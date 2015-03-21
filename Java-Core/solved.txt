@@ -1,0 +1,10 @@
+deadly diamond
+constructor
+portability
+open/close
+store/fetch
+send/receive
+passive objects/runtime polymorphism
+native types: date, xml, json
+patterns
+passive/active objects

@@ -1,0 +1,46 @@
+bugs:
+date/time/ check return type
+no getters from setters
+translate to E may change parameters, see test: is instance
+
+missing code:
+python timezone name
+javascript timezone name
+check member methods
+
+missing tests:
+pass/empty statement
+
+language:
+operators
+test/assert
+sentence/verb
+
+method as attribute, AnyMethod
+comments translation
+review types: document, method as parameters
+pattern literals
+typed tuples?
+
+framework:
+json
+xml
+store/fetch
+receive/send
+timer/scheduler
+type category
+avro
+protobuf
+logging
+
+tools:
+eclipse editor
+Java compiler
+Python debugger
+JavaScript debugger
+.Net compiler
+Swift version
+visual studio editor
+RCP editor
+.Net editor
+web editor

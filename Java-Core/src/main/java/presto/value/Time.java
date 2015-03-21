@@ -1,0 +1,111 @@
+package presto.value;
+
+import org.joda.time.LocalTime;
+
+import presto.error.PrestoError;
+import presto.error.SyntaxError;
+import presto.runtime.Context;
+import presto.type.TimeType;
+
+
+public class Time extends BaseValue implements Comparable<Time> {
+	public static Time Parse(String text) {
+		return new Time(LocalTime.parse(text));
+	}
+
+	LocalTime value;
+
+	public Time(LocalTime value) {
+		super(TimeType.instance());
+		this.value = value;
+	}
+
+	public Time(int hours, int minutes, int seconds, int millis) {
+		super(TimeType.instance());
+		this.value = new LocalTime(hours, minutes, seconds, millis);
+	}
+
+	public LocalTime getValue() {
+		return value;
+	}
+
+	@Override
+	public IValue Add(Context context, IValue value) throws SyntaxError {
+		if (value instanceof Period)
+			return new Time(this.value.plus(((Period) value).value));
+		else
+			throw new SyntaxError("Illegal: Time + " + value.getClass().getSimpleName());
+	}
+
+	@Override
+	public IValue Subtract(Context context, IValue value) throws PrestoError {
+		if (value instanceof Time) {
+			LocalTime other = ((Time) value).value;
+			org.joda.time.Period res = new org.joda.time.Period(0, 0, 0, 0, this.value.getHourOfDay() - other.getHourOfDay(), this.value.getMinuteOfHour() - other.getMinuteOfHour(), this.value.getSecondOfMinute() - other.getSecondOfMinute(), this.value.getMillisOfSecond()
+					- other.getMillisOfSecond());
+			return new Period(res);
+		} else if (value instanceof Period)
+			return this.minus((Period) value);
+		else
+			throw new SyntaxError("Illegal: Time - " + value.getClass().getSimpleName());
+	}
+
+	@Override
+	public int CompareTo(Context context, IValue value) throws SyntaxError {
+		if (value instanceof Time)
+			return this.value.compareTo(((Time) value).value);
+		else
+			throw new SyntaxError("Illegal comparison: Time + " + value.getClass().getSimpleName());
+	}
+
+	@Override
+	public IValue getMember(Context context, String name) throws PrestoError {
+		if ("hour".equals(name))
+			return new Integer(this.value.getHourOfDay());
+		else if ("minute".equals(name))
+			return new Integer(this.value.getMinuteOfHour());
+		else if ("second".equals(name))
+			return new Integer(this.value.getSecondOfMinute());
+		else if ("millis".equals(name))
+			return new Integer(this.value.getMillisOfSecond());
+		else
+			throw new SyntaxError("No such member:" + name);
+	}
+
+	@Override
+	public Object ConvertTo(Class<?> type) {
+		return value;
+	}
+
+	public Time minus(Period period) {
+		return new Time(value.minus(period.value));
+	}
+
+	public long getMillisOfDay() {
+		return value.getMillisOfDay();
+	}
+
+	@Override
+	public int compareTo(Time other) {
+		return value.compareTo(other.value);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Time)
+			return value.equals(((Time) obj).value);
+		else
+			return value.equals(obj);
+	}
+
+	@Override
+	public int hashCode() {
+		return value.hashCode();
+	}
+
+	@Override
+	public String toString() {
+		return value.toString();
+	}
+
+}

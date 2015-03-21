@@ -1,0 +1,117 @@
+package presto.type;
+
+import java.util.Comparator;
+
+import presto.error.PrestoError;
+import presto.error.SyntaxError;
+import presto.runtime.Context;
+import presto.value.Decimal;
+import presto.value.ICollection;
+import presto.value.INumber;
+import presto.value.IValue;
+import presto.value.ListValue;
+
+
+public class DecimalType extends NativeType {
+
+	static DecimalType instance = new DecimalType();
+	
+	public static DecimalType instance() {
+		return instance;
+	}
+	
+	private DecimalType() {
+		super("Decimal");
+	}
+	
+	@Override
+	public Class<?> toJavaClass() {
+		return Double.class;
+	}
+	
+
+	@Override
+	public boolean isAssignableTo(Context context, IType other) {
+		return (other instanceof IntegerType) || (other instanceof DecimalType) || (other instanceof AnyType);
+	}
+	
+	@Override
+	public IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError {
+		if(other instanceof IntegerType)
+			return this;
+		if(other instanceof DecimalType)
+			return this;
+		return super.checkAdd(context, other, tryReverse);
+	}
+	
+	@Override
+	public IType checkSubstract(Context context, IType other) throws SyntaxError {
+		if(other instanceof IntegerType)
+			return this;
+		if(other instanceof DecimalType)
+			return this;
+		return super.checkSubstract(context, other);
+	}
+
+	@Override
+	public IType checkMultiply(Context context, IType other, boolean tryReverse) throws SyntaxError {
+		if(other instanceof IntegerType)
+			return this;
+		if(other instanceof DecimalType)
+			return this;
+		return super.checkMultiply(context, other, tryReverse);
+	}
+
+	@Override
+	public IType checkDivide(Context context, IType other) throws SyntaxError {
+		if(other instanceof IntegerType)
+			return this;
+		if(other instanceof DecimalType)
+			return this;
+		return super.checkDivide(context, other);
+	}
+	
+	@Override
+	public IType checkIntDivide(Context context, IType other) throws SyntaxError {
+		if(other instanceof IntegerType)
+			return other;
+		return super.checkIntDivide(context, other);
+	}
+	
+	@Override
+	public IType checkModulo(Context context, IType other) throws SyntaxError {
+		if(other instanceof IntegerType)
+			return this;
+		if(other instanceof DecimalType)
+			return this;
+		return super.checkModulo(context, other);
+	}
+
+	@Override
+	public IType checkCompare(Context context, IType other) throws SyntaxError {
+		if(other instanceof IntegerType)
+			return BooleanType.instance();
+		if(other instanceof DecimalType)
+			return BooleanType.instance();
+		return super.checkCompare(context, other);
+	}
+	
+	@Override
+	public ListValue sort(Context context, ICollection<IValue> list) throws PrestoError {
+		return this.<INumber>doSort(context,list,new Comparator<INumber>() {
+			@Override
+			public int compare(INumber o1, INumber o2) {
+				return o1.compareTo(o2);
+			};
+		});
+	}
+
+	@Override
+	public IValue convertNativeValueToPrestoValue(Object value) {
+        if (value instanceof Number)
+            return new Decimal(((Number)value).doubleValue());
+        else
+            return (IValue)value; // TODO for now
+	}
+
+}
