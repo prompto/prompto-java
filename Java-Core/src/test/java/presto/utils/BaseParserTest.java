@@ -50,7 +50,7 @@ public abstract class BaseParserTest {
 		InputStream stream = loader.getResourceAsStream(resourceName);
 		if(stream==null) {
 			String dirPath = loader.getResource("").getFile();
-			String testsPath = dirPath.substring(0, dirPath.lastIndexOf("/Java/Core/")) + "/Test/resources/";
+			String testsPath = dirPath.substring(0, dirPath.lastIndexOf("/presto-java/Java-Core/")) + "/presto-tests/Tests/resources/";
 			stream = new FileInputStream(testsPath + resourceName);
 		}
 		return stream;
