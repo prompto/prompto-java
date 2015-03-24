@@ -1,5 +1,6 @@
 package presto.expression;
 
+import presto.declaration.TestMethodDeclaration;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.grammar.ContOp;
@@ -10,7 +11,7 @@ import presto.value.Boolean;
 import presto.value.ICollection;
 import presto.value.IValue;
 
-public class ContainsExpression implements IExpression {
+public class ContainsExpression implements IExpression, IAssertion {
 
 	IExpression left;
 	ContOp operator;
@@ -26,7 +27,7 @@ public class ContainsExpression implements IExpression {
 	public void toDialect(CodeWriter writer) {
 		left.toDialect(writer);
 		writer.append(" ");
-		operator.toDialect(writer);
+		writer.append(operator.toString());
 		writer.append(" ");
 		right.toDialect(writer);
 	}
@@ -51,6 +52,11 @@ public class ContainsExpression implements IExpression {
     {
     	IValue lval = left.interpret(context);
     	IValue rval = right.interpret(context);
+    	return interpret(context, lval, rval);
+
+    }
+
+    private IValue interpret(Context context, IValue lval, IValue rval) throws PrestoError {
         java.lang.Boolean result = null;
         switch (operator)
         {
@@ -89,10 +95,10 @@ public class ContainsExpression implements IExpression {
         }
         String lowerName = operator.name().toLowerCase().replace('_', ' ');
         throw new SyntaxError("Illegal comparison: " + lval.getClass().getSimpleName() +
-        		" " + lowerName + " " + rval.getClass().getSimpleName());
+        		" " + lowerName + " " + rval.getClass().getSimpleName());	
     }
 
-    public boolean containsAll(Context context, ICollection<?> container, ICollection<?> items) throws PrestoError
+	public boolean containsAll(Context context, ICollection<?> container, ICollection<?> items) throws PrestoError
     {
         for (IValue item : items.getItems(context))
         {
@@ -110,6 +116,20 @@ public class ContainsExpression implements IExpression {
         }
         return false;
     }
-
+    
+	@Override
+	public boolean interpretAssert(Context context, TestMethodDeclaration test) throws PrestoError {
+		IValue lval = left.interpret(context);
+		IValue rval = right.interpret(context);
+		IValue result = interpret(context, lval, rval);
+		if(result==Boolean.TRUE) 
+			return true;
+		CodeWriter writer = new CodeWriter(test.getDialect(), context);
+		this.toDialect(writer);
+		String expected = writer.toString();
+		String actual = lval.toString() + " " + operator.toString() + " " + rval.toString();
+		test.printFailure(context, expected, actual);
+		return false;
+	}
 
 }

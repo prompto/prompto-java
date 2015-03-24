@@ -1,10 +1,12 @@
 package presto.runtime;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import presto.declaration.IMethodDeclaration;
+import presto.declaration.TestMethodDeclaration;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.expression.IExpression;
@@ -23,9 +25,9 @@ import presto.type.IType;
 import presto.type.TextType;
 import presto.utils.CmdLineParser;
 import presto.value.Dictionary;
+import presto.value.ExpressionValue;
 import presto.value.IValue;
 import presto.value.Text;
-import presto.value.ExpressionValue;
 
 
 
@@ -37,6 +39,15 @@ public class Interpreter {
 	private Interpreter() {
 	}
 	
+	public static void interpretTests(Context context) throws PrestoError {
+		Collection<TestMethodDeclaration> tests = context.getTests();
+		for(TestMethodDeclaration test : tests) {
+			Context local = context.newLocalContext();
+			test.interpret(local);
+		}
+		
+	}
+
 	public static void interpretMainNoArgs(Context context) throws PrestoError {
 		interpret(context, "main", "");
 	}
@@ -131,6 +142,7 @@ public class Interpreter {
 		}
 		return true;
 	}
+
 	
 	
 	

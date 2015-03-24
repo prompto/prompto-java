@@ -12,7 +12,6 @@ missing tests:
 pass/empty statement
 
 language:
-operators
 test/assert
 sentence/verb
 

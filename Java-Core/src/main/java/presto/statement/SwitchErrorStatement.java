@@ -3,16 +3,8 @@ package presto.statement;
 import presto.error.ExecutionError;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
-import presto.expression.ConstructorExpression;
-import presto.expression.IExpression;
-import presto.grammar.ArgumentAssignment;
-import presto.grammar.ArgumentAssignmentList;
-import presto.grammar.INamed;
-import presto.grammar.UnresolvedArgument;
-import presto.literal.TextLiteral;
 import presto.runtime.Context;
 import presto.runtime.ErrorVariable;
-import presto.type.CategoryType;
 import presto.type.EnumeratedCategoryType;
 import presto.type.IType;
 import presto.type.TypeMap;
@@ -152,7 +144,7 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 		try {
 			result = instructions.interpret(context);
 		} catch (ExecutionError e) {
-			IValue switchValue = populateError(e,context);
+			IValue switchValue = e.interpret(context, errorName);
 			result = evaluateSwitch(context, switchValue, e);
 		} finally {
 			if(alwaysInstructions!=null)
@@ -161,19 +153,5 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 		return result;
 	}
 
-	private IValue populateError(ExecutionError e, Context context) throws PrestoError {
-		IExpression exp = e.getExpression(context);
-		if(exp==null) {
-			ArgumentAssignmentList args = new ArgumentAssignmentList();
-			args.add(new ArgumentAssignment(new UnresolvedArgument("name"), new TextLiteral(e.getClass().getSimpleName())));
-			args.add(new ArgumentAssignment(new UnresolvedArgument("text"), new TextLiteral(e.getMessage())));
-			exp = new ConstructorExpression(new CategoryType("Error"), args);
-		}
-		if(context.getRegisteredValue(INamed.class, errorName)==null)
-			context.registerValue(new ErrorVariable(errorName));
-		IValue error = exp.interpret(context);
-		context.setValue(errorName, error);
-		return error;
-	}
 
 }

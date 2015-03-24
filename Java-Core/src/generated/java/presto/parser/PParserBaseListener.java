@@ -269,6 +269,30 @@ public class PParserBaseListener implements PParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterTest_method_declaration(@NotNull PParser.Test_method_declarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTest_method_declaration(@NotNull PParser.Test_method_declarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAssertion(@NotNull PParser.AssertionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAssertion(@NotNull PParser.AssertionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterTyped_argument(@NotNull PParser.Typed_argumentContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2621,6 +2645,18 @@ public class PParserBaseListener implements PParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterTestMethod(@NotNull PParser.TestMethodContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTestMethod(@NotNull PParser.TestMethodContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterNativeStatementList(@NotNull PParser.NativeStatementListContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2748,6 +2784,30 @@ public class PParserBaseListener implements PParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitStatementList(@NotNull PParser.StatementListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAssertionListItem(@NotNull PParser.AssertionListItemContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAssertionListItem(@NotNull PParser.AssertionListItemContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAssertionList(@NotNull PParser.AssertionListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAssertionList(@NotNull PParser.AssertionListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

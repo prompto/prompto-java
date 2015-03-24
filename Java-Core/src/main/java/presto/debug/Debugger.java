@@ -1,6 +1,6 @@
 package presto.debug;
 
-import presto.declaration.IMethodDeclaration;
+import presto.declaration.IDeclaration;
 import presto.error.PrestoError;
 import presto.error.TerminatedError;
 import presto.parser.ISection;
@@ -61,7 +61,7 @@ public class Debugger {
 		this.listener = listener;
 	}
 	
-	public void enterMethod(Context context, IMethodDeclaration method) throws PrestoError {
+	public void enterMethod(Context context, IDeclaration method) throws PrestoError {
 		terminateIfRequested();
 		stack.push(new StackFrame(context, method.getName(), method));
 		if(stack.size()>0 && stack.size()<=stepDepth)

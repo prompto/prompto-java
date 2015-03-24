@@ -10,6 +10,7 @@ import presto.type.IType;
 import presto.utils.CodeWriter;
 import presto.value.IInstance;
 import presto.value.IValue;
+import presto.value.Text;
 
 public class CategorySymbol extends Symbol implements IExpression  {
 	
@@ -72,6 +73,7 @@ public class CategorySymbol extends Symbol implements IExpression  {
 				instance.setMember(context, assignment.getName(), value);
 			}
 		}
+		instance.setMember(context, "name", new Text(this.getName()));
 		return instance;
 	}
 

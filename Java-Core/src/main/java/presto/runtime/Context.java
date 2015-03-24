@@ -1,5 +1,6 @@
 package presto.runtime;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ import presto.declaration.AttributeDeclaration;
 import presto.declaration.ConcreteCategoryDeclaration;
 import presto.declaration.IDeclaration;
 import presto.declaration.IMethodDeclaration;
+import presto.declaration.TestMethodDeclaration;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.grammar.INamed;
@@ -40,6 +42,7 @@ public class Context implements IContext {
 	Debugger debugger; 
 	
 	Map<String,IDeclaration> declarations = new HashMap<String, IDeclaration>();
+	Map<String,TestMethodDeclaration> tests = new HashMap<String, TestMethodDeclaration>();
 	Map<String,INamed> instances = new HashMap<String, INamed>();
 	Map<String,IValue> values = new HashMap<String, IValue>();
 	
@@ -172,21 +175,28 @@ public class Context implements IContext {
 	}
 
 	public void registerDeclaration(IDeclaration declaration) throws SyntaxError {
-		INamed actual = getRegistered(declaration.getName());
-		if(actual!=null)
+		INamed current = getRegistered(declaration.getName());
+		if(current!=null)
 			throw new SyntaxError("Duplicate name: \"" + declaration.getName() + "\"");
 		declarations.put(declaration.getName(), declaration);
 	}
 
 	public void registerDeclaration(IMethodDeclaration declaration) throws SyntaxError {
-		INamed actual = getRegistered(declaration.getName());
-		if(actual!=null && !(actual instanceof MethodDeclarationMap)) 
+		INamed current = getRegistered(declaration.getName());
+		if(current!=null && !(current instanceof MethodDeclarationMap)) 
 			throw new SyntaxError("Duplicate name: \"" + declaration.getName() + "\"");
-		if(actual==null) {
-			actual = new MethodDeclarationMap(declaration.getName());
-			declarations.put(declaration.getName(), (MethodDeclarationMap)actual);
+		if(current==null) {
+			current = new MethodDeclarationMap(declaration.getName());
+			declarations.put(declaration.getName(), (MethodDeclarationMap)current);
 		}
-		((MethodDeclarationMap)actual).register(declaration,this);
+		((MethodDeclarationMap)current).register(declaration,this);
+	}
+	
+	public void registerDeclaration(TestMethodDeclaration declaration) throws SyntaxError {
+		TestMethodDeclaration current = tests.get(declaration.getName());
+		if(current!=null) 
+			throw new SyntaxError("Duplicate test: \"" + declaration.getName() + "\"");
+		tests.put(declaration.getName(), declaration);
 	}
 	
 	public static class MethodDeclarationMap extends HashMap<String,IMethodDeclaration> implements IDeclaration {
@@ -421,12 +431,12 @@ public class Context implements IContext {
 		}
 	}
 
-	public void enterMethod(IMethodDeclaration method) throws PrestoError {
+	public void enterMethod(IDeclaration method) throws PrestoError {
 		if(debugger!=null)
 			debugger.enterMethod(this, method);
 	}
 
-	public void leaveMethod(IMethodDeclaration method) throws PrestoError {
+	public void leaveMethod(IDeclaration method) throws PrestoError {
 		if(debugger!=null)
 			debugger.leaveMethod(this, method);
 	}
@@ -462,6 +472,14 @@ public class Context implements IContext {
 				throw new InternalError("Not a concrete instance:" + value.getClass().getSimpleName());
 		} else
 			return this.globals.loadSingleton(type);
+	}
+
+	public boolean hasTests() {
+		return tests.size()>0;
+	}
+
+	public Collection<TestMethodDeclaration> getTests() {
+		return tests.values();
 	}
 
 

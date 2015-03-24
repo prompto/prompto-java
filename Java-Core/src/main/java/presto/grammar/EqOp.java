@@ -1,6 +1,6 @@
 package presto.grammar;
 
-import presto.utils.CodeWriter;
+import presto.parser.Dialect;
 
 public enum EqOp {
 	IS,
@@ -22,10 +22,9 @@ public enum EqOp {
 		this.p = p;
 	}
 	
-	public void toDialect(CodeWriter writer) {
+	public String toString(Dialect dialect) {
 		String s = null;
-		
-		switch(writer.getDialect()) {
+		switch(dialect) {
 		case E:
 			s = e;
 			break;
@@ -38,6 +37,6 @@ public enum EqOp {
 		}
 		if(s==null)
 			s = this.name().toLowerCase().replace("_", " ");
-		writer.append(s);
+		return s;
 	}
 }

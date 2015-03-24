@@ -38,6 +38,7 @@ import presto.declaration.NativeResourceDeclaration;
 import presto.declaration.OperatorMethodDeclaration;
 import presto.declaration.SetterMethodDeclaration;
 import presto.declaration.SingletonCategoryDeclaration;
+import presto.declaration.TestMethodDeclaration;
 import presto.expression.AddExpression;
 import presto.expression.AndExpression;
 import presto.expression.CastExpression;
@@ -225,7 +226,7 @@ public class EPrestoBuilder extends EParserBaseListener {
 	public void buildSection(ParserRuleContext node, Section section) {
 		Token first = findFirstValidToken(node.start.getTokenIndex());
 		Token last = findLastValidToken(node.stop.getTokenIndex());
-		section.setFrom(path, first, last);
+		section.setFrom(path, first, last, Dialect.E);
 	}
 	
 	@Override
@@ -340,6 +341,27 @@ public class EPrestoBuilder extends EParserBaseListener {
 		setNodeValue(ctx, items);
 	}
 
+	@Override
+	public void exitAssertion(AssertionContext ctx) {
+		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		setNodeValue(ctx, exp);
+	}
+	
+	@Override
+	public void exitAssertionList(AssertionListContext ctx) {
+		IExpression item = this.<IExpression>getNodeValue(ctx.item);
+		ExpressionList items = new ExpressionList(item);
+		setNodeValue(ctx, items);
+	}
+	
+	@Override
+	public void exitAssertionListItem(AssertionListItemContext ctx) {
+		IExpression item = this.<IExpression>getNodeValue(ctx.item);
+		ExpressionList items = this.<ExpressionList>getNodeValue(ctx.items);
+		items.add(item);
+		setNodeValue(ctx, items);
+	}
+	
 	@Override
 	public void exitAssign_instance_statement(Assign_instance_statementContext ctx) {
 		IAssignableInstance inst = this.<IAssignableInstance>getNodeValue(ctx.inst);
@@ -1357,7 +1379,7 @@ public class EPrestoBuilder extends EParserBaseListener {
 	@Override
 	public void exitJavascript_module(Javascript_moduleContext ctx) {
 		List<String> ids = new ArrayList<String>();
-		for(IdentifierContext ic : ctx.identifier())
+		for(Javascript_identifierContext ic : ctx.javascript_identifier())
 			ids.add(ic.getText());
 		JavaScriptModule module = new JavaScriptModule(ids);
 		setNodeValue(ctx, module);
@@ -2367,6 +2389,22 @@ public class EPrestoBuilder extends EParserBaseListener {
 		TernaryExpression exp = new TernaryExpression(condition, ifTrue, ifFalse);
 		setNodeValue(ctx, exp);
 	};
+	
+	@Override
+	public void exitTest_method_declaration(Test_method_declarationContext ctx) {
+		String name = ctx.name.getText();
+		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		ExpressionList exps = this.<ExpressionList>getNodeValue(ctx.exps);
+		String errorName = this.<String>getNodeValue(ctx.error);
+		SymbolExpression error = errorName==null ? null : new SymbolExpression(errorName);
+		setNodeValue(ctx, new TestMethodDeclaration(name, stmts, exps, error));
+	}
+
+	@Override
+	public void exitTestMethod(TestMethodContext ctx) {
+		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
+		setNodeValue(ctx, decl);
+	}
 	
 	@Override
 	public void exitTextLiteral(TextLiteralContext ctx) {

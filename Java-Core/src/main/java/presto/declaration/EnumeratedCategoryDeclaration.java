@@ -40,6 +40,14 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration i
 	}
 	
 	@Override
+	public boolean hasAttribute(Context context, String name) {
+		if("name".equals(name))
+			return true;
+		else
+			return super.hasAttribute(context, name);
+	}
+	
+	@Override
 	protected void toODialect(CodeWriter writer) {
 		writer.append("enumerated category ");
 		writer.append(name);
@@ -77,10 +85,9 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration i
 			else
 				writer.append(" with attributes: ");
 			attributes.toDialect(writer, true);
-			if(symbols!=null && symbols.size()>0)
-				writer.append(",");
-		}
-		writer.append(" with symbols:\n");
+			writer.append(", and symbols:\n");
+		} else
+			writer.append(" with symbols:\n");
 		writer.indent();
 		for(Symbol symbol : symbols) {
 			symbol.toDialect(writer);

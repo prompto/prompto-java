@@ -1,5 +1,6 @@
 package presto.expression;
 
+import presto.declaration.TestMethodDeclaration;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.grammar.CmpOp;
@@ -9,7 +10,7 @@ import presto.utils.CodeWriter;
 import presto.value.Boolean;
 import presto.value.IValue;
 
-public class CompareExpression implements IExpression {
+public class CompareExpression implements IExpression, IAssertion {
 
 	IExpression left;
 	CmpOp operator;
@@ -25,7 +26,7 @@ public class CompareExpression implements IExpression {
 	public void toDialect(CodeWriter writer) {
 		left.toDialect(writer);
 		writer.append(" ");
-		operator.toDialect(writer);
+		writer.append(operator.toString());
 		writer.append(" ");
 		right.toDialect(writer);
 	}
@@ -56,9 +57,22 @@ public class CompareExpression implements IExpression {
 		case LTE:
 			return Boolean.ValueOf(cmp <= 0);
 		default:
-			throw new SyntaxError("Illegal compare operand: "
-					+ operator.toString());
+			throw new SyntaxError("Illegal compare operand: " + operator.toString());
 		}
 	}
 
+	@Override
+	public boolean interpretAssert(Context context, TestMethodDeclaration test) throws PrestoError {
+		IValue lval = left.interpret(context);
+		IValue rval = right.interpret(context);
+		IValue result = compare(context, lval, rval);
+		if(result==Boolean.TRUE) 
+			return true;
+		CodeWriter writer = new CodeWriter(test.getDialect(), context);
+		this.toDialect(writer);
+		String expected = writer.toString();
+		String actual = lval.toString() + " " + operator.toString() + " " + rval.toString();
+		test.printFailure(context, expected, actual);
+		return false;
+	}
 }

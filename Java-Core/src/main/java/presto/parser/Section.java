@@ -8,15 +8,17 @@ public class Section implements ISection {
 	String path;
 	Location start;
 	Location end;
+	Dialect dialect;
 	boolean breakpoint;
 	
 	protected Section() {
 	}
 	
-	public void setFrom(String path, Token start, Token end) {
+	public void setFrom(String path, Token start, Token end, Dialect dialect) {
 		this.path = path;
 		this.start = new Location(start);
 		this.end = new Location(end, true);
+		this.dialect = dialect;
 	}
 	
 	
@@ -33,6 +35,10 @@ public class Section implements ISection {
 	@Override
 	public Location getEnd() {
 		return end;
+	}
+	
+	public Dialect getDialect() {
+		return dialect;
 	}
 	
 	@Override

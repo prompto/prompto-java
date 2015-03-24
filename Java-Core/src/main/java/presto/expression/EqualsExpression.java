@@ -1,5 +1,6 @@
 package presto.expression;
 
+import presto.declaration.TestMethodDeclaration;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.grammar.EqOp;
@@ -15,7 +16,7 @@ import presto.value.Boolean;
 import presto.value.IValue;
 import presto.value.TypeValue;
 
-public class EqualsExpression implements IExpression {
+public class EqualsExpression implements IExpression, IAssertion {
 
 	IExpression left;
 	EqOp operator;
@@ -33,7 +34,7 @@ public class EqualsExpression implements IExpression {
 	public void toDialect(CodeWriter writer) {
 		left.toDialect(writer);
 		writer.append(" ");
-		operator.toDialect(writer);
+		writer.append(operator.toString(writer.getDialect()));
 		// make this a AN
 		if(operator==EqOp.IS_A || operator==EqOp.IS_NOT_A) {
 			String name = right.toString();
@@ -53,9 +54,13 @@ public class EqualsExpression implements IExpression {
 	
 	@Override
 	public IValue interpret(Context context) throws PrestoError {
-		boolean equal = false;
 		IValue lval = left.interpret(context);
 		IValue rval = right.interpret(context);
+		return interpret(context, lval, rval);
+	}
+
+	private IValue interpret(Context context, IValue lval, IValue rval) throws PrestoError {
+		boolean equal = false;
 		switch(operator) {
 		case IS:
 			equal = lval==rval;
@@ -70,17 +75,16 @@ public class EqualsExpression implements IExpression {
 			equal = !isA(context,lval,rval);
 			break;
 		case EQUALS:
-			equal = interpret(context,lval,rval);
+			equal = interpretEquals(context,lval,rval);
 			break;
 		case NOT_EQUALS:
-			equal = !interpret(context,lval,rval);
+			equal = !interpretEquals(context,lval,rval);
 			break;
 		case ROUGHLY:
 			equal = lval.Roughly(context, rval);
 			break;
 		}
-		return Boolean.ValueOf(equal);
-	}
+		return Boolean.ValueOf(equal);	}
 
 	private boolean isA(Context context, IValue lval, IValue rval) throws PrestoError {
 		if(lval==null)
@@ -90,7 +94,7 @@ public class EqualsExpression implements IExpression {
 		return actual.isAssignableTo(context, toCheck);
 	}
 
-	private boolean interpret(Context context, IValue lval, IValue rval) throws PrestoError {
+	private boolean interpretEquals(Context context, IValue lval, IValue rval) throws PrestoError {
 		if(lval==rval)
 			return true;
 		else if(lval==null || rval==null)
@@ -133,5 +137,20 @@ public class EqualsExpression implements IExpression {
 		else if(left instanceof UnresolvedIdentifier)
 			return ((UnresolvedIdentifier)left).getName();
 		return null;
+	}
+	
+	@Override
+	public boolean interpretAssert(Context context, TestMethodDeclaration test) throws PrestoError {
+		IValue lval = left.interpret(context);
+		IValue rval = right.interpret(context);
+		IValue result = interpret(context, lval, rval);
+		if(result==Boolean.TRUE) 
+			return true;
+		CodeWriter writer = new CodeWriter(test.getDialect(), context);
+		this.toDialect(writer);
+		String expected = writer.toString();
+		String actual = lval.toString() + " " + operator.toString(test.getDialect()) + " " + rval.toString();
+		test.printFailure(context, expected, actual);
+		return false;
 	}
 }

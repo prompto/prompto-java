@@ -1,6 +1,5 @@
 package presto.grammar;
 
-import presto.utils.CodeWriter;
 
 public enum ContOp {
 	IN,
@@ -12,7 +11,7 @@ public enum ContOp {
 	NOT_CONTAINS_ALL,
 	NOT_CONTAINS_ANY;
 
-	public void toDialect(CodeWriter writer) {
-		writer.append(this.name().toLowerCase().replace('_', ' '));
+	public String toString() {
+		return this.name().toLowerCase().replace('_', ' ');
 	}
 }

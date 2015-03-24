@@ -114,7 +114,7 @@ public class TestCheck extends BaseOParserTest {
 
 	@Test
 	public void testList() throws Exception {
-		DeclarationList stmts = parseString("method test (Text value) {" +
+		DeclarationList stmts = parseString("method testMethod (Text value) {" +
 					"list = [ \"john\" , \"jim\" ];" +
 					"elem = list[1]; }");
 		stmts.register(context);
@@ -123,7 +123,7 @@ public class TestCheck extends BaseOParserTest {
 
 	@Test
 	public void testDict() throws Exception {
-		DeclarationList stmts = parseString("method test (Text value) {" +
+		DeclarationList stmts = parseString("method testMethod (Text value) {" +
 					"dict = { \"john\":123, \"jim\":345 };" +
 					"elem = dict[\"john\"]; }");
 		stmts.register(context);

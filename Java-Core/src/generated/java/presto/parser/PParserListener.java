@@ -223,6 +223,26 @@ public interface PParserListener extends ParseTreeListener {
 	 */
 	void exitNative_method_declaration(@NotNull PParser.Native_method_declarationContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link PParser#test_method_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterTest_method_declaration(@NotNull PParser.Test_method_declarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PParser#test_method_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitTest_method_declaration(@NotNull PParser.Test_method_declarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PParser#assertion}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssertion(@NotNull PParser.AssertionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PParser#assertion}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssertion(@NotNull PParser.AssertionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link PParser#typed_argument}.
 	 * @param ctx the parse tree
 	 */
@@ -2487,6 +2507,18 @@ public interface PParserListener extends ParseTreeListener {
 	 */
 	void exitNativeMethod(@NotNull PParser.NativeMethodContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code TestMethod}
+	 * labeled alternative in {@link PParser#method_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterTestMethod(@NotNull PParser.TestMethodContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code TestMethod}
+	 * labeled alternative in {@link PParser#method_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitTestMethod(@NotNull PParser.TestMethodContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code NativeStatementList}
 	 * labeled alternative in {@link PParser#native_statement_list}.
 	 * @param ctx the parse tree
@@ -2614,6 +2646,30 @@ public interface PParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitStatementList(@NotNull PParser.StatementListContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code AssertionListItem}
+	 * labeled alternative in {@link PParser#assertion_list}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssertionListItem(@NotNull PParser.AssertionListItemContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code AssertionListItem}
+	 * labeled alternative in {@link PParser#assertion_list}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssertionListItem(@NotNull PParser.AssertionListItemContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code AssertionList}
+	 * labeled alternative in {@link PParser#assertion_list}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssertionList(@NotNull PParser.AssertionListContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code AssertionList}
+	 * labeled alternative in {@link PParser#assertion_list}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssertionList(@NotNull PParser.AssertionListContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code SwitchCaseStatementListItem}
 	 * labeled alternative in {@link PParser#switch_case_statement_list}.
