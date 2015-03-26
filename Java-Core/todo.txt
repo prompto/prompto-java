@@ -10,9 +10,9 @@ check member methods
 
 missing tests:
 pass/empty statement
+IAssertion
 
 language:
-test/assert
 sentence/verb
 
 method as attribute, AnyMethod
@@ -35,6 +35,7 @@ logging
 tools:
 eclipse editor
 Java compiler
+console/scripting
 Python debugger
 JavaScript debugger
 .Net compiler

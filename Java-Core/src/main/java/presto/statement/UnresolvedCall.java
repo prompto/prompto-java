@@ -2,9 +2,11 @@ package presto.statement;
 
 import presto.declaration.CategoryDeclaration;
 import presto.declaration.IDeclaration;
+import presto.declaration.TestMethodDeclaration;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.expression.ConstructorExpression;
+import presto.expression.IAssertion;
 import presto.expression.IExpression;
 import presto.expression.MemberSelector;
 import presto.expression.MethodSelector;
@@ -16,7 +18,7 @@ import presto.type.IType;
 import presto.utils.CodeWriter;
 import presto.value.IValue;
 
-public class UnresolvedCall extends SimpleStatement {
+public class UnresolvedCall extends SimpleStatement implements IAssertion {
 	
 	IExpression resolved;
 	IExpression caller;
@@ -59,6 +61,19 @@ public class UnresolvedCall extends SimpleStatement {
 		return resolved.interpret(context);
 	}
 
+	@Override
+	public boolean interpretAssert(Context context, TestMethodDeclaration testMethodDeclaration) throws PrestoError {
+		if(resolved==null)
+			resolveAndCheck(context);
+		if(resolved instanceof IAssertion)
+			return ((IAssertion)resolved).interpretAssert(context, testMethodDeclaration);
+		else {
+			CodeWriter writer = new CodeWriter(this.getDialect(), context);
+			resolved.toDialect(writer);
+			throw new SyntaxError("Cannot test '" + writer.toString() + "'");
+		}
+	}
+	
 	private IType resolveAndCheck(Context context) throws SyntaxError {
 		resolve(context);
 		return resolved.check(context);

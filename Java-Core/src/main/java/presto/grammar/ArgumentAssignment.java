@@ -40,6 +40,11 @@ public class ArgumentAssignment {
 		this.expression = expression;
 	}
 	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return (argument!=null ? argument.getName() + " = " : "") + expression.toString();
+	}
 	
 	public void toDialect(CodeWriter writer) {
 		switch(writer.getDialect()) {

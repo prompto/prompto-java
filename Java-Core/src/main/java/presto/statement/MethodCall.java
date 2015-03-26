@@ -4,8 +4,10 @@ import presto.declaration.AbstractMethodDeclaration;
 import presto.declaration.ClosureDeclaration;
 import presto.declaration.ConcreteMethodDeclaration;
 import presto.declaration.IMethodDeclaration;
+import presto.declaration.TestMethodDeclaration;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
+import presto.expression.IAssertion;
 import presto.expression.IExpression;
 import presto.expression.MethodSelector;
 import presto.grammar.ArgumentAssignment;
@@ -15,10 +17,11 @@ import presto.runtime.Context;
 import presto.runtime.MethodFinder;
 import presto.type.IType;
 import presto.utils.CodeWriter;
+import presto.value.Boolean;
 import presto.value.IValue;
 import presto.value.ClosureValue;
 
-public class MethodCall extends SimpleStatement {
+public class MethodCall extends SimpleStatement implements IAssertion {
 
 	MethodSelector method;
 	ArgumentAssignmentList assignments;
@@ -131,6 +134,18 @@ public class MethodCall extends SimpleStatement {
 		return declaration.interpret(local);
 	}
 
+	@Override
+	public boolean interpretAssert(Context context, TestMethodDeclaration testMethodDeclaration) throws PrestoError {
+		IValue value = this.interpret(context);
+		if(value instanceof Boolean)
+			return ((Boolean)value).getValue();
+		else {
+			CodeWriter writer = new CodeWriter(this.getDialect(), context);
+			this.toDialect(writer);
+			throw new SyntaxError("Cannot test '" + writer.toString() + "'");
+		}
+	}
+	
 	private IMethodDeclaration findDeclaration(Context context) throws SyntaxError {
 		try {
 			Object o = context.getValue(method.getName());

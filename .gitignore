@@ -1,2 +1,3 @@
 .metadata/*
 **/.p4ignore
+.DS_Store

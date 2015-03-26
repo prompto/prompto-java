@@ -1671,7 +1671,7 @@ public class EPrestoBuilder extends EParserBaseListener {
 	public void exitMethodCallExpression(MethodCallExpressionContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
 		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
-		Object call = new UnresolvedCall(exp,args);
+		UnresolvedCall call = new UnresolvedCall(exp,args);
 		setNodeValue(ctx, call);
 	}
 	
