@@ -47,10 +47,12 @@ import presto.literal.TupleLiteral;
 import presto.parser.Dialect;
 import presto.parser.OCleverParser;
 import presto.parser.OPrestoBuilder;
+import presto.runtime.Context;
 import presto.statement.AssignInstanceStatement;
 import presto.statement.IStatement;
 import presto.statement.MethodCall;
 import presto.statement.NativeCall;
+import presto.statement.UnresolvedCall;
 import presto.type.CategoryType;
 import presto.type.ListType;
 import presto.utils.CodeWriter;
@@ -202,10 +204,10 @@ public class TestParserAtoms {
 
 
 	@Test
-	public void testMethodCallExpression() throws Exception {
+	public void testUnresolvedCallExpression() throws Exception {
 		String statement = "print (\"person\" + p.name );";
 		OTestParser parser = new OTestParser(statement);
-		MethodCall ac = parser.parse_method_call();
+		UnresolvedCall ac = parser.parse_method_call();
 		assertNotNull(ac);
 	}
 
@@ -213,15 +215,15 @@ public class TestParserAtoms {
 	public void testMethodCallWith() throws Exception {
 		String statement = "print( value = \"person\" + p.name )";
 		OTestParser parser = new OTestParser(statement);
-		MethodCall mc = parser.parse_method_call();
+		UnresolvedCall mc = parser.parse_method_call();
 		assertNotNull(mc);
-		assertEquals("print",mc.getMethod().getName());
+		assertEquals("print",mc.getCaller().toString());
 		assertNotNull(mc.getAssignments());
 		ArgumentAssignment as = mc.getAssignments().get(0);
 		assertEquals("value",as.getName());
 		IExpression exp = as.getExpression();
 		assertTrue(exp instanceof AddExpression);
-		CodeWriter writer = new CodeWriter(Dialect.O, null);
+		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalContext());
 		mc.toDialect(writer);
 		assertEquals("print(value = \"person\" + p.name)", writer.toString());
 		
@@ -237,7 +239,7 @@ public class TestParserAtoms {
 		assertNotNull(ad.getArguments());
 		assertTrue(ad.getArguments().contains(new CategoryArgument(new CategoryType("Person"),"p",null)));
 		assertNotNull(ad.getStatements());
-		CodeWriter writer = new CodeWriter(Dialect.O, null);
+		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalContext());
 		ad.getStatements().getFirst().toDialect(writer);
 		assertEquals("print(value = \"person\" + p.name)", writer.toString());	
 	}
@@ -253,7 +255,7 @@ public class TestParserAtoms {
 		IArgument expected = new CategoryArgument(new CategoryType("Object"),"o", new IdentifierList("name"));
 		assertTrue(ad.getArguments().contains(expected));
 		assertNotNull(ad.getStatements());
-		CodeWriter writer = new CodeWriter(Dialect.O, null);
+		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalContext());
 		ad.getStatements().getFirst().toDialect(writer);
 		assertEquals("print(value = \"object\" + o.name)", writer.toString());
 		
@@ -270,7 +272,7 @@ public class TestParserAtoms {
 		IArgument expected = new CategoryArgument(new ListType(new CategoryType("Option")),"options",null);
 		assertTrue(ad.getArguments().contains(expected)); 
 		assertNotNull(ad.getStatements());
-		CodeWriter writer = new CodeWriter(Dialect.O, null);
+		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalContext());
 		ad.getStatements().getFirst().toDialect(writer);
 		assertEquals("print(value = \"array\" + options)", writer.toString());
 	}
@@ -320,7 +322,7 @@ public class TestParserAtoms {
 		OTestParser parser = new OTestParser(statement);
 		AssignInstanceStatement a = parser.parse_assign_instance_statement();
 		assertNotNull(a);
-		assertTrue(a.getExpression() instanceof ConstructorExpression);
+		assertTrue(a.getExpression() instanceof UnresolvedCall);
 	}
 	
 	@Test 
@@ -570,7 +572,7 @@ public class TestParserAtoms {
 		OTestParser parser = new OTestParser(statement);
 		IStatement stmt = parser.parse_statement();
 		assertNotNull(stmt);
-		CodeWriter writer = new CodeWriter(Dialect.O, null);
+		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalContext());
 		stmt.toDialect(writer);
 		assertEquals("x = print(value = \"1\")", writer.toString());
 	}
@@ -581,7 +583,7 @@ public class TestParserAtoms {
 		OTestParser parser = new OTestParser(statement);
 		IStatement stmt = parser.parse_statement();
 		assertNotNull(stmt); 
-		CodeWriter writer = new CodeWriter(Dialect.O, null);
+		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalContext());
 		stmt.toDialect(writer);
 		assertEquals("print(\"a\", value = \"1\")", writer.toString());
 	}
@@ -656,12 +658,12 @@ public class TestParserAtoms {
 			return builder.<ArgumentList>getNodeValue(tree);
 		}
 
-		public MethodCall parse_method_call() {
+		public UnresolvedCall parse_method_call() {
 			ParseTree tree = method_call();
 			OPrestoBuilder builder = new OPrestoBuilder(this);
 			ParseTreeWalker walker = new ParseTreeWalker();
 			walker.walk(builder, tree);
-			return builder.<MethodCall>getNodeValue(tree);
+			return builder.<UnresolvedCall>getNodeValue(tree);
 		}
 
 		public NativeMethodDeclaration parse_native_method_declaration() {

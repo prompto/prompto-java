@@ -1129,18 +1129,6 @@ public interface PParserListener extends ParseTreeListener {
 	 */
 	void exitDocumentExpression(@NotNull PParser.DocumentExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code ConstructorExpression}
-	 * labeled alternative in {@link PParser#method_expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterConstructorExpression(@NotNull PParser.ConstructorExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ConstructorExpression}
-	 * labeled alternative in {@link PParser#method_expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitConstructorExpression(@NotNull PParser.ConstructorExpressionContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code FetchExpression}
 	 * labeled alternative in {@link PParser#method_expression}.
 	 * @param ctx the parse tree
@@ -1188,6 +1176,18 @@ public interface PParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMethodCallExpression(@NotNull PParser.MethodCallExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ConstructorExpression}
+	 * labeled alternative in {@link PParser#method_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterConstructorExpression(@NotNull PParser.ConstructorExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ConstructorExpression}
+	 * labeled alternative in {@link PParser#method_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitConstructorExpression(@NotNull PParser.ConstructorExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code MemberSelector}
 	 * labeled alternative in {@link PParser#instance_selector}.

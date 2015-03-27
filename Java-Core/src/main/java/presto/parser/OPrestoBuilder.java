@@ -183,13 +183,13 @@ import presto.statement.IStatement;
 import presto.statement.IfStatement;
 import presto.statement.IfStatement.IfElement;
 import presto.statement.IfStatement.IfElementList;
-import presto.statement.MethodCall;
 import presto.statement.RaiseStatement;
 import presto.statement.ReturnStatement;
 import presto.statement.StatementList;
 import presto.statement.SwitchCase;
 import presto.statement.SwitchErrorStatement;
 import presto.statement.SwitchStatement;
+import presto.statement.UnresolvedCall;
 import presto.statement.WhileStatement;
 import presto.statement.WithResourceStatement;
 import presto.statement.WithSingletonStatement;
@@ -1649,9 +1649,9 @@ public class OPrestoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitMethod_call(Method_callContext ctx) {
-		MethodSelector method = this.<MethodSelector>getNodeValue(ctx.method);
+		IExpression caller = this.<IExpression>getNodeValue(ctx.method);
 		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
-		setNodeValue(ctx, new MethodCall(method, args));
+		setNodeValue(ctx, new UnresolvedCall(caller, args));
 	}
 
 	@Override
@@ -1682,7 +1682,7 @@ public class OPrestoBuilder extends OParserBaseListener {
 	@Override
 	public void exitMethodName(MethodNameContext ctx) {
 		String name = this.<String>getNodeValue(ctx.name);
-		setNodeValue(ctx, new MethodSelector(null, name));
+		setNodeValue(ctx, new UnresolvedIdentifier(name));
 	}
 	
 	@Override

@@ -1205,18 +1205,6 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitDocumentExpression(@NotNull OParser.DocumentExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code ConstructorExpression}
-	 * labeled alternative in {@link OParser#method_expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterConstructorExpression(@NotNull OParser.ConstructorExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ConstructorExpression}
-	 * labeled alternative in {@link OParser#method_expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitConstructorExpression(@NotNull OParser.ConstructorExpressionContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code FetchExpression}
 	 * labeled alternative in {@link OParser#method_expression}.
 	 * @param ctx the parse tree
@@ -1264,6 +1252,18 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMethodCallExpression(@NotNull OParser.MethodCallExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ConstructorExpression}
+	 * labeled alternative in {@link OParser#method_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterConstructorExpression(@NotNull OParser.ConstructorExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ConstructorExpression}
+	 * labeled alternative in {@link OParser#method_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitConstructorExpression(@NotNull OParser.ConstructorExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link OParser#document_expression}.
 	 * @param ctx the parse tree

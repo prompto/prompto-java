@@ -5428,21 +5428,6 @@ public class PParser extends AbstractParser {
 			if ( listener instanceof PParserListener ) ((PParserListener)listener).exitReadExpression(this);
 		}
 	}
-	public static class FetchExpressionContext extends Method_expressionContext {
-		public Fetch_expressionContext exp;
-		public Fetch_expressionContext fetch_expression() {
-			return getRuleContext(Fetch_expressionContext.class,0);
-		}
-		public FetchExpressionContext(Method_expressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PParserListener ) ((PParserListener)listener).enterFetchExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PParserListener ) ((PParserListener)listener).exitFetchExpression(this);
-		}
-	}
 	public static class ConstructorExpressionContext extends Method_expressionContext {
 		public Constructor_expressionContext exp;
 		public Constructor_expressionContext constructor_expression() {
@@ -5456,6 +5441,21 @@ public class PParser extends AbstractParser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof PParserListener ) ((PParserListener)listener).exitConstructorExpression(this);
+		}
+	}
+	public static class FetchExpressionContext extends Method_expressionContext {
+		public Fetch_expressionContext exp;
+		public Fetch_expressionContext fetch_expression() {
+			return getRuleContext(Fetch_expressionContext.class,0);
+		}
+		public FetchExpressionContext(Method_expressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PParserListener ) ((PParserListener)listener).enterFetchExpression(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PParserListener ) ((PParserListener)listener).exitFetchExpression(this);
 		}
 	}
 	public static class DocumentExpressionContext extends Method_expressionContext {
@@ -5489,43 +5489,43 @@ public class PParser extends AbstractParser {
 				}
 				break;
 			case 2:
-				_localctx = new ConstructorExpressionContext(_localctx);
+				_localctx = new FetchExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(992); 
-				((ConstructorExpressionContext)_localctx).exp = constructor_expression();
-				}
-				break;
-			case 3:
-				_localctx = new FetchExpressionContext(_localctx);
-				enterOuterAlt(_localctx, 3);
-				{
-				setState(993); 
 				((FetchExpressionContext)_localctx).exp = fetch_expression();
 				}
 				break;
-			case 4:
+			case 3:
 				_localctx = new ReadExpressionContext(_localctx);
-				enterOuterAlt(_localctx, 4);
+				enterOuterAlt(_localctx, 3);
 				{
-				setState(994); 
+				setState(993); 
 				((ReadExpressionContext)_localctx).exp = read_expression();
 				}
 				break;
-			case 5:
+			case 4:
 				_localctx = new SortedExpressionContext(_localctx);
-				enterOuterAlt(_localctx, 5);
+				enterOuterAlt(_localctx, 4);
 				{
-				setState(995); 
+				setState(994); 
 				((SortedExpressionContext)_localctx).exp = sorted_expression();
 				}
 				break;
-			case 6:
+			case 5:
 				_localctx = new MethodCallExpressionContext(_localctx);
+				enterOuterAlt(_localctx, 5);
+				{
+				setState(995); 
+				((MethodCallExpressionContext)_localctx).exp = method_call();
+				}
+				break;
+			case 6:
+				_localctx = new ConstructorExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 6);
 				{
 				setState(996); 
-				((MethodCallExpressionContext)_localctx).exp = method_call();
+				((ConstructorExpressionContext)_localctx).exp = constructor_expression();
 				}
 				break;
 			}
@@ -18661,8 +18661,8 @@ public class PParser extends AbstractParser {
 		"\u03d8\b-\1\2\u03d8\u03d9\5\u00eav\2\u03d9\u03de\3\2\2\2\u03da\u03db\f"+
 		"\3\2\2\u03db\u03dd\5\\/\2\u03dc\u03da\3\2\2\2\u03dd\u03e0\3\2\2\2\u03de"+
 		"\u03dc\3\2\2\2\u03de\u03df\3\2\2\2\u03dfY\3\2\2\2\u03e0\u03de\3\2\2\2"+
-		"\u03e1\u03e8\5^\60\2\u03e2\u03e8\5`\61\2\u03e3\u03e8\5j\66\2\u03e4\u03e8"+
-		"\5f\64\2\u03e5\u03e8\5l\67\2\u03e6\u03e8\5\62\32\2\u03e7\u03e1\3\2\2\2"+
+		"\u03e1\u03e8\5^\60\2\u03e2\u03e8\5j\66\2\u03e3\u03e8\5f\64\2\u03e4\u03e8"+
+		"\5l\67\2\u03e5\u03e8\5\62\32\2\u03e6\u03e8\5`\61\2\u03e7\u03e1\3\2\2\2"+
 		"\u03e7\u03e2\3\2\2\2\u03e7\u03e3\3\2\2\2\u03e7\u03e4\3\2\2\2\u03e7\u03e5"+
 		"\3\2\2\2\u03e7\u03e6\3\2\2\2\u03e8[\3\2\2\2\u03e9\u03ea\6/ \3\u03ea\u03eb"+
 		"\7\24\2\2\u03eb\u03f7\5\u00acW\2\u03ec\u03ed\6/!\3\u03ed\u03ee\7\27\2"+

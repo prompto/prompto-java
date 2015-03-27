@@ -1205,18 +1205,6 @@ public class PParserBaseListener implements PParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConstructorExpression(@NotNull PParser.ConstructorExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitConstructorExpression(@NotNull PParser.ConstructorExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterFetchExpression(@NotNull PParser.FetchExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1260,6 +1248,18 @@ public class PParserBaseListener implements PParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitMethodCallExpression(@NotNull PParser.MethodCallExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterConstructorExpression(@NotNull PParser.ConstructorExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitConstructorExpression(@NotNull PParser.ConstructorExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

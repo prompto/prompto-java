@@ -5528,21 +5528,6 @@ public class OParser extends AbstractParser {
 			if ( listener instanceof OParserListener ) ((OParserListener)listener).exitReadExpression(this);
 		}
 	}
-	public static class FetchExpressionContext extends Method_expressionContext {
-		public Fetch_expressionContext exp;
-		public Fetch_expressionContext fetch_expression() {
-			return getRuleContext(Fetch_expressionContext.class,0);
-		}
-		public FetchExpressionContext(Method_expressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof OParserListener ) ((OParserListener)listener).enterFetchExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof OParserListener ) ((OParserListener)listener).exitFetchExpression(this);
-		}
-	}
 	public static class ConstructorExpressionContext extends Method_expressionContext {
 		public Constructor_expressionContext exp;
 		public Constructor_expressionContext constructor_expression() {
@@ -5556,6 +5541,21 @@ public class OParser extends AbstractParser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof OParserListener ) ((OParserListener)listener).exitConstructorExpression(this);
+		}
+	}
+	public static class FetchExpressionContext extends Method_expressionContext {
+		public Fetch_expressionContext exp;
+		public Fetch_expressionContext fetch_expression() {
+			return getRuleContext(Fetch_expressionContext.class,0);
+		}
+		public FetchExpressionContext(Method_expressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof OParserListener ) ((OParserListener)listener).enterFetchExpression(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof OParserListener ) ((OParserListener)listener).exitFetchExpression(this);
 		}
 	}
 	public static class DocumentExpressionContext extends Method_expressionContext {
@@ -5589,43 +5589,43 @@ public class OParser extends AbstractParser {
 				}
 				break;
 			case 2:
-				_localctx = new ConstructorExpressionContext(_localctx);
+				_localctx = new FetchExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(1002); 
-				((ConstructorExpressionContext)_localctx).exp = constructor_expression();
-				}
-				break;
-			case 3:
-				_localctx = new FetchExpressionContext(_localctx);
-				enterOuterAlt(_localctx, 3);
-				{
-				setState(1003); 
 				((FetchExpressionContext)_localctx).exp = fetch_expression();
 				}
 				break;
-			case 4:
+			case 3:
 				_localctx = new ReadExpressionContext(_localctx);
-				enterOuterAlt(_localctx, 4);
+				enterOuterAlt(_localctx, 3);
 				{
-				setState(1004); 
+				setState(1003); 
 				((ReadExpressionContext)_localctx).exp = read_expression();
 				}
 				break;
-			case 5:
+			case 4:
 				_localctx = new SortedExpressionContext(_localctx);
-				enterOuterAlt(_localctx, 5);
+				enterOuterAlt(_localctx, 4);
 				{
-				setState(1005); 
+				setState(1004); 
 				((SortedExpressionContext)_localctx).exp = sorted_expression();
 				}
 				break;
-			case 6:
+			case 5:
 				_localctx = new MethodCallExpressionContext(_localctx);
+				enterOuterAlt(_localctx, 5);
+				{
+				setState(1005); 
+				((MethodCallExpressionContext)_localctx).exp = method_call();
+				}
+				break;
+			case 6:
+				_localctx = new ConstructorExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 6);
 				{
 				setState(1006); 
-				((MethodCallExpressionContext)_localctx).exp = method_call();
+				((ConstructorExpressionContext)_localctx).exp = constructor_expression();
 				}
 				break;
 			}
@@ -18642,9 +18642,9 @@ public class OParser extends AbstractParser {
 		"\5\u00aaV\2\u03e0[\3\2\2\2\u03e1\u03e2\b/\1\2\u03e2\u03e3\5\u00e6t\2\u03e3"+
 		"\u03e8\3\2\2\2\u03e4\u03e5\f\3\2\2\u03e5\u03e7\5j\66\2\u03e6\u03e4\3\2"+
 		"\2\2\u03e7\u03ea\3\2\2\2\u03e8\u03e6\3\2\2\2\u03e8\u03e9\3\2\2\2\u03e9"+
-		"]\3\2\2\2\u03ea\u03e8\3\2\2\2\u03eb\u03f2\5`\61\2\u03ec\u03f2\5l\67\2"+
-		"\u03ed\u03f2\5f\64\2\u03ee\u03f2\5b\62\2\u03ef\u03f2\5h\65\2\u03f0\u03f2"+
-		"\5P)\2\u03f1\u03eb\3\2\2\2\u03f1\u03ec\3\2\2\2\u03f1\u03ed\3\2\2\2\u03f1"+
+		"]\3\2\2\2\u03ea\u03e8\3\2\2\2\u03eb\u03f2\5`\61\2\u03ec\u03f2\5f\64\2"+
+		"\u03ed\u03f2\5b\62\2\u03ee\u03f2\5h\65\2\u03ef\u03f2\5P)\2\u03f0\u03f2"+
+		"\5l\67\2\u03f1\u03eb\3\2\2\2\u03f1\u03ec\3\2\2\2\u03f1\u03ed\3\2\2\2\u03f1"+
 		"\u03ee\3\2\2\2\u03f1\u03ef\3\2\2\2\u03f1\u03f0\3\2\2\2\u03f2_\3\2\2\2"+
 		"\u03f3\u03f4\5\u009eP\2\u03f4\u03f5\7\21\2\2\u03f5\u03f6\7\22\2\2\u03f6"+
 		"a\3\2\2\2\u03f7\u03f8\7r\2\2\u03f8\u03f9\7[\2\2\u03f9\u03fa\5X-\2\u03fa"+
