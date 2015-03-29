@@ -1,12 +1,15 @@
 bugs:
-date/time/ check return type
 no getters from setters
 translate to E may change parameters, see test: is instance
+review types: document, method as parameters
+date/time/ check return type
 
 missing code:
+comments translation
 python timezone name
 javascript timezone name
 check member methods
+check unit tests
 
 missing tests:
 pass/empty statement
@@ -14,10 +17,7 @@ IAssertion
 
 language:
 sentence/verb
-
 method as attribute, AnyMethod
-comments translation
-review types: document, method as parameters
 pattern literals
 typed tuples?
 
@@ -31,16 +31,27 @@ type category
 avro
 protobuf
 logging
+code store
+data store
 
 tools:
 eclipse editor
+	errors in editor
+	script project + launcher
+	console project + launcher
+	framework project
+	variables in debugger
+	code completion
+	refactoring
 Java compiler
+web editor
+JavaScript translator
 console/scripting
+
 Python debugger
 JavaScript debugger
 .Net compiler
+Python translator
 Swift version
 visual studio editor
 RCP editor
-.Net editor
-web editor

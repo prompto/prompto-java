@@ -50,7 +50,6 @@ import presto.parser.OPrestoBuilder;
 import presto.runtime.Context;
 import presto.statement.AssignInstanceStatement;
 import presto.statement.IStatement;
-import presto.statement.MethodCall;
 import presto.statement.NativeCall;
 import presto.statement.UnresolvedCall;
 import presto.type.CategoryType;

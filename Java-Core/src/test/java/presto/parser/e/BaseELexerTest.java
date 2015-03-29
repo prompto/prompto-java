@@ -1,9 +1,7 @@
 package presto.parser.e;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +13,28 @@ import org.antlr.v4.runtime.Token;
 
 import presto.parser.EIndentingLexer;
 import presto.parser.ELexer;
+import presto.utils.BaseTest;
 
 
-public class BaseELexerTest {
+public class BaseELexerTest extends BaseTest {
+
+	public void checkTokenOffsets(String resourceName) throws Exception {
+		Lexer lexer = newTokenStreamFromResource(resourceName);
+		List<Token> tokens = parseTokens(lexer);
+		Token previous = null;
+		for(Token token : tokens) {
+			checkTokenOffset(previous, token);
+			previous = token;
+		}
+	}
+
+	private void checkTokenOffset(Token previous, Token token) {
+		if(previous==null || token.getType()==-1) // EOF
+			return;
+		if(token.getStartIndex()<previous.getStopIndex()+1) {
+			fail("previous:" + previous.toString() + ", token:" + token.toString());
+		}
+	}
 
 	public List<Token> parseTokens(Lexer lexer) {
 		List<Token> result = new ArrayList<Token>();
@@ -52,16 +69,11 @@ public class BaseELexerTest {
 		return new EIndentingLexer(stream);
 	}
 
-	public Lexer newTokenStreamFromResource(String resourceName) {
-		InputStream input = ClassLoader.getSystemClassLoader().getResourceAsStream(resourceName);
+	public Lexer newTokenStreamFromResource(String resourceName) throws Exception {
+		InputStream input = getResourceAsStream(resourceName);
 		assertNotNull(input);
-		try {
-			CharStream stream = new ANTLRInputStream(input);
-			return new EIndentingLexer(stream);
-		} catch(IOException e) {
-			fail();
-			return null;
-		}
+		CharStream stream = new ANTLRInputStream(input);
+		return new EIndentingLexer(stream);
 	}
 
 	public String parseTokenNamesFromString(String input) {
@@ -69,7 +81,7 @@ public class BaseELexerTest {
 		return parseTokenNames(lexer);
 	}
 
-	public String parseTokenNamesFromResource(String input) {
+	public String parseTokenNamesFromResource(String input) throws Exception {
 		Lexer lexer = newTokenStreamFromResource(input);
 		return parseTokenNames(lexer);
 	}

@@ -28,6 +28,14 @@ public class TestMethodDeclaration extends BaseDeclaration {
 		this.error = error;
 	}
 	
+	public StatementList getStatements() {
+		return statements;
+	}
+	
+	public ExpressionList getAssertions() {
+		return assertions;
+	}
+	
 	@Override
 	public IType check(Context context) throws SyntaxError {
 		// TODO
