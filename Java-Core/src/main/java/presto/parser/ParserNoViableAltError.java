@@ -1,6 +1,8 @@
 package presto.parser;
 
 import org.antlr.v4.runtime.NoViableAltException;
+import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.TokenStream;
 
 public class ParserNoViableAltError extends ProblemBase {
 
@@ -24,8 +26,10 @@ public class ParserNoViableAltError extends ProblemBase {
 	
 	@Override
 	public String getMessage() {
-		return "Invalid syntax, found: " + getOffendingText() + ", was expecting: "
-				+ ((NoViableAltException)e).getExpectedTokens().toString(e.getRecognizer().getVocabulary());
+		TokenStream tokens = (TokenStream)e.getInputStream();
+		Token start = ((NoViableAltException)e).getStartToken();
+		return "Invalid syntax at: " +
+				( start.getType()==Token.EOF ? "<EOF>" : tokens.getText(start, e.getOffendingToken()));
 	}
 	
 	@Override

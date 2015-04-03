@@ -2,6 +2,7 @@ package presto.error;
 
 import java.io.ByteArrayInputStream;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -46,16 +47,29 @@ public class TestErrorListener {
 		assertTrue(error.getMessage().startsWith("Unwanted token:"));
 	}
 	
+	@Ignore
+	@Test
+	public void testMissingToken() throws Exception {
+		IProblemListener listener = new ProblemCollector();
+		IParser parser = Dialect.E.getParserFactory().newParser();
+		parser.setErrorListener(listener);
+		parser.parse(null, new ByteArrayInputStream("define x : Text attribute".getBytes()));
+		assertEquals(1, listener.getCount()); 
+		IProblem error = listener.getProblems().iterator().next();
+		assertEquals(9, error.getStartIndex());
+		assertTrue(error.getMessage().startsWith("Missing token:"));
+	}
+
 	@Test
 	public void testSyntaxError() throws Exception {
 		IProblemListener listener = new ProblemCollector();
 		IParser parser = Dialect.E.getParserFactory().newParser();
 		parser.setErrorListener(listener);
-		parser.parse(null, new ByteArrayInputStream("define x: Text attribute".getBytes()));
+		parser.parse(null, new ByteArrayInputStream("define".getBytes()));
 		assertEquals(1, listener.getCount()); 
 		IProblem error = listener.getProblems().iterator().next();
-		assertEquals(8, error.getStartIndex()); // between x and :
-		assertTrue(error.getMessage().startsWith("Invalid syntax"));
+		assertEquals(6, error.getStartIndex()); // after define
+		assertEquals("Invalid syntax at: define<EOF>", error.getMessage());
 	}
 
 	
