@@ -29,7 +29,7 @@ public class TestErrorListener {
 		parser.setErrorListener(listener);
 		parser.parse(null, new ByteArrayInputStream("'abc".getBytes()));
 		assertEquals(2, listener.getCount()); // 1 lexer,1 parser
-		IProblem error = listener.getErrors().iterator().next();
+		IProblem error = listener.getProblems().iterator().next();
 		assertEquals(0, error.getStartIndex());
 		assertTrue(error.getMessage().startsWith("Unrecognized character sequence:"));
 	}
@@ -41,7 +41,7 @@ public class TestErrorListener {
 		parser.setErrorListener(listener);
 		parser.parse(null, new ByteArrayInputStream("abc".getBytes()));
 		assertEquals(1, listener.getCount()); 
-		IProblem error = listener.getErrors().iterator().next();
+		IProblem error = listener.getProblems().iterator().next();
 		assertEquals(0, error.getStartIndex());
 		assertTrue(error.getMessage().startsWith("Unwanted token:"));
 	}
@@ -53,7 +53,7 @@ public class TestErrorListener {
 		parser.setErrorListener(listener);
 		parser.parse(null, new ByteArrayInputStream("define x: Text attribute".getBytes()));
 		assertEquals(1, listener.getCount()); 
-		IProblem error = listener.getErrors().iterator().next();
+		IProblem error = listener.getProblems().iterator().next();
 		assertEquals(8, error.getStartIndex()); // between x and :
 		assertTrue(error.getMessage().startsWith("Invalid syntax"));
 	}

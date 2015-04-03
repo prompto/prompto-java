@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.antlr.v4.runtime.ANTLRErrorListener;
+import org.antlr.v4.runtime.InputMismatchException;
 import org.antlr.v4.runtime.LexerNoViableAltException;
 import org.antlr.v4.runtime.NoViableAltException;
 import org.antlr.v4.runtime.Parser;
@@ -47,6 +48,8 @@ public class ProblemCollector implements ANTLRErrorListener, IProblemListener {
 				errors.add(new MissingTokenError(line, column, (MissingTokenException)e));
 			else if(e instanceof NoViableAltException)
 				errors.add(new ParserNoViableAltError(line, column, (NoViableAltException)e));
+			else if(e instanceof InputMismatchException)
+				errors.add(new InputMismatchError(line, column, (InputMismatchException)e));
 			else
 				throw e;
 		}
@@ -58,7 +61,7 @@ public class ProblemCollector implements ANTLRErrorListener, IProblemListener {
 	}
 	
 	@Override
-	public Collection<IProblem> getErrors() {
+	public Collection<IProblem> getProblems() {
 		return errors;
 	}
 

@@ -10,8 +10,10 @@ public interface IProblem {
 	Type getType();
 	
 	static enum Type {
-		ERROR,
-		WARNING,
-		INFO
+		// match Eclipse SEVERITY
+		INFO,		// public static final int SEVERITY_INFO = 0;
+		WARNING, 	// public static final int SEVERITY_WARNING = 1;
+		ERROR		// public static final int SEVERITY_ERROR = 2;
+		
 	}
 }

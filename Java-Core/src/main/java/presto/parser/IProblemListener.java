@@ -6,6 +6,6 @@ public interface IProblemListener {
 
 	void reset();
 	int getCount();
-	Collection<IProblem> getErrors();
+	Collection<IProblem> getProblems();
 
 }
