@@ -7,6 +7,6 @@ import presto.grammar.DeclarationList;
 public interface IParser {
 
 	ILexer getLexer();
-	void setErrorListener(IErrorListener listener);
+	void setErrorListener(IProblemListener listener);
 	DeclarationList parse(String path, InputStream data) throws Exception;
 }

@@ -2,14 +2,14 @@ package presto.parser;
 
 import org.antlr.v4.runtime.RecognitionException;
 
-public abstract class ErrorBase implements IError {
+public abstract class ProblemBase implements IProblem {
 	
 	int line;
 	int column;
 	int hashCode = -1;
 	RecognitionException e;
 	
-	public ErrorBase(int line, int column, RecognitionException e) {
+	public ProblemBase(int line, int column, RecognitionException e) {
 		this.line = line;
 		this.column = column;
 		this.e = e;
@@ -36,9 +36,9 @@ public abstract class ErrorBase implements IError {
 	public boolean equals(Object obj) {
 		if(obj==this)
 			return true;
-		if(!(obj instanceof ErrorBase))
+		if(!(obj instanceof ProblemBase))
 			return false;
-		ErrorBase other = (ErrorBase)obj;
+		ProblemBase other = (ProblemBase)obj;
 		return this.getStartIndex()==other.getStartIndex()
 				&& this.getMessage().equals(other.getMessage());
 	}

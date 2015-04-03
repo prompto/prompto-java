@@ -16,7 +16,7 @@ import presto.grammar.DeclarationList;
 
 public class PCleverParser extends PParser implements IParser {
 
-	IErrorListener errorListener;
+	IProblemListener errorListener;
 	String path = "";
 
 	public PCleverParser(String input) {
@@ -42,10 +42,11 @@ public class PCleverParser extends PParser implements IParser {
 
 	public PCleverParser(TokenStream input) {
 		super(input);
+		this.setErrorHandler(new ErrorStrategy());
 	}
 
 	@Override
-	public void setErrorListener(IErrorListener errorListener) {
+	public void setErrorListener(IProblemListener errorListener) {
 		this.removeErrorListeners();
 		this.addErrorListener((ANTLRErrorListener)errorListener);
 		getLexer().removeErrorListeners();

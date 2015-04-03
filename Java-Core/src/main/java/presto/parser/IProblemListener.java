@@ -2,10 +2,10 @@ package presto.parser;
 
 import java.util.Collection;
 
-public interface IErrorListener {
+public interface IProblemListener {
 
 	void reset();
 	int getCount();
-	Collection<IError> getErrors();
+	Collection<IProblem> getErrors();
 
 }

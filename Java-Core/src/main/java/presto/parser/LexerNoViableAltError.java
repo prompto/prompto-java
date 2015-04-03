@@ -3,7 +3,7 @@ package presto.parser;
 import org.antlr.v4.runtime.LexerNoViableAltException;
 import org.antlr.v4.runtime.misc.Interval;
 
-public class LexerNoViableAltError extends ErrorBase {
+public class LexerNoViableAltError extends ProblemBase {
 
 	public LexerNoViableAltError(int line, int column, LexerNoViableAltException e) {
 		super(line, column, e);
@@ -27,6 +27,11 @@ public class LexerNoViableAltError extends ErrorBase {
 	@Override
 	public String getMessage() {
 		return "Unrecognized character sequence: " + getOffendingText();
+	}
+	
+	@Override
+	public Type getType() {
+		return Type.ERROR;
 	}
 	
 }
