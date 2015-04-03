@@ -3,10 +3,10 @@ package presto.parser;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.TokenSource;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -16,6 +16,7 @@ import presto.grammar.DeclarationList;
 
 public class ECleverParser extends EParser implements IParser {
 
+	IErrorListener errorListener;
 	String path = "";
 
 	public ECleverParser(String input) {
@@ -35,14 +36,28 @@ public class ECleverParser extends EParser implements IParser {
 		this(new EIndentingLexer(input));
 	}
 	
-	public ECleverParser(TokenSource input) {
-		this(new CommonTokenStream(input));
+	public ECleverParser(EIndentingLexer lexer) {
+		this(new CommonTokenStream(lexer));
 	}
 
 	public ECleverParser(TokenStream input) {
 		super(input);
 	}
 
+	@Override
+	public void setErrorListener(IErrorListener errorListener) {
+		this.removeErrorListeners();
+		this.addErrorListener((ANTLRErrorListener)errorListener);
+		getLexer().removeErrorListeners();
+		getLexer().addErrorListener((ANTLRErrorListener)errorListener);
+		this.errorListener = errorListener;
+	}
+	
+	@Override
+	public EIndentingLexer getLexer() {
+		return (EIndentingLexer)this.getInputStream().getTokenSource();
+	}
+	
 	public int equalToken() {
 		return EParser.EQ;
 	};
@@ -56,7 +71,13 @@ public class ECleverParser extends EParser implements IParser {
 	}
 
 	@Override
-	public DeclarationList parse() throws Exception {
+	public DeclarationList parse(String path, InputStream data) throws Exception {
+		if(errorListener!=null)
+			errorListener.reset();
+		setPath(path);
+		EIndentingLexer lexer = getLexer();
+		lexer.reset(data);
+		setInputStream(new CommonTokenStream(lexer));
 		return parse_declaration_list();
 	}
 	

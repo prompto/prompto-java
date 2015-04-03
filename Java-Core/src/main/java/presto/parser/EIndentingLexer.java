@@ -1,9 +1,12 @@
 package presto.parser;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
+import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.Token;
@@ -17,6 +20,16 @@ public class EIndentingLexer extends ELexer implements ILexer {
 	
     public EIndentingLexer(CharStream input) {
     	super(input);
+    	indents.push(0);
+    }
+    
+    @Override
+    public void reset(InputStream input) throws IOException {
+    	setInputStream(new ANTLRInputStream(input));
+    	tokens = new LinkedList<Token>();
+    	indents = new Stack<Integer>();
+    	wasLF = false;
+    	// let user reset addLF
     	indents.push(0);
     }
     
