@@ -4,13 +4,16 @@ import org.antlr.v4.runtime.InputMismatchException;
 
 public class InputMismatchError extends ProblemBase {
 
+	InputMismatchException e;
+
 	public InputMismatchError(int line, int column, InputMismatchException e) {
-		super(line, column, e);
+		super(line, column);
+		this.e = e;
 	}
 	
 	@Override
 	public int getStartIndex() {
-		return ((InputMismatchException)e).getOffendingToken().getStartIndex();
+		return e.getOffendingToken().getStartIndex();
 	}
 	
 	@Override
@@ -19,13 +22,13 @@ public class InputMismatchError extends ProblemBase {
 	}
 	
 	String getOffendingText() {
-		return ((InputMismatchException)e).getOffendingToken().getText();
+		return e.getOffendingToken().getText();
 	}
 	
 	@Override
 	public String getMessage() {
 		return "Input mismatch, found: " + getOffendingText() + ", was expecting: "
-				+ ((InputMismatchException)e).getExpectedTokens().toString(e.getRecognizer().getVocabulary());
+				+ e.getExpectedTokens().toString(e.getRecognizer().getVocabulary());
 	}
 	
 	@Override

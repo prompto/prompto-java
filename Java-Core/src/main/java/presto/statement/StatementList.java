@@ -22,8 +22,16 @@ public class StatementList extends LinkedList<IStatement> {
 	public StatementList() {
 	}
 
-	public StatementList(IStatement statement) {
-		this.add(statement);
+	public StatementList(IStatement stmt) {
+		this.add(stmt);
+	}
+	
+	@Override
+	public boolean add(IStatement stmt) {
+		if(stmt!=null)
+			return super.add(stmt);
+		else
+			return false;
 	}
 	
 	public IType check(Context context) throws SyntaxError {

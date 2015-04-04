@@ -15,13 +15,15 @@ import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
 
+import presto.declaration.IDeclaration;
+
 public class ProblemCollector implements ANTLRErrorListener, IProblemListener {
 
-	List<IProblem> errors = new ArrayList<IProblem>();
+	List<IProblem> problems = new ArrayList<IProblem>();
 	
 	public void reset() {
-		synchronized(errors) {
-			errors.clear();
+		synchronized(problems) {
+			problems.clear();
 		}
 	}
 	
@@ -39,30 +41,37 @@ public class ProblemCollector implements ANTLRErrorListener, IProblemListener {
 	
 	@Override
 	public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int column, String msg, RecognitionException e) {
-		synchronized(errors) {
+		synchronized(problems) {
 			if(e instanceof LexerNoViableAltException)
-				errors.add(new LexerNoViableAltError(line, column, (LexerNoViableAltException)e));
+				problems.add(new LexerNoViableAltError(line, column, (LexerNoViableAltException)e));
 			else if(e instanceof UnwantedTokenException)
-				errors.add(new UnwantedTokenError(line, column, (UnwantedTokenException)e));
+				problems.add(new UnwantedTokenError(line, column, (UnwantedTokenException)e));
 			else if(e instanceof MissingTokenException)
-				errors.add(new MissingTokenError(line, column, (MissingTokenException)e));
+				problems.add(new MissingTokenError(line, column, (MissingTokenException)e));
 			else if(e instanceof NoViableAltException)
-				errors.add(new ParserNoViableAltError(line, column, (NoViableAltException)e));
+				problems.add(new ParserNoViableAltError(line, column, (NoViableAltException)e));
 			else if(e instanceof InputMismatchException)
-				errors.add(new InputMismatchError(line, column, (InputMismatchException)e));
+				problems.add(new InputMismatchError(line, column, (InputMismatchException)e));
 			else
 				throw e;
 		}
 	}
 	
 	@Override
+	public void reportDuplicate(IDeclaration declaration, ISection existing) {
+		synchronized(problems) {
+			problems.add(new DuplicateError(declaration.getName(), declaration, existing));
+		}
+	}
+	
+	@Override
 	public int getCount() {
-		return errors.size();
+		return problems.size();
 	}
 	
 	@Override
 	public Collection<IProblem> getProblems() {
-		return errors;
+		return problems;
 	}
 
 }

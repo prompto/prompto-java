@@ -2,13 +2,16 @@ package presto.parser;
 
 public class UnwantedTokenError extends ProblemBase {
 
+	UnwantedTokenException e;
+	
 	public UnwantedTokenError(int line, int column, UnwantedTokenException e) {
-		super(line, column, e);
+		super(line, column);
+		this.e = e;
 	}
 	
 	@Override
 	public int getStartIndex() {
-		return ((UnwantedTokenException)e).getStartIndex();
+		return e.getStartIndex();
 	}
 	
 	@Override
@@ -17,7 +20,7 @@ public class UnwantedTokenError extends ProblemBase {
 	}
 	
 	String getOffendingText() {
-		return ((UnwantedTokenException)e).getOffendingText();
+		return e.getOffendingText();
 	}
 	
 	@Override

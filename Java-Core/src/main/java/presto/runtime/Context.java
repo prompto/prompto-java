@@ -1,7 +1,9 @@
 package presto.runtime;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import presto.debug.Debugger;
@@ -14,6 +16,8 @@ import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.grammar.INamed;
 import presto.parser.ILocation;
+import presto.parser.IProblemListener;
+import presto.parser.ISection;
 import presto.statement.IStatement;
 import presto.type.CategoryType;
 import presto.type.DecimalType;
@@ -40,6 +44,7 @@ public class Context implements IContext {
 	Context calling;
 	Context parent; // for inner methods
 	Debugger debugger; 
+	IProblemListener problemListener;
 	
 	Map<String,IDeclaration> declarations = new HashMap<String, IDeclaration>();
 	Map<String,TestMethodDeclaration> tests = new HashMap<String, TestMethodDeclaration>();
@@ -61,6 +66,14 @@ public class Context implements IContext {
 		return debugger;
 	}
 	
+	public void setProblemListener(IProblemListener problemListener) {
+		this.problemListener = problemListener;
+	}
+	
+	public IProblemListener getProblemListener() {
+		return problemListener;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -109,6 +122,7 @@ public class Context implements IContext {
 		context.calling = this.calling;
 		context.parent = this;
 		context.debugger = this.debugger;
+		context.problemListener = this.problemListener;
 		return context;
 	}
 	
@@ -118,6 +132,7 @@ public class Context implements IContext {
 		context.calling = this;
 		context.parent = null;
 		context.debugger = this.debugger;
+		context.problemListener = this.problemListener;
 		return context;
 	}
 
@@ -134,6 +149,7 @@ public class Context implements IContext {
 		context.calling = this;
 		context.parent = null;
 		context.debugger = this.debugger;
+		context.problemListener = this.problemListener;
 		return context;
 	}
 
@@ -143,7 +159,39 @@ public class Context implements IContext {
 		context.calling = this.calling;
 		context.parent = this;
 		context.debugger = this.debugger;
+		context.problemListener = this.problemListener;
 		return context;
+	}
+
+	public void unregister(String path) throws SyntaxError {
+		if(globals!=this)
+			globals.unregister(path);
+		else {
+			unregisterDeclarations(path);
+			unregisterTests(path);
+		}
+	}
+	
+	private void unregisterTests(String path) {
+		List<TestMethodDeclaration> toRemove = new ArrayList<TestMethodDeclaration>();
+		for(TestMethodDeclaration decl : tests.values()) {
+			if(path.equals(decl.getPath()))
+				toRemove.add(decl);
+		}
+		for(TestMethodDeclaration decl : toRemove)
+			tests.remove(decl.getName());
+	}
+
+	private void unregisterDeclarations(String path) throws SyntaxError {
+		List<IDeclaration> toRemove = new ArrayList<IDeclaration>();
+		for(IDeclaration decl : declarations.values()) {
+			if(path.equals(decl.getPath()))
+				toRemove.add(decl);
+			else if(decl instanceof MethodDeclarationMap)
+				((MethodDeclarationMap)decl).unregister(this, path);
+		}
+		for(IDeclaration decl : toRemove)
+			declarations.remove(decl.getName());
 	}
 
 	public INamed getRegistered(String name) {
@@ -175,28 +223,55 @@ public class Context implements IContext {
 	}
 
 	public void registerDeclaration(IDeclaration declaration) throws SyntaxError {
+		if(checkDuplicate(declaration))
+			declarations.put(declaration.getName(), declaration);
+	}
+
+	private boolean checkDuplicate(IDeclaration declaration) throws SyntaxError {
 		INamed current = getRegistered(declaration.getName());
-		if(current!=null)
-			throw new SyntaxError("Duplicate name: \"" + declaration.getName() + "\"");
-		declarations.put(declaration.getName(), declaration);
+		if(current!=null) {
+			if(problemListener!=null)
+				problemListener.reportDuplicate(declaration, (ISection)current);
+			else
+				throw new SyntaxError("Duplicate name: \"" + declaration.getName() + "\"");
+		}
+		return current==null;
 	}
 
 	public void registerDeclaration(IMethodDeclaration declaration) throws SyntaxError {
-		INamed current = getRegistered(declaration.getName());
-		if(current!=null && !(current instanceof MethodDeclarationMap)) 
-			throw new SyntaxError("Duplicate name: \"" + declaration.getName() + "\"");
+		MethodDeclarationMap current = checkDuplicate(declaration);
 		if(current==null) {
 			current = new MethodDeclarationMap(declaration.getName());
 			declarations.put(declaration.getName(), (MethodDeclarationMap)current);
 		}
-		((MethodDeclarationMap)current).register(declaration,this);
+		current.register(declaration,this);
 	}
 	
+	private MethodDeclarationMap checkDuplicate(IMethodDeclaration declaration) throws SyntaxError {
+		INamed current = getRegistered(declaration.getName());
+		if(current!=null && !(current instanceof MethodDeclarationMap)) {
+			if(problemListener!=null)
+				problemListener.reportDuplicate(declaration, (ISection)current);
+			else
+				throw new SyntaxError("Duplicate name: \"" + declaration.getName() + "\"");
+		}
+		return (MethodDeclarationMap)current;
+	}
+
 	public void registerDeclaration(TestMethodDeclaration declaration) throws SyntaxError {
+		if(checkDuplicate(declaration))
+			tests.put(declaration.getName(), declaration);
+	}
+	
+	private boolean checkDuplicate(TestMethodDeclaration declaration) throws SyntaxError {
 		TestMethodDeclaration current = tests.get(declaration.getName());
-		if(current!=null) 
-			throw new SyntaxError("Duplicate test: \"" + declaration.getName() + "\"");
-		tests.put(declaration.getName(), declaration);
+		if(current!=null) {
+			if(problemListener!=null)
+				problemListener.reportDuplicate(declaration, (ISection)current);
+			else
+				throw new SyntaxError("Duplicate test: \"" + declaration.getName() + "\"");
+		}
+		return current==null;
 	}
 	
 	public static class MethodDeclarationMap extends HashMap<String,IMethodDeclaration> implements IDeclaration {
@@ -209,6 +284,16 @@ public class Context implements IContext {
 			this.name = name;
 		}
 		
+		public void unregister(Context context, String path) throws SyntaxError {
+			List<IMethodDeclaration> toRemove = new ArrayList<IMethodDeclaration>();
+			for(IMethodDeclaration decl : this.values()) {
+				if(path.equals(decl.getPath()))
+					toRemove.add(decl);
+			}
+			for(IMethodDeclaration decl : toRemove)
+				this.remove(decl.getProto(context));
+		}
+
 		@Override
 		public void toDialect(CodeWriter writer) {
 			throw new RuntimeException("Should never get there!");
@@ -229,11 +314,15 @@ public class Context implements IContext {
 			throw new RuntimeException("Should never get there!");
 		}
 		
-		public void register(IMethodDeclaration declaration,Context context) throws SyntaxError {
+		public void register(IMethodDeclaration declaration, Context context) throws SyntaxError {
 			String proto = declaration.getProto(context);
-			if(this.containsKey(proto)) 
-				throw new SyntaxError("Duplicate prototype for name: \"" + declaration.getName() + "\"");
-			this.put(proto, declaration);
+			if(this.containsKey(proto)) {
+				if(context.getProblemListener()!=null)
+					context.getProblemListener().reportDuplicate(declaration, this.get(proto));
+				else
+					throw new SyntaxError("Duplicate prototype for name: \"" + declaration.getName() + "\"");
+			} else
+				this.put(proto, declaration);
 		}
 		
 		public void registerIfMissing(IMethodDeclaration declaration,Context context) throws SyntaxError {
@@ -249,7 +338,7 @@ public class Context implements IContext {
 
 		@Override
 		public String getPath() {
-			throw new RuntimeException("Should never get there!");
+			return "__INTERNAL__"; // avoid crash in unregister
 		}
 
 		@Override
@@ -481,6 +570,7 @@ public class Context implements IContext {
 	public Collection<TestMethodDeclaration> getTests() {
 		return tests.values();
 	}
+
 
 
 }

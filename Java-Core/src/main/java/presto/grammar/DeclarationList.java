@@ -20,6 +20,14 @@ public class DeclarationList extends LinkedList<IDeclaration> {
 		this.add(item);
 	}
 
+	@Override
+	public boolean add(IDeclaration decl) {
+		if(decl!=null)
+			return super.add(decl);
+		else
+			return false;
+	}
+	
 	public void register(Context context) throws SyntaxError {
 		for(IDeclaration declaration : this) {
 			declaration.register(context);

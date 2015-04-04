@@ -5,13 +5,16 @@ import org.antlr.v4.runtime.misc.Interval;
 
 public class LexerNoViableAltError extends ProblemBase {
 
+	LexerNoViableAltException e;
+	
 	public LexerNoViableAltError(int line, int column, LexerNoViableAltException e) {
-		super(line, column, e);
+		super(line, column);
+		this.e = e;
 	}
 	
 	@Override
 	public int getStartIndex() {
-		return ((LexerNoViableAltException)e).getStartIndex();
+		return e.getStartIndex();
 	}
 	
 	@Override
@@ -21,7 +24,7 @@ public class LexerNoViableAltError extends ProblemBase {
 	
 	String getOffendingText() {
 		int idx = getStartIndex();
-		return ((LexerNoViableAltException)e).getInputStream().getText(Interval.of(idx, idx));
+		return e.getInputStream().getText(Interval.of(idx, idx));
 	}
 	
 	@Override

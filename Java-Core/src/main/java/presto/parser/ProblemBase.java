@@ -1,18 +1,15 @@
 package presto.parser;
 
-import org.antlr.v4.runtime.RecognitionException;
 
 public abstract class ProblemBase implements IProblem {
 	
 	int line;
 	int column;
 	int hashCode = -1;
-	RecognitionException e;
 	
-	public ProblemBase(int line, int column, RecognitionException e) {
+	public ProblemBase(int line, int column) {
 		this.line = line;
 		this.column = column;
-		this.e = e;
 	}
 
 	@Override

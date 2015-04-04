@@ -2,13 +2,16 @@ package presto.parser;
 
 public class MissingTokenError extends ProblemBase {
 
+	MissingTokenException e;
+	
 	public MissingTokenError(int line, int column, MissingTokenException e) {
-		super(line, column, e);
+		super(line, column);
+		this.e = e;
 	}
 	
 	@Override
 	public int getStartIndex() {
-		return ((MissingTokenException)e).getStartIndex();
+		return e.getStartIndex();
 	}
 	
 	@Override
@@ -18,8 +21,8 @@ public class MissingTokenError extends ProblemBase {
 	
 	@Override
 	public String getMessage() {
-		return "Missing token, expecting: " + ((MissingTokenException)e).getMissingTokensAsString() 
-				+ ", found: " + ((MissingTokenException)e).getOffendingText() + " instead.";
+		return "Missing token, expecting: " + e.getMissingTokensAsString() 
+				+ ", found: " + e.getOffendingText() + " instead.";
 	}
 	
 	@Override

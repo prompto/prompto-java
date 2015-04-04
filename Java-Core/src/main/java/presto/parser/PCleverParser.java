@@ -46,7 +46,7 @@ public class PCleverParser extends PParser implements IParser {
 	}
 
 	@Override
-	public void setErrorListener(IProblemListener errorListener) {
+	public void setProblemListener(IProblemListener errorListener) {
 		this.removeErrorListeners();
 		this.addErrorListener((ANTLRErrorListener)errorListener);
 		getLexer().removeErrorListeners();
