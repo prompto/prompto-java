@@ -70,9 +70,9 @@
 							<exclude>**/OLexer*.*</exclude>
 							<exclude>**/OParser*.*</exclude>
 							<exclude>**/OParserBaseListener*.*</exclude>
-							<exclude>**/PLexer*.*</exclude>
-							<exclude>**/PParser*.*</exclude>
-							<exclude>**/PParserBaseListener*.*</exclude>
+							<exclude>**/SLexer*.*</exclude>
+							<exclude>**/SParser*.*</exclude>
+							<exclude>**/SParserBaseListener*.*</exclude>
 						</excludes>
 					</instrumentation>
 					<formats>
