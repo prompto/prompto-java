@@ -21,57 +21,57 @@ public class TestSortList extends BaseEParserTest {
 
 	@Test
 	public void testSortBooleans() throws Exception {
-		checkOutput("sortList/sortBooleans.e");
+		checkOutput("sortList/sortBooleans.pec");
 	}
 
 	@Test
 	public void testSortDates() throws Exception {
-		checkOutput("sortList/sortDates.e");
+		checkOutput("sortList/sortDates.pec");
 	}
 
 	@Test
 	public void testSortDateTimes() throws Exception {
-		checkOutput("sortList/sortDateTimes.e");
+		checkOutput("sortList/sortDateTimes.pec");
 	}
 
 	@Test
 	public void testSortDecimals() throws Exception {
-		checkOutput("sortList/sortDecimals.e");
+		checkOutput("sortList/sortDecimals.pec");
 	}
 
 	@Test
 	public void testSortExpressions() throws Exception {
-		checkOutput("sortList/sortExpressions.e");
+		checkOutput("sortList/sortExpressions.pec");
 	}
 
 	@Test
 	public void testSortIntegers() throws Exception {
-		checkOutput("sortList/sortIntegers.e");
+		checkOutput("sortList/sortIntegers.pec");
 	}
 
 	@Test
 	public void testSortKeys() throws Exception {
-		checkOutput("sortList/sortKeys.e");
+		checkOutput("sortList/sortKeys.pec");
 	}
 
 	@Test
 	public void testSortMethods() throws Exception {
-		checkOutput("sortList/sortMethods.e");
+		checkOutput("sortList/sortMethods.pec");
 	}
 
 	@Test
 	public void testSortNames() throws Exception {
-		checkOutput("sortList/sortNames.e");
+		checkOutput("sortList/sortNames.pec");
 	}
 
 	@Test
 	public void testSortTexts() throws Exception {
-		checkOutput("sortList/sortTexts.e");
+		checkOutput("sortList/sortTexts.pec");
 	}
 
 	@Test
 	public void testSortTimes() throws Exception {
-		checkOutput("sortList/sortTimes.e");
+		checkOutput("sortList/sortTimes.pec");
 	}
 
 }

@@ -21,27 +21,27 @@ public class TestLazy extends BaseEParserTest {
 
 	@Test
 	public void testCyclic() throws Exception {
-		checkOutput("lazy/cyclic.e");
+		checkOutput("lazy/cyclic.pec");
 	}
 
 	@Test
 	public void testDict() throws Exception {
-		checkOutput("lazy/dict.e");
+		checkOutput("lazy/dict.pec");
 	}
 
 	@Test
 	public void testList() throws Exception {
-		checkOutput("lazy/list.e");
+		checkOutput("lazy/list.pec");
 	}
 
 	@Test
 	public void testSet() throws Exception {
-		checkOutput("lazy/set.e");
+		checkOutput("lazy/set.pec");
 	}
 
 	@Test
 	public void testTransient() throws Exception {
-		checkOutput("lazy/transient.e");
+		checkOutput("lazy/transient.pec");
 	}
 
 }

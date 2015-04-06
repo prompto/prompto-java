@@ -21,17 +21,17 @@ public class TestMinus extends BaseEParserTest {
 
 	@Test
 	public void testMinusDecimal() throws Exception {
-		checkOutput("minus/minusDecimal.e");
+		checkOutput("minus/minusDecimal.pec");
 	}
 
 	@Test
 	public void testMinusInteger() throws Exception {
-		checkOutput("minus/minusInteger.e");
+		checkOutput("minus/minusInteger.pec");
 	}
 
 	@Test
 	public void testMinusPeriod() throws Exception {
-		checkOutput("minus/minusPeriod.e");
+		checkOutput("minus/minusPeriod.pec");
 	}
 
 }

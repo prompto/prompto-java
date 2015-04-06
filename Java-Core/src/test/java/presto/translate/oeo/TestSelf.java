@@ -8,12 +8,12 @@ public class TestSelf extends BaseOParserTest {
 
 	@Test
 	public void testSelfAsParameter() throws Exception {
-		compareResourceOEO("self/selfAsParameter.o");
+		compareResourceOEO("self/selfAsParameter.poc");
 	}
 
 	@Test
 	public void testSelfMember() throws Exception {
-		compareResourceOEO("self/selfMember.o");
+		compareResourceOEO("self/selfMember.poc");
 	}
 
 }

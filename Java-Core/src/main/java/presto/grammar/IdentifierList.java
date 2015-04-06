@@ -31,7 +31,7 @@ public class IdentifierList extends ObjectList<String> {
 		case O:
 			toODialect(writer);
 			break;
-		case P:
+		case S:
 			toPDialect(writer);
 			break;
 		}

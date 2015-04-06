@@ -8,32 +8,32 @@ public class TestOperators extends BaseOParserTest {
 
 	@Test
 	public void testAddAmount() throws Exception {
-		compareResourceOEO("operators/addAmount.o");
+		compareResourceOEO("operators/addAmount.poc");
 	}
 
 	@Test
 	public void testDivAmount() throws Exception {
-		compareResourceOEO("operators/divAmount.o");
+		compareResourceOEO("operators/divAmount.poc");
 	}
 
 	@Test
 	public void testIdivAmount() throws Exception {
-		compareResourceOEO("operators/idivAmount.o");
+		compareResourceOEO("operators/idivAmount.poc");
 	}
 
 	@Test
 	public void testModAmount() throws Exception {
-		compareResourceOEO("operators/modAmount.o");
+		compareResourceOEO("operators/modAmount.poc");
 	}
 
 	@Test
 	public void testMultAmount() throws Exception {
-		compareResourceOEO("operators/multAmount.o");
+		compareResourceOEO("operators/multAmount.poc");
 	}
 
 	@Test
 	public void testSubAmount() throws Exception {
-		compareResourceOEO("operators/subAmount.o");
+		compareResourceOEO("operators/subAmount.poc");
 	}
 
 }

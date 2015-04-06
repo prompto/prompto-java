@@ -21,57 +21,57 @@ public class TestSortList extends BaseOParserTest {
 
 	@Test
 	public void testSortBooleans() throws Exception {
-		checkOutput("sortList/sortBooleans.o");
+		checkOutput("sortList/sortBooleans.poc");
 	}
 
 	@Test
 	public void testSortDates() throws Exception {
-		checkOutput("sortList/sortDates.o");
+		checkOutput("sortList/sortDates.poc");
 	}
 
 	@Test
 	public void testSortDateTimes() throws Exception {
-		checkOutput("sortList/sortDateTimes.o");
+		checkOutput("sortList/sortDateTimes.poc");
 	}
 
 	@Test
 	public void testSortDecimals() throws Exception {
-		checkOutput("sortList/sortDecimals.o");
+		checkOutput("sortList/sortDecimals.poc");
 	}
 
 	@Test
 	public void testSortExpressions() throws Exception {
-		checkOutput("sortList/sortExpressions.o");
+		checkOutput("sortList/sortExpressions.poc");
 	}
 
 	@Test
 	public void testSortIntegers() throws Exception {
-		checkOutput("sortList/sortIntegers.o");
+		checkOutput("sortList/sortIntegers.poc");
 	}
 
 	@Test
 	public void testSortKeys() throws Exception {
-		checkOutput("sortList/sortKeys.o");
+		checkOutput("sortList/sortKeys.poc");
 	}
 
 	@Test
 	public void testSortMethods() throws Exception {
-		checkOutput("sortList/sortMethods.o");
+		checkOutput("sortList/sortMethods.poc");
 	}
 
 	@Test
 	public void testSortNames() throws Exception {
-		checkOutput("sortList/sortNames.o");
+		checkOutput("sortList/sortNames.poc");
 	}
 
 	@Test
 	public void testSortTexts() throws Exception {
-		checkOutput("sortList/sortTexts.o");
+		checkOutput("sortList/sortTexts.poc");
 	}
 
 	@Test
 	public void testSortTimes() throws Exception {
-		checkOutput("sortList/sortTimes.o");
+		checkOutput("sortList/sortTimes.poc");
 	}
 
 }

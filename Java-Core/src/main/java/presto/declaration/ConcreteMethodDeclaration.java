@@ -39,7 +39,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration {
 		case O:
 			toODialect(writer);
 			break;
-		case P:
+		case S:
 			toPDialect(writer);
 			break;
 		}

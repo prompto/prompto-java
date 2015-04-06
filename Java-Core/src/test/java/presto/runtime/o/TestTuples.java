@@ -21,17 +21,17 @@ public class TestTuples extends BaseOParserTest {
 
 	@Test
 	public void testMultiAssignment() throws Exception {
-		checkOutput("tuples/multiAssignment.o");
+		checkOutput("tuples/multiAssignment.poc");
 	}
 
 	@Test
 	public void testSingleAssignment() throws Exception {
-		checkOutput("tuples/singleAssignment.o");
+		checkOutput("tuples/singleAssignment.poc");
 	}
 
 	@Test
 	public void testTupleElement() throws Exception {
-		checkOutput("tuples/tupleElement.o");
+		checkOutput("tuples/tupleElement.poc");
 	}
 
 }

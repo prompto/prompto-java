@@ -21,7 +21,7 @@ public class TestForward extends BaseOParserTest {
 
 	@Test
 	public void testForward() throws Exception {
-		checkOutput("forward/forward.o");
+		checkOutput("forward/forward.poc");
 	}
 
 }

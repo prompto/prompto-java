@@ -21,12 +21,12 @@ public class TestFetch extends BaseOParserTest {
 
 	@Test
 	public void testFetchFromList() throws Exception {
-		checkOutput("fetch/fetchFromList.o");
+		checkOutput("fetch/fetchFromList.poc");
 	}
 
 	@Test
 	public void testFetchFromSet() throws Exception {
-		checkOutput("fetch/fetchFromSet.o");
+		checkOutput("fetch/fetchFromSet.poc");
 	}
 
 }

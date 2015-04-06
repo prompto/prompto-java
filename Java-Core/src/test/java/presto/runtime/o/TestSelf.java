@@ -21,12 +21,12 @@ public class TestSelf extends BaseOParserTest {
 
 	@Test
 	public void testSelfAsParameter() throws Exception {
-		checkOutput("self/selfAsParameter.o");
+		checkOutput("self/selfAsParameter.poc");
 	}
 
 	@Test
 	public void testSelfMember() throws Exception {
-		checkOutput("self/selfMember.o");
+		checkOutput("self/selfMember.poc");
 	}
 
 }

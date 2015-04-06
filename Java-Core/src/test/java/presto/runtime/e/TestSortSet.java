@@ -21,57 +21,57 @@ public class TestSortSet extends BaseEParserTest {
 
 	@Test
 	public void testSortBooleans() throws Exception {
-		checkOutput("sortSet/sortBooleans.e");
+		checkOutput("sortSet/sortBooleans.pec");
 	}
 
 	@Test
 	public void testSortDates() throws Exception {
-		checkOutput("sortSet/sortDates.e");
+		checkOutput("sortSet/sortDates.pec");
 	}
 
 	@Test
 	public void testSortDateTimes() throws Exception {
-		checkOutput("sortSet/sortDateTimes.e");
+		checkOutput("sortSet/sortDateTimes.pec");
 	}
 
 	@Test
 	public void testSortDecimals() throws Exception {
-		checkOutput("sortSet/sortDecimals.e");
+		checkOutput("sortSet/sortDecimals.pec");
 	}
 
 	@Test
 	public void testSortExpressions() throws Exception {
-		checkOutput("sortSet/sortExpressions.e");
+		checkOutput("sortSet/sortExpressions.pec");
 	}
 
 	@Test
 	public void testSortIntegers() throws Exception {
-		checkOutput("sortSet/sortIntegers.e");
+		checkOutput("sortSet/sortIntegers.pec");
 	}
 
 	@Test
 	public void testSortKeys() throws Exception {
-		checkOutput("sortSet/sortKeys.e");
+		checkOutput("sortSet/sortKeys.pec");
 	}
 
 	@Test
 	public void testSortMethods() throws Exception {
-		checkOutput("sortSet/sortMethods.e");
+		checkOutput("sortSet/sortMethods.pec");
 	}
 
 	@Test
 	public void testSortNames() throws Exception {
-		checkOutput("sortSet/sortNames.e");
+		checkOutput("sortSet/sortNames.pec");
 	}
 
 	@Test
 	public void testSortTexts() throws Exception {
-		checkOutput("sortSet/sortTexts.e");
+		checkOutput("sortSet/sortTexts.pec");
 	}
 
 	@Test
 	public void testSortTimes() throws Exception {
-		checkOutput("sortSet/sortTimes.e");
+		checkOutput("sortSet/sortTimes.pec");
 	}
 
 }

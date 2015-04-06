@@ -19,42 +19,42 @@ public class TestParserFiles extends BaseEParserTest {
 	
 	@Test
 	public void testNative() throws Exception {
-		DeclarationList stmts = parseResource("native/method.e");
+		DeclarationList stmts = parseResource("native/method.pec");
 		assertNotNull(stmts);
 		assertEquals(2,stmts.size());
 	}
 
 	@Test
 	public void testSpecified() throws Exception {
-		DeclarationList stmts = parseResource("methods/specified.e");
+		DeclarationList stmts = parseResource("methods/specified.pec");
 		assertNotNull(stmts);
 		assertEquals(6,stmts.size());
 	}
 
 	@Test
 	public void testAttribute() throws Exception {
-		DeclarationList stmts = parseResource("methods/attribute.e");
+		DeclarationList stmts = parseResource("methods/attribute.pec");
 		assertNotNull(stmts);
 		assertEquals(6,stmts.size());
 	}
 
 	@Test
 	public void testImplicit() throws Exception {
-		DeclarationList stmts = parseResource("methods/implicit.e");
+		DeclarationList stmts = parseResource("methods/implicit.pec");
 		assertNotNull(stmts);
 		assertEquals(6,stmts.size());
 	}
 	
 	@Test
 	public void testPolymorphicImplicit() throws Exception {
-		DeclarationList stmts = parseResource("methods/polymorphic_implicit.e");
+		DeclarationList stmts = parseResource("methods/polymorphic_implicit.pec");
 		assertNotNull(stmts);
 		assertEquals(12,stmts.size());
 	}
 	
 	@Test
 	public void testEnumeratedCategory() throws Exception {
-		DeclarationList stmts = parseResource("enums/categoryEnum.e");
+		DeclarationList stmts = parseResource("enums/categoryEnum.pec");
 		assertNotNull(stmts);
 		assertEquals(5,stmts.size());
 	}

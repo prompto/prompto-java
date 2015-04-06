@@ -23,7 +23,7 @@ public class NativeCategoryMappingList extends ObjectList<NativeCategoryMapping>
 		case O:
 			toODialect(writer);
 			break;
-		case P:
+		case S:
 			toPDialect(writer);
 			break;
 		}

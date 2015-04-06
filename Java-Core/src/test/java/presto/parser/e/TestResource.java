@@ -24,37 +24,37 @@ public class TestResource extends BaseEParserTest {
 	
 	@Test(expected = SyntaxError.class)
 	public void testBadRead() throws Exception {
-		runResource("resource/badRead.e");
+		runResource("resource/badRead.pec");
 	}
 
 	@Test(expected = SyntaxError.class)
 	public void testBadWrite() throws Exception {
-		runResource("resource/badWrite.e");
+		runResource("resource/badWrite.pec");
 	}
 
 	@Test(expected = SyntaxError.class)
 	public void testBadResource() throws Exception {
-		runResource("resource/badResource.e");
+		runResource("resource/badResource.pec");
 	}
 	
 	@Test
 	public void testReadResource() throws Exception {
-		checkOutput("resource/readResource.e");
+		checkOutput("resource/readResource.pec");
 	}
 	
 	@Test
 	public void testWriteResource() throws Exception {
-		checkOutput("resource/writeResource.e");
+		checkOutput("resource/writeResource.pec");
 	}
 
 	@Test
 	public void testReadWithResource() throws Exception {
-		checkOutput("resource/readWithResource.e");
+		checkOutput("resource/readWithResource.pec");
 	}
 
 	@Test
 	public void testWriteWithResource() throws Exception {
-		checkOutput("resource/writeWithResource.e");
+		checkOutput("resource/writeWithResource.pec");
 	}
 
 

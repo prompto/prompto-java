@@ -21,17 +21,17 @@ public class TestLogic extends BaseEParserTest {
 
 	@Test
 	public void testAndBoolean() throws Exception {
-		checkOutput("logic/andBoolean.e");
+		checkOutput("logic/andBoolean.pec");
 	}
 
 	@Test
 	public void testNotBoolean() throws Exception {
-		checkOutput("logic/notBoolean.e");
+		checkOutput("logic/notBoolean.pec");
 	}
 
 	@Test
 	public void testOrBoolean() throws Exception {
-		checkOutput("logic/orBoolean.e");
+		checkOutput("logic/orBoolean.pec");
 	}
 
 }

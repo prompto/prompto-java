@@ -8,122 +8,122 @@ public class TestBuiltins extends BaseEParserTest {
 
 	@Test
 	public void testDateDayOfMonth() throws Exception {
-		compareResourceEOE("builtins/dateDayOfMonth.e");
+		compareResourceEOE("builtins/dateDayOfMonth.pec");
 	}
 
 	@Test
 	public void testDateDayOfYear() throws Exception {
-		compareResourceEOE("builtins/dateDayOfYear.e");
+		compareResourceEOE("builtins/dateDayOfYear.pec");
 	}
 
 	@Test
 	public void testDateMonth() throws Exception {
-		compareResourceEOE("builtins/dateMonth.e");
+		compareResourceEOE("builtins/dateMonth.pec");
 	}
 
 	@Test
 	public void testDateTimeDayOfMonth() throws Exception {
-		compareResourceEOE("builtins/dateTimeDayOfMonth.e");
+		compareResourceEOE("builtins/dateTimeDayOfMonth.pec");
 	}
 
 	@Test
 	public void testDateTimeDayOfYear() throws Exception {
-		compareResourceEOE("builtins/dateTimeDayOfYear.e");
+		compareResourceEOE("builtins/dateTimeDayOfYear.pec");
 	}
 
 	@Test
 	public void testDateTimeHour() throws Exception {
-		compareResourceEOE("builtins/dateTimeHour.e");
+		compareResourceEOE("builtins/dateTimeHour.pec");
 	}
 
 	@Test
 	public void testDateTimeMinute() throws Exception {
-		compareResourceEOE("builtins/dateTimeMinute.e");
+		compareResourceEOE("builtins/dateTimeMinute.pec");
 	}
 
 	@Test
 	public void testDateTimeMonth() throws Exception {
-		compareResourceEOE("builtins/dateTimeMonth.e");
+		compareResourceEOE("builtins/dateTimeMonth.pec");
 	}
 
 	@Test
 	public void testDateTimeSecond() throws Exception {
-		compareResourceEOE("builtins/dateTimeSecond.e");
+		compareResourceEOE("builtins/dateTimeSecond.pec");
 	}
 
 	@Test
 	public void testDateTimeTZName() throws Exception {
-		compareResourceEOE("builtins/dateTimeTZName.e");
+		compareResourceEOE("builtins/dateTimeTZName.pec");
 	}
 
 	@Test
 	public void testDateTimeTZOffset() throws Exception {
-		compareResourceEOE("builtins/dateTimeTZOffset.e");
+		compareResourceEOE("builtins/dateTimeTZOffset.pec");
 	}
 
 	@Test
 	public void testDateTimeYear() throws Exception {
-		compareResourceEOE("builtins/dateTimeYear.e");
+		compareResourceEOE("builtins/dateTimeYear.pec");
 	}
 
 	@Test
 	public void testDateYear() throws Exception {
-		compareResourceEOE("builtins/dateYear.e");
+		compareResourceEOE("builtins/dateYear.pec");
 	}
 
 	@Test
 	public void testDictLength() throws Exception {
-		compareResourceEOE("builtins/dictLength.e");
+		compareResourceEOE("builtins/dictLength.pec");
 	}
 
 	@Test
 	public void testEnumName() throws Exception {
-		compareResourceEOE("builtins/enumName.e");
+		compareResourceEOE("builtins/enumName.pec");
 	}
 
 	@Test
 	public void testEnumSymbols() throws Exception {
-		compareResourceEOE("builtins/enumSymbols.e");
+		compareResourceEOE("builtins/enumSymbols.pec");
 	}
 
 	@Test
 	public void testEnumValue() throws Exception {
-		compareResourceEOE("builtins/enumValue.e");
+		compareResourceEOE("builtins/enumValue.pec");
 	}
 
 	@Test
 	public void testListLength() throws Exception {
-		compareResourceEOE("builtins/listLength.e");
+		compareResourceEOE("builtins/listLength.pec");
 	}
 
 	@Test
 	public void testSetLength() throws Exception {
-		compareResourceEOE("builtins/setLength.e");
+		compareResourceEOE("builtins/setLength.pec");
 	}
 
 	@Test
 	public void testTextLength() throws Exception {
-		compareResourceEOE("builtins/textLength.e");
+		compareResourceEOE("builtins/textLength.pec");
 	}
 
 	@Test
 	public void testTimeHour() throws Exception {
-		compareResourceEOE("builtins/timeHour.e");
+		compareResourceEOE("builtins/timeHour.pec");
 	}
 
 	@Test
 	public void testTimeMinute() throws Exception {
-		compareResourceEOE("builtins/timeMinute.e");
+		compareResourceEOE("builtins/timeMinute.pec");
 	}
 
 	@Test
 	public void testTimeSecond() throws Exception {
-		compareResourceEOE("builtins/timeSecond.e");
+		compareResourceEOE("builtins/timeSecond.pec");
 	}
 
 	@Test
 	public void testTupleLength() throws Exception {
-		compareResourceEOE("builtins/tupleLength.e");
+		compareResourceEOE("builtins/tupleLength.pec");
 	}
 
 }

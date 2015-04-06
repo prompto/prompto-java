@@ -49,7 +49,7 @@ public class AttributeDeclaration extends BaseDeclaration {
 				constraint.toDialect(writer);
 			writer.append(';');
 			break;
-		case P:
+		case S:
 			writer.append("attr ");
 			writer.append(getName());
 			writer.append(" ( ");

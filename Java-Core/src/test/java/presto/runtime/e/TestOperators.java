@@ -21,32 +21,32 @@ public class TestOperators extends BaseEParserTest {
 
 	@Test
 	public void testAddAmount() throws Exception {
-		checkOutput("operators/addAmount.e");
+		checkOutput("operators/addAmount.pec");
 	}
 
 	@Test
 	public void testDivAmount() throws Exception {
-		checkOutput("operators/divAmount.e");
+		checkOutput("operators/divAmount.pec");
 	}
 
 	@Test
 	public void testIdivAmount() throws Exception {
-		checkOutput("operators/idivAmount.e");
+		checkOutput("operators/idivAmount.pec");
 	}
 
 	@Test
 	public void testModAmount() throws Exception {
-		checkOutput("operators/modAmount.e");
+		checkOutput("operators/modAmount.pec");
 	}
 
 	@Test
 	public void testMultAmount() throws Exception {
-		checkOutput("operators/multAmount.e");
+		checkOutput("operators/multAmount.pec");
 	}
 
 	@Test
 	public void testSubAmount() throws Exception {
-		checkOutput("operators/subAmount.e");
+		checkOutput("operators/subAmount.pec");
 	}
 
 }

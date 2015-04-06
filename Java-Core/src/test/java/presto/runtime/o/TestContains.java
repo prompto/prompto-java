@@ -21,127 +21,127 @@ public class TestContains extends BaseOParserTest {
 
 	@Test
 	public void testContainsAllList() throws Exception {
-		checkOutput("contains/containsAllList.o");
+		checkOutput("contains/containsAllList.poc");
 	}
 
 	@Test
 	public void testContainsAllSet() throws Exception {
-		checkOutput("contains/containsAllSet.o");
+		checkOutput("contains/containsAllSet.poc");
 	}
 
 	@Test
 	public void testContainsAllText() throws Exception {
-		checkOutput("contains/containsAllText.o");
+		checkOutput("contains/containsAllText.poc");
 	}
 
 	@Test
 	public void testContainsAllTuple() throws Exception {
-		checkOutput("contains/containsAllTuple.o");
+		checkOutput("contains/containsAllTuple.poc");
 	}
 
 	@Test
 	public void testContainsAnyList() throws Exception {
-		checkOutput("contains/containsAnyList.o");
+		checkOutput("contains/containsAnyList.poc");
 	}
 
 	@Test
 	public void testContainsAnySet() throws Exception {
-		checkOutput("contains/containsAnySet.o");
+		checkOutput("contains/containsAnySet.poc");
 	}
 
 	@Test
 	public void testContainsAnyText() throws Exception {
-		checkOutput("contains/containsAnyText.o");
+		checkOutput("contains/containsAnyText.poc");
 	}
 
 	@Test
 	public void testContainsAnyTuple() throws Exception {
-		checkOutput("contains/containsAnyTuple.o");
+		checkOutput("contains/containsAnyTuple.poc");
 	}
 
 	@Test
 	public void testInCharacterRange() throws Exception {
-		checkOutput("contains/inCharacterRange.o");
+		checkOutput("contains/inCharacterRange.poc");
 	}
 
 	@Test
 	public void testInDateRange() throws Exception {
-		checkOutput("contains/inDateRange.o");
+		checkOutput("contains/inDateRange.poc");
 	}
 
 	@Test
 	public void testInDict() throws Exception {
-		checkOutput("contains/inDict.o");
+		checkOutput("contains/inDict.poc");
 	}
 
 	@Test
 	public void testInIntegerRange() throws Exception {
-		checkOutput("contains/inIntegerRange.o");
+		checkOutput("contains/inIntegerRange.poc");
 	}
 
 	@Test
 	public void testInList() throws Exception {
-		checkOutput("contains/inList.o");
+		checkOutput("contains/inList.poc");
 	}
 
 	@Test
 	public void testInSet() throws Exception {
-		checkOutput("contains/inSet.o");
+		checkOutput("contains/inSet.poc");
 	}
 
 	@Test
 	public void testInText() throws Exception {
-		checkOutput("contains/inText.o");
+		checkOutput("contains/inText.poc");
 	}
 
 	@Test
 	public void testInTimeRange() throws Exception {
-		checkOutput("contains/inTimeRange.o");
+		checkOutput("contains/inTimeRange.poc");
 	}
 
 	@Test
 	public void testInTuple() throws Exception {
-		checkOutput("contains/inTuple.o");
+		checkOutput("contains/inTuple.poc");
 	}
 
 	@Test
 	public void testNinCharacterRange() throws Exception {
-		checkOutput("contains/ninCharacterRange.o");
+		checkOutput("contains/ninCharacterRange.poc");
 	}
 
 	@Test
 	public void testNinDateRange() throws Exception {
-		checkOutput("contains/ninDateRange.o");
+		checkOutput("contains/ninDateRange.poc");
 	}
 
 	@Test
 	public void testNinDict() throws Exception {
-		checkOutput("contains/ninDict.o");
+		checkOutput("contains/ninDict.poc");
 	}
 
 	@Test
 	public void testNinIntegerRange() throws Exception {
-		checkOutput("contains/ninIntegerRange.o");
+		checkOutput("contains/ninIntegerRange.poc");
 	}
 
 	@Test
 	public void testNinList() throws Exception {
-		checkOutput("contains/ninList.o");
+		checkOutput("contains/ninList.poc");
 	}
 
 	@Test
 	public void testNinSet() throws Exception {
-		checkOutput("contains/ninSet.o");
+		checkOutput("contains/ninSet.poc");
 	}
 
 	@Test
 	public void testNinText() throws Exception {
-		checkOutput("contains/ninText.o");
+		checkOutput("contains/ninText.poc");
 	}
 
 	@Test
 	public void testNinTimeRange() throws Exception {
-		checkOutput("contains/ninTimeRange.o");
+		checkOutput("contains/ninTimeRange.poc");
 	}
 
 }

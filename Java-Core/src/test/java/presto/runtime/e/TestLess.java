@@ -21,72 +21,72 @@ public class TestLess extends BaseEParserTest {
 
 	@Test
 	public void testLtCharacter() throws Exception {
-		checkOutput("less/ltCharacter.e");
+		checkOutput("less/ltCharacter.pec");
 	}
 
 	@Test
 	public void testLtDate() throws Exception {
-		checkOutput("less/ltDate.e");
+		checkOutput("less/ltDate.pec");
 	}
 
 	@Test
 	public void testLtDateTime() throws Exception {
-		checkOutput("less/ltDateTime.e");
+		checkOutput("less/ltDateTime.pec");
 	}
 
 	@Test
 	public void testLtDecimal() throws Exception {
-		checkOutput("less/ltDecimal.e");
+		checkOutput("less/ltDecimal.pec");
 	}
 
 	@Test
 	public void testLteCharacter() throws Exception {
-		checkOutput("less/lteCharacter.e");
+		checkOutput("less/lteCharacter.pec");
 	}
 
 	@Test
 	public void testLteDate() throws Exception {
-		checkOutput("less/lteDate.e");
+		checkOutput("less/lteDate.pec");
 	}
 
 	@Test
 	public void testLteDateTime() throws Exception {
-		checkOutput("less/lteDateTime.e");
+		checkOutput("less/lteDateTime.pec");
 	}
 
 	@Test
 	public void testLteDecimal() throws Exception {
-		checkOutput("less/lteDecimal.e");
+		checkOutput("less/lteDecimal.pec");
 	}
 
 	@Test
 	public void testLteInteger() throws Exception {
-		checkOutput("less/lteInteger.e");
+		checkOutput("less/lteInteger.pec");
 	}
 
 	@Test
 	public void testLteText() throws Exception {
-		checkOutput("less/lteText.e");
+		checkOutput("less/lteText.pec");
 	}
 
 	@Test
 	public void testLteTime() throws Exception {
-		checkOutput("less/lteTime.e");
+		checkOutput("less/lteTime.pec");
 	}
 
 	@Test
 	public void testLtInteger() throws Exception {
-		checkOutput("less/ltInteger.e");
+		checkOutput("less/ltInteger.pec");
 	}
 
 	@Test
 	public void testLtText() throws Exception {
-		checkOutput("less/ltText.e");
+		checkOutput("less/ltText.pec");
 	}
 
 	@Test
 	public void testLtTime() throws Exception {
-		checkOutput("less/ltTime.e");
+		checkOutput("less/ltTime.pec");
 	}
 
 }

@@ -8,17 +8,17 @@ public class TestSlice extends BaseOParserTest {
 
 	@Test
 	public void testSliceList() throws Exception {
-		compareResourceOEO("slice/sliceList.o");
+		compareResourceOEO("slice/sliceList.poc");
 	}
 
 	@Test
 	public void testSliceRange() throws Exception {
-		compareResourceOEO("slice/sliceRange.o");
+		compareResourceOEO("slice/sliceRange.poc");
 	}
 
 	@Test
 	public void testSliceText() throws Exception {
-		compareResourceOEO("slice/sliceText.o");
+		compareResourceOEO("slice/sliceText.poc");
 	}
 
 }

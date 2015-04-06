@@ -21,32 +21,32 @@ public class TestPatterns extends BaseEParserTest {
 
 	@Test
 	public void testIntegerEnumeration() throws Exception {
-		checkOutput("patterns/integerEnumeration.e");
+		checkOutput("patterns/integerEnumeration.pec");
 	}
 
 	@Test
 	public void testIntegerPattern() throws Exception {
-		checkOutput("patterns/integerPattern.e");
+		checkOutput("patterns/integerPattern.pec");
 	}
 
 	@Test
 	public void testNegativeIntegerRange() throws Exception {
-		checkOutput("patterns/negativeIntegerRange.e");
+		checkOutput("patterns/negativeIntegerRange.pec");
 	}
 
 	@Test
 	public void testPositiveIntegerRange() throws Exception {
-		checkOutput("patterns/positiveIntegerRange.e");
+		checkOutput("patterns/positiveIntegerRange.pec");
 	}
 
 	@Test
 	public void testTextEnumeration() throws Exception {
-		checkOutput("patterns/textEnumeration.e");
+		checkOutput("patterns/textEnumeration.pec");
 	}
 
 	@Test
 	public void testTextPattern() throws Exception {
-		checkOutput("patterns/textPattern.e");
+		checkOutput("patterns/textPattern.pec");
 	}
 
 }

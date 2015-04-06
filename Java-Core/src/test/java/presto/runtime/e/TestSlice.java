@@ -21,17 +21,17 @@ public class TestSlice extends BaseEParserTest {
 
 	@Test
 	public void testSliceList() throws Exception {
-		checkOutput("slice/sliceList.e");
+		checkOutput("slice/sliceList.pec");
 	}
 
 	@Test
 	public void testSliceRange() throws Exception {
-		checkOutput("slice/sliceRange.e");
+		checkOutput("slice/sliceRange.pec");
 	}
 
 	@Test
 	public void testSliceText() throws Exception {
-		checkOutput("slice/sliceText.e");
+		checkOutput("slice/sliceText.pec");
 	}
 
 }

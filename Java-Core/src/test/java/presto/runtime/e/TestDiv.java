@@ -21,22 +21,22 @@ public class TestDiv extends BaseEParserTest {
 
 	@Test
 	public void testDivDecimal() throws Exception {
-		checkOutput("div/divDecimal.e");
+		checkOutput("div/divDecimal.pec");
 	}
 
 	@Test
 	public void testDivInteger() throws Exception {
-		checkOutput("div/divInteger.e");
+		checkOutput("div/divInteger.pec");
 	}
 
 	@Test
 	public void testIdivInteger() throws Exception {
-		checkOutput("div/idivInteger.e");
+		checkOutput("div/idivInteger.pec");
 	}
 
 	@Test
 	public void testModInteger() throws Exception {
-		checkOutput("div/modInteger.e");
+		checkOutput("div/modInteger.pec");
 	}
 
 }

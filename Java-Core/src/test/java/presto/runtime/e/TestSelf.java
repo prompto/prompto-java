@@ -21,12 +21,12 @@ public class TestSelf extends BaseEParserTest {
 
 	@Test
 	public void testSelfAsParameter() throws Exception {
-		checkOutput("self/selfAsParameter.e");
+		checkOutput("self/selfAsParameter.pec");
 	}
 
 	@Test
 	public void testSelfMember() throws Exception {
-		checkOutput("self/selfMember.e");
+		checkOutput("self/selfMember.pec");
 	}
 
 }

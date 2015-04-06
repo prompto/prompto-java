@@ -8,7 +8,7 @@ public class TestInjections extends BaseEParserTest {
 
 	@Test
 	public void testExpressionInjection() throws Exception {
-		compareResourceEOE("injections/expressionInjection.e");
+		compareResourceEOE("injections/expressionInjection.pec");
 	}
 
 }

@@ -64,13 +64,13 @@ public class TestDebugger extends BaseEParserTest {
 
 	@Test
 	public void testStackNoDebug() throws Exception {
-		runResource("debug/stack.e");
+		runResource("debug/stack.pec");
 		assertEquals("test123-ok", Out.read());
 	}
 
 	@Test
 	public void testResume() throws Exception {
-		debugResource("debug/stack.e");
+		debugResource("debug/stack.pec");
 		thread.start();
 		waitBlocked();
 		assertEquals(Status.SUSPENDED, debugger.getStatus());
@@ -82,7 +82,7 @@ public class TestDebugger extends BaseEParserTest {
 	
 	@Test
 	public void testStepOver() throws Exception {
-		debugResource("debug/stack.e");
+		debugResource("debug/stack.pec");
 		thread.start();
 		waitBlocked();
 		assertEquals(Status.SUSPENDED, debugger.getStatus());
@@ -102,7 +102,7 @@ public class TestDebugger extends BaseEParserTest {
 	
 	@Test
 	public void testStepInto() throws Exception {
-		debugResource("debug/stack.e");
+		debugResource("debug/stack.pec");
 		thread.start();
 		waitBlocked();
 		assertEquals(Status.SUSPENDED, debugger.getStatus());
@@ -126,7 +126,7 @@ public class TestDebugger extends BaseEParserTest {
 	
 	@Test
 	public void testSilentStepInto() throws Exception {
-		debugResource("debug/stack.e");
+		debugResource("debug/stack.pec");
 		thread.start();
 		waitBlocked();
 		assertEquals(Status.SUSPENDED, debugger.getStatus());
@@ -155,7 +155,7 @@ public class TestDebugger extends BaseEParserTest {
 	
 	@Test
 	public void testStepOut() throws Exception {
-		debugResource("debug/stack.e");
+		debugResource("debug/stack.pec");
 		thread.start();
 		waitBlocked();
 		assertEquals(Status.SUSPENDED, debugger.getStatus());
@@ -191,7 +191,7 @@ public class TestDebugger extends BaseEParserTest {
 	
 	@Test
 	public void testBreakpoint() throws Exception {
-		debugResource("debug/stack.e");
+		debugResource("debug/stack.pec");
 		thread.start();
 		waitBlocked();
 		assertEquals(Status.SUSPENDED, debugger.getStatus());

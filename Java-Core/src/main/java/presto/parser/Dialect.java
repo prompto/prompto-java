@@ -5,7 +5,7 @@ package presto.parser;
 public enum Dialect {
 	E(new EParserFactory()),
 	O(new OParserFactory()),
-	P(new PParserFactory());
+	S(new SParserFactory());
 	
 	IParserFactory parserFactory;
 	

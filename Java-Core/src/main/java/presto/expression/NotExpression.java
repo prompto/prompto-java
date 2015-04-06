@@ -28,7 +28,7 @@ public class NotExpression implements IUnaryExpression, IAssertion {
 	private String operatorToDialect(Dialect dialect) {
 		switch(dialect) {
 		case E:
-		case P:
+		case S:
 			return "not ";
 		case O:
 			return "!";

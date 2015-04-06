@@ -8,72 +8,72 @@ public class TestLess extends BaseOParserTest {
 
 	@Test
 	public void testLtCharacter() throws Exception {
-		compareResourceOEO("less/ltCharacter.o");
+		compareResourceOEO("less/ltCharacter.poc");
 	}
 
 	@Test
 	public void testLtDate() throws Exception {
-		compareResourceOEO("less/ltDate.o");
+		compareResourceOEO("less/ltDate.poc");
 	}
 
 	@Test
 	public void testLtDateTime() throws Exception {
-		compareResourceOEO("less/ltDateTime.o");
+		compareResourceOEO("less/ltDateTime.poc");
 	}
 
 	@Test
 	public void testLtDecimal() throws Exception {
-		compareResourceOEO("less/ltDecimal.o");
+		compareResourceOEO("less/ltDecimal.poc");
 	}
 
 	@Test
 	public void testLteCharacter() throws Exception {
-		compareResourceOEO("less/lteCharacter.o");
+		compareResourceOEO("less/lteCharacter.poc");
 	}
 
 	@Test
 	public void testLteDate() throws Exception {
-		compareResourceOEO("less/lteDate.o");
+		compareResourceOEO("less/lteDate.poc");
 	}
 
 	@Test
 	public void testLteDateTime() throws Exception {
-		compareResourceOEO("less/lteDateTime.o");
+		compareResourceOEO("less/lteDateTime.poc");
 	}
 
 	@Test
 	public void testLteDecimal() throws Exception {
-		compareResourceOEO("less/lteDecimal.o");
+		compareResourceOEO("less/lteDecimal.poc");
 	}
 
 	@Test
 	public void testLteInteger() throws Exception {
-		compareResourceOEO("less/lteInteger.o");
+		compareResourceOEO("less/lteInteger.poc");
 	}
 
 	@Test
 	public void testLteText() throws Exception {
-		compareResourceOEO("less/lteText.o");
+		compareResourceOEO("less/lteText.poc");
 	}
 
 	@Test
 	public void testLteTime() throws Exception {
-		compareResourceOEO("less/lteTime.o");
+		compareResourceOEO("less/lteTime.poc");
 	}
 
 	@Test
 	public void testLtInteger() throws Exception {
-		compareResourceOEO("less/ltInteger.o");
+		compareResourceOEO("less/ltInteger.poc");
 	}
 
 	@Test
 	public void testLtText() throws Exception {
-		compareResourceOEO("less/ltText.o");
+		compareResourceOEO("less/ltText.poc");
 	}
 
 	@Test
 	public void testLtTime() throws Exception {
-		compareResourceOEO("less/ltTime.o");
+		compareResourceOEO("less/ltTime.poc");
 	}
 
 }

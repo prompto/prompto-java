@@ -21,157 +21,157 @@ public class TestEquals extends BaseOParserTest {
 
 	@Test
 	public void testEqBoolean() throws Exception {
-		checkOutput("equals/eqBoolean.o");
+		checkOutput("equals/eqBoolean.poc");
 	}
 
 	@Test
 	public void testEqCharacter() throws Exception {
-		checkOutput("equals/eqCharacter.o");
+		checkOutput("equals/eqCharacter.poc");
 	}
 
 	@Test
 	public void testEqDate() throws Exception {
-		checkOutput("equals/eqDate.o");
+		checkOutput("equals/eqDate.poc");
 	}
 
 	@Test
 	public void testEqDateTime() throws Exception {
-		checkOutput("equals/eqDateTime.o");
+		checkOutput("equals/eqDateTime.poc");
 	}
 
 	@Test
 	public void testEqDecimal() throws Exception {
-		checkOutput("equals/eqDecimal.o");
+		checkOutput("equals/eqDecimal.poc");
 	}
 
 	@Test
 	public void testEqDict() throws Exception {
-		checkOutput("equals/eqDict.o");
+		checkOutput("equals/eqDict.poc");
 	}
 
 	@Test
 	public void testEqInteger() throws Exception {
-		checkOutput("equals/eqInteger.o");
+		checkOutput("equals/eqInteger.poc");
 	}
 
 	@Test
 	public void testEqList() throws Exception {
-		checkOutput("equals/eqList.o");
+		checkOutput("equals/eqList.poc");
 	}
 
 	@Test
 	public void testEqPeriod() throws Exception {
-		checkOutput("equals/eqPeriod.o");
+		checkOutput("equals/eqPeriod.poc");
 	}
 
 	@Test
 	public void testEqRange() throws Exception {
-		checkOutput("equals/eqRange.o");
+		checkOutput("equals/eqRange.poc");
 	}
 
 	@Test
 	public void testEqSet() throws Exception {
-		checkOutput("equals/eqSet.o");
+		checkOutput("equals/eqSet.poc");
 	}
 
 	@Test
 	public void testEqText() throws Exception {
-		checkOutput("equals/eqText.o");
+		checkOutput("equals/eqText.poc");
 	}
 
 	@Test
 	public void testEqTime() throws Exception {
-		checkOutput("equals/eqTime.o");
+		checkOutput("equals/eqTime.poc");
 	}
 
 	@Test
 	public void testIsBoolean() throws Exception {
-		checkOutput("equals/isBoolean.o");
+		checkOutput("equals/isBoolean.poc");
 	}
 
 	@Test
 	public void testIsInstance() throws Exception {
-		checkOutput("equals/isInstance.o");
+		checkOutput("equals/isInstance.poc");
 	}
 
 	@Test
 	public void testIsNotBoolean() throws Exception {
-		checkOutput("equals/isNotBoolean.o");
+		checkOutput("equals/isNotBoolean.poc");
 	}
 
 	@Test
 	public void testIsNotInstance() throws Exception {
-		checkOutput("equals/isNotInstance.o");
+		checkOutput("equals/isNotInstance.poc");
 	}
 
 	@Test
 	public void testNeqBoolean() throws Exception {
-		checkOutput("equals/neqBoolean.o");
+		checkOutput("equals/neqBoolean.poc");
 	}
 
 	@Test
 	public void testNeqCharacter() throws Exception {
-		checkOutput("equals/neqCharacter.o");
+		checkOutput("equals/neqCharacter.poc");
 	}
 
 	@Test
 	public void testNeqDate() throws Exception {
-		checkOutput("equals/neqDate.o");
+		checkOutput("equals/neqDate.poc");
 	}
 
 	@Test
 	public void testNeqDateTime() throws Exception {
-		checkOutput("equals/neqDateTime.o");
+		checkOutput("equals/neqDateTime.poc");
 	}
 
 	@Test
 	public void testNeqDecimal() throws Exception {
-		checkOutput("equals/neqDecimal.o");
+		checkOutput("equals/neqDecimal.poc");
 	}
 
 	@Test
 	public void testNeqDict() throws Exception {
-		checkOutput("equals/neqDict.o");
+		checkOutput("equals/neqDict.poc");
 	}
 
 	@Test
 	public void testNeqInteger() throws Exception {
-		checkOutput("equals/neqInteger.o");
+		checkOutput("equals/neqInteger.poc");
 	}
 
 	@Test
 	public void testNeqList() throws Exception {
-		checkOutput("equals/neqList.o");
+		checkOutput("equals/neqList.poc");
 	}
 
 	@Test
 	public void testNeqPeriod() throws Exception {
-		checkOutput("equals/neqPeriod.o");
+		checkOutput("equals/neqPeriod.poc");
 	}
 
 	@Test
 	public void testNeqRange() throws Exception {
-		checkOutput("equals/neqRange.o");
+		checkOutput("equals/neqRange.poc");
 	}
 
 	@Test
 	public void testNeqSet() throws Exception {
-		checkOutput("equals/neqSet.o");
+		checkOutput("equals/neqSet.poc");
 	}
 
 	@Test
 	public void testNeqText() throws Exception {
-		checkOutput("equals/neqText.o");
+		checkOutput("equals/neqText.poc");
 	}
 
 	@Test
 	public void testNeqTime() throws Exception {
-		checkOutput("equals/neqTime.o");
+		checkOutput("equals/neqTime.poc");
 	}
 
 	@Test
 	public void testReqText() throws Exception {
-		checkOutput("equals/reqText.o");
+		checkOutput("equals/reqText.poc");
 	}
 
 }

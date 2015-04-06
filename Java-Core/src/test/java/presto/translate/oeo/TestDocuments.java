@@ -8,22 +8,22 @@ public class TestDocuments extends BaseOParserTest {
 
 	@Test
 	public void testDeepItem() throws Exception {
-		compareResourceOEO("documents/deepItem.o");
+		compareResourceOEO("documents/deepItem.poc");
 	}
 
 	@Test
 	public void testDeepVariable() throws Exception {
-		compareResourceOEO("documents/deepVariable.o");
+		compareResourceOEO("documents/deepVariable.poc");
 	}
 
 	@Test
 	public void testItem() throws Exception {
-		compareResourceOEO("documents/item.o");
+		compareResourceOEO("documents/item.poc");
 	}
 
 	@Test
 	public void testVariable() throws Exception {
-		compareResourceOEO("documents/variable.o");
+		compareResourceOEO("documents/variable.poc");
 	}
 
 }

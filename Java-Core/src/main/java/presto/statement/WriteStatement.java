@@ -29,7 +29,7 @@ public class WriteStatement extends SimpleStatement {
 		writer.append("write ");
 		switch(writer.getDialect()) {
 		case E:
-		case P:
+		case S:
 			content.toDialect(writer);
 			break;
 		case O:

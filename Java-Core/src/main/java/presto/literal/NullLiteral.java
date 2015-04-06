@@ -40,7 +40,7 @@ public class NullLiteral implements IExpression {
 		case O:
 			writer.append("null");
 			break;
-		case P:
+		case S:
 			writer.append("None");
 			break;
 		}

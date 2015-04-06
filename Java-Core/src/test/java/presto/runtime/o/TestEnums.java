@@ -21,17 +21,17 @@ public class TestEnums extends BaseOParserTest {
 
 	@Test
 	public void testCategoryEnum() throws Exception {
-		checkOutput("enums/categoryEnum.o");
+		checkOutput("enums/categoryEnum.poc");
 	}
 
 	@Test
 	public void testIntegerEnum() throws Exception {
-		checkOutput("enums/integerEnum.o");
+		checkOutput("enums/integerEnum.poc");
 	}
 
 	@Test
 	public void testTextEnum() throws Exception {
-		checkOutput("enums/textEnum.o");
+		checkOutput("enums/textEnum.poc");
 	}
 
 }

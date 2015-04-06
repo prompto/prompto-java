@@ -24,7 +24,7 @@ public class SetterMethodDeclaration extends BaseCategoryMethodDeclaration imple
 		case O:
 			toODialect(writer);
 			break;
-		case P:
+		case S:
 			toPDialect(writer);
 			break;
 		}

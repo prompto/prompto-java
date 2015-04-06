@@ -21,62 +21,62 @@ public class TestAdd extends BaseEParserTest {
 
 	@Test
 	public void testAddCharacter() throws Exception {
-		checkOutput("add/addCharacter.e");
+		checkOutput("add/addCharacter.pec");
 	}
 
 	@Test
 	public void testAddDate() throws Exception {
-		checkOutput("add/addDate.e");
+		checkOutput("add/addDate.pec");
 	}
 
 	@Test
 	public void testAddDateTime() throws Exception {
-		checkOutput("add/addDateTime.e");
+		checkOutput("add/addDateTime.pec");
 	}
 
 	@Test
 	public void testAddDecimal() throws Exception {
-		checkOutput("add/addDecimal.e");
+		checkOutput("add/addDecimal.pec");
 	}
 
 	@Test
 	public void testAddDict() throws Exception {
-		checkOutput("add/addDict.e");
+		checkOutput("add/addDict.pec");
 	}
 
 	@Test
 	public void testAddInteger() throws Exception {
-		checkOutput("add/addInteger.e");
+		checkOutput("add/addInteger.pec");
 	}
 
 	@Test
 	public void testAddList() throws Exception {
-		checkOutput("add/addList.e");
+		checkOutput("add/addList.pec");
 	}
 
 	@Test
 	public void testAddPeriod() throws Exception {
-		checkOutput("add/addPeriod.e");
+		checkOutput("add/addPeriod.pec");
 	}
 
 	@Test
 	public void testAddSet() throws Exception {
-		checkOutput("add/addSet.e");
+		checkOutput("add/addSet.pec");
 	}
 
 	@Test
 	public void testAddText() throws Exception {
-		checkOutput("add/addText.e");
+		checkOutput("add/addText.pec");
 	}
 
 	@Test
 	public void testAddTime() throws Exception {
-		checkOutput("add/addTime.e");
+		checkOutput("add/addTime.pec");
 	}
 
 	@Test
 	public void testAddTuple() throws Exception {
-		checkOutput("add/addTuple.e");
+		checkOutput("add/addTuple.pec");
 	}
 
 }

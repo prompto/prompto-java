@@ -8,32 +8,32 @@ public class TestPatterns extends BaseOParserTest {
 
 	@Test
 	public void testIntegerEnumeration() throws Exception {
-		compareResourceOEO("patterns/integerEnumeration.o");
+		compareResourceOEO("patterns/integerEnumeration.poc");
 	}
 
 	@Test
 	public void testIntegerPattern() throws Exception {
-		compareResourceOEO("patterns/integerPattern.o");
+		compareResourceOEO("patterns/integerPattern.poc");
 	}
 
 	@Test
 	public void testNegativeIntegerRange() throws Exception {
-		compareResourceOEO("patterns/negativeIntegerRange.o");
+		compareResourceOEO("patterns/negativeIntegerRange.poc");
 	}
 
 	@Test
 	public void testPositiveIntegerRange() throws Exception {
-		compareResourceOEO("patterns/positiveIntegerRange.o");
+		compareResourceOEO("patterns/positiveIntegerRange.poc");
 	}
 
 	@Test
 	public void testTextEnumeration() throws Exception {
-		compareResourceOEO("patterns/textEnumeration.o");
+		compareResourceOEO("patterns/textEnumeration.poc");
 	}
 
 	@Test
 	public void testTextPattern() throws Exception {
-		compareResourceOEO("patterns/textPattern.o");
+		compareResourceOEO("patterns/textPattern.poc");
 	}
 
 }

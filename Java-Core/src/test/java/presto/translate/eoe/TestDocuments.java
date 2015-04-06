@@ -8,22 +8,22 @@ public class TestDocuments extends BaseEParserTest {
 
 	@Test
 	public void testDeepItem() throws Exception {
-		compareResourceEOE("documents/deepItem.e");
+		compareResourceEOE("documents/deepItem.pec");
 	}
 
 	@Test
 	public void testDeepVariable() throws Exception {
-		compareResourceEOE("documents/deepVariable.e");
+		compareResourceEOE("documents/deepVariable.pec");
 	}
 
 	@Test
 	public void testItem() throws Exception {
-		compareResourceEOE("documents/item.e");
+		compareResourceEOE("documents/item.pec");
 	}
 
 	@Test
 	public void testVariable() throws Exception {
-		compareResourceEOE("documents/variable.e");
+		compareResourceEOE("documents/variable.pec");
 	}
 
 }

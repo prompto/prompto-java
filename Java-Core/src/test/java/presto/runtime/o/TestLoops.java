@@ -21,142 +21,142 @@ public class TestLoops extends BaseOParserTest {
 
 	@Test
 	public void testDoWhile() throws Exception {
-		checkOutput("loops/doWhile.o");
+		checkOutput("loops/doWhile.poc");
 	}
 
 	@Test
 	public void testForEachCharacterRange() throws Exception {
-		checkOutput("loops/forEachCharacterRange.o");
+		checkOutput("loops/forEachCharacterRange.poc");
 	}
 
 	@Test
 	public void testForEachCharacterRangeWithIndex() throws Exception {
-		checkOutput("loops/forEachCharacterRangeWithIndex.o");
+		checkOutput("loops/forEachCharacterRangeWithIndex.poc");
 	}
 
 	@Test
 	public void testForEachDateRange() throws Exception {
-		checkOutput("loops/forEachDateRange.o");
+		checkOutput("loops/forEachDateRange.poc");
 	}
 
 	@Test
 	public void testForEachDateRangeWithIndex() throws Exception {
-		checkOutput("loops/forEachDateRangeWithIndex.o");
+		checkOutput("loops/forEachDateRangeWithIndex.poc");
 	}
 
 	@Test
 	public void testForEachDictionaryItem() throws Exception {
-		checkOutput("loops/forEachDictionaryItem.o");
+		checkOutput("loops/forEachDictionaryItem.poc");
 	}
 
 	@Test
 	public void testForEachDictionaryItemWithIndex() throws Exception {
-		checkOutput("loops/forEachDictionaryItemWithIndex.o");
+		checkOutput("loops/forEachDictionaryItemWithIndex.poc");
 	}
 
 	@Test
 	public void testForEachDictionaryKey() throws Exception {
-		checkOutput("loops/forEachDictionaryKey.o");
+		checkOutput("loops/forEachDictionaryKey.poc");
 	}
 
 	@Test
 	public void testForEachDictionaryKeyWithIndex() throws Exception {
-		checkOutput("loops/forEachDictionaryKeyWithIndex.o");
+		checkOutput("loops/forEachDictionaryKeyWithIndex.poc");
 	}
 
 	@Test
 	public void testForEachDictionaryValue() throws Exception {
-		checkOutput("loops/forEachDictionaryValue.o");
+		checkOutput("loops/forEachDictionaryValue.poc");
 	}
 
 	@Test
 	public void testForEachDictionaryValueWithIndex() throws Exception {
-		checkOutput("loops/forEachDictionaryValueWithIndex.o");
+		checkOutput("loops/forEachDictionaryValueWithIndex.poc");
 	}
 
 	@Test
 	public void testForEachInstanceList() throws Exception {
-		checkOutput("loops/forEachInstanceList.o");
+		checkOutput("loops/forEachInstanceList.poc");
 	}
 
 	@Test
 	public void testForEachInstanceListWithIndex() throws Exception {
-		checkOutput("loops/forEachInstanceListWithIndex.o");
+		checkOutput("loops/forEachInstanceListWithIndex.poc");
 	}
 
 	@Test
 	public void testForEachInstanceSet() throws Exception {
-		checkOutput("loops/forEachInstanceSet.o");
+		checkOutput("loops/forEachInstanceSet.poc");
 	}
 
 	@Test
 	public void testForEachInstanceSetWithIndex() throws Exception {
-		checkOutput("loops/forEachInstanceSetWithIndex.o");
+		checkOutput("loops/forEachInstanceSetWithIndex.poc");
 	}
 
 	@Test
 	public void testForEachIntegerList() throws Exception {
-		checkOutput("loops/forEachIntegerList.o");
+		checkOutput("loops/forEachIntegerList.poc");
 	}
 
 	@Test
 	public void testForEachIntegerListWithIndex() throws Exception {
-		checkOutput("loops/forEachIntegerListWithIndex.o");
+		checkOutput("loops/forEachIntegerListWithIndex.poc");
 	}
 
 	@Test
 	public void testForEachIntegerRange() throws Exception {
-		checkOutput("loops/forEachIntegerRange.o");
+		checkOutput("loops/forEachIntegerRange.poc");
 	}
 
 	@Test
 	public void testForEachIntegerRangeWithIndex() throws Exception {
-		checkOutput("loops/forEachIntegerRangeWithIndex.o");
+		checkOutput("loops/forEachIntegerRangeWithIndex.poc");
 	}
 
 	@Test
 	public void testForEachIntegerSet() throws Exception {
-		checkOutput("loops/forEachIntegerSet.o");
+		checkOutput("loops/forEachIntegerSet.poc");
 	}
 
 	@Test
 	public void testForEachIntegerSetWithIndex() throws Exception {
-		checkOutput("loops/forEachIntegerSetWithIndex.o");
+		checkOutput("loops/forEachIntegerSetWithIndex.poc");
 	}
 
 	@Test
 	public void testForEachTimeRange() throws Exception {
-		checkOutput("loops/forEachTimeRange.o");
+		checkOutput("loops/forEachTimeRange.poc");
 	}
 
 	@Test
 	public void testForEachTimeRangeWithIndex() throws Exception {
-		checkOutput("loops/forEachTimeRangeWithIndex.o");
+		checkOutput("loops/forEachTimeRangeWithIndex.poc");
 	}
 
 	@Test
 	public void testForEachTupleList() throws Exception {
-		checkOutput("loops/forEachTupleList.o");
+		checkOutput("loops/forEachTupleList.poc");
 	}
 
 	@Test
 	public void testForEachTupleListWithIndex() throws Exception {
-		checkOutput("loops/forEachTupleListWithIndex.o");
+		checkOutput("loops/forEachTupleListWithIndex.poc");
 	}
 
 	@Test
 	public void testForEachTupleSet() throws Exception {
-		checkOutput("loops/forEachTupleSet.o");
+		checkOutput("loops/forEachTupleSet.poc");
 	}
 
 	@Test
 	public void testForEachTupleSetWithIndex() throws Exception {
-		checkOutput("loops/forEachTupleSetWithIndex.o");
+		checkOutput("loops/forEachTupleSetWithIndex.poc");
 	}
 
 	@Test
 	public void testWhile() throws Exception {
-		checkOutput("loops/while.o");
+		checkOutput("loops/while.poc");
 	}
 
 }

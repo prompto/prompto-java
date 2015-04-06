@@ -21,32 +21,32 @@ public class TestMult extends BaseOParserTest {
 
 	@Test
 	public void testMultCharacter() throws Exception {
-		checkOutput("mult/multCharacter.o");
+		checkOutput("mult/multCharacter.poc");
 	}
 
 	@Test
 	public void testMultDecimal() throws Exception {
-		checkOutput("mult/multDecimal.o");
+		checkOutput("mult/multDecimal.poc");
 	}
 
 	@Test
 	public void testMultInteger() throws Exception {
-		checkOutput("mult/multInteger.o");
+		checkOutput("mult/multInteger.poc");
 	}
 
 	@Test
 	public void testMultList() throws Exception {
-		checkOutput("mult/multList.o");
+		checkOutput("mult/multList.poc");
 	}
 
 	@Test
 	public void testMultPeriod() throws Exception {
-		checkOutput("mult/multPeriod.o");
+		checkOutput("mult/multPeriod.poc");
 	}
 
 	@Test
 	public void testMultText() throws Exception {
-		checkOutput("mult/multText.o");
+		checkOutput("mult/multText.poc");
 	}
 
 }

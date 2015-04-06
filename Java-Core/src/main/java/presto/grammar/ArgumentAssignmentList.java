@@ -52,7 +52,7 @@ public class ArgumentAssignmentList extends LinkedList<ArgumentAssignment> {
 		case O:
 			toODialect(writer);
 			break;
-		case P:
+		case S:
 			toPDialect(writer);
 			break;
 		}

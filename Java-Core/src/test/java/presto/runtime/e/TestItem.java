@@ -21,27 +21,27 @@ public class TestItem extends BaseEParserTest {
 
 	@Test
 	public void testItemDict() throws Exception {
-		checkOutput("item/itemDict.e");
+		checkOutput("item/itemDict.pec");
 	}
 
 	@Test
 	public void testItemList() throws Exception {
-		checkOutput("item/itemList.e");
+		checkOutput("item/itemList.pec");
 	}
 
 	@Test
 	public void testItemRange() throws Exception {
-		checkOutput("item/itemRange.e");
+		checkOutput("item/itemRange.pec");
 	}
 
 	@Test
 	public void testItemSet() throws Exception {
-		checkOutput("item/itemSet.e");
+		checkOutput("item/itemSet.pec");
 	}
 
 	@Test
 	public void testItemText() throws Exception {
-		checkOutput("item/itemText.e");
+		checkOutput("item/itemText.pec");
 	}
 
 }

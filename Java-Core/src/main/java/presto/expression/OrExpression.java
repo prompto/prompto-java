@@ -31,7 +31,7 @@ public class OrExpression implements IExpression, IAssertion {
 	private String operatorToDialect(Dialect dialect) {
 		switch(dialect) {
 		case E:
-		case P:
+		case S:
 			return " or ";
 		case O:
 			return " || ";

@@ -8,17 +8,17 @@ public class TestEnums extends BaseEParserTest {
 
 	@Test
 	public void testCategoryEnum() throws Exception {
-		compareResourceEOE("enums/categoryEnum.e");
+		compareResourceEOE("enums/categoryEnum.pec");
 	}
 
 	@Test
 	public void testIntegerEnum() throws Exception {
-		compareResourceEOE("enums/integerEnum.e");
+		compareResourceEOE("enums/integerEnum.pec");
 	}
 
 	@Test
 	public void testTextEnum() throws Exception {
-		compareResourceEOE("enums/textEnum.e");
+		compareResourceEOE("enums/textEnum.pec");
 	}
 
 }

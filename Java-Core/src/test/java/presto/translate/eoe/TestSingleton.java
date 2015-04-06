@@ -8,12 +8,12 @@ public class TestSingleton extends BaseEParserTest {
 
 	@Test
 	public void testAttribute() throws Exception {
-		compareResourceEOE("singleton/attribute.e");
+		compareResourceEOE("singleton/attribute.pec");
 	}
 
 	@Test
 	public void testMember() throws Exception {
-		compareResourceEOE("singleton/member.e");
+		compareResourceEOE("singleton/member.pec");
 	}
 
 }

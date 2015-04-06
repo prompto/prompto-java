@@ -40,7 +40,7 @@ public class ForEachStatement extends BaseStatement {
 		case O:
 			toODialect(writer);
 			break;
-		case P:
+		case S:
 			toPDialect(writer);
 			break;
 		}

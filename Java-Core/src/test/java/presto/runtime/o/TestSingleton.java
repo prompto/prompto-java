@@ -21,12 +21,12 @@ public class TestSingleton extends BaseOParserTest {
 
 	@Test
 	public void testAttribute() throws Exception {
-		checkOutput("singleton/attribute.o");
+		checkOutput("singleton/attribute.poc");
 	}
 
 	@Test
 	public void testMember() throws Exception {
-		checkOutput("singleton/member.o");
+		checkOutput("singleton/member.poc");
 	}
 
 }

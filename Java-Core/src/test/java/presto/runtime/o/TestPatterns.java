@@ -21,32 +21,32 @@ public class TestPatterns extends BaseOParserTest {
 
 	@Test
 	public void testIntegerEnumeration() throws Exception {
-		checkOutput("patterns/integerEnumeration.o");
+		checkOutput("patterns/integerEnumeration.poc");
 	}
 
 	@Test
 	public void testIntegerPattern() throws Exception {
-		checkOutput("patterns/integerPattern.o");
+		checkOutput("patterns/integerPattern.poc");
 	}
 
 	@Test
 	public void testNegativeIntegerRange() throws Exception {
-		checkOutput("patterns/negativeIntegerRange.o");
+		checkOutput("patterns/negativeIntegerRange.poc");
 	}
 
 	@Test
 	public void testPositiveIntegerRange() throws Exception {
-		checkOutput("patterns/positiveIntegerRange.o");
+		checkOutput("patterns/positiveIntegerRange.poc");
 	}
 
 	@Test
 	public void testTextEnumeration() throws Exception {
-		checkOutput("patterns/textEnumeration.o");
+		checkOutput("patterns/textEnumeration.poc");
 	}
 
 	@Test
 	public void testTextPattern() throws Exception {
-		checkOutput("patterns/textPattern.o");
+		checkOutput("patterns/textPattern.poc");
 	}
 
 }

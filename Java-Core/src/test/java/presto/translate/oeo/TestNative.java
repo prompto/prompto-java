@@ -8,82 +8,82 @@ public class TestNative extends BaseOParserTest {
 
 	@Test
 	public void testCategory() throws Exception {
-		compareResourceOEO("native/category.o");
+		compareResourceOEO("native/category.poc");
 	}
 
 	@Test
 	public void testMethod() throws Exception {
-		compareResourceOEO("native/method.o");
+		compareResourceOEO("native/method.poc");
 	}
 
 	@Test
 	public void testReturn() throws Exception {
-		compareResourceOEO("native/return.o");
+		compareResourceOEO("native/return.poc");
 	}
 
 	@Test
 	public void testReturnBooleanLiteral() throws Exception {
-		compareResourceOEO("native/returnBooleanLiteral.o");
+		compareResourceOEO("native/returnBooleanLiteral.poc");
 	}
 
 	@Test
 	public void testReturnBooleanObject() throws Exception {
-		compareResourceOEO("native/returnBooleanObject.o");
+		compareResourceOEO("native/returnBooleanObject.poc");
 	}
 
 	@Test
 	public void testReturnBooleanValue() throws Exception {
-		compareResourceOEO("native/returnBooleanValue.o");
+		compareResourceOEO("native/returnBooleanValue.poc");
 	}
 
 	@Test
 	public void testReturnCharacterLiteral() throws Exception {
-		compareResourceOEO("native/returnCharacterLiteral.o");
+		compareResourceOEO("native/returnCharacterLiteral.poc");
 	}
 
 	@Test
 	public void testReturnCharacterObject() throws Exception {
-		compareResourceOEO("native/returnCharacterObject.o");
+		compareResourceOEO("native/returnCharacterObject.poc");
 	}
 
 	@Test
 	public void testReturnCharacterValue() throws Exception {
-		compareResourceOEO("native/returnCharacterValue.o");
+		compareResourceOEO("native/returnCharacterValue.poc");
 	}
 
 	@Test
 	public void testReturnDecimalLiteral() throws Exception {
-		compareResourceOEO("native/returnDecimalLiteral.o");
+		compareResourceOEO("native/returnDecimalLiteral.poc");
 	}
 
 	@Test
 	public void testReturnIntegerLiteral() throws Exception {
-		compareResourceOEO("native/returnIntegerLiteral.o");
+		compareResourceOEO("native/returnIntegerLiteral.poc");
 	}
 
 	@Test
 	public void testReturnIntegerObject() throws Exception {
-		compareResourceOEO("native/returnIntegerObject.o");
+		compareResourceOEO("native/returnIntegerObject.poc");
 	}
 
 	@Test
 	public void testReturnIntegerValue() throws Exception {
-		compareResourceOEO("native/returnIntegerValue.o");
+		compareResourceOEO("native/returnIntegerValue.poc");
 	}
 
 	@Test
 	public void testReturnLongObject() throws Exception {
-		compareResourceOEO("native/returnLongObject.o");
+		compareResourceOEO("native/returnLongObject.poc");
 	}
 
 	@Test
 	public void testReturnLongValue() throws Exception {
-		compareResourceOEO("native/returnLongValue.o");
+		compareResourceOEO("native/returnLongValue.poc");
 	}
 
 	@Test
 	public void testReturnStringLiteral() throws Exception {
-		compareResourceOEO("native/returnStringLiteral.o");
+		compareResourceOEO("native/returnStringLiteral.poc");
 	}
 
 }

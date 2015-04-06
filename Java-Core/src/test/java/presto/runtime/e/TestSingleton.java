@@ -21,12 +21,12 @@ public class TestSingleton extends BaseEParserTest {
 
 	@Test
 	public void testAttribute() throws Exception {
-		checkOutput("singleton/attribute.e");
+		checkOutput("singleton/attribute.pec");
 	}
 
 	@Test
 	public void testMember() throws Exception {
-		checkOutput("singleton/member.e");
+		checkOutput("singleton/member.pec");
 	}
 
 }

@@ -8,12 +8,12 @@ public class TestFetch extends BaseOParserTest {
 
 	@Test
 	public void testFetchFromList() throws Exception {
-		compareResourceOEO("fetch/fetchFromList.o");
+		compareResourceOEO("fetch/fetchFromList.poc");
 	}
 
 	@Test
 	public void testFetchFromSet() throws Exception {
-		compareResourceOEO("fetch/fetchFromSet.o");
+		compareResourceOEO("fetch/fetchFromSet.poc");
 	}
 
 }

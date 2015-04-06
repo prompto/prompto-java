@@ -21,52 +21,52 @@ public class TestTesting extends BaseOParserTest {
 
 	@Test
 	public void testAnd() throws Exception {
-		checkOutput("testing/and.o");
+		checkOutput("testing/and.poc");
 	}
 
 	@Test
 	public void testContains() throws Exception {
-		checkOutput("testing/contains.o");
+		checkOutput("testing/contains.poc");
 	}
 
 	@Test
 	public void testGreater() throws Exception {
-		checkOutput("testing/greater.o");
+		checkOutput("testing/greater.poc");
 	}
 
 	@Test
 	public void testMethod() throws Exception {
-		checkOutput("testing/method.o");
+		checkOutput("testing/method.poc");
 	}
 
 	@Test
 	public void testNegative() throws Exception {
-		checkOutput("testing/negative.o");
+		checkOutput("testing/negative.poc");
 	}
 
 	@Test
 	public void testNegativeError() throws Exception {
-		checkOutput("testing/negativeError.o");
+		checkOutput("testing/negativeError.poc");
 	}
 
 	@Test
 	public void testNot() throws Exception {
-		checkOutput("testing/not.o");
+		checkOutput("testing/not.poc");
 	}
 
 	@Test
 	public void testOr() throws Exception {
-		checkOutput("testing/or.o");
+		checkOutput("testing/or.poc");
 	}
 
 	@Test
 	public void testPositive() throws Exception {
-		checkOutput("testing/positive.o");
+		checkOutput("testing/positive.poc");
 	}
 
 	@Test
 	public void testPositiveError() throws Exception {
-		checkOutput("testing/positiveError.o");
+		checkOutput("testing/positiveError.poc");
 	}
 
 }

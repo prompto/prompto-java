@@ -8,7 +8,7 @@ public class TestForward extends BaseOParserTest {
 
 	@Test
 	public void testForward() throws Exception {
-		compareResourceOEO("forward/forward.o");
+		compareResourceOEO("forward/forward.poc");
 	}
 
 }

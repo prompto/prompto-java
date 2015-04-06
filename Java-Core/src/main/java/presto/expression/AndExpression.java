@@ -31,7 +31,7 @@ public class AndExpression implements IExpression, IAssertion {
 	private String operatorToDialect(Dialect dialect) {
 		switch(dialect) {
 		case E:
-		case P:
+		case S:
 			return " and ";
 		case O:
 			return " && ";

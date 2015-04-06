@@ -8,17 +8,17 @@ public class TestTuples extends BaseOParserTest {
 
 	@Test
 	public void testMultiAssignment() throws Exception {
-		compareResourceOEO("tuples/multiAssignment.o");
+		compareResourceOEO("tuples/multiAssignment.poc");
 	}
 
 	@Test
 	public void testSingleAssignment() throws Exception {
-		compareResourceOEO("tuples/singleAssignment.o");
+		compareResourceOEO("tuples/singleAssignment.poc");
 	}
 
 	@Test
 	public void testTupleElement() throws Exception {
-		compareResourceOEO("tuples/tupleElement.o");
+		compareResourceOEO("tuples/tupleElement.poc");
 	}
 
 }

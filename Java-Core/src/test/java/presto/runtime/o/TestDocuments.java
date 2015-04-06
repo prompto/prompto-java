@@ -21,22 +21,22 @@ public class TestDocuments extends BaseOParserTest {
 
 	@Test
 	public void testDeepItem() throws Exception {
-		checkOutput("documents/deepItem.o");
+		checkOutput("documents/deepItem.poc");
 	}
 
 	@Test
 	public void testDeepVariable() throws Exception {
-		checkOutput("documents/deepVariable.o");
+		checkOutput("documents/deepVariable.poc");
 	}
 
 	@Test
 	public void testItem() throws Exception {
-		checkOutput("documents/item.o");
+		checkOutput("documents/item.poc");
 	}
 
 	@Test
 	public void testVariable() throws Exception {
-		checkOutput("documents/variable.o");
+		checkOutput("documents/variable.poc");
 	}
 
 }

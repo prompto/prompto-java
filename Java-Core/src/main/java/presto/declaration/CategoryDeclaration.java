@@ -82,7 +82,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		case O:
 			toODialect(writer);
 			break;
-		case P:
+		case S:
 			toPDialect(writer);
 			break;
 		}

@@ -21,32 +21,32 @@ public class TestSub extends BaseEParserTest {
 
 	@Test
 	public void testSubDate() throws Exception {
-		checkOutput("sub/subDate.e");
+		checkOutput("sub/subDate.pec");
 	}
 
 	@Test
 	public void testSubDateTime() throws Exception {
-		checkOutput("sub/subDateTime.e");
+		checkOutput("sub/subDateTime.pec");
 	}
 
 	@Test
 	public void testSubDecimal() throws Exception {
-		checkOutput("sub/subDecimal.e");
+		checkOutput("sub/subDecimal.pec");
 	}
 
 	@Test
 	public void testSubInteger() throws Exception {
-		checkOutput("sub/subInteger.e");
+		checkOutput("sub/subInteger.pec");
 	}
 
 	@Test
 	public void testSubPeriod() throws Exception {
-		checkOutput("sub/subPeriod.e");
+		checkOutput("sub/subPeriod.pec");
 	}
 
 	@Test
 	public void testSubTime() throws Exception {
-		checkOutput("sub/subTime.e");
+		checkOutput("sub/subTime.pec");
 	}
 
 }

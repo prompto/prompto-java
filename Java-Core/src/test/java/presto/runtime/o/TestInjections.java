@@ -21,7 +21,7 @@ public class TestInjections extends BaseOParserTest {
 
 	@Test
 	public void testExpressionInjection() throws Exception {
-		checkOutput("injections/expressionInjection.o");
+		checkOutput("injections/expressionInjection.poc");
 	}
 
 }

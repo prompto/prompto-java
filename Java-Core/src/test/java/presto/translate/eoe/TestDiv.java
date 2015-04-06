@@ -8,22 +8,22 @@ public class TestDiv extends BaseEParserTest {
 
 	@Test
 	public void testDivDecimal() throws Exception {
-		compareResourceEOE("div/divDecimal.e");
+		compareResourceEOE("div/divDecimal.pec");
 	}
 
 	@Test
 	public void testDivInteger() throws Exception {
-		compareResourceEOE("div/divInteger.e");
+		compareResourceEOE("div/divInteger.pec");
 	}
 
 	@Test
 	public void testIdivInteger() throws Exception {
-		compareResourceEOE("div/idivInteger.e");
+		compareResourceEOE("div/idivInteger.pec");
 	}
 
 	@Test
 	public void testModInteger() throws Exception {
-		compareResourceEOE("div/modInteger.e");
+		compareResourceEOE("div/modInteger.pec");
 	}
 
 }

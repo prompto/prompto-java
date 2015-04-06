@@ -8,7 +8,7 @@ public class TestIssues extends BaseEParserTest {
 
 	@Test
 	public void testMinimal() throws Exception {
-		compareResourceEOE("issues/minimal.e");
+		compareResourceEOE("issues/minimal.pec");
 	}
 
 }

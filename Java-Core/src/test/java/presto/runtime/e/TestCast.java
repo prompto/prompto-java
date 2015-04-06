@@ -21,22 +21,22 @@ public class TestCast extends BaseEParserTest {
 
 	@Test
 	public void testAutoDowncast() throws Exception {
-		checkOutput("cast/autoDowncast.e");
+		checkOutput("cast/autoDowncast.pec");
 	}
 
 	@Test
 	public void testCastChild() throws Exception {
-		checkOutput("cast/castChild.e");
+		checkOutput("cast/castChild.pec");
 	}
 
 	@Test
 	public void testIsAChild() throws Exception {
-		checkOutput("cast/isAChild.e");
+		checkOutput("cast/isAChild.pec");
 	}
 
 	@Test
 	public void testIsAText() throws Exception {
-		checkOutput("cast/isAText.e");
+		checkOutput("cast/isAText.pec");
 	}
 
 }

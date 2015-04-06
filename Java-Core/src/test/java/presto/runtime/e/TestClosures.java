@@ -21,17 +21,17 @@ public class TestClosures extends BaseEParserTest {
 
 	@Test
 	public void testGlobalClosureNoArg() throws Exception {
-		checkOutput("closures/globalClosureNoArg.e");
+		checkOutput("closures/globalClosureNoArg.pec");
 	}
 
 	@Test
 	public void testGlobalClosureWithArg() throws Exception {
-		checkOutput("closures/globalClosureWithArg.e");
+		checkOutput("closures/globalClosureWithArg.pec");
 	}
 
 	@Test
 	public void testInstanceClosureNoArg() throws Exception {
-		checkOutput("closures/instanceClosureNoArg.e");
+		checkOutput("closures/instanceClosureNoArg.pec");
 	}
 
 }

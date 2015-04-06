@@ -44,7 +44,7 @@ public class FetchExpression extends Section implements IExpression {
 			writer.append(itemName);
 			writer.append(")");
 			break;
-		case P:
+		case S:
 			writer.append("fetch ");
 			writer.append(itemName);
 			break;

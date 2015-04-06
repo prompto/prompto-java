@@ -21,17 +21,17 @@ public class TestTuples extends BaseEParserTest {
 
 	@Test
 	public void testMultiAssignment() throws Exception {
-		checkOutput("tuples/multiAssignment.e");
+		checkOutput("tuples/multiAssignment.pec");
 	}
 
 	@Test
 	public void testSingleAssignment() throws Exception {
-		checkOutput("tuples/singleAssignment.e");
+		checkOutput("tuples/singleAssignment.pec");
 	}
 
 	@Test
 	public void testTupleElement() throws Exception {
-		checkOutput("tuples/tupleElement.e");
+		checkOutput("tuples/tupleElement.pec");
 	}
 
 }

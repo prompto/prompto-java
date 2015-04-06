@@ -21,57 +21,57 @@ public class TestSortSet extends BaseOParserTest {
 
 	@Test
 	public void testSortBooleans() throws Exception {
-		checkOutput("sortSet/sortBooleans.o");
+		checkOutput("sortSet/sortBooleans.poc");
 	}
 
 	@Test
 	public void testSortDates() throws Exception {
-		checkOutput("sortSet/sortDates.o");
+		checkOutput("sortSet/sortDates.poc");
 	}
 
 	@Test
 	public void testSortDateTimes() throws Exception {
-		checkOutput("sortSet/sortDateTimes.o");
+		checkOutput("sortSet/sortDateTimes.poc");
 	}
 
 	@Test
 	public void testSortDecimals() throws Exception {
-		checkOutput("sortSet/sortDecimals.o");
+		checkOutput("sortSet/sortDecimals.poc");
 	}
 
 	@Test
 	public void testSortExpressions() throws Exception {
-		checkOutput("sortSet/sortExpressions.o");
+		checkOutput("sortSet/sortExpressions.poc");
 	}
 
 	@Test
 	public void testSortIntegers() throws Exception {
-		checkOutput("sortSet/sortIntegers.o");
+		checkOutput("sortSet/sortIntegers.poc");
 	}
 
 	@Test
 	public void testSortKeys() throws Exception {
-		checkOutput("sortSet/sortKeys.o");
+		checkOutput("sortSet/sortKeys.poc");
 	}
 
 	@Test
 	public void testSortMethods() throws Exception {
-		checkOutput("sortSet/sortMethods.o");
+		checkOutput("sortSet/sortMethods.poc");
 	}
 
 	@Test
 	public void testSortNames() throws Exception {
-		checkOutput("sortSet/sortNames.o");
+		checkOutput("sortSet/sortNames.poc");
 	}
 
 	@Test
 	public void testSortTexts() throws Exception {
-		checkOutput("sortSet/sortTexts.o");
+		checkOutput("sortSet/sortTexts.poc");
 	}
 
 	@Test
 	public void testSortTimes() throws Exception {
-		checkOutput("sortSet/sortTimes.o");
+		checkOutput("sortSet/sortTimes.poc");
 	}
 
 }

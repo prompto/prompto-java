@@ -8,157 +8,157 @@ public class TestEquals extends BaseOParserTest {
 
 	@Test
 	public void testEqBoolean() throws Exception {
-		compareResourceOEO("equals/eqBoolean.o");
+		compareResourceOEO("equals/eqBoolean.poc");
 	}
 
 	@Test
 	public void testEqCharacter() throws Exception {
-		compareResourceOEO("equals/eqCharacter.o");
+		compareResourceOEO("equals/eqCharacter.poc");
 	}
 
 	@Test
 	public void testEqDate() throws Exception {
-		compareResourceOEO("equals/eqDate.o");
+		compareResourceOEO("equals/eqDate.poc");
 	}
 
 	@Test
 	public void testEqDateTime() throws Exception {
-		compareResourceOEO("equals/eqDateTime.o");
+		compareResourceOEO("equals/eqDateTime.poc");
 	}
 
 	@Test
 	public void testEqDecimal() throws Exception {
-		compareResourceOEO("equals/eqDecimal.o");
+		compareResourceOEO("equals/eqDecimal.poc");
 	}
 
 	@Test
 	public void testEqDict() throws Exception {
-		compareResourceOEO("equals/eqDict.o");
+		compareResourceOEO("equals/eqDict.poc");
 	}
 
 	@Test
 	public void testEqInteger() throws Exception {
-		compareResourceOEO("equals/eqInteger.o");
+		compareResourceOEO("equals/eqInteger.poc");
 	}
 
 	@Test
 	public void testEqList() throws Exception {
-		compareResourceOEO("equals/eqList.o");
+		compareResourceOEO("equals/eqList.poc");
 	}
 
 	@Test
 	public void testEqPeriod() throws Exception {
-		compareResourceOEO("equals/eqPeriod.o");
+		compareResourceOEO("equals/eqPeriod.poc");
 	}
 
 	@Test
 	public void testEqRange() throws Exception {
-		compareResourceOEO("equals/eqRange.o");
+		compareResourceOEO("equals/eqRange.poc");
 	}
 
 	@Test
 	public void testEqSet() throws Exception {
-		compareResourceOEO("equals/eqSet.o");
+		compareResourceOEO("equals/eqSet.poc");
 	}
 
 	@Test
 	public void testEqText() throws Exception {
-		compareResourceOEO("equals/eqText.o");
+		compareResourceOEO("equals/eqText.poc");
 	}
 
 	@Test
 	public void testEqTime() throws Exception {
-		compareResourceOEO("equals/eqTime.o");
+		compareResourceOEO("equals/eqTime.poc");
 	}
 
 	@Test
 	public void testIsBoolean() throws Exception {
-		compareResourceOEO("equals/isBoolean.o");
+		compareResourceOEO("equals/isBoolean.poc");
 	}
 
 	@Test
 	public void testIsInstance() throws Exception {
-		compareResourceOEO("equals/isInstance.o");
+		compareResourceOEO("equals/isInstance.poc");
 	}
 
 	@Test
 	public void testIsNotBoolean() throws Exception {
-		compareResourceOEO("equals/isNotBoolean.o");
+		compareResourceOEO("equals/isNotBoolean.poc");
 	}
 
 	@Test
 	public void testIsNotInstance() throws Exception {
-		compareResourceOEO("equals/isNotInstance.o");
+		compareResourceOEO("equals/isNotInstance.poc");
 	}
 
 	@Test
 	public void testNeqBoolean() throws Exception {
-		compareResourceOEO("equals/neqBoolean.o");
+		compareResourceOEO("equals/neqBoolean.poc");
 	}
 
 	@Test
 	public void testNeqCharacter() throws Exception {
-		compareResourceOEO("equals/neqCharacter.o");
+		compareResourceOEO("equals/neqCharacter.poc");
 	}
 
 	@Test
 	public void testNeqDate() throws Exception {
-		compareResourceOEO("equals/neqDate.o");
+		compareResourceOEO("equals/neqDate.poc");
 	}
 
 	@Test
 	public void testNeqDateTime() throws Exception {
-		compareResourceOEO("equals/neqDateTime.o");
+		compareResourceOEO("equals/neqDateTime.poc");
 	}
 
 	@Test
 	public void testNeqDecimal() throws Exception {
-		compareResourceOEO("equals/neqDecimal.o");
+		compareResourceOEO("equals/neqDecimal.poc");
 	}
 
 	@Test
 	public void testNeqDict() throws Exception {
-		compareResourceOEO("equals/neqDict.o");
+		compareResourceOEO("equals/neqDict.poc");
 	}
 
 	@Test
 	public void testNeqInteger() throws Exception {
-		compareResourceOEO("equals/neqInteger.o");
+		compareResourceOEO("equals/neqInteger.poc");
 	}
 
 	@Test
 	public void testNeqList() throws Exception {
-		compareResourceOEO("equals/neqList.o");
+		compareResourceOEO("equals/neqList.poc");
 	}
 
 	@Test
 	public void testNeqPeriod() throws Exception {
-		compareResourceOEO("equals/neqPeriod.o");
+		compareResourceOEO("equals/neqPeriod.poc");
 	}
 
 	@Test
 	public void testNeqRange() throws Exception {
-		compareResourceOEO("equals/neqRange.o");
+		compareResourceOEO("equals/neqRange.poc");
 	}
 
 	@Test
 	public void testNeqSet() throws Exception {
-		compareResourceOEO("equals/neqSet.o");
+		compareResourceOEO("equals/neqSet.poc");
 	}
 
 	@Test
 	public void testNeqText() throws Exception {
-		compareResourceOEO("equals/neqText.o");
+		compareResourceOEO("equals/neqText.poc");
 	}
 
 	@Test
 	public void testNeqTime() throws Exception {
-		compareResourceOEO("equals/neqTime.o");
+		compareResourceOEO("equals/neqTime.poc");
 	}
 
 	@Test
 	public void testReqText() throws Exception {
-		compareResourceOEO("equals/reqText.o");
+		compareResourceOEO("equals/reqText.poc");
 	}
 
 }

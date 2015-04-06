@@ -42,7 +42,7 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration implements IEnu
 		case O:
 			toODialect(writer);
 			break;
-		case P:
+		case S:
 			toPDialect(writer);
 			break;
 		}

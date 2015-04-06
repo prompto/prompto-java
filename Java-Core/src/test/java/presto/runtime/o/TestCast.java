@@ -21,22 +21,22 @@ public class TestCast extends BaseOParserTest {
 
 	@Test
 	public void testAutoDowncast() throws Exception {
-		checkOutput("cast/autoDowncast.o");
+		checkOutput("cast/autoDowncast.poc");
 	}
 
 	@Test
 	public void testCastChild() throws Exception {
-		checkOutput("cast/castChild.o");
+		checkOutput("cast/castChild.poc");
 	}
 
 	@Test
 	public void testIsAChild() throws Exception {
-		checkOutput("cast/isAChild.o");
+		checkOutput("cast/isAChild.poc");
 	}
 
 	@Test
 	public void testIsAText() throws Exception {
-		checkOutput("cast/isAText.o");
+		checkOutput("cast/isAText.poc");
 	}
 
 }

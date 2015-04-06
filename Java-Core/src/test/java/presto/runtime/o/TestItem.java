@@ -21,27 +21,27 @@ public class TestItem extends BaseOParserTest {
 
 	@Test
 	public void testItemDict() throws Exception {
-		checkOutput("item/itemDict.o");
+		checkOutput("item/itemDict.poc");
 	}
 
 	@Test
 	public void testItemList() throws Exception {
-		checkOutput("item/itemList.o");
+		checkOutput("item/itemList.poc");
 	}
 
 	@Test
 	public void testItemRange() throws Exception {
-		checkOutput("item/itemRange.o");
+		checkOutput("item/itemRange.poc");
 	}
 
 	@Test
 	public void testItemSet() throws Exception {
-		checkOutput("item/itemSet.o");
+		checkOutput("item/itemSet.poc");
 	}
 
 	@Test
 	public void testItemText() throws Exception {
-		checkOutput("item/itemText.o");
+		checkOutput("item/itemText.poc");
 	}
 
 }

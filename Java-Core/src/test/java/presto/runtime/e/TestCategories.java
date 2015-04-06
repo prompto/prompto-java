@@ -21,22 +21,22 @@ public class TestCategories extends BaseEParserTest {
 
 	@Test
 	public void testCopyFromAscendant() throws Exception {
-		checkOutput("categories/copyFromAscendant.e");
+		checkOutput("categories/copyFromAscendant.pec");
 	}
 
 	@Test
 	public void testCopyFromAscendantWithOverride() throws Exception {
-		checkOutput("categories/copyFromAscendantWithOverride.e");
+		checkOutput("categories/copyFromAscendantWithOverride.pec");
 	}
 
 	@Test
 	public void testCopyFromDescendant() throws Exception {
-		checkOutput("categories/copyFromDescendant.e");
+		checkOutput("categories/copyFromDescendant.pec");
 	}
 
 	@Test
 	public void testCopyFromDescendantWithOverride() throws Exception {
-		checkOutput("categories/copyFromDescendantWithOverride.e");
+		checkOutput("categories/copyFromDescendantWithOverride.pec");
 	}
 
 }

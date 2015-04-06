@@ -44,7 +44,7 @@ public class ArgumentList extends ObjectList<IArgument> {
 		case O:
 			toODialect(writer);
 			break;
-		case P:
+		case S:
 			toPDialect(writer);
 			break;
 		}

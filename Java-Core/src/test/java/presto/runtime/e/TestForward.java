@@ -21,7 +21,7 @@ public class TestForward extends BaseEParserTest {
 
 	@Test
 	public void testForward() throws Exception {
-		checkOutput("forward/forward.e");
+		checkOutput("forward/forward.pec");
 	}
 
 }

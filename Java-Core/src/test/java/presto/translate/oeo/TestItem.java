@@ -8,27 +8,27 @@ public class TestItem extends BaseOParserTest {
 
 	@Test
 	public void testItemDict() throws Exception {
-		compareResourceOEO("item/itemDict.o");
+		compareResourceOEO("item/itemDict.poc");
 	}
 
 	@Test
 	public void testItemList() throws Exception {
-		compareResourceOEO("item/itemList.o");
+		compareResourceOEO("item/itemList.poc");
 	}
 
 	@Test
 	public void testItemRange() throws Exception {
-		compareResourceOEO("item/itemRange.o");
+		compareResourceOEO("item/itemRange.poc");
 	}
 
 	@Test
 	public void testItemSet() throws Exception {
-		compareResourceOEO("item/itemSet.o");
+		compareResourceOEO("item/itemSet.poc");
 	}
 
 	@Test
 	public void testItemText() throws Exception {
-		compareResourceOEO("item/itemText.o");
+		compareResourceOEO("item/itemText.poc");
 	}
 
 }

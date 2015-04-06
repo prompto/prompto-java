@@ -8,17 +8,17 @@ public class TestMinus extends BaseOParserTest {
 
 	@Test
 	public void testMinusDecimal() throws Exception {
-		compareResourceOEO("minus/minusDecimal.o");
+		compareResourceOEO("minus/minusDecimal.poc");
 	}
 
 	@Test
 	public void testMinusInteger() throws Exception {
-		compareResourceOEO("minus/minusInteger.o");
+		compareResourceOEO("minus/minusInteger.poc");
 	}
 
 	@Test
 	public void testMinusPeriod() throws Exception {
-		compareResourceOEO("minus/minusPeriod.o");
+		compareResourceOEO("minus/minusPeriod.poc");
 	}
 
 }

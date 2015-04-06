@@ -21,32 +21,32 @@ public class TestSub extends BaseOParserTest {
 
 	@Test
 	public void testSubDate() throws Exception {
-		checkOutput("sub/subDate.o");
+		checkOutput("sub/subDate.poc");
 	}
 
 	@Test
 	public void testSubDateTime() throws Exception {
-		checkOutput("sub/subDateTime.o");
+		checkOutput("sub/subDateTime.poc");
 	}
 
 	@Test
 	public void testSubDecimal() throws Exception {
-		checkOutput("sub/subDecimal.o");
+		checkOutput("sub/subDecimal.poc");
 	}
 
 	@Test
 	public void testSubInteger() throws Exception {
-		checkOutput("sub/subInteger.o");
+		checkOutput("sub/subInteger.poc");
 	}
 
 	@Test
 	public void testSubPeriod() throws Exception {
-		checkOutput("sub/subPeriod.o");
+		checkOutput("sub/subPeriod.poc");
 	}
 
 	@Test
 	public void testSubTime() throws Exception {
-		checkOutput("sub/subTime.o");
+		checkOutput("sub/subTime.poc");
 	}
 
 }

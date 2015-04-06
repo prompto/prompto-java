@@ -21,12 +21,12 @@ public class TestNative extends BaseEParserTest {
 
 	@Test
 	public void testCategory() throws Exception {
-		checkOutput("native/category.e");
+		checkOutput("native/category.pec");
 	}
 
 	@Test
 	public void testMethod() throws Exception {
-		checkOutput("native/method.e");
+		checkOutput("native/method.pec");
 	}
 
 }

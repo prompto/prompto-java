@@ -8,52 +8,52 @@ public class TestTesting extends BaseEParserTest {
 
 	@Test
 	public void testAnd() throws Exception {
-		compareResourceEOE("testing/and.e");
+		compareResourceEOE("testing/and.pec");
 	}
 
 	@Test
 	public void testContains() throws Exception {
-		compareResourceEOE("testing/contains.e");
+		compareResourceEOE("testing/contains.pec");
 	}
 
 	@Test
 	public void testGreater() throws Exception {
-		compareResourceEOE("testing/greater.e");
+		compareResourceEOE("testing/greater.pec");
 	}
 
 	@Test
 	public void testMethod() throws Exception {
-		compareResourceEOE("testing/method.e");
+		compareResourceEOE("testing/method.pec");
 	}
 
 	@Test
 	public void testNegative() throws Exception {
-		compareResourceEOE("testing/negative.e");
+		compareResourceEOE("testing/negative.pec");
 	}
 
 	@Test
 	public void testNegativeError() throws Exception {
-		compareResourceEOE("testing/negativeError.e");
+		compareResourceEOE("testing/negativeError.pec");
 	}
 
 	@Test
 	public void testNot() throws Exception {
-		compareResourceEOE("testing/not.e");
+		compareResourceEOE("testing/not.pec");
 	}
 
 	@Test
 	public void testOr() throws Exception {
-		compareResourceEOE("testing/or.e");
+		compareResourceEOE("testing/or.pec");
 	}
 
 	@Test
 	public void testPositive() throws Exception {
-		compareResourceEOE("testing/positive.e");
+		compareResourceEOE("testing/positive.pec");
 	}
 
 	@Test
 	public void testPositiveError() throws Exception {
-		compareResourceEOE("testing/positiveError.e");
+		compareResourceEOE("testing/positiveError.pec");
 	}
 
 }

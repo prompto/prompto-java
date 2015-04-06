@@ -8,12 +8,12 @@ public class TestSetters extends BaseOParserTest {
 
 	@Test
 	public void testGetter() throws Exception {
-		compareResourceOEO("setters/getter.o");
+		compareResourceOEO("setters/getter.poc");
 	}
 
 	@Test
 	public void testSetter() throws Exception {
-		compareResourceOEO("setters/setter.o");
+		compareResourceOEO("setters/setter.poc");
 	}
 
 }

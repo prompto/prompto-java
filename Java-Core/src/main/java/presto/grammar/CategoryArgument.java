@@ -62,7 +62,7 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 		case O:
 			toODialect(writer);
 			break;
-		case P:
+		case S:
 			toPDialect(writer);
 			break;
 		}

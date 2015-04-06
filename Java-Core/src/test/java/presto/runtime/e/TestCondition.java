@@ -21,32 +21,32 @@ public class TestCondition extends BaseEParserTest {
 
 	@Test
 	public void testComplexIf() throws Exception {
-		checkOutput("condition/complexIf.e");
+		checkOutput("condition/complexIf.pec");
 	}
 
 	@Test
 	public void testElseIf() throws Exception {
-		checkOutput("condition/elseIf.e");
+		checkOutput("condition/elseIf.pec");
 	}
 
 	@Test
 	public void testReturnIf() throws Exception {
-		checkOutput("condition/returnIf.e");
+		checkOutput("condition/returnIf.pec");
 	}
 
 	@Test
 	public void testSimpleIf() throws Exception {
-		checkOutput("condition/simpleIf.e");
+		checkOutput("condition/simpleIf.pec");
 	}
 
 	@Test
 	public void testSwitch() throws Exception {
-		checkOutput("condition/switch.e");
+		checkOutput("condition/switch.pec");
 	}
 
 	@Test
 	public void testTernary() throws Exception {
-		checkOutput("condition/ternary.e");
+		checkOutput("condition/ternary.pec");
 	}
 
 }

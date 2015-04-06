@@ -21,127 +21,127 @@ public class TestContains extends BaseEParserTest {
 
 	@Test
 	public void testContainsAllList() throws Exception {
-		checkOutput("contains/containsAllList.e");
+		checkOutput("contains/containsAllList.pec");
 	}
 
 	@Test
 	public void testContainsAllSet() throws Exception {
-		checkOutput("contains/containsAllSet.e");
+		checkOutput("contains/containsAllSet.pec");
 	}
 
 	@Test
 	public void testContainsAllText() throws Exception {
-		checkOutput("contains/containsAllText.e");
+		checkOutput("contains/containsAllText.pec");
 	}
 
 	@Test
 	public void testContainsAllTuple() throws Exception {
-		checkOutput("contains/containsAllTuple.e");
+		checkOutput("contains/containsAllTuple.pec");
 	}
 
 	@Test
 	public void testContainsAnyList() throws Exception {
-		checkOutput("contains/containsAnyList.e");
+		checkOutput("contains/containsAnyList.pec");
 	}
 
 	@Test
 	public void testContainsAnySet() throws Exception {
-		checkOutput("contains/containsAnySet.e");
+		checkOutput("contains/containsAnySet.pec");
 	}
 
 	@Test
 	public void testContainsAnyText() throws Exception {
-		checkOutput("contains/containsAnyText.e");
+		checkOutput("contains/containsAnyText.pec");
 	}
 
 	@Test
 	public void testContainsAnyTuple() throws Exception {
-		checkOutput("contains/containsAnyTuple.e");
+		checkOutput("contains/containsAnyTuple.pec");
 	}
 
 	@Test
 	public void testInCharacterRange() throws Exception {
-		checkOutput("contains/inCharacterRange.e");
+		checkOutput("contains/inCharacterRange.pec");
 	}
 
 	@Test
 	public void testInDateRange() throws Exception {
-		checkOutput("contains/inDateRange.e");
+		checkOutput("contains/inDateRange.pec");
 	}
 
 	@Test
 	public void testInDict() throws Exception {
-		checkOutput("contains/inDict.e");
+		checkOutput("contains/inDict.pec");
 	}
 
 	@Test
 	public void testInIntegerRange() throws Exception {
-		checkOutput("contains/inIntegerRange.e");
+		checkOutput("contains/inIntegerRange.pec");
 	}
 
 	@Test
 	public void testInList() throws Exception {
-		checkOutput("contains/inList.e");
+		checkOutput("contains/inList.pec");
 	}
 
 	@Test
 	public void testInSet() throws Exception {
-		checkOutput("contains/inSet.e");
+		checkOutput("contains/inSet.pec");
 	}
 
 	@Test
 	public void testInText() throws Exception {
-		checkOutput("contains/inText.e");
+		checkOutput("contains/inText.pec");
 	}
 
 	@Test
 	public void testInTimeRange() throws Exception {
-		checkOutput("contains/inTimeRange.e");
+		checkOutput("contains/inTimeRange.pec");
 	}
 
 	@Test
 	public void testInTuple() throws Exception {
-		checkOutput("contains/inTuple.e");
+		checkOutput("contains/inTuple.pec");
 	}
 
 	@Test
 	public void testNinCharacterRange() throws Exception {
-		checkOutput("contains/ninCharacterRange.e");
+		checkOutput("contains/ninCharacterRange.pec");
 	}
 
 	@Test
 	public void testNinDateRange() throws Exception {
-		checkOutput("contains/ninDateRange.e");
+		checkOutput("contains/ninDateRange.pec");
 	}
 
 	@Test
 	public void testNinDict() throws Exception {
-		checkOutput("contains/ninDict.e");
+		checkOutput("contains/ninDict.pec");
 	}
 
 	@Test
 	public void testNinIntegerRange() throws Exception {
-		checkOutput("contains/ninIntegerRange.e");
+		checkOutput("contains/ninIntegerRange.pec");
 	}
 
 	@Test
 	public void testNinList() throws Exception {
-		checkOutput("contains/ninList.e");
+		checkOutput("contains/ninList.pec");
 	}
 
 	@Test
 	public void testNinSet() throws Exception {
-		checkOutput("contains/ninSet.e");
+		checkOutput("contains/ninSet.pec");
 	}
 
 	@Test
 	public void testNinText() throws Exception {
-		checkOutput("contains/ninText.e");
+		checkOutput("contains/ninText.pec");
 	}
 
 	@Test
 	public void testNinTimeRange() throws Exception {
-		checkOutput("contains/ninTimeRange.e");
+		checkOutput("contains/ninTimeRange.pec");
 	}
 
 }

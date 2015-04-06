@@ -21,62 +21,62 @@ public class TestAdd extends BaseOParserTest {
 
 	@Test
 	public void testAddCharacter() throws Exception {
-		checkOutput("add/addCharacter.o");
+		checkOutput("add/addCharacter.poc");
 	}
 
 	@Test
 	public void testAddDate() throws Exception {
-		checkOutput("add/addDate.o");
+		checkOutput("add/addDate.poc");
 	}
 
 	@Test
 	public void testAddDateTime() throws Exception {
-		checkOutput("add/addDateTime.o");
+		checkOutput("add/addDateTime.poc");
 	}
 
 	@Test
 	public void testAddDecimal() throws Exception {
-		checkOutput("add/addDecimal.o");
+		checkOutput("add/addDecimal.poc");
 	}
 
 	@Test
 	public void testAddDict() throws Exception {
-		checkOutput("add/addDict.o");
+		checkOutput("add/addDict.poc");
 	}
 
 	@Test
 	public void testAddInteger() throws Exception {
-		checkOutput("add/addInteger.o");
+		checkOutput("add/addInteger.poc");
 	}
 
 	@Test
 	public void testAddList() throws Exception {
-		checkOutput("add/addList.o");
+		checkOutput("add/addList.poc");
 	}
 
 	@Test
 	public void testAddPeriod() throws Exception {
-		checkOutput("add/addPeriod.o");
+		checkOutput("add/addPeriod.poc");
 	}
 
 	@Test
 	public void testAddSet() throws Exception {
-		checkOutput("add/addSet.o");
+		checkOutput("add/addSet.poc");
 	}
 
 	@Test
 	public void testAddText() throws Exception {
-		checkOutput("add/addText.o");
+		checkOutput("add/addText.poc");
 	}
 
 	@Test
 	public void testAddTime() throws Exception {
-		checkOutput("add/addTime.o");
+		checkOutput("add/addTime.poc");
 	}
 
 	@Test
 	public void testAddTuple() throws Exception {
-		checkOutput("add/addTuple.o");
+		checkOutput("add/addTuple.poc");
 	}
 
 }

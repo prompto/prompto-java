@@ -37,7 +37,7 @@ public class SortedExpression implements IExpression {
 		case O:
 			toODialect(writer);
 			break;
-		case P:
+		case S:
 			toPDialect(writer);
 			break;
 		}

@@ -8,17 +8,17 @@ public class TestNative extends BaseEParserTest {
 
 	@Test
 	public void testCategory() throws Exception {
-		compareResourceEOE("native/category.e");
+		compareResourceEOE("native/category.pec");
 	}
 
 	@Test
 	public void testMethod() throws Exception {
-		compareResourceEOE("native/method.e");
+		compareResourceEOE("native/method.pec");
 	}
 
 	@Test
 	public void testReturn() throws Exception {
-		compareResourceEOE("native/return.e");
+		compareResourceEOE("native/return.pec");
 	}
 
 }

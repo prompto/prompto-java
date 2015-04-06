@@ -1,0 +1,25 @@
+package presto.translate.oso;
+
+import org.junit.Test;
+
+import presto.parser.o.BaseOParserTest;
+
+public class TestSlice extends BaseOParserTest {
+
+	@Test
+	public void testSliceList() throws Exception {
+		compareResourceOSO("slice/sliceList.poc");
+	}
+
+	@Test
+	public void testSliceRange() throws Exception {
+		compareResourceOSO("slice/sliceRange.poc");
+	}
+
+	@Test
+	public void testSliceText() throws Exception {
+		compareResourceOSO("slice/sliceText.poc");
+	}
+
+}
+

@@ -21,57 +21,57 @@ public class TestErrors extends BaseOParserTest {
 
 	@Test
 	public void testDivideByZero() throws Exception {
-		checkOutput("errors/divideByZero.o");
+		checkOutput("errors/divideByZero.poc");
 	}
 
 	@Test
 	public void testIndexOutOfRange_listItem() throws Exception {
-		checkOutput("errors/indexOutOfRange-listItem.o");
+		checkOutput("errors/indexOutOfRange-listItem.poc");
 	}
 
 	@Test
 	public void testIndexOutOfRange_sliceList() throws Exception {
-		checkOutput("errors/indexOutOfRange-sliceList.o");
+		checkOutput("errors/indexOutOfRange-sliceList.poc");
 	}
 
 	@Test
 	public void testIndexOutOfRange_sliceRange() throws Exception {
-		checkOutput("errors/indexOutOfRange-sliceRange.o");
+		checkOutput("errors/indexOutOfRange-sliceRange.poc");
 	}
 
 	@Test
 	public void testIndexOutOfRange_sliceText() throws Exception {
-		checkOutput("errors/indexOutOfRange-sliceText.o");
+		checkOutput("errors/indexOutOfRange-sliceText.poc");
 	}
 
 	@Test
 	public void testNullDict() throws Exception {
-		checkOutput("errors/nullDict.o");
+		checkOutput("errors/nullDict.poc");
 	}
 
 	@Test
 	public void testNullItem() throws Exception {
-		checkOutput("errors/nullItem.o");
+		checkOutput("errors/nullItem.poc");
 	}
 
 	@Test
 	public void testNullKey() throws Exception {
-		checkOutput("errors/nullKey.o");
+		checkOutput("errors/nullKey.poc");
 	}
 
 	@Test
 	public void testNullMember() throws Exception {
-		checkOutput("errors/nullMember.o");
+		checkOutput("errors/nullMember.poc");
 	}
 
 	@Test
 	public void testNullMethod() throws Exception {
-		checkOutput("errors/nullMethod.o");
+		checkOutput("errors/nullMethod.poc");
 	}
 
 	@Test
 	public void testUserException() throws Exception {
-		checkOutput("errors/userException.o");
+		checkOutput("errors/userException.poc");
 	}
 
 }

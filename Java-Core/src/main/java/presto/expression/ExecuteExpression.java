@@ -30,7 +30,7 @@ public class ExecuteExpression extends Section implements IExpression, ISection 
 			writer.append(name);
 			break;
 		case O:
-		case P:
+		case S:
 			writer.append("execute(");
 			writer.append(name);
 			writer.append(")");
