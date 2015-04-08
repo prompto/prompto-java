@@ -46,12 +46,12 @@ public class ECleverParser extends EParser implements IParser {
 	}
 
 	@Override
-	public void setProblemListener(IProblemListener errorListener) {
+	public void setProblemListener(IProblemListener problemListener) {
 		this.removeErrorListeners();
 		if(problemListener!=null)
-			this.addErrorListener((ANTLRErrorListener)errorListener);
-		getLexer().setProblemListener(errorListener);
-		this.problemListener = errorListener;
+			this.addErrorListener((ANTLRErrorListener)problemListener);
+		getLexer().setProblemListener(problemListener);
+		this.problemListener = problemListener;
 	}
 	
 	@Override
