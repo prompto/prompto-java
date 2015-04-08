@@ -16,7 +16,7 @@ import presto.grammar.DeclarationList;
 
 public class ECleverParser extends EParser implements IParser {
 
-	IProblemListener errorListener;
+	IProblemListener problemListener;
 	String path = "";
 
 	public ECleverParser(String input) {
@@ -48,10 +48,10 @@ public class ECleverParser extends EParser implements IParser {
 	@Override
 	public void setProblemListener(IProblemListener errorListener) {
 		this.removeErrorListeners();
-		this.addErrorListener((ANTLRErrorListener)errorListener);
-		getLexer().removeErrorListeners();
-		getLexer().addErrorListener((ANTLRErrorListener)errorListener);
-		this.errorListener = errorListener;
+		if(problemListener!=null)
+			this.addErrorListener((ANTLRErrorListener)errorListener);
+		getLexer().setProblemListener(errorListener);
+		this.problemListener = errorListener;
 	}
 	
 	@Override
@@ -73,8 +73,8 @@ public class ECleverParser extends EParser implements IParser {
 
 	@Override
 	public DeclarationList parse(String path, InputStream data) throws Exception {
-		if(errorListener!=null)
-			errorListener.reset();
+		if(problemListener!=null)
+			problemListener.reset();
 		setPath(path);
 		EIndentingLexer lexer = getLexer();
 		lexer.reset(data);

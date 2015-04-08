@@ -13,10 +13,9 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import presto.grammar.DeclarationList;
 
-
 public class SCleverParser extends SParser implements IParser {
 
-	IProblemListener errorListener;
+	IProblemListener problemListener;
 	String path = "";
 
 	public SCleverParser(String input) {
@@ -46,12 +45,12 @@ public class SCleverParser extends SParser implements IParser {
 	}
 
 	@Override
-	public void setProblemListener(IProblemListener errorListener) {
+	public void setProblemListener(IProblemListener problemListener) {
 		this.removeErrorListeners();
-		this.addErrorListener((ANTLRErrorListener)errorListener);
-		getLexer().removeErrorListeners();
-		getLexer().addErrorListener((ANTLRErrorListener)errorListener);
-		this.errorListener = errorListener;
+		if(problemListener!=null)
+			this.addErrorListener((ANTLRErrorListener)problemListener);
+		getLexer().setProblemListener(problemListener);
+		this.problemListener = problemListener;
 	}
 
 	@Override
@@ -73,8 +72,8 @@ public class SCleverParser extends SParser implements IParser {
 
 	@Override
 	public DeclarationList parse(String path, InputStream input) throws Exception {
-		if(errorListener!=null)
-			errorListener.reset();
+		if(problemListener!=null)
+			problemListener.reset();
 		this.path = path;
 		getLexer().reset(input);
 		getInputStream().seek(0);

@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
+import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonToken;
@@ -13,6 +14,7 @@ import org.antlr.v4.runtime.Token;
 
 public class SIndentingLexer extends SLexer implements ILexer {
 
+	IProblemListener problemListener;
 	List<Token> tokens = new LinkedList<Token>();
 	Stack<Integer> indents = new Stack<Integer>();
 	boolean wasLF = false;
@@ -23,6 +25,14 @@ public class SIndentingLexer extends SLexer implements ILexer {
     	indents.push(0);
     }
     
+	@Override
+	public void setProblemListener(IProblemListener problemListener) {
+		this.removeErrorListeners();
+		if(problemListener!=null)
+			this.addErrorListener((ANTLRErrorListener)problemListener);
+		this.problemListener = problemListener;
+	}
+
     @Override
     public void reset(InputStream input) throws IOException {
     	setInputStream(new ANTLRInputStream(input));
