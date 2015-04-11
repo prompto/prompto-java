@@ -6,6 +6,7 @@ import presto.grammar.ArgumentList;
 import presto.grammar.CategoryArgument;
 import presto.grammar.CodeArgument;
 import presto.grammar.IArgument;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 import presto.statement.StatementList;
 import presto.type.DictType;
@@ -19,7 +20,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration {
 
 	StatementList statements;
 	
-	public ConcreteMethodDeclaration(String name, ArgumentList arguments, IType returnType, StatementList statements) {
+	public ConcreteMethodDeclaration(Identifier name, ArgumentList arguments, IType returnType, StatementList statements) {
 		super(name,arguments,returnType);
 		this.statements = statements;
 	}

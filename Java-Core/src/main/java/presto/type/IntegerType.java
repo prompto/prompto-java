@@ -2,6 +2,7 @@ package presto.type;
 
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 import presto.value.ICollection;
 import presto.value.IValue;
@@ -91,7 +92,7 @@ public class IntegerType extends NativeType {
 	}
 
 	@Override
-	public IType checkMember(Context context, String name) throws SyntaxError {
+	public IType checkMember(Context context, Identifier name) throws SyntaxError {
 		if(name.equals("min"))
 			return this;
 		else if(name.equals("max"))
@@ -101,7 +102,7 @@ public class IntegerType extends NativeType {
 	}
 
 	@Override
-	public IValue getMember(Context context, String name) throws PrestoError {
+	public IValue getMember(Context context, Identifier name) throws PrestoError {
 		if(name.equals("min"))
 			return new Integer(java.lang.Integer.MIN_VALUE);
 		else if(name.equals("max"))

@@ -11,6 +11,7 @@ import presto.expression.IExpression;
 import presto.expression.MemberSelector;
 import presto.expression.MethodSelector;
 import presto.grammar.ArgumentAssignmentList;
+import presto.grammar.Identifier;
 import presto.grammar.UnresolvedIdentifier;
 import presto.runtime.Context;
 import presto.type.CategoryType;
@@ -90,7 +91,7 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 	}
 	
 	private void resolveUnresolvedIdentifier(Context context) throws SyntaxError {
-		String name = ((UnresolvedIdentifier)caller).getName();
+		Identifier name = ((UnresolvedIdentifier)caller).getName();
 		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, name);
 		if(decl==null)
 			throw new SyntaxError("Unknown name:" + name);
@@ -102,7 +103,7 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 
 	private void resolveMember(Context context) throws SyntaxError {
 		IExpression parent = ((MemberSelector)caller).getParent();
-		String name = ((MemberSelector)caller).getName();
+		Identifier name = ((MemberSelector)caller).getName();
 		resolved = new MethodCall(new MethodSelector(parent, name), assignments);
 	}
 

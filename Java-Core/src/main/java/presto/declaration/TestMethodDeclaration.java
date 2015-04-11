@@ -3,25 +3,27 @@ package presto.declaration;
 import presto.error.ExecutionError;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
-import presto.expression.IAssertion;
-import presto.expression.IExpression;
 import presto.expression.SymbolExpression;
+import presto.grammar.Identifier;
+import presto.parser.Assertion;
+import presto.parser.IProblemListener;
 import presto.runtime.Context;
+import presto.statement.IStatement;
 import presto.statement.StatementList;
 import presto.type.IType;
 import presto.type.VoidType;
+import presto.utils.AssertionList;
 import presto.utils.CodeWriter;
-import presto.utils.ExpressionList;
 import presto.value.IInstance;
 import presto.value.IValue;
 
 public class TestMethodDeclaration extends BaseDeclaration {
 
 	StatementList statements;
-	ExpressionList assertions;
+	AssertionList assertions;
 	SymbolExpression error;
 	
-	public TestMethodDeclaration(String name, StatementList stmts, ExpressionList exps, SymbolExpression error) {
+	public TestMethodDeclaration(Identifier name, StatementList stmts, AssertionList exps, SymbolExpression error) {
 		super(name);
 		this.statements = stmts;
 		this.assertions = exps;
@@ -32,16 +34,33 @@ public class TestMethodDeclaration extends BaseDeclaration {
 		return statements;
 	}
 	
-	public ExpressionList getAssertions() {
+	public AssertionList getAssertions() {
 		return assertions;
 	}
 	
 	@Override
 	public IType check(Context context) throws SyntaxError {
-		// TODO
+		context = context.newLocalContext();
+		for(IStatement statement : statements)
+			checkStatement(context, statement);
+		if(assertions!=null) {
+			for(Assertion assertion : assertions)
+				assertion.check(context);
+		}
 		return VoidType.instance();
 	}
 	
+	private void checkStatement(Context context, IStatement statement) throws SyntaxError {
+		IType type = statement.check(context);
+		if(type!=VoidType.instance()) {
+			IProblemListener pl = context.getProblemListener();
+			if(pl!=null)
+				pl.reportIllegalReturn(statement);
+			else
+				throw new SyntaxError("Illegal return statement in test method!");
+		}
+	}
+
 	@Override
 	public void register(Context context) throws SyntaxError {
 		context.registerDeclaration(this);
@@ -62,7 +81,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 	private void interpretError(Context context) {
 		// we land here only if no error was raised
 		if(error!=null)
-			printFailure(context, error.getName(), "no error");
+			printFailure(context, error.getName().toString(), "no error");
 	}
 
 	private void interpretAsserts(Context context) throws PrestoError {
@@ -71,9 +90,8 @@ public class TestMethodDeclaration extends BaseDeclaration {
 		context.enterMethod(this);
 		try {
 			boolean success = true;
-			for(IExpression exp : assertions) {
-				success &= ((IAssertion)exp).interpretAssert(context, this);
-			}
+			for(Assertion assertion : assertions)
+				success &= assertion.interpret(context, this);
 			if(success)
 				printSuccess(context);
 		} finally {
@@ -105,12 +123,12 @@ public class TestMethodDeclaration extends BaseDeclaration {
 
 	private void interpretError(Context context, ExecutionError e) throws PrestoError {
 		IValue expected = error.interpret(context);
-		IValue actual = e.interpret(context, "__test_error__");
+		IValue actual = e.interpret(context, new Identifier("__test_error__"));
 		if(expected.equals(actual))
 			printSuccess(context);
 		else {
-			String actualName = ((IInstance)actual).getMember(context, "name").toString();
-			printFailure(context, error.getName(), actualName);
+			String actualName = ((IInstance)actual).getMember(context, new Identifier("name")).toString();
+			printFailure(context, error.getName().toString(), actualName);
 		}
 	}
 
@@ -146,10 +164,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 		} else {
 			writer.append("\n");
 			writer.indent();
-			for(IExpression exp : assertions) {
-				exp.toDialect(writer);
-				writer.append("\n");
-			}
+			assertions.toDialect(writer);
 			writer.dedent();
 		}
 	}
@@ -169,10 +184,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 		} else {
 			writer.append("\n");
 			writer.indent();
-			for(IExpression exp : assertions) {
-				exp.toDialect(writer);
-				writer.append("\n");
-			}
+			assertions.toDialect(writer);
 			writer.dedent();
 		}
 	}
@@ -191,10 +203,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 		} else {
 			writer.append("{\n");
 			writer.indent();
-			for(IExpression exp : assertions) {
-				exp.toDialect(writer);
-				writer.append(";\n");
-			}
+			assertions.toDialect(writer);
 			writer.dedent();
 			writer.append("}\n");
 		}

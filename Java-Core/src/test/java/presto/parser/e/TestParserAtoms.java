@@ -29,7 +29,7 @@ import presto.grammar.CategoryArgument;
 import presto.grammar.IArgument;
 import presto.grammar.IAssignableInstance;
 import presto.grammar.ITypedArgument;
-import presto.grammar.IdentifierList;
+import presto.grammar.Identifier;
 import presto.grammar.NativeSymbol;
 import presto.grammar.UnresolvedIdentifier;
 import presto.literal.BooleanLiteral;
@@ -58,6 +58,7 @@ import presto.type.CategoryType;
 import presto.type.ListType;
 import presto.utils.CodeWriter;
 import presto.utils.ExpressionList;
+import presto.utils.IdentifierList;
 
 
 public class TestParserAtoms {
@@ -133,8 +134,8 @@ public class TestParserAtoms {
 		ETestParser parser = new ETestParser(statement, true);
 		AttributeDeclaration ad = parser.parse_attribute_declaration();
 		assertNotNull(ad);
-		assertEquals("id",ad.getName());
-		assertEquals("Integer",ad.getType().getName());
+		assertEquals("id",ad.getName().toString());
+		assertEquals("Integer",ad.getType().getName().toString());
 	}
 
 	@Test
@@ -143,8 +144,8 @@ public class TestParserAtoms {
 		ETestParser parser = new ETestParser(statement, true);
 		AttributeDeclaration ad = parser.parse_attribute_declaration();
 		assertNotNull(ad);
-		assertEquals("id",ad.getName());
-		assertEquals("Integer[]",ad.getType().getName());
+		assertEquals("id",ad.getName().toString());
+		assertEquals("Integer[]",ad.getType().getName().toString());
 	}
 
 	@Test
@@ -153,10 +154,10 @@ public class TestParserAtoms {
 		ETestParser parser = new ETestParser(statement, true);
 		CategoryDeclaration cd = parser.parse_category_declaration();
 		assertNotNull(cd);
-		assertEquals("Person",cd.getName());
+		assertEquals("Person",cd.getName().toString());
 		assertNull(cd.getDerivedFrom());
 		assertNotNull(cd.getAttributes());
-		assertTrue(cd.getAttributes().contains("id"));
+		assertTrue(cd.getAttributes().contains(new Identifier("id")));
 	}
 
 	@Test
@@ -165,11 +166,11 @@ public class TestParserAtoms {
 		ETestParser parser = new ETestParser(statement, false);
 		CategoryDeclaration cd = parser.parse_category_declaration();
 		assertNotNull(cd);
-		assertEquals("Person",cd.getName());
+		assertEquals("Person",cd.getName().toString());
 		assertNull(cd.getDerivedFrom());
 		assertNotNull(cd.getAttributes());
-		assertTrue(cd.getAttributes().contains("id"));
-		assertTrue(cd.getAttributes().contains("name"));
+		assertTrue(cd.getAttributes().contains(new Identifier("id")));
+		assertTrue(cd.getAttributes().contains(new Identifier("name")));
 	}
 	
 	@Test
@@ -178,11 +179,11 @@ public class TestParserAtoms {
 		ETestParser parser = new ETestParser(statement, false);
 		CategoryDeclaration cd = parser.parse_category_declaration();
 		assertNotNull(cd);
-		assertEquals("Employee",cd.getName());
+		assertEquals("Employee",cd.getName().toString());
 		assertNotNull(cd.getDerivedFrom());
-		assertTrue(cd.getDerivedFrom().contains("Person"));
+		assertTrue(cd.getDerivedFrom().contains(new Identifier("Person")));
 		assertNotNull(cd.getAttributes());
-		assertTrue(cd.getAttributes().contains("company"));
+		assertTrue(cd.getAttributes().contains(new Identifier("company")));
 	}
 
 	@Test
@@ -191,10 +192,10 @@ public class TestParserAtoms {
 		ETestParser parser = new ETestParser(statement, true);
 		CategoryDeclaration cd = parser.parse_category_declaration();
 		assertNotNull(cd);
-		assertEquals("Entrepreneur",cd.getName());
+		assertEquals("Entrepreneur",cd.getName().toString());
 		assertNotNull(cd.getDerivedFrom());
-		assertTrue(cd.getDerivedFrom().contains("Person"));
-		assertTrue(cd.getDerivedFrom().contains("Company"));
+		assertTrue(cd.getDerivedFrom().contains(new Identifier("Person")));
+		assertTrue(cd.getDerivedFrom().contains(new Identifier("Company")));
 		assertNull(cd.getAttributes());
 	}
 	
@@ -205,10 +206,10 @@ public class TestParserAtoms {
 		IExpression e = parser.parse_instance_expression();
 		assertTrue(e instanceof MemberSelector);
 		MemberSelector me = (MemberSelector)e;
-		assertEquals("name",me.getName());
+		assertEquals("name",me.getName().toString());
 		assertTrue(me.getParent() instanceof UnresolvedIdentifier);
 		UnresolvedIdentifier uie = (UnresolvedIdentifier)me.getParent();
-		assertEquals("p",uie.getName());
+		assertEquals("p",uie.getName().toString());
 	}
 
 	@Test
@@ -217,8 +218,8 @@ public class TestParserAtoms {
 		ETestParser parser = new ETestParser(statement, false);
 		ITypedArgument a = parser.parse_typed_argument();
 		assertNotNull(a);
-		assertEquals("Person",a.getType().getName());
-		assertEquals("p",a.getName());
+		assertEquals("Person",a.getType().getName().toString());
+		assertEquals("p",a.getName().toString());
 	}
 
 	@Test
@@ -261,7 +262,7 @@ public class TestParserAtoms {
 		String statement = "p.name as value";
 		ETestParser parser = new ETestParser(statement, false);
 		ArgumentAssignment as = parser.parse_argument_assignment();
-		assertEquals("value",as.getName());
+		assertEquals("value",as.getName().toString());
 		IExpression exp = as.getExpression();
 		assertNotNull(exp);
 		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
@@ -274,7 +275,7 @@ public class TestParserAtoms {
 		String statement = "\"person\" + p.name as value";
 		ETestParser parser = new ETestParser(statement, false);
 		ArgumentAssignment as = parser.parse_argument_assignment();
-		assertEquals("value",as.getName());
+		assertEquals("value",as.getName().toString());
 		IExpression exp = as.getExpression();
 		assertTrue(exp instanceof AddExpression);
 		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
@@ -288,7 +289,7 @@ public class TestParserAtoms {
 		ETestParser parser = new ETestParser(statement, false);
 		ArgumentAssignmentList ls = parser.parse_argument_assignment_list();
 		ArgumentAssignment as = ls.get(0);
-		assertEquals("value",as.getName());
+		assertEquals("value",as.getName().toString());
 		IExpression exp = as.getExpression();
 		assertTrue(exp instanceof AddExpression);
 		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
@@ -308,7 +309,7 @@ public class TestParserAtoms {
 		assertEquals("print",writer.toString());
 		assertNotNull(mc.getAssignments());
 		ArgumentAssignment as = mc.getAssignments().get(0);
-		assertEquals("value",as.getName());
+		assertEquals("value",as.getName().toString());
 		IExpression exp = as.getExpression();
 		assertTrue(exp instanceof AddExpression);
 		writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
@@ -324,9 +325,11 @@ public class TestParserAtoms {
 		ETestParser parser = new ETestParser(statement, true);
 		ConcreteMethodDeclaration ad = parser.parse_concrete_method_declaration();
 		assertNotNull(ad);
-		assertEquals("printName",ad.getName());
+		assertEquals("printName",ad.getName().toString());
 		assertNotNull(ad.getArguments());
-		assertTrue(ad.getArguments().contains(new CategoryArgument(new CategoryType("Person"),"p",null)));
+		assertTrue(ad.getArguments().contains(new CategoryArgument(
+				new CategoryType(new Identifier("Person")),
+				new Identifier("p"),null)));
 		assertNotNull(ad.getStatements());
 		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
 		ad.getStatements().getFirst().toDialect(writer);
@@ -340,9 +343,12 @@ public class TestParserAtoms {
 		ETestParser parser = new ETestParser(statement, true);
 		ConcreteMethodDeclaration ad = parser.parse_concrete_method_declaration();
 		assertNotNull(ad);
-		assertEquals("printName",ad.getName());
+		assertEquals("printName",ad.getName().toString());
 		assertNotNull(ad.getArguments());
-		IArgument expected = new CategoryArgument(new CategoryType("Object"),"o", new IdentifierList("name"));
+		IArgument expected = new CategoryArgument(
+								new CategoryType(new Identifier("Object")),
+								new Identifier("o"), 
+								new IdentifierList(new Identifier("name")));
 		assertTrue(ad.getArguments().contains(expected));
 		assertNotNull(ad.getStatements());
 		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
@@ -357,9 +363,11 @@ public class TestParserAtoms {
 		ETestParser parser = new ETestParser(statement, true);
 		ConcreteMethodDeclaration ad = parser.parse_concrete_method_declaration();
 		assertNotNull(ad);
-		assertEquals("printName",ad.getName());
+		assertEquals("printName",ad.getName().toString());
 		assertNotNull(ad.getArguments());
-		IArgument expected = new CategoryArgument(new ListType(new CategoryType("Option")),"options",null);
+		IArgument expected = new CategoryArgument(new ListType(
+				new CategoryType(new Identifier("Option"))),
+				new Identifier("options"),null);
 		assertTrue(ad.getArguments().contains(expected)); 
 		assertNotNull(ad.getStatements());
 		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
@@ -394,13 +402,13 @@ public class TestParserAtoms {
 		assertEquals(2, l.size());
 		ArgumentAssignment a = l.get(0);
 		assertNotNull(a);
-		assertEquals("id",a.getName());
+		assertEquals("id",a.getName().toString());
 		IExpression e = a.getExpression();
 		assertNotNull(e);
 		assertTrue(e instanceof IntegerLiteral);
 		a = l.get(1);
 		assertNotNull(a);
-		assertEquals("name",a.getName());
+		assertEquals("name",a.getName().toString());
 		e = a.getExpression();
 		assertNotNull(e);
 		assertTrue(e instanceof TextLiteral);
@@ -417,13 +425,13 @@ public class TestParserAtoms {
 		assertEquals(2, l.size());
 		ArgumentAssignment a = l.get(0);
 		assertNotNull(a);
-		assertEquals("id",a.getName());
+		assertEquals("id",a.getName().toString());
 		IExpression e = a.getExpression();
 		assertNotNull(e);
 		assertTrue(e instanceof IntegerLiteral);
 		a = l.get(1);
 		assertNotNull(a);
-		assertEquals("name",a.getName());
+		assertEquals("name",a.getName().toString());
 		e = a.getExpression();
 		assertNotNull(e);
 		assertTrue(e instanceof TextLiteral);

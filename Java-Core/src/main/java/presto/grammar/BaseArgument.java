@@ -9,15 +9,15 @@ import presto.value.IValue;
 
 public abstract class BaseArgument implements IArgument {
 
-	String name;
+	Identifier name;
 	DefaultExpression defaultExpression;
 	
-	protected BaseArgument(String name) {
+	protected BaseArgument(Identifier name) {
 		this.name = name;
 	}
 	
 	@Override
-	public String getName() {
+	public Identifier getName() {
 		return name;
 	}
 	

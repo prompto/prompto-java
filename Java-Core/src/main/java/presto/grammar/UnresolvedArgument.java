@@ -16,13 +16,13 @@ public class UnresolvedArgument extends BaseArgument implements INamedArgument {
 
 	INamedArgument resolved = null;
 	
-	public UnresolvedArgument(String name) {
+	public UnresolvedArgument(Identifier name) {
 		super(name);
 	}
 	
 	@Override
 	public String getSignature(Dialect dialect) {
-		return getName();
+		return getName().toString();
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class UnresolvedArgument extends BaseArgument implements INamedArgument {
 	
 	@Override
 	public String toString() {
-		return name;
+		return name.toString();
 	}
 	
 	@Override

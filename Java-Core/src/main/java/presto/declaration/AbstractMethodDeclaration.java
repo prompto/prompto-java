@@ -3,6 +3,7 @@ package presto.declaration;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.grammar.ArgumentList;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 import presto.type.IType;
 import presto.type.VoidType;
@@ -13,7 +14,7 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration {
 
 	IType returnType;
 	
-	public AbstractMethodDeclaration(String name, ArgumentList arguments, IType returnType) {
+	public AbstractMethodDeclaration(Identifier name, ArgumentList arguments, IType returnType) {
 		super(name,arguments);
 		this.returnType = returnType!=null ? returnType : VoidType.instance();
 	}

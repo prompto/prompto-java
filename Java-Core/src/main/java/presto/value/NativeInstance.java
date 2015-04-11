@@ -8,6 +8,7 @@ import presto.declaration.NativeCategoryDeclaration;
 import presto.error.InternalError;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
+import presto.grammar.Identifier;
 import presto.java.JavaClassType;
 import presto.runtime.Context;
 import presto.type.CategoryType;
@@ -44,13 +45,13 @@ public class NativeInstance extends BaseValue implements IInstance {
 	}
 	
 	@Override
-	public Set<String> getMemberNames() {
+	public Set<Identifier> getMemberNames() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
     @Override
-	public IValue getMember(Context context, String attrName) throws PrestoError {
+	public IValue getMember(Context context, Identifier attrName) throws PrestoError {
 		Method getter = getGetter(attrName);
 		Object value = getValue(getter);
 		JavaClassType ct = new JavaClassType(value.getClass());
@@ -67,7 +68,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 	}
 
 	@Override
-	public void setMember(Context context, String attrName, IValue value) throws PrestoError {
+	public void setMember(Context context, Identifier attrName, IValue value) throws PrestoError {
 		Method setter = getSetter(attrName);
 		Object data = value.ConvertTo(setter.getParameterTypes()[0]);
 		setValue(setter, data);
@@ -85,17 +86,19 @@ public class NativeInstance extends BaseValue implements IInstance {
 		} 
 	}
 
-	private Method getSetter(String attrName) throws SyntaxError {
-		String setterName = "set" + attrName.substring(0,1).toUpperCase() + attrName.substring(1);
+	private Method getSetter(Identifier attrName) throws SyntaxError {
+		String setterName = "set" + attrName.toString().substring(0,1).toUpperCase() 
+				+ attrName.toString().substring(1);
 		return getMethod(attrName, setterName);
 	}
 	
-	private Method getGetter(String attrName) throws SyntaxError {
-		String setterName = "get" + attrName.substring(0,1).toUpperCase() + attrName.substring(1);
+	private Method getGetter(Identifier attrName) throws SyntaxError {
+		String setterName = "get" + attrName.toString().substring(0,1).toUpperCase() 
+				+ attrName.toString().substring(1);
 		return getMethod(attrName, setterName);
 	}
 
-	private Method getMethod(String attrName, String setterName) throws SyntaxError {
+	private Method getMethod(Identifier attrName, String setterName) throws SyntaxError {
 		for(Method method : instance.getClass().getMethods()) {
 			if(method.getName().equals(setterName))
 				return method;

@@ -4,6 +4,7 @@ import presto.error.SyntaxError;
 import presto.expression.IExpression;
 import presto.grammar.ArgumentList;
 import presto.grammar.IArgument;
+import presto.grammar.Identifier;
 import presto.grammar.Operator;
 import presto.runtime.Context;
 import presto.statement.StatementList;
@@ -16,7 +17,7 @@ public class OperatorMethodDeclaration extends ConcreteMethodDeclaration impleme
 	Operator operator;
 	
 	public OperatorMethodDeclaration(Operator op, IArgument arg, IType returnType, StatementList stmts) {
-		super("operator_" + op.name(), new ArgumentList(arg), returnType, stmts);
+		super(new Identifier("operator_" + op.name()), new ArgumentList(arg), returnType, stmts);
 		this.operator = op;
 	}
 

@@ -3,20 +3,21 @@ package presto.value;
 import java.util.HashMap;
 import java.util.Map;
 
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 import presto.type.DocumentType;
 
 
 public class Document extends BaseValue
 {
-	Map<String,IValue> members = new HashMap<String,IValue>();
+	Map<Identifier,IValue> members = new HashMap<Identifier,IValue>();
 	
 	public Document() {
 		super(DocumentType.instance());
 	}
 	
     @Override
-    public IValue getMember(Context context, String name)
+    public IValue getMember(Context context, Identifier name)
     {
         IValue result = members.get(name);
         if(result== null)
@@ -28,7 +29,7 @@ public class Document extends BaseValue
     }
 
 
-    public void SetMember(String name, IValue value)
+    public void SetMember(Identifier name, IValue value)
     {
     	members.put(name, value);
     }

@@ -21,8 +21,8 @@ public class MatchingExpressionConstraint implements IAttributeConstraint {
 	@Override
 	public void checkValue(Context context, IValue value) throws PrestoError {
 		Context child = context.newChildContext();
-		child.registerValue(new Variable("value", AnyType.instance()));
-		child.setValue("value", value);
+		child.registerValue(new Variable(new Identifier("value"), AnyType.instance()));
+		child.setValue(new Identifier("value"), value);
 		Object test = expression.interpret(child);
 		if(!Boolean.TRUE.equals(test))
 			throw new InvalidDataError((value==null ? "null" : value.toString()) + " does not match:" + expression.toString());

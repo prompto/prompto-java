@@ -63,7 +63,7 @@ public class Debugger {
 	
 	public void enterMethod(Context context, IDeclaration method) throws PrestoError {
 		terminateIfRequested();
-		stack.push(new StackFrame(context, method.getName(), method));
+		stack.push(new StackFrame(context, method.getName().toString(), method));
 		if(stack.size()>0 && stack.size()<=stepDepth)
 			suspend(SuspendReason.STEPPING, context, method);
 		else if(method.isBreakpoint())

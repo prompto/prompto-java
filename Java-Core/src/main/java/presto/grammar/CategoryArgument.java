@@ -9,6 +9,7 @@ import presto.parser.Dialect;
 import presto.runtime.Context;
 import presto.type.IType;
 import presto.utils.CodeWriter;
+import presto.utils.IdentifierList;
 import presto.utils.Utils;
 
 public class CategoryArgument extends BaseArgument implements ITypedArgument {
@@ -16,13 +17,13 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 	IType type;
 	IdentifierList attributes;
 	
-	public CategoryArgument(IType type, String name, IdentifierList attributes) {
+	public CategoryArgument(IType type, Identifier name, IdentifierList attributes) {
 		super(name);
 		this.type = type;
 		this.attributes = attributes;
 	}
 
-	public CategoryArgument(IType type, String name) {
+	public CategoryArgument(IType type, Identifier name) {
 		super(name);
 		this.type = type;
 	}
@@ -48,9 +49,9 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 	
 	String getProto() {
 		if(attributes==null)
-			return type.getName();
+			return type.getName().toString();
 		else
-			return type.getName() + '(' + attributes.toString() + ')';
+			return type.getName().toString() + '(' + attributes.toString() + ')';
 	}
 	
 	@Override
@@ -73,7 +74,7 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 	}
 	
 	private void toEDialect(CodeWriter writer) {
-		boolean anonymous = "any".equals(type.getName());
+		boolean anonymous = "any".equals(type.getName().toString());
 		type.toDialect(writer);
 		if(anonymous) {
 			writer.append(' ');
@@ -123,7 +124,7 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 
 	@Override
 	public String toString() {
-		return name + ':' + getProto();
+		return name.toString() + ':' + getProto();
 	}
 	
 	public boolean hasAttributes() {
@@ -170,7 +171,7 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 	@Override
 	public void check(Context context) throws SyntaxError {
 		type.checkExists(context);
-		if(attributes!=null) for(String attribute : attributes) {
+		if(attributes!=null) for(Identifier attribute : attributes) {
 			AttributeDeclaration actual = context.getRegisteredDeclaration(AttributeDeclaration.class, attribute);
 			if(actual==null)
 				throw new SyntaxError("Unknown attribute: \"" + attribute + "\"");

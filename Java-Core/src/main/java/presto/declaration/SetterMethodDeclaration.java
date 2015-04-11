@@ -3,6 +3,7 @@ package presto.declaration;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.expression.IExpression;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 import presto.statement.StatementList;
 import presto.type.IType;
@@ -11,7 +12,7 @@ import presto.value.IValue;
 
 public class SetterMethodDeclaration extends BaseCategoryMethodDeclaration implements IExpression {
 
-	public SetterMethodDeclaration(String name, StatementList instructions) {
+	public SetterMethodDeclaration(Identifier name, StatementList instructions) {
 		super(name, null, null, instructions);
 	}
 

@@ -26,7 +26,7 @@ public class ArgumentList extends ObjectList<IArgument> {
 			argument.check(context);
 	}
 
-	public IArgument find(String name) {
+	public IArgument find(Identifier name) {
 		for(IArgument argument : this) {
 			if(name.equals(argument.getName()))
 					return argument;

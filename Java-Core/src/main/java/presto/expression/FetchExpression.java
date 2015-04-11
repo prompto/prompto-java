@@ -6,6 +6,7 @@ import java.util.List;
 import presto.error.NullReferenceError;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
+import presto.grammar.Identifier;
 import presto.parser.Section;
 import presto.runtime.Context;
 import presto.runtime.Variable;
@@ -21,11 +22,11 @@ import presto.value.ListValue;
 
 public class FetchExpression extends Section implements IExpression {
 
-	String itemName;
+	Identifier itemName;
 	IExpression source;
 	IExpression filter;
 	
-	public FetchExpression(String itemName, IExpression source, IExpression filter) {
+	public FetchExpression(Identifier itemName, IExpression source, IExpression filter) {
 		this.itemName = itemName;
 		this.source = source;
 		this.filter = filter;

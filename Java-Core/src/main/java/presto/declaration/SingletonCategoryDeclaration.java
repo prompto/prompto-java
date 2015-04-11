@@ -1,12 +1,13 @@
 package presto.declaration;
 
 import presto.grammar.CategoryMethodDeclarationList;
-import presto.grammar.IdentifierList;
+import presto.grammar.Identifier;
 import presto.utils.CodeWriter;
+import presto.utils.IdentifierList;
 
 public class SingletonCategoryDeclaration extends ConcreteCategoryDeclaration {
 
-	public SingletonCategoryDeclaration(String name, IdentifierList attributes, CategoryMethodDeclarationList methods) {
+	public SingletonCategoryDeclaration(Identifier name, IdentifierList attributes, CategoryMethodDeclarationList methods) {
 		super(name, attributes, null, methods);
 	}
 	

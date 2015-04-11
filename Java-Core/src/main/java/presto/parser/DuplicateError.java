@@ -1,15 +1,13 @@
 package presto.parser;
 
-public class DuplicateError extends ProblemBase {
+public class DuplicateError extends SyntaxProblemBase {
 
 	String name;
-	ISection section;
 	ISection other;
 	
 	public DuplicateError(String name, ISection section, ISection other) {
-		super(section.getStart().getLine(), section.getStart().getColumn());
+		super(section);
 		this.name = name;
-		this.section = section;
 		this.other = other;
 	}
 
@@ -18,16 +16,6 @@ public class DuplicateError extends ProblemBase {
 		return Type.ERROR;
 	}
 	
-	@Override
-	public int getStartIndex() {
-		return section.getStart().getIndex();
-	}
-	
-	@Override
-	public int getEndIndex() {
-		return section.getEnd().getIndex();
-	}
-
 	@Override
 	public String getMessage() {
 		return "Duplicate declaration: " + name + ", see: " + other.toString();

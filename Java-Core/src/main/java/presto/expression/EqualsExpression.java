@@ -5,6 +5,7 @@ import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.grammar.EqOp;
 import presto.grammar.INamed;
+import presto.grammar.Identifier;
 import presto.grammar.UnresolvedIdentifier;
 import presto.runtime.Context;
 import presto.runtime.LinkedValue;
@@ -116,7 +117,7 @@ public class EqualsExpression implements IExpression, IAssertion {
 
 	private Context downCast(Context context, boolean setValue) throws PrestoError {
 		if(operator==EqOp.IS_A) {
-			String name = readLeftName();
+			Identifier name = readLeftName();
 			if(name!=null) {
 				INamed value = context.getRegisteredValue(INamed.class, name);
 				IType type = ((TypeExpression)right).getType();
@@ -131,7 +132,7 @@ public class EqualsExpression implements IExpression, IAssertion {
 		return context;
 	}
 	
-	private String readLeftName() {
+	private Identifier readLeftName() {
 		if(left instanceof InstanceExpression)
 			return ((InstanceExpression)left).getName();
 		else if(left instanceof UnresolvedIdentifier)

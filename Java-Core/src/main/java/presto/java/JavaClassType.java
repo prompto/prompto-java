@@ -8,6 +8,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.joda.time.Period;
 
+import presto.grammar.Identifier;
 import presto.type.AnyType;
 import presto.type.BooleanType;
 import presto.type.CategoryType;
@@ -50,7 +51,7 @@ public class JavaClassType extends CategoryType {
 	Class<?> klass;
 	
 	public JavaClassType(Class<?> klass) {
-		super(klass.getName());
+		super(new Identifier(klass.getName()));
 		this.klass = klass;
 	}
 	

@@ -3,18 +3,19 @@ package presto.runtime;
 import presto.declaration.AttributeDeclaration;
 import presto.error.SyntaxError;
 import presto.grammar.INamed;
+import presto.grammar.Identifier;
 import presto.type.IType;
 
 public class Attribute implements INamed {
 
-	String name;
+	Identifier name;
 	
-	public Attribute(String name) {
+	public Attribute(Identifier name) {
 		this.name = name;
 	}
 
 	@Override
-	public String getName() {
+	public Identifier getName() {
 		return name;
 	}
 

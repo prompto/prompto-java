@@ -5,6 +5,7 @@ import java.util.Iterator;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.expression.IExpression;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 import presto.runtime.Variable;
 import presto.type.IType;
@@ -16,11 +17,11 @@ import presto.value.Integer;
 
 public class ForEachStatement extends BaseStatement {
 
-	String v1, v2;
+	Identifier v1, v2;
 	IExpression source;
 	StatementList instructions;
 
-	public ForEachStatement(String v1, String v2, IExpression source, StatementList instructions) {
+	public ForEachStatement(Identifier v1, Identifier v2, IExpression source, StatementList instructions) {
 		this.v1 = v1;
 		this.v2 = v2;
 		this.source = source;
@@ -110,7 +111,7 @@ public class ForEachStatement extends BaseStatement {
 
 	private IType checkItemIterator(IType elemType, Context context) throws SyntaxError {
 		Context child = context.newChildContext();
-		String itemName = v2 == null ? v1 : v2;
+		Identifier itemName = v2 == null ? v1 : v2;
 		context.registerValue(new Variable(itemName, elemType));
 		if (v2 != null)
 			context.registerValue(new Variable(v1, IntegerType.instance()));

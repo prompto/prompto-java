@@ -3,6 +3,7 @@ package presto.expression;
 import presto.error.NullReferenceError;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
+import presto.grammar.Identifier;
 import presto.grammar.UnresolvedIdentifier;
 import presto.runtime.Context;
 import presto.type.CategoryType;
@@ -15,18 +16,18 @@ import presto.value.Text;
 
 public class MemberSelector extends SelectorExpression {
 
-	String name;
+	Identifier name;
 	
-	public MemberSelector(String name) {
+	public MemberSelector(Identifier name) {
 		this.name = name;
 	}
 	
-	public MemberSelector(IExpression parent, String name) {
+	public MemberSelector(IExpression parent, Identifier name) {
 		super(parent);
 		this.name = name;
 	}
 
-	public String getName() {
+	public Identifier getName() {
 		return name;
 	}
 	
@@ -100,9 +101,9 @@ public class MemberSelector extends SelectorExpression {
 	private IValue interpretSymbol(Context context, IExpression parent) throws PrestoError {
        if (parent instanceof SymbolExpression)
         {
-            if ("name".equals(name))
-                return new Text(((SymbolExpression)parent).getName());
-            else if("value".equals(name))
+            if ("name".equals(name.toString()))
+                return new Text(((SymbolExpression)parent).getName().toString());
+            else if("value".equals(name.toString()))
                 return parent.interpret(context);
         }
  		return null;

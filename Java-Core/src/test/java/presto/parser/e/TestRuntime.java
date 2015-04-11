@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import presto.grammar.CategoryArgument;
 import presto.grammar.IArgument;
+import presto.grammar.Identifier;
 import presto.java.JavaStatement;
 import presto.parser.ECleverParser;
 import presto.parser.EIndentingLexer;
@@ -46,9 +47,9 @@ public class TestRuntime extends BaseEParserTest {
 		walker.walk(builder, tree);
 		JavaStatement statement =  builder.<JavaStatement>getNodeValue(tree);
 		Context context = Context.newGlobalContext();
-		IArgument arg = new CategoryArgument(TextType.instance(),"value");
+		IArgument arg = new CategoryArgument(TextType.instance(), new Identifier("value"));
 		arg.register(context);
-		context.setValue("value", new Text("test")); // StringLiteral trims enclosing quotes
+		context.setValue(new Identifier("value"), new Text("test")); // StringLiteral trims enclosing quotes
 		Object result = statement.interpret(context);
 		assertNull(result);
 		assertEquals("test", Out.read());

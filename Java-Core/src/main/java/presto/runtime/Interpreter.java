@@ -16,6 +16,7 @@ import presto.grammar.ArgumentAssignmentList;
 import presto.grammar.ArgumentList;
 import presto.grammar.IArgument;
 import presto.grammar.ITypedArgument;
+import presto.grammar.Identifier;
 import presto.grammar.UnresolvedArgument;
 import presto.literal.DictLiteral;
 import presto.runtime.Context.MethodDeclarationMap;
@@ -48,11 +49,17 @@ public class Interpreter {
 		
 	}
 
-	public static void interpretMainNoArgs(Context context) throws PrestoError {
-		interpret(context, "main", "");
+	public static void interpretTest(Context context, String name) throws PrestoError {
+		TestMethodDeclaration test = context.getTest(name);
+		Context local = context.newLocalContext();
+		test.interpret(local);
 	}
 	
-	public static void interpret(Context context, String methodName, String cmdLineArgs) throws PrestoError {
+	public static void interpretMainNoArgs(Context context) throws PrestoError {
+		interpretMethod(context, new Identifier("main"), "");
+	}
+	
+	public static void interpretMethod(Context context, Identifier methodName, String cmdLineArgs) throws PrestoError {
 		try {
 			IMethodDeclaration method = locateMethod(context, methodName, cmdLineArgs);
 			ArgumentAssignmentList assignments = buildAssignments(method, cmdLineArgs);
@@ -62,11 +69,14 @@ public class Interpreter {
 			context.terminated();
 		}
 	}
+	
+	public static void interpretScript(Context context, String cmdLineArgs) throws PrestoError {
+	}
 
 	private static ArgumentAssignmentList buildAssignments(IMethodDeclaration method, String cmdLineArgs) {
 		ArgumentAssignmentList assignments = new ArgumentAssignmentList();
 		if(method.getArguments().size()==1) {
-			String name = method.getArguments().getFirst().getName();
+			Identifier name = method.getArguments().getFirst().getName();
 			IExpression value = parseCmdLineArgs(cmdLineArgs);
 			assignments.add(new ArgumentAssignment(new UnresolvedArgument(name), value)); 
 		}
@@ -87,7 +97,7 @@ public class Interpreter {
 		}
 	}
 
-	 private static IMethodDeclaration locateMethod(Context context, String methodName, String cmdLineArgs) throws SyntaxError {
+	 private static IMethodDeclaration locateMethod(Context context, Identifier methodName, String cmdLineArgs) throws SyntaxError {
 		MethodDeclarationMap map = context.getRegisteredDeclaration(MethodDeclarationMap.class, methodName);
 		if(map==null)
 			throw new SyntaxError("Could not find a \"" + methodName + "\" method.");

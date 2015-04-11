@@ -14,18 +14,18 @@ import presto.value.IValue;
 
 public class AttributeArgument extends BaseArgument implements INamedArgument {
 	
-	public AttributeArgument(String name) {
+	public AttributeArgument(Identifier name) {
 		super(name);
 	}
 
 	@Override
 	public String getSignature(Dialect dialect) {
-		return getName();
+		return name.toString();
 	}
 	
 	@Override
 	public void toDialect(CodeWriter writer) {
-		writer.append(getName());
+		writer.append(name);
 		if(defaultExpression!=null) {
 			writer.append(" = ");
 			defaultExpression.toDialect(writer);
@@ -34,12 +34,12 @@ public class AttributeArgument extends BaseArgument implements INamedArgument {
 	
 	@Override
 	public String toString() {
-		return getName();
+		return name.toString();
 	}
 	
 	@Override
 	public String getProto(Context context) {
-		return getName();
+		return name.toString();
 	}
 	
 	@Override

@@ -12,9 +12,9 @@ import presto.value.IValue;
 public class MemberInstance implements IAssignableSelector {
 	
 	IAssignableInstance parent;
-	String name;
+	Identifier name;
 	
-	public MemberInstance(String name) {
+	public MemberInstance(Identifier name) {
 		this.name = name;
 	}
 	
@@ -23,7 +23,7 @@ public class MemberInstance implements IAssignableSelector {
 		this.parent = parent;
 	}
 	
-	public String getName() {
+	public Identifier getName() {
 		return name;
 	}
 	
@@ -41,7 +41,7 @@ public class MemberInstance implements IAssignableSelector {
 	}
 	
 	@Override
-	public void checkAssignMember(Context context, String memberName) throws SyntaxError {
+	public void checkAssignMember(Context context, Identifier memberName) throws SyntaxError {
 		parent.checkAssignMember(context, name);
 	}
 	

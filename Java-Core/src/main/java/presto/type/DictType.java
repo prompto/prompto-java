@@ -3,6 +3,7 @@ package presto.type;
 import java.util.Map;
 
 import presto.error.SyntaxError;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 
 
@@ -67,7 +68,8 @@ public class DictType extends CollectionType {
 	}
 	
 	@Override
-	public IType checkMember(Context context, String name) throws SyntaxError {
+	public IType checkMember(Context context, Identifier id) throws SyntaxError {
+		String name = id.toString();
         if ("length".equals(name))
             return IntegerType.instance();
         else if("keys".equals(name))
@@ -75,7 +77,7 @@ public class DictType extends CollectionType {
         else if ("values".equals(name))
             return new ListType(getItemType());
         else
-        	return super.checkMember(context, name);
+        	return super.checkMember(context, id);
 	}
 	
 

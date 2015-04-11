@@ -16,7 +16,7 @@ public class CategorySymbol extends Symbol implements IExpression  {
 	
 	ArgumentAssignmentList assignments;
 	
-	public CategorySymbol(String name,ArgumentAssignmentList assignments) {
+	public CategorySymbol(Identifier name,ArgumentAssignmentList assignments) {
 		super(name);
 		this.assignments = assignments;
 	}
@@ -73,7 +73,7 @@ public class CategorySymbol extends Symbol implements IExpression  {
 				instance.setMember(context, assignment.getName(), value);
 			}
 		}
-		instance.setMember(context, "name", new Text(this.getName()));
+		instance.setMember(context, new Identifier("name"), new Text(this.getName().toString()));
 		return instance;
 	}
 

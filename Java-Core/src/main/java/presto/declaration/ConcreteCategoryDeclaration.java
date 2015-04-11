@@ -7,13 +7,14 @@ import java.util.Map;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.grammar.CategoryMethodDeclarationList;
-import presto.grammar.IdentifierList;
+import presto.grammar.Identifier;
 import presto.grammar.Operator;
 import presto.runtime.Context;
 import presto.runtime.Context.MethodDeclarationMap;
 import presto.type.CategoryType;
 import presto.type.IType;
 import presto.utils.CodeWriter;
+import presto.utils.IdentifierList;
 import presto.value.ConcreteInstance;
 import presto.value.IInstance;
 
@@ -24,11 +25,11 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	CategoryMethodDeclarationList methods;
 	Map<String,IDeclaration> methodsMap = null;
 	
-	protected ConcreteCategoryDeclaration(String name) {
+	protected ConcreteCategoryDeclaration(Identifier name) {
 		super(name);
 	}
 	
-	public ConcreteCategoryDeclaration(String name, IdentifierList attributes, 
+	public ConcreteCategoryDeclaration(Identifier name, IdentifierList attributes, 
 			IdentifierList derivedFrom, CategoryMethodDeclarationList methods) {
 		super(name, attributes);
 		this.derivedFrom = derivedFrom;
@@ -112,7 +113,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 
 
 	@Override
-	public boolean hasAttribute(Context context, String name) {
+	public boolean hasAttribute(Context context, Identifier name) {
 		if(super.hasAttribute(context, name))
 			return true;
 		if(hasDerivedAttribute(context,name))
@@ -120,17 +121,17 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return false;
 	}
 	
-	private boolean hasDerivedAttribute(Context context, String name) {
+	private boolean hasDerivedAttribute(Context context, Identifier name) {
 		if(derivedFrom==null)
 			return false;
-		for(String ancestor : derivedFrom) {
+		for(Identifier ancestor : derivedFrom) {
 			if(ancestorHasAttribute(ancestor,context,name))
 				return true;
 		}
 		return false;
 	}
 		
-	private static boolean ancestorHasAttribute(String ancestor, Context context, String name) {
+	private static boolean ancestorHasAttribute(Identifier ancestor, Context context, Identifier name) {
 		CategoryDeclaration actual = context.getRegisteredDeclaration(CategoryDeclaration.class, ancestor);
 		if(actual==null)
 			return false;
@@ -156,20 +157,20 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	private void register(ICategoryMethodDeclaration method, Context context) throws SyntaxError {
 		IDeclaration actual;
 		if(method instanceof SetterMethodDeclaration) {
-			actual = methodsMap.get("setter:"+method.getName());
+			actual = methodsMap.get("setter:"+method.getName().toString());
 			if(actual!=null)
-				throw new SyntaxError("Duplicate setter: \"" + method.getName() + "\"");
-			methodsMap.put("setter:"+method.getName(),method);
+				throw new SyntaxError("Duplicate setter: \"" + method.getName().toString() + "\"");
+			methodsMap.put("setter:"+method.getName().toString(),method);
 		} else if(method instanceof GetterMethodDeclaration) {
-			actual = methodsMap.get("getter:"+method.getName());
+			actual = methodsMap.get("getter:"+method.getName().toString());
 			if(actual!=null)
-				throw new SyntaxError("Duplicate getter: \"" + method.getName() + "\"");
-			methodsMap.put("getter:"+method.getName(),method);
+				throw new SyntaxError("Duplicate getter: \"" + method.getName().toString() + "\"");
+			methodsMap.put("getter:"+method.getName().toString(),method);
 		} else {
-			actual = methodsMap.get(method.getName());
+			actual = methodsMap.get(method.getName().toString());
 			if(actual==null) {
 				actual = new MethodDeclarationMap(method.getName());
-				methodsMap.put(method.getName(), (MethodDeclarationMap)actual);
+				methodsMap.put(method.getName().toString(), (MethodDeclarationMap)actual);
 			}
 			((MethodDeclarationMap)actual).register(method,context);
 		}
@@ -177,7 +178,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 
 	private void checkDerived(Context context) throws SyntaxError {
-		if(derivedFrom!=null) for(String category : derivedFrom) {
+		if(derivedFrom!=null) for(Identifier category : derivedFrom) {
 			ConcreteCategoryDeclaration cd = context.getRegisteredDeclaration(ConcreteCategoryDeclaration.class, category);
 			if(cd==null)
 				throw new SyntaxError("Unknown category: \"" + category + "\"");
@@ -188,7 +189,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	public boolean isDerivedFrom(Context context, CategoryType categoryType) {
 		if(derivedFrom==null) 
 			return false;
-		for(String ancestor : derivedFrom) {
+		for(Identifier ancestor : derivedFrom) {
 			if(ancestor.equals(categoryType.getName()))
 				return true;
 			if(isAncestorDerivedFrom(ancestor,context,categoryType))
@@ -197,7 +198,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return false;
 	}
 
-	private static boolean isAncestorDerivedFrom(String ancestor, Context context, CategoryType categoryType) {
+	private static boolean isAncestorDerivedFrom(Identifier ancestor, Context context, CategoryType categoryType) {
 		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, ancestor);
 		if(actual==null || !(actual instanceof CategoryDeclaration))
 			return false;
@@ -210,7 +211,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return new ConcreteInstance(this);
 	}
 
-	public GetterMethodDeclaration findGetter(Context context, String attrName) throws SyntaxError {
+	public GetterMethodDeclaration findGetter(Context context, Identifier attrName) throws SyntaxError {
 		if(methodsMap==null)
 			return null;
 		IDeclaration method = methodsMap.get("getter:"+attrName); 
@@ -221,10 +222,10 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return findDerivedGetter(context, attrName);
 	}
 
-	private GetterMethodDeclaration findDerivedGetter(Context context, String attrName) throws SyntaxError {
+	private GetterMethodDeclaration findDerivedGetter(Context context, Identifier attrName) throws SyntaxError {
 		if(derivedFrom==null) 
 			return null;
-		for(String ancestor : derivedFrom) {
+		for(Identifier ancestor : derivedFrom) {
 			GetterMethodDeclaration method = findAncestorGetter(ancestor,context,attrName); 
 			if(method!=null)
 				return method;
@@ -232,7 +233,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return null;
 	}
 
-	private static GetterMethodDeclaration findAncestorGetter(String ancestor, Context context, String attrName) throws SyntaxError {
+	private static GetterMethodDeclaration findAncestorGetter(Identifier ancestor, Context context, Identifier attrName) throws SyntaxError {
 		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, ancestor);
 		if(actual==null || !(actual instanceof ConcreteCategoryDeclaration))
 			return null;
@@ -240,7 +241,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return cd.findGetter(context, attrName);
 	}
 
-	public SetterMethodDeclaration findSetter(Context context, String attrName) throws SyntaxError {
+	public SetterMethodDeclaration findSetter(Context context, Identifier attrName) throws SyntaxError {
 		if(methodsMap==null)
 			return null;
 		IDeclaration method = methodsMap.get("setter:"+attrName); 
@@ -251,10 +252,10 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return findDerivedSetter(context,attrName);
 	}
 
-	private SetterMethodDeclaration findDerivedSetter(Context context, String attrName) throws SyntaxError {
+	private SetterMethodDeclaration findDerivedSetter(Context context, Identifier attrName) throws SyntaxError {
 		if(derivedFrom==null) 
 			return null;
-		for(String ancestor : derivedFrom) {
+		for(Identifier ancestor : derivedFrom) {
 			SetterMethodDeclaration method = findAncestorSetter(ancestor,context,attrName); 
 			if(method!=null)
 				return method;
@@ -262,7 +263,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return null;
 	}
 	
-	private static SetterMethodDeclaration findAncestorSetter(String ancestor, Context context, String attrName) throws SyntaxError {
+	private static SetterMethodDeclaration findAncestorSetter(Identifier ancestor, Context context, Identifier attrName) throws SyntaxError {
 		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, ancestor);
 		if(actual==null || !(actual instanceof ConcreteCategoryDeclaration))
 			return null;
@@ -270,7 +271,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return cd.findSetter(context, attrName);
 	}
 	
-	public Collection<IMethodDeclaration> findMemberMethods(Context context, String name) throws SyntaxError {
+	public Collection<IMethodDeclaration> findMemberMethods(Context context, Identifier name) throws SyntaxError {
 		MethodDeclarationMap result = new MethodDeclarationMap(name);
 		registerMemberMethods(context,result);
 		return result.values();
@@ -286,7 +287,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	private void registerThisMemberMethods(Context context, MethodDeclarationMap result) throws SyntaxError {
 		if(methodsMap==null)
 			return;
-		IDeclaration actual = methodsMap.get(result.getName()); 
+		IDeclaration actual = methodsMap.get(result.getName().toString()); 
 		if(actual==null)
 			return;
 		if(!(actual instanceof MethodDeclarationMap))
@@ -298,11 +299,11 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	private void registerDerivedMemberMethods(Context context, MethodDeclarationMap result) throws SyntaxError {
 		if(derivedFrom==null) 
 			return;
-		for(String ancestor : derivedFrom)
+		for(Identifier ancestor : derivedFrom)
 			registerAncestorMemberMethods(ancestor,context,result); 
 	}
 	
-	private void registerAncestorMemberMethods(String ancestor, Context context, MethodDeclarationMap result) throws SyntaxError {
+	private void registerAncestorMemberMethods(Identifier ancestor, Context context, MethodDeclarationMap result) throws SyntaxError {
 		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, ancestor);
 		if(actual==null || !(actual instanceof ConcreteCategoryDeclaration))
 			return;
@@ -311,7 +312,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 
 	public IMethodDeclaration findOperator(Context context, Operator operator, IType type) throws SyntaxError {
-		String methodName = "operator_" + operator.name();
+		Identifier methodName = new Identifier("operator_" + operator.name());
 		Collection<IMethodDeclaration> methods = findMemberMethods(context, methodName);
 		if(methods==null)
 			return null;

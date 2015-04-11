@@ -8,15 +8,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import presto.debug.Debugger;
 import presto.debug.Debugger.Status;
 import presto.declaration.ConcreteMethodDeclaration;
 import presto.error.PrestoError;
+import presto.grammar.Identifier;
 import presto.parser.ISection;
 import presto.parser.e.BaseEParserTest;
 import presto.runtime.Context;
-import presto.runtime.Interpreter;
 import presto.runtime.Context.MethodDeclarationMap;
+import presto.runtime.Interpreter;
 import presto.runtime.utils.Out;
 
 
@@ -196,7 +196,7 @@ public class TestDebugger extends BaseEParserTest {
 		waitBlocked();
 		assertEquals(Status.SUSPENDED, debugger.getStatus());
 		assertEquals(MAIN_LINE, debugger.getLine());
-		MethodDeclarationMap mdm = context.getRegisteredDeclaration(MethodDeclarationMap.class, "printLevel2");
+		MethodDeclarationMap mdm = context.getRegisteredDeclaration(MethodDeclarationMap.class, new Identifier("printLevel2"));
 		ConcreteMethodDeclaration cmd = (ConcreteMethodDeclaration)mdm.values().iterator().next();
 		ISection section = cmd.getStatements().get(0);
 		assertEquals(LEVEL_2_LINE + 1, section.getStart().getLine());

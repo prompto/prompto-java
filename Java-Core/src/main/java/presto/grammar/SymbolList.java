@@ -79,7 +79,7 @@ public abstract class SymbolList <T extends Symbol> extends ObjectList<T> implem
 		throw new UnsupportedOperationException("Compare not supported by " + this.getClass().getSimpleName());
 	}
 
-	public IValue getMember(Context context, String name) throws PrestoError {
+	public IValue getMember(Context context, Identifier name) throws PrestoError {
 		throw new UnsupportedOperationException("No member support for " + this.getClass().getSimpleName());
 	}
 

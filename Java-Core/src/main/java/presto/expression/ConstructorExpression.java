@@ -5,6 +5,7 @@ import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.grammar.ArgumentAssignment;
 import presto.grammar.ArgumentAssignmentList;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 import presto.type.CategoryType;
 import presto.type.IType;
@@ -120,7 +121,7 @@ public class ConstructorExpression implements IExpression {
 			if(copyObj instanceof IInstance) {
 				IInstance copyFrom = (IInstance)copyObj;
 				CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getName());
-				for(String name : copyFrom.getMemberNames()) {
+				for(Identifier name : copyFrom.getMemberNames()) {
 					if(cd.hasAttribute(context, name)) 
 						instance.setMember(context, name, copyFrom.getMember(context,name));
 				}

@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.grammar.INamed;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 import presto.type.IType;
 import presto.utils.CodeWriter;
@@ -82,7 +83,7 @@ public class JavaIdentifierExpression implements JavaExpression {
 
 	Object evaluate_instance(Context context) throws PrestoError {
 		try {
-			return context.getValue(identifier); 
+			return context.getValue(new Identifier(identifier)); 
 		} catch (PrestoError e) {
 			return null;
 		}
@@ -143,7 +144,7 @@ public class JavaIdentifierExpression implements JavaExpression {
 	}
 
 	IType check_instance(Context context) throws SyntaxError {
-		INamed named = context.getRegisteredValue(INamed.class, identifier); 
+		INamed named = context.getRegisteredValue(INamed.class, new Identifier(identifier)); 
 		if(named==null)
 			return null;
 		try {

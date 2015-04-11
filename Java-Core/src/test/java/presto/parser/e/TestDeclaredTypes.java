@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import presto.grammar.DeclarationList;
+import presto.grammar.Identifier;
 import presto.type.AnyType;
 import presto.type.BooleanType;
 import presto.type.CategoryType;
@@ -43,9 +44,9 @@ public class TestDeclaredTypes extends BaseEParserTest {
 		assertFalse(st.isAssignableTo(context, DateTimeType.instance()));
 		assertFalse(st.isAssignableTo(context, MissingType.instance()));
 		assertTrue(st.isAssignableTo(context, AnyType.instance()));
-		assertFalse(st.isAssignableTo(context, new CategoryType("Root")));
-		assertFalse(st.isAssignableTo(context, new CategoryType("Derived")));
-		assertFalse(st.isAssignableTo(context, new CategoryType("Unrelated")));
+		assertFalse(st.isAssignableTo(context, new CategoryType(new Identifier("Root"))));
+		assertFalse(st.isAssignableTo(context, new CategoryType(new Identifier("Derived"))));
+		assertFalse(st.isAssignableTo(context, new CategoryType(new Identifier("Unrelated"))));
 	}
 	
 	@Test
@@ -60,9 +61,9 @@ public class TestDeclaredTypes extends BaseEParserTest {
 		assertFalse(st.isAssignableTo(context, DateTimeType.instance()));
 		assertFalse(st.isAssignableTo(context, MissingType.instance()));
 		assertTrue(st.isAssignableTo(context, AnyType.instance()));
-		assertFalse(st.isAssignableTo(context, new CategoryType("Root")));
-		assertFalse(st.isAssignableTo(context, new CategoryType("Derived")));
-		assertFalse(st.isAssignableTo(context, new CategoryType("Unrelated")));
+		assertFalse(st.isAssignableTo(context, new CategoryType(new Identifier("Root"))));
+		assertFalse(st.isAssignableTo(context, new CategoryType(new Identifier("Derived"))));
+		assertFalse(st.isAssignableTo(context, new CategoryType(new Identifier("Unrelated"))));
 	}
 	
 	@Test
@@ -77,9 +78,9 @@ public class TestDeclaredTypes extends BaseEParserTest {
 		assertFalse(st.isAssignableTo(context, DateTimeType.instance()));
 		assertFalse(st.isAssignableTo(context, MissingType.instance()));
 		assertTrue(st.isAssignableTo(context, AnyType.instance()));
-		assertFalse(st.isAssignableTo(context, new CategoryType("Root")));
-		assertFalse(st.isAssignableTo(context, new CategoryType("Derived")));
-		assertFalse(st.isAssignableTo(context, new CategoryType("Unrelated")));
+		assertFalse(st.isAssignableTo(context, new CategoryType(new Identifier("Root"))));
+		assertFalse(st.isAssignableTo(context, new CategoryType(new Identifier("Derived"))));
+		assertFalse(st.isAssignableTo(context, new CategoryType(new Identifier("Unrelated"))));
 	}
 
 	@Test
@@ -94,9 +95,9 @@ public class TestDeclaredTypes extends BaseEParserTest {
 		assertFalse(st.isAssignableTo(context, DateTimeType.instance()));
 		assertFalse(st.isAssignableTo(context, MissingType.instance()));
 		assertTrue(st.isAssignableTo(context, AnyType.instance()));
-		assertFalse(st.isAssignableTo(context, new CategoryType("Root")));
-		assertFalse(st.isAssignableTo(context, new CategoryType("Derived")));
-		assertFalse(st.isAssignableTo(context, new CategoryType("Unrelated")));
+		assertFalse(st.isAssignableTo(context, new CategoryType(new Identifier("Root"))));
+		assertFalse(st.isAssignableTo(context, new CategoryType(new Identifier("Derived"))));
+		assertFalse(st.isAssignableTo(context, new CategoryType(new Identifier("Unrelated"))));
 	}
 	
 	@Test
@@ -111,9 +112,9 @@ public class TestDeclaredTypes extends BaseEParserTest {
 		assertFalse(st.isAssignableTo(context, DateTimeType.instance()));
 		assertFalse(st.isAssignableTo(context, MissingType.instance()));
 		assertTrue(st.isAssignableTo(context, AnyType.instance()));
-		assertFalse(st.isAssignableTo(context, new CategoryType("Root")));
-		assertFalse(st.isAssignableTo(context, new CategoryType("Derived")));
-		assertFalse(st.isAssignableTo(context, new CategoryType("Unrelated")));
+		assertFalse(st.isAssignableTo(context, new CategoryType(new Identifier("Root"))));
+		assertFalse(st.isAssignableTo(context, new CategoryType(new Identifier("Derived"))));
+		assertFalse(st.isAssignableTo(context, new CategoryType(new Identifier("Unrelated"))));
 	}
 	
 	@Test 
@@ -128,9 +129,9 @@ public class TestDeclaredTypes extends BaseEParserTest {
 		assertTrue(st.isAssignableTo(context, DateTimeType.instance()));
 		assertFalse(st.isAssignableTo(context, MissingType.instance()));
 		assertTrue(st.isAssignableTo(context, AnyType.instance()));
-		assertFalse(st.isAssignableTo(context, new CategoryType("Root")));
-		assertFalse(st.isAssignableTo(context, new CategoryType("Derived")));
-		assertFalse(st.isAssignableTo(context, new CategoryType("Unrelated")));
+		assertFalse(st.isAssignableTo(context, new CategoryType(new Identifier("Root"))));
+		assertFalse(st.isAssignableTo(context, new CategoryType(new Identifier("Derived"))));
+		assertFalse(st.isAssignableTo(context, new CategoryType(new Identifier("Unrelated"))));
 	}
 	
 	@Test
@@ -145,15 +146,15 @@ public class TestDeclaredTypes extends BaseEParserTest {
 		assertTrue(st.isAssignableTo(context, DateTimeType.instance()));
 		assertTrue(st.isAssignableTo(context, MissingType.instance()));
 		assertTrue(st.isAssignableTo(context, AnyType.instance()));
-		assertTrue(st.isAssignableTo(context, new CategoryType("Root")));
-		assertTrue(st.isAssignableTo(context, new CategoryType("Derived")));
-		assertTrue(st.isAssignableTo(context, new CategoryType("Unrelated")));
+		assertTrue(st.isAssignableTo(context, new CategoryType(new Identifier("Root"))));
+		assertTrue(st.isAssignableTo(context, new CategoryType(new Identifier("Derived"))));
+		assertTrue(st.isAssignableTo(context, new CategoryType(new Identifier("Unrelated"))));
 	}
 
 	@Test
 	public void testRootCategoryType() throws Exception {
-		IType st = new CategoryType("Root");
-		assertEquals(st,new CategoryType("Root"));
+		IType st = new CategoryType(new Identifier("Root"));
+		assertEquals(st,new CategoryType(new Identifier("Root")));
 		assertFalse(st.isAssignableTo(context, BooleanType.instance()));
 		assertFalse(st.isAssignableTo(context, IntegerType.instance()));
 		assertFalse(st.isAssignableTo(context, DecimalType.instance()));
@@ -162,15 +163,15 @@ public class TestDeclaredTypes extends BaseEParserTest {
 		assertFalse(st.isAssignableTo(context, DateTimeType.instance()));
 		assertFalse(st.isAssignableTo(context, MissingType.instance()));
 		assertTrue(st.isAssignableTo(context, AnyType.instance()));
-		assertTrue(st.isAssignableTo(context, new CategoryType("Root")));
-		assertFalse(st.isAssignableTo(context, new CategoryType("Derived")));
-		assertFalse(st.isAssignableTo(context, new CategoryType("Unrelated")));
+		assertTrue(st.isAssignableTo(context, new CategoryType(new Identifier("Root"))));
+		assertFalse(st.isAssignableTo(context, new CategoryType(new Identifier("Derived"))));
+		assertFalse(st.isAssignableTo(context, new CategoryType(new Identifier("Unrelated"))));
 	}
 
 	@Test
 	public void testDerivedCategoryType() throws Exception {
-		IType st = new CategoryType("Derived");
-		assertEquals(st,new CategoryType("Derived"));
+		IType st = new CategoryType(new Identifier("Derived"));
+		assertEquals(st,new CategoryType(new Identifier("Derived")));
 		assertFalse(st.isAssignableTo(context, BooleanType.instance()));
 		assertFalse(st.isAssignableTo(context, IntegerType.instance()));
 		assertFalse(st.isAssignableTo(context, DecimalType.instance()));
@@ -179,15 +180,15 @@ public class TestDeclaredTypes extends BaseEParserTest {
 		assertFalse(st.isAssignableTo(context, DateTimeType.instance()));
 		assertFalse(st.isAssignableTo(context, MissingType.instance()));
 		assertTrue(st.isAssignableTo(context, AnyType.instance()));
-		assertTrue(st.isAssignableTo(context, new CategoryType("Root")));
-		assertTrue(st.isAssignableTo(context, new CategoryType("Derived")));
-		assertFalse(st.isAssignableTo(context, new CategoryType("Unrelated")));
+		assertTrue(st.isAssignableTo(context, new CategoryType(new Identifier("Root"))));
+		assertTrue(st.isAssignableTo(context, new CategoryType(new Identifier("Derived"))));
+		assertFalse(st.isAssignableTo(context, new CategoryType(new Identifier("Unrelated"))));
 	}
 	
 	@Test
 	public void testUnrelatedCategoryType() throws Exception {
-		IType st = new CategoryType("Unrelated");
-		assertEquals(st,new CategoryType("Unrelated"));
+		IType st = new CategoryType(new Identifier("Unrelated"));
+		assertEquals(st,new CategoryType(new Identifier("Unrelated")));
 		assertFalse(st.isAssignableTo(context, BooleanType.instance()));
 		assertFalse(st.isAssignableTo(context, IntegerType.instance()));
 		assertFalse(st.isAssignableTo(context, DecimalType.instance()));
@@ -196,9 +197,9 @@ public class TestDeclaredTypes extends BaseEParserTest {
 		assertFalse(st.isAssignableTo(context, DateTimeType.instance()));
 		assertFalse(st.isAssignableTo(context, MissingType.instance()));
 		assertTrue(st.isAssignableTo(context, AnyType.instance()));
-		assertFalse(st.isAssignableTo(context, new CategoryType("Root")));
-		assertFalse(st.isAssignableTo(context, new CategoryType("Derived")));
-		assertTrue(st.isAssignableTo(context, new CategoryType("Unrelated")));
+		assertFalse(st.isAssignableTo(context, new CategoryType(new Identifier("Root"))));
+		assertFalse(st.isAssignableTo(context, new CategoryType(new Identifier("Derived"))));
+		assertTrue(st.isAssignableTo(context, new CategoryType(new Identifier("Unrelated"))));
 	}
 
 }

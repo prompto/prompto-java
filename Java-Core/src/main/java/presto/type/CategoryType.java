@@ -13,6 +13,7 @@ import presto.expression.IExpression;
 import presto.expression.MethodSelector;
 import presto.grammar.ArgumentAssignment;
 import presto.grammar.ArgumentAssignmentList;
+import presto.grammar.Identifier;
 import presto.grammar.Operator;
 import presto.grammar.UnresolvedIdentifier;
 import presto.runtime.Context;
@@ -29,7 +30,7 @@ import presto.value.ListValue;
 
 public class CategoryType extends BaseType {
 
-	public CategoryType(String name) {
+	public CategoryType(Identifier name) {
 		super(name);
 	}
 	
@@ -144,7 +145,7 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-    public IType checkMember(Context context, String name) throws SyntaxError
+    public IType checkMember(Context context, Identifier name) throws SyntaxError
     {
         CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, getName());
         if (cd == null)
@@ -185,7 +186,7 @@ public class CategoryType extends BaseType {
 	boolean isDerivedFromCompatibleCategory(Context context, CategoryDeclaration decl, CategoryType other) {
 		if(decl.getDerivedFrom()==null)
 			return false;
-		for(String derived : decl.getDerivedFrom()) {
+		for(Identifier derived : decl.getDerivedFrom()) {
 			CategoryType ct = new CategoryType(derived);
 			if(ct.isAssignableTo(context, other))
 				return true;
@@ -205,16 +206,16 @@ public class CategoryType extends BaseType {
 	}
 	
 	public boolean isAnonymous() {
-		return Character.isLowerCase(name.charAt(0)); // since it's the name of the argument
+		return Character.isLowerCase(name.toString().charAt(0)); // since it's the name of the argument
 	}
 	
 	boolean isAssignableToAnonymousCategory(Context context, CategoryDeclaration decl, CategoryDeclaration other) {
 		// an anonymous category extends 1 and only 1 category
-		String baseName = other.getDerivedFrom().get(0);
+		Identifier baseName = other.getDerivedFrom().get(0);
 		// check we derive from root category (if not extending 'Any')
-		if(!"any".equals(baseName) && !decl.isDerivedFrom(context,new CategoryType(baseName)))
+		if(!"any".equals(baseName.toString()) && !decl.isDerivedFrom(context,new CategoryType(baseName)))
 			return false;
-		for(String attribute : other.getAttributes()) {
+		for(Identifier attribute : other.getAttributes()) {
 			if(!decl.hasAttribute(context,attribute))
 				return false;
 		}
@@ -258,14 +259,14 @@ public class CategoryType extends BaseType {
 		if(list.length()==0)
 			return list;
 		if(key==null)
-			key = new UnresolvedIdentifier("key");
+			key = new UnresolvedIdentifier(new Identifier("key"));
 		CategoryDeclaration decl = getDeclaration(context);
-		if(decl.hasAttribute(context, key.toString()))
-			return sortByAttribute(context, list, key.toString());
+		if(decl.hasAttribute(context, new Identifier(key.toString())))
+			return sortByAttribute(context, list, new Identifier(key.toString()));
 		else if(decl.hasMethod(context, key.toString(), null))
 			return sortByClassMethod(context, list, key.toString());
-		else if(globalMethodExists(context, list, key.toString()))
-			return sortByGlobalMethod(context, list, key.toString());
+		else if(globalMethodExists(context, list, new Identifier(key.toString())))
+			return sortByGlobalMethod(context, list, new Identifier(key.toString()));
 		else
 			return sortByExpression(context, list, key);
 	}
@@ -296,7 +297,7 @@ public class CategoryType extends BaseType {
 		}
 	}
 
-	private ListValue sortByAttribute(final Context context, ICollection<IValue> list, final String name) throws PrestoError {
+	private ListValue sortByAttribute(final Context context, ICollection<IValue> list, final Identifier name) throws PrestoError {
 		try {
 			return this.<IInstance>doSort(context,list,new Comparator<IInstance>() {
 				@Override
@@ -323,7 +324,7 @@ public class CategoryType extends BaseType {
 		return null;
 	}
 
-	private boolean globalMethodExists(Context context, ICollection<IValue> list, String name) {
+	private boolean globalMethodExists(Context context, ICollection<IValue> list, Identifier name) {
 		try {
 			IExpression exp = new ExpressionValue(this, newInstance(context));
 			ArgumentAssignment arg = new ArgumentAssignment(null, exp);
@@ -336,7 +337,7 @@ public class CategoryType extends BaseType {
 		}
 	}
 
-	private ListValue sortByGlobalMethod(Context context, ICollection<IValue> list, final String name) throws PrestoError {
+	private ListValue sortByGlobalMethod(Context context, ICollection<IValue> list, final Identifier name) throws PrestoError {
 		IExpression exp = new ExpressionValue(this, newInstance(context));
 		ArgumentAssignment arg = new ArgumentAssignment(null, exp);
 		ArgumentAssignmentList args = new ArgumentAssignmentList(arg);

@@ -37,6 +37,8 @@ public class MethodFinder {
 	public IMethodDeclaration findMethod(boolean checkInstance) throws SyntaxError {
 		MethodSelector selector = methodCall.getMethod();
 		Collection<IMethodDeclaration> candidates = selector.getCandidates(context);
+		if(candidates.size()==0)
+			throw new SyntaxError("No method named:" + methodCall.getMethod().getName().toString()); 
 		List<IMethodDeclaration> compatibles = filterCompatible(candidates,checkInstance);
 		switch(compatibles.size()) {
 		case 0:

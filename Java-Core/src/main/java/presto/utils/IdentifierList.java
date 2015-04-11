@@ -1,9 +1,9 @@
-package presto.grammar;
+package presto.utils;
 
-import presto.utils.CodeWriter;
-import presto.utils.ObjectList;
+import presto.grammar.Identifier;
 
-public class IdentifierList extends ObjectList<String> {
+
+public class IdentifierList extends ObjectList<Identifier> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -11,14 +11,14 @@ public class IdentifierList extends ObjectList<String> {
 		String[] parts = ids.split(",");
 		IdentifierList result = new IdentifierList();
 		for(String part : parts)
-			result.add(part);
+			result.add(new Identifier(part));
 		return result;
 	}
 	
 	public IdentifierList() {		
 	}
 	
-	public IdentifierList(String item) {
+	public IdentifierList(Identifier item) {
 		this.add(item);
 	}
 
@@ -46,7 +46,7 @@ public class IdentifierList extends ObjectList<String> {
 			writer.append(this.getFirst());
 			break;
 		default:
-			for(String s : this) {
+			for(Identifier s : this) {
 				if(finalAnd && s==this.getLast())
 					break;
 				writer.append(s);
@@ -62,7 +62,7 @@ public class IdentifierList extends ObjectList<String> {
 
 	private void toODialect(CodeWriter writer) {
 		if(this.size()>0) {
-			for(String s : this) {
+			for(Identifier s : this) {
 				writer.append(s);
 				writer.append(", ");
 			}

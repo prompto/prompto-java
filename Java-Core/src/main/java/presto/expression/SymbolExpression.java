@@ -2,6 +2,7 @@ package presto.expression;
 
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
+import presto.grammar.Identifier;
 import presto.grammar.Symbol;
 import presto.runtime.Context;
 import presto.type.IType;
@@ -10,13 +11,13 @@ import presto.value.IValue;
 
 public class SymbolExpression implements IExpression {
 
-	String name;
+	Identifier name;
 	
-	public SymbolExpression(String name) {
+	public SymbolExpression(Identifier name) {
 		this.name = name;
 	}
 
-	public String getName() {
+	public Identifier getName() {
 		return name;
 	}
 	

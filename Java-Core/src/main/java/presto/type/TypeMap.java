@@ -3,11 +3,12 @@ package presto.type;
 import java.util.HashMap;
 
 import presto.error.SyntaxError;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 
 
 
-public class TypeMap extends HashMap<String, IType> {
+public class TypeMap extends HashMap<Identifier, IType> {
 
 	private static final long serialVersionUID = 1L;
 

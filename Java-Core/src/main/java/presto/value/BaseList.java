@@ -5,8 +5,10 @@ import java.util.Collection;
 import java.util.List;
 
 import presto.error.IndexOutOfRangeError;
+import presto.error.InvalidDataError;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 import presto.type.CollectionType;
 import presto.type.IType;
@@ -122,11 +124,12 @@ public abstract class BaseList<T extends BaseList<T>> extends BaseValue implemen
 	}
 
 	@Override
-	public IValue getMember(Context context, String name) throws PrestoError {
+	public IValue getMember(Context context, Identifier id) throws PrestoError {
+		String name = id.toString();
 		if ("length".equals(name))
 			return new Integer(items.size());
 		else
-			return super.getMember(context, name);
+			throw new InvalidDataError("No such member:" + name);
 	}
 
 

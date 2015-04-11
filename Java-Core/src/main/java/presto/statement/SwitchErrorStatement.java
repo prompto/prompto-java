@@ -3,6 +3,7 @@ package presto.statement;
 import presto.error.ExecutionError;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 import presto.runtime.ErrorVariable;
 import presto.type.EnumeratedCategoryType;
@@ -14,16 +15,16 @@ import presto.value.IValue;
 
 public class SwitchErrorStatement extends BaseSwitchStatement {
 
-	String errorName;
+	Identifier errorName;
 	StatementList instructions;
 	StatementList alwaysInstructions;
 	
-	public SwitchErrorStatement(String errorName, StatementList instructions) {
+	public SwitchErrorStatement(Identifier errorName, StatementList instructions) {
 		this.errorName = errorName;
 		this.instructions = instructions;
 	}
 	
-	public SwitchErrorStatement(String errorName, StatementList instructions, 
+	public SwitchErrorStatement(Identifier errorName, StatementList instructions, 
 			SwitchCaseList handlers, StatementList anyStmts, StatementList finalStmts) {
 		super(handlers, anyStmts);
 		this.errorName = errorName;
@@ -120,7 +121,7 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 	
 	@Override
 	IType checkSwitchType(Context context) throws SyntaxError {
-		return new EnumeratedCategoryType("Error");
+		return new EnumeratedCategoryType(new Identifier("Error"));
 	}
 	
 	@Override

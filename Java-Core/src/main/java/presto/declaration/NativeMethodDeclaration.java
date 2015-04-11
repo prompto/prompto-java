@@ -2,6 +2,7 @@ package presto.declaration;
 
 import presto.error.PrestoError;
 import presto.grammar.ArgumentList;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 import presto.statement.IStatement;
 import presto.statement.StatementList;
@@ -12,7 +13,7 @@ import presto.value.IValue;
 
 public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 
-	public NativeMethodDeclaration(String name, ArgumentList arguments, IType returnType, StatementList instructions) {
+	public NativeMethodDeclaration(Identifier name, ArgumentList arguments, IType returnType, StatementList instructions) {
 		super(name,arguments,returnType, instructions);
 	}
 

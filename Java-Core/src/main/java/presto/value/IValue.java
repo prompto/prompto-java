@@ -1,6 +1,7 @@
 package presto.value;
 
 import presto.error.PrestoError;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 import presto.type.IType;
 
@@ -20,7 +21,7 @@ public interface IValue {
 
 	IValue Modulo(Context context, IValue iValue) throws PrestoError;
 
-	IValue getMember(Context context, String name) throws PrestoError;
+	IValue getMember(Context context, Identifier name) throws PrestoError;
 
 	int CompareTo(Context context, IValue value) throws PrestoError;
 

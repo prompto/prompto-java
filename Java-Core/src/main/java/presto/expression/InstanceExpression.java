@@ -6,6 +6,7 @@ import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.grammar.IArgument;
 import presto.grammar.INamed;
+import presto.grammar.Identifier;
 import presto.parser.Dialect;
 import presto.runtime.Attribute;
 import presto.runtime.Context;
@@ -19,19 +20,19 @@ import presto.value.IValue;
 
 public class InstanceExpression implements IExpression {
 
-	String name;
+	Identifier name;
 	
-	public InstanceExpression(String name) {
+	public InstanceExpression(Identifier name) {
 		this.name = name;
 	}
 
-	public String getName() {
+	public Identifier getName() {
 		return name;
 	}
 	
 	@Override
 	public String toString() {
-		return name;
+		return name.toString();
 	}
 	
 	@Override

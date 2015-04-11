@@ -5,6 +5,7 @@ import presto.grammar.ArgumentAssignment;
 import presto.grammar.ArgumentAssignmentList;
 import presto.grammar.ArgumentList;
 import presto.grammar.IArgument;
+import presto.grammar.Identifier;
 import presto.grammar.Specificity;
 import presto.parser.Dialect;
 import presto.runtime.Context;
@@ -17,7 +18,7 @@ public abstract class BaseCategoryMethodDeclaration extends BaseDeclaration impl
 	IType returnType;
 	StatementList instructions;
 	
-	protected BaseCategoryMethodDeclaration(String name, ArgumentList arguments, IType returnType, StatementList instructions) {
+	protected BaseCategoryMethodDeclaration(Identifier name, ArgumentList arguments, IType returnType, StatementList instructions) {
 		super(name);
 		this.arguments = arguments;
 		this.returnType = returnType;

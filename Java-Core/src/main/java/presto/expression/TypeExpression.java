@@ -2,6 +2,7 @@ package presto.expression;
 
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 import presto.type.IType;
 import presto.utils.CodeWriter;
@@ -36,7 +37,7 @@ public class TypeExpression implements IExpression {
 		return new TypeValue(type);
 	}
 
-	public IValue getMember(Context context, String name) throws PrestoError {
+	public IValue getMember(Context context, Identifier name) throws PrestoError {
 		return type.getMember(context, name);
 	}
 

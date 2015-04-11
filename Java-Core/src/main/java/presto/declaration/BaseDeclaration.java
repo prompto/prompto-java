@@ -1,19 +1,21 @@
 package presto.declaration;
 
+import presto.grammar.Identifier;
 import presto.parser.Section;
 
 public abstract class BaseDeclaration extends Section implements IDeclaration {
 
-	String name;
+	Identifier name;
 	
-	protected BaseDeclaration(String name) {
+	protected BaseDeclaration(Identifier name) {
 		this.name = name;
 	}
 		
 	@Override
-	public String getName() {
+	public Identifier getName() {
 		return name;
 	}
+	
 	
 	
 }

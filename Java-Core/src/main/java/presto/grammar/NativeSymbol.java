@@ -13,7 +13,7 @@ public class NativeSymbol extends Symbol implements IExpression {
 	
 	IExpression expression;
 	
-	public NativeSymbol(String name, IExpression expression) {
+	public NativeSymbol(Identifier name, IExpression expression) {
 		super(name);
 		this.expression = expression;
 	}

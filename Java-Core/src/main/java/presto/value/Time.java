@@ -2,8 +2,10 @@ package presto.value;
 
 import org.joda.time.LocalTime;
 
+import presto.error.InvalidDataError;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 import presto.type.TimeType;
 
@@ -59,7 +61,8 @@ public class Time extends BaseValue implements Comparable<Time> {
 	}
 
 	@Override
-	public IValue getMember(Context context, String name) throws PrestoError {
+	public IValue getMember(Context context, Identifier id) throws PrestoError {
+		String name = id.toString();
 		if ("hour".equals(name))
 			return new Integer(this.value.getHourOfDay());
 		else if ("minute".equals(name))
@@ -69,7 +72,7 @@ public class Time extends BaseValue implements Comparable<Time> {
 		else if ("millis".equals(name))
 			return new Integer(this.value.getMillisOfSecond());
 		else
-			throw new SyntaxError("No such member:" + name);
+			throw new InvalidDataError("No such member:" + name);
 	}
 
 	@Override

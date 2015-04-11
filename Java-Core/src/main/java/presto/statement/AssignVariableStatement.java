@@ -4,6 +4,7 @@ import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.expression.IExpression;
 import presto.grammar.INamed;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 import presto.runtime.Variable;
 import presto.type.IType;
@@ -15,15 +16,15 @@ import presto.value.IValue;
 
 public class AssignVariableStatement extends SimpleStatement {
 	
-	String name;
+	Identifier name;
 	IExpression expression;
 	
-	public AssignVariableStatement(String name, IExpression expression) {
+	public AssignVariableStatement(Identifier name, IExpression expression) {
 		this.name = name;
 		this.expression = expression;
 	}
 
-	public String getName() {
+	public Identifier getName() {
 		return name;
 	}
 

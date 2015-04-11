@@ -4,6 +4,7 @@ import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.expression.IExpression;
 import presto.grammar.IAttributeConstraint;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 import presto.type.IType;
 import presto.utils.CodeWriter;
@@ -14,7 +15,7 @@ public class AttributeDeclaration extends BaseDeclaration {
 	IType type;
 	IAttributeConstraint constraint;
 	
-	public AttributeDeclaration(String name,IType type, IAttributeConstraint constraint) {
+	public AttributeDeclaration(Identifier name, IType type, IAttributeConstraint constraint) {
 		super(name);
 		this.type = type;
 		this.constraint = constraint;

@@ -28,7 +28,7 @@ public class ArgumentAssignment {
 		return argument;
 	}
 
-	public String getName() {
+	public Identifier getName() {
 		return argument.getName();
 	} 
 	
@@ -113,7 +113,7 @@ public class ArgumentAssignment {
 	
 	public IExpression resolve(Context context, IMethodDeclaration methodDeclaration,boolean checkInstance) throws PrestoError {
 		// since we support implicit members, it's time to resolve them
-		String name = argument.getName();
+		Identifier name = argument.getName();
 		IExpression expression = getExpression();
 		IArgument argument = methodDeclaration.getArguments().find(name);
 		IType required = argument.getType(context);

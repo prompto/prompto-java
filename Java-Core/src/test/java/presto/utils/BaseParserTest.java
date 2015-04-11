@@ -1,6 +1,7 @@
 package presto.utils;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -11,6 +12,7 @@ import java.util.List;
 import org.junit.Before;
 
 import presto.grammar.DeclarationList;
+import presto.grammar.Identifier;
 import presto.parser.Dialect;
 import presto.parser.ECleverParser;
 import presto.parser.OCleverParser;
@@ -47,7 +49,7 @@ public abstract class BaseParserTest extends BaseTest {
 
 	protected void runResource(String resourceName, String methodName, String cmdLineArgs) throws Exception {
 		loadResource(resourceName);
-		Interpreter.interpret(context, methodName, cmdLineArgs);
+		Interpreter.interpretMethod(context, new Identifier(methodName), cmdLineArgs);
 	}
 	
 	protected void checkOutput(String resource) throws Exception {

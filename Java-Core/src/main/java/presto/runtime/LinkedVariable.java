@@ -2,6 +2,7 @@ package presto.runtime;
 
 import presto.error.SyntaxError;
 import presto.grammar.INamed;
+import presto.grammar.Identifier;
 import presto.type.IType;
 
 /* used for downcast */
@@ -16,7 +17,7 @@ public class LinkedVariable implements INamed {
 	}
 
 	@Override
-	public String getName() {
+	public Identifier getName() {
 		return linked.getName();
 	}
 	

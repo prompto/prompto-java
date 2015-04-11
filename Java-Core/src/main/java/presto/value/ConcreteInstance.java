@@ -13,6 +13,7 @@ import presto.declaration.SetterMethodDeclaration;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.grammar.IArgument;
+import presto.grammar.Identifier;
 import presto.grammar.Operator;
 import presto.runtime.Context;
 import presto.runtime.Variable;
@@ -22,7 +23,7 @@ import presto.type.DecimalType;
 public class ConcreteInstance extends BaseValue implements IInstance, IMultiplyable {
 
 	ConcreteCategoryDeclaration declaration;
-	Map<String,IValue> values = new HashMap<String,IValue>();
+	Map<Identifier,IValue> values = new HashMap<Identifier,IValue>();
 	
 	public ConcreteInstance(ConcreteCategoryDeclaration declaration) {
 		super(new CategoryType(declaration.getName()));
@@ -39,21 +40,21 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	}
 	
 	@Override
-	public Set<String> getMemberNames() {
+	public Set<Identifier> getMemberNames() {
 		return values.keySet();
 	}
 
 	// don't call getters from getters, so register them
-	ThreadLocal<Map<String,Context>> activeGetters = new ThreadLocal<Map<String,Context>>() {
+	ThreadLocal<Map<Identifier,Context>> activeGetters = new ThreadLocal<Map<Identifier,Context>>() {
 
 		@Override
-		protected Map<String,Context> initialValue() {
-			return new HashMap<String,Context>();
+		protected Map<Identifier,Context> initialValue() {
+			return new HashMap<Identifier,Context>();
 		}
 	};
 	
 	@Override
-	public IValue getMember(Context context, String attrName) throws PrestoError {
+	public IValue getMember(Context context, Identifier attrName) throws PrestoError {
 		Context stacked = activeGetters.get().get(attrName);
 		try {
 			return get(context, attrName, stacked==null);
@@ -63,8 +64,8 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		}
 	}
 	
-	protected IValue get(Context context, String attrName, boolean allowGetter) throws PrestoError {
-		GetterMethodDeclaration getter = allowGetter ? declaration.findGetter(context,attrName) : null;
+	protected IValue get(Context context, Identifier attrName, boolean allowGetter) throws PrestoError {
+		GetterMethodDeclaration getter = allowGetter ? declaration.findGetter(context, attrName) : null;
 		if(getter!=null) {
 			activeGetters.get().put(attrName, context);
 			context = context.newInstanceContext(this);
@@ -74,16 +75,16 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	}
 	
 	// don't call setters from setters, so register them
-	ThreadLocal<Map<String,Context>> activeSetters = new ThreadLocal<Map<String,Context>>() {
+	ThreadLocal<Map<Identifier,Context>> activeSetters = new ThreadLocal<Map<Identifier,Context>>() {
 
 		@Override
-		protected Map<String,Context> initialValue() {
-			return new HashMap<String,Context>();
+		protected Map<Identifier,Context> initialValue() {
+			return new HashMap<Identifier,Context>();
 		}
 	};
 	
 	@Override
-	public void setMember(Context context, String attrName, IValue value) throws PrestoError {
+	public void setMember(Context context, Identifier attrName, IValue value) throws PrestoError {
 		Context stacked = activeSetters.get().get(attrName);
 		try {
 			set(context, attrName, value, stacked==null);
@@ -93,7 +94,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		}
 	}
 	
-	public void set(Context context, String attrName, IValue value, boolean allowSetter) throws PrestoError {
+	public void set(Context context, Identifier attrName, IValue value, boolean allowSetter) throws PrestoError {
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, attrName);
 		SetterMethodDeclaration setter = allowSetter ? declaration.findSetter(context,attrName) : null;
 		if(setter!=null) {
@@ -125,9 +126,9 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("{");
-        for (Entry<String, IValue> kvp : this.values.entrySet())
+        for (Entry<Identifier, IValue> kvp : this.values.entrySet())
         {
-            sb.append(kvp.getKey());
+            sb.append(kvp.getKey().toString());
             sb.append(":");
             sb.append(kvp.getValue().toString());
             sb.append(", ");

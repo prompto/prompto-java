@@ -2,12 +2,13 @@ package presto.declaration;
 
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
-import presto.grammar.IdentifierList;
+import presto.grammar.Identifier;
 import presto.grammar.NativeAttributeMappingListMap;
 import presto.grammar.NativeCategoryMapping;
 import presto.grammar.NativeCategoryMappingList;
 import presto.java.JavaNativeCategoryMapping;
 import presto.utils.CodeWriter;
+import presto.utils.IdentifierList;
 import presto.value.IInstance;
 import presto.value.NativeInstance;
 
@@ -17,7 +18,7 @@ public class NativeCategoryDeclaration extends CategoryDeclaration {
 	NativeAttributeMappingListMap attributeMappings;
 	Class<?> mappedClass = null;
 	
-	public NativeCategoryDeclaration(String name, IdentifierList attributes, 
+	public NativeCategoryDeclaration(Identifier name, IdentifierList attributes, 
 			NativeCategoryMappingList categoryMappings, NativeAttributeMappingListMap attributeMappings) {
 		super(name,attributes);
 		this.categoryMappings = categoryMappings;

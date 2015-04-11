@@ -4,13 +4,14 @@ import org.joda.time.LocalTime;
 
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 import presto.value.ICollection;
 import presto.value.IValue;
+import presto.value.ListValue;
 import presto.value.Range;
 import presto.value.Time;
 import presto.value.TimeRange;
-import presto.value.ListValue;
 
 
 public class TimeType extends NativeType {
@@ -66,7 +67,8 @@ public class TimeType extends NativeType {
 	}
 
 	@Override
-	public IType checkMember(Context context, String name) throws SyntaxError {
+	public IType checkMember(Context context, Identifier id) throws SyntaxError {
+		String name = id.toString();
 		if ("hour".equals(name))
 			return IntegerType.instance();
 		else if ("minute".equals(name))
@@ -76,7 +78,7 @@ public class TimeType extends NativeType {
 		else if ("millis".equals(name))
 			return IntegerType.instance();
 		else
-			return super.checkMember(context, name);
+			return super.checkMember(context, id);
 	}
 
 	@Override

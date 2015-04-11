@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import presto.declaration.IDeclaration;
 import presto.declaration.IMethodDeclaration;
 import presto.error.SyntaxError;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 
 
@@ -13,7 +14,7 @@ public class MethodType extends BaseType {
 
 	Context context;
 	
-	public MethodType(Context context, String name) {
+	public MethodType(Context context, Identifier name) {
 		super(name);
 		this.context = context;
 	}
@@ -41,7 +42,7 @@ public class MethodType extends BaseType {
 	
 	@Override
 	public void checkUnique(Context context) throws SyntaxError {
-		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class,name);
+		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, name);
 		if(actual!=null)
 			throw new SyntaxError("Duplicate name: \"" + name + "\"");
 	}

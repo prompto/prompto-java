@@ -29,7 +29,7 @@ public class ArgumentAssignmentList extends LinkedList<ArgumentAssignment> {
 		this.add(assignment);
 	}
 
-	public ArgumentAssignment find(String name) {
+	public ArgumentAssignment find(Identifier name) {
 		for(ArgumentAssignment assignment : this) {
 			if(name.equals(assignment.getName()))
 				return assignment;

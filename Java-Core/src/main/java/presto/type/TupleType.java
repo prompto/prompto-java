@@ -1,6 +1,7 @@
 package presto.type;
 
 import presto.error.SyntaxError;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 
 public class TupleType extends CollectionType {
@@ -35,11 +36,12 @@ public class TupleType extends CollectionType {
 	
 
 	@Override
-	public IType checkMember(Context context, String name) throws SyntaxError {
+	public IType checkMember(Context context, Identifier id) throws SyntaxError {
+		String name = id.toString();
         if ("length".equals(name))
             return IntegerType.instance();
         else
-            return super.checkMember(context, name);
+            return super.checkMember(context, id);
 }
 	
 	@Override

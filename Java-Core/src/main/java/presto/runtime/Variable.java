@@ -2,14 +2,15 @@ package presto.runtime;
 
 import presto.error.SyntaxError;
 import presto.grammar.INamed;
+import presto.grammar.Identifier;
 import presto.type.IType;
 
 public class Variable implements INamed {
 
-	String name;
+	Identifier name;
 	IType type;
 	
-	public Variable(String name, IType type) {
+	public Variable(Identifier name, IType type) {
 		this.name = name;
 		this.type = type;
 	}
@@ -20,7 +21,7 @@ public class Variable implements INamed {
 	}
 	
 	@Override
-	public String getName() {
+	public Identifier getName() {
 		return name;
 	}
 

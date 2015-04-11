@@ -15,7 +15,7 @@ import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
 
-import presto.declaration.IDeclaration;
+import presto.type.IType;
 
 public class ProblemCollector implements ANTLRErrorListener, IProblemListener {
 
@@ -58,9 +58,37 @@ public class ProblemCollector implements ANTLRErrorListener, IProblemListener {
 	}
 	
 	@Override
-	public void reportDuplicate(IDeclaration declaration, ISection existing) {
+	public void reportDuplicate(String name, ISection section, ISection existing) {
 		synchronized(problems) {
-			problems.add(new DuplicateError(declaration.getName(), declaration, existing));
+			problems.add(new DuplicateError(name, section, existing));
+		}
+	}
+	
+	@Override
+	public void reportIllegalNonBoolean(ISection section, IType type) {
+		synchronized(problems) {
+			problems.add(new IllegalNonBooleanError(section, type));
+		}
+	}
+	
+	@Override
+	public void reportIllegalReturn(ISection section) {
+		synchronized(problems) {
+			problems.add(new IllegalReturnError(section));
+		}
+	}
+	
+	@Override
+	public void reportUnknowIdentifier(String name, ISection section) {
+		synchronized(problems) {
+			problems.add(new UnknowIdentifierError(name, section));
+		}
+	}
+	
+	@Override
+	public void reportUnknownAttribute(String name, ISection section) {
+		synchronized(problems) {
+			problems.add(new UnknowAttributeError(name, section));
 		}
 	}
 	

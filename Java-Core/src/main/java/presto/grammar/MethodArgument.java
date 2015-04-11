@@ -11,13 +11,13 @@ import presto.utils.Utils;
 
 public class MethodArgument extends BaseArgument implements INamedArgument {
 	
-	public MethodArgument(String name) {
+	public MethodArgument(Identifier name) {
 		super(name);
 	}
 	
 	@Override
 	public String getSignature(Dialect dialect) {
-		return getName();
+		return name.toString();
 	}
 	
 	@Override
@@ -27,12 +27,12 @@ public class MethodArgument extends BaseArgument implements INamedArgument {
 
 	@Override
 	public String toString() {
-		return getName();
+		return name.toString();
 	}
 	
 	@Override
 	public String getProto(Context context) {
-		return getName();
+		return name.toString();
 	}
 	
 	@Override

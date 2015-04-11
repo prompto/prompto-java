@@ -1,5 +1,6 @@
 package presto.utils;
 
+import presto.grammar.Identifier;
 import presto.parser.Dialect;
 import presto.runtime.Context;
 
@@ -52,6 +53,10 @@ public class CodeWriter {
 
 	public Context getContext() {
 		return context;
+	}
+	
+	public void append(Identifier id) {
+		append(id.toString());
 	}
 	
 	public void append(String s) {

@@ -4,7 +4,7 @@ import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.expression.IExpression;
 import presto.grammar.INamed;
-import presto.grammar.IdentifierList;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 import presto.runtime.Variable;
 import presto.type.AnyType;
@@ -12,6 +12,7 @@ import presto.type.IType;
 import presto.type.TupleType;
 import presto.type.VoidType;
 import presto.utils.CodeWriter;
+import presto.utils.IdentifierList;
 import presto.value.IValue;
 import presto.value.Integer;
 import presto.value.TupleValue;
@@ -33,7 +34,7 @@ public class AssignTupleStatement extends SimpleStatement {
 		expression.toDialect(writer);
 	}
 	
-	public void add(String i1) {
+	public void add(Identifier i1) {
 		this.names.add(i1);
 	}
 
@@ -67,7 +68,7 @@ public class AssignTupleStatement extends SimpleStatement {
 		IType type = expression.check(context);
 		if(type!=TupleType.instance())
 			throw new SyntaxError("Expecting a tuple expression, got " + type.getName());
-		for(String name : names) {
+		for(Identifier name : names) {
 			INamed actual = context.getRegistered(name);
 			if(actual==null)
 				context.registerValue(new Variable(name, AnyType.instance()));
@@ -87,7 +88,7 @@ public class AssignTupleStatement extends SimpleStatement {
 			throw new SyntaxError("Expecting a tuple expression, got " + object.getClass().getSimpleName());
 		TupleValue tuple = (TupleValue)object;
 		for(int i=0;i<names.size();i++) {
-			String name = names.get(i);
+			Identifier name = names.get(i);
 			IValue value = tuple.getItem(context, new Integer(i+1));
 			if(context.getRegisteredValue(INamed.class, name)==null)
 				context.registerValue(new Variable(name, value.getType()));

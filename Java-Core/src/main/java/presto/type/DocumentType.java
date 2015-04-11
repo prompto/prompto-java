@@ -1,6 +1,7 @@
 package presto.type;
 
 import presto.error.SyntaxError;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 import presto.value.Document;
 
@@ -27,7 +28,7 @@ public class DocumentType extends NativeType {
 	}
 	
 	@Override
-	public IType checkMember(Context context, String name) throws SyntaxError {
+	public IType checkMember(Context context, Identifier name) throws SyntaxError {
 		return AnyType.instance();
 	}
 	

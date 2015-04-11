@@ -8,6 +8,7 @@ import presto.error.InvalidDataError;
 import presto.error.NullReferenceError;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
+import presto.grammar.Identifier;
 import presto.grammar.UnresolvedIdentifier;
 import presto.runtime.Context;
 import presto.runtime.Context.MethodDeclarationMap;
@@ -21,17 +22,17 @@ import presto.value.TypeValue;
 
 public class MethodSelector extends MemberSelector implements IMethodSelector {
 
-	public MethodSelector(String name) {
+	public MethodSelector(Identifier name) {
 		super(name);
 	}
 
-	public MethodSelector(IExpression parent, String name) {
+	public MethodSelector(IExpression parent, Identifier name) {
 		super(parent,name);
 	}
 	
 	@Override
 	public String toString() {
-		return parent==null ? name : super.toString();
+		return parent==null ? name.toString() : super.toString();
 	}
 	
 	@Override

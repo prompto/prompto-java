@@ -1,6 +1,7 @@
 package presto.declaration;
 
 import presto.error.SyntaxError;
+import presto.grammar.Identifier;
 import presto.grammar.NativeSymbolList;
 import presto.grammar.Symbol;
 import presto.runtime.Context;
@@ -15,7 +16,7 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration implements IEnu
 	NativeSymbolList symbols;
 	EnumeratedNativeType type;
 	
-	public EnumeratedNativeDeclaration(String name, NativeType derivedFrom, NativeSymbolList symbols) {
+	public EnumeratedNativeDeclaration(Identifier name, NativeType derivedFrom, NativeSymbolList symbols) {
 		super(name);
 		this.type = new EnumeratedNativeType(name, derivedFrom);
 		setSymbols(symbols);

@@ -2,6 +2,7 @@ package presto.expression;
 
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
+import presto.grammar.Identifier;
 import presto.parser.ISection;
 import presto.parser.Section;
 import presto.runtime.Context;
@@ -12,13 +13,13 @@ import presto.value.IValue;
 
 public class ExecuteExpression extends Section implements IExpression, ISection {
 
-	String name;
+	Identifier name;
 	
-	public ExecuteExpression(String name) {
+	public ExecuteExpression(Identifier name) {
 		this.name = name;
 	}
 
-	public String getName() {
+	public Identifier getName() {
 		return name;
 	}
 		

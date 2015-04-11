@@ -15,6 +15,7 @@ import presto.declaration.TestMethodDeclaration;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.grammar.INamed;
+import presto.grammar.Identifier;
 import presto.parser.ILocation;
 import presto.parser.IProblemListener;
 import presto.parser.ISection;
@@ -46,10 +47,10 @@ public class Context implements IContext {
 	Debugger debugger; 
 	IProblemListener problemListener;
 	
-	Map<String,IDeclaration> declarations = new HashMap<String, IDeclaration>();
-	Map<String,TestMethodDeclaration> tests = new HashMap<String, TestMethodDeclaration>();
-	Map<String,INamed> instances = new HashMap<String, INamed>();
-	Map<String,IValue> values = new HashMap<String, IValue>();
+	Map<Identifier,IDeclaration> declarations = new HashMap<Identifier, IDeclaration>();
+	Map<Identifier,TestMethodDeclaration> tests = new HashMap<Identifier, TestMethodDeclaration>();
+	Map<Identifier,INamed> instances = new HashMap<Identifier, INamed>();
+	Map<Identifier,IValue> values = new HashMap<Identifier, IValue>();
 	
 	protected Context() {
 	}
@@ -194,7 +195,7 @@ public class Context implements IContext {
 			declarations.remove(decl.getName());
 	}
 
-	public INamed getRegistered(String name) {
+	public INamed getRegistered(Identifier name) {
 		// resolve upwards, since local names override global ones
 		INamed actual = declarations.get(name);
 		if(actual!=null)
@@ -209,7 +210,7 @@ public class Context implements IContext {
 		return null;	
 	}
 	
-	public <T extends IDeclaration> T getRegisteredDeclaration(Class<T> klass, String name) {
+	public <T extends IDeclaration> T getRegisteredDeclaration(Class<T> klass, Identifier name) {
 		// resolve upwards, since local names override global ones
 		IDeclaration actual = declarations.get(name);
 		if(actual==null && parent!=null)
@@ -231,7 +232,7 @@ public class Context implements IContext {
 		INamed current = getRegistered(declaration.getName());
 		if(current!=null) {
 			if(problemListener!=null)
-				problemListener.reportDuplicate(declaration, (ISection)current);
+				problemListener.reportDuplicate(declaration.getName().toString(), declaration, (ISection)current);
 			else
 				throw new SyntaxError("Duplicate name: \"" + declaration.getName() + "\"");
 		}
@@ -251,7 +252,7 @@ public class Context implements IContext {
 		INamed current = getRegistered(declaration.getName());
 		if(current!=null && !(current instanceof MethodDeclarationMap)) {
 			if(problemListener!=null)
-				problemListener.reportDuplicate(declaration, (ISection)current);
+				problemListener.reportDuplicate(declaration.getName().toString(), declaration, (ISection)current);
 			else
 				throw new SyntaxError("Duplicate name: \"" + declaration.getName() + "\"");
 		}
@@ -267,7 +268,7 @@ public class Context implements IContext {
 		TestMethodDeclaration current = tests.get(declaration.getName());
 		if(current!=null) {
 			if(problemListener!=null)
-				problemListener.reportDuplicate(declaration, (ISection)current);
+				problemListener.reportDuplicate(declaration.getName().toString(), declaration, (ISection)current);
 			else
 				throw new SyntaxError("Duplicate test: \"" + declaration.getName() + "\"");
 		}
@@ -278,9 +279,9 @@ public class Context implements IContext {
 
 		private static final long serialVersionUID = 1L;
 		
-		String name;
+		Identifier name;
 		
-		public MethodDeclarationMap(String name) {
+		public MethodDeclarationMap(Identifier name) {
 			this.name = name;
 		}
 		
@@ -300,7 +301,7 @@ public class Context implements IContext {
 		}
 		
 		@Override
-		public String getName() {
+		public Identifier getName() {
 			return name;
 		}
 		
@@ -318,7 +319,7 @@ public class Context implements IContext {
 			String proto = declaration.getProto(context);
 			if(this.containsKey(proto)) {
 				if(context.getProblemListener()!=null)
-					context.getProblemListener().reportDuplicate(declaration, this.get(proto));
+					context.getProblemListener().reportDuplicate(declaration.getName().toString(), declaration, this.get(proto));
 				else
 					throw new SyntaxError("Duplicate prototype for name: \"" + declaration.getName() + "\"");
 			} else
@@ -363,7 +364,7 @@ public class Context implements IContext {
 
 	}
 	
-	public <T extends INamed> T getRegisteredValue(Class<T> klass, String name) {
+	public <T extends INamed> T getRegisteredValue(Class<T> klass, Identifier name) {
 		Context context = contextForValue(name);
 		if(context==null)
 			return null;
@@ -371,7 +372,7 @@ public class Context implements IContext {
 			return context.readRegisteredValue(klass, name);
 	}
 	
-	protected <T extends INamed> T readRegisteredValue(Class<T> klass, String name) {
+	protected <T extends INamed> T readRegisteredValue(Class<T> klass, Identifier name) {
 		INamed actual = instances.get(name);
 		if(actual!=null)
 			return Utils.downcast(klass,actual);
@@ -393,7 +394,7 @@ public class Context implements IContext {
 		instances.put(value.getName(), value);
 	}
 	
-	public IValue getValue(String name) throws PrestoError {
+	public IValue getValue(Identifier name) throws PrestoError {
 		Context context = contextForValue(name);
 		if(context==null)
 			throw new SyntaxError(name + " is not defined");
@@ -401,7 +402,7 @@ public class Context implements IContext {
 	}
 	
 	
-	protected IValue readValue(String name) throws PrestoError {
+	protected IValue readValue(Identifier name) throws PrestoError {
 		IValue value = values.get(name);
 		if(value==null)
 			throw new SyntaxError(name + " has no value");
@@ -411,14 +412,14 @@ public class Context implements IContext {
 			return value;
 	}
 	
-	public void setValue(String name, IValue value) throws PrestoError {
+	public void setValue(Identifier name, IValue value) throws PrestoError {
 		Context context = contextForValue(name);
 		if(context==null)
 			throw new SyntaxError(name + " is not defined");
 		context.writeValue(name,value);
 	}
 	
-	protected void writeValue(String name, IValue value) throws PrestoError {
+	protected void writeValue(Identifier name, IValue value) throws PrestoError {
 		value = autocast(name, value);
 		IValue current = values.get(name);
 		if(current instanceof LinkedValue)
@@ -427,7 +428,7 @@ public class Context implements IContext {
 			values.put(name, value);
 	}
 
-	private IValue autocast(String name, IValue value) throws SyntaxError {
+	private IValue autocast(Identifier name, IValue value) throws SyntaxError {
 		if(value!=null && value instanceof presto.value.Integer) {
 			INamed actual = instances.get(name);
 			if(actual.getType(this)==DecimalType.instance())
@@ -436,7 +437,7 @@ public class Context implements IContext {
 		return value;
 	}
 
-	protected Context contextForValue(String name) {
+	protected Context contextForValue(Identifier name) {
 		// resolve upwards, since local names override global ones
 		INamed actual = instances.get(name);
 		if(actual!=null)
@@ -477,7 +478,7 @@ public class Context implements IContext {
 			return type;
 		}
 
-		protected <T extends INamed> T readRegisteredValue(Class<T> klass, String name) {
+		protected <T extends INamed> T readRegisteredValue(Class<T> klass, Identifier name) {
 			INamed actual = instances.get(name);
 			// not very pure, but avoids a lot of complexity when registering a value
 			if(actual==null) {
@@ -490,7 +491,7 @@ public class Context implements IContext {
 		}
 
 		@Override
-		protected Context contextForValue(String name) {
+		protected Context contextForValue(Identifier name) {
 			// params and variables have precedence over members
 			// so first look in context values
 			Context context = super.contextForValue(name);
@@ -510,12 +511,12 @@ public class Context implements IContext {
 		}
 
 		@Override
-		protected IValue readValue(String name) throws PrestoError {
+		protected IValue readValue(Identifier name) throws PrestoError {
 			return instance.getMember(calling, name);
 		}
 		
 		@Override
-		protected void writeValue(String name, IValue value) throws PrestoError {
+		protected void writeValue(Identifier name, IValue value) throws PrestoError {
 			instance.setMember(calling, name, value);
 		}
 	}
@@ -570,6 +571,12 @@ public class Context implements IContext {
 	public Collection<TestMethodDeclaration> getTests() {
 		return tests.values();
 	}
+
+	public TestMethodDeclaration getTest(String name) {
+		return tests.get(name);
+	}
+	
+	
 
 
 

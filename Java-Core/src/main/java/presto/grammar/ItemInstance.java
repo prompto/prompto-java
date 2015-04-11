@@ -49,7 +49,7 @@ public class ItemInstance implements IAssignableSelector {
 	}
 	
 	@Override
-	public void checkAssignMember(Context context, String memberName) throws SyntaxError {
+	public void checkAssignMember(Context context, Identifier memberName) throws SyntaxError {
 		// TODO Auto-generated method stub
 		
 	}

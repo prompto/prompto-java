@@ -2,6 +2,7 @@ package presto.error;
 
 import presto.expression.IExpression;
 import presto.grammar.CategorySymbol;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 
 
@@ -11,6 +12,6 @@ public class DivideByZeroError extends ExecutionError {
 
 	@Override
 	public IExpression getExpression(Context context) {
-		return context.getRegisteredValue(CategorySymbol.class, "DIVIDE_BY_ZERO");
+		return context.getRegisteredValue(CategorySymbol.class, new Identifier("DIVIDE_BY_ZERO"));
 	}
 }

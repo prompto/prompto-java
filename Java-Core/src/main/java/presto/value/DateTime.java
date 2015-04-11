@@ -2,8 +2,10 @@ package presto.value;
 
 import java.util.Locale;
 
+import presto.error.InvalidDataError;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 import presto.type.DateTimeType;
 
@@ -64,7 +66,8 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 	}
 
 	@Override
-	public IValue getMember(Context context, String name) throws PrestoError {
+	public IValue getMember(Context context, Identifier id) throws PrestoError {
+		String name = id.toString();
 		if ("year".equals(name))
 			return new Integer(this.value.getYear());
 		else if ("month".equals(name))
@@ -86,7 +89,7 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 		else if ("tzName".equals(name))
 			return new Text(this.value.getZone().toTimeZone().getDisplayName(Locale.ENGLISH));
 		else
-			throw new SyntaxError("No such member:" + name);
+			throw new InvalidDataError("No such member:" + name);
 	}
 
 	@Override

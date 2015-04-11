@@ -4,6 +4,7 @@ import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.error.UserError;
 import presto.expression.IExpression;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 import presto.type.CategoryType;
 import presto.type.IType;
@@ -56,7 +57,7 @@ public class RaiseStatement extends SimpleStatement {
 	@Override
 	public IType check(Context context) throws SyntaxError {
 		IType type = expression.check(context);
-		if(!type.isAssignableTo(context, new CategoryType("Error")))
+		if(!type.isAssignableTo(context, new CategoryType(new Identifier("Error"))))
 			throw new SyntaxError(type.getName() + " does not extend Error");
 		return type;
 	}

@@ -2,6 +2,7 @@ package presto.error;
 
 import presto.expression.IExpression;
 import presto.grammar.CategorySymbol;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 
 
@@ -11,6 +12,6 @@ public class IndexOutOfRangeError extends ExecutionError {
 
 	@Override
 	public IExpression getExpression(Context context) {
-		return context.getRegisteredValue(CategorySymbol.class, "INDEX_OUT_OF_RANGE");
+		return context.getRegisteredValue(CategorySymbol.class, new Identifier("INDEX_OUT_OF_RANGE"));
 	}
 }

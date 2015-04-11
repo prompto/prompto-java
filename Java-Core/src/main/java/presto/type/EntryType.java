@@ -1,6 +1,7 @@
 package presto.type;
 
 import presto.error.SyntaxError;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 
 public class EntryType extends BaseType {
@@ -32,13 +33,14 @@ public class EntryType extends BaseType {
 	}
 
 	@Override
-	public IType checkMember(Context context, String name) throws SyntaxError {
+	public IType checkMember(Context context, Identifier id) throws SyntaxError {
+		String name = id.toString();
 		if ("key".equals(name))
 			return TextType.instance();
 		else if ("value".equals(name))
 			return itemType;
 		else
-			return super.checkMember(context, name);
+			return super.checkMember(context, id);
 	}
 
 	@Override

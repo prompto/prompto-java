@@ -3,7 +3,7 @@ package presto.declaration;
 import presto.error.SyntaxError;
 import presto.grammar.CategorySymbol;
 import presto.grammar.CategorySymbolList;
-import presto.grammar.IdentifierList;
+import presto.grammar.Identifier;
 import presto.grammar.Symbol;
 import presto.grammar.SymbolList;
 import presto.runtime.Context;
@@ -11,17 +11,18 @@ import presto.type.EnumeratedCategoryType;
 import presto.type.IType;
 import presto.type.ListType;
 import presto.utils.CodeWriter;
+import presto.utils.IdentifierList;
 
 public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration implements IEnumeratedDeclaration {
 	
 	CategorySymbolList symbols;
 	EnumeratedCategoryType type;
 	
-	public EnumeratedCategoryDeclaration(String name) {
+	public EnumeratedCategoryDeclaration(Identifier name) {
 		super(name);
 	}
 	
-	public EnumeratedCategoryDeclaration(String name, IdentifierList attrs, IdentifierList derived, CategorySymbolList symbols) {
+	public EnumeratedCategoryDeclaration(Identifier name, IdentifierList attrs, IdentifierList derived, CategorySymbolList symbols) {
 		super(name, attrs, derived, null);
 		this.type = new EnumeratedCategoryType(name);
 		setSymbols(symbols);
@@ -40,7 +41,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration i
 	}
 	
 	@Override
-	public boolean hasAttribute(Context context, String name) {
+	public boolean hasAttribute(Context context, Identifier name) {
 		if("name".equals(name))
 			return true;
 		else

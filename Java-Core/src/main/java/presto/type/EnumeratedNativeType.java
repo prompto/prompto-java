@@ -2,8 +2,10 @@ package presto.type;
 
 import presto.declaration.IDeclaration;
 import presto.declaration.IEnumeratedDeclaration;
+import presto.error.InvalidDataError;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 import presto.value.IValue;
 
@@ -11,7 +13,7 @@ public class EnumeratedNativeType extends BaseType {
 
 	NativeType derivedFrom;
 
-	public EnumeratedNativeType(String name, NativeType derivedFrom) {
+	public EnumeratedNativeType(Identifier name, NativeType derivedFrom) {
 		super(name);
 		this.derivedFrom = derivedFrom;
 	}
@@ -39,7 +41,8 @@ public class EnumeratedNativeType extends BaseType {
 	}
 
 	@Override
-	public IType checkMember(Context context, String name) throws SyntaxError {
+	public IType checkMember(Context context, Identifier id) throws SyntaxError {
+		String name = id.toString();
 		if ("symbols".equals(name))
 			return new ListType(derivedFrom);
 		else if ("value".equals(name))
@@ -47,18 +50,19 @@ public class EnumeratedNativeType extends BaseType {
 		else if ("name".equals(name))
 			return TextType.instance();
 		else
-			return super.checkMember(context, name);
+			return super.checkMember(context, id);
 	}
 	
 	@Override
-	public IValue getMember(Context context, String name) throws PrestoError {
+	public IValue getMember(Context context, Identifier id) throws PrestoError {
+		String name = id.toString();
 		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, this.name);
 		if(!(decl instanceof IEnumeratedDeclaration))
 			throw new SyntaxError(name + " is not an enumerated type!");
 		if ("symbols".equals(name))
 			return ((IEnumeratedDeclaration)decl).getSymbols();
 		else
-			throw new SyntaxError("Unknown member:" + name);
+			throw new InvalidDataError("No such member:" + name);
 	}
 	
 	@Override

@@ -8,7 +8,7 @@ import org.junit.Test;
 import presto.grammar.CategoryArgument;
 import presto.grammar.DeclarationList;
 import presto.grammar.IArgument;
-import presto.grammar.IdentifierList;
+import presto.grammar.Identifier;
 import presto.type.AnyType;
 import presto.type.BooleanType;
 import presto.type.CategoryType;
@@ -19,6 +19,7 @@ import presto.type.IType;
 import presto.type.IntegerType;
 import presto.type.MissingType;
 import presto.type.TextType;
+import presto.utils.IdentifierList;
 
 
 
@@ -39,7 +40,7 @@ public class TestAnonymousTypes extends BaseEParserTest {
 	@Test
 	public void testAnonymousAnyType() throws Exception {
 		// any x
-		IArgument argument = new CategoryArgument(AnyType.instance(), "x", null);
+		IArgument argument = new CategoryArgument(AnyType.instance(), new Identifier("x"), null);
 		argument.register(context);
 		IType st = argument.getType(context);
 		assertTrue(st instanceof AnyType);
@@ -51,17 +52,17 @@ public class TestAnonymousTypes extends BaseEParserTest {
 		assertTrue(DateTimeType.instance().isAssignableTo(context,st));
 		assertTrue(MissingType.instance().isAssignableTo(context,st)); // missing type always compatible
 		assertTrue(AnyType.instance().isAssignableTo(context,st)); 
-		assertTrue(new CategoryType("Simple").isAssignableTo(context,st));
-		assertTrue(new CategoryType("Root").isAssignableTo(context,st));
-		assertTrue(new CategoryType("DerivedWithOther").isAssignableTo(context,st));
-		assertTrue(new CategoryType("DerivedWithName").isAssignableTo(context,st));
+		assertTrue(new CategoryType(new Identifier("Simple")).isAssignableTo(context,st));
+		assertTrue(new CategoryType(new Identifier("Root")).isAssignableTo(context,st));
+		assertTrue(new CategoryType(new Identifier("DerivedWithOther")).isAssignableTo(context,st));
+		assertTrue(new CategoryType(new Identifier("DerivedWithName")).isAssignableTo(context,st));
 	}
 	
 	@Test
 	public void testAnonymousAnyTypeWithAttribute() throws Exception {
 		// any x with attribute: name
-		IdentifierList list = new IdentifierList("name");
-		IArgument argument = new CategoryArgument(AnyType.instance(), "x", list);
+		IdentifierList list = new IdentifierList(new Identifier("name"));
+		IArgument argument = new CategoryArgument(AnyType.instance(), new Identifier("x"), list);
 		argument.register(context);
 		IType st = argument.getType(context);
 		assertTrue(st instanceof CategoryType);
@@ -73,16 +74,16 @@ public class TestAnonymousTypes extends BaseEParserTest {
 		assertFalse(DateTimeType.instance().isAssignableTo(context,st));
 		assertTrue(MissingType.instance().isAssignableTo(context,st)); // missing type always compatible
 		assertFalse(AnyType.instance().isAssignableTo(context,st)); // any type never compatible
-		assertTrue(new CategoryType("Simple").isAssignableTo(context,st)); // since Simple has a name
-		assertFalse(new CategoryType("Root").isAssignableTo(context,st)); // since Root has no name
-		assertFalse(new CategoryType("DerivedWithOther").isAssignableTo(context,st)); // since DerivedWithOther has no name
-		assertTrue(new CategoryType("DerivedWithName").isAssignableTo(context,st)); // since DerivedWithName has a name
+		assertTrue(new CategoryType(new Identifier("Simple")).isAssignableTo(context,st)); // since Simple has a name
+		assertFalse(new CategoryType(new Identifier("Root")).isAssignableTo(context,st)); // since Root has no name
+		assertFalse(new CategoryType(new Identifier("DerivedWithOther")).isAssignableTo(context,st)); // since DerivedWithOther has no name
+		assertTrue(new CategoryType(new Identifier("DerivedWithName")).isAssignableTo(context,st)); // since DerivedWithName has a name
 	}
 	
 	@Test
 	public void testAnonymousCategoryType() throws Exception {
 		// Root x
-		IArgument argument = new CategoryArgument(new CategoryType("Root"), "x", null);
+		IArgument argument = new CategoryArgument(new CategoryType(new Identifier("Root")), new Identifier("x"), null);
 		argument.register(context);
 		IType st = argument.getType(context);
 		assertTrue(st instanceof CategoryType);
@@ -94,17 +95,17 @@ public class TestAnonymousTypes extends BaseEParserTest {
 		assertFalse(DateTimeType.instance().isAssignableTo(context,st));
 		assertTrue(MissingType.instance().isAssignableTo(context,st)); // missing type always compatible
 		assertFalse(AnyType.instance().isAssignableTo(context,st)); // any type never compatible
-		assertFalse(new CategoryType("Simple").isAssignableTo(context,st));  // since Simple does not extend Root
-		assertTrue(new CategoryType("Root").isAssignableTo(context,st)); // since Root is Root
-		assertTrue(new CategoryType("DerivedWithOther").isAssignableTo(context,st)); // since DerivedWithOther extends Root
-		assertTrue(new CategoryType("DerivedWithName").isAssignableTo(context,st)); // since DerivedWithName extends Root
+		assertFalse(new CategoryType(new Identifier("Simple")).isAssignableTo(context,st));  // since Simple does not extend Root
+		assertTrue(new CategoryType(new Identifier("Root")).isAssignableTo(context,st)); // since Root is Root
+		assertTrue(new CategoryType(new Identifier("DerivedWithOther")).isAssignableTo(context,st)); // since DerivedWithOther extends Root
+		assertTrue(new CategoryType(new Identifier("DerivedWithName")).isAssignableTo(context,st)); // since DerivedWithName extends Root
 	}
 
 	@Test
 	public void testAnonymousCategoryTypeWithAttribute() throws Exception {
 		// Root x with attribute: name
-		IdentifierList list = new IdentifierList("name");
-		IArgument argument = new CategoryArgument(new CategoryType("Root"), "test", list);
+		IdentifierList list = new IdentifierList(new Identifier("name"));
+		IArgument argument = new CategoryArgument(new CategoryType(new Identifier("Root")), new Identifier("test"), list);
 		argument.register(context);
 		IType st = argument.getType(context);
 		assertTrue(st instanceof CategoryType);
@@ -116,10 +117,10 @@ public class TestAnonymousTypes extends BaseEParserTest {
 		assertFalse(DateTimeType.instance().isAssignableTo(context,st));
 		assertTrue(MissingType.instance().isAssignableTo(context,st)); // missing type always compatible
 		assertFalse(AnyType.instance().isAssignableTo(context,st)); // any type never compatible
-		assertFalse(new CategoryType("Simple").isAssignableTo(context,st));  // since Simple does not extend Root
-		assertFalse(new CategoryType("Root").isAssignableTo(context,st)); // since Root has no name
-		assertFalse(new CategoryType("DerivedWithOther").isAssignableTo(context,st)); // since DerivedWithOther has no name
-		assertTrue(new CategoryType("DerivedWithName").isAssignableTo(context,st)); // since DerivedWithName has a name
+		assertFalse(new CategoryType(new Identifier("Simple")).isAssignableTo(context,st));  // since Simple does not extend Root
+		assertFalse(new CategoryType(new Identifier("Root")).isAssignableTo(context,st)); // since Root has no name
+		assertFalse(new CategoryType(new Identifier("DerivedWithOther")).isAssignableTo(context,st)); // since DerivedWithOther has no name
+		assertTrue(new CategoryType(new Identifier("DerivedWithName")).isAssignableTo(context,st)); // since DerivedWithName has a name
 	}
 	
 }

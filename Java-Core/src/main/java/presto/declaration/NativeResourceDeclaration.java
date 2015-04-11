@@ -2,19 +2,20 @@ package presto.declaration;
 
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
-import presto.grammar.IdentifierList;
+import presto.grammar.Identifier;
 import presto.grammar.NativeAttributeMappingListMap;
 import presto.grammar.NativeCategoryMappingList;
 import presto.runtime.Context;
 import presto.runtime.Context.ResourceContext;
 import presto.type.ResourceType;
 import presto.utils.CodeWriter;
+import presto.utils.IdentifierList;
 import presto.value.IInstance;
 import presto.value.NativeResource;
 
 public class NativeResourceDeclaration extends NativeCategoryDeclaration {
 	
-	public NativeResourceDeclaration(String name, IdentifierList attributes, 
+	public NativeResourceDeclaration(Identifier name, IdentifierList attributes, 
 			NativeCategoryMappingList categoryMappings, NativeAttributeMappingListMap attributeMappings) {
 		super(name,attributes,categoryMappings,attributeMappings);
 	}

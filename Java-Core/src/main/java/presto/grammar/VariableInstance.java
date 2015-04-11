@@ -12,13 +12,13 @@ import presto.value.IValue;
 
 public class VariableInstance implements IAssignableInstance {
 	
-	String name;
+	Identifier name;
 	
-	public VariableInstance(String name) {
+	public VariableInstance(Identifier name) {
 		this.name = name;
 	}
 	
-	public String getName() {
+	public Identifier getName() {
 		return name;
 	}
 	
@@ -41,7 +41,7 @@ public class VariableInstance implements IAssignableInstance {
 	}
 	
 	@Override
-	public void checkAssignMember(Context context, String memberName) throws SyntaxError {
+	public void checkAssignMember(Context context, Identifier memberName) throws SyntaxError {
 		INamed actual = context.getRegisteredValue(INamed.class,name);
 		if(actual==null) 
 			throw new SyntaxError("Unknown variable:" + this.name);

@@ -7,6 +7,7 @@ import presto.grammar.ArgumentAssignment;
 import presto.grammar.ArgumentAssignmentList;
 import presto.grammar.ArgumentList;
 import presto.grammar.IArgument;
+import presto.grammar.Identifier;
 import presto.grammar.Specificity;
 import presto.parser.Dialect;
 import presto.runtime.Context;
@@ -21,13 +22,13 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	ArgumentList arguments;
 	IType returnType;
 	
-	public BaseMethodDeclaration(String name, ArgumentList arguments) {
+	public BaseMethodDeclaration(Identifier name, ArgumentList arguments) {
 		super(name);
 		this.arguments = arguments!=null ? arguments : new ArgumentList();
 		this.returnType = null;
 	}
 	
-	public BaseMethodDeclaration(String name, ArgumentList arguments, IType returnType) {
+	public BaseMethodDeclaration(Identifier name, ArgumentList arguments, IType returnType) {
 		super(name);
 		this.arguments = arguments!=null ? arguments : new ArgumentList();
 		this.returnType = returnType!=null ? returnType : VoidType.instance();
@@ -35,7 +36,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 
 	@Override
 	public String getSignature(Dialect dialect) {
-		StringBuilder sb = new StringBuilder(getName());
+		StringBuilder sb = new StringBuilder(getName().toString());
 		sb.append('(');
 		for(IArgument arg : arguments) {
 			sb.append(arg.getSignature(dialect));

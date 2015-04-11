@@ -3,6 +3,7 @@ package presto.expression;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.grammar.INamed;
+import presto.grammar.Identifier;
 import presto.parser.Dialect;
 import presto.runtime.Context;
 import presto.type.IType;
@@ -12,13 +13,13 @@ import presto.value.IValue;
 
 public class MethodExpression implements IExpression {
 
-	String name;
+	Identifier name;
 	
-	public MethodExpression(String name) {
+	public MethodExpression(Identifier name) {
 		this.name = name;
 	}
 
-	public String getName() {
+	public Identifier getName() {
 		return name;
 	}
 	

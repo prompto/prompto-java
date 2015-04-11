@@ -8,6 +8,7 @@ import java.util.PriorityQueue;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.expression.IExpression;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 import presto.utils.CodeWriter;
 import presto.value.ICollection;
@@ -18,14 +19,18 @@ import presto.value.ListValue;
 
 public abstract class BaseType implements IType {
 
-	String name;
+	Identifier name;
 
 	protected BaseType(String name) {
+		this(new Identifier(name));
+	}
+
+	protected BaseType(Identifier name) {
 		this.name = name;
 	}
 
 	@Override
-	public String getName() {
+	public Identifier getName() {
 		return name;
 	}
 
@@ -43,7 +48,7 @@ public abstract class BaseType implements IType {
 
 	@Override
 	public String toString() {
-		return name;
+		return name.toString();
 	}
 
 	@Override
@@ -108,7 +113,7 @@ public abstract class BaseType implements IType {
 	}
 
 	@Override
-	public IType checkMember(Context context, String name) throws SyntaxError {
+	public IType checkMember(Context context, Identifier name) throws SyntaxError {
 		throw new SyntaxError("Cannot read member from " + this.getName());
 	}
 
@@ -185,7 +190,7 @@ public abstract class BaseType implements IType {
 	}
 	
 	@Override
-	public IValue getMember(Context context, String name) throws PrestoError {
+	public IValue getMember(Context context, Identifier name) throws PrestoError {
 		throw new SyntaxError("Cannot read member from " + this.getName());
 	}
 

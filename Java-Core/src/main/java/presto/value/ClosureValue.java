@@ -3,6 +3,7 @@ package presto.value;
 import presto.declaration.IMethodDeclaration;
 import presto.error.PrestoError;
 import presto.grammar.ArgumentList;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 import presto.type.IType;
 import presto.type.MethodType;
@@ -29,7 +30,7 @@ public class ClosureValue extends BaseValue {
 		return result;
 	}
 
-	public String getName() {
+	public Identifier getName() {
 		return method.getName();
 	}
 

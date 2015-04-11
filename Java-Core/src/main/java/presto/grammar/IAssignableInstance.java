@@ -10,7 +10,7 @@ import presto.value.IValue;
 public interface IAssignableInstance {
 
 	void checkAssignValue(Context context, IExpression expression) throws SyntaxError;
-	void checkAssignMember(Context context, String name) throws SyntaxError;
+	void checkAssignMember(Context context, Identifier name) throws SyntaxError;
 	void checkAssignElement(Context context) throws SyntaxError;
 	void assign(Context context, IExpression expression) throws PrestoError;
 	IValue interpret(Context context) throws PrestoError;

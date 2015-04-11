@@ -10,7 +10,7 @@ import presto.utils.Utils;
 
 public class CodeArgument extends BaseArgument implements ITypedArgument {
 	
-	public CodeArgument(String name) {
+	public CodeArgument(Identifier name) {
 		super(name);
 	}
 	
@@ -26,19 +26,19 @@ public class CodeArgument extends BaseArgument implements ITypedArgument {
 	
 	@Override
 	public String getProto(Context context) {
-		return CodeType.instance().getName();
+		return CodeType.instance().getName().toString();
 	}
 	
 	@Override
 	public void toDialect(CodeWriter writer) {
-		writer.append(CodeType.instance().getName());
+		writer.append(CodeType.instance().getName().toString());
 		writer.append(" ");
 		writer.append(name);
 	}
 	
 	@Override
 	public String toString() {
-		return name + ':' + CodeType.instance().getName();
+		return name.toString() + ':' + CodeType.instance().getName();
 	}
 	
 	@Override

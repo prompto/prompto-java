@@ -11,6 +11,7 @@ import presto.declaration.CategoryDeclaration;
 import presto.declaration.IDeclaration;
 import presto.error.SyntaxError;
 import presto.grammar.DeclarationList;
+import presto.grammar.Identifier;
 import presto.runtime.Context.MethodDeclarationMap;
 
 
@@ -18,11 +19,11 @@ public class TestScope extends BaseEParserTest {
 
 	@Test(expected=SyntaxError.class)
 	public void testAttribute() throws Exception {
-		assertNull(context.getRegisteredDeclaration(IDeclaration.class, "id"));
+		assertNull(context.getRegisteredDeclaration(IDeclaration.class, new Identifier("id")));
 		DeclarationList stmts = parseString("define id as: Integer attribute");
 		assertNotNull(stmts);
 		stmts.register(context);
-		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, "id");
+		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, new Identifier("id"));
 		assertNotNull(actual);
 		assertTrue(actual instanceof AttributeDeclaration);
 		stmts.register(context);
@@ -30,11 +31,11 @@ public class TestScope extends BaseEParserTest {
 	
 	@Test(expected=SyntaxError.class)
 	public void testCategory() throws Exception {
-		assertNull(context.getRegisteredDeclaration(IDeclaration.class, "Person"));
+		assertNull(context.getRegisteredDeclaration(IDeclaration.class, new Identifier("Person")));
 		DeclarationList stmts = parseString("define Person as: category with attributes: id and name");
 		assertNotNull(stmts);
 		stmts.register(context);
-		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, "Person");
+		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, new Identifier("Person"));
 		assertNotNull(actual);
 		assertTrue(actual instanceof CategoryDeclaration);
 		stmts.register(context);
@@ -42,13 +43,13 @@ public class TestScope extends BaseEParserTest {
 	
 	@Test
 	public void testMethod() throws Exception {
-		assertNull(context.getRegisteredDeclaration(IDeclaration.class, "printName"));
+		assertNull(context.getRegisteredDeclaration(IDeclaration.class, new Identifier("printName")));
 		DeclarationList stmts = parseString("define name as: Text attribute\r\n"
 				+ "define printName as: method receiving: name doing:\r\n"
 				+ "\tprint with \"name\" + name as value");
 		assertNotNull(stmts);
 		stmts.register(context);
-		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, "printName");
+		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, new Identifier("printName"));
 		assertNotNull(actual);
 		assertTrue(actual instanceof MethodDeclarationMap);
 		stmts = parseString("define printName as: method receiving: Person p doing:"

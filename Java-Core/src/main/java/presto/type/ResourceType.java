@@ -1,10 +1,11 @@
 package presto.type;
 
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 
 public class ResourceType extends CategoryType {
 
-	public ResourceType(String name) {
+	public ResourceType(Identifier name) {
 		super(name);
 	}
 	

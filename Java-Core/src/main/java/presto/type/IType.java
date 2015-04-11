@@ -2,6 +2,7 @@ package presto.type;
 
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 import presto.utils.CodeWriter;
 import presto.value.ICollection;
@@ -10,8 +11,8 @@ import presto.value.Range;
 
 public interface IType {
 	
-	String getName();
-	IValue getMember(Context context, String name) throws PrestoError;
+	Identifier getName();
+	IValue getMember(Context context, Identifier name) throws PrestoError;
 	String toString(Object value);
 	void toDialect(CodeWriter writer);
 	
@@ -28,7 +29,7 @@ public interface IType {
 	IType checkContainsAllOrAny(Context context, IType other) throws SyntaxError;
 	IType checkIterator(Context context) throws SyntaxError;
 	IType checkSlice(Context context) throws SyntaxError;
-	IType checkMember(Context context, String name) throws SyntaxError;
+	IType checkMember(Context context, Identifier name) throws SyntaxError;
 	
 	void checkUnique(Context context) throws SyntaxError;
 	void checkExists(Context context) throws SyntaxError;

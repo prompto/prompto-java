@@ -12,19 +12,19 @@ import presto.value.IValue;
 
 public abstract class Symbol extends Section implements IExpression, INamed, IValue, ISection {
 
-	String symbol;
+	Identifier symbol;
 	IType type;
 
-	protected Symbol(String symbol) {
+	protected Symbol(Identifier symbol) {
 		this.symbol = symbol;
 	}
 
 	public String getSymbol() {
-		return symbol;
+		return symbol.toString();
 	}
 	
 	@Override
-	public String getName() {
+	public Identifier getName() {
 		return symbol;
 	}
 	
@@ -44,7 +44,7 @@ public abstract class Symbol extends Section implements IExpression, INamed, IVa
 	
 	@Override
 	public String toString() {
-		return symbol;
+		return symbol.toString();
 	}
 	
 	public void register(Context context) throws SyntaxError {
@@ -87,7 +87,7 @@ public abstract class Symbol extends Section implements IExpression, INamed, IVa
 	}
 
 	@Override
-	public IValue getMember(Context context, String name) throws PrestoError {
+	public IValue getMember(Context context, Identifier name) throws PrestoError {
 		throw new UnsupportedOperationException("No member support for " + this.getClass().getSimpleName());
 	}
 	

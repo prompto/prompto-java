@@ -2,13 +2,14 @@ package presto.type;
 
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 import presto.value.Date;
 import presto.value.DateRange;
 import presto.value.ICollection;
 import presto.value.IValue;
-import presto.value.Range;
 import presto.value.ListValue;
+import presto.value.Range;
 
 
 public class DateType extends NativeType {
@@ -70,7 +71,8 @@ public class DateType extends NativeType {
 	}
 
 	@Override
-	public IType checkMember(Context context, String name) throws SyntaxError {
+	public IType checkMember(Context context, Identifier id) throws SyntaxError {
+		String name = id.toString();
 		if ("year".equals(name))
 			return IntegerType.instance();
 		else if ("month".equals(name))
@@ -80,7 +82,7 @@ public class DateType extends NativeType {
 		else if ("dayOfYear".equals(name))
 			return IntegerType.instance();
 		else
-			return super.checkMember(context, name);
+			return super.checkMember(context, id);
 	}
 
 	@Override

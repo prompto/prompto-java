@@ -3,22 +3,24 @@ package presto.declaration;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.grammar.CategoryMethodDeclarationList;
-import presto.grammar.IdentifierList;
+import presto.grammar.Identifier;
+import presto.parser.IProblemListener;
 import presto.runtime.Context;
 import presto.type.CategoryType;
 import presto.type.IType;
 import presto.utils.CodeWriter;
+import presto.utils.IdentifierList;
 import presto.value.IInstance;
 
 public abstract class CategoryDeclaration extends BaseDeclaration {
 	
 	IdentifierList attributes;
 	
-	public CategoryDeclaration(String name) {
+	public CategoryDeclaration(Identifier name) {
 		super(name);
 	}
 
-	public CategoryDeclaration(String name, IdentifierList attributes) {
+	public CategoryDeclaration(Identifier name, IdentifierList attributes) {
 		super(name);
 		this.attributes = attributes;
 	}
@@ -38,10 +40,15 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	
 	@Override
 	public IType check(Context context) throws SyntaxError {
-		if(attributes!=null) for(String attribute : attributes) {
+		if(attributes!=null) for(Identifier attribute : attributes) {
 			AttributeDeclaration ad = context.getRegisteredDeclaration(AttributeDeclaration.class, attribute);
-			if(ad==null)
-				throw new SyntaxError("Unknown attribute: \"" + attribute + "\"");
+			if(ad==null) {
+				IProblemListener pl = context.getProblemListener();
+				if(pl!=null)
+					pl.reportUnknownAttribute(attribute.toString(), attribute);
+				else
+					throw new SyntaxError("Unknown attribute: \"" + attribute + "\"");
+			}
 		}
 		return new CategoryType(this.getName());
 	}
@@ -51,7 +58,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		return new CategoryType(name);
 	}
 
-	public boolean hasAttribute(Context context, String name) {
+	public boolean hasAttribute(Context context, Identifier name) {
 		 return attributes!=null && attributes.contains(name);
 	}
 

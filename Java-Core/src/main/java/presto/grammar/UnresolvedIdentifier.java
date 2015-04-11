@@ -11,20 +11,23 @@ import presto.expression.InstanceExpression;
 import presto.expression.MethodSelector;
 import presto.expression.SymbolExpression;
 import presto.expression.TypeExpression;
+import presto.parser.IProblemListener;
+import presto.parser.Section;
 import presto.runtime.Context;
 import presto.statement.MethodCall;
+import presto.type.AnyType;
 import presto.type.CategoryType;
 import presto.type.IType;
 import presto.type.NativeType;
 import presto.utils.CodeWriter;
 import presto.value.IValue;
 
-public class UnresolvedIdentifier implements IExpression {
+public class UnresolvedIdentifier extends Section implements IExpression {
 
-	String name;
+	Identifier name;
 	IExpression resolved;
 	
-	public UnresolvedIdentifier(String name) {
+	public UnresolvedIdentifier(Identifier name) {
 		this.name = name;
 	}
 	
@@ -32,13 +35,13 @@ public class UnresolvedIdentifier implements IExpression {
 		return resolved;
 	}
 
-	public String getName() {
+	public Identifier getName() {
 		return name;
 	}
 	
 	@Override
 	public String toString() {
-		return name;
+		return name.toString();
 	}
 	
 	@Override
@@ -69,14 +72,14 @@ public class UnresolvedIdentifier implements IExpression {
 	
 	private IType resolveAndCheck(Context context, boolean forMember) throws SyntaxError {
 		resolve(context, forMember);
-		return resolved.check(context);
+		return resolved!=null ? resolved.check(context) : AnyType.instance();
 	}
 
 	public IExpression resolve(Context context, boolean forMember) throws SyntaxError {
 		if(resolved==null) {
 			resolved = resolveSymbol(context);
 			if(resolved==null) {
-				if(Character.isUpperCase(name.charAt(0))) {
+				if(Character.isUpperCase(name.toString().charAt(0))) {
 					if(forMember)
 						resolved = resolveType(context);
 					else
@@ -89,10 +92,14 @@ public class UnresolvedIdentifier implements IExpression {
 				}
 			}
 		}
-		if(resolved==null)
-			throw new SyntaxError("Unknown identifier:" + name);
-		else
-			return resolved;
+		if(resolved==null) {
+			IProblemListener pl = context.getProblemListener();
+			if(pl!=null)
+				pl.reportUnknowIdentifier(name.toString(), this);
+			else 
+				throw new SyntaxError("Unknown identifier:" + name);
+		}
+		return resolved;
 	}
 
 	private IExpression resolveInstance(Context context) {
@@ -139,7 +146,7 @@ public class UnresolvedIdentifier implements IExpression {
 	}
 
 	private IExpression resolveSymbol(Context context) {
-		if(name.equals(name.toUpperCase()))
+		if(name.toString().equals(name.toString().toUpperCase()))
 			return new SymbolExpression(name);
 		else
 			return null;

@@ -4,6 +4,7 @@ import org.joda.time.DateTime;
 
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
+import presto.grammar.Identifier;
 import presto.runtime.Context;
 import presto.value.ICollection;
 import presto.value.IValue;
@@ -62,7 +63,8 @@ public class DateTimeType extends NativeType {
 	}
 
 	@Override
-	public IType checkMember(Context context, String name) throws SyntaxError {
+	public IType checkMember(Context context, Identifier id) throws SyntaxError {
+		String name = id.toString();
 		if ("year".equals(name))
 			return IntegerType.instance();
 		else if ("month".equals(name))
@@ -84,7 +86,7 @@ public class DateTimeType extends NativeType {
 		else if ("tzName".equals(name))
 			return TextType.instance();
 		else
-			return super.checkMember(context, name);
+			return super.checkMember(context, id);
 	}
 
 	@Override
