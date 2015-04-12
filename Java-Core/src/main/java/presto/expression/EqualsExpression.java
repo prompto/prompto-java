@@ -15,6 +15,7 @@ import presto.type.IType;
 import presto.utils.CodeWriter;
 import presto.value.Boolean;
 import presto.value.IValue;
+import presto.value.NullValue;
 import presto.value.TypeValue;
 
 public class EqualsExpression implements IExpression, IAssertion {
@@ -56,7 +57,11 @@ public class EqualsExpression implements IExpression, IAssertion {
 	@Override
 	public IValue interpret(Context context) throws PrestoError {
 		IValue lval = left.interpret(context);
+		if(lval==null)
+			lval = NullValue.instance();
 		IValue rval = right.interpret(context);
+		if(rval==null)
+			rval = NullValue.instance();
 		return interpret(context, lval, rval);
 	}
 
@@ -88,8 +93,6 @@ public class EqualsExpression implements IExpression, IAssertion {
 		return Boolean.ValueOf(equal);	}
 
 	private boolean isA(Context context, IValue lval, IValue rval) throws PrestoError {
-		if(lval==null)
-			return false;
 		IType actual = lval.getType();
 		IType toCheck = ((TypeValue)rval).getValue();
 		return actual.isAssignableTo(context, toCheck);
@@ -98,7 +101,7 @@ public class EqualsExpression implements IExpression, IAssertion {
 	private boolean interpretEquals(Context context, IValue lval, IValue rval) throws PrestoError {
 		if(lval==rval)
 			return true;
-		else if(lval==null || rval==null)
+		else if(lval==NullValue.instance() || rval==NullValue.instance())
 			return false;
 		else
 			return lval.equals(rval);
