@@ -16,7 +16,7 @@ import presto.type.VoidType;
 import presto.utils.CodeWriter;
 import presto.value.IValue;
 
-public class ConcreteMethodDeclaration extends BaseMethodDeclaration {
+public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements ICategoryMethodDeclaration {
 
 	StatementList statements;
 	
@@ -136,6 +136,12 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration {
 		registerArguments(child);
 		return statements.check(child);
 	}
+
+	@Override
+	public void check(ConcreteCategoryDeclaration declaration, Context context) throws SyntaxError {
+		// TODO Auto-generated method stub
+		
+	}	
 
 	@Override
 	public IValue interpret(Context context) throws PrestoError {

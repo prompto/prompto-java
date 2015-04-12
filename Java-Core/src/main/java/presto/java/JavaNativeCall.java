@@ -34,7 +34,11 @@ public class JavaNativeCall extends NativeCall {
 	
 	@Override
 	public IValue interpret(Context context) throws PrestoError {
-		return statement.interpret(context);
+		throw new RuntimeException("Should never get there!");
+	}
+
+	public IValue interpretNative(Context context, IType returnType) throws PrestoError {
+		return statement.interpret(context, returnType);
 	}
 
 }

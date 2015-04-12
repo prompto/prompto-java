@@ -49,8 +49,8 @@ public class Interpreter {
 		
 	}
 
-	public static void interpretTest(Context context, String name) throws PrestoError {
-		TestMethodDeclaration test = context.getTest(name);
+	public static void interpretTest(Context context, Identifier testName) throws PrestoError {
+		TestMethodDeclaration test = context.getTest(testName);
 		Context local = context.newLocalContext();
 		test.interpret(local);
 	}

@@ -8,6 +8,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.joda.time.Period;
 
+import presto.declaration.AnyNativeCategoryDeclaration;
 import presto.grammar.Identifier;
 import presto.type.AnyType;
 import presto.type.BooleanType;
@@ -23,29 +24,30 @@ import presto.type.TextType;
 import presto.type.TimeType;
 import presto.type.VoidType;
 import presto.value.IValue;
+import presto.value.NativeInstance;
 
 
 public class JavaClassType extends CategoryType {
 	
-	static Map<Class<?>,IType> javaToTypeMap = new HashMap<Class<?>, IType>();
+	static Map<Class<?>,IType> javaToPrestoMap = new HashMap<Class<?>, IType>();
 	
 	static {
-		javaToTypeMap.put(void.class, VoidType.instance());
-		javaToTypeMap.put(boolean.class, BooleanType.instance());
-		javaToTypeMap.put(Boolean.class, BooleanType.instance());
-		javaToTypeMap.put(char.class, CharacterType.instance());
-		javaToTypeMap.put(Character.class, CharacterType.instance());
-		javaToTypeMap.put(int.class, IntegerType.instance());
-		javaToTypeMap.put(Integer.class, IntegerType.instance());
-		javaToTypeMap.put(long.class, IntegerType.instance());
-		javaToTypeMap.put(Long.class, IntegerType.instance());
-		javaToTypeMap.put(Double.class, DecimalType.instance());
-		javaToTypeMap.put(String.class, TextType.instance());
-		javaToTypeMap.put(LocalDate.class, DateType.instance());
-		javaToTypeMap.put(LocalTime.class, TimeType.instance());
-		javaToTypeMap.put(DateTime.class, DateTimeType.instance());
-		javaToTypeMap.put(Period.class, PeriodType.instance());
-		javaToTypeMap.put(Object.class, AnyType.instance());
+		javaToPrestoMap.put(void.class, VoidType.instance());
+		javaToPrestoMap.put(boolean.class, BooleanType.instance());
+		javaToPrestoMap.put(Boolean.class, BooleanType.instance());
+		javaToPrestoMap.put(char.class, CharacterType.instance());
+		javaToPrestoMap.put(Character.class, CharacterType.instance());
+		javaToPrestoMap.put(int.class, IntegerType.instance());
+		javaToPrestoMap.put(Integer.class, IntegerType.instance());
+		javaToPrestoMap.put(long.class, IntegerType.instance());
+		javaToPrestoMap.put(Long.class, IntegerType.instance());
+		javaToPrestoMap.put(Double.class, DecimalType.instance());
+		javaToPrestoMap.put(String.class, TextType.instance());
+		javaToPrestoMap.put(LocalDate.class, DateType.instance());
+		javaToPrestoMap.put(LocalTime.class, TimeType.instance());
+		javaToPrestoMap.put(DateTime.class, DateTimeType.instance());
+		javaToPrestoMap.put(Period.class, PeriodType.instance());
+		javaToPrestoMap.put(Object.class, AnyType.instance());
 	}
 	
 	Class<?> klass;
@@ -60,21 +62,23 @@ public class JavaClassType extends CategoryType {
 		return this.klass;
 	}
 	
-	public IType convertSystemTypeToPrestoType() {
-		IType result = javaToTypeMap.get(klass);
+	public IType convertNativeTypeToPrestoType() {
+		IType result = javaToPrestoMap.get(klass);
 		if(result==null)
 			return this;
 		else
 			return result;
 	}
 	
-    public IValue convertNativeValueToPrestoValue(Object value)
+    public IValue convertNativeValueToPrestoValue(Object value, IType returnType)
     {
         if(value instanceof IValue)
             return (IValue)value;
-        IType result = javaToTypeMap.get(klass);
+        IType result = javaToPrestoMap.get(klass);
         if (result != null)
             return result.convertNativeValueToPrestoValue(value);
+        else if(returnType==AnyType.instance())
+        	return new NativeInstance(AnyNativeCategoryDeclaration.getInstance(), value);
         else
             throw new InternalError("Unable to convert:" + value.getClass().getSimpleName());
     }

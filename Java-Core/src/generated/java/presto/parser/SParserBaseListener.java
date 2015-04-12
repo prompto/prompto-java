@@ -113,18 +113,6 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMember_method_declaration(@NotNull SParser.Member_method_declarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMember_method_declaration(@NotNull SParser.Member_method_declarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterOperator_method_declaration(@NotNull SParser.Operator_method_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2417,49 +2405,61 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSetterMethod(@NotNull SParser.SetterMethodContext ctx) { }
+	@Override public void enterSetterMemberMethod(@NotNull SParser.SetterMemberMethodContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSetterMethod(@NotNull SParser.SetterMethodContext ctx) { }
+	@Override public void exitSetterMemberMethod(@NotNull SParser.SetterMemberMethodContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterGetterMethod(@NotNull SParser.GetterMethodContext ctx) { }
+	@Override public void enterGetterMemberMethod(@NotNull SParser.GetterMemberMethodContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitGetterMethod(@NotNull SParser.GetterMethodContext ctx) { }
+	@Override public void exitGetterMemberMethod(@NotNull SParser.GetterMemberMethodContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMemberMethod(@NotNull SParser.MemberMethodContext ctx) { }
+	@Override public void enterConcreteMemberMethod(@NotNull SParser.ConcreteMemberMethodContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMemberMethod(@NotNull SParser.MemberMethodContext ctx) { }
+	@Override public void exitConcreteMemberMethod(@NotNull SParser.ConcreteMemberMethodContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterOperatorMethod(@NotNull SParser.OperatorMethodContext ctx) { }
+	@Override public void enterAbstractMemberMethod(@NotNull SParser.AbstractMemberMethodContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitOperatorMethod(@NotNull SParser.OperatorMethodContext ctx) { }
+	@Override public void exitAbstractMemberMethod(@NotNull SParser.AbstractMemberMethodContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterOperatorMemberMethod(@NotNull SParser.OperatorMemberMethodContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOperatorMemberMethod(@NotNull SParser.OperatorMemberMethodContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

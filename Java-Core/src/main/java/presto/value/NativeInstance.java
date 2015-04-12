@@ -13,8 +13,6 @@ import presto.java.JavaClassType;
 import presto.runtime.Context;
 import presto.type.CategoryType;
 
-
-
 public class NativeInstance extends BaseValue implements IInstance {
 	
 	NativeCategoryDeclaration declaration;
@@ -26,6 +24,12 @@ public class NativeInstance extends BaseValue implements IInstance {
 		this.instance = makeInstance();
 	}
 	
+	public NativeInstance(NativeCategoryDeclaration declaration, Object instance) {
+		super(new CategoryType(declaration.getName()));
+		this.declaration = declaration;
+		this.instance = instance;
+	}
+
 	public Object getInstance() {
 		return instance;
 	}
@@ -55,7 +59,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 		Method getter = getGetter(attrName);
 		Object value = getValue(getter);
 		JavaClassType ct = new JavaClassType(value.getClass());
-		return ct.convertNativeValueToPrestoValue(value);
+		return ct.convertNativeValueToPrestoValue(value, null);
 	}
 	
 	private Object getValue(Method getter) throws PrestoError {

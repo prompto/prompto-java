@@ -9,6 +9,7 @@ import java.util.Map;
 import presto.debug.Debugger;
 import presto.declaration.AttributeDeclaration;
 import presto.declaration.ConcreteCategoryDeclaration;
+import presto.declaration.ConcreteMethodDeclaration;
 import presto.declaration.IDeclaration;
 import presto.declaration.IMethodDeclaration;
 import presto.declaration.TestMethodDeclaration;
@@ -592,12 +593,48 @@ public class Context implements IContext {
 		return tests.values();
 	}
 
-	public TestMethodDeclaration getTest(String name) {
+	public TestMethodDeclaration getTest(Identifier name) {
 		return tests.get(name);
 	}
 	
+	@Override
+	public ISection findSectionFor(String path, int lineNumber) {
+		if(globals!=this)
+			return globals.findSectionFor(path, lineNumber);
+		else
+			return findSection(declarations.values(), path, lineNumber);
+	}
 	
+	private ISection findSection(Collection<IDeclaration> declarations, String path, int lineNumber) {
+		for(IDeclaration decl : declarations) {
+			if(!path.equals(decl.getPath()))
+				continue;
+			if(decl.getStart().getLine()>lineNumber)
+				continue;
+			if(decl.getEnd().getLine()<lineNumber)
+				continue;
+			return findSection(decl, lineNumber);
+		}
+		return null;
+	}
 
+	private ISection findSection(IDeclaration decl, int lineNumber) {
+		if(decl instanceof ConcreteMethodDeclaration)
+			return findSection((ConcreteMethodDeclaration)decl, lineNumber);
+		else
+			return decl;
+	}
+	
+	private ISection findSection(ConcreteMethodDeclaration decl, int lineNumber) {
+		for(IStatement stmt : decl.getStatements()) {
+			if(stmt.getStart().getLine()>lineNumber)
+				continue;
+			if(stmt.getEnd().getLine()<lineNumber)
+				continue;
+			return stmt;
+		}
+		return decl;
+	}
 
 
 }

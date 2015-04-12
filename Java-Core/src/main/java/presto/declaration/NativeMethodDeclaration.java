@@ -14,14 +14,14 @@ import presto.value.IValue;
 public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 
 	public NativeMethodDeclaration(Identifier name, ArgumentList arguments, IType returnType, StatementList instructions) {
-		super(name,arguments,returnType, instructions);
+		super(name, arguments, returnType, instructions);
 	}
 
 	@Override
 	public IValue interpret(Context context) throws PrestoError {
 		context.enterMethod(this);
 		try {
-			return statements.interpret(context, true);
+			return statements.interpretNative(context, returnType);
 		} finally {
 			context.leaveMethod(this);
 		}

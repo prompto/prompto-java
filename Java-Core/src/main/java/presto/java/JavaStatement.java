@@ -21,18 +21,18 @@ public class JavaStatement {
 	public IType check(Context context) throws SyntaxError {
 		IType type = expression.check(context);
 		if(type instanceof JavaClassType) 
-			type = ((JavaClassType)type).convertSystemTypeToPrestoType();
+			type = ((JavaClassType)type).convertNativeTypeToPrestoType();
 		return isReturn ? type : VoidType.instance();
 	}
 
-	public IValue interpret(Context context) throws PrestoError {
+	public IValue interpret(Context context, IType returnType) throws PrestoError {
 		Object result = expression.interpret(context);
 		if(result==null) 
 			return isReturn ? VoidResult.instance() : null;
 		else {	
             IType type = expression.check(context);
             if (type instanceof JavaClassType)
-                return ((JavaClassType)type).convertNativeValueToPrestoValue(result);
+                return ((JavaClassType)type).convertNativeValueToPrestoValue(result, returnType);
             else
             	// TODO warning or exception?
             	return VoidResult.instance();

@@ -10,7 +10,7 @@ import presto.type.VoidType;
 import presto.utils.CodeWriter;
 import presto.value.IValue;
 
-public class AbstractMethodDeclaration extends BaseMethodDeclaration {
+public class AbstractMethodDeclaration extends BaseMethodDeclaration implements ICategoryMethodDeclaration {
 
 	IType returnType;
 	
@@ -28,6 +28,12 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration {
 		return returnType;
 	}
 	
+	@Override
+	public void check(ConcreteCategoryDeclaration declaration, Context context) throws SyntaxError {
+		// TODO Auto-generated method stub
+		
+	}	
+
 	@Override
 	public IValue interpret(Context context) throws PrestoError {
 		throw new SyntaxError("Should never get there !");

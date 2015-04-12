@@ -125,7 +125,8 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 			IType actual = assignment.getExpression().check(context);
 			// retrieve actual runtime type
 			if(checkInstance && actual instanceof CategoryType) {
-				Object value = assignment.getExpression().interpret(context.getCallingContext());
+				// TODO: potential side effects here with function called multiple times
+				IValue value = assignment.getExpression().interpret(context.getCallingContext());
 				if(value instanceof IInstance)
 					actual = ((IInstance)value).getType();
 			}

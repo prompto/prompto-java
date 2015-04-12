@@ -45,24 +45,38 @@ public class StatementList extends LinkedList<IStatement> {
 	}
 
 	public IValue interpret(Context context) throws PrestoError {
-		return interpret(context, false);
+		return doInterpret(context);
+	}
+
+	private IValue doInterpret(Context context) throws PrestoError {
+		for(IStatement statement : this) {
+			context.enterStatement(statement);
+			try {
+				IValue result = statement.interpret(context);
+				if(result!=null)
+					return result;
+			} finally {
+				context.leaveStatement(statement);
+			}
+		}
+		return null;
 	}
 	
-	public IValue interpret(Context context, boolean nativeOnly) throws PrestoError {
+	public IValue interpretNative(Context context, IType returnType) throws PrestoError {
 		try {
-			return doInterpret(context, nativeOnly);
+			return doInterpretNative(context, returnType);
 		} catch(NullPointerException e) {
 			throw new NullReferenceError();
 		}
 	}
 	
-	private IValue doInterpret(Context context, boolean nativeOnly) throws PrestoError {
+	private IValue doInterpretNative(Context context, IType returnType) throws PrestoError {
 		for(IStatement statement : this) {
-			if(nativeOnly && !(statement instanceof JavaNativeCall))
+			if(!(statement instanceof JavaNativeCall))
 				continue;
 			context.enterStatement(statement);
 			try {
-				IValue result = statement.interpret(context);
+				IValue result = ((JavaNativeCall)statement).interpretNative(context, returnType);
 				if(result!=null)
 					return result;
 			} finally {

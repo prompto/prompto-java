@@ -53,13 +53,13 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 	@Override
 	public Object interpret(Context context) throws PrestoError {
 		Object instance = parent.interpret(context);
-		Method method = findMethod(context);
+		if(instance instanceof NativeInstance)
+			instance = ((NativeInstance)instance).getInstance();
+		Method method = findMethod(context, instance);
 		Object[] args = evaluate_arguments(context, method);
 		Class<?> klass = instance instanceof Class<?> ? (Class<?>)instance : instance.getClass(); 
 		if(klass==instance)
 			instance = null;
-		else if(instance instanceof NativeInstance)
-			instance = ((NativeInstance)instance).getInstance();
 		try {
 			return method.invoke(instance, args);
 		} catch (IllegalArgumentException | InvocationTargetException | IllegalAccessException e) {
@@ -98,6 +98,17 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 				klass = ((NativeCategoryDeclaration)named).getMappedClass();
 		} else 
 			klass = type.toJavaClass();
+		return findMethod(context, klass);
+	}
+	
+	public Method findMethod(Context context, Object instance) throws SyntaxError {
+		if(instance instanceof Class<?>)
+			return findMethod(context, (Class<?>)instance);
+		else
+			return findMethod(context, instance.getClass());
+	}
+	
+	public Method findMethod(Context context, Class<?> klass) throws SyntaxError {
 		if(klass==null)
 			return null;
 		Method[] methods = klass.getMethods();

@@ -103,16 +103,6 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitDerivedListItem(@NotNull EParser.DerivedListItemContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link EParser#member_method_declaration}.
-	 * @param ctx the parse tree
-	 */
-	void enterMember_method_declaration(@NotNull EParser.Member_method_declarationContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link EParser#member_method_declaration}.
-	 * @param ctx the parse tree
-	 */
-	void exitMember_method_declaration(@NotNull EParser.Member_method_declarationContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link EParser#operator_method_declaration}.
 	 * @param ctx the parse tree
 	 */
@@ -2350,76 +2340,88 @@ public interface EParserListener extends ParseTreeListener {
 	void exitAnyDictType(@NotNull EParser.AnyDictTypeContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code CategoryMethodListItem}
-	 * labeled alternative in {@link EParser#category_method_declaration_list}.
+	 * labeled alternative in {@link EParser#member_method_declaration_list}.
 	 * @param ctx the parse tree
 	 */
 	void enterCategoryMethodListItem(@NotNull EParser.CategoryMethodListItemContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code CategoryMethodListItem}
-	 * labeled alternative in {@link EParser#category_method_declaration_list}.
+	 * labeled alternative in {@link EParser#member_method_declaration_list}.
 	 * @param ctx the parse tree
 	 */
 	void exitCategoryMethodListItem(@NotNull EParser.CategoryMethodListItemContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code CategoryMethodList}
-	 * labeled alternative in {@link EParser#category_method_declaration_list}.
+	 * labeled alternative in {@link EParser#member_method_declaration_list}.
 	 * @param ctx the parse tree
 	 */
 	void enterCategoryMethodList(@NotNull EParser.CategoryMethodListContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code CategoryMethodList}
-	 * labeled alternative in {@link EParser#category_method_declaration_list}.
+	 * labeled alternative in {@link EParser#member_method_declaration_list}.
 	 * @param ctx the parse tree
 	 */
 	void exitCategoryMethodList(@NotNull EParser.CategoryMethodListContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code SetterMethod}
-	 * labeled alternative in {@link EParser#category_method_declaration}.
+	 * Enter a parse tree produced by the {@code SetterMemberMethod}
+	 * labeled alternative in {@link EParser#member_method_declaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterSetterMethod(@NotNull EParser.SetterMethodContext ctx);
+	void enterSetterMemberMethod(@NotNull EParser.SetterMemberMethodContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code SetterMethod}
-	 * labeled alternative in {@link EParser#category_method_declaration}.
+	 * Exit a parse tree produced by the {@code SetterMemberMethod}
+	 * labeled alternative in {@link EParser#member_method_declaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitSetterMethod(@NotNull EParser.SetterMethodContext ctx);
+	void exitSetterMemberMethod(@NotNull EParser.SetterMemberMethodContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code GetterMethod}
-	 * labeled alternative in {@link EParser#category_method_declaration}.
+	 * Enter a parse tree produced by the {@code GetterMemberMethod}
+	 * labeled alternative in {@link EParser#member_method_declaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterGetterMethod(@NotNull EParser.GetterMethodContext ctx);
+	void enterGetterMemberMethod(@NotNull EParser.GetterMemberMethodContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code GetterMethod}
-	 * labeled alternative in {@link EParser#category_method_declaration}.
+	 * Exit a parse tree produced by the {@code GetterMemberMethod}
+	 * labeled alternative in {@link EParser#member_method_declaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitGetterMethod(@NotNull EParser.GetterMethodContext ctx);
+	void exitGetterMemberMethod(@NotNull EParser.GetterMemberMethodContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code MemberMethod}
-	 * labeled alternative in {@link EParser#category_method_declaration}.
+	 * Enter a parse tree produced by the {@code ConcreteMemberMethod}
+	 * labeled alternative in {@link EParser#member_method_declaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterMemberMethod(@NotNull EParser.MemberMethodContext ctx);
+	void enterConcreteMemberMethod(@NotNull EParser.ConcreteMemberMethodContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code MemberMethod}
-	 * labeled alternative in {@link EParser#category_method_declaration}.
+	 * Exit a parse tree produced by the {@code ConcreteMemberMethod}
+	 * labeled alternative in {@link EParser#member_method_declaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitMemberMethod(@NotNull EParser.MemberMethodContext ctx);
+	void exitConcreteMemberMethod(@NotNull EParser.ConcreteMemberMethodContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code OperatorMethod}
-	 * labeled alternative in {@link EParser#category_method_declaration}.
+	 * Enter a parse tree produced by the {@code AbstractMemberMethod}
+	 * labeled alternative in {@link EParser#member_method_declaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterOperatorMethod(@NotNull EParser.OperatorMethodContext ctx);
+	void enterAbstractMemberMethod(@NotNull EParser.AbstractMemberMethodContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code OperatorMethod}
-	 * labeled alternative in {@link EParser#category_method_declaration}.
+	 * Exit a parse tree produced by the {@code AbstractMemberMethod}
+	 * labeled alternative in {@link EParser#member_method_declaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitOperatorMethod(@NotNull EParser.OperatorMethodContext ctx);
+	void exitAbstractMemberMethod(@NotNull EParser.AbstractMemberMethodContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code OperatorMemberMethod}
+	 * labeled alternative in {@link EParser#member_method_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterOperatorMemberMethod(@NotNull EParser.OperatorMemberMethodContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code OperatorMemberMethod}
+	 * labeled alternative in {@link EParser#member_method_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitOperatorMemberMethod(@NotNull EParser.OperatorMemberMethodContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code JavaCategoryMapping}
 	 * labeled alternative in {@link EParser#native_category_mapping}.

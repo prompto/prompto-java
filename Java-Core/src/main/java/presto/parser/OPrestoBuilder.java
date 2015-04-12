@@ -31,7 +31,6 @@ import presto.declaration.EnumeratedNativeDeclaration;
 import presto.declaration.GetterMethodDeclaration;
 import presto.declaration.ICategoryMethodDeclaration;
 import presto.declaration.IDeclaration;
-import presto.declaration.MemberMethodDeclaration;
 import presto.declaration.NativeCategoryDeclaration;
 import presto.declaration.NativeMethodDeclaration;
 import presto.declaration.NativeResourceDeclaration;
@@ -1084,7 +1083,7 @@ public class OPrestoBuilder extends OParserBaseListener {
 	}
 	
 	@Override
-	public void exitGetterMethod(GetterMethodContext ctx) {
+	public void exitGetterMemberMethod(GetterMemberMethodContext ctx) {
 		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
 		setNodeValue(ctx, decl);
 	}
@@ -1623,22 +1622,19 @@ public class OPrestoBuilder extends OParserBaseListener {
 	}
 	
 	@Override
-	public void exitMember_method_declaration(Member_method_declarationContext ctx) {
-		IType type = this.<IType>getNodeValue(ctx.typ);
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		ArgumentList args = this.<ArgumentList>getNodeValue(ctx.args);
-		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
-		setNodeValue(ctx, new MemberMethodDeclaration(name, args, type, stmts));
-	}
-
-	@Override
 	public void exitMemberInstance(MemberInstanceContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
 		setNodeValue(ctx, new MemberInstance(name));
 	}
 
 	@Override
-	public void exitMemberMethod(MemberMethodContext ctx) {
+	public void exitAbstractMemberMethod(AbstractMemberMethodContext ctx) {
+		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
+		setNodeValue(ctx, decl);
+	}
+
+	@Override
+	public void exitConcreteMemberMethod(ConcreteMemberMethodContext ctx) {
 		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
 		setNodeValue(ctx, decl);
 	}
@@ -1939,7 +1935,7 @@ public class OPrestoBuilder extends OParserBaseListener {
 	}
 	
 	@Override
-	public void exitOperatorMethod(OperatorMethodContext ctx) {
+	public void exitOperatorMemberMethod(OperatorMemberMethodContext ctx) {
 		OperatorMethodDeclaration decl = this.<OperatorMethodDeclaration>getNodeValue(ctx.decl);
 		setNodeValue(ctx, decl);
 	}
@@ -2268,8 +2264,10 @@ public class OPrestoBuilder extends OParserBaseListener {
 		setNodeValue(ctx, new SetterMethodDeclaration(name, stmts));
 	}
 	
+	
+	
 	@Override
-	public void exitSetterMethod(SetterMethodContext ctx) {
+	public void exitSetterMemberMethod(SetterMemberMethodContext ctx) {
 		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
 		setNodeValue(ctx, decl);
 	}

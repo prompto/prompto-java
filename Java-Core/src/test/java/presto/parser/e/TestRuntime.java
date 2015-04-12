@@ -50,7 +50,7 @@ public class TestRuntime extends BaseEParserTest {
 		IArgument arg = new CategoryArgument(TextType.instance(), new Identifier("value"));
 		arg.register(context);
 		context.setValue(new Identifier("value"), new Text("test")); // StringLiteral trims enclosing quotes
-		Object result = statement.interpret(context);
+		Object result = statement.interpret(context, null);
 		assertNull(result);
 		assertEquals("test", Out.read());
 	}
