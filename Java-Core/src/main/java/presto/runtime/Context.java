@@ -20,6 +20,7 @@ import presto.parser.ILocation;
 import presto.parser.IProblemListener;
 import presto.parser.ISection;
 import presto.statement.IStatement;
+import presto.store.ICodeStore;
 import presto.type.CategoryType;
 import presto.type.DecimalType;
 import presto.type.IType;
@@ -33,7 +34,12 @@ import presto.value.IValue;
 public class Context implements IContext {
 	
 	public static Context newGlobalContext() {
+		return newGlobalContext(null);
+	}
+	
+	public static Context newGlobalContext(ICodeStore store) {
 		Context context = new Context();
+		context.store = store;
 		context.globals = context;
 		context.calling = null;
 		context.parent = null;
@@ -41,6 +47,7 @@ public class Context implements IContext {
 		return context;
 	}
 
+	ICodeStore store;
 	Context globals;
 	Context calling;
 	Context parent; // for inner methods
@@ -119,6 +126,7 @@ public class Context implements IContext {
 	
 	public Context newResourceContext() {
 		Context context = new ResourceContext();
+		context.store = this.store;
 		context.globals = this.globals;
 		context.calling = this.calling;
 		context.parent = this;
@@ -129,6 +137,7 @@ public class Context implements IContext {
 	
 	public Context newLocalContext() {
 		Context context = new Context();
+		context.store = this.store;
 		context.globals = this.globals;
 		context.calling = this;
 		context.parent = null;
@@ -146,6 +155,7 @@ public class Context implements IContext {
 	}
 
 	private Context initInstanceContext(InstanceContext context) {
+		context.store = this.store;
 		context.globals = this.globals;
 		context.calling = this;
 		context.parent = null;
@@ -156,6 +166,7 @@ public class Context implements IContext {
 
 	public Context newChildContext() {
 		Context context = new Context();
+		context.store = this.store;
 		context.globals = this.globals;
 		context.calling = this.calling;
 		context.parent = this;
@@ -164,6 +175,15 @@ public class Context implements IContext {
 		return context;
 	}
 
+	public boolean isEmpty() {
+		if(globals!=this)
+			return globals.isEmpty();
+		return declarations.isEmpty() 
+				&& tests.isEmpty()
+				&& instances.isEmpty()
+				&& values.isEmpty();
+	}
+	
 	public void unregister(String path) throws SyntaxError {
 		if(globals!=this)
 			globals.unregister(path);
