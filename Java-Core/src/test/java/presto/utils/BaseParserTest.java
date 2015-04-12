@@ -39,12 +39,15 @@ public abstract class BaseParserTest extends BaseTest {
 
 	public abstract DeclarationList parseResource(String resourceName) throws Exception;
 
-	protected void runResource(String resourceName) throws Exception {
+	protected boolean runResource(String resourceName) throws Exception {
 		loadResource(resourceName);
-		if(context.hasTests())
+		if(context.hasTests()) {
 			Interpreter.interpretTests(context);
-		else
+			return true;
+		} else {
 			Interpreter.interpretMainNoArgs(context);
+			return false;
+		}
 	}
 
 	protected void runResource(String resourceName, String methodName, String cmdLineArgs) throws Exception {
@@ -53,8 +56,10 @@ public abstract class BaseParserTest extends BaseTest {
 	}
 	
 	protected void checkOutput(String resource) throws Exception {
-		runResource(resource);
+		boolean isTest = runResource(resource);
 		String read = Out.read();
+		if(isTest && read.endsWith("\n"))
+			read = read.substring(0, read.length() - 1);
 		List<String> expected = readExpected(resource);
 		if(expected.size()==1)
 			assertEquals(expected.get(0), read);

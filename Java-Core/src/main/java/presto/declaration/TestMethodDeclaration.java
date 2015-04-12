@@ -100,11 +100,11 @@ public class TestMethodDeclaration extends BaseDeclaration {
 	}
 
 	public void printFailure(Context context, String expected, String actual) {
-		System.out.print(this.name + " test failed, expected: " + expected + ", actual: " + actual);
+		System.out.println(this.name + " test failed, expected: " + expected + ", actual: " + actual);
 	}
 
 	private void printSuccess(Context context) {
-		System.out.print(this.name + " test successful");
+		System.out.println(this.name + " test successful");
 	}
 
 	private boolean interpretBody(Context context) throws PrestoError {
