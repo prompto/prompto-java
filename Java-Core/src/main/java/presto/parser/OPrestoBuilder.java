@@ -657,9 +657,10 @@ public class OPrestoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitConstructor_expression(Constructor_expressionContext ctx) {
+		boolean mutable = ctx.MUTABLE()!=null;
 		CategoryType type = this.<CategoryType>getNodeValue(ctx.typ);
 		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
-		setNodeValue(ctx, new ConstructorExpression(type, args));
+		setNodeValue(ctx, new ConstructorExpression(type, mutable, args));
 	}
 	
 	@Override

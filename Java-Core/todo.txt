@@ -1,4 +1,5 @@
 bugs:
+category members not immutable
 no getters from setters
 translate to E may change parameters, see test: is instance
 review types: document, method as parameters
@@ -8,12 +9,12 @@ missing code:
 comments translation
 python timezone name
 javascript timezone name
+check return types
 check member methods
-check unit tests
 
 missing tests:
+null member is empty
 pass/empty statement
-IAssertion
 
 language:
 sentence/verb
@@ -24,6 +25,7 @@ typed tuples?
 framework:
 json
 xml
+threads
 store/fetch
 receive/send
 timer/scheduler
@@ -36,10 +38,6 @@ data store
 
 tools:
 eclipse editor
-	errors in editor
-	script project + launcher
-	console project + launcher
-	framework project
 	variables in debugger
 	code completion
 	refactoring

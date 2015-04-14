@@ -16,11 +16,13 @@ import presto.value.IValue;
 public class ConstructorExpression implements IExpression {
 	
 	CategoryType type;
+	boolean mutable;
 	IExpression copyFrom;
 	ArgumentAssignmentList assignments;
 	
-	public ConstructorExpression(CategoryType type, ArgumentAssignmentList assignments) {
+	public ConstructorExpression(CategoryType type, boolean mutable, ArgumentAssignmentList assignments) {
 		this.type = type;
+		this.mutable = mutable;
 		setAssignments(assignments);
 	}
 	
@@ -69,6 +71,8 @@ public class ConstructorExpression implements IExpression {
 	}
 
 	private void toODialect(CodeWriter writer) {
+		if(this.mutable)
+			writer.append("mutable ");
 		writer.append(type.getName());
 		ArgumentAssignmentList assignments = new ArgumentAssignmentList();
 		if (copyFrom != null)
@@ -79,6 +83,8 @@ public class ConstructorExpression implements IExpression {
 	}
 
 	private void toEDialect(CodeWriter writer) {
+		if(this.mutable)
+			writer.append("mutable ");
 		writer.append(type.getName());
 		if (copyFrom != null) {
 			writer.append(" from ");
@@ -116,24 +122,29 @@ public class ConstructorExpression implements IExpression {
 	@Override
 	public IValue interpret(Context context) throws PrestoError {
 		IInstance instance = type.newInstance(context);
-		if(copyFrom!=null) {
-			Object copyObj = copyFrom.interpret(context);
-			if(copyObj instanceof IInstance) {
-				IInstance copyFrom = (IInstance)copyObj;
-				CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getName());
-				for(Identifier name : copyFrom.getMemberNames()) {
-					if(cd.hasAttribute(context, name)) 
-						instance.setMember(context, name, copyFrom.getMember(context,name));
+		instance.setMutable(true);
+		try {
+			if(copyFrom!=null) {
+				Object copyObj = copyFrom.interpret(context);
+				if(copyObj instanceof IInstance) {
+					IInstance copyFrom = (IInstance)copyObj;
+					CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getName());
+					for(Identifier name : copyFrom.getMemberNames()) {
+						if(cd.hasAttribute(context, name)) 
+							instance.setMember(context, name, copyFrom.getMember(context,name));
+					}
 				}
 			}
-		}
-		if(assignments!=null) {
-			for(ArgumentAssignment assignment : assignments) {
-				IValue value = assignment.getExpression().interpret(context);
-				instance.setMember(context, assignment.getName(), value);
+			if(assignments!=null) {
+				for(ArgumentAssignment assignment : assignments) {
+					IValue value = assignment.getExpression().interpret(context);
+					instance.setMember(context, assignment.getName(), value);
+				}
 			}
+			return instance;
+		} finally {
+			instance.setMutable(this.mutable);
 		}
-		return instance;
 	}
 
 }

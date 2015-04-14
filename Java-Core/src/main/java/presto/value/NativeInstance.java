@@ -17,6 +17,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 	
 	NativeCategoryDeclaration declaration;
 	Object instance;
+	boolean mutable = false;
 	
 	public NativeInstance(NativeCategoryDeclaration declaration) throws SyntaxError {
 		super(new CategoryType(declaration.getName()));
@@ -28,6 +29,17 @@ public class NativeInstance extends BaseValue implements IInstance {
 		super(new CategoryType(declaration.getName()));
 		this.declaration = declaration;
 		this.instance = instance;
+	}
+	
+	@Override
+	public boolean setMutable(boolean mutable) {
+		boolean result = this.mutable;
+		this.mutable = mutable;
+		return result;
+	}
+	
+	public boolean isMutable() {
+		return mutable;
 	}
 
 	public Object getInstance() {

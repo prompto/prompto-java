@@ -14,5 +14,6 @@ public interface IInstance extends IValue {
 	void setMember(Context context, Identifier attrName, IValue value) throws PrestoError;
 	IValue getMember(Context context, Identifier attrName) throws PrestoError;
 	Set<Identifier> getMemberNames();
+	boolean setMutable(boolean set);
 	
 }

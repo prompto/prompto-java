@@ -10,6 +10,7 @@ import presto.declaration.ConcreteCategoryDeclaration;
 import presto.declaration.GetterMethodDeclaration;
 import presto.declaration.IMethodDeclaration;
 import presto.declaration.SetterMethodDeclaration;
+import presto.error.NotMutableError;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.grammar.IArgument;
@@ -24,10 +25,22 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 
 	ConcreteCategoryDeclaration declaration;
 	Map<Identifier,IValue> values = new HashMap<Identifier,IValue>();
+	boolean mutable = false;
 	
 	public ConcreteInstance(ConcreteCategoryDeclaration declaration) {
 		super(new CategoryType(declaration.getName()));
 		this.declaration = declaration;
+	}
+	
+	@Override
+	public boolean setMutable(boolean mutable) {
+		boolean result = this.mutable;
+		this.mutable = mutable;
+		return result;
+	}
+	
+	public boolean isMutable() {
+		return mutable;
 	}
 	
 	public ConcreteCategoryDeclaration getDeclaration() {
@@ -85,6 +98,8 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	
 	@Override
 	public void setMember(Context context, Identifier attrName, IValue value) throws PrestoError {
+		if(!mutable)
+			throw new NotMutableError();
 		Context stacked = activeSetters.get().get(attrName);
 		try {
 			set(context, attrName, value, stacked==null);

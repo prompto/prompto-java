@@ -654,6 +654,7 @@ public class EPrestoBuilder extends EParserBaseListener {
 
 	@Override
 	public void exitConstructorFrom(ConstructorFromContext ctx) {
+		boolean mutable = ctx.MUTABLE()!=null;
 		CategoryType type = this.<CategoryType>getNodeValue(ctx.typ);
 		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
 		if(args==null)
@@ -663,11 +664,12 @@ public class EPrestoBuilder extends EParserBaseListener {
 		ArgumentAssignment arg = this.<ArgumentAssignment>getNodeValue(ctx.arg);
 		if(arg!=null)
 			args.add(arg);
-		setNodeValue(ctx, new ConstructorExpression(type, args));
+		setNodeValue(ctx, new ConstructorExpression(type, mutable, args));
 	}
 	
 	@Override
 	public void exitConstructorNoFrom(ConstructorNoFromContext ctx) {
+		boolean mutable = ctx.MUTABLE()!=null;
 		CategoryType type = this.<CategoryType>getNodeValue(ctx.typ);
 		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
 		if(args==null)
@@ -675,7 +677,7 @@ public class EPrestoBuilder extends EParserBaseListener {
 		ArgumentAssignment arg = this.<ArgumentAssignment>getNodeValue(ctx.arg);
 		if(arg!=null)
 			args.add(arg);
-		setNodeValue(ctx, new ConstructorExpression(type, args));
+		setNodeValue(ctx, new ConstructorExpression(type, mutable, args));
 	}
 	
 	@Override

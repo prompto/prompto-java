@@ -67,6 +67,7 @@ public class CategorySymbol extends Symbol implements IExpression  {
 	public IValue interpret(Context context) throws PrestoError {
 		EnumeratedCategoryType type = (EnumeratedCategoryType)this.getType(context);
 		IInstance instance = type.newInstance(context);
+		instance.setMutable(true);
 		if(assignments!=null) {
 			for(ArgumentAssignment assignment : assignments) {
 				IValue value = assignment.getExpression().interpret(context);
@@ -74,6 +75,7 @@ public class CategorySymbol extends Symbol implements IExpression  {
 			}
 		}
 		instance.setMember(context, new Identifier("name"), new Text(this.getName().toString()));
+		instance.setMutable(false);
 		return instance;
 	}
 

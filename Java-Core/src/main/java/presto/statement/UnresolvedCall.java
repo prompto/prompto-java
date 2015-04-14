@@ -96,7 +96,7 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 		if(decl==null)
 			throw new SyntaxError("Unknown name:" + name);
 		if(decl instanceof CategoryDeclaration)
-			resolved = new ConstructorExpression(new CategoryType(name), assignments);
+			resolved = new ConstructorExpression(new CategoryType(name), false, assignments);
 		else
 			resolved = new MethodCall(new MethodSelector(name), assignments);
 	}

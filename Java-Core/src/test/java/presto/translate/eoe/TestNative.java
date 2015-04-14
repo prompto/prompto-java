@@ -17,6 +17,11 @@ public class TestNative extends BaseEParserTest {
 	}
 
 	@Test
+	public void testPrint() throws Exception {
+		compareResourceEOE("native/print.pec");
+	}
+
+	@Test
 	public void testReturn() throws Exception {
 		compareResourceEOE("native/return.pec");
 	}
