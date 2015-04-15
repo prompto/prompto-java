@@ -12,6 +12,7 @@ import presto.declaration.ConcreteCategoryDeclaration;
 import presto.declaration.ConcreteMethodDeclaration;
 import presto.declaration.IDeclaration;
 import presto.declaration.IMethodDeclaration;
+import presto.declaration.SingletonCategoryDeclaration;
 import presto.declaration.TestMethodDeclaration;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
@@ -29,6 +30,7 @@ import presto.utils.CodeWriter;
 import presto.utils.Utils;
 import presto.value.ConcreteInstance;
 import presto.value.Decimal;
+import presto.value.IInstance;
 import presto.value.IValue;
 
 /* a Context is the place where the Interpreter located declarations and values */
@@ -572,9 +574,10 @@ public class Context implements IContext {
 			IValue value = values.get(type.getName());
 			if(value==null) {
 				IDeclaration decl = declarations.get(type.getName());
-				if(!(decl instanceof ConcreteCategoryDeclaration))
+				if(!(decl instanceof SingletonCategoryDeclaration))
 					throw new InternalError("No such singleton:" + type.getName());
 				value = new ConcreteInstance((ConcreteCategoryDeclaration)decl);
+				((IInstance)value).setMutable(true); // a singleton is protected by "with x do", so always mutable in that context
 				values.put(type.getName(), value);
 			}
 			if(value instanceof ConcreteInstance)

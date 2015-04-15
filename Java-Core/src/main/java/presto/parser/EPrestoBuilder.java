@@ -165,6 +165,7 @@ import presto.python.PythonMethodExpression;
 import presto.python.PythonModule;
 import presto.python.PythonNamedArgument;
 import presto.python.PythonNativeCategoryMapping;
+import presto.python.PythonOrdinalArgument;
 import presto.python.PythonSelectorExpression;
 import presto.python.PythonStatement;
 import presto.python.PythonTextLiteral;
@@ -2121,6 +2122,29 @@ public class EPrestoBuilder extends EParserBaseListener {
 		PythonArgumentList named = this.<PythonArgumentList>getNodeValue(ctx.named);
 		setNodeValue(ctx, named);
 	}
+	
+	@Override
+	public void exitPythonOrdinalArgumentList( PythonOrdinalArgumentListContext ctx) {
+		PythonExpression exp = this.<PythonExpression>getNodeValue(ctx.item);
+		PythonOrdinalArgument arg = new PythonOrdinalArgument(exp);
+		setNodeValue(ctx, new PythonArgumentList(arg));
+	}
+	
+	@Override
+	public void exitPythonOrdinalArgumentListItem( PythonOrdinalArgumentListItemContext ctx) {
+		PythonExpression exp = this.<PythonExpression>getNodeValue(ctx.item);
+		PythonOrdinalArgument arg = new PythonOrdinalArgument(exp);
+		PythonArgumentList items = this.<PythonArgumentList>getNodeValue(ctx.items);
+		items.add(arg);
+		setNodeValue(ctx, items);
+	}
+	
+	@Override
+	public void exitPythonOrdinalOnlyArgumentList(PythonOrdinalOnlyArgumentListContext ctx) {
+		PythonArgumentList ordinal = this.<PythonArgumentList>getNodeValue(ctx.ordinal);
+		setNodeValue(ctx, ordinal);
+	}
+
 	
 	@Override
 	public void exitPythonPrimaryExpression(PythonPrimaryExpressionContext ctx) {

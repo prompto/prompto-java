@@ -29,10 +29,5 @@ public class TestNative extends BaseEParserTest {
 		checkOutput("native/method.pec");
 	}
 
-	@Test
-	public void testPrint() throws Exception {
-		checkOutput("native/print.pec");
-	}
-
 }
 
