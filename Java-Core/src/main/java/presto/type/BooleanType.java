@@ -35,7 +35,7 @@ public class BooleanType extends NativeType {
 	}
 	
 	@Override
-	public IValue convertNativeValueToPrestoValue(Object value) {
+	public IValue convertJavaValueToPrestoValue(Object value) {
         if (value instanceof java.lang.Boolean)
             return Boolean.ValueOf(((java.lang.Boolean)value).booleanValue());
         else

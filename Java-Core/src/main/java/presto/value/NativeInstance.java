@@ -71,7 +71,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 		Method getter = getGetter(attrName);
 		Object value = getValue(getter);
 		JavaClassType ct = new JavaClassType(value.getClass());
-		return ct.convertNativeValueToPrestoValue(value, null);
+		return ct.convertJavaValueToPrestoValue(value, null);
 	}
 	
 	private Object getValue(Method getter) throws PrestoError {

@@ -70,13 +70,13 @@ public class JavaClassType extends CategoryType {
 			return result;
 	}
 	
-    public IValue convertNativeValueToPrestoValue(Object value, IType returnType)
+    public IValue convertJavaValueToPrestoValue(Object value, IType returnType)
     {
         if(value instanceof IValue)
             return (IValue)value;
         IType result = javaToPrestoMap.get(klass);
         if (result != null)
-            return result.convertNativeValueToPrestoValue(value);
+            return result.convertJavaValueToPrestoValue(value);
         else if(returnType==AnyType.instance())
         	return new NativeInstance(AnyNativeCategoryDeclaration.getInstance(), value);
         else

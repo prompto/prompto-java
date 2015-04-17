@@ -32,7 +32,7 @@ public class JavaStatement {
 		else {	
             IType type = expression.check(context);
             if (type instanceof JavaClassType)
-                return ((JavaClassType)type).convertNativeValueToPrestoValue(result, returnType);
+                return ((JavaClassType)type).convertJavaValueToPrestoValue(result, returnType);
             else
             	// TODO warning or exception?
             	return VoidResult.instance();

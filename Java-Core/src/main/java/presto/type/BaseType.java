@@ -185,7 +185,7 @@ public abstract class BaseType implements IType {
 		return new ListValue(itemType, result);
 	}
 
-	public IValue convertNativeValueToPrestoValue(Object value) {
+	public IValue convertJavaValueToPrestoValue(Object value) {
 		return (IValue) value; // TODO for now
 	}
 	

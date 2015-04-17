@@ -105,7 +105,7 @@ public class TextType extends NativeType {
 	}
 	
 	@Override
-	public IValue convertNativeValueToPrestoValue(Object value) {
+	public IValue convertJavaValueToPrestoValue(Object value) {
         if (value instanceof String)
             return new Text((String)value);
         else

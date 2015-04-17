@@ -41,7 +41,7 @@ public interface IType {
 	Range<?> newRange(Object first,Object last) throws SyntaxError;
 	IValue sort(Context context,ICollection<IValue> values) throws PrestoError;
 	
-	IValue convertNativeValueToPrestoValue(Object value);
+	IValue convertJavaValueToPrestoValue(Object value);
 	Class<?> toJavaClass();
 
 }

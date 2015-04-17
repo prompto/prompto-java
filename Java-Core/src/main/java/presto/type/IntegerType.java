@@ -140,7 +140,7 @@ public class IntegerType extends NativeType {
 	}
 	
 	@Override
-	public IValue convertNativeValueToPrestoValue(Object value) {
+	public IValue convertJavaValueToPrestoValue(Object value) {
         if (value instanceof Number)
             return new Integer(((Number)value).longValue());
         else
