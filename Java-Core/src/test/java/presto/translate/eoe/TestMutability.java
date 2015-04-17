@@ -12,8 +12,18 @@ public class TestMutability extends BaseEParserTest {
 	}
 
 	@Test
+	public void testImmutableMember() throws Exception {
+		compareResourceEOE("mutability/immutableMember.pec");
+	}
+
+	@Test
 	public void testMutable() throws Exception {
 		compareResourceEOE("mutability/mutable.pec");
+	}
+
+	@Test
+	public void testMutableMember() throws Exception {
+		compareResourceEOE("mutability/mutableMember.pec");
 	}
 
 }

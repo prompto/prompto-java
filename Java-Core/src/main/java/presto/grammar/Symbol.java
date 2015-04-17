@@ -19,6 +19,11 @@ public abstract class Symbol extends Section implements IExpression, INamed, IVa
 		this.symbol = symbol;
 	}
 
+	@Override
+	public boolean isMutable() {
+		return false;
+	}
+	
 	public String getSymbol() {
 		return symbol.toString();
 	}
@@ -84,6 +89,11 @@ public abstract class Symbol extends Section implements IExpression, INamed, IVa
 	@Override
 	public int CompareTo(Context context, IValue value) throws PrestoError {
 		throw new UnsupportedOperationException("Compare not supported by " + this.getClass().getSimpleName());
+	}
+
+	@Override
+	public void setMember(Context context, Identifier name, IValue value) throws PrestoError {
+		throw new UnsupportedOperationException("No member support for " + this.getClass().getSimpleName());
 	}
 
 	@Override

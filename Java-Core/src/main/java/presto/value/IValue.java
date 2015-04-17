@@ -7,6 +7,8 @@ import presto.type.IType;
 
 public interface IValue {
 	
+	boolean isMutable();
+	
 	IType getType();
 	
 	IValue Add(Context context, IValue value) throws PrestoError;
@@ -22,6 +24,8 @@ public interface IValue {
 	IValue Modulo(Context context, IValue iValue) throws PrestoError;
 
 	IValue getMember(Context context, Identifier name) throws PrestoError;
+
+	void setMember(Context context, Identifier name, IValue value) throws PrestoError;
 
 	int CompareTo(Context context, IValue value) throws PrestoError;
 

@@ -12,8 +12,18 @@ public class TestMutability extends BaseOParserTest {
 	}
 
 	@Test
+	public void testImmutableMember() throws Exception {
+		compareResourceOSO("mutability/immutableMember.poc");
+	}
+
+	@Test
 	public void testMutable() throws Exception {
 		compareResourceOSO("mutability/mutable.poc");
+	}
+
+	@Test
+	public void testMutableMember() throws Exception {
+		compareResourceOSO("mutability/mutableMember.poc");
 	}
 
 }

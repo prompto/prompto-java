@@ -18,6 +18,11 @@ public abstract class SymbolList <T extends Symbol> extends ObjectList<T> implem
 		this.add(symbol);
 	}
 
+	@Override
+	public boolean isMutable() {
+		return false;
+	}
+	
 	public void setType(IType type) {
 		this.type = type;
 	}
@@ -79,6 +84,12 @@ public abstract class SymbolList <T extends Symbol> extends ObjectList<T> implem
 		throw new UnsupportedOperationException("Compare not supported by " + this.getClass().getSimpleName());
 	}
 
+	@Override
+	public void setMember(Context context, Identifier name, IValue value) throws PrestoError {
+		throw new UnsupportedOperationException("No member support for " + this.getClass().getSimpleName());
+	}
+
+	@Override
 	public IValue getMember(Context context, Identifier name) throws PrestoError {
 		throw new UnsupportedOperationException("No member support for " + this.getClass().getSimpleName());
 	}

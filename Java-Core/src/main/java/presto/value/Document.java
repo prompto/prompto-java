@@ -16,6 +16,11 @@ public class Document extends BaseValue
 		super(DocumentType.instance());
 	}
 	
+	@Override
+	public boolean isMutable() {
+		return true;
+	}
+	
     @Override
     public IValue getMember(Context context, Identifier name)
     {
@@ -29,7 +34,8 @@ public class Document extends BaseValue
     }
 
 
-    public void SetMember(Identifier name, IValue value)
+    @Override
+    public void setMember(Context context, Identifier name, IValue value)
     {
     	members.put(name, value);
     }

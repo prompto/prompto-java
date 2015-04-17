@@ -1,6 +1,7 @@
 package presto.expression;
 
 import presto.declaration.CategoryDeclaration;
+import presto.error.NotMutableError;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.grammar.ArgumentAssignment;
@@ -130,14 +131,20 @@ public class ConstructorExpression implements IExpression {
 					IInstance copyFrom = (IInstance)copyObj;
 					CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getName());
 					for(Identifier name : copyFrom.getMemberNames()) {
-						if(cd.hasAttribute(context, name)) 
-							instance.setMember(context, name, copyFrom.getMember(context,name));
+						if(cd.hasAttribute(context, name)) {
+							IValue value = copyFrom.getMember(context,name);
+							if(value!=null && value.isMutable() && !this.mutable)
+								throw new NotMutableError();
+							instance.setMember(context, name, value);
+						}
 					}
 				}
 			}
 			if(assignments!=null) {
 				for(ArgumentAssignment assignment : assignments) {
 					IValue value = assignment.getExpression().interpret(context);
+					if(value!=null && value.isMutable() && !this.mutable)
+						throw new NotMutableError();
 					instance.setMember(context, assignment.getName(), value);
 				}
 			}

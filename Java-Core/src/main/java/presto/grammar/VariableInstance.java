@@ -5,7 +5,6 @@ import presto.error.SyntaxError;
 import presto.expression.IExpression;
 import presto.runtime.Context;
 import presto.runtime.Variable;
-import presto.type.DocumentType;
 import presto.type.IType;
 import presto.utils.CodeWriter;
 import presto.value.IValue;
@@ -45,8 +44,6 @@ public class VariableInstance implements IAssignableInstance {
 		INamed actual = context.getRegisteredValue(INamed.class,name);
 		if(actual==null) 
 			throw new SyntaxError("Unknown variable:" + this.name);
-		if(actual.getType(context)!=DocumentType.instance())
-			throw new SyntaxError(this.name + " is not a document. Cannot assign member!");
 	}
 	
 	@Override

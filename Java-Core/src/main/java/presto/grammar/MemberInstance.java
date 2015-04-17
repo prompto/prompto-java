@@ -1,12 +1,11 @@
 package presto.grammar;
 
-import presto.error.InvalidDataError;
+import presto.error.NotMutableError;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.expression.IExpression;
 import presto.runtime.Context;
 import presto.utils.CodeWriter;
-import presto.value.Document;
 import presto.value.IValue;
 
 public class MemberInstance implements IAssignableSelector {
@@ -53,21 +52,17 @@ public class MemberInstance implements IAssignableSelector {
 	
 	@Override
 	public void assign(Context context, IExpression expression) throws PrestoError {
+		IValue root = parent.interpret(context);
+		if(!root.isMutable())
+			throw new NotMutableError();
 		IValue value = expression.interpret(context);
-		IValue doc = parent.interpret(context);
-		if(doc instanceof Document)
-			((Document)doc).SetMember(name, value);
-		else
-			throw new InvalidDataError("Expecting a document, got:" + doc.getClass().getSimpleName());
+		root.setMember(context, name, value);
 	}
 	
 	@Override
 	public IValue interpret(Context context) throws PrestoError {
-		IValue doc = parent.interpret(context);
-		if(doc instanceof Document) 
-			return ((Document)doc).getMember(context, name);
-		else
-			throw new InvalidDataError("Expecting a document, got:" + doc.getClass().getSimpleName());
+		IValue root = parent.interpret(context);
+		return root.getMember(context, name);
 	}
 	
 

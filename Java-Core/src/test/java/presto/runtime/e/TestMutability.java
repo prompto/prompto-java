@@ -25,8 +25,18 @@ public class TestMutability extends BaseEParserTest {
 	}
 
 	@Test
+	public void testImmutableMember() throws Exception {
+		checkOutput("mutability/immutableMember.pec");
+	}
+
+	@Test
 	public void testMutable() throws Exception {
 		checkOutput("mutability/mutable.pec");
+	}
+
+	@Test
+	public void testMutableMember() throws Exception {
+		checkOutput("mutability/mutableMember.pec");
 	}
 
 }
