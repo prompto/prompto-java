@@ -122,13 +122,14 @@ public class TestMethodDeclaration extends BaseDeclaration {
 	}
 
 	private void interpretError(Context context, ExecutionError e) throws PrestoError {
-		IValue expected = error.interpret(context);
 		IValue actual = e.interpret(context, new Identifier("__test_error__"));
-		if(expected.equals(actual))
+		IValue expectedError = error==null ? null : error.interpret(context);
+		if(expectedError!=null && expectedError.equals(actual))
 			printSuccess(context);
 		else {
 			String actualName = ((IInstance)actual).getMember(context, new Identifier("name")).toString();
-			printFailure(context, error.getName().toString(), actualName);
+			String expectedName = error==null ? "SUCCESS" : error.getName().toString();
+			printFailure(context, expectedName, actualName);
 		}
 	}
 

@@ -57,6 +57,11 @@ public class TestErrors extends BaseEParserTest {
 	}
 
 	@Test
+	public void testUnexpected() throws Exception {
+		compareResourceEOE("errors/unexpected.pec");
+	}
+
+	@Test
 	public void testUserException() throws Exception {
 		compareResourceEOE("errors/userException.pec");
 	}
