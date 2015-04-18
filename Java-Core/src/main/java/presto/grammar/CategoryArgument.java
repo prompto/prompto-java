@@ -56,6 +56,8 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 	
 	@Override
 	public void toDialect(CodeWriter writer) {
+		if(mutable)
+			writer.append("mutable ");
 		switch(writer.getDialect()) {
 		case E:
 			toEDialect(writer);

@@ -10,6 +10,7 @@ import presto.value.IValue;
 public abstract class BaseArgument implements IArgument {
 
 	Identifier name;
+	boolean mutable = false;
 	DefaultExpression defaultExpression;
 	
 	protected BaseArgument(Identifier name) {
@@ -19,6 +20,18 @@ public abstract class BaseArgument implements IArgument {
 	@Override
 	public Identifier getName() {
 		return name;
+	}
+	
+	@Override
+	public boolean setMutable(boolean set) {
+		boolean result = mutable;
+		mutable = set;
+		return result;
+	}
+	
+	@Override
+	public boolean isMutable() {
+		return mutable;
 	}
 	
 	@Override

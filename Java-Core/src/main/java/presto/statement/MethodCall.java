@@ -5,6 +5,7 @@ import presto.declaration.ClosureDeclaration;
 import presto.declaration.ConcreteMethodDeclaration;
 import presto.declaration.IMethodDeclaration;
 import presto.declaration.TestMethodDeclaration;
+import presto.error.NotMutableError;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.expression.IAssertion;
@@ -12,6 +13,7 @@ import presto.expression.IExpression;
 import presto.expression.MethodSelector;
 import presto.grammar.ArgumentAssignment;
 import presto.grammar.ArgumentAssignmentList;
+import presto.grammar.IArgument;
 import presto.parser.Dialect;
 import presto.runtime.Context;
 import presto.runtime.MethodFinder;
@@ -128,7 +130,10 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		ArgumentAssignmentList assignments = makeAssignments(context, declaration);
 		for (ArgumentAssignment assignment : assignments) {
 			IExpression expression = assignment.resolve(local, declaration, true);
-			IValue value = assignment.getArgument().checkValue(context, expression);
+			IArgument argument = assignment.getArgument();
+			IValue value = argument.checkValue(context, expression);
+			if(value!=null && value.isMutable() & !argument.isMutable()) 
+				throw new NotMutableError();
 			local.setValue(assignment.getName(), value);
 		}
 		return declaration.interpret(local);

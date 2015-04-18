@@ -1888,7 +1888,9 @@ public class EPrestoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitOperatorArgument(OperatorArgumentContext ctx) {
+		boolean mutable = ctx.MUTABLE()!=null;
 		IArgument arg = this.<IArgument>getNodeValue(ctx.arg);
+		arg.setMutable(mutable);
 		setNodeValue(ctx, arg);
 	}
 	

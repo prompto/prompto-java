@@ -19,5 +19,7 @@ public interface IArgument extends INamed {
 	IValue checkValue(Context context,IExpression value) throws PrestoError;
 	void toDialect(CodeWriter writer);
 	DefaultExpression getDefaultExpression();
+	boolean setMutable(boolean set);
+	boolean isMutable();
 	
 }
