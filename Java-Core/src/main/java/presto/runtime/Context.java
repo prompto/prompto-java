@@ -192,10 +192,23 @@ public class Context implements IContext {
 			globals.unregister(path);
 		else {
 			unregisterDeclarations(path);
+			unregisterValues(path);
 			unregisterTests(path);
 		}
 	}
 	
+	private void unregisterValues(String path) {
+		List<Identifier> toRemove = new ArrayList<Identifier>();
+		for(Identifier id : instances.keySet()) {
+			if(path.equals(id.getPath()))
+				toRemove.add(id);
+		}
+		for(Identifier id : toRemove) {
+			instances.remove(id);
+			values.remove(id);
+		}
+	}
+
 	private void unregisterTests(String path) {
 		List<TestMethodDeclaration> toRemove = new ArrayList<TestMethodDeclaration>();
 		for(TestMethodDeclaration decl : tests.values()) {
@@ -255,7 +268,7 @@ public class Context implements IContext {
 		INamed current = getRegistered(declaration.getName());
 		if(current!=null) {
 			if(problemListener!=null)
-				problemListener.reportDuplicate(declaration.getName().toString(), declaration, (ISection)current);
+				problemListener.reportDuplicate(declaration.getName().toString(), declaration, current.getName());
 			else
 				throw new SyntaxError("Duplicate name: \"" + declaration.getName() + "\"");
 		}

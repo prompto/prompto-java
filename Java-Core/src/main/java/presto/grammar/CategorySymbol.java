@@ -53,6 +53,7 @@ public class CategorySymbol extends Symbol implements IExpression  {
 		if(cd==null)
 			throw new SyntaxError("Unknown category " + type.getName());
 		if(assignments!=null) {
+			context = context.newLocalContext();
 			for(ArgumentAssignment assignment : assignments) {
 				if(!cd.hasAttribute(context, assignment.getName()))
 					throw new SyntaxError("\"" + assignment.getName() + 
@@ -69,6 +70,7 @@ public class CategorySymbol extends Symbol implements IExpression  {
 		IInstance instance = type.newInstance(context);
 		instance.setMutable(true);
 		if(assignments!=null) {
+			context = context.newLocalContext();
 			for(ArgumentAssignment assignment : assignments) {
 				IValue value = assignment.getExpression().interpret(context);
 				instance.setMember(context, assignment.getName(), value);
