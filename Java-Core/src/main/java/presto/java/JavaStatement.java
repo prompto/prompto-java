@@ -22,7 +22,7 @@ public class JavaStatement {
 	public IType check(Context context, IType returnType) throws SyntaxError {
 		IType type = expression.check(context);
 		if(type instanceof JavaClassType) 
-			type = ((JavaClassType)type).convertNativeTypeToPrestoType(context, returnType);
+			type = ((JavaClassType)type).convertJavaClassToPrestoType(context, returnType);
 		return isReturn ? type : VoidType.instance();
 	}
 

@@ -64,7 +64,7 @@ public class JavaClassType extends CategoryType {
 		return this.klass;
 	}
 	
-	public IType convertNativeTypeToPrestoType(Context context, IType returnType) {
+	public IType convertJavaClassToPrestoType(Context context, IType returnType) {
 		IType result = javaToPrestoMap.get(klass);
 		if(result!=null)
 			return result;
