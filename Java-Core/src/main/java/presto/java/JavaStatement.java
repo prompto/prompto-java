@@ -8,6 +8,7 @@ import presto.type.IType;
 import presto.type.VoidType;
 import presto.utils.CodeWriter;
 import presto.value.IValue;
+
 public class JavaStatement {
 
 	JavaExpression expression;
@@ -18,10 +19,10 @@ public class JavaStatement {
 		this.isReturn = isReturn;
 	}
 
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context, IType returnType) throws SyntaxError {
 		IType type = expression.check(context);
 		if(type instanceof JavaClassType) 
-			type = ((JavaClassType)type).convertNativeTypeToPrestoType(context);
+			type = ((JavaClassType)type).convertNativeTypeToPrestoType(context, returnType);
 		return isReturn ? type : VoidType.instance();
 	}
 

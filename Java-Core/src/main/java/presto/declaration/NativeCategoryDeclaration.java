@@ -29,7 +29,7 @@ public class NativeCategoryDeclaration extends CategoryDeclaration {
 	@Override
 	public void register(Context context) throws SyntaxError {
 		super.register(context);
-		context.registerNativeMapping(getMappedClass(), this);
+		context.registerNativeMapping(getMappedClass(false), this);
 	}
 	
 	@Override
@@ -85,22 +85,27 @@ public class NativeCategoryDeclaration extends CategoryDeclaration {
 		return new NativeInstance(this);
 	}
 
-	public Class<?> getMappedClass() throws SyntaxError {
+	public Class<?> getMappedClass(boolean fail) throws SyntaxError {
 		if(mappedClass==null) {
-			JavaNativeCategoryMapping mapping = getMapping();
-			mappedClass = mapping.getExpression().interpret_class();
-			if(mappedClass==null)
-				throw new SyntaxError("No Java class:" + mapping.getExpression().toString());
+			JavaNativeCategoryMapping mapping = getMapping(fail);
+			if(mapping!=null) {
+				mappedClass = mapping.getExpression().interpret_class();
+				if(mappedClass==null && fail)
+					throw new SyntaxError("No Java class:" + mapping.getExpression().toString());
+			}
 		}
 		return mappedClass;
 	}
 
-	private JavaNativeCategoryMapping getMapping() throws SyntaxError {
+	private JavaNativeCategoryMapping getMapping(boolean fail) throws SyntaxError {
 		for(NativeCategoryMapping mapping : categoryMappings) {
 			if(mapping instanceof JavaNativeCategoryMapping)
 				return (JavaNativeCategoryMapping)mapping;
 		}
-		throw new SyntaxError("Missing JAVA mapping !");
+		if(fail)
+			throw new SyntaxError("Missing JAVA mapping !");
+		else
+			return null;
 	}
 	
 }

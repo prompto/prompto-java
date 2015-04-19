@@ -44,6 +44,18 @@ public class StatementList extends LinkedList<IStatement> {
 		return types.inferType(context);
 	}
 
+	public IType checkNative(Context context, IType returnType) throws SyntaxError {
+		TypeMap types = new TypeMap();
+		for(IStatement statement : this) {
+			if(!(statement instanceof JavaNativeCall))
+				continue;
+			IType type = ((JavaNativeCall)statement).checkNative(context, returnType);
+			if(type!=VoidType.instance())
+				types.put(type.getName(), type);
+		}
+		return types.inferType(context);
+	}
+
 	public IValue interpret(Context context) throws PrestoError {
 		return doInterpret(context);
 	}

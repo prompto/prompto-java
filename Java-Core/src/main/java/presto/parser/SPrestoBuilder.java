@@ -751,6 +751,11 @@ public class SPrestoBuilder extends SParserBaseListener {
 		setNodeValue(ctx, new CSharpNativeCall(stmt));
 	}
 	
+	public void exitCSharpPrestoIdentifier(CSharpPrestoIdentifierContext ctx) {
+		String name = ctx.DOLLAR_IDENTIFIER().getText();
+		setNodeValue(ctx, new CSharpIdentifierExpression(name));
+	};
+	
 	@Override
 	public void exitCSharpPrimaryExpression(CSharpPrimaryExpressionContext ctx) {
 		CSharpExpression exp = this.<CSharpExpression>getNodeValue(ctx.exp);

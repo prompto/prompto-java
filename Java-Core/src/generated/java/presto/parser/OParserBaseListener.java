@@ -4673,6 +4673,18 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterCSharpPrestoIdentifier(@NotNull OParser.CSharpPrestoIdentifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCSharpPrestoIdentifier(@NotNull OParser.CSharpPrestoIdentifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCSharpIdentifier(@NotNull OParser.CSharpIdentifierContext ctx) { }
 	/**
 	 * {@inheritDoc}

@@ -4429,6 +4429,18 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitCsharp_parenthesis_expression(@NotNull SParser.Csharp_parenthesis_expressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code CSharpPrestoIdentifier}
+	 * labeled alternative in {@link SParser#csharp_identifier_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterCSharpPrestoIdentifier(@NotNull SParser.CSharpPrestoIdentifierContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code CSharpPrestoIdentifier}
+	 * labeled alternative in {@link SParser#csharp_identifier_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitCSharpPrestoIdentifier(@NotNull SParser.CSharpPrestoIdentifierContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code CSharpIdentifier}
 	 * labeled alternative in {@link SParser#csharp_identifier_expression}.
 	 * @param ctx the parse tree

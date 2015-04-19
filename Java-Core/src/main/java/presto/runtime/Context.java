@@ -232,7 +232,7 @@ public class Context implements IContext {
 		for(IDeclaration decl : toRemove) {
 			declarations.remove(decl.getIdentifier());
 			if(decl instanceof NativeCategoryDeclaration) {
-				Class<?> klass = ((NativeCategoryDeclaration)decl).getMappedClass();
+				Class<?> klass = ((NativeCategoryDeclaration)decl).getMappedClass(true);
 				if(klass!=null)
 					nativeMappings.remove(klass);
 			}

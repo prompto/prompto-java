@@ -47,7 +47,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 	}
 	
 	private Object makeInstance() throws SyntaxError {
-		Class<?> mapped = declaration.getMappedClass();
+		Class<?> mapped = declaration.getMappedClass(true);
 		try {
 			return mapped.newInstance();
 		} catch (Exception e) {

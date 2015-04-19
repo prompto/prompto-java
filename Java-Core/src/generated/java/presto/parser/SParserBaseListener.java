@@ -4625,6 +4625,18 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterCSharpPrestoIdentifier(@NotNull SParser.CSharpPrestoIdentifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCSharpPrestoIdentifier(@NotNull SParser.CSharpPrestoIdentifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCSharpIdentifier(@NotNull SParser.CSharpIdentifierContext ctx) { }
 	/**
 	 * {@inheritDoc}

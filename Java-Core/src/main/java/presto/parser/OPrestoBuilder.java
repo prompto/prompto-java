@@ -782,6 +782,12 @@ public class OPrestoBuilder extends OParserBaseListener {
 	}
 	
 	@Override
+	public void exitCSharpPrestoIdentifier(CSharpPrestoIdentifierContext ctx) {
+		String name = ctx.DOLLAR_IDENTIFIER().getText();
+		setNodeValue(ctx, new CSharpIdentifierExpression(name));
+	}
+	
+	@Override
 	public void exitCSharpPrimaryExpression(CSharpPrimaryExpressionContext ctx) {
 		CSharpExpression exp = this.<CSharpExpression>getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);

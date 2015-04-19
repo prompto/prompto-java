@@ -1,6 +1,7 @@
 package presto.declaration;
 
 import presto.error.PrestoError;
+import presto.error.SyntaxError;
 import presto.grammar.ArgumentList;
 import presto.grammar.Identifier;
 import presto.runtime.Context;
@@ -17,6 +18,11 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 		super(name, arguments, returnType, instructions);
 	}
 
+	@Override
+	protected IType checkStatements(Context context) throws SyntaxError {
+		return statements.checkNative(context, returnType);
+	}
+	
 	@Override
 	public IValue interpret(Context context) throws PrestoError {
 		context.enterMethod(this);

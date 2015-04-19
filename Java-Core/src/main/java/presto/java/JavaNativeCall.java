@@ -29,7 +29,11 @@ public class JavaNativeCall extends NativeCall {
 	
 	@Override
 	public IType check(Context context) throws SyntaxError {
-		return statement.check(context);
+		throw new RuntimeException("Should never get there!");
+	}
+	
+	public IType checkNative(Context context, IType returnType) throws SyntaxError {
+		return statement.check(context, returnType);
 	}
 	
 	@Override

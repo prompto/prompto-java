@@ -126,6 +126,10 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		}
 		if(arguments!=null)
 			arguments.check(context);
+		return checkStatements(context);
+	}
+
+	protected IType checkStatements(Context context) throws SyntaxError {
 		return statements.check(context);
 	}
 

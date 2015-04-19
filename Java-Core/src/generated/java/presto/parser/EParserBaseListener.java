@@ -4709,6 +4709,18 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterCSharpPrestoIdentifier(@NotNull EParser.CSharpPrestoIdentifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCSharpPrestoIdentifier(@NotNull EParser.CSharpPrestoIdentifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCSharpIdentifier(@NotNull EParser.CSharpIdentifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
