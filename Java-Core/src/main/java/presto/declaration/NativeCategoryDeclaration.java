@@ -29,7 +29,9 @@ public class NativeCategoryDeclaration extends CategoryDeclaration {
 	@Override
 	public void register(Context context) throws SyntaxError {
 		super.register(context);
-		context.registerNativeMapping(getMappedClass(false), this);
+		Class<?> klass = getMappedClass(false);
+		if(klass!=null)
+			context.registerNativeMapping(klass, this);
 	}
 	
 	@Override
