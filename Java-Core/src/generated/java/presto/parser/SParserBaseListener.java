@@ -4097,6 +4097,18 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterPythonPrestoIdentifier(@NotNull SParser.PythonPrestoIdentifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPythonPrestoIdentifier(@NotNull SParser.PythonPrestoIdentifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterPythonIntegerLiteral(@NotNull SParser.PythonIntegerLiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}

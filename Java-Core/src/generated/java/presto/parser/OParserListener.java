@@ -3973,6 +3973,18 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitPythonIdentifier(@NotNull OParser.PythonIdentifierContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code PythonPrestoIdentifier}
+	 * labeled alternative in {@link OParser#python_identifier_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterPythonPrestoIdentifier(@NotNull OParser.PythonPrestoIdentifierContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code PythonPrestoIdentifier}
+	 * labeled alternative in {@link OParser#python_identifier_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitPythonPrestoIdentifier(@NotNull OParser.PythonPrestoIdentifierContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code PythonIntegerLiteral}
 	 * labeled alternative in {@link OParser#python_literal_expression}.
 	 * @param ctx the parse tree

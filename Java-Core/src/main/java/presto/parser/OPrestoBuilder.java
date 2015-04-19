@@ -2157,6 +2157,13 @@ public class OPrestoBuilder extends OParserBaseListener {
 		setNodeValue(ctx, ordinal);
 	}
 	
+	
+	@Override
+	public void exitPythonPrestoIdentifier(PythonPrestoIdentifierContext ctx) {
+		String name = ctx.DOLLAR_IDENTIFIER().getText();
+		setNodeValue(ctx, new PythonIdentifierExpression(name));
+	}
+	
 	@Override
 	public void exitPythonPrimaryExpression(PythonPrimaryExpressionContext ctx) {
 		PythonExpression exp = this.<PythonExpression>getNodeValue(ctx.exp);

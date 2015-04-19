@@ -3917,6 +3917,18 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitPythonIdentifier(@NotNull SParser.PythonIdentifierContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code PythonPrestoIdentifier}
+	 * labeled alternative in {@link SParser#python_identifier_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterPythonPrestoIdentifier(@NotNull SParser.PythonPrestoIdentifierContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code PythonPrestoIdentifier}
+	 * labeled alternative in {@link SParser#python_identifier_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitPythonPrestoIdentifier(@NotNull SParser.PythonPrestoIdentifierContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code PythonIntegerLiteral}
 	 * labeled alternative in {@link SParser#python_literal_expression}.
 	 * @param ctx the parse tree

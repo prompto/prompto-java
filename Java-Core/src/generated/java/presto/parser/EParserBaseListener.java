@@ -4181,6 +4181,18 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterPythonPrestoIdentifier(@NotNull EParser.PythonPrestoIdentifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPythonPrestoIdentifier(@NotNull EParser.PythonPrestoIdentifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterPythonIntegerLiteral(@NotNull EParser.PythonIntegerLiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}

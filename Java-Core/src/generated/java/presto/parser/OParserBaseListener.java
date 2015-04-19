@@ -4145,6 +4145,18 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterPythonPrestoIdentifier(@NotNull OParser.PythonPrestoIdentifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPythonPrestoIdentifier(@NotNull OParser.PythonPrestoIdentifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterPythonIntegerLiteral(@NotNull OParser.PythonIntegerLiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
