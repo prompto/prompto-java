@@ -48,7 +48,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	@Override
 	protected void toEDialect(CodeWriter writer) {
 		boolean hasMethods = methods!=null && methods.size()>0;
-		protoToEDialect(writer, hasMethods, false); // no mappings
+		protoToEDialect(writer, hasMethods, false); // no bindings
 		if(hasMethods)
 			methodsToEDialect(writer, methods);
 	}

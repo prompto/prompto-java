@@ -26,10 +26,10 @@ public class SParser extends AbstractParser {
 		BOOLEAN=49, CHARACTER=50, TEXT=51, INTEGER=52, DECIMAL=53, DATE=54, TIME=55, 
 		DATETIME=56, PERIOD=57, METHOD_T=58, CODE=59, DOCUMENT=60, ABSTRACT=61, 
 		ALL=62, ALWAYS=63, AND=64, ANY=65, AS=66, ATTR=67, ATTRIBUTE=68, ATTRIBUTES=69, 
-		CASE=70, CATCH=71, CATEGORY=72, CLASS=73, CLOSE=74, CONTAINS=75, DEF=76, 
-		DEFAULT=77, DEFINE=78, DO=79, DOING=80, EACH=81, ELSE=82, ENUM=83, ENUMERATED=84, 
-		EXCEPT=85, EXECUTE=86, EXPECTING=87, EXTENDS=88, FETCH=89, FINALLY=90, 
-		FOR=91, FROM=92, GETTER=93, IF=94, IN=95, INVOKE=96, IS=97, MAPPINGS=98, 
+		BINDINGS=70, CASE=71, CATCH=72, CATEGORY=73, CLASS=74, CLOSE=75, CONTAINS=76, 
+		DEF=77, DEFAULT=78, DEFINE=79, DO=80, DOING=81, EACH=82, ELSE=83, ENUM=84, 
+		ENUMERATED=85, EXCEPT=86, EXECUTE=87, EXPECTING=88, EXTENDS=89, FETCH=90, 
+		FINALLY=91, FOR=92, FROM=93, GETTER=94, IF=95, IN=96, INVOKE=97, IS=98, 
 		MATCHING=99, METHOD=100, METHODS=101, MODULO=102, MUTABLE=103, NATIVE=104, 
 		NONE=105, NOT=106, NOTHING=107, NULL=108, ON=109, OPEN=110, OPERATOR=111, 
 		OR=112, OTHERWISE=113, PASS=114, RAISE=115, READ=116, RECEIVING=117, RESOURCE=118, 
@@ -47,8 +47,8 @@ public class SParser extends AbstractParser {
 		RULE_concrete_category_declaration = 5, RULE_singleton_category_declaration = 6, 
 		RULE_derived_list = 7, RULE_operator_method_declaration = 8, RULE_setter_method_declaration = 9, 
 		RULE_getter_method_declaration = 10, RULE_native_category_declaration = 11, 
-		RULE_native_resource_declaration = 12, RULE_native_category_mappings = 13, 
-		RULE_native_category_mapping_list = 14, RULE_attribute_list = 15, RULE_abstract_method_declaration = 16, 
+		RULE_native_resource_declaration = 12, RULE_native_category_bindings = 13, 
+		RULE_native_category_binding_list = 14, RULE_attribute_list = 15, RULE_abstract_method_declaration = 16, 
 		RULE_concrete_method_declaration = 17, RULE_native_method_declaration = 18, 
 		RULE_test_method_declaration = 19, RULE_assertion = 20, RULE_typed_argument = 21, 
 		RULE_statement = 22, RULE_method_call = 23, RULE_method_selector = 24, 
@@ -75,9 +75,9 @@ public class SParser extends AbstractParser {
 		RULE_symbol_identifier = 86, RULE_argument_list = 87, RULE_argument = 88, 
 		RULE_operator_argument = 89, RULE_named_argument = 90, RULE_code_argument = 91, 
 		RULE_category_or_any_type = 92, RULE_any_type = 93, RULE_member_method_declaration_list = 94, 
-		RULE_member_method_declaration = 95, RULE_native_category_mapping = 96, 
-		RULE_python_category_mapping = 97, RULE_python_module = 98, RULE_module_token = 99, 
-		RULE_javascript_category_mapping = 100, RULE_javascript_module = 101, 
+		RULE_member_method_declaration = 95, RULE_native_category_binding = 96, 
+		RULE_python_category_binding = 97, RULE_python_module = 98, RULE_module_token = 99, 
+		RULE_javascript_category_binding = 100, RULE_javascript_module = 101, 
 		RULE_variable_identifier_list = 102, RULE_method_declaration = 103, RULE_native_statement_list = 104, 
 		RULE_native_statement = 105, RULE_python_native_statement = 106, RULE_javascript_native_statement = 107, 
 		RULE_statement_list = 108, RULE_assertion_list = 109, RULE_switch_case_statement_list = 110, 
@@ -115,7 +115,7 @@ public class SParser extends AbstractParser {
 		"category_symbol", "attribute_declaration", "concrete_category_declaration", 
 		"singleton_category_declaration", "derived_list", "operator_method_declaration", 
 		"setter_method_declaration", "getter_method_declaration", "native_category_declaration", 
-		"native_resource_declaration", "native_category_mappings", "native_category_mapping_list", 
+		"native_resource_declaration", "native_category_bindings", "native_category_binding_list", 
 		"attribute_list", "abstract_method_declaration", "concrete_method_declaration", 
 		"native_method_declaration", "test_method_declaration", "assertion", "typed_argument", 
 		"statement", "method_call", "method_selector", "callable_parent", "callable_selector", 
@@ -136,8 +136,8 @@ public class SParser extends AbstractParser {
 		"variable_identifier", "type_identifier", "symbol_identifier", "argument_list", 
 		"argument", "operator_argument", "named_argument", "code_argument", "category_or_any_type", 
 		"any_type", "member_method_declaration_list", "member_method_declaration", 
-		"native_category_mapping", "python_category_mapping", "python_module", 
-		"module_token", "javascript_category_mapping", "javascript_module", "variable_identifier_list", 
+		"native_category_binding", "python_category_binding", "python_module", 
+		"module_token", "javascript_category_binding", "javascript_module", "variable_identifier_list", 
 		"method_declaration", "native_statement_list", "native_statement", "python_native_statement", 
 		"javascript_native_statement", "statement_list", "assertion_list", "switch_case_statement_list", 
 		"catch_statement_list", "literal_collection", "atomic_literal", "literal_list_literal", 
@@ -172,14 +172,14 @@ public class SParser extends AbstractParser {
 		"'~'", "'<-'", "'->'", "'Boolean'", "'Character'", "'Text'", "'Integer'", 
 		"'Decimal'", "'Date'", "'Time'", "'DateTime'", "'Period'", "'Method'", 
 		"'Code'", "'Document'", "'abstract'", "'all'", "'always'", "'and'", "'any'", 
-		"'as'", "'attr'", "'attribute'", "'attributes'", "'case'", "'catch'", 
-		"'category'", "'class'", "'close'", "'contains'", "'def'", "'default'", 
-		"'define'", "'do'", "'doing'", "'each'", "'else'", "'enum'", "'enumerated'", 
-		"'except'", "'execute'", "'expecting'", "'extends'", "'fetch'", "'finally'", 
-		"'for'", "'from'", "'getter'", "'if'", "'in'", "'invoke'", "'is'", "'mappings'", 
-		"'matching'", "'method'", "'methods'", "'modulo'", "'mutable'", "'native'", 
-		"'None'", "'not'", null, "'null'", "'on'", "'open'", "'operator'", "'or'", 
-		"'otherwise'", "'pass'", "'raise'", "'read'", "'receiving'", "'resource'", 
+		"'as'", "'attr'", "'attribute'", "'attributes'", "'bindings'", "'case'", 
+		"'catch'", "'category'", "'class'", "'close'", "'contains'", "'def'", 
+		"'default'", "'define'", "'do'", "'doing'", "'each'", "'else'", "'enum'", 
+		"'enumerated'", "'except'", "'execute'", "'expecting'", "'extends'", "'fetch'", 
+		"'finally'", "'for'", "'from'", "'getter'", "'if'", "'in'", "'invoke'", 
+		"'is'", "'matching'", "'method'", "'methods'", "'modulo'", "'mutable'", 
+		"'native'", "'None'", "'not'", null, "'null'", "'on'", "'open'", "'operator'", 
+		"'or'", "'otherwise'", "'pass'", "'raise'", "'read'", "'receiving'", "'resource'", 
 		"'return'", "'returning'", "'self'", "'setter'", "'singleton'", "'sorted'", 
 		"'switch'", "'test'", "'this'", "'throw'", "'to'", "'try'", "'with'", 
 		"'when'", "'where'", "'while'", "'write'", null, null, "'MIN_INTEGER'", 
@@ -194,10 +194,10 @@ public class SParser extends AbstractParser {
 		"XEQ", "EQ2", "TEQ", "TILDE", "LARROW", "RARROW", "BOOLEAN", "CHARACTER", 
 		"TEXT", "INTEGER", "DECIMAL", "DATE", "TIME", "DATETIME", "PERIOD", "METHOD_T", 
 		"CODE", "DOCUMENT", "ABSTRACT", "ALL", "ALWAYS", "AND", "ANY", "AS", "ATTR", 
-		"ATTRIBUTE", "ATTRIBUTES", "CASE", "CATCH", "CATEGORY", "CLASS", "CLOSE", 
-		"CONTAINS", "DEF", "DEFAULT", "DEFINE", "DO", "DOING", "EACH", "ELSE", 
-		"ENUM", "ENUMERATED", "EXCEPT", "EXECUTE", "EXPECTING", "EXTENDS", "FETCH", 
-		"FINALLY", "FOR", "FROM", "GETTER", "IF", "IN", "INVOKE", "IS", "MAPPINGS", 
+		"ATTRIBUTE", "ATTRIBUTES", "BINDINGS", "CASE", "CATCH", "CATEGORY", "CLASS", 
+		"CLOSE", "CONTAINS", "DEF", "DEFAULT", "DEFINE", "DO", "DOING", "EACH", 
+		"ELSE", "ENUM", "ENUMERATED", "EXCEPT", "EXECUTE", "EXPECTING", "EXTENDS", 
+		"FETCH", "FINALLY", "FOR", "FROM", "GETTER", "IF", "IN", "INVOKE", "IS", 
 		"MATCHING", "METHOD", "METHODS", "MODULO", "MUTABLE", "NATIVE", "NONE", 
 		"NOT", "NOTHING", "NULL", "ON", "OPEN", "OPERATOR", "OR", "OTHERWISE", 
 		"PASS", "RAISE", "READ", "RECEIVING", "RESOURCE", "RETURN", "RETURNING", 
@@ -524,7 +524,7 @@ public class SParser extends AbstractParser {
 			match(LPAR);
 			setState(402);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << CODE) | (1L << DOCUMENT))) != 0) || ((((_la - 86)) & ~0x3f) == 0 && ((1L << (_la - 86)) & ((1L << (EXECUTE - 86)) | (1L << (FETCH - 86)) | (1L << (MUTABLE - 86)) | (1L << (NONE - 86)) | (1L << (NOT - 86)) | (1L << (READ - 86)) | (1L << (SELF - 86)) | (1L << (SORTED - 86)) | (1L << (THIS - 86)) | (1L << (BOOLEAN_LITERAL - 86)) | (1L << (CHAR_LITERAL - 86)) | (1L << (MIN_INTEGER - 86)) | (1L << (MAX_INTEGER - 86)) | (1L << (SYMBOL_IDENTIFIER - 86)) | (1L << (TYPE_IDENTIFIER - 86)) | (1L << (VARIABLE_IDENTIFIER - 86)) | (1L << (TEXT_LITERAL - 86)) | (1L << (INTEGER_LITERAL - 86)) | (1L << (HEXA_LITERAL - 86)) | (1L << (DECIMAL_LITERAL - 86)) | (1L << (DATETIME_LITERAL - 86)))) != 0) || ((((_la - 150)) & ~0x3f) == 0 && ((1L << (_la - 150)) & ((1L << (TIME_LITERAL - 150)) | (1L << (DATE_LITERAL - 150)) | (1L << (PERIOD_LITERAL - 150)))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << CODE) | (1L << DOCUMENT))) != 0) || ((((_la - 87)) & ~0x3f) == 0 && ((1L << (_la - 87)) & ((1L << (EXECUTE - 87)) | (1L << (FETCH - 87)) | (1L << (MUTABLE - 87)) | (1L << (NONE - 87)) | (1L << (NOT - 87)) | (1L << (READ - 87)) | (1L << (SELF - 87)) | (1L << (SORTED - 87)) | (1L << (THIS - 87)) | (1L << (BOOLEAN_LITERAL - 87)) | (1L << (CHAR_LITERAL - 87)) | (1L << (MIN_INTEGER - 87)) | (1L << (MAX_INTEGER - 87)) | (1L << (SYMBOL_IDENTIFIER - 87)) | (1L << (TYPE_IDENTIFIER - 87)) | (1L << (VARIABLE_IDENTIFIER - 87)) | (1L << (TEXT_LITERAL - 87)) | (1L << (INTEGER_LITERAL - 87)) | (1L << (HEXA_LITERAL - 87)) | (1L << (DECIMAL_LITERAL - 87)) | (1L << (DATETIME_LITERAL - 87)) | (1L << (TIME_LITERAL - 87)))) != 0) || _la==DATE_LITERAL || _la==PERIOD_LITERAL) {
 				{
 				setState(401); 
 				((Category_symbolContext)_localctx).args = argument_assignment_list(0);
@@ -1132,7 +1132,7 @@ public class SParser extends AbstractParser {
 	public static class Native_category_declarationContext extends ParserRuleContext {
 		public Type_identifierContext name;
 		public Attribute_listContext attrs;
-		public Native_category_mappingsContext mappings;
+		public Native_category_bindingsContext bindings;
 		public TerminalNode NATIVE() { return getToken(SParser.NATIVE, 0); }
 		public TerminalNode LPAR() { return getToken(SParser.LPAR, 0); }
 		public TerminalNode RPAR() { return getToken(SParser.RPAR, 0); }
@@ -1148,8 +1148,8 @@ public class SParser extends AbstractParser {
 		public Type_identifierContext type_identifier() {
 			return getRuleContext(Type_identifierContext.class,0);
 		}
-		public Native_category_mappingsContext native_category_mappings() {
-			return getRuleContext(Native_category_mappingsContext.class,0);
+		public Native_category_bindingsContext native_category_bindings() {
+			return getRuleContext(Native_category_bindingsContext.class,0);
 		}
 		public Attribute_listContext attribute_list() {
 			return getRuleContext(Attribute_listContext.class,0);
@@ -1203,7 +1203,7 @@ public class SParser extends AbstractParser {
 			setState(498); 
 			indent();
 			setState(499); 
-			((Native_category_declarationContext)_localctx).mappings = native_category_mappings();
+			((Native_category_declarationContext)_localctx).bindings = native_category_bindings();
 			setState(500); 
 			dedent();
 			}
@@ -1222,7 +1222,7 @@ public class SParser extends AbstractParser {
 	public static class Native_resource_declarationContext extends ParserRuleContext {
 		public Type_identifierContext name;
 		public Attribute_listContext attrs;
-		public Native_category_mappingsContext mappings;
+		public Native_category_bindingsContext bindings;
 		public TerminalNode NATIVE() { return getToken(SParser.NATIVE, 0); }
 		public TerminalNode RESOURCE() { return getToken(SParser.RESOURCE, 0); }
 		public TerminalNode LPAR() { return getToken(SParser.LPAR, 0); }
@@ -1237,8 +1237,8 @@ public class SParser extends AbstractParser {
 		public Type_identifierContext type_identifier() {
 			return getRuleContext(Type_identifierContext.class,0);
 		}
-		public Native_category_mappingsContext native_category_mappings() {
-			return getRuleContext(Native_category_mappingsContext.class,0);
+		public Native_category_bindingsContext native_category_bindings() {
+			return getRuleContext(Native_category_bindingsContext.class,0);
 		}
 		public Attribute_listContext attribute_list() {
 			return getRuleContext(Attribute_listContext.class,0);
@@ -1288,7 +1288,7 @@ public class SParser extends AbstractParser {
 			setState(511); 
 			indent();
 			setState(512); 
-			((Native_resource_declarationContext)_localctx).mappings = native_category_mappings();
+			((Native_resource_declarationContext)_localctx).bindings = native_category_bindings();
 			setState(513); 
 			dedent();
 			}
@@ -1304,9 +1304,9 @@ public class SParser extends AbstractParser {
 		return _localctx;
 	}
 
-	public static class Native_category_mappingsContext extends ParserRuleContext {
-		public Native_category_mapping_listContext items;
-		public TerminalNode MAPPINGS() { return getToken(SParser.MAPPINGS, 0); }
+	public static class Native_category_bindingsContext extends ParserRuleContext {
+		public Native_category_binding_listContext items;
+		public TerminalNode BINDINGS() { return getToken(SParser.BINDINGS, 0); }
 		public TerminalNode COLON() { return getToken(SParser.COLON, 0); }
 		public IndentContext indent() {
 			return getRuleContext(IndentContext.class,0);
@@ -1314,37 +1314,37 @@ public class SParser extends AbstractParser {
 		public DedentContext dedent() {
 			return getRuleContext(DedentContext.class,0);
 		}
-		public Native_category_mapping_listContext native_category_mapping_list() {
-			return getRuleContext(Native_category_mapping_listContext.class,0);
+		public Native_category_binding_listContext native_category_binding_list() {
+			return getRuleContext(Native_category_binding_listContext.class,0);
 		}
-		public Native_category_mappingsContext(ParserRuleContext parent, int invokingState) {
+		public Native_category_bindingsContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_native_category_mappings; }
+		@Override public int getRuleIndex() { return RULE_native_category_bindings; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SParserListener ) ((SParserListener)listener).enterNative_category_mappings(this);
+			if ( listener instanceof SParserListener ) ((SParserListener)listener).enterNative_category_bindings(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SParserListener ) ((SParserListener)listener).exitNative_category_mappings(this);
+			if ( listener instanceof SParserListener ) ((SParserListener)listener).exitNative_category_bindings(this);
 		}
 	}
 
-	public final Native_category_mappingsContext native_category_mappings() throws RecognitionException {
-		Native_category_mappingsContext _localctx = new Native_category_mappingsContext(_ctx, getState());
-		enterRule(_localctx, 26, RULE_native_category_mappings);
+	public final Native_category_bindingsContext native_category_bindings() throws RecognitionException {
+		Native_category_bindingsContext _localctx = new Native_category_bindingsContext(_ctx, getState());
+		enterRule(_localctx, 26, RULE_native_category_bindings);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(515); 
-			match(MAPPINGS);
+			match(BINDINGS);
 			setState(516); 
 			match(COLON);
 			setState(517); 
 			indent();
 			setState(518); 
-			((Native_category_mappingsContext)_localctx).items = native_category_mapping_list(0);
+			((Native_category_bindingsContext)_localctx).items = native_category_binding_list(0);
 			setState(519); 
 			dedent();
 			}
@@ -1360,77 +1360,77 @@ public class SParser extends AbstractParser {
 		return _localctx;
 	}
 
-	public static class Native_category_mapping_listContext extends ParserRuleContext {
-		public Native_category_mapping_listContext(ParserRuleContext parent, int invokingState) {
+	public static class Native_category_binding_listContext extends ParserRuleContext {
+		public Native_category_binding_listContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_native_category_mapping_list; }
+		@Override public int getRuleIndex() { return RULE_native_category_binding_list; }
 	 
-		public Native_category_mapping_listContext() { }
-		public void copyFrom(Native_category_mapping_listContext ctx) {
+		public Native_category_binding_listContext() { }
+		public void copyFrom(Native_category_binding_listContext ctx) {
 			super.copyFrom(ctx);
 		}
 	}
-	public static class NativeCategoryMappingListContext extends Native_category_mapping_listContext {
-		public Native_category_mappingContext item;
-		public Native_category_mappingContext native_category_mapping() {
-			return getRuleContext(Native_category_mappingContext.class,0);
+	public static class NativeCategoryBindingListContext extends Native_category_binding_listContext {
+		public Native_category_bindingContext item;
+		public Native_category_bindingContext native_category_binding() {
+			return getRuleContext(Native_category_bindingContext.class,0);
 		}
-		public NativeCategoryMappingListContext(Native_category_mapping_listContext ctx) { copyFrom(ctx); }
+		public NativeCategoryBindingListContext(Native_category_binding_listContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SParserListener ) ((SParserListener)listener).enterNativeCategoryMappingList(this);
+			if ( listener instanceof SParserListener ) ((SParserListener)listener).enterNativeCategoryBindingList(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SParserListener ) ((SParserListener)listener).exitNativeCategoryMappingList(this);
+			if ( listener instanceof SParserListener ) ((SParserListener)listener).exitNativeCategoryBindingList(this);
 		}
 	}
-	public static class NativeCategoryMappingListItemContext extends Native_category_mapping_listContext {
-		public Native_category_mapping_listContext items;
-		public Native_category_mappingContext item;
+	public static class NativeCategoryBindingListItemContext extends Native_category_binding_listContext {
+		public Native_category_binding_listContext items;
+		public Native_category_bindingContext item;
 		public LfpContext lfp() {
 			return getRuleContext(LfpContext.class,0);
 		}
-		public Native_category_mapping_listContext native_category_mapping_list() {
-			return getRuleContext(Native_category_mapping_listContext.class,0);
+		public Native_category_binding_listContext native_category_binding_list() {
+			return getRuleContext(Native_category_binding_listContext.class,0);
 		}
-		public Native_category_mappingContext native_category_mapping() {
-			return getRuleContext(Native_category_mappingContext.class,0);
+		public Native_category_bindingContext native_category_binding() {
+			return getRuleContext(Native_category_bindingContext.class,0);
 		}
-		public NativeCategoryMappingListItemContext(Native_category_mapping_listContext ctx) { copyFrom(ctx); }
+		public NativeCategoryBindingListItemContext(Native_category_binding_listContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SParserListener ) ((SParserListener)listener).enterNativeCategoryMappingListItem(this);
+			if ( listener instanceof SParserListener ) ((SParserListener)listener).enterNativeCategoryBindingListItem(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SParserListener ) ((SParserListener)listener).exitNativeCategoryMappingListItem(this);
+			if ( listener instanceof SParserListener ) ((SParserListener)listener).exitNativeCategoryBindingListItem(this);
 		}
 	}
 
-	public final Native_category_mapping_listContext native_category_mapping_list() throws RecognitionException {
-		return native_category_mapping_list(0);
+	public final Native_category_binding_listContext native_category_binding_list() throws RecognitionException {
+		return native_category_binding_list(0);
 	}
 
-	private Native_category_mapping_listContext native_category_mapping_list(int _p) throws RecognitionException {
+	private Native_category_binding_listContext native_category_binding_list(int _p) throws RecognitionException {
 		ParserRuleContext _parentctx = _ctx;
 		int _parentState = getState();
-		Native_category_mapping_listContext _localctx = new Native_category_mapping_listContext(_ctx, _parentState);
-		Native_category_mapping_listContext _prevctx = _localctx;
+		Native_category_binding_listContext _localctx = new Native_category_binding_listContext(_ctx, _parentState);
+		Native_category_binding_listContext _prevctx = _localctx;
 		int _startState = 28;
-		enterRecursionRule(_localctx, 28, RULE_native_category_mapping_list, _p);
+		enterRecursionRule(_localctx, 28, RULE_native_category_binding_list, _p);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 			{
-			_localctx = new NativeCategoryMappingListContext(_localctx);
+			_localctx = new NativeCategoryBindingListContext(_localctx);
 			_ctx = _localctx;
 			_prevctx = _localctx;
 
 			setState(522); 
-			((NativeCategoryMappingListContext)_localctx).item = native_category_mapping();
+			((NativeCategoryBindingListContext)_localctx).item = native_category_binding();
 			}
 			_ctx.stop = _input.LT(-1);
 			setState(530);
@@ -1442,15 +1442,15 @@ public class SParser extends AbstractParser {
 					_prevctx = _localctx;
 					{
 					{
-					_localctx = new NativeCategoryMappingListItemContext(new Native_category_mapping_listContext(_parentctx, _parentState));
-					((NativeCategoryMappingListItemContext)_localctx).items = _prevctx;
-					pushNewRecursionContext(_localctx, _startState, RULE_native_category_mapping_list);
+					_localctx = new NativeCategoryBindingListItemContext(new Native_category_binding_listContext(_parentctx, _parentState));
+					((NativeCategoryBindingListItemContext)_localctx).items = _prevctx;
+					pushNewRecursionContext(_localctx, _startState, RULE_native_category_binding_list);
 					setState(524);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
 					setState(525); 
 					lfp();
 					setState(526); 
-					((NativeCategoryMappingListItemContext)_localctx).item = native_category_mapping();
+					((NativeCategoryBindingListItemContext)_localctx).item = native_category_binding();
 					}
 					} 
 				}
@@ -2451,7 +2451,7 @@ public class SParser extends AbstractParser {
 			match(LPAR);
 			setState(634);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << CODE) | (1L << DOCUMENT))) != 0) || ((((_la - 86)) & ~0x3f) == 0 && ((1L << (_la - 86)) & ((1L << (EXECUTE - 86)) | (1L << (FETCH - 86)) | (1L << (MUTABLE - 86)) | (1L << (NONE - 86)) | (1L << (NOT - 86)) | (1L << (READ - 86)) | (1L << (SELF - 86)) | (1L << (SORTED - 86)) | (1L << (THIS - 86)) | (1L << (BOOLEAN_LITERAL - 86)) | (1L << (CHAR_LITERAL - 86)) | (1L << (MIN_INTEGER - 86)) | (1L << (MAX_INTEGER - 86)) | (1L << (SYMBOL_IDENTIFIER - 86)) | (1L << (TYPE_IDENTIFIER - 86)) | (1L << (VARIABLE_IDENTIFIER - 86)) | (1L << (TEXT_LITERAL - 86)) | (1L << (INTEGER_LITERAL - 86)) | (1L << (HEXA_LITERAL - 86)) | (1L << (DECIMAL_LITERAL - 86)) | (1L << (DATETIME_LITERAL - 86)))) != 0) || ((((_la - 150)) & ~0x3f) == 0 && ((1L << (_la - 150)) & ((1L << (TIME_LITERAL - 150)) | (1L << (DATE_LITERAL - 150)) | (1L << (PERIOD_LITERAL - 150)))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << CODE) | (1L << DOCUMENT))) != 0) || ((((_la - 87)) & ~0x3f) == 0 && ((1L << (_la - 87)) & ((1L << (EXECUTE - 87)) | (1L << (FETCH - 87)) | (1L << (MUTABLE - 87)) | (1L << (NONE - 87)) | (1L << (NOT - 87)) | (1L << (READ - 87)) | (1L << (SELF - 87)) | (1L << (SORTED - 87)) | (1L << (THIS - 87)) | (1L << (BOOLEAN_LITERAL - 87)) | (1L << (CHAR_LITERAL - 87)) | (1L << (MIN_INTEGER - 87)) | (1L << (MAX_INTEGER - 87)) | (1L << (SYMBOL_IDENTIFIER - 87)) | (1L << (TYPE_IDENTIFIER - 87)) | (1L << (VARIABLE_IDENTIFIER - 87)) | (1L << (TEXT_LITERAL - 87)) | (1L << (INTEGER_LITERAL - 87)) | (1L << (HEXA_LITERAL - 87)) | (1L << (DECIMAL_LITERAL - 87)) | (1L << (DATETIME_LITERAL - 87)) | (1L << (TIME_LITERAL - 87)))) != 0) || _la==DATE_LITERAL || _la==PERIOD_LITERAL) {
 				{
 				setState(633); 
 				((Method_callContext)_localctx).args = argument_assignment_list(0);
@@ -5655,7 +5655,7 @@ public class SParser extends AbstractParser {
 			match(LPAR);
 			setState(1004);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << CODE) | (1L << DOCUMENT))) != 0) || ((((_la - 86)) & ~0x3f) == 0 && ((1L << (_la - 86)) & ((1L << (EXECUTE - 86)) | (1L << (FETCH - 86)) | (1L << (MUTABLE - 86)) | (1L << (NONE - 86)) | (1L << (NOT - 86)) | (1L << (READ - 86)) | (1L << (SELF - 86)) | (1L << (SORTED - 86)) | (1L << (THIS - 86)) | (1L << (BOOLEAN_LITERAL - 86)) | (1L << (CHAR_LITERAL - 86)) | (1L << (MIN_INTEGER - 86)) | (1L << (MAX_INTEGER - 86)) | (1L << (SYMBOL_IDENTIFIER - 86)) | (1L << (TYPE_IDENTIFIER - 86)) | (1L << (VARIABLE_IDENTIFIER - 86)) | (1L << (TEXT_LITERAL - 86)) | (1L << (INTEGER_LITERAL - 86)) | (1L << (HEXA_LITERAL - 86)) | (1L << (DECIMAL_LITERAL - 86)) | (1L << (DATETIME_LITERAL - 86)))) != 0) || ((((_la - 150)) & ~0x3f) == 0 && ((1L << (_la - 150)) & ((1L << (TIME_LITERAL - 150)) | (1L << (DATE_LITERAL - 150)) | (1L << (PERIOD_LITERAL - 150)))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << CODE) | (1L << DOCUMENT))) != 0) || ((((_la - 87)) & ~0x3f) == 0 && ((1L << (_la - 87)) & ((1L << (EXECUTE - 87)) | (1L << (FETCH - 87)) | (1L << (MUTABLE - 87)) | (1L << (NONE - 87)) | (1L << (NOT - 87)) | (1L << (READ - 87)) | (1L << (SELF - 87)) | (1L << (SORTED - 87)) | (1L << (THIS - 87)) | (1L << (BOOLEAN_LITERAL - 87)) | (1L << (CHAR_LITERAL - 87)) | (1L << (MIN_INTEGER - 87)) | (1L << (MAX_INTEGER - 87)) | (1L << (SYMBOL_IDENTIFIER - 87)) | (1L << (TYPE_IDENTIFIER - 87)) | (1L << (VARIABLE_IDENTIFIER - 87)) | (1L << (TEXT_LITERAL - 87)) | (1L << (INTEGER_LITERAL - 87)) | (1L << (HEXA_LITERAL - 87)) | (1L << (DECIMAL_LITERAL - 87)) | (1L << (DATETIME_LITERAL - 87)) | (1L << (TIME_LITERAL - 87)))) != 0) || _la==DATE_LITERAL || _la==PERIOD_LITERAL) {
 				{
 				setState(1003); 
 				((Constructor_expressionContext)_localctx).args = argument_assignment_list(0);
@@ -7511,7 +7511,7 @@ public class SParser extends AbstractParser {
 			match(LBRAK);
 			setState(1181);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << CODE) | (1L << DOCUMENT))) != 0) || ((((_la - 86)) & ~0x3f) == 0 && ((1L << (_la - 86)) & ((1L << (EXECUTE - 86)) | (1L << (FETCH - 86)) | (1L << (MUTABLE - 86)) | (1L << (NONE - 86)) | (1L << (NOT - 86)) | (1L << (READ - 86)) | (1L << (SELF - 86)) | (1L << (SORTED - 86)) | (1L << (THIS - 86)) | (1L << (BOOLEAN_LITERAL - 86)) | (1L << (CHAR_LITERAL - 86)) | (1L << (MIN_INTEGER - 86)) | (1L << (MAX_INTEGER - 86)) | (1L << (SYMBOL_IDENTIFIER - 86)) | (1L << (TYPE_IDENTIFIER - 86)) | (1L << (VARIABLE_IDENTIFIER - 86)) | (1L << (TEXT_LITERAL - 86)) | (1L << (INTEGER_LITERAL - 86)) | (1L << (HEXA_LITERAL - 86)) | (1L << (DECIMAL_LITERAL - 86)) | (1L << (DATETIME_LITERAL - 86)))) != 0) || ((((_la - 150)) & ~0x3f) == 0 && ((1L << (_la - 150)) & ((1L << (TIME_LITERAL - 150)) | (1L << (DATE_LITERAL - 150)) | (1L << (PERIOD_LITERAL - 150)))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << CODE) | (1L << DOCUMENT))) != 0) || ((((_la - 87)) & ~0x3f) == 0 && ((1L << (_la - 87)) & ((1L << (EXECUTE - 87)) | (1L << (FETCH - 87)) | (1L << (MUTABLE - 87)) | (1L << (NONE - 87)) | (1L << (NOT - 87)) | (1L << (READ - 87)) | (1L << (SELF - 87)) | (1L << (SORTED - 87)) | (1L << (THIS - 87)) | (1L << (BOOLEAN_LITERAL - 87)) | (1L << (CHAR_LITERAL - 87)) | (1L << (MIN_INTEGER - 87)) | (1L << (MAX_INTEGER - 87)) | (1L << (SYMBOL_IDENTIFIER - 87)) | (1L << (TYPE_IDENTIFIER - 87)) | (1L << (VARIABLE_IDENTIFIER - 87)) | (1L << (TEXT_LITERAL - 87)) | (1L << (INTEGER_LITERAL - 87)) | (1L << (HEXA_LITERAL - 87)) | (1L << (DECIMAL_LITERAL - 87)) | (1L << (DATETIME_LITERAL - 87)) | (1L << (TIME_LITERAL - 87)))) != 0) || _la==DATE_LITERAL || _la==PERIOD_LITERAL) {
 				{
 				setState(1180); 
 				((List_literalContext)_localctx).items = expression_list(0);
@@ -7565,7 +7565,7 @@ public class SParser extends AbstractParser {
 			match(LT);
 			setState(1187);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << CODE) | (1L << DOCUMENT))) != 0) || ((((_la - 86)) & ~0x3f) == 0 && ((1L << (_la - 86)) & ((1L << (EXECUTE - 86)) | (1L << (FETCH - 86)) | (1L << (MUTABLE - 86)) | (1L << (NONE - 86)) | (1L << (NOT - 86)) | (1L << (READ - 86)) | (1L << (SELF - 86)) | (1L << (SORTED - 86)) | (1L << (THIS - 86)) | (1L << (BOOLEAN_LITERAL - 86)) | (1L << (CHAR_LITERAL - 86)) | (1L << (MIN_INTEGER - 86)) | (1L << (MAX_INTEGER - 86)) | (1L << (SYMBOL_IDENTIFIER - 86)) | (1L << (TYPE_IDENTIFIER - 86)) | (1L << (VARIABLE_IDENTIFIER - 86)) | (1L << (TEXT_LITERAL - 86)) | (1L << (INTEGER_LITERAL - 86)) | (1L << (HEXA_LITERAL - 86)) | (1L << (DECIMAL_LITERAL - 86)) | (1L << (DATETIME_LITERAL - 86)))) != 0) || ((((_la - 150)) & ~0x3f) == 0 && ((1L << (_la - 150)) & ((1L << (TIME_LITERAL - 150)) | (1L << (DATE_LITERAL - 150)) | (1L << (PERIOD_LITERAL - 150)))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << CODE) | (1L << DOCUMENT))) != 0) || ((((_la - 87)) & ~0x3f) == 0 && ((1L << (_la - 87)) & ((1L << (EXECUTE - 87)) | (1L << (FETCH - 87)) | (1L << (MUTABLE - 87)) | (1L << (NONE - 87)) | (1L << (NOT - 87)) | (1L << (READ - 87)) | (1L << (SELF - 87)) | (1L << (SORTED - 87)) | (1L << (THIS - 87)) | (1L << (BOOLEAN_LITERAL - 87)) | (1L << (CHAR_LITERAL - 87)) | (1L << (MIN_INTEGER - 87)) | (1L << (MAX_INTEGER - 87)) | (1L << (SYMBOL_IDENTIFIER - 87)) | (1L << (TYPE_IDENTIFIER - 87)) | (1L << (VARIABLE_IDENTIFIER - 87)) | (1L << (TEXT_LITERAL - 87)) | (1L << (INTEGER_LITERAL - 87)) | (1L << (HEXA_LITERAL - 87)) | (1L << (DECIMAL_LITERAL - 87)) | (1L << (DATETIME_LITERAL - 87)) | (1L << (TIME_LITERAL - 87)))) != 0) || _la==DATE_LITERAL || _la==PERIOD_LITERAL) {
 				{
 				setState(1186); 
 				((Set_literalContext)_localctx).items = expression_list(0);
@@ -9730,152 +9730,152 @@ public class SParser extends AbstractParser {
 		return _localctx;
 	}
 
-	public static class Native_category_mappingContext extends ParserRuleContext {
-		public Native_category_mappingContext(ParserRuleContext parent, int invokingState) {
+	public static class Native_category_bindingContext extends ParserRuleContext {
+		public Native_category_bindingContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_native_category_mapping; }
+		@Override public int getRuleIndex() { return RULE_native_category_binding; }
 	 
-		public Native_category_mappingContext() { }
-		public void copyFrom(Native_category_mappingContext ctx) {
+		public Native_category_bindingContext() { }
+		public void copyFrom(Native_category_bindingContext ctx) {
 			super.copyFrom(ctx);
 		}
 	}
-	public static class CSharpCategoryMappingContext extends Native_category_mappingContext {
-		public Csharp_identifier_expressionContext mapping;
+	public static class Python2CategoryBindingContext extends Native_category_bindingContext {
+		public Python_category_bindingContext binding;
+		public TerminalNode PYTHON2() { return getToken(SParser.PYTHON2, 0); }
+		public Python_category_bindingContext python_category_binding() {
+			return getRuleContext(Python_category_bindingContext.class,0);
+		}
+		public Python2CategoryBindingContext(Native_category_bindingContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof SParserListener ) ((SParserListener)listener).enterPython2CategoryBinding(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof SParserListener ) ((SParserListener)listener).exitPython2CategoryBinding(this);
+		}
+	}
+	public static class CSharpCategoryBindingContext extends Native_category_bindingContext {
+		public Csharp_identifier_expressionContext binding;
 		public TerminalNode CSHARP() { return getToken(SParser.CSHARP, 0); }
 		public Csharp_identifier_expressionContext csharp_identifier_expression() {
 			return getRuleContext(Csharp_identifier_expressionContext.class,0);
 		}
-		public CSharpCategoryMappingContext(Native_category_mappingContext ctx) { copyFrom(ctx); }
+		public CSharpCategoryBindingContext(Native_category_bindingContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SParserListener ) ((SParserListener)listener).enterCSharpCategoryMapping(this);
+			if ( listener instanceof SParserListener ) ((SParserListener)listener).enterCSharpCategoryBinding(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SParserListener ) ((SParserListener)listener).exitCSharpCategoryMapping(this);
+			if ( listener instanceof SParserListener ) ((SParserListener)listener).exitCSharpCategoryBinding(this);
 		}
 	}
-	public static class JavaCategoryMappingContext extends Native_category_mappingContext {
-		public Java_class_identifier_expressionContext mapping;
+	public static class JavaScriptCategoryBindingContext extends Native_category_bindingContext {
+		public Javascript_category_bindingContext binding;
+		public TerminalNode JAVASCRIPT() { return getToken(SParser.JAVASCRIPT, 0); }
+		public Javascript_category_bindingContext javascript_category_binding() {
+			return getRuleContext(Javascript_category_bindingContext.class,0);
+		}
+		public JavaScriptCategoryBindingContext(Native_category_bindingContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof SParserListener ) ((SParserListener)listener).enterJavaScriptCategoryBinding(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof SParserListener ) ((SParserListener)listener).exitJavaScriptCategoryBinding(this);
+		}
+	}
+	public static class JavaCategoryBindingContext extends Native_category_bindingContext {
+		public Java_class_identifier_expressionContext binding;
 		public TerminalNode JAVA() { return getToken(SParser.JAVA, 0); }
 		public Java_class_identifier_expressionContext java_class_identifier_expression() {
 			return getRuleContext(Java_class_identifier_expressionContext.class,0);
 		}
-		public JavaCategoryMappingContext(Native_category_mappingContext ctx) { copyFrom(ctx); }
+		public JavaCategoryBindingContext(Native_category_bindingContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SParserListener ) ((SParserListener)listener).enterJavaCategoryMapping(this);
+			if ( listener instanceof SParserListener ) ((SParserListener)listener).enterJavaCategoryBinding(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SParserListener ) ((SParserListener)listener).exitJavaCategoryMapping(this);
+			if ( listener instanceof SParserListener ) ((SParserListener)listener).exitJavaCategoryBinding(this);
 		}
 	}
-	public static class JavaScriptCategoryMappingContext extends Native_category_mappingContext {
-		public Javascript_category_mappingContext mapping;
-		public TerminalNode JAVASCRIPT() { return getToken(SParser.JAVASCRIPT, 0); }
-		public Javascript_category_mappingContext javascript_category_mapping() {
-			return getRuleContext(Javascript_category_mappingContext.class,0);
-		}
-		public JavaScriptCategoryMappingContext(Native_category_mappingContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SParserListener ) ((SParserListener)listener).enterJavaScriptCategoryMapping(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SParserListener ) ((SParserListener)listener).exitJavaScriptCategoryMapping(this);
-		}
-	}
-	public static class Python3CategoryMappingContext extends Native_category_mappingContext {
-		public Python_category_mappingContext mapping;
+	public static class Python3CategoryBindingContext extends Native_category_bindingContext {
+		public Python_category_bindingContext binding;
 		public TerminalNode PYTHON3() { return getToken(SParser.PYTHON3, 0); }
-		public Python_category_mappingContext python_category_mapping() {
-			return getRuleContext(Python_category_mappingContext.class,0);
+		public Python_category_bindingContext python_category_binding() {
+			return getRuleContext(Python_category_bindingContext.class,0);
 		}
-		public Python3CategoryMappingContext(Native_category_mappingContext ctx) { copyFrom(ctx); }
+		public Python3CategoryBindingContext(Native_category_bindingContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SParserListener ) ((SParserListener)listener).enterPython3CategoryMapping(this);
+			if ( listener instanceof SParserListener ) ((SParserListener)listener).enterPython3CategoryBinding(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SParserListener ) ((SParserListener)listener).exitPython3CategoryMapping(this);
-		}
-	}
-	public static class Python2CategoryMappingContext extends Native_category_mappingContext {
-		public Python_category_mappingContext mapping;
-		public TerminalNode PYTHON2() { return getToken(SParser.PYTHON2, 0); }
-		public Python_category_mappingContext python_category_mapping() {
-			return getRuleContext(Python_category_mappingContext.class,0);
-		}
-		public Python2CategoryMappingContext(Native_category_mappingContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SParserListener ) ((SParserListener)listener).enterPython2CategoryMapping(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SParserListener ) ((SParserListener)listener).exitPython2CategoryMapping(this);
+			if ( listener instanceof SParserListener ) ((SParserListener)listener).exitPython3CategoryBinding(this);
 		}
 	}
 
-	public final Native_category_mappingContext native_category_mapping() throws RecognitionException {
-		Native_category_mappingContext _localctx = new Native_category_mappingContext(_ctx, getState());
-		enterRule(_localctx, 192, RULE_native_category_mapping);
+	public final Native_category_bindingContext native_category_binding() throws RecognitionException {
+		Native_category_bindingContext _localctx = new Native_category_bindingContext(_ctx, getState());
+		enterRule(_localctx, 192, RULE_native_category_binding);
 		try {
 			setState(1354);
 			switch (_input.LA(1)) {
 			case JAVA:
-				_localctx = new JavaCategoryMappingContext(_localctx);
+				_localctx = new JavaCategoryBindingContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(1344); 
 				match(JAVA);
 				setState(1345); 
-				((JavaCategoryMappingContext)_localctx).mapping = java_class_identifier_expression(0);
+				((JavaCategoryBindingContext)_localctx).binding = java_class_identifier_expression(0);
 				}
 				break;
 			case CSHARP:
-				_localctx = new CSharpCategoryMappingContext(_localctx);
+				_localctx = new CSharpCategoryBindingContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(1346); 
 				match(CSHARP);
 				setState(1347); 
-				((CSharpCategoryMappingContext)_localctx).mapping = csharp_identifier_expression(0);
+				((CSharpCategoryBindingContext)_localctx).binding = csharp_identifier_expression(0);
 				}
 				break;
 			case PYTHON2:
-				_localctx = new Python2CategoryMappingContext(_localctx);
+				_localctx = new Python2CategoryBindingContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(1348); 
 				match(PYTHON2);
 				setState(1349); 
-				((Python2CategoryMappingContext)_localctx).mapping = python_category_mapping();
+				((Python2CategoryBindingContext)_localctx).binding = python_category_binding();
 				}
 				break;
 			case PYTHON3:
-				_localctx = new Python3CategoryMappingContext(_localctx);
+				_localctx = new Python3CategoryBindingContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(1350); 
 				match(PYTHON3);
 				setState(1351); 
-				((Python3CategoryMappingContext)_localctx).mapping = python_category_mapping();
+				((Python3CategoryBindingContext)_localctx).binding = python_category_binding();
 				}
 				break;
 			case JAVASCRIPT:
-				_localctx = new JavaScriptCategoryMappingContext(_localctx);
+				_localctx = new JavaScriptCategoryBindingContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
 				setState(1352); 
 				match(JAVASCRIPT);
 				setState(1353); 
-				((JavaScriptCategoryMappingContext)_localctx).mapping = javascript_category_mapping();
+				((JavaScriptCategoryBindingContext)_localctx).binding = javascript_category_binding();
 				}
 				break;
 			default:
@@ -9893,7 +9893,7 @@ public class SParser extends AbstractParser {
 		return _localctx;
 	}
 
-	public static class Python_category_mappingContext extends ParserRuleContext {
+	public static class Python_category_bindingContext extends ParserRuleContext {
 		public IdentifierContext id_;
 		public Python_moduleContext module;
 		public IdentifierContext identifier() {
@@ -9902,34 +9902,34 @@ public class SParser extends AbstractParser {
 		public Python_moduleContext python_module() {
 			return getRuleContext(Python_moduleContext.class,0);
 		}
-		public Python_category_mappingContext(ParserRuleContext parent, int invokingState) {
+		public Python_category_bindingContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_python_category_mapping; }
+		@Override public int getRuleIndex() { return RULE_python_category_binding; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SParserListener ) ((SParserListener)listener).enterPython_category_mapping(this);
+			if ( listener instanceof SParserListener ) ((SParserListener)listener).enterPython_category_binding(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SParserListener ) ((SParserListener)listener).exitPython_category_mapping(this);
+			if ( listener instanceof SParserListener ) ((SParserListener)listener).exitPython_category_binding(this);
 		}
 	}
 
-	public final Python_category_mappingContext python_category_mapping() throws RecognitionException {
-		Python_category_mappingContext _localctx = new Python_category_mappingContext(_ctx, getState());
-		enterRule(_localctx, 194, RULE_python_category_mapping);
+	public final Python_category_bindingContext python_category_binding() throws RecognitionException {
+		Python_category_bindingContext _localctx = new Python_category_bindingContext(_ctx, getState());
+		enterRule(_localctx, 194, RULE_python_category_binding);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(1356); 
-			((Python_category_mappingContext)_localctx).id_ = identifier();
+			((Python_category_bindingContext)_localctx).id_ = identifier();
 			setState(1358);
 			switch ( getInterpreter().adaptivePredict(_input,82,_ctx) ) {
 			case 1:
 				{
 				setState(1357); 
-				((Python_category_mappingContext)_localctx).module = python_module();
+				((Python_category_bindingContext)_localctx).module = python_module();
 				}
 				break;
 			}
@@ -10062,7 +10062,7 @@ public class SParser extends AbstractParser {
 		return _localctx;
 	}
 
-	public static class Javascript_category_mappingContext extends ParserRuleContext {
+	public static class Javascript_category_bindingContext extends ParserRuleContext {
 		public IdentifierContext id_;
 		public Javascript_moduleContext module;
 		public IdentifierContext identifier() {
@@ -10071,34 +10071,34 @@ public class SParser extends AbstractParser {
 		public Javascript_moduleContext javascript_module() {
 			return getRuleContext(Javascript_moduleContext.class,0);
 		}
-		public Javascript_category_mappingContext(ParserRuleContext parent, int invokingState) {
+		public Javascript_category_bindingContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_javascript_category_mapping; }
+		@Override public int getRuleIndex() { return RULE_javascript_category_binding; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SParserListener ) ((SParserListener)listener).enterJavascript_category_mapping(this);
+			if ( listener instanceof SParserListener ) ((SParserListener)listener).enterJavascript_category_binding(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SParserListener ) ((SParserListener)listener).exitJavascript_category_mapping(this);
+			if ( listener instanceof SParserListener ) ((SParserListener)listener).exitJavascript_category_binding(this);
 		}
 	}
 
-	public final Javascript_category_mappingContext javascript_category_mapping() throws RecognitionException {
-		Javascript_category_mappingContext _localctx = new Javascript_category_mappingContext(_ctx, getState());
-		enterRule(_localctx, 200, RULE_javascript_category_mapping);
+	public final Javascript_category_bindingContext javascript_category_binding() throws RecognitionException {
+		Javascript_category_bindingContext _localctx = new Javascript_category_bindingContext(_ctx, getState());
+		enterRule(_localctx, 200, RULE_javascript_category_binding);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(1374); 
-			((Javascript_category_mappingContext)_localctx).id_ = identifier();
+			((Javascript_category_bindingContext)_localctx).id_ = identifier();
 			setState(1376);
 			switch ( getInterpreter().adaptivePredict(_input,84,_ctx) ) {
 			case 1:
 				{
 				setState(1375); 
-				((Javascript_category_mappingContext)_localctx).module = javascript_module();
+				((Javascript_category_bindingContext)_localctx).module = javascript_module();
 				}
 				break;
 			}
@@ -12317,7 +12317,7 @@ public class SParser extends AbstractParser {
 			match(LPAR);
 			setState(1566);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << CODE) | (1L << DOCUMENT))) != 0) || ((((_la - 86)) & ~0x3f) == 0 && ((1L << (_la - 86)) & ((1L << (EXECUTE - 86)) | (1L << (FETCH - 86)) | (1L << (MUTABLE - 86)) | (1L << (NONE - 86)) | (1L << (NOT - 86)) | (1L << (READ - 86)) | (1L << (SELF - 86)) | (1L << (SORTED - 86)) | (1L << (THIS - 86)) | (1L << (BOOLEAN_LITERAL - 86)) | (1L << (CHAR_LITERAL - 86)) | (1L << (MIN_INTEGER - 86)) | (1L << (MAX_INTEGER - 86)) | (1L << (SYMBOL_IDENTIFIER - 86)) | (1L << (TYPE_IDENTIFIER - 86)) | (1L << (VARIABLE_IDENTIFIER - 86)) | (1L << (TEXT_LITERAL - 86)) | (1L << (INTEGER_LITERAL - 86)) | (1L << (HEXA_LITERAL - 86)) | (1L << (DECIMAL_LITERAL - 86)) | (1L << (DATETIME_LITERAL - 86)))) != 0) || ((((_la - 150)) & ~0x3f) == 0 && ((1L << (_la - 150)) & ((1L << (TIME_LITERAL - 150)) | (1L << (DATE_LITERAL - 150)) | (1L << (PERIOD_LITERAL - 150)))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << CODE) | (1L << DOCUMENT))) != 0) || ((((_la - 87)) & ~0x3f) == 0 && ((1L << (_la - 87)) & ((1L << (EXECUTE - 87)) | (1L << (FETCH - 87)) | (1L << (MUTABLE - 87)) | (1L << (NONE - 87)) | (1L << (NOT - 87)) | (1L << (READ - 87)) | (1L << (SELF - 87)) | (1L << (SORTED - 87)) | (1L << (THIS - 87)) | (1L << (BOOLEAN_LITERAL - 87)) | (1L << (CHAR_LITERAL - 87)) | (1L << (MIN_INTEGER - 87)) | (1L << (MAX_INTEGER - 87)) | (1L << (SYMBOL_IDENTIFIER - 87)) | (1L << (TYPE_IDENTIFIER - 87)) | (1L << (VARIABLE_IDENTIFIER - 87)) | (1L << (TEXT_LITERAL - 87)) | (1L << (INTEGER_LITERAL - 87)) | (1L << (HEXA_LITERAL - 87)) | (1L << (DECIMAL_LITERAL - 87)) | (1L << (DATETIME_LITERAL - 87)) | (1L << (TIME_LITERAL - 87)))) != 0) || _la==DATE_LITERAL || _la==PERIOD_LITERAL) {
 				{
 				setState(1565); 
 				((Tuple_literalContext)_localctx).items = expression_tuple(0);
@@ -12371,7 +12371,7 @@ public class SParser extends AbstractParser {
 			match(LCURL);
 			setState(1572);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << CODE) | (1L << DOCUMENT))) != 0) || ((((_la - 86)) & ~0x3f) == 0 && ((1L << (_la - 86)) & ((1L << (EXECUTE - 86)) | (1L << (FETCH - 86)) | (1L << (MUTABLE - 86)) | (1L << (NONE - 86)) | (1L << (NOT - 86)) | (1L << (READ - 86)) | (1L << (SELF - 86)) | (1L << (SORTED - 86)) | (1L << (THIS - 86)) | (1L << (BOOLEAN_LITERAL - 86)) | (1L << (CHAR_LITERAL - 86)) | (1L << (MIN_INTEGER - 86)) | (1L << (MAX_INTEGER - 86)) | (1L << (SYMBOL_IDENTIFIER - 86)) | (1L << (TYPE_IDENTIFIER - 86)) | (1L << (VARIABLE_IDENTIFIER - 86)) | (1L << (TEXT_LITERAL - 86)) | (1L << (INTEGER_LITERAL - 86)) | (1L << (HEXA_LITERAL - 86)) | (1L << (DECIMAL_LITERAL - 86)) | (1L << (DATETIME_LITERAL - 86)))) != 0) || ((((_la - 150)) & ~0x3f) == 0 && ((1L << (_la - 150)) & ((1L << (TIME_LITERAL - 150)) | (1L << (DATE_LITERAL - 150)) | (1L << (PERIOD_LITERAL - 150)))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << CODE) | (1L << DOCUMENT))) != 0) || ((((_la - 87)) & ~0x3f) == 0 && ((1L << (_la - 87)) & ((1L << (EXECUTE - 87)) | (1L << (FETCH - 87)) | (1L << (MUTABLE - 87)) | (1L << (NONE - 87)) | (1L << (NOT - 87)) | (1L << (READ - 87)) | (1L << (SELF - 87)) | (1L << (SORTED - 87)) | (1L << (THIS - 87)) | (1L << (BOOLEAN_LITERAL - 87)) | (1L << (CHAR_LITERAL - 87)) | (1L << (MIN_INTEGER - 87)) | (1L << (MAX_INTEGER - 87)) | (1L << (SYMBOL_IDENTIFIER - 87)) | (1L << (TYPE_IDENTIFIER - 87)) | (1L << (VARIABLE_IDENTIFIER - 87)) | (1L << (TEXT_LITERAL - 87)) | (1L << (INTEGER_LITERAL - 87)) | (1L << (HEXA_LITERAL - 87)) | (1L << (DECIMAL_LITERAL - 87)) | (1L << (DATETIME_LITERAL - 87)) | (1L << (TIME_LITERAL - 87)))) != 0) || _la==DATE_LITERAL || _la==PERIOD_LITERAL) {
 				{
 				setState(1571); 
 				((Dict_literalContext)_localctx).items = dict_entry_list(0);
@@ -17798,7 +17798,7 @@ public class SParser extends AbstractParser {
 	public boolean sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
 		switch (ruleIndex) {
 		case 14: 
-			return native_category_mapping_list_sempred((Native_category_mapping_listContext)_localctx, predIndex);
+			return native_category_binding_list_sempred((Native_category_binding_listContext)_localctx, predIndex);
 		case 25: 
 			return callable_parent_sempred((Callable_parentContext)_localctx, predIndex);
 		case 35: 
@@ -17894,7 +17894,7 @@ public class SParser extends AbstractParser {
 		}
 		return true;
 	}
-	private boolean native_category_mapping_list_sempred(Native_category_mapping_listContext _localctx, int predIndex) {
+	private boolean native_category_binding_list_sempred(Native_category_binding_listContext _localctx, int predIndex) {
 		switch (predIndex) {
 		case 0: 
 			return precpred(_ctx, 1);
@@ -18455,7 +18455,7 @@ public class SParser extends AbstractParser {
 		"\u011e\u0120\u0122\u0124\u0126\u0128\u012a\u012c\u012e\u0130\u0132\u0134"+
 		"\u0136\u0138\u013a\u013c\u013e\u0140\u0142\u0144\u0146\u0148\u014a\u014c"+
 		"\u014e\u0150\u0152\u0154\u0156\u0158\u015a\u015c\u015e\u0160\u0162\u0164"+
-		"\u0166\u0168\u016a\u016c\u016e\u0170\2\t\3\2JK\3\2!\"\4\2{{\u0081\u0081"+
+		"\u0166\u0168\u016a\u016c\u016e\u0170\2\t\3\2KL\3\2!\"\4\2{{\u0081\u0081"+
 		"\4\2&&hh\b\2\63;vv\u0080\u0080\u0089\u0089\u008e\u0090\u0092\u0092\7\2"+
 		"\63;vv\u0080\u0080\u0089\u0089\u008e\u0090\7\2\63;vv\u0080\u0080\u0089"+
 		"\u0089\u008e\u0092\u081f\2\u0172\3\2\2\2\4\u0183\3\2\2\2\6\u018d\3\2\2"+
@@ -18506,13 +18506,13 @@ public class SParser extends AbstractParser {
 		"\2\2\u0158\u077b\3\2\2\2\u015a\u077d\3\2\2\2\u015c\u0786\3\2\2\2\u015e"+
 		"\u0788\3\2\2\2\u0160\u0795\3\2\2\2\u0162\u079a\3\2\2\2\u0164\u079c\3\2"+
 		"\2\2\u0166\u07a3\3\2\2\2\u0168\u07ae\3\2\2\2\u016a\u07b2\3\2\2\2\u016c"+
-		"\u07b9\3\2\2\2\u016e\u07c8\3\2\2\2\u0170\u07ca\3\2\2\2\u0172\u0173\7U"+
+		"\u07b9\3\2\2\2\u016e\u07c8\3\2\2\2\u0170\u07ca\3\2\2\2\u0172\u0173\7V"+
 		"\2\2\u0173\u0174\5\u00acW\2\u0174\u017b\7\25\2\2\u0175\u0178\5\u00acW"+
 		"\2\u0176\u0177\7\22\2\2\u0177\u0179\5 \21\2\u0178\u0176\3\2\2\2\u0178"+
 		"\u0179\3\2\2\2\u0179\u017c\3\2\2\2\u017a\u017c\5 \21\2\u017b\u0175\3\2"+
 		"\2\2\u017b\u017a\3\2\2\2\u017c\u017d\3\2\2\2\u017d\u017e\7\26\2\2\u017e"+
 		"\u017f\7\20\2\2\u017f\u0180\5v<\2\u0180\u0181\5\u0088E\2\u0181\u0182\5"+
-		"x=\2\u0182\3\3\2\2\2\u0183\u0184\7U\2\2\u0184\u0185\5\u00acW\2\u0185\u0186"+
+		"x=\2\u0182\3\3\2\2\2\u0183\u0184\7V\2\2\u0184\u0185\5\u00acW\2\u0185\u0186"+
 		"\7\25\2\2\u0186\u0187\5\u009aN\2\u0187\u0188\7\26\2\2\u0188\u0189\7\20"+
 		"\2\2\u0189\u018a\5v<\2\u018a\u018b\5\u0086D\2\u018b\u018c\5x=\2\u018c"+
 		"\5\3\2\2\2\u018d\u018e\5\u00aeX\2\u018e\u018f\7,\2\2\u018f\u0190\5R*\2"+
@@ -18533,15 +18533,15 @@ public class SParser extends AbstractParser {
 		"\5 \21\2\u01bd\u01be\7\26\2\2\u01be\u01bf\7\20\2\2\u01bf\u01c2\5v<\2\u01c0"+
 		"\u01c3\5\u00be`\2\u01c1\u01c3\7t\2\2\u01c2\u01c0\3\2\2\2\u01c2\u01c1\3"+
 		"\2\2\2\u01c3\u01c4\3\2\2\2\u01c4\u01c5\5x=\2\u01c5\17\3\2\2\2\u01c6\u01c7"+
-		"\5\u00a4S\2\u01c7\21\3\2\2\2\u01c8\u01c9\7N\2\2\u01c9\u01ca\7q\2\2\u01ca"+
+		"\5\u00a4S\2\u01c7\21\3\2\2\2\u01c8\u01c9\7O\2\2\u01c9\u01ca\7q\2\2\u01ca"+
 		"\u01cb\5\u0104\u0083\2\u01cb\u01cc\7\25\2\2\u01cc\u01cd\5\u00b4[\2\u01cd"+
 		"\u01d0\7\26\2\2\u01ce\u01cf\7\62\2\2\u01cf\u01d1\5\u0096L\2\u01d0\u01ce"+
 		"\3\2\2\2\u01d0\u01d1\3\2\2\2\u01d1\u01d2\3\2\2\2\u01d2\u01d3\7\20\2\2"+
 		"\u01d3\u01d4\5v<\2\u01d4\u01d5\5\u00dan\2\u01d5\u01d6\5x=\2\u01d6\23\3"+
-		"\2\2\2\u01d7\u01d8\7N\2\2\u01d8\u01d9\5\u00aaV\2\u01d9\u01da\7|\2\2\u01da"+
+		"\2\2\2\u01d7\u01d8\7O\2\2\u01d8\u01d9\5\u00aaV\2\u01d9\u01da\7|\2\2\u01da"+
 		"\u01db\7\25\2\2\u01db\u01dc\7\26\2\2\u01dc\u01dd\7\20\2\2\u01dd\u01de"+
 		"\5v<\2\u01de\u01df\5\u00dan\2\u01df\u01e0\5x=\2\u01e0\25\3\2\2\2\u01e1"+
-		"\u01e2\7N\2\2\u01e2\u01e3\5\u00aaV\2\u01e3\u01e4\7_\2\2\u01e4\u01e5\7"+
+		"\u01e2\7O\2\2\u01e2\u01e3\5\u00aaV\2\u01e3\u01e4\7`\2\2\u01e4\u01e5\7"+
 		"\25\2\2\u01e5\u01e6\7\26\2\2\u01e6\u01e7\7\20\2\2\u01e7\u01e8\5v<\2\u01e8"+
 		"\u01e9\5\u00dan\2\u01e9\u01ea\5x=\2\u01ea\27\3\2\2\2\u01eb\u01ec\7j\2"+
 		"\2\u01ec\u01ed\t\2\2\2\u01ed\u01ee\5\u00acW\2\u01ee\u01f0\7\25\2\2\u01ef"+
@@ -18551,31 +18551,31 @@ public class SParser extends AbstractParser {
 		"\u01f9\u01fa\7x\2\2\u01fa\u01fb\5\u00acW\2\u01fb\u01fd\7\25\2\2\u01fc"+
 		"\u01fe\5 \21\2\u01fd\u01fc\3\2\2\2\u01fd\u01fe\3\2\2\2\u01fe\u01ff\3\2"+
 		"\2\2\u01ff\u0200\7\26\2\2\u0200\u0201\7\20\2\2\u0201\u0202\5v<\2\u0202"+
-		"\u0203\5\34\17\2\u0203\u0204\5x=\2\u0204\33\3\2\2\2\u0205\u0206\7d\2\2"+
+		"\u0203\5\34\17\2\u0203\u0204\5x=\2\u0204\33\3\2\2\2\u0205\u0206\7H\2\2"+
 		"\u0206\u0207\7\20\2\2\u0207\u0208\5v<\2\u0208\u0209\5\36\20\2\u0209\u020a"+
 		"\5x=\2\u020a\35\3\2\2\2\u020b\u020c\b\20\1\2\u020c\u020d\5\u00c2b\2\u020d"+
 		"\u0214\3\2\2\2\u020e\u020f\f\3\2\2\u020f\u0210\5t;\2\u0210\u0211\5\u00c2"+
 		"b\2\u0211\u0213\3\2\2\2\u0212\u020e\3\2\2\2\u0213\u0216\3\2\2\2\u0214"+
 		"\u0212\3\2\2\2\u0214\u0215\3\2\2\2\u0215\37\3\2\2\2\u0216\u0214\3\2\2"+
 		"\2\u0217\u0218\5\u00ceh\2\u0218!\3\2\2\2\u0219\u021a\7?\2\2\u021a\u021b"+
-		"\7N\2\2\u021b\u021c\5\u00a6T\2\u021c\u021e\7\25\2\2\u021d\u021f\5\u00b0"+
+		"\7O\2\2\u021b\u021c\5\u00a6T\2\u021c\u021e\7\25\2\2\u021d\u021f\5\u00b0"+
 		"Y\2\u021e\u021d\3\2\2\2\u021e\u021f\3\2\2\2\u021f\u0220\3\2\2\2\u0220"+
 		"\u0223\7\26\2\2\u0221\u0222\7\62\2\2\u0222\u0224\5\u0096L\2\u0223\u0221"+
-		"\3\2\2\2\u0223\u0224\3\2\2\2\u0224#\3\2\2\2\u0225\u0226\7N\2\2\u0226\u0227"+
+		"\3\2\2\2\u0223\u0224\3\2\2\2\u0224#\3\2\2\2\u0225\u0226\7O\2\2\u0226\u0227"+
 		"\5\u00a6T\2\u0227\u0229\7\25\2\2\u0228\u022a\5\u00b0Y\2\u0229\u0228\3"+
 		"\2\2\2\u0229\u022a\3\2\2\2\u022a\u022b\3\2\2\2\u022b\u022e\7\26\2\2\u022c"+
 		"\u022d\7\62\2\2\u022d\u022f\5\u0096L\2\u022e\u022c\3\2\2\2\u022e\u022f"+
 		"\3\2\2\2\u022f\u0230\3\2\2\2\u0230\u0231\7\20\2\2\u0231\u0232\5v<\2\u0232"+
-		"\u0233\5\u00dan\2\u0233\u0234\5x=\2\u0234%\3\2\2\2\u0235\u0236\7N\2\2"+
+		"\u0233\5\u00dan\2\u0233\u0234\5x=\2\u0234%\3\2\2\2\u0235\u0236\7O\2\2"+
 		"\u0236\u0237\7j\2\2\u0237\u0238\5\u00a6T\2\u0238\u023a\7\25\2\2\u0239"+
 		"\u023b\5\u00b0Y\2\u023a\u0239\3\2\2\2\u023a\u023b\3\2\2\2\u023b\u023c"+
 		"\3\2\2\2\u023c\u023f\7\26\2\2\u023d\u023e\7\62\2\2\u023e\u0240\5\u00ba"+
 		"^\2\u023f\u023d\3\2\2\2\u023f\u0240\3\2\2\2\u0240\u0241\3\2\2\2\u0241"+
 		"\u0242\7\20\2\2\u0242\u0243\5v<\2\u0243\u0244\5\u00d2j\2\u0244\u0245\5"+
-		"x=\2\u0245\'\3\2\2\2\u0246\u0247\7N\2\2\u0247\u0248\7\u0080\2\2\u0248"+
+		"x=\2\u0245\'\3\2\2\2\u0246\u0247\7O\2\2\u0247\u0248\7\u0080\2\2\u0248"+
 		"\u0249\7\u0093\2\2\u0249\u024a\7\25\2\2\u024a\u024b\7\26\2\2\u024b\u024c"+
 		"\7\20\2\2\u024c\u024d\5v<\2\u024d\u024e\5\u00dan\2\u024e\u024f\5x=\2\u024f"+
-		"\u0250\5t;\2\u0250\u0251\7Y\2\2\u0251\u0257\7\20\2\2\u0252\u0253\5v<\2"+
+		"\u0250\5t;\2\u0250\u0251\7Z\2\2\u0251\u0257\7\20\2\2\u0252\u0253\5v<\2"+
 		"\u0253\u0254\5\u00dco\2\u0254\u0255\5x=\2\u0255\u0258\3\2\2\2\u0256\u0258"+
 		"\5\u00aeX\2\u0257\u0252\3\2\2\2\u0257\u0256\3\2\2\2\u0258)\3\2\2\2\u0259"+
 		"\u025a\5R*\2\u025a+\3\2\2\2\u025b\u025c\5\u00aaV\2\u025c\u025d\7\20\2"+
@@ -18613,123 +18613,123 @@ public class SParser extends AbstractParser {
 		"\2\2\u02b6\u02b7\5x=\2\u02b7=\3\2\2\2\u02b8\u02b9\7\u0086\2\2\u02b9\u02ba"+
 		"\5\u00e4s\2\u02ba\u02bb\7\20\2\2\u02bb\u02bc\5v<\2\u02bc\u02bd\5\u00da"+
 		"n\2\u02bd\u02be\5x=\2\u02be\u02c8\3\2\2\2\u02bf\u02c0\7\u0086\2\2\u02c0"+
-		"\u02c1\7a\2\2\u02c1\u02c2\5\u00e2r\2\u02c2\u02c3\7\20\2\2\u02c3\u02c4"+
+		"\u02c1\7b\2\2\u02c1\u02c2\5\u00e2r\2\u02c2\u02c3\7\20\2\2\u02c3\u02c4"+
 		"\5v<\2\u02c4\u02c5\5\u00dan\2\u02c5\u02c6\5x=\2\u02c6\u02c8\3\2\2\2\u02c7"+
-		"\u02b8\3\2\2\2\u02c7\u02bf\3\2\2\2\u02c8?\3\2\2\2\u02c9\u02ca\7]\2\2\u02ca"+
+		"\u02b8\3\2\2\2\u02c7\u02bf\3\2\2\2\u02c8?\3\2\2\2\u02c9\u02ca\7^\2\2\u02ca"+
 		"\u02cd\5\u00aaV\2\u02cb\u02cc\7\22\2\2\u02cc\u02ce\5\u00aaV\2\u02cd\u02cb"+
-		"\3\2\2\2\u02cd\u02ce\3\2\2\2\u02ce\u02cf\3\2\2\2\u02cf\u02d0\7a\2\2\u02d0"+
+		"\3\2\2\2\u02cd\u02ce\3\2\2\2\u02ce\u02cf\3\2\2\2\u02cf\u02d0\7b\2\2\u02d0"+
 		"\u02d1\5R*\2\u02d1\u02d2\7\20\2\2\u02d2\u02d3\5v<\2\u02d3\u02d4\5\u00da"+
-		"n\2\u02d4\u02d5\5x=\2\u02d5A\3\2\2\2\u02d6\u02d7\7Q\2\2\u02d7\u02d8\7"+
+		"n\2\u02d4\u02d5\5x=\2\u02d5A\3\2\2\2\u02d6\u02d7\7R\2\2\u02d7\u02d8\7"+
 		"\20\2\2\u02d8\u02d9\5v<\2\u02d9\u02da\5\u00dan\2\u02da\u02db\5x=\2\u02db"+
 		"\u02dc\5t;\2\u02dc\u02dd\7\u0088\2\2\u02dd\u02de\5R*\2\u02deC\3\2\2\2"+
 		"\u02df\u02e0\7\u0088\2\2\u02e0\u02e1\5R*\2\u02e1\u02e2\7\20\2\2\u02e2"+
 		"\u02e3\5v<\2\u02e3\u02e4\5\u00dan\2\u02e4\u02e5\5x=\2\u02e5E\3\2\2\2\u02e6"+
-		"\u02e7\7`\2\2\u02e7\u02e8\5R*\2\u02e8\u02e9\7\20\2\2\u02e9\u02ea\5v<\2"+
+		"\u02e7\7a\2\2\u02e7\u02e8\5R*\2\u02e8\u02e9\7\20\2\2\u02e9\u02ea\5v<\2"+
 		"\u02ea\u02eb\5\u00dan\2\u02eb\u02ef\5x=\2\u02ec\u02ed\5t;\2\u02ed\u02ee"+
 		"\5H%\2\u02ee\u02f0\3\2\2\2\u02ef\u02ec\3\2\2\2\u02ef\u02f0\3\2\2\2\u02f0"+
-		"\u02f8\3\2\2\2\u02f1\u02f2\5t;\2\u02f2\u02f3\7T\2\2\u02f3\u02f4\7\20\2"+
+		"\u02f8\3\2\2\2\u02f1\u02f2\5t;\2\u02f2\u02f3\7U\2\2\u02f3\u02f4\7\20\2"+
 		"\2\u02f4\u02f5\5v<\2\u02f5\u02f6\5\u00dan\2\u02f6\u02f7\5x=\2\u02f7\u02f9"+
 		"\3\2\2\2\u02f8\u02f1\3\2\2\2\u02f8\u02f9\3\2\2\2\u02f9G\3\2\2\2\u02fa"+
-		"\u02fb\b%\1\2\u02fb\u02fc\7T\2\2\u02fc\u02fd\7`\2\2\u02fd\u02fe\5R*\2"+
+		"\u02fb\b%\1\2\u02fb\u02fc\7U\2\2\u02fc\u02fd\7a\2\2\u02fd\u02fe\5R*\2"+
 		"\u02fe\u02ff\7\20\2\2\u02ff\u0300\5v<\2\u0300\u0301\5\u00dan\2\u0301\u0302"+
 		"\5x=\2\u0302\u030f\3\2\2\2\u0303\u0304\f\3\2\2\u0304\u0305\5t;\2\u0305"+
-		"\u0306\7T\2\2\u0306\u0307\7`\2\2\u0307\u0308\5R*\2\u0308\u0309\7\20\2"+
+		"\u0306\7U\2\2\u0306\u0307\7a\2\2\u0307\u0308\5R*\2\u0308\u0309\7\20\2"+
 		"\2\u0309\u030a\5v<\2\u030a\u030b\5\u00dan\2\u030b\u030c\5x=\2\u030c\u030e"+
 		"\3\2\2\2\u030d\u0303\3\2\2\2\u030e\u0311\3\2\2\2\u030f\u030d\3\2\2\2\u030f"+
 		"\u0310\3\2\2\2\u0310I\3\2\2\2\u0311\u030f\3\2\2\2\u0312\u0313\7u\2\2\u0313"+
 		"\u0314\5R*\2\u0314K\3\2\2\2\u0315\u0316\7\u0084\2\2\u0316\u0317\5\u00aa"+
 		"V\2\u0317\u0318\7\20\2\2\u0318\u0319\5v<\2\u0319\u031a\5\u00dan\2\u031a"+
 		"\u031b\5x=\2\u031b\u031d\5r:\2\u031c\u031e\5\u00e0q\2\u031d\u031c\3\2"+
-		"\2\2\u031d\u031e\3\2\2\2\u031e\u0326\3\2\2\2\u031f\u0320\7W\2\2\u0320"+
+		"\2\2\u031d\u031e\3\2\2\2\u031e\u0326\3\2\2\2\u031f\u0320\7X\2\2\u0320"+
 		"\u0321\7\20\2\2\u0321\u0322\5v<\2\u0322\u0323\5\u00dan\2\u0323\u0324\5"+
 		"x=\2\u0324\u0325\5r:\2\u0325\u0327\3\2\2\2\u0326\u031f\3\2\2\2\u0326\u0327"+
-		"\3\2\2\2\u0327\u032f\3\2\2\2\u0328\u0329\7\\\2\2\u0329\u032a\7\20\2\2"+
-		"\u032a\u032b\5v<\2\u032b\u032c\5\u00dan\2\u032c\u032d\5x=\2\u032d\u032e"+
-		"\5r:\2\u032e\u0330\3\2\2\2\u032f\u0328\3\2\2\2\u032f\u0330\3\2\2\2\u0330"+
-		"\u0331\3\2\2\2\u0331\u0332\5r:\2\u0332M\3\2\2\2\u0333\u0334\7W\2\2\u0334"+
-		"\u0335\5\u00aeX\2\u0335\u0336\7\20\2\2\u0336\u0337\5v<\2\u0337\u0338\5"+
-		"\u00dan\2\u0338\u0339\5x=\2\u0339\u033a\5r:\2\u033a\u0347\3\2\2\2\u033b"+
-		"\u033c\7W\2\2\u033c\u033d\7a\2\2\u033d\u033e\7\27\2\2\u033e\u033f\5\u008a"+
-		"F\2\u033f\u0340\7\30\2\2\u0340\u0341\7\20\2\2\u0341\u0342\5v<\2\u0342"+
-		"\u0343\5\u00dan\2\u0343\u0344\5x=\2\u0344\u0345\5r:\2\u0345\u0347\3\2"+
-		"\2\2\u0346\u0333\3\2\2\2\u0346\u033b\3\2\2\2\u0347O\3\2\2\2\u0348\u034a"+
-		"\7y\2\2\u0349\u034b\5R*\2\u034a\u0349\3\2\2\2\u034a\u034b\3\2\2\2\u034b"+
-		"Q\3\2\2\2\u034c\u034d\b*\1\2\u034d\u034e\7\"\2\2\u034e\u035f\5R*!\u034f"+
-		"\u0350\7l\2\2\u0350\u035f\5R* \u0351\u035f\5V,\2\u0352\u035f\5X-\2\u0353"+
-		"\u0354\7=\2\2\u0354\u0355\7\25\2\2\u0355\u0356\5R*\2\u0356\u0357\7\26"+
-		"\2\2\u0357\u035f\3\2\2\2\u0358\u0359\7X\2\2\u0359\u035a\7\25\2\2\u035a"+
-		"\u035b\5\u00aaV\2\u035b\u035c\7\26\2\2\u035c\u035f\3\2\2\2\u035d\u035f"+
-		"\5T+\2\u035e\u034c\3\2\2\2\u035e\u034f\3\2\2\2\u035e\u0351\3\2\2\2\u035e"+
-		"\u0352\3\2\2\2\u035e\u0353\3\2\2\2\u035e\u0358\3\2\2\2\u035e\u035d\3\2"+
-		"\2\2\u035f\u03c0\3\2\2\2\u0360\u0361\f\37\2\2\u0361\u0362\5\u010e\u0088"+
-		"\2\u0362\u0363\5R* \u0363\u03bf\3\2\2\2\u0364\u0365\f\36\2\2\u0365\u0366"+
-		"\5\u0110\u0089\2\u0366\u0367\5R*\37\u0367\u03bf\3\2\2\2\u0368\u0369\f"+
-		"\35\2\2\u0369\u036a\5\u0114\u008b\2\u036a\u036b\5R*\36\u036b\u03bf\3\2"+
-		"\2\2\u036c\u036d\f\34\2\2\u036d\u036e\5\u0112\u008a\2\u036e\u036f\5R*"+
-		"\35\u036f\u03bf\3\2\2\2\u0370\u0371\f\33\2\2\u0371\u0372\t\3\2\2\u0372"+
-		"\u03bf\5R*\34\u0373\u0374\f\32\2\2\u0374\u0375\7)\2\2\u0375\u03bf\5R*"+
-		"\33\u0376\u0377\f\31\2\2\u0377\u0378\7*\2\2\u0378\u03bf\5R*\32\u0379\u037a"+
-		"\f\30\2\2\u037a\u037b\7\'\2\2\u037b\u03bf\5R*\31\u037c\u037d\f\27\2\2"+
-		"\u037d\u037e\7(\2\2\u037e\u03bf\5R*\30\u037f\u0380\f\24\2\2\u0380\u0381"+
-		"\7.\2\2\u0381\u03bf\5R*\25\u0382\u0383\f\23\2\2\u0383\u0384\7-\2\2\u0384"+
-		"\u03bf\5R*\24\u0385\u0386\f\22\2\2\u0386\u0387\7/\2\2\u0387\u03bf\5R*"+
-		"\23\u0388\u0389\f\21\2\2\u0389\u038a\7r\2\2\u038a\u03bf\5R*\22\u038b\u038c"+
-		"\f\20\2\2\u038c\u038d\7B\2\2\u038d\u03bf\5R*\21\u038e\u038f\f\17\2\2\u038f"+
-		"\u0390\7`\2\2\u0390\u0391\5R*\2\u0391\u0392\7T\2\2\u0392\u0393\5R*\20"+
-		"\u0393\u03bf\3\2\2\2\u0394\u0395\f\r\2\2\u0395\u0396\7a\2\2\u0396\u03bf"+
-		"\5R*\16\u0397\u0398\f\f\2\2\u0398\u0399\7M\2\2\u0399\u03bf\5R*\r\u039a"+
-		"\u039b\f\13\2\2\u039b\u039c\7M\2\2\u039c\u039d\7@\2\2\u039d\u03bf\5R*"+
-		"\f\u039e\u039f\f\n\2\2\u039f\u03a0\7M\2\2\u03a0\u03a1\7C\2\2\u03a1\u03bf"+
-		"\5R*\13\u03a2\u03a3\f\t\2\2\u03a3\u03a4\7l\2\2\u03a4\u03a5\7a\2\2\u03a5"+
-		"\u03bf\5R*\n\u03a6\u03a7\f\b\2\2\u03a7\u03a8\7l\2\2\u03a8\u03a9\7M\2\2"+
-		"\u03a9\u03bf\5R*\t\u03aa\u03ab\f\7\2\2\u03ab\u03ac\7l\2\2\u03ac\u03ad"+
-		"\7M\2\2\u03ad\u03ae\7@\2\2\u03ae\u03bf\5R*\b\u03af\u03b0\f\6\2\2\u03b0"+
-		"\u03b1\7l\2\2\u03b1\u03b2\7M\2\2\u03b2\u03b3\7C\2\2\u03b3\u03bf\5R*\7"+
-		"\u03b4\u03b5\f\26\2\2\u03b5\u03b6\7c\2\2\u03b6\u03b7\7l\2\2\u03b7\u03bf"+
-		"\5\u0102\u0082\2\u03b8\u03b9\f\25\2\2\u03b9\u03ba\7c\2\2\u03ba\u03bf\5"+
-		"\u0102\u0082\2\u03bb\u03bc\f\16\2\2\u03bc\u03bd\7D\2\2\u03bd\u03bf\5\u00ba"+
-		"^\2\u03be\u0360\3\2\2\2\u03be\u0364\3\2\2\2\u03be\u0368\3\2\2\2\u03be"+
-		"\u036c\3\2\2\2\u03be\u0370\3\2\2\2\u03be\u0373\3\2\2\2\u03be\u0376\3\2"+
-		"\2\2\u03be\u0379\3\2\2\2\u03be\u037c\3\2\2\2\u03be\u037f\3\2\2\2\u03be"+
-		"\u0382\3\2\2\2\u03be\u0385\3\2\2\2\u03be\u0388\3\2\2\2\u03be\u038b\3\2"+
-		"\2\2\u03be\u038e\3\2\2\2\u03be\u0394\3\2\2\2\u03be\u0397\3\2\2\2\u03be"+
-		"\u039a\3\2\2\2\u03be\u039e\3\2\2\2\u03be\u03a2\3\2\2\2\u03be\u03a6\3\2"+
-		"\2\2\u03be\u03aa\3\2\2\2\u03be\u03af\3\2\2\2\u03be\u03b4\3\2\2\2\u03be"+
-		"\u03b8\3\2\2\2\u03be\u03bb\3\2\2\2\u03bf\u03c2\3\2\2\2\u03c0\u03be\3\2"+
-		"\2\2\u03c0\u03c1\3\2\2\2\u03c1S\3\2\2\2\u03c2\u03c0\3\2\2\2\u03c3\u03c4"+
-		"\5\u00acW\2\u03c4U\3\2\2\2\u03c5\u03c6\b,\1\2\u03c6\u03c7\5\u00e8u\2\u03c7"+
-		"\u03cc\3\2\2\2\u03c8\u03c9\f\3\2\2\u03c9\u03cb\5Z.\2\u03ca\u03c8\3\2\2"+
-		"\2\u03cb\u03ce\3\2\2\2\u03cc\u03ca\3\2\2\2\u03cc\u03cd\3\2\2\2\u03cdW"+
-		"\3\2\2\2\u03ce\u03cc\3\2\2\2\u03cf\u03d6\5\\/\2\u03d0\u03d6\5h\65\2\u03d1"+
-		"\u03d6\5d\63\2\u03d2\u03d6\5j\66\2\u03d3\u03d6\5\60\31\2\u03d4\u03d6\5"+
-		"^\60\2\u03d5\u03cf\3\2\2\2\u03d5\u03d0\3\2\2\2\u03d5\u03d1\3\2\2\2\u03d5"+
-		"\u03d2\3\2\2\2\u03d5\u03d3\3\2\2\2\u03d5\u03d4\3\2\2\2\u03d6Y\3\2\2\2"+
-		"\u03d7\u03d8\6. \3\u03d8\u03d9\7\24\2\2\u03d9\u03e5\5\u00aaV\2\u03da\u03db"+
-		"\6.!\3\u03db\u03dc\7\27\2\2\u03dc\u03dd\5\u00fc\177\2\u03dd\u03de\7\30"+
-		"\2\2\u03de\u03e5\3\2\2\2\u03df\u03e0\6.\"\3\u03e0\u03e1\7\27\2\2\u03e1"+
-		"\u03e2\5R*\2\u03e2\u03e3\7\30\2\2\u03e3\u03e5\3\2\2\2\u03e4\u03d7\3\2"+
-		"\2\2\u03e4\u03da\3\2\2\2\u03e4\u03df\3\2\2\2\u03e5[\3\2\2\2\u03e6\u03e7"+
-		"\5\u00a0Q\2\u03e7]\3\2\2\2\u03e8\u03ea\7i\2\2\u03e9\u03e8\3\2\2\2\u03e9"+
-		"\u03ea\3\2\2\2\u03ea\u03eb\3\2\2\2\u03eb\u03ec\5\u009cO\2\u03ec\u03ee"+
-		"\7\25\2\2\u03ed\u03ef\5`\61\2\u03ee\u03ed\3\2\2\2\u03ee\u03ef\3\2\2\2"+
-		"\u03ef\u03f0\3\2\2\2\u03f0\u03f1\7\26\2\2\u03f1_\3\2\2\2\u03f2\u03f3\b"+
-		"\61\1\2\u03f3\u03f4\5R*\2\u03f4\u03f5\6\61#\3\u03f5\u03f8\3\2\2\2\u03f6"+
-		"\u03f8\5b\62\2\u03f7\u03f2\3\2\2\2\u03f7\u03f6\3\2\2\2\u03f8\u03fe\3\2"+
-		"\2\2\u03f9\u03fa\f\3\2\2\u03fa\u03fb\7\22\2\2\u03fb\u03fd\5b\62\2\u03fc"+
-		"\u03f9\3\2\2\2\u03fd\u0400\3\2\2\2\u03fe\u03fc\3\2\2\2\u03fe\u03ff\3\2"+
-		"\2\2\u03ffa\3\2\2\2\u0400\u03fe\3\2\2\2\u0401\u0402\5\u00aaV\2\u0402\u0403"+
-		"\5\u010c\u0087\2\u0403\u0404\5R*\2\u0404c\3\2\2\2\u0405\u0406\7v\2\2\u0406"+
-		"\u0407\7^\2\2\u0407\u0408\5R*\2\u0408e\3\2\2\2\u0409\u040a\7\u0089\2\2"+
-		"\u040a\u040b\5R*\2\u040b\u040c\7\u0083\2\2\u040c\u040d\5R*\2\u040dg\3"+
-		"\2\2\2\u040e\u040f\7[\2\2\u040f\u0410\5\u00aaV\2\u0410\u0411\7^\2\2\u0411"+
-		"\u0412\5R*\2\u0412\u0413\7\u0087\2\2\u0413\u0414\5R*\2\u0414i\3\2\2\2"+
-		"\u0415\u0416\7~\2\2\u0416\u0417\7\25\2\2\u0417\u041d\5V,\2\u0418\u0419"+
-		"\7\22\2\2\u0419\u041a\5\u0106\u0084\2\u041a\u041b\7,\2\2\u041b\u041c\5"+
-		"V,\2\u041c\u041e\3\2\2\2\u041d\u0418\3\2\2\2\u041d\u041e\3\2\2\2\u041e"+
-		"\u041f\3\2\2\2\u041f\u0420\7\26\2\2\u0420k\3\2\2\2\u0421\u0422\5\u0100"+
-		"\u0081\2\u0422\u0423\5\u010c\u0087\2\u0423\u0424\5R*\2\u0424m\3\2\2\2"+
-		"\u0425\u0426\68%\3\u0426\u0427\7\24\2\2\u0427\u042e\5\u00aaV\2\u0428\u0429"+
-		"\68&\3\u0429\u042a\7\27\2\2\u042a\u042b\5R*\2\u042b\u042c\7\30\2\2\u042c"+
+		"\3\2\2\2\u0327\u032f\3\2\2\2\u0328\u0329\7]\2\2\u0329\u032a\7\20\2\2\u032a"+
+		"\u032b\5v<\2\u032b\u032c\5\u00dan\2\u032c\u032d\5x=\2\u032d\u032e\5r:"+
+		"\2\u032e\u0330\3\2\2\2\u032f\u0328\3\2\2\2\u032f\u0330\3\2\2\2\u0330\u0331"+
+		"\3\2\2\2\u0331\u0332\5r:\2\u0332M\3\2\2\2\u0333\u0334\7X\2\2\u0334\u0335"+
+		"\5\u00aeX\2\u0335\u0336\7\20\2\2\u0336\u0337\5v<\2\u0337\u0338\5\u00da"+
+		"n\2\u0338\u0339\5x=\2\u0339\u033a\5r:\2\u033a\u0347\3\2\2\2\u033b\u033c"+
+		"\7X\2\2\u033c\u033d\7b\2\2\u033d\u033e\7\27\2\2\u033e\u033f\5\u008aF\2"+
+		"\u033f\u0340\7\30\2\2\u0340\u0341\7\20\2\2\u0341\u0342\5v<\2\u0342\u0343"+
+		"\5\u00dan\2\u0343\u0344\5x=\2\u0344\u0345\5r:\2\u0345\u0347\3\2\2\2\u0346"+
+		"\u0333\3\2\2\2\u0346\u033b\3\2\2\2\u0347O\3\2\2\2\u0348\u034a\7y\2\2\u0349"+
+		"\u034b\5R*\2\u034a\u0349\3\2\2\2\u034a\u034b\3\2\2\2\u034bQ\3\2\2\2\u034c"+
+		"\u034d\b*\1\2\u034d\u034e\7\"\2\2\u034e\u035f\5R*!\u034f\u0350\7l\2\2"+
+		"\u0350\u035f\5R* \u0351\u035f\5V,\2\u0352\u035f\5X-\2\u0353\u0354\7=\2"+
+		"\2\u0354\u0355\7\25\2\2\u0355\u0356\5R*\2\u0356\u0357\7\26\2\2\u0357\u035f"+
+		"\3\2\2\2\u0358\u0359\7Y\2\2\u0359\u035a\7\25\2\2\u035a\u035b\5\u00aaV"+
+		"\2\u035b\u035c\7\26\2\2\u035c\u035f\3\2\2\2\u035d\u035f\5T+\2\u035e\u034c"+
+		"\3\2\2\2\u035e\u034f\3\2\2\2\u035e\u0351\3\2\2\2\u035e\u0352\3\2\2\2\u035e"+
+		"\u0353\3\2\2\2\u035e\u0358\3\2\2\2\u035e\u035d\3\2\2\2\u035f\u03c0\3\2"+
+		"\2\2\u0360\u0361\f\37\2\2\u0361\u0362\5\u010e\u0088\2\u0362\u0363\5R*"+
+		" \u0363\u03bf\3\2\2\2\u0364\u0365\f\36\2\2\u0365\u0366\5\u0110\u0089\2"+
+		"\u0366\u0367\5R*\37\u0367\u03bf\3\2\2\2\u0368\u0369\f\35\2\2\u0369\u036a"+
+		"\5\u0114\u008b\2\u036a\u036b\5R*\36\u036b\u03bf\3\2\2\2\u036c\u036d\f"+
+		"\34\2\2\u036d\u036e\5\u0112\u008a\2\u036e\u036f\5R*\35\u036f\u03bf\3\2"+
+		"\2\2\u0370\u0371\f\33\2\2\u0371\u0372\t\3\2\2\u0372\u03bf\5R*\34\u0373"+
+		"\u0374\f\32\2\2\u0374\u0375\7)\2\2\u0375\u03bf\5R*\33\u0376\u0377\f\31"+
+		"\2\2\u0377\u0378\7*\2\2\u0378\u03bf\5R*\32\u0379\u037a\f\30\2\2\u037a"+
+		"\u037b\7\'\2\2\u037b\u03bf\5R*\31\u037c\u037d\f\27\2\2\u037d\u037e\7("+
+		"\2\2\u037e\u03bf\5R*\30\u037f\u0380\f\24\2\2\u0380\u0381\7.\2\2\u0381"+
+		"\u03bf\5R*\25\u0382\u0383\f\23\2\2\u0383\u0384\7-\2\2\u0384\u03bf\5R*"+
+		"\24\u0385\u0386\f\22\2\2\u0386\u0387\7/\2\2\u0387\u03bf\5R*\23\u0388\u0389"+
+		"\f\21\2\2\u0389\u038a\7r\2\2\u038a\u03bf\5R*\22\u038b\u038c\f\20\2\2\u038c"+
+		"\u038d\7B\2\2\u038d\u03bf\5R*\21\u038e\u038f\f\17\2\2\u038f\u0390\7a\2"+
+		"\2\u0390\u0391\5R*\2\u0391\u0392\7U\2\2\u0392\u0393\5R*\20\u0393\u03bf"+
+		"\3\2\2\2\u0394\u0395\f\r\2\2\u0395\u0396\7b\2\2\u0396\u03bf\5R*\16\u0397"+
+		"\u0398\f\f\2\2\u0398\u0399\7N\2\2\u0399\u03bf\5R*\r\u039a\u039b\f\13\2"+
+		"\2\u039b\u039c\7N\2\2\u039c\u039d\7@\2\2\u039d\u03bf\5R*\f\u039e\u039f"+
+		"\f\n\2\2\u039f\u03a0\7N\2\2\u03a0\u03a1\7C\2\2\u03a1\u03bf\5R*\13\u03a2"+
+		"\u03a3\f\t\2\2\u03a3\u03a4\7l\2\2\u03a4\u03a5\7b\2\2\u03a5\u03bf\5R*\n"+
+		"\u03a6\u03a7\f\b\2\2\u03a7\u03a8\7l\2\2\u03a8\u03a9\7N\2\2\u03a9\u03bf"+
+		"\5R*\t\u03aa\u03ab\f\7\2\2\u03ab\u03ac\7l\2\2\u03ac\u03ad\7N\2\2\u03ad"+
+		"\u03ae\7@\2\2\u03ae\u03bf\5R*\b\u03af\u03b0\f\6\2\2\u03b0\u03b1\7l\2\2"+
+		"\u03b1\u03b2\7N\2\2\u03b2\u03b3\7C\2\2\u03b3\u03bf\5R*\7\u03b4\u03b5\f"+
+		"\26\2\2\u03b5\u03b6\7d\2\2\u03b6\u03b7\7l\2\2\u03b7\u03bf\5\u0102\u0082"+
+		"\2\u03b8\u03b9\f\25\2\2\u03b9\u03ba\7d\2\2\u03ba\u03bf\5\u0102\u0082\2"+
+		"\u03bb\u03bc\f\16\2\2\u03bc\u03bd\7D\2\2\u03bd\u03bf\5\u00ba^\2\u03be"+
+		"\u0360\3\2\2\2\u03be\u0364\3\2\2\2\u03be\u0368\3\2\2\2\u03be\u036c\3\2"+
+		"\2\2\u03be\u0370\3\2\2\2\u03be\u0373\3\2\2\2\u03be\u0376\3\2\2\2\u03be"+
+		"\u0379\3\2\2\2\u03be\u037c\3\2\2\2\u03be\u037f\3\2\2\2\u03be\u0382\3\2"+
+		"\2\2\u03be\u0385\3\2\2\2\u03be\u0388\3\2\2\2\u03be\u038b\3\2\2\2\u03be"+
+		"\u038e\3\2\2\2\u03be\u0394\3\2\2\2\u03be\u0397\3\2\2\2\u03be\u039a\3\2"+
+		"\2\2\u03be\u039e\3\2\2\2\u03be\u03a2\3\2\2\2\u03be\u03a6\3\2\2\2\u03be"+
+		"\u03aa\3\2\2\2\u03be\u03af\3\2\2\2\u03be\u03b4\3\2\2\2\u03be\u03b8\3\2"+
+		"\2\2\u03be\u03bb\3\2\2\2\u03bf\u03c2\3\2\2\2\u03c0\u03be\3\2\2\2\u03c0"+
+		"\u03c1\3\2\2\2\u03c1S\3\2\2\2\u03c2\u03c0\3\2\2\2\u03c3\u03c4\5\u00ac"+
+		"W\2\u03c4U\3\2\2\2\u03c5\u03c6\b,\1\2\u03c6\u03c7\5\u00e8u\2\u03c7\u03cc"+
+		"\3\2\2\2\u03c8\u03c9\f\3\2\2\u03c9\u03cb\5Z.\2\u03ca\u03c8\3\2\2\2\u03cb"+
+		"\u03ce\3\2\2\2\u03cc\u03ca\3\2\2\2\u03cc\u03cd\3\2\2\2\u03cdW\3\2\2\2"+
+		"\u03ce\u03cc\3\2\2\2\u03cf\u03d6\5\\/\2\u03d0\u03d6\5h\65\2\u03d1\u03d6"+
+		"\5d\63\2\u03d2\u03d6\5j\66\2\u03d3\u03d6\5\60\31\2\u03d4\u03d6\5^\60\2"+
+		"\u03d5\u03cf\3\2\2\2\u03d5\u03d0\3\2\2\2\u03d5\u03d1\3\2\2\2\u03d5\u03d2"+
+		"\3\2\2\2\u03d5\u03d3\3\2\2\2\u03d5\u03d4\3\2\2\2\u03d6Y\3\2\2\2\u03d7"+
+		"\u03d8\6. \3\u03d8\u03d9\7\24\2\2\u03d9\u03e5\5\u00aaV\2\u03da\u03db\6"+
+		".!\3\u03db\u03dc\7\27\2\2\u03dc\u03dd\5\u00fc\177\2\u03dd\u03de\7\30\2"+
+		"\2\u03de\u03e5\3\2\2\2\u03df\u03e0\6.\"\3\u03e0\u03e1\7\27\2\2\u03e1\u03e2"+
+		"\5R*\2\u03e2\u03e3\7\30\2\2\u03e3\u03e5\3\2\2\2\u03e4\u03d7\3\2\2\2\u03e4"+
+		"\u03da\3\2\2\2\u03e4\u03df\3\2\2\2\u03e5[\3\2\2\2\u03e6\u03e7\5\u00a0"+
+		"Q\2\u03e7]\3\2\2\2\u03e8\u03ea\7i\2\2\u03e9\u03e8\3\2\2\2\u03e9\u03ea"+
+		"\3\2\2\2\u03ea\u03eb\3\2\2\2\u03eb\u03ec\5\u009cO\2\u03ec\u03ee\7\25\2"+
+		"\2\u03ed\u03ef\5`\61\2\u03ee\u03ed\3\2\2\2\u03ee\u03ef\3\2\2\2\u03ef\u03f0"+
+		"\3\2\2\2\u03f0\u03f1\7\26\2\2\u03f1_\3\2\2\2\u03f2\u03f3\b\61\1\2\u03f3"+
+		"\u03f4\5R*\2\u03f4\u03f5\6\61#\3\u03f5\u03f8\3\2\2\2\u03f6\u03f8\5b\62"+
+		"\2\u03f7\u03f2\3\2\2\2\u03f7\u03f6\3\2\2\2\u03f8\u03fe\3\2\2\2\u03f9\u03fa"+
+		"\f\3\2\2\u03fa\u03fb\7\22\2\2\u03fb\u03fd\5b\62\2\u03fc\u03f9\3\2\2\2"+
+		"\u03fd\u0400\3\2\2\2\u03fe\u03fc\3\2\2\2\u03fe\u03ff\3\2\2\2\u03ffa\3"+
+		"\2\2\2\u0400\u03fe\3\2\2\2\u0401\u0402\5\u00aaV\2\u0402\u0403\5\u010c"+
+		"\u0087\2\u0403\u0404\5R*\2\u0404c\3\2\2\2\u0405\u0406\7v\2\2\u0406\u0407"+
+		"\7_\2\2\u0407\u0408\5R*\2\u0408e\3\2\2\2\u0409\u040a\7\u0089\2\2\u040a"+
+		"\u040b\5R*\2\u040b\u040c\7\u0083\2\2\u040c\u040d\5R*\2\u040dg\3\2\2\2"+
+		"\u040e\u040f\7\\\2\2\u040f\u0410\5\u00aaV\2\u0410\u0411\7_\2\2\u0411\u0412"+
+		"\5R*\2\u0412\u0413\7\u0087\2\2\u0413\u0414\5R*\2\u0414i\3\2\2\2\u0415"+
+		"\u0416\7~\2\2\u0416\u0417\7\25\2\2\u0417\u041d\5V,\2\u0418\u0419\7\22"+
+		"\2\2\u0419\u041a\5\u0106\u0084\2\u041a\u041b\7,\2\2\u041b\u041c\5V,\2"+
+		"\u041c\u041e\3\2\2\2\u041d\u0418\3\2\2\2\u041d\u041e\3\2\2\2\u041e\u041f"+
+		"\3\2\2\2\u041f\u0420\7\26\2\2\u0420k\3\2\2\2\u0421\u0422\5\u0100\u0081"+
+		"\2\u0422\u0423\5\u010c\u0087\2\u0423\u0424\5R*\2\u0424m\3\2\2\2\u0425"+
+		"\u0426\68%\3\u0426\u0427\7\24\2\2\u0427\u042e\5\u00aaV\2\u0428\u0429\6"+
+		"8&\3\u0429\u042a\7\27\2\2\u042a\u042b\5R*\2\u042b\u042c\7\30\2\2\u042c"+
 		"\u042e\3\2\2\2\u042d\u0425\3\2\2\2\u042d\u0428\3\2\2\2\u042eo\3\2\2\2"+
 		"\u042f\u0430\5\u00ceh\2\u0430\u0431\5\u010c\u0087\2\u0431\u0432\5R*\2"+
 		"\u0432q\3\2\2\2\u0433\u0435\7\7\2\2\u0434\u0433\3\2\2\2\u0435\u0438\3"+
@@ -18762,8 +18762,8 @@ public class SParser extends AbstractParser {
 		"\u0487\bF\1\2\u0487\u0488\5\u00aeX\2\u0488\u048e\3\2\2\2\u0489\u048a\f"+
 		"\3\2\2\u048a\u048b\7\22\2\2\u048b\u048d\5\u00aeX\2\u048c\u0489\3\2\2\2"+
 		"\u048d\u0490\3\2\2\2\u048e\u048c\3\2\2\2\u048e\u048f\3\2\2\2\u048f\u008b"+
-		"\3\2\2\2\u0490\u048e\3\2\2\2\u0491\u0492\7a\2\2\u0492\u049c\5\u008eH\2"+
-		"\u0493\u0494\7a\2\2\u0494\u049c\5\u0090I\2\u0495\u0496\7a\2\2\u0496\u049c"+
+		"\3\2\2\2\u0490\u048e\3\2\2\2\u0491\u0492\7b\2\2\u0492\u049c\5\u008eH\2"+
+		"\u0493\u0494\7b\2\2\u0494\u049c\5\u0090I\2\u0495\u0496\7b\2\2\u0496\u049c"+
 		"\5\u0094K\2\u0497\u0498\7e\2\2\u0498\u049c\7\u0093\2\2\u0499\u049a\7e"+
 		"\2\2\u049a\u049c\5R*\2\u049b\u0491\3\2\2\2\u049b\u0493\3\2\2\2\u049b\u0495"+
 		"\3\2\2\2\u049b\u0497\3\2\2\2\u049b\u0499\3\2\2\2\u049c\u008d\3\2\2\2\u049d"+
@@ -18831,13 +18831,13 @@ public class SParser extends AbstractParser {
 		"\3\2\2\2\u054c\u0544\3\2\2\2\u054c\u0546\3\2\2\2\u054c\u0548\3\2\2\2\u054c"+
 		"\u054a\3\2\2\2\u054d\u00c3\3\2\2\2\u054e\u0550\5\u00a8U\2\u054f\u0551"+
 		"\5\u00c6d\2\u0550\u054f\3\2\2\2\u0550\u0551\3\2\2\2\u0551\u00c5\3\2\2"+
-		"\2\u0552\u0553\7^\2\2\u0553\u0554\5\u00c8e\2\u0554\u0555\7\20\2\2\u0555"+
+		"\2\u0552\u0553\7_\2\2\u0553\u0554\5\u00c8e\2\u0554\u0555\7\20\2\2\u0555"+
 		"\u055a\5\u00a8U\2\u0556\u0557\7\24\2\2\u0557\u0559\5\u00a8U\2\u0558\u0556"+
 		"\3\2\2\2\u0559\u055c\3\2\2\2\u055a\u0558\3\2\2\2\u055a\u055b\3\2\2\2\u055b"+
 		"\u00c7\3\2\2\2\u055c\u055a\3\2\2\2\u055d\u055e\7\u0090\2\2\u055e\u055f"+
 		"\6e\64\3\u055f\u00c9\3\2\2\2\u0560\u0562\5\u00a8U\2\u0561\u0563\5\u00cc"+
 		"g\2\u0562\u0561\3\2\2\2\u0562\u0563\3\2\2\2\u0563\u00cb\3\2\2\2\u0564"+
-		"\u0565\7^\2\2\u0565\u0566\5\u00c8e\2\u0566\u0568\7\20\2\2\u0567\u0569"+
+		"\u0565\7_\2\2\u0565\u0566\5\u00c8e\2\u0566\u0568\7\20\2\2\u0567\u0569"+
 		"\7$\2\2\u0568\u0567\3\2\2\2\u0568\u0569\3\2\2\2\u0569\u056a\3\2\2\2\u056a"+
 		"\u056f\5\u012a\u0096\2\u056b\u056c\7$\2\2\u056c\u056e\5\u012a\u0096\2"+
 		"\u056d\u056b\3\2\2\2\u056e\u0571\3\2\2\2\u056f\u056d\3\2\2\2\u056f\u0570"+

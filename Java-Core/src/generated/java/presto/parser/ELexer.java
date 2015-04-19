@@ -26,10 +26,10 @@ public class ELexer extends Lexer {
 		BOOLEAN=49, CHARACTER=50, TEXT=51, INTEGER=52, DECIMAL=53, DATE=54, TIME=55, 
 		DATETIME=56, PERIOD=57, METHOD_T=58, CODE=59, DOCUMENT=60, ABSTRACT=61, 
 		ALL=62, ALWAYS=63, AND=64, ANY=65, AS=66, ATTR=67, ATTRIBUTE=68, ATTRIBUTES=69, 
-		CASE=70, CATCH=71, CATEGORY=72, CLASS=73, CLOSE=74, CONTAINS=75, DEF=76, 
-		DEFAULT=77, DEFINE=78, DO=79, DOING=80, EACH=81, ELSE=82, ENUM=83, ENUMERATED=84, 
-		EXCEPT=85, EXECUTE=86, EXPECTING=87, EXTENDS=88, FETCH=89, FINALLY=90, 
-		FOR=91, FROM=92, GETTER=93, IF=94, IN=95, INVOKE=96, IS=97, MAPPINGS=98, 
+		BINDINGS=70, CASE=71, CATCH=72, CATEGORY=73, CLASS=74, CLOSE=75, CONTAINS=76, 
+		DEF=77, DEFAULT=78, DEFINE=79, DO=80, DOING=81, EACH=82, ELSE=83, ENUM=84, 
+		ENUMERATED=85, EXCEPT=86, EXECUTE=87, EXPECTING=88, EXTENDS=89, FETCH=90, 
+		FINALLY=91, FOR=92, FROM=93, GETTER=94, IF=95, IN=96, INVOKE=97, IS=98, 
 		MATCHING=99, METHOD=100, METHODS=101, MODULO=102, MUTABLE=103, NATIVE=104, 
 		NONE=105, NOT=106, NOTHING=107, NULL=108, ON=109, OPEN=110, OPERATOR=111, 
 		OR=112, OTHERWISE=113, PASS=114, RAISE=115, READ=116, RECEIVING=117, RESOURCE=118, 
@@ -54,10 +54,10 @@ public class ELexer extends Lexer {
 		"LARROW", "RARROW", "BOOLEAN", "CHARACTER", "TEXT", "INTEGER", "DECIMAL", 
 		"DATE", "TIME", "DATETIME", "PERIOD", "METHOD_T", "CODE", "DOCUMENT", 
 		"ABSTRACT", "ALL", "ALWAYS", "AND", "ANY", "AS", "ATTR", "ATTRIBUTE", 
-		"ATTRIBUTES", "CASE", "CATCH", "CATEGORY", "CLASS", "CLOSE", "CONTAINS", 
-		"DEF", "DEFAULT", "DEFINE", "DO", "DOING", "EACH", "ELSE", "ENUM", "ENUMERATED", 
-		"EXCEPT", "EXECUTE", "EXPECTING", "EXTENDS", "FETCH", "FINALLY", "FOR", 
-		"FROM", "GETTER", "IF", "IN", "INVOKE", "IS", "MAPPINGS", "MATCHING", 
+		"ATTRIBUTES", "BINDINGS", "CASE", "CATCH", "CATEGORY", "CLASS", "CLOSE", 
+		"CONTAINS", "DEF", "DEFAULT", "DEFINE", "DO", "DOING", "EACH", "ELSE", 
+		"ENUM", "ENUMERATED", "EXCEPT", "EXECUTE", "EXPECTING", "EXTENDS", "FETCH", 
+		"FINALLY", "FOR", "FROM", "GETTER", "IF", "IN", "INVOKE", "IS", "MATCHING", 
 		"METHOD", "METHODS", "MODULO", "MUTABLE", "NATIVE", "NONE", "NOT", "NOTHING", 
 		"NULL", "ON", "OPEN", "OPERATOR", "OR", "OTHERWISE", "PASS", "RAISE", 
 		"READ", "RECEIVING", "RESOURCE", "RETURN", "RETURNING", "SELF", "SETTER", 
@@ -81,14 +81,14 @@ public class ELexer extends Lexer {
 		"'~'", "'<-'", "'->'", "'Boolean'", "'Character'", "'Text'", "'Integer'", 
 		"'Decimal'", "'Date'", "'Time'", "'DateTime'", "'Period'", "'Method'", 
 		"'Code'", "'Document'", "'abstract'", "'all'", "'always'", "'and'", "'any'", 
-		"'as'", "'attr'", "'attribute'", "'attributes'", "'case'", "'catch'", 
-		"'category'", "'class'", "'close'", "'contains'", "'def'", "'default'", 
-		"'define'", "'do'", "'doing'", "'each'", "'else'", "'enum'", "'enumerated'", 
-		"'except'", "'execute'", "'expecting'", "'extends'", "'fetch'", "'finally'", 
-		"'for'", "'from'", "'getter'", "'if'", "'in'", "'invoke'", "'is'", "'mappings'", 
-		"'matching'", "'method'", "'methods'", "'modulo'", "'mutable'", "'native'", 
-		"'None'", "'not'", null, "'null'", "'on'", "'open'", "'operator'", "'or'", 
-		"'otherwise'", "'pass'", "'raise'", "'read'", "'receiving'", "'resource'", 
+		"'as'", "'attr'", "'attribute'", "'attributes'", "'bindings'", "'case'", 
+		"'catch'", "'category'", "'class'", "'close'", "'contains'", "'def'", 
+		"'default'", "'define'", "'do'", "'doing'", "'each'", "'else'", "'enum'", 
+		"'enumerated'", "'except'", "'execute'", "'expecting'", "'extends'", "'fetch'", 
+		"'finally'", "'for'", "'from'", "'getter'", "'if'", "'in'", "'invoke'", 
+		"'is'", "'matching'", "'method'", "'methods'", "'modulo'", "'mutable'", 
+		"'native'", "'None'", "'not'", null, "'null'", "'on'", "'open'", "'operator'", 
+		"'or'", "'otherwise'", "'pass'", "'raise'", "'read'", "'receiving'", "'resource'", 
 		"'return'", "'returning'", "'self'", "'setter'", "'singleton'", "'sorted'", 
 		"'switch'", "'test'", "'this'", "'throw'", "'to'", "'try'", "'with'", 
 		"'when'", "'where'", "'while'", "'write'", null, null, "'MIN_INTEGER'", 
@@ -103,10 +103,10 @@ public class ELexer extends Lexer {
 		"XEQ", "EQ2", "TEQ", "TILDE", "LARROW", "RARROW", "BOOLEAN", "CHARACTER", 
 		"TEXT", "INTEGER", "DECIMAL", "DATE", "TIME", "DATETIME", "PERIOD", "METHOD_T", 
 		"CODE", "DOCUMENT", "ABSTRACT", "ALL", "ALWAYS", "AND", "ANY", "AS", "ATTR", 
-		"ATTRIBUTE", "ATTRIBUTES", "CASE", "CATCH", "CATEGORY", "CLASS", "CLOSE", 
-		"CONTAINS", "DEF", "DEFAULT", "DEFINE", "DO", "DOING", "EACH", "ELSE", 
-		"ENUM", "ENUMERATED", "EXCEPT", "EXECUTE", "EXPECTING", "EXTENDS", "FETCH", 
-		"FINALLY", "FOR", "FROM", "GETTER", "IF", "IN", "INVOKE", "IS", "MAPPINGS", 
+		"ATTRIBUTE", "ATTRIBUTES", "BINDINGS", "CASE", "CATCH", "CATEGORY", "CLASS", 
+		"CLOSE", "CONTAINS", "DEF", "DEFAULT", "DEFINE", "DO", "DOING", "EACH", 
+		"ELSE", "ENUM", "ENUMERATED", "EXCEPT", "EXECUTE", "EXPECTING", "EXTENDS", 
+		"FETCH", "FINALLY", "FOR", "FROM", "GETTER", "IF", "IN", "INVOKE", "IS", 
 		"MATCHING", "METHOD", "METHODS", "MODULO", "MUTABLE", "NATIVE", "NONE", 
 		"NOT", "NOTHING", "NULL", "ON", "OPEN", "OPERATOR", "OR", "OTHERWISE", 
 		"PASS", "RAISE", "READ", "RECEIVING", "RESOURCE", "RETURN", "RETURNING", 
@@ -212,24 +212,24 @@ public class ELexer extends Lexer {
 		"9\39\39\39\3:\3:\3:\3:\3:\3;\3;\3;\3;\3;\3;\3;\3;\3;\3<\3<\3<\3<\3<\3"+
 		"<\3<\3<\3<\3=\3=\3=\3=\3>\3>\3>\3>\3>\3>\3>\3?\3?\3?\3?\3@\3@\3@\3@\3"+
 		"A\3A\3A\3B\3B\3B\3B\3B\3C\3C\3C\3C\3C\3C\3C\3C\3C\3C\3D\3D\3D\3D\3D\3"+
-		"D\3D\3D\3D\3D\3D\3E\3E\3E\3E\3E\3F\3F\3F\3F\3F\3F\3G\3G\3G\3G\3G\3G\3"+
-		"G\3G\3G\3H\3H\3H\3H\3H\3H\3I\3I\3I\3I\3I\3I\3J\3J\3J\3J\3J\3J\3J\3J\3"+
-		"J\3K\3K\3K\3K\3L\3L\3L\3L\3L\3L\3L\3L\3M\3M\3M\3M\3M\3M\3M\3N\3N\3N\3"+
-		"O\3O\3O\3O\3O\3O\3P\3P\3P\3P\3P\3Q\3Q\3Q\3Q\3Q\3R\3R\3R\3R\3R\3S\3S\3"+
-		"S\3S\3S\3S\3S\3S\3S\3S\3S\3T\3T\3T\3T\3T\3T\3T\3U\3U\3U\3U\3U\3U\3U\3"+
-		"U\3V\3V\3V\3V\3V\3V\3V\3V\3V\3V\3W\3W\3W\3W\3W\3W\3W\3W\3X\3X\3X\3X\3"+
-		"X\3X\3Y\3Y\3Y\3Y\3Y\3Y\3Y\3Y\3Z\3Z\3Z\3Z\3[\3[\3[\3[\3[\3\\\3\\\3\\\3"+
-		"\\\3\\\3\\\3\\\3]\3]\3]\3^\3^\3^\3_\3_\3_\3_\3_\3_\3_\3`\3`\3`\3a\3a\3"+
-		"a\3a\3a\3a\3a\3a\3a\3b\3b\3b\3b\3b\3b\3b\3b\3b\3c\3c\3c\3c\3c\3c\3c\3"+
-		"d\3d\3d\3d\3d\3d\3d\3d\3e\3e\3e\3e\3e\3e\3e\3f\3f\3f\3f\3f\3f\3f\3f\3"+
-		"g\3g\3g\3g\3g\3g\3g\3h\3h\3h\3h\3h\3i\3i\3i\3i\3j\3j\3j\3j\3j\3j\3j\3"+
-		"j\3j\3j\3j\3j\3j\3j\5j\u0376\nj\3k\3k\3k\3k\3k\3l\3l\3l\3m\3m\3m\3m\3"+
-		"m\3n\3n\3n\3n\3n\3n\3n\3n\3n\3o\3o\3o\3p\3p\3p\3p\3p\3p\3p\3p\3p\3p\3"+
-		"q\3q\3q\3q\3q\3r\3r\3r\3r\3r\3r\3s\3s\3s\3s\3s\3t\3t\3t\3t\3t\3t\3t\3"+
-		"t\3t\3t\3u\3u\3u\3u\3u\3u\3u\3u\3u\3v\3v\3v\3v\3v\3v\3v\3w\3w\3w\3w\3"+
-		"w\3w\3w\3w\3w\3w\3x\3x\3x\3x\3x\3y\3y\3y\3y\3y\3y\3y\3z\3z\3z\3z\3z\3"+
-		"z\3z\3z\3z\3z\3{\3{\3{\3{\3{\3{\3{\3|\3|\3|\3|\3|\3|\3|\3}\3}\3}\3}\3"+
-		"}\3~\3~\3~\3~\3~\3\177\3\177\3\177\3\177\3\177\3\177\3\u0080\3\u0080\3"+
+		"D\3D\3D\3D\3D\3D\3E\3E\3E\3E\3E\3E\3E\3E\3E\3F\3F\3F\3F\3F\3G\3G\3G\3"+
+		"G\3G\3G\3H\3H\3H\3H\3H\3H\3H\3H\3H\3I\3I\3I\3I\3I\3I\3J\3J\3J\3J\3J\3"+
+		"J\3K\3K\3K\3K\3K\3K\3K\3K\3K\3L\3L\3L\3L\3M\3M\3M\3M\3M\3M\3M\3M\3N\3"+
+		"N\3N\3N\3N\3N\3N\3O\3O\3O\3P\3P\3P\3P\3P\3P\3Q\3Q\3Q\3Q\3Q\3R\3R\3R\3"+
+		"R\3R\3S\3S\3S\3S\3S\3T\3T\3T\3T\3T\3T\3T\3T\3T\3T\3T\3U\3U\3U\3U\3U\3"+
+		"U\3U\3V\3V\3V\3V\3V\3V\3V\3V\3W\3W\3W\3W\3W\3W\3W\3W\3W\3W\3X\3X\3X\3"+
+		"X\3X\3X\3X\3X\3Y\3Y\3Y\3Y\3Y\3Y\3Z\3Z\3Z\3Z\3Z\3Z\3Z\3Z\3[\3[\3[\3[\3"+
+		"\\\3\\\3\\\3\\\3\\\3]\3]\3]\3]\3]\3]\3]\3^\3^\3^\3_\3_\3_\3`\3`\3`\3`"+
+		"\3`\3`\3`\3a\3a\3a\3b\3b\3b\3b\3b\3b\3b\3b\3b\3c\3c\3c\3c\3c\3c\3c\3d"+
+		"\3d\3d\3d\3d\3d\3d\3d\3e\3e\3e\3e\3e\3e\3e\3f\3f\3f\3f\3f\3f\3f\3f\3g"+
+		"\3g\3g\3g\3g\3g\3g\3h\3h\3h\3h\3h\3i\3i\3i\3i\3j\3j\3j\3j\3j\3j\3j\3j"+
+		"\3j\3j\3j\3j\3j\3j\5j\u0376\nj\3k\3k\3k\3k\3k\3l\3l\3l\3m\3m\3m\3m\3m"+
+		"\3n\3n\3n\3n\3n\3n\3n\3n\3n\3o\3o\3o\3p\3p\3p\3p\3p\3p\3p\3p\3p\3p\3q"+
+		"\3q\3q\3q\3q\3r\3r\3r\3r\3r\3r\3s\3s\3s\3s\3s\3t\3t\3t\3t\3t\3t\3t\3t"+
+		"\3t\3t\3u\3u\3u\3u\3u\3u\3u\3u\3u\3v\3v\3v\3v\3v\3v\3v\3w\3w\3w\3w\3w"+
+		"\3w\3w\3w\3w\3w\3x\3x\3x\3x\3x\3y\3y\3y\3y\3y\3y\3y\3z\3z\3z\3z\3z\3z"+
+		"\3z\3z\3z\3z\3{\3{\3{\3{\3{\3{\3{\3|\3|\3|\3|\3|\3|\3|\3}\3}\3}\3}\3}"+
+		"\3~\3~\3~\3~\3~\3\177\3\177\3\177\3\177\3\177\3\177\3\u0080\3\u0080\3"+
 		"\u0080\3\u0081\3\u0081\3\u0081\3\u0081\3\u0082\3\u0082\3\u0082\3\u0082"+
 		"\3\u0082\3\u0083\3\u0083\3\u0083\3\u0083\3\u0083\3\u0084\3\u0084\3\u0084"+
 		"\3\u0084\3\u0084\3\u0084\3\u0085\3\u0085\3\u0085\3\u0085\3\u0085\3\u0085"+
@@ -335,15 +335,15 @@ public class ELexer extends Lexer {
 		"\u0224\3\2\2\2q\u022b\3\2\2\2s\u0232\3\2\2\2u\u0237\3\2\2\2w\u0240\3\2"+
 		"\2\2y\u0249\3\2\2\2{\u024d\3\2\2\2}\u0254\3\2\2\2\177\u0258\3\2\2\2\u0081"+
 		"\u025c\3\2\2\2\u0083\u025f\3\2\2\2\u0085\u0264\3\2\2\2\u0087\u026e\3\2"+
-		"\2\2\u0089\u0279\3\2\2\2\u008b\u027e\3\2\2\2\u008d\u0284\3\2\2\2\u008f"+
-		"\u028d\3\2\2\2\u0091\u0293\3\2\2\2\u0093\u0299\3\2\2\2\u0095\u02a2\3\2"+
-		"\2\2\u0097\u02a6\3\2\2\2\u0099\u02ae\3\2\2\2\u009b\u02b5\3\2\2\2\u009d"+
-		"\u02b8\3\2\2\2\u009f\u02be\3\2\2\2\u00a1\u02c3\3\2\2\2\u00a3\u02c8\3\2"+
-		"\2\2\u00a5\u02cd\3\2\2\2\u00a7\u02d8\3\2\2\2\u00a9\u02df\3\2\2\2\u00ab"+
-		"\u02e7\3\2\2\2\u00ad\u02f1\3\2\2\2\u00af\u02f9\3\2\2\2\u00b1\u02ff\3\2"+
-		"\2\2\u00b3\u0307\3\2\2\2\u00b5\u030b\3\2\2\2\u00b7\u0310\3\2\2\2\u00b9"+
-		"\u0317\3\2\2\2\u00bb\u031a\3\2\2\2\u00bd\u031d\3\2\2\2\u00bf\u0324\3\2"+
-		"\2\2\u00c1\u0327\3\2\2\2\u00c3\u0330\3\2\2\2\u00c5\u0339\3\2\2\2\u00c7"+
+		"\2\2\u0089\u0279\3\2\2\2\u008b\u0282\3\2\2\2\u008d\u0287\3\2\2\2\u008f"+
+		"\u028d\3\2\2\2\u0091\u0296\3\2\2\2\u0093\u029c\3\2\2\2\u0095\u02a2\3\2"+
+		"\2\2\u0097\u02ab\3\2\2\2\u0099\u02af\3\2\2\2\u009b\u02b7\3\2\2\2\u009d"+
+		"\u02be\3\2\2\2\u009f\u02c1\3\2\2\2\u00a1\u02c7\3\2\2\2\u00a3\u02cc\3\2"+
+		"\2\2\u00a5\u02d1\3\2\2\2\u00a7\u02d6\3\2\2\2\u00a9\u02e1\3\2\2\2\u00ab"+
+		"\u02e8\3\2\2\2\u00ad\u02f0\3\2\2\2\u00af\u02fa\3\2\2\2\u00b1\u0302\3\2"+
+		"\2\2\u00b3\u0308\3\2\2\2\u00b5\u0310\3\2\2\2\u00b7\u0314\3\2\2\2\u00b9"+
+		"\u0319\3\2\2\2\u00bb\u0320\3\2\2\2\u00bd\u0323\3\2\2\2\u00bf\u0326\3\2"+
+		"\2\2\u00c1\u032d\3\2\2\2\u00c3\u0330\3\2\2\2\u00c5\u0339\3\2\2\2\u00c7"+
 		"\u0340\3\2\2\2\u00c9\u0348\3\2\2\2\u00cb\u034f\3\2\2\2\u00cd\u0357\3\2"+
 		"\2\2\u00cf\u035e\3\2\2\2\u00d1\u0363\3\2\2\2\u00d3\u0375\3\2\2\2\u00d5"+
 		"\u0377\3\2\2\2\u00d7\u037c\3\2\2\2\u00d9\u037f\3\2\2\2\u00db\u0384\3\2"+
@@ -441,56 +441,56 @@ public class ELexer extends Lexer {
 		"\u026f\7c\2\2\u026f\u0270\7v\2\2\u0270\u0271\7v\2\2\u0271\u0272\7t\2\2"+
 		"\u0272\u0273\7k\2\2\u0273\u0274\7d\2\2\u0274\u0275\7w\2\2\u0275\u0276"+
 		"\7v\2\2\u0276\u0277\7g\2\2\u0277\u0278\7u\2\2\u0278\u0088\3\2\2\2\u0279"+
-		"\u027a\7e\2\2\u027a\u027b\7c\2\2\u027b\u027c\7u\2\2\u027c\u027d\7g\2\2"+
-		"\u027d\u008a\3\2\2\2\u027e\u027f\7e\2\2\u027f\u0280\7c\2\2\u0280\u0281"+
-		"\7v\2\2\u0281\u0282\7e\2\2\u0282\u0283\7j\2\2\u0283\u008c\3\2\2\2\u0284"+
-		"\u0285\7e\2\2\u0285\u0286\7c\2\2\u0286\u0287\7v\2\2\u0287\u0288\7g\2\2"+
-		"\u0288\u0289\7i\2\2\u0289\u028a\7q\2\2\u028a\u028b\7t\2\2\u028b\u028c"+
-		"\7{\2\2\u028c\u008e\3\2\2\2\u028d\u028e\7e\2\2\u028e\u028f\7n\2\2\u028f"+
-		"\u0290\7c\2\2\u0290\u0291\7u\2\2\u0291\u0292\7u\2\2\u0292\u0090\3\2\2"+
-		"\2\u0293\u0294\7e\2\2\u0294\u0295\7n\2\2\u0295\u0296\7q\2\2\u0296\u0297"+
-		"\7u\2\2\u0297\u0298\7g\2\2\u0298\u0092\3\2\2\2\u0299\u029a\7e\2\2\u029a"+
-		"\u029b\7q\2\2\u029b\u029c\7p\2\2\u029c\u029d\7v\2\2\u029d\u029e\7c\2\2"+
-		"\u029e\u029f\7k\2\2\u029f\u02a0\7p\2\2\u02a0\u02a1\7u\2\2\u02a1\u0094"+
-		"\3\2\2\2\u02a2\u02a3\7f\2\2\u02a3\u02a4\7g\2\2\u02a4\u02a5\7h\2\2\u02a5"+
-		"\u0096\3\2\2\2\u02a6\u02a7\7f\2\2\u02a7\u02a8\7g\2\2\u02a8\u02a9\7h\2"+
-		"\2\u02a9\u02aa\7c\2\2\u02aa\u02ab\7w\2\2\u02ab\u02ac\7n\2\2\u02ac\u02ad"+
-		"\7v\2\2\u02ad\u0098\3\2\2\2\u02ae\u02af\7f\2\2\u02af\u02b0\7g\2\2\u02b0"+
-		"\u02b1\7h\2\2\u02b1\u02b2\7k\2\2\u02b2\u02b3\7p\2\2\u02b3\u02b4\7g\2\2"+
-		"\u02b4\u009a\3\2\2\2\u02b5\u02b6\7f\2\2\u02b6\u02b7\7q\2\2\u02b7\u009c"+
-		"\3\2\2\2\u02b8\u02b9\7f\2\2\u02b9\u02ba\7q\2\2\u02ba\u02bb\7k\2\2\u02bb"+
-		"\u02bc\7p\2\2\u02bc\u02bd\7i\2\2\u02bd\u009e\3\2\2\2\u02be\u02bf\7g\2"+
-		"\2\u02bf\u02c0\7c\2\2\u02c0\u02c1\7e\2\2\u02c1\u02c2\7j\2\2\u02c2\u00a0"+
-		"\3\2\2\2\u02c3\u02c4\7g\2\2\u02c4\u02c5\7n\2\2\u02c5\u02c6\7u\2\2\u02c6"+
-		"\u02c7\7g\2\2\u02c7\u00a2\3\2\2\2\u02c8\u02c9\7g\2\2\u02c9\u02ca\7p\2"+
-		"\2\u02ca\u02cb\7w\2\2\u02cb\u02cc\7o\2\2\u02cc\u00a4\3\2\2\2\u02cd\u02ce"+
-		"\7g\2\2\u02ce\u02cf\7p\2\2\u02cf\u02d0\7w\2\2\u02d0\u02d1\7o\2\2\u02d1"+
-		"\u02d2\7g\2\2\u02d2\u02d3\7t\2\2\u02d3\u02d4\7c\2\2\u02d4\u02d5\7v\2\2"+
-		"\u02d5\u02d6\7g\2\2\u02d6\u02d7\7f\2\2\u02d7\u00a6\3\2\2\2\u02d8\u02d9"+
-		"\7g\2\2\u02d9\u02da\7z\2\2\u02da\u02db\7e\2\2\u02db\u02dc\7g\2\2\u02dc"+
-		"\u02dd\7r\2\2\u02dd\u02de\7v\2\2\u02de\u00a8\3\2\2\2\u02df\u02e0\7g\2"+
-		"\2\u02e0\u02e1\7z\2\2\u02e1\u02e2\7g\2\2\u02e2\u02e3\7e\2\2\u02e3\u02e4"+
-		"\7w\2\2\u02e4\u02e5\7v\2\2\u02e5\u02e6\7g\2\2\u02e6\u00aa\3\2\2\2\u02e7"+
-		"\u02e8\7g\2\2\u02e8\u02e9\7z\2\2\u02e9\u02ea\7r\2\2\u02ea\u02eb\7g\2\2"+
-		"\u02eb\u02ec\7e\2\2\u02ec\u02ed\7v\2\2\u02ed\u02ee\7k\2\2\u02ee\u02ef"+
-		"\7p\2\2\u02ef\u02f0\7i\2\2\u02f0\u00ac\3\2\2\2\u02f1\u02f2\7g\2\2\u02f2"+
-		"\u02f3\7z\2\2\u02f3\u02f4\7v\2\2\u02f4\u02f5\7g\2\2\u02f5\u02f6\7p\2\2"+
-		"\u02f6\u02f7\7f\2\2\u02f7\u02f8\7u\2\2\u02f8\u00ae\3\2\2\2\u02f9\u02fa"+
-		"\7h\2\2\u02fa\u02fb\7g\2\2\u02fb\u02fc\7v\2\2\u02fc\u02fd\7e\2\2\u02fd"+
-		"\u02fe\7j\2\2\u02fe\u00b0\3\2\2\2\u02ff\u0300\7h\2\2\u0300\u0301\7k\2"+
-		"\2\u0301\u0302\7p\2\2\u0302\u0303\7c\2\2\u0303\u0304\7n\2\2\u0304\u0305"+
-		"\7n\2\2\u0305\u0306\7{\2\2\u0306\u00b2\3\2\2\2\u0307\u0308\7h\2\2\u0308"+
-		"\u0309\7q\2\2\u0309\u030a\7t\2\2\u030a\u00b4\3\2\2\2\u030b\u030c\7h\2"+
-		"\2\u030c\u030d\7t\2\2\u030d\u030e\7q\2\2\u030e\u030f\7o\2\2\u030f\u00b6"+
-		"\3\2\2\2\u0310\u0311\7i\2\2\u0311\u0312\7g\2\2\u0312\u0313\7v\2\2\u0313"+
-		"\u0314\7v\2\2\u0314\u0315\7g\2\2\u0315\u0316\7t\2\2\u0316\u00b8\3\2\2"+
-		"\2\u0317\u0318\7k\2\2\u0318\u0319\7h\2\2\u0319\u00ba\3\2\2\2\u031a\u031b"+
-		"\7k\2\2\u031b\u031c\7p\2\2\u031c\u00bc\3\2\2\2\u031d\u031e\7k\2\2\u031e"+
-		"\u031f\7p\2\2\u031f\u0320\7x\2\2\u0320\u0321\7q\2\2\u0321\u0322\7m\2\2"+
-		"\u0322\u0323\7g\2\2\u0323\u00be\3\2\2\2\u0324\u0325\7k\2\2\u0325\u0326"+
-		"\7u\2\2\u0326\u00c0\3\2\2\2\u0327\u0328\7o\2\2\u0328\u0329\7c\2\2\u0329"+
-		"\u032a\7r\2\2\u032a\u032b\7r\2\2\u032b\u032c\7k\2\2\u032c\u032d\7p\2\2"+
-		"\u032d\u032e\7i\2\2\u032e\u032f\7u\2\2\u032f\u00c2\3\2\2\2\u0330\u0331"+
+		"\u027a\7d\2\2\u027a\u027b\7k\2\2\u027b\u027c\7p\2\2\u027c\u027d\7f\2\2"+
+		"\u027d\u027e\7k\2\2\u027e\u027f\7p\2\2\u027f\u0280\7i\2\2\u0280\u0281"+
+		"\7u\2\2\u0281\u008a\3\2\2\2\u0282\u0283\7e\2\2\u0283\u0284\7c\2\2\u0284"+
+		"\u0285\7u\2\2\u0285\u0286\7g\2\2\u0286\u008c\3\2\2\2\u0287\u0288\7e\2"+
+		"\2\u0288\u0289\7c\2\2\u0289\u028a\7v\2\2\u028a\u028b\7e\2\2\u028b\u028c"+
+		"\7j\2\2\u028c\u008e\3\2\2\2\u028d\u028e\7e\2\2\u028e\u028f\7c\2\2\u028f"+
+		"\u0290\7v\2\2\u0290\u0291\7g\2\2\u0291\u0292\7i\2\2\u0292\u0293\7q\2\2"+
+		"\u0293\u0294\7t\2\2\u0294\u0295\7{\2\2\u0295\u0090\3\2\2\2\u0296\u0297"+
+		"\7e\2\2\u0297\u0298\7n\2\2\u0298\u0299\7c\2\2\u0299\u029a\7u\2\2\u029a"+
+		"\u029b\7u\2\2\u029b\u0092\3\2\2\2\u029c\u029d\7e\2\2\u029d\u029e\7n\2"+
+		"\2\u029e\u029f\7q\2\2\u029f\u02a0\7u\2\2\u02a0\u02a1\7g\2\2\u02a1\u0094"+
+		"\3\2\2\2\u02a2\u02a3\7e\2\2\u02a3\u02a4\7q\2\2\u02a4\u02a5\7p\2\2\u02a5"+
+		"\u02a6\7v\2\2\u02a6\u02a7\7c\2\2\u02a7\u02a8\7k\2\2\u02a8\u02a9\7p\2\2"+
+		"\u02a9\u02aa\7u\2\2\u02aa\u0096\3\2\2\2\u02ab\u02ac\7f\2\2\u02ac\u02ad"+
+		"\7g\2\2\u02ad\u02ae\7h\2\2\u02ae\u0098\3\2\2\2\u02af\u02b0\7f\2\2\u02b0"+
+		"\u02b1\7g\2\2\u02b1\u02b2\7h\2\2\u02b2\u02b3\7c\2\2\u02b3\u02b4\7w\2\2"+
+		"\u02b4\u02b5\7n\2\2\u02b5\u02b6\7v\2\2\u02b6\u009a\3\2\2\2\u02b7\u02b8"+
+		"\7f\2\2\u02b8\u02b9\7g\2\2\u02b9\u02ba\7h\2\2\u02ba\u02bb\7k\2\2\u02bb"+
+		"\u02bc\7p\2\2\u02bc\u02bd\7g\2\2\u02bd\u009c\3\2\2\2\u02be\u02bf\7f\2"+
+		"\2\u02bf\u02c0\7q\2\2\u02c0\u009e\3\2\2\2\u02c1\u02c2\7f\2\2\u02c2\u02c3"+
+		"\7q\2\2\u02c3\u02c4\7k\2\2\u02c4\u02c5\7p\2\2\u02c5\u02c6\7i\2\2\u02c6"+
+		"\u00a0\3\2\2\2\u02c7\u02c8\7g\2\2\u02c8\u02c9\7c\2\2\u02c9\u02ca\7e\2"+
+		"\2\u02ca\u02cb\7j\2\2\u02cb\u00a2\3\2\2\2\u02cc\u02cd\7g\2\2\u02cd\u02ce"+
+		"\7n\2\2\u02ce\u02cf\7u\2\2\u02cf\u02d0\7g\2\2\u02d0\u00a4\3\2\2\2\u02d1"+
+		"\u02d2\7g\2\2\u02d2\u02d3\7p\2\2\u02d3\u02d4\7w\2\2\u02d4\u02d5\7o\2\2"+
+		"\u02d5\u00a6\3\2\2\2\u02d6\u02d7\7g\2\2\u02d7\u02d8\7p\2\2\u02d8\u02d9"+
+		"\7w\2\2\u02d9\u02da\7o\2\2\u02da\u02db\7g\2\2\u02db\u02dc\7t\2\2\u02dc"+
+		"\u02dd\7c\2\2\u02dd\u02de\7v\2\2\u02de\u02df\7g\2\2\u02df\u02e0\7f\2\2"+
+		"\u02e0\u00a8\3\2\2\2\u02e1\u02e2\7g\2\2\u02e2\u02e3\7z\2\2\u02e3\u02e4"+
+		"\7e\2\2\u02e4\u02e5\7g\2\2\u02e5\u02e6\7r\2\2\u02e6\u02e7\7v\2\2\u02e7"+
+		"\u00aa\3\2\2\2\u02e8\u02e9\7g\2\2\u02e9\u02ea\7z\2\2\u02ea\u02eb\7g\2"+
+		"\2\u02eb\u02ec\7e\2\2\u02ec\u02ed\7w\2\2\u02ed\u02ee\7v\2\2\u02ee\u02ef"+
+		"\7g\2\2\u02ef\u00ac\3\2\2\2\u02f0\u02f1\7g\2\2\u02f1\u02f2\7z\2\2\u02f2"+
+		"\u02f3\7r\2\2\u02f3\u02f4\7g\2\2\u02f4\u02f5\7e\2\2\u02f5\u02f6\7v\2\2"+
+		"\u02f6\u02f7\7k\2\2\u02f7\u02f8\7p\2\2\u02f8\u02f9\7i\2\2\u02f9\u00ae"+
+		"\3\2\2\2\u02fa\u02fb\7g\2\2\u02fb\u02fc\7z\2\2\u02fc\u02fd\7v\2\2\u02fd"+
+		"\u02fe\7g\2\2\u02fe\u02ff\7p\2\2\u02ff\u0300\7f\2\2\u0300\u0301\7u\2\2"+
+		"\u0301\u00b0\3\2\2\2\u0302\u0303\7h\2\2\u0303\u0304\7g\2\2\u0304\u0305"+
+		"\7v\2\2\u0305\u0306\7e\2\2\u0306\u0307\7j\2\2\u0307\u00b2\3\2\2\2\u0308"+
+		"\u0309\7h\2\2\u0309\u030a\7k\2\2\u030a\u030b\7p\2\2\u030b\u030c\7c\2\2"+
+		"\u030c\u030d\7n\2\2\u030d\u030e\7n\2\2\u030e\u030f\7{\2\2\u030f\u00b4"+
+		"\3\2\2\2\u0310\u0311\7h\2\2\u0311\u0312\7q\2\2\u0312\u0313\7t\2\2\u0313"+
+		"\u00b6\3\2\2\2\u0314\u0315\7h\2\2\u0315\u0316\7t\2\2\u0316\u0317\7q\2"+
+		"\2\u0317\u0318\7o\2\2\u0318\u00b8\3\2\2\2\u0319\u031a\7i\2\2\u031a\u031b"+
+		"\7g\2\2\u031b\u031c\7v\2\2\u031c\u031d\7v\2\2\u031d\u031e\7g\2\2\u031e"+
+		"\u031f\7t\2\2\u031f\u00ba\3\2\2\2\u0320\u0321\7k\2\2\u0321\u0322\7h\2"+
+		"\2\u0322\u00bc\3\2\2\2\u0323\u0324\7k\2\2\u0324\u0325\7p\2\2\u0325\u00be"+
+		"\3\2\2\2\u0326\u0327\7k\2\2\u0327\u0328\7p\2\2\u0328\u0329\7x\2\2\u0329"+
+		"\u032a\7q\2\2\u032a\u032b\7m\2\2\u032b\u032c\7g\2\2\u032c\u00c0\3\2\2"+
+		"\2\u032d\u032e\7k\2\2\u032e\u032f\7u\2\2\u032f\u00c2\3\2\2\2\u0330\u0331"+
 		"\7o\2\2\u0331\u0332\7c\2\2\u0332\u0333\7v\2\2\u0333\u0334\7e\2\2\u0334"+
 		"\u0335\7j\2\2\u0335\u0336\7k\2\2\u0336\u0337\7p\2\2\u0337\u0338\7i\2\2"+
 		"\u0338\u00c4\3\2\2\2\u0339\u033a\7o\2\2\u033a\u033b\7g\2\2\u033b\u033c"+

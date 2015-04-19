@@ -3,10 +3,10 @@ package presto.declaration;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.grammar.Identifier;
-import presto.grammar.NativeAttributeMappingListMap;
-import presto.grammar.NativeCategoryMapping;
-import presto.grammar.NativeCategoryMappingList;
-import presto.java.JavaNativeCategoryMapping;
+import presto.grammar.NativeAttributeBindingListMap;
+import presto.grammar.NativeCategoryBinding;
+import presto.grammar.NativeCategoryBindingList;
+import presto.java.JavaNativeCategoryBinding;
 import presto.runtime.Context;
 import presto.utils.CodeWriter;
 import presto.utils.IdentifierList;
@@ -15,12 +15,12 @@ import presto.value.NativeInstance;
 
 public class NativeCategoryDeclaration extends CategoryDeclaration {
 	
-	NativeCategoryMappingList categoryMappings;
-	NativeAttributeMappingListMap attributeMappings;
+	NativeCategoryBindingList categoryMappings;
+	NativeAttributeBindingListMap attributeMappings;
 	Class<?> mappedClass = null;
 	
 	public NativeCategoryDeclaration(Identifier name, IdentifierList attributes, 
-			NativeCategoryMappingList categoryMappings, NativeAttributeMappingListMap attributeMappings) {
+			NativeCategoryBindingList categoryMappings, NativeAttributeBindingListMap attributeMappings) {
 		super(name,attributes);
 		this.categoryMappings = categoryMappings;
 		this.attributeMappings = attributeMappings;
@@ -89,7 +89,7 @@ public class NativeCategoryDeclaration extends CategoryDeclaration {
 
 	public Class<?> getMappedClass(boolean fail) throws SyntaxError {
 		if(mappedClass==null) {
-			JavaNativeCategoryMapping mapping = getMapping(fail);
+			JavaNativeCategoryBinding mapping = getMapping(fail);
 			if(mapping!=null) {
 				mappedClass = mapping.getExpression().interpret_class();
 				if(mappedClass==null && fail)
@@ -99,10 +99,10 @@ public class NativeCategoryDeclaration extends CategoryDeclaration {
 		return mappedClass;
 	}
 
-	private JavaNativeCategoryMapping getMapping(boolean fail) throws SyntaxError {
-		for(NativeCategoryMapping mapping : categoryMappings) {
-			if(mapping instanceof JavaNativeCategoryMapping)
-				return (JavaNativeCategoryMapping)mapping;
+	private JavaNativeCategoryBinding getMapping(boolean fail) throws SyntaxError {
+		for(NativeCategoryBinding mapping : categoryMappings) {
+			if(mapping instanceof JavaNativeCategoryBinding)
+				return (JavaNativeCategoryBinding)mapping;
 		}
 		if(fail)
 			throw new SyntaxError("Missing JAVA mapping !");

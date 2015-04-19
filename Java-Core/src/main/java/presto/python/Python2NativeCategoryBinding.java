@@ -3,9 +3,9 @@ package presto.python;
 import presto.utils.CodeWriter;
 
 
-public class Python2NativeCategoryMapping extends PythonNativeCategoryMapping {
+public class Python2NativeCategoryBinding extends PythonNativeCategoryBinding {
 
-	public Python2NativeCategoryMapping(PythonNativeCategoryMapping mapping) {
+	public Python2NativeCategoryBinding(PythonNativeCategoryBinding mapping) {
 		super(mapping);
 	}
 

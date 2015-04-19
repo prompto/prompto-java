@@ -26,10 +26,10 @@ public class EParser extends AbstractParser {
 		BOOLEAN=49, CHARACTER=50, TEXT=51, INTEGER=52, DECIMAL=53, DATE=54, TIME=55, 
 		DATETIME=56, PERIOD=57, METHOD_T=58, CODE=59, DOCUMENT=60, ABSTRACT=61, 
 		ALL=62, ALWAYS=63, AND=64, ANY=65, AS=66, ATTR=67, ATTRIBUTE=68, ATTRIBUTES=69, 
-		CASE=70, CATCH=71, CATEGORY=72, CLASS=73, CLOSE=74, CONTAINS=75, DEF=76, 
-		DEFAULT=77, DEFINE=78, DO=79, DOING=80, EACH=81, ELSE=82, ENUM=83, ENUMERATED=84, 
-		EXCEPT=85, EXECUTE=86, EXPECTING=87, EXTENDS=88, FETCH=89, FINALLY=90, 
-		FOR=91, FROM=92, GETTER=93, IF=94, IN=95, INVOKE=96, IS=97, MAPPINGS=98, 
+		BINDINGS=70, CASE=71, CATCH=72, CATEGORY=73, CLASS=74, CLOSE=75, CONTAINS=76, 
+		DEF=77, DEFAULT=78, DEFINE=79, DO=80, DOING=81, EACH=82, ELSE=83, ENUM=84, 
+		ENUMERATED=85, EXCEPT=86, EXECUTE=87, EXPECTING=88, EXTENDS=89, FETCH=90, 
+		FINALLY=91, FOR=92, FROM=93, GETTER=94, IF=95, IN=96, INVOKE=97, IS=98, 
 		MATCHING=99, METHOD=100, METHODS=101, MODULO=102, MUTABLE=103, NATIVE=104, 
 		NONE=105, NOT=106, NOTHING=107, NULL=108, ON=109, OPEN=110, OPERATOR=111, 
 		OR=112, OTHERWISE=113, PASS=114, RAISE=115, READ=116, RECEIVING=117, RESOURCE=118, 
@@ -47,8 +47,8 @@ public class EParser extends AbstractParser {
 		RULE_concrete_category_declaration = 5, RULE_singleton_category_declaration = 6, 
 		RULE_derived_list = 7, RULE_operator_method_declaration = 8, RULE_setter_method_declaration = 9, 
 		RULE_getter_method_declaration = 10, RULE_native_category_declaration = 11, 
-		RULE_native_resource_declaration = 12, RULE_native_category_mappings = 13, 
-		RULE_native_category_mapping_list = 14, RULE_attribute_list = 15, RULE_abstract_method_declaration = 16, 
+		RULE_native_resource_declaration = 12, RULE_native_category_bindings = 13, 
+		RULE_native_category_binding_list = 14, RULE_attribute_list = 15, RULE_abstract_method_declaration = 16, 
 		RULE_concrete_method_declaration = 17, RULE_native_method_declaration = 18, 
 		RULE_test_method_declaration = 19, RULE_assertion = 20, RULE_full_argument_list = 21, 
 		RULE_typed_argument = 22, RULE_statement = 23, RULE_method_call_statement = 24, 
@@ -76,8 +76,8 @@ public class EParser extends AbstractParser {
 		RULE_argument_list = 89, RULE_argument = 90, RULE_operator_argument = 91, 
 		RULE_named_argument = 92, RULE_code_argument = 93, RULE_category_or_any_type = 94, 
 		RULE_any_type = 95, RULE_member_method_declaration_list = 96, RULE_member_method_declaration = 97, 
-		RULE_native_category_mapping = 98, RULE_python_category_mapping = 99, 
-		RULE_python_module = 100, RULE_module_token = 101, RULE_javascript_category_mapping = 102, 
+		RULE_native_category_binding = 98, RULE_python_category_binding = 99, 
+		RULE_python_module = 100, RULE_module_token = 101, RULE_javascript_category_binding = 102, 
 		RULE_javascript_module = 103, RULE_variable_identifier_list = 104, RULE_method_declaration = 105, 
 		RULE_native_statement_list = 106, RULE_native_statement = 107, RULE_python_native_statement = 108, 
 		RULE_javascript_native_statement = 109, RULE_statement_list = 110, RULE_assertion_list = 111, 
@@ -115,7 +115,7 @@ public class EParser extends AbstractParser {
 		"category_symbol", "attribute_declaration", "concrete_category_declaration", 
 		"singleton_category_declaration", "derived_list", "operator_method_declaration", 
 		"setter_method_declaration", "getter_method_declaration", "native_category_declaration", 
-		"native_resource_declaration", "native_category_mappings", "native_category_mapping_list", 
+		"native_resource_declaration", "native_category_bindings", "native_category_binding_list", 
 		"attribute_list", "abstract_method_declaration", "concrete_method_declaration", 
 		"native_method_declaration", "test_method_declaration", "assertion", "full_argument_list", 
 		"typed_argument", "statement", "method_call_statement", "with_resource_statement", 
@@ -137,8 +137,8 @@ public class EParser extends AbstractParser {
 		"method_identifier", "identifier", "variable_identifier", "type_identifier", 
 		"symbol_identifier", "argument_list", "argument", "operator_argument", 
 		"named_argument", "code_argument", "category_or_any_type", "any_type", 
-		"member_method_declaration_list", "member_method_declaration", "native_category_mapping", 
-		"python_category_mapping", "python_module", "module_token", "javascript_category_mapping", 
+		"member_method_declaration_list", "member_method_declaration", "native_category_binding", 
+		"python_category_binding", "python_module", "module_token", "javascript_category_binding", 
 		"javascript_module", "variable_identifier_list", "method_declaration", 
 		"native_statement_list", "native_statement", "python_native_statement", 
 		"javascript_native_statement", "statement_list", "assertion_list", "switch_case_statement_list", 
@@ -174,14 +174,14 @@ public class EParser extends AbstractParser {
 		"'~'", "'<-'", "'->'", "'Boolean'", "'Character'", "'Text'", "'Integer'", 
 		"'Decimal'", "'Date'", "'Time'", "'DateTime'", "'Period'", "'Method'", 
 		"'Code'", "'Document'", "'abstract'", "'all'", "'always'", "'and'", "'any'", 
-		"'as'", "'attr'", "'attribute'", "'attributes'", "'case'", "'catch'", 
-		"'category'", "'class'", "'close'", "'contains'", "'def'", "'default'", 
-		"'define'", "'do'", "'doing'", "'each'", "'else'", "'enum'", "'enumerated'", 
-		"'except'", "'execute'", "'expecting'", "'extends'", "'fetch'", "'finally'", 
-		"'for'", "'from'", "'getter'", "'if'", "'in'", "'invoke'", "'is'", "'mappings'", 
-		"'matching'", "'method'", "'methods'", "'modulo'", "'mutable'", "'native'", 
-		"'None'", "'not'", null, "'null'", "'on'", "'open'", "'operator'", "'or'", 
-		"'otherwise'", "'pass'", "'raise'", "'read'", "'receiving'", "'resource'", 
+		"'as'", "'attr'", "'attribute'", "'attributes'", "'bindings'", "'case'", 
+		"'catch'", "'category'", "'class'", "'close'", "'contains'", "'def'", 
+		"'default'", "'define'", "'do'", "'doing'", "'each'", "'else'", "'enum'", 
+		"'enumerated'", "'except'", "'execute'", "'expecting'", "'extends'", "'fetch'", 
+		"'finally'", "'for'", "'from'", "'getter'", "'if'", "'in'", "'invoke'", 
+		"'is'", "'matching'", "'method'", "'methods'", "'modulo'", "'mutable'", 
+		"'native'", "'None'", "'not'", null, "'null'", "'on'", "'open'", "'operator'", 
+		"'or'", "'otherwise'", "'pass'", "'raise'", "'read'", "'receiving'", "'resource'", 
 		"'return'", "'returning'", "'self'", "'setter'", "'singleton'", "'sorted'", 
 		"'switch'", "'test'", "'this'", "'throw'", "'to'", "'try'", "'with'", 
 		"'when'", "'where'", "'while'", "'write'", null, null, "'MIN_INTEGER'", 
@@ -196,10 +196,10 @@ public class EParser extends AbstractParser {
 		"XEQ", "EQ2", "TEQ", "TILDE", "LARROW", "RARROW", "BOOLEAN", "CHARACTER", 
 		"TEXT", "INTEGER", "DECIMAL", "DATE", "TIME", "DATETIME", "PERIOD", "METHOD_T", 
 		"CODE", "DOCUMENT", "ABSTRACT", "ALL", "ALWAYS", "AND", "ANY", "AS", "ATTR", 
-		"ATTRIBUTE", "ATTRIBUTES", "CASE", "CATCH", "CATEGORY", "CLASS", "CLOSE", 
-		"CONTAINS", "DEF", "DEFAULT", "DEFINE", "DO", "DOING", "EACH", "ELSE", 
-		"ENUM", "ENUMERATED", "EXCEPT", "EXECUTE", "EXPECTING", "EXTENDS", "FETCH", 
-		"FINALLY", "FOR", "FROM", "GETTER", "IF", "IN", "INVOKE", "IS", "MAPPINGS", 
+		"ATTRIBUTE", "ATTRIBUTES", "BINDINGS", "CASE", "CATCH", "CATEGORY", "CLASS", 
+		"CLOSE", "CONTAINS", "DEF", "DEFAULT", "DEFINE", "DO", "DOING", "EACH", 
+		"ELSE", "ENUM", "ENUMERATED", "EXCEPT", "EXECUTE", "EXPECTING", "EXTENDS", 
+		"FETCH", "FINALLY", "FOR", "FROM", "GETTER", "IF", "IN", "INVOKE", "IS", 
 		"MATCHING", "METHOD", "METHODS", "MODULO", "MUTABLE", "NATIVE", "NONE", 
 		"NOT", "NOTHING", "NULL", "ON", "OPEN", "OPERATOR", "OR", "OTHERWISE", 
 		"PASS", "RAISE", "READ", "RECEIVING", "RESOURCE", "RETURN", "RETURNING", 
@@ -1260,7 +1260,7 @@ public class EParser extends AbstractParser {
 	public static class Native_category_declarationContext extends ParserRuleContext {
 		public Type_identifierContext name;
 		public Attribute_listContext attrs;
-		public Native_category_mappingsContext mappings;
+		public Native_category_bindingsContext bindings;
 		public TerminalNode DEFINE() { return getToken(EParser.DEFINE, 0); }
 		public TerminalNode AS() { return getToken(EParser.AS, 0); }
 		public List<TerminalNode> COLON() { return getTokens(EParser.COLON); }
@@ -1278,11 +1278,11 @@ public class EParser extends AbstractParser {
 		public Type_identifierContext type_identifier() {
 			return getRuleContext(Type_identifierContext.class,0);
 		}
-		public Native_category_mappingsContext native_category_mappings() {
-			return getRuleContext(Native_category_mappingsContext.class,0);
+		public Native_category_bindingsContext native_category_bindings() {
+			return getRuleContext(Native_category_bindingsContext.class,0);
 		}
 		public TerminalNode WITH() { return getToken(EParser.WITH, 0); }
-		public TerminalNode MAPPINGS() { return getToken(EParser.MAPPINGS, 0); }
+		public TerminalNode BINDINGS() { return getToken(EParser.BINDINGS, 0); }
 		public TerminalNode COMMA() { return getToken(EParser.COMMA, 0); }
 		public TerminalNode AND() { return getToken(EParser.AND, 0); }
 		public Attribute_listContext attribute_list() {
@@ -1332,7 +1332,7 @@ public class EParser extends AbstractParser {
 				setState(533); 
 				match(AND);
 				setState(534); 
-				match(MAPPINGS);
+				match(BINDINGS);
 				}
 				}
 				break;
@@ -1341,7 +1341,7 @@ public class EParser extends AbstractParser {
 				setState(536); 
 				match(WITH);
 				setState(537); 
-				match(MAPPINGS);
+				match(BINDINGS);
 				}
 				break;
 			}
@@ -1350,7 +1350,7 @@ public class EParser extends AbstractParser {
 			setState(541); 
 			indent();
 			setState(542); 
-			((Native_category_declarationContext)_localctx).mappings = native_category_mappings();
+			((Native_category_declarationContext)_localctx).bindings = native_category_bindings();
 			setState(543); 
 			dedent();
 			}
@@ -1369,7 +1369,7 @@ public class EParser extends AbstractParser {
 	public static class Native_resource_declarationContext extends ParserRuleContext {
 		public Type_identifierContext name;
 		public Attribute_listContext attrs;
-		public Native_category_mappingsContext mappings;
+		public Native_category_bindingsContext bindings;
 		public TerminalNode DEFINE() { return getToken(EParser.DEFINE, 0); }
 		public TerminalNode AS() { return getToken(EParser.AS, 0); }
 		public List<TerminalNode> COLON() { return getTokens(EParser.COLON); }
@@ -1387,11 +1387,11 @@ public class EParser extends AbstractParser {
 		public Type_identifierContext type_identifier() {
 			return getRuleContext(Type_identifierContext.class,0);
 		}
-		public Native_category_mappingsContext native_category_mappings() {
-			return getRuleContext(Native_category_mappingsContext.class,0);
+		public Native_category_bindingsContext native_category_bindings() {
+			return getRuleContext(Native_category_bindingsContext.class,0);
 		}
 		public TerminalNode WITH() { return getToken(EParser.WITH, 0); }
-		public TerminalNode MAPPINGS() { return getToken(EParser.MAPPINGS, 0); }
+		public TerminalNode BINDINGS() { return getToken(EParser.BINDINGS, 0); }
 		public TerminalNode COMMA() { return getToken(EParser.COMMA, 0); }
 		public TerminalNode AND() { return getToken(EParser.AND, 0); }
 		public Attribute_listContext attribute_list() {
@@ -1441,7 +1441,7 @@ public class EParser extends AbstractParser {
 				setState(553); 
 				match(AND);
 				setState(554); 
-				match(MAPPINGS);
+				match(BINDINGS);
 				}
 				}
 				break;
@@ -1450,7 +1450,7 @@ public class EParser extends AbstractParser {
 				setState(556); 
 				match(WITH);
 				setState(557); 
-				match(MAPPINGS);
+				match(BINDINGS);
 				}
 				break;
 			}
@@ -1459,7 +1459,7 @@ public class EParser extends AbstractParser {
 			setState(561); 
 			indent();
 			setState(562); 
-			((Native_resource_declarationContext)_localctx).mappings = native_category_mappings();
+			((Native_resource_declarationContext)_localctx).bindings = native_category_bindings();
 			setState(563); 
 			dedent();
 			}
@@ -1475,11 +1475,11 @@ public class EParser extends AbstractParser {
 		return _localctx;
 	}
 
-	public static class Native_category_mappingsContext extends ParserRuleContext {
-		public Native_category_mapping_listContext items;
+	public static class Native_category_bindingsContext extends ParserRuleContext {
+		public Native_category_binding_listContext items;
 		public TerminalNode DEFINE() { return getToken(EParser.DEFINE, 0); }
 		public TerminalNode CATEGORY() { return getToken(EParser.CATEGORY, 0); }
-		public TerminalNode MAPPINGS() { return getToken(EParser.MAPPINGS, 0); }
+		public TerminalNode BINDINGS() { return getToken(EParser.BINDINGS, 0); }
 		public TerminalNode AS() { return getToken(EParser.AS, 0); }
 		public TerminalNode COLON() { return getToken(EParser.COLON, 0); }
 		public IndentContext indent() {
@@ -1488,26 +1488,26 @@ public class EParser extends AbstractParser {
 		public DedentContext dedent() {
 			return getRuleContext(DedentContext.class,0);
 		}
-		public Native_category_mapping_listContext native_category_mapping_list() {
-			return getRuleContext(Native_category_mapping_listContext.class,0);
+		public Native_category_binding_listContext native_category_binding_list() {
+			return getRuleContext(Native_category_binding_listContext.class,0);
 		}
-		public Native_category_mappingsContext(ParserRuleContext parent, int invokingState) {
+		public Native_category_bindingsContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_native_category_mappings; }
+		@Override public int getRuleIndex() { return RULE_native_category_bindings; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof EParserListener ) ((EParserListener)listener).enterNative_category_mappings(this);
+			if ( listener instanceof EParserListener ) ((EParserListener)listener).enterNative_category_bindings(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof EParserListener ) ((EParserListener)listener).exitNative_category_mappings(this);
+			if ( listener instanceof EParserListener ) ((EParserListener)listener).exitNative_category_bindings(this);
 		}
 	}
 
-	public final Native_category_mappingsContext native_category_mappings() throws RecognitionException {
-		Native_category_mappingsContext _localctx = new Native_category_mappingsContext(_ctx, getState());
-		enterRule(_localctx, 26, RULE_native_category_mappings);
+	public final Native_category_bindingsContext native_category_bindings() throws RecognitionException {
+		Native_category_bindingsContext _localctx = new Native_category_bindingsContext(_ctx, getState());
+		enterRule(_localctx, 26, RULE_native_category_bindings);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -1516,7 +1516,7 @@ public class EParser extends AbstractParser {
 			setState(566); 
 			match(CATEGORY);
 			setState(567); 
-			match(MAPPINGS);
+			match(BINDINGS);
 			setState(568); 
 			match(AS);
 			setState(569); 
@@ -1524,7 +1524,7 @@ public class EParser extends AbstractParser {
 			setState(570); 
 			indent();
 			setState(571); 
-			((Native_category_mappingsContext)_localctx).items = native_category_mapping_list(0);
+			((Native_category_bindingsContext)_localctx).items = native_category_binding_list(0);
 			setState(572); 
 			dedent();
 			}
@@ -1540,77 +1540,77 @@ public class EParser extends AbstractParser {
 		return _localctx;
 	}
 
-	public static class Native_category_mapping_listContext extends ParserRuleContext {
-		public Native_category_mapping_listContext(ParserRuleContext parent, int invokingState) {
+	public static class Native_category_binding_listContext extends ParserRuleContext {
+		public Native_category_binding_listContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_native_category_mapping_list; }
+		@Override public int getRuleIndex() { return RULE_native_category_binding_list; }
 	 
-		public Native_category_mapping_listContext() { }
-		public void copyFrom(Native_category_mapping_listContext ctx) {
+		public Native_category_binding_listContext() { }
+		public void copyFrom(Native_category_binding_listContext ctx) {
 			super.copyFrom(ctx);
 		}
 	}
-	public static class NativeCategoryMappingListContext extends Native_category_mapping_listContext {
-		public Native_category_mappingContext item;
-		public Native_category_mappingContext native_category_mapping() {
-			return getRuleContext(Native_category_mappingContext.class,0);
+	public static class NativeCategoryBindingListContext extends Native_category_binding_listContext {
+		public Native_category_bindingContext item;
+		public Native_category_bindingContext native_category_binding() {
+			return getRuleContext(Native_category_bindingContext.class,0);
 		}
-		public NativeCategoryMappingListContext(Native_category_mapping_listContext ctx) { copyFrom(ctx); }
+		public NativeCategoryBindingListContext(Native_category_binding_listContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof EParserListener ) ((EParserListener)listener).enterNativeCategoryMappingList(this);
+			if ( listener instanceof EParserListener ) ((EParserListener)listener).enterNativeCategoryBindingList(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof EParserListener ) ((EParserListener)listener).exitNativeCategoryMappingList(this);
+			if ( listener instanceof EParserListener ) ((EParserListener)listener).exitNativeCategoryBindingList(this);
 		}
 	}
-	public static class NativeCategoryMappingListItemContext extends Native_category_mapping_listContext {
-		public Native_category_mapping_listContext items;
-		public Native_category_mappingContext item;
+	public static class NativeCategoryBindingListItemContext extends Native_category_binding_listContext {
+		public Native_category_binding_listContext items;
+		public Native_category_bindingContext item;
 		public LfpContext lfp() {
 			return getRuleContext(LfpContext.class,0);
 		}
-		public Native_category_mapping_listContext native_category_mapping_list() {
-			return getRuleContext(Native_category_mapping_listContext.class,0);
+		public Native_category_binding_listContext native_category_binding_list() {
+			return getRuleContext(Native_category_binding_listContext.class,0);
 		}
-		public Native_category_mappingContext native_category_mapping() {
-			return getRuleContext(Native_category_mappingContext.class,0);
+		public Native_category_bindingContext native_category_binding() {
+			return getRuleContext(Native_category_bindingContext.class,0);
 		}
-		public NativeCategoryMappingListItemContext(Native_category_mapping_listContext ctx) { copyFrom(ctx); }
+		public NativeCategoryBindingListItemContext(Native_category_binding_listContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof EParserListener ) ((EParserListener)listener).enterNativeCategoryMappingListItem(this);
+			if ( listener instanceof EParserListener ) ((EParserListener)listener).enterNativeCategoryBindingListItem(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof EParserListener ) ((EParserListener)listener).exitNativeCategoryMappingListItem(this);
+			if ( listener instanceof EParserListener ) ((EParserListener)listener).exitNativeCategoryBindingListItem(this);
 		}
 	}
 
-	public final Native_category_mapping_listContext native_category_mapping_list() throws RecognitionException {
-		return native_category_mapping_list(0);
+	public final Native_category_binding_listContext native_category_binding_list() throws RecognitionException {
+		return native_category_binding_list(0);
 	}
 
-	private Native_category_mapping_listContext native_category_mapping_list(int _p) throws RecognitionException {
+	private Native_category_binding_listContext native_category_binding_list(int _p) throws RecognitionException {
 		ParserRuleContext _parentctx = _ctx;
 		int _parentState = getState();
-		Native_category_mapping_listContext _localctx = new Native_category_mapping_listContext(_ctx, _parentState);
-		Native_category_mapping_listContext _prevctx = _localctx;
+		Native_category_binding_listContext _localctx = new Native_category_binding_listContext(_ctx, _parentState);
+		Native_category_binding_listContext _prevctx = _localctx;
 		int _startState = 28;
-		enterRecursionRule(_localctx, 28, RULE_native_category_mapping_list, _p);
+		enterRecursionRule(_localctx, 28, RULE_native_category_binding_list, _p);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 			{
-			_localctx = new NativeCategoryMappingListContext(_localctx);
+			_localctx = new NativeCategoryBindingListContext(_localctx);
 			_ctx = _localctx;
 			_prevctx = _localctx;
 
 			setState(575); 
-			((NativeCategoryMappingListContext)_localctx).item = native_category_mapping();
+			((NativeCategoryBindingListContext)_localctx).item = native_category_binding();
 			}
 			_ctx.stop = _input.LT(-1);
 			setState(583);
@@ -1622,15 +1622,15 @@ public class EParser extends AbstractParser {
 					_prevctx = _localctx;
 					{
 					{
-					_localctx = new NativeCategoryMappingListItemContext(new Native_category_mapping_listContext(_parentctx, _parentState));
-					((NativeCategoryMappingListItemContext)_localctx).items = _prevctx;
-					pushNewRecursionContext(_localctx, _startState, RULE_native_category_mapping_list);
+					_localctx = new NativeCategoryBindingListItemContext(new Native_category_binding_listContext(_parentctx, _parentState));
+					((NativeCategoryBindingListItemContext)_localctx).items = _prevctx;
+					pushNewRecursionContext(_localctx, _startState, RULE_native_category_binding_list);
 					setState(577);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
 					setState(578); 
 					lfp();
 					setState(579); 
-					((NativeCategoryMappingListItemContext)_localctx).item = native_category_mapping();
+					((NativeCategoryBindingListItemContext)_localctx).item = native_category_binding();
 					}
 					} 
 				}
@@ -8124,7 +8124,7 @@ public class EParser extends AbstractParser {
 			match(LBRAK);
 			setState(1303);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << METHOD_T) | (1L << CODE) | (1L << DOCUMENT))) != 0) || ((((_la - 86)) & ~0x3f) == 0 && ((1L << (_la - 86)) & ((1L << (EXECUTE - 86)) | (1L << (FETCH - 86)) | (1L << (INVOKE - 86)) | (1L << (MUTABLE - 86)) | (1L << (NOT - 86)) | (1L << (NOTHING - 86)) | (1L << (READ - 86)) | (1L << (SELF - 86)) | (1L << (SORTED - 86)) | (1L << (THIS - 86)) | (1L << (BOOLEAN_LITERAL - 86)) | (1L << (CHAR_LITERAL - 86)) | (1L << (MIN_INTEGER - 86)) | (1L << (MAX_INTEGER - 86)) | (1L << (SYMBOL_IDENTIFIER - 86)) | (1L << (TYPE_IDENTIFIER - 86)) | (1L << (VARIABLE_IDENTIFIER - 86)) | (1L << (TEXT_LITERAL - 86)) | (1L << (INTEGER_LITERAL - 86)) | (1L << (HEXA_LITERAL - 86)) | (1L << (DECIMAL_LITERAL - 86)) | (1L << (DATETIME_LITERAL - 86)))) != 0) || ((((_la - 150)) & ~0x3f) == 0 && ((1L << (_la - 150)) & ((1L << (TIME_LITERAL - 150)) | (1L << (DATE_LITERAL - 150)) | (1L << (PERIOD_LITERAL - 150)))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << METHOD_T) | (1L << CODE) | (1L << DOCUMENT))) != 0) || ((((_la - 87)) & ~0x3f) == 0 && ((1L << (_la - 87)) & ((1L << (EXECUTE - 87)) | (1L << (FETCH - 87)) | (1L << (INVOKE - 87)) | (1L << (MUTABLE - 87)) | (1L << (NOT - 87)) | (1L << (NOTHING - 87)) | (1L << (READ - 87)) | (1L << (SELF - 87)) | (1L << (SORTED - 87)) | (1L << (THIS - 87)) | (1L << (BOOLEAN_LITERAL - 87)) | (1L << (CHAR_LITERAL - 87)) | (1L << (MIN_INTEGER - 87)) | (1L << (MAX_INTEGER - 87)) | (1L << (SYMBOL_IDENTIFIER - 87)) | (1L << (TYPE_IDENTIFIER - 87)) | (1L << (VARIABLE_IDENTIFIER - 87)) | (1L << (TEXT_LITERAL - 87)) | (1L << (INTEGER_LITERAL - 87)) | (1L << (HEXA_LITERAL - 87)) | (1L << (DECIMAL_LITERAL - 87)) | (1L << (DATETIME_LITERAL - 87)) | (1L << (TIME_LITERAL - 87)))) != 0) || _la==DATE_LITERAL || _la==PERIOD_LITERAL) {
 				{
 				setState(1302); 
 				((List_literalContext)_localctx).items = expression_list(0);
@@ -8178,7 +8178,7 @@ public class EParser extends AbstractParser {
 			match(LT);
 			setState(1309);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << METHOD_T) | (1L << CODE) | (1L << DOCUMENT))) != 0) || ((((_la - 86)) & ~0x3f) == 0 && ((1L << (_la - 86)) & ((1L << (EXECUTE - 86)) | (1L << (FETCH - 86)) | (1L << (INVOKE - 86)) | (1L << (MUTABLE - 86)) | (1L << (NOT - 86)) | (1L << (NOTHING - 86)) | (1L << (READ - 86)) | (1L << (SELF - 86)) | (1L << (SORTED - 86)) | (1L << (THIS - 86)) | (1L << (BOOLEAN_LITERAL - 86)) | (1L << (CHAR_LITERAL - 86)) | (1L << (MIN_INTEGER - 86)) | (1L << (MAX_INTEGER - 86)) | (1L << (SYMBOL_IDENTIFIER - 86)) | (1L << (TYPE_IDENTIFIER - 86)) | (1L << (VARIABLE_IDENTIFIER - 86)) | (1L << (TEXT_LITERAL - 86)) | (1L << (INTEGER_LITERAL - 86)) | (1L << (HEXA_LITERAL - 86)) | (1L << (DECIMAL_LITERAL - 86)) | (1L << (DATETIME_LITERAL - 86)))) != 0) || ((((_la - 150)) & ~0x3f) == 0 && ((1L << (_la - 150)) & ((1L << (TIME_LITERAL - 150)) | (1L << (DATE_LITERAL - 150)) | (1L << (PERIOD_LITERAL - 150)))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << METHOD_T) | (1L << CODE) | (1L << DOCUMENT))) != 0) || ((((_la - 87)) & ~0x3f) == 0 && ((1L << (_la - 87)) & ((1L << (EXECUTE - 87)) | (1L << (FETCH - 87)) | (1L << (INVOKE - 87)) | (1L << (MUTABLE - 87)) | (1L << (NOT - 87)) | (1L << (NOTHING - 87)) | (1L << (READ - 87)) | (1L << (SELF - 87)) | (1L << (SORTED - 87)) | (1L << (THIS - 87)) | (1L << (BOOLEAN_LITERAL - 87)) | (1L << (CHAR_LITERAL - 87)) | (1L << (MIN_INTEGER - 87)) | (1L << (MAX_INTEGER - 87)) | (1L << (SYMBOL_IDENTIFIER - 87)) | (1L << (TYPE_IDENTIFIER - 87)) | (1L << (VARIABLE_IDENTIFIER - 87)) | (1L << (TEXT_LITERAL - 87)) | (1L << (INTEGER_LITERAL - 87)) | (1L << (HEXA_LITERAL - 87)) | (1L << (DECIMAL_LITERAL - 87)) | (1L << (DATETIME_LITERAL - 87)) | (1L << (TIME_LITERAL - 87)))) != 0) || _la==DATE_LITERAL || _la==PERIOD_LITERAL) {
 				{
 				setState(1308); 
 				((Set_literalContext)_localctx).items = expression_list(0);
@@ -10350,152 +10350,152 @@ public class EParser extends AbstractParser {
 		return _localctx;
 	}
 
-	public static class Native_category_mappingContext extends ParserRuleContext {
-		public Native_category_mappingContext(ParserRuleContext parent, int invokingState) {
+	public static class Native_category_bindingContext extends ParserRuleContext {
+		public Native_category_bindingContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_native_category_mapping; }
+		@Override public int getRuleIndex() { return RULE_native_category_binding; }
 	 
-		public Native_category_mappingContext() { }
-		public void copyFrom(Native_category_mappingContext ctx) {
+		public Native_category_bindingContext() { }
+		public void copyFrom(Native_category_bindingContext ctx) {
 			super.copyFrom(ctx);
 		}
 	}
-	public static class CSharpCategoryMappingContext extends Native_category_mappingContext {
-		public Csharp_identifier_expressionContext mapping;
+	public static class Python2CategoryBindingContext extends Native_category_bindingContext {
+		public Python_category_bindingContext binding;
+		public TerminalNode PYTHON2() { return getToken(EParser.PYTHON2, 0); }
+		public Python_category_bindingContext python_category_binding() {
+			return getRuleContext(Python_category_bindingContext.class,0);
+		}
+		public Python2CategoryBindingContext(Native_category_bindingContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof EParserListener ) ((EParserListener)listener).enterPython2CategoryBinding(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof EParserListener ) ((EParserListener)listener).exitPython2CategoryBinding(this);
+		}
+	}
+	public static class CSharpCategoryBindingContext extends Native_category_bindingContext {
+		public Csharp_identifier_expressionContext binding;
 		public TerminalNode CSHARP() { return getToken(EParser.CSHARP, 0); }
 		public Csharp_identifier_expressionContext csharp_identifier_expression() {
 			return getRuleContext(Csharp_identifier_expressionContext.class,0);
 		}
-		public CSharpCategoryMappingContext(Native_category_mappingContext ctx) { copyFrom(ctx); }
+		public CSharpCategoryBindingContext(Native_category_bindingContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof EParserListener ) ((EParserListener)listener).enterCSharpCategoryMapping(this);
+			if ( listener instanceof EParserListener ) ((EParserListener)listener).enterCSharpCategoryBinding(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof EParserListener ) ((EParserListener)listener).exitCSharpCategoryMapping(this);
+			if ( listener instanceof EParserListener ) ((EParserListener)listener).exitCSharpCategoryBinding(this);
 		}
 	}
-	public static class JavaCategoryMappingContext extends Native_category_mappingContext {
-		public Java_class_identifier_expressionContext mapping;
+	public static class JavaScriptCategoryBindingContext extends Native_category_bindingContext {
+		public Javascript_category_bindingContext binding;
+		public TerminalNode JAVASCRIPT() { return getToken(EParser.JAVASCRIPT, 0); }
+		public Javascript_category_bindingContext javascript_category_binding() {
+			return getRuleContext(Javascript_category_bindingContext.class,0);
+		}
+		public JavaScriptCategoryBindingContext(Native_category_bindingContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof EParserListener ) ((EParserListener)listener).enterJavaScriptCategoryBinding(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof EParserListener ) ((EParserListener)listener).exitJavaScriptCategoryBinding(this);
+		}
+	}
+	public static class JavaCategoryBindingContext extends Native_category_bindingContext {
+		public Java_class_identifier_expressionContext binding;
 		public TerminalNode JAVA() { return getToken(EParser.JAVA, 0); }
 		public Java_class_identifier_expressionContext java_class_identifier_expression() {
 			return getRuleContext(Java_class_identifier_expressionContext.class,0);
 		}
-		public JavaCategoryMappingContext(Native_category_mappingContext ctx) { copyFrom(ctx); }
+		public JavaCategoryBindingContext(Native_category_bindingContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof EParserListener ) ((EParserListener)listener).enterJavaCategoryMapping(this);
+			if ( listener instanceof EParserListener ) ((EParserListener)listener).enterJavaCategoryBinding(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof EParserListener ) ((EParserListener)listener).exitJavaCategoryMapping(this);
+			if ( listener instanceof EParserListener ) ((EParserListener)listener).exitJavaCategoryBinding(this);
 		}
 	}
-	public static class JavaScriptCategoryMappingContext extends Native_category_mappingContext {
-		public Javascript_category_mappingContext mapping;
-		public TerminalNode JAVASCRIPT() { return getToken(EParser.JAVASCRIPT, 0); }
-		public Javascript_category_mappingContext javascript_category_mapping() {
-			return getRuleContext(Javascript_category_mappingContext.class,0);
-		}
-		public JavaScriptCategoryMappingContext(Native_category_mappingContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof EParserListener ) ((EParserListener)listener).enterJavaScriptCategoryMapping(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof EParserListener ) ((EParserListener)listener).exitJavaScriptCategoryMapping(this);
-		}
-	}
-	public static class Python3CategoryMappingContext extends Native_category_mappingContext {
-		public Python_category_mappingContext mapping;
+	public static class Python3CategoryBindingContext extends Native_category_bindingContext {
+		public Python_category_bindingContext binding;
 		public TerminalNode PYTHON3() { return getToken(EParser.PYTHON3, 0); }
-		public Python_category_mappingContext python_category_mapping() {
-			return getRuleContext(Python_category_mappingContext.class,0);
+		public Python_category_bindingContext python_category_binding() {
+			return getRuleContext(Python_category_bindingContext.class,0);
 		}
-		public Python3CategoryMappingContext(Native_category_mappingContext ctx) { copyFrom(ctx); }
+		public Python3CategoryBindingContext(Native_category_bindingContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof EParserListener ) ((EParserListener)listener).enterPython3CategoryMapping(this);
+			if ( listener instanceof EParserListener ) ((EParserListener)listener).enterPython3CategoryBinding(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof EParserListener ) ((EParserListener)listener).exitPython3CategoryMapping(this);
-		}
-	}
-	public static class Python2CategoryMappingContext extends Native_category_mappingContext {
-		public Python_category_mappingContext mapping;
-		public TerminalNode PYTHON2() { return getToken(EParser.PYTHON2, 0); }
-		public Python_category_mappingContext python_category_mapping() {
-			return getRuleContext(Python_category_mappingContext.class,0);
-		}
-		public Python2CategoryMappingContext(Native_category_mappingContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof EParserListener ) ((EParserListener)listener).enterPython2CategoryMapping(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof EParserListener ) ((EParserListener)listener).exitPython2CategoryMapping(this);
+			if ( listener instanceof EParserListener ) ((EParserListener)listener).exitPython3CategoryBinding(this);
 		}
 	}
 
-	public final Native_category_mappingContext native_category_mapping() throws RecognitionException {
-		Native_category_mappingContext _localctx = new Native_category_mappingContext(_ctx, getState());
-		enterRule(_localctx, 196, RULE_native_category_mapping);
+	public final Native_category_bindingContext native_category_binding() throws RecognitionException {
+		Native_category_bindingContext _localctx = new Native_category_bindingContext(_ctx, getState());
+		enterRule(_localctx, 196, RULE_native_category_binding);
 		try {
 			setState(1476);
 			switch (_input.LA(1)) {
 			case JAVA:
-				_localctx = new JavaCategoryMappingContext(_localctx);
+				_localctx = new JavaCategoryBindingContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(1466); 
 				match(JAVA);
 				setState(1467); 
-				((JavaCategoryMappingContext)_localctx).mapping = java_class_identifier_expression(0);
+				((JavaCategoryBindingContext)_localctx).binding = java_class_identifier_expression(0);
 				}
 				break;
 			case CSHARP:
-				_localctx = new CSharpCategoryMappingContext(_localctx);
+				_localctx = new CSharpCategoryBindingContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(1468); 
 				match(CSHARP);
 				setState(1469); 
-				((CSharpCategoryMappingContext)_localctx).mapping = csharp_identifier_expression(0);
+				((CSharpCategoryBindingContext)_localctx).binding = csharp_identifier_expression(0);
 				}
 				break;
 			case PYTHON2:
-				_localctx = new Python2CategoryMappingContext(_localctx);
+				_localctx = new Python2CategoryBindingContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(1470); 
 				match(PYTHON2);
 				setState(1471); 
-				((Python2CategoryMappingContext)_localctx).mapping = python_category_mapping();
+				((Python2CategoryBindingContext)_localctx).binding = python_category_binding();
 				}
 				break;
 			case PYTHON3:
-				_localctx = new Python3CategoryMappingContext(_localctx);
+				_localctx = new Python3CategoryBindingContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(1472); 
 				match(PYTHON3);
 				setState(1473); 
-				((Python3CategoryMappingContext)_localctx).mapping = python_category_mapping();
+				((Python3CategoryBindingContext)_localctx).binding = python_category_binding();
 				}
 				break;
 			case JAVASCRIPT:
-				_localctx = new JavaScriptCategoryMappingContext(_localctx);
+				_localctx = new JavaScriptCategoryBindingContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
 				setState(1474); 
 				match(JAVASCRIPT);
 				setState(1475); 
-				((JavaScriptCategoryMappingContext)_localctx).mapping = javascript_category_mapping();
+				((JavaScriptCategoryBindingContext)_localctx).binding = javascript_category_binding();
 				}
 				break;
 			default:
@@ -10513,7 +10513,7 @@ public class EParser extends AbstractParser {
 		return _localctx;
 	}
 
-	public static class Python_category_mappingContext extends ParserRuleContext {
+	public static class Python_category_bindingContext extends ParserRuleContext {
 		public IdentifierContext id_;
 		public Python_moduleContext module;
 		public IdentifierContext identifier() {
@@ -10522,34 +10522,34 @@ public class EParser extends AbstractParser {
 		public Python_moduleContext python_module() {
 			return getRuleContext(Python_moduleContext.class,0);
 		}
-		public Python_category_mappingContext(ParserRuleContext parent, int invokingState) {
+		public Python_category_bindingContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_python_category_mapping; }
+		@Override public int getRuleIndex() { return RULE_python_category_binding; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof EParserListener ) ((EParserListener)listener).enterPython_category_mapping(this);
+			if ( listener instanceof EParserListener ) ((EParserListener)listener).enterPython_category_binding(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof EParserListener ) ((EParserListener)listener).exitPython_category_mapping(this);
+			if ( listener instanceof EParserListener ) ((EParserListener)listener).exitPython_category_binding(this);
 		}
 	}
 
-	public final Python_category_mappingContext python_category_mapping() throws RecognitionException {
-		Python_category_mappingContext _localctx = new Python_category_mappingContext(_ctx, getState());
-		enterRule(_localctx, 198, RULE_python_category_mapping);
+	public final Python_category_bindingContext python_category_binding() throws RecognitionException {
+		Python_category_bindingContext _localctx = new Python_category_bindingContext(_ctx, getState());
+		enterRule(_localctx, 198, RULE_python_category_binding);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(1478); 
-			((Python_category_mappingContext)_localctx).id_ = identifier();
+			((Python_category_bindingContext)_localctx).id_ = identifier();
 			setState(1480);
 			switch ( getInterpreter().adaptivePredict(_input,96,_ctx) ) {
 			case 1:
 				{
 				setState(1479); 
-				((Python_category_mappingContext)_localctx).module = python_module();
+				((Python_category_bindingContext)_localctx).module = python_module();
 				}
 				break;
 			}
@@ -10682,7 +10682,7 @@ public class EParser extends AbstractParser {
 		return _localctx;
 	}
 
-	public static class Javascript_category_mappingContext extends ParserRuleContext {
+	public static class Javascript_category_bindingContext extends ParserRuleContext {
 		public IdentifierContext id_;
 		public Javascript_moduleContext module;
 		public IdentifierContext identifier() {
@@ -10691,34 +10691,34 @@ public class EParser extends AbstractParser {
 		public Javascript_moduleContext javascript_module() {
 			return getRuleContext(Javascript_moduleContext.class,0);
 		}
-		public Javascript_category_mappingContext(ParserRuleContext parent, int invokingState) {
+		public Javascript_category_bindingContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_javascript_category_mapping; }
+		@Override public int getRuleIndex() { return RULE_javascript_category_binding; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof EParserListener ) ((EParserListener)listener).enterJavascript_category_mapping(this);
+			if ( listener instanceof EParserListener ) ((EParserListener)listener).enterJavascript_category_binding(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof EParserListener ) ((EParserListener)listener).exitJavascript_category_mapping(this);
+			if ( listener instanceof EParserListener ) ((EParserListener)listener).exitJavascript_category_binding(this);
 		}
 	}
 
-	public final Javascript_category_mappingContext javascript_category_mapping() throws RecognitionException {
-		Javascript_category_mappingContext _localctx = new Javascript_category_mappingContext(_ctx, getState());
-		enterRule(_localctx, 204, RULE_javascript_category_mapping);
+	public final Javascript_category_bindingContext javascript_category_binding() throws RecognitionException {
+		Javascript_category_bindingContext _localctx = new Javascript_category_bindingContext(_ctx, getState());
+		enterRule(_localctx, 204, RULE_javascript_category_binding);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(1496); 
-			((Javascript_category_mappingContext)_localctx).id_ = identifier();
+			((Javascript_category_bindingContext)_localctx).id_ = identifier();
 			setState(1498);
 			switch ( getInterpreter().adaptivePredict(_input,98,_ctx) ) {
 			case 1:
 				{
 				setState(1497); 
-				((Javascript_category_mappingContext)_localctx).module = javascript_module();
+				((Javascript_category_bindingContext)_localctx).module = javascript_module();
 				}
 				break;
 			}
@@ -12937,7 +12937,7 @@ public class EParser extends AbstractParser {
 			match(LPAR);
 			setState(1688);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << METHOD_T) | (1L << CODE) | (1L << DOCUMENT))) != 0) || ((((_la - 86)) & ~0x3f) == 0 && ((1L << (_la - 86)) & ((1L << (EXECUTE - 86)) | (1L << (FETCH - 86)) | (1L << (INVOKE - 86)) | (1L << (MUTABLE - 86)) | (1L << (NOT - 86)) | (1L << (NOTHING - 86)) | (1L << (READ - 86)) | (1L << (SELF - 86)) | (1L << (SORTED - 86)) | (1L << (THIS - 86)) | (1L << (BOOLEAN_LITERAL - 86)) | (1L << (CHAR_LITERAL - 86)) | (1L << (MIN_INTEGER - 86)) | (1L << (MAX_INTEGER - 86)) | (1L << (SYMBOL_IDENTIFIER - 86)) | (1L << (TYPE_IDENTIFIER - 86)) | (1L << (VARIABLE_IDENTIFIER - 86)) | (1L << (TEXT_LITERAL - 86)) | (1L << (INTEGER_LITERAL - 86)) | (1L << (HEXA_LITERAL - 86)) | (1L << (DECIMAL_LITERAL - 86)) | (1L << (DATETIME_LITERAL - 86)))) != 0) || ((((_la - 150)) & ~0x3f) == 0 && ((1L << (_la - 150)) & ((1L << (TIME_LITERAL - 150)) | (1L << (DATE_LITERAL - 150)) | (1L << (PERIOD_LITERAL - 150)))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << METHOD_T) | (1L << CODE) | (1L << DOCUMENT))) != 0) || ((((_la - 87)) & ~0x3f) == 0 && ((1L << (_la - 87)) & ((1L << (EXECUTE - 87)) | (1L << (FETCH - 87)) | (1L << (INVOKE - 87)) | (1L << (MUTABLE - 87)) | (1L << (NOT - 87)) | (1L << (NOTHING - 87)) | (1L << (READ - 87)) | (1L << (SELF - 87)) | (1L << (SORTED - 87)) | (1L << (THIS - 87)) | (1L << (BOOLEAN_LITERAL - 87)) | (1L << (CHAR_LITERAL - 87)) | (1L << (MIN_INTEGER - 87)) | (1L << (MAX_INTEGER - 87)) | (1L << (SYMBOL_IDENTIFIER - 87)) | (1L << (TYPE_IDENTIFIER - 87)) | (1L << (VARIABLE_IDENTIFIER - 87)) | (1L << (TEXT_LITERAL - 87)) | (1L << (INTEGER_LITERAL - 87)) | (1L << (HEXA_LITERAL - 87)) | (1L << (DECIMAL_LITERAL - 87)) | (1L << (DATETIME_LITERAL - 87)) | (1L << (TIME_LITERAL - 87)))) != 0) || _la==DATE_LITERAL || _la==PERIOD_LITERAL) {
 				{
 				setState(1687); 
 				((Tuple_literalContext)_localctx).items = expression_tuple(0);
@@ -12991,7 +12991,7 @@ public class EParser extends AbstractParser {
 			match(LCURL);
 			setState(1694);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << METHOD_T) | (1L << CODE) | (1L << DOCUMENT))) != 0) || ((((_la - 86)) & ~0x3f) == 0 && ((1L << (_la - 86)) & ((1L << (EXECUTE - 86)) | (1L << (FETCH - 86)) | (1L << (INVOKE - 86)) | (1L << (MUTABLE - 86)) | (1L << (NOT - 86)) | (1L << (NOTHING - 86)) | (1L << (READ - 86)) | (1L << (SELF - 86)) | (1L << (SORTED - 86)) | (1L << (THIS - 86)) | (1L << (BOOLEAN_LITERAL - 86)) | (1L << (CHAR_LITERAL - 86)) | (1L << (MIN_INTEGER - 86)) | (1L << (MAX_INTEGER - 86)) | (1L << (SYMBOL_IDENTIFIER - 86)) | (1L << (TYPE_IDENTIFIER - 86)) | (1L << (VARIABLE_IDENTIFIER - 86)) | (1L << (TEXT_LITERAL - 86)) | (1L << (INTEGER_LITERAL - 86)) | (1L << (HEXA_LITERAL - 86)) | (1L << (DECIMAL_LITERAL - 86)) | (1L << (DATETIME_LITERAL - 86)))) != 0) || ((((_la - 150)) & ~0x3f) == 0 && ((1L << (_la - 150)) & ((1L << (TIME_LITERAL - 150)) | (1L << (DATE_LITERAL - 150)) | (1L << (PERIOD_LITERAL - 150)))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << METHOD_T) | (1L << CODE) | (1L << DOCUMENT))) != 0) || ((((_la - 87)) & ~0x3f) == 0 && ((1L << (_la - 87)) & ((1L << (EXECUTE - 87)) | (1L << (FETCH - 87)) | (1L << (INVOKE - 87)) | (1L << (MUTABLE - 87)) | (1L << (NOT - 87)) | (1L << (NOTHING - 87)) | (1L << (READ - 87)) | (1L << (SELF - 87)) | (1L << (SORTED - 87)) | (1L << (THIS - 87)) | (1L << (BOOLEAN_LITERAL - 87)) | (1L << (CHAR_LITERAL - 87)) | (1L << (MIN_INTEGER - 87)) | (1L << (MAX_INTEGER - 87)) | (1L << (SYMBOL_IDENTIFIER - 87)) | (1L << (TYPE_IDENTIFIER - 87)) | (1L << (VARIABLE_IDENTIFIER - 87)) | (1L << (TEXT_LITERAL - 87)) | (1L << (INTEGER_LITERAL - 87)) | (1L << (HEXA_LITERAL - 87)) | (1L << (DECIMAL_LITERAL - 87)) | (1L << (DATETIME_LITERAL - 87)) | (1L << (TIME_LITERAL - 87)))) != 0) || _la==DATE_LITERAL || _la==PERIOD_LITERAL) {
 				{
 				setState(1693); 
 				((Dict_literalContext)_localctx).items = dict_entry_list(0);
@@ -18418,7 +18418,7 @@ public class EParser extends AbstractParser {
 	public boolean sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
 		switch (ruleIndex) {
 		case 14: 
-			return native_category_mapping_list_sempred((Native_category_mapping_listContext)_localctx, predIndex);
+			return native_category_binding_list_sempred((Native_category_binding_listContext)_localctx, predIndex);
 		case 33: 
 			return else_if_statement_list_sempred((Else_if_statement_listContext)_localctx, predIndex);
 		case 38: 
@@ -18520,7 +18520,7 @@ public class EParser extends AbstractParser {
 		}
 		return true;
 	}
-	private boolean native_category_mapping_list_sempred(Native_category_mapping_listContext _localctx, int predIndex) {
+	private boolean native_category_binding_list_sempred(Native_category_binding_listContext _localctx, int predIndex) {
 		switch (predIndex) {
 		case 0: 
 			return precpred(_ctx, 1);
@@ -19163,25 +19163,25 @@ public class EParser extends AbstractParser {
 		"\2\2\u0162\u0802\3\2\2\2\u0164\u080f\3\2\2\2\u0166\u0814\3\2\2\2\u0168"+
 		"\u0816\3\2\2\2\u016a\u081d\3\2\2\2\u016c\u0828\3\2\2\2\u016e\u082c\3\2"+
 		"\2\2\u0170\u0833\3\2\2\2\u0172\u0842\3\2\2\2\u0174\u0844\3\2\2\2\u0176"+
-		"\u0177\7P\2\2\u0177\u0178\5\u00b0Y\2\u0178\u0179\7D\2\2\u0179\u017a\7"+
-		"\20\2\2\u017a\u017d\7V\2\2\u017b\u017e\7J\2\2\u017c\u017e\5\u00b0Y\2\u017d"+
+		"\u0177\7Q\2\2\u0177\u0178\5\u00b0Y\2\u0178\u0179\7D\2\2\u0179\u017a\7"+
+		"\20\2\2\u017a\u017d\7W\2\2\u017b\u017e\7K\2\2\u017c\u017e\5\u00b0Y\2\u017d"+
 		"\u017b\3\2\2\2\u017d\u017c\3\2\2\2\u017e\u0184\3\2\2\2\u017f\u0180\5 "+
 		"\21\2\u0180\u0181\7\22\2\2\u0181\u0182\7B\2\2\u0182\u0185\3\2\2\2\u0183"+
 		"\u0185\7\u0085\2\2\u0184\u017f\3\2\2\2\u0184\u0183\3\2\2\2\u0185\u0186"+
 		"\3\2\2\2\u0186\u0187\5\u010e\u0088\2\u0187\u0188\7\20\2\2\u0188\u0189"+
 		"\5z>\2\u0189\u018a\5\u008cG\2\u018a\u018b\5|?\2\u018b\3\3\2\2\2\u018c"+
-		"\u018d\7P\2\2\u018d\u018e\5\u00b0Y\2\u018e\u018f\7D\2\2\u018f\u0190\7"+
-		"\20\2\2\u0190\u0191\7V\2\2\u0191\u0192\5\u009eP\2\u0192\u0193\7\u0085"+
+		"\u018d\7Q\2\2\u018d\u018e\5\u00b0Y\2\u018e\u018f\7D\2\2\u018f\u0190\7"+
+		"\20\2\2\u0190\u0191\7W\2\2\u0191\u0192\5\u009eP\2\u0192\u0193\7\u0085"+
 		"\2\2\u0193\u0194\5\u010e\u0088\2\u0194\u0195\7\20\2\2\u0195\u0196\5z>"+
 		"\2\u0196\u0197\5\u008aF\2\u0197\u0198\5|?\2\u0198\5\3\2\2\2\u0199\u019a"+
 		"\5\u00b2Z\2\u019a\u019b\7\u0085\2\2\u019b\u019c\5N(\2\u019c\u019d\7D\2"+
 		"\2\u019d\u019e\5\u010c\u0087\2\u019e\7\3\2\2\2\u019f\u01a0\5\u00b2Z\2"+
 		"\u01a0\u01a3\5l\67\2\u01a1\u01a2\7B\2\2\u01a2\u01a4\5n8\2\u01a3\u01a1"+
-		"\3\2\2\2\u01a3\u01a4\3\2\2\2\u01a4\t\3\2\2\2\u01a5\u01a6\7P\2\2\u01a6"+
+		"\3\2\2\2\u01a3\u01a4\3\2\2\2\u01a4\t\3\2\2\2\u01a5\u01a6\7Q\2\2\u01a6"+
 		"\u01a7\5\u00aeX\2\u01a7\u01a8\7D\2\2\u01a8\u01a9\7\20\2\2\u01a9\u01aa"+
 		"\5\u009aN\2\u01aa\u01ac\7F\2\2\u01ab\u01ad\5\u0090I\2\u01ac\u01ab\3\2"+
-		"\2\2\u01ac\u01ad\3\2\2\2\u01ad\13\3\2\2\2\u01ae\u01af\7P\2\2\u01af\u01b0"+
-		"\5\u00b0Y\2\u01b0\u01b1\7D\2\2\u01b1\u01b4\7\20\2\2\u01b2\u01b5\7J\2\2"+
+		"\2\2\u01ac\u01ad\3\2\2\2\u01ad\13\3\2\2\2\u01ae\u01af\7Q\2\2\u01af\u01b0"+
+		"\5\u00b0Y\2\u01b0\u01b1\7D\2\2\u01b1\u01b4\7\20\2\2\u01b2\u01b5\7K\2\2"+
 		"\u01b3\u01b5\5\20\t\2\u01b4\u01b2\3\2\2\2\u01b4\u01b3\3\2\2\2\u01b5\u01c8"+
 		"\3\2\2\2\u01b6\u01bf\5 \21\2\u01b7\u01b8\7\22\2\2\u01b8\u01b9\7B\2\2\u01b9"+
 		"\u01ba\7g\2\2\u01ba\u01bb\7\20\2\2\u01bb\u01bc\5z>\2\u01bc\u01bd\5\u00c2"+
@@ -19189,7 +19189,7 @@ public class EParser extends AbstractParser {
 		"\3\2\2\2\u01c0\u01c9\3\2\2\2\u01c1\u01c2\7\u0085\2\2\u01c2\u01c3\7g\2"+
 		"\2\u01c3\u01c4\7\20\2\2\u01c4\u01c5\5z>\2\u01c5\u01c6\5\u00c2b\2\u01c6"+
 		"\u01c7\5|?\2\u01c7\u01c9\3\2\2\2\u01c8\u01b6\3\2\2\2\u01c8\u01c1\3\2\2"+
-		"\2\u01c8\u01c9\3\2\2\2\u01c9\r\3\2\2\2\u01ca\u01cb\7P\2\2\u01cb\u01cc"+
+		"\2\u01c8\u01c9\3\2\2\2\u01c9\r\3\2\2\2\u01ca\u01cb\7Q\2\2\u01cb\u01cc"+
 		"\5\u00b0Y\2\u01cc\u01cd\7D\2\2\u01cd\u01ce\7\20\2\2\u01ce\u01e1\7}\2\2"+
 		"\u01cf\u01d8\5 \21\2\u01d0\u01d1\7\22\2\2\u01d1\u01d2\7B\2\2\u01d2\u01d3"+
 		"\7g\2\2\u01d3\u01d4\7\20\2\2\u01d4\u01d5\5z>\2\u01d5\u01d6\5\u00c2b\2"+
@@ -19200,30 +19200,30 @@ public class EParser extends AbstractParser {
 		"\2\u01e1\u01e2\3\2\2\2\u01e2\17\3\2\2\2\u01e3\u01e9\5\u00a8U\2\u01e4\u01e5"+
 		"\5\u00a8U\2\u01e5\u01e6\7B\2\2\u01e6\u01e7\5\u00b0Y\2\u01e7\u01e9\3\2"+
 		"\2\2\u01e8\u01e3\3\2\2\2\u01e8\u01e4\3\2\2\2\u01e9\21\3\2\2\2\u01ea\u01eb"+
-		"\7P\2\2\u01eb\u01ec\5\u0108\u0085\2\u01ec\u01ed\7D\2\2\u01ed\u01ee\7\20"+
+		"\7Q\2\2\u01eb\u01ec\5\u0108\u0085\2\u01ec\u01ed\7D\2\2\u01ed\u01ee\7\20"+
 		"\2\2\u01ee\u01ef\7q\2\2\u01ef\u01f0\7w\2\2\u01f0\u01f1\7\20\2\2\u01f1"+
 		"\u01f5\5\u00b8]\2\u01f2\u01f3\7z\2\2\u01f3\u01f4\7\20\2\2\u01f4\u01f6"+
 		"\5\u009aN\2\u01f5\u01f2\3\2\2\2\u01f5\u01f6\3\2\2\2\u01f6\u01f7\3\2\2"+
-		"\2\u01f7\u01f8\7R\2\2\u01f8\u01f9\7\20\2\2\u01f9\u01fa\5z>\2\u01fa\u01fb"+
-		"\5\u00dep\2\u01fb\u01fc\5|?\2\u01fc\23\3\2\2\2\u01fd\u01fe\7P\2\2\u01fe"+
-		"\u01ff\5\u00aeX\2\u01ff\u0200\7|\2\2\u0200\u0201\7R\2\2\u0201\u0202\7"+
+		"\2\u01f7\u01f8\7S\2\2\u01f8\u01f9\7\20\2\2\u01f9\u01fa\5z>\2\u01fa\u01fb"+
+		"\5\u00dep\2\u01fb\u01fc\5|?\2\u01fc\23\3\2\2\2\u01fd\u01fe\7Q\2\2\u01fe"+
+		"\u01ff\5\u00aeX\2\u01ff\u0200\7|\2\2\u0200\u0201\7S\2\2\u0201\u0202\7"+
 		"\20\2\2\u0202\u0203\5z>\2\u0203\u0204\5\u00dep\2\u0204\u0205\5|?\2\u0205"+
-		"\25\3\2\2\2\u0206\u0207\7P\2\2\u0207\u0208\5\u00aeX\2\u0208\u0209\7_\2"+
-		"\2\u0209\u020a\7R\2\2\u020a\u020b\7\20\2\2\u020b\u020c\5z>\2\u020c\u020d"+
-		"\5\u00dep\2\u020d\u020e\5|?\2\u020e\27\3\2\2\2\u020f\u0210\7P\2\2\u0210"+
+		"\25\3\2\2\2\u0206\u0207\7Q\2\2\u0207\u0208\5\u00aeX\2\u0208\u0209\7`\2"+
+		"\2\u0209\u020a\7S\2\2\u020a\u020b\7\20\2\2\u020b\u020c\5z>\2\u020c\u020d"+
+		"\5\u00dep\2\u020d\u020e\5|?\2\u020e\27\3\2\2\2\u020f\u0210\7Q\2\2\u0210"+
 		"\u0211\5\u00b0Y\2\u0211\u0212\7D\2\2\u0212\u0213\7\20\2\2\u0213\u0214"+
-		"\7j\2\2\u0214\u021c\7J\2\2\u0215\u0216\5 \21\2\u0216\u0217\7\22\2\2\u0217"+
-		"\u0218\7B\2\2\u0218\u0219\7d\2\2\u0219\u021d\3\2\2\2\u021a\u021b\7\u0085"+
-		"\2\2\u021b\u021d\7d\2\2\u021c\u0215\3\2\2\2\u021c\u021a\3\2\2\2\u021d"+
+		"\7j\2\2\u0214\u021c\7K\2\2\u0215\u0216\5 \21\2\u0216\u0217\7\22\2\2\u0217"+
+		"\u0218\7B\2\2\u0218\u0219\7H\2\2\u0219\u021d\3\2\2\2\u021a\u021b\7\u0085"+
+		"\2\2\u021b\u021d\7H\2\2\u021c\u0215\3\2\2\2\u021c\u021a\3\2\2\2\u021d"+
 		"\u021e\3\2\2\2\u021e\u021f\7\20\2\2\u021f\u0220\5z>\2\u0220\u0221\5\34"+
-		"\17\2\u0221\u0222\5|?\2\u0222\31\3\2\2\2\u0223\u0224\7P\2\2\u0224\u0225"+
+		"\17\2\u0221\u0222\5|?\2\u0222\31\3\2\2\2\u0223\u0224\7Q\2\2\u0224\u0225"+
 		"\5\u00b0Y\2\u0225\u0226\7D\2\2\u0226\u0227\7\20\2\2\u0227\u0228\7j\2\2"+
 		"\u0228\u0230\7x\2\2\u0229\u022a\5 \21\2\u022a\u022b\7\22\2\2\u022b\u022c"+
-		"\7B\2\2\u022c\u022d\7d\2\2\u022d\u0231\3\2\2\2\u022e\u022f\7\u0085\2\2"+
-		"\u022f\u0231\7d\2\2\u0230\u0229\3\2\2\2\u0230\u022e\3\2\2\2\u0231\u0232"+
+		"\7B\2\2\u022c\u022d\7H\2\2\u022d\u0231\3\2\2\2\u022e\u022f\7\u0085\2\2"+
+		"\u022f\u0231\7H\2\2\u0230\u0229\3\2\2\2\u0230\u022e\3\2\2\2\u0231\u0232"+
 		"\3\2\2\2\u0232\u0233\7\20\2\2\u0233\u0234\5z>\2\u0234\u0235\5\34\17\2"+
-		"\u0235\u0236\5|?\2\u0236\33\3\2\2\2\u0237\u0238\7P\2\2\u0238\u0239\7J"+
-		"\2\2\u0239\u023a\7d\2\2\u023a\u023b\7D\2\2\u023b\u023c\7\20\2\2\u023c"+
+		"\u0235\u0236\5|?\2\u0236\33\3\2\2\2\u0237\u0238\7Q\2\2\u0238\u0239\7K"+
+		"\2\2\u0239\u023a\7H\2\2\u023a\u023b\7D\2\2\u023b\u023c\7\20\2\2\u023c"+
 		"\u023d\5z>\2\u023d\u023e\5\36\20\2\u023e\u023f\5|?\2\u023f\35\3\2\2\2"+
 		"\u0240\u0241\b\20\1\2\u0241\u0242\5\u00c6d\2\u0242\u0249\3\2\2\2\u0243"+
 		"\u0244\f\3\2\2\u0244\u0245\5x=\2\u0245\u0246\5\u00c6d\2\u0246\u0248\3"+
@@ -19233,29 +19233,29 @@ public class EParser extends AbstractParser {
 		"\u0251\7\u0085\2\2\u0251\u0252\7G\2\2\u0252\u0253\7\20\2\2\u0253\u0256"+
 		"\5\u00d2j\2\u0254\u0255\7B\2\2\u0255\u0257\5\u00aeX\2\u0256\u0254\3\2"+
 		"\2\2\u0256\u0257\3\2\2\2\u0257\u0259\3\2\2\2\u0258\u024c\3\2\2\2\u0258"+
-		"\u0250\3\2\2\2\u0259!\3\2\2\2\u025a\u025b\7P\2\2\u025b\u025c\5\u00aaV"+
+		"\u0250\3\2\2\2\u0259!\3\2\2\2\u025a\u025b\7Q\2\2\u025b\u025c\5\u00aaV"+
 		"\2\u025c\u025d\7D\2\2\u025d\u025e\7\20\2\2\u025e\u025f\7?\2\2\u025f\u0263"+
 		"\7f\2\2\u0260\u0261\7w\2\2\u0261\u0262\7\20\2\2\u0262\u0264\5,\27\2\u0263"+
 		"\u0260\3\2\2\2\u0263\u0264\3\2\2\2\u0264\u0268\3\2\2\2\u0265\u0266\7z"+
 		"\2\2\u0266\u0267\7\20\2\2\u0267\u0269\5\u009aN\2\u0268\u0265\3\2\2\2\u0268"+
-		"\u0269\3\2\2\2\u0269#\3\2\2\2\u026a\u026b\7P\2\2\u026b\u026c\5\u00aaV"+
+		"\u0269\3\2\2\2\u0269#\3\2\2\2\u026a\u026b\7Q\2\2\u026b\u026c\5\u00aaV"+
 		"\2\u026c\u026d\7D\2\2\u026d\u026e\7\20\2\2\u026e\u0272\7f\2\2\u026f\u0270"+
 		"\7w\2\2\u0270\u0271\7\20\2\2\u0271\u0273\5,\27\2\u0272\u026f\3\2\2\2\u0272"+
 		"\u0273\3\2\2\2\u0273\u0277\3\2\2\2\u0274\u0275\7z\2\2\u0275\u0276\7\20"+
 		"\2\2\u0276\u0278\5\u009aN\2\u0277\u0274\3\2\2\2\u0277\u0278\3\2\2\2\u0278"+
-		"\u0279\3\2\2\2\u0279\u027a\7R\2\2\u027a\u027b\7\20\2\2\u027b\u027c\5z"+
+		"\u0279\3\2\2\2\u0279\u027a\7S\2\2\u027a\u027b\7\20\2\2\u027b\u027c\5z"+
 		">\2\u027c\u027d\5\u00dep\2\u027d\u027e\5|?\2\u027e%\3\2\2\2\u027f\u0280"+
-		"\7P\2\2\u0280\u0281\5\u00aaV\2\u0281\u0282\7D\2\2\u0282\u0283\7\20\2\2"+
+		"\7Q\2\2\u0280\u0281\5\u00aaV\2\u0281\u0282\7D\2\2\u0282\u0283\7\20\2\2"+
 		"\u0283\u0284\7j\2\2\u0284\u0288\7f\2\2\u0285\u0286\7w\2\2\u0286\u0287"+
 		"\7\20\2\2\u0287\u0289\5,\27\2\u0288\u0285\3\2\2\2\u0288\u0289\3\2\2\2"+
 		"\u0289\u028d\3\2\2\2\u028a\u028b\7z\2\2\u028b\u028c\7\20\2\2\u028c\u028e"+
 		"\5\u00be`\2\u028d\u028a\3\2\2\2\u028d\u028e\3\2\2\2\u028e\u028f\3\2\2"+
-		"\2\u028f\u0290\7R\2\2\u0290\u0291\7\20\2\2\u0291\u0292\5z>\2\u0292\u0293"+
-		"\5\u00d6l\2\u0293\u0294\5|?\2\u0294\'\3\2\2\2\u0295\u0296\7P\2\2\u0296"+
+		"\2\u028f\u0290\7S\2\2\u0290\u0291\7\20\2\2\u0291\u0292\5z>\2\u0292\u0293"+
+		"\5\u00d6l\2\u0293\u0294\5|?\2\u0294\'\3\2\2\2\u0295\u0296\7Q\2\2\u0296"+
 		"\u0297\7\u0093\2\2\u0297\u0298\7D\2\2\u0298\u0299\7\20\2\2\u0299\u029a"+
-		"\7\u0080\2\2\u029a\u029b\7f\2\2\u029b\u029c\7R\2\2\u029c\u029d\7\20\2"+
+		"\7\u0080\2\2\u029a\u029b\7f\2\2\u029b\u029c\7S\2\2\u029c\u029d\7\20\2"+
 		"\2\u029d\u029e\5z>\2\u029e\u029f\5\u00dep\2\u029f\u02a0\5|?\2\u02a0\u02a1"+
-		"\5x=\2\u02a1\u02a2\7B\2\2\u02a2\u02a3\7Y\2\2\u02a3\u02a9\7\20\2\2\u02a4"+
+		"\5x=\2\u02a1\u02a2\7B\2\2\u02a2\u02a3\7Z\2\2\u02a3\u02a9\7\20\2\2\u02a4"+
 		"\u02a5\5z>\2\u02a5\u02a6\5\u00e0q\2\u02a6\u02a7\5|?\2\u02a7\u02aa\3\2"+
 		"\2\2\u02a8\u02aa\5\u00b2Z\2\u02a9\u02a4\3\2\2\2\u02a9\u02a8\3\2\2\2\u02aa"+
 		")\3\2\2\2\u02ab\u02ac\5N(\2\u02ac+\3\2\2\2\u02ad\u02b0\5\u00b4[\2\u02ae"+
@@ -19275,10 +19275,10 @@ public class EParser extends AbstractParser {
 		"\61\3\2\2\2\u02cc\u02ce\5P)\2\u02cd\u02cf\5j\66\2\u02ce\u02cd\3\2\2\2"+
 		"\u02ce\u02cf\3\2\2\2\u02cf\u02d2\3\2\2\2\u02d0\u02d2\5T+\2\u02d1\u02cc"+
 		"\3\2\2\2\u02d1\u02d0\3\2\2\2\u02d2\63\3\2\2\2\u02d3\u02d4\7\u0085\2\2"+
-		"\u02d4\u02d5\5\u0102\u0082\2\u02d5\u02d6\7\22\2\2\u02d6\u02d7\7Q\2\2\u02d7"+
+		"\u02d4\u02d5\5\u0102\u0082\2\u02d5\u02d6\7\22\2\2\u02d6\u02d7\7R\2\2\u02d7"+
 		"\u02d8\7\20\2\2\u02d8\u02d9\5z>\2\u02d9\u02da\5\u00dep\2\u02da\u02db\5"+
 		"|?\2\u02db\65\3\2\2\2\u02dc\u02dd\7\u0085\2\2\u02dd\u02de\5\u00b0Y\2\u02de"+
-		"\u02df\7\22\2\2\u02df\u02e0\7Q\2\2\u02e0\u02e1\7\20\2\2\u02e1\u02e2\5"+
+		"\u02df\7\22\2\2\u02df\u02e0\7R\2\2\u02e0\u02e1\7\20\2\2\u02e1\u02e2\5"+
 		"z>\2\u02e2\u02e3\5\u00dep\2\u02e3\u02e4\5|?\2\u02e4\67\3\2\2\2\u02e5\u02e6"+
 		"\7\177\2\2\u02e6\u02e7\7o\2\2\u02e7\u02e8\5N(\2\u02e8\u02e9\7\20\2\2\u02e9"+
 		"\u02ea\5z>\2\u02ea\u02f2\5\u00e2r\2\u02eb\u02ec\5x=\2\u02ec\u02ed\7s\2"+
@@ -19287,32 +19287,32 @@ public class EParser extends AbstractParser {
 		"\2\u02f3\u02f4\3\2\2\2\u02f4\u02f5\5|?\2\u02f59\3\2\2\2\u02f6\u02f7\7"+
 		"\u0086\2\2\u02f7\u02f8\5\u00e8u\2\u02f8\u02f9\7\20\2\2\u02f9\u02fa\5z"+
 		">\2\u02fa\u02fb\5\u00dep\2\u02fb\u02fc\5|?\2\u02fc\u0306\3\2\2\2\u02fd"+
-		"\u02fe\7\u0086\2\2\u02fe\u02ff\7a\2\2\u02ff\u0300\5\u00e6t\2\u0300\u0301"+
+		"\u02fe\7\u0086\2\2\u02fe\u02ff\7b\2\2\u02ff\u0300\5\u00e6t\2\u0300\u0301"+
 		"\7\20\2\2\u0301\u0302\5z>\2\u0302\u0303\5\u00dep\2\u0303\u0304\5|?\2\u0304"+
 		"\u0306\3\2\2\2\u0305\u02f6\3\2\2\2\u0305\u02fd\3\2\2\2\u0306;\3\2\2\2"+
-		"\u0307\u0308\7]\2\2\u0308\u0309\7S\2\2\u0309\u030c\5\u00aeX\2\u030a\u030b"+
+		"\u0307\u0308\7^\2\2\u0308\u0309\7T\2\2\u0309\u030c\5\u00aeX\2\u030a\u030b"+
 		"\7\22\2\2\u030b\u030d\5\u00aeX\2\u030c\u030a\3\2\2\2\u030c\u030d\3\2\2"+
-		"\2\u030d\u030e\3\2\2\2\u030e\u030f\7a\2\2\u030f\u0310\5N(\2\u0310\u0311"+
+		"\2\u030d\u030e\3\2\2\2\u030e\u030f\7b\2\2\u030f\u0310\5N(\2\u0310\u0311"+
 		"\7\20\2\2\u0311\u0312\5z>\2\u0312\u0313\5\u00dep\2\u0313\u0314\5|?\2\u0314"+
-		"=\3\2\2\2\u0315\u0316\7Q\2\2\u0316\u0317\7\20\2\2\u0317\u0318\5z>\2\u0318"+
+		"=\3\2\2\2\u0315\u0316\7R\2\2\u0316\u0317\7\20\2\2\u0317\u0318\5z>\2\u0318"+
 		"\u0319\5\u00dep\2\u0319\u031a\5|?\2\u031a\u031b\5x=\2\u031b\u031c\7\u0088"+
 		"\2\2\u031c\u031d\5N(\2\u031d?\3\2\2\2\u031e\u031f\7\u0088\2\2\u031f\u0320"+
 		"\5N(\2\u0320\u0321\7\20\2\2\u0321\u0322\5z>\2\u0322\u0323\5\u00dep\2\u0323"+
-		"\u0324\5|?\2\u0324A\3\2\2\2\u0325\u0326\7`\2\2\u0326\u0327\5N(\2\u0327"+
+		"\u0324\5|?\2\u0324A\3\2\2\2\u0325\u0326\7a\2\2\u0326\u0327\5N(\2\u0327"+
 		"\u0328\7\20\2\2\u0328\u0329\5z>\2\u0329\u032a\5\u00dep\2\u032a\u032e\5"+
 		"|?\2\u032b\u032c\5x=\2\u032c\u032d\5D#\2\u032d\u032f\3\2\2\2\u032e\u032b"+
 		"\3\2\2\2\u032e\u032f\3\2\2\2\u032f\u0337\3\2\2\2\u0330\u0331\5x=\2\u0331"+
-		"\u0332\7T\2\2\u0332\u0333\7\20\2\2\u0333\u0334\5z>\2\u0334\u0335\5\u00de"+
+		"\u0332\7U\2\2\u0332\u0333\7\20\2\2\u0333\u0334\5z>\2\u0334\u0335\5\u00de"+
 		"p\2\u0335\u0336\5|?\2\u0336\u0338\3\2\2\2\u0337\u0330\3\2\2\2\u0337\u0338"+
-		"\3\2\2\2\u0338C\3\2\2\2\u0339\u033a\b#\1\2\u033a\u033b\7T\2\2\u033b\u033c"+
-		"\7`\2\2\u033c\u033d\5N(\2\u033d\u033e\7\20\2\2\u033e\u033f\5z>\2\u033f"+
+		"\3\2\2\2\u0338C\3\2\2\2\u0339\u033a\b#\1\2\u033a\u033b\7U\2\2\u033b\u033c"+
+		"\7a\2\2\u033c\u033d\5N(\2\u033d\u033e\7\20\2\2\u033e\u033f\5z>\2\u033f"+
 		"\u0340\5\u00dep\2\u0340\u0341\5|?\2\u0341\u034e\3\2\2\2\u0342\u0343\f"+
-		"\3\2\2\u0343\u0344\5x=\2\u0344\u0345\7T\2\2\u0345\u0346\7`\2\2\u0346\u0347"+
+		"\3\2\2\u0343\u0344\5x=\2\u0344\u0345\7U\2\2\u0345\u0346\7a\2\2\u0346\u0347"+
 		"\5N(\2\u0347\u0348\7\20\2\2\u0348\u0349\5z>\2\u0349\u034a\5\u00dep\2\u034a"+
 		"\u034b\5|?\2\u034b\u034d\3\2\2\2\u034c\u0342\3\2\2\2\u034d\u0350\3\2\2"+
 		"\2\u034e\u034c\3\2\2\2\u034e\u034f\3\2\2\2\u034fE\3\2\2\2\u0350\u034e"+
 		"\3\2\2\2\u0351\u0352\7u\2\2\u0352\u0353\5N(\2\u0353G\3\2\2\2\u0354\u0355"+
-		"\7\177\2\2\u0355\u0356\7o\2\2\u0356\u0357\5\u00aeX\2\u0357\u0358\7R\2"+
+		"\7\177\2\2\u0355\u0356\7o\2\2\u0356\u0357\5\u00aeX\2\u0357\u0358\7S\2"+
 		"\2\u0358\u0359\7\20\2\2\u0359\u035a\5z>\2\u035a\u035b\5\u00dep\2\u035b"+
 		"\u035c\5|?\2\u035c\u035e\5v<\2\u035d\u035f\5\u00e4s\2\u035e\u035d\3\2"+
 		"\2\2\u035e\u035f\3\2\2\2\u035f\u036b\3\2\2\2\u0360\u0364\7s\2\2\u0361"+
@@ -19326,7 +19326,7 @@ public class EParser extends AbstractParser {
 		"I\3\2\2\2\u0378\u0379\7\u0086\2\2\u0379\u037a\5\u00b2Z\2\u037a\u037b\7"+
 		"\20\2\2\u037b\u037c\5z>\2\u037c\u037d\5\u00dep\2\u037d\u037e\5|?\2\u037e"+
 		"\u037f\5v<\2\u037f\u038c\3\2\2\2\u0380\u0381\7\u0086\2\2\u0381\u0382\7"+
-		"a\2\2\u0382\u0383\7\27\2\2\u0383\u0384\5\u008eH\2\u0384\u0385\7\30\2\2"+
+		"b\2\2\u0382\u0383\7\27\2\2\u0383\u0384\5\u008eH\2\u0384\u0385\7\30\2\2"+
 		"\u0385\u0386\7\20\2\2\u0386\u0387\5z>\2\u0387\u0388\5\u00dep\2\u0388\u0389"+
 		"\5|?\2\u0389\u038a\5v<\2\u038a\u038c\3\2\2\2\u038b\u0378\3\2\2\2\u038b"+
 		"\u0380\3\2\2\2\u038cK\3\2\2\2\u038d\u038f\7y\2\2\u038e\u0390\5N(\2\u038f"+
@@ -19334,7 +19334,7 @@ public class EParser extends AbstractParser {
 		"\u0393\7\"\2\2\u0393\u03ac\5N((\u0394\u0395\7l\2\2\u0395\u03ac\5N(\'\u0396"+
 		"\u0397\7=\2\2\u0397\u0398\7\20\2\2\u0398\u03ac\5N(\f\u0399\u03ac\5X-\2"+
 		"\u039a\u03ac\5P)\2\u039b\u039c\5P)\2\u039c\u039d\5j\66\2\u039d\u03ac\3"+
-		"\2\2\2\u039e\u039f\7X\2\2\u039f\u03a0\7\20\2\2\u03a0\u03ac\5\u00aeX\2"+
+		"\2\2\2\u039e\u039f\7Y\2\2\u039f\u03a0\7\20\2\2\u03a0\u03ac\5\u00aeX\2"+
 		"\u03a1\u03a2\7<\2\2\u03a2\u03a3\7\20\2\2\u03a3\u03ac\5\u00aaV\2\u03a4"+
 		"\u03ac\5\\/\2\u03a5\u03ac\5^\60\2\u03a6\u03ac\5f\64\2\u03a7\u03ac\5`\61"+
 		"\2\u03a8\u03ac\5h\65\2\u03a9\u03ac\5d\63\2\u03aa\u03ac\5T+\2\u03ab\u0391"+
@@ -19355,19 +19355,19 @@ public class EParser extends AbstractParser {
 		"\34\u03cf\u03d0\f\32\2\2\u03d0\u03d1\7+\2\2\u03d1\u040c\5N(\33\u03d2\u03d3"+
 		"\f\31\2\2\u03d3\u03d4\7\60\2\2\u03d4\u040c\5N(\32\u03d5\u03d6\f\30\2\2"+
 		"\u03d6\u03d7\7r\2\2\u03d7\u040c\5N(\31\u03d8\u03d9\f\27\2\2\u03d9\u03da"+
-		"\7B\2\2\u03da\u040c\5N(\30\u03db\u03dc\f\26\2\2\u03dc\u03dd\7`\2\2\u03dd"+
-		"\u03de\5N(\2\u03de\u03df\7T\2\2\u03df\u03e0\5N(\27\u03e0\u040c\3\2\2\2"+
-		"\u03e1\u03e2\f\24\2\2\u03e2\u03e3\7a\2\2\u03e3\u040c\5N(\25\u03e4\u03e5"+
-		"\f\23\2\2\u03e5\u03e6\7M\2\2\u03e6\u040c\5N(\24\u03e7\u03e8\f\22\2\2\u03e8"+
-		"\u03e9\7M\2\2\u03e9\u03ea\7@\2\2\u03ea\u040c\5N(\23\u03eb\u03ec\f\21\2"+
-		"\2\u03ec\u03ed\7M\2\2\u03ed\u03ee\7C\2\2\u03ee\u040c\5N(\22\u03ef\u03f0"+
-		"\f\20\2\2\u03f0\u03f1\7l\2\2\u03f1\u03f2\7a\2\2\u03f2\u040c\5N(\21\u03f3"+
-		"\u03f4\f\17\2\2\u03f4\u03f5\7l\2\2\u03f5\u03f6\7M\2\2\u03f6\u040c\5N("+
-		"\20\u03f7\u03f8\f\16\2\2\u03f8\u03f9\7l\2\2\u03f9\u03fa\7M\2\2\u03fa\u03fb"+
+		"\7B\2\2\u03da\u040c\5N(\30\u03db\u03dc\f\26\2\2\u03dc\u03dd\7a\2\2\u03dd"+
+		"\u03de\5N(\2\u03de\u03df\7U\2\2\u03df\u03e0\5N(\27\u03e0\u040c\3\2\2\2"+
+		"\u03e1\u03e2\f\24\2\2\u03e2\u03e3\7b\2\2\u03e3\u040c\5N(\25\u03e4\u03e5"+
+		"\f\23\2\2\u03e5\u03e6\7N\2\2\u03e6\u040c\5N(\24\u03e7\u03e8\f\22\2\2\u03e8"+
+		"\u03e9\7N\2\2\u03e9\u03ea\7@\2\2\u03ea\u040c\5N(\23\u03eb\u03ec\f\21\2"+
+		"\2\u03ec\u03ed\7N\2\2\u03ed\u03ee\7C\2\2\u03ee\u040c\5N(\22\u03ef\u03f0"+
+		"\f\20\2\2\u03f0\u03f1\7l\2\2\u03f1\u03f2\7b\2\2\u03f2\u040c\5N(\21\u03f3"+
+		"\u03f4\f\17\2\2\u03f4\u03f5\7l\2\2\u03f5\u03f6\7N\2\2\u03f6\u040c\5N("+
+		"\20\u03f7\u03f8\f\16\2\2\u03f8\u03f9\7l\2\2\u03f9\u03fa\7N\2\2\u03fa\u03fb"+
 		"\7@\2\2\u03fb\u040c\5N(\17\u03fc\u03fd\f\r\2\2\u03fd\u03fe\7l\2\2\u03fe"+
-		"\u03ff\7M\2\2\u03ff\u0400\7C\2\2\u0400\u040c\5N(\16\u0401\u0402\f\35\2"+
-		"\2\u0402\u0403\7c\2\2\u0403\u0404\7l\2\2\u0404\u040c\5\u0106\u0084\2\u0405"+
-		"\u0406\f\34\2\2\u0406\u0407\7c\2\2\u0407\u040c\5\u0106\u0084\2\u0408\u0409"+
+		"\u03ff\7N\2\2\u03ff\u0400\7C\2\2\u0400\u040c\5N(\16\u0401\u0402\f\35\2"+
+		"\2\u0402\u0403\7d\2\2\u0403\u0404\7l\2\2\u0404\u040c\5\u0106\u0084\2\u0405"+
+		"\u0406\f\34\2\2\u0406\u0407\7d\2\2\u0407\u040c\5\u0106\u0084\2\u0408\u0409"+
 		"\f\25\2\2\u0409\u040a\7D\2\2\u040a\u040c\5\u00be`\2\u040b\u03ad\3\2\2"+
 		"\2\u040b\u03b1\3\2\2\2\u040b\u03b5\3\2\2\2\u040b\u03b9\3\2\2\2\u040b\u03bd"+
 		"\3\2\2\2\u040b\u03c0\3\2\2\2\u040b\u03c3\3\2\2\2\u040b\u03c6\3\2\2\2\u040b"+
@@ -19381,7 +19381,7 @@ public class EParser extends AbstractParser {
 		"\2\u0412\u0417\3\2\2\2\u0413\u0414\f\3\2\2\u0414\u0416\5R*\2\u0415\u0413"+
 		"\3\2\2\2\u0416\u0419\3\2\2\2\u0417\u0415\3\2\2\2\u0417\u0418\3\2\2\2\u0418"+
 		"Q\3\2\2\2\u0419\u0417\3\2\2\2\u041a\u041b\6*\37\3\u041b\u041c\7\24\2\2"+
-		"\u041c\u041d\5\u00acW\2\u041dS\3\2\2\2\u041e\u041f\7b\2\2\u041f\u0420"+
+		"\u041c\u041d\5\u00acW\2\u041dS\3\2\2\2\u041e\u041f\7c\2\2\u041f\u0420"+
 		"\7\20\2\2\u0420\u0421\5\u00aeX\2\u0421\u0422\5V,\2\u0422U\3\2\2\2\u0423"+
 		"\u0424\6, \3\u0424W\3\2\2\2\u0425\u0426\b-\1\2\u0426\u0427\5\u00ecw\2"+
 		"\u0427\u042c\3\2\2\2\u0428\u0429\f\3\2\2\u0429\u042b\5Z.\2\u042a\u0428"+
@@ -19393,7 +19393,7 @@ public class EParser extends AbstractParser {
 		"\u043d\3\2\2\2\u043c\u042f\3\2\2\2\u043c\u0432\3\2\2\2\u043c\u0437\3\2"+
 		"\2\2\u043d[\3\2\2\2\u043e\u043f\5\u00a4S\2\u043f]\3\2\2\2\u0440\u0442"+
 		"\7i\2\2\u0441\u0440\3\2\2\2\u0441\u0442\3\2\2\2\u0442\u0443\3\2\2\2\u0443"+
-		"\u0444\5\u00a0Q\2\u0444\u0445\7^\2\2\u0445\u044e\5N(\2\u0446\u0448\7\22"+
+		"\u0444\5\u00a0Q\2\u0444\u0445\7_\2\2\u0445\u044e\5N(\2\u0446\u0448\7\22"+
 		"\2\2\u0447\u0446\3\2\2\2\u0447\u0448\3\2\2\2\u0448\u0449\3\2\2\2\u0449"+
 		"\u044c\5l\67\2\u044a\u044b\7B\2\2\u044b\u044d\5n8\2\u044c\u044a\3\2\2"+
 		"\2\u044c\u044d\3\2\2\2\u044d\u044f\3\2\2\2\u044e\u0447\3\2\2\2\u044e\u044f"+
@@ -19402,11 +19402,11 @@ public class EParser extends AbstractParser {
 		"\5l\67\2\u0455\u0456\7B\2\2\u0456\u0458\5n8\2\u0457\u0455\3\2\2\2\u0457"+
 		"\u0458\3\2\2\2\u0458\u045a\3\2\2\2\u0459\u0454\3\2\2\2\u0459\u045a\3\2"+
 		"\2\2\u045a\u045c\3\2\2\2\u045b\u0441\3\2\2\2\u045b\u0451\3\2\2\2\u045c"+
-		"_\3\2\2\2\u045d\u045e\7v\2\2\u045e\u045f\7^\2\2\u045f\u0460\5N(\2\u0460"+
+		"_\3\2\2\2\u045d\u045e\7v\2\2\u045e\u045f\7_\2\2\u045f\u0460\5N(\2\u0460"+
 		"a\3\2\2\2\u0461\u0462\7\u0089\2\2\u0462\u0463\5N(\2\u0463\u0464\7\u0083"+
 		"\2\2\u0464\u0465\5N(\2\u0465c\3\2\2\2\u0466\u0467\5P)\2\u0467\u0468\7"+
-		"\"\2\2\u0468\u0469\5N(\2\u0469e\3\2\2\2\u046a\u046b\7[\2\2\u046b\u046c"+
-		"\7C\2\2\u046c\u046d\5\u00aeX\2\u046d\u046e\7^\2\2\u046e\u046f\5N(\2\u046f"+
+		"\"\2\2\u0468\u0469\5N(\2\u0469e\3\2\2\2\u046a\u046b\7\\\2\2\u046b\u046c"+
+		"\7C\2\2\u046c\u046d\5\u00aeX\2\u046d\u046e\7_\2\2\u046e\u046f\5N(\2\u046f"+
 		"\u0470\7\u0087\2\2\u0470\u0471\5N(\2\u0471g\3\2\2\2\u0472\u0473\7~\2\2"+
 		"\u0473\u0479\5X-\2\u0474\u0475\7\u0085\2\2\u0475\u0476\5X-\2\u0476\u0477"+
 		"\7D\2\2\u0477\u0478\5\u010a\u0086\2\u0478\u047a\3\2\2\2\u0479\u0474\3"+
@@ -19457,8 +19457,8 @@ public class EParser extends AbstractParser {
 		"\u0508\3\2\2\2\u0503\u0504\f\3\2\2\u0504\u0505\7\22\2\2\u0505\u0507\5"+
 		"\u00b2Z\2\u0506\u0503\3\2\2\2\u0507\u050a\3\2\2\2\u0508\u0506\3\2\2\2"+
 		"\u0508\u0509\3\2\2\2\u0509\u008f\3\2\2\2\u050a\u0508\3\2\2\2\u050b\u050c"+
-		"\7a\2\2\u050c\u0516\5\u0092J\2\u050d\u050e\7a\2\2\u050e\u0516\5\u0094"+
-		"K\2\u050f\u0510\7a\2\2\u0510\u0516\5\u0098M\2\u0511\u0512\7e\2\2\u0512"+
+		"\7b\2\2\u050c\u0516\5\u0092J\2\u050d\u050e\7b\2\2\u050e\u0516\5\u0094"+
+		"K\2\u050f\u0510\7b\2\2\u0510\u0516\5\u0098M\2\u0511\u0512\7e\2\2\u0512"+
 		"\u0516\7\u0093\2\2\u0513\u0514\7e\2\2\u0514\u0516\5N(\2\u0515\u050b\3"+
 		"\2\2\2\u0515\u050d\3\2\2\2\u0515\u050f\3\2\2\2\u0515\u0511\3\2\2\2\u0515"+
 		"\u0513\3\2\2\2\u0516\u0091\3\2\2\2\u0517\u0519\7\27\2\2\u0518\u051a\5"+
@@ -19525,13 +19525,13 @@ public class EParser extends AbstractParser {
 		"\3\2\2\2\u05c6\u05be\3\2\2\2\u05c6\u05c0\3\2\2\2\u05c6\u05c2\3\2\2\2\u05c6"+
 		"\u05c4\3\2\2\2\u05c7\u00c7\3\2\2\2\u05c8\u05ca\5\u00acW\2\u05c9\u05cb"+
 		"\5\u00caf\2\u05ca\u05c9\3\2\2\2\u05ca\u05cb\3\2\2\2\u05cb\u00c9\3\2\2"+
-		"\2\u05cc\u05cd\7^\2\2\u05cd\u05ce\5\u00ccg\2\u05ce\u05cf\7\20\2\2\u05cf"+
+		"\2\u05cc\u05cd\7_\2\2\u05cd\u05ce\5\u00ccg\2\u05ce\u05cf\7\20\2\2\u05cf"+
 		"\u05d4\5\u00acW\2\u05d0\u05d1\7\24\2\2\u05d1\u05d3\5\u00acW\2\u05d2\u05d0"+
 		"\3\2\2\2\u05d3\u05d6\3\2\2\2\u05d4\u05d2\3\2\2\2\u05d4\u05d5\3\2\2\2\u05d5"+
 		"\u00cb\3\2\2\2\u05d6\u05d4\3\2\2\2\u05d7\u05d8\7\u0090\2\2\u05d8\u05d9"+
 		"\6g\66\3\u05d9\u00cd\3\2\2\2\u05da\u05dc\5\u00acW\2\u05db\u05dd\5\u00d0"+
 		"i\2\u05dc\u05db\3\2\2\2\u05dc\u05dd\3\2\2\2\u05dd\u00cf\3\2\2\2\u05de"+
-		"\u05df\7^\2\2\u05df\u05e0\5\u00ccg\2\u05e0\u05e2\7\20\2\2\u05e1\u05e3"+
+		"\u05df\7_\2\2\u05df\u05e0\5\u00ccg\2\u05e0\u05e2\7\20\2\2\u05e1\u05e3"+
 		"\7$\2\2\u05e2\u05e1\3\2\2\2\u05e2\u05e3\3\2\2\2\u05e3\u05e4\3\2\2\2\u05e4"+
 		"\u05e9\5\u012e\u0098\2\u05e5\u05e6\7$\2\2\u05e6\u05e8\5\u012e\u0098\2"+
 		"\u05e7\u05e5\3\2\2\2\u05e8\u05eb\3\2\2\2\u05e9\u05e7\3\2\2\2\u05e9\u05ea"+

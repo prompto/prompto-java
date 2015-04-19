@@ -1,20 +1,20 @@
 package presto.python;
 
-import presto.grammar.NativeCategoryMapping;
+import presto.grammar.NativeCategoryBinding;
 import presto.utils.CodeWriter;
 
 
-public class PythonNativeCategoryMapping extends NativeCategoryMapping {
+public class PythonNativeCategoryBinding extends NativeCategoryBinding {
 
 	String identifier;
 	PythonModule module;
 	
-	public PythonNativeCategoryMapping(String identifier, PythonModule module) {
+	public PythonNativeCategoryBinding(String identifier, PythonModule module) {
 		this.identifier = identifier;
 		this.module = module;
 	}
 
-	public PythonNativeCategoryMapping(PythonNativeCategoryMapping mapping) {
+	public PythonNativeCategoryBinding(PythonNativeCategoryBinding mapping) {
 		this.identifier = mapping.identifier;
 		this.module = mapping.module;
 	}

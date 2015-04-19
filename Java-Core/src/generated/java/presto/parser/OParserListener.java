@@ -177,39 +177,39 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitNative_category_declaration(@NotNull OParser.Native_category_declarationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link OParser#native_category_mappings}.
+	 * Enter a parse tree produced by {@link OParser#native_category_bindings}.
 	 * @param ctx the parse tree
 	 */
-	void enterNative_category_mappings(@NotNull OParser.Native_category_mappingsContext ctx);
+	void enterNative_category_bindings(@NotNull OParser.Native_category_bindingsContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link OParser#native_category_mappings}.
+	 * Exit a parse tree produced by {@link OParser#native_category_bindings}.
 	 * @param ctx the parse tree
 	 */
-	void exitNative_category_mappings(@NotNull OParser.Native_category_mappingsContext ctx);
+	void exitNative_category_bindings(@NotNull OParser.Native_category_bindingsContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code NativeCategoryMappingList}
-	 * labeled alternative in {@link OParser#native_category_mapping_list}.
+	 * Enter a parse tree produced by the {@code NativeCategoryBindingListItem}
+	 * labeled alternative in {@link OParser#native_category_binding_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterNativeCategoryMappingList(@NotNull OParser.NativeCategoryMappingListContext ctx);
+	void enterNativeCategoryBindingListItem(@NotNull OParser.NativeCategoryBindingListItemContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code NativeCategoryMappingList}
-	 * labeled alternative in {@link OParser#native_category_mapping_list}.
+	 * Exit a parse tree produced by the {@code NativeCategoryBindingListItem}
+	 * labeled alternative in {@link OParser#native_category_binding_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitNativeCategoryMappingList(@NotNull OParser.NativeCategoryMappingListContext ctx);
+	void exitNativeCategoryBindingListItem(@NotNull OParser.NativeCategoryBindingListItemContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code NativeCategoryMappingListItem}
-	 * labeled alternative in {@link OParser#native_category_mapping_list}.
+	 * Enter a parse tree produced by the {@code NativeCategoryBindingList}
+	 * labeled alternative in {@link OParser#native_category_binding_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterNativeCategoryMappingListItem(@NotNull OParser.NativeCategoryMappingListItemContext ctx);
+	void enterNativeCategoryBindingList(@NotNull OParser.NativeCategoryBindingListContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code NativeCategoryMappingListItem}
-	 * labeled alternative in {@link OParser#native_category_mapping_list}.
+	 * Exit a parse tree produced by the {@code NativeCategoryBindingList}
+	 * labeled alternative in {@link OParser#native_category_binding_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitNativeCategoryMappingListItem(@NotNull OParser.NativeCategoryMappingListItemContext ctx);
+	void exitNativeCategoryBindingList(@NotNull OParser.NativeCategoryBindingListContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code AttributeListItem}
 	 * labeled alternative in {@link OParser#attribute_list}.
@@ -2375,75 +2375,75 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitOperatorMemberMethod(@NotNull OParser.OperatorMemberMethodContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code JavaCategoryMapping}
-	 * labeled alternative in {@link OParser#native_category_mapping}.
+	 * Enter a parse tree produced by the {@code JavaCategoryBinding}
+	 * labeled alternative in {@link OParser#native_category_binding}.
 	 * @param ctx the parse tree
 	 */
-	void enterJavaCategoryMapping(@NotNull OParser.JavaCategoryMappingContext ctx);
+	void enterJavaCategoryBinding(@NotNull OParser.JavaCategoryBindingContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code JavaCategoryMapping}
-	 * labeled alternative in {@link OParser#native_category_mapping}.
+	 * Exit a parse tree produced by the {@code JavaCategoryBinding}
+	 * labeled alternative in {@link OParser#native_category_binding}.
 	 * @param ctx the parse tree
 	 */
-	void exitJavaCategoryMapping(@NotNull OParser.JavaCategoryMappingContext ctx);
+	void exitJavaCategoryBinding(@NotNull OParser.JavaCategoryBindingContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code CSharpCategoryMapping}
-	 * labeled alternative in {@link OParser#native_category_mapping}.
+	 * Enter a parse tree produced by the {@code CSharpCategoryBinding}
+	 * labeled alternative in {@link OParser#native_category_binding}.
 	 * @param ctx the parse tree
 	 */
-	void enterCSharpCategoryMapping(@NotNull OParser.CSharpCategoryMappingContext ctx);
+	void enterCSharpCategoryBinding(@NotNull OParser.CSharpCategoryBindingContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code CSharpCategoryMapping}
-	 * labeled alternative in {@link OParser#native_category_mapping}.
+	 * Exit a parse tree produced by the {@code CSharpCategoryBinding}
+	 * labeled alternative in {@link OParser#native_category_binding}.
 	 * @param ctx the parse tree
 	 */
-	void exitCSharpCategoryMapping(@NotNull OParser.CSharpCategoryMappingContext ctx);
+	void exitCSharpCategoryBinding(@NotNull OParser.CSharpCategoryBindingContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code Python2CategoryMapping}
-	 * labeled alternative in {@link OParser#native_category_mapping}.
+	 * Enter a parse tree produced by the {@code Python2CategoryBinding}
+	 * labeled alternative in {@link OParser#native_category_binding}.
 	 * @param ctx the parse tree
 	 */
-	void enterPython2CategoryMapping(@NotNull OParser.Python2CategoryMappingContext ctx);
+	void enterPython2CategoryBinding(@NotNull OParser.Python2CategoryBindingContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code Python2CategoryMapping}
-	 * labeled alternative in {@link OParser#native_category_mapping}.
+	 * Exit a parse tree produced by the {@code Python2CategoryBinding}
+	 * labeled alternative in {@link OParser#native_category_binding}.
 	 * @param ctx the parse tree
 	 */
-	void exitPython2CategoryMapping(@NotNull OParser.Python2CategoryMappingContext ctx);
+	void exitPython2CategoryBinding(@NotNull OParser.Python2CategoryBindingContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code Python3CategoryMapping}
-	 * labeled alternative in {@link OParser#native_category_mapping}.
+	 * Enter a parse tree produced by the {@code Python3CategoryBinding}
+	 * labeled alternative in {@link OParser#native_category_binding}.
 	 * @param ctx the parse tree
 	 */
-	void enterPython3CategoryMapping(@NotNull OParser.Python3CategoryMappingContext ctx);
+	void enterPython3CategoryBinding(@NotNull OParser.Python3CategoryBindingContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code Python3CategoryMapping}
-	 * labeled alternative in {@link OParser#native_category_mapping}.
+	 * Exit a parse tree produced by the {@code Python3CategoryBinding}
+	 * labeled alternative in {@link OParser#native_category_binding}.
 	 * @param ctx the parse tree
 	 */
-	void exitPython3CategoryMapping(@NotNull OParser.Python3CategoryMappingContext ctx);
+	void exitPython3CategoryBinding(@NotNull OParser.Python3CategoryBindingContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code JavaScriptCategoryMapping}
-	 * labeled alternative in {@link OParser#native_category_mapping}.
+	 * Enter a parse tree produced by the {@code JavaScriptCategoryBinding}
+	 * labeled alternative in {@link OParser#native_category_binding}.
 	 * @param ctx the parse tree
 	 */
-	void enterJavaScriptCategoryMapping(@NotNull OParser.JavaScriptCategoryMappingContext ctx);
+	void enterJavaScriptCategoryBinding(@NotNull OParser.JavaScriptCategoryBindingContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code JavaScriptCategoryMapping}
-	 * labeled alternative in {@link OParser#native_category_mapping}.
+	 * Exit a parse tree produced by the {@code JavaScriptCategoryBinding}
+	 * labeled alternative in {@link OParser#native_category_binding}.
 	 * @param ctx the parse tree
 	 */
-	void exitJavaScriptCategoryMapping(@NotNull OParser.JavaScriptCategoryMappingContext ctx);
+	void exitJavaScriptCategoryBinding(@NotNull OParser.JavaScriptCategoryBindingContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link OParser#python_category_mapping}.
+	 * Enter a parse tree produced by {@link OParser#python_category_binding}.
 	 * @param ctx the parse tree
 	 */
-	void enterPython_category_mapping(@NotNull OParser.Python_category_mappingContext ctx);
+	void enterPython_category_binding(@NotNull OParser.Python_category_bindingContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link OParser#python_category_mapping}.
+	 * Exit a parse tree produced by {@link OParser#python_category_binding}.
 	 * @param ctx the parse tree
 	 */
-	void exitPython_category_mapping(@NotNull OParser.Python_category_mappingContext ctx);
+	void exitPython_category_binding(@NotNull OParser.Python_category_bindingContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link OParser#python_module}.
 	 * @param ctx the parse tree
@@ -2465,15 +2465,15 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitModule_token(@NotNull OParser.Module_tokenContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link OParser#javascript_category_mapping}.
+	 * Enter a parse tree produced by {@link OParser#javascript_category_binding}.
 	 * @param ctx the parse tree
 	 */
-	void enterJavascript_category_mapping(@NotNull OParser.Javascript_category_mappingContext ctx);
+	void enterJavascript_category_binding(@NotNull OParser.Javascript_category_bindingContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link OParser#javascript_category_mapping}.
+	 * Exit a parse tree produced by {@link OParser#javascript_category_binding}.
 	 * @param ctx the parse tree
 	 */
-	void exitJavascript_category_mapping(@NotNull OParser.Javascript_category_mappingContext ctx);
+	void exitJavascript_category_binding(@NotNull OParser.Javascript_category_bindingContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link OParser#javascript_module}.
 	 * @param ctx the parse tree

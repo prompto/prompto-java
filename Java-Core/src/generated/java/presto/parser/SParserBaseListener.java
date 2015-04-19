@@ -173,37 +173,37 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNative_category_mappings(@NotNull SParser.Native_category_mappingsContext ctx) { }
+	@Override public void enterNative_category_bindings(@NotNull SParser.Native_category_bindingsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNative_category_mappings(@NotNull SParser.Native_category_mappingsContext ctx) { }
+	@Override public void exitNative_category_bindings(@NotNull SParser.Native_category_bindingsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNativeCategoryMappingList(@NotNull SParser.NativeCategoryMappingListContext ctx) { }
+	@Override public void enterNativeCategoryBindingListItem(@NotNull SParser.NativeCategoryBindingListItemContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNativeCategoryMappingList(@NotNull SParser.NativeCategoryMappingListContext ctx) { }
+	@Override public void exitNativeCategoryBindingListItem(@NotNull SParser.NativeCategoryBindingListItemContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNativeCategoryMappingListItem(@NotNull SParser.NativeCategoryMappingListItemContext ctx) { }
+	@Override public void enterNativeCategoryBindingList(@NotNull SParser.NativeCategoryBindingListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNativeCategoryMappingListItem(@NotNull SParser.NativeCategoryMappingListItemContext ctx) { }
+	@Override public void exitNativeCategoryBindingList(@NotNull SParser.NativeCategoryBindingListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2465,73 +2465,73 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJavaCategoryMapping(@NotNull SParser.JavaCategoryMappingContext ctx) { }
+	@Override public void enterJavaCategoryBinding(@NotNull SParser.JavaCategoryBindingContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJavaCategoryMapping(@NotNull SParser.JavaCategoryMappingContext ctx) { }
+	@Override public void exitJavaCategoryBinding(@NotNull SParser.JavaCategoryBindingContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCSharpCategoryMapping(@NotNull SParser.CSharpCategoryMappingContext ctx) { }
+	@Override public void enterCSharpCategoryBinding(@NotNull SParser.CSharpCategoryBindingContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCSharpCategoryMapping(@NotNull SParser.CSharpCategoryMappingContext ctx) { }
+	@Override public void exitCSharpCategoryBinding(@NotNull SParser.CSharpCategoryBindingContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPython2CategoryMapping(@NotNull SParser.Python2CategoryMappingContext ctx) { }
+	@Override public void enterPython2CategoryBinding(@NotNull SParser.Python2CategoryBindingContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPython2CategoryMapping(@NotNull SParser.Python2CategoryMappingContext ctx) { }
+	@Override public void exitPython2CategoryBinding(@NotNull SParser.Python2CategoryBindingContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPython3CategoryMapping(@NotNull SParser.Python3CategoryMappingContext ctx) { }
+	@Override public void enterPython3CategoryBinding(@NotNull SParser.Python3CategoryBindingContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPython3CategoryMapping(@NotNull SParser.Python3CategoryMappingContext ctx) { }
+	@Override public void exitPython3CategoryBinding(@NotNull SParser.Python3CategoryBindingContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJavaScriptCategoryMapping(@NotNull SParser.JavaScriptCategoryMappingContext ctx) { }
+	@Override public void enterJavaScriptCategoryBinding(@NotNull SParser.JavaScriptCategoryBindingContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJavaScriptCategoryMapping(@NotNull SParser.JavaScriptCategoryMappingContext ctx) { }
+	@Override public void exitJavaScriptCategoryBinding(@NotNull SParser.JavaScriptCategoryBindingContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPython_category_mapping(@NotNull SParser.Python_category_mappingContext ctx) { }
+	@Override public void enterPython_category_binding(@NotNull SParser.Python_category_bindingContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPython_category_mapping(@NotNull SParser.Python_category_mappingContext ctx) { }
+	@Override public void exitPython_category_binding(@NotNull SParser.Python_category_bindingContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2561,13 +2561,13 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJavascript_category_mapping(@NotNull SParser.Javascript_category_mappingContext ctx) { }
+	@Override public void enterJavascript_category_binding(@NotNull SParser.Javascript_category_bindingContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJavascript_category_mapping(@NotNull SParser.Javascript_category_mappingContext ctx) { }
+	@Override public void exitJavascript_category_binding(@NotNull SParser.Javascript_category_bindingContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -3,15 +3,15 @@ package presto.grammar;
 import presto.utils.CodeWriter;
 import presto.utils.ObjectList;
 
-public class NativeCategoryMappingList extends ObjectList<NativeCategoryMapping> {
+public class NativeCategoryBindingList extends ObjectList<NativeCategoryBinding> {
 
 	private static final long serialVersionUID = 1L;
 
-	public NativeCategoryMappingList() {
+	public NativeCategoryBindingList() {
 		
 	}
 	
-	public NativeCategoryMappingList(NativeCategoryMapping mapping) {
+	public NativeCategoryBindingList(NativeCategoryBinding mapping) {
 		this.add(mapping);
 	}
 
@@ -30,9 +30,9 @@ public class NativeCategoryMappingList extends ObjectList<NativeCategoryMapping>
 	}
 
 	private void toEDialect(CodeWriter writer) {
-		writer.append("define category mappings as:\n");
+		writer.append("define category bindings as:\n");
 		writer.indent();
-		for(NativeCategoryMapping m : this) {
+		for(NativeCategoryBinding m : this) {
 			m.toDialect(writer);
 			writer.newLine();
 		}
@@ -40,9 +40,9 @@ public class NativeCategoryMappingList extends ObjectList<NativeCategoryMapping>
 	}
 
 	private void toPDialect(CodeWriter writer) {
-		writer.append("mappings:\n");
+		writer.append("bindings:\n");
 		writer.indent();
-		for(NativeCategoryMapping m : this) {
+		for(NativeCategoryBinding m : this) {
 			m.toDialect(writer);
 			writer.newLine();
 		}
@@ -50,9 +50,9 @@ public class NativeCategoryMappingList extends ObjectList<NativeCategoryMapping>
 	}
 
 	private void toODialect(CodeWriter writer) {
-		writer.append("category mappings {\n");
+		writer.append("category bindings {\n");
 		writer.indent();
-		for(NativeCategoryMapping m : this) {
+		for(NativeCategoryBinding m : this) {
 			m.toDialect(writer);
 			writer.append(';');
 			writer.newLine();

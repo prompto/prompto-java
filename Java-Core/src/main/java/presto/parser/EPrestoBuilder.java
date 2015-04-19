@@ -18,7 +18,7 @@ import presto.csharp.CSharpIdentifierExpression;
 import presto.csharp.CSharpIntegerLiteral;
 import presto.csharp.CSharpMethodExpression;
 import presto.csharp.CSharpNativeCall;
-import presto.csharp.CSharpNativeCategoryMapping;
+import presto.csharp.CSharpNativeCategoryBinding;
 import presto.csharp.CSharpSelectorExpression;
 import presto.csharp.CSharpStatement;
 import presto.csharp.CSharpTextLiteral;
@@ -93,8 +93,8 @@ import presto.grammar.MatchingCollectionConstraint;
 import presto.grammar.MatchingExpressionConstraint;
 import presto.grammar.MatchingPatternConstraint;
 import presto.grammar.MemberInstance;
-import presto.grammar.NativeCategoryMapping;
-import presto.grammar.NativeCategoryMappingList;
+import presto.grammar.NativeCategoryBinding;
+import presto.grammar.NativeCategoryBindingList;
 import presto.grammar.NativeSymbol;
 import presto.grammar.NativeSymbolList;
 import presto.grammar.Operator;
@@ -111,7 +111,7 @@ import presto.java.JavaIntegerLiteral;
 import presto.java.JavaItemExpression;
 import presto.java.JavaMethodExpression;
 import presto.java.JavaNativeCall;
-import presto.java.JavaNativeCategoryMapping;
+import presto.java.JavaNativeCategoryBinding;
 import presto.java.JavaSelectorExpression;
 import presto.java.JavaStatement;
 import presto.java.JavaTextLiteral;
@@ -125,7 +125,7 @@ import presto.javascript.JavaScriptIntegerLiteral;
 import presto.javascript.JavaScriptMethodExpression;
 import presto.javascript.JavaScriptModule;
 import presto.javascript.JavaScriptNativeCall;
-import presto.javascript.JavaScriptNativeCategoryMapping;
+import presto.javascript.JavaScriptNativeCategoryBinding;
 import presto.javascript.JavaScriptSelectorExpression;
 import presto.javascript.JavaScriptStatement;
 import presto.javascript.JavaScriptTextLiteral;
@@ -151,9 +151,9 @@ import presto.literal.TimeLiteral;
 import presto.literal.TupleLiteral;
 import presto.parser.EParser.*;
 import presto.python.Python2NativeCall;
-import presto.python.Python2NativeCategoryMapping;
+import presto.python.Python2NativeCategoryBinding;
 import presto.python.Python3NativeCall;
-import presto.python.Python3NativeCategoryMapping;
+import presto.python.Python3NativeCategoryBinding;
 import presto.python.PythonArgumentList;
 import presto.python.PythonBooleanLiteral;
 import presto.python.PythonCharacterLiteral;
@@ -164,7 +164,7 @@ import presto.python.PythonIntegerLiteral;
 import presto.python.PythonMethodExpression;
 import presto.python.PythonModule;
 import presto.python.PythonNamedArgument;
-import presto.python.PythonNativeCategoryMapping;
+import presto.python.PythonNativeCategoryBinding;
 import presto.python.PythonOrdinalArgument;
 import presto.python.PythonSelectorExpression;
 import presto.python.PythonStatement;
@@ -734,9 +734,9 @@ public class EPrestoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitCSharpCategoryMapping(CSharpCategoryMappingContext ctx) {
-		CSharpIdentifierExpression map = this.<CSharpIdentifierExpression>getNodeValue(ctx.mapping);
-		setNodeValue(ctx, new CSharpNativeCategoryMapping(map));
+	public void exitCSharpCategoryBinding(CSharpCategoryBindingContext ctx) {
+		CSharpIdentifierExpression map = this.<CSharpIdentifierExpression>getNodeValue(ctx.binding);
+		setNodeValue(ctx, new CSharpNativeCategoryBinding(map));
 	}
 	
 	@Override
@@ -1267,9 +1267,9 @@ public class EPrestoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitJavaCategoryMapping(JavaCategoryMappingContext ctx) {
-		JavaIdentifierExpression map = this.<JavaIdentifierExpression>getNodeValue(ctx.mapping);
-		setNodeValue(ctx, new JavaNativeCategoryMapping(map));
+	public void exitJavaCategoryBinding(JavaCategoryBindingContext ctx) {
+		JavaIdentifierExpression map = this.<JavaIdentifierExpression>getNodeValue(ctx.binding);
+		setNodeValue(ctx, new JavaNativeCategoryBinding(map));
 	}
 	
 	@Override
@@ -1363,10 +1363,10 @@ public class EPrestoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitJavascript_category_mapping(Javascript_category_mappingContext ctx) {
+	public void exitJavascript_category_binding(Javascript_category_bindingContext ctx) {
 		String identifier = ctx.identifier().getText();
 		JavaScriptModule module = this.<JavaScriptModule>getNodeValue(ctx.javascript_module());
-		JavaScriptNativeCategoryMapping map = new JavaScriptNativeCategoryMapping(identifier, module);
+		JavaScriptNativeCategoryBinding map = new JavaScriptNativeCategoryBinding(identifier, module);
 		setNodeValue(ctx, map);
 	}
 	
@@ -1424,8 +1424,8 @@ public class EPrestoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitJavaScriptCategoryMapping(JavaScriptCategoryMappingContext ctx) {
-		setNodeValue(ctx, this.<Object>getNodeValue(ctx.mapping));
+	public void exitJavaScriptCategoryBinding(JavaScriptCategoryBindingContext ctx) {
+		setNodeValue(ctx, this.<Object>getNodeValue(ctx.binding));
 	}
 	
 	@Override
@@ -1749,13 +1749,13 @@ public class EPrestoBuilder extends EParserBaseListener {
 	public void exitNative_category_declaration(Native_category_declarationContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
 		IdentifierList attrs = this.<IdentifierList>getNodeValue(ctx.attrs);
-		NativeCategoryMappingList mappings = this.<NativeCategoryMappingList>getNodeValue(ctx.mappings);
-		setNodeValue(ctx, new NativeCategoryDeclaration(name, attrs, mappings, null));
+		NativeCategoryBindingList bindings = this.<NativeCategoryBindingList>getNodeValue(ctx.bindings);
+		setNodeValue(ctx, new NativeCategoryDeclaration(name, attrs, bindings, null));
 	}
 	
 	@Override
-	public void exitNative_category_mappings(Native_category_mappingsContext ctx) {
-		NativeCategoryMappingList items = this.<NativeCategoryMappingList>getNodeValue(ctx.items);
+	public void exitNative_category_bindings(Native_category_bindingsContext ctx) {
+		NativeCategoryBindingList items = this.<NativeCategoryBindingList>getNodeValue(ctx.items);
 		setNodeValue(ctx, items);
 	}
 	
@@ -1772,8 +1772,8 @@ public class EPrestoBuilder extends EParserBaseListener {
 	public void exitNative_resource_declaration(Native_resource_declarationContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
 		IdentifierList attrs = this.<IdentifierList>getNodeValue(ctx.attrs);
-		NativeCategoryMappingList mappings = this.<NativeCategoryMappingList>getNodeValue(ctx.mappings);
-		setNodeValue(ctx, new NativeResourceDeclaration(name, attrs, mappings, null));
+		NativeCategoryBindingList bindings = this.<NativeCategoryBindingList>getNodeValue(ctx.bindings);
+		setNodeValue(ctx, new NativeResourceDeclaration(name, attrs, bindings, null));
 	}
 	
 	@Override
@@ -1790,16 +1790,16 @@ public class EPrestoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitNativeCategoryMappingList(NativeCategoryMappingListContext ctx) {
-		NativeCategoryMapping item = this.<NativeCategoryMapping>getNodeValue(ctx.item);
-		NativeCategoryMappingList items = new NativeCategoryMappingList(item);
+	public void exitNativeCategoryBindingList(NativeCategoryBindingListContext ctx) {
+		NativeCategoryBinding item = this.<NativeCategoryBinding>getNodeValue(ctx.item);
+		NativeCategoryBindingList items = new NativeCategoryBindingList(item);
 		setNodeValue(ctx, items);
 	}
 	
 	@Override
-	public void exitNativeCategoryMappingListItem(NativeCategoryMappingListItemContext ctx) {
-		NativeCategoryMapping item = this.<NativeCategoryMapping>getNodeValue(ctx.item);
-		NativeCategoryMappingList items = this.<NativeCategoryMappingList>getNodeValue(ctx.items);
+	public void exitNativeCategoryBindingListItem(NativeCategoryBindingListItemContext ctx) {
+		NativeCategoryBinding item = this.<NativeCategoryBinding>getNodeValue(ctx.item);
+		NativeCategoryBindingList items = this.<NativeCategoryBindingList>getNodeValue(ctx.items);
 		items.add(item);
 		setNodeValue(ctx, items);
 	}
@@ -1975,10 +1975,10 @@ public class EPrestoBuilder extends EParserBaseListener {
 		setNodeValue(ctx, type);
 	}
 	
-	public void exitPython_category_mapping(Python_category_mappingContext ctx) {
+	public void exitPython_category_binding(Python_category_bindingContext ctx) {
 		String identifier = ctx.identifier().getText();
 		PythonModule module = this.<PythonModule>getNodeValue(ctx.python_module());
-		PythonNativeCategoryMapping map = new PythonNativeCategoryMapping(identifier, module);
+		PythonNativeCategoryBinding map = new PythonNativeCategoryBinding(identifier, module);
 		setNodeValue(ctx, map);
 	}
 	
@@ -2014,9 +2014,9 @@ public class EPrestoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitPython2CategoryMapping(Python2CategoryMappingContext ctx) {
-		PythonNativeCategoryMapping map = this.<PythonNativeCategoryMapping>getNodeValue(ctx.mapping);
-		setNodeValue(ctx, new Python2NativeCategoryMapping(map));
+	public void exitPython2CategoryBinding(Python2CategoryBindingContext ctx) {
+		PythonNativeCategoryBinding map = this.<PythonNativeCategoryBinding>getNodeValue(ctx.binding);
+		setNodeValue(ctx, new Python2NativeCategoryBinding(map));
 	}
 	
 	@Override
@@ -2026,9 +2026,9 @@ public class EPrestoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitPython3CategoryMapping(Python3CategoryMappingContext ctx) {
-		PythonNativeCategoryMapping map = this.<PythonNativeCategoryMapping>getNodeValue(ctx.mapping);
-		setNodeValue(ctx, new Python3NativeCategoryMapping(map));
+	public void exitPython3CategoryBinding(Python3CategoryBindingContext ctx) {
+		PythonNativeCategoryBinding map = this.<PythonNativeCategoryBinding>getNodeValue(ctx.binding);
+		setNodeValue(ctx, new Python3NativeCategoryBinding(map));
 	}
 	
 	@Override

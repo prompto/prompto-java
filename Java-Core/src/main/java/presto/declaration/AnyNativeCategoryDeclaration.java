@@ -1,8 +1,8 @@
 package presto.declaration;
 
 import presto.grammar.Identifier;
-import presto.grammar.NativeAttributeMappingListMap;
-import presto.grammar.NativeCategoryMappingList;
+import presto.grammar.NativeAttributeBindingListMap;
+import presto.grammar.NativeCategoryBindingList;
 import presto.utils.IdentifierList;
 
 public class AnyNativeCategoryDeclaration extends NativeCategoryDeclaration {
@@ -14,7 +14,7 @@ public class AnyNativeCategoryDeclaration extends NativeCategoryDeclaration {
 	}
 	
 	private AnyNativeCategoryDeclaration() {
-		super(new Identifier("Any"), new IdentifierList(), new NativeCategoryMappingList(), new NativeAttributeMappingListMap());
+		super(new Identifier("Any"), new IdentifierList(), new NativeCategoryBindingList(), new NativeAttributeBindingListMap());
 	}
 
 }

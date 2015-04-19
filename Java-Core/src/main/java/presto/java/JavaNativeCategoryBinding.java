@@ -1,13 +1,13 @@
 package presto.java;
 
-import presto.grammar.NativeCategoryMapping;
+import presto.grammar.NativeCategoryBinding;
 import presto.utils.CodeWriter;
 
-public class JavaNativeCategoryMapping extends NativeCategoryMapping {
+public class JavaNativeCategoryBinding extends NativeCategoryBinding {
 
 	JavaIdentifierExpression expression;
 	
-	public JavaNativeCategoryMapping(JavaIdentifierExpression expression) {
+	public JavaNativeCategoryBinding(JavaIdentifierExpression expression) {
 		this.expression = expression;
 	}
 

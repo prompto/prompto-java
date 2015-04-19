@@ -117,9 +117,9 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 				writer.append(" with methods:");
 		} else if (hasMappings) {
 			if(hasAttributes)
-				writer.append(", and mappings:");
+				writer.append(", and bindings:");
 			else 
-				writer.append(" with mappings:");
+				writer.append(" with bindings:");
 		}
 		writer.newLine();	
 	}

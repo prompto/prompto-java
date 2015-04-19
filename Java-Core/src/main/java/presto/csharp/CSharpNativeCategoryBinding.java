@@ -1,13 +1,13 @@
 package presto.csharp;
 
-import presto.grammar.NativeCategoryMapping;
+import presto.grammar.NativeCategoryBinding;
 import presto.utils.CodeWriter;
 
-public class CSharpNativeCategoryMapping extends NativeCategoryMapping {
+public class CSharpNativeCategoryBinding extends NativeCategoryBinding {
 
 	CSharpIdentifierExpression expression;
 	
-	public CSharpNativeCategoryMapping(CSharpIdentifierExpression expression) {
+	public CSharpNativeCategoryBinding(CSharpIdentifierExpression expression) {
 		this.expression = expression;
 	}
 

@@ -1,15 +1,15 @@
 package presto.javascript;
 
-import presto.grammar.NativeCategoryMapping;
+import presto.grammar.NativeCategoryBinding;
 import presto.utils.CodeWriter;
 
 
-public class JavaScriptNativeCategoryMapping extends NativeCategoryMapping {
+public class JavaScriptNativeCategoryBinding extends NativeCategoryBinding {
 
 	String identifier;
 	JavaScriptModule module;
 	
-	public JavaScriptNativeCategoryMapping(String identifier, JavaScriptModule module) {
+	public JavaScriptNativeCategoryBinding(String identifier, JavaScriptModule module) {
 		this.identifier = identifier;
 		this.module = module;
 	}
