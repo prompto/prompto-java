@@ -51,7 +51,7 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration implements IEnu
 	
 	private void toPDialect(CodeWriter writer) {
 		writer.append("enum ");
-		writer.append(name);
+		writer.append(getName());
 		writer.append('(');
 		type.getDerivedFrom().toDialect(writer);
 		writer.append("):\n");
@@ -65,7 +65,7 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration implements IEnu
 
 	private void toODialect(CodeWriter writer) {
 		writer.append("enumerated ");
-		writer.append(name);
+		writer.append(getName());
 		writer.append('(');
 		type.getDerivedFrom().toDialect(writer);
 		writer.append(") {\n");
@@ -80,7 +80,7 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration implements IEnu
 
 	private void toEDialect(CodeWriter writer) {
 		writer.append("define ");
-		writer.append(name);
+		writer.append(getName());
 		writer.append(" as: enumerated ");
 		type.getDerivedFrom().toDialect(writer);
 		writer.append(" with symbols:\n");

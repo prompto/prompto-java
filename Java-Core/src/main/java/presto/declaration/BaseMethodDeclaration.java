@@ -36,7 +36,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 
 	@Override
 	public String getSignature(Dialect dialect) {
-		StringBuilder sb = new StringBuilder(getName().toString());
+		StringBuilder sb = new StringBuilder(getIdentifier().toString());
 		sb.append('(');
 		for(IArgument arg : arguments) {
 			sb.append(arg.getSignature(dialect));
@@ -96,7 +96,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 			registerArguments(local);
 			ArgumentAssignmentList assignmentsList = new ArgumentAssignmentList(assignments);
 			for(IArgument argument : arguments) {
-				ArgumentAssignment assignment = assignmentsList.find(argument.getName());
+				ArgumentAssignment assignment = assignmentsList.find(argument.getIdentifier());
 				if(assignment==null) {
 					IExpression expression = argument.getDefaultExpression();
 					if(expression!=null)

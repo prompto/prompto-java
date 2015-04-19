@@ -52,9 +52,9 @@ public class DeclarationInstruction<T extends IDeclaration> extends BaseStatemen
 		if(declaration instanceof ConcreteMethodDeclaration) {
 			ConcreteMethodDeclaration method = (ConcreteMethodDeclaration)declaration;
 			context.registerDeclaration(method);
-			IType type = new MethodType(context,method.getName());
-			context.registerValue(new Variable(method.getName(), type)); 
-			context.setValue(method.getName(), new ClosureValue(context, method));
+			IType type = new MethodType(context,method.getIdentifier());
+			context.registerValue(new Variable(method.getIdentifier(), type)); 
+			context.setValue(method.getIdentifier(), new ClosureValue(context, method));
 			return null;
 		} else
 			throw new SyntaxError("Unsupported:" + declaration.getClass().getSimpleName());

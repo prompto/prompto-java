@@ -29,7 +29,7 @@ public class ArgumentAssignment {
 	}
 
 	public Identifier getName() {
-		return argument.getName();
+		return argument.getIdentifier();
 	} 
 	
 	public IExpression getExpression() {
@@ -43,7 +43,7 @@ public class ArgumentAssignment {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return (argument!=null ? argument.getName() + " = " : "") + expression.toString();
+		return (argument!=null ? argument.getIdentifier() + " = " : "") + expression.toString();
 	}
 	
 	public void toDialect(CodeWriter writer) {
@@ -62,7 +62,7 @@ public class ArgumentAssignment {
 	
 	private void toODialect(CodeWriter writer) {
 		if(argument!=null) {
-			writer.append(argument.getName());
+			writer.append(argument.getIdentifier());
 			writer.append(" = ");
 		}
 		expression.toDialect(writer);
@@ -70,7 +70,7 @@ public class ArgumentAssignment {
 
 	private void toPDialect(CodeWriter writer) {
 		if(argument!=null) {
-			writer.append(argument.getName());
+			writer.append(argument.getIdentifier());
 			writer.append(" = ");
 		}
 		expression.toDialect(writer);
@@ -80,7 +80,7 @@ public class ArgumentAssignment {
 		expression.toDialect(writer);
 		if(argument!=null) {
 			writer.append(" as ");
-			writer.append(argument.getName());
+			writer.append(argument.getIdentifier());
 		}
 	}
 	
@@ -98,10 +98,10 @@ public class ArgumentAssignment {
 	}
 	
 	public IType check(Context context) throws SyntaxError {
-		INamed actual = context.getRegisteredValue(INamed.class,argument.getName());
+		INamed actual = context.getRegisteredValue(INamed.class,argument.getIdentifier());
 		if(actual==null) {
 			IType actualType = expression.check(context);
-			context.registerValue(new Variable(argument.getName(), actualType));
+			context.registerValue(new Variable(argument.getIdentifier(), actualType));
 		} else {
 			// need to check type compatibility
 			IType actualType = actual.getType(context);
@@ -113,7 +113,7 @@ public class ArgumentAssignment {
 	
 	public IExpression resolve(Context context, IMethodDeclaration methodDeclaration,boolean checkInstance) throws PrestoError {
 		// since we support implicit members, it's time to resolve them
-		Identifier name = argument.getName();
+		Identifier name = argument.getIdentifier();
 		IExpression expression = getExpression();
 		IArgument argument = methodDeclaration.getArguments().find(name);
 		IType required = argument.getType(context);

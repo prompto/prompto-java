@@ -18,7 +18,7 @@ public abstract class BaseArgument implements IArgument {
 	}
 	
 	@Override
-	public Identifier getName() {
+	public Identifier getIdentifier() {
 		return name;
 	}
 	

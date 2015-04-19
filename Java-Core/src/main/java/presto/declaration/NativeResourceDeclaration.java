@@ -22,7 +22,7 @@ public class NativeResourceDeclaration extends NativeCategoryDeclaration {
 	
 	@Override
 	public ResourceType getType(Context context) {
-		return new ResourceType(name);
+		return new ResourceType(getIdentifier());
 	}
 	
 	@Override

@@ -22,7 +22,7 @@ public class UnresolvedArgument extends BaseArgument implements INamedArgument {
 	
 	@Override
 	public String getSignature(Dialect dialect) {
-		return getName().toString();
+		return getIdentifier().toString();
 	}
 
 	@Override

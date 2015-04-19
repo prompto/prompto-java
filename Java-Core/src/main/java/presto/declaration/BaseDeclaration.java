@@ -5,17 +5,20 @@ import presto.parser.Section;
 
 public abstract class BaseDeclaration extends Section implements IDeclaration {
 
-	Identifier name;
+	private Identifier name;
 	
 	protected BaseDeclaration(Identifier name) {
 		this.name = name;
 	}
 		
 	@Override
-	public Identifier getName() {
+	public Identifier getIdentifier() {
 		return name;
 	}
 	
+	public String getName() {
+		return name.getName();
+	}
 	
 	
 }

@@ -17,8 +17,8 @@ public class LinkedVariable implements INamed {
 	}
 
 	@Override
-	public Identifier getName() {
-		return linked.getName();
+	public Identifier getIdentifier() {
+		return linked.getIdentifier();
 	}
 	
 	@Override

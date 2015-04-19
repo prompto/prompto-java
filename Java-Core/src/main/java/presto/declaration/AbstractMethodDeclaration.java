@@ -56,7 +56,7 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 	
 	private void toPDialect(CodeWriter writer) {
 		writer.append("abstract def ");
-		writer.append(name);
+		writer.append(getName());
 		writer.append(" (");
 		arguments.toDialect(writer);
 		writer.append(")");
@@ -68,7 +68,7 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 
 	protected void toEDialect(CodeWriter writer) {
 		writer.append("define ");
-		writer.append(name);
+		writer.append(getName());
 		writer.append(" as: abstract method ");
 		arguments.toDialect(writer);
 		if(returnType!=null && returnType!=VoidType.instance()) {
@@ -84,7 +84,7 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 			writer.append(" ");
 		}
 		writer.append("method ");
-		writer.append(name);
+		writer.append(getName());
 		writer.append(" (");
 		arguments.toDialect(writer);
 		writer.append(");");

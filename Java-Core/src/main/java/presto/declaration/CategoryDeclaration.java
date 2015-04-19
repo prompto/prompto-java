@@ -50,12 +50,12 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 					throw new SyntaxError("Unknown attribute: \"" + attribute + "\"");
 			}
 		}
-		return new CategoryType(this.getName());
+		return new CategoryType(this.getIdentifier());
 	}
 	
 	@Override
 	public CategoryType getType(Context context) {
-		return new CategoryType(name);
+		return new CategoryType(getIdentifier());
 	}
 
 	public boolean hasAttribute(Context context, Identifier name) {
@@ -100,7 +100,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	protected void protoToEDialect(CodeWriter writer, boolean hasMethods, boolean hasMappings) {
 		boolean hasAttributes = attributes!=null && attributes.size()>0;
 		writer.append("define ");
-		writer.append(name);
+		writer.append(getName());
 		writer.append(" as: ");
 		categoryTypeToEDialect(writer);
 		if(hasAttributes) {
@@ -141,7 +141,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	protected void toODialect(CodeWriter writer, boolean hasBody) {
 		categoryTypeToODialect(writer);
 		writer.append(" ");
-		writer.append(name);
+		writer.append(getName());
 		if(attributes!=null) {
 			writer.append('(');
 			attributes.toDialect(writer, true);
@@ -173,7 +173,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	protected void protoToPDialect(CodeWriter writer, IdentifierList derivedFrom) {
 		categoryTypeToPDialect(writer);
 		writer.append(" ");
-		writer.append(name);
+		writer.append(getName());
 		writer.append("(");
 		if(derivedFrom!=null) {
 			derivedFrom.toDialect(writer, false);

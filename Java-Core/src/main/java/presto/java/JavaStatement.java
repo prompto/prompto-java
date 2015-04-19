@@ -21,7 +21,7 @@ public class JavaStatement {
 	public IType check(Context context) throws SyntaxError {
 		IType type = expression.check(context);
 		if(type instanceof JavaClassType) 
-			type = ((JavaClassType)type).convertNativeTypeToPrestoType();
+			type = ((JavaClassType)type).convertNativeTypeToPrestoType(context);
 		return isReturn ? type : VoidType.instance();
 	}
 
@@ -32,7 +32,7 @@ public class JavaStatement {
 		else {	
             IType type = expression.check(context);
             if (type instanceof JavaClassType)
-                return ((JavaClassType)type).convertJavaValueToPrestoValue(result, returnType);
+                return ((JavaClassType)type).convertJavaValueToPrestoValue(context, result, returnType);
             else
             	// TODO warning or exception?
             	return VoidResult.instance();

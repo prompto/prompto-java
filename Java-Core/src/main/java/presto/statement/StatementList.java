@@ -66,6 +66,7 @@ public class StatementList extends LinkedList<IStatement> {
 		try {
 			return doInterpretNative(context, returnType);
 		} catch(NullPointerException e) {
+			e.printStackTrace();
 			throw new NullReferenceError();
 		}
 	}

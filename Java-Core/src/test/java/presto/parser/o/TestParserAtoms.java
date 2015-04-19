@@ -93,7 +93,7 @@ public class TestParserAtoms {
 		OTestParser parser = new OTestParser(statement);
 		AttributeDeclaration ad = parser.parse_attribute_declaration();
 		assertNotNull(ad);
-		assertEquals("id",ad.getName().toString());
+		assertEquals("id",ad.getIdentifier().toString());
 		assertNotNull(ad.getType());
 		assertEquals("Integer",ad.getType().getName().toString());
 	}
@@ -104,7 +104,7 @@ public class TestParserAtoms {
 		OTestParser parser = new OTestParser(statement);
 		AttributeDeclaration ad = parser.parse_attribute_declaration();
 		assertNotNull(ad);
-		assertEquals("id",ad.getName().toString());
+		assertEquals("id",ad.getIdentifier().toString());
 		assertNotNull(ad.getType());
 		assertEquals("Integer[]",ad.getType().getName().toString());
 	}
@@ -115,7 +115,7 @@ public class TestParserAtoms {
 		OTestParser parser = new OTestParser(statement);
 		CategoryDeclaration cd = parser.parse_category_declaration();
 		assertNotNull(cd);
-		assertEquals("Person",cd.getName().toString());
+		assertEquals("Person",cd.getIdentifier().toString());
 		assertNull(cd.getDerivedFrom());
 		assertNotNull(cd.getAttributes());
 		assertTrue(cd.getAttributes().contains(new Identifier("id")));
@@ -127,7 +127,7 @@ public class TestParserAtoms {
 		OTestParser parser = new OTestParser(statement);
 		CategoryDeclaration cd = parser.parse_category_declaration();
 		assertNotNull(cd);
-		assertEquals("Person",cd.getName().toString());
+		assertEquals("Person",cd.getIdentifier().toString());
 		assertNull(cd.getDerivedFrom());
 		assertNotNull(cd.getAttributes());
 		assertTrue(cd.getAttributes().contains(new Identifier("id")));
@@ -140,7 +140,7 @@ public class TestParserAtoms {
 		OTestParser parser = new OTestParser(statement);
 		CategoryDeclaration cd = parser.parse_category_declaration();
 		assertNotNull(cd);
-		assertEquals("Employee",cd.getName().toString());
+		assertEquals("Employee",cd.getIdentifier().toString());
 		assertNotNull(cd.getDerivedFrom());
 		assertTrue(cd.getDerivedFrom().contains(new Identifier("Person")));
 		assertNotNull(cd.getAttributes());
@@ -153,7 +153,7 @@ public class TestParserAtoms {
 		OTestParser parser = new OTestParser(statement);
 		CategoryDeclaration cd = parser.parse_category_declaration();
 		assertNotNull(cd);
-		assertEquals("Entrepreneur",cd.getName().toString());
+		assertEquals("Entrepreneur",cd.getIdentifier().toString());
 		assertNotNull(cd.getDerivedFrom());
 		assertTrue(cd.getDerivedFrom().contains(new Identifier("Person")));
 		assertTrue(cd.getDerivedFrom().contains(new Identifier("Company")));
@@ -181,7 +181,7 @@ public class TestParserAtoms {
 		assertNotNull(a);
 		assertNotNull(a.getType());
 		assertEquals("Person",a.getType().getName().toString());
-		assertEquals("p",a.getName().toString());
+		assertEquals("p",a.getIdentifier().toString());
 	}
 
 	@Test
@@ -235,7 +235,7 @@ public class TestParserAtoms {
 		OTestParser parser = new OTestParser(statement);
 		ConcreteMethodDeclaration ad = parser.parse_concrete_method_declaration();
 		assertNotNull(ad);
-		assertEquals("printName",ad.getName().toString());
+		assertEquals("printName",ad.getIdentifier().toString());
 		assertNotNull(ad.getArguments());
 		assertTrue(ad.getArguments().contains(
 				new CategoryArgument(
@@ -254,7 +254,7 @@ public class TestParserAtoms {
 		OTestParser parser = new OTestParser(statement);
 		ConcreteMethodDeclaration ad = parser.parse_concrete_method_declaration();
 		assertNotNull(ad);
-		assertEquals("printName",ad.getName().toString());
+		assertEquals("printName",ad.getIdentifier().toString());
 		assertNotNull(ad.getArguments());
 		IArgument expected = new CategoryArgument(
 				new CategoryType(new Identifier("Object")), 
@@ -274,7 +274,7 @@ public class TestParserAtoms {
 		OTestParser parser = new OTestParser(statement);
 		ConcreteMethodDeclaration ad = parser.parse_concrete_method_declaration();
 		assertNotNull(ad);
-		assertEquals("printName",ad.getName().toString());
+		assertEquals("printName",ad.getIdentifier().toString());
 		assertNotNull(ad.getArguments());
 		IArgument expected = new CategoryArgument(
 				new ListType(

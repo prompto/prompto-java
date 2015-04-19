@@ -100,11 +100,11 @@ public class TestMethodDeclaration extends BaseDeclaration {
 	}
 
 	public void printFailure(Context context, String expected, String actual) {
-		System.out.println(this.name + " test failed, expected: " + expected + ", actual: " + actual);
+		System.out.println(getName() + " test failed, expected: " + expected + ", actual: " + actual);
 	}
 
 	private void printSuccess(Context context) {
-		System.out.println(this.name + " test successful");
+		System.out.println(getName() + " test successful");
 	}
 
 	private boolean interpretBody(Context context) throws PrestoError {
@@ -152,7 +152,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 	
 	protected void toPDialect(CodeWriter writer) {
 		writer.append("def test ");
-		writer.append(name);
+		writer.append(getName());
 		writer.append(" ():\n");
 		writer.indent();
 		statements.toDialect(writer);
@@ -172,7 +172,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 
 	protected void toEDialect(CodeWriter writer) {
 		writer.append("define ");
-		writer.append(name);
+		writer.append(getName());
 		writer.append(" as: test method doing:\n");
 		writer.indent();
 		statements.toDialect(writer);
@@ -192,7 +192,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 	
 	protected void toODialect(CodeWriter writer) {
 		writer.append("test method ");
-		writer.append(name);
+		writer.append(getName());
 		writer.append(" () {\n");
 		writer.indent();
 		statements.toDialect(writer);

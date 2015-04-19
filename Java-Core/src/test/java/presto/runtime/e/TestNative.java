@@ -20,6 +20,11 @@ public class TestNative extends BaseEParserTest {
 	}
 
 	@Test
+	public void testAttribute() throws Exception {
+		checkOutput("native/attribute.pec");
+	}
+
+	@Test
 	public void testCategory() throws Exception {
 		checkOutput("native/category.pec");
 	}
@@ -27,6 +32,11 @@ public class TestNative extends BaseEParserTest {
 	@Test
 	public void testMethod() throws Exception {
 		checkOutput("native/method.pec");
+	}
+
+	@Test
+	public void testPrinter() throws Exception {
+		checkOutput("native/printer.pec");
 	}
 
 }

@@ -34,7 +34,7 @@ public class AttributeDeclaration extends BaseDeclaration {
 		switch(writer.getDialect()) {
 		case E:
 			writer.append("define ");
-			writer.append(getName());
+			writer.append(getIdentifier());
 			writer.append(" as: ");
 			type.toDialect(writer);
 			writer.append(" attribute");
@@ -43,7 +43,7 @@ public class AttributeDeclaration extends BaseDeclaration {
 			break;
 		case O:
 			writer.append("attribute ");
-			writer.append(getName());
+			writer.append(getIdentifier());
 			writer.append(" : ");
 			type.toDialect(writer);
 			if(constraint!=null)
@@ -52,7 +52,7 @@ public class AttributeDeclaration extends BaseDeclaration {
 			break;
 		case S:
 			writer.append("attr ");
-			writer.append(getName());
+			writer.append(getIdentifier());
 			writer.append(" ( ");
 			type.toDialect(writer);
 			writer.append(" ):\n");

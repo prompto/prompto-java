@@ -20,13 +20,13 @@ public class NativeInstance extends BaseValue implements IInstance {
 	boolean mutable = false;
 	
 	public NativeInstance(NativeCategoryDeclaration declaration) throws SyntaxError {
-		super(new CategoryType(declaration.getName()));
+		super(new CategoryType(declaration.getIdentifier()));
 		this.declaration = declaration;
 		this.instance = makeInstance();
 	}
 	
 	public NativeInstance(NativeCategoryDeclaration declaration, Object instance) {
-		super(new CategoryType(declaration.getName()));
+		super(new CategoryType(declaration.getIdentifier()));
 		this.declaration = declaration;
 		this.instance = instance;
 	}
@@ -71,7 +71,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 		Method getter = getGetter(attrName);
 		Object value = getValue(getter);
 		JavaClassType ct = new JavaClassType(value.getClass());
-		return ct.convertJavaValueToPrestoValue(value, null);
+		return ct.convertJavaValueToPrestoValue(context, value, null);
 	}
 	
 	private Object getValue(Method getter) throws PrestoError {

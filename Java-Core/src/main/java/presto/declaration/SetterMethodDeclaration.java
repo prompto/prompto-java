@@ -33,7 +33,7 @@ public class SetterMethodDeclaration extends BaseCategoryMethodDeclaration imple
 	
 	private void toODialect(CodeWriter writer) {
 		writer.append("setter ");
-		writer.append(name);
+		writer.append(getName());
 		writer.append(" {\n");
 		writer.indent();
 		instructions.toDialect(writer);
@@ -43,7 +43,7 @@ public class SetterMethodDeclaration extends BaseCategoryMethodDeclaration imple
 
 	private void toEDialect(CodeWriter writer) {
 		writer.append("define ");
-		writer.append(name);
+		writer.append(getName());
 		writer.append(" setter doing:\n");
 		writer.indent();
 		instructions.toDialect(writer);
@@ -52,7 +52,7 @@ public class SetterMethodDeclaration extends BaseCategoryMethodDeclaration imple
 
 	private void toPDialect(CodeWriter writer) {
 		writer.append("def ");
-		writer.append(name);
+		writer.append(getName());
 		writer.append(" setter():\n");
 		writer.indent();
 		instructions.toDialect(writer);

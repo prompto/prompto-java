@@ -68,20 +68,31 @@ public class JavaIdentifierExpression implements JavaExpression {
 	@Override
 	public Object interpret(Context context) throws PrestoError {
 		if(parent==null)
-			return evaluate_root(context);
+			return interpret_root(context);
 		else
-			return evaluate_child(context);
+			return interpret_child(context);
 	}
 	
-	Object evaluate_root(Context context) throws PrestoError {
-		Object o = evaluate_instance(context);
+	Object interpret_root(Context context) throws PrestoError {
+		Object o = interpret_presto(context);
+		if(o!=null)
+			return o;
+		o = interpret_instance(context);
 		if(o!=null)
 			return o;
 		else
-			return evaluate_class(); // as an instance for static field/method
+			return interpret_class(); // as an instance for static field/method
 	}
 
-	Object evaluate_instance(Context context) throws PrestoError {
+	private Object interpret_presto(Context context) {
+		switch(identifier) {
+		case "$context":
+			return context;
+		}
+		return null;
+	}
+
+	Object interpret_instance(Context context) throws PrestoError {
 		try {
 			return context.getValue(new Identifier(identifier)); 
 		} catch (PrestoError e) {
@@ -89,7 +100,7 @@ public class JavaIdentifierExpression implements JavaExpression {
 		}
 	}
 
-	public Class<?> evaluate_class() {
+	public Class<?> interpret_class() {
 		String fullName = this.toString();
 		try {
 			return Class.forName(fullName);
@@ -104,15 +115,15 @@ public class JavaIdentifierExpression implements JavaExpression {
 		return null;
 	}
 
-	Object evaluate_child(Context context) throws PrestoError {
+	Object interpret_child(Context context) throws PrestoError {
 		Object o = parent.interpret(context); 
 		if(o!=null)
-			return evaluate_field(o);
+			return interpret_field(o);
 		else
-			return evaluate_class();
+			return interpret_class();
 	}
 	
-	Object evaluate_field(Object o) {
+	Object interpret_field(Object o) {
 		Class<?> klass = null;
 		if(o instanceof Class<?>) {
 			klass = (Class<?>)o;
@@ -136,11 +147,22 @@ public class JavaIdentifierExpression implements JavaExpression {
 	}
 	
 	IType check_root(Context context) throws SyntaxError {
-		IType t = check_instance(context);
+		IType t = check_presto(context);
+		if(t!=null)
+			return t;
+		t = check_instance(context);
 		if(t!=null)
 			return t;
 		else
 			return check_class(); // as an instance for accessing static field/method
+	}
+
+	private IType check_presto(Context context) {
+		switch(identifier) {
+		case "$context":
+			return new JavaClassType(context.getClass());
+		}
+		return null;
 	}
 
 	IType check_instance(Context context) throws SyntaxError {

@@ -18,6 +18,11 @@ public class AddExpression implements IExpression {
 	}
 	
 	@Override
+	public String toString() {
+		return left.toString() + " + " + right.toString();
+	}
+	
+	@Override
 	public void toDialect(CodeWriter writer) {
 		left.toDialect(writer);
 		writer.append(" + ");

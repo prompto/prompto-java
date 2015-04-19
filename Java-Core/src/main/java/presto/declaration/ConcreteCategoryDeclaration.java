@@ -157,20 +157,20 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	private void register(ICategoryMethodDeclaration method, Context context) throws SyntaxError {
 		IDeclaration actual;
 		if(method instanceof SetterMethodDeclaration) {
-			actual = methodsMap.get("setter:"+method.getName().toString());
+			actual = methodsMap.get("setter:"+method.getIdentifier().toString());
 			if(actual!=null)
-				throw new SyntaxError("Duplicate setter: \"" + method.getName().toString() + "\"");
-			methodsMap.put("setter:"+method.getName().toString(),method);
+				throw new SyntaxError("Duplicate setter: \"" + method.getIdentifier().toString() + "\"");
+			methodsMap.put("setter:"+method.getIdentifier().toString(),method);
 		} else if(method instanceof GetterMethodDeclaration) {
-			actual = methodsMap.get("getter:"+method.getName().toString());
+			actual = methodsMap.get("getter:"+method.getIdentifier().toString());
 			if(actual!=null)
-				throw new SyntaxError("Duplicate getter: \"" + method.getName().toString() + "\"");
-			methodsMap.put("getter:"+method.getName().toString(),method);
+				throw new SyntaxError("Duplicate getter: \"" + method.getIdentifier().toString() + "\"");
+			methodsMap.put("getter:"+method.getIdentifier().toString(),method);
 		} else {
-			actual = methodsMap.get(method.getName().toString());
+			actual = methodsMap.get(method.getIdentifier().toString());
 			if(actual==null) {
-				actual = new MethodDeclarationMap(method.getName());
-				methodsMap.put(method.getName().toString(), (MethodDeclarationMap)actual);
+				actual = new MethodDeclarationMap(method.getIdentifier());
+				methodsMap.put(method.getIdentifier().toString(), (MethodDeclarationMap)actual);
 			}
 			((MethodDeclarationMap)actual).register(method,context);
 		}
@@ -287,7 +287,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	private void registerThisMemberMethods(Context context, MethodDeclarationMap result) throws SyntaxError {
 		if(methodsMap==null)
 			return;
-		IDeclaration actual = methodsMap.get(result.getName().toString()); 
+		IDeclaration actual = methodsMap.get(result.getIdentifier().toString()); 
 		if(actual==null)
 			return;
 		if(!(actual instanceof MethodDeclarationMap))

@@ -50,7 +50,7 @@ public class CodeArgument extends BaseArgument implements ITypedArgument {
 		if(!(obj instanceof CodeArgument))
 			return false;
 		CodeArgument other = (CodeArgument)obj;
-		return Utils.equal(this.getName(),other.getName());
+		return Utils.equal(this.getIdentifier(),other.getIdentifier());
 	}
 
 	@Override

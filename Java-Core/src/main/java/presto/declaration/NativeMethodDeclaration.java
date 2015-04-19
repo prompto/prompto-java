@@ -30,7 +30,7 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 	@Override
 	protected void toPDialect(CodeWriter writer) {
 		writer.append("def native ");
-		writer.append(name);
+		writer.append(getName());
 		writer.append(" (");
 		arguments.toDialect(writer);
 		writer.append(")");
@@ -51,7 +51,7 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 			writer.append(" ");
 		}
 		writer.append("native method ");
-		writer.append(name);
+		writer.append(getName());
 		writer.append(" (");
 		arguments.toDialect(writer);
 		writer.append(") {\n");
@@ -67,7 +67,7 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 	@Override
 	protected void toEDialect(CodeWriter writer) {
 		writer.append("define ");
-		writer.append(name);
+		writer.append(getName());
 		writer.append(" as: native method ");
 		arguments.toDialect(writer);
 		if(returnType!=null && returnType!=VoidType.instance()) {

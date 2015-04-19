@@ -13,7 +13,7 @@ public class ErrorVariable extends Variable {
 	
 	@Override
 	public String toString() {
-		return getName().toString();
+		return getIdentifier().toString();
 	}
 	
 	@Override

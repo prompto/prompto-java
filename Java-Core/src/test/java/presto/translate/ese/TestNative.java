@@ -7,6 +7,11 @@ import presto.parser.e.BaseEParserTest;
 public class TestNative extends BaseEParserTest {
 
 	@Test
+	public void testAttribute() throws Exception {
+		compareResourceESE("native/attribute.pec");
+	}
+
+	@Test
 	public void testCategory() throws Exception {
 		compareResourceESE("native/category.pec");
 	}
@@ -17,8 +22,8 @@ public class TestNative extends BaseEParserTest {
 	}
 
 	@Test
-	public void testPrint() throws Exception {
-		compareResourceESE("native/print.pec");
+	public void testPrinter() throws Exception {
+		compareResourceESE("native/printer.pec");
 	}
 
 	@Test

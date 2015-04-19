@@ -33,7 +33,7 @@ public class GetterMethodDeclaration extends BaseCategoryMethodDeclaration imple
 	
 	private void toODialect(CodeWriter writer) {
 		writer.append("getter ");
-		writer.append(name);
+		writer.append(getName());
 		writer.append(" {\n");
 		writer.indent();
 		instructions.toDialect(writer);
@@ -43,7 +43,7 @@ public class GetterMethodDeclaration extends BaseCategoryMethodDeclaration imple
 
 	private void toEDialect(CodeWriter writer) {
 		writer.append("define ");
-		writer.append(name);
+		writer.append(getName());
 		writer.append(" getter doing:\n");
 		writer.indent();
 		instructions.toDialect(writer);
@@ -52,7 +52,7 @@ public class GetterMethodDeclaration extends BaseCategoryMethodDeclaration imple
 
 	private void toPDialect(CodeWriter writer) {
 		writer.append("def ");
-		writer.append(name);
+		writer.append(getName());
 		writer.append(" getter():\n");
 		writer.indent();
 		instructions.toDialect(writer);
@@ -61,7 +61,7 @@ public class GetterMethodDeclaration extends BaseCategoryMethodDeclaration imple
 
 	@Override
 	public int hashCode() {
-		return getName().hashCode();
+		return getIdentifier().hashCode();
 	}
 
 	@Override

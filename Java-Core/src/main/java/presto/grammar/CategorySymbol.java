@@ -76,7 +76,7 @@ public class CategorySymbol extends Symbol implements IExpression  {
 				instance.setMember(context, assignment.getName(), value);
 			}
 		}
-		instance.setMember(context, new Identifier("name"), new Text(this.getName().toString()));
+		instance.setMember(context, new Identifier("name"), new Text(this.getIdentifier().toString()));
 		instance.setMutable(false);
 		return instance;
 	}

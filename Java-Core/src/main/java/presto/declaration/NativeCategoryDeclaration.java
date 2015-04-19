@@ -7,6 +7,7 @@ import presto.grammar.NativeAttributeMappingListMap;
 import presto.grammar.NativeCategoryMapping;
 import presto.grammar.NativeCategoryMappingList;
 import presto.java.JavaNativeCategoryMapping;
+import presto.runtime.Context;
 import presto.utils.CodeWriter;
 import presto.utils.IdentifierList;
 import presto.value.IInstance;
@@ -25,6 +26,12 @@ public class NativeCategoryDeclaration extends CategoryDeclaration {
 		this.attributeMappings = attributeMappings;
 	}
 
+	@Override
+	public void register(Context context) throws SyntaxError {
+		super.register(context);
+		context.registerNativeMapping(getMappedClass(), this);
+	}
+	
 	@Override
 	protected void toEDialect(CodeWriter writer) {
 		protoToEDialect(writer, false, true);
@@ -81,7 +88,7 @@ public class NativeCategoryDeclaration extends CategoryDeclaration {
 	public Class<?> getMappedClass() throws SyntaxError {
 		if(mappedClass==null) {
 			JavaNativeCategoryMapping mapping = getMapping();
-			mappedClass = mapping.getExpression().evaluate_class();
+			mappedClass = mapping.getExpression().interpret_class();
 			if(mappedClass==null)
 				throw new SyntaxError("No Java class:" + mapping.getExpression().toString());
 		}

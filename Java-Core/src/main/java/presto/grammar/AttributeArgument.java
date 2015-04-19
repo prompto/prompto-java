@@ -51,7 +51,7 @@ public class AttributeArgument extends BaseArgument implements INamedArgument {
 		if(!(obj instanceof AttributeArgument))
 			return false;
 		AttributeArgument other = (AttributeArgument)obj;
-		return Utils.equal(this.getName(),other.getName());
+		return Utils.equal(this.getIdentifier(),other.getIdentifier());
 	}
 
 	@Override

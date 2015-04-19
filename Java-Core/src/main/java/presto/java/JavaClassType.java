@@ -9,7 +9,9 @@ import org.joda.time.LocalTime;
 import org.joda.time.Period;
 
 import presto.declaration.AnyNativeCategoryDeclaration;
+import presto.declaration.NativeCategoryDeclaration;
 import presto.grammar.Identifier;
+import presto.runtime.Context;
 import presto.type.AnyType;
 import presto.type.BooleanType;
 import presto.type.CategoryType;
@@ -62,21 +64,27 @@ public class JavaClassType extends CategoryType {
 		return this.klass;
 	}
 	
-	public IType convertNativeTypeToPrestoType() {
+	public IType convertNativeTypeToPrestoType(Context context) {
 		IType result = javaToPrestoMap.get(klass);
-		if(result==null)
-			return this;
-		else
+		if(result!=null)
 			return result;
+		NativeCategoryDeclaration decl = context.getNativeMapping(klass);
+		if(decl!=null)
+			return decl.getType(context);
+		else
+			return result; // TODO not sure this makes any sense
 	}
 	
-    public IValue convertJavaValueToPrestoValue(Object value, IType returnType)
+    public IValue convertJavaValueToPrestoValue(Context context, Object value, IType returnType)
     {
         if(value instanceof IValue)
             return (IValue)value;
         IType result = javaToPrestoMap.get(klass);
         if (result != null)
             return result.convertJavaValueToPrestoValue(value);
+		NativeCategoryDeclaration decl = context.getNativeMapping(klass);
+		if(decl!=null)
+			return new NativeInstance(decl, value);
         else if(returnType==AnyType.instance())
         	return new NativeInstance(AnyNativeCategoryDeclaration.getInstance(), value);
         else

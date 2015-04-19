@@ -51,7 +51,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration i
 	@Override
 	protected void toODialect(CodeWriter writer) {
 		writer.append("enumerated category ");
-		writer.append(name);
+		writer.append(getName());
 		if(attributes!=null) {
 			writer.append('(');
 			attributes.toDialect(writer, true);
@@ -74,7 +74,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration i
 	@Override
 	protected void toEDialect(CodeWriter writer) {
 		writer.append("define ");
-		writer.append(name);
+		writer.append(getName());
 		writer.append(" as: enumerated ");
 		if(derivedFrom!=null)
 			derivedFrom.toDialect(writer, true);
@@ -100,7 +100,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration i
 	@Override
 	protected void toPDialect(CodeWriter writer) {
 		writer.append("enum ");
-		writer.append(name);
+		writer.append(getName());
 		writer.append("(");
 		if(derivedFrom!=null) {
 			derivedFrom.toDialect(writer, false);
@@ -135,7 +135,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration i
 	
 	@Override
 	public EnumeratedCategoryType getType(Context context) {
-		return new EnumeratedCategoryType(name);
+		return new EnumeratedCategoryType(getIdentifier());
 	}
 
 }
