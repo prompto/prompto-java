@@ -24,7 +24,7 @@ public class NativeCategoryBindingList extends ObjectList<NativeCategoryBinding>
 			toODialect(writer);
 			break;
 		case S:
-			toPDialect(writer);
+			toSDialect(writer);
 			break;
 		}
 	}
@@ -39,8 +39,8 @@ public class NativeCategoryBindingList extends ObjectList<NativeCategoryBinding>
 		writer.dedent();	
 	}
 
-	private void toPDialect(CodeWriter writer) {
-		writer.append("bindings:\n");
+	private void toSDialect(CodeWriter writer) {
+		writer.append("def category bindings:\n");
 		writer.indent();
 		for(NativeCategoryBinding m : this) {
 			m.toDialect(writer);

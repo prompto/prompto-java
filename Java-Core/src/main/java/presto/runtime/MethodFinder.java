@@ -39,7 +39,7 @@ public class MethodFinder {
 		Collection<IMethodDeclaration> candidates = selector.getCandidates(context);
 		if(candidates.size()==0)
 			throw new SyntaxError("No method named:" + methodCall.getMethod().getName().toString()); 
-		List<IMethodDeclaration> compatibles = filterCompatible(candidates,checkInstance);
+		List<IMethodDeclaration> compatibles = filterCompatible(candidates, checkInstance);
 		switch(compatibles.size()) {
 		case 0:
 			// TODO refine
@@ -51,7 +51,7 @@ public class MethodFinder {
 		}
 	}
 	
-	IMethodDeclaration findMostSpecific(Collection<IMethodDeclaration> candidates,boolean checkInstance) throws SyntaxError {
+	IMethodDeclaration findMostSpecific(Collection<IMethodDeclaration> candidates, boolean checkInstance) throws SyntaxError {
 		IMethodDeclaration candidate = null;
 		List<IMethodDeclaration> ambiguous = new ArrayList<IMethodDeclaration>();
 		for(IMethodDeclaration declaration : candidates) {
@@ -123,11 +123,11 @@ public class MethodFinder {
 		return Score.SIMILAR;
 	}
 	
-	List<IMethodDeclaration> filterCompatible(Collection<IMethodDeclaration> candidates,boolean checkInstance) throws SyntaxError {
+	List<IMethodDeclaration> filterCompatible(Collection<IMethodDeclaration> candidates, boolean checkInstance) throws SyntaxError {
 		List<IMethodDeclaration> compatibles = new ArrayList<IMethodDeclaration>();
 		for(IMethodDeclaration declaration : candidates) {
 			try {
-				ArgumentAssignmentList args = methodCall.makeAssignments(context,declaration);
+				ArgumentAssignmentList args = methodCall.makeAssignments(context, declaration);
 				if(declaration.isAssignableTo(context, args, checkInstance))
 					compatibles.add(declaration);
 			} catch(SyntaxError e) {

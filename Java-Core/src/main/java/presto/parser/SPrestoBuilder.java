@@ -29,7 +29,7 @@ import presto.declaration.ConcreteMethodDeclaration;
 import presto.declaration.EnumeratedCategoryDeclaration;
 import presto.declaration.EnumeratedNativeDeclaration;
 import presto.declaration.GetterMethodDeclaration;
-import presto.declaration.ICategoryMethodDeclaration;
+import presto.declaration.IMethodDeclaration;
 import presto.declaration.IDeclaration;
 import presto.declaration.NativeCategoryDeclaration;
 import presto.declaration.NativeMethodDeclaration;
@@ -75,7 +75,7 @@ import presto.grammar.ArgumentAssignment;
 import presto.grammar.ArgumentAssignmentList;
 import presto.grammar.ArgumentList;
 import presto.grammar.CategoryArgument;
-import presto.grammar.CategoryMethodDeclarationList;
+import presto.grammar.MethodDeclarationList;
 import presto.grammar.CategorySymbol;
 import presto.grammar.CategorySymbolList;
 import presto.grammar.CmpOp;
@@ -115,6 +115,7 @@ import presto.java.JavaNativeCategoryBinding;
 import presto.java.JavaSelectorExpression;
 import presto.java.JavaStatement;
 import presto.java.JavaTextLiteral;
+import presto.java.JavaThisExpression;
 import presto.javascript.JavaScriptBooleanLiteral;
 import presto.javascript.JavaScriptCharacterLiteral;
 import presto.javascript.JavaScriptDecimalLiteral;
@@ -485,15 +486,30 @@ public class SPrestoBuilder extends SParserBaseListener {
 
 	@Override
 	public void exitCategoryMethodList(CategoryMethodListContext ctx) {
-		ICategoryMethodDeclaration item = this.<ICategoryMethodDeclaration>getNodeValue(ctx.item);
-		CategoryMethodDeclarationList items = new CategoryMethodDeclarationList(item);
+		IMethodDeclaration item = this.<IMethodDeclaration>getNodeValue(ctx.item);
+		MethodDeclarationList items = new MethodDeclarationList(item);
 		setNodeValue(ctx, items);
 	}
 
 	@Override
 	public void exitCategoryMethodListItem(CategoryMethodListItemContext ctx) {
-		ICategoryMethodDeclaration item = this.<ICategoryMethodDeclaration>getNodeValue(ctx.item);
-		CategoryMethodDeclarationList items = this.<CategoryMethodDeclarationList>getNodeValue(ctx.items);
+		IMethodDeclaration item = this.<IMethodDeclaration>getNodeValue(ctx.item);
+		MethodDeclarationList items = this.<MethodDeclarationList>getNodeValue(ctx.items);
+		items.add(item);
+		setNodeValue(ctx, items);
+	}
+
+	@Override
+	public void exitNativeCategoryMethodList(NativeCategoryMethodListContext ctx) {
+		IMethodDeclaration item = this.<IMethodDeclaration>getNodeValue(ctx.item);
+		MethodDeclarationList items = new MethodDeclarationList(item);
+		setNodeValue(ctx, items);
+	}
+	
+	@Override
+	public void exitNativeCategoryMethodListItem(NativeCategoryMethodListItemContext ctx) {
+		IMethodDeclaration item = this.<IMethodDeclaration>getNodeValue(ctx.item);
+		MethodDeclarationList items = this.<MethodDeclarationList>getNodeValue(ctx.items);
 		items.add(item);
 		setNodeValue(ctx, items);
 	}
@@ -600,7 +616,7 @@ public class SPrestoBuilder extends SParserBaseListener {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
 		IdentifierList attrs = this.<IdentifierList>getNodeValue(ctx.attrs);
 		IdentifierList derived = this.<IdentifierList>getNodeValue(ctx.derived);
-		CategoryMethodDeclarationList methods = this.<CategoryMethodDeclarationList>getNodeValue(ctx.methods);
+		MethodDeclarationList methods = this.<MethodDeclarationList>getNodeValue(ctx.methods);
 		setNodeValue(ctx, new ConcreteCategoryDeclaration(name, attrs, derived, methods));
 	}
 
@@ -1036,12 +1052,6 @@ public class SPrestoBuilder extends SParserBaseListener {
 	}
 
 	@Override
-	public void exitGetterMemberMethod(GetterMemberMethodContext ctx) {
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
-		setNodeValue(ctx, decl);
-	}
-	
-	@Override
 	public void exitGreaterThanExpression(GreaterThanExpressionContext ctx) {
 		IExpression left = this.<IExpression>getNodeValue(ctx.left);
 		IExpression right = this.<IExpression>getNodeValue(ctx.right);
@@ -1239,12 +1249,6 @@ public class SPrestoBuilder extends SParserBaseListener {
 	}
 	
 	@Override
-	public void exitJavaIdentifierExpression(JavaIdentifierExpressionContext ctx) {
-		JavaExpression exp = this.<JavaIdentifierExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, exp);
-	}
-	
-	@Override
 	public void exitJavaIntegerLiteral(JavaIntegerLiteralContext ctx) {
 		setNodeValue(ctx, new JavaIntegerLiteral(ctx.getText()));
 	}
@@ -1255,12 +1259,6 @@ public class SPrestoBuilder extends SParserBaseListener {
 		setNodeValue(ctx, exp);
 	}
 
-	@Override
-	public void exitJavaLiteralExpression(JavaLiteralExpressionContext ctx) {
-		JavaExpression exp = this.<JavaExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, exp);
-	}
-	
 	@Override
 	public void exitJavaMethodExpression(JavaMethodExpressionContext ctx) {
 		JavaExpression exp = this.<JavaExpression>getNodeValue(ctx.exp);
@@ -1274,8 +1272,8 @@ public class SPrestoBuilder extends SParserBaseListener {
 	}
 	
 	@Override
-	public void exitJavaParenthesisExpression(JavaParenthesisExpressionContext ctx) {
-		JavaExpression exp = this.<JavaExpression>getNodeValue(ctx.exp);
+	public void exitJava_primary_expression(Java_primary_expressionContext ctx) {
+		JavaExpression exp = this.<JavaExpression>getNodeValue(ctx.getChild(0));
 		setNodeValue(ctx, exp);
 	}
 	
@@ -1378,6 +1376,12 @@ public class SPrestoBuilder extends SParserBaseListener {
 	}
 	
 	@Override
+	public void exitJavascriptGlobalMethodExpression(JavascriptGlobalMethodExpressionContext ctx) {
+		JavaScriptMethodExpression method = this.<JavaScriptMethodExpression>getNodeValue(ctx.exp);
+		setNodeValue(ctx, method);
+	}
+	
+	@Override
 	public void exitJavascriptIdentifier(JavascriptIdentifierContext ctx) {
 		String name = this.<String>getNodeValue(ctx.name);
 		setNodeValue(ctx, new JavaScriptIdentifierExpression(name));
@@ -1463,6 +1467,11 @@ public class SPrestoBuilder extends SParserBaseListener {
 	@Override
 	public void exitJavaTextLiteral(JavaTextLiteralContext ctx) {
 		setNodeValue(ctx, new JavaTextLiteral(ctx.getText()));
+	}
+	
+	@Override
+	public void exitJava_this_expression(Java_this_expressionContext ctx) {
+		setNodeValue(ctx, new JavaThisExpression());
 	}
 	
 	@Override
@@ -1585,14 +1594,14 @@ public class SPrestoBuilder extends SParserBaseListener {
 	}
 	
 	@Override
-	public void exitAbstractMemberMethod(AbstractMemberMethodContext ctx) {
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
+	public void exitMember_method_declaration(Member_method_declarationContext ctx) {
+		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.getChild(0));
 		setNodeValue(ctx, decl);
 	}
 	
 	@Override
-	public void exitConcreteMemberMethod(ConcreteMemberMethodContext ctx) {
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
+	public void exitNative_member_method_declaration(Native_member_method_declarationContext ctx) {
+		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.getChild(0));
 		setNodeValue(ctx, decl);
 	}
 	
@@ -1703,7 +1712,8 @@ public class SPrestoBuilder extends SParserBaseListener {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
 		IdentifierList attrs = this.<IdentifierList>getNodeValue(ctx.attrs);
 		NativeCategoryBindingList bindings = this.<NativeCategoryBindingList>getNodeValue(ctx.bindings);
-		setNodeValue(ctx, new NativeCategoryDeclaration(name, attrs, bindings, null));
+		MethodDeclarationList methods = this.<MethodDeclarationList>getNodeValue(ctx.methods);
+		setNodeValue(ctx, new NativeCategoryDeclaration(name, attrs, bindings, null, methods));
 	}
 	
 	@Override
@@ -1726,7 +1736,8 @@ public class SPrestoBuilder extends SParserBaseListener {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
 		IdentifierList attrs = this.<IdentifierList>getNodeValue(ctx.attrs);
 		NativeCategoryBindingList bindings = this.<NativeCategoryBindingList>getNodeValue(ctx.bindings);
-		setNodeValue(ctx, new NativeResourceDeclaration(name, attrs, bindings, null));
+		MethodDeclarationList methods = this.<MethodDeclarationList>getNodeValue(ctx.methods);
+		setNodeValue(ctx, new NativeResourceDeclaration(name, attrs, bindings, null, methods));
 	}
 	
 	@Override
@@ -1889,12 +1900,6 @@ public class SPrestoBuilder extends SParserBaseListener {
 		IType typ = this.<IType>getNodeValue(ctx.typ);
 		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
 		OperatorMethodDeclaration decl = new OperatorMethodDeclaration(op, arg, typ, stmts);
-		setNodeValue(ctx, decl);
-	}
-	
-	@Override
-	public void exitOperatorMemberMethod(OperatorMemberMethodContext ctx) {
-		OperatorMethodDeclaration decl = this.<OperatorMethodDeclaration>getNodeValue(ctx.decl);
 		setNodeValue(ctx, decl);
 	}
 	
@@ -2251,12 +2256,6 @@ public class SPrestoBuilder extends SParserBaseListener {
 	}
 	
 	@Override
-	public void exitSetterMemberMethod(SetterMemberMethodContext ctx) {
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
-		setNodeValue(ctx, decl);
-	}
-
-	@Override
 	public void exitSetType(SetTypeContext ctx) {
 		IType itemType = this.<IType>getNodeValue(ctx.s);
 		setNodeValue(ctx, new SetType(itemType));
@@ -2266,7 +2265,7 @@ public class SPrestoBuilder extends SParserBaseListener {
 	public void exitSingleton_category_declaration(Singleton_category_declarationContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
 		IdentifierList attrs = this.<IdentifierList>getNodeValue(ctx.attrs);
-		CategoryMethodDeclarationList methods = this.<CategoryMethodDeclarationList>getNodeValue(ctx.methods);
+		MethodDeclarationList methods = this.<MethodDeclarationList>getNodeValue(ctx.methods);
 		setNodeValue(ctx, new SingletonCategoryDeclaration(name, attrs, methods));
 	}
 	

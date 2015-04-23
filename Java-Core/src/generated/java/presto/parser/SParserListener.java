@@ -2279,65 +2279,49 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitCategoryMethodList(@NotNull SParser.CategoryMethodListContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code SetterMemberMethod}
-	 * labeled alternative in {@link SParser#member_method_declaration}.
+	 * Enter a parse tree produced by {@link SParser#member_method_declaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterSetterMemberMethod(@NotNull SParser.SetterMemberMethodContext ctx);
+	void enterMember_method_declaration(@NotNull SParser.Member_method_declarationContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code SetterMemberMethod}
-	 * labeled alternative in {@link SParser#member_method_declaration}.
+	 * Exit a parse tree produced by {@link SParser#member_method_declaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitSetterMemberMethod(@NotNull SParser.SetterMemberMethodContext ctx);
+	void exitMember_method_declaration(@NotNull SParser.Member_method_declarationContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code GetterMemberMethod}
-	 * labeled alternative in {@link SParser#member_method_declaration}.
+	 * Enter a parse tree produced by the {@code NativeCategoryMethodList}
+	 * labeled alternative in {@link SParser#native_member_method_declaration_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterGetterMemberMethod(@NotNull SParser.GetterMemberMethodContext ctx);
+	void enterNativeCategoryMethodList(@NotNull SParser.NativeCategoryMethodListContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code GetterMemberMethod}
-	 * labeled alternative in {@link SParser#member_method_declaration}.
+	 * Exit a parse tree produced by the {@code NativeCategoryMethodList}
+	 * labeled alternative in {@link SParser#native_member_method_declaration_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitGetterMemberMethod(@NotNull SParser.GetterMemberMethodContext ctx);
+	void exitNativeCategoryMethodList(@NotNull SParser.NativeCategoryMethodListContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code ConcreteMemberMethod}
-	 * labeled alternative in {@link SParser#member_method_declaration}.
+	 * Enter a parse tree produced by the {@code NativeCategoryMethodListItem}
+	 * labeled alternative in {@link SParser#native_member_method_declaration_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterConcreteMemberMethod(@NotNull SParser.ConcreteMemberMethodContext ctx);
+	void enterNativeCategoryMethodListItem(@NotNull SParser.NativeCategoryMethodListItemContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code ConcreteMemberMethod}
-	 * labeled alternative in {@link SParser#member_method_declaration}.
+	 * Exit a parse tree produced by the {@code NativeCategoryMethodListItem}
+	 * labeled alternative in {@link SParser#native_member_method_declaration_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitConcreteMemberMethod(@NotNull SParser.ConcreteMemberMethodContext ctx);
+	void exitNativeCategoryMethodListItem(@NotNull SParser.NativeCategoryMethodListItemContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code AbstractMemberMethod}
-	 * labeled alternative in {@link SParser#member_method_declaration}.
+	 * Enter a parse tree produced by {@link SParser#native_member_method_declaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterAbstractMemberMethod(@NotNull SParser.AbstractMemberMethodContext ctx);
+	void enterNative_member_method_declaration(@NotNull SParser.Native_member_method_declarationContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code AbstractMemberMethod}
-	 * labeled alternative in {@link SParser#member_method_declaration}.
+	 * Exit a parse tree produced by {@link SParser#native_member_method_declaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitAbstractMemberMethod(@NotNull SParser.AbstractMemberMethodContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code OperatorMemberMethod}
-	 * labeled alternative in {@link SParser#member_method_declaration}.
-	 * @param ctx the parse tree
-	 */
-	void enterOperatorMemberMethod(@NotNull SParser.OperatorMemberMethodContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code OperatorMemberMethod}
-	 * labeled alternative in {@link SParser#member_method_declaration}.
-	 * @param ctx the parse tree
-	 */
-	void exitOperatorMemberMethod(@NotNull SParser.OperatorMemberMethodContext ctx);
+	void exitNative_member_method_declaration(@NotNull SParser.Native_member_method_declarationContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code JavaCategoryBinding}
 	 * labeled alternative in {@link SParser#native_category_binding}.
@@ -3497,6 +3481,18 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitJavascriptLiteralExpression(@NotNull SParser.JavascriptLiteralExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code JavascriptGlobalMethodExpression}
+	 * labeled alternative in {@link SParser#javascript_primary_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterJavascriptGlobalMethodExpression(@NotNull SParser.JavascriptGlobalMethodExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code JavascriptGlobalMethodExpression}
+	 * labeled alternative in {@link SParser#javascript_primary_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitJavascriptGlobalMethodExpression(@NotNull SParser.JavascriptGlobalMethodExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code JavascriptMethodExpression}
 	 * labeled alternative in {@link SParser#javascript_selector_expression}.
 	 * @param ctx the parse tree
@@ -4047,41 +4043,25 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitJavaSelectorExpression(@NotNull SParser.JavaSelectorExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code JavaParenthesisExpression}
-	 * labeled alternative in {@link SParser#java_primary_expression}.
+	 * Enter a parse tree produced by {@link SParser#java_primary_expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterJavaParenthesisExpression(@NotNull SParser.JavaParenthesisExpressionContext ctx);
+	void enterJava_primary_expression(@NotNull SParser.Java_primary_expressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code JavaParenthesisExpression}
-	 * labeled alternative in {@link SParser#java_primary_expression}.
+	 * Exit a parse tree produced by {@link SParser#java_primary_expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitJavaParenthesisExpression(@NotNull SParser.JavaParenthesisExpressionContext ctx);
+	void exitJava_primary_expression(@NotNull SParser.Java_primary_expressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code JavaIdentifierExpression}
-	 * labeled alternative in {@link SParser#java_primary_expression}.
+	 * Enter a parse tree produced by {@link SParser#java_this_expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterJavaIdentifierExpression(@NotNull SParser.JavaIdentifierExpressionContext ctx);
+	void enterJava_this_expression(@NotNull SParser.Java_this_expressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code JavaIdentifierExpression}
-	 * labeled alternative in {@link SParser#java_primary_expression}.
+	 * Exit a parse tree produced by {@link SParser#java_this_expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitJavaIdentifierExpression(@NotNull SParser.JavaIdentifierExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code JavaLiteralExpression}
-	 * labeled alternative in {@link SParser#java_primary_expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterJavaLiteralExpression(@NotNull SParser.JavaLiteralExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code JavaLiteralExpression}
-	 * labeled alternative in {@link SParser#java_primary_expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitJavaLiteralExpression(@NotNull SParser.JavaLiteralExpressionContext ctx);
+	void exitJava_this_expression(@NotNull SParser.Java_this_expressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code JavaMethodExpression}
 	 * labeled alternative in {@link SParser#java_selector_expression}.

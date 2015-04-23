@@ -2,7 +2,7 @@ package presto.declaration;
 
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
-import presto.grammar.CategoryMethodDeclarationList;
+import presto.grammar.MethodDeclarationList;
 import presto.grammar.Identifier;
 import presto.parser.IProblemListener;
 import presto.runtime.Context;
@@ -82,6 +82,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	
 	@Override
 	public void toDialect(CodeWriter writer) {
+		writer = writer.newInstanceWriter(getType(writer.getContext()));
 		switch(writer.getDialect()) {
 		case E:
 			toEDialect(writer);
@@ -90,7 +91,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 			toODialect(writer);
 			break;
 		case S:
-			toPDialect(writer);
+			toSDialect(writer);
 			break;
 		}
 	}
@@ -124,14 +125,24 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		writer.newLine();	
 	}
 	
-	protected void methodsToEDialect(CodeWriter writer, CategoryMethodDeclarationList methods) {
+	protected void methodsToEDialect(CodeWriter writer, MethodDeclarationList methods) {
 		writer.indent();
 		for(IDeclaration decl : methods) {
 			writer.newLine();
-			decl.toDialect(writer);
+			CodeWriter w = writer.newMemberWriter();
+			decl.toDialect(w);
 		}
 		writer.dedent();
 	}
+
+	protected void methodsToODialect(CodeWriter writer, MethodDeclarationList methods) {
+		for(IDeclaration decl : methods) {
+			CodeWriter w = writer.newMemberWriter();
+			decl.toDialect(w);
+			w.newLine();
+		}
+	}
+
 
 
 	protected abstract void categoryTypeToEDialect(CodeWriter writer);
@@ -168,7 +179,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 
 	protected abstract void bodyToODialect(CodeWriter writer);
 
-	protected abstract void toPDialect(CodeWriter writer);
+	protected abstract void toSDialect(CodeWriter writer);
 
 	protected void protoToPDialect(CodeWriter writer, IdentifierList derivedFrom) {
 		categoryTypeToPDialect(writer);

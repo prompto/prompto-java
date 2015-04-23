@@ -10,7 +10,7 @@ import presto.type.VoidType;
 import presto.utils.CodeWriter;
 import presto.value.IValue;
 
-public class AbstractMethodDeclaration extends BaseMethodDeclaration implements ICategoryMethodDeclaration {
+public class AbstractMethodDeclaration extends BaseMethodDeclaration implements IMethodDeclaration {
 
 	IType returnType;
 	

@@ -36,8 +36,7 @@ public class CategoryType extends BaseType {
 	
 	@Override
 	public Class<?> toJavaClass() {
-		// TODO Auto-generated method stub
-		return null;
+		return Object.class;
 	}
 	
 	@Override
@@ -127,7 +126,7 @@ public class CategoryType extends BaseType {
 			if(method==null)
 				return null;
 			context = context.newInstanceContext(this);
-			Context local = context.newChildContext();
+			Context local = context.newLocalContext();
 			method.registerArguments(local);
 			return method.check(local);
 		} catch(SyntaxError e) {

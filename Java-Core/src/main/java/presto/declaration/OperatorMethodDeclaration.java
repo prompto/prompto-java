@@ -12,7 +12,7 @@ import presto.type.IType;
 import presto.type.VoidType;
 import presto.utils.CodeWriter;
 
-public class OperatorMethodDeclaration extends ConcreteMethodDeclaration implements IExpression, ICategoryMethodDeclaration {
+public class OperatorMethodDeclaration extends ConcreteMethodDeclaration implements IExpression, IMethodDeclaration {
 	
 	Operator operator;
 	

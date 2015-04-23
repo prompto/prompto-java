@@ -25,6 +25,11 @@ public class TestSetters extends BaseEParserTest {
 	}
 
 	@Test
+	public void testGetterCall() throws Exception {
+		checkOutput("setters/getterCall.pec");
+	}
+
+	@Test
 	public void testSetter() throws Exception {
 		checkOutput("setters/setter.pec");
 	}

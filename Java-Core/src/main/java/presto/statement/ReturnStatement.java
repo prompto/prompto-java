@@ -55,7 +55,12 @@ public class ReturnStatement extends SimpleStatement {
 	
 	@Override
 	public IValue interpret(Context context) throws PrestoError {
-		return expression==null ? VoidResult.instance() : expression.interpret(context);
+		if(expression==null)
+			return VoidResult.instance();
+		IValue result = expression.interpret(context);
+		if(result instanceof IExpression)
+			result = ((IExpression)result).interpret(context);
+		return result;
 	}
 
 }

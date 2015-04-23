@@ -68,21 +68,24 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	
 	@Override
 	public IValue getMember(Context context, Identifier attrName) throws PrestoError {
-		Context stacked = activeGetters.get().get(attrName);
+		Map<Identifier,Context> activeGetters = this.activeGetters.get();
+		Context stacked = activeGetters.get(attrName);
+		boolean first = stacked==null;
 		try {
-			return get(context, attrName, stacked==null);
+			if(first)
+				activeGetters.put(attrName, context);
+			return getMember(context, attrName, first);
 		} finally {
-			if(stacked==context)
-				activeGetters.get().remove(attrName);
+			if(first)
+				activeGetters.remove(attrName);
 		}
 	}
 	
-	protected IValue get(Context context, Identifier attrName, boolean allowGetter) throws PrestoError {
+	protected IValue getMember(Context context, Identifier attrName, boolean allowGetter) throws PrestoError {
 		GetterMethodDeclaration getter = allowGetter ? declaration.findGetter(context, attrName) : null;
 		if(getter!=null) {
-			activeGetters.get().put(attrName, context);
-			context = context.newInstanceContext(this);
-			return new ContextualExpression(context,getter);
+			context = context.newInstanceContext(this).newChildContext(); // mimic method call
+			return getter.interpret(context);
 		} else
 			return values.get(attrName);
 	}
@@ -100,22 +103,25 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	public void setMember(Context context, Identifier attrName, IValue value) throws PrestoError {
 		if(!mutable)
 			throw new NotMutableError();
-		Context stacked = activeSetters.get().get(attrName);
+		Map<Identifier,Context> activeSetters = this.activeSetters.get();
+		Context stacked = activeSetters.get(attrName);
+		boolean first = stacked==null;
 		try {
-			set(context, attrName, value, stacked==null);
+			if(first)
+				activeSetters.put(attrName, context);
+			setMember(context, attrName, value, first);
 		} finally {
-			if(stacked==context)
-				activeSetters.get().remove(attrName);
+			if(first)
+				activeSetters.remove(attrName);
 		}
 	}
 	
-	public void set(Context context, Identifier attrName, IValue value, boolean allowSetter) throws PrestoError {
+	public void setMember(Context context, Identifier attrName, IValue value, boolean allowSetter) throws PrestoError {
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, attrName);
 		SetterMethodDeclaration setter = allowSetter ? declaration.findSetter(context,attrName) : null;
 		if(setter!=null) {
-			activeSetters.get().put(attrName, context);
 			// use attribute name as parameter name for incoming value
-			context = context.newInstanceContext(this);
+			context = context.newInstanceContext(this).newChildContext(); // mimic method call
 			context.registerValue(new Variable(attrName, decl.getType())); 
 			context.setValue(attrName, value);
 			value = setter.interpret(context);

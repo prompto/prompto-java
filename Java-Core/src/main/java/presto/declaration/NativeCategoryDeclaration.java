@@ -3,6 +3,7 @@ package presto.declaration;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.grammar.Identifier;
+import presto.grammar.MethodDeclarationList;
 import presto.grammar.NativeAttributeBindingListMap;
 import presto.grammar.NativeCategoryBinding;
 import presto.grammar.NativeCategoryBindingList;
@@ -13,15 +14,17 @@ import presto.utils.IdentifierList;
 import presto.value.IInstance;
 import presto.value.NativeInstance;
 
-public class NativeCategoryDeclaration extends CategoryDeclaration {
+public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 	
 	NativeCategoryBindingList categoryMappings;
 	NativeAttributeBindingListMap attributeMappings;
 	Class<?> mappedClass = null;
 	
 	public NativeCategoryDeclaration(Identifier name, IdentifierList attributes, 
-			NativeCategoryBindingList categoryMappings, NativeAttributeBindingListMap attributeMappings) {
-		super(name,attributes);
+			NativeCategoryBindingList categoryMappings, 
+			NativeAttributeBindingListMap attributeMappings,
+			MethodDeclarationList methods) {
+		super(name, attributes, null, methods);
 		this.categoryMappings = categoryMappings;
 		this.attributeMappings = attributeMappings;
 	}
@@ -38,6 +41,16 @@ public class NativeCategoryDeclaration extends CategoryDeclaration {
 	protected void toEDialect(CodeWriter writer) {
 		protoToEDialect(writer, false, true);
 		mappingsToEDialect(writer);
+		methodsToEDialect(writer);
+	}
+
+	private void methodsToEDialect(CodeWriter writer) {
+		if(methods!=null && methods.size()>0) {
+			writer.append("and methods:");
+			writer.newLine();
+			methodsToEDialect(writer, methods);
+		}
+		
 	}
 
 	protected void categoryTypeToEDialect(CodeWriter writer) {
@@ -65,14 +78,24 @@ public class NativeCategoryDeclaration extends CategoryDeclaration {
 	@Override
 	protected void bodyToODialect(CodeWriter writer) {
 		categoryMappings.toDialect(writer);
+		if(methods!=null && methods.size()>0) {
+			writer.newLine();
+			writer.newLine();
+			methodsToODialect(writer, methods);
+		}
 	}
 
 	@Override
-	protected void toPDialect(CodeWriter writer) {
+	protected void toSDialect(CodeWriter writer) {
 		protoToPDialect(writer, null);
 		writer.indent();
 		writer.newLine();
 		categoryMappings.toDialect(writer);
+		if(methods!=null && methods.size()>0) for(IDeclaration decl : methods) {
+			CodeWriter w = writer.newMemberWriter();
+			decl.toDialect(w);
+			writer.newLine();
+		}
 		writer.dedent();
 		writer.newLine();
 	}

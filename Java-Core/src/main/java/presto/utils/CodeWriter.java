@@ -3,6 +3,7 @@ package presto.utils;
 import presto.grammar.Identifier;
 import presto.parser.Dialect;
 import presto.runtime.Context;
+import presto.type.CategoryType;
 
 public class CodeWriter {
 	
@@ -100,6 +101,16 @@ public class CodeWriter {
 
 	public CodeWriter newLocalWriter() {
 		return new CodeWriter(dialect, context.newLocalContext(), sb, indenter);
+	}
+
+	public CodeWriter newMemberWriter() {
+		Context context = this.context.newLocalContext();
+		context.setParentContext(this.context);
+		return new CodeWriter(dialect, context, sb, indenter);
+	}
+
+	public CodeWriter newInstanceWriter(CategoryType type) {
+		return new CodeWriter(dialect, context.newInstanceContext(type), sb, indenter);
 	}
 
 }

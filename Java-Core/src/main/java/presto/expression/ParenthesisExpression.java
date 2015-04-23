@@ -16,6 +16,11 @@ public class ParenthesisExpression implements IExpression {
 	}
 
 	@Override
+	public String toString() {
+		return "(" + expression.toString() + ")";
+	}
+	
+	@Override
 	public void toDialect(CodeWriter writer) {
 		writer.append("(");
 		expression.toDialect(writer);

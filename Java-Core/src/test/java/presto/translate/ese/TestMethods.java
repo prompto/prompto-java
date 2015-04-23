@@ -42,6 +42,11 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testMemberCall() throws Exception {
+		compareResourceESE("methods/memberCall.pec");
+	}
+
+	@Test
 	public void testPolymorphic_abstract() throws Exception {
 		compareResourceESE("methods/polymorphic_abstract.pec");
 	}

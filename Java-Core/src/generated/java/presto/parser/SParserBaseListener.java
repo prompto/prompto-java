@@ -2405,61 +2405,49 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSetterMemberMethod(@NotNull SParser.SetterMemberMethodContext ctx) { }
+	@Override public void enterMember_method_declaration(@NotNull SParser.Member_method_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSetterMemberMethod(@NotNull SParser.SetterMemberMethodContext ctx) { }
+	@Override public void exitMember_method_declaration(@NotNull SParser.Member_method_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterGetterMemberMethod(@NotNull SParser.GetterMemberMethodContext ctx) { }
+	@Override public void enterNativeCategoryMethodList(@NotNull SParser.NativeCategoryMethodListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitGetterMemberMethod(@NotNull SParser.GetterMemberMethodContext ctx) { }
+	@Override public void exitNativeCategoryMethodList(@NotNull SParser.NativeCategoryMethodListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConcreteMemberMethod(@NotNull SParser.ConcreteMemberMethodContext ctx) { }
+	@Override public void enterNativeCategoryMethodListItem(@NotNull SParser.NativeCategoryMethodListItemContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitConcreteMemberMethod(@NotNull SParser.ConcreteMemberMethodContext ctx) { }
+	@Override public void exitNativeCategoryMethodListItem(@NotNull SParser.NativeCategoryMethodListItemContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAbstractMemberMethod(@NotNull SParser.AbstractMemberMethodContext ctx) { }
+	@Override public void enterNative_member_method_declaration(@NotNull SParser.Native_member_method_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAbstractMemberMethod(@NotNull SParser.AbstractMemberMethodContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterOperatorMemberMethod(@NotNull SParser.OperatorMemberMethodContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitOperatorMemberMethod(@NotNull SParser.OperatorMemberMethodContext ctx) { }
+	@Override public void exitNative_member_method_declaration(@NotNull SParser.Native_member_method_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -3665,6 +3653,18 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterJavascriptGlobalMethodExpression(@NotNull SParser.JavascriptGlobalMethodExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJavascriptGlobalMethodExpression(@NotNull SParser.JavascriptGlobalMethodExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterJavascriptMethodExpression(@NotNull SParser.JavascriptMethodExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -4229,37 +4229,25 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJavaParenthesisExpression(@NotNull SParser.JavaParenthesisExpressionContext ctx) { }
+	@Override public void enterJava_primary_expression(@NotNull SParser.Java_primary_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJavaParenthesisExpression(@NotNull SParser.JavaParenthesisExpressionContext ctx) { }
+	@Override public void exitJava_primary_expression(@NotNull SParser.Java_primary_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJavaIdentifierExpression(@NotNull SParser.JavaIdentifierExpressionContext ctx) { }
+	@Override public void enterJava_this_expression(@NotNull SParser.Java_this_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJavaIdentifierExpression(@NotNull SParser.JavaIdentifierExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterJavaLiteralExpression(@NotNull SParser.JavaLiteralExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitJavaLiteralExpression(@NotNull SParser.JavaLiteralExpressionContext ctx) { }
+	@Override public void exitJava_this_expression(@NotNull SParser.Java_this_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

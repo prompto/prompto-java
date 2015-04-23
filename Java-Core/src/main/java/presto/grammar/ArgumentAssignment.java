@@ -139,7 +139,7 @@ public class ArgumentAssignment {
 			argument = declaration.getArguments().find(this.getName());
 		if(argument==null)
 			throw new SyntaxError("Method has no argument:" + this.getName());
-		IExpression expression = new ContextualExpression(context,this.expression);
+		IExpression expression = new ContextualExpression(context, this.expression);
 		return new ArgumentAssignment(argument,expression);
 	}
 

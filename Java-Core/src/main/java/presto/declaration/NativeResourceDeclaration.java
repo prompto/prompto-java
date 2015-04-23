@@ -3,6 +3,7 @@ package presto.declaration;
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.grammar.Identifier;
+import presto.grammar.MethodDeclarationList;
 import presto.grammar.NativeAttributeBindingListMap;
 import presto.grammar.NativeCategoryBindingList;
 import presto.runtime.Context;
@@ -16,8 +17,10 @@ import presto.value.NativeResource;
 public class NativeResourceDeclaration extends NativeCategoryDeclaration {
 	
 	public NativeResourceDeclaration(Identifier name, IdentifierList attributes, 
-			NativeCategoryBindingList categoryMappings, NativeAttributeBindingListMap attributeMappings) {
-		super(name,attributes,categoryMappings,attributeMappings);
+			NativeCategoryBindingList categoryMappings, 
+			NativeAttributeBindingListMap attributeMappings,
+			MethodDeclarationList methods) {
+		super(name,attributes, categoryMappings, attributeMappings, methods);
 	}
 	
 	@Override

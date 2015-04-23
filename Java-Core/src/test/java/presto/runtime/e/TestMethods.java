@@ -55,6 +55,11 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testMemberCall() throws Exception {
+		checkOutput("methods/memberCall.pec");
+	}
+
+	@Test
 	public void testPolymorphic_abstract() throws Exception {
 		checkOutput("methods/polymorphic_abstract.pec");
 	}

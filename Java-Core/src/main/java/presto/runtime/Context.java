@@ -150,12 +150,12 @@ public class Context implements IContext {
 		context.problemListener = this.problemListener;
 		return context;
 	}
-
-	public Context newInstanceContext(IType type) {
+	
+	public Context newInstanceContext(CategoryType type) {
 		return initInstanceContext(new InstanceContext(type));
 	}
 
-	public Context newInstanceContext(ConcreteInstance instance) {
+	public Context newInstanceContext(IInstance instance) {
 		return initInstanceContext(new InstanceContext(instance));
 	}
 
@@ -497,77 +497,7 @@ public class Context implements IContext {
 		return null;
 	}
 	
-	public static class ResourceContext extends Context {
-		
-		ResourceContext() {
-		}
 
-	}
-
-	public static class InstanceContext extends Context {
-		
-		ConcreteInstance instance;
-		IType type;
-		
-		InstanceContext(ConcreteInstance instance) {
-			this.instance = instance;
-			this.type = instance.getType();
-		}
-		
-		InstanceContext(IType type) {
-			this.type = type;
-		}
-
-		public ConcreteInstance getInstance() {
-			return instance;
-		}
-		
-		public IType getInstanceType() {
-			return type;
-		}
-
-		protected <T extends INamed> T readRegisteredValue(Class<T> klass, Identifier name) {
-			INamed actual = instances.get(name);
-			// not very pure, but avoids a lot of complexity when registering a value
-			if(actual==null) {
-				AttributeDeclaration attr = getRegisteredDeclaration(AttributeDeclaration.class, name);
-				IType type = attr.getType();
-				actual = new Variable(name, type);
-				instances.put(name, actual);
-			}
-			return Utils.downcast(klass,actual);
-		}
-
-		@Override
-		protected Context contextForValue(Identifier name) {
-			// params and variables have precedence over members
-			// so first look in context values
-			Context context = super.contextForValue(name);
-			if(context!=null)
-				return context;
-			else if(getDeclaration().hasAttribute(this, name))
-				return this;
-			else
-				return null;
-		}
-		
-		private ConcreteCategoryDeclaration getDeclaration() {
-			if(instance!=null)
-				return instance.getDeclaration();
-			else
-				return getRegisteredDeclaration(ConcreteCategoryDeclaration.class, type.getName());
-		}
-
-		@Override
-		protected IValue readValue(Identifier name) throws PrestoError {
-			return instance.getMember(calling, name);
-		}
-		
-		@Override
-		protected void writeValue(Identifier name, IValue value) throws PrestoError {
-			instance.setMember(calling, name, value);
-		}
-	}
 
 	public void enterMethod(IDeclaration method) throws PrestoError {
 		if(debugger!=null)
@@ -678,5 +608,78 @@ public class Context implements IContext {
 			return globals.getNativeMapping(klass);
 	}
 
+	public static class ResourceContext extends Context {
+		
+		ResourceContext() {
+		}
+
+	}
+
+	public static class InstanceContext extends Context {
+		
+		IInstance instance;
+		CategoryType type;
+		
+		InstanceContext(IInstance instance) {
+			this.instance = instance;
+			this.type = instance.getType();
+		}
+		
+		InstanceContext(CategoryType type) {
+			this.type = type;
+		}
+
+		public IInstance getInstance() {
+			return instance;
+		}
+		
+		public CategoryType getInstanceType() {
+			return type;
+		}
+
+		protected <T extends INamed> T readRegisteredValue(Class<T> klass, Identifier name) {
+			INamed actual = instances.get(name);
+			// not very pure, but avoids a lot of complexity when registering a value
+			if(actual==null) {
+				AttributeDeclaration attr = getRegisteredDeclaration(AttributeDeclaration.class, name);
+				if(attr!=null) {
+					IType type = attr.getType();
+					actual = new Variable(name, type);
+					instances.put(name, actual);
+				}
+			}
+			return Utils.downcast(klass,actual);
+		}
+		
+		@Override
+		protected Context contextForValue(Identifier name) {
+			// params and variables have precedence over members
+			// so first look in context values
+			Context context = super.contextForValue(name);
+			if(context!=null)
+				return context;
+			else if(getDeclaration().hasAttribute(this, name))
+				return this;
+			else
+				return null;
+		}
+		
+		private ConcreteCategoryDeclaration getDeclaration() {
+			if(instance!=null)
+				return instance.getDeclaration();
+			else
+				return getRegisteredDeclaration(ConcreteCategoryDeclaration.class, type.getName());
+		}
+
+		@Override
+		protected IValue readValue(Identifier name) throws PrestoError {
+			return instance.getMember(calling, name);
+		}
+		
+		@Override
+		protected void writeValue(Identifier name, IValue value) throws PrestoError {
+			instance.setMember(calling, name, value);
+		}
+	}
 
 }

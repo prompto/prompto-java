@@ -7,6 +7,16 @@ import presto.parser.e.BaseEParserTest;
 public class TestNative extends BaseEParserTest {
 
 	@Test
+	public void testAnyId() throws Exception {
+		compareResourceEOE("native/anyId.pec");
+	}
+
+	@Test
+	public void testAnyText() throws Exception {
+		compareResourceEOE("native/anyText.pec");
+	}
+
+	@Test
 	public void testAttribute() throws Exception {
 		compareResourceEOE("native/attribute.pec");
 	}

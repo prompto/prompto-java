@@ -1,6 +1,7 @@
 package presto.statement;
 
 import presto.declaration.CategoryDeclaration;
+import presto.declaration.ConcreteCategoryDeclaration;
 import presto.declaration.IDeclaration;
 import presto.declaration.TestMethodDeclaration;
 import presto.error.PrestoError;
@@ -14,6 +15,8 @@ import presto.grammar.ArgumentAssignmentList;
 import presto.grammar.Identifier;
 import presto.grammar.UnresolvedIdentifier;
 import presto.runtime.Context;
+import presto.runtime.Context.InstanceContext;
+import presto.runtime.Context.MethodDeclarationMap;
 import presto.type.CategoryType;
 import presto.type.IType;
 import presto.utils.CodeWriter;
@@ -85,26 +88,42 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 		if(resolved!=null)
 			return;
 		if(caller instanceof UnresolvedIdentifier)
-			resolveUnresolvedIdentifier(context);
-		else
-			resolveMember(context);
+			resolved = resolveUnresolvedIdentifier(context);
+		else if(caller instanceof MemberSelector)
+			resolved = resolveMember(context);
 	}
 	
-	private void resolveUnresolvedIdentifier(Context context) throws SyntaxError {
+	private IExpression resolveUnresolvedIdentifier(Context context) throws SyntaxError {
 		Identifier name = ((UnresolvedIdentifier)caller).getName();
-		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, name);
+		IDeclaration decl = null;
+		// if this happens in the context of a member method, then we need to check for category members first
+		if(context.getParentContext() instanceof InstanceContext) {
+			decl = resolveUnresolvedMember((InstanceContext)context.getParentContext(), name);
+			if(decl!=null)
+				return new MethodCall(new MethodSelector(name), assignments);
+		}
+		decl = context.getRegisteredDeclaration(IDeclaration.class, name);
 		if(decl==null)
 			throw new SyntaxError("Unknown name:" + name);
 		if(decl instanceof CategoryDeclaration)
-			resolved = new ConstructorExpression(new CategoryType(name), false, assignments);
+			return new ConstructorExpression(new CategoryType(name), false, assignments);
 		else
-			resolved = new MethodCall(new MethodSelector(name), assignments);
+			return new MethodCall(new MethodSelector(name), assignments);
 	}
 
-	private void resolveMember(Context context) throws SyntaxError {
+	private IDeclaration resolveUnresolvedMember(InstanceContext context, Identifier name) throws SyntaxError {
+		ConcreteCategoryDeclaration decl = context.getRegisteredDeclaration(ConcreteCategoryDeclaration.class, context.getInstanceType().getName());
+		MethodDeclarationMap methods = decl.getMemberMethods(context, name);
+		if(methods!=null && methods.size()>0)
+			return methods;
+		else
+			return null;
+	}
+
+	private IExpression resolveMember(Context context) throws SyntaxError {
 		IExpression parent = ((MemberSelector)caller).getParent();
 		Identifier name = ((MemberSelector)caller).getName();
-		resolved = new MethodCall(new MethodSelector(parent, name), assignments);
+		return new MethodCall(new MethodSelector(parent, name), assignments);
 	}
 
 }

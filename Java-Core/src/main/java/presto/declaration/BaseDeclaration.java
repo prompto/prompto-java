@@ -20,5 +20,9 @@ public abstract class BaseDeclaration extends Section implements IDeclaration {
 		return name.getName();
 	}
 	
+	@Override
+	public int hashCode() {
+		return getIdentifier().hashCode();
+	}
 	
 }

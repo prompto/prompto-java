@@ -17,12 +17,15 @@ public interface IMethodDeclaration extends IDeclaration {
 	IType getReturnType();
 	ArgumentList getArguments();
 	String getSignature(Dialect dialect);
+	boolean isEligibleAsMain();
 	String getProto(Context context) throws SyntaxError;
-	Specificity computeSpecificity(Context context, IArgument argument, ArgumentAssignment assignment, boolean checkInstance);
 	IValue interpret(Context context) throws PrestoError;
+	void check(ConcreteCategoryDeclaration declaration, Context context) throws SyntaxError;
 	boolean isAssignableTo(Context context, ArgumentAssignmentList assignments, boolean checkInstance);
 	void registerArguments(Context local) throws SyntaxError;
-	boolean isEligibleAsMain();
+	Specificity computeSpecificity(Context context, IArgument argument, ArgumentAssignment assignment, boolean checkInstance);
+	void setMemberOf(ConcreteCategoryDeclaration declaration);
+	ConcreteCategoryDeclaration getMemberOf();
 
 }
 

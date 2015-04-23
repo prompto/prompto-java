@@ -12,6 +12,11 @@ public class TestSetters extends BaseEParserTest {
 	}
 
 	@Test
+	public void testGetterCall() throws Exception {
+		compareResourceEOE("setters/getterCall.pec");
+	}
+
+	@Test
 	public void testSetter() throws Exception {
 		compareResourceEOE("setters/setter.pec");
 	}

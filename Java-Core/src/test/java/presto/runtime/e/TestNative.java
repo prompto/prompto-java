@@ -20,6 +20,16 @@ public class TestNative extends BaseEParserTest {
 	}
 
 	@Test
+	public void testAnyId() throws Exception {
+		checkOutput("native/anyId.pec");
+	}
+
+	@Test
+	public void testAnyText() throws Exception {
+		checkOutput("native/anyText.pec");
+	}
+
+	@Test
 	public void testAttribute() throws Exception {
 		checkOutput("native/attribute.pec");
 	}

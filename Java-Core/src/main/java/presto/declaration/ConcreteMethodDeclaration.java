@@ -16,12 +16,12 @@ import presto.type.VoidType;
 import presto.utils.CodeWriter;
 import presto.value.IValue;
 
-public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements ICategoryMethodDeclaration {
+public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements IMethodDeclaration {
 
 	StatementList statements;
 	
 	public ConcreteMethodDeclaration(Identifier name, ArgumentList arguments, IType returnType, StatementList statements) {
-		super(name,arguments,returnType);
+		super(name, arguments, returnType);
 		this.statements = statements;
 	}
 

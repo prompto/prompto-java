@@ -23,6 +23,7 @@ import presto.expression.ConstructorExpression;
 import presto.expression.IExpression;
 import presto.expression.InstanceExpression;
 import presto.expression.MemberSelector;
+import presto.expression.TernaryExpression;
 import presto.grammar.ArgumentAssignment;
 import presto.grammar.ArgumentAssignmentList;
 import presto.grammar.ArgumentList;
@@ -604,6 +605,14 @@ public class TestParserAtoms {
 		OTestParser parser = new OTestParser(statement);
 		IExpression exp = parser.parse_expression();
 		assertTrue(exp instanceof InstanceExpression);
+	}
+
+	@Test
+	public void testTernaryExpression() throws Exception {
+		String statement = "a is not null ? x : y";
+		OTestParser parser = new OTestParser(statement);
+		IExpression exp = parser.parse_expression();
+		assertTrue(exp instanceof TernaryExpression);
 	}
 
 	static class OTestParser extends OCleverParser {

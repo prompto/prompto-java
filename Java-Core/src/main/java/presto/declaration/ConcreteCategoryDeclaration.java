@@ -1,12 +1,11 @@
 package presto.declaration;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import presto.error.PrestoError;
 import presto.error.SyntaxError;
-import presto.grammar.CategoryMethodDeclarationList;
+import presto.grammar.MethodDeclarationList;
 import presto.grammar.Identifier;
 import presto.grammar.Operator;
 import presto.runtime.Context;
@@ -22,7 +21,7 @@ import presto.value.IInstance;
 public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	
 	IdentifierList derivedFrom;
-	CategoryMethodDeclarationList methods;
+	MethodDeclarationList methods;
 	Map<String,IDeclaration> methodsMap = null;
 	
 	protected ConcreteCategoryDeclaration(Identifier name) {
@@ -30,10 +29,10 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 	
 	public ConcreteCategoryDeclaration(Identifier name, IdentifierList attributes, 
-			IdentifierList derivedFrom, CategoryMethodDeclarationList methods) {
+			IdentifierList derivedFrom, MethodDeclarationList methods) {
 		super(name, attributes);
 		this.derivedFrom = derivedFrom;
-		this.methods = methods!=null ? methods : new CategoryMethodDeclarationList();
+		this.methods = methods!=null ? methods : new MethodDeclarationList();
 	}
 
 	@Override
@@ -41,7 +40,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return derivedFrom;
 	}
 	
-	public CategoryMethodDeclarationList getMethods() {
+	public MethodDeclarationList getMethods() {
 		return methods;
 	}
 	
@@ -83,14 +82,11 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	
 	@Override
 	protected void bodyToODialect(CodeWriter writer) {
-		for(IDeclaration decl : methods) {
-			decl.toDialect(writer);
-			writer.newLine();
-		}
+		methodsToODialect(writer, methods);
 	}
 	
 	@Override
-	protected void toPDialect(CodeWriter writer) {
+	protected void toSDialect(CodeWriter writer) {
 		protoToPDialect(writer, derivedFrom);
 		methodsToPDialect(writer);
 	}
@@ -105,7 +101,8 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		if(methods==null || methods.size()==0)
 			writer.append("pass\n");
 		else for(IDeclaration decl : methods) {
-			decl.toDialect(writer);
+			CodeWriter w = writer.newMemberWriter();
+			decl.toDialect(w);
 			writer.newLine();
 		}
 		writer.dedent();
@@ -146,15 +143,23 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 
 	private void checkMethods(Context context) throws SyntaxError {
-		if(methodsMap==null) {
-			methodsMap = new HashMap<String,IDeclaration>();
-			for(ICategoryMethodDeclaration method : methods)
-				register(method,context);
-		}
+		registerMethods(context);
+		for(IMethodDeclaration method : methods)
+			method.check(this,context);
 	}
 			
 			
-	private void register(ICategoryMethodDeclaration method, Context context) throws SyntaxError {
+	private void registerMethods(Context context) throws SyntaxError {
+		if(methodsMap==null) {
+			methodsMap = new HashMap<String,IDeclaration>();
+			for(IMethodDeclaration method : methods) {
+				method.setMemberOf(this);
+				registerMethod(method,context);
+			}
+		}
+	}
+
+	private void registerMethod(IMethodDeclaration method, Context context) throws SyntaxError {
 		IDeclaration actual;
 		if(method instanceof SetterMethodDeclaration) {
 			actual = methodsMap.get("setter:"+method.getIdentifier().toString());
@@ -170,11 +175,10 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			actual = methodsMap.get(method.getIdentifier().toString());
 			if(actual==null) {
 				actual = new MethodDeclarationMap(method.getIdentifier());
-				methodsMap.put(method.getIdentifier().toString(), (MethodDeclarationMap)actual);
+				methodsMap.put(method.getIdentifier().toString(), actual);
 			}
 			((MethodDeclarationMap)actual).register(method,context);
 		}
-		method.check(this,context);
 	}
 
 	private void checkDerived(Context context) throws SyntaxError {
@@ -271,12 +275,12 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return cd.findSetter(context, attrName);
 	}
 	
-	public Collection<IMethodDeclaration> findMemberMethods(Context context, Identifier name) throws SyntaxError {
+	public MethodDeclarationMap getMemberMethods(Context context, Identifier name) throws SyntaxError {
+		registerMethods(context);
 		MethodDeclarationMap result = new MethodDeclarationMap(name);
 		registerMemberMethods(context,result);
-		return result.values();
+		return result; 
 	}
-	
 	
 	private void registerMemberMethods(Context context, MethodDeclarationMap result) throws SyntaxError {
 		registerThisMemberMethods(context,result);
@@ -313,12 +317,12 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 
 	public IMethodDeclaration findOperator(Context context, Operator operator, IType type) throws SyntaxError {
 		Identifier methodName = new Identifier("operator_" + operator.name());
-		Collection<IMethodDeclaration> methods = findMemberMethods(context, methodName);
+		MethodDeclarationMap methods = getMemberMethods(context, methodName);
 		if(methods==null)
 			return null;
 		// find best candidate
 		IMethodDeclaration candidate = null;
-		for(IMethodDeclaration method : methods) {
+		for(IMethodDeclaration method : methods.values()) {
 			IType potential = method.getArguments().getFirst().getType(context);
 			if(!type.isAssignableTo(context, potential))
 				continue;

@@ -19,6 +19,7 @@ import presto.value.IValue;
 
 public abstract class BaseMethodDeclaration extends BaseDeclaration implements IMethodDeclaration {
 
+	ConcreteCategoryDeclaration memberOf;
 	ArgumentList arguments;
 	IType returnType;
 	
@@ -34,6 +35,16 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 		this.returnType = returnType!=null ? returnType : VoidType.instance();
 	}
 
+	@Override
+	public void setMemberOf(ConcreteCategoryDeclaration declaration) {
+		this.memberOf = declaration;
+	}
+	
+	@Override
+	public ConcreteCategoryDeclaration getMemberOf() {
+		return memberOf;
+	}
+	
 	@Override
 	public String getSignature(Dialect dialect) {
 		StringBuilder sb = new StringBuilder(getIdentifier().toString());

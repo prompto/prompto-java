@@ -821,18 +821,6 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterClosureExpression(@NotNull OParser.ClosureExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitClosureExpression(@NotNull OParser.ClosureExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterTernaryExpression(@NotNull OParser.TernaryExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -840,6 +828,18 @@ public class OParserBaseListener implements OParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitTernaryExpression(@NotNull OParser.TernaryExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterClosureExpression(@NotNull OParser.ClosureExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitClosureExpression(@NotNull OParser.ClosureExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -900,6 +900,18 @@ public class OParserBaseListener implements OParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitRoughlyEqualsExpression(@NotNull OParser.RoughlyEqualsExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIsNotAnExpression(@NotNull OParser.IsNotAnExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIsNotAnExpression(@NotNull OParser.IsNotAnExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1073,6 +1085,18 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterIsAnExpression(@NotNull OParser.IsAnExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIsAnExpression(@NotNull OParser.IsAnExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterMultiplyExpression(@NotNull OParser.MultiplyExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1212,6 +1236,18 @@ public class OParserBaseListener implements OParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitIsNotExpression(@NotNull OParser.IsNotExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAn_expression(@NotNull OParser.An_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAn_expression(@NotNull OParser.An_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2429,61 +2465,49 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSetterMemberMethod(@NotNull OParser.SetterMemberMethodContext ctx) { }
+	@Override public void enterMember_method_declaration(@NotNull OParser.Member_method_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSetterMemberMethod(@NotNull OParser.SetterMemberMethodContext ctx) { }
+	@Override public void exitMember_method_declaration(@NotNull OParser.Member_method_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterGetterMemberMethod(@NotNull OParser.GetterMemberMethodContext ctx) { }
+	@Override public void enterNativeCategoryMethodList(@NotNull OParser.NativeCategoryMethodListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitGetterMemberMethod(@NotNull OParser.GetterMemberMethodContext ctx) { }
+	@Override public void exitNativeCategoryMethodList(@NotNull OParser.NativeCategoryMethodListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConcreteMemberMethod(@NotNull OParser.ConcreteMemberMethodContext ctx) { }
+	@Override public void enterNativeCategoryMethodListItem(@NotNull OParser.NativeCategoryMethodListItemContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitConcreteMemberMethod(@NotNull OParser.ConcreteMemberMethodContext ctx) { }
+	@Override public void exitNativeCategoryMethodListItem(@NotNull OParser.NativeCategoryMethodListItemContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAbstractMemberMethod(@NotNull OParser.AbstractMemberMethodContext ctx) { }
+	@Override public void enterNative_member_method_declaration(@NotNull OParser.Native_member_method_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAbstractMemberMethod(@NotNull OParser.AbstractMemberMethodContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterOperatorMemberMethod(@NotNull OParser.OperatorMemberMethodContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitOperatorMemberMethod(@NotNull OParser.OperatorMemberMethodContext ctx) { }
+	@Override public void exitNative_member_method_declaration(@NotNull OParser.Native_member_method_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -3713,6 +3737,18 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterJavascriptGlobalMethodExpression(@NotNull OParser.JavascriptGlobalMethodExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJavascriptGlobalMethodExpression(@NotNull OParser.JavascriptGlobalMethodExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterJavascriptMethodExpression(@NotNull OParser.JavascriptMethodExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -4277,37 +4313,25 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJavaParenthesisExpression(@NotNull OParser.JavaParenthesisExpressionContext ctx) { }
+	@Override public void enterJava_primary_expression(@NotNull OParser.Java_primary_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJavaParenthesisExpression(@NotNull OParser.JavaParenthesisExpressionContext ctx) { }
+	@Override public void exitJava_primary_expression(@NotNull OParser.Java_primary_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJavaIdentifierExpression(@NotNull OParser.JavaIdentifierExpressionContext ctx) { }
+	@Override public void enterJava_this_expression(@NotNull OParser.Java_this_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJavaIdentifierExpression(@NotNull OParser.JavaIdentifierExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterJavaLiteralExpression(@NotNull OParser.JavaLiteralExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitJavaLiteralExpression(@NotNull OParser.JavaLiteralExpressionContext ctx) { }
+	@Override public void exitJava_this_expression(@NotNull OParser.Java_this_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

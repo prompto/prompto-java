@@ -83,7 +83,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	public IType check(Context context) throws SyntaxError {
 		MethodFinder finder = new MethodFinder(context, this);
 		IMethodDeclaration declaration = finder.findMethod(false);
-		Context local = method.newLocalCheckContext(context);
+		Context local = method.newLocalCheckContext(context, declaration);
 		return check(declaration, context, local);
 	}
 
@@ -125,7 +125,8 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	@Override
 	public IValue interpret(Context context) throws PrestoError {
 		IMethodDeclaration declaration = findDeclaration(context);
-		Context local = method.newLocalContext(context);
+		// if called from within a member method without 
+		Context local = method.newLocalContext(context, declaration);
 		declaration.registerArguments(local);
 		ArgumentAssignmentList assignments = makeAssignments(context, declaration);
 		for (ArgumentAssignment assignment : assignments) {

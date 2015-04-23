@@ -753,18 +753,6 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitCallableItemSelector(@NotNull OParser.CallableItemSelectorContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code ClosureExpression}
-	 * labeled alternative in {@link OParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterClosureExpression(@NotNull OParser.ClosureExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ClosureExpression}
-	 * labeled alternative in {@link OParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitClosureExpression(@NotNull OParser.ClosureExpressionContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code TernaryExpression}
 	 * labeled alternative in {@link OParser#expression}.
 	 * @param ctx the parse tree
@@ -776,6 +764,18 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitTernaryExpression(@NotNull OParser.TernaryExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ClosureExpression}
+	 * labeled alternative in {@link OParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterClosureExpression(@NotNull OParser.ClosureExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ClosureExpression}
+	 * labeled alternative in {@link OParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitClosureExpression(@NotNull OParser.ClosureExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code NotContainsAnyExpression}
 	 * labeled alternative in {@link OParser#expression}.
@@ -836,6 +836,18 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitRoughlyEqualsExpression(@NotNull OParser.RoughlyEqualsExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code IsNotAnExpression}
+	 * labeled alternative in {@link OParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterIsNotAnExpression(@NotNull OParser.IsNotAnExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code IsNotAnExpression}
+	 * labeled alternative in {@link OParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitIsNotAnExpression(@NotNull OParser.IsNotAnExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ContainsExpression}
 	 * labeled alternative in {@link OParser#expression}.
@@ -1005,6 +1017,18 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitLessThanOrEqualExpression(@NotNull OParser.LessThanOrEqualExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code IsAnExpression}
+	 * labeled alternative in {@link OParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterIsAnExpression(@NotNull OParser.IsAnExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code IsAnExpression}
+	 * labeled alternative in {@link OParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitIsAnExpression(@NotNull OParser.IsAnExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code MultiplyExpression}
 	 * labeled alternative in {@link OParser#expression}.
 	 * @param ctx the parse tree
@@ -1148,6 +1172,16 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitIsNotExpression(@NotNull OParser.IsNotExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#an_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterAn_expression(@NotNull OParser.An_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#an_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitAn_expression(@NotNull OParser.An_expressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link OParser#closure_expression}.
 	 * @param ctx the parse tree
@@ -2315,65 +2349,49 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitCategoryMethodList(@NotNull OParser.CategoryMethodListContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code SetterMemberMethod}
-	 * labeled alternative in {@link OParser#member_method_declaration}.
+	 * Enter a parse tree produced by {@link OParser#member_method_declaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterSetterMemberMethod(@NotNull OParser.SetterMemberMethodContext ctx);
+	void enterMember_method_declaration(@NotNull OParser.Member_method_declarationContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code SetterMemberMethod}
-	 * labeled alternative in {@link OParser#member_method_declaration}.
+	 * Exit a parse tree produced by {@link OParser#member_method_declaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitSetterMemberMethod(@NotNull OParser.SetterMemberMethodContext ctx);
+	void exitMember_method_declaration(@NotNull OParser.Member_method_declarationContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code GetterMemberMethod}
-	 * labeled alternative in {@link OParser#member_method_declaration}.
+	 * Enter a parse tree produced by the {@code NativeCategoryMethodList}
+	 * labeled alternative in {@link OParser#native_member_method_declaration_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterGetterMemberMethod(@NotNull OParser.GetterMemberMethodContext ctx);
+	void enterNativeCategoryMethodList(@NotNull OParser.NativeCategoryMethodListContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code GetterMemberMethod}
-	 * labeled alternative in {@link OParser#member_method_declaration}.
+	 * Exit a parse tree produced by the {@code NativeCategoryMethodList}
+	 * labeled alternative in {@link OParser#native_member_method_declaration_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitGetterMemberMethod(@NotNull OParser.GetterMemberMethodContext ctx);
+	void exitNativeCategoryMethodList(@NotNull OParser.NativeCategoryMethodListContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code ConcreteMemberMethod}
-	 * labeled alternative in {@link OParser#member_method_declaration}.
+	 * Enter a parse tree produced by the {@code NativeCategoryMethodListItem}
+	 * labeled alternative in {@link OParser#native_member_method_declaration_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterConcreteMemberMethod(@NotNull OParser.ConcreteMemberMethodContext ctx);
+	void enterNativeCategoryMethodListItem(@NotNull OParser.NativeCategoryMethodListItemContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code ConcreteMemberMethod}
-	 * labeled alternative in {@link OParser#member_method_declaration}.
+	 * Exit a parse tree produced by the {@code NativeCategoryMethodListItem}
+	 * labeled alternative in {@link OParser#native_member_method_declaration_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitConcreteMemberMethod(@NotNull OParser.ConcreteMemberMethodContext ctx);
+	void exitNativeCategoryMethodListItem(@NotNull OParser.NativeCategoryMethodListItemContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code AbstractMemberMethod}
-	 * labeled alternative in {@link OParser#member_method_declaration}.
+	 * Enter a parse tree produced by {@link OParser#native_member_method_declaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterAbstractMemberMethod(@NotNull OParser.AbstractMemberMethodContext ctx);
+	void enterNative_member_method_declaration(@NotNull OParser.Native_member_method_declarationContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code AbstractMemberMethod}
-	 * labeled alternative in {@link OParser#member_method_declaration}.
+	 * Exit a parse tree produced by {@link OParser#native_member_method_declaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitAbstractMemberMethod(@NotNull OParser.AbstractMemberMethodContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code OperatorMemberMethod}
-	 * labeled alternative in {@link OParser#member_method_declaration}.
-	 * @param ctx the parse tree
-	 */
-	void enterOperatorMemberMethod(@NotNull OParser.OperatorMemberMethodContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code OperatorMemberMethod}
-	 * labeled alternative in {@link OParser#member_method_declaration}.
-	 * @param ctx the parse tree
-	 */
-	void exitOperatorMemberMethod(@NotNull OParser.OperatorMemberMethodContext ctx);
+	void exitNative_member_method_declaration(@NotNull OParser.Native_member_method_declarationContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code JavaCategoryBinding}
 	 * labeled alternative in {@link OParser#native_category_binding}.
@@ -3553,6 +3571,18 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitJavascriptLiteralExpression(@NotNull OParser.JavascriptLiteralExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code JavascriptGlobalMethodExpression}
+	 * labeled alternative in {@link OParser#javascript_primary_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterJavascriptGlobalMethodExpression(@NotNull OParser.JavascriptGlobalMethodExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code JavascriptGlobalMethodExpression}
+	 * labeled alternative in {@link OParser#javascript_primary_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitJavascriptGlobalMethodExpression(@NotNull OParser.JavascriptGlobalMethodExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code JavascriptMethodExpression}
 	 * labeled alternative in {@link OParser#javascript_selector_expression}.
 	 * @param ctx the parse tree
@@ -4103,41 +4133,25 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitJavaSelectorExpression(@NotNull OParser.JavaSelectorExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code JavaParenthesisExpression}
-	 * labeled alternative in {@link OParser#java_primary_expression}.
+	 * Enter a parse tree produced by {@link OParser#java_primary_expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterJavaParenthesisExpression(@NotNull OParser.JavaParenthesisExpressionContext ctx);
+	void enterJava_primary_expression(@NotNull OParser.Java_primary_expressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code JavaParenthesisExpression}
-	 * labeled alternative in {@link OParser#java_primary_expression}.
+	 * Exit a parse tree produced by {@link OParser#java_primary_expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitJavaParenthesisExpression(@NotNull OParser.JavaParenthesisExpressionContext ctx);
+	void exitJava_primary_expression(@NotNull OParser.Java_primary_expressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code JavaIdentifierExpression}
-	 * labeled alternative in {@link OParser#java_primary_expression}.
+	 * Enter a parse tree produced by {@link OParser#java_this_expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterJavaIdentifierExpression(@NotNull OParser.JavaIdentifierExpressionContext ctx);
+	void enterJava_this_expression(@NotNull OParser.Java_this_expressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code JavaIdentifierExpression}
-	 * labeled alternative in {@link OParser#java_primary_expression}.
+	 * Exit a parse tree produced by {@link OParser#java_this_expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitJavaIdentifierExpression(@NotNull OParser.JavaIdentifierExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code JavaLiteralExpression}
-	 * labeled alternative in {@link OParser#java_primary_expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterJavaLiteralExpression(@NotNull OParser.JavaLiteralExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code JavaLiteralExpression}
-	 * labeled alternative in {@link OParser#java_primary_expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitJavaLiteralExpression(@NotNull OParser.JavaLiteralExpressionContext ctx);
+	void exitJava_this_expression(@NotNull OParser.Java_this_expressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code JavaMethodExpression}
 	 * labeled alternative in {@link OParser#java_selector_expression}.

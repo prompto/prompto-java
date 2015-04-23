@@ -1,6 +1,5 @@
 package presto.declaration;
 
-import presto.error.PrestoError;
 import presto.error.SyntaxError;
 import presto.expression.IExpression;
 import presto.grammar.Identifier;
@@ -8,90 +7,54 @@ import presto.runtime.Context;
 import presto.statement.StatementList;
 import presto.type.IType;
 import presto.utils.CodeWriter;
-import presto.value.IValue;
 
-public class SetterMethodDeclaration extends BaseCategoryMethodDeclaration implements IExpression {
+public class SetterMethodDeclaration extends ConcreteMethodDeclaration implements IExpression {
 
-	public SetterMethodDeclaration(Identifier name, StatementList instructions) {
-		super(name, null, null, instructions);
+	public SetterMethodDeclaration(Identifier name, StatementList statements) {
+		super(name, null, null, statements);
 	}
 
 	@Override
-	public void toDialect(CodeWriter writer) {
-		switch(writer.getDialect()) {
-		case E:
-			toEDialect(writer);
-			break;
-		case O:
-			toODialect(writer);
-			break;
-		case S:
-			toPDialect(writer);
-			break;
-		}
-	}
-	
-	private void toODialect(CodeWriter writer) {
+	protected void toODialect(CodeWriter writer) {
 		writer.append("setter ");
 		writer.append(getName());
 		writer.append(" {\n");
 		writer.indent();
-		instructions.toDialect(writer);
+		statements.toDialect(writer);
 		writer.dedent();
 		writer.append("}\n");
 	}
 
-	private void toEDialect(CodeWriter writer) {
+	@Override
+	protected void toEDialect(CodeWriter writer) {
 		writer.append("define ");
 		writer.append(getName());
 		writer.append(" setter doing:\n");
 		writer.indent();
-		instructions.toDialect(writer);
+		statements.toDialect(writer);
 		writer.dedent();
 	}	
 
-	private void toPDialect(CodeWriter writer) {
+	@Override
+	protected void toPDialect(CodeWriter writer) {
 		writer.append("def ");
 		writer.append(getName());
 		writer.append(" setter():\n");
 		writer.indent();
-		instructions.toDialect(writer);
+		statements.toDialect(writer);
 		writer.dedent();
 	}	
 
 	@Override
 	public void check(ConcreteCategoryDeclaration category, Context context) {
 		// TODO Auto-generated method stub
-		
 	}
 	
-	@Override
-	public IType getReturnType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public IType getType(Context context) throws SyntaxError {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public IValue interpret(Context context) throws PrestoError {
-		return instructions.interpret(context);
-	}
 
 	@Override
 	public IType check(Context context) throws SyntaxError {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public void register(Context context) throws SyntaxError {
-		// TODO Auto-generated method stub
-		
 	}
 
 }
