@@ -125,6 +125,7 @@ import presto.javascript.JavaScriptExpression;
 import presto.javascript.JavaScriptExpressionList;
 import presto.javascript.JavaScriptIdentifierExpression;
 import presto.javascript.JavaScriptIntegerLiteral;
+import presto.javascript.JavaScriptMemberExpression;
 import presto.javascript.JavaScriptMethodExpression;
 import presto.javascript.JavaScriptModule;
 import presto.javascript.JavaScriptNativeCall;
@@ -132,6 +133,7 @@ import presto.javascript.JavaScriptNativeCategoryBinding;
 import presto.javascript.JavaScriptSelectorExpression;
 import presto.javascript.JavaScriptStatement;
 import presto.javascript.JavaScriptTextLiteral;
+import presto.javascript.JavaScriptThisExpression;
 import presto.literal.BooleanLiteral;
 import presto.literal.CharacterLiteral;
 import presto.literal.DateLiteral;
@@ -256,16 +258,16 @@ public class OPrestoBuilder extends OParserBaseListener {
 	}
 
 	@Override
+	public void exitAn_expression(An_expressionContext ctx) {
+		IType type = this.<IType>getNodeValue(ctx.typ);
+		setNodeValue(ctx, type);
+	}
+	
+	@Override
 	public void exitAndExpression(AndExpressionContext ctx) {
 		IExpression left = this.<IExpression>getNodeValue(ctx.left);
 		IExpression right = this.<IExpression>getNodeValue(ctx.right);
 		setNodeValue(ctx, new AndExpression(left, right));
-	}
-	
-	@Override
-	public void exitAn_expression(An_expressionContext ctx) {
-		IType type = this.<IType>getNodeValue(ctx.typ);
-		setNodeValue(ctx, type);
 	}
 	
 	@Override
@@ -537,27 +539,11 @@ public class OPrestoBuilder extends OParserBaseListener {
 	}
 	
 	@Override
-	public void exitNativeCategoryMethodList(NativeCategoryMethodListContext ctx) {
-		IMethodDeclaration item = this.<IMethodDeclaration>getNodeValue(ctx.item);
-		MethodDeclarationList items = new MethodDeclarationList(item);
-		setNodeValue(ctx, items);
-	}
-	
-	@Override
-	public void exitNativeCategoryMethodListItem(NativeCategoryMethodListItemContext ctx) {
-		IMethodDeclaration item = this.<IMethodDeclaration>getNodeValue(ctx.item);
-		MethodDeclarationList items = this.<MethodDeclarationList>getNodeValue(ctx.items);
-		items.add(item);
-		setNodeValue(ctx, items);
-	}
-
-
-	@Override
 	public void exitCategorySymbolList(CategorySymbolListContext ctx) {
 		CategorySymbol item = this.<CategorySymbol>getNodeValue(ctx.item);
 		setNodeValue(ctx, new CategorySymbolList(item));
 	}
-
+	
 	@Override
 	public void exitCategorySymbolListItem(CategorySymbolListItemContext ctx) {
 		CategorySymbol item = this.<CategorySymbol>getNodeValue(ctx.item);
@@ -566,22 +552,23 @@ public class OPrestoBuilder extends OParserBaseListener {
 		setNodeValue(ctx, items);
 	}
 
+
 	@Override
 	public void exitCategoryType(CategoryTypeContext ctx) {
 		IType type = this.<IType>getNodeValue(ctx.c);
 		setNodeValue(ctx, type);
 	}
-	
+
 	@Override
 	public void exitCharacterLiteral(CharacterLiteralContext ctx) {
 		setNodeValue(ctx, new CharacterLiteral(ctx.t.getText()));
 	}
-	
+
 	@Override
 	public void exitCharacterType(CharacterTypeContext ctx) {
 		setNodeValue(ctx, CharacterType.instance());
 	}
-
+	
 	@Override
 	public void exitChildInstance(ChildInstanceContext ctx) {
 		IAssignableInstance parent = this.<IAssignableInstance>getNodeValue(ctx.parent);
@@ -590,25 +577,25 @@ public class OPrestoBuilder extends OParserBaseListener {
 		setNodeValue(ctx, child);
 	}
 	
-
 	@Override
 	public void exitClosure_expression(Closure_expressionContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
 		setNodeValue(ctx, new MethodExpression(name));
 	}
-	
+
 	@Override
 	public void exitClosureExpression(ClosureExpressionContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
 	}
+	
 
 	@Override
 	public void exitClosureStatement(ClosureStatementContext ctx) {
 		ConcreteMethodDeclaration decl = this.<ConcreteMethodDeclaration>getNodeValue(ctx.decl);
 		setNodeValue(ctx, new DeclarationInstruction<ConcreteMethodDeclaration>(decl));
 	}
-
+	
 	@Override
 	public void exitCode_argument(Code_argumentContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
@@ -658,7 +645,7 @@ public class OPrestoBuilder extends OParserBaseListener {
 		MethodDeclarationList methods = this.<MethodDeclarationList>getNodeValue(ctx.methods);
 		setNodeValue(ctx, new ConcreteCategoryDeclaration(name, attrs, derived, methods));
 	}
-	
+
 	@Override
 	public void exitConcrete_method_declaration(Concrete_method_declarationContext ctx) {
 		IType type = this.<IType>getNodeValue(ctx.typ);
@@ -667,7 +654,7 @@ public class OPrestoBuilder extends OParserBaseListener {
 		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
 		setNodeValue(ctx, new ConcreteMethodDeclaration(name, args, type, stmts));
 	}
-	
+
 	@Override
 	public void exitConcreteCategoryDeclaration(ConcreteCategoryDeclarationContext ctx) {
 		ConcreteCategoryDeclaration decl = this.<ConcreteCategoryDeclaration>getNodeValue(ctx.decl);
@@ -725,6 +712,17 @@ public class OPrestoBuilder extends OParserBaseListener {
 		String name = this.<String>getNodeValue(ctx.name);
 		CSharpExpressionList args = this.<CSharpExpressionList>getNodeValue(ctx.args);
 		setNodeValue(ctx, new CSharpMethodExpression(name, args));
+	}
+	
+	@Override
+	public void exitCsharp_primary_expression(Csharp_primary_expressionContext ctx) {
+		CSharpExpression exp = this.<CSharpExpression>getNodeValue(ctx.getChild(0));
+		setNodeValue(ctx, exp);
+	}
+	
+	@Override
+	public void exitCsharp_this_expression(Csharp_this_expressionContext ctx) {
+		setNodeValue(ctx, new CSharpThisExpression());
 	}
 	
 	@Override
@@ -800,12 +798,6 @@ public class OPrestoBuilder extends OParserBaseListener {
 	}
 	
 	@Override
-	public void exitCsharp_primary_expression(Csharp_primary_expressionContext ctx) {
-		CSharpExpression exp = this.<CSharpExpression>getNodeValue(ctx.getChild(0));
-		setNodeValue(ctx, exp);
-	}
-	
-	@Override
 	public void exitCSharpPrimaryExpression(CSharpPrimaryExpressionContext ctx) {
 		CSharpExpression exp = this.<CSharpExpression>getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
@@ -834,11 +826,6 @@ public class OPrestoBuilder extends OParserBaseListener {
 	@Override
 	public void exitCSharpTextLiteral(CSharpTextLiteralContext ctx) {
 		setNodeValue(ctx, new CSharpTextLiteral(ctx.getText()));
-	}
-	
-	@Override
-	public void exitCsharp_this_expression(Csharp_this_expressionContext ctx) {
-		setNodeValue(ctx, new CSharpThisExpression());
 	}
 	
 	@Override
@@ -1054,7 +1041,7 @@ public class OPrestoBuilder extends OParserBaseListener {
 		IExpression right = this.<IExpression>getNodeValue(ctx.right);
 		setNodeValue(ctx, new EqualsExpression(left, EqOp.EQUALS, right));
 	}
-
+	
 	@Override
 	public void exitExecuteExpression(ExecuteExpressionContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
@@ -1068,7 +1055,7 @@ public class OPrestoBuilder extends OParserBaseListener {
 		ArgumentAssignmentList items = new ArgumentAssignmentList(item);
 		setNodeValue(ctx, items);
 	}
-	
+
 	@Override
 	public void exitFetch_expression(Fetch_expressionContext ctx) {
 		Identifier itemName = this.<Identifier>getNodeValue(ctx.name);
@@ -1097,7 +1084,7 @@ public class OPrestoBuilder extends OParserBaseListener {
 		IStatement stmt = this.<IStatement>getNodeValue(ctx.stmt);
 		setNodeValue(ctx, stmt);
 	}
-
+	
 	@Override
 	public void exitFullDeclarationList(FullDeclarationListContext ctx) {
 		DeclarationList items = this.<DeclarationList>getNodeValue(ctx.items);
@@ -1112,7 +1099,7 @@ public class OPrestoBuilder extends OParserBaseListener {
 		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
 		setNodeValue(ctx, new GetterMethodDeclaration(name, stmts));
 	}
-	
+
 	@Override
 	public void exitGreaterThanExpression(GreaterThanExpressionContext ctx) {
 		IExpression left = this.<IExpression>getNodeValue(ctx.left);
@@ -1184,9 +1171,10 @@ public class OPrestoBuilder extends OParserBaseListener {
 	}
 	
 	@Override
-	public void exitItemInstance(ItemInstanceContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, new ItemInstance(exp));
+	public void exitIsAnExpression(IsAnExpressionContext ctx) {
+		IExpression left = this.<IExpression>getNodeValue(ctx.left);
+		IType type = this.<IType>getNodeValue(ctx.right);
+		setNodeValue(ctx, new EqualsExpression(left, EqOp.IS_A, new TypeExpression(type)));
 	}
 	
 	@Override
@@ -1197,16 +1185,11 @@ public class OPrestoBuilder extends OParserBaseListener {
 	}
 	
 	@Override
-	public void exitIsOtherExpression(IsOtherExpressionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, exp);
-	}
-	
-	@Override
-	public void exitIsAnExpression(IsAnExpressionContext ctx) {
+	public void exitIsExpression(IsExpressionContext ctx) {
 		IExpression left = this.<IExpression>getNodeValue(ctx.left);
-		IType type = this.<IType>getNodeValue(ctx.right);
-		setNodeValue(ctx, new EqualsExpression(left, EqOp.IS_A, new TypeExpression(type)));
+		IExpression right = this.<IExpression>getNodeValue(ctx.right);
+		EqOp op = right instanceof TypeExpression ? EqOp.IS_A : EqOp.IS;
+		setNodeValue(ctx, new EqualsExpression(left, op, right));
 	}
 	
 	@Override
@@ -1214,14 +1197,6 @@ public class OPrestoBuilder extends OParserBaseListener {
 		IExpression left = this.<IExpression>getNodeValue(ctx.left);
 		IType type = this.<IType>getNodeValue(ctx.right);
 		setNodeValue(ctx, new EqualsExpression(left, EqOp.IS_NOT_A, new TypeExpression(type)));
-	}
-
-	@Override
-	public void exitIsExpression(IsExpressionContext ctx) {
-		IExpression left = this.<IExpression>getNodeValue(ctx.left);
-		IExpression right = this.<IExpression>getNodeValue(ctx.right);
-		EqOp op = right instanceof TypeExpression ? EqOp.IS_A : EqOp.IS;
-		setNodeValue(ctx, new EqualsExpression(left, op, right));
 	}
 	
 	@Override
@@ -1231,7 +1206,18 @@ public class OPrestoBuilder extends OParserBaseListener {
 		EqOp op = right instanceof TypeExpression ? EqOp.IS_NOT_A : EqOp.IS_NOT;
 		setNodeValue(ctx, new EqualsExpression(left, op, right));
 	}
-
+	
+	@Override
+	public void exitIsOtherExpression(IsOtherExpressionContext ctx) {
+		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		setNodeValue(ctx, exp);
+	}
+	
+	@Override
+	public void exitItemInstance(ItemInstanceContext ctx) {
+		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		setNodeValue(ctx, new ItemInstance(exp));
+	}
 
 	@Override
 	public void exitItemSelector(ItemSelectorContext ctx) {
@@ -1243,7 +1229,8 @@ public class OPrestoBuilder extends OParserBaseListener {
 	public void exitJava_identifier(Java_identifierContext ctx) {
 		setNodeValue(ctx, ctx.getText());
 	}
-	
+
+
 	@Override
 	public void exitJava_item_expression(Java_item_expressionContext ctx) {
 		JavaExpression exp = this.<JavaExpression>getNodeValue(ctx.exp);
@@ -1261,6 +1248,17 @@ public class OPrestoBuilder extends OParserBaseListener {
 	public void exitJava_parenthesis_expression(Java_parenthesis_expressionContext ctx) {
 		JavaExpression exp = this.<JavaExpression>getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
+	}
+	
+	@Override
+	public void exitJava_primary_expression(Java_primary_expressionContext ctx) {
+		JavaExpression exp = this.<JavaExpression>getNodeValue(ctx.getChild(0));
+		setNodeValue(ctx, exp);
+	}
+	
+	@Override
+	public void exitJava_this_expression(Java_this_expressionContext ctx) {
+		setNodeValue(ctx, new JavaThisExpression());
 	}
 	
 	@Override
@@ -1350,12 +1348,6 @@ public class OPrestoBuilder extends OParserBaseListener {
 	}
 	
 	@Override
-	public void exitJava_primary_expression(Java_primary_expressionContext ctx) {
-		JavaExpression exp = this.<JavaExpression>getNodeValue(ctx.getChild(0));
-		setNodeValue(ctx, exp);
-	}
-	
-	@Override
 	public void exitJavaPrimaryExpression(JavaPrimaryExpressionContext ctx) {
 		JavaExpression exp = this.<JavaExpression>getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
@@ -1374,11 +1366,17 @@ public class OPrestoBuilder extends OParserBaseListener {
 		JavaScriptNativeCategoryBinding map = new JavaScriptNativeCategoryBinding(identifier, module);
 		setNodeValue(ctx, map);
 	}
-
+	
 	@Override
 	public void exitJavascript_identifier(Javascript_identifierContext ctx) {
 		String name = ctx.getText();
 		setNodeValue(ctx, name);
+	}
+
+	@Override
+	public void exitJavascript_member_expression(Javascript_member_expressionContext ctx) {
+		String name = ctx.getText();
+		setNodeValue(ctx, new JavaScriptMemberExpression(name));		
 	}
 	
 	@Override
@@ -1405,6 +1403,23 @@ public class OPrestoBuilder extends OParserBaseListener {
 		JavaScriptModule module = this.<JavaScriptModule>getNodeValue(ctx.module);
 		stmt.setModule(module);
 		setNodeValue(ctx, stmt);
+	}
+	
+	@Override
+	public void exitJavascript_primary_expression(Javascript_primary_expressionContext ctx) {
+		JavaScriptExpression exp = this.<JavaScriptExpression>getNodeValue(ctx.getChild(0));
+		setNodeValue(ctx, exp);
+	}
+	
+	@Override
+	public void exitJavascript_selector_expression(Javascript_selector_expressionContext ctx) {
+		JavaScriptExpression exp = this.<JavaScriptExpression>getNodeValue(ctx.getChild(1)); // 0 is DOT
+		setNodeValue(ctx, exp);
+	}
+	
+	@Override
+	public void exitJavascript_this_expression(Javascript_this_expressionContext ctx) {
+		setNodeValue(ctx, new JavaScriptThisExpression());		
 	}
 	
 	@Override
@@ -1452,11 +1467,6 @@ public class OPrestoBuilder extends OParserBaseListener {
 		String text = ctx.t.getText();
 		setNodeValue(ctx, new JavaScriptDecimalLiteral(text));
 	}
-	
-	public void exitJavascriptGlobalMethodExpression(JavascriptGlobalMethodExpressionContext ctx) {
-		JavaScriptMethodExpression method = this.<JavaScriptMethodExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, method);
-	};
 
 	@Override
 	public void exitJavascriptIdentifier(JavascriptIdentifierContext ctx) {
@@ -1465,29 +1475,11 @@ public class OPrestoBuilder extends OParserBaseListener {
 	}
 	
 	@Override
-	public void exitJavascriptIdentifierExpression(JavascriptIdentifierExpressionContext ctx) {
-		JavaScriptIdentifierExpression exp = this.<JavaScriptIdentifierExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, exp);
-	}
-	
-	@Override
 	public void exitJavascriptIntegerLiteral(JavascriptIntegerLiteralContext ctx) {
 		String text = ctx.t.getText();
 		setNodeValue(ctx, new JavaScriptIntegerLiteral(text));
 	}	
 	
-	@Override
-	public void exitJavascriptLiteralExpression(JavascriptLiteralExpressionContext ctx) {
-		JavaScriptExpression exp = this.<JavaScriptExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, exp);
-	}
-	
-	@Override
-	public void exitJavascriptMethodExpression(JavascriptMethodExpressionContext ctx) {
-		JavaScriptMethodExpression method = this.<JavaScriptMethodExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, method);
-	}
-
 	@Override
 	public void exitJavaScriptNativeStatement(JavaScriptNativeStatementContext ctx) {
 		JavaScriptStatement stmt = this.<JavaScriptStatement>getNodeValue(ctx.stmt);
@@ -1526,7 +1518,6 @@ public class OPrestoBuilder extends OParserBaseListener {
 		setNodeValue(ctx, new JavaScriptTextLiteral(text));
 	}
 	
-
 	@Override
 	public void exitJavaSelectorExpression(JavaSelectorExpressionContext ctx) {
 		JavaExpression parent = this.<JavaExpression>getNodeValue(ctx.parent);
@@ -1534,7 +1525,7 @@ public class OPrestoBuilder extends OParserBaseListener {
 		child.setParent(parent);
 		setNodeValue(ctx, child);
 	}
-	
+
 	@Override
 	public void exitJavaStatement(JavaStatementContext ctx) {
 		JavaExpression exp = this.<JavaExpression>getNodeValue(ctx.exp);
@@ -1544,11 +1535,6 @@ public class OPrestoBuilder extends OParserBaseListener {
 	@Override
 	public void exitJavaTextLiteral(JavaTextLiteralContext ctx) {
 		setNodeValue(ctx, new JavaTextLiteral(ctx.getText()));
-	}
-	
-	@Override
-	public void exitJava_this_expression(Java_this_expressionContext ctx) {
-		setNodeValue(ctx, new JavaThisExpression());
 	}
 	
 	@Override
@@ -1600,7 +1586,7 @@ public class OPrestoBuilder extends OParserBaseListener {
 		IExpression item = this.<IExpression>getNodeValue(ctx.item);
 		setNodeValue(ctx, new ExpressionList(item));
 	}
-
+	
 	@Override
 	public void exitLiteralListItem(LiteralListItemContext ctx) {
 		ExpressionList items = this.<ExpressionList>getNodeValue(ctx.items);
@@ -1614,7 +1600,7 @@ public class OPrestoBuilder extends OParserBaseListener {
 		ExpressionList exp = this.<ExpressionList>getNodeValue(ctx.exp);
 		setNodeValue(ctx, new ListLiteral(exp));
 	}
-	
+
 	@Override
 	public void exitLiteralRangeLiteral(LiteralRangeLiteralContext ctx) {
 		IExpression low = this.<IExpression>getNodeValue(ctx.low);
@@ -1628,7 +1614,6 @@ public class OPrestoBuilder extends OParserBaseListener {
 		setNodeValue(ctx, new SetLiteral(items));
 	}
 	
-
 	public void exitMatchingExpression(MatchingExpressionContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
 		setNodeValue(ctx, new MatchingExpressionConstraint(exp));
@@ -1638,6 +1623,7 @@ public class OPrestoBuilder extends OParserBaseListener {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.source);
 		setNodeValue(ctx, new MatchingCollectionConstraint(exp));
 	}
+	
 
 	public void exitMatchingPattern(MatchingPatternContext ctx) {
 		setNodeValue(ctx, new MatchingPatternConstraint(new TextLiteral(ctx.text.getText())));
@@ -1658,13 +1644,7 @@ public class OPrestoBuilder extends OParserBaseListener {
 	public void exitMaxIntegerLiteral(MaxIntegerLiteralContext ctx) {
 		setNodeValue(ctx, new MaxIntegerLiteral());
 	}
-	
-	@Override
-	public void exitMemberInstance(MemberInstanceContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		setNodeValue(ctx, new MemberInstance(name));
-	}
-	
+
 	@Override
 	public void exitMember_method_declaration(Member_method_declarationContext ctx) {
 		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.getChild(0));
@@ -1672,11 +1652,11 @@ public class OPrestoBuilder extends OParserBaseListener {
 	}
 	
 	@Override
-	public void exitNative_member_method_declaration(Native_member_method_declarationContext ctx) {
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.getChild(0));
-		setNodeValue(ctx, decl);
+	public void exitMemberInstance(MemberInstanceContext ctx) {
+		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		setNodeValue(ctx, new MemberInstance(name));
 	}
-
+	
 	@Override
 	public void exitMemberSelector(MemberSelectorContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
@@ -1689,38 +1669,38 @@ public class OPrestoBuilder extends OParserBaseListener {
 		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
 		setNodeValue(ctx, new UnresolvedCall(caller, args));
 	}
-
+	
 	@Override
 	public void exitMethodCallExpression(MethodCallExpressionContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
 	}
 
-
 	@Override
 	public void exitMethodCallStatement(MethodCallStatementContext ctx) {
 		IStatement stmt = this.<IStatement>getNodeValue(ctx.stmt);
 		setNodeValue(ctx, stmt);
 	}
-
+	
 	@Override
 	public void exitMethodDeclaration(MethodDeclarationContext ctx) {
 		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
 		setNodeValue(ctx, decl);
 	}
-	
+
 	@Override
 	public void exitMethodExpression(MethodExpressionContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
 	}
 
+
 	@Override
 	public void exitMethodName(MethodNameContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
 		setNodeValue(ctx, new UnresolvedIdentifier(name));
 	}
-	
+
 	@Override
 	public void exitMethodParent(MethodParentContext ctx) {
 		IExpression parent = this.<IExpression>getNodeValue(ctx.parent);
@@ -1733,7 +1713,7 @@ public class OPrestoBuilder extends OParserBaseListener {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
 		setNodeValue(ctx, name);
 	}
-	
+
 	@Override
 	public void exitMethodVariableIdentifier(MethodVariableIdentifierContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
@@ -1750,7 +1730,7 @@ public class OPrestoBuilder extends OParserBaseListener {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
 		setNodeValue(ctx, new MinusExpression(exp));
 	}
-
+	
 	@Override
 	public void exitModuloExpression(ModuloExpressionContext ctx) {
 		IExpression left = this.<IExpression>getNodeValue(ctx.left);
@@ -1773,11 +1753,17 @@ public class OPrestoBuilder extends OParserBaseListener {
 		arg.setDefaultExpression(exp);
 		setNodeValue(ctx, arg);
 	}
-	
+
 	@Override
 	public void exitNamedArgument(NamedArgumentContext ctx) {
 		IArgument arg = this.<IArgument>getNodeValue(ctx.arg);
 		setNodeValue(ctx, arg);
+	}
+	
+	@Override
+	public void exitNative_category_bindings(Native_category_bindingsContext ctx) {
+		NativeCategoryBindingList items = this.<NativeCategoryBindingList>getNodeValue(ctx.items);
+		setNodeValue(ctx, items);
 	}
 	
 	@Override
@@ -1790,9 +1776,9 @@ public class OPrestoBuilder extends OParserBaseListener {
 	}
 	
 	@Override
-	public void exitNative_category_bindings(Native_category_bindingsContext ctx) {
-		NativeCategoryBindingList items = this.<NativeCategoryBindingList>getNodeValue(ctx.items);
-		setNodeValue(ctx, items);
+	public void exitNative_member_method_declaration(Native_member_method_declarationContext ctx) {
+		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.getChild(0));
+		setNodeValue(ctx, decl);
 	}
 	
 	@Override
@@ -1821,12 +1807,6 @@ public class OPrestoBuilder extends OParserBaseListener {
 	}
 	
 	@Override
-	public void exitNativeCategoryDeclaration(NativeCategoryDeclarationContext ctx) {
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
-		setNodeValue(ctx, decl);
-	}
-	
-	@Override
 	public void exitNativeCategoryBindingList(NativeCategoryBindingListContext ctx) {
 		NativeCategoryBinding item = this.<NativeCategoryBinding>getNodeValue(ctx.item);
 		NativeCategoryBindingList items = new NativeCategoryBindingList(item);
@@ -1837,6 +1817,27 @@ public class OPrestoBuilder extends OParserBaseListener {
 	public void exitNativeCategoryBindingListItem(NativeCategoryBindingListItemContext ctx) {
 		NativeCategoryBinding item = this.<NativeCategoryBinding>getNodeValue(ctx.item);
 		NativeCategoryBindingList items = this.<NativeCategoryBindingList>getNodeValue(ctx.items);
+		items.add(item);
+		setNodeValue(ctx, items);
+	}
+	
+	@Override
+	public void exitNativeCategoryDeclaration(NativeCategoryDeclarationContext ctx) {
+		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
+		setNodeValue(ctx, decl);
+	}
+	
+	@Override
+	public void exitNativeCategoryMethodList(NativeCategoryMethodListContext ctx) {
+		IMethodDeclaration item = this.<IMethodDeclaration>getNodeValue(ctx.item);
+		MethodDeclarationList items = new MethodDeclarationList(item);
+		setNodeValue(ctx, items);
+	}
+	
+	@Override
+	public void exitNativeCategoryMethodListItem(NativeCategoryMethodListItemContext ctx) {
+		IMethodDeclaration item = this.<IMethodDeclaration>getNodeValue(ctx.item);
+		MethodDeclarationList items = this.<MethodDeclarationList>getNodeValue(ctx.items);
 		items.add(item);
 		setNodeValue(ctx, items);
 	}
@@ -1929,26 +1930,21 @@ public class OPrestoBuilder extends OParserBaseListener {
 	}
 
 	@Override
+	public void exitOperator_method_declaration(Operator_method_declarationContext ctx) {
+		Operator op = this.<Operator>getNodeValue(ctx.op);
+		IArgument arg = this.<IArgument>getNodeValue(ctx.arg);
+		IType typ = this.<IType>getNodeValue(ctx.typ);
+		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		OperatorMethodDeclaration decl = new OperatorMethodDeclaration(op, arg, typ, stmts);
+		setNodeValue(ctx, decl);
+	}
+	
+	@Override
 	public void exitOperatorArgument(OperatorArgumentContext ctx) {
 		boolean mutable = ctx.MUTABLE()!=null;
 		IArgument arg = this.<IArgument>getNodeValue(ctx.arg);
 		arg.setMutable(mutable);
 		setNodeValue(ctx, arg);
-	}
-	
-	@Override
-	public void exitOperatorPlus(OperatorPlusContext ctx) {
-		setNodeValue(ctx, Operator.PLUS);
-	}
-	
-	@Override
-	public void exitOperatorMinus(OperatorMinusContext ctx) {
-		setNodeValue(ctx, Operator.MINUS);
-	}
-	
-	@Override
-	public void exitOperatorMultiply(OperatorMultiplyContext ctx) {
-		setNodeValue(ctx, Operator.MULTIPLY);
 	}
 	
 	@Override
@@ -1962,18 +1958,23 @@ public class OPrestoBuilder extends OParserBaseListener {
 	}
 	
 	@Override
+	public void exitOperatorMinus(OperatorMinusContext ctx) {
+		setNodeValue(ctx, Operator.MINUS);
+	}
+	
+	@Override
 	public void exitOperatorModulo(OperatorModuloContext ctx) {
 		setNodeValue(ctx, Operator.MODULO);
 	}
 	
 	@Override
-	public void exitOperator_method_declaration(Operator_method_declarationContext ctx) {
-		Operator op = this.<Operator>getNodeValue(ctx.op);
-		IArgument arg = this.<IArgument>getNodeValue(ctx.arg);
-		IType typ = this.<IType>getNodeValue(ctx.typ);
-		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
-		OperatorMethodDeclaration decl = new OperatorMethodDeclaration(op, arg, typ, stmts);
-		setNodeValue(ctx, decl);
+	public void exitOperatorMultiply(OperatorMultiplyContext ctx) {
+		setNodeValue(ctx, Operator.MULTIPLY);
+	}
+	
+	@Override
+	public void exitOperatorPlus(OperatorPlusContext ctx) {
+		setNodeValue(ctx, Operator.PLUS);
 	}
 	
 	@Override
@@ -2338,6 +2339,12 @@ public class OPrestoBuilder extends OParserBaseListener {
 	
 	
 	@Override
+	public void exitSingleStatement(SingleStatementContext ctx) {
+		IStatement stmt = this.<IStatement>getNodeValue(ctx.stmt);
+		setNodeValue(ctx, new StatementList(stmt));
+	}
+	
+	@Override
 	public void exitSingleton_category_declaration(Singleton_category_declarationContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
 		IdentifierList attrs = this.<IdentifierList>getNodeValue(ctx.attrs);
@@ -2349,12 +2356,6 @@ public class OPrestoBuilder extends OParserBaseListener {
 	public void exitSingletonCategoryDeclaration(SingletonCategoryDeclarationContext ctx) {
 		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
 		setNodeValue(ctx, decl);
-	}
-	
-	@Override
-	public void exitSingleStatement(SingleStatementContext ctx) {
-		IStatement stmt = this.<IStatement>getNodeValue(ctx.stmt);
-		setNodeValue(ctx, new StatementList(stmt));
 	}
 	
 	@Override
@@ -2650,17 +2651,17 @@ public class OPrestoBuilder extends OParserBaseListener {
 	}
 	
 	@Override
-	public void exitWithResourceStatement(WithResourceStatementContext ctx) {
-		IStatement stmt = this.<IStatement>getNodeValue(ctx.stmt);
-		setNodeValue(ctx, stmt);
-	}
-	
-	@Override
 	public void exitWith_singleton_statement(With_singleton_statementContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.typ);
 		CategoryType type = new CategoryType(name);
 		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
 		setNodeValue(ctx, new WithSingletonStatement(type, stmts));
+	}
+	
+	@Override
+	public void exitWithResourceStatement(WithResourceStatementContext ctx) {
+		IStatement stmt = this.<IStatement>getNodeValue(ctx.stmt);
+		setNodeValue(ctx, stmt);
 	}
 	
 	@Override

@@ -124,6 +124,7 @@ import presto.javascript.JavaScriptExpression;
 import presto.javascript.JavaScriptExpressionList;
 import presto.javascript.JavaScriptIdentifierExpression;
 import presto.javascript.JavaScriptIntegerLiteral;
+import presto.javascript.JavaScriptMemberExpression;
 import presto.javascript.JavaScriptMethodExpression;
 import presto.javascript.JavaScriptModule;
 import presto.javascript.JavaScriptNativeCall;
@@ -131,6 +132,7 @@ import presto.javascript.JavaScriptNativeCategoryBinding;
 import presto.javascript.JavaScriptSelectorExpression;
 import presto.javascript.JavaScriptStatement;
 import presto.javascript.JavaScriptTextLiteral;
+import presto.javascript.JavaScriptThisExpression;
 import presto.literal.BooleanLiteral;
 import presto.literal.CharacterLiteral;
 import presto.literal.DateLiteral;
@@ -529,26 +531,11 @@ public class EPrestoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitNativeCategoryMethodList(NativeCategoryMethodListContext ctx) {
-		IMethodDeclaration item = this.<IMethodDeclaration>getNodeValue(ctx.item);
-		MethodDeclarationList items = new MethodDeclarationList(item);
-		setNodeValue(ctx, items);
-	}
-	
-	@Override
-	public void exitNativeCategoryMethodListItem(NativeCategoryMethodListItemContext ctx) {
-		IMethodDeclaration item = this.<IMethodDeclaration>getNodeValue(ctx.item);
-		MethodDeclarationList items = this.<MethodDeclarationList>getNodeValue(ctx.items);
-		items.add(item);
-		setNodeValue(ctx, items);
-	}
-
-	@Override
 	public void exitCategorySymbolList(CategorySymbolListContext ctx) {
 		CategorySymbol item = this.<CategorySymbol>getNodeValue(ctx.item);
 		setNodeValue(ctx, new CategorySymbolList(item));
 	}
-
+	
 	@Override
 	public void exitCategorySymbolListItem(CategorySymbolListItemContext ctx) {
 		CategorySymbol item = this.<CategorySymbol>getNodeValue(ctx.item);
@@ -562,7 +549,7 @@ public class EPrestoBuilder extends EParserBaseListener {
 		IType type = this.<IType>getNodeValue(ctx.c);
 		setNodeValue(ctx, type);
 	}
-	
+
 	@Override
 	public void exitCharacterLiteral(CharacterLiteralContext ctx) {
 		setNodeValue(ctx, new CharacterLiteral(ctx.t.getText()));
@@ -572,7 +559,7 @@ public class EPrestoBuilder extends EParserBaseListener {
 	public void exitCharacterType(CharacterTypeContext ctx) {
 		setNodeValue(ctx, CharacterType.instance());
 	}
-
+	
 	@Override
 	public void exitChildInstance(ChildInstanceContext ctx) {
 		IAssignableInstance parent = this.<IAssignableInstance>getNodeValue(ctx.parent);
@@ -592,7 +579,7 @@ public class EPrestoBuilder extends EParserBaseListener {
 		ConcreteMethodDeclaration decl = this.<ConcreteMethodDeclaration>getNodeValue(ctx.decl);
 		setNodeValue(ctx, new DeclarationInstruction<ConcreteMethodDeclaration>(decl));
 	}
-	
+
 	@Override
 	public void exitCode_argument(Code_argumentContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
@@ -603,13 +590,13 @@ public class EPrestoBuilder extends EParserBaseListener {
 	public void exitCode_type(Code_typeContext ctx) {
 		setNodeValue(ctx, CodeType.instance());
 	}
-
+	
 	@Override
 	public void exitCodeArgument(CodeArgumentContext ctx) {
 		IArgument arg = this.<IArgument>getNodeValue(ctx.arg);
 		setNodeValue(ctx, arg);
 	}
-	
+
 	@Override
 	public void exitCodeExpression(CodeExpressionContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
@@ -620,7 +607,7 @@ public class EPrestoBuilder extends EParserBaseListener {
 	public void exitCodeType(CodeTypeContext ctx) {
 		setNodeValue(ctx, CodeType.instance());
 	}
-
+	
 	@Override
 	public void exitCollectionLiteral(CollectionLiteralContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
@@ -684,7 +671,7 @@ public class EPrestoBuilder extends EParserBaseListener {
 			args.add(arg);
 		setNodeValue(ctx, new ConstructorExpression(type, mutable, args));
 	}
-	
+
 	@Override
 	public void exitConstructorNoFrom(ConstructorNoFromContext ctx) {
 		boolean mutable = ctx.MUTABLE()!=null;
@@ -697,7 +684,7 @@ public class EPrestoBuilder extends EParserBaseListener {
 			args.add(arg);
 		setNodeValue(ctx, new ConstructorExpression(type, mutable, args));
 	}
-	
+
 	@Override
 	public void exitContainsAllExpression(ContainsAllExpressionContext ctx) {
 		IExpression left = this.<IExpression>getNodeValue(ctx.left);
@@ -729,6 +716,17 @@ public class EPrestoBuilder extends EParserBaseListener {
 		String name = this.<String>getNodeValue(ctx.name);
 		CSharpExpressionList args = this.<CSharpExpressionList>getNodeValue(ctx.args);
 		setNodeValue(ctx, new CSharpMethodExpression(name, args));
+	}
+	
+	@Override
+	public void exitCsharp_primary_expression(Csharp_primary_expressionContext ctx) {
+		CSharpExpression exp = this.<CSharpExpression>getNodeValue(ctx.getChild(0));
+		setNodeValue(ctx, exp);
+	}
+	
+	@Override
+	public void exitCsharp_this_expression(Csharp_this_expressionContext ctx) {
+		setNodeValue(ctx, new CSharpThisExpression());
 	}
 	
 	@Override
@@ -805,18 +803,12 @@ public class EPrestoBuilder extends EParserBaseListener {
 	};
 	
 	@Override
-	public void exitCsharp_primary_expression(Csharp_primary_expressionContext ctx) {
-		CSharpExpression exp = this.<CSharpExpression>getNodeValue(ctx.getChild(0));
-		setNodeValue(ctx, exp);
-	}
-	
-
-	@Override
 	public void exitCSharpPrimaryExpression(CSharpPrimaryExpressionContext ctx) {
 		CSharpExpression exp = this.<CSharpExpression>getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
 	}
 	
+
 	@Override
 	public void exitCSharpReturnStatement(CSharpReturnStatementContext ctx) {
 		CSharpExpression exp = this.<CSharpExpression>getNodeValue(ctx.exp);
@@ -843,11 +835,6 @@ public class EPrestoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitCsharp_this_expression(Csharp_this_expressionContext ctx) {
-		setNodeValue(ctx, new CSharpThisExpression());
-	}
-	
-	@Override
 	public void exitDateLiteral(DateLiteralContext ctx) {
 		setNodeValue(ctx, new DateLiteral(ctx.t.getText()));
 	}
@@ -856,7 +843,7 @@ public class EPrestoBuilder extends EParserBaseListener {
 	public void exitDateTimeLiteral(DateTimeLiteralContext ctx) {
 		setNodeValue(ctx, new DateTimeLiteral(ctx.t.getText()));
 	}
-
+	
 	@Override
 	public void exitDateTimeType(DateTimeTypeContext ctx) {
 		setNodeValue(ctx, TextType.instance());
@@ -866,7 +853,7 @@ public class EPrestoBuilder extends EParserBaseListener {
 	public void exitDateType(DateTypeContext ctx) {
 		setNodeValue(ctx, DateType.instance());
 	}
-	
+
 	@Override
 	public void exitDecimalLiteral(DecimalLiteralContext ctx) {
 		setNodeValue(ctx, new DecimalLiteral(ctx.t.getText()));
@@ -935,7 +922,6 @@ public class EPrestoBuilder extends EParserBaseListener {
 		setNodeValue(ctx, items);
 	}
 	
-
 	@Override
 	public void exitDictLiteral(DictLiteralContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
@@ -948,6 +934,7 @@ public class EPrestoBuilder extends EParserBaseListener {
 		setNodeValue(ctx, new DictType(type));
 	}
 	
+
 	@Override
 	public void exitDivideExpression(DivideExpressionContext ctx) {
 		IExpression left = this.<IExpression>getNodeValue(ctx.left);
@@ -1073,7 +1060,7 @@ public class EPrestoBuilder extends EParserBaseListener {
 		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
 		setNodeValue(ctx, new ForEachStatement(name1, name2, source, stmts));
 	}
-
+	
 	@Override
 	public void exitForEachStatement(ForEachStatementContext ctx) {
 		IStatement stmt = this.<IStatement>getNodeValue(ctx.stmt);
@@ -1088,7 +1075,7 @@ public class EPrestoBuilder extends EParserBaseListener {
 			items.add(item);
 		setNodeValue(ctx, items);
 	}
-	
+
 	@Override
 	public void exitFullDeclarationList(FullDeclarationListContext ctx) {
 		DeclarationList items = this.<DeclarationList>getNodeValue(ctx.items);
@@ -1103,7 +1090,7 @@ public class EPrestoBuilder extends EParserBaseListener {
 		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
 		setNodeValue(ctx, new GetterMethodDeclaration(name, stmts));
 	}
-
+	
 	@Override
 	public void exitGreaterThanExpression(GreaterThanExpressionContext ctx) {
 		IExpression left = this.<IExpression>getNodeValue(ctx.left);
@@ -1117,7 +1104,7 @@ public class EPrestoBuilder extends EParserBaseListener {
 		IExpression right = this.<IExpression>getNodeValue(ctx.right);
 		setNodeValue(ctx, new CompareExpression(left, CmpOp.GTE, right));
 	}
-	
+
 	@Override
 	public void exitHexadecimalLiteral(HexadecimalLiteralContext ctx) {
 		setNodeValue(ctx, new HexaLiteral(ctx.t.getText()));
@@ -1187,7 +1174,6 @@ public class EPrestoBuilder extends EParserBaseListener {
 		setNodeValue(ctx, exp);
 	}
 	
-	
 	@Override
 	public void exitInvokeStatement(InvokeStatementContext ctx) {
 		IStatement exp = this.<IStatement>getNodeValue(ctx.exp);
@@ -1201,11 +1187,6 @@ public class EPrestoBuilder extends EParserBaseListener {
 		setNodeValue(ctx, exp);
 	}
 	
-	@Override
-	public void exitIsOtherExpression(IsOtherExpressionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, exp);
-	}
 	
 	@Override
 	public void exitIsExpression(IsExpressionContext ctx) {
@@ -1222,7 +1203,13 @@ public class EPrestoBuilder extends EParserBaseListener {
 		EqOp op = right instanceof TypeExpression ? EqOp.IS_NOT_A : EqOp.IS_NOT;
 		setNodeValue(ctx, new EqualsExpression(left, op, right));
 	}
-
+	
+	@Override
+	public void exitIsOtherExpression(IsOtherExpressionContext ctx) {
+		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		setNodeValue(ctx, exp);
+	}
+	
 	@Override
 	public void exitItemInstance(ItemInstanceContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
@@ -1234,7 +1221,7 @@ public class EPrestoBuilder extends EParserBaseListener {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
 		setNodeValue(ctx, new ItemSelector(exp));
 	}
-	
+
 	@Override
 	public void exitJava_identifier(Java_identifierContext ctx) {
 		setNodeValue(ctx, ctx.getText());
@@ -1253,12 +1240,23 @@ public class EPrestoBuilder extends EParserBaseListener {
 		setNodeValue(ctx, new JavaMethodExpression(name, args));
 	}
 	
-	
-	
 	@Override
 	public void exitJava_parenthesis_expression(Java_parenthesis_expressionContext ctx) {
 		JavaExpression exp = this.<JavaExpression>getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
+	}
+	
+	@Override
+	public void exitJava_primary_expression(Java_primary_expressionContext ctx) {
+		JavaExpression exp = this.<JavaExpression>getNodeValue(ctx.getChild(0));
+		setNodeValue(ctx, exp);
+	}
+	
+	
+	
+	@Override
+	public void exitJava_this_expression(Java_this_expressionContext ctx) {
+		setNodeValue(ctx, new JavaThisExpression());
 	}
 	
 	@Override
@@ -1347,18 +1345,12 @@ public class EPrestoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitJava_primary_expression(Java_primary_expressionContext ctx) {
-		JavaExpression exp = this.<JavaExpression>getNodeValue(ctx.getChild(0));
-		setNodeValue(ctx, exp);
-	}
-	
-
-	@Override
 	public void exitJavaPrimaryExpression(JavaPrimaryExpressionContext ctx) {
 		JavaExpression exp = this.<JavaExpression>getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
 	}
 	
+
 	@Override
 	public void exitJavaReturnStatement(JavaReturnStatementContext ctx) {
 		JavaExpression exp = this.<JavaExpression>getNodeValue(ctx.exp);
@@ -1377,6 +1369,12 @@ public class EPrestoBuilder extends EParserBaseListener {
 	public void exitJavascript_identifier(Javascript_identifierContext ctx) {
 		String name = ctx.getText();
 		setNodeValue(ctx, name);
+	}
+	
+	@Override
+	public void exitJavascript_member_expression(Javascript_member_expressionContext ctx) {
+		String name = ctx.getText();
+		setNodeValue(ctx, new JavaScriptMemberExpression(name));		
 	}
 	
 	@Override
@@ -1406,6 +1404,23 @@ public class EPrestoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
+	public void exitJavascript_primary_expression( Javascript_primary_expressionContext ctx) {
+		JavaScriptExpression exp = this.<JavaScriptExpression>getNodeValue(ctx.getChild(0));
+		setNodeValue(ctx, exp);
+	}
+	
+	@Override
+	public void exitJavascript_selector_expression(Javascript_selector_expressionContext ctx) {
+		JavaScriptExpression exp = this.<JavaScriptExpression>getNodeValue(ctx.getChild(1)); // 0 is DOT
+		setNodeValue(ctx, exp);
+	}
+	
+	@Override
+	public void exitJavascript_this_expression(Javascript_this_expressionContext ctx) {
+		setNodeValue(ctx, new JavaScriptThisExpression());		
+	}
+
+	@Override
 	public void exitJavascriptArgumentList(JavascriptArgumentListContext ctx) {
 		JavaScriptExpression exp = this.<JavaScriptExpression>getNodeValue(ctx.item);
 		JavaScriptExpressionList list = new JavaScriptExpressionList(exp);
@@ -1419,12 +1434,12 @@ public class EPrestoBuilder extends EParserBaseListener {
 		list.add(exp);
 		setNodeValue(ctx, list);
 	}
-
+	
 	@Override
 	public void exitJavascriptBooleanLiteral(JavascriptBooleanLiteralContext ctx) {
 		String text = ctx.t.getText();
 		setNodeValue(ctx, new JavaScriptBooleanLiteral(text));		
-	}
+	};
 	
 	@Override
 	public void exitJavaScriptCategoryBinding(JavaScriptCategoryBindingContext ctx) {
@@ -1435,7 +1450,7 @@ public class EPrestoBuilder extends EParserBaseListener {
 	public void exitJavascriptCharacterLiteral(JavascriptCharacterLiteralContext ctx) {
 		String text = ctx.t.getText();
 		setNodeValue(ctx, new JavaScriptCharacterLiteral(text));		
-	};
+	}
 	
 	@Override
 	public void exitJavascriptChildIdentifier(JavascriptChildIdentifierContext ctx) {
@@ -1458,36 +1473,11 @@ public class EPrestoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitJavascriptIdentifierExpression(JavascriptIdentifierExpressionContext ctx) {
-		JavaScriptIdentifierExpression exp = this.<JavaScriptIdentifierExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, exp);
-	}
-	
-	@Override
 	public void exitJavascriptIntegerLiteral(JavascriptIntegerLiteralContext ctx) {
 		String text = ctx.t.getText();
 		setNodeValue(ctx, new JavaScriptIntegerLiteral(text));		
 	}
 	
-	@Override
-	public void exitJavascriptGlobalMethodExpression(JavascriptGlobalMethodExpressionContext ctx) {
-		JavaScriptMethodExpression method = this.<JavaScriptMethodExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, method);
-	}
-
-	
-	@Override
-	public void exitJavascriptLiteralExpression(JavascriptLiteralExpressionContext ctx) {
-		JavaScriptExpression exp = this.<JavaScriptExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, exp);
-	}
-	
-	@Override
-	public void exitJavascriptMethodExpression(JavascriptMethodExpressionContext ctx) {
-		JavaScriptMethodExpression method = this.<JavaScriptMethodExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, method);
-	}
-
 	@Override
 	public void exitJavaScriptNativeStatement(JavaScriptNativeStatementContext ctx) {
 		JavaScriptStatement stmt = this.<JavaScriptStatement>getNodeValue(ctx.stmt);
@@ -1547,11 +1537,6 @@ public class EPrestoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitJava_this_expression(Java_this_expressionContext ctx) {
-		setNodeValue(ctx, new JavaThisExpression());
-	}
-	
-	@Override
 	public void exitKey_token(Key_tokenContext ctx) {
 		setNodeValue(ctx, ctx.getText());
 	}
@@ -1563,14 +1548,13 @@ public class EPrestoBuilder extends EParserBaseListener {
 		setNodeValue(ctx, new CompareExpression(left, CmpOp.LT, right));
 	}
 	
-	
 	@Override
 	public void exitLessThanOrEqualExpression(LessThanOrEqualExpressionContext ctx) {
 		IExpression left = this.<IExpression>getNodeValue(ctx.left);
 		IExpression right = this.<IExpression>getNodeValue(ctx.right);
 		setNodeValue(ctx, new CompareExpression(left, CmpOp.LTE, right));
 	}
-
+	
 	@Override
 	public void exitList_literal(List_literalContext ctx) {
 		ExpressionList items = this.<ExpressionList>getNodeValue(ctx.items);
@@ -1578,12 +1562,13 @@ public class EPrestoBuilder extends EParserBaseListener {
 		setNodeValue(ctx, value);
 	}
 	
+	
 	@Override
 	public void exitListLiteral(ListLiteralContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
 	}
-	
+
 	@Override
 	public void exitListType(ListTypeContext ctx) {
 		IType type = this.<IType>getNodeValue(ctx.l);
@@ -1595,7 +1580,7 @@ public class EPrestoBuilder extends EParserBaseListener {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
 	}
-
+	
 	@Override
 	public void exitLiteralList(LiteralListContext ctx) {
 		IExpression item = this.<IExpression>getNodeValue(ctx.item);
@@ -1609,7 +1594,7 @@ public class EPrestoBuilder extends EParserBaseListener {
 		items.add(item);
 		setNodeValue(ctx, items);
 	}
-	
+
 	@Override
 	public void exitLiteralListLiteral(LiteralListLiteralContext ctx) {
 		ExpressionList items = this.<ExpressionList>getNodeValue(ctx.exp);
@@ -1634,19 +1619,19 @@ public class EPrestoBuilder extends EParserBaseListener {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
 		setNodeValue(ctx, new MatchingExpressionConstraint(exp));
 	}
-
-
+	
 	@Override
 	public void exitMatchingList(MatchingListContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.source);
 		setNodeValue(ctx, new MatchingCollectionConstraint(exp));
 	}
-
+	
 	@Override
 	public void exitMatchingPattern(MatchingPatternContext ctx) {
 		setNodeValue(ctx, new MatchingPatternConstraint(new TextLiteral(ctx.text.getText())));
 	}
-	
+
+
 	@Override
 	public void exitMatchingRange(MatchingRangeContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.source);
@@ -1663,6 +1648,12 @@ public class EPrestoBuilder extends EParserBaseListener {
 	public void exitMaxIntegerLiteral(MaxIntegerLiteralContext ctx) {
 		setNodeValue(ctx, new MaxIntegerLiteral());
 	}
+
+	@Override
+	public void exitMember_method_declaration(Member_method_declarationContext ctx) {
+		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.getChild(0));
+		setNodeValue(ctx, decl);
+	}
 	
 	@Override
 	public void exitMemberInstance(MemberInstanceContext ctx) {
@@ -1670,19 +1661,6 @@ public class EPrestoBuilder extends EParserBaseListener {
 		setNodeValue(ctx, new MemberInstance(name));
 	}
 	
-	@Override
-	public void exitMember_method_declaration(Member_method_declarationContext ctx) {
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.getChild(0));
-		setNodeValue(ctx, decl);
-	};
-	
-	@Override
-	public void exitNative_member_method_declaration(Native_member_method_declarationContext ctx) {
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.getChild(0));
-		setNodeValue(ctx, decl);
-	}
-	
-
 	@Override
 	public void exitMemberSelector(MemberSelectorContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
@@ -1695,7 +1673,7 @@ public class EPrestoBuilder extends EParserBaseListener {
 		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
 		UnresolvedCall call = new UnresolvedCall(exp,args);
 		setNodeValue(ctx, call);
-	}
+	};
 	
 	@Override
 	public void exitMethodCallStatement(MethodCallStatementContext ctx) {
@@ -1703,6 +1681,7 @@ public class EPrestoBuilder extends EParserBaseListener {
 		setNodeValue(ctx, stmt);
 	}
 	
+
 	@Override
 	public void exitMethodDeclaration(MethodDeclarationContext ctx) {
 		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
@@ -1762,6 +1741,12 @@ public class EPrestoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
+	public void exitNative_category_bindings(Native_category_bindingsContext ctx) {
+		NativeCategoryBindingList items = this.<NativeCategoryBindingList>getNodeValue(ctx.items);
+		setNodeValue(ctx, items);
+	}
+	
+	@Override
 	public void exitNative_category_declaration(Native_category_declarationContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
 		IdentifierList attrs = this.<IdentifierList>getNodeValue(ctx.attrs);
@@ -1771,9 +1756,9 @@ public class EPrestoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitNative_category_bindings(Native_category_bindingsContext ctx) {
-		NativeCategoryBindingList items = this.<NativeCategoryBindingList>getNodeValue(ctx.items);
-		setNodeValue(ctx, items);
+	public void exitNative_member_method_declaration(Native_member_method_declarationContext ctx) {
+		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.getChild(0));
+		setNodeValue(ctx, decl);
 	}
 	
 	@Override
@@ -1784,7 +1769,7 @@ public class EPrestoBuilder extends EParserBaseListener {
 		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
 		setNodeValue(ctx, new NativeMethodDeclaration(name, args, type, stmts));
 	}
-
+	
 	@Override
 	public void exitNative_resource_declaration(Native_resource_declarationContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
@@ -1800,13 +1785,7 @@ public class EPrestoBuilder extends EParserBaseListener {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
 		setNodeValue(ctx, new NativeSymbol(name, exp));
 	}
-	
-	@Override
-	public void exitNativeCategoryDeclaration(NativeCategoryDeclarationContext ctx) {
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
-		setNodeValue(ctx, decl);
-	}
-	
+
 	@Override
 	public void exitNativeCategoryBindingList(NativeCategoryBindingListContext ctx) {
 		NativeCategoryBinding item = this.<NativeCategoryBinding>getNodeValue(ctx.item);
@@ -1818,6 +1797,27 @@ public class EPrestoBuilder extends EParserBaseListener {
 	public void exitNativeCategoryBindingListItem(NativeCategoryBindingListItemContext ctx) {
 		NativeCategoryBinding item = this.<NativeCategoryBinding>getNodeValue(ctx.item);
 		NativeCategoryBindingList items = this.<NativeCategoryBindingList>getNodeValue(ctx.items);
+		items.add(item);
+		setNodeValue(ctx, items);
+	}
+	
+	@Override
+	public void exitNativeCategoryDeclaration(NativeCategoryDeclarationContext ctx) {
+		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
+		setNodeValue(ctx, decl);
+	}
+	
+	@Override
+	public void exitNativeCategoryMethodList(NativeCategoryMethodListContext ctx) {
+		IMethodDeclaration item = this.<IMethodDeclaration>getNodeValue(ctx.item);
+		MethodDeclarationList items = new MethodDeclarationList(item);
+		setNodeValue(ctx, items);
+	}
+	
+	@Override
+	public void exitNativeCategoryMethodListItem(NativeCategoryMethodListItemContext ctx) {
+		IMethodDeclaration item = this.<IMethodDeclaration>getNodeValue(ctx.item);
+		MethodDeclarationList items = this.<MethodDeclarationList>getNodeValue(ctx.items);
 		items.add(item);
 		setNodeValue(ctx, items);
 	}
@@ -1910,26 +1910,21 @@ public class EPrestoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
+	public void exitOperator_method_declaration(Operator_method_declarationContext ctx) {
+		Operator op = this.<Operator>getNodeValue(ctx.op);
+		IArgument arg = this.<IArgument>getNodeValue(ctx.arg);
+		IType typ = this.<IType>getNodeValue(ctx.typ);
+		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		OperatorMethodDeclaration decl = new OperatorMethodDeclaration(op, arg, typ, stmts);
+		setNodeValue(ctx, decl);
+	}
+	
+	@Override
 	public void exitOperatorArgument(OperatorArgumentContext ctx) {
 		boolean mutable = ctx.MUTABLE()!=null;
 		IArgument arg = this.<IArgument>getNodeValue(ctx.arg);
 		arg.setMutable(mutable);
 		setNodeValue(ctx, arg);
-	}
-	
-	@Override
-	public void exitOperatorPlus(OperatorPlusContext ctx) {
-		setNodeValue(ctx, Operator.PLUS);
-	}
-	
-	@Override
-	public void exitOperatorMinus(OperatorMinusContext ctx) {
-		setNodeValue(ctx, Operator.MINUS);
-	}
-	
-	@Override
-	public void exitOperatorMultiply(OperatorMultiplyContext ctx) {
-		setNodeValue(ctx, Operator.MULTIPLY);
 	}
 	
 	@Override
@@ -1943,18 +1938,23 @@ public class EPrestoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
+	public void exitOperatorMinus(OperatorMinusContext ctx) {
+		setNodeValue(ctx, Operator.MINUS);
+	}
+	
+	@Override
 	public void exitOperatorModulo(OperatorModuloContext ctx) {
 		setNodeValue(ctx, Operator.MODULO);
 	}
 	
 	@Override
-	public void exitOperator_method_declaration(Operator_method_declarationContext ctx) {
-		Operator op = this.<Operator>getNodeValue(ctx.op);
-		IArgument arg = this.<IArgument>getNodeValue(ctx.arg);
-		IType typ = this.<IType>getNodeValue(ctx.typ);
-		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
-		OperatorMethodDeclaration decl = new OperatorMethodDeclaration(op, arg, typ, stmts);
-		setNodeValue(ctx, decl);
+	public void exitOperatorMultiply(OperatorMultiplyContext ctx) {
+		setNodeValue(ctx, Operator.MULTIPLY);
+	}
+	
+	@Override
+	public void exitOperatorPlus(OperatorPlusContext ctx) {
+		setNodeValue(ctx, Operator.PLUS);
 	}
 	
 	@Override
@@ -2660,17 +2660,17 @@ public class EPrestoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitWithResourceStatement(WithResourceStatementContext ctx) {
-		IStatement stmt = this.<IStatement>getNodeValue(ctx.stmt);
-		setNodeValue(ctx, stmt);
-	}
-	
-	@Override
 	public void exitWith_singleton_statement(With_singleton_statementContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.typ);
 		CategoryType type = new CategoryType(name);
 		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
 		setNodeValue(ctx, new WithSingletonStatement(type, stmts));
+	}
+	
+	@Override
+	public void exitWithResourceStatement(WithResourceStatementContext ctx) {
+		IStatement stmt = this.<IStatement>getNodeValue(ctx.stmt);
+		setNodeValue(ctx, stmt);
 	}
 	
 	@Override

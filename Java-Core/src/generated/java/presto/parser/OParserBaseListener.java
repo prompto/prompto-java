@@ -3701,73 +3701,49 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJavascriptParenthesisExpression(@NotNull OParser.JavascriptParenthesisExpressionContext ctx) { }
+	@Override public void enterJavascript_primary_expression(@NotNull OParser.Javascript_primary_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJavascriptParenthesisExpression(@NotNull OParser.JavascriptParenthesisExpressionContext ctx) { }
+	@Override public void exitJavascript_primary_expression(@NotNull OParser.Javascript_primary_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJavascriptIdentifierExpression(@NotNull OParser.JavascriptIdentifierExpressionContext ctx) { }
+	@Override public void enterJavascript_this_expression(@NotNull OParser.Javascript_this_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJavascriptIdentifierExpression(@NotNull OParser.JavascriptIdentifierExpressionContext ctx) { }
+	@Override public void exitJavascript_this_expression(@NotNull OParser.Javascript_this_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJavascriptLiteralExpression(@NotNull OParser.JavascriptLiteralExpressionContext ctx) { }
+	@Override public void enterJavascript_selector_expression(@NotNull OParser.Javascript_selector_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJavascriptLiteralExpression(@NotNull OParser.JavascriptLiteralExpressionContext ctx) { }
+	@Override public void exitJavascript_selector_expression(@NotNull OParser.Javascript_selector_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJavascriptGlobalMethodExpression(@NotNull OParser.JavascriptGlobalMethodExpressionContext ctx) { }
+	@Override public void enterJavascript_member_expression(@NotNull OParser.Javascript_member_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJavascriptGlobalMethodExpression(@NotNull OParser.JavascriptGlobalMethodExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterJavascriptMethodExpression(@NotNull OParser.JavascriptMethodExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitJavascriptMethodExpression(@NotNull OParser.JavascriptMethodExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterJavascriptItemExpression(@NotNull OParser.JavascriptItemExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitJavascriptItemExpression(@NotNull OParser.JavascriptItemExpressionContext ctx) { }
+	@Override public void exitJavascript_member_expression(@NotNull OParser.Javascript_member_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

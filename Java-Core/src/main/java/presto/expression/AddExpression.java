@@ -46,7 +46,7 @@ public class AddExpression implements IExpression {
 	private IValue interpret(Context context, IExpression exp) throws PrestoError {
 		IValue value = exp.interpret(context);
 		// need a fully evaluated value (could be contextual)
-		if(value instanceof IExpression)
+		while(value instanceof IExpression)
 			value = ((IExpression)value).interpret(context);
 		return value;
 	}
