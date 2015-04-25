@@ -22,6 +22,7 @@ import presto.csharp.CSharpNativeCategoryBinding;
 import presto.csharp.CSharpSelectorExpression;
 import presto.csharp.CSharpStatement;
 import presto.csharp.CSharpTextLiteral;
+import presto.csharp.CSharpThisExpression;
 import presto.declaration.AbstractMethodDeclaration;
 import presto.declaration.AttributeDeclaration;
 import presto.declaration.ConcreteCategoryDeclaration;
@@ -738,21 +739,8 @@ public class SPrestoBuilder extends SParserBaseListener {
 	}
 	
 	@Override
-	public void exitCSharpIdentifierExpression(CSharpIdentifierExpressionContext ctx) {
-		CSharpIdentifierExpression exp = this.<CSharpIdentifierExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, exp);
-	}
-	
-	
-	@Override
 	public void exitCSharpIntegerLiteral(CSharpIntegerLiteralContext ctx) {
 		setNodeValue(ctx, new CSharpIntegerLiteral(ctx.getText()));
-	}
-	
-	@Override
-	public void exitCSharpLiteralExpression(CSharpLiteralExpressionContext ctx) {
-		CSharpExpression exp = this.<CSharpExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, exp);
 	}
 	
 	@Override
@@ -767,10 +755,17 @@ public class SPrestoBuilder extends SParserBaseListener {
 		setNodeValue(ctx, new CSharpNativeCall(stmt));
 	}
 	
+	@Override
 	public void exitCSharpPrestoIdentifier(CSharpPrestoIdentifierContext ctx) {
 		String name = ctx.DOLLAR_IDENTIFIER().getText();
 		setNodeValue(ctx, new CSharpIdentifierExpression(name));
 	};
+	
+	@Override
+	public void exitCsharp_primary_expression(Csharp_primary_expressionContext ctx) {
+		CSharpExpression exp = this.<CSharpExpression>getNodeValue(ctx.getChild(0));
+		setNodeValue(ctx, exp);
+	}
 	
 	@Override
 	public void exitCSharpPrimaryExpression(CSharpPrimaryExpressionContext ctx) {
@@ -802,6 +797,10 @@ public class SPrestoBuilder extends SParserBaseListener {
 	public void exitCSharpTextLiteral(CSharpTextLiteralContext ctx) {
 		setNodeValue(ctx, new CSharpTextLiteral(ctx.getText()));
 	}
+	
+	public void exitCsharp_this_expression(Csharp_this_expressionContext ctx) {
+		setNodeValue(ctx, new CSharpThisExpression());
+	};
 	
 	@Override
 	public void exitDateLiteral(DateLiteralContext ctx) {

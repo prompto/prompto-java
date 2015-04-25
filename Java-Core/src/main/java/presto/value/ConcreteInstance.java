@@ -71,9 +71,9 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		Map<Identifier,Context> activeGetters = this.activeGetters.get();
 		Context stacked = activeGetters.get(attrName);
 		boolean first = stacked==null;
+		if(first)
+			activeGetters.put(attrName, context);
 		try {
-			if(first)
-				activeGetters.put(attrName, context);
 			return getMember(context, attrName, first);
 		} finally {
 			if(first)

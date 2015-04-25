@@ -59,7 +59,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 	}
 	
 	private Object makeInstance() throws SyntaxError {
-		Class<?> mapped = declaration.getMappedClass(true);
+		Class<?> mapped = declaration.getBoundClass(true);
 		try {
 			return mapped.newInstance();
 		} catch (Exception e) {
@@ -92,9 +92,9 @@ public class NativeInstance extends BaseValue implements IInstance {
 		Map<Identifier,Context> activeGetters = this.activeGetters.get();
 		Context stacked = activeGetters.get(attrName);
 		boolean first = stacked==null;
+		if(first)
+			activeGetters.put(attrName, context);
 		try {
-			if(first)
-				activeGetters.put(attrName, context);
 			return getMember(context, attrName, first);
 		} finally {
 			if(first)

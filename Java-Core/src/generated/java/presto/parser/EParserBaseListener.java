@@ -4589,37 +4589,25 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCSharpParenthesisExpression(@NotNull EParser.CSharpParenthesisExpressionContext ctx) { }
+	@Override public void enterCsharp_primary_expression(@NotNull EParser.Csharp_primary_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCSharpParenthesisExpression(@NotNull EParser.CSharpParenthesisExpressionContext ctx) { }
+	@Override public void exitCsharp_primary_expression(@NotNull EParser.Csharp_primary_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCSharpIdentifierExpression(@NotNull EParser.CSharpIdentifierExpressionContext ctx) { }
+	@Override public void enterCsharp_this_expression(@NotNull EParser.Csharp_this_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCSharpIdentifierExpression(@NotNull EParser.CSharpIdentifierExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCSharpLiteralExpression(@NotNull EParser.CSharpLiteralExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCSharpLiteralExpression(@NotNull EParser.CSharpLiteralExpressionContext ctx) { }
+	@Override public void exitCsharp_this_expression(@NotNull EParser.Csharp_this_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

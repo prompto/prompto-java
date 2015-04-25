@@ -16,23 +16,23 @@ import presto.value.NativeInstance;
 
 public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 	
-	NativeCategoryBindingList categoryMappings;
+	NativeCategoryBindingList categoryBindings;
 	NativeAttributeBindingListMap attributeMappings;
-	Class<?> mappedClass = null;
+	Class<?> boundClass = null;
 	
 	public NativeCategoryDeclaration(Identifier name, IdentifierList attributes, 
 			NativeCategoryBindingList categoryMappings, 
 			NativeAttributeBindingListMap attributeMappings,
 			MethodDeclarationList methods) {
 		super(name, attributes, null, methods);
-		this.categoryMappings = categoryMappings;
+		this.categoryBindings = categoryMappings;
 		this.attributeMappings = attributeMappings;
 	}
 
 	@Override
 	public void register(Context context) throws SyntaxError {
 		super.register(context);
-		Class<?> klass = getMappedClass(false);
+		Class<?> klass = getBoundClass(false);
 		if(klass!=null)
 			context.registerNativeMapping(klass, this);
 	}
@@ -40,7 +40,7 @@ public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 	@Override
 	protected void toEDialect(CodeWriter writer) {
 		protoToEDialect(writer, false, true);
-		mappingsToEDialect(writer);
+		bindingsToEDialect(writer);
 		methodsToEDialect(writer);
 	}
 
@@ -57,9 +57,9 @@ public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 		writer.append("native category");
 	}
 	
-	protected void mappingsToEDialect(CodeWriter writer) {
+	protected void bindingsToEDialect(CodeWriter writer) {
 		writer.indent();
-		categoryMappings.toDialect(writer);
+		categoryBindings.toDialect(writer);
 		writer.dedent();
 		writer.newLine();
 	}
@@ -77,7 +77,7 @@ public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 	
 	@Override
 	protected void bodyToODialect(CodeWriter writer) {
-		categoryMappings.toDialect(writer);
+		categoryBindings.toDialect(writer);
 		if(methods!=null && methods.size()>0) {
 			writer.newLine();
 			writer.newLine();
@@ -90,11 +90,13 @@ public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 		protoToPDialect(writer, null);
 		writer.indent();
 		writer.newLine();
-		categoryMappings.toDialect(writer);
-		if(methods!=null && methods.size()>0) for(IDeclaration decl : methods) {
-			CodeWriter w = writer.newMemberWriter();
-			decl.toDialect(w);
-			writer.newLine();
+		categoryBindings.toDialect(writer);
+		if(methods!=null && methods.size()>0) {
+			for(IDeclaration decl : methods) {
+				CodeWriter w = writer.newMemberWriter();
+				decl.toDialect(w);
+				writer.newLine();
+			}
 		}
 		writer.dedent();
 		writer.newLine();
@@ -110,20 +112,20 @@ public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 		return new NativeInstance(this);
 	}
 
-	public Class<?> getMappedClass(boolean fail) throws SyntaxError {
-		if(mappedClass==null) {
-			JavaNativeCategoryBinding mapping = getMapping(fail);
+	public Class<?> getBoundClass(boolean fail) throws SyntaxError {
+		if(boundClass==null) {
+			JavaNativeCategoryBinding mapping = getBinding(fail);
 			if(mapping!=null) {
-				mappedClass = mapping.getExpression().interpret_class();
-				if(mappedClass==null && fail)
+				boundClass = mapping.getExpression().interpret_class();
+				if(boundClass==null && fail)
 					throw new SyntaxError("No Java class:" + mapping.getExpression().toString());
 			}
 		}
-		return mappedClass;
+		return boundClass;
 	}
 
-	private JavaNativeCategoryBinding getMapping(boolean fail) throws SyntaxError {
-		for(NativeCategoryBinding mapping : categoryMappings) {
+	private JavaNativeCategoryBinding getBinding(boolean fail) throws SyntaxError {
+		for(NativeCategoryBinding mapping : categoryBindings) {
 			if(mapping instanceof JavaNativeCategoryBinding)
 				return (JavaNativeCategoryBinding)mapping;
 		}

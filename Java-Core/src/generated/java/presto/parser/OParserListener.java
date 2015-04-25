@@ -4397,41 +4397,25 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitCSharpSelectorExpression(@NotNull OParser.CSharpSelectorExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code CSharpParenthesisExpression}
-	 * labeled alternative in {@link OParser#csharp_primary_expression}.
+	 * Enter a parse tree produced by {@link OParser#csharp_primary_expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterCSharpParenthesisExpression(@NotNull OParser.CSharpParenthesisExpressionContext ctx);
+	void enterCsharp_primary_expression(@NotNull OParser.Csharp_primary_expressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code CSharpParenthesisExpression}
-	 * labeled alternative in {@link OParser#csharp_primary_expression}.
+	 * Exit a parse tree produced by {@link OParser#csharp_primary_expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitCSharpParenthesisExpression(@NotNull OParser.CSharpParenthesisExpressionContext ctx);
+	void exitCsharp_primary_expression(@NotNull OParser.Csharp_primary_expressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code CSharpIdentifierExpression}
-	 * labeled alternative in {@link OParser#csharp_primary_expression}.
+	 * Enter a parse tree produced by {@link OParser#csharp_this_expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterCSharpIdentifierExpression(@NotNull OParser.CSharpIdentifierExpressionContext ctx);
+	void enterCsharp_this_expression(@NotNull OParser.Csharp_this_expressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code CSharpIdentifierExpression}
-	 * labeled alternative in {@link OParser#csharp_primary_expression}.
+	 * Exit a parse tree produced by {@link OParser#csharp_this_expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitCSharpIdentifierExpression(@NotNull OParser.CSharpIdentifierExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code CSharpLiteralExpression}
-	 * labeled alternative in {@link OParser#csharp_primary_expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterCSharpLiteralExpression(@NotNull OParser.CSharpLiteralExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code CSharpLiteralExpression}
-	 * labeled alternative in {@link OParser#csharp_primary_expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitCSharpLiteralExpression(@NotNull OParser.CSharpLiteralExpressionContext ctx);
+	void exitCsharp_this_expression(@NotNull OParser.Csharp_this_expressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code CSharpMethodExpression}
 	 * labeled alternative in {@link OParser#csharp_selector_expression}.
