@@ -3725,25 +3725,37 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJavascript_selector_expression(@NotNull EParser.Javascript_selector_expressionContext ctx) { }
+	@Override public void enterJavaScriptMethodExpression(@NotNull EParser.JavaScriptMethodExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJavascript_selector_expression(@NotNull EParser.Javascript_selector_expressionContext ctx) { }
+	@Override public void exitJavaScriptMethodExpression(@NotNull EParser.JavaScriptMethodExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJavascript_member_expression(@NotNull EParser.Javascript_member_expressionContext ctx) { }
+	@Override public void enterJavaScriptMemberExpression(@NotNull EParser.JavaScriptMemberExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJavascript_member_expression(@NotNull EParser.Javascript_member_expressionContext ctx) { }
+	@Override public void exitJavaScriptMemberExpression(@NotNull EParser.JavaScriptMemberExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterJavaScriptItemExpression(@NotNull EParser.JavaScriptItemExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJavaScriptItemExpression(@NotNull EParser.JavaScriptItemExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -3809,25 +3821,13 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJavascriptChildIdentifier(@NotNull EParser.JavascriptChildIdentifierContext ctx) { }
+	@Override public void enterJavascript_identifier_expression(@NotNull EParser.Javascript_identifier_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJavascriptChildIdentifier(@NotNull EParser.JavascriptChildIdentifierContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterJavascriptIdentifier(@NotNull EParser.JavascriptIdentifierContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitJavascriptIdentifier(@NotNull EParser.JavascriptIdentifierContext ctx) { }
+	@Override public void exitJavascript_identifier_expression(@NotNull EParser.Javascript_identifier_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

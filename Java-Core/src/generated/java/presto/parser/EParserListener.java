@@ -3549,25 +3549,41 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitJavascript_this_expression(@NotNull EParser.Javascript_this_expressionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link EParser#javascript_selector_expression}.
+	 * Enter a parse tree produced by the {@code JavaScriptMethodExpression}
+	 * labeled alternative in {@link EParser#javascript_selector_expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterJavascript_selector_expression(@NotNull EParser.Javascript_selector_expressionContext ctx);
+	void enterJavaScriptMethodExpression(@NotNull EParser.JavaScriptMethodExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link EParser#javascript_selector_expression}.
+	 * Exit a parse tree produced by the {@code JavaScriptMethodExpression}
+	 * labeled alternative in {@link EParser#javascript_selector_expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitJavascript_selector_expression(@NotNull EParser.Javascript_selector_expressionContext ctx);
+	void exitJavaScriptMethodExpression(@NotNull EParser.JavaScriptMethodExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link EParser#javascript_member_expression}.
+	 * Enter a parse tree produced by the {@code JavaScriptMemberExpression}
+	 * labeled alternative in {@link EParser#javascript_selector_expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterJavascript_member_expression(@NotNull EParser.Javascript_member_expressionContext ctx);
+	void enterJavaScriptMemberExpression(@NotNull EParser.JavaScriptMemberExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link EParser#javascript_member_expression}.
+	 * Exit a parse tree produced by the {@code JavaScriptMemberExpression}
+	 * labeled alternative in {@link EParser#javascript_selector_expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitJavascript_member_expression(@NotNull EParser.Javascript_member_expressionContext ctx);
+	void exitJavaScriptMemberExpression(@NotNull EParser.JavaScriptMemberExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code JavaScriptItemExpression}
+	 * labeled alternative in {@link EParser#javascript_selector_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterJavaScriptItemExpression(@NotNull EParser.JavaScriptItemExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code JavaScriptItemExpression}
+	 * labeled alternative in {@link EParser#javascript_selector_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitJavaScriptItemExpression(@NotNull EParser.JavaScriptItemExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link EParser#javascript_method_expression}.
 	 * @param ctx the parse tree
@@ -3623,29 +3639,15 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitJavascript_parenthesis_expression(@NotNull EParser.Javascript_parenthesis_expressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code JavascriptChildIdentifier}
-	 * labeled alternative in {@link EParser#javascript_identifier_expression}.
+	 * Enter a parse tree produced by {@link EParser#javascript_identifier_expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterJavascriptChildIdentifier(@NotNull EParser.JavascriptChildIdentifierContext ctx);
+	void enterJavascript_identifier_expression(@NotNull EParser.Javascript_identifier_expressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code JavascriptChildIdentifier}
-	 * labeled alternative in {@link EParser#javascript_identifier_expression}.
+	 * Exit a parse tree produced by {@link EParser#javascript_identifier_expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitJavascriptChildIdentifier(@NotNull EParser.JavascriptChildIdentifierContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code JavascriptIdentifier}
-	 * labeled alternative in {@link EParser#javascript_identifier_expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterJavascriptIdentifier(@NotNull EParser.JavascriptIdentifierContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code JavascriptIdentifier}
-	 * labeled alternative in {@link EParser#javascript_identifier_expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitJavascriptIdentifier(@NotNull EParser.JavascriptIdentifierContext ctx);
+	void exitJavascript_identifier_expression(@NotNull EParser.Javascript_identifier_expressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code JavascriptIntegerLiteral}
 	 * labeled alternative in {@link EParser#javascript_literal_expression}.

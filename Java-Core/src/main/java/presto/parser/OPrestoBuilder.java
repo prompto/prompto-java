@@ -30,8 +30,8 @@ import presto.declaration.ConcreteMethodDeclaration;
 import presto.declaration.EnumeratedCategoryDeclaration;
 import presto.declaration.EnumeratedNativeDeclaration;
 import presto.declaration.GetterMethodDeclaration;
-import presto.declaration.IMethodDeclaration;
 import presto.declaration.IDeclaration;
+import presto.declaration.IMethodDeclaration;
 import presto.declaration.NativeCategoryDeclaration;
 import presto.declaration.NativeMethodDeclaration;
 import presto.declaration.NativeResourceDeclaration;
@@ -77,7 +77,6 @@ import presto.grammar.ArgumentAssignment;
 import presto.grammar.ArgumentAssignmentList;
 import presto.grammar.ArgumentList;
 import presto.grammar.CategoryArgument;
-import presto.grammar.MethodDeclarationList;
 import presto.grammar.CategorySymbol;
 import presto.grammar.CategorySymbolList;
 import presto.grammar.CmpOp;
@@ -95,6 +94,7 @@ import presto.grammar.MatchingCollectionConstraint;
 import presto.grammar.MatchingExpressionConstraint;
 import presto.grammar.MatchingPatternConstraint;
 import presto.grammar.MemberInstance;
+import presto.grammar.MethodDeclarationList;
 import presto.grammar.NativeCategoryBinding;
 import presto.grammar.NativeCategoryBindingList;
 import presto.grammar.NativeSymbol;
@@ -125,6 +125,7 @@ import presto.javascript.JavaScriptExpression;
 import presto.javascript.JavaScriptExpressionList;
 import presto.javascript.JavaScriptIdentifierExpression;
 import presto.javascript.JavaScriptIntegerLiteral;
+import presto.javascript.JavaScriptItemExpression;
 import presto.javascript.JavaScriptMemberExpression;
 import presto.javascript.JavaScriptMethodExpression;
 import presto.javascript.JavaScriptModule;
@@ -1372,11 +1373,12 @@ public class OPrestoBuilder extends OParserBaseListener {
 		String name = ctx.getText();
 		setNodeValue(ctx, name);
 	}
+	
 
 	@Override
-	public void exitJavascript_member_expression(Javascript_member_expressionContext ctx) {
-		String name = ctx.getText();
-		setNodeValue(ctx, new JavaScriptMemberExpression(name));		
+	public void exitJavascript_identifier_expression(Javascript_identifier_expressionContext ctx) {
+		String name = this.<String>getNodeValue(ctx.name);
+		setNodeValue(ctx, new JavaScriptIdentifierExpression(name));
 	}
 	
 	@Override
@@ -1408,12 +1410,6 @@ public class OPrestoBuilder extends OParserBaseListener {
 	@Override
 	public void exitJavascript_primary_expression(Javascript_primary_expressionContext ctx) {
 		JavaScriptExpression exp = this.<JavaScriptExpression>getNodeValue(ctx.getChild(0));
-		setNodeValue(ctx, exp);
-	}
-	
-	@Override
-	public void exitJavascript_selector_expression(Javascript_selector_expressionContext ctx) {
-		JavaScriptExpression exp = this.<JavaScriptExpression>getNodeValue(ctx.getChild(1)); // 0 is DOT
 		setNodeValue(ctx, exp);
 	}
 	
@@ -1455,29 +1451,33 @@ public class OPrestoBuilder extends OParserBaseListener {
 	}
 	
 	@Override
-	public void exitJavascriptChildIdentifier(JavascriptChildIdentifierContext ctx) {
-		JavaScriptIdentifierExpression parent = this.<JavaScriptIdentifierExpression>getNodeValue(ctx.parent);
-		String name = this.<String>getNodeValue(ctx.name);
-		JavaScriptIdentifierExpression exp = new JavaScriptIdentifierExpression(parent, name);
-		setNodeValue(ctx, exp);
-	}
-	
-	@Override
 	public void exitJavascriptDecimalLiteral(JavascriptDecimalLiteralContext ctx) {
 		String text = ctx.t.getText();
 		setNodeValue(ctx, new JavaScriptDecimalLiteral(text));
-	}
-
-	@Override
-	public void exitJavascriptIdentifier(JavascriptIdentifierContext ctx) {
-		String name = this.<String>getNodeValue(ctx.name);
-		setNodeValue(ctx, new JavaScriptIdentifierExpression(name));
 	}
 	
 	@Override
 	public void exitJavascriptIntegerLiteral(JavascriptIntegerLiteralContext ctx) {
 		String text = ctx.t.getText();
 		setNodeValue(ctx, new JavaScriptIntegerLiteral(text));
+	}
+	
+	@Override
+	public void exitJavaScriptItemExpression(JavaScriptItemExpressionContext ctx) {
+		JavaScriptExpression item = this.<JavaScriptExpression>getNodeValue(ctx.exp);
+		setNodeValue(ctx, new JavaScriptItemExpression(item));
+	}
+
+	@Override
+	public void exitJavaScriptMemberExpression(JavaScriptMemberExpressionContext ctx) {
+		String name = this.<String>getNodeValue(ctx.name);
+		setNodeValue(ctx, new JavaScriptMemberExpression(name));
+	}
+	
+	@Override
+	public void exitJavaScriptMethodExpression(JavaScriptMethodExpressionContext ctx) {
+		JavaScriptExpression exp = this.<JavaScriptExpression>getNodeValue(ctx.method); 
+		setNodeValue(ctx, exp);
 	}	
 	
 	@Override
