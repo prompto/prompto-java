@@ -50,7 +50,6 @@ public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 			writer.newLine();
 			methodsToEDialect(writer, methods);
 		}
-		
 	}
 
 	protected void categoryTypeToEDialect(CodeWriter writer) {

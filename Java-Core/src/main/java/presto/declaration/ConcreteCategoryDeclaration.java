@@ -88,7 +88,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	@Override
 	protected void toSDialect(CodeWriter writer) {
 		protoToPDialect(writer, derivedFrom);
-		methodsToPDialect(writer);
+		methodsToSDialect(writer);
 	}
 	
 	@Override
@@ -96,7 +96,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		writer.append("class");
 	}
 
-	private void methodsToPDialect(CodeWriter writer) {
+	private void methodsToSDialect(CodeWriter writer) {
 		writer.indent();
 		if(methods==null || methods.size()==0)
 			writer.append("pass\n");
