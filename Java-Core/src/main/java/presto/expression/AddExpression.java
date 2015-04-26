@@ -38,18 +38,10 @@ public class AddExpression implements IExpression {
 	
 	@Override
 	public IValue interpret(Context context) throws PrestoError {
-		IValue lval = interpret(context, left);
-		IValue rval = interpret(context, right);
+		IValue lval = left.interpret(context);
+		IValue rval = right.interpret(context);
         return lval.Add(context, rval);
  	}
-
-	private IValue interpret(Context context, IExpression exp) throws PrestoError {
-		IValue value = exp.interpret(context);
-		// need a fully evaluated value (could be contextual)
-		while(value instanceof IExpression)
-			value = ((IExpression)value).interpret(context);
-		return value;
-	}
 	
 
 }
