@@ -23,7 +23,7 @@ public class AssignInstanceStatement extends SimpleStatement {
 
 	@Override
 	public void toDialect(CodeWriter writer) {
-		instance.toDialect(writer);
+		instance.toDialect(writer, expression);
 		writer.append(" = ");
 		expression.toDialect(writer);
 	}

@@ -751,7 +751,7 @@ public class TestParserAtoms {
 		IAssignableInstance stmt = parser.parse_assignable();
 		assertNotNull(stmt);
 		CodeWriter writer = new CodeWriter(Dialect.E, null);
-		stmt.toDialect(writer);
+		stmt.toDialect(writer, null);
 		assertEquals(statement, writer.toString());
 	}
 

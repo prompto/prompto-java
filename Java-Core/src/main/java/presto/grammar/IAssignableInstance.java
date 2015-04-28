@@ -14,6 +14,6 @@ public interface IAssignableInstance {
 	void checkAssignElement(Context context) throws SyntaxError;
 	void assign(Context context, IExpression expression) throws PrestoError;
 	IValue interpret(Context context) throws PrestoError;
-	void toDialect(CodeWriter writer);
+	void toDialect(CodeWriter writer, IExpression expression);
 
 }

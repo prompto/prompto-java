@@ -33,8 +33,8 @@ public class ItemInstance implements IAssignableSelector {
 	}
 	
 	@Override
-	public void toDialect(CodeWriter writer) {
-		parent.toDialect(writer);
+	public void toDialect(CodeWriter writer, IExpression expression) {
+		parent.toDialect(writer, null);
 		writer.append('[');
 		item.toDialect(writer);
 		writer.append(']');

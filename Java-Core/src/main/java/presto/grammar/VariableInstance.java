@@ -22,7 +22,15 @@ public class VariableInstance implements IAssignableInstance {
 	}
 	
 	@Override
-	public void toDialect(CodeWriter writer) {
+	public void toDialect(CodeWriter writer, IExpression expression) {
+		if(expression!=null) try {
+			IType type = expression.check(writer.getContext());
+			INamed actual = writer.getContext().getRegisteredValue(INamed.class,name);
+			if(actual==null)
+				writer.getContext().registerValue(new Variable(name, type));
+		} catch(SyntaxError e) {
+			// TODO warning
+		}
 		writer.append(name);
 	}
 	
