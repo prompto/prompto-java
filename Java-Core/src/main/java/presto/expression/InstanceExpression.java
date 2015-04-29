@@ -8,7 +8,6 @@ import presto.grammar.IArgument;
 import presto.grammar.INamed;
 import presto.grammar.Identifier;
 import presto.parser.Dialect;
-import presto.runtime.Attribute;
 import presto.runtime.Context;
 import presto.runtime.Context.MethodDeclarationMap;
 import presto.runtime.LinkedVariable;
@@ -60,8 +59,6 @@ public class InstanceExpression implements IExpression {
 		INamed named = context.getRegistered(name);
 		if(named==null)
 			throw new SyntaxError("Unknown identifier:" + name);
-		else if(named instanceof Attribute) // instance member
-			return named.getType(context);
 		else if(named instanceof Variable) // local variable
 			return named.getType(context);
 		else if(named instanceof LinkedVariable) // local variable

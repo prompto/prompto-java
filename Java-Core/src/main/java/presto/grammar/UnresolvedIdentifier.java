@@ -48,10 +48,12 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 	public void toDialect(CodeWriter writer) {
 		try {
 			resolve(writer.getContext(), false);
-			resolved.toDialect(writer);
 		} catch(SyntaxError e) {
-			writer.append(name);
 		}
+		if(resolved!=null)
+			resolved.toDialect(writer);
+		else
+			writer.append(name);
 	}
 	
 	@Override
