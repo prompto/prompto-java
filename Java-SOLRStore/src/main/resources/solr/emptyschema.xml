@@ -1,0 +1,57 @@
+<schema name="empty" version="1.5">
+	<types>
+		<fieldType name="uuid" class="solr.UUIDField" indexed="true" />
+		
+	    <!-- The StrField type is not analyzed, but indexed/stored verbatim.
+	       It supports doc values but in that case the field needs to be
+	       single-valued and either required or have a default value.
+	      -->
+	    <fieldType name="string" class="solr.StrField" sortMissingLast="true" />
+	
+	    <!-- A general text field that has reasonable, generic
+	         cross-language defaults: it tokenizes with StandardTokenizer,
+		 removes stop words from case-insensitive "stopwords.txt"
+		 (empty by default), and down cases.  At query time only, it
+		 also applies synonyms. -->
+	    <fieldType name="text" class="solr.TextField" positionIncrementGap="100">
+	      <analyzer type="index">
+	        <tokenizer class="solr.StandardTokenizerFactory"/>
+	        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
+	        <!-- in this example, we will only use synonyms at query time
+	        <filter class="solr.SynonymFilterFactory" synonyms="index_synonyms.txt" ignoreCase="true" expand="false"/>
+	        -->
+	        <filter class="solr.LowerCaseFilterFactory"/>
+	      </analyzer>
+	      <analyzer type="query">
+	        <tokenizer class="solr.StandardTokenizerFactory"/>
+	        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
+	        <!-- in this example, we will only use synonyms at query time
+	        <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+	        -->
+	        <filter class="solr.LowerCaseFilterFactory"/>
+	      </analyzer>
+	    </fieldType>
+
+	    <!-- boolean type: "true" or "false" -->
+	    <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true"/>
+	    
+	    <!--
+	      Default numeric field types. For faster range queries, consider the tint/tfloat/tlong/tdouble types.
+	
+	      These fields support doc values, but they require the field to be
+	      single-valued and either be required or have a default value.
+	    -->
+	    <fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0"/>
+	    <fieldType name="float" class="solr.TrieFloatField" precisionStep="0" positionIncrementGap="0"/>
+	    <fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0"/>
+	    <fieldType name="double" class="solr.TrieDoubleField" precisionStep="0" positionIncrementGap="0"/>
+	</types>
+	<fields>
+		<!-- If you remove this field, you must _also_ disable the update log in solrconfig.xml 
+		or Solr won't start. _version_ and update log are required for SolrCloud -->
+		<field name="_version_" type="long" indexed="true" stored="true" />
+   		<field name="dbId" type="uuid" indexed="true" stored="true" required="true" multiValued="false" /> 
+	   <field name="text" type="text" indexed="true" stored="false" multiValued="true"/>
+	</fields>
+	<uniqueKey>dbId</uniqueKey>
+</schema>
