@@ -50,7 +50,7 @@
 		<!-- If you remove this field, you must _also_ disable the update log in solrconfig.xml 
 		or Solr won't start. _version_ and update log are required for SolrCloud -->
 		<field name="_version_" type="long" indexed="true" stored="true" />
-   		<field name="dbId" type="uuid" indexed="true" stored="true" required="true" multiValued="false" /> 
+   		<field name="dbId" type="uuid" indexed="true" stored="true" multiValued="false" /> 
 	   <field name="text" type="text" indexed="true" stored="false" multiValued="true"/>
 	</fields>
 	<uniqueKey>dbId</uniqueKey>
