@@ -29,6 +29,8 @@ public class BaseSOLRTest {
 	protected void startServerWithEmptyCore(String coreName) throws Exception {
 		if(server==null) {
 			File coreDir = new File(solrRoot, coreName);
+			if(coreDir.exists())
+				delete(coreDir);
 			File confDir = new File(coreDir, "conf");
 			confDir.mkdir();
 			copyResourceToFile("solr/solrconfig.xml", new File(confDir, "solrconfig.xml"));
@@ -40,6 +42,14 @@ public class BaseSOLRTest {
 		}
 	}
 	
+	private void delete(File file) {
+		if(!file.exists())
+			return;
+		if(file.isDirectory()) for(String name : file.list())
+			delete(new File(file, name));
+		file.delete();
+	}
+
 	private void copyResourceToFile(String resourcePath, File destination) throws IOException {
 		URL inputUrl = Thread.currentThread().getContextClassLoader().getResource(resourcePath);
 		FileUtils.copyURLToFile(inputUrl, destination);	
