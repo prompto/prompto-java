@@ -21,7 +21,7 @@ public class TestConnect {
 		// adjust handler path for junit and cobertura context
 		ResourceHandler rh1 = CodeServer.prepareResourceHandler("/");
 		ResourceHandler rh2 = CodeServer.prepareResourceHandler("../classes/");
-		ResourceHandler rh3 = CodeServer.prepareResourceHandler("../../classes/");
+		ResourceHandler rh3 = CodeServer.prepareResourceHandler("../generated-classes/cobertura/");
 		HandlerList list = new HandlerList();
 		list.addHandler(rh1);
 		list.addHandler(rh2);
