@@ -13,27 +13,39 @@ public class CodeServer {
 	
 	public static void main(String[] args) throws Exception {
 		Integer httpPort = null;
-		String htmlRoot = "/";
 		// parse parameters
 		for(int i=0; i<args.length; i++) {
 			if(!args[i].startsWith("-"))
 				continue;
 			if(args[i].equalsIgnoreCase("-http_port")) {
 				httpPort = Integer.parseInt(args[++i]);
-			} else if(args[i].equalsIgnoreCase("-html_root")) {
-				htmlRoot = args[++i];
 			}
 		}
+		// standard resource handlers
+		Handler handler = prepareHandlers();
 		// initialize server accordingly
+		startServer(httpPort, handler);
+	}
+
+	static void startServer(Integer httpPort, Handler handler) throws Exception {
 		jettyServer = new Server(httpPort);
-		Resource resource = Resource.newClassPathResource(htmlRoot);
+		jettyServer.setHandler(handler);
+		CodeServer.start();
+	}
+
+	static Handler prepareHandlers() {
+		ResourceHandler rh = prepareResourceHandler("/");
+		HandlerList handlers = new HandlerList();
+		handlers.setHandlers(new Handler[] { rh, new DefaultHandler() });
+		return handlers;
+	}
+
+	static ResourceHandler prepareResourceHandler(String path) {
+		Resource resource = Resource.newClassPathResource(path);
 		ResourceHandler rh = new ResourceHandler();
 		rh.setDirectoriesListed(false);
 		rh.setBaseResource(resource);
-		HandlerList handlers = new HandlerList();
-		handlers.setHandlers(new Handler[] { rh, new DefaultHandler() });
-		jettyServer.setHandler(handlers);
-		CodeServer.start();
+		return rh;
 	}
 
 	public static void start() throws Exception  {

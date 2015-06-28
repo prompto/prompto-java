@@ -6,6 +6,10 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.eclipse.jetty.server.handler.DefaultHandler;
+import org.eclipse.jetty.server.handler.HandlerList;
+import org.eclipse.jetty.server.handler.ResourceHandler;
+import org.eclipse.jetty.util.resource.Resource;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,8 +18,17 @@ public class TestConnect {
 
 	@Before
 	public void before() throws Exception {
-		String[] args = { "-http_port", "8888", "-html_root", "../classes/" };
-		CodeServer.main(args);
+		// adjust handler path for junit and cobertura context
+		ResourceHandler rh1 = CodeServer.prepareResourceHandler("/");
+		ResourceHandler rh2 = CodeServer.prepareResourceHandler("../classes/");
+		ResourceHandler rh3 = CodeServer.prepareResourceHandler("../../classes/");
+		HandlerList list = new HandlerList();
+		list.addHandler(rh1);
+		list.addHandler(rh2);
+		list.addHandler(rh3);
+		list.addHandler(new DefaultHandler());
+		// start server
+		CodeServer.startServer(8888, list);
 		assertTrue(CodeServer.isStarted());
 	}
 	
