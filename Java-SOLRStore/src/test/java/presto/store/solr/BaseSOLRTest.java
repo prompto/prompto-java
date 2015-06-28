@@ -8,6 +8,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.core.CoreContainer;
 import org.apache.solr.core.CoreDescriptor;
+import org.apache.solr.core.SolrCore;
 import org.junit.After;
 import org.junit.Before;
 
@@ -15,6 +16,7 @@ public class BaseSOLRTest {
 	
 	File solrRoot = new File("target/test-classes/solr-test");
 	CoreContainer container;
+	SolrCore core;
 	EmbeddedSolrServer server;
 			
 	@Before
@@ -36,8 +38,8 @@ public class BaseSOLRTest {
 			copyResourceToFile("solr/solrconfig.xml", new File(confDir, "solrconfig.xml"));
 			copyResourceToFile("solr/emptyschema.xml", new File(confDir, "schema.xml"));
 			copyResourceToFile("solr/stopwords.txt", new File(confDir, "stopwords.txt"));
-			CoreDescriptor core = new CoreDescriptor(container, coreName, coreDir.getAbsolutePath());
-			container.create(core);
+			CoreDescriptor cd = new CoreDescriptor(container, coreName, coreDir.getAbsolutePath());
+			core = container.create(cd);
 			server = new EmbeddedSolrServer(container, coreName);
 		}
 	}
@@ -60,6 +62,14 @@ public class BaseSOLRTest {
 		if(server!=null) {
 			server.shutdown();
 			server = null;
+		}
+	}
+	
+	@After
+	public void shutdownCore() {
+		if(core!=null) {
+			core.close();
+			core = null;
 		}
 	}
 	
