@@ -1,0 +1,44 @@
+// generated: 2015-07-05T23:01:00.940
+package prompto.runtime.o;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import prompto.parser.o.BaseOParserTest;
+import prompto.runtime.utils.Out;
+
+public class TestDocuments extends BaseOParserTest {
+
+	@Before
+	public void before() {
+		Out.init();
+	}
+
+	@After
+	public void after() {
+		Out.restore();
+	}
+
+	@Test
+	public void testDeepItem() throws Exception {
+		checkOutput("documents/deepItem.poc");
+	}
+
+	@Test
+	public void testDeepVariable() throws Exception {
+		checkOutput("documents/deepVariable.poc");
+	}
+
+	@Test
+	public void testItem() throws Exception {
+		checkOutput("documents/item.poc");
+	}
+
+	@Test
+	public void testVariable() throws Exception {
+		checkOutput("documents/variable.poc");
+	}
+
+}
+
