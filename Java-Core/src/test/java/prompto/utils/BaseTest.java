@@ -28,7 +28,6 @@ public class BaseTest {
 		if(stream==null) {
 			String dirPath = loader.getResource("").getFile();
 			String testsPath = dirPath.substring(0, dirPath.lastIndexOf("/prompto-java/Java-Core/")) + "/prompto-tests/Tests/resources/";
-			System.out.println("Loading:" +testsPath + resourceName);
 			stream = new FileInputStream(testsPath + resourceName);
 		}
 		return stream;
