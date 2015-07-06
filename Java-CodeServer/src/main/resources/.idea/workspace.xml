@@ -1,0 +1,641 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="817cafb3-5cf9-4bd5-b4d6-043cc4107218" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/abap.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/abc.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ace.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/actionscript.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/ada.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/apache_conf.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/applescript.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/asciidoc.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/assembly_x86.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/autohotkey.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/batchfile.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/c9search.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/c_cpp.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/cirru.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/clojure.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/cobol.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/coffee.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/coldfusion.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/csharp.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/css.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/curly.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/d.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/dart.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/diff.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/django.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/dockerfile.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/dot.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/code/editor.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/eiffel.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/ejs.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/elixir.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/elm.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/erlang.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-beautify.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-chromevox.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-elastic_tabstops_lite.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-emmet.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-error_marker.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-keybinding_menu.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-language_tools.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-linking.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-modelist.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-old_ie.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-searchbox.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-settings_menu.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-spellcheck.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-split.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-static_highlight.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-statusbar.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-textarea.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-themelist.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-whitespace.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/forth.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/ftl.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/gcode.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/gherkin.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/gitignore.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/glsl.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/golang.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/groovy.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/haml.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/handlebars.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/haskell.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/haxe.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/html.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/html_ruby.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/code/index.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/ini.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/io.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/jack.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/jade.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/java.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/javascript.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/json.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/jsoniq.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/jsp.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/jsx.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/julia.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/keybinding-emacs.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/keybinding-vim.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/latex.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/lean.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/less.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/liquid.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/lisp.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/live_script.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/livescript.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/logiql.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/lsl.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/lua.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/luapage.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/lucene.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/makefile.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/markdown.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/mask.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/matlab.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/mel.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/mips_assembler.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/mipsassembler.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-abap.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-abc.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-actionscript.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-ada.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-apache_conf.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-applescript.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-asciidoc.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-assembly_x86.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-autohotkey.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-batchfile.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-c9search.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-c_cpp.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-cirru.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-clojure.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-cobol.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-coffee.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-coldfusion.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-csharp.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-css.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-curly.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-d.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-dart.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-diff.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-django.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-dockerfile.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-dot.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-eiffel.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-ejs.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-elixir.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-elm.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-erlang.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-forth.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-ftl.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-gcode.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-gherkin.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-gitignore.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-glsl.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-golang.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-groovy.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-haml.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-handlebars.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-haskell.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-haxe.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-html.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-html_ruby.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-ini.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-io.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-jack.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-jade.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-java.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-javascript.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-json.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-jsoniq.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-jsp.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-jsx.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-julia.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-latex.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-lean.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-less.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-liquid.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-lisp.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-live_script.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-livescript.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-logiql.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-lsl.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-lua.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-luapage.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-lucene.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-makefile.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-markdown.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-mask.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-matlab.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-mel.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-mips_assembler.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-mipsassembler.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-mushcode.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-mysql.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-nix.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-objectivec.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-ocaml.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-pascal.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-perl.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-pgsql.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-php.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-plain_text.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-powershell.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-praat.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-prolog.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-properties.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-protobuf.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-python.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-r.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-rdoc.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-rhtml.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-ruby.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-rust.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-sass.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-scad.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-scala.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-scheme.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-scss.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-sh.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-sjs.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-smarty.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-snippets.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-soy_template.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-space.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-sql.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-sqlserver.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-stylus.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-svg.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-tcl.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-tex.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-text.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-textile.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-toml.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-twig.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-typescript.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-vala.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-vbscript.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-velocity.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-verilog.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-vhdl.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-xml.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-xquery.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-yaml.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/mushcode.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/mysql.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/nix.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/objectivec.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/ocaml.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/pascal.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/perl.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/pgsql.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/php.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/plain_text.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/powershell.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/praat.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/prolog.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/properties.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/protobuf.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/python.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/r.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/rdoc.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/resources.iml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/rhtml.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/ruby.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/rust.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/sass.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/scad.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/scala.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/scheme.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/scss.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/sh.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/sjs.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/smarty.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/snippets.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/soy_template.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/space.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/sql.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/sqlserver.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/stylus.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/svg.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/tcl.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/tex.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/text.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/textile.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-ambiance.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-chaos.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-chrome.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-clouds.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-clouds_midnight.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-cobalt.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-crimson_editor.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-dawn.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-dreamweaver.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-eclipse.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-github.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-idle_fingers.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-iplastic.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-katzenmilch.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-kr_theme.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-kuroir.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-merbivore.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-merbivore_soft.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-mono_industrial.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-monokai.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-pastel_on_dark.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-solarized_dark.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-solarized_light.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-sqlserver.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-terminal.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-textmate.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-tomorrow.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-tomorrow_night.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-tomorrow_night_blue.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-tomorrow_night_bright.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-tomorrow_night_eighties.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-twilight.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-vibrant_ink.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-xcode.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/toml.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/twig.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/typescript.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/vala.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/vbscript.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/velocity.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/verilog.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/vhdl.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/worker-coffee.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/worker-css.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/worker-html.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/worker-javascript.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/worker-json.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/worker-lua.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/worker-php.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/worker-xml.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/worker-xquery.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/xml.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/xquery.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/yaml.js" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/apps/applications.html" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/css/presto-frame.css" afterPath="$PROJECT_DIR$/css/prompto-frame.css" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/css/presto-main.css" afterPath="$PROJECT_DIR$/css/prompto-main.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apps/index.html" afterPath="$PROJECT_DIR$/apps/index.html" />
+    </list>
+    <ignored path="resources.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="DaemonCodeAnalyzer">
+    <disable_hints />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="resources" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/code/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-1.3333334" vertical-offset="538" max-vertical-offset="1290">
+              <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+              <folding>
+                <marker date="1436204184000" expanded="true" signature="2278:2661" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="editor.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/code/editor.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-25.708334" vertical-offset="448" max-vertical-offset="1215">
+              <caret line="71" column="0" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.24202128" vertical-offset="508" max-vertical-offset="1260">
+              <caret line="46" column="54" selection-start-line="46" selection-start-column="54" selection-end-line="46" selection-end-column="54" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/apps/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-6.875" vertical-offset="510" max-vertical-offset="1320">
+              <caret line="45" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../.." />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/apps/index.html" />
+        <option value="$PROJECT_DIR$/code/index.html" />
+        <option value="$PROJECT_DIR$/code/editor.html" />
+      </list>
+    </option>
+  </component>
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="y" value="23" />
+    <option name="width" value="1440" />
+    <option name="height" value="873" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="2" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="img" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="css" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="code" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="apps" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/code" />
+      <recent name="$PROJECT_DIR$/ace" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
+      <method />
+    </configuration>
+    <configuration default="true" type="NodeJSConfigurationType" factoryName="Node.js" working-dir="">
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <method />
+    </configuration>
+    <list size="0" />
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="ToolWindowManager">
+    <frame x="0" y="23" width="1440" height="873" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.30208334" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+    </layout>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="myTodoPanelSettings">
+      <TodoPanelSettings />
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/css/bootstrap.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33244327" vertical-offset="16596" max-vertical-offset="98850">
+          <caret line="1123" column="10" selection-start-line="1123" selection-start-column="1" selection-end-line="1123" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/bootstrap-theme.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33244327" vertical-offset="2781" max-vertical-offset="7230">
+          <caret line="202" column="14" selection-start-line="202" selection-start-column="5" selection-end-line="202" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apps/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.875" vertical-offset="510" max-vertical-offset="1320">
+          <caret line="45" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/editor.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-25.708334" vertical-offset="448" max-vertical-offset="1215">
+          <caret line="71" column="0" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.3333334" vertical-offset="538" max-vertical-offset="1290">
+          <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+          <folding>
+            <marker date="1436204184000" expanded="true" signature="2278:2661" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.24202128" vertical-offset="508" max-vertical-offset="1260">
+          <caret line="46" column="54" selection-start-line="46" selection-start-column="54" selection-end-line="46" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
