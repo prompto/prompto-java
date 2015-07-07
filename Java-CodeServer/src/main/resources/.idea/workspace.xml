@@ -2,335 +2,673 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="817cafb3-5cf9-4bd5-b4d6-043cc4107218" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/abap.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/abc.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ace.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/actionscript.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/ada.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/apache_conf.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/applescript.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/asciidoc.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/assembly_x86.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/autohotkey.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/batchfile.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/c9search.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/c_cpp.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/cirru.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/clojure.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/cobol.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/coffee.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/coldfusion.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/csharp.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/css.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/curly.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/d.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/dart.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/diff.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/django.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/dockerfile.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/dot.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/code/editor.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/eiffel.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/ejs.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/elixir.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/elm.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/erlang.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-beautify.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-chromevox.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-elastic_tabstops_lite.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-emmet.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-error_marker.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-keybinding_menu.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-language_tools.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-linking.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-modelist.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-old_ie.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-searchbox.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-settings_menu.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-spellcheck.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-split.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-static_highlight.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-statusbar.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-textarea.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-themelist.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/ext-whitespace.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/forth.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/ftl.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/gcode.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/gherkin.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/gitignore.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/glsl.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/golang.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/groovy.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/haml.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/handlebars.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/haskell.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/haxe.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/html.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/html_ruby.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/code/index.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/ini.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/io.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/jack.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/jade.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/java.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/javascript.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/json.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/jsoniq.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/jsp.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/jsx.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/julia.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/keybinding-emacs.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/keybinding-vim.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/latex.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/lean.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/less.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/liquid.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/lisp.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/live_script.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/livescript.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/logiql.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/lsl.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/lua.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/luapage.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/lucene.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/makefile.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/markdown.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/mask.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/matlab.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/mel.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/mips_assembler.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/mipsassembler.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-abap.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-abc.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-actionscript.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-ada.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-apache_conf.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-applescript.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-asciidoc.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-assembly_x86.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-autohotkey.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-batchfile.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-c9search.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-c_cpp.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-cirru.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-clojure.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-cobol.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-coffee.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-coldfusion.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-csharp.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-css.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-curly.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-d.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-dart.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-diff.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-django.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-dockerfile.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-dot.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-eiffel.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-ejs.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-elixir.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-elm.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-erlang.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-forth.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-ftl.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-gcode.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-gherkin.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-gitignore.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-glsl.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-golang.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-groovy.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-haml.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-handlebars.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-haskell.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-haxe.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-html.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-html_ruby.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-ini.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-io.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-jack.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-jade.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-java.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-javascript.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-json.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-jsoniq.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-jsp.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-jsx.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-julia.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-latex.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-lean.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-less.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-liquid.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-lisp.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-live_script.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-livescript.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-logiql.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-lsl.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-lua.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-luapage.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-lucene.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-makefile.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-markdown.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-mask.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-matlab.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-mel.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-mips_assembler.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-mipsassembler.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-mushcode.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-mysql.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-nix.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-objectivec.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-ocaml.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-pascal.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-perl.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-pgsql.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-php.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-plain_text.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-powershell.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-praat.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-prolog.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-properties.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-protobuf.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-python.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-r.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-rdoc.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-rhtml.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-ruby.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-rust.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-sass.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-scad.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-scala.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-scheme.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-scss.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-sh.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-sjs.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-smarty.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-snippets.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-soy_template.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-space.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-sql.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-sqlserver.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-stylus.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-svg.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-tcl.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-tex.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-text.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-textile.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-toml.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-twig.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-typescript.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-vala.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-vbscript.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-velocity.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-verilog.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-vhdl.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-xml.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-xquery.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/mode-yaml.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/mushcode.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/mysql.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/nix.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/objectivec.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/ocaml.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/pascal.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/perl.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/pgsql.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/php.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/plain_text.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/powershell.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/praat.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/prolog.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/properties.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/protobuf.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/python.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/r.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/rdoc.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/resources.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/rhtml.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/ruby.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/rust.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/sass.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/scad.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/scala.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/scheme.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/scss.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/sh.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/sjs.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/smarty.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/snippets.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/soy_template.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/space.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/sql.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/sqlserver.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/stylus.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/svg.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/tcl.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/tex.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/text.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/textile.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-ambiance.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-chaos.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-chrome.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-clouds.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-clouds_midnight.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-cobalt.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-crimson_editor.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-dawn.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-dreamweaver.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-eclipse.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-github.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-idle_fingers.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-iplastic.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-katzenmilch.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-kr_theme.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-kuroir.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-merbivore.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-merbivore_soft.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-mono_industrial.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-monokai.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-pastel_on_dark.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-solarized_dark.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-solarized_light.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-sqlserver.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-terminal.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-textmate.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-tomorrow.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-tomorrow_night.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-tomorrow_night_blue.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-tomorrow_night_bright.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-tomorrow_night_eighties.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-twilight.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-vibrant_ink.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/theme-xcode.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/toml.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/twig.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/typescript.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/vala.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/vbscript.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/velocity.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/verilog.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/vhdl.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/worker-coffee.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/worker-css.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/worker-html.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/worker-javascript.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/worker-json.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/worker-lua.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/worker-php.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/worker-xml.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/worker-xquery.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/xml.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/xquery.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ace/snippets/yaml.js" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/apps/applications.html" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/css/presto-frame.css" afterPath="$PROJECT_DIR$/css/prompto-frame.css" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/css/presto-main.css" afterPath="$PROJECT_DIR$/css/prompto-main.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apps/index.html" afterPath="$PROJECT_DIR$/apps/index.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/declaration/AbstractMethodDeclaration.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/parser/AbstractParser.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/AddExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/AndExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/Any.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/declaration/AnyNativeCategoryDeclaration.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/AnyType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/utils/ArgsLexer.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/utils/ArgsParser.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/utils/ArgsParserListener.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/Argument.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/ArgumentAssignment.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/ArgumentAssignmentList.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/ArgumentList.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/statement/AssignInstanceStatement.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/statement/AssignTupleStatement.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/statement/AssignVariableStatement.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/statement/AtomicSwitchCase.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/AttributeArgument.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/declaration/AttributeDeclaration.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/declaration/BaseDeclaration.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/declaration/BaseMethodDeclaration.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/statement/BaseStatement.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/statement/BaseSwitchStatement.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/BaseType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/BaseValueList.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/Bool.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/literal/BooleanLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/BooleanType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/csharp/CSharpBooleanLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/csharp/CSharpCharacterLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/csharp/CSharpDecimalLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/csharp/CSharpExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/csharp/CSharpExpressionList.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/csharp/CSharpIdentifierExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/csharp/CSharpIntegerLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/csharp/CSharpItemExpression.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/csharp/CSharpLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/csharp/CSharpMethodExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/csharp/CSharpNativeCall.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/csharp/CSharpNativeCategoryBinding.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/csharp/CSharpSelectorExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/csharp/CSharpStatement.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/csharp/CSharpTextLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/csharp/CSharpThisExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/CastExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/CategoryArgument.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/declaration/CategoryDeclaration.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/CategorySymbol.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/CategorySymbolList.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/CategoryType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/Character.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/literal/CharacterLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/CharacterRange.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/CharacterType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/declaration/ClosureDeclaration.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/ClosureValue.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/utils/CmdLineParser.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/CmpOp.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/CodeArgument.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/CodeExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/CodeType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/utils/CodeWriter.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/statement/CollectionSwitchCase.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/CollectionType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/CompareExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/declaration/ConcreteCategoryDeclaration.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/ConcreteInstance.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/declaration/ConcreteMethodDeclaration.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/ConstructorExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/ContOp.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/ContainsExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/runtime/Context.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/ContextualExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/literal/DateLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/DateRange.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/DateTime.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/literal/DateTimeLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/DateTimeType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/DateType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/debug/Debugger.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/Decimal.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/literal/DecimalLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/DecimalType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/statement/DeclarationInstruction.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/DeclarationList.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/parser/Dialect.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/literal/DictEntry.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/literal/DictEntryList.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/literal/DictLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/DictType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/Dictionary.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/error/DivideByZeroError.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/DivideExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/statement/DoWhileStatement.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/Document.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/DocumentExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/DocumentType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/parser/ECleverParser.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/parser/EIndentingLexer.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/parser/ELexer.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/parser/EParser.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/parser/EParserFactory.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/parser/EParserListener.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/parser/EPromptoBuilder.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/EntryType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/declaration/EnumeratedCategoryDeclaration.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/EnumeratedCategoryType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/declaration/EnumeratedNativeDeclaration.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/EnumeratedNativeType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/EqOp.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/EqualsExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/runtime/ErrorVariable.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/ExecuteExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/error/ExecutionError.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/utils/ExpressionList.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/ExpressionValue.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/FetchExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/statement/ForEachStatement.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/declaration/GetterMethodDeclaration.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/literal/HexaLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/debug/IDebugEventListener.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/IMethodSelector.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/IUnaryExpression.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/IdentifierList.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/statement/IfStatement.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/error/IndexOutOfRangeError.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/InstanceExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/IntDivideExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/Integer.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/literal/IntegerLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/IntegerRange.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/IntegerType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/error/InternalError.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/runtime/Interpreter.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/error/InvalidDataError.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/error/InvalidResourceError.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/ItemInstance.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/ItemSelector.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/java/JavaBooleanLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/java/JavaCharacterLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/java/JavaDecimalLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/java/JavaExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/java/JavaExpressionList.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/java/JavaIdentifierExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/java/JavaIntegerLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/java/JavaItemExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/java/JavaLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/java/JavaMethodExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/java/JavaNativeCall.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/java/JavaNativeCategoryBinding.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/javascript/JavaScriptBooleanLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/javascript/JavaScriptCharacterLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/javascript/JavaScriptDecimalLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/javascript/JavaScriptExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/javascript/JavaScriptExpressionList.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/javascript/JavaScriptIdentifierExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/javascript/JavaScriptIntegerLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/javascript/JavaScriptItemExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/javascript/JavaScriptLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/javascript/JavaScriptMemberExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/javascript/JavaScriptMethodExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/javascript/JavaScriptModule.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/javascript/JavaScriptNativeCall.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/javascript/JavaScriptNativeCategoryBinding.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/javascript/JavaScriptSelectorExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/javascript/JavaScriptStatement.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/javascript/JavaScriptTextLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/javascript/JavaScriptThisExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/javascript/JavaScriptType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/javascript/JavaScriptUtils.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/java/JavaSelectorExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/java/JavaStatement.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/java/JavaTextLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/java/JavaThisExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/runtime/LinkedValue.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/runtime/LinkedVariable.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/literal/ListLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/ListType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/ListValue.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/literal/Literal.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/LocalDate.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/parser/Location.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/MatchingCollectionConstraint.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/MatchingExpressionConstraint.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/MatchingPatternConstraint.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/MemberInstance.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/MemberSelector.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/MethodArgument.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/statement/MethodCall.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/MethodDeclarationList.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/MethodExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/runtime/MethodFinder.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/MethodSelector.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/MethodType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/MinusExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/MissingType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/ModuloExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/MultiplyExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/NativeAttributeBindingListMap.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/statement/NativeCall.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/NativeCategoryBinding.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/NativeCategoryBindingList.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/declaration/NativeCategoryDeclaration.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/NativeInstance.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/declaration/NativeMethodDeclaration.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/NativeResource.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/declaration/NativeResourceDeclaration.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/NativeSymbol.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/NativeSymbolList.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/NativeType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/NotExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/error/NotMutableError.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/literal/NullLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/error/NullReferenceError.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/NullType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/NullValue.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/parser/OCleverParser.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/parser/OLexer.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/parser/ONamingLexer.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/parser/OParser.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/parser/OParserFactory.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/parser/OParserListener.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/parser/OPromptoBuilder.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/utils/ObjectList.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/Operator.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/declaration/OperatorMethodDeclaration.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/OrExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/ParenthesisExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/Period.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/literal/PeriodLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/PeriodType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/error/PrestoError.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/python/Python2NativeCall.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/python/Python2NativeCategoryBinding.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/python/Python3NativeCall.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/python/Python3NativeCategoryBinding.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/python/PythonArgumentList.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/python/PythonBooleanLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/python/PythonCharacterLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/python/PythonDecimalLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/python/PythonExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/python/PythonIdentifierExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/python/PythonIntegerLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/python/PythonItemExpression.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/python/PythonLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/python/PythonMethodExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/python/PythonModule.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/python/PythonNamedArgument.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/python/PythonNativeCall.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/python/PythonNativeCategoryBinding.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/python/PythonOrdinalArgument.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/python/PythonParenthesisExpression.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/python/PythonSelectorExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/python/PythonStatement.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/python/PythonTextLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/statement/RaiseStatement.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/Range.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/literal/RangeLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/RangeType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/ReadExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/ResourceType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/debug/ResumeReason.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/statement/ReturnStatement.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/parser/SCleverParser.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/parser/SIndentingLexer.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/parser/SLexer.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/parser/SParser.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/parser/SParserFactory.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/parser/SParserListener.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/parser/SPromptoBuilder.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/runtime/Score.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/parser/Section.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/SelectorExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/literal/SetLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/SetType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/SetValue.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/declaration/SetterMethodDeclaration.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/statement/SimpleStatement.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/declaration/SingletonCategoryDeclaration.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/SliceSelector.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/SortedExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/Specificity.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/debug/Stack.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/debug/StackFrame.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/statement/StatementList.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/SubtractExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/debug/SuspendReason.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/statement/SwitchCase.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/statement/SwitchErrorStatement.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/statement/SwitchStatement.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/Symbol.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/SymbolExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/SymbolList.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/error/SyntaxError.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/error/TerminatedError.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/TernaryExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/declaration/TestMethodDeclaration.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/Text.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/literal/TextLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/TextType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/ThisExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/Time.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/literal/TimeLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/TimeRange.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/TimeType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/runtime/TransientVariable.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/literal/TupleLiteral.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/TupleType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/TupleValue.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/TypeExpression.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/TypeList.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/TypeMap.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/TypeValue.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/UnresolvedArgument.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/statement/UnresolvedCall.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/UnresolvedIdentifier.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/error/UserError.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/utils/Utils.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/Value.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/runtime/Variable.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/VariableInstance.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/runtime/VoidResult.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/VoidType.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/statement/WhileStatement.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/statement/WithResourceStatement.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/statement/WithSingletonStatement.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/statement/WriteStatement.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/index.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/csharp/index.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/declaration/index.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/error/index.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/expression/index.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/grammar/index.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/java/index.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/javascript/index.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/literal/index.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/parser/index.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/python/index.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/runtime/index.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/statement/index.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/type/index.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/utils/index.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/prompto/value/index.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/ace.js" afterPath="$PROJECT_DIR$/js/ace/ace.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/ext-beautify.js" afterPath="$PROJECT_DIR$/js/ace/ext-beautify.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/ext-chromevox.js" afterPath="$PROJECT_DIR$/js/ace/ext-chromevox.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/ext-elastic_tabstops_lite.js" afterPath="$PROJECT_DIR$/js/ace/ext-elastic_tabstops_lite.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/ext-emmet.js" afterPath="$PROJECT_DIR$/js/ace/ext-emmet.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/ext-error_marker.js" afterPath="$PROJECT_DIR$/js/ace/ext-error_marker.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/ext-keybinding_menu.js" afterPath="$PROJECT_DIR$/js/ace/ext-keybinding_menu.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/ext-language_tools.js" afterPath="$PROJECT_DIR$/js/ace/ext-language_tools.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/ext-linking.js" afterPath="$PROJECT_DIR$/js/ace/ext-linking.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/ext-modelist.js" afterPath="$PROJECT_DIR$/js/ace/ext-modelist.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/ext-old_ie.js" afterPath="$PROJECT_DIR$/js/ace/ext-old_ie.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/ext-searchbox.js" afterPath="$PROJECT_DIR$/js/ace/ext-searchbox.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/ext-settings_menu.js" afterPath="$PROJECT_DIR$/js/ace/ext-settings_menu.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/ext-spellcheck.js" afterPath="$PROJECT_DIR$/js/ace/ext-spellcheck.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/ext-split.js" afterPath="$PROJECT_DIR$/js/ace/ext-split.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/ext-static_highlight.js" afterPath="$PROJECT_DIR$/js/ace/ext-static_highlight.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/ext-statusbar.js" afterPath="$PROJECT_DIR$/js/ace/ext-statusbar.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/ext-textarea.js" afterPath="$PROJECT_DIR$/js/ace/ext-textarea.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/ext-themelist.js" afterPath="$PROJECT_DIR$/js/ace/ext-themelist.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/ext-whitespace.js" afterPath="$PROJECT_DIR$/js/ace/ext-whitespace.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/keybinding-emacs.js" afterPath="$PROJECT_DIR$/js/ace/keybinding-emacs.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/keybinding-vim.js" afterPath="$PROJECT_DIR$/js/ace/keybinding-vim.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-abap.js" afterPath="$PROJECT_DIR$/js/ace/mode-abap.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-abc.js" afterPath="$PROJECT_DIR$/js/ace/mode-abc.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-actionscript.js" afterPath="$PROJECT_DIR$/js/ace/mode-actionscript.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-ada.js" afterPath="$PROJECT_DIR$/js/ace/mode-ada.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-apache_conf.js" afterPath="$PROJECT_DIR$/js/ace/mode-apache_conf.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-applescript.js" afterPath="$PROJECT_DIR$/js/ace/mode-applescript.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-asciidoc.js" afterPath="$PROJECT_DIR$/js/ace/mode-asciidoc.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-assembly_x86.js" afterPath="$PROJECT_DIR$/js/ace/mode-assembly_x86.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-autohotkey.js" afterPath="$PROJECT_DIR$/js/ace/mode-autohotkey.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-batchfile.js" afterPath="$PROJECT_DIR$/js/ace/mode-batchfile.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-c9search.js" afterPath="$PROJECT_DIR$/js/ace/mode-c9search.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-c_cpp.js" afterPath="$PROJECT_DIR$/js/ace/mode-c_cpp.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-cirru.js" afterPath="$PROJECT_DIR$/js/ace/mode-cirru.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-clojure.js" afterPath="$PROJECT_DIR$/js/ace/mode-clojure.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-cobol.js" afterPath="$PROJECT_DIR$/js/ace/mode-cobol.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-coffee.js" afterPath="$PROJECT_DIR$/js/ace/mode-coffee.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-coldfusion.js" afterPath="$PROJECT_DIR$/js/ace/mode-coldfusion.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-csharp.js" afterPath="$PROJECT_DIR$/js/ace/mode-csharp.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-css.js" afterPath="$PROJECT_DIR$/js/ace/mode-css.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-curly.js" afterPath="$PROJECT_DIR$/js/ace/mode-curly.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-d.js" afterPath="$PROJECT_DIR$/js/ace/mode-d.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-dart.js" afterPath="$PROJECT_DIR$/js/ace/mode-dart.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-diff.js" afterPath="$PROJECT_DIR$/js/ace/mode-diff.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-django.js" afterPath="$PROJECT_DIR$/js/ace/mode-django.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-dockerfile.js" afterPath="$PROJECT_DIR$/js/ace/mode-dockerfile.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-dot.js" afterPath="$PROJECT_DIR$/js/ace/mode-dot.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-eiffel.js" afterPath="$PROJECT_DIR$/js/ace/mode-eiffel.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-ejs.js" afterPath="$PROJECT_DIR$/js/ace/mode-ejs.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-elixir.js" afterPath="$PROJECT_DIR$/js/ace/mode-elixir.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-elm.js" afterPath="$PROJECT_DIR$/js/ace/mode-elm.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-erlang.js" afterPath="$PROJECT_DIR$/js/ace/mode-erlang.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-forth.js" afterPath="$PROJECT_DIR$/js/ace/mode-forth.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-ftl.js" afterPath="$PROJECT_DIR$/js/ace/mode-ftl.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-gcode.js" afterPath="$PROJECT_DIR$/js/ace/mode-gcode.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-gherkin.js" afterPath="$PROJECT_DIR$/js/ace/mode-gherkin.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-gitignore.js" afterPath="$PROJECT_DIR$/js/ace/mode-gitignore.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-glsl.js" afterPath="$PROJECT_DIR$/js/ace/mode-glsl.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-golang.js" afterPath="$PROJECT_DIR$/js/ace/mode-golang.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-groovy.js" afterPath="$PROJECT_DIR$/js/ace/mode-groovy.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-haml.js" afterPath="$PROJECT_DIR$/js/ace/mode-haml.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-handlebars.js" afterPath="$PROJECT_DIR$/js/ace/mode-handlebars.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-haskell.js" afterPath="$PROJECT_DIR$/js/ace/mode-haskell.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-haxe.js" afterPath="$PROJECT_DIR$/js/ace/mode-haxe.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-html.js" afterPath="$PROJECT_DIR$/js/ace/mode-html.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-html_ruby.js" afterPath="$PROJECT_DIR$/js/ace/mode-html_ruby.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-ini.js" afterPath="$PROJECT_DIR$/js/ace/mode-ini.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-io.js" afterPath="$PROJECT_DIR$/js/ace/mode-io.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-jack.js" afterPath="$PROJECT_DIR$/js/ace/mode-jack.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-jade.js" afterPath="$PROJECT_DIR$/js/ace/mode-jade.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-java.js" afterPath="$PROJECT_DIR$/js/ace/mode-java.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-javascript.js" afterPath="$PROJECT_DIR$/js/ace/mode-javascript.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-json.js" afterPath="$PROJECT_DIR$/js/ace/mode-json.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-jsoniq.js" afterPath="$PROJECT_DIR$/js/ace/mode-jsoniq.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-jsp.js" afterPath="$PROJECT_DIR$/js/ace/mode-jsp.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-jsx.js" afterPath="$PROJECT_DIR$/js/ace/mode-jsx.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-julia.js" afterPath="$PROJECT_DIR$/js/ace/mode-julia.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-latex.js" afterPath="$PROJECT_DIR$/js/ace/mode-latex.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-lean.js" afterPath="$PROJECT_DIR$/js/ace/mode-lean.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-less.js" afterPath="$PROJECT_DIR$/js/ace/mode-less.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-liquid.js" afterPath="$PROJECT_DIR$/js/ace/mode-liquid.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-lisp.js" afterPath="$PROJECT_DIR$/js/ace/mode-lisp.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-live_script.js" afterPath="$PROJECT_DIR$/js/ace/mode-live_script.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-livescript.js" afterPath="$PROJECT_DIR$/js/ace/mode-livescript.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-logiql.js" afterPath="$PROJECT_DIR$/js/ace/mode-logiql.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-lsl.js" afterPath="$PROJECT_DIR$/js/ace/mode-lsl.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-lua.js" afterPath="$PROJECT_DIR$/js/ace/mode-lua.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-luapage.js" afterPath="$PROJECT_DIR$/js/ace/mode-luapage.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-lucene.js" afterPath="$PROJECT_DIR$/js/ace/mode-lucene.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-makefile.js" afterPath="$PROJECT_DIR$/js/ace/mode-makefile.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-markdown.js" afterPath="$PROJECT_DIR$/js/ace/mode-markdown.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-mask.js" afterPath="$PROJECT_DIR$/js/ace/mode-mask.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-matlab.js" afterPath="$PROJECT_DIR$/js/ace/mode-matlab.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-mel.js" afterPath="$PROJECT_DIR$/js/ace/mode-mel.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-mips_assembler.js" afterPath="$PROJECT_DIR$/js/ace/mode-mips_assembler.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-mipsassembler.js" afterPath="$PROJECT_DIR$/js/ace/mode-mipsassembler.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-mushcode.js" afterPath="$PROJECT_DIR$/js/ace/mode-mushcode.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-mysql.js" afterPath="$PROJECT_DIR$/js/ace/mode-mysql.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-nix.js" afterPath="$PROJECT_DIR$/js/ace/mode-nix.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-objectivec.js" afterPath="$PROJECT_DIR$/js/ace/mode-objectivec.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-ocaml.js" afterPath="$PROJECT_DIR$/js/ace/mode-ocaml.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-pascal.js" afterPath="$PROJECT_DIR$/js/ace/mode-pascal.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-perl.js" afterPath="$PROJECT_DIR$/js/ace/mode-perl.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-pgsql.js" afterPath="$PROJECT_DIR$/js/ace/mode-pgsql.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-php.js" afterPath="$PROJECT_DIR$/js/ace/mode-php.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-plain_text.js" afterPath="$PROJECT_DIR$/js/ace/mode-plain_text.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-powershell.js" afterPath="$PROJECT_DIR$/js/ace/mode-powershell.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-praat.js" afterPath="$PROJECT_DIR$/js/ace/mode-praat.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-prolog.js" afterPath="$PROJECT_DIR$/js/ace/mode-prolog.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-properties.js" afterPath="$PROJECT_DIR$/js/ace/mode-properties.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-protobuf.js" afterPath="$PROJECT_DIR$/js/ace/mode-protobuf.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-python.js" afterPath="$PROJECT_DIR$/js/ace/mode-python.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-r.js" afterPath="$PROJECT_DIR$/js/ace/mode-r.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-rdoc.js" afterPath="$PROJECT_DIR$/js/ace/mode-rdoc.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-rhtml.js" afterPath="$PROJECT_DIR$/js/ace/mode-rhtml.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-ruby.js" afterPath="$PROJECT_DIR$/js/ace/mode-ruby.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-rust.js" afterPath="$PROJECT_DIR$/js/ace/mode-rust.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-sass.js" afterPath="$PROJECT_DIR$/js/ace/mode-sass.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-scad.js" afterPath="$PROJECT_DIR$/js/ace/mode-scad.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-scala.js" afterPath="$PROJECT_DIR$/js/ace/mode-scala.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-scheme.js" afterPath="$PROJECT_DIR$/js/ace/mode-scheme.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-scss.js" afterPath="$PROJECT_DIR$/js/ace/mode-scss.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-sh.js" afterPath="$PROJECT_DIR$/js/ace/mode-sh.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-sjs.js" afterPath="$PROJECT_DIR$/js/ace/mode-sjs.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-smarty.js" afterPath="$PROJECT_DIR$/js/ace/mode-smarty.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-snippets.js" afterPath="$PROJECT_DIR$/js/ace/mode-snippets.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-soy_template.js" afterPath="$PROJECT_DIR$/js/ace/mode-soy_template.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-space.js" afterPath="$PROJECT_DIR$/js/ace/mode-space.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-sql.js" afterPath="$PROJECT_DIR$/js/ace/mode-sql.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-sqlserver.js" afterPath="$PROJECT_DIR$/js/ace/mode-sqlserver.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-stylus.js" afterPath="$PROJECT_DIR$/js/ace/mode-stylus.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-svg.js" afterPath="$PROJECT_DIR$/js/ace/mode-svg.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-tcl.js" afterPath="$PROJECT_DIR$/js/ace/mode-tcl.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-tex.js" afterPath="$PROJECT_DIR$/js/ace/mode-tex.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-text.js" afterPath="$PROJECT_DIR$/js/ace/mode-text.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-textile.js" afterPath="$PROJECT_DIR$/js/ace/mode-textile.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-toml.js" afterPath="$PROJECT_DIR$/js/ace/mode-toml.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-twig.js" afterPath="$PROJECT_DIR$/js/ace/mode-twig.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-typescript.js" afterPath="$PROJECT_DIR$/js/ace/mode-typescript.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-vala.js" afterPath="$PROJECT_DIR$/js/ace/mode-vala.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-vbscript.js" afterPath="$PROJECT_DIR$/js/ace/mode-vbscript.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-velocity.js" afterPath="$PROJECT_DIR$/js/ace/mode-velocity.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-verilog.js" afterPath="$PROJECT_DIR$/js/ace/mode-verilog.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-vhdl.js" afterPath="$PROJECT_DIR$/js/ace/mode-vhdl.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-xml.js" afterPath="$PROJECT_DIR$/js/ace/mode-xml.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-xquery.js" afterPath="$PROJECT_DIR$/js/ace/mode-xquery.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/mode-yaml.js" afterPath="$PROJECT_DIR$/js/ace/mode-yaml.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/abap.js" afterPath="$PROJECT_DIR$/js/ace/snippets/abap.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/abc.js" afterPath="$PROJECT_DIR$/js/ace/snippets/abc.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/actionscript.js" afterPath="$PROJECT_DIR$/js/ace/snippets/actionscript.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/ada.js" afterPath="$PROJECT_DIR$/js/ace/snippets/ada.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/apache_conf.js" afterPath="$PROJECT_DIR$/js/ace/snippets/apache_conf.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/applescript.js" afterPath="$PROJECT_DIR$/js/ace/snippets/applescript.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/asciidoc.js" afterPath="$PROJECT_DIR$/js/ace/snippets/asciidoc.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/assembly_x86.js" afterPath="$PROJECT_DIR$/js/ace/snippets/assembly_x86.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/autohotkey.js" afterPath="$PROJECT_DIR$/js/ace/snippets/autohotkey.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/batchfile.js" afterPath="$PROJECT_DIR$/js/ace/snippets/batchfile.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/c9search.js" afterPath="$PROJECT_DIR$/js/ace/snippets/c9search.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/c_cpp.js" afterPath="$PROJECT_DIR$/js/ace/snippets/c_cpp.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/cirru.js" afterPath="$PROJECT_DIR$/js/ace/snippets/cirru.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/clojure.js" afterPath="$PROJECT_DIR$/js/ace/snippets/clojure.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/cobol.js" afterPath="$PROJECT_DIR$/js/ace/snippets/cobol.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/coffee.js" afterPath="$PROJECT_DIR$/js/ace/snippets/coffee.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/coldfusion.js" afterPath="$PROJECT_DIR$/js/ace/snippets/coldfusion.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/csharp.js" afterPath="$PROJECT_DIR$/js/ace/snippets/csharp.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/css.js" afterPath="$PROJECT_DIR$/js/ace/snippets/css.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/curly.js" afterPath="$PROJECT_DIR$/js/ace/snippets/curly.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/d.js" afterPath="$PROJECT_DIR$/js/ace/snippets/d.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/dart.js" afterPath="$PROJECT_DIR$/js/ace/snippets/dart.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/diff.js" afterPath="$PROJECT_DIR$/js/ace/snippets/diff.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/django.js" afterPath="$PROJECT_DIR$/js/ace/snippets/django.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/dockerfile.js" afterPath="$PROJECT_DIR$/js/ace/snippets/dockerfile.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/dot.js" afterPath="$PROJECT_DIR$/js/ace/snippets/dot.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/eiffel.js" afterPath="$PROJECT_DIR$/js/ace/snippets/eiffel.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/ejs.js" afterPath="$PROJECT_DIR$/js/ace/snippets/ejs.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/elixir.js" afterPath="$PROJECT_DIR$/js/ace/snippets/elixir.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/elm.js" afterPath="$PROJECT_DIR$/js/ace/snippets/elm.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/erlang.js" afterPath="$PROJECT_DIR$/js/ace/snippets/erlang.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/forth.js" afterPath="$PROJECT_DIR$/js/ace/snippets/forth.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/ftl.js" afterPath="$PROJECT_DIR$/js/ace/snippets/ftl.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/gcode.js" afterPath="$PROJECT_DIR$/js/ace/snippets/gcode.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/gherkin.js" afterPath="$PROJECT_DIR$/js/ace/snippets/gherkin.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/gitignore.js" afterPath="$PROJECT_DIR$/js/ace/snippets/gitignore.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/glsl.js" afterPath="$PROJECT_DIR$/js/ace/snippets/glsl.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/golang.js" afterPath="$PROJECT_DIR$/js/ace/snippets/golang.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/groovy.js" afterPath="$PROJECT_DIR$/js/ace/snippets/groovy.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/haml.js" afterPath="$PROJECT_DIR$/js/ace/snippets/haml.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/handlebars.js" afterPath="$PROJECT_DIR$/js/ace/snippets/handlebars.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/haskell.js" afterPath="$PROJECT_DIR$/js/ace/snippets/haskell.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/haxe.js" afterPath="$PROJECT_DIR$/js/ace/snippets/haxe.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/html.js" afterPath="$PROJECT_DIR$/js/ace/snippets/html.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/html_ruby.js" afterPath="$PROJECT_DIR$/js/ace/snippets/html_ruby.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/ini.js" afterPath="$PROJECT_DIR$/js/ace/snippets/ini.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/io.js" afterPath="$PROJECT_DIR$/js/ace/snippets/io.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/jack.js" afterPath="$PROJECT_DIR$/js/ace/snippets/jack.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/jade.js" afterPath="$PROJECT_DIR$/js/ace/snippets/jade.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/java.js" afterPath="$PROJECT_DIR$/js/ace/snippets/java.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/javascript.js" afterPath="$PROJECT_DIR$/js/ace/snippets/javascript.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/json.js" afterPath="$PROJECT_DIR$/js/ace/snippets/json.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/jsoniq.js" afterPath="$PROJECT_DIR$/js/ace/snippets/jsoniq.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/jsp.js" afterPath="$PROJECT_DIR$/js/ace/snippets/jsp.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/jsx.js" afterPath="$PROJECT_DIR$/js/ace/snippets/jsx.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/julia.js" afterPath="$PROJECT_DIR$/js/ace/snippets/julia.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/latex.js" afterPath="$PROJECT_DIR$/js/ace/snippets/latex.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/lean.js" afterPath="$PROJECT_DIR$/js/ace/snippets/lean.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/less.js" afterPath="$PROJECT_DIR$/js/ace/snippets/less.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/liquid.js" afterPath="$PROJECT_DIR$/js/ace/snippets/liquid.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/lisp.js" afterPath="$PROJECT_DIR$/js/ace/snippets/lisp.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/live_script.js" afterPath="$PROJECT_DIR$/js/ace/snippets/live_script.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/livescript.js" afterPath="$PROJECT_DIR$/js/ace/snippets/livescript.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/logiql.js" afterPath="$PROJECT_DIR$/js/ace/snippets/logiql.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/lsl.js" afterPath="$PROJECT_DIR$/js/ace/snippets/lsl.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/lua.js" afterPath="$PROJECT_DIR$/js/ace/snippets/lua.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/luapage.js" afterPath="$PROJECT_DIR$/js/ace/snippets/luapage.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/lucene.js" afterPath="$PROJECT_DIR$/js/ace/snippets/lucene.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/makefile.js" afterPath="$PROJECT_DIR$/js/ace/snippets/makefile.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/markdown.js" afterPath="$PROJECT_DIR$/js/ace/snippets/markdown.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/mask.js" afterPath="$PROJECT_DIR$/js/ace/snippets/mask.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/matlab.js" afterPath="$PROJECT_DIR$/js/ace/snippets/matlab.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/mel.js" afterPath="$PROJECT_DIR$/js/ace/snippets/mel.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/mips_assembler.js" afterPath="$PROJECT_DIR$/js/ace/snippets/mips_assembler.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/mipsassembler.js" afterPath="$PROJECT_DIR$/js/ace/snippets/mipsassembler.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/mushcode.js" afterPath="$PROJECT_DIR$/js/ace/snippets/mushcode.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/mysql.js" afterPath="$PROJECT_DIR$/js/ace/snippets/mysql.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/nix.js" afterPath="$PROJECT_DIR$/js/ace/snippets/nix.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/objectivec.js" afterPath="$PROJECT_DIR$/js/ace/snippets/objectivec.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/ocaml.js" afterPath="$PROJECT_DIR$/js/ace/snippets/ocaml.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/pascal.js" afterPath="$PROJECT_DIR$/js/ace/snippets/pascal.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/perl.js" afterPath="$PROJECT_DIR$/js/ace/snippets/perl.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/pgsql.js" afterPath="$PROJECT_DIR$/js/ace/snippets/pgsql.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/php.js" afterPath="$PROJECT_DIR$/js/ace/snippets/php.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/plain_text.js" afterPath="$PROJECT_DIR$/js/ace/snippets/plain_text.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/powershell.js" afterPath="$PROJECT_DIR$/js/ace/snippets/powershell.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/praat.js" afterPath="$PROJECT_DIR$/js/ace/snippets/praat.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/prolog.js" afterPath="$PROJECT_DIR$/js/ace/snippets/prolog.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/properties.js" afterPath="$PROJECT_DIR$/js/ace/snippets/properties.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/protobuf.js" afterPath="$PROJECT_DIR$/js/ace/snippets/protobuf.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/python.js" afterPath="$PROJECT_DIR$/js/ace/snippets/python.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/r.js" afterPath="$PROJECT_DIR$/js/ace/snippets/r.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/rdoc.js" afterPath="$PROJECT_DIR$/js/ace/snippets/rdoc.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/rhtml.js" afterPath="$PROJECT_DIR$/js/ace/snippets/rhtml.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/ruby.js" afterPath="$PROJECT_DIR$/js/ace/snippets/ruby.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/rust.js" afterPath="$PROJECT_DIR$/js/ace/snippets/rust.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/sass.js" afterPath="$PROJECT_DIR$/js/ace/snippets/sass.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/scad.js" afterPath="$PROJECT_DIR$/js/ace/snippets/scad.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/scala.js" afterPath="$PROJECT_DIR$/js/ace/snippets/scala.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/scheme.js" afterPath="$PROJECT_DIR$/js/ace/snippets/scheme.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/scss.js" afterPath="$PROJECT_DIR$/js/ace/snippets/scss.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/sh.js" afterPath="$PROJECT_DIR$/js/ace/snippets/sh.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/sjs.js" afterPath="$PROJECT_DIR$/js/ace/snippets/sjs.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/smarty.js" afterPath="$PROJECT_DIR$/js/ace/snippets/smarty.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/snippets.js" afterPath="$PROJECT_DIR$/js/ace/snippets/snippets.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/soy_template.js" afterPath="$PROJECT_DIR$/js/ace/snippets/soy_template.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/space.js" afterPath="$PROJECT_DIR$/js/ace/snippets/space.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/sql.js" afterPath="$PROJECT_DIR$/js/ace/snippets/sql.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/sqlserver.js" afterPath="$PROJECT_DIR$/js/ace/snippets/sqlserver.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/stylus.js" afterPath="$PROJECT_DIR$/js/ace/snippets/stylus.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/svg.js" afterPath="$PROJECT_DIR$/js/ace/snippets/svg.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/tcl.js" afterPath="$PROJECT_DIR$/js/ace/snippets/tcl.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/tex.js" afterPath="$PROJECT_DIR$/js/ace/snippets/tex.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/text.js" afterPath="$PROJECT_DIR$/js/ace/snippets/text.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/textile.js" afterPath="$PROJECT_DIR$/js/ace/snippets/textile.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/toml.js" afterPath="$PROJECT_DIR$/js/ace/snippets/toml.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/twig.js" afterPath="$PROJECT_DIR$/js/ace/snippets/twig.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/typescript.js" afterPath="$PROJECT_DIR$/js/ace/snippets/typescript.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/vala.js" afterPath="$PROJECT_DIR$/js/ace/snippets/vala.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/vbscript.js" afterPath="$PROJECT_DIR$/js/ace/snippets/vbscript.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/velocity.js" afterPath="$PROJECT_DIR$/js/ace/snippets/velocity.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/verilog.js" afterPath="$PROJECT_DIR$/js/ace/snippets/verilog.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/vhdl.js" afterPath="$PROJECT_DIR$/js/ace/snippets/vhdl.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/xml.js" afterPath="$PROJECT_DIR$/js/ace/snippets/xml.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/xquery.js" afterPath="$PROJECT_DIR$/js/ace/snippets/xquery.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/snippets/yaml.js" afterPath="$PROJECT_DIR$/js/ace/snippets/yaml.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-ambiance.js" afterPath="$PROJECT_DIR$/js/ace/theme-ambiance.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-chaos.js" afterPath="$PROJECT_DIR$/js/ace/theme-chaos.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-chrome.js" afterPath="$PROJECT_DIR$/js/ace/theme-chrome.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-clouds.js" afterPath="$PROJECT_DIR$/js/ace/theme-clouds.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-clouds_midnight.js" afterPath="$PROJECT_DIR$/js/ace/theme-clouds_midnight.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-cobalt.js" afterPath="$PROJECT_DIR$/js/ace/theme-cobalt.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-crimson_editor.js" afterPath="$PROJECT_DIR$/js/ace/theme-crimson_editor.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-dawn.js" afterPath="$PROJECT_DIR$/js/ace/theme-dawn.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-dreamweaver.js" afterPath="$PROJECT_DIR$/js/ace/theme-dreamweaver.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-eclipse.js" afterPath="$PROJECT_DIR$/js/ace/theme-eclipse.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-github.js" afterPath="$PROJECT_DIR$/js/ace/theme-github.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-idle_fingers.js" afterPath="$PROJECT_DIR$/js/ace/theme-idle_fingers.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-iplastic.js" afterPath="$PROJECT_DIR$/js/ace/theme-iplastic.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-katzenmilch.js" afterPath="$PROJECT_DIR$/js/ace/theme-katzenmilch.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-kr_theme.js" afterPath="$PROJECT_DIR$/js/ace/theme-kr_theme.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-kuroir.js" afterPath="$PROJECT_DIR$/js/ace/theme-kuroir.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-merbivore.js" afterPath="$PROJECT_DIR$/js/ace/theme-merbivore.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-merbivore_soft.js" afterPath="$PROJECT_DIR$/js/ace/theme-merbivore_soft.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-mono_industrial.js" afterPath="$PROJECT_DIR$/js/ace/theme-mono_industrial.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-monokai.js" afterPath="$PROJECT_DIR$/js/ace/theme-monokai.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-pastel_on_dark.js" afterPath="$PROJECT_DIR$/js/ace/theme-pastel_on_dark.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-solarized_dark.js" afterPath="$PROJECT_DIR$/js/ace/theme-solarized_dark.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-solarized_light.js" afterPath="$PROJECT_DIR$/js/ace/theme-solarized_light.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-sqlserver.js" afterPath="$PROJECT_DIR$/js/ace/theme-sqlserver.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-terminal.js" afterPath="$PROJECT_DIR$/js/ace/theme-terminal.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-textmate.js" afterPath="$PROJECT_DIR$/js/ace/theme-textmate.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-tomorrow.js" afterPath="$PROJECT_DIR$/js/ace/theme-tomorrow.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-tomorrow_night.js" afterPath="$PROJECT_DIR$/js/ace/theme-tomorrow_night.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-tomorrow_night_blue.js" afterPath="$PROJECT_DIR$/js/ace/theme-tomorrow_night_blue.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-tomorrow_night_bright.js" afterPath="$PROJECT_DIR$/js/ace/theme-tomorrow_night_bright.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-tomorrow_night_eighties.js" afterPath="$PROJECT_DIR$/js/ace/theme-tomorrow_night_eighties.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-twilight.js" afterPath="$PROJECT_DIR$/js/ace/theme-twilight.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-vibrant_ink.js" afterPath="$PROJECT_DIR$/js/ace/theme-vibrant_ink.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/theme-xcode.js" afterPath="$PROJECT_DIR$/js/ace/theme-xcode.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/worker-coffee.js" afterPath="$PROJECT_DIR$/js/ace/worker-coffee.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/worker-css.js" afterPath="$PROJECT_DIR$/js/ace/worker-css.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/worker-html.js" afterPath="$PROJECT_DIR$/js/ace/worker-html.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/worker-javascript.js" afterPath="$PROJECT_DIR$/js/ace/worker-javascript.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/worker-json.js" afterPath="$PROJECT_DIR$/js/ace/worker-json.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/worker-lua.js" afterPath="$PROJECT_DIR$/js/ace/worker-lua.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/worker-php.js" afterPath="$PROJECT_DIR$/js/ace/worker-php.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/worker-xml.js" afterPath="$PROJECT_DIR$/js/ace/worker-xml.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ace/worker-xquery.js" afterPath="$PROJECT_DIR$/js/ace/worker-xquery.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../.project" afterPath="$PROJECT_DIR$/../../../.project" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/antlr4/FileStream.js" afterPath="$PROJECT_DIR$/js/antlr4/FileStream.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/code/editor.html" afterPath="$PROJECT_DIR$/code/editor.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/resources.iml" afterPath="$PROJECT_DIR$/.idea/resources.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="resources.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -354,43 +692,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-1.3333334" vertical-offset="538" max-vertical-offset="1290">
-              <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
-              <folding>
-                <marker date="1436204184000" expanded="true" signature="2278:2661" placeholder="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="editor.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="editor.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/code/editor.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-25.708334" vertical-offset="448" max-vertical-offset="1215">
-              <caret line="71" column="0" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.24202128" vertical-offset="508" max-vertical-offset="1260">
-              <caret line="46" column="54" selection-start-line="46" selection-start-column="54" selection-end-line="46" selection-end-column="54" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/apps/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.875" vertical-offset="510" max-vertical-offset="1320">
-              <caret line="45" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.5984042" vertical-offset="0" max-vertical-offset="1485">
+              <caret line="30" column="64" selection-start-line="30" selection-start-column="64" selection-end-line="30" selection-end-column="64" />
               <folding />
             </state>
           </provider>
@@ -407,9 +713,33 @@
         <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/apps/index.html" />
         <option value="$PROJECT_DIR$/code/index.html" />
+        <option value="$PROJECT_DIR$/js/prompto/parser/AbstractParser.js" />
+        <option value="$PROJECT_DIR$/js/prompto/parser/EIndentingLexer.js" />
+        <option value="$PROJECT_DIR$/js/prompto/parser/EParserFactory.js" />
+        <option value="$PROJECT_DIR$/js/prompto/parser/ONamingLexer.js" />
+        <option value="$PROJECT_DIR$/js/prompto/parser/OParserFactory.js" />
+        <option value="$PROJECT_DIR$/js/prompto/parser/SIndentingLexer.js" />
+        <option value="$PROJECT_DIR$/js/prompto/parser/SParserFactory.js" />
+        <option value="$PROJECT_DIR$/js/prompto/utils/CmdLineParser.js" />
+        <option value="$PROJECT_DIR$/js/fs.js" />
+        <option value="$PROJECT_DIR$/js/prompto/parser/EPromptoBuilder.js" />
+        <option value="$PROJECT_DIR$/js/module.js" />
+        <option value="$PROJECT_DIR$/js/path.js" />
+        <option value="$PROJECT_DIR$/js/prompto/parser/ECleverParser.js" />
+        <option value="$PROJECT_DIR$/js/prompto/parser/OCleverParser.js" />
+        <option value="$PROJECT_DIR$/js/prompto/parser/SCleverParser.js" />
+        <option value="$PROJECT_DIR$/js/prompto/javascript/JavaScriptModule.js" />
+        <option value="$PROJECT_DIR$/js/antlr4/FileStream.js" />
+        <option value="$PROJECT_DIR$/js/prompto/grammar/CategoryArgument.js" />
+        <option value="$PROJECT_DIR$/js/prompto/parser/OPromptoBuilder.js" />
+        <option value="$PROJECT_DIR$/js/prompto/parser/SPromptoBuilder.js" />
         <option value="$PROJECT_DIR$/code/editor.html" />
       </list>
     </option>
+  </component>
+  <component name="JsBowerSettings">
+    <exe-path />
+    <config-path />
   </component>
   <component name="JsGulpfileManager">
     <detection-done>true</detection-done>
@@ -470,7 +800,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="img" />
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="prompto" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -484,7 +818,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
+              <option name="myItemId" value="js" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -502,32 +836,30 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="apps" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
       <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../../prompto-javascript/JavaScript-Core" />
+    <property name="js.eslint.nodeInterpreter" value="/usr/local/bin/node" />
+    <property name="js.eslint.eslintPackage" value="" />
+    <property name="options.lastSelected" value="web-ide.project.structure" />
+    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="FullScreen" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/js/prompto/parser" />
+      <recent name="$PROJECT_DIR$/js" />
+      <recent name="$PROJECT_DIR$/js/prompto/utils" />
       <recent name="$PROJECT_DIR$/code" />
       <recent name="$PROJECT_DIR$/ace" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/js" />
     </key>
   </component>
   <component name="RunManager">
@@ -538,6 +870,12 @@
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <pass-parent-envs>true</pass-parent-envs>
+      <envs />
       <method />
     </configuration>
     <list size="0" />
@@ -545,25 +883,25 @@
   <component name="ShelveChangesManager" show_recycled="false" />
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="873" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.329602" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.30208334" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -583,15 +921,71 @@
     </option>
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/code/editor.html</url>
+          <line>38</line>
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/js/lib/require.js</url>
+          <line>83</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="2" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/code/editor.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1215">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="538" max-vertical-offset="1290">
+          <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/editor.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="448" max-vertical-offset="1215">
+          <caret line="71" column="0" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../../../ace-build/src/mode-python.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4050">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="508" max-vertical-offset="1260">
+          <caret line="46" column="54" selection-start-line="46" selection-start-column="54" selection-end-line="46" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apps/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="510" max-vertical-offset="1320">
+          <caret line="45" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/css/bootstrap.css">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33244327" vertical-offset="16596" max-vertical-offset="98850">
           <caret line="1123" column="10" selection-start-line="1123" selection-start-column="1" selection-end-line="1123" selection-end-column="10" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -599,40 +993,250 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33244327" vertical-offset="2781" max-vertical-offset="7230">
           <caret line="202" column="14" selection-start-line="202" selection-start-column="5" selection-end-line="202" selection-end-column="14" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/apps/index.html">
+    <entry file="file://$PROJECT_DIR$/../../../../../ace-build/src/mode-java.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.875" vertical-offset="510" max-vertical-offset="1320">
-          <caret line="45" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
-          <folding />
+        <state vertical-scroll-proportion="-17.976805" vertical-offset="13950" max-vertical-offset="17670">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/editor.html">
+    <entry file="file://$PROJECT_DIR$/js/ace/mode-java.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-25.708334" vertical-offset="448" max-vertical-offset="1215">
-          <caret line="71" column="0" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
-          <folding />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="776">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../../../ace-build/src/mode-python.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.40592784" vertical-offset="225" max-vertical-offset="4050">
+          <caret line="36" column="0" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/code/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.3333334" vertical-offset="538" max-vertical-offset="1290">
+        <state vertical-scroll-proportion="0.04255319" vertical-offset="538" max-vertical-offset="1290">
           <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
-          <folding>
-            <marker date="1436204184000" expanded="true" signature="2278:2661" placeholder="..." />
-          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apps/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.21941489" vertical-offset="510" max-vertical-offset="1320">
+          <caret line="45" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.24202128" vertical-offset="508" max-vertical-offset="1260">
-          <caret line="46" column="54" selection-start-line="46" selection-start-column="54" selection-end-line="46" selection-end-column="54" />
+        <state vertical-scroll-proportion="0.17420213" vertical-offset="484" max-vertical-offset="1260">
+          <caret line="41" column="6" selection-start-line="41" selection-start-column="6" selection-end-line="41" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/prompto/parser/EParser.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="420975">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/prompto/parser/ELexer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="11790">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/prompto/parser/AbstractParser.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="960">
+          <caret line="0" column="34" selection-start-line="0" selection-start-column="34" selection-end-line="0" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/prompto/parser/Dialect.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="825">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/prompto/parser/EIndentingLexer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1875">
+          <caret line="0" column="34" selection-start-line="0" selection-start-column="34" selection-end-line="0" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/prompto/parser/EParserFactory.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="511">
+          <caret line="0" column="28" selection-start-line="0" selection-start-column="28" selection-end-line="0" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/prompto/parser/ONamingLexer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="511">
+          <caret line="0" column="34" selection-start-line="0" selection-start-column="34" selection-end-line="0" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/prompto/parser/OParserFactory.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="511">
+          <caret line="0" column="34" selection-start-line="0" selection-start-column="34" selection-end-line="0" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/prompto/parser/SIndentingLexer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1875">
+          <caret line="0" column="34" selection-start-line="0" selection-start-column="34" selection-end-line="0" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/prompto/parser/SParserFactory.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="511">
+          <caret line="0" column="34" selection-start-line="0" selection-start-column="34" selection-end-line="0" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/prompto/utils/CmdLineParser.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="945">
+          <caret line="0" column="34" selection-start-line="0" selection-start-column="34" selection-end-line="0" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/prompto/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="776">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/prompto/parser/EPromptoBuilder.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="36015">
+          <caret line="12" column="37" selection-start-line="12" selection-start-column="37" selection-end-line="12" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/prompto/parser/SCleverParser.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.019329896" vertical-offset="0" max-vertical-offset="825">
+          <caret line="1" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/prompto/javascript/JavaScriptModule.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.019329896" vertical-offset="0" max-vertical-offset="1110">
+          <caret line="1" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/prompto/parser/SLexer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="11790">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/prompto/parser/SPromptoBuilder.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.23195876" vertical-offset="0" max-vertical-offset="35070">
+          <caret line="12" column="37" selection-start-line="12" selection-start-column="37" selection-end-line="12" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/prompto/parser/OPromptoBuilder.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.23195876" vertical-offset="0" max-vertical-offset="36180">
+          <caret line="12" column="37" selection-start-line="12" selection-start-column="37" selection-end-line="12" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/prompto/grammar/CategoryArgument.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.46391752" vertical-offset="645" max-vertical-offset="2505">
+          <caret line="19" column="20" selection-start-line="19" selection-start-column="20" selection-end-line="19" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/antlr4/FileStream.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.61340207" vertical-offset="64" max-vertical-offset="840">
+          <caret line="36" column="27" selection-start-line="36" selection-start-column="27" selection-end-line="36" selection-end-column="27" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <marker date="1436280432000" expanded="true" signature="-1:-1" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/prompto/parser/ECleverParser.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.038659792" vertical-offset="0" max-vertical-offset="780">
+          <caret line="2" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/prompto/parser/OCleverParser.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.17396908" vertical-offset="0" max-vertical-offset="825">
+          <caret line="9" column="23" selection-start-line="9" selection-start-column="23" selection-end-line="9" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/lib/require.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.9329897" vertical-offset="1500" max-vertical-offset="3285">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/editor.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5984042" vertical-offset="0" max-vertical-offset="1485">
+          <caret line="30" column="64" selection-start-line="30" selection-start-column="64" selection-end-line="30" selection-end-column="64" />
           <folding />
         </state>
       </provider>

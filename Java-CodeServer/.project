@@ -20,11 +20,4 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>src/main/resources/js/prompto</name>
-			<type>2</type>
-			<location>/Users/ericvergnaud/Development/prompto/prompto-javascript/JavaScript-Core/src/main/prompto</location>
-		</link>
-	</linkedResources>
 </projectDescription>

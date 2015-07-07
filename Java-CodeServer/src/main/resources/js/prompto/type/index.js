@@ -1,0 +1,26 @@
+exports.DocumentType = require('./DocumentType').DocumentType;
+exports.BooleanType = require('./BooleanType').BooleanType;
+exports.CharacterType = require('./CharacterType').CharacterType;
+exports.IntegerType = require('./IntegerType').IntegerType;
+exports.DecimalType = require('./DecimalType').DecimalType;
+exports.DateTimeType = require('./DateTimeType').DateTimeType;
+exports.DateType = require('./DateType').DateType;
+exports.ListType = require('./ListType').ListType;
+exports.DictType = require('./DictType').DictType;
+exports.CategoryType = require('./CategoryType').CategoryType;
+exports.ResourceType = require('./ResourceType').ResourceType;
+exports.TextType = require('./TextType').TextType;
+exports.RangeType = require('./RangeType').RangeType;
+exports.MissingType = require('./MissingType').MissingType;
+exports.AnyType = require('./AnyType').AnyType;
+exports.CodeType = require('./CodeType').CodeType;
+
+require('./BaseType').resolve();
+require('./TextType').resolve();
+require('./BooleanType').resolve();
+require('./DecimalType').resolve();
+require('./IntegerType').resolve();
+require('./CharacterType').resolve();
+require('./ListType').resolve();
+require('./RangeType').resolve();
+require('./CategoryType').resolve();

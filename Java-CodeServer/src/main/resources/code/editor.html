@@ -26,6 +26,24 @@
     <script src="../js/lib/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../js/lib/ie10-viewport-bug-workaround.js"></script>
+    <!-- get require for antlr4 -->
+    <script>
+        // need to set relative paths first for Smoothie/require
+        Smoothie = {
+            'paths': ['../js/']
+        };
+    </script>
+    <script src="../js/lib/require.js"></script>
+    <!-- load prompto -->
+    <script>
+        prompto = null;
+        try {
+            prompto = require('prompto/index');
+            window.alert("prompto loaded successfully!");
+        } catch(ex) {
+            window.alert(ex.toString());
+        }
+    </script>
     <!-- ensure content menu is highlighted -->
     <script type="text/javascript">
         $(document).ready(function () {
@@ -60,7 +78,7 @@
                             return x;
                             }
                 </div>
-                <script src="../ace/ace.js" type="text/javascript" charset="utf-8"></script>
+                <script src="../js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
                 <script>
                     var editor = ace.edit("editor");
                     editor.setTheme("ace/theme/github");

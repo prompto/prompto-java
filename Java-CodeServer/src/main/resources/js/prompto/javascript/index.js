@@ -1,0 +1,15 @@
+exports.JavaScriptStatement = require('./JavaScriptStatement').JavaScriptStatement;
+exports.JavaScriptNativeCall = require('./JavaScriptNativeCall').JavaScriptNativeCall;
+exports.JavaScriptItemExpression = require('./JavaScriptItemExpression').JavaScriptItemExpression;
+exports.JavaScriptIdentifierExpression = require('./JavaScriptIdentifierExpression').JavaScriptIdentifierExpression;
+exports.JavaScriptBooleanLiteral = require('./JavaScriptBooleanLiteral').JavaScriptBooleanLiteral;
+exports.JavaScriptCharacterLiteral = require('./JavaScriptCharacterLiteral').JavaScriptCharacterLiteral;
+exports.JavaScriptTextLiteral = require('./JavaScriptTextLiteral').JavaScriptTextLiteral;
+exports.JavaScriptIntegerLiteral = require('./JavaScriptIntegerLiteral').JavaScriptIntegerLiteral;
+exports.JavaScriptDecimalLiteral = require('./JavaScriptDecimalLiteral').JavaScriptDecimalLiteral;
+exports.JavaScriptExpressionList = require('./JavaScriptExpressionList').JavaScriptExpressionList;
+exports.JavaScriptMethodExpression = require('./JavaScriptMethodExpression').JavaScriptMethodExpression;
+exports.JavaScriptMemberExpression = require('./JavaScriptMemberExpression').JavaScriptMemberExpression;
+exports.JavaScriptThisExpression = require('./JavaScriptThisExpression').JavaScriptThisExpression;
+exports.JavaScriptNativeCategoryBinding = require("./JavaScriptNativeCategoryBinding").JavaScriptNativeCategoryBinding;
+exports.JavaScriptModule = require("./JavaScriptModule").JavaScriptModule;
