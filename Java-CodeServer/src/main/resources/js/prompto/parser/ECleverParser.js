@@ -1,4 +1,4 @@
-var isNodeJs = typeof window === 'undefined';
+var isNodeJs = typeof window === 'undefined' && importScripts === 'undefined';
 var fs = isNodeJs ? require("fs") : {}; // nodejs only
 var antlr4 = require("antlr4/index");
 var EIndentingLexer = require("./EIndentingLexer").EIndentingLexer;
