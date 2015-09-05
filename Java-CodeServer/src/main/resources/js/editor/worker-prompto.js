@@ -1,6 +1,6 @@
 self.console.log('loading prompto worker');
 importScripts("worker-base.js");
-ace.define('ace/mode/prompto_worker',["require","exports","module","ace/lib/oop","ace/worker/mirror"], function(require, exports, module) {
+ace.define('ace/worker/prompto',["require","exports","module","ace/lib/oop","ace/worker/mirror"], function(require, exports, module) {
     "use strict";
 
     var oop = require("ace/lib/oop");
