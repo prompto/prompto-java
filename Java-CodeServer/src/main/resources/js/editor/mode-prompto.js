@@ -128,6 +128,14 @@ ace.define('ace/mode/prompto',["require","exports","module","ace/lib/oop","ace/m
                 session.setAnnotations(e.data);
             });
 
+            worker.on("annotate", function(e) {
+                session.setAnnotations(e.data);
+            });
+
+            worker.on("terminate", function() {
+                session.clearAnnotations();
+            });
+
             return worker;
 
         };
