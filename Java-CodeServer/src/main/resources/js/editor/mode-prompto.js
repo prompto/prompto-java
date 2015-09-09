@@ -120,8 +120,13 @@ ace.define('ace/mode/prompto',["require","exports","module","ace/lib/oop","ace/m
 
     (function() {
 
+        this.setDialect = function(dialect) {
+            this.$dialect = dialect;
+        };
+
         this.createWorker = function(session) {
             var worker = new WorkerClient(["ace"], "ace/worker/prompto", "PromptoWorker", "../js/editor/worker-prompto.js");
+            worker.send("setDialect", [ this.$dialect ] );
             worker.attachToDocument(session.getDocument());
 
             worker.on("errors", function(e) {

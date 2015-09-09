@@ -1,4 +1,3 @@
-self.console.log('loading prompto worker');
 importScripts("worker-base.js");
 ace.define('ace/worker/prompto',["require","exports","module","ace/lib/oop","ace/worker/mirror"], function(require, exports, module) {
     "use strict";
@@ -9,55 +8,62 @@ ace.define('ace/worker/prompto',["require","exports","module","ace/lib/oop","ace
     var PromptoWorker = function(sender) {
         Mirror.call(this, sender);
         this.setTimeout(200);
+        this.$dialect = null;
     };
 
     oop.inherits(PromptoWorker, Mirror);
 
     (function() {
 
+        this.setDialect = function(dialect) {
+            this.$dialect = dialect;
+        };
+
         this.onUpdate = function() {
-            self.console.log('onUpdate');
+            var annotations = [];
             var value = this.doc.getValue();
-            var errors = [];
-            errors.push({
-                row: 0,
-                column: 8,
-                text: "prompto worker!",
-                type: "error",
-                raw: "just a test"
-            });
-            /*
-            try {
-                if (value)
-                    parse(value);
-            } catch (e) {
-                var pos = this.doc.indexToPosition(e.at-1);
-                errors.push({
-                    row: pos.row,
-                    column: pos.column,
-                    text: e.message,
-                    type: "error"
-                });
-            }*/
-            this.sender.emit("annotate", errors);
+            if (value) {
+                var errorListener = new AnnotatingErrorListener(annotations);
+                parse(value, this.$dialect, errorListener);
+            }
+            this.sender.emit("annotate", annotations);
         };
 
     }).call(PromptoWorker.prototype);
 
     exports.PromptoWorker = PromptoWorker;
 });
-self.console.log('prompto worker loaded');
 
-self.console.log('loading prompto parser');
 var require_saved = require;
 require = undefined;
-Smoothie = { 'requirePath': ['..'] }; // walk up to js folder
+RequireOptions = { 'paths': ['..'] }; // walk up to js folder
 importScripts("../lib/require.js");
 var prompto = require('prompto/index');
+var antlr4ErrorListener = require('antlr4/error/ErrorListener').ErrorListener;
 require = require_saved;
-self.console.log('prompto parser loaded');
 
-var parse = function(input) {
-    var parser = new prompto.parser.ECleverParser(input);
+var AnnotatingErrorListener = function(annotations) {
+    antlr4ErrorListener.call(this);
+    this.annotations = annotations;
+    return this;
+};
+
+AnnotatingErrorListener.prototype = Object.create(antlr4ErrorListener.prototype);
+AnnotatingErrorListener.prototype.constructor = AnnotatingErrorListener;
+
+AnnotatingErrorListener.prototype.syntaxError = function(recognizer, offendingSymbol, line, column, msg, e) {
+    this.annotations.push({
+        row: line - 1,
+        column: column,
+        text: msg,
+        type: "error"
+    });
+};
+
+var parse = function(input, dialect, listener) {
+    var klass = prompto.parser[dialect + "CleverParser"];
+    var parser = new klass(input);
+    parser.removeErrorListeners();
+    parser.addErrorListener(listener);
     var decls = parser.parse();
 };

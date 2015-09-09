@@ -36,7 +36,9 @@
             });
         });
     </script>
-
+    <script type="text/javascript">
+        var dialect = "O";
+    </script>
 </head>
 
 <body>
@@ -70,8 +72,19 @@
     </nav>
 
     <div class="container-fluid">
-        <div class="embed-responsive embed-responsive-4by3">
-            <iframe name="content-frame" class="embed-responsive-item" src="editor.html"/>
+        <div class="row">
+            <div class="col-md-2 sidebar">
+                <ul class="nav nav-sidebar">
+                    <li class="active"><a href="#">Attributes <span class="sr-only">(current)</span></a></li>
+                    <li><a href="#">Categories</a></li>
+                    <li><a href="#">Methods</a></li>
+                </ul>
+            </div>
+            <div class="col-md-10 col-md-offset-2 main no-gutter" style="padding: 0">
+                <div class="embed-responsive embed-responsive-4by3">
+                    <iframe name="content-frame" class="embed-responsive-item" src="editor.html"/>
+                </div>
+            </div>
         </div>
     </div>
 

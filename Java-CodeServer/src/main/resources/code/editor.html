@@ -50,23 +50,20 @@
 <body>
 
     <div class="container">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Editor</h3>
-            </div>
-            <div class="panel-body">
-                <div id="editor"/>
-                <script src="../js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
-                <script src="../js/editor/mode-prompto.js" type="text/javascript" charset="utf-8"></script>
-                <script>
-                    var editor = ace.edit("editor");
-                    editor.$blockScrolling = Infinity;
-                    editor.setTheme("ace/theme/eclipse");
-                    editor.getSession().setMode("ace/mode/prompto");
-                    editor.setValue("define name as: Text attribute");
-                </script>
-            </div>
-        </div>
+        <div id="editor"/>
+        <script src="../js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../js/editor/mode-prompto.js" type="text/javascript" charset="utf-8"></script>
+        <script>
+            var editor = ace.edit("editor");
+            editor.getSession().setUseWorker(false);
+            editor.$blockScrolling = Infinity;
+            editor.setTheme("ace/theme/eclipse");
+            editor.getSession().setMode("ace/mode/prompto");
+            var mode = editor.getSession().getMode();
+            mode.setDialect(parent.dialect);
+            editor.getSession().setUseWorker(true);
+            editor.setValue("define name as: Text attribute ");
+        </script>
     </div>
 
 </body>
