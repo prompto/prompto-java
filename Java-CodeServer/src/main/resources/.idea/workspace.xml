@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="817cafb3-5cf9-4bd5-b4d6-043cc4107218" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/code/editor.html" afterPath="$PROJECT_DIR$/code/editor.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/code/index.html" afterPath="$PROJECT_DIR$/code/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/editor/mode-prompto.js" afterPath="$PROJECT_DIR$/js/editor/mode-prompto.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/editor/worker-prompto.js" afterPath="$PROJECT_DIR$/js/editor/worker-prompto.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/code/editor.html" afterPath="$PROJECT_DIR$/ide/editor.html" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/code/index.html" afterPath="$PROJECT_DIR$/ide/index.html" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/js/editor/mode-prompto.js" afterPath="$PROJECT_DIR$/js/ide/mode-prompto.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/js/editor/worker-base.js" afterPath="$PROJECT_DIR$/js/ide/worker-base.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/js/editor/worker-prompto.js" afterPath="$PROJECT_DIR$/js/ide/worker-prompto.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apps/index.html" afterPath="$PROJECT_DIR$/apps/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="resources.iws" />
@@ -31,19 +33,29 @@
   <component name="FileEditorManager">
     <leaf>
       <file leaf-file-name="editor.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/editor.html">
+        <entry file="file://$PROJECT_DIR$/ide/editor.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-4.9583335" vertical-offset="496" max-vertical-offset="1155">
-              <caret line="41" column="21" selection-start-line="41" selection-start-column="21" selection-end-line="41" selection-end-column="21" />
+            <state vertical-scroll-proportion="-16.833334" vertical-offset="496" max-vertical-offset="1155">
+              <caret line="60" column="48" selection-start-line="60" selection-start-column="48" selection-end-line="60" selection-end-column="48" />
               <folding>
-                <marker date="1441810100000" expanded="true" signature="1735:2455" placeholder="..." />
+                <marker date="1441814351000" expanded="true" signature="1735:2452" placeholder="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/ide/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.68948245" vertical-offset="862" max-vertical-offset="1485">
+              <caret line="85" column="22" selection-start-line="85" selection-start-column="22" selection-end-line="85" selection-end-column="22" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="worker-base.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/editor/worker-base.js">
+        <entry file="file://$PROJECT_DIR$/js/ide/worker-base.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="-7.3333335" vertical-offset="10632" max-vertical-offset="16260">
               <caret line="722" column="24" selection-start-line="722" selection-start-column="16" selection-end-line="722" selection-end-column="24" />
@@ -64,11 +76,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="worker-prompto.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/js/editor/worker-prompto.js">
+      <file leaf-file-name="worker-prompto.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/ide/worker-prompto.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.3258427" vertical-offset="502" max-vertical-offset="1125">
-              <caret line="47" column="16" selection-start-line="47" selection-start-column="16" selection-end-line="47" selection-end-column="16" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="502" max-vertical-offset="1125">
+              <caret line="49" column="0" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
               <folding>
                 <marker date="1441813583000" expanded="true" signature="861:874" placeholder="/*...*/" />
               </folding>
@@ -89,12 +101,12 @@
         </entry>
       </file>
       <file leaf-file-name="mode-prompto.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/editor/mode-prompto.js">
+        <entry file="file://$PROJECT_DIR$/js/ide/mode-prompto.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0" vertical-offset="1672" max-vertical-offset="2400">
-              <caret line="139" column="47" selection-start-line="139" selection-start-column="47" selection-end-line="139" selection-end-column="47" />
+              <caret line="119" column="0" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
               <folding>
-                <marker date="1441811843000" expanded="true" signature="3758:5021" placeholder="{...}" />
+                <marker date="1441814403000" expanded="true" signature="3758:5018" placeholder="{...}" />
               </folding>
             </state>
           </provider>
@@ -140,12 +152,14 @@
         <option value="$PROJECT_DIR$/js/test/testmode.js" />
         <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/js/lib/require.js" />
-        <option value="$PROJECT_DIR$/apps/index.html" />
         <option value="$PROJECT_DIR$/code/index.html" />
         <option value="$PROJECT_DIR$/code/editor.html" />
         <option value="$PROJECT_DIR$/js/editor/worker-base.js" />
         <option value="$PROJECT_DIR$/js/editor/mode-prompto.js" />
         <option value="$PROJECT_DIR$/js/editor/worker-prompto.js" />
+        <option value="$PROJECT_DIR$/apps/index.html" />
+        <option value="$PROJECT_DIR$/ide/editor.html" />
+        <option value="$PROJECT_DIR$/js/ide/mode-prompto.js" />
       </list>
     </option>
   </component>
@@ -541,6 +555,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.40592784" vertical-offset="0" max-vertical-offset="776">
           <caret line="50" column="0" selection-start-line="50" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -576,22 +591,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/apps/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.15025042" vertical-offset="615" max-vertical-offset="1320">
-          <caret line="47" column="65" selection-start-line="47" selection-start-column="54" selection-end-line="47" selection-end-column="65" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.5025042" vertical-offset="0" max-vertical-offset="1260">
-          <caret line="60" column="31" selection-start-line="60" selection-start-column="31" selection-end-line="60" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/lib/require.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="645" max-vertical-offset="4575">
@@ -599,14 +598,6 @@
           <folding>
             <marker date="1441630558000" expanded="false" signature="-1:-1" placeholder="//..." />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/code/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-53.125" vertical-offset="0" max-vertical-offset="1485">
-          <caret line="85" column="22" selection-start-line="85" selection-start-column="22" selection-end-line="85" selection-end-column="22" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -620,31 +611,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/editor.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.9583335" vertical-offset="496" max-vertical-offset="1155">
-          <caret line="41" column="21" selection-start-line="41" selection-start-column="21" selection-end-line="41" selection-end-column="21" />
-          <folding>
-            <marker date="1441810100000" expanded="true" signature="1735:2455" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/editor/worker-base.js">
+    <entry file="file://$PROJECT_DIR$/js/ide/worker-base.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-7.3333335" vertical-offset="10632" max-vertical-offset="16260">
           <caret line="722" column="24" selection-start-line="722" selection-start-column="16" selection-end-line="722" selection-end-column="24" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/editor/mode-prompto.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1672" max-vertical-offset="2400">
-          <caret line="139" column="47" selection-start-line="139" selection-start-column="47" selection-end-line="139" selection-end-column="47" />
-          <folding>
-            <marker date="1441811843000" expanded="true" signature="3758:5021" placeholder="{...}" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -669,7 +640,7 @@
         <state vertical-scroll-proportion="-7.3333335" vertical-offset="5382" max-vertical-offset="10425">
           <caret line="372" column="48" selection-start-line="372" selection-start-column="24" selection-end-line="372" selection-end-column="48" />
           <folding>
-            <element signature="n#!!doc" expanded="true" />
+            <element signature="n#!!doc" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -694,13 +665,57 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/editor/worker-prompto.js">
+    <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3258427" vertical-offset="502" max-vertical-offset="1125">
-          <caret line="47" column="16" selection-start-line="47" selection-start-column="16" selection-end-line="47" selection-end-column="16" />
+        <state vertical-scroll-proportion="0.49916527" vertical-offset="601" max-vertical-offset="1260">
+          <caret line="60" column="31" selection-start-line="60" selection-start-column="31" selection-end-line="60" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apps/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6010017" vertical-offset="570" max-vertical-offset="1320">
+          <caret line="62" column="52" selection-start-line="62" selection-start-column="52" selection-end-line="62" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/ide/worker-prompto.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="502" max-vertical-offset="1125">
+          <caret line="49" column="0" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
           <folding>
             <marker date="1441813583000" expanded="true" signature="861:874" placeholder="/*...*/" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ide/editor.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-16.833334" vertical-offset="496" max-vertical-offset="1155">
+          <caret line="60" column="48" selection-start-line="60" selection-start-column="48" selection-end-line="60" selection-end-column="48" />
+          <folding>
+            <marker date="1441814351000" expanded="true" signature="1735:2452" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/ide/mode-prompto.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1672" max-vertical-offset="2400">
+          <caret line="119" column="0" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
+          <folding>
+            <marker date="1441814403000" expanded="true" signature="3758:5018" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ide/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.68948245" vertical-offset="862" max-vertical-offset="1485">
+          <caret line="85" column="22" selection-start-line="85" selection-start-column="22" selection-end-line="85" selection-end-column="22" />
+          <folding />
         </state>
       </provider>
     </entry>

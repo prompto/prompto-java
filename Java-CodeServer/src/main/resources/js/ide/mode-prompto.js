@@ -125,7 +125,7 @@ ace.define('ace/mode/prompto',["require","exports","module","ace/lib/oop","ace/m
         };
 
         this.createWorker = function(session) {
-            var worker = new WorkerClient(["ace"], "ace/worker/prompto", "PromptoWorker", "../js/editor/worker-prompto.js");
+            var worker = new WorkerClient(["ace"], "ace/worker/prompto", "PromptoWorker", "../js/ide/worker-prompto.js");
             worker.send("setDialect", [ this.$dialect ] );
             worker.attachToDocument(session.getDocument());
 
