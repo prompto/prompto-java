@@ -2,12 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="817cafb3-5cf9-4bd5-b4d6-043cc4107218" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/editor.html" afterPath="$PROJECT_DIR$/ide/editor.html" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/index.html" afterPath="$PROJECT_DIR$/ide/index.html" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/js/editor/mode-prompto.js" afterPath="$PROJECT_DIR$/js/ide/mode-prompto.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/js/editor/worker-base.js" afterPath="$PROJECT_DIR$/js/ide/worker-base.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/js/editor/worker-prompto.js" afterPath="$PROJECT_DIR$/js/ide/worker-prompto.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apps/index.html" afterPath="$PROJECT_DIR$/apps/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ide/editor.html" afterPath="$PROJECT_DIR$/ide/editor.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ide/index.html" afterPath="$PROJECT_DIR$/ide/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/ide/mode-prompto.js" afterPath="$PROJECT_DIR$/js/ide/mode-prompto.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/ide/worker-prompto.js" afterPath="$PROJECT_DIR$/js/ide/worker-prompto.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="resources.iws" />
@@ -32,24 +30,29 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="editor.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="editor.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ide/editor.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-16.833334" vertical-offset="496" max-vertical-offset="1155">
-              <caret line="60" column="48" selection-start-line="60" selection-start-column="48" selection-end-line="60" selection-end-column="48" />
+            <state vertical-scroll-proportion="0.5784114" vertical-offset="286" max-vertical-offset="1245">
+              <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
               <folding>
-                <marker date="1441814351000" expanded="true" signature="1735:2452" placeholder="..." />
+                <marker date="1441906266000" expanded="true" signature="1755:2492" placeholder="..." />
+                <marker date="1441906266000" expanded="true" signature="1784:2483" placeholder="..." />
+                <marker date="1441906266000" expanded="true" signature="1787:2474" placeholder="..." />
+                <marker date="1441906266000" expanded="true" signature="1787:2474" placeholder="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ide/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.68948245" vertical-offset="862" max-vertical-offset="1485">
-              <caret line="85" column="22" selection-start-line="85" selection-start-column="22" selection-end-line="85" selection-end-column="22" />
-              <folding />
+            <state vertical-scroll-proportion="-15.0" vertical-offset="315" max-vertical-offset="1545">
+              <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
+              <folding>
+                <marker date="1441902663000" expanded="true" signature="2435:2675" placeholder="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -67,8 +70,8 @@
       <file leaf-file-name="ace.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/ace/ace.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-12.333333" vertical-offset="243642" max-vertical-offset="275655">
-              <caret line="16265" column="39" selection-start-line="16265" selection-start-column="39" selection-end-line="16265" selection-end-column="39" />
+            <state vertical-scroll-proportion="-6.0" vertical-offset="171528" max-vertical-offset="275655">
+              <caret line="11446" column="17" selection-start-line="11446" selection-start-column="9" selection-end-line="11446" selection-end-column="17" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -79,11 +82,31 @@
       <file leaf-file-name="worker-prompto.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/ide/worker-prompto.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="502" max-vertical-offset="1125">
-              <caret line="49" column="0" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="150" max-vertical-offset="1425">
+              <caret line="24" column="53" selection-start-line="24" selection-start-column="53" selection-end-line="24" selection-end-column="53" />
               <folding>
-                <marker date="1441813583000" expanded="true" signature="861:874" placeholder="/*...*/" />
+                <marker date="1441905690000" expanded="true" signature="1162:1175" placeholder="/*...*/" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CodeWriter.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/prompto/utils/CodeWriter.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1440">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Dialect.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/prompto/parser/Dialect.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="825">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -103,10 +126,10 @@
       <file leaf-file-name="mode-prompto.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/ide/mode-prompto.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1672" max-vertical-offset="2400">
-              <caret line="119" column="0" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1240" max-vertical-offset="2475">
+              <caret line="145" column="51" selection-start-line="145" selection-start-column="51" selection-end-line="145" selection-end-column="51" />
               <folding>
-                <marker date="1441814403000" expanded="true" signature="3758:5018" placeholder="{...}" />
+                <marker date="1441906236000" expanded="true" signature="3758:5261" placeholder="{...}" />
               </folding>
             </state>
           </provider>
@@ -150,7 +173,6 @@
         <option value="$PROJECT_DIR$/js/ace/worker-prompto.js" />
         <option value="$PROJECT_DIR$/js/test/testworker.js" />
         <option value="$PROJECT_DIR$/js/test/testmode.js" />
-        <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/js/lib/require.js" />
         <option value="$PROJECT_DIR$/code/index.html" />
         <option value="$PROJECT_DIR$/code/editor.html" />
@@ -158,8 +180,11 @@
         <option value="$PROJECT_DIR$/js/editor/mode-prompto.js" />
         <option value="$PROJECT_DIR$/js/editor/worker-prompto.js" />
         <option value="$PROJECT_DIR$/apps/index.html" />
-        <option value="$PROJECT_DIR$/ide/editor.html" />
+        <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/ide/index.html" />
+        <option value="$PROJECT_DIR$/js/ide/worker-prompto.js" />
         <option value="$PROJECT_DIR$/js/ide/mode-prompto.js" />
+        <option value="$PROJECT_DIR$/ide/editor.html" />
       </list>
     </option>
   </component>
@@ -292,7 +317,7 @@
       <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21666667" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19029851" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32462686" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -322,46 +347,11 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="8" />
+      <option name="time" value="11" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../../../../../ace-build/src-noconflict/ace.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-9.222222" vertical-offset="121191" max-vertical-offset="275235">
-          <caret line="8124" column="16" selection-start-line="8124" selection-start-column="9" selection-end-line="8124" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../../../../ace-build/src-noconflict/mode-java.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.1791238" vertical-offset="915" max-vertical-offset="17670">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../../../../ace-build/src-noconflict/mode-python.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="555" max-vertical-offset="4005">
-          <caret line="99" column="9" selection-start-line="90" selection-start-column="9" selection-end-line="99" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../../../../ace-build/src-noconflict/mode-c_cpp.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1455" max-vertical-offset="12825">
-          <caret line="119" column="14" selection-start-line="109" selection-start-column="13" selection-end-line="119" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/ace/mode-javascript.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="90">
-          <caret line="0" column="21429" selection-start-line="0" selection-start-column="21423" selection-end-line="0" selection-end-column="21429" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/ace/ext-modelist.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="150">
@@ -464,13 +454,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.03" vertical-offset="0" max-vertical-offset="825">
           <caret line="1" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/prompto/parser/ECleverParser.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.53" vertical-offset="280" max-vertical-offset="780">
-          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -601,36 +584,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/ace/ace.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-12.333333" vertical-offset="243642" max-vertical-offset="275655">
-          <caret line="16265" column="39" selection-start-line="16265" selection-start-column="39" selection-end-line="16265" selection-end-column="39" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/ide/worker-base.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-7.3333335" vertical-offset="10632" max-vertical-offset="16260">
           <caret line="722" column="24" selection-start-line="722" selection-start-column="16" selection-end-line="722" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/prompto/parser/EParser.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="15000" max-vertical-offset="420960">
-          <caret line="16261" column="5" selection-start-line="16261" selection-start-column="5" selection-end-line="16261" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/prompto/parser/AbstractParser.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="960">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -665,14 +622,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.49916527" vertical-offset="601" max-vertical-offset="1260">
-          <caret line="60" column="31" selection-start-line="60" selection-start-column="31" selection-end-line="60" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/apps/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.6010017" vertical-offset="570" max-vertical-offset="1320">
@@ -681,41 +630,128 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/ide/worker-prompto.js">
+    <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="502" max-vertical-offset="1125">
-          <caret line="49" column="0" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.6494157" vertical-offset="661" max-vertical-offset="1260">
+          <caret line="70" column="0" selection-start-line="70" selection-start-column="0" selection-end-line="70" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/prompto-frame.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1680">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/prompto-main.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.6966292" vertical-offset="1057" max-vertical-offset="1680">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/prompto/parser/EParser.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5537721" vertical-offset="30495" max-vertical-offset="420960">
+          <caret line="2057" column="0" selection-start-line="2057" selection-start-column="0" selection-end-line="2057" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ide/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-15.0" vertical-offset="315" max-vertical-offset="1545">
+          <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
           <folding>
-            <marker date="1441813583000" expanded="true" signature="861:874" placeholder="/*...*/" />
+            <marker date="1441902663000" expanded="true" signature="2435:2675" placeholder="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ide/editor.html">
+    <entry file="file://$PROJECT_DIR$/js/prompto/parser/AbstractParser.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-16.833334" vertical-offset="496" max-vertical-offset="1155">
-          <caret line="60" column="48" selection-start-line="60" selection-start-column="48" selection-end-line="60" selection-end-column="48" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="960">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/prompto/parser/EPromptoBuilder.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-4.4301767" vertical-offset="2760" max-vertical-offset="36015">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/prompto/parser/ECleverParser.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.22792937" vertical-offset="157" max-vertical-offset="780">
+          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/prompto/utils/CodeWriter.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1440">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/prompto/parser/Dialect.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="825">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/ide/worker-prompto.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="150" max-vertical-offset="1425">
+          <caret line="24" column="53" selection-start-line="24" selection-start-column="53" selection-end-line="24" selection-end-column="53" />
           <folding>
-            <marker date="1441814351000" expanded="true" signature="1735:2452" placeholder="..." />
+            <marker date="1441905690000" expanded="true" signature="1162:1175" placeholder="/*...*/" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/ace/ace.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.0" vertical-offset="171528" max-vertical-offset="275655">
+          <caret line="11446" column="17" selection-start-line="11446" selection-start-column="9" selection-end-line="11446" selection-end-column="17" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/ide/mode-prompto.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1672" max-vertical-offset="2400">
-          <caret line="119" column="0" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1240" max-vertical-offset="2475">
+          <caret line="145" column="51" selection-start-line="145" selection-start-column="51" selection-end-line="145" selection-end-column="51" />
           <folding>
-            <marker date="1441814403000" expanded="true" signature="3758:5018" placeholder="{...}" />
+            <marker date="1441906236000" expanded="true" signature="3758:5261" placeholder="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ide/index.html">
+    <entry file="file://$PROJECT_DIR$/ide/editor.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.68948245" vertical-offset="862" max-vertical-offset="1485">
-          <caret line="85" column="22" selection-start-line="85" selection-start-column="22" selection-end-line="85" selection-end-column="22" />
-          <folding />
+        <state vertical-scroll-proportion="0.5784114" vertical-offset="286" max-vertical-offset="1245">
+          <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+          <folding>
+            <marker date="1441906266000" expanded="true" signature="1755:2492" placeholder="..." />
+            <marker date="1441906266000" expanded="true" signature="1784:2483" placeholder="..." />
+            <marker date="1441906266000" expanded="true" signature="1787:2474" placeholder="..." />
+            <marker date="1441906266000" expanded="true" signature="1787:2474" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>

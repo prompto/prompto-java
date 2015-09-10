@@ -122,26 +122,31 @@ ace.define('ace/mode/prompto',["require","exports","module","ace/lib/oop","ace/m
 
         this.setDialect = function(dialect) {
             this.$dialect = dialect;
+            this.$worker && this.$worker.send("setDialect", [ this.$dialect ] );
         };
 
         this.createWorker = function(session) {
-            var worker = new WorkerClient(["ace"], "ace/worker/prompto", "PromptoWorker", "../js/ide/worker-prompto.js");
-            worker.send("setDialect", [ this.$dialect ] );
-            worker.attachToDocument(session.getDocument());
+            this.$worker = new WorkerClient(["ace"], "ace/worker/prompto", "PromptoWorker", "../js/ide/worker-prompto.js");
+            this.$worker.send("setDialect", [ this.$dialect ] );
+            this.$worker.attachToDocument(session.getDocument());
 
-            worker.on("errors", function(e) {
+            this.$worker.on("errors", function(e) {
                 session.setAnnotations(e.data);
             });
 
-            worker.on("annotate", function(e) {
+            this.$worker.on("annotate", function(e) {
                 session.setAnnotations(e.data);
             });
 
-            worker.on("terminate", function() {
+            this.$worker.on("terminate", function() {
                 session.clearAnnotations();
             });
 
-            return worker;
+            this.$worker.on("content", function(v) {
+                session.$editor.setValue(v.data, -1);
+            });
+
+            return this.$worker;
 
         };
 

@@ -16,7 +16,15 @@ ace.define('ace/worker/prompto',["require","exports","module","ace/lib/oop","ace
     (function() {
 
         this.setDialect = function(dialect) {
+            var old = this.$dialect;
             this.$dialect = dialect;
+            if(old && dialect!==old) {
+                var value = this.doc.getValue();
+                if(value) {
+                    value = translate(value, old, dialect);
+                    this.sender.emit("content", value);
+                }
+            }
         };
 
         this.onUpdate = function() {
@@ -64,6 +72,18 @@ var parse = function(input, dialect, listener) {
     var klass = prompto.parser[dialect + "CleverParser"];
     var parser = new klass(input);
     parser.removeErrorListeners();
-    parser.addErrorListener(listener);
-    var decls = parser.parse();
+    if(listener)
+        parser.addErrorListener(listener);
+    return parser.parse();
+};
+
+var translate = function(input, from, to) {
+    var decls = parse(input, from); // could be cached
+    var context = prompto.runtime.Context.newGlobalContext();
+    decls.register(context);
+    // rewrite
+    var dialect = prompto.parser.Dialect[to];
+    var writer = new prompto.utils.CodeWriter(dialect, context);
+    decls.toDialect(writer);
+    return writer.toString();
 };

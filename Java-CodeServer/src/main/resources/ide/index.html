@@ -29,15 +29,28 @@
     <script src="../js/lib/ie10-viewport-bug-workaround.js"></script>
     <!-- ensure content menu is highlighted -->
     <script type="text/javascript">
+
+        function editorReady() {
+            var frame = document.getElementById("editor");
+            frame.contentWindow.setDialect("E");
+            frame.contentWindow.setValue("define name as: Text attribute");
+        };
+
         $(document).ready(function () {
-            $('ul.nav > li').click(function (e) {
-                $('ul.nav > li').removeClass('active');
+
+            $('#nav-dialect > li').click(function (e) {
+                $('#nav-dialect > li').removeClass('active');
+                $(this).addClass('active');
+                var dialect = this.innerText.substring(0,1);
+                var frame = document.getElementById("editor");
+                frame.contentWindow.setDialect(dialect);
+            });
+
+            $('#nav-catalog > li').click(function (e) {
+                $('#nav-catalog > li').removeClass('active');
                 $(this).addClass('active');
             });
         });
-    </script>
-    <script type="text/javascript">
-        var dialect = "O";
     </script>
 </head>
 
@@ -46,24 +59,15 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">Prompto Code Center for MyApp</a>
+                <a class="navbar-brand">Prompto Code Center for MyApp</a>
             </div>
-            <div id="navbar" class="navbar-collapse collapse">
-                <!--
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="active"><a href="#">Applications</a></li>
-                    <li><a href="#">Projects</a></li>
-                    <li><a href="#">Data</a></li>
-                    <li><a href="#">Tutorials</a></li>
-                    <li><a href="#">Reference</a></li>
+            <div id="navbar" class="navbar-collapse">
+                <ul id="nav-dialect" class="nav navbar-nav navbar-right">
+                    <li class="active"><a>English</a></li>
+                    <li><a>Orient</a></li>
+                    <li><a>Snake</a></li>
                 </ul>
-                -->
+                <a class="navbar-brand navbar-right">Prompto dialect:</a>
                 <form class="navbar-form navbar-right">
                     <input type="text" class="form-control" placeholder="Search...">
                 </form>
@@ -73,17 +77,17 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-2 sidebar">
-                <ul class="nav nav-sidebar">
-                    <li class="active"><a href="#">Attributes <span class="sr-only">(current)</span></a></li>
-                    <li><a href="#">Categories</a></li>
-                    <li><a href="#">Methods</a></li>
+            <div id="sidebar" class="col-md-2 sidebar">
+                <ul id="nav-catalog" class="nav nav-sidebar">
+                    <li class="active"><a href="#X">Attributes <span class="sr-only">(current)</span></a></li>
+                    <li><a href="#Y">Categories</a></li>
+                    <li><a href="#Z">Methods</a></li>
                 </ul>
             </div>
             <div class="col-md-10 col-md-offset-2 main no-gutter" style="padding: 0">
-                <div class="embed-responsive embed-responsive-4by3">
-                    <iframe name="content-frame" class="embed-responsive-item" src="editor.html"/>
-                </div>
+               <div class="embed-responsive embed-responsive-4by3 collapse in">
+                    <iframe id="editor" class="embed-responsive-item" src="editor.html"/>
+               </div>
             </div>
         </div>
     </div>

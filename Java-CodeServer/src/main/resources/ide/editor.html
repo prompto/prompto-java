@@ -26,14 +26,21 @@
     <script src="../js/lib/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../js/lib/ie10-viewport-bug-workaround.js"></script>
-    <!-- ensure content menu is highlighted -->
     <script type="text/javascript">
+
+        function setDialect(dialect) {
+            var mode = editor.getSession().getMode();
+            mode.setDialect(dialect);
+        };
+
+        function setValue(value) {
+            editor.setValue(value, -1);
+        };
+
         $(document).ready(function () {
-            $('ul.nav > li').click(function (e) {
-                $('ul.nav > li').removeClass('active');
-                $(this).addClass('active');
-            });
+            parent.editorReady();
         });
+
     </script>
     <style type="text/css" media="screen">
         #editor {
@@ -55,14 +62,13 @@
         <script src="../js/ide/mode-prompto.js" type="text/javascript" charset="utf-8"></script>
         <script>
             var editor = ace.edit("editor");
+            editor.getSession().$editor = editor;
             editor.getSession().setUseWorker(false);
             editor.$blockScrolling = Infinity;
             editor.setTheme("ace/theme/eclipse");
             editor.getSession().setMode("ace/mode/prompto");
-            var mode = editor.getSession().getMode();
-            mode.setDialect(parent.dialect);
+            editor.getSession().getMode().setDialect("E"); // start with something
             editor.getSession().setUseWorker(true);
-            editor.setValue("define name as: Text attribute ");
         </script>
     </div>
 
