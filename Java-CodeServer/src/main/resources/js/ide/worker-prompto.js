@@ -44,7 +44,7 @@ ace.define('ace/worker/prompto',["require","exports","module","ace/lib/oop","ace
 
 var require_saved = require;
 require = undefined;
-RequireOptions = { 'paths': ['..'] }; // walk up to js folder
+Honey = { 'requirePath': ['..'] }; // walk up to js folder
 importScripts("../lib/require.js");
 var prompto = require('prompto/index');
 var antlr4ErrorListener = require('antlr4/error/ErrorListener').ErrorListener;
