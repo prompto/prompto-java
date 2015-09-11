@@ -41,7 +41,7 @@
             $('#nav-dialect > li').click(function (e) {
                 $('#nav-dialect > li').removeClass('active');
                 $(this).addClass('active');
-                var dialect = this.innerText.substring(0,1);
+                var dialect = this.textContent.substring(0,1);
                 var frame = document.getElementById("editor");
                 frame.contentWindow.setDialect(dialect);
             });
@@ -84,7 +84,7 @@
                     <li><a href="#Z">Methods</a></li>
                 </ul>
             </div>
-            <div class="col-md-10 col-md-offset-2 main no-gutter" style="padding: 0">
+            <div class="col-md-10 col-md-offset-2 main" style="padding: 0px">
                <div class="embed-responsive embed-responsive-4by3 collapse in">
                     <iframe id="editor" class="embed-responsive-item" src="editor.html"/>
                </div>
