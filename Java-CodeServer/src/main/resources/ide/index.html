@@ -39,6 +39,7 @@
         function editorReady() {
             var frame = document.getElementById("editor");
             frame.contentWindow.setDialect("E");
+            frame.contentWindow.setCodebase("../../prompto/application.pec");
         }
 
         var catalog = {
@@ -51,7 +52,7 @@
         function attributesAdded(added) {
             catalog.attributes = catalog.attributes.concat(added).sort();
             $('#attributes').html(catalog.attributes.map(function (name) {
-                return "<li class='list-group-item'><a>" + name + "</a></li>";
+                return "<li id='attribute_" + name + "' class='list-group-item'><a>" + name + "</a></li>";
             }).join(""));
             // need to reinstall click handler
             $('#attributes > li').click(function (e) {
@@ -60,10 +61,19 @@
             });
         }
 
+        function attributesRemoved(removed) {
+            for(var i=0;i<removed.length;i++) {
+                var name = removed[i];
+                var j = catalog.attributes.indexOf(name);
+                catalog.attributes.splice(j, 1);
+                $('#attribute_' + name).remove();
+            }
+        }
+
         function categoriesAdded(added) {
             catalog.categories = catalog.categories.concat(added).sort();
             $('#categories').html(catalog.categories.map(function(name) {
-                return "<li class='list-group-item'><a>" + name + "</a></li>";
+                return "<li id='category_" + name + "' class='list-group-item'><a>" + name + "</a></li>";
             }).join(""));
             // need to reinstall click handler
             $('#categories > li').click(function (e) {
@@ -72,16 +82,38 @@
             });
         }
 
+        function categoriesRemoved(removed) {
+            for(var i=0;i<removed.length;i++) {
+                var name = removed[i];
+                var j = catalog.categories.indexOf(name);
+                catalog.categories.splice(j, 1);
+                $('#category_' + name).remove();
+            }
+        }
+
         function testsAdded(added) {
             catalog.tests = catalog.tests.concat(added).sort();
             $('#tests').html(catalog.tests.map(function(name) {
-                return "<li class='list-group-item'><a>" + name + "</a></li>";
+                return "<li id='test_" + makeId(name) + "' class='list-group-item'><a>" + name + "</a></li>";
             }).join(""));
             // need to reinstall click handler
             $('#tests > li').click(function (e) {
                 e.stopPropagation();
                 setContent({ test : $(event.target).text() });
             });
+        }
+
+        function testsRemoved(removed) {
+            for(var i=0;i<removed.length;i++) {
+                var name = removed[i];
+                var j = catalog.tests.indexOf(name);
+                catalog.tests.splice(j, 1);
+                $('#test_' + makeId(name)).remove();
+            }
+        }
+
+        function makeId(name) {
+            return name.replace(" ", "_").replace('"',"").replace("'","");
         }
 
         function methodsAdded(added) {
@@ -119,8 +151,23 @@
             });
         }
 
+        function methodsRemoved(added) {
+        }
+
         function catalogUpdated(delta) {
             // remove deleted elements
+            if(delta.removed.attributes) {
+                attributesRemoved(delta.removed.attributes);
+            }
+            if(delta.removed.methods) {
+                methodsRemoved(delta.removed.methods);
+            }
+            if(delta.removed.categories) {
+                categoriesRemoved(delta.removed.categories);
+            }
+            if(delta.removed.tests) {
+                testsRemoved(delta.removed.tests);
+            }
             // add newly created elements
             if(delta.added.attributes) {
                 attributesAdded(delta.added.attributes);
@@ -170,7 +217,7 @@
                     <li><a>Orient</a></li>
                     <li><a>Snake</a></li>
                 </ul>
-                <a class="navbar-brand navbar-right">Prompto dialect:</a>
+                <a class="navbar-brand navbar-right">Dialect:</a>
                 <form class="navbar-form navbar-right">
                     <input type="text" class="form-control" placeholder="Search...">
                 </form>

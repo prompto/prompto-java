@@ -38,6 +38,11 @@
             mode.setContent(id);
         }
 
+        function setCodebase(path) {
+            var mode = editor.getSession().getMode();
+            mode.setCodebase(path);
+        }
+
         function setValue(value) {
             editor.setValue(value, -1);
         }

@@ -9,6 +9,7 @@ ace.define('ace/worker/prompto',["require","exports","module","ace/lib/oop","ace
         Mirror.call(this, sender);
         this.setTimeout(200);
         this.$dialect = null;
+        this.$value = null;
         this.onInit();
     };
 
@@ -20,47 +21,41 @@ ace.define('ace/worker/prompto',["require","exports","module","ace/lib/oop","ace
         if(old && dialect!==old) {
             var value = this.doc.getValue();
             if(value) {
-                value = safe_require(function(){return translate(value, old, dialect);});
-                this.sender.emit("value", value);
+                // remember value since it does not result from an edit
+                this.$value = safe_require(function() { return translate(value, old, dialect); } );
+                this.sender.emit("value", this.$value);
             }
-        }
-    };
-
-    PromptoWorker.prototype.getDeclaration = function(id) {
-        if(id.test)
-            return appContext.getRegisteredTest(id.test);
-        else if(id.method) {
-            var decl = appContext.getRegisteredDeclaration(id.method);
-            if(id.proto)
-                return decl.methods[id.proto];
-            else for(var proto in decl.methods)
-                return decl.methods[proto];
-        } else {
-            var name = id.attribute || id.category
-            return appContext.getRegisteredDeclaration(name);
         }
     };
 
     PromptoWorker.prototype.setContent = function(id) {
         var worker = this;
         safe_require(function() {
-            var decl = worker.getDeclaration(id);
+            var decl = getDeclaration(id);
             var dialect = prompto.parser.Dialect[worker.$dialect];
             var writer = new prompto.utils.CodeWriter(dialect, appContext);
             decl.toDialect(writer);
-            var value = writer.toString();
-            worker.sender.emit("value", value);
+            // remember value since it does not result from an edit
+            worker.$value = writer.toString();
+            worker.sender.emit("value", worker.$value);
+        });
+    };
+
+    PromptoWorker.prototype.setCodebase = function(path) {
+        var worker = this;
+        safe_require(function() {
+            loadCodebase(worker, path);
+            publishCodebase(worker);
         });
     };
 
     PromptoWorker.prototype.onUpdate = function() {
-        var annotations = [];
         var value = this.doc.getValue();
-        if (value) {
-            var errorListener = new AnnotatingErrorListener(annotations);
-            var worker = this;
-            safe_require(function() { parse(value, worker.$dialect, errorListener); });
-        }
+        var annotations = [];
+        var errorListener = new AnnotatingErrorListener(annotations);
+        var worker = this;
+        safe_require(function() { annotateAndUpdateCatalog(worker, worker.$value, value, worker.$dialect, errorListener); });
+        this.$value = value;
         this.sender.emit("annotate", annotations);
     };
 
@@ -125,17 +120,78 @@ AnnotatingErrorListener.prototype.syntaxError = function(recognizer, offendingSy
 };
 
 // method for parsing editor input
-var parse = function(input, dialect, listener) {
+function parse(input, dialect, listener) {
     var klass = prompto.parser[dialect + "CleverParser"];
     var parser = new klass(input);
     parser.removeErrorListeners();
     if(listener)
         parser.addErrorListener(listener);
     return parser.parse();
-};
+}
+
+// method for updating context on user input
+function annotateAndUpdateCatalog(worker, previous, current, dialect, listener) {
+    // always annotate new content
+    var new_decls = parse(current, dialect, listener);
+    // only update catalog and appContext if update event results from an edit
+    if(previous && previous!=current) {
+        // update catalog using isolated contexts
+        var old_decls = parse(previous, dialect); // don't annotate previous content
+        var new_context = prompto.runtime.Context.newGlobalContext();
+        new_decls.register(new_context);
+        var old_context = prompto.runtime.Context.newGlobalContext();
+        old_decls.register(old_context);
+        var delta = {
+            removed : old_context.getLocalCatalog(),
+            added   : new_context.getLocalCatalog()
+        };
+        var count = shrinkDelta(delta);
+        if(count)
+            worker.sender.emit("catalog", delta);
+        // now update appContext
+        old_decls.unregister(appContext);
+        new_decls.register(appContext);
+    }
+}
+
+function shrinkDelta(delta) {
+    var length = shrinkLists(delta.removed.attributes, delta.added.attributes);
+    length += shrinkLists(delta.removed.categories, delta.added.categories);
+    length += shrinkLists(delta.removed.tests, delta.added.tests);
+    return length;
+}
+
+function shrinkLists(a, b) {
+    if(a && b) {
+        a.sort();
+        b.sort();
+        for(var i=0,j=0;i<a.length && j< b.length;) {
+            if(a[i]===b[j]) {
+                a.splice(i,1);
+                b.splice(j,1);
+            } else if(a[i]>b[j]) {
+                j++;
+            } else {
+                i++;
+            }
+        }
+        var length = a.length + b.length;
+        if(!length) {
+            delete a;
+            delete b;
+        }
+        return length;
+    } else if(a)
+        return a.length;
+    else if(b)
+        return b.length;
+    else
+        return 0;
+}
+
 
 // method for translating current input to other dialect
-var translate = function(input, from, to) {
+function translate(input, from, to) {
     var decls = parse(input, from); // could be cached
     var ctx = prompto.runtime.Context.newGlobalContext();
     decls.register(ctx);
@@ -144,10 +200,10 @@ var translate = function(input, from, to) {
     var writer = new prompto.utils.CodeWriter(dialect, ctx);
     decls.toDialect(writer);
     return writer.toString();
-};
+}
 
 // method for downloading prompto code
-var loadCode = function(url) {
+function loadCode(url) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = "text";
     xhr.onerror = function(e) {
@@ -157,7 +213,7 @@ var loadCode = function(url) {
     xhr.open('GET', url, false);
     xhr.send(null);
     return xhr.responseText;
-};
+}
 
 var coreContext = prompto.runtime.Context.newGlobalContext();
 var appContext = coreContext.newLocalContext();
@@ -166,7 +222,7 @@ function loadCore(worker) {
     var code = loadCode("../../prompto/core.pec");
     var decls = parse(code, "E");
     decls.register(coreContext);
-};
+}
 
 function publishCore(worker) {
     var delta = {
@@ -175,4 +231,40 @@ function publishCore(worker) {
     };
     worker.sender.emit("catalog", delta);
 }
+
+function inferDialect(path) {
+    return path.substring(path.length-2, path.length-1).toUpperCase();
+}
+
+function loadCodebase(worker, path) {
+    var code = loadCode(path);
+    var dialect = inferDialect(path);
+    var decls = parse(code, dialect);
+    decls.register(appContext);
+}
+
+function publishCodebase(worker) {
+    var delta = {
+        removed : {},
+        added   : appContext.getLocalCatalog()
+    };
+    worker.sender.emit("catalog", delta);
+}
+
+function getDeclaration(id) {
+    if(id.test)
+        return appContext.getRegisteredTest(id.test);
+    else if(id.method) {
+        var decl = appContext.getRegisteredDeclaration(id.method);
+        if(id.proto)
+            return decl.methods[id.proto];
+        else for(var proto in decl.methods)
+            return decl.methods[proto];
+    } else {
+        var name = id.attribute || id.category
+        return appContext.getRegisteredDeclaration(name);
+    }
+}
+
+
 

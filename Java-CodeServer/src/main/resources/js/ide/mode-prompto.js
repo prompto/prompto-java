@@ -129,6 +129,10 @@ ace.define('ace/mode/prompto',["require","exports","module","ace/lib/oop","ace/m
             this.$worker && this.$worker.send("setContent", [ id ] );
         };
 
+        this.setCodebase = function(path) {
+            this.$worker && this.$worker.send("setCodebase", [ path ] );
+        };
+
         this.createWorker = function(session) {
             this.$worker = new WorkerClient(["ace"], "ace/worker/prompto", "PromptoWorker", "../js/ide/worker-prompto.js");
             this.$worker.send("setDialect", [ this.$dialect ] );
