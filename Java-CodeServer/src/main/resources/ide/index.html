@@ -27,35 +27,69 @@
     <script src="../js/lib/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../js/lib/ie10-viewport-bug-workaround.js"></script>
+    <script src="../js/lib/FileSaver.js"></script>
     <!-- ensure content menu is highlighted -->
     <script type="text/javascript">
+
+        function saveBlob() {
+            var blob = new Blob(["Hello, world!"], {type: "text/plain;charset=utf-8"});
+            saveAs(blob,'test.txt');
+        }
 
         function editorReady() {
             var frame = document.getElementById("editor");
             frame.contentWindow.setDialect("E");
-            frame.contentWindow.setValue("define name as: Text attribute");
+        }
+
+        var catalog = {
+            attributes : [],
+            methods : [],
+            categories : [],
+            tests : []
         };
+
+        function catalogUpdated(delta) {
+            // remove deleted elements
+            // add newly created elements
+            if(delta.added.attributes) {
+                catalog.attributes = catalog.attributes.concat(delta.added.attributes).sort();
+                $('#attributes').html(catalog.attributes.map(function(name) {
+                    return "<li><a>" + name + "</a></li>";
+                }).join(""));
+                // need to reinstall click handler
+                $('#attributes > li').click(function (e) {
+                    setContent({ attribute : $(event.target).text() });
+                });
+            }
+        }
+
+        function setContent(id) {
+            var frame = document.getElementById("editor");
+            frame.contentWindow.setContent(id);
+        }
 
         $(document).ready(function () {
 
-            $('#nav-dialect > li').click(function (e) {
+            $('#nav-dialect > li').click(function () {
                 $('#nav-dialect > li').removeClass('active');
                 $(this).addClass('active');
-                var dialect = this.textContent.substring(0,1);
+                var dialect = $(this).text().substring(0,1);
                 var frame = document.getElementById("editor");
                 frame.contentWindow.setDialect(dialect);
             });
 
-            $('#nav-catalog > li').click(function (e) {
-                $('#nav-catalog > li').removeClass('active');
-                $(this).addClass('active');
+            $('label.tree-toggler').click(function () {
+                $(this).parent().children('ul.tree').toggle(300);
+            });
+
+            $('#attributes > li').click(function () {
+                setContent({ attribute : $(event.target).text() });
             });
         });
     </script>
 </head>
 
 <body>
-
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -77,12 +111,35 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div id="sidebar" class="col-md-2 sidebar">
-                <ul id="nav-catalog" class="nav nav-sidebar">
-                    <li class="active"><a href="#X">Attributes <span class="sr-only">(current)</span></a></li>
-                    <li><a href="#Y">Categories</a></li>
-                    <li><a href="#Z">Methods</a></li>
-                </ul>
+            <div class="col-md-2 sidebar">
+                <div style="overflow-y: scroll; overflow-x: hidden; height: 500px;">
+                    <ul class="nav nav-list">
+                        <li><label class="tree-toggler nav-header">Attributes</label>
+                            <ul id="attributes" class="nav nav-list tree">
+                                <li><a href="#">id</a></li>
+                                <li><a href="#">text</a></li>
+                            </ul>
+                        </li>
+                        <li><label class="tree-toggler nav-header">Methods</label>
+                            <ul id="methods" class="nav nav-list tree">
+                                <li><a href="#">print</a></li>
+                                <li><a href="#">main</a></li>
+                            </ul>
+                        </li>
+                        <li><label class="tree-toggler nav-header">Categories</label>
+                            <ul id="categories" class="nav nav-list tree">
+                                <li><a href="#">Person</a></li>
+                                <li><a href="#">Employee</a></li>
+                            </ul>
+                        </li>
+                        <li><label class="tree-toggler nav-header">Tests</label>
+                            <ul id="tests" class="nav nav-list tree">
+                                <li><a href="#">It just works!</a></li>
+                                <li><a href="#">Name must be identical</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
             </div>
             <div class="col-md-10 col-md-offset-2 main" style="padding: 0px">
                <div class="embed-responsive embed-responsive-4by3 collapse in">
@@ -91,7 +148,6 @@
             </div>
         </div>
     </div>
-
 </body>
 </html>
 

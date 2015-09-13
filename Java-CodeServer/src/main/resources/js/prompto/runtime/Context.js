@@ -1,4 +1,5 @@
 var ConcreteCategoryDeclaration = require("../declaration/ConcreteCategoryDeclaration").ConcreteCategoryDeclaration;
+var AttributeDeclaration = require("../declaration/AttributeDeclaration").AttributeDeclaration;
 var ContextualExpression = require("../value/ContextualExpression").ContextualExpression;
 var MethodExpression = require("../expression/MethodExpression").MethodExpression;
 var ConcreteInstance = require("../value/ConcreteInstance").ConcreteInstance;
@@ -11,121 +12,132 @@ var Variable = require("./Variable").Variable;
 var LinkedValue = require("./LinkedValue").LinkedValue;
 
 function Context() {
-	this.globals = null;
-	this.calling = null;
-	this.parent = null; // for inner methods
-	this.debugger = null;
-	this.declarations = {};
+    this.globals = null;
+    this.calling = null;
+    this.parent = null; // for inner methods
+    this.debugger = null;
+    this.declarations = {};
     this.tests = {};
-	this.instances = {};
-	this.values = {};
+    this.instances = {};
+    this.values = {};
     this.nativeBindings = {};
-	return this;
+    return this;
 }
 
 Context.newGlobalContext = function() {
-	var context = new Context();
-	context.globals = context;
-	context.calling = null;
-	context.parent = null;
-	context.debugger = null;
-	return context;
+    var context = new Context();
+    context.globals = context;
+    context.calling = null;
+    context.parent = null;
+    context.debugger = null;
+    return context;
 };
 
 
 Context.prototype.isGlobalContext = function() {
-	return this===this.globals;
+    return this===this.globals;
 };
 
 /*
 
-public void setDebugger(Debugger debugger) {
-	this.debugger = debugger;
-}
+ public void setDebugger(Debugger debugger) {
+ this.debugger = debugger;
+ }
 
-public Debugger getDebugger() {
-	return debugger;
-}
+ public Debugger getDebugger() {
+ return debugger;
+ }
 
-@Override
-public String toString() {
-	StringBuilder sb = new StringBuilder();
-	sb.append("{");
-	if(this!=globals) {
-		sb.append("globals:");
-		sb.append(globals);
-	}
-	sb.append(",calling:");
-	sb.append(calling);
-	sb.append(",parent:");
-	sb.append(parent);
-	sb.append(",declarations:");
-	sb.append(declarations);
-	sb.append(",instances:");
-	sb.append(instances);
-	sb.append(",values:");
-	sb.append(values);
-	sb.append("}");
-	return sb.toString();
-}
+ @Override
+ public String toString() {
+ StringBuilder sb = new StringBuilder();
+ sb.append("{");
+ if(this!=globals) {
+ sb.append("globals:");
+ sb.append(globals);
+ }
+ sb.append(",calling:");
+ sb.append(calling);
+ sb.append(",parent:");
+ sb.append(parent);
+ sb.append(",declarations:");
+ sb.append(declarations);
+ sb.append(",instances:");
+ sb.append(instances);
+ sb.append(",values:");
+ sb.append(values);
+ sb.append("}");
+ return sb.toString();
+ }
 
-*/
+ */
 
 Context.prototype.getCallingContext = function() {
-	return this.calling;
+    return this.calling;
 };
 
 Context.prototype.getParentMostContext = function() {
-	if(this.parent==null) {
-		return this;
-	} else {
-		return this.parent.getParentMostContext();
-	}
+    if(this.parent==null) {
+        return this;
+    } else {
+        return this.parent.getParentMostContext();
+    }
 };
 
 Context.prototype.getParentContext = function() {
-	return this.parent;
+    return this.parent;
 }
 
 Context.prototype.setParentContext = function(parent) {
-	this.parent = parent;
+    this.parent = parent;
 }
 
 Context.prototype.newResourceContext = function() {
-	var context = new ResourceContext();
-	context.globals = this.globals;
-	context.calling = this.calling;
-	context.parent = this;
-	context.debugger = this.debugger;
-	return context;
+    var context = new ResourceContext();
+    context.globals = this.globals;
+    context.calling = this.calling;
+    context.parent = this;
+    context.debugger = this.debugger;
+    return context;
 };
 
 Context.prototype.newLocalContext = function() {
-	var context = new Context();
-	context.globals = this.globals;
-	context.calling = this;
-	context.parent = null;
-	context.debugger = this.debugger;
-	return context;
+    var context = new Context();
+    context.globals = this.globals;
+    context.calling = this;
+    context.parent = null;
+    context.debugger = this.debugger;
+    return context;
 };
 
 Context.prototype.newInstanceContext = function(instance, type) {
-	var context = new InstanceContext(instance, type);
-	context.globals = this.globals;
-	context.calling = this;
-	context.parent = null;
-	context.debugger = this.debugger;
-	return context;
+    var context = new InstanceContext(instance, type);
+    context.globals = this.globals;
+    context.calling = this;
+    context.parent = null;
+    context.debugger = this.debugger;
+    return context;
 };
 
 
 Context.prototype.newChildContext = function() {
-	var context = new Context();
-	context.globals = this.globals;
-	context.calling = this.calling;
-	context.parent = this;
-	context.debugger = this.debugger;
-	return context;
+    var context = new Context();
+    context.globals = this.globals;
+    context.calling = this.calling;
+    context.parent = this;
+    context.debugger = this.debugger;
+    return context;
+};
+
+Context.prototype.getAllAttributes = function() {
+    if(this!=this.globals)
+        return this.globals.getAllAttributes();
+    var list = [];
+    for(name in this.declarations) {
+        if(this.declarations[name] instanceof AttributeDeclaration)
+            list.push(name);
+    }
+    return list;
 };
 
 Context.prototype.findAttribute = function(name) {
@@ -136,55 +148,55 @@ Context.prototype.findAttribute = function(name) {
 };
 
 Context.prototype.getRegistered = function(name) {
-	// resolve upwards, since local names override global ones
-	var actual = this.declarations[name] || null;
-	if(actual!==null) {
-		return actual;
-	}
-	actual = this.instances[name] || null;
-	if(actual!==null) {
-		return actual;
-	} else if(this.parent!==null) {
-		return this.parent.getRegistered(name);
-	} else if(this.globals!==this) {
-		return this.globals.getRegistered(name);
-	} else {
-		return null;
-	}
-}
+    // resolve upwards, since local names override global ones
+    var actual = this.declarations[name] || null;
+    if(actual!==null) {
+        return actual;
+    }
+    actual = this.instances[name] || null;
+    if(actual!==null) {
+        return actual;
+    } else if(this.parent!==null) {
+        return this.parent.getRegistered(name);
+    } else if(this.globals!==this) {
+        return this.globals.getRegistered(name);
+    } else {
+        return null;
+    }
+};
 
 Context.prototype.getRegisteredDeclaration = function(name) {
-	// resolve upwards, since local names override global ones
-	var actual = this.declarations[name] || null;
-	if(actual!==null) {
-		return actual;
-	} else if(this.parent!==null) {
-		return this.parent.getRegisteredDeclaration(name);
-	} else if(this.globals!==this) {
-		return this.globals.getRegisteredDeclaration(name);
-	} else {
-		return null;
-	}
+    // resolve upwards, since local names override global ones
+    var actual = this.declarations[name] || null;
+    if(actual!==null) {
+        return actual;
+    } else if(this.parent!==null) {
+        return this.parent.getRegisteredDeclaration(name);
+    } else if(this.globals!==this) {
+        return this.globals.getRegisteredDeclaration(name);
+    } else {
+        return null;
+    }
 }
 
 Context.prototype.registerDeclaration = function(declaration) {
-	var actual = this.getRegistered(declaration.name) || null;
-	if(actual!=null) {
-		throw new SyntaxError("Duplicate name: \"" + declaration.name + "\"");
-	}
-	this.declarations[declaration.name] = declaration;
+    var actual = this.getRegistered(declaration.name) || null;
+    if(actual!=null) {
+        throw new SyntaxError("Duplicate name: \"" + declaration.name + "\"");
+    }
+    this.declarations[declaration.name] = declaration;
 };
 
 Context.prototype.registerMethodDeclaration = function(declaration) {
-	var actual = this.getRegistered(declaration.name);
-	if(actual!==null && !(actual instanceof MethodDeclarationMap)) {
-		throw new SyntaxError("Duplicate name: \"" + declaration.name + "\"");
-	}
+    var actual = this.getRegistered(declaration.name);
+    if(actual!==null && !(actual instanceof MethodDeclarationMap)) {
+        throw new SyntaxError("Duplicate name: \"" + declaration.name + "\"");
+    }
     if(actual===null) {
         actual = new MethodDeclarationMap(declaration.name);
         this.declarations[declaration.name] = actual;
     }
-	actual.register(declaration,this);
+    actual.register(declaration,this);
 };
 
 Context.prototype.registerTestDeclaration = function(declaration) {
@@ -216,25 +228,25 @@ Context.prototype.getNativeBinding = function(type) {
 };
 
 function MethodDeclarationMap(name) {
-	this.name = name;
-	this.methods = {};
-	return this;
+    this.name = name;
+    this.methods = {};
+    return this;
 }
 
 MethodDeclarationMap.prototype.register = function(declaration, context) {
-	var proto = declaration.getProto(context);
-	var current = this.methods[proto] || null;
-	if(current!==null) {
-		throw new SyntaxError("Duplicate prototype for name: \"" + declaration.name + "\"");
-	}
-	this.methods[proto] = declaration;
+    var proto = declaration.getProto(context);
+    var current = this.methods[proto] || null;
+    if(current!==null) {
+        throw new SyntaxError("Duplicate prototype for name: \"" + declaration.name + "\"");
+    }
+    this.methods[proto] = declaration;
 };
 
 MethodDeclarationMap.prototype.registerIfMissing = function(declaration,context) {
-	var proto = declaration.getProto(context);
-	if(!(proto in this.methods)) {
-		this.methods[proto] = declaration;
-	}
+    var proto = declaration.getProto(context);
+    if(!(proto in this.methods)) {
+        this.methods[proto] = declaration;
+    }
 };
 
 
@@ -247,36 +259,36 @@ Context.prototype.getRegisteredValue = function(name) {
 };
 
 Context.prototype.readRegisteredValue = function(name) {
-	return this.instances[name] || null;
+    return this.instances[name] || null;
 };
 
 
 Context.prototype.registerValue = function(value, checkDuplicate) {
     if(checkDuplicate === undefined)
         checkDuplicate = true;
-	if(checkDuplicate) {
+    if(checkDuplicate) {
         // only explore current context
         var actual = this.instances[value.name] || null;
         if(actual!==null) {
             throw new SyntaxError("Duplicate name: \"" + value.name + "\"");
         }
     }
-	this.instances[value.name] = value;
+    this.instances[value.name] = value;
 }
 
 Context.prototype.getValue = function(name) {
-	var context = this.contextForValue(name);
-	if(context===null) {
-		throw new SyntaxError(name + " is not defined");
-	}
-	return context.readValue(name);
+    var context = this.contextForValue(name);
+    if(context===null) {
+        throw new SyntaxError(name + " is not defined");
+    }
+    return context.readValue(name);
 };
 
 Context.prototype.readValue = function(name) {
-	var value = this.values[name] || null;
-	if(value===null) {
-		throw new SyntaxError(name + " has no value");
-	}
+    var value = this.values[name] || null;
+    if(value===null) {
+        throw new SyntaxError(name + " has no value");
+    }
     if(value instanceof LinkedValue)
         return value.context.getValue(name);
     else
@@ -284,11 +296,11 @@ Context.prototype.readValue = function(name) {
 };
 
 Context.prototype.setValue = function(name, value) {
-	var context = this.contextForValue(name);
-	if(context===null) {
-		throw new SyntaxError(name + " is not defined");
-	}
-	context.writeValue(name,value);
+    var context = this.contextForValue(name);
+    if(context===null) {
+        throw new SyntaxError(name + " is not defined");
+    }
+    context.writeValue(name,value);
 };
 
 
@@ -298,7 +310,7 @@ Context.prototype.writeValue = function(name, value) {
     if(current instanceof LinkedValue)
         current.context.setValue(name, value);
     else
-    	this.values[name] = value;
+        this.values[name] = value;
 };
 
 Context.prototype.autocast = function(name, value) {
@@ -311,32 +323,32 @@ Context.prototype.autocast = function(name, value) {
 };
 
 Context.prototype.contextForValue = function(name) {
-	// resolve upwards, since local names override global ones
-	var actual = this.instances[name] || null;
-	if(actual!==null) {
-		return this;
-	} else if(this.parent!==null) {
-		return this.parent.contextForValue(name);
-	} else if(this.globals!==this) {
-		return this.globals.contextForValue(name);
-	} else {
-		return null;
-	}
+    // resolve upwards, since local names override global ones
+    var actual = this.instances[name] || null;
+    if(actual!==null) {
+        return this;
+    } else if(this.parent!==null) {
+        return this.parent.contextForValue(name);
+    } else if(this.globals!==this) {
+        return this.globals.contextForValue(name);
+    } else {
+        return null;
+    }
 };
 
 function ResourceContext() {
-	Context.call(this);
-	return this;
+    Context.call(this);
+    return this;
 }
 
 ResourceContext.prototype = Object.create(Context.prototype);
 ResourceContext.prototype.constructor = ResourceContext;
 
 function InstanceContext(instance, type) {
-	Context.call(this);
-	this.instance = instance || null;
+    Context.call(this);
+    this.instance = instance || null;
     this.instanceType = type!=null ? type : instance.type;
-	return this;
+    return this;
 }
 
 InstanceContext.prototype = Object.create(Context.prototype);
@@ -357,16 +369,16 @@ InstanceContext.prototype.readRegisteredValue = function(name) {
 
 
 InstanceContext.prototype.contextForValue = function(name) {
-	// params and variables have precedence over members
-	// so first look in context values
-	var context = Context.prototype.contextForValue.call(this,name);
-	if(context!=null) {
-		return context;
-	} else if(this.getDeclaration().hasAttribute(this, name)) {
-		return this;
-	} else {
-		return null;
-	}
+    // params and variables have precedence over members
+    // so first look in context values
+    var context = Context.prototype.contextForValue.call(this,name);
+    if(context!=null) {
+        return context;
+    } else if(this.getDeclaration().hasAttribute(this, name)) {
+        return this;
+    } else {
+        return null;
+    }
 };
 
 InstanceContext.prototype.getDeclaration = function() {
@@ -377,43 +389,43 @@ InstanceContext.prototype.getDeclaration = function() {
 };
 
 InstanceContext.prototype.readValue = function(name) {
-	return this.instance.getMember(this.calling, name);
+    return this.instance.getMember(this.calling, name);
 };
 
 InstanceContext.prototype.writeValue = function(name, value) {
-	this.instance.setMember(this.calling, name, value);
+    this.instance.setMember(this.calling, name, value);
 };
 
 
 
 Context.prototype.enterMethod = function(method) {
-	if(this.debugger!=null) {
-		this.debugger.enterMethod(this, method);
-	}
+    if(this.debugger!=null) {
+        this.debugger.enterMethod(this, method);
+    }
 };
 
 Context.prototype.leaveMethod = function(method) {
-	if(this.debugger!=null) {
-		this.debugger.leaveMethod(this, method);
-	}
+    if(this.debugger!=null) {
+        this.debugger.leaveMethod(this, method);
+    }
 };
 
 Context.prototype.enterStatement = function(statement) {
-	if(this.debugger!=null) {
-		this.debugger.enterStatement(this, statement);
-	}
+    if(this.debugger!=null) {
+        this.debugger.enterStatement(this, statement);
+    }
 };
 
 Context.prototype.leaveStatement = function(statement) {
-	if(this.debugger!=null) {
-		this.debugger.leaveStatement(this, statement);
-	}
+    if(this.debugger!=null) {
+        this.debugger.leaveStatement(this, statement);
+    }
 }
 
 Context.prototype.terminated = function() {
-	if (this.debugger != null) {
-		this.debugger.terminated();
-	}
+    if (this.debugger != null) {
+        this.debugger.terminated();
+    }
 };
 
 Context.prototype.loadSingleton = function(type) {

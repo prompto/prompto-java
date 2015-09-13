@@ -125,6 +125,10 @@ ace.define('ace/mode/prompto',["require","exports","module","ace/lib/oop","ace/m
             this.$worker && this.$worker.send("setDialect", [ this.$dialect ] );
         };
 
+        this.setContent = function(id) {
+            this.$worker && this.$worker.send("setContent", [ id ] );
+        };
+
         this.createWorker = function(session) {
             this.$worker = new WorkerClient(["ace"], "ace/worker/prompto", "PromptoWorker", "../js/ide/worker-prompto.js");
             this.$worker.send("setDialect", [ this.$dialect ] );
@@ -142,8 +146,13 @@ ace.define('ace/mode/prompto',["require","exports","module","ace/lib/oop","ace/m
                 session.clearAnnotations();
             });
 
-            this.$worker.on("content", function(v) {
+            this.$worker.on("value", function(v) {
                 session.$editor.setValue(v.data, -1);
+                session.$editor.focus();
+            });
+
+            this.$worker.on("catalog", function(v) {
+                parent.catalogUpdated(v.data);
             });
 
             return this.$worker;

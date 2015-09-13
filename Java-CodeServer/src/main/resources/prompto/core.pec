@@ -1,0 +1,149 @@
+define id as: Any attribute
+define text as: Text attribute
+
+define Any as: native category with attributes: id and text, and bindings:
+
+	define category bindings as:
+		Java: prompto.value.Any
+		C#: prompto.value.Any
+		Python2: Any from module: prompto.value.Any
+		Python3: Any from module: prompto.value.Any
+		JavaScript: Any from module: prompto/value/Any.js
+
+and methods:
+
+	define id getter doing:
+		return nativeId
+
+	define nativeId as: native method returning: any doing:
+		Java: return System.identityHashCode(self);
+		C#: return System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(self);
+		Python2: return id(self)
+		Python3: return id(self)
+		JavaScript: return self.id;
+
+	define text getter doing:
+		return text if text is not nothing else nativeText
+
+	define nativeText as: native method returning: Text doing:
+		Java: return self.toString();
+		C#: return self.ToString();
+		Python2: return str(self)
+		Python3: return str(self)
+		JavaScript: return self.toString();
+
+define name as: Text attribute
+
+define Attribute as: native category with attribute: name, and bindings:
+
+	define category bindings as:
+		Java: prompto.declaration.AttributeDeclaration
+		C#: prompto.declaration.AttributeDeclaration
+		Python2: AttributeDeclaration from module: prompto.declaration.AttributeDeclaration
+		Python3: AttributeDeclaration from module: prompto.declaration.AttributeDeclaration
+		JavaScript: AttributeDeclaration from module: prompto/declaration/AttributeDeclaration.js
+
+define findAttribute as: native method receiving: Text name returning: Attribute doing:
+	Java: return $context.findAttribute(name);
+	C#: return $context.findAttribute(name);
+	Python2: return $context.findAttribute(name)
+	Python3: return $context.findAttribute(name)
+	JavaScript: return $context.findAttribute(name);
+
+define "findAttribute id" as: test method doing:
+	a = findAttribute "id"
+and expecting:
+	a is an Attribute
+	a.name = "id"
+
+define "findAttribute name" as: test method doing:
+	a = findAttribute "name"
+and expecting:
+	a is an Attribute
+	a.name = "name"
+
+define "findAttribute text" as: test method doing:
+	a = findAttribute "text"
+and expecting:
+	a is an Attribute
+	a.name = "text"
+
+define Error as: enumerated category with attributes: name and text, and symbols:
+	DIVIDE_BY_ZERO with "Divide by zero!" as text
+	INDEX_OUT_OF_RANGE with "Index out of range!" as text
+	NULL_REFERENCE with "Null reference!" as text
+	NOT_MUTABLE with "Not a mutable object!" as text
+
+define stdout as: native method returning: any doing:
+	Java: return System.out;
+	C#: return System.Console.Out;
+	Python2: return stdout from module: sys
+	Python3: return stdout from module: sys
+	JavaScript: return stdout; from module: process
+
+define stderr as: native method returning: any doing:
+	Java: return System.err;
+	C#: return System.Console.Error;
+	Python2: return stderr from module: sys
+	Python3: return stderr from module: sys
+	JavaScript: return stderr; from module: process
+
+define printNative as: native method receiving: any value and any writer doing:
+	Java: writer.print(value);
+	C#: writer.Write(value);
+	Python2: print(objects=str(value), end="", file=writer)
+	Python3: print(objects=str(value), end="", file=writer)
+	JavaScript: writer.write(value.toString());
+
+define print as: method receiving: any value doing:
+	writer = invoke: stdout
+	printNative value with writer as writer
+
+define printLine as: method receiving: any value doing:
+	writer = invoke: stdout
+	value = "" + value + "\n"
+	printNative value with writer as writer
+
+define PrintWriter as: category with attribute: text, and methods:
+
+	define print as: method receiving: any value doing:
+		if text is nothing:
+			text = "" + value
+		else:
+			text = text + value
+
+define print as: method receiving: any value and any writer doing:
+	if writer is a PrintWriter:
+		writer.print with value as value
+	else:
+		printNative value with writer as writer
+
+define printLine as: method receiving: any value and any writer doing:
+	print value with writer as writer
+	print '\n' with writer as writer
+
+define "print a text" as: test method doing:
+	w = mutable PrintWriter
+	print "Hello" with w as writer
+	print " John" with w as writer
+and expecting:
+	w.text = "Hello John"
+
+define "print an integer" as: test method doing:
+	w = mutable PrintWriter
+	print 12345 with w as writer
+and expecting:
+	w.text = "12345"
+
+define "printLine a text" as: test method doing:
+	w = mutable PrintWriter
+	print "Hello" with w as writer
+	printLine " John" with w as writer
+and expecting:
+	w.text = "Hello John\n"
+
+define "printLine an integer" as: test method doing:
+	w = mutable PrintWriter
+	printLine 12345 with w as writer
+and expecting:
+	w.text = "12345\n"

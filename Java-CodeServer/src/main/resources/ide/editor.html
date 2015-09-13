@@ -31,11 +31,16 @@
         function setDialect(dialect) {
             var mode = editor.getSession().getMode();
             mode.setDialect(dialect);
-        };
+        }
+
+        function setContent(id) {
+            var mode = editor.getSession().getMode();
+            mode.setContent(id);
+        }
 
         function setValue(value) {
             editor.setValue(value, -1);
-        };
+        }
 
         $(document).ready(function () {
             parent.editorReady();
@@ -66,6 +71,7 @@
             editor.getSession().setUseWorker(false);
             editor.$blockScrolling = Infinity;
             editor.setTheme("ace/theme/eclipse");
+            editor.setValue("", -1);
             editor.getSession().setMode("ace/mode/prompto");
             editor.getSession().getMode().setDialect("E"); // start with something
             editor.getSession().setUseWorker(true);
