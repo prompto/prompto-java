@@ -48,18 +48,91 @@
             tests : []
         };
 
+        function attributesAdded(added) {
+            catalog.attributes = catalog.attributes.concat(added).sort();
+            $('#attributes').html(catalog.attributes.map(function (name) {
+                return "<li class='list-group-item'><a>" + name + "</a></li>";
+            }).join(""));
+            // need to reinstall click handler
+            $('#attributes > li').click(function (e) {
+                e.stopPropagation();
+                setContent({attribute: $(event.target).text()});
+            });
+        }
+
+        function categoriesAdded(added) {
+            catalog.categories = catalog.categories.concat(added).sort();
+            $('#categories').html(catalog.categories.map(function(name) {
+                return "<li class='list-group-item'><a>" + name + "</a></li>";
+            }).join(""));
+            // need to reinstall click handler
+            $('#categories > li').click(function (e) {
+                e.stopPropagation();
+                setContent({ category : $(event.target).text() });
+            });
+        }
+
+        function testsAdded(added) {
+            catalog.tests = catalog.tests.concat(added).sort();
+            $('#tests').html(catalog.tests.map(function(name) {
+                return "<li class='list-group-item'><a>" + name + "</a></li>";
+            }).join(""));
+            // need to reinstall click handler
+            $('#tests > li').click(function (e) {
+                e.stopPropagation();
+                setContent({ test : $(event.target).text() });
+            });
+        }
+
+        function methodsAdded(added) {
+            catalog.methods = catalog.methods.concat(added);
+            var sortedNames = catalog.methods.map( function(m) { return m.name; } ).sort();
+            var sortedMethods = sortedNames.map( function(e, i) { return catalog.methods[i]; } );
+            catalog.methods = sortedMethods;
+            $('#methods').html(catalog.methods.map(function(method) {
+                if(method.protos) {
+                    var lis = [ "<li class='list-group-item'>",
+                                "<label class='tree-toggler nav-header'>",
+                                method.name,
+                                "</label>",
+                                "<ul class='list-group method' id='method_",
+                                method.name,
+                                "'>" ];
+                    lis = lis.concat(method.protos.map( function(proto) {
+                        return "<li class='list-group-item'><a>" + proto + "</a></li>"
+                    }));
+                    lis = lis.concat(["</ul>", "</li>"]);
+                    return lis.join("");
+                } else
+                    return "<li class='list-group-item'><a>" + method.name + "</a></li>";
+            }).join(""));
+            // need to reinstall click handler
+            $('#methods > li').click(function (e) {
+                e.stopPropagation();
+                setContent({ method : $(event.target).text() });
+            });
+            sortedNames.map( function(name) {
+                $('#method_' + name + ' > li').click(function (e) {
+                    e.stopPropagation();
+                    setContent({ method : name, proto : $(event.target).text() });
+                });
+            });
+        }
+
         function catalogUpdated(delta) {
             // remove deleted elements
             // add newly created elements
             if(delta.added.attributes) {
-                catalog.attributes = catalog.attributes.concat(delta.added.attributes).sort();
-                $('#attributes').html(catalog.attributes.map(function(name) {
-                    return "<li><a>" + name + "</a></li>";
-                }).join(""));
-                // need to reinstall click handler
-                $('#attributes > li').click(function (e) {
-                    setContent({ attribute : $(event.target).text() });
-                });
+                attributesAdded(delta.added.attributes);
+            }
+            if(delta.added.methods) {
+                methodsAdded(delta.added.methods);
+            }
+            if(delta.added.categories) {
+                categoriesAdded(delta.added.categories);
+            }
+            if(delta.added.tests) {
+                testsAdded(delta.added.tests);
             }
         }
 
@@ -79,11 +152,7 @@
             });
 
             $('label.tree-toggler').click(function () {
-                $(this).parent().children('ul.tree').toggle(300);
-            });
-
-            $('#attributes > li').click(function () {
-                setContent({ attribute : $(event.target).text() });
+                $(this).parent().children('ul').toggle(300);
             });
         });
     </script>
@@ -112,34 +181,32 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-2 sidebar">
-                <div style="overflow-y: scroll; overflow-x: hidden; height: 500px;">
-                    <ul class="nav nav-list">
-                        <li><label class="tree-toggler nav-header">Attributes</label>
-                            <ul id="attributes" class="nav nav-list tree">
-                                <li><a href="#">id</a></li>
-                                <li><a href="#">text</a></li>
+                    <ul class="list-group">
+                        <li class="list-group-item"><label class="tree-toggler nav-header">Attributes</label>
+                            <ul id="attributes" class="list-group">
+                                <li class="list-group-item"><a>id</a></li>
+                                <li class="list-group-item"><a>text</a></li>
                             </ul>
                         </li>
-                        <li><label class="tree-toggler nav-header">Methods</label>
-                            <ul id="methods" class="nav nav-list tree">
-                                <li><a href="#">print</a></li>
-                                <li><a href="#">main</a></li>
+                        <li class="list-group-item"><label class="tree-toggler nav-header">Methods</label>
+                            <ul id="methods" class="list-group">
+                                <li class="list-group-item"><a>print</a></li>
+                                <li class="list-group-item"><a>main</a></li>
                             </ul>
                         </li>
-                        <li><label class="tree-toggler nav-header">Categories</label>
-                            <ul id="categories" class="nav nav-list tree">
-                                <li><a href="#">Person</a></li>
-                                <li><a href="#">Employee</a></li>
+                        <li class="list-group-item"><label class="tree-toggler nav-header">Categories</label>
+                            <ul id="categories" class="list-group">
+                                <li class="list-group-item"><a>Person</a></li>
+                                <li class="list-group-item"><a>Employee</a></li>
                             </ul>
                         </li>
-                        <li><label class="tree-toggler nav-header">Tests</label>
-                            <ul id="tests" class="nav nav-list tree">
-                                <li><a href="#">It just works!</a></li>
-                                <li><a href="#">Name must be identical</a></li>
+                        <li class="list-group-item"><label class="tree-toggler nav-header">Tests</label>
+                            <ul id="tests" class="list-group">
+                                <li class="list-group-item"><a>It just works!</a></li>
+                                <li class="list-group-item"><a>Name must be identical</a></li>
                             </ul>
                         </li>
                     </ul>
-                </div>
             </div>
             <div class="col-md-10 col-md-offset-2 main" style="padding: 0px">
                <div class="embed-responsive embed-responsive-4by3 collapse in">

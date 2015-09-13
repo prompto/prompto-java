@@ -20,20 +20,37 @@ ace.define('ace/worker/prompto',["require","exports","module","ace/lib/oop","ace
         if(old && dialect!==old) {
             var value = this.doc.getValue();
             if(value) {
-                value = translate(value, old, dialect);
+                value = safe_require(function(){return translate(value, old, dialect);});
                 this.sender.emit("value", value);
             }
         }
     };
 
+    PromptoWorker.prototype.getDeclaration = function(id) {
+        if(id.test)
+            return appContext.getRegisteredTest(id.test);
+        else if(id.method) {
+            var decl = appContext.getRegisteredDeclaration(id.method);
+            if(id.proto)
+                return decl.methods[id.proto];
+            else for(var proto in decl.methods)
+                return decl.methods[proto];
+        } else {
+            var name = id.attribute || id.category
+            return appContext.getRegisteredDeclaration(name);
+        }
+    };
+
     PromptoWorker.prototype.setContent = function(id) {
-        var name = id.attribute || id.method || id.category || id.test;
-        var decl = appContext.getRegisteredDeclaration(name);
-        var dialect = prompto.parser.Dialect[this.$dialect];
-        var writer = new prompto.utils.CodeWriter(dialect, appContext);
-        decl.toDialect(writer);
-        var value = writer.toString();
-        this.sender.emit("value", value);
+        var worker = this;
+        safe_require(function() {
+            var decl = worker.getDeclaration(id);
+            var dialect = prompto.parser.Dialect[worker.$dialect];
+            var writer = new prompto.utils.CodeWriter(dialect, appContext);
+            decl.toDialect(writer);
+            var value = writer.toString();
+            worker.sender.emit("value", value);
+        });
     };
 
     PromptoWorker.prototype.onUpdate = function() {
@@ -41,14 +58,18 @@ ace.define('ace/worker/prompto',["require","exports","module","ace/lib/oop","ace
         var value = this.doc.getValue();
         if (value) {
             var errorListener = new AnnotatingErrorListener(annotations);
-            parse(value, this.$dialect, errorListener);
+            var worker = this;
+            safe_require(function() { parse(value, worker.$dialect, errorListener); });
         }
         this.sender.emit("annotate", annotations);
     };
 
     PromptoWorker.prototype.onInit = function() {
-        loadCore(this);
-        publishCore(this);
+        var worker = this;
+        safe_require(function() {
+            loadCore(worker);
+            publishCore(worker);
+        });
     };
 
     exports.PromptoWorker = PromptoWorker;
@@ -57,24 +78,33 @@ ace.define('ace/worker/prompto',["require","exports","module","ace/lib/oop","ace
 // load nodejs compatible require
 var ace_require = require;
 try {
-    require = undefined;
+    self.require = undefined;
     Honey = {'requirePath': ['..']}; // walk up to js folder
     importScripts("../lib/require.js");
     var antlr4_require = require;
 } finally {
-    require = ace_require;
+    self.require = ace_require;
 }
 
 // load antlr4 and prompto
 var antlr4, prompto;
 try {
-    require = antlr4_require;
+    self.require = antlr4_require;
     antlr4 = require('antlr4/index');
     prompto = require('prompto/index');
 } finally {
-    require = ace_require;
+    self.require = ace_require;
 }
 
+function safe_require(method) {
+    try {
+        self.require = antlr4_require;
+        return method();
+    } finally {
+        self.require = ace_require;
+    }
+
+}
 // class for gathering errors and posting them to editor
 var AnnotatingErrorListener = function(annotations) {
     antlr4.error.ErrorListener.call(this);
@@ -133,22 +163,15 @@ var coreContext = prompto.runtime.Context.newGlobalContext();
 var appContext = coreContext.newLocalContext();
 
 function loadCore(worker) {
-    try {
-        require = antlr4_require;
-        var code = loadCode("../../prompto/core.pec");
-        var decls = parse(code, "E");
-        decls.register(coreContext);
-    } finally {
-        require = ace_require;
-    }
+    var code = loadCode("../../prompto/core.pec");
+    var decls = parse(code, "E");
+    decls.register(coreContext);
 };
 
 function publishCore(worker) {
     var delta = {
         removed : {},
-        added   : {
-            attributes: coreContext.getAllAttributes()
-        }
+        added   : coreContext.getCatalog()
     };
     worker.sender.emit("catalog", delta);
 }
