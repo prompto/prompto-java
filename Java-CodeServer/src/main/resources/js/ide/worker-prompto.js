@@ -102,21 +102,18 @@ function safe_require(method) {
 }
 // class for gathering errors and posting them to editor
 var AnnotatingErrorListener = function(annotations) {
-    antlr4.error.ErrorListener.call(this);
-    this.annotations = annotations;
+    prompto.parser.ProblemCollector.call(this);
+    this.problems = annotations;
     return this;
 };
 
-AnnotatingErrorListener.prototype = Object.create(antlr4.error.ErrorListener.prototype);
+AnnotatingErrorListener.prototype = Object.create(prompto.parser.ProblemCollector.prototype);
 AnnotatingErrorListener.prototype.constructor = AnnotatingErrorListener;
 
-AnnotatingErrorListener.prototype.syntaxError = function(recognizer, offendingSymbol, line, column, msg, e) {
-    this.annotations.push({
-        row: line - 1,
-        column: column,
-        text: msg,
-        type: "error"
-    });
+AnnotatingErrorListener.prototype.collectProblem = function(problem) {
+    // convert to ACE annotation
+    problem = { row : problem.startLine - 1, column : problem.startColumn, type : problem.type, text : problem.message };
+    this.problems.push(problem);
 };
 
 // method for parsing editor input
@@ -136,10 +133,13 @@ function annotateAndUpdateCatalog(worker, previous, current, dialect, listener) 
     // only update catalog and appContext if update event results from an edit
     if(previous && previous!=current) {
         // update catalog using isolated contexts
-        var old_decls = parse(previous, dialect); // don't annotate previous content
+        var old_listener = new prompto.parser.ProblemCollector(); // ignore errors
+        var old_decls = parse(previous, dialect, old_listener);
         var new_context = prompto.runtime.Context.newGlobalContext();
+        new_context.problemListener = listener;
         new_decls.register(new_context);
         var old_context = prompto.runtime.Context.newGlobalContext();
+        old_context.problemListener = old_listener;
         old_decls.register(old_context);
         var delta = {
             removed : old_context.getLocalCatalog(),
@@ -149,8 +149,11 @@ function annotateAndUpdateCatalog(worker, previous, current, dialect, listener) 
         if(count)
             worker.sender.emit("catalog", delta);
         // now update appContext
-        old_decls.unregister(appContext);
-        new_decls.register(appContext);
+        if(listener.problems.length==0) {
+            appContext.problemListener = listener;
+            old_decls.unregister(appContext);
+            new_decls.register(appContext);
+        }
     }
 }
 
