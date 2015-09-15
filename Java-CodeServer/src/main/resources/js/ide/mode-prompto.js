@@ -106,12 +106,13 @@ ace.define('ace/mode/prompto_highlight_rules',["require","exports","module","ace
     exports.PromptoHighlightRules = PromptoHighlightRules;
 });
 
-ace.define('ace/mode/prompto',["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/prompto_highlight_rules","ace/worker/worker_client"], function(require, exports, module) {
+ace.define('ace/mode/prompto',["require","exports","module","ace/range","ace/lib/oop","ace/mode/text","ace/mode/prompto_highlight_rules","ace/worker/worker_client"], function(require, exports, module) {
 
     var oop = require("ace/lib/oop");
     var TextMode = require("ace/mode/text").Mode;
     var PromptoHighlightRules = require("ace/mode/prompto_highlight_rules").PromptoHighlightRules;
     var WorkerClient = require("ace/worker/worker_client").WorkerClient;
+    var Range = ace.require("ace/range").Range;
 
     var Mode = function() {
         this.HighlightRules = PromptoHighlightRules;
@@ -137,14 +138,21 @@ ace.define('ace/mode/prompto',["require","exports","module","ace/lib/oop","ace/m
             this.$worker = new WorkerClient(["ace"], "ace/worker/prompto", "PromptoWorker", "../js/ide/worker-prompto.js");
             this.$worker.send("setDialect", [ this.$dialect ] );
             this.$worker.attachToDocument(session.getDocument());
+            var $markers = [];
 
             this.$worker.on("errors", function(e) {
                 session.setAnnotations(e.data);
             });
 
-            this.$worker.on("annotate", function(e) {
+            this.annotate = function(e) {
                 session.setAnnotations(e.data);
-            });
+                while($markers.length)
+                    session.removeMarker($markers.pop());
+                var marker = session.addMarker(new Range(0, 0, 0, 10), "ace_error-word", "text", true);
+                $markers.push(marker);
+            };
+
+            this.$worker.on("annotate", this.annotate);
 
             this.$worker.on("terminate", function() {
                 session.clearAnnotations();

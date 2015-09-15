@@ -133,24 +133,21 @@ function annotateAndUpdateCatalog(worker, previous, current, dialect, listener) 
     // only update catalog and appContext if update event results from an edit
     if(previous && previous!=current) {
         // update catalog using isolated contexts
-        var old_listener = new prompto.parser.ProblemCollector(); // ignore errors
-        var old_decls = parse(previous, dialect, old_listener);
+        var old_decls = parse(previous, dialect); // don't annotate previous content
         var new_context = prompto.runtime.Context.newGlobalContext();
         new_context.problemListener = listener;
         new_decls.register(new_context);
         var old_context = prompto.runtime.Context.newGlobalContext();
-        old_context.problemListener = old_listener;
         old_decls.register(old_context);
         var delta = {
-            removed : old_context.getLocalCatalog(),
-            added   : new_context.getLocalCatalog()
+            removed: old_context.getLocalCatalog(),
+            added: new_context.getLocalCatalog()
         };
         var count = shrinkDelta(delta);
-        if(count)
+        if (count)
             worker.sender.emit("catalog", delta);
         // now update appContext
-        if(listener.problems.length==0) {
-            appContext.problemListener = listener;
+        if (listener.problems.length == 0) {
             old_decls.unregister(appContext);
             new_decls.register(appContext);
         }
@@ -208,9 +205,8 @@ function translate(input, from, to) {
 // method for downloading prompto code
 function loadCode(url) {
     var xhr = new XMLHttpRequest();
-    xhr.responseType = "text";
     xhr.onerror = function(e) {
-        alert("Error " + e.target.status + " occurred while receiving the document.");
+        self.console.log("Error " + e.target.status + " occurred while receiving the document.");
         return null;
     };
     xhr.open('GET', url, false);

@@ -57,7 +57,7 @@
             // need to reinstall click handler
             $('#attributes > li').click(function (e) {
                 e.stopPropagation();
-                setContent({attribute: $(event.target).text()});
+                setContent({attribute: $(e.target).text()});
             });
         }
 
@@ -78,7 +78,7 @@
             // need to reinstall click handler
             $('#categories > li').click(function (e) {
                 e.stopPropagation();
-                setContent({ category : $(event.target).text() });
+                setContent({ category : $(e.target).text() });
             });
         }
 
@@ -99,7 +99,7 @@
             // need to reinstall click handler
             $('#tests > li').click(function (e) {
                 e.stopPropagation();
-                setContent({ test : $(event.target).text() });
+                setContent({ test : $(e.target).text() });
             });
         }
 
@@ -141,12 +141,12 @@
             // need to reinstall click handler
             $('#methods > li').click(function (e) {
                 e.stopPropagation();
-                setContent({ method : $(event.target).text() });
+                setContent({ method : $(e.target).text() });
             });
             sortedNames.map( function(name) {
                 $('#method_' + name + ' > li').click(function (e) {
                     e.stopPropagation();
-                    setContent({ method : name, proto : $(event.target).text() });
+                    setContent({ method : name, proto : $(e.target).text() });
                 });
             });
         }
