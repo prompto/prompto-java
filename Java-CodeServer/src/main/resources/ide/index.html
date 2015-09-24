@@ -28,8 +28,41 @@
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../js/lib/ie10-viewport-bug-workaround.js"></script>
     <script src="../js/lib/FileSaver.js"></script>
-    <!-- ensure content menu is highlighted -->
+    <!-- catalog management -->
+    <style type="text/css" media="screen">
+        .core {
+            display: block;
+        }
+        .no-core {
+            display: none;
+        }
+    </style>
     <script type="text/javascript">
+
+        var catalog = {
+            attributes : [],
+            methods : [],
+            categories : [],
+            tests : []
+        };
+
+        function makeId(name) {
+            return name.replace(" ", "_").replace('"',"").replace("'","");
+        }
+
+        function sortBy(a, f) {
+            return a.sort(function(i1,i2) {
+                return (i1[f]>i2[f]) ? 1 : ((i1[f]<i2[f]) ? -1 : 0);
+            });
+        }
+
+        function findBy(a, f, v) {
+            for(var i=0;i<a.length;i++) {
+                if(a[i][f]==v)
+                    return i;
+            }
+            return -1;
+        }
 
         function saveBlob() {
             var blob = new Blob(["Hello, world!"], {type: "text/plain;charset=utf-8"});
@@ -42,94 +75,97 @@
             frame.contentWindow.setCodebase("../../prompto/application.pec");
         }
 
-        var catalog = {
-            attributes : [],
-            methods : [],
-            categories : [],
-            tests : []
-        };
+        function showCore(input) {
+            if(input.checked)
+                $(".core").removeClass("no-core");
+            else
+                $(".core").addClass("no-core");
+        }
 
         function attributesAdded(added, core) {
-            catalog.attributes = catalog.attributes.concat(added).sort();
-            $('#attributes').html(catalog.attributes.map(function (name) {
-                return "<li id='attribute_" + name + "' class='list-group-item'><a core='" + core + "'>" + name + "</a></li>";
+            added = added.map(function(name) { return { name : name, core : core }; });
+            catalog.attributes = sortBy(catalog.attributes.concat(added), 'name');
+            $('#attributes').html(catalog.attributes.map(function (attr) {
+                return "<li id='attribute_" + attr.name + "' class='list-group-item" +
+                        (attr.core ? " core" : "") + "'><a core='" +
+                        attr.core + "'>" + attr.name + "</a></li>";
             }).join(""));
             // need to reinstall click handler
             $('#attributes > li').click(function (e) {
                 e.stopPropagation();
                 var a = $(e.target);
-                var core = a.attr("core");
-                setContent({attribute: a.text(), core: core || "false"});
+                var core = eval(a.attr("core") || "false");
+                setContent({attribute: a.text(), core: core});
             });
         }
 
         function attributesRemoved(removed) {
             for(var i=0;i<removed.length;i++) {
                 var name = removed[i];
-                var j = catalog.attributes.indexOf(name);
+                var j = findBy(catalog.attributes, 'name', name);
                 catalog.attributes.splice(j, 1);
                 $('#attribute_' + name).remove();
             }
         }
 
         function categoriesAdded(added, core) {
-            catalog.categories = catalog.categories.concat(added).sort();
-            $('#categories').html(catalog.categories.map(function(name) {
-                return "<li id='category_" + name + "' class='list-group-item'><a core='" + core + "'>" + name + "</a></li>";
+            added = added.map(function(name) { return { name : name, core : core }; });
+            catalog.categories = sortBy(catalog.categories.concat(added), 'name');
+            $('#categories').html(catalog.categories.map(function(cat) {
+                return "<li id='category_" + cat.name + "' class='list-group-item" +
+                        (cat.core ? " core" : "") + "'><a core='" +
+                        cat.core + "'>" + cat.name + "</a></li>";
             }).join(""));
             // need to reinstall click handler
             $('#categories > li').click(function (e) {
                 e.stopPropagation();
                 var a = $(e.target);
-                var core = a.attr("core");
-                setContent({category: a.text(), core: core || "false"});
+                var core = eval(a.attr("core") || "false");
+                setContent({category: a.text(), core: core});
             });
         }
 
         function categoriesRemoved(removed) {
             for(var i=0;i<removed.length;i++) {
                 var name = removed[i];
-                var j = catalog.categories.indexOf(name);
+                var j = findBy(catalog.categories, 'name', name);
                 catalog.categories.splice(j, 1);
                 $('#category_' + name).remove();
             }
         }
 
         function testsAdded(added, core) {
-            catalog.tests = catalog.tests.concat(added).sort();
-            $('#tests').html(catalog.tests.map(function(name) {
-                return "<li id='test_" + makeId(name) + "' class='list-group-item'><a core='" + core + "'>" + name + "</a></li>";
+            added = added.map(function(name) { return { name : name, core : core }; });
+            catalog.tests = sortBy(catalog.tests.concat(added), 'name');
+            $('#tests').html(catalog.tests.map(function(test) {
+                return "<li id='test_" + makeId(test.name) + "' class='list-group-item" +
+                        (test.core ? " core" : "") + "'><a core='" +
+                        test.core + "'>" + test.name + "</a></li>";
             }).join(""));
             // need to reinstall click handler
             $('#tests > li').click(function (e) {
                 e.stopPropagation();
                 var a = $(e.target);
-                var core = a.attr("core");
-                setContent({test: a.text(), core: core || "false"});
+                var core = eval(a.attr("core") || "false");
+                setContent({test: a.text(), core: core});
             });
         }
 
         function testsRemoved(removed) {
             for(var i=0;i<removed.length;i++) {
                 var name = removed[i];
-                var j = catalog.tests.indexOf(name);
+                var j = findBy(catalog.tests, 'name', name);
                 catalog.tests.splice(j, 1);
                 $('#test_' + makeId(name)).remove();
             }
         }
 
-        function makeId(name) {
-            return name.replace(" ", "_").replace('"',"").replace("'","");
-        }
-
         function methodsAdded(added, core) {
-            catalog.methods = catalog.methods.concat(added);
-            var sortedNames = catalog.methods.map( function(m) { return m.name; } ).sort();
-            var sortedMethods = sortedNames.map( function(e, i) { return catalog.methods[i]; } );
-            catalog.methods = sortedMethods;
+            added = added.map(function(method) { method.core = core; return method; });
+            catalog.methods = sortBy(catalog.methods.concat(added), 'name');
             $('#methods').html(catalog.methods.map(function(method) {
                 if(method.protos) {
-                    var lis = [ "<li class='list-group-item'>",
+                    var lis = [ "<li class='list-group-item" + (method.core ? " core" : "") + "'>",
                                 "<label class='tree-toggler nav-header'>",
                                 method.name,
                                 "</label>",
@@ -137,12 +173,15 @@
                                 method.name,
                                 "'>" ];
                     lis = lis.concat(method.protos.map( function(proto) {
-                        return "<li class='list-group-item'><a core='" + core + "'>" + proto + "</a></li>"
+                        return "<li class='list-group-item" +
+                                (method.core ? " core" : "") + "'><a core='" +
+                                method.core + "'>" + proto + "</a></li>"
                     }));
                     lis = lis.concat(["</ul>", "</li>"]);
                     return lis.join("");
                 } else
-                    return "<li class='list-group-item'><a core='" + core + "'>" + method.name + "</a></li>";
+                    return "<li class='list-group-item" + (method.core ? " core" : "") + "'><a core='" +
+                            method.core + "'>" + method.name + "</a></li>";
             }).join(""));
             // need to reinstall click handler
             $('#methods > li').click(function (e) {
@@ -151,12 +190,12 @@
                 var core = a.attr("core");
                 setContent({method: a.text(), core: core || "false"});
             });
-            sortedNames.map( function(name) {
-                $('#method_' + name + ' > li').click(function (e) {
+            catalog.methods.map( function(method) {
+                $('#method_' + method.name + ' > li').click(function (e) {
                     e.stopPropagation();
                     var a = $(e.target);
-                    var core = a.attr("core");
-                    setContent({ method : name, proto : a.text(), core: core || "false" });
+                    var core = eval(a.attr("core") || "false");
+                    setContent({ method : method.name, proto : a.text(), core: core });
                 });
             });
         }
@@ -179,17 +218,18 @@
                 testsRemoved(delta.removed.tests);
             }
             // add newly created elements
+            var core = eval(delta.core || "false");
             if(delta.added.attributes) {
-                attributesAdded(delta.added.attributes, delta.core || "false");
+                attributesAdded(delta.added.attributes, core);
             }
             if(delta.added.methods) {
-                methodsAdded(delta.added.methods, delta.core || "false");
+                methodsAdded(delta.added.methods, core);
             }
             if(delta.added.categories) {
-                categoriesAdded(delta.added.categories, delta.core || "false");
+                categoriesAdded(delta.added.categories, core);
             }
             if(delta.added.tests) {
-                testsAdded(delta.added.tests, delta.core || "false");
+                testsAdded(delta.added.tests, core);
             }
         }
 
@@ -238,6 +278,11 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-2 sidebar">
+                <div class="checkbox">
+                    <label>
+                        <input id="show-core" type="checkbox" checked="true" onclick="showCore(this)"> Show core
+                    </label>
+                </div>
                     <ul class="list-group">
                         <li class="list-group-item"><label class="tree-toggler nav-header">Attributes</label>
                             <ul id="attributes" class="list-group">

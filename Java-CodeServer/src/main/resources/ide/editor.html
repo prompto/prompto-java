@@ -36,8 +36,7 @@
         function setContent(id) {
             var mode = editor.getSession().getMode();
             mode.setContent(id);
-            var ro = eval(id.core || "false");
-            editor.setReadOnly(ro);
+            editor.setReadOnly(id.core);
         }
 
         function setCodebase(path) {
