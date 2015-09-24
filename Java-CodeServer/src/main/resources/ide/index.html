@@ -49,15 +49,17 @@
             tests : []
         };
 
-        function attributesAdded(added) {
+        function attributesAdded(added, core) {
             catalog.attributes = catalog.attributes.concat(added).sort();
             $('#attributes').html(catalog.attributes.map(function (name) {
-                return "<li id='attribute_" + name + "' class='list-group-item'><a>" + name + "</a></li>";
+                return "<li id='attribute_" + name + "' class='list-group-item'><a core='" + core + "'>" + name + "</a></li>";
             }).join(""));
             // need to reinstall click handler
             $('#attributes > li').click(function (e) {
                 e.stopPropagation();
-                setContent({attribute: $(e.target).text()});
+                var a = $(e.target);
+                var core = a.attr("core");
+                setContent({attribute: a.text(), core: core || "false"});
             });
         }
 
@@ -70,15 +72,17 @@
             }
         }
 
-        function categoriesAdded(added) {
+        function categoriesAdded(added, core) {
             catalog.categories = catalog.categories.concat(added).sort();
             $('#categories').html(catalog.categories.map(function(name) {
-                return "<li id='category_" + name + "' class='list-group-item'><a>" + name + "</a></li>";
+                return "<li id='category_" + name + "' class='list-group-item'><a core='" + core + "'>" + name + "</a></li>";
             }).join(""));
             // need to reinstall click handler
             $('#categories > li').click(function (e) {
                 e.stopPropagation();
-                setContent({ category : $(e.target).text() });
+                var a = $(e.target);
+                var core = a.attr("core");
+                setContent({category: a.text(), core: core || "false"});
             });
         }
 
@@ -91,15 +95,17 @@
             }
         }
 
-        function testsAdded(added) {
+        function testsAdded(added, core) {
             catalog.tests = catalog.tests.concat(added).sort();
             $('#tests').html(catalog.tests.map(function(name) {
-                return "<li id='test_" + makeId(name) + "' class='list-group-item'><a>" + name + "</a></li>";
+                return "<li id='test_" + makeId(name) + "' class='list-group-item'><a core='" + core + "'>" + name + "</a></li>";
             }).join(""));
             // need to reinstall click handler
             $('#tests > li').click(function (e) {
                 e.stopPropagation();
-                setContent({ test : $(e.target).text() });
+                var a = $(e.target);
+                var core = a.attr("core");
+                setContent({test: a.text(), core: core || "false"});
             });
         }
 
@@ -116,7 +122,7 @@
             return name.replace(" ", "_").replace('"',"").replace("'","");
         }
 
-        function methodsAdded(added) {
+        function methodsAdded(added, core) {
             catalog.methods = catalog.methods.concat(added);
             var sortedNames = catalog.methods.map( function(m) { return m.name; } ).sort();
             var sortedMethods = sortedNames.map( function(e, i) { return catalog.methods[i]; } );
@@ -131,22 +137,26 @@
                                 method.name,
                                 "'>" ];
                     lis = lis.concat(method.protos.map( function(proto) {
-                        return "<li class='list-group-item'><a>" + proto + "</a></li>"
+                        return "<li class='list-group-item'><a core='" + core + "'>" + proto + "</a></li>"
                     }));
                     lis = lis.concat(["</ul>", "</li>"]);
                     return lis.join("");
                 } else
-                    return "<li class='list-group-item'><a>" + method.name + "</a></li>";
+                    return "<li class='list-group-item'><a core='" + core + "'>" + method.name + "</a></li>";
             }).join(""));
             // need to reinstall click handler
             $('#methods > li').click(function (e) {
                 e.stopPropagation();
-                setContent({ method : $(e.target).text() });
+                var a = $(e.target);
+                var core = a.attr("core");
+                setContent({method: a.text(), core: core || "false"});
             });
             sortedNames.map( function(name) {
                 $('#method_' + name + ' > li').click(function (e) {
                     e.stopPropagation();
-                    setContent({ method : name, proto : $(e.target).text() });
+                    var a = $(e.target);
+                    var core = a.attr("core");
+                    setContent({ method : name, proto : a.text(), core: core || "false" });
                 });
             });
         }
@@ -170,16 +180,16 @@
             }
             // add newly created elements
             if(delta.added.attributes) {
-                attributesAdded(delta.added.attributes);
+                attributesAdded(delta.added.attributes, delta.core || "false");
             }
             if(delta.added.methods) {
-                methodsAdded(delta.added.methods);
+                methodsAdded(delta.added.methods, delta.core || "false");
             }
             if(delta.added.categories) {
-                categoriesAdded(delta.added.categories);
+                categoriesAdded(delta.added.categories, delta.core || "false");
             }
             if(delta.added.tests) {
-                testsAdded(delta.added.tests);
+                testsAdded(delta.added.tests, delta.core || "false");
             }
         }
 

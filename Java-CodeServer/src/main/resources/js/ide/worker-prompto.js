@@ -101,9 +101,9 @@ function safe_require(method) {
 
 }
 // class for gathering errors and posting them to editor
-var AnnotatingErrorListener = function(annotations) {
+var AnnotatingErrorListener = function(problems) {
     prompto.parser.ProblemCollector.call(this);
-    this.problems = annotations;
+    this.problems = problems || [];
     return this;
 };
 
@@ -112,7 +112,12 @@ AnnotatingErrorListener.prototype.constructor = AnnotatingErrorListener;
 
 AnnotatingErrorListener.prototype.collectProblem = function(problem) {
     // convert to ACE annotation
-    problem = { row : problem.startLine - 1, column : problem.startColumn, type : problem.type, text : problem.message };
+    problem = { row : problem.startLine - 1,
+        column : problem.startColumn,
+        endRow : problem.endLine - 1,
+        endColumn : problem.endColumn,
+        type : problem.type,
+        text : problem.message };
     this.problems.push(problem);
 };
 
@@ -138,6 +143,7 @@ function annotateAndUpdateCatalog(worker, previous, current, dialect, listener) 
         new_context.problemListener = listener;
         new_decls.register(new_context);
         var old_context = prompto.runtime.Context.newGlobalContext();
+        old_context.problemListener = new AnnotatingErrorListener(); // we'll ignore these errors but let's catch them
         old_decls.register(old_context);
         var delta = {
             removed: old_context.getLocalCatalog(),
@@ -149,7 +155,9 @@ function annotateAndUpdateCatalog(worker, previous, current, dialect, listener) 
         // now update appContext
         if (listener.problems.length == 0) {
             old_decls.unregister(appContext);
+            appContext.problemListener = listener;
             new_decls.register(appContext);
+            appContext.problemListener = null;
         }
     }
 }
@@ -226,7 +234,8 @@ function loadCore(worker) {
 function publishCore(worker) {
     var delta = {
         removed : {},
-        added   : coreContext.getCatalog()
+        added   : coreContext.getCatalog(),
+        core    : true
     };
     worker.sender.emit("catalog", delta);
 }

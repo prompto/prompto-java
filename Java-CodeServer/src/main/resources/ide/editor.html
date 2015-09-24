@@ -36,6 +36,8 @@
         function setContent(id) {
             var mode = editor.getSession().getMode();
             mode.setContent(id);
+            var ro = eval(id.core || "false");
+            editor.setReadOnly(ro);
         }
 
         function setCodebase(path) {
@@ -61,6 +63,7 @@
             left: 0;
         }
         .ace_error-word {
+            position: absolute;
             border-bottom: 2px dotted red;
         }
     </style>

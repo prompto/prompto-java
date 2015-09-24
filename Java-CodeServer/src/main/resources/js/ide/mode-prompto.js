@@ -148,8 +148,11 @@ ace.define('ace/mode/prompto',["require","exports","module","ace/range","ace/lib
                 session.setAnnotations(e.data);
                 while($markers.length)
                     session.removeMarker($markers.pop());
-                var marker = session.addMarker(new Range(0, 0, 0, 10), "ace_error-word", "text", true);
-                $markers.push(marker);
+                e.data.map( function(a) {
+                    var range = new Range(a.row, a.column, a.endRow, a.endColumn);
+                    var marker = session.addMarker(range, "ace_error-word", "text", true);
+                    $markers.push(marker);
+                });
             };
 
             this.$worker.on("annotate", this.annotate);
