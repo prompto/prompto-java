@@ -20,4 +20,11 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>src/main/web-site</name>
+			<type>2</type>
+			<location>/Users/ericvergnaud/Development/prompto/prompto-app-center/web-site</location>
+		</link>
+	</linkedResources>
 </projectDescription>
