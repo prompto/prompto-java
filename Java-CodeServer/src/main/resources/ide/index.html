@@ -231,6 +231,8 @@
             if(delta.added.tests) {
                 testsAdded(delta.added.tests, core);
             }
+            var input = $("#show-core")[0];
+            showCore(input);
         }
 
         function setContent(id) {
@@ -269,6 +271,7 @@
                 </ul>
                 <a class="navbar-brand navbar-right">Dialect:</a>
                 <form class="navbar-form navbar-right">
+                    <button type="button" class="form-control" onclick="setContent(null);">New</button>
                     <input type="text" class="form-control" placeholder="Search...">
                 </form>
             </div>

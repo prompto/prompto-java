@@ -9,7 +9,7 @@ ace.define('ace/worker/prompto',["require","exports","module","ace/lib/oop","ace
         Mirror.call(this, sender);
         this.setTimeout(200);
         this.$dialect = null;
-        this.$value = null;
+        this.$value = this.doc.getValue();
         this.onInit();
     };
 
@@ -31,12 +31,16 @@ ace.define('ace/worker/prompto',["require","exports","module","ace/lib/oop","ace
     PromptoWorker.prototype.setContent = function(id) {
         var worker = this;
         safe_require(function() {
-            var decl = getDeclaration(id);
-            var dialect = prompto.parser.Dialect[worker.$dialect];
-            var writer = new prompto.utils.CodeWriter(dialect, appContext);
-            decl.toDialect(writer);
+            var value = "";
+            if(id) {
+                var decl = getDeclaration(id);
+                var dialect = prompto.parser.Dialect[worker.$dialect];
+                var writer = new prompto.utils.CodeWriter(dialect, appContext);
+                decl.toDialect(writer);
+                value = writer.toString();
+            }
             // remember value since it does not result from an edit
-            worker.$value = writer.toString();
+            worker.$value = value;
             worker.sender.emit("value", worker.$value);
         });
     };
@@ -133,32 +137,35 @@ function parse(input, dialect, listener) {
 
 // method for updating context on user input
 function annotateAndUpdateCatalog(worker, previous, current, dialect, listener) {
+    // don't annotate previous content
+    var old_decls = parse(previous, dialect);
     // always annotate new content
     var new_decls = parse(current, dialect, listener);
-    // only update catalog and appContext if update event results from an edit
-    if(previous && previous!=current) {
-        // update catalog using isolated contexts
-        var old_decls = parse(previous, dialect); // don't annotate previous content
-        var new_context = prompto.runtime.Context.newGlobalContext();
-        new_context.problemListener = listener;
-        new_decls.register(new_context);
-        var old_context = prompto.runtime.Context.newGlobalContext();
-        old_context.problemListener = new AnnotatingErrorListener(); // we'll ignore these errors but let's catch them
-        old_decls.register(old_context);
-        var delta = {
-            removed: old_context.getLocalCatalog(),
-            added: new_context.getLocalCatalog()
-        };
-        var count = shrinkDelta(delta);
-        if (count)
-            worker.sender.emit("catalog", delta);
-        // now update appContext
-        if (listener.problems.length == 0) {
-            old_decls.unregister(appContext);
-            appContext.problemListener = listener;
-            new_decls.register(appContext);
-            appContext.problemListener = null;
+    // only update catalog and appContext if syntax is correct
+    if (listener.problems.length == 0) {
+        // only update catalog if event results from an edit
+        if(previous!=current) {
+            // update catalog using isolated contexts
+            var new_context = prompto.runtime.Context.newGlobalContext();
+            new_context.problemListener = new AnnotatingErrorListener(); // we'll ignore these errors but let's catch them;
+            new_decls.register(new_context);
+            var old_context = prompto.runtime.Context.newGlobalContext();
+            old_context.problemListener = new AnnotatingErrorListener(); // we'll ignore these errors but let's catch them
+            old_decls.register(old_context);
+            var delta = {
+                removed: old_context.getLocalCatalog(),
+                added: new_context.getLocalCatalog()
+            };
+            var count = shrinkDelta(delta);
+            if (count)
+                worker.sender.emit("catalog", delta);
         }
+        // update appContext, collecting prompto errors
+        old_decls.unregister(appContext); // TODO: manage damage on objects referring to these
+        appContext.problemListener = listener;
+        new_decls.register(appContext);
+        new_decls.check(appContext);
+        appContext.problemListener = null;
     }
 }
 
