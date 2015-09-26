@@ -37,6 +37,14 @@
 				</executions>
 			</plugin>
 		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<directory>../../prompto-dev-center/web-site</directory>
+			</resource>
+		</resources>
 	</build>
 
 	<properties>
