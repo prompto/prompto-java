@@ -35,7 +35,7 @@ public class AttributeDeclaration extends BaseDeclaration {
 		case E:
 			writer.append("define ");
 			writer.append(getIdentifier());
-			writer.append(" as: ");
+			writer.append(" as ");
 			type.toDialect(writer);
 			writer.append(" attribute");
 			if(constraint!=null)

@@ -173,7 +173,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 	protected void toEDialect(CodeWriter writer) {
 		writer.append("define ");
 		writer.append(getName());
-		writer.append(" as: test method doing:\n");
+		writer.append(" as test method doing:\n");
 		writer.indent();
 		statements.toDialect(writer);
 		writer.dedent();

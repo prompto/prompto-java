@@ -74,10 +74,10 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 	protected void toEDialect(CodeWriter writer) {
 		writer.append("define ");
 		writer.append(getName());
-		writer.append(" as: native method ");
+		writer.append(" as native method ");
 		arguments.toDialect(writer);
 		if(returnType!=null && returnType!=VoidType.instance()) {
-			writer.append("returning: ");
+			writer.append("returning ");
 			returnType.toDialect(writer);
 			writer.append(" ");
 		}

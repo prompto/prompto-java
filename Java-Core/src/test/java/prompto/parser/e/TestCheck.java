@@ -13,14 +13,14 @@ public class TestCheck extends BaseEParserTest {
 
 	@Test
 	public void testNativeAttribute() throws Exception {
-		DeclarationList stmts = parseString("define id as: Integer attribute");
+		DeclarationList stmts = parseString("define id as Integer attribute");
 		stmts.register(context);
 		stmts.check(context);
 	}
 
 	@Test
 	public void testUndeclaredCategoryAttribute() throws Exception {
-		DeclarationList stmts = parseString("define person as: Person attribute");
+		DeclarationList stmts = parseString("define person as Person attribute");
 		stmts.register(context);
 		try {
 			stmts.check(context);
@@ -32,10 +32,10 @@ public class TestCheck extends BaseEParserTest {
 	
 	@Test
 	public void testMethodAttribute() throws Exception {
-		DeclarationList stmts = parseString("define name as: Text attribute\r\n" +
-				"define printName as: method receiving: name doing:\r\n" +
+		DeclarationList stmts = parseString("define name as Text attribute\r\n" +
+				"define printName as method receiving name doing:\r\n" +
 				"\tprint with \"name\" + name as value\r\n" +
-				"define Person as: category with attribute: printName");
+				"define Person as category with attribute printName");
 		stmts.register(context);
 		try {
 			stmts.check(context);
@@ -47,9 +47,9 @@ public class TestCheck extends BaseEParserTest {
 
 	@Test
 	public void testCategoryAttribute() throws Exception {
-		DeclarationList stmts = parseString("define id as: Integer attribute\r\n" +
-				"define Person as: category with attribute: id\r\n" +
-				"define person as: Person attribute");
+		DeclarationList stmts = parseString("define id as Integer attribute\r\n" +
+				"define Person as category with attribute id\r\n" +
+				"define person as Person attribute");
 		stmts.register(context);
 		stmts.check(context);
 	}
@@ -57,7 +57,7 @@ public class TestCheck extends BaseEParserTest {
 	
 	@Test
 	public void testCategoryWithUndeclaredDerived() throws Exception {
-		DeclarationList stmts = parseString("define Employee as: Person");
+		DeclarationList stmts = parseString("define Employee as Person");
 		try {
 			stmts.register(context);
 			stmts.check(context);
@@ -69,7 +69,7 @@ public class TestCheck extends BaseEParserTest {
 
 	@Test
 	public void testCategoryWithUndeclaredAttribute() throws Exception {
-		DeclarationList stmts = parseString("define Person as: category with attribute: id");
+		DeclarationList stmts = parseString("define Person as category with attribute id");
 		try {
 			stmts.register(context);
 			stmts.check(context);
@@ -81,16 +81,16 @@ public class TestCheck extends BaseEParserTest {
 
 	@Test
 	public void testCategory() throws Exception {
-		DeclarationList stmts = parseString("define id as: Integer attribute\r\n" +
-				"define Person as: category with attribute: id\r\n" +
-				"define Employee as: Person");
+		DeclarationList stmts = parseString("define id as Integer attribute\r\n" +
+				"define Person as category with attribute id\r\n" +
+				"define Employee as Person");
 		stmts.register(context);
 		stmts.check(context);
 	}
 
 	@Test
 	public void testMethodWithUndeclaredAttribute() throws Exception {
-		DeclarationList stmts = parseString("define printName as: method receiving: name doing:\r\n" +
+		DeclarationList stmts = parseString("define printName as method receiving name doing:\r\n" +
 				"\tprint with \"name\" + name as value");
 		try {
 			stmts.register(context);
@@ -103,10 +103,10 @@ public class TestCheck extends BaseEParserTest {
 	
 	@Test
 	public void testMethod() throws Exception {
-		DeclarationList stmts = parseString("define print as: native method receiving: Text value doing:\r\n" +
+		DeclarationList stmts = parseString("define print as native method receiving Text value doing:\r\n" +
 					"\tJava: System.out.println(value);\r\n" +
-					"define name as: Text attribute\r\n" +
-					"define printName as: method receiving: name doing:\r\n" +
+					"define name as Text attribute\r\n" +
+					"define printName as method receiving name doing:\r\n" +
 					"\tprint with \"name\" + name as value" );
 		stmts.register(context);
 		stmts.check(context);
@@ -114,7 +114,7 @@ public class TestCheck extends BaseEParserTest {
 
 	@Test
 	public void testList() throws Exception {
-		DeclarationList stmts = parseString("define testMethod as: method receiving: Text value doing:\r\n" +
+		DeclarationList stmts = parseString("define testMethod as method receiving Text value doing:\r\n" +
 					"\tlist = [ \"john\" , \"jim\" ]\r\n" +
 					"\telem = list[1]\r\n");
 		stmts.register(context);
@@ -123,7 +123,7 @@ public class TestCheck extends BaseEParserTest {
 
 	@Test
 	public void testDict() throws Exception {
-		DeclarationList stmts = parseString("define testMethod as: method receiving: Text value doing:\r\n" +
+		DeclarationList stmts = parseString("define testMethod as method receiving Text value doing:\r\n" +
 					"\tdict = { \"john\":123, \"jim\":345 }\r\n" +
 					"\telem = dict[\"john\"]\r\n");
 		stmts.register(context);

@@ -27,13 +27,13 @@ public class TestAnonymousTypes extends BaseEParserTest {
 
 	@Before
 	public void register() throws Exception {
-		DeclarationList stmts = parseString("define id as: Integer attribute\r\n" +
-				"define name as: String attribute\r\n" +
-				"define other as: String attribute\r\n" +
-				"define Simple as: category with attribute: name\r\n" +
-				"define Root as: category with attribute: id\r\n" +
-				"define DerivedWithOther as: Root with attribute: other\r\n" +
-				"define DerivedWithName as: Root with attribute: name\r\n");
+		DeclarationList stmts = parseString("define id as Integer attribute\r\n" +
+				"define name as String attribute\r\n" +
+				"define other as String attribute\r\n" +
+				"define Simple as category with attribute name\r\n" +
+				"define Root as category with attribute id\r\n" +
+				"define DerivedWithOther as Root with attribute other\r\n" +
+				"define DerivedWithName as Root with attribute name\r\n");
 		stmts.register(context);
 	}
 	

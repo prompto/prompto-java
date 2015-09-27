@@ -87,11 +87,11 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 			case 0:
 				break;
 			case 1:
-				writer.append(" with attribute: ");
+				writer.append(" with attribute ");
 				attributes.toDialect(writer, false);
 				break;
 			default:
-				writer.append(" with attributes: ");
+				writer.append(" with attributes ");
 				attributes.toDialect(writer, true);
 				break;
 			}

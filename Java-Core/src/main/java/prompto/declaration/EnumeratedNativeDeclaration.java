@@ -81,7 +81,7 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration implements IEnu
 	private void toEDialect(CodeWriter writer) {
 		writer.append("define ");
 		writer.append(getName());
-		writer.append(" as: enumerated ");
+		writer.append(" as enumerated ");
 		type.getDerivedFrom().toDialect(writer);
 		writer.append(" with symbols:\n");
 		writer.indent();

@@ -102,13 +102,13 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		boolean hasAttributes = attributes!=null && attributes.size()>0;
 		writer.append("define ");
 		writer.append(getName());
-		writer.append(" as: ");
+		writer.append(" as ");
 		categoryTypeToEDialect(writer);
 		if(hasAttributes) {
 			if(attributes.size()==1)
-				writer.append(" with attribute: ");
+				writer.append(" with attribute ");
 			else
-				writer.append(" with attributes: ");
+				writer.append(" with attributes ");
 			attributes.toDialect(writer, true);
 		}
 		if(hasMethods) {

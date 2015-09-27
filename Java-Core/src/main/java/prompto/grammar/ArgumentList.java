@@ -52,7 +52,7 @@ public class ArgumentList extends ObjectList<IArgument> {
 	
 	private void toEDialect(CodeWriter writer) {
 		IArgument last = this.getLast();
-		writer.append("receiving: ");
+		writer.append("receiving ");
 		for(IArgument argument : this) {
 			if(argument==last)
 				break;

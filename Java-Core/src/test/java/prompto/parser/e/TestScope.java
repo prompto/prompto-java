@@ -20,7 +20,7 @@ public class TestScope extends BaseEParserTest {
 	@Test(expected=SyntaxError.class)
 	public void testAttribute() throws Exception {
 		assertNull(context.getRegisteredDeclaration(IDeclaration.class, new Identifier("id")));
-		DeclarationList stmts = parseString("define id as: Integer attribute");
+		DeclarationList stmts = parseString("define id as Integer attribute");
 		assertNotNull(stmts);
 		stmts.register(context);
 		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, new Identifier("id"));
@@ -32,7 +32,7 @@ public class TestScope extends BaseEParserTest {
 	@Test(expected=SyntaxError.class)
 	public void testCategory() throws Exception {
 		assertNull(context.getRegisteredDeclaration(IDeclaration.class, new Identifier("Person")));
-		DeclarationList stmts = parseString("define Person as: category with attributes: id and name");
+		DeclarationList stmts = parseString("define Person as category with attributes id and name");
 		assertNotNull(stmts);
 		stmts.register(context);
 		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, new Identifier("Person"));
@@ -44,15 +44,15 @@ public class TestScope extends BaseEParserTest {
 	@Test
 	public void testMethod() throws Exception {
 		assertNull(context.getRegisteredDeclaration(IDeclaration.class, new Identifier("printName")));
-		DeclarationList stmts = parseString("define name as: Text attribute\r\n"
-				+ "define printName as: method receiving: name doing:\r\n"
+		DeclarationList stmts = parseString("define name as Text attribute\r\n"
+				+ "define printName as method receiving name doing:\r\n"
 				+ "\tprint with \"name\" + name as value");
 		assertNotNull(stmts);
 		stmts.register(context);
 		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, new Identifier("printName"));
 		assertNotNull(actual);
 		assertTrue(actual instanceof MethodDeclarationMap);
-		stmts = parseString("define printName as: method receiving: Person p doing:"
+		stmts = parseString("define printName as method receiving Person p doing:"
 				+ "\r\n\tprint with \"person\" + p.name as value");
 		assertNotNull(stmts);
 		stmts.register(context);

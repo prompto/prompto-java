@@ -24,11 +24,11 @@ public class TestDeclaredTypes extends BaseEParserTest {
 
 	@Before
 	public void registerCategoryTypes() throws Exception {
-		DeclarationList stmts = parseString("define id as: Integer attribute\r\n" +
-				"define name as: String attribute\r\n" +
-				"define Root as: category with attribute: id\r\n" +
-				"define Derived as: Root with attribute: name\r\n" +
-				"define Unrelated as: category with attributes: id and name\r\n");
+		DeclarationList stmts = parseString("define id as Integer attribute\r\n" +
+				"define name as String attribute\r\n" +
+				"define Root as category with attribute id\r\n" +
+				"define Derived as Root with attribute name\r\n" +
+				"define Unrelated as category with attributes id and name\r\n");
 		stmts.register(context);
 	}
 	

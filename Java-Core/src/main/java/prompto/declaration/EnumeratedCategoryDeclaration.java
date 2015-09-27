@@ -75,16 +75,16 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration i
 	protected void toEDialect(CodeWriter writer) {
 		writer.append("define ");
 		writer.append(getName());
-		writer.append(" as: enumerated ");
+		writer.append(" as enumerated ");
 		if(derivedFrom!=null)
 			derivedFrom.toDialect(writer, true);
 		else 
 			writer.append("category");
 		if(attributes!=null && attributes.size()>0) {
 			if(attributes.size()==1)
-				writer.append(" with attribute: ");
+				writer.append(" with attribute ");
 			else
-				writer.append(" with attributes: ");
+				writer.append(" with attributes ");
 			attributes.toDialect(writer, true);
 			writer.append(", and symbols:\n");
 		} else

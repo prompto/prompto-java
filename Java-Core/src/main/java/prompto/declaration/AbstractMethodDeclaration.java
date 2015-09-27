@@ -69,10 +69,10 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 	protected void toEDialect(CodeWriter writer) {
 		writer.append("define ");
 		writer.append(getName());
-		writer.append(" as: abstract method ");
+		writer.append(" as abstract method ");
 		arguments.toDialect(writer);
 		if(returnType!=null && returnType!=VoidType.instance()) {
-			writer.append("returning: ");
+			writer.append("returning ");
 			returnType.toDialect(writer);
 		}
 	}

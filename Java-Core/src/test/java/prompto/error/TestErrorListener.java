@@ -21,7 +21,7 @@ public class TestErrorListener {
 		IProblemListener listener = new ProblemCollector();
 		IParser parser = Dialect.E.getParserFactory().newParser();
 		parser.setProblemListener(listener);
-		parser.parse(null, new ByteArrayInputStream("define x as: Text attribute".getBytes()));
+		parser.parse(null, new ByteArrayInputStream("define x as Text attribute".getBytes()));
 		assertEquals(0, listener.getCount());
 	}
 
@@ -92,7 +92,7 @@ public class TestErrorListener {
 		IProblemListener listener = new ProblemCollector();
 		IParser parser = Dialect.E.getParserFactory().newParser();
 		parser.setProblemListener(listener);
-		DeclarationList dl = parser.parse(null, new ByteArrayInputStream("define x as: Text attribute\ndefine x as: Text attribute\n".getBytes()));
+		DeclarationList dl = parser.parse(null, new ByteArrayInputStream("define x as Text attribute\ndefine x as Text attribute\n".getBytes()));
 		assertEquals(0, listener.getCount()); 
 		Context ctx = Context.newGlobalContext();
 		ctx.setProblemListener(listener);

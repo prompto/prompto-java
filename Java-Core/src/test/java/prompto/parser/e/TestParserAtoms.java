@@ -130,7 +130,7 @@ public class TestParserAtoms {
 
 	@Test
 	public void testAttribute() throws Exception {
-		String statement = "define id as : Integer attribute\n";
+		String statement = "define id as Integer attribute\n";
 		ETestParser parser = new ETestParser(statement, true);
 		AttributeDeclaration ad = parser.parse_attribute_declaration();
 		assertNotNull(ad);
@@ -140,7 +140,7 @@ public class TestParserAtoms {
 
 	@Test
 	public void testArrayAttribute() throws Exception {
-		String statement = "define id as : Integer[] attribute\n";
+		String statement = "define id as Integer[] attribute\n";
 		ETestParser parser = new ETestParser(statement, true);
 		AttributeDeclaration ad = parser.parse_attribute_declaration();
 		assertNotNull(ad);
@@ -150,7 +150,7 @@ public class TestParserAtoms {
 
 	@Test
 	public void testCategory1Attribute() throws Exception {
-		String statement = "define Person as: category with attribute: id\n";
+		String statement = "define Person as category with attribute id\n";
 		ETestParser parser = new ETestParser(statement, true);
 		CategoryDeclaration cd = parser.parse_category_declaration();
 		assertNotNull(cd);
@@ -162,7 +162,7 @@ public class TestParserAtoms {
 
 	@Test
 	public void testCategory2Attributes() throws Exception {
-		String statement = "define Person as: category with attributes: id, name";
+		String statement = "define Person as category with attributes id, name";
 		ETestParser parser = new ETestParser(statement, false);
 		CategoryDeclaration cd = parser.parse_category_declaration();
 		assertNotNull(cd);
@@ -175,7 +175,7 @@ public class TestParserAtoms {
 	
 	@Test
 	public void testCategory1Derived1Attribute() throws Exception {
-		String statement = "define Employee as: Person with attribute: company";
+		String statement = "define Employee as Person with attribute company";
 		ETestParser parser = new ETestParser(statement, false);
 		CategoryDeclaration cd = parser.parse_category_declaration();
 		assertNotNull(cd);
@@ -188,7 +188,7 @@ public class TestParserAtoms {
 
 	@Test
 	public void testCategory2DerivedNoAttribute() throws Exception {
-		String statement = "define Entrepreneur as: Person and Company\n";
+		String statement = "define Entrepreneur as Person and Company\n";
 		ETestParser parser = new ETestParser(statement, true);
 		CategoryDeclaration cd = parser.parse_category_declaration();
 		assertNotNull(cd);
@@ -320,7 +320,7 @@ public class TestParserAtoms {
 
 	@Test
 	public void testMethod1Parameter1Statement() throws Exception {
-		String statement = "define printName as: method receiving: Person p doing:\n"
+		String statement = "define printName as method receiving Person p doing:\n"
 				+ "\tprint with \"person\" + p.name as value\n";
 		ETestParser parser = new ETestParser(statement, true);
 		ConcreteMethodDeclaration ad = parser.parse_concrete_method_declaration();
@@ -338,7 +338,7 @@ public class TestParserAtoms {
 	
 	@Test
 	public void testMethod1Extended1Statement() throws Exception {
-		String statement = "define printName as: method receiving: Object o with attribute: name doing:\n"
+		String statement = "define printName as method receiving Object o with attribute name doing:\n"
 				+ "\tprint with \"object\" + o.name as value\n";
 		ETestParser parser = new ETestParser(statement, true);
 		ConcreteMethodDeclaration ad = parser.parse_concrete_method_declaration();
@@ -358,7 +358,7 @@ public class TestParserAtoms {
 	
 	@Test
 	public void testMethod1Array1Statement() throws Exception {
-		String statement = "define printName as: method receiving: Option[] options doing:\n"
+		String statement = "define printName as method receiving Option[] options doing:\n"
 				+ "\tprint with \"array\" + args as value\n";
 		ETestParser parser = new ETestParser(statement, true);
 		ConcreteMethodDeclaration ad = parser.parse_concrete_method_declaration();
@@ -466,7 +466,7 @@ public class TestParserAtoms {
 	
 	@Test 
 	public void testNativeMethod() throws Exception {
-		String statement = "define print as: native method receiving: String value doing:\n"
+		String statement = "define print as native method receiving String value doing:\n"
 				+ "\tJava: System.out.println(value);\n"
 				+ "\tC#: Console.println(value);\n";
 		
