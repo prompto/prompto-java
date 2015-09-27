@@ -177,13 +177,13 @@ public class TestMethodDeclaration extends BaseDeclaration {
 		writer.indent();
 		statements.toDialect(writer);
 		writer.dedent();
-		writer.append("and expecting:");
+		writer.append("and expecting");
 		if(error!=null) {
 			writer.append(" ");
 			error.toDialect(writer);
 			writer.append("\n");
 		} else {
-			writer.append("\n");
+			writer.append(":\n");
 			writer.indent();
 			assertions.toDialect(writer);
 			writer.dedent();
