@@ -1,5 +1,7 @@
 package prompto.value;
 
+import java.io.IOException;
+
 import prompto.declaration.NativeResourceDeclaration;
 import prompto.error.SyntaxError;
 
@@ -20,12 +22,12 @@ public class NativeResource extends NativeInstance implements IResource {
 	}
 	
 	@Override
-	public String readFully() {
+	public String readFully() throws IOException {
 		return ((IResource)instance).readFully();
 	}
 	
 	@Override
-	public void writeFully(String data) {
+	public void writeFully(String data) throws IOException {
 		((IResource)instance).writeFully(data);
 	}
 	

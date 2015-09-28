@@ -1,8 +1,11 @@
 package prompto.expression;
 
+import java.io.IOException;
+
 import prompto.error.InvalidResourceError;
 import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
+import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.type.IType;
@@ -48,7 +51,11 @@ public class ReadExpression implements IExpression {
 		IResource res = (IResource)o;
 		if(!res.isReadable())
 			throw new InvalidResourceError("Not readable");
-		String str = res.readFully();
-		return new Text(str);
+		try {
+			String str = res.readFully();
+			return new Text(str);
+		} catch(IOException e) {
+			throw new ReadWriteError(e.getMessage());
+		}
 	}
 }

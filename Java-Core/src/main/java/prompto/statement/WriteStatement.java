@@ -1,8 +1,11 @@
 package prompto.statement;
 
+import java.io.IOException;
+
 import prompto.error.InvalidResourceError;
 import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
+import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.runtime.Context;
@@ -62,7 +65,11 @@ public class WriteStatement extends SimpleStatement {
 		IResource res = (IResource)o;
 		if(!res.isWritable())
 			throw new InvalidResourceError("Not writable");
-		res.writeFully(content.interpret(context).toString());
-		return null;
+		try {
+			res.writeFully(content.interpret(context).toString());
+			return null;
+		} catch(IOException e) {
+			throw new ReadWriteError(e.getMessage());
+		}
 	}
 }

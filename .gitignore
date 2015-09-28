@@ -1,5 +1,4 @@
 .metadata/*
 **/.p4ignore
+**/target/*
 .DS_Store
-antlr4
-prompto
