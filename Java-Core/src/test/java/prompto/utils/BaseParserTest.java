@@ -39,7 +39,7 @@ public abstract class BaseParserTest extends BaseTest {
 		if(coreContext==null)
 			coreContext = Context.newGlobalContext();
 		File[] files = listLibraryFiles(name);
-		for(File file : files) {
+		if(files!=null) for(File file : files) {
 			String resourceName = name + "/" + file.getName();
 			DeclarationList stmts = parseResource(resourceName);
 			stmts.register(coreContext);
