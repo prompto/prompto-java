@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -11,6 +12,8 @@ import java.util.List;
 
 import org.junit.Before;
 
+import prompto.declaration.IDeclaration;
+import prompto.declaration.TestMethodDeclaration;
 import prompto.grammar.DeclarationList;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
@@ -24,13 +27,24 @@ import prompto.utils.CodeWriter;
 
 public abstract class BaseParserTest extends BaseTest {
 
+	protected Context coreContext;
 	protected Context context;
 
 	@Before  
-	public void baseTestBefore() {
+	public void __before__test__() {
 		context = Context.newGlobalContext();
 	}
 
+	public void loadDependency(String name) throws Exception {
+		if(coreContext==null)
+			coreContext = Context.newGlobalContext();
+		File[] files = listLibraryFiles(name);
+		for(File file : files) {
+			String resourceName = name + "/" + file.getName();
+			DeclarationList stmts = parseResource(resourceName);
+			stmts.register(coreContext);
+		}
+	}
 
 	protected void loadResource(String resourceName) throws Exception {
 		DeclarationList stmts = parseResource(resourceName);
@@ -70,6 +84,19 @@ public abstract class BaseParserTest extends BaseTest {
 					return;
 			}
 			assertEquals(expected.get(0), read); // to get a display
+		}
+	}
+	
+	protected void runTests(String resource) throws Exception {
+		DeclarationList stmts = parseResource(resource);
+		for(IDeclaration decl : stmts) {
+			if(!(decl instanceof TestMethodDeclaration))
+				continue;
+			Out.reset();
+			Interpreter.interpretTest(coreContext, decl.getIdentifier());
+			String expected = decl.getIdentifier().getName() + " test successful\n";
+			String read = Out.read();
+			assertEquals(expected, read);
 		}
 	}
 	

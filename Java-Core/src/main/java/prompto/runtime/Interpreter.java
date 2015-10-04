@@ -30,9 +30,6 @@ import prompto.value.ExpressionValue;
 import prompto.value.IValue;
 import prompto.value.Text;
 
-
-
-
 public class Interpreter {
 	
 	private static IType argsType = new DictType(TextType.instance());
