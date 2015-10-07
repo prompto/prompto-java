@@ -6,6 +6,7 @@ import org.eclipse.jetty.server.handler.DefaultHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.util.resource.Resource;
+import org.eclipse.jetty.webapp.WebAppContext;
 
 public class CodeServer {
 	
@@ -34,10 +35,21 @@ public class CodeServer {
 	}
 
 	static Handler prepareHandlers() {
-		ResourceHandler rh = prepareResourceHandler("/");
+		Handler rh = prepareResourceHandler("/");
+		Handler ws = prepareServiceHandler("/ws/");
 		HandlerList handlers = new HandlerList();
-		handlers.setHandlers(new Handler[] { rh, new DefaultHandler() });
+		handlers.setHandlers(new Handler[] { rh, ws, new DefaultHandler() });
 		return handlers;
+	}
+
+	static Handler prepareServiceHandler(String path) {
+		return prepareServiceHandler(path, "");
+	}
+	public static Handler prepareServiceHandler(String path, String base) {
+        WebAppContext webapp = new WebAppContext();
+        webapp.setContextPath(path);
+        webapp.setResourceBase(base);
+ 		return webapp;
 	}
 
 	static ResourceHandler prepareResourceHandler(String path) {
@@ -48,10 +60,32 @@ public class CodeServer {
 		return rh;
 	}
 
+	static Thread serverThread = null;
+	
 	public static void start() throws Exception  {
 		if(jettyServer.isStarted())
 			throw new RuntimeException("Server is already started!");
-		jettyServer.start();
+		Object sync = new Object();
+		serverThread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					jettyServer.start();
+					synchronized (sync) {
+						sync.notify();
+					}
+					jettyServer.join();
+				} catch(Throwable t) {
+					throw new RuntimeException(t);
+				} finally {
+					serverThread = null;
+				}
+			}
+		}, "HTTP Server");
+		serverThread.start();
+		synchronized (sync) {
+			sync.wait();
+		}
 	}
 
 	public static void stop() throws Exception {
@@ -63,4 +97,5 @@ public class CodeServer {
 	public static boolean isStarted() {
 		return jettyServer.isStarted();
 	}
+
 }
