@@ -95,7 +95,7 @@ public abstract class BaseSwitchStatement extends BaseStatement {
 				types.put(type.getName(), type);
 		}
 		if(defaultCase!=null) {
-			IType type = defaultCase.check(context);
+			IType type = defaultCase.check(context, null);
 			if(type!=VoidType.instance())
 				types.put(type.getName(), type);
 		}

@@ -4,7 +4,6 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.grammar.MethodDeclarationList;
-import prompto.parser.IProblemListener;
 import prompto.runtime.Context;
 import prompto.type.CategoryType;
 import prompto.type.IType;
@@ -42,13 +41,8 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	public IType check(Context context) throws SyntaxError {
 		if(attributes!=null) for(Identifier attribute : attributes) {
 			AttributeDeclaration ad = context.getRegisteredDeclaration(AttributeDeclaration.class, attribute);
-			if(ad==null) {
-				IProblemListener pl = context.getProblemListener();
-				if(pl!=null)
-					pl.reportUnknownAttribute(attribute.toString(), attribute);
-				else
-					throw new SyntaxError("Unknown attribute: \"" + attribute + "\"");
-			}
+			if(ad==null)
+				context.getProblemListener().reportUnknownAttribute(attribute.toString(), attribute);
 		}
 		return new CategoryType(this.getIdentifier());
 	}

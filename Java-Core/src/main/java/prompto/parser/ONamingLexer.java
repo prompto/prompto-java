@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 
 import prompto.parser.OLexer;
+import prompto.problem.IProblemListener;
 
 public class ONamingLexer extends OLexer implements ILexer {
 

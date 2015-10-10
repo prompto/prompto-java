@@ -1,4 +1,6 @@
-package prompto.parser;
+package prompto.problem;
+
+import prompto.parser.ISection;
 
 
 public abstract class SyntaxProblemBase implements IProblem {

@@ -1,9 +1,9 @@
-package prompto.parser;
+package prompto.problem;
 
 import org.antlr.v4.runtime.LexerNoViableAltException;
 import org.antlr.v4.runtime.misc.Interval;
 
-public class LexerNoViableAltError extends ProblemBase {
+public class LexerNoViableAltError extends ParserProblemBase {
 
 	LexerNoViableAltException e;
 	

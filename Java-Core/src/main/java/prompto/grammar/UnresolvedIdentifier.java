@@ -11,7 +11,6 @@ import prompto.expression.InstanceExpression;
 import prompto.expression.MethodSelector;
 import prompto.expression.SymbolExpression;
 import prompto.expression.TypeExpression;
-import prompto.parser.IProblemListener;
 import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.statement.MethodCall;
@@ -94,13 +93,8 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 				}
 			}
 		}
-		if(resolved==null) {
-			IProblemListener pl = context.getProblemListener();
-			if(pl!=null)
-				pl.reportUnknowIdentifier(name.toString(), this);
-			else 
-				throw new SyntaxError("Unknown identifier:" + name);
-		}
+		if(resolved==null)
+			context.getProblemListener().reportUnknowIdentifier(name.toString(), this);
 		return resolved;
 	}
 

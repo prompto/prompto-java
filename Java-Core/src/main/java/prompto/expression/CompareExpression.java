@@ -4,13 +4,14 @@ import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.CmpOp;
+import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.Boolean;
 import prompto.value.IValue;
 
-public class CompareExpression implements IExpression, IAssertion {
+public class CompareExpression extends Section implements IExpression, IAssertion {
 
 	IExpression left;
 	CmpOp operator;
@@ -35,7 +36,7 @@ public class CompareExpression implements IExpression, IAssertion {
 	public IType check(Context context) throws SyntaxError {
 		IType lt = left.check(context);
 		IType rt = right.check(context);
-		return lt.checkCompare(context, rt);
+		return lt.checkCompare(context, rt, this);
 	}
 
 	@Override

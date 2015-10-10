@@ -9,6 +9,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
+import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.utils.CodeWriter;
 import prompto.value.ExpressionValue;
@@ -93,8 +94,9 @@ public abstract class BaseType implements IType {
 	}
 	
 	@Override
-	public IType checkCompare(Context context, IType other) throws SyntaxError {
-		throw new SyntaxError("Cannot compare " + this.getName() + " to " + other.getName());
+	public IType checkCompare(Context context, IType other, ISection section) throws SyntaxError {
+		context.getProblemListener().reportIllegalComparison(this, other, section);
+		return BooleanType.instance();
 	}
 
 	@Override
@@ -114,7 +116,8 @@ public abstract class BaseType implements IType {
 
 	@Override
 	public IType checkMember(Context context, Identifier name) throws SyntaxError {
-		throw new SyntaxError("Cannot read member from " + this.getName());
+		context.getProblemListener().reportIllegalMember(name.getName(), name);
+		return VoidType.instance();
 	}
 
 	@Override

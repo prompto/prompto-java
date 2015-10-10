@@ -3,6 +3,7 @@ package prompto.type;
 import org.joda.time.Period;
 
 import prompto.error.SyntaxError;
+import prompto.parser.ISection;
 import prompto.runtime.Context;
 
 
@@ -52,9 +53,9 @@ public class PeriodType extends NativeType {
 	}
 
 	@Override
-	public IType checkCompare(Context context, IType other) throws SyntaxError {
+	public IType checkCompare(Context context, IType other, ISection section) throws SyntaxError {
 		if(other instanceof PeriodType)
 			return BooleanType.instance();
-		return super.checkCompare(context, other);
+		return super.checkCompare(context, other, section);
 	}
 }

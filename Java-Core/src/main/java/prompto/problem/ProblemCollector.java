@@ -1,8 +1,7 @@
-package prompto.parser;
+package prompto.problem;
 
 import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.Collection;
 import java.util.List;
 
 import org.antlr.v4.runtime.ANTLRErrorListener;
@@ -15,6 +14,10 @@ import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
 
+import prompto.error.SyntaxError;
+import prompto.parser.ISection;
+import prompto.parser.MissingTokenException;
+import prompto.parser.UnwantedTokenException;
 import prompto.type.IType;
 
 public class ProblemCollector implements ANTLRErrorListener, IProblemListener {
@@ -26,7 +29,16 @@ public class ProblemCollector implements ANTLRErrorListener, IProblemListener {
 			problems.clear();
 		}
 	}
+
+	public int getCount() {
+		return problems.size();
+	}
 	
+	public List<IProblem> getProblems() {
+		return problems;
+	}
+
+
 	@Override
 	public void reportAmbiguity(Parser recognizer, DFA dfa, int startIndex, int stopIndex, boolean exact, BitSet ambigAlts, ATNConfigSet configs) {
 	}
@@ -93,13 +105,24 @@ public class ProblemCollector implements ANTLRErrorListener, IProblemListener {
 	}
 	
 	@Override
-	public int getCount() {
-		return problems.size();
+	public void reportUnknownMethod(String name, ISection section) {
+		synchronized(problems) {
+			problems.add(new UnknowMethodError(name, section));
+		}
 	}
 	
 	@Override
-	public Collection<IProblem> getProblems() {
-		return problems;
+	public void reportIllegalComparison(IType type, IType other, ISection section) throws SyntaxError {
+		synchronized(problems) {
+			problems.add(new IllegalComparisonError(type, other, section));
+		}
 	}
-
+	
+	@Override
+	public void reportIllegalMember(String name, ISection section) throws SyntaxError {
+		synchronized(problems) {
+			problems.add(new IllegalMemberError(name, section));
+		}
+	}
+	
 }

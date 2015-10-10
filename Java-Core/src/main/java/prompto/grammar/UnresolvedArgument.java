@@ -77,7 +77,7 @@ public class UnresolvedArgument extends BaseArgument implements INamedArgument {
 		else if(named instanceof MethodDeclarationMap)
 			resolved = new MethodArgument(name);
 		else
-			throw new SyntaxError("Unknown identifier:" + name);
+			throw new SyntaxError("Unknown identifier: " + name);
 	}
 
 

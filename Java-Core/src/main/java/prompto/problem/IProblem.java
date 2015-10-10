@@ -1,4 +1,4 @@
-package prompto.parser;
+package prompto.problem;
 
 public interface IProblem {
 	

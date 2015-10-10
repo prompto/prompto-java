@@ -34,26 +34,59 @@ public class StatementList extends LinkedList<IStatement> {
 			return false;
 	}
 	
-	public IType check(Context context) throws SyntaxError {
-		TypeMap types = new TypeMap();
-		for(IStatement statement : this) {
-			IType type = statement.check(context);
-			if(type!=VoidType.instance())
-				types.put(type.getName(), type);
+	public IType check(Context context, IType returnType) throws SyntaxError {
+		if(returnType==VoidType.instance()) {
+			for(IStatement statement : this) {
+				IType type = statement.check(context);
+				if(type!=VoidType.instance())
+					context.getProblemListener().reportIllegalReturn(statement);
+			}
+			return returnType;
+		} else {
+			TypeMap types = new TypeMap();
+			if(returnType!=null)
+				types.put(returnType.getName(), returnType);
+			for(IStatement statement : this) {
+				IType type = statement.check(context);
+				if(type!=VoidType.instance())
+					types.put(type.getName(), type);
+			}
+			IType type = types.inferType(context);
+			if(returnType!=null)
+				return returnType;
+			else
+				return type;
 		}
-		return types.inferType(context);
 	}
 
 	public IType checkNative(Context context, IType returnType) throws SyntaxError {
-		TypeMap types = new TypeMap();
-		for(IStatement statement : this) {
-			if(!(statement instanceof JavaNativeCall))
-				continue;
-			IType type = ((JavaNativeCall)statement).checkNative(context, returnType);
-			if(type!=VoidType.instance())
-				types.put(type.getName(), type);
+		if(returnType==VoidType.instance()) {
+			// don't check return type
+			for(IStatement statement : this) {
+				if(!(statement instanceof JavaNativeCall))
+					continue;
+				IType type = ((JavaNativeCall)statement).checkNative(context, returnType);
+				if(type!=VoidType.instance())
+					context.getProblemListener().reportIllegalReturn(statement);
+			}
+			return returnType;
+		} else {
+			TypeMap types = new TypeMap();
+			if(returnType!=null)
+				types.put(returnType.getName(), returnType);
+			for(IStatement statement : this) {
+				if(!(statement instanceof JavaNativeCall))
+					continue;
+				IType type = ((JavaNativeCall)statement).checkNative(context, returnType);
+				if(type!=VoidType.instance())
+					types.put(type.getName(), type);
+			}
+			IType type = types.inferType(context);
+			if(returnType!=null)
+				return returnType;
+			else
+				return type;
 		}
-		return types.inferType(context);
 	}
 
 	public IValue interpret(Context context) throws PromptoError {

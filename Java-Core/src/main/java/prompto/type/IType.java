@@ -3,6 +3,7 @@ package prompto.type;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
+import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.utils.CodeWriter;
 import prompto.value.ICollection;
@@ -22,7 +23,7 @@ public interface IType {
 	IType checkIntDivide(Context context, IType other) throws SyntaxError;
 	IType checkMultiply(Context context, IType other, boolean tryReverse) throws SyntaxError;
 	IType checkModulo(Context context, IType rt) throws SyntaxError;
-	IType checkCompare(Context context, IType other) throws SyntaxError;
+	IType checkCompare(Context context, IType other, ISection section) throws SyntaxError;
 	IType checkItem(Context context, IType itemType)  throws SyntaxError;
 	IType checkRange(Context context, IType other) throws SyntaxError;
 	IType checkContains(Context context, IType other) throws SyntaxError;

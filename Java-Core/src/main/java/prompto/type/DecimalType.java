@@ -4,6 +4,7 @@ import java.util.Comparator;
 
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.value.Decimal;
 import prompto.value.ICollection;
@@ -88,12 +89,12 @@ public class DecimalType extends NativeType {
 	}
 
 	@Override
-	public IType checkCompare(Context context, IType other) throws SyntaxError {
+	public IType checkCompare(Context context, IType other, ISection section) throws SyntaxError {
 		if(other instanceof IntegerType)
 			return BooleanType.instance();
 		if(other instanceof DecimalType)
 			return BooleanType.instance();
-		return super.checkCompare(context, other);
+		return super.checkCompare(context, other, section);
 	}
 	
 	@Override

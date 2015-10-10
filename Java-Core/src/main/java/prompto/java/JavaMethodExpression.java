@@ -11,6 +11,7 @@ import prompto.expression.IExpression;
 import prompto.runtime.Context;
 import prompto.type.CategoryType;
 import prompto.type.IType;
+import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 import prompto.value.NativeInstance;
@@ -44,10 +45,11 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 	@Override
 	public IType check(Context context) throws SyntaxError {
 		Method method = findMethod(context);
-		if(method==null)
-			return null;
-		else
-			return new JavaClassType(method.getReturnType());
+		if(method==null) {
+			context.getProblemListener().reportUnknownMethod(name, this);
+			return VoidType.instance();
+		} else
+			return new JavaClassType(method.getGenericReturnType());
 	}
 	
 	@Override
@@ -89,18 +91,19 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 
 	public Method findMethod(Context context) throws SyntaxError {
 		IType type = parent.check(context);
-		Class<?> klass = null;
-		if (type instanceof JavaClassType)
-			klass = ((JavaClassType)type).klass;
-		else if(type instanceof CategoryType) {
-			IDeclaration named = context.getRegisteredDeclaration(IDeclaration.class, type.getName());
-			if(named instanceof NativeCategoryDeclaration) 
-				klass = ((NativeCategoryDeclaration)named).getBoundClass(true);
-		} else 
-			klass = type.toJavaClass();
+		Class<?> klass = findClass(context, type);
 		return findMethod(context, klass);
 	}
 	
+	private Class<?> findClass(Context context, IType type) throws SyntaxError {
+		if(type instanceof CategoryType) {
+			IDeclaration named = context.getRegisteredDeclaration(IDeclaration.class, type.getName());
+			if(named instanceof NativeCategoryDeclaration) 
+				return ((NativeCategoryDeclaration)named).getBoundClass(true);
+		}
+		return type.toJavaClass();
+	}
+
 	public Method findMethod(Context context, Object instance) throws SyntaxError {
 		if(instance instanceof Class<?>)
 			return findMethod(context, (Class<?>)instance);

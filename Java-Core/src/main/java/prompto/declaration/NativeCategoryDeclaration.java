@@ -34,7 +34,7 @@ public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 		super.register(context);
 		Class<?> klass = getBoundClass(false);
 		if(klass!=null)
-			context.registerNativeMapping(klass, this);
+			context.registerNativeBinding(klass, this);
 	}
 	
 	@Override

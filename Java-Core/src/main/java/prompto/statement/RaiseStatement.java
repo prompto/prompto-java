@@ -8,6 +8,7 @@ import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.type.CategoryType;
 import prompto.type.IType;
+import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
@@ -59,7 +60,7 @@ public class RaiseStatement extends SimpleStatement {
 		IType type = expression.check(context);
 		if(!type.isAssignableTo(context, new CategoryType(new Identifier("Error"))))
 			throw new SyntaxError(type.getName() + " does not extend Error");
-		return type;
+		return VoidType.instance();
 	}
 	
 	@Override

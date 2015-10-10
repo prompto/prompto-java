@@ -9,9 +9,8 @@ import static org.junit.Assert.*;
 import prompto.grammar.DeclarationList;
 import prompto.parser.Dialect;
 import prompto.parser.IParser;
-import prompto.parser.IProblem;
-import prompto.parser.IProblemListener;
-import prompto.parser.ProblemCollector;
+import prompto.problem.IProblem;
+import prompto.problem.ProblemCollector;
 import prompto.runtime.Context;
 
 public class TestErrorListener {
@@ -48,7 +47,7 @@ public class TestErrorListener {
 	}
 
 	@Test
-	public void testSyntaxError() throws Exception {
+	public void testInvalidSyntaxError() throws Exception {
 		IProblem error = checkProblem("define", 1, "Invalid syntax at: define<EOF>"); 
 		assertEquals(6, error.getStartIndex());
 	}
@@ -59,15 +58,30 @@ public class TestErrorListener {
 				+ "define x as Text attribute\n", 1, "Duplicate declaration: x"); 
 	}
 	
+	@Test
+	public void testUnknownIdentifierInAssignmentError() throws Exception {
+		checkProblem("define m as method doing:\n"
+				+ "\tl = x\n", 1, "Unknown identifier: x"); 
+	}
+
+	@Test
+	public void testUnknownIdentifierInExpressionError() throws Exception {
+		checkProblem("define \"m\" as test method doing:\n"
+				+ "\tl = x\n"
+				+ "and expecting:\n"
+				+ "\tl.length >= 3", 2, "Unknown identifier: x"); 
+	}
+
 	private IProblem checkProblem(String prompto, int count, String firstError) throws Exception {
 		IProblem error = null;
-		IProblemListener listener = new ProblemCollector();
+		ProblemCollector listener = new ProblemCollector();
 		IParser parser = Dialect.E.getParserFactory().newParser();
 		parser.setProblemListener(listener);
 		DeclarationList decls = parser.parse(null, new ByteArrayInputStream(prompto.getBytes()));
 		Context context = Context.newGlobalContext();
 		context.setProblemListener(listener);
 		decls.register(context);
+		decls.check(context);
 		assertEquals(count, listener.getCount());
 		if(count>0) {
 			error = listener.getProblems().iterator().next();

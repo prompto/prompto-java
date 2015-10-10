@@ -23,7 +23,7 @@ public abstract class SwitchCase extends Section implements ISection {
 	public abstract void checkSwitchType(Context context, IType type) throws SyntaxError;
 
 	public IType checkReturnType(Context context) throws SyntaxError {
-		return statements.check(context);
+		return statements.check(context, null);
 	}
 
 	public abstract boolean matches(Context context, IValue value) throws PromptoError;

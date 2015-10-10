@@ -1,6 +1,8 @@
-package prompto.parser;
+package prompto.problem;
 
-public class MissingTokenError extends ProblemBase {
+import prompto.parser.MissingTokenException;
+
+public class MissingTokenError extends ParserProblemBase {
 
 	MissingTokenException e;
 	

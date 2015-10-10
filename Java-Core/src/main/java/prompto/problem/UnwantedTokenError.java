@@ -1,6 +1,8 @@
-package prompto.parser;
+package prompto.problem;
 
-public class UnwantedTokenError extends ProblemBase {
+import prompto.parser.UnwantedTokenException;
+
+public class UnwantedTokenError extends ParserProblemBase {
 
 	UnwantedTokenException e;
 	

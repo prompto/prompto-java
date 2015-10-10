@@ -23,7 +23,7 @@ public class WithSingletonStatement extends BaseStatement {
 	public IType check(Context context) throws SyntaxError {
 		Context instanceContext = context.newInstanceContext(type);
 		Context childContext = instanceContext.newChildContext();
-		return instructions.check(childContext);
+		return instructions.check(childContext, null);
 	}
 
 	@Override

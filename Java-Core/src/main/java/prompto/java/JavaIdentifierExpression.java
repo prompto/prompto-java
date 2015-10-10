@@ -204,7 +204,7 @@ public class JavaIdentifierExpression implements JavaExpression {
 	IType check_field(IType t) {
 		if(!(t instanceof JavaClassType))
 			return null;
-		Class<?> klass = ((JavaClassType)t).klass;
+		Class<?> klass = t.toJavaClass();
 		try {
 			Field field = klass.getField(identifier);
 			return new JavaClassType(field.getType());

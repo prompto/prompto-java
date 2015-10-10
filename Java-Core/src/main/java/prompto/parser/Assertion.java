@@ -25,13 +25,8 @@ public class Assertion extends Section {
 
 	public void check(Context context) throws SyntaxError {
 		IType type = expression.check(context);
-		if(type!=BooleanType.instance()) {
-			IProblemListener pl = context.getProblemListener();
-			if(pl!=null)
-				pl.reportIllegalNonBoolean(this, type);
-			else
-				throw new SyntaxError("Illegal expression type, expected Boolean, got:" + type.getName());
-		}
+		if(type!=BooleanType.instance())
+			context.getProblemListener().reportIllegalNonBoolean(this, type);
 	}
 
 	public boolean interpret(Context context, TestMethodDeclaration test) throws PromptoError {

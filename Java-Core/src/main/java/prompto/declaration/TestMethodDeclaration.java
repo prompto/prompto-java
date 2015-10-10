@@ -6,7 +6,6 @@ import prompto.error.SyntaxError;
 import prompto.expression.SymbolExpression;
 import prompto.grammar.Identifier;
 import prompto.parser.Assertion;
-import prompto.parser.IProblemListener;
 import prompto.runtime.Context;
 import prompto.statement.IStatement;
 import prompto.statement.StatementList;
@@ -52,13 +51,8 @@ public class TestMethodDeclaration extends BaseDeclaration {
 	
 	private void checkStatement(Context context, IStatement statement) throws SyntaxError {
 		IType type = statement.check(context);
-		if(type!=VoidType.instance()) {
-			IProblemListener pl = context.getProblemListener();
-			if(pl!=null)
-				pl.reportIllegalReturn(statement);
-			else
-				throw new SyntaxError("Illegal return statement in test method!");
-		}
+		if(type!=VoidType.instance())
+			context.getProblemListener().reportIllegalReturn(statement);
 	}
 
 	@Override

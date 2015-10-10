@@ -1,5 +1,6 @@
-package prompto.parser;
+package prompto.problem;
 
+import prompto.parser.ISection;
 import prompto.type.IType;
 
 public class IllegalNonBooleanError extends SyntaxProblemBase {

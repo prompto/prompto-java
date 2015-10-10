@@ -1,4 +1,6 @@
-package prompto.parser;
+package prompto.problem;
+
+import prompto.parser.ISection;
 
 public class DuplicateError extends SyntaxProblemBase {
 

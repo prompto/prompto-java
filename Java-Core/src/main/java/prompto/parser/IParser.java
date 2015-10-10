@@ -3,6 +3,7 @@ package prompto.parser;
 import java.io.InputStream;
 
 import prompto.grammar.DeclarationList;
+import prompto.problem.IProblemListener;
 
 public interface IParser {
 

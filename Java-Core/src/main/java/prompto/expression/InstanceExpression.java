@@ -58,7 +58,7 @@ public class InstanceExpression implements IExpression {
 	public IType check(Context context) throws SyntaxError {
 		INamed named = context.getRegistered(name);
 		if(named==null)
-			throw new SyntaxError("Unknown identifier:" + name);
+			throw new SyntaxError("Unknown identifier: " + name);
 		else if(named instanceof Variable) // local variable
 			return named.getType(context);
 		else if(named instanceof LinkedVariable) // local variable

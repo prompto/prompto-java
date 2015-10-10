@@ -13,6 +13,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import prompto.grammar.DeclarationList;
 import prompto.parser.EParser;
+import prompto.problem.IProblemListener;
 
 
 public class ECleverParser extends EParser implements IParser {
@@ -74,8 +75,6 @@ public class ECleverParser extends EParser implements IParser {
 
 	@Override
 	public DeclarationList parse(String path, InputStream data) throws Exception {
-		if(problemListener!=null)
-			problemListener.reset();
 		setPath(path);
 		EIndentingLexer lexer = getLexer();
 		lexer.reset(data);

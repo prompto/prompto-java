@@ -1,5 +1,6 @@
 package prompto.runtime;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -20,8 +21,9 @@ import prompto.error.SyntaxError;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.parser.ILocation;
-import prompto.parser.IProblemListener;
 import prompto.parser.ISection;
+import prompto.problem.IProblemListener;
+import prompto.problem.ProblemListener;
 import prompto.statement.IStatement;
 import prompto.store.ICodeStore;
 import prompto.type.CategoryType;
@@ -48,6 +50,7 @@ public class Context implements IContext {
 		context.calling = null;
 		context.parent = null;
 		context.debugger = null;
+		context.problemListener = new ProblemListener();
 		return context;
 	}
 
@@ -62,7 +65,7 @@ public class Context implements IContext {
 	Map<Identifier,TestMethodDeclaration> tests = new HashMap<Identifier, TestMethodDeclaration>();
 	Map<Identifier,INamed> instances = new HashMap<Identifier, INamed>();
 	Map<Identifier,IValue> values = new HashMap<Identifier, IValue>();
-	Map<Class<?>, NativeCategoryDeclaration> nativeMappings = new HashMap<Class<?>, NativeCategoryDeclaration>();
+	Map<Type, NativeCategoryDeclaration> nativeBindings = new HashMap<Type, NativeCategoryDeclaration>();
 	
 	protected Context() {
 	}
@@ -234,13 +237,24 @@ public class Context implements IContext {
 			if(decl instanceof NativeCategoryDeclaration) {
 				Class<?> klass = ((NativeCategoryDeclaration)decl).getBoundClass(true);
 				if(klass!=null)
-					nativeMappings.remove(klass);
+					nativeBindings.remove(klass);
 			}
 		}
 	}
 	
 	public AttributeDeclaration findAttribute(String name) {
 		return getRegisteredDeclaration(AttributeDeclaration.class, new Identifier(name));
+	}
+	
+	public List<AttributeDeclaration> getAllAttributes() {
+		if(globals!=this)
+			return globals.getAllAttributes();
+		List<AttributeDeclaration> list = new ArrayList<>();
+		for(IDeclaration decl : declarations.values()) {
+			if(decl instanceof AttributeDeclaration)
+				list.add((AttributeDeclaration)decl);
+		}
+		return list;
 	}
 
 	public INamed getRegistered(Identifier name) {
@@ -278,12 +292,8 @@ public class Context implements IContext {
 
 	private boolean checkDuplicate(IDeclaration declaration) throws SyntaxError {
 		INamed current = getRegistered(declaration.getIdentifier());
-		if(current!=null) {
-			if(problemListener!=null)
-				problemListener.reportDuplicate(declaration.getIdentifier().toString(), declaration, current.getIdentifier());
-			else
-				throw new SyntaxError("Duplicate name: \"" + declaration.getIdentifier() + "\"");
-		}
+		if(current!=null)
+			problemListener.reportDuplicate(declaration.getIdentifier().toString(), declaration, current.getIdentifier());
 		return current==null;
 	}
 
@@ -298,12 +308,8 @@ public class Context implements IContext {
 	
 	private MethodDeclarationMap checkDuplicate(IMethodDeclaration declaration) throws SyntaxError {
 		INamed current = getRegistered(declaration.getIdentifier());
-		if(current!=null && !(current instanceof MethodDeclarationMap)) {
-			if(problemListener!=null)
-				problemListener.reportDuplicate(declaration.getIdentifier().toString(), declaration, (ISection)current);
-			else
-				throw new SyntaxError("Duplicate name: \"" + declaration.getIdentifier() + "\"");
-		}
+		if(current!=null && !(current instanceof MethodDeclarationMap))
+			problemListener.reportDuplicate(declaration.getIdentifier().toString(), declaration, (ISection)current);
 		return (MethodDeclarationMap)current;
 	}
 
@@ -314,12 +320,8 @@ public class Context implements IContext {
 	
 	private boolean checkDuplicate(TestMethodDeclaration declaration) throws SyntaxError {
 		TestMethodDeclaration current = tests.get(declaration.getIdentifier());
-		if(current!=null) {
-			if(problemListener!=null)
-				problemListener.reportDuplicate(declaration.getIdentifier().toString(), declaration, (ISection)current);
-			else
-				throw new SyntaxError("Duplicate test: \"" + declaration.getIdentifier() + "\"");
-		}
+		if(current!=null)
+			problemListener.reportDuplicate(declaration.getIdentifier().toString(), declaration, (ISection)current);
 		return current==null;
 	}
 	
@@ -365,12 +367,9 @@ public class Context implements IContext {
 		
 		public void register(IMethodDeclaration declaration, Context context) throws SyntaxError {
 			String proto = declaration.getProto(context);
-			if(this.containsKey(proto)) {
-				if(context.getProblemListener()!=null)
-					context.getProblemListener().reportDuplicate(declaration.getIdentifier().toString(), declaration, this.get(proto));
-				else
-					throw new SyntaxError("Duplicate prototype for name: \"" + declaration.getIdentifier() + "\"");
-			} else
+			if(this.containsKey(proto))
+				context.getProblemListener().reportDuplicate(declaration.getIdentifier().toString(), declaration, this.get(proto));
+			else
 				this.put(proto, declaration);
 		}
 		
@@ -594,18 +593,18 @@ public class Context implements IContext {
 		return decl;
 	}
 
-	public void registerNativeMapping(Class<?> klass, NativeCategoryDeclaration declaration) {
+	public void registerNativeBinding(Type type, NativeCategoryDeclaration declaration) {
 		if(this==globals)
-			nativeMappings.put(klass, declaration);
+			nativeBindings.put(type, declaration);
 		else
-			globals.registerNativeMapping(klass, declaration);
+			globals.registerNativeBinding(type, declaration);
 	}
 	
-	public NativeCategoryDeclaration getNativeMapping(Class<?> klass) {
+	public NativeCategoryDeclaration getNativeBinding(Type type) {
 		if(this==globals)
-			return nativeMappings.get(klass);
+			return nativeBindings.get(type);
 		else
-			return globals.getNativeMapping(klass);
+			return globals.getNativeBinding(type);
 	}
 
 	public static class ResourceContext extends Context {

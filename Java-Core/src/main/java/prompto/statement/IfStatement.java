@@ -201,7 +201,7 @@ public class IfStatement extends BaseStatement {
 			if(cond!=BooleanType.instance())
 				throw new SyntaxError("Expected a boolean condition!");
 			context = downCastForCheck(context);
-			return instructions.check(context);
+			return instructions.check(context, null);
 		}
 
 		private Context downCastForCheck(Context context) throws SyntaxError {

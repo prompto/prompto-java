@@ -1,4 +1,6 @@
-package prompto.parser;
+package prompto.problem;
+
+import prompto.parser.ISection;
 
 public class UnknowIdentifierError extends SyntaxProblemBase {
 
@@ -16,7 +18,7 @@ public class UnknowIdentifierError extends SyntaxProblemBase {
 	
 	@Override
 	public String getMessage() {
-		return "Unknown identifier:" + name;
+		return "Unknown identifier: " + name;
 	}
 
 }

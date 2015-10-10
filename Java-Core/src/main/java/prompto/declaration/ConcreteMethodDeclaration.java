@@ -130,7 +130,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 
 	protected IType checkStatements(Context context) throws SyntaxError {
-		return statements.check(context);
+		return statements.check(context, returnType);
 	}
 
 	public IType checkChild(Context context) throws SyntaxError {
@@ -138,7 +138,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 			arguments.check(context);
 		Context child = context.newChildContext();
 		registerArguments(child);
-		return statements.check(child);
+		return statements.check(child, returnType);
 	}
 
 	@Override

@@ -13,6 +13,7 @@ import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.Token;
 
 import prompto.parser.ELexer;
+import prompto.problem.IProblemListener;
 
 public class EIndentingLexer extends ELexer implements ILexer {
 

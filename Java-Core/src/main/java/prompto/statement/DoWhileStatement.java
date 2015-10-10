@@ -74,7 +74,7 @@ public class DoWhileStatement extends BaseStatement {
 		if(cond!=BooleanType.instance())
 			throw new SyntaxError("Expected a Boolean condition!");
 		Context child = context.newChildContext();
-		return instructions.check(child);
+		return instructions.check(child, null);
 	}
 
 	@Override

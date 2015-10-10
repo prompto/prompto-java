@@ -1,10 +1,10 @@
-package prompto.parser;
+package prompto.problem;
 
 import org.antlr.v4.runtime.NoViableAltException;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 
-public class ParserNoViableAltError extends ProblemBase {
+public class ParserNoViableAltError extends ParserProblemBase {
 
 	NoViableAltException e;
 	

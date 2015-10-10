@@ -1,13 +1,14 @@
-package prompto.parser;
+package prompto.problem;
 
 
-public abstract class ProblemBase implements IProblem {
+
+public abstract class ParserProblemBase implements IProblem {
 	
 	int line;
 	int column;
 	int hashCode = -1;
 	
-	public ProblemBase(int line, int column) {
+	public ParserProblemBase(int line, int column) {
 		this.line = line;
 		this.column = column;
 	}
@@ -33,9 +34,9 @@ public abstract class ProblemBase implements IProblem {
 	public boolean equals(Object obj) {
 		if(obj==this)
 			return true;
-		if(!(obj instanceof ProblemBase))
+		if(!(obj instanceof ParserProblemBase))
 			return false;
-		ProblemBase other = (ProblemBase)obj;
+		ParserProblemBase other = (ParserProblemBase)obj;
 		return this.getStartIndex()==other.getStartIndex()
 				&& this.getMessage().equals(other.getMessage());
 	}

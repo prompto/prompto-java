@@ -2,6 +2,7 @@ package prompto.type;
 
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.value.Character;
 import prompto.value.CharacterRange;
@@ -47,10 +48,10 @@ public class CharacterType extends NativeType {
 	}
 	
 	@Override
-	public IType checkCompare(Context context, IType other) throws SyntaxError {
+	public IType checkCompare(Context context, IType other, ISection section) throws SyntaxError {
 		if(other instanceof CharacterType || other instanceof TextType)
 			return BooleanType.instance();
-		return super.checkCompare(context, other);
+		return super.checkCompare(context, other, section);
 	}
 	
 	@Override

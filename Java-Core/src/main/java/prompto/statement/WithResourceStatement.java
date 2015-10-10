@@ -73,7 +73,7 @@ public class WithResourceStatement extends BaseStatement {
 	public IType check(Context context) throws SyntaxError {
 		context = context.newResourceContext();
 		resource.checkResource(context);
-		return instructions.check(context);
+		return instructions.check(context, null);
 	}
 
 	@Override

@@ -1,8 +1,8 @@
-package prompto.parser;
+package prompto.problem;
 
 import org.antlr.v4.runtime.InputMismatchException;
 
-public class InputMismatchError extends ProblemBase {
+public class InputMismatchError extends ParserProblemBase {
 
 	InputMismatchException e;
 

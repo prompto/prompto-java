@@ -13,7 +13,6 @@ import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.type.CategoryType;
 import prompto.type.IType;
-import prompto.type.VoidType;
 import prompto.value.IInstance;
 import prompto.value.IValue;
 
@@ -32,7 +31,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	public BaseMethodDeclaration(Identifier name, ArgumentList arguments, IType returnType) {
 		super(name);
 		this.arguments = arguments!=null ? arguments : new ArgumentList();
-		this.returnType = returnType!=null ? returnType : VoidType.instance();
+		this.returnType = returnType;
 	}
 
 	@Override
