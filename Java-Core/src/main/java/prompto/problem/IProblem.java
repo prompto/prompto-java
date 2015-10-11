@@ -2,6 +2,7 @@ package prompto.problem;
 
 public interface IProblem {
 	
+	String getPath();
 	int getStartIndex();
 	int getEndIndex();
 	int getStartLine();

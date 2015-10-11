@@ -4,15 +4,22 @@ package prompto.problem;
 
 public abstract class ParserProblemBase implements IProblem {
 	
+	String path;
 	int line;
 	int column;
 	int hashCode = -1;
 	
-	public ParserProblemBase(int line, int column) {
+	public ParserProblemBase(String path, int line, int column) {
+		this.path = path;
 		this.line = line;
 		this.column = column;
 	}
 
+	@Override
+	public String getPath() {
+		return path;
+	}
+	
 	@Override
 	public int getStartLine() {
 		return line;

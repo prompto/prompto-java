@@ -6,8 +6,8 @@ public class UnwantedTokenError extends ParserProblemBase {
 
 	UnwantedTokenException e;
 	
-	public UnwantedTokenError(int line, int column, UnwantedTokenException e) {
-		super(line, column);
+	public UnwantedTokenError(String path, int line, int column, UnwantedTokenException e) {
+		super(path, line, column);
 		this.e = e;
 	}
 	

@@ -53,17 +53,18 @@ public class ProblemCollector implements ANTLRErrorListener, IProblemListener {
 	
 	@Override
 	public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int column, String msg, RecognitionException e) {
+		String path = recognizer.getInputStream().getSourceName();
 		synchronized(problems) {
 			if(e instanceof LexerNoViableAltException)
-				problems.add(new LexerNoViableAltError(line, column, (LexerNoViableAltException)e));
+				problems.add(new LexerNoViableAltError(path, line, column, (LexerNoViableAltException)e));
 			else if(e instanceof UnwantedTokenException)
-				problems.add(new UnwantedTokenError(line, column, (UnwantedTokenException)e));
+				problems.add(new UnwantedTokenError(path, line, column, (UnwantedTokenException)e));
 			else if(e instanceof MissingTokenException)
-				problems.add(new MissingTokenError(line, column, (MissingTokenException)e));
+				problems.add(new MissingTokenError(path, line, column, (MissingTokenException)e));
 			else if(e instanceof NoViableAltException)
-				problems.add(new ParserNoViableAltError(line, column, (NoViableAltException)e));
+				problems.add(new ParserNoViableAltError(path, line, column, (NoViableAltException)e));
 			else if(e instanceof InputMismatchException)
-				problems.add(new InputMismatchError(line, column, (InputMismatchException)e));
+				problems.add(new InputMismatchError(path, line, column, (InputMismatchException)e));
 			else
 				throw e;
 		}

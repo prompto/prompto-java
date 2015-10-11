@@ -13,6 +13,11 @@ public abstract class SyntaxProblemBase implements IProblem {
 	}
 
 	@Override
+	public String getPath() {
+		return section.getPath();
+	}
+	
+	@Override
 	public int getStartLine() {
 		return section.getStart().getLine();
 	}

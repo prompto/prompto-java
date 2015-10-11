@@ -7,8 +7,8 @@ public class LexerNoViableAltError extends ParserProblemBase {
 
 	LexerNoViableAltException e;
 	
-	public LexerNoViableAltError(int line, int column, LexerNoViableAltException e) {
-		super(line, column);
+	public LexerNoViableAltError(String path, int line, int column, LexerNoViableAltException e) {
+		super(path, line, column);
 		this.e = e;
 	}
 	

@@ -8,8 +8,8 @@ public class ParserNoViableAltError extends ParserProblemBase {
 
 	NoViableAltException e;
 	
-	public ParserNoViableAltError(int line, int column, NoViableAltException e) {
-		super(line, column);
+	public ParserNoViableAltError(String path, int line, int column, NoViableAltException e) {
+		super(path, line, column);
 		this.e = e;
 	}
 	

@@ -6,8 +6,8 @@ public class InputMismatchError extends ParserProblemBase {
 
 	InputMismatchException e;
 
-	public InputMismatchError(int line, int column, InputMismatchException e) {
-		super(line, column);
+	public InputMismatchError(String path, int line, int column, InputMismatchException e) {
+		super(path, line, column);
 		this.e = e;
 	}
 	

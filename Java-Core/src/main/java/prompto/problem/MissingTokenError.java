@@ -6,8 +6,8 @@ public class MissingTokenError extends ParserProblemBase {
 
 	MissingTokenException e;
 	
-	public MissingTokenError(int line, int column, MissingTokenException e) {
-		super(line, column);
+	public MissingTokenError(String path, int line, int column, MissingTokenException e) {
+		super(path, line, column);
 		this.e = e;
 	}
 	
