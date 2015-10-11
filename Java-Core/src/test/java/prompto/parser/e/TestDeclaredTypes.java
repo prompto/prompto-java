@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import prompto.grammar.DeclarationList;
+import prompto.declaration.DeclarationList;
 import prompto.grammar.Identifier;
 import prompto.type.AnyType;
 import prompto.type.BooleanType;

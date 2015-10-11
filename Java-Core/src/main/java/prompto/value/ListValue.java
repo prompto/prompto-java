@@ -1,8 +1,11 @@
 package prompto.value;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -56,6 +59,14 @@ public class ListValue extends BaseList<ListValue> {
 			return new ListValue(itemType, result);
 		} else
 			throw new SyntaxError("Illegal: List * " + value.getClass().getSimpleName());
+	}
+	
+	@Override
+	public void toJson(Context context, JsonGenerator generator) throws IOException, PromptoError {
+		generator.writeStartArray();
+		for(IValue value : this.items)
+			value.toJson(context, generator);
+		generator.writeEndArray();
 	}
 
 }

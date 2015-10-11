@@ -12,9 +12,9 @@ import java.util.List;
 
 import org.junit.Before;
 
+import prompto.declaration.DeclarationList;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.TestMethodDeclaration;
-import prompto.grammar.DeclarationList;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
 import prompto.parser.ECleverParser;

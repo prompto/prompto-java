@@ -5,8 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import prompto.declaration.DeclarationList;
 import prompto.grammar.CategoryArgument;
-import prompto.grammar.DeclarationList;
 import prompto.grammar.IArgument;
 import prompto.grammar.Identifier;
 import prompto.type.AnyType;

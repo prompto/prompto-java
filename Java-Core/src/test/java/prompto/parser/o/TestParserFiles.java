@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import prompto.grammar.DeclarationList;
+import prompto.declaration.DeclarationList;
 
 
 

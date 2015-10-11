@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.prompto</groupId>
-	<artifactId>CodeServer</artifactId>
+	<artifactId>Server</artifactId>
 	<version>trunk-SNAPSHOT</version>
 
 	<properties>
@@ -64,15 +64,10 @@
 				</executions>
 			</plugin>
 		</plugins>
+		<sourceDirectory>src/main/java</sourceDirectory>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
-			</resource>
-			<resource>
-				<directory>src/main/webapp</directory>
-			</resource>
-			<resource>
-				<directory>../../prompto-dev-center/web-site</directory>
 			</resource>
 		</resources>
 	</build>
@@ -119,11 +114,6 @@
 		<dependency>
 			<groupId>org.prompto</groupId>
 			<artifactId>Core</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.prompto</groupId>
-			<artifactId>Server</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

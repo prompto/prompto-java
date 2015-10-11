@@ -8,9 +8,9 @@ import org.junit.Test;
 
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
+import prompto.declaration.DeclarationList;
 import prompto.declaration.IDeclaration;
 import prompto.error.SyntaxError;
-import prompto.grammar.DeclarationList;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context.MethodDeclarationMap;
 

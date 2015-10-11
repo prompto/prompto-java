@@ -11,7 +11,7 @@ import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import prompto.grammar.DeclarationList;
+import prompto.declaration.DeclarationList;
 import prompto.parser.OParser;
 import prompto.problem.IProblemListener;
 

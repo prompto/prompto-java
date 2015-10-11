@@ -6,7 +6,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
-import prompto.grammar.DeclarationList;
+import prompto.declaration.DeclarationList;
 import prompto.parser.Dialect;
 import prompto.parser.IParser;
 import prompto.problem.IProblem;

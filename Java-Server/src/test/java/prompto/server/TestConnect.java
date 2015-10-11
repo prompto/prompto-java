@@ -35,15 +35,17 @@ public class TestConnect {
 		// adjust handler path for junit and cobertura context
 		Handler rh1 = CodeServer.prepareResourceHandler("/");
 		Handler rh2 = CodeServer.prepareResourceHandler("../classes/");
-		Handler rh3 = CodeServer.prepareResourceHandler("../generated-classes/cobertura/");
+		Handler rh3 = CodeServer.prepareResourceHandler("../test-classes/");
+		Handler rh4 = CodeServer.prepareResourceHandler("../generated-classes/cobertura/");
 		// a bit more tricky for WebAppContext
 		String thisPath = TestConnect.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-		thisPath = thisPath.replace("/test-classes/", "/classes/");
+		System.out.println(thisPath);
 		Handler ws = CodeServer.prepareServiceHandler("/ws", thisPath);
 		HandlerList list = new HandlerList();
 		list.addHandler(rh1);
 		list.addHandler(rh2);
 		list.addHandler(rh3);
+		list.addHandler(rh4);
 		list.addHandler(ws);
 		list.addHandler(new DefaultHandler());
 		// start server
@@ -76,7 +78,21 @@ public class TestConnect {
 	}
 	
 	@Test
-	public void testService() throws Exception {
+	public void testServiceNoParam() throws Exception {
+		Context context = Context.newGlobalContext();
+		ParameterList params = createParameterList();
+		URL url = new URL("http://localhost:8888/ws/getAllAttributes?params=" + params.toURLEncodedString(context));
+		URLConnection cnx = url.openConnection();
+		InputStream input = cnx.getInputStream();
+		assertNotNull(input);
+		JsonNode json = parseJSON(input);
+		assertNotNull(json);
+		input.close();
+		System.out.println(json.toString());
+	}
+
+	@Test
+	public void testService1TextParam() throws Exception {
 		Context context = Context.newGlobalContext();
 		ParameterList params = createParameterList("name", TextType.instance(), new Text("id"));
 		URL url = new URL("http://localhost:8888/ws/findAttribute?params=" + params.toURLEncodedString(context));
@@ -86,8 +102,9 @@ public class TestConnect {
 		JsonNode json = parseJSON(input);
 		assertNotNull(json);
 		input.close();
+		System.out.println(json.toString());
 	}
-
+	
 	private ParameterList createParameterList(Object ... params) throws IOException, PromptoError {
 		ParameterList list = new ParameterList();
 		for(int i=0;i<params.length;i+=3) {

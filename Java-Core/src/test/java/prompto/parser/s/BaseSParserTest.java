@@ -1,6 +1,6 @@
 package prompto.parser.s;
 
-import prompto.grammar.DeclarationList;
+import prompto.declaration.DeclarationList;
 import prompto.utils.BaseParserTest;
 
 public abstract class BaseSParserTest extends BaseParserTest {

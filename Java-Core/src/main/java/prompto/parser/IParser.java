@@ -2,7 +2,7 @@ package prompto.parser;
 
 import java.io.InputStream;
 
-import prompto.grammar.DeclarationList;
+import prompto.declaration.DeclarationList;
 import prompto.problem.IProblemListener;
 
 public interface IParser {

@@ -4,8 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import prompto.declaration.DeclarationList;
 import prompto.error.SyntaxError;
-import prompto.grammar.DeclarationList;
 
 
 
