@@ -38,12 +38,17 @@ public abstract class BaseParserTest extends BaseTest {
 	public void loadDependency(String name) throws Exception {
 		if(coreContext==null)
 			coreContext = Context.newGlobalContext();
+		DeclarationList allStmts = null;
 		File[] files = listLibraryFiles(name);
 		if(files!=null) for(File file : files) {
 			String resourceName = name + "/" + file.getName();
 			DeclarationList stmts = parseResource(resourceName);
-			stmts.register(coreContext);
+			if(allStmts==null)
+				allStmts = stmts;
+			else
+				allStmts.addAll(stmts);
 		}
+		allStmts.register(coreContext);
 	}
 
 	protected void loadResource(String resourceName) throws Exception {
