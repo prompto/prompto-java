@@ -1,6 +1,9 @@
 package prompto.value;
 
+import java.io.IOException;
 import java.text.Collator;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -94,7 +97,11 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
         } else
             return false;
     }
-
+    
+   @Override
+   public void toJson(Context context, JsonGenerator generator) throws IOException {
+	   generator.writeString("" + value);
+   }
 
 }
 

@@ -50,13 +50,13 @@ public class CompareExpression extends Section implements IExpression, IAssertio
 		int cmp = lval.CompareTo(context, rval);
 		switch (operator) {
 		case GT:
-			return Boolean.ValueOf(cmp > 0);
+			return Boolean.valueOf(cmp > 0);
 		case LT:
-			return Boolean.ValueOf(cmp < 0);
+			return Boolean.valueOf(cmp < 0);
 		case GTE:
-			return Boolean.ValueOf(cmp >= 0);
+			return Boolean.valueOf(cmp >= 0);
 		case LTE:
-			return Boolean.ValueOf(cmp <= 0);
+			return Boolean.valueOf(cmp <= 0);
 		default:
 			throw new SyntaxError("Illegal compare operand: " + operator.toString());
 		}

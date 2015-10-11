@@ -1,5 +1,9 @@
 package prompto.value;
 
+import java.io.IOException;
+
+import com.fasterxml.jackson.core.JsonGenerator;
+
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
@@ -34,5 +38,7 @@ public interface IValue {
 	ISliceable<IValue> asSliceable(Context context) throws PromptoError;
 
 	Object ConvertTo(Class<?> type) throws PromptoError;
+
+	void toJson(Context context, JsonGenerator generator) throws IOException, PromptoError;
 
 }

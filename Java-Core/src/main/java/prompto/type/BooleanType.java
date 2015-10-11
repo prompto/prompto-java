@@ -1,5 +1,7 @@
 package prompto.type;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import prompto.error.PromptoError;
 import prompto.runtime.Context;
 import prompto.value.Boolean;
@@ -37,9 +39,14 @@ public class BooleanType extends NativeType {
 	@Override
 	public IValue convertJavaValueToPromptoValue(Object value) {
         if (value instanceof java.lang.Boolean)
-            return Boolean.ValueOf(((java.lang.Boolean)value).booleanValue());
+            return Boolean.valueOf(((java.lang.Boolean)value).booleanValue());
         else
             return (IValue)value; // TODO for now
+	}
+	
+	@Override
+	public IValue readJSONValue(JsonNode value) {
+		return prompto.value.Boolean.valueOf(value.asBoolean());
 	}
 
 }

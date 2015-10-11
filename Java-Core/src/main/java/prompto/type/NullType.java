@@ -39,7 +39,6 @@ public class NullType extends BaseType {
 	public boolean isMoreSpecificThan(Context context, IType other) {
 		return false;
 	}
-	
-	
+		
 
 }

@@ -2,6 +2,8 @@ package prompto.type;
 
 import org.joda.time.LocalTime;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
@@ -97,6 +99,12 @@ public class TimeType extends NativeType {
 	@Override
 	public String toString(Object value) {
 		return "'" + value.toString() + "'";
+	}
+	
+	@Override
+	public IValue readJSONValue(JsonNode value) {
+		LocalTime time = LocalTime.parse(value.asText());
+		return new Time(time);
 	}
 
 }

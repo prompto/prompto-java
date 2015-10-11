@@ -59,7 +59,7 @@ public class AndExpression implements IExpression, IAssertion {
 	private IValue interpret(IValue lval, IValue rval) throws PromptoError {
 		if(lval instanceof Boolean) {
 			if(rval instanceof Boolean)
-				return Boolean.ValueOf(((Boolean)lval).getValue() && ((Boolean)rval).getValue());
+				return Boolean.valueOf(((Boolean)lval).getValue() && ((Boolean)rval).getValue());
 			else
 				throw new SyntaxError("Illegal: Boolean and " + rval.getClass().getSimpleName());
 		} else

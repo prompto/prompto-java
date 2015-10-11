@@ -1,6 +1,10 @@
 package prompto.value;
 
+import java.io.IOException;
+
 import org.joda.time.LocalDate;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
@@ -121,5 +125,10 @@ public class Date extends BaseValue implements Comparable<Date> {
 	@Override
 	public String toString() {
 		return value.toString("yyyy-MM-dd");
+	}
+	
+	@Override
+	public void toJson(Context context, JsonGenerator generator) throws IOException {
+		generator.writeString(this.toString());
 	}
 }

@@ -1,5 +1,7 @@
 package prompto.type;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IEnumeratedDeclaration;
 import prompto.error.InvalidDataError;
@@ -77,4 +79,9 @@ public class EnumeratedNativeType extends BaseType {
 		return false;
 	}
 
+	@Override
+	public IValue readJSONValue(JsonNode value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

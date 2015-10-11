@@ -2,11 +2,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.prompto</groupId>
-	<artifactId>Java-CodeServer</artifactId>
+	<artifactId>CodeServer</artifactId>
 	<version>trunk-SNAPSHOT</version>
 
 	<properties>
 		<jettyVersion>9.3.3.v20150827</jettyVersion>
+		<jackson-version>2.6.2</jackson-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -104,6 +105,21 @@
 			<artifactId>selenium-java</artifactId>
 			<version>2.46.0</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.prompto</groupId>
+			<artifactId>Core</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 

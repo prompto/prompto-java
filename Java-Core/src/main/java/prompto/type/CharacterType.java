@@ -1,5 +1,9 @@
 package prompto.type;
 
+import java.security.InvalidParameterException;
+
+import com.fasterxml.jackson.databind.JsonNode;
+
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.parser.ISection;
@@ -84,6 +88,13 @@ public class CharacterType extends NativeType {
             return new Character(((java.lang.Character)value).charValue());
         else
             return (IValue)value; // TODO for now
+	}
+	
+	@Override
+	public IValue readJSONValue(JsonNode value) {
+		if(value.asText().length()>1)
+			throw new InvalidParameterException(value.toString());
+		return new Character(value.asText().charAt(0));
 	}
 
 }

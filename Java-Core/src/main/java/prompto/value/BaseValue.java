@@ -1,5 +1,9 @@
 package prompto.value;
 
+import java.io.IOException;
+
+import com.fasterxml.jackson.core.JsonGenerator;
+
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
@@ -80,5 +84,9 @@ public abstract class BaseValue implements IValue {
 		return this;
 	}
 	
+	@Override
+	public void toJson(Context context, JsonGenerator generator) throws IOException, PromptoError {
+		throw new UnsupportedOperationException("toJson not supported by " + this.getClass().getSimpleName());
+	}
 
 }

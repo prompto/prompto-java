@@ -2,6 +2,8 @@ package prompto.type;
 
 import java.util.Comparator;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.parser.ISection;
@@ -113,6 +115,11 @@ public class DecimalType extends NativeType {
             return new Decimal(((Number)value).doubleValue());
         else
             return (IValue)value; // TODO for now
+	}
+	
+	@Override
+	public IValue readJSONValue(JsonNode value) {
+		return new Decimal(value.asDouble());
 	}
 
 }

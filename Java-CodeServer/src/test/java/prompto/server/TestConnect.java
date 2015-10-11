@@ -2,6 +2,7 @@ package prompto.server;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -13,7 +14,19 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import prompto.error.PromptoError;
+import prompto.remoting.Parameter;
+import prompto.remoting.ParameterList;
+import prompto.runtime.Context;
 import prompto.server.CodeServer;
+import prompto.type.IType;
+import prompto.type.TextType;
+import prompto.value.IValue;
+import prompto.value.Text;
 
 public class TestConnect {
 
@@ -61,13 +74,35 @@ public class TestConnect {
 		assertNotNull(input);
 		input.close();
 	}
+	
 	@Test
 	public void testService() throws Exception {
-		URL url = new URL("http://localhost:8888/ws/someMethod?name=hello");
+		Context context = Context.newGlobalContext();
+		ParameterList params = createParameterList("name", TextType.instance(), new Text("id"));
+		URL url = new URL("http://localhost:8888/ws/findAttribute?params=" + params.toURLEncodedString(context));
 		URLConnection cnx = url.openConnection();
 		InputStream input = cnx.getInputStream();
 		assertNotNull(input);
+		JsonNode json = parseJSON(input);
+		assertNotNull(json);
 		input.close();
+	}
+
+	private ParameterList createParameterList(Object ... params) throws IOException, PromptoError {
+		ParameterList list = new ParameterList();
+		for(int i=0;i<params.length;i+=3) {
+			Parameter param = new Parameter();
+			param.setName(params[i].toString());
+			param.setType((IType)params[i+1]);
+			param.setValue((IValue)params[i+2]);
+			list.add(param);
+		}
+		return list;
+	}
+
+	private JsonNode parseJSON(InputStream input) throws Exception {
+		JsonParser parser = new ObjectMapper().getFactory().createParser(input);
+		return parser.readValueAsTree();
 	}
 
 }

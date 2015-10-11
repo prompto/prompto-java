@@ -1,5 +1,9 @@
 package prompto.type;
 
+import org.joda.time.LocalDate;
+
+import com.fasterxml.jackson.databind.JsonNode;
+
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
@@ -101,5 +105,11 @@ public class DateType extends NativeType {
 	@Override
 	public String toString(Object value) {
 		return "'" + value.toString() + "'";
+	}
+	
+	@Override
+	public IValue readJSONValue(JsonNode value) {
+		LocalDate date = LocalDate.parse(value.asText());
+		return new Date(date);
 	}
 }

@@ -1,5 +1,7 @@
 package prompto.type;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
@@ -148,4 +150,8 @@ public class IntegerType extends NativeType {
             return (IValue)value; // TODO for now
 	}
 
+	@Override
+	public IValue readJSONValue(JsonNode value) {
+		return new Integer(value.asLong());
+	}
 }

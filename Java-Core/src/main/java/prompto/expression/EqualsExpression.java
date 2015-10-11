@@ -90,7 +90,7 @@ public class EqualsExpression implements IExpression, IAssertion {
 			equal = lval.Roughly(context, rval);
 			break;
 		}
-		return Boolean.ValueOf(equal);	}
+		return Boolean.valueOf(equal);	}
 
 	private boolean isA(Context context, IValue lval, IValue rval) throws PromptoError {
 		IType actual = lval.getType();

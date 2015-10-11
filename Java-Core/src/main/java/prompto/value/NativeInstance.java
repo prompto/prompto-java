@@ -1,10 +1,13 @@
 package prompto.value;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.GetterMethodDeclaration;
@@ -207,4 +210,17 @@ public class NativeInstance extends BaseValue implements IInstance {
 		return null;
 	}
 
+	@Override
+	public void toJson(Context context, JsonGenerator generator) throws IOException, PromptoError {
+		generator.writeStartObject();
+		for(Identifier attrName : declaration.getAttributes()) {
+			generator.writeFieldName(attrName.toString());
+			IValue value = getMember(context, attrName);
+			if(value!=null)
+				value.toJson(context, generator);
+			else
+				generator.writeNull();
+		}
+		generator.writeEndObject();
+	}
 }

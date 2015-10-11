@@ -85,7 +85,7 @@ public class ContainsExpression implements IExpression, IAssertion {
         {
             if (operator.name().startsWith("NOT_"))
                 result = !result;
-            return Boolean.ValueOf(result);
+            return Boolean.valueOf(result);
         }
         if (operator.name().endsWith("IN"))
         {

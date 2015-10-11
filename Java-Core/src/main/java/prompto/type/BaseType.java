@@ -1,9 +1,12 @@
 package prompto.type;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -197,4 +200,8 @@ public abstract class BaseType implements IType {
 		throw new SyntaxError("Cannot read member from " + this.getName());
 	}
 
+	@Override
+	public IValue readJSONValue(JsonNode value) {
+		throw new InvalidParameterException(value.toString());
+	}
 }

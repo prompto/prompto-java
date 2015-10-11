@@ -2,6 +2,8 @@ package prompto.type;
 
 import org.joda.time.DateTime;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
@@ -100,4 +102,9 @@ public class DateTimeType extends NativeType {
 		return "'" + value.toString() + "'";
 	}
 
+	@Override
+	public IValue readJSONValue(JsonNode value) {
+		DateTime dt = DateTime.parse(value.asText());
+		return new prompto.value.DateTime(dt);
+	}
 }

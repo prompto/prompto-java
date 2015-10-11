@@ -1,7 +1,10 @@
 package prompto.value;
 
+import java.io.IOException;
 import java.text.Collator;
 import java.util.Iterator;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 import prompto.error.IndexOutOfRangeError;
 import prompto.error.InvalidDataError;
@@ -194,6 +197,12 @@ public class Text extends BaseValue implements Comparable<Text>, ICollection<Cha
 	public int hashCode() {
 		return value.hashCode();
 	}
+	
+	@Override
+	public void toJson(Context context, JsonGenerator generator) throws IOException {
+		generator.writeString(value);
+	}
+
 }
 
 

@@ -1,6 +1,10 @@
 package prompto.value;
 
+import java.io.IOException;
+
 import org.joda.time.LocalTime;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
@@ -109,6 +113,11 @@ public class Time extends BaseValue implements Comparable<Time> {
 	@Override
 	public String toString() {
 		return value.toString();
+	}
+
+	@Override
+	public void toJson(Context context, JsonGenerator generator) throws IOException {
+		generator.writeString(this.toString());
 	}
 
 }

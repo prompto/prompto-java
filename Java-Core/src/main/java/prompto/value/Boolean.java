@@ -1,5 +1,9 @@
 package prompto.value;
 
+import java.io.IOException;
+
+import com.fasterxml.jackson.core.JsonGenerator;
+
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.type.BooleanType;
@@ -14,11 +18,11 @@ public class Boolean extends BaseValue implements Comparable<Boolean> {
 		FALSE.not = TRUE;
 	}
 
-	public static Boolean Parse(String text) {
-		return ValueOf(java.lang.Boolean.parseBoolean(text));
+	public static Boolean parse(String text) {
+		return valueOf(java.lang.Boolean.parseBoolean(text));
 	}
 
-	public static Boolean ValueOf(boolean value) {
+	public static Boolean valueOf(boolean value) {
 		return value ? TRUE : FALSE;
 	}
 
@@ -67,6 +71,11 @@ public class Boolean extends BaseValue implements Comparable<Boolean> {
 			return value == ((Boolean) obj).value;
 		else
 			return false;
+	}
+	
+	@Override
+	public void toJson(Context context, JsonGenerator generator) throws IOException {
+		generator.writeBoolean(value);
 	}
 
 }

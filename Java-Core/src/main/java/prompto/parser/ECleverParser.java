@@ -14,6 +14,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import prompto.grammar.DeclarationList;
 import prompto.parser.EParser;
 import prompto.problem.IProblemListener;
+import prompto.type.IType;
 
 
 public class ECleverParser extends EParser implements IParser {
@@ -76,18 +77,27 @@ public class ECleverParser extends EParser implements IParser {
 	@Override
 	public DeclarationList parse(String path, InputStream data) throws Exception {
 		setPath(path);
-		EIndentingLexer lexer = getLexer();
-		lexer.reset(data);
-		setInputStream(new CommonTokenStream(lexer));
+		getLexer().reset(data);
+		setInputStream(new CommonTokenStream(getLexer()));
 		return parse_declaration_list();
 	}
 	
 	public DeclarationList parse_declaration_list() throws Exception {
+		getLexer().setAddLF(true);
 		ParseTree tree = this.declaration_list();
 		EPromptoBuilder builder = new EPromptoBuilder(this);
 		ParseTreeWalker walker = new ParseTreeWalker();
 		walker.walk(builder, tree);
 		return builder.<DeclarationList>getNodeValue(tree);
+	}
+	
+	public IType parse_standalone_type() throws Exception {
+		getLexer().setAddLF(false);
+		ParseTree tree = this.category_or_any_type();
+		EPromptoBuilder builder = new EPromptoBuilder(this);
+		ParseTreeWalker walker = new ParseTreeWalker();
+		walker.walk(builder, tree);
+		return builder.<IType>getNodeValue(tree);
 	}
 	
 }

@@ -1,5 +1,7 @@
 package prompto.type;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
@@ -16,6 +18,7 @@ public interface IType {
 	IValue getMember(Context context, Identifier name) throws PromptoError;
 	String toString(Object value);
 	void toDialect(CodeWriter writer);
+	IValue readJSONValue(JsonNode value);
 	
 	IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError;
 	IType checkSubstract(Context context, IType other) throws SyntaxError;
@@ -44,6 +47,5 @@ public interface IType {
 	
 	IValue convertJavaValueToPromptoValue(Object value);
 	Class<?> toJavaClass();
-
 }
  

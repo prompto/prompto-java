@@ -1,5 +1,9 @@
 package prompto.value;
 
+import java.io.IOException;
+
+import com.fasterxml.jackson.core.JsonGenerator;
+
 import prompto.error.DivideByZeroError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -122,5 +126,11 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 		else
 			return false;
 	}
+	
+	@Override
+	public void toJson(Context context, JsonGenerator generator) throws IOException {
+		generator.writeNumber(value);
+	}
+
 
 }

@@ -1,6 +1,9 @@
 package prompto.value;
 
+import java.io.IOException;
 import java.util.Locale;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
@@ -126,5 +129,11 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 	public String toString() {
 		return value.toString();
 	}
+	
+	@Override
+	public void toJson(Context context, JsonGenerator generator) throws IOException {
+		generator.writeString(this.toString());
+	}
+
 
 }
