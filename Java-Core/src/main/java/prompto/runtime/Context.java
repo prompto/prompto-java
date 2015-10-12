@@ -33,6 +33,7 @@ import prompto.utils.CodeWriter;
 import prompto.utils.Utils;
 import prompto.value.ConcreteInstance;
 import prompto.value.Decimal;
+import prompto.value.Document;
 import prompto.value.IInstance;
 import prompto.value.IValue;
 
@@ -162,7 +163,11 @@ public class Context implements IContext {
 		return initInstanceContext(new InstanceContext(instance));
 	}
 
-	private Context initInstanceContext(InstanceContext context) {
+	public Context newDocumentContext(Document document) {
+		return initInstanceContext(new DocumentContext(document));
+	}
+
+	private Context initInstanceContext(Context context) {
 		context.store = this.store;
 		context.globals = this.globals;
 		context.calling = this;
@@ -523,7 +528,7 @@ public class Context implements IContext {
 			debugger.terminated();
 	}
 
-	public ConcreteInstance loadSingleton(CategoryType type) {
+	public ConcreteInstance loadSingleton(CategoryType type) throws PromptoError {
 		if(this==globals) {
 			IValue value = values.get(type.getName());
 			if(value==null) {
@@ -614,6 +619,39 @@ public class Context implements IContext {
 
 	}
 
+	public static class DocumentContext extends Context {
+		
+		Document document;
+		
+		DocumentContext(Document document) {
+			this.document = document;
+		}
+		
+		@Override
+		protected Context contextForValue(Identifier name) {
+			// params and variables have precedence over members
+			// so first look in context values
+			Context context = super.contextForValue(name);
+			if(context!=null)
+				return context;
+			else if(document.hasMember(name))
+				return this;
+			else
+				return null;
+		}
+
+		@Override
+		protected IValue readValue(Identifier name) throws PromptoError {
+			return document.getMember(calling, name);
+		}
+		
+		@Override
+		protected void writeValue(Identifier name, IValue value) throws PromptoError {
+			document.setMember(calling, name, value);
+		}
+
+	}
+	
 	public static class InstanceContext extends Context {
 		
 		IInstance instance;
@@ -680,5 +718,6 @@ public class Context implements IContext {
 			instance.setMember(calling, name, value);
 		}
 	}
+
 
 }

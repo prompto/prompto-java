@@ -214,7 +214,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	public IInstance newInstance() throws PromptoError {
 		return new ConcreteInstance(this);
 	}
-
+	
 	public GetterMethodDeclaration findGetter(Context context, Identifier attrName) throws SyntaxError {
 		if(methodsMap==null)
 			return null;

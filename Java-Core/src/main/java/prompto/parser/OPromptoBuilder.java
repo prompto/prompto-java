@@ -51,7 +51,7 @@ import prompto.expression.DivideExpression;
 import prompto.expression.DocumentExpression;
 import prompto.expression.EqualsExpression;
 import prompto.expression.ExecuteExpression;
-import prompto.expression.FetchExpression;
+import prompto.expression.FetchListExpression;
 import prompto.expression.IExpression;
 import prompto.expression.InstanceExpression;
 import prompto.expression.IntDivideExpression;
@@ -406,7 +406,9 @@ public class OPromptoBuilder extends OParserBaseListener {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
 		IType type = this.<IType>getNodeValue(ctx.typ);
 		IAttributeConstraint match = this.<IAttributeConstraint>getNodeValue(ctx.match);
-		setNodeValue(ctx, new AttributeDeclaration(name, type, match));
+		AttributeDeclaration decl = new AttributeDeclaration(name, type, match);
+		decl.setStorable(ctx.STORABLE()!=null);
+		setNodeValue(ctx, decl);
 	}
 
 	@Override
@@ -646,7 +648,9 @@ public class OPromptoBuilder extends OParserBaseListener {
 		IdentifierList attrs = this.<IdentifierList>getNodeValue(ctx.attrs);
 		IdentifierList derived = this.<IdentifierList>getNodeValue(ctx.derived);
 		MethodDeclarationList methods = this.<MethodDeclarationList>getNodeValue(ctx.methods);
-		setNodeValue(ctx, new ConcreteCategoryDeclaration(name, attrs, derived, methods));
+		ConcreteCategoryDeclaration decl = new ConcreteCategoryDeclaration(name, attrs, derived, methods);
+		decl.setStorable(ctx.STORABLE()!=null);
+		setNodeValue(ctx, decl);
 	}
 
 	@Override
@@ -1064,7 +1068,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 		Identifier itemName = this.<Identifier>getNodeValue(ctx.name);
 		IExpression source = this.<IExpression>getNodeValue(ctx.source);
 		IExpression filter = this.<IExpression>getNodeValue(ctx.xfilter);
-		setNodeValue(ctx, new FetchExpression(itemName, source, filter));
+		setNodeValue(ctx, new FetchListExpression(itemName, source, filter));
 	}
 	
 	@Override
@@ -1774,7 +1778,9 @@ public class OPromptoBuilder extends OParserBaseListener {
 		IdentifierList attrs = this.<IdentifierList>getNodeValue(ctx.attrs);
 		NativeCategoryBindingList bindings = this.<NativeCategoryBindingList>getNodeValue(ctx.bindings);
 		MethodDeclarationList methods = this.<MethodDeclarationList>getNodeValue(ctx.methods);
-		setNodeValue(ctx, new NativeCategoryDeclaration(name, attrs, bindings, null, methods));
+		NativeCategoryDeclaration decl = new NativeCategoryDeclaration(name, attrs, bindings, null, methods);
+		decl.setStorable(ctx.STORABLE()!=null);
+		setNodeValue(ctx, decl);
 	}
 	
 	@Override

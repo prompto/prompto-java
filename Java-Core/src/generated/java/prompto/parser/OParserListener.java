@@ -355,6 +355,18 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitAssignTupleStatement(@NotNull OParser.AssignTupleStatementContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code StoreStatement}
+	 * labeled alternative in {@link OParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterStoreStatement(@NotNull OParser.StoreStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code StoreStatement}
+	 * labeled alternative in {@link OParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitStoreStatement(@NotNull OParser.StoreStatementContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code ReturnStatement}
 	 * labeled alternative in {@link OParser#statement}.
 	 * @param ctx the parse tree
@@ -498,6 +510,30 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitClosureStatement(@NotNull OParser.ClosureStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code StoreOne}
+	 * labeled alternative in {@link OParser#store_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterStoreOne(@NotNull OParser.StoreOneContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code StoreOne}
+	 * labeled alternative in {@link OParser#store_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitStoreOne(@NotNull OParser.StoreOneContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code StoreMany}
+	 * labeled alternative in {@link OParser#store_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterStoreMany(@NotNull OParser.StoreManyContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code StoreMany}
+	 * labeled alternative in {@link OParser#store_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitStoreMany(@NotNull OParser.StoreManyContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link OParser#with_resource_statement}.
 	 * @param ctx the parse tree
@@ -1319,15 +1355,41 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitWrite_statement(@NotNull OParser.Write_statementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link OParser#fetch_expression}.
+	 * Enter a parse tree produced by the {@code FetchList}
+	 * labeled alternative in {@link OParser#fetch_expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterFetch_expression(@NotNull OParser.Fetch_expressionContext ctx);
+	void enterFetchList(@NotNull OParser.FetchListContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link OParser#fetch_expression}.
+	 * Exit a parse tree produced by the {@code FetchList}
+	 * labeled alternative in {@link OParser#fetch_expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitFetch_expression(@NotNull OParser.Fetch_expressionContext ctx);
+	void exitFetchList(@NotNull OParser.FetchListContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code FetchOne}
+	 * labeled alternative in {@link OParser#fetch_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterFetchOne(@NotNull OParser.FetchOneContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code FetchOne}
+	 * labeled alternative in {@link OParser#fetch_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitFetchOne(@NotNull OParser.FetchOneContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code FetchAll}
+	 * labeled alternative in {@link OParser#fetch_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterFetchAll(@NotNull OParser.FetchAllContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code FetchAll}
+	 * labeled alternative in {@link OParser#fetch_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitFetchAll(@NotNull OParser.FetchAllContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link OParser#sorted_expression}.
 	 * @param ctx the parse tree

@@ -21,6 +21,7 @@ import prompto.runtime.MethodFinder;
 import prompto.runtime.Score;
 import prompto.statement.MethodCall;
 import prompto.value.ConcreteInstance;
+import prompto.value.Document;
 import prompto.value.ExpressionValue;
 import prompto.value.ICollection;
 import prompto.value.IInstance;
@@ -254,6 +255,11 @@ public class CategoryType extends BaseType {
 		return decl.newInstance();
 	}
 	
+	public IInstance newInstance(Context context, Document document) throws PromptoError {
+		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, this.getName());
+		return decl.newInstance(context, document);
+	}
+	
 	public IValue sort(final Context context, ICollection<IValue> list, IExpression key) throws PromptoError {
 		if(list.length()==0)
 			return list;
@@ -384,6 +390,7 @@ public class CategoryType extends BaseType {
 			return ((Comparable<Object>)key1).compareTo(key2);
 		else
 			return key1.toString().compareTo(key2.toString());
-	};
+	}
+
 
 }

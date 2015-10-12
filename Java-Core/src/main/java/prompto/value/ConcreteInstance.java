@@ -18,6 +18,8 @@ import prompto.grammar.Identifier;
 import prompto.grammar.Operator;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
+import prompto.store.IStorable;
+import prompto.store.StorableDocument;
 import prompto.type.CategoryType;
 import prompto.type.DecimalType;
 
@@ -25,13 +27,21 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 
 	ConcreteCategoryDeclaration declaration;
 	Map<Identifier,IValue> values = new HashMap<Identifier,IValue>();
+	StorableDocument storable = null;
 	boolean mutable = false;
 	
 	public ConcreteInstance(ConcreteCategoryDeclaration declaration) {
 		super(new CategoryType(declaration.getIdentifier()));
 		this.declaration = declaration;
+		if(declaration.isStorable())
+			storable = new StorableDocument();
 	}
-	
+
+	@Override
+	public IStorable getStorable() {
+		return storable;
+	}
+
 	@Override
 	public boolean setMutable(boolean mutable) {
 		boolean result = this.mutable;
@@ -128,6 +138,10 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		}
 		value = autocast(decl, value);
 		values.put(attrName, value);
+		if(storable!=null && decl.isStorable()) {
+			// TODO convert object graph if(value instanceof IInstance)
+			storable.setMember(context, attrName, value);
+		}
 	}
 	
 	private IValue autocast(AttributeDeclaration decl, IValue value) {
@@ -224,6 +238,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		local.setValue(arg.getIdentifier(), value);
 		return decl.interpret(local);
 	}
+
 
 }
 

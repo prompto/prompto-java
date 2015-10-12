@@ -9,7 +9,6 @@ import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
-import static prompto.parser.EParser.*;
 import prompto.csharp.CSharpBooleanLiteral;
 import prompto.csharp.CSharpCharacterLiteral;
 import prompto.csharp.CSharpDecimalLiteral;
@@ -26,6 +25,7 @@ import prompto.csharp.CSharpTextLiteral;
 import prompto.csharp.CSharpThisExpression;
 import prompto.declaration.AbstractMethodDeclaration;
 import prompto.declaration.AttributeDeclaration;
+import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.declaration.ConcreteMethodDeclaration;
 import prompto.declaration.DeclarationList;
@@ -52,7 +52,9 @@ import prompto.expression.DivideExpression;
 import prompto.expression.DocumentExpression;
 import prompto.expression.EqualsExpression;
 import prompto.expression.ExecuteExpression;
-import prompto.expression.FetchExpression;
+import prompto.expression.FetchAllExpression;
+import prompto.expression.FetchListExpression;
+import prompto.expression.FetchOneExpression;
 import prompto.expression.IExpression;
 import prompto.expression.IntDivideExpression;
 import prompto.expression.ItemSelector;
@@ -154,8 +156,7 @@ import prompto.literal.SetLiteral;
 import prompto.literal.TextLiteral;
 import prompto.literal.TimeLiteral;
 import prompto.literal.TupleLiteral;
-import prompto.parser.EParser;
-import prompto.parser.EParserBaseListener;
+import prompto.parser.EParser.*;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -179,16 +180,20 @@ import prompto.statement.AssignInstanceStatement;
 import prompto.statement.AssignTupleStatement;
 import prompto.statement.AssignVariableStatement;
 import prompto.statement.AtomicSwitchCase;
+import prompto.statement.BaseSwitchStatement.SwitchCaseList;
 import prompto.statement.CollectionSwitchCase;
 import prompto.statement.DeclarationInstruction;
 import prompto.statement.DoWhileStatement;
 import prompto.statement.ForEachStatement;
 import prompto.statement.IStatement;
 import prompto.statement.IfStatement;
+import prompto.statement.IfStatement.IfElement;
+import prompto.statement.IfStatement.IfElementList;
 import prompto.statement.MethodCall;
 import prompto.statement.RaiseStatement;
 import prompto.statement.ReturnStatement;
 import prompto.statement.StatementList;
+import prompto.statement.StoreStatement;
 import prompto.statement.SwitchCase;
 import prompto.statement.SwitchErrorStatement;
 import prompto.statement.SwitchStatement;
@@ -197,9 +202,6 @@ import prompto.statement.WhileStatement;
 import prompto.statement.WithResourceStatement;
 import prompto.statement.WithSingletonStatement;
 import prompto.statement.WriteStatement;
-import prompto.statement.BaseSwitchStatement.SwitchCaseList;
-import prompto.statement.IfStatement.IfElement;
-import prompto.statement.IfStatement.IfElementList;
 import prompto.type.AnyType;
 import prompto.type.BooleanType;
 import prompto.type.CategoryType;
@@ -421,7 +423,9 @@ public class EPromptoBuilder extends EParserBaseListener {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
 		IType type = this.<IType>getNodeValue(ctx.typ);
 		IAttributeConstraint match = this.<IAttributeConstraint>getNodeValue(ctx.match);
-		setNodeValue(ctx, new AttributeDeclaration(name, type, match));
+		AttributeDeclaration decl = new AttributeDeclaration(name, type, match);
+		decl.setStorable(ctx.STORABLE()!=null);
+		setNodeValue(ctx, decl);
 	}
 
 	@Override
@@ -629,7 +633,9 @@ public class EPromptoBuilder extends EParserBaseListener {
 		IdentifierList attrs = this.<IdentifierList>getNodeValue(ctx.attrs);
 		IdentifierList derived = this.<IdentifierList>getNodeValue(ctx.derived);
 		MethodDeclarationList methods = this.<MethodDeclarationList>getNodeValue(ctx.methods);
-		setNodeValue(ctx, new ConcreteCategoryDeclaration(name, attrs, derived, methods));
+		CategoryDeclaration decl = new ConcreteCategoryDeclaration(name, attrs, derived, methods);
+		decl.setStorable(ctx.STORABLE()!=null);
+		setNodeValue(ctx, decl);
 	}
 
 	@Override
@@ -1041,17 +1047,32 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitFetch_expression(Fetch_expressionContext ctx) {
+	public void exitFetchList(FetchListContext ctx) {
 		Identifier itemName = this.<Identifier>getNodeValue(ctx.name);
 		IExpression source = this.<IExpression>getNodeValue(ctx.source);
 		IExpression filter = this.<IExpression>getNodeValue(ctx.xfilter);
-		setNodeValue(ctx, new FetchExpression(itemName, source, filter));
+		setNodeValue(ctx, new FetchListExpression(itemName, source, filter));
+	}
+	
+	@Override
+	public void exitFetchOne(FetchOneContext ctx) {
+		CategoryType category = this.<CategoryType>getNodeValue(ctx.typ);
+		IExpression filter = this.<IExpression>getNodeValue(ctx.xfilter);
+		setNodeValue(ctx, new FetchOneExpression(category, filter));
 	}
 	
 	@Override
 	public void exitFetchExpression(FetchExpressionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, exp);
+		setNodeValue(ctx, getNodeValue(ctx.exp));
+	}
+	
+	@Override
+	public void exitFetchAll(FetchAllContext ctx) {
+		CategoryType category = this.<CategoryType>getNodeValue(ctx.typ);
+		IExpression filter = this.<IExpression>getNodeValue(ctx.xfilter);
+		IExpression start = this.<IExpression>getNodeValue(ctx.start);
+		IExpression end = this.<IExpression>getNodeValue(ctx.end);
+		setNodeValue(ctx, new FetchAllExpression(category, filter, start, end));
 	}
 	
 	@Override
@@ -1745,7 +1766,9 @@ public class EPromptoBuilder extends EParserBaseListener {
 		IdentifierList attrs = this.<IdentifierList>getNodeValue(ctx.attrs);
 		NativeCategoryBindingList bindings = this.<NativeCategoryBindingList>getNodeValue(ctx.bindings);
 		MethodDeclarationList methods = this.<MethodDeclarationList>getNodeValue(ctx.methods);
-		setNodeValue(ctx, new NativeCategoryDeclaration(name, attrs, bindings, null, methods));
+		CategoryDeclaration decl = new NativeCategoryDeclaration(name, attrs, bindings, null, methods);
+		decl.setStorable(ctx.STORABLE()!=null);
+		setNodeValue(ctx, decl);
 	}
 	
 	@Override
@@ -2374,6 +2397,25 @@ public class EPromptoBuilder extends EParserBaseListener {
 		setNodeValue(ctx, items);
 	}
 	
+	@Override
+	public void exitStoreOne(StoreOneContext ctx) {
+		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		StoreStatement stmt = new StoreStatement(exp);
+		setNodeValue(ctx, stmt);
+	}
+	
+	@Override
+	public void exitStoreMany(StoreManyContext ctx) {
+		ExpressionList exps = this.<ExpressionList>getNodeValue(ctx.exps);
+		StoreStatement stmt = new StoreStatement(exps);
+		setNodeValue(ctx, stmt);
+	}
+	
+	@Override
+	public void exitStoreStatement(StoreStatementContext ctx) {
+		setNodeValue(ctx, getNodeValue(ctx.stmt));
+	}
+
 	@Override
 	public void exitSwitch_statement(Switch_statementContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);

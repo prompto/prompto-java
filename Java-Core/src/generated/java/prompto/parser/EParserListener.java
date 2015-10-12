@@ -317,6 +317,18 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitAssignTupleStatement(@NotNull EParser.AssignTupleStatementContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code StoreStatement}
+	 * labeled alternative in {@link EParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterStoreStatement(@NotNull EParser.StoreStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code StoreStatement}
+	 * labeled alternative in {@link EParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitStoreStatement(@NotNull EParser.StoreStatementContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code ReturnStatement}
 	 * labeled alternative in {@link EParser#statement}.
 	 * @param ctx the parse tree
@@ -460,6 +472,30 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitClosureStatement(@NotNull EParser.ClosureStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code StoreOne}
+	 * labeled alternative in {@link EParser#store_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterStoreOne(@NotNull EParser.StoreOneContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code StoreOne}
+	 * labeled alternative in {@link EParser#store_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitStoreOne(@NotNull EParser.StoreOneContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code StoreMany}
+	 * labeled alternative in {@link EParser#store_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterStoreMany(@NotNull EParser.StoreManyContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code StoreMany}
+	 * labeled alternative in {@link EParser#store_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitStoreMany(@NotNull EParser.StoreManyContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code UnresolvedWithArgsStatement}
 	 * labeled alternative in {@link EParser#method_call_statement}.
@@ -1327,15 +1363,41 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitAmbiguous_expression(@NotNull EParser.Ambiguous_expressionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link EParser#fetch_expression}.
+	 * Enter a parse tree produced by the {@code FetchList}
+	 * labeled alternative in {@link EParser#fetch_expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterFetch_expression(@NotNull EParser.Fetch_expressionContext ctx);
+	void enterFetchList(@NotNull EParser.FetchListContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link EParser#fetch_expression}.
+	 * Exit a parse tree produced by the {@code FetchList}
+	 * labeled alternative in {@link EParser#fetch_expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitFetch_expression(@NotNull EParser.Fetch_expressionContext ctx);
+	void exitFetchList(@NotNull EParser.FetchListContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code FetchOne}
+	 * labeled alternative in {@link EParser#fetch_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterFetchOne(@NotNull EParser.FetchOneContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code FetchOne}
+	 * labeled alternative in {@link EParser#fetch_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitFetchOne(@NotNull EParser.FetchOneContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code FetchAll}
+	 * labeled alternative in {@link EParser#fetch_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterFetchAll(@NotNull EParser.FetchAllContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code FetchAll}
+	 * labeled alternative in {@link EParser#fetch_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitFetchAll(@NotNull EParser.FetchAllContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link EParser#sorted_expression}.
 	 * @param ctx the parse tree

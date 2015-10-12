@@ -22,21 +22,26 @@ public class Document extends BaseValue
 	}
 	
     @Override
-    public IValue getMember(Context context, Identifier name)
-    {
+    public IValue getMember(Context context, Identifier name) {
+    	return getMember(context, name, true);
+    }
+
+
+    public IValue getMember(Context context, Identifier name, boolean createIfNull) {
         IValue result = members.get(name);
-        if(result== null)
-        {
+        if(createIfNull && result==null) {
             result = new Document();
             members.put(name, result);
         }
         return result;
-    }
+ 	}
 
-
-    @Override
-    public void setMember(Context context, Identifier name, IValue value)
-    {
+	@Override
+    public void setMember(Context context, Identifier name, IValue value) {
     	members.put(name, value);
     }
+
+	public boolean hasMember(Identifier name) {
+		return members.containsKey(name);
+	}
 }

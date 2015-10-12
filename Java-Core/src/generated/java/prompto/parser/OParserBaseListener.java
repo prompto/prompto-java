@@ -401,6 +401,18 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterStoreStatement(@NotNull OParser.StoreStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStoreStatement(@NotNull OParser.StoreStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterReturnStatement(@NotNull OParser.ReturnStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -540,6 +552,30 @@ public class OParserBaseListener implements OParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitClosureStatement(@NotNull OParser.ClosureStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStoreOne(@NotNull OParser.StoreOneContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStoreOne(@NotNull OParser.StoreOneContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStoreMany(@NotNull OParser.StoreManyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStoreMany(@NotNull OParser.StoreManyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1397,13 +1433,37 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFetch_expression(@NotNull OParser.Fetch_expressionContext ctx) { }
+	@Override public void enterFetchList(@NotNull OParser.FetchListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFetch_expression(@NotNull OParser.Fetch_expressionContext ctx) { }
+	@Override public void exitFetchList(@NotNull OParser.FetchListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFetchOne(@NotNull OParser.FetchOneContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFetchOne(@NotNull OParser.FetchOneContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFetchAll(@NotNull OParser.FetchAllContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFetchAll(@NotNull OParser.FetchAllContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

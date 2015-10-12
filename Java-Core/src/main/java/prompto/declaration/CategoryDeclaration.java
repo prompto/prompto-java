@@ -9,11 +9,14 @@ import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
+import prompto.value.Document;
 import prompto.value.IInstance;
+import prompto.value.IValue;
 
 public abstract class CategoryDeclaration extends BaseDeclaration {
 	
 	IdentifierList attributes;
+	boolean storable = false;
 	
 	public CategoryDeclaration(Identifier name) {
 		super(name);
@@ -22,6 +25,14 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	public CategoryDeclaration(Identifier name, IdentifierList attributes) {
 		super(name);
 		this.attributes = attributes;
+	}
+	
+	public void setStorable(boolean storable) {
+		this.storable = storable;
+	}
+	
+	public boolean isStorable() {
+		return storable;
 	}
 
 	public void setAttributes(IdentifierList attributes) {
@@ -69,6 +80,29 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	}
 
 	public abstract IInstance newInstance() throws PromptoError;
+	
+	public IInstance newInstance(Context context, Document document) throws PromptoError {
+		IInstance instance = newInstance();
+		instance.setMutable(true);
+		try {
+			for(Identifier name : this.getAttributes()) {
+				AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, name);
+				if(!decl.isStorable())
+					continue;
+				IValue value = document.getMember(context, name, false);
+				if(value instanceof Document) {
+					IType type = decl.getType(context);
+					if(!(type instanceof CategoryType))
+						throw new InternalError("How did we get there?");
+					value = ((CategoryType)type).newInstance(context, (Document)value);
+				}
+				instance.setMember(context, name, value);
+			}
+		} finally {
+			instance.setMutable(false);
+		}
+		return instance;
+	}
 
 	public void checkConstructorContext(Context context) throws SyntaxError {
 		// nothing to do
@@ -192,10 +226,5 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	}
 
 	protected abstract void categoryTypeToPDialect(CodeWriter writer);
-	
-	
-
-
-
 
 }

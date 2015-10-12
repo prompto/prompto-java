@@ -20,13 +20,13 @@ import prompto.value.ICollection;
 import prompto.value.IValue;
 import prompto.value.ListValue;
 
-public class FetchExpression extends Section implements IExpression {
+public class FetchListExpression extends Section implements IExpression {
 
 	Identifier itemName;
 	IExpression source;
 	IExpression filter;
 	
-	public FetchExpression(Identifier itemName, IExpression source, IExpression filter) {
+	public FetchListExpression(Identifier itemName, IExpression source, IExpression filter) {
 		this.itemName = itemName;
 		this.source = source;
 		this.filter = filter;
@@ -66,7 +66,7 @@ public class FetchExpression extends Section implements IExpression {
 		local.registerValue(new Variable(itemName, itemType));
 		IType filterType = filter.check(local);
 		if(filterType!=BooleanType.instance())
-			throw new SyntaxError("Filtering expresion must return a boolean !");
+			throw new SyntaxError("Filtering expression must return a boolean !");
 		return new ListType(itemType);
 	}
 	
@@ -87,7 +87,7 @@ public class FetchExpression extends Section implements IExpression {
 		local.registerValue(item);
 		for(IValue o : ((ICollection<?>)src).getItems(context)) {
 			local.setValue(itemName, o);
-			Object test = filter.interpret(local);
+			IValue test = filter.interpret(local);
 			if(!(test instanceof Boolean))
 				throw new InternalError("Illegal test result: " + test);
 			if(((Boolean)test).getValue())

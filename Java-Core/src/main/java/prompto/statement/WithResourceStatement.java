@@ -11,11 +11,11 @@ import prompto.value.IValue;
 public class WithResourceStatement extends BaseStatement {
 
 	AssignVariableStatement resource;
-	StatementList instructions;
+	StatementList statements;
 	
-	public WithResourceStatement(AssignVariableStatement resource, StatementList instructions) {
+	public WithResourceStatement(AssignVariableStatement resource, StatementList statements) {
 		this.resource = resource;
-		this.instructions = instructions;
+		this.statements = statements;
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class WithResourceStatement extends BaseStatement {
 		resource.toDialect(writer);
 		writer.append(", do:\n");
 		writer.indent();
-		instructions.toDialect(writer);
+		statements.toDialect(writer);
 		writer.dedent();
 	}
 
@@ -46,12 +46,12 @@ public class WithResourceStatement extends BaseStatement {
 		writer.append("with (");
 		resource.toDialect(writer);
 		writer.append(")");
-		boolean oneLine = instructions.size()==1 && (instructions.get(0) instanceof SimpleStatement);
+		boolean oneLine = statements.size()==1 && (statements.get(0) instanceof SimpleStatement);
 		if(!oneLine)
 			writer.append(" {");
 		writer.newLine();
 		writer.indent();
-		instructions.toDialect(writer);
+		statements.toDialect(writer);
 		writer.dedent();
 		if(!oneLine) {
 			writer.append("}");
@@ -64,7 +64,7 @@ public class WithResourceStatement extends BaseStatement {
 		resource.toDialect(writer);
 		writer.append(":\n");
 		writer.indent();
-		instructions.toDialect(writer);
+		statements.toDialect(writer);
 		writer.dedent();
 	}
 
@@ -73,7 +73,7 @@ public class WithResourceStatement extends BaseStatement {
 	public IType check(Context context) throws SyntaxError {
 		context = context.newResourceContext();
 		resource.checkResource(context);
-		return instructions.check(context, null);
+		return statements.check(context, null);
 	}
 
 	@Override
@@ -81,7 +81,7 @@ public class WithResourceStatement extends BaseStatement {
 		context = context.newResourceContext();
 		try {
 			resource.interpret(context);
-			return instructions.interpret(context);
+			return statements.interpret(context);
 		} finally {
 			Object res = context.getValue(resource.getName());
 			if(res instanceof IResource)

@@ -10,7 +10,6 @@ import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
-
 public class AssignInstanceStatement extends SimpleStatement {
 	
 	IAssignableInstance instance;

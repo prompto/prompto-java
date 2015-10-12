@@ -14,6 +14,7 @@ public class AttributeDeclaration extends BaseDeclaration {
 	
 	IType type;
 	IAttributeConstraint constraint;
+	boolean storable = false;
 	
 	public AttributeDeclaration(Identifier name, IType type, IAttributeConstraint constraint) {
 		super(name);
@@ -27,6 +28,14 @@ public class AttributeDeclaration extends BaseDeclaration {
 	
 	public IAttributeConstraint getConstraint() {
 		return constraint;
+	}
+	
+	public void setStorable(boolean storable) {
+		this.storable = storable;
+	}
+	
+	public boolean isStorable() {
+		return storable;
 	}
 	
 	@Override
@@ -89,4 +98,6 @@ public class AttributeDeclaration extends BaseDeclaration {
 		constraint.checkValue(context, value);
 		return value;
 	}
+
+
 }
