@@ -1,4 +1,3 @@
-// generated: 2015-10-05T22:40:44.524
 package prompto.library.e;
 
 import org.junit.After;
@@ -29,6 +28,11 @@ public class TestCore extends BaseEParserTest {
 	@Test
 	public void testAttribute() throws Exception {
 		runTests("core/attribute.pec");
+	}
+
+	@Test
+	public void testAttributes() throws Exception {
+		runTests("core/attributes.pec");
 	}
 
 	@Test

@@ -1,4 +1,3 @@
-// generated: 2015-07-05T23:01:00.947
 package prompto.translate.oso;
 
 import org.junit.Test;
@@ -9,17 +8,17 @@ public class TestEnums extends BaseOParserTest {
 
 	@Test
 	public void testCategoryEnum() throws Exception {
-		compareResourceOSO("enums/categoryEnum.poc");
+		compareResourceEOE("enums/categoryEnum.poc");
 	}
 
 	@Test
 	public void testIntegerEnum() throws Exception {
-		compareResourceOSO("enums/integerEnum.poc");
+		compareResourceEOE("enums/integerEnum.poc");
 	}
 
 	@Test
 	public void testTextEnum() throws Exception {
-		compareResourceOSO("enums/textEnum.poc");
+		compareResourceEOE("enums/textEnum.poc");
 	}
 
 }

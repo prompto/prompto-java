@@ -1,4 +1,3 @@
-// generated: 2015-07-05T23:01:01.063
 package prompto.translate.ese;
 
 import org.junit.Test;
@@ -9,37 +8,37 @@ public class TestNative extends BaseEParserTest {
 
 	@Test
 	public void testAnyId() throws Exception {
-		compareResourceESE("native/anyId.pec");
+		compareResourceEOE("native/anyId.pec");
 	}
 
 	@Test
 	public void testAnyText() throws Exception {
-		compareResourceESE("native/anyText.pec");
+		compareResourceEOE("native/anyText.pec");
 	}
 
 	@Test
 	public void testAttribute() throws Exception {
-		compareResourceESE("native/attribute.pec");
+		compareResourceEOE("native/attribute.pec");
 	}
 
 	@Test
 	public void testCategory() throws Exception {
-		compareResourceESE("native/category.pec");
+		compareResourceEOE("native/category.pec");
 	}
 
 	@Test
 	public void testMethod() throws Exception {
-		compareResourceESE("native/method.pec");
+		compareResourceEOE("native/method.pec");
 	}
 
 	@Test
 	public void testPrinter() throws Exception {
-		compareResourceESE("native/printer.pec");
+		compareResourceEOE("native/printer.pec");
 	}
 
 	@Test
 	public void testReturn() throws Exception {
-		compareResourceESE("native/return.pec");
+		compareResourceEOE("native/return.pec");
 	}
 
 }

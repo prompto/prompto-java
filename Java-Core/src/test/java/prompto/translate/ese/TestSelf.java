@@ -1,4 +1,3 @@
-// generated: 2015-07-05T23:01:01.089
 package prompto.translate.ese;
 
 import org.junit.Test;
@@ -9,12 +8,12 @@ public class TestSelf extends BaseEParserTest {
 
 	@Test
 	public void testSelfAsParameter() throws Exception {
-		compareResourceESE("self/selfAsParameter.pec");
+		compareResourceEOE("self/selfAsParameter.pec");
 	}
 
 	@Test
 	public void testSelfMember() throws Exception {
-		compareResourceESE("self/selfMember.pec");
+		compareResourceEOE("self/selfMember.pec");
 	}
 
 }

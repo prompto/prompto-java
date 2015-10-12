@@ -1,4 +1,3 @@
-// generated: 2015-07-05T23:01:01.001
 package prompto.translate.oeo;
 
 import org.junit.Test;
@@ -9,27 +8,27 @@ public class TestItem extends BaseOParserTest {
 
 	@Test
 	public void testItemDict() throws Exception {
-		compareResourceOEO("item/itemDict.poc");
+		compareResourceEOE("item/itemDict.poc");
 	}
 
 	@Test
 	public void testItemList() throws Exception {
-		compareResourceOEO("item/itemList.poc");
+		compareResourceEOE("item/itemList.poc");
 	}
 
 	@Test
 	public void testItemRange() throws Exception {
-		compareResourceOEO("item/itemRange.poc");
+		compareResourceEOE("item/itemRange.poc");
 	}
 
 	@Test
 	public void testItemSet() throws Exception {
-		compareResourceOEO("item/itemSet.poc");
+		compareResourceEOE("item/itemSet.poc");
 	}
 
 	@Test
 	public void testItemText() throws Exception {
-		compareResourceOEO("item/itemText.poc");
+		compareResourceEOE("item/itemText.poc");
 	}
 
 }

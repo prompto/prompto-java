@@ -1,4 +1,3 @@
-// generated: 2015-07-05T23:01:01.147
 package prompto.translate.oeo;
 
 import org.junit.Test;
@@ -9,52 +8,52 @@ public class TestTesting extends BaseOParserTest {
 
 	@Test
 	public void testAnd() throws Exception {
-		compareResourceOEO("testing/and.poc");
+		compareResourceEOE("testing/and.poc");
 	}
 
 	@Test
 	public void testContains() throws Exception {
-		compareResourceOEO("testing/contains.poc");
+		compareResourceEOE("testing/contains.poc");
 	}
 
 	@Test
 	public void testGreater() throws Exception {
-		compareResourceOEO("testing/greater.poc");
+		compareResourceEOE("testing/greater.poc");
 	}
 
 	@Test
 	public void testMethod() throws Exception {
-		compareResourceOEO("testing/method.poc");
+		compareResourceEOE("testing/method.poc");
 	}
 
 	@Test
 	public void testNegative() throws Exception {
-		compareResourceOEO("testing/negative.poc");
+		compareResourceEOE("testing/negative.poc");
 	}
 
 	@Test
 	public void testNegativeError() throws Exception {
-		compareResourceOEO("testing/negativeError.poc");
+		compareResourceEOE("testing/negativeError.poc");
 	}
 
 	@Test
 	public void testNot() throws Exception {
-		compareResourceOEO("testing/not.poc");
+		compareResourceEOE("testing/not.poc");
 	}
 
 	@Test
 	public void testOr() throws Exception {
-		compareResourceOEO("testing/or.poc");
+		compareResourceEOE("testing/or.poc");
 	}
 
 	@Test
 	public void testPositive() throws Exception {
-		compareResourceOEO("testing/positive.poc");
+		compareResourceEOE("testing/positive.poc");
 	}
 
 	@Test
 	public void testPositiveError() throws Exception {
-		compareResourceOEO("testing/positiveError.poc");
+		compareResourceEOE("testing/positiveError.poc");
 	}
 
 }

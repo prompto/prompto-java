@@ -1,4 +1,3 @@
-// generated: 2015-07-05T23:01:01.032
 package prompto.translate.oso;
 
 import org.junit.Test;
@@ -9,142 +8,142 @@ public class TestLoops extends BaseOParserTest {
 
 	@Test
 	public void testDoWhile() throws Exception {
-		compareResourceOSO("loops/doWhile.poc");
+		compareResourceEOE("loops/doWhile.poc");
 	}
 
 	@Test
 	public void testForEachCharacterRange() throws Exception {
-		compareResourceOSO("loops/forEachCharacterRange.poc");
+		compareResourceEOE("loops/forEachCharacterRange.poc");
 	}
 
 	@Test
 	public void testForEachCharacterRangeWithIndex() throws Exception {
-		compareResourceOSO("loops/forEachCharacterRangeWithIndex.poc");
+		compareResourceEOE("loops/forEachCharacterRangeWithIndex.poc");
 	}
 
 	@Test
 	public void testForEachDateRange() throws Exception {
-		compareResourceOSO("loops/forEachDateRange.poc");
+		compareResourceEOE("loops/forEachDateRange.poc");
 	}
 
 	@Test
 	public void testForEachDateRangeWithIndex() throws Exception {
-		compareResourceOSO("loops/forEachDateRangeWithIndex.poc");
+		compareResourceEOE("loops/forEachDateRangeWithIndex.poc");
 	}
 
 	@Test
 	public void testForEachDictionaryItem() throws Exception {
-		compareResourceOSO("loops/forEachDictionaryItem.poc");
+		compareResourceEOE("loops/forEachDictionaryItem.poc");
 	}
 
 	@Test
 	public void testForEachDictionaryItemWithIndex() throws Exception {
-		compareResourceOSO("loops/forEachDictionaryItemWithIndex.poc");
+		compareResourceEOE("loops/forEachDictionaryItemWithIndex.poc");
 	}
 
 	@Test
 	public void testForEachDictionaryKey() throws Exception {
-		compareResourceOSO("loops/forEachDictionaryKey.poc");
+		compareResourceEOE("loops/forEachDictionaryKey.poc");
 	}
 
 	@Test
 	public void testForEachDictionaryKeyWithIndex() throws Exception {
-		compareResourceOSO("loops/forEachDictionaryKeyWithIndex.poc");
+		compareResourceEOE("loops/forEachDictionaryKeyWithIndex.poc");
 	}
 
 	@Test
 	public void testForEachDictionaryValue() throws Exception {
-		compareResourceOSO("loops/forEachDictionaryValue.poc");
+		compareResourceEOE("loops/forEachDictionaryValue.poc");
 	}
 
 	@Test
 	public void testForEachDictionaryValueWithIndex() throws Exception {
-		compareResourceOSO("loops/forEachDictionaryValueWithIndex.poc");
+		compareResourceEOE("loops/forEachDictionaryValueWithIndex.poc");
 	}
 
 	@Test
 	public void testForEachInstanceList() throws Exception {
-		compareResourceOSO("loops/forEachInstanceList.poc");
+		compareResourceEOE("loops/forEachInstanceList.poc");
 	}
 
 	@Test
 	public void testForEachInstanceListWithIndex() throws Exception {
-		compareResourceOSO("loops/forEachInstanceListWithIndex.poc");
+		compareResourceEOE("loops/forEachInstanceListWithIndex.poc");
 	}
 
 	@Test
 	public void testForEachInstanceSet() throws Exception {
-		compareResourceOSO("loops/forEachInstanceSet.poc");
+		compareResourceEOE("loops/forEachInstanceSet.poc");
 	}
 
 	@Test
 	public void testForEachInstanceSetWithIndex() throws Exception {
-		compareResourceOSO("loops/forEachInstanceSetWithIndex.poc");
+		compareResourceEOE("loops/forEachInstanceSetWithIndex.poc");
 	}
 
 	@Test
 	public void testForEachIntegerList() throws Exception {
-		compareResourceOSO("loops/forEachIntegerList.poc");
+		compareResourceEOE("loops/forEachIntegerList.poc");
 	}
 
 	@Test
 	public void testForEachIntegerListWithIndex() throws Exception {
-		compareResourceOSO("loops/forEachIntegerListWithIndex.poc");
+		compareResourceEOE("loops/forEachIntegerListWithIndex.poc");
 	}
 
 	@Test
 	public void testForEachIntegerRange() throws Exception {
-		compareResourceOSO("loops/forEachIntegerRange.poc");
+		compareResourceEOE("loops/forEachIntegerRange.poc");
 	}
 
 	@Test
 	public void testForEachIntegerRangeWithIndex() throws Exception {
-		compareResourceOSO("loops/forEachIntegerRangeWithIndex.poc");
+		compareResourceEOE("loops/forEachIntegerRangeWithIndex.poc");
 	}
 
 	@Test
 	public void testForEachIntegerSet() throws Exception {
-		compareResourceOSO("loops/forEachIntegerSet.poc");
+		compareResourceEOE("loops/forEachIntegerSet.poc");
 	}
 
 	@Test
 	public void testForEachIntegerSetWithIndex() throws Exception {
-		compareResourceOSO("loops/forEachIntegerSetWithIndex.poc");
+		compareResourceEOE("loops/forEachIntegerSetWithIndex.poc");
 	}
 
 	@Test
 	public void testForEachTimeRange() throws Exception {
-		compareResourceOSO("loops/forEachTimeRange.poc");
+		compareResourceEOE("loops/forEachTimeRange.poc");
 	}
 
 	@Test
 	public void testForEachTimeRangeWithIndex() throws Exception {
-		compareResourceOSO("loops/forEachTimeRangeWithIndex.poc");
+		compareResourceEOE("loops/forEachTimeRangeWithIndex.poc");
 	}
 
 	@Test
 	public void testForEachTupleList() throws Exception {
-		compareResourceOSO("loops/forEachTupleList.poc");
+		compareResourceEOE("loops/forEachTupleList.poc");
 	}
 
 	@Test
 	public void testForEachTupleListWithIndex() throws Exception {
-		compareResourceOSO("loops/forEachTupleListWithIndex.poc");
+		compareResourceEOE("loops/forEachTupleListWithIndex.poc");
 	}
 
 	@Test
 	public void testForEachTupleSet() throws Exception {
-		compareResourceOSO("loops/forEachTupleSet.poc");
+		compareResourceEOE("loops/forEachTupleSet.poc");
 	}
 
 	@Test
 	public void testForEachTupleSetWithIndex() throws Exception {
-		compareResourceOSO("loops/forEachTupleSetWithIndex.poc");
+		compareResourceEOE("loops/forEachTupleSetWithIndex.poc");
 	}
 
 	@Test
 	public void testWhile() throws Exception {
-		compareResourceOSO("loops/while.poc");
+		compareResourceEOE("loops/while.poc");
 	}
 
 }

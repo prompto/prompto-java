@@ -1,4 +1,3 @@
-// generated: 2015-07-05T23:01:00.879
 package prompto.translate.ese;
 
 import org.junit.Test;
@@ -9,22 +8,22 @@ public class TestCast extends BaseEParserTest {
 
 	@Test
 	public void testAutoDowncast() throws Exception {
-		compareResourceESE("cast/autoDowncast.pec");
+		compareResourceEOE("cast/autoDowncast.pec");
 	}
 
 	@Test
 	public void testCastChild() throws Exception {
-		compareResourceESE("cast/castChild.pec");
+		compareResourceEOE("cast/castChild.pec");
 	}
 
 	@Test
 	public void testIsAChild() throws Exception {
-		compareResourceESE("cast/isAChild.pec");
+		compareResourceEOE("cast/isAChild.pec");
 	}
 
 	@Test
 	public void testIsAText() throws Exception {
-		compareResourceESE("cast/isAText.pec");
+		compareResourceEOE("cast/isAText.pec");
 	}
 
 }

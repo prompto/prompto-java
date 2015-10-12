@@ -1,4 +1,3 @@
-// generated: 2015-07-05T23:01:00.914
 package prompto.translate.ese;
 
 import org.junit.Test;
@@ -9,127 +8,127 @@ public class TestContains extends BaseEParserTest {
 
 	@Test
 	public void testContainsAllList() throws Exception {
-		compareResourceESE("contains/containsAllList.pec");
+		compareResourceEOE("contains/containsAllList.pec");
 	}
 
 	@Test
 	public void testContainsAllSet() throws Exception {
-		compareResourceESE("contains/containsAllSet.pec");
+		compareResourceEOE("contains/containsAllSet.pec");
 	}
 
 	@Test
 	public void testContainsAllText() throws Exception {
-		compareResourceESE("contains/containsAllText.pec");
+		compareResourceEOE("contains/containsAllText.pec");
 	}
 
 	@Test
 	public void testContainsAllTuple() throws Exception {
-		compareResourceESE("contains/containsAllTuple.pec");
+		compareResourceEOE("contains/containsAllTuple.pec");
 	}
 
 	@Test
 	public void testContainsAnyList() throws Exception {
-		compareResourceESE("contains/containsAnyList.pec");
+		compareResourceEOE("contains/containsAnyList.pec");
 	}
 
 	@Test
 	public void testContainsAnySet() throws Exception {
-		compareResourceESE("contains/containsAnySet.pec");
+		compareResourceEOE("contains/containsAnySet.pec");
 	}
 
 	@Test
 	public void testContainsAnyText() throws Exception {
-		compareResourceESE("contains/containsAnyText.pec");
+		compareResourceEOE("contains/containsAnyText.pec");
 	}
 
 	@Test
 	public void testContainsAnyTuple() throws Exception {
-		compareResourceESE("contains/containsAnyTuple.pec");
+		compareResourceEOE("contains/containsAnyTuple.pec");
 	}
 
 	@Test
 	public void testInCharacterRange() throws Exception {
-		compareResourceESE("contains/inCharacterRange.pec");
+		compareResourceEOE("contains/inCharacterRange.pec");
 	}
 
 	@Test
 	public void testInDateRange() throws Exception {
-		compareResourceESE("contains/inDateRange.pec");
+		compareResourceEOE("contains/inDateRange.pec");
 	}
 
 	@Test
 	public void testInDict() throws Exception {
-		compareResourceESE("contains/inDict.pec");
+		compareResourceEOE("contains/inDict.pec");
 	}
 
 	@Test
 	public void testInIntegerRange() throws Exception {
-		compareResourceESE("contains/inIntegerRange.pec");
+		compareResourceEOE("contains/inIntegerRange.pec");
 	}
 
 	@Test
 	public void testInList() throws Exception {
-		compareResourceESE("contains/inList.pec");
+		compareResourceEOE("contains/inList.pec");
 	}
 
 	@Test
 	public void testInSet() throws Exception {
-		compareResourceESE("contains/inSet.pec");
+		compareResourceEOE("contains/inSet.pec");
 	}
 
 	@Test
 	public void testInText() throws Exception {
-		compareResourceESE("contains/inText.pec");
+		compareResourceEOE("contains/inText.pec");
 	}
 
 	@Test
 	public void testInTimeRange() throws Exception {
-		compareResourceESE("contains/inTimeRange.pec");
+		compareResourceEOE("contains/inTimeRange.pec");
 	}
 
 	@Test
 	public void testInTuple() throws Exception {
-		compareResourceESE("contains/inTuple.pec");
+		compareResourceEOE("contains/inTuple.pec");
 	}
 
 	@Test
 	public void testNinCharacterRange() throws Exception {
-		compareResourceESE("contains/ninCharacterRange.pec");
+		compareResourceEOE("contains/ninCharacterRange.pec");
 	}
 
 	@Test
 	public void testNinDateRange() throws Exception {
-		compareResourceESE("contains/ninDateRange.pec");
+		compareResourceEOE("contains/ninDateRange.pec");
 	}
 
 	@Test
 	public void testNinDict() throws Exception {
-		compareResourceESE("contains/ninDict.pec");
+		compareResourceEOE("contains/ninDict.pec");
 	}
 
 	@Test
 	public void testNinIntegerRange() throws Exception {
-		compareResourceESE("contains/ninIntegerRange.pec");
+		compareResourceEOE("contains/ninIntegerRange.pec");
 	}
 
 	@Test
 	public void testNinList() throws Exception {
-		compareResourceESE("contains/ninList.pec");
+		compareResourceEOE("contains/ninList.pec");
 	}
 
 	@Test
 	public void testNinSet() throws Exception {
-		compareResourceESE("contains/ninSet.pec");
+		compareResourceEOE("contains/ninSet.pec");
 	}
 
 	@Test
 	public void testNinText() throws Exception {
-		compareResourceESE("contains/ninText.pec");
+		compareResourceEOE("contains/ninText.pec");
 	}
 
 	@Test
 	public void testNinTimeRange() throws Exception {
-		compareResourceESE("contains/ninTimeRange.pec");
+		compareResourceEOE("contains/ninTimeRange.pec");
 	}
 
 }

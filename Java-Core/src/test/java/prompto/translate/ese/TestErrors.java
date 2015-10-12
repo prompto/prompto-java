@@ -1,4 +1,3 @@
-// generated: 2015-07-05T23:01:00.960
 package prompto.translate.ese;
 
 import org.junit.Test;
@@ -9,62 +8,62 @@ public class TestErrors extends BaseEParserTest {
 
 	@Test
 	public void testDivideByZero() throws Exception {
-		compareResourceESE("errors/divideByZero.pec");
+		compareResourceEOE("errors/divideByZero.pec");
 	}
 
 	@Test
 	public void testIndexOutOfRange_listItem() throws Exception {
-		compareResourceESE("errors/indexOutOfRange-listItem.pec");
+		compareResourceEOE("errors/indexOutOfRange-listItem.pec");
 	}
 
 	@Test
 	public void testIndexOutOfRange_sliceList() throws Exception {
-		compareResourceESE("errors/indexOutOfRange-sliceList.pec");
+		compareResourceEOE("errors/indexOutOfRange-sliceList.pec");
 	}
 
 	@Test
 	public void testIndexOutOfRange_sliceRange() throws Exception {
-		compareResourceESE("errors/indexOutOfRange-sliceRange.pec");
+		compareResourceEOE("errors/indexOutOfRange-sliceRange.pec");
 	}
 
 	@Test
 	public void testIndexOutOfRange_sliceText() throws Exception {
-		compareResourceESE("errors/indexOutOfRange-sliceText.pec");
+		compareResourceEOE("errors/indexOutOfRange-sliceText.pec");
 	}
 
 	@Test
 	public void testNullDict() throws Exception {
-		compareResourceESE("errors/nullDict.pec");
+		compareResourceEOE("errors/nullDict.pec");
 	}
 
 	@Test
 	public void testNullItem() throws Exception {
-		compareResourceESE("errors/nullItem.pec");
+		compareResourceEOE("errors/nullItem.pec");
 	}
 
 	@Test
 	public void testNullKey() throws Exception {
-		compareResourceESE("errors/nullKey.pec");
+		compareResourceEOE("errors/nullKey.pec");
 	}
 
 	@Test
 	public void testNullMember() throws Exception {
-		compareResourceESE("errors/nullMember.pec");
+		compareResourceEOE("errors/nullMember.pec");
 	}
 
 	@Test
 	public void testNullMethod() throws Exception {
-		compareResourceESE("errors/nullMethod.pec");
+		compareResourceEOE("errors/nullMethod.pec");
 	}
 
 	@Test
 	public void testUnexpected() throws Exception {
-		compareResourceESE("errors/unexpected.pec");
+		compareResourceEOE("errors/unexpected.pec");
 	}
 
 	@Test
 	public void testUserException() throws Exception {
-		compareResourceESE("errors/userException.pec");
+		compareResourceEOE("errors/userException.pec");
 	}
 
 }

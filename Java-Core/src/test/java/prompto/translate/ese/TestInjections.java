@@ -1,4 +1,3 @@
-// generated: 2015-07-05T23:01:00.989
 package prompto.translate.ese;
 
 import org.junit.Test;
@@ -9,7 +8,7 @@ public class TestInjections extends BaseEParserTest {
 
 	@Test
 	public void testExpressionInjection() throws Exception {
-		compareResourceESE("injections/expressionInjection.pec");
+		compareResourceEOE("injections/expressionInjection.pec");
 	}
 
 }

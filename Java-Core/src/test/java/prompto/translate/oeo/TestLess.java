@@ -1,4 +1,3 @@
-// generated: 2015-07-05T23:01:01.014
 package prompto.translate.oeo;
 
 import org.junit.Test;
@@ -9,72 +8,72 @@ public class TestLess extends BaseOParserTest {
 
 	@Test
 	public void testLtCharacter() throws Exception {
-		compareResourceOEO("less/ltCharacter.poc");
+		compareResourceEOE("less/ltCharacter.poc");
 	}
 
 	@Test
 	public void testLtDate() throws Exception {
-		compareResourceOEO("less/ltDate.poc");
+		compareResourceEOE("less/ltDate.poc");
 	}
 
 	@Test
 	public void testLtDateTime() throws Exception {
-		compareResourceOEO("less/ltDateTime.poc");
+		compareResourceEOE("less/ltDateTime.poc");
 	}
 
 	@Test
 	public void testLtDecimal() throws Exception {
-		compareResourceOEO("less/ltDecimal.poc");
+		compareResourceEOE("less/ltDecimal.poc");
 	}
 
 	@Test
 	public void testLteCharacter() throws Exception {
-		compareResourceOEO("less/lteCharacter.poc");
+		compareResourceEOE("less/lteCharacter.poc");
 	}
 
 	@Test
 	public void testLteDate() throws Exception {
-		compareResourceOEO("less/lteDate.poc");
+		compareResourceEOE("less/lteDate.poc");
 	}
 
 	@Test
 	public void testLteDateTime() throws Exception {
-		compareResourceOEO("less/lteDateTime.poc");
+		compareResourceEOE("less/lteDateTime.poc");
 	}
 
 	@Test
 	public void testLteDecimal() throws Exception {
-		compareResourceOEO("less/lteDecimal.poc");
+		compareResourceEOE("less/lteDecimal.poc");
 	}
 
 	@Test
 	public void testLteInteger() throws Exception {
-		compareResourceOEO("less/lteInteger.poc");
+		compareResourceEOE("less/lteInteger.poc");
 	}
 
 	@Test
 	public void testLteText() throws Exception {
-		compareResourceOEO("less/lteText.poc");
+		compareResourceEOE("less/lteText.poc");
 	}
 
 	@Test
 	public void testLteTime() throws Exception {
-		compareResourceOEO("less/lteTime.poc");
+		compareResourceEOE("less/lteTime.poc");
 	}
 
 	@Test
 	public void testLtInteger() throws Exception {
-		compareResourceOEO("less/ltInteger.poc");
+		compareResourceEOE("less/ltInteger.poc");
 	}
 
 	@Test
 	public void testLtText() throws Exception {
-		compareResourceOEO("less/ltText.poc");
+		compareResourceEOE("less/ltText.poc");
 	}
 
 	@Test
 	public void testLtTime() throws Exception {
-		compareResourceOEO("less/ltTime.poc");
+		compareResourceEOE("less/ltTime.poc");
 	}
 
 }

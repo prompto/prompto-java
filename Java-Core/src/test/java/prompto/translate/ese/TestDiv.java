@@ -1,4 +1,3 @@
-// generated: 2015-07-05T23:01:00.928
 package prompto.translate.ese;
 
 import org.junit.Test;
@@ -9,22 +8,22 @@ public class TestDiv extends BaseEParserTest {
 
 	@Test
 	public void testDivDecimal() throws Exception {
-		compareResourceESE("div/divDecimal.pec");
+		compareResourceEOE("div/divDecimal.pec");
 	}
 
 	@Test
 	public void testDivInteger() throws Exception {
-		compareResourceESE("div/divInteger.pec");
+		compareResourceEOE("div/divInteger.pec");
 	}
 
 	@Test
 	public void testIdivInteger() throws Exception {
-		compareResourceESE("div/idivInteger.pec");
+		compareResourceEOE("div/idivInteger.pec");
 	}
 
 	@Test
 	public void testModInteger() throws Exception {
-		compareResourceESE("div/modInteger.pec");
+		compareResourceEOE("div/modInteger.pec");
 	}
 
 }

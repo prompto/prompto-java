@@ -1,4 +1,3 @@
-// generated: 2015-07-05T23:01:01.151
 package prompto.runtime.s;
 
 import org.junit.After;

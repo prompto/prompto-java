@@ -1,4 +1,3 @@
-// generated: 2015-07-05T23:01:01.071
 package prompto.translate.ese;
 
 import org.junit.Test;
@@ -9,32 +8,32 @@ public class TestOperators extends BaseEParserTest {
 
 	@Test
 	public void testAddAmount() throws Exception {
-		compareResourceESE("operators/addAmount.pec");
+		compareResourceEOE("operators/addAmount.pec");
 	}
 
 	@Test
 	public void testDivAmount() throws Exception {
-		compareResourceESE("operators/divAmount.pec");
+		compareResourceEOE("operators/divAmount.pec");
 	}
 
 	@Test
 	public void testIdivAmount() throws Exception {
-		compareResourceESE("operators/idivAmount.pec");
+		compareResourceEOE("operators/idivAmount.pec");
 	}
 
 	@Test
 	public void testModAmount() throws Exception {
-		compareResourceESE("operators/modAmount.pec");
+		compareResourceEOE("operators/modAmount.pec");
 	}
 
 	@Test
 	public void testMultAmount() throws Exception {
-		compareResourceESE("operators/multAmount.pec");
+		compareResourceEOE("operators/multAmount.pec");
 	}
 
 	@Test
 	public void testSubAmount() throws Exception {
-		compareResourceESE("operators/subAmount.pec");
+		compareResourceEOE("operators/subAmount.pec");
 	}
 
 }

@@ -1,4 +1,3 @@
-// generated: 2015-07-05T23:01:01.100
 package prompto.translate.oso;
 
 import org.junit.Test;
@@ -9,12 +8,12 @@ public class TestSetters extends BaseOParserTest {
 
 	@Test
 	public void testGetter() throws Exception {
-		compareResourceOSO("setters/getter.poc");
+		compareResourceEOE("setters/getter.poc");
 	}
 
 	@Test
 	public void testSetter() throws Exception {
-		compareResourceOSO("setters/setter.poc");
+		compareResourceEOE("setters/setter.poc");
 	}
 
 }

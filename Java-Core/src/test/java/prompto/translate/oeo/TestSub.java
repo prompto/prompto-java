@@ -1,4 +1,3 @@
-// generated: 2015-07-05T23:01:01.140
 package prompto.translate.oeo;
 
 import org.junit.Test;
@@ -9,32 +8,32 @@ public class TestSub extends BaseOParserTest {
 
 	@Test
 	public void testSubDate() throws Exception {
-		compareResourceOEO("sub/subDate.poc");
+		compareResourceEOE("sub/subDate.poc");
 	}
 
 	@Test
 	public void testSubDateTime() throws Exception {
-		compareResourceOEO("sub/subDateTime.poc");
+		compareResourceEOE("sub/subDateTime.poc");
 	}
 
 	@Test
 	public void testSubDecimal() throws Exception {
-		compareResourceOEO("sub/subDecimal.poc");
+		compareResourceEOE("sub/subDecimal.poc");
 	}
 
 	@Test
 	public void testSubInteger() throws Exception {
-		compareResourceOEO("sub/subInteger.poc");
+		compareResourceEOE("sub/subInteger.poc");
 	}
 
 	@Test
 	public void testSubPeriod() throws Exception {
-		compareResourceOEO("sub/subPeriod.poc");
+		compareResourceEOE("sub/subPeriod.poc");
 	}
 
 	@Test
 	public void testSubTime() throws Exception {
-		compareResourceOEO("sub/subTime.poc");
+		compareResourceEOE("sub/subTime.poc");
 	}
 
 }

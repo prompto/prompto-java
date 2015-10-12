@@ -1,4 +1,3 @@
-// generated: 2015-07-05T23:01:00.931
 package prompto.translate.oso;
 
 import org.junit.Test;
@@ -9,22 +8,22 @@ public class TestDiv extends BaseOParserTest {
 
 	@Test
 	public void testDivDecimal() throws Exception {
-		compareResourceOSO("div/divDecimal.poc");
+		compareResourceEOE("div/divDecimal.poc");
 	}
 
 	@Test
 	public void testDivInteger() throws Exception {
-		compareResourceOSO("div/divInteger.poc");
+		compareResourceEOE("div/divInteger.poc");
 	}
 
 	@Test
 	public void testIdivInteger() throws Exception {
-		compareResourceOSO("div/idivInteger.poc");
+		compareResourceEOE("div/idivInteger.poc");
 	}
 
 	@Test
 	public void testModInteger() throws Exception {
-		compareResourceOSO("div/modInteger.poc");
+		compareResourceEOE("div/modInteger.poc");
 	}
 
 }

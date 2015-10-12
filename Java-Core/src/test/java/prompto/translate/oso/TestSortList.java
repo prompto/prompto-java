@@ -1,4 +1,3 @@
-// generated: 2015-07-05T23:01:01.126
 package prompto.translate.oso;
 
 import org.junit.Test;
@@ -9,57 +8,57 @@ public class TestSortList extends BaseOParserTest {
 
 	@Test
 	public void testSortBooleans() throws Exception {
-		compareResourceOSO("sortList/sortBooleans.poc");
+		compareResourceEOE("sortList/sortBooleans.poc");
 	}
 
 	@Test
 	public void testSortDates() throws Exception {
-		compareResourceOSO("sortList/sortDates.poc");
+		compareResourceEOE("sortList/sortDates.poc");
 	}
 
 	@Test
 	public void testSortDateTimes() throws Exception {
-		compareResourceOSO("sortList/sortDateTimes.poc");
+		compareResourceEOE("sortList/sortDateTimes.poc");
 	}
 
 	@Test
 	public void testSortDecimals() throws Exception {
-		compareResourceOSO("sortList/sortDecimals.poc");
+		compareResourceEOE("sortList/sortDecimals.poc");
 	}
 
 	@Test
 	public void testSortExpressions() throws Exception {
-		compareResourceOSO("sortList/sortExpressions.poc");
+		compareResourceEOE("sortList/sortExpressions.poc");
 	}
 
 	@Test
 	public void testSortIntegers() throws Exception {
-		compareResourceOSO("sortList/sortIntegers.poc");
+		compareResourceEOE("sortList/sortIntegers.poc");
 	}
 
 	@Test
 	public void testSortKeys() throws Exception {
-		compareResourceOSO("sortList/sortKeys.poc");
+		compareResourceEOE("sortList/sortKeys.poc");
 	}
 
 	@Test
 	public void testSortMethods() throws Exception {
-		compareResourceOSO("sortList/sortMethods.poc");
+		compareResourceEOE("sortList/sortMethods.poc");
 	}
 
 	@Test
 	public void testSortNames() throws Exception {
-		compareResourceOSO("sortList/sortNames.poc");
+		compareResourceEOE("sortList/sortNames.poc");
 	}
 
 	@Test
 	public void testSortTexts() throws Exception {
-		compareResourceOSO("sortList/sortTexts.poc");
+		compareResourceEOE("sortList/sortTexts.poc");
 	}
 
 	@Test
 	public void testSortTimes() throws Exception {
-		compareResourceOSO("sortList/sortTimes.poc");
+		compareResourceEOE("sortList/sortTimes.poc");
 	}
 
 }

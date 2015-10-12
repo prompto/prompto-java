@@ -1,4 +1,3 @@
-// generated: 2015-07-05T23:01:00.909
 package prompto.translate.oeo;
 
 import org.junit.Test;
@@ -9,32 +8,32 @@ public class TestCondition extends BaseOParserTest {
 
 	@Test
 	public void testComplexIf() throws Exception {
-		compareResourceOEO("condition/complexIf.poc");
+		compareResourceEOE("condition/complexIf.poc");
 	}
 
 	@Test
 	public void testElseIf() throws Exception {
-		compareResourceOEO("condition/elseIf.poc");
+		compareResourceEOE("condition/elseIf.poc");
 	}
 
 	@Test
 	public void testReturnIf() throws Exception {
-		compareResourceOEO("condition/returnIf.poc");
+		compareResourceEOE("condition/returnIf.poc");
 	}
 
 	@Test
 	public void testSimpleIf() throws Exception {
-		compareResourceOEO("condition/simpleIf.poc");
+		compareResourceEOE("condition/simpleIf.poc");
 	}
 
 	@Test
 	public void testSwitch() throws Exception {
-		compareResourceOEO("condition/switch.poc");
+		compareResourceEOE("condition/switch.poc");
 	}
 
 	@Test
 	public void testTernary() throws Exception {
-		compareResourceOEO("condition/ternary.poc");
+		compareResourceEOE("condition/ternary.poc");
 	}
 
 }

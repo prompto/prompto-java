@@ -1,4 +1,3 @@
-// generated: 2015-07-05T23:01:01.079
 package prompto.translate.oeo;
 
 import org.junit.Test;
@@ -9,32 +8,32 @@ public class TestPatterns extends BaseOParserTest {
 
 	@Test
 	public void testIntegerEnumeration() throws Exception {
-		compareResourceOEO("patterns/integerEnumeration.poc");
+		compareResourceEOE("patterns/integerEnumeration.poc");
 	}
 
 	@Test
 	public void testIntegerPattern() throws Exception {
-		compareResourceOEO("patterns/integerPattern.poc");
+		compareResourceEOE("patterns/integerPattern.poc");
 	}
 
 	@Test
 	public void testNegativeIntegerRange() throws Exception {
-		compareResourceOEO("patterns/negativeIntegerRange.poc");
+		compareResourceEOE("patterns/negativeIntegerRange.poc");
 	}
 
 	@Test
 	public void testPositiveIntegerRange() throws Exception {
-		compareResourceOEO("patterns/positiveIntegerRange.poc");
+		compareResourceEOE("patterns/positiveIntegerRange.poc");
 	}
 
 	@Test
 	public void testTextEnumeration() throws Exception {
-		compareResourceOEO("patterns/textEnumeration.poc");
+		compareResourceEOE("patterns/textEnumeration.poc");
 	}
 
 	@Test
 	public void testTextPattern() throws Exception {
-		compareResourceOEO("patterns/textPattern.poc");
+		compareResourceEOE("patterns/textPattern.poc");
 	}
 
 }

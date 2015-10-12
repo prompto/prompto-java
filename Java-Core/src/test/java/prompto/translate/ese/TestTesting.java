@@ -1,4 +1,3 @@
-// generated: 2015-07-05T23:01:01.145
 package prompto.translate.ese;
 
 import org.junit.Test;
@@ -9,52 +8,52 @@ public class TestTesting extends BaseEParserTest {
 
 	@Test
 	public void testAnd() throws Exception {
-		compareResourceESE("testing/and.pec");
+		compareResourceEOE("testing/and.pec");
 	}
 
 	@Test
 	public void testContains() throws Exception {
-		compareResourceESE("testing/contains.pec");
+		compareResourceEOE("testing/contains.pec");
 	}
 
 	@Test
 	public void testGreater() throws Exception {
-		compareResourceESE("testing/greater.pec");
+		compareResourceEOE("testing/greater.pec");
 	}
 
 	@Test
 	public void testMethod() throws Exception {
-		compareResourceESE("testing/method.pec");
+		compareResourceEOE("testing/method.pec");
 	}
 
 	@Test
 	public void testNegative() throws Exception {
-		compareResourceESE("testing/negative.pec");
+		compareResourceEOE("testing/negative.pec");
 	}
 
 	@Test
 	public void testNegativeError() throws Exception {
-		compareResourceESE("testing/negativeError.pec");
+		compareResourceEOE("testing/negativeError.pec");
 	}
 
 	@Test
 	public void testNot() throws Exception {
-		compareResourceESE("testing/not.pec");
+		compareResourceEOE("testing/not.pec");
 	}
 
 	@Test
 	public void testOr() throws Exception {
-		compareResourceESE("testing/or.pec");
+		compareResourceEOE("testing/or.pec");
 	}
 
 	@Test
 	public void testPositive() throws Exception {
-		compareResourceESE("testing/positive.pec");
+		compareResourceEOE("testing/positive.pec");
 	}
 
 	@Test
 	public void testPositiveError() throws Exception {
-		compareResourceESE("testing/positiveError.pec");
+		compareResourceEOE("testing/positiveError.pec");
 	}
 
 }

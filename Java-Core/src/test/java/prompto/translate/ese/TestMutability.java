@@ -1,4 +1,3 @@
-// generated: 2015-07-05T23:01:01.056
 package prompto.translate.ese;
 
 import org.junit.Test;
@@ -9,32 +8,32 @@ public class TestMutability extends BaseEParserTest {
 
 	@Test
 	public void testImmutable() throws Exception {
-		compareResourceESE("mutability/immutable.pec");
+		compareResourceEOE("mutability/immutable.pec");
 	}
 
 	@Test
 	public void testImmutableArgument() throws Exception {
-		compareResourceESE("mutability/immutableArgument.pec");
+		compareResourceEOE("mutability/immutableArgument.pec");
 	}
 
 	@Test
 	public void testImmutableMember() throws Exception {
-		compareResourceESE("mutability/immutableMember.pec");
+		compareResourceEOE("mutability/immutableMember.pec");
 	}
 
 	@Test
 	public void testMutable() throws Exception {
-		compareResourceESE("mutability/mutable.pec");
+		compareResourceEOE("mutability/mutable.pec");
 	}
 
 	@Test
 	public void testMutableArgument() throws Exception {
-		compareResourceESE("mutability/mutableArgument.pec");
+		compareResourceEOE("mutability/mutableArgument.pec");
 	}
 
 	@Test
 	public void testMutableMember() throws Exception {
-		compareResourceESE("mutability/mutableMember.pec");
+		compareResourceEOE("mutability/mutableMember.pec");
 	}
 
 }

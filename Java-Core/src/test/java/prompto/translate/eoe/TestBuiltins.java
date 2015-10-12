@@ -1,4 +1,3 @@
-// generated: 2015-07-05T23:01:00.867
 package prompto.translate.eoe;
 
 import org.junit.Test;

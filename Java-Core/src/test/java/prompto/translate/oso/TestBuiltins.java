@@ -1,4 +1,3 @@
-// generated: 2015-07-05T23:01:00.871
 package prompto.translate.oso;
 
 import org.junit.Test;
@@ -9,122 +8,122 @@ public class TestBuiltins extends BaseOParserTest {
 
 	@Test
 	public void testDateDayOfMonth() throws Exception {
-		compareResourceOSO("builtins/dateDayOfMonth.poc");
+		compareResourceEOE("builtins/dateDayOfMonth.poc");
 	}
 
 	@Test
 	public void testDateDayOfYear() throws Exception {
-		compareResourceOSO("builtins/dateDayOfYear.poc");
+		compareResourceEOE("builtins/dateDayOfYear.poc");
 	}
 
 	@Test
 	public void testDateMonth() throws Exception {
-		compareResourceOSO("builtins/dateMonth.poc");
+		compareResourceEOE("builtins/dateMonth.poc");
 	}
 
 	@Test
 	public void testDateTimeDayOfMonth() throws Exception {
-		compareResourceOSO("builtins/dateTimeDayOfMonth.poc");
+		compareResourceEOE("builtins/dateTimeDayOfMonth.poc");
 	}
 
 	@Test
 	public void testDateTimeDayOfYear() throws Exception {
-		compareResourceOSO("builtins/dateTimeDayOfYear.poc");
+		compareResourceEOE("builtins/dateTimeDayOfYear.poc");
 	}
 
 	@Test
 	public void testDateTimeHour() throws Exception {
-		compareResourceOSO("builtins/dateTimeHour.poc");
+		compareResourceEOE("builtins/dateTimeHour.poc");
 	}
 
 	@Test
 	public void testDateTimeMinute() throws Exception {
-		compareResourceOSO("builtins/dateTimeMinute.poc");
+		compareResourceEOE("builtins/dateTimeMinute.poc");
 	}
 
 	@Test
 	public void testDateTimeMonth() throws Exception {
-		compareResourceOSO("builtins/dateTimeMonth.poc");
+		compareResourceEOE("builtins/dateTimeMonth.poc");
 	}
 
 	@Test
 	public void testDateTimeSecond() throws Exception {
-		compareResourceOSO("builtins/dateTimeSecond.poc");
+		compareResourceEOE("builtins/dateTimeSecond.poc");
 	}
 
 	@Test
 	public void testDateTimeTZName() throws Exception {
-		compareResourceOSO("builtins/dateTimeTZName.poc");
+		compareResourceEOE("builtins/dateTimeTZName.poc");
 	}
 
 	@Test
 	public void testDateTimeTZOffset() throws Exception {
-		compareResourceOSO("builtins/dateTimeTZOffset.poc");
+		compareResourceEOE("builtins/dateTimeTZOffset.poc");
 	}
 
 	@Test
 	public void testDateTimeYear() throws Exception {
-		compareResourceOSO("builtins/dateTimeYear.poc");
+		compareResourceEOE("builtins/dateTimeYear.poc");
 	}
 
 	@Test
 	public void testDateYear() throws Exception {
-		compareResourceOSO("builtins/dateYear.poc");
+		compareResourceEOE("builtins/dateYear.poc");
 	}
 
 	@Test
 	public void testDictLength() throws Exception {
-		compareResourceOSO("builtins/dictLength.poc");
+		compareResourceEOE("builtins/dictLength.poc");
 	}
 
 	@Test
 	public void testEnumName() throws Exception {
-		compareResourceOSO("builtins/enumName.poc");
+		compareResourceEOE("builtins/enumName.poc");
 	}
 
 	@Test
 	public void testEnumSymbols() throws Exception {
-		compareResourceOSO("builtins/enumSymbols.poc");
+		compareResourceEOE("builtins/enumSymbols.poc");
 	}
 
 	@Test
 	public void testEnumValue() throws Exception {
-		compareResourceOSO("builtins/enumValue.poc");
+		compareResourceEOE("builtins/enumValue.poc");
 	}
 
 	@Test
 	public void testListLength() throws Exception {
-		compareResourceOSO("builtins/listLength.poc");
+		compareResourceEOE("builtins/listLength.poc");
 	}
 
 	@Test
 	public void testSetLength() throws Exception {
-		compareResourceOSO("builtins/setLength.poc");
+		compareResourceEOE("builtins/setLength.poc");
 	}
 
 	@Test
 	public void testTextLength() throws Exception {
-		compareResourceOSO("builtins/textLength.poc");
+		compareResourceEOE("builtins/textLength.poc");
 	}
 
 	@Test
 	public void testTimeHour() throws Exception {
-		compareResourceOSO("builtins/timeHour.poc");
+		compareResourceEOE("builtins/timeHour.poc");
 	}
 
 	@Test
 	public void testTimeMinute() throws Exception {
-		compareResourceOSO("builtins/timeMinute.poc");
+		compareResourceEOE("builtins/timeMinute.poc");
 	}
 
 	@Test
 	public void testTimeSecond() throws Exception {
-		compareResourceOSO("builtins/timeSecond.poc");
+		compareResourceEOE("builtins/timeSecond.poc");
 	}
 
 	@Test
 	public void testTupleLength() throws Exception {
-		compareResourceOSO("builtins/tupleLength.poc");
+		compareResourceEOE("builtins/tupleLength.poc");
 	}
 
 }

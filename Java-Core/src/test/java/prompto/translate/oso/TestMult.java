@@ -1,4 +1,3 @@
-// generated: 2015-07-05T23:01:01.053
 package prompto.translate.oso;
 
 import org.junit.Test;
@@ -9,32 +8,32 @@ public class TestMult extends BaseOParserTest {
 
 	@Test
 	public void testMultCharacter() throws Exception {
-		compareResourceOSO("mult/multCharacter.poc");
+		compareResourceEOE("mult/multCharacter.poc");
 	}
 
 	@Test
 	public void testMultDecimal() throws Exception {
-		compareResourceOSO("mult/multDecimal.poc");
+		compareResourceEOE("mult/multDecimal.poc");
 	}
 
 	@Test
 	public void testMultInteger() throws Exception {
-		compareResourceOSO("mult/multInteger.poc");
+		compareResourceEOE("mult/multInteger.poc");
 	}
 
 	@Test
 	public void testMultList() throws Exception {
-		compareResourceOSO("mult/multList.poc");
+		compareResourceEOE("mult/multList.poc");
 	}
 
 	@Test
 	public void testMultPeriod() throws Exception {
-		compareResourceOSO("mult/multPeriod.poc");
+		compareResourceEOE("mult/multPeriod.poc");
 	}
 
 	@Test
 	public void testMultText() throws Exception {
-		compareResourceOSO("mult/multText.poc");
+		compareResourceEOE("mult/multText.poc");
 	}
 
 }
