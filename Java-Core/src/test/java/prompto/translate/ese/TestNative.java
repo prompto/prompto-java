@@ -8,37 +8,37 @@ public class TestNative extends BaseEParserTest {
 
 	@Test
 	public void testAnyId() throws Exception {
-		compareResourceEOE("native/anyId.pec");
+		compareResourceESE("native/anyId.pec");
 	}
 
 	@Test
 	public void testAnyText() throws Exception {
-		compareResourceEOE("native/anyText.pec");
+		compareResourceESE("native/anyText.pec");
 	}
 
 	@Test
 	public void testAttribute() throws Exception {
-		compareResourceEOE("native/attribute.pec");
+		compareResourceESE("native/attribute.pec");
 	}
 
 	@Test
 	public void testCategory() throws Exception {
-		compareResourceEOE("native/category.pec");
+		compareResourceESE("native/category.pec");
 	}
 
 	@Test
 	public void testMethod() throws Exception {
-		compareResourceEOE("native/method.pec");
+		compareResourceESE("native/method.pec");
 	}
 
 	@Test
 	public void testPrinter() throws Exception {
-		compareResourceEOE("native/printer.pec");
+		compareResourceESE("native/printer.pec");
 	}
 
 	@Test
 	public void testReturn() throws Exception {
-		compareResourceEOE("native/return.pec");
+		compareResourceESE("native/return.pec");
 	}
 
 }

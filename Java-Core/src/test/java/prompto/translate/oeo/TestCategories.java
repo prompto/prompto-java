@@ -8,22 +8,22 @@ public class TestCategories extends BaseOParserTest {
 
 	@Test
 	public void testCopyFromAscendant() throws Exception {
-		compareResourceEOE("categories/copyFromAscendant.poc");
+		compareResourceOEO("categories/copyFromAscendant.poc");
 	}
 
 	@Test
 	public void testCopyFromAscendantWithOverride() throws Exception {
-		compareResourceEOE("categories/copyFromAscendantWithOverride.poc");
+		compareResourceOEO("categories/copyFromAscendantWithOverride.poc");
 	}
 
 	@Test
 	public void testCopyFromDescendant() throws Exception {
-		compareResourceEOE("categories/copyFromDescendant.poc");
+		compareResourceOEO("categories/copyFromDescendant.poc");
 	}
 
 	@Test
 	public void testCopyFromDescendantWithOverride() throws Exception {
-		compareResourceEOE("categories/copyFromDescendantWithOverride.poc");
+		compareResourceOEO("categories/copyFromDescendantWithOverride.poc");
 	}
 
 }

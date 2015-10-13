@@ -8,72 +8,72 @@ public class TestLess extends BaseEParserTest {
 
 	@Test
 	public void testLtCharacter() throws Exception {
-		compareResourceEOE("less/ltCharacter.pec");
+		compareResourceESE("less/ltCharacter.pec");
 	}
 
 	@Test
 	public void testLtDate() throws Exception {
-		compareResourceEOE("less/ltDate.pec");
+		compareResourceESE("less/ltDate.pec");
 	}
 
 	@Test
 	public void testLtDateTime() throws Exception {
-		compareResourceEOE("less/ltDateTime.pec");
+		compareResourceESE("less/ltDateTime.pec");
 	}
 
 	@Test
 	public void testLtDecimal() throws Exception {
-		compareResourceEOE("less/ltDecimal.pec");
+		compareResourceESE("less/ltDecimal.pec");
 	}
 
 	@Test
 	public void testLteCharacter() throws Exception {
-		compareResourceEOE("less/lteCharacter.pec");
+		compareResourceESE("less/lteCharacter.pec");
 	}
 
 	@Test
 	public void testLteDate() throws Exception {
-		compareResourceEOE("less/lteDate.pec");
+		compareResourceESE("less/lteDate.pec");
 	}
 
 	@Test
 	public void testLteDateTime() throws Exception {
-		compareResourceEOE("less/lteDateTime.pec");
+		compareResourceESE("less/lteDateTime.pec");
 	}
 
 	@Test
 	public void testLteDecimal() throws Exception {
-		compareResourceEOE("less/lteDecimal.pec");
+		compareResourceESE("less/lteDecimal.pec");
 	}
 
 	@Test
 	public void testLteInteger() throws Exception {
-		compareResourceEOE("less/lteInteger.pec");
+		compareResourceESE("less/lteInteger.pec");
 	}
 
 	@Test
 	public void testLteText() throws Exception {
-		compareResourceEOE("less/lteText.pec");
+		compareResourceESE("less/lteText.pec");
 	}
 
 	@Test
 	public void testLteTime() throws Exception {
-		compareResourceEOE("less/lteTime.pec");
+		compareResourceESE("less/lteTime.pec");
 	}
 
 	@Test
 	public void testLtInteger() throws Exception {
-		compareResourceEOE("less/ltInteger.pec");
+		compareResourceESE("less/ltInteger.pec");
 	}
 
 	@Test
 	public void testLtText() throws Exception {
-		compareResourceEOE("less/ltText.pec");
+		compareResourceESE("less/ltText.pec");
 	}
 
 	@Test
 	public void testLtTime() throws Exception {
-		compareResourceEOE("less/ltTime.pec");
+		compareResourceESE("less/ltTime.pec");
 	}
 
 }

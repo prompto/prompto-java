@@ -8,72 +8,72 @@ public class TestGreater extends BaseEParserTest {
 
 	@Test
 	public void testGtCharacter() throws Exception {
-		compareResourceEOE("greater/gtCharacter.pec");
+		compareResourceESE("greater/gtCharacter.pec");
 	}
 
 	@Test
 	public void testGtDate() throws Exception {
-		compareResourceEOE("greater/gtDate.pec");
+		compareResourceESE("greater/gtDate.pec");
 	}
 
 	@Test
 	public void testGtDateTime() throws Exception {
-		compareResourceEOE("greater/gtDateTime.pec");
+		compareResourceESE("greater/gtDateTime.pec");
 	}
 
 	@Test
 	public void testGtDecimal() throws Exception {
-		compareResourceEOE("greater/gtDecimal.pec");
+		compareResourceESE("greater/gtDecimal.pec");
 	}
 
 	@Test
 	public void testGteCharacter() throws Exception {
-		compareResourceEOE("greater/gteCharacter.pec");
+		compareResourceESE("greater/gteCharacter.pec");
 	}
 
 	@Test
 	public void testGteDate() throws Exception {
-		compareResourceEOE("greater/gteDate.pec");
+		compareResourceESE("greater/gteDate.pec");
 	}
 
 	@Test
 	public void testGteDateTime() throws Exception {
-		compareResourceEOE("greater/gteDateTime.pec");
+		compareResourceESE("greater/gteDateTime.pec");
 	}
 
 	@Test
 	public void testGteDecimal() throws Exception {
-		compareResourceEOE("greater/gteDecimal.pec");
+		compareResourceESE("greater/gteDecimal.pec");
 	}
 
 	@Test
 	public void testGteInteger() throws Exception {
-		compareResourceEOE("greater/gteInteger.pec");
+		compareResourceESE("greater/gteInteger.pec");
 	}
 
 	@Test
 	public void testGteText() throws Exception {
-		compareResourceEOE("greater/gteText.pec");
+		compareResourceESE("greater/gteText.pec");
 	}
 
 	@Test
 	public void testGteTime() throws Exception {
-		compareResourceEOE("greater/gteTime.pec");
+		compareResourceESE("greater/gteTime.pec");
 	}
 
 	@Test
 	public void testGtInteger() throws Exception {
-		compareResourceEOE("greater/gtInteger.pec");
+		compareResourceESE("greater/gtInteger.pec");
 	}
 
 	@Test
 	public void testGtText() throws Exception {
-		compareResourceEOE("greater/gtText.pec");
+		compareResourceESE("greater/gtText.pec");
 	}
 
 	@Test
 	public void testGtTime() throws Exception {
-		compareResourceEOE("greater/gtTime.pec");
+		compareResourceESE("greater/gtTime.pec");
 	}
 
 }

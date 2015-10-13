@@ -8,22 +8,22 @@ public class TestCast extends BaseEParserTest {
 
 	@Test
 	public void testAutoDowncast() throws Exception {
-		compareResourceEOE("cast/autoDowncast.pec");
+		compareResourceESE("cast/autoDowncast.pec");
 	}
 
 	@Test
 	public void testCastChild() throws Exception {
-		compareResourceEOE("cast/castChild.pec");
+		compareResourceESE("cast/castChild.pec");
 	}
 
 	@Test
 	public void testIsAChild() throws Exception {
-		compareResourceEOE("cast/isAChild.pec");
+		compareResourceESE("cast/isAChild.pec");
 	}
 
 	@Test
 	public void testIsAText() throws Exception {
-		compareResourceEOE("cast/isAText.pec");
+		compareResourceESE("cast/isAText.pec");
 	}
 
 }

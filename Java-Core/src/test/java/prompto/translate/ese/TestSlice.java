@@ -8,17 +8,17 @@ public class TestSlice extends BaseEParserTest {
 
 	@Test
 	public void testSliceList() throws Exception {
-		compareResourceEOE("slice/sliceList.pec");
+		compareResourceESE("slice/sliceList.pec");
 	}
 
 	@Test
 	public void testSliceRange() throws Exception {
-		compareResourceEOE("slice/sliceRange.pec");
+		compareResourceESE("slice/sliceRange.pec");
 	}
 
 	@Test
 	public void testSliceText() throws Exception {
-		compareResourceEOE("slice/sliceText.pec");
+		compareResourceESE("slice/sliceText.pec");
 	}
 
 }

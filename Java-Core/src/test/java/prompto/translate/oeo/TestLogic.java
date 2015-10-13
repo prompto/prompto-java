@@ -8,17 +8,17 @@ public class TestLogic extends BaseOParserTest {
 
 	@Test
 	public void testAndBoolean() throws Exception {
-		compareResourceEOE("logic/andBoolean.poc");
+		compareResourceOEO("logic/andBoolean.poc");
 	}
 
 	@Test
 	public void testNotBoolean() throws Exception {
-		compareResourceEOE("logic/notBoolean.poc");
+		compareResourceOEO("logic/notBoolean.poc");
 	}
 
 	@Test
 	public void testOrBoolean() throws Exception {
-		compareResourceEOE("logic/orBoolean.poc");
+		compareResourceOEO("logic/orBoolean.poc");
 	}
 
 }

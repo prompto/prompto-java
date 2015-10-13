@@ -8,122 +8,122 @@ public class TestBuiltins extends BaseOParserTest {
 
 	@Test
 	public void testDateDayOfMonth() throws Exception {
-		compareResourceEOE("builtins/dateDayOfMonth.poc");
+		compareResourceOEO("builtins/dateDayOfMonth.poc");
 	}
 
 	@Test
 	public void testDateDayOfYear() throws Exception {
-		compareResourceEOE("builtins/dateDayOfYear.poc");
+		compareResourceOEO("builtins/dateDayOfYear.poc");
 	}
 
 	@Test
 	public void testDateMonth() throws Exception {
-		compareResourceEOE("builtins/dateMonth.poc");
+		compareResourceOEO("builtins/dateMonth.poc");
 	}
 
 	@Test
 	public void testDateTimeDayOfMonth() throws Exception {
-		compareResourceEOE("builtins/dateTimeDayOfMonth.poc");
+		compareResourceOEO("builtins/dateTimeDayOfMonth.poc");
 	}
 
 	@Test
 	public void testDateTimeDayOfYear() throws Exception {
-		compareResourceEOE("builtins/dateTimeDayOfYear.poc");
+		compareResourceOEO("builtins/dateTimeDayOfYear.poc");
 	}
 
 	@Test
 	public void testDateTimeHour() throws Exception {
-		compareResourceEOE("builtins/dateTimeHour.poc");
+		compareResourceOEO("builtins/dateTimeHour.poc");
 	}
 
 	@Test
 	public void testDateTimeMinute() throws Exception {
-		compareResourceEOE("builtins/dateTimeMinute.poc");
+		compareResourceOEO("builtins/dateTimeMinute.poc");
 	}
 
 	@Test
 	public void testDateTimeMonth() throws Exception {
-		compareResourceEOE("builtins/dateTimeMonth.poc");
+		compareResourceOEO("builtins/dateTimeMonth.poc");
 	}
 
 	@Test
 	public void testDateTimeSecond() throws Exception {
-		compareResourceEOE("builtins/dateTimeSecond.poc");
+		compareResourceOEO("builtins/dateTimeSecond.poc");
 	}
 
 	@Test
 	public void testDateTimeTZName() throws Exception {
-		compareResourceEOE("builtins/dateTimeTZName.poc");
+		compareResourceOEO("builtins/dateTimeTZName.poc");
 	}
 
 	@Test
 	public void testDateTimeTZOffset() throws Exception {
-		compareResourceEOE("builtins/dateTimeTZOffset.poc");
+		compareResourceOEO("builtins/dateTimeTZOffset.poc");
 	}
 
 	@Test
 	public void testDateTimeYear() throws Exception {
-		compareResourceEOE("builtins/dateTimeYear.poc");
+		compareResourceOEO("builtins/dateTimeYear.poc");
 	}
 
 	@Test
 	public void testDateYear() throws Exception {
-		compareResourceEOE("builtins/dateYear.poc");
+		compareResourceOEO("builtins/dateYear.poc");
 	}
 
 	@Test
 	public void testDictLength() throws Exception {
-		compareResourceEOE("builtins/dictLength.poc");
+		compareResourceOEO("builtins/dictLength.poc");
 	}
 
 	@Test
 	public void testEnumName() throws Exception {
-		compareResourceEOE("builtins/enumName.poc");
+		compareResourceOEO("builtins/enumName.poc");
 	}
 
 	@Test
 	public void testEnumSymbols() throws Exception {
-		compareResourceEOE("builtins/enumSymbols.poc");
+		compareResourceOEO("builtins/enumSymbols.poc");
 	}
 
 	@Test
 	public void testEnumValue() throws Exception {
-		compareResourceEOE("builtins/enumValue.poc");
+		compareResourceOEO("builtins/enumValue.poc");
 	}
 
 	@Test
 	public void testListLength() throws Exception {
-		compareResourceEOE("builtins/listLength.poc");
+		compareResourceOEO("builtins/listLength.poc");
 	}
 
 	@Test
 	public void testSetLength() throws Exception {
-		compareResourceEOE("builtins/setLength.poc");
+		compareResourceOEO("builtins/setLength.poc");
 	}
 
 	@Test
 	public void testTextLength() throws Exception {
-		compareResourceEOE("builtins/textLength.poc");
+		compareResourceOEO("builtins/textLength.poc");
 	}
 
 	@Test
 	public void testTimeHour() throws Exception {
-		compareResourceEOE("builtins/timeHour.poc");
+		compareResourceOEO("builtins/timeHour.poc");
 	}
 
 	@Test
 	public void testTimeMinute() throws Exception {
-		compareResourceEOE("builtins/timeMinute.poc");
+		compareResourceOEO("builtins/timeMinute.poc");
 	}
 
 	@Test
 	public void testTimeSecond() throws Exception {
-		compareResourceEOE("builtins/timeSecond.poc");
+		compareResourceOEO("builtins/timeSecond.poc");
 	}
 
 	@Test
 	public void testTupleLength() throws Exception {
-		compareResourceEOE("builtins/tupleLength.poc");
+		compareResourceOEO("builtins/tupleLength.poc");
 	}
 
 }

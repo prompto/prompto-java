@@ -8,17 +8,17 @@ public class TestMinus extends BaseEParserTest {
 
 	@Test
 	public void testMinusDecimal() throws Exception {
-		compareResourceEOE("minus/minusDecimal.pec");
+		compareResourceESE("minus/minusDecimal.pec");
 	}
 
 	@Test
 	public void testMinusInteger() throws Exception {
-		compareResourceEOE("minus/minusInteger.pec");
+		compareResourceESE("minus/minusInteger.pec");
 	}
 
 	@Test
 	public void testMinusPeriod() throws Exception {
-		compareResourceEOE("minus/minusPeriod.pec");
+		compareResourceESE("minus/minusPeriod.pec");
 	}
 
 }

@@ -8,27 +8,27 @@ public class TestLazy extends BaseOParserTest {
 
 	@Test
 	public void testCyclic() throws Exception {
-		compareResourceEOE("lazy/cyclic.poc");
+		compareResourceOEO("lazy/cyclic.poc");
 	}
 
 	@Test
 	public void testDict() throws Exception {
-		compareResourceEOE("lazy/dict.poc");
+		compareResourceOEO("lazy/dict.poc");
 	}
 
 	@Test
 	public void testList() throws Exception {
-		compareResourceEOE("lazy/list.poc");
+		compareResourceOEO("lazy/list.poc");
 	}
 
 	@Test
 	public void testSet() throws Exception {
-		compareResourceEOE("lazy/set.poc");
+		compareResourceOEO("lazy/set.poc");
 	}
 
 	@Test
 	public void testTransient() throws Exception {
-		compareResourceEOE("lazy/transient.poc");
+		compareResourceOEO("lazy/transient.poc");
 	}
 
 }

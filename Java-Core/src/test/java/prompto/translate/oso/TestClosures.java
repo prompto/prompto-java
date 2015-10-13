@@ -8,17 +8,17 @@ public class TestClosures extends BaseOParserTest {
 
 	@Test
 	public void testGlobalClosureNoArg() throws Exception {
-		compareResourceEOE("closures/globalClosureNoArg.poc");
+		compareResourceOSO("closures/globalClosureNoArg.poc");
 	}
 
 	@Test
 	public void testGlobalClosureWithArg() throws Exception {
-		compareResourceEOE("closures/globalClosureWithArg.poc");
+		compareResourceOSO("closures/globalClosureWithArg.poc");
 	}
 
 	@Test
 	public void testInstanceClosureNoArg() throws Exception {
-		compareResourceEOE("closures/instanceClosureNoArg.poc");
+		compareResourceOSO("closures/instanceClosureNoArg.poc");
 	}
 
 }

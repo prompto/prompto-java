@@ -8,62 +8,62 @@ public class TestErrors extends BaseEParserTest {
 
 	@Test
 	public void testDivideByZero() throws Exception {
-		compareResourceEOE("errors/divideByZero.pec");
+		compareResourceESE("errors/divideByZero.pec");
 	}
 
 	@Test
 	public void testIndexOutOfRange_listItem() throws Exception {
-		compareResourceEOE("errors/indexOutOfRange-listItem.pec");
+		compareResourceESE("errors/indexOutOfRange-listItem.pec");
 	}
 
 	@Test
 	public void testIndexOutOfRange_sliceList() throws Exception {
-		compareResourceEOE("errors/indexOutOfRange-sliceList.pec");
+		compareResourceESE("errors/indexOutOfRange-sliceList.pec");
 	}
 
 	@Test
 	public void testIndexOutOfRange_sliceRange() throws Exception {
-		compareResourceEOE("errors/indexOutOfRange-sliceRange.pec");
+		compareResourceESE("errors/indexOutOfRange-sliceRange.pec");
 	}
 
 	@Test
 	public void testIndexOutOfRange_sliceText() throws Exception {
-		compareResourceEOE("errors/indexOutOfRange-sliceText.pec");
+		compareResourceESE("errors/indexOutOfRange-sliceText.pec");
 	}
 
 	@Test
 	public void testNullDict() throws Exception {
-		compareResourceEOE("errors/nullDict.pec");
+		compareResourceESE("errors/nullDict.pec");
 	}
 
 	@Test
 	public void testNullItem() throws Exception {
-		compareResourceEOE("errors/nullItem.pec");
+		compareResourceESE("errors/nullItem.pec");
 	}
 
 	@Test
 	public void testNullKey() throws Exception {
-		compareResourceEOE("errors/nullKey.pec");
+		compareResourceESE("errors/nullKey.pec");
 	}
 
 	@Test
 	public void testNullMember() throws Exception {
-		compareResourceEOE("errors/nullMember.pec");
+		compareResourceESE("errors/nullMember.pec");
 	}
 
 	@Test
 	public void testNullMethod() throws Exception {
-		compareResourceEOE("errors/nullMethod.pec");
+		compareResourceESE("errors/nullMethod.pec");
 	}
 
 	@Test
 	public void testUnexpected() throws Exception {
-		compareResourceEOE("errors/unexpected.pec");
+		compareResourceESE("errors/unexpected.pec");
 	}
 
 	@Test
 	public void testUserException() throws Exception {
-		compareResourceEOE("errors/userException.pec");
+		compareResourceESE("errors/userException.pec");
 	}
 
 }

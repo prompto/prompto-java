@@ -8,7 +8,7 @@ public class TestForward extends BaseEParserTest {
 
 	@Test
 	public void testForward() throws Exception {
-		compareResourceEOE("forward/forward.pec");
+		compareResourceESE("forward/forward.pec");
 	}
 
 }

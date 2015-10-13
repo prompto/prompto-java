@@ -8,7 +8,7 @@ public class TestDebug extends BaseEParserTest {
 
 	@Test
 	public void testStack() throws Exception {
-		compareResourceEOE("debug/stack.pec");
+		compareResourceESE("debug/stack.pec");
 	}
 
 }

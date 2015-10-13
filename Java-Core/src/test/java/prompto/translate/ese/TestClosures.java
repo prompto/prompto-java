@@ -8,17 +8,17 @@ public class TestClosures extends BaseEParserTest {
 
 	@Test
 	public void testGlobalClosureNoArg() throws Exception {
-		compareResourceEOE("closures/globalClosureNoArg.pec");
+		compareResourceESE("closures/globalClosureNoArg.pec");
 	}
 
 	@Test
 	public void testGlobalClosureWithArg() throws Exception {
-		compareResourceEOE("closures/globalClosureWithArg.pec");
+		compareResourceESE("closures/globalClosureWithArg.pec");
 	}
 
 	@Test
 	public void testInstanceClosureNoArg() throws Exception {
-		compareResourceEOE("closures/instanceClosureNoArg.pec");
+		compareResourceESE("closures/instanceClosureNoArg.pec");
 	}
 
 }

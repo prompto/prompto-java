@@ -8,22 +8,22 @@ public class TestCast extends BaseOParserTest {
 
 	@Test
 	public void testAutoDowncast() throws Exception {
-		compareResourceEOE("cast/autoDowncast.poc");
+		compareResourceOEO("cast/autoDowncast.poc");
 	}
 
 	@Test
 	public void testCastChild() throws Exception {
-		compareResourceEOE("cast/castChild.poc");
+		compareResourceOEO("cast/castChild.poc");
 	}
 
 	@Test
 	public void testIsAChild() throws Exception {
-		compareResourceEOE("cast/isAChild.poc");
+		compareResourceOEO("cast/isAChild.poc");
 	}
 
 	@Test
 	public void testIsAText() throws Exception {
-		compareResourceEOE("cast/isAText.poc");
+		compareResourceOEO("cast/isAText.poc");
 	}
 
 }

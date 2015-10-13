@@ -8,37 +8,37 @@ public class TestResource extends BaseOParserTest {
 
 	@Test
 	public void testBadRead() throws Exception {
-		compareResourceEOE("resource/badRead.poc");
+		compareResourceOEO("resource/badRead.poc");
 	}
 
 	@Test
 	public void testBadResource() throws Exception {
-		compareResourceEOE("resource/badResource.poc");
+		compareResourceOEO("resource/badResource.poc");
 	}
 
 	@Test
 	public void testBadWrite() throws Exception {
-		compareResourceEOE("resource/badWrite.poc");
+		compareResourceOEO("resource/badWrite.poc");
 	}
 
 	@Test
 	public void testReadResource() throws Exception {
-		compareResourceEOE("resource/readResource.poc");
+		compareResourceOEO("resource/readResource.poc");
 	}
 
 	@Test
 	public void testReadWithResource() throws Exception {
-		compareResourceEOE("resource/readWithResource.poc");
+		compareResourceOEO("resource/readWithResource.poc");
 	}
 
 	@Test
 	public void testWriteResource() throws Exception {
-		compareResourceEOE("resource/writeResource.poc");
+		compareResourceOEO("resource/writeResource.poc");
 	}
 
 	@Test
 	public void testWriteWithResource() throws Exception {
-		compareResourceEOE("resource/writeWithResource.poc");
+		compareResourceOEO("resource/writeWithResource.poc");
 	}
 
 }

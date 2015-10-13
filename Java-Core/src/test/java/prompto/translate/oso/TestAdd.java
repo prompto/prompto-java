@@ -8,62 +8,62 @@ public class TestAdd extends BaseOParserTest {
 
 	@Test
 	public void testAddCharacter() throws Exception {
-		compareResourceEOE("add/addCharacter.poc");
+		compareResourceOSO("add/addCharacter.poc");
 	}
 
 	@Test
 	public void testAddDate() throws Exception {
-		compareResourceEOE("add/addDate.poc");
+		compareResourceOSO("add/addDate.poc");
 	}
 
 	@Test
 	public void testAddDateTime() throws Exception {
-		compareResourceEOE("add/addDateTime.poc");
+		compareResourceOSO("add/addDateTime.poc");
 	}
 
 	@Test
 	public void testAddDecimal() throws Exception {
-		compareResourceEOE("add/addDecimal.poc");
+		compareResourceOSO("add/addDecimal.poc");
 	}
 
 	@Test
 	public void testAddDict() throws Exception {
-		compareResourceEOE("add/addDict.poc");
+		compareResourceOSO("add/addDict.poc");
 	}
 
 	@Test
 	public void testAddInteger() throws Exception {
-		compareResourceEOE("add/addInteger.poc");
+		compareResourceOSO("add/addInteger.poc");
 	}
 
 	@Test
 	public void testAddList() throws Exception {
-		compareResourceEOE("add/addList.poc");
+		compareResourceOSO("add/addList.poc");
 	}
 
 	@Test
 	public void testAddPeriod() throws Exception {
-		compareResourceEOE("add/addPeriod.poc");
+		compareResourceOSO("add/addPeriod.poc");
 	}
 
 	@Test
 	public void testAddSet() throws Exception {
-		compareResourceEOE("add/addSet.poc");
+		compareResourceOSO("add/addSet.poc");
 	}
 
 	@Test
 	public void testAddText() throws Exception {
-		compareResourceEOE("add/addText.poc");
+		compareResourceOSO("add/addText.poc");
 	}
 
 	@Test
 	public void testAddTime() throws Exception {
-		compareResourceEOE("add/addTime.poc");
+		compareResourceOSO("add/addTime.poc");
 	}
 
 	@Test
 	public void testAddTuple() throws Exception {
-		compareResourceEOE("add/addTuple.poc");
+		compareResourceOSO("add/addTuple.poc");
 	}
 
 }

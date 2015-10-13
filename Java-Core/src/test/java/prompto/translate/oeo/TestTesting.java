@@ -8,52 +8,52 @@ public class TestTesting extends BaseOParserTest {
 
 	@Test
 	public void testAnd() throws Exception {
-		compareResourceEOE("testing/and.poc");
+		compareResourceOEO("testing/and.poc");
 	}
 
 	@Test
 	public void testContains() throws Exception {
-		compareResourceEOE("testing/contains.poc");
+		compareResourceOEO("testing/contains.poc");
 	}
 
 	@Test
 	public void testGreater() throws Exception {
-		compareResourceEOE("testing/greater.poc");
+		compareResourceOEO("testing/greater.poc");
 	}
 
 	@Test
 	public void testMethod() throws Exception {
-		compareResourceEOE("testing/method.poc");
+		compareResourceOEO("testing/method.poc");
 	}
 
 	@Test
 	public void testNegative() throws Exception {
-		compareResourceEOE("testing/negative.poc");
+		compareResourceOEO("testing/negative.poc");
 	}
 
 	@Test
 	public void testNegativeError() throws Exception {
-		compareResourceEOE("testing/negativeError.poc");
+		compareResourceOEO("testing/negativeError.poc");
 	}
 
 	@Test
 	public void testNot() throws Exception {
-		compareResourceEOE("testing/not.poc");
+		compareResourceOEO("testing/not.poc");
 	}
 
 	@Test
 	public void testOr() throws Exception {
-		compareResourceEOE("testing/or.poc");
+		compareResourceOEO("testing/or.poc");
 	}
 
 	@Test
 	public void testPositive() throws Exception {
-		compareResourceEOE("testing/positive.poc");
+		compareResourceOEO("testing/positive.poc");
 	}
 
 	@Test
 	public void testPositiveError() throws Exception {
-		compareResourceEOE("testing/positiveError.poc");
+		compareResourceOEO("testing/positiveError.poc");
 	}
 
 }

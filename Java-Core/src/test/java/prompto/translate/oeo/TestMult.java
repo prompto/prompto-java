@@ -8,32 +8,32 @@ public class TestMult extends BaseOParserTest {
 
 	@Test
 	public void testMultCharacter() throws Exception {
-		compareResourceEOE("mult/multCharacter.poc");
+		compareResourceOEO("mult/multCharacter.poc");
 	}
 
 	@Test
 	public void testMultDecimal() throws Exception {
-		compareResourceEOE("mult/multDecimal.poc");
+		compareResourceOEO("mult/multDecimal.poc");
 	}
 
 	@Test
 	public void testMultInteger() throws Exception {
-		compareResourceEOE("mult/multInteger.poc");
+		compareResourceOEO("mult/multInteger.poc");
 	}
 
 	@Test
 	public void testMultList() throws Exception {
-		compareResourceEOE("mult/multList.poc");
+		compareResourceOEO("mult/multList.poc");
 	}
 
 	@Test
 	public void testMultPeriod() throws Exception {
-		compareResourceEOE("mult/multPeriod.poc");
+		compareResourceOEO("mult/multPeriod.poc");
 	}
 
 	@Test
 	public void testMultText() throws Exception {
-		compareResourceEOE("mult/multText.poc");
+		compareResourceOEO("mult/multText.poc");
 	}
 
 }

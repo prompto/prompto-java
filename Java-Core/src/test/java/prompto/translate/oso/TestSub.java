@@ -8,32 +8,32 @@ public class TestSub extends BaseOParserTest {
 
 	@Test
 	public void testSubDate() throws Exception {
-		compareResourceEOE("sub/subDate.poc");
+		compareResourceOSO("sub/subDate.poc");
 	}
 
 	@Test
 	public void testSubDateTime() throws Exception {
-		compareResourceEOE("sub/subDateTime.poc");
+		compareResourceOSO("sub/subDateTime.poc");
 	}
 
 	@Test
 	public void testSubDecimal() throws Exception {
-		compareResourceEOE("sub/subDecimal.poc");
+		compareResourceOSO("sub/subDecimal.poc");
 	}
 
 	@Test
 	public void testSubInteger() throws Exception {
-		compareResourceEOE("sub/subInteger.poc");
+		compareResourceOSO("sub/subInteger.poc");
 	}
 
 	@Test
 	public void testSubPeriod() throws Exception {
-		compareResourceEOE("sub/subPeriod.poc");
+		compareResourceOSO("sub/subPeriod.poc");
 	}
 
 	@Test
 	public void testSubTime() throws Exception {
-		compareResourceEOE("sub/subTime.poc");
+		compareResourceOSO("sub/subTime.poc");
 	}
 
 }

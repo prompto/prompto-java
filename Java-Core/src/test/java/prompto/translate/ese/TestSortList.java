@@ -8,57 +8,57 @@ public class TestSortList extends BaseEParserTest {
 
 	@Test
 	public void testSortBooleans() throws Exception {
-		compareResourceEOE("sortList/sortBooleans.pec");
+		compareResourceESE("sortList/sortBooleans.pec");
 	}
 
 	@Test
 	public void testSortDates() throws Exception {
-		compareResourceEOE("sortList/sortDates.pec");
+		compareResourceESE("sortList/sortDates.pec");
 	}
 
 	@Test
 	public void testSortDateTimes() throws Exception {
-		compareResourceEOE("sortList/sortDateTimes.pec");
+		compareResourceESE("sortList/sortDateTimes.pec");
 	}
 
 	@Test
 	public void testSortDecimals() throws Exception {
-		compareResourceEOE("sortList/sortDecimals.pec");
+		compareResourceESE("sortList/sortDecimals.pec");
 	}
 
 	@Test
 	public void testSortExpressions() throws Exception {
-		compareResourceEOE("sortList/sortExpressions.pec");
+		compareResourceESE("sortList/sortExpressions.pec");
 	}
 
 	@Test
 	public void testSortIntegers() throws Exception {
-		compareResourceEOE("sortList/sortIntegers.pec");
+		compareResourceESE("sortList/sortIntegers.pec");
 	}
 
 	@Test
 	public void testSortKeys() throws Exception {
-		compareResourceEOE("sortList/sortKeys.pec");
+		compareResourceESE("sortList/sortKeys.pec");
 	}
 
 	@Test
 	public void testSortMethods() throws Exception {
-		compareResourceEOE("sortList/sortMethods.pec");
+		compareResourceESE("sortList/sortMethods.pec");
 	}
 
 	@Test
 	public void testSortNames() throws Exception {
-		compareResourceEOE("sortList/sortNames.pec");
+		compareResourceESE("sortList/sortNames.pec");
 	}
 
 	@Test
 	public void testSortTexts() throws Exception {
-		compareResourceEOE("sortList/sortTexts.pec");
+		compareResourceESE("sortList/sortTexts.pec");
 	}
 
 	@Test
 	public void testSortTimes() throws Exception {
-		compareResourceEOE("sortList/sortTimes.pec");
+		compareResourceESE("sortList/sortTimes.pec");
 	}
 
 }

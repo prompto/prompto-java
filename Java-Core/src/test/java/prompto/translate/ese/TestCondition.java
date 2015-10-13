@@ -8,32 +8,32 @@ public class TestCondition extends BaseEParserTest {
 
 	@Test
 	public void testComplexIf() throws Exception {
-		compareResourceEOE("condition/complexIf.pec");
+		compareResourceESE("condition/complexIf.pec");
 	}
 
 	@Test
 	public void testElseIf() throws Exception {
-		compareResourceEOE("condition/elseIf.pec");
+		compareResourceESE("condition/elseIf.pec");
 	}
 
 	@Test
 	public void testReturnIf() throws Exception {
-		compareResourceEOE("condition/returnIf.pec");
+		compareResourceESE("condition/returnIf.pec");
 	}
 
 	@Test
 	public void testSimpleIf() throws Exception {
-		compareResourceEOE("condition/simpleIf.pec");
+		compareResourceESE("condition/simpleIf.pec");
 	}
 
 	@Test
 	public void testSwitch() throws Exception {
-		compareResourceEOE("condition/switch.pec");
+		compareResourceESE("condition/switch.pec");
 	}
 
 	@Test
 	public void testTernary() throws Exception {
-		compareResourceEOE("condition/ternary.pec");
+		compareResourceESE("condition/ternary.pec");
 	}
 
 }

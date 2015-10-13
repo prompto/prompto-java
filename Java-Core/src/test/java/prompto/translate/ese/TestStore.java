@@ -8,7 +8,7 @@ public class TestStore extends BaseEParserTest {
 
 	@Test
 	public void testRecord() throws Exception {
-		compareResourceEOE("store/record.pec");
+		compareResourceESE("store/record.pec");
 	}
 
 }
