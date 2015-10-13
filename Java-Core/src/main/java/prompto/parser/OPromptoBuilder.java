@@ -51,7 +51,9 @@ import prompto.expression.DivideExpression;
 import prompto.expression.DocumentExpression;
 import prompto.expression.EqualsExpression;
 import prompto.expression.ExecuteExpression;
+import prompto.expression.FetchAllExpression;
 import prompto.expression.FetchListExpression;
+import prompto.expression.FetchOneExpression;
 import prompto.expression.IExpression;
 import prompto.expression.InstanceExpression;
 import prompto.expression.IntDivideExpression;
@@ -190,6 +192,7 @@ import prompto.statement.IfStatement;
 import prompto.statement.RaiseStatement;
 import prompto.statement.ReturnStatement;
 import prompto.statement.StatementList;
+import prompto.statement.StoreStatement;
 import prompto.statement.SwitchCase;
 import prompto.statement.SwitchErrorStatement;
 import prompto.statement.SwitchStatement;
@@ -1064,7 +1067,13 @@ public class OPromptoBuilder extends OParserBaseListener {
 	}
 
 	@Override
-	public void exitFetch_expression(Fetch_expressionContext ctx) {
+	public void exitFetchExpression(FetchExpressionContext ctx) {
+		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		setNodeValue(ctx, exp);
+	}
+
+	@Override
+	public void exitFetchList(FetchListContext ctx) {
 		Identifier itemName = this.<Identifier>getNodeValue(ctx.name);
 		IExpression source = this.<IExpression>getNodeValue(ctx.source);
 		IExpression filter = this.<IExpression>getNodeValue(ctx.xfilter);
@@ -1072,10 +1081,21 @@ public class OPromptoBuilder extends OParserBaseListener {
 	}
 	
 	@Override
-	public void exitFetchExpression(FetchExpressionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, exp);
+	public void exitFetchOne(FetchOneContext ctx) {
+		CategoryType category = this.<CategoryType>getNodeValue(ctx.typ);
+		IExpression filter = this.<IExpression>getNodeValue(ctx.xfilter);
+		setNodeValue(ctx, new FetchOneExpression(category, filter));
 	}
+	
+	@Override
+	public void exitFetchAll(FetchAllContext ctx) {
+		CategoryType category = this.<CategoryType>getNodeValue(ctx.typ);
+		IExpression filter = this.<IExpression>getNodeValue(ctx.xfilter);
+		IExpression start = this.<IExpression>getNodeValue(ctx.start);
+		IExpression end = this.<IExpression>getNodeValue(ctx.end);
+		setNodeValue(ctx, new FetchAllExpression(category, filter, start, end));
+	}
+	
 	
 	@Override
 	public void exitFor_each_statement(For_each_statementContext ctx) {
@@ -2418,6 +2438,18 @@ public class OPromptoBuilder extends OParserBaseListener {
 		setNodeValue(ctx, items);
 	}
 	
+	@Override
+	public void exitStore_statement(Store_statementContext ctx) {
+		ExpressionList exps = this.<ExpressionList>getNodeValue(ctx.exps);
+		StoreStatement stmt = new StoreStatement(exps);
+		setNodeValue(ctx, stmt);
+	}
+	
+	@Override
+	public void exitStoreStatement(StoreStatementContext ctx) {
+		setNodeValue(ctx, getNodeValue(ctx.stmt));
+	}
+
 	@Override
 	public void exitSwitch_statement(Switch_statementContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);

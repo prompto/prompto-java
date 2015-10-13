@@ -473,29 +473,15 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitClosureStatement(@NotNull EParser.ClosureStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code StoreOne}
-	 * labeled alternative in {@link EParser#store_statement}.
+	 * Enter a parse tree produced by {@link EParser#store_statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterStoreOne(@NotNull EParser.StoreOneContext ctx);
+	void enterStore_statement(@NotNull EParser.Store_statementContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code StoreOne}
-	 * labeled alternative in {@link EParser#store_statement}.
+	 * Exit a parse tree produced by {@link EParser#store_statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitStoreOne(@NotNull EParser.StoreOneContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code StoreMany}
-	 * labeled alternative in {@link EParser#store_statement}.
-	 * @param ctx the parse tree
-	 */
-	void enterStoreMany(@NotNull EParser.StoreManyContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code StoreMany}
-	 * labeled alternative in {@link EParser#store_statement}.
-	 * @param ctx the parse tree
-	 */
-	void exitStoreMany(@NotNull EParser.StoreManyContext ctx);
+	void exitStore_statement(@NotNull EParser.Store_statementContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code UnresolvedWithArgsStatement}
 	 * labeled alternative in {@link EParser#method_call_statement}.

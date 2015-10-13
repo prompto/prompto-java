@@ -557,25 +557,13 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStoreOne(@NotNull OParser.StoreOneContext ctx) { }
+	@Override public void enterStore_statement(@NotNull OParser.Store_statementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStoreOne(@NotNull OParser.StoreOneContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterStoreMany(@NotNull OParser.StoreManyContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitStoreMany(@NotNull OParser.StoreManyContext ctx) { }
+	@Override public void exitStore_statement(@NotNull OParser.Store_statementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

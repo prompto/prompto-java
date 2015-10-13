@@ -69,6 +69,8 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	
 	@Override
 	protected void categoryTypeToODialect(CodeWriter writer) {
+		if(storable)
+			writer.append("storable ");
 		writer.append("category");
 	}
 	

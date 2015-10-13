@@ -511,29 +511,15 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitClosureStatement(@NotNull OParser.ClosureStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code StoreOne}
-	 * labeled alternative in {@link OParser#store_statement}.
+	 * Enter a parse tree produced by {@link OParser#store_statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterStoreOne(@NotNull OParser.StoreOneContext ctx);
+	void enterStore_statement(@NotNull OParser.Store_statementContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code StoreOne}
-	 * labeled alternative in {@link OParser#store_statement}.
+	 * Exit a parse tree produced by {@link OParser#store_statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitStoreOne(@NotNull OParser.StoreOneContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code StoreMany}
-	 * labeled alternative in {@link OParser#store_statement}.
-	 * @param ctx the parse tree
-	 */
-	void enterStoreMany(@NotNull OParser.StoreManyContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code StoreMany}
-	 * labeled alternative in {@link OParser#store_statement}.
-	 * @param ctx the parse tree
-	 */
-	void exitStoreMany(@NotNull OParser.StoreManyContext ctx);
+	void exitStore_statement(@NotNull OParser.Store_statementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link OParser#with_resource_statement}.
 	 * @param ctx the parse tree

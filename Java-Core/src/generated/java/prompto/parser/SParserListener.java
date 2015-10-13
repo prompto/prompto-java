@@ -435,29 +435,15 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitClosureStatement(@NotNull SParser.ClosureStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code StoreOne}
-	 * labeled alternative in {@link SParser#store_statement}.
+	 * Enter a parse tree produced by {@link SParser#store_statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterStoreOne(@NotNull SParser.StoreOneContext ctx);
+	void enterStore_statement(@NotNull SParser.Store_statementContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code StoreOne}
-	 * labeled alternative in {@link SParser#store_statement}.
+	 * Exit a parse tree produced by {@link SParser#store_statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitStoreOne(@NotNull SParser.StoreOneContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code StoreMany}
-	 * labeled alternative in {@link SParser#store_statement}.
-	 * @param ctx the parse tree
-	 */
-	void enterStoreMany(@NotNull SParser.StoreManyContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code StoreMany}
-	 * labeled alternative in {@link SParser#store_statement}.
-	 * @param ctx the parse tree
-	 */
-	void exitStoreMany(@NotNull SParser.StoreManyContext ctx);
+	void exitStore_statement(@NotNull SParser.Store_statementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SParser#method_call}.
 	 * @param ctx the parse tree

@@ -4,6 +4,7 @@ import prompto.error.NotStorableError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
+import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.store.IStore;
@@ -31,7 +32,13 @@ public class StoreStatement extends SimpleStatement {
 	@Override
 	public void toDialect(CodeWriter writer) {
 		writer.append("store ");
-		expressions.toDialect(writer);
+		if(writer.getDialect()==Dialect.E)
+			expressions.toDialect(writer);
+		else {
+			writer.append('(');
+			expressions.toDialect(writer);
+			writer.append(')');
+		}
 	}
 	
 	@Override

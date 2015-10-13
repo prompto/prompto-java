@@ -32,19 +32,23 @@ public class FetchOneExpression extends Section implements IExpression {
 		case E:
 			writer.append("fetch one ");
 			writer.append(type.getName().toString());
+			writer.append(" where ");
+			filter.toDialect(writer);
 			break;
 		case O:
 			writer.append("fetch one (");
 			writer.append(type.getName().toString());
+			writer.append(") where (");
+			filter.toDialect(writer);
 			writer.append(")");
 			break;
 		case S:
 			writer.append("fetch one ");
 			writer.append(type.getName().toString());
+			writer.append(" where ");
+			filter.toDialect(writer);
 			break;
 		}
-		writer.append(" where ");
-		filter.toDialect(writer);
 	}
 	
 	@Override

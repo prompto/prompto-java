@@ -485,25 +485,13 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStoreOne(@NotNull SParser.StoreOneContext ctx) { }
+	@Override public void enterStore_statement(@NotNull SParser.Store_statementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStoreOne(@NotNull SParser.StoreOneContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterStoreMany(@NotNull SParser.StoreManyContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitStoreMany(@NotNull SParser.StoreManyContext ctx) { }
+	@Override public void exitStore_statement(@NotNull SParser.Store_statementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

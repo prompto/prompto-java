@@ -2398,14 +2398,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitStoreOne(StoreOneContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		StoreStatement stmt = new StoreStatement(exp);
-		setNodeValue(ctx, stmt);
-	}
-	
-	@Override
-	public void exitStoreMany(StoreManyContext ctx) {
+	public void exitStore_statement(Store_statementContext ctx) {
 		ExpressionList exps = this.<ExpressionList>getNodeValue(ctx.exps);
 		StoreStatement stmt = new StoreStatement(exps);
 		setNodeValue(ctx, stmt);

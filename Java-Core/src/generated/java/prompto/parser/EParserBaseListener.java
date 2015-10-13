@@ -521,25 +521,13 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStoreOne(@NotNull EParser.StoreOneContext ctx) { }
+	@Override public void enterStore_statement(@NotNull EParser.Store_statementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStoreOne(@NotNull EParser.StoreOneContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterStoreMany(@NotNull EParser.StoreManyContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitStoreMany(@NotNull EParser.StoreManyContext ctx) { }
+	@Override public void exitStore_statement(@NotNull EParser.Store_statementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

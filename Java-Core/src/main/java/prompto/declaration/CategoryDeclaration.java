@@ -131,6 +131,8 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		writer.append("define ");
 		writer.append(getName());
 		writer.append(" as ");
+		if(storable)
+			writer.append("storable ");
 		categoryTypeToEDialect(writer);
 		if(hasAttributes) {
 			if(attributes.size()==1)
@@ -210,6 +212,8 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	protected abstract void toSDialect(CodeWriter writer);
 
 	protected void protoToPDialect(CodeWriter writer, IdentifierList derivedFrom) {
+		if(storable)
+			writer.append("storable ");
 		categoryTypeToPDialect(writer);
 		writer.append(" ");
 		writer.append(getName());

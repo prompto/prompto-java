@@ -45,12 +45,16 @@ public class AttributeDeclaration extends BaseDeclaration {
 			writer.append("define ");
 			writer.append(getIdentifier());
 			writer.append(" as ");
+			if(storable)
+				writer.append("storable ");
 			type.toDialect(writer);
 			writer.append(" attribute");
 			if(constraint!=null)
 				constraint.toDialect(writer);
 			break;
 		case O:
+			if(storable)
+				writer.append("storable ");
 			writer.append("attribute ");
 			writer.append(getIdentifier());
 			writer.append(" : ");
@@ -60,6 +64,8 @@ public class AttributeDeclaration extends BaseDeclaration {
 			writer.append(';');
 			break;
 		case S:
+			if(storable)
+				writer.append("storable ");
 			writer.append("attr ");
 			writer.append(getIdentifier());
 			writer.append(" ( ");
