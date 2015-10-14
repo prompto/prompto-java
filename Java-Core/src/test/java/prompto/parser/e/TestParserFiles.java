@@ -56,7 +56,7 @@ public class TestParserFiles extends BaseEParserTest {
 	public void testEnumeratedCategory() throws Exception {
 		DeclarationList stmts = parseResource("enums/categoryEnum.pec");
 		assertNotNull(stmts);
-		assertEquals(5,stmts.size());
+		assertEquals(6,stmts.size());
 	}
 
 }
