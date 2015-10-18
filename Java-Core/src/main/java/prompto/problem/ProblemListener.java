@@ -48,7 +48,7 @@ public class ProblemListener implements ANTLRErrorListener, IProblemListener {
 	}
 	
 	@Override
-	public void reportUnknowIdentifier(String name, ISection section) throws SyntaxError {
+	public void reportUnknownIdentifier(String name, ISection section) throws SyntaxError {
 		throw new SyntaxError("Unknown identifier: " + name);
 	}
 	

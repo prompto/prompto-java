@@ -94,7 +94,7 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 			}
 		}
 		if(resolved==null)
-			context.getProblemListener().reportUnknowIdentifier(name.toString(), this);
+			context.getProblemListener().reportUnknownIdentifier(name.toString(), this);
 		return resolved;
 	}
 

@@ -72,6 +72,14 @@ public class TestErrorListener {
 				+ "\tl.length >= 3", 2, "Unknown identifier: x"); 
 	}
 
+	
+	@Test
+	public void testUnknownBindingClassError() throws Exception {
+		checkProblem("define m as native method returning Text doing:\n"
+				+ "\tJava: return missing.Klass.MyMethod();\n"
+				, 2, "Unknown identifier: missing.Klass"); 
+	}
+
 	private IProblem checkProblem(String prompto, int count, String firstError) throws Exception {
 		IProblem error = null;
 		ProblemCollector listener = new ProblemCollector();

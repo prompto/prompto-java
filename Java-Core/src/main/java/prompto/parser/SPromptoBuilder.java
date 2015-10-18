@@ -158,6 +158,7 @@ import prompto.literal.TimeLiteral;
 import prompto.literal.TupleLiteral;
 import prompto.parser.SParser;
 import prompto.parser.SParserBaseListener;
+import prompto.parser.SParser.DocumentTypeContext;
 import prompto.parser.SParser.Store_statementContext;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
@@ -921,12 +922,12 @@ public class SPromptoBuilder extends SParserBaseListener {
 		setNodeValue(ctx, new DocumentExpression());
 	}
 	
+	
 	@Override
-	public void exitDocument_type(Document_typeContext ctx) {
+	public void exitDocumentType(DocumentTypeContext ctx) {
 		setNodeValue(ctx, DocumentType.instance());
 	}
 	
-
 	@Override
 	public void exitDocumentExpression(DocumentExpressionContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);

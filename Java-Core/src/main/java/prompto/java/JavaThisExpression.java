@@ -3,11 +3,12 @@ package prompto.java;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.ThisExpression;
+import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 
-public class JavaThisExpression implements JavaExpression {
+public class JavaThisExpression extends Section implements JavaExpression {
 	
 	ThisExpression expression = new ThisExpression();
 	

@@ -1,8 +1,9 @@
 package prompto.java;
 
+import prompto.parser.Section;
 import prompto.utils.CodeWriter;
 
-public abstract class JavaLiteral implements JavaExpression {
+public abstract class JavaLiteral extends Section implements JavaExpression {
 	
 	String text;
 	

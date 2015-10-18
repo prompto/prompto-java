@@ -92,7 +92,7 @@ public class ProblemCollector implements ANTLRErrorListener, IProblemListener {
 	}
 	
 	@Override
-	public void reportUnknowIdentifier(String name, ISection section) {
+	public void reportUnknownIdentifier(String name, ISection section) {
 		synchronized(problems) {
 			problems.add(new UnknowIdentifierError(name, section));
 		}

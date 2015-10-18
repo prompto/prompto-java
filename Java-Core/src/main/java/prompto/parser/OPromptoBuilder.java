@@ -980,11 +980,13 @@ public class OPromptoBuilder extends OParserBaseListener {
 		setNodeValue(ctx, new DocumentExpression());
 	}
 	
+	
 	@Override
-	public void exitDocument_type(Document_typeContext ctx) {
+	public void exitDocumentType(DocumentTypeContext ctx) {
 		setNodeValue(ctx, DocumentType.instance());
 	}
 	
+
 	@Override
 	public void exitDocumentExpression(DocumentExpressionContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);

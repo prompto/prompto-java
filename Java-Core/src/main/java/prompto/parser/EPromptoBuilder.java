@@ -974,7 +974,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitDocument_type(Document_typeContext ctx) {
+	public void exitDocumentType(DocumentTypeContext ctx) {
 		setNodeValue(ctx, DocumentType.instance());
 	}
 	

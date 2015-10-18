@@ -91,8 +91,13 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 
 	public Method findMethod(Context context) throws SyntaxError {
 		IType type = parent.check(context);
-		Class<?> klass = findClass(context, type);
-		return findMethod(context, klass);
+		if(type==null) {
+			context.getProblemListener().reportUnknownIdentifier(parent.toString(), parent);
+			return null;
+		} else {
+			Class<?> klass = findClass(context, type);
+			return findMethod(context, klass);
+		}
 	}
 	
 	private Class<?> findClass(Context context, IType type) throws SyntaxError {
