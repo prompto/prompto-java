@@ -473,6 +473,18 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitClosureStatement(@NotNull EParser.ClosureStatementContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code CommentStatement}
+	 * labeled alternative in {@link EParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterCommentStatement(@NotNull EParser.CommentStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code CommentStatement}
+	 * labeled alternative in {@link EParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitCommentStatement(@NotNull EParser.CommentStatementContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link EParser#store_statement}.
 	 * @param ctx the parse tree
 	 */
@@ -2636,6 +2648,16 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitTestMethod(@NotNull EParser.TestMethodContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link EParser#comment_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterComment_statement(@NotNull EParser.Comment_statementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EParser#comment_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitComment_statement(@NotNull EParser.Comment_statementContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code NativeStatementListItem}
 	 * labeled alternative in {@link EParser#native_statement_list}.

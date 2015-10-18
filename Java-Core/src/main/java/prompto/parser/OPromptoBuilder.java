@@ -184,6 +184,7 @@ import prompto.statement.AssignTupleStatement;
 import prompto.statement.AssignVariableStatement;
 import prompto.statement.AtomicSwitchCase;
 import prompto.statement.CollectionSwitchCase;
+import prompto.statement.CommentStatement;
 import prompto.statement.DeclarationInstruction;
 import prompto.statement.DoWhileStatement;
 import prompto.statement.ForEachStatement;
@@ -643,6 +644,16 @@ public class OPromptoBuilder extends OParserBaseListener {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
 		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
 		setNodeValue(ctx, new CollectionSwitchCase(exp, stmts));
+	}
+
+	@Override
+	public void exitCommentStatement(CommentStatementContext ctx) {
+		setNodeValue(ctx, this.<Object>getNodeValue(ctx.comment_statement()));
+	}
+	
+	@Override
+	public void exitComment_statement(Comment_statementContext ctx) {
+		setNodeValue(ctx, new CommentStatement(ctx.getText()));
 	}
 
 	@Override

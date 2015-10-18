@@ -511,6 +511,18 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitClosureStatement(@NotNull OParser.ClosureStatementContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code CommentStatement}
+	 * labeled alternative in {@link OParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterCommentStatement(@NotNull OParser.CommentStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code CommentStatement}
+	 * labeled alternative in {@link OParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitCommentStatement(@NotNull OParser.CommentStatementContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link OParser#store_statement}.
 	 * @param ctx the parse tree
 	 */
@@ -2622,6 +2634,16 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitTestMethod(@NotNull OParser.TestMethodContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#comment_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterComment_statement(@NotNull OParser.Comment_statementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#comment_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitComment_statement(@NotNull OParser.Comment_statementContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code NativeStatementListItem}
 	 * labeled alternative in {@link OParser#native_statement_list}.
