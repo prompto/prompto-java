@@ -1923,6 +1923,18 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitDecimalType(@NotNull SParser.DecimalTypeContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code DocumentType}
+	 * labeled alternative in {@link SParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void enterDocumentType(@NotNull SParser.DocumentTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code DocumentType}
+	 * labeled alternative in {@link SParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void exitDocumentType(@NotNull SParser.DocumentTypeContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code DateType}
 	 * labeled alternative in {@link SParser#native_type}.
 	 * @param ctx the parse tree
@@ -2002,16 +2014,6 @@ public interface SParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCode_type(@NotNull SParser.Code_typeContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SParser#document_type}.
-	 * @param ctx the parse tree
-	 */
-	void enterDocument_type(@NotNull SParser.Document_typeContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SParser#document_type}.
-	 * @param ctx the parse tree
-	 */
-	void exitDocument_type(@NotNull SParser.Document_typeContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ConcreteCategoryDeclaration}
 	 * labeled alternative in {@link SParser#category_declaration}.

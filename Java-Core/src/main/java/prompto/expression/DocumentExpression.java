@@ -25,7 +25,7 @@ public class DocumentExpression implements IExpression {
 	@Override
 	public void toDialect(CodeWriter writer) {
 		writer.append("Document");
-		if(writer.getDialect()==Dialect.O)
+		if(writer.getDialect()!=Dialect.E)
 			writer.append("()");
 	}
 	

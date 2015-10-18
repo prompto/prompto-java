@@ -2117,6 +2117,18 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterDocumentType(@NotNull EParser.DocumentTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDocumentType(@NotNull EParser.DocumentTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterDateType(@NotNull EParser.DateTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2196,18 +2208,6 @@ public class EParserBaseListener implements EParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCode_type(@NotNull EParser.Code_typeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDocument_type(@NotNull EParser.Document_typeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDocument_type(@NotNull EParser.Document_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

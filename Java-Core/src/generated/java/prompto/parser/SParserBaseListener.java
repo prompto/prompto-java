@@ -2033,6 +2033,18 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterDocumentType(@NotNull SParser.DocumentTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDocumentType(@NotNull SParser.DocumentTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterDateType(@NotNull SParser.DateTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2112,18 +2124,6 @@ public class SParserBaseListener implements SParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCode_type(@NotNull SParser.Code_typeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDocument_type(@NotNull SParser.Document_typeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDocument_type(@NotNull SParser.Document_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

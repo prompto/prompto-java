@@ -2093,6 +2093,18 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterDocumentType(@NotNull OParser.DocumentTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDocumentType(@NotNull OParser.DocumentTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterDateType(@NotNull OParser.DateTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2172,18 +2184,6 @@ public class OParserBaseListener implements OParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCode_type(@NotNull OParser.Code_typeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDocument_type(@NotNull OParser.Document_typeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDocument_type(@NotNull OParser.Document_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

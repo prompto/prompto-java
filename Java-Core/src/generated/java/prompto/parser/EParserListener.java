@@ -2007,6 +2007,18 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitDecimalType(@NotNull EParser.DecimalTypeContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code DocumentType}
+	 * labeled alternative in {@link EParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void enterDocumentType(@NotNull EParser.DocumentTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code DocumentType}
+	 * labeled alternative in {@link EParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void exitDocumentType(@NotNull EParser.DocumentTypeContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code DateType}
 	 * labeled alternative in {@link EParser#native_type}.
 	 * @param ctx the parse tree
@@ -2086,16 +2098,6 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCode_type(@NotNull EParser.Code_typeContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link EParser#document_type}.
-	 * @param ctx the parse tree
-	 */
-	void enterDocument_type(@NotNull EParser.Document_typeContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link EParser#document_type}.
-	 * @param ctx the parse tree
-	 */
-	void exitDocument_type(@NotNull EParser.Document_typeContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ConcreteCategoryDeclaration}
 	 * labeled alternative in {@link EParser#category_declaration}.
