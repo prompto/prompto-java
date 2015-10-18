@@ -52,7 +52,6 @@ public class CommentStatement extends BaseStatement {
 		case S:	
 			for(String line : lines) {
 				writer.append("#");
-				line = uncomment(line);
 				writer.append(line);
 				writer.newLine();
 			}
