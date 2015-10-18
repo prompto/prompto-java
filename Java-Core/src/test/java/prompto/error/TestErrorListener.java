@@ -68,7 +68,7 @@ public class TestErrorListener {
 	public void testUnknownIdentifierInExpressionError() throws Exception {
 		checkProblem("define \"m\" as test method doing:\n"
 				+ "\tl = x\n"
-				+ "and expecting:\n"
+				+ "and verifying:\n"
 				+ "\tl.length >= 3", 2, "Unknown identifier: x"); 
 	}
 

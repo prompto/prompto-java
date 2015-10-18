@@ -4,6 +4,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.type.IType;
+import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
@@ -18,7 +19,7 @@ public class CommentStatement extends BaseStatement {
 
 	@Override
 	public IType check(Context context) throws SyntaxError {
-		return null;
+		return VoidType.instance();
 	}
 
 	@Override

@@ -151,7 +151,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 		writer.indent();
 		statements.toDialect(writer);
 		writer.dedent();
-		writer.append("expecting:");
+		writer.append("verifying:");
 		if(error!=null) {
 			writer.append(" ");
 			error.toDialect(writer);
@@ -171,7 +171,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 		writer.indent();
 		statements.toDialect(writer);
 		writer.dedent();
-		writer.append("and expecting");
+		writer.append("and verifying");
 		if(error!=null) {
 			writer.append(" ");
 			error.toDialect(writer);
@@ -191,7 +191,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 		writer.indent();
 		statements.toDialect(writer);
 		writer.dedent();
-		writer.append("} expecting ");
+		writer.append("} verifying ");
 		if(error!=null) {
 			error.toDialect(writer);
 			writer.append(";\n");
