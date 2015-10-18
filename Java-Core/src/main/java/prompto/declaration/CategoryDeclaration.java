@@ -79,10 +79,10 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		return null;
 	}
 
-	public abstract IInstance newInstance() throws PromptoError;
+	public abstract IInstance newInstance(Context context) throws PromptoError;
 	
 	public IInstance newInstance(Context context, Document document) throws PromptoError {
-		IInstance instance = newInstance();
+		IInstance instance = newInstance(context);
 		instance.setMutable(true);
 		try {
 			for(Identifier name : this.getAttributes()) {

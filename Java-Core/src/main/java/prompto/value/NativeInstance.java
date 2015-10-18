@@ -32,10 +32,10 @@ public class NativeInstance extends BaseValue implements IInstance {
 	StorableDocument storable = null;
 	boolean mutable = false;
 	
-	public NativeInstance(NativeCategoryDeclaration declaration) throws SyntaxError {
+	public NativeInstance(Context context, NativeCategoryDeclaration declaration) throws SyntaxError {
 		super(new CategoryType(declaration.getIdentifier()));
 		this.declaration = declaration;
-		this.instance = makeInstance();
+		this.instance = makeInstance(context);
 		if(declaration.isStorable())
 			storable = new StorableDocument();
 	}
@@ -73,8 +73,8 @@ public class NativeInstance extends BaseValue implements IInstance {
 		return instance;
 	}
 	
-	private Object makeInstance() throws SyntaxError {
-		Class<?> mapped = declaration.getBoundClass(true);
+	private Object makeInstance(Context context) throws SyntaxError {
+		Class<?> mapped = declaration.getBoundClass(context, true);
 		try {
 			return mapped.newInstance();
 		} catch (Exception e) {

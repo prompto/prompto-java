@@ -29,8 +29,8 @@ public class NativeResourceDeclaration extends NativeCategoryDeclaration {
 	}
 	
 	@Override
-	public IInstance newInstance() throws PromptoError {
-		return new NativeResource(this);
+	public IInstance newInstance(Context context) throws PromptoError {
+		return new NativeResource(context, this);
 	}
 	
 	@Override

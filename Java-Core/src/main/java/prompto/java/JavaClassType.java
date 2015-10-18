@@ -23,6 +23,7 @@ import prompto.type.CharacterType;
 import prompto.type.DateTimeType;
 import prompto.type.DateType;
 import prompto.type.DecimalType;
+import prompto.type.DocumentType;
 import prompto.type.IType;
 import prompto.type.IntegerType;
 import prompto.type.ListType;
@@ -30,6 +31,7 @@ import prompto.type.PeriodType;
 import prompto.type.TextType;
 import prompto.type.TimeType;
 import prompto.type.VoidType;
+import prompto.value.Document;
 import prompto.value.IValue;
 import prompto.value.ListValue;
 import prompto.value.NativeInstance;
@@ -55,6 +57,7 @@ public class JavaClassType extends CategoryType {
 		javaToPromptoMap.put(LocalTime.class, TimeType.instance());
 		javaToPromptoMap.put(DateTime.class, DateTimeType.instance());
 		javaToPromptoMap.put(Period.class, PeriodType.instance());
+		javaToPromptoMap.put(Document.class, DocumentType.instance());
 		javaToPromptoMap.put(Object.class, AnyType.instance());
 	}
 	

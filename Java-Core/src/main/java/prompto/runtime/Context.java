@@ -240,7 +240,7 @@ public class Context implements IContext {
 		for(IDeclaration decl : toRemove) {
 			declarations.remove(decl.getIdentifier());
 			if(decl instanceof NativeCategoryDeclaration) {
-				Class<?> klass = ((NativeCategoryDeclaration)decl).getBoundClass(true);
+				Class<?> klass = ((NativeCategoryDeclaration)decl).getBoundClass(this, false);
 				if(klass!=null)
 					nativeBindings.remove(klass);
 			}

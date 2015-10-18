@@ -213,7 +213,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 	
 	@Override
-	public IInstance newInstance() throws PromptoError {
+	public IInstance newInstance(Context context) throws PromptoError {
 		return new ConcreteInstance(this);
 	}
 	

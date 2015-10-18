@@ -252,7 +252,7 @@ public class CategoryType extends BaseType {
 
 	public IInstance newInstance(Context context) throws PromptoError {
 		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, this.getName());
-		return decl.newInstance();
+		return decl.newInstance(context);
 	}
 	
 	public IInstance newInstance(Context context, Document document) throws PromptoError {

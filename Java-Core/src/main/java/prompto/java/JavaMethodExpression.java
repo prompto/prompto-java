@@ -104,7 +104,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 		if(type instanceof CategoryType) {
 			IDeclaration named = context.getRegisteredDeclaration(IDeclaration.class, type.getName());
 			if(named instanceof NativeCategoryDeclaration) 
-				return ((NativeCategoryDeclaration)named).getBoundClass(true);
+				return ((NativeCategoryDeclaration)named).getBoundClass(context, true);
 		}
 		return type.toJavaClass();
 	}
