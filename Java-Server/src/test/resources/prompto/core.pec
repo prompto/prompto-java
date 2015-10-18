@@ -54,25 +54,25 @@ define getAllAttributes as native method returning Attribute[] doing:
 
 define "findAttribute id" as test method doing:
 	a = findAttribute "id"
-and expecting: 
+and verifying: 
 	a is an Attribute
 	a.name = "id"
 
 define "findAttribute name" as test method doing:
 	a = findAttribute "name"
-and expecting: 
+and verifying: 
 	a is an Attribute
 	a.name = "name" 
 
 define "findAttribute text" as test method doing: 
 	a = findAttribute "text"
-and expecting: 
+and verifying: 
 	a is an Attribute
 	a.name = "text"
 
 define "at least 3 items getAllAttributes" as test method doing:
 	l = getAllAttributes 
-and expecting: 
+and verifying: 
 	l is an Attribute[]
 	l.length >= 3
 define id as Any attribute
@@ -145,26 +145,26 @@ define "print a text" as test method doing:
 	w = mutable PrintWriter
 	print "Hello" with w as writer
 	print " John" with w as writer
-and expecting: 
+and verifying: 
 	w.text = "Hello John"
 
 define "print an integer" as test method doing:
 	w = mutable PrintWriter
 	print 12345 with w as writer
-and expecting: 
+and verifying: 
 	w.text = "12345" 
 
 define "printLine a text" as test method doing:
 	w = mutable PrintWriter
 	print "Hello" with w as writer
 	printLine " John" with w as writer
-and expecting: 
+and verifying: 
 	w.text = "Hello John\n"
 
 define "printLine an integer" as test method doing:
 	w = mutable PrintWriter
 	printLine 12345 with w as writer
-and expecting: 
+and verifying: 
 	w.text = "12345\n" 
 define path as Text attribute
 define encoding as Text attribute
@@ -180,5 +180,5 @@ define Url as native resource with attributes path and encoding, and bindings:
 
 define "reads from www.prompto.org" as test method doing:
 	content = read from Url with "http://www.prompto.org" as path
-and expecting: 
+and verifying: 
 	content contains "prompto"
