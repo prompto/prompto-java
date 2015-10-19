@@ -14,6 +14,7 @@ import prompto.declaration.DeclarationList;
 import prompto.grammar.Identifier;
 import prompto.parser.ECleverParser;
 import prompto.runtime.Context;
+import prompto.value.Document;
 
 @SuppressWarnings("serial")
 public class PromptoServlet extends HttpServlet {
@@ -40,6 +41,8 @@ public class PromptoServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
+			authenticate(req);
+			readSession(req);
 			Identifier methodName = new Identifier(req.getServletPath().substring(1));
 			String[] httpParams = req.getParameterMap().get("params");
 			String params = httpParams==null || httpParams.length==0 ? null : httpParams[0];
@@ -54,6 +57,21 @@ public class PromptoServlet extends HttpServlet {
 		}
 	}
 	
+	private void readSession(HttpServletRequest req) {
+		Document doc = (Document)req.getSession(true).getAttribute("__prompto_http_session__");
+		if(doc==null) {
+			doc = new Document();
+			req.getSession(true).setAttribute("__prompto_http_session__", doc);
+		}
+		Server.setHttpSession(doc);
+	}
+
+	private void authenticate(HttpServletRequest req) {
+		IAuthenticator authenticator = IAuthenticator.getInstance();
+		String user = authenticator==null ? "<anonymous>" : authenticator.authenticate(req);
+		Server.setHttpUser(user);
+	}
+
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setStatus(200);

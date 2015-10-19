@@ -116,6 +116,11 @@
 			<artifactId>Core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.prompto</groupId>
+			<artifactId>Runtime</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<reporting>
