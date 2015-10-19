@@ -2,6 +2,7 @@
     <wb-module deploy-name="Java-CodeServer">
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/web-site"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <property name="java-output-path" value="/Java-CodeServer/target/classes"/>
         <property name="context-root" value="devcenter"/>
     </wb-module>
