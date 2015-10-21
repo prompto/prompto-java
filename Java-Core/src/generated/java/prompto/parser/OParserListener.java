@@ -3387,6 +3387,26 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitIsOtherExpression(@NotNull OParser.IsOtherExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link OParser#order_by_list}.
+	 * @param ctx the parse tree
+	 */
+	void enterOrder_by_list(@NotNull OParser.Order_by_listContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#order_by_list}.
+	 * @param ctx the parse tree
+	 */
+	void exitOrder_by_list(@NotNull OParser.Order_by_listContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#order_by}.
+	 * @param ctx the parse tree
+	 */
+	void enterOrder_by(@NotNull OParser.Order_byContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#order_by}.
+	 * @param ctx the parse tree
+	 */
+	void exitOrder_by(@NotNull OParser.Order_byContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code OperatorPlus}
 	 * labeled alternative in {@link OParser#operator}.
 	 * @param ctx the parse tree

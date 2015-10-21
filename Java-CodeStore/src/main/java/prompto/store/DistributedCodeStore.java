@@ -12,13 +12,17 @@ import prompto.expression.EqualsExpression;
 import prompto.expression.IExpression;
 import prompto.grammar.EqOp;
 import prompto.grammar.Identifier;
+import prompto.grammar.OrderByClause;
+import prompto.grammar.OrderByClauseList;
 import prompto.grammar.UnresolvedIdentifier;
+import prompto.literal.IntegerLiteral;
 import prompto.literal.TextLiteral;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.type.DocumentType;
 import prompto.utils.CodeWriter;
+import prompto.utils.IdentifierList;
 import prompto.value.Document;
 import prompto.value.ListValue;
 import prompto.value.Text;
@@ -114,30 +118,26 @@ public class DistributedCodeStore extends BaseCodeStore {
 				// TODO log
 			}
 		}
-		
 	}
 
 	private IDeclaration fetchInStore(String name, String version) {
 		if(store==null)
 			return null;
-		IExpression filter = buildFilter(name, version);
 		try {
-			Document doc = store.fetchOne(context, filter); // TODO order by
+			Document doc = null;
+			IExpression filter = buildFilter(name, version);
+			if(LATEST.equals(version)) {
+				IdentifierList names = new IdentifierList(new Identifier("version"));
+				OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
+				IntegerLiteral one = new IntegerLiteral(1);
+				IDocumentIterator result = store.fetchMany(context, one, one, filter, orderBy);
+				doc = result.hasNext() ? result.next() : null;
+			} else
+				doc = store.fetchOne(context, filter); 
 			return parse(context, doc);
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	private IDeclaration parse(Context context, Document doc) throws Exception {
-		if(doc==null)
-			return null;
-		Text value = (Text)doc.getMember(context, new Identifier("format"));
-		Dialect dialect = Dialect.valueOf(value.getValue());
-		value = (Text)doc.getMember(context, new Identifier("content"));
-		InputStream input = new ByteArrayInputStream(value.getValue().getBytes());
-		DeclarationList decls = ICodeStore.parse(dialect, "__store__", input);
-		return decls.isEmpty() ? null : decls.get(0);
 	}
 
 	private IExpression buildFilter(String name, String version) {
@@ -152,5 +152,17 @@ public class DistributedCodeStore extends BaseCodeStore {
 		} 
 		return filter;
 	}
+
+	private IDeclaration parse(Context context, Document doc) throws Exception {
+		if(doc==null)
+			return null;
+		Text value = (Text)doc.getMember(context, new Identifier("format"));
+		Dialect dialect = Dialect.valueOf(value.getValue());
+		value = (Text)doc.getMember(context, new Identifier("content"));
+		InputStream input = new ByteArrayInputStream(value.getValue().getBytes());
+		DeclarationList decls = ICodeStore.parse(dialect, "__store__", input);
+		return decls.isEmpty() ? null : decls.get(0);
+	}
+
 
 }

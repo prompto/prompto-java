@@ -3,23 +3,30 @@ package prompto.expression;
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.grammar.OrderByClauseList;
 import prompto.runtime.Context;
+import prompto.store.IDocumentIterator;
+import prompto.store.IStore;
 import prompto.type.BooleanType;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.type.ListType;
 import prompto.utils.CodeWriter;
+import prompto.value.Cursor;
 import prompto.value.IValue;
+
 
 public class FetchAllExpression extends FetchOneExpression {
 
 	IExpression start;
 	IExpression end;
+	OrderByClauseList orderBy;
 	
-	public FetchAllExpression(CategoryType type, IExpression filter, IExpression start, IExpression end) {
+	public FetchAllExpression(CategoryType type, IExpression start, IExpression end, IExpression filter, OrderByClauseList orderBy) {
 		super(type, filter);
 		this.start = start;
 		this.end = end;
+		this.orderBy = orderBy;
 	}
 	
 
@@ -65,6 +72,8 @@ public class FetchAllExpression extends FetchOneExpression {
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		return null;
+		IStore store = IStore.getInstance();
+		IDocumentIterator docs = store.fetchMany(context, start, end, filter, orderBy);
+		return new Cursor(context, type, docs);
 	}
 }

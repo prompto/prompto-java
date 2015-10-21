@@ -2,6 +2,7 @@ package prompto.store;
 
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
+import prompto.grammar.OrderByClauseList;
 import prompto.runtime.Context;
 import prompto.utils.ISingleton;
 import prompto.value.Document;
@@ -25,4 +26,6 @@ public interface IStore {
 
 	void store(Document document) throws PromptoError;
 	Document fetchOne(Context context, IExpression filter) throws PromptoError;
+	IDocumentIterator fetchMany(Context context, IExpression start, IExpression end, 
+			IExpression filter, OrderByClauseList orderBy) throws PromptoError;
 }

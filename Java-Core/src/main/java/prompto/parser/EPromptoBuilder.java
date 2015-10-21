@@ -102,6 +102,8 @@ import prompto.grammar.NativeCategoryBindingList;
 import prompto.grammar.NativeSymbol;
 import prompto.grammar.NativeSymbolList;
 import prompto.grammar.Operator;
+import prompto.grammar.OrderByClause;
+import prompto.grammar.OrderByClauseList;
 import prompto.grammar.UnresolvedArgument;
 import prompto.grammar.UnresolvedIdentifier;
 import prompto.grammar.VariableInstance;
@@ -1080,10 +1082,11 @@ public class EPromptoBuilder extends EParserBaseListener {
 	@Override
 	public void exitFetchAll(FetchAllContext ctx) {
 		CategoryType category = this.<CategoryType>getNodeValue(ctx.typ);
-		IExpression filter = this.<IExpression>getNodeValue(ctx.xfilter);
 		IExpression start = this.<IExpression>getNodeValue(ctx.start);
 		IExpression end = this.<IExpression>getNodeValue(ctx.end);
-		setNodeValue(ctx, new FetchAllExpression(category, filter, start, end));
+		IExpression filter = this.<IExpression>getNodeValue(ctx.xfilter);
+		OrderByClauseList orderBy = this.<OrderByClauseList>getNodeValue(ctx.xorder);
+		setNodeValue(ctx, new FetchAllExpression(category, start, end, filter, orderBy));
 	}
 	
 	@Override
@@ -1982,6 +1985,23 @@ public class EPromptoBuilder extends EParserBaseListener {
 	@Override
 	public void exitOperatorPlus(OperatorPlusContext ctx) {
 		setNodeValue(ctx, Operator.PLUS);
+	}
+	
+	@Override
+	public void exitOrder_by(Order_byContext ctx) {
+		IdentifierList names = new IdentifierList();
+		for(Variable_identifierContext ctx_ : ctx.variable_identifier())
+			names.add(this.<Identifier>getNodeValue(ctx_));
+		OrderByClause clause = new OrderByClause(names, ctx.DESC()!=null);
+		setNodeValue(ctx, clause);
+	}
+	
+	@Override
+	public void exitOrder_by_list(Order_by_listContext ctx) {
+		OrderByClauseList list = new OrderByClauseList();
+		for(Order_byContext ctx_ : ctx.order_by())
+			list.add(this.<OrderByClause>getNodeValue(ctx_));
+		setNodeValue(ctx, list);
 	}
 	
 	@Override
