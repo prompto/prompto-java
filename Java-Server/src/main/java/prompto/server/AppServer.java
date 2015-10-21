@@ -65,9 +65,9 @@ public class AppServer {
 	public static void bootstrap(IStore codeStore, String resourceName, String application, String version) throws Exception {
 		System.out.println("Bootstrapping prompto...");
 		System.out.println("Connecting to prompto runtime...");
-		ICodeStore module = new BootstrapCodeStore(null, ModuleType.MODULE, "core.pec", "1.0.0");
-		module = new BootstrapCodeStore(module, ModuleType.MODULE, "core.pec", "1.0.0");
-		module = new BootstrapCodeStore(module, ModuleType.MODULE, "internet.pec", "1.0.0");
+		ICodeStore module = new BootstrapCodeStore(null, ModuleType.LIBRARY, "core.pec", "1.0.0");
+		module = new BootstrapCodeStore(module, ModuleType.LIBRARY, "core.pec", "1.0.0");
+		module = new BootstrapCodeStore(module, ModuleType.LIBRARY, "internet.pec", "1.0.0");
 		if(resourceName!=null)
 			module = new BootstrapCodeStore(module, ModuleType.APPLICATION, resourceName, version);
 		System.out.println("Connecting to code store for application " + application + " version " + version + "...");

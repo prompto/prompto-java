@@ -63,7 +63,7 @@ public interface ICodeStore {
 	
 	static public enum ModuleType {
 		APPLICATION,
-		MODULE;
+		LIBRARY;
 		
 		public IValue asValue() {
 			return new Text(this.name());
