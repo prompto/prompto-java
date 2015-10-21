@@ -13,6 +13,7 @@ import org.joda.time.LocalTime;
 import org.joda.time.Period;
 
 import prompto.declaration.AnyNativeCategoryDeclaration;
+import prompto.declaration.IDeclaration;
 import prompto.declaration.NativeCategoryDeclaration;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
@@ -116,7 +117,7 @@ public class JavaClassType extends CategoryType {
 
 	public IValue convertJavaValueToPromptoValue(Context context, Object value, IType returnType)
     {
-    	return convertJavaValueToPromptoValue(context, value, type, returnType);
+   	return convertJavaValueToPromptoValue(context, value, type, returnType);
     }
     
     public static IValue convertJavaValueToPromptoValue(Context context, Object value, Type type, IType returnType) {
@@ -129,7 +130,7 @@ public class JavaClassType extends CategoryType {
     	val = convertList(context, value, type, returnType);
     	if(val!=null)
     		return val;
-    	val = convertCategory(context, value, type);
+    	val = convertCategory(context, value, type, returnType);
     	if(val!=null)
     		return val;
     	else if(returnType==AnyType.instance())
@@ -148,8 +149,10 @@ public class JavaClassType extends CategoryType {
 	}
 
 
-	private static IValue convertCategory(Context context, Object value, Type type) {
-		NativeCategoryDeclaration decl = context.getNativeBinding(type);
+	private static IValue convertCategory(Context context, Object value, Type type, IType returnType) {
+		// ensure the underlying declaration is loaded
+		context.getRegisteredDeclaration(IDeclaration.class, returnType.getName());
+ 		NativeCategoryDeclaration decl = context.getNativeBinding(type);
 		return decl!=null ? new NativeInstance(decl, value) : null;
 	}
 

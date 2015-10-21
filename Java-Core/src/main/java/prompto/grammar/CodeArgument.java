@@ -25,7 +25,7 @@ public class CodeArgument extends BaseArgument implements ITypedArgument {
 	}
 	
 	@Override
-	public String getProto(Context context) {
+	public String getProto() {
 		return CodeType.instance().getName().toString();
 	}
 	

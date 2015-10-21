@@ -13,7 +13,7 @@ import prompto.value.IValue;
 public interface IArgument extends INamed {
 	
 	String getSignature(Dialect dialect);
-	String getProto(Context context) throws SyntaxError;
+	String getProto();
 	void register(Context context) throws SyntaxError;
 	void check(Context context) throws SyntaxError;
 	IValue checkValue(Context context,IExpression value) throws PromptoError;

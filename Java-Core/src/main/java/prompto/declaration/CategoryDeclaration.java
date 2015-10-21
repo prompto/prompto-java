@@ -27,6 +27,11 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		this.attributes = attributes;
 	}
 	
+	@Override
+	public Type getDeclarationType() {
+		return Type.CATEGORY;
+	}
+	
 	public void setStorable(boolean storable) {
 		this.storable = storable;
 	}

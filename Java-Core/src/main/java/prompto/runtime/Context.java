@@ -46,7 +46,6 @@ public class Context implements IContext {
 	
 	public static Context newGlobalContext(ICodeStore store) {
 		Context context = new Context();
-		context.store = store;
 		context.globals = context;
 		context.calling = null;
 		context.parent = null;
@@ -55,7 +54,6 @@ public class Context implements IContext {
 		return context;
 	}
 
-	ICodeStore store;
 	Context globals;
 	Context calling;
 	Context parent; // for inner methods
@@ -135,7 +133,6 @@ public class Context implements IContext {
 	
 	public Context newResourceContext() {
 		Context context = new ResourceContext();
-		context.store = this.store;
 		context.globals = this.globals;
 		context.calling = this.calling;
 		context.parent = this;
@@ -146,7 +143,6 @@ public class Context implements IContext {
 	
 	public Context newLocalContext() {
 		Context context = new Context();
-		context.store = this.store;
 		context.globals = this.globals;
 		context.calling = this;
 		context.parent = null;
@@ -168,7 +164,6 @@ public class Context implements IContext {
 	}
 
 	private Context initInstanceContext(Context context) {
-		context.store = this.store;
 		context.globals = this.globals;
 		context.calling = this;
 		context.parent = null;
@@ -179,7 +174,6 @@ public class Context implements IContext {
 
 	public Context newChildContext() {
 		Context context = new Context();
-		context.store = this.store;
 		context.globals = this.globals;
 		context.calling = this.calling;
 		context.parent = this;
@@ -235,7 +229,7 @@ public class Context implements IContext {
 			if(path.equals(decl.getPath()))
 				toRemove.add(decl);
 			else if(decl instanceof MethodDeclarationMap)
-				((MethodDeclarationMap)decl).unregister(this, path);
+				((MethodDeclarationMap)decl).unregister(path);
 		}
 		for(IDeclaration decl : toRemove) {
 			declarations.remove(decl.getIdentifier());
@@ -278,16 +272,43 @@ public class Context implements IContext {
 	}
 	
 	public <T extends IDeclaration> T getRegisteredDeclaration(Class<T> klass, Identifier name) {
+		return getRegisteredDeclaration(klass, name, true);
+	}
+	
+	public <T extends IDeclaration> T getRegisteredDeclaration(Class<T> klass, Identifier name, boolean lookInStore) {
 		// resolve upwards, since local names override global ones
 		IDeclaration actual = declarations.get(name);
 		if(actual==null && parent!=null)
-			actual = parent.getRegisteredDeclaration(klass,name);
+			actual = parent.getRegisteredDeclaration(klass, name, lookInStore);
 		if(actual==null && globals!=this)
-			actual = globals.getRegisteredDeclaration(klass,name);
+			actual = globals.getRegisteredDeclaration(klass, name, lookInStore);
+		if(actual==null && lookInStore && globals==this)
+			actual = fetchAndRegister(name);
 		if(actual!=null)
 			return Utils.downcast(klass,actual);
 		else
 			return null;
+	}
+
+	private IDeclaration fetchAndRegister(Identifier name) {
+		ICodeStore store = ICodeStore.getInstance();
+		if(store==null)
+			return null;
+		IDeclaration decl = store.fetchLatestVersion(name.getName());
+		if(decl==null)
+			return null;
+		try {
+			if(decl instanceof MethodDeclarationMap) {
+				MethodDeclarationMap map = (MethodDeclarationMap)decl;
+				for(Map.Entry<String, IMethodDeclaration> entry : map.entrySet())
+					entry.getValue().register(this);
+				decl = this.getRegisteredDeclaration(MethodDeclarationMap.class, name);
+			} else
+				decl.register(this);
+			return decl;
+		} catch(SyntaxError e) {
+			throw new RuntimeException(e); // TODO define a strategy
+		}
 	}
 
 	public void registerDeclaration(IDeclaration declaration) throws SyntaxError {
@@ -334,20 +355,36 @@ public class Context implements IContext {
 
 		private static final long serialVersionUID = 1L;
 		
-		Identifier name;
+		Identifier id;
+		ICodeStore origin;
 		
-		public MethodDeclarationMap(Identifier name) {
-			this.name = name;
+		public MethodDeclarationMap(Identifier id) {
+			this.id = id;
 		}
 		
-		public void unregister(Context context, String path) throws SyntaxError {
+		@Override
+		public Type getDeclarationType() {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override
+		public ICodeStore getOrigin() {
+			return origin;
+		}
+		
+		@Override
+		public void setOrigin(ICodeStore origin) {
+			this.origin = origin;
+		}
+		
+		public void unregister(String path) throws SyntaxError {
 			List<IMethodDeclaration> toRemove = new ArrayList<IMethodDeclaration>();
 			for(IMethodDeclaration decl : this.values()) {
 				if(path.equals(decl.getPath()))
 					toRemove.add(decl);
 			}
 			for(IMethodDeclaration decl : toRemove)
-				this.remove(decl.getProto(context));
+				this.remove(decl.getProto());
 		}
 
 		@Override
@@ -357,7 +394,7 @@ public class Context implements IContext {
 		
 		@Override
 		public Identifier getIdentifier() {
-			return name;
+			return id;
 		}
 		
 		@Override
@@ -371,7 +408,7 @@ public class Context implements IContext {
 		}
 		
 		public void register(IMethodDeclaration declaration, Context context) throws SyntaxError {
-			String proto = declaration.getProto(context);
+			String proto = declaration.getProto();
 			if(this.containsKey(proto))
 				context.getProblemListener().reportDuplicate(declaration.getIdentifier().toString(), declaration, this.get(proto));
 			else
@@ -379,7 +416,7 @@ public class Context implements IContext {
 		}
 		
 		public void registerIfMissing(IMethodDeclaration declaration,Context context) throws SyntaxError {
-			String proto = declaration.getProto(context);
+			String proto = declaration.getProto();
 			if(!this.containsKey(proto))
 				this.put(proto, declaration);
 		}
@@ -718,6 +755,5 @@ public class Context implements IContext {
 			instance.setMember(calling, name, value);
 		}
 	}
-
 
 }

@@ -23,6 +23,11 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration implements IEnu
 	}
 	
 	@Override
+	public Type getDeclarationType() {
+		return Type.ENUM;
+	}
+	
+	@Override
 	public NativeSymbolList getSymbols() {
 		return symbols;
 	}

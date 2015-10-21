@@ -22,7 +22,8 @@ import prompto.error.PromptoError;
 import prompto.remoting.Parameter;
 import prompto.remoting.ParameterList;
 import prompto.runtime.Context;
-import prompto.server.CodeServer;
+import prompto.server.AppServer;
+import prompto.store.MemStore;
 import prompto.type.IType;
 import prompto.type.TextType;
 import prompto.value.IValue;
@@ -32,15 +33,17 @@ public class TestConnect {
 
 	@Before
 	public void before() throws Exception {
+		// bootstrap
+		AppServer.bootstrap(new MemStore(), null, "test", "1.0.0");
 		// adjust handler path for junit and cobertura context
-		Handler rh1 = CodeServer.prepareResourceHandler("/");
-		Handler rh2 = CodeServer.prepareResourceHandler("../classes/");
-		Handler rh3 = CodeServer.prepareResourceHandler("../test-classes/");
-		Handler rh4 = CodeServer.prepareResourceHandler("../generated-classes/cobertura/");
+		Handler rh1 = AppServer.prepareResourceHandler("/");
+		Handler rh2 = AppServer.prepareResourceHandler("../classes/");
+		Handler rh3 = AppServer.prepareResourceHandler("../test-classes/");
+		Handler rh4 = AppServer.prepareResourceHandler("../generated-classes/cobertura/");
 		// a bit more tricky for WebAppContext
 		String thisPath = TestConnect.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 		System.out.println(thisPath);
-		Handler ws = CodeServer.prepareServiceHandler("/ws", thisPath);
+		Handler ws = AppServer.prepareServiceHandler("/ws", thisPath);
 		HandlerList list = new HandlerList();
 		list.addHandler(rh1);
 		list.addHandler(rh2);
@@ -49,23 +52,23 @@ public class TestConnect {
 		list.addHandler(ws);
 		list.addHandler(new DefaultHandler());
 		// start server
-		CodeServer.startServer(8888, list);
-		assertTrue(CodeServer.isStarted());
+		AppServer.startServer(8888, list);
+		assertTrue(AppServer.isStarted());
 	}
 	
 	@After
 	public void after() throws Exception {
-		if(CodeServer.isStarted())
-			CodeServer.stop();
+		if(AppServer.isStarted())
+			AppServer.stop();
 	}
 	
 	@Test
 	public void testStartAndStop() throws Exception {
-		CodeServer.stop();
-		assertFalse(CodeServer.isStarted());
-		CodeServer.start();
-		assertTrue(CodeServer.isStarted());
-		CodeServer.stop();
+		AppServer.stop();
+		assertFalse(AppServer.isStarted());
+		AppServer.start();
+		assertTrue(AppServer.isStarted());
+		AppServer.stop();
 	}
 
 	@Test

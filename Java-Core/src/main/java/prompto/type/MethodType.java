@@ -67,7 +67,7 @@ public class MethodType extends BaseType {
 		try {
 			IMethodDeclaration thisMethod = getDeclaration(context);
 			IMethodDeclaration otherMethod = otherType.getDeclaration(context);
-			return thisMethod.getProto(context).equals(otherMethod.getProto(otherType.context)); // TODO: refine
+			return thisMethod.getProto().equals(otherMethod.getProto()); // TODO: refine
 		} catch (SyntaxError e) {
 			return false;
 		}

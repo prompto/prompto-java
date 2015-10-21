@@ -22,6 +22,11 @@ public class AttributeDeclaration extends BaseDeclaration {
 		this.constraint = constraint;
 	}
 	
+	@Override
+	public Type getDeclarationType() {
+		return Type.ATTRIBUTE;
+	}
+	
 	public IType getType() {
 		return type;
 	}

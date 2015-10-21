@@ -45,9 +45,8 @@ public class UnresolvedArgument extends BaseArgument implements INamedArgument {
 	}
 	
 	@Override
-	public String getProto(Context context) throws SyntaxError {
-		resolveAndCheck(context);
-		return resolved.getProto(context);
+	public String getProto() {
+		return name.getName();
 	}
 	
 	@Override

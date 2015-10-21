@@ -45,5 +45,10 @@
 			<type>2</type>
 			<location>/Users/ericvergnaud/Development/prompto/prompto-dev-center/web-site</location>
 		</link>
+		<link>
+			<name>src/main/web-site/prompto/prompto.pec</name>
+			<type>1</type>
+			<location>/Users/ericvergnaud/Development/prompto/prompto-libraries/concat/prompto.pec</location>
+		</link>
 	</linkedResources>
 </projectDescription>

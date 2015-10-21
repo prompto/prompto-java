@@ -8,7 +8,6 @@ import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.store.IStore;
-import prompto.store.MemStore;
 import prompto.type.IType;
 import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
@@ -67,8 +66,6 @@ public class StoreStatement extends SimpleStatement {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		IStore store = IStore.getInstance();
-		if(store==null)
-			store = MemStore.getInstance();
 		for(IExpression exp : expressions) {
 			IValue value = exp.interpret(context);
 			IStorable storable = null;

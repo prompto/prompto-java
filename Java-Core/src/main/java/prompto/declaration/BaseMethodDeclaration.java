@@ -35,6 +35,11 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	}
 
 	@Override
+	public Type getDeclarationType() {
+		return Type.METHOD;
+	}
+	
+	@Override
 	public void setMemberOf(ConcreteCategoryDeclaration declaration) {
 		this.memberOf = declaration;
 	}
@@ -59,12 +64,12 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	}
 	
 	@Override
-	public String getProto(Context context) throws SyntaxError {
+	public String getProto() {
 		StringBuilder sb = new StringBuilder();
 		for(IArgument arg : arguments) {
 			if(sb.length()>0)
 				sb.append('/');
-			sb.append(arg.getProto(context));
+			sb.append(arg.getProto());
 		}
 		return sb.toString();
 	}

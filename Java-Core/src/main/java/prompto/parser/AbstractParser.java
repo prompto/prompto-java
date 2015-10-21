@@ -7,6 +7,8 @@ import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 
+import prompto.declaration.DeclarationList;
+
 public abstract class AbstractParser extends Parser {
 
 	public AbstractParser(TokenStream input) { 
@@ -62,5 +64,7 @@ public abstract class AbstractParser extends Parser {
 		else
 			return hidden.get(hidden.size()-1).getType();
 	}
+
+	public DeclarationList parse_declaration_list() throws Exception { return null; }
 	
 }

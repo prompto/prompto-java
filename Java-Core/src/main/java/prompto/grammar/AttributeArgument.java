@@ -38,7 +38,7 @@ public class AttributeArgument extends BaseArgument implements INamedArgument {
 	}
 	
 	@Override
-	public String getProto(Context context) {
+	public String getProto() {
 		return name.toString();
 	}
 	

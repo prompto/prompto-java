@@ -43,11 +43,7 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 	}
 	
 	@Override
-	public String getProto(Context context) {
-		return getProto();
-	}
-	
-	String getProto() {
+	public String getProto() {
 		if(attributes==null)
 			return type.getName().toString();
 		else

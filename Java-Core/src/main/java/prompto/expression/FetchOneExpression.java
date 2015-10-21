@@ -6,7 +6,6 @@ import prompto.error.SyntaxError;
 import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.store.IStore;
-import prompto.store.MemStore;
 import prompto.type.BooleanType;
 import prompto.type.CategoryType;
 import prompto.type.IType;
@@ -66,8 +65,6 @@ public class FetchOneExpression extends Section implements IExpression {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		IStore store = IStore.getInstance();
-		if(store==null)
-			store = MemStore.getInstance();
 		Document doc = store.fetchOne(context, filter);
 		if(doc==null)
 			return NullValue.instance();

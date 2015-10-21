@@ -30,9 +30,6 @@
 						</goals>
 					</execution>
 				</executions>
-				<configuration>
-					<mainClass>prompto.server.CodeServer</mainClass>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -120,6 +117,11 @@
 			<groupId>org.prompto</groupId>
 			<artifactId>Runtime</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.prompto</groupId>
+			<artifactId>CodeStore</artifactId>
+			<version>trunk-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 

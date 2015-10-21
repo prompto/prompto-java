@@ -29,6 +29,11 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration i
 	}
 	
 	@Override
+	public Type getDeclarationType() {
+		return Type.ENUM;
+	}
+	
+	@Override
 	public SymbolList<?> getSymbols() {
 		return symbols;
 	}

@@ -18,7 +18,7 @@ public interface IMethodDeclaration extends IDeclaration {
 	ArgumentList getArguments();
 	String getSignature(Dialect dialect);
 	boolean isEligibleAsMain();
-	String getProto(Context context) throws SyntaxError;
+	String getProto();
 	IValue interpret(Context context) throws PromptoError;
 	void check(ConcreteCategoryDeclaration declaration, Context context) throws SyntaxError;
 	boolean isAssignableTo(Context context, ArgumentAssignmentList assignments, boolean checkInstance);

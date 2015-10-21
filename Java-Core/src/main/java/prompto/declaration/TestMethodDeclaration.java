@@ -29,6 +29,12 @@ public class TestMethodDeclaration extends BaseDeclaration {
 		this.error = error;
 	}
 	
+	@Override
+	public Type getDeclarationType() {
+		// TODO Auto-generated method stub
+		return Type.TEST;
+	}
+	
 	public StatementList getStatements() {
 		return statements;
 	}
