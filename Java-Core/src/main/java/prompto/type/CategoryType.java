@@ -284,9 +284,9 @@ public class CategoryType extends BaseType {
 				public int compare(ConcreteInstance o1, ConcreteInstance o2) {
 					try {
 						Context co = context.newInstanceContext(o1);
-						Object key1 = key.interpret(co);
+						IValue key1 = key.interpret(co);
 						co = context.newInstanceContext(o2);
-						Object key2 = key.interpret(co);
+						IValue key2 = key.interpret(co);
 						return compareKeys(key1,key2);
 					} catch(Throwable t) {
 						throw new RuntimeException(t);
@@ -308,8 +308,8 @@ public class CategoryType extends BaseType {
 				@Override
 				public int compare(IInstance o1, IInstance o2) {
 					try {
-						Object key1 = o1.getMember(context, name);
-						Object key2 = o2.getMember(context, name);
+						IValue key1 = o1.getMember(context, name);
+						IValue key2 = o2.getMember(context, name);
 						return compareKeys(key1,key2);
 					} catch(Throwable t) {
 						throw new RuntimeException(t);
@@ -360,9 +360,9 @@ public class CategoryType extends BaseType {
 					try {
 						ArgumentAssignment assignment = method.getAssignments().get(0);
 						assignment.setExpression(new ExpressionValue(CategoryType.this, o1));
-						Object key1 = method.interpret(context);
+						IValue key1 = method.interpret(context);
 						assignment.setExpression(new ExpressionValue(CategoryType.this, o2));
-						Object key2 = method.interpret(context);
+						IValue key2 = method.interpret(context);
 						return compareKeys(key1,key2);
 					} catch(Throwable t) {
 						throw new RuntimeException(t);
@@ -379,7 +379,7 @@ public class CategoryType extends BaseType {
 	}
 
 	@SuppressWarnings("unchecked")
-	private int compareKeys(Object key1, Object key2) {
+	private int compareKeys(IValue key1, IValue key2) {
 		if(key1==null && key2==null)
 			return 0;
 		else if(key1==null)

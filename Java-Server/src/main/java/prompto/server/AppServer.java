@@ -130,6 +130,7 @@ public class AppServer {
 					}
 					jettyServer.join();
 				} catch(Throwable t) {
+					t.printStackTrace();
 					throw new RuntimeException(t);
 				} finally {
 					serverThread = null;

@@ -34,6 +34,7 @@ public class PromptoServlet extends HttpServlet {
 			resp.setContentType("application/json");
 			resp.setStatus(200);
 		} catch(Exception e) {
+			e.printStackTrace();
 			resp.setStatus(500);
 		}
 	}
