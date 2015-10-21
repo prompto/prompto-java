@@ -36,10 +36,5 @@
 			<type>1</type>
 			<location>/Users/ericvergnaud/Development/prompto/prompto-libraries/concat/internet.pec</location>
 		</link>
-		<link>
-			<name>src/test/resources/prompto/core.pec</name>
-			<type>1</type>
-			<location>/Users/ericvergnaud/Development/prompto/prompto-libraries/concat/core.pec</location>
-		</link>
 	</linkedResources>
 </projectDescription>

@@ -1,0 +1,31 @@
+define getHttpUser as native method returning Text doing:
+	Java: return prompto.server.Server.getHttpUser();
+	C#: return prompto.server.Server.getHttpUser();
+	Python2: return getHttpUser() from module: prompto.server.Server
+	Python3: return getHttpUser() from module: prompto.server.Server
+	JavaScript: return getHttpUser(); from module: prompto/server/Server.js
+
+define getHttpSession as native method returning Document doing:
+	Java: return prompto.server.Server.getHttpSession();
+	C#: return prompto.server.Server.getHttpSession();
+	Python2: return getHttpSession() from module: prompto.server.Server
+	Python3: return getHttpSession() from module: prompto.server.Server
+	JavaScript: return getHttpSession(); from module: prompto/server/Server.js
+define path as Text attribute
+define encoding as Text attribute
+
+define Url as native resource with attributes path and encoding, and bindings:
+	
+	define category bindings as:
+		Java: prompto.internet.Url
+		C#: prompto.internet.Url
+		Python2: Url from module: prompto.internet.Url
+		Python3: Url from module: prompto.internet.Url
+		JavaScript: Url from module: prompto/internet/Url.js
+
+define "reads from www.html5rocks.com" as test method doing:
+	// need a cross-domain enabled page for browser testing
+	content = read from Url with "http://www.html5rocks.com/en/" as path
+and verifying: 
+	content contains "HTML5 Rocks"
+ 

@@ -1,0 +1,82 @@
+define Writer as native category with bindings:
+
+	define category bindings as:
+		Java: java.io.PrintStream
+		C#: System.IO.TextWriter
+		Python2: StringIO from module: StringIO 
+		Python3: StringIO from module: io
+		JavaScript: writer from module: prompto/io/io.js
+
+define stdout as native method returning Writer doing:
+	Java: return System.out;
+	C#: return System.Console.Out;
+	Python2: return stdout from module: sys
+	Python3: return stdout from module: sys
+	JavaScript: return stdout; from module: prompto/io/io.js
+
+define stderr as native method returning Writer doing:
+	Java: return System.err;
+	C#: return System.Console.Error;
+	Python2: return stderr from module: sys
+	Python3: return stderr from module: sys
+	JavaScript: return stderr; from module: prompto/io/io.js
+
+define printNative as native method receiving any value and Writer writer doing:
+	Java: writer.print(value);
+	C#: writer.Write(value);
+	Python2: print(objects=str(value), end="", file=writer)
+	Python3: print(objects=str(value), end="", file=writer)
+	JavaScript: writer.write(value.toString());
+
+define print as method receiving any value doing:
+	writer = invoke: stdout
+	printNative value with writer as writer
+	
+define printLine as method receiving any value doing:
+	writer = invoke: stdout
+	value = "" + value + "\n" 
+	printNative value with writer as writer
+
+define PrintWriter as category with attribute text, and methods:
+	
+	define print as method receiving any value doing:
+		if text is nothing:
+			text = "" + value
+		else:
+			text = text + value
+
+define print as method receiving any value and any writer doing:
+	if writer is a PrintWriter:
+		writer.print with value as value
+	else:
+		printNative value with writer as writer
+
+define printLine as method receiving any value and any writer doing:
+	print value with writer as writer
+	print '\n' with writer as writer
+
+define "print a text" as test method doing:
+	w = mutable PrintWriter
+	print "Hello" with w as writer
+	print " John" with w as writer
+and verifying: 
+	w.text = "Hello John"
+
+define "print an integer" as test method doing:
+	w = mutable PrintWriter
+	print 12345 with w as writer
+and verifying: 
+	w.text = "12345" 
+
+define "printLine a text" as test method doing:
+	w = mutable PrintWriter
+	print "Hello" with w as writer
+	printLine " John" with w as writer
+and verifying: 
+	w.text = "Hello John\n"
+
+define "printLine an integer" as test method doing:
+	w = mutable PrintWriter
+	printLine 12345 with w as writer
+and verifying: 
+	w.text = "12345\n" 
