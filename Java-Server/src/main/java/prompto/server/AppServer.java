@@ -121,9 +121,12 @@ public class AppServer {
 			@Override
 			public void run() {
 				try {
-					jettyServer.start();
-					synchronized (sync) {
-						sync.notify();
+					try {
+						jettyServer.start();
+					} finally {
+						synchronized (sync) {
+							sync.notify();
+						}
 					}
 					jettyServer.join();
 				} catch(Throwable t) {
