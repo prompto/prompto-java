@@ -2,6 +2,7 @@ package prompto.value;
 
 import prompto.error.PromptoError;
 import prompto.runtime.Context;
+import prompto.store.ICursor;
 
 public interface IContainer<T extends IValue> extends ICursor<T>
 {

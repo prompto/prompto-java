@@ -6,6 +6,7 @@ import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.store.ICursor;
 import prompto.store.IDocumentIterator;
 import prompto.type.CategoryType;
 import prompto.type.CollectionType;
