@@ -9,7 +9,7 @@ import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.type.IntegerType;
 import prompto.utils.CodeWriter;
-import prompto.value.ICollection;
+import prompto.value.IContainer;
 import prompto.value.IValue;
 import prompto.value.Integer;
 import prompto.value.ListValue;
@@ -79,8 +79,8 @@ public class ItemInstance implements IAssignableSelector {
 	public IValue interpret(Context context) throws PromptoError {
 		IValue parent = this.parent.interpret(context);
 		IValue item = this.item.interpret(context);
-        if (parent instanceof ICollection)
-            return ((ICollection<?>)parent).getItem(context, item);
+        if (parent instanceof IContainer)
+            return ((IContainer<?>)parent).getItem(context, item);
          else
  			throw new SyntaxError("Unknown item/key: " + item.getClass().getName());
 	}

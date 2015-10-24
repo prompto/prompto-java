@@ -23,7 +23,7 @@ import prompto.statement.MethodCall;
 import prompto.value.ConcreteInstance;
 import prompto.value.Document;
 import prompto.value.ExpressionValue;
-import prompto.value.ICollection;
+import prompto.value.IContainer;
 import prompto.value.IInstance;
 import prompto.value.IValue;
 import prompto.value.ListValue;
@@ -260,7 +260,7 @@ public class CategoryType extends BaseType {
 		return decl.newInstance(context, document);
 	}
 	
-	public IValue sort(final Context context, ICollection<IValue> list, IExpression key) throws PromptoError {
+	public IValue sort(final Context context, IContainer<IValue> list, IExpression key) throws PromptoError {
 		if(list.length()==0)
 			return list;
 		if(key==null)
@@ -277,7 +277,7 @@ public class CategoryType extends BaseType {
 	}
 	
 	
-	private ListValue sortByExpression(final Context context, ICollection<IValue> list, final IExpression key) throws PromptoError {
+	private ListValue sortByExpression(final Context context, IContainer<IValue> list, final IExpression key) throws PromptoError {
 		try {
 			return this.<ConcreteInstance>doSort(context,list,new Comparator<ConcreteInstance>() {
 				@Override
@@ -302,7 +302,7 @@ public class CategoryType extends BaseType {
 		}
 	}
 
-	private ListValue sortByAttribute(final Context context, ICollection<IValue> list, final Identifier name) throws PromptoError {
+	private ListValue sortByAttribute(final Context context, IContainer<IValue> list, final Identifier name) throws PromptoError {
 		try {
 			return this.<IInstance>doSort(context,list,new Comparator<IInstance>() {
 				@Override
@@ -325,11 +325,11 @@ public class CategoryType extends BaseType {
 		}
 	}
 	
-	private ListValue sortByClassMethod(Context context, ICollection<IValue> list, final String name) {
+	private ListValue sortByClassMethod(Context context, IContainer<IValue> list, final String name) {
 		return null;
 	}
 
-	private boolean globalMethodExists(Context context, ICollection<IValue> list, Identifier name) {
+	private boolean globalMethodExists(Context context, IContainer<IValue> list, Identifier name) {
 		try {
 			IExpression exp = new ExpressionValue(this, newInstance(context));
 			ArgumentAssignment arg = new ArgumentAssignment(null, exp);
@@ -342,7 +342,7 @@ public class CategoryType extends BaseType {
 		}
 	}
 
-	private ListValue sortByGlobalMethod(Context context, ICollection<IValue> list, final Identifier name) throws PromptoError {
+	private ListValue sortByGlobalMethod(Context context, IContainer<IValue> list, final Identifier name) throws PromptoError {
 		IExpression exp = new ExpressionValue(this, newInstance(context));
 		ArgumentAssignment arg = new ArgumentAssignment(null, exp);
 		ArgumentAssignmentList args = new ArgumentAssignmentList(arg);
@@ -352,7 +352,7 @@ public class CategoryType extends BaseType {
 		return sortByGlobalMethod(context, list, proto, method);
 	}
 	
-	private ListValue sortByGlobalMethod(final Context context, ICollection<IValue> list, final MethodCall method, final IMethodDeclaration declaration) throws PromptoError {
+	private ListValue sortByGlobalMethod(final Context context, IContainer<IValue> list, final MethodCall method, final IMethodDeclaration declaration) throws PromptoError {
 		try {
 			return this.<IInstance>doSort(context,list,new Comparator<IInstance>() {
 				@Override

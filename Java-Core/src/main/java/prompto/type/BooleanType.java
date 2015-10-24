@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import prompto.error.PromptoError;
 import prompto.runtime.Context;
 import prompto.value.Boolean;
-import prompto.value.ICollection;
+import prompto.value.IContainer;
 import prompto.value.IValue;
 import prompto.value.ListValue;
 
@@ -32,7 +32,7 @@ public class BooleanType extends NativeType {
 	}
 	
 	@Override
-	public ListValue sort(Context context, ICollection<IValue> list) throws PromptoError {
+	public ListValue sort(Context context, IContainer<IValue> list) throws PromptoError {
 		return this.doSort(context,list);
 	}
 	

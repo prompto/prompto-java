@@ -14,7 +14,7 @@ import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.type.SetType;
 
-public class SetValue extends BaseValue implements ICollection<IValue>, IListable<SetValue> {
+public class SetValue extends BaseValue implements IContainer<IValue>, IListable<SetValue> {
 
 	Set<IValue> items = null;
 	

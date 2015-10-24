@@ -8,7 +8,7 @@ import prompto.grammar.Identifier;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.utils.CodeWriter;
-import prompto.value.ICollection;
+import prompto.value.IContainer;
 import prompto.value.IValue;
 import prompto.value.Range;
 
@@ -43,7 +43,7 @@ public interface IType {
 	boolean isMoreSpecificThan(Context context, IType other);
 	
 	Range<?> newRange(Object first,Object last) throws SyntaxError;
-	IValue sort(Context context,ICollection<IValue> values) throws PromptoError;
+	IValue sort(Context context,IContainer<IValue> values) throws PromptoError;
 	
 	IValue convertJavaValueToPromptoValue(Object value);
 	Class<?> toJavaClass();

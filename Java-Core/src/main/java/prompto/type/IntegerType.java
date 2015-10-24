@@ -7,7 +7,7 @@ import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
-import prompto.value.ICollection;
+import prompto.value.IContainer;
 import prompto.value.IValue;
 import prompto.value.Integer;
 import prompto.value.IntegerRange;
@@ -138,7 +138,7 @@ public class IntegerType extends NativeType {
 	}
 
 	@Override
-	public ListValue sort(Context context, ICollection<IValue> list) throws PromptoError {
+	public ListValue sort(Context context, IContainer<IValue> list) throws PromptoError {
 		return this.doSort(context,list);
 	}
 	

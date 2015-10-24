@@ -16,7 +16,7 @@ import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.utils.CodeWriter;
 import prompto.value.ExpressionValue;
-import prompto.value.ICollection;
+import prompto.value.IContainer;
 import prompto.value.IValue;
 import prompto.value.ListValue;
 import prompto.value.Range;
@@ -167,15 +167,15 @@ public abstract class BaseType implements IType {
 	}
 
 	@Override
-	public ListValue sort(Context context, ICollection<IValue> list) throws PromptoError {
+	public ListValue sort(Context context, IContainer<IValue> list) throws PromptoError {
 		throw new RuntimeException("Unsupported!");
 	}
 
-	protected ListValue doSort(Context context, ICollection<IValue> list) throws PromptoError {
+	protected ListValue doSort(Context context, IContainer<IValue> list) throws PromptoError {
 		return doSort(context, list, null);
 	}
 
-	protected <T extends IValue> ListValue doSort(Context context, ICollection<IValue> list, Comparator<T> cmp) throws PromptoError {
+	protected <T extends IValue> ListValue doSort(Context context, IContainer<IValue> list, Comparator<T> cmp) throws PromptoError {
 		PriorityQueue<T> queue = new PriorityQueue<T>((int) list.length(), cmp);
 		for (Object o : list.getItems(context)) {
 			if (o instanceof IExpression)

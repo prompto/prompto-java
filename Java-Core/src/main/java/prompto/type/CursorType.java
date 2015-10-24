@@ -1,10 +1,9 @@
 package prompto.type;
 
-import java.util.List;
-
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.value.Cursor;
 
 public class CursorType extends CollectionType {
 	
@@ -14,7 +13,7 @@ public class CursorType extends CollectionType {
 	
 	@Override
 	public Class<?> toJavaClass() {
-		return List.class;
+		return Cursor.class;
 	}
 	
 	@Override

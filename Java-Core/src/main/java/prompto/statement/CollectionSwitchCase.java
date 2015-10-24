@@ -7,7 +7,7 @@ import prompto.runtime.Context;
 import prompto.type.CollectionType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.value.ICollection;
+import prompto.value.IContainer;
 import prompto.value.IValue;
 import prompto.value.ListValue;
 
@@ -30,8 +30,8 @@ public class CollectionSwitchCase extends SwitchCase {
 	@Override
 	public boolean matches(Context context, IValue value) throws PromptoError {
 		Object thisValue = expression.interpret(context);
-		if(thisValue instanceof ICollection)
-			return ((ICollection<?>)thisValue).hasItem(context, value);
+		if(thisValue instanceof IContainer)
+			return ((IContainer<?>)thisValue).hasItem(context, value);
 		else if(thisValue instanceof ListValue)
 			return ((ListValue)thisValue).hasItem(context, value);
 		return false;

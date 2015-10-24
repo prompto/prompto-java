@@ -11,7 +11,7 @@ import prompto.type.IType;
 import prompto.type.ListType;
 import prompto.type.SetType;
 import prompto.utils.CodeWriter;
-import prompto.value.ICollection;
+import prompto.value.IContainer;
 import prompto.value.IValue;
 
 public class SortedExpression implements IExpression {
@@ -94,13 +94,13 @@ public class SortedExpression implements IExpression {
 		IValue o = source.interpret(context);
 		if(o==null)
 			throw new NullReferenceError();
-		if(!(o instanceof ICollection<?>))
+		if(!(o instanceof IContainer<?>))
 			throw new InternalError("Unexpected type:" + o.getClass().getName());
 		IType itemType = ((CollectionType)type).getItemType();
 		if(itemType instanceof CategoryType) 
-			return ((CategoryType)itemType).sort(context, (ICollection<IValue>)o, key);
+			return ((CategoryType)itemType).sort(context, (IContainer<IValue>)o, key);
 		else
-			return itemType.sort(context, (ICollection<IValue>)o );
+			return itemType.sort(context, (IContainer<IValue>)o );
 	}
 
 	public void setKey(IExpression key) {

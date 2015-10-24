@@ -8,7 +8,7 @@ import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.Boolean;
-import prompto.value.ICollection;
+import prompto.value.IContainer;
 import prompto.value.IValue;
 
 public class ContainsExpression implements IExpression, IAssertion {
@@ -62,23 +62,23 @@ public class ContainsExpression implements IExpression, IAssertion {
         {
             case IN:
             case NOT_IN:
-                if(rval instanceof ICollection)
-                    result = ((ICollection<?>)rval).hasItem(context, lval);
+                if(rval instanceof IContainer)
+                    result = ((IContainer<?>)rval).hasItem(context, lval);
                 break;
             case CONTAINS:
             case NOT_CONTAINS:
-                if(lval instanceof ICollection)
-                    result = ((ICollection<?>)lval).hasItem(context, rval);
+                if(lval instanceof IContainer)
+                    result = ((IContainer<?>)lval).hasItem(context, rval);
                 break;
             case CONTAINS_ALL:
             case NOT_CONTAINS_ALL:
-                if (lval instanceof ICollection && rval instanceof ICollection)
-                    result = containsAll(context, (ICollection<?>)lval, (ICollection<?>)rval);
+                if (lval instanceof IContainer && rval instanceof IContainer)
+                    result = containsAll(context, (IContainer<?>)lval, (IContainer<?>)rval);
                 break;
             case CONTAINS_ANY:
             case NOT_CONTAINS_ANY:
-                if (lval instanceof ICollection && rval instanceof ICollection)
-                    result = containsAny(context, (ICollection<?>)lval, (ICollection<?>)rval);
+                if (lval instanceof IContainer && rval instanceof IContainer)
+                    result = containsAny(context, (IContainer<?>)lval, (IContainer<?>)rval);
                 break;
         }
         if (result != null)
@@ -98,7 +98,7 @@ public class ContainsExpression implements IExpression, IAssertion {
         		" " + lowerName + " " + rval.getClass().getSimpleName());	
     }
 
-	public boolean containsAll(Context context, ICollection<?> container, ICollection<?> items) throws PromptoError
+	public boolean containsAll(Context context, IContainer<?> container, IContainer<?> items) throws PromptoError
     {
         for (IValue item : items.getItems(context))
         {
@@ -107,7 +107,7 @@ public class ContainsExpression implements IExpression, IAssertion {
         }
         return true;
     }
-    public boolean containsAny(Context context, ICollection<?> container, ICollection<?> items) throws PromptoError
+    public boolean containsAny(Context context, IContainer<?> container, IContainer<?> items) throws PromptoError
     {
         for (IValue item : items.getItems(context))
         {

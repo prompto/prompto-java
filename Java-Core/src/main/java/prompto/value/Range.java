@@ -9,7 +9,7 @@ import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.type.RangeType;
 
-public abstract class Range<T extends IValue> extends BaseValue implements ICollection<T>, IRange<T> {
+public abstract class Range<T extends IValue> extends BaseValue implements IContainer<T>, IRange<T> {
 	
 	T low;
 	T high;

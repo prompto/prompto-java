@@ -9,8 +9,8 @@ import prompto.store.IDocumentIterator;
 import prompto.store.IStore;
 import prompto.type.BooleanType;
 import prompto.type.CategoryType;
+import prompto.type.CursorType;
 import prompto.type.IType;
-import prompto.type.ListType;
 import prompto.utils.CodeWriter;
 import prompto.value.Cursor;
 import prompto.value.IValue;
@@ -117,7 +117,7 @@ public class FetchAllExpression extends FetchOneExpression {
 		checkFilter(context);
 		checkOrderBy(context);
 		checkSlice(context);
-		return new ListType(type);
+		return new CursorType(type);
 	}
 	
 	private void checkSlice(Context context) {

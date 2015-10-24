@@ -9,12 +9,12 @@ import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.IValueIterable;
 import prompto.utils.ObjectList;
-import prompto.value.ICollection;
+import prompto.value.IContainer;
 import prompto.value.ISliceable;
 import prompto.value.IValue;
 
 @SuppressWarnings("serial")
-public abstract class SymbolList <T extends Symbol> extends ObjectList<T> implements IValue, ICollection<IValue> {
+public abstract class SymbolList <T extends Symbol> extends ObjectList<T> implements IValue, IContainer<IValue> {
 	
 	IType type;
 	

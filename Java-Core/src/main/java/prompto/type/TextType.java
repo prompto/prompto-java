@@ -9,7 +9,7 @@ import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
-import prompto.value.ICollection;
+import prompto.value.IContainer;
 import prompto.value.IValue;
 import prompto.value.ListValue;
 import prompto.value.Text;
@@ -98,7 +98,7 @@ public class TextType extends NativeType {
 	}
 
 	@Override
-	public ListValue sort(Context context, ICollection<IValue> list) throws PromptoError {
+	public ListValue sort(Context context, IContainer<IValue> list) throws PromptoError {
 		return this.<IValue>doSort(context,list, new Comparator<IValue>() {
 			@Override
 			public int compare(IValue o1, IValue o2) {

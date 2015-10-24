@@ -17,7 +17,7 @@ import prompto.type.DictType;
 import prompto.type.IType;
 import prompto.type.TextType;
 
-public class Dictionary extends BaseValue implements ICollection<IValue> {
+public class Dictionary extends BaseValue implements IContainer<IValue> {
 
 	Map<Text, IValue> dict;
 

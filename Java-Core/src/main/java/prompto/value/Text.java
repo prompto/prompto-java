@@ -15,7 +15,7 @@ import prompto.runtime.Context;
 import prompto.type.TextType;
 
 
-public class Text extends BaseValue implements Comparable<Text>, ICollection<Character>, ISliceable<Character>, IMultiplyable {
+public class Text extends BaseValue implements Comparable<Text>, IContainer<Character>, ISliceable<Character>, IMultiplyable {
 
 	String value;
 

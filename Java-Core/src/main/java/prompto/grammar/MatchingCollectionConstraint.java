@@ -5,7 +5,7 @@ import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.runtime.Context;
 import prompto.utils.CodeWriter;
-import prompto.value.ICollection;
+import prompto.value.IContainer;
 import prompto.value.IValue;
 
 public class MatchingCollectionConstraint implements IAttributeConstraint {
@@ -19,8 +19,8 @@ public class MatchingCollectionConstraint implements IAttributeConstraint {
 	@Override
 	public void checkValue(Context context, IValue value) throws PromptoError {
 		Object container = collection.interpret(context);
-		if(container instanceof ICollection) {
-			if(!((ICollection<?>)container).hasItem(context, value))
+		if(container instanceof IContainer) {
+			if(!((IContainer<?>)container).hasItem(context, value))
 				throw new InvalidDataError("Value:" + value.toString() + " is not in range: " + collection.toString());
 		} else
 			throw new InvalidDataError("Not a collection: " + collection.toString());

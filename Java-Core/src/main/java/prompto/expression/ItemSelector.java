@@ -6,7 +6,7 @@ import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.value.ICollection;
+import prompto.value.IContainer;
 import prompto.value.IValue;
 import prompto.value.NullValue;
 
@@ -50,8 +50,8 @@ public class ItemSelector extends SelectorExpression {
         IValue i = item.interpret(context);
         if (i == null || i==NullValue.instance())
             throw new NullReferenceError();
-        if (o instanceof ICollection)
-            return ((ICollection<?>)o).getItem(context, i);
+        if (o instanceof IContainer)
+            return ((IContainer<?>)o).getItem(context, i);
         else
         	throw new SyntaxError("Unknown collection: " + parent);
 	}

@@ -9,7 +9,7 @@ import prompto.error.SyntaxError;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.value.Decimal;
-import prompto.value.ICollection;
+import prompto.value.IContainer;
 import prompto.value.INumber;
 import prompto.value.IValue;
 import prompto.value.ListValue;
@@ -100,7 +100,7 @@ public class DecimalType extends NativeType {
 	}
 	
 	@Override
-	public ListValue sort(Context context, ICollection<IValue> list) throws PromptoError {
+	public ListValue sort(Context context, IContainer<IValue> list) throws PromptoError {
 		return this.<INumber>doSort(context,list,new Comparator<INumber>() {
 			@Override
 			public int compare(INumber o1, INumber o2) {

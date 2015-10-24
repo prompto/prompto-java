@@ -16,7 +16,7 @@ import prompto.type.IType;
 import prompto.type.ListType;
 import prompto.utils.CodeWriter;
 import prompto.value.Boolean;
-import prompto.value.ICollection;
+import prompto.value.IContainer;
 import prompto.value.IValue;
 import prompto.value.ListValue;
 
@@ -75,7 +75,7 @@ public class FetchListExpression extends Section implements IExpression {
 		Object src = source.interpret(context);
 		if(src==null)
 			throw new NullReferenceError();
-		if(!(src instanceof ICollection<?>))
+		if(!(src instanceof IContainer<?>))
 			throw new InternalError("Illegal fetch source: " + source);
 		IType sourceType = source.check(context);
 		if(!(sourceType instanceof CollectionType))
@@ -85,7 +85,7 @@ public class FetchListExpression extends Section implements IExpression {
 		Context local = context.newLocalContext();
 		Variable item = new Variable(itemName, itemType);
 		local.registerValue(item);
-		for(IValue o : ((ICollection<?>)src).getItems(context)) {
+		for(IValue o : ((IContainer<?>)src).getItems(context)) {
 			local.setValue(itemName, o);
 			IValue test = filter.interpret(local);
 			if(!(test instanceof Boolean))

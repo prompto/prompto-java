@@ -14,7 +14,7 @@ import prompto.type.CollectionType;
 import prompto.type.IType;
 
 
-public abstract class BaseList<T extends BaseList<T>> extends BaseValue implements ICollection<IValue>, ISliceable<IValue>, IListable<T> {
+public abstract class BaseList<T extends BaseList<T>> extends BaseValue implements IContainer<IValue>, ISliceable<IValue>, IListable<T> {
 
 	protected List<IValue> items;
 

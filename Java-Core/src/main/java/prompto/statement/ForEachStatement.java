@@ -11,7 +11,7 @@ import prompto.runtime.Variable;
 import prompto.type.IType;
 import prompto.type.IntegerType;
 import prompto.utils.CodeWriter;
-import prompto.value.ICollection;
+import prompto.value.IContainer;
 import prompto.value.IValue;
 import prompto.value.Integer;
 
@@ -122,17 +122,17 @@ public class ForEachStatement extends BaseStatement {
 	public IValue interpret(Context context) throws PromptoError {
 		IType srcType = source.check(context);
 		IType elemType = srcType.checkIterator(context);
-		return evaluateItemIterator(elemType, context);
+		return interpretItemIterator(elemType, context);
 	}
 
-	private IValue evaluateItemIterator(IType elemType, Context context) throws PromptoError {
+	private IValue interpretItemIterator(IType elemType, Context context) throws PromptoError {
 		if (v2 == null)
-			return evaluateItemIteratorNoIndex(elemType, context);
+			return interpretItemIteratorNoIndex(elemType, context);
 		else
-			return evaluateItemIteratorWithIndex(elemType, context);
+			return interpretItemIteratorWithIndex(elemType, context);
 	}
 
-	private IValue evaluateItemIteratorNoIndex(IType elemType, Context context) throws PromptoError {
+	private IValue interpretItemIteratorNoIndex(IType elemType, Context context) throws PromptoError {
 		IValue src = source.interpret(context);
 		Iterator<IValue> iterator = getIterator(context, src);
 		while (iterator.hasNext()) {
@@ -146,7 +146,7 @@ public class ForEachStatement extends BaseStatement {
 		return null;
 	}
 
-	private IValue evaluateItemIteratorWithIndex(IType elemType, Context context) throws PromptoError {
+	private IValue interpretItemIteratorWithIndex(IType elemType, Context context) throws PromptoError {
 		IValue src = source.interpret(context);
 		Iterator<IValue> iterator = getIterator(context, src);
 		long index = 0L;
@@ -165,8 +165,8 @@ public class ForEachStatement extends BaseStatement {
 
 	@SuppressWarnings("unchecked")
 	private Iterator<IValue> getIterator(Context context, Object src) {
-		if (src instanceof ICollection) 
-			return ((ICollection<IValue>) src).getItems(context).iterator();
+		if (src instanceof IContainer) 
+			return ((IContainer<IValue>) src).getItems(context).iterator();
 		else if(src instanceof Iterable)
 			return ((Iterable<IValue>)src).iterator();
 		else
