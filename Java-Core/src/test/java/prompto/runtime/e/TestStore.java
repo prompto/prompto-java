@@ -20,8 +20,28 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
-	public void testRecord() throws Exception {
-		checkOutput("store/record.pec");
+	public void testManyRecords() throws Exception {
+		checkOutput("store/manyRecords.pec");
+	}
+
+	@Test
+	public void testSimpleRecord() throws Exception {
+		checkOutput("store/simpleRecord.pec");
+	}
+
+	@Test
+	public void testSlicedRecords() throws Exception {
+		checkOutput("store/slicedRecords.pec");
+	}
+
+	@Test
+	public void testSortedRecords() throws Exception {
+		checkOutput("store/sortedRecords.pec");
+	}
+
+	@Test
+	public void testSubRecord() throws Exception {
+		checkOutput("store/subRecord.pec");
 	}
 
 }

@@ -2,7 +2,9 @@ package prompto.value;
 
 import java.util.Iterator;
 
+import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
+import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.IDocumentIterator;
 import prompto.type.CategoryType;
@@ -12,23 +14,23 @@ import prompto.type.IType;
 
 public class Cursor extends BaseValue implements ICursor<IValue>, Iterable<IValue>, Iterator<IValue> {
 
-	IDocumentIterator documents;
 	Context context;
+	IDocumentIterator documents;
 	
 	public Cursor(Context context, IType itemType, IDocumentIterator documents) {
 		super(new CursorType(itemType));
+		this.context = context;
+		this.documents = documents;
 	}
 
 	@Override
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
+		return length()==0;
 	}
 
 	@Override
 	public long length() {
-		// TODO Auto-generated method stub
-		return 0;
+		return documents.length();
 	}
 
 	@Override
@@ -56,5 +58,16 @@ public class Cursor extends BaseValue implements ICursor<IValue>, Iterable<IValu
 			throw new RuntimeException(e);
 		}
 	}
+	
+	@Override
+	public IValue getMember(Context context, Identifier id) throws PromptoError {
+		String name = id.toString();
+		if ("length".equals(name))
+			return new Integer(length());
+		else
+			throw new InvalidDataError("No such member:" + name);
+	}
+
+
 
 }

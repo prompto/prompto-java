@@ -181,12 +181,12 @@ public class EParser extends AbstractParser {
 		"'~'", "'<-'", "'->'", "'Boolean'", "'Character'", "'Text'", "'Integer'", 
 		"'Decimal'", "'Date'", "'Time'", "'DateTime'", "'Period'", "'Method'", 
 		"'Code'", "'Document'", "'abstract'", "'all'", "'always'", "'and'", "'any'", 
-		"'as'", "'asc'", "'attr'", "'attribute'", "'attributes'", "'bindings'", 
-		"'by'", "'case'", "'catch'", "'category'", "'class'", "'close'", "'contains'", 
-		"'def'", "'default'", "'define'", "'desc'", "'do'", "'doing'", "'each'", 
-		"'else'", "'enum'", "'enumerated'", "'except'", "'execute'", "'expecting'", 
-		"'extends'", "'fetch'", "'finally'", "'for'", "'from'", "'getter'", "'if'", 
-		"'in'", "'invoke'", "'is'", "'matching'", "'method'", "'methods'", "'modulo'", 
+		"'as'", null, "'attr'", "'attribute'", "'attributes'", "'bindings'", "'by'", 
+		"'case'", "'catch'", "'category'", "'class'", "'close'", "'contains'", 
+		"'def'", "'default'", "'define'", null, "'do'", "'doing'", "'each'", "'else'", 
+		"'enum'", "'enumerated'", "'except'", "'execute'", "'expecting'", "'extends'", 
+		"'fetch'", "'finally'", "'for'", "'from'", "'getter'", "'if'", "'in'", 
+		"'invoke'", "'is'", "'matching'", "'method'", "'methods'", "'modulo'", 
 		"'mutable'", "'native'", "'None'", "'not'", null, "'null'", "'on'", "'one'", 
 		"'open'", "'operator'", "'or'", "'order'", "'otherwise'", "'pass'", "'raise'", 
 		"'read'", "'receiving'", "'resource'", "'return'", "'returning'", "'rows'", 
@@ -6493,17 +6493,16 @@ public class EParser extends AbstractParser {
 		}
 	}
 	public static class FetchAllContext extends Fetch_expressionContext {
+		public Category_typeContext typ;
 		public ExpressionContext start;
 		public ExpressionContext end;
-		public Category_typeContext typ;
 		public ExpressionContext xfilter;
 		public Order_by_listContext xorder;
 		public TerminalNode FETCH() { return getToken(EParser.FETCH, 0); }
-		public Category_typeContext category_type() {
-			return getRuleContext(Category_typeContext.class,0);
-		}
+		public TerminalNode WHERE() { return getToken(EParser.WHERE, 0); }
+		public TerminalNode ORDER() { return getToken(EParser.ORDER, 0); }
+		public TerminalNode BY() { return getToken(EParser.BY, 0); }
 		public TerminalNode ALL() { return getToken(EParser.ALL, 0); }
-		public TerminalNode ROWS() { return getToken(EParser.ROWS, 0); }
 		public TerminalNode TO() { return getToken(EParser.TO, 0); }
 		public List<ExpressionContext> expression() {
 			return getRuleContexts(ExpressionContext.class);
@@ -6511,11 +6510,11 @@ public class EParser extends AbstractParser {
 		public ExpressionContext expression(int i) {
 			return getRuleContext(ExpressionContext.class,i);
 		}
-		public TerminalNode WHERE() { return getToken(EParser.WHERE, 0); }
-		public TerminalNode ORDER() { return getToken(EParser.ORDER, 0); }
-		public TerminalNode BY() { return getToken(EParser.BY, 0); }
 		public Order_by_listContext order_by_list() {
 			return getRuleContext(Order_by_listContext.class,0);
+		}
+		public Category_typeContext category_type() {
+			return getRuleContext(Category_typeContext.class,0);
 		}
 		public FetchAllContext(Fetch_expressionContext ctx) { copyFrom(ctx); }
 		@Override
@@ -6576,31 +6575,35 @@ public class EParser extends AbstractParser {
 				{
 				setState(1168); 
 				match(FETCH);
-				setState(1175);
+				setState(1176);
 				switch (_input.LA(1)) {
 				case ALL:
 					{
+					{
 					setState(1169); 
 					match(ALL);
+					setState(1170); 
+					((FetchAllContext)_localctx).typ = category_type();
+					}
 					}
 					break;
-				case ROWS:
+				case TYPE_IDENTIFIER:
 					{
-					setState(1170); 
-					match(ROWS);
+					{
 					setState(1171); 
-					((FetchAllContext)_localctx).start = expression(0);
+					((FetchAllContext)_localctx).typ = category_type();
 					setState(1172); 
-					match(TO);
+					((FetchAllContext)_localctx).start = expression(0);
 					setState(1173); 
+					match(TO);
+					setState(1174); 
 					((FetchAllContext)_localctx).end = expression(0);
+					}
 					}
 					break;
 				default:
 					throw new NoViableAltException(this);
 				}
-				setState(1177); 
-				((FetchAllContext)_localctx).typ = category_type();
 				setState(1180);
 				switch ( getInterpreter().adaptivePredict(_input,61,_ctx) ) {
 				case 1:
@@ -19571,8 +19574,8 @@ public class EParser extends AbstractParser {
 		"\u0469\n\61\3\61\5\61\u046c\n\61\3\61\3\61\3\61\3\61\5\61\u0472\n\61\5"+
 		"\61\u0474\n\61\5\61\u0476\n\61\3\62\3\62\3\62\3\62\3\63\3\63\3\63\3\63"+
 		"\3\63\3\64\3\64\3\64\3\64\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65"+
-		"\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\5\65\u049a"+
-		"\n\65\3\65\3\65\3\65\5\65\u049f\n\65\3\65\3\65\3\65\5\65\u04a4\n\65\5"+
+		"\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\3\65\5\65"+
+		"\u049b\n\65\3\65\3\65\5\65\u049f\n\65\3\65\3\65\3\65\5\65\u04a4\n\65\5"+
 		"\65\u04a6\n\65\3\66\3\66\3\66\3\66\3\66\3\66\3\66\5\66\u04af\n\66\3\67"+
 		"\3\67\3\67\3\67\3\67\5\67\u04b6\n\67\5\67\u04b8\n\67\3\67\3\67\3\67\5"+
 		"\67\u04bd\n\67\5\67\u04bf\n\67\38\38\38\38\38\38\38\78\u04c8\n8\f8\16"+
@@ -19986,12 +19989,12 @@ public class EParser extends AbstractParser {
 		"\2\u0485\u0486\7D\2\2\u0486\u0487\5\u00aeX\2\u0487\u0488\7c\2\2\u0488"+
 		"\u0489\5P)\2\u0489\u048a\7\u0091\2\2\u048a\u048b\5P)\2\u048b\u04a6\3\2"+
 		"\2\2\u048c\u048d\7`\2\2\u048d\u048e\7t\2\2\u048e\u048f\5\u00a2R\2\u048f"+
-		"\u0490\7\u0091\2\2\u0490\u0491\5P)\2\u0491\u04a6\3\2\2\2\u0492\u0499\7"+
-		"`\2\2\u0493\u049a\7A\2\2\u0494\u0495\7\u0081\2\2\u0495\u0496\5P)\2\u0496"+
-		"\u0497\7\u008c\2\2\u0497\u0498\5P)\2\u0498\u049a\3\2\2\2\u0499\u0493\3"+
-		"\2\2\2\u0499\u0494\3\2\2\2\u049a\u049b\3\2\2\2\u049b\u049e\5\u00a2R\2"+
-		"\u049c\u049d\7\u0091\2\2\u049d\u049f\5P)\2\u049e\u049c\3\2\2\2\u049e\u049f"+
-		"\3\2\2\2\u049f\u04a3\3\2\2\2\u04a0\u04a1\7x\2\2\u04a1\u04a2\7K\2\2\u04a2"+
+		"\u0490\7\u0091\2\2\u0490\u0491\5P)\2\u0491\u04a6\3\2\2\2\u0492\u049a\7"+
+		"`\2\2\u0493\u0494\7A\2\2\u0494\u049b\5\u00a2R\2\u0495\u0496\5\u00a2R\2"+
+		"\u0496\u0497\5P)\2\u0497\u0498\7\u008c\2\2\u0498\u0499\5P)\2\u0499\u049b"+
+		"\3\2\2\2\u049a\u0493\3\2\2\2\u049a\u0495\3\2\2\2\u049b\u049e\3\2\2\2\u049c"+
+		"\u049d\7\u0091\2\2\u049d\u049f\5P)\2\u049e\u049c\3\2\2\2\u049e\u049f\3"+
+		"\2\2\2\u049f\u04a3\3\2\2\2\u04a0\u04a1\7x\2\2\u04a1\u04a2\7K\2\2\u04a2"+
 		"\u04a4\5\u010e\u0088\2\u04a3\u04a0\3\2\2\2\u04a3\u04a4\3\2\2\2\u04a4\u04a6"+
 		"\3\2\2\2\u04a5\u0484\3\2\2\2\u04a5\u048c\3\2\2\2\u04a5\u0492\3\2\2\2\u04a6"+
 		"i\3\2\2\2\u04a7\u04a8\7\u0085\2\2\u04a8\u04ae\5Z.\2\u04a9\u04aa\7\u008f"+
@@ -20357,7 +20360,7 @@ public class EParser extends AbstractParser {
 		"\u0284\u028c\u0290\u029f\u02a3\u02be\u02c5\u02ca\u02ce\u02e1\u02e8\u02eb"+
 		"\u030c\u031f\u0326\u0348\u0351\u0368\u0378\u037d\u0385\u038e\u03a5\u03a9"+
 		"\u03c5\u0425\u0427\u0431\u0446\u0456\u045b\u0461\u0466\u0468\u046b\u0471"+
-		"\u0473\u0475\u0499\u049e\u04a3\u04a5\u04ae\u04b5\u04b7\u04bc\u04be\u04c9"+
+		"\u0473\u0475\u049a\u049e\u04a3\u04a5\u04ae\u04b5\u04b7\u04bc\u04be\u04c9"+
 		"\u04dc\u04e5\u04eb\u04f0\u04f7\u04ff\u050d\u0515\u051b\u0526\u0532\u053d"+
 		"\u054a\u054e\u0554\u0560\u0574\u0576\u057b\u0588\u0591\u059b\u05a0\u05a5"+
 		"\u05b5\u05ba\u05bd\u05c1\u05c6\u05cd\u05d8\u05da\u05e6\u05ee\u05f9\u05fe"+

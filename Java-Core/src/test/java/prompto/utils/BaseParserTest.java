@@ -23,6 +23,8 @@ import prompto.parser.SCleverParser;
 import prompto.runtime.Context;
 import prompto.runtime.Interpreter;
 import prompto.runtime.utils.Out;
+import prompto.store.IStore;
+import prompto.store.MemStore;
 import prompto.utils.CodeWriter;
 
 public abstract class BaseParserTest extends BaseTest {
@@ -76,6 +78,7 @@ public abstract class BaseParserTest extends BaseTest {
 	}
 	
 	protected void checkOutput(String resource) throws Exception {
+		IStore.setInstance(new MemStore());
 		boolean isTest = runResource(resource);
 		String read = Out.read();
 		if(isTest && read.endsWith("\n"))

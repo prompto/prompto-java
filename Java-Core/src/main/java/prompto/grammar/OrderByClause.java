@@ -1,6 +1,7 @@
 package prompto.grammar;
 
 import prompto.parser.Section;
+import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
 
 public class OrderByClause extends Section {
@@ -19,5 +20,15 @@ public class OrderByClause extends Section {
 	
 	public boolean isDescending() {
 		return descending;
+	}
+
+	public void toDialect(CodeWriter writer) {
+		for(Identifier name : names) {
+			writer.append(name.toString());
+			writer.append(".");
+		}
+		writer.trimLast(1);
+		if(descending)
+			writer.append(" descending");
 	}
 }

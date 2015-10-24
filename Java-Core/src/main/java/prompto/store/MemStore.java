@@ -56,10 +56,11 @@ public final class MemStore implements IStore {
 									IExpression filter, OrderByClauseList orderBy) throws PromptoError {
 		
 		final List<Document> docs = fetchManyDocs(context, start, end, filter, orderBy);
+		final Iterator<Document> iter = docs.iterator();
 		return new IDocumentIterator() {
-			Iterator<Document> iter = docs.iterator();
 			@Override public boolean hasNext() { return iter.hasNext(); }
 			@Override public Document next() { return iter.next(); }
+			@Override public long length() { return docs.size(); }
 		};
 	}
 

@@ -30,6 +30,8 @@ public class StorableDocument implements IStorable {
 	public void setMember(Context context, Identifier name, IValue value) {
 		if(document==null)
 			document = new Document();
+		if(value instanceof IStorable)
+			value = ((IStorable)value).asDocument();
 		document.setMember(context, name, value);
 	}
 

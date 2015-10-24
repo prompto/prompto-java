@@ -34,42 +34,114 @@ public class FetchAllExpression extends FetchOneExpression {
 	public void toDialect(CodeWriter writer) {
 		switch(writer.getDialect()) {
 		case E:
-			writer.append("fetch all ");
-			writer.append(type.getName().toString());
+			toEDialect(writer);
 			break;
 		case O:
-			writer.append("fetch all (");
-			writer.append(type.getName().toString());
-			writer.append(")");
+			toODialect(writer);
 			break;
 		case S:
-			writer.append("fetch all ");
-			writer.append(type.getName().toString());
+			toSDialect(writer);
 			break;
-		}
-		writer.append(" where ");
-		filter.toDialect(writer);
-		if(start!=null) {
-			writer.append(" rows ");
-			start.toDialect(writer);
-			writer.append(" to ");
-			end.toDialect(writer);
 		}
 	}
 	
+	private void toSDialect(CodeWriter writer) {
+		writer.append("fetch ");
+		if(start!=null) {
+			writer.append("rows ");
+			start.toDialect(writer);
+			writer.append(" to ");
+			end.toDialect(writer);
+		} else
+			writer.append("all ");
+		writer.append(" ( ");
+		writer.append(type.getName().toString());
+		writer.append(" ) ");
+		if(filter!=null) {
+			writer.append(" where ");
+			filter.toDialect(writer);
+		}
+		if(orderBy!=null)
+			orderBy.toDialect(writer);
+	}
+
+
+	private void toODialect(CodeWriter writer) {
+		writer.append("fetch ");
+		if(start==null)
+			writer.append("all ");
+		writer.append("( ");
+		writer.append(type.getName().toString());
+		writer.append(" ) ");
+		if(start!=null) {
+			writer.append("rows ( ");
+			start.toDialect(writer);
+			writer.append(" to ");
+			end.toDialect(writer);
+			writer.append(") ");
+		}
+		if(filter!=null) {
+			writer.append(" where ( ");
+			filter.toDialect(writer);
+			writer.append(") ");
+		}
+		if(orderBy!=null)
+			orderBy.toDialect(writer);
+	}
+
+
+	private void toEDialect(CodeWriter writer) {
+		writer.append("fetch ");
+		if(start==null)
+			writer.append("all ");
+		writer.append(type.getName().toString());
+		if(start!=null) {
+			start.toDialect(writer);
+			writer.append(" to ");
+			end.toDialect(writer);
+		} 
+		if(filter!=null) {
+			writer.append(" where ");
+			filter.toDialect(writer);
+		}
+		if(orderBy!=null)
+			orderBy.toDialect(writer);
+	}
+
+
 	@Override
 	public IType check(Context context) throws SyntaxError {
 		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, type.getName());
 		if(decl==null)
 			throw new SyntaxError("Expecting a type type !");
+		checkFilter(context);
+		checkOrderBy(context);
+		checkSlice(context);
+		return new ListType(type);
+	}
+	
+	private void checkSlice(Context context) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	private void checkOrderBy(Context context) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	private void checkFilter(Context context) throws SyntaxError {
+		if(filter==null)
+			return;
 		Context local = context.newLocalContext();
 		IType filterType = filter.check(local);
 		if(filterType!=BooleanType.instance())
 			throw new SyntaxError("Filtering expression must return a boolean !");
-		// TODO check start and end
-		return new ListType(type);
 	}
-	
+
+
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		IStore store = IStore.getInstance();
