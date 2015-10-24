@@ -25,6 +25,7 @@ import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
 import prompto.value.Document;
 import prompto.value.ListValue;
+import prompto.value.Integer;
 import prompto.value.Text;
 
 
@@ -33,14 +34,14 @@ public class DistributedCodeStore extends BaseCodeStore {
 	IStore store; // data store where to store/fetch the code
 	Context context; // used for querying the data store and parsing code
 	String application;
-	String version;
+	Version version;
 	
 	public DistributedCodeStore(IStore store, ICodeStore next, String application, String version) {
 		super(next);
 		this.store = store;
 		this.context = Context.newGlobalContext();
 		this.application = application;
-		this.version = version;
+		this.version = Version.parse(version);
 	}
 	
 	@Override
@@ -59,7 +60,7 @@ public class DistributedCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public String getModuleVersion() {
+	public Version getModuleVersion() {
 		return version;
 	}
 	
@@ -69,7 +70,7 @@ public class DistributedCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public IDeclaration fetchSpecificVersion(String name, String version) {
+	public IDeclaration fetchSpecificVersion(String name, Version version) {
 		IDeclaration decl = fetchInStore(name, version);
 		if(decl==null) {
 			decl = super.fetchLatestVersion(name);
@@ -85,11 +86,12 @@ public class DistributedCodeStore extends BaseCodeStore {
 		Document doc = new Document();
 		doc.setMember(context, new Identifier("type"),  new Text(origin.getModuleType().name()));
 		doc.setMember(context, new Identifier("name"),  new Text(origin.getModuleName()));
-		doc.setMember(context, new Identifier("version"),  new Text(origin.getModuleVersion()));
+		doc.setMember(context, new Identifier("version"),  new Text(origin.getModuleVersion().toString()));
+		doc.setMember(context, new Identifier("__version__"),  new Integer(origin.getModuleVersion().asInt()));
 		storeInDocument(context, doc, decl, origin.getModuleDialect(), origin.getModuleVersion());
 	}
 
-	private void storeInDocument(Context context, Document doc, IDeclaration decl, Dialect dialect, String version) {
+	private void storeInDocument(Context context, Document doc, IDeclaration decl, Dialect dialect, Version version) {
 		if(decl instanceof MethodDeclarationMap) {
 			for(IDeclaration d : ((MethodDeclarationMap)decl).values())
 				storeInDocument(context, doc, d, dialect, version);
@@ -97,7 +99,8 @@ public class DistributedCodeStore extends BaseCodeStore {
 			Document child = new Document();
 			child.setMember(context, new Identifier("type"),  new Text(decl.getDeclarationType().name()));
 			child.setMember(context, new Identifier("name"),  new Text(decl.getIdentifier().getName()));
-			doc.setMember(context, new Identifier("version"),  new Text(version));
+			doc.setMember(context, new Identifier("version"),  new Text(version.toString()));
+			doc.setMember(context, new Identifier("__version__"),  new Integer(version.asInt()));
 			if(decl instanceof IMethodDeclaration) {
 				String proto = ((IMethodDeclaration)decl).getProto();
 				child.setMember(context, new Identifier("proto"), new Text(proto));
@@ -120,7 +123,7 @@ public class DistributedCodeStore extends BaseCodeStore {
 		}
 	}
 
-	private IDeclaration fetchInStore(String name, String version) {
+	private IDeclaration fetchInStore(String name, Version version) {
 		if(store==null)
 			return null;
 		try {
@@ -140,13 +143,13 @@ public class DistributedCodeStore extends BaseCodeStore {
 		}
 	}
 
-	private IExpression buildFilter(String name, String version) {
+	private IExpression buildFilter(String name, Version version) {
 		IExpression left = new UnresolvedIdentifier(new Identifier("name"));
 		IExpression right = new TextLiteral("'" + name + "'");
 		IExpression filter = new EqualsExpression(left, EqOp.ROUGHLY, right);
 		if(!LATEST.equals(version)) {
-			left = new UnresolvedIdentifier(new Identifier("version"));
-			right = new TextLiteral("'" + version + "'");
+			left = new UnresolvedIdentifier(new Identifier("__version__"));
+			right = new IntegerLiteral(version.asInt());
 			IExpression condition = new EqualsExpression(left, EqOp.EQUALS, right);
 			filter = new AndExpression(filter, condition);
 		} 

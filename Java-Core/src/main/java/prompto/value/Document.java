@@ -44,4 +44,17 @@ public class Document extends BaseValue
 	public boolean hasMember(Identifier name) {
 		return members.containsKey(name);
 	}
+	
+	@Override
+	public String toString() {
+		return members.toString();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Document)
+			return members.equals(((Document)obj).members);
+		else
+			return false;
+	}
 }

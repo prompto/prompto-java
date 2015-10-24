@@ -11,10 +11,11 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import prompto.runtime.Context;
 import prompto.store.DistributedCodeStore;
 import prompto.store.ICodeStore;
-import prompto.store.BootstrapCodeStore;
+import prompto.store.ResourceCodeStore;
 import prompto.store.ICodeStore.ModuleType;
 import prompto.store.IStore;
 import prompto.store.MemStore;
+import prompto.store.Version;
 
 public class AppServer {
 	
@@ -25,7 +26,7 @@ public class AppServer {
 		Integer httpPort = null;
 		String resource = null;
 		String application = null;
-		String version = ICodeStore.LATEST;
+		Version version = ICodeStore.LATEST;
 		
 		// parse parameters
 		for(int i=0; i<args.length; i++) {
@@ -38,7 +39,7 @@ public class AppServer {
 			} else if(args[i].equalsIgnoreCase("-application")) {
 				application = args[++i];
 			} else if(args[i].equalsIgnoreCase("-version")) {
-				version = args[++i];
+				version = Version.parse(args[++i]);
 			}
 		}
 		if(httpPort==null || application==null) {
@@ -53,7 +54,7 @@ public class AppServer {
 		startServer(httpPort, handler);
 	}
 
-	private static void showHelp(Integer httpPort, String application, String version) {
+	private static void showHelp(Integer httpPort, String application, Version version) {
 		if(httpPort==null)
 			System.out.println("Missing argument: -http_port");
 		if(application==null)
@@ -62,16 +63,16 @@ public class AppServer {
 			System.out.println("Additional argument: -version (optional)");
 	}
 
-	public static void bootstrap(IStore codeStore, String resourceName, String application, String version) throws Exception {
+	public static void bootstrap(IStore codeStore, String resourceName, String application, Version version) throws Exception {
 		System.out.println("Bootstrapping prompto...");
 		System.out.println("Connecting to prompto runtime...");
-		ICodeStore module = new BootstrapCodeStore(null, ModuleType.LIBRARY, "core.pec", "1.0.0");
-		module = new BootstrapCodeStore(module, ModuleType.LIBRARY, "console.pec", "1.0.0");
-		module = new BootstrapCodeStore(module, ModuleType.LIBRARY, "internet.pec", "1.0.0");
+		ICodeStore module = new ResourceCodeStore(null, ModuleType.LIBRARY, "core.pec", "1.0.0");
+		module = new ResourceCodeStore(module, ModuleType.LIBRARY, "console.pec", "1.0.0");
+		module = new ResourceCodeStore(module, ModuleType.LIBRARY, "internet.pec", "1.0.0");
 		if(resourceName!=null)
-			module = new BootstrapCodeStore(module, ModuleType.APPLICATION, resourceName, version);
+			module = new ResourceCodeStore(module, ModuleType.APPLICATION, resourceName, version.toString());
 		System.out.println("Connecting to code store for application " + application + " version " + version + "...");
-		ICodeStore store = new DistributedCodeStore(codeStore, module, application, version);
+		ICodeStore store = new DistributedCodeStore(codeStore, module, application, version.toString());
 		ICodeStore.setInstance(store);
 		System.out.println("Bootstrapping successful...");
 	}

@@ -24,6 +24,7 @@ import prompto.remoting.ParameterList;
 import prompto.runtime.Context;
 import prompto.server.AppServer;
 import prompto.store.MemStore;
+import prompto.store.Version;
 import prompto.type.IType;
 import prompto.type.TextType;
 import prompto.value.IValue;
@@ -34,7 +35,7 @@ public class TestConnect {
 	@Before
 	public void before() throws Exception {
 		// bootstrap
-		AppServer.bootstrap(new MemStore(), null, "test", "1.0.0");
+		AppServer.bootstrap(new MemStore(), null, "test", Version.parse("1.0.0"));
 		// adjust handler path for junit and cobertura context
 		Handler rh1 = AppServer.prepareResourceHandler("/");
 		Handler rh2 = AppServer.prepareResourceHandler("../classes/");

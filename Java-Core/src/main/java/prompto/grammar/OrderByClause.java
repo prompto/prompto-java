@@ -12,4 +12,12 @@ public class OrderByClause extends Section {
 		this.names = names;
 		this.descending = descending;
 	}
+	
+	public IdentifierList getNames() {
+		return names;
+	}
+	
+	public boolean isDescending() {
+		return descending;
+	}
 }

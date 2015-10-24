@@ -19,7 +19,7 @@ public abstract class BaseCodeStore implements ICodeStore {
 	}
 	
 	@Override
-	public IDeclaration fetchSpecificVersion(String name, String version) {
+	public IDeclaration fetchSpecificVersion(String name, Version version) {
 		return next==null ? null : next.fetchSpecificVersion(name, version);
 	}
 

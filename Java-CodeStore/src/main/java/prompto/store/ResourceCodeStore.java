@@ -11,18 +11,18 @@ import prompto.parser.Dialect;
 import prompto.runtime.Context.MethodDeclarationMap;
 
 /* class used to bootstrap modules from resources */
-public class BootstrapCodeStore extends BaseCodeStore {
+public class ResourceCodeStore extends BaseCodeStore {
 
 	ModuleType type;
 	String resourceName;
-	String version;
+	Version version;
 	Map<String, IDeclaration> declarations = null;
 	
-	public BootstrapCodeStore(ICodeStore next, ModuleType type, String resourceName, String version) throws Exception {
+	public ResourceCodeStore(ICodeStore next, ModuleType type, String resourceName, String version) throws Exception {
 		super(next);
 		this.type = type;
 		this.resourceName = resourceName;
-		this.version = version;
+		this.version = Version.parse(version);
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class BootstrapCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public String getModuleVersion() {
+	public Version getModuleVersion() {
 		return version;
 	}
 	
@@ -56,7 +56,7 @@ public class BootstrapCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public IDeclaration fetchSpecificVersion(String name, String version) {
+	public IDeclaration fetchSpecificVersion(String name,Version version) {
 		IDeclaration decl = fetchInResource(name);
 		if(decl!=null)
 			return decl;

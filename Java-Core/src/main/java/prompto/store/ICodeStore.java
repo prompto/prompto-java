@@ -59,7 +59,7 @@ public interface ICodeStore {
 		return Dialect.valueOf(s.toUpperCase());
 	}
 
-	static final String LATEST = "__latest__";
+	static final Version LATEST = Version.parse("-1.-1.-1");
 	
 	static public enum ModuleType {
 		APPLICATION,
@@ -71,10 +71,10 @@ public interface ICodeStore {
 	}
 	
 	IDeclaration fetchLatestVersion(String name);
-	IDeclaration fetchSpecificVersion(String name, String version);
+	IDeclaration fetchSpecificVersion(String name, Version version);
 	ModuleType getModuleType();
 	Dialect getModuleDialect();
 	String getModuleName();
-	String getModuleVersion();
+	Version getModuleVersion();
 
 }

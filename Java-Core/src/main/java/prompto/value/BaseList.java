@@ -41,6 +41,10 @@ public abstract class BaseList<T extends BaseList<T>> extends BaseValue implemen
 		return items.toString();
 	}
 
+	public void addItem(IValue item) {
+		items.add(item);
+	}
+	
 	public Collection<IValue> getItems() {
 		return items;
 	}
