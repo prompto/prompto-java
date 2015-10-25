@@ -25,8 +25,6 @@ public class CursorType extends ContainerType {
 	public boolean equals(Object obj) {
 		if(obj==this)
 			return true; 
-		if(obj==null)
-			return false;
 		if(!(obj instanceof CursorType))
 			return false;
 		CursorType other = (CursorType)obj;

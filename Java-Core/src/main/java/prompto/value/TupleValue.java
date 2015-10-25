@@ -72,12 +72,16 @@ public class TupleValue extends BaseList<TupleValue> {
 			// compare items
 			IValue thisVal = iterThis.next();
 			IValue otherVal = iterOther.next();
+			if(thisVal==null && otherVal==null)
+				continue;
+			else if(thisVal==null)
+				return descending ? 1 : -1;
+			else if(otherVal==null)
+				return descending ? -1 : 1;
 			int cmp = thisVal.CompareTo(context, otherVal);
 			// if not equal, done
 			if(cmp!=0) {
-				if(descending)
-					cmp = -cmp;
-				return cmp;
+				return descending ? -cmp : cmp;
 			}
 		}
 		boolean descending = iterDirs.hasNext() ? iterDirs.next() : false;
