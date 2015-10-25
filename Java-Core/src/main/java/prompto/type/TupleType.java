@@ -4,7 +4,7 @@ import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 
-public class TupleType extends CollectionType {
+public class TupleType extends ContainerType {
 
 	static TupleType instance = new TupleType();
 	

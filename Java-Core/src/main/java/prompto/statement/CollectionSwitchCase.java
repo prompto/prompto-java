@@ -4,7 +4,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.runtime.Context;
-import prompto.type.CollectionType;
+import prompto.type.ContainerType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IContainer;
@@ -21,8 +21,8 @@ public class CollectionSwitchCase extends SwitchCase {
 	@Override
 	public void checkSwitchType(Context context, IType type) throws SyntaxError {
 		IType thisType = expression.check(context);
-		if(thisType instanceof CollectionType)
-			thisType = ((CollectionType)thisType).getItemType();
+		if(thisType instanceof ContainerType)
+			thisType = ((ContainerType)thisType).getItemType();
 		if(!thisType.isAssignableTo(context, type))
 			throw new SyntaxError("Cannot assign:" + thisType.getName() + " to:" + type.getName());
 	}

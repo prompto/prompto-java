@@ -6,7 +6,7 @@ import prompto.error.SyntaxError;
 import prompto.grammar.UnresolvedIdentifier;
 import prompto.runtime.Context;
 import prompto.type.CategoryType;
-import prompto.type.CollectionType;
+import prompto.type.ContainerType;
 import prompto.type.IType;
 import prompto.type.ListType;
 import prompto.type.SetType;
@@ -96,7 +96,7 @@ public class SortedExpression implements IExpression {
 			throw new NullReferenceError();
 		if(!(o instanceof IContainer<?>))
 			throw new InternalError("Unexpected type:" + o.getClass().getName());
-		IType itemType = ((CollectionType)type).getItemType();
+		IType itemType = ((ContainerType)type).getItemType();
 		if(itemType instanceof CategoryType) 
 			return ((CategoryType)itemType).sort(context, (IContainer<IValue>)o, key);
 		else

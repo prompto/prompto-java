@@ -12,7 +12,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
-import prompto.type.CollectionType;
+import prompto.type.ContainerType;
 import prompto.type.DictType;
 import prompto.type.IType;
 import prompto.type.TextType;
@@ -27,7 +27,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 	}
 
 	public Dictionary(Dictionary from) {
-		this(((CollectionType) from.type).getItemType(), from.dict);
+		this(((ContainerType) from.type).getItemType(), from.dict);
 	}
 
 	public Dictionary(IType itemType, Map<Text, IValue> dict) {
@@ -39,7 +39,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 		Map<Text, IValue> dict = new HashMap<Text, IValue>();
 		dict.putAll(dict1.dict);
 		dict.putAll(dict2.dict);
-		return new Dictionary(((CollectionType) dict1.type).getItemType(), dict); // TODO
+		return new Dictionary(((ContainerType) dict1.type).getItemType(), dict); // TODO
 																					// check
 																					// type
 																					// fungibility
@@ -80,7 +80,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 			Set<IValue> values = (Set<IValue>) (Object) this.dict.keySet();
 			return new SetValue(type, values);
 		} else if ("values".equals(name)) {
-			IType itemType = ((CollectionType) this.type).getItemType();
+			IType itemType = ((ContainerType) this.type).getItemType();
 			Collection<IValue> values = this.dict.values();
 			return new ListValue(itemType, values);
 		} else

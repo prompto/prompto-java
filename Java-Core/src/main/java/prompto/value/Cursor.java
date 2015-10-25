@@ -9,7 +9,7 @@ import prompto.runtime.Context;
 import prompto.store.ICursor;
 import prompto.store.IDocumentIterator;
 import prompto.type.CategoryType;
-import prompto.type.CollectionType;
+import prompto.type.ContainerType;
 import prompto.type.CursorType;
 import prompto.type.IType;
 
@@ -53,7 +53,7 @@ public class Cursor extends BaseValue implements ICursor<IValue>, Iterable<IValu
 	public IValue next() {
 		try {
 			Document doc = documents.next();
-			CategoryType itemType = (CategoryType) ((CollectionType)type).getItemType();
+			CategoryType itemType = (CategoryType) ((ContainerType)type).getItemType();
 			return itemType.newInstance(context, doc);
 		} catch (PromptoError e) {
 			throw new RuntimeException(e);

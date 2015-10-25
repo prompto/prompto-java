@@ -5,7 +5,7 @@ import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.value.Cursor;
 
-public class CursorType extends CollectionType {
+public class CursorType extends ContainerType {
 	
 	public CursorType(IType itemType) {
 		super(itemType.getName()+"[]", itemType);
@@ -35,8 +35,8 @@ public class CursorType extends CollectionType {
 	
 	@Override
 	public IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError {
-		if(other instanceof CollectionType) {
-			IType itemType = ((CollectionType)other).getItemType();
+		if(other instanceof ContainerType) {
+			IType itemType = ((ContainerType)other).getItemType();
 			if((other instanceof CursorType || other instanceof SetType) 
 					&& this.getItemType().equals(itemType))
 				return this;

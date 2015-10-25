@@ -10,7 +10,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
-import prompto.type.CollectionType;
+import prompto.type.ContainerType;
 import prompto.type.IType;
 
 
@@ -18,22 +18,22 @@ public abstract class BaseList<T extends BaseList<T>> extends BaseValue implemen
 
 	protected List<IValue> items;
 
-	protected BaseList(CollectionType type) {
+	protected BaseList(ContainerType type) {
 		this(type, new ArrayList<IValue>());
 	}
 	
-	protected BaseList(CollectionType type, List<IValue> items) {
+	protected BaseList(ContainerType type, List<IValue> items) {
 		super(type);
 		this.items = items;
 	}
 
-	public BaseList(CollectionType type, Collection<IValue> items) {
+	public BaseList(ContainerType type, Collection<IValue> items) {
 		super(type);
 		this.items = new ArrayList<IValue>(items);
 	}
 
 	public IType getItemType() {
-		return ((CollectionType)type).getItemType();
+		return ((ContainerType)type).getItemType();
 	}
 
 	@Override

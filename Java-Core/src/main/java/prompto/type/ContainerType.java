@@ -3,11 +3,11 @@ package prompto.type;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 
-public abstract class CollectionType extends NativeType {
+public abstract class ContainerType extends NativeType {
 
 	IType itemType;
 	
-	protected CollectionType(String name, IType itemType) {
+	protected ContainerType(String name, IType itemType) {
 		super(name);
 		this.itemType = itemType;
 	}

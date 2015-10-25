@@ -3,7 +3,7 @@ package prompto.type;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 
-public class RangeType extends CollectionType {
+public class RangeType extends ContainerType {
 	
 	public RangeType(IType itemType) {
 		super(itemType.getName()+"[..]",itemType);

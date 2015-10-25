@@ -6,7 +6,7 @@ import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 
-public class ListType extends CollectionType {
+public class ListType extends ContainerType {
 	
 	public ListType(IType itemType) {
 		super(itemType.getName()+"[]", itemType);
@@ -36,8 +36,8 @@ public class ListType extends CollectionType {
 	
 	@Override
 	public IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError {
-		if(other instanceof CollectionType) {
-			IType itemType = ((CollectionType)other).getItemType();
+		if(other instanceof ContainerType) {
+			IType itemType = ((ContainerType)other).getItemType();
 			if((other instanceof ListType || other instanceof SetType) 
 					&& this.getItemType().equals(itemType))
 				return this;

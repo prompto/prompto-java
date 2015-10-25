@@ -10,7 +10,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
-import prompto.type.CollectionType;
+import prompto.type.ContainerType;
 import prompto.type.IType;
 import prompto.type.ListType;
 
@@ -30,7 +30,7 @@ public class ListValue extends BaseList<ListValue> {
 
 	@Override
 	public ListValue newInstance(List<IValue> items) {
-		IType itemType = ((CollectionType)this.type).getItemType();
+		IType itemType = ((ContainerType)this.type).getItemType();
 		return new ListValue(itemType, items);
 	}
 
@@ -45,7 +45,7 @@ public class ListValue extends BaseList<ListValue> {
 	@Override
 	public IValue Multiply(Context context, IValue value) throws PromptoError {
 		if (value instanceof Integer) {
-			IType itemType = ((CollectionType)this.type).getItemType();
+			IType itemType = ((ContainerType)this.type).getItemType();
 			int count = (int) ((Integer) value).IntegerValue();
 			if (count < 0)
 				throw new SyntaxError("Negative repeat count:" + count);

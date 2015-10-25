@@ -11,7 +11,7 @@ import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.type.BooleanType;
-import prompto.type.CollectionType;
+import prompto.type.ContainerType;
 import prompto.type.IType;
 import prompto.type.ListType;
 import prompto.utils.CodeWriter;
@@ -59,10 +59,10 @@ public class FetchListExpression extends Section implements IExpression {
 	@Override
 	public IType check(Context context) throws SyntaxError {
 		IType sourceType = source.check(context);
-		if(!(sourceType instanceof CollectionType))
+		if(!(sourceType instanceof ContainerType))
 			throw new SyntaxError("Expecting a list, set or tuple as data source !");
 		Context local = context.newLocalContext();
-		IType itemType = ((CollectionType)sourceType).getItemType();
+		IType itemType = ((ContainerType)sourceType).getItemType();
 		local.registerValue(new Variable(itemName, itemType));
 		IType filterType = filter.check(local);
 		if(filterType!=BooleanType.instance())
@@ -78,9 +78,9 @@ public class FetchListExpression extends Section implements IExpression {
 		if(!(src instanceof IContainer<?>))
 			throw new InternalError("Illegal fetch source: " + source);
 		IType sourceType = source.check(context);
-		if(!(sourceType instanceof CollectionType))
+		if(!(sourceType instanceof ContainerType))
 			throw new InternalError("Illegal source type: " + sourceType.getName());
-		IType itemType = ((CollectionType)sourceType).getItemType();
+		IType itemType = ((ContainerType)sourceType).getItemType();
 		List<IValue> result = new ArrayList<IValue>();
 		Context local = context.newLocalContext();
 		Variable item = new Variable(itemName, itemType);

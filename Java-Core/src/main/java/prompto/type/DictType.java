@@ -8,7 +8,7 @@ import prompto.runtime.Context;
 
 
 
-public class DictType extends CollectionType {
+public class DictType extends ContainerType {
 	
 	public DictType(IType itemType) {
 		super(itemType.getName()+"{}",itemType);

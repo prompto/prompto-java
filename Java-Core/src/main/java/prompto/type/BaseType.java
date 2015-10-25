@@ -187,7 +187,7 @@ public abstract class BaseType implements IType {
 		List<IValue> result = new ArrayList<IValue>();
 		while (queue.peek() != null)
 			result.add(new ExpressionValue(this, queue.poll()));
-		IType itemType = ((CollectionType)list.getType()).getItemType();
+		IType itemType = ((ContainerType)list.getType()).getItemType();
 		return new ListValue(itemType, result);
 	}
 
