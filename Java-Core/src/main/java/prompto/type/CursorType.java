@@ -34,42 +34,6 @@ public class CursorType extends ContainerType {
 	}
 	
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError {
-		if(other instanceof ContainerType) {
-			IType itemType = ((ContainerType)other).getItemType();
-			if((other instanceof CursorType || other instanceof SetType) 
-					&& this.getItemType().equals(itemType))
-				return this;
-		} 
-		return super.checkAdd(context, other, tryReverse);
-	}
-	
-	@Override
-	public IType checkItem(Context context, IType other) throws SyntaxError {
-		if(other==IntegerType.instance())
-			return itemType;
-		else
-			return super.checkItem(context,other);
-	}
-	
-	@Override
-	public IType checkSlice(Context context) throws SyntaxError {
-		return this;
-	}
-	
-	@Override
-	public IType checkMultiply(Context context, IType other, boolean tryReverse) throws SyntaxError {
-		if(other instanceof IntegerType)
-			return this;
-		return super.checkMultiply(context, other, tryReverse);
-	}
-	
-	@Override
-	public IType checkContainsAllOrAny(Context context, IType other) throws SyntaxError {
-		return BooleanType.instance();
-	}
-	
-	@Override
 	public IType checkIterator(Context context) throws SyntaxError {
 		return itemType;
 	}
