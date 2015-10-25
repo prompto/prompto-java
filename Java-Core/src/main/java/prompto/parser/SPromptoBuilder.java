@@ -1039,11 +1039,11 @@ public class SPromptoBuilder extends SParserBaseListener {
 	@Override
 	public void exitFetchAll(FetchAllContext ctx) {
 		CategoryType category = this.<CategoryType>getNodeValue(ctx.typ);
-		IExpression start = this.<IExpression>getNodeValue(ctx.start);
-		IExpression end = this.<IExpression>getNodeValue(ctx.end);
+		IExpression start = this.<IExpression>getNodeValue(ctx.xstart);
+		IExpression stop = this.<IExpression>getNodeValue(ctx.xstop);
 		IExpression filter = this.<IExpression>getNodeValue(ctx.xfilter);
 		OrderByClauseList orderBy = this.<OrderByClauseList>getNodeValue(ctx.xorder);
-		setNodeValue(ctx, new FetchAllExpression(category, start, end, filter, orderBy));
+		setNodeValue(ctx, new FetchAllExpression(category, start, stop, filter, orderBy));
 	}
 	
 	@Override

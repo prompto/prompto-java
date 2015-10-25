@@ -6048,8 +6048,8 @@ public class OParser extends AbstractParser {
 	}
 	public static class FetchAllContext extends Fetch_expressionContext {
 		public Category_typeContext typ;
-		public ExpressionContext start;
-		public ExpressionContext end;
+		public ExpressionContext xstart;
+		public ExpressionContext xstop;
 		public ExpressionContext xfilter;
 		public Order_by_listContext xorder;
 		public TerminalNode FETCH() { return getToken(OParser.FETCH, 0); }
@@ -6178,11 +6178,11 @@ public class OParser extends AbstractParser {
 					setState(1088); 
 					match(LPAR);
 					setState(1089); 
-					((FetchAllContext)_localctx).start = expression(0);
+					((FetchAllContext)_localctx).xstart = expression(0);
 					setState(1090); 
 					match(TO);
 					setState(1091); 
-					((FetchAllContext)_localctx).end = expression(0);
+					((FetchAllContext)_localctx).xstop = expression(0);
 					setState(1092); 
 					match(RPAR);
 					}

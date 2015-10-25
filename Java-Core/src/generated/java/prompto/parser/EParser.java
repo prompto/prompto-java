@@ -6494,8 +6494,8 @@ public class EParser extends AbstractParser {
 	}
 	public static class FetchAllContext extends Fetch_expressionContext {
 		public Category_typeContext typ;
-		public ExpressionContext start;
-		public ExpressionContext end;
+		public ExpressionContext xstart;
+		public ExpressionContext xstop;
 		public ExpressionContext xfilter;
 		public Order_by_listContext xorder;
 		public TerminalNode FETCH() { return getToken(EParser.FETCH, 0); }
@@ -6593,11 +6593,11 @@ public class EParser extends AbstractParser {
 					setState(1171); 
 					((FetchAllContext)_localctx).typ = category_type();
 					setState(1172); 
-					((FetchAllContext)_localctx).start = expression(0);
+					((FetchAllContext)_localctx).xstart = expression(0);
 					setState(1173); 
 					match(TO);
 					setState(1174); 
-					((FetchAllContext)_localctx).end = expression(0);
+					((FetchAllContext)_localctx).xstop = expression(0);
 					}
 					}
 					break;

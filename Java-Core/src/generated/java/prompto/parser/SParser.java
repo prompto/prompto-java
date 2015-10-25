@@ -6213,8 +6213,8 @@ public class SParser extends AbstractParser {
 		}
 	}
 	public static class FetchAllContext extends Fetch_expressionContext {
-		public ExpressionContext start;
-		public ExpressionContext end;
+		public ExpressionContext xstart;
+		public ExpressionContext xstop;
 		public Category_typeContext typ;
 		public ExpressionContext xfilter;
 		public Order_by_listContext xorder;
@@ -6309,11 +6309,11 @@ public class SParser extends AbstractParser {
 					setState(1097); 
 					match(ROWS);
 					setState(1098); 
-					((FetchAllContext)_localctx).start = expression(0);
+					((FetchAllContext)_localctx).xstart = expression(0);
 					setState(1099); 
 					match(TO);
 					setState(1100); 
-					((FetchAllContext)_localctx).end = expression(0);
+					((FetchAllContext)_localctx).xstop = expression(0);
 					}
 					break;
 				default:
