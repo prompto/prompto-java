@@ -24,6 +24,7 @@ import prompto.parser.ILocation;
 import prompto.parser.ISection;
 import prompto.problem.IProblemListener;
 import prompto.problem.ProblemListener;
+import prompto.statement.CommentStatement;
 import prompto.statement.IStatement;
 import prompto.store.ICodeStore;
 import prompto.type.CategoryType;
@@ -360,6 +361,16 @@ public class Context implements IContext {
 		
 		public MethodDeclarationMap(Identifier id) {
 			this.id = id;
+		}
+		
+		@Override
+		public Collection<CommentStatement> getComments() {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override
+		public void setComments(Collection<CommentStatement> stmts) {
+			throw new UnsupportedOperationException();
 		}
 		
 		@Override

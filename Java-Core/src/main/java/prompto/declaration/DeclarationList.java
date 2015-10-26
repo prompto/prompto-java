@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
+import prompto.statement.CommentStatement;
 import prompto.utils.CodeWriter;
 
 
@@ -87,6 +88,10 @@ public class DeclarationList extends LinkedList<IDeclaration> {
 
 	public void toDialect(CodeWriter writer) {
 		for(IDeclaration declaration : this) {
+			if(declaration.getComments()!=null) {
+				for(CommentStatement comment : declaration.getComments())
+					comment.toDialect(writer);
+			}
 			declaration.toDialect(writer);
 			writer.append("\n");
 		}

@@ -432,12 +432,6 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 
 	@Override
-	public void exitAttributeDeclaration(AttributeDeclarationContext ctx) {
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
-		setNodeValue(ctx, decl);
-	}
-
-	@Override
 	public void exitAttributeList(AttributeListContext ctx) {
 		Identifier item = this.<Identifier>getNodeValue(ctx.item);
 		setNodeValue(ctx, new IdentifierList(item));
@@ -516,12 +510,6 @@ public class EPromptoBuilder extends EParserBaseListener {
 	public void exitCategoryArgumentType(CategoryArgumentTypeContext ctx) {
 		IType type = this.<IType>getNodeValue(ctx.typ);
 		setNodeValue(ctx, type);
-	}
-
-	@Override
-	public void exitCategoryDeclaration(CategoryDeclarationContext ctx) {
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
-		setNodeValue(ctx, decl);
 	}
 
 	@Override
@@ -886,6 +874,33 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
+	public void exitDeclaration(DeclarationContext ctx) {
+		List<CommentStatement> stmts = null;
+		for(Comment_statementContext csc : ctx.comment_statement()) {
+			if(csc==null)
+				continue;
+			if(stmts==null)
+				stmts = new ArrayList<>();
+			stmts.add((CommentStatement)this.<CommentStatement>getNodeValue(csc));
+		}
+		ParserRuleContext ctx_ = ctx.attribute_declaration();
+		if(ctx_==null)
+			ctx_ = ctx.category_declaration();
+		if(ctx_==null)
+			ctx_ = ctx.enum_declaration();
+		if(ctx_==null)
+			ctx_ = ctx.method_declaration();
+		if(ctx_==null)
+			ctx_ = ctx.resource_declaration();
+		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx_);
+		if(decl!=null) {
+			decl.setComments(stmts);
+			setNodeValue(ctx, decl);
+		}
+	}
+	
+
+	@Override
 	public void exitDeclarationList(DeclarationListContext ctx) {
 		IDeclaration item = this.<IDeclaration>getNodeValue(ctx.item);
 		DeclarationList items = new DeclarationList(item);
@@ -1030,12 +1045,6 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitEnumCategoryDeclaration(EnumCategoryDeclarationContext ctx) {
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
-		setNodeValue(ctx, decl);
-	}
-	
-	@Override
-	public void exitEnumDeclaration(EnumDeclarationContext ctx) {
 		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
 		setNodeValue(ctx, decl);
 	}
@@ -1711,12 +1720,6 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 
 	@Override
-	public void exitMethodDeclaration(MethodDeclarationContext ctx) {
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
-		setNodeValue(ctx, decl);
-	}
-	
-	@Override
 	public void exitMethodTypeIdentifier(MethodTypeIdentifierContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
 		setNodeValue(ctx, name);
@@ -2287,12 +2290,6 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitResource_declaration(Resource_declarationContext ctx) {
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
-		setNodeValue(ctx, decl);
-	}
-	
-	@Override
-	public void exitResourceDeclaration(ResourceDeclarationContext ctx) {
 		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
 		setNodeValue(ctx, decl);
 	}

@@ -1673,61 +1673,13 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAttributeDeclaration(@NotNull OParser.AttributeDeclarationContext ctx) { }
+	@Override public void enterDeclaration(@NotNull OParser.DeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAttributeDeclaration(@NotNull OParser.AttributeDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCategoryDeclaration(@NotNull OParser.CategoryDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCategoryDeclaration(@NotNull OParser.CategoryDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterResourceDeclaration(@NotNull OParser.ResourceDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitResourceDeclaration(@NotNull OParser.ResourceDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterEnumDeclaration(@NotNull OParser.EnumDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitEnumDeclaration(@NotNull OParser.EnumDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterMethodDeclaration(@NotNull OParser.MethodDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMethodDeclaration(@NotNull OParser.MethodDeclarationContext ctx) { }
+	@Override public void exitDeclaration(@NotNull OParser.DeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

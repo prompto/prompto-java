@@ -1613,61 +1613,13 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAttributeDeclaration(@NotNull SParser.AttributeDeclarationContext ctx) { }
+	@Override public void enterDeclaration(@NotNull SParser.DeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAttributeDeclaration(@NotNull SParser.AttributeDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCategoryDeclaration(@NotNull SParser.CategoryDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCategoryDeclaration(@NotNull SParser.CategoryDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterResourceDeclaration(@NotNull SParser.ResourceDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitResourceDeclaration(@NotNull SParser.ResourceDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterEnumDeclaration(@NotNull SParser.EnumDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitEnumDeclaration(@NotNull SParser.EnumDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterMethodDeclaration(@NotNull SParser.MethodDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMethodDeclaration(@NotNull SParser.MethodDeclarationContext ctx) { }
+	@Override public void exitDeclaration(@NotNull SParser.DeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

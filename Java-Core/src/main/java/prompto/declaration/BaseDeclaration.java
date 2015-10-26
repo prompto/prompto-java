@@ -1,11 +1,15 @@
 package prompto.declaration;
 
+import java.util.Collection;
+
 import prompto.grammar.Identifier;
 import prompto.parser.Section;
+import prompto.statement.CommentStatement;
 import prompto.store.ICodeStore;
 
 public abstract class BaseDeclaration extends Section implements IDeclaration {
 
+	Collection<CommentStatement> comments = null;
 	private Identifier id;
 	private ICodeStore origin;
 	
@@ -33,6 +37,15 @@ public abstract class BaseDeclaration extends Section implements IDeclaration {
 	@Override
 	public int hashCode() {
 		return getIdentifier().hashCode();
+	}
+	
+	public Collection<CommentStatement> getComments() {
+		return comments;
+	}
+	
+	@Override
+	public void setComments(Collection<CommentStatement> stmts) {
+		this.comments = stmts;
 	}
 	
 }

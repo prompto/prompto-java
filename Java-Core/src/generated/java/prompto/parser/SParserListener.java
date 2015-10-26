@@ -1511,65 +1511,15 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitDeclarationList(@NotNull SParser.DeclarationListContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code AttributeDeclaration}
-	 * labeled alternative in {@link SParser#declaration}.
+	 * Enter a parse tree produced by {@link SParser#declaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterAttributeDeclaration(@NotNull SParser.AttributeDeclarationContext ctx);
+	void enterDeclaration(@NotNull SParser.DeclarationContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code AttributeDeclaration}
-	 * labeled alternative in {@link SParser#declaration}.
+	 * Exit a parse tree produced by {@link SParser#declaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitAttributeDeclaration(@NotNull SParser.AttributeDeclarationContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code CategoryDeclaration}
-	 * labeled alternative in {@link SParser#declaration}.
-	 * @param ctx the parse tree
-	 */
-	void enterCategoryDeclaration(@NotNull SParser.CategoryDeclarationContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code CategoryDeclaration}
-	 * labeled alternative in {@link SParser#declaration}.
-	 * @param ctx the parse tree
-	 */
-	void exitCategoryDeclaration(@NotNull SParser.CategoryDeclarationContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ResourceDeclaration}
-	 * labeled alternative in {@link SParser#declaration}.
-	 * @param ctx the parse tree
-	 */
-	void enterResourceDeclaration(@NotNull SParser.ResourceDeclarationContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ResourceDeclaration}
-	 * labeled alternative in {@link SParser#declaration}.
-	 * @param ctx the parse tree
-	 */
-	void exitResourceDeclaration(@NotNull SParser.ResourceDeclarationContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code EnumDeclaration}
-	 * labeled alternative in {@link SParser#declaration}.
-	 * @param ctx the parse tree
-	 */
-	void enterEnumDeclaration(@NotNull SParser.EnumDeclarationContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code EnumDeclaration}
-	 * labeled alternative in {@link SParser#declaration}.
-	 * @param ctx the parse tree
-	 */
-	void exitEnumDeclaration(@NotNull SParser.EnumDeclarationContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code MethodDeclaration}
-	 * labeled alternative in {@link SParser#declaration}.
-	 * @param ctx the parse tree
-	 */
-	void enterMethodDeclaration(@NotNull SParser.MethodDeclarationContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code MethodDeclaration}
-	 * labeled alternative in {@link SParser#declaration}.
-	 * @param ctx the parse tree
-	 */
-	void exitMethodDeclaration(@NotNull SParser.MethodDeclarationContext ctx);
+	void exitDeclaration(@NotNull SParser.DeclarationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SParser#resource_declaration}.
 	 * @param ctx the parse tree
