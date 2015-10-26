@@ -8,7 +8,7 @@ import prompto.server.AppServer;
 
 public class Application {
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws Throwable {
 		List<String> argsList = new ArrayList<>(Arrays.asList(args));
 		argsList.add("-resource");
 		argsList.add("codeserver.pec");

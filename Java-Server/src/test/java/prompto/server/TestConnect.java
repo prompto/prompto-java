@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.BindException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -31,9 +32,11 @@ import prompto.value.IValue;
 import prompto.value.Text;
 
 public class TestConnect {
-
+	
+	static int port = 8888;
+	
 	@Before
-	public void before() throws Exception {
+	public void before() throws Throwable {
 		// bootstrap
 		AppServer.bootstrap(new MemStore(), null, "test", Version.parse("1.0.0"));
 		// adjust handler path for junit and cobertura context
@@ -53,8 +56,15 @@ public class TestConnect {
 		list.addHandler(ws);
 		list.addHandler(new DefaultHandler());
 		// start server
-		AppServer.startServer(8888, list);
-		assertTrue(AppServer.isStarted());
+		for(;;) {
+			try {
+				AppServer.startServer(port, list);
+				assertTrue(AppServer.isStarted());
+				break;
+			} catch(BindException e) {
+				port++;
+			}
+		}
 	}
 	
 	@After
@@ -64,17 +74,18 @@ public class TestConnect {
 	}
 	
 	@Test
-	public void testStartAndStop() throws Exception {
+	public void testStartAndStop() throws Throwable {
 		AppServer.stop();
 		assertFalse(AppServer.isStarted());
 		AppServer.start();
 		assertTrue(AppServer.isStarted());
 		AppServer.stop();
+		assertFalse(AppServer.isStarted());
 	}
 
 	@Test
 	public void testResource() throws Exception {
-		URL url = new URL("http://localhost:8888/js/lib/require.js");
+		URL url = new URL("http://localhost:" + port + "/js/lib/require.js");
 		URLConnection cnx = url.openConnection();
 		InputStream input = cnx.getInputStream();
 		assertNotNull(input);
@@ -85,7 +96,7 @@ public class TestConnect {
 	public void testServiceNoParam() throws Exception {
 		Context context = Context.newGlobalContext();
 		ParameterList params = createParameterList();
-		URL url = new URL("http://localhost:8888/ws/getAllAttributes?params=" + params.toURLEncodedString(context));
+		URL url = new URL("http://localhost:" + port + "/ws/getAllAttributes?params=" + params.toURLEncodedString(context));
 		URLConnection cnx = url.openConnection();
 		InputStream input = cnx.getInputStream();
 		assertNotNull(input);
@@ -99,7 +110,7 @@ public class TestConnect {
 	public void testService1TextParam() throws Exception {
 		Context context = Context.newGlobalContext();
 		ParameterList params = createParameterList("name", TextType.instance(), new Text("id"));
-		URL url = new URL("http://localhost:8888/ws/findAttribute?params=" + params.toURLEncodedString(context));
+		URL url = new URL("http://localhost:" + port + "/ws/findAttribute?params=" + params.toURLEncodedString(context));
 		URLConnection cnx = url.openConnection();
 		InputStream input = cnx.getInputStream();
 		assertNotNull(input);

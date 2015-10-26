@@ -22,7 +22,7 @@ public class AppServer {
 	static Server jettyServer;
 	static Context globalContext = Context.newGlobalContext();
 	
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws Throwable {
 		Integer httpPort = null;
 		String resource = null;
 		String application = null;
@@ -77,7 +77,7 @@ public class AppServer {
 		System.out.println("Bootstrapping successful...");
 	}
 
-	static void startServer(Integer httpPort, Handler handler) throws Exception {
+	static void startServer(Integer httpPort, Handler handler) throws Throwable {
 		System.out.println("Starting web server...");
 		jettyServer = new Server(httpPort);
 		jettyServer.setHandler(handler);
@@ -113,10 +113,12 @@ public class AppServer {
 	}
 
 	static Thread serverThread = null;
+	static Throwable serverThrowable = null;
 	
-	public static void start() throws Exception  {
+	public static void start() throws Throwable  {
 		if(jettyServer.isStarted())
 			throw new RuntimeException("Server is already started!");
+		serverThrowable = null;
 		Object sync = new Object();
 		serverThread = new Thread(new Runnable() {
 			@Override
@@ -131,8 +133,7 @@ public class AppServer {
 					}
 					jettyServer.join();
 				} catch(Throwable t) {
-					t.printStackTrace();
-					throw new RuntimeException(t);
+					serverThrowable = t;
 				} finally {
 					serverThread = null;
 				}
@@ -142,6 +143,8 @@ public class AppServer {
 		synchronized (sync) {
 			sync.wait();
 		}
+		if(serverThrowable!=null)
+			throw serverThrowable;
 	}
 
 	public static void stop() throws Exception {
