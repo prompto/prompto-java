@@ -1,7 +1,6 @@
 package prompto.utils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,7 +22,7 @@ import prompto.parser.SCleverParser;
 import prompto.runtime.Context;
 import prompto.runtime.Interpreter;
 import prompto.runtime.utils.Out;
-import prompto.store.IStore;
+import prompto.store.IDataStore;
 import prompto.store.MemStore;
 import prompto.utils.CodeWriter;
 
@@ -78,7 +77,7 @@ public abstract class BaseParserTest extends BaseTest {
 	}
 	
 	protected void checkOutput(String resource) throws Exception {
-		IStore.setInstance(new MemStore());
+		IDataStore.setInstance(new MemStore());
 		boolean isTest = runResource(resource);
 		String read = Out.read();
 		if(isTest && read.endsWith("\n"))

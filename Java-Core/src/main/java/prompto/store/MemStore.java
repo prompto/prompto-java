@@ -3,11 +3,12 @@ package prompto.store;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
+import prompto.declaration.AttributeDeclaration;
 import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -16,6 +17,8 @@ import prompto.grammar.Identifier;
 import prompto.grammar.OrderByClause;
 import prompto.grammar.OrderByClauseList;
 import prompto.runtime.Context;
+import prompto.type.IType;
+import prompto.type.IntegerType;
 import prompto.value.Boolean;
 import prompto.value.Document;
 import prompto.value.IValue;
@@ -25,16 +28,40 @@ import prompto.value.TupleValue;
 /* a utility class for running unit tests only */
 public final class MemStore implements IStore {
 
-	private Set<Document> documents = new HashSet<>();
+	private Map<Integer, Document> documents = new HashMap<>();
+	private long lastDbId = 0;
 	
 	@Override
-	public void store(Document document) {
-		documents.add(document);
+	public IType getDbIdType() {
+		return IntegerType.instance();
+	}
+	
+	@Override
+	public IType getColumnType(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public void createOrUpdateColumns(Collection<AttributeDeclaration> columns) {
+		// nothing to do
+	}
+	
+	static final Identifier dbIdName = new Identifier("dbId");
+	
+	@Override
+	public void store(Context context, Document document) {
+		IValue dbId = document.getMember(context, dbIdName, false);
+		if(!(dbId instanceof Integer)) {
+			dbId = new Integer(++lastDbId);
+			document.setMember(context, dbIdName, dbId);
+		}
+		documents.put((Integer)dbId, document);
 	}
 	
 	@Override
 	public Document fetchOne(Context context, IExpression filter) throws PromptoError {
-		for(Document doc : documents) {
+		for(Document doc : documents.values()) {
 			if(matches(context, doc, filter))
 				return doc;
 		}
@@ -78,7 +105,7 @@ public final class MemStore implements IStore {
 	private List<Document> filterDocs(Context context, IExpression filter) throws PromptoError {
 		// create list of filtered docs
 		List<Document> docs = new ArrayList<Document>();
-		for(Document doc : documents) {
+		for(Document doc : documents.values()) {
 			if(matches(context, doc, filter))
 				docs.add(doc);
 		}

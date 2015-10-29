@@ -15,11 +15,12 @@ import org.joda.time.Period;
 import prompto.declaration.AnyNativeCategoryDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.NativeCategoryDeclaration;
+import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.type.AnyType;
+import prompto.type.BaseType;
 import prompto.type.BooleanType;
-import prompto.type.CategoryType;
 import prompto.type.CharacterType;
 import prompto.type.DateTimeType;
 import prompto.type.DateType;
@@ -38,7 +39,7 @@ import prompto.value.ListValue;
 import prompto.value.NativeInstance;
 
 
-public class JavaClassType extends CategoryType {
+public class JavaClassType extends BaseType {
 	
 	static Map<Class<?>,IType> javaToPromptoMap = new HashMap<Class<?>, IType>();
 	
@@ -169,6 +170,18 @@ public class JavaClassType extends CategoryType {
 		}
 		return new ListValue(itemType, list);
 	}
+
+	@Override
+	public void checkUnique(Context context) throws SyntaxError { }
+
+	@Override
+	public void checkExists(Context context) throws SyntaxError { }
+
+	@Override
+	public boolean isAssignableTo(Context context, IType other) { return false; }
+
+	@Override
+	public boolean isMoreSpecificThan(Context context, IType other) { return true; }
 
 
 

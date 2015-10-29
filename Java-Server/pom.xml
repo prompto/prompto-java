@@ -109,19 +109,24 @@
 			<version>${jackson-version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.prompto</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>Core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.prompto</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>Runtime</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.prompto</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>CodeStore</artifactId>
-			<version>trunk-SNAPSHOT</version>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>SOLRStore</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 

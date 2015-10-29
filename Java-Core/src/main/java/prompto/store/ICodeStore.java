@@ -5,6 +5,7 @@ import java.io.InputStream;
 
 import prompto.declaration.DeclarationList;
 import prompto.declaration.IDeclaration;
+import prompto.error.PromptoError;
 import prompto.parser.AbstractParser;
 import prompto.parser.Dialect;
 import prompto.parser.ECleverParser;
@@ -70,8 +71,8 @@ public interface ICodeStore {
 		}
 	}
 	
-	IDeclaration fetchLatestVersion(String name);
-	IDeclaration fetchSpecificVersion(String name, Version version);
+	IDeclaration fetchLatestVersion(String name) throws PromptoError;
+	IDeclaration fetchSpecificVersion(String name, Version version) throws PromptoError;
 	ModuleType getModuleType();
 	Dialect getModuleDialect();
 	String getModuleName();

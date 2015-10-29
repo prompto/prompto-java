@@ -33,8 +33,8 @@ public class PromptoServlet extends HttpServlet {
 			resp.flushBuffer();
 			resp.setContentType("application/json");
 			resp.setStatus(200);
-		} catch(Exception e) {
-			e.printStackTrace();
+		} catch(Throwable t) {
+			t.printStackTrace();
 			resp.setStatus(500);
 		}
 	}

@@ -12,7 +12,7 @@ import org.apache.solr.core.SolrCore;
 import org.junit.After;
 import org.junit.Before;
 
-public class BaseSOLRTest {
+public abstract class BaseSOLRTest {
 	
 	File solrRoot = new File("target/test-classes/solr-test");
 	CoreContainer container;
@@ -58,6 +58,12 @@ public class BaseSOLRTest {
 	}
 
 	@After
+	public void after() {
+		shutdownServer();
+		shutdownCore();
+		shutdownContainer();
+	}
+	
 	public void shutdownServer() {
 		if(server!=null) {
 			server.shutdown();
@@ -65,18 +71,18 @@ public class BaseSOLRTest {
 		}
 	}
 	
-	@After
 	public void shutdownCore() {
 		if(core!=null) {
-			core.close();
+			if(!core.isClosed())
+				core.close();
 			core = null;
 		}
 	}
 	
-	@After
 	public void shutdownContainer() {
 		if(container!=null) {
-			container.shutdown();
+			if(!container.isShutDown())
+				container.shutdown();
 			container = null;
 		}
 	}

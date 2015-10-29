@@ -6,6 +6,7 @@ import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
+import prompto.store.IDataStore;
 import prompto.store.IStorable;
 import prompto.store.IStore;
 import prompto.type.IType;
@@ -65,7 +66,7 @@ public class StoreStatement extends SimpleStatement {
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		IStore store = IStore.getInstance();
+		IStore store = IDataStore.getInstance();
 		for(IExpression exp : expressions) {
 			IValue value = exp.interpret(context);
 			IStorable storable = null;
@@ -76,7 +77,7 @@ public class StoreStatement extends SimpleStatement {
 			if(!storable.isDirty())
 				continue;
 			Document document = storable.asDocument();
-			store.store(document);
+			store.store(context, document);
 		}
 		return null;
 	}

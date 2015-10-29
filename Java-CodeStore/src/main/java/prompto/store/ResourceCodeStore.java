@@ -7,6 +7,7 @@ import java.util.Map;
 import prompto.declaration.DeclarationList;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
+import prompto.error.PromptoError;
 import prompto.parser.Dialect;
 import prompto.runtime.Context.MethodDeclarationMap;
 
@@ -47,7 +48,7 @@ public class ResourceCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public IDeclaration fetchLatestVersion(String name) {
+	public IDeclaration fetchLatestVersion(String name) throws PromptoError {
 		IDeclaration decl = fetchInResource(name);
 		if(decl!=null)
 			return decl;
@@ -56,7 +57,7 @@ public class ResourceCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public IDeclaration fetchSpecificVersion(String name,Version version) {
+	public IDeclaration fetchSpecificVersion(String name,Version version) throws PromptoError {
 		IDeclaration decl = fetchInResource(name);
 		if(decl!=null)
 			return decl;

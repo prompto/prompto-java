@@ -11,10 +11,13 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import prompto.runtime.Context;
 import prompto.store.DistributedCodeStore;
 import prompto.store.ICodeStore;
+import prompto.store.IDataStore;
+import prompto.store.IStoreFactory;
+import prompto.store.IStoreFactory.Type;
+import prompto.store.MemStoreFactory;
 import prompto.store.ResourceCodeStore;
 import prompto.store.ICodeStore.ModuleType;
 import prompto.store.IStore;
-import prompto.store.MemStore;
 import prompto.store.Version;
 
 public class AppServer {
@@ -26,6 +29,8 @@ public class AppServer {
 		Integer httpPort = null;
 		String resource = null;
 		String application = null;
+		String codeStoreFactory = MemStoreFactory.class.getName();
+		String dataStoreFactory = MemStoreFactory.class.getName();
 		Version version = ICodeStore.LATEST;
 		
 		// parse parameters
@@ -40,18 +45,36 @@ public class AppServer {
 				application = args[++i];
 			} else if(args[i].equalsIgnoreCase("-version")) {
 				version = Version.parse(args[++i]);
+			} else if(args[i].equalsIgnoreCase("-codeStoreFactory")) {
+				codeStoreFactory = args[++i];
+			} else if(args[i].equalsIgnoreCase("-dataStoreFactory")) {
+				dataStoreFactory = args[++i];
 			}
+
+
 		}
 		if(httpPort==null || application==null) {
 			showHelp(httpPort, application, version);
 			System.exit(-1); // raise an error in whatever tool is used to launch this
 		}
-		// initialize prompto
-		bootstrap(new MemStore(), resource, application, version);
+		// initialize code store
+		IStoreFactory factory = newStoreFactory(codeStoreFactory);
+		IStore store = factory.newStore(args, Type.CODE);
+		bootstrap(store, resource, application, version);
+		// initialize data store
+		factory = newStoreFactory(dataStoreFactory);
+		IDataStore.setInstance(factory.newStore(args, Type.DATA));
 		// standard resource handlers
 		Handler handler = prepareHandlers();
 		// initialize server accordingly
 		startServer(httpPort, handler);
+	}
+
+	private static IStoreFactory newStoreFactory(String factoryName) throws Throwable {
+		Class<?> klass = Class.forName(factoryName, true, Thread.currentThread().getContextClassLoader());
+		if(!(IStoreFactory.class.isAssignableFrom(klass)))
+			throw new RuntimeException("Not a store factory: " + factoryName);
+		return (IStoreFactory)klass.newInstance();
 	}
 
 	private static void showHelp(Integer httpPort, String application, Version version) {

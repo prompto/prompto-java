@@ -295,9 +295,15 @@ public class Context implements IContext {
 		ICodeStore store = ICodeStore.getInstance();
 		if(store==null)
 			return null;
-		IDeclaration decl = store.fetchLatestVersion(name.getName());
-		if(decl==null)
+		IDeclaration decl = null;
+		try {
+			decl = store.fetchLatestVersion(name.getName());
+			if(decl==null)
+				return null;
+		} catch(PromptoError e) {
+			// TODO log
 			return null;
+		}
 		try {
 			if(decl instanceof MethodDeclarationMap) {
 				MethodDeclarationMap map = (MethodDeclarationMap)decl;
