@@ -141,6 +141,27 @@
 			<version>4.10.4</version>
 			<scope>test</scope>
 			<exclusions>
+				<!-- SOLR core uses older versions, so need to exclude them -->
+				<exclusion>
+					<groupId>org.eclipse.jetty</groupId>
+					<artifactId>jetty-continuation</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.eclipse.jetty</groupId>
+					<artifactId>jetty-security</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.eclipse.jetty</groupId>
+					<artifactId>jetty-jmx</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.eclipse.jetty</groupId>
+					<artifactId>jetty-deploy</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.eclipse.jetty</groupId>
+					<artifactId>jetty-util</artifactId>
+				</exclusion>
 				<exclusion>
 					<groupId>joda-time</groupId>
 					<artifactId>joda-time</artifactId>
@@ -152,10 +173,6 @@
 				<exclusion>
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-log4j12</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-api</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
