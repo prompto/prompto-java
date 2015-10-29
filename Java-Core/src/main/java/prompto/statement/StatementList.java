@@ -45,11 +45,11 @@ public class StatementList extends LinkedList<IStatement> {
 		} else {
 			TypeMap types = new TypeMap();
 			if(returnType!=null)
-				types.put(returnType.getName(), returnType);
+				types.put(returnType.getId(), returnType);
 			for(IStatement statement : this) {
 				IType type = statement.check(context);
 				if(type!=VoidType.instance())
-					types.put(type.getName(), type);
+					types.put(type.getId(), type);
 			}
 			IType type = types.inferType(context);
 			if(returnType!=null)
@@ -73,13 +73,13 @@ public class StatementList extends LinkedList<IStatement> {
 		} else {
 			TypeMap types = new TypeMap();
 			if(returnType!=null)
-				types.put(returnType.getName(), returnType);
+				types.put(returnType.getId(), returnType);
 			for(IStatement statement : this) {
 				if(!(statement instanceof JavaNativeCall))
 					continue;
 				IType type = ((JavaNativeCall)statement).checkNative(context, returnType);
 				if(type!=VoidType.instance())
-					types.put(type.getName(), type);
+					types.put(type.getId(), type);
 			}
 			IType type = types.inferType(context);
 			if(returnType!=null)

@@ -135,7 +135,7 @@ public class TestParserAtoms {
 		AttributeDeclaration ad = parser.parse_attribute_declaration();
 		assertNotNull(ad);
 		assertEquals("id",ad.getIdentifier().toString());
-		assertEquals("Integer",ad.getType().getName().toString());
+		assertEquals("Integer",ad.getType().getId().toString());
 	}
 
 	@Test
@@ -145,7 +145,7 @@ public class TestParserAtoms {
 		AttributeDeclaration ad = parser.parse_attribute_declaration();
 		assertNotNull(ad);
 		assertEquals("id",ad.getIdentifier().toString());
-		assertEquals("Integer[]",ad.getType().getName().toString());
+		assertEquals("Integer[]",ad.getType().getId().toString());
 	}
 
 	@Test
@@ -218,7 +218,7 @@ public class TestParserAtoms {
 		ETestParser parser = new ETestParser(statement, false);
 		ITypedArgument a = parser.parse_typed_argument();
 		assertNotNull(a);
-		assertEquals("Person",a.getType().getName().toString());
+		assertEquals("Person",a.getType().getId().toString());
 		assertEquals("p",a.getIdentifier().toString());
 	}
 

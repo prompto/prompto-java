@@ -11,7 +11,7 @@ import prompto.runtime.Context;
 public class DictType extends ContainerType {
 	
 	public DictType(IType itemType) {
-		super(itemType.getName()+"{}",itemType);
+		super(itemType.getId()+"{}",itemType);
 		this.itemType = itemType;
 	}
 	

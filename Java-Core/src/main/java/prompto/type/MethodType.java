@@ -37,20 +37,20 @@ public class MethodType extends BaseType {
 		if(!(obj instanceof MethodType))
 			return false;
 		MethodType other = (MethodType)obj;
-		return this.getName().equals(other.getName());
+		return this.getId().equals(other.getId());
 	}
 	
 	@Override
 	public void checkUnique(Context context) throws SyntaxError {
-		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, name);
+		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, id);
 		if(actual!=null)
-			throw new SyntaxError("Duplicate name: \"" + name + "\"");
+			throw new SyntaxError("Duplicate name: \"" + id + "\"");
 	}
 	
 	IMethodDeclaration getDeclaration(Context context) throws SyntaxError {
-		Context.MethodDeclarationMap map = this.context.getRegisteredDeclaration(Context.MethodDeclarationMap.class, name);
+		Context.MethodDeclarationMap map = this.context.getRegisteredDeclaration(Context.MethodDeclarationMap.class, id);
 		if(map==null)
-			throw new SyntaxError("Unknown method: \"" + name + "\"");
+			throw new SyntaxError("Unknown method: \"" + id + "\"");
 		return map.entrySet().iterator().next().getValue();
 	}
 	

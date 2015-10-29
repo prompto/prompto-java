@@ -152,7 +152,7 @@ public class JavaClassType extends BaseType {
 
 	private static IValue convertCategory(Context context, Object value, Type type, IType returnType) {
 		// ensure the underlying declaration is loaded
-		context.getRegisteredDeclaration(IDeclaration.class, returnType.getName());
+		context.getRegisteredDeclaration(IDeclaration.class, returnType.getId());
  		NativeCategoryDeclaration decl = context.getNativeBinding(type);
 		return decl!=null ? new NativeInstance(decl, value) : null;
 	}

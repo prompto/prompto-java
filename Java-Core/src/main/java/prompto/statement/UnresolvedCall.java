@@ -112,7 +112,7 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 	}
 
 	private IDeclaration resolveUnresolvedMember(InstanceContext context, Identifier name) throws SyntaxError {
-		ConcreteCategoryDeclaration decl = context.getRegisteredDeclaration(ConcreteCategoryDeclaration.class, context.getInstanceType().getName());
+		ConcreteCategoryDeclaration decl = context.getRegisteredDeclaration(ConcreteCategoryDeclaration.class, context.getInstanceType().getId());
 		MethodDeclarationMap methods = decl.getMemberMethods(context, name);
 		if(methods!=null && methods.size()>0)
 			return methods;

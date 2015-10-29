@@ -119,7 +119,7 @@ public abstract class BaseList<T extends BaseList<T>> extends BaseValue implemen
         else if (value instanceof SetValue)
             return this.merge(((SetValue)value).getItems());
         else
-            throw new SyntaxError("Illegal: " +this.type.getName() + " + " + value.getClass().getSimpleName());
+            throw new SyntaxError("Illegal: " +this.type.getId() + " + " + value.getClass().getSimpleName());
     }
 
 	@Override

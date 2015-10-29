@@ -124,7 +124,7 @@ public final class MemStore implements IStore {
 			if(value==null)
 				throw new NullReferenceError();
 			else if(!(value instanceof Integer))
-				throw new SyntaxError("Expecting an integer, got " + value.getType().getName().getName());
+				throw new SyntaxError("Expecting an integer, got " + value.getType().getId().getName());
 			startValue = ((Integer)value).IntegerValue();
 		}
 		if(end!=null) {
@@ -132,7 +132,7 @@ public final class MemStore implements IStore {
 			if(value==null)
 				throw new NullReferenceError();
 			else if(!(value instanceof Integer))
-				throw new SyntaxError("Expecting an integer, got " + value.getType().getName().getName());
+				throw new SyntaxError("Expecting an integer, got " + value.getType().getId().getName());
 			endValue = ((Integer)value).IntegerValue();
 		}
 		if(startValue==null || startValue<1)

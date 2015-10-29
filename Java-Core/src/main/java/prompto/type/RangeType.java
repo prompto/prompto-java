@@ -6,7 +6,7 @@ import prompto.runtime.Context;
 public class RangeType extends ContainerType {
 	
 	public RangeType(IType itemType) {
-		super(itemType.getName()+"[..]",itemType);
+		super(itemType.getId()+"[..]",itemType);
 	}
 	
 	@Override

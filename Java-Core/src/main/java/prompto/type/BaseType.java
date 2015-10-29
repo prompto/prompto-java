@@ -23,19 +23,24 @@ import prompto.value.Range;
 
 public abstract class BaseType implements IType {
 
-	Identifier name;
+	Identifier id;
 
 	protected BaseType(String name) {
 		this(new Identifier(name));
 	}
 
-	protected BaseType(Identifier name) {
-		this.name = name;
+	protected BaseType(Identifier id) {
+		this.id = id;
 	}
 
 	@Override
-	public Identifier getName() {
-		return name;
+	public Identifier getId() {
+		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return id.getName();
 	}
 
 	@Override
@@ -47,17 +52,17 @@ public abstract class BaseType implements IType {
 		if (!(obj instanceof IType))
 			return false;
 		IType type = (IType) obj;
-		return this.getName().equals(type.getName());
+		return this.getId().equals(type.getId());
 	}
 
 	@Override
 	public String toString() {
-		return name.toString();
+		return id.toString();
 	}
 
 	@Override
 	public void toDialect(CodeWriter writer) {
-		writer.append(name);
+		writer.append(id);
 	}
 	
 	@Override
@@ -65,22 +70,22 @@ public abstract class BaseType implements IType {
 		if(tryReverse)
 			return other.checkAdd(context, this, false);
 		else
-			throw new SyntaxError("Cannot add " + this.getName() + " to " + other.getName());
+			throw new SyntaxError("Cannot add " + this.getId() + " to " + other.getId());
 	}
 
 	@Override
 	public IType checkSubstract(Context context, IType other) throws SyntaxError {
-		throw new SyntaxError("Cannot substract " + this.getName() + " from " + other.getName());
+		throw new SyntaxError("Cannot substract " + this.getId() + " from " + other.getId());
 	}
 
 	@Override
 	public IType checkDivide(Context context, IType other) throws SyntaxError {
-		throw new SyntaxError("Cannot divide " + this.getName() + " with " + other.getName());
+		throw new SyntaxError("Cannot divide " + this.getId() + " with " + other.getId());
 	}
 
 	@Override
 	public IType checkIntDivide(Context context, IType other) throws SyntaxError {
-		throw new SyntaxError("Cannot divide " + this.getName() + " with " + other.getName());
+		throw new SyntaxError("Cannot divide " + this.getId() + " with " + other.getId());
 	}
 
 	@Override
@@ -88,12 +93,12 @@ public abstract class BaseType implements IType {
 		if(tryReverse)
 			return other.checkMultiply(context, this, false);
 		else
-			throw new SyntaxError("Cannot multiply " + this.getName() + " with " + other.getName());
+			throw new SyntaxError("Cannot multiply " + this.getId() + " with " + other.getId());
 	}
 
 	@Override
 	public IType checkModulo(Context context, IType other) throws SyntaxError {
-		throw new SyntaxError("Cannot modulo " + this.getName() + " with " + other.getName());
+		throw new SyntaxError("Cannot modulo " + this.getId() + " with " + other.getId());
 	}
 	
 	@Override
@@ -104,17 +109,17 @@ public abstract class BaseType implements IType {
 
 	@Override
 	public IType checkContains(Context context, IType other) throws SyntaxError {
-		throw new SyntaxError(this.getName() + " cannot contain " + other.getName());
+		throw new SyntaxError(this.getId() + " cannot contain " + other.getId());
 	}
 
 	@Override
 	public IType checkContainsAllOrAny(Context context, IType other) throws SyntaxError {
-		throw new SyntaxError(this.getName() + " cannot contain " + other.getName());
+		throw new SyntaxError(this.getId() + " cannot contain " + other.getId());
 	}
 
 	@Override
 	public IType checkItem(Context context, IType itemType) throws SyntaxError {
-		throw new SyntaxError("Cannot read item from " + this.getName());
+		throw new SyntaxError("Cannot read item from " + this.getId());
 	}
 
 	@Override
@@ -125,12 +130,12 @@ public abstract class BaseType implements IType {
 
 	@Override
 	public IType checkSlice(Context context) throws SyntaxError {
-		throw new SyntaxError("Cannot slice " + this.getName());
+		throw new SyntaxError("Cannot slice " + this.getId());
 	}
 
 	@Override
 	public IType checkIterator(Context context) throws SyntaxError {
-		throw new SyntaxError("Cannot iterate over " + this.getName());
+		throw new SyntaxError("Cannot iterate over " + this.getId());
 	}
 
 	@Override
@@ -148,17 +153,17 @@ public abstract class BaseType implements IType {
 	@Override
 	public final void checkAssignableTo(Context context, IType other) throws SyntaxError {
 		if (!isAssignableTo(context, other))
-			throw new SyntaxError("Type: " + this.getName() + " is not compatible with: " + other.getName());
+			throw new SyntaxError("Type: " + this.getId() + " is not compatible with: " + other.getId());
 	}
 
 	@Override
 	public IType checkRange(Context context, IType other) throws SyntaxError {
-		throw new SyntaxError("Cannot create range of " + this.getName() + " and " + other.getName());
+		throw new SyntaxError("Cannot create range of " + this.getId() + " and " + other.getId());
 	}
 
 	@Override
 	public Range<?> newRange(Object left, Object right) throws SyntaxError {
-		throw new SyntaxError("Cannot create range of " + this.getName());
+		throw new SyntaxError("Cannot create range of " + this.getId());
 	}
 
 	@Override
@@ -197,7 +202,7 @@ public abstract class BaseType implements IType {
 	
 	@Override
 	public IValue getMember(Context context, Identifier name) throws PromptoError {
-		throw new SyntaxError("Cannot read member from " + this.getName());
+		throw new SyntaxError("Cannot read member from " + this.getId());
 	}
 
 	@Override

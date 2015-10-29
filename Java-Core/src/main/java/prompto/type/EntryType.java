@@ -9,7 +9,7 @@ public class EntryType extends BaseType {
 	IType itemType;
 
 	public EntryType(IType itemType) {
-		super(itemType.getName() + "{}[]");
+		super(itemType.getId() + "{}[]");
 		this.itemType = itemType;
 	}
 

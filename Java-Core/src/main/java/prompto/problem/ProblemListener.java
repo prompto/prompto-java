@@ -39,7 +39,7 @@ public class ProblemListener implements ANTLRErrorListener, IProblemListener {
 	
 	@Override
 	public void reportIllegalNonBoolean(ISection section, IType type) throws SyntaxError {
-		throw new SyntaxError("Illegal expression type, expected Boolean, got:" + type.getName());
+		throw new SyntaxError("Illegal expression type, expected Boolean, got:" + type.getId());
 	}
 	
 	@Override
@@ -64,7 +64,7 @@ public class ProblemListener implements ANTLRErrorListener, IProblemListener {
 	
 	@Override
 	public void reportIllegalComparison(IType type, IType other, ISection section) throws SyntaxError {
-		throw new SyntaxError("Cannot compare " +type.getName() + " to " + other.getName());
+		throw new SyntaxError("Cannot compare " +type.getId() + " to " + other.getId());
 	}
 	
 	@Override

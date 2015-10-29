@@ -103,7 +103,7 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IListable
         else if (value instanceof SetValue)
             return this.merge(((SetValue)value).getItems());
         else
-            throw new SyntaxError("Illegal: " +this.type.getName() + " + " + value.getClass().getSimpleName());
+            throw new SyntaxError("Illegal: " +this.type.getId() + " + " + value.getClass().getSimpleName());
     }
 
 	public SetValue merge(Collection<IValue> items) {

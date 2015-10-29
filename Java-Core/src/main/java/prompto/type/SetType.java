@@ -7,7 +7,7 @@ import prompto.runtime.Context;
 public class SetType extends ContainerType {
 
 	public SetType(IType itemType) {
-		super(itemType.getName()+"<>", itemType);
+		super(itemType.getId()+"<>", itemType);
 	}
 	
 	@Override

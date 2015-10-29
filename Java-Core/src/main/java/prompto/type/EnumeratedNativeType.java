@@ -58,7 +58,7 @@ public class EnumeratedNativeType extends BaseType {
 	@Override
 	public IValue getMember(Context context, Identifier id) throws PromptoError {
 		String name = id.toString();
-		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, this.name);
+		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, this.id);
 		if(!(decl instanceof IEnumeratedDeclaration))
 			throw new SyntaxError(name + " is not an enumerated type!");
 		if ("symbols".equals(name))

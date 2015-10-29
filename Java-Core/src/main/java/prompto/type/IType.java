@@ -14,7 +14,8 @@ import prompto.value.Range;
 
 public interface IType {
 	
-	Identifier getName();
+	Identifier getId();
+	String getName();
 	IValue getMember(Context context, Identifier name) throws PromptoError;
 	String toString(Object value);
 	void toDialect(CodeWriter writer);

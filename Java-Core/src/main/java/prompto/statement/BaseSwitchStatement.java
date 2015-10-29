@@ -92,12 +92,12 @@ public abstract class BaseSwitchStatement extends BaseStatement {
 		for(SwitchCase sc : switchCases) {
 			IType type = sc.checkReturnType(context);
 			if(type!=VoidType.instance())
-				types.put(type.getName(), type);
+				types.put(type.getId(), type);
 		}
 		if(defaultCase!=null) {
 			IType type = defaultCase.check(context, null);
 			if(type!=VoidType.instance())
-				types.put(type.getName(), type);
+				types.put(type.getId(), type);
 		}
 	}
 

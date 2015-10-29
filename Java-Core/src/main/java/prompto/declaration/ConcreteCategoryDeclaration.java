@@ -196,7 +196,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		if(derivedFrom==null) 
 			return false;
 		for(Identifier ancestor : derivedFrom) {
-			if(ancestor.equals(categoryType.getName()))
+			if(ancestor.equals(categoryType.getId()))
 				return true;
 			if(isAncestorDerivedFrom(ancestor,context,categoryType))
 				return true;

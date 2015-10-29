@@ -74,7 +74,7 @@ public class ConstructorExpression implements IExpression {
 	private void toODialect(CodeWriter writer) {
 		if(this.mutable)
 			writer.append("mutable ");
-		writer.append(type.getName());
+		writer.append(type.getId());
 		ArgumentAssignmentList assignments = new ArgumentAssignmentList();
 		if (copyFrom != null)
 			assignments.add(new ArgumentAssignment(null, copyFrom));
@@ -86,7 +86,7 @@ public class ConstructorExpression implements IExpression {
 	private void toEDialect(CodeWriter writer) {
 		if(this.mutable)
 			writer.append("mutable ");
-		writer.append(type.getName());
+		writer.append(type.getId());
 		if (copyFrom != null) {
 			writer.append(" from ");
 			writer.append(copyFrom.toString());
@@ -99,21 +99,21 @@ public class ConstructorExpression implements IExpression {
 	
 	@Override
 	public IType check(Context context) throws SyntaxError {
-		CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getName());
+		CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getId());
 		if(cd==null)
-			throw new SyntaxError("Unknown category " + type.getName());
+			throw new SyntaxError("Unknown category " + type.getId());
 		type = cd.getType(context);
 		cd.checkConstructorContext(context);
 		if(copyFrom!=null) {
 			IType cft = copyFrom.check(context);
 			if(!(cft instanceof CategoryType))
-				throw new SyntaxError("Cannot copy from " + cft.getName());
+				throw new SyntaxError("Cannot copy from " + cft.getId());
 		}
 		if(assignments!=null) {
 			for(ArgumentAssignment assignment : assignments) {
 				if(!cd.hasAttribute(context, assignment.getName()))
 					throw new SyntaxError("\"" + assignment.getName() + 
-						"\" is not an attribute of " + type.getName());	
+						"\" is not an attribute of " + type.getId());	
 				assignment.check(context);
 			}
 		}
@@ -129,7 +129,7 @@ public class ConstructorExpression implements IExpression {
 				Object copyObj = copyFrom.interpret(context);
 				if(copyObj instanceof IInstance) {
 					IInstance copyFrom = (IInstance)copyObj;
-					CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getName());
+					CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getId());
 					for(Identifier name : copyFrom.getMemberNames()) {
 						if(cd.hasAttribute(context, name)) {
 							IValue value = copyFrom.getMember(context,name);

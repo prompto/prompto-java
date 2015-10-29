@@ -31,20 +31,20 @@ public class FetchOneExpression extends Section implements IExpression {
 		switch(writer.getDialect()) {
 		case E:
 			writer.append("fetch one ");
-			writer.append(type.getName().toString());
+			writer.append(type.getId().toString());
 			writer.append(" where ");
 			filter.toDialect(writer);
 			break;
 		case O:
 			writer.append("fetch one (");
-			writer.append(type.getName().toString());
+			writer.append(type.getId().toString());
 			writer.append(") where (");
 			filter.toDialect(writer);
 			writer.append(")");
 			break;
 		case S:
 			writer.append("fetch one ");
-			writer.append(type.getName().toString());
+			writer.append(type.getId().toString());
 			writer.append(" where ");
 			filter.toDialect(writer);
 			break;
@@ -53,9 +53,9 @@ public class FetchOneExpression extends Section implements IExpression {
 	
 	@Override
 	public IType check(Context context) throws SyntaxError {
-		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getName());
+		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getId());
 		if(decl==null)
-			throw new SyntaxError("Unknown category: " + type.getName().toString());
+			throw new SyntaxError("Unknown category: " + type.getId().toString());
 		Context local = context.newLocalContext();
 		IType filterType = filter.check(local);
 		if(filterType!=BooleanType.instance())

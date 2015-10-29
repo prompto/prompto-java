@@ -51,7 +51,7 @@ public class RangeLiteral implements IExpression {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		IType type = first.check(context);
-		if("IntegerLimits".equals(type.getName()))
+		if("IntegerLimits".equals(type.getId()))
 			type = IntegerType.instance();
 		Object of = first.interpret(context);
 		Object ol = last.interpret(context);

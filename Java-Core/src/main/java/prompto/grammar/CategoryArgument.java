@@ -45,9 +45,9 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 	@Override
 	public String getProto() {
 		if(attributes==null)
-			return type.getName().toString();
+			return type.getId().toString();
 		else
-			return type.getName().toString() + '(' + attributes.toString() + ')';
+			return type.getId().toString() + '(' + attributes.toString() + ')';
 	}
 	
 	@Override
@@ -72,7 +72,7 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 	}
 	
 	private void toEDialect(CodeWriter writer) {
-		boolean anonymous = "any".equals(type.getName().toString());
+		boolean anonymous = "any".equals(type.getId().toString());
 		type.toDialect(writer);
 		if(anonymous) {
 			writer.append(' ');
@@ -155,7 +155,7 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 		if(attributes!=null) {
 			ConcreteCategoryDeclaration declaration = 
 					new ConcreteCategoryDeclaration(name, attributes,
-							new IdentifierList(type.getName()), null);
+							new IdentifierList(type.getId()), null);
 			context.registerDeclaration(declaration);
 		}
 		context.registerValue(this);

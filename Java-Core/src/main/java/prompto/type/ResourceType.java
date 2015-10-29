@@ -18,7 +18,7 @@ public class ResourceType extends CategoryType {
 		if(!(obj instanceof ResourceType))
 			return false;
 		ResourceType other = (ResourceType)obj;
-		return this.getName().equals(other.getName());
+		return this.getId().equals(other.getId());
 	}
 	
 	@Override

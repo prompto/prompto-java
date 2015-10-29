@@ -49,20 +49,20 @@ public class CategoryType extends BaseType {
 		if(!(obj instanceof CategoryType))
 			return false;
 		CategoryType other = (CategoryType)obj;
-		return this.getName().equals(other.getName());
+		return this.getId().equals(other.getId());
 	}
 	
 	@Override
 	public void checkUnique(Context context) throws SyntaxError {
-		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class,name);
+		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class,id);
 		if(actual!=null)
-			throw new SyntaxError("Duplicate name: \"" + name + "\"");
+			throw new SyntaxError("Duplicate name: \"" + id + "\"");
 	}
 	
 	CategoryDeclaration getDeclaration(Context context) throws SyntaxError {
-		CategoryDeclaration actual = context.getRegisteredDeclaration(CategoryDeclaration.class, name);
+		CategoryDeclaration actual = context.getRegisteredDeclaration(CategoryDeclaration.class, id);
 		if(actual==null)
-			throw new SyntaxError("Unknown category: \"" + name + "\"");
+			throw new SyntaxError("Unknown category: \"" + id + "\"");
 		return actual;
 	}
 	
@@ -136,7 +136,7 @@ public class CategoryType extends BaseType {
 		if(tryReverse)
 			return null;
 		else
-			throw new SyntaxError("Unsupported operation: " + this.name + " " + operator.getToken() + " " + other.getName());
+			throw new SyntaxError("Unsupported operation: " + this.id + " " + operator.getToken() + " " + other.getId());
 	}
 
 	@Override
@@ -147,11 +147,11 @@ public class CategoryType extends BaseType {
 	@Override
     public IType checkMember(Context context, Identifier name) throws SyntaxError
     {
-        CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, getName());
+        CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, getId());
         if (cd == null)
-            throw new SyntaxError("Unknown category:" + getName());
+            throw new SyntaxError("Unknown category:" + getId());
         if (!cd.hasAttribute(context, name))
-            throw new SyntaxError("No attribute:" + name + " in category:" + getName());
+            throw new SyntaxError("No attribute:" + name + " in category:" + getId());
         AttributeDeclaration ad = context.getRegisteredDeclaration(AttributeDeclaration.class, name);
         if (ad == null)
             throw new SyntaxError("Unknown atttribute:" + name);
@@ -162,7 +162,7 @@ public class CategoryType extends BaseType {
 	
 	@Override
 	public boolean isAssignableTo(Context context, IType other) {
-		if(name.equals(other.getName()))
+		if(id.equals(other.getId()))
 			return true;
 		if(other instanceof AnyType)
 			return true;
@@ -172,7 +172,7 @@ public class CategoryType extends BaseType {
 	}
 	
 	boolean isAssignableTo(Context context, CategoryType other) {
-		if(name.equals(other.getName()))
+		if(id.equals(other.getId()))
 			return true;
 		try {
 			CategoryDeclaration	cd = getDeclaration(context);
@@ -206,7 +206,7 @@ public class CategoryType extends BaseType {
 	}
 	
 	public boolean isAnonymous() {
-		return Character.isLowerCase(name.toString().charAt(0)); // since it's the name of the argument
+		return Character.isLowerCase(id.toString().charAt(0)); // since it's the name of the argument
 	}
 	
 	boolean isAssignableToAnonymousCategory(Context context, CategoryDeclaration decl, CategoryDeclaration other) {
@@ -229,7 +229,7 @@ public class CategoryType extends BaseType {
 		CategoryType otherCat = (CategoryType)other;
 		if(otherCat.isAnonymous())
 			return true;
-		CategoryDeclaration thisDecl = context.getRegisteredDeclaration(CategoryDeclaration.class, this.getName());
+		CategoryDeclaration thisDecl = context.getRegisteredDeclaration(CategoryDeclaration.class, this.getId());
 		if(thisDecl.isDerivedFrom(context, otherCat))
 			return true;
 		return false;
@@ -251,12 +251,12 @@ public class CategoryType extends BaseType {
 	}
 
 	public IInstance newInstance(Context context) throws PromptoError {
-		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, this.getName());
+		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, this.getId());
 		return decl.newInstance(context);
 	}
 	
 	public IInstance newInstance(Context context, Document document) throws PromptoError {
-		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, this.getName());
+		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, this.getId());
 		return decl.newInstance(context, document);
 	}
 	

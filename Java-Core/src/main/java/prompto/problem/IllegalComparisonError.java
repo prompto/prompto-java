@@ -20,7 +20,7 @@ public class IllegalComparisonError extends SyntaxProblemBase {
 	
 	@Override
 	public String getMessage() {
-		return "Cannot compare " + t1.getName() + " to " + t2.getName();
+		return "Cannot compare " + t1.getId() + " to " + t2.getId();
 	}
 
 }

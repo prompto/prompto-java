@@ -56,7 +56,7 @@ public class FetchAllExpression extends FetchOneExpression {
 		} else
 			writer.append("all ");
 		writer.append(" ( ");
-		writer.append(type.getName().toString());
+		writer.append(type.getId().toString());
 		writer.append(" ) ");
 		if(filter!=null) {
 			writer.append(" where ");
@@ -72,7 +72,7 @@ public class FetchAllExpression extends FetchOneExpression {
 		if(start==null)
 			writer.append("all ");
 		writer.append("( ");
-		writer.append(type.getName().toString());
+		writer.append(type.getId().toString());
 		writer.append(" ) ");
 		if(start!=null) {
 			writer.append("rows ( ");
@@ -95,7 +95,7 @@ public class FetchAllExpression extends FetchOneExpression {
 		writer.append("fetch ");
 		if(start==null)
 			writer.append("all ");
-		writer.append(type.getName().toString());
+		writer.append(type.getId().toString());
 		if(start!=null) {
 			start.toDialect(writer);
 			writer.append(" to ");
@@ -112,7 +112,7 @@ public class FetchAllExpression extends FetchOneExpression {
 
 	@Override
 	public IType check(Context context) throws SyntaxError {
-		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, type.getName());
+		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, type.getId());
 		if(decl==null)
 			throw new SyntaxError("Expecting a type type !");
 		checkFilter(context);

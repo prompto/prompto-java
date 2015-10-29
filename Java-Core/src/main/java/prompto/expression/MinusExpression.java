@@ -38,7 +38,7 @@ public class MinusExpression implements IUnaryExpression {
 		if(type instanceof IntegerType || type instanceof DecimalType || type instanceof PeriodType)
 			return type;
 		else
-			throw new SyntaxError("Cannot negate " + type.getName());
+			throw new SyntaxError("Cannot negate " + type.getId());
 	}
 	
 	@Override

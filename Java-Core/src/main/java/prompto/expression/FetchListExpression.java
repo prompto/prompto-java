@@ -79,7 +79,7 @@ public class FetchListExpression extends Section implements IExpression {
 			throw new InternalError("Illegal fetch source: " + source);
 		IType sourceType = source.check(context);
 		if(!(sourceType instanceof ContainerType))
-			throw new InternalError("Illegal source type: " + sourceType.getName());
+			throw new InternalError("Illegal source type: " + sourceType.getId());
 		IType itemType = ((ContainerType)sourceType).getItemType();
 		List<IValue> result = new ArrayList<IValue>();
 		Context local = context.newLocalContext();

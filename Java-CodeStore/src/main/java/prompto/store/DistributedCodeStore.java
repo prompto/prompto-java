@@ -28,6 +28,7 @@ import prompto.type.BooleanType;
 import prompto.type.DateTimeType;
 import prompto.type.DocumentType;
 import prompto.type.IntegerType;
+import prompto.type.ListType;
 import prompto.type.TextType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
@@ -86,7 +87,7 @@ public class DistributedCodeStore extends BaseCodeStore {
 		columns.add(new AttributeDeclaration(new Identifier("prototype"), TextType.instance(), null));
 		columns.add(new AttributeDeclaration(new Identifier("codeFormat"), TextType.instance(), null));
 		columns.add(new AttributeDeclaration(new Identifier("codeBody"), TextType.instance(), null));
-		columns.add(new AttributeDeclaration(new Identifier("members"), store.getDbIdType(), null));
+		columns.add(new AttributeDeclaration(new Identifier("members"), new ListType(store.getDbIdType()), null));
 		return columns;
 	}
 

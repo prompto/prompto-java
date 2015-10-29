@@ -102,7 +102,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 	
 	private Class<?> findClass(Context context, IType type) throws SyntaxError {
 		if(type instanceof CategoryType) {
-			IDeclaration named = context.getRegisteredDeclaration(IDeclaration.class, type.getName());
+			IDeclaration named = context.getRegisteredDeclaration(IDeclaration.class, type.getId());
 			if(named instanceof NativeCategoryDeclaration) 
 				return ((NativeCategoryDeclaration)named).getBoundClass(context, true);
 		}

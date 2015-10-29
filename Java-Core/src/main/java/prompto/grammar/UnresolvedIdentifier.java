@@ -135,7 +135,7 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 		else if(decl instanceof EnumeratedNativeDeclaration)
 			return new TypeExpression(decl.getType(context));
 		else for(IType type : NativeType.getAll()) {
-			if(name.equals(type.getName()))
+			if(name.equals(type.getId()))
 				return new TypeExpression(type);
 		}
 		return null;

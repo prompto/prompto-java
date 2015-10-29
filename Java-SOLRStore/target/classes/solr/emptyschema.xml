@@ -6,7 +6,7 @@
 	       It supports doc values but in that case the field needs to be
 	       single-valued and either required or have a default value.
 	      -->
-	    <fieldType name="string" class="solr.StrField" sortMissingLast="true" />
+	    <fieldType name="token" class="solr.StrField" sortMissingLast="true" />
 	
 	    <!-- A general text field that has reasonable, generic
 	         cross-language defaults: it tokenizes with StandardTokenizer,
@@ -32,26 +32,17 @@
 	      </analyzer>
 	    </fieldType>
 
-	    <!-- boolean type: "true" or "false" -->
 	    <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true"/>
-	    
-	    <!--
-	      Default numeric field types. For faster range queries, consider the tint/tfloat/tlong/tdouble types.
-	
-	      These fields support doc values, but they require the field to be
-	      single-valued and either be required or have a default value.
-	    -->
-	    <fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0"/>
-	    <fieldType name="float" class="solr.TrieFloatField" precisionStep="0" positionIncrementGap="0"/>
-	    <fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0"/>
-	    <fieldType name="double" class="solr.TrieDoubleField" precisionStep="0" positionIncrementGap="0"/>
+	    <fieldType name="integer" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0"/>
+	    <fieldType name="decimal" class="solr.TrieDoubleField" precisionStep="0" positionIncrementGap="0"/>
+	    <fieldType name="datetime" class="solr.TrieDateField"/>
 	</types>
 	<fields>
 		<!-- If you remove this field, you must _also_ disable the update log in solrconfig.xml 
 		or Solr won't start. _version_ and update log are required for SolrCloud -->
-		<field name="_version_" type="long" indexed="true" stored="true" />
+		<field name="_version_" type="integer" indexed="true" stored="true" />
+		<!-- unique id of a prompto document -->
    		<field name="dbId" type="uuid" indexed="true" stored="true" required="true" multiValued="false" /> 
-	   <field name="text" type="text" indexed="true" stored="false" multiValued="false"/>
 	</fields>
 	<uniqueKey>dbId</uniqueKey>
 </schema>

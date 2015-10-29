@@ -8,7 +8,7 @@ import prompto.value.Cursor;
 public class CursorType extends ContainerType {
 	
 	public CursorType(IType itemType) {
-		super(itemType.getName()+"[]", itemType);
+		super(itemType.getId()+"[]", itemType);
 	}
 	
 	@Override

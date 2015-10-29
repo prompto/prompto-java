@@ -9,7 +9,7 @@ import prompto.runtime.Context;
 public class ListType extends ContainerType {
 	
 	public ListType(IType itemType) {
-		super(itemType.getName()+"[]", itemType);
+		super(itemType.getId()+"[]", itemType);
 	}
 	
 	@Override
