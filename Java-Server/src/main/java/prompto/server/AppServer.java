@@ -159,15 +159,20 @@ public class AppServer {
 		serverThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
+				System.out.println("Web server about to start...");
 				try {
 					try {
 						jettyServer.start();
+						System.out.println("Web server started...");
 					} finally {
+						System.out.println("Signaling start completion...");
 						synchronized (sync) {
 							sync.notify();
 						}
 					}
+					System.out.println("Web server thread waiting for completion...");
 					jettyServer.join();
+					System.out.println("Web server thread complete...");
 				} catch(Throwable t) {
 					serverThrowable = t;
 				} finally {
@@ -176,11 +181,16 @@ public class AppServer {
 			}
 		}, "HTTP Server");
 		serverThread.start();
+		System.out.println("Waiting for start completion signal...");
 		synchronized (sync) {
 			sync.wait();
 		}
-		if(serverThrowable!=null)
-			throw serverThrowable;
+		System.out.println("Start completion signalled...");
+		if(serverThrowable!=null) {
+			Throwable t = serverThrowable;
+			serverThrowable = null;
+			throw t;
+		}
 	}
 
 	public static void stop() throws Exception {
@@ -188,7 +198,9 @@ public class AppServer {
 			throw new RuntimeException("Server is not started!");
 		System.out.println("Stopping web server...");
 		jettyServer.stop();
+		System.out.println("Web server stopped, waiting for completion...");
 		jettyServer.join();
+		System.out.println("Web server stop complete...");
 	}
 
 	public static boolean isStarted() {

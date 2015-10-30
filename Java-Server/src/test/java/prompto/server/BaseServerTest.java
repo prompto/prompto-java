@@ -43,6 +43,7 @@ public abstract class BaseServerTest {
 	
 	@After
 	public void __after__() throws Exception {
+		port = -1;
 		if(AppServer.isStarted()) {
 			AppServer.stop();
 			Thread.sleep(100);
