@@ -18,7 +18,7 @@ public abstract class BaseServerTest {
 	static int port = 8888;
 	
 	@Before
-	public void before() throws Throwable {
+	public void __before__() throws Throwable {
 		// bootstrap
 		AppServer.bootstrap(new MemStore(), null, "test", Version.parse("1.0.0"));
 		// adjust handler path for junit and cobertura context
