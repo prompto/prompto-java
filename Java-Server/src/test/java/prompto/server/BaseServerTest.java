@@ -47,12 +47,14 @@ public abstract class BaseServerTest {
 				port++;
 			}
 		}
+		Thread.sleep(100);
 	}
 	
 	@After
 	public void __after__() throws Exception {
 		if(AppServer.isStarted())
 			AppServer.stop();
+		Thread.sleep(100);
 	}
 	
 

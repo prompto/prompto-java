@@ -173,6 +173,7 @@ public class AppServer {
 	public static void stop() throws Exception {
 		if(!jettyServer.isStarted())
 			throw new RuntimeException("Server is not started!");
+		System.out.println("Stopping web server...");
 		jettyServer.stop();
 		jettyServer.join();
 	}
