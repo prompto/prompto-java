@@ -174,6 +174,7 @@ public class AppServer {
 		if(!jettyServer.isStarted())
 			throw new RuntimeException("Server is not started!");
 		jettyServer.stop();
+		jettyServer.join();
 	}
 
 	public static boolean isStarted() {

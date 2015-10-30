@@ -50,7 +50,7 @@ public abstract class BaseServerTest {
 	}
 	
 	@After
-	public void after() throws Exception {
+	public void __after__() throws Exception {
 		if(AppServer.isStarted())
 			AppServer.stop();
 	}
