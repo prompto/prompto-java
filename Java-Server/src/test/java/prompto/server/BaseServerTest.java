@@ -2,8 +2,6 @@ package prompto.server;
 
 import static org.junit.Assert.*;
 
-import java.net.BindException;
-
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.handler.DefaultHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
@@ -15,7 +13,7 @@ import prompto.store.Version;
 
 public abstract class BaseServerTest {
 	
-	static int port = 8888;
+	int port = -1;
 	
 	@Before
 	public void __before__() throws Throwable {
@@ -38,23 +36,17 @@ public abstract class BaseServerTest {
 		list.addHandler(ws);
 		list.addHandler(new DefaultHandler());
 		// start server
-		for(;;) {
-			try {
-				AppServer.startServer(port, list);
-				assertTrue(AppServer.isStarted());
-				break;
-			} catch(BindException e) {
-				port++;
-			}
-		}
+		port = AppServer.startServer(port, list);
 		Thread.sleep(100);
+		assertTrue(AppServer.isStarted());
 	}
 	
 	@After
 	public void __after__() throws Exception {
-		if(AppServer.isStarted())
+		if(AppServer.isStarted()) {
 			AppServer.stop();
-		Thread.sleep(100);
+			Thread.sleep(100);
+		}
 	}
 	
 

@@ -1,7 +1,9 @@
 package prompto.server;
 
+import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.DefaultHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
@@ -100,11 +102,22 @@ public class AppServer {
 		System.out.println("Bootstrapping successful...");
 	}
 
-	static void startServer(Integer httpPort, Handler handler) throws Throwable {
-		System.out.println("Starting web server...");
-		jettyServer = new Server(httpPort);
-		jettyServer.setHandler(handler);
-		AppServer.start();
+	static int startServer(Integer httpPort, Handler handler) throws Throwable {
+		System.out.println("Starting web server on port " + httpPort + "...");
+		if(httpPort==-1) {
+			jettyServer = new Server(httpPort);
+			ServerConnector sc = new ServerConnector(jettyServer);
+			jettyServer.setConnectors(new Connector[] { sc });
+			jettyServer.setHandler(handler);
+			AppServer.start();
+			httpPort = sc.getLocalPort();
+		} else {
+			jettyServer = new Server(httpPort);
+			jettyServer.setHandler(handler);
+			AppServer.start();
+		}
+		System.out.println("Web server started on port " + httpPort);
+		return httpPort;
 	}
 
 	static Handler prepareHandlers() {

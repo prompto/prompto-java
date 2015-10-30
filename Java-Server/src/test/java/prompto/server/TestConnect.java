@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class TestConnect extends BaseServerTest {
 	
-	// @Test
+	@Test
 	public void testStartAndStop() throws Throwable {
 		AppServer.stop();
 		assertFalse(AppServer.isStarted());
