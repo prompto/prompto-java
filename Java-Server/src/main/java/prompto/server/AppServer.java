@@ -148,6 +148,7 @@ public class AppServer {
 		return rh;
 	}
 
+	static boolean startComplete = false;
 	static Thread serverThread = null;
 	static Throwable serverThrowable = null;
 	
@@ -155,6 +156,7 @@ public class AppServer {
 		if(jettyServer.isStarted())
 			throw new RuntimeException("Server is already started!");
 		serverThrowable = null;
+		startComplete = false;
 		Object sync = new Object();
 		serverThread = new Thread(new Runnable() {
 			@Override
@@ -167,6 +169,7 @@ public class AppServer {
 					} finally {
 						System.out.println("Signaling start completion...");
 						synchronized (sync) {
+							startComplete = true;
 							sync.notify();
 						}
 					}
@@ -183,7 +186,8 @@ public class AppServer {
 		serverThread.start();
 		System.out.println("Waiting for start completion signal...");
 		synchronized (sync) {
-			sync.wait();
+			while(!startComplete)
+				sync.wait();
 		}
 		System.out.println("Start completion signalled...");
 		if(serverThrowable!=null) {
