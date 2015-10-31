@@ -22,7 +22,7 @@ public class TestSchema extends BaseSOLRTest {
 	}
 	
 	@Test
-	public void testEmptyCore() throws SolrServerException {
+	public void testEmptyCore() throws SolrServerException, IOException {
 		// Test the basics
 		ModifiableSolrParams params = new ModifiableSolrParams();
 		params.set("q", "_version_:0");

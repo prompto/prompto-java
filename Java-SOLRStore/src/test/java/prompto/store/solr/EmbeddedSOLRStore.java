@@ -46,6 +46,7 @@ public class EmbeddedSOLRStore extends BaseSOLRStore {
 			copyResourceToFile("solr/solrconfig.xml", new File(confDir, "solrconfig.xml"));
 			copyResourceToFile("solr/emptyschema.xml", new File(confDir, "schema.xml"));
 			copyResourceToFile("solr/stopwords.txt", new File(confDir, "stopwords.txt"));
+			copyResourceToFile("solr/update-script.js", new File(confDir, "update-script.js"));
 			CoreDescriptor cd = new CoreDescriptor(container, coreName, coreDir.getAbsolutePath());
 			core = container.create(cd);
 			server = new EmbeddedSolrServer(container, coreName);
@@ -65,9 +66,9 @@ public class EmbeddedSOLRStore extends BaseSOLRStore {
 		FileUtils.copyURLToFile(inputUrl, destination);	
 	}
 
-	public void shutdownServer() {
+	public void shutdownServer() throws IOException {
 		if(server!=null) {
-			server.shutdown();
+			server.close();
 			server = null;
 		}
 	}
@@ -89,7 +90,7 @@ public class EmbeddedSOLRStore extends BaseSOLRStore {
 	}
 
 	@Override
-	public QueryResponse query(ModifiableSolrParams params) throws SolrServerException {
+	public QueryResponse query(ModifiableSolrParams params) throws SolrServerException, IOException {
 		return server.query(params);
 	}
 

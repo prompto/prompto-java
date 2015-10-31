@@ -1,6 +1,7 @@
 package prompto.store.solr;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,7 +21,7 @@ public abstract class BaseSOLRTest {
 	}
 	
 	@After
-	public void after() {
+	public void after() throws IOException {
 		store.shutdownServer();
 		store.shutdownCore();
 		store.shutdownContainer();

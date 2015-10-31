@@ -96,7 +96,7 @@ abstract class BaseSOLRStore implements IStore {
 		return null;
 	}
 	
-	public abstract QueryResponse query(ModifiableSolrParams params) throws SolrServerException;
+	public abstract QueryResponse query(ModifiableSolrParams params) throws SolrServerException, IOException;
 
 	public abstract void addDocument(SolrInputDocument doc) throws SolrServerException, IOException;
 
