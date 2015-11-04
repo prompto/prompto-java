@@ -2,10 +2,10 @@ package prompto.declaration;
 
 import java.util.Collection;
 
+import prompto.code.ICodeStore;
 import prompto.grammar.Identifier;
 import prompto.parser.Section;
 import prompto.statement.CommentStatement;
-import prompto.store.ICodeStore;
 
 public abstract class BaseDeclaration extends Section implements IDeclaration {
 

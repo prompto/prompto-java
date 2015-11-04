@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import prompto.code.ICodeStore;
 import prompto.debug.Debugger;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
@@ -26,7 +27,6 @@ import prompto.problem.IProblemListener;
 import prompto.problem.ProblemListener;
 import prompto.statement.CommentStatement;
 import prompto.statement.IStatement;
-import prompto.store.ICodeStore;
 import prompto.type.CategoryType;
 import prompto.type.DecimalType;
 import prompto.type.IType;

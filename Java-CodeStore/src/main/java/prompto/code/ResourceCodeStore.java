@@ -1,9 +1,13 @@
-package prompto.store;
+package prompto.code;
 
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import prompto.code.Application;
+import prompto.code.ICodeStore;
+import prompto.code.Version;
 import prompto.declaration.DeclarationList;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
@@ -45,6 +49,21 @@ public class ResourceCodeStore extends BaseCodeStore {
 	@Override
 	public Version getModuleVersion() {
 		return version;
+	}
+	
+	@Override
+	public void store(Application application) throws PromptoError {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public Application fetchApplication(String name, Version version) throws PromptoError {
+		return null;
+	}
+	
+	@Override
+	public void store(IDeclaration declaration, Dialect dialect, Version version) throws PromptoError {
+		throw new UnsupportedOperationException();
 	}
 	
 	@Override
@@ -92,5 +111,10 @@ public class ResourceCodeStore extends BaseCodeStore {
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public Collection<IDeclaration> getDeclarations() {
+		loadResource();
+		return declarations.values();
 	}
 }

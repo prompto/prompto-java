@@ -1,8 +1,10 @@
-package prompto.store;
+package prompto.code;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import prompto.code.Version;
 
 public class TestVersion {
 

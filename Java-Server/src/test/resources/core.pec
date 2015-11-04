@@ -75,12 +75,20 @@ define "at least 3 items getAllAttributes" as test method doing:
 and verifying: 
 	l is an Attribute[]
 	l.length >= 3
+// runtime reference of any object
 define id as Any attribute
-define name as Text attribute
-define text as Text attribute
+// database reference of stored object
+define dbId as Any attribute
+// any object has a text attribute, used for print 
+define text as storable Text attribute
+// many objects have a name, it is not unique 
+define name as storable Text attribute
+// many objects have a version, it is not unique 
+define version as storable Text attribute
 define Error as enumerated category with attributes name and text, and symbols:
 	DIVIDE_BY_ZERO with "Divide by zero!" as text
 	INDEX_OUT_OF_RANGE with "Index out of range!" as text
 	NULL_REFERENCE with "Null reference!" as text
 	NOT_MUTABLE with "Not a mutable object!" as text
+	NOT_STORABLE with "Not a storable object!" as text
 	READ_WRITE with "Read/write failed!" as text

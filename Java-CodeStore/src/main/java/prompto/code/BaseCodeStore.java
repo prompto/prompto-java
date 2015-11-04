@@ -1,5 +1,7 @@
-package prompto.store;
+package prompto.code;
 
+import prompto.code.ICodeStore;
+import prompto.code.Version;
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
 

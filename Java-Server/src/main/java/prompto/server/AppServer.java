@@ -10,17 +10,17 @@ import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.webapp.WebAppContext;
 
+import prompto.code.DistributedCodeStore;
+import prompto.code.ICodeStore;
+import prompto.code.ResourceCodeStore;
+import prompto.code.Version;
+import prompto.code.ICodeStore.ModuleType;
 import prompto.runtime.Context;
-import prompto.store.DistributedCodeStore;
-import prompto.store.ICodeStore;
 import prompto.store.IDataStore;
 import prompto.store.IStoreFactory;
 import prompto.store.IStoreFactory.Type;
 import prompto.store.MemStoreFactory;
-import prompto.store.ResourceCodeStore;
-import prompto.store.ICodeStore.ModuleType;
 import prompto.store.IStore;
-import prompto.store.Version;
 
 public class AppServer {
 	
@@ -28,6 +28,14 @@ public class AppServer {
 	static Context globalContext = Context.newGlobalContext();
 	
 	public static void main(String[] args) throws Throwable {
+		main(args, null);
+	}
+	
+	public static interface ThrowingRunnable {
+		void run() throws Throwable;
+	}
+	
+	public static void main(String[] args, ThrowingRunnable serverInitialized ) throws Throwable {
 		Integer httpPort = null;
 		String resource = null;
 		String application = null;
@@ -68,6 +76,9 @@ public class AppServer {
 		IDataStore.setInstance(factory.newStore(args, Type.DATA));
 		// standard resource handlers
 		Handler handler = prepareHandlers();
+		// call pre-start code if any
+		if(serverInitialized!=null)
+			serverInitialized.run();
 		// initialize server accordingly
 		startServer(httpPort, handler);
 	}

@@ -138,6 +138,12 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>SOLRFields</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.solr</groupId>
 			<artifactId>solr-core</artifactId>
 			<version>5.2.1</version>

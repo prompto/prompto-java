@@ -1,0 +1,7 @@
+{
+	"name" : "Chat",
+	"version" : "1.0.0",
+	"description" : "Wanna chat?",
+	"entryPoint" : "printHelloWorld",
+	"imageResource" : "ChatApp.png"
+}

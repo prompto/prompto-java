@@ -1,0 +1,7 @@
+{
+	"name" : "Soup",
+	"version" : "1.0.0",
+	"description" : "A supper app!",
+	"entryPoint" : "printHelloWorld",
+	"imageResource" : "SoupApp.png"
+}

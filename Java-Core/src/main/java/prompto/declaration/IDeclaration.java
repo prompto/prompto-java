@@ -2,12 +2,12 @@ package prompto.declaration;
 
 import java.util.Collection;
 
+import prompto.code.ICodeStore;
 import prompto.error.SyntaxError;
 import prompto.grammar.INamed;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.statement.CommentStatement;
-import prompto.store.ICodeStore;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 

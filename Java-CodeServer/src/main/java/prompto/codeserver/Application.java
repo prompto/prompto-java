@@ -2,9 +2,11 @@ package prompto.codeserver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import prompto.server.AppServer;
+import prompto.utils.ResourceUtils;
 
 public class Application {
 
@@ -16,6 +18,14 @@ public class Application {
 		argsList.add("dev-center");
 		argsList.add("-version");
 		argsList.add("1.0.0");
-		AppServer.main(argsList.toArray(new String[argsList.size()]));
+		AppServer.main(argsList.toArray(new String[argsList.size()]), Application::importSamples);
+	}
+	
+	static void importSamples() throws Exception {
+		Collection<String> samples = ResourceUtils.listResourcesAt("samples/");
+		for(String sample : samples) {
+			SampleImporter importer = new SampleImporter("samples/" + sample);
+			importer.importSample();
+		}
 	}
 }

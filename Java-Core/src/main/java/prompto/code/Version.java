@@ -1,4 +1,4 @@
-package prompto.store;
+package prompto.code;
 
 import java.security.InvalidParameterException;
 

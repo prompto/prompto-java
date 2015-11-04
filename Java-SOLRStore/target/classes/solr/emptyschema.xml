@@ -35,7 +35,12 @@
 	    <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true"/>
 	    <fieldType name="integer" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0"/>
 	    <fieldType name="decimal" class="solr.TrieDoubleField" precisionStep="0" positionIncrementGap="0"/>
-	    <fieldType name="datetime" class="solr.TrieDateField"/>
+	    <fieldType name="time" class="prompto.store.solr.TimeFieldType"/>
+	    <fieldType name="date" class="prompto.store.solr.DateFieldType"/>
+	    <fieldType name="datetime" class="prompto.store.solr.DateTimeFieldType"/>
+	    <fieldType name="version" class="prompto.store.solr.VersionFieldType"/>
+	    <fieldType name="blob" class="prompto.store.solr.BinaryFieldType"/>
+	    <fieldType name="image" class="prompto.store.solr.BinaryFieldType"/>
 	</types>
 	<fields>
 		<!-- If you remove this field, you must _also_ disable the update log in solrconfig.xml 

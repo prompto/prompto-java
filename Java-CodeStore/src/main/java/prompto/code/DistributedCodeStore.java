@@ -1,4 +1,4 @@
-package prompto.store;
+package prompto.code;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import prompto.code.Application;
+import prompto.code.ICodeStore;
+import prompto.code.Version;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.DeclarationList;
 import prompto.declaration.IDeclaration;
@@ -24,17 +27,18 @@ import prompto.literal.TextLiteral;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
+import prompto.store.IDocumentIterator;
+import prompto.store.IStore;
 import prompto.type.BooleanType;
 import prompto.type.DateTimeType;
 import prompto.type.DocumentType;
-import prompto.type.IntegerType;
 import prompto.type.ListType;
 import prompto.type.TextType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
 import prompto.value.Document;
+import prompto.value.IValue;
 import prompto.value.ListValue;
-import prompto.value.Integer;
 import prompto.value.Text;
 
 
@@ -79,11 +83,10 @@ public class DistributedCodeStore extends BaseCodeStore {
 		columns.add(new AttributeDeclaration(new Identifier("dbId"), store.getDbIdType(), null));
 		columns.add(new AttributeDeclaration(new Identifier("author"), TextType.instance(), null));
 		columns.add(new AttributeDeclaration(new Identifier("timeStamp"), DateTimeType.instance(), null));
-		columns.add(new AttributeDeclaration(new Identifier("codeType"), TextType.instance(), null));
+		columns.add(new AttributeDeclaration(new Identifier("category"), TextType.instance(), null));
 		columns.add(new AttributeDeclaration(new Identifier("name"), TextType.instance(), null));
 		columns.add(new AttributeDeclaration(new Identifier("storable"), BooleanType.instance(), null));
 		columns.add(new AttributeDeclaration(new Identifier("version"), TextType.instance(), null));
-		columns.add(new AttributeDeclaration(new Identifier("__version__"), IntegerType.instance(), null));
 		columns.add(new AttributeDeclaration(new Identifier("prototype"), TextType.instance(), null));
 		columns.add(new AttributeDeclaration(new Identifier("codeFormat"), TextType.instance(), null));
 		columns.add(new AttributeDeclaration(new Identifier("codeBody"), TextType.instance(), null));
@@ -112,13 +115,47 @@ public class DistributedCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
+	public void store(Application application) throws PromptoError {
+		Document doc = application.asDocument();
+		store.store(context, doc);
+	}
+	
+	@Override
+	public Application fetchApplication(String name, Version version) throws PromptoError {
+		try {
+			Document doc = fetchDocumentInStore(name, version);
+			if(doc==null)
+				return null;
+			IValue category = doc.getMember(context, new Identifier("category"), false);
+			if(!ModuleType.APPLICATION.asValue().equals(category))
+				return null;
+			Application app = new Application();
+			app.setName((Text)doc.getMember(context, new Identifier("name"), false));
+			app.setVersion((Text)doc.getMember(context, new Identifier("version"), false));
+			app.setText((Text)doc.getMember(context, new Identifier("text"), false));
+			app.setEntryPoint((Text)doc.getMember(context, new Identifier("entryPoint"), false));
+			return app;
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	@Override
+	public void store(IDeclaration declaration, Dialect dialect, Version version) throws PromptoError {
+		Context context = Context.newGlobalContext();
+		Document doc = new Document();
+		populate(context, doc, declaration, dialect, version);
+		store.store(context, doc);
+	}
+	
+	@Override
 	public IDeclaration fetchLatestVersion(String name) throws PromptoError {
 		return fetchSpecificVersion(name, ICodeStore.LATEST);
 	}
 	
 	@Override
 	public IDeclaration fetchSpecificVersion(String name, Version version) throws PromptoError {
-		IDeclaration decl = fetchInStore(name, version);
+		IDeclaration decl = fetchDeclarationInStore(name, version);
 		if(decl==null) {
 			decl = super.fetchLatestVersion(name);
 			if(decl!=null && decl.getOrigin()!=null)
@@ -131,10 +168,9 @@ public class DistributedCodeStore extends BaseCodeStore {
 		ICodeStore origin = decl.getOrigin();
 		Context context = Context.newGlobalContext();
 		Document doc = new Document();
-		doc.setMember(context, new Identifier("codeType"),  new Text(origin.getModuleType().name()));
+		doc.setMember(context, new Identifier("category"),  new Text(origin.getModuleType().name()));
 		doc.setMember(context, new Identifier("name"),  new Text(origin.getModuleName()));
 		doc.setMember(context, new Identifier("version"),  new Text(origin.getModuleVersion().toString()));
-		doc.setMember(context, new Identifier("__version__"),  new Integer(origin.getModuleVersion().asInt()));
 		storeInDocument(context, doc, decl, origin.getModuleDialect(), origin.getModuleVersion());
 		store.store(context, doc);
 	}
@@ -145,19 +181,7 @@ public class DistributedCodeStore extends BaseCodeStore {
 				storeInDocument(context, doc, d, dialect, version);
 		} else {
 			Document child = new Document();
-			child.setMember(context, new Identifier("codeType"),  new Text(decl.getDeclarationType().name()));
-			child.setMember(context, new Identifier("name"),  new Text(decl.getIdentifier().getName()));
-			doc.setMember(context, new Identifier("version"),  new Text(version.toString()));
-			doc.setMember(context, new Identifier("__version__"),  new Integer(version.asInt()));
-			if(decl instanceof IMethodDeclaration) {
-				String proto = ((IMethodDeclaration)decl).getProto();
-				child.setMember(context, new Identifier("prototype"), new Text(proto));
-			}
-			child.setMember(context, new Identifier("codeFormat"),  new Text(dialect.name()));
-			CodeWriter writer = new CodeWriter(dialect, context);
-			decl.toDialect(writer);
-			String content = writer.toString();
-			child.setMember(context, new Identifier("codeBody"),  new Text(content));
+			populate(context, child, decl, dialect, version);
 			ListValue value = (ListValue)doc.getMember(context, new Identifier("members"), false);
 			if(value==null) {
 				value = new ListValue(DocumentType.instance());
@@ -171,24 +195,40 @@ public class DistributedCodeStore extends BaseCodeStore {
 		}
 	}
 
-	private IDeclaration fetchInStore(String name, Version version) {
-		if(store==null)
-			return null;
+	private void populate(Context context, Document doc, IDeclaration decl, Dialect dialect, Version version) {
+		doc.setMember(context, new Identifier("category"),  new Text(decl.getDeclarationType().name()));
+		doc.setMember(context, new Identifier("name"),  new Text(decl.getIdentifier().getName()));
+		doc.setMember(context, new Identifier("version"),  new Text(version.toString()));
+		if(decl instanceof IMethodDeclaration) {
+			String proto = ((IMethodDeclaration)decl).getProto();
+			doc.setMember(context, new Identifier("prototype"), new Text(proto));
+		}
+		doc.setMember(context, new Identifier("codeFormat"),  new Text(dialect.name()));
+		CodeWriter writer = new CodeWriter(dialect, context);
+		decl.toDialect(writer);
+		String content = writer.toString();
+		doc.setMember(context, new Identifier("codeBody"),  new Text(content));
+	}
+
+	private IDeclaration fetchDeclarationInStore(String name, Version version) {
 		try {
-			Document doc = null;
-			IExpression filter = buildFilter(name, version);
-			if(LATEST.equals(version)) {
-				IdentifierList names = new IdentifierList(new Identifier("version"));
-				OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
-				IntegerLiteral one = new IntegerLiteral(1);
-				IDocumentIterator result = store.fetchMany(context, one, one, filter, orderBy);
-				doc = result.hasNext() ? result.next() : null;
-			} else
-				doc = store.fetchOne(context, filter); 
-			return parse(context, doc);
+			Document doc = fetchDocumentInStore(name, version);
+			return parseDeclaration(context, doc);
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	private Document fetchDocumentInStore(String name, Version version) throws PromptoError {
+		IExpression filter = buildFilter(name, version);
+		if(LATEST.equals(version)) {
+			IdentifierList names = new IdentifierList(new Identifier("version"));
+			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
+			IntegerLiteral one = new IntegerLiteral(1);
+			IDocumentIterator result = store.fetchMany(context, one, one, filter, orderBy);
+			return result.hasNext() ? result.next() : null;
+		} else
+			return store.fetchOne(context, filter); 
 	}
 
 	private IExpression buildFilter(String name, Version version) {
@@ -196,15 +236,15 @@ public class DistributedCodeStore extends BaseCodeStore {
 		IExpression right = new TextLiteral("'" + name + "'");
 		IExpression filter = new EqualsExpression(left, EqOp.ROUGHLY, right);
 		if(!LATEST.equals(version)) {
-			left = new UnresolvedIdentifier(new Identifier("__version__"));
-			right = new IntegerLiteral(version.asInt());
+			left = new UnresolvedIdentifier(new Identifier("version"));
+			right = new TextLiteral('"' + version.toString() + '"');
 			IExpression condition = new EqualsExpression(left, EqOp.EQUALS, right);
 			filter = new AndExpression(filter, condition);
 		} 
 		return filter;
 	}
 
-	private IDeclaration parse(Context context, Document doc) throws Exception {
+	private IDeclaration parseDeclaration(Context context, Document doc) throws Exception {
 		if(doc==null)
 			return null;
 		Text value = (Text)doc.getMember(context, new Identifier("codeFormat"));

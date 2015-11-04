@@ -8,8 +8,8 @@ import org.eclipse.jetty.server.handler.HandlerList;
 import org.junit.After;
 import org.junit.Before;
 
+import prompto.code.Version;
 import prompto.store.MemStore;
-import prompto.store.Version;
 
 public abstract class BaseServerTest {
 	

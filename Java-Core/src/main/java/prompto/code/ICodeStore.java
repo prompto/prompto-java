@@ -1,4 +1,4 @@
-package prompto.store;
+package prompto.code;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,18 +64,24 @@ public interface ICodeStore {
 	
 	static public enum ModuleType {
 		APPLICATION,
-		LIBRARY;
+		LIBRARY,
+		SCRIPT;
 		
 		public IValue asValue() {
 			return new Text(this.name());
 		}
 	}
 	
-	IDeclaration fetchLatestVersion(String name) throws PromptoError;
-	IDeclaration fetchSpecificVersion(String name, Version version) throws PromptoError;
 	ModuleType getModuleType();
 	Dialect getModuleDialect();
 	String getModuleName();
 	Version getModuleVersion();
+
+	void store(IDeclaration declaration, Dialect dialect, Version version) throws PromptoError;
+	IDeclaration fetchLatestVersion(String name) throws PromptoError;
+	IDeclaration fetchSpecificVersion(String name, Version version) throws PromptoError;
+
+	Application fetchApplication(String name, Version version) throws PromptoError;
+	void store(Application application) throws PromptoError;
 
 }
