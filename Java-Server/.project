@@ -20,21 +20,4 @@
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>src/main/resources/console.pec</name>
-			<type>1</type>
-			<location>/Users/ericvergnaud/Development/prompto/prompto-libraries/concat/console.pec</location>
-		</link>
-		<link>
-			<name>src/main/resources/core.pec</name>
-			<type>1</type>
-			<location>/Users/ericvergnaud/Development/prompto/prompto-libraries/concat/core.pec</location>
-		</link>
-		<link>
-			<name>src/main/resources/internet.pec</name>
-			<type>1</type>
-			<location>/Users/ericvergnaud/Development/prompto/prompto-libraries/concat/internet.pec</location>
-		</link>
-	</linkedResources>
 </projectDescription>
