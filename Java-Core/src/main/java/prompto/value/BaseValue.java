@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.store.IStorable;
 import prompto.type.IType;
 
 public abstract class BaseValue implements IValue {
@@ -29,6 +30,11 @@ public abstract class BaseValue implements IValue {
 	@Override
 	public IType getType() {
 		return type;
+	}
+	
+	@Override
+	public void store(Context context, String name, IStorable storable) {
+		throw new UnsupportedOperationException("Cannot store " + this.getClass().getSimpleName());
 	}
 	
 	public IValue Add(Context context, IValue value) throws PromptoError {

@@ -13,7 +13,6 @@ import prompto.type.IType;
 import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.utils.ExpressionList;
-import prompto.value.Document;
 import prompto.value.IInstance;
 import prompto.value.IValue;
 
@@ -76,8 +75,7 @@ public class StoreStatement extends SimpleStatement {
 				throw new NotStorableError();
 			if(!storable.isDirty())
 				continue;
-			Document document = storable.asDocument();
-			store.store(context, document);
+			store.store(context, storable);
 		}
 		return null;
 	}

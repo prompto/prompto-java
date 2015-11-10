@@ -18,7 +18,6 @@ import prompto.literal.TextLiteral;
 import prompto.runtime.Context;
 import prompto.type.TextType;
 import prompto.utils.IdentifierList;
-import prompto.value.Document;
 import prompto.value.Text;
 
 public class TestMemStore {
@@ -40,9 +39,9 @@ public class TestMemStore {
 				new TextLiteral('"' + value + '"'));
 	}
 
-	private Document store(String name, String value) throws Exception {
-		Document doc = new Document();
-		doc.setMember(context, new Identifier(name), new Text(value));
+	private IStorable store(String name, String value) throws Exception {
+		IStorable doc = IDataStore.getInstance().newStorable();
+		doc.setValue(context, new Identifier(name), new Text(value));
 		IDataStore.getInstance().store(context, doc);
 		return doc;
 	}
@@ -51,16 +50,16 @@ public class TestMemStore {
 	@Test
 	public void testFetchOneEmpty() throws Exception {
 		IExpression filter = createFilter("__id__", EqOp.EQUALS, "__test__");
-		Document d = IDataStore.getInstance().fetchOne(context, filter);
+		IStored d = IDataStore.getInstance().fetchOne(context, filter);
 		assertNull(d);
 	}
 
 
 	@Test
 	public void testFetchOneExists() throws Exception {
-		Document d1 = store("__id__", "__test__");
+		IStorable d1 = store("__id__", "__test__");
 		IExpression filter = createFilter("__id__", EqOp.EQUALS, "__test__");
-		Document d2 = IDataStore.getInstance().fetchOne(context, filter);
+		IStored d2 = IDataStore.getInstance().fetchOne(context, filter);
 		assertEquals(d1,  d2);
 	}
 
@@ -68,33 +67,33 @@ public class TestMemStore {
 	public void testFetchOneMissing() throws Exception {
 		store("__id__", "__test__");
 		IExpression filter = createFilter("__id__", EqOp.EQUALS, "__test1__");
-		Document d2 = IDataStore.getInstance().fetchOne(context, filter);
+		IStored d2 = IDataStore.getInstance().fetchOne(context, filter);
 		assertNull(d2);
 	}
 
 	@Test
 	public void testFetchOneMulti() throws Exception {
 		store("__id__", "__test1__");
-		Document d2 = store("__id__", "__test2__");
+		IStorable d2 = store("__id__", "__test2__");
 		store("__id__", "__test3__");
 		IExpression filter = createFilter("__id__", EqOp.EQUALS, "__test2__");
-		Document d4 = IDataStore.getInstance().fetchOne(context, filter);
+		IStored d4 = IDataStore.getInstance().fetchOne(context, filter);
 		assertEquals(d2,  d4);
 	}
 
 	@Test
 	public void testFetchManyEmpty() throws Exception {
 		IExpression filter = createFilter("__id__", EqOp.EQUALS, "__test__");
-		IDocumentIterator docs = IDataStore.getInstance().fetchMany(context, null, null, filter, null);
+		IStoredIterator docs = IDataStore.getInstance().fetchMany(context, null, null, filter, null);
 		assertFalse(docs.hasNext());
 	}
 
 	@Test
 	public void testFetchManyOneExists() throws Exception {
-		Document d1 = store("__id__", "__test1__");
+		IStorable d1 = store("__id__", "__test1__");
 		store("__id__", "__test2__");
 		IExpression filter = createFilter("__id__", EqOp.EQUALS, "__test1__");
-		IDocumentIterator docs = IDataStore.getInstance().fetchMany(context, null, null, filter, null);
+		IStoredIterator docs = IDataStore.getInstance().fetchMany(context, null, null, filter, null);
 		assertTrue(docs.hasNext());
 		assertEquals(d1,  docs.next());
 		assertFalse(docs.hasNext());
@@ -104,7 +103,7 @@ public class TestMemStore {
 	public void testFetchManyOneMissing() throws Exception {
 		store("__id__", "__test1__");
 		IExpression filter = createFilter("__id__", EqOp.EQUALS, "__test2__");
-		IDocumentIterator docs = IDataStore.getInstance().fetchMany(context, null, null, filter, null);
+		IStoredIterator docs = IDataStore.getInstance().fetchMany(context, null, null, filter, null);
 		assertFalse(docs.hasNext());
 	}
 
@@ -115,7 +114,7 @@ public class TestMemStore {
 		store("__id__", "__test1__");
 		store("__id__", "__test2__");
 		IExpression filter = createFilter("__id__", EqOp.EQUALS, "__test1__");
-		IDocumentIterator docs = IDataStore.getInstance().fetchMany(context, null, null, filter, null);
+		IStoredIterator docs = IDataStore.getInstance().fetchMany(context, null, null, filter, null);
 		assertTrue(docs.hasNext());
 		docs.next();
 		assertTrue(docs.hasNext());
@@ -127,15 +126,15 @@ public class TestMemStore {
 
 	@Test
 	public void testOrderByAsc() throws Exception {
-		Document d3 = store("__id__", "__test3__");
-		Document d1 = store("__id__", "__test1__");
-		Document d4 = store("__id__", "__test4__");
-		Document d2 = store("__id__", "__test2__");
+		IStorable d3 = store("__id__", "__test3__");
+		IStorable d1 = store("__id__", "__test1__");
+		IStorable d4 = store("__id__", "__test4__");
+		IStorable d2 = store("__id__", "__test2__");
 		OrderByClauseList obc = new OrderByClauseList(
 				new OrderByClause(
 						new IdentifierList(new Identifier("__id__")), 
 						false));
-		IDocumentIterator docs = IDataStore.getInstance().fetchMany(context, null, null, null, obc);
+		IStoredIterator docs = IDataStore.getInstance().fetchMany(context, null, null, null, obc);
 		assertTrue(docs.hasNext());
 		assertEquals(d1,  docs.next());
 		assertTrue(docs.hasNext());
@@ -149,15 +148,15 @@ public class TestMemStore {
 
 	@Test
 	public void testOrderByDesc() throws Exception {
-		Document d3 = store("__id__", "__test3__");
-		Document d1 = store("__id__", "__test1__");
-		Document d4 = store("__id__", "__test4__");
-		Document d2 = store("__id__", "__test2__");
+		IStorable d3 = store("__id__", "__test3__");
+		IStorable d1 = store("__id__", "__test1__");
+		IStorable d4 = store("__id__", "__test4__");
+		IStorable d2 = store("__id__", "__test2__");
 		OrderByClauseList obc = new OrderByClauseList(
 				new OrderByClause(
 						new IdentifierList(new Identifier("__id__")), 
 						true));
-		IDocumentIterator docs = IDataStore.getInstance().fetchMany(context, null, null, null, obc);
+		IStoredIterator docs = IDataStore.getInstance().fetchMany(context, null, null, null, obc);
 		assertTrue(docs.hasNext());
 		assertEquals(d4,  docs.next());
 		assertTrue(docs.hasNext());
@@ -171,14 +170,14 @@ public class TestMemStore {
 	
 	@Test
 	public void testSliceEmpty() throws Exception {
-		IDocumentIterator docs = IDataStore.getInstance().fetchMany(context, new IntegerLiteral(1), new IntegerLiteral(10), null, null);
+		IStoredIterator docs = IDataStore.getInstance().fetchMany(context, new IntegerLiteral(1), new IntegerLiteral(10), null, null);
 		assertFalse(docs.hasNext());
 	}
 
 	@Test
 	public void testSliceBeyond() throws Exception {
-		Document d1 = store("__id__", "__test1__");
-		IDocumentIterator docs = IDataStore.getInstance().fetchMany(context, new IntegerLiteral(1), new IntegerLiteral(10), null, null);
+		IStorable d1 = store("__id__", "__test1__");
+		IStoredIterator docs = IDataStore.getInstance().fetchMany(context, new IntegerLiteral(1), new IntegerLiteral(10), null, null);
 		assertTrue(docs.hasNext());
 		assertEquals(d1,  docs.next());
 		assertFalse(docs.hasNext());
@@ -190,7 +189,7 @@ public class TestMemStore {
 		store("__id__", "__test2__");
 		store("__id__", "__test3__");
 		store("__id__", "__test4__");
-		IDocumentIterator docs = IDataStore.getInstance().fetchMany(context, new IntegerLiteral(1), new IntegerLiteral(4), null, null);
+		IStoredIterator docs = IDataStore.getInstance().fetchMany(context, new IntegerLiteral(1), new IntegerLiteral(4), null, null);
 		assertTrue(docs.hasNext());
 		docs.next();
 		assertTrue(docs.hasNext());
@@ -208,7 +207,7 @@ public class TestMemStore {
 		store("__id__", "__test2__");
 		store("__id__", "__test3__");
 		store("__id__", "__test4__");
-		IDocumentIterator docs = IDataStore.getInstance().fetchMany(context, new IntegerLiteral(2), new IntegerLiteral(3), null, null);
+		IStoredIterator docs = IDataStore.getInstance().fetchMany(context, new IntegerLiteral(2), new IntegerLiteral(3), null, null);
 		assertTrue(docs.hasNext());
 		docs.next();
 		assertTrue(docs.hasNext());

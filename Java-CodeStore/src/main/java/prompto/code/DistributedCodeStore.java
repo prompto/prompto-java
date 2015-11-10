@@ -6,9 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import prompto.code.Application;
-import prompto.code.ICodeStore;
-import prompto.code.Version;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.DeclarationList;
 import prompto.declaration.IDeclaration;
@@ -27,18 +24,17 @@ import prompto.literal.TextLiteral;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
-import prompto.store.IDocumentIterator;
+import prompto.store.IStorable;
 import prompto.store.IStore;
+import prompto.store.IStored;
+import prompto.store.IStoredIterator;
 import prompto.type.BooleanType;
 import prompto.type.DateTimeType;
-import prompto.type.DocumentType;
 import prompto.type.ListType;
 import prompto.type.TextType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
-import prompto.value.Document;
 import prompto.value.IValue;
-import prompto.value.ListValue;
 import prompto.value.Text;
 
 
@@ -120,24 +116,26 @@ public class DistributedCodeStore extends BaseCodeStore {
 	
 	@Override
 	public void store(Application application) throws PromptoError {
-		Document doc = application.asDocument();
-		store.store(context, doc);
+		Context context = Context.newGlobalContext();
+		IStorable storable = store.newStorable(); 
+		application.populate(context, storable);
+		store.store(context, storable);
 	}
 	
 	@Override
 	public Application fetchApplication(String name, Version version) throws PromptoError {
 		try {
-			Document doc = fetchDocumentInStore(name, version);
-			if(doc==null)
+			IStored stored = fetchInStore(name, version);
+			if(stored==null)
 				return null;
-			IValue category = doc.getMember(context, new Identifier("category"), false);
+			IValue category = stored.getValue(context, new Identifier("category"));
 			if(!ModuleType.APPLICATION.asValue().equals(category))
 				return null;
 			Application app = new Application();
-			app.setName((Text)doc.getMember(context, new Identifier("name"), false));
-			app.setVersion((Text)doc.getMember(context, new Identifier("version"), false));
-			app.setText((Text)doc.getMember(context, new Identifier("text"), false));
-			app.setEntryPoint((Text)doc.getMember(context, new Identifier("entryPoint"), false));
+			app.setName((Text)stored.getValue(context, new Identifier("name")));
+			app.setVersion((Text)stored.getValue(context, new Identifier("version")));
+			app.setText((Text)stored.getValue(context, new Identifier("text")));
+			app.setEntryPoint((Text)stored.getValue(context, new Identifier("entryPoint")));
 			return app;
 		} catch(Exception e) {
 			throw new RuntimeException(e);
@@ -147,9 +145,9 @@ public class DistributedCodeStore extends BaseCodeStore {
 	@Override
 	public void store(IDeclaration declaration, Dialect dialect, Version version) throws PromptoError {
 		Context context = Context.newGlobalContext();
-		Document doc = new Document();
-		populate(context, doc, declaration, dialect, version);
-		store.store(context, doc);
+		IStorable storable = store.newStorable(); 
+		populate(context, storable, declaration, dialect, version);
+		store.store(context, storable);
 	}
 	
 	@Override
@@ -171,65 +169,56 @@ public class DistributedCodeStore extends BaseCodeStore {
 	private void storeInStore(IDeclaration decl) throws PromptoError {
 		ICodeStore origin = decl.getOrigin();
 		Context context = Context.newGlobalContext();
-		Document doc = new Document();
-		doc.setMember(context, new Identifier("category"),  new Text(origin.getModuleType().name()));
-		doc.setMember(context, new Identifier("name"),  new Text(origin.getModuleName()));
-		doc.setMember(context, new Identifier("version"),  new Text(origin.getModuleVersion().toString()));
-		storeInDocument(context, doc, decl, origin.getModuleDialect(), origin.getModuleVersion());
-		store.store(context, doc);
+		IStorable storable = store.newStorable();
+		storable.setValue(context, new Identifier("category"),  new Text(origin.getModuleType().name()));
+		storable.setValue(context, new Identifier("name"),  new Text(origin.getModuleName()));
+		storable.setValue(context, new Identifier("version"),  new Text(origin.getModuleVersion().toString()));
+		storeInStorable(context, storable, decl, origin.getModuleDialect(), origin.getModuleVersion());
+		store.store(context, storable);
 	}
 
-	private void storeInDocument(Context context, Document doc, IDeclaration decl, Dialect dialect, Version version) {
+	private void storeInStorable(Context context, IStorable storable, IDeclaration decl, Dialect dialect, Version version) {
 		if(decl instanceof MethodDeclarationMap) {
 			for(IDeclaration d : ((MethodDeclarationMap)decl).values())
-				storeInDocument(context, doc, d, dialect, version);
+				storeInStorable(context, storable, d, dialect, version);
 		} else {
-			Document child = new Document();
+			IStorable child = store.newStorable();
 			populate(context, child, decl, dialect, version);
-			ListValue value = (ListValue)doc.getMember(context, new Identifier("members"), false);
-			if(value==null) {
-				value = new ListValue(DocumentType.instance());
-				doc.setMember(context, new Identifier("members"), value);
-			}
-			try {
-				value.Add(context, child);
-			} catch(PromptoError e) {
-				// TODO log
-			}
+			storable.setData("members", child);
 		}
 	}
 
-	private void populate(Context context, Document doc, IDeclaration decl, Dialect dialect, Version version) {
-		doc.setMember(context, new Identifier("category"),  new Text(decl.getDeclarationType().name()));
-		doc.setMember(context, new Identifier("name"),  new Text(decl.getIdentifier().getName()));
-		doc.setMember(context, new Identifier("version"),  new Text(version.toString()));
+	private void populate(Context context, IStorable storable, IDeclaration decl, Dialect dialect, Version version) {
+		storable.setValue(context, new Identifier("category"),  new Text(decl.getDeclarationType().name()));
+		storable.setValue(context, new Identifier("name"),  new Text(decl.getIdentifier().getName()));
+		storable.setValue(context, new Identifier("version"),  new Text(version.toString()));
 		if(decl instanceof IMethodDeclaration) {
 			String proto = ((IMethodDeclaration)decl).getProto();
-			doc.setMember(context, new Identifier("prototype"), new Text(proto));
+			storable.setValue(context, new Identifier("prototype"), new Text(proto));
 		}
-		doc.setMember(context, new Identifier("codeFormat"),  new Text(dialect.name()));
+		storable.setValue(context, new Identifier("codeFormat"),  new Text(dialect.name()));
 		CodeWriter writer = new CodeWriter(dialect, context);
 		decl.toDialect(writer);
 		String content = writer.toString();
-		doc.setMember(context, new Identifier("codeBody"),  new Text(content));
+		storable.setValue(context, new Identifier("codeBody"),  new Text(content));
 	}
 
 	private IDeclaration fetchDeclarationInStore(String name, Version version) {
 		try {
-			Document doc = fetchDocumentInStore(name, version);
-			return parseDeclaration(context, doc);
+			IStored stored = fetchInStore(name, version);
+			return parseDeclaration(context, stored);
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	private Document fetchDocumentInStore(String name, Version version) throws PromptoError {
+	private IStored fetchInStore(String name, Version version) throws PromptoError {
 		IExpression filter = buildFilter(name, version);
 		if(LATEST.equals(version)) {
 			IdentifierList names = new IdentifierList(new Identifier("version"));
 			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
 			IntegerLiteral one = new IntegerLiteral(1);
-			IDocumentIterator result = store.fetchMany(context, one, one, filter, orderBy);
+			IStoredIterator result = store.fetchMany(context, one, one, filter, orderBy);
 			return result.hasNext() ? result.next() : null;
 		} else
 			return store.fetchOne(context, filter); 
@@ -248,12 +237,12 @@ public class DistributedCodeStore extends BaseCodeStore {
 		return filter;
 	}
 
-	private IDeclaration parseDeclaration(Context context, Document doc) throws Exception {
-		if(doc==null)
+	private IDeclaration parseDeclaration(Context context, IStored stored) throws Exception {
+		if(stored==null)
 			return null;
-		Text value = (Text)doc.getMember(context, new Identifier("codeFormat"));
+		Text value = (Text)stored.getValue(context, new Identifier("codeFormat"));
 		Dialect dialect = Dialect.valueOf(value.getValue());
-		value = (Text)doc.getMember(context, new Identifier("codeBody"));
+		value = (Text)stored.getValue(context, new Identifier("codeBody"));
 		InputStream input = new ByteArrayInputStream(value.getValue().getBytes());
 		DeclarationList decls = ICodeStore.parse(dialect, "__store__", input);
 		return decls.isEmpty() ? null : decls.get(0);

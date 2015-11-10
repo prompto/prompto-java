@@ -7,11 +7,11 @@ import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.store.IDataStore;
 import prompto.store.IStore;
+import prompto.store.IStored;
 import prompto.type.BooleanType;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.value.Document;
 import prompto.value.IValue;
 import prompto.value.NullValue;
 
@@ -66,11 +66,11 @@ public class FetchOneExpression extends Section implements IExpression {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		IStore store = IDataStore.getInstance();
-		Document doc = store.fetchOne(context, filter);
-		if(doc==null)
+		IStored stored = store.fetchOne(context, filter);
+		if(stored==null)
 			return NullValue.instance();
 		else
-			return type.newInstance(context, doc);
+			return type.newInstance(context, stored);
 	}
 
 }

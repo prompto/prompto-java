@@ -20,8 +20,8 @@ import prompto.runtime.Context;
 import prompto.runtime.MethodFinder;
 import prompto.runtime.Score;
 import prompto.statement.MethodCall;
+import prompto.store.IStored;
 import prompto.value.ConcreteInstance;
-import prompto.value.Document;
 import prompto.value.ExpressionValue;
 import prompto.value.IContainer;
 import prompto.value.IInstance;
@@ -255,9 +255,9 @@ public class CategoryType extends BaseType {
 		return decl.newInstance(context);
 	}
 	
-	public IInstance newInstance(Context context, Document document) throws PromptoError {
+	public IInstance newInstance(Context context, IStored stored) throws PromptoError {
 		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, this.getId());
-		return decl.newInstance(context, document);
+		return decl.newInstance(context, stored);
 	}
 	
 	public IValue sort(final Context context, IContainer<IValue> list, IExpression key) throws PromptoError {

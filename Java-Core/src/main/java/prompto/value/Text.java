@@ -12,6 +12,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.store.IStorable;
 import prompto.type.TextType;
 
 
@@ -28,6 +29,11 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 		return value;
 	}
 	
+	@Override
+	public void store(Context context, String name, IStorable storable) {
+		storable.setData(name, value);
+	}
+		
 	@Override
 	public long length() {
 		return value.length();

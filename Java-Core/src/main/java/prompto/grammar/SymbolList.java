@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 
 import prompto.error.PromptoError;
 import prompto.runtime.Context;
+import prompto.store.IStorable;
 import prompto.type.IType;
 import prompto.utils.IValueIterable;
 import prompto.utils.ObjectList;
@@ -22,6 +23,11 @@ public abstract class SymbolList <T extends Symbol> extends ObjectList<T> implem
 		this.add(symbol);
 	}
 
+	@Override
+	public void store(Context context, String name, IStorable storable) {
+		throw new UnsupportedOperationException("Cannot store " + this.getClass().getSimpleName());
+	}
+	
 	@Override
 	public boolean isMutable() {
 		return false;

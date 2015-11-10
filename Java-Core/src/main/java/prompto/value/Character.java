@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
+import prompto.store.IStorable;
 import prompto.type.CharacterType;
 
 public class Character extends BaseValue implements Comparable<Character>, IMultiplyable
@@ -24,6 +25,11 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
     	return value; 
     }
 
+	@Override
+	public void store(Context context, String name, IStorable storable) {
+		storable.setData(name, value);
+	}
+	    
     @Override
     public IValue Add(Context context, IValue value)
     {

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
+import prompto.store.IStorable;
 import prompto.type.BooleanType;
 
 public class Boolean extends BaseValue implements Comparable<Boolean> {
@@ -42,6 +43,11 @@ public class Boolean extends BaseValue implements Comparable<Boolean> {
 		return not;
 	}
 
+	@Override
+	public void store(Context context, String name, IStorable storable) {
+		storable.setData(name, value);
+	}
+	
 	@Override
 	public int CompareTo(Context context, IValue value) throws SyntaxError {
 		if (value instanceof Boolean)

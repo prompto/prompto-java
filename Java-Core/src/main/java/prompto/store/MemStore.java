@@ -28,7 +28,7 @@ import prompto.value.TupleValue;
 /* a utility class for running unit tests only */
 public final class MemStore implements IStore {
 
-	private Map<Integer, Document> documents = new HashMap<>();
+	private Map<Integer, StorableDocument> documents = new HashMap<>();
 	private long lastDbId = 0;
 	
 	@Override
@@ -50,28 +50,35 @@ public final class MemStore implements IStore {
 	static final Identifier dbIdName = new Identifier("dbId");
 	
 	@Override
-	public void store(Context context, Document document) {
-		IValue dbId = document.getMember(context, dbIdName, false);
+	public void store(Context context, IStorable storable) {
+		if(!(storable instanceof StorableDocument))
+			throw new IllegalStateException("Expecting a StorableDocument");
+		store(context, (StorableDocument)storable);
+	}
+	
+	public void store(Context context, StorableDocument storable) {
+		// ensure db id
+		IValue dbId = storable.getValue(context, dbIdName);
 		if(!(dbId instanceof Integer)) {
 			dbId = new Integer(++lastDbId);
-			document.setMember(context, dbIdName, dbId);
+			storable.setValue(context, dbIdName, dbId);
 		}
-		documents.put((Integer)dbId, document);
+		documents.put((Integer)dbId, storable);
 	}
 	
 	@Override
-	public Document fetchOne(Context context, IExpression filter) throws PromptoError {
-		for(Document doc : documents.values()) {
+	public IStored fetchOne(Context context, IExpression filter) throws PromptoError {
+		for(StorableDocument doc : documents.values()) {
 			if(matches(context, doc, filter))
 				return doc;
 		}
 		return null;
 	}
 	
-	private boolean matches(Context context, Document doc, IExpression filter) throws PromptoError {
+	private boolean matches(Context context, StorableDocument doc, IExpression filter) throws PromptoError {
 		if(filter==null)
 			return true;
-		Context local = context.newDocumentContext(doc);
+		Context local = context.newDocumentContext(doc.document);
 		IValue test = filter.interpret(local);
 		if(!(test instanceof Boolean))
 			throw new InternalError("Illegal test result: " + test);
@@ -79,21 +86,21 @@ public final class MemStore implements IStore {
 	}
 
 	@Override
-	public IDocumentIterator fetchMany(Context context, IExpression start, IExpression end, 
+	public IStoredIterator fetchMany(Context context, IExpression start, IExpression end, 
 									IExpression filter, OrderByClauseList orderBy) throws PromptoError {
 		
-		final List<Document> docs = fetchManyDocs(context, start, end, filter, orderBy);
-		final Iterator<Document> iter = docs.iterator();
-		return new IDocumentIterator() {
+		final List<StorableDocument> docs = fetchManyDocs(context, start, end, filter, orderBy);
+		final Iterator<StorableDocument> iter = docs.iterator();
+		return new IStoredIterator() {
 			@Override public boolean hasNext() { return iter.hasNext(); }
-			@Override public Document next() { return iter.next(); }
+			@Override public IStored next() { return iter.next(); }
 			@Override public long length() { return docs.size(); }
 		};
 	}
 
-	private List<Document> fetchManyDocs(Context context, IExpression start, IExpression end, 
+	private List<StorableDocument> fetchManyDocs(Context context, IExpression start, IExpression end, 
 			IExpression filter, OrderByClauseList orderBy) throws PromptoError {
-		List<Document> docs = filterDocs(context, filter);
+		List<StorableDocument> docs = filterDocs(context, filter);
 		// sort it if required
 		docs = sort(context, docs, orderBy);
 		// slice it if required
@@ -102,17 +109,17 @@ public final class MemStore implements IStore {
 		return docs;
 	}
 
-	private List<Document> filterDocs(Context context, IExpression filter) throws PromptoError {
+	private List<StorableDocument> filterDocs(Context context, IExpression filter) throws PromptoError {
 		// create list of filtered docs
-		List<Document> docs = new ArrayList<Document>();
-		for(Document doc : documents.values()) {
+		List<StorableDocument> docs = new ArrayList<StorableDocument>();
+		for(StorableDocument doc : documents.values()) {
 			if(matches(context, doc, filter))
 				docs.add(doc);
 		}
 		return docs;
 	}
 
-	private List<Document> slice(Context context, List<Document> docs, IExpression start, IExpression end) throws PromptoError {
+	private List<StorableDocument> slice(Context context, List<StorableDocument> docs, IExpression start, IExpression end) throws PromptoError {
 		if(docs.isEmpty())
 			return docs;
 		if(start==null && end==null)
@@ -140,17 +147,17 @@ public final class MemStore implements IStore {
 		if(endValue==null || endValue>docs.size())
 			endValue = new Long(docs.size());
 		if(startValue>docs.size() || startValue > endValue)
-			return new ArrayList<Document>();
+			return new ArrayList<StorableDocument>();
 		return docs.subList(startValue.intValue() - 1, endValue.intValue());
 	}
 
-	private List<Document> sort(Context context, List<Document> docs, OrderByClauseList orderBy) {
+	private List<StorableDocument> sort(Context context, List<StorableDocument> docs, OrderByClauseList orderBy) {
 		if(orderBy!=null) {
 			Collection<java.lang.Boolean> directions = collectDirections(orderBy);
-			docs.sort(new Comparator<Document>() {
+			docs.sort(new Comparator<StorableDocument>() {
 
 				@Override
-				public int compare(Document o1, Document o2) {
+				public int compare(StorableDocument o1, StorableDocument o2) {
 					try {
 						TupleValue v1 = readValue(context, o1, orderBy);
 						TupleValue v2 = readValue(context, o2, orderBy);
@@ -172,15 +179,15 @@ public final class MemStore implements IStore {
 		return list;
 	}
 
-	private TupleValue readValue(Context context, Document doc, OrderByClauseList orderBy) throws PromptoError {
+	private TupleValue readValue(Context context, StorableDocument doc, OrderByClauseList orderBy) throws PromptoError {
 		TupleValue tuple = new TupleValue();
 		for(OrderByClause clause : orderBy)
 			tuple.addItem(readValue(context, doc, clause));
 		return tuple;
 	}
 
-	private IValue readValue(Context context, Document doc, OrderByClause clause) throws PromptoError {
-		IValue source = doc;
+	private IValue readValue(Context context, StorableDocument doc, OrderByClause clause) throws PromptoError {
+		IValue source = doc.document;
 		IValue value = null;
 		for(Identifier name : clause.getNames()) {
 			if(!(source instanceof Document))
@@ -191,5 +198,59 @@ public final class MemStore implements IStore {
 		return value;
 	}
 	
+	@Override
+	public IStorable newStorable() {
+		return new StorableDocument();
+	}
+	
+	static class StorableDocument implements IStorable {
+
+		Document document = null;
+		
+		@Override
+		public void setDirty(boolean set) {
+			if(!set)
+				document = null;
+			else if(document==null)
+				document = new Document();
+		}
+
+		@Override
+		public boolean isDirty() {
+			return document!=null;
+		}
+
+		@Override
+		public IValue getValue(Context context, Identifier name) {
+			if(document==null)
+				return null;
+			else
+				return document.getMember(context, name, false);
+		}
+		
+		@Override
+		public void setValue(Context context, Identifier name, IValue value) {
+			if(document==null)
+				document = new Document();
+			if(value instanceof StorableDocument)
+				value = ((StorableDocument)value).document;
+			document.setMember(context, name, value);
+		}
+		
+		@Override
+		public Object getData(String name) {
+			throw new IllegalStateException();
+		}
+		
+		@Override
+		public void setData(String name, Object value) {
+			if(value instanceof StorableDocument)
+				document.setMember(null, new Identifier(name), ((StorableDocument)value).document);
+			else
+				throw new IllegalStateException();
+		}
+
+	}
+
 	
 }

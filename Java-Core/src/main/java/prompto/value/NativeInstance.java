@@ -21,15 +21,15 @@ import prompto.grammar.Identifier;
 import prompto.java.JavaClassType;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
+import prompto.store.IDataStore;
 import prompto.store.IStorable;
-import prompto.store.StorableDocument;
 import prompto.type.CategoryType;
 
 public class NativeInstance extends BaseValue implements IInstance {
 	
 	NativeCategoryDeclaration declaration;
 	Object instance = null;
-	StorableDocument storable = null;
+	IStorable storable = null;
 	boolean mutable = false;
 	
 	public NativeInstance(Context context, NativeCategoryDeclaration declaration) throws SyntaxError {
@@ -37,7 +37,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 		this.declaration = declaration;
 		this.instance = makeInstance(context);
 		if(declaration.isStorable())
-			storable = new StorableDocument();
+			storable = IDataStore.getInstance().newStorable();
 	}
 	
 	public NativeInstance(NativeCategoryDeclaration declaration, Object instance) {
@@ -45,7 +45,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 		this.declaration = declaration;
 		this.instance = instance;
 		if(declaration.isStorable())
-			storable = new StorableDocument();
+			storable = IDataStore.getInstance().newStorable();
 	}
 	
 	@Override
@@ -181,7 +181,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 			setValue(nativeSetter, data);
 			if(storable!=null && decl.isStorable()) {
 				// TODO convert object graph if(value instanceof IInstance)
-				storable.setMember(context, attrName, value);
+				storable.setValue(context, attrName, value);
 			}
 		}
 	}

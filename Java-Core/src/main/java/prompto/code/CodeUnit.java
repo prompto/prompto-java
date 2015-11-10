@@ -2,7 +2,7 @@ package prompto.code;
 
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
-import prompto.value.Document;
+import prompto.store.IStorable;
 import prompto.value.Image;
 import prompto.value.Text;
 
@@ -45,12 +45,12 @@ public class CodeUnit {
 		this.image = image;
 	}
 
-	protected void populate(Context context, Document document) {
-		document.setMember(context, new Identifier("name"), name);
-		document.setMember(context, new Identifier("version"), version);
+	public void populate(Context context, IStorable storable) {
+		storable.setValue(context, new Identifier("name"), name);
+		storable.setValue(context, new Identifier("version"), version);
 		if(text!=null)
-			document.setMember(context, new Identifier("text"), text);
+			storable.setValue(context, new Identifier("text"), text);
 		if(image!=null)
-			document.setMember(context, new Identifier("image"), image);
+			storable.setValue(context, new Identifier("image"), image);
 	}
 }

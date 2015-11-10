@@ -7,7 +7,8 @@ import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.ICursor;
-import prompto.store.IDocumentIterator;
+import prompto.store.IStored;
+import prompto.store.IStoredIterator;
 import prompto.type.CategoryType;
 import prompto.type.ContainerType;
 import prompto.type.CursorType;
@@ -16,9 +17,9 @@ import prompto.type.IType;
 public class Cursor extends BaseValue implements ICursor<IValue>, Iterable<IValue>, Iterator<IValue> {
 
 	Context context;
-	IDocumentIterator documents;
+	IStoredIterator documents;
 	
-	public Cursor(Context context, IType itemType, IDocumentIterator documents) {
+	public Cursor(Context context, IType itemType, IStoredIterator documents) {
 		super(new CursorType(itemType));
 		this.context = context;
 		this.documents = documents;
@@ -52,9 +53,9 @@ public class Cursor extends BaseValue implements ICursor<IValue>, Iterable<IValu
 	@Override
 	public IValue next() {
 		try {
-			Document doc = documents.next();
+			IStored stored = documents.next();
 			CategoryType itemType = (CategoryType) ((ContainerType)type).getItemType();
-			return itemType.newInstance(context, doc);
+			return itemType.newInstance(context, stored);
 		} catch (PromptoError e) {
 			throw new RuntimeException(e);
 		}

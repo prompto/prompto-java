@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -17,8 +18,10 @@ import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.grammar.OrderByClauseList;
 import prompto.runtime.Context;
-import prompto.store.IDocumentIterator;
+import prompto.store.IStorable;
 import prompto.store.IStore;
+import prompto.store.IStored;
+import prompto.store.IStoredIterator;
 import prompto.type.BooleanType;
 import prompto.type.DateTimeType;
 import prompto.type.DecimalType;
@@ -27,7 +30,6 @@ import prompto.type.IntegerType;
 import prompto.type.ListType;
 import prompto.type.TextType;
 import prompto.type.UUIDType;
-import prompto.value.Document;
 
 abstract class BaseSOLRStore implements IStore {
 	
@@ -79,21 +81,40 @@ abstract class BaseSOLRStore implements IStore {
 	}
 
 	@Override
-	public void store(Context context, Document document) throws PromptoError {
+	public void store(Context context, IStorable storable) throws PromptoError {
+		if(!(storable instanceof StorableDocument))
+			throw new IllegalStateException();
+		SolrInputDocument document = ((StorableDocument)storable).document;
+		storeChildren(context, document);
+		if(!document.containsKey("dbId"))
+			document.setField("dbId", UUID.randomUUID());
+		try {
+			addDocument(document);
+		} catch(Exception e) {
+			throw new InternalError(e);
+		}
+	}
+
+	private void storeChildren(Context context, SolrInputDocument document) {
 		
 	}
 
 	@Override
-	public Document fetchOne(Context context, IExpression filter) throws PromptoError {
+	public IStored fetchOne(Context context, IExpression filter) throws PromptoError {
 		return null;
 	}
 	
 	@Override
-	public IDocumentIterator fetchMany(Context context, IExpression start,
+	public IStoredIterator fetchMany(Context context, IExpression start,
 			IExpression end, IExpression filter, OrderByClauseList orderBy)
 			throws PromptoError {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public IStorable newStorable() {
+		return new StorableDocument();
 	}
 	
 	public abstract QueryResponse query(ModifiableSolrParams params) throws SolrServerException, IOException;

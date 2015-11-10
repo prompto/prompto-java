@@ -10,6 +10,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
+import prompto.store.IStorable;
 import prompto.type.ContainerType;
 import prompto.type.IType;
 import prompto.type.ListType;
@@ -28,6 +29,12 @@ public class ListValue extends BaseList<ListValue> {
 		super(new ListType(itemType), items);
 	}
 
+	@Override
+	public void store(Context context, String name, IStorable storable) {
+		for(IValue item : this.items)
+			item.store(context, name, storable);
+	}
+	
 	@Override
 	public ListValue newInstance(List<IValue> items) {
 		IType itemType = ((ContainerType)this.type).getItemType();

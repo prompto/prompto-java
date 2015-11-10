@@ -6,7 +6,7 @@ import prompto.error.SyntaxError;
 import prompto.grammar.OrderByClauseList;
 import prompto.runtime.Context;
 import prompto.store.IDataStore;
-import prompto.store.IDocumentIterator;
+import prompto.store.IStoredIterator;
 import prompto.store.IStore;
 import prompto.type.BooleanType;
 import prompto.type.CategoryType;
@@ -146,7 +146,7 @@ public class FetchAllExpression extends FetchOneExpression {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		IStore store = IDataStore.getInstance();
-		IDocumentIterator docs = store.fetchMany(context, start, end, filter, orderBy);
+		IStoredIterator docs = store.fetchMany(context, start, end, filter, orderBy);
 		return new Cursor(context, type, docs);
 	}
 }

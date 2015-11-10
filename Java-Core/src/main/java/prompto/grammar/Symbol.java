@@ -10,6 +10,7 @@ import prompto.expression.IExpression;
 import prompto.parser.ISection;
 import prompto.parser.Section;
 import prompto.runtime.Context;
+import prompto.store.IStorable;
 import prompto.type.IType;
 import prompto.value.ISliceable;
 import prompto.value.IValue;
@@ -23,6 +24,11 @@ public abstract class Symbol extends Section implements IExpression, INamed, IVa
 		this.symbol = symbol;
 	}
 
+	@Override
+	public void store(Context context, String name, IStorable storable) {
+		storable.setData(name, symbol.toString());
+	}
+	
 	@Override
 	public boolean isMutable() {
 		return false;
