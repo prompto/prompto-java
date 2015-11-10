@@ -21,6 +21,14 @@ public class AndExpression implements IExpression, IAssertion {
 		this.right = right;
 	}
 	
+	public IExpression getLeft() {
+		return left;
+	}
+	
+	public IExpression getRight() {
+		return right;
+	}
+	
 	@Override
 	public void toDialect(CodeWriter writer) {
 		left.toDialect(writer);

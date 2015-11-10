@@ -19,19 +19,23 @@ import prompto.value.IValue;
 
 public class InstanceExpression implements IExpression {
 
-	Identifier name;
+	Identifier id;
 	
 	public InstanceExpression(Identifier name) {
-		this.name = name;
+		this.id = name;
 	}
 
-	public Identifier getName() {
-		return name;
+	public Identifier getId() {
+		return id;
+	}
+	
+	public String getName() {
+		return id.getName();
 	}
 	
 	@Override
 	public String toString() {
-		return name.toString();
+		return id.toString();
 	}
 	
 	@Override
@@ -42,13 +46,13 @@ public class InstanceExpression implements IExpression {
 	public void toDialect(CodeWriter writer, boolean requireMethod) {
 		if(requireMethod && requiresMethod(writer))
 			writer.append("Method: ");
-		writer.append(name);
+		writer.append(id);
 	}
 	
 	private boolean requiresMethod(CodeWriter writer) {
 		if(writer.getDialect()!=Dialect.E)
 			return false;
-		Object o = writer.getContext().getRegistered(name);
+		Object o = writer.getContext().getRegistered(id);
 		if(o instanceof MethodDeclarationMap)
 			return true;
 		return false;
@@ -56,9 +60,9 @@ public class InstanceExpression implements IExpression {
 
 	@Override
 	public IType check(Context context) throws SyntaxError {
-		INamed named = context.getRegistered(name);
+		INamed named = context.getRegistered(id);
 		if(named==null)
-			throw new SyntaxError("Unknown identifier: " + name);
+			throw new SyntaxError("Unknown identifier: " + id);
 		else if(named instanceof Variable) // local variable
 			return named.getType(context);
 		else if(named instanceof LinkedVariable) // local variable
@@ -70,14 +74,14 @@ public class InstanceExpression implements IExpression {
 		else if(named instanceof AttributeDeclaration) // in category method
 			return named.getType(context);
 		else if(named instanceof Context.MethodDeclarationMap) // global method or closure
-			return new MethodType(context, name);
+			return new MethodType(context, id);
 		else
-			throw new SyntaxError(name + "  is not an instance:" + named.getClass().getSimpleName());
+			throw new SyntaxError(id + "  is not an instance:" + named.getClass().getSimpleName());
 	}
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		return context.getValue(name);
+		return context.getValue(id);
 	}
 
 }

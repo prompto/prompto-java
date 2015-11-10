@@ -8,10 +8,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrInputDocument;
-import org.apache.solr.common.params.ModifiableSolrParams;
 
 import prompto.declaration.AttributeDeclaration;
 import prompto.error.PromptoError;
@@ -96,14 +96,30 @@ abstract class BaseSOLRStore implements IStore {
 	}
 
 	private void storeChildren(Context context, SolrInputDocument document) {
-		
+		// TODO
 	}
 
 	@Override
-	public IStored fetchOne(Context context, IExpression filter) throws PromptoError {
-		return null;
+	public IStored fetchOne(Context context, IExpression filterExpression) throws PromptoError {
+		SOLRFilterBuilder builder = new SOLRFilterBuilder();
+		filterExpression.toFilter(context, builder);
+		SolrQuery query = builder.toSolrQuery();
+		query.setRows(1);
+		try {
+			QueryResponse result = query(query);
+			return getOne(context, result);
+		} catch(Exception e) {
+			throw new InternalError(e);
+		}
 	}
 	
+	private IStored getOne(Context context, QueryResponse result) {
+		if(result.getResults().isEmpty())
+			return null;
+		else
+			return new StoredDocument(result.getResults().get(0));
+	}
+
 	@Override
 	public IStoredIterator fetchMany(Context context, IExpression start,
 			IExpression end, IExpression filter, OrderByClauseList orderBy)
@@ -117,7 +133,7 @@ abstract class BaseSOLRStore implements IStore {
 		return new StorableDocument();
 	}
 	
-	public abstract QueryResponse query(ModifiableSolrParams params) throws SolrServerException, IOException;
+	public abstract QueryResponse query(SolrQuery params) throws SolrServerException, IOException;
 
 	public abstract void addDocument(SolrInputDocument doc) throws SolrServerException, IOException;
 

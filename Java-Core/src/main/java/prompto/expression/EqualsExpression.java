@@ -10,6 +10,7 @@ import prompto.grammar.UnresolvedIdentifier;
 import prompto.runtime.Context;
 import prompto.runtime.LinkedValue;
 import prompto.runtime.LinkedVariable;
+import prompto.store.IFilterBuilder;
 import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -137,9 +138,9 @@ public class EqualsExpression implements IExpression, IAssertion {
 	
 	private Identifier readLeftName() {
 		if(left instanceof InstanceExpression)
-			return ((InstanceExpression)left).getName();
+			return ((InstanceExpression)left).getId();
 		else if(left instanceof UnresolvedIdentifier)
-			return ((UnresolvedIdentifier)left).getName();
+			return ((UnresolvedIdentifier)left).getId();
 		return null;
 	}
 	
@@ -156,5 +157,20 @@ public class EqualsExpression implements IExpression, IAssertion {
 		String actual = lval.toString() + " " + operator.toString(test.getDialect()) + " " + rval.toString();
 		test.printFailure(context, expected, actual);
 		return false;
+	}
+	
+	@Override
+	public void toFilter(Context context, IFilterBuilder builder) throws PromptoError {
+		if(left instanceof UnresolvedIdentifier) {
+			builder.push(((UnresolvedIdentifier)left).getName(), operator, right.interpret(context));
+		} else if(left instanceof InstanceExpression) {
+			builder.push(((InstanceExpression)left).getName(), operator, right.interpret(context));
+		} else if(right instanceof UnresolvedIdentifier) {
+			builder.push(((UnresolvedIdentifier)right).getName(), operator, left.interpret(context));
+		} else if(right instanceof InstanceExpression) {
+			builder.push(((InstanceExpression)right).getName(), operator, left.interpret(context));
+		} else
+			IExpression.super.toFilter(context, builder);
+		
 	}
 }

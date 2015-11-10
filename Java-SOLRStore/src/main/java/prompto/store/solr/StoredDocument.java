@@ -11,6 +11,10 @@ public class StoredDocument extends BaseDocument implements IStored {
 
 	SolrDocument document;
 	
+	public StoredDocument(SolrDocument document) {
+		this.document = document;
+	}
+
 	public IValue getValue(Context context, Identifier name) {
 		Object data = getData(name.getName());
 		return translate(context, name, data);

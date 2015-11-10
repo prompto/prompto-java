@@ -6,11 +6,11 @@ import java.net.URL;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrInputDocument;
-import org.apache.solr.common.params.ModifiableSolrParams;
 import org.apache.solr.core.CoreContainer;
 import org.apache.solr.core.CoreDescriptor;
 import org.apache.solr.core.SolrCore;
@@ -90,8 +90,8 @@ public class EmbeddedSOLRStore extends BaseSOLRStore {
 	}
 
 	@Override
-	public QueryResponse query(ModifiableSolrParams params) throws SolrServerException, IOException {
-		return server.query(params);
+	public QueryResponse query(SolrQuery query) throws SolrServerException, IOException {
+		return server.query(query);
 	}
 
 	@Override

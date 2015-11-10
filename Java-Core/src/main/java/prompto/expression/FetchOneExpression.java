@@ -25,6 +25,9 @@ public class FetchOneExpression extends Section implements IExpression {
 		this.filter = filter;
 	}
 	
+	public IExpression getFilter() {
+		return filter;
+	}
 
 	@Override
 	public void toDialect(CodeWriter writer) {

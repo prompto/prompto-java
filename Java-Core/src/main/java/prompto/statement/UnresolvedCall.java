@@ -94,7 +94,7 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 	}
 	
 	private IExpression resolveUnresolvedIdentifier(Context context) throws SyntaxError {
-		Identifier name = ((UnresolvedIdentifier)caller).getName();
+		Identifier name = ((UnresolvedIdentifier)caller).getId();
 		IDeclaration decl = null;
 		// if this happens in the context of a member method, then we need to check for category members first
 		if(context.getParentContext() instanceof InstanceContext) {

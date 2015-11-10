@@ -23,24 +23,28 @@ import prompto.value.IValue;
 
 public class UnresolvedIdentifier extends Section implements IExpression {
 
-	Identifier name;
+	Identifier id;
 	IExpression resolved;
 	
 	public UnresolvedIdentifier(Identifier name) {
-		this.name = name;
+		this.id = name;
 	}
 	
 	public IExpression getResolved() {
 		return resolved;
 	}
 
-	public Identifier getName() {
-		return name;
+	public Identifier getId() {
+		return id;
+	}
+	
+	public String getName() {
+		return id.getName();
 	}
 	
 	@Override
 	public String toString() {
-		return name.toString();
+		return id.toString();
 	}
 	
 	@Override
@@ -52,7 +56,7 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 		if(resolved!=null)
 			resolved.toDialect(writer);
 		else
-			writer.append(name);
+			writer.append(id);
 	}
 	
 	@Override
@@ -80,7 +84,7 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 		if(resolved==null) {
 			resolved = resolveSymbol(context);
 			if(resolved==null) {
-				if(Character.isUpperCase(name.toString().charAt(0))) {
+				if(Character.isUpperCase(id.toString().charAt(0))) {
 					if(forMember)
 						resolved = resolveType(context);
 					else
@@ -94,15 +98,15 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 			}
 		}
 		if(resolved==null)
-			context.getProblemListener().reportUnknownIdentifier(name.toString(), this);
+			context.getProblemListener().reportUnknownIdentifier(id.toString(), this);
 		return resolved;
 	}
 
 	private IExpression resolveInstance(Context context) {
 		try {
-			IExpression id = new InstanceExpression(name);
-			id.check(context);
-			return id;
+			IExpression exp = new InstanceExpression(id);
+			exp.check(context);
+			return exp;
 		} catch(SyntaxError e) {
 			return null;
 		}
@@ -110,7 +114,7 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 
 	private IExpression resolveMethod(Context context) {
 		try {
-			IExpression method = new MethodCall(new MethodSelector(name));
+			IExpression method = new MethodCall(new MethodSelector(id));
 			method.check(context);
 			return method;
 		} catch(SyntaxError e) {
@@ -120,7 +124,7 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 
 	private IExpression resolveConstructor(Context context) {
 		try {
-			IExpression method = new ConstructorExpression(new CategoryType(name), false, null);
+			IExpression method = new ConstructorExpression(new CategoryType(id), false, null);
 			method.check(context);
 			return method;
 		} catch(SyntaxError e) {
@@ -129,21 +133,21 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 	}
 
 	private IExpression resolveType(Context context) throws SyntaxError {
-		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, name);
+		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, id);
 		if(decl instanceof CategoryDeclaration)
-			return new TypeExpression(new CategoryType(name));
+			return new TypeExpression(new CategoryType(id));
 		else if(decl instanceof EnumeratedNativeDeclaration)
 			return new TypeExpression(decl.getType(context));
 		else for(IType type : NativeType.getAll()) {
-			if(name.equals(type.getId()))
+			if(id.equals(type.getId()))
 				return new TypeExpression(type);
 		}
 		return null;
 	}
 
 	private IExpression resolveSymbol(Context context) {
-		if(name.toString().equals(name.toString().toUpperCase()))
-			return new SymbolExpression(name);
+		if(id.toString().equals(id.toString().toUpperCase()))
+			return new SymbolExpression(id);
 		else
 			return null;
 	}

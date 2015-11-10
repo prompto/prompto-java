@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.util.Map;
 
 import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrInputDocument;
-import org.apache.solr.common.params.ModifiableSolrParams;
 
 
 public class RemoteSOLRStore extends BaseSOLRStore {
@@ -15,8 +15,8 @@ public class RemoteSOLRStore extends BaseSOLRStore {
 	SolrClient client;
 	
 	@Override
-	public QueryResponse query(ModifiableSolrParams params) throws SolrServerException, IOException {
-		return client.query(params);
+	public QueryResponse query(SolrQuery query) throws SolrServerException, IOException {
+		return client.query(query);
 	}
 	
 	@Override
