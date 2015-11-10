@@ -34,10 +34,7 @@ public abstract class ResourceUtils {
 
 	private static URL getRootURL() throws IOException {
 		try {
-			String name = ResourceUtils.class.getName().replace('.', '/') + ".class";
-			URL url = Thread.currentThread().getContextClassLoader().getResource(name);
-			String urlStr = url.toExternalForm();
-			return new URL(urlStr.substring(0, urlStr.indexOf(name)));
+			return ClassLoader.getSystemClassLoader().getResource(".");
 		} catch (Exception e) {
 			throw new IOException(e);
 		}

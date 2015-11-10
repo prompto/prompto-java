@@ -15,28 +15,11 @@ import prompto.value.ExpressionValue;
 import prompto.value.IValue;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Parameter {
 
-	public static ParameterList readList(Context context, String jsonParams) throws Exception {
-		JsonParser parser = new ObjectMapper().getFactory().createParser(jsonParams);
-		JsonNode params = parser.readValueAsTree();
-		return readParams(context, params);
-	}
-
-	private static ParameterList readParams(Context context, JsonNode jsonParams) throws Exception {
-		if(!jsonParams.isArray())
-			throw new InvalidParameterException("Expecting a JSON array!");
-		ParameterList params = new ParameterList();
-		for(JsonNode node : jsonParams)
-			params.add(readParam(context, node));
-		return params;
-	}
-
-	private static Parameter readParam(Context context, JsonNode jsonParam) throws Exception {
+	public static Parameter read(Context context, JsonNode jsonParam) throws Exception {
 		if(!jsonParam.isObject())
 			throw new InvalidParameterException("Expecting a JSON object!");
 		Parameter param = new Parameter();

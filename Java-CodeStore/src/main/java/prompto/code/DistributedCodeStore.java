@@ -59,6 +59,10 @@ public class DistributedCodeStore extends BaseCodeStore {
 		bootstrapCodeStore();
 	}
 	
+	public IStore getStore() {
+		return store;
+	}
+	
 	private void bootstrapCodeStore() throws PromptoError {
 		Collection<AttributeDeclaration> columns = getInitialColumns();
 		store.createOrUpdateColumns(columns);

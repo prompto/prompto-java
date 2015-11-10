@@ -7,7 +7,6 @@ import prompto.error.PromptoError;
 import prompto.expression.MethodSelector;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
-import prompto.remoting.Parameter;
 import prompto.remoting.ParameterList;
 import prompto.runtime.Context;
 import prompto.statement.MethodCall;
@@ -26,7 +25,7 @@ public class RequestRouter {
 
 	public void handleRequest(Identifier methodName, String jsonParams, OutputStream output) throws Exception {
 		try {
-			ParameterList params = Parameter.readList(context, jsonParams);
+			ParameterList params = ParameterList.read(context, jsonParams);
 			ArgumentAssignmentList assignments = params.toAssignments(context);
 			MethodCall methodCall = new MethodCall(new MethodSelector(methodName),assignments);
 			IValue value = methodCall.interpret(context);	

@@ -4,10 +4,14 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URLEncoder;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import prompto.error.PromptoError;
 import prompto.grammar.ArgumentAssignment;
@@ -42,6 +46,30 @@ public class ParameterList extends ArrayList<Parameter> {
 		generator.close();
 		return writer.toString();
 	}
+
+	public static ParameterList read(Context context, String jsonParams) throws Exception {
+		JsonNode params = parseParams(jsonParams);
+		return read(context, params);
+	}
+	
+	private static JsonNode parseParams(String jsonParams) throws Exception {
+		if(jsonParams==null || jsonParams.isEmpty())
+			return null;
+		JsonParser parser = new ObjectMapper().getFactory().createParser(jsonParams);
+		return parser.readValueAsTree();
+	}
+
+	public static ParameterList read(Context context, JsonNode jsonParams) throws Exception {
+		ParameterList params = new ParameterList();
+		if(jsonParams==null)
+			return params;
+		if(!jsonParams.isArray())
+			throw new InvalidParameterException("Expecting a JSON array!");
+		for(JsonNode node : jsonParams)
+			params.add(Parameter.read(context, node));
+		return params;
+	}
+
 
 
 }

@@ -26,9 +26,9 @@ public class PromptoServlet extends HttpServlet {
 			readSession(req);
 			Identifier methodName = new Identifier(req.getServletPath().substring(1));
 			String[] httpParams = req.getParameterMap().get("params");
-			String params = httpParams==null || httpParams.length==0 ? null : httpParams[0];
+			String jsonParams = httpParams==null || httpParams.length==0 ? null : httpParams[0];
 			RequestRouter handler = new RequestRouter(AppServer.globalContext);
-			handler.handleRequest(methodName, params, resp.getOutputStream());
+			handler.handleRequest(methodName, jsonParams, resp.getOutputStream());
 			resp.getOutputStream().close();
 			resp.flushBuffer();
 			resp.setContentType("application/json");

@@ -1,5 +1,7 @@
 package prompto.server;
 
+import java.net.URL;
+
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
@@ -142,7 +144,8 @@ public class AppServer {
 	}
 
 	static Handler prepareServiceHandler(String path) {
-		return prepareServiceHandler(path, "");
+		URL url = ClassLoader.getSystemResource(".");
+		return prepareServiceHandler(path, url.toExternalForm());
 	}
 	public static Handler prepareServiceHandler(String path, String base) {
         WebAppContext webapp = new WebAppContext();

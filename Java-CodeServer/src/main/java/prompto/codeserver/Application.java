@@ -5,7 +5,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import prompto.code.DistributedCodeStore;
+import prompto.code.ICodeStore;
 import prompto.server.AppServer;
+import prompto.store.IDataStore;
 import prompto.utils.ResourceUtils;
 
 public class Application {
@@ -18,7 +21,15 @@ public class Application {
 		argsList.add("dev-center");
 		argsList.add("-version");
 		argsList.add("1.0.0");
-		AppServer.main(argsList.toArray(new String[argsList.size()]), Application::importSamples);
+		AppServer.main(argsList.toArray(new String[argsList.size()]), Application::aboutToStart);
+	}
+	
+	static void aboutToStart() throws Exception {
+		ICodeStore codeStore = ICodeStore.getInstance();
+		if(codeStore instanceof DistributedCodeStore)
+			IDataStore.setInstance(((DistributedCodeStore)codeStore).getStore());
+		importSamples();
+		
 	}
 	
 	static void importSamples() throws Exception {

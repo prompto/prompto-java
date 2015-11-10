@@ -1,1 +1,2 @@
-// a comment
+define getRecentProjects as method doing:
+	return ["a", "b", "c"]
