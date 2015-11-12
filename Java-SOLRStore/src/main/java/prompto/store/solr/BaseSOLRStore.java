@@ -103,7 +103,9 @@ abstract class BaseSOLRStore implements IStore {
 	public IStored fetchOne(Context context, IExpression filterExpression) throws PromptoError {
 		SOLRFilterBuilder builder = new SOLRFilterBuilder();
 		filterExpression.toFilter(context, builder);
-		SolrQuery query = builder.toSolrQuery();
+		// TODO: based on the field type and operator, we should use query/filterQuery
+		SolrQuery query = new SolrQuery();
+		query.setQuery(builder.toSolrQuery());
 		query.setRows(1);
 		try {
 			QueryResponse result = query(query);

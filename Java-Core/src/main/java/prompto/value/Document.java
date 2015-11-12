@@ -7,9 +7,8 @@ import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.type.DocumentType;
 
-
-public class Document extends BaseValue
-{
+public class Document extends BaseValue {
+	
 	Map<Identifier,IValue> members = new HashMap<Identifier,IValue>();
 	
 	public Document() {
@@ -22,14 +21,9 @@ public class Document extends BaseValue
 	}
 	
     @Override
-    public IValue getMember(Context context, Identifier name) {
-    	return getMember(context, name, true);
-    }
-
-
-    public IValue getMember(Context context, Identifier name, boolean createIfNull) {
+    public IValue getMember(Context context, Identifier name, boolean autoCreate) {
         IValue result = members.get(name);
-        if(createIfNull && result==null) {
+        if(autoCreate && result==null) {
             result = new Document();
             members.put(name, result);
         }

@@ -90,7 +90,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	}
 
 	@Override
-	public IValue getMember(Context context, Identifier id) throws PromptoError {
+	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
 		if ("length".equals(name))
 			return new Integer(value.length());

@@ -35,6 +35,7 @@ import prompto.type.TextType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
 import prompto.value.IValue;
+import prompto.value.ListValue;
 import prompto.value.Text;
 
 
@@ -83,7 +84,7 @@ public class DistributedCodeStore extends BaseCodeStore {
 		columns.add(new AttributeDeclaration(new Identifier("dbId"), store.getDbIdType(), null));
 		columns.add(new AttributeDeclaration(new Identifier("author"), TextType.instance(), null));
 		columns.add(new AttributeDeclaration(new Identifier("timeStamp"), DateTimeType.instance(), null));
-		columns.add(new AttributeDeclaration(new Identifier("category"), TextType.instance(), null));
+		columns.add(new AttributeDeclaration(new Identifier("categories"), new ListType(TextType.instance()), null));
 		columns.add(new AttributeDeclaration(new Identifier("name"), TextType.instance(), null));
 		columns.add(new AttributeDeclaration(new Identifier("storable"), BooleanType.instance(), null));
 		columns.add(new AttributeDeclaration(new Identifier("version"), TextType.instance(), null));
@@ -128,8 +129,10 @@ public class DistributedCodeStore extends BaseCodeStore {
 			IStored stored = fetchInStore(name, version);
 			if(stored==null)
 				return null;
-			IValue category = stored.getValue(context, new Identifier("category"));
-			if(!ModuleType.APPLICATION.asValue().equals(category))
+			IValue categories = stored.getValue(context, new Identifier("categories"));
+			if(!(categories instanceof ListValue))
+				return null;
+			if(!((ListValue)categories).hasItem(null, ModuleType.APPLICATION.asValue()))
 				return null;
 			Application app = new Application();
 			app.setName((Text)stored.getValue(context, new Identifier("name")));
@@ -170,14 +173,17 @@ public class DistributedCodeStore extends BaseCodeStore {
 		ICodeStore origin = decl.getOrigin();
 		Context context = Context.newGlobalContext();
 		IStorable storable = store.newStorable();
-		storable.setValue(context, new Identifier("category"),  new Text(origin.getModuleType().name()));
+		ListValue categories = new ListValue(TextType.instance());
+		categories.addItem(new Text("Project"));
+		categories.addItem(new Text(origin.getModuleType().name()));
+		storable.setValue(context, new Identifier("categories"), categories);
 		storable.setValue(context, new Identifier("name"),  new Text(origin.getModuleName()));
 		storable.setValue(context, new Identifier("version"),  new Text(origin.getModuleVersion().toString()));
 		storeInStorable(context, storable, decl, origin.getModuleDialect(), origin.getModuleVersion());
 		store.store(context, storable);
 	}
 
-	private void storeInStorable(Context context, IStorable storable, IDeclaration decl, Dialect dialect, Version version) {
+	private void storeInStorable(Context context, IStorable storable, IDeclaration decl, Dialect dialect, Version version) throws PromptoError {
 		if(decl instanceof MethodDeclarationMap) {
 			for(IDeclaration d : ((MethodDeclarationMap)decl).values())
 				storeInStorable(context, storable, d, dialect, version);
@@ -188,8 +194,10 @@ public class DistributedCodeStore extends BaseCodeStore {
 		}
 	}
 
-	private void populate(Context context, IStorable storable, IDeclaration decl, Dialect dialect, Version version) {
-		storable.setValue(context, new Identifier("category"),  new Text(decl.getDeclarationType().name()));
+	private void populate(Context context, IStorable storable, IDeclaration decl, Dialect dialect, Version version) throws PromptoError {
+		ListValue categories = new ListValue(TextType.instance());
+		categories.addItem(new Text(decl.getDeclarationType().name()));
+		storable.setValue(context, new Identifier("categories"), categories);
 		storable.setValue(context, new Identifier("name"),  new Text(decl.getIdentifier().getName()));
 		storable.setValue(context, new Identifier("version"),  new Text(version.toString()));
 		if(decl instanceof IMethodDeclaration) {

@@ -77,21 +77,21 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	};
 	
 	@Override
-	public IValue getMember(Context context, Identifier attrName) throws PromptoError {
+	public IValue getMember(Context context, Identifier attrName, boolean autoCreate) throws PromptoError {
 		Map<Identifier,Context> activeGetters = this.activeGetters.get();
 		Context stacked = activeGetters.get(attrName);
 		boolean first = stacked==null;
 		if(first)
 			activeGetters.put(attrName, context);
 		try {
-			return getMember(context, attrName, first);
+			return getMemberAllowGetter(context, attrName, first);
 		} finally {
 			if(first)
 				activeGetters.remove(attrName);
 		}
 	}
 	
-	protected IValue getMember(Context context, Identifier attrName, boolean allowGetter) throws PromptoError {
+	protected IValue getMemberAllowGetter(Context context, Identifier attrName, boolean allowGetter) throws PromptoError {
 		GetterMethodDeclaration getter = allowGetter ? declaration.findGetter(context, attrName) : null;
 		if(getter!=null) {
 			context = context.newInstanceContext(this).newChildContext(); // mimic method call

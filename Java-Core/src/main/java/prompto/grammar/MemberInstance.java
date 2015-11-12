@@ -62,7 +62,7 @@ public class MemberInstance implements IAssignableSelector {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		IValue root = parent.interpret(context);
-		return root.getMember(context, name);
+		return root.getMember(context, name, true);
 	}
 	
 

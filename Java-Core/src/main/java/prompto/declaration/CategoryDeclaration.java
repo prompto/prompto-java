@@ -56,6 +56,8 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	@Override
 	public IType check(Context context) throws SyntaxError {
 		if(attributes!=null) for(Identifier attribute : attributes) {
+			if(attribute==null)
+				continue; // problem already handled by parser
 			AttributeDeclaration ad = context.getRegisteredDeclaration(AttributeDeclaration.class, attribute);
 			if(ad==null)
 				context.getProblemListener().reportUnknownAttribute(attribute.toString(), attribute);

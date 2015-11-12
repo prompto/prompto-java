@@ -65,7 +65,7 @@ public class Time extends BaseValue implements Comparable<Time> {
 	}
 
 	@Override
-	public IValue getMember(Context context, Identifier id) throws PromptoError {
+	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
 		if ("hour".equals(name))
 			return new Integer(this.value.getHourOfDay());

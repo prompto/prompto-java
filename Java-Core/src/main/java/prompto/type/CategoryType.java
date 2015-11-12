@@ -126,7 +126,7 @@ public class CategoryType extends BaseType {
 			IMethodDeclaration method = ((ConcreteCategoryDeclaration)actual).findOperator(context, operator, other);
 			if(method==null)
 				return null;
-			context = context.newInstanceContext(this);
+			context = context.newSingletonContext(this);
 			Context local = context.newLocalContext();
 			method.registerArguments(local);
 			return method.check(local);
@@ -308,8 +308,8 @@ public class CategoryType extends BaseType {
 				@Override
 				public int compare(IInstance o1, IInstance o2) {
 					try {
-						IValue key1 = o1.getMember(context, name);
-						IValue key2 = o2.getMember(context, name);
+						IValue key1 = o1.getMember(context, name, false);
+						IValue key2 = o2.getMember(context, name, false);
 						return compareKeys(key1,key2);
 					} catch(Throwable t) {
 						throw new RuntimeException(t);

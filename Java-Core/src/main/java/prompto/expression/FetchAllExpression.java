@@ -136,8 +136,7 @@ public class FetchAllExpression extends FetchOneExpression {
 	private void checkFilter(Context context) throws SyntaxError {
 		if(filter==null)
 			return;
-		Context local = context.newLocalContext();
-		IType filterType = filter.check(local);
+		IType filterType = filter.check(context);
 		if(filterType!=BooleanType.instance())
 			throw new SyntaxError("Filtering expression must return a boolean !");
 	}

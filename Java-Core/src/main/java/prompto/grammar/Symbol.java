@@ -107,7 +107,7 @@ public abstract class Symbol extends Section implements IExpression, INamed, IVa
 	}
 
 	@Override
-	public IValue getMember(Context context, Identifier name) throws PromptoError {
+	public IValue getMember(Context context, Identifier name, boolean autoCreate) throws PromptoError {
 		throw new UnsupportedOperationException("No member support for " + this.getClass().getSimpleName());
 	}
 	

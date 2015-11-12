@@ -39,12 +39,12 @@ public abstract class Binary extends BaseValue {
 	}
 
 	@Override
-	public IValue getMember(Context context, Identifier id) throws PromptoError {
+	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
 		if ("mimeType".equals(name))
 			return new Text(this.getMimeType());
 		else
-			return super.getMember(context, id);
+			return super.getMember(context, id, autoCreate);
 	}
 
 	public static void fromResource(Binary binary, String path) throws IOException {

@@ -152,22 +152,22 @@ public class Context implements IContext {
 		return context;
 	}
 	
-	public Context newInstanceContext(CategoryType type) {
-		return initInstanceContext(new InstanceContext(type));
+	public Context newSingletonContext(CategoryType type) {
+		return initInstanceContext(new InstanceContext(type), false);
 	}
 
 	public Context newInstanceContext(IInstance instance) {
-		return initInstanceContext(new InstanceContext(instance));
+		return initInstanceContext(new InstanceContext(instance), false);
 	}
 
-	public Context newDocumentContext(Document document) {
-		return initInstanceContext(new DocumentContext(document));
+	public Context newDocumentContext(Document document, boolean isChild) {
+		return initInstanceContext(new DocumentContext(document), isChild);
 	}
 
-	private Context initInstanceContext(Context context) {
+	private Context initInstanceContext(Context context, boolean isChild) {
 		context.globals = this.globals;
-		context.calling = this;
-		context.parent = null;
+		context.calling = isChild ? this.calling : this;
+		context.parent = isChild ? this : null;
 		context.debugger = this.debugger;
 		context.problemListener = this.problemListener;
 		return context;
@@ -688,15 +688,15 @@ public class Context implements IContext {
 			Context context = super.contextForValue(name);
 			if(context!=null)
 				return context;
-			else if(document.hasMember(name))
+			// since any name is valid in the context of a document
+			// simply return this document context
+			else 
 				return this;
-			else
-				return null;
 		}
 
 		@Override
 		protected IValue readValue(Identifier name) throws PromptoError {
-			return document.getMember(calling, name);
+			return document.getMember(calling, name, false);
 		}
 		
 		@Override
@@ -764,7 +764,7 @@ public class Context implements IContext {
 
 		@Override
 		protected IValue readValue(Identifier name) throws PromptoError {
-			return instance.getMember(calling, name);
+			return instance.getMember(calling, name, false);
 		}
 		
 		@Override

@@ -12,7 +12,6 @@ import prompto.parser.ECleverParser;
 import prompto.parser.OCleverParser;
 import prompto.parser.SCleverParser;
 import prompto.utils.ISingleton;
-import prompto.value.IValue;
 import prompto.value.Text;
 
 /* a code store is a place where a code consumer (interpreter, compiler...) can fetch code from */
@@ -67,7 +66,7 @@ public interface ICodeStore {
 		LIBRARY,
 		SCRIPT;
 		
-		public IValue asValue() {
+		public Text asValue() {
 			return new Text(this.name());
 		}
 	}

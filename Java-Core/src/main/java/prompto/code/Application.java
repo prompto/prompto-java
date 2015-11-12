@@ -4,6 +4,8 @@ import prompto.code.ICodeStore.ModuleType;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
+import prompto.type.TextType;
+import prompto.value.ListValue;
 import prompto.value.Text;
 
 public class Application extends CodeUnit {
@@ -22,7 +24,10 @@ public class Application extends CodeUnit {
 	public void populate(Context context, IStorable storable) {
 		super.populate(context, storable);
 		storable.setValue(context, new Identifier("entryPoint"), entryPoint);
-		storable.setValue(context, new Identifier("category"), ModuleType.APPLICATION.asValue());
+		ListValue categories = new ListValue(TextType.instance());
+		categories.addItem(new Text("Project"));
+		categories.addItem(ModuleType.APPLICATION.asValue());
+		storable.setValue(context, new Identifier("categories"), categories);
 	}
 
 }

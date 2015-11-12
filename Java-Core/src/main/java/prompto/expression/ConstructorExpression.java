@@ -132,7 +132,7 @@ public class ConstructorExpression implements IExpression {
 					CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getId());
 					for(Identifier name : copyFrom.getMemberNames()) {
 						if(cd.hasAttribute(context, name)) {
-							IValue value = copyFrom.getMember(context,name);
+							IValue value = copyFrom.getMember(context, name, false);
 							if(value!=null && value.isMutable() && !this.mutable)
 								throw new NotMutableError();
 							instance.setMember(context, name, value);

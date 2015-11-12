@@ -94,21 +94,21 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 	}
 	
 	private IExpression resolveUnresolvedIdentifier(Context context) throws SyntaxError {
-		Identifier name = ((UnresolvedIdentifier)caller).getId();
+		Identifier id = ((UnresolvedIdentifier)caller).getId();
 		IDeclaration decl = null;
 		// if this happens in the context of a member method, then we need to check for category members first
 		if(context.getParentContext() instanceof InstanceContext) {
-			decl = resolveUnresolvedMember((InstanceContext)context.getParentContext(), name);
+			decl = resolveUnresolvedMember((InstanceContext)context.getParentContext(), id);
 			if(decl!=null)
-				return new MethodCall(new MethodSelector(name), assignments);
+				return new MethodCall(new MethodSelector(id), assignments);
 		}
-		decl = context.getRegisteredDeclaration(IDeclaration.class, name);
+		decl = context.getRegisteredDeclaration(IDeclaration.class, id);
 		if(decl==null)
-			throw new SyntaxError("Unknown name:" + name);
+			context.getProblemListener().reportUnknownIdentifier(id.getName(), id);
 		if(decl instanceof CategoryDeclaration)
-			return new ConstructorExpression(new CategoryType(name), false, assignments);
+			return new ConstructorExpression(new CategoryType(id), false, assignments);
 		else
-			return new MethodCall(new MethodSelector(name), assignments);
+			return new MethodCall(new MethodSelector(id), assignments);
 	}
 
 	private IDeclaration resolveUnresolvedMember(InstanceContext context, Identifier name) throws SyntaxError {

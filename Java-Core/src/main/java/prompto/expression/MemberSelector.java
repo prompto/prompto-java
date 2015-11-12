@@ -79,7 +79,7 @@ public class MemberSelector extends SelectorExpression {
         if (instance == null || instance == NullValue.instance())
             throw new NullReferenceError();
         else
-        	return instance.getMember(context, name);
+        	return instance.getMember(context, name, true);
 	}
 
 	private IValue interpretTypeMember(Context context, IExpression parent) throws PromptoError {
@@ -93,7 +93,7 @@ public class MemberSelector extends SelectorExpression {
         if(parent instanceof TypeExpression && ((TypeExpression)parent).getType() instanceof CategoryType) {
         	ConcreteInstance instance = context.loadSingleton((CategoryType)((TypeExpression)parent).getType());
         	if(instance!=null)
-        		return instance.getMember(context, name); 
+        		return instance.getMember(context, name, false); 
         }
         return null;
 	}

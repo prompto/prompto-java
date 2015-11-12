@@ -129,4 +129,28 @@ public class TestCheck extends BaseEParserTest {
 		stmts.register(context);
 		stmts.check(context);
 	}
+	
+	@Test
+	public void testFetchOne() throws Exception {
+		DeclarationList stmts = parseString("define name as Text attribute\r\n" +
+				"define Person as category with attribute name\r\n" +
+				"define testMethod as method doing:\r\n" +
+					"\ta = \"john\"\r\n" +
+					"\tb = fetch one Person where name = a\r\n");
+		stmts.register(context);
+		stmts.check(context);
+	}
+	
+	@Test
+	public void testFetchAll() throws Exception {
+		DeclarationList stmts = parseString("define name as Text attribute\r\n" +
+				"define Person as category with attribute name\r\n" +
+				"define testMethod as method doing:\r\n" +
+					"\ta = \"john\"\r\n" +
+					"\tb = fetch all Person where name = a\r\n");
+		stmts.register(context);
+		stmts.check(context);
+	}
+
+
 }

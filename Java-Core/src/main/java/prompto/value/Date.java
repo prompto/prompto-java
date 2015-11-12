@@ -74,7 +74,7 @@ public class Date extends BaseValue implements Comparable<Date> {
 	}
 
 	@Override
-	public IValue getMember(Context context, Identifier id) throws PromptoError {
+	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
 		if ("year".equals(name))
 			return new Integer(this.value.getYear());

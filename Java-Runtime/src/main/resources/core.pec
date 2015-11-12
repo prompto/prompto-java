@@ -85,6 +85,8 @@ define text as storable Text attribute
 define name as storable Text attribute
 // many objects have a version, it is not unique 
 define version as storable Text attribute
+// many objects have a name, it is not unique 
+define user as storable Text attribute
 define Error as enumerated category with attributes name and text, and symbols:
 	DIVIDE_BY_ZERO with "Divide by zero!" as text
 	INDEX_OUT_OF_RANGE with "Index out of range!" as text

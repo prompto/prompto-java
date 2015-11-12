@@ -2,8 +2,6 @@ package prompto.store.solr;
 
 import java.util.Stack;
 
-import org.apache.solr.client.solrj.SolrQuery;
-
 import prompto.grammar.EqOp;
 import prompto.store.IFilterBuilder;
 import prompto.value.IValue;
@@ -33,11 +31,8 @@ public class SOLRFilterBuilder implements IFilterBuilder {
 		stack.push(sb.toString());
 	}
 
-	public SolrQuery toSolrQuery() {
-		// TODO: based on the field type and operator, we should use query/filterQuery
-		SolrQuery query = new SolrQuery();
-		query.setQuery(stack.pop());
-		return query;
+	public String toSolrQuery() {
+		return stack.pop();
 	}
 	
 }

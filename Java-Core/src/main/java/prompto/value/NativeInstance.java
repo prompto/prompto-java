@@ -103,21 +103,21 @@ public class NativeInstance extends BaseValue implements IInstance {
 	};
 	
 	@Override
-	public IValue getMember(Context context, Identifier attrName) throws PromptoError {
+	public IValue getMember(Context context, Identifier attrName, boolean autoCreate) throws PromptoError {
 		Map<Identifier,Context> activeGetters = this.activeGetters.get();
 		Context stacked = activeGetters.get(attrName);
 		boolean first = stacked==null;
 		if(first)
 			activeGetters.put(attrName, context);
 		try {
-			return getMember(context, attrName, first);
+			return getMemberAllowGetter(context, attrName, first);
 		} finally {
 			if(first)
 				activeGetters.remove(attrName);
 		}
 	}
 
-	public IValue getMember(Context context, Identifier attrName, boolean allowGetter) throws PromptoError {
+	public IValue getMemberAllowGetter(Context context, Identifier attrName, boolean allowGetter) throws PromptoError {
 		GetterMethodDeclaration promptoGetter = allowGetter ? declaration.findGetter(context, attrName) : null;
 		if(promptoGetter!=null) {
 			context = context.newInstanceContext(this).newChildContext(); // mimic method call
@@ -231,7 +231,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 		generator.writeStartObject();
 		for(Identifier attrName : declaration.getAttributes()) {
 			generator.writeFieldName(attrName.toString());
-			IValue value = getMember(context, attrName);
+			IValue value = getMember(context, attrName, false);
 			if(value!=null)
 				value.toJson(context, generator);
 			else

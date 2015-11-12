@@ -103,7 +103,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		IType type = parent.check(context);
 		if(!(type instanceof CategoryType))
 			throw new SyntaxError("Not an instance !");
-		context = context.newInstanceContext((CategoryType)type);
+		context = context.newSingletonContext((CategoryType)type);
 		return context.newChildContext();
 	}
 

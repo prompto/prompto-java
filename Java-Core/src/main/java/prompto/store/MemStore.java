@@ -78,7 +78,7 @@ public final class MemStore implements IStore {
 	private boolean matches(Context context, StorableDocument doc, IExpression filter) throws PromptoError {
 		if(filter==null)
 			return true;
-		Context local = context.newDocumentContext(doc.document);
+		Context local = context.newDocumentContext(doc.document, true);
 		IValue test = filter.interpret(local);
 		if(!(test instanceof Boolean))
 			throw new InternalError("Illegal test result: " + test);
@@ -192,7 +192,7 @@ public final class MemStore implements IStore {
 		for(Identifier name : clause.getNames()) {
 			if(!(source instanceof Document))
 				return null;
-			value = source.getMember(context, name);
+			value = source.getMember(context, name, false);
 			source = value;
 		}
 		return value;

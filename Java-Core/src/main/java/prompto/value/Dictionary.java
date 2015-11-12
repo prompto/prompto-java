@@ -71,7 +71,8 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public IValue getMember(Context context, Identifier id) throws PromptoError {
+	@Override
+	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
 		if ("length".equals(name))
 			return new Integer(this.dict.size());
@@ -84,7 +85,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 			Collection<IValue> values = this.dict.values();
 			return new ListValue(itemType, values);
 		} else
-			return super.getMember(context, id);
+			return super.getMember(context, id, autoCreate);
 	}
 
 	public IValue getItem(Context context, IValue index) throws PromptoError {
@@ -170,7 +171,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 		}
 
 		@Override
-		public IValue getMember(Context context, Identifier id) throws PromptoError {
+		public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 			String name = id.toString();
 			if ("key".equals(name))
 				return kvp.getKey();

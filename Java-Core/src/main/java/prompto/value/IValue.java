@@ -28,7 +28,7 @@ public interface IValue {
 
 	IValue Modulo(Context context, IValue iValue) throws PromptoError;
 
-	IValue getMember(Context context, Identifier name) throws PromptoError;
+	IValue getMember(Context context, Identifier name, boolean autoCreate) throws PromptoError;
 
 	void setMember(Context context, Identifier name, IValue value) throws PromptoError;
 

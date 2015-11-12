@@ -1,6 +1,9 @@
 package prompto.value;
 
+import java.io.IOException;
 import java.util.Iterator;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
@@ -62,7 +65,7 @@ public class Cursor extends BaseValue implements ICursor<IValue>, Iterable<IValu
 	}
 	
 	@Override
-	public IValue getMember(Context context, Identifier id) throws PromptoError {
+	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
 		if ("length".equals(name))
 			return new Integer(length());
@@ -70,6 +73,13 @@ public class Cursor extends BaseValue implements ICursor<IValue>, Iterable<IValu
 			throw new InvalidDataError("No such member:" + name);
 	}
 
+	@Override
+	public void toJson(Context context, JsonGenerator generator) throws IOException, PromptoError {
+		generator.writeStartArray();
+		while(hasNext())
+			next().toJson(context, generator);
+		generator.writeEndArray();
+	}
 
 
 }

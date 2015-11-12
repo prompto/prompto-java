@@ -127,7 +127,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 		if(expectedError!=null && expectedError.equals(actual))
 			printSuccess(context);
 		else {
-			String actualName = ((IInstance)actual).getMember(context, new Identifier("name")).toString();
+			String actualName = ((IInstance)actual).getMember(context, new Identifier("name"), false).toString();
 			String expectedName = error==null ? "SUCCESS" : error.getName().toString();
 			printFailure(context, expectedName, actualName);
 		}

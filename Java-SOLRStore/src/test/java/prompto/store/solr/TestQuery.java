@@ -35,23 +35,23 @@ public class TestQuery extends BaseSOLRTest {
 	public void before() throws Exception {
 		startServerWithEmptyCore("TestQuery");
 		context = Context.newGlobalContext();
-		addDbIdAttribute();
-		addNameAttribute();
-		addNameField();
+		registerDbIdAttribute();
+		registerNameAttribute();
+		registerNameField();
 	}
 	
-	private void addDbIdAttribute() throws SyntaxError {
+	private void registerDbIdAttribute() throws SyntaxError {
 		AttributeDeclaration decl = new AttributeDeclaration( new Identifier("dbId"), AnyType.instance(), null);
 		context.registerDeclaration(decl);
 	}
 
-	private void addNameAttribute() throws SyntaxError {
+	private void registerNameAttribute() throws SyntaxError {
 		AttributeDeclaration decl = new AttributeDeclaration( new Identifier("name"), TextType.instance(), null);
 		decl.setStorable(true);
 		context.registerDeclaration(decl);
 	}
 
-	private void addNameField() {
+	private void registerNameField() {
 		Map<String, Object> options = new HashMap<>();
 		options.put("indexed", true);
 		options.put("stored", true);
