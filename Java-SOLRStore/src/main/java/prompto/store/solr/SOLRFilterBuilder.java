@@ -12,6 +12,13 @@ public class SOLRFilterBuilder implements IFilterBuilder {
 	Stack<String> stack = new Stack<>();
 	
 	@Override
+	public void and() {
+		String e1 = stack.pop();
+		String e2 = stack.pop();
+		stack.push("(" + e1 + " AND " + e2 + ")");
+	}
+	
+	@Override
 	public void push(String name, EqOp operator, IValue value) {
 		StringBuilder sb = new StringBuilder();
 		switch(operator) {

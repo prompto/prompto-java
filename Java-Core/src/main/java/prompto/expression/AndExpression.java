@@ -5,6 +5,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
+import prompto.store.IFilterBuilder;
 import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -88,5 +89,13 @@ public class AndExpression implements IExpression, IAssertion {
 		test.printFailure(context, expected, actual);
 		return false;
 	}
+
+	@Override
+	public void toFilter(Context context, IFilterBuilder builder) throws PromptoError {
+		left.toFilter(context, builder);
+		right.toFilter(context, builder);
+		builder.and();
+	}
+
 
 }

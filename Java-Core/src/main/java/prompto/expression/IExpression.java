@@ -21,7 +21,7 @@ public interface IExpression {
 	void toDialect(CodeWriter writer);
 
 	default void toFilter(Context context, IFilterBuilder builder) throws PromptoError {
-		throw new UnsupportedOperationException("toFilter not supprted by " + this.getClass().getSimpleName());
+		throw new UnsupportedOperationException("toFilter not supported by " + this.getClass().getSimpleName());
 	}
 	
 

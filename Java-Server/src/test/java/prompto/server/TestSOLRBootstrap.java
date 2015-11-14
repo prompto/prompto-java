@@ -30,7 +30,7 @@ public class TestSOLRBootstrap {
 		assertEquals(codeStore.getDbIdType(), codeStore.getColumnType("dbId"));
 		assertEquals(TextType.instance(), codeStore.getColumnType("author"));
 		assertEquals(DateTimeType.instance(), codeStore.getColumnType("timeStamp"));
-		assertEquals(new ListType(TextType.instance()), codeStore.getColumnType("categories"));
+		assertEquals(new ListType(TextType.instance()), codeStore.getColumnType("category"));
 		assertEquals(TextType.instance(), codeStore.getColumnType("name"));
 		assertEquals(BooleanType.instance(), codeStore.getColumnType("storable"));
 		assertEquals(TextType.instance(), codeStore.getColumnType("version"));
