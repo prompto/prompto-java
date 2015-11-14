@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -23,6 +24,7 @@ import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.store.IStoredIterator;
 import prompto.type.BooleanType;
+import prompto.type.CategoryType;
 import prompto.type.DateTimeType;
 import prompto.type.DecimalType;
 import prompto.type.IType;
@@ -100,9 +102,12 @@ abstract class BaseSOLRStore implements IStore {
 	}
 
 	@Override
-	public IStored fetchOne(Context context, IExpression filterExpression) throws PromptoError {
+	public IStored fetchOne(Context context, CategoryType type, IExpression filterExpression) throws PromptoError {
 		SOLRFilterBuilder builder = new SOLRFilterBuilder();
-		filterExpression.toFilter(context, builder);
+		if(type!=null)
+			builder.pushCategory(type);
+		if(filterExpression!=null)
+			filterExpression.toFilter(context, builder);
 		// TODO: based on the field type and operator, we should use query/filterQuery
 		SolrQuery query = new SolrQuery();
 		query.setQuery(builder.toSolrQuery());
@@ -123,16 +128,17 @@ abstract class BaseSOLRStore implements IStore {
 	}
 
 	@Override
-	public IStoredIterator fetchMany(Context context, IExpression start,
-			IExpression end, IExpression filter, OrderByClauseList orderBy)
+	public IStoredIterator fetchMany(Context context, CategoryType type,
+			IExpression start, IExpression end, 
+			IExpression filter, OrderByClauseList orderBy)
 			throws PromptoError {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	@Override
-	public IStorable newStorable() {
-		return new StorableDocument();
+	public IStorable newStorable(List<String> categories) {
+		return new StorableDocument(categories);
 	}
 	
 	public abstract QueryResponse query(SolrQuery params) throws SolrServerException, IOException;

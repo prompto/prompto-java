@@ -1,7 +1,11 @@
 package prompto.declaration;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -214,7 +218,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	
 	@Override
 	public IInstance newInstance(Context context) throws PromptoError {
-		return new ConcreteInstance(this);
+		return new ConcreteInstance(context, this);
 	}
 	
 	public GetterMethodDeclaration findGetter(Context context, Identifier attrName) throws SyntaxError {
@@ -337,6 +341,24 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			}
 		}
 		return candidate;
+	}
+
+	public List<String> collectCategories(Context context) {
+		Set<String> set = new HashSet<>();
+		List<String> list = new ArrayList<>();
+		collectCategories(context, set, list);
+		return list;
+	}
+	
+	private void collectCategories(Context context, Set<String> set, List<String> list) {
+		if(derivedFrom!=null) for(Identifier category : derivedFrom) {
+			ConcreteCategoryDeclaration cd = context.getRegisteredDeclaration(ConcreteCategoryDeclaration.class, category);
+			cd.collectCategories(context, set, list);
+		}
+		if(!set.contains(this.getName())) {
+			set.add(this.getName());
+			list.add(this.getName());
+		}
 	}
 
 }

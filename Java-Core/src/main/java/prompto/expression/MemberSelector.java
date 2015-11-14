@@ -91,7 +91,7 @@ public class MemberSelector extends SelectorExpression {
 
 	private IValue interpretSingleton(Context context, IExpression parent) throws PromptoError {
         if(parent instanceof TypeExpression && ((TypeExpression)parent).getType() instanceof CategoryType) {
-        	ConcreteInstance instance = context.loadSingleton((CategoryType)((TypeExpression)parent).getType());
+        	ConcreteInstance instance = context.loadSingleton(context, (CategoryType)((TypeExpression)parent).getType());
         	if(instance!=null)
         		return instance.getMember(context, name, false); 
         }

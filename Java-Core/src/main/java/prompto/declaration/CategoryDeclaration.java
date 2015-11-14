@@ -88,27 +88,38 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 
 	public abstract IInstance newInstance(Context context) throws PromptoError;
 	
+	static final Identifier dbIdName = new Identifier("dbId");
+	
 	public IInstance newInstance(Context context, IStored stored) throws PromptoError {
 		IInstance instance = newInstance(context);
 		instance.setMutable(true);
 		try {
-			for(Identifier name : this.getAttributes()) {
-				AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, name);
-				if(!decl.isStorable())
-					continue;
-				IValue value = stored.getValue(context, name);
-				if(value instanceof IStored) {
-					IType type = decl.getType(context);
-					if(!(type instanceof CategoryType))
-						throw new InternalError("How did we get there?");
-					value = ((CategoryType)type).newInstance(context, (IStored)value);
-				}
-				instance.setMember(context, name, value);
-			}
+			populateInstance(context, stored, instance);
 		} finally {
 			instance.setMutable(false);
 		}
 		return instance;
+	}
+
+	private void populateInstance(Context context, IStored stored, IInstance instance) throws PromptoError {
+		IValue dbId = stored.getValue(context, dbIdName);
+		instance.setMember(context, dbIdName, dbId);
+		for(Identifier name : this.getAttributes()) 
+			populateMember(context, stored, instance, name);
+	}
+	
+	private void populateMember(Context context, IStored stored, IInstance instance, Identifier name) throws PromptoError {
+		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, name);
+		if(!decl.isStorable())
+			return;
+		IValue value = stored.getValue(context, name);
+		if(value instanceof IStored) {
+			IType type = decl.getType(context);
+			if(!(type instanceof CategoryType))
+				throw new InternalError("How did we get there?");
+			value = ((CategoryType)type).newInstance(context, (IStored)value);
+		}
+		instance.setMember(context, name, value);
 	}
 
 	public void checkConstructorContext(Context context) throws SyntaxError {

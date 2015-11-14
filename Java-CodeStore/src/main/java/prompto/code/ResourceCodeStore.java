@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import prompto.code.Application;
 import prompto.code.ICodeStore;
 import prompto.code.Version;
 import prompto.declaration.DeclarationList;
@@ -52,12 +51,12 @@ public class ResourceCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public void store(Application application) throws PromptoError {
+	public void store(Module module) throws PromptoError {
 		throw new UnsupportedOperationException();
 	}
 	
 	@Override
-	public Application fetchApplication(String name, Version version) throws PromptoError {
+	public <T extends Module> T fetchModule(ModuleType type, String name, Version version) throws PromptoError {
 		return null;
 	}
 	

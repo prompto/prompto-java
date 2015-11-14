@@ -8,7 +8,7 @@ import prompto.type.TextType;
 import prompto.value.ListValue;
 import prompto.value.Text;
 
-public class Application extends CodeUnit {
+public class Application extends Module {
 
 	private Text entryPoint;
 
@@ -20,6 +20,11 @@ public class Application extends CodeUnit {
 		this.entryPoint = entryPoint;
 	}
 
+	@Override
+	public ModuleType getType() {
+		return ModuleType.APPLICATION;
+	}
+	
 	@Override
 	public void populate(Context context, IStorable storable) {
 		super.populate(context, storable);

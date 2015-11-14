@@ -582,14 +582,14 @@ public class Context implements IContext {
 			debugger.terminated();
 	}
 
-	public ConcreteInstance loadSingleton(CategoryType type) throws PromptoError {
+	public ConcreteInstance loadSingleton(Context context, CategoryType type) throws PromptoError {
 		if(this==globals) {
 			IValue value = values.get(type.getId());
 			if(value==null) {
 				IDeclaration decl = declarations.get(type.getId());
 				if(!(decl instanceof SingletonCategoryDeclaration))
 					throw new InternalError("No such singleton:" + type.getId());
-				value = new ConcreteInstance((ConcreteCategoryDeclaration)decl);
+				value = new ConcreteInstance(context, (ConcreteCategoryDeclaration)decl);
 				((IInstance)value).setMutable(true); // a singleton is protected by "with x do", so always mutable in that context
 				values.put(type.getId(), value);
 			}
@@ -598,7 +598,7 @@ public class Context implements IContext {
 			else
 				throw new InternalError("Not a concrete instance:" + value.getClass().getSimpleName());
 		} else
-			return this.globals.loadSingleton(type);
+			return this.globals.loadSingleton(context, type);
 	}
 
 	public boolean hasTests() {

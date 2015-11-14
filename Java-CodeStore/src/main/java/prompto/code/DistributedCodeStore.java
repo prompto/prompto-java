@@ -3,6 +3,7 @@ package prompto.code;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -29,13 +30,13 @@ import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.store.IStoredIterator;
 import prompto.type.BooleanType;
+import prompto.type.CategoryType;
 import prompto.type.DateTimeType;
 import prompto.type.ListType;
 import prompto.type.TextType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
-import prompto.value.IValue;
-import prompto.value.ListValue;
+import prompto.utils.Utils;
 import prompto.value.Text;
 
 
@@ -64,6 +65,18 @@ public class DistributedCodeStore extends BaseCodeStore {
 		Collection<AttributeDeclaration> columns = getInitialColumns();
 		store.createOrUpdateColumns(columns);
 		registerColumnAttributes(columns);
+		storeColumnAttributes(columns);
+	}
+
+	private void storeColumnAttributes(Collection<AttributeDeclaration> columns) throws PromptoError {
+		for(AttributeDeclaration column : columns)
+			storeColumnAttribute(column);
+	}
+
+	private void storeColumnAttribute(AttributeDeclaration column) throws PromptoError {
+		IDeclaration decl = super.fetchLatestVersion(column.getName());
+		if(decl!=null && decl.getOrigin()!=null)
+			storeInStore(decl);
 	}
 
 	private void registerColumnAttributes(Collection<AttributeDeclaration> columns) throws PromptoError {
@@ -73,10 +86,8 @@ public class DistributedCodeStore extends BaseCodeStore {
 
 	private void registerColumnAttribute(AttributeDeclaration column) throws PromptoError {
 		IDeclaration decl = super.fetchLatestVersion(column.getName());
-		if(decl!=null && decl.getOrigin()!=null) {
+		if(decl!=null)
 			decl.register(context);
-			storeInStore(decl);
-		}
 	}
 
 	private Collection<AttributeDeclaration> getInitialColumns() {
@@ -84,7 +95,7 @@ public class DistributedCodeStore extends BaseCodeStore {
 		columns.add(new AttributeDeclaration(new Identifier("dbId"), store.getDbIdType(), null));
 		columns.add(new AttributeDeclaration(new Identifier("author"), TextType.instance(), null));
 		columns.add(new AttributeDeclaration(new Identifier("timeStamp"), DateTimeType.instance(), null));
-		columns.add(new AttributeDeclaration(new Identifier("categories"), new ListType(TextType.instance()), null));
+		columns.add(new AttributeDeclaration(new Identifier("category"), new ListType(TextType.instance()), null));
 		columns.add(new AttributeDeclaration(new Identifier("name"), TextType.instance(), null));
 		columns.add(new AttributeDeclaration(new Identifier("storable"), BooleanType.instance(), null));
 		columns.add(new AttributeDeclaration(new Identifier("version"), TextType.instance(), null));
@@ -116,30 +127,28 @@ public class DistributedCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public void store(Application application) throws PromptoError {
+	public void store(Module module) throws PromptoError {
 		Context context = Context.newGlobalContext();
-		IStorable storable = store.newStorable(); 
-		application.populate(context, storable);
+		List<String> categories = Arrays.asList("Project", module.getType().getCategory().getName());
+		IStorable storable = store.newStorable(categories); 
+		module.populate(context, storable);
 		store.store(context, storable);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	public Application fetchApplication(String name, Version version) throws PromptoError {
+	public <T extends Module> T fetchModule(ModuleType type, String name, Version version) throws PromptoError {
 		try {
-			IStored stored = fetchInStore(name, version);
+			IStored stored = fetchInStore(name, type.getCategory(), version);
 			if(stored==null)
 				return null;
-			IValue categories = stored.getValue(context, new Identifier("categories"));
-			if(!(categories instanceof ListValue))
-				return null;
-			if(!((ListValue)categories).hasItem(null, ModuleType.APPLICATION.asValue()))
-				return null;
-			Application app = new Application();
-			app.setName((Text)stored.getValue(context, new Identifier("name")));
-			app.setVersion((Text)stored.getValue(context, new Identifier("version")));
-			app.setText((Text)stored.getValue(context, new Identifier("text")));
-			app.setEntryPoint((Text)stored.getValue(context, new Identifier("entryPoint")));
-			return app;
+			Module module = type.getModuleClass().newInstance();
+			module.setName((Text)stored.getValue(context, new Identifier("name")));
+			module.setVersion((Text)stored.getValue(context, new Identifier("version")));
+			module.setText((Text)stored.getValue(context, new Identifier("text")));
+			if(module instanceof Application)
+				((Application)module).setEntryPoint((Text)stored.getValue(context, new Identifier("entryPoint")));
+			return (T)module;
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -148,7 +157,8 @@ public class DistributedCodeStore extends BaseCodeStore {
 	@Override
 	public void store(IDeclaration declaration, Dialect dialect, Version version) throws PromptoError {
 		Context context = Context.newGlobalContext();
-		IStorable storable = store.newStorable(); 
+		List<String> categories = Arrays.asList("Declaration", declaration.getType(null).getName());
+		IStorable storable = store.newStorable(categories); 
 		populate(context, storable, declaration, dialect, version);
 		store.store(context, storable);
 	}
@@ -170,34 +180,50 @@ public class DistributedCodeStore extends BaseCodeStore {
 	}
 
 	private void storeInStore(IDeclaration decl) throws PromptoError {
+		IStorable storable = fetchModule(decl);
+		if(storable==null)
+			storable = storeModule(decl);
 		ICodeStore origin = decl.getOrigin();
-		Context context = Context.newGlobalContext();
-		IStorable storable = store.newStorable();
-		ListValue categories = new ListValue(TextType.instance());
-		categories.addItem(new Text("Project"));
-		categories.addItem(new Text(origin.getModuleType().name()));
-		storable.setValue(context, new Identifier("categories"), categories);
-		storable.setValue(context, new Identifier("name"),  new Text(origin.getModuleName()));
-		storable.setValue(context, new Identifier("version"),  new Text(origin.getModuleVersion().toString()));
-		storeInStorable(context, storable, decl, origin.getModuleDialect(), origin.getModuleVersion());
-		store.store(context, storable);
+		storeMember(context, storable, decl, origin.getModuleDialect(), origin.getModuleVersion());
 	}
 
-	private void storeInStorable(Context context, IStorable storable, IDeclaration decl, Dialect dialect, Version version) throws PromptoError {
+	private IStorable storeModule(IDeclaration decl) throws PromptoError {
+		ICodeStore origin = decl.getOrigin();
+		Context context = Context.newGlobalContext();
+		List<String> categories = Arrays.asList("Project", origin.getModuleType().getCategory().getName());
+		IStorable storable = store.newStorable(categories);
+		storable.setValue(context, new Identifier("name"),  new Text(origin.getModuleName()));
+		storable.setValue(context, new Identifier("version"),  new Text(origin.getModuleVersion().toString()));
+		store.store(context, storable);
+		return storable;
+	}
+
+	private IStorable fetchModule(IDeclaration decl) throws PromptoError {
+		ICodeStore origin = decl.getOrigin();
+		IStored stored = fetchInStore(origin.getModuleName(), origin.getModuleType().getCategory(), origin.getModuleVersion());
+		if(stored==null)
+			return null;
+		List<String> categories = Arrays.asList("Project", origin.getModuleType().getCategory().getName());
+		IStorable storable = store.newStorable(categories);
+		storable.setData("dbId", stored.getData("dbId"));
+		storable.setData("members", stored.getData("members"));
+		return storable;
+	}
+
+	private void storeMember(Context context, IStorable storable, IDeclaration decl, Dialect dialect, Version version) throws PromptoError {
 		if(decl instanceof MethodDeclarationMap) {
 			for(IDeclaration d : ((MethodDeclarationMap)decl).values())
-				storeInStorable(context, storable, d, dialect, version);
+				storeMember(context, storable, d, dialect, version);
 		} else {
-			IStorable child = store.newStorable();
+			String name = Utils.capitalizeFirst(decl.getDeclarationType().name());
+			List<String> categories = Arrays.asList(name);
+			IStorable child = store.newStorable(categories);
 			populate(context, child, decl, dialect, version);
 			storable.setData("members", child);
 		}
 	}
 
 	private void populate(Context context, IStorable storable, IDeclaration decl, Dialect dialect, Version version) throws PromptoError {
-		ListValue categories = new ListValue(TextType.instance());
-		categories.addItem(new Text(decl.getDeclarationType().name()));
-		storable.setValue(context, new Identifier("categories"), categories);
 		storable.setValue(context, new Identifier("name"),  new Text(decl.getIdentifier().getName()));
 		storable.setValue(context, new Identifier("version"),  new Text(version.toString()));
 		if(decl instanceof IMethodDeclaration) {
@@ -213,23 +239,24 @@ public class DistributedCodeStore extends BaseCodeStore {
 
 	private IDeclaration fetchDeclarationInStore(String name, Version version) {
 		try {
-			IStored stored = fetchInStore(name, version);
+			IStored stored = fetchInStore(name, null, version);
 			return parseDeclaration(context, stored);
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	private IStored fetchInStore(String name, Version version) throws PromptoError {
+	private IStored fetchInStore(String name, CategoryType type, Version version) throws PromptoError {
+		
 		IExpression filter = buildFilter(name, version);
 		if(LATEST.equals(version)) {
 			IdentifierList names = new IdentifierList(new Identifier("version"));
 			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
 			IntegerLiteral one = new IntegerLiteral(1);
-			IStoredIterator result = store.fetchMany(context, one, one, filter, orderBy);
+			IStoredIterator result = store.fetchMany(context, type, one, one, filter, orderBy);
 			return result.hasNext() ? result.next() : null;
 		} else
-			return store.fetchOne(context, filter); 
+			return store.fetchOne(context, null, filter); 
 	}
 
 	private IExpression buildFilter(String name, Version version) {

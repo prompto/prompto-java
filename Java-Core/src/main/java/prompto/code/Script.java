@@ -1,5 +1,11 @@
 package prompto.code;
 
-public class Script extends CodeUnit {
+import prompto.code.ICodeStore.ModuleType;
 
+public class Script extends Module {
+
+	@Override
+	public ModuleType getType() {
+		return ModuleType.SCRIPT;
+	}
 }

@@ -4,6 +4,7 @@ import java.util.Stack;
 
 import prompto.grammar.EqOp;
 import prompto.store.IFilterBuilder;
+import prompto.type.CategoryType;
 import prompto.value.IValue;
 
 public class SOLRFilterBuilder implements IFilterBuilder {
@@ -33,6 +34,10 @@ public class SOLRFilterBuilder implements IFilterBuilder {
 
 	public String toSolrQuery() {
 		return stack.pop();
+	}
+
+	public void pushCategory(CategoryType type) {
+		stack.push("category:" + type.getName());
 	}
 	
 }

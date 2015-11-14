@@ -3,7 +3,9 @@ package prompto.value;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -36,16 +38,20 @@ public class NativeInstance extends BaseValue implements IInstance {
 		super(new CategoryType(declaration.getIdentifier()));
 		this.declaration = declaration;
 		this.instance = makeInstance(context);
-		if(declaration.isStorable())
-			storable = IDataStore.getInstance().newStorable();
+		if(declaration.isStorable()) {
+			List<String> categories = Arrays.asList(declaration.getName()); 
+			storable = IDataStore.getInstance().newStorable(categories);
+		}
 	}
 	
 	public NativeInstance(NativeCategoryDeclaration declaration, Object instance) {
 		super(new CategoryType(declaration.getIdentifier()));
 		this.declaration = declaration;
 		this.instance = instance;
-		if(declaration.isStorable())
-			storable = IDataStore.getInstance().newStorable();
+		if(declaration.isStorable()) {
+			List<String> categories = Arrays.asList(declaration.getName()); 
+			storable = IDataStore.getInstance().newStorable(categories);
+		}
 	}
 	
 	@Override

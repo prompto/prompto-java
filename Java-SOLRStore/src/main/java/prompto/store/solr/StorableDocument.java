@@ -1,5 +1,7 @@
 package prompto.store.solr;
 
+import java.util.List;
+
 import org.apache.solr.common.SolrInputDocument;
 
 import prompto.grammar.Identifier;
@@ -10,13 +12,25 @@ import prompto.value.IValue;
 public class StorableDocument extends BaseDocument implements IStorable {
 
 	SolrInputDocument document = null;
+	List<String> categories;
 	
+	public StorableDocument(List<String> categories) {
+		this.categories = categories;
+	}
+
 	@Override
 	public void setDirty(boolean set) {
 		if(!set)
 			document = null;
 		else if(document==null)
-			document = new SolrInputDocument();
+			document = newDocument();
+	}
+
+	private SolrInputDocument newDocument() {
+		SolrInputDocument doc = new SolrInputDocument();
+		if(categories!=null)
+			doc.setField("category", categories);
+		return doc;
 	}
 
 	@Override
@@ -27,7 +41,7 @@ public class StorableDocument extends BaseDocument implements IStorable {
 	@Override
 	public void setValue(Context context, Identifier name, IValue value) {
 		if(document==null)
-			document = new SolrInputDocument();
+			document = newDocument();
 		if(value==null)
 			document.setField(name.getName(), null);
 		else

@@ -6,12 +6,15 @@ import java.io.InputStream;
 import prompto.declaration.DeclarationList;
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
+import prompto.grammar.Identifier;
 import prompto.parser.AbstractParser;
 import prompto.parser.Dialect;
 import prompto.parser.ECleverParser;
 import prompto.parser.OCleverParser;
 import prompto.parser.SCleverParser;
+import prompto.type.CategoryType;
 import prompto.utils.ISingleton;
+import prompto.utils.Utils;
 import prompto.value.Text;
 
 /* a code store is a place where a code consumer (interpreter, compiler...) can fetch code from */
@@ -62,12 +65,27 @@ public interface ICodeStore {
 	static final Version LATEST = Version.parse("-1.-1.-1");
 	
 	static public enum ModuleType {
-		APPLICATION,
-		LIBRARY,
-		SCRIPT;
+		APPLICATION(Application.class),
+		LIBRARY(Library.class),
+		SCRIPT(Script.class);
+		
+		Class<? extends Module> moduleClass;
+		
+		ModuleType(Class<? extends Module> klass) {
+			moduleClass = klass;
+		}
+		
+		public Class<? extends Module> getModuleClass() {
+			return moduleClass;
+		}
 		
 		public Text asValue() {
 			return new Text(this.name());
+		}
+
+		public CategoryType getCategory() {
+			String capped = Utils.capitalizeFirst(name());
+			return new CategoryType( new Identifier(capped));
 		}
 	}
 	
@@ -80,7 +98,19 @@ public interface ICodeStore {
 	IDeclaration fetchLatestVersion(String name) throws PromptoError;
 	IDeclaration fetchSpecificVersion(String name, Version version) throws PromptoError;
 
-	Application fetchApplication(String name, Version version) throws PromptoError;
-	void store(Application application) throws PromptoError;
+	default public Application fetchApplication(String name, Version version) throws PromptoError {
+		return fetchModule(ModuleType.APPLICATION, name, version);
+	}
+	
+	default public Library fetchLibrary(String name, Version version) throws PromptoError {
+		return fetchModule(ModuleType.LIBRARY, name, version);
+	}
+	
+	default public Script fetchScript(String name, Version version) throws PromptoError {
+		return fetchModule(ModuleType.SCRIPT, name, version);
+	}
+	
+	<T extends Module> T fetchModule(ModuleType type, String name, Version version) throws PromptoError;
+	void store(Module module) throws PromptoError;
 
 }

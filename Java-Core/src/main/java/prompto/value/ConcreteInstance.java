@@ -1,9 +1,13 @@
 package prompto.value;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
@@ -30,11 +34,13 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	IStorable storable = null;
 	boolean mutable = false;
 	
-	public ConcreteInstance(ConcreteCategoryDeclaration declaration) {
+	public ConcreteInstance(Context context, ConcreteCategoryDeclaration declaration) {
 		super(new CategoryType(declaration.getIdentifier()));
 		this.declaration = declaration;
-		if(declaration.isStorable())
-			storable = IDataStore.getInstance().newStorable();
+		if(declaration.isStorable()) {
+			List<String> categories = declaration.collectCategories(context);
+			storable = IDataStore.getInstance().newStorable(categories);
+		}
 	}
 
 	@Override
@@ -239,6 +245,14 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		return decl.interpret(local);
 	}
 
-
+	@Override
+	public void toJson(Context context, JsonGenerator generator) throws IOException, PromptoError {
+		generator.writeStartObject();
+		for(Entry<Identifier, IValue> entry : values.entrySet()) {
+			generator.writeFieldName(entry.getKey().getName());
+			entry.getValue().toJson(context, generator);
+		}
+		generator.writeEndObject();
+	}
 }
 

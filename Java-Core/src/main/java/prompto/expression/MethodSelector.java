@@ -112,7 +112,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		if(value==null || value==NullValue.instance())
 			throw new NullReferenceError();
 		if(value instanceof TypeValue && ((TypeValue)value).getValue() instanceof CategoryType)
-			value = context.loadSingleton((CategoryType)((TypeValue)value).getValue());
+			value = context.loadSingleton(context, (CategoryType)((TypeValue)value).getValue());
 		if(!(value instanceof ConcreteInstance))
 			throw new InvalidDataError("Not an instance !");
 		context = context.newInstanceContext((ConcreteInstance)value);

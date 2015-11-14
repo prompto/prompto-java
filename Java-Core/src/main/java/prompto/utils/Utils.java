@@ -22,7 +22,7 @@ public class Utils {
 	}
 	
 	public static String capitalizeFirst(String value) {
-		return Character.toUpperCase(value.charAt(0)) + value.substring(1);
+		return Character.toUpperCase(value.charAt(0)) + value.substring(1).toLowerCase();
 	}
 	
 	public static Character[] stringToCharacterArray(String value) {

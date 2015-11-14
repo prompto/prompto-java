@@ -29,7 +29,7 @@ public class WithSingletonStatement extends BaseStatement {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		// TODO synchronize
-		ConcreteInstance instance = context.loadSingleton(type);
+		ConcreteInstance instance = context.loadSingleton(context, type);
 		Context instanceContext = context.newInstanceContext(instance);
 		Context childContext = instanceContext.newChildContext();
 		return instructions.interpret(childContext);

@@ -1,17 +1,20 @@
 package prompto.code;
 
+import prompto.code.ICodeStore.ModuleType;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.value.Image;
 import prompto.value.Text;
 
-public class CodeUnit {
+public abstract class Module {
 	
 	private Text name;
 	private Text version;
 	private Text text;
 	private Image image;
+	
+	public abstract ModuleType getType();
 	
 	public Text getName() {
 		return name;

@@ -17,12 +17,16 @@ import prompto.grammar.Identifier;
 import prompto.grammar.OrderByClause;
 import prompto.grammar.OrderByClauseList;
 import prompto.runtime.Context;
+import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.type.IntegerType;
+import prompto.type.TextType;
 import prompto.value.Boolean;
 import prompto.value.Document;
 import prompto.value.IValue;
 import prompto.value.Integer;
+import prompto.value.ListValue;
+import prompto.value.Text;
 import prompto.value.TupleValue;
 
 /* a utility class for running unit tests only */
@@ -67,15 +71,19 @@ public final class MemStore implements IStore {
 	}
 	
 	@Override
-	public IStored fetchOne(Context context, IExpression filter) throws PromptoError {
+	public IStored fetchOne(Context context, CategoryType type, IExpression filter) throws PromptoError {
 		for(StorableDocument doc : documents.values()) {
-			if(matches(context, doc, filter))
+			if(matches(context, doc, type, filter))
 				return doc;
 		}
 		return null;
 	}
 	
-	private boolean matches(Context context, StorableDocument doc, IExpression filter) throws PromptoError {
+	private boolean matches(Context context, StorableDocument doc, CategoryType type, IExpression filter) throws PromptoError {
+		return matchesType(context, doc, type) && matchesFilter(context, doc, filter);
+	}
+	
+	private boolean matchesFilter(Context context, StorableDocument doc, IExpression filter) throws PromptoError {
 		if(filter==null)
 			return true;
 		Context local = context.newDocumentContext(doc.document, true);
@@ -85,11 +93,19 @@ public final class MemStore implements IStore {
 		return ((Boolean)test).getValue();
 	}
 
+	private boolean matchesType(Context context, StorableDocument doc, CategoryType type) throws PromptoError {
+		if(type==null)
+			return true;
+		ListValue list = (ListValue) doc.getValue(context, new Identifier("category"));
+		return list==null ? false : list.hasItem(context, new Text(type.getName()));
+	}
+
 	@Override
-	public IStoredIterator fetchMany(Context context, IExpression start, IExpression end, 
-									IExpression filter, OrderByClauseList orderBy) throws PromptoError {
+	public IStoredIterator fetchMany(Context context, CategoryType type, 
+				IExpression start, IExpression end, 
+				IExpression filter, OrderByClauseList orderBy) throws PromptoError {
 		
-		final List<StorableDocument> docs = fetchManyDocs(context, start, end, filter, orderBy);
+		final List<StorableDocument> docs = fetchManyDocs(context, type, start, end, filter, orderBy);
 		final Iterator<StorableDocument> iter = docs.iterator();
 		return new IStoredIterator() {
 			@Override public boolean hasNext() { return iter.hasNext(); }
@@ -98,9 +114,10 @@ public final class MemStore implements IStore {
 		};
 	}
 
-	private List<StorableDocument> fetchManyDocs(Context context, IExpression start, IExpression end, 
+	private List<StorableDocument> fetchManyDocs(Context context, CategoryType type, 
+			IExpression start, IExpression end, 
 			IExpression filter, OrderByClauseList orderBy) throws PromptoError {
-		List<StorableDocument> docs = filterDocs(context, filter);
+		List<StorableDocument> docs = filterDocs(context, type, filter);
 		// sort it if required
 		docs = sort(context, docs, orderBy);
 		// slice it if required
@@ -109,11 +126,12 @@ public final class MemStore implements IStore {
 		return docs;
 	}
 
-	private List<StorableDocument> filterDocs(Context context, IExpression filter) throws PromptoError {
+	private List<StorableDocument> filterDocs(Context context, CategoryType type, IExpression filter) throws PromptoError {
 		// create list of filtered docs
 		List<StorableDocument> docs = new ArrayList<StorableDocument>();
-		for(StorableDocument doc : documents.values()) {
-			if(matches(context, doc, filter))
+		List<StorableDocument> all = new ArrayList<>(documents.values()); // need a copy to avoid concurrent modification
+		for(StorableDocument doc : all) {
+			if(matches(context, doc, type, filter))
 				docs.add(doc);
 		}
 		return docs;
@@ -199,20 +217,36 @@ public final class MemStore implements IStore {
 	}
 	
 	@Override
-	public IStorable newStorable() {
-		return new StorableDocument();
+	public IStorable newStorable(List<String> categories) {
+		return new StorableDocument(categories);
 	}
 	
 	static class StorableDocument implements IStorable {
 
 		Document document = null;
+		List<String> categories;
 		
+		public StorableDocument(List<String> categories) {
+			this.categories = categories;
+		}
+
 		@Override
 		public void setDirty(boolean set) {
 			if(!set)
 				document = null;
 			else if(document==null)
-				document = new Document();
+				document = newDocument();
+		}
+
+		private Document newDocument() {
+			Document doc = new Document();
+			if(categories!=null) {
+				ListValue value = new ListValue(TextType.instance());
+				for(String name : categories)
+					value.addItem(new Text(name));
+				doc.setMember(null, new Identifier("category"), value);
+			}
+			return doc;
 		}
 
 		@Override
@@ -231,7 +265,7 @@ public final class MemStore implements IStore {
 		@Override
 		public void setValue(Context context, Identifier name, IValue value) {
 			if(document==null)
-				document = new Document();
+				document = newDocument();
 			if(value instanceof StorableDocument)
 				value = ((StorableDocument)value).document;
 			document.setMember(context, name, value);
@@ -239,13 +273,17 @@ public final class MemStore implements IStore {
 		
 		@Override
 		public Object getData(String name) {
-			throw new IllegalStateException();
+			return document.getMember(null, new Identifier(name), false);
 		}
 		
 		@Override
 		public void setData(String name, Object value) {
+			if(document==null)
+				document = newDocument();
 			if(value instanceof StorableDocument)
 				document.setMember(null, new Identifier(name), ((StorableDocument)value).document);
+			else if(value instanceof IValue)
+				document.setMember(null, new Identifier(name), (IValue)value);
 			else
 				throw new IllegalStateException();
 		}

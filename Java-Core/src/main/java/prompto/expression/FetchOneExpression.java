@@ -25,6 +25,10 @@ public class FetchOneExpression extends Section implements IExpression {
 		this.filter = filter;
 	}
 	
+	public CategoryType getType() {
+		return type;
+	}
+	
 	public IExpression getFilter() {
 		return filter;
 	}
@@ -68,7 +72,7 @@ public class FetchOneExpression extends Section implements IExpression {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		IStore store = IDataStore.getInstance();
-		IStored stored = store.fetchOne(context, filter);
+		IStored stored = store.fetchOne(context, type, filter);
 		if(stored==null)
 			return NullValue.instance();
 		else
