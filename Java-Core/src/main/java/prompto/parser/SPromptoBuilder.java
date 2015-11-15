@@ -160,6 +160,8 @@ import prompto.literal.TimeLiteral;
 import prompto.literal.TupleLiteral;
 import prompto.parser.SParser;
 import prompto.parser.SParserBaseListener;
+import prompto.parser.SParser.BlobTypeContext;
+import prompto.parser.SParser.ImageTypeContext;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -206,6 +208,7 @@ import prompto.statement.BaseSwitchStatement.SwitchCaseList;
 import prompto.statement.IfStatement.IfElement;
 import prompto.statement.IfStatement.IfElementList;
 import prompto.type.AnyType;
+import prompto.type.BlobType;
 import prompto.type.BooleanType;
 import prompto.type.CategoryType;
 import prompto.type.CharacterType;
@@ -215,6 +218,7 @@ import prompto.type.DecimalType;
 import prompto.type.DictType;
 import prompto.type.DocumentType;
 import prompto.type.IType;
+import prompto.type.ImageType;
 import prompto.type.IntegerType;
 import prompto.type.ListType;
 import prompto.type.NativeType;
@@ -413,6 +417,11 @@ public class SPromptoBuilder extends SParserBaseListener {
 	public void exitAttribute_list(Attribute_listContext ctx) {
 		IdentifierList items = this.<IdentifierList>getNodeValue(ctx.items);
 		setNodeValue(ctx, items);
+	}
+	
+	@Override
+	public void exitBlobType(BlobTypeContext ctx) {
+		setNodeValue(ctx, BlobType.instance());
 	}
 	
 	@Override
@@ -1123,6 +1132,11 @@ public class SPromptoBuilder extends SParserBaseListener {
 	public void exitIfStatement(IfStatementContext ctx) {
 		IStatement stmt = this.<IStatement>getNodeValue(ctx.stmt);
 		setNodeValue(ctx, stmt);
+	}
+	
+	@Override
+	public void exitImageType(ImageTypeContext ctx) {
+		setNodeValue(ctx, ImageType.instance());
 	}
 	
 	@Override

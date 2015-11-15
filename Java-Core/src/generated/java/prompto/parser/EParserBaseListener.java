@@ -2045,6 +2045,18 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterImageType(@NotNull EParser.ImageTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitImageType(@NotNull EParser.ImageTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterIntegerType(@NotNull EParser.IntegerTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2136,6 +2148,18 @@ public class EParserBaseListener implements EParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCodeType(@NotNull EParser.CodeTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBlobType(@NotNull EParser.BlobTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBlobType(@NotNull EParser.BlobTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

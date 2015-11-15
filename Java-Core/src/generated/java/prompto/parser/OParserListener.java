@@ -1919,6 +1919,18 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitTextType(@NotNull OParser.TextTypeContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code ImageType}
+	 * labeled alternative in {@link OParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void enterImageType(@NotNull OParser.ImageTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ImageType}
+	 * labeled alternative in {@link OParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void exitImageType(@NotNull OParser.ImageTypeContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code IntegerType}
 	 * labeled alternative in {@link OParser#native_type}.
 	 * @param ctx the parse tree
@@ -2014,6 +2026,18 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCodeType(@NotNull OParser.CodeTypeContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code BlobType}
+	 * labeled alternative in {@link OParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void enterBlobType(@NotNull OParser.BlobTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code BlobType}
+	 * labeled alternative in {@link OParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void exitBlobType(@NotNull OParser.BlobTypeContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link OParser#category_type}.
 	 * @param ctx the parse tree

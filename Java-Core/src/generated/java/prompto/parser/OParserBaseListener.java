@@ -2021,6 +2021,18 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterImageType(@NotNull OParser.ImageTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitImageType(@NotNull OParser.ImageTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterIntegerType(@NotNull OParser.IntegerTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2112,6 +2124,18 @@ public class OParserBaseListener implements OParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCodeType(@NotNull OParser.CodeTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBlobType(@NotNull OParser.BlobTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBlobType(@NotNull OParser.BlobTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -206,6 +206,7 @@ import prompto.statement.WithResourceStatement;
 import prompto.statement.WithSingletonStatement;
 import prompto.statement.WriteStatement;
 import prompto.type.AnyType;
+import prompto.type.BlobType;
 import prompto.type.BooleanType;
 import prompto.type.CategoryType;
 import prompto.type.CharacterType;
@@ -215,6 +216,7 @@ import prompto.type.DecimalType;
 import prompto.type.DictType;
 import prompto.type.DocumentType;
 import prompto.type.IType;
+import prompto.type.ImageType;
 import prompto.type.IntegerType;
 import prompto.type.ListType;
 import prompto.type.NativeType;
@@ -445,6 +447,11 @@ public class EPromptoBuilder extends EParserBaseListener {
 		setNodeValue(ctx, items);
 	}
 
+	@Override
+	public void exitBlobType(BlobTypeContext ctx) {
+		setNodeValue(ctx, BlobType.instance());
+	}
+	
 	@Override
 	public void exitBooleanLiteral(BooleanLiteralContext ctx) {
 		setNodeValue(ctx, new BooleanLiteral(ctx.t.getText()));
@@ -1175,6 +1182,11 @@ public class EPromptoBuilder extends EParserBaseListener {
 	public void exitIfStatement(IfStatementContext ctx) {
 		IStatement stmt = this.<IStatement>getNodeValue(ctx.stmt);
 		setNodeValue(ctx, stmt);
+	}
+	
+	@Override
+	public void exitImageType(ImageTypeContext ctx) {
+		setNodeValue(ctx, ImageType.instance());
 	}
 	
 	@Override

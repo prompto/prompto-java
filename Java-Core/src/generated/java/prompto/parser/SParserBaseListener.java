@@ -1961,6 +1961,18 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterImageType(@NotNull SParser.ImageTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitImageType(@NotNull SParser.ImageTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterIntegerType(@NotNull SParser.IntegerTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2052,6 +2064,18 @@ public class SParserBaseListener implements SParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCodeType(@NotNull SParser.CodeTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBlobType(@NotNull SParser.BlobTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBlobType(@NotNull SParser.BlobTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -208,6 +208,7 @@ import prompto.statement.BaseSwitchStatement.SwitchCaseList;
 import prompto.statement.IfStatement.IfElement;
 import prompto.statement.IfStatement.IfElementList;
 import prompto.type.AnyType;
+import prompto.type.BlobType;
 import prompto.type.BooleanType;
 import prompto.type.CategoryType;
 import prompto.type.CharacterType;
@@ -217,6 +218,7 @@ import prompto.type.DecimalType;
 import prompto.type.DictType;
 import prompto.type.DocumentType;
 import prompto.type.IType;
+import prompto.type.ImageType;
 import prompto.type.IntegerType;
 import prompto.type.ListType;
 import prompto.type.NativeType;
@@ -431,6 +433,11 @@ public class OPromptoBuilder extends OParserBaseListener {
 		setNodeValue(ctx, items);
 	}
 
+	@Override
+	public void exitBlobType(BlobTypeContext ctx) {
+		setNodeValue(ctx, BlobType.instance());
+	}
+	
 	@Override
 	public void exitBooleanLiteral(BooleanLiteralContext ctx) {
 		setNodeValue(ctx, new BooleanLiteral(ctx.t.getText()));
@@ -1190,6 +1197,11 @@ public class OPromptoBuilder extends OParserBaseListener {
 	public void exitIfStatement(IfStatementContext ctx) {
 		IStatement stmt = this.<IStatement>getNodeValue(ctx.stmt);
 		setNodeValue(ctx, stmt);
+	}
+	
+	@Override
+	public void exitImageType(ImageTypeContext ctx) {
+		setNodeValue(ctx, ImageType.instance());
 	}
 	
 	@Override

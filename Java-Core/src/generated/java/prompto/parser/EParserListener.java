@@ -1933,6 +1933,18 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitTextType(@NotNull EParser.TextTypeContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code ImageType}
+	 * labeled alternative in {@link EParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void enterImageType(@NotNull EParser.ImageTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ImageType}
+	 * labeled alternative in {@link EParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void exitImageType(@NotNull EParser.ImageTypeContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code IntegerType}
 	 * labeled alternative in {@link EParser#native_type}.
 	 * @param ctx the parse tree
@@ -2028,6 +2040,18 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCodeType(@NotNull EParser.CodeTypeContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code BlobType}
+	 * labeled alternative in {@link EParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void enterBlobType(@NotNull EParser.BlobTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code BlobType}
+	 * labeled alternative in {@link EParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void exitBlobType(@NotNull EParser.BlobTypeContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link EParser#category_type}.
 	 * @param ctx the parse tree
