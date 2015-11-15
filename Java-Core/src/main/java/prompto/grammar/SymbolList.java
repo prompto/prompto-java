@@ -1,9 +1,5 @@
 package prompto.grammar;
 
-import java.io.IOException;
-
-import com.fasterxml.jackson.core.JsonGenerator;
-
 import prompto.error.PromptoError;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
@@ -13,6 +9,8 @@ import prompto.utils.ObjectList;
 import prompto.value.IContainer;
 import prompto.value.ISliceable;
 import prompto.value.IValue;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 @SuppressWarnings("serial")
 public abstract class SymbolList <T extends Symbol> extends ObjectList<T> implements IValue, IContainer<IValue> {
@@ -119,7 +117,7 @@ public abstract class SymbolList <T extends Symbol> extends ObjectList<T> implem
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator) throws IOException {
+	public void toJson(Context context, JsonGenerator generator) throws PromptoError {
 		throw new UnsupportedOperationException("toJson not supported by " + this.getClass().getSimpleName());
 	}
 

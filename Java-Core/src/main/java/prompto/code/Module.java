@@ -1,6 +1,7 @@
 package prompto.code;
 
 import prompto.code.ICodeStore.ModuleType;
+import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
@@ -48,7 +49,7 @@ public abstract class Module {
 		this.image = image;
 	}
 
-	public void populate(Context context, IStorable storable) {
+	public void populate(Context context, IStorable storable) throws PromptoError {
 		storable.setValue(context, new Identifier("name"), name);
 		storable.setValue(context, new Identifier("version"), version);
 		if(text!=null)

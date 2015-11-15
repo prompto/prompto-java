@@ -18,6 +18,7 @@ import prompto.declaration.SetterMethodDeclaration;
 import prompto.error.InternalError;
 import prompto.error.NotMutableError;
 import prompto.error.PromptoError;
+import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.java.JavaClassType;
@@ -233,16 +234,20 @@ public class NativeInstance extends BaseValue implements IInstance {
 	}
 
 	@Override
-	public void toJson(Context context, JsonGenerator generator) throws IOException, PromptoError {
-		generator.writeStartObject();
-		for(Identifier attrName : declaration.getAttributes()) {
-			generator.writeFieldName(attrName.toString());
-			IValue value = getMember(context, attrName, false);
-			if(value!=null)
-				value.toJson(context, generator);
-			else
-				generator.writeNull();
+	public void toJson(Context context, JsonGenerator generator) throws PromptoError {
+		try {
+			generator.writeStartObject();
+			for(Identifier attrName : declaration.getAttributes()) {
+				generator.writeFieldName(attrName.toString());
+				IValue value = getMember(context, attrName, false);
+				if(value!=null)
+					value.toJson(context, generator);
+				else
+					generator.writeNull();
+			}
+			generator.writeEndObject();
+		} catch(IOException e) {
+			throw new ReadWriteError(e.getMessage());
 		}
-		generator.writeEndObject();
 	}
 }

@@ -16,6 +16,7 @@ import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.SetterMethodDeclaration;
 import prompto.error.NotMutableError;
 import prompto.error.PromptoError;
+import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.grammar.IArgument;
 import prompto.grammar.Identifier;
@@ -246,13 +247,17 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	}
 
 	@Override
-	public void toJson(Context context, JsonGenerator generator) throws IOException, PromptoError {
-		generator.writeStartObject();
-		for(Entry<Identifier, IValue> entry : values.entrySet()) {
-			generator.writeFieldName(entry.getKey().getName());
-			entry.getValue().toJson(context, generator);
+	public void toJson(Context context, JsonGenerator generator) throws PromptoError {
+		try {
+			generator.writeStartObject();
+			for(Entry<Identifier, IValue> entry : values.entrySet()) {
+				generator.writeFieldName(entry.getKey().getName());
+				entry.getValue().toJson(context, generator);
+			}
+			generator.writeEndObject();
+		} catch(IOException e) {
+			throw new ReadWriteError(e.getMessage());
 		}
-		generator.writeEndObject();
 	}
 }
 

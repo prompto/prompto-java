@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 
 import prompto.error.DivideByZeroError;
 import prompto.error.PromptoError;
+import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.type.IntegerType;
@@ -137,8 +138,12 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator) throws IOException {
-		generator.writeNumber(value);
+	public void toJson(Context context, JsonGenerator generator) throws PromptoError {
+		try {
+			generator.writeNumber(value);
+		} catch(IOException e) {
+			throw new ReadWriteError(e.getMessage());
+		}
 	}
 
 

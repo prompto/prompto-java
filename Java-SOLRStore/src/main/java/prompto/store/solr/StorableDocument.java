@@ -1,12 +1,16 @@
 package prompto.store.solr;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.solr.common.SolrInputDocument;
 
+import prompto.error.PromptoError;
+import prompto.error.ReadWriteError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
+import prompto.value.Binary;
 import prompto.value.IValue;
 
 public class StorableDocument extends BaseDocument implements IStorable {
@@ -39,7 +43,7 @@ public class StorableDocument extends BaseDocument implements IStorable {
 	}
 
 	@Override
-	public void setValue(Context context, Identifier name, IValue value) {
+	public void setValue(Context context, Identifier name, IValue value) throws PromptoError {
 		if(document==null)
 			document = newDocument();
 		if(value==null)
@@ -49,7 +53,15 @@ public class StorableDocument extends BaseDocument implements IStorable {
 	}
 	
 	@Override
-	public void setData(String name, Object value) {
+	public void setData(String name, Object value) throws PromptoError {
+		if(document==null)
+			document = newDocument();
+		if(value instanceof Binary) try {
+			Binary binary = (Binary)value;
+			value = new BinaryValue(binary.getMimeType(), binary.getData()).toByteArray();
+		} catch(IOException e) {
+			throw new ReadWriteError(e.getMessage());
+		}
 		if(value instanceof StorableDocument)
 			value = ((StorableDocument)value).document;
 		document.setField(name, value);

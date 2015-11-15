@@ -68,7 +68,7 @@ abstract class BaseSOLRStore implements IStore {
 	}
 	
 	private void createOrUpdateColumn(AttributeDeclaration column) {
-		if("dbId".equals(column.getName()))
+		if(hasField(column.getName()))
 			return;
 		Map<String, Object> options = new HashMap<>();
 		options.put("indexed", true);
@@ -77,7 +77,8 @@ abstract class BaseSOLRStore implements IStore {
 		if(type instanceof ListType) {
 			options.put("multiValued", true);
 			type = ((ListType)type).getItemType();
-		}
+		} else if(type instanceof CategoryType)
+			type = getDbIdType();
 		String typeName = type.getName().toLowerCase();
 		addField(column.getName(), typeName, options);
 	}
@@ -147,6 +148,8 @@ abstract class BaseSOLRStore implements IStore {
 
 	public abstract void commit() throws SolrServerException, IOException;
 
+	public abstract boolean hasField(String fieldName);
+	
 	public abstract void addField(String fieldName, String fieldType, Map<String, Object> options);
 
 	public abstract String getFieldType(String fieldName);

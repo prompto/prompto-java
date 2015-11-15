@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
+import prompto.error.PromptoError;
+import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
@@ -44,7 +46,7 @@ public class Boolean extends BaseValue implements Comparable<Boolean> {
 	}
 
 	@Override
-	public void store(Context context, String name, IStorable storable) {
+	public void store(Context context, String name, IStorable storable) throws PromptoError {
 		storable.setData(name, value);
 	}
 	
@@ -80,8 +82,12 @@ public class Boolean extends BaseValue implements Comparable<Boolean> {
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator) throws IOException {
-		generator.writeBoolean(value);
+	public void toJson(Context context, JsonGenerator generator) throws PromptoError {
+		try {
+			generator.writeBoolean(value);
+		} catch(IOException e) {
+			throw new ReadWriteError(e.getMessage());
+		}
 	}
 
 }

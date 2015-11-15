@@ -103,7 +103,7 @@ public class AppServer {
 
 	public static void bootstrap(IStore codeStore, String resourceName, String application, Version version) throws Exception {
 		System.out.println("Bootstrapping prompto...");
-		System.out.println("Connecting to prompto runtime...");
+		System.out.println("Connecting to prompto runtime libraries...");
 		ICodeStore module = new ResourceCodeStore(null, ModuleType.LIBRARY, "core.pec", "1.0.0");
 		module = new ResourceCodeStore(module, ModuleType.LIBRARY, "console.pec", "1.0.0");
 		module = new ResourceCodeStore(module, ModuleType.LIBRARY, "internet.pec", "1.0.0");
@@ -112,6 +112,8 @@ public class AppServer {
 		System.out.println("Connecting to code store for application " + application + " version " + version + "...");
 		ICodeStore store = new DistributedCodeStore(codeStore, module, application, version.toString());
 		ICodeStore.setInstance(store);
+		System.out.println("Initializing code store schema...");
+		store.synchronizeSchema();
 		System.out.println("Bootstrapping successful...");
 	}
 

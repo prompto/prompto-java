@@ -10,6 +10,7 @@ import java.util.Set;
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.store.IStorable;
 import prompto.type.IType;
 import prompto.utils.ResourceUtils;
 
@@ -105,4 +106,8 @@ public abstract class Binary extends BaseValue {
 		this.data = data;
 	}
 
+	@Override
+	public void store(Context context, String name, IStorable storable) throws PromptoError {
+		storable.setData(name, this);
+	}
 }

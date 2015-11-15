@@ -20,6 +20,7 @@ import prompto.grammar.Identifier;
 import prompto.grammar.OrderByClause;
 import prompto.grammar.OrderByClauseList;
 import prompto.grammar.UnresolvedIdentifier;
+import prompto.literal.BooleanLiteral;
 import prompto.literal.IntegerLiteral;
 import prompto.literal.TextLiteral;
 import prompto.parser.Dialect;
@@ -248,7 +249,7 @@ public class DistributedCodeStore extends BaseCodeStore {
 
 	private IStored fetchInStore(String name, CategoryType type, Version version) throws PromptoError {
 		
-		IExpression filter = buildFilter(name, version);
+		IExpression filter = buildNameAndVersionFilter(name, version);
 		if(LATEST.equals(version)) {
 			IdentifierList names = new IdentifierList(new Identifier("version"));
 			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
@@ -259,7 +260,7 @@ public class DistributedCodeStore extends BaseCodeStore {
 			return store.fetchOne(context, null, filter); 
 	}
 
-	private IExpression buildFilter(String name, Version version) {
+	private IExpression buildNameAndVersionFilter(String name, Version version) {
 		IExpression left = new UnresolvedIdentifier(new Identifier("name"));
 		IExpression right = new TextLiteral("'" + name + "'");
 		IExpression filter = new EqualsExpression(left, EqOp.ROUGHLY, right);
@@ -272,7 +273,8 @@ public class DistributedCodeStore extends BaseCodeStore {
 		return filter;
 	}
 
-	private IDeclaration parseDeclaration(Context context, IStored stored) throws Exception {
+	@SuppressWarnings("unchecked")
+	private <T extends IDeclaration> T parseDeclaration(Context context, IStored stored) throws Exception {
 		if(stored==null)
 			return null;
 		Text value = (Text)stored.getValue(context, new Identifier("codeFormat"));
@@ -280,8 +282,31 @@ public class DistributedCodeStore extends BaseCodeStore {
 		value = (Text)stored.getValue(context, new Identifier("codeBody"));
 		InputStream input = new ByteArrayInputStream(value.getValue().getBytes());
 		DeclarationList decls = ICodeStore.parse(dialect, "__store__", input);
-		return decls.isEmpty() ? null : decls.get(0);
+		return decls.isEmpty() ? null : (T)decls.get(0);
 	}
 
+	@Override
+	public void synchronizeSchema() {
+		List<AttributeDeclaration> columns = new ArrayList<>();
+		collectStorableAttributes(columns);
+		store.createOrUpdateColumns(columns);
+	}
 
+	@Override
+	public void collectStorableAttributes(List<AttributeDeclaration> list) {
+		super.collectStorableAttributes(list);
+		IExpression left = new UnresolvedIdentifier(new Identifier("storable"));
+		IExpression right = new BooleanLiteral("true");
+		IExpression filter = new EqualsExpression(left, EqOp.EQUALS, right);
+		CategoryType type = new CategoryType(new Identifier("Attribute"));
+		try {
+			IStoredIterator result = store.fetchMany(context, type, null, null, filter, null);
+			while(result.hasNext()) {
+				AttributeDeclaration attr = parseDeclaration(context, result.next());
+				list.add(attr);		
+			}
+		} catch(Exception e) {
+			// TODO
+		}
+	}
 }

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 
 import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
+import prompto.error.ReadWriteError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.ICursor;
@@ -74,11 +75,15 @@ public class Cursor extends BaseValue implements ICursor<IValue>, Iterable<IValu
 	}
 
 	@Override
-	public void toJson(Context context, JsonGenerator generator) throws IOException, PromptoError {
-		generator.writeStartArray();
-		while(hasNext())
-			next().toJson(context, generator);
-		generator.writeEndArray();
+	public void toJson(Context context, JsonGenerator generator) throws PromptoError {
+		try {
+			generator.writeStartArray();
+			while(hasNext())
+				next().toJson(context, generator);
+			generator.writeEndArray();
+		} catch(IOException e) {
+			throw new ReadWriteError(e.getMessage());
+		}
 	}
 
 

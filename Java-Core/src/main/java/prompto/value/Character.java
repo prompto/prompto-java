@@ -6,6 +6,7 @@ import java.text.Collator;
 import com.fasterxml.jackson.core.JsonGenerator;
 
 import prompto.error.PromptoError;
+import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
@@ -26,7 +27,7 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
     }
 
 	@Override
-	public void store(Context context, String name, IStorable storable) {
+	public void store(Context context, String name, IStorable storable) throws PromptoError {
 		storable.setData(name, value);
 	}
 	    
@@ -105,8 +106,12 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
     }
     
    @Override
-   public void toJson(Context context, JsonGenerator generator) throws IOException {
-	   generator.writeString("" + value);
+   public void toJson(Context context, JsonGenerator generator) throws PromptoError {
+		try {
+			generator.writeString("" + value);
+		} catch(IOException e) {
+			throw new ReadWriteError(e.getMessage());
+		}
    }
 
 }

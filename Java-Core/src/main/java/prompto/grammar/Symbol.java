@@ -1,9 +1,5 @@
 package prompto.grammar;
 
-import java.io.IOException;
-
-import com.fasterxml.jackson.core.JsonGenerator;
-
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
@@ -15,6 +11,8 @@ import prompto.type.IType;
 import prompto.value.ISliceable;
 import prompto.value.IValue;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+
 public abstract class Symbol extends Section implements IExpression, INamed, IValue, ISection {
 
 	Identifier symbol;
@@ -25,7 +23,7 @@ public abstract class Symbol extends Section implements IExpression, INamed, IVa
 	}
 
 	@Override
-	public void store(Context context, String name, IStorable storable) {
+	public void store(Context context, String name, IStorable storable) throws PromptoError {
 		storable.setData(name, symbol.toString());
 	}
 	
@@ -127,7 +125,7 @@ public abstract class Symbol extends Section implements IExpression, INamed, IVa
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator) throws IOException {
+	public void toJson(Context context, JsonGenerator generator) throws PromptoError {
 		throw new UnsupportedOperationException("toJson not supported by " + this.getClass().getSimpleName());
 	}
 

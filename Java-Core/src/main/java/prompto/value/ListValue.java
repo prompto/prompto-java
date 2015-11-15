@@ -8,6 +8,7 @@ import java.util.List;
 import com.fasterxml.jackson.core.JsonGenerator;
 
 import prompto.error.PromptoError;
+import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
@@ -30,7 +31,7 @@ public class ListValue extends BaseList<ListValue> {
 	}
 
 	@Override
-	public void store(Context context, String name, IStorable storable) {
+	public void store(Context context, String name, IStorable storable) throws PromptoError {
 		for(IValue item : this.items)
 			item.store(context, name, storable);
 	}
@@ -69,11 +70,15 @@ public class ListValue extends BaseList<ListValue> {
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator) throws IOException, PromptoError {
-		generator.writeStartArray();
-		for(IValue value : this.items)
-			value.toJson(context, generator);
-		generator.writeEndArray();
+	public void toJson(Context context, JsonGenerator generator) throws PromptoError {
+		try {
+			generator.writeStartArray();
+			for(IValue value : this.items)
+				value.toJson(context, generator);
+			generator.writeEndArray();
+		} catch(IOException e) {
+			throw new ReadWriteError(e.getMessage());
+		}
 	}
 
 }

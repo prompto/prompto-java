@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 
 import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
+import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
@@ -116,8 +117,12 @@ public class Time extends BaseValue implements Comparable<Time> {
 	}
 
 	@Override
-	public void toJson(Context context, JsonGenerator generator) throws IOException {
-		generator.writeString(this.toString());
+	public void toJson(Context context, JsonGenerator generator) throws PromptoError {
+		try {
+			generator.writeString(this.toString());
+		} catch(IOException e) {
+			throw new ReadWriteError(e.getMessage());
+		}
 	}
 
 }

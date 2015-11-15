@@ -1,14 +1,12 @@
 package prompto.value;
 
-import java.io.IOException;
-
-import com.fasterxml.jackson.core.JsonGenerator;
-
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.type.IType;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 public interface IValue {
 	
@@ -40,8 +38,8 @@ public interface IValue {
 
 	Object ConvertTo(Class<?> type) throws PromptoError;
 
-	void toJson(Context context, JsonGenerator generator) throws IOException, PromptoError;
+	void toJson(Context context, JsonGenerator generator) throws PromptoError;
 
-	void store(Context context, String name, IStorable storable);
+	void store(Context context, String name, IStorable storable) throws PromptoError;
 
 }

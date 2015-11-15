@@ -2,7 +2,9 @@ package prompto.code;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
+import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.DeclarationList;
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
@@ -113,4 +115,6 @@ public interface ICodeStore {
 	<T extends Module> T fetchModule(ModuleType type, String name, Version version) throws PromptoError;
 	void store(Module module) throws PromptoError;
 
+	void synchronizeSchema();
+	void collectStorableAttributes(List<AttributeDeclaration> list);
 }

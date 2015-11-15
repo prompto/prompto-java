@@ -2,9 +2,11 @@ package prompto.store.solr;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 
 import prompto.store.IStore;
 import prompto.store.IStoreFactory;
+import prompto.utils.Utils;
 
 public class SOLRStoreFactory implements IStoreFactory {
 
@@ -24,15 +26,26 @@ public class SOLRStoreFactory implements IStoreFactory {
 				root = args[++i];
 		}
 		if(embedded)
-			return newEmbeddedSOLRStore(root);
+			return newEmbeddedSOLRStore(root, type);
 		else
-			return new RemoteSOLRStore();
+			return newRemoteSOLRStore(type);
 	}
 
-	private IStore newEmbeddedSOLRStore(String root) throws Exception {
+	private IStore newRemoteSOLRStore(Type type) {
+		return new RemoteSOLRStore(type);
+	}
+
+	private IStore newEmbeddedSOLRStore(String root, Type type) throws Exception {
 		// this is test only, load class by name to avoid carrying SOLR jars with each executable
-		Class<?> klass = Class.forName("prompto.store.solr.EmbeddedSOLRStore");
-		Constructor<?> ctor = klass.getConstructor(File.class);
-		return (IStore)ctor.newInstance(new File(root));
+		@SuppressWarnings("unchecked")
+		Class<? extends BaseSOLRStore> klass = (Class<? extends BaseSOLRStore>) Class.forName("prompto.store.solr.EmbeddedSOLRStore");
+		Constructor<? extends BaseSOLRStore> ctor = klass.getConstructor(File.class);
+		BaseSOLRStore store = ctor.newInstance(new File(root));
+		Method method = klass.getDeclaredMethod("startContainer");
+		method.invoke(store);
+		method = klass.getDeclaredMethod("startServerWithEmptyCore", String.class);
+		String name = Utils.capitalizeFirst(type.name()) + "Store";
+		method.invoke(store, name);
+		return store;
 	}
 }

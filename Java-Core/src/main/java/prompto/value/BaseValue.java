@@ -1,14 +1,12 @@
 package prompto.value;
 
-import java.io.IOException;
-
-import com.fasterxml.jackson.core.JsonGenerator;
-
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.type.IType;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 public abstract class BaseValue implements IValue {
 	
@@ -33,7 +31,7 @@ public abstract class BaseValue implements IValue {
 	}
 	
 	@Override
-	public void store(Context context, String name, IStorable storable) {
+	public void store(Context context, String name, IStorable storable) throws PromptoError {
 		throw new UnsupportedOperationException("Cannot store " + this.getClass().getSimpleName());
 	}
 	
@@ -91,7 +89,7 @@ public abstract class BaseValue implements IValue {
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator) throws IOException, PromptoError {
+	public void toJson(Context context, JsonGenerator generator) throws PromptoError {
 		throw new UnsupportedOperationException("toJson not supported by " + this.getClass().getSimpleName());
 	}
 

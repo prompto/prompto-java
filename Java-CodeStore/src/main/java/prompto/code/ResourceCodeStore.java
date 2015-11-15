@@ -3,10 +3,12 @@ package prompto.code;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import prompto.code.ICodeStore;
 import prompto.code.Version;
+import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.DeclarationList;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
@@ -115,5 +117,23 @@ public class ResourceCodeStore extends BaseCodeStore {
 	public Collection<IDeclaration> getDeclarations() {
 		loadResource();
 		return declarations.values();
+	}
+	
+	@Override
+	public void synchronizeSchema() {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public void collectStorableAttributes(List<AttributeDeclaration> list) {
+		super.collectStorableAttributes(list);
+		loadResource();
+		for(IDeclaration decl : declarations.values()) {
+			if(!(decl instanceof AttributeDeclaration))
+				continue;
+			AttributeDeclaration attr = (AttributeDeclaration)decl;
+			if(attr.isStorable())
+				list.add(attr);
+		}
 	}
 }

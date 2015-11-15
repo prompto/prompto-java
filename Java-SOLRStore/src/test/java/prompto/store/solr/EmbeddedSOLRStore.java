@@ -105,6 +105,12 @@ public class EmbeddedSOLRStore extends BaseSOLRStore {
 	}
 
 	@Override
+	public boolean hasField(String fieldName) {
+		IndexSchema schema = core.getLatestSchema();
+		return schema.hasExplicitField(fieldName);
+	}
+	
+	@Override
 	public void addField(String fieldName, String fieldType, Map<String, Object> options) {
 		IndexSchema schema = core.getLatestSchema();
 		Object lock = schema.getSchemaUpdateLock();

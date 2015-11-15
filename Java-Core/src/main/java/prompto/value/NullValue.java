@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
+import prompto.error.PromptoError;
+import prompto.error.ReadWriteError;
 import prompto.runtime.Context;
 import prompto.type.NullType;
 
@@ -21,8 +23,12 @@ public class NullValue extends BaseValue {
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator) throws IOException {
-		generator.writeNull();
+	public void toJson(Context context, JsonGenerator generator) throws PromptoError {
+		try {
+			generator.writeNull();
+		} catch(IOException e) {
+			throw new ReadWriteError(e.getMessage());
+		}
 	}
 
 
