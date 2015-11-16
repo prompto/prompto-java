@@ -252,7 +252,11 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 			generator.writeStartObject();
 			for(Entry<Identifier, IValue> entry : values.entrySet()) {
 				generator.writeFieldName(entry.getKey().getName());
-				entry.getValue().toJson(context, generator);
+				IValue value = entry.getValue();
+				if(value==null)
+					generator.writeNull();
+				else
+					value.toJson(context, generator);
 			}
 			generator.writeEndObject();
 		} catch(IOException e) {

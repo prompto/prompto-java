@@ -49,7 +49,7 @@ public abstract class Binary extends BaseValue {
 	}
 
 	public static void fromResource(Binary binary, String path) throws IOException {
-		String ext = path.substring(path.lastIndexOf('.'));
+		String ext = path.substring(path.lastIndexOf('.') + 1);
 		binary.setMimeType(fileExtensionToMimeType(ext));
 		binary.setData(ResourceUtils.getResourceAsBytes(path));
 	}

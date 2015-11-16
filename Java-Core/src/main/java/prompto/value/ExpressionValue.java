@@ -17,6 +17,10 @@ public class ExpressionValue extends BaseValue implements IExpression {
 		this.value = value;
 	}
 	
+	public IValue getValue() {
+		return value;
+	}
+	
 	@Override
 	public IType check(Context context) throws SyntaxError {
 		return type;

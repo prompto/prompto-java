@@ -173,9 +173,16 @@ public class DistributedCodeStore extends BaseCodeStore {
 	public IDeclaration fetchSpecificVersion(String name, Version version) throws PromptoError {
 		IDeclaration decl = fetchDeclarationInStore(name, version);
 		if(decl==null) {
-			decl = super.fetchLatestVersion(name);
-			if(decl!=null && decl.getOrigin()!=null)
-				storeInStore(decl);
+			// when called from the AppServer, multiple threads may be attempting to do this
+			// TODO: need to deal with multiple cloud nodes doing this
+			synchronized(this) {
+				decl = fetchDeclarationInStore(name, version);
+				if(decl==null) {
+					decl = super.fetchLatestVersion(name);
+					if(decl!=null && decl.getOrigin()!=null)
+						storeInStore(decl);
+				}
+			}
 		}
 		return decl;
 	}
@@ -248,7 +255,6 @@ public class DistributedCodeStore extends BaseCodeStore {
 	}
 
 	private IStored fetchInStore(String name, CategoryType type, Version version) throws PromptoError {
-		
 		IExpression filter = buildNameAndVersionFilter(name, version);
 		if(LATEST.equals(version)) {
 			IdentifierList names = new IdentifierList(new Identifier("version"));

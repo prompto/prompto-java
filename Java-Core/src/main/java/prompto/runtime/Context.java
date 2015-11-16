@@ -35,6 +35,7 @@ import prompto.utils.Utils;
 import prompto.value.ConcreteInstance;
 import prompto.value.Decimal;
 import prompto.value.Document;
+import prompto.value.ExpressionValue;
 import prompto.value.IInstance;
 import prompto.value.IValue;
 
@@ -535,10 +536,14 @@ public class Context implements IContext {
 	}
 
 	private IValue autocast(Identifier name, IValue value) throws SyntaxError {
-		if(value!=null && value instanceof prompto.value.Integer) {
-			INamed actual = instances.get(name);
-			if(actual.getType(this)==DecimalType.instance())
-				value = new Decimal(((prompto.value.Integer)value).DecimalValue());
+		if(value!=null) {
+			if(value instanceof ExpressionValue)
+				value = ((ExpressionValue)value).getValue();
+			if(value instanceof prompto.value.Integer) {
+				INamed actual = instances.get(name);
+				if(actual.getType(this)==DecimalType.instance())
+					value = new Decimal(((prompto.value.Integer)value).DecimalValue());
+			}
 		}
 		return value;
 	}

@@ -96,7 +96,7 @@ public class EmbeddedSOLRStore extends BaseSOLRStore {
 
 	@Override
 	public void addDocument(SolrInputDocument doc) throws SolrServerException, IOException {
-		server.add(doc);
+		server.add(doc, 1000);
 	}
 
 	@Override

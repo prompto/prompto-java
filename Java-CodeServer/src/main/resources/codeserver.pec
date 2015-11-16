@@ -1,8 +1,11 @@
-define Project as category with attributes name and version 
+define Project as category with attributes name, version and image 
 
 define Library as Project
 define Script as Project 
-define Application as Project
+
+define entryPoint as storable Text attribute
+
+define Application as Project with attribute entryPoint
 
 define project as storable Project attribute
 define lastOpened as storable DateTime attribute
