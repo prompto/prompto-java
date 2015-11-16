@@ -234,14 +234,14 @@ public class NativeInstance extends BaseValue implements IInstance {
 	}
 
 	@Override
-	public void toJson(Context context, JsonGenerator generator) throws PromptoError {
+	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
 		try {
 			generator.writeStartObject();
 			for(Identifier attrName : declaration.getAttributes()) {
 				generator.writeFieldName(attrName.toString());
 				IValue value = getMember(context, attrName, false);
 				if(value!=null)
-					value.toJson(context, generator);
+					value.toJson(context, generator, this, attrName);
 				else
 					generator.writeNull();
 			}

@@ -38,7 +38,7 @@ public interface IValue {
 
 	Object ConvertTo(Class<?> type) throws PromptoError;
 
-	void toJson(Context context, JsonGenerator generator) throws PromptoError;
+	void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError;
 
 	void store(Context context, String name, IStorable storable) throws PromptoError;
 

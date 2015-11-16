@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
+import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.type.BooleanType;
@@ -82,7 +83,7 @@ public class Boolean extends BaseValue implements Comparable<Boolean> {
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator) throws PromptoError {
+	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
 		try {
 			generator.writeBoolean(value);
 		} catch(IOException e) {

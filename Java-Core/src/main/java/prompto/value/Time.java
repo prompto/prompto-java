@@ -117,7 +117,7 @@ public class Time extends BaseValue implements Comparable<Time> {
 	}
 
 	@Override
-	public void toJson(Context context, JsonGenerator generator) throws PromptoError {
+	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
 		try {
 			generator.writeString(this.toString());
 		} catch(IOException e) {

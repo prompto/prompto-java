@@ -21,6 +21,7 @@ import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.type.IntegerType;
 import prompto.type.TextType;
+import prompto.value.Binary;
 import prompto.value.Boolean;
 import prompto.value.Document;
 import prompto.value.IValue;
@@ -68,6 +69,17 @@ public final class MemStore implements IStore {
 			storable.setValue(context, dbIdName, dbId);
 		}
 		documents.put((Integer)dbId, storable);
+	}
+	
+	@Override
+	public Binary fetchBinary(String dbId, String attr) {
+		for(StorableDocument doc : documents.values()) {
+			Object data = doc.getData("dbId");
+			if(data==null || !dbId.equals(data.toString()))
+				continue;
+			data = doc.getData("attr");
+		}
+		return null;
 	}
 	
 	@Override

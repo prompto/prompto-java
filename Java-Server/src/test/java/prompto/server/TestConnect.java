@@ -47,7 +47,7 @@ public class TestConnect extends BaseServerTest {
 	public void testServiceNoParam() throws Exception {
 		Context context = Context.newGlobalContext();
 		ParameterList params = createParameterList();
-		URL url = new URL("http://localhost:" + port + "/ws/getAllAttributes?params=" + params.toURLEncodedString(context));
+		URL url = new URL("http://localhost:" + port + "/ws/run/getAllAttributes?params=" + params.toURLEncodedString(context));
 		URLConnection cnx = url.openConnection();
 		InputStream input = cnx.getInputStream();
 		assertNotNull(input);
@@ -61,7 +61,7 @@ public class TestConnect extends BaseServerTest {
 	public void testService1TextParam() throws Exception {
 		Context context = Context.newGlobalContext();
 		ParameterList params = createParameterList("name", TextType.instance(), new Text("id"));
-		URL url = new URL("http://localhost:" + port + "/ws/findAttribute?params=" + params.toURLEncodedString(context));
+		URL url = new URL("http://localhost:" + port + "/ws/run/findAttribute?params=" + params.toURLEncodedString(context));
 		URLConnection cnx = url.openConnection();
 		InputStream input = cnx.getInputStream();
 		assertNotNull(input);

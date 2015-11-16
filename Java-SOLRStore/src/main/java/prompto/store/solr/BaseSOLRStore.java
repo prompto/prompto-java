@@ -14,6 +14,7 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 
 import prompto.declaration.AttributeDeclaration;
@@ -40,6 +41,7 @@ import prompto.type.ListType;
 import prompto.type.TextType;
 import prompto.type.UUIDType;
 import prompto.utils.IdentifierList;
+import prompto.value.Binary;
 import prompto.value.IValue;
 
 abstract class BaseSOLRStore implements IStore {
@@ -165,6 +167,30 @@ abstract class BaseSOLRStore implements IStore {
 		// TODO
 	}
 
+	@Override
+	public Binary fetchBinary(String dbId, String attr) throws PromptoError {
+		SolrQuery query = new SolrQuery();
+		query.setQuery("dbId:" + dbId);
+		query.setFields(attr);
+		query.setRows(1);
+		try {
+			commit();
+			QueryResponse response = query(query);
+			if(response.getResults().isEmpty())
+				return null;
+			SolrDocument doc = response.getResults().get(0);
+			if(doc==null)
+				return null;
+			Object data = doc.getFieldValue(attr);
+			if(data==null)
+				return null;
+			else
+				return BinaryConverter.toBinary(data);
+		} catch(Exception e) {
+			throw new InternalError(e);
+		}
+	}
+	
 	@Override
 	public IStored fetchOne(Context context, CategoryType type, IExpression filterExpression) throws PromptoError {
 		SolrQuery query = buildQuery(context, type, null, null, filterExpression, null);

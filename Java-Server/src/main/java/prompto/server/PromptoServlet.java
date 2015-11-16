@@ -24,7 +24,8 @@ public class PromptoServlet extends HttpServlet {
 		try {
 			authenticate(req);
 			readSession(req);
-			Identifier methodName = new Identifier(req.getServletPath().substring(1));
+			String path = req.getPathInfo();
+			Identifier methodName = new Identifier(path.substring(1));
 			String[] httpParams = req.getParameterMap().get("params");
 			String jsonParams = httpParams==null || httpParams.length==0 ? null : httpParams[0];
 			RequestRouter handler = new RequestRouter(AppServer.globalContext);

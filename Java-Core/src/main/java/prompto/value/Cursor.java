@@ -75,11 +75,11 @@ public class Cursor extends BaseValue implements ICursor<IValue>, Iterable<IValu
 	}
 
 	@Override
-	public void toJson(Context context, JsonGenerator generator) throws PromptoError {
+	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
 		try {
 			generator.writeStartArray();
 			while(hasNext())
-				next().toJson(context, generator);
+				next().toJson(context, generator, null, null);
 			generator.writeEndArray();
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());

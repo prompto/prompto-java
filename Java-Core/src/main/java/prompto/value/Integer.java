@@ -8,6 +8,7 @@ import prompto.error.DivideByZeroError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
+import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.type.IntegerType;
 
@@ -138,7 +139,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator) throws PromptoError {
+	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
 		try {
 			generator.writeNumber(value);
 		} catch(IOException e) {

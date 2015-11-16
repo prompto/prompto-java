@@ -2,11 +2,6 @@ package prompto.value;
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-
-import prompto.error.PromptoError;
-import prompto.error.ReadWriteError;
-import prompto.runtime.Context;
 import prompto.type.ImageType;
 
 public class Image extends Binary {
@@ -25,12 +20,4 @@ public class Image extends Binary {
 		return image;
 	}
 
-	@Override
-	public void toJson(Context context, JsonGenerator generator) throws PromptoError {
-		try {
-			generator.writeString("empty.jpg");
-		} catch(IOException e) {
-			throw new ReadWriteError(e.getMessage());
-		}
-	}
 }

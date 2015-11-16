@@ -247,7 +247,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	}
 
 	@Override
-	public void toJson(Context context, JsonGenerator generator) throws PromptoError {
+	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
 		try {
 			generator.writeStartObject();
 			for(Entry<Identifier, IValue> entry : values.entrySet()) {
@@ -256,7 +256,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 				if(value==null)
 					generator.writeNull();
 				else
-					value.toJson(context, generator);
+					value.toJson(context, generator, this, entry.getKey());
 			}
 			generator.writeEndObject();
 		} catch(IOException e) {

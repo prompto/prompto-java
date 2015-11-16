@@ -87,7 +87,7 @@ public class Parameter {
 			generator.writeNullField("value");
 		else {
 			generator.writeFieldName("value");
-			value.toJson(context, generator);
+			value.toJson(context, generator, null, null);
 		}
 		generator.writeEndObject();
 	}

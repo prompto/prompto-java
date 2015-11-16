@@ -8,6 +8,7 @@ import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.type.IType;
+import prompto.value.IInstance;
 import prompto.value.ISliceable;
 import prompto.value.IValue;
 
@@ -125,7 +126,7 @@ public abstract class Symbol extends Section implements IExpression, INamed, IVa
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator) throws PromptoError {
+	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
 		throw new UnsupportedOperationException("toJson not supported by " + this.getClass().getSimpleName());
 	}
 

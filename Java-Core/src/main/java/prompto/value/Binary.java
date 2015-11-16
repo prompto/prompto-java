@@ -8,12 +8,14 @@ import java.util.Map;
 import java.util.Set;
 
 import prompto.error.PromptoError;
+import prompto.error.ReadWriteError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.type.IType;
 import prompto.utils.ResourceUtils;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -110,4 +112,15 @@ public abstract class Binary extends BaseValue {
 	public void store(Context context, String name, IStorable storable) throws PromptoError {
 		storable.setData(name, this);
 	}
+	
+	@Override
+	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
+		try {
+			String dbId = instance.getMember(context, new Identifier("dbId"), false).toString();
+			generator.writeString("/ws/bin/data?dbId=" + dbId + "&attribute=" + name.getName());
+		} catch(IOException e) {
+			throw new ReadWriteError(e.getMessage());
+		}
+	}
+
 }

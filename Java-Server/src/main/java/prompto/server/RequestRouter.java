@@ -41,7 +41,7 @@ public class RequestRouter {
 		generator.writeStartObject();
 		generator.writeNullField("error");
 		generator.writeFieldName("data");
-		value.toJson(context, generator);
+		value.toJson(context, generator, null, null);
 		generator.writeEndObject();
 		generator.flush();
 		generator.close();

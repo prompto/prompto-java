@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
+import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.type.CharacterType;
@@ -106,7 +107,7 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
     }
     
    @Override
-   public void toJson(Context context, JsonGenerator generator) throws PromptoError {
+   public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
 		try {
 			generator.writeString("" + value);
 		} catch(IOException e) {

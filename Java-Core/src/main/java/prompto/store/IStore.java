@@ -10,6 +10,7 @@ import prompto.grammar.OrderByClauseList;
 import prompto.runtime.Context;
 import prompto.type.CategoryType;
 import prompto.type.IType;
+import prompto.value.Binary;
 
 /* a mean to store and fetch data */
 public interface IStore {
@@ -23,4 +24,5 @@ public interface IStore {
 			IExpression filter, OrderByClauseList orderBy) throws PromptoError;
 	void createOrUpdateColumns(Collection<AttributeDeclaration> columns);
 	IType getColumnType(String name);
+	Binary fetchBinary(String dbId, String attr) throws PromptoError;
 }
