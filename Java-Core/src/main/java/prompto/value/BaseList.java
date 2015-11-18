@@ -123,7 +123,7 @@ public abstract class BaseList<T extends BaseList<T>> extends BaseValue implemen
     }
 
 	@Override
-	public Iterable<IValue> getItems(Context context) {
+	public Iterable<IValue> getIterable(Context context) {
 		return items;
 	}
 

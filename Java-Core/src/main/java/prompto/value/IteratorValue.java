@@ -3,29 +3,37 @@ package prompto.value;
 import java.io.IOException;
 import java.util.Iterator;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+
 import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
+import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
-import prompto.store.IStored;
-import prompto.store.IStoredIterator;
-import prompto.type.CategoryType;
-import prompto.type.CursorType;
+import prompto.runtime.Variable;
 import prompto.type.IType;
-import prompto.type.IterableType;
+import prompto.type.IteratorType;
 
-import com.fasterxml.jackson.core.JsonGenerator;
+public class IteratorValue extends BaseValue implements IIterable<IValue>, Iterable<IValue>, Iterator<IValue> {
 
-public class Cursor extends BaseValue implements IIterable<IValue>, Iterable<IValue>, Iterator<IValue> {
-
+	IType itemType;
 	Context context;
-	IStoredIterator documents;
+	Integer length;
+	Identifier name;
+	Iterator<IValue> source;
+	IExpression expression;
 	
-	public Cursor(Context context, IType itemType, IStoredIterator documents) {
-		super(new CursorType(itemType));
+	public IteratorValue(IType itemType, 
+			Context context, Integer length, Identifier name, 
+			Iterator<IValue> source, IExpression expression) {
+		super(new IteratorType(itemType));
+		this.itemType = itemType;
 		this.context = context;
-		this.documents = documents;
+		this.length = length;
+		this.name = name;
+		this.source = source;
+		this.expression = expression;
 	}
 
 	@Override
@@ -35,14 +43,14 @@ public class Cursor extends BaseValue implements IIterable<IValue>, Iterable<IVa
 
 	@Override
 	public long length() {
-		return documents.length();
+		return length.IntegerValue();
 	}
 
 	@Override
 	public Iterable<IValue> getIterable(Context context) {
 		return this;
 	}
-	
+
 	@Override 
 	public Iterator<IValue> iterator() {
 		return this;
@@ -50,15 +58,16 @@ public class Cursor extends BaseValue implements IIterable<IValue>, Iterable<IVa
 	
 	@Override
 	public boolean hasNext() {
-		return documents.hasNext();
+		return source.hasNext();
 	}
 	
 	@Override
 	public IValue next() {
 		try {
-			IStored stored = documents.next();
-			CategoryType itemType = (CategoryType) ((IterableType)type).getItemType();
-			return itemType.newInstance(context, stored);
+			Context child = context.newChildContext();
+			child.registerValue(new Variable(name, itemType));
+			child.setValue(name, source.next());
+			return expression.interpret(child);
 		} catch (PromptoError e) {
 			throw new RuntimeException(e);
 		}
@@ -68,7 +77,7 @@ public class Cursor extends BaseValue implements IIterable<IValue>, Iterable<IVa
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
 		if ("length".equals(name))
-			return new Integer(length());
+			return length;
 		else
 			throw new InvalidDataError("No such member:" + name);
 	}
@@ -85,5 +94,5 @@ public class Cursor extends BaseValue implements IIterable<IValue>, Iterable<IVa
 		}
 	}
 
-
+	
 }

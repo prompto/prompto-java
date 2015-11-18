@@ -52,7 +52,7 @@ public class DeclarationInstruction<T extends IDeclaration> extends BaseStatemen
 		if(declaration instanceof ConcreteMethodDeclaration) {
 			ConcreteMethodDeclaration method = (ConcreteMethodDeclaration)declaration;
 			context.registerDeclaration(method);
-			IType type = new MethodType(context,method.getIdentifier());
+			IType type = new MethodType(context, method.getIdentifier());
 			context.registerValue(new Variable(method.getIdentifier(), type)); 
 			context.setValue(method.getIdentifier(), new ClosureValue(context, method));
 			return null;

@@ -87,7 +87,7 @@ public abstract class Range<T extends IValue> extends BaseValue implements ICont
 	}
 
 	@Override
-	public Iterable<T> getItems(Context context) {
+	public Iterable<T> getIterable(Context context) {
 		return new RangeIterable(context);
 	}	
 	

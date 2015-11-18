@@ -963,6 +963,18 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitNotInExpression(@NotNull SParser.NotInExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code IteratorExpression}
+	 * labeled alternative in {@link SParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterIteratorExpression(@NotNull SParser.IteratorExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code IteratorExpression}
+	 * labeled alternative in {@link SParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitIteratorExpression(@NotNull SParser.IteratorExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code IsNotExpression}
 	 * labeled alternative in {@link SParser#expression}.
 	 * @param ctx the parse tree

@@ -112,7 +112,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	}
 	
 	@Override
-	public Iterable<Character> getItems(Context context) {
+	public Iterable<Character> getIterable(Context context) {
 		return new CharacterIterable(context);
 	}
 

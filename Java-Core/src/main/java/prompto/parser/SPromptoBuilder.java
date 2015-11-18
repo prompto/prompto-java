@@ -58,6 +58,7 @@ import prompto.expression.FetchOneExpression;
 import prompto.expression.IExpression;
 import prompto.expression.IntDivideExpression;
 import prompto.expression.ItemSelector;
+import prompto.expression.IteratorExpression;
 import prompto.expression.MemberSelector;
 import prompto.expression.MethodExpression;
 import prompto.expression.MethodSelector;
@@ -1210,6 +1211,15 @@ public class SPromptoBuilder extends SParserBaseListener {
 		setNodeValue(ctx, new ItemSelector(exp));
 	}
 	
+	@Override
+	public void exitIteratorExpression(IteratorExpressionContext ctx) {
+		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		IExpression source = this.<IExpression>getNodeValue(ctx.source);
+		setNodeValue(ctx, new IteratorExpression(name, source, exp));
+	}
+	
+
 	@Override
 	public void exitJava_identifier(Java_identifierContext ctx) {
 		setNodeValue(ctx, ctx.getText());

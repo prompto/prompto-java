@@ -1097,6 +1097,18 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterIteratorExpression(@NotNull EParser.IteratorExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIteratorExpression(@NotNull EParser.IteratorExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterUnresolvedExpression(@NotNull EParser.UnresolvedExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}

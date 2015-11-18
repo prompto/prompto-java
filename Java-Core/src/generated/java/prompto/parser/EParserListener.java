@@ -1027,6 +1027,18 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitNotInExpression(@NotNull EParser.NotInExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code IteratorExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterIteratorExpression(@NotNull EParser.IteratorExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code IteratorExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitIteratorExpression(@NotNull EParser.IteratorExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code UnresolvedExpression}
 	 * labeled alternative in {@link EParser#expression}.
 	 * @param ctx the parse tree

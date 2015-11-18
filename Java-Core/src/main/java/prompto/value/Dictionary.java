@@ -122,7 +122,8 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 		return sb.toString();
 	}
 
-	public Iterable<IValue> getItems(Context context) {
+	@Override
+	public Iterable<IValue> getIterable(Context context) {
 		return new KVPIterable(context);
 	}
 

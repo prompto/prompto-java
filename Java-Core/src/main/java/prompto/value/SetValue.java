@@ -71,7 +71,7 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IListable
 	}
 
 	@Override
-	public Iterable<IValue> getItems(Context context) {
+	public Iterable<IValue> getIterable(Context context) {
 		return items;
 	}
 

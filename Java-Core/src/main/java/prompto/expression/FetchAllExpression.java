@@ -59,8 +59,9 @@ public class FetchAllExpression extends FetchOneExpression {
 		writer.append(type.getId().toString());
 		writer.append(" ) ");
 		if(filter!=null) {
-			writer.append(" where ");
+			writer.append("where ");
 			filter.toDialect(writer);
+			writer.append(" ");
 		}
 		if(orderBy!=null)
 			orderBy.toDialect(writer);

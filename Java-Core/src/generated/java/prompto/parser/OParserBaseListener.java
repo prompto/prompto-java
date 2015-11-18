@@ -1133,6 +1133,18 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterIteratorExpression(@NotNull OParser.IteratorExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIteratorExpression(@NotNull OParser.IteratorExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterIsNotExpression(@NotNull OParser.IsNotExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}

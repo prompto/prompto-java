@@ -3,22 +3,10 @@ package prompto.type;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 
-public abstract class ContainerType extends NativeType {
+public abstract class ContainerType extends IterableType {
 
-	IType itemType;
-	
 	protected ContainerType(String name, IType itemType) {
-		super(name);
-		this.itemType = itemType;
-	}
-	
-	public IType getItemType() {
-		return itemType;
-	}
-	
-	@Override
-	public void checkExists(Context context) throws SyntaxError {
-		itemType.checkExists(context);
+		super(name, itemType);
 	}
 	
 	@Override

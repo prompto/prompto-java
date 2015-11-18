@@ -100,8 +100,7 @@ public class ContainsExpression implements IExpression, IAssertion {
 
 	public boolean containsAll(Context context, IContainer<?> container, IContainer<?> items) throws PromptoError
     {
-        for (IValue item : items.getItems(context))
-        {
+        for (IValue item : items.getIterable(context)) {
             if (!container.hasItem(context, item))
                  return false;
         }
@@ -109,8 +108,7 @@ public class ContainsExpression implements IExpression, IAssertion {
     }
     public boolean containsAny(Context context, IContainer<?> container, IContainer<?> items) throws PromptoError
     {
-        for (IValue item : items.getItems(context))
-        {
+        for (IValue item : items.getIterable(context)) {
            if (container.hasItem(context, item))
                     return true;
         }

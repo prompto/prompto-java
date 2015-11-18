@@ -8,8 +8,6 @@ import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 
-
-
 public class MethodType extends BaseType {
 
 	Context context;

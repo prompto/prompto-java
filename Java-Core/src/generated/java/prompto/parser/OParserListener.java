@@ -1063,6 +1063,18 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitNotInExpression(@NotNull OParser.NotInExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code IteratorExpression}
+	 * labeled alternative in {@link OParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterIteratorExpression(@NotNull OParser.IteratorExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code IteratorExpression}
+	 * labeled alternative in {@link OParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitIteratorExpression(@NotNull OParser.IteratorExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code IsNotExpression}
 	 * labeled alternative in {@link OParser#expression}.
 	 * @param ctx the parse tree

@@ -67,9 +67,10 @@ public interface ICodeStore {
 	static final Version LATEST = Version.parse("-1.-1.-1");
 	
 	static public enum ModuleType {
-		APPLICATION(Application.class),
-		LIBRARY(Library.class),
-		SCRIPT(Script.class);
+		APPLICATION(Application.class), // which interacts with users through a UI
+		SERVICE(Service.class), // back end service (web/messaging)
+		LIBRARY(Library.class), // reusable classes and methods
+		SCRIPT(Script.class); // script that can be scheduled or launched by user
 		
 		Class<? extends Module> moduleClass;
 		
@@ -108,6 +109,10 @@ public interface ICodeStore {
 		return fetchModule(ModuleType.LIBRARY, name, version);
 	}
 	
+	default public Service fetchService(String name, Version version) throws PromptoError {
+		return fetchModule(ModuleType.SERVICE, name, version);
+	}
+
 	default public Script fetchScript(String name, Version version) throws PromptoError {
 		return fetchModule(ModuleType.SCRIPT, name, version);
 	}

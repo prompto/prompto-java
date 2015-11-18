@@ -17,6 +17,7 @@ import prompto.type.ListType;
 import prompto.utils.CodeWriter;
 import prompto.value.Boolean;
 import prompto.value.IContainer;
+import prompto.value.IIterable;
 import prompto.value.IValue;
 import prompto.value.ListValue;
 
@@ -85,7 +86,7 @@ public class FetchListExpression extends Section implements IExpression {
 		Context local = context.newLocalContext();
 		Variable item = new Variable(itemName, itemType);
 		local.registerValue(item);
-		for(IValue o : ((IContainer<?>)src).getItems(context)) {
+		for(IValue o : ((IIterable<?>)src).getIterable(context)) {
 			local.setValue(itemName, o);
 			IValue test = filter.interpret(local);
 			if(!(test instanceof Boolean))

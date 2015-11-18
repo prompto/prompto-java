@@ -11,7 +11,7 @@ import prompto.runtime.Variable;
 import prompto.type.IType;
 import prompto.type.IntegerType;
 import prompto.utils.CodeWriter;
-import prompto.value.IContainer;
+import prompto.value.IIterable;
 import prompto.value.IValue;
 import prompto.value.Integer;
 
@@ -165,8 +165,8 @@ public class ForEachStatement extends BaseStatement {
 
 	@SuppressWarnings("unchecked")
 	private Iterator<IValue> getIterator(Context context, Object src) {
-		if (src instanceof IContainer) 
-			return ((IContainer<IValue>) src).getItems(context).iterator();
+		if (src instanceof IIterable) 
+			return ((IIterable<IValue>) src).getIterable(context).iterator();
 		else if(src instanceof Iterable)
 			return ((Iterable<IValue>)src).iterator();
 		else

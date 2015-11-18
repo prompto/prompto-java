@@ -3,31 +3,31 @@ package prompto.type;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
-import prompto.value.Cursor;
+import prompto.value.IteratorValue;
 
-public class CursorType extends IterableType {
-	
-	public CursorType(IType itemType) {
-		super("Cursor<" + itemType.getId()+">", itemType);
+public class IteratorType extends IterableType {
+
+	public IteratorType(IType itemType) {
+		super("Iterator<" + itemType.getId()+">", itemType);
 	}
-	
+
 	@Override
 	public Class<?> toJavaClass() {
-		return Cursor.class;
+		return IteratorValue.class;
 	}
 	
 	@Override
 	public boolean isAssignableTo(Context context, IType other) {
-		return (other instanceof CursorType) && itemType.isAssignableTo(context, ((CursorType)other).getItemType());
+		return (other instanceof IteratorType) && itemType.isAssignableTo(context, ((IteratorType)other).getItemType());
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		if(obj==this)
 			return true; 
-		if(!(obj instanceof CursorType))
+		if(!(obj instanceof IteratorType))
 			return false;
-		CursorType other = (CursorType)obj;
+		IteratorType other = (IteratorType)obj;
 		return this.getItemType().equals(other.getItemType());
 	}
 	
@@ -45,5 +45,5 @@ public class CursorType extends IterableType {
     		return super.checkMember(context, id);
    }
 
-
+	
 }

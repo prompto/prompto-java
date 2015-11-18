@@ -60,7 +60,7 @@ public abstract class SymbolList <T extends Symbol> extends ObjectList<T> implem
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public Iterable<IValue> getItems(Context context) {
+	public Iterable<IValue> getIterable(Context context) {
 		return new IValueIterable(context, (Iterable<Object>)(Object)this);
 	}
 	
