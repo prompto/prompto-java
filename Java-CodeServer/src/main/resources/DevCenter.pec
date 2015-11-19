@@ -1,0 +1,26 @@
+define Project as category with attributes name, version and image 
+
+define Library as Project
+define Service as Project
+define Script as Project 
+
+define entryPoint as storable Text attribute
+
+define Application as Project with attribute entryPoint
+
+define project as storable Project attribute
+define lastOpened as storable DateTime attribute
+
+define CodingSession as category with attributes user, project and lastOpened
+
+define verifyProject as method receiving project doing:
+	return project
+ 
+define getRecentProjects as method receiving Integer count doing:
+	developer = getHttpUser
+	sessions = fetch CodingSession 1 to count where user = developer order by lastOpened desc
+	return verifyProject session.project for each session in sessions
+
+define getAllProjects as method doing:
+	projects = fetch all Project order by name
+	return verifyProject project for each project in projects

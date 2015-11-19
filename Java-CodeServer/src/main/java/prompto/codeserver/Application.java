@@ -16,7 +16,7 @@ public class Application {
 	public static void main(String[] args) throws Throwable {
 		List<String> argsList = new ArrayList<>(Arrays.asList(args));
 		argsList.add("-resource");
-		argsList.add("codeserver.pec");
+		argsList.add("DevCenter.pec");
 		argsList.add("-application");
 		argsList.add("dev-center");
 		argsList.add("-version");
