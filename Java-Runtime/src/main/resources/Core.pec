@@ -83,6 +83,8 @@ define dbId as Any attribute
 define text as storable Text attribute
 // many objects have a name, it is not unique 
 define name as storable Text attribute
+// many objects have a description, it is not unique 
+define description as storable Text attribute
 // many objects have a version, it is not unique 
 define version as storable Text attribute
 // many objects have a user, it is not unique 

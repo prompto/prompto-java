@@ -22,7 +22,10 @@ public class StoredDocument extends BaseDocument implements IStored {
 	@Override
 	public IValue getValue(Context context, Identifier id) throws PromptoError {
 		Object data = getData(id.getName());
-		return store.readData(id.getName(), data);
+		if(data==null)
+			return null;
+		else
+			return store.readData(id.getName(), data);
 	}
 
 	@Override

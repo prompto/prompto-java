@@ -98,6 +98,7 @@ public class DistributedCodeStore extends BaseCodeStore {
 		columns.add(new AttributeDeclaration(new Identifier("timeStamp"), DateTimeType.instance(), null));
 		columns.add(new AttributeDeclaration(new Identifier("category"), new ListType(TextType.instance()), null));
 		columns.add(new AttributeDeclaration(new Identifier("name"), TextType.instance(), null));
+		columns.add(new AttributeDeclaration(new Identifier("description"), TextType.instance(), null));
 		columns.add(new AttributeDeclaration(new Identifier("storable"), BooleanType.instance(), null));
 		columns.add(new AttributeDeclaration(new Identifier("version"), TextType.instance(), null));
 		columns.add(new AttributeDeclaration(new Identifier("prototype"), TextType.instance(), null));
@@ -146,7 +147,7 @@ public class DistributedCodeStore extends BaseCodeStore {
 			Module module = type.getModuleClass().newInstance();
 			module.setName((Text)stored.getValue(context, new Identifier("name")));
 			module.setVersion((Text)stored.getValue(context, new Identifier("version")));
-			module.setText((Text)stored.getValue(context, new Identifier("text")));
+			module.setDescription((Text)stored.getValue(context, new Identifier("description")));
 			if(module instanceof Application)
 				((Application)module).setEntryPoint((Text)stored.getValue(context, new Identifier("entryPoint")));
 			return (T)module;

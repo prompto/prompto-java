@@ -28,7 +28,7 @@ public class SampleImporter {
 			Application application = new Application();
 			application.setName(readText(descriptor, "name"));
 			application.setVersion(readText(descriptor, "version"));
-			application.setText(readText(descriptor, "description"));
+			application.setDescription(readText(descriptor, "description"));
 			application.setEntryPoint(readText(descriptor, "entryPoint"));
 			if(descriptor.get("imageResource")!=null)
 				this.imageResource = path + descriptor.get("imageResource").asText();

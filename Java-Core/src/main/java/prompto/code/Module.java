@@ -12,7 +12,7 @@ public abstract class Module {
 	
 	private Text name;
 	private Text version;
-	private Text text;
+	private Text description;
 	private Image image;
 	
 	public abstract ModuleType getType();
@@ -33,12 +33,12 @@ public abstract class Module {
 		this.version = version;
 	}
 	
-	public Text getText() {
-		return text;
+	public Text getDescription() {
+		return description;
 	}
 	
-	public void setText(Text text) {
-		this.text = text;
+	public void setDescription(Text description) {
+		this.description = description;
 	}
 	
 	public Image getImage() {
@@ -52,8 +52,8 @@ public abstract class Module {
 	public void populate(Context context, IStorable storable) throws PromptoError {
 		storable.setValue(context, new Identifier("name"), name);
 		storable.setValue(context, new Identifier("version"), version);
-		if(text!=null)
-			storable.setValue(context, new Identifier("text"), text);
+		if(description!=null)
+			storable.setValue(context, new Identifier("description"), description);
 		if(image!=null)
 			storable.setValue(context, new Identifier("image"), image);
 	}
