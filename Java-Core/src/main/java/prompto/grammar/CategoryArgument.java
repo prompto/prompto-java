@@ -62,7 +62,7 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 			toODialect(writer);
 			break;
 		case S:
-			toPDialect(writer);
+			toSDialect(writer);
 			break;
 		}
 		if(defaultExpression!=null) {
@@ -109,7 +109,7 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 		writer.append(name);
 	}
 
-	private void toPDialect(CodeWriter writer) {
+	private void toSDialect(CodeWriter writer) {
 		writer.append(name);
 		writer.append(':');
 		type.toDialect(writer);

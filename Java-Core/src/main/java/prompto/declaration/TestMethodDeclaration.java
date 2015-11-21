@@ -145,12 +145,12 @@ public class TestMethodDeclaration extends BaseDeclaration {
 			toODialect(writer);
 			break;
 		case S:
-			toPDialect(writer);
+			toSDialect(writer);
 			break;
 		}
 	}
 	
-	protected void toPDialect(CodeWriter writer) {
+	protected void toSDialect(CodeWriter writer) {
 		writer.append("def test ");
 		writer.append(getName());
 		writer.append(" ():\n");

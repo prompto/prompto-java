@@ -65,7 +65,7 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 	}
 
 	@Override
-	protected void toPDialect(CodeWriter writer) {
+	protected void toSDialect(CodeWriter writer) {
 		writer.append("try ");
 		writer.append(errorName);
 		writer.append(":\n");

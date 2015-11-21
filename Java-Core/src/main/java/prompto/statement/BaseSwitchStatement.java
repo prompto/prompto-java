@@ -59,14 +59,14 @@ public abstract class BaseSwitchStatement extends BaseStatement {
 			toODialect(writer);
 			break;
 		case S:
-			toPDialect(writer);
+			toSDialect(writer);
 			break;
 		}
 	}
 	
 	protected abstract void toEDialect(CodeWriter writer);
 	protected abstract void toODialect(CodeWriter writer);
-	protected abstract void toPDialect(CodeWriter writer);
+	protected abstract void toSDialect(CodeWriter writer);
 
 	@Override
 	public IType check(Context context) throws SyntaxError {

@@ -34,7 +34,7 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 	}
 	
 	@Override
-	protected void toPDialect(CodeWriter writer) {
+	protected void toSDialect(CodeWriter writer) {
 		writer.append("def native ");
 		writer.append(getName());
 		writer.append(" (");

@@ -67,12 +67,12 @@ public class IteratorExpression implements IExpression {
 			toODialect(writer);
 			break;
 		case S:
-			toPDialect(writer);
+			toSDialect(writer);
 			break;
 		}
 	}
 
-	private void toPDialect(CodeWriter writer) {
+	private void toSDialect(CodeWriter writer) {
 		expression.toDialect(writer);
 		writer.append(" for ");
 		writer.append(name.toString());

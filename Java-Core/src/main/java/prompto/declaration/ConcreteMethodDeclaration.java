@@ -41,12 +41,12 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 			toODialect(writer);
 			break;
 		case S:
-			toPDialect(writer);
+			toSDialect(writer);
 			break;
 		}
 	}
 	
-	protected void toPDialect(CodeWriter writer) {
+	protected void toSDialect(CodeWriter writer) {
 		writer.append("def ");
 		writer.append(getName());
 		writer.append(" (");

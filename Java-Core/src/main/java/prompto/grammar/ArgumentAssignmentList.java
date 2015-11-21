@@ -53,7 +53,7 @@ public class ArgumentAssignmentList extends LinkedList<ArgumentAssignment> {
 			toODialect(writer);
 			break;
 		case S:
-			toPDialect(writer);
+			toSDialect(writer);
 			break;
 		}
 	}
@@ -92,7 +92,7 @@ public class ArgumentAssignmentList extends LinkedList<ArgumentAssignment> {
 		writer.append(")");
 	}
 
-	private void toPDialect(CodeWriter writer) {
+	private void toSDialect(CodeWriter writer) {
 		toODialect(writer);
 	}
 

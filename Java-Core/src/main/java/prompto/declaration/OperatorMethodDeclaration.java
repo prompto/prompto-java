@@ -28,7 +28,7 @@ public class OperatorMethodDeclaration extends ConcreteMethodDeclaration impleme
 		
 	}	
 
-	protected void toPDialect(CodeWriter writer) {
+	protected void toSDialect(CodeWriter writer) {
 		writer.append("def operator ");
 		writer.append(operator.getToken());
 		writer.append(" (");
