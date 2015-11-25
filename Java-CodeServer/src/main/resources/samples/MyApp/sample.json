@@ -2,6 +2,7 @@
 	"name" : "MyApp",
 	"version" : "1.0.0",
 	"description" : "A killer app!",
-	"entryPoint" : "printHelloWorld",
-	"imageResource" : "MyApp.png"
+	"entryPoint" : "printHelloMyApp",
+	"imageResource" : "MyApp.png",
+	"codeResource" : "MyApp.pec"
 }

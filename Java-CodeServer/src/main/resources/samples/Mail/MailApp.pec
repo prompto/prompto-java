@@ -1,0 +1,2 @@
+define printHelloMail as method receiving Text{} options doing:
+    print "Hello Mail!"

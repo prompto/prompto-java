@@ -2,6 +2,7 @@
 	"name" : "Mail",
 	"version" : "1.0.0",
 	"description" : "Manage mails",
-	"entryPoint" : "printHelloWorld",
-	"imageResource" : "MailApp.png"
+	"entryPoint" : "printHelloMail",
+	"imageResource" : "MailApp.png",
+	"codeResource" : "MailApp.pec"
 }

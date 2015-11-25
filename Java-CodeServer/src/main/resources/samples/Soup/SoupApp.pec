@@ -1,0 +1,2 @@
+define printHelloSoup as method receiving Text{} options doing:
+    print "Hello Soup!"
