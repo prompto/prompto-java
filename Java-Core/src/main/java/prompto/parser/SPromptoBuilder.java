@@ -214,6 +214,7 @@ import prompto.type.BooleanType;
 import prompto.type.CategoryType;
 import prompto.type.CharacterType;
 import prompto.type.CodeType;
+import prompto.type.DateTimeType;
 import prompto.type.DateType;
 import prompto.type.DecimalType;
 import prompto.type.DictType;
@@ -821,7 +822,7 @@ public class SPromptoBuilder extends SParserBaseListener {
 	
 	@Override
 	public void exitDateTimeType(DateTimeTypeContext ctx) {
-		setNodeValue(ctx, TextType.instance());
+		setNodeValue(ctx, DateTimeType.instance());
 	}
 	
 	@Override
