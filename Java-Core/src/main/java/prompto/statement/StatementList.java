@@ -77,7 +77,11 @@ public class StatementList extends LinkedList<IStatement> {
 			for(IStatement statement : this) {
 				if(!(statement instanceof JavaNativeCall))
 					continue;
+				// TODO: ensure returnType is registered prior to the below 
 				IType type = ((JavaNativeCall)statement).checkNative(context, returnType);
+				// TODO: remove the below workaround for unregistered native categories
+				if(type==null)
+					type = returnType;
 				if(type!=VoidType.instance())
 					types.put(type.getId(), type);
 			}
