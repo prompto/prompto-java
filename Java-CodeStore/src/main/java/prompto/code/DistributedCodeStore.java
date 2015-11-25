@@ -158,11 +158,15 @@ public class DistributedCodeStore extends BaseCodeStore {
 	
 	@Override
 	public void store(IDeclaration declaration, Dialect dialect, Version version) throws PromptoError {
-		Context context = Context.newGlobalContext();
-		List<String> categories = Arrays.asList("Declaration", declaration.getType(null).getName());
-		IStorable storable = store.newStorable(categories); 
-		populate(context, storable, declaration, dialect, version);
-		store.store(context, storable);
+		if(declaration instanceof MethodDeclarationMap) {
+			for(IDeclaration method : ((MethodDeclarationMap)declaration).values())
+				store(method, dialect, version);
+		} else {
+			List<String> categories = Arrays.asList("Declaration", declaration.getType(context).getName());
+			IStorable storable = store.newStorable(categories); 
+			populate(context, storable, declaration, dialect, version);
+			store.store(context, storable);
+		}
 	}
 	
 	@Override
