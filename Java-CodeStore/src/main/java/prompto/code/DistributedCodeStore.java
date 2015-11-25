@@ -162,7 +162,7 @@ public class DistributedCodeStore extends BaseCodeStore {
 			for(IDeclaration method : ((MethodDeclarationMap)declaration).values())
 				store(method, dialect, version);
 		} else {
-			List<String> categories = Arrays.asList("Declaration", declaration.getType(context).getName());
+			List<String> categories = Arrays.asList("Declaration", Utils.capitalizeFirst(declaration.getDeclarationType().name()));
 			IStorable storable = store.newStorable(categories); 
 			populate(context, storable, declaration, dialect, version);
 			store.store(context, storable);

@@ -292,7 +292,9 @@ public final class MemStore implements IStore {
 		public void setData(String name, Object value) {
 			if(document==null)
 				document = newDocument();
-			if(value instanceof StorableDocument)
+			if(value==null)
+				document.setMember(null, new Identifier(name), null);
+			else if(value instanceof StorableDocument)
 				document.setMember(null, new Identifier(name), ((StorableDocument)value).document);
 			else if(value instanceof IValue)
 				document.setMember(null, new Identifier(name), (IValue)value);
