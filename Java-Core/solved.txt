@@ -1,10 +1,11 @@
 deadly diamond
 constructor
-portability
+singleton
+tuples
+mutability
 open/close
 store/fetch
-send/receive
-passive objects/runtime polymorphism
 native types: date, xml, json
-patterns
-passive/active objects
+runtime polymorphism
+documents
+portability

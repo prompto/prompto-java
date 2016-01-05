@@ -17,6 +17,7 @@ null member is empty
 pass/empty statement
 
 language:
+send/receive
 sentence/verb
 method as attribute, AnyMethod
 pattern literals
