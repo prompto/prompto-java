@@ -100,7 +100,7 @@ define Error as enumerated category with attributes name and text, and symbols:
 	READ_WRITE with "Read/write failed!" as text
 define now as native method returning DateTime doing:
 	Java: return org.joda.time.DateTime.now();
-	C#: return System.DateTime.Now;
+	C#: return System.DateTimeOffset.Now;
 	Python2: return datetime.utcnow() from module: datetime
 	Python3: return datetime.utcnow() from module: datetime
 	JavaScript: return Date.now();

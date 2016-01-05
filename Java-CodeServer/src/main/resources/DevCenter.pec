@@ -1,7 +1,7 @@
-define codeFormat as storable Text attribute
-define codeBody as storable Text attribute
+define dialect as storable Text attribute
+define body as storable Text attribute
 
-define Declaration as storable category with attributes name, version, codeFormat and codeBody
+define Declaration as storable category with attributes name, version, dialect and body
 
 define memberDeclarations as storable Declaration[] attribute
 
@@ -31,7 +31,7 @@ define getAllProjects as method doing:
 define getProjectDeclarations as method receiving dbId doing:
 	project = fetch one Project where dbId = dbId
 	// use this opportunity to keep track of latest projects
-	dev = getHttpUser
-	session = CodingSession with dev as user, project as project and now as lastOpened 
+	user = getHttpUser
+	session = CodingSession with user as user, project as project and now as lastOpened 
 	store session
 	return project.memberDeclarations

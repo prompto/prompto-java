@@ -1,4 +1,3 @@
-// generated: 2015-10-04T20:28:15.875
 package prompto.library.e;
 
 import org.junit.After;
@@ -21,6 +20,11 @@ public class TestInternet extends BaseEParserTest {
 	@After
 	public void after() {
 		Out.restore();
+	}
+
+	@Test
+	public void testServer() throws Exception {
+		runTests("internet/server.pec");
 	}
 
 	@Test

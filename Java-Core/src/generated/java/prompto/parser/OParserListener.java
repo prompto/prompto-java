@@ -3465,6 +3465,16 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitOperatorModulo(@NotNull OParser.OperatorModuloContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link OParser#new_token}.
+	 * @param ctx the parse tree
+	 */
+	void enterNew_token(@NotNull OParser.New_tokenContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#new_token}.
+	 * @param ctx the parse tree
+	 */
+	void exitNew_token(@NotNull OParser.New_tokenContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link OParser#key_token}.
 	 * @param ctx the parse tree
 	 */
@@ -3632,6 +3642,16 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitJavascript_this_expression(@NotNull OParser.Javascript_this_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#javascript_new_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterJavascript_new_expression(@NotNull OParser.Javascript_new_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#javascript_new_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitJavascript_new_expression(@NotNull OParser.Javascript_new_expressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code JavaScriptMethodExpression}
 	 * labeled alternative in {@link OParser#javascript_selector_expression}.
@@ -4201,6 +4221,16 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitJava_this_expression(@NotNull OParser.Java_this_expressionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link OParser#java_new_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterJava_new_expression(@NotNull OParser.Java_new_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#java_new_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitJava_new_expression(@NotNull OParser.Java_new_expressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code JavaMethodExpression}
 	 * labeled alternative in {@link OParser#java_selector_expression}.
 	 * @param ctx the parse tree
@@ -4464,6 +4494,16 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCsharp_this_expression(@NotNull OParser.Csharp_this_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#csharp_new_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterCsharp_new_expression(@NotNull OParser.Csharp_new_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#csharp_new_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitCsharp_new_expression(@NotNull OParser.Csharp_new_expressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code CSharpMethodExpression}
 	 * labeled alternative in {@link OParser#csharp_selector_expression}.

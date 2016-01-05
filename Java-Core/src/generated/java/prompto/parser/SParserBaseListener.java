@@ -3557,6 +3557,18 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNew_token(@NotNull SParser.New_tokenContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNew_token(@NotNull SParser.New_tokenContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterKey_token(@NotNull SParser.Key_tokenContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -3720,6 +3732,18 @@ public class SParserBaseListener implements SParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitJavascript_this_expression(@NotNull SParser.Javascript_this_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterJavascript_new_expression(@NotNull SParser.Javascript_new_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJavascript_new_expression(@NotNull SParser.Javascript_new_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -4313,6 +4337,18 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterJava_new_expression(@NotNull SParser.Java_new_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJava_new_expression(@NotNull SParser.Java_new_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterJavaMethodExpression(@NotNull SParser.JavaMethodExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -4584,6 +4620,18 @@ public class SParserBaseListener implements SParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCsharp_this_expression(@NotNull SParser.Csharp_this_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCsharp_new_expression(@NotNull SParser.Csharp_new_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCsharp_new_expression(@NotNull SParser.Csharp_new_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
