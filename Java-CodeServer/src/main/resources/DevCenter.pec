@@ -1,8 +1,15 @@
-define Project as category with attributes name, version, description and image 
+define codeFormat as storable Text attribute
+define codeBody as storable Text attribute
+
+define Declaration as storable category with attributes name, version, codeFormat and codeBody
+
+define memberDeclarations as storable Declaration[] attribute
+
+define Project as storable category with attributes name, version, description, image and memberDeclarations
 
 define Library as Project
 define Service as Project
-define Script as Project 
+define Script as Project
 
 define entryPoint as storable Text attribute
 
@@ -11,7 +18,7 @@ define Application as Project with attribute entryPoint
 define project as storable Project attribute
 define lastOpened as storable DateTime attribute
 
-define CodingSession as category with attributes user, project and lastOpened
+define CodingSession as storable category with attributes user, project and lastOpened
 
 define getRecentProjects as method receiving Integer count doing:
 	developer = getHttpUser
@@ -20,3 +27,11 @@ define getRecentProjects as method receiving Integer count doing:
 
 define getAllProjects as method doing:
 	return fetch all Project order by name
+
+define getProjectDeclarations as method receiving dbId doing:
+	project = fetch one Project where dbId = dbId
+	// use this opportunity to keep track of latest projects
+	dev = getHttpUser
+	session = CodingSession with dev as user, project as project and now as lastOpened 
+	store session
+	return project.memberDeclarations
