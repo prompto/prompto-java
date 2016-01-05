@@ -30,6 +30,14 @@ public class DateTimeType extends NativeType {
 	public Class<?> toJavaClass() {
 		return DateTime.class;
 	}
+	
+	@Override
+	public IValue convertJavaValueToPromptoValue(Object value) {
+        if (value instanceof org.joda.time.DateTime)
+            return new prompto.value.DateTime((org.joda.time.DateTime)value);
+        else
+        	return super.convertJavaValueToPromptoValue(value);
+	}
 
 	@Override
 	public boolean isAssignableTo(Context context, IType other) {

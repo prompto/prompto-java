@@ -41,7 +41,7 @@ public class BooleanType extends NativeType {
         if (value instanceof java.lang.Boolean)
             return Boolean.valueOf(((java.lang.Boolean)value).booleanValue());
         else
-            return (IValue)value; // TODO for now
+        	return super.convertJavaValueToPromptoValue(value);
 	}
 	
 	@Override
