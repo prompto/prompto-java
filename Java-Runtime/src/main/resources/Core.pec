@@ -98,3 +98,14 @@ define Error as enumerated category with attributes name and text, and symbols:
 	NOT_MUTABLE with "Not a mutable object!" as text
 	NOT_STORABLE with "Not a storable object!" as text
 	READ_WRITE with "Read/write failed!" as text
+define now as native method returning DateTime doing:
+	Java: return org.joda.time.DateTime.now();
+	C#: return System.DateTime.Now;
+	Python2: return datetime.utcnow() from module: datetime
+	Python3: return datetime.utcnow() from module: datetime
+	JavaScript: return Date.now();
+
+define "now is a DateTime" as test method doing: 
+	a = now
+and verifying: 
+	a is a DateTime 
