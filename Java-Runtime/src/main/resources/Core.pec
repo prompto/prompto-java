@@ -103,7 +103,7 @@ define now as native method returning DateTime doing:
 	C#: return System.DateTimeOffset.Now;
 	Python2: return datetime.utcnow() from module: datetime
 	Python3: return datetime.utcnow() from module: datetime
-	JavaScript: return Date.now();
+	JavaScript: return new Date();
 
 define "now is a DateTime" as test method doing: 
 	a = now
