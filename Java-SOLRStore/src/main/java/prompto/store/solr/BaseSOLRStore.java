@@ -142,7 +142,8 @@ abstract class BaseSOLRStore implements IStore {
 		if(type instanceof ListType) {
 			options.put("multiValued", true);
 			type = ((ListType)type).getItemType();
-		} else if(type instanceof CategoryType)
+		}
+		if(type instanceof CategoryType)
 			type = getDbIdType();
 		String typeName = type.getName().toLowerCase();
 		addField(column.getName(), typeName, options);
