@@ -96,4 +96,20 @@ public class TestQuery extends BaseSOLRTest {
 		assertEquals("John", result.getData("name"));
 	}
 
+	@Test
+	public void testDeleteOne() throws Exception {
+		SolrInputDocument doc = new SolrInputDocument();
+		UUID uuid = UUID.randomUUID();
+		doc.addField("dbId", uuid);
+		doc.addField("name", "John");
+		store.addDocument(doc);
+		store.commit();
+		// Test the basics
+		store.deleteOne(uuid);
+		store.commit();
+		String query = "fetch one where name = \"John\"";
+		IStored result = fetchOne(query);
+		assertNull(result);
+	}
+
 }

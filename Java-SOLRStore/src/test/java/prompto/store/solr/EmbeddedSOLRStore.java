@@ -3,6 +3,7 @@ package prompto.store.solr;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -16,6 +17,9 @@ import org.apache.solr.core.CoreDescriptor;
 import org.apache.solr.core.SolrCore;
 import org.apache.solr.schema.IndexSchema;
 import org.apache.solr.schema.SchemaField;
+
+import prompto.error.InternalError;
+import prompto.error.PromptoError;
 
 public class EmbeddedSOLRStore extends BaseSOLRStore {
 
@@ -100,6 +104,24 @@ public class EmbeddedSOLRStore extends BaseSOLRStore {
 	}
 
 	@Override
+	public void deleteOne(Object dbId) throws PromptoError {
+		try {
+			server.deleteById(String.valueOf(dbId));
+		} catch(IOException | SolrServerException e) {
+			throw new InternalError(e);
+		}
+	}
+	
+	@Override
+	public void deleteAll() throws PromptoError {
+		try {
+			server.deleteByQuery("*:*");
+		} catch(IOException | SolrServerException e) {
+			throw new InternalError(e);
+		}
+	}
+	
+	@Override
 	public void commit() throws SolrServerException, IOException {
 		server.commit();
 	}
@@ -128,4 +150,16 @@ public class EmbeddedSOLRStore extends BaseSOLRStore {
 		SchemaField field = schema.getField(fieldName);
 		return field.getType().getTypeName() + (field.multiValued() ? "[]" : "");
 	}
+	
+	@Override
+	public void dropField(String fieldName) throws SolrServerException, IOException {
+		IndexSchema schema = core.getLatestSchema();
+		Object lock = schema.getSchemaUpdateLock();
+		synchronized(lock) {
+			schema = schema.deleteFields(Arrays.asList(fieldName));
+			schema.refreshAnalyzers();
+		}
+		core.setLatestSchema(schema);
+	}
+
 }

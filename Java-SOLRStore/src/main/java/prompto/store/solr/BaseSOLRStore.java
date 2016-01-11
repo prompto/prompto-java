@@ -18,9 +18,10 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 
 import prompto.declaration.AttributeDeclaration;
-import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
+import prompto.error.InternalError;
 import prompto.error.ReadWriteError;
+import prompto.error.InvalidDataError;
 import prompto.expression.IExpression;
 import prompto.grammar.OrderByClause;
 import prompto.grammar.OrderByClauseList;
@@ -90,21 +91,25 @@ abstract class BaseSOLRStore implements IStore {
 	ConcurrentMap<String, IType> columnTypes = new ConcurrentHashMap<>();
 	
 	@Override
-	public IType getColumnType(String fieldName) {
+	public IType getColumnType(String fieldName) throws PromptoError {
 		IType type = columnTypes.get(fieldName);
-		if(type==null) {
+		if(type==null) try {
 			String typeName = getColumnTypeName(fieldName);
 			type = typeMap.get(typeName);
 			columnTypes.put(fieldName, type);
+		} catch(Exception e) {
+			throw new InternalError(e);
 		}
 		return type;
 	}
 	
-	private String getColumnTypeName(String fieldName) {
+	private String getColumnTypeName(String fieldName) throws PromptoError {
 		String typeName = columnTypeNames.get(fieldName);
-		if(typeName==null) {
+		if(typeName==null) try {
 			typeName = getFieldType(fieldName);
 			columnTypeNames.put(fieldName, typeName);
+		} catch(Exception e) {
+			throw new InternalError(e);
 		}
 		return typeName;
 	}
@@ -127,12 +132,15 @@ abstract class BaseSOLRStore implements IStore {
 	}
 	
 	@Override
-	public void createOrUpdateColumns(Collection<AttributeDeclaration> columns) {
-		for(AttributeDeclaration column : columns)
+	public void createOrUpdateColumns(Collection<AttributeDeclaration> columns) throws PromptoError {
+		for(AttributeDeclaration column : columns) try {
 			createOrUpdateColumn(column);
+		} catch(Exception e) {
+			throw new InternalError(e);
+		}
 	}
 	
-	private void createOrUpdateColumn(AttributeDeclaration column) {
+	private void createOrUpdateColumn(AttributeDeclaration column) throws SolrServerException, IOException {
 		if(hasField(column.getName()))
 			return;
 		Map<String, Object> options = new HashMap<>();
@@ -304,10 +312,11 @@ abstract class BaseSOLRStore implements IStore {
 
 	public abstract void commit() throws SolrServerException, IOException;
 
-	public abstract boolean hasField(String fieldName);
+	public abstract boolean hasField(String fieldName)throws SolrServerException, IOException;
 	
-	public abstract void addField(String fieldName, String fieldType, Map<String, Object> options);
+	public abstract void addField(String fieldName, String fieldType, Map<String, Object> options) throws SolrServerException, IOException;
 
-	public abstract String getFieldType(String fieldName);
+	public abstract String getFieldType(String fieldName) throws SolrServerException, IOException;
 
+	public abstract void dropField(String fieldName) throws SolrServerException, IOException;
 }

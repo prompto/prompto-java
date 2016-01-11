@@ -22,7 +22,9 @@ public interface IStore {
 	IStoredIterator fetchMany(Context context, CategoryType type, 
 			IExpression start, IExpression end, 
 			IExpression filter, OrderByClauseList orderBy) throws PromptoError;
-	void createOrUpdateColumns(Collection<AttributeDeclaration> columns);
-	IType getColumnType(String name);
+	void deleteOne(Object dbId) throws PromptoError;
+	void deleteAll() throws PromptoError;
+	void createOrUpdateColumns(Collection<AttributeDeclaration> columns) throws PromptoError;
+	IType getColumnType(String name) throws PromptoError;
 	Binary fetchBinary(String dbId, String attr) throws PromptoError;
 }

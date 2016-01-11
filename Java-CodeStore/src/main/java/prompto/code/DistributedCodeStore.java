@@ -297,7 +297,7 @@ public class DistributedCodeStore extends BaseCodeStore {
 	}
 
 	@Override
-	public void synchronizeSchema() {
+	public void synchronizeSchema() throws PromptoError {
 		List<AttributeDeclaration> columns = new ArrayList<>();
 		collectStorableAttributes(columns);
 		store.createOrUpdateColumns(columns);

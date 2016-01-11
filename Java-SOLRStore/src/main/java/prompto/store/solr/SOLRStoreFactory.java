@@ -14,6 +14,9 @@ public class SOLRStoreFactory implements IStoreFactory {
 	public IStore newStore(String[] args, Type type) throws Exception {
 		boolean embedded = false;
 		String root = null;
+		String protocol = "http";
+		String server = null;
+		int port = 8983;
 		
 		final String argKey = "-" + type.name().toLowerCase() + "-solr" + "-";
 		for(int i=0;i<args.length;i++) {
@@ -24,15 +27,21 @@ public class SOLRStoreFactory implements IStoreFactory {
 				embedded = true;
 			else if(arg.equalsIgnoreCase("root"))
 				root = args[++i];
+			else if(arg.equalsIgnoreCase("protocol"))
+				protocol = args[++i];
+			else if(arg.equalsIgnoreCase("server"))
+				server = args[++i];
+			else if(arg.equalsIgnoreCase("port"))
+				port = Integer.decode(args[++i]);
 		}
 		if(embedded)
 			return newEmbeddedSOLRStore(root, type);
 		else
-			return newRemoteSOLRStore(type);
+			return newRemoteSOLRStore(protocol, server, port, type);
 	}
 
-	private IStore newRemoteSOLRStore(Type type) {
-		return new RemoteSOLRStore(type);
+	private IStore newRemoteSOLRStore(String protocol, String host, int port, Type type) {
+		return new RemoteSOLRStore(protocol, host, port, type);
 	}
 
 	private IStore newEmbeddedSOLRStore(String root, Type type) throws Exception {

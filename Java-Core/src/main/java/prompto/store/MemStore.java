@@ -83,6 +83,16 @@ public final class MemStore implements IStore {
 	}
 	
 	@Override
+	public void deleteOne(Object dbId) throws PromptoError {
+		documents.remove(dbId);
+	}
+	
+	@Override
+	public void deleteAll() throws PromptoError {
+		documents = new HashMap<>();
+	}
+	
+	@Override
 	public IStored fetchOne(Context context, CategoryType type, IExpression filter) throws PromptoError {
 		for(StorableDocument doc : documents.values()) {
 			if(matches(context, doc, type, filter))
