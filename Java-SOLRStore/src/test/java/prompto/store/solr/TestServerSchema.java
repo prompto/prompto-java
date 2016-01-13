@@ -17,7 +17,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import prompto.error.PromptoError;
 import prompto.value.Blob;
 import prompto.value.Image;
 
@@ -27,22 +26,15 @@ public class TestServerSchema {
 	
 	@Before
 	public void before() throws Exception {
-		store = new RemoteSOLRStore("http", "192.168.1.12", 8983, "TestCore");
-		cleanup();
+		store = new RemoteSOLRStore("http", "192.168.1.12", 8983, "TestStore");
+		store.dropCoreIfExists();
+		store.createCoreIfRequired();
 	}
 	
-	private void cleanup() throws SolrServerException, IOException, PromptoError {
-		store.dropField("version");
-		store.dropField("infos");
-		store.dropField("data");
-		store.dropField("test");
-		store.deleteAll();
-		store.commit();
-	}
-
 	@After
 	public void after() throws Exception {
-		cleanup();
+		store.dropUserFields();
+		store.dropCoreIfExists();
 	}
 	
 	@Test
@@ -173,36 +165,36 @@ public class TestServerSchema {
 		Map<String, Object> options = new HashMap<>();
 		options.put("indexed", "true");
 		options.put("stored", "true");
-		store.addField("test", "version", options);
+		store.addField("version", "version", options);
 		String[] sorted = { "2.2.2", "2.2.10", "2.10.2", "10.2.2" }; 
 		String[] reversed = { sorted[3], sorted[2], sorted[1], sorted[0] }; 
 		String[] unsorted = { sorted[2], sorted[1], sorted[3], sorted[0] }; 
 		for(String version : unsorted) {
 			SolrInputDocument doc = new SolrInputDocument();
 			doc.addField("dbId", UUID.randomUUID());
-			doc.addField("test", version);
+			doc.addField("version", version);
 			store.addDocument(doc);
 		}
 		store.commit();
 		// Test ascending sort
 		SolrQuery query = new SolrQuery();
 		query.setQuery("*:*");
-		query.addSort("test", ORDER.asc);
+		query.addSort("version", ORDER.asc);
 		QueryResponse resp = store.query(query);
 		assertEquals(sorted.length, resp.getResults().size());
 		for(int i=0;i<sorted.length;i++) {
 			SolrDocument result = resp.getResults().get(i);
-			assertEquals(sorted[i], result.getFieldValue("test"));
+			assertEquals(sorted[i], result.getFieldValue("version"));
 		}
 		// Test descending sort
 		query = new SolrQuery();
 		query.setQuery("*:*");
-		query.addSort("test", ORDER.desc);
+		query.addSort("version", ORDER.desc);
 		resp = store.query(query);
 		assertEquals(reversed.length, resp.getResults().size());
 		for(int i=0; i<reversed.length;i++) {
 			SolrDocument result = resp.getResults().get(i);
-			assertEquals(reversed[i], result.getFieldValue("test"));
+			assertEquals(reversed[i], result.getFieldValue("version"));
 		}
 	}
 	
@@ -211,10 +203,10 @@ public class TestServerSchema {
 		Map<String, Object> options = new HashMap<>();
 		options.put("indexed", true);
 		options.put("stored", true);
-		store.addField("test", "time", options);
+		store.addField("time", "time", options);
 		SolrInputDocument doc = new SolrInputDocument();
 		doc.addField("dbId", UUID.randomUUID());
-		doc.addField("test", "13:02:17.4578");
+		doc.addField("time", "13:02:17.4578");
 		store.addDocument(doc);
 		store.commit();
 		// Test the basics
@@ -225,7 +217,7 @@ public class TestServerSchema {
 		assertEquals(1, resp.getResults().size());
 		SolrDocument result = resp.getResults().get(0);
 		assertNotNull(result);
-		assertEquals("13:02:17.457800", result.getFieldValue("test"));
+		assertEquals("13:02:17.457800", result.getFieldValue("time"));
 	}
 	
 	@Test
@@ -233,36 +225,36 @@ public class TestServerSchema {
 		Map<String, Object> options = new HashMap<>();
 		options.put("indexed", "true");
 		options.put("stored", "true");
-		store.addField("test", "time", options);
+		store.addField("time", "time", options);
 		String[] sorted = { "00:33:15", "12:43:15", "15:30:12", "18:43:16" }; 
 		String[] reversed = { sorted[3], sorted[2], sorted[1], sorted[0] }; 
 		String[] unsorted = { sorted[2], sorted[1], sorted[3], sorted[0] }; 
-		for(String version : unsorted) {
+		for(String time : unsorted) {
 			SolrInputDocument doc = new SolrInputDocument();
 			doc.addField("dbId", UUID.randomUUID());
-			doc.addField("test", version);
+			doc.addField("time", time);
 			store.addDocument(doc);
 		}
 		store.commit();
 		// Test ascending sort
 		SolrQuery query = new SolrQuery();
 		query.setQuery("*:*");
-		query.addSort("test", ORDER.asc);
+		query.addSort("time", ORDER.asc);
 		QueryResponse resp = store.query(query);
 		assertEquals(sorted.length, resp.getResults().size());
 		for(int i=0;i<sorted.length;i++) {
 			SolrDocument result = resp.getResults().get(i);
-			assertEquals(sorted[i], result.getFieldValue("test"));
+			assertEquals(sorted[i], result.getFieldValue("time"));
 		}
 		// Test descending sort
 		query = new SolrQuery();
 		query.setQuery("*:*");
-		query.addSort("test", ORDER.desc);
+		query.addSort("time", ORDER.desc);
 		resp = store.query(query);
 		assertEquals(reversed.length, resp.getResults().size());
 		for(int i=0; i<reversed.length;i++) {
 			SolrDocument result = resp.getResults().get(i);
-			assertEquals(reversed[i], result.getFieldValue("test"));
+			assertEquals(reversed[i], result.getFieldValue("time"));
 		}
 	}
 
@@ -271,10 +263,10 @@ public class TestServerSchema {
 		Map<String, Object> options = new HashMap<>();
 		options.put("indexed", true);
 		options.put("stored", true);
-		store.addField("test", "date", options);
+		store.addField("date", "date", options);
 		SolrInputDocument doc = new SolrInputDocument();
 		doc.addField("dbId", UUID.randomUUID());
-		doc.addField("test", "2015-10-22");
+		doc.addField("date", "2015-10-22");
 		store.addDocument(doc);
 		store.commit();
 		// Test the basics
@@ -285,7 +277,7 @@ public class TestServerSchema {
 		assertEquals(1, resp.getResults().size());
 		SolrDocument result = resp.getResults().get(0);
 		assertNotNull(result);
-		assertEquals("2015-10-22", result.getFieldValue("test"));
+		assertEquals("2015-10-22", result.getFieldValue("date"));
 	}
 	
 	@Test
@@ -293,36 +285,36 @@ public class TestServerSchema {
 		Map<String, Object> options = new HashMap<>();
 		options.put("indexed", "true");
 		options.put("stored", "true");
-		store.addField("test", "date", options);
+		store.addField("date", "date", options);
 		String[] sorted = { "2010-02-12", "2013-08-17", "2222-12-12", "3333-01-01" }; 
 		String[] reversed = { sorted[3], sorted[2], sorted[1], sorted[0] }; 
 		String[] unsorted = { sorted[2], sorted[1], sorted[3], sorted[0] }; 
-		for(String version : unsorted) {
+		for(String date : unsorted) {
 			SolrInputDocument doc = new SolrInputDocument();
 			doc.addField("dbId", UUID.randomUUID());
-			doc.addField("test", version);
+			doc.addField("date", date);
 			store.addDocument(doc);
 		}
 		store.commit();
 		// Test ascending sort
 		SolrQuery query = new SolrQuery();
 		query.setQuery("*:*");
-		query.addSort("test", ORDER.asc);
+		query.addSort("date", ORDER.asc);
 		QueryResponse resp = store.query(query);
 		assertEquals(sorted.length, resp.getResults().size());
 		for(int i=0;i<sorted.length;i++) {
 			SolrDocument result = resp.getResults().get(i);
-			assertEquals(sorted[i], result.getFieldValue("test"));
+			assertEquals(sorted[i], result.getFieldValue("date"));
 		}
 		// Test descending sort
 		query = new SolrQuery();
 		query.setQuery("*:*");
-		query.addSort("test", ORDER.desc);
+		query.addSort("date", ORDER.desc);
 		resp = store.query(query);
 		assertEquals(reversed.length, resp.getResults().size());
 		for(int i=0; i<reversed.length;i++) {
 			SolrDocument result = resp.getResults().get(i);
-			assertEquals(reversed[i], result.getFieldValue("test"));
+			assertEquals(reversed[i], result.getFieldValue("date"));
 		}
 	}
 
@@ -331,10 +323,10 @@ public class TestServerSchema {
 		Map<String, Object> options = new HashMap<>();
 		options.put("indexed", true);
 		options.put("stored", true);
-		store.addField("test", "datetime", options);
+		store.addField("datetime", "datetime", options);
 		SolrInputDocument doc = new SolrInputDocument();
 		doc.addField("dbId", UUID.randomUUID());
-		doc.addField("test", "2015-10-22T15:02:17Z");
+		doc.addField("datetime", "2015-10-22T15:02:17Z");
 		store.addDocument(doc);
 		store.commit();
 		// Test the basics
@@ -345,7 +337,7 @@ public class TestServerSchema {
 		assertEquals(1, resp.getResults().size());
 		SolrDocument result = resp.getResults().get(0);
 		assertNotNull(result);
-		assertEquals("2015-10-22T15:02:17Z", result.getFieldValue("test"));
+		assertEquals("2015-10-22T15:02:17Z", result.getFieldValue("datetime"));
 	}
 	
 	@Test
@@ -353,36 +345,36 @@ public class TestServerSchema {
 		Map<String, Object> options = new HashMap<>();
 		options.put("indexed", "true");
 		options.put("stored", "true");
-		store.addField("test", "datetime", options);
+		store.addField("datetime", "datetime", options);
 		String[] sorted = { "2013-08-17T15:02:17Z", "2015-10-22T15:02:17Z", "2222-12-12T15:02:17Z", "3333-01-01T15:02:17Z" }; 
 		String[] reversed = { sorted[3], sorted[2], sorted[1], sorted[0] }; 
 		String[] unsorted = { sorted[2], sorted[1], sorted[3], sorted[0] }; 
-		for(String version : unsorted) {
+		for(String datetime : unsorted) {
 			SolrInputDocument doc = new SolrInputDocument();
 			doc.addField("dbId", UUID.randomUUID());
-			doc.addField("test", version);
+			doc.addField("datetime", datetime);
 			store.addDocument(doc);
 		}
 		store.commit();
 		// Test ascending sort
 		SolrQuery query = new SolrQuery();
 		query.setQuery("*:*");
-		query.addSort("test", ORDER.asc);
+		query.addSort("datetime", ORDER.asc);
 		QueryResponse resp = store.query(query);
 		assertEquals(sorted.length, resp.getResults().size());
 		for(int i=0;i<sorted.length;i++) {
 			SolrDocument result = resp.getResults().get(i);
-			assertEquals(sorted[i], result.getFieldValue("test"));
+			assertEquals(sorted[i], result.getFieldValue("datetime"));
 		}
 		// Test descending sort
 		query = new SolrQuery();
 		query.setQuery("*:*");
-		query.addSort("test", ORDER.desc);
+		query.addSort("datetime", ORDER.desc);
 		resp = store.query(query);
 		assertEquals(reversed.length, resp.getResults().size());
 		for(int i=0; i<reversed.length;i++) {
 			SolrDocument result = resp.getResults().get(i);
-			assertEquals(reversed[i], result.getFieldValue("test"));
+			assertEquals(reversed[i], result.getFieldValue("datetime"));
 		}
 	}
 
@@ -391,36 +383,36 @@ public class TestServerSchema {
 		Map<String, Object> options = new HashMap<>();
 		options.put("indexed", "true");
 		options.put("stored", "true");
-		store.addField("test", "datetime", options);
+		store.addField("datetime", "datetime", options);
 		String[] sorted = { "2013-08-17T15:02:17+01:00", "2013-08-17T15:02:17Z", "2013-08-17T15:02:17-01:00", "2013-08-17T17:02:18+01:00" }; 
 		String[] reversed = { sorted[3], sorted[2], sorted[1], sorted[0] }; 
 		String[] unsorted = { sorted[2], sorted[1], sorted[3], sorted[0] }; 
-		for(String version : unsorted) {
+		for(String datetime : unsorted) {
 			SolrInputDocument doc = new SolrInputDocument();
 			doc.addField("dbId", UUID.randomUUID());
-			doc.addField("test", version);
+			doc.addField("datetime", datetime);
 			store.addDocument(doc);
 		}
 		store.commit();
 		// Test ascending sort
 		SolrQuery query = new SolrQuery();
 		query.setQuery("*:*");
-		query.addSort("test", ORDER.asc);
+		query.addSort("datetime", ORDER.asc);
 		QueryResponse resp = store.query(query);
 		assertEquals(sorted.length, resp.getResults().size());
 		for(int i=0;i<sorted.length;i++) {
 			SolrDocument result = resp.getResults().get(i);
-			assertEquals(sorted[i], result.getFieldValue("test"));
+			assertEquals(sorted[i], result.getFieldValue("datetime"));
 		}
 		// Test descending sort
 		query = new SolrQuery();
 		query.setQuery("*:*");
-		query.addSort("test", ORDER.desc);
+		query.addSort("datetime", ORDER.desc);
 		resp = store.query(query);
 		assertEquals(reversed.length, resp.getResults().size());
 		for(int i=0; i<reversed.length;i++) {
 			SolrDocument result = resp.getResults().get(i);
-			assertEquals(reversed[i], result.getFieldValue("test"));
+			assertEquals(reversed[i], result.getFieldValue("datetime"));
 		}
 	}
 

@@ -306,6 +306,10 @@ abstract class BaseSOLRStore implements IStore {
 		return new StorableDocument(categories);
 	}
 	
+	public abstract void createCoreIfRequired() throws SolrServerException, IOException;
+	
+	public abstract void dropCoreIfExists() throws SolrServerException, IOException;
+
 	public abstract QueryResponse query(SolrQuery params) throws SolrServerException, IOException;
 
 	public abstract void addDocument(SolrInputDocument doc) throws SolrServerException, IOException;

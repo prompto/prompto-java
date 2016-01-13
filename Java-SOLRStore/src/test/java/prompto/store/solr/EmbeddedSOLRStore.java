@@ -24,12 +24,14 @@ import prompto.error.PromptoError;
 public class EmbeddedSOLRStore extends BaseSOLRStore {
 
 	File root;
+	String coreName;
 	CoreContainer container;
 	SolrCore core;
 	EmbeddedSolrServer server;
 
-	public EmbeddedSOLRStore(File root) {
+	public EmbeddedSOLRStore(File root, String coreName) {
 		this.root = root;
+		this.coreName = coreName;
 	}
 
 	public void startContainer() {
@@ -40,8 +42,15 @@ public class EmbeddedSOLRStore extends BaseSOLRStore {
 		}
 	}
 
-	public void startServerWithEmptyCore(String coreName) throws IOException {
-		if(server==null) {
+	public void startServerWithEmptyCore() throws SolrServerException, IOException {
+		createCoreIfRequired();
+		if(server==null)
+			server = new EmbeddedSolrServer(container, coreName);
+	}
+	
+	@Override
+	public void createCoreIfRequired() throws SolrServerException, IOException {
+		if(core==null) {
 			File coreDir = new File(root, coreName);
 			if(coreDir.exists())
 				delete(coreDir);
@@ -53,8 +62,13 @@ public class EmbeddedSOLRStore extends BaseSOLRStore {
 			copyResourceToFile("solr/update-script.js", new File(confDir, "update-script.js"));
 			CoreDescriptor cd = new CoreDescriptor(container, coreName, coreDir.getAbsolutePath());
 			core = container.create(cd);
-			server = new EmbeddedSolrServer(container, coreName);
 		}
+	}
+	
+	@Override
+	public void dropCoreIfExists() throws SolrServerException, IOException {
+		container.unload(coreName, true, true, true);
+		core = null;
 	}
 	
 	private void delete(File file) {

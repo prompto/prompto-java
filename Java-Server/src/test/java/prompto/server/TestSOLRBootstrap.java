@@ -25,7 +25,7 @@ public class TestSOLRBootstrap {
 		};
 		IStore codeStore = new SOLRStoreFactory().newStore(args, Type.CODE);
 		((EmbeddedSOLRStore)codeStore).startContainer();
-		((EmbeddedSOLRStore)codeStore).startServerWithEmptyCore(Type.CODE.name());
+		((EmbeddedSOLRStore)codeStore).startServerWithEmptyCore();
 		AppServer.bootstrap(codeStore, null, "test", Version.parse("1.0.0"));
 		assertEquals(codeStore.getDbIdType(), codeStore.getColumnType("dbId"));
 		assertEquals(TextType.instance(), codeStore.getColumnType("author"));

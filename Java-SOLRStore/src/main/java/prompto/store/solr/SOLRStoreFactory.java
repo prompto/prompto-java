@@ -48,13 +48,13 @@ public class SOLRStoreFactory implements IStoreFactory {
 		// this is test only, load class by name to avoid carrying SOLR jars with each executable
 		@SuppressWarnings("unchecked")
 		Class<? extends BaseSOLRStore> klass = (Class<? extends BaseSOLRStore>) Class.forName("prompto.store.solr.EmbeddedSOLRStore");
-		Constructor<? extends BaseSOLRStore> ctor = klass.getConstructor(File.class);
-		BaseSOLRStore store = ctor.newInstance(new File(root));
+		Constructor<? extends BaseSOLRStore> ctor = klass.getConstructor(File.class, String.class);
+		String coreName = Utils.capitalizeFirst(type.name()) + "Store";
+		BaseSOLRStore store = ctor.newInstance(new File(root), coreName);
 		Method method = klass.getDeclaredMethod("startContainer");
 		method.invoke(store);
-		method = klass.getDeclaredMethod("startServerWithEmptyCore", String.class);
-		String name = Utils.capitalizeFirst(type.name()) + "Store";
-		method.invoke(store, name);
+		method = klass.getDeclaredMethod("startServerWithEmptyCore");
+		method.invoke(store);
 		return store;
 	}
 }

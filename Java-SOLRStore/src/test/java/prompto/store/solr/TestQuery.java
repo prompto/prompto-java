@@ -33,7 +33,8 @@ public class TestQuery extends BaseSOLRTest {
 	
 	@Before
 	public void before() throws Exception {
-		startServerWithEmptyCore("TestQuery");
+		createStore("TestQuery");
+		store.startServerWithEmptyCore();
 		context = Context.newGlobalContext();
 		registerDbIdAttribute();
 		registerNameAttribute();

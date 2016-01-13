@@ -4,20 +4,15 @@ import java.io.File;
 import java.io.IOException;
 
 import org.junit.After;
-import org.junit.Before;
 
 public abstract class BaseSOLRTest {
 	
 	File root = new File("target/test-classes/solr-test");
-	EmbeddedSOLRStore store = new EmbeddedSOLRStore(root);
-			
-	@Before
-	public void startContainer() {
-		store.startContainer();
-	}
+	EmbeddedSOLRStore store;
 	
-	protected void startServerWithEmptyCore(String coreName) throws Exception {
-		store.startServerWithEmptyCore(coreName);
+	protected void createStore(String coreName) {
+		store = new EmbeddedSOLRStore(root, coreName);
+		store.startContainer();
 	}
 	
 	@After
