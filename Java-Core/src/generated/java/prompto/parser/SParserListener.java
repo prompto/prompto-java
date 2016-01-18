@@ -1981,6 +1981,18 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitBlobType(@NotNull SParser.BlobTypeContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code UUIDType}
+	 * labeled alternative in {@link SParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void enterUUIDType(@NotNull SParser.UUIDTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code UUIDType}
+	 * labeled alternative in {@link SParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void exitUUIDType(@NotNull SParser.UUIDTypeContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SParser#category_type}.
 	 * @param ctx the parse tree
 	 */

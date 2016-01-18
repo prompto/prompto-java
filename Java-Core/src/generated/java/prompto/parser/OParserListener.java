@@ -2051,6 +2051,18 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitBlobType(@NotNull OParser.BlobTypeContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code UUIDType}
+	 * labeled alternative in {@link OParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void enterUUIDType(@NotNull OParser.UUIDTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code UUIDType}
+	 * labeled alternative in {@link OParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void exitUUIDType(@NotNull OParser.UUIDTypeContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link OParser#category_type}.
 	 * @param ctx the parse tree
 	 */

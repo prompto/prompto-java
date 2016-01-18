@@ -135,6 +135,7 @@ import prompto.javascript.JavaScriptMethodExpression;
 import prompto.javascript.JavaScriptModule;
 import prompto.javascript.JavaScriptNativeCall;
 import prompto.javascript.JavaScriptNativeCategoryBinding;
+import prompto.javascript.JavaScriptNewExpression;
 import prompto.javascript.JavaScriptSelectorExpression;
 import prompto.javascript.JavaScriptStatement;
 import prompto.javascript.JavaScriptTextLiteral;
@@ -163,6 +164,8 @@ import prompto.parser.SParser;
 import prompto.parser.SParserBaseListener;
 import prompto.parser.SParser.BlobTypeContext;
 import prompto.parser.SParser.ImageTypeContext;
+import prompto.parser.SParser.Javascript_new_expressionContext;
+import prompto.parser.SParser.UUIDTypeContext;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -227,6 +230,7 @@ import prompto.type.NativeType;
 import prompto.type.SetType;
 import prompto.type.TextType;
 import prompto.type.TimeType;
+import prompto.type.UUIDType;
 import prompto.utils.AssertionList;
 import prompto.utils.ExpressionList;
 import prompto.utils.IdentifierList;
@@ -1397,6 +1401,12 @@ public class SPromptoBuilder extends SParserBaseListener {
 		JavaScriptModule module = this.<JavaScriptModule>getNodeValue(ctx.module);
 		stmt.setModule(module);
 		setNodeValue(ctx, stmt);
+	}
+	
+	@Override
+	public void exitJavascript_new_expression(Javascript_new_expressionContext ctx) {
+		JavaScriptMethodExpression exp = this.<JavaScriptMethodExpression>getNodeValue(ctx.javascript_method_expression());
+		setNodeValue(ctx, new JavaScriptNewExpression(exp));
 	}
 	
 	@Override
@@ -2575,6 +2585,11 @@ public class SPromptoBuilder extends SParserBaseListener {
 		Identifier item = this.<Identifier>getNodeValue(ctx.item);
 		items.add(item);
 		setNodeValue(ctx, items);
+	}
+	
+	@Override
+	public void exitUUIDType(UUIDTypeContext ctx) {
+		setNodeValue(ctx, UUIDType.instance());
 	}
 	
 	@Override

@@ -45,6 +45,11 @@ public class TestNative extends BaseEParserTest {
 	}
 
 	@Test
+	public void testNow() throws Exception {
+		checkOutput("native/now.pec");
+	}
+
+	@Test
 	public void testPrinter() throws Exception {
 		checkOutput("native/printer.pec");
 	}

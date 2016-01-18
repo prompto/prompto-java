@@ -2093,6 +2093,18 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterUUIDType(@NotNull SParser.UUIDTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUUIDType(@NotNull SParser.UUIDTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCategory_type(@NotNull SParser.Category_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}

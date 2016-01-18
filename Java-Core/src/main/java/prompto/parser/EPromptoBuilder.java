@@ -135,6 +135,7 @@ import prompto.javascript.JavaScriptMethodExpression;
 import prompto.javascript.JavaScriptModule;
 import prompto.javascript.JavaScriptNativeCall;
 import prompto.javascript.JavaScriptNativeCategoryBinding;
+import prompto.javascript.JavaScriptNewExpression;
 import prompto.javascript.JavaScriptSelectorExpression;
 import prompto.javascript.JavaScriptStatement;
 import prompto.javascript.JavaScriptTextLiteral;
@@ -225,6 +226,7 @@ import prompto.type.NativeType;
 import prompto.type.SetType;
 import prompto.type.TextType;
 import prompto.type.TimeType;
+import prompto.type.UUIDType;
 import prompto.utils.AssertionList;
 import prompto.utils.ExpressionList;
 import prompto.utils.IdentifierList;
@@ -1545,6 +1547,12 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
+	public void exitJavascript_new_expression(Javascript_new_expressionContext ctx) {
+		JavaScriptMethodExpression exp = this.<JavaScriptMethodExpression>getNodeValue(ctx.javascript_method_expression());
+		setNodeValue(ctx, new JavaScriptNewExpression(exp));
+	}
+	
+	@Override
 	public void exitJavascriptPrimaryExpression(JavascriptPrimaryExpressionContext ctx) {
 		JavaScriptExpression exp = this.<JavaScriptExpression>getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
@@ -2657,6 +2665,11 @@ public class EPromptoBuilder extends EParserBaseListener {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
 		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
 		setNodeValue(ctx, new UnresolvedCall(exp, args));
+	}
+	
+	@Override
+	public void exitUUIDType(UUIDTypeContext ctx) {
+		setNodeValue(ctx, UUIDType.instance());
 	}
 	
 	@Override

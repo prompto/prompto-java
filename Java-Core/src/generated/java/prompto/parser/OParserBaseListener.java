@@ -2153,6 +2153,18 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterUUIDType(@NotNull OParser.UUIDTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUUIDType(@NotNull OParser.UUIDTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCategory_type(@NotNull OParser.Category_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}

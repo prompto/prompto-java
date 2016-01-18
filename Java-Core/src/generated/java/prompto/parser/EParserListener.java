@@ -2065,6 +2065,18 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitBlobType(@NotNull EParser.BlobTypeContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code UUIDType}
+	 * labeled alternative in {@link EParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void enterUUIDType(@NotNull EParser.UUIDTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code UUIDType}
+	 * labeled alternative in {@link EParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void exitUUIDType(@NotNull EParser.UUIDTypeContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link EParser#category_type}.
 	 * @param ctx the parse tree
 	 */

@@ -32,6 +32,11 @@ public class TestNative extends BaseEParserTest {
 	}
 
 	@Test
+	public void testNow() throws Exception {
+		compareResourceESE("native/now.pec");
+	}
+
+	@Test
 	public void testPrinter() throws Exception {
 		compareResourceESE("native/printer.pec");
 	}

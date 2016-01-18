@@ -6,7 +6,6 @@ review types: document, method as parameters
 date/time/ check return type
 
 missing code:
-comments translation
 python timezone name
 javascript timezone name
 check return types
@@ -22,6 +21,7 @@ sentence/verb
 method as attribute, AnyMethod
 pattern literals
 typed tuples?
+uuid literal
 
 framework:
 json
