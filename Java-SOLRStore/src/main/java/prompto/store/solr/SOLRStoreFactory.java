@@ -12,6 +12,12 @@ public class SOLRStoreFactory implements IStoreFactory {
 
 	@Override
 	public IStore newStore(String[] args, Type type) throws Exception {
+		BaseSOLRStore store = newStoreFromArgs(args, type);
+		store.createCoreIfRequired();
+		return store;
+	}
+
+	private BaseSOLRStore newStoreFromArgs(String[] args, Type type) throws Exception {
 		boolean embedded = false;
 		String root = null;
 		String protocol = "http";
@@ -40,11 +46,11 @@ public class SOLRStoreFactory implements IStoreFactory {
 			return newRemoteSOLRStore(protocol, server, port, type);
 	}
 
-	private IStore newRemoteSOLRStore(String protocol, String host, int port, Type type) {
+	private BaseSOLRStore newRemoteSOLRStore(String protocol, String host, int port, Type type) {
 		return new RemoteSOLRStore(protocol, host, port, type);
 	}
 
-	private IStore newEmbeddedSOLRStore(String root, Type type) throws Exception {
+	private BaseSOLRStore newEmbeddedSOLRStore(String root, Type type) throws Exception {
 		// this is test only, load class by name to avoid carrying SOLR jars with each executable
 		@SuppressWarnings("unchecked")
 		Class<? extends BaseSOLRStore> klass = (Class<? extends BaseSOLRStore>) Class.forName("prompto.store.solr.EmbeddedSOLRStore");

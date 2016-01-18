@@ -4,10 +4,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.http.HttpStatus;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.HttpSolrClient.RemoteSolrException;
 import org.apache.solr.client.solrj.request.CoreAdminRequest;
 import org.apache.solr.client.solrj.request.schema.SchemaRequest;
 import org.apache.solr.client.solrj.response.CoreAdminResponse;
@@ -28,7 +30,7 @@ public class RemoteSOLRStore extends BaseSOLRStore {
 	String coreName;
 	
 	public RemoteSOLRStore(String protocol, String host, int port, Type type) {
-		this(protocol, host, port, Utils.capitalizeFirst(type.name()));
+		this(protocol, host, port, Utils.capitalizeFirst(type.name()) + "Store");
 	}
 
 	public RemoteSOLRStore(String protocol, String host, int port, String coreName) {
@@ -98,10 +100,17 @@ public class RemoteSOLRStore extends BaseSOLRStore {
 
 	@Override
 	public boolean hasField(String fieldName) throws SolrServerException, IOException {
-		SchemaRequest.Field getField = new SchemaRequest.Field(fieldName);
-		SchemaResponse.FieldResponse response = getField.process(client, coreName);
-	    Map<String, Object> field = response.getField();
-		return field!=null && fieldName.equals(field.get("name"));
+		try {
+			SchemaRequest.Field getField = new SchemaRequest.Field(fieldName);
+			SchemaResponse.FieldResponse response = getField.process(client, coreName);
+		    Map<String, Object> field = response.getField();
+			return field!=null && fieldName.equals(field.get("name"));
+		} catch(RemoteSolrException e) {
+			if(e.code()==HttpStatus.SC_NOT_FOUND)
+				return false;
+			else
+				throw e;
+		}
 	}
 	
 	@Override
