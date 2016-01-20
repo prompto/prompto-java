@@ -187,8 +187,6 @@ public class NativeInstance extends BaseValue implements IInstance {
 			Object data = value.ConvertTo(nativeSetter.getParameterTypes()[0]);
 			setValue(nativeSetter, data);
 			if(storable!=null && decl.isStorable()) {
-				if(value instanceof IInstance)
-					value = ((IInstance)value).getStorable().getDbId();
 				storable.setValue(context, attrName, value);
 			}
 		}

@@ -11,6 +11,7 @@ import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.value.Binary;
+import prompto.value.IInstance;
 import prompto.value.IValue;
 
 public class StorableDocument extends BaseDocument implements IStorable {
@@ -58,8 +59,11 @@ public class StorableDocument extends BaseDocument implements IStorable {
 			document = newDocument();
 		if(value==null)
 			document.setField(name.getName(), null);
-		else
+		else {
+			if(value instanceof IInstance)
+				value = ((IInstance)value).getStorable().getDbId();
 			value.store(context, name.getName(), this);
+		}
 	}
 	
 	@Override
