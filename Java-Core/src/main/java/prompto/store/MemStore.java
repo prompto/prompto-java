@@ -243,7 +243,7 @@ public final class MemStore implements IStore {
 		return new StorableDocument(categories);
 	}
 	
-	static class StorableDocument implements IStorable {
+	class StorableDocument implements IStorable {
 
 		Document document = null;
 		List<String> categories;
@@ -252,6 +252,17 @@ public final class MemStore implements IStore {
 			this.categories = categories;
 		}
 
+		@Override
+		public IValue getDbId() {
+			IValue dbId = getValue(null, dbIdName);
+			if(dbId==null) {
+				setDirty(true);
+				dbId = new Integer(++lastDbId);
+				document.setMember(null, dbIdName, dbId);
+			}
+			return dbId;
+		}
+		
 		@Override
 		public void setDirty(boolean set) {
 			if(!set)

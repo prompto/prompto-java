@@ -10,6 +10,7 @@ import prompto.grammar.IArgument;
 import prompto.grammar.Identifier;
 import prompto.parser.ECleverParser;
 import prompto.runtime.Context;
+import prompto.store.IDataStore;
 import prompto.type.IType;
 import prompto.value.ExpressionValue;
 import prompto.value.IValue;
@@ -27,10 +28,15 @@ public class Parameter {
 		if(field==null)
 			throw new InvalidParameterException("Expecting a 'name' field!");
 		param.setName(field.asText());
-		field = jsonParam.get("type");
-		if(field==null)
-			throw new InvalidParameterException("Expecting a 'type' field!");
-		param.setType(getType(context, field.asText()));
+		// dbId type resolves to Any category, when it's actually a value, need a hack for this one
+		if("dbId".equals(param.getName()))
+			param.setType(IDataStore.getInstance().getDbIdType());
+		else {
+			field = jsonParam.get("type");
+			if(field==null)
+				throw new InvalidParameterException("Expecting a 'type' field!");
+			param.setType(getType(context, field.asText()));
+		}
 		field = jsonParam.get("value");
 		if(field==null)
 			throw new InvalidParameterException("Expecting a 'value' field!");

@@ -20,6 +20,15 @@ public class StoredDocument extends BaseDocument implements IStored {
 
 	
 	@Override
+	public IValue getDbId() {
+		Object dbId = document.getFieldValue("dbId");
+		if(dbId==null)
+			return null;
+		else
+			return new prompto.value.UUID(String.valueOf(dbId));
+	}
+
+	@Override
 	public IValue getValue(Context context, Identifier id) throws PromptoError {
 		Object data = getData(id.getName());
 		if(data==null)

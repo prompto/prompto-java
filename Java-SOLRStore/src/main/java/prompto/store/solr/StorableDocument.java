@@ -23,6 +23,16 @@ public class StorableDocument extends BaseDocument implements IStorable {
 	}
 
 	@Override
+	public IValue getDbId() {
+		Object dbId = document.getField("dbId");
+		if(dbId==null) {
+			dbId = java.util.UUID.randomUUID();
+			document.setField("dbId", dbId);
+		}
+		return new prompto.value.UUID(String.valueOf(dbId));
+	}
+	
+	@Override
 	public void setDirty(boolean set) {
 		if(!set)
 			document = null;

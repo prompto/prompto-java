@@ -161,10 +161,9 @@ abstract class BaseSOLRStore implements IStore {
 	public void store(Context context, IStorable storable) throws PromptoError {
 		if(!(storable instanceof StorableDocument))
 			throw new IllegalStateException();
+		storable.getDbId(); // force population
 		SolrInputDocument document = ((StorableDocument)storable).document;
 		storeChildren(context, document);
-		if(!document.containsKey("dbId"))
-			document.setField("dbId", java.util.UUID.randomUUID());
 		try {
 			addDocument(document);
 		} catch(Exception e) {
