@@ -3,6 +3,8 @@ package prompto.store.solr;
 import java.time.LocalTime;
 
 import org.apache.lucene.index.IndexableField;
+import org.apache.lucene.util.BytesRefBuilder;
+import org.apache.lucene.util.NumericUtils;
 import org.apache.solr.schema.SchemaField;
 import org.apache.solr.schema.TrieLongField;
 
@@ -37,5 +39,12 @@ public class TimeFieldType extends TrieLongField {
 			| (( (long)time.getSecond() << 32 ) & 0x000000FF00000000L )
 			| (long)time.getNano();
 	}
+	
+    @Override
+    public void readableToIndexed(CharSequence val, BytesRefBuilder result) {
+    	Long value = parseTimeString(val.toString());
+        NumericUtils.longToPrefixCodedBytes(value, 0, result);
+    }
+
 
 }

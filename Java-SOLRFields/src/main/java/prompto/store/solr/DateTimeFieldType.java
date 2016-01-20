@@ -11,6 +11,8 @@ import org.apache.lucene.index.IndexOptions;
 import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.search.SortField;
 import org.apache.lucene.uninverting.UninvertingReader.Type;
+import org.apache.lucene.util.BytesRefBuilder;
+import org.apache.lucene.util.NumericUtils;
 import org.apache.solr.response.TextResponseWriter;
 import org.apache.solr.schema.FieldType;
 import org.apache.solr.schema.SchemaField;
@@ -31,6 +33,14 @@ public class DateTimeFieldType extends FieldType {
 
 	}
 
+    @Override
+    public void readableToIndexed(CharSequence val, BytesRefBuilder result) {
+	    ZonedDateTime dateTime = ZonedDateTime.parse(val.toString());
+	    long millis = dateTime.toInstant().toEpochMilli();
+        NumericUtils.longToPrefixCodedBytes(millis, 0, result);
+    }
+
+	
 	@Override
 	public SortField getSortField(SchemaField field, boolean reverse) {
 		field.checkSortability();
