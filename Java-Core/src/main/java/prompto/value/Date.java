@@ -12,6 +12,7 @@ import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.store.IStorable;
 import prompto.type.DateType;
 
 public class Date extends BaseValue implements Comparable<Date> {
@@ -135,5 +136,10 @@ public class Date extends BaseValue implements Comparable<Date> {
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		}
+	}
+	
+	@Override
+	public void store(Context context, String name, IStorable storable) throws PromptoError {
+		storable.setData(name, value);
 	}
 }

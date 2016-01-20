@@ -11,7 +11,11 @@ import prompto.value.Time;
 public class TimeLiteral extends Literal<Time> {
 
 	public TimeLiteral(String text) {
-		super(text,parseTime(text.substring(1,text.length()-1)));
+		super(text, parseTime(text.substring(1,text.length()-1)));
+	}
+	
+	public TimeLiteral(LocalTime time) {
+		super("'" + time.toString() + "'", new Time(time));
 	}
 	
 	@Override

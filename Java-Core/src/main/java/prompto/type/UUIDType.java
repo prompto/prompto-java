@@ -2,6 +2,7 @@ package prompto.type;
 
 import java.util.UUID;
 
+import prompto.runtime.Context;
 import prompto.value.IValue;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -26,5 +27,10 @@ public class UUIDType extends NativeType {
 	@Override
 	public IValue readJSONValue(JsonNode value) {
 		return new prompto.value.UUID(value.asText());
+	}
+	
+	@Override
+	public boolean isAssignableTo(Context context, IType other) {
+		return (other instanceof UUIDType) || (other instanceof AnyType);
 	}
 }

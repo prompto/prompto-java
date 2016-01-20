@@ -8,6 +8,7 @@ import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.store.IStorable;
 import prompto.type.UUIDType;
 
 public class UUID extends BaseValue {
@@ -17,6 +18,11 @@ public class UUID extends BaseValue {
 	public UUID(String value) {
 		super(UUIDType.instance());
 		this.value = java.util.UUID.fromString(value);
+	}
+
+	public UUID(java.util.UUID value) {
+		super(UUIDType.instance());
+		this.value = value;
 	}
 
 	@Override
@@ -31,6 +37,11 @@ public class UUID extends BaseValue {
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		}
+	}
+	
+	@Override
+	public void store(Context context, String name, IStorable storable) throws PromptoError {
+		storable.setData(name, value);
 	}
 
 }

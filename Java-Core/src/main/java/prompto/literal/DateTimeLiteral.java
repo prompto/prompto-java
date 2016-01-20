@@ -9,9 +9,13 @@ import prompto.value.DateTime;
 public class DateTimeLiteral extends Literal<DateTime> {
 
 	public DateTimeLiteral(String text) {
-		super(text,parseDateTime(text.substring(1,text.length()-1)));
+		super(text, parseDateTime(text.substring(1,text.length()-1)));
 	}
 	
+	public DateTimeLiteral(org.joda.time.DateTime dateTime) {
+		super("'" + dateTime.toString() + "'" , new DateTime(dateTime));
+	}
+
 	@Override
 	public IType check(Context context) {
 		return DateTimeType.instance();

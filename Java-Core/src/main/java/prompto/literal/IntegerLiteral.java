@@ -8,14 +8,14 @@ import prompto.value.Integer;
 public class IntegerLiteral extends Literal<Integer> {
 
 	public IntegerLiteral(String text) {
-		super(text,new Integer(Long.valueOf(text)));
+		super(text, new Integer(Long.valueOf(text)));
 	}
 
 	public IntegerLiteral(long value) {
-		super(Long.toString(value),new Integer(value));
+		super(Long.toString(value), new Integer(value));
 	}
 	
-	public IntegerLiteral(String text,Integer value) {
+	public IntegerLiteral(String text, Integer value) {
 		super(text, value);
 	}
 

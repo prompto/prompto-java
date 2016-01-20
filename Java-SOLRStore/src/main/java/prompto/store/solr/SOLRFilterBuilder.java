@@ -35,8 +35,76 @@ public class SOLRFilterBuilder implements IFilterBuilder {
 		}
 		sb.append(name);
 		sb.append(':');
-		sb.append(value.toString());
+		escape(sb, value);
 		stack.push(sb.toString());
+	}
+
+	private void escape(StringBuilder sb, IValue value) {
+		boolean wasAmpersand = false;
+		boolean wasPipe = false;
+		for(char c : value.toString().toCharArray()) {
+			switch(c) {
+			case '+':
+			case '-':
+			case '!':
+			case '(':
+			case ')':
+			case '{':
+			case '}':
+			case '[':
+			case ']':
+			case '^':
+			case '"':
+			case '~':
+			case '*':
+			case '?':
+			case ':':
+			case '\\':
+				if(wasAmpersand) {
+					sb.append('&');
+					wasAmpersand = false;
+				}
+				if(wasPipe) {
+					sb.append('|');
+					wasPipe = false;
+				}
+				sb.append('\\');
+				sb.append(c);
+				break;
+			case '&':
+				if(wasAmpersand) {
+					sb.append("\\&&");
+					wasAmpersand = false;
+				} else
+					wasAmpersand = true;
+				break;
+			case '|':
+				if(wasPipe) {
+					sb.append("\\||");
+					wasPipe = false;
+				} else
+					wasPipe = true;
+				break;
+			default:
+				if(wasAmpersand) {
+					sb.append('&');
+					wasAmpersand = false;
+				}
+				if(wasPipe) {
+					sb.append('|');
+					wasPipe = false;
+				}
+				sb.append(c);
+			}
+		}
+		if(wasAmpersand) {
+			sb.append('&');
+			wasAmpersand = false;
+		}
+		if(wasPipe) {
+			sb.append('|');
+			wasPipe = false;
+		}
 	}
 
 	public String toSolrQuery() {

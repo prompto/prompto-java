@@ -14,6 +14,10 @@ public class DateLiteral extends Literal<Date> {
 		super(text,parseDate(text.substring(1,text.length()-1)));
 	}
 	
+	public DateLiteral(LocalDate date) {
+		super("'" + date.toString() + "'", new Date(date));
+	}
+
 	@Override
 	public IType check(Context context) {
 		return DateType.instance();

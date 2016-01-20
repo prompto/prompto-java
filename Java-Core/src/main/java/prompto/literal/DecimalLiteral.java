@@ -11,6 +11,10 @@ public class DecimalLiteral extends Literal<Decimal> {
 		super(text,Decimal.Parse(text));
 	}
 
+	public DecimalLiteral(double value) {
+		super(Double.toString(value), new Decimal(value));
+	}
+
 	@Override
 	public IType check(Context context) {
 		return DecimalType.instance();

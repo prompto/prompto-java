@@ -146,7 +146,8 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		value = autocast(decl, value);
 		values.put(attrName, value);
 		if(storable!=null && decl.isStorable()) {
-			// TODO convert object graph if(value instanceof IInstance)
+			if(value instanceof IInstance)
+				value = ((IInstance)value).getStorable().getDbId();
 			storable.setValue(context, attrName, value);
 		}
 	}
