@@ -10,8 +10,8 @@ import prompto.utils.Utils;
 
 public class CodeArgument extends BaseArgument implements ITypedArgument {
 	
-	public CodeArgument(Identifier name) {
-		super(name);
+	public CodeArgument(Identifier id) {
+		super(id);
 	}
 	
 	@Override
@@ -21,7 +21,7 @@ public class CodeArgument extends BaseArgument implements ITypedArgument {
 	
 	@Override
 	public String getSignature(Dialect dialect) {
-		return CodeType.instance().getId() + " " + name;
+		return CodeType.instance().getId() + " " + id;
 	}
 	
 	@Override
@@ -33,12 +33,12 @@ public class CodeArgument extends BaseArgument implements ITypedArgument {
 	public void toDialect(CodeWriter writer) {
 		writer.append(CodeType.instance().getId().toString());
 		writer.append(" ");
-		writer.append(name);
+		writer.append(id);
 	}
 	
 	@Override
 	public String toString() {
-		return name.toString() + ':' + CodeType.instance().getId();
+		return id.toString() + ':' + CodeType.instance().getId();
 	}
 	
 	@Override
@@ -55,9 +55,9 @@ public class CodeArgument extends BaseArgument implements ITypedArgument {
 
 	@Override
 	public void register(Context context) throws SyntaxError {
-		INamed actual = context.getRegisteredValue(INamed.class, name);
+		INamed actual = context.getRegisteredValue(INamed.class, id);
 		if(actual!=null)
-			throw new SyntaxError("Duplicate argument: \"" + name + "\"");
+			throw new SyntaxError("Duplicate argument: \"" + id + "\"");
 		context.registerValue(this);
 	}
 	

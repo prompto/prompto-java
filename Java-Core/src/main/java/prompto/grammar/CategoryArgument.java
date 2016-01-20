@@ -17,8 +17,8 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 	IType type;
 	IdentifierList attributes;
 	
-	public CategoryArgument(IType type, Identifier name, IdentifierList attributes) {
-		super(name);
+	public CategoryArgument(IType type, Identifier id, IdentifierList attributes) {
+		super(id);
 		this.type = type;
 		this.attributes = attributes;
 	}
@@ -76,7 +76,7 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 		type.toDialect(writer);
 		if(anonymous) {
 			writer.append(' ');
-			writer.append(name);
+			writer.append(id);
 		}
 		if(attributes!=null) {
 			switch(attributes.size()) {
@@ -94,7 +94,7 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 		}
 		if(!anonymous) {
 			writer.append(' ');
-			writer.append(name);
+			writer.append(id);
 		}
 	}
 
@@ -106,11 +106,11 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 			writer.append(')');
 		}
 		writer.append(' ');
-		writer.append(name);
+		writer.append(id);
 	}
 
 	private void toSDialect(CodeWriter writer) {
-		writer.append(name);
+		writer.append(id);
 		writer.append(':');
 		type.toDialect(writer);
 		if(attributes!=null) {
@@ -122,7 +122,7 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 
 	@Override
 	public String toString() {
-		return name.toString() + ':' + getProto();
+		return id.toString() + ':' + getProto();
 	}
 	
 	public boolean hasAttributes() {
@@ -149,20 +149,20 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 
 	@Override
 	public void register(Context context) throws SyntaxError {
-		INamed actual = context.getRegisteredValue(INamed.class, name);
+		INamed actual = context.getRegisteredValue(INamed.class, id);
 		if(actual!=null)
-			throw new SyntaxError("Duplicate argument: \"" + name + "\"");
+			throw new SyntaxError("Duplicate argument: \"" + id + "\"");
 		if(attributes!=null) {
 			ConcreteCategoryDeclaration declaration = 
-					new ConcreteCategoryDeclaration(name, attributes,
+					new ConcreteCategoryDeclaration(id, attributes,
 							new IdentifierList(type.getId()), null);
 			context.registerDeclaration(declaration);
 		}
 		context.registerValue(this);
 		if(defaultExpression!=null) try {
-			context.setValue(name, defaultExpression.interpret(context));
+			context.setValue(id, defaultExpression.interpret(context));
 		} catch(PromptoError error) {
-			throw new SyntaxError("Unable to register default value: "+ defaultExpression.toString() + " for argument: " + name);
+			throw new SyntaxError("Unable to register default value: "+ defaultExpression.toString() + " for argument: " + id);
 		}
 	}
 	
@@ -181,7 +181,7 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 		if(attributes==null)
 			return type;
 		else
-			return context.getRegisteredDeclaration(IDeclaration.class, name).getType(context);
+			return context.getRegisteredDeclaration(IDeclaration.class, id).getType(context);
 	}
 
 }

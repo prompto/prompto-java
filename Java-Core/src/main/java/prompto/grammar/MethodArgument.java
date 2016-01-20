@@ -11,28 +11,28 @@ import prompto.utils.Utils;
 
 public class MethodArgument extends BaseArgument implements INamedArgument {
 	
-	public MethodArgument(Identifier name) {
-		super(name);
+	public MethodArgument(Identifier id) {
+		super(id);
 	}
 	
 	@Override
 	public String getSignature(Dialect dialect) {
-		return name.toString();
+		return id.toString();
 	}
 	
 	@Override
 	public void toDialect(CodeWriter writer) {
-		writer.append(name);
+		writer.append(id);
 	}
 
 	@Override
 	public String toString() {
-		return name.toString();
+		return id.toString();
 	}
 	
 	@Override
 	public String getProto() {
-		return name.toString();
+		return id.toString();
 	}
 	
 	@Override
@@ -49,22 +49,22 @@ public class MethodArgument extends BaseArgument implements INamedArgument {
 
 	@Override
 	public void register(Context context) throws SyntaxError {
-		INamed actual = context.getRegisteredValue(INamed.class,name);
+		INamed actual = context.getRegisteredValue(INamed.class,id);
 		if(actual!=null)
-			throw new SyntaxError("Duplicate argument: \"" + name + "\"");
+			throw new SyntaxError("Duplicate argument: \"" + id + "\"");
 		context.registerValue(this);
 	}
 	
 	@Override
 	public void check(Context context) throws SyntaxError {
-		IMethodDeclaration actual = context.getRegisteredDeclaration(IMethodDeclaration.class,name);
+		IMethodDeclaration actual = context.getRegisteredDeclaration(IMethodDeclaration.class,id);
 		if(actual==null)
-			throw new SyntaxError("Unknown method: \"" + name + "\"");
+			throw new SyntaxError("Unknown method: \"" + id + "\"");
 	}
 	
 	@Override
 	public IType getType(Context context) throws SyntaxError {
-		return new MethodType(context,name);
+		return new MethodType(context,id);
 	}
 	
 }

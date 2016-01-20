@@ -9,17 +9,17 @@ import prompto.value.IValue;
 
 public abstract class BaseArgument implements IArgument {
 
-	Identifier name;
+	Identifier id;
 	boolean mutable = false;
 	DefaultExpression defaultExpression;
 	
-	protected BaseArgument(Identifier name) {
-		this.name = name;
+	protected BaseArgument(Identifier id) {
+		this.id = id;
 	}
 	
 	@Override
 	public Identifier getIdentifier() {
-		return name;
+		return id;
 	}
 	
 	@Override

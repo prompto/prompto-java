@@ -16,8 +16,8 @@ public class UnresolvedArgument extends BaseArgument implements INamedArgument {
 
 	INamedArgument resolved = null;
 	
-	public UnresolvedArgument(Identifier name) {
-		super(name);
+	public UnresolvedArgument(Identifier id) {
+		super(id);
 	}
 	
 	@Override
@@ -27,7 +27,7 @@ public class UnresolvedArgument extends BaseArgument implements INamedArgument {
 
 	@Override
 	public void toDialect(CodeWriter writer) {
-		writer.append(name);
+		writer.append(id);
 		if(defaultExpression!=null) {
 			writer.append(" = ");
 			defaultExpression.toDialect(writer);
@@ -36,7 +36,7 @@ public class UnresolvedArgument extends BaseArgument implements INamedArgument {
 	
 	@Override
 	public String toString() {
-		return name.toString();
+		return id.toString();
 	}
 	
 	@Override
@@ -46,7 +46,7 @@ public class UnresolvedArgument extends BaseArgument implements INamedArgument {
 	
 	@Override
 	public String getProto() {
-		return name.getName();
+		return id.getName();
 	}
 	
 	@Override
@@ -70,13 +70,13 @@ public class UnresolvedArgument extends BaseArgument implements INamedArgument {
 	private void resolveAndCheck(Context context) throws SyntaxError {
 		if(resolved!=null) 
 			return;
-		IDeclaration named = context.getRegisteredDeclaration(IDeclaration.class, name);
+		IDeclaration named = context.getRegisteredDeclaration(IDeclaration.class, id);
 		if(named instanceof AttributeDeclaration)
-			resolved = new AttributeArgument(name);
+			resolved = new AttributeArgument(id);
 		else if(named instanceof MethodDeclarationMap)
-			resolved = new MethodArgument(name);
+			resolved = new MethodArgument(id);
 		else
-			throw new SyntaxError("Unknown identifier: " + name);
+			throw new SyntaxError("Unknown identifier: " + id);
 	}
 
 
