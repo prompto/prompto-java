@@ -118,15 +118,14 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 			return;
 		IType type = decl.getType(context);
 		if(type instanceof CategoryType) {
-			if(value instanceof IStored) // happens with MemoryStore
-				value = ((CategoryType)type).newInstance(context, (IStored)value);
-			else {
+			// is this a foreign key?
+			if(!(value instanceof IInstance)) {
 				stored = IDataStore.getInstance().fetchUnique(context, value);
 				if(stored==null)
 					throw new InternalError("How did we get there?");
 				value = ((CategoryType)type).newInstance(context, stored);
 			}
-		} else if(value instanceof IStored)
+		} else if(value instanceof IInstance)
 			throw new InternalError("How did we get there?");
 		instance.setMember(context, name, value);
 	}
