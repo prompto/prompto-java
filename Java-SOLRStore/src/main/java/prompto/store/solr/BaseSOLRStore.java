@@ -1,6 +1,8 @@
 package prompto.store.solr;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,6 +25,7 @@ import prompto.error.InternalError;
 import prompto.error.ReadWriteError;
 import prompto.error.InvalidDataError;
 import prompto.expression.IExpression;
+import prompto.grammar.EqOp;
 import prompto.grammar.OrderByClause;
 import prompto.grammar.OrderByClauseList;
 import prompto.runtime.Context;
@@ -161,18 +164,13 @@ abstract class BaseSOLRStore implements IStore {
 	public void store(Context context, IStorable storable) throws PromptoError {
 		if(!(storable instanceof StorableDocument))
 			throw new IllegalStateException();
-		storable.getDbId(); // force population
-		SolrInputDocument document = ((StorableDocument)storable).document;
-		storeChildren(context, document);
+		List<SolrInputDocument> documents = new ArrayList<>();
+		((StorableDocument)storable).collectDocuments(documents);
 		try {
-			addDocument(document);
+			addDocuments(documents);
 		} catch(Exception e) {
 			throw new InternalError(e);
 		}
-	}
-
-	private void storeChildren(Context context, SolrInputDocument document) {
-		// TODO
 	}
 
 	@Override
@@ -200,16 +198,26 @@ abstract class BaseSOLRStore implements IStore {
 	}
 	
 	@Override
+	public IStored fetchUnique(Context context, IValue dbId) throws PromptoError {
+		SOLRFilterBuilder builder = new SOLRFilterBuilder();
+		builder.push("dbId", EqOp.EQUALS, dbId);
+		SolrQuery query = new SolrQuery();
+		query.setQuery(builder.toSolrQuery());
+		try {
+			commit();
+			QueryResponse result = query(query);
+			return getOne(context, result);
+		} catch(Exception e) {
+			throw new InternalError(e);
+		}
+	}
+	
+	@Override
 	public IStored fetchOne(Context context, CategoryType type, IExpression filterExpression) throws PromptoError {
 		SolrQuery query = buildQuery(context, type, null, null, filterExpression, null);
 		query.setRows(1);
 		try {
 			commit();
-			/*
-			SolrQuery q = new SolrQuery();
-			q.setQuery("*:*");
-			QueryResponse r = query(q);
-			*/
 			QueryResponse result = query(query);
 			return getOne(context, result);
 		} catch(Exception e) {
@@ -311,7 +319,11 @@ abstract class BaseSOLRStore implements IStore {
 
 	public abstract QueryResponse query(SolrQuery params) throws SolrServerException, IOException;
 
-	public abstract void addDocument(SolrInputDocument doc) throws SolrServerException, IOException;
+	public void addDocuments(SolrInputDocument ... docs) throws SolrServerException, IOException {
+		addDocuments(Arrays.asList(docs));
+	}
+
+	public abstract void addDocuments(Collection<SolrInputDocument> docs) throws SolrServerException, IOException;
 
 	public abstract void commit() throws SolrServerException, IOException;
 

@@ -24,6 +24,10 @@ public class UUID extends BaseValue {
 		super(UUIDType.instance());
 		this.value = value;
 	}
+	
+	public java.util.UUID getValue() {
+		return value;
+	}
 
 	@Override
 	public String toString() {

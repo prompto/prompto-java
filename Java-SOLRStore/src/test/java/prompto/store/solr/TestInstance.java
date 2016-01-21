@@ -28,6 +28,7 @@ import prompto.literal.TimeLiteral;
 import prompto.runtime.Context;
 import prompto.store.IDataStore;
 import prompto.store.IStored;
+import prompto.type.AnyType;
 import prompto.type.BooleanType;
 import prompto.type.CategoryType;
 import prompto.type.DateTimeType;
@@ -42,6 +43,7 @@ import prompto.value.Boolean;
 import prompto.value.Date;
 import prompto.value.Decimal;
 import prompto.value.ExpressionValue;
+import prompto.value.IValue;
 import prompto.value.Integer;
 import prompto.value.ConcreteInstance;
 import prompto.value.IInstance;
@@ -165,6 +167,34 @@ public class TestInstance extends BaseSOLRTest {
 		assertEquals(fieldValue.toString(), stored.getData(fieldName));
 	}
 
+	@Test
+	public void testStoreChildField() throws Exception {
+		CategoryType type = new CategoryType(new Identifier("Test"));
+		String fieldName = "textField";
+		String fieldValue = "textValue";
+		String childValue = "childValue";
+		String childName = "childField";
+		createField(fieldName, "text", false);
+		createField(childName, "uuid", false);
+		IInstance parent = createInstanceWith2Attributes(fieldName, TextType.instance(), childName, type);
+		ConcreteCategoryDeclaration cd = context.getRegisteredDeclaration(
+				ConcreteCategoryDeclaration.class, new Identifier("Test"), false);
+		ConcreteInstance child = new ConcreteInstance(context, cd);
+		child.setMutable(true);
+		child.setMember(context, new Identifier(fieldName), new Text(childValue));
+		parent.setMember(context, new Identifier(fieldName), new Text(fieldValue));
+		parent.setMember(context, new Identifier(childName), child);
+		store.store(context, parent.getStorable());
+		IStored stored = fetchOne(fieldName, new TextLiteral(fieldValue));
+		assertNotNull(stored);
+		assertEquals(fieldValue, stored.getData(fieldName));
+		parent = (ConcreteInstance)type.newInstance(context, stored);
+		IValue v = parent.getMember(context, new Identifier(childName), false);
+		assertNotNull(v);
+		assertTrue(v instanceof IInstance);
+		assertEquals(new Text(childValue), v.getMember(context, new Identifier(fieldName), false));
+	}
+
 	private IStored fetchOne(String field, IExpression value) throws Exception {
 		CategoryType t = new CategoryType(new Identifier("Test"));
 		IExpression e = new EqualsExpression( 
@@ -185,6 +215,25 @@ public class TestInstance extends BaseSOLRTest {
 		a.setStorable(true);
 		context.registerDeclaration(a);
 		IdentifierList as = new IdentifierList(new Identifier(name));
+		ConcreteCategoryDeclaration d = new ConcreteCategoryDeclaration(new Identifier("Test"), as, null, null);
+		d.setStorable(true);
+		context.registerDeclaration(d);
+		ConcreteInstance i = new ConcreteInstance(context, d);
+		i.setMutable(true);
+		return i;
+	}
+
+	private IInstance createInstanceWith2Attributes(String name1, IType type1, String name2, IType type2) throws Exception {
+		AttributeDeclaration a = new AttributeDeclaration(new Identifier("dbId"), AnyType.instance(), null);
+		context.registerDeclaration(a);
+		a = new AttributeDeclaration(new Identifier(name1), type1, null);
+		a.setStorable(true);
+		context.registerDeclaration(a);
+		a = new AttributeDeclaration(new Identifier(name2), type2, null);
+		a.setStorable(true);
+		context.registerDeclaration(a);
+		IdentifierList as = new IdentifierList(new Identifier(name1));
+		as.add(new Identifier(name2));
 		ConcreteCategoryDeclaration d = new ConcreteCategoryDeclaration(new Identifier("Test"), as, null, null);
 		d.setStorable(true);
 		context.registerDeclaration(d);

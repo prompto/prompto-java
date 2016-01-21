@@ -5,6 +5,7 @@ import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.grammar.MethodDeclarationList;
 import prompto.runtime.Context;
+import prompto.store.IDataStore;
 import prompto.store.IStored;
 import prompto.type.CategoryType;
 import prompto.type.IType;
@@ -113,12 +114,20 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		if(!decl.isStorable())
 			return;
 		IValue value = stored.getValue(context, name);
-		if(value instanceof IStored) {
-			IType type = decl.getType(context);
-			if(!(type instanceof CategoryType))
-				throw new InternalError("How did we get there?");
-			value = ((CategoryType)type).newInstance(context, (IStored)value);
-		}
+		if(value==null)
+			return;
+		IType type = decl.getType(context);
+		if(type instanceof CategoryType) {
+			if(value instanceof IStored) // happens with MemoryStore
+				value = ((CategoryType)type).newInstance(context, (IStored)value);
+			else {
+				stored = IDataStore.getInstance().fetchUnique(context, value);
+				if(stored==null)
+					throw new InternalError("How did we get there?");
+				value = ((CategoryType)type).newInstance(context, stored);
+			}
+		} else if(value instanceof IStored)
+			throw new InternalError("How did we get there?");
 		instance.setMember(context, name, value);
 	}
 

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -113,8 +114,8 @@ public class EmbeddedSOLRStore extends BaseSOLRStore {
 	}
 
 	@Override
-	public void addDocument(SolrInputDocument doc) throws SolrServerException, IOException {
-		server.add(doc, 1000);
+	public void addDocuments(Collection<SolrInputDocument> docs) throws SolrServerException, IOException {
+		server.add(docs, 1000);
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package prompto.store.solr;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -89,8 +90,8 @@ public class RemoteSOLRStore extends BaseSOLRStore {
 	}
 	
 	@Override
-	public void addDocument(SolrInputDocument doc) throws SolrServerException, IOException {
-		client.add(coreName, doc);
+	public void addDocuments(Collection<SolrInputDocument> docs) throws SolrServerException, IOException {
+		client.add(coreName, docs);
 	}
 	
 	@Override

@@ -88,7 +88,7 @@ public class TestQuery extends BaseSOLRTest {
 		SolrInputDocument doc = new SolrInputDocument();
 		doc.addField("dbId", UUID.randomUUID());
 		doc.addField("name", "John");
-		store.addDocument(doc);
+		store.addDocuments(doc);
 		store.commit();
 		// Test the basics
 		String query = "fetch one where name = \"John\"";
@@ -103,7 +103,7 @@ public class TestQuery extends BaseSOLRTest {
 		UUID uuid = UUID.randomUUID();
 		doc.addField("dbId", uuid);
 		doc.addField("name", "John");
-		store.addDocument(doc);
+		store.addDocuments(doc);
 		store.commit();
 		// Test the basics
 		store.deleteOne(uuid);

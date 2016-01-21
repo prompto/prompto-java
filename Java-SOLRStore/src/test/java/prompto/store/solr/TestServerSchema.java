@@ -52,7 +52,7 @@ public class TestServerSchema {
 		UUID uuid = UUID.randomUUID();
 		SolrInputDocument doc = new SolrInputDocument();
 		doc.addField("dbId", uuid);
-		store.addDocument(doc);
+		store.addDocuments(doc);
 		store.commit();
 		// Test the basics
 		SolrQuery query = new SolrQuery();
@@ -71,7 +71,7 @@ public class TestServerSchema {
 		SolrInputDocument doc = new SolrInputDocument();
 		doc.addField("dbId", UUID.randomUUID());
 		doc.addField("infos", "sample");
-		store.addDocument(doc);
+		store.addDocuments(doc);
 		store.commit();
 		// Test the basics
 		SolrQuery query = new SolrQuery();
@@ -91,7 +91,7 @@ public class TestServerSchema {
 		doc.addField("dbId", UUID.randomUUID());
 		Blob blob = new Blob("application/octet-stream","azertyuiop".getBytes());
 		doc.addField("data", BinaryConverter.toBytes(blob));
-		store.addDocument(doc);
+		store.addDocuments(doc);
 		store.commit();
 		// Test the basics
 		SolrQuery query = new SolrQuery();
@@ -119,7 +119,7 @@ public class TestServerSchema {
 		doc.addField("dbId", UUID.randomUUID());
 		Image image = new Image("image/jpeg","JFIF".getBytes());
 		doc.addField("data", BinaryConverter.toBytes(image));
-		store.addDocument(doc);
+		store.addDocuments(doc);
 		store.commit();
 		// Test the basics
 		SolrQuery query = new SolrQuery();
@@ -147,7 +147,7 @@ public class TestServerSchema {
 		SolrInputDocument doc = new SolrInputDocument();
 		doc.addField("dbId", UUID.randomUUID());
 		doc.addField("version", "1.0.3");
-		store.addDocument(doc);
+		store.addDocuments(doc);
 		store.commit();
 		// Test the basics
 		SolrQuery query = new SolrQuery();
@@ -173,7 +173,7 @@ public class TestServerSchema {
 			SolrInputDocument doc = new SolrInputDocument();
 			doc.addField("dbId", UUID.randomUUID());
 			doc.addField("version", version);
-			store.addDocument(doc);
+			store.addDocuments(doc);
 		}
 		store.commit();
 		// Test ascending sort
@@ -207,7 +207,7 @@ public class TestServerSchema {
 		SolrInputDocument doc = new SolrInputDocument();
 		doc.addField("dbId", UUID.randomUUID());
 		doc.addField("time", "13:02:17.4578");
-		store.addDocument(doc);
+		store.addDocuments(doc);
 		store.commit();
 		// Test the basics
 		SolrQuery query = new SolrQuery();
@@ -233,7 +233,7 @@ public class TestServerSchema {
 			SolrInputDocument doc = new SolrInputDocument();
 			doc.addField("dbId", UUID.randomUUID());
 			doc.addField("time", time);
-			store.addDocument(doc);
+			store.addDocuments(doc);
 		}
 		store.commit();
 		// Test ascending sort
@@ -267,7 +267,7 @@ public class TestServerSchema {
 		SolrInputDocument doc = new SolrInputDocument();
 		doc.addField("dbId", UUID.randomUUID());
 		doc.addField("date", "2015-10-22");
-		store.addDocument(doc);
+		store.addDocuments(doc);
 		store.commit();
 		// Test the basics
 		SolrQuery query = new SolrQuery();
@@ -293,7 +293,7 @@ public class TestServerSchema {
 			SolrInputDocument doc = new SolrInputDocument();
 			doc.addField("dbId", UUID.randomUUID());
 			doc.addField("date", date);
-			store.addDocument(doc);
+			store.addDocuments(doc);
 		}
 		store.commit();
 		// Test ascending sort
@@ -327,7 +327,7 @@ public class TestServerSchema {
 		SolrInputDocument doc = new SolrInputDocument();
 		doc.addField("dbId", UUID.randomUUID());
 		doc.addField("datetime", "2015-10-22T15:02:17Z");
-		store.addDocument(doc);
+		store.addDocuments(doc);
 		store.commit();
 		// Test the basics
 		SolrQuery query = new SolrQuery();
@@ -353,7 +353,7 @@ public class TestServerSchema {
 			SolrInputDocument doc = new SolrInputDocument();
 			doc.addField("dbId", UUID.randomUUID());
 			doc.addField("datetime", datetime);
-			store.addDocument(doc);
+			store.addDocuments(doc);
 		}
 		store.commit();
 		// Test ascending sort
@@ -391,7 +391,7 @@ public class TestServerSchema {
 			SolrInputDocument doc = new SolrInputDocument();
 			doc.addField("dbId", UUID.randomUUID());
 			doc.addField("datetime", datetime);
-			store.addDocument(doc);
+			store.addDocuments(doc);
 		}
 		store.commit();
 		// Test ascending sort

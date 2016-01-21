@@ -92,6 +92,12 @@ public final class MemStore implements IStore {
 		documents = new HashMap<>();
 	}
 	
+	
+	@Override
+	public IStored fetchUnique(Context context, IValue dbId) throws PromptoError {
+		return documents.get(dbId);
+	}
+	
 	@Override
 	public IStored fetchOne(Context context, CategoryType type, IExpression filter) throws PromptoError {
 		for(StorableDocument doc : documents.values()) {

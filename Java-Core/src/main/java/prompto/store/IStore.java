@@ -11,6 +11,7 @@ import prompto.runtime.Context;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.value.Binary;
+import prompto.value.IValue;
 
 /* a mean to store and fetch data */
 public interface IStore {
@@ -18,6 +19,7 @@ public interface IStore {
 	IType getDbIdType();
 	IStorable newStorable(List<String> categories);
 	void store(Context context, IStorable storable) throws PromptoError;
+	IStored fetchUnique(Context context, IValue dbId) throws PromptoError;
 	IStored fetchOne(Context context, CategoryType type, IExpression filter) throws PromptoError;
 	IStoredIterator fetchMany(Context context, CategoryType type, 
 			IExpression start, IExpression end, 

@@ -1,9 +1,13 @@
 package prompto.store.solr;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import org.apache.solr.common.SolrInputDocument;
+import org.apache.solr.common.SolrInputField;
 
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
@@ -17,6 +21,7 @@ import prompto.value.IValue;
 public class StorableDocument extends BaseDocument implements IStorable {
 
 	SolrInputDocument document = null;
+	Map<UUID, StorableDocument> children = null;
 	List<String> categories;
 	
 	public StorableDocument(List<String> categories) {
@@ -25,12 +30,13 @@ public class StorableDocument extends BaseDocument implements IStorable {
 
 	@Override
 	public IValue getDbId() {
-		Object dbId = document.getField("dbId");
+		SolrInputField dbIdField = document.getField("dbId");
+		UUID dbId = dbIdField==null ? null : (UUID)dbIdField.getValue();
 		if(dbId==null) {
 			dbId = java.util.UUID.randomUUID();
 			document.setField("dbId", dbId);
 		}
-		return new prompto.value.UUID(String.valueOf(dbId));
+		return new prompto.value.UUID(dbId);
 	}
 	
 	@Override
@@ -60,12 +66,23 @@ public class StorableDocument extends BaseDocument implements IStorable {
 		if(value==null)
 			document.setField(name.getName(), null);
 		else {
-			if(value instanceof IInstance)
-				value = ((IInstance)value).getStorable().getDbId();
+			value = registerInstance(value);
 			value.store(context, name.getName(), this);
 		}
 	}
 	
+	private IValue registerInstance(IValue value) {
+		if(value instanceof IInstance) {
+			IStorable storable = ((IInstance)value).getStorable();
+			value = storable.getDbId();
+			UUID uuid = ((prompto.value.UUID)value).getValue();
+			if(children==null)
+				children = new HashMap<UUID, StorableDocument>();
+			children.put(uuid, (StorableDocument)storable);
+		}
+		return value;
+	}
+
 	@Override
 	public void setData(String name, Object value) throws PromptoError {
 		if(document==null)
@@ -92,4 +109,13 @@ public class StorableDocument extends BaseDocument implements IStorable {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public void collectDocuments(List<SolrInputDocument> documents) {
+		if(document!=null) {
+			getDbId(); // force population
+			documents.add(document);
+		}
+		if(children!=null)
+			children.values().forEach((s) -> s.collectDocuments(documents));
+ 	}
 }
