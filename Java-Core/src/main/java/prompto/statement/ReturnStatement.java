@@ -9,6 +9,7 @@ import prompto.type.IType;
 import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
+import prompto.value.NullValue;
 
 public class ReturnStatement extends SimpleStatement {
 	
@@ -57,8 +58,10 @@ public class ReturnStatement extends SimpleStatement {
 	public IValue interpret(Context context) throws PromptoError {
 		if(expression==null)
 			return VoidResult.instance();
-		else
-			return expression.interpret(context);
+		else {
+			IValue value = expression.interpret(context);
+			return value==null ? NullValue.instance() : value;
+		}
 	}
 
 }
