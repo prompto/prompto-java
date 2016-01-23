@@ -8,6 +8,7 @@ import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.store.IStorable;
 import prompto.type.NullType;
 
 
@@ -32,5 +33,9 @@ public class NullValue extends BaseValue {
 		}
 	}
 
+	@Override
+	public void store(Context context, String name, IStorable storable) throws PromptoError {
+		storable.setData(name, null);
+	}
 
 }
