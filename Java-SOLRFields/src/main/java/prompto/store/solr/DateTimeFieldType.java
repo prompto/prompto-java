@@ -29,8 +29,7 @@ public class DateTimeFieldType extends FieldType {
 
 	@Override
 	public void write(TextResponseWriter writer, String name, IndexableField f) throws IOException {
-		// TODO Auto-generated method stub
-
+		writer.writeStr(name, f.stringValue(), true);
 	}
 
     @Override
