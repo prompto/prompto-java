@@ -34,6 +34,11 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 		this.value = new org.joda.time.DateTime(year, month, day, hour, minute, second, milli);
 	}
 
+	public DateTime(String value) {
+		super(DateTimeType.instance());
+		this.value = org.joda.time.DateTime.parse(value);
+	}
+
 	public org.joda.time.DateTime getValue() {
 		return value;
 	}
