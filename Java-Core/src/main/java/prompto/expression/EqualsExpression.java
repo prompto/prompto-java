@@ -11,10 +11,12 @@ import prompto.runtime.Context;
 import prompto.runtime.LinkedValue;
 import prompto.runtime.LinkedVariable;
 import prompto.store.IFilterBuilder;
+import prompto.store.IStore;
 import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.Boolean;
+import prompto.value.IInstance;
 import prompto.value.IValue;
 import prompto.value.NullValue;
 import prompto.value.TypeValue;
@@ -161,16 +163,27 @@ public class EqualsExpression implements IExpression, IAssertion {
 	
 	@Override
 	public void toFilter(Context context, IFilterBuilder builder) throws PromptoError {
+		String name = null;
+		IValue value = null;
 		if(left instanceof UnresolvedIdentifier) {
-			builder.push(((UnresolvedIdentifier)left).getName(), operator, right.interpret(context));
+			name = ((UnresolvedIdentifier)left).getName();
+			value = right.interpret(context);
 		} else if(left instanceof InstanceExpression) {
-			builder.push(((InstanceExpression)left).getName(), operator, right.interpret(context));
+			name = ((InstanceExpression)left).getName();
+			value = right.interpret(context);
 		} else if(right instanceof UnresolvedIdentifier) {
-			builder.push(((UnresolvedIdentifier)right).getName(), operator, left.interpret(context));
+			name = ((UnresolvedIdentifier)right).getName();
+			value = left.interpret(context);
 		} else if(right instanceof InstanceExpression) {
-			builder.push(((InstanceExpression)right).getName(), operator, left.interpret(context));
-		} else
+			name = ((InstanceExpression)right).getName();
+			value = left.interpret(context);
+		}
+		if(name==null || value==null)
 			IExpression.super.toFilter(context, builder);
-		
+		else {
+			if(value instanceof IInstance)
+				value = ((IInstance)value).getMember(context, IStore.dbIdName, false);
+			builder.push(name, operator, value);
+		}
 	}
 }
