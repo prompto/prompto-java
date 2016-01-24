@@ -2073,6 +2073,16 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitCategory_type(@NotNull OParser.Category_typeContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link OParser#mutable_category_type}.
+	 * @param ctx the parse tree
+	 */
+	void enterMutable_category_type(@NotNull OParser.Mutable_category_typeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#mutable_category_type}.
+	 * @param ctx the parse tree
+	 */
+	void exitMutable_category_type(@NotNull OParser.Mutable_category_typeContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link OParser#code_type}.
 	 * @param ctx the parse tree
 	 */

@@ -691,10 +691,9 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitConstructor_expression(Constructor_expressionContext ctx) {
-		boolean mutable = ctx.MUTABLE()!=null;
 		CategoryType type = this.<CategoryType>getNodeValue(ctx.typ);
 		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
-		setNodeValue(ctx, new ConstructorExpression(type, mutable, args));
+		setNodeValue(ctx, new ConstructorExpression(type, args));
 	}
 	
 	@Override
@@ -1821,6 +1820,14 @@ public class OPromptoBuilder extends OParserBaseListener {
 		setNodeValue(ctx, new MultiplyExpression(left, right));
 	}
 	
+	@Override
+	public void exitMutable_category_type(Mutable_category_typeContext ctx) {
+		CategoryType typ = this.<CategoryType>getNodeValue(ctx.category_type());
+		typ.setMutable(ctx.MUTABLE()!=null);
+		setNodeValue(ctx, typ);
+	}
+	
+
 	@Override
 	public void exitNamed_argument(Named_argumentContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);

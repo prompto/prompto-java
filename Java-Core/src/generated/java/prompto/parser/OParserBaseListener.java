@@ -2177,6 +2177,18 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterMutable_category_type(@NotNull OParser.Mutable_category_typeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMutable_category_type(@NotNull OParser.Mutable_category_typeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCode_type(@NotNull OParser.Code_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}

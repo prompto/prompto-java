@@ -2087,6 +2087,16 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitCategory_type(@NotNull EParser.Category_typeContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link EParser#mutable_category_type}.
+	 * @param ctx the parse tree
+	 */
+	void enterMutable_category_type(@NotNull EParser.Mutable_category_typeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EParser#mutable_category_type}.
+	 * @param ctx the parse tree
+	 */
+	void exitMutable_category_type(@NotNull EParser.Mutable_category_typeContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link EParser#code_type}.
 	 * @param ctx the parse tree
 	 */

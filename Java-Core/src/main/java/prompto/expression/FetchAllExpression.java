@@ -56,7 +56,7 @@ public class FetchAllExpression extends FetchOneExpression {
 		} else
 			writer.append("all ");
 		writer.append(" ( ");
-		writer.append(type.getId().toString());
+		type.toDialect(writer);
 		writer.append(" ) ");
 		if(filter!=null) {
 			writer.append("where ");
@@ -73,7 +73,7 @@ public class FetchAllExpression extends FetchOneExpression {
 		if(start==null)
 			writer.append("all ");
 		writer.append("( ");
-		writer.append(type.getId().toString());
+		type.toDialect(writer);
 		writer.append(" ) ");
 		if(start!=null) {
 			writer.append("rows ( ");
@@ -96,7 +96,7 @@ public class FetchAllExpression extends FetchOneExpression {
 		writer.append("fetch ");
 		if(start==null)
 			writer.append("all ");
-		writer.append(type.getId().toString());
+		type.toDialect(writer);
 		if(start!=null) {
 			start.toDialect(writer);
 			writer.append(" to ");

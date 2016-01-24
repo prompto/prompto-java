@@ -679,7 +679,6 @@ public class EPromptoBuilder extends EParserBaseListener {
 
 	@Override
 	public void exitConstructorFrom(ConstructorFromContext ctx) {
-		boolean mutable = ctx.MUTABLE()!=null;
 		CategoryType type = this.<CategoryType>getNodeValue(ctx.typ);
 		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
 		if(args==null)
@@ -689,12 +688,11 @@ public class EPromptoBuilder extends EParserBaseListener {
 		ArgumentAssignment arg = this.<ArgumentAssignment>getNodeValue(ctx.arg);
 		if(arg!=null)
 			args.add(arg);
-		setNodeValue(ctx, new ConstructorExpression(type, mutable, args));
+		setNodeValue(ctx, new ConstructorExpression(type, args));
 	}
 
 	@Override
 	public void exitConstructorNoFrom(ConstructorNoFromContext ctx) {
-		boolean mutable = ctx.MUTABLE()!=null;
 		CategoryType type = this.<CategoryType>getNodeValue(ctx.typ);
 		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
 		if(args==null)
@@ -702,7 +700,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 		ArgumentAssignment arg = this.<ArgumentAssignment>getNodeValue(ctx.arg);
 		if(arg!=null)
 			args.add(arg);
-		setNodeValue(ctx, new ConstructorExpression(type, mutable, args));
+		setNodeValue(ctx, new ConstructorExpression(type, args));
 	}
 
 	@Override
@@ -1784,6 +1782,13 @@ public class EPromptoBuilder extends EParserBaseListener {
 		IExpression left = this.<IExpression>getNodeValue(ctx.left);
 		IExpression right = this.<IExpression>getNodeValue(ctx.right);
 		setNodeValue(ctx, new MultiplyExpression(left, right));
+	}
+	
+	@Override
+	public void exitMutable_category_type(Mutable_category_typeContext ctx) {
+		CategoryType typ = this.<CategoryType>getNodeValue(ctx.category_type());
+		typ.setMutable(ctx.MUTABLE()!=null);
+		setNodeValue(ctx, typ);
 	}
 	
 	@Override

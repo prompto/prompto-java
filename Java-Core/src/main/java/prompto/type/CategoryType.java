@@ -21,6 +21,7 @@ import prompto.runtime.MethodFinder;
 import prompto.runtime.Score;
 import prompto.statement.MethodCall;
 import prompto.store.IStored;
+import prompto.utils.CodeWriter;
 import prompto.value.ConcreteInstance;
 import prompto.value.ExpressionValue;
 import prompto.value.IContainer;
@@ -31,8 +32,25 @@ import prompto.value.ListValue;
 
 public class CategoryType extends BaseType {
 
+	boolean mutable = false;
+	
 	public CategoryType(Identifier name) {
 		super(name);
+	}
+	
+	public void setMutable(boolean mutable) {
+		this.mutable = mutable;
+	}
+	
+	public boolean isMutable() {
+		return mutable;
+	}
+	
+	@Override
+	public void toDialect(CodeWriter writer) {
+		if(mutable)
+			writer.append("mutable ");
+		super.toDialect(writer);
 	}
 	
 	@Override
@@ -252,12 +270,16 @@ public class CategoryType extends BaseType {
 
 	public IInstance newInstance(Context context) throws PromptoError {
 		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, this.getId());
-		return decl.newInstance(context);
+		IInstance inst = decl.newInstance(context);
+		inst.setMutable(this.mutable);
+		return inst;
 	}
 	
 	public IInstance newInstance(Context context, IStored stored) throws PromptoError {
 		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, this.getId());
-		return decl.newInstance(context, stored);
+		IInstance inst = decl.newInstance(context, stored);
+		inst.setMutable(this.mutable);
+		return inst;
 	}
 	
 	public IValue sort(final Context context, IContainer<IValue> list, IExpression key) throws PromptoError {

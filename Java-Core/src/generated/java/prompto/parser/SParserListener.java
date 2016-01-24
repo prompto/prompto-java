@@ -2003,6 +2003,16 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitCategory_type(@NotNull SParser.Category_typeContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SParser#mutable_category_type}.
+	 * @param ctx the parse tree
+	 */
+	void enterMutable_category_type(@NotNull SParser.Mutable_category_typeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SParser#mutable_category_type}.
+	 * @param ctx the parse tree
+	 */
+	void exitMutable_category_type(@NotNull SParser.Mutable_category_typeContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SParser#code_type}.
 	 * @param ctx the parse tree
 	 */

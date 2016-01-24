@@ -17,13 +17,11 @@ import prompto.value.IValue;
 public class ConstructorExpression implements IExpression {
 	
 	CategoryType type;
-	boolean mutable;
 	IExpression copyFrom;
 	ArgumentAssignmentList assignments;
 	
-	public ConstructorExpression(CategoryType type, boolean mutable, ArgumentAssignmentList assignments) {
+	public ConstructorExpression(CategoryType type, ArgumentAssignmentList assignments) {
 		this.type = type;
-		this.mutable = mutable;
 		setAssignments(assignments);
 	}
 	
@@ -72,9 +70,7 @@ public class ConstructorExpression implements IExpression {
 	}
 
 	private void toODialect(CodeWriter writer) {
-		if(this.mutable)
-			writer.append("mutable ");
-		writer.append(type.getId());
+		type.toDialect(writer);
 		ArgumentAssignmentList assignments = new ArgumentAssignmentList();
 		if (copyFrom != null)
 			assignments.add(new ArgumentAssignment(null, copyFrom));
@@ -84,9 +80,7 @@ public class ConstructorExpression implements IExpression {
 	}
 
 	private void toEDialect(CodeWriter writer) {
-		if(this.mutable)
-			writer.append("mutable ");
-		writer.append(type.getId());
+		type.toDialect(writer);
 		if (copyFrom != null) {
 			writer.append(" from ");
 			writer.append(copyFrom.toString());
@@ -102,7 +96,7 @@ public class ConstructorExpression implements IExpression {
 		CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getId());
 		if(cd==null)
 			throw new SyntaxError("Unknown category " + type.getId());
-		type = cd.getType(context);
+		IType type = cd.getType(context); // could be a resource rather than a category
 		cd.checkConstructorContext(context);
 		if(copyFrom!=null) {
 			IType cft = copyFrom.check(context);
@@ -133,7 +127,7 @@ public class ConstructorExpression implements IExpression {
 					for(Identifier name : copyFrom.getMemberNames()) {
 						if(cd.hasAttribute(context, name)) {
 							IValue value = copyFrom.getMember(context, name, false);
-							if(value!=null && value.isMutable() && !this.mutable)
+							if(value!=null && value.isMutable() && !type.isMutable())
 								throw new NotMutableError();
 							instance.setMember(context, name, value);
 						}
@@ -143,15 +137,15 @@ public class ConstructorExpression implements IExpression {
 			if(assignments!=null) {
 				for(ArgumentAssignment assignment : assignments) {
 					IValue value = assignment.getExpression().interpret(context);
-					if(value!=null && value.isMutable() && !this.mutable)
+					if(value!=null && value.isMutable() && !type.isMutable())
 						throw new NotMutableError();
 					instance.setMember(context, assignment.getName(), value);
 				}
 			}
-			return instance;
 		} finally {
-			instance.setMutable(this.mutable);
+			instance.setMutable(type.isMutable());
 		}
+		return instance;
 	}
 
 }

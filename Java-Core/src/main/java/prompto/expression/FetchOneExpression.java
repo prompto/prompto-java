@@ -38,20 +38,20 @@ public class FetchOneExpression extends Section implements IExpression {
 		switch(writer.getDialect()) {
 		case E:
 			writer.append("fetch one ");
-			writer.append(type.getId().toString());
+			type.toDialect(writer);
 			writer.append(" where ");
 			filter.toDialect(writer);
 			break;
 		case O:
 			writer.append("fetch one (");
-			writer.append(type.getId().toString());
+			type.toDialect(writer);
 			writer.append(") where (");
 			filter.toDialect(writer);
 			writer.append(")");
 			break;
 		case S:
 			writer.append("fetch one ");
-			writer.append(type.getId().toString());
+			type.toDialect(writer);
 			writer.append(" where ");
 			filter.toDialect(writer);
 			break;

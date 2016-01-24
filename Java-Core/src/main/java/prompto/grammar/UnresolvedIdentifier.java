@@ -124,7 +124,7 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 
 	private IExpression resolveConstructor(Context context) {
 		try {
-			IExpression method = new ConstructorExpression(new CategoryType(id), false, null);
+			IExpression method = new ConstructorExpression(new CategoryType(id), null);
 			method.check(context);
 			return method;
 		} catch(SyntaxError e) {

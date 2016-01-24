@@ -2201,6 +2201,18 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterMutable_category_type(@NotNull EParser.Mutable_category_typeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMutable_category_type(@NotNull EParser.Mutable_category_typeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCode_type(@NotNull EParser.Code_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}

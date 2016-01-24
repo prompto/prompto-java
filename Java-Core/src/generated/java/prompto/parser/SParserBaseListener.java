@@ -2117,6 +2117,18 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterMutable_category_type(@NotNull SParser.Mutable_category_typeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMutable_category_type(@NotNull SParser.Mutable_category_typeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCode_type(@NotNull SParser.Code_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
