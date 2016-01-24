@@ -1,6 +1,8 @@
 package prompto.statement;
 
-import prompto.error.NotStorableError;
+import java.util.ArrayList;
+import java.util.List;
+
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
@@ -66,17 +68,13 @@ public class StoreStatement extends SimpleStatement {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		IStore store = IDataStore.getInstance();
+		List<IStorable> storables = new ArrayList<>();
 		for(IExpression exp : expressions) {
 			IValue value = exp.interpret(context);
-			IStorable storable = null;
 			if(value instanceof IInstance)
-				storable = ((IInstance)value).getStorable();
-			if(storable==null)
-				throw new NotStorableError();
-			if(!storable.isDirty())
-				continue;
-			store.store(context, storable);
+				((IInstance)value).collectStorables(storables);
 		}
+		store.store(context, storables);
 		return null;
 	}
 

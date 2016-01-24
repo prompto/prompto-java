@@ -55,10 +55,12 @@ public final class MemStore implements IStore {
 	static final Identifier dbIdName = new Identifier("dbId");
 	
 	@Override
-	public void store(Context context, IStorable storable) {
-		if(!(storable instanceof StorableDocument))
-			throw new IllegalStateException("Expecting a StorableDocument");
-		store(context, (StorableDocument)storable);
+	public void store(Context context, Collection<IStorable> storables) {
+		for(IStorable storable : storables) {
+			if(!(storable instanceof StorableDocument))
+				throw new IllegalStateException("Expecting a StorableDocument");
+			store(context, (StorableDocument)storable);
+		}
 	}
 	
 	public void store(Context context, StorableDocument storable) {
@@ -259,7 +261,7 @@ public final class MemStore implements IStore {
 		}
 
 		@Override
-		public IValue getDbId() {
+		public IValue getDbId(boolean create) {
 			IValue dbId = getValue(null, dbIdName);
 			if(dbId==null) {
 				setDirty(true);

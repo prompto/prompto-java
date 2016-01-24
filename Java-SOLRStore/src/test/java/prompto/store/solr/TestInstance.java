@@ -1,5 +1,6 @@
 package prompto.store.solr;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -184,7 +185,7 @@ public class TestInstance extends BaseSOLRTest {
 		child.setMember(context, new Identifier(fieldName), new Text(childValue));
 		parent.setMember(context, new Identifier(fieldName), new Text(fieldValue));
 		parent.setMember(context, new Identifier(childName), child);
-		store.store(context, parent.getStorable());
+		store.store(context, Arrays.asList(parent.getStorable(), child.getStorable()));
 		IStored stored = fetchOne(fieldName, new TextLiteral(fieldValue));
 		assertNotNull(stored);
 		assertEquals(fieldValue, stored.getData(fieldName));

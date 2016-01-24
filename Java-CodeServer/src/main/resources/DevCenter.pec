@@ -19,19 +19,28 @@ define project as storable Project attribute
 define lastOpened as storable DateTime attribute
 
 define CodingSession as storable category with attributes user, project and lastOpened
+define RecentProject as storable CodingSession
 
 define getRecentProjects as method receiving Integer count doing:
-	developer = getHttpUser
-	sessions = fetch CodingSession 1 to count where user = developer order by lastOpened desc
+	user = getHttpUser
+	sessions = fetch RecentProject 1 to count where user = user order by lastOpened desc
 	return session.project for each session in sessions
 
 define getAllProjects as method doing:
 	return fetch all Project order by name
 
 define getProjectDeclarations as method receiving dbId doing:
-	project = fetch one Project where dbId = dbId
-	// use this opportunity to keep track of latest projects
 	user = getHttpUser
+	project = fetch one Project where dbId = dbId
+	// use this opportunity to keep track of coding sessions
 	session = CodingSession with user as user, project as project and now as lastOpened 
 	store session
+	// use this opportunity to keep track of recent projects
+	recent = fetch one mutable RecentProject where user = user and project = project
+	if recent is nothing:
+		recent = RecentProject with user as user, project as project and now as lastOpened 
+	else:
+		recent.lastOpened = now 
+	store recent
+	
 	return project.memberDeclarations

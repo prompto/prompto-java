@@ -20,7 +20,7 @@ public class StoredDocument extends BaseDocument implements IStored {
 
 	
 	@Override
-	public IValue getDbId() {
+	public IValue getDbId(boolean create) {
 		Object dbId = document.getFieldValue("dbId");
 		if(dbId==null)
 			return null;

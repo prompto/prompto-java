@@ -215,7 +215,7 @@ public class CategoryType extends BaseType {
 		// check we derive from root category (if not extending 'Any')
 		if(!"any".equals(baseName.toString()) && !decl.isDerivedFrom(context,new CategoryType(baseName)))
 			return false;
-		for(Identifier attribute : other.getAttributes()) {
+		for(Identifier attribute : other.getAllAttributes(context)) {
 			if(!decl.hasAttribute(context,attribute))
 				return false;
 		}

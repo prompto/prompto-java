@@ -10,6 +10,6 @@ public interface IStored {
 
 	IValue getValue(Context context, Identifier name) throws PromptoError;
 	Object getData(String name) throws PromptoError;
-	IValue getDbId();
+	IValue getDbId(boolean create);
 	
 }

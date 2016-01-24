@@ -6,6 +6,7 @@ import prompto.grammar.Identifier;
 import prompto.grammar.MethodDeclarationList;
 import prompto.runtime.Context;
 import prompto.store.IDataStore;
+import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.type.CategoryType;
 import prompto.type.IType;
@@ -48,6 +49,10 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	public IdentifierList getAttributes() {
 		return attributes;
 	}
+	
+	public IdentifierList getAllAttributes(Context context) {
+		return attributes;
+	}
 		
 	@Override
 	public void register(Context context) throws SyntaxError {
@@ -72,7 +77,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	}
 
 	public boolean hasAttribute(Context context, Identifier name) {
-		 return attributes!=null && attributes.contains(name);
+		return attributes!=null && attributes.contains(name);
 	}
 
 	public boolean hasMethod(Context context, String key, Object object) {
@@ -89,8 +94,6 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 
 	public abstract IInstance newInstance(Context context) throws PromptoError;
 	
-	static final Identifier dbIdName = new Identifier("dbId");
-	
 	public IInstance newInstance(Context context, IStored stored) throws PromptoError {
 		IInstance instance = newInstance(context);
 		instance.setMutable(true);
@@ -103,10 +106,12 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	}
 
 	private void populateInstance(Context context, IStored stored, IInstance instance) throws PromptoError {
-		IValue dbId = stored.getValue(context, dbIdName);
-		instance.setMember(context, dbIdName, dbId);
-		for(Identifier name : this.getAttributes()) 
+		IValue dbId = stored.getValue(context, IStore.dbIdName);
+		instance.setMember(context, IStore.dbIdName, dbId);
+		for(Identifier name : this.getAllAttributes(context)) 
 			populateMember(context, stored, instance, name);
+		if(instance.getStorable()!=null)
+			instance.getStorable().setDirty(false);
 	}
 	
 	private void populateMember(Context context, IStored stored, IInstance instance, Identifier name) throws PromptoError {
