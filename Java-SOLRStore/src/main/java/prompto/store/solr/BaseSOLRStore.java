@@ -82,7 +82,7 @@ abstract class BaseSOLRStore implements IStore {
 		readerMap.put("image", (o) -> BinaryConverter.toBinary(o));
 		readerMap.put("integer", null);
 		readerMap.put("decimal", null);
-		readerMap.put("datetime", null);
+		readerMap.put("datetime", (o) -> new prompto.value.DateTime(o.toString()));
 		// create a list type for each atomic type (using a copy to avoid concurrent modification)
 		Set<Map.Entry<String, IValueReader>> entries = new HashSet<>(readerMap.entrySet());
 		for(Map.Entry<String, IValueReader> entry : entries) {
@@ -161,11 +161,13 @@ abstract class BaseSOLRStore implements IStore {
 	}
 
 	@Override
-	public void store(Context context, IStorable storable) throws PromptoError {
-		if(!(storable instanceof StorableDocument))
-			throw new IllegalStateException();
+	public void store(Context context, Collection<IStorable> storables) throws PromptoError {
 		List<SolrInputDocument> documents = new ArrayList<>();
-		((StorableDocument)storable).collectDocuments(documents);
+		for(IStorable storable : storables) {
+			if(!(storable instanceof StorableDocument))
+				throw new IllegalStateException();
+			documents.add(((StorableDocument)storable).getDocument());
+		}
 		try {
 			addDocuments(documents);
 		} catch(Exception e) {
@@ -240,11 +242,6 @@ abstract class BaseSOLRStore implements IStore {
 		SolrQuery query = buildQuery(context, type, start, end, filterExpression, orderBy);
 		try {
 			commit();
-			/*
-			SolrQuery q = new SolrQuery();
-			q.setQuery("*:*");
-			QueryResponse r = query(q);
-			*/
 			QueryResponse result = query(query);
 			return getMany(context, result);
 		} catch(Exception e) {
@@ -282,13 +279,15 @@ abstract class BaseSOLRStore implements IStore {
 			builder.pushCategory(type);
 		if(filterExpression!=null)
 			filterExpression.toFilter(context, builder);
+		if(type!=null && filterExpression!=null)
+			builder.and();
 		// TODO: based on the field type and operator, should we use query/filterQuery ?
 		SolrQuery query = new SolrQuery();
 		query.setQuery(builder.toSolrQuery());
 		Long intStart = getLong(context, start);
 		Long intEnd = getLong(context, end);
 		if(intStart!=null && intEnd!=null) {
-			query.setStart(intStart.intValue());
+			query.setStart(intStart.intValue() - 1);
 			query.setRows(1 + (int)(intEnd - intStart));
 		}
 		if(orderBy!=null) for(OrderByClause clause : orderBy) {

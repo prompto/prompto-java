@@ -116,6 +116,34 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 
 
 	@Override
+	public IdentifierList getAllAttributes(Context context) {
+		if(derivedFrom==null)
+			return super.getAllAttributes(context);
+		IdentifierList attributes;
+		Set<Identifier> distinct = new HashSet<>();
+		attributes = super.getAllAttributes(context);
+		if(attributes!=null)
+			distinct.addAll(attributes);
+		for(Identifier ancestor : derivedFrom) {
+			attributes = getAncestorAttributes(context, ancestor);
+			if(attributes!=null)
+				distinct.addAll(attributes);
+		}
+		if(distinct.isEmpty())
+			return null;
+		attributes = new IdentifierList();
+		attributes.addAll(distinct);
+		return attributes;
+	}
+	
+	private IdentifierList getAncestorAttributes(Context context, Identifier ancestor) {
+		CategoryDeclaration actual = context.getRegisteredDeclaration(CategoryDeclaration.class, ancestor);
+		if(actual==null)
+			return null;
+		return actual.getAllAttributes(context);
+	}
+
+	@Override
 	public boolean hasAttribute(Context context, Identifier name) {
 		if(super.hasAttribute(context, name))
 			return true;

@@ -15,6 +15,7 @@ import prompto.declaration.GetterMethodDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.SetterMethodDeclaration;
 import prompto.error.NotMutableError;
+import prompto.error.NotStorableError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
@@ -25,6 +26,7 @@ import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.store.IDataStore;
 import prompto.store.IStorable;
+import prompto.store.IStore;
 import prompto.type.CategoryType;
 import prompto.type.DecimalType;
 
@@ -45,11 +47,6 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	}
 
 	@Override
-	public IStorable getStorable() {
-		return storable;
-	}
-
-	@Override
 	public boolean setMutable(boolean mutable) {
 		boolean result = this.mutable;
 		this.mutable = mutable;
@@ -58,6 +55,35 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	
 	public boolean isMutable() {
 		return mutable;
+	}
+	
+	@Override
+	public IStorable getStorable() {
+		return storable;
+	}
+
+	@Override
+	public void collectStorables(List<IStorable> list) throws PromptoError {
+		if(storable==null)
+			throw new NotStorableError();
+		if(storable.isDirty())
+			list.add(storable);
+		for(IValue value : values.values()) {
+			if(value instanceof IInstance)
+				((IInstance)value).collectStorables(list);
+		}
+	}
+	
+	@Override
+	public void store(Context context, String name, IStorable storable) throws PromptoError {
+		// this is called when storing the instance as a field value, so we just store the dbId
+		if(this.storable==null)
+			throw new NotStorableError();
+		IValue dbId = this.values.get(IStore.dbIdName);
+		if(dbId==null && this.storable.isDirty())
+			dbId = this.storable.getDbId(true);
+		if(dbId!=null)
+			storable.setValue(context, new Identifier(name), dbId);
 	}
 	
 	public ConcreteCategoryDeclaration getDeclaration() {

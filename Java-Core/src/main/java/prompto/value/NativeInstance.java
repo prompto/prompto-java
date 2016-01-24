@@ -17,6 +17,7 @@ import prompto.declaration.NativeCategoryDeclaration;
 import prompto.declaration.SetterMethodDeclaration;
 import prompto.error.InternalError;
 import prompto.error.NotMutableError;
+import prompto.error.NotStorableError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
@@ -70,6 +71,20 @@ public class NativeInstance extends BaseValue implements IInstance {
 		boolean result = this.mutable;
 		this.mutable = mutable;
 		return result;
+	}
+	
+	@Override
+	public void collectStorables(List<IStorable> list) throws PromptoError {
+		if(storable==null)
+			throw new NotStorableError();
+		if(!storable.isDirty())
+			list.add(storable);
+		/* TODO get child storables of native instance
+		for(IValue value : values.values()) {
+			if(value instanceof IInstance)
+				((IInstance)value).collectStorables(list);
+		}
+		*/
 	}
 	
 	public boolean isMutable() {
@@ -236,7 +251,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
 		try {
 			generator.writeStartObject();
-			for(Identifier attrName : declaration.getAttributes()) {
+			for(Identifier attrName : declaration.getAllAttributes(context)) {
 				generator.writeFieldName(attrName.toString());
 				IValue value = getMember(context, attrName, false);
 				if(value!=null)
