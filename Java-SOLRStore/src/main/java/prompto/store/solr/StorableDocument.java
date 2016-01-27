@@ -1,6 +1,7 @@
 package prompto.store.solr;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,41 +20,61 @@ public class StorableDocument extends BaseDocument implements IStorable {
 
 	SolrInputDocument document = null;
 	List<String> categories;
+	boolean isUpdate; // partial updates require operations instead of values
 	
 	public StorableDocument(List<String> categories) {
 		this.categories = categories;
 	}
 
 	@Override
-	public IValue getDbId(boolean create) {
-		SolrInputField dbIdField = document==null? null : document.getField("dbId");
-		UUID dbId = dbIdField==null ? null : (UUID)dbIdField.getValue();
-		if(dbId==null && create) {
-			if(document==null)
-				document = newDocument();
-			dbId = java.util.UUID.randomUUID();
-			document.setField("dbId", dbId);
-		}
+	public IValue getOrCreateDbId() {
+		UUID dbId = getNativeDbId();
 		return dbId==null ? null : new prompto.value.UUID(dbId);
 	}
 	
+	private UUID getNativeDbId() {
+		ensureDocument(null);
+		SolrInputField dbIdField = document.getField("dbId");
+		if(dbIdField!=null)
+			return (UUID)dbIdField.getValue();
+		else
+			return null;
+	}
+
 	@Override
 	public void setDirty(boolean set) {
-		if(!set)
+		if(!set) {
 			document = null;
-		else if(document==null)
-			document = newDocument();
+			isUpdate = false;
+		} else 
+			ensureDocument(null);
 	}
 
 	public SolrInputDocument getDocument() {
 		return document;
 	}
 	
-	private SolrInputDocument newDocument() {
-		SolrInputDocument doc = new SolrInputDocument();
-		if(categories!=null)
-			doc.setField("category", categories);
-		return doc;
+	private void ensureDocument(IDbIdProvider provider) {
+		if(document==null) {
+			UUID dbId = null;
+			if(provider!=null) {
+				// the only scenario where we get an existing dbId is when  
+				// an instance passes a provider when calling setValue
+				// in such a case, the scenario is an update scenario
+				IValue dbIdValue = provider.getDbId();
+				if(dbIdValue!=null) {
+					dbId = ((prompto.value.UUID)dbIdValue).getValue();
+					if(dbId!=null)
+						this.isUpdate = true;
+				}
+			}
+			if(dbId==null)
+				dbId = java.util.UUID.randomUUID();
+			document = new SolrInputDocument();
+			document.setField("dbId", dbId);
+			if(categories!=null && !this.isUpdate)
+				document.setField("category", categories);
+		}
 	}
 
 	@Override
@@ -62,40 +83,32 @@ public class StorableDocument extends BaseDocument implements IStorable {
 	}
 
 	@Override
-	public void setValue(Context context, Identifier name, IValue value) throws PromptoError {
-		if(document==null)
-			document = newDocument();
-		if(value==null)
-			document.setField(name.getName(), null);
-		else
+	public void setValue(Context context, Identifier name, IValue value, IDbIdProvider provider) throws PromptoError {
+		ensureDocument(provider);
+		if(value==null) {
+			if(isUpdate)
+				document.setField(name.getName(), Collections.singletonMap("set", null));
+		} else
 			value.store(context, name.getName(), this);
 	}
 	
 	@Override
 	public void setData(String name, Object value) throws PromptoError {
-		if(document==null)
-			document = newDocument();
-		if(value instanceof Binary) try {
-			Binary binary = (Binary)value;
-			value = new BinaryValue(binary.getMimeType(), binary.getData()).toByteArray();
+		ensureDocument(null);
+		if(value instanceof Binary)
+			value = binaryValue((Binary)value);
+		if(isUpdate)
+			document.setField(name, Collections.singletonMap("set", value));
+		else
+			document.setField(name, value);
+	}
+
+	private Object binaryValue(Binary binary) throws PromptoError {
+		try {
+			return new BinaryValue(binary.getMimeType(), binary.getData()).toByteArray();
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		}
-		if(value instanceof StorableDocument)
-			value = ((StorableDocument)value).document;
-		document.setField(name, value);
-	}
-
-	@Override
-	public IValue getValue(Context context, Identifier name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
-	public Object getData(String name) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

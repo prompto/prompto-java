@@ -79,11 +79,8 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		// this is called when storing the instance as a field value, so we just store the dbId
 		if(this.storable==null)
 			throw new NotStorableError();
-		IValue dbId = this.values.get(IStore.dbIdName);
-		if(dbId==null && this.storable.isDirty())
-			dbId = this.storable.getDbId(true);
-		if(dbId!=null)
-			storable.setValue(context, new Identifier(name), dbId);
+		if(this.storable.isDirty())
+			storable.setValue(context, new Identifier(name), this.storable.getOrCreateDbId());
 	}
 	
 	public ConcreteCategoryDeclaration getDeclaration() {
@@ -172,8 +169,12 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		value = autocast(decl, value);
 		values.put(attrName, value);
 		if(storable!=null && decl.isStorable()) {
-			storable.setValue(context, attrName, value);
+			storable.setValue(context, attrName, value, this::getDbId);
 		}
+	}
+	
+	private IValue getDbId() {
+		return values.get(IStore.dbIdName);
 	}
 	
 	private IValue autocast(AttributeDeclaration decl, IValue value) {

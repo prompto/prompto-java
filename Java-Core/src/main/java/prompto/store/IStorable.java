@@ -6,11 +6,23 @@ import prompto.runtime.Context;
 import prompto.value.IValue;
 
 
-public interface IStorable extends IStored {
+public interface IStorable {
+
+	IValue getOrCreateDbId();
 
 	void setDirty(boolean dirty);
 	boolean isDirty();
-	void setValue(Context context, Identifier name, IValue value) throws PromptoError;
+	
+	default void setValue(Context context, Identifier name, IValue value) throws PromptoError {
+		setValue(context, name, value, null);
+	}
+	void setValue(Context context, Identifier name, IValue value, IDbIdProvider provider) throws PromptoError;
+	
 	void setData(String name, Object value) throws PromptoError;
 
+
+	public static interface IDbIdProvider {
+		IValue getDbId();
+	}
+	
 }

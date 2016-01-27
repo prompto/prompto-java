@@ -55,7 +55,7 @@ public final class MemStore implements IStore {
 	static final Identifier dbIdName = new Identifier("dbId");
 	
 	@Override
-	public void store(Context context, Collection<IStorable> storables) {
+	public void store(Context context, Collection<IStorable> storables) throws PromptoError {
 		for(IStorable storable : storables) {
 			if(!(storable instanceof StorableDocument))
 				throw new IllegalStateException("Expecting a StorableDocument");
@@ -63,7 +63,7 @@ public final class MemStore implements IStore {
 		}
 	}
 	
-	public void store(Context context, StorableDocument storable) {
+	public void store(Context context, StorableDocument storable) throws PromptoError {
 		// ensure db id
 		IValue dbId = storable.getValue(context, dbIdName);
 		if(!(dbId instanceof Integer)) {
@@ -251,7 +251,7 @@ public final class MemStore implements IStore {
 		return new StorableDocument(categories);
 	}
 	
-	class StorableDocument implements IStorable {
+	class StorableDocument implements IStored, IStorable {
 
 		Document document = null;
 		List<String> categories;
@@ -261,7 +261,12 @@ public final class MemStore implements IStore {
 		}
 
 		@Override
-		public IValue getDbId(boolean create) {
+		public IValue getDbId() {
+			return getValue(null, dbIdName);
+		}
+		
+		@Override
+		public IValue getOrCreateDbId() {
 			IValue dbId = getValue(null, dbIdName);
 			if(dbId==null) {
 				setDirty(true);
@@ -304,7 +309,7 @@ public final class MemStore implements IStore {
 		}
 		
 		@Override
-		public void setValue(Context context, Identifier name, IValue value) {
+		public void setValue(Context context, Identifier name, IValue value, IDbIdProvider provider) {
 			if(document==null)
 				document = newDocument();
 			if(value instanceof StorableDocument)
