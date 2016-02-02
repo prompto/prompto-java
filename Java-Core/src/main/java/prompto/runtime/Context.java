@@ -296,26 +296,31 @@ public class Context implements IContext {
 		ICodeStore store = ICodeStore.getInstance();
 		if(store==null)
 			return null;
-		IDeclaration decl = null;
-		try {
-			decl = store.fetchLatestVersion(name.getName());
-			if(decl==null)
+		// fetch and register atomically
+		synchronized(this) {
+			IDeclaration decl = declarations.get(name); // may have happened in another thread
+			if(decl!=null)
+				return decl;
+			try {
+				decl = store.fetchLatestVersion(name.getName());
+				if(decl==null)
+					return null;
+			} catch(PromptoError e) {
+				// TODO log
 				return null;
-		} catch(PromptoError e) {
-			// TODO log
-			return null;
-		}
-		try {
-			if(decl instanceof MethodDeclarationMap) {
-				MethodDeclarationMap map = (MethodDeclarationMap)decl;
-				for(Map.Entry<String, IMethodDeclaration> entry : map.entrySet())
-					entry.getValue().register(this);
-				decl = this.getRegisteredDeclaration(MethodDeclarationMap.class, name);
-			} else
-				decl.register(this);
-			return decl;
-		} catch(SyntaxError e) {
-			throw new RuntimeException(e); // TODO define a strategy
+			}
+			try {
+				if(decl instanceof MethodDeclarationMap) {
+					MethodDeclarationMap map = (MethodDeclarationMap)decl;
+					for(Map.Entry<String, IMethodDeclaration> entry : map.entrySet())
+						entry.getValue().register(this);
+					decl = this.getRegisteredDeclaration(MethodDeclarationMap.class, name);
+				} else
+					decl.register(this);
+				return decl;
+			} catch(SyntaxError e) {
+				throw new RuntimeException(e); // TODO define a strategy
+			}
 		}
 	}
 

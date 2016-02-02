@@ -1,6 +1,6 @@
 package prompto.store;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -24,16 +24,17 @@ public interface IStore {
 	IStorable newStorable(List<String> categories);
 	void store(Context context, Collection<IStorable> storables) throws PromptoError;
 	default void store(Context context, IStorable storable) throws PromptoError {
-		List<IStorable> list = new ArrayList<IStorable>();
-		list.add(storable);
-		store(context, list);
+		store(context, Arrays.asList(storable));
 	}
 	IStored fetchUnique(Context context, IValue dbId) throws PromptoError;
 	IStored fetchOne(Context context, CategoryType type, IExpression filter) throws PromptoError;
 	IStoredIterator fetchMany(Context context, CategoryType type, 
 			IExpression start, IExpression end, 
 			IExpression filter, OrderByClauseList orderBy) throws PromptoError;
-	void deleteOne(Object dbId) throws PromptoError;
+	void delete(Collection<Object> dbIds) throws PromptoError;
+	default void delete(Object dbId) throws PromptoError {
+		delete(Arrays.asList(dbId));
+	}
 	void deleteAll() throws PromptoError;
 	void createOrUpdateColumns(Collection<AttributeDeclaration> columns) throws PromptoError;
 	IType getColumnType(String name) throws PromptoError;

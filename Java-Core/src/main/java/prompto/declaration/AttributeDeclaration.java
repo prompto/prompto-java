@@ -1,5 +1,8 @@
 package prompto.declaration;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
@@ -8,23 +11,47 @@ import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
+import prompto.utils.IdentifierList;
 import prompto.value.IValue;
 
 public class AttributeDeclaration extends BaseDeclaration {
 	
 	IType type;
 	IAttributeConstraint constraint;
+	IdentifierList indexTypes;
 	boolean storable = false;
 	
+	public AttributeDeclaration(Identifier name, IType type) {
+		this(name, type, null, null);
+	}
+
 	public AttributeDeclaration(Identifier name, IType type, IAttributeConstraint constraint) {
+		this(name, type, constraint, null);
+	}
+	
+	public AttributeDeclaration(Identifier name, IType type, IdentifierList indexTypes) {
+		this(name, type, null, indexTypes);
+	}
+	
+	public AttributeDeclaration(Identifier name, IType type, IAttributeConstraint constraint, IdentifierList indexTypes) {
 		super(name);
 		this.type = type;
 		this.constraint = constraint;
+		this.indexTypes = indexTypes;
 	}
-	
+
 	@Override
 	public Type getDeclarationType() {
 		return Type.ATTRIBUTE;
+	}
+	
+	@Override
+	public String toString() {
+		return this.type.toString() + " " + this.getName();
+	}
+	
+	public Collection<String> getIndexTypes() {
+		return indexTypes==null ? null : indexTypes.stream().map((id) -> id.getName()).collect(Collectors.toList());
 	}
 	
 	public IType getType() {
@@ -109,6 +136,7 @@ public class AttributeDeclaration extends BaseDeclaration {
 		constraint.checkValue(context, value);
 		return value;
 	}
+
 
 
 }

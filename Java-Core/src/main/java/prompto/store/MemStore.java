@@ -85,8 +85,9 @@ public final class MemStore implements IStore {
 	}
 	
 	@Override
-	public void deleteOne(Object dbId) throws PromptoError {
-		documents.remove(dbId);
+	public void delete(Collection<Object> dbIds) throws PromptoError {
+		for(Object dbId : dbIds)
+			documents.remove(dbId);
 	}
 	
 	@Override

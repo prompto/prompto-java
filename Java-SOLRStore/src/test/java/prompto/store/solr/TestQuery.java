@@ -2,8 +2,6 @@ package prompto.store.solr;
 
 import static org.junit.Assert.*;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -38,25 +36,18 @@ public class TestQuery extends BaseSOLRTest {
 		context = Context.newGlobalContext();
 		registerDbIdAttribute();
 		registerNameAttribute();
-		registerNameField();
+		createField("name", "text", false);
 	}
 	
 	private void registerDbIdAttribute() throws SyntaxError {
-		AttributeDeclaration decl = new AttributeDeclaration( new Identifier("dbId"), AnyType.instance(), null);
+		AttributeDeclaration decl = new AttributeDeclaration( new Identifier("dbId"), AnyType.instance());
 		context.registerDeclaration(decl);
 	}
 
 	private void registerNameAttribute() throws SyntaxError {
-		AttributeDeclaration decl = new AttributeDeclaration( new Identifier("name"), TextType.instance(), null);
+		AttributeDeclaration decl = new AttributeDeclaration( new Identifier("name"), TextType.instance());
 		decl.setStorable(true);
 		context.registerDeclaration(decl);
-	}
-
-	private void registerNameField() {
-		Map<String, Object> options = new HashMap<>();
-		options.put("indexed", true);
-		options.put("stored", true);
-		store.addField("name", "text", options);
 	}
 
 	private IStored fetchOne(String query) throws Exception {
@@ -106,11 +97,16 @@ public class TestQuery extends BaseSOLRTest {
 		store.addDocuments(doc);
 		store.commit();
 		// Test the basics
-		store.deleteOne(uuid);
+		store.delete(uuid);
 		store.commit();
 		String query = "fetch one where name = \"John\"";
 		IStored result = fetchOne(query);
 		assertNull(result);
+	}
+	
+	@Test
+	public void testTextField() throws Exception {
+		
 	}
 
 }

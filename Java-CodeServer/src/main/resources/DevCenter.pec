@@ -1,46 +1,40 @@
-define dialect as storable Text attribute
-define body as storable Text attribute
+define Module as storable category with attributes name, version, description and image
 
-define Declaration as storable category with attributes name, version, dialect and body
-
-define memberDeclarations as storable Declaration[] attribute
-
-define Project as storable category with attributes name, version, description, image and memberDeclarations
-
-define Library as Project
-define Service as Project
-define Script as Project
+define Library as Module
+define Service as Module
+define Script as Module
 
 define entryPoint as storable Text attribute
+define Application as Module with attribute entryPoint
 
-define Application as Project with attribute entryPoint
+define module as storable Module attribute
 
-define project as storable Project attribute
 define lastOpened as storable DateTime attribute
+define CodingSession as storable category with attributes user, module and lastOpened
+define RecentSession as storable CodingSession
 
-define CodingSession as storable category with attributes user, project and lastOpened
-define RecentProject as storable CodingSession
+define Declaration as storable category with attributes name, version, methodDialect, methodBody and module
 
-define getRecentProjects as method receiving Integer count doing:
+define getRecentModules as method receiving Integer count doing:
 	user = getHttpUser
-	sessions = fetch RecentProject 1 to count where user = user order by lastOpened desc
-	return session.project for each session in sessions
+	sessions = fetch RecentSession 1 to count where user = user order by lastOpened desc
+	return session.module for each session in sessions
 
-define getAllProjects as method doing:
-	return fetch all Project order by name
+define getAllModules as method doing:
+	return fetch all Module order by name
 
-define getProjectDeclarations as method receiving dbId doing:
+define getModuleDeclarations as method receiving dbId doing:
 	user = getHttpUser
-	project = fetch one Project where dbId = dbId
+	module = fetch one Module where dbId = dbId
 	// use this opportunity to keep track of coding sessions
-	session = CodingSession with user as user, project as project and now as lastOpened 
+	session = CodingSession with user as user, module as module and now as lastOpened 
 	store session
 	// use this opportunity to keep track of recent projects
-	recent = fetch one mutable RecentProject where user = user and project = project
+	recent = fetch one mutable RecentSession where user = user and module = module
 	if recent is nothing:
-		recent = RecentProject with user as user, project as project and now as lastOpened 
+		recent = RecentSession with user as user, module as module and now as lastOpened 
 	else:
 		recent.lastOpened = now 
 	store recent
 	
-	return project.memberDeclarations
+	return fetch all Declaration where module = module

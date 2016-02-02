@@ -22,6 +22,7 @@ public class TestSampleImporter {
 		SampleImporter importer = new SampleImporter("samples/Chat/");
 		importer.importSample();
 		assertNotNull(importer.application);
+		assertNotNull(importer.application.getDbId());
 	}
 
 	@Test
@@ -29,6 +30,7 @@ public class TestSampleImporter {
 		SampleImporter importer = new SampleImporter("samples/Mail/");
 		importer.importSample();
 		assertNotNull(importer.application);
+		assertNotNull(importer.application.getDbId());
 	}
 
 	@Test
@@ -36,6 +38,7 @@ public class TestSampleImporter {
 		SampleImporter importer = new SampleImporter("samples/Soup/");
 		importer.importSample();
 		assertNotNull(importer.application);
+		assertNotNull(importer.application.getDbId());
 	}
 
 	@Test
@@ -43,5 +46,6 @@ public class TestSampleImporter {
 		SampleImporter importer = new SampleImporter("samples/MyApp/");
 		importer.importSample();
 		assertNotNull(importer.application);
+		assertNotNull(importer.application.getDbId());
 	}
 }

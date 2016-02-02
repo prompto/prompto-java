@@ -73,7 +73,7 @@ public class StorableDocument extends BaseDocument implements IStorable {
 			document = new SolrInputDocument();
 			document.setField("dbId", dbId);
 			if(categories!=null && !this.isUpdate)
-				document.setField("category", categories);
+				document.setField("category", categories); 
 		}
 	}
 
@@ -83,13 +83,14 @@ public class StorableDocument extends BaseDocument implements IStorable {
 	}
 
 	@Override
-	public void setValue(Context context, Identifier name, IValue value, IDbIdProvider provider) throws PromptoError {
+	public void setValue(Context context, Identifier id, IValue value, IDbIdProvider provider) throws PromptoError {
 		ensureDocument(provider);
+		String fieldName = id.getName();
 		if(value==null) {
 			if(isUpdate)
-				document.setField(name.getName(), Collections.singletonMap("set", null));
+				document.setField(fieldName, Collections.singletonMap("set", null));
 		} else
-			value.store(context, name.getName(), this);
+			value.store(context, fieldName, this);
 	}
 	
 	@Override

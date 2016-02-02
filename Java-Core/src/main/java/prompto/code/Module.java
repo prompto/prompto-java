@@ -5,17 +5,27 @@ import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
+import prompto.value.IValue;
 import prompto.value.Image;
 import prompto.value.Text;
 
 public abstract class Module {
 	
+	private IValue dbId;
 	private Text name;
 	private Text version;
 	private Text description;
 	private Image image;
 	
 	public abstract ModuleType getType();
+	
+	public IValue getDbId() {
+		return dbId;
+	}
+	
+	public void setDbId(IValue dbId) {
+		this.dbId = dbId;
+	}
 	
 	public Text getName() {
 		return name;
@@ -50,6 +60,7 @@ public abstract class Module {
 	}
 
 	public void populate(Context context, IStorable storable) throws PromptoError {
+		setDbId(storable.getOrCreateDbId());
 		storable.setValue(context, new Identifier("name"), name);
 		storable.setValue(context, new Identifier("version"), version);
 		if(description!=null)

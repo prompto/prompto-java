@@ -1,8 +1,6 @@
 package prompto.store.solr;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 import org.joda.time.DateTime;
@@ -203,16 +201,8 @@ public class TestInstance extends BaseSOLRTest {
 		return store.fetchOne(context, t, e);
 	}
 
-	private void createField(String name, String type, boolean multi) {
-		Map<String, Object> options = new HashMap<>();
-		options.put("indexed", "true");
-		options.put("stored", "true");
-		options.put("multiValued", multi);
-		store.addField(name, type, options);
-	}
-
 	private IInstance createInstanceWith1Attribute(String name, IType type) throws Exception {
-		AttributeDeclaration a = new AttributeDeclaration(new Identifier(name), type, null);
+		AttributeDeclaration a = new AttributeDeclaration(new Identifier(name), type);
 		a.setStorable(true);
 		context.registerDeclaration(a);
 		IdentifierList as = new IdentifierList(new Identifier(name));
@@ -225,12 +215,12 @@ public class TestInstance extends BaseSOLRTest {
 	}
 
 	private IInstance createInstanceWith2Attributes(String name1, IType type1, String name2, IType type2) throws Exception {
-		AttributeDeclaration a = new AttributeDeclaration(new Identifier("dbId"), AnyType.instance(), null);
+		AttributeDeclaration a = new AttributeDeclaration(new Identifier("dbId"), AnyType.instance());
 		context.registerDeclaration(a);
-		a = new AttributeDeclaration(new Identifier(name1), type1, null);
+		a = new AttributeDeclaration(new Identifier(name1), type1);
 		a.setStorable(true);
 		context.registerDeclaration(a);
-		a = new AttributeDeclaration(new Identifier(name2), type2, null);
+		a = new AttributeDeclaration(new Identifier(name2), type2);
 		a.setStorable(true);
 		context.registerDeclaration(a);
 		IdentifierList as = new IdentifierList(new Identifier(name1));

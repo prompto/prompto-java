@@ -57,6 +57,10 @@ abstract class BaseSOLRStore implements IStore {
 		typeMap.put("blob", BlobType.instance());
 		typeMap.put("boolean", BooleanType.instance());
 		typeMap.put("text", TextType.instance());
+		typeMap.put("text-key", typeMap.get("text"));
+		typeMap.put("text-value", typeMap.get("text"));
+		typeMap.put("text-words", typeMap.get("text"));
+		typeMap.put("version", TextType.instance());
 		typeMap.put("image", ImageType.instance());
 		typeMap.put("integer", IntegerType.instance());
 		typeMap.put("decimal", DecimalType.instance());
@@ -79,6 +83,9 @@ abstract class BaseSOLRStore implements IStore {
 		readerMap.put("blob", null);
 		readerMap.put("boolean", null);
 		readerMap.put("text", (o) -> new prompto.value.Text(o.toString()));
+		readerMap.put("text-key", readerMap.get("text"));
+		readerMap.put("text-value", readerMap.get("text"));
+		readerMap.put("text-words", readerMap.get("text"));
 		readerMap.put("image", (o) -> BinaryConverter.toBinary(o));
 		readerMap.put("integer", null);
 		readerMap.put("decimal", null);
@@ -156,8 +163,29 @@ abstract class BaseSOLRStore implements IStore {
 		}
 		if(type instanceof CategoryType)
 			type = getDbIdType();
-		String typeName = type.getName().toLowerCase();
-		addField(column.getName(), typeName, options);
+		if("version".equals(column.getName())) 
+			addField("version", "version", options);
+		else if(type==TextType.instance())
+			addTextField(column.getName(), options, column.getIndexTypes());
+		else {
+			String typeName = type.getName().toLowerCase();
+			addField(column.getName(), typeName, options);
+		}
+	}
+	
+	
+	private void addTextField(String fieldName, Map<String, Object> options, Collection<String> indexTypes) throws SolrServerException, IOException {
+		options = new HashMap<>(options); // use a copy
+		options.put("indexed", false);
+		options.put("stored", true);
+		addField(fieldName, "text", options);
+		options = new HashMap<>(options); // use a copy
+		options.put("indexed", true);
+		options.put("stored", false);
+		if(indexTypes!=null) for(String indexType : indexTypes)
+			addCopyField(fieldName + "-" + indexType, "text-" + indexType, options, fieldName);
+		else
+			addCopyField(fieldName + "-key", "text-key", options, fieldName);
 	}
 
 	@Override
@@ -166,10 +194,12 @@ abstract class BaseSOLRStore implements IStore {
 		for(IStorable storable : storables) {
 			if(!(storable instanceof StorableDocument))
 				throw new IllegalStateException();
-			documents.add(((StorableDocument)storable).getDocument());
+			SolrInputDocument doc = ((StorableDocument)storable).getDocument();
+			documents.add(doc);
 		}
 		try {
 			addDocuments(documents);
+			commit();
 		} catch(Exception e) {
 			throw new InternalError(e);
 		}
@@ -202,7 +232,7 @@ abstract class BaseSOLRStore implements IStore {
 	@Override
 	public IStored fetchUnique(Context context, IValue dbId) throws PromptoError {
 		SOLRFilterBuilder builder = new SOLRFilterBuilder();
-		builder.push("dbId", EqOp.EQUALS, dbId);
+		builder.push(context, "dbId", EqOp.EQUALS, dbId);
 		SolrQuery query = new SolrQuery();
 		query.setQuery(builder.toSolrQuery());
 		try {
@@ -329,6 +359,8 @@ abstract class BaseSOLRStore implements IStore {
 	public abstract boolean hasField(String fieldName)throws SolrServerException, IOException;
 	
 	public abstract void addField(String fieldName, String fieldType, Map<String, Object> options) throws SolrServerException, IOException;
+
+	public abstract void addCopyField(String fieldName, String fieldType, Map<String, Object> options, String sourceName) throws SolrServerException, IOException;
 
 	public abstract String getFieldType(String fieldName) throws SolrServerException, IOException;
 

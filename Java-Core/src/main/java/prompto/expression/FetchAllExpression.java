@@ -93,11 +93,15 @@ public class FetchAllExpression extends FetchOneExpression {
 
 
 	private void toEDialect(CodeWriter writer) {
-		writer.append("fetch ");
+		writer.append("fetch");
 		if(start==null)
-			writer.append("all ");
-		type.toDialect(writer);
+			writer.append(" all");
+		if(type!=null) {
+			writer.append(" ");
+			type.toDialect(writer);
+		}
 		if(start!=null) {
+			writer.append(" ");
 			start.toDialect(writer);
 			writer.append(" to ");
 			end.toDialect(writer);
@@ -106,8 +110,10 @@ public class FetchAllExpression extends FetchOneExpression {
 			writer.append(" where ");
 			filter.toDialect(writer);
 		}
-		if(orderBy!=null)
+		if(orderBy!=null) {
+			writer.append(" ");
 			orderBy.toDialect(writer);
+		}
 	}
 
 

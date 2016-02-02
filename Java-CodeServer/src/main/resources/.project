@@ -3,6 +3,7 @@
 	<name>code-server</name>
 	<comment></comment>
 	<projects>
+		<project>code-store</project>
 		<project>console</project>
 		<project>core</project>
 		<project>internet</project>

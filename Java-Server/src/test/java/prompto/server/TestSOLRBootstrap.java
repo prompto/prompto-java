@@ -28,16 +28,14 @@ public class TestSOLRBootstrap {
 		((EmbeddedSOLRStore)codeStore).startServerWithEmptyCore();
 		AppServer.bootstrap(codeStore, null, "test", Version.parse("1.0.0"));
 		assertEquals(codeStore.getDbIdType(), codeStore.getColumnType("dbId"));
-		assertEquals(TextType.instance(), codeStore.getColumnType("author"));
 		assertEquals(DateTimeType.instance(), codeStore.getColumnType("timeStamp"));
 		assertEquals(new ListType(TextType.instance()), codeStore.getColumnType("category"));
 		assertEquals(TextType.instance(), codeStore.getColumnType("name"));
 		assertEquals(BooleanType.instance(), codeStore.getColumnType("storable"));
 		assertEquals(TextType.instance(), codeStore.getColumnType("version"));
-		assertEquals(TextType.instance(), codeStore.getColumnType("prototype"));
-		assertEquals(TextType.instance(), codeStore.getColumnType("codeFormat"));
-		assertEquals(TextType.instance(), codeStore.getColumnType("codeBody"));
-		assertEquals(new ListType(codeStore.getDbIdType()), codeStore.getColumnType("members"));
+		assertEquals(TextType.instance(), codeStore.getColumnType("methodPrototype"));
+		assertEquals(TextType.instance(), codeStore.getColumnType("methodDialect"));
+		assertEquals(TextType.instance(), codeStore.getColumnType("methodBody"));
 	}
-
+	
 }

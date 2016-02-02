@@ -1,6 +1,8 @@
 package prompto.store.solr;
 
 import org.apache.lucene.index.IndexableField;
+import org.apache.lucene.util.BytesRefBuilder;
+import org.apache.lucene.util.NumericUtils;
 import org.apache.solr.schema.SchemaField;
 import org.apache.solr.schema.TrieIntField;
 
@@ -47,6 +49,12 @@ public class VersionFieldType extends TrieIntField {
 		if(parts.length>3)
 			version |= Long.parseLong(parts[3]) & 0x000000FF;
 		return (int)(version & 0xFFFFFFFF);
+	}
+	
+	@Override
+	public void readableToIndexed(CharSequence val, BytesRefBuilder result) {
+		Integer value = parseVersionString(val.toString());
+        NumericUtils.intToPrefixCodedBytes(value, 0, result);
 	}
 
 }

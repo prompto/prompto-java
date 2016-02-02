@@ -67,7 +67,7 @@ public class TestServerSchema {
 		Map<String, Object> options = new HashMap<>();
 		options.put("indexed", true);
 		options.put("stored", true);
-		store.addField("infos", "text", options);
+		store.addField("infos", "text-value", options);
 		SolrInputDocument doc = new SolrInputDocument();
 		doc.addField("dbId", UUID.randomUUID());
 		doc.addField("infos", "sample");

@@ -183,7 +183,7 @@ public class EqualsExpression implements IExpression, IAssertion {
 		else {
 			if(value instanceof IInstance)
 				value = ((IInstance)value).getMember(context, IStore.dbIdName, false);
-			builder.push(name, operator, value);
+			builder.push(context, name, operator, value);
 		}
 	}
 }

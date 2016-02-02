@@ -2,7 +2,9 @@ package prompto.store.solr;
 
 import java.util.Stack;
 
+import prompto.declaration.AttributeDeclaration;
 import prompto.grammar.EqOp;
+import prompto.runtime.Context;
 import prompto.store.IFilterBuilder;
 import prompto.type.CategoryType;
 import prompto.value.IValue;
@@ -19,7 +21,9 @@ public class SOLRFilterBuilder implements IFilterBuilder {
 	}
 	
 	@Override
-	public void push(String name, EqOp operator, IValue value) {
+	public void push(Context context, String fieldName, EqOp operator, IValue fieldValue) {
+		AttributeDeclaration column = context.findAttribute(fieldName);
+		TextFieldFlags flags = TextFieldFlags.computeFieldFlags(column);
 		StringBuilder sb = new StringBuilder();
 		switch(operator) {
 		case IS:
@@ -28,14 +32,25 @@ public class SOLRFilterBuilder implements IFilterBuilder {
 		case IS_A:
 		case IS_NOT_A:
 			throw new UnsupportedOperationException();
+		case EQUALS:
+			sb.append(fieldName);
+			if(flags!=null)
+				flags.addSuffixForEquals(sb);
+			break;
+		case ROUGHLY:
+			sb.append(fieldName);
+			if(flags!=null)
+				flags.addSuffixForRoughly(sb);
+			break;
 		case NOT_EQUALS:
 			sb.append('-');
+			if(flags!=null)
+				flags.addSuffixForEquals(sb);
 			break;
 		default:
 		}
-		sb.append(name);
 		sb.append(':');
-		escape(sb, value);
+		escape(sb, fieldValue);
 		stack.push(sb.toString());
 	}
 
@@ -112,7 +127,7 @@ public class SOLRFilterBuilder implements IFilterBuilder {
 	}
 
 	public void pushCategory(CategoryType type) {
-		stack.push("category:" + type.getName());
+		stack.push("category-key:" + type.getName());
 	}
 	
 }

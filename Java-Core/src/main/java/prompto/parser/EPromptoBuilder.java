@@ -432,7 +432,13 @@ public class EPromptoBuilder extends EParserBaseListener {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
 		IType type = this.<IType>getNodeValue(ctx.typ);
 		IAttributeConstraint match = this.<IAttributeConstraint>getNodeValue(ctx.match);
-		AttributeDeclaration decl = new AttributeDeclaration(name, type, match);
+		IdentifierList indices = this.<IdentifierList>getNodeValue(ctx.indices);
+		if(indices!=null) {
+			Identifier index = this.<Identifier>getNodeValue(ctx.index);
+			if(index!=null)
+				indices.add(index);
+		}
+		AttributeDeclaration decl = new AttributeDeclaration(name, type, match, indices);
 		decl.setStorable(ctx.STORABLE()!=null);
 		setNodeValue(ctx, decl);
 	}

@@ -12,11 +12,9 @@ import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.webapp.WebAppContext;
 
-import prompto.code.DistributedCodeStore;
+import prompto.code.UpdatableCodeStore;
 import prompto.code.ICodeStore;
-import prompto.code.ResourceCodeStore;
 import prompto.code.Version;
-import prompto.code.ICodeStore.ModuleType;
 import prompto.runtime.Context;
 import prompto.store.IDataStore;
 import prompto.store.IStoreFactory;
@@ -27,7 +25,7 @@ import prompto.store.IStore;
 public class AppServer {
 	
 	static Server jettyServer;
-	static Context globalContext = Context.newGlobalContext();
+	static Context globalContext;
 	
 	public static void main(String[] args) throws Throwable {
 		main(args, null);
@@ -102,15 +100,9 @@ public class AppServer {
 	}
 
 	public static void bootstrap(IStore codeStore, String resourceName, String application, Version version) throws Exception {
+		globalContext = Context.newGlobalContext();
 		System.out.println("Bootstrapping prompto...");
-		System.out.println("Connecting to prompto runtime libraries...");
-		ICodeStore module = new ResourceCodeStore(null, ModuleType.LIBRARY, "Core.pec", "1.0.0");
-		module = new ResourceCodeStore(module, ModuleType.LIBRARY, "Console.pec", "1.0.0");
-		module = new ResourceCodeStore(module, ModuleType.LIBRARY, "Internet.pec", "1.0.0");
-		if(resourceName!=null)
-			module = new ResourceCodeStore(module, ModuleType.APPLICATION, resourceName, version.toString());
-		System.out.println("Connecting to code store for application " + application + " version " + version + "...");
-		ICodeStore store = new DistributedCodeStore(codeStore, module, application, version.toString());
+		ICodeStore store = new UpdatableCodeStore(globalContext, codeStore, resourceName, application, version.toString());
 		ICodeStore.setInstance(store);
 		System.out.println("Initializing code store schema...");
 		store.synchronizeSchema();

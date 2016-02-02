@@ -67,9 +67,10 @@ public class RemoteSOLRStore extends BaseSOLRStore {
 	}
 
 	@Override
-	public void deleteOne(Object dbId) throws PromptoError {
+	public void delete(Collection<Object> dbIds) throws PromptoError {
 		try {
-			client.deleteById(coreName, String.valueOf(dbId));
+			for(Object dbId : dbIds)
+				client.deleteById(coreName, String.valueOf(dbId));
 		} catch(IOException | SolrServerException e) {
 			throw new InternalError(e);
 		}
@@ -105,13 +106,17 @@ public class RemoteSOLRStore extends BaseSOLRStore {
 			SchemaRequest.Field getField = new SchemaRequest.Field(fieldName);
 			SchemaResponse.FieldResponse response = getField.process(client, coreName);
 		    Map<String, Object> field = response.getField();
-			return field!=null && fieldName.equals(field.get("name"));
+			if(field!=null && fieldName.equals(field.get("name")))
+				return true;
 		} catch(RemoteSolrException e) {
 			if(e.code()==HttpStatus.SC_NOT_FOUND)
 				return false;
 			else
 				throw e;
 		}
+		if(fieldName.contains("-"))
+			return false;
+		return hasField(fieldName + "-key") || hasField(fieldName + "-value") || hasField(fieldName + "-words");
 	}
 	
 	@Override
@@ -121,6 +126,21 @@ public class RemoteSOLRStore extends BaseSOLRStore {
 		props.put("type", fieldType);
 		SchemaRequest.AddField addField = new SchemaRequest.AddField(props);
 		addField.process(client, coreName);
+	}
+	
+	@Override
+	public void addCopyField(String fieldName, String fieldType, Map<String, Object> options, String sourceName) throws SolrServerException, IOException {
+		Map<String, Object> props = new HashMap<>(options);
+		props.put("name", fieldName);
+		props.put("type", fieldType);
+		SchemaRequest.AddField addField = new SchemaRequest.AddField(props);
+		addField.process(client, coreName);
+		props = new HashMap<>();
+		props.put("source", sourceName);
+		props.put("dest", fieldName);
+		props.put("maxChars", 0); // 0 = CopyField.UNLIMITED
+		SchemaRequest.CopyFields copyFields = new SchemaRequest.CopyFields();
+		copyFields.process(client, coreName);
 	}
 	
 	@Override

@@ -2,6 +2,7 @@ package prompto.code;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.List;
 
 import prompto.declaration.AttributeDeclaration;
@@ -17,6 +18,7 @@ import prompto.parser.SCleverParser;
 import prompto.type.CategoryType;
 import prompto.utils.ISingleton;
 import prompto.utils.Utils;
+import prompto.value.IValue;
 import prompto.value.Text;
 
 /* a code store is a place where a code consumer (interpreter, compiler...) can fetch code from */
@@ -97,7 +99,7 @@ public interface ICodeStore {
 	String getModuleName();
 	Version getModuleVersion();
 
-	void store(IDeclaration declaration, Dialect dialect, Version version) throws PromptoError;
+	void storeDeclarations(Collection<IDeclaration> declarations, Dialect dialect, Version version, IValue projectId) throws PromptoError;
 	IDeclaration fetchLatestVersion(String name) throws PromptoError;
 	IDeclaration fetchSpecificVersion(String name, Version version) throws PromptoError;
 
@@ -118,7 +120,7 @@ public interface ICodeStore {
 	}
 	
 	<T extends Module> T fetchModule(ModuleType type, String name, Version version) throws PromptoError;
-	void store(Module module) throws PromptoError;
+	void storeModule(Module module) throws PromptoError;
 
 	void synchronizeSchema() throws PromptoError;
 	void collectStorableAttributes(List<AttributeDeclaration> list);

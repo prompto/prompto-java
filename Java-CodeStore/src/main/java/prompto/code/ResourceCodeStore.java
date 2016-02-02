@@ -15,8 +15,9 @@ import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.parser.Dialect;
 import prompto.runtime.Context.MethodDeclarationMap;
+import prompto.value.IValue;
 
-/* class used to bootstrap modules from resources */
+/* resource base code store used to bootstrap modules  */
 public class ResourceCodeStore extends BaseCodeStore {
 
 	ModuleType type;
@@ -24,7 +25,7 @@ public class ResourceCodeStore extends BaseCodeStore {
 	Version version;
 	Map<String, IDeclaration> declarations = null;
 	
-	public ResourceCodeStore(ICodeStore next, ModuleType type, String resourceName, String version) throws Exception {
+	public ResourceCodeStore(ICodeStore next, ModuleType type, String resourceName, String version) {
 		super(next);
 		this.type = type;
 		this.resourceName = resourceName;
@@ -53,7 +54,7 @@ public class ResourceCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public void store(Module module) throws PromptoError {
+	public void storeModule(Module module) throws PromptoError {
 		throw new UnsupportedOperationException();
 	}
 	
@@ -63,7 +64,7 @@ public class ResourceCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public void store(IDeclaration declaration, Dialect dialect, Version version) throws PromptoError {
+	public void storeDeclarations(Collection<IDeclaration> declarations, Dialect dialect, Version version, IValue projectId) throws PromptoError {
 		throw new UnsupportedOperationException();
 	}
 	
@@ -128,12 +129,9 @@ public class ResourceCodeStore extends BaseCodeStore {
 	public void collectStorableAttributes(List<AttributeDeclaration> list) {
 		super.collectStorableAttributes(list);
 		loadResource();
-		for(IDeclaration decl : declarations.values()) {
-			if(!(decl instanceof AttributeDeclaration))
-				continue;
-			AttributeDeclaration attr = (AttributeDeclaration)decl;
-			if(attr.isStorable())
-				list.add(attr);
-		}
+		declarations.values().stream()
+			.filter( (decl) -> decl instanceof AttributeDeclaration)
+			.filter( (decl) -> ((AttributeDeclaration)decl).isStorable())
+			.forEach( (decl) -> list.add((AttributeDeclaration)decl));
 	}
 }

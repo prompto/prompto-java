@@ -9,7 +9,7 @@ import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
 
 /* a code store which simply links to another one */
-/* enables multiple code stores (resource, classpath, store...) */
+/* enables multiple code store implementations (resource, classpath, store...) */
 /* also enables versioning, by having the latest version as root */
 public abstract class BaseCodeStore implements ICodeStore {
 

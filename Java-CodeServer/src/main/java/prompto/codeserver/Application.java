@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import prompto.code.DistributedCodeStore;
+import prompto.code.UpdatableCodeStore;
 import prompto.code.ICodeStore;
 import prompto.server.AppServer;
 import prompto.store.IDataStore;
@@ -26,8 +26,8 @@ public class Application {
 	
 	static void aboutToStart() throws Exception {
 		ICodeStore codeStore = ICodeStore.getInstance();
-		if(codeStore instanceof DistributedCodeStore)
-			IDataStore.setInstance(((DistributedCodeStore)codeStore).getStore());
+		if(codeStore instanceof UpdatableCodeStore)
+			IDataStore.setInstance(((UpdatableCodeStore)codeStore).getStore());
 		importSamples();
 		
 	}

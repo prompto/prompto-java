@@ -7,7 +7,6 @@ import prompto.code.ICodeStore;
 import prompto.code.ICodeStore.ModuleType;
 import prompto.code.ResourceCodeStore;
 import prompto.code.Version;
-import prompto.declaration.IDeclaration;
 import prompto.value.Image;
 import prompto.value.Text;
 
@@ -57,15 +56,14 @@ public class SampleImporter {
 			return;
 		if(imageResource!=null)
 			application.setImage(Image.fromResource(imageResource));
-		store.store(application);	
+		store.storeModule(application);	
 		if(codeResource!=null)
 			storeAssociatedCode(store);
 	}
 
 	private void storeAssociatedCode(ICodeStore store) throws Exception {
 		ResourceCodeStore rcs = new ResourceCodeStore(null, ModuleType.APPLICATION, codeResource, application.getVersion().getValue());
-		for(IDeclaration decl : rcs.getDeclarations())
-			store.store(decl, rcs.getModuleDialect(), Version.parse(application.getVersion().getValue()));
+		store.storeDeclarations(rcs.getDeclarations(), rcs.getModuleDialect(), Version.parse(application.getVersion().getValue()), application.getDbId());
 	}
 
 }

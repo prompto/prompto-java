@@ -30,7 +30,7 @@ public class TestMemStore {
 	public void before() throws Exception {
 		IDataStore.setInstance(new MemStore());
 		context = Context.newGlobalContext();
-		AttributeDeclaration attr = new AttributeDeclaration(new Identifier("__id__"), TextType.instance(), null);
+		AttributeDeclaration attr = new AttributeDeclaration(new Identifier("__id__"), TextType.instance());
 		attr.register(context);
 	}
 	

@@ -57,7 +57,7 @@ public class TestSchema extends BaseSOLRTest {
 		Map<String, Object> options = new HashMap<>();
 		options.put("indexed", true);
 		options.put("stored", true);
-		store.addField("text", "text", options);
+		store.addField("text", "text-key", options);
 		SolrInputDocument doc = new SolrInputDocument();
 		doc.addField("dbId", UUID.randomUUID());
 		doc.addField("text", "sample");
@@ -71,6 +71,44 @@ public class TestSchema extends BaseSOLRTest {
 		assertEquals(1, resp.getResults().size());
 	}
 	
+	@Test
+	public void testCopyField() throws SolrServerException, IOException {
+		Map<String, Object> options = new HashMap<>();
+		options.put("indexed", true);
+		options.put("stored", true);
+		store.addField("text-key", "text-key", options);
+		options = new HashMap<>();
+		options.put("indexed", true);
+		options.put("stored", false);
+		store.addCopyField("text-value", "text-value", options, "text-key");
+		SolrInputDocument doc = new SolrInputDocument();
+		doc.addField("dbId", UUID.randomUUID());
+		doc.addField("text-key", "Sample");
+		store.addDocuments(doc);
+		store.commit();
+		// Test the basics
+		SolrQuery query = new SolrQuery();
+		query.setQuery("text-key:Sample");
+		QueryResponse resp = store.query(query);
+		assertNotNull(resp);
+		assertEquals(1, resp.getResults().size());
+		query = new SolrQuery();
+		query.setQuery("text-key:sample");
+		resp = store.query(query);
+		assertNotNull(resp);
+		assertEquals(0, resp.getResults().size());
+		query = new SolrQuery();
+		query.setQuery("text-value:Sample");
+		resp = store.query(query);
+		assertNotNull(resp);
+		assertEquals(1, resp.getResults().size());
+		query = new SolrQuery();
+		query.setQuery("text-value:sample");
+		resp = store.query(query);
+		assertNotNull(resp);
+		assertEquals(1, resp.getResults().size());
+	}
+
 	@Test
 	public void testStoreBlobField() throws SolrServerException, IOException {
 		Map<String, Object> options = new HashMap<>();

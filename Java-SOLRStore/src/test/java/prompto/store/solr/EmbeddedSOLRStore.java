@@ -16,6 +16,7 @@ import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.core.CoreContainer;
 import org.apache.solr.core.CoreDescriptor;
 import org.apache.solr.core.SolrCore;
+import org.apache.solr.schema.CopyField;
 import org.apache.solr.schema.IndexSchema;
 import org.apache.solr.schema.SchemaField;
 
@@ -119,9 +120,10 @@ public class EmbeddedSOLRStore extends BaseSOLRStore {
 	}
 
 	@Override
-	public void deleteOne(Object dbId) throws PromptoError {
+	public void delete(Collection<Object> dbIds) throws PromptoError {
 		try {
-			server.deleteById(String.valueOf(dbId));
+			for(Object dbId : dbIds)
+				server.deleteById(String.valueOf(dbId));
 		} catch(IOException | SolrServerException e) {
 			throw new InternalError(e);
 		}
@@ -144,7 +146,8 @@ public class EmbeddedSOLRStore extends BaseSOLRStore {
 	@Override
 	public boolean hasField(String fieldName) {
 		IndexSchema schema = core.getLatestSchema();
-		return schema.hasExplicitField(fieldName);
+		return schema.hasExplicitField(fieldName) || schema.hasExplicitField(fieldName + "-key")
+				 || schema.hasExplicitField(fieldName + "-value") || schema.hasExplicitField(fieldName + "-words");
 	}
 	
 	@Override
@@ -154,6 +157,19 @@ public class EmbeddedSOLRStore extends BaseSOLRStore {
 		synchronized(lock) {
 			SchemaField field = schema.newField(fieldName, fieldType, options);
 			schema = schema.addField(field);
+			schema.refreshAnalyzers();
+		}
+		core.setLatestSchema(schema);
+	}
+	
+	@Override
+	public void addCopyField(String fieldName, String fieldType, Map<String, Object> options, String sourceName) {
+		IndexSchema schema = core.getLatestSchema();
+		Object lock = schema.getSchemaUpdateLock();
+		synchronized(lock) {
+			SchemaField field = schema.newField(fieldName, fieldType, options);
+			schema = schema.addField(field);
+			schema = schema.addCopyFields(sourceName, Arrays.asList(fieldName), CopyField.UNLIMITED);
 			schema.refreshAnalyzers();
 		}
 		core.setLatestSchema(schema);
