@@ -1,4 +1,4 @@
 define author as storable Text attribute
-define methodPrototype as storable Text attribute
-define methodDialect as storable Text attribute with key index
-define methodBody as storable Text attribute with words index
+define prototype as storable Text attribute
+define dialect as storable Text attribute with key index
+define body as storable Text attribute with words index

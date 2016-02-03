@@ -1,6 +1,7 @@
 package prompto.store.solr;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -135,12 +136,8 @@ public class RemoteSOLRStore extends BaseSOLRStore {
 		props.put("type", fieldType);
 		SchemaRequest.AddField addField = new SchemaRequest.AddField(props);
 		addField.process(client, coreName);
-		props = new HashMap<>();
-		props.put("source", sourceName);
-		props.put("dest", fieldName);
-		props.put("maxChars", 0); // 0 = CopyField.UNLIMITED
-		SchemaRequest.CopyFields copyFields = new SchemaRequest.CopyFields();
-		copyFields.process(client, coreName);
+		SchemaRequest.AddCopyField copyField = new SchemaRequest.AddCopyField(sourceName, Arrays.asList(fieldName));
+		copyField.process(client, coreName);
 	}
 	
 	@Override

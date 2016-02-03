@@ -33,9 +33,22 @@ public class TestSOLRBootstrap {
 		assertEquals(TextType.instance(), codeStore.getColumnType("name"));
 		assertEquals(BooleanType.instance(), codeStore.getColumnType("storable"));
 		assertEquals(TextType.instance(), codeStore.getColumnType("version"));
-		assertEquals(TextType.instance(), codeStore.getColumnType("methodPrototype"));
-		assertEquals(TextType.instance(), codeStore.getColumnType("methodDialect"));
-		assertEquals(TextType.instance(), codeStore.getColumnType("methodBody"));
+		assertEquals(TextType.instance(), codeStore.getColumnType("prototype"));
+		assertEquals(TextType.instance(), codeStore.getColumnType("dialect"));
+		assertEquals(TextType.instance(), codeStore.getColumnType("body"));
 	}
 	
+	@Test
+	public void testCodeStoreIsolation() throws Throwable {
+		String[] args = {
+				"-code-solr-embedded",
+				"-code-solr-root",
+				"target/test-classes/solr-test"
+		};
+		IStore codeStore = new SOLRStoreFactory().newStore(args, Type.CODE);
+		((EmbeddedSOLRStore)codeStore).startContainer();
+		((EmbeddedSOLRStore)codeStore).startServerWithEmptyCore();
+		AppServer.bootstrap(codeStore, null, "test", Version.parse("1.0.0"));
+		assertNull(AppServer.globalContext.findAttribute("prototype"));
+	}
 }

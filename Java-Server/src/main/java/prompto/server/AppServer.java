@@ -102,7 +102,7 @@ public class AppServer {
 	public static void bootstrap(IStore codeStore, String resourceName, String application, Version version) throws Exception {
 		globalContext = Context.newGlobalContext();
 		System.out.println("Bootstrapping prompto...");
-		ICodeStore store = new UpdatableCodeStore(globalContext, codeStore, resourceName, application, version.toString());
+		ICodeStore store = new UpdatableCodeStore(codeStore, resourceName, application, version.toString());
 		ICodeStore.setInstance(store);
 		System.out.println("Initializing code store schema...");
 		store.synchronizeSchema();
