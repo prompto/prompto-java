@@ -310,14 +310,20 @@ public class Context implements IContext {
 				return null;
 			}
 			try {
-				if(decl instanceof MethodDeclarationMap) {
+				if(decl instanceof IMethodDeclaration) {
+					decl.register(this);
+					// return the MethodDeclarationMap actually registered
+					return this.getRegisteredDeclaration(MethodDeclarationMap.class, name);
+				} else if(decl instanceof MethodDeclarationMap) {
 					MethodDeclarationMap map = (MethodDeclarationMap)decl;
 					for(Map.Entry<String, IMethodDeclaration> entry : map.entrySet())
 						entry.getValue().register(this);
-					decl = this.getRegisteredDeclaration(MethodDeclarationMap.class, name);
-				} else
+					// return the MethodDeclarationMap actually registered
+					return this.getRegisteredDeclaration(MethodDeclarationMap.class, name);
+				} else {
 					decl.register(this);
-				return decl;
+					return decl;
+				}
 			} catch(SyntaxError e) {
 				throw new RuntimeException(e); // TODO define a strategy
 			}

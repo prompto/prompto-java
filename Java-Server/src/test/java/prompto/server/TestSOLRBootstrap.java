@@ -60,6 +60,9 @@ public class TestSOLRBootstrap {
 		store.startContainer();
 		store.startServerWithEmptyCore();
 		AppServer.bootstrap(store, null, "test", Version.parse("1.0.0"));
+		assertEquals(store.getDbIdType(), store.getColumnType("dbId"));
+		assertEquals(TextType.instance(), store.getColumnType("name"));
+		assertEquals(TextType.instance(), store.getColumnType("version"));
 		assertNull(AppServer.globalContext.findAttribute("prototype"));
 	}
 }

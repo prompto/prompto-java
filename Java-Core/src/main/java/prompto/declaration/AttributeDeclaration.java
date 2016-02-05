@@ -83,6 +83,11 @@ public class AttributeDeclaration extends BaseDeclaration {
 			writer.append(" attribute");
 			if(constraint!=null)
 				constraint.toDialect(writer);
+			if(indexTypes!=null) {
+				writer.append(" with ");
+				indexTypes.toDialect(writer, true);
+				writer.append(" index");
+			}
 			break;
 		case O:
 			if(storable)

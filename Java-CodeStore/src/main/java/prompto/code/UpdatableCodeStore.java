@@ -157,6 +157,8 @@ public class UpdatableCodeStore extends BaseCodeStore {
 				}
 			}
 		}
+		if(decl==null)
+			return null;
 		return decl;
 	}
 
@@ -229,7 +231,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	private IExpression buildNameAndVersionFilter(String name, Version version) {
 		IExpression left = new UnresolvedIdentifier(new Identifier("name"));
 		IExpression right = new TextLiteral("'" + name + "'");
-		IExpression filter = new EqualsExpression(left, EqOp.ROUGHLY, right);
+		IExpression filter = new EqualsExpression(left, EqOp.EQUALS, right);
 		if(!LATEST.equals(version)) {
 			left = new UnresolvedIdentifier(new Identifier("version"));
 			right = new TextLiteral('"' + version.toString() + '"');
@@ -243,9 +245,9 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	private <T extends IDeclaration> T parseDeclaration(IStored stored) throws Exception {
 		if(stored==null)
 			return null;
-		Text value = (Text)stored.getValue(context, new Identifier("methodDialect"));
+		Text value = (Text)stored.getValue(context, new Identifier("dialect"));
 		Dialect dialect = Dialect.valueOf(value.getValue());
-		value = (Text)stored.getValue(context, new Identifier("methodBody"));
+		value = (Text)stored.getValue(context, new Identifier("body"));
 		InputStream input = new ByteArrayInputStream(value.getValue().getBytes());
 		DeclarationList decls = ICodeStore.parse(dialect, "__store__", input);
 		return decls.isEmpty() ? null : (T)decls.get(0);

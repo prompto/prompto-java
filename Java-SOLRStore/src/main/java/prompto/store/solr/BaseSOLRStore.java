@@ -60,7 +60,7 @@ abstract class BaseSOLRStore implements IStore {
 		typeMap.put("text-key", typeMap.get("text"));
 		typeMap.put("text-value", typeMap.get("text"));
 		typeMap.put("text-words", typeMap.get("text"));
-		typeMap.put("version", TextType.instance());
+		typeMap.put("version", TextType.instance()); // TODO create Version type?
 		typeMap.put("image", ImageType.instance());
 		typeMap.put("integer", IntegerType.instance());
 		typeMap.put("decimal", DecimalType.instance());
@@ -86,6 +86,7 @@ abstract class BaseSOLRStore implements IStore {
 		readerMap.put("text-key", readerMap.get("text"));
 		readerMap.put("text-value", readerMap.get("text"));
 		readerMap.put("text-words", readerMap.get("text"));
+		readerMap.put("version", (o) -> new prompto.value.Text(o.toString()));
 		readerMap.put("image", (o) -> BinaryConverter.toBinary(o));
 		readerMap.put("integer", null);
 		readerMap.put("decimal", null);
@@ -323,7 +324,12 @@ abstract class BaseSOLRStore implements IStore {
 		if(orderBy!=null) for(OrderByClause clause : orderBy) {
 			IdentifierList names = clause.getNames();
 			// TODO manage member names: a.b
-			query.addSort(names.get(0).getName(), clause.isDescending() ? ORDER.desc : ORDER.asc);
+			String fieldName = names.get(0).getName();
+			AttributeDeclaration column = context.findAttribute(fieldName);
+			TextFieldFlags flags = TextFieldFlags.computeFieldFlags(column);
+			if(flags!=null)
+				fieldName += flags.getSuffixForOrderBy();
+			query.addSort(fieldName, clause.isDescending() ? ORDER.desc : ORDER.asc);
 		}
 		return query;
 	}

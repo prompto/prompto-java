@@ -56,4 +56,15 @@ class TextFieldFlags {
 		else if(hasWords)
 			sb.append(WORDS);
 	}
+
+	public String getSuffixForOrderBy() {
+		if(hasKey)
+			return '-' + KEY;
+		else if(hasValue)
+			return '-' + VALUE;
+		else if(hasWords)
+			return '-' + WORDS;
+		else
+			return "";
+	}
 }
