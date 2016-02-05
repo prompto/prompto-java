@@ -40,6 +40,6 @@ public interface IValue {
 
 	void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError;
 
-	void store(Context context, String name, IStorable storable) throws PromptoError;
+	void storeValue(Context context, String name, IStorable storable) throws PromptoError;
 
 }

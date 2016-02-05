@@ -31,7 +31,7 @@ public abstract class BaseValue implements IValue {
 	}
 	
 	@Override
-	public void store(Context context, String name, IStorable storable) throws PromptoError {
+	public void storeValue(Context context, String name, IStorable storable) throws PromptoError {
 		throw new UnsupportedOperationException("Cannot store " + this.getClass().getSimpleName());
 	}
 	

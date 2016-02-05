@@ -18,7 +18,7 @@ public abstract class BaseServerTest {
 	@Before
 	public void __before__() throws Throwable {
 		// bootstrap
-		AppServer.bootstrap(new MemStore(), null, "test", Version.parse("1.0.0"));
+		AppServer.bootstrap(new MemStore(), "test", Version.parse("1.0.0"));
 		// adjust handler path for junit and cobertura context
 		Handler rh1 = AppServer.prepareResourceHandler("/");
 		Handler rh2 = AppServer.prepareResourceHandler("../classes/");

@@ -47,14 +47,14 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	// some of these are code store specific and cannot/should not be found in the app context
 	Context context; 
 	
-	public UpdatableCodeStore(IStore store, String resourceName, String application, String version) throws PromptoError {
+	public UpdatableCodeStore(IStore store, String application, String version, String ...resourceNames) throws PromptoError {
 		super(null);
 		this.store = store;
 		this.application = application;
 		this.version = Version.parse(version);
 		ICodeStore runtime = bootstrapRuntime();
 		this.context = CodeStoreBootstrapper.bootstrap(store, runtime);
-		this.next = AppStoreBootstrapper.bootstrap(store, runtime, resourceName, application, version);
+		this.next = AppStoreBootstrapper.bootstrap(store, runtime, application, version, resourceNames);
 	}
 	
 	private ICodeStore bootstrapRuntime() {

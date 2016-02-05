@@ -75,12 +75,12 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	}
 	
 	@Override
-	public void store(Context context, String name, IStorable storable) throws PromptoError {
+	public void storeValue(Context context, String name, IStorable storable) throws PromptoError {
 		// this is called when storing the instance as a field value, so we just store the dbId
+		// the instance data itself will be collected as part of collectStorables
 		if(this.storable==null)
 			throw new NotStorableError();
-		if(this.storable.isDirty())
-			storable.setValue(context, new Identifier(name), this.storable.getOrCreateDbId());
+		storable.setValue(context, new Identifier(name), this.getOrCreateDbId());
 	}
 	
 	public ConcreteCategoryDeclaration getDeclaration() {
@@ -177,6 +177,11 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		return values.get(IStore.dbIdName);
 	}
 	
+	private IValue getOrCreateDbId() {
+		IValue dbId = values.get(IStore.dbIdName);
+		return dbId!=null ? dbId : this.storable.getOrCreateDbId();
+	}
+
 	private IValue autocast(AttributeDeclaration decl, IValue value) {
 		if(value!=null && value instanceof prompto.value.Integer && decl.getType()==DecimalType.instance())
 			value = new Decimal(((prompto.value.Integer)value).DecimalValue());

@@ -90,7 +90,7 @@ public class StorableDocument extends BaseDocument implements IStorable {
 			if(isUpdate)
 				document.setField(fieldName, Collections.singletonMap("set", null));
 		} else
-			value.store(context, fieldName, this);
+			value.storeValue(context, fieldName, this);
 	}
 	
 	@Override

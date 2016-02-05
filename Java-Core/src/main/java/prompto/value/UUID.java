@@ -44,7 +44,7 @@ public class UUID extends BaseValue {
 	}
 	
 	@Override
-	public void store(Context context, String name, IStorable storable) throws PromptoError {
+	public void storeValue(Context context, String name, IStorable storable) throws PromptoError {
 		storable.setData(name, value);
 	}
 

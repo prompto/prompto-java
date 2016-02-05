@@ -32,9 +32,9 @@ public class ListValue extends BaseList<ListValue> {
 	}
 
 	@Override
-	public void store(Context context, String name, IStorable storable) throws PromptoError {
+	public void storeValue(Context context, String name, IStorable storable) throws PromptoError {
 		for(IValue item : this.items)
-			item.store(context, name, storable);
+			item.storeValue(context, name, storable);
 	}
 	
 	@Override

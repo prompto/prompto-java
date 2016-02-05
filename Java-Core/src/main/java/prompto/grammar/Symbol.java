@@ -24,7 +24,7 @@ public abstract class Symbol extends Section implements IExpression, INamed, IVa
 	}
 
 	@Override
-	public void store(Context context, String name, IStorable storable) throws PromptoError {
+	public void storeValue(Context context, String name, IStorable storable) throws PromptoError {
 		storable.setData(name, symbol.toString());
 	}
 	

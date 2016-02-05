@@ -23,7 +23,7 @@ public abstract class SymbolList <T extends Symbol> extends ObjectList<T> implem
 	}
 
 	@Override
-	public void store(Context context, String name, IStorable storable) {
+	public void storeValue(Context context, String name, IStorable storable) {
 		throw new UnsupportedOperationException("Cannot store " + this.getClass().getSimpleName());
 	}
 	

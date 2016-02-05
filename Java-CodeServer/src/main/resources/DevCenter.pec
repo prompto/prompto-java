@@ -26,6 +26,8 @@ define getAllModules as method doing:
 define getModuleDeclarations as method receiving dbId doing:
 	user = getHttpUser
 	module = fetch one Module where dbId = dbId
+	if module is nothing:
+		raise NULL_REFERENCE
 	// use this opportunity to keep track of coding sessions
 	session = CodingSession with user as user, module as module and now as lastOpened 
 	store session

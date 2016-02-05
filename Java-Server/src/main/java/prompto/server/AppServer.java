@@ -37,7 +37,7 @@ public class AppServer {
 	
 	public static void main(String[] args, ThrowingRunnable serverInitialized ) throws Throwable {
 		Integer httpPort = null;
-		String resource = null;
+		String[] resources = null;
 		String application = null;
 		String codeStoreFactory = MemStoreFactory.class.getName();
 		String dataStoreFactory = MemStoreFactory.class.getName();
@@ -49,8 +49,8 @@ public class AppServer {
 				continue;
 			if(args[i].equalsIgnoreCase("-http_port")) {
 				httpPort = Integer.parseInt(args[++i]);
-			} else if(args[i].equalsIgnoreCase("-resource")) {
-				resource = args[++i];
+			} else if(args[i].equalsIgnoreCase("-resources")) {
+				resources = args[++i].split(",");
 			} else if(args[i].equalsIgnoreCase("-application")) {
 				application = args[++i];
 			} else if(args[i].equalsIgnoreCase("-version")) {
@@ -70,7 +70,7 @@ public class AppServer {
 		// initialize code store
 		IStoreFactory factory = newStoreFactory(codeStoreFactory);
 		IStore store = factory.newStore(args, Type.CODE);
-		bootstrap(store, resource, application, version);
+		bootstrap(store, application, version, resources);
 		// initialize data store
 		factory = newStoreFactory(dataStoreFactory);
 		IDataStore.setInstance(factory.newStore(args, Type.DATA));
@@ -99,10 +99,10 @@ public class AppServer {
 			System.out.println("Additional argument: -version (optional)");
 	}
 
-	public static void bootstrap(IStore codeStore, String resourceName, String application, Version version) throws Exception {
+	public static void bootstrap(IStore codeStore, String application, Version version, String ...resourceNames) throws Exception {
 		globalContext = Context.newGlobalContext();
 		System.out.println("Bootstrapping prompto...");
-		ICodeStore store = new UpdatableCodeStore(codeStore, resourceName, application, version.toString());
+		ICodeStore store = new UpdatableCodeStore(codeStore, application, version.toString(), resourceNames);
 		ICodeStore.setInstance(store);
 		System.out.println("Initializing code store schema...");
 		store.synchronizeSchema();
