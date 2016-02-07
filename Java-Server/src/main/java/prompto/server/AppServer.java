@@ -42,24 +42,31 @@ public class AppServer {
 		String codeStoreFactory = MemStoreFactory.class.getName();
 		String dataStoreFactory = MemStoreFactory.class.getName();
 		Version version = ICodeStore.LATEST;
+		Type codeStoreType = Type.CODE;
+		Type dataStoreType = Type.DATA;
 		
 		// parse parameters
 		for(int i=0; i<args.length; i++) {
-			if(!args[i].startsWith("-"))
+			String arg = args[i];
+			if(!arg.startsWith("-"))
 				continue;
-			if(args[i].equalsIgnoreCase("-http_port")) {
+			if(arg.equalsIgnoreCase("-http_port")) {
 				httpPort = Integer.parseInt(args[++i]);
-			} else if(args[i].equalsIgnoreCase("-resources")) {
+			} else if(arg.equalsIgnoreCase("-resources")) {
 				resources = args[++i].split(",");
-			} else if(args[i].equalsIgnoreCase("-application")) {
+			} else if(arg.equalsIgnoreCase("-application")) {
 				application = args[++i];
-			} else if(args[i].equalsIgnoreCase("-version")) {
+			} else if(arg.equalsIgnoreCase("-version")) {
 				version = Version.parse(args[++i]);
-			} else if(args[i].equalsIgnoreCase("-codeStoreFactory")) {
+			} else if(arg.equalsIgnoreCase("-codeStoreFactory")) {
 				codeStoreFactory = args[++i];
-			} else if(args[i].equalsIgnoreCase("-dataStoreFactory")) {
+			} else if(arg.equalsIgnoreCase("-codeStoreType")) {
+				codeStoreType = Type.valueOf(args[++i]);
+			} else if(arg.equalsIgnoreCase("-dataStoreFactory")) {
 				dataStoreFactory = args[++i];
-			}
+			} else if(arg.equalsIgnoreCase("-dataStoreType")) {
+				dataStoreType = Type.valueOf(args[++i]);
+			} 
 
 
 		}
@@ -69,11 +76,11 @@ public class AppServer {
 		}
 		// initialize code store
 		IStoreFactory factory = newStoreFactory(codeStoreFactory);
-		IStore store = factory.newStore(args, Type.CODE);
+		IStore store = factory.newStore(args, codeStoreType);
 		bootstrap(store, application, version, resources);
 		// initialize data store
 		factory = newStoreFactory(dataStoreFactory);
-		IDataStore.setInstance(factory.newStore(args, Type.DATA));
+		IDataStore.setInstance(factory.newStore(args, dataStoreType));
 		// standard resource handlers
 		Handler handler = prepareHandlers();
 		// call pre-start code if any

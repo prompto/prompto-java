@@ -47,23 +47,22 @@ public class SampleImporter {
 		return new Text(child.asText());
 	}
 
-	public void importSample() throws Exception {
-		ICodeStore store = ICodeStore.getInstance();
+	public void importSample(ICodeStore codeStore) throws Exception {
 		String name = application.getName().getValue();
 		Version version = Version.parse(application.getVersion().getValue());
-		Application existing = store.fetchApplication(name, version);
+		Application existing = codeStore.fetchApplication(name, version);
 		if(existing!=null)
 			return;
 		if(imageResource!=null)
 			application.setImage(Image.fromResource(imageResource));
-		store.storeModule(application);	
+		codeStore.storeModule(application);	
 		if(codeResource!=null)
-			storeAssociatedCode(store);
+			storeAssociatedCode(codeStore);
 	}
 
-	private void storeAssociatedCode(ICodeStore store) throws Exception {
+	private void storeAssociatedCode(ICodeStore codeStore) throws Exception {
 		ResourceCodeStore rcs = new ResourceCodeStore(null, ModuleType.APPLICATION, codeResource, application.getVersion().getValue());
-		store.storeDeclarations(rcs.getDeclarations(), rcs.getModuleDialect(), Version.parse(application.getVersion().getValue()), application.getDbId());
+		codeStore.storeDeclarations(rcs.getDeclarations(), rcs.getModuleDialect(), Version.parse(application.getVersion().getValue()), application.getDbId());
 	}
 
 }

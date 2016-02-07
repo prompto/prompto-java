@@ -24,11 +24,12 @@ public class SOLRStoreFactory implements IStoreFactory {
 		String server = null;
 		int port = 8983;
 		
-		final String argKey = "-" + type.name().toLowerCase() + "-solr" + "-";
+		final String argKey = "-solr-" + type.name().toLowerCase() + "-";
 		for(int i=0;i<args.length;i++) {
-			if(!args[i].toLowerCase().startsWith(argKey))
+			String arg = args[i]; 
+			if(!arg.toLowerCase().startsWith(argKey))
 				continue;
-			String arg = args[i].substring(argKey.length());
+			arg = arg.substring(argKey.length());
 			if(arg.equalsIgnoreCase("embedded"))
 				embedded = true;
 			else if(arg.equalsIgnoreCase("root"))

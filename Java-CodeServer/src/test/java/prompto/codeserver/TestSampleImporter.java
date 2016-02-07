@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import prompto.code.ICodeStore;
 import prompto.code.Version;
 import prompto.server.AppServer;
 import prompto.store.MemStore;
@@ -20,7 +21,7 @@ public class TestSampleImporter {
 	@Test
 	public void testChat() throws Exception {
 		SampleImporter importer = new SampleImporter("samples/Chat/");
-		importer.importSample();
+		importer.importSample(ICodeStore.getInstance());
 		assertNotNull(importer.application);
 		assertNotNull(importer.application.getDbId());
 	}
@@ -28,7 +29,7 @@ public class TestSampleImporter {
 	@Test
 	public void testMail() throws Exception {
 		SampleImporter importer = new SampleImporter("samples/Mail/");
-		importer.importSample();
+		importer.importSample(ICodeStore.getInstance());
 		assertNotNull(importer.application);
 		assertNotNull(importer.application.getDbId());
 	}
@@ -36,7 +37,7 @@ public class TestSampleImporter {
 	@Test
 	public void testSoup() throws Exception {
 		SampleImporter importer = new SampleImporter("samples/Soup/");
-		importer.importSample();
+		importer.importSample(ICodeStore.getInstance());
 		assertNotNull(importer.application);
 		assertNotNull(importer.application.getDbId());
 	}
@@ -44,7 +45,7 @@ public class TestSampleImporter {
 	@Test
 	public void testMyApp() throws Exception {
 		SampleImporter importer = new SampleImporter("samples/MyApp/");
-		importer.importSample();
+		importer.importSample(ICodeStore.getInstance());
 		assertNotNull(importer.application);
 		assertNotNull(importer.application.getDbId());
 	}
