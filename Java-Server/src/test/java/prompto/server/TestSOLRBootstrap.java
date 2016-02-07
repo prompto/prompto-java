@@ -30,8 +30,8 @@ public class TestSOLRBootstrap {
 	@Test
 	public void testCodeStoreColumns() throws Throwable {
 		String[] args = {
-				"-code-solr-embedded",
-				"-code-solr-root",
+				"-solr-code-embedded",
+				"-solr-code-root",
 				"target/test-classes/solr-test"
 		};
 		store = (EmbeddedSOLRStore)new SOLRStoreFactory().newStore(args, Type.CODE);
@@ -52,8 +52,8 @@ public class TestSOLRBootstrap {
 	@Test
 	public void testCodeStoreIsolation() throws Throwable {
 		String[] args = {
-				"-code-solr-embedded",
-				"-code-solr-root",
+				"-solr-code-embedded",
+				"-solr-code-root",
 				"target/test-classes/solr-test"
 		};
 		store = (EmbeddedSOLRStore)new SOLRStoreFactory().newStore(args, Type.CODE);
