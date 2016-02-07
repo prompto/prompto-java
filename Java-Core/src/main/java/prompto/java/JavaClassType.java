@@ -118,7 +118,7 @@ public class JavaClassType extends BaseType {
 
 	public IValue convertJavaValueToPromptoValue(Context context, Object value, IType returnType)
     {
-   	return convertJavaValueToPromptoValue(context, value, type, returnType);
+		return convertJavaValueToPromptoValue(context, value, type, returnType);
     }
     
     public static IValue convertJavaValueToPromptoValue(Context context, Object value, Type type, IType returnType) {
