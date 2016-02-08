@@ -184,7 +184,7 @@ public class AppServer {
 	static ResourceHandler prepareResourceHandler(String path) throws Exception {
 		Resource resource = Resource.newClassPathResource(path);
 		// ugly work around for unit tests
-		if(resource.getURI().toString().contains("/test-classes/")) {
+		if(resource!=null && resource.getURI().toString().contains("/test-classes/")) {
 			URL url = new URL(resource.getURI().toString().replace("/test-classes/", "/classes/"));
 			resource = Resource.newResource(url);
 		}
