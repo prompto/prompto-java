@@ -31,7 +31,7 @@ public class TestEditor extends BaseWebTest {
 	public static void startCodeServer() throws Throwable {
 		String[] args = {
 				"-http_port",
-				"8080",
+				"8888",
 				"-codeStoreFactory",
 				"prompto.store.solr.SOLRStoreFactory",
 				"-dataStoreFactory",
@@ -52,7 +52,7 @@ public class TestEditor extends BaseWebTest {
 	}
 	
 	
-	static final String ROOT_URL = "http://localhost:8080/";
+	static final String ROOT_URL = "http://localhost:8888/";
 	static final String EDITOR_URL = ROOT_URL + "ide/index.html?dbId=$dbId$&name=$name$";
 	
 	@Test
