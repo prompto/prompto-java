@@ -22,6 +22,16 @@ public abstract class ResourceUtils {
 
 	public static Collection<String> listResourcesAt(String path) throws IOException {
 		URL url = getRootURL();
+		Collection<String> names = listResourcesAt(url, path);
+		// special case when running unit tests
+		if(names==null && url.toExternalForm().contains("/test-classes/")) {
+			url = new URL(url.toExternalForm().replace("/test-classes/", "/classes/"));
+			names = listResourcesAt(url, path);
+		}
+		return names;
+	}
+
+	public static Collection<String> listResourcesAt(URL url, String path) throws IOException {
 		switch(url.getProtocol()) {
 		case "jar":
 			return listJarResourcesAt(url, path);
@@ -44,6 +54,8 @@ public abstract class ResourceUtils {
 		try {
 			path = path.startsWith("/") ? "file:" + path : url.toExternalForm() + path;
 			File dir = new File(new URI(path));
+			if(!dir.exists())
+				return null;
 			String[] names = dir.list();
 			return Arrays.asList(names).stream().map((String name) -> 
 				new File(dir, name).isDirectory() ? name + '/' : name
