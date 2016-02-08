@@ -122,6 +122,5 @@ public interface ICodeStore {
 	<T extends Module> T fetchModule(ModuleType type, String name, Version version) throws PromptoError;
 	void storeModule(Module module) throws PromptoError;
 
-	void synchronizeSchema() throws PromptoError;
 	void collectStorableAttributes(List<AttributeDeclaration> list);
 }

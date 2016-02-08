@@ -254,13 +254,6 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	}
 
 	@Override
-	public void synchronizeSchema() throws PromptoError {
-		List<AttributeDeclaration> columns = new ArrayList<>();
-		collectStorableAttributes(columns);
-		store.createOrUpdateColumns(columns);
-	}
-
-	@Override
 	public void collectStorableAttributes(List<AttributeDeclaration> list) {
 		super.collectStorableAttributes(list);
 		IExpression left = new UnresolvedIdentifier(new Identifier("storable"));

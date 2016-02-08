@@ -14,7 +14,7 @@ public class TestSampleImporter {
 
 	@Before
 	public void before() throws Exception {
-		AppServer.bootstrap(new MemStore(), "test", Version.parse("1.0.0"));
+		AppServer.bootstrapCodeStore(new MemStore(), "test", Version.parse("1.0.0"));
 
 	}
 	

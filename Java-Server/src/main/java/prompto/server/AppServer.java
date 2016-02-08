@@ -1,6 +1,8 @@
 package prompto.server;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
@@ -15,6 +17,8 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import prompto.code.UpdatableCodeStore;
 import prompto.code.ICodeStore;
 import prompto.code.Version;
+import prompto.declaration.AttributeDeclaration;
+import prompto.error.PromptoError;
 import prompto.runtime.Context;
 import prompto.store.IDataStore;
 import prompto.store.IStoreFactory;
@@ -26,6 +30,10 @@ public class AppServer {
 	
 	static Server jettyServer;
 	static Context globalContext;
+	
+	public static Context getGlobalContext() {
+		return globalContext;
+	}
 	
 	public static void main(String[] args) throws Throwable {
 		main(args, null);
@@ -77,10 +85,12 @@ public class AppServer {
 		// initialize code store
 		IStoreFactory factory = newStoreFactory(codeStoreFactory);
 		IStore store = factory.newStore(args, codeStoreType);
-		bootstrap(store, application, version, resources);
+		ICodeStore codeStore = bootstrapCodeStore(store, application, version, resources);
 		// initialize data store
 		factory = newStoreFactory(dataStoreFactory);
-		IDataStore.setInstance(factory.newStore(args, dataStoreType));
+		store = factory.newStore(args, dataStoreType);
+		IStore dataStore = bootstrapDataStore(store);
+		synchronizeSchema(codeStore, dataStore);
 		// standard resource handlers
 		Handler handler = prepareHandlers();
 		// call pre-start code if any
@@ -88,6 +98,11 @@ public class AppServer {
 			serverInitialized.run();
 		// initialize server accordingly
 		startServer(httpPort, handler);
+	}
+
+	private static IStore bootstrapDataStore(IStore store) {
+		IDataStore.setInstance(store);
+		return store;
 	}
 
 	private static IStoreFactory newStoreFactory(String factoryName) throws Throwable {
@@ -106,15 +121,23 @@ public class AppServer {
 			System.out.println("Additional argument: -version (optional)");
 	}
 
-	public static void bootstrap(IStore codeStore, String application, Version version, String ...resourceNames) throws Exception {
+	public static ICodeStore bootstrapCodeStore(IStore store, String application, Version version, String ...resourceNames) throws Exception {
 		globalContext = Context.newGlobalContext();
 		System.out.println("Bootstrapping prompto...");
-		ICodeStore store = new UpdatableCodeStore(codeStore, application, version.toString(), resourceNames);
-		ICodeStore.setInstance(store);
-		System.out.println("Initializing code store schema...");
-		store.synchronizeSchema();
-		System.out.println("Bootstrapping successful...");
+		ICodeStore codeStore = new UpdatableCodeStore(store, application, version.toString(), resourceNames);
+		ICodeStore.setInstance(codeStore);
+		System.out.println("Bootstrapping successful.");
+		return codeStore;
 	}
+
+	private static void synchronizeSchema(ICodeStore codeStore, IStore dataStore) throws PromptoError {
+		System.out.println("Initializing schema...");
+		List<AttributeDeclaration> columns = new ArrayList<>();
+		codeStore.collectStorableAttributes(columns);
+		dataStore.createOrUpdateColumns(columns);
+		System.out.println("Schema successfully initialized.");
+	}
+
 
 	static int startServer(Integer httpPort, Handler handler) throws Throwable {
 		System.out.println("Starting web server on port " + httpPort + "...");
@@ -130,22 +153,25 @@ public class AppServer {
 			jettyServer.setHandler(handler);
 			AppServer.start();
 		}
-		System.out.println("Web server started on port " + httpPort);
+		System.out.println("Web server successfully started on port " + httpPort);
 		return httpPort;
 	}
 
-	static Handler prepareHandlers() {
+	static Handler prepareHandlers() throws Exception {
 		System.out.println("Preparing web handlers...");
 		Handler rh = prepareResourceHandler("/");
 		Handler ws = prepareServiceHandler("/ws/");
 		HandlerList handlers = new HandlerList();
 		handlers.setHandlers(new Handler[] { rh, ws, new DefaultHandler() });
-		System.out.println("Web handlers successfully prepared...");
+		System.out.println("Web handlers successfully prepared.");
 		return handlers;
 	}
 
-	static Handler prepareServiceHandler(String path) {
+	static Handler prepareServiceHandler(String path) throws Exception {
 		URL url = ClassLoader.getSystemResource(".");
+		// ugly work around for unit tests
+		if(url.toExternalForm().contains("/test-classes/"))
+			url = new URL(url.toExternalForm().replace("/test-classes/", "/classes/"));
 		return prepareServiceHandler(path, url.toExternalForm());
 	}
 	public static Handler prepareServiceHandler(String path, String base) {
@@ -155,8 +181,13 @@ public class AppServer {
  		return webapp;
 	}
 
-	static ResourceHandler prepareResourceHandler(String path) {
+	static ResourceHandler prepareResourceHandler(String path) throws Exception {
 		Resource resource = Resource.newClassPathResource(path);
+		// ugly work around for unit tests
+		if(resource.getURI().toString().contains("/test-classes/")) {
+			URL url = new URL(resource.getURI().toString().replace("/test-classes/", "/classes/"));
+			resource = Resource.newResource(url);
+		}
 		ResourceHandler rh = new ResourceHandler();
 		rh.setDirectoriesListed(false);
 		rh.setBaseResource(resource);
@@ -190,7 +221,7 @@ public class AppServer {
 					}
 					System.out.println("Web server thread waiting for completion...");
 					jettyServer.join();
-					System.out.println("Web server thread complete...");
+					System.out.println("Web server thread complete.");
 				} catch(Throwable t) {
 					serverThrowable = t;
 				} finally {
@@ -219,7 +250,7 @@ public class AppServer {
 		jettyServer.stop();
 		System.out.println("Web server stopped, waiting for completion...");
 		jettyServer.join();
-		System.out.println("Web server stop complete...");
+		System.out.println("Web server stop complete.");
 	}
 
 	public static boolean isStarted() {

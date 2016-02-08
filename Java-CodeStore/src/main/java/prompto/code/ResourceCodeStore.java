@@ -121,11 +121,6 @@ public class ResourceCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public void synchronizeSchema() {
-		throw new UnsupportedOperationException();
-	}
-	
-	@Override
 	public void collectStorableAttributes(List<AttributeDeclaration> list) {
 		super.collectStorableAttributes(list);
 		loadResource();
