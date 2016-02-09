@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -36,7 +37,8 @@ public abstract class BaseWebTest {
 		String className = properties.getProperty("web-driver-factory", HtmlUnitWebDriverFactory.class.getName());
 		Class<? extends WebDriverFactory> klass = (Class<? extends WebDriverFactory>)Class.forName(className);
 		webDriver = klass.newInstance().newDriver(properties);
-		webDriver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
+		webDriver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
+		webDriver.manage().window().setSize(new Dimension(1300, 900));
 	}
 	
 	@AfterClass
