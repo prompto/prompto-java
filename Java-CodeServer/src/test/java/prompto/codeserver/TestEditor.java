@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
@@ -20,6 +21,7 @@ import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.type.CategoryType;
 
+@Category(SeleniumTest.class)
 public class TestEditor extends BaseWebTest {
 
 	@BeforeClass
