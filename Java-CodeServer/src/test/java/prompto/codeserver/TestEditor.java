@@ -9,17 +9,7 @@ import org.junit.experimental.categories.Category;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import prompto.expression.EqualsExpression;
-import prompto.expression.IExpression;
-import prompto.grammar.EqOp;
-import prompto.grammar.Identifier;
-import prompto.grammar.UnresolvedIdentifier;
-import prompto.literal.TextLiteral;
 import prompto.server.AppServer;
-import prompto.store.IDataStore;
-import prompto.store.IStore;
-import prompto.store.IStored;
-import prompto.type.CategoryType;
 
 @Category(SeleniumTest.class)
 public class TestEditor extends BaseWebTest {
@@ -52,15 +42,6 @@ public class TestEditor extends BaseWebTest {
 	static final String ROOT_URL = "http://localhost:8888/";
 	static final String EDITOR_URL = ROOT_URL + "ide/index.html?dbId=$dbId$&name=$name$";
 	
-	@Test
-	public void testLoadAppStore() throws Exception {
-		webDriver.get(ROOT_URL);
-		webDriver.switchTo().frame("content-frame");
-		String dbId = getDbIdForModule("Mail");
-		WebElement we = waitElement(By.id(dbId));
-		assertTrue(we.getText().startsWith("Mail"));
-	}
-
 	@Test
 	public void testSelectMethod() throws Exception { 
 		loadMailAppAndHideCore();
@@ -161,18 +142,6 @@ public class TestEditor extends BaseWebTest {
 		webDriver.switchTo().frame("editor");
 		WebElement we = waitElement(By.className("ace_content"));
 		return we.getText();
-	}
-
-	
-	private String getDbIdForModule(String name) throws Exception {
-		IStore store = IDataStore.getInstance();
-		IExpression filter = new EqualsExpression(
-				new UnresolvedIdentifier(new Identifier("name")), 
-				EqOp.EQUALS, 
-				new TextLiteral( "'" + name + "'"));
-		IStored stored = store.fetchOne(AppServer.getGlobalContext(), 
-				new CategoryType(new Identifier("Module")), filter);
-		return stored.getDbId().toString();
 	}
 
 }
