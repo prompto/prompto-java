@@ -94,6 +94,7 @@ public class TestEditor extends BaseWebTest {
 		String code = "define dummy as Text attribute";
 		we.sendKeys(code);
 		assertEquals(code, getEditorContent());
+		we = getObjectLink("attribute_dummy");
 		// press the New button to clear the editor
 		webDriver.switchTo().defaultContent();
 		we = waitElement(By.id("btnNew"));
@@ -114,7 +115,7 @@ public class TestEditor extends BaseWebTest {
 		// press the newly created attribute link
 		we = getObjectLink("attribute_dummy");
 		we.click();
-		// press the New button to clear the editor
+		// press the Delete button to clear the editor
 		webDriver.switchTo().defaultContent();
 		we = waitElement(By.id("btnDelete"));
 		we.click();
@@ -124,13 +125,134 @@ public class TestEditor extends BaseWebTest {
 		assertEquals(0, webDriver.findElements(By.id("attribute_dummy")).size());
 	}
 
+	@Test
+	public void testNewCategory() throws Exception {  
+		loadMailAppAndHideCore();
+		WebElement we = getEditorInput();
+		String code = "define Dummy as category with attribute name";
+		we.sendKeys(code);
+		assertEquals(code, getEditorContent());
+		we = getObjectLink("category_Dummy");
+		// press the New button to clear the editor
+		webDriver.switchTo().defaultContent();
+		we = waitElement(By.id("btnNew"));
+		we.click();
+		// press the newly created category link
+		we = getObjectLink("category_Dummy");
+		we.click();
+		assertEquals(code, getEditorContent());
+	}
 	
+	@Test
+	public void testDeleteCategory() throws Exception { 
+		loadMailAppAndHideCore();
+		WebElement we = getEditorInput();
+		String code = "define Dummy as category with attribute name";
+		we.sendKeys(code);
+		assertEquals(code, getEditorContent());
+		// press the newly created category link
+		we = getObjectLink("category_Dummy");
+		we.click();
+		// press the Delete button to clear the editor
+		webDriver.switchTo().defaultContent();
+		we = waitElement(By.id("btnDelete"));
+		we.click();
+		assertEquals("", getEditorContent());
+		// ensure the newly created category was deleted
+		webDriver.switchTo().defaultContent();
+		assertEquals(0, webDriver.findElements(By.id("category_Dummy")).size());
+	}
+
+	@Test
+	public void testNewTest() throws Exception {  
+		loadMailAppAndHideCore();
+		WebElement we = getEditorInput();
+		String code = "define \"dummy test\" as test method doing:\n"
+				+ "    a = \"Hello\"\n"
+				+ "\band verifying:\n"
+				+ "    a = \"Hello\"";
+		we.sendKeys(code);
+		assertEquals(code.replace("\b",""), getEditorContent());
+		we = getObjectLink("test_dummy_test");
+		// press the New button to clear the editor
+		webDriver.switchTo().defaultContent();
+		we = waitElement(By.id("btnNew"));
+		we.click();
+		// press the newly created category link
+		we = getObjectLink("test_dummy_test");
+		we.click();
+		assertEquals(code.replace("\b",""), getEditorContent());
+	}
+
+	@Test
+	public void testDeleteTest() throws Exception { 
+		loadMailAppAndHideCore();
+		WebElement we = getEditorInput();
+		String code = "define \"dummy test\" as test method doing:\n"
+				+ "    a = \"Hello\"\n"
+				+ "\band verifying:\n"
+				+ "    a = \"Hello\"";
+		we.sendKeys(code);
+		assertEquals(code.replace("\b",""), getEditorContent());
+		// press the newly created test link
+		we = getObjectLink("test_dummy_test");
+		we.click();
+		// press the Delete button to clear the editor
+		webDriver.switchTo().defaultContent();
+		we = waitElement(By.id("btnDelete"));
+		we.click();
+		assertEquals("", getEditorContent());
+		// ensure the newly created test was deleted
+		webDriver.switchTo().defaultContent();
+		assertEquals(0, webDriver.findElements(By.id("test_dummy_test")).size());
+	}
+
+	@Test
+	public void testNewMethod1Proto() throws Exception {  
+		loadMailAppAndHideCore();
+		WebElement we = getEditorInput();
+		String code = "define simpleMethod as method receiving name doing:\n"
+					+ "    print with \"name=\" + name as value";
+		we.sendKeys(code);
+		assertEquals(code, getEditorContent());
+		we = getObjectLink("method_simpleMethod");
+		// press the New button to clear the editor
+		webDriver.switchTo().defaultContent();
+		we = waitElement(By.id("btnNew"));
+		we.click();
+		// press the newly created method link
+		we = getObjectLink("method_simpleMethod");
+		we.click();
+		assertEquals(code, getEditorContent());
+	}
+
+	@Test
+	public void testDeleteMethod1Proto() throws Exception { 
+		loadMailAppAndHideCore();
+		WebElement we = getEditorInput();
+		String code = "define simpleMethod as method receiving name doing:\n"
+					+ "    print with \"name=\" + name as value";
+		we.sendKeys(code);
+		assertEquals(code, getEditorContent());
+		// press the newly created method link
+		we = getObjectLink("method_simpleMethod");
+		we.click();
+		// press the Delete button to clear the editor
+		webDriver.switchTo().defaultContent();
+		we = waitElement(By.id("btnDelete"));
+		we.click();
+		assertEquals("", getEditorContent());
+		// ensure the newly created method was deleted
+		webDriver.switchTo().defaultContent();
+		assertEquals(0, webDriver.findElements(By.id("method_simpleMethod")).size());
+	}
+
 	private WebElement getEditorInput() {
 		webDriver.switchTo().defaultContent();
 		webDriver.switchTo().frame("editor");
 		return waitElement(By.tagName("textarea"));
 	}
-
+	
 	private WebElement getObjectLink(String id) {
 		webDriver.switchTo().defaultContent();
 		WebElement we = waitElement(By.id(id));
