@@ -70,6 +70,16 @@ public abstract class BaseWebTest {
 		});
 	}
 
+	protected WebElement waitElement(WebElement start, By by) {
+		WebDriverWait wait = new WebDriverWait(webDriver, 10);
+		return wait.until( new ExpectedCondition<WebElement>() {
+
+			@Override public WebElement apply(WebDriver input) {
+				return start.findElement(by);
+			}
+		});
+	}
+
 	protected String getDbIdForModule(String name) throws Exception {
 		IStore store = IDataStore.getInstance();
 		IExpression filter = new EqualsExpression(

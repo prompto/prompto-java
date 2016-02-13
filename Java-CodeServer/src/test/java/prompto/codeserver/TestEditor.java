@@ -49,7 +49,7 @@ public class TestEditor extends BaseWebTest {
 		String content = getEditorContent();
 		assertEquals("", content);
 		// locate method item
-		WebElement we = getObjectLink("method_printHelloMail");
+		WebElement we = waitObjectLink("method_printHelloMail");
 		assertEquals("printHelloMail", we.getText());
 		we.click();
 		// ensure code was loaded in editor
@@ -72,7 +72,7 @@ public class TestEditor extends BaseWebTest {
 	public void testNewButton() throws Exception { 
 		loadMailAppAndHideCore();
 		// locate method item
-		WebElement we = getObjectLink("method_printHelloMail");
+		WebElement we = waitObjectLink("method_printHelloMail");
 		assertEquals("printHelloMail", we.getText());
 		we.click();
 		// ensure code was loaded in editor
@@ -94,13 +94,13 @@ public class TestEditor extends BaseWebTest {
 		String code = "define dummy as Text attribute";
 		we.sendKeys(code);
 		assertEquals(code, getEditorContent());
-		we = getObjectLink("attribute_dummy");
+		we = waitObjectLink("attribute_dummy");
 		// press the New button to clear the editor
 		webDriver.switchTo().defaultContent();
 		we = waitElement(By.id("btnNew"));
 		we.click();
 		// press the newly created attribute link
-		we = getObjectLink("attribute_dummy");
+		we = waitObjectLink("attribute_dummy");
 		we.click();
 		assertEquals(code, getEditorContent());
 	}
@@ -113,7 +113,7 @@ public class TestEditor extends BaseWebTest {
 		we.sendKeys(code);
 		assertEquals(code, getEditorContent());
 		// press the newly created attribute link
-		we = getObjectLink("attribute_dummy");
+		we = waitObjectLink("attribute_dummy");
 		we.click();
 		// press the Delete button to clear the editor
 		webDriver.switchTo().defaultContent();
@@ -132,13 +132,13 @@ public class TestEditor extends BaseWebTest {
 		String code = "define Dummy as category with attribute name";
 		we.sendKeys(code);
 		assertEquals(code, getEditorContent());
-		we = getObjectLink("category_Dummy");
+		we = waitObjectLink("category_Dummy");
 		// press the New button to clear the editor
 		webDriver.switchTo().defaultContent();
 		we = waitElement(By.id("btnNew"));
 		we.click();
 		// press the newly created category link
-		we = getObjectLink("category_Dummy");
+		we = waitObjectLink("category_Dummy");
 		we.click();
 		assertEquals(code, getEditorContent());
 	}
@@ -151,7 +151,7 @@ public class TestEditor extends BaseWebTest {
 		we.sendKeys(code);
 		assertEquals(code, getEditorContent());
 		// press the newly created category link
-		we = getObjectLink("category_Dummy");
+		we = waitObjectLink("category_Dummy");
 		we.click();
 		// press the Delete button to clear the editor
 		webDriver.switchTo().defaultContent();
@@ -173,13 +173,13 @@ public class TestEditor extends BaseWebTest {
 				+ "    a = \"Hello\"";
 		we.sendKeys(code);
 		assertEquals(code.replace("\b",""), getEditorContent());
-		we = getObjectLink("test_dummy_test");
+		we = waitObjectLink("test_dummy_test");
 		// press the New button to clear the editor
 		webDriver.switchTo().defaultContent();
 		we = waitElement(By.id("btnNew"));
 		we.click();
 		// press the newly created category link
-		we = getObjectLink("test_dummy_test");
+		we = waitObjectLink("test_dummy_test");
 		we.click();
 		assertEquals(code.replace("\b",""), getEditorContent());
 	}
@@ -195,7 +195,7 @@ public class TestEditor extends BaseWebTest {
 		we.sendKeys(code);
 		assertEquals(code.replace("\b",""), getEditorContent());
 		// press the newly created test link
-		we = getObjectLink("test_dummy_test");
+		we = waitObjectLink("test_dummy_test");
 		we.click();
 		// press the Delete button to clear the editor
 		webDriver.switchTo().defaultContent();
@@ -215,15 +215,50 @@ public class TestEditor extends BaseWebTest {
 					+ "    print with \"name=\" + name as value";
 		we.sendKeys(code);
 		assertEquals(code, getEditorContent());
-		we = getObjectLink("method_simpleMethod");
+		we = waitObjectLink("method_simpleMethod");
 		// press the New button to clear the editor
 		webDriver.switchTo().defaultContent();
 		we = waitElement(By.id("btnNew"));
 		we.click();
 		// press the newly created method link
-		we = getObjectLink("method_simpleMethod");
+		we = waitObjectLink("method_simpleMethod");
 		we.click();
 		assertEquals(code, getEditorContent());
+	}
+
+	@Test
+	public void testNewMethod2Protos() throws Exception {  
+		loadMailAppAndHideCore();
+		WebElement we = getEditorInput();
+		String code1 = "define simpleMethod as method receiving name doing:\n"
+					+ "    print with \"name=\" + name as value";
+		we.sendKeys(code1);
+		assertEquals(code1, getEditorContent());
+		we = waitObjectLink("method_simpleMethod");
+		// press the New button to clear the editor
+		webDriver.switchTo().defaultContent();
+		we = waitElement(By.id("btnNew"));
+		we.click();
+		// create a method with same name but different proto
+		we = getEditorInput();
+		String code2 = "define simpleMethod as method receiving description doing:\n"
+					+ "    print with \"description=\" + description as value";
+		we.sendKeys(code2);
+		assertEquals(code2, getEditorContent());
+		Thread.sleep(1000); // need to wait for the new "method_simpleMethod" WebElement
+		we = waitProtoLink("method_simpleMethod", "proto_description");
+		// press the New button to clear the editor
+		webDriver.switchTo().defaultContent();
+		we = waitElement(By.id("btnNew"));
+		we.click();
+		// press the newly created method link
+		we = waitProtoLink("method_simpleMethod", "proto_name");
+		we.click();
+		assertEquals(code1, getEditorContent());
+		// press the newly created method link
+		we = waitProtoLink("method_simpleMethod", "proto_description");
+		we.click();
+		assertEquals(code2, getEditorContent());
 	}
 
 	@Test
@@ -235,7 +270,7 @@ public class TestEditor extends BaseWebTest {
 		we.sendKeys(code);
 		assertEquals(code, getEditorContent());
 		// press the newly created method link
-		we = getObjectLink("method_simpleMethod");
+		we = waitObjectLink("method_simpleMethod");
 		we.click();
 		// press the Delete button to clear the editor
 		webDriver.switchTo().defaultContent();
@@ -253,11 +288,19 @@ public class TestEditor extends BaseWebTest {
 		return waitElement(By.tagName("textarea"));
 	}
 	
-	private WebElement getObjectLink(String id) {
+	private WebElement waitObjectLink(String id) {
 		webDriver.switchTo().defaultContent();
 		WebElement we = waitElement(By.id(id));
 		return we.findElement(By.tagName("a"));
 	}
+
+	private WebElement waitProtoLink(String method, String proto) {
+		webDriver.switchTo().defaultContent();
+		WebElement we = waitElement(By.id(method));
+		we = waitElement(we, By.id(proto));
+		return we.findElement(By.tagName("a"));
+	}
+
 
 	private String getEditorContent() {
 		webDriver.switchTo().defaultContent();
