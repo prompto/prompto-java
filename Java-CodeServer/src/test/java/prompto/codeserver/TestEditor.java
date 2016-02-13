@@ -282,6 +282,43 @@ public class TestEditor extends BaseWebTest {
 		assertEquals(0, webDriver.findElements(By.id("method_simpleMethod")).size());
 	}
 
+	@Test
+	public void testDeleteMethod2Protos() throws Exception { 
+		loadMailAppAndHideCore();
+		WebElement we = getEditorInput();
+		String code = "define simpleMethod as method receiving name doing:\n"
+					+ "    print with \"name=\" + name as value";
+		we.sendKeys(code);
+		assertEquals(code, getEditorContent());
+		// press the newly created method link
+		we = waitObjectLink("method_simpleMethod");
+		we.click();
+		// press the New button to clear the editor
+		webDriver.switchTo().defaultContent();
+		we = waitElement(By.id("btnNew"));
+		we.click();
+		// create a method with same name but different proto
+		we = getEditorInput();
+		String code2 = "define simpleMethod as method receiving description doing:\n"
+					+ "    print with \"description=\" + description as value";
+		we.sendKeys(code2);
+		assertEquals(code2, getEditorContent());
+		Thread.sleep(1000); // need to wait for the new "method_simpleMethod" WebElement
+		we = waitProtoLink("method_simpleMethod", "proto_description");
+		we.click();
+		// press the Delete button to clear the editor
+		webDriver.switchTo().defaultContent();
+		we = waitElement(By.id("btnDelete"));
+		we.click();
+		assertEquals("", getEditorContent());
+		Thread.sleep(1000); // need to wait for the new "method_simpleMethod" WebElement
+		// ensure the newly created method was deleted
+		webDriver.switchTo().defaultContent();
+		assertEquals(0, webDriver.findElements(By.id("proto_description")).size());
+		// ensure the previous method still exists
+		we = waitObjectLink("method_simpleMethod");
+	}
+
 	private WebElement getEditorInput() {
 		webDriver.switchTo().defaultContent();
 		webDriver.switchTo().frame("editor");
