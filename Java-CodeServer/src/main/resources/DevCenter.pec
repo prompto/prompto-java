@@ -13,7 +13,17 @@ define lastOpened as storable DateTime attribute
 define CodingSession as storable category with attributes user, module and lastOpened
 define RecentSession as storable CodingSession
 
-define Declaration as storable category with attributes name, version, dialect, body and module
+define Declaration as storable category with attributes name, version, dialect, prototype, body and module
+
+define EditStatus as enumerated Text with symbols:
+	CLEAN with "CLEAN" as value
+	CREATED with "CREATED" as value
+	DELETED with "DELETED" as value 
+	DIRTY with "DIRTY" as value
+
+define editStatus as storable EditStatus attribute with key index
+
+define EditedDeclaration as storable Declaration with attribute editStatus
 
 define getRecentModules as method receiving Integer count doing:
 	user = getHttpUser
@@ -36,7 +46,10 @@ define getModuleDeclarations as method receiving dbId doing:
 	if recent is nothing:
 		recent = RecentSession with user as user, module as module and now as lastOpened 
 	else:
-		recent.lastOpened = now 
+		recent.lastOpened = now
 	store recent
 	
 	return fetch all Declaration where module = module
+
+define storeDeclarations as method receiving EditedDeclaration[] edited doing:
+	print "ok"
