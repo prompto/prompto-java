@@ -379,7 +379,72 @@ public class TestEditor extends BaseWebTest {
 		assertEquals(0, webDriver.findElements(By.id("method_simpleMethod")).size());
 		assertEquals(0, webDriver.findElements(By.id("test_dummy_test")).size());
 		// ensure the main method still exists
-		we = waitObjectLink("method_printHelloMail");
+		waitElement(By.id("method_printHelloMail"));
+	}
+	
+	@Test
+	public void testCommitButton() throws Exception { 
+		loadMailAppAndHideCore();
+		WebElement we = getEditorInput();
+		// create an attribute
+		String code = "define dummy as Text attribute";
+		we.sendKeys(code);
+		assertEquals(code, getEditorContent());
+		we = waitObjectLink("attribute_dummy");
+		// press the New button to clear the editor
+		webDriver.switchTo().defaultContent();
+		we = waitElement(By.id("btnNew"));
+		we.click();
+		// create a category
+		we = getEditorInput();
+		code = "define Dummy as category with attribute name";
+		we.sendKeys(code);
+		assertEquals(code, getEditorContent());
+		we = waitObjectLink("category_Dummy");
+		// press the New button to clear the editor
+		webDriver.switchTo().defaultContent();
+		we = waitElement(By.id("btnNew"));
+		we.click();
+		// create a method
+		we = getEditorInput();
+		code = "define simpleMethod as method receiving name doing:\n"
+					+ "    print with \"name=\" + name as value";
+		we.sendKeys(code);
+		assertEquals(code, getEditorContent());
+		we = waitObjectLink("method_simpleMethod");
+		// press the New button to clear the editor
+		webDriver.switchTo().defaultContent();
+		we = waitElement(By.id("btnNew"));
+		we.click();
+		// create a test
+		we = getEditorInput();
+		code = "define \"dummy test\" as test method doing:\n"
+				+ "    a = \"Hello\"\n"
+				+ "\band verifying:\n"
+				+ "    a = \"Hello\"";
+		we.sendKeys(code);
+		assertEquals(code.replace("\b",""), getEditorContent());
+		we = waitObjectLink("test_dummy_test");
+		// press the New button to clear the editor
+		webDriver.switchTo().defaultContent();
+		we = waitElement(By.id("btnNew"));
+		we.click();
+		// press the commit button
+		webDriver.switchTo().defaultContent();
+		we = waitElement(By.id("btnCommit"));
+		we.click();
+		we = waitElement(By.id("btnRevert"));
+		we.click();
+		assertEquals("", getEditorContent());
+		Thread.sleep(1000); // need to wait for the new WebElements
+		// ensure the newly created objects still exist
+		webDriver.switchTo().defaultContent();
+		waitElement(By.id("attribute_dummy"));
+		waitElement(By.id("category_Dummy"));
+		waitElement(By.id("method_simpleMethod"));
+		waitElement(By.id("test_dummy_test"));
+		// ensure the main method still exists
+		waitElement(By.id("method_printHelloMail"));
 	}
 
 	private WebElement getEditorInput() {
