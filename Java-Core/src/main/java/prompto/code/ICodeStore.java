@@ -2,7 +2,7 @@ package prompto.code;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import prompto.declaration.AttributeDeclaration;
@@ -99,9 +99,13 @@ public interface ICodeStore {
 	String getModuleName();
 	Version getModuleVersion();
 
-	void storeDeclarations(Collection<IDeclaration> declarations, Dialect dialect, Version version, IValue projectId) throws PromptoError;
-	IDeclaration fetchLatestVersion(String name) throws PromptoError;
-	IDeclaration fetchSpecificVersion(String name, Version version) throws PromptoError;
+	void storeDeclarations(Iterator<IDeclaration> declarations, Dialect dialect, Version version, IValue projectId) throws PromptoError;
+
+	default Iterator<IDeclaration> fetchLatestVersions(String name) throws PromptoError {
+		return fetchSpecificVersions(name, ICodeStore.LATEST);
+	}
+	
+	Iterator<IDeclaration> fetchSpecificVersions(String name, Version version) throws PromptoError;
 
 	default public Application fetchApplication(String name, Version version) throws PromptoError {
 		return fetchModule(ModuleType.APPLICATION, name, version);
@@ -122,5 +126,5 @@ public interface ICodeStore {
 	<T extends Module> T fetchModule(ModuleType type, String name, Version version) throws PromptoError;
 	void storeModule(Module module) throws PromptoError;
 
-	void collectStorableAttributes(List<AttributeDeclaration> list);
+	void collectStorableAttributes(List<AttributeDeclaration> list) throws PromptoError;
 }

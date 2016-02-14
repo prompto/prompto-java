@@ -91,7 +91,7 @@ public class CharacterType extends NativeType {
 	}
 	
 	@Override
-	public IValue readJSONValue(JsonNode value) {
+	public IValue readJSONValue(Context context, JsonNode value) {
 		if(value.asText().length()>1)
 			throw new InvalidParameterException(value.toString());
 		return new Character(value.asText().charAt(0));

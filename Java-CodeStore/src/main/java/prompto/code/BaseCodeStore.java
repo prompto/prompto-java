@@ -1,5 +1,6 @@
 package prompto.code;
 
+import java.util.Iterator;
 import java.util.List;
 
 import prompto.code.ICodeStore;
@@ -20,17 +21,17 @@ public abstract class BaseCodeStore implements ICodeStore {
 	}
 	
 	@Override
-	public IDeclaration fetchLatestVersion(String name) throws PromptoError {
-		return next==null ? null : next.fetchLatestVersion(name);
+	public Iterator<IDeclaration> fetchLatestVersions(String name) throws PromptoError {
+		return next==null ? null : next.fetchLatestVersions(name);
 	}
 	
 	@Override
-	public IDeclaration fetchSpecificVersion(String name, Version version) throws PromptoError {
-		return next==null ? null : next.fetchSpecificVersion(name, version);
+	public Iterator<IDeclaration> fetchSpecificVersions(String name, Version version) throws PromptoError {
+		return next==null ? null : next.fetchSpecificVersions(name, version);
 	}
 	
 	@Override
-	public void collectStorableAttributes(List<AttributeDeclaration> list) {
+	public void collectStorableAttributes(List<AttributeDeclaration> list) throws PromptoError {
 		if(next!=null)
 			next.collectStorableAttributes(list);
 		

@@ -128,6 +128,11 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		// if called from within a member method without 
 		Context local = method.newLocalContext(context, declaration);
 		declaration.registerArguments(local);
+		registerAssignments(context, local, declaration);
+		return declaration.interpret(local);
+	}
+
+	private void registerAssignments(Context context, Context local, IMethodDeclaration declaration) throws PromptoError {
 		ArgumentAssignmentList assignments = makeAssignments(context, declaration);
 		for (ArgumentAssignment assignment : assignments) {
 			IExpression expression = assignment.resolve(local, declaration, true);
@@ -137,7 +142,6 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 				throw new NotMutableError();
 			local.setValue(assignment.getName(), value);
 		}
-		return declaration.interpret(local);
 	}
 
 	@Override

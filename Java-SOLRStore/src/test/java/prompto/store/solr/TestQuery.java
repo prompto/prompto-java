@@ -20,6 +20,7 @@ import prompto.parser.ECleverParser;
 import prompto.parser.EPromptoBuilder;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
+import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.type.AnyType;
 import prompto.type.TextType;
@@ -40,7 +41,7 @@ public class TestQuery extends BaseSOLRTest {
 	}
 	
 	private void registerDbIdAttribute() throws SyntaxError {
-		AttributeDeclaration decl = new AttributeDeclaration( new Identifier("dbId"), AnyType.instance());
+		AttributeDeclaration decl = new AttributeDeclaration( IStore.dbIdName, AnyType.instance());
 		context.registerDeclaration(decl);
 	}
 
@@ -77,7 +78,7 @@ public class TestQuery extends BaseSOLRTest {
 	@Test
 	public void testFetchOneByName() throws Exception {
 		SolrInputDocument doc = new SolrInputDocument();
-		doc.addField("dbId", UUID.randomUUID());
+		doc.addField(IStore.dbIdName.getName(), UUID.randomUUID());
 		doc.addField("name", "John");
 		store.addDocuments(doc);
 		store.commit();
@@ -92,7 +93,7 @@ public class TestQuery extends BaseSOLRTest {
 	public void testDeleteOne() throws Exception {
 		SolrInputDocument doc = new SolrInputDocument();
 		UUID uuid = UUID.randomUUID();
-		doc.addField("dbId", uuid);
+		doc.addField(IStore.dbIdName.getName(), uuid);
 		doc.addField("name", "John");
 		store.addDocuments(doc);
 		store.commit();

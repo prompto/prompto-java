@@ -1,20 +1,17 @@
 package prompto.code;
 
 import java.io.InputStream;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import prompto.code.ICodeStore;
-import prompto.code.Version;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.DeclarationList;
 import prompto.declaration.IDeclaration;
-import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.parser.Dialect;
-import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.value.IValue;
 
 /* resource base code store used to bootstrap modules  */
@@ -23,7 +20,7 @@ public class ResourceCodeStore extends BaseCodeStore {
 	ModuleType type;
 	String resourceName;
 	Version version;
-	Map<String, IDeclaration> declarations = null;
+	Map<String, List<IDeclaration>> declarations = null;
 	
 	public ResourceCodeStore(ICodeStore next, ModuleType type, String resourceName, String version) {
 		super(next);
@@ -64,69 +61,91 @@ public class ResourceCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public void storeDeclarations(Collection<IDeclaration> declarations, Dialect dialect, Version version, IValue projectId) throws PromptoError {
+	public void storeDeclarations(Iterator<IDeclaration> declarations, Dialect dialect, Version version, IValue projectId) throws PromptoError {
 		throw new UnsupportedOperationException();
 	}
 	
 	@Override
-	public IDeclaration fetchLatestVersion(String name) throws PromptoError {
-		IDeclaration decl = fetchInResource(name);
-		if(decl!=null)
-			return decl;
+	public Iterator<IDeclaration> fetchLatestVersions(String name) throws PromptoError {
+		Iterator<IDeclaration> decls = fetchInResource(name);
+		if(decls!=null)
+			return decls;
 		else
-			return super.fetchLatestVersion(name);
+			return super.fetchLatestVersions(name);
 	}
 	
 	@Override
-	public IDeclaration fetchSpecificVersion(String name,Version version) throws PromptoError {
-		IDeclaration decl = fetchInResource(name);
-		if(decl!=null)
-			return decl;
+	public Iterator<IDeclaration> fetchSpecificVersions(String name,Version version) throws PromptoError {
+		Iterator<IDeclaration> decls = fetchInResource(name);
+		if(decls!=null)
+			return decls;
 		else
-			return super.fetchSpecificVersion(name, version);
+			return super.fetchSpecificVersions(name, version);
 	}
 
-	private IDeclaration fetchInResource(String name) {
+	private Iterator<IDeclaration> fetchInResource(String name) {
 		loadResource();
-		return declarations.get(name);
+		List<IDeclaration> decls = declarations.get(name);
+		return decls==null ? null : decls.iterator();
 	}
 
 	private void loadResource() {
 		if(declarations==null) try {
 			InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName);
 			DeclarationList decls = ICodeStore.parse(resourceName, input);
-			declarations = new HashMap<String, IDeclaration>();
+			declarations = new HashMap<String, List<IDeclaration>>();
 			for(IDeclaration decl : decls) {
 				decl.setOrigin(this);
 				String name = decl.getIdentifier().getName();
-				if(decl instanceof IMethodDeclaration) {
-					MethodDeclarationMap protos = (MethodDeclarationMap)declarations.get(name);
-					if(protos==null) {
-						protos = new MethodDeclarationMap(decl.getIdentifier());
-						protos.setOrigin(this);
-						declarations.put(name, protos);
-					}
-					protos.register((IMethodDeclaration)decl, null);
-				} else
-					declarations.put(name, decl);
+				if(declarations.get(name)==null)
+					declarations.put(name, new ArrayList<>());
+				declarations.get(name).add(decl);
 			}
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	public Collection<IDeclaration> getDeclarations() {
+	public Iterator<IDeclaration> getDeclarations() {
 		loadResource();
-		return declarations.values();
+		return new Iterator<IDeclaration>() {
+			
+			Iterator<List<IDeclaration>> main = declarations.values().iterator();
+			Iterator<IDeclaration> child = null;
+			
+			@Override 
+			public boolean hasNext() {
+				while(true) {
+					if(child!=null) {
+						if(child.hasNext())
+							return true;
+						else
+							child = null;
+					}
+					if(child==null) {
+						if(!main.hasNext())
+							return false;
+						else
+							child = main.next().iterator();
+					}
+				}
+			}
+			
+			@Override
+			public IDeclaration next() {
+				return child.next();
+			}
+		};
 	}
 	
 	@Override
-	public void collectStorableAttributes(List<AttributeDeclaration> list) {
+	public void collectStorableAttributes(List<AttributeDeclaration> list) throws PromptoError {
 		super.collectStorableAttributes(list);
 		loadResource();
-		declarations.values().stream()
-			.filter( (decl) -> decl instanceof AttributeDeclaration)
+		declarations.values().forEach( (decls) -> {
+			decls.stream().filter( (decl) -> decl instanceof AttributeDeclaration)
 			.filter( (decl) -> ((AttributeDeclaration)decl).isStorable())
 			.forEach( (decl) -> list.add((AttributeDeclaration)decl));
+		});
 	}
 }

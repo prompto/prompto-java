@@ -12,6 +12,7 @@ import prompto.error.ReadWriteError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
+import prompto.store.IStore;
 import prompto.type.IType;
 import prompto.utils.ResourceUtils;
 
@@ -116,7 +117,7 @@ public abstract class Binary extends BaseValue {
 	@Override
 	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
 		try {
-			String dbId = instance.getMember(context, new Identifier("dbId"), false).toString();
+			String dbId = instance.getMember(context, IStore.dbIdName, false).toString();
 			generator.writeString("/ws/bin/data?dbId=" + dbId + "&attribute=" + name.getName());
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());

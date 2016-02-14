@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
@@ -12,7 +13,9 @@ import org.eclipse.jetty.server.handler.DefaultHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.util.resource.Resource;
+import org.eclipse.jetty.webapp.Configuration;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.eclipse.jetty.webapp.WebXmlConfiguration;
 
 import prompto.code.UpdatableCodeStore;
 import prompto.code.ICodeStore;
@@ -174,11 +177,15 @@ public class AppServer {
 			url = new URL(url.toExternalForm().replace("/test-classes/", "/classes/"));
 		return prepareServiceHandler(path, url.toExternalForm());
 	}
+	
 	public static Handler prepareServiceHandler(String path, String base) {
-        WebAppContext webapp = new WebAppContext();
-        webapp.setContextPath(path);
-        webapp.setResourceBase(base);
- 		return webapp;
+        WebAppContext handler = new WebAppContext();
+        handler.setContextPath(path);
+        handler.setResourceBase(base);
+        handler.setConfigurations(new Configuration[] {
+        		new AnnotationConfiguration(), new WebXmlConfiguration()
+        });
+ 		return handler;
 	}
 
 	static ResourceHandler prepareResourceHandler(String path) throws Exception {

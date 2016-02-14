@@ -40,8 +40,12 @@ public class RequestRouter {
 		JsonGenerator generator = new JsonFactory().createGenerator(output);
 		generator.writeStartObject();
 		generator.writeNullField("error");
-		generator.writeFieldName("data");
-		value.toJson(context, generator, null, null);
+		if(value==null)
+			generator.writeNullField("data");
+		else {
+			generator.writeFieldName("data");
+			value.toJson(context, generator, null, null);
+		}
 		generator.writeEndObject();
 		generator.flush();
 		generator.close();

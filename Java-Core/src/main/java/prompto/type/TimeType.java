@@ -102,7 +102,7 @@ public class TimeType extends NativeType {
 	}
 	
 	@Override
-	public IValue readJSONValue(JsonNode value) {
+	public IValue readJSONValue(Context context, JsonNode value) {
 		LocalTime time = LocalTime.parse(value.asText());
 		return new Time(time);
 	}

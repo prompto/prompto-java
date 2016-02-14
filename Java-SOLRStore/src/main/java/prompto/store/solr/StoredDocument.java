@@ -5,6 +5,7 @@ import org.apache.solr.common.SolrDocument;
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.value.IValue;
 
@@ -21,7 +22,7 @@ public class StoredDocument extends BaseDocument implements IStored {
 	
 	@Override
 	public IValue getDbId() {
-		Object dbId = document.getFieldValue("dbId");
+		Object dbId = document.getFieldValue(IStore.dbIdName.getName());
 		if(dbId==null)
 			return null;
 		else

@@ -22,6 +22,7 @@ import org.apache.solr.common.params.CoreAdminParams.CoreAdminAction;
 
 import prompto.error.InternalError;
 import prompto.error.PromptoError;
+import prompto.store.IStore;
 import prompto.store.IStoreFactory.Type;
 import prompto.utils.Utils;
 
@@ -159,7 +160,7 @@ public class RemoteSOLRStore extends BaseSOLRStore {
 		SchemaResponse.FieldsResponse response = getFields.process(client, coreName);
 		for(Map<String, Object> field : response.getFields()) {
 			String name = String.valueOf(field.get("name"));
-			if("dbId".equals(name) || "_version_".equals(name))
+			if(IStore.dbIdName.getName().equals(name) || "_version_".equals(name))
 				continue;
 			dropField(name);
 		}

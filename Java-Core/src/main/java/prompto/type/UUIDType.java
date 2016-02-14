@@ -25,7 +25,7 @@ public class UUIDType extends NativeType {
 	}
 	
 	@Override
-	public IValue readJSONValue(JsonNode value) {
+	public IValue readJSONValue(Context context, JsonNode value) {
 		return new prompto.value.UUID(value.asText());
 	}
 	

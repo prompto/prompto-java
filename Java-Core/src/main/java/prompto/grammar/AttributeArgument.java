@@ -8,6 +8,7 @@ import prompto.expression.IExpression;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.store.IDataStore;
+import prompto.store.IStore;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.utils.Utils;
@@ -75,7 +76,7 @@ public class AttributeArgument extends BaseArgument implements INamedArgument {
 	@Override
 	public IType getType(Context context) throws SyntaxError {
 		// dbId type can only be resolved at runtime
-		if("dbId".equals(id.getName()))
+		if(IStore.dbIdName.equals(id))
 			return IDataStore.getInstance().getDbIdType();
 		else {
 			IDeclaration named = context.getRegisteredDeclaration(IDeclaration.class, id);

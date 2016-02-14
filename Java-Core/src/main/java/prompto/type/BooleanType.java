@@ -45,7 +45,7 @@ public class BooleanType extends NativeType {
 	}
 	
 	@Override
-	public IValue readJSONValue(JsonNode value) {
+	public IValue readJSONValue(Context context, JsonNode value) {
 		return prompto.value.Boolean.valueOf(value.asBoolean());
 	}
 

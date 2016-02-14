@@ -52,8 +52,6 @@ public final class MemStore implements IStore {
 		// nothing to do
 	}
 	
-	static final Identifier dbIdName = new Identifier("dbId");
-	
 	@Override
 	public void store(Context context, Collection<IStorable> storables) throws PromptoError {
 		for(IStorable storable : storables) {
@@ -76,7 +74,7 @@ public final class MemStore implements IStore {
 	@Override
 	public Binary fetchBinary(String dbId, String attr) {
 		for(StorableDocument doc : documents.values()) {
-			Object data = doc.getData("dbId");
+			Object data = doc.getData(IStore.dbIdName.getName());
 			if(data==null || !dbId.equals(data.toString()))
 				continue;
 			data = doc.getData("attr");

@@ -233,7 +233,7 @@ abstract class BaseSOLRStore implements IStore {
 	@Override
 	public IStored fetchUnique(Context context, IValue dbId) throws PromptoError {
 		SOLRFilterBuilder builder = new SOLRFilterBuilder();
-		builder.push(context, "dbId", EqOp.EQUALS, dbId);
+		builder.push(context, IStore.dbIdName.getName(), EqOp.EQUALS, dbId);
 		SolrQuery query = new SolrQuery();
 		query.setQuery(builder.toSolrQuery());
 		try {

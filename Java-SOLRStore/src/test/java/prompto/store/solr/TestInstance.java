@@ -26,6 +26,7 @@ import prompto.literal.TextLiteral;
 import prompto.literal.TimeLiteral;
 import prompto.runtime.Context;
 import prompto.store.IDataStore;
+import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.type.AnyType;
 import prompto.type.BooleanType;
@@ -215,7 +216,7 @@ public class TestInstance extends BaseSOLRTest {
 	}
 
 	private IInstance createInstanceWith2Attributes(String name1, IType type1, String name2, IType type2) throws Exception {
-		AttributeDeclaration a = new AttributeDeclaration(new Identifier("dbId"), AnyType.instance());
+		AttributeDeclaration a = new AttributeDeclaration(IStore.dbIdName, AnyType.instance());
 		context.registerDeclaration(a);
 		a = new AttributeDeclaration(new Identifier(name1), type1);
 		a.setStorable(true);

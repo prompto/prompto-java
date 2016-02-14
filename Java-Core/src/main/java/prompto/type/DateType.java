@@ -108,7 +108,7 @@ public class DateType extends NativeType {
 	}
 	
 	@Override
-	public IValue readJSONValue(JsonNode value) {
+	public IValue readJSONValue(Context context, JsonNode value) {
 		LocalDate date = LocalDate.parse(value.asText());
 		return new Date(date);
 	}

@@ -8,6 +8,7 @@ import org.junit.After;
 import org.junit.Test;
 
 import prompto.code.Version;
+import prompto.store.IStore;
 import prompto.store.IStoreFactory.Type;
 import prompto.store.solr.EmbeddedSOLRStore;
 import prompto.store.solr.SOLRStoreFactory;
@@ -38,7 +39,7 @@ public class TestSOLRBootstrap {
 		((EmbeddedSOLRStore)store).startContainer();
 		((EmbeddedSOLRStore)store).startServerWithEmptyCore();
 		AppServer.bootstrapCodeStore(store, "test", Version.parse("1.0.0"));
-		assertEquals(store.getDbIdType(), store.getColumnType("dbId"));
+		assertEquals(store.getDbIdType(), store.getColumnType(IStore.dbIdName.getName()));
 		assertEquals(DateTimeType.instance(), store.getColumnType("timeStamp"));
 		assertEquals(new ListType(TextType.instance()), store.getColumnType("category"));
 		assertEquals(TextType.instance(), store.getColumnType("name"));
@@ -60,7 +61,7 @@ public class TestSOLRBootstrap {
 		store.startContainer();
 		store.startServerWithEmptyCore();
 		AppServer.bootstrapCodeStore(store, "test", Version.parse("1.0.0"));
-		assertEquals(store.getDbIdType(), store.getColumnType("dbId"));
+		assertEquals(store.getDbIdType(), store.getColumnType(IStore.dbIdName.getName()));
 		assertEquals(TextType.instance(), store.getColumnType("name"));
 		assertEquals(TextType.instance(), store.getColumnType("version"));
 		assertNull(AppServer.globalContext.findAttribute("prototype"));

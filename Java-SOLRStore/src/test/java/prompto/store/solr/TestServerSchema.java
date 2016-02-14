@@ -17,6 +17,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import prompto.store.IStore;
 import prompto.value.Blob;
 import prompto.value.Image;
 
@@ -51,7 +52,7 @@ public class TestServerSchema {
 	public void testNonEmptyCore() throws SolrServerException, IOException {
 		UUID uuid = UUID.randomUUID();
 		SolrInputDocument doc = new SolrInputDocument();
-		doc.addField("dbId", uuid);
+		doc.addField(IStore.dbIdName.getName(), uuid);
 		store.addDocuments(doc);
 		store.commit();
 		// Test the basics
@@ -69,7 +70,7 @@ public class TestServerSchema {
 		options.put("stored", true);
 		store.addField("infos", "text-value", options);
 		SolrInputDocument doc = new SolrInputDocument();
-		doc.addField("dbId", UUID.randomUUID());
+		doc.addField(IStore.dbIdName.getName(), UUID.randomUUID());
 		doc.addField("infos", "sample");
 		store.addDocuments(doc);
 		store.commit();
@@ -88,7 +89,7 @@ public class TestServerSchema {
 		options.put("stored", "true");
 		store.addField("data", "blob", options);
 		SolrInputDocument doc = new SolrInputDocument();
-		doc.addField("dbId", UUID.randomUUID());
+		doc.addField(IStore.dbIdName.getName(), UUID.randomUUID());
 		Blob blob = new Blob("application/octet-stream","azertyuiop".getBytes());
 		doc.addField("data", BinaryConverter.toBytes(blob));
 		store.addDocuments(doc);
@@ -116,7 +117,7 @@ public class TestServerSchema {
 		options.put("stored", "true");
 		store.addField("data", "image", options);
 		SolrInputDocument doc = new SolrInputDocument();
-		doc.addField("dbId", UUID.randomUUID());
+		doc.addField(IStore.dbIdName.getName(), UUID.randomUUID());
 		Image image = new Image("image/jpeg","JFIF".getBytes());
 		doc.addField("data", BinaryConverter.toBytes(image));
 		store.addDocuments(doc);
@@ -145,7 +146,7 @@ public class TestServerSchema {
 		options.put("stored", true);
 		store.addField("version", "version", options);
 		SolrInputDocument doc = new SolrInputDocument();
-		doc.addField("dbId", UUID.randomUUID());
+		doc.addField(IStore.dbIdName.getName(), UUID.randomUUID());
 		doc.addField("version", "1.0.3");
 		store.addDocuments(doc);
 		store.commit();
@@ -171,7 +172,7 @@ public class TestServerSchema {
 		String[] unsorted = { sorted[2], sorted[1], sorted[3], sorted[0] }; 
 		for(String version : unsorted) {
 			SolrInputDocument doc = new SolrInputDocument();
-			doc.addField("dbId", UUID.randomUUID());
+			doc.addField(IStore.dbIdName.getName(), UUID.randomUUID());
 			doc.addField("version", version);
 			store.addDocuments(doc);
 		}
@@ -205,7 +206,7 @@ public class TestServerSchema {
 		options.put("stored", true);
 		store.addField("time", "time", options);
 		SolrInputDocument doc = new SolrInputDocument();
-		doc.addField("dbId", UUID.randomUUID());
+		doc.addField(IStore.dbIdName.getName(), UUID.randomUUID());
 		doc.addField("time", "13:02:17.4578");
 		store.addDocuments(doc);
 		store.commit();
@@ -231,7 +232,7 @@ public class TestServerSchema {
 		String[] unsorted = { sorted[2], sorted[1], sorted[3], sorted[0] }; 
 		for(String time : unsorted) {
 			SolrInputDocument doc = new SolrInputDocument();
-			doc.addField("dbId", UUID.randomUUID());
+			doc.addField(IStore.dbIdName.getName(), UUID.randomUUID());
 			doc.addField("time", time);
 			store.addDocuments(doc);
 		}
@@ -265,7 +266,7 @@ public class TestServerSchema {
 		options.put("stored", true);
 		store.addField("date", "date", options);
 		SolrInputDocument doc = new SolrInputDocument();
-		doc.addField("dbId", UUID.randomUUID());
+		doc.addField(IStore.dbIdName.getName(), UUID.randomUUID());
 		doc.addField("date", "2015-10-22");
 		store.addDocuments(doc);
 		store.commit();
@@ -291,7 +292,7 @@ public class TestServerSchema {
 		String[] unsorted = { sorted[2], sorted[1], sorted[3], sorted[0] }; 
 		for(String date : unsorted) {
 			SolrInputDocument doc = new SolrInputDocument();
-			doc.addField("dbId", UUID.randomUUID());
+			doc.addField(IStore.dbIdName.getName(), UUID.randomUUID());
 			doc.addField("date", date);
 			store.addDocuments(doc);
 		}
@@ -325,7 +326,7 @@ public class TestServerSchema {
 		options.put("stored", true);
 		store.addField("datetime", "datetime", options);
 		SolrInputDocument doc = new SolrInputDocument();
-		doc.addField("dbId", UUID.randomUUID());
+		doc.addField(IStore.dbIdName.getName(), UUID.randomUUID());
 		doc.addField("datetime", "2015-10-22T15:02:17Z");
 		store.addDocuments(doc);
 		store.commit();
@@ -351,7 +352,7 @@ public class TestServerSchema {
 		String[] unsorted = { sorted[2], sorted[1], sorted[3], sorted[0] }; 
 		for(String datetime : unsorted) {
 			SolrInputDocument doc = new SolrInputDocument();
-			doc.addField("dbId", UUID.randomUUID());
+			doc.addField(IStore.dbIdName.getName(), UUID.randomUUID());
 			doc.addField("datetime", datetime);
 			store.addDocuments(doc);
 		}
@@ -389,7 +390,7 @@ public class TestServerSchema {
 		String[] unsorted = { sorted[2], sorted[1], sorted[3], sorted[0] }; 
 		for(String datetime : unsorted) {
 			SolrInputDocument doc = new SolrInputDocument();
-			doc.addField("dbId", UUID.randomUUID());
+			doc.addField(IStore.dbIdName.getName(), UUID.randomUUID());
 			doc.addField("datetime", datetime);
 			store.addDocuments(doc);
 		}

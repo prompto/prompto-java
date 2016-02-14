@@ -1,5 +1,9 @@
 package prompto.declaration;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
+import prompto.error.InvalidSymbolError;
+import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.grammar.NativeSymbolList;
@@ -10,6 +14,7 @@ import prompto.type.IType;
 import prompto.type.ListType;
 import prompto.type.NativeType;
 import prompto.utils.CodeWriter;
+import prompto.value.IValue;
 
 public class EnumeratedNativeDeclaration extends BaseDeclaration implements IEnumeratedDeclaration {
 	
@@ -114,5 +119,14 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration implements IEnu
 	@Override
 	public IType getType(Context context) {
 		return type;
+	}
+
+	public IValue readJSONValue(Context context, JsonNode value) throws PromptoError {
+		String name = value.asText();
+		for(Symbol symbol : symbols) {
+			if(name.equals(symbol.getSymbol()))
+				return symbol;
+		}
+		throw new InvalidSymbolError(name = " is not a valid " + this.getName() + " symbol.");
 	}
 }

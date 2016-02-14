@@ -13,6 +13,7 @@ import prompto.error.ReadWriteError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
+import prompto.store.IStore;
 import prompto.value.Binary;
 import prompto.value.IValue;
 
@@ -34,7 +35,7 @@ public class StorableDocument extends BaseDocument implements IStorable {
 	
 	private UUID getNativeDbId() {
 		ensureDocument(null);
-		SolrInputField dbIdField = document.getField("dbId");
+		SolrInputField dbIdField = document.getField(IStore.dbIdName.getName());
 		if(dbIdField!=null)
 			return (UUID)dbIdField.getValue();
 		else
@@ -71,7 +72,7 @@ public class StorableDocument extends BaseDocument implements IStorable {
 			if(dbId==null)
 				dbId = java.util.UUID.randomUUID();
 			document = new SolrInputDocument();
-			document.setField("dbId", dbId);
+			document.setField(IStore.dbIdName.getName(), dbId);
 			if(categories!=null && !this.isUpdate)
 				document.setField("category", categories); 
 		}

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -63,12 +64,15 @@ public class CodeStoreBootstrapper {
 		}
 	}
 
-	static final Set<String> reserved = new HashSet<>(Arrays.asList("dbId", "category", "storable", "module"));
+	static final Set<String> reserved = new HashSet<>(Arrays.asList(IStore.dbIdName.getName(), "category", "storable", "module"));
 	
 	private AttributeDeclaration fetchLatestDeclaration(AttributeDeclaration column) {
 		try {
 			// can't write a declaration for a column with a reserved name, so use the hard coded one
-			IDeclaration decl = reserved.contains(column.getName()) ? column : next.fetchLatestVersion(column.getName());
+			if(reserved.contains(column.getName()))
+				return column;
+			Iterator<IDeclaration> decls = next.fetchLatestVersions(column.getName());
+			IDeclaration decl = decls==null ? null : decls.next(); // can only get one attribute
 			if(!(decl instanceof AttributeDeclaration))
 				throw new RuntimeException("Invalid column attribute: " + column.getName());
 			return (AttributeDeclaration)decl;
@@ -80,7 +84,7 @@ public class CodeStoreBootstrapper {
 	private Collection<AttributeDeclaration> getMinimalColumns(IStore store) {
 		List<AttributeDeclaration> columns = new ArrayList<AttributeDeclaration>();
 		// attributes with reserved names, the below declarations will be used
-		columns.add(new AttributeDeclaration(new Identifier("dbId"), store.getDbIdType()));
+		columns.add(new AttributeDeclaration(IStore.dbIdName, store.getDbIdType()));
 		columns.add(new AttributeDeclaration(new Identifier("storable"), BooleanType.instance()));
 		columns.add(new AttributeDeclaration(new Identifier("category"), 
 				new ListType(TextType.instance()), new IdentifierList(new Identifier("key"))));

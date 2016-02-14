@@ -79,7 +79,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	public boolean hasAttribute(Context context, Identifier name) {
 		return attributes!=null && attributes.contains(name);
 	}
-
+	
 	public boolean hasMethod(Context context, String key, Object object) {
 		return false;
 	}
@@ -261,5 +261,6 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	}
 
 	protected abstract void categoryTypeToPDialect(CodeWriter writer);
+
 
 }

@@ -23,7 +23,7 @@ public class BinaryServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
-			String dbId = req.getParameter("dbId");
+			String dbId = req.getParameter(IStore.dbIdName.getName());
 			String attr = req.getParameter("attribute");
 			IStore store = IDataStore.getInstance();
 			Binary binary = store.fetchBinary(dbId, attr);

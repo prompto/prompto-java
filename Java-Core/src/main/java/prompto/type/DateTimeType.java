@@ -111,7 +111,7 @@ public class DateTimeType extends NativeType {
 	}
 
 	@Override
-	public IValue readJSONValue(JsonNode value) {
+	public IValue readJSONValue(Context context, JsonNode value) {
 		DateTime dt = DateTime.parse(value.asText());
 		return new prompto.value.DateTime(dt);
 	}

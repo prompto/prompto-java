@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -302,29 +303,20 @@ public class Context implements IContext {
 			if(decl!=null)
 				return decl;
 			try {
-				decl = store.fetchLatestVersion(name.getName());
-				if(decl==null)
+				Iterator<IDeclaration> decls = store.fetchLatestVersions(name.getName());
+				if(decls==null)
 					return null;
-			} catch(PromptoError e) {
-				// TODO log
-				return null;
-			}
-			try {
-				if(decl instanceof IMethodDeclaration) {
-					decl.register(this);
-					// return the MethodDeclarationMap actually registered
-					return this.getRegisteredDeclaration(MethodDeclarationMap.class, name);
-				} else if(decl instanceof MethodDeclarationMap) {
-					MethodDeclarationMap map = (MethodDeclarationMap)decl;
-					for(Map.Entry<String, IMethodDeclaration> entry : map.entrySet())
-						entry.getValue().register(this);
-					// return the MethodDeclarationMap actually registered
-					return this.getRegisteredDeclaration(MethodDeclarationMap.class, name);
-				} else {
-					decl.register(this);
-					return decl;
+				while(decls.hasNext()) {
+					decl = decls.next();
+					if(decl instanceof MethodDeclarationMap) {
+						MethodDeclarationMap map = (MethodDeclarationMap)decl;
+						for(Map.Entry<String, IMethodDeclaration> entry : map.entrySet())
+							entry.getValue().register(this);
+					} else
+						decl.register(this);
 				}
-			} catch(SyntaxError e) {
+				return declarations.get(name);
+			} catch(PromptoError e) {
 				throw new RuntimeException(e); // TODO define a strategy
 			}
 		}

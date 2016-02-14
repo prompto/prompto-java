@@ -19,7 +19,7 @@ public interface IType {
 	IValue getMember(Context context, Identifier name) throws PromptoError;
 	String toString(Object value);
 	void toDialect(CodeWriter writer);
-	IValue readJSONValue(JsonNode value);
+	IValue readJSONValue(Context context, JsonNode value);
 	
 	IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError;
 	IType checkSubstract(Context context, IType other) throws SyntaxError;

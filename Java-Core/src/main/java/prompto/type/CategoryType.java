@@ -1,10 +1,17 @@
 package prompto.type;
 
+import java.security.InvalidParameterException;
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Map;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
+import prompto.declaration.EnumeratedCategoryDeclaration;
+import prompto.declaration.EnumeratedNativeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
@@ -77,8 +84,12 @@ public class CategoryType extends BaseType {
 			throw new SyntaxError("Duplicate name: \"" + id + "\"");
 	}
 	
-	CategoryDeclaration getDeclaration(Context context) throws SyntaxError {
-		CategoryDeclaration actual = context.getRegisteredDeclaration(CategoryDeclaration.class, id);
+	IDeclaration getDeclaration(Context context) throws SyntaxError {
+		IDeclaration actual = context.getRegisteredDeclaration(CategoryDeclaration.class, id);
+		if(actual==null)
+			actual = context.getRegisteredDeclaration(EnumeratedCategoryDeclaration.class, id);
+		if(actual==null)
+			actual = context.getRegisteredDeclaration(EnumeratedNativeDeclaration.class, id);
 		if(actual==null)
 			throw new SyntaxError("Unknown category: \"" + id + "\"");
 		return actual;
@@ -139,7 +150,7 @@ public class CategoryType extends BaseType {
 	}
 	
 	private IType checkOperator(Context context, IType other, boolean tryReverse, Operator operator) throws SyntaxError {
-		CategoryDeclaration actual = getDeclaration(context);
+		IDeclaration actual = getDeclaration(context);
 		if(actual instanceof ConcreteCategoryDeclaration) try {
 			IMethodDeclaration method = ((ConcreteCategoryDeclaration)actual).findOperator(context, operator, other);
 			if(method==null)
@@ -193,9 +204,13 @@ public class CategoryType extends BaseType {
 		if(id.equals(other.getId()))
 			return true;
 		try {
-			CategoryDeclaration	cd = getDeclaration(context);
-			return isDerivedFromCompatibleCategory(context,cd,other)
-				|| isAssignableToAnonymousCategory(context,cd,other);	
+			IDeclaration d = getDeclaration(context);
+			if(d instanceof CategoryDeclaration) {
+				CategoryDeclaration cd = (CategoryDeclaration)d;
+				return isDerivedFromCompatibleCategory(context,cd,other)
+					|| isAssignableToAnonymousCategory(context,cd,other);	
+			} else
+				return false; // TODO
 		} catch (SyntaxError e) {
 			return false;			
 		}
@@ -216,8 +231,12 @@ public class CategoryType extends BaseType {
 		if(!other.isAnonymous())
 			return false;
 		try {
-			CategoryDeclaration	cd = other.getDeclaration(context);
-			return isAssignableToAnonymousCategory(context, decl, cd);
+			IDeclaration d = other.getDeclaration(context);
+			if(d instanceof CategoryDeclaration) {
+				CategoryDeclaration cd = (CategoryDeclaration)d;
+				return isAssignableToAnonymousCategory(context, decl, cd);
+			} else
+				return false; // TODO
 		} catch (SyntaxError e) {
 			return false;			
 		}
@@ -287,15 +306,19 @@ public class CategoryType extends BaseType {
 			return list;
 		if(key==null)
 			key = new UnresolvedIdentifier(new Identifier("key"));
-		CategoryDeclaration decl = getDeclaration(context);
-		if(decl.hasAttribute(context, new Identifier(key.toString())))
-			return sortByAttribute(context, list, new Identifier(key.toString()));
-		else if(decl.hasMethod(context, key.toString(), null))
-			return sortByClassMethod(context, list, key.toString());
-		else if(globalMethodExists(context, list, new Identifier(key.toString())))
-			return sortByGlobalMethod(context, list, new Identifier(key.toString()));
-		else
-			return sortByExpression(context, list, key);
+		IDeclaration d = getDeclaration(context);
+		if(d instanceof CategoryDeclaration) {
+			CategoryDeclaration decl = (CategoryDeclaration)d;
+			if(decl.hasAttribute(context, new Identifier(key.toString())))
+				return sortByAttribute(context, list, new Identifier(key.toString()));
+			else if(decl.hasMethod(context, key.toString(), null))
+				return sortByClassMethod(context, list, key.toString());
+			else if(globalMethodExists(context, list, new Identifier(key.toString())))
+				return sortByGlobalMethod(context, list, new Identifier(key.toString()));
+			else
+				return sortByExpression(context, list, key);
+		} else
+			throw new UnsupportedOperationException(); // TODO
 	}
 	
 	
@@ -415,4 +438,34 @@ public class CategoryType extends BaseType {
 	}
 
 
+	@Override
+	public IValue readJSONValue(Context context, JsonNode value) {
+		try {
+			IDeclaration declaration = getDeclaration(context);
+			if(declaration instanceof CategoryDeclaration) 
+				return readJSONInstance(context, (CategoryDeclaration)declaration, value);
+			else if(declaration instanceof EnumeratedNativeDeclaration)
+				return ((EnumeratedNativeDeclaration)declaration).readJSONValue(context, value);
+			else
+				throw new InvalidParameterException(); 
+		} catch (PromptoError e) {
+			throw new RuntimeException(e);
+		} 
+	}
+
+	private IValue readJSONInstance(Context context, CategoryDeclaration declaration, JsonNode value) throws PromptoError {
+		IInstance instance = newInstance(context);
+		instance.setMutable(true);
+		Iterator<Map.Entry<String, JsonNode>> fields = value.fields();
+		while(fields.hasNext()) {
+			Map.Entry<String, JsonNode> field = fields.next();
+			Identifier fieldName = new Identifier(field.getKey());
+			AttributeDeclaration attribute = context.getRegisteredDeclaration(AttributeDeclaration.class, fieldName);
+			IValue fieldValue = attribute.getType(context).readJSONValue(context, field.getValue());
+			if(fieldValue!=null)
+				instance.setMember(context, fieldName, fieldValue);
+		}
+		instance.setMutable(this.mutable);
+		return instance;
+	}
 }

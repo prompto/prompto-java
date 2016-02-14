@@ -206,7 +206,7 @@ public abstract class BaseType implements IType {
 	}
 
 	@Override
-	public IValue readJSONValue(JsonNode value) {
+	public IValue readJSONValue(Context context, JsonNode value) {
 		throw new InvalidParameterException(value.toString());
 	}
 }

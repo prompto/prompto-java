@@ -69,19 +69,16 @@ public class EnumeratedNativeType extends BaseType {
 	
 	@Override
 	public boolean isAssignableTo(Context context, IType other) {
-		// TODO Auto-generated method stub
-		return false;
+		throw new UnsupportedOperationException(); // TODO
 	}
 
 	@Override
 	public boolean isMoreSpecificThan(Context context, IType other) {
-		// TODO Auto-generated method stub
-		return false;
+		throw new UnsupportedOperationException(); // TODO
 	}
 
 	@Override
-	public IValue readJSONValue(JsonNode value) {
-		// TODO Auto-generated method stub
-		return null;
+	public IValue readJSONValue(Context context, JsonNode value) {
+		throw new UnsupportedOperationException(); // TODO
 	}
 }

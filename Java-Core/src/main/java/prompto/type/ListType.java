@@ -2,9 +2,16 @@ package prompto.type;
 
 import java.util.List;
 
+
+import com.fasterxml.jackson.databind.JsonNode;
+
+
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
+import prompto.parser.ECleverParser;
 import prompto.runtime.Context;
+import prompto.value.IValue;
+import prompto.value.ListValue;
 
 public class ListType extends ContainerType {
 	
@@ -84,5 +91,20 @@ public class ListType extends ContainerType {
     		return super.checkMember(context, id);
    }
 
+	@Override
+	public IValue readJSONValue(Context context, JsonNode array) {
+		ListValue list = new ListValue(itemType);
+		array.forEach( (node) -> { try {
+				String typeName = node.get("type").asText(itemType.toString());
+				IType itemType = new ECleverParser(typeName).parse_standalone_type();
+				JsonNode itemNode = node.get("value");
+				IValue item = itemType.readJSONValue(context, itemNode);
+				list.addItem(item);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		});
+		return list;
+	}
 
 }
