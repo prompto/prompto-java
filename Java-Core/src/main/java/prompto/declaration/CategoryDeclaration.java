@@ -106,8 +106,8 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	}
 
 	private void populateInstance(Context context, IStored stored, IInstance instance) throws PromptoError {
-		IValue dbId = stored.getValue(context, IStore.dbIdName);
-		instance.setMember(context, IStore.dbIdName, dbId);
+		IValue dbId = stored.getValue(context, IStore.dbIdIdentifier);
+		instance.setMember(context, IStore.dbIdIdentifier, dbId);
 		for(Identifier name : this.getAllAttributes(context)) 
 			populateMember(context, stored, instance, name);
 		if(instance.getStorable()!=null)

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.http.HttpStatus;
@@ -73,6 +74,7 @@ public class RemoteSOLRStore extends BaseSOLRStore {
 		try {
 			for(Object dbId : dbIds)
 				client.deleteById(coreName, String.valueOf(dbId));
+			client.commit();
 		} catch(IOException | SolrServerException e) {
 			throw new InternalError(e);
 		}
@@ -82,6 +84,7 @@ public class RemoteSOLRStore extends BaseSOLRStore {
 	public void deleteAll() throws PromptoError {
 		try {
 			client.deleteByQuery(coreName, "*:*");
+			client.commit();
 		} catch(IOException | SolrServerException e) {
 			throw new InternalError(e);
 		}
@@ -95,6 +98,11 @@ public class RemoteSOLRStore extends BaseSOLRStore {
 	@Override
 	public void addDocuments(Collection<SolrInputDocument> docs) throws SolrServerException, IOException {
 		client.add(coreName, docs);
+	}
+	
+	@Override
+	public void dropDocuments(List<String> dbIds) throws SolrServerException, IOException {
+		client.deleteById(coreName, dbIds);
 	}
 	
 	@Override
@@ -160,7 +168,7 @@ public class RemoteSOLRStore extends BaseSOLRStore {
 		SchemaResponse.FieldsResponse response = getFields.process(client, coreName);
 		for(Map<String, Object> field : response.getFields()) {
 			String name = String.valueOf(field.get("name"));
-			if(IStore.dbIdName.getName().equals(name) || "_version_".equals(name))
+			if(IStore.dbIdName.equals(name) || "_version_".equals(name))
 				continue;
 			dropField(name);
 		}

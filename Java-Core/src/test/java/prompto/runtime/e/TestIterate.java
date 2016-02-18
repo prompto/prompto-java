@@ -20,6 +20,11 @@ public class TestIterate extends BaseEParserTest {
 	}
 
 	@Test
+	public void testForEachCategoryList() throws Exception {
+		checkOutput("iterate/forEachCategoryList.pec");
+	}
+
+	@Test
 	public void testForEachIntegerList() throws Exception {
 		checkOutput("iterate/forEachIntegerList.pec");
 	}

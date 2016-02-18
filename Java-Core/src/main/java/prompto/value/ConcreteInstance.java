@@ -174,11 +174,11 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	}
 	
 	private IValue getDbId() {
-		return values.get(IStore.dbIdName);
+		return values.get(IStore.dbIdIdentifier);
 	}
 	
 	private IValue getOrCreateDbId() {
-		IValue dbId = values.get(IStore.dbIdName);
+		IValue dbId = values.get(IStore.dbIdIdentifier);
 		return dbId!=null ? dbId : this.storable.getOrCreateDbId();
 	}
 
@@ -281,6 +281,10 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
 		try {
 			generator.writeStartObject();
+			generator.writeFieldName("type");
+			generator.writeString(this.getType().getName());
+			generator.writeFieldName("value");
+			generator.writeStartObject();
 			for(Entry<Identifier, IValue> entry : values.entrySet()) {
 				generator.writeFieldName(entry.getKey().getName());
 				IValue value = entry.getValue();
@@ -289,6 +293,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 				else
 					value.toJson(context, generator, this, entry.getKey());
 			}
+			generator.writeEndObject();
 			generator.writeEndObject();
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());

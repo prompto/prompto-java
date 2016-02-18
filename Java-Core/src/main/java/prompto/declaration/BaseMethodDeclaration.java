@@ -60,7 +60,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 		if(arguments.size()>0)
 			sb.setLength(sb.length()-2); // strip ", "
 		sb.append(')');
-		return toString();
+		return sb.toString();
 	}
 	
 	@Override

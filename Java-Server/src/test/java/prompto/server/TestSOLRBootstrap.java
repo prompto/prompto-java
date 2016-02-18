@@ -39,7 +39,7 @@ public class TestSOLRBootstrap {
 		((EmbeddedSOLRStore)store).startContainer();
 		((EmbeddedSOLRStore)store).startServerWithEmptyCore();
 		AppServer.bootstrapCodeStore(store, "test", Version.parse("1.0.0"));
-		assertEquals(store.getDbIdType(), store.getColumnType(IStore.dbIdName.getName()));
+		assertEquals(store.getDbIdType(), store.getColumnType(IStore.dbIdName));
 		assertEquals(DateTimeType.instance(), store.getColumnType("timeStamp"));
 		assertEquals(new ListType(TextType.instance()), store.getColumnType("category"));
 		assertEquals(TextType.instance(), store.getColumnType("name"));
@@ -61,7 +61,7 @@ public class TestSOLRBootstrap {
 		store.startContainer();
 		store.startServerWithEmptyCore();
 		AppServer.bootstrapCodeStore(store, "test", Version.parse("1.0.0"));
-		assertEquals(store.getDbIdType(), store.getColumnType(IStore.dbIdName.getName()));
+		assertEquals(store.getDbIdType(), store.getColumnType(IStore.dbIdName));
 		assertEquals(TextType.instance(), store.getColumnType("name"));
 		assertEquals(TextType.instance(), store.getColumnType("version"));
 		assertNull(AppServer.globalContext.findAttribute("prototype"));

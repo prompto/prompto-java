@@ -42,7 +42,7 @@ public class TestSchema extends BaseSOLRTest {
 	public void testNonEmptyCore() throws SolrServerException, IOException {
 		UUID uuid = UUID.randomUUID();
 		SolrInputDocument doc = new SolrInputDocument();
-		doc.addField(IStore.dbIdName.getName(), uuid);
+		doc.addField(IStore.dbIdName, uuid);
 		store.addDocuments(doc);
 		store.commit();
 		// Test the basics
@@ -60,7 +60,7 @@ public class TestSchema extends BaseSOLRTest {
 		options.put("stored", true);
 		store.addField("text", "text-key", options);
 		SolrInputDocument doc = new SolrInputDocument();
-		doc.addField(IStore.dbIdName.getName(), UUID.randomUUID());
+		doc.addField(IStore.dbIdName, UUID.randomUUID());
 		doc.addField("text", "sample");
 		store.addDocuments(doc);
 		store.commit();
@@ -83,7 +83,7 @@ public class TestSchema extends BaseSOLRTest {
 		options.put("stored", false);
 		store.addCopyField("text-value", "text-value", options, "text-key");
 		SolrInputDocument doc = new SolrInputDocument();
-		doc.addField(IStore.dbIdName.getName(), UUID.randomUUID());
+		doc.addField(IStore.dbIdName, UUID.randomUUID());
 		doc.addField("text-key", "Sample");
 		store.addDocuments(doc);
 		store.commit();
@@ -117,7 +117,7 @@ public class TestSchema extends BaseSOLRTest {
 		options.put("stored", "true");
 		store.addField("blob", "blob", options);
 		SolrInputDocument doc = new SolrInputDocument();
-		doc.addField(IStore.dbIdName.getName(), UUID.randomUUID());
+		doc.addField(IStore.dbIdName, UUID.randomUUID());
 		Blob blob = new Blob("application/octet-stream","azertyuiop".getBytes());
 		doc.addField("blob", BinaryConverter.toBytes(blob));
 		store.addDocuments(doc);
@@ -145,7 +145,7 @@ public class TestSchema extends BaseSOLRTest {
 		options.put("stored", "true");
 		store.addField("image", "image", options);
 		SolrInputDocument doc = new SolrInputDocument();
-		doc.addField(IStore.dbIdName.getName(), UUID.randomUUID());
+		doc.addField(IStore.dbIdName, UUID.randomUUID());
 		Image image = new Image("image/jpeg","JFIF".getBytes());
 		doc.addField("image", BinaryConverter.toBytes(image));
 		store.addDocuments(doc);
@@ -174,7 +174,7 @@ public class TestSchema extends BaseSOLRTest {
 		options.put("stored", true);
 		store.addField("version", "version", options);
 		SolrInputDocument doc = new SolrInputDocument();
-		doc.addField(IStore.dbIdName.getName(), UUID.randomUUID());
+		doc.addField(IStore.dbIdName, UUID.randomUUID());
 		doc.addField("version", "1.0.3");
 		store.addDocuments(doc);
 		store.commit();
@@ -200,7 +200,7 @@ public class TestSchema extends BaseSOLRTest {
 		String[] unsorted = { sorted[2], sorted[1], sorted[3], sorted[0] }; 
 		for(String version : unsorted) {
 			SolrInputDocument doc = new SolrInputDocument();
-			doc.addField(IStore.dbIdName.getName(), UUID.randomUUID());
+			doc.addField(IStore.dbIdName, UUID.randomUUID());
 			doc.addField("version", version);
 			store.addDocuments(doc);
 		}
@@ -234,7 +234,7 @@ public class TestSchema extends BaseSOLRTest {
 		options.put("stored", true);
 		store.addField("time", "time", options);
 		SolrInputDocument doc = new SolrInputDocument();
-		doc.addField(IStore.dbIdName.getName(), UUID.randomUUID());
+		doc.addField(IStore.dbIdName, UUID.randomUUID());
 		doc.addField("time", "13:02:17.4578");
 		store.addDocuments(doc);
 		store.commit();
@@ -260,7 +260,7 @@ public class TestSchema extends BaseSOLRTest {
 		String[] unsorted = { sorted[2], sorted[1], sorted[3], sorted[0] }; 
 		for(String time : unsorted) {
 			SolrInputDocument doc = new SolrInputDocument();
-			doc.addField(IStore.dbIdName.getName(), UUID.randomUUID());
+			doc.addField(IStore.dbIdName, UUID.randomUUID());
 			doc.addField("time", time);
 			store.addDocuments(doc);
 		}
@@ -294,7 +294,7 @@ public class TestSchema extends BaseSOLRTest {
 		options.put("stored", true);
 		store.addField("date", "date", options);
 		SolrInputDocument doc = new SolrInputDocument();
-		doc.addField(IStore.dbIdName.getName(), UUID.randomUUID());
+		doc.addField(IStore.dbIdName, UUID.randomUUID());
 		doc.addField("date", "2015-10-22");
 		store.addDocuments(doc);
 		store.commit();
@@ -320,7 +320,7 @@ public class TestSchema extends BaseSOLRTest {
 		String[] unsorted = { sorted[2], sorted[1], sorted[3], sorted[0] }; 
 		for(String date : unsorted) {
 			SolrInputDocument doc = new SolrInputDocument();
-			doc.addField(IStore.dbIdName.getName(), UUID.randomUUID());
+			doc.addField(IStore.dbIdName, UUID.randomUUID());
 			doc.addField("date", date);
 			store.addDocuments(doc);
 		}
@@ -354,7 +354,7 @@ public class TestSchema extends BaseSOLRTest {
 		options.put("stored", true);
 		store.addField("datetime", "datetime", options);
 		SolrInputDocument doc = new SolrInputDocument();
-		doc.addField(IStore.dbIdName.getName(), UUID.randomUUID());
+		doc.addField(IStore.dbIdName, UUID.randomUUID());
 		doc.addField("datetime", "2015-10-22T15:02:17Z");
 		store.addDocuments(doc);
 		store.commit();
@@ -380,7 +380,7 @@ public class TestSchema extends BaseSOLRTest {
 		String[] unsorted = { sorted[2], sorted[1], sorted[3], sorted[0] }; 
 		for(String datetime : unsorted) {
 			SolrInputDocument doc = new SolrInputDocument();
-			doc.addField(IStore.dbIdName.getName(), UUID.randomUUID());
+			doc.addField(IStore.dbIdName, UUID.randomUUID());
 			doc.addField("datetime", datetime);
 			store.addDocuments(doc);
 		}
@@ -418,7 +418,7 @@ public class TestSchema extends BaseSOLRTest {
 		String[] unsorted = { sorted[2], sorted[1], sorted[3], sorted[0] }; 
 		for(String datetime : unsorted) {
 			SolrInputDocument doc = new SolrInputDocument();
-			doc.addField(IStore.dbIdName.getName(), UUID.randomUUID());
+			doc.addField(IStore.dbIdName, UUID.randomUUID());
 			doc.addField("datetime", datetime);
 			store.addDocuments(doc);
 		}

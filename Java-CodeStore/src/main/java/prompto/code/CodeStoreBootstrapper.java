@@ -64,7 +64,7 @@ public class CodeStoreBootstrapper {
 		}
 	}
 
-	static final Set<String> reserved = new HashSet<>(Arrays.asList(IStore.dbIdName.getName(), "category", "storable", "module"));
+	static final Set<String> reserved = new HashSet<>(Arrays.asList(IStore.dbIdName, "category", "storable", "module"));
 	
 	private AttributeDeclaration fetchLatestDeclaration(AttributeDeclaration column) {
 		try {
@@ -84,7 +84,7 @@ public class CodeStoreBootstrapper {
 	private Collection<AttributeDeclaration> getMinimalColumns(IStore store) {
 		List<AttributeDeclaration> columns = new ArrayList<AttributeDeclaration>();
 		// attributes with reserved names, the below declarations will be used
-		columns.add(new AttributeDeclaration(IStore.dbIdName, store.getDbIdType()));
+		columns.add(new AttributeDeclaration(IStore.dbIdIdentifier, store.getDbIdType()));
 		columns.add(new AttributeDeclaration(new Identifier("storable"), BooleanType.instance()));
 		columns.add(new AttributeDeclaration(new Identifier("category"), 
 				new ListType(TextType.instance()), new IdentifierList(new Identifier("key"))));

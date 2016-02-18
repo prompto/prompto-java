@@ -2508,8 +2508,9 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitStore_statement(Store_statementContext ctx) {
-		ExpressionList exps = this.<ExpressionList>getNodeValue(ctx.exps);
-		StoreStatement stmt = new StoreStatement(exps);
+		ExpressionList deleted = this.<ExpressionList>getNodeValue(ctx.del);
+		ExpressionList added = this.<ExpressionList>getNodeValue(ctx.add);
+		StoreStatement stmt = new StoreStatement(deleted, added);
 		setNodeValue(ctx, stmt);
 	}
 	

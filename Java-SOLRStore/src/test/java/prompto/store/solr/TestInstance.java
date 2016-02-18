@@ -184,7 +184,7 @@ public class TestInstance extends BaseSOLRTest {
 		child.setMember(context, new Identifier(fieldName), new Text(childValue));
 		parent.setMember(context, new Identifier(fieldName), new Text(fieldValue));
 		parent.setMember(context, new Identifier(childName), child);
-		store.store(context, Arrays.asList(parent.getStorable(), child.getStorable()));
+		store.store(context, null, Arrays.asList(parent.getStorable(), child.getStorable()));
 		IStored stored = fetchOne(fieldName, new TextLiteral(fieldValue));
 		assertNotNull(stored);
 		assertEquals(fieldValue, stored.getData(fieldName));
@@ -216,7 +216,7 @@ public class TestInstance extends BaseSOLRTest {
 	}
 
 	private IInstance createInstanceWith2Attributes(String name1, IType type1, String name2, IType type2) throws Exception {
-		AttributeDeclaration a = new AttributeDeclaration(IStore.dbIdName, AnyType.instance());
+		AttributeDeclaration a = new AttributeDeclaration(IStore.dbIdIdentifier, AnyType.instance());
 		context.registerDeclaration(a);
 		a = new AttributeDeclaration(new Identifier(name1), type1);
 		a.setStorable(true);

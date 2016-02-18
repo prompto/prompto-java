@@ -2,6 +2,7 @@ package prompto.type;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import prompto.declaration.EnumeratedNativeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IEnumeratedDeclaration;
 import prompto.error.InvalidDataError;
@@ -15,8 +16,8 @@ public class EnumeratedNativeType extends BaseType {
 
 	NativeType derivedFrom;
 
-	public EnumeratedNativeType(Identifier name, NativeType derivedFrom) {
-		super(name);
+	public EnumeratedNativeType(Identifier id, NativeType derivedFrom) {
+		super(id);
 		this.derivedFrom = derivedFrom;
 	}
 
@@ -79,6 +80,11 @@ public class EnumeratedNativeType extends BaseType {
 
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value) {
-		throw new UnsupportedOperationException(); // TODO
+		try {
+			EnumeratedNativeDeclaration decl = context.getRegisteredDeclaration(EnumeratedNativeDeclaration.class, this.getId());
+			return decl.readJSONValue(context, value);
+		} catch (PromptoError e) {
+			throw new RuntimeException(e);
+		} 
 	}
 }

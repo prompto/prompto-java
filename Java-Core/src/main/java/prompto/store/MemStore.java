@@ -53,7 +53,7 @@ public final class MemStore implements IStore {
 	}
 	
 	@Override
-	public void store(Context context, Collection<IStorable> storables) throws PromptoError {
+	public void store(Context context, Collection<IValue> deletables, Collection<IStorable> storables) throws PromptoError {
 		for(IStorable storable : storables) {
 			if(!(storable instanceof StorableDocument))
 				throw new IllegalStateException("Expecting a StorableDocument");
@@ -63,10 +63,10 @@ public final class MemStore implements IStore {
 	
 	public void store(Context context, StorableDocument storable) throws PromptoError {
 		// ensure db id
-		IValue dbId = storable.getValue(context, dbIdName);
+		IValue dbId = storable.getValue(context, dbIdIdentifier);
 		if(!(dbId instanceof Integer)) {
 			dbId = new Integer(++lastDbId);
-			storable.setValue(context, dbIdName, dbId);
+			storable.setValue(context, dbIdIdentifier, dbId);
 		}
 		documents.put((Integer)dbId, storable);
 	}
@@ -74,7 +74,7 @@ public final class MemStore implements IStore {
 	@Override
 	public Binary fetchBinary(String dbId, String attr) {
 		for(StorableDocument doc : documents.values()) {
-			Object data = doc.getData(IStore.dbIdName.getName());
+			Object data = doc.getData(IStore.dbIdName);
 			if(data==null || !dbId.equals(data.toString()))
 				continue;
 			data = doc.getData("attr");
@@ -261,16 +261,16 @@ public final class MemStore implements IStore {
 
 		@Override
 		public IValue getDbId() {
-			return getValue(null, dbIdName);
+			return getValue(null, dbIdIdentifier);
 		}
 		
 		@Override
 		public IValue getOrCreateDbId() {
-			IValue dbId = getValue(null, dbIdName);
+			IValue dbId = getValue(null, dbIdIdentifier);
 			if(dbId==null) {
 				setDirty(true);
 				dbId = new Integer(++lastDbId);
-				document.setMember(null, dbIdName, dbId);
+				document.setMember(null, dbIdIdentifier, dbId);
 			}
 			return dbId;
 		}

@@ -76,7 +76,8 @@ public class UpdatableCodeStore extends BaseCodeStore {
 			for(IDeclaration method : ((MethodDeclarationMap)declaration).values())
 				collectStorables(list, method, dialect, version, moduleId);
 		} else {
-			List<String> categories = Arrays.asList("Declaration", Utils.capitalizeFirst(declaration.getDeclarationType().name()));
+			String typeName = Utils.capitalizeFirst(declaration.getDeclarationType().name()) + "Declaration";
+			List<String> categories = Arrays.asList("Declaration", typeName);
 			IStorable storable = populateDeclarationStorable(categories, declaration, dialect, version, moduleId);
 			list.add(storable);
 		}
@@ -220,7 +221,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 		List<IStorable> list = new ArrayList<>();
 		while(declarations.hasNext())
 			collectStorables(list, declarations.next(), dialect, version, moduleId);
-		store.store(context, list);
+		store.store(context, null, list);
 	}
 	
 	private IValue fetchDeclarationModuleDbId(IDeclaration decl) throws PromptoError {

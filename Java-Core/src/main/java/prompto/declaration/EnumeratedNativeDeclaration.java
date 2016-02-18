@@ -125,7 +125,7 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration implements IEnu
 		String name = value.asText();
 		for(Symbol symbol : symbols) {
 			if(name.equals(symbol.getSymbol()))
-				return symbol;
+				return symbol.interpret(context);
 		}
 		throw new InvalidSymbolError(name = " is not a valid " + this.getName() + " symbol.");
 	}

@@ -35,7 +35,7 @@ public class StorableDocument extends BaseDocument implements IStorable {
 	
 	private UUID getNativeDbId() {
 		ensureDocument(null);
-		SolrInputField dbIdField = document.getField(IStore.dbIdName.getName());
+		SolrInputField dbIdField = document.getField(IStore.dbIdName);
 		if(dbIdField!=null)
 			return (UUID)dbIdField.getValue();
 		else
@@ -72,7 +72,7 @@ public class StorableDocument extends BaseDocument implements IStorable {
 			if(dbId==null)
 				dbId = java.util.UUID.randomUUID();
 			document = new SolrInputDocument();
-			document.setField(IStore.dbIdName.getName(), dbId);
+			document.setField(IStore.dbIdName, dbId);
 			if(categories!=null && !this.isUpdate)
 				document.setField("category", categories); 
 		}

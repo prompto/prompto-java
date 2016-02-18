@@ -18,13 +18,17 @@ import prompto.value.IValue;
 /* a mean to store and fetch data */
 public interface IStore {
 	
-	public static final Identifier dbIdName = new Identifier("dbId");
+	public static final String dbIdName = "dbId";
+	public static final Identifier dbIdIdentifier = new Identifier(dbIdName);
 	
 	IType getDbIdType();
 	IStorable newStorable(List<String> categories);
-	void store(Context context, Collection<IStorable> storables) throws PromptoError;
+	void store(Context context, Collection<IValue> deletables, Collection<IStorable> storables) throws PromptoError;
 	default void store(Context context, IStorable storable) throws PromptoError {
-		store(context, Arrays.asList(storable));
+		store(context, null, Arrays.asList(storable));
+	}
+	default void delete(Context context, IValue dbId) throws PromptoError {
+		store(context, Arrays.asList(dbId), null);
 	}
 	IStored fetchUnique(Context context, IValue dbId) throws PromptoError;
 	IStored fetchOne(Context context, CategoryType type, IExpression filter) throws PromptoError;

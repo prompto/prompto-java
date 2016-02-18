@@ -190,19 +190,34 @@ abstract class BaseSOLRStore implements IStore {
 	}
 
 	@Override
-	public void store(Context context, Collection<IStorable> storables) throws PromptoError {
-		List<SolrInputDocument> documents = new ArrayList<>();
-		for(IStorable storable : storables) {
-			if(!(storable instanceof StorableDocument))
-				throw new IllegalStateException();
-			SolrInputDocument doc = ((StorableDocument)storable).getDocument();
-			documents.add(doc);
+	public void store(Context context, Collection<IValue> deletables, Collection<IStorable> storables) throws PromptoError {
+		List<String> dbIdsToDrop = null;
+		if(deletables!=null && deletables.size()>0) {
+			dbIdsToDrop = new ArrayList<>();
+			for(IValue dbId : deletables)
+				dbIdsToDrop.add(dbId.toString()); // a simple UUID
+		}
+		List<SolrInputDocument> docsToAdd = null;
+		if(storables!=null && storables.size()>0) {
+			docsToAdd = new ArrayList<>();
+			for(IStorable storable : storables) {
+				if(!(storable instanceof StorableDocument))
+					throw new IllegalStateException();
+				SolrInputDocument doc = ((StorableDocument)storable).getDocument();
+				docsToAdd.add(doc);
+			}
+			if(docsToAdd.isEmpty())
+				docsToAdd = null;
 		}
 		try {
-			addDocuments(documents);
-			commit();
+			if(dbIdsToDrop!=null)
+				dropDocuments(dbIdsToDrop);
+			if(docsToAdd!=null)
+				addDocuments(docsToAdd);
+			if(dbIdsToDrop!=null || docsToAdd!=null)
+				commit();
 		} catch(Exception e) {
-			throw new InternalError(e);
+			throw new InternalError(e); // TODO much better
 		}
 	}
 
@@ -233,7 +248,7 @@ abstract class BaseSOLRStore implements IStore {
 	@Override
 	public IStored fetchUnique(Context context, IValue dbId) throws PromptoError {
 		SOLRFilterBuilder builder = new SOLRFilterBuilder();
-		builder.push(context, IStore.dbIdName.getName(), EqOp.EQUALS, dbId);
+		builder.push(context, IStore.dbIdName, EqOp.EQUALS, dbId);
 		SolrQuery query = new SolrQuery();
 		query.setQuery(builder.toSolrQuery());
 		try {
@@ -359,6 +374,8 @@ abstract class BaseSOLRStore implements IStore {
 	}
 
 	public abstract void addDocuments(Collection<SolrInputDocument> docs) throws SolrServerException, IOException;
+
+	public abstract void dropDocuments(List<String> dbIds) throws SolrServerException, IOException;
 
 	public abstract void commit() throws SolrServerException, IOException;
 

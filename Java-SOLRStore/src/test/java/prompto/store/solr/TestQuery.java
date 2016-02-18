@@ -41,7 +41,7 @@ public class TestQuery extends BaseSOLRTest {
 	}
 	
 	private void registerDbIdAttribute() throws SyntaxError {
-		AttributeDeclaration decl = new AttributeDeclaration( IStore.dbIdName, AnyType.instance());
+		AttributeDeclaration decl = new AttributeDeclaration( IStore.dbIdIdentifier, AnyType.instance());
 		context.registerDeclaration(decl);
 	}
 
@@ -78,7 +78,7 @@ public class TestQuery extends BaseSOLRTest {
 	@Test
 	public void testFetchOneByName() throws Exception {
 		SolrInputDocument doc = new SolrInputDocument();
-		doc.addField(IStore.dbIdName.getName(), UUID.randomUUID());
+		doc.addField(IStore.dbIdName, UUID.randomUUID());
 		doc.addField("name", "John");
 		store.addDocuments(doc);
 		store.commit();
@@ -93,7 +93,7 @@ public class TestQuery extends BaseSOLRTest {
 	public void testDeleteOne() throws Exception {
 		SolrInputDocument doc = new SolrInputDocument();
 		UUID uuid = UUID.randomUUID();
-		doc.addField(IStore.dbIdName.getName(), uuid);
+		doc.addField(IStore.dbIdName, uuid);
 		doc.addField("name", "John");
 		store.addDocuments(doc);
 		store.commit();

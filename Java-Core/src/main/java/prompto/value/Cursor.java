@@ -2,6 +2,7 @@ package prompto.value;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 
 import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
@@ -57,13 +58,24 @@ public class Cursor extends BaseValue implements IIterable<IValue>, Iterable<IVa
 	public IValue next() {
 		try {
 			IStored stored = documents.next();
-			CategoryType itemType = (CategoryType) ((IterableType)type).getItemType();
+			CategoryType itemType = readItemType(stored);
 			return itemType.newInstance(context, stored);
 		} catch (PromptoError e) {
 			throw new RuntimeException(e);
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
+	private CategoryType readItemType(IStored stored) throws PromptoError {
+		Object value = stored.getData("category");
+		if(value instanceof List<?>) {
+			List<String> categories = (List<String>)value;
+			String category = categories.get(categories.size()-1);
+			return new CategoryType(new Identifier(category));
+		} else
+			return (CategoryType) ((IterableType)type).getItemType();
+	}
+
 	@Override
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();

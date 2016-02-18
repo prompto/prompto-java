@@ -117,7 +117,7 @@ public abstract class Binary extends BaseValue {
 	@Override
 	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
 		try {
-			String dbId = instance.getMember(context, IStore.dbIdName, false).toString();
+			String dbId = instance.getMember(context, IStore.dbIdIdentifier, false).toString();
 			generator.writeString("/ws/bin/data?dbId=" + dbId + "&attribute=" + name.getName());
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());

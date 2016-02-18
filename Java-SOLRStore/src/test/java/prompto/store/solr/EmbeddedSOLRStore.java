@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -120,10 +121,16 @@ public class EmbeddedSOLRStore extends BaseSOLRStore {
 	}
 
 	@Override
+	public void dropDocuments(List<String> dbIds) throws SolrServerException, IOException {
+		server.deleteById(dbIds);
+	}
+	
+	@Override
 	public void delete(Collection<Object> dbIds) throws PromptoError {
 		try {
 			for(Object dbId : dbIds)
 				server.deleteById(String.valueOf(dbId));
+			server.commit();
 		} catch(IOException | SolrServerException e) {
 			throw new InternalError(e);
 		}
@@ -133,6 +140,7 @@ public class EmbeddedSOLRStore extends BaseSOLRStore {
 	public void deleteAll() throws PromptoError {
 		try {
 			server.deleteByQuery("*:*");
+			server.commit();
 		} catch(IOException | SolrServerException e) {
 			throw new InternalError(e);
 		}

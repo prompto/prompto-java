@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
-import prompto.declaration.EnumeratedCategoryDeclaration;
 import prompto.declaration.EnumeratedNativeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
@@ -27,6 +26,8 @@ import prompto.runtime.Context;
 import prompto.runtime.MethodFinder;
 import prompto.runtime.Score;
 import prompto.statement.MethodCall;
+import prompto.store.IDataStore;
+import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.utils.CodeWriter;
 import prompto.value.ConcreteInstance;
@@ -85,16 +86,18 @@ public class CategoryType extends BaseType {
 	}
 	
 	IDeclaration getDeclaration(Context context) throws SyntaxError {
+		return getDeclaration(context, id);
+	}
+	
+	private static IDeclaration getDeclaration(Context context, Identifier id) throws SyntaxError {
 		IDeclaration actual = context.getRegisteredDeclaration(CategoryDeclaration.class, id);
-		if(actual==null)
-			actual = context.getRegisteredDeclaration(EnumeratedCategoryDeclaration.class, id);
 		if(actual==null)
 			actual = context.getRegisteredDeclaration(EnumeratedNativeDeclaration.class, id);
 		if(actual==null)
 			throw new SyntaxError("Unknown category: \"" + id + "\"");
 		return actual;
 	}
-	
+
 	@Override
 	public IType checkMultiply(Context context, IType other, boolean tryReverse) throws SyntaxError {
 		IType type = checkOperator(context, other, tryReverse, Operator.MULTIPLY);
@@ -456,16 +459,55 @@ public class CategoryType extends BaseType {
 	private IValue readJSONInstance(Context context, CategoryDeclaration declaration, JsonNode value) throws PromptoError {
 		IInstance instance = newInstance(context);
 		instance.setMutable(true);
+		readJSONDbId(context, value, instance); // start by dbId to avoid creating a new one
+		readJSONFields(context, value, instance); // then copy all the remaining fields
+		instance.setMutable(this.mutable);
+		return instance;
+	}
+
+	private void readJSONFields(Context context, JsonNode value, IInstance instance) throws PromptoError {
 		Iterator<Map.Entry<String, JsonNode>> fields = value.fields();
 		while(fields.hasNext()) {
 			Map.Entry<String, JsonNode> field = fields.next();
-			Identifier fieldName = new Identifier(field.getKey());
-			AttributeDeclaration attribute = context.getRegisteredDeclaration(AttributeDeclaration.class, fieldName);
-			IValue fieldValue = attribute.getType(context).readJSONValue(context, field.getValue());
-			if(fieldValue!=null)
-				instance.setMember(context, fieldName, fieldValue);
+			if(IStore.dbIdName.equals(field.getKey()))
+					continue;
+			readJSONField(context, instance, field.getKey(), field.getValue());
 		}
-		instance.setMutable(this.mutable);
-		return instance;
+	}
+
+	private void readJSONField(Context context, IInstance instance, String fieldName, JsonNode fieldData) throws PromptoError {
+		Identifier fieldId = new Identifier(fieldName);
+		IType fieldType = readJSONFieldType(context, fieldId, fieldData);
+		if(fieldType instanceof CategoryType)
+			fieldData = fieldData.get("value");
+		IValue fieldValue = fieldType.readJSONValue(context, fieldData);
+		if(fieldValue!=null)
+			instance.setMember(context, fieldId, fieldValue);
+	}
+
+	private IType readJSONFieldType(Context context, Identifier fieldId, JsonNode fieldData) throws SyntaxError {
+		AttributeDeclaration attribute = context.getRegisteredDeclaration(AttributeDeclaration.class, fieldId);
+		IType fieldType = attribute.getType(context);
+		return checkDerivedType(context, fieldType, fieldData);
+	}
+
+	private IType checkDerivedType(Context context, IType fieldType, JsonNode fieldData) throws SyntaxError {
+		if(fieldType instanceof CategoryType) {
+			if(fieldData.isObject())
+				return new CategoryType(new Identifier(fieldData.get("type").asText()));
+			else {
+				IDeclaration declaration = getDeclaration(context, fieldType.getId());
+				return declaration.getType(context);
+			}
+		}
+		return fieldType;
+	}
+
+	private void readJSONDbId(Context context, JsonNode value, IInstance instance) throws PromptoError {
+		if(value.has(IStore.dbIdName)) {
+			IType type = IDataStore.getInstance().getDbIdType();
+			IValue dbid = type.readJSONValue(context, value.get(IStore.dbIdName));
+			instance.setMember(context, IStore.dbIdIdentifier, dbid);
+		}
 	}
 }
