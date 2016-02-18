@@ -2709,8 +2709,8 @@ public class OParser extends AbstractParser {
 	}
 
 	public static class Store_statementContext extends ParserRuleContext {
-		public Expression_listContext del;
-		public Expression_listContext add;
+		public Expression_listContext to_del;
+		public Expression_listContext to_add;
 		public TerminalNode DELETE() { return getToken(OParser.DELETE, 0); }
 		public List<TerminalNode> LPAR() { return getTokens(OParser.LPAR); }
 		public TerminalNode LPAR(int i) {
@@ -2757,7 +2757,7 @@ public class OParser extends AbstractParser {
 				setState(694); 
 				match(LPAR);
 				setState(695); 
-				((Store_statementContext)_localctx).del = expression_list(0);
+				((Store_statementContext)_localctx).to_del = expression_list(0);
 				setState(696); 
 				match(RPAR);
 				setState(697); 
@@ -2772,7 +2772,7 @@ public class OParser extends AbstractParser {
 				setState(700); 
 				match(LPAR);
 				setState(701); 
-				((Store_statementContext)_localctx).add = expression_list(0);
+				((Store_statementContext)_localctx).to_add = expression_list(0);
 				setState(702); 
 				match(RPAR);
 				setState(703); 
@@ -2787,7 +2787,7 @@ public class OParser extends AbstractParser {
 				setState(706); 
 				match(LPAR);
 				setState(707); 
-				((Store_statementContext)_localctx).del = expression_list(0);
+				((Store_statementContext)_localctx).to_del = expression_list(0);
 				setState(708); 
 				match(RPAR);
 				setState(709); 
@@ -2797,7 +2797,7 @@ public class OParser extends AbstractParser {
 				setState(711); 
 				match(LPAR);
 				setState(712); 
-				((Store_statementContext)_localctx).add = expression_list(0);
+				((Store_statementContext)_localctx).to_add = expression_list(0);
 				setState(713); 
 				match(RPAR);
 				setState(714); 

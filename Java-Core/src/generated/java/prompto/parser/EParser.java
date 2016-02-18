@@ -2891,8 +2891,8 @@ public class EParser extends AbstractParser {
 	}
 
 	public static class Store_statementContext extends ParserRuleContext {
-		public Expression_listContext del;
-		public Expression_listContext add;
+		public Expression_listContext to_del;
+		public Expression_listContext to_add;
 		public TerminalNode DELETE() { return getToken(EParser.DELETE, 0); }
 		public List<Expression_listContext> expression_list() {
 			return getRuleContexts(Expression_listContext.class);
@@ -2928,7 +2928,7 @@ public class EParser extends AbstractParser {
 				setState(757); 
 				match(DELETE);
 				setState(758); 
-				((Store_statementContext)_localctx).del = expression_list(0);
+				((Store_statementContext)_localctx).to_del = expression_list(0);
 				}
 				break;
 			case 2:
@@ -2937,7 +2937,7 @@ public class EParser extends AbstractParser {
 				setState(759); 
 				match(STORE);
 				setState(760); 
-				((Store_statementContext)_localctx).add = expression_list(0);
+				((Store_statementContext)_localctx).to_add = expression_list(0);
 				}
 				break;
 			case 3:
@@ -2946,13 +2946,13 @@ public class EParser extends AbstractParser {
 				setState(761); 
 				match(DELETE);
 				setState(762); 
-				((Store_statementContext)_localctx).del = expression_list(0);
+				((Store_statementContext)_localctx).to_del = expression_list(0);
 				setState(763); 
 				match(AND);
 				setState(764); 
 				match(STORE);
 				setState(765); 
-				((Store_statementContext)_localctx).add = expression_list(0);
+				((Store_statementContext)_localctx).to_add = expression_list(0);
 				}
 				break;
 			}
