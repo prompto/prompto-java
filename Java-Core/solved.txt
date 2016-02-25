@@ -4,7 +4,7 @@ singleton
 tuples
 mutability
 open/close
-store/fetch
+store/fetch orm are prosthesis
 native types: date, xml, json
 runtime polymorphism
 documents

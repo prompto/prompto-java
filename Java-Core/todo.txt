@@ -27,15 +27,12 @@ framework:
 json
 xml
 threads
-store/fetch
 receive/send
 timer/scheduler
 type category
 avro
 protobuf
 logging
-code store
-data store
 
 tools:
 eclipse editor
@@ -43,7 +40,6 @@ eclipse editor
 	code completion
 	refactoring
 Java compiler
-web editor
 JavaScript translator
 console/scripting
 
