@@ -10,6 +10,12 @@ public class ClassConstant implements Constant {
 	}
 
 	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof ClassConstant
+				&& className.equals(((ClassConstant)obj).className);
+	}
+	
+	@Override
 	public int index() {
 		return index;
 	}

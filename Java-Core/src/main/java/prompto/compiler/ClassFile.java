@@ -10,8 +10,8 @@ public class ClassFile {
 	ClassConstant thisClass;
 	ClassConstant superClass;
 	List<StringConstant> interfaces = new ArrayList<>();
-	List<Field> fields = new ArrayList<>();
-	List<Method> methods = new ArrayList<>();
+	List<FieldInfo> fields = new ArrayList<>();
+	List<MethodInfo> methods = new ArrayList<>();
 	List<Attribute> attributes = new ArrayList<>();
 	
 	int accessFlags = Tags.ACC_SUPER | Modifier.PUBLIC;
@@ -25,7 +25,7 @@ public class ClassFile {
 		accessFlags |= modifier;
 	}
 
-	public void addMethod(Method method) {
+	public void addMethod(MethodInfo method) {
 		methods.add(method);
 	}
 

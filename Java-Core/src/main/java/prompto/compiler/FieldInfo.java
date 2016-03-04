@@ -1,6 +1,6 @@
 package prompto.compiler;
 
-class Field {
+class FieldInfo {
 
 	void writeTo(ByteWriter writer) {
 		// TODO Auto-generated method stub

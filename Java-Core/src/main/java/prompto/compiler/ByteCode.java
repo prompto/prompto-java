@@ -1,28 +1,28 @@
 package prompto.compiler;
 
 import java.io.ByteArrayOutputStream;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ByteCode extends Attribute {
 	
-	StringConstant attributeName;
-	int maxStack = 0;
+	List<Instruction> instructions = new LinkedList<>(); 
+	StringConstant attributeName = new StringConstant("Code");
+	int maxOperands = 0;
 	int maxLocals = 0;
-	int currentStack = 0;
+	int currentOperands = 0;
 	int currentLocals = 0;
-	
-	ByteArrayOutputStream opcodes = new ByteArrayOutputStream();
-	ByteWriter writer = new ByteWriter(opcodes);
 	
 	public ByteCode(int numParameters, boolean isStatic) {
 		maxLocals = numParameters + (isStatic ? 0 : 1); // 1 for 'this'
 	}
 
-	public void append(Opcode op) {
-		writer.writeU1(op.opcode);
+	public void addInstruction(Instruction instruction) {
+		instructions.add(instruction);
 	}
 
 	public void register(ConstantsPool pool) {
-		attributeName = new StringConstant("Code");
+		instructions.forEach((i)->i.register(pool));
 		attributeName.register(pool);
 	}	
 	
@@ -35,15 +35,22 @@ public class ByteCode extends Attribute {
 		--currentLocals;
 	}
 	
-	void pushStack() {
-		if(++currentStack>maxStack)
-			maxStack = currentStack;
+	void pushOperands(int count) {
+		if((currentOperands += count)>maxOperands)
+			maxOperands = currentOperands;
 	}
 	
-	void popStack() {
-		--currentStack;
+	void popOperands(int count) {
+		currentOperands -= count;
 	}
 	
+	byte[] createOpcodes() {
+		ByteArrayOutputStream o = new ByteArrayOutputStream();
+		ByteWriter w = new ByteWriter(o);
+		instructions.forEach((i)->i.writeTo(this, w));
+		return o.toByteArray();
+	}
+
 
 	public void writeTo(ByteWriter writer) {
 		/*
@@ -64,17 +71,19 @@ public class ByteCode extends Attribute {
 		    attribute_info attributes[attributes_count];
 		}	
 		*/	
-		byte[] code = opcodes.toByteArray();
-		int len = 2 + 2 + 4 + code.length + 2 + 2;
+		byte[] opcodes = createOpcodes();
+		int len = 2 + 2 + 4 + opcodes.length + 2 + 2;
 		writer.writeU2(attributeName.index());
 		writer.writeU4(len);
-		writer.writeU2(maxStack);
+		writer.writeU2(maxOperands);
 		writer.writeU2(maxLocals);
-		writer.writeU4(code.length);
-		writer.writeBytes(code);
+		writer.writeU4(opcodes.length);
+		writer.writeBytes(opcodes);
 		writer.writeU2(0); // TODO exceptions
 		writer.writeU2(0); // TODO attributes
 	}
+
+
 
 
 }

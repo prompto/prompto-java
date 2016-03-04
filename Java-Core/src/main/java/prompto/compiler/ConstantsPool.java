@@ -6,10 +6,11 @@ import java.util.LinkedList;
 class ConstantsPool extends LinkedList<Constant> {
 
 	int registerConstant(Constant c) {
-		int idx = indexOf(c);
-		if(idx==-1) {
+		// 1 based index
+		int idx = 1 + indexOf(c);
+		if(idx==0) {
 			add(c);
-			idx = size(); // 1 based
+			idx = size(); 
 		}
 		return idx;
 	}

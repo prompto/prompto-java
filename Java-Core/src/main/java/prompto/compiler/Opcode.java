@@ -28,6 +28,8 @@ package prompto.compiler;
 
 import static prompto.compiler.OpcodeKind.*;
 
+import java.util.function.Function;
+
 /**
  * See JVMS, chapter 6.
  *
@@ -82,10 +84,10 @@ public enum Opcode {
     DLOAD_1(0x27),
     DLOAD_2(0x28),
     DLOAD_3(0x29),
-    ALOAD_0(0x2a),
-    ALOAD_1(0x2b),
-    ALOAD_2(0x2c),
-    ALOAD_3(0x2d),
+    ALOAD_0(0x2a, 1),
+    ALOAD_1(0x2b, 1),
+    ALOAD_2(0x2c, 1),
+    ALOAD_3(0x2d, 1),
     IALOAD(0x2e),
     LALOAD(0x2f),
     FALOAD(0x30),
@@ -218,11 +220,11 @@ public enum Opcode {
     DRETURN(0xaf),
     ARETURN(0xb0),
     RETURN(0xb1),
-    GETSTATIC(0xb2, CPREF_W),
+    GETSTATIC(0xb2, CPREF_W, 1),
     PUTSTATIC(0xb3, CPREF_W),
     GETFIELD(0xb4, CPREF_W),
     PUTFIELD(0xb5, CPREF_W),
-    INVOKEVIRTUAL(0xb6, CPREF_W),
+    INVOKEVIRTUAL(0xb6, CPREF_W, (i)->(-(1+i.countMethodArguments()))),
     INVOKESPECIAL(0xb7, CPREF_W),
     INVOKESTATIC(0xb8, CPREF_W),
     INVOKEINTERFACE(0xb9, CPREF_W_UBYTE_ZERO),
@@ -242,8 +244,6 @@ public enum Opcode {
     IFNONNULL(0xc7, BRANCH),
     GOTO_W(0xc8, BRANCH_W),
     JSR_W(0xc9, BRANCH_W),
-    // impdep 0xfe: PicoJava nonpriv
-    // impdep 0xff: Picojava priv
 
     // wide opcodes
     ILOAD_W(0xc415, WIDE_CPREF_W),
@@ -261,16 +261,44 @@ public enum Opcode {
 
     public final int opcode;
     public final OpcodeKind kind;
-
+    private final int fixedOperands;
+    public final Function<Instruction, Integer> countOperands;
+    
     Opcode(int opcode) {
         this(opcode, NO_OPERANDS);
     }
 
-    Opcode(int opcode, OpcodeKind kind) {
-        this.opcode = opcode;
-        this.kind = kind;
+    Opcode(int opcode, int operands) {
+        this(opcode, NO_OPERANDS, operands);
     }
 
+    Opcode(int opcode, OpcodeKind kind) {
+        this(opcode, kind, 0);
+    }
+    
+    Opcode(int opcode, OpcodeKind kind, int operands) {
+        this.opcode = opcode;
+        this.kind = kind;
+        this.fixedOperands = operands;
+        this.countOperands = this::countFixedOperands;
+        
+    }
+    
+    Opcode(int opcode, OpcodeKind kind, Function<Instruction, Integer> countOperands) {
+        this.opcode = opcode;
+        this.kind = kind;
+        this.fixedOperands = 0;
+        this.countOperands = countOperands;
+    }
+    
+    public int countOperands(Instruction i) {
+    	return countOperands.apply(i);
+    }
+    
+    private int countFixedOperands(Instruction i) {
+    	return fixedOperands;
+    }
+    
     /** Get the Opcode for a simple standard 1-byte opcode. */
     public static Opcode get(int opcode) {
         return stdOpcodes[opcode];

@@ -14,6 +14,12 @@ class StringConstant implements Constant {
 	}
 	
 	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof StringConstant 
+				&& value.equals(((StringConstant)obj).value);
+	}
+	
+	@Override
 	public int index() {
 		return index;
 	}

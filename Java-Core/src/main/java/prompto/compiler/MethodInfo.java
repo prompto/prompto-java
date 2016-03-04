@@ -1,19 +1,18 @@
 package prompto.compiler;
 
 import java.lang.reflect.Modifier;
-import java.rmi.UnexpectedException;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
-class Method {
+class MethodInfo {
 	
 	int accessFlags = Modifier.PUBLIC;
 	StringConstant name;
 	StringConstant proto;
-	List<Attribute> attributes = new ArrayList<>();
-	ByteCode code;
+	List<Attribute> attributes = new LinkedList<>();
+	ByteCode codeAttribute = null;
 	
-	Method(String name, String spec) {
+	MethodInfo(String name, String spec) {
 		this.name = new StringConstant(name);
 		this.proto = new StringConstant(spec);
 	}
@@ -22,41 +21,24 @@ class Method {
 		accessFlags |= modifier;
 	}
 
-	public ByteCode createCode() {
-		if(code==null) {
-			code = new ByteCode(getParamsCount(), Modifier.isStatic(accessFlags));
-			attributes.add(code);
-		}
-		return code;
+	public void addInstruction(Opcode op, Constant ... operands) {
+		createCodeAttribute();
+		codeAttribute.addInstruction(new Instruction(op, operands));
 	}
 
-	private int getParamsCount() {
-		int count = 0;
-		String proto = this.proto.getValue();
-		while(proto.length()>0) {
-			switch(proto.charAt(0)) {
-			case '(':
-				proto = proto.substring(1);
-				continue;
-			case ')':
-				return count;
-			case 'L':
-				count++;
-				proto = proto.substring(proto.indexOf(';') + 1);
-				continue;
-			default:
-				count++;
-				proto = proto.substring(1);
-				continue;
-			}
-		}
-		throw new CompilerException(new UnexpectedException("Should never get there"));
-	}
 
 	void register(ConstantsPool pool) {
 		name.register(pool);
 		proto.register(pool);
 		attributes.forEach((a)->a.register(pool));
+	}
+
+	private void createCodeAttribute() {
+		if(codeAttribute==null) {
+			int paramsCount = Utils.getParamsCount(proto.getValue());
+			codeAttribute = new ByteCode(paramsCount, Modifier.isStatic(accessFlags));
+			attributes.add(codeAttribute);
+		}
 	}
 
 	void writeTo(ByteWriter writer) {
