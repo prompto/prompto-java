@@ -57,13 +57,13 @@ public class TestRuntime extends BaseEParserTest {
 
 	@Test
 	public void testReturn() throws Exception {
-		runResource("native/return.pec");
+		interpretResource("native/return.pec");
 		assertEquals(System.getProperty("os.name"), Out.read());
 	}
 	
 	@Test
 	public void testDateTimeTZName() throws Exception {
-		runResource("builtins/dateTimeTZName.pec");
+		interpretResource("builtins/dateTimeTZName.pec");
 		String tzName = TimeZone.getTimeZone("UTC").getDisplayName(Locale.ENGLISH);
 		assertEquals("tzName=" + tzName, Out.read());
 	}

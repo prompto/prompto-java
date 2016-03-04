@@ -21,7 +21,7 @@ public class TestUnexpected extends BaseEParserTest {
 
 	@Test(expected = DivideByZeroError.class)
 	public void testReturn() throws Exception {
-		runResource("errors/unexpected.pec");
+		interpretResource("errors/unexpected.pec");
 	}
 	
 }

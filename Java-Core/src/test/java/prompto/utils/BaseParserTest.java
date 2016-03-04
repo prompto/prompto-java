@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import org.junit.Before;
 
@@ -20,6 +21,7 @@ import prompto.parser.ECleverParser;
 import prompto.parser.OCleverParser;
 import prompto.parser.SCleverParser;
 import prompto.runtime.Context;
+import prompto.runtime.Executor;
 import prompto.runtime.Interpreter;
 import prompto.runtime.utils.Out;
 import prompto.store.IDataStore;
@@ -60,25 +62,54 @@ public abstract class BaseParserTest extends BaseTest {
 
 	public abstract DeclarationList parseResource(String resourceName) throws Exception;
 
-	protected boolean runResource(String resourceName) throws Exception {
-		loadResource(resourceName);
-		if(context.hasTests()) {
-			Interpreter.interpretTests(context);
-			return true;
-		} else {
-			Interpreter.interpretMainNoArgs(context);
+	protected boolean interpretResource(String resourceName) {
+		try {
+			loadResource(resourceName);
+			if(context.hasTests()) {
+				Interpreter.interpretTests(context);
+				return true;
+			} else {
+				Interpreter.interpretMainNoArgs(context);
+				return false;
+			}
+		} catch(Exception e) {
+			fail(e.getMessage());
 			return false;
 		}
 	}
 
-	protected void runResource(String resourceName, String methodName, String cmdLineArgs) throws Exception {
+	protected boolean executeResource(String resourceName) {
+		try {
+			loadResource(resourceName);
+			if(context.hasTests()) {
+				Executor.executeTests(context);
+				return true;
+			} else {
+				Executor.executeMainNoArgs(context);
+				return false;
+			}
+		} catch(Exception e) {
+			fail(e.getMessage());
+			return false;
+		}
+	}
+
+	protected void interpretResource(String resourceName, String methodName, String cmdLineArgs) throws Exception {
 		loadResource(resourceName);
 		Interpreter.interpretMethod(context, new Identifier(methodName), cmdLineArgs);
 	}
 	
 	protected void checkOutput(String resource) throws Exception {
+		checkOutput(resource, this::interpretResource);
+		/*
+		__before__test__();
+		checkOutput(resource, this::executeResource);
+		*/
+	}
+
+	protected void checkOutput(String resource, Function<String, Boolean> runner) throws Exception {
 		IDataStore.setInstance(new MemStore());
-		boolean isTest = runResource(resource);
+		boolean isTest = runner.apply(resource);
 		String read = Out.read();
 		if(isTest && read.endsWith("\n"))
 			read = read.substring(0, read.length() - 1);
@@ -100,30 +131,43 @@ public abstract class BaseParserTest extends BaseTest {
 			if(!(decl instanceof TestMethodDeclaration))
 				continue;
 			Out.reset();
-			Interpreter.interpretTest(coreContext, decl.getIdentifier());
-			String expected = decl.getIdentifier().getName() + " test successful\n";
-			String read = Out.read();
-			assertEquals(expected, read);
+			interpretTest(decl.getIdentifier());
+			Out.reset();
+			executeTest(decl.getIdentifier());
 		}
 	}
 	
-	protected List<String> readExpected(String resourceName) throws Exception {
-		int idx = resourceName.lastIndexOf('.');
-		resourceName = resourceName.substring(0, idx) + ".txt";
-		InputStream input = getResourceAsStream(resourceName);
-		assertNotNull("resource not found:"+resourceName,input);
+	private void executeTest(Identifier identifier) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void interpretTest(Identifier identifier) throws Exception {
+		Interpreter.interpretTest(coreContext, identifier);
+		String expected = identifier.getName() + " test successful\n";
+		String read = Out.read();
+		assertEquals(expected, read);
+	}
+
+	protected List<String> readExpected(String resourceName) {
 		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-			List<String> expected = new ArrayList<String>();
-			for(;;) {
-				String read = reader.readLine();
-				if(read==null || read.length()==0)
-					return expected;
-				expected.add(read);
-			}
-				
-		} finally {
-			input.close();
+			int idx = resourceName.lastIndexOf('.');
+			resourceName = resourceName.substring(0, idx) + ".txt";
+			try(InputStream input = getResourceAsStream(resourceName)) {
+				assertNotNull("resource not found:" + resourceName, input);
+				BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+				List<String> expected = new ArrayList<String>();
+				for(;;) {
+					String read = reader.readLine();
+					if(read==null || read.length()==0)
+						return expected;
+					expected.add(read);
+				}
+					
+			} 
+		} catch(Exception e) {
+			fail(e.getMessage());
+			return null;
 		}
 	}
 
