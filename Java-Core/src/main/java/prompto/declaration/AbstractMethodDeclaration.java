@@ -1,5 +1,7 @@
 package prompto.declaration;
 
+import prompto.compiler.ClassFile;
+import prompto.compiler.Compiler;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.ArgumentList;
@@ -37,6 +39,12 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		throw new SyntaxError("Should never get there !");
+	}
+	
+	@Override
+	public void compile(Context context, Compiler compiler, ClassFile classFile) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
 	}
 	
 	@Override

@@ -20,18 +20,33 @@ public class TestSlice extends BaseEParserTest {
 	}
 
 	@Test
-	public void testSliceList() throws Exception {
-		checkOutput("slice/sliceList.pec");
+	public void testInterpretedSliceList() throws Exception {
+		checkInterpretedOutput("slice/sliceList.pec");
 	}
 
 	@Test
-	public void testSliceRange() throws Exception {
-		checkOutput("slice/sliceRange.pec");
+	public void testCompiledSliceList() throws Exception {
+		checkCompiledOutput("slice/sliceList.pec");
 	}
 
 	@Test
-	public void testSliceText() throws Exception {
-		checkOutput("slice/sliceText.pec");
+	public void testInterpretedSliceRange() throws Exception {
+		checkInterpretedOutput("slice/sliceRange.pec");
+	}
+
+	@Test
+	public void testCompiledSliceRange() throws Exception {
+		checkCompiledOutput("slice/sliceRange.pec");
+	}
+
+	@Test
+	public void testInterpretedSliceText() throws Exception {
+		checkInterpretedOutput("slice/sliceText.pec");
+	}
+
+	@Test
+	public void testCompiledSliceText() throws Exception {
+		checkCompiledOutput("slice/sliceText.pec");
 	}
 
 }

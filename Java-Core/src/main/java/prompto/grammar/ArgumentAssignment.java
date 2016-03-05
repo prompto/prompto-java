@@ -1,5 +1,7 @@
 package prompto.grammar;
 
+import prompto.compiler.Compiler;
+import prompto.compiler.MethodInfo;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -141,6 +143,10 @@ public class ArgumentAssignment {
 			throw new SyntaxError("Method has no argument:" + this.getName());
 		IExpression expression = new ContextualExpression(context, this.expression);
 		return new ArgumentAssignment(argument,expression);
+	}
+
+	public void compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+		expression.compile(context, compiler, method);
 	}
 
 

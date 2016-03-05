@@ -39,22 +39,22 @@ public class TestResource extends BaseOParserTest {
 	
 	@Test
 	public void testReadResource() throws Exception {
-		checkOutput("resource/readResource.poc");
+		checkInterpretedOutput("resource/readResource.poc");
 	}
 	
 	@Test
 	public void testWriteResource() throws Exception {
-		checkOutput("resource/writeResource.poc");
+		checkInterpretedOutput("resource/writeResource.poc");
 	}
 
 	@Test
 	public void testReadWithResource() throws Exception {
-		checkOutput("resource/readWithResource.poc");
+		checkInterpretedOutput("resource/readWithResource.poc");
 	}
 
 	@Test
 	public void testWriteWithResource() throws Exception {
-		checkOutput("resource/writeWithResource.poc");
+		checkInterpretedOutput("resource/writeWithResource.poc");
 	}
 
 

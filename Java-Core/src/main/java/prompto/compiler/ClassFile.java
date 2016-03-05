@@ -9,7 +9,7 @@ public class ClassFile {
 	
 	ClassConstant thisClass;
 	ClassConstant superClass;
-	List<StringConstant> interfaces = new ArrayList<>();
+	List<Utf8Constant> interfaces = new ArrayList<>();
 	List<FieldInfo> fields = new ArrayList<>();
 	List<MethodInfo> methods = new ArrayList<>();
 	List<Attribute> attributes = new ArrayList<>();
@@ -19,6 +19,10 @@ public class ClassFile {
 	public ClassFile(String thisClassName, String superClassName) {
 		this.thisClass = new ClassConstant(thisClassName);
 		this.superClass = new ClassConstant(superClassName);
+	}
+
+	public int getModifiers() {
+		return accessFlags;
 	}
 
 	public void addModifier(int modifier) {
@@ -83,6 +87,7 @@ public class ClassFile {
 		writer.writeU2(attributes.size());
 		attributes.forEach((a)->a.writeTo(writer));
 	}
+
 
 
 

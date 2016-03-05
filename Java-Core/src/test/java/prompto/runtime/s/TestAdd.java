@@ -20,8 +20,13 @@ public class TestAdd extends BaseSParserTest {
 	}
 
 	@Test
-	public void testAddInteger() throws Exception {
-		checkOutput("add/addInteger.psc");
+	public void testInterpretedAddInteger() throws Exception {
+		checkInterpretedOutput("add/addInteger.psc");
+	}
+
+	@Test
+	public void testCompiledAddInteger() throws Exception {
+		checkCompiledOutput("add/addInteger.psc");
 	}
 
 }

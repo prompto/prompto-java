@@ -2,20 +2,20 @@ package prompto.compiler;
 
 public class NameAndTypeConstant implements Constant {
 
-	StringConstant name;
-	StringConstant type;
+	Utf8Constant name;
+	Utf8Constant type;
 	int index;
 	
 	public NameAndTypeConstant(String name, String type) {
-		this.name = new StringConstant(name);
-		this.type = new StringConstant(type);
+		this.name = new Utf8Constant(name);
+		this.type = new Utf8Constant(type);
 	}
 
-	public StringConstant getName() {
+	public Utf8Constant getName() {
 		return name;
 	}
 	
-	public StringConstant getType() {
+	public Utf8Constant getType() {
 		return type;
 	}
 	

@@ -20,33 +20,63 @@ public class TestMult extends BaseOParserTest {
 	}
 
 	@Test
-	public void testMultCharacter() throws Exception {
-		checkOutput("mult/multCharacter.poc");
+	public void testInterpretedMultCharacter() throws Exception {
+		checkInterpretedOutput("mult/multCharacter.poc");
 	}
 
 	@Test
-	public void testMultDecimal() throws Exception {
-		checkOutput("mult/multDecimal.poc");
+	public void testCompiledMultCharacter() throws Exception {
+		checkCompiledOutput("mult/multCharacter.poc");
 	}
 
 	@Test
-	public void testMultInteger() throws Exception {
-		checkOutput("mult/multInteger.poc");
+	public void testInterpretedMultDecimal() throws Exception {
+		checkInterpretedOutput("mult/multDecimal.poc");
 	}
 
 	@Test
-	public void testMultList() throws Exception {
-		checkOutput("mult/multList.poc");
+	public void testCompiledMultDecimal() throws Exception {
+		checkCompiledOutput("mult/multDecimal.poc");
 	}
 
 	@Test
-	public void testMultPeriod() throws Exception {
-		checkOutput("mult/multPeriod.poc");
+	public void testInterpretedMultInteger() throws Exception {
+		checkInterpretedOutput("mult/multInteger.poc");
 	}
 
 	@Test
-	public void testMultText() throws Exception {
-		checkOutput("mult/multText.poc");
+	public void testCompiledMultInteger() throws Exception {
+		checkCompiledOutput("mult/multInteger.poc");
+	}
+
+	@Test
+	public void testInterpretedMultList() throws Exception {
+		checkInterpretedOutput("mult/multList.poc");
+	}
+
+	@Test
+	public void testCompiledMultList() throws Exception {
+		checkCompiledOutput("mult/multList.poc");
+	}
+
+	@Test
+	public void testInterpretedMultPeriod() throws Exception {
+		checkInterpretedOutput("mult/multPeriod.poc");
+	}
+
+	@Test
+	public void testCompiledMultPeriod() throws Exception {
+		checkCompiledOutput("mult/multPeriod.poc");
+	}
+
+	@Test
+	public void testInterpretedMultText() throws Exception {
+		checkInterpretedOutput("mult/multText.poc");
+	}
+
+	@Test
+	public void testCompiledMultText() throws Exception {
+		checkCompiledOutput("mult/multText.poc");
 	}
 
 }

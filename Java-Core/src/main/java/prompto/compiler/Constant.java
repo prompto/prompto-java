@@ -1,6 +1,6 @@
 package prompto.compiler;
 
-interface Constant {
+public interface Constant {
 
 	void register(ConstantsPool pool);
 	void writeTo(ByteWriter writer);

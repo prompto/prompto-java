@@ -20,18 +20,33 @@ public class TestLogic extends BaseOParserTest {
 	}
 
 	@Test
-	public void testAndBoolean() throws Exception {
-		checkOutput("logic/andBoolean.poc");
+	public void testInterpretedAndBoolean() throws Exception {
+		checkInterpretedOutput("logic/andBoolean.poc");
 	}
 
 	@Test
-	public void testNotBoolean() throws Exception {
-		checkOutput("logic/notBoolean.poc");
+	public void testCompiledAndBoolean() throws Exception {
+		checkCompiledOutput("logic/andBoolean.poc");
 	}
 
 	@Test
-	public void testOrBoolean() throws Exception {
-		checkOutput("logic/orBoolean.poc");
+	public void testInterpretedNotBoolean() throws Exception {
+		checkInterpretedOutput("logic/notBoolean.poc");
+	}
+
+	@Test
+	public void testCompiledNotBoolean() throws Exception {
+		checkCompiledOutput("logic/notBoolean.poc");
+	}
+
+	@Test
+	public void testInterpretedOrBoolean() throws Exception {
+		checkInterpretedOutput("logic/orBoolean.poc");
+	}
+
+	@Test
+	public void testCompiledOrBoolean() throws Exception {
+		checkCompiledOutput("logic/orBoolean.poc");
 	}
 
 }

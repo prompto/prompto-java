@@ -35,7 +35,7 @@ public class TestClassFile {
 	@Test
 	public void testTranscode() throws Exception {
 		byte[] expected = { (byte)0xCF, (byte)0x80, 0x2F, (byte)0xCF, (byte)0x87, 0x2F, (byte)0xC2, (byte)0xB5, 0x2F, 0x70, 0x72, 0x69, 0x6E, 0x74 };
-		byte[] transcoded = StringConstant.toModifiedUtf8("π/χ/µ/print");
+		byte[] transcoded = Utf8Constant.toModifiedUtf8("π/χ/µ/print");
 		assertArrayEquals(expected, transcoded);	
 	}
 	

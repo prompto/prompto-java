@@ -1,5 +1,7 @@
 package prompto.statement;
 
+import prompto.compiler.Compiler;
+import prompto.compiler.MethodInfo;
 import prompto.declaration.AbstractMethodDeclaration;
 import prompto.declaration.ClosureDeclaration;
 import prompto.declaration.ConcreteMethodDeclaration;
@@ -122,6 +124,15 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 			return assignments.makeAssignments(context, declaration);
 	}
 
+	@Override
+	public void compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+		for(ArgumentAssignment arg : assignments)
+			arg.compile(context, compiler, method);
+		MethodFinder finder = new MethodFinder(context, this);
+		IMethodDeclaration declaration = finder.findMethod(false);
+		this.method.compile(context, compiler, method, declaration);
+	}
+	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		IMethodDeclaration declaration = findDeclaration(context);

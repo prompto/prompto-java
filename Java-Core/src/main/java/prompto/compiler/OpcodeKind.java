@@ -62,20 +62,25 @@ enum OpcodeKind {
     /** Opcode is followed by a signed short value. */
     SHORT(3),
     /** Wide opcode is not followed by any operands. */
-    WIDE_NO_OPERANDS(2),
+    WIDE_NO_OPERANDS(2, 2),
     /** Wide opcode is followed by a 2-byte index into the constant pool. */
-    WIDE_CPREF_W(4),
+    WIDE_CPREF_W(2, 4),
     /** Wide opcode is followed by a 2-byte index into the constant pool,
      *  and a signed short value. */
-    WIDE_CPREF_W_SHORT(6),
+    WIDE_CPREF_W_SHORT(2, 6),
     /** Opcode was not recognized. */
     UNKNOWN(1);
 
+    final int width;  // opcode length	
+    final int length; // full length in bytes, or -1 if it depends on the instruction
+
     OpcodeKind(int length) {
+        this(1, length);
+    }
+    
+    OpcodeKind(int width, int length) {
+    	this.width = width;
         this.length = length;
     }
 
-    /** The length, in bytes, of this kind of instruction, or -1 if the
-     *  length depends on the specific instruction. */
-    final int length;
 };

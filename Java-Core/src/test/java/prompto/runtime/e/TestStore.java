@@ -20,28 +20,53 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
-	public void testManyRecords() throws Exception {
-		checkOutput("store/manyRecords.pec");
+	public void testInterpretedManyRecords() throws Exception {
+		checkInterpretedOutput("store/manyRecords.pec");
 	}
 
 	@Test
-	public void testSimpleRecord() throws Exception {
-		checkOutput("store/simpleRecord.pec");
+	public void testCompiledManyRecords() throws Exception {
+		checkCompiledOutput("store/manyRecords.pec");
 	}
 
 	@Test
-	public void testSlicedRecords() throws Exception {
-		checkOutput("store/slicedRecords.pec");
+	public void testInterpretedSimpleRecord() throws Exception {
+		checkInterpretedOutput("store/simpleRecord.pec");
 	}
 
 	@Test
-	public void testSortedRecords() throws Exception {
-		checkOutput("store/sortedRecords.pec");
+	public void testCompiledSimpleRecord() throws Exception {
+		checkCompiledOutput("store/simpleRecord.pec");
 	}
 
 	@Test
-	public void testSubRecord() throws Exception {
-		checkOutput("store/subRecord.pec");
+	public void testInterpretedSlicedRecords() throws Exception {
+		checkInterpretedOutput("store/slicedRecords.pec");
+	}
+
+	@Test
+	public void testCompiledSlicedRecords() throws Exception {
+		checkCompiledOutput("store/slicedRecords.pec");
+	}
+
+	@Test
+	public void testInterpretedSortedRecords() throws Exception {
+		checkInterpretedOutput("store/sortedRecords.pec");
+	}
+
+	@Test
+	public void testCompiledSortedRecords() throws Exception {
+		checkCompiledOutput("store/sortedRecords.pec");
+	}
+
+	@Test
+	public void testInterpretedSubRecord() throws Exception {
+		checkInterpretedOutput("store/subRecord.pec");
+	}
+
+	@Test
+	public void testCompiledSubRecord() throws Exception {
+		checkCompiledOutput("store/subRecord.pec");
 	}
 
 }

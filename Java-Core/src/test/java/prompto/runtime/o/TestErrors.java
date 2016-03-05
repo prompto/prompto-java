@@ -20,58 +20,113 @@ public class TestErrors extends BaseOParserTest {
 	}
 
 	@Test
-	public void testDivideByZero() throws Exception {
-		checkOutput("errors/divideByZero.poc");
+	public void testInterpretedDivideByZero() throws Exception {
+		checkInterpretedOutput("errors/divideByZero.poc");
 	}
 
 	@Test
-	public void testIndexOutOfRange_listItem() throws Exception {
-		checkOutput("errors/indexOutOfRange-listItem.poc");
+	public void testCompiledDivideByZero() throws Exception {
+		checkCompiledOutput("errors/divideByZero.poc");
 	}
 
 	@Test
-	public void testIndexOutOfRange_sliceList() throws Exception {
-		checkOutput("errors/indexOutOfRange-sliceList.poc");
+	public void testInterpretedIndexOutOfRange_listItem() throws Exception {
+		checkInterpretedOutput("errors/indexOutOfRange-listItem.poc");
 	}
 
 	@Test
-	public void testIndexOutOfRange_sliceRange() throws Exception {
-		checkOutput("errors/indexOutOfRange-sliceRange.poc");
+	public void testCompiledIndexOutOfRange_listItem() throws Exception {
+		checkCompiledOutput("errors/indexOutOfRange-listItem.poc");
 	}
 
 	@Test
-	public void testIndexOutOfRange_sliceText() throws Exception {
-		checkOutput("errors/indexOutOfRange-sliceText.poc");
+	public void testInterpretedIndexOutOfRange_sliceList() throws Exception {
+		checkInterpretedOutput("errors/indexOutOfRange-sliceList.poc");
 	}
 
 	@Test
-	public void testNullDict() throws Exception {
-		checkOutput("errors/nullDict.poc");
+	public void testCompiledIndexOutOfRange_sliceList() throws Exception {
+		checkCompiledOutput("errors/indexOutOfRange-sliceList.poc");
 	}
 
 	@Test
-	public void testNullItem() throws Exception {
-		checkOutput("errors/nullItem.poc");
+	public void testInterpretedIndexOutOfRange_sliceRange() throws Exception {
+		checkInterpretedOutput("errors/indexOutOfRange-sliceRange.poc");
 	}
 
 	@Test
-	public void testNullKey() throws Exception {
-		checkOutput("errors/nullKey.poc");
+	public void testCompiledIndexOutOfRange_sliceRange() throws Exception {
+		checkCompiledOutput("errors/indexOutOfRange-sliceRange.poc");
 	}
 
 	@Test
-	public void testNullMember() throws Exception {
-		checkOutput("errors/nullMember.poc");
+	public void testInterpretedIndexOutOfRange_sliceText() throws Exception {
+		checkInterpretedOutput("errors/indexOutOfRange-sliceText.poc");
 	}
 
 	@Test
-	public void testNullMethod() throws Exception {
-		checkOutput("errors/nullMethod.poc");
+	public void testCompiledIndexOutOfRange_sliceText() throws Exception {
+		checkCompiledOutput("errors/indexOutOfRange-sliceText.poc");
 	}
 
 	@Test
-	public void testUserException() throws Exception {
-		checkOutput("errors/userException.poc");
+	public void testInterpretedNullDict() throws Exception {
+		checkInterpretedOutput("errors/nullDict.poc");
+	}
+
+	@Test
+	public void testCompiledNullDict() throws Exception {
+		checkCompiledOutput("errors/nullDict.poc");
+	}
+
+	@Test
+	public void testInterpretedNullItem() throws Exception {
+		checkInterpretedOutput("errors/nullItem.poc");
+	}
+
+	@Test
+	public void testCompiledNullItem() throws Exception {
+		checkCompiledOutput("errors/nullItem.poc");
+	}
+
+	@Test
+	public void testInterpretedNullKey() throws Exception {
+		checkInterpretedOutput("errors/nullKey.poc");
+	}
+
+	@Test
+	public void testCompiledNullKey() throws Exception {
+		checkCompiledOutput("errors/nullKey.poc");
+	}
+
+	@Test
+	public void testInterpretedNullMember() throws Exception {
+		checkInterpretedOutput("errors/nullMember.poc");
+	}
+
+	@Test
+	public void testCompiledNullMember() throws Exception {
+		checkCompiledOutput("errors/nullMember.poc");
+	}
+
+	@Test
+	public void testInterpretedNullMethod() throws Exception {
+		checkInterpretedOutput("errors/nullMethod.poc");
+	}
+
+	@Test
+	public void testCompiledNullMethod() throws Exception {
+		checkCompiledOutput("errors/nullMethod.poc");
+	}
+
+	@Test
+	public void testInterpretedUserException() throws Exception {
+		checkInterpretedOutput("errors/userException.poc");
+	}
+
+	@Test
+	public void testCompiledUserException() throws Exception {
+		checkCompiledOutput("errors/userException.poc");
 	}
 
 }

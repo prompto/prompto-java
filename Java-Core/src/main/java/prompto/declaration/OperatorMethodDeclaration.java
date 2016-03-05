@@ -1,5 +1,7 @@
 package prompto.declaration;
 
+import prompto.compiler.ClassFile;
+import prompto.compiler.Compiler;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.ArgumentList;
@@ -27,6 +29,12 @@ public class OperatorMethodDeclaration extends ConcreteMethodDeclaration impleme
 		// TODO Auto-generated method stub
 		
 	}	
+
+	@Override
+	public void compile(Context context, Compiler compiler, ClassFile classFile) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+	}
 
 	protected void toSDialect(CodeWriter writer) {
 		writer.append("def operator ");

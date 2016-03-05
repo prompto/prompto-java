@@ -7,7 +7,7 @@ import java.util.List;
 public class ByteCode extends Attribute {
 	
 	List<Instruction> instructions = new LinkedList<>(); 
-	StringConstant attributeName = new StringConstant("Code");
+	Utf8Constant attributeName = new Utf8Constant("Code");
 	int maxOperands = 0;
 	int maxLocals = 0;
 	int currentOperands = 0;

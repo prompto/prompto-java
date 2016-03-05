@@ -21,6 +21,11 @@ public class VoidType extends NativeType {
 	}
 
 	@Override
+	public String getJavaSignature(Context context) {
+		return "V";
+	}
+	
+	@Override
 	public boolean isAssignableTo(Context context, IType other) {
 		throw new RuntimeException("Should never get there !");
 	}

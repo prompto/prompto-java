@@ -99,12 +99,12 @@ public abstract class BaseParserTest extends BaseTest {
 		Interpreter.interpretMethod(context, new Identifier(methodName), cmdLineArgs);
 	}
 	
-	protected void checkOutput(String resource) throws Exception {
+	protected void checkInterpretedOutput(String resource) throws Exception {
 		checkOutput(resource, this::interpretResource);
-		/*
-		__before__test__();
+	}
+
+	protected void checkCompiledOutput(String resource) throws Exception {
 		checkOutput(resource, this::executeResource);
-		*/
 	}
 
 	protected void checkOutput(String resource, Function<String, Boolean> runner) throws Exception {

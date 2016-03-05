@@ -20,118 +20,233 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
-	public void testDateDayOfMonth() throws Exception {
-		checkOutput("builtins/dateDayOfMonth.pec");
+	public void testInterpretedDateDayOfMonth() throws Exception {
+		checkInterpretedOutput("builtins/dateDayOfMonth.pec");
 	}
 
 	@Test
-	public void testDateDayOfYear() throws Exception {
-		checkOutput("builtins/dateDayOfYear.pec");
+	public void testCompiledDateDayOfMonth() throws Exception {
+		checkCompiledOutput("builtins/dateDayOfMonth.pec");
 	}
 
 	@Test
-	public void testDateMonth() throws Exception {
-		checkOutput("builtins/dateMonth.pec");
+	public void testInterpretedDateDayOfYear() throws Exception {
+		checkInterpretedOutput("builtins/dateDayOfYear.pec");
 	}
 
 	@Test
-	public void testDateTimeDayOfMonth() throws Exception {
-		checkOutput("builtins/dateTimeDayOfMonth.pec");
+	public void testCompiledDateDayOfYear() throws Exception {
+		checkCompiledOutput("builtins/dateDayOfYear.pec");
 	}
 
 	@Test
-	public void testDateTimeDayOfYear() throws Exception {
-		checkOutput("builtins/dateTimeDayOfYear.pec");
+	public void testInterpretedDateMonth() throws Exception {
+		checkInterpretedOutput("builtins/dateMonth.pec");
 	}
 
 	@Test
-	public void testDateTimeHour() throws Exception {
-		checkOutput("builtins/dateTimeHour.pec");
+	public void testCompiledDateMonth() throws Exception {
+		checkCompiledOutput("builtins/dateMonth.pec");
 	}
 
 	@Test
-	public void testDateTimeMinute() throws Exception {
-		checkOutput("builtins/dateTimeMinute.pec");
+	public void testInterpretedDateTimeDayOfMonth() throws Exception {
+		checkInterpretedOutput("builtins/dateTimeDayOfMonth.pec");
 	}
 
 	@Test
-	public void testDateTimeMonth() throws Exception {
-		checkOutput("builtins/dateTimeMonth.pec");
+	public void testCompiledDateTimeDayOfMonth() throws Exception {
+		checkCompiledOutput("builtins/dateTimeDayOfMonth.pec");
 	}
 
 	@Test
-	public void testDateTimeSecond() throws Exception {
-		checkOutput("builtins/dateTimeSecond.pec");
+	public void testInterpretedDateTimeDayOfYear() throws Exception {
+		checkInterpretedOutput("builtins/dateTimeDayOfYear.pec");
 	}
 
 	@Test
-	public void testDateTimeTZOffset() throws Exception {
-		checkOutput("builtins/dateTimeTZOffset.pec");
+	public void testCompiledDateTimeDayOfYear() throws Exception {
+		checkCompiledOutput("builtins/dateTimeDayOfYear.pec");
 	}
 
 	@Test
-	public void testDateTimeYear() throws Exception {
-		checkOutput("builtins/dateTimeYear.pec");
+	public void testInterpretedDateTimeHour() throws Exception {
+		checkInterpretedOutput("builtins/dateTimeHour.pec");
 	}
 
 	@Test
-	public void testDateYear() throws Exception {
-		checkOutput("builtins/dateYear.pec");
+	public void testCompiledDateTimeHour() throws Exception {
+		checkCompiledOutput("builtins/dateTimeHour.pec");
 	}
 
 	@Test
-	public void testDictLength() throws Exception {
-		checkOutput("builtins/dictLength.pec");
+	public void testInterpretedDateTimeMinute() throws Exception {
+		checkInterpretedOutput("builtins/dateTimeMinute.pec");
 	}
 
 	@Test
-	public void testEnumName() throws Exception {
-		checkOutput("builtins/enumName.pec");
+	public void testCompiledDateTimeMinute() throws Exception {
+		checkCompiledOutput("builtins/dateTimeMinute.pec");
 	}
 
 	@Test
-	public void testEnumSymbols() throws Exception {
-		checkOutput("builtins/enumSymbols.pec");
+	public void testInterpretedDateTimeMonth() throws Exception {
+		checkInterpretedOutput("builtins/dateTimeMonth.pec");
 	}
 
 	@Test
-	public void testEnumValue() throws Exception {
-		checkOutput("builtins/enumValue.pec");
+	public void testCompiledDateTimeMonth() throws Exception {
+		checkCompiledOutput("builtins/dateTimeMonth.pec");
 	}
 
 	@Test
-	public void testListLength() throws Exception {
-		checkOutput("builtins/listLength.pec");
+	public void testInterpretedDateTimeSecond() throws Exception {
+		checkInterpretedOutput("builtins/dateTimeSecond.pec");
 	}
 
 	@Test
-	public void testSetLength() throws Exception {
-		checkOutput("builtins/setLength.pec");
+	public void testCompiledDateTimeSecond() throws Exception {
+		checkCompiledOutput("builtins/dateTimeSecond.pec");
 	}
 
 	@Test
-	public void testTextLength() throws Exception {
-		checkOutput("builtins/textLength.pec");
+	public void testInterpretedDateTimeTZOffset() throws Exception {
+		checkInterpretedOutput("builtins/dateTimeTZOffset.pec");
 	}
 
 	@Test
-	public void testTimeHour() throws Exception {
-		checkOutput("builtins/timeHour.pec");
+	public void testCompiledDateTimeTZOffset() throws Exception {
+		checkCompiledOutput("builtins/dateTimeTZOffset.pec");
 	}
 
 	@Test
-	public void testTimeMinute() throws Exception {
-		checkOutput("builtins/timeMinute.pec");
+	public void testInterpretedDateTimeYear() throws Exception {
+		checkInterpretedOutput("builtins/dateTimeYear.pec");
 	}
 
 	@Test
-	public void testTimeSecond() throws Exception {
-		checkOutput("builtins/timeSecond.pec");
+	public void testCompiledDateTimeYear() throws Exception {
+		checkCompiledOutput("builtins/dateTimeYear.pec");
 	}
 
 	@Test
-	public void testTupleLength() throws Exception {
-		checkOutput("builtins/tupleLength.pec");
+	public void testInterpretedDateYear() throws Exception {
+		checkInterpretedOutput("builtins/dateYear.pec");
+	}
+
+	@Test
+	public void testCompiledDateYear() throws Exception {
+		checkCompiledOutput("builtins/dateYear.pec");
+	}
+
+	@Test
+	public void testInterpretedDictLength() throws Exception {
+		checkInterpretedOutput("builtins/dictLength.pec");
+	}
+
+	@Test
+	public void testCompiledDictLength() throws Exception {
+		checkCompiledOutput("builtins/dictLength.pec");
+	}
+
+	@Test
+	public void testInterpretedEnumName() throws Exception {
+		checkInterpretedOutput("builtins/enumName.pec");
+	}
+
+	@Test
+	public void testCompiledEnumName() throws Exception {
+		checkCompiledOutput("builtins/enumName.pec");
+	}
+
+	@Test
+	public void testInterpretedEnumSymbols() throws Exception {
+		checkInterpretedOutput("builtins/enumSymbols.pec");
+	}
+
+	@Test
+	public void testCompiledEnumSymbols() throws Exception {
+		checkCompiledOutput("builtins/enumSymbols.pec");
+	}
+
+	@Test
+	public void testInterpretedEnumValue() throws Exception {
+		checkInterpretedOutput("builtins/enumValue.pec");
+	}
+
+	@Test
+	public void testCompiledEnumValue() throws Exception {
+		checkCompiledOutput("builtins/enumValue.pec");
+	}
+
+	@Test
+	public void testInterpretedListLength() throws Exception {
+		checkInterpretedOutput("builtins/listLength.pec");
+	}
+
+	@Test
+	public void testCompiledListLength() throws Exception {
+		checkCompiledOutput("builtins/listLength.pec");
+	}
+
+	@Test
+	public void testInterpretedSetLength() throws Exception {
+		checkInterpretedOutput("builtins/setLength.pec");
+	}
+
+	@Test
+	public void testCompiledSetLength() throws Exception {
+		checkCompiledOutput("builtins/setLength.pec");
+	}
+
+	@Test
+	public void testInterpretedTextLength() throws Exception {
+		checkInterpretedOutput("builtins/textLength.pec");
+	}
+
+	@Test
+	public void testCompiledTextLength() throws Exception {
+		checkCompiledOutput("builtins/textLength.pec");
+	}
+
+	@Test
+	public void testInterpretedTimeHour() throws Exception {
+		checkInterpretedOutput("builtins/timeHour.pec");
+	}
+
+	@Test
+	public void testCompiledTimeHour() throws Exception {
+		checkCompiledOutput("builtins/timeHour.pec");
+	}
+
+	@Test
+	public void testInterpretedTimeMinute() throws Exception {
+		checkInterpretedOutput("builtins/timeMinute.pec");
+	}
+
+	@Test
+	public void testCompiledTimeMinute() throws Exception {
+		checkCompiledOutput("builtins/timeMinute.pec");
+	}
+
+	@Test
+	public void testInterpretedTimeSecond() throws Exception {
+		checkInterpretedOutput("builtins/timeSecond.pec");
+	}
+
+	@Test
+	public void testCompiledTimeSecond() throws Exception {
+		checkCompiledOutput("builtins/timeSecond.pec");
+	}
+
+	@Test
+	public void testInterpretedTupleLength() throws Exception {
+		checkInterpretedOutput("builtins/tupleLength.pec");
+	}
+
+	@Test
+	public void testCompiledTupleLength() throws Exception {
+		checkCompiledOutput("builtins/tupleLength.pec");
 	}
 
 }

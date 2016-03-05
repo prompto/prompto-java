@@ -20,33 +20,63 @@ public class TestMult extends BaseEParserTest {
 	}
 
 	@Test
-	public void testMultCharacter() throws Exception {
-		checkOutput("mult/multCharacter.pec");
+	public void testInterpretedMultCharacter() throws Exception {
+		checkInterpretedOutput("mult/multCharacter.pec");
 	}
 
 	@Test
-	public void testMultDecimal() throws Exception {
-		checkOutput("mult/multDecimal.pec");
+	public void testCompiledMultCharacter() throws Exception {
+		checkCompiledOutput("mult/multCharacter.pec");
 	}
 
 	@Test
-	public void testMultInteger() throws Exception {
-		checkOutput("mult/multInteger.pec");
+	public void testInterpretedMultDecimal() throws Exception {
+		checkInterpretedOutput("mult/multDecimal.pec");
 	}
 
 	@Test
-	public void testMultList() throws Exception {
-		checkOutput("mult/multList.pec");
+	public void testCompiledMultDecimal() throws Exception {
+		checkCompiledOutput("mult/multDecimal.pec");
 	}
 
 	@Test
-	public void testMultPeriod() throws Exception {
-		checkOutput("mult/multPeriod.pec");
+	public void testInterpretedMultInteger() throws Exception {
+		checkInterpretedOutput("mult/multInteger.pec");
 	}
 
 	@Test
-	public void testMultText() throws Exception {
-		checkOutput("mult/multText.pec");
+	public void testCompiledMultInteger() throws Exception {
+		checkCompiledOutput("mult/multInteger.pec");
+	}
+
+	@Test
+	public void testInterpretedMultList() throws Exception {
+		checkInterpretedOutput("mult/multList.pec");
+	}
+
+	@Test
+	public void testCompiledMultList() throws Exception {
+		checkCompiledOutput("mult/multList.pec");
+	}
+
+	@Test
+	public void testInterpretedMultPeriod() throws Exception {
+		checkInterpretedOutput("mult/multPeriod.pec");
+	}
+
+	@Test
+	public void testCompiledMultPeriod() throws Exception {
+		checkCompiledOutput("mult/multPeriod.pec");
+	}
+
+	@Test
+	public void testInterpretedMultText() throws Exception {
+		checkInterpretedOutput("mult/multText.pec");
+	}
+
+	@Test
+	public void testCompiledMultText() throws Exception {
+		checkCompiledOutput("mult/multText.pec");
 	}
 
 }

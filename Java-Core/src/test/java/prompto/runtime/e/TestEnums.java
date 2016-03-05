@@ -20,18 +20,33 @@ public class TestEnums extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCategoryEnum() throws Exception {
-		checkOutput("enums/categoryEnum.pec");
+	public void testInterpretedCategoryEnum() throws Exception {
+		checkInterpretedOutput("enums/categoryEnum.pec");
 	}
 
 	@Test
-	public void testIntegerEnum() throws Exception {
-		checkOutput("enums/integerEnum.pec");
+	public void testCompiledCategoryEnum() throws Exception {
+		checkCompiledOutput("enums/categoryEnum.pec");
 	}
 
 	@Test
-	public void testTextEnum() throws Exception {
-		checkOutput("enums/textEnum.pec");
+	public void testInterpretedIntegerEnum() throws Exception {
+		checkInterpretedOutput("enums/integerEnum.pec");
+	}
+
+	@Test
+	public void testCompiledIntegerEnum() throws Exception {
+		checkCompiledOutput("enums/integerEnum.pec");
+	}
+
+	@Test
+	public void testInterpretedTextEnum() throws Exception {
+		checkInterpretedOutput("enums/textEnum.pec");
+	}
+
+	@Test
+	public void testCompiledTextEnum() throws Exception {
+		checkCompiledOutput("enums/textEnum.pec");
 	}
 
 }

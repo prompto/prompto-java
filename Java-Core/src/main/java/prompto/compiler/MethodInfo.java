@@ -4,20 +4,20 @@ import java.lang.reflect.Modifier;
 import java.util.LinkedList;
 import java.util.List;
 
-class MethodInfo {
+public class MethodInfo {
 	
 	int accessFlags = Modifier.PUBLIC;
-	StringConstant name;
-	StringConstant proto;
+	Utf8Constant name;
+	Utf8Constant proto;
 	List<Attribute> attributes = new LinkedList<>();
 	ByteCode codeAttribute = null;
 	
-	MethodInfo(String name, String spec) {
-		this.name = new StringConstant(name);
-		this.proto = new StringConstant(spec);
+	public MethodInfo(String name, String spec) {
+		this.name = new Utf8Constant(name);
+		this.proto = new Utf8Constant(spec);
 	}
 
-	void addModifier(int modifier) {
+	public void addModifier(int modifier) {
 		accessFlags |= modifier;
 	}
 

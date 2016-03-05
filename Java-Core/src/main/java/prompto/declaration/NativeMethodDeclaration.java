@@ -1,5 +1,7 @@
 package prompto.declaration;
 
+import prompto.compiler.ClassFile;
+import prompto.compiler.Compiler;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.ArgumentList;
@@ -32,6 +34,13 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 			context.leaveMethod(this);
 		}
 	}
+	
+	@Override
+	public void compile(Context context, Compiler compiler, ClassFile classFile) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+	}
+
 	
 	@Override
 	protected void toSDialect(CodeWriter writer) {

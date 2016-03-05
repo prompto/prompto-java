@@ -20,13 +20,23 @@ public class TestSingleton extends BaseEParserTest {
 	}
 
 	@Test
-	public void testAttribute() throws Exception {
-		checkOutput("singleton/attribute.pec");
+	public void testInterpretedAttribute() throws Exception {
+		checkInterpretedOutput("singleton/attribute.pec");
 	}
 
 	@Test
-	public void testMember() throws Exception {
-		checkOutput("singleton/member.pec");
+	public void testCompiledAttribute() throws Exception {
+		checkCompiledOutput("singleton/attribute.pec");
+	}
+
+	@Test
+	public void testInterpretedMember() throws Exception {
+		checkInterpretedOutput("singleton/member.pec");
+	}
+
+	@Test
+	public void testCompiledMember() throws Exception {
+		checkCompiledOutput("singleton/member.pec");
 	}
 
 }

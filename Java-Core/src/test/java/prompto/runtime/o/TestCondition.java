@@ -20,33 +20,63 @@ public class TestCondition extends BaseOParserTest {
 	}
 
 	@Test
-	public void testComplexIf() throws Exception {
-		checkOutput("condition/complexIf.poc");
+	public void testInterpretedComplexIf() throws Exception {
+		checkInterpretedOutput("condition/complexIf.poc");
 	}
 
 	@Test
-	public void testElseIf() throws Exception {
-		checkOutput("condition/elseIf.poc");
+	public void testCompiledComplexIf() throws Exception {
+		checkCompiledOutput("condition/complexIf.poc");
 	}
 
 	@Test
-	public void testReturnIf() throws Exception {
-		checkOutput("condition/returnIf.poc");
+	public void testInterpretedElseIf() throws Exception {
+		checkInterpretedOutput("condition/elseIf.poc");
 	}
 
 	@Test
-	public void testSimpleIf() throws Exception {
-		checkOutput("condition/simpleIf.poc");
+	public void testCompiledElseIf() throws Exception {
+		checkCompiledOutput("condition/elseIf.poc");
 	}
 
 	@Test
-	public void testSwitch() throws Exception {
-		checkOutput("condition/switch.poc");
+	public void testInterpretedReturnIf() throws Exception {
+		checkInterpretedOutput("condition/returnIf.poc");
 	}
 
 	@Test
-	public void testTernary() throws Exception {
-		checkOutput("condition/ternary.poc");
+	public void testCompiledReturnIf() throws Exception {
+		checkCompiledOutput("condition/returnIf.poc");
+	}
+
+	@Test
+	public void testInterpretedSimpleIf() throws Exception {
+		checkInterpretedOutput("condition/simpleIf.poc");
+	}
+
+	@Test
+	public void testCompiledSimpleIf() throws Exception {
+		checkCompiledOutput("condition/simpleIf.poc");
+	}
+
+	@Test
+	public void testInterpretedSwitch() throws Exception {
+		checkInterpretedOutput("condition/switch.poc");
+	}
+
+	@Test
+	public void testCompiledSwitch() throws Exception {
+		checkCompiledOutput("condition/switch.poc");
+	}
+
+	@Test
+	public void testInterpretedTernary() throws Exception {
+		checkInterpretedOutput("condition/ternary.poc");
+	}
+
+	@Test
+	public void testCompiledTernary() throws Exception {
+		checkCompiledOutput("condition/ternary.poc");
 	}
 
 }

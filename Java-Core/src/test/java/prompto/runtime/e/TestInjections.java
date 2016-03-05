@@ -20,8 +20,13 @@ public class TestInjections extends BaseEParserTest {
 	}
 
 	@Test
-	public void testExpressionInjection() throws Exception {
-		checkOutput("injections/expressionInjection.pec");
+	public void testInterpretedExpressionInjection() throws Exception {
+		checkInterpretedOutput("injections/expressionInjection.pec");
+	}
+
+	@Test
+	public void testCompiledExpressionInjection() throws Exception {
+		checkCompiledOutput("injections/expressionInjection.pec");
 	}
 
 }

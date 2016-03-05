@@ -20,18 +20,33 @@ public class TestTuples extends BaseOParserTest {
 	}
 
 	@Test
-	public void testMultiAssignment() throws Exception {
-		checkOutput("tuples/multiAssignment.poc");
+	public void testInterpretedMultiAssignment() throws Exception {
+		checkInterpretedOutput("tuples/multiAssignment.poc");
 	}
 
 	@Test
-	public void testSingleAssignment() throws Exception {
-		checkOutput("tuples/singleAssignment.poc");
+	public void testCompiledMultiAssignment() throws Exception {
+		checkCompiledOutput("tuples/multiAssignment.poc");
 	}
 
 	@Test
-	public void testTupleElement() throws Exception {
-		checkOutput("tuples/tupleElement.poc");
+	public void testInterpretedSingleAssignment() throws Exception {
+		checkInterpretedOutput("tuples/singleAssignment.poc");
+	}
+
+	@Test
+	public void testCompiledSingleAssignment() throws Exception {
+		checkCompiledOutput("tuples/singleAssignment.poc");
+	}
+
+	@Test
+	public void testInterpretedTupleElement() throws Exception {
+		checkInterpretedOutput("tuples/tupleElement.poc");
+	}
+
+	@Test
+	public void testCompiledTupleElement() throws Exception {
+		checkCompiledOutput("tuples/tupleElement.poc");
 	}
 
 }

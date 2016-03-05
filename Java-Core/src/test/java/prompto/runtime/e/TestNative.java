@@ -20,38 +20,73 @@ public class TestNative extends BaseEParserTest {
 	}
 
 	@Test
-	public void testAnyId() throws Exception {
-		checkOutput("native/anyId.pec");
+	public void testInterpretedAnyId() throws Exception {
+		checkInterpretedOutput("native/anyId.pec");
 	}
 
 	@Test
-	public void testAnyText() throws Exception {
-		checkOutput("native/anyText.pec");
+	public void testCompiledAnyId() throws Exception {
+		checkCompiledOutput("native/anyId.pec");
 	}
 
 	@Test
-	public void testAttribute() throws Exception {
-		checkOutput("native/attribute.pec");
+	public void testInterpretedAnyText() throws Exception {
+		checkInterpretedOutput("native/anyText.pec");
 	}
 
 	@Test
-	public void testCategory() throws Exception {
-		checkOutput("native/category.pec");
+	public void testCompiledAnyText() throws Exception {
+		checkCompiledOutput("native/anyText.pec");
 	}
 
 	@Test
-	public void testMethod() throws Exception {
-		checkOutput("native/method.pec");
+	public void testInterpretedAttribute() throws Exception {
+		checkInterpretedOutput("native/attribute.pec");
 	}
 
 	@Test
-	public void testNow() throws Exception {
-		checkOutput("native/now.pec");
+	public void testCompiledAttribute() throws Exception {
+		checkCompiledOutput("native/attribute.pec");
 	}
 
 	@Test
-	public void testPrinter() throws Exception {
-		checkOutput("native/printer.pec");
+	public void testInterpretedCategory() throws Exception {
+		checkInterpretedOutput("native/category.pec");
+	}
+
+	@Test
+	public void testCompiledCategory() throws Exception {
+		checkCompiledOutput("native/category.pec");
+	}
+
+	@Test
+	public void testInterpretedMethod() throws Exception {
+		checkInterpretedOutput("native/method.pec");
+	}
+
+	@Test
+	public void testCompiledMethod() throws Exception {
+		checkCompiledOutput("native/method.pec");
+	}
+
+	@Test
+	public void testInterpretedNow() throws Exception {
+		checkInterpretedOutput("native/now.pec");
+	}
+
+	@Test
+	public void testCompiledNow() throws Exception {
+		checkCompiledOutput("native/now.pec");
+	}
+
+	@Test
+	public void testInterpretedPrinter() throws Exception {
+		checkInterpretedOutput("native/printer.pec");
+	}
+
+	@Test
+	public void testCompiledPrinter() throws Exception {
+		checkCompiledOutput("native/printer.pec");
 	}
 
 }

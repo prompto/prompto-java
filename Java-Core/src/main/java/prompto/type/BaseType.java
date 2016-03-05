@@ -209,4 +209,9 @@ public abstract class BaseType implements IType {
 	public IValue readJSONValue(Context context, JsonNode value) {
 		throw new InvalidParameterException(value.toString());
 	}
+	
+	@Override
+	public String getJavaSignature(Context context) {
+		return "L" + this.toJavaClass().getName().replace('.', '/') + ';';
+	}
 }

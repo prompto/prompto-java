@@ -2,11 +2,11 @@ package prompto.compiler;
 
 public class ClassConstant implements Constant {
 
-	StringConstant className;
+	Utf8Constant className;
 	int index;
 	
 	public ClassConstant(String className) {
-		this.className = new StringConstant(className);
+		this.className = new Utf8Constant(className);
 	}
 
 	@Override

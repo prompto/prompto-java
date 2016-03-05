@@ -20,68 +20,133 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
-	public void testAnonymous() throws Exception {
-		checkOutput("methods/anonymous.pec");
+	public void testInterpretedAnonymous() throws Exception {
+		checkInterpretedOutput("methods/anonymous.pec");
 	}
 
 	@Test
-	public void testAttribute() throws Exception {
-		checkOutput("methods/attribute.pec");
+	public void testCompiledAnonymous() throws Exception {
+		checkCompiledOutput("methods/anonymous.pec");
 	}
 
 	@Test
-	public void testDefault() throws Exception {
-		checkOutput("methods/default.pec");
+	public void testInterpretedAttribute() throws Exception {
+		checkInterpretedOutput("methods/attribute.pec");
 	}
 
 	@Test
-	public void testE_as_e_bug() throws Exception {
-		checkOutput("methods/e_as_e_bug.pec");
+	public void testCompiledAttribute() throws Exception {
+		checkCompiledOutput("methods/attribute.pec");
 	}
 
 	@Test
-	public void testExpressionWith() throws Exception {
-		checkOutput("methods/expressionWith.pec");
+	public void testInterpretedDefault() throws Exception {
+		checkInterpretedOutput("methods/default.pec");
 	}
 
 	@Test
-	public void testImplicit() throws Exception {
-		checkOutput("methods/implicit.pec");
+	public void testCompiledDefault() throws Exception {
+		checkCompiledOutput("methods/default.pec");
 	}
 
 	@Test
-	public void testMember() throws Exception {
-		checkOutput("methods/member.pec");
+	public void testInterpretedE_as_e_bug() throws Exception {
+		checkInterpretedOutput("methods/e_as_e_bug.pec");
 	}
 
 	@Test
-	public void testMemberCall() throws Exception {
-		checkOutput("methods/memberCall.pec");
+	public void testCompiledE_as_e_bug() throws Exception {
+		checkCompiledOutput("methods/e_as_e_bug.pec");
 	}
 
 	@Test
-	public void testPolymorphic_abstract() throws Exception {
-		checkOutput("methods/polymorphic_abstract.pec");
+	public void testInterpretedExpressionWith() throws Exception {
+		checkInterpretedOutput("methods/expressionWith.pec");
 	}
 
 	@Test
-	public void testPolymorphic_implicit() throws Exception {
-		checkOutput("methods/polymorphic_implicit.pec");
+	public void testCompiledExpressionWith() throws Exception {
+		checkCompiledOutput("methods/expressionWith.pec");
 	}
 
 	@Test
-	public void testPolymorphic_named() throws Exception {
-		checkOutput("methods/polymorphic_named.pec");
+	public void testInterpretedImplicit() throws Exception {
+		checkInterpretedOutput("methods/implicit.pec");
 	}
 
 	@Test
-	public void testPolymorphic_runtime() throws Exception {
-		checkOutput("methods/polymorphic_runtime.pec");
+	public void testCompiledImplicit() throws Exception {
+		checkCompiledOutput("methods/implicit.pec");
 	}
 
 	@Test
-	public void testSpecified() throws Exception {
-		checkOutput("methods/specified.pec");
+	public void testInterpretedMember() throws Exception {
+		checkInterpretedOutput("methods/member.pec");
+	}
+
+	@Test
+	public void testCompiledMember() throws Exception {
+		checkCompiledOutput("methods/member.pec");
+	}
+
+	@Test
+	public void testInterpretedMemberCall() throws Exception {
+		checkInterpretedOutput("methods/memberCall.pec");
+	}
+
+	@Test
+	public void testCompiledMemberCall() throws Exception {
+		checkCompiledOutput("methods/memberCall.pec");
+	}
+
+	@Test
+	public void testInterpretedPolymorphic_abstract() throws Exception {
+		checkInterpretedOutput("methods/polymorphic_abstract.pec");
+	}
+
+	@Test
+	public void testCompiledPolymorphic_abstract() throws Exception {
+		checkCompiledOutput("methods/polymorphic_abstract.pec");
+	}
+
+	@Test
+	public void testInterpretedPolymorphic_implicit() throws Exception {
+		checkInterpretedOutput("methods/polymorphic_implicit.pec");
+	}
+
+	@Test
+	public void testCompiledPolymorphic_implicit() throws Exception {
+		checkCompiledOutput("methods/polymorphic_implicit.pec");
+	}
+
+	@Test
+	public void testInterpretedPolymorphic_named() throws Exception {
+		checkInterpretedOutput("methods/polymorphic_named.pec");
+	}
+
+	@Test
+	public void testCompiledPolymorphic_named() throws Exception {
+		checkCompiledOutput("methods/polymorphic_named.pec");
+	}
+
+	@Test
+	public void testInterpretedPolymorphic_runtime() throws Exception {
+		checkInterpretedOutput("methods/polymorphic_runtime.pec");
+	}
+
+	@Test
+	public void testCompiledPolymorphic_runtime() throws Exception {
+		checkCompiledOutput("methods/polymorphic_runtime.pec");
+	}
+
+	@Test
+	public void testInterpretedSpecified() throws Exception {
+		checkInterpretedOutput("methods/specified.pec");
+	}
+
+	@Test
+	public void testCompiledSpecified() throws Exception {
+		checkCompiledOutput("methods/specified.pec");
 	}
 
 }

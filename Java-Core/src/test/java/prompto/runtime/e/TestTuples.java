@@ -20,18 +20,33 @@ public class TestTuples extends BaseEParserTest {
 	}
 
 	@Test
-	public void testMultiAssignment() throws Exception {
-		checkOutput("tuples/multiAssignment.pec");
+	public void testInterpretedMultiAssignment() throws Exception {
+		checkInterpretedOutput("tuples/multiAssignment.pec");
 	}
 
 	@Test
-	public void testSingleAssignment() throws Exception {
-		checkOutput("tuples/singleAssignment.pec");
+	public void testCompiledMultiAssignment() throws Exception {
+		checkCompiledOutput("tuples/multiAssignment.pec");
 	}
 
 	@Test
-	public void testTupleElement() throws Exception {
-		checkOutput("tuples/tupleElement.pec");
+	public void testInterpretedSingleAssignment() throws Exception {
+		checkInterpretedOutput("tuples/singleAssignment.pec");
+	}
+
+	@Test
+	public void testCompiledSingleAssignment() throws Exception {
+		checkCompiledOutput("tuples/singleAssignment.pec");
+	}
+
+	@Test
+	public void testInterpretedTupleElement() throws Exception {
+		checkInterpretedOutput("tuples/tupleElement.pec");
+	}
+
+	@Test
+	public void testCompiledTupleElement() throws Exception {
+		checkCompiledOutput("tuples/tupleElement.pec");
 	}
 
 }

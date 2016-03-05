@@ -1,5 +1,6 @@
 package prompto.grammar;
 
+import prompto.compiler.CompilerException;
 import prompto.error.PromptoError;
 import prompto.expression.DefaultExpression;
 import prompto.expression.IExpression;
@@ -46,6 +47,15 @@ public abstract class BaseArgument implements IArgument {
 	@Override
 	public IValue checkValue(Context context, IExpression expression) throws PromptoError {
 		return expression.interpret(context);
+	}
+	
+	@Override
+	public String getJavaSignature(Context context) {
+		try {
+			return getType(context).getJavaSignature(context);
+		} catch(PromptoError e) {
+			throw new CompilerException(e);
+		}
 	}
 
 }

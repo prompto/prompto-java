@@ -1,5 +1,12 @@
 package prompto.declaration;
 
+import java.lang.reflect.Modifier;
+
+import prompto.compiler.ClassFile;
+import prompto.compiler.Compiler;
+import prompto.compiler.CompilerException;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.ArgumentList;
@@ -8,6 +15,7 @@ import prompto.grammar.CodeArgument;
 import prompto.grammar.IArgument;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.statement.IStatement;
 import prompto.statement.StatementList;
 import prompto.type.DictType;
 import prompto.type.IType;
@@ -156,6 +164,30 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 			context.leaveMethod(this);
 		}
 	}
+	
+	@Override
+	public void compile(Context context, Compiler compiler, ClassFile classFile) {
+		try {
+			IType returnType = check(context);
+			String proto = compiler.createProto(context, arguments, returnType);
+			MethodInfo method = new MethodInfo(getName(), proto); 
+			if(Modifier.isAbstract(classFile.getModifiers())) // TODO find another way
+				method.addModifier(Modifier.STATIC); // otherwise it's a member method
+			for(IStatement s : statements)
+				s.compile(context, compiler, method);
+			// ensure we always return something
+			if(returnType==VoidType.instance())
+				method.addInstruction(Opcode.RETURN);
+			else {
+				method.addInstruction(Opcode.ACONST_NULL);
+				method.addInstruction(Opcode.ARETURN);
+			}
+			classFile.addMethod(method);
+		} catch (PromptoError e) {
+			throw new CompilerException(e);
+		}
+	}
+
 	
 	@Override
 	public boolean isEligibleAsMain() {

@@ -1,5 +1,6 @@
 package prompto.runtime;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -25,16 +26,15 @@ public abstract class Executor {
 	}
 
 	public static void executeMainMethod(Context context, Identifier methodName, String cmdLineArgs) throws PromptoError {
-		try {
-			String className = Namer.getGlobalMethodClassName(methodName);
-			ClassLoader loader = new PromptoClassLoader(context);
+		String className = Namer.getGlobalMethodClassName(methodName, false);
+		try(PromptoClassLoader loader = new PromptoClassLoader(context)) {
 			Class<?> klass = loader.loadClass(className);
 			Method method = locateMainMethod(klass, cmdLineArgs);
 			Map<String, String> options = parseCmdLineArgs(cmdLineArgs);
 			method.invoke(null, options);
 		} catch(ClassNotFoundException | NoSuchMethodException e) {
 			throw new SyntaxError("Could not find a compatible \"" + methodName + "\" method.");
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | IOException e) {
 			throw new InternalError(e);
 		} finally {
 			context.terminated();

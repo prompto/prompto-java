@@ -20,23 +20,43 @@ public class TestCast extends BaseEParserTest {
 	}
 
 	@Test
-	public void testAutoDowncast() throws Exception {
-		checkOutput("cast/autoDowncast.pec");
+	public void testInterpretedAutoDowncast() throws Exception {
+		checkInterpretedOutput("cast/autoDowncast.pec");
 	}
 
 	@Test
-	public void testCastChild() throws Exception {
-		checkOutput("cast/castChild.pec");
+	public void testCompiledAutoDowncast() throws Exception {
+		checkCompiledOutput("cast/autoDowncast.pec");
 	}
 
 	@Test
-	public void testIsAChild() throws Exception {
-		checkOutput("cast/isAChild.pec");
+	public void testInterpretedCastChild() throws Exception {
+		checkInterpretedOutput("cast/castChild.pec");
 	}
 
 	@Test
-	public void testIsAText() throws Exception {
-		checkOutput("cast/isAText.pec");
+	public void testCompiledCastChild() throws Exception {
+		checkCompiledOutput("cast/castChild.pec");
+	}
+
+	@Test
+	public void testInterpretedIsAChild() throws Exception {
+		checkInterpretedOutput("cast/isAChild.pec");
+	}
+
+	@Test
+	public void testCompiledIsAChild() throws Exception {
+		checkCompiledOutput("cast/isAChild.pec");
+	}
+
+	@Test
+	public void testInterpretedIsAText() throws Exception {
+		checkInterpretedOutput("cast/isAText.pec");
+	}
+
+	@Test
+	public void testCompiledIsAText() throws Exception {
+		checkCompiledOutput("cast/isAText.pec");
 	}
 
 }

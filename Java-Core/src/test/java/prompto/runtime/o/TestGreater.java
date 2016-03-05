@@ -20,73 +20,143 @@ public class TestGreater extends BaseOParserTest {
 	}
 
 	@Test
-	public void testGtCharacter() throws Exception {
-		checkOutput("greater/gtCharacter.poc");
+	public void testInterpretedGtCharacter() throws Exception {
+		checkInterpretedOutput("greater/gtCharacter.poc");
 	}
 
 	@Test
-	public void testGtDate() throws Exception {
-		checkOutput("greater/gtDate.poc");
+	public void testCompiledGtCharacter() throws Exception {
+		checkCompiledOutput("greater/gtCharacter.poc");
 	}
 
 	@Test
-	public void testGtDateTime() throws Exception {
-		checkOutput("greater/gtDateTime.poc");
+	public void testInterpretedGtDate() throws Exception {
+		checkInterpretedOutput("greater/gtDate.poc");
 	}
 
 	@Test
-	public void testGtDecimal() throws Exception {
-		checkOutput("greater/gtDecimal.poc");
+	public void testCompiledGtDate() throws Exception {
+		checkCompiledOutput("greater/gtDate.poc");
 	}
 
 	@Test
-	public void testGteCharacter() throws Exception {
-		checkOutput("greater/gteCharacter.poc");
+	public void testInterpretedGtDateTime() throws Exception {
+		checkInterpretedOutput("greater/gtDateTime.poc");
 	}
 
 	@Test
-	public void testGteDate() throws Exception {
-		checkOutput("greater/gteDate.poc");
+	public void testCompiledGtDateTime() throws Exception {
+		checkCompiledOutput("greater/gtDateTime.poc");
 	}
 
 	@Test
-	public void testGteDateTime() throws Exception {
-		checkOutput("greater/gteDateTime.poc");
+	public void testInterpretedGtDecimal() throws Exception {
+		checkInterpretedOutput("greater/gtDecimal.poc");
 	}
 
 	@Test
-	public void testGteDecimal() throws Exception {
-		checkOutput("greater/gteDecimal.poc");
+	public void testCompiledGtDecimal() throws Exception {
+		checkCompiledOutput("greater/gtDecimal.poc");
 	}
 
 	@Test
-	public void testGteInteger() throws Exception {
-		checkOutput("greater/gteInteger.poc");
+	public void testInterpretedGteCharacter() throws Exception {
+		checkInterpretedOutput("greater/gteCharacter.poc");
 	}
 
 	@Test
-	public void testGteText() throws Exception {
-		checkOutput("greater/gteText.poc");
+	public void testCompiledGteCharacter() throws Exception {
+		checkCompiledOutput("greater/gteCharacter.poc");
 	}
 
 	@Test
-	public void testGteTime() throws Exception {
-		checkOutput("greater/gteTime.poc");
+	public void testInterpretedGteDate() throws Exception {
+		checkInterpretedOutput("greater/gteDate.poc");
 	}
 
 	@Test
-	public void testGtInteger() throws Exception {
-		checkOutput("greater/gtInteger.poc");
+	public void testCompiledGteDate() throws Exception {
+		checkCompiledOutput("greater/gteDate.poc");
 	}
 
 	@Test
-	public void testGtText() throws Exception {
-		checkOutput("greater/gtText.poc");
+	public void testInterpretedGteDateTime() throws Exception {
+		checkInterpretedOutput("greater/gteDateTime.poc");
 	}
 
 	@Test
-	public void testGtTime() throws Exception {
-		checkOutput("greater/gtTime.poc");
+	public void testCompiledGteDateTime() throws Exception {
+		checkCompiledOutput("greater/gteDateTime.poc");
+	}
+
+	@Test
+	public void testInterpretedGteDecimal() throws Exception {
+		checkInterpretedOutput("greater/gteDecimal.poc");
+	}
+
+	@Test
+	public void testCompiledGteDecimal() throws Exception {
+		checkCompiledOutput("greater/gteDecimal.poc");
+	}
+
+	@Test
+	public void testInterpretedGteInteger() throws Exception {
+		checkInterpretedOutput("greater/gteInteger.poc");
+	}
+
+	@Test
+	public void testCompiledGteInteger() throws Exception {
+		checkCompiledOutput("greater/gteInteger.poc");
+	}
+
+	@Test
+	public void testInterpretedGteText() throws Exception {
+		checkInterpretedOutput("greater/gteText.poc");
+	}
+
+	@Test
+	public void testCompiledGteText() throws Exception {
+		checkCompiledOutput("greater/gteText.poc");
+	}
+
+	@Test
+	public void testInterpretedGteTime() throws Exception {
+		checkInterpretedOutput("greater/gteTime.poc");
+	}
+
+	@Test
+	public void testCompiledGteTime() throws Exception {
+		checkCompiledOutput("greater/gteTime.poc");
+	}
+
+	@Test
+	public void testInterpretedGtInteger() throws Exception {
+		checkInterpretedOutput("greater/gtInteger.poc");
+	}
+
+	@Test
+	public void testCompiledGtInteger() throws Exception {
+		checkCompiledOutput("greater/gtInteger.poc");
+	}
+
+	@Test
+	public void testInterpretedGtText() throws Exception {
+		checkInterpretedOutput("greater/gtText.poc");
+	}
+
+	@Test
+	public void testCompiledGtText() throws Exception {
+		checkCompiledOutput("greater/gtText.poc");
+	}
+
+	@Test
+	public void testInterpretedGtTime() throws Exception {
+		checkInterpretedOutput("greater/gtTime.poc");
+	}
+
+	@Test
+	public void testCompiledGtTime() throws Exception {
+		checkCompiledOutput("greater/gtTime.poc");
 	}
 
 }

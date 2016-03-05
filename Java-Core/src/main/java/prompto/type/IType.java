@@ -48,5 +48,6 @@ public interface IType {
 	
 	IValue convertJavaValueToPromptoValue(Object value);
 	Class<?> toJavaClass();
+	String getJavaSignature(Context context);
 }
  

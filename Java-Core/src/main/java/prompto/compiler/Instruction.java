@@ -21,9 +21,24 @@ public class Instruction {
 			byteCode.popOperands(-operandsCount);
 		else
 			byteCode.pushOperands(operandsCount);
-		writer.writeU2(opcode.opcode);
-		for(Constant operand : operands)
-			writer.writeU2(operand.index());
+		if(opcode.kind.width==1)
+			writer.writeU1(opcode.opcode);
+		else
+			writer.writeU2(opcode.opcode);
+		if(opcode.kind.length==-1) {
+			throw new UnsupportedOperationException(); // TODO
+		} else if(operands.length>0) {
+			switch(opcode.kind) {
+				case CPREF:
+					writer.writeU1(operands[0].index());
+					break;
+				case CPREF_W:
+					writer.writeU2(operands[0].index());
+					break;
+				default:
+					throw new UnsupportedOperationException(); // TODO
+			}
+		}
 	}
 
 	public int countMethodArguments() {

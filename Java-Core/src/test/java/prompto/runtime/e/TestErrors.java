@@ -20,58 +20,113 @@ public class TestErrors extends BaseEParserTest {
 	}
 
 	@Test
-	public void testDivideByZero() throws Exception {
-		checkOutput("errors/divideByZero.pec");
+	public void testInterpretedDivideByZero() throws Exception {
+		checkInterpretedOutput("errors/divideByZero.pec");
 	}
 
 	@Test
-	public void testIndexOutOfRange_listItem() throws Exception {
-		checkOutput("errors/indexOutOfRange-listItem.pec");
+	public void testCompiledDivideByZero() throws Exception {
+		checkCompiledOutput("errors/divideByZero.pec");
 	}
 
 	@Test
-	public void testIndexOutOfRange_sliceList() throws Exception {
-		checkOutput("errors/indexOutOfRange-sliceList.pec");
+	public void testInterpretedIndexOutOfRange_listItem() throws Exception {
+		checkInterpretedOutput("errors/indexOutOfRange-listItem.pec");
 	}
 
 	@Test
-	public void testIndexOutOfRange_sliceRange() throws Exception {
-		checkOutput("errors/indexOutOfRange-sliceRange.pec");
+	public void testCompiledIndexOutOfRange_listItem() throws Exception {
+		checkCompiledOutput("errors/indexOutOfRange-listItem.pec");
 	}
 
 	@Test
-	public void testIndexOutOfRange_sliceText() throws Exception {
-		checkOutput("errors/indexOutOfRange-sliceText.pec");
+	public void testInterpretedIndexOutOfRange_sliceList() throws Exception {
+		checkInterpretedOutput("errors/indexOutOfRange-sliceList.pec");
 	}
 
 	@Test
-	public void testNullDict() throws Exception {
-		checkOutput("errors/nullDict.pec");
+	public void testCompiledIndexOutOfRange_sliceList() throws Exception {
+		checkCompiledOutput("errors/indexOutOfRange-sliceList.pec");
 	}
 
 	@Test
-	public void testNullItem() throws Exception {
-		checkOutput("errors/nullItem.pec");
+	public void testInterpretedIndexOutOfRange_sliceRange() throws Exception {
+		checkInterpretedOutput("errors/indexOutOfRange-sliceRange.pec");
 	}
 
 	@Test
-	public void testNullKey() throws Exception {
-		checkOutput("errors/nullKey.pec");
+	public void testCompiledIndexOutOfRange_sliceRange() throws Exception {
+		checkCompiledOutput("errors/indexOutOfRange-sliceRange.pec");
 	}
 
 	@Test
-	public void testNullMember() throws Exception {
-		checkOutput("errors/nullMember.pec");
+	public void testInterpretedIndexOutOfRange_sliceText() throws Exception {
+		checkInterpretedOutput("errors/indexOutOfRange-sliceText.pec");
 	}
 
 	@Test
-	public void testNullMethod() throws Exception {
-		checkOutput("errors/nullMethod.pec");
+	public void testCompiledIndexOutOfRange_sliceText() throws Exception {
+		checkCompiledOutput("errors/indexOutOfRange-sliceText.pec");
 	}
 
 	@Test
-	public void testUserException() throws Exception {
-		checkOutput("errors/userException.pec");
+	public void testInterpretedNullDict() throws Exception {
+		checkInterpretedOutput("errors/nullDict.pec");
+	}
+
+	@Test
+	public void testCompiledNullDict() throws Exception {
+		checkCompiledOutput("errors/nullDict.pec");
+	}
+
+	@Test
+	public void testInterpretedNullItem() throws Exception {
+		checkInterpretedOutput("errors/nullItem.pec");
+	}
+
+	@Test
+	public void testCompiledNullItem() throws Exception {
+		checkCompiledOutput("errors/nullItem.pec");
+	}
+
+	@Test
+	public void testInterpretedNullKey() throws Exception {
+		checkInterpretedOutput("errors/nullKey.pec");
+	}
+
+	@Test
+	public void testCompiledNullKey() throws Exception {
+		checkCompiledOutput("errors/nullKey.pec");
+	}
+
+	@Test
+	public void testInterpretedNullMember() throws Exception {
+		checkInterpretedOutput("errors/nullMember.pec");
+	}
+
+	@Test
+	public void testCompiledNullMember() throws Exception {
+		checkCompiledOutput("errors/nullMember.pec");
+	}
+
+	@Test
+	public void testInterpretedNullMethod() throws Exception {
+		checkInterpretedOutput("errors/nullMethod.pec");
+	}
+
+	@Test
+	public void testCompiledNullMethod() throws Exception {
+		checkCompiledOutput("errors/nullMethod.pec");
+	}
+
+	@Test
+	public void testInterpretedUserException() throws Exception {
+		checkInterpretedOutput("errors/userException.pec");
+	}
+
+	@Test
+	public void testCompiledUserException() throws Exception {
+		checkCompiledOutput("errors/userException.pec");
 	}
 
 }

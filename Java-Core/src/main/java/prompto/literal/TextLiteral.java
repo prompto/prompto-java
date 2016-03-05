@@ -4,6 +4,12 @@ import java.io.IOException;
 import java.io.StreamTokenizer;
 import java.io.StringReader;
 
+import prompto.compiler.Compiler;
+import prompto.compiler.Constant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.StringConstant;
+import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.type.TextType;
@@ -33,4 +39,9 @@ public class TextLiteral extends Literal<Text> {
 	}
 	
 
+	@Override
+	public void compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+		Constant operand = new StringConstant(value.getValue());
+		method.addInstruction(Opcode.LDC, operand);
+	}
 }

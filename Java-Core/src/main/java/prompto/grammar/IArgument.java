@@ -21,5 +21,6 @@ public interface IArgument extends INamed {
 	DefaultExpression getDefaultExpression();
 	boolean setMutable(boolean set);
 	boolean isMutable();
+	String getJavaSignature(Context context);
 	
 }

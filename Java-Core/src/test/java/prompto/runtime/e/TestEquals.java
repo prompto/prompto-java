@@ -20,158 +20,313 @@ public class TestEquals extends BaseEParserTest {
 	}
 
 	@Test
-	public void testEqBoolean() throws Exception {
-		checkOutput("equals/eqBoolean.pec");
+	public void testInterpretedEqBoolean() throws Exception {
+		checkInterpretedOutput("equals/eqBoolean.pec");
 	}
 
 	@Test
-	public void testEqCharacter() throws Exception {
-		checkOutput("equals/eqCharacter.pec");
+	public void testCompiledEqBoolean() throws Exception {
+		checkCompiledOutput("equals/eqBoolean.pec");
 	}
 
 	@Test
-	public void testEqDate() throws Exception {
-		checkOutput("equals/eqDate.pec");
+	public void testInterpretedEqCharacter() throws Exception {
+		checkInterpretedOutput("equals/eqCharacter.pec");
 	}
 
 	@Test
-	public void testEqDateTime() throws Exception {
-		checkOutput("equals/eqDateTime.pec");
+	public void testCompiledEqCharacter() throws Exception {
+		checkCompiledOutput("equals/eqCharacter.pec");
 	}
 
 	@Test
-	public void testEqDecimal() throws Exception {
-		checkOutput("equals/eqDecimal.pec");
+	public void testInterpretedEqDate() throws Exception {
+		checkInterpretedOutput("equals/eqDate.pec");
 	}
 
 	@Test
-	public void testEqDict() throws Exception {
-		checkOutput("equals/eqDict.pec");
+	public void testCompiledEqDate() throws Exception {
+		checkCompiledOutput("equals/eqDate.pec");
 	}
 
 	@Test
-	public void testEqInteger() throws Exception {
-		checkOutput("equals/eqInteger.pec");
+	public void testInterpretedEqDateTime() throws Exception {
+		checkInterpretedOutput("equals/eqDateTime.pec");
 	}
 
 	@Test
-	public void testEqList() throws Exception {
-		checkOutput("equals/eqList.pec");
+	public void testCompiledEqDateTime() throws Exception {
+		checkCompiledOutput("equals/eqDateTime.pec");
 	}
 
 	@Test
-	public void testEqPeriod() throws Exception {
-		checkOutput("equals/eqPeriod.pec");
+	public void testInterpretedEqDecimal() throws Exception {
+		checkInterpretedOutput("equals/eqDecimal.pec");
 	}
 
 	@Test
-	public void testEqRange() throws Exception {
-		checkOutput("equals/eqRange.pec");
+	public void testCompiledEqDecimal() throws Exception {
+		checkCompiledOutput("equals/eqDecimal.pec");
 	}
 
 	@Test
-	public void testEqSet() throws Exception {
-		checkOutput("equals/eqSet.pec");
+	public void testInterpretedEqDict() throws Exception {
+		checkInterpretedOutput("equals/eqDict.pec");
 	}
 
 	@Test
-	public void testEqText() throws Exception {
-		checkOutput("equals/eqText.pec");
+	public void testCompiledEqDict() throws Exception {
+		checkCompiledOutput("equals/eqDict.pec");
 	}
 
 	@Test
-	public void testEqTime() throws Exception {
-		checkOutput("equals/eqTime.pec");
+	public void testInterpretedEqInteger() throws Exception {
+		checkInterpretedOutput("equals/eqInteger.pec");
 	}
 
 	@Test
-	public void testIsBoolean() throws Exception {
-		checkOutput("equals/isBoolean.pec");
+	public void testCompiledEqInteger() throws Exception {
+		checkCompiledOutput("equals/eqInteger.pec");
 	}
 
 	@Test
-	public void testIsInstance() throws Exception {
-		checkOutput("equals/isInstance.pec");
+	public void testInterpretedEqList() throws Exception {
+		checkInterpretedOutput("equals/eqList.pec");
 	}
 
 	@Test
-	public void testIsNotBoolean() throws Exception {
-		checkOutput("equals/isNotBoolean.pec");
+	public void testCompiledEqList() throws Exception {
+		checkCompiledOutput("equals/eqList.pec");
 	}
 
 	@Test
-	public void testIsNotInstance() throws Exception {
-		checkOutput("equals/isNotInstance.pec");
+	public void testInterpretedEqPeriod() throws Exception {
+		checkInterpretedOutput("equals/eqPeriod.pec");
 	}
 
 	@Test
-	public void testNeqBoolean() throws Exception {
-		checkOutput("equals/neqBoolean.pec");
+	public void testCompiledEqPeriod() throws Exception {
+		checkCompiledOutput("equals/eqPeriod.pec");
 	}
 
 	@Test
-	public void testNeqCharacter() throws Exception {
-		checkOutput("equals/neqCharacter.pec");
+	public void testInterpretedEqRange() throws Exception {
+		checkInterpretedOutput("equals/eqRange.pec");
 	}
 
 	@Test
-	public void testNeqDate() throws Exception {
-		checkOutput("equals/neqDate.pec");
+	public void testCompiledEqRange() throws Exception {
+		checkCompiledOutput("equals/eqRange.pec");
 	}
 
 	@Test
-	public void testNeqDateTime() throws Exception {
-		checkOutput("equals/neqDateTime.pec");
+	public void testInterpretedEqSet() throws Exception {
+		checkInterpretedOutput("equals/eqSet.pec");
 	}
 
 	@Test
-	public void testNeqDecimal() throws Exception {
-		checkOutput("equals/neqDecimal.pec");
+	public void testCompiledEqSet() throws Exception {
+		checkCompiledOutput("equals/eqSet.pec");
 	}
 
 	@Test
-	public void testNeqDict() throws Exception {
-		checkOutput("equals/neqDict.pec");
+	public void testInterpretedEqText() throws Exception {
+		checkInterpretedOutput("equals/eqText.pec");
 	}
 
 	@Test
-	public void testNeqInteger() throws Exception {
-		checkOutput("equals/neqInteger.pec");
+	public void testCompiledEqText() throws Exception {
+		checkCompiledOutput("equals/eqText.pec");
 	}
 
 	@Test
-	public void testNeqList() throws Exception {
-		checkOutput("equals/neqList.pec");
+	public void testInterpretedEqTime() throws Exception {
+		checkInterpretedOutput("equals/eqTime.pec");
 	}
 
 	@Test
-	public void testNeqPeriod() throws Exception {
-		checkOutput("equals/neqPeriod.pec");
+	public void testCompiledEqTime() throws Exception {
+		checkCompiledOutput("equals/eqTime.pec");
 	}
 
 	@Test
-	public void testNeqRange() throws Exception {
-		checkOutput("equals/neqRange.pec");
+	public void testInterpretedIsBoolean() throws Exception {
+		checkInterpretedOutput("equals/isBoolean.pec");
 	}
 
 	@Test
-	public void testNeqSet() throws Exception {
-		checkOutput("equals/neqSet.pec");
+	public void testCompiledIsBoolean() throws Exception {
+		checkCompiledOutput("equals/isBoolean.pec");
 	}
 
 	@Test
-	public void testNeqText() throws Exception {
-		checkOutput("equals/neqText.pec");
+	public void testInterpretedIsInstance() throws Exception {
+		checkInterpretedOutput("equals/isInstance.pec");
 	}
 
 	@Test
-	public void testNeqTime() throws Exception {
-		checkOutput("equals/neqTime.pec");
+	public void testCompiledIsInstance() throws Exception {
+		checkCompiledOutput("equals/isInstance.pec");
 	}
 
 	@Test
-	public void testReqText() throws Exception {
-		checkOutput("equals/reqText.pec");
+	public void testInterpretedIsNotBoolean() throws Exception {
+		checkInterpretedOutput("equals/isNotBoolean.pec");
+	}
+
+	@Test
+	public void testCompiledIsNotBoolean() throws Exception {
+		checkCompiledOutput("equals/isNotBoolean.pec");
+	}
+
+	@Test
+	public void testInterpretedIsNotInstance() throws Exception {
+		checkInterpretedOutput("equals/isNotInstance.pec");
+	}
+
+	@Test
+	public void testCompiledIsNotInstance() throws Exception {
+		checkCompiledOutput("equals/isNotInstance.pec");
+	}
+
+	@Test
+	public void testInterpretedNeqBoolean() throws Exception {
+		checkInterpretedOutput("equals/neqBoolean.pec");
+	}
+
+	@Test
+	public void testCompiledNeqBoolean() throws Exception {
+		checkCompiledOutput("equals/neqBoolean.pec");
+	}
+
+	@Test
+	public void testInterpretedNeqCharacter() throws Exception {
+		checkInterpretedOutput("equals/neqCharacter.pec");
+	}
+
+	@Test
+	public void testCompiledNeqCharacter() throws Exception {
+		checkCompiledOutput("equals/neqCharacter.pec");
+	}
+
+	@Test
+	public void testInterpretedNeqDate() throws Exception {
+		checkInterpretedOutput("equals/neqDate.pec");
+	}
+
+	@Test
+	public void testCompiledNeqDate() throws Exception {
+		checkCompiledOutput("equals/neqDate.pec");
+	}
+
+	@Test
+	public void testInterpretedNeqDateTime() throws Exception {
+		checkInterpretedOutput("equals/neqDateTime.pec");
+	}
+
+	@Test
+	public void testCompiledNeqDateTime() throws Exception {
+		checkCompiledOutput("equals/neqDateTime.pec");
+	}
+
+	@Test
+	public void testInterpretedNeqDecimal() throws Exception {
+		checkInterpretedOutput("equals/neqDecimal.pec");
+	}
+
+	@Test
+	public void testCompiledNeqDecimal() throws Exception {
+		checkCompiledOutput("equals/neqDecimal.pec");
+	}
+
+	@Test
+	public void testInterpretedNeqDict() throws Exception {
+		checkInterpretedOutput("equals/neqDict.pec");
+	}
+
+	@Test
+	public void testCompiledNeqDict() throws Exception {
+		checkCompiledOutput("equals/neqDict.pec");
+	}
+
+	@Test
+	public void testInterpretedNeqInteger() throws Exception {
+		checkInterpretedOutput("equals/neqInteger.pec");
+	}
+
+	@Test
+	public void testCompiledNeqInteger() throws Exception {
+		checkCompiledOutput("equals/neqInteger.pec");
+	}
+
+	@Test
+	public void testInterpretedNeqList() throws Exception {
+		checkInterpretedOutput("equals/neqList.pec");
+	}
+
+	@Test
+	public void testCompiledNeqList() throws Exception {
+		checkCompiledOutput("equals/neqList.pec");
+	}
+
+	@Test
+	public void testInterpretedNeqPeriod() throws Exception {
+		checkInterpretedOutput("equals/neqPeriod.pec");
+	}
+
+	@Test
+	public void testCompiledNeqPeriod() throws Exception {
+		checkCompiledOutput("equals/neqPeriod.pec");
+	}
+
+	@Test
+	public void testInterpretedNeqRange() throws Exception {
+		checkInterpretedOutput("equals/neqRange.pec");
+	}
+
+	@Test
+	public void testCompiledNeqRange() throws Exception {
+		checkCompiledOutput("equals/neqRange.pec");
+	}
+
+	@Test
+	public void testInterpretedNeqSet() throws Exception {
+		checkInterpretedOutput("equals/neqSet.pec");
+	}
+
+	@Test
+	public void testCompiledNeqSet() throws Exception {
+		checkCompiledOutput("equals/neqSet.pec");
+	}
+
+	@Test
+	public void testInterpretedNeqText() throws Exception {
+		checkInterpretedOutput("equals/neqText.pec");
+	}
+
+	@Test
+	public void testCompiledNeqText() throws Exception {
+		checkCompiledOutput("equals/neqText.pec");
+	}
+
+	@Test
+	public void testInterpretedNeqTime() throws Exception {
+		checkInterpretedOutput("equals/neqTime.pec");
+	}
+
+	@Test
+	public void testCompiledNeqTime() throws Exception {
+		checkCompiledOutput("equals/neqTime.pec");
+	}
+
+	@Test
+	public void testInterpretedReqText() throws Exception {
+		checkInterpretedOutput("equals/reqText.pec");
+	}
+
+	@Test
+	public void testCompiledReqText() throws Exception {
+		checkCompiledOutput("equals/reqText.pec");
 	}
 
 }
