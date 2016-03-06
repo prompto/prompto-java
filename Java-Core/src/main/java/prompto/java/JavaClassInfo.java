@@ -1,11 +1,11 @@
 package prompto.java;
 
-public class ClassInfo {
+public class JavaClassInfo {
 
 	Class<?> type;
 	boolean isInstance;
 	
-	public ClassInfo(Class<?> type, boolean isInstance) {
+	public JavaClassInfo(Class<?> type, boolean isInstance) {
 		this.type = type;
 		this.isInstance = isInstance;
 	}

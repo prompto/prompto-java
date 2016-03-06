@@ -15,7 +15,7 @@ public interface JavaExpression extends ISection {
 	Object interpret(Context context) throws PromptoError;
 	void toDialect(CodeWriter writer);
 	
-	default ClassInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+	default JavaClassInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
 		throw new UnsupportedOperationException();
 	}
 	

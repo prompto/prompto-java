@@ -5,9 +5,9 @@ import java.util.Collection;
 import java.util.List;
 
 import prompto.compiler.Compiler;
+import prompto.compiler.CompilerUtils;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
-import prompto.compiler.Namer;
 import prompto.compiler.Opcode;
 import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.declaration.IMethodDeclaration;
@@ -89,14 +89,16 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	public void compile(Context context, Compiler compiler, MethodInfo method, IMethodDeclaration declaration) throws SyntaxError {
 		// TODO use invokedynamic when multiple candidates
 		if(parent!=null) {
-			// calling an explicit instance member method
-			parent.compile(context, compiler, method); // will push instance
-		} else if(declaration.getMemberOf()!=null) {
+			// calling an explicit instance or singleton member method
+			// push instance if any
+			parent.compile(context, compiler, method); 
+		} 
+		if(declaration.getMemberOf()!=null) {
 			// calling another member method
 			// TODO
 		} else {
 			// calling a global method
-			String className = Namer.getGlobalMethodClassName(declaration.getName(), true);
+			String className = CompilerUtils.getGlobalMethodClassName(declaration.getName(), true);
 			String methodName = declaration.getName();
 			IType returnType = declaration.check(context);
 			String methodProto = compiler.createProto(context, declaration.getArguments(), returnType);

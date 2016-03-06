@@ -74,15 +74,15 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 	}
 	
 	@Override
-	public ClassInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+	public JavaClassInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
 		if(parent==null)
 			return compile_root(context, compiler, method);
 		else
 			return compile_child(context, compiler, method);
 	}
 	
-	private ClassInfo compile_root(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
-		ClassInfo info = compile_prompto(context, compiler, method);
+	private JavaClassInfo compile_root(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+		JavaClassInfo info = compile_prompto(context, compiler, method);
 		if(info!=null)
 			return info;
 		else
@@ -93,7 +93,7 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 			return compile_class(context, compiler, method);
 	}
 
-	private ClassInfo compile_prompto(Context context, Compiler compiler, MethodInfo method) {
+	private JavaClassInfo compile_prompto(Context context, Compiler compiler, MethodInfo method) {
 		switch(name) {
 		case "$context":
 			throw new UnsupportedOperationException();
@@ -101,7 +101,7 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 		return null;
 	}
 
-	private ClassInfo compile_instance(Context context, Compiler compiler, MethodInfo method) {
+	private JavaClassInfo compile_instance(Context context, Compiler compiler, MethodInfo method) {
 		INamed named = context.getRegisteredValue(INamed.class, new Identifier(name));
 		if(named==null)
 			return null;
@@ -125,18 +125,18 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 		}
 		// TODO return useful class so we can get members ?
 		// not sure we support this...
-		return new ClassInfo(Object.class, true); 
+		return new JavaClassInfo(Object.class, true); 
 	}
 
-	private ClassInfo compile_child(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
-		ClassInfo info = parent.compile(context, compiler, method);
+	private JavaClassInfo compile_child(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+		JavaClassInfo info = parent.compile(context, compiler, method);
 		if(info!=null)
 			return compile_field(context, compiler, method, info);
 		else
 			return compile_class(context, compiler, method);
 	}
 
-	private ClassInfo compile_field(Context context, Compiler compiler, MethodInfo method, ClassInfo info) {
+	private JavaClassInfo compile_field(Context context, Compiler compiler, MethodInfo method, JavaClassInfo info) {
 		try {
 			Field field = info.getType().getField(name);
 			String parentClassName = CompilerUtils.getClassName(info.getType());
@@ -146,21 +146,21 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 				method.addInstruction(Opcode.GETFIELD, oper);
 			else
 				method.addInstruction(Opcode.GETSTATIC, oper);
-			return new ClassInfo(field.getType(), true);
+			return new JavaClassInfo(field.getType(), true);
 		} catch (NoSuchFieldException e) { 
 			return null;
 		}
 	}
 
-	private ClassInfo compile_class(Context context, Compiler compiler, MethodInfo method) {
+	private JavaClassInfo compile_class(Context context, Compiler compiler, MethodInfo method) {
 		String fullName = this.toString();
 		try {
-			return new ClassInfo(Class.forName(fullName), false);
+			return new JavaClassInfo(Class.forName(fullName), false);
 		} catch (ClassNotFoundException e1) {
 			// package prefix not required for classes in java.lang package
 			if(parent==null) try {
 				fullName = "java.lang." + name;
-				return new ClassInfo(Class.forName(fullName), false);
+				return new JavaClassInfo(Class.forName(fullName), false);
 			} catch (ClassNotFoundException e2) {
 			}	
 		}

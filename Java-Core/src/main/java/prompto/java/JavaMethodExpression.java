@@ -2,7 +2,6 @@ package prompto.java;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 
 import prompto.compiler.Compiler;
 import prompto.compiler.CompilerUtils;
@@ -60,9 +59,9 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 	}
 	
 	@Override
-	public ClassInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+	public JavaClassInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
 		// push instance if any
-		ClassInfo parentType = parent.compile(context, compiler, method); 
+		JavaClassInfo parentType = parent.compile(context, compiler, method); 
 		// push arguments if any
 		for(JavaExpression arg : arguments)
 			arg.compile(context, compiler, method);
@@ -71,11 +70,11 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 		String proto = CompilerUtils.createProto(m.getParameterTypes(), m.getReturnType());
 		String parentClassName = CompilerUtils.getClassName(parentType.getType());
 		ConstantOperand operand = new MethodConstant(parentClassName, m.getName(), proto);
-		if(Modifier.isStatic(m.getModifiers()))
-			method.addInstruction(Opcode.INVOKESTATIC, operand);
-		else
+		if(parentType.isInstance())
 			method.addInstruction(Opcode.INVOKEVIRTUAL, operand);
-		return new ClassInfo(m.getReturnType(), true);
+		else
+			method.addInstruction(Opcode.INVOKESTATIC, operand);
+		return new JavaClassInfo(m.getReturnType(), true);
 	}
 	
 	@Override

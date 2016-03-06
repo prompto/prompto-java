@@ -4,6 +4,8 @@ import java.rmi.UnexpectedException;
 import java.util.HashMap;
 import java.util.Map;
 
+import prompto.grammar.Identifier;
+
 public abstract class CompilerUtils {
 
 	static int getParamsCount(String proto) {
@@ -77,6 +79,20 @@ public abstract class CompilerUtils {
 		sb.append(')');
 		sb.append(getDescriptor(returnType));
 		return sb.toString();
+	}
+
+	static final char PROMPTO_CHAR = 'π';
+	static final char CLASS_CHAR = 'χ';
+	static final char METHOD_CHAR = 'µ';
+
+	public static String getGlobalMethodClassName(Identifier id, boolean useSlash) {
+		return CompilerUtils.getGlobalMethodClassName(id.getName(), useSlash);
+	}
+
+	public static String getGlobalMethodClassName(String name, boolean useSlash) {
+		return useSlash ?
+				"" + PROMPTO_CHAR + '/' + CLASS_CHAR + '/' + METHOD_CHAR + '/' + name
+				: "" + PROMPTO_CHAR + '.' + CLASS_CHAR + '.' + METHOD_CHAR + '.' + name;
 	}
 
 }

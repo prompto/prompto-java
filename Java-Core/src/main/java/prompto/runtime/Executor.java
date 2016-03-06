@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import prompto.compiler.Namer;
+import prompto.compiler.CompilerUtils;
 import prompto.compiler.PromptoClassLoader;
 import prompto.error.InternalError;
 import prompto.error.PromptoError;
@@ -26,7 +26,7 @@ public abstract class Executor {
 	}
 
 	public static void executeMainMethod(Context context, Identifier methodName, String cmdLineArgs) throws PromptoError {
-		String className = Namer.getGlobalMethodClassName(methodName, false);
+		String className = CompilerUtils.getGlobalMethodClassName(methodName, false);
 		try(PromptoClassLoader loader = new PromptoClassLoader(context)) {
 			Class<?> klass = loader.loadClass(className);
 			Method method = locateMainMethod(klass, cmdLineArgs);
