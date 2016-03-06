@@ -103,7 +103,7 @@ public abstract class SymbolList <T extends Symbol> extends ObjectList<T> implem
 		throw new UnsupportedOperationException("No member support for " + this.getClass().getSimpleName());
 	}
 
-	public Object ConvertTo(Class<?> type) {
+	public Object convertTo(Class<?> type) {
 		return this;
 	}
 	

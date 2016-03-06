@@ -3,9 +3,9 @@ package prompto.compiler;
 import java.util.LinkedList;
 
 @SuppressWarnings("serial")
-class ConstantsPool extends LinkedList<Constant> {
+class ConstantsPool extends LinkedList<ConstantOperand> {
 
-	int registerConstant(Constant c) {
+	int registerConstant(ConstantOperand c) {
 		// 1 based index
 		int idx = 1 + indexOf(c);
 		if(idx==0) {

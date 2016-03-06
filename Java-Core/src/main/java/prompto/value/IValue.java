@@ -36,7 +36,7 @@ public interface IValue {
 	
 	ISliceable<IValue> asSliceable(Context context) throws PromptoError;
 
-	Object ConvertTo(Class<?> type) throws PromptoError;
+	Object convertTo(Class<?> type) throws PromptoError;
 
 	void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError;
 

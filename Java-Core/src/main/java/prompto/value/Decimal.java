@@ -111,7 +111,7 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 
 	@Override
-	public Object ConvertTo(Class<?> type) {
+	public Object convertTo(Class<?> type) {
 		return value;
 	}
 

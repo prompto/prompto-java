@@ -91,7 +91,7 @@ public class Date extends BaseValue implements Comparable<Date> {
 	}
 
 	@Override
-	public Object ConvertTo(Class<?> type) {
+	public Object convertTo(Class<?> type) {
 		return value;
 	}
 

@@ -66,7 +66,7 @@ public class Period extends BaseValue implements IMultiplyable
     }
 
     @Override
-    public Object ConvertTo(Class<?> type)
+    public Object convertTo(Class<?> type)
     {
         return value; 
    }

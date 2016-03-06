@@ -1,6 +1,6 @@
 package prompto.compiler;
 
-public class StringConstant implements Constant {
+public class StringConstant implements ConstantOperand {
 	
 	Utf8Constant value;
 	int index;

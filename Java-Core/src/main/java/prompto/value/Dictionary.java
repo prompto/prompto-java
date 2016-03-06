@@ -95,7 +95,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 			throw new SyntaxError("No such item:" + index.toString());
 	}
 
-	public Object ConvertTo(Class<?> type) {
+	public Object convertTo(Class<?> type) {
 		return this;
 	}
 

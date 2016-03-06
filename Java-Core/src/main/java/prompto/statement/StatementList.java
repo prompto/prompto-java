@@ -2,7 +2,6 @@ package prompto.statement;
 
 import java.util.LinkedList;
 
-import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.java.JavaNativeCall;
@@ -111,30 +110,6 @@ public class StatementList extends LinkedList<IStatement> {
 		return null;
 	}
 	
-	public IValue interpretNative(Context context, IType returnType) throws PromptoError {
-		try {
-			return doInterpretNative(context, returnType);
-		} catch(NullPointerException e) {
-			e.printStackTrace();
-			throw new NullReferenceError();
-		}
-	}
-	
-	private IValue doInterpretNative(Context context, IType returnType) throws PromptoError {
-		for(IStatement statement : this) {
-			if(!(statement instanceof JavaNativeCall))
-				continue;
-			context.enterStatement(statement);
-			try {
-				IValue result = ((JavaNativeCall)statement).interpretNative(context, returnType);
-				if(result!=null)
-					return result;
-			} finally {
-				context.leaveStatement(statement);
-			}
-		}
-		return null;
-	}
 
 	public void toDialect(CodeWriter writer) {
 		for(IStatement statement : this) {

@@ -27,7 +27,7 @@ public class Compiler {
 	private void writeClassFile(ClassFile classFile, String fullName) throws Exception {
 		fullName = fullName.replace('.', '/');
 		File parent = new File(classDir, fullName.substring(0, fullName.lastIndexOf('/')+1));
-		if(!parent.mkdirs())
+		if(!parent.exists() && !parent.mkdirs())
 			throw new IOException("Could not create " + parent.getAbsolutePath());
 		File file = new File(parent, fullName.substring(fullName.lastIndexOf('/')+1) + ".class");
 		System.err.println("Writing class file: " + file.getAbsolutePath());
@@ -40,17 +40,20 @@ public class Compiler {
 		fullName = fullName.replace('.', '/');
 		ClassFile classFile = new ClassFile(fullName, "java/lang/Object");
 		classFile.addModifier(Modifier.ABSTRACT);
-		methods.values().forEach((m)->m.compile(context, this, classFile));
+		methods.values().forEach((m) -> 
+			m.compile(context, this, classFile));
 		return classFile;
 	}
 
 	public String createProto(Context context, ArgumentList arguments, IType returnType) {
 		StringBuilder sb = new StringBuilder();
 		sb.append('(');
-		arguments.forEach((arg)->sb.append(arg.getJavaSignature(context)));
+		arguments.forEach((arg)->sb.append(arg.getJavaDescriptor(context)));
 		sb.append(')');
-		sb.append(returnType.getJavaSignature(context));
+		sb.append(returnType.getJavaDescriptor(context));
 		return sb.toString();
 	}
+
+
 
 }

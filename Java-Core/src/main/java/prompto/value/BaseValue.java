@@ -84,7 +84,7 @@ public abstract class BaseValue implements IValue {
 		return (this instanceof ISliceable) ? (ISliceable<IValue>)this : null;
 	}
 	
-	public Object ConvertTo(Class<?> type) {
+	public Object convertTo(Class<?> type) {
 		return this;
 	}
 	

@@ -21,11 +21,19 @@ public class MethodInfo {
 		accessFlags |= modifier;
 	}
 
-	public void addInstruction(Opcode op, Constant ... operands) {
+	public void addInstruction(Opcode op, Operand ... operands) {
 		createCodeAttribute();
 		codeAttribute.addInstruction(new Instruction(op, operands));
 	}
+	
+	public void registerLocal(String name) {
+		createCodeAttribute();
+		codeAttribute.registerLocal(name);
+	}
 
+	public Integer getRegisteredLocal(String name) {
+		return codeAttribute==null ? null : codeAttribute.getRegisteredLocal(name);
+	}
 
 	void register(ConstantsPool pool) {
 		name.register(pool);
@@ -35,8 +43,7 @@ public class MethodInfo {
 
 	private void createCodeAttribute() {
 		if(codeAttribute==null) {
-			int paramsCount = Utils.getParamsCount(proto.getValue());
-			codeAttribute = new ByteCode(paramsCount, Modifier.isStatic(accessFlags));
+			codeAttribute = new ByteCode();
 			attributes.add(codeAttribute);
 		}
 	}
@@ -57,7 +64,5 @@ public class MethodInfo {
 		writer.writeU2(attributes.size());
 		attributes.forEach((a)->a.writeTo(writer));
 	}
-
-
 
 }

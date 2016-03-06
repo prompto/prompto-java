@@ -21,7 +21,7 @@ public class VoidType extends NativeType {
 	}
 
 	@Override
-	public String getJavaSignature(Context context) {
+	public String getJavaDescriptor(Context context) {
 		return "V";
 	}
 	

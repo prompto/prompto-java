@@ -5,7 +5,7 @@ import java.io.StreamTokenizer;
 import java.io.StringReader;
 
 import prompto.compiler.Compiler;
-import prompto.compiler.Constant;
+import prompto.compiler.ConstantOperand;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.StringConstant;
@@ -41,7 +41,7 @@ public class TextLiteral extends Literal<Text> {
 
 	@Override
 	public void compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
-		Constant operand = new StringConstant(value.getValue());
-		method.addInstruction(Opcode.LDC, operand);
+		ConstantOperand operand = new StringConstant(value.getValue());
+		method.addInstruction(Opcode.LDC_W, operand);
 	}
 }

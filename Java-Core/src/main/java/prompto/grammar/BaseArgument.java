@@ -50,9 +50,9 @@ public abstract class BaseArgument implements IArgument {
 	}
 	
 	@Override
-	public String getJavaSignature(Context context) {
+	public String getJavaDescriptor(Context context) {
 		try {
-			return getType(context).getJavaSignature(context);
+			return getType(context).getJavaDescriptor(context);
 		} catch(PromptoError e) {
 			throw new CompilerException(e);
 		}

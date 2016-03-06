@@ -1,6 +1,6 @@
 package prompto.compiler;
 
-public class MethodConstant implements Constant {
+public class MethodConstant implements ConstantOperand {
 
 	ClassConstant className;
 	NameAndTypeConstant methodNameAndType;
@@ -38,6 +38,6 @@ public class MethodConstant implements Constant {
 	}
 
 	public int getParamsCount() {
-		return Utils.getParamsCount(methodNameAndType.getType().getValue());
+		return CompilerUtils.getParamsCount(methodNameAndType.getType().getValue());
 	}
 }

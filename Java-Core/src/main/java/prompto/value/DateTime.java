@@ -103,7 +103,7 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 	}
 
 	@Override
-	public Object ConvertTo(Class<?> type) {
+	public Object convertTo(Class<?> type) {
 		return value;
 	}
 

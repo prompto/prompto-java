@@ -3,16 +3,18 @@ package prompto.compiler;
 public class Instruction {
 
 	Opcode opcode;
-	Constant[] operands;
+	Operand[] operands;
 	
-	Instruction(Opcode opcode, Constant[] operands) {
+	Instruction(Opcode opcode, Operand[] operands) {
 		this.opcode = opcode;
 		this.operands = operands;
 	}
 
 	void register(ConstantsPool pool) {
-		for(Constant operand : operands)
-			operand.register(pool);
+		for(Operand operand : operands) {
+			if(operand instanceof ConstantOperand)
+				((ConstantOperand)operand).register(pool);
+		}
 	}
 
 	void writeTo(ByteCode byteCode, ByteWriter writer) {
@@ -30,19 +32,19 @@ public class Instruction {
 		} else if(operands.length>0) {
 			switch(opcode.kind) {
 				case CPREF:
-					writer.writeU1(operands[0].index());
+					writer.writeU1(((ConstantOperand)operands[0]).index());
 					break;
 				case CPREF_W:
-					writer.writeU2(operands[0].index());
+					writer.writeU2(((ConstantOperand)operands[0]).index());
 					break;
 				default:
-					throw new UnsupportedOperationException(); // TODO
+					throw new UnsupportedOperationException(); 
 			}
 		}
 	}
 
 	public int countMethodArguments() {
-		for(Constant operand : operands) {
+		for(Operand operand : operands) {
 			if(operand instanceof MethodConstant)
 				return ((MethodConstant)operand).getParamsCount();
 		}

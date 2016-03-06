@@ -2,6 +2,13 @@ package prompto.java;
 
 import java.lang.reflect.Field;
 
+import prompto.compiler.ByteOperand;
+import prompto.compiler.Compiler;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.FieldConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.Operand;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.INamed;
@@ -23,21 +30,21 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 	}
 	
 	JavaIdentifierExpression parent = null;
-	String identifier;
+	String name;
 	boolean isChildClass = false;
 	
-	public JavaIdentifierExpression(String identifier) {
-		this.identifier = identifier;
+	public JavaIdentifierExpression(String name) {
+		this.name = name;
 	}
 
-	public JavaIdentifierExpression(JavaIdentifierExpression parent, String identifier) {
+	public JavaIdentifierExpression(JavaIdentifierExpression parent, String name) {
 		this.parent = parent;
-		this.identifier = identifier;
+		this.name = name;
 	}
 	
-	public JavaIdentifierExpression(JavaIdentifierExpression parent, String identifier, boolean isChildClass) {
+	public JavaIdentifierExpression(JavaIdentifierExpression parent, String name, boolean isChildClass) {
 		this.parent = parent;
-		this.identifier = identifier;
+		this.name = name;
 		this.isChildClass = isChildClass;
 	}
 
@@ -45,8 +52,8 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 		return parent;
 	}
 	
-	public String getIdentifier() {
-		return identifier;
+	public String getName() {
+		return name;
 	}
 	
 	@Override
@@ -55,17 +62,111 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 			parent.toDialect(writer);
 			writer.append(isChildClass ? '$' : '.');
 		}
-		writer.append(identifier);
+		writer.append(name);
 	}
 	
 	@Override
 	public String toString() {
 		if(parent==null)
-			return identifier;
+			return name;
 		else 
-			return parent.toString() + (isChildClass ? '$' : '.') + identifier;
+			return parent.toString() + (isChildClass ? '$' : '.') + name;
 	}
-		
+	
+	@Override
+	public ClassInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+		if(parent==null)
+			return compile_root(context, compiler, method);
+		else
+			return compile_child(context, compiler, method);
+	}
+	
+	private ClassInfo compile_root(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+		ClassInfo info = compile_prompto(context, compiler, method);
+		if(info!=null)
+			return info;
+		else
+			info = compile_instance(context, compiler, method);
+		if(info!=null)
+			return info;
+		else
+			return compile_class(context, compiler, method);
+	}
+
+	private ClassInfo compile_prompto(Context context, Compiler compiler, MethodInfo method) {
+		switch(name) {
+		case "$context":
+			throw new UnsupportedOperationException();
+		}
+		return null;
+	}
+
+	private ClassInfo compile_instance(Context context, Compiler compiler, MethodInfo method) {
+		INamed named = context.getRegisteredValue(INamed.class, new Identifier(name));
+		if(named==null)
+			return null;
+		Integer index = method.getRegisteredLocal(name);
+		switch(index) {
+		case 0:
+			method.addInstruction(Opcode.ALOAD_0);
+			break;
+		case 1:
+			method.addInstruction(Opcode.ALOAD_1);
+			break;
+		case 2:
+			method.addInstruction(Opcode.ALOAD_2);
+			break;
+		case 3:
+			method.addInstruction(Opcode.ALOAD_3);
+			break;
+		default:
+			method.addInstruction(Opcode.ALOAD, new ByteOperand(index.byteValue()));
+			break;
+		}
+		// TODO return useful class so we can get members ?
+		// not sure we support this...
+		return new ClassInfo(Object.class, true); 
+	}
+
+	private ClassInfo compile_child(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+		ClassInfo info = parent.compile(context, compiler, method);
+		if(info!=null)
+			return compile_field(context, compiler, method, info);
+		else
+			return compile_class(context, compiler, method);
+	}
+
+	private ClassInfo compile_field(Context context, Compiler compiler, MethodInfo method, ClassInfo info) {
+		try {
+			Field field = info.getType().getField(name);
+			String parentClassName = CompilerUtils.getClassName(info.getType());
+			String fieldClassName = CompilerUtils.getDescriptor(field.getType());
+			Operand oper = new FieldConstant(parentClassName, name, fieldClassName);
+			if(info.isInstance())
+				method.addInstruction(Opcode.GETFIELD, oper);
+			else
+				method.addInstruction(Opcode.GETSTATIC, oper);
+			return new ClassInfo(field.getType(), true);
+		} catch (NoSuchFieldException e) { 
+			return null;
+		}
+	}
+
+	private ClassInfo compile_class(Context context, Compiler compiler, MethodInfo method) {
+		String fullName = this.toString();
+		try {
+			return new ClassInfo(Class.forName(fullName), false);
+		} catch (ClassNotFoundException e1) {
+			// package prefix not required for classes in java.lang package
+			if(parent==null) try {
+				fullName = "java.lang." + name;
+				return new ClassInfo(Class.forName(fullName), false);
+			} catch (ClassNotFoundException e2) {
+			}	
+		}
+		return null;
+	}
+
 	@Override
 	public Object interpret(Context context) throws PromptoError {
 		if(parent==null)
@@ -86,7 +187,7 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 	}
 
 	private Object interpret_prompto(Context context) {
-		switch(identifier) {
+		switch(name) {
 		case "$context":
 			return context;
 		}
@@ -95,7 +196,7 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 
 	Object interpret_instance(Context context) throws PromptoError {
 		try {
-			return context.getValue(new Identifier(identifier)); 
+			return context.getValue(new Identifier(name)); 
 		} catch (PromptoError e) {
 			return null;
 		}
@@ -108,7 +209,7 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 		} catch (ClassNotFoundException e1) {
 			// package prefix not required for classes in java.lang package
 			if(parent==null) try {
-				fullName = "java.lang." + identifier;
+				fullName = "java.lang." + name;
 				return Class.forName(fullName);
 			} catch (ClassNotFoundException e2) {
 			}	
@@ -132,7 +233,7 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 		} else
 			klass = o.getClass();
 		try {
-			Field field = klass.getField(identifier);
+			Field field = klass.getField(name);
 			return field.get(o);
 		} catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException e) { 
 			return null;
@@ -159,7 +260,7 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 	}
 
 	private IType check_prompto(Context context) {
-		switch(identifier) {
+		switch(name) {
 		case "$context":
 			return new JavaClassType(context.getClass());
 		}
@@ -167,7 +268,7 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 	}
 
 	IType check_instance(Context context) throws SyntaxError {
-		INamed named = context.getRegisteredValue(INamed.class, new Identifier(identifier)); 
+		INamed named = context.getRegisteredValue(INamed.class, new Identifier(name)); 
 		if(named==null)
 			return null;
 		try {
@@ -185,7 +286,7 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 		} catch (ClassNotFoundException e1) {
 			// package prefix not required for classes in java.lang package
 			if(parent==null) try {
-				fullName = "java.lang." + identifier;
+				fullName = "java.lang." + name;
 				Class<?> klass = Class.forName(fullName);
 				return new JavaClassType(klass);
 			} catch (ClassNotFoundException e2) {
@@ -193,7 +294,7 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 		}
 		return null;
 	}
-
+	
 	IType check_child(Context context) throws SyntaxError {
 		IType t = parent.check(context); 
 		if(t!=null)
@@ -207,7 +308,7 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 			return null;
 		Class<?> klass = t.toJavaClass();
 		try {
-			Field field = klass.getField(identifier);
+			Field field = klass.getField(name);
 			return new JavaClassType(field.getType());
 		} catch (NoSuchFieldException e) { 
 			return null;

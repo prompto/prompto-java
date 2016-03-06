@@ -126,11 +126,13 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 
 	@Override
 	public void compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
-		for(ArgumentAssignment arg : assignments)
-			arg.compile(context, compiler, method);
 		MethodFinder finder = new MethodFinder(context, this);
 		IMethodDeclaration declaration = finder.findMethod(false);
-		this.method.compile(context, compiler, method, declaration);
+		Context local = this.method.newLocalCheckContext(context, declaration);
+		declaration.registerArguments(local);
+		for(ArgumentAssignment arg : assignments)
+			arg.compile(local, compiler, method);
+		this.method.compile(local, compiler, method, declaration);
 	}
 	
 	@Override

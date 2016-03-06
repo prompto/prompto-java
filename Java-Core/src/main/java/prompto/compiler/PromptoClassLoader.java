@@ -57,7 +57,12 @@ public class PromptoClassLoader extends URLClassLoader {
 			// is this a Prompto class ?
 			if(fullName.charAt(0)=='π') { 
 				createPromptoClass(fullName);
-				return super.findClass(fullName);
+				try {
+					return super.findClass(fullName);
+				} catch (Throwable t) {
+					t.printStackTrace();
+					throw t;
+				}
 			} else
 				throw e;
 		}

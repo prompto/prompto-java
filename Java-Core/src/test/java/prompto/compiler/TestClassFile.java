@@ -49,6 +49,7 @@ public class TestClassFile {
 		c.addMethod(m);
 		m = new MethodInfo("printStatic", "(Ljava/lang/String;)V");
 		m.addModifier(Modifier.STATIC);
+		m.registerLocal("value");
 		m.addInstruction(Opcode.RETURN);
 		c.addMethod(m);
 		ByteArrayOutputStream o = new ByteArrayOutputStream();
@@ -72,6 +73,7 @@ public class TestClassFile {
 		c.addModifier(Modifier.ABSTRACT);
 		MethodInfo m = new MethodInfo("print", "(Ljava/lang/String;)V");
 		m.addModifier(Modifier.STATIC);
+		m.registerLocal("value");
 		m.addInstruction(Opcode.GETSTATIC, new FieldConstant("java/lang/System", "out", "Ljava/io/PrintStream;"));
 		m.addInstruction(Opcode.ALOAD_0); // the parameter
 		m.addInstruction(Opcode.INVOKEVIRTUAL, new MethodConstant("java/io/PrintStream", "print", "(Ljava/lang/String;)V"));

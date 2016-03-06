@@ -82,7 +82,7 @@ public class Time extends BaseValue implements Comparable<Time> {
 	}
 
 	@Override
-	public Object ConvertTo(Class<?> type) {
+	public Object convertTo(Class<?> type) {
 		return value;
 	}
 

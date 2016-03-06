@@ -168,25 +168,33 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	@Override
 	public void compile(Context context, Compiler compiler, ClassFile classFile) {
 		try {
+			// coming from nowhere, so need a context in which to register arguments
+			context = context.newLocalContext();
+			registerArguments(context);
 			IType returnType = check(context);
-			String proto = compiler.createProto(context, arguments, returnType);
-			MethodInfo method = new MethodInfo(getName(), proto); 
-			if(Modifier.isAbstract(classFile.getModifiers())) // TODO find another way
-				method.addModifier(Modifier.STATIC); // otherwise it's a member method
+			MethodInfo method = createMethodInfo(context, compiler, classFile, returnType);
 			for(IStatement s : statements)
 				s.compile(context, compiler, method);
-			// ensure we always return something
-			if(returnType==VoidType.instance())
-				method.addInstruction(Opcode.RETURN);
-			else {
-				method.addInstruction(Opcode.ACONST_NULL);
-				method.addInstruction(Opcode.ARETURN);
-			}
-			classFile.addMethod(method);
+			// ensure we always return
+			method.addInstruction(Opcode.RETURN);
 		} catch (PromptoError e) {
 			throw new CompilerException(e);
 		}
 	}
+
+	protected MethodInfo createMethodInfo(Context context, Compiler compiler, ClassFile classFile, IType returnType) {
+		String proto = compiler.createProto(context, arguments, returnType);
+		MethodInfo method = new MethodInfo(getName(), proto); 
+		classFile.addMethod(method);
+		if(Modifier.isAbstract(classFile.getModifiers())) // TODO find another way
+			method.addModifier(Modifier.STATIC); // otherwise it's a member method
+		else
+			method.registerLocal("this");
+		for(IArgument arg : arguments)
+			method.registerLocal(arg.getName());
+		return method;
+	}
+
 
 	
 	@Override

@@ -151,7 +151,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	}
 	
 	@Override
-	public Object ConvertTo(Class<?> type) {
+	public Object convertTo(Class<?> type) {
 		return value;
 	}
 

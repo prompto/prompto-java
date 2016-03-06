@@ -2,7 +2,14 @@ package prompto.java;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
+import prompto.compiler.Compiler;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.ConstantOperand;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.NativeCategoryDeclaration;
 import prompto.error.PromptoError;
@@ -53,6 +60,25 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 	}
 	
 	@Override
+	public ClassInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+		// push instance if any
+		ClassInfo parentType = parent.compile(context, compiler, method); 
+		// push arguments if any
+		for(JavaExpression arg : arguments)
+			arg.compile(context, compiler, method);
+		// write method call
+		Method m = findMethod(context, parentType.getType());
+		String proto = CompilerUtils.createProto(m.getParameterTypes(), m.getReturnType());
+		String parentClassName = CompilerUtils.getClassName(parentType.getType());
+		ConstantOperand operand = new MethodConstant(parentClassName, m.getName(), proto);
+		if(Modifier.isStatic(m.getModifiers()))
+			method.addInstruction(Opcode.INVOKESTATIC, operand);
+		else
+			method.addInstruction(Opcode.INVOKEVIRTUAL, operand);
+		return new ClassInfo(m.getReturnType(), true);
+	}
+	
+	@Override
 	public Object interpret(Context context) throws PromptoError {
 		Object instance = parent.interpret(context);
 		if(instance instanceof NativeInstance)
@@ -85,7 +111,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 	        if (value instanceof IExpression)
 	            value = ((IExpression)value).interpret(context);
 	        if (value instanceof IValue)
-	            value = ((IValue)value).ConvertTo(type);
+	            value = ((IValue)value).convertTo(type);
 	        return value;
 	    }
 
@@ -142,6 +168,8 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 	
 	boolean validArgument(Context context, Class<?> klass, JavaExpression argument) throws SyntaxError {
 		IType type = argument.check(context);
+		if(type==null)
+			type = argument.check(context);
 		return klass.isAssignableFrom(type.toJavaClass());
 	}
 }

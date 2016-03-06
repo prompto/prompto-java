@@ -76,7 +76,7 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
 
     
     @Override
-    public Object ConvertTo(Class<?> type)
+    public Object convertTo(Class<?> type)
     {
         return value;
     }

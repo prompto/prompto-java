@@ -1,40 +1,47 @@
 package prompto.compiler;
 
 import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class ByteCode extends Attribute {
 	
 	List<Instruction> instructions = new LinkedList<>(); 
 	Utf8Constant attributeName = new Utf8Constant("Code");
+	Map<String, Integer> locals = new HashMap<>();
 	int maxOperands = 0;
 	int maxLocals = 0;
 	int currentOperands = 0;
-	int currentLocals = 0;
 	
-	public ByteCode(int numParameters, boolean isStatic) {
-		maxLocals = numParameters + (isStatic ? 0 : 1); // 1 for 'this'
-	}
-
-	public void addInstruction(Instruction instruction) {
-		instructions.add(instruction);
-	}
-
 	public void register(ConstantsPool pool) {
 		instructions.forEach((i)->i.register(pool));
 		attributeName.register(pool);
 	}	
 	
-	void pushLocal() {
-		if(++currentLocals>maxLocals)
-			maxLocals = currentLocals;
+	public void addInstruction(Instruction instruction) {
+		instructions.add(instruction);
+	}
+
+	public void registerLocal(String name) {
+		if(!locals.containsKey(name)) {
+			Integer idx = locals.size();
+			locals.put(name, idx);
+			if(locals.size()>maxLocals)
+				maxLocals = locals.size();
+		}
 	}
 	
-	void popLocal() {
-		--currentLocals;
+	public void unregisterLocal(String name) {
+		locals.remove(name);
 	}
 	
+	public Integer getRegisteredLocal(String name) {
+		return locals.get(name);
+	}
+
+
 	void pushOperands(int count) {
 		if((currentOperands += count)>maxOperands)
 			maxOperands = currentOperands;
@@ -82,8 +89,5 @@ public class ByteCode extends Attribute {
 		writer.writeU2(0); // TODO exceptions
 		writer.writeU2(0); // TODO attributes
 	}
-
-
-
 
 }

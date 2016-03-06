@@ -1,6 +1,6 @@
 package prompto.compiler;
 
-public class FieldConstant implements Constant {
+public class FieldConstant implements ConstantOperand {
 
 	ClassConstant className;
 	NameAndTypeConstant fieldNameAndType;

@@ -65,7 +65,7 @@ public class Boolean extends BaseValue implements Comparable<Boolean> {
 	}
 
 	@Override
-	public Object ConvertTo(Class<?> type) {
+	public Object convertTo(Class<?> type) {
 		return value;
 	}
 
