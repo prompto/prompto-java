@@ -2,11 +2,11 @@ package prompto.python;
 
 public class PythonIntegerLiteral extends PythonLiteral {
 
-	Integer value;
+	Long value;
 	
 	public PythonIntegerLiteral(String text) {
 		super(text);
-		this.value = Integer.valueOf(text);
+		this.value = Long.valueOf(text);
 	}
 
 	@Override

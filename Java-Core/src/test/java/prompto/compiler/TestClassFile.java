@@ -39,6 +39,28 @@ public class TestClassFile {
 		assertArrayEquals(expected, transcoded);	
 	}
 	
+	
+	@Test
+	public void testConstantsPool() {
+		ConstantsPool pool = new ConstantsPool();
+		assertEquals(1, pool.nextIndex);
+		ConstantOperand c = new Utf8Constant("abc");
+		c.register(pool);
+		assertEquals(2, pool.nextIndex);
+		c = new Utf8Constant("abc");
+		c.register(pool);
+		assertEquals(2, pool.nextIndex);
+		c = new LongConstant(123);
+		c.register(pool);
+		assertEquals(4, pool.nextIndex);
+		NameAndTypeConstant ntc = new NameAndTypeConstant("xyw", "hkp");
+		ntc.register(pool);
+		assertEquals(4, ntc.index());
+		assertEquals(5, ntc.name.index());
+		assertEquals(6, ntc.type.index());
+		assertEquals(7, pool.nextIndex);
+	}
+	
 	@Test
 	public void testDefineClassForGlobalMethod() throws Exception {
 		String name = "π/χ/µ/print";
@@ -91,5 +113,21 @@ public class TestClassFile {
 		String read = Out.read();
 		Out.restore();
 		assertEquals("Hello", read);
+	}
+	
+	@Test
+	public void testClassWithLongConstant() throws Exception {
+		String name = "k1";
+		ClassFile c = new ClassFile(name, "java/lang/Object");
+		c.addModifier(Modifier.ABSTRACT);
+		MethodInfo m = new MethodInfo("m3", "()Ljava/lang/Long;");
+		m.addModifier(Modifier.STATIC);
+		m.addInstruction(Opcode.LDC2_W, new LongConstant(9876543210L));
+		c.addMethod(m);
+		ByteArrayOutputStream o = new ByteArrayOutputStream();
+		c.writeTo(o);
+		byte[] gen = o.toByteArray();
+		Class<?> klass = ByteClassLoader.defineAndResolveClass(name.replace("/", "."), gen);
+		assertNotNull(klass);
 	}
 }

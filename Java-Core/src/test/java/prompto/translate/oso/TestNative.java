@@ -72,6 +72,11 @@ public class TestNative extends BaseOParserTest {
 	}
 
 	@Test
+	public void testReturnLongLiteral() throws Exception {
+		compareResourceOSO("native/returnLongLiteral.poc");
+	}
+
+	@Test
 	public void testReturnLongObject() throws Exception {
 		compareResourceOSO("native/returnLongObject.poc");
 	}

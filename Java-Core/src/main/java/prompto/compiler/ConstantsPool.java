@@ -5,19 +5,24 @@ import java.util.LinkedList;
 @SuppressWarnings("serial")
 class ConstantsPool extends LinkedList<ConstantOperand> {
 
+	int nextIndex = 1; // 1 based index
+	
 	int registerConstant(ConstantOperand c) {
-		// 1 based index
-		int idx = 1 + indexOf(c);
-		if(idx==0) {
+		int idx = indexOf(c);
+		if(idx>=0)
+			return get(idx).index();
+		else {
 			add(c);
-			idx = size(); 
+			idx = nextIndex; 
+			nextIndex += c.size();
+			return idx;
 		}
-		return idx;
 	}
 
 	public void write(ByteWriter writer) throws CompilerException {
-		writer.writeU2(size() + 1);
-		this.forEach((c) -> c.writeTo(writer));
+		writer.writeU2(nextIndex);
+		this.forEach((c) -> 
+			c.writeTo(writer));
 	}
 
 }

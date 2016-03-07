@@ -2,11 +2,11 @@ package prompto.javascript;
 
 public class JavaScriptIntegerLiteral extends JavaScriptLiteral {
 
-	Integer value;
+	Long value;
 	
 	public JavaScriptIntegerLiteral(String text) {
 		super(text);
-		this.value = Integer.valueOf(text);
+		this.value = Long.valueOf(text);
 	}
 
 	@Override

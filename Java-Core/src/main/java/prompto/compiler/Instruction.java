@@ -18,8 +18,8 @@ public class Instruction {
 	}
 
 	void writeTo(CodeAttribute byteCode, ByteWriter writer) {
-		byteCode.pushOperand(opcode.pushesOperand());
 		byteCode.popOperands(opcode.poppedOperands(this));
+		byteCode.pushOperands(opcode.pushedOperands());
 		if(opcode.kind.width==1)
 			writer.writeU1(opcode.opcode);
 		else

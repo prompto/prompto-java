@@ -43,7 +43,7 @@ import java.util.function.Function;
  */
 public enum Opcode {
     NOP(0x0),
-    ACONST_NULL(0x1, true),
+    ACONST_NULL(0x1, 0, 1),
     ICONST_M1(0x2),
     ICONST_0(0x3),
     ICONST_1(0x4),
@@ -60,14 +60,14 @@ public enum Opcode {
     DCONST_1(0xf),
     BIPUSH(0x10, BYTE),
     SIPUSH(0x11, SHORT),
-    LDC(0x12, CPREF, true),
-    LDC_W(0x13, CPREF_W, true),
-    LDC2_W(0x14, CPREF_W),
+    LDC(0x12, CPREF, 0, 2), // TODO use real constant size
+    LDC_W(0x13, CPREF_W, 0, 2), // TODO use real constant size
+    LDC2_W(0x14, CPREF_W, 0, 2),
     ILOAD(0x15, LOCAL),
     LLOAD(0x16, LOCAL),
     FLOAD(0x17, LOCAL),
     DLOAD(0x18, LOCAL),
-    ALOAD(0x19, LOCAL, true),
+    ALOAD(0x19, LOCAL, 0, 1),
     ILOAD_0(0x1a),
     ILOAD_1(0x1b),
     ILOAD_2(0x1c),
@@ -84,10 +84,10 @@ public enum Opcode {
     DLOAD_1(0x27),
     DLOAD_2(0x28),
     DLOAD_3(0x29),
-    ALOAD_0(0x2a, true),
-    ALOAD_1(0x2b, true),
-    ALOAD_2(0x2c, true),
-    ALOAD_3(0x2d, true),
+    ALOAD_0(0x2a, 0, 1),
+    ALOAD_1(0x2b, 0, 1),
+    ALOAD_2(0x2c, 0, 1),
+    ALOAD_3(0x2d, 0, 1),
     IALOAD(0x2e),
     LALOAD(0x2f),
     FALOAD(0x30),
@@ -100,7 +100,7 @@ public enum Opcode {
     LSTORE(0x37, LOCAL),
     FSTORE(0x38, LOCAL),
     DSTORE(0x39, LOCAL),
-    ASTORE(0x3a, LOCAL, 1),
+    ASTORE(0x3a, LOCAL, 1, 0),
     ISTORE_0(0x3b),
     ISTORE_1(0x3c),
     ISTORE_2(0x3d),
@@ -117,10 +117,10 @@ public enum Opcode {
     DSTORE_1(0x48),
     DSTORE_2(0x49),
     DSTORE_3(0x4a),
-    ASTORE_0(0x4b, 1),
-    ASTORE_1(0x4c, 1),
-    ASTORE_2(0x4d, 1),
-    ASTORE_3(0x4e, 1),
+    ASTORE_0(0x4b, 1, 0),
+    ASTORE_1(0x4c, 1, 0),
+    ASTORE_2(0x4d, 1, 0),
+    ASTORE_3(0x4e, 1, 0),
     IASTORE(0x4f),
     LASTORE(0x50),
     FASTORE(0x51),
@@ -129,8 +129,8 @@ public enum Opcode {
     BASTORE(0x54),
     CASTORE(0x55),
     SASTORE(0x56),
-    POP(0x57),
-    POP2(0x58),
+    POP(0x57, 1, 0),
+    POP2(0x58, 2, 0),
     DUP(0x59),
     DUP_X1(0x5a),
     DUP_X2(0x5b),
@@ -175,7 +175,7 @@ public enum Opcode {
     IXOR(0x82),
     LXOR(0x83),
     IINC(0x84, LOCAL_BYTE),
-    I2L(0x85),
+    I2L(0x85, 1, 2),
     I2F(0x86),
     I2D(0x87),
     L2I(0x88),
@@ -218,15 +218,15 @@ public enum Opcode {
     LRETURN(0xad),
     FRETURN(0xae),
     DRETURN(0xaf),
-    ARETURN(0xb0, 1),
+    ARETURN(0xb0, 1, 0),
     RETURN(0xb1),
-    GETSTATIC(0xb2, CPREF_W, true),
+    GETSTATIC(0xb2, CPREF_W, 0, 2), // pushed can actually vary, be savvy. TODO use field type
     PUTSTATIC(0xb3, CPREF_W),
-    GETFIELD(0xb4, CPREF_W, true),
+    GETFIELD(0xb4, CPREF_W, 0, 2), // pushed can actually vary, be savvy. TODO use field type
     PUTFIELD(0xb5, CPREF_W),
-    INVOKEVIRTUAL(0xb6, CPREF_W, (i)->(-(1+i.countMethodArguments())), true), // even if it's not alwas true
+    INVOKEVIRTUAL(0xb6, CPREF_W, (i)->(-(1+i.countMethodArguments())), 2), // pushed can actually vary, be savvy. TODO use return type
     INVOKESPECIAL(0xb7, CPREF_W),
-    INVOKESTATIC(0xb8, CPREF_W, (i)->(-i.countMethodArguments()), true), // even if it's not alwas true
+    INVOKESTATIC(0xb8, CPREF_W, (i)->(-i.countMethodArguments()), 2), // pushed can actually vary, be savvy. TODO use return type
     INVOKEINTERFACE(0xb9, CPREF_W_UBYTE_ZERO),
     INVOKEDYNAMIC(0xba, CPREF_W_UBYTE_ZERO),
     NEW(0xbb, CPREF_W),
@@ -263,55 +263,51 @@ public enum Opcode {
     public final OpcodeKind kind;
     private final int poppedOperands;
     public final Function<Instruction, Integer> calcPoppedOperands;
-    private final boolean pushesOperand;
+    private final int pushedOperands;
     
     Opcode(int opcode) {
         this(opcode, NO_OPERANDS);
     }
 
     Opcode(int opcode, int poppedOperands) {
-        this(opcode, NO_OPERANDS, poppedOperands, false);
+        this(opcode, NO_OPERANDS, poppedOperands, 0);
     }
 
-    Opcode(int opcode, boolean pushesOperand) {
-        this(opcode, NO_OPERANDS, 0, pushesOperand);
+    Opcode(int opcode, int poppedOperands, int pushedOperands) {
+        this(opcode, NO_OPERANDS, poppedOperands, pushedOperands);
     }
 
     Opcode(int opcode, OpcodeKind kind) {
-        this(opcode, kind, 0, false);
+        this(opcode, kind, 0, 0);
     }
     
     Opcode(int opcode, OpcodeKind kind, int poppedOperands) {
-        this(opcode, kind, poppedOperands, false);
+        this(opcode, kind, poppedOperands, 0);
     }
     
-    Opcode(int opcode, OpcodeKind kind, boolean pushesOperand) {
-        this(opcode, kind, 0, pushesOperand);
-    }
-
-    Opcode(int opcode, OpcodeKind kind, int poppedOperands, boolean pushesOperand) {
+    Opcode(int opcode, OpcodeKind kind, int poppedOperands, int pushedOperands) {
         this.opcode = opcode;
         this.kind = kind;
         this.poppedOperands = poppedOperands;
         this.calcPoppedOperands = this::countFixedOperands;
-        this.pushesOperand = pushesOperand;
+        this.pushedOperands = pushedOperands;
         
     }
     
-    Opcode(int opcode, OpcodeKind kind, Function<Instruction, Integer> calcPoppedOperands, boolean pushesOperand) {
+    Opcode(int opcode, OpcodeKind kind, Function<Instruction, Integer> calcPoppedOperands, int pushedOperands) {
         this.opcode = opcode;
         this.kind = kind;
         this.poppedOperands = 0;
         this.calcPoppedOperands = calcPoppedOperands;
-        this.pushesOperand = pushesOperand;
+        this.pushedOperands = pushedOperands;
     }
     
     public int poppedOperands(Instruction i) {
     	return calcPoppedOperands.apply(i);
     }
     
-    public boolean pushesOperand() {
-    	return pushesOperand;
+    public int pushedOperands() {
+    	return pushedOperands;
     }
     
     private int countFixedOperands(Instruction i) {

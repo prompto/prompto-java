@@ -140,6 +140,16 @@ public class TestNative extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedReturnLongLiteral() throws Exception {
+		checkInterpretedOutput("native/returnLongLiteral.poc");
+	}
+
+	@Test
+	public void testCompiledReturnLongLiteral() throws Exception {
+		checkCompiledOutput("native/returnLongLiteral.poc");
+	}
+
+	@Test
 	public void testInterpretedReturnLongObject() throws Exception {
 		checkInterpretedOutput("native/returnLongObject.poc");
 	}

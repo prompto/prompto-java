@@ -17,6 +17,7 @@ public interface JavaExpression extends ISection {
 	void toDialect(CodeWriter writer);
 	
 	default ResultInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+		System.err.println("Need to implement compile for " + this.getClass().getName());
 		throw new UnsupportedOperationException();
 	}
 	

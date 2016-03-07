@@ -6,10 +6,10 @@ import java.lang.reflect.Method;
 import prompto.compiler.Compiler;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.ConstantOperand;
-import prompto.compiler.ResultInfo;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.NativeCategoryDeclaration;
 import prompto.error.PromptoError;
@@ -144,17 +144,37 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 	public Method findMethod(Context context, Class<?> klass) throws SyntaxError {
 		if(klass==null)
 			return null;
+		Method method = findExactMethod(context, klass);
+		if(method!=null)
+			return method;
+		else
+			return findCompatibleMethod(context, klass);
+	}
+	
+	private Method findExactMethod(Context context, Class<?> klass) throws SyntaxError {
+		Class<?>[] types = new Class<?>[arguments.size()];
+		int i = 0;
+		for(JavaExpression exp  : arguments)
+			types[i++] = exp.check(context).toJavaClass();
+		try {
+			return klass.getDeclaredMethod(name, types);
+		} catch (NoSuchMethodException e) {
+			return null;
+		}
+	}
+
+	private Method findCompatibleMethod(Context context, Class<?> klass) throws SyntaxError {
 		Method[] methods = klass.getMethods();
 		for(Method m : methods) {
 			if(!name.equals(m.getName())) 
 				continue;
-			if(validPrototype(context,m))
+			if(validPrototype(context, m))
 				return m;
 		}
 		return null; 
 	}
-	
-	boolean validPrototype(Context context,Method method) throws SyntaxError  {
+
+	boolean validPrototype(Context context,Method method) throws SyntaxError {
 		Class<?>[] types = method.getParameterTypes();
 		if(types.length!=arguments.size())
 			return false;
