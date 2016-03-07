@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class ByteCode extends Attribute {
+public class CodeAttribute extends Attribute {
 	
 	List<Instruction> instructions = new LinkedList<>(); 
 	Utf8Constant attributeName = new Utf8Constant("Code");
@@ -42,8 +42,8 @@ public class ByteCode extends Attribute {
 	}
 
 
-	void pushOperands(int count) {
-		if((currentOperands += count)>maxOperands)
+	void pushOperand(boolean push) {
+		if(push && ++currentOperands>maxOperands)
 			maxOperands = currentOperands;
 	}
 	
@@ -54,7 +54,8 @@ public class ByteCode extends Attribute {
 	byte[] createOpcodes() {
 		ByteArrayOutputStream o = new ByteArrayOutputStream();
 		ByteWriter w = new ByteWriter(o);
-		instructions.forEach((i)->i.writeTo(this, w));
+		instructions.forEach((i)->
+			i.writeTo(this, w));
 		return o.toByteArray();
 	}
 

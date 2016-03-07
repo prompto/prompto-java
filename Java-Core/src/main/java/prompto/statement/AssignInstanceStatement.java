@@ -1,5 +1,8 @@
 package prompto.statement;
 
+import prompto.compiler.ResultInfo;
+import prompto.compiler.Compiler;
+import prompto.compiler.MethodInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
@@ -41,5 +44,13 @@ public class AssignInstanceStatement extends SimpleStatement {
 	public IValue interpret(Context context) throws PromptoError {
 		instance.assign(context,expression);
 		return null;
+	}
+	
+	@Override
+	public ResultInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+		instance.checkAssignValue(context, expression);
+		instance.register(context, compiler, method);
+		expression.compile(context, compiler, method);
+		return instance.compile(context, compiler, method);
 	}
 }

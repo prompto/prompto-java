@@ -168,15 +168,20 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	@Override
 	public void compile(Context context, Compiler compiler, ClassFile classFile) {
 		try {
-			// coming from nowhere, so need a context in which to register arguments
-			context = context.newLocalContext();
-			registerArguments(context);
+			if(context.isGlobalContext()) {
+				// coming from nowhere, so need a clean context in which to register arguments
+				context = context.newLocalContext();
+				registerArguments(context);
+			}
+			// create method
 			IType returnType = check(context);
 			MethodInfo method = createMethodInfo(context, compiler, classFile, returnType);
+			// produce byte code
 			for(IStatement s : statements)
 				s.compile(context, compiler, method);
-			// ensure we always return
-			method.addInstruction(Opcode.RETURN);
+			// add return for void
+			if(returnType==VoidType.instance())
+				method.addInstruction(Opcode.RETURN);
 		} catch (PromptoError e) {
 			throw new CompilerException(e);
 		}

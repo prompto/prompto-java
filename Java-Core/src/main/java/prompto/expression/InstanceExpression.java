@@ -1,5 +1,10 @@
 package prompto.expression;
 
+import prompto.compiler.ByteOperand;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.Compiler;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.error.PromptoError;
@@ -82,6 +87,29 @@ public class InstanceExpression implements IExpression {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		return context.getValue(id);
+	}
+	
+	@Override
+	public ResultInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+		Integer idx = method.getRegisteredLocal(getName());
+		switch(idx) {
+			case 0:
+				method.addInstruction(Opcode.ALOAD_0);
+				break;
+			case 1:
+				method.addInstruction(Opcode.ALOAD_1);
+				break;
+			case 2:
+				method.addInstruction(Opcode.ALOAD_2);
+				break;
+			case 3:
+				method.addInstruction(Opcode.ALOAD_3);
+				break;
+			default:
+				method.addInstruction(Opcode.ALOAD, new ByteOperand(idx.byteValue()));
+		}
+		IType type = check(context);
+		return new ResultInfo(type.toJavaClass(), true);
 	}
 
 }

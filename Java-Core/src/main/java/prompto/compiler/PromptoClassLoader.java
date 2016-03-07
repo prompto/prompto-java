@@ -35,7 +35,7 @@ public class PromptoClassLoader extends URLClassLoader {
 
 	private static URL[] makeClassDirURLs() {
 		try {
-			URL[] urls =  { classDir.toURI().toURL() };
+			URL[] urls = { classDir.toURI().toURL() };
 			return urls;
 		} catch (MalformedURLException e) {
 			throw new RuntimeException(e);
@@ -56,8 +56,8 @@ public class PromptoClassLoader extends URLClassLoader {
 		} catch (ClassNotFoundException e) {
 			// is this a Prompto class ?
 			if(fullName.charAt(0)=='π') { 
-				createPromptoClass(fullName);
 				try {
+					createPromptoClass(fullName);
 					return super.findClass(fullName);
 				} catch (Throwable t) {
 					t.printStackTrace();

@@ -10,7 +10,7 @@ public class MethodInfo {
 	Utf8Constant name;
 	Utf8Constant proto;
 	List<Attribute> attributes = new LinkedList<>();
-	ByteCode codeAttribute = null;
+	CodeAttribute codeAttribute = null;
 	
 	public MethodInfo(String name, String spec) {
 		this.name = new Utf8Constant(name);
@@ -43,7 +43,7 @@ public class MethodInfo {
 
 	private void createCodeAttribute() {
 		if(codeAttribute==null) {
-			codeAttribute = new ByteCode();
+			codeAttribute = new CodeAttribute();
 			attributes.add(codeAttribute);
 		}
 	}

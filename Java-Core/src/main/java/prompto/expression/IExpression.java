@@ -1,5 +1,6 @@
 package prompto.expression;
 
+import prompto.compiler.ResultInfo;
 import prompto.compiler.Compiler;
 import prompto.compiler.MethodInfo;
 import prompto.error.PromptoError;
@@ -26,7 +27,7 @@ public interface IExpression {
 		throw new UnsupportedOperationException("toFilter not supported by " + this.getClass().getSimpleName());
 	}
 	
-	default void compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+	default ResultInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
 		throw new UnsupportedOperationException();
 	}
 	

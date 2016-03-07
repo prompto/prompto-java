@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import prompto.compiler.Compiler;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.ConstantOperand;
+import prompto.compiler.ResultInfo;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -59,9 +60,9 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 	}
 	
 	@Override
-	public JavaClassInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
 		// push instance if any
-		JavaClassInfo parentType = parent.compile(context, compiler, method); 
+		ResultInfo parentType = parent.compile(context, compiler, method); 
 		// push arguments if any
 		for(JavaExpression arg : arguments)
 			arg.compile(context, compiler, method);
@@ -74,7 +75,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 			method.addInstruction(Opcode.INVOKEVIRTUAL, operand);
 		else
 			method.addInstruction(Opcode.INVOKESTATIC, operand);
-		return new JavaClassInfo(m.getReturnType(), true);
+		return new ResultInfo(m.getReturnType(), true);
 	}
 	
 	@Override
@@ -104,15 +105,14 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 		return args;
 	}
 
-	  Object evaluate_argument(Context context, JavaExpression expression, Class<?> type) throws PromptoError
-	    {
-	        Object value = expression.interpret(context);
-	        if (value instanceof IExpression)
-	            value = ((IExpression)value).interpret(context);
-	        if (value instanceof IValue)
-	            value = ((IValue)value).convertTo(type);
-	        return value;
-	    }
+	Object evaluate_argument(Context context, JavaExpression expression, Class<?> type) throws PromptoError {
+        Object value = expression.interpret(context);
+        if (value instanceof IExpression)
+            value = ((IExpression)value).interpret(context);
+        if (value instanceof IValue)
+            value = ((IValue)value).convertTo(type);
+        return value;
+    }
 
 	public Method findMethod(Context context) throws SyntaxError {
 		IType type = parent.check(context);
@@ -167,8 +167,6 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 	
 	boolean validArgument(Context context, Class<?> klass, JavaExpression argument) throws SyntaxError {
 		IType type = argument.check(context);
-		if(type==null)
-			type = argument.check(context);
 		return klass.isAssignableFrom(type.toJavaClass());
 	}
 }

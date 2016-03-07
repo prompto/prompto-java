@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import prompto.compiler.ResultInfo;
 import prompto.compiler.Compiler;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.MethodConstant;
@@ -86,16 +87,17 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		return cd.getMemberMethods(context, name).values();
 	}
 
-	public void compile(Context context, Compiler compiler, MethodInfo method, IMethodDeclaration declaration) throws SyntaxError {
+	public ResultInfo compile(Context context, Compiler compiler, MethodInfo method, IMethodDeclaration declaration) throws SyntaxError {
 		// TODO use invokedynamic when multiple candidates
 		if(parent!=null) {
 			// calling an explicit instance or singleton member method
 			// push instance if any
 			parent.compile(context, compiler, method); 
+			throw new UnsupportedOperationException();
 		} 
 		if(declaration.getMemberOf()!=null) {
 			// calling another member method
-			// TODO
+			throw new UnsupportedOperationException(); 
 		} else {
 			// calling a global method
 			String className = CompilerUtils.getGlobalMethodClassName(declaration.getName(), true);
@@ -104,6 +106,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 			String methodProto = compiler.createProto(context, declaration.getArguments(), returnType);
 			MethodConstant constant = new MethodConstant(className, methodName, methodProto);
 			method.addInstruction(Opcode.INVOKESTATIC, constant);
+			return new ResultInfo(returnType.toJavaClass(), true);
 		}
 		
 	}

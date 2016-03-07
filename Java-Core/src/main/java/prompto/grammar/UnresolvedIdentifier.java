@@ -1,5 +1,8 @@
 package prompto.grammar;
 
+import prompto.compiler.ResultInfo;
+import prompto.compiler.Compiler;
+import prompto.compiler.MethodInfo;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.EnumeratedNativeDeclaration;
 import prompto.declaration.IDeclaration;
@@ -70,9 +73,14 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		if(resolved==null)
-			resolveAndCheck(context, false);
+		resolveAndCheck(context, false);
 		return resolved.interpret(context);
+	}
+	
+	@Override
+	public ResultInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+		resolveAndCheck(context, false);
+		return resolved.compile(context, compiler, method);
 	}
 	
 	private IType resolveAndCheck(Context context, boolean forMember) throws SyntaxError {

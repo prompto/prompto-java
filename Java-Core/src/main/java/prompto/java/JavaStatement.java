@@ -1,7 +1,9 @@
 package prompto.java;
 
 import prompto.compiler.Compiler;
+import prompto.compiler.ResultInfo;
 import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
@@ -54,8 +56,12 @@ public class JavaStatement {
 		writer.append(';');
 	}
 
-	public void compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
-		expression.compile(context, compiler, method);
-		// TODO isReturn
+	public ResultInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+		ResultInfo info = expression.compile(context, compiler, method);
+		if(isReturn && info.getType()!=void.class) {
+			method.addInstruction(Opcode.ARETURN);
+			return info;
+		} else
+			return new ResultInfo(void.class, false);
 	}
 }

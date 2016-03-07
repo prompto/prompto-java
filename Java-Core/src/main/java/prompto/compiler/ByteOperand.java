@@ -8,4 +8,7 @@ public class ByteOperand implements InlineOperand {
 		this.value = value;
 	}
 
+	public byte value() {
+		return value;
+	}
 }

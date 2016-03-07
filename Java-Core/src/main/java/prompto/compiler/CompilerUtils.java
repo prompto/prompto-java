@@ -82,8 +82,8 @@ public abstract class CompilerUtils {
 	}
 
 	static final char PROMPTO_CHAR = 'π';
-	static final char CLASS_CHAR = 'χ';
 	static final char METHOD_CHAR = 'µ';
+	static final char CLASS_CHAR = 'χ';
 
 	public static String getGlobalMethodClassName(Identifier id, boolean useSlash) {
 		return CompilerUtils.getGlobalMethodClassName(id.getName(), useSlash);
@@ -91,8 +91,8 @@ public abstract class CompilerUtils {
 
 	public static String getGlobalMethodClassName(String name, boolean useSlash) {
 		return useSlash ?
-				"" + PROMPTO_CHAR + '/' + CLASS_CHAR + '/' + METHOD_CHAR + '/' + name
-				: "" + PROMPTO_CHAR + '.' + CLASS_CHAR + '.' + METHOD_CHAR + '.' + name;
+				"" + PROMPTO_CHAR + '/' + METHOD_CHAR + '/' + name
+				: "" + PROMPTO_CHAR + '.' + METHOD_CHAR + '.' + name;
 	}
 
 }

@@ -17,12 +17,9 @@ public class Instruction {
 		}
 	}
 
-	void writeTo(ByteCode byteCode, ByteWriter writer) {
-		int operandsCount = opcode.countOperands(this);
-		if(operandsCount<0)
-			byteCode.popOperands(-operandsCount);
-		else
-			byteCode.pushOperands(operandsCount);
+	void writeTo(CodeAttribute byteCode, ByteWriter writer) {
+		byteCode.pushOperand(opcode.pushesOperand());
+		byteCode.popOperands(opcode.poppedOperands(this));
 		if(opcode.kind.width==1)
 			writer.writeU1(opcode.opcode);
 		else
@@ -31,6 +28,9 @@ public class Instruction {
 			throw new UnsupportedOperationException(); // TODO
 		} else if(operands.length>0) {
 			switch(opcode.kind) {
+				case LOCAL:
+					writer.writeU1(((ByteOperand)operands[0]).value());
+					break;
 				case CPREF:
 					writer.writeU1(((ConstantOperand)operands[0]).index());
 					break;
