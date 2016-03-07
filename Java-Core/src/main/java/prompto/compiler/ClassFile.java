@@ -43,10 +43,14 @@ public class ClassFile {
 		ConstantsPool pool = new ConstantsPool();
 		thisClass.register(pool);
 		superClass.register(pool);
-		interfaces.forEach((s) -> s.register(pool));
-		fields.forEach((f) -> f.register(pool));
-		methods.forEach((m) -> m.register(pool));
-		attributes.forEach((a) -> a.register(pool));
+		interfaces.forEach((s)-> 
+			s.register(pool));
+		fields.forEach((f)-> 
+			f.register(pool));
+		methods.forEach((m)-> 
+			m.register(pool));
+		attributes.forEach((a)-> 
+			a.register(pool));
 		return pool;
 	}
 

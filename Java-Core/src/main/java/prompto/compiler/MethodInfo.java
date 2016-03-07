@@ -38,7 +38,8 @@ public class MethodInfo {
 	void register(ConstantsPool pool) {
 		name.register(pool);
 		proto.register(pool);
-		attributes.forEach((a)->a.register(pool));
+		attributes.forEach((a)->
+			a.register(pool));
 	}
 
 	private void createCodeAttribute() {

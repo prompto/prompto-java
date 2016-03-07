@@ -16,7 +16,8 @@ public class CodeAttribute extends Attribute {
 	int currentOperands = 0;
 	
 	public void register(ConstantsPool pool) {
-		instructions.forEach((i)->i.register(pool));
+		instructions.forEach((i)->
+			i.register(pool));
 		attributeName.register(pool);
 	}	
 	
@@ -42,8 +43,8 @@ public class CodeAttribute extends Attribute {
 	}
 
 
-	void pushOperand(boolean push) {
-		if(push && ++currentOperands>maxOperands)
+	void pushOperands(int count) {
+		if((currentOperands += count)>maxOperands)
 			maxOperands = currentOperands;
 	}
 	
