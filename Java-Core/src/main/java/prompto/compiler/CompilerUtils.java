@@ -42,7 +42,7 @@ public abstract class CompilerUtils {
 		map.put(int.class, "I");
 		map.put(long.class, "J");
 		map.put(short.class, "S");
-		map.put(boolean.class, "B");
+		map.put(boolean.class, "Z");
 		map.put(void.class, "V");
 		return map;
 	}

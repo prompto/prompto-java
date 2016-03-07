@@ -28,6 +28,12 @@ public class Instruction {
 			throw new UnsupportedOperationException(); // TODO
 		} else if(operands.length>0) {
 			switch(opcode.kind) {
+				case BYTE:
+					writer.writeU1(((ByteOperand)operands[0]).value());
+					break;
+				case SHORT:
+					writer.writeU2(((ShortOperand)operands[0]).value());
+					break;
 				case LOCAL:
 					writer.writeU1(((ByteOperand)operands[0]).value());
 					break;

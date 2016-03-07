@@ -1,5 +1,12 @@
 package prompto.java;
 
+import prompto.compiler.ByteOperand;
+import prompto.compiler.Compiler;
+import prompto.compiler.IntConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.ShortOperand;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.type.IType;
@@ -28,4 +35,16 @@ public class JavaCharacterLiteral extends JavaLiteral {
 	public IType check(Context context) throws SyntaxError {
 		return new JavaClassType(Character.class);
 	}
+	
+	@Override
+	public ResultInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+		if((value&0xFFFFFF00)==0)
+			method.addInstruction(Opcode.BIPUSH, new ByteOperand((byte)value.charValue()));
+		else if((value&0xFFFF0000)==0)
+			method.addInstruction(Opcode.SIPUSH, new ShortOperand((short)value.charValue()));
+		else
+			method.addInstruction(Opcode.LDC_W, new IntConstant(value.charValue()));
+		return new ResultInfo(char.class, false);
+	}
+
 }

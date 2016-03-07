@@ -104,6 +104,7 @@ public abstract class BaseParserTest extends BaseTest {
 	}
 
 	protected void checkCompiledOutput(String resource) throws Exception {
+		System.setProperty("prompto.compiler.clean", "true");
 		checkOutput(resource, this::executeResource);
 	}
 

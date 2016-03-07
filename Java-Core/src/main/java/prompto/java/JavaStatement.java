@@ -68,16 +68,17 @@ public class JavaStatement {
 	private static Map<Class<?>, Function<MethodInfo, ResultInfo>> createResultConverters() {
 		Map<Class<?>, Function<MethodInfo, ResultInfo>> map = new HashMap<>();
 		map.put(boolean.class, JavaStatement::booleanToBoolean);
-		// map.put(byte.class, JavaStatement::byteToLong);
-		// map.put(Byte.class, JavaStatement::ByteToLong);
-		// map.put(short.class, JavaStatement::shortToLong);
-		// map.put(short.class, JavaStatement::ShortToLong);
+		map.put(byte.class, JavaStatement::intToLong);
+		map.put(Byte.class, JavaStatement::ByteToLong);
+		map.put(short.class, JavaStatement::intToLong);
+		map.put(short.class, JavaStatement::ShortToLong);
 		map.put(int.class, JavaStatement::intToLong);
-		// map.put(Integer.class, JavaStatement::IntgerToLong);
+		map.put(Integer.class, JavaStatement::IntegerToLong);
 		map.put(long.class, JavaStatement::longToLong);
-		// map.put(float.class, JavaStatement::floatToDouble);
-		// map.put(Float.class, JavaStatement::FloatToDouble);
-		// map.put(double.class, JavaStatement::doubleToDouble);
+		map.put(float.class, JavaStatement::floatToDouble);
+		map.put(Float.class, JavaStatement::FloatToDouble);
+		map.put(double.class, JavaStatement::doubleToDouble);
+		map.put(char.class, JavaStatement::charToCharacter);
 		return map;
 	}
 	
@@ -114,13 +115,54 @@ public class JavaStatement {
 		return new ResultInfo(Boolean.class, true);
 	}
 
+	private static ResultInfo ByteToLong(MethodInfo method) {
+		Operand oper = new MethodConstant("java/lang/Byte", "longValue", "()J");
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return longToLong(method);
+	}
+
+	private static ResultInfo ShortToLong(MethodInfo method) {
+		Operand oper = new MethodConstant("java/lang/Short", "longValue", "()J");
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return longToLong(method);
+	}
+
 	private static ResultInfo intToLong(MethodInfo method) {
 		method.addInstruction(Opcode.I2L);
 		return longToLong(method);
 	}
 
+	private static ResultInfo IntegerToLong(MethodInfo method) {
+		Operand oper = new MethodConstant("java/lang/Integer", "longValue", "()J");
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return longToLong(method);
+	}
+
 	private static ResultInfo longToLong(MethodInfo method) {
 		Operand oper = new MethodConstant("java/lang/Long", "valueOf", "(J)Ljava/lang/Long;");
+		method.addInstruction(Opcode.INVOKESTATIC, oper);
+		return new ResultInfo(Boolean.class, true);
+	}
+	
+	private static ResultInfo floatToDouble(MethodInfo method) {
+		method.addInstruction(Opcode.F2D);
+		return doubleToDouble(method);
+	}
+
+	private static ResultInfo FloatToDouble(MethodInfo method) {
+		Operand oper = new MethodConstant("java/lang/Float", "doubleValue", "()D");
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return doubleToDouble(method);
+	}
+
+	private static ResultInfo doubleToDouble(MethodInfo method) {
+		Operand oper = new MethodConstant("java/lang/Double", "valueOf", "(D)Ljava/lang/Double;");
+		method.addInstruction(Opcode.INVOKESTATIC, oper);
+		return new ResultInfo(Boolean.class, true);
+	}
+
+	private static ResultInfo charToCharacter(MethodInfo method) {
+		Operand oper = new MethodConstant("java/lang/Character", "valueOf", "(C)Ljava/lang/Character;");
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
 		return new ResultInfo(Boolean.class, true);
 	}

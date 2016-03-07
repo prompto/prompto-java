@@ -41,7 +41,12 @@ public class JavaIntegerLiteral extends JavaLiteral {
 	
 	@Override
 	public ResultInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
-		if(value<=Integer.MAX_VALUE && value>=Integer.MIN_VALUE) {
+		if(value>=0 && value<=5) {
+			// ICONST_0 to ICONST_5 are consecutive
+			Opcode opcode = Opcode.values()[Opcode.ICONST_0.ordinal() + value.intValue()];
+			method.addInstruction(opcode);
+			return new ResultInfo(int.class, false);
+		} else if(value<=Integer.MAX_VALUE && value>=Integer.MIN_VALUE) {
 			method.addInstruction(Opcode.LDC_W, new IntConstant(value.intValue()));
 			return new ResultInfo(int.class, false);
 		} else {
