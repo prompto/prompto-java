@@ -1,7 +1,11 @@
 package prompto.statement;
 
+import prompto.compiler.Compiler;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.expression.IExpression;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.type.VoidType;
@@ -69,4 +73,9 @@ public class CommentStatement extends BaseStatement {
 			return line;
 	}
 
+	@Override
+	public ResultInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+		// nathing to do
+		return new ResultInfo(void.class, false);
+	}
 }
