@@ -110,6 +110,16 @@ public class TestAdd extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedAddTextCharacter() throws Exception {
+		checkInterpretedOutput("add/addTextCharacter.pec");
+	}
+
+	@Test
+	public void testCompiledAddTextCharacter() throws Exception {
+		checkCompiledOutput("add/addTextCharacter.pec");
+	}
+
+	@Test
 	public void testInterpretedAddTextDecimal() throws Exception {
 		checkInterpretedOutput("add/addTextDecimal.pec");
 	}
