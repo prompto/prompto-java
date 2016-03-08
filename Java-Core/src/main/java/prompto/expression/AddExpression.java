@@ -13,6 +13,7 @@ import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.Decimal;
+import prompto.value.Integer;
 import prompto.value.IValue;
 import prompto.value.Text;
 import prompto.value.Character;
@@ -60,6 +61,7 @@ public class AddExpression implements IExpression {
 		map.put(String.class, Text::compileAdd);
 		map.put(java.lang.Character.class, Character::compileAdd);
 		map.put(Double.class, Decimal::compileAdd);
+		map.put(Long.class, Integer::compileAdd);
 		return map;
 	}
 

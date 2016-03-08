@@ -178,6 +178,15 @@ public abstract class CompilerUtils {
 		return new ResultInfo(double.class, true);
 	}
 
+	public static ResultInfo LongTolong(MethodInfo method) {
+		Operand oper = new MethodConstant(
+				CompilerUtils.getClassName(Long.class), 
+				"longValue",
+				CompilerUtils.createProto(long.class));
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return new ResultInfo(long.class, true);
+	}
+
 	public static ResultInfo LongToDouble(MethodInfo method) {
 		LongTodouble(method);
 		return doubleToDouble(method);

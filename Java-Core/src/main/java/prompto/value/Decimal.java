@@ -50,12 +50,6 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 			throw new SyntaxError("Illegal: Decimal + " + value.getClass().getSimpleName());
 	}
 
-	public static Double addDoubleLong() {
-		Double d = Double.valueOf(1.2);
-		Long l = Long.valueOf(3L);
-		return d + l;
-	}
-	
 	public static ResultInfo compileAdd(Context context, Compiler compiler, MethodInfo method, IExpression value) throws SyntaxError {
 		CompilerUtils.DoubleTodouble(method);
 		// compile rhs

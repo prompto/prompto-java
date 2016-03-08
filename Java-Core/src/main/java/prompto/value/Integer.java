@@ -4,13 +4,21 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
+import prompto.compiler.Compiler;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.error.DivideByZeroError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
+import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
+import prompto.type.DecimalType;
+import prompto.type.IType;
 import prompto.type.IntegerType;
 
 public class Integer extends BaseValue implements INumber, Comparable<INumber>, IMultiplyable {
@@ -42,6 +50,29 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 			return new Decimal(((Decimal) value).doubleValue() + this.value);
 		else
 			throw new SyntaxError("Illegal: Integer + " + value.getClass().getSimpleName());
+	}
+
+	public static ResultInfo compileAdd(Context context, Compiler compiler, MethodInfo method, IExpression value) throws SyntaxError {
+		IType type = value.check(context);
+		boolean isDecimal = type==DecimalType.instance();
+		if(isDecimal)
+			CompilerUtils.LongTodouble(method);
+		else
+			CompilerUtils.LongTolong(method);
+		// compile rhs
+		ResultInfo right = value.compile(context, compiler, method);
+		if(isDecimal) {
+			if(right.getType()==Long.class)
+				CompilerUtils.LongTodouble(method);
+			else
+				CompilerUtils.DoubleTodouble(method);
+			method.addInstruction(Opcode.DADD);
+			return CompilerUtils.doubleToDouble(method);
+		} else {
+			CompilerUtils.LongTolong(method);
+			method.addInstruction(Opcode.LADD);
+			return CompilerUtils.longToLong(method);
+		}
 	}
 
 	@Override

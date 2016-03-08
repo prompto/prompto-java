@@ -139,7 +139,7 @@ public enum Opcode {
     DUP2_X2(0x5e),
     SWAP(0x5f),
     IADD(0x60),
-    LADD(0x61),
+    LADD(0x61, 4, 2),
     FADD(0x62),
     DADD(0x63, 4, 2),
     ISUB(0x64),
