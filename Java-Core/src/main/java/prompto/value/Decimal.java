@@ -4,10 +4,16 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
+import prompto.compiler.Compiler;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.error.DivideByZeroError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
+import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
@@ -42,6 +48,25 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 			return new Decimal(this.value + ((Decimal) value).doubleValue());
 		else
 			throw new SyntaxError("Illegal: Decimal + " + value.getClass().getSimpleName());
+	}
+
+	public static Double addDoubleLong() {
+		Double d = Double.valueOf(1.2);
+		Long l = Long.valueOf(3L);
+		return d + l;
+	}
+	
+	public static ResultInfo compileAdd(Context context, Compiler compiler, MethodInfo method, IExpression value) throws SyntaxError {
+		CompilerUtils.DoubleTodouble(method);
+		// compile rhs
+		ResultInfo right = value.compile(context, compiler, method);
+		if(right.getType()==Long.class)
+			CompilerUtils.LongTodouble(method);
+		else
+			CompilerUtils.DoubleTodouble(method);
+		// add
+		method.addInstruction(Opcode.DADD);
+		return CompilerUtils.doubleToDouble(method);
 	}
 
 	@Override

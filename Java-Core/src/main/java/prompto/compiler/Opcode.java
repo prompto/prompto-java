@@ -141,7 +141,7 @@ public enum Opcode {
     IADD(0x60),
     LADD(0x61),
     FADD(0x62),
-    DADD(0x63),
+    DADD(0x63, 4, 2),
     ISUB(0x64),
     LSUB(0x65),
     FSUB(0x66),

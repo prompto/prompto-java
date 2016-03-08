@@ -169,6 +169,29 @@ public abstract class CompilerUtils {
 		return doubleToDouble(method);
 	}
 
+	public static ResultInfo LongTodouble(MethodInfo method) {
+		Operand oper = new MethodConstant(
+				CompilerUtils.getClassName(Long.class), 
+				"doubleValue",
+				CompilerUtils.createProto(double.class));
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return new ResultInfo(double.class, true);
+	}
+
+	public static ResultInfo LongToDouble(MethodInfo method) {
+		LongTodouble(method);
+		return doubleToDouble(method);
+	}
+
+	public static ResultInfo DoubleTodouble(MethodInfo method) {
+		Operand oper = new MethodConstant(
+				CompilerUtils.getClassName(Double.class), 
+				"doubleValue",
+				CompilerUtils.createProto(double.class));
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return new ResultInfo(double.class, true);
+	}
+
 	public static ResultInfo doubleToDouble(MethodInfo method) {
 		Operand oper = new MethodConstant(
 				CompilerUtils.getClassName(Double.class), 

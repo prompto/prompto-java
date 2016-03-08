@@ -12,6 +12,7 @@ import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
+import prompto.value.Decimal;
 import prompto.value.IValue;
 import prompto.value.Text;
 import prompto.value.Character;
@@ -58,6 +59,7 @@ public class AddExpression implements IExpression {
 		Map<Class<?>, IOperatorFunction> map = new HashMap<>();
 		map.put(String.class, Text::compileAdd);
 		map.put(java.lang.Character.class, Character::compileAdd);
+		map.put(Double.class, Decimal::compileAdd);
 		return map;
 	}
 
