@@ -14,6 +14,7 @@ import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 import prompto.value.Text;
+import prompto.value.Character;
 
 public class AddExpression implements IExpression {
 
@@ -56,19 +57,19 @@ public class AddExpression implements IExpression {
 	private static Map<Class<?>, IOperatorFunction> createAdders() {
 		Map<Class<?>, IOperatorFunction> map = new HashMap<>();
 		map.put(String.class, Text::compileAdd);
+		map.put(java.lang.Character.class, Character::compileAdd);
 		return map;
 	}
 
 	@Override
 	public ResultInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
 		ResultInfo lval = left.compile(context, compiler, method);
-		ResultInfo rval = right.compile(context, compiler, method);
 		IOperatorFunction adder = adders.get(lval.getType());
 		if(adder==null) {
 			System.err.println("Missing IOperatorFunction for add " + lval.getType().getName());
-			throw new SyntaxError("Cannot add " + lval.getType().getName() + " to " + rval.getType().getName());
+			throw new SyntaxError("Cannot add " + lval.getType().getName() + " to " + right.check(context).getName());
 		}
-		return adder.compile(context, compiler, method, lval, rval);
+		return adder.compile(context, compiler, method, right);
 	}
 
 	

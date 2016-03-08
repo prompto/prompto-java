@@ -20,6 +20,7 @@ import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
+import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
@@ -61,13 +62,15 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 
 	static Map<Class<?>, IConverterFunction> textConverters = createConverters();
 	
-	public static ResultInfo compileAdd(Context context, Compiler compiler, MethodInfo method, ResultInfo left, ResultInfo right) {
+	public static ResultInfo compileAdd(Context context, Compiler compiler, MethodInfo method, IExpression value) throws SyntaxError {
+		ResultInfo right = value.compile(context, compiler, method);
+		// convert right to String
 		IConverterFunction converter = textConverters.get(right.getType());
 		if(converter==null)
 			converter = Text::objectConverter;
 		right = converter.compile(context, compiler, method, right);
-		// now call concat
-		String className = CompilerUtils.getClassName(left.getType());
+		// and call concat
+		String className = CompilerUtils.getClassName(String.class);
 		MethodConstant c = new MethodConstant(className, "concat", CompilerUtils.createProto(String.class, String.class));
 		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
 		return new ResultInfo(String.class, true);
