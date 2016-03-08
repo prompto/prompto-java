@@ -4,11 +4,11 @@ package prompto.csharp;
 
 public class CSharpIntegerLiteral extends CSharpLiteral {
 
-	Integer value;
+	Long value;
 	
 	public CSharpIntegerLiteral(String text) {
 		super(text);
-		this.value = Integer.valueOf(text);
+		this.value = Long.valueOf(text);
 	}
 
 	@Override
