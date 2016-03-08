@@ -52,8 +52,18 @@ public class TestAdd extends BaseEParserTest {
 	}
 
 	@Test
-	public void testAddText() throws Exception {
-		compareResourceEOE("add/addText.pec");
+	public void testAddTextDecimal() throws Exception {
+		compareResourceEOE("add/addTextDecimal.pec");
+	}
+
+	@Test
+	public void testAddTextInteger() throws Exception {
+		compareResourceEOE("add/addTextInteger.pec");
+	}
+
+	@Test
+	public void testAddTextText() throws Exception {
+		compareResourceEOE("add/addTextText.pec");
 	}
 
 	@Test

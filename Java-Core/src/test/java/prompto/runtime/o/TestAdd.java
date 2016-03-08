@@ -65,8 +65,18 @@ public class TestAdd extends BaseOParserTest {
 	}
 
 	@Test
-	public void testAddText() throws Exception {
-		checkOutput("add/addText.poc");
+	public void testAddTextDecimal() throws Exception {
+		checkOutput("add/addTextDecimal.poc");
+	}
+
+	@Test
+	public void testAddTextInteger() throws Exception {
+		checkOutput("add/addTextInteger.poc");
+	}
+
+	@Test
+	public void testAddTextText() throws Exception {
+		checkOutput("add/addTextText.poc");
 	}
 
 	@Test

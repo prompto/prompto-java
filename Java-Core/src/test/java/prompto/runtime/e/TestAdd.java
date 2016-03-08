@@ -65,8 +65,18 @@ public class TestAdd extends BaseEParserTest {
 	}
 
 	@Test
-	public void testAddText() throws Exception {
-		checkOutput("add/addText.pec");
+	public void testAddTextDecimal() throws Exception {
+		checkOutput("add/addTextDecimal.pec");
+	}
+
+	@Test
+	public void testAddTextInteger() throws Exception {
+		checkOutput("add/addTextInteger.pec");
+	}
+
+	@Test
+	public void testAddTextText() throws Exception {
+		checkOutput("add/addTextText.pec");
 	}
 
 	@Test

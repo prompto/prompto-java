@@ -52,8 +52,18 @@ public class TestAdd extends BaseOParserTest {
 	}
 
 	@Test
-	public void testAddText() throws Exception {
-		compareResourceOEO("add/addText.poc");
+	public void testAddTextDecimal() throws Exception {
+		compareResourceOEO("add/addTextDecimal.poc");
+	}
+
+	@Test
+	public void testAddTextInteger() throws Exception {
+		compareResourceOEO("add/addTextInteger.poc");
+	}
+
+	@Test
+	public void testAddTextText() throws Exception {
+		compareResourceOEO("add/addTextText.poc");
 	}
 
 	@Test
