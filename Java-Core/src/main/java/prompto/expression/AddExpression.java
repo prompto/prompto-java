@@ -3,6 +3,8 @@ package prompto.expression;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.joda.time.LocalDate;
+
 import prompto.compiler.Compiler;
 import prompto.compiler.IOperatorFunction;
 import prompto.compiler.MethodInfo;
@@ -12,6 +14,7 @@ import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
+import prompto.value.Date;
 import prompto.value.Decimal;
 import prompto.value.Integer;
 import prompto.value.IValue;
@@ -62,6 +65,7 @@ public class AddExpression implements IExpression {
 		map.put(java.lang.Character.class, Character::compileAdd);
 		map.put(Double.class, Decimal::compileAdd);
 		map.put(Long.class, Integer::compileAdd);
+		map.put(LocalDate.class, Date::compileAdd);
 		return map;
 	}
 
