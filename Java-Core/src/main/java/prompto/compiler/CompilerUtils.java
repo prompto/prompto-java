@@ -61,7 +61,7 @@ public abstract class CompilerUtils {
 		[	reference	one array dimension
 		 */
 		if(type.isArray())
-			return "L" + getDescriptor(type.getComponentType());
+			return "[" + getDescriptor(type.getComponentType());
 		String s = descriptors.get(type);
 		return s!=null ? s : "L" + getClassName(type) + ';';
 	}
@@ -70,6 +70,16 @@ public abstract class CompilerUtils {
 		return type.getName().replace('.', '/');
 	}
 
+	public static String createProto(Class<?> ... types) {
+		StringBuilder sb = new StringBuilder();
+		sb.append('(');
+		for(int i=0;i<types.length-1;i++)
+			sb.append(getDescriptor(types[i]));
+		sb.append(')');
+		sb.append(getDescriptor(types[types.length-1]));
+		return sb.toString();
+	}
+	
 	public static String createProto(Class<?>[] parameterTypes, Class<?> returnType) {
 		StringBuilder sb = new StringBuilder();
 		sb.append('(');
@@ -93,6 +103,88 @@ public abstract class CompilerUtils {
 		return useSlash ?
 				"" + PROMPTO_CHAR + '/' + METHOD_CHAR + '/' + name
 				: "" + PROMPTO_CHAR + '.' + METHOD_CHAR + '.' + name;
+	}
+	
+	public static ResultInfo booleanToBoolean(MethodInfo method) {
+		Operand oper = new MethodConstant(
+				CompilerUtils.getClassName(Boolean.class), 
+				"valueOf",
+				CompilerUtils.createProto(boolean.class, Boolean.class));
+		method.addInstruction(Opcode.INVOKESTATIC, oper);
+		return new ResultInfo(Boolean.class, true);
+	}
+
+	public static ResultInfo ByteToLong(MethodInfo method) {
+		Operand oper = new MethodConstant(
+				CompilerUtils.getClassName(Byte.class), 
+				"longValue",
+				CompilerUtils.createProto(Long.class));
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return longToLong(method);
+	}
+
+	public static ResultInfo ShortToLong(MethodInfo method) {
+		Operand oper = new MethodConstant(
+				CompilerUtils.getClassName(Short.class), 
+				"longValue",
+				CompilerUtils.createProto(Long.class));
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return longToLong(method);
+	}
+
+	public static ResultInfo intToLong(MethodInfo method) {
+		method.addInstruction(Opcode.I2L);
+		return longToLong(method);
+	}
+
+	public static ResultInfo IntegerToLong(MethodInfo method) {
+		Operand oper = new MethodConstant(
+				CompilerUtils.getClassName(Integer.class), 
+				"longValue",
+				CompilerUtils.createProto(long.class));
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return longToLong(method);
+	}
+
+	public static ResultInfo longToLong(MethodInfo method) {
+		Operand oper = new MethodConstant(
+				CompilerUtils.getClassName(Long.class), 
+				"valueOf",
+				CompilerUtils.createProto(long.class, Long.class));
+		method.addInstruction(Opcode.INVOKESTATIC, oper);
+		return new ResultInfo(Long.class, true);
+	}
+	
+	public static ResultInfo floatToDouble(MethodInfo method) {
+		method.addInstruction(Opcode.F2D);
+		return doubleToDouble(method);
+	}
+
+	public static ResultInfo FloatToDouble(MethodInfo method) {
+		Operand oper = new MethodConstant(
+				CompilerUtils.getClassName(Float.class), 
+				"doubleValue",
+				CompilerUtils.createProto(Double.class));
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return doubleToDouble(method);
+	}
+
+	public static ResultInfo doubleToDouble(MethodInfo method) {
+		Operand oper = new MethodConstant(
+				CompilerUtils.getClassName(Double.class), 
+				"valueOf",
+				CompilerUtils.createProto(double.class, Double.class));
+		method.addInstruction(Opcode.INVOKESTATIC, oper);
+		return new ResultInfo(Double.class, true);
+	}
+
+	public static ResultInfo charToCharacter(MethodInfo method) {
+		Operand oper = new MethodConstant(
+				CompilerUtils.getClassName(Character.class), 
+				"valueOf",
+				CompilerUtils.createProto(char.class, Character.class));
+		method.addInstruction(Opcode.INVOKESTATIC, oper);
+		return new ResultInfo(Character.class, true);
 	}
 
 }

@@ -1,5 +1,12 @@
 package prompto.literal;
 
+import prompto.compiler.Compiler;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.DoubleConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.type.DecimalType;
 import prompto.type.IType;
@@ -19,4 +26,17 @@ public class DecimalLiteral extends Literal<Decimal> {
 	public IType check(Context context) {
 		return DecimalType.instance();
 	}
+	
+	@Override
+	public ResultInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+		double d = value.doubleValue();
+		if(d==0.0)
+			method.addInstruction(Opcode.DCONST_0);
+		else if(d==1.0)
+			method.addInstruction(Opcode.DCONST_1);
+		else
+			method.addInstruction(Opcode.LDC2_W, new DoubleConstant(d));
+		return CompilerUtils.doubleToDouble(method);
+	}
+
 }

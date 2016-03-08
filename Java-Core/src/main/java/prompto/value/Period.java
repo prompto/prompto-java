@@ -52,7 +52,7 @@ public class Period extends BaseValue implements IMultiplyable
     {
         if (value instanceof Integer)
         {
-            int count = (int)((Integer)value).IntegerValue();
+            int count = (int)((Integer)value).longValue();
             if (count < 0)
                 throw new SyntaxError("Negative repeat count:" + count);
             if (count == 0)

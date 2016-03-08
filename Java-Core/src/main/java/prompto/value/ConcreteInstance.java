@@ -184,7 +184,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 
 	private IValue autocast(AttributeDeclaration decl, IValue value) {
 		if(value!=null && value instanceof prompto.value.Integer && decl.getType()==DecimalType.instance())
-			value = new Decimal(((prompto.value.Integer)value).DecimalValue());
+			value = new Decimal(((prompto.value.Integer)value).doubleValue());
 		return value;
 	}
 

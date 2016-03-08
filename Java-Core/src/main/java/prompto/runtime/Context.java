@@ -545,7 +545,7 @@ public class Context implements IContext {
 			if(value instanceof prompto.value.Integer) {
 				INamed actual = instances.get(name);
 				if(actual.getType(this)==DecimalType.instance())
-					value = new Decimal(((prompto.value.Integer)value).DecimalValue());
+					value = new Decimal(((prompto.value.Integer)value).doubleValue());
 			}
 		}
 		return value;

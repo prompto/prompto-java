@@ -26,20 +26,20 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 		this.value = value;
 	}
 
-	public long IntegerValue() {
+	public long longValue() {
 		return value;
 	}
 
-	public double DecimalValue() {
+	public double doubleValue() {
 		return value;
 	}
 
 	@Override
 	public IValue Add(Context context, IValue value) throws PromptoError {
 		if (value instanceof Integer)
-			return new Integer(this.IntegerValue() + ((Integer) value).IntegerValue());
+			return new Integer(this.longValue() + ((Integer) value).longValue());
 		else if (value instanceof Decimal)
-			return new Decimal(((Decimal) value).DecimalValue() + this.value);
+			return new Decimal(((Decimal) value).doubleValue() + this.value);
 		else
 			throw new SyntaxError("Illegal: Integer + " + value.getClass().getSimpleName());
 	}
@@ -47,9 +47,9 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	@Override
 	public IValue Subtract(Context context, IValue value) throws PromptoError {
 		if (value instanceof Integer)
-			return new Integer(this.IntegerValue() - ((Integer) value).IntegerValue());
+			return new Integer(this.longValue() - ((Integer) value).longValue());
 		else if (value instanceof Decimal)
-			return new Decimal(this.DecimalValue() - ((Decimal) value).DecimalValue());
+			return new Decimal(this.doubleValue() - ((Decimal) value).doubleValue());
 		else
 			throw new SyntaxError("Illegal: Integer - " + value.getClass().getSimpleName());
 	}
@@ -57,9 +57,9 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	@Override
 	public IValue Multiply(Context context, IValue value) throws PromptoError {
 		if (value instanceof Integer)
-			return new Integer(this.IntegerValue() * ((Integer) value).IntegerValue());
+			return new Integer(this.longValue() * ((Integer) value).longValue());
 		else if (value instanceof Decimal)
-			return new Decimal(((Decimal) value).DecimalValue() * this.IntegerValue());
+			return new Decimal(((Decimal) value).doubleValue() * this.longValue());
 		else if (value instanceof IMultiplyable)
 			return value.Multiply(context, this);
 		else
@@ -69,10 +69,10 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	@Override
 	public IValue Divide(Context context, IValue value) throws PromptoError {
 		if (value instanceof INumber) {
-			if (((INumber) value).DecimalValue() == 0.0)
+			if (((INumber) value).doubleValue() == 0.0)
 				throw new DivideByZeroError();
 			else
-				return new Decimal(this.DecimalValue() / ((INumber) value).DecimalValue());
+				return new Decimal(this.doubleValue() / ((INumber) value).doubleValue());
 		} else
 			throw new SyntaxError("Illegal: Integer / " + value.getClass().getSimpleName());
 	}
@@ -80,10 +80,10 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	@Override
 	public IValue IntDivide(Context context, IValue value) throws PromptoError {
 		if (value instanceof Integer) {
-			if (((Integer) value).IntegerValue() == 0)
+			if (((Integer) value).longValue() == 0)
 				throw new DivideByZeroError();
 			else
-				return new Integer(this.IntegerValue() / ((Integer) value).IntegerValue());
+				return new Integer(this.longValue() / ((Integer) value).longValue());
 		} else
 			throw new SyntaxError("Illegal: Integer \\ " + value.getClass().getSimpleName());
 	}
@@ -91,24 +91,24 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	@Override
 	public IValue Modulo(Context context, IValue value) throws PromptoError {
 		if (value instanceof Integer) {
-			long mod = ((Integer) value).IntegerValue();
+			long mod = ((Integer) value).longValue();
 			if (mod == 0)
 				throw new DivideByZeroError();
-			return new Integer(this.IntegerValue() % mod);
+			return new Integer(this.longValue() % mod);
 		} else
 			throw new SyntaxError("Illegal: Integer % " + value.getClass().getSimpleName());
 	}
 
 	public int compareTo(INumber obj) {
-		return Long.compare(value, obj.IntegerValue());
+		return Long.compare(value, obj.longValue());
 	}
 
 	@Override
 	public int CompareTo(Context context, IValue value) throws PromptoError {
 		if (value instanceof Integer)
-			return Long.compare(this.value, ((Integer) value).IntegerValue());
+			return Long.compare(this.value, ((Integer) value).longValue());
 		else if (value instanceof Decimal)
-			return Double.compare(this.DecimalValue(), ((Decimal) value).DecimalValue());
+			return Double.compare(this.doubleValue(), ((Decimal) value).doubleValue());
 		else
 			throw new SyntaxError("Illegal comparison: Integer and " + value.getClass().getSimpleName());
 

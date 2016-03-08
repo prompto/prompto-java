@@ -2,10 +2,19 @@ package prompto.value;
 
 import java.io.IOException;
 import java.text.Collator;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
+import prompto.compiler.Compiler;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.IConverterFunction;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.error.IndexOutOfRangeError;
 import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
@@ -50,10 +59,41 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 		return new Text(this.value + value.toString());
 	}
 
+	static Map<Class<?>, IConverterFunction> textConverters = createConverters();
+	
+	public static ResultInfo compileAdd(Context context, Compiler compiler, MethodInfo method, ResultInfo left, ResultInfo right) {
+		IConverterFunction converter = textConverters.get(right.getType());
+		if(converter==null)
+			converter = Text::objectConverter;
+		right = converter.compile(context, compiler, method, right);
+		// now call concat
+		String className = CompilerUtils.getClassName(left.getType());
+		MethodConstant c = new MethodConstant(className, "concat", CompilerUtils.createProto(String.class, String.class));
+		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
+		return new ResultInfo(String.class, true);
+	}
+	
+	private static Map<Class<?>, IConverterFunction> createConverters() {
+		Map<Class<?>, IConverterFunction> map = new HashMap<>();
+		map.put(String.class, Text::textConverter);
+		return map;
+	}
+
+	private static ResultInfo objectConverter(Context context, Compiler compiler, MethodInfo method, ResultInfo info) {
+		String className = CompilerUtils.getClassName(info.getType());
+		MethodConstant c = new MethodConstant(className, "toString", CompilerUtils.createProto(String.class));
+		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
+		return new ResultInfo(String.class, true);
+	}
+
+	private static ResultInfo textConverter(Context context, Compiler compiler, MethodInfo method, ResultInfo info) {
+		return info;
+	}
+	
 	@Override
 	public IValue Multiply(Context context, IValue value) throws PromptoError {
 		if (value instanceof Integer) {
-			int count = (int) ((Integer) value).IntegerValue();
+			int count = (int) ((Integer) value).longValue();
 			if (count < 0)
 				throw new SyntaxError("Negative repeat count:" + count);
 			if (count == 0)
@@ -102,7 +142,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	public Character getItem(Context context, IValue index) throws PromptoError {
 		try {
 			if (index instanceof Integer)
-				return new Character(value.charAt((int) ((Integer) index).IntegerValue() - 1));
+				return new Character(value.charAt((int) ((Integer) index).longValue() - 1));
 			else
 				throw new InvalidDataError("No such item:" + index.toString());
 		} catch (IndexOutOfBoundsException e) {
@@ -162,16 +202,16 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	}
 
 	private int checkFirst(Integer fi) throws IndexOutOfRangeError {
-		int value = (fi == null) ? 1 : (int) fi.IntegerValue();
+		int value = (fi == null) ? 1 : (int) fi.longValue();
 		if (value < 1 || value > this.value.length())
 			throw new IndexOutOfRangeError();
 		return value;
 	}
 
 	private int checkLast(Integer li) throws IndexOutOfRangeError {
-		int value = (li == null) ? this.value.length() : (int) li.IntegerValue();
+		int value = (li == null) ? this.value.length() : (int) li.longValue();
 		if (value < 0)
-			value = this.value.length() + 1 + (int) li.IntegerValue();
+			value = this.value.length() + 1 + (int) li.longValue();
 		if (value < 1 || value > this.value.length())
 			throw new IndexOutOfRangeError();
 		return value;

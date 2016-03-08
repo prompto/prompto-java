@@ -54,7 +54,7 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IListable
 	@Override
 	public IValue getItem(Context context, IValue index) throws PromptoError {
 		if (index instanceof Integer) {
-			int idx = (int)((Integer)index).IntegerValue() - 1;
+			int idx = (int)((Integer)index).longValue() - 1;
 			return getNthItem(idx);
 		} else
 			throw new SyntaxError("No such item:" + index.toString());

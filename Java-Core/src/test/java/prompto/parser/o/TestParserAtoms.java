@@ -405,12 +405,12 @@ public class TestParserAtoms {
 		assertNotNull(literal);
 		assertTrue(literal instanceof IntegerLiteral);
 		assertEquals("1234", literal.toString());
-		assertEquals(1234, ((IntegerLiteral)literal).getValue().IntegerValue());
+		assertEquals(1234, ((IntegerLiteral)literal).getValue().longValue());
 	}
 	
 	@Test
 	public void testParseHexa() throws Exception {
-		assertEquals(0x0A11, HexaLiteral.parseHexa("0x0A11").IntegerValue());
+		assertEquals(0x0A11, HexaLiteral.parseHexa("0x0A11").longValue());
 	}
 	
 	@Test
@@ -423,7 +423,7 @@ public class TestParserAtoms {
 		CodeWriter writer = new CodeWriter(Dialect.O, null);
 		literal.toDialect(writer);
 		assertEquals("0x0A11", writer.toString());
-		assertEquals(0x0A11, ((HexaLiteral)literal).getValue().IntegerValue());
+		assertEquals(0x0A11, ((HexaLiteral)literal).getValue().longValue());
 	}
 
 	@Test
@@ -434,7 +434,7 @@ public class TestParserAtoms {
 		assertNotNull(literal);
 		assertTrue(literal instanceof DecimalLiteral);
 		assertEquals("1234.13", literal.toString());
-		assertEquals(1234.13, ((DecimalLiteral)literal).getValue().DecimalValue(),0.0000001);
+		assertEquals(1234.13, ((DecimalLiteral)literal).getValue().doubleValue(),0.0000001);
 	}
 	
 	@Test

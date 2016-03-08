@@ -69,7 +69,7 @@ public class ItemInstance implements IAssignableSelector {
 		IValue idx = item.interpret(context);
 		if(!(idx instanceof Integer))
 			throw new InvalidDataError("Expected an Integer, got:" + idx.getClass().getName());
-		int index = (int)((Integer)idx).IntegerValue();
+		int index = (int)((Integer)idx).longValue();
 		if(index<1 || index>list.length())
 			throw new IndexOutOfRangeError();
 		list.setItem(index-1, expression.interpret(context));

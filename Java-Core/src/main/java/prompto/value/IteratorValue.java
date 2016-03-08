@@ -43,7 +43,7 @@ public class IteratorValue extends BaseValue implements IIterable<IValue>, Itera
 
 	@Override
 	public long length() {
-		return length.IntegerValue();
+		return length.longValue();
 	}
 
 	@Override

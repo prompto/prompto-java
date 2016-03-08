@@ -59,7 +59,7 @@ public abstract class Range<T extends IValue> extends BaseValue implements ICont
 	public T getItem(Context context, IValue index) throws PromptoError {
 		if (index instanceof Integer) {
 			try {
-				Object value = this.getItem(((Integer) index).IntegerValue());
+				Object value = this.getItem(((Integer) index).longValue());
 				if (value instanceof IValue)
 					return (T) value;
 				else
@@ -75,10 +75,10 @@ public abstract class Range<T extends IValue> extends BaseValue implements ICont
 
 	public Range<T> slice(Integer fi, Integer li) throws PromptoError {
 		long size = length();
-		long _fi = fi==null ? 1L : fi.IntegerValue();
+		long _fi = fi==null ? 1L : fi.longValue();
 		if(_fi<0)
 			throw new IndexOutOfRangeError();
-		long _li = li==null ? size : li.IntegerValue();
+		long _li = li==null ? size : li.longValue();
 		if(_li<0)
 			_li = size + 1 + _li;
 		else if(_li>size)

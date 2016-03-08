@@ -355,7 +355,7 @@ abstract class BaseSOLRStore implements IStore {
 		IValue value = exp.interpret(context);
 		if(!(value instanceof prompto.value.Integer))
 			throw new InvalidDataError("Expecting an Integer, got:" + value.getType().toString());
-		return ((prompto.value.Integer)value).IntegerValue();
+		return ((prompto.value.Integer)value).longValue();
 	}
 
 	@Override

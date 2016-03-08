@@ -45,9 +45,9 @@ public class MinusExpression implements IUnaryExpression {
 	public IValue interpret(Context context) throws PromptoError {
 		Object val = expression.interpret(context);
 		if(val instanceof Integer) 
-			return new Integer(-((Integer)val).IntegerValue());
+			return new Integer(-((Integer)val).longValue());
 		else if(val instanceof Decimal) 
-			return new Decimal(-((Decimal)val).DecimalValue());
+			return new Decimal(-((Decimal)val).doubleValue());
 		else if(val instanceof Period) { 
 			org.joda.time.Period p = ((Period)val).getValue();
 			return new Period(-p.getYears(),-p.getMonths(),-p.getWeeks(),-p.getDays(),-p.getHours(),

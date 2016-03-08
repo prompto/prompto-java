@@ -68,10 +68,10 @@ public abstract class BaseList<T extends BaseList<T>> extends BaseValue implemen
 	}
 
 	public T slice(Integer fi, Integer li) throws IndexOutOfRangeError {
-		long _fi = fi == null ? 1L : fi.IntegerValue();
+		long _fi = fi == null ? 1L : fi.longValue();
 		if (_fi < 0)
 			throw new IndexOutOfRangeError();
-		long _li = li == null ? items.size() : li.IntegerValue();
+		long _li = li == null ? items.size() : li.longValue();
 		if (_li < 0)
 			_li = items.size() + 1 + _li;
 		if (_li > items.size())
@@ -102,7 +102,7 @@ public abstract class BaseList<T extends BaseList<T>> extends BaseValue implemen
 	public IValue getItem(Context context, IValue index) throws PromptoError {
 		if (index instanceof Integer) {
 			try {
-				int idx = (int)((Integer)index).IntegerValue() - 1;
+				int idx = (int)((Integer)index).longValue() - 1;
 				return items.get(idx);
 			} catch (IndexOutOfBoundsException e) {
 				throw new IndexOutOfRangeError();

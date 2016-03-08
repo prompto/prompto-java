@@ -55,7 +55,7 @@ public class ListValue extends BaseList<ListValue> {
 	public IValue Multiply(Context context, IValue value) throws PromptoError {
 		if (value instanceof Integer) {
 			IType itemType = ((ContainerType)this.type).getItemType();
-			int count = (int) ((Integer) value).IntegerValue();
+			int count = (int) ((Integer) value).longValue();
 			if (count < 0)
 				throw new SyntaxError("Negative repeat count:" + count);
 			if (count == 0)

@@ -35,7 +35,7 @@ public class TestPrecedence extends BaseEParserTest {
 		IExpression exp = parse_expression("1-2-3-4");
 		Context context = Context.newGlobalContext();
 		Object value = exp.interpret(context);
-		assertEquals(-8L,((Integer)value).IntegerValue());
+		assertEquals(-8L,((Integer)value).longValue());
 	}
 	
 	@Test
@@ -43,7 +43,7 @@ public class TestPrecedence extends BaseEParserTest {
 		IExpression exp = parse_expression("1+2-3+4-5-6");
 		Context context = Context.newGlobalContext();
 		Object value = exp.interpret(context);
-		assertEquals(-7L,((Integer)value).IntegerValue());
+		assertEquals(-7L,((Integer)value).longValue());
 	}
 	
 	@Test
@@ -51,7 +51,7 @@ public class TestPrecedence extends BaseEParserTest {
 		IExpression exp = parse_expression("1*2+3");
 		Context context = Context.newGlobalContext();
 		Object value = exp.interpret(context);
-		assertEquals(5L,((Integer)value).IntegerValue());
+		assertEquals(5L,((Integer)value).longValue());
 	}
 
 	IExpression parse_expression(String code) {
