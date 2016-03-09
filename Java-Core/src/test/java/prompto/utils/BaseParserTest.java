@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -86,7 +87,8 @@ public abstract class BaseParserTest extends BaseTest {
 				Executor.executeTests(context);
 				return true;
 			} else {
-				Executor.executeMainNoArgs(context);
+				File root = Files.createTempDirectory("prompto_").toFile();
+				Executor.executeMainNoArgs(context, root);
 				return false;
 			}
 		} catch(Exception e) {

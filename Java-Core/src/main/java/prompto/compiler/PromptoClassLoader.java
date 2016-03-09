@@ -1,11 +1,10 @@
 package prompto.compiler;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
@@ -14,26 +13,20 @@ import prompto.runtime.Context.MethodDeclarationMap;
 /* a class loader which is able to create and store classes for prompto objects */
 public class PromptoClassLoader extends URLClassLoader {
 	
-	private static final File classDir = makeClassDir();
-
 	private static ClassLoader getParentClassLoader() {
 		return PromptoClassLoader.class.getClassLoader();
 	}
 
-	private static File makeClassDir() {
-		try {
-			// TODO use configuration based prompto directory
-			File promptoDir = Files.createTempDirectory("prompto_").toFile();
-			File javaDir = new File(promptoDir, "java");
-			File classDir = new File(javaDir, "classes");
-			classDir.mkdirs();
-			return classDir;
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+	private static File makeClassDir(File promptoDir) {
+		File javaDir = new File(promptoDir, "java");
+		File classDir = new File(javaDir, "classes");
+		classDir.mkdirs();
+		if(!classDir.exists())
+			throw new RuntimeException("Could not create prompto class dir at " + classDir.getAbsolutePath());
+		return classDir;
 	}
 
-	private static URL[] makeClassDirURLs() {
+	private static URL[] makeClassDirURLs(File classDir) {
 		try {
 			URL[] urls = { classDir.toURI().toURL() };
 			return urls;
@@ -44,9 +37,13 @@ public class PromptoClassLoader extends URLClassLoader {
 
 	Context context;
 	
-	public PromptoClassLoader(Context context) {
-		super(makeClassDirURLs(), getParentClassLoader());
+	public PromptoClassLoader(Context context, File promptoDir) {
+		super(makeClassDirURLs(makeClassDir(promptoDir)), getParentClassLoader());
 		this.context = context;
+	}
+	
+	File getClassDir() throws Exception {
+		return Paths.get(getURLs()[0].toURI()).toFile();
 	}
 
 	@Override
@@ -86,7 +83,7 @@ public class PromptoClassLoader extends URLClassLoader {
 
 	private void createGlobalMethodsClass(String fullName, MethodDeclarationMap methods) throws ClassNotFoundException {
 		try {
-			Compiler compiler = new Compiler(classDir); // where to store .class
+			Compiler compiler = new Compiler(getClassDir()); // where to store .class
 			compiler.compileGlobalMethods(context, methods, fullName);
 		} catch(Exception e) {
 			throw new ClassNotFoundException(fullName, e);

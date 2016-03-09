@@ -1,5 +1,6 @@
 package prompto.runtime;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -22,12 +23,16 @@ public abstract class Executor {
 	}
 
 	public static void executeMainNoArgs(Context context) throws PromptoError {
-		executeMainMethod(context, new Identifier("main"), "");
+		executeMainMethod(context, new Identifier("main"), "", null);
 	}
 
-	public static void executeMainMethod(Context context, Identifier methodName, String cmdLineArgs) throws PromptoError {
+	public static void executeMainNoArgs(Context context, File promptoDir) throws PromptoError {
+		executeMainMethod(context, new Identifier("main"), "", promptoDir);
+	}
+	
+	public static void executeMainMethod(Context context, Identifier methodName, String cmdLineArgs, File promptoDir) throws PromptoError {
 		String className = CompilerUtils.getGlobalMethodClassName(methodName, false);
-		try(PromptoClassLoader loader = new PromptoClassLoader(context)) {
+		try(PromptoClassLoader loader = new PromptoClassLoader(context, promptoDir)) {
 			Class<?> klass = loader.loadClass(className);
 			Method method = locateMainMethod(klass, cmdLineArgs);
 			PromptoDict<String, String> options = parseCmdLineArgs(cmdLineArgs);
