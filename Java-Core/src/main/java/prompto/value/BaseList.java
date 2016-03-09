@@ -3,7 +3,6 @@ package prompto.value;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.MethodConstant;
@@ -11,7 +10,6 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.Operand;
 import prompto.compiler.ResultInfo;
-import prompto.custom.PromptoMap;
 import prompto.error.IndexOutOfRangeError;
 import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;

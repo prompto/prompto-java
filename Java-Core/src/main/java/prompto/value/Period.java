@@ -1,7 +1,14 @@
 package prompto.value;
 
+import org.joda.time.ReadablePeriod;
+
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.expression.IExpression;
 import prompto.runtime.Context;
 import prompto.type.PeriodType;
 
@@ -37,6 +44,17 @@ public class Period extends BaseValue implements IMultiplyable
         else
             throw new SyntaxError("Illegal: Period + " + value.getClass().getSimpleName());
     }
+    
+	public static ResultInfo compileAdd(Context context, MethodInfo method, IExpression value) throws SyntaxError {
+		ResultInfo right = value.compile(context, method);
+		if(right.getType()!=org.joda.time.Period.class)
+			throw new SyntaxError("Illegal: Date + " + value.getClass().getSimpleName());
+		MethodConstant c = new MethodConstant(org.joda.time.Period.class, "plus", 
+				ReadablePeriod.class, org.joda.time.Period.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
+		return new ResultInfo(org.joda.time.Period.class, true);
+	}
+
 
     @Override
     public IValue Subtract(Context context, IValue value) throws PromptoError

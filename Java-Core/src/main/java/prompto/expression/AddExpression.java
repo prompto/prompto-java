@@ -22,6 +22,7 @@ import prompto.value.Decimal;
 import prompto.value.Dictionary;
 import prompto.value.Integer;
 import prompto.value.IValue;
+import prompto.value.Period;
 import prompto.value.Text;
 import prompto.value.Character;
 
@@ -73,6 +74,7 @@ public class AddExpression implements IExpression {
 		map.put(DateTime.class, prompto.value.DateTime::compileAdd);
 		map.put(PromptoMap.class, Dictionary::compileAdd);
 		map.put(ArrayList.class, BaseList::compileAdd);
+		map.put(org.joda.time.Period.class, Period::compileAdd);
 		return map;
 	}
 
