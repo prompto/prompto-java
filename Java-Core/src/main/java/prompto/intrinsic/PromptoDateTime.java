@@ -11,6 +11,10 @@ public class PromptoDateTime implements Comparable<PromptoDateTime>{
 		return new PromptoDateTime(DateTime.parse(text));
 	}
 	
+	public static PromptoDateTime now() {
+		return new PromptoDateTime(DateTime.now());
+	}
+	
 	private DateTime wrapped;
 
 	public PromptoDateTime(DateTime wrapped) {
