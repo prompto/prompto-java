@@ -71,6 +71,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 	}
 	
 	public static ResultInfo compileAdd(Context context, MethodInfo method, IExpression value) throws SyntaxError {
+		// TODO: return right if left is empty (or left if right is empty)
 		// create result
 		ResultInfo info = CompilerUtils.newInstance(method, PromptoMap.class); 
 		// add left, current stack is: left, result, we need: result, result, left

@@ -1,5 +1,6 @@
 package prompto.expression;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
+import prompto.value.BaseList;
 import prompto.value.Date;
 import prompto.value.Decimal;
 import prompto.value.Dictionary;
@@ -70,6 +72,7 @@ public class AddExpression implements IExpression {
 		map.put(LocalDate.class, Date::compileAdd);
 		map.put(DateTime.class, prompto.value.DateTime::compileAdd);
 		map.put(PromptoMap.class, Dictionary::compileAdd);
+		map.put(ArrayList.class, BaseList::compileAdd);
 		return map;
 	}
 

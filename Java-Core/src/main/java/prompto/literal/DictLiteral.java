@@ -102,12 +102,17 @@ public class DictLiteral extends Literal<Dictionary> {
 	private void addEntries(Context context, MethodInfo method) throws SyntaxError {
 		for(DictEntry e : entries) {
 			method.addInstruction(Opcode.DUP); // need to keep a reference to the map on top of stack
-			e.getKey().compile(context, method);
+			ResultInfo info = e.getKey().compile(context, method);
+			if(info.getType()!=String.class) {
+				Operand oper = new MethodConstant(info.getType(), "put", 
+						String.class);
+				method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+			}
 			e.getValue().compile(context, method);
-			Operand c = new MethodConstant(PromptoMap.class, "put", 
+			Operand oper = new MethodConstant(PromptoMap.class, "put", 
 					Object.class, Object.class, Object.class);
-			method.addInstruction(Opcode.INVOKEVIRTUAL, c);
-			method.addInstruction(Opcode.POP);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+			method.addInstruction(Opcode.POP); // consume the returned value (null since this is a new Map)
 		}
 	}
 

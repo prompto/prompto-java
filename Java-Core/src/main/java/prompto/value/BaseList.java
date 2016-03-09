@@ -3,11 +3,20 @@ package prompto.value;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.Operand;
+import prompto.compiler.ResultInfo;
+import prompto.custom.PromptoMap;
 import prompto.error.IndexOutOfRangeError;
 import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.type.ContainerType;
@@ -122,6 +131,27 @@ public abstract class BaseList<T extends BaseList<T>> extends BaseValue implemen
             throw new SyntaxError("Illegal: " +this.type.getId() + " + " + value.getClass().getSimpleName());
     }
 
+	public static ResultInfo compileAdd(Context context, MethodInfo method, IExpression value) throws SyntaxError {
+		// TODO: return left if right is empty (or right if left is empty and is a list)
+		// create result
+		ResultInfo info = CompilerUtils.newInstance(method, ArrayList.class); 
+		// add left, current stack is: left, result, we need: result, result, left
+		method.addInstruction(Opcode.DUP_X1); // stack is: result, left, result
+		method.addInstruction(Opcode.SWAP); // stack is: result, result, left
+		Operand oper = new MethodConstant(ArrayList.class, "addAll", 
+				Collection.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		method.addInstruction(Opcode.POP); // consume returned boolean
+		// add right, current stack is: result, we need: result, result, right
+		method.addInstruction(Opcode.DUP); // stack is: result, result 
+		value.compile(context, method); // stack is: result, result, right
+		oper = new MethodConstant(ArrayList.class, "addAll", 
+				Collection.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		method.addInstruction(Opcode.POP); // consume returned boolean
+		return info;
+	}
+	
 	@Override
 	public Iterable<IValue> getIterable(Context context) {
 		return items;
