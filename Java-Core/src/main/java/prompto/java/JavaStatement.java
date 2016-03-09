@@ -4,11 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import prompto.compiler.Compiler;
 import prompto.compiler.CompilerUtils;
-import prompto.compiler.ResultInfo;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
@@ -86,8 +85,8 @@ public class JavaStatement {
 		return map;
 	}
 
-	public ResultInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
-		ResultInfo info = expression.compile(context, compiler, method);
+	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
+		ResultInfo info = expression.compile(context, method);
 		if(isReturn) {
 			if(info.getType()==void.class)
 				throw new SyntaxError("Cannot return void!"); // TODO add a test to ensure this has been caught earlier

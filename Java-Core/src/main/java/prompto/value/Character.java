@@ -3,10 +3,6 @@ package prompto.value;
 import java.io.IOException;
 import java.text.Collator;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-
-import prompto.compiler.Compiler;
-import prompto.compiler.CompilerUtils;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -19,6 +15,8 @@ import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.type.CharacterType;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 public class Character extends BaseValue implements Comparable<Character>, IMultiplyable
 {
@@ -45,13 +43,14 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
         return new Text(this.value + value.toString());
     }
 
-	public static ResultInfo compileAdd(Context context, Compiler compiler, MethodInfo method, IExpression value) throws SyntaxError {
+	public static ResultInfo compileAdd(Context context, MethodInfo method, IExpression value) throws SyntaxError {
 		// convert to String
-		String className = CompilerUtils.getClassName(java.lang.Character.class);
-		MethodConstant c = new MethodConstant(className, "toString", CompilerUtils.createProto(String.class));
+		MethodConstant c = new MethodConstant(java.lang.Character.class, 
+									"toString", 
+									String.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
 		// use Text::compileAdd
-		return Text.compileAdd(context, compiler, method, value);
+		return Text.compileAdd(context, method, value);
 	}
 	
     @Override

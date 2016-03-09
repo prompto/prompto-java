@@ -3,7 +3,6 @@ package prompto.java;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import prompto.compiler.Compiler;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.ConstantOperand;
 import prompto.compiler.MethodConstant;
@@ -60,12 +59,12 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
 		// push instance if any
-		ResultInfo parentType = parent.compile(context, compiler, method); 
+		ResultInfo parentType = parent.compile(context, method); 
 		// push arguments if any
 		for(JavaExpression arg : arguments)
-			arg.compile(context, compiler, method);
+			arg.compile(context, method);
 		// write method call
 		Method m = findMethod(context, parentType.getType());
 		String proto = CompilerUtils.createProto(m.getParameterTypes(), m.getReturnType());

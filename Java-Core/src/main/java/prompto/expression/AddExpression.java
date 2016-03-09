@@ -6,10 +6,10 @@ import java.util.Map;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
-import prompto.compiler.Compiler;
 import prompto.compiler.IOperatorFunction;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
+import prompto.custom.PromptoMap;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
@@ -17,6 +17,7 @@ import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.Date;
 import prompto.value.Decimal;
+import prompto.value.Dictionary;
 import prompto.value.Integer;
 import prompto.value.IValue;
 import prompto.value.Text;
@@ -68,18 +69,19 @@ public class AddExpression implements IExpression {
 		map.put(Long.class, Integer::compileAdd);
 		map.put(LocalDate.class, Date::compileAdd);
 		map.put(DateTime.class, prompto.value.DateTime::compileAdd);
+		map.put(PromptoMap.class, Dictionary::compileAdd);
 		return map;
 	}
 
 	@Override
-	public ResultInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
-		ResultInfo lval = left.compile(context, compiler, method);
+	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
+		ResultInfo lval = left.compile(context, method);
 		IOperatorFunction adder = adders.get(lval.getType());
 		if(adder==null) {
 			System.err.println("Missing IOperatorFunction for add " + lval.getType().getName());
 			throw new SyntaxError("Cannot add " + lval.getType().getName() + " to " + right.check(context).getName());
 		}
-		return adder.compile(context, compiler, method, right);
+		return adder.compile(context, method, right);
 	}
 
 	

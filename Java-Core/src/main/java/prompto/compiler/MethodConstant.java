@@ -6,11 +6,15 @@ public class MethodConstant implements ConstantOperand {
 	NameAndTypeConstant methodNameAndType;
 	int index;
 	
-	public MethodConstant(String className, String methodName, String methodProto) {
-		this.className = new ClassConstant(className);
-		this.methodNameAndType = new NameAndTypeConstant(methodName, methodProto);
+	public MethodConstant(Class<?> klass, String methodName, Class<?> ... params) {
+		this(CompilerUtils.getClassName(klass), methodName, CompilerUtils.createProto(params));
 	}
 	
+	public MethodConstant(String className, String methodName, String proto) {
+		this.className = new ClassConstant(className);
+		this.methodNameAndType = new NameAndTypeConstant(methodName, proto);
+	}
+
 	@Override
 	public int index() {
 		return index;

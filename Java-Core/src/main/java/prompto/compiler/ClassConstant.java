@@ -1,13 +1,19 @@
 package prompto.compiler;
 
+
 public class ClassConstant implements ConstantOperand {
 
 	Utf8Constant className;
 	int index;
 	
+	public ClassConstant(Class<?> klass) {
+		this(CompilerUtils.getClassName(klass));
+	}
+
 	public ClassConstant(String className) {
 		this.className = new Utf8Constant(className);
 	}
+
 
 	@Override
 	public boolean equals(Object obj) {

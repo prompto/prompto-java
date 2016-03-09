@@ -1,6 +1,5 @@
 package prompto.java;
 
-import prompto.compiler.Compiler;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
@@ -29,7 +28,7 @@ public class JavaBooleanLiteral extends JavaLiteral {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
 		method.addInstruction(value ? Opcode.ICONST_1 : Opcode.ICONST_0);
 		return new ResultInfo(boolean.class, false);
 	}

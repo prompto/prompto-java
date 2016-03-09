@@ -1,7 +1,6 @@
 package prompto.declaration;
 
 import prompto.compiler.ClassFile;
-import prompto.compiler.Compiler;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
@@ -60,7 +59,7 @@ public class GetterMethodDeclaration extends ConcreteMethodDeclaration implement
 	}
 
 	@Override
-	public void compile(Context context, Compiler compiler, ClassFile classFile) {
+	public void compile(Context context, ClassFile classFile) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}

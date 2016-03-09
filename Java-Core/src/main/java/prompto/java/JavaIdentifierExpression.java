@@ -3,7 +3,6 @@ package prompto.java;
 import java.lang.reflect.Field;
 
 import prompto.compiler.ByteOperand;
-import prompto.compiler.Compiler;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.FieldConstant;
 import prompto.compiler.ResultInfo;
@@ -75,26 +74,26 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
 		if(parent==null)
-			return compile_root(context, compiler, method);
+			return compile_root(context, method);
 		else
-			return compile_child(context, compiler, method);
+			return compile_child(context, method);
 	}
 	
-	private ResultInfo compile_root(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
-		ResultInfo info = compile_prompto(context, compiler, method);
+	private ResultInfo compile_root(Context context, MethodInfo method) throws SyntaxError {
+		ResultInfo info = compile_prompto(context, method);
 		if(info!=null)
 			return info;
 		else
-			info = compile_instance(context, compiler, method);
+			info = compile_instance(context, method);
 		if(info!=null)
 			return info;
 		else
-			return compile_class(context, compiler, method);
+			return compile_class(context, method);
 	}
 
-	private ResultInfo compile_prompto(Context context, Compiler compiler, MethodInfo method) {
+	private ResultInfo compile_prompto(Context context, MethodInfo method) {
 		switch(name) {
 		case "$context":
 			throw new UnsupportedOperationException();
@@ -102,7 +101,7 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 		return null;
 	}
 
-	private ResultInfo compile_instance(Context context, Compiler compiler, MethodInfo method) {
+	private ResultInfo compile_instance(Context context, MethodInfo method) {
 		INamed named = context.getRegisteredValue(INamed.class, new Identifier(name));
 		if(named==null)
 			return null;
@@ -129,15 +128,15 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 		return new ResultInfo(Object.class, true); 
 	}
 
-	private ResultInfo compile_child(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
-		ResultInfo info = parent.compile(context, compiler, method);
+	private ResultInfo compile_child(Context context, MethodInfo method) throws SyntaxError {
+		ResultInfo info = parent.compile(context, method);
 		if(info!=null)
-			return compile_field(context, compiler, method, info);
+			return compile_field(context, method, info);
 		else
-			return compile_class(context, compiler, method);
+			return compile_class(context, method);
 	}
 
-	private ResultInfo compile_field(Context context, Compiler compiler, MethodInfo method, ResultInfo info) {
+	private ResultInfo compile_field(Context context, MethodInfo method, ResultInfo info) {
 		try {
 			Field field = info.getType().getField(name);
 			String parentClassName = CompilerUtils.getClassName(info.getType());
@@ -153,7 +152,7 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 		}
 	}
 
-	private ResultInfo compile_class(Context context, Compiler compiler, MethodInfo method) {
+	private ResultInfo compile_class(Context context, MethodInfo method) {
 		String fullName = this.toString();
 		try {
 			return new ResultInfo(Class.forName(fullName), false);

@@ -5,7 +5,6 @@ import java.io.StreamTokenizer;
 import java.io.StringReader;
 
 import prompto.compiler.ByteOperand;
-import prompto.compiler.Compiler;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.IntConstant;
 import prompto.compiler.MethodInfo;
@@ -42,7 +41,7 @@ public class CharacterLiteral extends Literal<Character> {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
 		char c = value.getValue();
 		if((c&0xFFFFFF00)==0)
 			method.addInstruction(Opcode.BIPUSH, new ByteOperand((byte)c));

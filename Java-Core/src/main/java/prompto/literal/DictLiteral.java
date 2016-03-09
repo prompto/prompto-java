@@ -3,6 +3,13 @@ package prompto.literal;
 import java.util.HashMap;
 import java.util.Map;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.Operand;
+import prompto.compiler.ResultInfo;
+import prompto.custom.PromptoMap;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
@@ -84,5 +91,25 @@ public class DictLiteral extends Literal<Dictionary> {
 		}
 		return value;
 	}
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
+		ResultInfo info = CompilerUtils.newInstance(method, PromptoMap.class);
+		addEntries(context, method);
+		return info;
+	}
+
+	private void addEntries(Context context, MethodInfo method) throws SyntaxError {
+		for(DictEntry e : entries) {
+			method.addInstruction(Opcode.DUP); // need to keep a reference to the map on top of stack
+			e.getKey().compile(context, method);
+			e.getValue().compile(context, method);
+			Operand c = new MethodConstant(PromptoMap.class, "put", 
+					Object.class, Object.class, Object.class);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, c);
+			method.addInstruction(Opcode.POP);
+		}
+	}
+
 	
 }

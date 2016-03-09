@@ -1,6 +1,5 @@
 package prompto.java;
 
-import prompto.compiler.Compiler;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.MethodInfo;
 import prompto.error.PromptoError;
@@ -16,7 +15,7 @@ public interface JavaExpression extends ISection {
 	Object interpret(Context context) throws PromptoError;
 	void toDialect(CodeWriter writer);
 	
-	default ResultInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+	default ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
 		System.err.println("Need to implement compile for " + this.getClass().getName());
 		throw new UnsupportedOperationException();
 	}

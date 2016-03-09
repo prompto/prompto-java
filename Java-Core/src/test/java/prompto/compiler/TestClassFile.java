@@ -3,6 +3,7 @@ package prompto.compiler;
 import static org.junit.Assert.*;
 
 import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.nio.ByteBuffer;
@@ -98,7 +99,7 @@ public class TestClassFile {
 		m.registerLocal("value");
 		m.addInstruction(Opcode.GETSTATIC, new FieldConstant("java/lang/System", "out", "Ljava/io/PrintStream;"));
 		m.addInstruction(Opcode.ALOAD_0); // the parameter
-		m.addInstruction(Opcode.INVOKEVIRTUAL, new MethodConstant("java/io/PrintStream", "print", "(Ljava/lang/String;)V"));
+		m.addInstruction(Opcode.INVOKEVIRTUAL, new MethodConstant(PrintStream.class, "print", String.class, void.class));
 		m.addInstruction(Opcode.RETURN);
 		c.addMethod(m);
 		ByteArrayOutputStream o = new ByteArrayOutputStream();

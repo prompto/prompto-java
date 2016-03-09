@@ -5,10 +5,6 @@ import java.util.Locale;
 
 import org.joda.time.ReadablePeriod;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-
-import prompto.compiler.Compiler;
-import prompto.compiler.CompilerUtils;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -22,6 +18,8 @@ import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.type.DateTimeType;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 
 public class DateTime extends BaseValue implements Comparable<DateTime> {
@@ -60,13 +58,12 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 			throw new SyntaxError("Illegal: DateTime + " + value.getClass().getSimpleName());
 	}
 	
-	public static ResultInfo compileAdd(Context context, Compiler compiler, MethodInfo method, IExpression value) throws SyntaxError {
-		ResultInfo right = value.compile(context, compiler, method);
+	public static ResultInfo compileAdd(Context context, MethodInfo method, IExpression value) throws SyntaxError {
+		ResultInfo right = value.compile(context, method);
 		if(right.getType()!=org.joda.time.Period.class)
 			throw new SyntaxError("Illegal: DateTime + " + value.getClass().getSimpleName());
-		String className = CompilerUtils.getClassName(org.joda.time.DateTime.class);
-		String proto = CompilerUtils.createProto(ReadablePeriod.class, org.joda.time.DateTime.class);
-		MethodConstant c = new MethodConstant(className, "plus", proto);
+		MethodConstant c = new MethodConstant(org.joda.time.DateTime.class, "plus", 
+				ReadablePeriod.class, org.joda.time.DateTime.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
 		return new ResultInfo(org.joda.time.DateTime.class, true);
 	}

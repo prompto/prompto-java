@@ -1,6 +1,5 @@
 package prompto.java;
 
-import prompto.compiler.Compiler;
 import prompto.compiler.IntConstant;
 import prompto.compiler.LongConstant;
 import prompto.compiler.MethodInfo;
@@ -40,7 +39,7 @@ public class JavaIntegerLiteral extends JavaLiteral {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
 		if(value>=0 && value<=5) {
 			// ICONST_0 to ICONST_5 are consecutive
 			Opcode opcode = Opcode.values()[Opcode.ICONST_0.ordinal() + value.intValue()];

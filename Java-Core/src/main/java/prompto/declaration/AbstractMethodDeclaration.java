@@ -1,7 +1,6 @@
 package prompto.declaration;
 
 import prompto.compiler.ClassFile;
-import prompto.compiler.Compiler;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.ArgumentList;
@@ -42,7 +41,7 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 	
 	@Override
-	public void compile(Context context, Compiler compiler, ClassFile classFile) {
+	public void compile(Context context, ClassFile classFile) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}

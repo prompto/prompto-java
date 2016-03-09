@@ -1,7 +1,6 @@
 package prompto.statement;
 
 import prompto.compiler.ResultInfo;
-import prompto.compiler.Compiler;
 import prompto.compiler.MethodInfo;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
@@ -68,9 +67,9 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
 		resolveAndCheck(context);
-		return resolved.compile(context, compiler, method);
+		return resolved.compile(context, method);
 	}
 
 	@Override

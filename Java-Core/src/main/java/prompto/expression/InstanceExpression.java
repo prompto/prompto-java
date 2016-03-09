@@ -2,7 +2,6 @@ package prompto.expression;
 
 import prompto.compiler.ByteOperand;
 import prompto.compiler.ResultInfo;
-import prompto.compiler.Compiler;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.declaration.AttributeDeclaration;
@@ -90,7 +89,7 @@ public class InstanceExpression implements IExpression {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
 		Integer idx = method.getRegisteredLocal(getName());
 		switch(idx) {
 			case 0:

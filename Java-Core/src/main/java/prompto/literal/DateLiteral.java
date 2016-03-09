@@ -2,8 +2,6 @@ package prompto.literal;
 
 import org.joda.time.LocalDate;
 
-import prompto.compiler.Compiler;
-import prompto.compiler.CompilerUtils;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -37,12 +35,10 @@ public class DateLiteral extends Literal<Date> {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
 		LocalDate date = value.getValue();
 		method.addInstruction(Opcode.LDC_W, new StringConstant(date.toString()));
-		String className = CompilerUtils.getClassName(LocalDate.class);
-		String proto = CompilerUtils.createProto(String.class, LocalDate.class);
-		Operand oper = new MethodConstant(className, "parse", proto);
+		Operand oper = new MethodConstant(LocalDate.class, "parse", String.class, LocalDate.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
 		return new ResultInfo(LocalDate.class, true);
 	}

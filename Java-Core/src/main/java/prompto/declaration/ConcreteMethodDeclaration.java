@@ -3,8 +3,8 @@ package prompto.declaration;
 import java.lang.reflect.Modifier;
 
 import prompto.compiler.ClassFile;
-import prompto.compiler.Compiler;
 import prompto.compiler.CompilerException;
+import prompto.compiler.CompilerUtils;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.error.PromptoError;
@@ -166,7 +166,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 	
 	@Override
-	public void compile(Context context, Compiler compiler, ClassFile classFile) {
+	public void compile(Context context, ClassFile classFile) {
 		try {
 			if(context.isGlobalContext()) {
 				// coming from nowhere, so need a clean context in which to register arguments
@@ -175,10 +175,10 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 			}
 			// create method
 			IType returnType = check(context);
-			MethodInfo method = createMethodInfo(context, compiler, classFile, returnType);
+			MethodInfo method = createMethodInfo(context, classFile, returnType);
 			// produce byte code
 			for(IStatement s : statements)
-				s.compile(context, compiler, method);
+				s.compile(context, method);
 			// add return for void
 			if(returnType==VoidType.instance())
 				method.addInstruction(Opcode.RETURN);
@@ -187,8 +187,8 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		}
 	}
 
-	protected MethodInfo createMethodInfo(Context context, Compiler compiler, ClassFile classFile, IType returnType) {
-		String proto = compiler.createProto(context, arguments, returnType);
+	protected MethodInfo createMethodInfo(Context context, ClassFile classFile, IType returnType) {
+		String proto = CompilerUtils.createProto(context, arguments, returnType);
 		MethodInfo method = new MethodInfo(getName(), proto); 
 		classFile.addMethod(method);
 		if(Modifier.isAbstract(classFile.getModifiers())) // TODO find another way

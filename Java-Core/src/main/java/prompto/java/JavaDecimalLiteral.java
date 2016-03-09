@@ -1,6 +1,5 @@
 package prompto.java;
 
-import prompto.compiler.Compiler;
 import prompto.compiler.DoubleConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -34,7 +33,7 @@ public class JavaDecimalLiteral extends JavaLiteral {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
 		if(value==0.0)
 			method.addInstruction(Opcode.DCONST_0);
 		else if(value==1.0)

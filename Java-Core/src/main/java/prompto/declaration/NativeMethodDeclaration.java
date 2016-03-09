@@ -1,7 +1,6 @@
 package prompto.declaration;
 
 import prompto.compiler.ClassFile;
-import prompto.compiler.Compiler;
 import prompto.compiler.CompilerException;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -99,14 +98,14 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 	}
 	
 	@Override
-	public void compile(Context context, Compiler compiler, ClassFile classFile) {
+	public void compile(Context context, ClassFile classFile) {
 		try {
 			context = context.newLocalContext();
 			registerArguments(context);
 			IType returnType = this.checkNative(context);
-			MethodInfo method = createMethodInfo(context, compiler, classFile, returnType);
+			MethodInfo method = createMethodInfo(context, classFile, returnType);
 			if(statement!=null)
-				statement.compile(context, compiler, method);
+				statement.compile(context, method);
 			// ensure we always return
 			if(returnType==VoidType.instance())
 				method.addInstruction(Opcode.RETURN);

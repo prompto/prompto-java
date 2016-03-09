@@ -1,7 +1,6 @@
 package prompto.declaration;
 
 import prompto.compiler.ClassFile;
-import prompto.compiler.Compiler;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.ArgumentAssignment;
@@ -28,7 +27,7 @@ public interface IMethodDeclaration extends IDeclaration {
 	Specificity computeSpecificity(Context context, IArgument argument, ArgumentAssignment assignment, boolean checkInstance);
 	void setMemberOf(ConcreteCategoryDeclaration declaration);
 	ConcreteCategoryDeclaration getMemberOf();
-	void compile(Context context, Compiler compiler, ClassFile classFile);
+	void compile(Context context, ClassFile classFile);
 
 }
 

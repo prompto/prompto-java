@@ -2,7 +2,6 @@ package prompto.grammar;
 
 import prompto.compiler.ByteOperand;
 import prompto.compiler.ResultInfo;
-import prompto.compiler.Compiler;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.error.PromptoError;
@@ -27,12 +26,12 @@ public class VariableInstance implements IAssignableInstance {
 	}
 	
 	@Override
-	public void register(Context context, Compiler compiler, MethodInfo method) {
+	public void register(Context context, MethodInfo method) {
 		method.registerLocal(id.getName());
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, Compiler compiler, MethodInfo method) {
+	public ResultInfo compile(Context context, MethodInfo method) {
 		Integer idx = method.getRegisteredLocal(id.getName());
 		switch(idx) {
 			case 0:

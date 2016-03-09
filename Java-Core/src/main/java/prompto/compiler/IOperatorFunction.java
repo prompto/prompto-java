@@ -6,5 +6,5 @@ import prompto.runtime.Context;
 
 
 public interface IOperatorFunction {
-	ResultInfo compile(Context context, Compiler compiler, MethodInfo method, IExpression right) throws SyntaxError;
+	ResultInfo compile(Context context, MethodInfo method, IExpression right) throws SyntaxError;
 }

@@ -6,10 +6,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-
-import prompto.compiler.Compiler;
-import prompto.compiler.CompilerUtils;
 import prompto.compiler.IConverterFunction;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
@@ -25,6 +21,8 @@ import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.type.TextType;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 
 public class Text extends BaseValue implements Comparable<Text>, IContainer<Character>, ISliceable<Character>, IMultiplyable {
@@ -62,16 +60,16 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 
 	static Map<Class<?>, IConverterFunction> textConverters = createConverters();
 	
-	public static ResultInfo compileAdd(Context context, Compiler compiler, MethodInfo method, IExpression value) throws SyntaxError {
-		ResultInfo right = value.compile(context, compiler, method);
+	public static ResultInfo compileAdd(Context context, MethodInfo method, IExpression value) throws SyntaxError {
+		ResultInfo right = value.compile(context, method);
 		// convert right to String
 		IConverterFunction converter = textConverters.get(right.getType());
 		if(converter==null)
 			converter = Text::objectConverter;
-		right = converter.compile(context, compiler, method, right);
+		right = converter.compile(context, method, right);
 		// and call concat
-		String className = CompilerUtils.getClassName(String.class);
-		MethodConstant c = new MethodConstant(className, "concat", CompilerUtils.createProto(String.class, String.class));
+		MethodConstant c = new MethodConstant(String.class, "concat", 
+				String.class, String.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
 		return new ResultInfo(String.class, true);
 	}
@@ -82,14 +80,13 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 		return map;
 	}
 
-	private static ResultInfo objectConverter(Context context, Compiler compiler, MethodInfo method, ResultInfo info) {
-		String className = CompilerUtils.getClassName(info.getType());
-		MethodConstant c = new MethodConstant(className, "toString", CompilerUtils.createProto(String.class));
+	private static ResultInfo objectConverter(Context context, MethodInfo method, ResultInfo info) {
+		MethodConstant c = new MethodConstant(info.getType(), "toString", String.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
 		return new ResultInfo(String.class, true);
 	}
 
-	private static ResultInfo textConverter(Context context, Compiler compiler, MethodInfo method, ResultInfo info) {
+	private static ResultInfo textConverter(Context context, MethodInfo method, ResultInfo info) {
 		return info;
 	}
 	

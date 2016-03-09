@@ -1,7 +1,5 @@
 package prompto.literal;
 
-import prompto.compiler.Compiler;
-import prompto.compiler.CompilerUtils;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -31,12 +29,11 @@ public class PeriodLiteral extends Literal<Period> {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, Compiler compiler, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
 		org.joda.time.Period period = value.getValue();
 		method.addInstruction(Opcode.LDC_W, new StringConstant(period.toString()));
-		String className = CompilerUtils.getClassName(org.joda.time.Period.class);
-		String proto = CompilerUtils.createProto(String.class, org.joda.time.Period.class);
-		Operand oper = new MethodConstant(className, "parse", proto);
+		Operand oper = new MethodConstant(org.joda.time.Period.class, "parse", 
+				String.class, org.joda.time.Period.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
 		return new ResultInfo(org.joda.time.Period.class, true);
 	}

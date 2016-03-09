@@ -1,7 +1,6 @@
 package prompto.grammar;
 
 import prompto.compiler.ResultInfo;
-import prompto.compiler.Compiler;
 import prompto.compiler.MethodInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -18,10 +17,10 @@ public interface IAssignableInstance {
 	void assign(Context context, IExpression expression) throws PromptoError;
 	IValue interpret(Context context) throws PromptoError;
 	void toDialect(CodeWriter writer, IExpression expression);
-	default void register(Context context, Compiler compiler, MethodInfo method) {
+	default void register(Context context, MethodInfo method) {
 		throw new UnsupportedOperationException();
 	}
-	default ResultInfo compile(Context context, Compiler compiler, MethodInfo method) {
+	default ResultInfo compile(Context context, MethodInfo method) {
 		throw new UnsupportedOperationException();
 	}
 

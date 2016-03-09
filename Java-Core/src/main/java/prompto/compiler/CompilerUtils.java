@@ -4,7 +4,10 @@ import java.rmi.UnexpectedException;
 import java.util.HashMap;
 import java.util.Map;
 
+import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
+import prompto.runtime.Context;
+import prompto.type.IType;
 
 public abstract class CompilerUtils {
 
@@ -80,6 +83,15 @@ public abstract class CompilerUtils {
 		return sb.toString();
 	}
 	
+	public static String createProto(Context context, ArgumentList arguments, IType returnType) {
+		StringBuilder sb = new StringBuilder();
+		sb.append('(');
+		arguments.forEach((arg)->sb.append(arg.getJavaDescriptor(context)));
+		sb.append(')');
+		sb.append(returnType.getJavaDescriptor(context));
+		return sb.toString();
+	}
+
 	public static String createProto(Class<?>[] parameterTypes, Class<?> returnType) {
 		StringBuilder sb = new StringBuilder();
 		sb.append('(');
@@ -107,27 +119,27 @@ public abstract class CompilerUtils {
 	
 	public static ResultInfo booleanToBoolean(MethodInfo method) {
 		Operand oper = new MethodConstant(
-				CompilerUtils.getClassName(Boolean.class), 
+				Boolean.class, 
 				"valueOf",
-				CompilerUtils.createProto(boolean.class, Boolean.class));
+				boolean.class, Boolean.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
 		return new ResultInfo(Boolean.class, true);
 	}
 
 	public static ResultInfo ByteToLong(MethodInfo method) {
 		Operand oper = new MethodConstant(
-				CompilerUtils.getClassName(Byte.class), 
+				Byte.class, 
 				"longValue",
-				CompilerUtils.createProto(Long.class));
+				Long.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		return longToLong(method);
 	}
 
 	public static ResultInfo ShortToLong(MethodInfo method) {
 		Operand oper = new MethodConstant(
-				CompilerUtils.getClassName(Short.class), 
+				Short.class, 
 				"longValue",
-				CompilerUtils.createProto(Long.class));
+				Long.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		return longToLong(method);
 	}
@@ -139,18 +151,18 @@ public abstract class CompilerUtils {
 
 	public static ResultInfo IntegerToLong(MethodInfo method) {
 		Operand oper = new MethodConstant(
-				CompilerUtils.getClassName(Integer.class), 
+				Integer.class, 
 				"longValue",
-				CompilerUtils.createProto(long.class));
+				long.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		return longToLong(method);
 	}
 
 	public static ResultInfo longToLong(MethodInfo method) {
 		Operand oper = new MethodConstant(
-				CompilerUtils.getClassName(Long.class), 
+				Long.class, 
 				"valueOf",
-				CompilerUtils.createProto(long.class, Long.class));
+				long.class, Long.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
 		return new ResultInfo(Long.class, true);
 	}
@@ -162,27 +174,27 @@ public abstract class CompilerUtils {
 
 	public static ResultInfo FloatToDouble(MethodInfo method) {
 		Operand oper = new MethodConstant(
-				CompilerUtils.getClassName(Float.class), 
+				Float.class, 
 				"doubleValue",
-				CompilerUtils.createProto(Double.class));
+				Double.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		return doubleToDouble(method);
 	}
 
 	public static ResultInfo LongTodouble(MethodInfo method) {
 		Operand oper = new MethodConstant(
-				CompilerUtils.getClassName(Long.class), 
+				Long.class, 
 				"doubleValue",
-				CompilerUtils.createProto(double.class));
+				double.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		return new ResultInfo(double.class, true);
 	}
 
 	public static ResultInfo LongTolong(MethodInfo method) {
 		Operand oper = new MethodConstant(
-				CompilerUtils.getClassName(Long.class), 
+				Long.class, 
 				"longValue",
-				CompilerUtils.createProto(long.class));
+				long.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		return new ResultInfo(long.class, true);
 	}
@@ -194,29 +206,40 @@ public abstract class CompilerUtils {
 
 	public static ResultInfo DoubleTodouble(MethodInfo method) {
 		Operand oper = new MethodConstant(
-				CompilerUtils.getClassName(Double.class), 
+				Double.class, 
 				"doubleValue",
-				CompilerUtils.createProto(double.class));
+				double.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		return new ResultInfo(double.class, true);
 	}
 
 	public static ResultInfo doubleToDouble(MethodInfo method) {
 		Operand oper = new MethodConstant(
-				CompilerUtils.getClassName(Double.class), 
+				Double.class, 
 				"valueOf",
-				CompilerUtils.createProto(double.class, Double.class));
+				double.class, Double.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
 		return new ResultInfo(Double.class, true);
 	}
 
 	public static ResultInfo charToCharacter(MethodInfo method) {
 		Operand oper = new MethodConstant(
-				CompilerUtils.getClassName(Character.class), 
+				Character.class, 
 				"valueOf",
-				CompilerUtils.createProto(char.class, Character.class));
+				char.class, Character.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
 		return new ResultInfo(Character.class, true);
+	}
+
+	public static ResultInfo newInstance(MethodInfo method, Class<?> klass, Class<?> ... params) {
+		Operand c = new ClassConstant(klass);
+		method.addInstruction(Opcode.NEW, c);
+		// call constructor
+		method.addInstruction(Opcode.DUP); // need to keep a reference on top of stack
+		c = new MethodConstant(getClassName(klass), "<init>", createProto(params, void.class));
+		method.addInstruction(Opcode.INVOKESPECIAL, c);
+		// done
+		return new ResultInfo(klass, true);
 	}
 
 }

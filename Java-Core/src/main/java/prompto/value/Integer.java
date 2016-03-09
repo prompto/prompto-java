@@ -2,9 +2,6 @@ package prompto.value;
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-
-import prompto.compiler.Compiler;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -20,6 +17,8 @@ import prompto.store.IStorable;
 import prompto.type.DecimalType;
 import prompto.type.IType;
 import prompto.type.IntegerType;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 public class Integer extends BaseValue implements INumber, Comparable<INumber>, IMultiplyable {
 	
@@ -52,7 +51,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 			throw new SyntaxError("Illegal: Integer + " + value.getClass().getSimpleName());
 	}
 
-	public static ResultInfo compileAdd(Context context, Compiler compiler, MethodInfo method, IExpression value) throws SyntaxError {
+	public static ResultInfo compileAdd(Context context, MethodInfo method, IExpression value) throws SyntaxError {
 		IType type = value.check(context);
 		boolean isDecimal = type==DecimalType.instance();
 		if(isDecimal)
@@ -60,7 +59,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 		else
 			CompilerUtils.LongTolong(method);
 		// compile rhs
-		ResultInfo right = value.compile(context, compiler, method);
+		ResultInfo right = value.compile(context, method);
 		if(isDecimal) {
 			if(right.getType()==Long.class)
 				CompilerUtils.LongTodouble(method);

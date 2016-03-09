@@ -6,10 +6,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Modifier;
 
-import prompto.grammar.ArgumentList;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
-import prompto.type.IType;
 import prompto.utils.FileUtils;
 
 public class Compiler {
@@ -45,19 +43,8 @@ public class Compiler {
 		ClassFile classFile = new ClassFile(fullName, "java/lang/Object");
 		classFile.addModifier(Modifier.ABSTRACT);
 		methods.values().forEach((m) -> 
-			m.compile(context, this, classFile));
+			m.compile(context, classFile));
 		return classFile;
 	}
-
-	public String createProto(Context context, ArgumentList arguments, IType returnType) {
-		StringBuilder sb = new StringBuilder();
-		sb.append('(');
-		arguments.forEach((arg)->sb.append(arg.getJavaDescriptor(context)));
-		sb.append(')');
-		sb.append(returnType.getJavaDescriptor(context));
-		return sb.toString();
-	}
-
-
 
 }
