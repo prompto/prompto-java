@@ -14,25 +14,25 @@ public interface IValue {
 	
 	IType getType();
 	
-	IValue Add(Context context, IValue value) throws PromptoError;
+	IValue plus(Context context, IValue value) throws PromptoError;
 
-	IValue Subtract(Context context, IValue iValue) throws PromptoError;
+	IValue minus(Context context, IValue iValue) throws PromptoError;
 
-	IValue Multiply(Context context, IValue iValue) throws PromptoError;
+	IValue multiply(Context context, IValue iValue) throws PromptoError;
 
-	IValue Divide(Context context, IValue iValue) throws PromptoError;
+	IValue divide(Context context, IValue iValue) throws PromptoError;
 
-	IValue IntDivide(Context context, IValue iValue) throws PromptoError;
+	IValue intDivide(Context context, IValue iValue) throws PromptoError;
 
-	IValue Modulo(Context context, IValue iValue) throws PromptoError;
+	IValue modulo(Context context, IValue iValue) throws PromptoError;
 
 	IValue getMember(Context context, Identifier name, boolean autoCreate) throws PromptoError;
 
 	void setMember(Context context, Identifier name, IValue value) throws PromptoError;
 
-	int CompareTo(Context context, IValue value) throws PromptoError;
+	int compareTo(Context context, IValue value) throws PromptoError;
 
-	boolean Roughly(Context context, IValue value) throws PromptoError;
+	boolean roughly(Context context, IValue value) throws PromptoError;
 	
 	ISliceable<IValue> asSliceable(Context context) throws PromptoError;
 

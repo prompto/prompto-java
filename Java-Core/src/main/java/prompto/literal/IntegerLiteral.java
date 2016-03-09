@@ -38,14 +38,16 @@ public class IntegerLiteral extends Literal<Integer> {
 			// ICONST_0 to ICONST_5 are consecutive
 			Opcode opcode = Opcode.values()[Opcode.ICONST_0.ordinal() + (int)l];
 			method.addInstruction(opcode);
-			return CompilerUtils.intToLong(method);
+			CompilerUtils.intTolong(method);
 		} else if(l<=java.lang.Integer.MAX_VALUE && l>=java.lang.Integer.MIN_VALUE) {
 			method.addInstruction(Opcode.LDC_W, new IntConstant((int)l));
-			return CompilerUtils.intToLong(method);
-		} else {
+			CompilerUtils.intTolong(method);
+		} else
 			method.addInstruction(Opcode.LDC2_W, new LongConstant(l));
+		if(toNative)
+			return new ResultInfo(long.class, false);
+		else
 			return CompilerUtils.longToLong(method);
-		}
 	}
 
 }

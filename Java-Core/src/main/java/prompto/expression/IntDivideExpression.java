@@ -1,11 +1,19 @@
 package prompto.expression;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import prompto.compiler.IOperatorFunction;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
+import prompto.value.Decimal;
 import prompto.value.IValue;
+import prompto.value.Integer;
 
 public class IntDivideExpression implements IExpression {
 
@@ -35,6 +43,28 @@ public class IntDivideExpression implements IExpression {
 	public IValue interpret(Context context) throws PromptoError {
 		IValue lval = left.interpret(context);
 		IValue rval = right.interpret(context);
-        return lval.IntDivide(context, rval);
+        return lval.intDivide(context, rval);
+	}
+	
+	static Map<Class<?>, IOperatorFunction> dividers = createDividers();
+	
+	private static Map<Class<?>, IOperatorFunction> createDividers() {
+		Map<Class<?>, IOperatorFunction> map = new HashMap<>();
+		map.put(double.class, Decimal::compileIntDivide);
+		map.put(Double.class, Decimal::compileIntDivide);
+		map.put(long.class, Integer::compileIntDivide);
+		map.put(Long.class, Integer::compileIntDivide);
+		return map;
+	}
+
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
+		ResultInfo lval = left.compile(context, method, true);
+		IOperatorFunction divider = dividers.get(lval.getType());
+		if(divider==null) {
+			System.err.println("Missing IOperatorFunction for idivide " + lval.getType().getName());
+			throw new SyntaxError("Cannot idivide " + lval.getType().getName() + " by " + right.check(context).getName());
+		}
+		return divider.compile(context, method, lval, right, toNative);
 	}
 }

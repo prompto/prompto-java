@@ -14,7 +14,7 @@ import prompto.value.IntegerRange;
 import prompto.value.ListValue;
 import prompto.value.Range;
 
-public class IntegerType extends NativeType {
+public class IntegerType extends NativeType implements INumberType {
 
 	static IntegerType instance = new IntegerType();
 	

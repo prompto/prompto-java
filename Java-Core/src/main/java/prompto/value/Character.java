@@ -3,6 +3,7 @@ package prompto.value;
 import java.io.IOException;
 import java.text.Collator;
 
+import prompto.compiler.CompilerUtils;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -12,6 +13,7 @@ import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoChar;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.type.CharacterType;
@@ -38,50 +40,52 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
 	}
 	    
     @Override
-    public IValue Add(Context context, IValue value)
+    public IValue plus(Context context, IValue value)
     {
         return new Text(this.value + value.toString());
     }
 
-	public static ResultInfo compileAdd(Context context, MethodInfo method, ResultInfo left, IExpression right, boolean toNative) throws SyntaxError {
+	public static ResultInfo compilePlus(Context context, MethodInfo method, ResultInfo left, IExpression right, boolean toNative) throws SyntaxError {
 		// convert to String
 		MethodConstant c = new MethodConstant(java.lang.Character.class, 
 									"toString", 
 									String.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
 		// use Text::compileAdd
-		return Text.compileAdd(context, method, left, right, false);
+		return Text.compilePlus(context, method, left, right, false);
 	}
 	
     @Override
-    public IValue Multiply(Context context, IValue value) throws PromptoError
-    {
-        if (value instanceof Integer)
-        {
+    public IValue multiply(Context context, IValue value) throws PromptoError {
+        if (value instanceof Integer) {
             int count = (int)((Integer)value).longValue();
             if (count < 0)
                 throw new SyntaxError("Negative repeat count:" + count);
-            if (count == 0)
-                return new Text("");
-            if (count == 1)
-                return new Text("" + value);
-            char[] cc = new char[count];
-            for (int i = 0; i < count; i++)
-                cc[i] = this.value;
-            return new Text(new String(cc));
-      }
-        else
+            return new Text(PromptoChar.multiply(this.value, count));
+      } else
            throw new SyntaxError("Illegal: Chararacter * " + value.getClass().getSimpleName());
      }
 
-    public int compareTo(Character obj)
-    {
+	public static ResultInfo compileMultiply(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+		CompilerUtils.CharacterTochar(method);
+		ResultInfo right = exp.compile(context, method, true);
+		if(Long.class==right.getType())
+			CompilerUtils.LongToint(method);
+		else if(long.class==right.getType())
+			CompilerUtils.longToint(method);
+		MethodConstant oper = new MethodConstant(PromptoChar.class, 
+				"multiply", 
+				char.class, int.class, String.class);
+		method.addInstruction(Opcode.INVOKESTATIC, oper);
+		return new ResultInfo(String.class, true);
+	}
+	
+    public int compareTo(Character obj) {
         return java.lang.Character.compare(value, obj.getValue());
     }
 
     @Override
-    public int CompareTo(Context context, IValue value) throws SyntaxError
-    {
+    public int compareTo(Context context, IValue value) throws SyntaxError {
         if (value instanceof Character)
             return java.lang.Character.compare(this.value, ((Character)value).value);
         else
@@ -91,20 +95,17 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
 
     
     @Override
-    public Object convertTo(Class<?> type)
-    {
+    public Object convertTo(Class<?> type) {
         return value;
     }
     
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "" + value;
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         if (obj instanceof Character)
             return value == ((Character)obj).value;
         else
@@ -112,7 +113,7 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
     }
     
     @Override
-    public boolean Roughly(Context context, IValue obj) throws PromptoError {
+    public boolean roughly(Context context, IValue obj) throws PromptoError {
         if (obj instanceof Character || obj instanceof Text) {
         	Collator c = Collator.getInstance();
         	c.setStrength(Collator.PRIMARY);

@@ -107,7 +107,4 @@ public class PromptoTime implements Comparable<PromptoTime>{
 				this.getNativeMillis() - other.getNativeMillis());
 	}
 
-
-
-	
 }

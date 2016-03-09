@@ -35,31 +35,31 @@ public abstract class BaseValue implements IValue {
 		throw new UnsupportedOperationException("Cannot store " + this.getClass().getSimpleName());
 	}
 	
-	public IValue Add(Context context, IValue value) throws PromptoError {
+	public IValue plus(Context context, IValue value) throws PromptoError {
 		throw new UnsupportedOperationException("Add not supported by " + this.getClass().getSimpleName());
 	}
 
-	public IValue Subtract(Context context, IValue value) throws PromptoError {
+	public IValue minus(Context context, IValue value) throws PromptoError {
 		throw new UnsupportedOperationException("Subtract not supported by " + this.getClass().getSimpleName());
 	}
 
-	public IValue Multiply(Context context, IValue value) throws PromptoError {
+	public IValue multiply(Context context, IValue value) throws PromptoError {
 		throw new UnsupportedOperationException("Multiply not supported by " + this.getClass().getSimpleName());
 	}
 
-	public IValue Divide(Context context, IValue value) throws PromptoError {
+	public IValue divide(Context context, IValue value) throws PromptoError {
 		throw new UnsupportedOperationException("Divide not supported by " + this.getClass().getSimpleName());
 	}
 
-	public IValue IntDivide(Context context, IValue value) throws PromptoError {
+	public IValue intDivide(Context context, IValue value) throws PromptoError {
 		throw new UnsupportedOperationException("Integer divide not supported by " + this.getClass().getSimpleName());
 	}
 
-	public IValue Modulo(Context context, IValue value) throws PromptoError {
+	public IValue modulo(Context context, IValue value) throws PromptoError {
 		throw new UnsupportedOperationException("Integer divide not supported by " + this.getClass().getSimpleName());
 	}
 
-	public int CompareTo(Context context, IValue value) throws PromptoError {
+	public int compareTo(Context context, IValue value) throws PromptoError {
 		throw new UnsupportedOperationException("Compare not supported by " + this.getClass().getSimpleName());
 	}
 
@@ -74,7 +74,7 @@ public abstract class BaseValue implements IValue {
 	}
 
 	@Override
-	public boolean Roughly(Context context, IValue value) throws PromptoError {
+	public boolean roughly(Context context, IValue value) throws PromptoError {
 		return this.equals(value);
 	}
 

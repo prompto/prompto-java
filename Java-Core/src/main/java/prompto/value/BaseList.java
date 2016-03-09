@@ -13,16 +13,16 @@ import prompto.type.ContainerType;
 import prompto.type.IType;
 
 
-public abstract class BaseList<T extends BaseList<T>> extends BaseValue implements IContainer<IValue>, ISliceable<IValue>, IListable<T> {
+public abstract class BaseList<T extends BaseList<T,I>,I extends List<IValue>> extends BaseValue implements IContainer<IValue>, ISliceable<IValue>, IListable<T> {
 
-	protected List<IValue> items;
+	protected I items;
 
 	protected BaseList(ContainerType type) {
 		super(type);
 		this.items = newItemsInstance();
 	}
 	
-	protected BaseList(ContainerType type, List<IValue> items) {
+	protected BaseList(ContainerType type, I items) {
 		super(type);
 		this.items = items;
 	}
@@ -32,8 +32,8 @@ public abstract class BaseList<T extends BaseList<T>> extends BaseValue implemen
 		this.items = newItemsInstance(items);
 	}
 
-	protected abstract List<IValue> newItemsInstance();
-	protected abstract List<IValue> newItemsInstance(Collection<IValue> items);
+	protected abstract I newItemsInstance();
+	protected abstract I newItemsInstance(Collection<IValue> items);
 
 	public IType getItemType() {
 		return ((ContainerType)type).getItemType();
@@ -117,9 +117,9 @@ public abstract class BaseList<T extends BaseList<T>> extends BaseValue implemen
 	}
 
 	@Override
-	public IValue Add(Context context, IValue value) throws PromptoError {
-        if (value instanceof BaseList<?>)
-            return this.merge(((BaseList<?>)value).getItems());
+	public IValue plus(Context context, IValue value) throws PromptoError {
+        if (value instanceof BaseList<?,?>)
+            return this.merge(((BaseList<?,?>)value).getItems());
         else if (value instanceof SetValue)
             return this.merge(((SetValue)value).getItems());
         else

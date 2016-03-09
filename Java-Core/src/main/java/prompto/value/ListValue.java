@@ -24,7 +24,7 @@ import prompto.type.ContainerType;
 import prompto.type.IType;
 import prompto.type.ListType;
 
-public class ListValue extends BaseList<ListValue> {
+public class ListValue extends BaseList<ListValue, PromptoList<IValue>> {
 
 	public ListValue(IType itemType) {
 		super(new ListType(itemType));
@@ -39,12 +39,12 @@ public class ListValue extends BaseList<ListValue> {
 	}
 	
 	@Override
-	protected List<IValue> newItemsInstance() {
+	protected PromptoList<IValue> newItemsInstance() {
 		return new PromptoList<IValue>();
 	}
 	
 	@Override
-	protected List<IValue> newItemsInstance(Collection<IValue> items) {
+	protected PromptoList<IValue> newItemsInstance(Collection<IValue> items) {
 		return new PromptoList<IValue>(items);
 	}
 
@@ -89,20 +89,13 @@ public class ListValue extends BaseList<ListValue> {
 	}
 	
 	@Override
-	public IValue Multiply(Context context, IValue value) throws PromptoError {
+	public IValue multiply(Context context, IValue value) throws PromptoError {
 		if (value instanceof Integer) {
 			IType itemType = ((ContainerType)this.type).getItemType();
 			int count = (int) ((Integer) value).longValue();
 			if (count < 0)
 				throw new SyntaxError("Negative repeat count:" + count);
-			if (count == 0)
-				return new ListValue(itemType);
-			if (count == 1)
-				return this;
-			List<IValue> result = new PromptoList<IValue>();
-			for (long i = 0; i < count; i++)
-				result.addAll(this.items);
-			return new ListValue(itemType, result);
+			return new ListValue(itemType, this.items.multiply(count));
 		} else
 			throw new SyntaxError("Illegal: List * " + value.getClass().getSimpleName());
 	}

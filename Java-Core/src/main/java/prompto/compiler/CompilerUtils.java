@@ -144,9 +144,19 @@ public abstract class CompilerUtils {
 		return longToLong(method);
 	}
 
+	public static ResultInfo intTolong(MethodInfo method) {
+		method.addInstruction(Opcode.I2L);
+		return new ResultInfo(long.class, true);
+	}
+
 	public static ResultInfo intToLong(MethodInfo method) {
 		method.addInstruction(Opcode.I2L);
 		return longToLong(method);
+	}
+
+	public static ResultInfo longToint(MethodInfo method) {
+		method.addInstruction(Opcode.L2I);
+		return new ResultInfo(int.class, true);
 	}
 
 	public static ResultInfo IntegerToLong(MethodInfo method) {
@@ -169,12 +179,12 @@ public abstract class CompilerUtils {
 	
 	public static ResultInfo longTodouble(MethodInfo method) {
 		method.addInstruction(Opcode.L2D);
-		return longToLong(method);
+		return new ResultInfo(double.class, false);
 	}
 
 	public static ResultInfo doubleTolong(MethodInfo method) {
 		method.addInstruction(Opcode.D2L);
-		return longToLong(method);
+		return new ResultInfo(long.class, false);
 	}
 
 	public static ResultInfo floatToDouble(MethodInfo method) {
@@ -209,6 +219,15 @@ public abstract class CompilerUtils {
 		return new ResultInfo(long.class, true);
 	}
 
+	public static ResultInfo LongToint(MethodInfo method) {
+		Operand oper = new MethodConstant(
+				Long.class, 
+				"intValue",
+				int.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return new ResultInfo(int.class, true);
+	}
+
 	public static ResultInfo LongToDouble(MethodInfo method) {
 		LongTodouble(method);
 		return doubleToDouble(method);
@@ -241,6 +260,31 @@ public abstract class CompilerUtils {
 		return new ResultInfo(Double.class, true);
 	}
 
+	public static void numberToNative(MethodInfo method, ResultInfo info, boolean toDecimal) {
+		if(toDecimal)
+			numberTodouble(method, info);
+		else	
+			numberTolong(method, info);
+	}
+	
+	public static void numberTodouble(MethodInfo method, ResultInfo info) {
+		 if(info.getType()==long.class)
+			longTodouble(method);
+		else if(info.getType()==Long.class)
+			LongTodouble(method);
+		else if(info.getType()==Double.class)
+			DoubleTodouble(method);
+	}
+
+	public static void numberTolong(MethodInfo method, ResultInfo info) {
+		if(double.class==info.getType())
+			doubleTolong(method);
+		else if(Long.class==info.getType())
+			LongTolong(method);
+		else if(Double.class==info.getType())
+			DoubleTolong(method);
+	}
+
 	public static ResultInfo charToCharacter(MethodInfo method) {
 		Operand oper = new MethodConstant(
 				Character.class, 
@@ -248,6 +292,15 @@ public abstract class CompilerUtils {
 				char.class, Character.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
 		return new ResultInfo(Character.class, true);
+	}
+
+	public static ResultInfo CharacterTochar(MethodInfo method) {
+		Operand oper = new MethodConstant(
+				Character.class, 
+				"charValue",
+				char.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return new ResultInfo(char.class, true);
 	}
 
 	public static ResultInfo newInstance(MethodInfo method, Class<?> klass, Class<?> ... params) {
@@ -260,5 +313,6 @@ public abstract class CompilerUtils {
 		// done
 		return new ResultInfo(klass, true);
 	}
+
 
 }

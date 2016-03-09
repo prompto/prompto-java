@@ -52,7 +52,7 @@ public class Boolean extends BaseValue implements Comparable<Boolean> {
 	}
 	
 	@Override
-	public int CompareTo(Context context, IValue value) throws SyntaxError {
+	public int compareTo(Context context, IValue value) throws SyntaxError {
 		if (value instanceof Boolean)
 			return compareTo((Boolean) value);
 		else

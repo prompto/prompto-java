@@ -16,7 +16,7 @@ import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteMethodDeclaration;
 import prompto.declaration.NativeMethodDeclaration;
-import prompto.expression.AddExpression;
+import prompto.expression.PlusExpression;
 import prompto.expression.ConstructorExpression;
 import prompto.expression.IExpression;
 import prompto.expression.MemberSelector;
@@ -278,7 +278,7 @@ public class TestParserAtoms {
 		ArgumentAssignment as = parser.parse_argument_assignment();
 		assertEquals("value",as.getName().toString());
 		IExpression exp = as.getExpression();
-		assertTrue(exp instanceof AddExpression);
+		assertTrue(exp instanceof PlusExpression);
 		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
 		as.toDialect(writer);
 		assertEquals("\"person\" + p.name as value", writer.toString());		
@@ -292,7 +292,7 @@ public class TestParserAtoms {
 		ArgumentAssignment as = ls.get(0);
 		assertEquals("value",as.getName().toString());
 		IExpression exp = as.getExpression();
-		assertTrue(exp instanceof AddExpression);
+		assertTrue(exp instanceof PlusExpression);
 		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
 		as.toDialect(writer);
 		assertEquals("\"person\" + p.name as value",writer.toString());
@@ -312,7 +312,7 @@ public class TestParserAtoms {
 		ArgumentAssignment as = mc.getAssignments().get(0);
 		assertEquals("value",as.getName().toString());
 		IExpression exp = as.getExpression();
-		assertTrue(exp instanceof AddExpression);
+		assertTrue(exp instanceof PlusExpression);
 		writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
 		mc.toDialect(writer);
 		assertEquals("print with \"person\" + p.name as value",writer.toString());

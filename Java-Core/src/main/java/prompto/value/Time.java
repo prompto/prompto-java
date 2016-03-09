@@ -43,14 +43,14 @@ public class Time extends BaseValue implements Comparable<Time> {
 	}
 
 	@Override
-	public IValue Add(Context context, IValue value) throws SyntaxError {
+	public IValue plus(Context context, IValue value) throws SyntaxError {
 		if (value instanceof Period)
 			return new Time(this.value.plus(((Period)value).value));
 		else
 			throw new SyntaxError("Illegal: Time + " + value.getClass().getSimpleName());
 	}
 
-	public static ResultInfo compileAdd(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+	public static ResultInfo compilePlus(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
 		ResultInfo right = exp.compile(context, method, false);
 		if(right.getType()!=PromptoPeriod.class)
 			throw new SyntaxError("Illegal: Date + " + exp.getClass().getSimpleName());
@@ -60,19 +60,33 @@ public class Time extends BaseValue implements Comparable<Time> {
 	}
 	
 	@Override
-	public IValue Subtract(Context context, IValue value) throws PromptoError {
-		if (value instanceof Time) {
-			PromptoTime other = ((Time) value).value;
-			PromptoPeriod res = this.value.minus(other);
-			return new Period(res);
-		} else if (value instanceof Period)
-			return this.minus((Period) value);
+	public IValue minus(Context context, IValue value) throws PromptoError {
+		if (value instanceof Time)
+			return new Period(this.value.minus(((Time)value).value));
+		else if (value instanceof Period)
+			return new Time(this.value.minus(((Period)value).value));
 		else
 			throw new SyntaxError("Illegal: Time - " + value.getClass().getSimpleName());
 	}
 
+	public static ResultInfo compileMinus(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+		ResultInfo right = exp.compile(context, method, false);
+		if(right.getType()==PromptoTime.class) {
+			MethodConstant oper = new MethodConstant(PromptoTime.class, "minus", 
+					PromptoTime.class, PromptoPeriod.class);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+			return new ResultInfo(PromptoPeriod.class, true);
+		} else if(right.getType()==PromptoPeriod.class) {
+			MethodConstant oper = new MethodConstant(PromptoTime.class, "minus", PromptoPeriod.class, PromptoTime.class);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+			return new ResultInfo(PromptoTime.class, true);
+			
+		} else
+			throw new SyntaxError("Illegal: Date + " + exp.getClass().getSimpleName());
+	}
+
 	@Override
-	public int CompareTo(Context context, IValue value) throws SyntaxError {
+	public int compareTo(Context context, IValue value) throws SyntaxError {
 		if (value instanceof Time)
 			return this.value.compareTo(((Time) value).value);
 		else
@@ -97,10 +111,6 @@ public class Time extends BaseValue implements Comparable<Time> {
 	@Override
 	public Object convertTo(Class<?> type) {
 		return value;
-	}
-
-	public Time minus(Period period) {
-		return new Time(value.minus(period.value));
 	}
 
 	public long getMillisOfDay() {

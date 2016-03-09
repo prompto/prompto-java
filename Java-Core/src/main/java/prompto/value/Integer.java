@@ -3,8 +3,10 @@ package prompto.value;
 import java.io.IOException;
 
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
+import prompto.compiler.Operand;
 import prompto.compiler.ResultInfo;
 import prompto.error.DivideByZeroError;
 import prompto.error.PromptoError;
@@ -12,10 +14,16 @@ import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoChar;
+import prompto.intrinsic.PromptoString;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
+import prompto.type.CharacterType;
 import prompto.type.DecimalType;
+import prompto.type.INumberType;
+import prompto.type.IType;
 import prompto.type.IntegerType;
+import prompto.type.TextType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
@@ -41,7 +49,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 
 	@Override
-	public IValue Add(Context context, IValue value) throws PromptoError {
+	public IValue plus(Context context, IValue value) throws PromptoError {
 		if (value instanceof Integer)
 			return new Integer(this.longValue() + ((Integer) value).longValue());
 		else if (value instanceof Decimal)
@@ -50,11 +58,11 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 			throw new SyntaxError("Illegal: Integer + " + value.getClass().getSimpleName());
 	}
 
-	public static ResultInfo compileAdd(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+	public static ResultInfo compilePlus(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
 		boolean isDecimal = isDecimal(context, exp);
-		convertToNative(method, left, isDecimal);
+		CompilerUtils.numberToNative(method, left, isDecimal);
 		ResultInfo right = exp.compile(context, method, true);
-		convertToNative(method, right, isDecimal);
+		CompilerUtils.numberToNative(method, right, isDecimal);
 		if(isDecimal) {
 			method.addInstruction(Opcode.DADD);
 			if(toNative)
@@ -70,30 +78,12 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 		}
 	}
 
-	private static void convertToNative(MethodInfo method, ResultInfo info, boolean toDecimal) {
-		if(toDecimal) {
-			if(long.class==info.getType())
-				CompilerUtils.longTodouble(method);
-			else if(Long.class==info.getType())
-				CompilerUtils.LongTodouble(method);
-			else if(Double.class==info.getType())
-				CompilerUtils.DoubleTodouble(method);
-		} else {
-			if(double.class==info.getType())
-				CompilerUtils.doubleTolong(method);
-			else if(Long.class==info.getType())
-				CompilerUtils.LongTolong(method);
-			else if(Double.class==info.getType())
-				CompilerUtils.DoubleTolong(method);
-		}
-	}
-
 	private static boolean isDecimal(Context context, IExpression exp) throws SyntaxError {
 		return exp.check(context)==DecimalType.instance();
 	}
 
 	@Override
-	public IValue Subtract(Context context, IValue value) throws PromptoError {
+	public IValue minus(Context context, IValue value) throws PromptoError {
 		if (value instanceof Integer)
 			return new Integer(this.longValue() - ((Integer) value).longValue());
 		else if (value instanceof Decimal)
@@ -102,20 +92,127 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 			throw new SyntaxError("Illegal: Integer - " + value.getClass().getSimpleName());
 	}
 
+	public static ResultInfo compileMinus(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+		boolean isDecimal = isDecimal(context, exp);
+		CompilerUtils.numberToNative(method, left, isDecimal);
+		ResultInfo right = exp.compile(context, method, true);
+		CompilerUtils.numberToNative(method, right, isDecimal);
+		if(isDecimal) {
+			method.addInstruction(Opcode.DSUB);
+			if(toNative)
+				return new ResultInfo(double.class, false);
+			else
+				return CompilerUtils.doubleToDouble(method);
+		} else {
+			method.addInstruction(Opcode.LSUB);
+			if(toNative)
+				return new ResultInfo(long.class, false);
+			else
+				return CompilerUtils.longToLong(method);
+		}
+	}
+
 	@Override
-	public IValue Multiply(Context context, IValue value) throws PromptoError {
+	public IValue multiply(Context context, IValue value) throws PromptoError {
 		if (value instanceof Integer)
 			return new Integer(this.longValue() * ((Integer) value).longValue());
 		else if (value instanceof Decimal)
 			return new Decimal(((Decimal) value).doubleValue() * this.longValue());
 		else if (value instanceof IMultiplyable)
-			return value.Multiply(context, this);
+			return value.multiply(context, this);
 		else
 			throw new SyntaxError("Illegal: Integer * " + value.getClass().getSimpleName());
 	}
 
+	public static ResultInfo compileMultiply(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+		IType type = exp.check(context);
+		if(type instanceof INumberType)
+			return compileMultiplyNumber(context, method, left, exp, toNative);
+		else if(type==CharacterType.instance())
+			return compileMultiplyCharacter(context, method, left, exp);
+		else if(type==TextType.instance())
+			return compileMultiplyText(context, method, left, exp);
+		else if(IMultiplyable.class.isAssignableFrom(type.toJavaClass()))
+			return compileMultiplyMultiplyable(context, method, left, exp);
+		else
+			throw new SyntaxError("Illegal: Integer * " + type.getClass().getSimpleName());
+	}
+
+	private static ResultInfo compileMultiplyCharacter(Context context, MethodInfo method, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
+		if(Long.class==left.getType())
+			CompilerUtils.LongToint(method);
+		else
+			CompilerUtils.longToint(method);
+		exp.compile(context, method, false);
+		CompilerUtils.CharacterTochar(method);
+		// stack is int, char, need char, int
+		method.addInstruction(Opcode.SWAP);
+		MethodConstant oper = new MethodConstant(PromptoChar.class, 
+				"multiply", 
+				char.class, int.class, String.class);
+		method.addInstruction(Opcode.INVOKESTATIC, oper);
+		return new ResultInfo(String.class, true);
+	}
+	
+	private static ResultInfo compileMultiplyText(Context context, MethodInfo method, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
+		if(Long.class==left.getType())
+			CompilerUtils.LongToint(method);
+		else
+			CompilerUtils.longToint(method);
+		exp.compile(context, method, false);
+		// stack is int, String, need String int
+		method.addInstruction(Opcode.SWAP);
+		MethodConstant oper = new MethodConstant(PromptoString.class, 
+				"multiply", 
+				String.class, int.class, String.class);
+		method.addInstruction(Opcode.INVOKESTATIC, oper);
+		return new ResultInfo(String.class, true);
+	}
+
+	private static ResultInfo compileMultiplyMultiplyable(Context context, MethodInfo method, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
+		if(Long.class==left.getType())
+			CompilerUtils.LongToint(method);
+		else
+			CompilerUtils.longToint(method);
+		ResultInfo rval = exp.compile(context, method, false);
+		method.addInstruction(Opcode.SWAP);
+		try {
+			Class<?> resultType = rval.getType().getMethod("multiply", int.class).getReturnType();
+			Operand oper = new MethodConstant(rval.getType(), "multiply", 
+					int.class, resultType);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+			return new ResultInfo(resultType, true);
+		} catch(NoSuchMethodException e) {
+			throw new SyntaxError(e.getMessage());
+		}
+	}
+
+	private static ResultInfo compileMultiplyNumber(Context context, MethodInfo method, 
+			ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+		boolean isDecimal = isDecimal(context, exp);
+		CompilerUtils.numberToNative(method, left, isDecimal);
+		ResultInfo right = exp.compile(context, method, true);
+		CompilerUtils.numberToNative(method, right, isDecimal);
+		if(isDecimal) {
+			method.addInstruction(Opcode.DMUL);
+			if(toNative)
+				return new ResultInfo(double.class, false);
+			else
+				return CompilerUtils.doubleToDouble(method);
+		} else {
+			method.addInstruction(Opcode.LMUL);
+			if(toNative)
+				return new ResultInfo(long.class, false);
+			else
+				return CompilerUtils.longToLong(method);
+		}
+	}
+
 	@Override
-	public IValue Divide(Context context, IValue value) throws PromptoError {
+	public IValue divide(Context context, IValue value) throws PromptoError {
 		if (value instanceof INumber) {
 			if (((INumber) value).doubleValue() == 0.0)
 				throw new DivideByZeroError();
@@ -125,8 +222,19 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 			throw new SyntaxError("Illegal: Integer / " + value.getClass().getSimpleName());
 	}
 
+	public static ResultInfo compileDivide(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+		CompilerUtils.numberToNative(method, left, true);
+		ResultInfo right = exp.compile(context, method, true);
+		CompilerUtils.numberToNative(method, right, true);
+		method.addInstruction(Opcode.DDIV);
+		if(toNative)
+			return new ResultInfo(double.class, false);
+		else
+			return CompilerUtils.doubleToDouble(method);
+	}
+
 	@Override
-	public IValue IntDivide(Context context, IValue value) throws PromptoError {
+	public IValue intDivide(Context context, IValue value) throws PromptoError {
 		if (value instanceof Integer) {
 			if (((Integer) value).longValue() == 0)
 				throw new DivideByZeroError();
@@ -135,9 +243,20 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 		} else
 			throw new SyntaxError("Illegal: Integer \\ " + value.getClass().getSimpleName());
 	}
+	
+	public static ResultInfo compileIntDivide(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+		CompilerUtils.numberToNative(method, left, false);
+		ResultInfo right = exp.compile(context, method, true);
+		CompilerUtils.numberToNative(method, right, false);
+		method.addInstruction(Opcode.LDIV);
+		if(toNative)
+			return new ResultInfo(long.class, false);
+		else
+			return CompilerUtils.longToLong(method);
+	}
 
 	@Override
-	public IValue Modulo(Context context, IValue value) throws PromptoError {
+	public IValue modulo(Context context, IValue value) throws PromptoError {
 		if (value instanceof Integer) {
 			long mod = ((Integer) value).longValue();
 			if (mod == 0)
@@ -147,12 +266,23 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 			throw new SyntaxError("Illegal: Integer % " + value.getClass().getSimpleName());
 	}
 
+	public static ResultInfo compileModulo(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+		CompilerUtils.numberToNative(method, left, false);
+		ResultInfo right = exp.compile(context, method, true);
+		CompilerUtils.numberToNative(method, right, false);
+		method.addInstruction(Opcode.LREM);
+		if(toNative)
+			return new ResultInfo(long.class, false);
+		else
+			return CompilerUtils.longToLong(method);
+	}
+
 	public int compareTo(INumber obj) {
 		return Long.compare(value, obj.longValue());
 	}
 
 	@Override
-	public int CompareTo(Context context, IValue value) throws PromptoError {
+	public int compareTo(Context context, IValue value) throws PromptoError {
 		if (value instanceof Integer)
 			return Long.compare(this.value, ((Integer) value).longValue());
 		else if (value instanceof Decimal)
@@ -199,6 +329,19 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	@Override
 	public void storeValue(Context context, String name, IStorable storable) throws PromptoError {
 		storable.setData(name, value);
+	}
+
+	public IValue negate() {
+		return new Integer(-value);
+	}
+	
+	public static ResultInfo compileNegate(Context context, MethodInfo method, ResultInfo value, boolean toNative) throws SyntaxError {
+		CompilerUtils.numberToNative(method, value, false);
+		method.addInstruction(Opcode.LNEG);
+		if(toNative)
+			return new ResultInfo(long.class, false);
+		else
+			return CompilerUtils.longToLong(method);
 	}
 
 }

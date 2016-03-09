@@ -114,9 +114,9 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IListable
 	}
 
 	@Override
-	public IValue Add(Context context, IValue value) throws PromptoError {
-        if (value instanceof BaseList<?>)
-            return this.merge(((BaseList<?>)value).getItems());
+	public IValue plus(Context context, IValue value) throws PromptoError {
+        if (value instanceof BaseList<?,?>)
+            return this.merge(((BaseList<?,?>)value).getItems());
         else if (value instanceof SetValue)
             return this.merge(((SetValue)value).getItems());
         else

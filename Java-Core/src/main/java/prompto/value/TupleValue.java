@@ -21,7 +21,7 @@ import prompto.runtime.Context;
 import prompto.type.TupleType;
 import prompto.utils.CodeWriter;
 
-public class TupleValue extends BaseList<TupleValue> {
+public class TupleValue extends BaseList<TupleValue, PromptoTuple<IValue>> {
 
 	public TupleValue() {
 		super(TupleType.instance());
@@ -32,12 +32,12 @@ public class TupleValue extends BaseList<TupleValue> {
 	}
 	
 	@Override
-	protected List<IValue> newItemsInstance() {
+	protected PromptoTuple<IValue> newItemsInstance() {
 		return new PromptoTuple<IValue>();
 	}
 	
 	@Override
-	protected List<IValue> newItemsInstance(Collection<IValue> items) {
+	protected PromptoTuple<IValue> newItemsInstance(Collection<IValue> items) {
 		return new PromptoTuple<IValue>(items);
 	}
 
@@ -75,9 +75,9 @@ public class TupleValue extends BaseList<TupleValue> {
 	}
 	
 	@Override
-	public int CompareTo(Context context, IValue value) throws PromptoError {
+	public int compareTo(Context context, IValue value) throws PromptoError {
 		if(!(value instanceof TupleValue))
-			return super.CompareTo(context, value);
+			return super.compareTo(context, value);
 		return CompareTo(context, (TupleValue)value, new ArrayList<Boolean>());
 	}
 
@@ -96,7 +96,7 @@ public class TupleValue extends BaseList<TupleValue> {
 				return descending ? 1 : -1;
 			else if(otherVal==null)
 				return descending ? -1 : 1;
-			int cmp = thisVal.CompareTo(context, otherVal);
+			int cmp = thisVal.compareTo(context, otherVal);
 			// if not equal, done
 			if(cmp!=0) {
 				return descending ? -cmp : cmp;

@@ -90,7 +90,7 @@ public class EqualsExpression implements IExpression, IAssertion {
 			equal = !interpretEquals(context,lval,rval);
 			break;
 		case ROUGHLY:
-			equal = lval.Roughly(context, rval);
+			equal = lval.roughly(context, rval);
 			break;
 		}
 		return Boolean.valueOf(equal);	}

@@ -213,60 +213,59 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	}
 	
 	@Override
-	public IValue Multiply(Context context, IValue value) throws PromptoError {
+	public IValue multiply(Context context, IValue value) throws PromptoError {
 		try {
 			return interpretOperator(context, value, Operator.MULTIPLY);
 		} catch(SyntaxError e) {
-			return super.Multiply(context, value);
+			return super.multiply(context, value);
 		}
 	}
 	
 	@Override
-	public IValue Divide(Context context, IValue value) throws PromptoError {
+	public IValue divide(Context context, IValue value) throws PromptoError {
 		try {
 			return interpretOperator(context, value, Operator.DIVIDE);
 		} catch(SyntaxError e) {
-			return super.Divide(context, value);
+			return super.divide(context, value);
 		}
 	}
 	
 	@Override
-	public IValue IntDivide(Context context, IValue value) throws PromptoError {
+	public IValue intDivide(Context context, IValue value) throws PromptoError {
 		try {
 			return interpretOperator(context, value, Operator.IDIVIDE);
 		} catch(SyntaxError e) {
-			return super.IntDivide(context, value);
+			return super.intDivide(context, value);
 		}
 	}
 	
 	@Override
-	public IValue Modulo(Context context, IValue value) throws PromptoError {
+	public IValue modulo(Context context, IValue value) throws PromptoError {
 		try {
 			return interpretOperator(context, value, Operator.MODULO);
 		} catch(SyntaxError e) {
-			return super.Modulo(context, value);
+			return super.modulo(context, value);
 		}
 	}
 	
 	@Override
-	public IValue Add(Context context, IValue value) throws PromptoError {
+	public IValue plus(Context context, IValue value) throws PromptoError {
 		try {
 			return interpretOperator(context, value, Operator.PLUS);
 		} catch(SyntaxError e) {
-			return super.Add(context, value);
+			return super.plus(context, value);
 		}
 	}
 	
 	@Override
-	public IValue Subtract(Context context, IValue value) throws PromptoError {
+	public IValue minus(Context context, IValue value) throws PromptoError {
 		try {
 			return interpretOperator(context, value, Operator.MINUS);
 		} catch(SyntaxError e) {
-			return super.Subtract(context, value);
+			return super.minus(context, value);
 		}
 	}
 	
-
 	private IValue interpretOperator(Context context, IValue value, Operator operator) throws PromptoError {
 		IMethodDeclaration decl = declaration.findOperator(context, operator, value.getType());
 		context = context.newInstanceContext(this);

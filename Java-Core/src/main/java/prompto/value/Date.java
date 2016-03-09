@@ -45,14 +45,14 @@ public class Date extends BaseValue implements Comparable<Date> {
 	}
 
 	@Override
-	public IValue Add(Context context, IValue value) throws PromptoError {
+	public IValue plus(Context context, IValue value) throws PromptoError {
 		if (value instanceof Period)
 			return new Date(this.value.plus(((Period)value).getValue()));
 		else
 			throw new SyntaxError("Illegal: Date + " + value.getClass().getSimpleName());
 	}
 
-	public static ResultInfo compileAdd(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+	public static ResultInfo compilePlus(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
 		ResultInfo right = exp.compile(context, method, false);
 		if(right.getType()!=PromptoPeriod.class)
 			throw new SyntaxError("Illegal: Date + " + exp.getClass().getSimpleName());
@@ -63,7 +63,7 @@ public class Date extends BaseValue implements Comparable<Date> {
 	
 
 	@Override
-	public IValue Subtract(Context context, IValue value) throws PromptoError {
+	public IValue minus(Context context, IValue value) throws PromptoError {
 		if (value instanceof Date) {
 			PromptoDate other = ((Date) value).value;
 			PromptoPeriod result = this.value.minus(other);
@@ -75,8 +75,24 @@ public class Date extends BaseValue implements Comparable<Date> {
 					+ value.getClass().getSimpleName());
 	}
 
+	public static ResultInfo compileMinus(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+		ResultInfo right = exp.compile(context, method, false);
+		if(right.getType()==PromptoDate.class) {
+			MethodConstant oper = new MethodConstant(PromptoDate.class, "minus", 
+					PromptoDate.class, PromptoPeriod.class);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+			return new ResultInfo(PromptoPeriod.class, true);
+		} else if(right.getType()==PromptoPeriod.class) {
+			MethodConstant oper = new MethodConstant(PromptoDate.class, "minus", 
+					PromptoPeriod.class, PromptoDate.class);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+			return new ResultInfo(PromptoDate.class, true);
+		} else
+			throw new SyntaxError("Illegal: Date - " + exp.getClass().getSimpleName());
+	}
+	
 	@Override
-	public int CompareTo(Context context, IValue value) throws PromptoError {
+	public int compareTo(Context context, IValue value) throws PromptoError {
 		if (value instanceof Date)
 			return this.value.compareTo(((Date) value).value);
 		else

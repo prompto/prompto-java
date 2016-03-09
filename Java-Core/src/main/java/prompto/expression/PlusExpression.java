@@ -33,12 +33,12 @@ import prompto.value.Text;
 import prompto.value.Time;
 import prompto.value.TupleValue;
 
-public class AddExpression implements IExpression {
+public class PlusExpression implements IExpression {
 
 	IExpression left;
 	IExpression right;
 	
-	public AddExpression(IExpression left, IExpression right) {
+	public PlusExpression(IExpression left, IExpression right) {
 		this.left = left;
 		this.right = right;
 	}
@@ -66,23 +66,23 @@ public class AddExpression implements IExpression {
 	public IValue interpret(Context context) throws PromptoError {
 		IValue lval = left.interpret(context);
 		IValue rval = right.interpret(context);
-        return lval.Add(context, rval);
+        return lval.plus(context, rval);
  	}
 	
 	static Map<Class<?>, IOperatorFunction> adders = createAdders();
 	
 	private static Map<Class<?>, IOperatorFunction> createAdders() {
 		Map<Class<?>, IOperatorFunction> map = new HashMap<>();
-		map.put(String.class, Text::compileAdd);
-		map.put(java.lang.Character.class, Character::compileAdd);
-		map.put(double.class, Decimal::compileAdd);
-		map.put(Double.class, Decimal::compileAdd);
-		map.put(long.class, Integer::compileAdd);
-		map.put(Long.class, Integer::compileAdd);
-		map.put(PromptoDate.class, Date::compileAdd);
-		map.put(PromptoDateTime.class, DateTime::compileAdd);
-		map.put(PromptoTime.class, Time::compileAdd);
-		map.put(PromptoPeriod.class, Period::compileAdd);
+		map.put(String.class, Text::compilePlus);
+		map.put(java.lang.Character.class, Character::compilePlus);
+		map.put(double.class, Decimal::compilePlus);
+		map.put(Double.class, Decimal::compilePlus);
+		map.put(long.class, Integer::compilePlus);
+		map.put(Long.class, Integer::compilePlus);
+		map.put(PromptoDate.class, Date::compilePlus);
+		map.put(PromptoDateTime.class, DateTime::compilePlus);
+		map.put(PromptoTime.class, Time::compilePlus);
+		map.put(PromptoPeriod.class, Period::compilePlus);
 		map.put(PromptoDict.class, Dictionary::compileAdd);
 		map.put(PromptoSet.class, SetValue::compileAdd);
 		map.put(PromptoTuple.class, TupleValue::compileAdd);
@@ -92,7 +92,7 @@ public class AddExpression implements IExpression {
 
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
-		ResultInfo lval = left.compile(context, method, false);
+		ResultInfo lval = left.compile(context, method, true);
 		IOperatorFunction adder = adders.get(lval.getType());
 		if(adder==null) {
 			System.err.println("Missing IOperatorFunction for add " + lval.getType().getName());

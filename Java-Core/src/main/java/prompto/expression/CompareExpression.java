@@ -47,7 +47,7 @@ public class CompareExpression extends Section implements IExpression, IAssertio
 	}
 
 	private Boolean compare(Context context, IValue lval, IValue rval) throws PromptoError {
-		int cmp = lval.CompareTo(context, rval);
+		int cmp = lval.compareTo(context, rval);
 		switch (operator) {
 		case GT:
 			return Boolean.valueOf(cmp > 0);

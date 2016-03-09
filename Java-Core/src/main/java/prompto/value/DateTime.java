@@ -50,14 +50,14 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 	}
 
 	@Override
-	public IValue Add(Context context, IValue value) throws PromptoError {
+	public IValue plus(Context context, IValue value) throws PromptoError {
 		if (value instanceof Period)
 			return new DateTime(this.value.plus(((Period) value).value));
 		else
 			throw new SyntaxError("Illegal: DateTime + " + value.getClass().getSimpleName());
 	}
 	
-	public static ResultInfo compileAdd(Context context, MethodInfo method, ResultInfo left, IExpression value, boolean toNative) throws SyntaxError {
+	public static ResultInfo compilePlus(Context context, MethodInfo method, ResultInfo left, IExpression value, boolean toNative) throws SyntaxError {
 		ResultInfo right = value.compile(context, method, false);
 		if(right.getType()!=PromptoPeriod.class)
 			throw new SyntaxError("Illegal: DateTime + " + value.getClass().getSimpleName());
@@ -66,31 +66,35 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
 		return new ResultInfo(PromptoDateTime.class, true);
 	}
-	
-
 
 	@Override
-	public IValue Subtract(Context context, IValue value) throws PromptoError {
-		if (value instanceof DateTime) {
-			long millis = this.value.toJavaTime();
-			millis -= ((DateTime) value).value.toJavaTime();
-			PromptoPeriod result = new PromptoPeriod(millis);
-			if (result.getNativeHours() > 24)
-				result = new PromptoPeriod(0, 0, 0, 
-						result.getNativeHours() / 24, 
-						result.getNativeHours() % 24, 
-						result.getNativeMinutes(), 
-						result.getNativeSeconds(), 
-						result.getNativeMillis());
-			return new Period(result);
-		} else if (value instanceof Period)
+	public IValue minus(Context context, IValue value) throws PromptoError {
+		if (value instanceof DateTime)
+			return new Period(this.value.minus(((DateTime)value).getValue()));
+		else if (value instanceof Period)
 			return new DateTime(this.value.minus(((Period)value).getValue()));
 		else
 			throw new SyntaxError("Illegal: DateTime - " + value.getClass().getSimpleName());
 	}
 
+	public static ResultInfo compileMinus(Context context, MethodInfo method, ResultInfo left, IExpression value, boolean toNative) throws SyntaxError {
+		ResultInfo right = value.compile(context, method, false);
+		if(right.getType()==PromptoDateTime.class) {
+			MethodConstant c = new MethodConstant(PromptoDateTime.class, "minus", 
+					PromptoDateTime.class, PromptoPeriod.class);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, c);
+			return new ResultInfo(PromptoPeriod.class, true);
+		} else if(right.getType()==PromptoPeriod.class) {
+			MethodConstant c = new MethodConstant(PromptoDateTime.class, "minus", 
+					PromptoPeriod.class, PromptoDateTime.class);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, c);
+			return new ResultInfo(PromptoDateTime.class, true);
+		} else
+			throw new SyntaxError("Illegal: DateTime - " + value.getClass().getSimpleName());
+	}
+
 	@Override
-	public int CompareTo(Context context, IValue value) throws PromptoError {
+	public int compareTo(Context context, IValue value) throws PromptoError {
 		if (value instanceof DateTime)
 			return this.value.compareTo(((DateTime) value).value);
 		else

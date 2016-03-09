@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.Collator;
 import java.util.Iterator;
 
+import prompto.compiler.CompilerUtils;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -15,6 +16,7 @@ import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoString;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.type.TextType;
@@ -51,11 +53,11 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	}
 
 	@Override
-	public IValue Add(Context context, IValue value) {
+	public IValue plus(Context context, IValue value) {
 		return new Text(this.value + value.toString());
 	}
 
-	public static ResultInfo compileAdd(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+	public static ResultInfo compilePlus(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
 		ResultInfo right = exp.compile(context, method, false);
 		// convert right to String
 		if(String.class!=right.getType()) {
@@ -70,30 +72,36 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	}
 	
 	@Override
-	public IValue Multiply(Context context, IValue value) throws PromptoError {
+	public IValue multiply(Context context, IValue value) throws PromptoError {
 		if (value instanceof Integer) {
 			int count = (int) ((Integer) value).longValue();
 			if (count < 0)
 				throw new SyntaxError("Negative repeat count:" + count);
-			if (count == 0)
-				return new Text("");
-			if (count == 1)
-				return new Text(this.value);
-			char[] src = this.value.toCharArray();
-			char[] cc = new char[count * src.length];
-			for (int i = 0; i < count; i++)
-				System.arraycopy(src, 0, cc, i * src.length, src.length);
-			return new Text(new String(cc));
+			return new Text(PromptoString.multiply(this.value, count));
 		} else
 			throw new SyntaxError("Illegal: Chararacter * " + value.getClass().getSimpleName());
 	}
 
+	public static ResultInfo compileMultiply(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+		ResultInfo right = exp.compile(context, method, true);
+		if(Long.class==right.getType())
+			CompilerUtils.LongToint(method);
+		else if(long.class==right.getType())
+			CompilerUtils.longToint(method);
+		MethodConstant oper = new MethodConstant(PromptoString.class, 
+				"multiply", 
+				String.class, int.class, String.class);
+		method.addInstruction(Opcode.INVOKESTATIC, oper);
+		return new ResultInfo(String.class, true);
+	}
+	
+	
 	public int compareTo(Text obj) {
 		return value.compareTo(obj.getValue());
 	}
 
 	@Override
-	public int CompareTo(Context context, IValue value) throws PromptoError {
+	public int compareTo(Context context, IValue value) throws PromptoError {
 		if (value instanceof Text)
 			return this.value.compareTo(((Text) value).value);
 		else
@@ -210,7 +218,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	}
 
     @Override
-    public boolean Roughly(Context context, IValue obj) throws PromptoError {
+    public boolean roughly(Context context, IValue obj) throws PromptoError {
         if (obj instanceof Character || obj instanceof Text) {
         	Collator c = Collator.getInstance();
         	c.setStrength(Collator.PRIMARY);

@@ -40,7 +40,7 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 
 	@Override
-	public IValue Add(Context context, IValue value) throws SyntaxError {
+	public IValue plus(Context context, IValue value) throws SyntaxError {
 		if (value instanceof Integer)
 			return new Decimal(this.value + ((Integer) value).longValue());
 		else if (value instanceof Decimal)
@@ -49,28 +49,24 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 			throw new SyntaxError("Illegal: Decimal + " + value.getClass().getSimpleName());
 	}
 
-	public static ResultInfo compileAdd(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
-		convertToNative(method, left);
+	public static ResultInfo compilePlus(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+		return compileOperation(context, method, left, exp, toNative, true, Opcode.DADD);
+	}
+
+	private static ResultInfo compileOperation(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative, boolean isDecimal, Opcode opcode) throws SyntaxError {
+		CompilerUtils.numberToNative(method, left, isDecimal);
 		ResultInfo right = exp.compile(context, method, true);
-		convertToNative(method, right);
-		method.addInstruction(Opcode.DADD);
+		CompilerUtils.numberToNative(method, right, isDecimal);
+		method.addInstruction(opcode);
 		if(toNative)
 			return new ResultInfo(double.class, false);
 		else
 			return CompilerUtils.doubleToDouble(method);
 	}
 
-	private static void convertToNative(MethodInfo method, ResultInfo info) {
-		if(info.getType()==long.class)
-			CompilerUtils.longTodouble(method);
-		else if(info.getType()==Long.class)
-			CompilerUtils.LongTodouble(method);
-		else if(info.getType()==Double.class)
-			CompilerUtils.DoubleTodouble(method);
-	}
 
 	@Override
-	public IValue Subtract(Context context, IValue value) throws SyntaxError {
+	public IValue minus(Context context, IValue value) throws SyntaxError {
 		if (value instanceof Integer)
 			return new Decimal(this.value - ((Integer) value).longValue());
 		else if (value instanceof Decimal)
@@ -79,8 +75,12 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 			throw new SyntaxError("Illegal: Decimal - " + value.getClass().getSimpleName());
 	}
 
+	public static ResultInfo compileMinus(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+		return compileOperation(context, method, left, exp, toNative, true, Opcode.DSUB);
+	}
+
 	@Override
-	public IValue Multiply(Context context, IValue value) throws SyntaxError {
+	public IValue multiply(Context context, IValue value) throws SyntaxError {
 		if (value instanceof Integer)
 			return new Decimal(this.doubleValue() * ((Integer) value).longValue());
 		else if (value instanceof Decimal)
@@ -89,8 +89,12 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 			throw new SyntaxError("Illegal: Decimal * " + value.getClass().getSimpleName());
 	}
 
+	public static ResultInfo compileMultiply(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+		return compileOperation(context, method, left, exp, toNative, true, Opcode.DMUL);
+	}
+
 	@Override
-	public IValue Divide(Context context, IValue value) throws PromptoError {
+	public IValue divide(Context context, IValue value) throws PromptoError {
 		if (value instanceof INumber) {
 			if (((INumber) value).doubleValue() == 0.0)
 				throw new DivideByZeroError();
@@ -100,8 +104,12 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 			throw new SyntaxError("Illegal: Decimal / " + value.getClass().getSimpleName());
 	}
 	
+	public static ResultInfo compileDivide(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+		return compileOperation(context, method, left, exp, toNative, true, Opcode.DDIV);
+	}
+
 	@Override
-	public IValue IntDivide(Context context, IValue value) throws PromptoError {
+	public IValue intDivide(Context context, IValue value) throws PromptoError {
 		if (value instanceof Integer) {
 			if (((Integer) value).longValue() == 0)
 				throw new DivideByZeroError();
@@ -111,8 +119,13 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 			throw new SyntaxError("Illegal: Decimal \\ " + value.getClass().getSimpleName());
 	}
 
+	public static ResultInfo compileIntDivide(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+		return compileOperation(context, method, left, exp, toNative, false, Opcode.LDIV);
+	}
+
+
 	@Override
-	public IValue Modulo(Context context, IValue value) throws PromptoError {
+	public IValue modulo(Context context, IValue value) throws PromptoError {
 		if (value instanceof INumber) {
 			if (((INumber) value).doubleValue() == 0.0)
 				throw new DivideByZeroError();
@@ -122,12 +135,17 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 			throw new SyntaxError("Illegal: Decimal % " + value.getClass().getSimpleName());
 	}
 	
+	public static ResultInfo compileModulo(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+		return compileOperation(context, method, left, exp, toNative, true, Opcode.DREM);
+	}
+
+
 	public int compareTo(INumber obj) {
 		return Double.compare(value, obj.doubleValue());
 	}
 
 	@Override
-	public int CompareTo(Context context, IValue value) throws PromptoError {
+	public int compareTo(Context context, IValue value) throws PromptoError {
 		if (value instanceof INumber)
 			return Double.compare(this.value, ((INumber) value).doubleValue());
 		else
@@ -167,6 +185,19 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 	@Override
 	public void storeValue(Context context, String name, IStorable storable) throws PromptoError {
 		storable.setData(name, value);
+	}
+
+	public IValue negate() {
+		return new Decimal(-value);
+	}
+	
+	public static ResultInfo compileNegate(Context context, MethodInfo method, ResultInfo value, boolean toNative) throws SyntaxError {
+		CompilerUtils.numberToNative(method, value, true);
+		method.addInstruction(Opcode.DNEG);
+		if(toNative)
+			return new ResultInfo(double.class, false);
+		else
+			return CompilerUtils.doubleToDouble(method);
 	}
 
 }

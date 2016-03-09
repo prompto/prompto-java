@@ -59,7 +59,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 		return dict.isEmpty();
 	}
 
-	public IValue Add(Context context, IValue value) throws PromptoError {
+	public IValue plus(Context context, IValue value) throws PromptoError {
 		if (value instanceof Dictionary)
 			return merge(this, (Dictionary) value);
 		else

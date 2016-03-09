@@ -134,6 +134,20 @@ public class PromptoDateTime implements Comparable<PromptoDateTime>{
 		return new PromptoDateTime(wrapped.minus(value.wrapped));
 	}
 
+	public PromptoPeriod minus(PromptoDateTime value) {
+		long millis = toJavaTime();
+		millis -= value.toJavaTime();
+		PromptoPeriod result = new PromptoPeriod(millis);
+		if (result.getNativeHours() > 24)
+			result = new PromptoPeriod(0, 0, 0, 
+					result.getNativeHours() / 24, 
+					result.getNativeHours() % 24, 
+					result.getNativeMinutes(), 
+					result.getNativeSeconds(), 
+					result.getNativeMillis());
+		return result;
+	}
+
 	public String format(String formatString) {
 		return wrapped.toString(formatString);
 	}
@@ -145,6 +159,8 @@ public class PromptoDateTime implements Comparable<PromptoDateTime>{
 	public boolean isEqual(PromptoDateTime actual) {
 		return wrapped.isEqual(actual.wrapped);
 	}
+
+
 
 
 	

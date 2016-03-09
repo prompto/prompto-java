@@ -41,7 +41,7 @@ import prompto.declaration.OperatorMethodDeclaration;
 import prompto.declaration.SetterMethodDeclaration;
 import prompto.declaration.SingletonCategoryDeclaration;
 import prompto.declaration.TestMethodDeclaration;
-import prompto.expression.AddExpression;
+import prompto.expression.PlusExpression;
 import prompto.expression.AndExpression;
 import prompto.expression.CastExpression;
 import prompto.expression.CodeExpression;
@@ -62,7 +62,7 @@ import prompto.expression.IteratorExpression;
 import prompto.expression.MemberSelector;
 import prompto.expression.MethodExpression;
 import prompto.expression.MethodSelector;
-import prompto.expression.MinusExpression;
+import prompto.expression.NegateExpression;
 import prompto.expression.ModuloExpression;
 import prompto.expression.MultiplyExpression;
 import prompto.expression.NotExpression;
@@ -72,7 +72,7 @@ import prompto.expression.ReadExpression;
 import prompto.expression.SelectorExpression;
 import prompto.expression.SliceSelector;
 import prompto.expression.SortedExpression;
-import prompto.expression.SubtractExpression;
+import prompto.expression.MinusExpression;
 import prompto.expression.SymbolExpression;
 import prompto.expression.TernaryExpression;
 import prompto.expression.ThisExpression;
@@ -266,7 +266,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	public void exitAddExpression(AddExpressionContext ctx) {
 		IExpression left = this.<IExpression>getNodeValue(ctx.left);
 		IExpression right = this.<IExpression>getNodeValue(ctx.right);
-		IExpression exp = ctx.op.getType()==EParser.PLUS ? new AddExpression(left, right) : new SubtractExpression(left, right);
+		IExpression exp = ctx.op.getType()==EParser.PLUS ? new PlusExpression(left, right) : new MinusExpression(left, right);
 		setNodeValue(ctx, exp);
 	}
 
@@ -1773,7 +1773,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	@Override
 	public void exitMinusExpression(MinusExpressionContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, new MinusExpression(exp));
+		setNodeValue(ctx, new NegateExpression(exp));
 	}
 	
 	@Override

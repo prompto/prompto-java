@@ -15,7 +15,7 @@ import prompto.value.IValue;
 import prompto.value.ListValue;
 
 
-public class DecimalType extends NativeType {
+public class DecimalType extends NativeType implements INumberType {
 
 	static DecimalType instance = new DecimalType();
 	

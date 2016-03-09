@@ -17,7 +17,7 @@ import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteMethodDeclaration;
 import prompto.declaration.NativeMethodDeclaration;
-import prompto.expression.AddExpression;
+import prompto.expression.PlusExpression;
 import prompto.expression.ConstructorExpression;
 import prompto.expression.IExpression;
 import prompto.expression.InstanceExpression;
@@ -224,7 +224,7 @@ public class TestParserAtoms {
 		ArgumentAssignment as = mc.getAssignments().get(0);
 		assertEquals("value",as.getName().toString());
 		IExpression exp = as.getExpression();
-		assertTrue(exp instanceof AddExpression);
+		assertTrue(exp instanceof PlusExpression);
 		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalContext());
 		mc.toDialect(writer);
 		assertEquals("print(value = \"person\" + p.name)", writer.toString());

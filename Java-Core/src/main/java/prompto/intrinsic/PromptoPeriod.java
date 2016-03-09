@@ -2,8 +2,10 @@ package prompto.intrinsic;
 
 import org.joda.time.Period;
 
+import prompto.value.IMultiplyable;
+
 /* Period is final so can't just extend it */
-public class PromptoPeriod {
+public class PromptoPeriod implements IMultiplyable {
 
 	public static PromptoPeriod parse(String text) {
 		return new PromptoPeriod(Period.parse(text));
@@ -77,8 +79,7 @@ public class PromptoPeriod {
 		return wrapped.getMillis();
 	}
 
-    public PromptoPeriod times(int count)
-    {
+    public PromptoPeriod multiply(int count) {
         return new PromptoPeriod(
               getNativeYears() * count,
               getNativeMonths() * count,
@@ -89,6 +90,13 @@ public class PromptoPeriod {
               getNativeSeconds() * count,
               getNativeMillis() * count);
     }
+    
+    
+	public PromptoPeriod negate() {
+		return new PromptoPeriod(-getNativeYears(),-getNativeMonths(),-getNativeWeeks(),
+					-getNativeDays(),-getNativeHours(), -getNativeMinutes(),
+					-getNativeSeconds(),-getNativeMillis());
+	}
 
 	
 }

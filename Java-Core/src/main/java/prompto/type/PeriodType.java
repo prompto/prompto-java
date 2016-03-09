@@ -1,8 +1,7 @@
 package prompto.type;
 
-import org.joda.time.Period;
-
 import prompto.error.SyntaxError;
+import prompto.intrinsic.PromptoPeriod;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 
@@ -22,7 +21,7 @@ public class PeriodType extends NativeType {
 
 	@Override
 	public Class<?> toJavaClass() {
-		return Period.class;
+		return PromptoPeriod.class;
 	}
 	
 
