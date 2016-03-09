@@ -2,14 +2,21 @@ package prompto.value;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+import prompto.custom.PromptoSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.Operand;
+import prompto.compiler.ResultInfo;
 import prompto.error.IndexOutOfRangeError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.expression.IExpression;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.type.SetType;
@@ -29,7 +36,7 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IListable
 	}
 
 	protected Set<IValue> newSet() {
-		return new HashSet<IValue>();
+		return new PromptoSet<IValue>();
 	}
 
 	@Override
@@ -92,8 +99,7 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IListable
 	
 	@Override
 	public String toString() {
-		String result = items.toString();
-		return "<" + result.substring(1,result.length()-1) + ">";
+		return items.toString();
 	}
 
 	@Override
@@ -106,6 +112,27 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IListable
             throw new SyntaxError("Illegal: " +this.type.getId() + " + " + value.getClass().getSimpleName());
     }
 
+	public static ResultInfo compileAdd(Context context, MethodInfo method, IExpression value) throws SyntaxError {
+		// TODO: return left if right is empty (or right if left is empty and is a set)
+		// create result
+		ResultInfo info = CompilerUtils.newInstance(method, PromptoSet.class); 
+		// add left, current stack is: left, result, we need: result, result, left
+		method.addInstruction(Opcode.DUP_X1); // stack is: result, left, result
+		method.addInstruction(Opcode.SWAP); // stack is: result, result, left
+		Operand oper = new MethodConstant(PromptoSet.class, "addAll", 
+				Collection.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		method.addInstruction(Opcode.POP); // consume returned boolean
+		// add right, current stack is: result, we need: result, result, right
+		method.addInstruction(Opcode.DUP); // stack is: result, result 
+		value.compile(context, method); // stack is: result, result, right
+		oper = new MethodConstant(PromptoSet.class, "addAll", 
+				Collection.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		method.addInstruction(Opcode.POP); // consume returned boolean
+		return info;
+	}
+	
 	public SetValue merge(Collection<IValue> items) {
 		List<IValue> result = new ArrayList<IValue>();
 		result.addAll(this.items);

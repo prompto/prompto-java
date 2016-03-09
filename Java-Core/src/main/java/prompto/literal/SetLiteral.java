@@ -3,6 +3,12 @@ package prompto.literal;
 import java.util.HashSet;
 import java.util.Set;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.Operand;
+import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
@@ -56,6 +62,7 @@ public class SetLiteral extends Literal<SetValue> {
 		return value;
 	}
 
+
 	@Override
 	public void toDialect(CodeWriter writer) {
 		if(expressions!=null) {
@@ -66,5 +73,22 @@ public class SetLiteral extends Literal<SetValue> {
 			writer.append("< >");
 	}
 
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
+		ResultInfo info = CompilerUtils.newInstance(method, HashSet.class);
+		if(expressions!=null)
+			addItems(context, method);
+		return info;
+	}
 
+	private void addItems(Context context, MethodInfo method) throws SyntaxError {
+		for(IExpression e : expressions) {
+			method.addInstruction(Opcode.DUP); // need to keep a reference to the list on top of stack
+			e.compile(context, method);
+			Operand oper = new MethodConstant(HashSet.class, "add", 
+					Object.class, boolean.class);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+			method.addInstruction(Opcode.POP); // consume the returned boolean
+		}
+	}
 }

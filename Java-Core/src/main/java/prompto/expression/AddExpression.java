@@ -2,6 +2,7 @@ package prompto.expression;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.joda.time.DateTime;
@@ -23,6 +24,7 @@ import prompto.value.Dictionary;
 import prompto.value.Integer;
 import prompto.value.IValue;
 import prompto.value.Period;
+import prompto.value.SetValue;
 import prompto.value.Text;
 import prompto.value.Character;
 
@@ -75,6 +77,7 @@ public class AddExpression implements IExpression {
 		map.put(PromptoMap.class, Dictionary::compileAdd);
 		map.put(ArrayList.class, BaseList::compileAdd);
 		map.put(org.joda.time.Period.class, Period::compileAdd);
+		map.put(HashSet.class, SetValue::compileAdd);
 		return map;
 	}
 
