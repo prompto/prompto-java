@@ -75,7 +75,9 @@ public class AddExpression implements IExpression {
 		Map<Class<?>, IOperatorFunction> map = new HashMap<>();
 		map.put(String.class, Text::compileAdd);
 		map.put(java.lang.Character.class, Character::compileAdd);
+		map.put(double.class, Decimal::compileAdd);
 		map.put(Double.class, Decimal::compileAdd);
+		map.put(long.class, Integer::compileAdd);
 		map.put(Long.class, Integer::compileAdd);
 		map.put(PromptoDate.class, Date::compileAdd);
 		map.put(PromptoDateTime.class, DateTime::compileAdd);
@@ -89,14 +91,14 @@ public class AddExpression implements IExpression {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
-		ResultInfo lval = left.compile(context, method);
+	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
+		ResultInfo lval = left.compile(context, method, false);
 		IOperatorFunction adder = adders.get(lval.getType());
 		if(adder==null) {
 			System.err.println("Missing IOperatorFunction for add " + lval.getType().getName());
 			throw new SyntaxError("Cannot add " + lval.getType().getName() + " to " + right.check(context).getName());
 		}
-		return adder.compile(context, method, right);
+		return adder.compile(context, method, lval, right, toNative);
 	}
 
 	

@@ -15,7 +15,6 @@ import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.type.DecimalType;
-import prompto.type.IType;
 import prompto.type.IntegerType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -51,27 +50,46 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 			throw new SyntaxError("Illegal: Integer + " + value.getClass().getSimpleName());
 	}
 
-	public static ResultInfo compileAdd(Context context, MethodInfo method, IExpression value) throws SyntaxError {
-		IType type = value.check(context);
-		boolean isDecimal = type==DecimalType.instance();
-		if(isDecimal)
-			CompilerUtils.LongTodouble(method);
-		else
-			CompilerUtils.LongTolong(method);
-		// compile rhs
-		ResultInfo right = value.compile(context, method);
+	public static ResultInfo compileAdd(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+		boolean isDecimal = isDecimal(context, exp);
+		convertToNative(method, left, isDecimal);
+		ResultInfo right = exp.compile(context, method, true);
+		convertToNative(method, right, isDecimal);
 		if(isDecimal) {
-			if(right.getType()==Long.class)
-				CompilerUtils.LongTodouble(method);
-			else
-				CompilerUtils.DoubleTodouble(method);
 			method.addInstruction(Opcode.DADD);
-			return CompilerUtils.doubleToDouble(method);
+			if(toNative)
+				return new ResultInfo(double.class, false);
+			else
+				return CompilerUtils.doubleToDouble(method);
 		} else {
-			CompilerUtils.LongTolong(method);
 			method.addInstruction(Opcode.LADD);
-			return CompilerUtils.longToLong(method);
+			if(toNative)
+				return new ResultInfo(long.class, false);
+			else
+				return CompilerUtils.longToLong(method);
 		}
+	}
+
+	private static void convertToNative(MethodInfo method, ResultInfo info, boolean toDecimal) {
+		if(toDecimal) {
+			if(long.class==info.getType())
+				CompilerUtils.longTodouble(method);
+			else if(Long.class==info.getType())
+				CompilerUtils.LongTodouble(method);
+			else if(Double.class==info.getType())
+				CompilerUtils.DoubleTodouble(method);
+		} else {
+			if(double.class==info.getType())
+				CompilerUtils.doubleTolong(method);
+			else if(Long.class==info.getType())
+				CompilerUtils.LongTolong(method);
+			else if(Double.class==info.getType())
+				CompilerUtils.DoubleTolong(method);
+		}
+	}
+
+	private static boolean isDecimal(Context context, IExpression exp) throws SyntaxError {
+		return exp.check(context)==DecimalType.instance();
 	}
 
 	@Override

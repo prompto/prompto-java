@@ -57,8 +57,8 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 			throw new SyntaxError("Illegal: DateTime + " + value.getClass().getSimpleName());
 	}
 	
-	public static ResultInfo compileAdd(Context context, MethodInfo method, IExpression value) throws SyntaxError {
-		ResultInfo right = value.compile(context, method);
+	public static ResultInfo compileAdd(Context context, MethodInfo method, ResultInfo left, IExpression value, boolean toNative) throws SyntaxError {
+		ResultInfo right = value.compile(context, method, false);
 		if(right.getType()!=PromptoPeriod.class)
 			throw new SyntaxError("Illegal: DateTime + " + value.getClass().getSimpleName());
 		MethodConstant c = new MethodConstant(PromptoDateTime.class, "plus", 

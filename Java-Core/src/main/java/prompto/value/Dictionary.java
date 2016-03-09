@@ -67,7 +67,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 					+ value.getClass().getSimpleName());
 	}
 	
-	public static ResultInfo compileAdd(Context context, MethodInfo method, IExpression value) throws SyntaxError {
+	public static ResultInfo compileAdd(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
 		// TODO: return right if left is empty (or left if right is empty)
 		// create result
 		ResultInfo info = CompilerUtils.newInstance(method, PromptoDict.class); 
@@ -79,7 +79,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		// add right, current stack is: result, we need: result, result, right
 		method.addInstruction(Opcode.DUP); // stack is: result, result 
-		value.compile(context, method); // stack is: result, result, right
+		exp.compile(context, method, false); // stack is: result, result, right
 		oper = new MethodConstant(PromptoDict.class, "putAll", 
 				Map.class, void.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);

@@ -26,7 +26,7 @@ public interface IExpression {
 		throw new UnsupportedOperationException("toFilter not supported by " + this.getClass().getSimpleName());
 	}
 	
-	default ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
+	default ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
 		System.err.println("Need to implement compile for " + this.getClass().getName());
 		throw new UnsupportedOperationException();
 	}

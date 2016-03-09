@@ -128,7 +128,7 @@ public class MemberSelector extends SelectorExpression {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
 		ResultInfo info = compileParent(context, method);
         // special case for Symbol which evaluates as value
 		ResultInfo result = compileSymbol(context, method, info);
@@ -186,7 +186,7 @@ public class MemberSelector extends SelectorExpression {
 
 	private ResultInfo compileParent(Context context, MethodInfo method) throws SyntaxError {
 		IExpression parent = resolveParent(context);
-		return parent.compile(context, method);
+		return parent.compile(context, method, false);
 	}
 
 

@@ -89,7 +89,7 @@ public class InstanceExpression implements IExpression {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
 		Integer idx = method.getRegisteredLocal(getName());
 		switch(idx) {
 			case 0:

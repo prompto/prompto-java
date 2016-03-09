@@ -167,6 +167,16 @@ public abstract class CompilerUtils {
 		return new ResultInfo(Long.class, true);
 	}
 	
+	public static ResultInfo longTodouble(MethodInfo method) {
+		method.addInstruction(Opcode.L2D);
+		return longToLong(method);
+	}
+
+	public static ResultInfo doubleTolong(MethodInfo method) {
+		method.addInstruction(Opcode.D2L);
+		return longToLong(method);
+	}
+
 	public static ResultInfo floatToDouble(MethodInfo method) {
 		method.addInstruction(Opcode.F2D);
 		return doubleToDouble(method);
@@ -211,6 +221,15 @@ public abstract class CompilerUtils {
 				double.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		return new ResultInfo(double.class, true);
+	}
+
+	public static ResultInfo DoubleTolong(MethodInfo method) {
+		Operand oper = new MethodConstant(
+				Double.class, 
+				"longValue",
+				long.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return new ResultInfo(long.class, true);
 	}
 
 	public static ResultInfo doubleToDouble(MethodInfo method) {

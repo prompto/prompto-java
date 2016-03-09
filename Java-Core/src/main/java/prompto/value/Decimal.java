@@ -49,17 +49,24 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 			throw new SyntaxError("Illegal: Decimal + " + value.getClass().getSimpleName());
 	}
 
-	public static ResultInfo compileAdd(Context context, MethodInfo method, IExpression value) throws SyntaxError {
-		CompilerUtils.DoubleTodouble(method);
-		// compile rhs
-		ResultInfo right = value.compile(context, method);
-		if(right.getType()==Long.class)
-			CompilerUtils.LongTodouble(method);
-		else
-			CompilerUtils.DoubleTodouble(method);
-		// add
+	public static ResultInfo compileAdd(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+		convertToNative(method, left);
+		ResultInfo right = exp.compile(context, method, true);
+		convertToNative(method, right);
 		method.addInstruction(Opcode.DADD);
-		return CompilerUtils.doubleToDouble(method);
+		if(toNative)
+			return new ResultInfo(double.class, false);
+		else
+			return CompilerUtils.doubleToDouble(method);
+	}
+
+	private static void convertToNative(MethodInfo method, ResultInfo info) {
+		if(info.getType()==long.class)
+			CompilerUtils.longTodouble(method);
+		else if(info.getType()==Long.class)
+			CompilerUtils.LongTodouble(method);
+		else if(info.getType()==Double.class)
+			CompilerUtils.DoubleTodouble(method);
 	}
 
 	@Override

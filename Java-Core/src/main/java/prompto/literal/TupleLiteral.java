@@ -65,7 +65,7 @@ public class TupleLiteral extends Literal<TupleValue> {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
 		ResultInfo info = CompilerUtils.newInstance(method, PromptoTuple.class);
 		if(expressions!=null)
 			addItems(context, method);
@@ -75,7 +75,7 @@ public class TupleLiteral extends Literal<TupleValue> {
 	private void addItems(Context context, MethodInfo method) throws SyntaxError {
 		for(IExpression e : expressions) {
 			method.addInstruction(Opcode.DUP); // need to keep a reference to the list on top of stack
-			e.compile(context, method);
+			e.compile(context, method, false);
 			Operand c = new MethodConstant(PromptoTuple.class, "add", 
 					Object.class, boolean.class);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, c);

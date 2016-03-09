@@ -125,7 +125,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
 		// push arguments on the stack
 		if(assignments!=null) for(ArgumentAssignment assign : assignments)
 			assign.compile(context, method);

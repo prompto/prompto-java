@@ -67,7 +67,7 @@ public class ListValue extends BaseList<ListValue> {
 		return items.equals(((ListValue)obj).items);
 	}
 	
-	public static ResultInfo compileAdd(Context context, MethodInfo method, IExpression value) throws SyntaxError {
+	public static ResultInfo compileAdd(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean right) throws SyntaxError {
 		// TODO: return left if right is empty (or right if left is empty and is a list)
 		// create result
 		ResultInfo info = CompilerUtils.newInstance(method, PromptoList.class); 
@@ -80,7 +80,7 @@ public class ListValue extends BaseList<ListValue> {
 		method.addInstruction(Opcode.POP); // consume returned boolean
 		// add right, current stack is: result, we need: result, result, right
 		method.addInstruction(Opcode.DUP); // stack is: result, result 
-		value.compile(context, method); // stack is: result, result, right
+		exp.compile(context, method, false); // stack is: result, result, right
 		oper = new MethodConstant(PromptoList.class, "addAll", 
 				Collection.class, boolean.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);

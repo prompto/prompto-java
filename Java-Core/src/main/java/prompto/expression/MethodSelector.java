@@ -91,7 +91,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		if(parent!=null) {
 			// calling an explicit instance or singleton member method
 			// push instance if any
-			parent.compile(context, method); 
+			parent.compile(context, method, false); 
 			throw new UnsupportedOperationException();
 		} 
 		if(declaration.getMemberOf()!=null) {

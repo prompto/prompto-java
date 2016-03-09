@@ -77,9 +77,9 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
 		resolveAndCheck(context, false);
-		return resolved.compile(context, method);
+		return resolved.compile(context, method, false);
 	}
 	
 	private IType resolveAndCheck(Context context, boolean forMember) throws SyntaxError {

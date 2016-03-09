@@ -178,7 +178,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 			MethodInfo method = createMethodInfo(context, classFile, returnType);
 			// produce byte code
 			for(IStatement s : statements)
-				s.compile(context, method);
+				s.compile(context, method, false);
 			// add return for void
 			if(returnType==VoidType.instance())
 				method.addInstruction(Opcode.RETURN);

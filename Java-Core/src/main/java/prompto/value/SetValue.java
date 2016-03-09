@@ -123,7 +123,7 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IListable
             throw new SyntaxError("Illegal: " +this.type.getId() + " + " + value.getClass().getSimpleName());
     }
 
-	public static ResultInfo compileAdd(Context context, MethodInfo method, IExpression value) throws SyntaxError {
+	public static ResultInfo compileAdd(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
 		// TODO: return left if right is empty (or right if left is empty and is a set)
 		// create result
 		ResultInfo info = CompilerUtils.newInstance(method, PromptoSet.class); 
@@ -136,7 +136,7 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IListable
 		method.addInstruction(Opcode.POP); // consume returned boolean
 		// add right, current stack is: result, we need: result, result, right
 		method.addInstruction(Opcode.DUP); // stack is: result, result 
-		value.compile(context, method); // stack is: result, result, right
+		exp.compile(context, method, false); // stack is: result, result, right
 		oper = new MethodConstant(PromptoSet.class, "addAll", 
 				Collection.class, boolean.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);

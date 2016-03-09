@@ -40,7 +40,7 @@ public class TextLiteral extends Literal<Text> {
 	
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
 		ConstantOperand operand = new StringConstant(value.getValue());
 		method.addInstruction(Opcode.LDC_W, operand);
 		return new ResultInfo(String.class, true);

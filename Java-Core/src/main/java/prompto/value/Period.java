@@ -44,10 +44,10 @@ public class Period extends BaseValue implements IMultiplyable
             throw new SyntaxError("Illegal: Period + " + value.getClass().getSimpleName());
     }
     
-	public static ResultInfo compileAdd(Context context, MethodInfo method, IExpression value) throws SyntaxError {
-		ResultInfo right = value.compile(context, method);
+	public static ResultInfo compileAdd(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+		ResultInfo right = exp.compile(context, method, false);
 		if(right.getType()!=PromptoPeriod.class)
-			throw new SyntaxError("Illegal: Period + " + value.getClass().getSimpleName());
+			throw new SyntaxError("Illegal: Period + " + exp.getClass().getSimpleName());
 		MethodConstant c = new MethodConstant(PromptoPeriod.class, "plus", 
 				PromptoPeriod.class, PromptoPeriod.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, c);

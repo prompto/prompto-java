@@ -40,7 +40,7 @@ public class ParenthesisExpression implements IExpression {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
-		return expression.compile(context, method);
+	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
+		return expression.compile(context, method, false);
 	}
 }

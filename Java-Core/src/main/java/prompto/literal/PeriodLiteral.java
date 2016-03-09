@@ -30,7 +30,7 @@ public class PeriodLiteral extends Literal<Period> {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
 		PromptoPeriod period = value.getValue();
 		method.addInstruction(Opcode.LDC_W, new StringConstant(period.toString()));
 		Operand oper = new MethodConstant(PromptoPeriod.class, "parse", 

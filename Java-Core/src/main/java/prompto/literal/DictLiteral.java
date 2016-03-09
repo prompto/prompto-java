@@ -90,7 +90,7 @@ public class DictLiteral extends Literal<Dictionary> {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
 		ResultInfo info = CompilerUtils.newInstance(method, PromptoDict.class);
 		addEntries(context, method);
 		return info;
@@ -99,13 +99,13 @@ public class DictLiteral extends Literal<Dictionary> {
 	private void addEntries(Context context, MethodInfo method) throws SyntaxError {
 		for(DictEntry e : entries) {
 			method.addInstruction(Opcode.DUP); // need to keep a reference to the map on top of stack
-			ResultInfo info = e.getKey().compile(context, method);
+			ResultInfo info = e.getKey().compile(context, method, false);
 			if(info.getType()!=String.class) {
 				Operand oper = new MethodConstant(info.getType(), "put", 
 						String.class);
 				method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 			}
-			e.getValue().compile(context, method);
+			e.getValue().compile(context, method, false);
 			Operand oper = new MethodConstant(PromptoDict.class, "put", 
 					Object.class, Object.class, Object.class);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);

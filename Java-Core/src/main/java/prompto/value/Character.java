@@ -43,14 +43,14 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
         return new Text(this.value + value.toString());
     }
 
-	public static ResultInfo compileAdd(Context context, MethodInfo method, IExpression value) throws SyntaxError {
+	public static ResultInfo compileAdd(Context context, MethodInfo method, ResultInfo left, IExpression right, boolean toNative) throws SyntaxError {
 		// convert to String
 		MethodConstant c = new MethodConstant(java.lang.Character.class, 
 									"toString", 
 									String.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
 		// use Text::compileAdd
-		return Text.compileAdd(context, method, value);
+		return Text.compileAdd(context, method, left, right, false);
 	}
 	
     @Override

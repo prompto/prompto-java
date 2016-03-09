@@ -46,10 +46,10 @@ public class AssignInstanceStatement extends SimpleStatement {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
 		instance.checkAssignValue(context, expression);
 		instance.register(context, method);
-		expression.compile(context, method);
+		expression.compile(context, method, false);
 		return instance.compile(context, method);
 	}
 }

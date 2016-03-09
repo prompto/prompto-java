@@ -27,7 +27,7 @@ public class DecimalLiteral extends Literal<Decimal> {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
 		double d = value.doubleValue();
 		if(d==0.0)
 			method.addInstruction(Opcode.DCONST_0);

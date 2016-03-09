@@ -72,7 +72,7 @@ public class CommentStatement extends BaseStatement {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
 		// nathing to do
 		return new ResultInfo(void.class, false);
 	}

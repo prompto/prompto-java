@@ -145,7 +145,7 @@ public class ArgumentAssignment {
 	}
 
 	public void compile(Context context, MethodInfo method) throws SyntaxError {
-		expression.compile(context, method);
+		expression.compile(context, method, false);
 	}
 
 

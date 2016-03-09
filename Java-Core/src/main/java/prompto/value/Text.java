@@ -2,11 +2,8 @@ package prompto.value;
 
 import java.io.IOException;
 import java.text.Collator;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
-import prompto.compiler.IConverterFunction;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -58,36 +55,18 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 		return new Text(this.value + value.toString());
 	}
 
-	static Map<Class<?>, IConverterFunction> textConverters = createConverters();
-	
-	public static ResultInfo compileAdd(Context context, MethodInfo method, IExpression value) throws SyntaxError {
-		ResultInfo right = value.compile(context, method);
+	public static ResultInfo compileAdd(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+		ResultInfo right = exp.compile(context, method, false);
 		// convert right to String
-		IConverterFunction converter = textConverters.get(right.getType());
-		if(converter==null)
-			converter = Text::objectConverter;
-		right = converter.compile(context, method, right);
+		if(String.class!=right.getType()) {
+			MethodConstant oper = new MethodConstant(right.getType(), "toString", String.class);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		}
 		// and call concat
-		MethodConstant c = new MethodConstant(String.class, "concat", 
+		MethodConstant oper = new MethodConstant(String.class, "concat", 
 				String.class, String.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		return new ResultInfo(String.class, true);
-	}
-	
-	private static Map<Class<?>, IConverterFunction> createConverters() {
-		Map<Class<?>, IConverterFunction> map = new HashMap<>();
-		map.put(String.class, Text::textConverter);
-		return map;
-	}
-
-	private static ResultInfo objectConverter(Context context, MethodInfo method, ResultInfo info) {
-		MethodConstant c = new MethodConstant(info.getType(), "toString", String.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
-		return new ResultInfo(String.class, true);
-	}
-
-	private static ResultInfo textConverter(Context context, MethodInfo method, ResultInfo info) {
-		return info;
 	}
 	
 	@Override

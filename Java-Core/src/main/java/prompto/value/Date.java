@@ -52,10 +52,10 @@ public class Date extends BaseValue implements Comparable<Date> {
 			throw new SyntaxError("Illegal: Date + " + value.getClass().getSimpleName());
 	}
 
-	public static ResultInfo compileAdd(Context context, MethodInfo method, IExpression value) throws SyntaxError {
-		ResultInfo right = value.compile(context, method);
+	public static ResultInfo compileAdd(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+		ResultInfo right = exp.compile(context, method, false);
 		if(right.getType()!=PromptoPeriod.class)
-			throw new SyntaxError("Illegal: Date + " + value.getClass().getSimpleName());
+			throw new SyntaxError("Illegal: Date + " + exp.getClass().getSimpleName());
 		MethodConstant oper = new MethodConstant(PromptoDate.class, "plus", PromptoPeriod.class, PromptoDate.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		return new ResultInfo(PromptoDate.class, true);

@@ -105,7 +105,7 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 			IType returnType = this.checkNative(context);
 			MethodInfo method = createMethodInfo(context, classFile, returnType);
 			if(statement!=null)
-				statement.compile(context, method);
+				statement.compile(context, method, false);
 			// ensure we always return
 			if(returnType==VoidType.instance())
 				method.addInstruction(Opcode.RETURN);
