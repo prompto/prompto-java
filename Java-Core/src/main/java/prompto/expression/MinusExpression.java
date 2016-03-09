@@ -2,6 +2,7 @@ package prompto.expression;
 
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.intrinsic.PromptoPeriod;
 import prompto.runtime.Context;
 import prompto.type.DecimalType;
 import prompto.type.IType;
@@ -49,9 +50,10 @@ public class MinusExpression implements IUnaryExpression {
 		else if(val instanceof Decimal) 
 			return new Decimal(-((Decimal)val).doubleValue());
 		else if(val instanceof Period) { 
-			org.joda.time.Period p = ((Period)val).getValue();
-			return new Period(-p.getYears(),-p.getMonths(),-p.getWeeks(),-p.getDays(),-p.getHours(),
-					-p.getMinutes(),-p.getSeconds(),-p.getMillis());
+			PromptoPeriod p = ((Period)val).getValue();
+			return new Period(-p.getNativeYears(),-p.getNativeMonths(),-p.getNativeWeeks(),
+					-p.getNativeDays(),-p.getNativeHours(), -p.getNativeMinutes(),
+					-p.getNativeSeconds(),-p.getNativeMillis());
 		} else
 			throw new SyntaxError("Illegal: - " + val.getClass().getSimpleName());
 	}

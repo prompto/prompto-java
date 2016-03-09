@@ -3,9 +3,6 @@ package prompto.store.solr;
 import java.util.Arrays;
 import java.util.UUID;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,6 +14,9 @@ import prompto.expression.IExpression;
 import prompto.grammar.EqOp;
 import prompto.grammar.Identifier;
 import prompto.grammar.UnresolvedIdentifier;
+import prompto.intrinsic.PromptoDate;
+import prompto.intrinsic.PromptoDateTime;
+import prompto.intrinsic.PromptoTime;
 import prompto.literal.BooleanLiteral;
 import prompto.literal.DateLiteral;
 import prompto.literal.DateTimeLiteral;
@@ -118,7 +118,7 @@ public class TestInstance extends BaseSOLRTest {
 	@Test
 	public void testStoreDateField() throws Exception {
 		String fieldName = "date";
-		LocalDate fieldValue = LocalDate.parse("2015-03-12");
+		PromptoDate fieldValue = PromptoDate.parse("2015-03-12");
 		createField(fieldName, "date", false);
 		IInstance instance = createInstanceWith1Attribute(fieldName, DateType.instance());
 		instance.setMember(context, new Identifier(fieldName), new Date(fieldValue));
@@ -131,7 +131,7 @@ public class TestInstance extends BaseSOLRTest {
 	@Test
 	public void testStoreTimeField() throws Exception {
 		String fieldName = "time";
-		LocalTime fieldValue = LocalTime.parse("13:15:16.012");
+		PromptoTime fieldValue = PromptoTime.parse("13:15:16.012");
 		createField(fieldName, "time", false);
 		IInstance instance = createInstanceWith1Attribute(fieldName, TimeType.instance());
 		instance.setMember(context, new Identifier(fieldName), new Time(fieldValue));
@@ -144,7 +144,7 @@ public class TestInstance extends BaseSOLRTest {
 	@Test
 	public void testStoreDateTimeField() throws Exception {
 		String fieldName = "datetime";
-		DateTime fieldValue = DateTime.parse("2015-03-12T13:15:16.012Z");
+		PromptoDateTime fieldValue = PromptoDateTime.parse("2015-03-12T13:15:16.012Z");
 		createField(fieldName, "datetime", false);
 		IInstance instance = createInstanceWith1Attribute(fieldName, DateTimeType.instance());
 		instance.setMember(context, new Identifier(fieldName), new prompto.value.DateTime(fieldValue));

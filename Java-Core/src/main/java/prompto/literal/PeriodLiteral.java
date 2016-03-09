@@ -7,6 +7,7 @@ import prompto.compiler.Operand;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StringConstant;
 import prompto.error.SyntaxError;
+import prompto.intrinsic.PromptoPeriod;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.type.PeriodType;
@@ -25,17 +26,17 @@ public class PeriodLiteral extends Literal<Period> {
 	}
 	
 	public static Period parseDuration(String text) {
-		return new Period(org.joda.time.Period.parse(text));
+		return new Period(PromptoPeriod.parse(text));
 	}
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
-		org.joda.time.Period period = value.getValue();
+		PromptoPeriod period = value.getValue();
 		method.addInstruction(Opcode.LDC_W, new StringConstant(period.toString()));
-		Operand oper = new MethodConstant(org.joda.time.Period.class, "parse", 
-				String.class, org.joda.time.Period.class);
+		Operand oper = new MethodConstant(PromptoPeriod.class, "parse", 
+				String.class, PromptoPeriod.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
-		return new ResultInfo(org.joda.time.Period.class, true);
+		return new ResultInfo(PromptoPeriod.class, true);
 	}
 	
 	

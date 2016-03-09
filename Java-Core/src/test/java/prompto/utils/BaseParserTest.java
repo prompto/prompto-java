@@ -90,6 +90,7 @@ public abstract class BaseParserTest extends BaseTest {
 				return false;
 			}
 		} catch(Exception e) {
+			e.printStackTrace(System.err);
 			fail(e.getMessage());
 			return false;
 		}
@@ -106,7 +107,12 @@ public abstract class BaseParserTest extends BaseTest {
 
 	protected void checkCompiledOutput(String resource) throws Exception {
 		System.setProperty("prompto.compiler.clean", "true");
-		checkOutput(resource, this::executeResource);
+		try {
+			checkOutput(resource, this::executeResource);
+		} catch(Throwable t) {
+			t.printStackTrace(System.err);
+			throw t;
+		}
 	}
 
 	protected void checkOutput(String resource, Function<String, Boolean> runner) throws Exception {

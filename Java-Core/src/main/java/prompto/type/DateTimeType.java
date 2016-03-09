@@ -1,14 +1,14 @@
 package prompto.type;
 
-import org.joda.time.DateTime;
-
 import com.fasterxml.jackson.databind.JsonNode;
 
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoDateTime;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
+import prompto.value.DateTime;
 import prompto.value.IContainer;
 import prompto.value.IValue;
 import prompto.value.ListValue;
@@ -28,13 +28,13 @@ public class DateTimeType extends NativeType {
 
 	@Override
 	public Class<?> toJavaClass() {
-		return DateTime.class;
+		return PromptoDateTime.class;
 	}
 	
 	@Override
 	public IValue convertJavaValueToPromptoValue(Object value) {
-        if (value instanceof org.joda.time.DateTime)
-            return new prompto.value.DateTime((org.joda.time.DateTime)value);
+        if (value instanceof PromptoDateTime)
+            return new prompto.value.DateTime((PromptoDateTime)value);
         else
         	return super.convertJavaValueToPromptoValue(value);
 	}
@@ -112,7 +112,7 @@ public class DateTimeType extends NativeType {
 
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value) {
-		DateTime dt = DateTime.parse(value.asText());
-		return new prompto.value.DateTime(dt);
+		PromptoDateTime dt = PromptoDateTime.parse(value.asText());
+		return new DateTime(dt);
 	}
 }

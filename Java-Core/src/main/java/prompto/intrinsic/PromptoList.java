@@ -1,4 +1,4 @@
-package prompto.custom;
+package prompto.intrinsic;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,5 +13,11 @@ public class PromptoList<V> extends ArrayList<V> {
 		super(items);
 	}
 
-
+	public Long getLength() {
+		return (long)size();
+	}
+	
+	public long getNativeLength() {
+		return size();
+	}
 }

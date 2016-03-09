@@ -1,7 +1,6 @@
 package prompto.value;
 
-import org.joda.time.LocalTime;
-
+import prompto.intrinsic.PromptoTime;
 import prompto.type.TimeType;
 
 
@@ -24,7 +23,7 @@ public class TimeRange extends Range<Time> {
 
 	@Override
 	public Time getItem(long index) {
-		LocalTime result = low.getValue().plusSeconds((int)index-1);
+		PromptoTime result = low.getValue().plusSeconds(index-1);
 		if(result.isAfter(high.getValue()))
 			throw new IndexOutOfBoundsException();
 		return new Time(result);

@@ -1,7 +1,5 @@
 package prompto.literal;
 
-import org.joda.time.LocalTime;
-
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -9,6 +7,7 @@ import prompto.compiler.Operand;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StringConstant;
 import prompto.error.SyntaxError;
+import prompto.intrinsic.PromptoTime;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.type.TimeType;
@@ -21,7 +20,7 @@ public class TimeLiteral extends Literal<Time> {
 		super(text, parseTime(text.substring(1,text.length()-1)));
 	}
 	
-	public TimeLiteral(LocalTime time) {
+	public TimeLiteral(PromptoTime time) {
 		super("'" + time.toString() + "'", new Time(time));
 	}
 	
@@ -31,16 +30,16 @@ public class TimeLiteral extends Literal<Time> {
 	}
 	
 	public static Time parseTime(String text) {
-		return new Time(LocalTime.parse(text));
+		return new Time(PromptoTime.parse(text));
 	}
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
-		LocalTime time = value.getValue();
+		PromptoTime time = value.getValue();
 		method.addInstruction(Opcode.LDC_W, new StringConstant(time.toString()));
-		Operand oper = new MethodConstant(LocalTime.class, "parse", String.class, LocalTime.class);
+		Operand oper = new MethodConstant(PromptoTime.class, "parse", String.class, PromptoTime.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
-		return new ResultInfo(LocalTime.class, true);
+		return new ResultInfo(PromptoTime.class, true);
 	}
 
 	

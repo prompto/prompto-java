@@ -1,7 +1,7 @@
 package prompto.compiler;
 
-/* since we follow a bottom-up compile strategy, we need to keep track of instance types */
-/* in order to select GETFIELD/GETSTATIC or INVOKEVIRTUAL/INVOKESTATIC deterministically */ 
+/* since we follow a bottom-up compile strategy, we must keep track of instance types at the top of the stack */
+/* isInstance is also required to select GETFIELD/GETSTATIC or INVOKEVIRTUAL/INVOKESTATIC deterministically */ 
 public class ResultInfo {
 
 	Class<?> type;

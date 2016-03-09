@@ -1,4 +1,4 @@
-package prompto.custom;
+package prompto.intrinsic;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,5 +25,13 @@ public class PromptoTuple<V> extends ArrayList<V> {
 			sb.setLength(sb.length()-2); // trim last ", "
 		sb.append(')');
 		return sb.toString();
+	}
+	
+	public Long getLength() {
+		return (long)size();
+	}
+	
+	public long getNativeLength() {
+		return size();
 	}
 }

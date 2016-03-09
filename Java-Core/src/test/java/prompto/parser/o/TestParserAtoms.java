@@ -9,7 +9,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.joda.time.tz.ZoneInfoProvider;
 import org.junit.Test;
@@ -32,6 +31,8 @@ import prompto.grammar.IArgument;
 import prompto.grammar.ITypedArgument;
 import prompto.grammar.Identifier;
 import prompto.grammar.NativeSymbol;
+import prompto.intrinsic.PromptoDate;
+import prompto.intrinsic.PromptoDateTime;
 import prompto.literal.BooleanLiteral;
 import prompto.literal.DateLiteral;
 import prompto.literal.DateTimeLiteral;
@@ -168,7 +169,7 @@ public class TestParserAtoms {
 		IExpression e = parser.parse_instance_expression();
 		assertTrue(e instanceof MemberSelector);
 		MemberSelector me = (MemberSelector)e;
-		assertEquals("name",me.getName().toString());
+		assertEquals("name",me.getName());
 		assertTrue(me.getParent() instanceof InstanceExpression);
 		InstanceExpression uie = (InstanceExpression)me.getParent();
 		assertEquals("p",uie.getName().toString());
@@ -493,7 +494,7 @@ public class TestParserAtoms {
 		CodeWriter writer = new CodeWriter(Dialect.O, null);
 		literal.toDialect(writer);
 		assertEquals("'2012-10-09'", writer.toString());
-		assertEquals(new LocalDate(2012, 10, 9), ((DateLiteral)literal).getValue().getValue());
+		assertEquals(new PromptoDate(2012, 10, 9), ((DateLiteral)literal).getValue().getValue());
 	}
 
 	@Test
@@ -547,8 +548,9 @@ public class TestParserAtoms {
 		assertEquals("'2012-10-09T15:18:17+02:00'", writer.toString());
 		ZoneInfoProvider provider = new ZoneInfoProvider("org/joda/time/tz/data");
 		DateTimeZone tz = provider.getZone("Etc/GMT-2");
-		DateTime expected = new DateTime(2012, 10, 9, 15, 18, 17, tz);
-		DateTime actual = ((DateTimeLiteral)literal).getValue().getValue();
+		DateTime dt = new DateTime(2012, 10, 9, 15, 18, 17, tz);
+		PromptoDateTime expected = new PromptoDateTime(dt);
+		PromptoDateTime actual = ((DateTimeLiteral)literal).getValue().getValue();
 		assertTrue(expected.isEqual(actual));
 	}
 	
@@ -562,7 +564,7 @@ public class TestParserAtoms {
 		CodeWriter writer = new CodeWriter(Dialect.O, null);
 		literal.toDialect(writer);
 		assertEquals("'P3Y'", writer.toString());
-		assertEquals(3,((PeriodLiteral)literal).getValue().getValue().getYears());
+		assertEquals(3,((PeriodLiteral)literal).getValue().getValue().getNativeYears());
 	}
 
 	@Test

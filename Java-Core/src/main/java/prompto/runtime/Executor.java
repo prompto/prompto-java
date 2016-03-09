@@ -3,7 +3,6 @@ package prompto.runtime;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Map;
 
 import prompto.compiler.CompilerUtils;
@@ -12,6 +11,7 @@ import prompto.error.InternalError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoDict;
 import prompto.utils.CmdLineParser;
 
 public abstract class Executor {
@@ -30,7 +30,7 @@ public abstract class Executor {
 		try(PromptoClassLoader loader = new PromptoClassLoader(context)) {
 			Class<?> klass = loader.loadClass(className);
 			Method method = locateMainMethod(klass, cmdLineArgs);
-			Map<String, String> options = parseCmdLineArgs(cmdLineArgs);
+			PromptoDict<String, String> options = parseCmdLineArgs(cmdLineArgs);
 			method.invoke(null, options);
 		} catch(ClassNotFoundException | NoSuchMethodException e) {
 			throw new SyntaxError("Could not find a compatible \"" + methodName + "\" method.");
@@ -41,19 +41,22 @@ public abstract class Executor {
 		}
 	}
 
-	private static Map<String, String> parseCmdLineArgs(String cmdLineArgs) {
+	private static PromptoDict<String, String> parseCmdLineArgs(String cmdLineArgs) {
+		PromptoDict<String, String> result = new PromptoDict<>();
 		try {
-			return CmdLineParser.parse(cmdLineArgs);
+			Map<String, String> args = CmdLineParser.parse(cmdLineArgs);
+			result.putAll(args);
 		} catch(Exception e) {
-			return new HashMap<String, String>();
+			e.printStackTrace(System.err); 
 		}
+		return result;
 	}
 
 	private static Method locateMainMethod(Class<?> klass, String cmdLineArgs) throws NoSuchMethodException {
 		if(cmdLineArgs==null)
 			return locateMainMethod(klass);
 		else
-			return locateMainMethod(klass, Map.class);
+			return locateMainMethod(klass, PromptoDict.class);
 	}
 
 	private static Method locateMainMethod(Class<?> klass, Class<?> ... argTypes) throws NoSuchMethodException {

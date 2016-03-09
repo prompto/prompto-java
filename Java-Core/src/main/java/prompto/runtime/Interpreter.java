@@ -1,7 +1,6 @@
 package prompto.runtime;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -18,6 +17,7 @@ import prompto.grammar.IArgument;
 import prompto.grammar.ITypedArgument;
 import prompto.grammar.Identifier;
 import prompto.grammar.UnresolvedArgument;
+import prompto.intrinsic.PromptoDict;
 import prompto.literal.DictLiteral;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.statement.MethodCall;
@@ -83,7 +83,7 @@ public class Interpreter {
 	private static IExpression parseCmdLineArgs(String cmdLineArgs) {
 		try {
 			Map<String,String> args = CmdLineParser.parse(cmdLineArgs);
-			Map<Text, IValue> valueArgs = new HashMap<Text, IValue>();
+			PromptoDict<Text, IValue> valueArgs = new PromptoDict<Text, IValue>();
 			for(Entry<String,String> entry : args.entrySet())
 				valueArgs.put(new Text(entry.getKey()), new Text(entry.getValue()));
 			Dictionary dict = new Dictionary(TextType.instance(), valueArgs);

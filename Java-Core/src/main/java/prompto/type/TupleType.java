@@ -2,6 +2,7 @@ package prompto.type;
 
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoTuple;
 import prompto.runtime.Context;
 
 public class TupleType extends ContainerType {
@@ -18,7 +19,7 @@ public class TupleType extends ContainerType {
 
 	@Override
 	public Class<?> toJavaClass() {
-		return null; // no equivalent
+		return PromptoTuple.class;
 	}
 	
 	@Override

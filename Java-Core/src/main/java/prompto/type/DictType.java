@@ -1,12 +1,9 @@
 package prompto.type;
 
-import java.util.Map;
-
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoDict;
 import prompto.runtime.Context;
-
-
 
 public class DictType extends ContainerType {
 	
@@ -22,7 +19,7 @@ public class DictType extends ContainerType {
 
 	@Override
 	public Class<?> toJavaClass() {
-		return Map.class;
+		return PromptoDict.class;
 	}
 	
 	@Override

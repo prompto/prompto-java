@@ -1,16 +1,14 @@
 package prompto.literal;
 
-import java.util.Map;
-
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.Operand;
 import prompto.compiler.ResultInfo;
-import prompto.custom.PromptoDict;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.intrinsic.PromptoDict;
 import prompto.runtime.Context;
 import prompto.type.DictType;
 import prompto.type.IType;
@@ -80,7 +78,7 @@ public class DictLiteral extends Literal<Dictionary> {
 	public IValue interpret(Context context) throws PromptoError {
 		if(value.isEmpty() && entries.size()>0) {
 			check(context); // to compute itemType
-			Map<Text,IValue> map = new PromptoDict<Text, IValue>();
+			PromptoDict<Text,IValue> map = new PromptoDict<Text, IValue>();
 			for(DictEntry e : entries) {
 				Text key = (Text)e.getKey().interpret(context);
 				IValue val = e.getValue().interpret(context); 

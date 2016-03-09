@@ -2,9 +2,6 @@ package prompto.value;
 
 import java.io.IOException;
 
-import org.joda.time.LocalDate;
-import org.joda.time.ReadablePeriod;
-
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -15,6 +12,8 @@ import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoDate;
+import prompto.intrinsic.PromptoPeriod;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.type.DateType;
@@ -24,57 +23,53 @@ import com.fasterxml.jackson.core.JsonGenerator;
 public class Date extends BaseValue implements Comparable<Date> {
 
 	public static Date Parse(String text) {
-		LocalDate value = LocalDate.parse(text);
+		PromptoDate value = PromptoDate.parse(text);
 		return new Date(value);
 	}
 
-	LocalDate value;
+	PromptoDate value;
 
-	public Date(LocalDate value) {
+	public Date(PromptoDate date) {
 		super(DateType.instance());
-		this.value = value;
+		this.value = date;
 
 	}
 
 	public Date(int year, int month, int day) {
 		super(DateType.instance());
-		value = new LocalDate(year, month, day);
+		value = new PromptoDate(year, month, day);
 	}
 
-	public LocalDate getValue() {
+	public PromptoDate getValue() {
 		return value;
 	}
 
 	@Override
 	public IValue Add(Context context, IValue value) throws PromptoError {
 		if (value instanceof Period)
-			return this.plus((Period) value);
+			return new Date(this.value.plus(((Period)value).getValue()));
 		else
 			throw new SyntaxError("Illegal: Date + " + value.getClass().getSimpleName());
 	}
 
 	public static ResultInfo compileAdd(Context context, MethodInfo method, IExpression value) throws SyntaxError {
 		ResultInfo right = value.compile(context, method);
-		if(right.getType()!=org.joda.time.Period.class)
+		if(right.getType()!=PromptoPeriod.class)
 			throw new SyntaxError("Illegal: Date + " + value.getClass().getSimpleName());
-		MethodConstant oper = new MethodConstant(LocalDate.class, "plus", ReadablePeriod.class, LocalDate.class);
+		MethodConstant oper = new MethodConstant(PromptoDate.class, "plus", PromptoPeriod.class, PromptoDate.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return new ResultInfo(LocalDate.class, true);
+		return new ResultInfo(PromptoDate.class, true);
 	}
 	
 
 	@Override
 	public IValue Subtract(Context context, IValue value) throws PromptoError {
 		if (value instanceof Date) {
-			LocalDate other = ((Date) value).value;
-			org.joda.time.Period result = new org.joda.time.Period(
-					this.value.getYear() - other.getYear(),
-					this.value.getMonthOfYear() - other.getMonthOfYear(), 0,
-					this.value.getDayOfMonth() - other.getDayOfMonth(), 0, 0,
-					0, 0);
+			PromptoDate other = ((Date) value).value;
+			PromptoPeriod result = this.value.minus(other);
 			return new Period(result);
 		} else if (value instanceof Period)
-			return this.minus((Period) value);
+			return new Date(this.value.minus(((Period)value).getValue()));
 		else
 			throw new SyntaxError("Illegal: Date - "
 					+ value.getClass().getSimpleName());
@@ -94,13 +89,13 @@ public class Date extends BaseValue implements Comparable<Date> {
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
 		if ("year".equals(name))
-			return new Integer(this.value.getYear());
+			return new Integer(this.value.getNativeYear());
 		else if ("month".equals(name))
-			return new Integer(this.value.getMonthOfYear());
+			return new Integer(this.value.getNativeMonth());
 		else if ("dayOfMonth".equals(name))
-			return new Integer(this.value.getDayOfMonth());
+			return new Integer(this.value.getNativeDayOfMonth());
 		else if ("dayOfYear".equals(name))
-			return new Integer(this.value.getDayOfYear());
+			return new Integer(this.value.getNativeDayOfYear());
 		else
 			throw new InvalidDataError("No such member:" + name);
 	}
@@ -110,16 +105,8 @@ public class Date extends BaseValue implements Comparable<Date> {
 		return value;
 	}
 
-	public Date minus(Period period) {
-		return new Date(this.value.minus(period.value));
-	}
-
 	public Date toDateMidnight() {
 		return this;
-	}
-
-	Date plus(Period period) {
-		return new Date(this.value.plus(period.value));
 	}
 
 	public int compareTo(Date other) {
@@ -141,7 +128,7 @@ public class Date extends BaseValue implements Comparable<Date> {
 
 	@Override
 	public String toString() {
-		return value.toString("yyyy-MM-dd");
+		return value.format("yyyy-MM-dd");
 	}
 	
 	@Override

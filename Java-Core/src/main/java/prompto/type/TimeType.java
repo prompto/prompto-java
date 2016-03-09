@@ -1,12 +1,11 @@
 package prompto.type;
 
-import org.joda.time.LocalTime;
-
 import com.fasterxml.jackson.databind.JsonNode;
 
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoTime;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.value.IContainer;
@@ -31,7 +30,7 @@ public class TimeType extends NativeType {
 
 	@Override
 	public Class<?> toJavaClass() {
-		return LocalTime.class;
+		return PromptoTime.class;
 	}
 
 	@Override
@@ -103,7 +102,7 @@ public class TimeType extends NativeType {
 	
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value) {
-		LocalTime time = LocalTime.parse(value.asText());
+		PromptoTime time = PromptoTime.parse(value.asText());
 		return new Time(time);
 	}
 

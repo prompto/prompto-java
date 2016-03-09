@@ -1,4 +1,4 @@
-package prompto.custom;
+package prompto.intrinsic;
 
 import java.util.HashMap;
 
@@ -20,4 +20,13 @@ public class PromptoDict<K,V> extends HashMap<K,V>{
 		sb.append("}");
 		return sb.toString();
 	}
+	
+	public Long getLength() {
+		return (long)size();
+	}
+	
+	public long getNativeLength() {
+		return size();
+	}
+	
 }

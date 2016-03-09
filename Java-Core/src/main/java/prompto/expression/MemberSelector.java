@@ -1,5 +1,11 @@
 package prompto.expression;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.Operand;
+import prompto.compiler.ResultInfo;
 import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -16,21 +22,25 @@ import prompto.value.Text;
 
 public class MemberSelector extends SelectorExpression {
 
-	Identifier name;
+	Identifier id;
 	
-	public MemberSelector(Identifier name) {
-		this.name = name;
+	public MemberSelector(Identifier id) {
+		this.id = id;
 	}
 	
-	public MemberSelector(IExpression parent, Identifier name) {
+	public MemberSelector(IExpression parent, Identifier id) {
 		super(parent);
-		this.name = name;
+		this.id = id;
 	}
 
-	public Identifier getName() {
-		return name;
+	public Identifier getId() {
+		return id;
 	}
 	
+	public String getName() {
+		return id.getName();
+	}
+
 	@Override
 	public void toDialect(CodeWriter writer) {
 		try {
@@ -40,18 +50,18 @@ public class MemberSelector extends SelectorExpression {
 		}
 		parent.toDialect(writer);
 		writer.append(".");
-		writer.append(name);
+		writer.append(id);
 	}
 	
 	@Override
 	public String toString() {
-		return parent.toString() + "." + name;
+		return parent.toString() + "." + id;
 	}
 	
 	@Override
 	public IType check(Context context) throws SyntaxError {
 		IType parentType = checkParent(context);
-        return parentType.checkMember(context, name);
+        return parentType.checkMember(context, id);
 	}
 	
 	@Override
@@ -79,12 +89,12 @@ public class MemberSelector extends SelectorExpression {
         if (instance == null || instance == NullValue.instance())
             throw new NullReferenceError();
         else
-        	return instance.getMember(context, name, true);
+        	return instance.getMember(context, id, true);
 	}
 
 	private IValue interpretTypeMember(Context context, IExpression parent) throws PromptoError {
        if(parent instanceof TypeExpression)
-    	   return ((TypeExpression)parent).getMember(context, name);
+    	   return ((TypeExpression)parent).getMember(context, id);
        else
     	   return null;
 	}
@@ -93,7 +103,7 @@ public class MemberSelector extends SelectorExpression {
         if(parent instanceof TypeExpression && ((TypeExpression)parent).getType() instanceof CategoryType) {
         	ConcreteInstance instance = context.loadSingleton(context, (CategoryType)((TypeExpression)parent).getType());
         	if(instance!=null)
-        		return instance.getMember(context, name, false); 
+        		return instance.getMember(context, id, false); 
         }
         return null;
 	}
@@ -101,9 +111,9 @@ public class MemberSelector extends SelectorExpression {
 	private IValue interpretSymbol(Context context, IExpression parent) throws PromptoError {
        if (parent instanceof SymbolExpression)
         {
-            if ("name".equals(name.toString()))
+            if ("name".equals(id.toString()))
                 return new Text(((SymbolExpression)parent).getName().toString());
-            else if("value".equals(name.toString()))
+            else if("value".equals(id.toString()))
                 return parent.interpret(context);
         }
  		return null;
@@ -115,6 +125,68 @@ public class MemberSelector extends SelectorExpression {
         	return ((UnresolvedIdentifier) parent).getResolved();
         } else
         	return parent;
+	}
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
+		ResultInfo info = compileParent(context, method);
+        // special case for Symbol which evaluates as value
+		ResultInfo result = compileSymbol(context, method, info);
+		if(result!=null)
+			return result;
+		else
+			// special case for singletons 
+			result = compileSingleton(context, method, info);
+		if(result!=null)
+			return result;
+		else
+			// special case for 'static' type members (like Enum.symbols, Type.name etc...)
+			result = compileTypeMember(context, method, info);
+		if(result!=null)
+			return result;
+		else
+			// finally resolve instance member
+			return compileInstanceMember(context, method,info);		
+	}
+
+	private ResultInfo compileSymbol(Context context, MethodInfo method, ResultInfo parent) {
+		System.err.println("TODO: MemberSelector.compileSymbol");
+		return null;
+	}
+
+	private ResultInfo compileSingleton(Context context, MethodInfo method, ResultInfo parent) {
+		System.err.println("TODO: MemberSelector.compileSingleton");
+		return null;
+	}
+
+	private ResultInfo compileTypeMember(Context context, MethodInfo method, ResultInfo parent) {
+		System.err.println("TODO: MemberSelector.compileTypeMember");
+		return null;
+	}
+
+	private ResultInfo compileInstanceMember(Context context, MethodInfo method, ResultInfo parent) throws SyntaxError {
+		Class<?> resultType = check(context).toJavaClass();
+		// special case for String.length() to avoid wrapping String.class for just one member
+		if(String.class==parent.getType() && "length".equals(getName()))
+			return compileStringLength(method);
+		else {
+			String getterName = "get" + getName().substring(0,1).toUpperCase() + getName().substring(1);
+			Operand oper = new MethodConstant(parent.getType(), getterName, resultType);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+			return new ResultInfo(resultType, true);
+		}
+	}
+
+	private ResultInfo compileStringLength(MethodInfo method) {
+		Operand oper = new MethodConstant(String.class, "length", int.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		CompilerUtils.intToLong(method);
+		return new ResultInfo(Long.class, true);
+	}
+
+	private ResultInfo compileParent(Context context, MethodInfo method) throws SyntaxError {
+		IExpression parent = resolveParent(context);
+		return parent.compile(context, method);
 	}
 
 

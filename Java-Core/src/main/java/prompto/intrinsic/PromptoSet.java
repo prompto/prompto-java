@@ -1,4 +1,4 @@
-package prompto.custom;
+package prompto.intrinsic;
 
 import java.util.HashSet;
 
@@ -17,5 +17,13 @@ public class PromptoSet<V> extends HashSet<V> {
 			sb.setLength(sb.length()-2); // trim last ", "
 		sb.append('>');
 		return sb.toString();
+	}
+	
+	public Long getLength() {
+		return (long)size();
+	}
+	
+	public long getNativeLength() {
+		return size();
 	}
 }

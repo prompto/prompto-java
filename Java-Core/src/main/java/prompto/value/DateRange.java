@@ -1,7 +1,6 @@
 package prompto.value;
 
-import org.joda.time.LocalDate;
-
+import prompto.intrinsic.PromptoDate;
 import prompto.type.DateType;
 
 
@@ -14,8 +13,8 @@ public class DateRange extends Range<Date> {
 	
 	@Override
 	public long length() {
-		long h = high.getValue().toDate().getTime();
-		long l = low.getValue().toDate().getTime();
+		long h = high.getValue().toJavaTime();
+		long l = low.getValue().toJavaTime();
 		return 1 + ( (h-l)/(24*60*60*1000));
 	}
 
@@ -26,7 +25,7 @@ public class DateRange extends Range<Date> {
 
 	@Override
 	public Date getItem(long index) {
-		LocalDate result = low.getValue().plusDays((int)index-1);
+		PromptoDate result = low.getValue().plusDays(index-1);
 		if(result.isAfter(high.getValue()))
 			throw new IndexOutOfBoundsException();
 		return new Date(result);

@@ -173,7 +173,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	
 	private IMethodDeclaration findDeclaration(Context context) throws SyntaxError {
 		try {
-			Object o = context.getValue(method.getName());
+			Object o = context.getValue(method.getId());
 			if (o instanceof ClosureValue)
 				return new ClosureDeclaration((ClosureValue)o);
 		} catch (PromptoError e) {

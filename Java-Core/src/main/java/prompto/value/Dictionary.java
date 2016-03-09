@@ -12,12 +12,12 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.Operand;
 import prompto.compiler.ResultInfo;
-import prompto.custom.PromptoDict;
 import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoDict;
 import prompto.runtime.Context;
 import prompto.type.ContainerType;
 import prompto.type.DictType;
@@ -26,7 +26,7 @@ import prompto.type.TextType;
 
 public class Dictionary extends BaseValue implements IContainer<IValue> {
 
-	Map<Text, IValue> dict;
+	PromptoDict<Text, IValue> dict;
 
 	public Dictionary(IType itemType) {
 		super(new DictType(itemType));
@@ -37,13 +37,13 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 		this(((ContainerType) from.type).getItemType(), from.dict);
 	}
 
-	public Dictionary(IType itemType, Map<Text, IValue> dict) {
+	public Dictionary(IType itemType, PromptoDict<Text, IValue> dict) {
 		super(new DictType(itemType));
 		this.dict = dict;
 	}
 
 	public static Dictionary merge(Dictionary dict1, Dictionary dict2) {
-		Map<Text, IValue> dict = new PromptoDict<Text, IValue>();
+		PromptoDict<Text, IValue> dict = new PromptoDict<Text, IValue>();
 		dict.putAll(dict1.dict);
 		dict.putAll(dict2.dict);
 		// TODO check type fungibility		

@@ -2,7 +2,6 @@ package prompto.value;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import prompto.custom.PromptoSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -14,9 +13,12 @@ import prompto.compiler.Opcode;
 import prompto.compiler.Operand;
 import prompto.compiler.ResultInfo;
 import prompto.error.IndexOutOfRangeError;
+import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
+import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoSet;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.type.SetType;
@@ -100,6 +102,15 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IListable
 	@Override
 	public String toString() {
 		return items.toString();
+	}
+
+	@Override
+	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
+		String name = id.toString();
+		if ("length".equals(name))
+			return new Integer(items.size());
+		else
+			throw new InvalidDataError("No such member:" + name);
 	}
 
 	@Override

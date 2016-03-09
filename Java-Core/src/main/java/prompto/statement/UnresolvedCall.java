@@ -129,8 +129,8 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 
 	private IExpression resolveMember(Context context) throws SyntaxError {
 		IExpression parent = ((MemberSelector)caller).getParent();
-		Identifier name = ((MemberSelector)caller).getName();
-		return new MethodCall(new MethodSelector(parent, name), assignments);
+		Identifier id = ((MemberSelector)caller).getId();
+		return new MethodCall(new MethodSelector(parent, id), assignments);
 	}
 
 }

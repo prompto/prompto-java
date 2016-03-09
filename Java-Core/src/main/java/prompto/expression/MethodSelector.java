@@ -40,13 +40,13 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	
 	@Override
 	public String toString() {
-		return parent==null ? name.toString() : super.toString();
+		return parent==null ? id.toString() : super.toString();
 	}
 	
 	@Override
 	public void toDialect(CodeWriter writer) {
 		if(parent==null)
-			writer.append(name);
+			writer.append(id);
 		else
 			super.toDialect(writer);
 	}
@@ -65,12 +65,12 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 			IType type = ((InstanceContext)context.getParentContext()).getInstanceType();
 			ConcreteCategoryDeclaration cd = context.getRegisteredDeclaration(ConcreteCategoryDeclaration.class, type.getId());
 			if(cd!=null) {
-				MethodDeclarationMap members = cd.getMemberMethods(context, name);
+				MethodDeclarationMap members = cd.getMemberMethods(context, id);
 				if(members!=null)
 					methods.addAll(members.values());
 			}
 		}
-		MethodDeclarationMap globals = context.getRegisteredDeclaration(MethodDeclarationMap.class, name);
+		MethodDeclarationMap globals = context.getRegisteredDeclaration(MethodDeclarationMap.class, id);
 		if(globals!=null)
 			methods.addAll(globals.values());
 		return methods;
@@ -83,7 +83,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		ConcreteCategoryDeclaration cd = context.getRegisteredDeclaration(ConcreteCategoryDeclaration.class, parentType.getId());
 		if(cd==null)
 			throw new SyntaxError("Unknown category:" + parentType.getId());
-		return cd.getMemberMethods(context, name).values();
+		return cd.getMemberMethods(context, id).values();
 	}
 
 	public ResultInfo compile(Context context, MethodInfo method, IMethodDeclaration declaration) throws SyntaxError {
@@ -160,10 +160,11 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 
 	public IExpression toInstanceExpression() {
 		if(parent==null)
-			return new UnresolvedIdentifier(name);
+			return new UnresolvedIdentifier(id);
 		else
-			return new MemberSelector(parent, name);
+			return new MemberSelector(parent, id);
 	}
+
 
 
 

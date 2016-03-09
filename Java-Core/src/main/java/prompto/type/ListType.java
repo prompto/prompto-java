@@ -1,17 +1,14 @@
 package prompto.type;
 
-import java.util.List;
-
-
-import com.fasterxml.jackson.databind.JsonNode;
-
-
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoList;
 import prompto.parser.ECleverParser;
 import prompto.runtime.Context;
 import prompto.value.IValue;
 import prompto.value.ListValue;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class ListType extends ContainerType {
 	
@@ -21,7 +18,7 @@ public class ListType extends ContainerType {
 	
 	@Override
 	public Class<?> toJavaClass() {
-		return List.class;
+		return PromptoList.class;
 	}
 	
 	@Override

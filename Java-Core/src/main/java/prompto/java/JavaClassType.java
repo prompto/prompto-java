@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.joda.time.Period;
 
@@ -17,6 +16,7 @@ import prompto.declaration.IDeclaration;
 import prompto.declaration.NativeCategoryDeclaration;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoDate;
 import prompto.runtime.Context;
 import prompto.type.AnyType;
 import prompto.type.BaseType;
@@ -55,7 +55,7 @@ public class JavaClassType extends BaseType {
 		javaToPromptoMap.put(Long.class, IntegerType.instance());
 		javaToPromptoMap.put(Double.class, DecimalType.instance());
 		javaToPromptoMap.put(String.class, TextType.instance());
-		javaToPromptoMap.put(LocalDate.class, DateType.instance());
+		javaToPromptoMap.put(PromptoDate.class, DateType.instance());
 		javaToPromptoMap.put(LocalTime.class, TimeType.instance());
 		javaToPromptoMap.put(DateTime.class, DateTimeType.instance());
 		javaToPromptoMap.put(Period.class, PeriodType.instance());

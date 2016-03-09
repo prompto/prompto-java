@@ -1,6 +1,8 @@
 package prompto.type;
 
 import prompto.error.SyntaxError;
+import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoSet;
 import prompto.runtime.Context;
 
 
@@ -12,15 +14,28 @@ public class SetType extends ContainerType {
 	
 	@Override
 	public Class<?> toJavaClass() {
-		// TODO Auto-generated method stub
-		return null;
+		return PromptoSet.class;
 	}
 	
+	@Override
+	public boolean isAssignableTo(Context context, IType other) {
+		return (other instanceof SetType) && itemType.isAssignableTo(context, ((SetType)other).getItemType());
+	}
+
 	@Override
 	public IType checkIterator(Context context) throws SyntaxError {
 		return itemType;
 	}
 	
+	@Override
+	public IType checkMember(Context context, Identifier id) throws SyntaxError {
+		String name = id.toString();
+        if ("length".equals(name))
+            return IntegerType.instance();
+        else
+    		return super.checkMember(context, id);
+    }
+
 	@Override
 	public IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError {
 		if(other instanceof ContainerType) {

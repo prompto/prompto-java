@@ -2,9 +2,6 @@ package prompto.value;
 
 import java.io.IOException;
 
-import org.joda.time.LocalTime;
-import org.joda.time.ReadablePeriod;
-
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -15,6 +12,8 @@ import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoPeriod;
+import prompto.intrinsic.PromptoTime;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.type.TimeType;
@@ -24,48 +23,47 @@ import com.fasterxml.jackson.core.JsonGenerator;
 
 public class Time extends BaseValue implements Comparable<Time> {
 	public static Time Parse(String text) {
-		return new Time(LocalTime.parse(text));
+		return new Time(PromptoTime.parse(text));
 	}
 
-	LocalTime value;
+	PromptoTime value;
 
-	public Time(LocalTime value) {
+	public Time(PromptoTime time) {
 		super(TimeType.instance());
-		this.value = value;
+		this.value = time;
 	}
 
 	public Time(int hours, int minutes, int seconds, int millis) {
 		super(TimeType.instance());
-		this.value = new LocalTime(hours, minutes, seconds, millis);
+		this.value = new PromptoTime(hours, minutes, seconds, millis);
 	}
 
-	public LocalTime getValue() {
+	public PromptoTime getValue() {
 		return value;
 	}
 
 	@Override
 	public IValue Add(Context context, IValue value) throws SyntaxError {
 		if (value instanceof Period)
-			return new Time(this.value.plus(((Period) value).value));
+			return new Time(this.value.plus(((Period)value).value));
 		else
 			throw new SyntaxError("Illegal: Time + " + value.getClass().getSimpleName());
 	}
 
 	public static ResultInfo compileAdd(Context context, MethodInfo method, IExpression value) throws SyntaxError {
 		ResultInfo right = value.compile(context, method);
-		if(right.getType()!=org.joda.time.Period.class)
+		if(right.getType()!=PromptoPeriod.class)
 			throw new SyntaxError("Illegal: Date + " + value.getClass().getSimpleName());
-		MethodConstant oper = new MethodConstant(LocalTime.class, "plus", ReadablePeriod.class, LocalTime.class);
+		MethodConstant oper = new MethodConstant(PromptoTime.class, "plus", PromptoPeriod.class, PromptoTime.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return new ResultInfo(LocalTime.class, true);
+		return new ResultInfo(PromptoTime.class, true);
 	}
 	
 	@Override
 	public IValue Subtract(Context context, IValue value) throws PromptoError {
 		if (value instanceof Time) {
-			LocalTime other = ((Time) value).value;
-			org.joda.time.Period res = new org.joda.time.Period(0, 0, 0, 0, this.value.getHourOfDay() - other.getHourOfDay(), this.value.getMinuteOfHour() - other.getMinuteOfHour(), this.value.getSecondOfMinute() - other.getSecondOfMinute(), this.value.getMillisOfSecond()
-					- other.getMillisOfSecond());
+			PromptoTime other = ((Time) value).value;
+			PromptoPeriod res = this.value.minus(other);
 			return new Period(res);
 		} else if (value instanceof Period)
 			return this.minus((Period) value);
@@ -85,13 +83,13 @@ public class Time extends BaseValue implements Comparable<Time> {
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
 		if ("hour".equals(name))
-			return new Integer(this.value.getHourOfDay());
+			return new Integer(this.value.getNativeHour());
 		else if ("minute".equals(name))
-			return new Integer(this.value.getMinuteOfHour());
+			return new Integer(this.value.getNativeMinute());
 		else if ("second".equals(name))
-			return new Integer(this.value.getSecondOfMinute());
+			return new Integer(this.value.getNativeSecond());
 		else if ("millis".equals(name))
-			return new Integer(this.value.getMillisOfSecond());
+			return new Integer(this.value.getNativeMillis());
 		else
 			throw new InvalidDataError("No such member:" + name);
 	}
@@ -106,7 +104,7 @@ public class Time extends BaseValue implements Comparable<Time> {
 	}
 
 	public long getMillisOfDay() {
-		return value.getMillisOfDay();
+		return value.getNativeMillisOfDay();
 	}
 
 	@Override
