@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 
 import prompto.compiler.IOperatorFunction;
 import prompto.compiler.MethodInfo;
@@ -27,6 +28,7 @@ import prompto.value.Period;
 import prompto.value.SetValue;
 import prompto.value.Text;
 import prompto.value.Character;
+import prompto.value.Time;
 
 public class AddExpression implements IExpression {
 
@@ -78,6 +80,7 @@ public class AddExpression implements IExpression {
 		map.put(ArrayList.class, BaseList::compileAdd);
 		map.put(org.joda.time.Period.class, Period::compileAdd);
 		map.put(HashSet.class, SetValue::compileAdd);
+		map.put(LocalTime.class, Time::compileAdd);
 		return map;
 	}
 

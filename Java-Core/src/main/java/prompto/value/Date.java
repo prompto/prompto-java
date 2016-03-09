@@ -57,8 +57,8 @@ public class Date extends BaseValue implements Comparable<Date> {
 		ResultInfo right = value.compile(context, method);
 		if(right.getType()!=org.joda.time.Period.class)
 			throw new SyntaxError("Illegal: Date + " + value.getClass().getSimpleName());
-		MethodConstant c = new MethodConstant(LocalDate.class, "plus", ReadablePeriod.class, LocalDate.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
+		MethodConstant oper = new MethodConstant(LocalDate.class, "plus", ReadablePeriod.class, LocalDate.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		return new ResultInfo(LocalDate.class, true);
 	}
 	
