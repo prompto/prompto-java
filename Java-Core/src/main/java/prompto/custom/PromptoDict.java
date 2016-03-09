@@ -3,7 +3,7 @@ package prompto.custom;
 import java.util.HashMap;
 
 @SuppressWarnings("serial")
-public class PromptoMap<K,V> extends HashMap<K,V>{
+public class PromptoDict<K,V> extends HashMap<K,V>{
 
 	@Override
 	public String toString() {

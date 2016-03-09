@@ -73,6 +73,7 @@ public abstract class BaseParserTest extends BaseTest {
 				return false;
 			}
 		} catch(Exception e) {
+			e.printStackTrace(System.err);
 			fail(e.getMessage());
 			return false;
 		}

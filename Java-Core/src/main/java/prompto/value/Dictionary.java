@@ -1,7 +1,6 @@
 package prompto.value;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -13,7 +12,7 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.Operand;
 import prompto.compiler.ResultInfo;
-import prompto.custom.PromptoMap;
+import prompto.custom.PromptoDict;
 import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -31,7 +30,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 
 	public Dictionary(IType itemType) {
 		super(new DictType(itemType));
-		dict = new PromptoMap<>();
+		dict = new PromptoDict<>();
 	}
 
 	public Dictionary(Dictionary from) {
@@ -44,13 +43,11 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 	}
 
 	public static Dictionary merge(Dictionary dict1, Dictionary dict2) {
-		Map<Text, IValue> dict = new HashMap<Text, IValue>();
+		Map<Text, IValue> dict = new PromptoDict<Text, IValue>();
 		dict.putAll(dict1.dict);
 		dict.putAll(dict2.dict);
-		return new Dictionary(((ContainerType) dict1.type).getItemType(), dict); // TODO
-																					// check
-																					// type
-																					// fungibility
+		// TODO check type fungibility		
+		return new Dictionary(((ContainerType) dict1.type).getItemType(), dict); 
 	}
 
 	public long length() {
@@ -73,17 +70,17 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 	public static ResultInfo compileAdd(Context context, MethodInfo method, IExpression value) throws SyntaxError {
 		// TODO: return right if left is empty (or left if right is empty)
 		// create result
-		ResultInfo info = CompilerUtils.newInstance(method, PromptoMap.class); 
+		ResultInfo info = CompilerUtils.newInstance(method, PromptoDict.class); 
 		// add left, current stack is: left, result, we need: result, result, left
 		method.addInstruction(Opcode.DUP_X1); // stack is: result, left, result
 		method.addInstruction(Opcode.SWAP); // stack is: result, result, left
-		Operand oper = new MethodConstant(PromptoMap.class, "putAll", 
+		Operand oper = new MethodConstant(PromptoDict.class, "putAll", 
 				Map.class, void.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		// add right, current stack is: result, we need: result, result, right
 		method.addInstruction(Opcode.DUP); // stack is: result, result 
 		value.compile(context, method); // stack is: result, result, right
-		oper = new MethodConstant(PromptoMap.class, "putAll", 
+		oper = new MethodConstant(PromptoDict.class, "putAll", 
 				Map.class, void.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		return info;

@@ -1,6 +1,5 @@
 package prompto.literal;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import prompto.compiler.CompilerUtils;
@@ -9,6 +8,7 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.Operand;
 import prompto.compiler.ResultInfo;
+import prompto.custom.PromptoSet;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
@@ -51,7 +51,7 @@ public class SetLiteral extends Literal<SetValue> {
 	public IValue interpret(Context context) throws PromptoError {
 		if(value.isEmpty() && expressions!=null) {
 			check(context); // force computation of itemType
-			Set<IValue> set = new HashSet<IValue>();
+			Set<IValue> set = new PromptoSet<IValue>();
 			for(IExpression exp : expressions)
 				set.add(exp.interpret(context));
 			if(itemType==null)
@@ -75,7 +75,7 @@ public class SetLiteral extends Literal<SetValue> {
 
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
-		ResultInfo info = CompilerUtils.newInstance(method, HashSet.class);
+		ResultInfo info = CompilerUtils.newInstance(method, PromptoSet.class);
 		if(expressions!=null)
 			addItems(context, method);
 		return info;
@@ -85,7 +85,7 @@ public class SetLiteral extends Literal<SetValue> {
 		for(IExpression e : expressions) {
 			method.addInstruction(Opcode.DUP); // need to keep a reference to the list on top of stack
 			e.compile(context, method);
-			Operand oper = new MethodConstant(HashSet.class, "add", 
+			Operand oper = new MethodConstant(PromptoSet.class, "add", 
 					Object.class, boolean.class);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 			method.addInstruction(Opcode.POP); // consume the returned boolean

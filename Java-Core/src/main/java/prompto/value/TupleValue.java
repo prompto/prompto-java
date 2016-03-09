@@ -1,13 +1,21 @@
 package prompto.value;
 
 import java.lang.Boolean;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.Operand;
+import prompto.compiler.ResultInfo;
+import prompto.custom.PromptoTuple;
 import prompto.error.PromptoError;
+import prompto.error.SyntaxError;
+import prompto.expression.IExpression;
 import prompto.literal.Literal;
 import prompto.runtime.Context;
 import prompto.type.TupleType;
@@ -21,6 +29,16 @@ public class TupleValue extends BaseList<TupleValue> {
 	
 	public TupleValue(List<IValue> items) {
 		super(TupleType.instance(), items);
+	}
+	
+	@Override
+	protected List<IValue> newItemsInstance() {
+		return new PromptoTuple<IValue>();
+	}
+	
+	@Override
+	protected List<IValue> newItemsInstance(Collection<IValue> items) {
+		return new PromptoTuple<IValue>(items);
 	}
 
 	@Override
@@ -93,5 +111,24 @@ public class TupleValue extends BaseList<TupleValue> {
 			return 0;
 	}
 
-	
+	public static ResultInfo compileAdd(Context context, MethodInfo method, IExpression value) throws SyntaxError {
+		// TODO: return left if right is empty (or right if left is empty and is a list)
+		// create result
+		ResultInfo info = CompilerUtils.newInstance(method, PromptoTuple.class); 
+		// add left, current stack is: left, result, we need: result, result, left
+		method.addInstruction(Opcode.DUP_X1); // stack is: result, left, result
+		method.addInstruction(Opcode.SWAP); // stack is: result, result, left
+		Operand oper = new MethodConstant(PromptoTuple.class, "addAll", 
+				Collection.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		method.addInstruction(Opcode.POP); // consume returned boolean
+		// add right, current stack is: result, we need: result, result, right
+		method.addInstruction(Opcode.DUP); // stack is: result, result 
+		value.compile(context, method); // stack is: result, result, right
+		oper = new MethodConstant(PromptoTuple.class, "addAll", 
+				Collection.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		method.addInstruction(Opcode.POP); // consume returned boolean
+		return info;
+	}
 }

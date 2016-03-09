@@ -1,15 +1,22 @@
 package prompto.value;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.Operand;
+import prompto.compiler.ResultInfo;
+import prompto.custom.PromptoList;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
+import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
@@ -29,6 +36,16 @@ public class ListValue extends BaseList<ListValue> {
 
 	public ListValue(IType itemType, Collection<IValue> items) {
 		super(new ListType(itemType), items);
+	}
+	
+	@Override
+	protected List<IValue> newItemsInstance() {
+		return new PromptoList<IValue>();
+	}
+	
+	@Override
+	protected List<IValue> newItemsInstance(Collection<IValue> items) {
+		return new PromptoList<IValue>(items);
 	}
 
 	@Override
@@ -50,7 +67,27 @@ public class ListValue extends BaseList<ListValue> {
 		return items.equals(((ListValue)obj).items);
 	}
 	
-
+	public static ResultInfo compileAdd(Context context, MethodInfo method, IExpression value) throws SyntaxError {
+		// TODO: return left if right is empty (or right if left is empty and is a list)
+		// create result
+		ResultInfo info = CompilerUtils.newInstance(method, PromptoList.class); 
+		// add left, current stack is: left, result, we need: result, result, left
+		method.addInstruction(Opcode.DUP_X1); // stack is: result, left, result
+		method.addInstruction(Opcode.SWAP); // stack is: result, result, left
+		Operand oper = new MethodConstant(PromptoList.class, "addAll", 
+				Collection.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		method.addInstruction(Opcode.POP); // consume returned boolean
+		// add right, current stack is: result, we need: result, result, right
+		method.addInstruction(Opcode.DUP); // stack is: result, result 
+		value.compile(context, method); // stack is: result, result, right
+		oper = new MethodConstant(PromptoList.class, "addAll", 
+				Collection.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		method.addInstruction(Opcode.POP); // consume returned boolean
+		return info;
+	}
+	
 	@Override
 	public IValue Multiply(Context context, IValue value) throws PromptoError {
 		if (value instanceof Integer) {
@@ -62,7 +99,7 @@ public class ListValue extends BaseList<ListValue> {
 				return new ListValue(itemType);
 			if (count == 1)
 				return this;
-			List<IValue> result = new ArrayList<IValue>();
+			List<IValue> result = new PromptoList<IValue>();
 			for (long i = 0; i < count; i++)
 				result.addAll(this.items);
 			return new ListValue(itemType, result);

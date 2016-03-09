@@ -1,8 +1,6 @@
 package prompto.expression;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 import org.joda.time.DateTime;
@@ -12,23 +10,27 @@ import org.joda.time.LocalTime;
 import prompto.compiler.IOperatorFunction;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
-import prompto.custom.PromptoMap;
+import prompto.custom.PromptoList;
+import prompto.custom.PromptoDict;
+import prompto.custom.PromptoSet;
+import prompto.custom.PromptoTuple;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.value.BaseList;
+import prompto.value.Character;
 import prompto.value.Date;
 import prompto.value.Decimal;
 import prompto.value.Dictionary;
-import prompto.value.Integer;
 import prompto.value.IValue;
+import prompto.value.Integer;
+import prompto.value.ListValue;
 import prompto.value.Period;
 import prompto.value.SetValue;
 import prompto.value.Text;
-import prompto.value.Character;
 import prompto.value.Time;
+import prompto.value.TupleValue;
 
 public class AddExpression implements IExpression {
 
@@ -76,10 +78,11 @@ public class AddExpression implements IExpression {
 		map.put(Long.class, Integer::compileAdd);
 		map.put(LocalDate.class, Date::compileAdd);
 		map.put(DateTime.class, prompto.value.DateTime::compileAdd);
-		map.put(PromptoMap.class, Dictionary::compileAdd);
-		map.put(ArrayList.class, BaseList::compileAdd);
+		map.put(PromptoDict.class, Dictionary::compileAdd);
+		map.put(PromptoSet.class, SetValue::compileAdd);
+		map.put(PromptoTuple.class, TupleValue::compileAdd);
+		map.put(PromptoList.class, ListValue::compileAdd);
 		map.put(org.joda.time.Period.class, Period::compileAdd);
-		map.put(HashSet.class, SetValue::compileAdd);
 		map.put(LocalTime.class, Time::compileAdd);
 		return map;
 	}

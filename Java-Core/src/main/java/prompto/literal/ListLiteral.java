@@ -1,6 +1,5 @@
 package prompto.literal;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import prompto.compiler.CompilerUtils;
@@ -9,6 +8,7 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.Operand;
 import prompto.compiler.ResultInfo;
+import prompto.custom.PromptoList;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
@@ -52,7 +52,7 @@ public class ListLiteral extends Literal<ListValue> {
 	public IValue interpret(Context context) throws PromptoError {
 		if(value.isEmpty() && expressions!=null) {
 			check(context); // force computation of itemType
-			List<IValue> list = new ArrayList<IValue>();
+			List<IValue> list = new PromptoList<IValue>();
 			for(IExpression exp : expressions)
 				list.add(exp.interpret(context));
 			value = new ListValue(itemType, list);
@@ -77,7 +77,7 @@ public class ListLiteral extends Literal<ListValue> {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
-		ResultInfo info = CompilerUtils.newInstance(method, ArrayList.class);
+		ResultInfo info = CompilerUtils.newInstance(method, PromptoList.class);
 		if(expressions!=null)
 			addItems(context, method);
 		return info;
@@ -87,7 +87,7 @@ public class ListLiteral extends Literal<ListValue> {
 		for(IExpression e : expressions) {
 			method.addInstruction(Opcode.DUP); // need to keep a reference to the list on top of stack
 			e.compile(context, method);
-			Operand c = new MethodConstant(ArrayList.class, "add", 
+			Operand c = new MethodConstant(PromptoList.class, "add", 
 					Object.class, boolean.class);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, c);
 			method.addInstruction(Opcode.POP); // consume the returned boolean
