@@ -131,4 +131,36 @@ public class TestClassFile {
 		Class<?> klass = ByteClassLoader.defineAndResolveClass(name.replace("/", "."), gen);
 		assertNotNull(klass);
 	}
+	
+	@Test
+	public void testClassWithStackLabel_SAME() throws Exception {
+		String name = "k1";
+		ClassFile c = new ClassFile(name, "java/lang/Object");
+		c.addModifier(Modifier.ABSTRACT);
+		MethodInfo m = new MethodInfo("m", "()V");
+		m.addModifier(Modifier.STATIC);
+		/*
+		m.addInstruction(Opcode.ICONST_1);
+		m.addInstruction(Opcode.ICONST_1);
+		m.addInstruction(Opcode.IADD).setStackLabel(new StackLabel.SAME());
+		m.addInstruction(Opcode.ICONST_1);
+		Instruction branch = m.addInstruction(Opcode.IF_ICMPNE, new ShortOperand((short)4));
+		// branch.setStackLabel(new StackLabel());
+		m.addInstruction(Opcode.ICONST_1);
+		Instruction jump = m.addInstruction(Opcode.GOTO, new ShortOperand((short)1));
+		// jump.setStackLabel(new StackLabel(branch.getLabel()));
+		Instruction last = m.addInstruction(Opcode.ICONST_0);
+		// last.setStackLabel(new StackLabel(branch.getLabel()));
+		m.addInstruction(Opcode.POP);
+		 */
+		m.addInstruction(Opcode.RETURN);
+		c.addMethod(m);
+		ByteArrayOutputStream o = new ByteArrayOutputStream();
+		c.writeTo(o);
+		byte[] gen = o.toByteArray();
+		Class<?> klass = ByteClassLoader.defineAndResolveClass(name.replace("/", "."), gen);
+		assertNotNull(klass);
+		Method mm = klass.getDeclaredMethod("m");
+		mm.invoke(null);
+	}
 }

@@ -2,9 +2,8 @@ package prompto.value;
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.Instruction;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
@@ -17,6 +16,8 @@ import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.type.BooleanType;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 public class Boolean extends BaseValue implements Comparable<Boolean> {
 	
@@ -97,6 +98,7 @@ public class Boolean extends BaseValue implements Comparable<Boolean> {
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	public static ResultInfo compileEquals(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
 		if(Boolean.class==left.getType())
 			CompilerUtils.BooleanToboolean(method);
@@ -105,8 +107,10 @@ public class Boolean extends BaseValue implements Comparable<Boolean> {
 			CompilerUtils.BooleanToboolean(method);
 		method.addInstruction(Opcode.IF_ICMPNE, new ShortOperand((short)4));
 		method.addInstruction(Opcode.ICONST_1);
-		method.addInstruction(Opcode.GOTO, new ShortOperand((short)1));
-		method.addInstruction(Opcode.ICONST_0);
+		Instruction jump = method.addInstruction(Opcode.GOTO, new ShortOperand((short)1));
+		// jump.setStackLabel(new StackLabel.SAME());
+		Instruction last = method.addInstruction(Opcode.ICONST_0);
+		// last.setStackLabel(new StackLabel(branch.getLabel()));
 		if(toNative)
 			return new ResultInfo(boolean.class, false);
 		else

@@ -1,5 +1,7 @@
 package prompto.compiler;
 
+import prompto.compiler.StackEntry.Type;
+
 public class StringConstant implements ValueConstant {
 	
 	Utf8Constant value;
@@ -15,8 +17,8 @@ public class StringConstant implements ValueConstant {
 	}
 	
 	@Override
-	public StackEntry toStackEntry() {
-		return StackEntry.ITEM_Object;
+	public Type toStackEntryType() {
+		return StackEntry.Type.ITEM_Object;
 	}
 	
 	@Override

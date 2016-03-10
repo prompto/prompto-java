@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 public class CodeAttribute implements Attribute {
 	
@@ -13,13 +14,20 @@ public class CodeAttribute implements Attribute {
 	List<Attribute> attributes = new ArrayList<>();
 	Utf8Constant attributeName = new Utf8Constant("Code");
 	Map<String, Integer> locals = new HashMap<>();
-	StackAttribute stack = new StackAttribute();
+	StackAttribute stack = createStack();
 	int maxLocals = 0;
+	byte[] opcodes = null;
 	
 	public StackAttribute getStack() {
 		return stack;
 	}
 	
+	private StackAttribute createStack() {
+		StackAttribute stack = new StackAttribute();
+		attributes.add(stack);
+		return stack;
+	}
+
 	public void register(ConstantsPool pool) {
 		instructions.forEach((i)->
 			i.register(pool));
@@ -28,8 +36,9 @@ public class CodeAttribute implements Attribute {
 			a.register(pool));
 	}	
 	
-	public void addInstruction(Instruction instruction) {
+	public Instruction addInstruction(Instruction instruction) {
 		instructions.add(instruction);
+		return instruction;
 	}
 
 	public void registerLocal(String name) {
@@ -53,11 +62,31 @@ public class CodeAttribute implements Attribute {
 	byte[] createOpcodes() {
 		ByteArrayOutputStream o = new ByteArrayOutputStream();
 		ByteWriter w = new ByteWriter(o);
-		instructions.forEach((i)->
-			i.writeTo(this, w));
+		instructions.forEach((i)-> {
+			i.writeTo(this, w);
+			StackLabel label = i.getStackLabel();
+			if(label!=null) {
+				label.setOffset(o.size());
+				stack.addLabel(label);
+			}
+		});
 		return o.toByteArray();
 	}
 
+	@Override
+	public int length() {
+		if(opcodes==null)
+			opcodes = createOpcodes();
+		return 2 + 2 + 4 + opcodes.length + 2 + 2 + attributesLength();
+	}
+
+	private int attributesLength() {
+		return (int)attributes
+				.stream()
+					.flatMapToInt((a)->
+						IntStream.of(6 + a.length()))
+							.summaryStatistics().getSum();
+	}
 
 	public void writeTo(ByteWriter writer) {
 		/*
@@ -78,16 +107,16 @@ public class CodeAttribute implements Attribute {
 		    attribute_info attributes[attributes_count];
 		}	
 		*/	
-		byte[] opcodes = createOpcodes();
-		int len = 2 + 2 + 4 + opcodes.length + 2 + 2;
 		writer.writeU2(attributeName.index());
-		writer.writeU4(len);
+		writer.writeU4(length());
 		writer.writeU2(stack.getMaxStack());
 		writer.writeU2(maxLocals);
 		writer.writeU4(opcodes.length);
 		writer.writeBytes(opcodes);
 		writer.writeU2(0); // TODO exceptions
-		writer.writeU2(0); // TODO attributes
+		writer.writeU2((short)attributes.size()); 
+		attributes.forEach((a)->
+			a.writeTo(writer));
 	}
 
 }

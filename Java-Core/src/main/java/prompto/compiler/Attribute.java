@@ -4,5 +4,5 @@ interface Attribute {
 
 	void register(ConstantsPool pool);
 	void writeTo(ByteWriter writer);
-
+	int length();
 }

@@ -1,5 +1,7 @@
 package prompto.compiler;
 
+import prompto.compiler.StackEntry.Type;
+
 public class IntConstant implements ValueConstant {
 	
 	int value;
@@ -10,8 +12,8 @@ public class IntConstant implements ValueConstant {
 	}
 
 	@Override
-	public StackEntry toStackEntry() {
-		return StackEntry.ITEM_Integer;
+	public Type toStackEntryType() {
+		return Type.ITEM_Integer;
 	}
 	
 	@Override

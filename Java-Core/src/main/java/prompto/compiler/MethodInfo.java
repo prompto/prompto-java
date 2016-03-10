@@ -26,9 +26,9 @@ public class MethodInfo {
 		accessFlags |= modifier;
 	}
 
-	public void addInstruction(Opcode op, Operand ... operands) {
+	public Instruction addInstruction(Opcode op, Operand ... operands) {
 		createCodeAttribute();
-		codeAttribute.addInstruction(new Instruction(op, operands));
+		return codeAttribute.addInstruction(new Instruction(op, operands));
 	}
 	
 	public void registerLocal(String name) {
@@ -47,11 +47,12 @@ public class MethodInfo {
 			a.register(pool));
 	}
 
-	private void createCodeAttribute() {
+	public CodeAttribute createCodeAttribute() {
 		if(codeAttribute==null) {
 			codeAttribute = new CodeAttribute();
 			attributes.add(codeAttribute);
 		}
+		return codeAttribute;
 	}
 
 	void writeTo(ByteWriter writer) {

@@ -1,5 +1,7 @@
 package prompto.compiler;
 
+import prompto.compiler.StackEntry.Type;
+
 public class Instruction {
 
 	static boolean DUMP = isDUMP();
@@ -10,10 +12,19 @@ public class Instruction {
 	
 	Opcode opcode;
 	Operand[] operands;
+	StackLabel label;
 	
 	Instruction(Opcode opcode, Operand[] operands) {
 		this.opcode = opcode;
 		this.operands = operands;
+	}
+	
+	public StackLabel getStackLabel() {
+		return label;
+	}
+	
+	public void setStackLabel(StackLabel label) {
+		this.label = label;
 	}
 
 	@Override
@@ -47,10 +58,10 @@ public class Instruction {
 		StackAttribute stack = byteCode.getStack();
 		if(DUMP)
 			System.err.println("Before pop: " + stack.toString());
-		StackEntry[] popped = stack.pop(opcode.getPopped(this));
+		StackEntry.Type[] popped = stack.pop(opcode.getPopped(this));
 		if(DUMP)
 			System.err.println("After pop: " + stack.toString());
-		StackEntry[] pushed = opcode.getPushed(this, popped);
+		StackEntry.Type[] pushed = opcode.getPushed(this, popped);
 		byteCode.getStack().push(pushed);
 		if(DUMP)
 			System.err.println("After push: " + stack.toString());
@@ -110,21 +121,21 @@ public class Instruction {
 		return null;
 	}
 
-	public StackEntry getConstantStackEntryType() {
+	public Type getConstantStackEntryType() {
 		ValueConstant v = getValueConstant();
-		return v.toStackEntry();
+		return v.toStackEntryType();
 	}
 
-	public StackEntry getFieldStackEntryType() {
+	public StackEntry.Type getFieldStackEntryType() {
 		FieldConstant f = getFieldConstant();
 		String type = f.getDescriptor();
-		return StackEntry.fromDescriptor(type);
+		return StackEntry.Type.fromDescriptor(type);
 	}
 
-	public StackEntry getResultStackEntryType() {
+	public StackEntry.Type getResultStackEntryType() {
 		MethodConstant m = getMethodConstant();
 		String[] types = m.getDescriptor();
-		return StackEntry.fromDescriptor(types[types.length-1]);
+		return StackEntry.Type.fromDescriptor(types[types.length-1]);
 	}
 
 	public short getArgumentsCount(boolean isStatic) {
@@ -132,5 +143,7 @@ public class Instruction {
 		String[] types = m.getDescriptor();
 		return (short)(types.length - (isStatic ? 1 : 0));
 	}
+
+
 
 }

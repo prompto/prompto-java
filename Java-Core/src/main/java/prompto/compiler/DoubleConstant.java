@@ -1,5 +1,7 @@
 package prompto.compiler;
 
+import prompto.compiler.StackEntry.Type;
+
 public class DoubleConstant implements ValueConstant {
 	
 	double value;
@@ -10,8 +12,8 @@ public class DoubleConstant implements ValueConstant {
 	}
 
 	@Override
-	public StackEntry toStackEntry() {
-		return StackEntry.ITEM_Double;
+	public Type toStackEntryType() {
+		return Type.ITEM_Double;
 	}
 	
 	@Override

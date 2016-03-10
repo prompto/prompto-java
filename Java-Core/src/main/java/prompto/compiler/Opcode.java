@@ -27,6 +27,7 @@
 package prompto.compiler;
 
 import static prompto.compiler.OpcodeKind.*;
+import static prompto.compiler.StackEntry.Type.*;
 
 import java.util.function.Function;
 
@@ -43,23 +44,23 @@ import java.util.function.Function;
  */
 public enum Opcode {
     // NOP(0x0),
-    ACONST_NULL(0x1, popsNone(), pushes(StackEntry.ITEM_Null)), /*
+    ACONST_NULL(0x1, popsNone(), pushes(ITEM_Null)), /*
     ICONST_M1(0x2), */
-    ICONST_0(0x3, popsNone(), pushes(StackEntry.ITEM_Integer)),
-    ICONST_1(0x4, popsNone(), pushes(StackEntry.ITEM_Integer)),
-    ICONST_2(0x5, popsNone(), pushes(StackEntry.ITEM_Integer)),
-    ICONST_3(0x6, popsNone(), pushes(StackEntry.ITEM_Integer)),
-    ICONST_4(0x7, popsNone(), pushes(StackEntry.ITEM_Integer)),
-    ICONST_5(0x8, popsNone(), pushes(StackEntry.ITEM_Integer))/*,
+    ICONST_0(0x3, popsNone(), pushes(ITEM_Integer)),
+    ICONST_1(0x4, popsNone(), pushes(ITEM_Integer)),
+    ICONST_2(0x5, popsNone(), pushes(ITEM_Integer)),
+    ICONST_3(0x6, popsNone(), pushes(ITEM_Integer)),
+    ICONST_4(0x7, popsNone(), pushes(ITEM_Integer)),
+    ICONST_5(0x8, popsNone(), pushes(ITEM_Integer))/*,
     LCONST_0(0x9),
     LCONST_1(0xa),
     FCONST_0(0xb),
     FCONST_1(0xc),
     FCONST_2(0xd)*/,
-    DCONST_0(0xe, popsNone(), pushes(StackEntry.ITEM_Double)),
-    DCONST_1(0xf, popsNone(), pushes(StackEntry.ITEM_Double)),
-    BIPUSH(0x10, BYTE, popsNone(), pushes(StackEntry.ITEM_Integer)),
-    SIPUSH(0x11, SHORT, popsNone(), pushes(StackEntry.ITEM_Integer)),
+    DCONST_0(0xe, popsNone(), pushes(ITEM_Double)),
+    DCONST_1(0xf, popsNone(), pushes(ITEM_Double)),
+    BIPUSH(0x10, BYTE, popsNone(), pushes(ITEM_Integer)),
+    SIPUSH(0x11, SHORT, popsNone(), pushes(ITEM_Integer)),
     LDC(0x12, CPREF, popsNone(), pushesConstant()),
     LDC_W(0x13, CPREF_W, popsNone(), pushesConstant()), 
     LDC2_W(0x14, CPREF_W, popsNone(), pushesConstant()) /*,
@@ -67,7 +68,7 @@ public enum Opcode {
     LLOAD(0x16, LOCAL),
     FLOAD(0x17, LOCAL),
     DLOAD(0x18, LOCAL) */,
-    ALOAD(0x19, LOCAL, popsNone(), pushes(StackEntry.ITEM_Object)) /*,
+    ALOAD(0x19, LOCAL, popsNone(), pushes(ITEM_Object)) /*,
     ILOAD_0(0x1a),
     ILOAD_1(0x1b),
     ILOAD_2(0x1c),
@@ -84,10 +85,10 @@ public enum Opcode {
     DLOAD_1(0x27),
     DLOAD_2(0x28),
     DLOAD_3(0x29) */,
-    ALOAD_0(0x2a, popsNone(), pushes(StackEntry.ITEM_Object)),
-    ALOAD_1(0x2b, popsNone(), pushes(StackEntry.ITEM_Object)),
-    ALOAD_2(0x2c, popsNone(), pushes(StackEntry.ITEM_Object)),
-    ALOAD_3(0x2d, popsNone(), pushes(StackEntry.ITEM_Object)) /*,
+    ALOAD_0(0x2a, popsNone(), pushes(ITEM_Object)),
+    ALOAD_1(0x2b, popsNone(), pushes(ITEM_Object)),
+    ALOAD_2(0x2c, popsNone(), pushes(ITEM_Object)),
+    ALOAD_3(0x2d, popsNone(), pushes(ITEM_Object)) /*,
     IALOAD(0x2e),
     LALOAD(0x2f),
     FALOAD(0x30),
@@ -137,31 +138,31 @@ public enum Opcode {
     DUP2(0x5c),
     DUP2_X1(0x5d),
     DUP2_X2(0x5e)*/,
-    SWAP(0x5f, pops(2), pushesSwapped())/*,
-    IADD(0x60)*/,
-    LADD(0x61, pops(2), pushes(StackEntry.ITEM_Long))/*,
+    SWAP(0x5f, pops(2), pushesSwapped()),
+    IADD(0x60, pops(2), pushes(ITEM_Integer)),
+    LADD(0x61, pops(2), pushes(ITEM_Long))/*,
     FADD(0x62)*/,
-    DADD(0x63, pops(2), pushes(StackEntry.ITEM_Double))/*,
+    DADD(0x63, pops(2), pushes(ITEM_Double))/*,
     ISUB(0x64)*/,
-    LSUB(0x65, pops(2), pushes(StackEntry.ITEM_Long))/*,
+    LSUB(0x65, pops(2), pushes(ITEM_Long))/*,
     FSUB(0x66)*/,
-    DSUB(0x67, pops(2), pushes(StackEntry.ITEM_Double))/*,
+    DSUB(0x67, pops(2), pushes(ITEM_Double))/*,
     IMUL(0x68)*/,
-    LMUL(0x69, pops(2), pushes(StackEntry.ITEM_Long))/*,
+    LMUL(0x69, pops(2), pushes(ITEM_Long))/*,
     FMUL(0x6a)*/,
-    DMUL(0x6b, pops(2), pushes(StackEntry.ITEM_Double))/*,
+    DMUL(0x6b, pops(2), pushes(ITEM_Double))/*,
     IDIV(0x6c)*/,
-    LDIV(0x6d, pops(2), pushes(StackEntry.ITEM_Long))/*,
+    LDIV(0x6d, pops(2), pushes(ITEM_Long))/*,
     FDIV(0x6e)*/,
-    DDIV(0x6f, pops(2), pushes(StackEntry.ITEM_Double))/*,
+    DDIV(0x6f, pops(2), pushes(ITEM_Double))/*,
     IREM(0x70)*/,
-    LREM(0x71, pops(2), pushes(StackEntry.ITEM_Long))/*,
+    LREM(0x71, pops(2), pushes(ITEM_Long))/*,
     FREM(0x72)*/,
-    DREM(0x73, pops(2), pushes(StackEntry.ITEM_Double))/*,
+    DREM(0x73, pops(2), pushes(ITEM_Double))/*,
     INEG(0x74)*/,
-    LNEG(0x75, pops(1), pushes(StackEntry.ITEM_Long))/*,
+    LNEG(0x75, pops(1), pushes(ITEM_Long))/*,
     FNEG(0x76)*/,
-    DNEG(0x77, pops(1), pushes(StackEntry.ITEM_Double))/*,
+    DNEG(0x77, pops(1), pushes(ITEM_Double))/*,
     ISHL(0x78),
     LSHL(0x79),
     ISHR(0x7a),
@@ -175,17 +176,17 @@ public enum Opcode {
     IXOR(0x82),
     LXOR(0x83),
     IINC(0x84, LOCAL_BYTE)*/,
-    I2L(0x85, pops(1), pushes(StackEntry.ITEM_Long))/*,
+    I2L(0x85, pops(1), pushes(ITEM_Long))/*,
     I2F(0x86),
     I2D(0x87)*/,
-    L2I(0x88, pops(1), pushes(StackEntry.ITEM_Integer))/*,
+    L2I(0x88, pops(1), pushes(ITEM_Integer))/*,
     L2F(0x89)*/,
-    L2D(0x8a, pops(1), pushes(StackEntry.ITEM_Double))/*,
+    L2D(0x8a, pops(1), pushes(ITEM_Double))/*,
     F2I(0x8b),
     F2L(0x8c)*/,
-    F2D(0x8d, pops(1), pushes(StackEntry.ITEM_Double))/*,
+    F2D(0x8d, pops(1), pushes(ITEM_Double))/*,
     D2I(0x8e) */,
-    D2L(0x8f, pops(1), pushes(StackEntry.ITEM_Long)) /*,
+    D2L(0x8f, pops(1), pushes(ITEM_Long)) /*,
     D2F(0x90),
     I2B(0x91),
     I2C(0x92),
@@ -229,7 +230,7 @@ public enum Opcode {
     INVOKESTATIC(0xb8, CPREF_W, popsArguments(true), pushesResult())/*,
     INVOKEINTERFACE(0xb9, CPREF_W_UBYTE_ZERO),
     INVOKEDYNAMIC(0xba, CPREF_W_UBYTE_ZERO)*/,
-    NEW(0xbb, CPREF_W, popsNone(), pushes(StackEntry.ITEM_Object))/*,
+    NEW(0xbb, CPREF_W, popsNone(), pushes(ITEM_Object))/*,
     NEWARRAY(0xbc, ATYPE),
     ANEWARRAY(0xbd, CPREF_W),
     ARRAYLENGTH(0xbe),
@@ -287,72 +288,72 @@ public enum Opcode {
     }
     
     static interface Pusher {
-    	StackEntry[] apply(Instruction i, StackEntry[] popped);
+    	StackEntry.Type[] apply(Instruction i, StackEntry.Type[] popped);
     }
  
     static Pusher pushesNone() {
     	return new Pusher() {
-    		@Override public StackEntry[] apply(Instruction i, StackEntry[] popped) {
-    			return new StackEntry[0];
+    		@Override public StackEntry.Type[] apply(Instruction i, StackEntry.Type[] popped) {
+    			return new StackEntry.Type[0];
     		}
     	};
     }
     
     static Pusher pushesDuplicate() {
     	return new Pusher() {
-    		@Override public StackEntry[] apply(Instruction i, StackEntry[] popped) {
-				return new StackEntry[] { popped[0], popped[0] };
+    		@Override public StackEntry.Type[] apply(Instruction i, StackEntry.Type[] popped) {
+				return new StackEntry.Type[] { popped[0], popped[0] };
     		}
     	};
     }
     
     static Pusher pushesDuplicateDown() {
     	return new Pusher() {
-    		@Override public StackEntry[] apply(Instruction i, StackEntry[] popped) {
-				return new StackEntry[] { popped[1], popped[0], popped[1] };
+    		@Override public StackEntry.Type[] apply(Instruction i, StackEntry.Type[] popped) {
+				return new StackEntry.Type[] { popped[1], popped[0], popped[1] };
     		}
     	};
     }
     
     static Pusher pushesSwapped() {
     	return new Pusher() {
-    		@Override public StackEntry[] apply(Instruction i, StackEntry[] popped) {
-				return new StackEntry[] { popped[1], popped[0] };
+    		@Override public StackEntry.Type[] apply(Instruction i, StackEntry.Type[] popped) {
+				return new StackEntry.Type[] { popped[1], popped[0] };
     		}
     	};
     }
     
     static Pusher pushesConstant() {
     	return new Pusher() {
-    		@Override public StackEntry[] apply(Instruction i, StackEntry[] popped) {
-    			StackEntry e = i.getConstantStackEntryType() ;
-    			return e==null ? new StackEntry[0] : new StackEntry[] { e };
+    		@Override public StackEntry.Type[] apply(Instruction i, StackEntry.Type[] popped) {
+    			StackEntry.Type e = i.getConstantStackEntryType() ;
+    			return e==null ? new StackEntry.Type[0] : new StackEntry.Type[] { e };
     		}
     	};
     }
     
     static Pusher pushesField() {
     	return new Pusher() {
-    		@Override public StackEntry[] apply(Instruction i, StackEntry[] popped) {
-    			StackEntry e = i.getFieldStackEntryType() ;
-    			return e==null ? new StackEntry[0] : new StackEntry[] { e };
+    		@Override public StackEntry.Type[] apply(Instruction i, StackEntry.Type[] popped) {
+    			StackEntry.Type e = i.getFieldStackEntryType() ;
+    			return e==null ? new StackEntry.Type[0] : new StackEntry.Type[] { e };
     		}
     	};
     }
 
     static Pusher pushesResult() {
     	return new Pusher() {
-    		@Override public StackEntry[] apply(Instruction i, StackEntry[] popped) {
-    			StackEntry e = i.getResultStackEntryType() ;
-    			return e==null ? new StackEntry[0] : new StackEntry[] { e };
+    		@Override public StackEntry.Type[] apply(Instruction i, StackEntry.Type[] popped) {
+    			StackEntry.Type e = i.getResultStackEntryType() ;
+    			return e==null ? new StackEntry.Type[0] : new StackEntry.Type[] { e };
     		}
     	};
     }
 
-    static Pusher pushes(StackEntry e) {
+    static Pusher pushes(StackEntry.Type e) {
     	return new Pusher() {
-    		@Override public StackEntry[] apply(Instruction i, StackEntry[] popped) {
-    			return new StackEntry[] { e };
+    		@Override public StackEntry.Type[] apply(Instruction i, StackEntry.Type[] popped) {
+    			return new StackEntry.Type[] { e };
     		}
     	};
     }
@@ -383,7 +384,7 @@ public enum Opcode {
     	return popper.apply(i);
     }
     
-	public StackEntry[] getPushed(Instruction instruction, StackEntry[] popped) {
+	public StackEntry.Type[] getPushed(Instruction instruction, StackEntry.Type[] popped) {
 		return pusher.apply(instruction, popped);
 	}
 

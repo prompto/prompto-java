@@ -1,5 +1,7 @@
 package prompto.compiler;
 
+import prompto.compiler.StackEntry.Type;
+
 public class LongConstant implements ValueConstant {
 	
 	long value;
@@ -10,8 +12,8 @@ public class LongConstant implements ValueConstant {
 	}
 	
 	@Override
-	public StackEntry toStackEntry() {
-		return StackEntry.ITEM_Long;
+	public Type toStackEntryType() {
+		return StackEntry.Type.ITEM_Long;
 	}
 
 	@Override
