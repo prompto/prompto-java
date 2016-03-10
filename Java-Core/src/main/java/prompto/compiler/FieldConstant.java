@@ -1,6 +1,6 @@
 package prompto.compiler;
 
-public class FieldConstant implements ConstantOperand {
+public class FieldConstant implements CodeConstant {
 
 	ClassConstant className;
 	NameAndTypeConstant fieldNameAndType;
@@ -11,6 +11,10 @@ public class FieldConstant implements ConstantOperand {
 		this.fieldNameAndType = new NameAndTypeConstant(fieldName, fieldType);
 	}
 	
+	public String getDescriptor() {
+		return fieldNameAndType.getType().getValue();
+	}
+
 	@Override
 	public int index() {
 		return index;
@@ -36,4 +40,5 @@ public class FieldConstant implements ConstantOperand {
 		writer.writeU2(className.index());
 		writer.writeU2(fieldNameAndType.index());
 	}
+
 }

@@ -1,6 +1,6 @@
 package prompto.compiler;
 
-public class MethodConstant implements ConstantOperand {
+public class MethodConstant implements CodeConstant {
 
 	ClassConstant className;
 	NameAndTypeConstant methodNameAndType;
@@ -15,6 +15,11 @@ public class MethodConstant implements ConstantOperand {
 		this.methodNameAndType = new NameAndTypeConstant(methodName, proto);
 	}
 
+	@Override
+	public String toString() {
+		return className.toString() + '/' + methodNameAndType.toString();
+	}
+	
 	@Override
 	public int index() {
 		return index;
@@ -41,7 +46,8 @@ public class MethodConstant implements ConstantOperand {
 		writer.writeU2(methodNameAndType.index());
 	}
 
-	public int getParamsCount() {
-		return CompilerUtils.getParamsCount(methodNameAndType.getType().getValue());
+	public String[] getDescriptor() {
+		return CompilerUtils.parseDescriptor(methodNameAndType.getType().getValue());
 	}
+
 }

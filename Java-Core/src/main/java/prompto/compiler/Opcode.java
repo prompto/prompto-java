@@ -42,32 +42,32 @@ import java.util.function.Function;
  *  deletion without notice.</b>
  */
 public enum Opcode {
-    NOP(0x0),
-    ACONST_NULL(0x1, 0, 1),
-    ICONST_M1(0x2),
-    ICONST_0(0x3, 0, 1),
-    ICONST_1(0x4, 0, 1),
-    ICONST_2(0x5, 0, 1),
-    ICONST_3(0x6, 0, 1),
-    ICONST_4(0x7, 0, 1),
-    ICONST_5(0x8, 0, 1),
+    // NOP(0x0),
+    ACONST_NULL(0x1, popsNone(), pushes(StackEntry.ITEM_Null)), /*
+    ICONST_M1(0x2), */
+    ICONST_0(0x3, popsNone(), pushes(StackEntry.ITEM_Integer)),
+    ICONST_1(0x4, popsNone(), pushes(StackEntry.ITEM_Integer)),
+    ICONST_2(0x5, popsNone(), pushes(StackEntry.ITEM_Integer)),
+    ICONST_3(0x6, popsNone(), pushes(StackEntry.ITEM_Integer)),
+    ICONST_4(0x7, popsNone(), pushes(StackEntry.ITEM_Integer)),
+    ICONST_5(0x8, popsNone(), pushes(StackEntry.ITEM_Integer))/*,
     LCONST_0(0x9),
     LCONST_1(0xa),
     FCONST_0(0xb),
     FCONST_1(0xc),
-    FCONST_2(0xd),
-    DCONST_0(0xe, 0, 2),
-    DCONST_1(0xf, 0, 2),
-    BIPUSH(0x10, BYTE, 0, 1),
-    SIPUSH(0x11, SHORT, 0, 1),
-    LDC(0x12, CPREF, 0, 2), // TODO use real constant size
-    LDC_W(0x13, CPREF_W, 0, 2), // TODO use real constant size
-    LDC2_W(0x14, CPREF_W, 0, 2),
+    FCONST_2(0xd)*/,
+    DCONST_0(0xe, popsNone(), pushes(StackEntry.ITEM_Double)),
+    DCONST_1(0xf, popsNone(), pushes(StackEntry.ITEM_Double)),
+    BIPUSH(0x10, BYTE, popsNone(), pushes(StackEntry.ITEM_Integer)),
+    SIPUSH(0x11, SHORT, popsNone(), pushes(StackEntry.ITEM_Integer)),
+    LDC(0x12, CPREF, popsNone(), pushesConstant()),
+    LDC_W(0x13, CPREF_W, popsNone(), pushesConstant()), 
+    LDC2_W(0x14, CPREF_W, popsNone(), pushesConstant()) /*,
     ILOAD(0x15, LOCAL),
     LLOAD(0x16, LOCAL),
     FLOAD(0x17, LOCAL),
-    DLOAD(0x18, LOCAL),
-    ALOAD(0x19, LOCAL, 0, 1),
+    DLOAD(0x18, LOCAL) */,
+    ALOAD(0x19, LOCAL, popsNone(), pushes(StackEntry.ITEM_Object)) /*,
     ILOAD_0(0x1a),
     ILOAD_1(0x1b),
     ILOAD_2(0x1c),
@@ -83,11 +83,11 @@ public enum Opcode {
     DLOAD_0(0x26),
     DLOAD_1(0x27),
     DLOAD_2(0x28),
-    DLOAD_3(0x29),
-    ALOAD_0(0x2a, 0, 1),
-    ALOAD_1(0x2b, 0, 1),
-    ALOAD_2(0x2c, 0, 1),
-    ALOAD_3(0x2d, 0, 1),
+    DLOAD_3(0x29) */,
+    ALOAD_0(0x2a, popsNone(), pushes(StackEntry.ITEM_Object)),
+    ALOAD_1(0x2b, popsNone(), pushes(StackEntry.ITEM_Object)),
+    ALOAD_2(0x2c, popsNone(), pushes(StackEntry.ITEM_Object)),
+    ALOAD_3(0x2d, popsNone(), pushes(StackEntry.ITEM_Object)) /*,
     IALOAD(0x2e),
     LALOAD(0x2f),
     FALOAD(0x30),
@@ -99,8 +99,8 @@ public enum Opcode {
     ISTORE(0x36, LOCAL),
     LSTORE(0x37, LOCAL),
     FSTORE(0x38, LOCAL),
-    DSTORE(0x39, LOCAL),
-    ASTORE(0x3a, LOCAL, 1, 0),
+    DSTORE(0x39, LOCAL) */,
+    ASTORE(0x3a, LOCAL, pops(1), pushesNone()) /*,
     ISTORE_0(0x3b),
     ISTORE_1(0x3c),
     ISTORE_2(0x3d),
@@ -116,11 +116,11 @@ public enum Opcode {
     DSTORE_0(0x47),
     DSTORE_1(0x48),
     DSTORE_2(0x49),
-    DSTORE_3(0x4a),
-    ASTORE_0(0x4b, 1, 0),
-    ASTORE_1(0x4c, 1, 0),
-    ASTORE_2(0x4d, 1, 0),
-    ASTORE_3(0x4e, 1, 0),
+    DSTORE_3(0x4a) */,
+    ASTORE_0(0x4b, pops(1), pushesNone()),
+    ASTORE_1(0x4c, pops(1), pushesNone()),
+    ASTORE_2(0x4d, pops(1), pushesNone()),
+    ASTORE_3(0x4e, pops(1), pushesNone()) /*,
     IASTORE(0x4f),
     LASTORE(0x50),
     FASTORE(0x51),
@@ -128,40 +128,40 @@ public enum Opcode {
     AASTORE(0x53),
     BASTORE(0x54),
     CASTORE(0x55),
-    SASTORE(0x56),
-    POP(0x57, 1, 0),
-    POP2(0x58, 2, 0),
-    DUP(0x59, 1, 2),
-    DUP_X1(0x5a, 2, 3),
+    SASTORE(0x56) */,
+    POP(0x57, pops(1), pushesNone()),
+    POP2(0x58, pops(2), pushesNone()),
+    DUP(0x59, pops(1), pushesDuplicate()),
+    DUP_X1(0x5a, pops(2), pushesDuplicateDown())/*,
     DUP_X2(0x5b),
     DUP2(0x5c),
     DUP2_X1(0x5d),
-    DUP2_X2(0x5e),
-    SWAP(0x5f, 1, 1),
-    IADD(0x60),
-    LADD(0x61, 4, 2),
-    FADD(0x62),
-    DADD(0x63, 4, 2),
-    ISUB(0x64),
-    LSUB(0x65, 4, 2),
-    FSUB(0x66),
-    DSUB(0x67, 4, 2),
-    IMUL(0x68),
-    LMUL(0x69, 4, 2),
-    FMUL(0x6a),
-    DMUL(0x6b, 4, 2),
-    IDIV(0x6c),
-    LDIV(0x6d, 2, 2),
-    FDIV(0x6e),
-    DDIV(0x6f, 2, 2),
-    IREM(0x70),
-    LREM(0x71, 4, 2),
-    FREM(0x72),
-    DREM(0x73, 4, 2),
-    INEG(0x74),
-    LNEG(0x75, 2, 2),
-    FNEG(0x76),
-    DNEG(0x77, 2, 2),
+    DUP2_X2(0x5e)*/,
+    SWAP(0x5f, pops(2), pushesSwapped())/*,
+    IADD(0x60)*/,
+    LADD(0x61, pops(2), pushes(StackEntry.ITEM_Long))/*,
+    FADD(0x62)*/,
+    DADD(0x63, pops(2), pushes(StackEntry.ITEM_Double))/*,
+    ISUB(0x64)*/,
+    LSUB(0x65, pops(2), pushes(StackEntry.ITEM_Long))/*,
+    FSUB(0x66)*/,
+    DSUB(0x67, pops(2), pushes(StackEntry.ITEM_Double))/*,
+    IMUL(0x68)*/,
+    LMUL(0x69, pops(2), pushes(StackEntry.ITEM_Long))/*,
+    FMUL(0x6a)*/,
+    DMUL(0x6b, pops(2), pushes(StackEntry.ITEM_Double))/*,
+    IDIV(0x6c)*/,
+    LDIV(0x6d, pops(2), pushes(StackEntry.ITEM_Long))/*,
+    FDIV(0x6e)*/,
+    DDIV(0x6f, pops(2), pushes(StackEntry.ITEM_Double))/*,
+    IREM(0x70)*/,
+    LREM(0x71, pops(2), pushes(StackEntry.ITEM_Long))/*,
+    FREM(0x72)*/,
+    DREM(0x73, pops(2), pushes(StackEntry.ITEM_Double))/*,
+    INEG(0x74)*/,
+    LNEG(0x75, pops(1), pushes(StackEntry.ITEM_Long))/*,
+    FNEG(0x76)*/,
+    DNEG(0x77, pops(1), pushes(StackEntry.ITEM_Double))/*,
     ISHL(0x78),
     LSHL(0x79),
     ISHR(0x7a),
@@ -174,18 +174,18 @@ public enum Opcode {
     LOR(0x81),
     IXOR(0x82),
     LXOR(0x83),
-    IINC(0x84, LOCAL_BYTE),
-    I2L(0x85, 1, 2),
+    IINC(0x84, LOCAL_BYTE)*/,
+    I2L(0x85, pops(1), pushes(StackEntry.ITEM_Long))/*,
     I2F(0x86),
-    I2D(0x87),
-    L2I(0x88, 2, 1),
-    L2F(0x89),
-    L2D(0x8a, 2, 2),
+    I2D(0x87)*/,
+    L2I(0x88, pops(1), pushes(StackEntry.ITEM_Integer))/*,
+    L2F(0x89)*/,
+    L2D(0x8a, pops(1), pushes(StackEntry.ITEM_Double))/*,
     F2I(0x8b),
-    F2L(0x8c),
-    F2D(0x8d, 1, 2),
-    D2I(0x8e),
-    D2L(0x8f, 2, 2),
+    F2L(0x8c)*/,
+    F2D(0x8d, pops(1), pushes(StackEntry.ITEM_Double))/*,
+    D2I(0x8e) */,
+    D2L(0x8f, pops(1), pushes(StackEntry.ITEM_Long)) /*,
     D2F(0x90),
     I2B(0x91),
     I2C(0x92),
@@ -201,35 +201,35 @@ public enum Opcode {
     IFGE(0x9c, BRANCH),
     IFGT(0x9d, BRANCH),
     IFLE(0x9e, BRANCH),
-    IF_ICMPEQ(0x9f, BRANCH),
-    IF_ICMPNE(0xa0, BRANCH),
+    IF_ICMPEQ(0x9f, BRANCH)*/,
+    IF_ICMPNE(0xa0, BRANCH, pops(2), pushesNone())/*,
     IF_ICMPLT(0xa1, BRANCH),
     IF_ICMPGE(0xa2, BRANCH),
     IF_ICMPGT(0xa3, BRANCH),
     IF_ICMPLE(0xa4, BRANCH),
     IF_ACMPEQ(0xa5, BRANCH),
-    IF_ACMPNE(0xa6, BRANCH),
-    GOTO(0xa7, BRANCH),
+    IF_ACMPNE(0xa6, BRANCH)*/,
+    GOTO(0xa7, BRANCH, popsNone(), pushesNone())/*,
     JSR(0xa8, BRANCH),
     RET(0xa9, LOCAL),
     TABLESWITCH(0xaa, DYNAMIC),
     LOOKUPSWITCH(0xab, DYNAMIC),
-    IRETURN(0xac),
+    IRETURN(0xac, 1, 0),
     LRETURN(0xad),
     FRETURN(0xae),
-    DRETURN(0xaf),
-    ARETURN(0xb0, 1, 0),
-    RETURN(0xb1),
-    GETSTATIC(0xb2, CPREF_W, 0, 2), // pushed can actually vary, be savvy. TODO use field type
-    PUTSTATIC(0xb3, CPREF_W),
-    GETFIELD(0xb4, CPREF_W, 0, 2), // pushed can actually vary, be savvy. TODO use field type
-    PUTFIELD(0xb5, CPREF_W),
-    INVOKEVIRTUAL(0xb6, CPREF_W, (i)->(-(1+i.countMethodArguments())), 2), // pushed can actually vary, be savvy. TODO use return type
-    INVOKESPECIAL(0xb7, CPREF_W, (i)->(-(1+i.countMethodArguments())), 2),
-    INVOKESTATIC(0xb8, CPREF_W, (i)->(-i.countMethodArguments()), 2), // pushed can actually vary, be savvy. TODO use return type
+    DRETURN(0xaf) */,
+    ARETURN(0xb0, pops(1), pushesNone()),
+    RETURN(0xb1, popsNone(), pushesNone()),
+    GETSTATIC(0xb2, CPREF_W, popsNone(), pushesField())/*, 
+    PUTSTATIC(0xb3, CPREF_W)*/,
+    GETFIELD(0xb4, CPREF_W, popsNone(), pushesField())/*, 
+    PUTFIELD(0xb5, CPREF_W)*/,
+    INVOKEVIRTUAL(0xb6, CPREF_W, popsArguments(false), pushesResult()),
+    INVOKESPECIAL(0xb7, CPREF_W, popsArguments(false), pushesResult()),
+    INVOKESTATIC(0xb8, CPREF_W, popsArguments(true), pushesResult())/*,
     INVOKEINTERFACE(0xb9, CPREF_W_UBYTE_ZERO),
-    INVOKEDYNAMIC(0xba, CPREF_W_UBYTE_ZERO),
-    NEW(0xbb, CPREF_W, 0, 1),
+    INVOKEDYNAMIC(0xba, CPREF_W_UBYTE_ZERO)*/,
+    NEW(0xbb, CPREF_W, popsNone(), pushes(StackEntry.ITEM_Object))/*,
     NEWARRAY(0xbc, ATYPE),
     ANEWARRAY(0xbd, CPREF_W),
     ARRAYLENGTH(0xbe),
@@ -257,70 +257,144 @@ public enum Opcode {
     DSTORE_W(0xc439, WIDE_CPREF_W),
     ASTORE_W(0xc43a, WIDE_CPREF_W),
     IINC_W(0xc484, WIDE_CPREF_W_SHORT),
-    RET_W(0xc4a9, WIDE_CPREF_W);
+    RET_W(0xc4a9, WIDE_CPREF_W) */;
+
+    static interface Popper extends Function<Instruction, Short> {
+    }
+
+    static Popper popsNone() {
+    	return new Popper() {
+    		public Short apply(Instruction i) {
+    			return 0;
+    		}
+    	};
+    }
+ 
+    static Popper pops(int count) {
+    	return new Popper() {
+    		public Short apply(Instruction i) {
+    			return (short)count;
+    		}
+    	};
+    }
+
+    static Popper popsArguments(boolean isStatic) {
+    	return new Popper() {
+    		public Short apply(Instruction i) {
+    			return i.getArgumentsCount(isStatic);
+    		}
+    	};
+    }
+    
+    static interface Pusher {
+    	StackEntry[] apply(Instruction i, StackEntry[] popped);
+    }
+ 
+    static Pusher pushesNone() {
+    	return new Pusher() {
+    		@Override public StackEntry[] apply(Instruction i, StackEntry[] popped) {
+    			return new StackEntry[0];
+    		}
+    	};
+    }
+    
+    static Pusher pushesDuplicate() {
+    	return new Pusher() {
+    		@Override public StackEntry[] apply(Instruction i, StackEntry[] popped) {
+				return new StackEntry[] { popped[0], popped[0] };
+    		}
+    	};
+    }
+    
+    static Pusher pushesDuplicateDown() {
+    	return new Pusher() {
+    		@Override public StackEntry[] apply(Instruction i, StackEntry[] popped) {
+				return new StackEntry[] { popped[1], popped[0], popped[1] };
+    		}
+    	};
+    }
+    
+    static Pusher pushesSwapped() {
+    	return new Pusher() {
+    		@Override public StackEntry[] apply(Instruction i, StackEntry[] popped) {
+				return new StackEntry[] { popped[1], popped[0] };
+    		}
+    	};
+    }
+    
+    static Pusher pushesConstant() {
+    	return new Pusher() {
+    		@Override public StackEntry[] apply(Instruction i, StackEntry[] popped) {
+    			StackEntry e = i.getConstantStackEntryType() ;
+    			return e==null ? new StackEntry[0] : new StackEntry[] { e };
+    		}
+    	};
+    }
+    
+    static Pusher pushesField() {
+    	return new Pusher() {
+    		@Override public StackEntry[] apply(Instruction i, StackEntry[] popped) {
+    			StackEntry e = i.getFieldStackEntryType() ;
+    			return e==null ? new StackEntry[0] : new StackEntry[] { e };
+    		}
+    	};
+    }
+
+    static Pusher pushesResult() {
+    	return new Pusher() {
+    		@Override public StackEntry[] apply(Instruction i, StackEntry[] popped) {
+    			StackEntry e = i.getResultStackEntryType() ;
+    			return e==null ? new StackEntry[0] : new StackEntry[] { e };
+    		}
+    	};
+    }
+
+    static Pusher pushes(StackEntry e) {
+    	return new Pusher() {
+    		@Override public StackEntry[] apply(Instruction i, StackEntry[] popped) {
+    			return new StackEntry[] { e };
+    		}
+    	};
+    }
+
+ 
 
     public final int opcode;
     public final OpcodeKind kind;
-    private final int poppedOperands;
-    public final Function<Instruction, Integer> calcPoppedOperands;
-    private final int pushedOperands;
+    public final Popper popper;
+    public final Pusher pusher;
     
     Opcode(int opcode) {
-        this(opcode, NO_OPERANDS);
+        this(opcode, NO_OPERANDS, popsNone(), pushesNone());
     }
 
-    Opcode(int opcode, int poppedOperands) {
-        this(opcode, NO_OPERANDS, poppedOperands, 0);
+    Opcode(int opcode, Popper popper, Pusher pusher) {
+    	this(opcode, NO_OPERANDS, popper, pusher);
     }
 
-    Opcode(int opcode, int poppedOperands, int pushedOperands) {
-        this(opcode, NO_OPERANDS, poppedOperands, pushedOperands);
-    }
-
-    Opcode(int opcode, OpcodeKind kind) {
-        this(opcode, kind, 0, 0);
-    }
-    
-    Opcode(int opcode, OpcodeKind kind, int poppedOperands) {
-        this(opcode, kind, poppedOperands, 0);
-    }
-    
-    Opcode(int opcode, OpcodeKind kind, int poppedOperands, int pushedOperands) {
+    Opcode(int opcode, OpcodeKind kind, Popper popper, Pusher pusher) {
         this.opcode = opcode;
         this.kind = kind;
-        this.poppedOperands = poppedOperands;
-        this.calcPoppedOperands = this::countFixedOperands;
-        this.pushedOperands = pushedOperands;
-        
+        this.popper = popper;
+        this.pusher = pusher;
     }
     
-    Opcode(int opcode, OpcodeKind kind, Function<Instruction, Integer> calcPoppedOperands, int pushedOperands) {
-        this.opcode = opcode;
-        this.kind = kind;
-        this.poppedOperands = 0;
-        this.calcPoppedOperands = calcPoppedOperands;
-        this.pushedOperands = pushedOperands;
+    public short getPopped(Instruction i) {
+    	return popper.apply(i);
     }
     
-    public int poppedOperands(Instruction i) {
-    	return calcPoppedOperands.apply(i);
-    }
-    
-    public int pushedOperands() {
-    	return pushedOperands;
-    }
-    
-    private int countFixedOperands(Instruction i) {
-    	return poppedOperands;
-    }
+	public StackEntry[] getPushed(Instruction instruction, StackEntry[] popped) {
+		return pusher.apply(instruction, popped);
+	}
+
     
     /** Get the Opcode for a simple standard 1-byte opcode. */
-    public static Opcode get(int opcode) {
+    public static Opcode get(byte opcode) {
         return stdOpcodes[opcode];
     }
 
     /** Get the Opcode for 1- or 2-byte opcode. */
-    public static Opcode get(int opcodePrefix, int opcode) {
+    public static Opcode get(byte opcodePrefix, byte opcode) {
         Opcode[] block = getOpcodeBlock(opcodePrefix);
         return (block == null ? null : block[opcode]);
     }
@@ -347,5 +421,6 @@ public enum Opcode {
 
     /** The byte prefix for the wide instructions. */
     public static final int WIDE = 0xc4;
+
 
 }

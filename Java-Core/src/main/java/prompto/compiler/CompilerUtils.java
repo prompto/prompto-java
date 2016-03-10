@@ -1,7 +1,9 @@
 package prompto.compiler;
 
 import java.rmi.UnexpectedException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import prompto.grammar.ArgumentList;
@@ -11,8 +13,8 @@ import prompto.type.IType;
 
 public abstract class CompilerUtils {
 
-	static int getParamsCount(String proto) {
-		int count = 0;
+	static String[] parseDescriptor(String proto) {
+		List<String> params = new ArrayList<>(); 
 		while(proto.length()>0) {
 			switch(proto.charAt(0)) {
 			case '(':
@@ -20,13 +22,15 @@ public abstract class CompilerUtils {
 				proto = proto.substring(1);
 				continue;
 			case ')':
-				return count;
+				params.add(proto.substring(1));
+				return params.toArray(new String[params.size()]);
 			case 'L':
-				count++;
-				proto = proto.substring(proto.indexOf(';') + 1);
+				int idx = proto.indexOf(';') + 1;
+				params.add(proto.substring(0, idx));
+				proto = proto.substring(idx);
 				continue;
 			default:
-				count++;
+				params.add(proto.substring(0, 1));
 				proto = proto.substring(1);
 				continue;
 			}
@@ -124,6 +128,15 @@ public abstract class CompilerUtils {
 				boolean.class, Boolean.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
 		return new ResultInfo(Boolean.class, true);
+	}
+	
+	public static ResultInfo BooleanToboolean(MethodInfo method) {
+		Operand oper = new MethodConstant(
+				Boolean.class, 
+				"booleanValue",
+				boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return new ResultInfo(boolean.class, true);
 	}
 
 	public static ResultInfo ByteToLong(MethodInfo method) {
@@ -313,6 +326,5 @@ public abstract class CompilerUtils {
 		// done
 		return new ResultInfo(klass, true);
 	}
-
 
 }

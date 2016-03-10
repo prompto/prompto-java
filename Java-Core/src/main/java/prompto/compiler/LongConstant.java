@@ -1,12 +1,22 @@
 package prompto.compiler;
 
-public class LongConstant implements ConstantOperand {
+public class LongConstant implements ValueConstant {
 	
 	long value;
 	int index;
 	
 	public LongConstant(long value) {
 		this.value = value;
+	}
+	
+	@Override
+	public StackEntry toStackEntry() {
+		return StackEntry.ITEM_Long;
+	}
+
+	@Override
+	public String toString() {
+		return String.valueOf(value);
 	}
 
 	@Override

@@ -23,6 +23,9 @@ pattern literals
 typed tuples?
 uuid literal
 
+runtime:
+shared versioned singletons
+
 framework:
 json
 xml

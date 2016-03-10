@@ -1,24 +1,31 @@
 package prompto.compiler;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class CodeAttribute extends Attribute {
+public class CodeAttribute implements Attribute {
 	
 	List<Instruction> instructions = new LinkedList<>(); 
+	List<Attribute> attributes = new ArrayList<>();
 	Utf8Constant attributeName = new Utf8Constant("Code");
 	Map<String, Integer> locals = new HashMap<>();
-	int maxOperands = 0;
+	StackAttribute stack = new StackAttribute();
 	int maxLocals = 0;
-	int currentOperands = 0;
+	
+	public StackAttribute getStack() {
+		return stack;
+	}
 	
 	public void register(ConstantsPool pool) {
 		instructions.forEach((i)->
 			i.register(pool));
 		attributeName.register(pool);
+		attributes.forEach((a)->
+			a.register(pool));
 	}	
 	
 	public void addInstruction(Instruction instruction) {
@@ -43,15 +50,6 @@ public class CodeAttribute extends Attribute {
 	}
 
 
-	void pushOperands(int count) {
-		if((currentOperands += count)>maxOperands)
-			maxOperands = currentOperands;
-	}
-	
-	void popOperands(int count) {
-		currentOperands -= count;
-	}
-	
 	byte[] createOpcodes() {
 		ByteArrayOutputStream o = new ByteArrayOutputStream();
 		ByteWriter w = new ByteWriter(o);
@@ -84,7 +82,7 @@ public class CodeAttribute extends Attribute {
 		int len = 2 + 2 + 4 + opcodes.length + 2 + 2;
 		writer.writeU2(attributeName.index());
 		writer.writeU4(len);
-		writer.writeU2(maxOperands);
+		writer.writeU2(stack.getMaxStack());
 		writer.writeU2(maxLocals);
 		writer.writeU4(opcodes.length);
 		writer.writeBytes(opcodes);

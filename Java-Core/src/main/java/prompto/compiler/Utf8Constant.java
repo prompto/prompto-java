@@ -1,6 +1,6 @@
 package prompto.compiler;
 
-public class Utf8Constant implements ConstantOperand {
+public class Utf8Constant implements InternalConstant {
 	
 	String value;
 	int index;
@@ -9,6 +9,11 @@ public class Utf8Constant implements ConstantOperand {
 		this.value = value;
 	}
 
+	@Override
+	public String toString() {
+		return this.value;
+	}
+	
 	public String getValue() {
 		return value;
 	}

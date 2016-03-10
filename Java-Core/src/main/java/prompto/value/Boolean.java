@@ -4,9 +4,15 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.ShortOperand;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
+import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
@@ -89,6 +95,22 @@ public class Boolean extends BaseValue implements Comparable<Boolean> {
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		}
+	}
+	
+	public static ResultInfo compileEquals(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+		if(Boolean.class==left.getType())
+			CompilerUtils.BooleanToboolean(method);
+		ResultInfo right = exp.compile(context, method, true);
+		if(Boolean.class==right.getType())
+			CompilerUtils.BooleanToboolean(method);
+		method.addInstruction(Opcode.IF_ICMPNE, new ShortOperand((short)4));
+		method.addInstruction(Opcode.ICONST_1);
+		method.addInstruction(Opcode.GOTO, new ShortOperand((short)1));
+		method.addInstruction(Opcode.ICONST_0);
+		if(toNative)
+			return new ResultInfo(boolean.class, false);
+		else
+			return CompilerUtils.booleanToBoolean(method);
 	}
 
 }

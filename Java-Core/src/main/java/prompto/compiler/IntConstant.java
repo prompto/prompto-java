@@ -1,6 +1,6 @@
 package prompto.compiler;
 
-public class IntConstant implements ConstantOperand {
+public class IntConstant implements ValueConstant {
 	
 	int value;
 	int index;
@@ -9,6 +9,16 @@ public class IntConstant implements ConstantOperand {
 		this.value = value;
 	}
 
+	@Override
+	public StackEntry toStackEntry() {
+		return StackEntry.ITEM_Integer;
+	}
+	
+	@Override
+	public String toString() {
+		return String.valueOf(value);
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		return obj instanceof IntConstant 

@@ -1,8 +1,8 @@
 package prompto.compiler;
 
-abstract class Attribute {
+interface Attribute {
 
-	abstract void register(ConstantsPool pool);
-	abstract void writeTo(ByteWriter writer);
+	void register(ConstantsPool pool);
+	void writeTo(ByteWriter writer);
 
 }

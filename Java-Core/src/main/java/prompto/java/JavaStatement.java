@@ -66,11 +66,11 @@ public class JavaStatement {
 	private static Map<Class<?>, Function<MethodInfo, ResultInfo>> createResultConverters() {
 		Map<Class<?>, Function<MethodInfo, ResultInfo>> map = new HashMap<>();
 		map.put(boolean.class, CompilerUtils::booleanToBoolean);
-		map.put(byte.class, CompilerUtils::intTolong);
+		map.put(byte.class, CompilerUtils::intTolong); // no byte in the JVM
 		map.put(Byte.class, CompilerUtils::ByteToLong);
-		map.put(short.class, CompilerUtils::intTolong);
+		map.put(short.class, CompilerUtils::intToLong); // no short in the JVM
 		map.put(short.class, CompilerUtils::ShortToLong);
-		map.put(int.class, CompilerUtils::intTolong);
+		map.put(int.class, CompilerUtils::intToLong);
 		map.put(Integer.class, CompilerUtils::IntegerToLong);
 		map.put(long.class, CompilerUtils::longToLong);
 		map.put(float.class, CompilerUtils::floatToDouble);

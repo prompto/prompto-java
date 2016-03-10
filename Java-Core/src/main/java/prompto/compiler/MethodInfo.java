@@ -17,6 +17,11 @@ public class MethodInfo {
 		this.proto = new Utf8Constant(spec);
 	}
 
+	@Override
+	public String toString() {
+		return name.toString() + '/' + proto.toString();
+	}
+	
 	public void addModifier(int modifier) {
 		accessFlags |= modifier;
 	}

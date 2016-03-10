@@ -1,12 +1,22 @@
 package prompto.compiler;
 
-public class DoubleConstant implements ConstantOperand {
+public class DoubleConstant implements ValueConstant {
 	
 	double value;
 	int index;
 	
 	public DoubleConstant(double value) {
 		this.value = value;
+	}
+
+	@Override
+	public StackEntry toStackEntry() {
+		return StackEntry.ITEM_Double;
+	}
+	
+	@Override
+	public String toString() {
+		return String.valueOf(value);
 	}
 
 	@Override

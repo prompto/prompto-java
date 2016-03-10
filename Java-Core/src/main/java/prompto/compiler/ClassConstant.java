@@ -1,7 +1,7 @@
 package prompto.compiler;
 
 
-public class ClassConstant implements ConstantOperand {
+public class ClassConstant implements CodeConstant {
 
 	Utf8Constant className;
 	int index;
@@ -14,6 +14,10 @@ public class ClassConstant implements ConstantOperand {
 		this.className = new Utf8Constant(className);
 	}
 
+	@Override
+	public String toString() {
+		return this.className.toString();
+	}
 
 	@Override
 	public boolean equals(Object obj) {

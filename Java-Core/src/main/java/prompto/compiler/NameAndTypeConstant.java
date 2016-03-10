@@ -1,6 +1,6 @@
 package prompto.compiler;
 
-public class NameAndTypeConstant implements ConstantOperand {
+public class NameAndTypeConstant implements CodeConstant {
 
 	Utf8Constant name;
 	Utf8Constant type;
@@ -11,6 +11,11 @@ public class NameAndTypeConstant implements ConstantOperand {
 		this.type = new Utf8Constant(type);
 	}
 
+	@Override
+	public String toString() {
+		return name.toString() + '/' + type.toString();
+	}
+	
 	public Utf8Constant getName() {
 		return name;
 	}

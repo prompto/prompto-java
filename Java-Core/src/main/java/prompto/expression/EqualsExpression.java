@@ -1,5 +1,11 @@
 package prompto.expression;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import prompto.compiler.IOperatorFunction;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -7,6 +13,14 @@ import prompto.grammar.EqOp;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.grammar.UnresolvedIdentifier;
+import prompto.intrinsic.PromptoDate;
+import prompto.intrinsic.PromptoDateTime;
+import prompto.intrinsic.PromptoDict;
+import prompto.intrinsic.PromptoList;
+import prompto.intrinsic.PromptoPeriod;
+import prompto.intrinsic.PromptoSet;
+import prompto.intrinsic.PromptoTime;
+import prompto.intrinsic.PromptoTuple;
 import prompto.runtime.Context;
 import prompto.runtime.LinkedValue;
 import prompto.runtime.LinkedVariable;
@@ -16,9 +30,21 @@ import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.Boolean;
+import prompto.value.Character;
+import prompto.value.Date;
+import prompto.value.DateTime;
+import prompto.value.Decimal;
+import prompto.value.Dictionary;
 import prompto.value.IInstance;
 import prompto.value.IValue;
+import prompto.value.Integer;
+import prompto.value.ListValue;
 import prompto.value.NullValue;
+import prompto.value.Period;
+import prompto.value.SetValue;
+import prompto.value.Text;
+import prompto.value.Time;
+import prompto.value.TupleValue;
 import prompto.value.TypeValue;
 
 public class EqualsExpression implements IExpression, IAssertion {
@@ -185,5 +211,39 @@ public class EqualsExpression implements IExpression, IAssertion {
 				value = ((IInstance)value).getMember(context, IStore.dbIdIdentifier, false);
 			builder.push(context, name, operator, value);
 		}
+	}
+	
+	static Map<Class<?>, IOperatorFunction> testers = createTesters();
+	
+	private static Map<Class<?>, IOperatorFunction> createTesters() {
+		Map<Class<?>, IOperatorFunction> map = new HashMap<>();
+		map.put(boolean.class, Boolean::compileEquals); 
+		map.put(Boolean.class, Boolean::compileEquals); /*
+		map.put(String.class, Text::compileEquals); 
+		map.put(java.lang.Character.class, Character::compileEquals);
+		map.put(double.class, Decimal::compileEquals);
+		map.put(Double.class, Decimal::compileEquals);
+		map.put(long.class, Integer::compileEquals);
+		map.put(Long.class, Integer::compileEquals);
+		map.put(PromptoDate.class, Date::compileEquals);
+		map.put(PromptoDateTime.class, DateTime::compileEquals);
+		map.put(PromptoTime.class, Time::compileEquals);
+		map.put(PromptoPeriod.class, Period::compileEquals);
+		map.put(PromptoDict.class, Dictionary::compileEquals);
+		map.put(PromptoSet.class, SetValue::compileEquals);
+		map.put(PromptoTuple.class, TupleValue::compileEquals);
+		map.put(PromptoList.class, ListValue::compileEquals); */
+		return map;
+	}
+
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
+		ResultInfo lval = left.compile(context, method, true);
+		IOperatorFunction tester = testers.get(lval.getType());
+		if(tester==null) {
+			System.err.println("Missing IOperatorFunction for = " + lval.getType().getName());
+			throw new SyntaxError("Cannot check equality of " + lval.getType().getName() + " with " + right.check(context).getName());
+		}
+		return tester.compile(context, method, lval, right, toNative);
 	}
 }
