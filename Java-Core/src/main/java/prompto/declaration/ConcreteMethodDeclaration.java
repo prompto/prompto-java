@@ -202,8 +202,9 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		for(IArgument arg : arguments) {
 			String desc = arg.getJavaDescriptor(context);
 			IVerifierEntry.Type type = IVerifierEntry.Type.fromDescriptor(desc);
-			ClassConstant className = new ClassConstant(arg.getJavaClassName(context));
-			method.registerLocal(arg.getName(), type, className);
+			String className = arg.getJavaClassName(context).replace('.', '/');
+			ClassConstant classConstant = new ClassConstant(className);
+			method.registerLocal(arg.getName(), type, classConstant);
 		}
 		return method;
 	}

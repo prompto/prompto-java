@@ -11,7 +11,6 @@ public class StackMapTableAttribute implements IAttribute {
 	List<StackLabel> labels = new ArrayList<>();
 	short currentStackSize = 0;
 	short maxStackSize = 0;
-	short currentLocalsCount = 0;
 	short maxLocalsCount = 0;
 	
 	public StackMapTableAttribute(LocalVariableTableAttribute locals) {
@@ -23,7 +22,7 @@ public class StackMapTableAttribute implements IAttribute {
 	}
 
 	public short getMaxLocals() {
-		return maxLocalsCount;
+		return (short)(1 + maxLocalsCount);
 	}
 
 	public void addLabel(StackLabel label) {
@@ -62,14 +61,15 @@ public class StackMapTableAttribute implements IAttribute {
 	@Override
 	public void register(ConstantsPool pool) {
 		attributeName.register(pool);
+		state.register(pool);
 		labels.forEach((l)->
 			l.register(pool));
 	}
 
 	public StackLocal registerLocal(StackLocal local) {
 		StackLocal other = locals.registerLocal(local);
-		if(other.getIndex()>maxLocalsCount)
-			maxLocalsCount = other.getIndex();
+		if(other.getIndex()>=maxLocalsCount)
+			maxLocalsCount = (short)(1 + other.getIndex());
 		state.pushLocal(local);
 		return other;
 	}

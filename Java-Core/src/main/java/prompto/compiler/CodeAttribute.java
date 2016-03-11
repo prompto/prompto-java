@@ -28,8 +28,6 @@ public class CodeAttribute implements IAttribute {
 		attributeName.register(pool);
 		attributes.forEach((a)->
 			a.register(pool));
-		// locals.register(pool); TODO
-		stack.register(pool);
 	}	
 	
 	public Instruction addInstruction(Instruction instruction) {
