@@ -1,6 +1,5 @@
 package prompto.compiler;
 
-import prompto.compiler.StackEntry.Type;
 
 public class StringConstant implements ValueConstant {
 	
@@ -17,8 +16,8 @@ public class StringConstant implements ValueConstant {
 	}
 	
 	@Override
-	public Type toStackEntryType() {
-		return StackEntry.Type.ITEM_Object;
+	public StackEntry toStackEntry() {
+		return IVerifierEntry.Type.ITEM_Object.newStackEntry(null);
 	}
 	
 	@Override
@@ -28,7 +27,7 @@ public class StringConstant implements ValueConstant {
 	}
 	
 	@Override
-	public int index() {
+	public int getIndexInConstantPool() {
 		return index;
 	}
 	
@@ -47,7 +46,7 @@ public class StringConstant implements ValueConstant {
 		}
 		*/
 		writer.writeU1(Tags.CONSTANT_String);
-		writer.writeU2(value.index());
+		writer.writeU2(value.getIndexInConstantPool());
 	}
 
 }

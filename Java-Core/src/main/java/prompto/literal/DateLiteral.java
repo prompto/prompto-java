@@ -3,7 +3,7 @@ package prompto.literal;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.Operand;
+import prompto.compiler.IOperand;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StringConstant;
 import prompto.error.SyntaxError;
@@ -37,7 +37,7 @@ public class DateLiteral extends Literal<Date> {
 	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
 		PromptoDate date = value.getValue();
 		method.addInstruction(Opcode.LDC_W, new StringConstant(date.toString()));
-		Operand oper = new MethodConstant(PromptoDate.class, "parse", String.class, PromptoDate.class);
+		IOperand oper = new MethodConstant(PromptoDate.class, "parse", String.class, PromptoDate.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
 		return new ResultInfo(PromptoDate.class, true);
 	}

@@ -45,7 +45,7 @@ public class TestClassFile {
 	public void testConstantsPool() {
 		ConstantsPool pool = new ConstantsPool();
 		assertEquals(1, pool.nextIndex);
-		ConstantOperand c = new Utf8Constant("abc");
+		IConstantOperand c = new Utf8Constant("abc");
 		c.register(pool);
 		assertEquals(2, pool.nextIndex);
 		c = new Utf8Constant("abc");
@@ -56,9 +56,9 @@ public class TestClassFile {
 		assertEquals(4, pool.nextIndex);
 		NameAndTypeConstant ntc = new NameAndTypeConstant("xyw", "hkp");
 		ntc.register(pool);
-		assertEquals(4, ntc.index());
-		assertEquals(5, ntc.name.index());
-		assertEquals(6, ntc.type.index());
+		assertEquals(4, ntc.getIndexInConstantPool());
+		assertEquals(5, ntc.name.getIndexInConstantPool());
+		assertEquals(6, ntc.type.getIndexInConstantPool());
 		assertEquals(7, pool.nextIndex);
 	}
 	
@@ -72,7 +72,7 @@ public class TestClassFile {
 		c.addMethod(m);
 		m = new MethodInfo("printStatic", "(Ljava/lang/String;)V");
 		m.addModifier(Modifier.STATIC);
-		m.registerLocal("value", StackEntry.Type.ITEM_Object, "java/lang/String");
+		m.registerLocal("value", IVerifierEntry.Type.ITEM_Object, new ClassConstant("java/lang/String"));
 		m.addInstruction(Opcode.RETURN);
 		c.addMethod(m);
 		ByteArrayOutputStream o = new ByteArrayOutputStream();
@@ -96,7 +96,7 @@ public class TestClassFile {
 		c.addModifier(Modifier.ABSTRACT);
 		MethodInfo m = new MethodInfo("print", "(Ljava/lang/String;)V");
 		m.addModifier(Modifier.STATIC);
-		m.registerLocal("value", StackEntry.Type.ITEM_Object, "java/lang/String");
+		m.registerLocal("value", IVerifierEntry.Type.ITEM_Object, new ClassConstant("java/lang/String"));
 		m.addInstruction(Opcode.GETSTATIC, new FieldConstant("java/lang/System", "out", "Ljava/io/PrintStream;"));
 		m.addInstruction(Opcode.ALOAD_0); // the parameter
 		m.addInstruction(Opcode.INVOKEVIRTUAL, new MethodConstant(PrintStream.class, "print", String.class, void.class));
@@ -142,17 +142,32 @@ public class TestClassFile {
 		m.addInstruction(Opcode.ICONST_1);
 		m.addInstruction(Opcode.ICONST_1);
 		m.addInstruction(Opcode.IADD);
-		/*
+		m.addInstruction(Opcode.POP).setStackLabel(new StackLabel.SAME());
+		m.addInstruction(Opcode.RETURN);
+		c.addMethod(m);
+		ByteArrayOutputStream o = new ByteArrayOutputStream();
+		c.writeTo(o);
+		byte[] gen = o.toByteArray();
+		Class<?> klass = ByteClassLoader.defineAndResolveClass(name.replace("/", "."), gen);
+		assertNotNull(klass);
+		Method mm = klass.getDeclaredMethod("m");
+		mm.invoke(null);
+	}
+	
+	@Test
+	public void testClassWithStackLabel_FULL() throws Exception {
+		String name = "k1";
+		ClassFile c = new ClassFile(name, "java/lang/Object");
+		c.addModifier(Modifier.ABSTRACT);
+		MethodInfo m = new MethodInfo("m", "()V");
+		m.addModifier(Modifier.STATIC);
+		m.addInstruction(Opcode.ICONST_1);
 		m.addInstruction(Opcode.ICONST_1);
 		Instruction branch = m.addInstruction(Opcode.IF_ICMPNE, new ShortOperand((short)4));
-		// branch.setStackLabel(new StackLabel());
 		m.addInstruction(Opcode.ICONST_1);
-		Instruction jump = m.addInstruction(Opcode.GOTO, new ShortOperand((short)1));
-		// jump.setStackLabel(new StackLabel(branch.getLabel()));
+		m.addInstruction(Opcode.GOTO, new ShortOperand((short)1)).setStackLabel(new StackLabel.FULL(branch));
 		Instruction last = m.addInstruction(Opcode.ICONST_0);
-		// last.setStackLabel(new StackLabel(branch.getLabel()));
-		 */
-		m.addInstruction(Opcode.POP).setStackLabel(new StackLabel.SAME());
+		m.addInstruction(Opcode.POP).setStackLabel(new StackLabel.FULL(last));
 		m.addInstruction(Opcode.RETURN);
 		c.addMethod(m);
 		ByteArrayOutputStream o = new ByteArrayOutputStream();

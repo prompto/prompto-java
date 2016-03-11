@@ -1,7 +1,5 @@
 package prompto.compiler;
 
-import prompto.compiler.StackEntry.Type;
-
 public class Instruction {
 
 	static boolean DUMP = isDUMP();
@@ -11,10 +9,11 @@ public class Instruction {
 	}
 	
 	Opcode opcode;
-	Operand[] operands;
+	IOperand[] operands;
 	StackLabel label;
+	StackState state;
 	
-	Instruction(Opcode opcode, Operand[] operands) {
+	Instruction(Opcode opcode, IOperand[] operands) {
 		this.opcode = opcode;
 		this.operands = operands;
 	}
@@ -27,6 +26,10 @@ public class Instruction {
 		this.label = label;
 	}
 
+	public StackState getStackState() {
+		return state;
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder(opcode.name());
@@ -35,7 +38,7 @@ public class Instruction {
 			sb.append("[]");
 		else {
 			sb.append('[');
-			for(Operand o : operands) {
+			for(IOperand o : operands) {
 				sb.append(o.toString());
 				sb.append(", ");
 			}
@@ -46,22 +49,22 @@ public class Instruction {
 	}
 	
 	void register(ConstantsPool pool) {
-		for(Operand operand : operands) {
-			if(operand instanceof ConstantOperand)
-				((ConstantOperand)operand).register(pool);
+		for(IOperand operand : operands) {
+			if(operand instanceof IConstantOperand)
+				((IConstantOperand)operand).register(pool);
 		}
 	}
 
 	void writeTo(CodeAttribute byteCode, ByteWriter writer) {
 		if(DUMP)
 			System.err.println(this.toString());
-		StackAttribute stack = byteCode.getStack();
+		StackMapTableAttribute stack = byteCode.getStack();
 		if(DUMP)
 			System.err.println("Before pop: " + stack.toString());
-		StackEntry.Type[] popped = stack.pop(opcode.getPopped(this));
+		StackEntry[] popped = stack.pop(opcode.getPopped(this));
 		if(DUMP)
 			System.err.println("After pop: " + stack.toString());
-		StackEntry.Type[] pushed = opcode.getPushed(this, popped);
+		StackEntry[] pushed = opcode.getPushed(this, popped);
 		byteCode.getStack().push(pushed);
 		if(DUMP)
 			System.err.println("After push: " + stack.toString());
@@ -86,19 +89,21 @@ public class Instruction {
 					writer.writeU1(((ByteOperand)operands[0]).value());
 					break;
 				case CPREF:
-					writer.writeU1(((ConstantOperand)operands[0]).index());
+					writer.writeU1(((IConstantOperand)operands[0]).getIndexInConstantPool());
 					break;
 				case CPREF_W:
-					writer.writeU2(((ConstantOperand)operands[0]).index());
+					writer.writeU2(((IConstantOperand)operands[0]).getIndexInConstantPool());
 					break;
 				default:
 					throw new UnsupportedOperationException(opcode.kind.name()); 
 			}
 		}
+		if(state!=null)
+			state.capture(stack.state);
 	}
 
 	public MethodConstant getMethodConstant() {
-		for(Operand operand : operands) {
+		for(IOperand operand : operands) {
 			if(operand instanceof MethodConstant)
 				return (MethodConstant)operand;
 		}
@@ -106,7 +111,7 @@ public class Instruction {
 	}
 
 	public FieldConstant getFieldConstant() {
-		for(Operand operand : operands) {
+		for(IOperand operand : operands) {
 			if(operand instanceof FieldConstant)
 				return (FieldConstant)operand;
 		}
@@ -114,34 +119,37 @@ public class Instruction {
 	}
 
 	public ValueConstant getValueConstant() {
-		for(Operand operand : operands) {
+		for(IOperand operand : operands) {
 			if(operand instanceof ValueConstant)
 				return (ValueConstant)operand;
 		}
 		return null;
 	}
 
-	public Type getConstantStackEntryType() {
+	public StackEntry getConstantStackEntry() {
 		ValueConstant v = getValueConstant();
-		return v.toStackEntryType();
+		return v.toStackEntry();
 	}
 
-	public StackEntry.Type getFieldStackEntryType() {
+	public StackEntry getFieldStackEntry() {
 		FieldConstant f = getFieldConstant();
-		String type = f.getDescriptor();
-		return StackEntry.Type.fromDescriptor(type);
+		return f.toStackEntry();
 	}
 
-	public StackEntry.Type getResultStackEntryType() {
+	public StackEntry getMethodResultStackEntry() {
 		MethodConstant m = getMethodConstant();
-		String[] types = m.getDescriptor();
-		return StackEntry.Type.fromDescriptor(types[types.length-1]);
+		return m.resultToStackEntry();
 	}
 
 	public short getArgumentsCount(boolean isStatic) {
 		MethodConstant m = getMethodConstant();
-		String[] types = m.getDescriptor();
-		return (short)(types.length - (isStatic ? 1 : 0));
+		return m.getArgumentsCount(isStatic);
+	}
+
+	public StackState recordState() {
+		if(state==null)
+			state = new StackState();
+		return state;
 	}
 
 

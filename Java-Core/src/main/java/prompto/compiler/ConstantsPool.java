@@ -3,14 +3,14 @@ package prompto.compiler;
 import java.util.LinkedList;
 
 @SuppressWarnings("serial")
-class ConstantsPool extends LinkedList<ConstantOperand> {
+class ConstantsPool extends LinkedList<IConstantOperand> {
 
 	int nextIndex = 1; // 1 based index
 	
-	int registerConstant(ConstantOperand c) {
+	int registerConstant(IConstantOperand c) {
 		int idx = indexOf(c);
 		if(idx>=0)
-			return get(idx).index();
+			return get(idx).getIndexInConstantPool();
 		else {
 			add(c);
 			idx = nextIndex; 

@@ -11,12 +11,18 @@ public class FieldConstant implements CodeConstant {
 		this.fieldNameAndType = new NameAndTypeConstant(fieldName, fieldType);
 	}
 	
-	public String getDescriptor() {
-		return fieldNameAndType.getType().getValue();
+	public StackEntry toStackEntry() {
+		String desc = fieldNameAndType.getType().getValue();
+		String[] types = CompilerUtils.parseDescriptor(desc);
+		IVerifierEntry.Type type = IVerifierEntry.Type.fromDescriptor(types[types.length-1]);
+		return type.newStackEntry(className);
 	}
 
+
 	@Override
-	public int index() {
+	public int getIndexInConstantPool() {
+		if(index==-1)
+			throw new UnsupportedOperationException();
 		return index;
 	}
 	
@@ -37,8 +43,8 @@ public class FieldConstant implements CodeConstant {
 		}
 		*/
 		writer.writeU1(Tags.CONSTANT_Fieldref);
-		writer.writeU2(className.index());
-		writer.writeU2(fieldNameAndType.index());
+		writer.writeU2(className.getIndexInConstantPool());
+		writer.writeU2(fieldNameAndType.getIndexInConstantPool());
 	}
 
 }

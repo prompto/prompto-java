@@ -1,6 +1,6 @@
 package prompto.compiler;
 
-public class ByteOperand implements InlineOperand {
+public class ByteOperand implements IInlineOperand {
 
 	byte value;
 	

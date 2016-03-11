@@ -6,30 +6,30 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class CodeAttribute implements Attribute {
+public class CodeAttribute implements IAttribute {
 	
-	List<Instruction> instructions = new LinkedList<>(); 
-	List<Attribute> attributes = new ArrayList<>();
 	Utf8Constant attributeName = new Utf8Constant("Code");
-	StackAttribute stack = createStack();
+	List<Instruction> instructions = new LinkedList<>(); 
+	List<IAttribute> attributes = new ArrayList<>();
+	LocalVariableTableAttribute locals = new LocalVariableTableAttribute();
+	StackMapTableAttribute stack = new StackMapTableAttribute(locals);
+	{ attributes.add(stack); } // TODO add locals so they get stored
 	byte[] opcodes = null;
 	
-	public StackAttribute getStack() {
+	
+	public StackMapTableAttribute getStack() {
 		return stack;
 	}
 	
-	private StackAttribute createStack() {
-		StackAttribute stack = new StackAttribute();
-		attributes.add(stack);
-		return stack;
-	}
-
+	@Override
 	public void register(ConstantsPool pool) {
 		instructions.forEach((i)->
 			i.register(pool));
 		attributeName.register(pool);
 		attributes.forEach((a)->
 			a.register(pool));
+		// locals.register(pool); TODO
+		stack.register(pool);
 	}	
 	
 	public Instruction addInstruction(Instruction instruction) {
@@ -51,21 +51,22 @@ public class CodeAttribute implements Attribute {
 		return o.toByteArray();
 	}
 
+	private int attributesLength() {
+		return (int)attributes
+				.stream()
+					.flatMapToInt((a)->
+						IntStream.of(a.lengthWithHeader()))
+							.summaryStatistics().getSum();
+	}
+
 	@Override
-	public int length() {
+	public int lengthWithoutHeader() {
 		if(opcodes==null)
 			opcodes = createOpcodes();
 		return 2 + 2 + 4 + opcodes.length + 2 + 2 + attributesLength();
 	}
 
-	private int attributesLength() {
-		return (int)attributes
-				.stream()
-					.flatMapToInt((a)->
-						IntStream.of(6 + a.length()))
-							.summaryStatistics().getSum();
-	}
-
+	@Override
 	public void writeTo(ByteWriter writer) {
 		/*
 		Code_attribute {
@@ -85,8 +86,8 @@ public class CodeAttribute implements Attribute {
 		    attribute_info attributes[attributes_count];
 		}	
 		*/	
-		writer.writeU2(attributeName.index());
-		writer.writeU4(length());
+		writer.writeU2(attributeName.getIndexInConstantPool());
+		writer.writeU4(lengthWithoutHeader());
 		writer.writeU2(stack.getMaxStack());
 		writer.writeU2(stack.getMaxLocals());
 		writer.writeU4(opcodes.length);

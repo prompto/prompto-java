@@ -1,6 +1,6 @@
 package prompto.compiler;
 
-import prompto.compiler.StackEntry.Type;
+import prompto.compiler.IVerifierEntry.Type;
 
 public class DoubleConstant implements ValueConstant {
 	
@@ -12,8 +12,8 @@ public class DoubleConstant implements ValueConstant {
 	}
 
 	@Override
-	public Type toStackEntryType() {
-		return Type.ITEM_Double;
+	public StackEntry toStackEntry() {
+		return Type.ITEM_Double.newStackEntry(null);
 	}
 	
 	@Override
@@ -33,7 +33,7 @@ public class DoubleConstant implements ValueConstant {
 	}
 	
 	@Override
-	public int index() {
+	public int getIndexInConstantPool() {
 		return index;
 	}
 	

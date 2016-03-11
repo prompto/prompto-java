@@ -1,5 +1,5 @@
 package prompto.compiler;
 
-public interface CodeConstant extends ConstantOperand {
+public interface CodeConstant extends IConstantOperand {
 
 }

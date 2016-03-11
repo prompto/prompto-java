@@ -32,7 +32,9 @@ public class NameAndTypeConstant implements CodeConstant {
 	}
 	
 	@Override
-	public int index() {
+	public int getIndexInConstantPool() {
+		if(index==-1)
+			throw new UnsupportedOperationException();
 		return index;
 	}
 	
@@ -53,7 +55,7 @@ public class NameAndTypeConstant implements CodeConstant {
 		}	
 		*/	
 		writer.writeU1(Tags.CONSTANT_NameAndType);
-		writer.writeU2(name.index());
-		writer.writeU2(type.index());
+		writer.writeU2(name.getIndexInConstantPool());
+		writer.writeU2(type.getIndexInConstantPool());
 	}
 }

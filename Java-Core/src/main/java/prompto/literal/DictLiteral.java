@@ -4,7 +4,7 @@ import prompto.compiler.CompilerUtils;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.Operand;
+import prompto.compiler.IOperand;
 import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -101,12 +101,12 @@ public class DictLiteral extends Literal<Dictionary> {
 			method.addInstruction(Opcode.DUP); // need to keep a reference to the map on top of stack
 			ResultInfo info = e.getKey().compile(context, method, false);
 			if(info.getType()!=String.class) {
-				Operand oper = new MethodConstant(info.getType(), "put", 
+				IOperand oper = new MethodConstant(info.getType(), "put", 
 						String.class);
 				method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 			}
 			e.getValue().compile(context, method, false);
-			Operand oper = new MethodConstant(PromptoDict.class, "put", 
+			IOperand oper = new MethodConstant(PromptoDict.class, "put", 
 					Object.class, Object.class, Object.class);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 			method.addInstruction(Opcode.POP); // consume the returned value (null since this is a new Map)

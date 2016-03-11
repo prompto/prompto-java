@@ -10,7 +10,7 @@ import prompto.compiler.CompilerUtils;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.Operand;
+import prompto.compiler.IOperand;
 import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -118,7 +118,7 @@ public class TupleValue extends BaseList<TupleValue, PromptoTuple<IValue>> {
 		// add left, current stack is: left, result, we need: result, result, left
 		method.addInstruction(Opcode.DUP_X1); // stack is: result, left, result
 		method.addInstruction(Opcode.SWAP); // stack is: result, result, left
-		Operand oper = new MethodConstant(PromptoTuple.class, "addAll", 
+		IOperand oper = new MethodConstant(PromptoTuple.class, "addAll", 
 				Collection.class, boolean.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		method.addInstruction(Opcode.POP); // consume returned boolean

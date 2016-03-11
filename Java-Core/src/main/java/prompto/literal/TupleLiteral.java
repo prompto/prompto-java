@@ -6,7 +6,7 @@ import prompto.compiler.CompilerUtils;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.Operand;
+import prompto.compiler.IOperand;
 import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -76,7 +76,7 @@ public class TupleLiteral extends Literal<TupleValue> {
 		for(IExpression e : expressions) {
 			method.addInstruction(Opcode.DUP); // need to keep a reference to the list on top of stack
 			e.compile(context, method, false);
-			Operand c = new MethodConstant(PromptoTuple.class, "add", 
+			IOperand c = new MethodConstant(PromptoTuple.class, "add", 
 					Object.class, boolean.class);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, c);
 			method.addInstruction(Opcode.POP); // consume the returned boolean

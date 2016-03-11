@@ -4,7 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import prompto.compiler.CompilerUtils;
-import prompto.compiler.ConstantOperand;
+import prompto.compiler.IConstantOperand;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -69,7 +69,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 		Method m = findMethod(context, parentType.getType());
 		String proto = CompilerUtils.createProto(m.getParameterTypes(), m.getReturnType());
 		String parentClassName = CompilerUtils.getClassName(parentType.getType());
-		ConstantOperand operand = new MethodConstant(parentClassName, m.getName(), proto);
+		IConstantOperand operand = new MethodConstant(parentClassName, m.getName(), proto);
 		if(parentType.isInstance())
 			method.addInstruction(Opcode.INVOKEVIRTUAL, operand);
 		else

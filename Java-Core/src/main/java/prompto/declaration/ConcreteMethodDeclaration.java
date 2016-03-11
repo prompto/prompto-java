@@ -2,12 +2,13 @@ package prompto.declaration;
 
 import java.lang.reflect.Modifier;
 
+import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
 import prompto.compiler.CompilerException;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.StackEntry;
+import prompto.compiler.IVerifierEntry;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.ArgumentList;
@@ -195,14 +196,14 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		if(Modifier.isAbstract(classFile.getModifiers())) // TODO find another way
 			method.addModifier(Modifier.STATIC); // otherwise it's a member method
 		else {
-			StackEntry.Type type = StackEntry.Type.ITEM_UninitializedThis;
-			String className = classFile.getThisClass().getClassName().getValue();
-			method.registerLocal("this", type, className);
+			IVerifierEntry.Type type = IVerifierEntry.Type.ITEM_UninitializedThis;
+			method.registerLocal("this", type, classFile.getThisClass());
 		}
 		for(IArgument arg : arguments) {
 			String desc = arg.getJavaDescriptor(context);
-			StackEntry.Type type = StackEntry.Type.fromDescriptor(desc);
-			method.registerLocal(arg.getName(), type, desc);
+			IVerifierEntry.Type type = IVerifierEntry.Type.fromDescriptor(desc);
+			ClassConstant className = new ClassConstant(arg.getJavaClassName(context));
+			method.registerLocal(arg.getName(), type, className);
 		}
 		return method;
 	}

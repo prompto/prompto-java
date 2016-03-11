@@ -10,7 +10,7 @@ import prompto.compiler.CompilerUtils;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.Operand;
+import prompto.compiler.IOperand;
 import prompto.compiler.ResultInfo;
 import prompto.error.IndexOutOfRangeError;
 import prompto.error.InvalidDataError;
@@ -130,7 +130,7 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IListable
 		// add left, current stack is: left, result, we need: result, result, left
 		method.addInstruction(Opcode.DUP_X1); // stack is: result, left, result
 		method.addInstruction(Opcode.SWAP); // stack is: result, result, left
-		Operand oper = new MethodConstant(PromptoSet.class, "addAll", 
+		IOperand oper = new MethodConstant(PromptoSet.class, "addAll", 
 				Collection.class, boolean.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		method.addInstruction(Opcode.POP); // consume returned boolean

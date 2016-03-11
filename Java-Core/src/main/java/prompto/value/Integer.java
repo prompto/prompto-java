@@ -6,7 +6,7 @@ import prompto.compiler.CompilerUtils;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.Operand;
+import prompto.compiler.IOperand;
 import prompto.compiler.ResultInfo;
 import prompto.error.DivideByZeroError;
 import prompto.error.PromptoError;
@@ -181,7 +181,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 		method.addInstruction(Opcode.SWAP);
 		try {
 			Class<?> resultType = rval.getType().getMethod("multiply", int.class).getReturnType();
-			Operand oper = new MethodConstant(rval.getType(), "multiply", 
+			IOperand oper = new MethodConstant(rval.getType(), "multiply", 
 					int.class, resultType);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 			return new ResultInfo(resultType, true);

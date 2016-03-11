@@ -12,7 +12,7 @@ public class ClassFile {
 	List<Utf8Constant> interfaces = new ArrayList<>();
 	List<FieldInfo> fields = new ArrayList<>();
 	List<MethodInfo> methods = new ArrayList<>();
-	List<Attribute> attributes = new ArrayList<>();
+	List<IAttribute> attributes = new ArrayList<>();
 	
 	int accessFlags = Tags.ACC_SUPER | Modifier.PUBLIC;
 	
@@ -84,10 +84,10 @@ public class ClassFile {
 		writer.writeU2(Tags.MAJOR);
 		constantsPool.write(writer);
 		writer.writeU2(accessFlags);
-		writer.writeU2(thisClass.index());
-		writer.writeU2(superClass.index());
+		writer.writeU2(thisClass.getIndexInConstantPool());
+		writer.writeU2(superClass.getIndexInConstantPool());
 		writer.writeU2(interfaces.size());
-		interfaces.forEach((i)->writer.writeU2(i.index()));
+		interfaces.forEach((i)->writer.writeU2(i.getIndexInConstantPool()));
 		writer.writeU2(fields.size());
 		fields.forEach((f)->f.writeTo(writer));
 		writer.writeU2(methods.size());

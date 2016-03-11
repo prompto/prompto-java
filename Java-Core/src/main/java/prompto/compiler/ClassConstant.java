@@ -4,7 +4,7 @@ package prompto.compiler;
 public class ClassConstant implements CodeConstant {
 
 	Utf8Constant className;
-	int index;
+	int index = -1;
 	
 	public ClassConstant(Class<?> klass) {
 		this(CompilerUtils.getClassName(klass));
@@ -30,7 +30,9 @@ public class ClassConstant implements CodeConstant {
 	}
 	
 	@Override
-	public int index() {
+	public int getIndexInConstantPool() {
+		if(index==-1)
+			throw new UnsupportedOperationException();
 		return index;
 	}
 	
@@ -49,7 +51,7 @@ public class ClassConstant implements CodeConstant {
 		}
 		*/
 		writer.writeU1(Tags.CONSTANT_Class);
-		writer.writeU2(className.index());
+		writer.writeU2(className.getIndexInConstantPool());
 	}
 
 

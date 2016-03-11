@@ -1,6 +1,6 @@
 package prompto.compiler;
 
-public class Utf8Constant implements InternalConstant {
+public class Utf8Constant implements IInternalConstant {
 	
 	String value;
 	int index;
@@ -25,7 +25,9 @@ public class Utf8Constant implements InternalConstant {
 	}
 	
 	@Override
-	public int index() {
+	public int getIndexInConstantPool() {
+		if(index==-1)
+			throw new UnsupportedOperationException();
 		return index;
 	}
 	

@@ -10,7 +10,7 @@ import prompto.compiler.CompilerUtils;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.Operand;
+import prompto.compiler.IOperand;
 import prompto.compiler.ResultInfo;
 import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
@@ -74,7 +74,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 		// add left, current stack is: left, result, we need: result, result, left
 		method.addInstruction(Opcode.DUP_X1); // stack is: result, left, result
 		method.addInstruction(Opcode.SWAP); // stack is: result, result, left
-		Operand oper = new MethodConstant(PromptoDict.class, "putAll", 
+		IOperand oper = new MethodConstant(PromptoDict.class, "putAll", 
 				Map.class, void.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		// add right, current stack is: result, we need: result, result, right

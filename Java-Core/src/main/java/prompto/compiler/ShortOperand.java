@@ -1,6 +1,6 @@
 package prompto.compiler;
 
-public class ShortOperand implements InlineOperand {
+public class ShortOperand implements IInlineOperand {
 
 	short value;
 	

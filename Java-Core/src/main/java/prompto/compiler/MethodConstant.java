@@ -15,13 +15,34 @@ public class MethodConstant implements CodeConstant {
 		this.methodNameAndType = new NameAndTypeConstant(methodName, proto);
 	}
 
+	public short getArgumentsCount(boolean isStatic) {
+		String[] types = CompilerUtils.parseDescriptor(methodNameAndType.getType().getValue());
+		return (short)(types.length - (isStatic ? 1 : 0));
+	}
+
+	public StackEntry resultToStackEntry() {
+		String[] types = CompilerUtils.parseDescriptor(methodNameAndType.getType().getValue());
+		String descriptor = types[types.length-1];
+		if("V".equals(descriptor))
+			return null;
+		IVerifierEntry.Type type = IVerifierEntry.Type.fromDescriptor(descriptor);
+		StackEntry entry = type.newStackEntry(null);
+		if(entry instanceof StackEntry.ObjectEntry) {
+			String className = descriptor.substring(1, descriptor.length()-1); // strip 'L' and ';'
+			((StackEntry.ObjectEntry)entry).setClassName(new ClassConstant(className));
+		}
+		return entry;
+	}
+
 	@Override
 	public String toString() {
 		return className.toString() + '/' + methodNameAndType.toString();
 	}
 	
 	@Override
-	public int index() {
+	public int getIndexInConstantPool() {
+		if(index==-1)
+			throw new UnsupportedOperationException();
 		return index;
 	}
 	
@@ -42,12 +63,10 @@ public class MethodConstant implements CodeConstant {
 		}		
 		*/
 		writer.writeU1(Tags.CONSTANT_Methodref);
-		writer.writeU2(className.index());
-		writer.writeU2(methodNameAndType.index());
+		writer.writeU2(className.getIndexInConstantPool());
+		writer.writeU2(methodNameAndType.getIndexInConstantPool());
 	}
 
-	public String[] getDescriptor() {
-		return CompilerUtils.parseDescriptor(methodNameAndType.getType().getValue());
-	}
+
 
 }

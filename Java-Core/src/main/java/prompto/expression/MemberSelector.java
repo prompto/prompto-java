@@ -4,7 +4,7 @@ import prompto.compiler.CompilerUtils;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.Operand;
+import prompto.compiler.IOperand;
 import prompto.compiler.ResultInfo;
 import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
@@ -171,14 +171,14 @@ public class MemberSelector extends SelectorExpression {
 			return compileStringLength(method, toNative);
 		else {
 			String getterName = "get" + getName().substring(0,1).toUpperCase() + getName().substring(1);
-			Operand oper = new MethodConstant(parent.getType(), getterName, resultType);
+			IOperand oper = new MethodConstant(parent.getType(), getterName, resultType);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 			return new ResultInfo(resultType, true);
 		}
 	}
 
 	private ResultInfo compileStringLength(MethodInfo method, boolean toNative) {
-		Operand oper = new MethodConstant(String.class, "length", int.class);
+		IOperand oper = new MethodConstant(String.class, "length", int.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		if(toNative)
 			return CompilerUtils.intTolong(method);

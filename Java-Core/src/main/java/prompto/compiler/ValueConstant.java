@@ -1,9 +1,8 @@
 package prompto.compiler;
 
-import prompto.compiler.StackEntry.Type;
 
-public interface ValueConstant extends ConstantOperand {
+public interface ValueConstant extends IConstantOperand {
 
-	Type toStackEntryType();
+	StackEntry toStackEntry();
 
 }

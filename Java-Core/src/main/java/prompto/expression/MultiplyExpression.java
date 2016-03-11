@@ -8,7 +8,7 @@ import prompto.compiler.IOperatorFunction;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.Operand;
+import prompto.compiler.IOperand;
 import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -89,7 +89,7 @@ public class MultiplyExpression implements IExpression {
 			else
 				CompilerUtils.longToint(method);
 			Class<?> resultType = lval.getType().getMethod("multiply", int.class).getReturnType();
-			Operand oper = new MethodConstant(lval.getType(), "multiply", 
+			IOperand oper = new MethodConstant(lval.getType(), "multiply", 
 					int.class, resultType);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 			return new ResultInfo(resultType, true);

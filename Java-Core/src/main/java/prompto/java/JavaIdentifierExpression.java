@@ -8,7 +8,7 @@ import prompto.compiler.FieldConstant;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.Operand;
+import prompto.compiler.IOperand;
 import prompto.compiler.StackLocal;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -143,7 +143,7 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 			Field field = info.getType().getField(name);
 			String parentClassName = CompilerUtils.getClassName(info.getType());
 			String fieldClassName = CompilerUtils.getDescriptor(field.getType());
-			Operand oper = new FieldConstant(parentClassName, name, fieldClassName);
+			IOperand oper = new FieldConstant(parentClassName, name, fieldClassName);
 			if(info.isInstance())
 				method.addInstruction(Opcode.GETFIELD, oper);
 			else

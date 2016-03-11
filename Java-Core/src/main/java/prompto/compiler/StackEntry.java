@@ -1,109 +1,92 @@
 package prompto.compiler;
 
-public interface StackEntry {
-	
-	public static enum Type {
-		ITEM_Top,
-		ITEM_Integer(NativeFactory.instance),
-		ITEM_Float(NativeFactory.instance),
-		ITEM_Double(2, NativeFactory.instance),
-		ITEM_Long(2, NativeFactory.instance),
-		ITEM_Null(NativeFactory.instance),
-		ITEM_UninitializedThis(),
-		ITEM_Object(ObjectFactory.instance),
-		ITEM_Uninitialized(ObjectFactory.instance);
-		
-		static interface Factory {
-			StackLocal newStackLocal(Type type, String name, String className);
-		}
-		
-		static class NativeFactory implements Factory {
-			
-			static NativeFactory instance = new NativeFactory();
-			
-			@Override
-			public StackLocal newStackLocal(Type type, String name, String className) {
-				return new StackLocal.NativeLocal(type, name);
-			}
-		};
-	
-		static class ObjectFactory implements Factory {
-			
-			static ObjectFactory instance = new ObjectFactory();
-			
-			@Override
-			public StackLocal newStackLocal(Type type, String name, String className) {
-				return new StackLocal.ObjectLocal(type, name, className);
-			}
-		};
-	
-		static class ThisFactory implements Factory {
-			
-			static ThisFactory instance = new ThisFactory();
-			
-			@Override
-			public StackLocal newStackLocal(Type type, String name, String className) {
-				if(!"this".equals(name))
-					throw new UnsupportedOperationException();
-				return new StackLocal.ThisLocal(className);
-			}
-		};
 
-		final short size;
-		final Factory entryFactory;
+public abstract class StackEntry implements IVerifierEntry {
+
+	Type type;
+	
+	protected StackEntry(Type type) {
+		this.type = type;
+	}
+	
+	@Override
+	public Type getType() {
+		return type;
+	}
+	
+	static class ObjectEntry extends StackEntry {
+
+		ClassConstant className;
 		
-		private Type() {
-			size = 1;
-			entryFactory = null;
+		public ObjectEntry(Type type, ClassConstant className) {
+			super(type);
+			this.className = className;
 		}
 		
-		private Type(Factory entryFactory) {
-			size = 1;
-			this.entryFactory = entryFactory;
+		public void setClassName(ClassConstant className) {
+			this.className = className;
 		}
 
-		private Type(int size, Factory entryFactory) {
-			this.size = (short)size;
-			this.entryFactory = entryFactory;
-		}
-	
-		public byte byteValue() {
-			return (byte)ordinal();
+		@Override
+		public void register(ConstantsPool pool) {
+			super.register(pool);
+			className.register(pool);
 		}
 		
-		public short size() {
-			return size;
-		}
-	
-		public StackLocal newStackLocal(String name, String className) {
-			if(entryFactory==null)
-				throw new UnsupportedOperationException();
-			return entryFactory.newStackLocal(this, name, className);
+		@Override
+		public int length() {
+			/*
+			Object_variable_info {
+			    u1 tag = ITEM_Object; // 7
+			    u2 cpool_index;
+			}
+			*/
+			return 3;
 		}
 
-		public static Type fromDescriptor(String desc) {
-			switch(desc.charAt(0)) {
-			case 'Z': // boolean
-			case 'B': // byte
-			case 'S': // short
-			case 'I': // int
-			case 'C': // char
-				return ITEM_Integer;
-			case 'F': // float
-				return ITEM_Float;
-			case 'D': // double
-				return ITEM_Double;
-			case 'J':
-				return ITEM_Long;
-			case '[': // array
-			case 'L':
-				return ITEM_Object;
-			case 'V':
-				return null;
-			default:
-				throw new UnsupportedOperationException(desc);
+		@Override
+		public void writeTo(ByteWriter writer) {
+			/*
+			Object_variable_info {
+			    u1 tag = ITEM_Object; // 7
+			    u2 cpool_index;
 			}
+			*/
+			type.writeTo(writer);
+			writer.writeU2(className.getIndexInConstantPool());
 		}
 
 	}
+	
+	static class NativeEntry extends StackEntry{
+
+		public NativeEntry(Type type) {
+			super(type);
+		}
+		
+		@Override
+		public int length() {
+			/*
+			union verification_type_info {
+			    Top_variable_info;
+			    Integer_variable_info;
+			    Float_variable_info;
+			    Long_variable_info;
+			    Double_variable_info;
+			    Null_variable_info;
+			    UninitializedThis_variable_info;
+			    Object_variable_info; // EXCLUDED
+			    Uninitialized_variable_info; // EXCLUDED
+			}
+			*/
+			return 1;
+		}
+		
+		@Override
+		public void writeTo(ByteWriter writer) {
+			type.writeTo(writer);
+		}
+		
+	}
+
 }

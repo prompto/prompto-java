@@ -122,7 +122,7 @@ public abstract class CompilerUtils {
 	}
 	
 	public static ResultInfo booleanToBoolean(MethodInfo method) {
-		Operand oper = new MethodConstant(
+		IOperand oper = new MethodConstant(
 				Boolean.class, 
 				"valueOf",
 				boolean.class, Boolean.class);
@@ -131,7 +131,7 @@ public abstract class CompilerUtils {
 	}
 	
 	public static ResultInfo BooleanToboolean(MethodInfo method) {
-		Operand oper = new MethodConstant(
+		IOperand oper = new MethodConstant(
 				Boolean.class, 
 				"booleanValue",
 				boolean.class);
@@ -140,7 +140,7 @@ public abstract class CompilerUtils {
 	}
 
 	public static ResultInfo ByteToLong(MethodInfo method) {
-		Operand oper = new MethodConstant(
+		IOperand oper = new MethodConstant(
 				Byte.class, 
 				"longValue",
 				Long.class);
@@ -149,7 +149,7 @@ public abstract class CompilerUtils {
 	}
 
 	public static ResultInfo ShortToLong(MethodInfo method) {
-		Operand oper = new MethodConstant(
+		IOperand oper = new MethodConstant(
 				Short.class, 
 				"longValue",
 				Long.class);
@@ -173,7 +173,7 @@ public abstract class CompilerUtils {
 	}
 
 	public static ResultInfo IntegerToLong(MethodInfo method) {
-		Operand oper = new MethodConstant(
+		IOperand oper = new MethodConstant(
 				Integer.class, 
 				"longValue",
 				long.class);
@@ -182,7 +182,7 @@ public abstract class CompilerUtils {
 	}
 
 	public static ResultInfo longToLong(MethodInfo method) {
-		Operand oper = new MethodConstant(
+		IOperand oper = new MethodConstant(
 				Long.class, 
 				"valueOf",
 				long.class, Long.class);
@@ -206,7 +206,7 @@ public abstract class CompilerUtils {
 	}
 
 	public static ResultInfo FloatToDouble(MethodInfo method) {
-		Operand oper = new MethodConstant(
+		IOperand oper = new MethodConstant(
 				Float.class, 
 				"doubleValue",
 				Double.class);
@@ -215,7 +215,7 @@ public abstract class CompilerUtils {
 	}
 
 	public static ResultInfo LongTodouble(MethodInfo method) {
-		Operand oper = new MethodConstant(
+		IOperand oper = new MethodConstant(
 				Long.class, 
 				"doubleValue",
 				double.class);
@@ -224,7 +224,7 @@ public abstract class CompilerUtils {
 	}
 
 	public static ResultInfo LongTolong(MethodInfo method) {
-		Operand oper = new MethodConstant(
+		IOperand oper = new MethodConstant(
 				Long.class, 
 				"longValue",
 				long.class);
@@ -233,7 +233,7 @@ public abstract class CompilerUtils {
 	}
 
 	public static ResultInfo LongToint(MethodInfo method) {
-		Operand oper = new MethodConstant(
+		IOperand oper = new MethodConstant(
 				Long.class, 
 				"intValue",
 				int.class);
@@ -247,7 +247,7 @@ public abstract class CompilerUtils {
 	}
 
 	public static ResultInfo DoubleTodouble(MethodInfo method) {
-		Operand oper = new MethodConstant(
+		IOperand oper = new MethodConstant(
 				Double.class, 
 				"doubleValue",
 				double.class);
@@ -256,7 +256,7 @@ public abstract class CompilerUtils {
 	}
 
 	public static ResultInfo DoubleTolong(MethodInfo method) {
-		Operand oper = new MethodConstant(
+		IOperand oper = new MethodConstant(
 				Double.class, 
 				"longValue",
 				long.class);
@@ -265,7 +265,7 @@ public abstract class CompilerUtils {
 	}
 
 	public static ResultInfo doubleToDouble(MethodInfo method) {
-		Operand oper = new MethodConstant(
+		IOperand oper = new MethodConstant(
 				Double.class, 
 				"valueOf",
 				double.class, Double.class);
@@ -299,7 +299,7 @@ public abstract class CompilerUtils {
 	}
 
 	public static ResultInfo charToCharacter(MethodInfo method) {
-		Operand oper = new MethodConstant(
+		IOperand oper = new MethodConstant(
 				Character.class, 
 				"valueOf",
 				char.class, Character.class);
@@ -308,7 +308,7 @@ public abstract class CompilerUtils {
 	}
 
 	public static ResultInfo CharacterTochar(MethodInfo method) {
-		Operand oper = new MethodConstant(
+		IOperand oper = new MethodConstant(
 				Character.class, 
 				"charValue",
 				char.class);
@@ -317,7 +317,7 @@ public abstract class CompilerUtils {
 	}
 
 	public static ResultInfo newInstance(MethodInfo method, Class<?> klass, Class<?> ... params) {
-		Operand c = new ClassConstant(klass);
+		IOperand c = new ClassConstant(klass);
 		method.addInstruction(Opcode.NEW, c);
 		// call constructor
 		method.addInstruction(Opcode.DUP); // need to keep a reference on top of stack

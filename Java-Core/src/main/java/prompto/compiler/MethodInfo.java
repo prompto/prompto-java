@@ -4,14 +4,14 @@ import java.lang.reflect.Modifier;
 import java.util.LinkedList;
 import java.util.List;
 
-import prompto.compiler.StackEntry.Type;
+import prompto.compiler.IVerifierEntry.Type;
 
 public class MethodInfo {
 	
 	int accessFlags = Modifier.PUBLIC;
 	Utf8Constant name;
 	Utf8Constant proto;
-	List<Attribute> attributes = new LinkedList<>();
+	List<IAttribute> attributes = new LinkedList<>();
 	CodeAttribute codeAttribute = null;
 	
 	public MethodInfo(String name, String spec) {
@@ -28,12 +28,12 @@ public class MethodInfo {
 		accessFlags |= modifier;
 	}
 
-	public Instruction addInstruction(Opcode op, Operand ... operands) {
+	public Instruction addInstruction(Opcode op, IOperand ... operands) {
 		createCodeAttribute();
 		return codeAttribute.addInstruction(new Instruction(op, operands));
 	}
 	
-	public StackLocal registerLocal(String name, Type type, String className) {
+	public StackLocal registerLocal(String name, Type type, ClassConstant className) {
 		StackLocal local = getRegisteredLocal(name);
 		if(local!=null)
 			return local;
@@ -72,8 +72,8 @@ public class MethodInfo {
 		}
 		*/
 		writer.writeU2(accessFlags);
-		writer.writeU2(name.index());
-		writer.writeU2(proto.index());
+		writer.writeU2(name.getIndexInConstantPool());
+		writer.writeU2(proto.getIndexInConstantPool());
 		writer.writeU2(attributes.size());
 		attributes.forEach((a)->a.writeTo(writer));
 	}

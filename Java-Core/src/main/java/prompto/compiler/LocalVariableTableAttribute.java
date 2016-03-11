@@ -3,31 +3,28 @@ package prompto.compiler;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LocalsAttribute implements Attribute {
+public class LocalVariableTableAttribute implements IAttribute {
 
 	Utf8Constant attributeName = new Utf8Constant("LocalVariableTable");
-	Map<String, StackLocal> locals = new HashMap<>();
-	short maxSize = 0;
+	private Map<String, StackLocal> entries = new HashMap<>();
 
-	public short getMaxLocals() {
-		return maxSize;
+	public Map<String, StackLocal> getEntries() {
+		return entries;
 	}
 	
 	public StackLocal registerLocal(StackLocal local) {
 		String name = local.getName();
-		StackLocal current = locals.get(name);
+		StackLocal current = entries.get(name);
 		if(current!=null)
 			return current;
-		int idx = locals.size();
-		local.setIndex(idx);
-		locals.put(name, local);
-		if(locals.size()>maxSize)
-			maxSize = (short)locals.size();
+		int idx = entries.size();
+		local.setIndex((short)idx);
+		entries.put(name, local);
 		return local;
 	}
 		
 	public StackLocal getRegisteredLocal(String name) {
-		return locals.get(name);
+		return entries.get(name);
 	}
 	
 	@Override
@@ -36,7 +33,7 @@ public class LocalsAttribute implements Attribute {
 	}
 	
 	@Override
-	public int length() {
+	public int lengthWithoutHeader() {
 		throw new UnsupportedOperationException(); // TODO
 	}
 	

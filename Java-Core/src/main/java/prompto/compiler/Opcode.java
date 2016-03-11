@@ -27,7 +27,7 @@
 package prompto.compiler;
 
 import static prompto.compiler.OpcodeKind.*;
-import static prompto.compiler.StackEntry.Type.*;
+import static prompto.compiler.IVerifierEntry.Type.*;
 
 import java.util.function.Function;
 
@@ -288,72 +288,72 @@ public enum Opcode {
     }
     
     static interface Pusher {
-    	StackEntry.Type[] apply(Instruction i, StackEntry.Type[] popped);
+    	StackEntry[] apply(Instruction i, StackEntry[] popped);
     }
  
     static Pusher pushesNone() {
     	return new Pusher() {
-    		@Override public StackEntry.Type[] apply(Instruction i, StackEntry.Type[] popped) {
-    			return new StackEntry.Type[0];
+    		@Override public StackEntry[] apply(Instruction i, StackEntry[] popped) {
+    			return new StackEntry[0];
     		}
     	};
     }
     
     static Pusher pushesDuplicate() {
     	return new Pusher() {
-    		@Override public StackEntry.Type[] apply(Instruction i, StackEntry.Type[] popped) {
-				return new StackEntry.Type[] { popped[0], popped[0] };
+    		@Override public StackEntry[] apply(Instruction i, StackEntry[] popped) {
+				return new StackEntry[] { popped[0], popped[0] };
     		}
     	};
     }
     
     static Pusher pushesDuplicateDown() {
     	return new Pusher() {
-    		@Override public StackEntry.Type[] apply(Instruction i, StackEntry.Type[] popped) {
-				return new StackEntry.Type[] { popped[1], popped[0], popped[1] };
+    		@Override public StackEntry[] apply(Instruction i, StackEntry[] popped) {
+				return new StackEntry[] { popped[1], popped[0], popped[1] };
     		}
     	};
     }
     
     static Pusher pushesSwapped() {
     	return new Pusher() {
-    		@Override public StackEntry.Type[] apply(Instruction i, StackEntry.Type[] popped) {
-				return new StackEntry.Type[] { popped[1], popped[0] };
+    		@Override public StackEntry[] apply(Instruction i, StackEntry[] popped) {
+				return new StackEntry[] { popped[1], popped[0] };
     		}
     	};
     }
     
     static Pusher pushesConstant() {
     	return new Pusher() {
-    		@Override public StackEntry.Type[] apply(Instruction i, StackEntry.Type[] popped) {
-    			StackEntry.Type e = i.getConstantStackEntryType() ;
-    			return e==null ? new StackEntry.Type[0] : new StackEntry.Type[] { e };
+    		@Override public StackEntry[] apply(Instruction i, StackEntry[] popped) {
+    			StackEntry e = i.getConstantStackEntry() ;
+    			return e==null ? new StackEntry[0] : new StackEntry[] { e };
     		}
     	};
     }
     
     static Pusher pushesField() {
     	return new Pusher() {
-    		@Override public StackEntry.Type[] apply(Instruction i, StackEntry.Type[] popped) {
-    			StackEntry.Type e = i.getFieldStackEntryType() ;
-    			return e==null ? new StackEntry.Type[0] : new StackEntry.Type[] { e };
+    		@Override public StackEntry[] apply(Instruction i, StackEntry[] popped) {
+    			StackEntry e = i.getFieldStackEntry() ;
+    			return e==null ? new StackEntry[0] : new StackEntry[] { e };
     		}
     	};
     }
 
     static Pusher pushesResult() {
     	return new Pusher() {
-    		@Override public StackEntry.Type[] apply(Instruction i, StackEntry.Type[] popped) {
-    			StackEntry.Type e = i.getResultStackEntryType() ;
-    			return e==null ? new StackEntry.Type[0] : new StackEntry.Type[] { e };
+    		@Override public StackEntry[] apply(Instruction i, StackEntry[] popped) {
+    			StackEntry e = i.getMethodResultStackEntry() ;
+    			return e==null ? new StackEntry[0] : new StackEntry[] { e };
     		}
     	};
     }
 
-    static Pusher pushes(StackEntry.Type e) {
+    static Pusher pushes(IVerifierEntry.Type e) {
     	return new Pusher() {
-    		@Override public StackEntry.Type[] apply(Instruction i, StackEntry.Type[] popped) {
-    			return new StackEntry.Type[] { e };
+    		@Override public StackEntry[] apply(Instruction i, StackEntry[] popped) {
+    			return new StackEntry[] { e.newStackEntry(null) };
     		}
     	};
     }
@@ -384,7 +384,7 @@ public enum Opcode {
     	return popper.apply(i);
     }
     
-	public StackEntry.Type[] getPushed(Instruction instruction, StackEntry.Type[] popped) {
+	public StackEntry[] getPushed(Instruction instruction, StackEntry[] popped) {
 		return pusher.apply(instruction, popped);
 	}
 
