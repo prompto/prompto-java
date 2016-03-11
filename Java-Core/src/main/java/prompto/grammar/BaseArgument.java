@@ -57,5 +57,14 @@ public abstract class BaseArgument implements IArgument {
 			throw new CompilerException(e);
 		}
 	}
+	
+	@Override
+	public String getJavaClassName(Context context) {
+		try {
+			return getType(context).getJavaClassName(context);
+		} catch(PromptoError e) {
+			throw new CompilerException(e);
+		}
+	}
 
 }

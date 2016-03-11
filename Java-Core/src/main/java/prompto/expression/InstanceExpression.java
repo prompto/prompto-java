@@ -4,6 +4,7 @@ import prompto.compiler.ByteOperand;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
+import prompto.compiler.StackLocal;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.error.PromptoError;
@@ -90,8 +91,8 @@ public class InstanceExpression implements IExpression {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
-		Integer idx = method.getRegisteredLocal(getName());
-		switch(idx) {
+		StackLocal local = method.getRegisteredLocal(getName());
+		switch(local.getIndex()) {
 			case 0:
 				method.addInstruction(Opcode.ALOAD_0);
 				break;
@@ -105,7 +106,8 @@ public class InstanceExpression implements IExpression {
 				method.addInstruction(Opcode.ALOAD_3);
 				break;
 			default:
-				method.addInstruction(Opcode.ALOAD, new ByteOperand(idx.byteValue()));
+				// TODO: support ALOAD_W
+				method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)local.getIndex()));
 		}
 		IType type = check(context);
 		return new ResultInfo(type.toJavaClass(), true);

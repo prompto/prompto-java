@@ -72,7 +72,7 @@ public class TestClassFile {
 		c.addMethod(m);
 		m = new MethodInfo("printStatic", "(Ljava/lang/String;)V");
 		m.addModifier(Modifier.STATIC);
-		m.registerLocal("value");
+		m.registerLocal("value", StackEntry.Type.ITEM_Object, "java/lang/String");
 		m.addInstruction(Opcode.RETURN);
 		c.addMethod(m);
 		ByteArrayOutputStream o = new ByteArrayOutputStream();
@@ -96,7 +96,7 @@ public class TestClassFile {
 		c.addModifier(Modifier.ABSTRACT);
 		MethodInfo m = new MethodInfo("print", "(Ljava/lang/String;)V");
 		m.addModifier(Modifier.STATIC);
-		m.registerLocal("value");
+		m.registerLocal("value", StackEntry.Type.ITEM_Object, "java/lang/String");
 		m.addInstruction(Opcode.GETSTATIC, new FieldConstant("java/lang/System", "out", "Ljava/io/PrintStream;"));
 		m.addInstruction(Opcode.ALOAD_0); // the parameter
 		m.addInstruction(Opcode.INVOKEVIRTUAL, new MethodConstant(PrintStream.class, "print", String.class, void.class));
@@ -139,10 +139,10 @@ public class TestClassFile {
 		c.addModifier(Modifier.ABSTRACT);
 		MethodInfo m = new MethodInfo("m", "()V");
 		m.addModifier(Modifier.STATIC);
+		m.addInstruction(Opcode.ICONST_1);
+		m.addInstruction(Opcode.ICONST_1);
+		m.addInstruction(Opcode.IADD);
 		/*
-		m.addInstruction(Opcode.ICONST_1);
-		m.addInstruction(Opcode.ICONST_1);
-		m.addInstruction(Opcode.IADD).setStackLabel(new StackLabel.SAME());
 		m.addInstruction(Opcode.ICONST_1);
 		Instruction branch = m.addInstruction(Opcode.IF_ICMPNE, new ShortOperand((short)4));
 		// branch.setStackLabel(new StackLabel());
@@ -151,8 +151,8 @@ public class TestClassFile {
 		// jump.setStackLabel(new StackLabel(branch.getLabel()));
 		Instruction last = m.addInstruction(Opcode.ICONST_0);
 		// last.setStackLabel(new StackLabel(branch.getLabel()));
-		m.addInstruction(Opcode.POP);
 		 */
+		m.addInstruction(Opcode.POP).setStackLabel(new StackLabel.SAME());
 		m.addInstruction(Opcode.RETURN);
 		c.addMethod(m);
 		ByteArrayOutputStream o = new ByteArrayOutputStream();

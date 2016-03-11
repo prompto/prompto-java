@@ -134,6 +134,13 @@
 			<artifactId>jackson-databind</artifactId>
 			<version>${jackson-version}</version>
 		</dependency>
+		<!--  only there so I can get quick access to JDT reference code -->
+		<dependency>
+			<groupId>org.eclipse.jdt</groupId>
+			<artifactId>org.eclipse.jdt.core</artifactId>
+			<version>3.10.0</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<reporting>

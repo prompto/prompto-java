@@ -4,6 +4,8 @@ import java.lang.reflect.Modifier;
 import java.util.LinkedList;
 import java.util.List;
 
+import prompto.compiler.StackEntry.Type;
+
 public class MethodInfo {
 	
 	int accessFlags = Modifier.PUBLIC;
@@ -31,13 +33,17 @@ public class MethodInfo {
 		return codeAttribute.addInstruction(new Instruction(op, operands));
 	}
 	
-	public void registerLocal(String name) {
-		createCodeAttribute();
-		codeAttribute.registerLocal(name);
+	public StackLocal registerLocal(String name, Type type, String className) {
+		StackLocal local = getRegisteredLocal(name);
+		if(local!=null)
+			return local;
+		else
+			return codeAttribute.getStack().registerLocal(type.newStackLocal(name, className));
 	}
-
-	public Integer getRegisteredLocal(String name) {
-		return codeAttribute==null ? null : codeAttribute.getRegisteredLocal(name);
+	
+	public StackLocal getRegisteredLocal(String name) {
+		createCodeAttribute();
+		return codeAttribute.getStack().getRegisteredLocal(name);
 	}
 
 	void register(ConstantsPool pool) {

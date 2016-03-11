@@ -4,6 +4,7 @@ import prompto.compiler.ByteOperand;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
+import prompto.compiler.StackLocal;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
@@ -27,13 +28,13 @@ public class VariableInstance implements IAssignableInstance {
 	
 	@Override
 	public void register(Context context, MethodInfo method) {
-		method.registerLocal(id.getName());
+		// method.registerLocal(id.getName());
 	}
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method) {
-		Integer idx = method.getRegisteredLocal(id.getName());
-		switch(idx) {
+		StackLocal local = method.getRegisteredLocal(id.getName());
+		switch(local.getIndex()) {
 			case 0:
 				method.addInstruction(Opcode.ASTORE_0);
 				break;
@@ -47,7 +48,8 @@ public class VariableInstance implements IAssignableInstance {
 				method.addInstruction(Opcode.ASTORE_3);
 				break;
 			default:
-				method.addInstruction(Opcode.ASTORE, new ByteOperand(idx.byteValue()));
+				// TODO: support ALOAD_W
+				method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)local.getIndex()));
 		}
 		return new ResultInfo(void.class, false);
 	}
@@ -66,7 +68,7 @@ public class VariableInstance implements IAssignableInstance {
 	}
 	
 	@Override
-	public void checkAssignValue(Context context, IExpression expression) throws SyntaxError {
+	public IType checkAssignValue(Context context, IExpression expression) throws SyntaxError {
 		IType type = expression.check(context);
 		INamed actual = context.getRegisteredValue(INamed.class,id);
 		if(actual==null)
@@ -74,21 +76,23 @@ public class VariableInstance implements IAssignableInstance {
 		else {
 			// need to check type compatibility
 			IType actualType = actual.getType(context);
-			type.checkAssignableTo(context,actualType);
+			type.checkAssignableTo(context, actualType);
+			type = actualType;
 		}
+		return type;
 	}
 	
 	@Override
-	public void checkAssignMember(Context context, Identifier memberName) throws SyntaxError {
+	public IType checkAssignMember(Context context, Identifier memberName) throws SyntaxError {
 		INamed actual = context.getRegisteredValue(INamed.class,id);
 		if(actual==null) 
 			throw new SyntaxError("Unknown variable:" + this.id);
+		return actual.getType(context);
 	}
 	
 	@Override
-	public void checkAssignElement(Context context) throws SyntaxError {
-		// TODO Auto-generated method stub
-		
+	public IType checkAssignElement(Context context) throws SyntaxError {
+		throw new UnsupportedOperationException();
 	}
 	
 	@Override

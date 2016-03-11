@@ -21,6 +21,10 @@ public class ClassFile {
 		this.superClass = new ClassConstant(superClassName);
 	}
 
+	public ClassConstant getThisClass() {
+		return thisClass;
+	}
+	
 	public int getModifiers() {
 		return accessFlags;
 	}

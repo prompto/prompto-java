@@ -22,5 +22,6 @@ public interface IArgument extends INamed {
 	boolean setMutable(boolean set);
 	boolean isMutable();
 	String getJavaDescriptor(Context context);
+	String getJavaClassName(Context context);
 	
 }

@@ -49,5 +49,6 @@ public interface IType {
 	IValue convertJavaValueToPromptoValue(Object value);
 	Class<?> toJavaClass();
 	String getJavaDescriptor(Context context);
+	String getJavaClassName(Context context);
 }
  

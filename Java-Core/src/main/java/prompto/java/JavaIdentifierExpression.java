@@ -9,6 +9,7 @@ import prompto.compiler.ResultInfo;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.Operand;
+import prompto.compiler.StackLocal;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.INamed;
@@ -105,8 +106,8 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 		INamed named = context.getRegisteredValue(INamed.class, new Identifier(name));
 		if(named==null)
 			return null;
-		Integer index = method.getRegisteredLocal(name);
-		switch(index) {
+		StackLocal local = method.getRegisteredLocal(name);
+		switch(local.getIndex()) {
 		case 0:
 			method.addInstruction(Opcode.ALOAD_0);
 			break;
@@ -120,7 +121,8 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 			method.addInstruction(Opcode.ALOAD_3);
 			break;
 		default:
-			method.addInstruction(Opcode.ALOAD, new ByteOperand(index.byteValue()));
+			// TODO: support ALOAD_W
+			method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)local.getIndex()));
 			break;
 		}
 		// TODO return useful class so we can get members ?

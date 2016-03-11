@@ -5,6 +5,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.runtime.Context;
+import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
@@ -34,20 +35,21 @@ public class MemberInstance implements IAssignableSelector {
 	}
 	
 	@Override
-	public void checkAssignValue(Context context, IExpression expression) throws SyntaxError {
-		parent.checkAssignMember(context, name);
-		expression.check(context);
+	public IType checkAssignValue(Context context, IExpression expression) throws SyntaxError {
+		IType type = parent.checkAssignMember(context, name);
+		IType actualType = expression.check(context);
+		actualType.checkAssignableTo(context, type);
+		return type;
 	}
 	
 	@Override
-	public void checkAssignMember(Context context, Identifier memberName) throws SyntaxError {
-		parent.checkAssignMember(context, name);
+	public IType checkAssignMember(Context context, Identifier memberName) throws SyntaxError {
+		return parent.checkAssignMember(context, name);
 	}
 	
 	@Override
-	public void checkAssignElement(Context context) throws SyntaxError {
-		// TODO Auto-generated method stub
-		
+	public IType checkAssignElement(Context context) throws SyntaxError {
+		throw new UnsupportedOperationException();
 	}
 	
 	@Override

@@ -41,23 +41,22 @@ public class ItemInstance implements IAssignableSelector {
 	}
 	
 	@Override
-	public void checkAssignValue(Context context, IExpression expression) throws SyntaxError {
-		parent.checkAssignElement(context);
+	public IType checkAssignValue(Context context, IExpression expression) throws SyntaxError {
+		IType elemType = parent.checkAssignElement(context);
 		IType itemType = item.check(context);
 		if(itemType!=IntegerType.instance())
 			throw new SyntaxError("Expecting an Integer, got:" + itemType.toString());
+		return elemType;
 	}
 	
 	@Override
-	public void checkAssignMember(Context context, Identifier memberName) throws SyntaxError {
-		// TODO Auto-generated method stub
-		
+	public IType checkAssignMember(Context context, Identifier memberName) throws SyntaxError {
+		throw new UnsupportedOperationException();
 	}
 	
 	@Override
-	public void checkAssignElement(Context context) throws SyntaxError {
-		// TODO Auto-generated method stub
-		
+	public IType checkAssignElement(Context context) throws SyntaxError {
+		throw new UnsupportedOperationException();
 	}
 	
 	@Override

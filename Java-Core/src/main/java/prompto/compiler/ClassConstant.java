@@ -14,6 +14,10 @@ public class ClassConstant implements CodeConstant {
 		this.className = new Utf8Constant(className);
 	}
 
+	public Utf8Constant getClassName() {
+		return className;
+	}
+	
 	@Override
 	public String toString() {
 		return this.className.toString();

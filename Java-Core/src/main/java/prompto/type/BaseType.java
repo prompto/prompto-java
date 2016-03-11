@@ -212,6 +212,11 @@ public abstract class BaseType implements IType {
 	
 	@Override
 	public String getJavaDescriptor(Context context) {
-		return "L" + this.toJavaClass().getName().replace('.', '/') + ';';
+		return "L" + this.getJavaClassName(context).replace('.', '/') + ';';
+	}
+
+	@Override
+	public String getJavaClassName(Context context) {
+		return this.toJavaClass().getName();
 	}
 }

@@ -8,4 +8,8 @@ public class CompilerException extends RuntimeException {
 		super(e);
 	}
 
+	public CompilerException(String msg) {
+		super(msg);
+	}
+
 }

@@ -7,6 +7,7 @@ import prompto.compiler.CompilerException;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
+import prompto.compiler.StackEntry;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.ArgumentList;
@@ -193,10 +194,16 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		classFile.addMethod(method);
 		if(Modifier.isAbstract(classFile.getModifiers())) // TODO find another way
 			method.addModifier(Modifier.STATIC); // otherwise it's a member method
-		else
-			method.registerLocal("this");
-		for(IArgument arg : arguments)
-			method.registerLocal(arg.getName());
+		else {
+			StackEntry.Type type = StackEntry.Type.ITEM_UninitializedThis;
+			String className = classFile.getThisClass().getClassName().getValue();
+			method.registerLocal("this", type, className);
+		}
+		for(IArgument arg : arguments) {
+			String desc = arg.getJavaDescriptor(context);
+			StackEntry.Type type = StackEntry.Type.fromDescriptor(desc);
+			method.registerLocal(arg.getName(), type, desc);
+		}
 		return method;
 	}
 

@@ -2,10 +2,8 @@ package prompto.compiler;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.IntStream;
 
 public class CodeAttribute implements Attribute {
@@ -13,9 +11,7 @@ public class CodeAttribute implements Attribute {
 	List<Instruction> instructions = new LinkedList<>(); 
 	List<Attribute> attributes = new ArrayList<>();
 	Utf8Constant attributeName = new Utf8Constant("Code");
-	Map<String, Integer> locals = new HashMap<>();
 	StackAttribute stack = createStack();
-	int maxLocals = 0;
 	byte[] opcodes = null;
 	
 	public StackAttribute getStack() {
@@ -40,24 +36,6 @@ public class CodeAttribute implements Attribute {
 		instructions.add(instruction);
 		return instruction;
 	}
-
-	public void registerLocal(String name) {
-		if(!locals.containsKey(name)) {
-			Integer idx = locals.size();
-			locals.put(name, idx);
-			if(locals.size()>maxLocals)
-				maxLocals = locals.size();
-		}
-	}
-	
-	public void unregisterLocal(String name) {
-		locals.remove(name);
-	}
-	
-	public Integer getRegisteredLocal(String name) {
-		return locals.get(name);
-	}
-
 
 	byte[] createOpcodes() {
 		ByteArrayOutputStream o = new ByteArrayOutputStream();
@@ -110,7 +88,7 @@ public class CodeAttribute implements Attribute {
 		writer.writeU2(attributeName.index());
 		writer.writeU4(length());
 		writer.writeU2(stack.getMaxStack());
-		writer.writeU2(maxLocals);
+		writer.writeU2(stack.getMaxLocals());
 		writer.writeU4(opcodes.length);
 		writer.writeBytes(opcodes);
 		writer.writeU2(0); // TODO exceptions

@@ -8,6 +8,7 @@ import java.util.Stack;
 public class StackAttribute extends Stack<StackEntry.Type> implements Attribute {
 
 	Utf8Constant attributeName = new Utf8Constant("StackMapTable");
+	LocalsAttribute locals = new LocalsAttribute();
 	List<StackLabel> labels = new ArrayList<>();
 	short currentSize = 0;
 	short maxSize = 0;
@@ -60,6 +61,18 @@ public class StackAttribute extends Stack<StackEntry.Type> implements Attribute 
 		attributeName.register(pool);
 	}
 
+	public short getMaxLocals() {
+		return locals.getMaxLocals();
+	}
+
+	public StackLocal registerLocal(StackLocal local) {
+		return locals.registerLocal(local);
+	}
+
+	public StackLocal getRegisteredLocal(String name) {
+		return locals.getRegisteredLocal(name);
+	}
+	
 	@Override
 	public void writeTo(ByteWriter writer) {
 		/*
@@ -76,8 +89,5 @@ public class StackAttribute extends Stack<StackEntry.Type> implements Attribute 
 		labels.forEach((l)->
 			l.writeTo(writer));
 	}
-
-
-
 
 }
