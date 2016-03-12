@@ -1,6 +1,6 @@
 package prompto.compiler;
 
-public class Instruction {
+public class Instruction implements IInstruction {
 
 	static boolean DUMP = isDUMP();
 	
@@ -10,24 +10,10 @@ public class Instruction {
 	
 	Opcode opcode;
 	IOperand[] operands;
-	StackLabel label;
-	StackState state;
 	
 	Instruction(Opcode opcode, IOperand[] operands) {
 		this.opcode = opcode;
 		this.operands = operands;
-	}
-	
-	public StackLabel getStackLabel() {
-		return label;
-	}
-	
-	public void setStackLabel(StackLabel label) {
-		this.label = label;
-	}
-
-	public StackState getStackState() {
-		return state;
 	}
 	
 	@Override
@@ -48,30 +34,35 @@ public class Instruction {
 		return sb.toString();
 	}
 	
-	void register(ConstantsPool pool) {
+	@Override
+	public void rehearse(CodeAttribute code) {
+		updateStack(code.getStack());
+		if(DUMP) {
+			System.err.print(opcode.name() + " ");
+			for(int i=0;i<operands.length;i++) {
+				if(i>0)
+					System.err.print(",");
+					System.err.print(operands[i].toString());
+			}
+			System.err.println(" -> " + code.getStack().getState().toString());
+		}
+	}
+	
+	@Override
+	public void register(ConstantsPool pool) {
 		for(IOperand operand : operands) {
 			if(operand instanceof IConstantOperand)
 				((IConstantOperand)operand).register(pool);
 		}
 	}
 
-	void writeTo(CodeAttribute byteCode, ByteWriter writer) {
-		if(DUMP)
-			System.err.println(this.toString());
-		StackMapTableAttribute stack = byteCode.getStack();
-		if(DUMP)
-			System.err.println("Before pop: " + stack.toString());
-		StackEntry[] popped = stack.pop(opcode.getPopped(this));
-		if(DUMP)
-			System.err.println("After pop: " + stack.toString());
-		StackEntry[] pushed = opcode.getPushed(this, popped);
-		byteCode.getStack().push(pushed);
-		if(DUMP)
-			System.err.println("After push: " + stack.toString());
-		if(opcode.kind.width==1)
-			writer.writeU1(opcode.opcode);
-		else
-			writer.writeU2(opcode.opcode);
+	@Override
+	public void writeTo(ByteWriter writer) {
+		writeByteCode(writer);
+		writeOperands(writer);
+	}
+
+	private void writeOperands(ByteWriter writer) {
 		if(opcode.kind.length==-1) {
 			throw new UnsupportedOperationException(); // TODO
 		} else if(operands.length>0) {
@@ -98,8 +89,27 @@ public class Instruction {
 					throw new UnsupportedOperationException(opcode.kind.name()); 
 			}
 		}
-		if(state!=null)
-			state.capture(stack.state);
+	}
+
+	private void writeByteCode(ByteWriter writer) {
+		if(opcode.kind.width==1)
+			writer.writeU1(opcode.opcode);
+		else
+			writer.writeU2(opcode.opcode);
+	}
+
+	private void updateStack(StackMapTableAttribute stack) {
+		if(DUMP)
+			System.err.println(this.toString());
+		if(DUMP)
+			System.err.println("Before pop: " + stack.toString());
+		StackEntry[] popped = stack.pop(opcode.getPopped(this));
+		if(DUMP)
+			System.err.println("After pop: " + stack.toString());
+		StackEntry[] pushed = opcode.getPushed(this, popped);
+		stack.push(pushed);
+		if(DUMP)
+			System.err.println("After push: " + stack.toString());
 	}
 
 	public MethodConstant getMethodConstant() {
@@ -145,13 +155,5 @@ public class Instruction {
 		MethodConstant m = getMethodConstant();
 		return m.getArgumentsCount(isStatic);
 	}
-
-	public StackState recordState() {
-		if(state==null)
-			state = new StackState();
-		return state;
-	}
-
-
 
 }

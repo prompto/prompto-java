@@ -17,7 +17,7 @@ public class StringConstant implements ValueConstant {
 	
 	@Override
 	public StackEntry toStackEntry() {
-		return IVerifierEntry.Type.ITEM_Object.newStackEntry(null);
+		return IVerifierEntry.Type.ITEM_Object.newStackEntry(new ClassConstant("java/lang/String"));
 	}
 	
 	@Override

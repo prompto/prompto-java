@@ -11,6 +11,11 @@ public class FieldConstant implements CodeConstant {
 		this.fieldNameAndType = new NameAndTypeConstant(fieldName, fieldType);
 	}
 	
+	@Override
+	public String toString() {
+		return className.toString() + ':' + fieldNameAndType.toString();
+	}
+	
 	public StackEntry toStackEntry() {
 		String desc = fieldNameAndType.getType().getValue();
 		IVerifierEntry.Type type = IVerifierEntry.Type.fromDescriptor(desc);

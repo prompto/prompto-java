@@ -1,13 +1,38 @@
 package prompto.compiler;
 
+
 public abstract class StackLabel {
 
-	int offset;
-
-	public void setOffset(int offset) {
-		this.offset = offset;
+	static boolean DUMP = isDump();
+	
+	private static boolean isDump() {
+		return false;
 	}
 
+	
+	int realOffset = -1;
+	int deltaOffset = -1;
+
+	public void setRealOffset(int offset) {
+		if(DUMP)
+			System.err.println("Setting state real offset " + this.toString() + " to " + offset);
+		this.realOffset = offset;
+	}
+
+	public int getRealOffset() {
+		return realOffset;
+	}
+	
+	public void setDeltaOffset(int offset) {
+		if(DUMP)
+			System.err.println("Setting state delta offset " + this.toString() + " to " + offset);
+		this.deltaOffset = offset;
+	}
+	
+	public int getDeltaOffset() {
+		return deltaOffset;
+	}
+	
 	public abstract int length();
 	public abstract void writeTo(ByteWriter writer);
 
@@ -20,12 +45,16 @@ public abstract class StackLabel {
 		
 		@Override
 		public int length() {
-			return offset<64 ? 1 : 3;
+			if(deltaOffset==-1)
+				throw new UnsupportedOperationException();
+			return deltaOffset<64 ? 1 : 3;
 		}
 		
 		@Override
 		public void writeTo(ByteWriter writer) {
-			if(offset<64)
+			if(deltaOffset==-1)
+				throw new UnsupportedOperationException();
+			if(deltaOffset<64)
 				writeSAME(writer);
 			else
 				writeSAME_Extended(writer);
@@ -39,7 +68,7 @@ public abstract class StackLabel {
 			}
 			*/		
 			writer.writeU1(251);
-			writer.writeU2(offset);
+			writer.writeU2(deltaOffset);
 		}
 
 		private void writeSAME(ByteWriter writer) {
@@ -47,7 +76,7 @@ public abstract class StackLabel {
 			same_frame {
 		    u1 frame_type = SAME; // 0-63 
 			*/
-			writer.writeU1(offset);
+			writer.writeU1(deltaOffset);
 		}
 	}
 	
@@ -55,12 +84,16 @@ public abstract class StackLabel {
 
 		StackState state;
 		
-		public FULL(Instruction instruction) {
-			state = instruction.recordState();
+		public FULL(StackState state) {
+			if(DUMP)
+				System.err.println("New state " + this.toString());
+			this.state = state;
 		}
 		
 		@Override
 		public void register(ConstantsPool pool) {
+			if(DUMP)
+				System.err.println("Registering state " + this.toString());
 			state.register(pool);
 		}
 		
@@ -76,6 +109,8 @@ public abstract class StackLabel {
 			    verification_type_info stack[number_of_stack_items];
 			}
 			*/
+			if(DUMP)
+				System.err.println("Computing length of state " + this.toString());
 			return 1 + 2 + 2 + state.localsLength() + 2 + state.stackLength();
 		}
 		
@@ -91,8 +126,12 @@ public abstract class StackLabel {
 			    verification_type_info stack[number_of_stack_items];
 			}
 			*/
+			if(DUMP)
+				System.err.println("Writing state " + this.toString());
+			if(deltaOffset==-1)
+				throw new UnsupportedOperationException();
 			writer.writeU1(255);
-			writer.writeU2(offset);
+			writer.writeU2(deltaOffset);
 			writer.writeU2(state.getLocals().size());
 			state.getLocals().forEach((l)->
 				l.writeTo(writer));

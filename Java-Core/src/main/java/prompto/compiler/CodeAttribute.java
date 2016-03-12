@@ -8,8 +8,14 @@ import java.util.stream.IntStream;
 
 public class CodeAttribute implements IAttribute {
 	
+	static boolean DUMP = isDUMP();
+	
+	private static boolean isDUMP() {
+		return false;
+	}
+	
 	Utf8Constant attributeName = new Utf8Constant("Code");
-	List<Instruction> instructions = new LinkedList<>(); 
+	List<IInstruction> instructions = new LinkedList<>(); 
 	List<IAttribute> attributes = new ArrayList<>();
 	LocalVariableTableAttribute locals = new LocalVariableTableAttribute();
 	StackMapTableAttribute stack = new StackMapTableAttribute(locals);
@@ -21,8 +27,105 @@ public class CodeAttribute implements IAttribute {
 		return stack;
 	}
 	
+
+	static class CaptureStackState implements IInstruction {
+
+		StackState state = new StackState();
+		
+		public StackState getState() {
+			return state;
+		}
+		
+		@Override
+		public void rehearse(CodeAttribute code) {
+			state.capture(code.getStack().getState());
+		}
+		
+		@Override
+		public void register(ConstantsPool pool) {
+			state.register(pool);
+		}
+		
+		@Override
+		public void writeTo(ByteWriter writer) {
+		}
+		
+	}
+	
+	public StackState captureStackState() {
+		CaptureStackState capture = new CaptureStackState();
+		instructions.add(capture);
+		return capture.getState();
+	}
+	
+	static class RestoreStackState implements IInstruction {
+
+		StackState state;
+		
+		public RestoreStackState(StackState state) {
+			this.state = state;
+		}
+		
+		public StackState getState() {
+			return state;
+		}
+		
+		@Override
+		public void rehearse(CodeAttribute code) {
+			code.getStack().getState().capture(state);
+			if(DUMP)
+				System.err.println("restore: " + state.toString());
+		}
+		
+		@Override
+		public void register(ConstantsPool pool) {
+		}
+		
+		@Override
+		public void writeTo(ByteWriter writer) {
+		}
+		
+	}
+	
+	public void restoreStackState(StackState state) {
+		RestoreStackState restore = new RestoreStackState(state);
+		instructions.add(restore);
+	}
+	
+	static class PlaceLabelInstruction implements IInstruction {
+		
+		StackLabel label;
+		
+		public PlaceLabelInstruction(StackLabel label) {
+			this.label = label;
+		}
+		
+		@Override
+		public void rehearse(CodeAttribute code) {
+			code.getStack().addLabel(label);
+		}
+		
+		@Override
+		public void register(ConstantsPool pool) {
+			label.register(pool);
+		}
+		
+		@Override
+		public void writeTo(ByteWriter writer) {
+			label.setRealOffset(writer.length());
+		}
+	}
+	
+	public StackLabel placeLabel(StackState state) {
+		StackLabel label = new StackLabel.FULL(state);
+		instructions.add(new PlaceLabelInstruction(label));
+		return label;
+	}
+	
 	@Override
 	public void register(ConstantsPool pool) {
+		instructions.forEach((i)->
+			i.rehearse(this));
 		instructions.forEach((i)->
 			i.register(pool));
 		attributeName.register(pool);
@@ -30,7 +133,7 @@ public class CodeAttribute implements IAttribute {
 			a.register(pool));
 	}	
 	
-	public Instruction addInstruction(Instruction instruction) {
+	public IInstruction addInstruction(IInstruction instruction) {
 		instructions.add(instruction);
 		return instruction;
 	}
@@ -39,12 +142,7 @@ public class CodeAttribute implements IAttribute {
 		ByteArrayOutputStream o = new ByteArrayOutputStream();
 		ByteWriter w = new ByteWriter(o);
 		instructions.forEach((i)-> {
-			i.writeTo(this, w);
-			StackLabel label = i.getStackLabel();
-			if(label!=null) {
-				label.setOffset(o.size());
-				stack.addLabel(label);
-			}
+			i.writeTo(w);
 		});
 		return o.toByteArray();
 	}
@@ -95,5 +193,6 @@ public class CodeAttribute implements IAttribute {
 		attributes.forEach((a)->
 			a.writeTo(writer));
 	}
+
 
 }

@@ -87,13 +87,17 @@ public class ClassFile {
 		writer.writeU2(thisClass.getIndexInConstantPool());
 		writer.writeU2(superClass.getIndexInConstantPool());
 		writer.writeU2(interfaces.size());
-		interfaces.forEach((i)->writer.writeU2(i.getIndexInConstantPool()));
+		interfaces.forEach((i)->
+			writer.writeU2(i.getIndexInConstantPool()));
 		writer.writeU2(fields.size());
-		fields.forEach((f)->f.writeTo(writer));
+		fields.forEach((f)->
+			f.writeTo(writer));
 		writer.writeU2(methods.size());
-		methods.forEach((m)->m.writeTo(writer));
+		methods.forEach((m)->
+			m.writeTo(writer));
 		writer.writeU2(attributes.size());
-		attributes.forEach((a)->a.writeTo(writer));
+		attributes.forEach((a)->
+			a.writeTo(writer));
 	}
 
 

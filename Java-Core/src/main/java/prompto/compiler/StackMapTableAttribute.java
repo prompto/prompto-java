@@ -17,6 +17,10 @@ public class StackMapTableAttribute implements IAttribute {
 		this.locals = locals;
 	}
 
+	public StackState getState() {
+		return state;
+	}
+	
 	public short getMaxStack() {
 		return maxStackSize;
 	}
@@ -104,6 +108,13 @@ public class StackMapTableAttribute implements IAttribute {
 		writer.writeU2(attributeName.getIndexInConstantPool());
 		writer.writeU4(lengthWithoutHeader());
 		writer.writeU2((short)labels.size());
+		int lastRealOffset = 0;
+		for(StackLabel label : labels) {
+			int deltaOffset = label.getRealOffset()-
+					(lastRealOffset==0 ? lastRealOffset : lastRealOffset + 1); // see java class file format
+			label.setDeltaOffset(deltaOffset);
+			lastRealOffset = label.getRealOffset();
+		}
 		labels.forEach((l)->
 			l.writeTo(writer));
 	}

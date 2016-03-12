@@ -23,6 +23,11 @@ public abstract class StackEntry implements IVerifierEntry {
 			this.className = className;
 		}
 		
+		@Override
+		public String toString() {
+			return className==null ? "<null>" : className.toString();
+		}
+		
 		public void setClassName(ClassConstant className) {
 			this.className = className;
 		}
@@ -62,6 +67,11 @@ public abstract class StackEntry implements IVerifierEntry {
 
 		public NativeEntry(Type type) {
 			super(type);
+		}
+		
+		@Override
+		public String toString() {
+			return type.name();
 		}
 		
 		@Override

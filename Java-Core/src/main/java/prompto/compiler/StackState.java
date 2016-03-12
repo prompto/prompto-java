@@ -7,6 +7,10 @@ public class StackState {
 	private Stack<StackEntry> entries = new Stack<>();
 	private Stack<StackLocal> locals = new Stack<>();
 	
+	@Override
+	public String toString() {
+		return locals.toString() + "," + entries.toString();
+	}
 	public Stack<StackEntry> getEntries() {
 		return entries;
 	}

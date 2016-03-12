@@ -36,7 +36,7 @@ public class MethodConstant implements CodeConstant {
 
 	@Override
 	public String toString() {
-		return className.toString() + '/' + methodNameAndType.toString();
+		return className.toString() + ':' + methodNameAndType.toString();
 	}
 	
 	@Override

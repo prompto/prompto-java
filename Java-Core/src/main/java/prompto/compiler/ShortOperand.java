@@ -11,4 +11,10 @@ public class ShortOperand implements IInlineOperand {
 	public short value() {
 		return value;
 	}
+	
+	@Override
+	public String toString() {
+		return String.valueOf(value);
+	}
+
 }

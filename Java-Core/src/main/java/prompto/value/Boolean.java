@@ -3,11 +3,11 @@ package prompto.value;
 import java.io.IOException;
 
 import prompto.compiler.CompilerUtils;
-import prompto.compiler.Instruction;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.ShortOperand;
+import prompto.compiler.StackState;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
@@ -98,19 +98,21 @@ public class Boolean extends BaseValue implements Comparable<Boolean> {
 		}
 	}
 	
-	@SuppressWarnings("unused")
 	public static ResultInfo compileEquals(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
 		if(Boolean.class==left.getType())
 			CompilerUtils.BooleanToboolean(method);
 		ResultInfo right = exp.compile(context, method, true);
 		if(Boolean.class==right.getType())
 			CompilerUtils.BooleanToboolean(method);
-		method.addInstruction(Opcode.IF_ICMPNE, new ShortOperand((short)4));
+		method.addInstruction(Opcode.IF_ICMPNE, new ShortOperand((short)7));
+		StackState branchState = method.captureStackState();
 		method.addInstruction(Opcode.ICONST_1);
-		Instruction jump = method.addInstruction(Opcode.GOTO, new ShortOperand((short)1));
-		// jump.setStackLabel(new StackLabel.SAME());
-		Instruction last = method.addInstruction(Opcode.ICONST_0);
-		// last.setStackLabel(new StackLabel(branch.getLabel()));
+		method.addInstruction(Opcode.GOTO, new ShortOperand((short)4));
+		method.restoreStackState(branchState);
+		method.placeLabel(branchState);
+		method.addInstruction(Opcode.ICONST_0);
+		StackState lastState = method.captureStackState();
+		method.placeLabel(lastState);
 		if(toNative)
 			return new ResultInfo(boolean.class, false);
 		else

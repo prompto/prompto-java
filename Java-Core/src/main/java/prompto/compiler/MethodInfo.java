@@ -28,11 +28,15 @@ public class MethodInfo {
 		accessFlags |= modifier;
 	}
 
-	public Instruction addInstruction(Opcode op, IOperand ... operands) {
-		createCodeAttribute();
-		return codeAttribute.addInstruction(new Instruction(op, operands));
+	public IInstruction addInstruction(Opcode op, IOperand ... operands) {
+		return addInstruction(new Instruction(op, operands));
 	}
 	
+	public IInstruction addInstruction(IInstruction instruction) {
+		createCodeAttribute();
+		return codeAttribute.addInstruction(instruction);
+	}
+
 	public StackLocal registerLocal(String name, Type type, ClassConstant className) {
 		StackLocal local = getRegisteredLocal(name);
 		if(local!=null)
@@ -61,6 +65,21 @@ public class MethodInfo {
 		return codeAttribute;
 	}
 
+	public StackState captureStackState() {
+		createCodeAttribute();
+		return codeAttribute.captureStackState();
+	}
+
+	public void restoreStackState(StackState state) {
+		codeAttribute.restoreStackState(state);
+	}
+
+	public StackLabel placeLabel(StackState state) {
+		createCodeAttribute();
+		return codeAttribute.placeLabel(state);
+	}
+
+
 	void writeTo(ByteWriter writer) {
 		/*
 		method_info {
@@ -77,5 +96,6 @@ public class MethodInfo {
 		writer.writeU2(attributes.size());
 		attributes.forEach((a)->a.writeTo(writer));
 	}
+
 
 }

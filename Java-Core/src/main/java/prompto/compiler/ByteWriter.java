@@ -6,14 +6,20 @@ import java.io.OutputStream;
 class ByteWriter {
 
 	OutputStream o;
+	int length = 0;
 	
 	ByteWriter(OutputStream o) {
 		this.o = o;
 	}
 	
+	public int length() {
+		return length;
+	}
+
 	private void write(int i) {
 		try {
 			o.write(i);
+			length++;
 		} catch (IOException e) {
 			throw new CompilerException(e);
 		}
@@ -22,6 +28,7 @@ class ByteWriter {
 	void writeBytes(byte[] b) {
 		try {
 			o.write(b);
+			length += b.length;
 		} catch (IOException e) {
 			throw new CompilerException(e);
 		}
@@ -42,7 +49,6 @@ class ByteWriter {
 		write(u4 >> 8);
 		write(u4);
 	}
-
 
 
 }

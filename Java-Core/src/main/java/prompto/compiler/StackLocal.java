@@ -40,6 +40,11 @@ public abstract class StackLocal implements IVerifierEntry {
 		}
 
 		@Override
+		public String toString() {
+			return className.toString();
+		}
+		
+		@Override
 		public void register(ConstantsPool pool) {
 			super.register(pool);
 			className.register(pool);
