@@ -3,10 +3,14 @@ package prompto.expression;
 import java.util.HashMap;
 import java.util.Map;
 
+import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.IOperatorFunction;
 import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
+import prompto.compiler.ShortOperand;
+import prompto.compiler.StackState;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -245,13 +249,11 @@ public class EqualsExpression implements IExpression, IAssertion {
 			return compileEquals(context, method, flags.withReverse(true));
 		case ROUGHLY:
 			return compileEquals(context, method, flags.withReverse(false).withRoughly(true));
-		/*
 		case IS:
-			equal = lval==rval;
-			break;
+			return compileIs(context, method, flags.withReverse(false));
 		case IS_NOT:
-			equal = lval!=rval;
-			break;
+			return compileIs(context, method, flags.withReverse(true));
+			/*
 		case IS_A:
 			equal = isA(context,lval,rval);
 			break;
@@ -266,6 +268,25 @@ public class EqualsExpression implements IExpression, IAssertion {
 		default:
 			throw new UnsupportedOperationException();
 		}
+	}
+	
+	public ResultInfo compileIs(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		left.compile(context, method, flags.withNative(false));
+		right.compile(context, method, flags.withNative(false));
+		Opcode opcode = flags.isReverse() ? Opcode.IF_ACMPNE : Opcode.IF_ACMPEQ;
+		method.addInstruction(opcode, new ShortOperand((short)7));
+		StackState branchState = method.captureStackState();
+		method.addInstruction(Opcode.ICONST_0);
+		method.addInstruction(Opcode.GOTO, new ShortOperand((short)4));
+		method.restoreStackState(branchState);
+		method.placeLabel(branchState);
+		method.addInstruction(Opcode.ICONST_1);
+		StackState lastState = method.captureStackState();
+		method.placeLabel(lastState);
+		if(flags.toNative())
+			return new ResultInfo(boolean.class, false);
+		else
+			return CompilerUtils.booleanToBoolean(method);
 	}
 	
 	public ResultInfo compileEquals(Context context, MethodInfo method, Flags flags) throws SyntaxError {
