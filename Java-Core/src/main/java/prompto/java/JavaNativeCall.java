@@ -1,5 +1,6 @@
 package prompto.java;
 
+import prompto.compiler.Flags;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.MethodInfo;
 import prompto.error.PromptoError;
@@ -48,7 +49,7 @@ public class JavaNativeCall extends NativeCall {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		return statement.compile(context, method);
 	}
 }

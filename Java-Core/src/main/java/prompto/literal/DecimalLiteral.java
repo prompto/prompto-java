@@ -2,6 +2,7 @@ package prompto.literal;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.DoubleConstant;
+import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
@@ -27,7 +28,7 @@ public class DecimalLiteral extends Literal<Decimal> {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		double d = value.doubleValue();
 		if(d==0.0)
 			method.addInstruction(Opcode.DCONST_0);
@@ -35,7 +36,7 @@ public class DecimalLiteral extends Literal<Decimal> {
 			method.addInstruction(Opcode.DCONST_1);
 		else
 			method.addInstruction(Opcode.LDC2_W, new DoubleConstant(d));
-		if(toNative)
+		if(flags.toNative())
 			return new ResultInfo(double.class, false);
 		else
 			return CompilerUtils.doubleToDouble(method);

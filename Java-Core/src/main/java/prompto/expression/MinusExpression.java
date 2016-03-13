@@ -3,6 +3,7 @@ package prompto.expression;
 import java.util.HashMap;
 import java.util.Map;
 
+import prompto.compiler.Flags;
 import prompto.compiler.IOperatorFunction;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
@@ -70,14 +71,14 @@ public class MinusExpression implements IExpression {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
-		ResultInfo lval = left.compile(context, method, true);
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		ResultInfo lval = left.compile(context, method, flags);
 		IOperatorFunction minuser = minusers.get(lval.getType());
 		if(minuser==null) {
 			System.err.println("Missing IOperatorFunction for minus " + lval.getType().getName());
 			throw new SyntaxError("Cannot sub " + right.check(context).getName()  + " from " + lval.getType().getName() );
 		}
-		return minuser.compile(context, method, lval, right, toNative);
+		return minuser.compile(context, method, lval, right, flags);
 	}
 
 }

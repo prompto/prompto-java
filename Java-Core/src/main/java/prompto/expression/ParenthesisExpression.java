@@ -1,5 +1,6 @@
 package prompto.expression;
 
+import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
@@ -40,7 +41,7 @@ public class ParenthesisExpression implements IExpression {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
-		return expression.compile(context, method, false);
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		return expression.compile(context, method, flags);
 	}
 }

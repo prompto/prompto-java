@@ -1,5 +1,8 @@
 package prompto.value;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -42,9 +45,9 @@ public class Period extends BaseValue implements IMultiplyable {
 	}
 
 	public static ResultInfo compilePlus(Context context, MethodInfo method,
-			ResultInfo left, IExpression exp, boolean toNative)
+			ResultInfo left, IExpression exp, Flags flags)
 			throws SyntaxError {
-		ResultInfo right = exp.compile(context, method, false);
+		ResultInfo right = exp.compile(context, method, flags);
 		if (right.getType() != PromptoPeriod.class)
 			throw new SyntaxError("Illegal: Period + "
 					+ exp.getClass().getSimpleName());
@@ -64,9 +67,9 @@ public class Period extends BaseValue implements IMultiplyable {
 	}
 
 	public static ResultInfo compileMinus(Context context, MethodInfo method,
-			ResultInfo left, IExpression exp, boolean toNative)
+			ResultInfo left, IExpression exp, Flags flags)
 			throws SyntaxError {
-		ResultInfo right = exp.compile(context, method, false);
+		ResultInfo right = exp.compile(context, method, flags);
 		if (right.getType() != PromptoPeriod.class)
 			throw new SyntaxError("Illegal: Period - "
 					+ exp.getClass().getSimpleName());
@@ -112,6 +115,25 @@ public class Period extends BaseValue implements IMultiplyable {
 			return false;
 	}
 
+	public static ResultInfo compileEquals(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+		exp.compile(context, method, flags);
+		IOperand oper = new MethodConstant(
+				PromptoPeriod.class, 
+				"equals",
+				Object.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		if(flags.isReverse()) {
+			// perform 1-0
+			method.addInstruction(Opcode.ICONST_1);
+			method.addInstruction(Opcode.SWAP);
+			method.addInstruction(Opcode.ISUB);
+		}
+		if(flags.toNative())
+			return new ResultInfo(boolean.class, false);
+		else
+			return CompilerUtils.booleanToBoolean(method);
+	}
+	
 	@Override
 	public int hashCode() {
 		return value.hashCode();
@@ -122,7 +144,7 @@ public class Period extends BaseValue implements IMultiplyable {
 	}
 
 	public static ResultInfo compileNegate(Context context, MethodInfo method,
-			ResultInfo value, boolean toNative) throws SyntaxError {
+			ResultInfo value, Flags flags) throws SyntaxError {
 		MethodConstant oper = new MethodConstant(PromptoPeriod.class, "negate",
 				PromptoPeriod.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);

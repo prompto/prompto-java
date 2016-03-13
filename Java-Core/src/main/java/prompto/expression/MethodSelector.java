@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -86,12 +87,12 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		return cd.getMemberMethods(context, id).values();
 	}
 
-	public ResultInfo compile(Context context, MethodInfo method, IMethodDeclaration declaration) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, IMethodDeclaration declaration, Flags flags) throws SyntaxError {
 		// TODO use invokedynamic when multiple candidates
 		if(parent!=null) {
 			// calling an explicit instance or singleton member method
 			// push instance if any
-			parent.compile(context, method, false); 
+			parent.compile(context, method, flags); 
 			throw new UnsupportedOperationException();
 		} 
 		if(declaration.getMemberOf()!=null) {

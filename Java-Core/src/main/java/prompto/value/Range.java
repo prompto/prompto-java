@@ -16,7 +16,7 @@ public abstract class Range<T extends IValue> extends BaseValue implements ICont
 	
 	public Range(IType type, T left, T right) {
 		super(new RangeType(type));
-		// can't just use T extends Comparable<T> because LocalDate and LocalTime extend Comparable<R>
+		// can't just use T extends Comparable<T> because T may already extend Comparable<R> with R!=T
 		int cmp = compare(left,right);
 		if(cmp<0) {
 			this.low = left;

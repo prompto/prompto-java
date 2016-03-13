@@ -131,30 +131,7 @@ public class TestClassFile {
 		Class<?> klass = ByteClassLoader.defineAndResolveClass(name.replace("/", "."), gen);
 		assertNotNull(klass);
 	}
-	
-	@Test
-	public void testClassWithStackLabel_SAME() throws Exception {
-		String name = "k1";
-		ClassFile c = new ClassFile(name, "java/lang/Object");
-		c.addModifier(Modifier.ABSTRACT);
-		MethodInfo m = new MethodInfo("m", "()V");
-		m.addModifier(Modifier.STATIC);
-		m.addInstruction(Opcode.ICONST_1);
-		m.addInstruction(Opcode.ICONST_1);
-		m.addInstruction(Opcode.IADD);
-		m.addInstruction(Opcode.POP);
-		m.addInstruction(new CodeAttribute.PlaceLabelInstruction(new StackLabel.SAME()));
-		m.addInstruction(Opcode.RETURN);
-		c.addMethod(m);
-		ByteArrayOutputStream o = new ByteArrayOutputStream();
-		c.writeTo(o);
-		byte[] gen = o.toByteArray();
-		Class<?> klass = ByteClassLoader.defineAndResolveClass(name.replace("/", "."), gen);
-		assertNotNull(klass);
-		Method mm = klass.getDeclaredMethod("m");
-		mm.invoke(null);
-	}
-	
+		
 	@Test
 	public void testClassWithStackLabel_FULL() throws Exception {
 		String name = "k1";
@@ -168,9 +145,10 @@ public class TestClassFile {
 		StackState branchState = m.captureStackState();
 		m.addInstruction(Opcode.ICONST_1);
 		m.addInstruction(Opcode.GOTO, new ShortOperand((short)4));
+		m.restoreStackState(branchState);
 		m.placeLabel(branchState);
-		StackState lastState = m.captureStackState();
 		m.addInstruction(Opcode.ICONST_0);
+		StackState lastState = m.captureStackState();
 		m.placeLabel(lastState);
 		m.addInstruction(Opcode.POP);
 		m.addInstruction(Opcode.RETURN);

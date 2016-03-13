@@ -1,6 +1,7 @@
 package prompto.literal;
 
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
 import prompto.compiler.IntConstant;
 import prompto.compiler.LongConstant;
 import prompto.compiler.MethodInfo;
@@ -32,7 +33,7 @@ public class IntegerLiteral extends Literal<Integer> {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		long l = value.longValue();
 		if(l>=0 && l<=5) {
 			// ICONST_0 to ICONST_5 are consecutive
@@ -44,7 +45,7 @@ public class IntegerLiteral extends Literal<Integer> {
 			CompilerUtils.intTolong(method);
 		} else
 			method.addInstruction(Opcode.LDC2_W, new LongConstant(l));
-		if(toNative)
+		if(flags.toNative())
 			return new ResultInfo(long.class, false);
 		else
 			return CompilerUtils.longToLong(method);

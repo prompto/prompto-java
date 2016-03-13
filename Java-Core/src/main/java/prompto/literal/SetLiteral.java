@@ -3,6 +3,7 @@ package prompto.literal;
 import java.util.Set;
 
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -74,17 +75,17 @@ public class SetLiteral extends Literal<SetValue> {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		ResultInfo info = CompilerUtils.newInstance(method, PromptoSet.class);
 		if(expressions!=null)
-			addItems(context, method);
+			addItems(context, method, flags);
 		return info;
 	}
 
-	private void addItems(Context context, MethodInfo method) throws SyntaxError {
+	private void addItems(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		for(IExpression e : expressions) {
 			method.addInstruction(Opcode.DUP); // need to keep a reference to the list on top of stack
-			e.compile(context, method, false);
+			e.compile(context, method, flags.withNative(false));
 			IOperand oper = new MethodConstant(PromptoSet.class, "add", 
 					Object.class, boolean.class);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);

@@ -7,10 +7,11 @@ import java.util.List;
 import java.util.Set;
 
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.IOperand;
 import prompto.compiler.ResultInfo;
 import prompto.error.IndexOutOfRangeError;
 import prompto.error.InvalidDataError;
@@ -91,6 +92,25 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IListable
 		return items.equals(((SetValue)obj).items);
 	}
 
+	public static ResultInfo compileEquals(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+		exp.compile(context, method, flags);
+		IOperand oper = new MethodConstant(
+				PromptoSet.class, 
+				"equals",
+				Object.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		if(flags.isReverse()) {
+			// perform 1-0
+			method.addInstruction(Opcode.ICONST_1);
+			method.addInstruction(Opcode.SWAP);
+			method.addInstruction(Opcode.ISUB);
+		}
+		if(flags.toNative())
+			return new ResultInfo(boolean.class, false);
+		else
+			return CompilerUtils.booleanToBoolean(method);
+	}
+	
 	@Override
 	public SetValue newInstance(List<IValue> values) {
 		IType itemType = ((SetType)type).getItemType();
@@ -123,7 +143,7 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IListable
             throw new SyntaxError("Illegal: " +this.type.getId() + " + " + value.getClass().getSimpleName());
     }
 
-	public static ResultInfo compileAdd(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+	public static ResultInfo compileAdd(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
 		// TODO: return left if right is empty (or right if left is empty and is a set)
 		// create result
 		ResultInfo info = CompilerUtils.newInstance(method, PromptoSet.class); 
@@ -136,7 +156,7 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IListable
 		method.addInstruction(Opcode.POP); // consume returned boolean
 		// add right, current stack is: result, we need: result, result, right
 		method.addInstruction(Opcode.DUP); // stack is: result, result 
-		exp.compile(context, method, false); // stack is: result, result, right
+		exp.compile(context, method, flags); // stack is: result, result, right
 		oper = new MethodConstant(PromptoSet.class, "addAll", 
 				Collection.class, boolean.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);

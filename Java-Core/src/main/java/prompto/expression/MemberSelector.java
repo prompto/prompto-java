@@ -1,6 +1,7 @@
 package prompto.expression;
 
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -128,47 +129,47 @@ public class MemberSelector extends SelectorExpression {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
-		ResultInfo info = compileParent(context, method);
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		ResultInfo info = compileParent(context, method, flags);
         // special case for Symbol which evaluates as value
-		ResultInfo result = compileSymbol(context, method, info, toNative);
+		ResultInfo result = compileSymbol(context, method, info, flags);
 		if(result!=null)
 			return result;
 		else
 			// special case for singletons 
-			result = compileSingleton(context, method, info, toNative);
+			result = compileSingleton(context, method, info, flags);
 		if(result!=null)
 			return result;
 		else
 			// special case for 'static' type members (like Enum.symbols, Type.name etc...)
-			result = compileTypeMember(context, method, info, toNative);
+			result = compileTypeMember(context, method, info, flags);
 		if(result!=null)
 			return result;
 		else
 			// finally resolve instance member
-			return compileInstanceMember(context, method,info, toNative);		
+			return compileInstanceMember(context, method,info, flags);		
 	}
 
-	private ResultInfo compileSymbol(Context context, MethodInfo method, ResultInfo parent, boolean toNative) {
+	private ResultInfo compileSymbol(Context context, MethodInfo method, ResultInfo parent, Flags flags) {
 		System.err.println("TODO: MemberSelector.compileSymbol");
 		return null;
 	}
 
-	private ResultInfo compileSingleton(Context context, MethodInfo method, ResultInfo parent, boolean toNative) {
+	private ResultInfo compileSingleton(Context context, MethodInfo method, ResultInfo parent, Flags flags) {
 		System.err.println("TODO: MemberSelector.compileSingleton");
 		return null;
 	}
 
-	private ResultInfo compileTypeMember(Context context, MethodInfo method, ResultInfo parent, boolean toNative) {
+	private ResultInfo compileTypeMember(Context context, MethodInfo method, ResultInfo parent, Flags flags) {
 		System.err.println("TODO: MemberSelector.compileTypeMember");
 		return null;
 	}
 
-	private ResultInfo compileInstanceMember(Context context, MethodInfo method, ResultInfo parent, boolean toNative) throws SyntaxError {
+	private ResultInfo compileInstanceMember(Context context, MethodInfo method, ResultInfo parent, Flags flags) throws SyntaxError {
 		Class<?> resultType = check(context).toJavaClass();
 		// special case for String.length() to avoid wrapping String.class for just one member
 		if(String.class==parent.getType() && "length".equals(getName()))
-			return compileStringLength(method, toNative);
+			return compileStringLength(method, flags);
 		else {
 			String getterName = "get" + getName().substring(0,1).toUpperCase() + getName().substring(1);
 			IOperand oper = new MethodConstant(parent.getType(), getterName, resultType);
@@ -177,18 +178,18 @@ public class MemberSelector extends SelectorExpression {
 		}
 	}
 
-	private ResultInfo compileStringLength(MethodInfo method, boolean toNative) {
+	private ResultInfo compileStringLength(MethodInfo method, Flags flags) {
 		IOperand oper = new MethodConstant(String.class, "length", int.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		if(toNative)
+		if(flags.toNative())
 			return CompilerUtils.intTolong(method);
 		else
 			return CompilerUtils.intToLong(method);
 	}
 
-	private ResultInfo compileParent(Context context, MethodInfo method) throws SyntaxError {
+	private ResultInfo compileParent(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		IExpression parent = resolveParent(context);
-		return parent.compile(context, method, false);
+		return parent.compile(context, method, flags);
 	}
 
 

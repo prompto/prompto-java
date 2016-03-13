@@ -14,6 +14,7 @@ check member methods
 missing tests:
 null member is empty
 pass/empty statement
+tuple equals tuple
 
 language:
 send/receive

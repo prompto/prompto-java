@@ -2,6 +2,7 @@ package prompto.literal;
 
 import prompto.compiler.ByteOperand;
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
@@ -23,9 +24,9 @@ public class BooleanLiteral extends Literal<Boolean> {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		method.addInstruction(Opcode.BIPUSH, new ByteOperand(value.getValue() ? (byte)1 : 0));
-		if(toNative)
+		if(flags.toNative())
 			return new ResultInfo(boolean.class, false);
 		else
 			return CompilerUtils.booleanToBoolean(method);

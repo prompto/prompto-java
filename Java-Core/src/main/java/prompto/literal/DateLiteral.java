@@ -1,5 +1,6 @@
 package prompto.literal;
 
+import prompto.compiler.Flags;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -34,7 +35,7 @@ public class DateLiteral extends Literal<Date> {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		PromptoDate date = value.getValue();
 		method.addInstruction(Opcode.LDC_W, new StringConstant(date.toString()));
 		IOperand oper = new MethodConstant(PromptoDate.class, "parse", String.class, PromptoDate.class);

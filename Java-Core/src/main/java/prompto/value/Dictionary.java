@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -67,7 +68,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 					+ value.getClass().getSimpleName());
 	}
 	
-	public static ResultInfo compileAdd(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+	public static ResultInfo compileAdd(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
 		// TODO: return right if left is empty (or left if right is empty)
 		// create result
 		ResultInfo info = CompilerUtils.newInstance(method, PromptoDict.class); 
@@ -79,7 +80,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		// add right, current stack is: result, we need: result, result, right
 		method.addInstruction(Opcode.DUP); // stack is: result, result 
-		exp.compile(context, method, false); // stack is: result, result, right
+		exp.compile(context, method, flags); // stack is: result, result, right
 		oper = new MethodConstant(PromptoDict.class, "putAll", 
 				Map.class, void.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
@@ -130,6 +131,25 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 		return dict.equals(((Dictionary) obj).dict);
 	}
 
+	public static ResultInfo compileEquals(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+		exp.compile(context, method, flags);
+		IOperand oper = new MethodConstant(
+				PromptoDict.class, 
+				"equals",
+				Object.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		if(flags.isReverse()) {
+			// perform 1-0
+			method.addInstruction(Opcode.ICONST_1);
+			method.addInstruction(Opcode.SWAP);
+			method.addInstruction(Opcode.ISUB);
+		}
+		if(flags.toNative())
+			return new ResultInfo(boolean.class, false);
+		else
+			return CompilerUtils.booleanToBoolean(method);
+	}
+	
 	@Override
 	public String toString() {
 		return dict.toString();

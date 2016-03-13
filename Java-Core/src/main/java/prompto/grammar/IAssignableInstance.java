@@ -18,10 +18,10 @@ public interface IAssignableInstance {
 	void assign(Context context, IExpression expression) throws PromptoError;
 	IValue interpret(Context context) throws PromptoError;
 	void toDialect(CodeWriter writer, IExpression expression);
-	default void register(Context context, MethodInfo method) {
+	default void register(MethodInfo method, ResultInfo info)  {
 		throw new UnsupportedOperationException();
 	}
-	default ResultInfo compile(Context context, MethodInfo method) {
+	default ResultInfo compile(MethodInfo method, ResultInfo info) {
 		throw new UnsupportedOperationException();
 	}
 

@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -111,7 +112,7 @@ public class TupleValue extends BaseList<TupleValue, PromptoTuple<IValue>> {
 			return 0;
 	}
 
-	public static ResultInfo compileAdd(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+	public static ResultInfo compileAdd(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
 		// TODO: return left if right is empty (or right if left is empty and is a list)
 		// create result
 		ResultInfo info = CompilerUtils.newInstance(method, PromptoTuple.class); 
@@ -124,7 +125,7 @@ public class TupleValue extends BaseList<TupleValue, PromptoTuple<IValue>> {
 		method.addInstruction(Opcode.POP); // consume returned boolean
 		// add right, current stack is: result, we need: result, result, right
 		method.addInstruction(Opcode.DUP); // stack is: result, result 
-		exp.compile(context, method, false); // stack is: result, result, right
+		exp.compile(context, method, flags); // stack is: result, result, right
 		oper = new MethodConstant(PromptoTuple.class, "addAll", 
 				Collection.class, boolean.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);

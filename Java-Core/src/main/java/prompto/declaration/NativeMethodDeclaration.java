@@ -2,6 +2,7 @@ package prompto.declaration;
 
 import prompto.compiler.ClassFile;
 import prompto.compiler.CompilerException;
+import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.error.NullReferenceError;
@@ -105,7 +106,7 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 			IType returnType = this.checkNative(context);
 			MethodInfo method = createMethodInfo(context, classFile, returnType);
 			if(statement!=null)
-				statement.compile(context, method, false);
+				statement.compile(context, method, new Flags());
 			// ensure we always return
 			if(returnType==VoidType.instance())
 				method.addInstruction(Opcode.RETURN);

@@ -6,6 +6,7 @@ import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
 import prompto.compiler.CompilerException;
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.IVerifierEntry;
@@ -179,8 +180,9 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 			IType returnType = check(context);
 			MethodInfo method = createMethodInfo(context, classFile, returnType);
 			// produce byte code
+			Flags flags = new Flags();
 			for(IStatement s : statements)
-				s.compile(context, method, false);
+				s.compile(context, method, flags);
 			// add return for void
 			if(returnType==VoidType.instance())
 				method.addInstruction(Opcode.RETURN);

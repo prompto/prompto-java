@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.StreamTokenizer;
 import java.io.StringReader;
 
+import prompto.compiler.Flags;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.IConstantOperand;
 import prompto.compiler.MethodInfo;
@@ -40,7 +41,7 @@ public class TextLiteral extends Literal<Text> {
 	
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		IConstantOperand operand = new StringConstant(value.getValue());
 		method.addInstruction(Opcode.LDC_W, operand);
 		return new ResultInfo(String.class, true);

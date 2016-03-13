@@ -1,6 +1,7 @@
 package prompto.expression;
 
 import prompto.compiler.ByteOperand;
+import prompto.compiler.Flags;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -90,7 +91,7 @@ public class InstanceExpression implements IExpression {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		StackLocal local = method.getRegisteredLocal(getName());
 		switch(local.getIndex()) {
 			case 0:

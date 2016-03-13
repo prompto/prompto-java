@@ -280,22 +280,30 @@ public abstract class CompilerUtils {
 			numberTolong(method, info);
 	}
 	
-	public static void numberTodouble(MethodInfo method, ResultInfo info) {
-		 if(info.getType()==long.class)
-			longTodouble(method);
-		else if(info.getType()==Long.class)
-			LongTodouble(method);
-		else if(info.getType()==Double.class)
-			DoubleTodouble(method);
+	public static ResultInfo numberTodouble(MethodInfo method, ResultInfo info) {
+		 if(double.class==info.getType())
+			return info;
+		 else if(long.class==info.getType())
+			return longTodouble(method);
+		else if(Long.class==info.getType())
+			return LongTodouble(method);
+		else if(Double.class==info.getType())
+			return DoubleTodouble(method);
+		else
+			throw new CompilerException("Cannot convert " + info.getType().getName() + " to double");
 	}
 
-	public static void numberTolong(MethodInfo method, ResultInfo info) {
-		if(double.class==info.getType())
-			doubleTolong(method);
+	public static ResultInfo numberTolong(MethodInfo method, ResultInfo info) {
+		 if(long.class==info.getType())
+			return info;
+		 else if(double.class==info.getType())
+			return doubleTolong(method);
 		else if(Long.class==info.getType())
-			LongTolong(method);
+			return LongTolong(method);
 		else if(Double.class==info.getType())
-			DoubleTolong(method);
+			return DoubleTolong(method);
+		else
+			throw new CompilerException("Cannot convert " + info.getType().getName() + " to long");
 	}
 
 	public static ResultInfo charToCharacter(MethodInfo method) {

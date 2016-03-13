@@ -5,6 +5,8 @@ import java.text.Collator;
 import java.util.Iterator;
 
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -57,8 +59,8 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 		return new Text(this.value + value.toString());
 	}
 
-	public static ResultInfo compilePlus(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
-		ResultInfo right = exp.compile(context, method, false);
+	public static ResultInfo compilePlus(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+		ResultInfo right = exp.compile(context, method, flags);
 		// convert right to String
 		if(String.class!=right.getType()) {
 			MethodConstant oper = new MethodConstant(right.getType(), "toString", String.class);
@@ -82,8 +84,8 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 			throw new SyntaxError("Illegal: Chararacter * " + value.getClass().getSimpleName());
 	}
 
-	public static ResultInfo compileMultiply(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
-		ResultInfo right = exp.compile(context, method, true);
+	public static ResultInfo compileMultiply(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+		ResultInfo right = exp.compile(context, method, flags);
 		if(Long.class==right.getType())
 			CompilerUtils.LongToint(method);
 		else if(long.class==right.getType())
@@ -215,6 +217,25 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 			return value.equals(((Text) obj).value);
 		else
 			return value.equals(obj);
+	}
+	
+	public static ResultInfo compileEquals(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+		exp.compile(context, method, flags);
+		IOperand oper = new MethodConstant(
+				String.class, 
+				"equals",
+				Object.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		if(flags.isReverse()) {
+			// perform 1-0
+			method.addInstruction(Opcode.ICONST_1);
+			method.addInstruction(Opcode.SWAP);
+			method.addInstruction(Opcode.ISUB);
+		}
+		if(flags.toNative())
+			return new ResultInfo(boolean.class, false);
+		else
+			return CompilerUtils.booleanToBoolean(method);
 	}
 
     @Override

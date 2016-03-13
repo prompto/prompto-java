@@ -1,5 +1,6 @@
 package prompto.grammar;
 
+import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
@@ -144,8 +145,8 @@ public class ArgumentAssignment {
 		return new ArgumentAssignment(argument,expression);
 	}
 
-	public void compile(Context context, MethodInfo method) throws SyntaxError {
-		expression.compile(context, method, false);
+	public void compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		expression.compile(context, method, flags);
 	}
 
 

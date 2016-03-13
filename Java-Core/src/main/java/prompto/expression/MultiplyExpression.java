@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
 import prompto.compiler.IOperatorFunction;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
@@ -67,22 +68,22 @@ public class MultiplyExpression implements IExpression {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
-		ResultInfo lval = left.compile(context, method, true);
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		ResultInfo lval = left.compile(context, method, flags);
 		IOperatorFunction multiplier = multipliers.get(lval.getType());
 		if(multiplier!=null)
-			return multiplier.compile(context, method, lval, right, toNative);
+			return multiplier.compile(context, method, lval, right, flags);
 		else if(IMultiplyable.class.isAssignableFrom(lval.getType()))
-			return compileMultiplyable(context, method, lval);
+			return compileMultiplyable(context, method, lval, flags);
 		else {
 			System.err.println("Missing IOperatorFunction for multiply " + lval.getType().getName());
 			throw new SyntaxError("Cannot multiply " + lval.getType().getName() + " with " + right.check(context).getName());
 		}
 	}
 
-	private ResultInfo compileMultiplyable(Context context, MethodInfo method, ResultInfo lval) throws SyntaxError {
+	private ResultInfo compileMultiplyable(Context context, MethodInfo method, ResultInfo lval, Flags flags) throws SyntaxError {
 		try {
-			ResultInfo rval = right.compile(context, method, false);
+			ResultInfo rval = right.compile(context, method, flags);
 			// for now we only support multiply by Integer
 			if(Long.class==rval.getType())
 				CompilerUtils.LongToint(method);

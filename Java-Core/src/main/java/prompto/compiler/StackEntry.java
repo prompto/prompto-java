@@ -25,7 +25,7 @@ public abstract class StackEntry implements IVerifierEntry {
 		
 		@Override
 		public String toString() {
-			return className==null ? "<null>" : className.toString();
+			return className.toString();
 		}
 		
 		public void setClassName(ClassConstant className) {

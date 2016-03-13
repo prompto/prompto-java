@@ -1,6 +1,7 @@
 package prompto.literal;
 
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -90,22 +91,22 @@ public class DictLiteral extends Literal<Dictionary> {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		ResultInfo info = CompilerUtils.newInstance(method, PromptoDict.class);
-		addEntries(context, method);
+		addEntries(context, method, flags.withNative(false));
 		return info;
 	}
 
-	private void addEntries(Context context, MethodInfo method) throws SyntaxError {
+	private void addEntries(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		for(DictEntry e : entries) {
 			method.addInstruction(Opcode.DUP); // need to keep a reference to the map on top of stack
-			ResultInfo info = e.getKey().compile(context, method, false);
+			ResultInfo info = e.getKey().compile(context, method, flags);
 			if(info.getType()!=String.class) {
 				IOperand oper = new MethodConstant(info.getType(), "put", 
 						String.class);
 				method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 			}
-			e.getValue().compile(context, method, false);
+			e.getValue().compile(context, method, flags);
 			IOperand oper = new MethodConstant(PromptoDict.class, "put", 
 					Object.class, Object.class, Object.class);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);

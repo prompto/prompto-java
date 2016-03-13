@@ -3,6 +3,7 @@ package prompto.expression;
 import java.util.HashMap;
 import java.util.Map;
 
+import prompto.compiler.Flags;
 import prompto.compiler.IOperatorFunction;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
@@ -58,14 +59,14 @@ public class DivideExpression implements IExpression {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
-		ResultInfo lval = left.compile(context, method, true);
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		ResultInfo lval = left.compile(context, method, flags);
 		IOperatorFunction divider = dividers.get(lval.getType());
 		if(divider==null) {
 			System.err.println("Missing IOperatorFunction for divide " + lval.getType().getName());
 			throw new SyntaxError("Cannot divide " + lval.getType().getName() + " by " + right.check(context).getName());
 		}
-		return divider.compile(context, method, lval, right, toNative);
+		return divider.compile(context, method, lval, right, flags);
 	}
 
 }

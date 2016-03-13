@@ -4,10 +4,13 @@ import java.io.IOException;
 import java.text.Collator;
 
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
+import prompto.compiler.ShortOperand;
+import prompto.compiler.StackState;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
@@ -45,14 +48,14 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
         return new Text(this.value + value.toString());
     }
 
-	public static ResultInfo compilePlus(Context context, MethodInfo method, ResultInfo left, IExpression right, boolean toNative) throws SyntaxError {
+	public static ResultInfo compilePlus(Context context, MethodInfo method, ResultInfo left, IExpression right, Flags flags) throws SyntaxError {
 		// convert to String
 		MethodConstant c = new MethodConstant(java.lang.Character.class, 
 									"toString", 
 									String.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
 		// use Text::compileAdd
-		return Text.compilePlus(context, method, left, right, false);
+		return Text.compilePlus(context, method, left, right, flags);
 	}
 	
     @Override
@@ -66,9 +69,9 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
            throw new SyntaxError("Illegal: Chararacter * " + value.getClass().getSimpleName());
      }
 
-	public static ResultInfo compileMultiply(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
+	public static ResultInfo compileMultiply(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
 		CompilerUtils.CharacterTochar(method);
-		ResultInfo right = exp.compile(context, method, true);
+		ResultInfo right = exp.compile(context, method, flags.withNative(true));
 		if(Long.class==right.getType())
 			CompilerUtils.LongToint(method);
 		else if(long.class==right.getType())
@@ -81,7 +84,7 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
 	}
 	
     public int compareTo(Character obj) {
-        return java.lang.Character.compare(value, obj.getValue());
+        return java.lang.Character.compare(value, obj.value);
     }
 
     @Override
@@ -111,6 +114,28 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
         else
             return false;
     }
+    
+	public static ResultInfo compileEquals(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+		if(java.lang.Character.class==left.getType())
+			CompilerUtils.CharacterTochar(method);
+		ResultInfo right = exp.compile(context, method, flags);
+		if(java.lang.Character.class==right.getType())
+			CompilerUtils.CharacterTochar(method);
+		Opcode opcode = flags.isReverse() ? Opcode.IF_ICMPNE : Opcode.IF_ICMPEQ;
+		method.addInstruction(opcode, new ShortOperand((short)7));
+		StackState branchState = method.captureStackState();
+		method.addInstruction(Opcode.ICONST_0);
+		method.addInstruction(Opcode.GOTO, new ShortOperand((short)4));
+		method.restoreStackState(branchState);
+		method.placeLabel(branchState);
+		method.addInstruction(Opcode.ICONST_1);
+		StackState lastState = method.captureStackState();
+		method.placeLabel(lastState);
+		if(flags.toNative())
+			return new ResultInfo(boolean.class, false);
+		else
+			return CompilerUtils.booleanToBoolean(method);
+	}
     
     @Override
     public boolean roughly(Context context, IValue obj) throws PromptoError {

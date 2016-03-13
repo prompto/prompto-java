@@ -3,6 +3,7 @@ package prompto.expression;
 import java.util.HashMap;
 import java.util.Map;
 
+import prompto.compiler.Flags;
 import prompto.compiler.IOperatorFunction;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
@@ -13,6 +14,13 @@ import prompto.grammar.EqOp;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.grammar.UnresolvedIdentifier;
+import prompto.intrinsic.PromptoDate;
+import prompto.intrinsic.PromptoDateTime;
+import prompto.intrinsic.PromptoDict;
+import prompto.intrinsic.PromptoList;
+import prompto.intrinsic.PromptoPeriod;
+import prompto.intrinsic.PromptoSet;
+import prompto.intrinsic.PromptoTime;
 import prompto.runtime.Context;
 import prompto.runtime.LinkedValue;
 import prompto.runtime.LinkedVariable;
@@ -22,9 +30,20 @@ import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.Boolean;
+import prompto.value.Character;
+import prompto.value.Date;
+import prompto.value.DateTime;
+import prompto.value.Decimal;
+import prompto.value.Dictionary;
 import prompto.value.IInstance;
 import prompto.value.IValue;
+import prompto.value.Integer;
+import prompto.value.ListValue;
 import prompto.value.NullValue;
+import prompto.value.Period;
+import prompto.value.SetValue;
+import prompto.value.Text;
+import prompto.value.Time;
 import prompto.value.TypeValue;
 
 public class EqualsExpression implements IExpression, IAssertion {
@@ -198,32 +217,65 @@ public class EqualsExpression implements IExpression, IAssertion {
 	private static Map<Class<?>, IOperatorFunction> createTesters() {
 		Map<Class<?>, IOperatorFunction> map = new HashMap<>();
 		map.put(boolean.class, Boolean::compileEquals); 
-		map.put(Boolean.class, Boolean::compileEquals); /*
-		map.put(String.class, Text::compileEquals); 
+		map.put(java.lang.Boolean.class, Boolean::compileEquals); 
+		map.put(char.class, Character::compileEquals);
 		map.put(java.lang.Character.class, Character::compileEquals);
+		map.put(String.class, Text::compileEquals); 
 		map.put(double.class, Decimal::compileEquals);
-		map.put(Double.class, Decimal::compileEquals);
+		map.put(Double.class, Decimal::compileEquals); 
 		map.put(long.class, Integer::compileEquals);
-		map.put(Long.class, Integer::compileEquals);
-		map.put(PromptoDate.class, Date::compileEquals);
-		map.put(PromptoDateTime.class, DateTime::compileEquals);
-		map.put(PromptoTime.class, Time::compileEquals);
-		map.put(PromptoPeriod.class, Period::compileEquals);
+		map.put(Long.class, Integer::compileEquals); 
+		map.put(PromptoDate.class, Date::compileEquals); 
+		map.put(PromptoDateTime.class, DateTime::compileEquals); 
+		map.put(PromptoTime.class, Time::compileEquals); 
+		map.put(PromptoPeriod.class, Period::compileEquals); 
 		map.put(PromptoDict.class, Dictionary::compileEquals);
-		map.put(PromptoSet.class, SetValue::compileEquals);
-		map.put(PromptoTuple.class, TupleValue::compileEquals);
-		map.put(PromptoList.class, ListValue::compileEquals); */
+		map.put(PromptoSet.class, SetValue::compileEquals);  /*
+		map.put(PromptoTuple.class, TupleValue::compileEquals); */
+		map.put(PromptoList.class, ListValue::compileEquals); 
 		return map;
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
-		ResultInfo lval = left.compile(context, method, true);
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		switch(operator) {
+		case EQUALS:
+			return compileEquals(context, method, flags.withReverse(false));
+		case NOT_EQUALS:
+			return compileEquals(context, method, flags.withReverse(true));
+		/*
+		case IS:
+			equal = lval==rval;
+			break;
+		case IS_NOT:
+			equal = lval!=rval;
+			break;
+		case IS_A:
+			equal = isA(context,lval,rval);
+			break;
+		case IS_NOT_A:
+			equal = !isA(context,lval,rval);
+			break;
+			equal = interpretEquals(context,lval,rval);
+			break;
+			equal = !interpretEquals(context,lval,rval);
+			break;
+		case ROUGHLY:
+			equal = lval.roughly(context, rval);
+			break;
+		*/
+		default:
+			throw new UnsupportedOperationException();
+		}
+	}
+	
+	public ResultInfo compileEquals(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		ResultInfo lval = left.compile(context, method, flags);
 		IOperatorFunction tester = testers.get(lval.getType());
 		if(tester==null) {
 			System.err.println("Missing IOperatorFunction for = " + lval.getType().getName());
 			throw new SyntaxError("Cannot check equality of " + lval.getType().getName() + " with " + right.check(context).getName());
 		}
-		return tester.compile(context, method, lval, right, toNative);
+		return tester.compile(context, method, lval, right, flags);
 	}
 }

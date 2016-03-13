@@ -2,6 +2,9 @@ package prompto.value;
 
 import java.io.IOException;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -52,8 +55,8 @@ public class Date extends BaseValue implements Comparable<Date> {
 			throw new SyntaxError("Illegal: Date + " + value.getClass().getSimpleName());
 	}
 
-	public static ResultInfo compilePlus(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
-		ResultInfo right = exp.compile(context, method, false);
+	public static ResultInfo compilePlus(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+		ResultInfo right = exp.compile(context, method, flags);
 		if(right.getType()!=PromptoPeriod.class)
 			throw new SyntaxError("Illegal: Date + " + exp.getClass().getSimpleName());
 		MethodConstant oper = new MethodConstant(PromptoDate.class, "plus", PromptoPeriod.class, PromptoDate.class);
@@ -75,8 +78,8 @@ public class Date extends BaseValue implements Comparable<Date> {
 					+ value.getClass().getSimpleName());
 	}
 
-	public static ResultInfo compileMinus(Context context, MethodInfo method, ResultInfo left, IExpression exp, boolean toNative) throws SyntaxError {
-		ResultInfo right = exp.compile(context, method, false);
+	public static ResultInfo compileMinus(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+		ResultInfo right = exp.compile(context, method, flags);
 		if(right.getType()==PromptoDate.class) {
 			MethodConstant oper = new MethodConstant(PromptoDate.class, "minus", 
 					PromptoDate.class, PromptoPeriod.class);
@@ -135,6 +138,25 @@ public class Date extends BaseValue implements Comparable<Date> {
 			return value.equals(((Date) obj).value);
 		else
 			return value.equals(obj);
+	}
+	
+	public static ResultInfo compileEquals(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+		exp.compile(context, method, flags);
+		IOperand oper = new MethodConstant(
+				PromptoDate.class, 
+				"equals",
+				Object.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		if(flags.isReverse()) {
+			// perform 1-0
+			method.addInstruction(Opcode.ICONST_1);
+			method.addInstruction(Opcode.SWAP);
+			method.addInstruction(Opcode.ISUB);
+		}
+		if(flags.toNative())
+			return new ResultInfo(boolean.class, false);
+		else
+			return CompilerUtils.booleanToBoolean(method);
 	}
 
 	@Override

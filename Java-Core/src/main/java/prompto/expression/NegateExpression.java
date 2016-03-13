@@ -3,6 +3,7 @@ package prompto.expression;
 import java.util.HashMap;
 import java.util.Map;
 
+import prompto.compiler.Flags;
 import prompto.compiler.IUnaryFunction;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
@@ -78,14 +79,14 @@ public class NegateExpression implements IUnaryExpression {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
-		ResultInfo val = expression.compile(context, method, true);
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		ResultInfo val = expression.compile(context, method, flags);
 		IUnaryFunction negator = negators.get(val.getType());
 		if(negator==null) {
 			System.err.println("Missing IOperatorFunction for negate " + val.getType().getName());
 			throw new SyntaxError("Cannot negate " + val.getType().getName());
 		}
-		return negator.compile(context, method, val, toNative);
+		return negator.compile(context, method, val, flags);
 	}
 
 }

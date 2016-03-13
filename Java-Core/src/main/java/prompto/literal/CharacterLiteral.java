@@ -6,6 +6,7 @@ import java.io.StringReader;
 
 import prompto.compiler.ByteOperand;
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
 import prompto.compiler.IntConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -41,7 +42,7 @@ public class CharacterLiteral extends Literal<Character> {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		char c = value.getValue();
 		if((c&0xFFFFFF00)==0)
 			method.addInstruction(Opcode.BIPUSH, new ByteOperand((byte)c));

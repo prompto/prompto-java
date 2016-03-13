@@ -1,5 +1,6 @@
 package prompto.literal;
 
+import prompto.compiler.Flags;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -30,7 +31,7 @@ public class PeriodLiteral extends Literal<Period> {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, boolean toNative) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		PromptoPeriod period = value.getValue();
 		method.addInstruction(Opcode.LDC_W, new StringConstant(period.toString()));
 		IOperand oper = new MethodConstant(PromptoPeriod.class, "parse", 
