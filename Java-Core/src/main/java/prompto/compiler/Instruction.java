@@ -102,14 +102,22 @@ public class Instruction implements IInstruction {
 		if(DUMP)
 			System.err.println(this.toString());
 		if(DUMP)
-			System.err.println("Before pop: " + stack.toString());
+			System.err.println("Before pop: " + stack.getState().toString());
 		StackEntry[] popped = stack.pop(opcode.getPopped(this));
 		if(DUMP)
-			System.err.println("After pop: " + stack.toString());
+			System.err.println("After pop: " + stack.getState().toString());
 		StackEntry[] pushed = opcode.getPushed(this, popped);
 		stack.push(pushed);
 		if(DUMP)
-			System.err.println("After push: " + stack.toString());
+			System.err.println("After push: " + stack.getState().toString());
+	}
+
+	public ClassConstant getClassConstant() {
+		for(IOperand operand : operands) {
+			if(operand instanceof ClassConstant)
+				return (ClassConstant)operand;
+		}
+		return null;
 	}
 
 	public MethodConstant getMethodConstant() {
@@ -155,5 +163,6 @@ public class Instruction implements IInstruction {
 		MethodConstant m = getMethodConstant();
 		return m.getArgumentsCount(isStatic);
 	}
+
 
 }

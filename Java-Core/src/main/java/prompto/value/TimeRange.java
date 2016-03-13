@@ -13,7 +13,7 @@ public class TimeRange extends Range<Time> {
 	
 	@Override
 	public long length() {
-		return 1 + (high.getMillisOfDay() - low.getMillisOfDay())/1000;
+		return 1 + (getHigh().getMillisOfDay() - getLow().getMillisOfDay())/1000;
 	}
 	
 	@Override
@@ -23,8 +23,8 @@ public class TimeRange extends Range<Time> {
 
 	@Override
 	public Time getItem(long index) {
-		PromptoTime result = low.getValue().plusSeconds(index-1);
-		if(result.isAfter(high.getValue()))
+		PromptoTime result = getLow().getValue().plusSeconds(index-1);
+		if(result.isAfter(getHigh().getValue()))
 			throw new IndexOutOfBoundsException();
 		return new Time(result);
 	}

@@ -11,7 +11,7 @@ public class CharacterRange extends Range<Character> {
 
 	@Override
 	public long length() {
-		return 1 + high.getValue() - low.getValue();
+		return 1 + getHigh().getValue() - getLow().getValue();
 	}
 	
 	@Override
@@ -21,8 +21,8 @@ public class CharacterRange extends Range<Character> {
 	
 	@Override
 	public Character getItem(long index) {
-		char result = (char)(low.getValue() + index - 1);
-		if(result>high.getValue())
+		char result = (char)(getLow().getValue() + index - 1);
+		if(result>getHigh().getValue())
 			throw new IndexOutOfBoundsException();
 		return new Character(result);
 	}

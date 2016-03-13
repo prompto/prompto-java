@@ -1,8 +1,13 @@
 package prompto.literal;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
+import prompto.intrinsic.PromptoRange;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.type.IntegerType;
@@ -32,6 +37,15 @@ public class RangeLiteral implements IExpression {
 		last.toDialect(writer);
 		writer.append("]");
 	}
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		CompilerUtils.newRawInstance(method, PromptoRange.class);
+		first.compile(context, method, flags.withNative(false));
+		last.compile(context, method, flags.withNative(false));
+		return CompilerUtils.callConstructor(method, PromptoRange.class, Object.class, Object.class);
+	}
+
 
 	public IExpression getFirst() {
 		return first;

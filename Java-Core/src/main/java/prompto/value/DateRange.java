@@ -13,8 +13,8 @@ public class DateRange extends Range<Date> {
 	
 	@Override
 	public long length() {
-		long h = high.getValue().toJavaTime();
-		long l = low.getValue().toJavaTime();
+		long h = getHigh().getValue().toJavaTime();
+		long l = getLow().getValue().toJavaTime();
 		return 1 + ( (h-l)/(24*60*60*1000));
 	}
 
@@ -25,8 +25,8 @@ public class DateRange extends Range<Date> {
 
 	@Override
 	public Date getItem(long index) {
-		PromptoDate result = low.getValue().plusDays(index-1);
-		if(result.isAfter(high.getValue()))
+		PromptoDate result = getLow().getValue().plusDays(index-1);
+		if(result.isAfter(getHigh().getValue()))
 			throw new IndexOutOfBoundsException();
 		return new Date(result);
 	}

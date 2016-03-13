@@ -230,7 +230,7 @@ public enum Opcode {
     INVOKESTATIC(0xb8, CPREF_W, popsArguments(true), pushesResult())/*,
     INVOKEINTERFACE(0xb9, CPREF_W_UBYTE_ZERO),
     INVOKEDYNAMIC(0xba, CPREF_W_UBYTE_ZERO)*/,
-    NEW(0xbb, CPREF_W, popsNone(), pushes(ITEM_Object))/*,
+    NEW(0xbb, CPREF_W, popsNone(), pushesObject())/*,
     NEWARRAY(0xbc, ATYPE),
     ANEWARRAY(0xbd, CPREF_W),
     ARRAYLENGTH(0xbe),
@@ -350,6 +350,15 @@ public enum Opcode {
     	};
     }
 
+    static Pusher pushesObject() {
+    	return new Pusher() {
+    		@Override public StackEntry[] apply(Instruction i, StackEntry[] popped) {
+    			return new StackEntry[] { ITEM_Object.newStackEntry(i.getClassConstant()) };
+    		}
+    	};
+    }
+
+    
     static Pusher pushes(IVerifierEntry.Type e) {
     	return new Pusher() {
     		@Override public StackEntry[] apply(Instruction i, StackEntry[] popped) {

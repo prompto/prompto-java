@@ -324,15 +324,25 @@ public abstract class CompilerUtils {
 		return new ResultInfo(char.class, true);
 	}
 
-	public static ResultInfo newInstance(MethodInfo method, Class<?> klass, Class<?> ... params) {
+	public static ResultInfo newRawInstance(MethodInfo method, Class<?> klass) {
 		IOperand c = new ClassConstant(klass);
 		method.addInstruction(Opcode.NEW, c);
-		// call constructor
 		method.addInstruction(Opcode.DUP); // need to keep a reference on top of stack
-		c = new MethodConstant(getClassName(klass), "<init>", createProto(params, void.class));
-		method.addInstruction(Opcode.INVOKESPECIAL, c);
-		// done
 		return new ResultInfo(klass, true);
 	}
+	
+	public static ResultInfo callConstructor(MethodInfo method, Class<?> klass, Class<?> ... params) {
+		IOperand c = new MethodConstant(getClassName(klass), "<init>", createProto(params, void.class));
+		method.addInstruction(Opcode.INVOKESPECIAL, c);
+		return new ResultInfo(klass, true);
+	}
+	
+	public static ResultInfo newInstance(MethodInfo method, Class<?> klass) {
+		newRawInstance(method, klass);
+		return callConstructor(method, klass);
+	}
+
+	
+
 
 }

@@ -11,7 +11,7 @@ public class IntegerRange extends Range<Integer> {
 
 	@Override
 	public long length() {
-		return 1 + high.longValue() - low.longValue();
+		return 1 + getHigh().longValue() - getLow().longValue();
 	}
 
 	@Override
@@ -21,8 +21,8 @@ public class IntegerRange extends Range<Integer> {
 	
 	@Override
 	public Integer getItem(long index) {
-		Long result = low.longValue() + index - 1;
-		if(result>high.longValue())
+		Long result = getLow().longValue() + index - 1;
+		if(result>getHigh().longValue())
 			throw new IndexOutOfBoundsException();
 		return new Integer(result);
 	}

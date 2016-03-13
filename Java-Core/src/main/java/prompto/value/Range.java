@@ -2,57 +2,77 @@ package prompto.value;
 
 import java.util.Iterator;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.error.IndexOutOfRangeError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.expression.IExpression;
+import prompto.intrinsic.PromptoRange;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.type.RangeType;
 
 public abstract class Range<T extends IValue> extends BaseValue implements IContainer<T>, IRange<T> {
 	
-	T low;
-	T high;
+	PromptoRange<T> range;
 	
 	public Range(IType type, T left, T right) {
 		super(new RangeType(type));
 		// can't just use T extends Comparable<T> because T may already extend Comparable<R> with R!=T
 		int cmp = compare(left,right);
-		if(cmp<0) {
-			this.low = left;
-			this.high = right;
-		} else {
-			this.low = right;
-			this.high = left;
-		}
+		if(cmp<0)
+			range = new PromptoRange<T>(left, right);
+		else
+			range = new PromptoRange<T>(right, left);
 	}
 	
 	@Override
 	public String toString() {
-		return "[" + (low==null?"":low.toString()) + ".." 
-				+ (high==null?"":high.toString()) + "]";
+		return range.toString();
 	}
 	
 	public T getLow() {
-		return low;
+		return range.getLow();
 	}
 	
 	public T getHigh() {
-		return high;
+		return range.getHigh();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if(!(obj instanceof Range<?>))
-			return false;
-		Range<?> r = (Range<?>)obj;
-		return low.equals(r.low) && high.equals(r.high);
+		return obj instanceof Range && range.equals(((Range<?>)obj).range);
 	}
 		
+	public static ResultInfo compileEquals(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+		exp.compile(context, method, flags);
+		IOperand oper = new MethodConstant(
+				PromptoRange.class, 
+				"equals",
+				Object.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		if(flags.isReverse()) {
+			// perform 1-0
+			method.addInstruction(Opcode.ICONST_1);
+			method.addInstruction(Opcode.SWAP);
+			method.addInstruction(Opcode.ISUB);
+		}
+		if(flags.toNative())
+			return new ResultInfo(boolean.class, false);
+		else
+			return CompilerUtils.booleanToBoolean(method);
+	}
+
 	public boolean hasItem(Context context, IValue lval) {
 		@SuppressWarnings("unchecked")
 		T val = (T)lval;
-		return compare(val,low)>=0 && compare(high,val)>=0;
+		return compare(val, getLow())>=0 && compare(getHigh(), val)>=0;
 	}
 	
 	@SuppressWarnings("unchecked")
