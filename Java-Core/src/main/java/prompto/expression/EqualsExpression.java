@@ -269,7 +269,7 @@ public class EqualsExpression implements IExpression, IAssertion {
 	}
 	
 	public ResultInfo compileEquals(Context context, MethodInfo method, Flags flags) throws SyntaxError {
-		ResultInfo lval = left.compile(context, method, flags);
+		ResultInfo lval = left.compile(context, method, flags.withNative(true));
 		IOperatorFunction tester = testers.get(lval.getType());
 		if(tester==null) {
 			System.err.println("Missing IOperatorFunction for = " + lval.getType().getName());

@@ -103,6 +103,15 @@ public class Date extends BaseValue implements Comparable<Date> {
 					+ value.getClass().getSimpleName());
 
 	}
+	
+	public static ResultInfo compileCompareTo(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+		exp.compile(context, method, flags);
+		IOperand oper = new MethodConstant(PromptoDate.class, 
+				"compareTo", PromptoDate.class, int.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return BaseValue.compileCompareToEpilogue(method, flags);
+	}
+
 
 	@Override
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {

@@ -1,15 +1,32 @@
 package prompto.expression;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import prompto.compiler.Flags;
+import prompto.compiler.IOperatorFunction;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.CmpOp;
+import prompto.intrinsic.PromptoDate;
+import prompto.intrinsic.PromptoDateTime;
+import prompto.intrinsic.PromptoTime;
 import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.Boolean;
+import prompto.value.Character;
+import prompto.value.Date;
+import prompto.value.DateTime;
+import prompto.value.Decimal;
 import prompto.value.IValue;
+import prompto.value.Integer;
+import prompto.value.Text;
+import prompto.value.Time;
 
 public class CompareExpression extends Section implements IExpression, IAssertion {
 
@@ -61,7 +78,35 @@ public class CompareExpression extends Section implements IExpression, IAssertio
 			throw new SyntaxError("Illegal compare operand: " + operator.toString());
 		}
 	}
+	
+	static Map<Class<?>, IOperatorFunction> testers = createTesters();
+	
+	private static Map<Class<?>, IOperatorFunction> createTesters() {
+		Map<Class<?>, IOperatorFunction> map = new HashMap<>(); 
+		map.put(char.class, Character::compileCompareTo);
+		map.put(java.lang.Character.class, Character::compileCompareTo); 
+		map.put(String.class, Text::compileCompareTo); 
+		map.put(double.class, Decimal::compileCompareTo);
+		map.put(Double.class, Decimal::compileCompareTo); 
+		map.put(long.class, Integer::compileCompareTo);
+		map.put(Long.class, Integer::compileCompareTo); 
+		map.put(PromptoDate.class, Date::compileCompareTo); 
+		map.put(PromptoDateTime.class, DateTime::compileCompareTo); 
+		map.put(PromptoTime.class, Time::compileCompareTo); 
+		return map;
+	}
 
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		ResultInfo lval = left.compile(context, method, flags.withNative(true));
+		IOperatorFunction tester = testers.get(lval.getType());
+		if(tester==null) {
+			System.err.println("Missing IOperatorFunction for compare " + lval.getType().getName());
+			throw new SyntaxError("Cannot compare " + lval.getType().getName() + " with " + right.check(context).getName());
+		}
+		return tester.compile(context, method, lval, right, flags.withCmpOp(operator));
+	}
+	
 	@Override
 	public boolean interpretAssert(Context context, TestMethodDeclaration test) throws PromptoError {
 		IValue lval = left.interpret(context);

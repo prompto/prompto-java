@@ -104,6 +104,15 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 			throw new SyntaxError("Illegal comparison: DateTime + " + value.getClass().getSimpleName());
 
 	}
+	
+	public static ResultInfo compileCompareTo(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+		exp.compile(context, method, flags);
+		IOperand oper = new MethodConstant(PromptoDateTime.class, 
+				"compareTo", PromptoDateTime.class, int.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return BaseValue.compileCompareToEpilogue(method, flags);
+	}
+
 
 	@Override
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {

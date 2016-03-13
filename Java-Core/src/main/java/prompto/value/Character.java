@@ -15,6 +15,7 @@ import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
+import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoChar;
 import prompto.runtime.Context;
@@ -93,11 +94,42 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
             return java.lang.Character.compare(this.value, ((Character)value).value);
         else
             throw new SyntaxError("Illegal comparison: Character + " + value.getClass().getSimpleName());
-
     }
 
+    static Opcode[] cmpOpcodes = createOpcodes();
     
-    @Override
+    private static Opcode[] createOpcodes() {
+    	Opcode[] opcodes = new Opcode[CmpOp.values().length];
+    	opcodes[CmpOp.LT.ordinal()] = Opcode.IF_ICMPLT;
+    	opcodes[CmpOp.LTE.ordinal()] = Opcode.IF_ICMPLE;
+    	opcodes[CmpOp.GT.ordinal()] = Opcode.IF_ICMPGT;
+    	opcodes[CmpOp.GTE.ordinal()] = Opcode.IF_ICMPGE;
+ 		return opcodes;
+ 	}
+    
+	public static ResultInfo compileCompareTo(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+		if(java.lang.Character.class==left.getType())
+			CompilerUtils.CharacterTochar(method);
+		ResultInfo right = exp.compile(context, method, flags.withNative(true));
+		if(java.lang.Character.class==right.getType())
+			CompilerUtils.CharacterTochar(method);
+		Opcode opcode = cmpOpcodes[flags.cmpOp().ordinal()];
+		method.addInstruction(opcode, new ShortOperand((short)7));
+		StackState branchState = method.captureStackState();
+		method.addInstruction(Opcode.ICONST_0);
+		method.addInstruction(Opcode.GOTO, new ShortOperand((short)4));
+		method.restoreStackState(branchState);
+		method.placeLabel(branchState);
+		method.addInstruction(Opcode.ICONST_1);
+		StackState lastState = method.captureStackState();
+		method.placeLabel(lastState);
+		if(flags.toNative())
+			return new ResultInfo(boolean.class, false);
+		else
+			return CompilerUtils.booleanToBoolean(method);
+	}
+
+	@Override
     public Object convertTo(Class<?> type) {
         return value;
     }

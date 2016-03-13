@@ -155,6 +155,14 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 			throw new SyntaxError("Illegal comparison: Decimal and " + value.getClass().getSimpleName());
 
 	}
+	
+	public static ResultInfo compileCompareTo(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+		CompilerUtils.numberTodouble(method, left);
+		ResultInfo right = exp.compile(context, method, flags.withNative(true));
+		CompilerUtils.numberTodouble(method, right);
+		method.addInstruction(Opcode.DCMPG);
+		return BaseValue.compileCompareToEpilogue(method, flags);
+	}
 
 	@Override
 	public Object convertTo(Class<?> type) {

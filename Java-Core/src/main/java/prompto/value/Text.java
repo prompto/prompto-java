@@ -109,6 +109,14 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 		else
 			throw new SyntaxError("Illegal comparison: Text + " + value.getClass().getSimpleName());
 	}
+	
+	public static ResultInfo compileCompareTo(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+		exp.compile(context, method, flags);
+		IOperand oper = new MethodConstant(String.class, 
+				"compareTo", String.class, int.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return BaseValue.compileCompareToEpilogue(method, flags);
+	}
 
 	public boolean hasItem(Context context, IValue value) throws PromptoError {
 		if (value instanceof Character)

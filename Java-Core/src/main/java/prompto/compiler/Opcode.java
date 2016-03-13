@@ -44,8 +44,8 @@ import java.util.function.Function;
  */
 public enum Opcode {
     // NOP(0x0),
-    ACONST_NULL(0x1, popsNone(), pushes(ITEM_Null)), /*
-    ICONST_M1(0x2), */
+    ACONST_NULL(0x1, popsNone(), pushes(ITEM_Null)), 
+    ICONST_M1(0x2, popsNone(), pushes(ITEM_Integer)),
     ICONST_0(0x3, popsNone(), pushes(ITEM_Integer)),
     ICONST_1(0x4, popsNone(), pushes(ITEM_Integer)),
     ICONST_2(0x5, popsNone(), pushes(ITEM_Integer)),
@@ -203,11 +203,11 @@ public enum Opcode {
     IFGT(0x9d, BRANCH),
     IFLE(0x9e, BRANCH) */,
     IF_ICMPEQ(0x9f, BRANCH, pops(2), pushesNone()),
-    IF_ICMPNE(0xa0, BRANCH, pops(2), pushesNone())/*,
-    IF_ICMPLT(0xa1, BRANCH),
-    IF_ICMPGE(0xa2, BRANCH),
-    IF_ICMPGT(0xa3, BRANCH),
-    IF_ICMPLE(0xa4, BRANCH),
+    IF_ICMPNE(0xa0, BRANCH, pops(2), pushesNone()),
+    IF_ICMPLT(0xa1, BRANCH, pops(2), pushesNone()),
+    IF_ICMPGE(0xa2, BRANCH, pops(2), pushesNone()),
+    IF_ICMPGT(0xa3, BRANCH, pops(2), pushesNone()),
+    IF_ICMPLE(0xa4, BRANCH, pops(2), pushesNone())/*,
     IF_ACMPEQ(0xa5, BRANCH),
     IF_ACMPNE(0xa6, BRANCH)*/,
     GOTO(0xa7, BRANCH, popsNone(), pushesNone())/*,

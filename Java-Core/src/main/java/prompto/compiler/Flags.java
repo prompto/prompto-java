@@ -3,6 +3,8 @@ package prompto.compiler;
 import java.util.HashMap;
 import java.util.Map;
 
+import prompto.grammar.CmpOp;
+
 public class Flags {
 
 	Map<String, Object> values;
@@ -64,6 +66,14 @@ public class Flags {
 
 	public Flags withRoughly(boolean set) {
 		return clone("roughly", set);
+	}
+
+	public CmpOp cmpOp() {
+		return (CmpOp)values.get("CmpOp");
+	}
+	
+	public Flags withCmpOp(CmpOp operator) {
+		return clone("CmpOp", operator);
 	}
 
 

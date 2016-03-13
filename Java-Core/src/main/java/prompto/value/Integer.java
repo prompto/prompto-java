@@ -296,6 +296,18 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 
 	}
 
+	public static ResultInfo compileCompareTo(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+		boolean isDecimal = isDecimal(context, exp);
+		CompilerUtils.numberToNative(method, left, isDecimal);
+		ResultInfo right = exp.compile(context, method, flags.withNative(true).withDecimal(isDecimal));
+		CompilerUtils.numberToNative(method, right, isDecimal);
+		if(isDecimal)
+			method.addInstruction(Opcode.DCMPG);
+		else
+			method.addInstruction(Opcode.LCMP);
+		return BaseValue.compileCompareToEpilogue(method, flags);
+	}
+
 	@Override
 	public Object convertTo(Class<?> type) {
 		return value;
