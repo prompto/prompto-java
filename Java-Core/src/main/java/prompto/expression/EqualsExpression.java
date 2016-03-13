@@ -103,10 +103,10 @@ public class EqualsExpression implements IExpression, IAssertion {
 			equal = lval!=rval;
 			break;
 		case IS_A:
-			equal = isA(context,lval,rval);
+			equal = interpretIsA(context,lval,rval);
 			break;
 		case IS_NOT_A:
-			equal = !isA(context,lval,rval);
+			equal = !interpretIsA(context,lval,rval);
 			break;
 		case EQUALS:
 			equal = interpretEquals(context,lval,rval);
@@ -120,7 +120,7 @@ public class EqualsExpression implements IExpression, IAssertion {
 		}
 		return Boolean.valueOf(equal);	}
 
-	private boolean isA(Context context, IValue lval, IValue rval) throws PromptoError {
+	private boolean interpretIsA(Context context, IValue lval, IValue rval) throws PromptoError {
 		IType actual = lval.getType();
 		IType toCheck = ((TypeValue)rval).getValue();
 		return actual.isAssignableTo(context, toCheck);
@@ -243,6 +243,8 @@ public class EqualsExpression implements IExpression, IAssertion {
 			return compileEquals(context, method, flags.withReverse(false));
 		case NOT_EQUALS:
 			return compileEquals(context, method, flags.withReverse(true));
+		case ROUGHLY:
+			return compileEquals(context, method, flags.withReverse(false).withRoughly(true));
 		/*
 		case IS:
 			equal = lval==rval;
@@ -259,9 +261,6 @@ public class EqualsExpression implements IExpression, IAssertion {
 			equal = interpretEquals(context,lval,rval);
 			break;
 			equal = !interpretEquals(context,lval,rval);
-			break;
-		case ROUGHLY:
-			equal = lval.roughly(context, rval);
 			break;
 		*/
 		default:

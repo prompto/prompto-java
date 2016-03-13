@@ -11,6 +11,7 @@ public class Flags {
 		this.values = new HashMap<>();
 		this.values.put("native", false);
 		this.values.put("reverse", false);
+		this.values.put("roughly", false);
 		this.values.put("decimal", false);
 		this.values.put("opcode", null);
 	}
@@ -55,6 +56,14 @@ public class Flags {
 
 	public Flags withOpcode(Opcode opcode) {
 		return clone("opcode", opcode);
+	}
+
+	public boolean isRoughly() {
+		return (boolean)values.get("roughly");
+	}
+
+	public Flags withRoughly(boolean set) {
+		return clone("roughly", set);
 	}
 
 

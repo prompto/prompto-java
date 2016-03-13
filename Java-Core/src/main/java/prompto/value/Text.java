@@ -221,10 +221,9 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	
 	public static ResultInfo compileEquals(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
 		exp.compile(context, method, flags);
-		IOperand oper = new MethodConstant(
-				String.class, 
-				"equals",
-				Object.class, boolean.class);
+		IOperand oper = flags.isRoughly() ?
+				new MethodConstant(String.class, "equalsIgnoreCase", String.class, boolean.class) :
+				new MethodConstant(String.class, "equals", Object.class, boolean.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		if(flags.isReverse()) {
 			// perform 1-0
