@@ -12,7 +12,7 @@ import prompto.value.IValue;
 import prompto.value.Integer;
 import prompto.value.IntegerRange;
 import prompto.value.ListValue;
-import prompto.value.Range;
+import prompto.value.RangeBase;
 
 public class IntegerType extends NativeType implements INumberType {
 
@@ -131,7 +131,7 @@ public class IntegerType extends NativeType implements INumberType {
 	}
 	
 	@Override
-	public Range<?> newRange(Object left, Object right) throws SyntaxError {
+	public RangeBase<?> newRange(Object left, Object right) throws SyntaxError {
 		if(left instanceof Integer && right instanceof Integer)
 			return new IntegerRange((Integer)left,(Integer)right);
 		return super.newRange(left, right);

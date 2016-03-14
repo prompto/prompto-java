@@ -13,7 +13,7 @@ import prompto.value.DateRange;
 import prompto.value.IContainer;
 import prompto.value.IValue;
 import prompto.value.ListValue;
-import prompto.value.Range;
+import prompto.value.RangeBase;
 
 
 public class DateType extends NativeType {
@@ -90,7 +90,7 @@ public class DateType extends NativeType {
 	}
 
 	@Override
-	public Range<?> newRange(Object left, Object right) throws SyntaxError {
+	public RangeBase<?> newRange(Object left, Object right) throws SyntaxError {
 		if (left instanceof Date && right instanceof Date)
 			return new DateRange((Date) left, (Date) right);
 		return super.newRange(left, right);

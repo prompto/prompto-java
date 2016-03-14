@@ -30,7 +30,7 @@ public abstract class StackLocal implements IVerifierEntry {
 		return index;
 	}
 
-	static class ObjectLocal extends StackLocal {
+	public static class ObjectLocal extends StackLocal {
 
 		ClassConstant className;
 		
@@ -39,6 +39,10 @@ public abstract class StackLocal implements IVerifierEntry {
 			this.className = className;
 		}
 
+		public ClassConstant getClassName() {
+			return className;
+		}
+		
 		@Override
 		public String toString() {
 			return className.toString();

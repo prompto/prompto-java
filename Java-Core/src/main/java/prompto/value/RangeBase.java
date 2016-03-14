@@ -18,11 +18,11 @@ import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.type.RangeType;
 
-public abstract class Range<T extends IValue> extends BaseValue implements IContainer<T>, IRange<T> {
+public abstract class RangeBase<T extends IValue> extends BaseValue implements IContainer<T>, IRange<T> {
 	
 	PromptoRange<T> range;
 	
-	public Range(IType type, T left, T right) {
+	public RangeBase(IType type, T left, T right) {
 		super(new RangeType(type));
 		// can't just use T extends Comparable<T> because T may already extend Comparable<R> with R!=T
 		int cmp = compare(left,right);
@@ -47,7 +47,7 @@ public abstract class Range<T extends IValue> extends BaseValue implements ICont
 
 	@Override
 	public boolean equals(Object obj) {
-		return obj instanceof Range && range.equals(((Range<?>)obj).range);
+		return obj instanceof RangeBase && range.equals(((RangeBase<?>)obj).range);
 	}
 		
 	public static ResultInfo compileEquals(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
@@ -93,7 +93,7 @@ public abstract class Range<T extends IValue> extends BaseValue implements ICont
 		  			
 	}
 
-	public Range<T> slice(Integer fi, Integer li) throws PromptoError {
+	public RangeBase<T> slice(Integer fi, Integer li) throws PromptoError {
 		long size = length();
 		long _fi = fi==null ? 1L : fi.longValue();
 		if(_fi<0)
@@ -158,7 +158,7 @@ public abstract class Range<T extends IValue> extends BaseValue implements ICont
 	public abstract long length();
 	public abstract int compare(T o1,T o2);
 	public abstract T getItem(long index);
-	public abstract Range<T> newInstance(T left,T right);
+	public abstract RangeBase<T> newInstance(T left,T right);
 
 
 

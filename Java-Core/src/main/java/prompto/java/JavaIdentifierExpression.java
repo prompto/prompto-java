@@ -3,6 +3,7 @@ package prompto.java;
 import java.lang.reflect.Field;
 
 import prompto.compiler.ByteOperand;
+import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.FieldConstant;
 import prompto.compiler.ResultInfo;
@@ -107,22 +108,25 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 		if(named==null)
 			return null;
 		StackLocal local = method.getRegisteredLocal(name);
+		ClassConstant c = local instanceof StackLocal.ObjectLocal ? 
+				((StackLocal.ObjectLocal)local).getClassName() 
+				: new ClassConstant("java/lang/Object");
 		switch(local.getIndex()) {
 		case 0:
-			method.addInstruction(Opcode.ALOAD_0);
+			method.addInstruction(Opcode.ALOAD_0, c);
 			break;
 		case 1:
-			method.addInstruction(Opcode.ALOAD_1);
+			method.addInstruction(Opcode.ALOAD_1, c);
 			break;
 		case 2:
-			method.addInstruction(Opcode.ALOAD_2);
+			method.addInstruction(Opcode.ALOAD_2, c);
 			break;
 		case 3:
-			method.addInstruction(Opcode.ALOAD_3);
+			method.addInstruction(Opcode.ALOAD_3, c);
 			break;
 		default:
 			// TODO: support ALOAD_W
-			method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)local.getIndex()));
+			method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)local.getIndex()), c);
 			break;
 		}
 		// TODO return useful class so we can get members ?

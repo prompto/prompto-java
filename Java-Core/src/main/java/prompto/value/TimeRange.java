@@ -5,7 +5,7 @@ import prompto.type.TimeType;
 
 
 
-public class TimeRange extends Range<Time> {
+public class TimeRange extends RangeBase<Time> {
 
 	public TimeRange(Time left, Time right) {
 		super(TimeType.instance(), left, right);
@@ -30,7 +30,7 @@ public class TimeRange extends Range<Time> {
 	}
 	
 	@Override
-	public Range<Time> newInstance(Time left, Time right) {
+	public RangeBase<Time> newInstance(Time left, Time right) {
 		return new TimeRange(left, right);
 	}
 

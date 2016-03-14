@@ -29,4 +29,10 @@ public class PromptoList<V> extends ArrayList<V> implements IMultiplyable {
 			result.addAll(this);
 		return result;
 	}
+
+	public PromptoList<V> slice(long first, long last) {
+		if (last < 0)
+			last = this.size() + 1 + last;
+		return new PromptoList<>(this.subList((int)(first-1), (int)last));
+	}
 }

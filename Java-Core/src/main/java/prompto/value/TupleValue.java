@@ -1,6 +1,5 @@
 package prompto.value;
 
-import java.lang.Boolean;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -8,11 +7,12 @@ import java.util.List;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.IOperand;
 import prompto.compiler.ResultInfo;
+import prompto.error.IndexOutOfRangeError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
@@ -28,10 +28,14 @@ public class TupleValue extends BaseList<TupleValue, PromptoTuple<IValue>> {
 		super(TupleType.instance());
 	}
 	
-	public TupleValue(List<IValue> items) {
+	public TupleValue(PromptoTuple<IValue> items) {
 		super(TupleType.instance(), items);
 	}
 	
+	public TupleValue(Collection<IValue> items) {
+		super(TupleType.instance(), items);
+	}
+
 	@Override
 	protected PromptoTuple<IValue> newItemsInstance() {
 		return new PromptoTuple<IValue>();
@@ -76,14 +80,37 @@ public class TupleValue extends BaseList<TupleValue, PromptoTuple<IValue>> {
 	}
 	
 	@Override
+	public TupleValue slice(Integer fi, Integer li) throws IndexOutOfRangeError {
+		long _fi = fi == null ? 1L : fi.longValue();
+		if (_fi < 0)
+			throw new IndexOutOfRangeError();
+		long _li = li == null ? items.size() : li.longValue();
+		if (_li > items.size())
+			throw new IndexOutOfRangeError();
+		PromptoTuple<IValue> sliced = items.slice(_fi, _li); // 1 based
+		return new TupleValue(sliced);
+	}
+	
+	public static ResultInfo compileSlice(Context context, MethodInfo method, 
+			ResultInfo parent, IExpression first, IExpression last, Flags flags) throws SyntaxError {
+		compileSliceFirst(context, method, flags, first);
+		compileSliceLast(context, method, flags, last);
+		MethodConstant m = new MethodConstant(PromptoTuple.class, "slice", 
+				long.class, long.class, PromptoTuple.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+		return parent;
+	}
+
+
+	@Override
 	public int compareTo(Context context, IValue value) throws PromptoError {
 		if(!(value instanceof TupleValue))
 			return super.compareTo(context, value);
-		return CompareTo(context, (TupleValue)value, new ArrayList<Boolean>());
+		return CompareTo(context, (TupleValue)value, new ArrayList<java.lang.Boolean>());
 	}
 
-	public int CompareTo(Context context, TupleValue other, Collection<Boolean> directions) throws PromptoError {
-		Iterator<Boolean> iterDirs = directions.iterator();
+	public int CompareTo(Context context, TupleValue other, Collection<java.lang.Boolean> directions) throws PromptoError {
+		Iterator<java.lang.Boolean> iterDirs = directions.iterator();
 		Iterator<IValue> iterThis = this.items.iterator();
 		Iterator<IValue> iterOther = other.items.iterator();
 		while(iterThis.hasNext() && iterOther.hasNext()) {

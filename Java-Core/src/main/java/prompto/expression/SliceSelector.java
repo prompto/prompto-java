@@ -1,8 +1,16 @@
 package prompto.expression;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import prompto.compiler.Flags;
+import prompto.compiler.ISlicerFunction;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.intrinsic.PromptoList;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.type.IntegerType;
@@ -10,6 +18,8 @@ import prompto.utils.CodeWriter;
 import prompto.value.ISliceable;
 import prompto.value.IValue;
 import prompto.value.Integer;
+import prompto.value.ListValue;
+import prompto.value.Text;
 
 public class SliceSelector extends SelectorExpression {
 
@@ -77,6 +87,28 @@ public class SliceSelector extends SelectorExpression {
         }
         else
 			throw new SyntaxError("Illegal sliced object: " + parent);
+	}
+
+	static Map<Class<?>, ISlicerFunction> slicers = createSlicers();
+	
+	private static Map<Class<?>, ISlicerFunction> createSlicers() {
+		Map<Class<?>, ISlicerFunction> map = new HashMap<>(); 
+		map.put(String.class, Text::compileSlice); /*
+		map.put(PromptoRange.class, RangeBase::compileSlice);
+		map.put(PromptoTuple.class, TupleValue::compileSlice)*/;
+		map.put(PromptoList.class, ListValue::compileSlice);
+		return map;
+	}
+
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		ResultInfo pinfo = parent.compile(context, method, flags.withNative(false));
+		ISlicerFunction slicer = slicers.get(pinfo.getType());
+		if(slicer==null) {
+			System.err.println("Missing ISlicerFunction for slice " + pinfo.getType().getName());
+			throw new SyntaxError("Cannot slice " + pinfo.getType().getName());
+		}
+		return slicer.compile(context, method, pinfo, first, last, flags);
 	}
 
 }

@@ -11,7 +11,7 @@ import prompto.runtime.Context;
 import prompto.value.IContainer;
 import prompto.value.IValue;
 import prompto.value.ListValue;
-import prompto.value.Range;
+import prompto.value.RangeBase;
 import prompto.value.Time;
 import prompto.value.TimeRange;
 
@@ -84,7 +84,7 @@ public class TimeType extends NativeType {
 	}
 
 	@Override
-	public Range<?> newRange(Object left, Object right) throws SyntaxError {
+	public RangeBase<?> newRange(Object left, Object right) throws SyntaxError {
 		if (left instanceof Time && right instanceof Time)
 			return new TimeRange((Time) left, (Time) right);
 		return super.newRange(left, right);

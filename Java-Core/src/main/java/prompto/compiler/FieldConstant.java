@@ -17,9 +17,14 @@ public class FieldConstant implements CodeConstant {
 	}
 	
 	public StackEntry toStackEntry() {
-		String desc = fieldNameAndType.getType().getValue();
-		IVerifierEntry.Type type = IVerifierEntry.Type.fromDescriptor(desc);
-		return type.newStackEntry(className);
+		String descriptor = fieldNameAndType.getType().getValue();
+		IVerifierEntry.Type type = IVerifierEntry.Type.fromDescriptor(descriptor);
+		StackEntry entry = type.newStackEntry(null);
+		if(entry instanceof StackEntry.ObjectEntry) {
+			String className = descriptor.substring(1, descriptor.length()-1); // strip 'L' and ';'
+			((StackEntry.ObjectEntry)entry).setClassName(new ClassConstant(className));
+		}
+		return entry;
 	}
 
 

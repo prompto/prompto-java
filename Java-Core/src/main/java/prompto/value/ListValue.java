@@ -4,15 +4,14 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.IOperand;
 import prompto.compiler.ResultInfo;
+import prompto.error.IndexOutOfRangeError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
@@ -25,13 +24,15 @@ import prompto.type.ContainerType;
 import prompto.type.IType;
 import prompto.type.ListType;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+
 public class ListValue extends BaseList<ListValue, PromptoList<IValue>> {
 
 	public ListValue(IType itemType) {
 		super(new ListType(itemType));
 	}
 
-	public ListValue(IType itemType, List<IValue> items) {
+	public ListValue(IType itemType, PromptoList<IValue> items) {
 		super(new ListType(itemType), items);
 	}
 
@@ -120,6 +121,28 @@ public class ListValue extends BaseList<ListValue, PromptoList<IValue>> {
 			throw new SyntaxError("Illegal: List * " + value.getClass().getSimpleName());
 	}
 	
+	@Override
+	public ListValue slice(Integer fi, Integer li) throws IndexOutOfRangeError {
+		long _fi = fi == null ? 1L : fi.longValue();
+		if (_fi < 0)
+			throw new IndexOutOfRangeError();
+		long _li = li == null ? items.size() : li.longValue();
+		if (_li > items.size())
+			throw new IndexOutOfRangeError();
+		PromptoList<IValue> sliced = items.slice(_fi, _li); // 1 based
+		return new ListValue(this.getItemType(), sliced);
+	}
+
+	public static ResultInfo compileSlice(Context context, MethodInfo method, 
+			ResultInfo parent, IExpression first, IExpression last, Flags flags) throws SyntaxError {
+		compileSliceFirst(context, method, flags, first);
+		compileSliceLast(context, method, flags, last);
+		MethodConstant m = new MethodConstant(PromptoList.class, "slice", 
+				long.class, long.class, PromptoList.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+		return parent;
+	}
+
 	@Override
 	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
 		try {

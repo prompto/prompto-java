@@ -306,6 +306,11 @@ public abstract class CompilerUtils {
 			throw new CompilerException("Cannot convert " + info.getType().getName() + " to long");
 	}
 
+	public static ResultInfo numberToint(MethodInfo method, ResultInfo info) {
+		numberTolong(method, info);
+		return longToint(method);
+	}
+
 	public static ResultInfo charToCharacter(MethodInfo method) {
 		IOperand oper = new MethodConstant(
 				Character.class, 
@@ -341,6 +346,7 @@ public abstract class CompilerUtils {
 		newRawInstance(method, klass);
 		return callConstructor(method, klass);
 	}
+
 
 	
 

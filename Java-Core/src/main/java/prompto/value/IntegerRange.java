@@ -3,7 +3,7 @@ package prompto.value;
 import prompto.type.IntegerType;
 
 
-public class IntegerRange extends Range<Integer> {
+public class IntegerRange extends RangeBase<Integer> {
 
 	public IntegerRange(Integer left, Integer right) {
 		super(IntegerType.instance(), left, right);
@@ -28,7 +28,7 @@ public class IntegerRange extends Range<Integer> {
 	}
 
 	@Override
-	public Range<Integer> newInstance(Integer left, Integer right) {
+	public RangeBase<Integer> newInstance(Integer left, Integer right) {
 		return new IntegerRange(left, right);
 	}
 	

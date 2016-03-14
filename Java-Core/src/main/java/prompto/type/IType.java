@@ -10,7 +10,7 @@ import prompto.runtime.Context;
 import prompto.utils.CodeWriter;
 import prompto.value.IContainer;
 import prompto.value.IValue;
-import prompto.value.Range;
+import prompto.value.RangeBase;
 
 public interface IType {
 	
@@ -43,7 +43,7 @@ public interface IType {
 	boolean isAssignableTo(Context context, IType other);
 	boolean isMoreSpecificThan(Context context, IType other);
 	
-	Range<?> newRange(Object first,Object last) throws SyntaxError;
+	RangeBase<?> newRange(Object first,Object last) throws SyntaxError;
 	IValue sort(Context context,IContainer<IValue> values) throws PromptoError;
 	
 	IValue convertJavaValueToPromptoValue(Object value);

@@ -46,7 +46,7 @@ import prompto.value.Integer;
 import prompto.value.ListValue;
 import prompto.value.NullValue;
 import prompto.value.Period;
-import prompto.value.Range;
+import prompto.value.RangeBase;
 import prompto.value.SetValue;
 import prompto.value.Text;
 import prompto.value.Time;
@@ -231,7 +231,7 @@ public class EqualsExpression implements IExpression, IAssertion {
 		map.put(Double.class, Decimal::compileEquals); 
 		map.put(long.class, Integer::compileEquals);
 		map.put(Long.class, Integer::compileEquals); 
-		map.put(PromptoRange.class, Range::compileEquals); 
+		map.put(PromptoRange.class, RangeBase::compileEquals); 
 		map.put(PromptoDate.class, Date::compileEquals); 
 		map.put(PromptoDateTime.class, DateTime::compileEquals); 
 		map.put(PromptoTime.class, Time::compileEquals); 

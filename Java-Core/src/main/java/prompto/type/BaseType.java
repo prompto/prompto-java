@@ -19,7 +19,7 @@ import prompto.value.ExpressionValue;
 import prompto.value.IContainer;
 import prompto.value.IValue;
 import prompto.value.ListValue;
-import prompto.value.Range;
+import prompto.value.RangeBase;
 
 public abstract class BaseType implements IType {
 
@@ -162,7 +162,7 @@ public abstract class BaseType implements IType {
 	}
 
 	@Override
-	public Range<?> newRange(Object left, Object right) throws SyntaxError {
+	public RangeBase<?> newRange(Object left, Object right) throws SyntaxError {
 		throw new SyntaxError("Cannot create range of " + this.getId());
 	}
 

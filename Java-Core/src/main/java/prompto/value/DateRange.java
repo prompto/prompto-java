@@ -5,7 +5,7 @@ import prompto.type.DateType;
 
 
 
-public class DateRange extends Range<Date> {
+public class DateRange extends RangeBase<Date> {
 
 	public DateRange(Date left, Date right) {
 		super(DateType.instance(), left, right);
@@ -32,7 +32,7 @@ public class DateRange extends Range<Date> {
 	}
 	
 	@Override
-	public Range<Date> newInstance(Date left, Date right) {
+	public RangeBase<Date> newInstance(Date left, Date right) {
 		return new DateRange(left, right);
 	}
 

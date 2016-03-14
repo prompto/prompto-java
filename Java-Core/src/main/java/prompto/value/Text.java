@@ -11,6 +11,8 @@ import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
+import prompto.compiler.ShortOperand;
+import prompto.compiler.StackState;
 import prompto.error.IndexOutOfRangeError;
 import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
@@ -193,25 +195,80 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	}
 
 	public ISliceable<Character> slice(Integer fi, Integer li) throws PromptoError {
-		int first = checkFirst(fi);
-		int last = checkLast(li);
+		int first = checkSliceFirst(fi);
+		int last = checkSliceLast(li);
 		return new Text(value.substring(first - 1, last ));
 	}
-
-	private int checkFirst(Integer fi) throws IndexOutOfRangeError {
+	
+	private int checkSliceFirst(Integer fi) throws IndexOutOfRangeError {
 		int value = (fi == null) ? 1 : (int) fi.longValue();
 		if (value < 1 || value > this.value.length())
 			throw new IndexOutOfRangeError();
 		return value;
 	}
 
-	private int checkLast(Integer li) throws IndexOutOfRangeError {
+	private int checkSliceLast(Integer li) throws IndexOutOfRangeError {
 		int value = (li == null) ? this.value.length() : (int) li.longValue();
 		if (value < 0)
 			value = this.value.length() + 1 + (int) li.longValue();
 		if (value < 1 || value > this.value.length())
 			throw new IndexOutOfRangeError();
 		return value;
+	}
+
+	public static ResultInfo compileSlice(Context context, MethodInfo method, 
+			ResultInfo parent, IExpression first, IExpression last, Flags flags) throws SyntaxError {
+		compileSliceFirst(context, method, flags, first);
+		compileSliceLast(context, method, flags, last);
+		MethodConstant m = new MethodConstant(String.class, "substring", 
+				int.class, int.class, String.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+		return parent;
+	}
+	
+	private static void compileSliceFirst(Context context, MethodInfo method, Flags flags, IExpression first) throws SyntaxError {
+		if(first==null)
+			method.addInstruction(Opcode.ICONST_0);
+		else {
+			ResultInfo finfo = first.compile(context, method, flags.withNative(true));
+			finfo = CompilerUtils.numberToint(method, finfo);
+			// convert from 1 based to 0 based
+			method.addInstruction(Opcode.ICONST_M1);
+			method.addInstruction(Opcode.IADD);
+		}
+	}
+
+	private static void compileSliceLast(Context context, MethodInfo method, Flags flags, IExpression last) throws SyntaxError {
+		// always compile last index since we need to manage negative values
+		compileSliceMaxIndex(method);
+		// stack is now obj, int, int (max)
+		if(last!=null) {
+			ResultInfo linfo = last.compile(context, method, flags.withNative(true));
+			linfo = CompilerUtils.numberToint(method, linfo);
+			// stack is now obj, int, int (max), int (last)
+			// manage negative index
+			method.addInstruction(Opcode.DUP); // push last -> OIIII
+			method.addInstruction(Opcode.IFGE, new ShortOperand((short)9)); // consume last -> OIII
+			StackState branchState = method.captureStackState();
+			method.addInstruction(Opcode.IADD); // add max to negative last -> OII
+			method.addInstruction(Opcode.ICONST_1); // -> OIII
+			method.addInstruction(Opcode.IADD); // add 1 to last -> OII
+			method.addInstruction(Opcode.GOTO, new ShortOperand((short)5));
+			method.restoreStackState(branchState);
+			method.placeLabel(branchState);
+			method.addInstruction(Opcode.SWAP); // swap max and last -> OIII
+			method.addInstruction(Opcode.POP); // forget max -> OII
+			StackState lastState = method.captureStackState();
+			method.placeLabel(lastState);			
+		}
+	}
+
+	private static void compileSliceMaxIndex(MethodInfo method) {
+		// stack is obj, int we need obj, int, obj
+		method.addInstruction(Opcode.SWAP); // -> int, obj
+		method.addInstruction(Opcode.DUP_X1); // obj, int, obj
+		MethodConstant m = new MethodConstant(String.class, "length", int.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 	}
 
 	@Override

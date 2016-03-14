@@ -13,7 +13,7 @@ import prompto.value.CharacterRange;
 import prompto.value.IContainer;
 import prompto.value.IValue;
 import prompto.value.ListValue;
-import prompto.value.Range;
+import prompto.value.RangeBase;
 
 public class CharacterType extends NativeType {
 
@@ -66,7 +66,7 @@ public class CharacterType extends NativeType {
 	}
 	
 	@Override
-	public Range<?> newRange(Object left, Object right) throws SyntaxError {
+	public RangeBase<?> newRange(Object left, Object right) throws SyntaxError {
 		if(left instanceof Character && right instanceof Character)
 			return new CharacterRange((Character)left,(Character)right);
 		return super.newRange(left, right);

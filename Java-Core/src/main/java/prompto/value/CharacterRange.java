@@ -3,7 +3,7 @@ package prompto.value;
 import prompto.type.CharacterType;
 
 
-public class CharacterRange extends Range<Character> {
+public class CharacterRange extends RangeBase<Character> {
 
 	public CharacterRange(Character left, Character right) {
 		super(CharacterType.instance(), left, right);
@@ -28,7 +28,7 @@ public class CharacterRange extends Range<Character> {
 	}
 	
 	@Override
-	public Range<Character> newInstance(Character left, Character right) {
+	public RangeBase<Character> newInstance(Character left, Character right) {
 		return new CharacterRange(left, right);
 	}
 

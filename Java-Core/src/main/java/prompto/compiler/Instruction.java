@@ -2,10 +2,10 @@ package prompto.compiler;
 
 public class Instruction implements IInstruction {
 
-	static boolean DUMP = isDUMP();
+	static int DUMP_LEVEL = getDumpLevel();
 	
-	private static boolean isDUMP() {
-		return false;
+	private static int getDumpLevel() {
+		return 0;
 	}
 	
 	Opcode opcode;
@@ -19,7 +19,7 @@ public class Instruction implements IInstruction {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder(opcode.name());
-		sb.append('/');
+		sb.append(' ');
 		if(operands==null || operands.length==0)
 			sb.append("[]");
 		else {
@@ -37,15 +37,6 @@ public class Instruction implements IInstruction {
 	@Override
 	public void rehearse(CodeAttribute code) {
 		updateStack(code.getStack());
-		if(DUMP) {
-			System.err.print(opcode.name() + " ");
-			for(int i=0;i<operands.length;i++) {
-				if(i>0)
-					System.err.print(",");
-					System.err.print(operands[i].toString());
-			}
-			System.err.println(" -> " + code.getStack().getState().toString());
-		}
 	}
 	
 	@Override
@@ -85,6 +76,8 @@ public class Instruction implements IInstruction {
 				case CPREF_W:
 					writer.writeU2(((IConstantOperand)operands[0]).getIndexInConstantPool());
 					break;
+				case NO_OPERANDS:
+					break;
 				default:
 					throw new UnsupportedOperationException(opcode.kind.name()); 
 			}
@@ -99,17 +92,19 @@ public class Instruction implements IInstruction {
 	}
 
 	private void updateStack(StackMapTableAttribute stack) {
-		if(DUMP)
+		if(DUMP_LEVEL>1) {
 			System.err.println(this.toString());
-		if(DUMP)
 			System.err.println("Before pop: " + stack.getState().toString());
+		}
 		StackEntry[] popped = stack.pop(opcode.getPopped(this));
-		if(DUMP)
+		if(DUMP_LEVEL>1)
 			System.err.println("After pop: " + stack.getState().toString());
 		StackEntry[] pushed = opcode.getPushed(this, popped);
 		stack.push(pushed);
-		if(DUMP)
+		if(DUMP_LEVEL>1)
 			System.err.println("After push: " + stack.getState().toString());
+		else if(DUMP_LEVEL>0)
+			System.err.println(this.toString() + " -> " + stack.getState().toString());
 	}
 
 	public ClassConstant getClassConstant() {
