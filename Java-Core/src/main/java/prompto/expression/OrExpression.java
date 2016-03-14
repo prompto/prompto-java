@@ -1,5 +1,14 @@
 package prompto.expression;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.IInstructionListener;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.OffsetListenerConstant;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.ShortOperand;
+import prompto.compiler.StackState;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -73,6 +82,34 @@ public class OrExpression implements IExpression, IAssertion {
 		} else
 			throw new SyntaxError("Illegal: " + lval.getClass().getSimpleName() + " + " + rval.getClass().getSimpleName());
 	}
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		ResultInfo li = left.compile(context, method, flags.withNative(true));
+		if(Boolean.class==li.getType())
+			CompilerUtils.BooleanToboolean(method);
+		IInstructionListener olc = method.addOffsetListener(new OffsetListenerConstant());
+		method.activateOffsetListener(olc);
+		method.addInstruction(Opcode.IFNE, olc);
+		ResultInfo ri = right.compile(context, method, flags.withNative(true));
+		if(Boolean.class==ri.getType())
+			CompilerUtils.BooleanToboolean(method);
+		method.addInstruction(Opcode.IFNE, new ShortOperand((short)7));
+		StackState branchState = method.captureStackState();
+		method.addInstruction(Opcode.ICONST_0);
+		method.addInstruction(Opcode.GOTO, new ShortOperand((short)4));
+		method.restoreStackState(branchState);
+		method.placeLabel(branchState);
+		method.inhibitOffsetListener(olc);
+		method.addInstruction(Opcode.ICONST_1);
+		StackState lastState = method.captureStackState();
+		method.placeLabel(lastState);
+		if(flags.toNative())
+			return new ResultInfo(boolean.class, false);
+		else
+			return CompilerUtils.booleanToBoolean(method);
+	}
+	
 
 	@Override
 	public boolean interpretAssert(Context context, TestMethodDeclaration test) throws PromptoError {

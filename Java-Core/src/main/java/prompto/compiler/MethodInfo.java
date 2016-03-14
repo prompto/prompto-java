@@ -37,6 +37,19 @@ public class MethodInfo {
 		return codeAttribute.addInstruction(instruction);
 	}
 
+	public IInstructionListener addOffsetListener(IInstructionListener listener) {
+		createCodeAttribute();
+		return codeAttribute.addOffsetListener(listener);
+	}
+	
+	public IInstruction activateOffsetListener(IInstructionListener listener) {
+		return codeAttribute.activateOffsetListener(listener);
+	}
+
+	public IInstruction inhibitOffsetListener(IInstructionListener listener) {
+		return codeAttribute.inhibitOffsetListener(listener);
+	}
+
 	public StackLocal registerLocal(String name, Type type, ClassConstant className) {
 		StackLocal local = getRegisteredLocal(name);
 		if(local!=null)

@@ -20,6 +20,7 @@ public class CodeAttribute implements IAttribute {
 	LocalVariableTableAttribute locals = new LocalVariableTableAttribute();
 	StackMapTableAttribute stack = new StackMapTableAttribute(locals);
 	{ attributes.add(stack); } // TODO add locals so they get stored
+	List<IInstructionListener> listeners = new ArrayList<>();
 	byte[] opcodes = null;
 	
 	
@@ -58,6 +59,40 @@ public class CodeAttribute implements IAttribute {
 		return capture.getState();
 	}
 	
+	static class ListenerActivator implements IInstruction {
+
+		Runnable method;
+		
+		public ListenerActivator(Runnable method) {
+			this.method = method;
+		}
+
+		@Override public void rehearse(CodeAttribute code) { 
+			method.run();
+		}
+		
+		@Override public void register(ConstantsPool pool) { /* nothing to do */ }
+		@Override public void writeTo(ByteWriter writer) { /* nothing to do */ }
+		
+	}
+	
+	public IInstructionListener addOffsetListener(IInstructionListener listener) {
+		listeners.add(listener);
+		return listener;
+	}
+	
+	public IInstruction activateOffsetListener(IInstructionListener listener) {
+		ListenerActivator activator = new ListenerActivator(listener::activate);
+		instructions.add(activator);
+		return activator;
+	}
+
+	public IInstruction inhibitOffsetListener(IInstructionListener listener) {
+		ListenerActivator activator = new ListenerActivator(listener::inhibit);
+		instructions.add(activator);
+		return activator;
+	}
+
 	static class RestoreStackState implements IInstruction {
 
 		StackState state;
@@ -124,10 +159,17 @@ public class CodeAttribute implements IAttribute {
 	
 	@Override
 	public void register(ConstantsPool pool) {
-		instructions.forEach((i)->
-			i.rehearse(this));
-		instructions.forEach((i)->
-			i.register(pool));
+		instructions.forEach((i)-> {
+			listeners.forEach((l)->
+				l.onRehearse(i));
+			i.rehearse(this);
+		});
+
+		instructions.forEach((i)-> {
+			listeners.forEach((l)->
+				l.onRegister(i));
+			i.register(pool);
+		});
 		attributeName.register(pool);
 		attributes.forEach((a)->
 			a.register(pool));
@@ -142,6 +184,8 @@ public class CodeAttribute implements IAttribute {
 		ByteArrayOutputStream o = new ByteArrayOutputStream();
 		ByteWriter w = new ByteWriter(o);
 		instructions.forEach((i)-> {
+			listeners.forEach((l)->
+				l.onWriteTo(i));
 			i.writeTo(w);
 		});
 		return o.toByteArray();

@@ -1,5 +1,10 @@
 package prompto.expression;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -58,6 +63,21 @@ public class NotExpression implements IUnaryExpression, IAssertion {
 			throw new SyntaxError("Illegal: not " + val.getClass().getSimpleName());
 	}
 
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		ResultInfo info = expression.compile(context, method, flags.withNative(true));
+		if(Boolean.class==info.getType())
+			CompilerUtils.BooleanToboolean(method);
+		// perform 1-0
+		method.addInstruction(Opcode.ICONST_1);
+		method.addInstruction(Opcode.SWAP);
+		method.addInstruction(Opcode.ISUB);
+		if(flags.toNative())
+			return new ResultInfo(boolean.class, false);
+		else
+			return CompilerUtils.booleanToBoolean(method);
+	}
+	
 	@Override
 	public boolean interpretAssert(Context context, TestMethodDeclaration test) throws PromptoError {
 		IValue val = expression.interpret(context);
