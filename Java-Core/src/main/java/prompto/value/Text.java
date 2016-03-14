@@ -218,15 +218,15 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 
 	public static ResultInfo compileSlice(Context context, MethodInfo method, 
 			ResultInfo parent, IExpression first, IExpression last, Flags flags) throws SyntaxError {
-		compileSliceFirst(context, method, flags, first);
-		compileSliceLast(context, method, flags, last);
+		compileTextSliceFirst(context, method, flags, first);
+		compileTextSliceLast(context, method, flags, last);
 		MethodConstant m = new MethodConstant(String.class, "substring", 
 				int.class, int.class, String.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 		return parent;
 	}
 	
-	private static void compileSliceFirst(Context context, MethodInfo method, Flags flags, IExpression first) throws SyntaxError {
+	private static void compileTextSliceFirst(Context context, MethodInfo method, Flags flags, IExpression first) throws SyntaxError {
 		if(first==null)
 			method.addInstruction(Opcode.ICONST_0);
 		else {
@@ -238,7 +238,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 		}
 	}
 
-	private static void compileSliceLast(Context context, MethodInfo method, Flags flags, IExpression last) throws SyntaxError {
+	private static void compileTextSliceLast(Context context, MethodInfo method, Flags flags, IExpression last) throws SyntaxError {
 		// always compile last index since we need to manage negative values
 		compileSliceMaxIndex(method);
 		// stack is now obj, int, int (max)

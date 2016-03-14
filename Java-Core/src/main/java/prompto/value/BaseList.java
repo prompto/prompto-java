@@ -3,16 +3,10 @@ package prompto.value;
 import java.util.Collection;
 import java.util.List;
 
-import prompto.compiler.CompilerUtils;
-import prompto.compiler.Flags;
-import prompto.compiler.MethodInfo;
-import prompto.compiler.Opcode;
-import prompto.compiler.ResultInfo;
 import prompto.error.IndexOutOfRangeError;
 import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
-import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.type.ContainerType;
@@ -125,25 +119,5 @@ public abstract class BaseList<T extends BaseList<T,I>,I extends List<IValue>> e
 		else
 			throw new InvalidDataError("No such member:" + name);
 	}
-
-	protected static void compileSliceLast(Context context, MethodInfo method, Flags flags, IExpression last) throws SyntaxError {
-		if(last==null) {
-			method.addInstruction(Opcode.LCONST_1);
-			method.addInstruction(Opcode.LNEG);
-		} else {
-			ResultInfo linfo = last.compile(context, method, flags.withNative(true));
-			linfo = CompilerUtils.numberTolong(method, linfo);
-		}
-	}
-	
-	protected static void compileSliceFirst(Context context, MethodInfo method, Flags flags, IExpression first) throws SyntaxError {
-		if(first==null)
-			method.addInstruction(Opcode.LCONST_1);
-		else {
-			ResultInfo finfo = first.compile(context, method, flags.withNative(true));
-			finfo = CompilerUtils.numberTolong(method, finfo);
-		}
-	}
-
 
 }

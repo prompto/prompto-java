@@ -8,6 +8,8 @@ import prompto.compiler.ResultInfo;
 import prompto.compiler.ShortOperand;
 import prompto.compiler.StackState;
 import prompto.error.PromptoError;
+import prompto.error.SyntaxError;
+import prompto.expression.IExpression;
 import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
@@ -129,4 +131,24 @@ public abstract class BaseValue implements IValue {
 		else
 			return CompilerUtils.booleanToBoolean(method);
 	}
+	
+	public static void compileSliceLast(Context context, MethodInfo method, Flags flags, IExpression last) throws SyntaxError {
+		if(last==null) {
+			method.addInstruction(Opcode.LCONST_1);
+			method.addInstruction(Opcode.LNEG);
+		} else {
+			ResultInfo linfo = last.compile(context, method, flags.withNative(true));
+			linfo = CompilerUtils.numberTolong(method, linfo);
+		}
+	}
+	
+	public static void compileSliceFirst(Context context, MethodInfo method, Flags flags, IExpression first) throws SyntaxError {
+		if(first==null)
+			method.addInstruction(Opcode.LCONST_1);
+		else {
+			ResultInfo finfo = first.compile(context, method, flags.withNative(true));
+			finfo = CompilerUtils.numberTolong(method, finfo);
+		}
+	}
+
 }

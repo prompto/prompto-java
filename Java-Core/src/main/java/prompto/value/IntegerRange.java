@@ -1,12 +1,45 @@
 package prompto.value;
 
+import prompto.intrinsic.PromptoRange;
 import prompto.type.IntegerType;
 
 
 public class IntegerRange extends RangeBase<Integer> {
 
+	static class PromptoIntegerRange extends PromptoRange<Integer> {
+
+		public PromptoIntegerRange(Integer low, Integer high) {
+			super(low, high);
+		}
+		
+		@Override
+		public Integer getItem(long item) {
+			java.lang.Long result = low.longValue() + item - 1;
+			if(result>high.longValue())
+				throw new IndexOutOfBoundsException();
+			return new Integer(result);
+		}
+		
+		@Override
+		public long length() {
+			return 1L + high.longValue() - low.longValue();
+		}
+			
+		@Override
+		public PromptoIntegerRange slice(long first, long last) {
+			last = adjustLastSliceIndex(last);
+			return new PromptoIntegerRange(getItem(first), getItem(last));
+		}
+
+
+	}
+	
 	public IntegerRange(Integer left, Integer right) {
-		super(IntegerType.instance(), left, right);
+		this(new PromptoIntegerRange(left, right));
+	}
+
+	public IntegerRange(PromptoRange<Integer> range) {
+		super(IntegerType.instance(), range);
 	}
 
 	@Override
@@ -20,16 +53,8 @@ public class IntegerRange extends RangeBase<Integer> {
 	}
 	
 	@Override
-	public Integer getItem(long index) {
-		Long result = getLow().longValue() + index - 1;
-		if(result>getHigh().longValue())
-			throw new IndexOutOfBoundsException();
-		return new Integer(result);
-	}
-
-	@Override
-	public RangeBase<Integer> newInstance(Integer left, Integer right) {
-		return new IntegerRange(left, right);
+	public RangeBase<Integer> newInstance(PromptoRange<Integer> range) {
+		return new IntegerRange(range);
 	}
 	
 

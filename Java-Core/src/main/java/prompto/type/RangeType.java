@@ -1,6 +1,10 @@
 package prompto.type;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import prompto.error.SyntaxError;
+import prompto.intrinsic.PromptoRange;
 import prompto.runtime.Context;
 
 public class RangeType extends ContainerType {
@@ -13,10 +17,21 @@ public class RangeType extends ContainerType {
 	public boolean isAssignableTo(Context context, IType other) {
 		return this.equals(other);
 	}
-
+	
+	static Map<IType,Class<?>> rangeClassMap = createRangeClassMap();
+	
+	private static Map<IType, Class<?>> createRangeClassMap() {
+		Map<IType,Class<?>> map = new HashMap<>();
+		map.put(CharacterType.instance(), PromptoRange.Character.class);
+		map.put(IntegerType.instance(), PromptoRange.Long.class);
+		map.put(DateType.instance(), PromptoRange.Date.class);
+		map.put(TimeType.instance(), PromptoRange.Time.class);
+		return map;
+	}
+	
 	@Override
 	public Class<?> toJavaClass() {
-		return null; // no equivalent
+		return rangeClassMap.get(itemType); 
 	}
 	
 

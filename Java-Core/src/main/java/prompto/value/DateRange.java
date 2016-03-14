@@ -1,21 +1,49 @@
 package prompto.value;
 
 import prompto.intrinsic.PromptoDate;
+import prompto.intrinsic.PromptoRange;
 import prompto.type.DateType;
 
 
 
 public class DateRange extends RangeBase<Date> {
 
-	public DateRange(Date left, Date right) {
-		super(DateType.instance(), left, right);
+	static class PromptoDateRange extends PromptoRange<Date> {
+
+		public PromptoDateRange(prompto.value.Date low, prompto.value.Date high) {
+			super(low, high);
+		}
+		
+		@Override
+		public prompto.value.Date getItem(long item) {
+			PromptoDate result = low.getValue().plusDays(item-1);
+			if(result.isAfter(high.getValue()))
+				throw new IndexOutOfBoundsException();
+			return new prompto.value.Date(result);
+		}
+		
+		@Override
+		public PromptoDateRange slice(long first, long last) {
+			last = adjustLastSliceIndex(last);
+			return new PromptoDateRange(getItem(first), getItem(last));
+		}
+
+		@Override
+		public long length() {
+			long h = high.getValue().toJavaTime();
+			long l = low.getValue().toJavaTime();
+			return 1 + ( (h-l)/(24*60*60*1000));
+		}
+
+		
 	}
 	
-	@Override
-	public long length() {
-		long h = getHigh().getValue().toJavaTime();
-		long l = getLow().getValue().toJavaTime();
-		return 1 + ( (h-l)/(24*60*60*1000));
+	public DateRange(Date left, Date right) {
+		this(new PromptoDateRange(left, right));
+	}
+	
+	public DateRange(PromptoRange<Date> range) {
+		super(DateType.instance(), range);
 	}
 
 	@Override
@@ -24,16 +52,8 @@ public class DateRange extends RangeBase<Date> {
 	}
 
 	@Override
-	public Date getItem(long index) {
-		PromptoDate result = getLow().getValue().plusDays(index-1);
-		if(result.isAfter(getHigh().getValue()))
-			throw new IndexOutOfBoundsException();
-		return new Date(result);
-	}
-	
-	@Override
-	public RangeBase<Date> newInstance(Date left, Date right) {
-		return new DateRange(left, right);
+	public RangeBase<Date> newInstance(PromptoRange<Date> range) {
+		return new DateRange(range);
 	}
 
 }

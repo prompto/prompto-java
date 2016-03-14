@@ -9,7 +9,6 @@ import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
-import prompto.error.IndexOutOfRangeError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
@@ -22,14 +21,9 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 	
 	PromptoRange<T> range;
 	
-	public RangeBase(IType type, T left, T right) {
+	protected RangeBase(IType type, PromptoRange<T> range) {
 		super(new RangeType(type));
-		// can't just use T extends Comparable<T> because T may already extend Comparable<R> with R!=T
-		int cmp = compare(left,right);
-		if(cmp<0)
-			range = new PromptoRange<T>(left, right);
-		else
-			range = new PromptoRange<T>(right, left);
+		this.range = range;
 	}
 	
 	@Override
@@ -45,6 +39,11 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 		return range.getHigh();
 	}
 
+	@Override
+	public long length() {
+		return range.length();
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		return obj instanceof RangeBase && range.equals(((RangeBase<?>)obj).range);
@@ -75,35 +74,29 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 		return compare(val, getLow())>=0 && compare(getHigh(), val)>=0;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public T getItem(Context context, IValue index) throws PromptoError {
 		if (index instanceof Integer) {
-			try {
-				Object value = this.getItem(((Integer) index).longValue());
-				if (value instanceof IValue)
-					return (T) value;
-				else
-					throw new InternalError("Item not a value!");
-			} catch (IndexOutOfBoundsException e) {
-				throw new IndexOutOfRangeError();
-			}
-
+			return range.getItem(((Integer) index).longValue());
 		} else
 			throw new SyntaxError("No such item:" + index.toString());
 		  			
 	}
 
 	public RangeBase<T> slice(Integer fi, Integer li) throws PromptoError {
-		long size = length();
 		long _fi = fi==null ? 1L : fi.longValue();
-		if(_fi<0)
-			throw new IndexOutOfRangeError();
-		long _li = li==null ? size : li.longValue();
-		if(_li<0)
-			_li = size + 1 + _li;
-		else if(_li>size)
-			throw new IndexOutOfRangeError();
-		return newInstance(getItem(_fi),getItem(_li));
+		long _li = li==null ? -1L : li.longValue();
+		PromptoRange<T> sliced = range.slice(_fi, _li);
+		return newInstance(sliced);
+	}
+
+	public static ResultInfo compileSlice(Context context, MethodInfo method, 
+			ResultInfo parent, IExpression first, IExpression last, Flags flags) throws SyntaxError {
+		compileSliceFirst(context, method, flags, first);
+		compileSliceLast(context, method, flags, last);
+		MethodConstant m = new MethodConstant(parent.getType(), "slice", 
+				long.class, long.class, parent.getType());
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+		return parent;
 	}
 
 	@Override
@@ -155,10 +148,8 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 		return length()==0;
 	}
 	
-	public abstract long length();
 	public abstract int compare(T o1,T o2);
-	public abstract T getItem(long index);
-	public abstract RangeBase<T> newInstance(T left,T right);
+	public abstract RangeBase<T> newInstance(PromptoRange<T> range);
 
 
 
