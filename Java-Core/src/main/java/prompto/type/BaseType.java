@@ -152,6 +152,8 @@ public abstract class BaseType implements IType {
 
 	@Override
 	public final void checkAssignableTo(Context context, IType other) throws SyntaxError {
+		if(other==DocumentType.instance() || other==AnyType.instance())
+			return;
 		if (!isAssignableTo(context, other))
 			throw new SyntaxError("Type: " + this.getId() + " is not compatible with: " + other.getId());
 	}

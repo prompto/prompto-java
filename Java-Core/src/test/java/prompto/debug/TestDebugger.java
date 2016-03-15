@@ -65,7 +65,7 @@ public class TestDebugger extends BaseEParserTest {
 
 	@Test
 	public void testStackNoDebug() throws Exception {
-		interpretResource("debug/stack.pec");
+		interpretResource("debug/stack.pec", false);
 		assertEquals("test123-ok", Out.read());
 	}
 

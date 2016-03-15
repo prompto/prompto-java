@@ -9,6 +9,7 @@ import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
+import prompto.error.IndexOutOfRangeError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
@@ -76,17 +77,25 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 	
 	public T getItem(Context context, IValue index) throws PromptoError {
 		if (index instanceof Integer) {
-			return range.getItem(((Integer) index).longValue());
+			try {
+				return range.getItem(((Integer) index).longValue());
+			} catch (IndexOutOfBoundsException e) {
+				throw new IndexOutOfRangeError();
+			}
 		} else
 			throw new SyntaxError("No such item:" + index.toString());
 		  			
 	}
 
 	public RangeBase<T> slice(Integer fi, Integer li) throws PromptoError {
-		long _fi = fi==null ? 1L : fi.longValue();
-		long _li = li==null ? -1L : li.longValue();
-		PromptoRange<T> sliced = range.slice(_fi, _li);
-		return newInstance(sliced);
+		try {
+			long _fi = fi==null ? 1L : fi.longValue();
+			long _li = li==null ? -1L : li.longValue();
+			PromptoRange<T> sliced = range.slice(_fi, _li);
+			return newInstance(sliced);
+		} catch (IndexOutOfBoundsException e) {
+			throw new IndexOutOfRangeError();
+		}
 	}
 
 	public static ResultInfo compileSlice(Context context, MethodInfo method, 

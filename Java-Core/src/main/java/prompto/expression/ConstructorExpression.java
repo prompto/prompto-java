@@ -104,6 +104,7 @@ public class ConstructorExpression implements IExpression {
 				throw new SyntaxError("Cannot copy from " + cft.getId());
 		}
 		if(assignments!=null) {
+			context = context.newChildContext();
 			for(ArgumentAssignment assignment : assignments) {
 				if(!cd.hasAttribute(context, assignment.getName()))
 					throw new SyntaxError("\"" + assignment.getName() + 

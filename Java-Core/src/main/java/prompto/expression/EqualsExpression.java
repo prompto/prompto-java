@@ -231,7 +231,10 @@ public class EqualsExpression implements IExpression, IAssertion {
 		map.put(Double.class, Decimal::compileEquals); 
 		map.put(long.class, Integer::compileEquals);
 		map.put(Long.class, Integer::compileEquals); 
-		map.put(PromptoRange.class, RangeBase::compileEquals); 
+		map.put(PromptoRange.Long.class, RangeBase::compileEquals); 
+		map.put(PromptoRange.Character.class, RangeBase::compileEquals); 
+		map.put(PromptoRange.Date.class, RangeBase::compileEquals); 
+		map.put(PromptoRange.Time.class, RangeBase::compileEquals); 
 		map.put(PromptoDate.class, Date::compileEquals); 
 		map.put(PromptoDateTime.class, DateTime::compileEquals); 
 		map.put(PromptoTime.class, Time::compileEquals); 

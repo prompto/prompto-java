@@ -5,6 +5,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.runtime.Context;
+import prompto.type.AnyType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
@@ -44,12 +45,12 @@ public class MemberInstance implements IAssignableSelector {
 	
 	@Override
 	public IType checkAssignMember(Context context, Identifier memberName) throws SyntaxError {
-		return parent.checkAssignMember(context, name);
+		return parent.checkAssignMember(context, name); // TODO
 	}
 	
 	@Override
 	public IType checkAssignElement(Context context) throws SyntaxError {
-		throw new UnsupportedOperationException();
+		return AnyType.instance(); // TODO
 	}
 	
 	@Override

@@ -23,7 +23,7 @@ public class ListType extends ContainerType {
 	
 	@Override
 	public boolean isAssignableTo(Context context, IType other) {
-		return (other instanceof ListType) && itemType.isAssignableTo(context, ((ListType)other).getItemType());
+		return other instanceof ListType && itemType.isAssignableTo(context, ((ListType)other).getItemType());
 	}
 
 	@Override

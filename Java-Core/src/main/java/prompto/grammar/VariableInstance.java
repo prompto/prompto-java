@@ -3,9 +3,9 @@ package prompto.grammar;
 import prompto.compiler.ByteOperand;
 import prompto.compiler.ClassConstant;
 import prompto.compiler.IVerifierEntry.Type;
-import prompto.compiler.ResultInfo;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -86,10 +86,11 @@ public class VariableInstance implements IAssignableInstance {
 	
 	@Override
 	public IType checkAssignMember(Context context, Identifier memberName) throws SyntaxError {
-		INamed actual = context.getRegisteredValue(INamed.class,id);
+		INamed actual = context.getRegisteredValue(INamed.class, id);
 		if(actual==null) 
 			throw new SyntaxError("Unknown variable:" + this.id);
-		return actual.getType(context);
+		IType parentType = actual.getType(context);
+		return parentType.checkMember(context, memberName);
 	}
 	
 	@Override

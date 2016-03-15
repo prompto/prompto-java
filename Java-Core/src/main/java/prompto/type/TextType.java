@@ -36,7 +36,7 @@ public class TextType extends NativeType {
 	
 	@Override
 	public boolean isAssignableTo(Context context, IType other) {
-		return (other instanceof TextType) || (other instanceof AnyType);
+		return other==TextType.instance() || other==AnyType.instance();
 	}
 
 	@Override

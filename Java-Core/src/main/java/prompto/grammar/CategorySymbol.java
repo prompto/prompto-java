@@ -53,7 +53,7 @@ public class CategorySymbol extends Symbol implements IExpression  {
 		if(cd==null)
 			throw new SyntaxError("Unknown category " + type.getId());
 		if(assignments!=null) {
-			context = context.newLocalContext();
+			context = context.newChildContext();
 			for(ArgumentAssignment assignment : assignments) {
 				if(!cd.hasAttribute(context, assignment.getName()))
 					throw new SyntaxError("\"" + assignment.getName() + 

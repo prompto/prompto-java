@@ -24,17 +24,17 @@ public class TestResource extends BaseEParserTest {
 	
 	@Test(expected = SyntaxError.class)
 	public void testBadRead() throws Exception {
-		interpretResource("resource/badRead.pec");
+		interpretResource("resource/badRead.pec", true);
 	}
 
 	@Test(expected = SyntaxError.class)
 	public void testBadWrite() throws Exception {
-		interpretResource("resource/badWrite.pec");
+		interpretResource("resource/badWrite.pec", true);
 	}
 
 	@Test(expected = SyntaxError.class)
 	public void testBadResource() throws Exception {
-		interpretResource("resource/badResource.pec");
+		interpretResource("resource/badResource.pec", true);
 	}
 	
 	@Test

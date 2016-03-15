@@ -6,6 +6,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.runtime.Context;
+import prompto.type.AnyType;
 import prompto.type.IType;
 import prompto.type.IntegerType;
 import prompto.utils.CodeWriter;
@@ -51,7 +52,7 @@ public class ItemInstance implements IAssignableSelector {
 	
 	@Override
 	public IType checkAssignMember(Context context, Identifier memberName) throws SyntaxError {
-		throw new UnsupportedOperationException();
+		return AnyType.instance(); // TODO 
 	}
 	
 	@Override

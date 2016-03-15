@@ -9,13 +9,13 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 import org.junit.Before;
 
 import prompto.declaration.DeclarationList;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.TestMethodDeclaration;
+import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
 import prompto.parser.ECleverParser;
@@ -63,7 +63,11 @@ public abstract class BaseParserTest extends BaseTest {
 
 	public abstract DeclarationList parseResource(String resourceName) throws Exception;
 
-	protected boolean interpretResource(String resourceName) {
+	static interface ResourceRunner {
+		boolean runResource(String resourceName, boolean catchExceptions) throws PromptoError;
+	}
+	
+	protected boolean interpretResource(String resourceName, boolean reThrow) throws PromptoError {
 		try {
 			loadResource(resourceName);
 			if(context.hasTests()) {
@@ -74,13 +78,15 @@ public abstract class BaseParserTest extends BaseTest {
 				return false;
 			}
 		} catch(Exception e) {
+			if(reThrow && e instanceof PromptoError)
+				throw (PromptoError)e;
 			e.printStackTrace(System.err);
 			fail(e.getMessage());
 			return false;
 		}
 	}
 
-	protected boolean executeResource(String resourceName) {
+	protected boolean executeResource(String resourceName, boolean reThrow) throws PromptoError {
 		try {
 			loadResource(resourceName);
 			if(context.hasTests()) {
@@ -92,6 +98,8 @@ public abstract class BaseParserTest extends BaseTest {
 				return false;
 			}
 		} catch(Exception e) {
+			if(reThrow && e instanceof PromptoError)
+				throw (PromptoError)e;
 			e.printStackTrace(System.err);
 			fail(e.getMessage());
 			return false;
@@ -117,9 +125,9 @@ public abstract class BaseParserTest extends BaseTest {
 		}
 	}
 
-	protected void checkOutput(String resource, Function<String, Boolean> runner) throws Exception {
+	protected void checkOutput(String resource, ResourceRunner runner) throws Exception {
 		IDataStore.setInstance(new MemStore());
-		boolean isTest = runner.apply(resource);
+		boolean isTest = runner.runResource(resource, false);
 		String read = Out.read();
 		if(isTest && read.endsWith("\n"))
 			read = read.substring(0, read.length() - 1);
