@@ -37,6 +37,10 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
     public char getValue() { 
     	return value; 
     }
+    
+    public IValue asText() {
+    	return new Text(java.lang.Character.toString(value));
+    }
 
 	@Override
 	public void storeValue(Context context, String name, IStorable storable) throws PromptoError {
@@ -187,6 +191,8 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
 			throw new ReadWriteError(e.getMessage());
 		}
    }
+
+
 
 }
 

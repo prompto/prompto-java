@@ -319,6 +319,15 @@ public abstract class CompilerUtils {
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
 		return new ResultInfo(Character.class, true);
 	}
+	
+	public static ResultInfo charToString(MethodInfo method) {
+		IOperand oper = new MethodConstant(
+				Character.class, 
+				"toString",
+				char.class, String.class);
+		method.addInstruction(Opcode.INVOKESTATIC, oper);
+		return new ResultInfo(String.class, true);
+	}
 
 	public static ResultInfo CharacterTochar(MethodInfo method) {
 		IOperand oper = new MethodConstant(
@@ -327,6 +336,15 @@ public abstract class CompilerUtils {
 				char.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		return new ResultInfo(char.class, true);
+	}
+	
+	public static ResultInfo CharacterToString(MethodInfo method) {
+		IOperand oper = new MethodConstant(
+				Character.class, 
+				"toString",
+				String.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return new ResultInfo(String.class, true);
 	}
 
 	public static ResultInfo newRawInstance(MethodInfo method, Class<?> klass) {

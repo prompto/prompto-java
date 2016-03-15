@@ -1,5 +1,7 @@
 package prompto.literal;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import prompto.compiler.CompilerUtils;
@@ -14,12 +16,17 @@ import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.intrinsic.PromptoSet;
 import prompto.runtime.Context;
+import prompto.type.DecimalType;
 import prompto.type.IType;
 import prompto.type.MissingType;
 import prompto.type.SetType;
+import prompto.type.TextType;
 import prompto.utils.CodeWriter;
 import prompto.utils.ExpressionList;
 import prompto.utils.Utils;
+import prompto.value.Character;
+import prompto.value.Integer;
+import prompto.value.Decimal;
 import prompto.value.IValue;
 import prompto.value.SetValue;
 
@@ -40,7 +47,7 @@ public class SetLiteral extends Literal<SetValue> {
 	@Override
 	public IType check(Context context) throws SyntaxError {
 		if(itemType==null) {
-			if(expressions!=null)
+			if(value.isEmpty() && expressions!=null && !expressions.isEmpty())
 				itemType = Utils.inferElementType(context, expressions);
 			else
 				itemType = Utils.inferElementType(context, value.getItems());
@@ -50,13 +57,21 @@ public class SetLiteral extends Literal<SetValue> {
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		if(value.isEmpty() && expressions!=null) {
+		if(value.isEmpty() && expressions!=null && !expressions.isEmpty()) {
 			check(context); // force computation of itemType
-			Set<IValue> set = new PromptoSet<IValue>();
+			List<IValue> list = new ArrayList<>();
 			for(IExpression exp : expressions)
-				set.add(exp.interpret(context));
+				list.add(exp.interpret(context));
 			if(itemType==null)
-				itemType = Utils.inferElementType(context, set); 
+				itemType = Utils.inferElementType(context, list); 
+			Set<IValue> set = new PromptoSet<IValue>();
+			for(IValue item : list) {
+				if(DecimalType.instance()==itemType && item instanceof Integer)
+					item = new Decimal(((Integer)item).doubleValue());
+				else if(TextType.instance()==itemType && item instanceof Character)
+					item = ((Character)item).asText();
+				set.add(item);
+			}
 			value = new SetValue(itemType, set);
 			// don't dispose of expressions, they are required by translation 
 		}
@@ -85,11 +100,24 @@ public class SetLiteral extends Literal<SetValue> {
 	private void addItems(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		for(IExpression e : expressions) {
 			method.addInstruction(Opcode.DUP); // need to keep a reference to the list on top of stack
-			e.compile(context, method, flags.withNative(false));
+			ResultInfo info = e.compile(context, method, flags.withNative(false));
+			compilePromotion(method, info);
 			IOperand oper = new MethodConstant(PromptoSet.class, "add", 
 					Object.class, boolean.class);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 			method.addInstruction(Opcode.POP); // consume the returned boolean
 		}
+	}
+
+	private ResultInfo compilePromotion(MethodInfo method, ResultInfo info) {
+		if(DecimalType.instance()==itemType && Long.class==info.getType())
+			return CompilerUtils.LongToDouble(method);
+		else if(TextType.instance()==itemType) {
+			if(char.class==info.getType())
+				return CompilerUtils.charToString(method);
+			else if(java.lang.Character.class==info.getType())
+				return CompilerUtils.CharacterToString(method);
+		}
+		return info;
 	}
 }

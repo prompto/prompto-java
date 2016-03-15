@@ -1,11 +1,18 @@
 package prompto.intrinsic;
 
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.TreeSet;
 
 @SuppressWarnings("serial")
-public class PromptoSet<V> extends HashSet<V> {
+public class PromptoSortedSet<V> extends TreeSet<V> {
 
+	public PromptoSortedSet() {
+	}
+	
+	public PromptoSortedSet(Collection<V> items) {
+		super(items);
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -28,9 +35,9 @@ public class PromptoSet<V> extends HashSet<V> {
 		return size();
 	}
 	
-	public PromptoList<V> sort() {
-		TreeSet<V> sorted = new TreeSet<>(this);
-		return new PromptoList<>(sorted);
+	public PromptoSortedSet<V> sort() {
+		return this; // since it's immutable
 	}
-
+	
+	
 }

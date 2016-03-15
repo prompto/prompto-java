@@ -1,9 +1,15 @@
 package prompto.expression;
 
+import prompto.compiler.Flags;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.UnresolvedIdentifier;
+import prompto.intrinsic.PromptoList;
 import prompto.runtime.Context;
 import prompto.type.CategoryType;
 import prompto.type.ContainerType;
@@ -103,9 +109,26 @@ public class SortedExpression implements IExpression {
 			return itemType.sort(context, (IContainer<IValue>)o );
 	}
 
-	public void setKey(IExpression key) {
-		this.key = key;
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		IType type = source.check(context);
+		IType itemType = ((ContainerType)type).getItemType();
+		if(itemType instanceof CategoryType) 
+			return compileSortCategory(context, method, flags);
+		else
+			return compileSortNative(context, method, flags);
 	}
 
+	private ResultInfo compileSortNative(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		ResultInfo info = source.compile(context, method, flags);
+		MethodConstant m = new MethodConstant(info.getType(), "sort", PromptoList.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+		return new ResultInfo(PromptoList.class, true);
+	}
+
+	private ResultInfo compileSortCategory(Context context, MethodInfo method, Flags flags) {
+		throw new UnsupportedOperationException();
+	}
 
 }
