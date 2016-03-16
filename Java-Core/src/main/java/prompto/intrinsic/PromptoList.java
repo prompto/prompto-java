@@ -43,4 +43,13 @@ public class PromptoList<V> extends ArrayList<V> implements IMultiplyable {
 		Collections.sort((PromptoList<Comparable>)sorted); // work around non Comparable V
 		return sorted;
 	}
+	
+	public boolean containsAny(Collection<Object> items) {
+		for(Object item : items) {
+			if(contains(item))
+				return true;
+		}
+		return false;
+	}
+	
 }

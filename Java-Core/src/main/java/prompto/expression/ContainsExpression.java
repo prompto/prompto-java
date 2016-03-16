@@ -1,9 +1,18 @@
 package prompto.expression;
 
+import java.util.Collection;
+
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.ContOp;
+import prompto.intrinsic.PromptoString;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -48,15 +57,118 @@ public class ContainsExpression implements IExpression, IAssertion {
 		}
 	}
 	
-    public IValue interpret(Context context) throws PromptoError
-    {
+	@Override
+    public IValue interpret(Context context) throws PromptoError {
     	IValue lval = left.interpret(context);
     	IValue rval = right.interpret(context);
     	return interpret(context, lval, rval);
 
     }
+    
+    @Override
+    public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+    	ResultInfo result = compileOperator(context, method, flags.withNative(true));
+    	if (operator.name().startsWith("NOT_"))
+    		return compileNot(context, method, flags, result);
+    	else if((!flags.toNative() && boolean.class==result.getType()))
+    		return CompilerUtils.booleanToBoolean(method);
+    	else
+    		return result;
+    }
+    
+    private ResultInfo compileNot(Context context, MethodInfo method, Flags flags, ResultInfo info) {
+		if(Boolean.class==info.getType())
+			CompilerUtils.BooleanToboolean(method);
+		// perform 1-0
+		method.addInstruction(Opcode.ICONST_1);
+		method.addInstruction(Opcode.SWAP);
+		method.addInstruction(Opcode.ISUB);
+		if(flags.toNative())
+			return new ResultInfo(boolean.class, false);
+		else
+			return CompilerUtils.booleanToBoolean(method);
+	}
 
-    private IValue interpret(Context context, IValue lval, IValue rval) throws PromptoError {
+	private ResultInfo compileOperator(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+    	switch (operator) {
+            case IN:
+            case NOT_IN:
+            	return compileContains(context, method, flags, right, left);
+            case CONTAINS:
+            case NOT_CONTAINS:
+            	return compileContains(context, method, flags, left, right);
+            case CONTAINS_ALL:
+            case NOT_CONTAINS_ALL:
+            	return compileContainsAll(context, method, flags, left, right);
+            case CONTAINS_ANY:
+            case NOT_CONTAINS_ANY:
+            	return compileContainsAny(context, method, flags, left, right);
+            default:
+        		throw new UnsupportedOperationException("Uknown operator: " + operator.name());
+        }
+    }
+
+	private ResultInfo compileContains(Context context, MethodInfo method, Flags flags, IExpression left, IExpression right) throws SyntaxError {
+		ResultInfo linfo = left.compile(context, method, flags);
+		right.compile(context, method, flags.withNative(false));
+		if(String.class==linfo.getType()) {
+			MethodConstant m = new MethodConstant(PromptoString.class, "contains", String.class, Object.class, boolean.class);
+			method.addInstruction(Opcode.INVOKESTATIC, m);
+			if(flags.toNative())
+				return new ResultInfo(boolean.class, true);
+			else
+				return CompilerUtils.booleanToBoolean(method);
+		} else {
+			MethodConstant m = new MethodConstant(linfo.getType(), "contains", Object.class, boolean.class);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+			if(flags.toNative())
+				return new ResultInfo(boolean.class, true);
+			else
+				return CompilerUtils.booleanToBoolean(method);
+		}
+	}
+
+	private ResultInfo compileContainsAll(Context context, MethodInfo method, Flags flags, IExpression left, IExpression right) throws SyntaxError {
+		ResultInfo linfo = left.compile(context, method, flags);
+		right.compile(context, method, flags.withNative(false));
+		if(String.class==linfo.getType()) {
+			MethodConstant m = new MethodConstant(PromptoString.class, "containsAll", String.class, Object.class, boolean.class);
+			method.addInstruction(Opcode.INVOKESTATIC, m);
+			if(flags.toNative())
+				return new ResultInfo(boolean.class, true);
+			else
+				return CompilerUtils.booleanToBoolean(method);
+		} else {
+			MethodConstant m = new MethodConstant(linfo.getType(), "containsAll", Collection.class, boolean.class);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+			if(flags.toNative())
+				return new ResultInfo(boolean.class, true);
+			else
+				return CompilerUtils.booleanToBoolean(method);
+		}
+	}
+
+	private ResultInfo compileContainsAny(Context context, MethodInfo method, Flags flags, IExpression left, IExpression right) throws SyntaxError {
+		ResultInfo linfo = left.compile(context, method, flags);
+		right.compile(context, method, flags.withNative(false));
+		if(String.class==linfo.getType()) {
+			MethodConstant m = new MethodConstant(PromptoString.class, "containsAny", String.class, Object.class, boolean.class);
+			method.addInstruction(Opcode.INVOKESTATIC, m);
+			if(flags.toNative())
+				return new ResultInfo(boolean.class, true);
+			else
+				return CompilerUtils.booleanToBoolean(method);
+		} else {
+			MethodConstant m = new MethodConstant(linfo.getType(), "containsAny", Collection.class, boolean.class);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+			if(flags.toNative())
+				return new ResultInfo(boolean.class, true);
+			else
+				return CompilerUtils.booleanToBoolean(method);
+		}
+	}
+
+	private IValue interpret(Context context, IValue lval, IValue rval) throws PromptoError {
         java.lang.Boolean result = null;
         switch (operator)
         {

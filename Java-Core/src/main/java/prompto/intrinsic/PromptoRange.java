@@ -1,5 +1,7 @@
 package prompto.intrinsic;
 
+import java.util.Collection;
+
 
 public abstract class PromptoRange<T extends Object> {
 	
@@ -43,6 +45,24 @@ public abstract class PromptoRange<T extends Object> {
 			return length() + 1 + last;
 	}
 	
+	public abstract boolean contains(Object item);
+
+	public boolean containsAll(Collection<Object> items) {
+		for(Object item : items) {
+			if(contains(item))
+				return true;
+		}
+		return false;
+	}
+	
+	public boolean containsAny(Collection<Object> items) {
+		for(Object item : items) {
+			if(contains(item))
+				return true;
+		}
+		return false;
+	}
+	
 	public static class Character extends PromptoRange<java.lang.Character> {
 		
 		public Character(java.lang.Character low, java.lang.Character high) {
@@ -66,6 +86,13 @@ public abstract class PromptoRange<T extends Object> {
 		@Override
 		public long length() {
 			return 1L + high.charValue() - low.charValue();
+		}
+		
+		public boolean contains(Object item) {
+			if(!(item instanceof java.lang.Character))
+				return false;
+			java.lang.Character other = (java.lang.Character)item;
+			return other.compareTo(low)>=0 && high.compareTo(other)>=0;
 		}
 
 	}
@@ -93,6 +120,13 @@ public abstract class PromptoRange<T extends Object> {
 		@Override
 		public long length() {
 			return 1L + high.longValue() - low.longValue();
+		}
+
+		public boolean contains(Object item) {
+			if(!(item instanceof java.lang.Long))
+				return false;
+			java.lang.Long other = (java.lang.Long)item;
+			return other.compareTo(low)>=0 && high.compareTo(other)>=0;
 		}
 
 
@@ -125,6 +159,13 @@ public abstract class PromptoRange<T extends Object> {
 			return 1 + ( (h-l)/(24*60*60*1000));
 		}
 
+		public boolean contains(Object item) {
+			if(!(item instanceof PromptoDate))
+				return false;
+			PromptoDate other = (PromptoDate)item;
+			return other.compareTo(low)>=0 && high.compareTo(other)>=0;
+		}
+
 	}
 	
 	public static class Time extends PromptoRange<PromptoTime> {
@@ -152,6 +193,12 @@ public abstract class PromptoRange<T extends Object> {
 			return 1 + (high.getNativeMillisOfDay() - low.getNativeMillisOfDay())/1000;
 		}
 
+		public boolean contains(Object item) {
+			if(!(item instanceof PromptoTime))
+				return false;
+			PromptoTime other = (PromptoTime)item;
+			return other.compareTo(low)>=0 && high.compareTo(other)>=0;
+		}
 
 	}
 }

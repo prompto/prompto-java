@@ -1,5 +1,6 @@
 package prompto.intrinsic;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 @SuppressWarnings("serial")
@@ -29,4 +30,20 @@ public class PromptoDict<K,V> extends HashMap<K,V>{
 		return size();
 	}
 	
+	public boolean contains(Object item) {
+		return containsKey(item);
+	}
+
+	public boolean containsAll(Collection<Object> items) {
+		return keySet().containsAll(items);
+	}
+	
+	public boolean containsAny(Collection<Object> items) {
+		for(Object item : items) {
+			if(containsKey(item))
+				return true;
+		}
+		return false;
+	}
+
 }

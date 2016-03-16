@@ -1,5 +1,6 @@
 package prompto.intrinsic;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.TreeSet;
 
@@ -33,4 +34,11 @@ public class PromptoSet<V> extends HashSet<V> {
 		return new PromptoList<>(sorted);
 	}
 
+	public boolean containsAny(Collection<Object> items) {
+		for(Object item : items) {
+			if(contains(item))
+				return true;
+		}
+		return false;
+	}
 }

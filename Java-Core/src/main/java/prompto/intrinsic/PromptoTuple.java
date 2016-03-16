@@ -40,4 +40,12 @@ public class PromptoTuple<V> extends ArrayList<V> {
 			last = this.size() + 1 + last;
 		return new PromptoTuple<>(this.subList((int)(first-1), (int)last));
 	}
+	
+	public boolean containsAny(Collection<Object> items) {
+		for(Object item : items) {
+			if(contains(item))
+				return true;
+		}
+		return false;
+	}
 }

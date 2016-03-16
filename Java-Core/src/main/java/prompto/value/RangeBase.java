@@ -70,9 +70,7 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 	}
 
 	public boolean hasItem(Context context, IValue lval) {
-		@SuppressWarnings("unchecked")
-		T val = (T)lval;
-		return compare(val, getLow())>=0 && compare(getHigh(), val)>=0;
+		return range.contains(lval);
 	}
 	
 	public T getItem(Context context, IValue index) throws PromptoError {
@@ -157,7 +155,6 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 		return length()==0;
 	}
 	
-	public abstract int compare(T o1,T o2);
 	public abstract RangeBase<T> newInstance(PromptoRange<T> range);
 
 

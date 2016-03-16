@@ -35,6 +35,14 @@ public class DateRange extends RangeBase<Date> {
 			return 1 + ( (h-l)/(24*60*60*1000));
 		}
 
+		@Override
+		public boolean contains(Object item) {
+			if(!(item instanceof prompto.value.Date))
+				return false;
+			prompto.value.Date other = (prompto.value.Date)item;
+			return other.compareTo(low)>=0 && high.compareTo(other)>=0;
+		}
+
 		
 	}
 	
@@ -44,11 +52,6 @@ public class DateRange extends RangeBase<Date> {
 	
 	public DateRange(PromptoRange<Date> range) {
 		super(DateType.instance(), range);
-	}
-
-	@Override
-	public int compare(Date o1, Date o2) {
-		return o1.compareTo(o2);
 	}
 
 	@Override

@@ -31,6 +31,13 @@ public class IntegerRange extends RangeBase<Integer> {
 			return new PromptoIntegerRange(getItem(first), getItem(last));
 		}
 
+		@Override
+		public boolean contains(Object item) {
+			if(!(item instanceof prompto.value.Integer))
+				return false;
+			prompto.value.Integer other = (prompto.value.Integer)item;
+			return other.compareTo(low)>=0 && high.compareTo(other)>=0;
+		}
 
 	}
 	
@@ -47,11 +54,6 @@ public class IntegerRange extends RangeBase<Integer> {
 		return 1 + getHigh().longValue() - getLow().longValue();
 	}
 
-	@Override
-	public int compare(Integer o1, Integer o2) {
-		return o1.compareTo(o2);
-	}
-	
 	@Override
 	public RangeBase<Integer> newInstance(PromptoRange<Integer> range) {
 		return new IntegerRange(range);

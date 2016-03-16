@@ -33,6 +33,13 @@ public class TimeRange extends RangeBase<Time> {
 			return 1 + (high.getMillisOfDay() - low.getMillisOfDay())/1000;
 		}
 		
+		@Override
+		public boolean contains(Object item) {
+			if(!(item instanceof prompto.value.Time))
+				return false;
+			prompto.value.Time other = (prompto.value.Time)item;
+			return other.compareTo(low)>=0 && high.compareTo(other)>=0;
+		}
 
 	}
 	
@@ -45,11 +52,6 @@ public class TimeRange extends RangeBase<Time> {
 		super(TimeType.instance(), range);
 	}
 
-
-	@Override
-	public int compare(Time o1, Time o2) {
-		return o1.compareTo(o2);
-	}
 
 	@Override
 	public RangeBase<Time> newInstance(PromptoRange<Time> range) {

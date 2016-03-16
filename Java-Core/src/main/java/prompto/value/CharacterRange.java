@@ -30,6 +30,14 @@ public class CharacterRange extends RangeBase<Character> {
 		public long length() {
 			return 1L + high.getValue() - low.getValue();
 		}
+		
+		@Override
+		public boolean contains(Object item) {
+			if(!(item instanceof prompto.value.Character))
+				return false;
+			prompto.value.Character other = (prompto.value.Character)item;
+			return other.compareTo(low)>=0 && high.compareTo(other)>=0;
+		}
 
 	}
 	
@@ -39,11 +47,6 @@ public class CharacterRange extends RangeBase<Character> {
 	
 	public CharacterRange(PromptoRange<Character> range) {
 		super(CharacterType.instance(), range);
-	}
-	
-	@Override
-	public int compare(Character o1, Character o2) {
-		return o1.compareTo(o2);
 	}
 	
 	@Override
