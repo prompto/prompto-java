@@ -1,7 +1,17 @@
 package prompto.statement;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.IInstructionListener;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.OffsetListenerConstant;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.StackState;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.EqualsExpression;
@@ -91,7 +101,7 @@ public class IfStatement extends BaseStatement {
 					writer.append(" ");
 				writer.append("else ");
 			}
-			curly = elem.instructions.size()>1;
+			curly = elem.statements.size()>1;
 			elem.toDialect(writer);
 			first = false;
 		}
@@ -127,15 +137,112 @@ public class IfStatement extends BaseStatement {
 		}
 		return null;
 	}
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+ 		IType result = check(context);
+		compileIfElements(context, method, flags);
+		return new ResultInfo(result.toJavaClass(), true);
+	}
+
+	static class IfElementBranch {
+		List<IInstructionListener> finalOffsetListeners = new ArrayList<>();
+		IInstructionListener branchOffsetListener = null;
+		StackState neutralState = null;
+	}
+	
+	private void compileIfElements(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		IfElementBranch branch = new IfElementBranch();
+		branch.neutralState = method.captureStackState();
+		for(IfElement element : elements)
+			 compileElement(context, method, flags, element, branch);
+		method.restoreStackState(branch.neutralState);
+		method.placeLabel(branch.neutralState);
+		stopListeningForThisBranch(method, branch);
+		branch.finalOffsetListeners.forEach((l)->
+			method.inhibitOffsetListener(l));
+	}
+
+	
+	private void compileElement(Context context, MethodInfo method, Flags flags, IfElement element, IfElementBranch branch) throws SyntaxError {
+		restoreNeutralStackState(method, branch);
+		stopListeningForThisBranch(method, branch);
+		compileCondition(context, method, flags, element);
+		startListeningForNextBranch(method, element, branch);
+		compileBranch(method, element, branch);
+		ResultInfo info = compileStatements(context, method, flags, element, branch);
+		startListeningForFinalThenGoto(context, method, flags, element, branch, info);
+	}
+
+	
+	private void compileBranch(MethodInfo method, IfElement element, IfElementBranch branch) {
+		if(element.condition!=null) {
+			method.addInstruction(Opcode.IFEQ, branch.branchOffsetListener);
+		}		
+	}
+
+
+	private void startListeningForFinalThenGoto(Context context, MethodInfo method, Flags flags, IfElement element, IfElementBranch branch, ResultInfo info) {
+		if(element.condition!=null && !info.isReturn()) {
+			IInstructionListener finalOffset = method.addOffsetListener(new OffsetListenerConstant());
+			method.activateOffsetListener(finalOffset);
+			branch.finalOffsetListeners.add(finalOffset);
+			method.addInstruction(Opcode.GOTO, finalOffset);
+		}
+	}
+
+
+	private ResultInfo compileStatements(Context context, MethodInfo method, Flags flags, IfElement element, IfElementBranch branch) throws SyntaxError {
+		ResultInfo info = new ResultInfo(void.class, false);
+		if(element.statements!=null) {
+			for(IStatement statement : element.statements)
+				info = statement.compile(context, method, flags);
+		}
+		return info; // we assume all statements are reachable
+	}
+
+
+	private void stopListeningForThisBranch(MethodInfo method, IfElementBranch branch) {
+		if(branch.branchOffsetListener!=null) {
+			method.inhibitOffsetListener(branch.branchOffsetListener);
+			branch.branchOffsetListener = null;
+		}
+	}
+
+
+	private void startListeningForNextBranch(MethodInfo method, IfElement element, IfElementBranch branch) {
+		if(element.condition!=null) {
+			branch.branchOffsetListener = method.addOffsetListener(new OffsetListenerConstant());
+			method.activateOffsetListener(branch.branchOffsetListener);
+		}
+	}
+
+
+	private void compileCondition(Context context, MethodInfo method, Flags flags, IfElement element) throws SyntaxError {
+		if(element.condition!=null) {
+			ResultInfo info = element.condition.compile(context, method, flags.withNative(true));
+			if(Boolean.class==info.getType())
+				CompilerUtils.BooleanToboolean(method);
+		}
+	}
+
+
+	private void restoreNeutralStackState(MethodInfo method, IfElementBranch branch) {
+		// is there a need to restore the stack?
+		if(branch.branchOffsetListener!=null) {
+			method.restoreStackState(branch.neutralState);
+			method.placeLabel(branch.neutralState);
+		}
+	}
 
 	public static class IfElement extends BaseStatement {
 
 		IExpression condition;
-		StatementList instructions;
+		StatementList statements;
 		
-		public IfElement(IExpression condition, StatementList instructions) {
+		public IfElement(IExpression condition, StatementList statements) {
 			this.condition = condition;
-			this.instructions = instructions;
+			this.statements = statements;
 		}
 		
 		@Override
@@ -164,7 +271,7 @@ public class IfStatement extends BaseStatement {
 			}
 			writer.append(":\n");
 			writer.indent();
-			instructions.toDialect(writer);
+			statements.toDialect(writer);
 			writer.dedent();	
 		}
 
@@ -175,13 +282,13 @@ public class IfStatement extends BaseStatement {
 				condition.toDialect(writer);
 				writer.append(") ");
 			}
-			boolean curly = instructions!=null && instructions.size()>1;
+			boolean curly = statements!=null && statements.size()>1;
 			if(curly) 
 				writer.append("{\n");
 			else 
 				writer.newLine();
 			writer.indent();
-			instructions.toDialect(writer);
+			statements.toDialect(writer);
 			writer.dedent();
 			if(curly) 
 				writer.append("}");
@@ -192,7 +299,7 @@ public class IfStatement extends BaseStatement {
 		}
 		
 		public StatementList getInstructions() {
-			return instructions;
+			return statements;
 		}
 		
 		@Override
@@ -201,7 +308,7 @@ public class IfStatement extends BaseStatement {
 			if(cond!=BooleanType.instance())
 				throw new SyntaxError("Expected a boolean condition!");
 			context = downCastForCheck(context);
-			return instructions.check(context, null);
+			return statements.check(context, null);
 		}
 
 		private Context downCastForCheck(Context context) throws SyntaxError {
@@ -215,7 +322,7 @@ public class IfStatement extends BaseStatement {
 		@Override
 		public IValue interpret(Context context) throws PromptoError {
 			context = downCastForInterpret(context);
-			return instructions.interpret(context);
+			return statements.interpret(context);
 		}
 
 		private Context downCastForInterpret(Context context) throws PromptoError {

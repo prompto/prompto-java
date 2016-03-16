@@ -70,20 +70,25 @@ public class ReturnStatement extends SimpleStatement {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
-		ResultInfo info = expression.compile(context, method, flags);
-		if(boolean.class==info.getType())
-			method.addInstruction(Opcode.IRETURN);
-		else if(int.class==info.getType())
-			method.addInstruction(Opcode.IRETURN);
-		else if(char.class==info.getType())
-			method.addInstruction(Opcode.IRETURN);
-		else if(long.class==info.getType())
-			method.addInstruction(Opcode.LRETURN);
-		else if(double.class==info.getType())
-			method.addInstruction(Opcode.DRETURN);
-		else
-			method.addInstruction(Opcode.ARETURN);
-		return info;
+		if(expression==null) {
+			method.addInstruction(Opcode.RETURN);
+			return new ResultInfo(void.class, false, true);
+		} else {
+			ResultInfo info = expression.compile(context, method, flags);
+			if(boolean.class==info.getType())
+				method.addInstruction(Opcode.IRETURN);
+			else if(int.class==info.getType())
+				method.addInstruction(Opcode.IRETURN);
+			else if(char.class==info.getType())
+				method.addInstruction(Opcode.IRETURN);
+			else if(long.class==info.getType())
+				method.addInstruction(Opcode.LRETURN);
+			else if(double.class==info.getType())
+				method.addInstruction(Opcode.DRETURN);
+			else
+				method.addInstruction(Opcode.ARETURN);
+			return new ResultInfo(info.getType(), info.isInstance(), true);
+		}
 	}
 
 }

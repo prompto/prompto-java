@@ -104,7 +104,7 @@ public class Instruction implements IInstruction {
 		if(DUMP_LEVEL>1)
 			System.err.println("After push: " + stack.getState().toString());
 		else if(DUMP_LEVEL>0)
-			System.err.println(this.toString() + " -> " + stack.getState().toString());
+			System.err.println("(" + opcode.kind.length + ") " + this.toString() + " -> " + stack.getState().toString());
 	}
 
 	public ClassConstant getClassConstant() {
