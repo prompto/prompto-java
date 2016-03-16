@@ -84,6 +84,16 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 			throw new SyntaxError("No such item:" + index.toString());
 		  			
 	}
+	
+	public static ResultInfo compileItem(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+		ResultInfo right = exp.compile(context, method, flags.withNative(true));
+		right = CompilerUtils.numberTolong(method, right);
+		// create result
+		IOperand oper = new MethodConstant(PromptoRange.class, "getItem", 
+				long.class, Object.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return new ResultInfo(Object.class, true);
+	}
 
 	public RangeBase<T> slice(Integer fi, Integer li) throws PromptoError {
 		try {

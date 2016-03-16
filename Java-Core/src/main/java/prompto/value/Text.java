@@ -150,6 +150,22 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 
 	}
 	
+	public static ResultInfo compileItem(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+		ResultInfo right = exp.compile(context, method, flags);
+		if(Long.class==right.getType())
+			CompilerUtils.LongToint(method);
+		else if(long.class==right.getType())
+			CompilerUtils.longToint(method);
+		MethodConstant oper = new MethodConstant(String.class, 
+				"charAt", 
+				int.class, char.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		if(flags.toNative())
+			return new ResultInfo(char.class, true);
+		else
+			return CompilerUtils.charToCharacter(method);
+	}
+	
 	@Override
 	public Iterable<Character> getIterable(Context context) {
 		return new CharacterIterable(context);

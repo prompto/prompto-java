@@ -8,10 +8,10 @@ import java.util.Set;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.IOperand;
 import prompto.compiler.ResultInfo;
 import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
@@ -120,6 +120,14 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 			throw new SyntaxError("No such item:" + index.toString());
 	}
 
+	public static ResultInfo compileItem(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+		exp.compile(context, method, flags.withNative(true));
+		IOperand oper = new MethodConstant(PromptoDict.class, "get", 
+				Object.class, Object.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return new ResultInfo(Object.class, true);
+	}
+	
 	public Object convertTo(Class<?> type) {
 		return this;
 	}

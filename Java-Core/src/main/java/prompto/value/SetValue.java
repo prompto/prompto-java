@@ -69,6 +69,19 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IListable
 		} else
 			throw new SyntaxError("No such item:" + index.toString());
 	}
+	
+	public static ResultInfo compileItem(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+		ResultInfo right = exp.compile(context, method, flags.withNative(true));
+		right = CompilerUtils.numberToint(method, right);
+		// minus 1
+		method.addInstruction(Opcode.ICONST_M1);
+		method.addInstruction(Opcode.IADD);
+		// create result
+		IOperand oper = new MethodConstant(PromptoSet.class, "get", 
+				int.class, Object.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return new ResultInfo(Object.class, true);
+	}
 
 	private IValue getNthItem(int idx) throws PromptoError {
 		Iterator<IValue> it = items.iterator();

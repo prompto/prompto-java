@@ -143,6 +143,19 @@ public class ListValue extends BaseList<ListValue, PromptoList<IValue>> {
 		return parent;
 	}
 
+	public static ResultInfo compileItem(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+		ResultInfo right = exp.compile(context, method, flags.withNative(true));
+		right = CompilerUtils.numberToint(method, right);
+		// minus 1
+		method.addInstruction(Opcode.ICONST_M1);
+		method.addInstruction(Opcode.IADD);
+		// create result
+		IOperand oper = new MethodConstant(PromptoList.class, "get", 
+				int.class, Object.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return new ResultInfo(Object.class, true);
+	}
+	
 	@Override
 	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
 		try {

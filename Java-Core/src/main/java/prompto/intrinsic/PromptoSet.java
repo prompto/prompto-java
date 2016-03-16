@@ -41,4 +41,15 @@ public class PromptoSet<V> extends HashSet<V> {
 		}
 		return false;
 	}
+	
+	public Object get(int index) {
+		if(index<0 || index>size())
+			throw new IndexOutOfBoundsException(String.valueOf(index));
+		for(Object item : this) {
+			if(index==0)
+				return item;
+			index--;
+		}
+		throw new UnsupportedOperationException("Should never get there!");
+	}
 }

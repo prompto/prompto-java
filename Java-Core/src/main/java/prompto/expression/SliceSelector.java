@@ -100,7 +100,7 @@ public class SliceSelector extends SelectorExpression {
 		map.put(PromptoRange.Date.class, RangeBase::compileSlice);
 		map.put(PromptoRange.Time.class, RangeBase::compileSlice);
 		map.put(PromptoRange.Long.class, RangeBase::compileSlice);
-		/*map.put(PromptoTuple.class, TupleValue::compileSlice)*/;
+		/*map.put(PromptoTuple.class, RangeBase::compileSlice)*/;
 		map.put(PromptoList.class, ListValue::compileSlice);
 		return map;
 	}

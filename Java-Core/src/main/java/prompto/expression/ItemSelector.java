@@ -1,14 +1,34 @@
 package prompto.expression;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import prompto.compiler.ClassConstant;
+import prompto.compiler.Flags;
+import prompto.compiler.IOperatorFunction;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.intrinsic.PromptoDict;
+import prompto.intrinsic.PromptoList;
+import prompto.intrinsic.PromptoRange;
+import prompto.intrinsic.PromptoSet;
+import prompto.intrinsic.PromptoTuple;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
+import prompto.value.Dictionary;
 import prompto.value.IContainer;
 import prompto.value.IValue;
+import prompto.value.ListValue;
 import prompto.value.NullValue;
+import prompto.value.RangeBase;
+import prompto.value.SetValue;
+import prompto.value.Text;
+import prompto.value.TupleValue;
 
 public class ItemSelector extends SelectorExpression {
 
@@ -55,5 +75,43 @@ public class ItemSelector extends SelectorExpression {
         else
         	throw new SyntaxError("Unknown collection: " + parent);
 	}
+	
+	static Map<Class<?>, IOperatorFunction> getters = createGetters();
+	
+	private static Map<Class<?>, IOperatorFunction> createGetters() {
+		Map<Class<?>, IOperatorFunction> map = new HashMap<>(); 
+		map.put(String.class, Text::compileItem); 
+		map.put(PromptoRange.Character.class, RangeBase::compileItem);
+		map.put(PromptoRange.Date.class, RangeBase::compileItem);
+		map.put(PromptoRange.Time.class, RangeBase::compileItem);
+		map.put(PromptoRange.Long.class, RangeBase::compileItem);
+		map.put(PromptoDict.class, Dictionary::compileItem);
+		map.put(PromptoTuple.class, TupleValue::compileItem);
+		map.put(PromptoSet.class, SetValue::compileItem);
+		map.put(PromptoList.class, ListValue::compileItem);
+		return map;
+	}
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		IType type = check(context);
+		ResultInfo pinfo = parent.compile(context, method, flags);
+		IOperatorFunction getter = getters.get(pinfo.getType());
+		if(getter==null) {
+			System.err.println("Missing IOperatorFunction for get item " + pinfo.getType().getName());
+			throw new SyntaxError("Cannot get item from " + pinfo.getType().getName());
+		}
+		ResultInfo result = getter.compile(context, method, pinfo, item, flags);
+		if(Object.class==result.getType()) {
+			// need to downcast
+			Class<?> klass = type.toJavaClass();
+			ClassConstant c = new ClassConstant(klass);
+			method.addInstruction(Opcode.CHECKCAST, c);
+			return new ResultInfo(klass, true);
+		} else
+			return result;
+	}
+
+
 
 }
