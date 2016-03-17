@@ -1,5 +1,6 @@
 package prompto.expression;
 
+import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodConstant;
@@ -12,6 +13,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.grammar.UnresolvedIdentifier;
+import prompto.intrinsic.PromptoDict;
 import prompto.runtime.Context;
 import prompto.type.CategoryType;
 import prompto.type.IType;
@@ -172,8 +174,15 @@ public class MemberSelector extends SelectorExpression {
 			return compileStringLength(method, flags);
 		else {
 			String getterName = "get" + getName().substring(0,1).toUpperCase() + getName().substring(1);
-			IOperand oper = new MethodConstant(parent.getType(), getterName, resultType);
-			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+			// TODO do this for all generic classes?
+			if(PromptoDict.Entry.class==parent.getType()) {
+				IOperand oper = new MethodConstant(parent.getType(), getterName, Object.class);
+				method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+				method.addInstruction(Opcode.CHECKCAST, new ClassConstant(resultType));
+			} else {
+				IOperand oper = new MethodConstant(parent.getType(), getterName, resultType);
+				method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+			}
 			return new ResultInfo(resultType, true);
 		}
 	}

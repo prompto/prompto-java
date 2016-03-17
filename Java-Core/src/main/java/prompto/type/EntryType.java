@@ -2,6 +2,7 @@ package prompto.type;
 
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoDict;
 import prompto.runtime.Context;
 
 public class EntryType extends BaseType {
@@ -19,7 +20,7 @@ public class EntryType extends BaseType {
 
 	@Override
 	public Class<?> toJavaClass() {
-		throw new RuntimeException("Should never get there!");
+		return PromptoDict.Entry.class;
 	}
 
 	@Override
