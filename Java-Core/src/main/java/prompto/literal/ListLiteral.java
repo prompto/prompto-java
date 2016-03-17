@@ -14,15 +14,20 @@ import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.intrinsic.PromptoList;
 import prompto.runtime.Context;
+import prompto.type.CharacterType;
 import prompto.type.DecimalType;
 import prompto.type.IType;
+import prompto.type.IntegerType;
 import prompto.type.ListType;
 import prompto.type.MissingType;
 import prompto.type.TextType;
 import prompto.utils.CodeWriter;
 import prompto.utils.ExpressionList;
 import prompto.utils.Utils;
+import prompto.value.Character;
+import prompto.value.Decimal;
 import prompto.value.IValue;
+import prompto.value.Integer;
 import prompto.value.ListValue;
 
 public class ListLiteral extends Literal<ListValue> {
@@ -56,12 +61,26 @@ public class ListLiteral extends Literal<ListValue> {
 		if(expressions!=null) {
 			check(context); // force computation of itemType
 			List<IValue> list = new PromptoList<IValue>();
-			for(IExpression exp : expressions)
-				list.add(exp.interpret(context));
+			for(IExpression exp : expressions) {
+				IValue item = exp.interpret(context);
+				item = interpretPromotion(item);
+				list.add(item);
+			}
 			return new ListValue(itemType, list);
 			// don't dispose of expressions, they are required by translation 
 		} else
 			return value;
+	}
+
+	private IValue interpretPromotion(IValue item) {
+		if(item==null)
+			return item;
+		if(DecimalType.instance()==itemType && item.getType()==IntegerType.instance())
+			return new Decimal(((Integer)item).doubleValue());
+		else if(TextType.instance()==itemType && item.getType()==CharacterType.instance())
+			return ((Character)item).asText();
+		else
+			return item;
 	}
 
 	public ExpressionList getExpressions() {

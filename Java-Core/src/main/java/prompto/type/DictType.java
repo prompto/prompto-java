@@ -70,7 +70,7 @@ public class DictType extends ContainerType {
         if ("length".equals(name))
             return IntegerType.instance();
         else if("keys".equals(name))
-            return new ListType(TextType.instance());
+            return new SetType(TextType.instance());
         else if ("values".equals(name))
             return new ListType(getItemType());
         else
