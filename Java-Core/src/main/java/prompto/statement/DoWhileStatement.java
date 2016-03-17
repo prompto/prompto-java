@@ -1,5 +1,13 @@
 package prompto.statement;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.IInstructionListener;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.OffsetListenerConstant;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.StackState;
 import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -14,11 +22,11 @@ import prompto.value.IValue;
 public class DoWhileStatement extends BaseStatement {
 
 	IExpression condition;
-	StatementList instructions;
+	StatementList statements;
 	
-	public DoWhileStatement(IExpression condition, StatementList instructions) {
+	public DoWhileStatement(IExpression condition, StatementList statements) {
 		this.condition = condition;
-		this.instructions = instructions;
+		this.statements = statements;
 	}
 	
 	public IExpression getCondition() {
@@ -26,7 +34,7 @@ public class DoWhileStatement extends BaseStatement {
 	}
 	
 	public StatementList getInstructions() {
-		return instructions;
+		return statements;
 	}	
 	
 	@Override
@@ -51,7 +59,7 @@ public class DoWhileStatement extends BaseStatement {
 	private void toEDialect(CodeWriter writer) {
 		writer.append("do:\n");
 		writer.indent();
-		instructions.toDialect(writer);
+		statements.toDialect(writer);
 		writer.dedent();
 		writer.append("while ");
 		condition.toDialect(writer);
@@ -61,7 +69,7 @@ public class DoWhileStatement extends BaseStatement {
 	private void toODialect(CodeWriter writer) {
 		writer.append("do {\n");
 		writer.indent();
-		instructions.toDialect(writer);
+		statements.toDialect(writer);
 		writer.dedent();
 		writer.append("} while (");
 		condition.toDialect(writer);
@@ -74,14 +82,14 @@ public class DoWhileStatement extends BaseStatement {
 		if(cond!=BooleanType.instance())
 			throw new SyntaxError("Expected a Boolean condition!");
 		Context child = context.newChildContext();
-		return instructions.check(child, null);
+		return statements.check(child, null);
 	}
 
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		do {
 			Context child = context.newChildContext();
-			IValue value = instructions.interpret(child);
+			IValue value = statements.interpret(child);
 			if(value!=null)
 				return value;
 		} while(interpretCondition(context));
@@ -94,6 +102,22 @@ public class DoWhileStatement extends BaseStatement {
 			throw new InvalidDataError("Expected a Boolean, got:" + value.getClass().getSimpleName());
 		return ((Boolean)value).getValue();
 	}
-
-
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		StackState neutralState = method.captureStackState();
+		method.placeLabel(neutralState);
+		IInstructionListener loop = method.addOffsetListener(new OffsetListenerConstant(true));
+		method.activateOffsetListener(loop);
+		for(IStatement statement : statements)
+			statement.compile(context, method, flags);
+		ResultInfo info = condition.compile(context, method, flags.withNative(true));
+		if(Boolean.class==info.getType())
+			CompilerUtils.BooleanToboolean(method);
+		method.inhibitOffsetListener(loop);
+		method.addInstruction(Opcode.IFNE, loop);
+		// TODO manage return value in loop
+		return new ResultInfo(void.class, false);
+	}
+	
 }

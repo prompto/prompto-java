@@ -18,6 +18,7 @@ pass/empty statement
 tuple equals tuple
 a = null, null = a
 slice tuple
+return in loops and if/else
 
 language:
 send/receive
