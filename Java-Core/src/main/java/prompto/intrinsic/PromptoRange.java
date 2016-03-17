@@ -1,9 +1,10 @@
 package prompto.intrinsic;
 
 import java.util.Collection;
+import java.util.Iterator;
 
 
-public abstract class PromptoRange<T extends Object> {
+public abstract class PromptoRange<T extends Object> implements Iterable<T> {
 	
 	protected T low;
 	protected T high;
@@ -61,6 +62,22 @@ public abstract class PromptoRange<T extends Object> {
 				return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public Iterator<T> iterator() {
+		return new Iterator<T>() {
+			
+			long index = 0;
+			long length = length();
+			
+			@Override
+			public boolean hasNext() { return index<length; }
+
+			@Override
+			public T next() { return getItem(++index); }
+			
+		};
 	}
 	
 	public static class Character extends PromptoRange<java.lang.Character> {

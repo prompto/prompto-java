@@ -8,7 +8,7 @@ public interface IVerifierEntry {
 	void writeTo(ByteWriter writer);
 
 	public static enum Type {
-		ITEM_Top,
+		ITEM_Top(NativeFactory.instance),
 		ITEM_Integer(NativeFactory.instance),
 		ITEM_Float(NativeFactory.instance),
 		ITEM_Double(2, NativeFactory.instance),

@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 @SuppressWarnings("serial")
-public class PromptoDict<K,V> extends HashMap<K,V>{
+public class PromptoDict<K,V> extends HashMap<K,V> {
 
 	@Override
 	public String toString() {

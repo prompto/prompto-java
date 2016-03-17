@@ -76,6 +76,11 @@ public class Instruction implements IInstruction {
 				case CPREF_W:
 					writer.writeU2(((IConstantOperand)operands[0]).getIndexInConstantPool());
 					break;
+				case CPREF_W_UBYTE_ZERO:
+					writer.writeU2(((IConstantOperand)operands[0]).getIndexInConstantPool());
+					writer.writeU1(1);
+					writer.writeU1(0);
+					break;
 				case NO_OPERANDS:
 					break;
 				default:

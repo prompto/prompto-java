@@ -2,6 +2,19 @@ package prompto.statement;
 
 import java.util.Iterator;
 
+import prompto.compiler.ByteOperand;
+import prompto.compiler.ClassConstant;
+import prompto.compiler.Flags;
+import prompto.compiler.IInstructionListener;
+import prompto.compiler.IVerifierEntry.Type;
+import prompto.compiler.InterfaceConstant;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.OffsetListenerConstant;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.StackLocal;
+import prompto.compiler.StackState;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
@@ -19,17 +32,17 @@ public class ForEachStatement extends BaseStatement {
 
 	Identifier v1, v2;
 	IExpression source;
-	StatementList instructions;
+	StatementList statements;
 
 	public ForEachStatement(Identifier v1, Identifier v2, IExpression source, StatementList instructions) {
 		this.v1 = v1;
 		this.v2 = v2;
 		this.source = source;
-		this.instructions = instructions;
+		this.statements = instructions;
 	}
 
 	public StatementList getInstructions() {
-		return instructions;
+		return statements;
 	}
 
 	@Override
@@ -57,12 +70,12 @@ public class ForEachStatement extends BaseStatement {
 		writer.append(" in ");
 		source.toDialect(writer);
 		writer.append(")");
-		boolean oneLine = instructions.size()==1 && (instructions.get(0) instanceof SimpleStatement);
+		boolean oneLine = statements.size()==1 && (statements.get(0) instanceof SimpleStatement);
 		if(!oneLine)
 			writer.append(" {");
 		writer.newLine();
 		writer.indent();
-		instructions.toDialect(writer);
+		statements.toDialect(writer);
 		writer.dedent();
 		if(!oneLine) {
 			writer.append("}");
@@ -82,7 +95,7 @@ public class ForEachStatement extends BaseStatement {
 		writer.append(":");
 		writer.newLine();
 		writer.indent();
-		instructions.toDialect(writer);
+		statements.toDialect(writer);
 		writer.dedent();
 	}
 
@@ -98,7 +111,7 @@ public class ForEachStatement extends BaseStatement {
 		writer.append(":");
 		writer.newLine();
 		writer.indent();
-		instructions.toDialect(writer);
+		statements.toDialect(writer);
 		writer.dedent();
 	}
 
@@ -115,7 +128,7 @@ public class ForEachStatement extends BaseStatement {
 		context.registerValue(new Variable(itemName, elemType));
 		if (v2 != null)
 			context.registerValue(new Variable(v1, IntegerType.instance()));
-		return instructions.check(child, null);
+		return statements.check(child, null);
 	}
 
 	@Override
@@ -139,7 +152,7 @@ public class ForEachStatement extends BaseStatement {
 			Context child = context.newChildContext();
 			child.registerValue(new Variable(v1, elemType));
 			child.setValue(v1, iterator.next());
-			IValue value = instructions.interpret(child);
+			IValue value = statements.interpret(child);
 			if (value != null)
 				return value;
 		}
@@ -156,7 +169,7 @@ public class ForEachStatement extends BaseStatement {
 			child.setValue(v2, iterator.next());
 			child.registerValue(new Variable(v1, IntegerType.instance()));
 			child.setValue(v1, new Integer(++index));
-			IValue value = instructions.interpret(child);
+			IValue value = statements.interpret(child);
 			if (value != null)
 				return value;
 		}
@@ -173,4 +186,126 @@ public class ForEachStatement extends BaseStatement {
 			throw new InternalError("Should never get there!");
 	}
 
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		if(v2==null)
+			return compileWithoutIndex(context, method, flags);
+		else
+			return compileWithIndex(context, method, flags);
+	}
+
+	private ResultInfo compileWithIndex(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		Class<?> itemClass = source.check(context).checkIterator(context).toJavaClass();
+		StackLocal iterLocal = compileIterator(context, method, flags);
+		StackLocal v1Local = compileInitCounter(method);
+		// local needs to be ITEM_Top because that's what the verifier infers from INVOKEINTERFACE on Iterator.next
+		StackLocal v2Local = method.registerLocal(v2.getName(), Type.ITEM_Top, new ClassConstant(itemClass));
+		StackState iteratorState = method.captureStackState();
+		IInstructionListener test = method.addOffsetListener(new OffsetListenerConstant());
+		method.activateOffsetListener(test);
+		method.addInstruction(Opcode.GOTO, test);
+		IInstructionListener loop = method.addOffsetListener(new OffsetListenerConstant(true));
+		method.activateOffsetListener(loop);
+		method.restoreStackState(iteratorState);
+		method.placeLabel(iteratorState);
+		// call next and store in v2
+		method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)iterLocal.getIndex()), new ClassConstant(Iterator.class));
+		InterfaceConstant m = new InterfaceConstant(Iterator.class, "next", Object.class);
+		method.addInstruction(Opcode.INVOKEINTERFACE, m);
+		method.addInstruction(Opcode.CHECKCAST, new ClassConstant(itemClass));
+		method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)v2Local.getIndex()));
+		// increment v1
+		compileIncrementCounter(method, v1Local);
+		// compile statements
+		for(IStatement statement : statements)
+			statement.compile(context, method, flags);
+		// call hasNext
+		method.inhibitOffsetListener(test);
+		method.restoreStackState(iteratorState);
+		method.placeLabel(iteratorState);
+		method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)iterLocal.getIndex()), new ClassConstant(Iterator.class));
+		m = new InterfaceConstant(Iterator.class, "hasNext", boolean.class);
+		method.addInstruction(Opcode.INVOKEINTERFACE, m);
+		// branch if done
+		method.inhibitOffsetListener(loop);
+		method.addInstruction(Opcode.IFNE, loop);
+		// TODO method.unregisterLocal(iterLocal.getName());
+		// TODO method.unregisterLocal(v1.getName());
+		// TODO method.unregisterLocal(v2.getName());
+		// TODO manage return value in loop
+		return new ResultInfo(void.class, false);
+	}
+
+	private void compileIncrementCounter(MethodInfo method, StackLocal local) {
+		compileLoadCounter(method, local);
+		method.addInstruction(Opcode.LCONST_1);
+		method.addInstruction(Opcode.LADD);
+		compileStoreCounter(method, local);
+	}
+
+	private void compileLoadCounter(MethodInfo method, StackLocal local) {
+		method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)local.getIndex()), new ClassConstant(Long.class));
+		MethodConstant m = new MethodConstant(Long.class, "longValue", long.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+	}
+
+	private StackLocal compileInitCounter(MethodInfo method) {
+		StackLocal local = method.registerLocal(v1.getName(), Type.ITEM_Object, new ClassConstant(Long.class));
+		method.addInstruction(Opcode.LCONST_0);
+		compileStoreCounter(method, local);
+		return local;
+	}
+
+	private void compileStoreCounter(MethodInfo method, StackLocal local) {
+		MethodConstant m = new MethodConstant(Long.class, "valueOf", long.class, Long.class);
+		method.addInstruction(Opcode.INVOKESTATIC, m);
+		method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)local.getIndex()));		
+	}
+
+	private ResultInfo compileWithoutIndex(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		Class<?> itemClass = source.check(context).checkIterator(context).toJavaClass();
+		StackLocal iterLocal = compileIterator(context, method, flags);
+		// local needs to be ITEM_Top because that's what the verifier infers from INVOKEINTERFACE on Iterator.next
+		StackLocal v1Local = method.registerLocal(v1.getName(), Type.ITEM_Top, new ClassConstant(itemClass));
+		StackState iteratorState = method.captureStackState();
+		IInstructionListener test = method.addOffsetListener(new OffsetListenerConstant());
+		method.activateOffsetListener(test);
+		method.addInstruction(Opcode.GOTO, test);
+		IInstructionListener loop = method.addOffsetListener(new OffsetListenerConstant(true));
+		method.activateOffsetListener(loop);
+		method.restoreStackState(iteratorState);
+		method.placeLabel(iteratorState);
+		// call next and store in v1
+		method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)iterLocal.getIndex()), new ClassConstant(Iterator.class));
+		InterfaceConstant m = new InterfaceConstant(Iterator.class, "next", Object.class);
+		method.addInstruction(Opcode.INVOKEINTERFACE, m);
+		method.addInstruction(Opcode.CHECKCAST, new ClassConstant(itemClass));
+		method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)v1Local.getIndex()));
+		// compile statements
+		for(IStatement statement : statements)
+			statement.compile(context, method, flags);
+		// call hasNext
+		method.inhibitOffsetListener(test);
+		method.restoreStackState(iteratorState);
+		method.placeLabel(iteratorState);
+		method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)iterLocal.getIndex()), new ClassConstant(Iterator.class));
+		m = new InterfaceConstant(Iterator.class, "hasNext", boolean.class);
+		method.addInstruction(Opcode.INVOKEINTERFACE, m);
+		// branch if done
+		method.inhibitOffsetListener(loop);
+		method.addInstruction(Opcode.IFNE, loop);
+		// TODO method.unregisterLocal(iterLocal.getName());
+		// TODO method.unregisterLocal(v1.getName());
+		// TODO manage return value in loop
+		return new ResultInfo(void.class, false);
+	}
+
+	private StackLocal compileIterator(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		source.compile(context, method, flags);
+		InterfaceConstant m = new InterfaceConstant(Iterable.class, "iterator", Iterator.class);
+		method.addInstruction(Opcode.INVOKEINTERFACE, m);
+		StackLocal iterLocal = method.registerLocal("%iter%", Type.ITEM_Object, new ClassConstant(Iterator.class));
+		method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)iterLocal.getIndex()), new ClassConstant(Iterator.class));
+		return iterLocal;
+	}
 }
