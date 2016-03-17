@@ -33,6 +33,7 @@ import prompto.grammar.Identifier;
 import prompto.grammar.NativeSymbol;
 import prompto.intrinsic.PromptoDate;
 import prompto.intrinsic.PromptoDateTime;
+import prompto.intrinsic.PromptoTime;
 import prompto.literal.BooleanLiteral;
 import prompto.literal.DateLiteral;
 import prompto.literal.DateTimeLiteral;
@@ -507,7 +508,7 @@ public class TestParserAtoms {
 		CodeWriter writer = new CodeWriter(Dialect.O, null);
 		literal.toDialect(writer);
 		assertEquals("'15:03:10'", writer.toString());
-		assertEquals(new LocalTime(15, 03, 10), ((TimeLiteral)literal).getValue().getValue());
+		assertEquals(new PromptoTime(new LocalTime(15, 03, 10)), ((TimeLiteral)literal).getValue().getValue());
 	}
 
 	@Test
@@ -520,7 +521,7 @@ public class TestParserAtoms {
 		CodeWriter writer = new CodeWriter(Dialect.O, null);
 		literal.toDialect(writer);
 		assertEquals("'2012-10-09T15:18:17'", writer.toString());
-		assertEquals(new DateTime(2012, 10, 9, 15, 18, 17), ((DateTimeLiteral)literal).getValue().getValue());
+		assertEquals(new PromptoDateTime(new DateTime(2012, 10, 9, 15, 18, 17)), ((DateTimeLiteral)literal).getValue().getValue());
 	}
 	
 	@Test
@@ -533,7 +534,7 @@ public class TestParserAtoms {
 		CodeWriter writer = new CodeWriter(Dialect.O, null);
 		literal.toDialect(writer);
 		assertEquals("'2012-10-09T15:18:17.487'", writer.toString());
-		assertEquals(new DateTime(2012, 10, 9, 15, 18, 17, 487), ((DateTimeLiteral)literal).getValue().getValue());
+		assertEquals(new PromptoDateTime(new DateTime(2012, 10, 9, 15, 18, 17, 487)), ((DateTimeLiteral)literal).getValue().getValue());
 	}
 	
 	@Test
