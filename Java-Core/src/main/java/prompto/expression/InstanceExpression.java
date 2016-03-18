@@ -93,7 +93,28 @@ public class InstanceExpression implements IExpression {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		ResultInfo info = compileLocal(context, method, flags);
+		if(info==null)
+			info = compileField(context, method, flags);
+		if(info==null)
+			throw new SyntaxError("Unknown identifier: " + getName());
+		else
+			return info;
+	}
+
+	private ResultInfo compileField(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		StackLocal local = method.getRegisteredLocal("this");
+		if(local==null)
+			return null;
+		ThisExpression parent = new ThisExpression();
+		MemberSelector selector = new MemberSelector(parent, id);
+		return selector.compile(context, method, flags);
+	}
+
+	private ResultInfo compileLocal(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		StackLocal local = method.getRegisteredLocal(getName());
+		if(local==null)
+			return null;
 		ClassConstant c = local instanceof StackLocal.ObjectLocal ? ((StackLocal.ObjectLocal)local).getClassName() : new ClassConstant("java/lang/Object");   
 		switch(local.getIndex()) {
 			case 0:
@@ -113,7 +134,7 @@ public class InstanceExpression implements IExpression {
 				method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)local.getIndex()), c);
 		}
 		IType type = check(context);
-		return new ResultInfo(type.toJavaType(), true);
+		return new ResultInfo(type.toJavaType(), true);	
 	}
 
 }

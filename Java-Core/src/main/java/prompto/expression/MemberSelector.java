@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 
 import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.FieldConstant;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
@@ -169,6 +170,7 @@ public class MemberSelector extends SelectorExpression {
 		return null;
 	}
 
+
 	private ResultInfo compileInstanceMember(Context context, MethodInfo method, ResultInfo parent, Flags flags) throws SyntaxError {
 		Type resultType = check(context).toJavaType();
 		// special case for String.length() to avoid wrapping String.class for just one member
@@ -176,8 +178,12 @@ public class MemberSelector extends SelectorExpression {
 			return compileStringLength(method, flags);
 		else {
 			String getterName = CompilerUtils.getterName(getName());
-			// TODO do this for all generic classes?
-			if(PromptoDict.Entry.class==parent.getType()) {
+			if(isCompilingGetter(context, method, parent, getterName)) {
+				String className = CompilerUtils.getClassName(parent.getType());
+				String desc = CompilerUtils.getDescriptor(resultType);
+				FieldConstant f = new FieldConstant(className, id.getName(), desc);
+				method.addInstruction(Opcode.GETFIELD, f);
+			} else if(PromptoDict.Entry.class==parent.getType()) {
 				IOperand oper = new MethodConstant(parent.getType(), getterName, Object.class);
 				method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 				method.addInstruction(Opcode.CHECKCAST, new ClassConstant(resultType));
@@ -187,6 +193,10 @@ public class MemberSelector extends SelectorExpression {
 			}
 			return new ResultInfo(resultType, true);
 		}
+	}
+
+	private boolean isCompilingGetter(Context context, MethodInfo method, ResultInfo parent, String getterName) {
+		return this.parent instanceof ThisExpression && getterName.equals(method.getName().getValue());
 	}
 
 	private ResultInfo compileStringLength(MethodInfo method, Flags flags) {

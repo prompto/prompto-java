@@ -61,7 +61,7 @@ public interface IVerifierEntry {
 			public StackLocal newStackLocal(Type type, String name, ClassConstant className) {
 				if(!"this".equals(name))
 					throw new UnsupportedOperationException();
-				return new StackLocal.ThisLocal();
+				return new StackLocal.ThisLocal(className);
 			}
 		};
 

@@ -158,6 +158,10 @@ public class Context implements IContext {
 		return initInstanceContext(new InstanceContext(type), false);
 	}
 
+	public Context newCategoryContext(CategoryType type) {
+		return initInstanceContext(new InstanceContext(type), false);
+	}
+	
 	public Context newInstanceContext(IInstance instance) {
 		return initInstanceContext(new InstanceContext(instance), false);
 	}
@@ -780,5 +784,7 @@ public class Context implements IContext {
 			instance.setMember(calling, name, value);
 		}
 	}
+
+
 
 }

@@ -78,10 +78,32 @@ public abstract class StackLocal implements IVerifierEntry {
 		}
 	}
 	
+	static class ThisLocal extends ObjectLocal {
+
+		public ThisLocal(ClassConstant className) {
+			super(Type.ITEM_UninitializedThis, "this", className);
+		}
+		
+		@Override
+		public int length() {
+			return 1;
+		}
+		
+		@Override
+		public void writeTo(ByteWriter writer) {
+			type.writeTo(writer);
+		}
+	}
+	
 	static class NativeLocal extends StackLocal{
 
 		public NativeLocal(Type type, String name) {
 			super(type, name);
+		}
+		
+		@Override
+		public String toString() {
+			return this.type.name();
 		}
 		
 		@Override
@@ -94,7 +116,7 @@ public abstract class StackLocal implements IVerifierEntry {
 			    Long_variable_info;
 			    Double_variable_info;
 			    Null_variable_info;
-			    UninitializedThis_variable_info;
+			    UninitializedThis_variable_info; // EXCLUDED
 			    Object_variable_info; // EXCLUDED
 			    Uninitialized_variable_info; // EXCLUDED
 			}
@@ -108,13 +130,7 @@ public abstract class StackLocal implements IVerifierEntry {
 		}
 	}
 
-	static class ThisLocal extends NativeLocal {
 
-		public ThisLocal() {
-			super(Type.ITEM_UninitializedThis, "this");
-		}
-		
-	}
 
 
 	

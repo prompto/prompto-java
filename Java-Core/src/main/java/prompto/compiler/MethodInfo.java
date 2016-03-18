@@ -19,6 +19,10 @@ public class MethodInfo {
 		this.proto = new Utf8Constant(proto);
 	}
 
+	public Utf8Constant getName() {
+		return name;
+	}
+	
 	@Override
 	public String toString() {
 		return name.toString() + '/' + proto.toString();

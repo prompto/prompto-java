@@ -1,5 +1,11 @@
 package prompto.expression;
 
+import prompto.compiler.ClassConstant;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.StackLocal;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.parser.Dialect;
@@ -29,6 +35,18 @@ public class ThisExpression implements IExpression {
 		else
 			throw new SyntaxError("Not in an instance context!");
 	}
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		StackLocal local = method.getRegisteredLocal("this");
+		if(local==null)
+			return null;
+		ClassConstant c = local instanceof StackLocal.ObjectLocal ? ((StackLocal.ObjectLocal)local).getClassName() : new ClassConstant("java/lang/Object");   
+		method.addInstruction(Opcode.ALOAD_0, c);
+		IType type = check(context);
+		return new ResultInfo(type.toJavaType(), true);	
+	}
+	
 	
 	@Override
 	public void toDialect(CodeWriter writer) {

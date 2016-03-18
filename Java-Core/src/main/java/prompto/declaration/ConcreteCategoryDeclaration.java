@@ -9,9 +9,11 @@ import java.util.Set;
 
 import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
+import prompto.compiler.CompilerException;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.FieldConstant;
 import prompto.compiler.FieldInfo;
+import prompto.compiler.Flags;
 import prompto.compiler.IVerifierEntry;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
@@ -397,13 +399,17 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	
 	@Override
 	public void compile(Context context, ClassFile classFile) {
-		compileSuperClass(context, classFile);
-		compileFields(context, classFile);
-		compileConstructor(context, classFile);
-		compileMethods(context, classFile);
+		try {
+			compileSuperClass(context, classFile, new Flags());
+			compileFields(context, classFile, new Flags());
+			compileConstructor(context, classFile, new Flags());
+			compileMethods(context, classFile, new Flags());
+		} catch(SyntaxError e) {
+			throw new CompilerException(e);
+		}
 	}
 
-	private void compileSuperClass(Context context, ClassFile classFile) {
+	private void compileSuperClass(Context context, ClassFile classFile, Flags flags) {
 		ClassConstant superClass = getSuperClass(context);
 		if(superClass!=null)
 			classFile.setSuperClass(superClass);
@@ -419,21 +425,21 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return new ClassConstant(className);
 	}
 
-	private void compileFields(Context context, ClassFile classFile) {
+	private void compileFields(Context context, ClassFile classFile, Flags flags) throws SyntaxError {
 		if(attributes!=null) for(Identifier id : attributes)
-			compileField(context, classFile, id);
+			compileField(context, classFile, flags, id);
 	}
 
-	private void compileField(Context context, ClassFile classFile, Identifier id) {
+	private void compileField(Context context, ClassFile classFile, Flags flags, Identifier id) throws SyntaxError {
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
 		FieldInfo field = decl.toFieldInfo(context);
 		classFile.addField(field);
-		compileSetter(context, classFile, field);
-		compileGetter(context, classFile, field);
+		compileSetter(context, classFile, flags, id, field);
+		compileGetter(context, classFile, flags, id, field);
 	}
 	
 
-	private void compileSetter(Context context, ClassFile classFile, FieldInfo field) {
+	private void compileSetter(Context context, ClassFile classFile, Flags flags, Identifier id, FieldInfo field) {
 		String name = CompilerUtils.setterName(field.getName().getValue());
 		String proto = "(" + field.getDescriptor().getValue() + ")V";
 		MethodInfo method = new MethodInfo(name, proto);
@@ -448,19 +454,27 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		method.addInstruction(Opcode.RETURN);
 	}
 
-	private void compileGetter(Context context, ClassFile classFile, FieldInfo field) {
-		String name = CompilerUtils.getterName(field.getName().getValue());
+	private void compileGetter(Context context, ClassFile classFile, Flags flags,Identifier id, FieldInfo field) throws SyntaxError {
+		GetterMethodDeclaration getter = findGetter(context, id);
+		if(getter!=null)
+			getter.compile(context, classFile, flags, getType(context), field);
+		else
+			compileGetterField(context, classFile, flags, id, field);
+	}
+
+	private void compileGetterField(Context context, ClassFile classFile, Flags flags, Identifier id, FieldInfo field) {
+		String name = CompilerUtils.getterName(id.getName());
 		String proto = "()" + field.getDescriptor().getValue();
 		MethodInfo method = new MethodInfo(name, proto);
 		classFile.addMethod(method);
-		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
+		method.registerLocal("this", IVerifierEntry.Type.ITEM_UninitializedThis, classFile.getThisClass());
 		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
-		FieldConstant f = new FieldConstant(classFile.getThisClass(), field.getName().getValue(), field.getDescriptor());
+		FieldConstant f = new FieldConstant(classFile.getThisClass(), id.getName(), field.getDescriptor());
 		method.addInstruction(Opcode.GETFIELD, f);
 		method.addInstruction(Opcode.ARETURN, new ClassConstant(field.getClassName()));
 	}
 
-	private void compileConstructor(Context context, ClassFile classFile) {
+	private void compileConstructor(Context context, ClassFile classFile, Flags flags) {
 		MethodInfo method = new MethodInfo("<init>", "()V");
 		classFile.addMethod(method);
 		method.registerLocal("this", IVerifierEntry.Type.ITEM_UninitializedThis, classFile.getThisClass());
@@ -470,7 +484,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		method.addInstruction(Opcode.RETURN);
 	}
 
-	private void compileMethods(Context context, ClassFile classFile) {
+	private void compileMethods(Context context, ClassFile classFile, Flags flags) {
 		// TODO Auto-generated method stub
 		
 	}
