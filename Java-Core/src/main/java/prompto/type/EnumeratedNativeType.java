@@ -1,5 +1,7 @@
 package prompto.type;
 
+import java.lang.reflect.Type;
+
 import com.fasterxml.jackson.databind.JsonNode;
 
 import prompto.declaration.EnumeratedNativeDeclaration;
@@ -26,7 +28,7 @@ public class EnumeratedNativeType extends BaseType {
 	}
 
 	@Override
-	public Class<?> toJavaClass() {
+	public Type toJavaType() {
 		// TODO Auto-generated method stub
 		return null;
 	}

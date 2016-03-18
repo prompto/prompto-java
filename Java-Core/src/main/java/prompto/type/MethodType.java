@@ -1,6 +1,7 @@
 package prompto.type;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
@@ -22,7 +23,7 @@ public class MethodType extends BaseType {
 	}
 	
 	@Override
-	public Class<?> toJavaClass() {
+	public Type toJavaType() {
 		return Method.class;
 	}
 	

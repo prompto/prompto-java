@@ -1,5 +1,7 @@
 package prompto.type;
 
+import java.lang.reflect.Type;
+
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoList;
@@ -17,7 +19,7 @@ public class ListType extends ContainerType {
 	}
 	
 	@Override
-	public Class<?> toJavaClass() {
+	public Type toJavaType() {
 		return PromptoList.class;
 	}
 	

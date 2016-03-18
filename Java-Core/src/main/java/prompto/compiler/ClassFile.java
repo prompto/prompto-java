@@ -16,13 +16,20 @@ public class ClassFile {
 	
 	int accessFlags = Tags.ACC_SUPER | Modifier.PUBLIC;
 	
-	public ClassFile(String thisClassName, String superClassName) {
+	public ClassFile(String thisClassName) {
 		this.thisClass = new ClassConstant(thisClassName);
-		this.superClass = new ClassConstant(superClassName);
 	}
 
 	public ClassConstant getThisClass() {
 		return thisClass;
+	}
+	
+	public ClassConstant getSuperClass() {
+		return superClass;
+	}
+	
+	public void setSuperClass(ClassConstant superClass) {
+		this.superClass = superClass;
 	}
 	
 	public int getModifiers() {
@@ -31,6 +38,10 @@ public class ClassFile {
 
 	public void addModifier(int modifier) {
 		accessFlags |= modifier;
+	}
+	
+	public void addField(FieldInfo field) {
+		fields.add(field);
 	}
 
 	public void addMethod(MethodInfo method) {
@@ -46,6 +57,8 @@ public class ClassFile {
 	private ConstantsPool registerConstants() {
 		ConstantsPool pool = new ConstantsPool();
 		thisClass.register(pool);
+		if(superClass==null)
+			superClass = new ClassConstant("java/lang/Object");
 		superClass.register(pool);
 		interfaces.forEach((s)-> 
 			s.register(pool));
@@ -99,6 +112,8 @@ public class ClassFile {
 		attributes.forEach((a)->
 			a.writeTo(writer));
 	}
+
+
 
 
 

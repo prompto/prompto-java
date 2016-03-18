@@ -63,8 +63,8 @@ public class IntDivideExpression implements IExpression {
 		ResultInfo lval = left.compile(context, method, flags);
 		IOperatorFunction divider = dividers.get(lval.getType());
 		if(divider==null) {
-			System.err.println("Missing IOperatorFunction for idivide " + lval.getType().getName());
-			throw new SyntaxError("Cannot idivide " + lval.getType().getName() + " by " + right.check(context).getName());
+			System.err.println("Missing IOperatorFunction for idivide " + lval.getType().getTypeName());
+			throw new SyntaxError("Cannot idivide " + lval.getType().getTypeName() + " by " + right.check(context).getName());
 		}
 		return divider.compile(context, method, lval, right, flags);
 	}

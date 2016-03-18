@@ -70,7 +70,7 @@ public class JavaClassType extends BaseType {
 	}
 	
 	@Override
-	public Class<?> toJavaClass() {
+	public Type toJavaType() {
 		return toJavaClass(type);
 	}
 	

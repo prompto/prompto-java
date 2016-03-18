@@ -1,5 +1,6 @@
 package prompto.compiler;
 
+import java.lang.reflect.Type;
 import java.rmi.UnexpectedException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,10 +39,10 @@ public abstract class CompilerUtils {
 		throw new CompilerException(new UnexpectedException("Should never get there"));
 	}
 
-	static Map<Class<?>, String> descriptors = createDescriptorsMap();
+	static Map<Type, String> descriptors = createDescriptorsMap();
 	
-	private static Map<Class<?>, String> createDescriptorsMap() {
-		Map<Class<?>, String> map = new HashMap<>();
+	private static Map<Type, String> createDescriptorsMap() {
+		Map<Type, String> map = new HashMap<>();
 		map.put(byte.class, "B");
 		map.put(char.class, "C");
 		map.put(double.class, "D");
@@ -54,7 +55,7 @@ public abstract class CompilerUtils {
 		return map;
 	}
 
-	public static String getDescriptor(Class<?> type) {
+	public static String getDescriptor(Type type) {
 		/*
 		B	byte	signed byte
 		C	char	Unicode character code point in the Basic Multilingual Plane, encoded with UTF-16
@@ -67,17 +68,17 @@ public abstract class CompilerUtils {
 		Z	boolean	true or false
 		[	reference	one array dimension
 		 */
-		if(type.isArray())
-			return "[" + getDescriptor(type.getComponentType());
+		if(type instanceof Class<?> && ((Class<?>)type).isArray())
+			return "[" + getDescriptor(((Class<?>)type).getComponentType());
 		String s = descriptors.get(type);
 		return s!=null ? s : "L" + getClassName(type) + ';';
 	}
 
-	public static String getClassName(Class<?> type) {
-		return type.getName().replace('.', '/');
+	public static String getClassName(Type type) {
+		return type.getTypeName().replace('.', '/');
 	}
 
-	public static String createProto(Class<?> ... types) {
+	public static String createProto(Type ... types) {
 		StringBuilder sb = new StringBuilder();
 		sb.append('(');
 		for(int i=0;i<types.length-1;i++)
@@ -96,10 +97,10 @@ public abstract class CompilerUtils {
 		return sb.toString();
 	}
 
-	public static String createProto(Class<?>[] parameterTypes, Class<?> returnType) {
+	public static String createProto(Type[] parameterTypes, Type returnType) {
 		StringBuilder sb = new StringBuilder();
 		sb.append('(');
-		for(Class<?> type : parameterTypes) {
+		for(Type type : parameterTypes) {
 			sb.append(getDescriptor(type));
 		}
 		sb.append(')');
@@ -109,7 +110,7 @@ public abstract class CompilerUtils {
 
 	static final char PROMPTO_CHAR = 'π';
 	static final char METHOD_CHAR = 'µ';
-	static final char CLASS_CHAR = 'χ';
+	static final char CATEGORY_CHAR = 'χ';
 
 	public static String getGlobalMethodClassName(Identifier id, boolean useSlash) {
 		return CompilerUtils.getGlobalMethodClassName(id.getName(), useSlash);
@@ -121,6 +122,16 @@ public abstract class CompilerUtils {
 				: "" + PROMPTO_CHAR + '.' + METHOD_CHAR + '.' + name;
 	}
 	
+	public static String getCategoryClassName(Identifier id, boolean useSlash) {
+		return CompilerUtils.getCategoryClassName(id.getName(), useSlash);
+	}
+
+	public static String getCategoryClassName(String name, boolean useSlash) {
+		return useSlash ?
+				"" + PROMPTO_CHAR + '/' + CATEGORY_CHAR + '/' + name
+				: "" + PROMPTO_CHAR + '.' + CATEGORY_CHAR + '.' + name;
+	}
+
 	public static ResultInfo booleanToBoolean(MethodInfo method) {
 		IOperand oper = new MethodConstant(
 				Boolean.class, 
@@ -290,7 +301,7 @@ public abstract class CompilerUtils {
 		else if(Double.class==info.getType())
 			return DoubleTodouble(method);
 		else
-			throw new CompilerException("Cannot convert " + info.getType().getName() + " to double");
+			throw new CompilerException("Cannot convert " + info.getType().getTypeName() + " to double");
 	}
 
 	public static ResultInfo numberTolong(MethodInfo method, ResultInfo info) {
@@ -303,7 +314,7 @@ public abstract class CompilerUtils {
 		else if(Double.class==info.getType())
 			return DoubleTolong(method);
 		else
-			throw new CompilerException("Cannot convert " + info.getType().getName() + " to long");
+			throw new CompilerException("Cannot convert " + info.getType().getTypeName() + " to long");
 	}
 
 	public static ResultInfo numberToint(MethodInfo method, ResultInfo info) {
@@ -347,23 +358,41 @@ public abstract class CompilerUtils {
 		return new ResultInfo(String.class, true);
 	}
 
-	public static ResultInfo newRawInstance(MethodInfo method, Class<?> klass) {
+	public static ResultInfo newRawInstance(MethodInfo method, Type klass) {
 		IOperand c = new ClassConstant(klass);
 		method.addInstruction(Opcode.NEW, c);
 		method.addInstruction(Opcode.DUP); // need to keep a reference on top of stack
 		return new ResultInfo(klass, true);
 	}
 	
-	public static ResultInfo callConstructor(MethodInfo method, Class<?> klass, Class<?> ... params) {
+	public static ResultInfo callConstructor(MethodInfo method, Type klass, Type ... params) {
 		IOperand c = new MethodConstant(getClassName(klass), "<init>", createProto(params, void.class));
 		method.addInstruction(Opcode.INVOKESPECIAL, c);
 		return new ResultInfo(klass, true);
 	}
 	
-	public static ResultInfo newInstance(MethodInfo method, Class<?> klass) {
+	public static ResultInfo newInstance(MethodInfo method, Type klass) {
 		newRawInstance(method, klass);
 		return callConstructor(method, klass);
 	}
+
+	public static Type getCategoryClass(Identifier identifier) {
+		return getCategoryClass(identifier.getName());
+	}
+
+	public static Type getCategoryClass(String name) {
+		name = name.replace('.', '/');
+		return new PromptoType(name);
+	}
+
+	public static String setterName(String name) {
+		return "set" + name.substring(0,1).toUpperCase() + name.substring(1);
+	}
+
+	public static String getterName(String name) {
+		return "get" + name.substring(0,1).toUpperCase() + name.substring(1);
+	}
+
 
 
 	

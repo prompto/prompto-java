@@ -55,8 +55,8 @@ public class CategorySymbol extends Symbol implements IExpression  {
 		if(assignments!=null) {
 			context = context.newChildContext();
 			for(ArgumentAssignment assignment : assignments) {
-				if(!cd.hasAttribute(context, assignment.getName()))
-					throw new SyntaxError("\"" + assignment.getName() + 
+				if(!cd.hasAttribute(context, assignment.getId()))
+					throw new SyntaxError("\"" + assignment.getId() + 
 						"\" is not an attribute of " + type.getId());	
 				assignment.check(context);
 			}
@@ -73,10 +73,10 @@ public class CategorySymbol extends Symbol implements IExpression  {
 			context = context.newLocalContext();
 			for(ArgumentAssignment assignment : assignments) {
 				IValue value = assignment.getExpression().interpret(context);
-				instance.setMember(context, assignment.getName(), value);
+				instance.setMember(context, assignment.getId(), value);
 			}
 		}
-		instance.setMember(context, new Identifier("name"), new Text(this.getIdentifier().toString()));
+		instance.setMember(context, new Identifier("name"), new Text(this.getId().toString()));
 		instance.setMutable(false);
 		return instance;
 	}

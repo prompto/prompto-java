@@ -299,8 +299,8 @@ public class EqualsExpression implements IExpression, IAssertion {
 		ResultInfo lval = left.compile(context, method, flags.withNative(true));
 		IOperatorFunction tester = testers.get(lval.getType());
 		if(tester==null) {
-			System.err.println("Missing IOperatorFunction for = " + lval.getType().getName());
-			throw new SyntaxError("Cannot check equality of " + lval.getType().getName() + " with " + right.check(context).getName());
+			System.err.println("Missing IOperatorFunction for = " + lval.getType().getTypeName());
+			throw new SyntaxError("Cannot check equality of " + lval.getType().getTypeName() + " with " + right.check(context).getName());
 		}
 		return tester.compile(context, method, lval, right, flags);
 	}

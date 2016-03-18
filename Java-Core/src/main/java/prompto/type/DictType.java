@@ -1,5 +1,7 @@
 package prompto.type;
 
+import java.lang.reflect.Type;
+
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDict;
@@ -18,7 +20,7 @@ public class DictType extends ContainerType {
 	}
 
 	@Override
-	public Class<?> toJavaClass() {
+	public Type toJavaType() {
 		return PromptoDict.class;
 	}
 	

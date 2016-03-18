@@ -1,5 +1,6 @@
 package prompto.type;
 
+import java.lang.reflect.Type;
 import java.util.UUID;
 
 import prompto.runtime.Context;
@@ -20,7 +21,7 @@ public class UUIDType extends NativeType {
 	}
 	
 	@Override
-	public Class<?> toJavaClass() {
+	public Type toJavaType() {
 		return UUID.class;
 	}
 	

@@ -1,5 +1,7 @@
 package prompto.expression;
 
+import java.lang.reflect.Type;
+
 import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -168,12 +170,12 @@ public class MemberSelector extends SelectorExpression {
 	}
 
 	private ResultInfo compileInstanceMember(Context context, MethodInfo method, ResultInfo parent, Flags flags) throws SyntaxError {
-		Class<?> resultType = check(context).toJavaClass();
+		Type resultType = check(context).toJavaType();
 		// special case for String.length() to avoid wrapping String.class for just one member
 		if(String.class==parent.getType() && "length".equals(getName()))
 			return compileStringLength(method, flags);
 		else {
-			String getterName = "get" + getName().substring(0,1).toUpperCase() + getName().substring(1);
+			String getterName = CompilerUtils.getterName(getName());
 			// TODO do this for all generic classes?
 			if(PromptoDict.Entry.class==parent.getType()) {
 				IOperand oper = new MethodConstant(parent.getType(), getterName, Object.class);

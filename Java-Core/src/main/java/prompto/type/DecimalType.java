@@ -1,5 +1,6 @@
 package prompto.type;
 
+import java.lang.reflect.Type;
 import java.util.Comparator;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -28,7 +29,7 @@ public class DecimalType extends NativeType implements INumberType {
 	}
 	
 	@Override
-	public Class<?> toJavaClass() {
+	public Type toJavaType() {
 		return Double.class;
 	}
 	

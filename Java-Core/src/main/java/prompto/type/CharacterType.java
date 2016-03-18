@@ -1,5 +1,6 @@
 package prompto.type;
 
+import java.lang.reflect.Type;
 import java.security.InvalidParameterException;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -28,7 +29,7 @@ public class CharacterType extends NativeType {
 	}
 	
 	@Override
-	public Class<?> toJavaClass() {
+	public Type toJavaType() {
 		return java.lang.Character.class;
 	}
 	

@@ -88,9 +88,9 @@ public class MethodFinder {
 			while(it1.hasNext() && it2.hasNext()) {
 				ArgumentAssignment as1 = it1.next();
 				ArgumentAssignment as2 = it2.next();
-				IArgument ar1 = d1.getArguments().find(as1.getName());
-				IArgument ar2 = d2.getArguments().find(as2.getName());
-				if(as1.getName().equals(as2.getName())) {
+				IArgument ar1 = d1.getArguments().find(as1.getId());
+				IArgument ar2 = d2.getArguments().find(as2.getId());
+				if(as1.getId().equals(as2.getId())) {
 					// the general case with named arguments
 					IType t1 = ar1.getType(s1);
 					IType t2 = ar2.getType(s2);

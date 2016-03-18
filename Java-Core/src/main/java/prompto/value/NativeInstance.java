@@ -37,7 +37,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 	boolean mutable = false;
 	
 	public NativeInstance(Context context, NativeCategoryDeclaration declaration) throws SyntaxError {
-		super(new CategoryType(declaration.getIdentifier()));
+		super(new CategoryType(declaration.getId()));
 		this.declaration = declaration;
 		this.instance = makeInstance(context);
 		if(declaration.isStorable()) {
@@ -47,7 +47,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 	}
 	
 	public NativeInstance(NativeCategoryDeclaration declaration, Object instance) {
-		super(new CategoryType(declaration.getIdentifier()));
+		super(new CategoryType(declaration.getId()));
 		this.declaration = declaration;
 		this.instance = instance;
 		if(declaration.isStorable()) {

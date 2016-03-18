@@ -1,6 +1,18 @@
 package prompto.expression;
 
+import java.lang.reflect.Type;
+import java.util.Set;
+
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.FieldInfo;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
+import prompto.declaration.NativeCategoryDeclaration;
 import prompto.error.NotMutableError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -31,7 +43,7 @@ public class ConstructorExpression implements IExpression {
 	
 	public void setAssignments(ArgumentAssignmentList assignments) {
 		this.assignments = assignments;
-		// in O and P, first anonymous argument is copyFrom
+		// in O and S dialects, first anonymous argument is copyFrom
 		if(assignments!=null && assignments.size()>0 && assignments.get(0).getArgument()==null) {
 			copyFrom = assignments.get(0).getExpression();
 			this.assignments.remove(0);
@@ -106,8 +118,8 @@ public class ConstructorExpression implements IExpression {
 		if(assignments!=null) {
 			context = context.newChildContext();
 			for(ArgumentAssignment assignment : assignments) {
-				if(!cd.hasAttribute(context, assignment.getName()))
-					throw new SyntaxError("\"" + assignment.getName() + 
+				if(!cd.hasAttribute(context, assignment.getId()))
+					throw new SyntaxError("\"" + assignment.getId() + 
 						"\" is not an attribute of " + type.getId());	
 				assignment.check(context);
 			}
@@ -140,13 +152,103 @@ public class ConstructorExpression implements IExpression {
 					IValue value = assignment.getExpression().interpret(context);
 					if(value!=null && value.isMutable() && !type.isMutable())
 						throw new NotMutableError();
-					instance.setMember(context, assignment.getName(), value);
+					instance.setMember(context, assignment.getId(), value);
 				}
 			}
 		} finally {
 			instance.setMutable(type.isMutable());
 		}
 		return instance;
+	}
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		Type klass = getType(context);
+		ResultInfo result = CompilerUtils.newInstance(method, klass);
+		compileCopyFrom(context, method, flags, result);
+		compileAssignments(context, method, flags, result);
+		return result;
+	}
+
+	private void compileAssignments(Context context, MethodInfo method, Flags flags, ResultInfo thisInfo) throws SyntaxError {
+		if(assignments!=null)
+			for(ArgumentAssignment assignment : assignments)
+				compileAssignment(context, method, flags, thisInfo, assignment);
+	}
+
+	private void compileAssignment(Context context, MethodInfo method, Flags flags, 
+			ResultInfo thisInfo, ArgumentAssignment assignment) throws SyntaxError {
+		// keep a copy of new instance on top of the stack
+		method.addInstruction(Opcode.DUP);
+		// get value
+		assignment.getExpression().compile(context, method, flags);
+		// call setter
+		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, assignment.getId());
+		FieldInfo field = decl.toFieldInfo(context);
+		MethodConstant m = new MethodConstant(thisInfo.getType(), 
+				CompilerUtils.setterName(field.getName().getValue()), "(" + field.getDescriptor().getValue() + ")V");
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+	}
+
+	private void compileCopyFrom(Context context, MethodInfo method, Flags flags, ResultInfo thisInfo) throws SyntaxError {
+		if(copyFrom==null)
+			return;
+		CategoryDeclaration thisCd = context.getRegisteredDeclaration(CategoryDeclaration.class, this.type.getId());
+		IType otherType = copyFrom.check(context);
+		CategoryDeclaration otherCd = context.getRegisteredDeclaration(CategoryDeclaration.class, otherType.getId());
+		compileCopyFrom(context, method, flags, thisCd, otherCd, thisInfo);
+	}
+
+	private void compileCopyFrom(Context context, MethodInfo method, Flags flags, 
+			CategoryDeclaration thisCd, CategoryDeclaration otherCd, ResultInfo thisInfo) throws SyntaxError {
+		ResultInfo copyFromInfo = copyFrom.compile(context, method, flags.withNative(false));
+		Set<Identifier> attrIds = thisCd.getAllAttributes(context);
+		for(Identifier attrId : attrIds)
+			compileCopyFrom(context, method, flags, thisCd, otherCd, attrId, thisInfo, copyFromInfo);
+		method.addInstruction(Opcode.POP);
+	}
+
+	private void compileCopyFrom(Context context, MethodInfo method, Flags flags, 
+			CategoryDeclaration thisCd, CategoryDeclaration otherCd, Identifier attrId, ResultInfo thisInfo, ResultInfo copyFromInfo) {
+		if(willBeAssigned(attrId) || !otherCd.hasAttribute(context, attrId))
+			return;
+		// keep a copy of copyFrom on top of the stack
+		method.addInstruction(Opcode.DUP); // -> new, copyFrom, copyFrom
+		// call getter on copyFrom instance
+		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, attrId);
+		FieldInfo field = decl.toFieldInfo(context);
+		MethodConstant m = new MethodConstant(copyFromInfo.getType(), 
+				CompilerUtils.getterName(attrId.getName()), "()" + field.getDescriptor().getValue());
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+		// keep the new instance at top of the stack (currently new, copyFrom, value)
+		method.addInstruction(Opcode.DUP_X2); // -> value, new, copyFrom, value
+		method.addInstruction(Opcode.POP); // -> value, new, copyFrom
+		method.addInstruction(Opcode.DUP_X2); // -> copyFrom, value, new, copyFrom
+		method.addInstruction(Opcode.POP); // -> copyFrom, value, new
+		method.addInstruction(Opcode.DUP_X2); // -> new, copyFrom, value, new
+		method.addInstruction(Opcode.SWAP); // -> new, copyFrom, new, value
+		// call setter on new instance
+		m = new MethodConstant(thisInfo.getType(), 
+				CompilerUtils.setterName(attrId.getName()), "(" + field.getDescriptor().getValue() + ")V");
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+	}
+
+	private boolean willBeAssigned(Identifier name) {
+		if(assignments!=null) 
+			for(ArgumentAssignment assignment : assignments) 
+				if(name.equals(assignment.getId()))
+					return true;
+		return false;
+	}
+
+	private Type getType(Context context) throws SyntaxError {
+		CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getId());
+		if(cd instanceof NativeCategoryDeclaration)
+			return ((NativeCategoryDeclaration)cd).getBoundClass(context, false);
+		else {
+			String className = CompilerUtils.getCategoryClassName(cd.getId(), true);
+			return CompilerUtils.getCategoryClass(className);	
+		}
 	}
 
 }

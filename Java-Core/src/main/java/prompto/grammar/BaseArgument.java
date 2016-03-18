@@ -19,7 +19,7 @@ public abstract class BaseArgument implements IArgument {
 	}
 	
 	@Override
-	public Identifier getIdentifier() {
+	public Identifier getId() {
 		return id;
 	}
 	

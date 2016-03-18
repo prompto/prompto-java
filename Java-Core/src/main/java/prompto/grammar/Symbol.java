@@ -38,7 +38,7 @@ public abstract class Symbol extends Section implements IExpression, INamed, IVa
 	}
 	
 	@Override
-	public Identifier getIdentifier() {
+	public Identifier getId() {
 		return symbol;
 	}
 	

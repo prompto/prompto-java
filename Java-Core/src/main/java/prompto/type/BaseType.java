@@ -219,6 +219,6 @@ public abstract class BaseType implements IType {
 
 	@Override
 	public String getJavaClassName(Context context) {
-		return this.toJavaClass().getName();
+		return this.toJavaType().getTypeName();
 	}
 }

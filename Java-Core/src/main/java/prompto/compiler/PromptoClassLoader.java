@@ -6,6 +6,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Paths;
 
+import prompto.declaration.CategoryDeclaration;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
@@ -68,8 +69,28 @@ public class PromptoClassLoader extends URLClassLoader {
 	private void createPromptoClass(String fullName) throws ClassNotFoundException {
 		if(fullName.contains(".µ.")) {
 			createGlobalMethodsClass(fullName);
+		} else if(fullName.contains(".χ.")) {
+			createCategoryClass(fullName);
 		} else
 			throw new ClassNotFoundException(fullName);
+	}
+
+	private void createCategoryClass(String fullName) throws ClassNotFoundException {
+		String simpleName = fullName.substring(fullName.indexOf(".χ.") + 3);
+		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, new Identifier(simpleName));
+		if(decl==null)
+			throw new ClassNotFoundException(simpleName);
+		else
+			createCategoryClass(fullName, decl);
+	}
+
+	private void createCategoryClass(String fullName, CategoryDeclaration decl) throws ClassNotFoundException {
+		try {
+			Compiler compiler = new Compiler(getClassDir()); // where to store .class
+			compiler.compileCategory(context, decl, fullName);
+		} catch(Exception e) {
+			throw new ClassNotFoundException(fullName, e);
+		}
 	}
 
 	private void createGlobalMethodsClass(String fullName) throws ClassNotFoundException {

@@ -14,9 +14,9 @@ public class MethodInfo {
 	List<IAttribute> attributes = new LinkedList<>();
 	CodeAttribute codeAttribute = null;
 	
-	public MethodInfo(String name, String spec) {
+	public MethodInfo(String name, String proto) {
 		this.name = new Utf8Constant(name);
-		this.proto = new Utf8Constant(spec);
+		this.proto = new Utf8Constant(proto);
 	}
 
 	@Override

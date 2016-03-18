@@ -133,9 +133,9 @@ public enum Opcode {
     POP(0x57, pops(1), pushesNone()),
     POP2(0x58, pops(2), pushesNone()),
     DUP(0x59, pops(1), pushesDuplicate()),
-    DUP_X1(0x5a, pops(2), pushesDuplicateDown())/*,
-    DUP_X2(0x5b)*/,
-    DUP2(0x5c, pops(2), pushesDuplicateDown())/*,
+    DUP_X1(0x5a, pops(2), pushesDuplicateDown(1)),
+    DUP_X2(0x5b, pops(3), pushesDuplicateDown(2)),
+    DUP2(0x5c, pops(2), pushesDuplicateDown(1))/*,
     DUP2_X1(0x5d),
     DUP2_X2(0x5e)*/,
     SWAP(0x5f, pops(2), pushesSwapped()),
@@ -223,8 +223,8 @@ public enum Opcode {
     RETURN(0xb1, popsNone(), pushesNone()),
     GETSTATIC(0xb2, CPREF_W, popsNone(), pushesField())/*, 
     PUTSTATIC(0xb3, CPREF_W)*/,
-    GETFIELD(0xb4, CPREF_W, popsNone(), pushesField())/*, 
-    PUTFIELD(0xb5, CPREF_W)*/,
+    GETFIELD(0xb4, CPREF_W, popsNone(), pushesField()), 
+    PUTFIELD(0xb5, CPREF_W, pops(2), pushesNone()),
     INVOKEVIRTUAL(0xb6, CPREF_W, popsArguments(false), pushesResult()),
     INVOKESPECIAL(0xb7, CPREF_W, popsArguments(false), pushesResult()),
     INVOKESTATIC(0xb8, CPREF_W, popsArguments(true), pushesResult()),
@@ -307,10 +307,17 @@ public enum Opcode {
     	};
     }
     
-    static Pusher pushesDuplicateDown() {
+    static Pusher pushesDuplicateDown(int downBy) {
     	return new Pusher() {
     		@Override public StackEntry[] apply(Instruction i, StackEntry[] popped) {
-				return new StackEntry[] { popped[1], popped[0], popped[1] };
+    			switch(downBy) {
+    				case 1:
+        				return new StackEntry[] { popped[1], popped[0], popped[1] };
+    				case 2:
+        				return new StackEntry[] { popped[2], popped[0], popped[1], popped[2] };
+    				default:
+    					throw new UnsupportedOperationException();
+    			}
     		}
     	};
     }

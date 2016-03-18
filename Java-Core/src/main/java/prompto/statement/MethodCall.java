@@ -110,7 +110,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 			for (ArgumentAssignment assignment : assignments) {
 				IExpression expression = assignment.resolve(local, declaration, true);
 				IValue value = assignment.getArgument().checkValue(parent, expression);
-				local.setValue(assignment.getName(), value);
+				local.setValue(assignment.getId(), value);
 			}
 			return declaration.check(local);
 		} catch (PromptoError e) {
@@ -156,7 +156,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 			IValue value = argument.checkValue(context, expression);
 			if(value!=null && argument.isMutable() & !value.isMutable()) 
 				throw new NotMutableError();
-			local.setValue(assignment.getName(), value);
+			local.setValue(assignment.getId(), value);
 		}
 	}
 

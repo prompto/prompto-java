@@ -236,7 +236,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	private IStorable populateDeclarationStorable(List<String> categories, IDeclaration decl, Dialect dialect, Version version, IValue moduleId) {
 		IStorable storable = store.newStorable(categories); 
 		try {
-			storable.setValue(context, new Identifier("name"),  new Text(decl.getIdentifier().getName()));
+			storable.setValue(context, new Identifier("name"),  new Text(decl.getId().getName()));
 			storable.setValue(context, new Identifier("version"),  new Text(version.toString()));
 			if(decl instanceof IMethodDeclaration) {
 				String proto = ((IMethodDeclaration)decl).getProto();

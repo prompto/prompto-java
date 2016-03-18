@@ -31,7 +31,7 @@ public class ArgumentAssignmentList extends LinkedList<ArgumentAssignment> {
 
 	public ArgumentAssignment find(Identifier name) {
 		for(ArgumentAssignment assignment : this) {
-			if(name.equals(assignment.getName()))
+			if(name.equals(assignment.getId()))
 				return assignment;
 		}
 		return null;

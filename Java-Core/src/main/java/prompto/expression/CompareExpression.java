@@ -101,8 +101,8 @@ public class CompareExpression extends Section implements IExpression, IAssertio
 		ResultInfo lval = left.compile(context, method, flags.withNative(true));
 		IOperatorFunction tester = testers.get(lval.getType());
 		if(tester==null) {
-			System.err.println("Missing IOperatorFunction for compare " + lval.getType().getName());
-			throw new SyntaxError("Cannot compare " + lval.getType().getName() + " with " + right.check(context).getName());
+			System.err.println("Missing IOperatorFunction for compare " + lval.getType().getTypeName());
+			throw new SyntaxError("Cannot compare " + lval.getType().getTypeName() + " with " + right.check(context).getName());
 		}
 		return tester.compile(context, method, lval, right, flags.withCmpOp(operator));
 	}

@@ -1,5 +1,6 @@
 package prompto.expression;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -98,13 +99,13 @@ public class ItemSelector extends SelectorExpression {
 		ResultInfo pinfo = parent.compile(context, method, flags);
 		IOperatorFunction getter = getters.get(pinfo.getType());
 		if(getter==null) {
-			System.err.println("Missing IOperatorFunction for get item " + pinfo.getType().getName());
-			throw new SyntaxError("Cannot get item from " + pinfo.getType().getName());
+			System.err.println("Missing IOperatorFunction for get item " + pinfo.getType().getTypeName());
+			throw new SyntaxError("Cannot get item from " + pinfo.getType().getTypeName());
 		}
 		ResultInfo result = getter.compile(context, method, pinfo, item, flags);
 		if(Object.class==result.getType()) {
 			// need to downcast
-			Class<?> klass = type.toJavaClass();
+			Type klass = type.toJavaType();
 			ClassConstant c = new ClassConstant(klass);
 			method.addInstruction(Opcode.CHECKCAST, c);
 			return new ResultInfo(klass, true);

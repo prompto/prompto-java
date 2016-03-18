@@ -21,7 +21,7 @@ public class Variable implements INamed {
 	}
 	
 	@Override
-	public Identifier getIdentifier() {
+	public Identifier getId() {
 		return name;
 	}
 

@@ -110,8 +110,8 @@ public class SliceSelector extends SelectorExpression {
 		ResultInfo pinfo = parent.compile(context, method, flags.withNative(false));
 		ISlicerFunction slicer = slicers.get(pinfo.getType());
 		if(slicer==null) {
-			System.err.println("Missing ISlicerFunction for slice " + pinfo.getType().getName());
-			throw new SyntaxError("Cannot slice " + pinfo.getType().getName());
+			System.err.println("Missing ISlicerFunction for slice " + pinfo.getType().getTypeName());
+			throw new SyntaxError("Cannot slice " + pinfo.getType().getTypeName());
 		}
 		return slicer.compile(context, method, pinfo, first, last, flags);
 	}

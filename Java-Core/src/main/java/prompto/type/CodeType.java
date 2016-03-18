@@ -1,5 +1,7 @@
 package prompto.type;
 
+import java.lang.reflect.Type;
+
 
 
 public class CodeType extends NativeType {
@@ -15,7 +17,7 @@ public class CodeType extends NativeType {
 	}
 	
 	@Override
-	public Class<?> toJavaClass() {
+	public Type toJavaType() {
 		return null;
 	}
 }

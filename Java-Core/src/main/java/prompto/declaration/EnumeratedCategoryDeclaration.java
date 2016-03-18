@@ -140,7 +140,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration i
 	
 	@Override
 	public EnumeratedCategoryType getType(Context context) {
-		return new EnumeratedCategoryType(getIdentifier());
+		return new EnumeratedCategoryType(getId());
 	}
 
 }

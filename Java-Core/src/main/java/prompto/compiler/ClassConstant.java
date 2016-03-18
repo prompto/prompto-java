@@ -1,12 +1,14 @@
 package prompto.compiler;
 
+import java.lang.reflect.Type;
+
 
 public class ClassConstant implements CodeConstant {
 
 	Utf8Constant className;
 	int index = -1;
 	
-	public ClassConstant(Class<?> klass) {
+	public ClassConstant(Type klass) {
 		this(CompilerUtils.getClassName(klass));
 	}
 

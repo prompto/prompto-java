@@ -51,7 +51,7 @@ public class NativeSymbol extends Symbol implements IExpression {
 		if(!(obj instanceof NativeSymbol))
 			return false;
 		NativeSymbol other = (NativeSymbol)obj;
-		return this.getIdentifier().equals(other.getIdentifier())
+		return this.getId().equals(other.getId())
 				&& this.getExpression().equals(other.getExpression());
 	}
 	

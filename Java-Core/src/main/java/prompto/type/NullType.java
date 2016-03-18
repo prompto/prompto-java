@@ -1,5 +1,7 @@
 package prompto.type;
 
+import java.lang.reflect.Type;
+
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 
@@ -16,7 +18,7 @@ public class NullType extends BaseType {
 	}
 
 	@Override
-	public Class<?> toJavaClass() {
+	public Type toJavaType() {
 		return null;
 	}
 

@@ -73,11 +73,11 @@ public class MultiplyExpression implements IExpression {
 		IOperatorFunction multiplier = multipliers.get(lval.getType());
 		if(multiplier!=null)
 			return multiplier.compile(context, method, lval, right, flags);
-		else if(IMultiplyable.class.isAssignableFrom(lval.getType()))
+		else if(IMultiplyable.class.isAssignableFrom((Class<?>)lval.getType())) // TODO for now
 			return compileMultiplyable(context, method, lval, flags);
 		else {
-			System.err.println("Missing IOperatorFunction for multiply " + lval.getType().getName());
-			throw new SyntaxError("Cannot multiply " + lval.getType().getName() + " with " + right.check(context).getName());
+			System.err.println("Missing IOperatorFunction for multiply " + lval.getType().getTypeName());
+			throw new SyntaxError("Cannot multiply " + lval.getType().getTypeName() + " with " + right.check(context).getName());
 		}
 	}
 
@@ -89,7 +89,8 @@ public class MultiplyExpression implements IExpression {
 				CompilerUtils.LongToint(method);
 			else
 				CompilerUtils.longToint(method);
-			Class<?> resultType = lval.getType().getMethod("multiply", int.class).getReturnType();
+			Class<?> klass = (Class<?>)lval.getType();
+			Class<?> resultType = klass.getMethod("multiply", int.class).getReturnType();
 			IOperand oper = new MethodConstant(lval.getType(), "multiply", 
 					int.class, resultType);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);

@@ -1,5 +1,7 @@
 package prompto.type;
 
+import java.lang.reflect.Type;
+
 import prompto.runtime.Context;
 
 public class MissingType extends NativeType {
@@ -15,7 +17,7 @@ public class MissingType extends NativeType {
 	}
 	
 	@Override
-	public Class<?> toJavaClass() {
+	public Type toJavaType() {
 		return Object.class;
 	}
 

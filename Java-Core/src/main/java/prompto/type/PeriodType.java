@@ -1,5 +1,7 @@
 package prompto.type;
 
+import java.lang.reflect.Type;
+
 import prompto.error.SyntaxError;
 import prompto.intrinsic.PromptoPeriod;
 import prompto.parser.ISection;
@@ -20,7 +22,7 @@ public class PeriodType extends NativeType {
 	}
 
 	@Override
-	public Class<?> toJavaClass() {
+	public Type toJavaType() {
 		return PromptoPeriod.class;
 	}
 	

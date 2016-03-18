@@ -135,7 +135,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 			return compileMultiplyCharacter(context, method, left, exp, flags);
 		else if(type==TextType.instance())
 			return compileMultiplyText(context, method, left, exp, flags);
-		else if(IMultiplyable.class.isAssignableFrom(type.toJavaClass()))
+		else if(IMultiplyable.class.isAssignableFrom((Class<?>)type.toJavaType()))
 			return compileMultiplyMultiplyable(context, method, left, exp, flags);
 		else
 			throw new SyntaxError("Illegal: Integer * " + type.getClass().getSimpleName());
@@ -184,7 +184,8 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 		ResultInfo rval = exp.compile(context, method, flags);
 		method.addInstruction(Opcode.SWAP);
 		try {
-			Class<?> resultType = rval.getType().getMethod("multiply", int.class).getReturnType();
+			Class<?> klass = (Class<?>)rval.getType();
+			Class<?> resultType = klass.getMethod("multiply", int.class).getReturnType();
 			IOperand oper = new MethodConstant(rval.getType(), "multiply", 
 					int.class, resultType);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);

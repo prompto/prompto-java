@@ -6,9 +6,9 @@ import prompto.type.IType;
 
 /* something that can be referred to by name, and returns a type */
 public interface INamed {
-	Identifier getIdentifier();
+	Identifier getId();
 	default String getName() {
-		return getIdentifier().getName();
+		return getId().getName();
 	}
 	IType getType(Context context) throws SyntaxError;
 }

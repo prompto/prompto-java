@@ -83,8 +83,8 @@ public class NegateExpression implements IUnaryExpression {
 		ResultInfo val = expression.compile(context, method, flags);
 		IUnaryFunction negator = negators.get(val.getType());
 		if(negator==null) {
-			System.err.println("Missing IOperatorFunction for negate " + val.getType().getName());
-			throw new SyntaxError("Cannot negate " + val.getType().getName());
+			System.err.println("Missing IOperatorFunction for negate " + val.getType().getTypeName());
+			throw new SyntaxError("Cannot negate " + val.getType().getTypeName());
 		}
 		return negator.compile(context, method, val, flags);
 	}

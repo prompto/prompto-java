@@ -1,5 +1,7 @@
 package prompto.type;
 
+import java.lang.reflect.Type;
+
 import com.fasterxml.jackson.databind.JsonNode;
 
 import prompto.error.PromptoError;
@@ -22,7 +24,7 @@ public class BooleanType extends NativeType {
 	}
 
 	@Override
-	public Class<?> toJavaClass() {
+	public Type toJavaType() {
 		return java.lang.Boolean.class;
 	}
 	

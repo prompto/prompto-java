@@ -44,7 +44,7 @@ public class MethodArgument extends BaseArgument implements INamedArgument {
 		if(!(obj instanceof MethodArgument))
 			return false;
 		MethodArgument other = (MethodArgument)obj;
-		return Utils.equal(this.getIdentifier(),other.getIdentifier());
+		return Utils.equal(this.getId(),other.getId());
 	}
 
 	@Override

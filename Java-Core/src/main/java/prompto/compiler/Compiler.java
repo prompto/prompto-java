@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Modifier;
 
+import prompto.declaration.CategoryDeclaration;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.utils.FileUtils;
@@ -40,10 +41,24 @@ public class Compiler {
 
 	private ClassFile createGlobalMethodsClassFile(Context context, MethodDeclarationMap methods, String fullName) {
 		fullName = fullName.replace('.', '/');
-		ClassFile classFile = new ClassFile(fullName, "java/lang/Object");
+		ClassFile classFile = new ClassFile(fullName);
 		classFile.addModifier(Modifier.ABSTRACT);
 		methods.values().forEach((m) -> 
 			m.compile(context, classFile));
+		return classFile;
+	}
+
+	public void compileCategory(Context context, CategoryDeclaration decl, String fullName) throws Exception {
+		ClassFile classFile = createCategoryClassFile(context, decl, fullName);
+		writeClassFile(classFile, fullName);
+	}
+	
+	public ClassFile createCategoryClassFile(Context context, CategoryDeclaration decl, String fullName) {
+		fullName = fullName.replace('.', '/');
+		ClassFile classFile = new ClassFile(fullName);
+		if(decl.isAbstract())
+			classFile.addModifier(Modifier.ABSTRACT);
+		decl.compile(context, classFile);
 		return classFile;
 	}
 

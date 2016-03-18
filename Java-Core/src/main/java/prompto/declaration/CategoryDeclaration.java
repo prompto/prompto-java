@@ -1,5 +1,9 @@
 package prompto.declaration;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import prompto.compiler.ClassFile;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
@@ -20,8 +24,8 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	IdentifierList attributes;
 	boolean storable = false;
 	
-	public CategoryDeclaration(Identifier name) {
-		super(name);
+	public CategoryDeclaration(Identifier id) {
+		super(id);
 	}
 
 	public CategoryDeclaration(Identifier name, IdentifierList attributes) {
@@ -50,8 +54,11 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		return attributes;
 	}
 	
-	public IdentifierList getAllAttributes(Context context) {
-		return attributes;
+	public Set<Identifier> getAllAttributes(Context context) {
+		if(attributes!=null)
+			return new HashSet<Identifier>(attributes);
+		else
+			return null;
 	}
 		
 	@Override
@@ -68,12 +75,12 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 			if(ad==null)
 				context.getProblemListener().reportUnknownAttribute(attribute.toString(), attribute);
 		}
-		return new CategoryType(this.getIdentifier());
+		return new CategoryType(this.getId());
 	}
 	
 	@Override
 	public CategoryType getType(Context context) {
-		return new CategoryType(getIdentifier());
+		return new CategoryType(getId());
 	}
 
 	public boolean hasAttribute(Context context, Identifier name) {
@@ -92,6 +99,10 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		return null;
 	}
 
+	public boolean isAbstract() {
+		return false;
+	}
+	
 	public abstract IInstance newInstance(Context context) throws PromptoError;
 	
 	public IInstance newInstance(Context context, IStored stored) throws PromptoError {
@@ -261,6 +272,10 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	}
 
 	protected abstract void categoryTypeToPDialect(CodeWriter writer);
+
+	public void compile(Context context, ClassFile classFile) {
+		throw new UnsupportedOperationException(); // TODO -> abstract
+	}
 
 
 }

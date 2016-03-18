@@ -113,7 +113,7 @@ public class InstanceExpression implements IExpression {
 				method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)local.getIndex()), c);
 		}
 		IType type = check(context);
-		return new ResultInfo(type.toJavaClass(), true);
+		return new ResultInfo(type.toJavaType(), true);
 	}
 
 }

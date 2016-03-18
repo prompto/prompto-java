@@ -1,5 +1,6 @@
 package prompto.type;
 
+import java.lang.reflect.Type;
 import java.security.InvalidParameterException;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -7,6 +8,8 @@ import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.PromptoType;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
@@ -62,8 +65,8 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public Class<?> toJavaClass() {
-		return Object.class;
+	public Type toJavaType() {
+		return new PromptoType(CompilerUtils.getCategoryClassName(getId(), false));
 	}
 	
 	@Override

@@ -1,5 +1,6 @@
 package prompto.literal;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,10 +44,10 @@ public class RangeLiteral implements IExpression {
 		writer.append("]");
 	}
 	
-	static Map<Class<?>,Class<?>> rangeClassMap = createRangeClassMap();
+	static Map<Type,Type> rangeClassMap = createRangeClassMap();
 	
-	private static Map<Class<?>, Class<?>> createRangeClassMap() {
-		Map<Class<?>,Class<?>> map = new HashMap<>();
+	private static Map<Type, Type> createRangeClassMap() {
+		Map<Type,Type> map = new HashMap<>();
 		map.put(char.class, PromptoRange.Character.class);
 		map.put(Character.class, PromptoRange.Character.class);
 		map.put(long.class, PromptoRange.Long.class);
@@ -59,8 +60,8 @@ public class RangeLiteral implements IExpression {
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		IType itemType = checkType(context, first);
-		Class<?> itemKlass = itemType.toJavaClass();
-		Class<?> rangeKlass = rangeClassMap.get(itemKlass);
+		Type itemKlass = itemType.toJavaType();
+		Type rangeKlass = rangeClassMap.get(itemKlass);
 		if(rangeKlass==null) {
 			System.err.println("Missing PromptoRange for = " + itemType.getName());
 			throw new SyntaxError("Cannot build Range of " + itemType.getName());

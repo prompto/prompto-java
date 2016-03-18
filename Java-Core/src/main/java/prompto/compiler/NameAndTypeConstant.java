@@ -11,6 +11,11 @@ public class NameAndTypeConstant implements CodeConstant {
 		this.type = new Utf8Constant(type);
 	}
 
+	public NameAndTypeConstant(String name, Utf8Constant type) {
+		this.name = new Utf8Constant(name);
+		this.type = type;
+	}
+
 	@Override
 	public String toString() {
 		return name.toString() + '/' + type.toString();

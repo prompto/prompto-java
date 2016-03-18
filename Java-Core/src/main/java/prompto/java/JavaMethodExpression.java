@@ -2,6 +2,7 @@ package prompto.java;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.IConstantOperand;
@@ -119,18 +120,18 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 			context.getProblemListener().reportUnknownIdentifier(parent.toString(), parent);
 			return null;
 		} else {
-			Class<?> klass = findClass(context, type);
+			Type klass = findClass(context, type);
 			return findMethod(context, klass);
 		}
 	}
 	
-	private Class<?> findClass(Context context, IType type) throws SyntaxError {
+	private Type findClass(Context context, IType type) throws SyntaxError {
 		if(type instanceof CategoryType) {
 			IDeclaration named = context.getRegisteredDeclaration(IDeclaration.class, type.getId());
 			if(named instanceof NativeCategoryDeclaration) 
 				return ((NativeCategoryDeclaration)named).getBoundClass(context, true);
 		}
-		return type.toJavaClass();
+			return type.toJavaType();
 	}
 
 	public Method findMethod(Context context, Object instance) throws SyntaxError {
@@ -154,7 +155,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 		Class<?>[] types = new Class<?>[arguments.size()];
 		int i = 0;
 		for(JavaExpression exp  : arguments)
-			types[i++] = exp.check(context).toJavaClass();
+			types[i++] = (Class<?>)exp.check(context).toJavaType();
 		try {
 			return klass.getDeclaredMethod(name, types);
 		} catch (NoSuchMethodException e) {
@@ -186,6 +187,6 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 	
 	boolean validArgument(Context context, Class<?> klass, JavaExpression argument) throws SyntaxError {
 		IType type = argument.check(context);
-		return klass.isAssignableFrom(type.toJavaClass());
+		return klass.isAssignableFrom((Class<?>)type.toJavaType());
 	}
 }

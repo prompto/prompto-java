@@ -13,7 +13,7 @@ public class ClosureValue extends BaseValue {
 	IMethodDeclaration method;
 	
 	public ClosureValue(Context context, IMethodDeclaration method) {
-		super(new MethodType(context, method.getIdentifier()));
+		super(new MethodType(context, method.getId()));
 		this.method = method;
 	}
 	
@@ -31,7 +31,7 @@ public class ClosureValue extends BaseValue {
 	}
 
 	public Identifier getName() {
-		return method.getIdentifier();
+		return method.getId();
 	}
 
 	public ArgumentList getArguments() {

@@ -1,19 +1,39 @@
 package prompto.compiler;
 
+import java.lang.reflect.Type;
+
 public class MethodConstant implements CodeConstant {
 
 	ClassConstant className;
 	NameAndTypeConstant methodNameAndType;
 	int index;
 	
-	public MethodConstant(Class<?> klass, String methodName, Class<?> ... params) {
-		this(CompilerUtils.getClassName(klass), methodName, CompilerUtils.createProto(params));
+	public MethodConstant(Type type, String methodName, Type ... params) {
+		this(CompilerUtils.getClassName(type), methodName, CompilerUtils.createProto(params));
 	}
 	
-	public MethodConstant(String className, String methodName, String proto) {
-		this.className = new ClassConstant(className);
-		this.methodNameAndType = new NameAndTypeConstant(methodName, proto);
+	public MethodConstant(Type type, String methodName, String proto) {
+		this(CompilerUtils.getClassName(type), methodName, proto);
 	}
+
+	public MethodConstant(String className, String methodName, String proto) {
+		this(new ClassConstant(className), new NameAndTypeConstant(methodName, proto));
+	}
+
+	public MethodConstant(ClassConstant superClass, String methodName, Type ... params) {
+		this(superClass, methodName, CompilerUtils.createProto(params));
+	}
+
+	public MethodConstant(ClassConstant superClass, String methodName, String proto) {
+		this(superClass, new NameAndTypeConstant(methodName, proto));
+	}
+	
+	public MethodConstant(ClassConstant className, NameAndTypeConstant nameAndType) {
+		this.className = className;
+		this.methodNameAndType = nameAndType;
+	}
+
+
 
 	public short getArgumentsCount(boolean isStatic) {
 		String[] types = CompilerUtils.parseDescriptor(methodNameAndType.getType().getValue());

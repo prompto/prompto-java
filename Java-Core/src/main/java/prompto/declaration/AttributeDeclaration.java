@@ -3,6 +3,7 @@ package prompto.declaration;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import prompto.compiler.FieldInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
@@ -21,20 +22,20 @@ public class AttributeDeclaration extends BaseDeclaration {
 	IdentifierList indexTypes;
 	boolean storable = false;
 	
-	public AttributeDeclaration(Identifier name, IType type) {
-		this(name, type, null, null);
+	public AttributeDeclaration(Identifier id, IType type) {
+		this(id, type, null, null);
 	}
 
-	public AttributeDeclaration(Identifier name, IType type, IAttributeConstraint constraint) {
-		this(name, type, constraint, null);
+	public AttributeDeclaration(Identifier id, IType type, IAttributeConstraint constraint) {
+		this(id, type, constraint, null);
 	}
 	
-	public AttributeDeclaration(Identifier name, IType type, IdentifierList indexTypes) {
-		this(name, type, null, indexTypes);
+	public AttributeDeclaration(Identifier id, IType type, IdentifierList indexTypes) {
+		this(id, type, null, indexTypes);
 	}
 	
-	public AttributeDeclaration(Identifier name, IType type, IAttributeConstraint constraint, IdentifierList indexTypes) {
-		super(name);
+	public AttributeDeclaration(Identifier id, IType type, IAttributeConstraint constraint, IdentifierList indexTypes) {
+		super(id);
 		this.type = type;
 		this.constraint = constraint;
 		this.indexTypes = indexTypes;
@@ -75,7 +76,7 @@ public class AttributeDeclaration extends BaseDeclaration {
 		switch(writer.getDialect()) {
 		case E:
 			writer.append("define ");
-			writer.append(getIdentifier());
+			writer.append(getId());
 			writer.append(" as ");
 			if(storable)
 				writer.append("storable ");
@@ -93,7 +94,7 @@ public class AttributeDeclaration extends BaseDeclaration {
 			if(storable)
 				writer.append("storable ");
 			writer.append("attribute ");
-			writer.append(getIdentifier());
+			writer.append(getId());
 			writer.append(" : ");
 			type.toDialect(writer);
 			if(constraint!=null)
@@ -104,7 +105,7 @@ public class AttributeDeclaration extends BaseDeclaration {
 			if(storable)
 				writer.append("storable ");
 			writer.append("attr ");
-			writer.append(getIdentifier());
+			writer.append(getId());
 			writer.append(" ( ");
 			type.toDialect(writer);
 			writer.append(" ):\n");
@@ -140,6 +141,11 @@ public class AttributeDeclaration extends BaseDeclaration {
 			return value;
 		constraint.checkValue(context, value);
 		return value;
+	}
+
+	public FieldInfo toFieldInfo(Context context) {
+		String desc = type.getJavaDescriptor(context);
+		return new FieldInfo(getName(), desc);
 	}
 
 

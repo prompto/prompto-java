@@ -75,8 +75,8 @@ public class MinusExpression implements IExpression {
 		ResultInfo lval = left.compile(context, method, flags);
 		IOperatorFunction minuser = minusers.get(lval.getType());
 		if(minuser==null) {
-			System.err.println("Missing IOperatorFunction for minus " + lval.getType().getName());
-			throw new SyntaxError("Cannot sub " + right.check(context).getName()  + " from " + lval.getType().getName() );
+			System.err.println("Missing IOperatorFunction for minus " + lval.getType().getTypeName());
+			throw new SyntaxError("Cannot sub " + right.check(context).getName()  + " from " + lval.getType().getTypeName() );
 		}
 		return minuser.compile(context, method, lval, right, flags);
 	}

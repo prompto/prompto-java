@@ -11,6 +11,11 @@ public class FieldConstant implements CodeConstant {
 		this.fieldNameAndType = new NameAndTypeConstant(fieldName, fieldType);
 	}
 	
+	public FieldConstant(ClassConstant className, String fieldName, Utf8Constant fieldType) {
+		this.className = className;
+		this.fieldNameAndType = new NameAndTypeConstant(fieldName, fieldType);
+	}
+
 	@Override
 	public String toString() {
 		return className.toString() + ':' + fieldNameAndType.toString();

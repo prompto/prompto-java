@@ -18,7 +18,7 @@ public abstract class BaseDeclaration extends Section implements IDeclaration {
 	}
 		
 	@Override
-	public Identifier getIdentifier() {
+	public Identifier getId() {
 		return id;
 	}
 	
@@ -36,7 +36,7 @@ public abstract class BaseDeclaration extends Section implements IDeclaration {
 	
 	@Override
 	public int hashCode() {
-		return getIdentifier().hashCode();
+		return getId().hashCode();
 	}
 	
 	public Collection<CommentStatement> getComments() {

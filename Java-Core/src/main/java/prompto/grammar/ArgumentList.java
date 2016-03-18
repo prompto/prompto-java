@@ -28,7 +28,7 @@ public class ArgumentList extends ObjectList<IArgument> {
 
 	public IArgument find(Identifier name) {
 		for(IArgument argument : this) {
-			if(name.equals(argument.getIdentifier()))
+			if(name.equals(argument.getId()))
 					return argument;
 		}
 		return null;

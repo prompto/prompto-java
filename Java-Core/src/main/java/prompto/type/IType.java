@@ -1,5 +1,7 @@
 package prompto.type;
 
+import java.lang.reflect.Type;
+
 import com.fasterxml.jackson.databind.JsonNode;
 
 import prompto.error.PromptoError;
@@ -47,7 +49,7 @@ public interface IType {
 	IValue sort(Context context,IContainer<IValue> values) throws PromptoError;
 	
 	IValue convertJavaValueToPromptoValue(Object value);
-	Class<?> toJavaClass();
+	Type toJavaType();
 	String getJavaDescriptor(Context context);
 	String getJavaClassName(Context context);
 }

@@ -111,6 +111,14 @@ public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 		return new NativeInstance(context, this);
 	}
 
+	public String getBoundClassName(Context context) throws SyntaxError {
+		JavaNativeCategoryBinding mapping = getBinding(context, false);
+		if(mapping==null)
+			return null;
+		else
+			return mapping.getExpression().toString();
+	}
+	
 	public Class<?> getBoundClass(Context context, boolean fail) throws SyntaxError {
 		if(boundClass==null) {
 			JavaNativeCategoryBinding mapping = getBinding(context, fail);

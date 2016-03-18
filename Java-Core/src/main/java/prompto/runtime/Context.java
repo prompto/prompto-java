@@ -223,7 +223,7 @@ public class Context implements IContext {
 				toRemove.add(decl);
 		}
 		for(TestMethodDeclaration decl : toRemove)
-			tests.remove(decl.getIdentifier());
+			tests.remove(decl.getId());
 	}
 
 	private void unregisterDeclarations(String path) throws SyntaxError {
@@ -235,7 +235,7 @@ public class Context implements IContext {
 				((MethodDeclarationMap)decl).unregister(path);
 		}
 		for(IDeclaration decl : toRemove) {
-			declarations.remove(decl.getIdentifier());
+			declarations.remove(decl.getId());
 			if(decl instanceof NativeCategoryDeclaration) {
 				Class<?> klass = ((NativeCategoryDeclaration)decl).getBoundClass(this, false);
 				if(klass!=null)
@@ -324,41 +324,41 @@ public class Context implements IContext {
 
 	public void registerDeclaration(IDeclaration declaration) throws SyntaxError {
 		if(checkDuplicate(declaration))
-			declarations.put(declaration.getIdentifier(), declaration);
+			declarations.put(declaration.getId(), declaration);
 	}
 
 	private boolean checkDuplicate(IDeclaration declaration) throws SyntaxError {
-		INamed current = getRegistered(declaration.getIdentifier());
+		INamed current = getRegistered(declaration.getId());
 		if(current!=null)
-			problemListener.reportDuplicate(declaration.getIdentifier().toString(), declaration, current.getIdentifier());
+			problemListener.reportDuplicate(declaration.getId().toString(), declaration, current.getId());
 		return current==null;
 	}
 
 	public void registerDeclaration(IMethodDeclaration declaration) throws SyntaxError {
 		MethodDeclarationMap current = checkDuplicate(declaration);
 		if(current==null) {
-			current = new MethodDeclarationMap(declaration.getIdentifier());
-			declarations.put(declaration.getIdentifier(), (MethodDeclarationMap)current);
+			current = new MethodDeclarationMap(declaration.getId());
+			declarations.put(declaration.getId(), (MethodDeclarationMap)current);
 		}
 		current.register(declaration,this);
 	}
 	
 	private MethodDeclarationMap checkDuplicate(IMethodDeclaration declaration) throws SyntaxError {
-		INamed current = getRegistered(declaration.getIdentifier());
+		INamed current = getRegistered(declaration.getId());
 		if(current!=null && !(current instanceof MethodDeclarationMap))
-			problemListener.reportDuplicate(declaration.getIdentifier().toString(), declaration, (ISection)current);
+			problemListener.reportDuplicate(declaration.getId().toString(), declaration, (ISection)current);
 		return (MethodDeclarationMap)current;
 	}
 
 	public void registerDeclaration(TestMethodDeclaration declaration) throws SyntaxError {
 		if(checkDuplicate(declaration))
-			tests.put(declaration.getIdentifier(), declaration);
+			tests.put(declaration.getId(), declaration);
 	}
 	
 	private boolean checkDuplicate(TestMethodDeclaration declaration) throws SyntaxError {
-		TestMethodDeclaration current = tests.get(declaration.getIdentifier());
+		TestMethodDeclaration current = tests.get(declaration.getId());
 		if(current!=null)
-			problemListener.reportDuplicate(declaration.getIdentifier().toString(), declaration, (ISection)current);
+			problemListener.reportDuplicate(declaration.getId().toString(), declaration, (ISection)current);
 		return current==null;
 	}
 	
@@ -414,7 +414,7 @@ public class Context implements IContext {
 		}
 		
 		@Override
-		public Identifier getIdentifier() {
+		public Identifier getId() {
 			return id;
 		}
 		
@@ -431,7 +431,7 @@ public class Context implements IContext {
 		public void register(IMethodDeclaration declaration, Context context) throws SyntaxError {
 			String proto = declaration.getProto();
 			if(this.containsKey(proto))
-				context.getProblemListener().reportDuplicate(declaration.getIdentifier().toString(), declaration, this.get(proto));
+				context.getProblemListener().reportDuplicate(declaration.getId().toString(), declaration, this.get(proto));
 			else
 				this.put(proto, declaration);
 		}
@@ -498,10 +498,10 @@ public class Context implements IContext {
 	public void registerValue(INamed value, boolean checkDuplicate) throws SyntaxError {
 		if(checkDuplicate) {
 			// only explore current context
-			if(instances.get(value.getIdentifier())!=null)
-				throw new SyntaxError("Duplicate name: \"" + value.getIdentifier() + "\"");
+			if(instances.get(value.getId())!=null)
+				throw new SyntaxError("Duplicate name: \"" + value.getId() + "\"");
 		}
-		instances.put(value.getIdentifier(), value);
+		instances.put(value.getId(), value);
 	}
 	
 	public IValue getValue(Identifier name) throws PromptoError {

@@ -7,6 +7,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import prompto.compiler.ClassConstant;
+import prompto.compiler.ClassFile;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.FieldConstant;
+import prompto.compiler.FieldInfo;
+import prompto.compiler.IVerifierEntry;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
@@ -20,7 +29,6 @@ import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
 import prompto.value.ConcreteInstance;
 import prompto.value.IInstance;
-
 
 public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	
@@ -116,27 +124,25 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 
 
 	@Override
-	public IdentifierList getAllAttributes(Context context) {
-		if(derivedFrom==null)
-			return super.getAllAttributes(context);
-		IdentifierList attributes;
-		Set<Identifier> distinct = new HashSet<>();
-		attributes = super.getAllAttributes(context);
-		if(attributes!=null)
-			distinct.addAll(attributes);
-		for(Identifier ancestor : derivedFrom) {
-			attributes = getAncestorAttributes(context, ancestor);
-			if(attributes!=null)
-				distinct.addAll(attributes);
+	public Set<Identifier> getAllAttributes(Context context) {
+		final Set<Identifier> all = new HashSet<>();
+		Set<Identifier> more = super.getAllAttributes(context);
+		if(more!=null)
+			all.addAll(more);
+		if(derivedFrom!=null) {
+			derivedFrom.forEach((id)-> {
+				Set<Identifier> ids = getAncestorAttributes(context, id);
+				if(ids!=null)
+					all.addAll(ids);
+			});
 		}
-		if(distinct.isEmpty())
+		if(all.isEmpty())
 			return null;
-		attributes = new IdentifierList();
-		attributes.addAll(distinct);
-		return attributes;
+		else
+			return all;
 	}
 	
-	private IdentifierList getAncestorAttributes(Context context, Identifier ancestor) {
+	private Set<Identifier> getAncestorAttributes(Context context, Identifier ancestor) {
 		CategoryDeclaration actual = context.getRegisteredDeclaration(CategoryDeclaration.class, ancestor);
 		if(actual==null)
 			return null;
@@ -196,20 +202,20 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	private void registerMethod(IMethodDeclaration method, Context context) throws SyntaxError {
 		IDeclaration actual;
 		if(method instanceof SetterMethodDeclaration) {
-			actual = methodsMap.get("setter:"+method.getIdentifier().toString());
+			actual = methodsMap.get("setter:"+method.getId().toString());
 			if(actual!=null)
-				throw new SyntaxError("Duplicate setter: \"" + method.getIdentifier().toString() + "\"");
-			methodsMap.put("setter:"+method.getIdentifier().toString(),method);
+				throw new SyntaxError("Duplicate setter: \"" + method.getId().toString() + "\"");
+			methodsMap.put("setter:"+method.getId().toString(),method);
 		} else if(method instanceof GetterMethodDeclaration) {
-			actual = methodsMap.get("getter:"+method.getIdentifier().toString());
+			actual = methodsMap.get("getter:"+method.getId().toString());
 			if(actual!=null)
-				throw new SyntaxError("Duplicate getter: \"" + method.getIdentifier().toString() + "\"");
-			methodsMap.put("getter:"+method.getIdentifier().toString(),method);
+				throw new SyntaxError("Duplicate getter: \"" + method.getId().toString() + "\"");
+			methodsMap.put("getter:"+method.getId().toString(),method);
 		} else {
-			actual = methodsMap.get(method.getIdentifier().toString());
+			actual = methodsMap.get(method.getId().toString());
 			if(actual==null) {
-				actual = new MethodDeclarationMap(method.getIdentifier());
-				methodsMap.put(method.getIdentifier().toString(), actual);
+				actual = new MethodDeclarationMap(method.getId());
+				methodsMap.put(method.getId().toString(), actual);
 			}
 			((MethodDeclarationMap)actual).register(method,context);
 		}
@@ -325,7 +331,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	private void registerThisMemberMethods(Context context, MethodDeclarationMap result) throws SyntaxError {
 		if(methodsMap==null)
 			return;
-		IDeclaration actual = methodsMap.get(result.getIdentifier().toString()); 
+		IDeclaration actual = methodsMap.get(result.getId().toString()); 
 		if(actual==null)
 			return;
 		if(!(actual instanceof MethodDeclarationMap))
@@ -388,5 +394,105 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			list.add(this.getName());
 		}
 	}
+	
+	@Override
+	public void compile(Context context, ClassFile classFile) {
+		compileSuperClass(context, classFile);
+		compileFields(context, classFile);
+		compileConstructor(context, classFile);
+		compileMethods(context, classFile);
+	}
 
+	private void compileSuperClass(Context context, ClassFile classFile) {
+		ClassConstant superClass = getSuperClass(context);
+		if(superClass!=null)
+			classFile.setSuperClass(superClass);
+	}
+	
+	
+	private ClassConstant getSuperClass(Context context) {
+		if(derivedFrom==null) 
+			return new ClassConstant("java/lang/Object");
+		/* the JVM does not support multiple inheritance but we can still benefit from single inheritance */
+		Identifier id = derivedFrom.getFirst();
+		String className = CompilerUtils.getCategoryClassName(id, true);
+		return new ClassConstant(className);
+	}
+
+	private void compileFields(Context context, ClassFile classFile) {
+		if(attributes!=null) for(Identifier id : attributes)
+			compileField(context, classFile, id);
+	}
+
+	private void compileField(Context context, ClassFile classFile, Identifier id) {
+		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
+		FieldInfo field = decl.toFieldInfo(context);
+		classFile.addField(field);
+		compileSetter(context, classFile, field);
+		compileGetter(context, classFile, field);
+	}
+	
+
+	private void compileSetter(Context context, ClassFile classFile, FieldInfo field) {
+		String name = CompilerUtils.setterName(field.getName().getValue());
+		String proto = "(" + field.getDescriptor().getValue() + ")V";
+		MethodInfo method = new MethodInfo(name, proto);
+		classFile.addMethod(method);
+		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
+		ClassConstant fc = new ClassConstant(field.getClassName());
+		method.registerLocal("value", IVerifierEntry.Type.ITEM_Object, fc);
+		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
+		method.addInstruction(Opcode.ALOAD_1, fc);
+		FieldConstant f = new FieldConstant(classFile.getThisClass(), field.getName().getValue(), field.getDescriptor());
+		method.addInstruction(Opcode.PUTFIELD, f);
+		method.addInstruction(Opcode.RETURN);
+	}
+
+	private void compileGetter(Context context, ClassFile classFile, FieldInfo field) {
+		String name = CompilerUtils.getterName(field.getName().getValue());
+		String proto = "()" + field.getDescriptor().getValue();
+		MethodInfo method = new MethodInfo(name, proto);
+		classFile.addMethod(method);
+		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
+		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
+		FieldConstant f = new FieldConstant(classFile.getThisClass(), field.getName().getValue(), field.getDescriptor());
+		method.addInstruction(Opcode.GETFIELD, f);
+		method.addInstruction(Opcode.ARETURN, new ClassConstant(field.getClassName()));
+	}
+
+	private void compileConstructor(Context context, ClassFile classFile) {
+		MethodInfo method = new MethodInfo("<init>", "()V");
+		classFile.addMethod(method);
+		method.registerLocal("this", IVerifierEntry.Type.ITEM_UninitializedThis, classFile.getThisClass());
+		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
+		MethodConstant m = new MethodConstant(classFile.getSuperClass(), "<init>", void.class);
+		method.addInstruction(Opcode.INVOKESPECIAL, m);
+		method.addInstruction(Opcode.RETURN);
+	}
+
+	private void compileMethods(Context context, ClassFile classFile) {
+		// TODO Auto-generated method stub
+		
+	}
+	/*
+	protected MethodInfo createMethodInfo(Context context, ClassFile classFile, IType returnType) {
+		String proto = CompilerUtils.createProto(context, arguments, returnType);
+		MethodInfo method = new MethodInfo(getName(), proto); 
+		classFile.addMethod(method);
+		if(Modifier.isAbstract(classFile.getModifiers())) // TODO find another way
+			method.addModifier(Modifier.STATIC); // otherwise it's a member method
+		else {
+			IVerifierEntry.Type type = IVerifierEntry.Type.ITEM_UninitializedThis;
+			method.registerLocal("this", type, classFile.getThisClass());
+		}
+		for(IArgument arg : arguments) {
+			String desc = arg.getJavaDescriptor(context);
+			IVerifierEntry.Type type = IVerifierEntry.Type.fromDescriptor(desc);
+			String className = arg.getJavaClassName(context).replace('.', '/');
+			ClassConstant classConstant = new ClassConstant(className);
+			method.registerLocal(arg.getName(), type, classConstant);
+		}
+		return method;
+	}
+	*/
 }

@@ -1,6 +1,7 @@
 package prompto.java;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 
 import prompto.compiler.ByteOperand;
 import prompto.compiler.ClassConstant;
@@ -144,7 +145,8 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 
 	private ResultInfo compile_field(Context context, MethodInfo method, ResultInfo info) {
 		try {
-			Field field = info.getType().getField(name);
+			Class<?> klass = (Class<?>)info.getType();
+			Field field = klass.getField(name);
 			String parentClassName = CompilerUtils.getClassName(info.getType());
 			String fieldClassName = CompilerUtils.getDescriptor(field.getType());
 			IOperand oper = new FieldConstant(parentClassName, name, fieldClassName);
@@ -312,12 +314,14 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 	IType check_field(IType t) {
 		if(!(t instanceof JavaClassType))
 			return null;
-		Class<?> klass = t.toJavaClass();
-		try {
-			Field field = klass.getField(name);
+		Type klass = t.toJavaType();
+		if(klass instanceof Class) try {
+			Field field = ((Class<?>)klass).getField(name);
 			return new JavaClassType(field.getType());
 		} catch (NoSuchFieldException e) { 
 			return null;
+		} else {
+			throw new UnsupportedOperationException();
 		}
 	}
 }

@@ -14,7 +14,7 @@ public interface IVerifierEntry {
 		ITEM_Double(2, NativeFactory.instance),
 		ITEM_Long(2, NativeFactory.instance),
 		ITEM_Null(NativeFactory.instance),
-		ITEM_UninitializedThis(),
+		ITEM_UninitializedThis(NativeFactory.instance),
 		ITEM_Object(ObjectFactory.instance),
 		ITEM_Uninitialized(ObjectFactory.instance);
 		

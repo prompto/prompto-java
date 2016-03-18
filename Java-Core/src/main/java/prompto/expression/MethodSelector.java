@@ -106,7 +106,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 			String methodProto = CompilerUtils.createProto(context, declaration.getArguments(), returnType);
 			MethodConstant constant = new MethodConstant(className, methodName, methodProto);
 			method.addInstruction(Opcode.INVOKESTATIC, constant);
-			return new ResultInfo(returnType.toJavaClass(), true);
+			return new ResultInfo(returnType.toJavaType(), true);
 		}
 		
 	}

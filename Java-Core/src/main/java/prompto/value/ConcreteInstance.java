@@ -38,7 +38,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	boolean mutable = false;
 	
 	public ConcreteInstance(Context context, ConcreteCategoryDeclaration declaration) {
-		super(new CategoryType(declaration.getIdentifier()));
+		super(new CategoryType(declaration.getId()));
 		this.declaration = declaration;
 		if(declaration.isStorable()) {
 			List<String> categories = declaration.collectCategories(context);
@@ -272,7 +272,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		Context local = context.newChildContext();
 		decl.registerArguments(local);
 		IArgument arg = decl.getArguments().getFirst();
-		local.setValue(arg.getIdentifier(), value);
+		local.setValue(arg.getId(), value);
 		return decl.interpret(local);
 	}
 

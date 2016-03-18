@@ -96,8 +96,8 @@ public class PlusExpression implements IExpression {
 		ResultInfo lval = left.compile(context, method, flags);
 		IOperatorFunction adder = adders.get(lval.getType());
 		if(adder==null) {
-			System.err.println("Missing IOperatorFunction for add " + lval.getType().getName());
-			throw new SyntaxError("Cannot add " + lval.getType().getName() + " to " + right.check(context).getName());
+			System.err.println("Missing IOperatorFunction for add " + lval.getType().getTypeName());
+			throw new SyntaxError("Cannot add " + lval.getType().getTypeName() + " to " + right.check(context).getName());
 		}
 		return adder.compile(context, method, lval, right, flags);
 	}

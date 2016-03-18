@@ -195,7 +195,7 @@ public class ForEachStatement extends BaseStatement {
 	}
 
 	private ResultInfo compileWithIndex(Context context, MethodInfo method, Flags flags) throws SyntaxError {
-		Class<?> itemClass = source.check(context).checkIterator(context).toJavaClass();
+		java.lang.reflect.Type itemClass = source.check(context).checkIterator(context).toJavaType();
 		StackLocal iterLocal = compileIterator(context, method, flags);
 		StackLocal v1Local = compileInitCounter(method);
 		// local needs to be ITEM_Top because that's what the verifier infers from INVOKEINTERFACE on Iterator.next
@@ -263,7 +263,7 @@ public class ForEachStatement extends BaseStatement {
 	}
 
 	private ResultInfo compileWithoutIndex(Context context, MethodInfo method, Flags flags) throws SyntaxError {
-		Class<?> itemClass = source.check(context).checkIterator(context).toJavaClass();
+		java.lang.reflect.Type itemClass = source.check(context).checkIterator(context).toJavaType();
 		StackLocal iterLocal = compileIterator(context, method, flags);
 		// local needs to be ITEM_Top because that's what the verifier infers from INVOKEINTERFACE on Iterator.next
 		StackLocal v1Local = method.registerLocal(v1.getName(), Type.ITEM_Top, new ClassConstant(itemClass));

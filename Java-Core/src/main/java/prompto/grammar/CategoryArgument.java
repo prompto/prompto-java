@@ -143,7 +143,7 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 			return false;
 		CategoryArgument other = (CategoryArgument)obj;
 		return Utils.equal(this.getType(),other.getType())
-				&& Utils.equal(this.getIdentifier(),other.getIdentifier())
+				&& Utils.equal(this.getId(),other.getId())
 				&& Utils.equal(this.getAttributes(),other.getAttributes());
 	}
 

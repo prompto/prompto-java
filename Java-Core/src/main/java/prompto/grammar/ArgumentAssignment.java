@@ -30,8 +30,8 @@ public class ArgumentAssignment {
 		return argument;
 	}
 
-	public Identifier getName() {
-		return argument.getIdentifier();
+	public Identifier getId() {
+		return argument.getId();
 	} 
 	
 	public IExpression getExpression() {
@@ -45,7 +45,7 @@ public class ArgumentAssignment {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return (argument!=null ? argument.getIdentifier() + " = " : "") + expression.toString();
+		return (argument!=null ? argument.getId() + " = " : "") + expression.toString();
 	}
 	
 	public void toDialect(CodeWriter writer) {
@@ -64,7 +64,7 @@ public class ArgumentAssignment {
 	
 	private void toODialect(CodeWriter writer) {
 		if(argument!=null) {
-			writer.append(argument.getIdentifier());
+			writer.append(argument.getId());
 			writer.append(" = ");
 		}
 		expression.toDialect(writer);
@@ -72,7 +72,7 @@ public class ArgumentAssignment {
 
 	private void toSDialect(CodeWriter writer) {
 		if(argument!=null) {
-			writer.append(argument.getIdentifier());
+			writer.append(argument.getId());
 			writer.append(" = ");
 		}
 		expression.toDialect(writer);
@@ -82,7 +82,7 @@ public class ArgumentAssignment {
 		expression.toDialect(writer);
 		if(argument!=null) {
 			writer.append(" as ");
-			writer.append(argument.getIdentifier());
+			writer.append(argument.getId());
 		}
 	}
 	
@@ -100,10 +100,10 @@ public class ArgumentAssignment {
 	}
 	
 	public IType check(Context context) throws SyntaxError {
-		INamed actual = context.getRegisteredValue(INamed.class,argument.getIdentifier());
+		INamed actual = context.getRegisteredValue(INamed.class,argument.getId());
 		if(actual==null) {
 			IType actualType = expression.check(context);
-			context.registerValue(new Variable(argument.getIdentifier(), actualType));
+			context.registerValue(new Variable(argument.getId(), actualType));
 		} else {
 			// need to check type compatibility
 			IType actualType = actual.getType(context);
@@ -115,7 +115,7 @@ public class ArgumentAssignment {
 	
 	public IExpression resolve(Context context, IMethodDeclaration methodDeclaration,boolean checkInstance) throws PromptoError {
 		// since we support implicit members, it's time to resolve them
-		Identifier name = argument.getIdentifier();
+		Identifier name = argument.getId();
 		IExpression expression = getExpression();
 		IArgument argument = methodDeclaration.getArguments().find(name);
 		IType required = argument.getType(context);
@@ -138,9 +138,9 @@ public class ArgumentAssignment {
 				throw new SyntaxError("Method has no argument");
 			argument = declaration.getArguments().get(0);
 		} else
-			argument = declaration.getArguments().find(this.getName());
+			argument = declaration.getArguments().find(this.getId());
 		if(argument==null)
-			throw new SyntaxError("Method has no argument:" + this.getName());
+			throw new SyntaxError("Method has no argument:" + this.getId());
 		IExpression expression = new ContextualExpression(context, this.expression);
 		return new ArgumentAssignment(argument,expression);
 	}

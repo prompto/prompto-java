@@ -73,7 +73,7 @@ public class Interpreter {
 	private static ArgumentAssignmentList buildAssignments(IMethodDeclaration method, String cmdLineArgs) {
 		ArgumentAssignmentList assignments = new ArgumentAssignmentList();
 		if(method.getArguments().size()==1) {
-			Identifier name = method.getArguments().getFirst().getIdentifier();
+			Identifier name = method.getArguments().getFirst().getId();
 			IExpression value = parseCmdLineArgs(cmdLineArgs);
 			assignments.add(new ArgumentAssignment(new UnresolvedArgument(name), value)); 
 		}
@@ -124,7 +124,7 @@ public class Interpreter {
 			if(method.getArguments().size()==0)
 				return method;
 		}
-		throw new SyntaxError("Could not find a compatible \"" + map.getIdentifier() + "\" method.");
+		throw new SyntaxError("Could not find a compatible \"" + map.getId() + "\" method.");
 	}
 
 	private static boolean isSingleTextDictArgument(ArgumentList arguments) {
