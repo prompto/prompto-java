@@ -4,18 +4,22 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
+import prompto.compiler.StackLocal;
 import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.InvalidDataError;
 import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.grammar.ArgumentAssignment;
+import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
 import prompto.grammar.UnresolvedIdentifier;
 import prompto.runtime.Context;
@@ -87,28 +91,56 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		return cd.getMemberMethods(context, id).values();
 	}
 
-	public ResultInfo compile(Context context, MethodInfo method, IMethodDeclaration declaration, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags, 
+				IMethodDeclaration declaration, ArgumentAssignmentList assignments) throws SyntaxError {
 		// TODO use invokedynamic when multiple candidates
-		if(parent!=null) {
-			// calling an explicit instance or singleton member method
-			// push instance if any
-			parent.compile(context, method, flags); 
-			throw new UnsupportedOperationException();
-		} 
-		if(declaration.getMemberOf()!=null) {
-			// calling another member method
-			throw new UnsupportedOperationException(); 
-		} else {
-			// calling a global method
-			String className = CompilerUtils.getGlobalMethodClassName(declaration.getName(), true);
-			String methodName = declaration.getName();
-			IType returnType = declaration.check(context);
-			String methodProto = CompilerUtils.createProto(context, declaration.getArguments(), returnType);
-			MethodConstant constant = new MethodConstant(className, methodName, methodProto);
-			method.addInstruction(Opcode.INVOKESTATIC, constant);
-			return new ResultInfo(returnType.toJavaType(), true);
-		}
-		
+		if(parent!=null)
+			return compileExplicitMember(context, method, flags, declaration, assignments);
+		else if(declaration.getMemberOf()!=null) 
+			return compileImplicitMember(context, method, flags, declaration, assignments);
+		else 
+			return compileGlobalMethod(context, method, flags, declaration, assignments);
+	}
+
+	private ResultInfo compileGlobalMethod(Context context, MethodInfo method, Flags flags, 
+			IMethodDeclaration declaration, ArgumentAssignmentList assignments) throws SyntaxError {
+		// push arguments on the stack
+		if(assignments!=null) for(ArgumentAssignment assign : assignments)
+			assign.compile(context.getCallingContext(), method, flags);
+		// call global method in its own class
+		String className = CompilerUtils.getGlobalMethodClassName(declaration.getName(), true);
+		String methodName = declaration.getName();
+		IType returnType = declaration.check(context);
+		String methodProto = CompilerUtils.createProto(context, declaration.getArguments(), returnType);
+		MethodConstant constant = new MethodConstant(className, methodName, methodProto);
+		method.addInstruction(Opcode.INVOKESTATIC, constant);
+		return new ResultInfo(returnType.toJavaType(), true);
+	}
+
+	private ResultInfo compileImplicitMember(Context context, MethodInfo method, Flags flags, 
+			IMethodDeclaration declaration, ArgumentAssignmentList assignments) throws SyntaxError {
+		// calling method with implicit this
+		StackLocal local = method.getRegisteredLocal("this");
+		ClassConstant klass = ((StackLocal.ObjectLocal)local).getClassName();
+		method.addInstruction(Opcode.ALOAD_0, klass); // 'this' is always at index 0
+		// push arguments on the stack
+		if(assignments!=null) for(ArgumentAssignment assign : assignments)
+			assign.compile(context.getCallingContext(), method, flags);
+		// call virtual method
+		IType returnType = declaration.check(context);
+		String methodProto = CompilerUtils.createProto(context, declaration.getArguments(), returnType);
+		MethodConstant constant = new MethodConstant(klass, declaration.getName(), methodProto);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, constant);
+		return new ResultInfo(returnType.toJavaType(), true);
+	}
+
+	private ResultInfo compileExplicitMember(Context context, MethodInfo method, Flags flags, 
+			IMethodDeclaration declaration, ArgumentAssignmentList assignments) throws SyntaxError {
+		// TODO Auto-generated method stub
+		// calling an explicit instance or singleton member method
+		// push instance if any
+		parent.compile(context, method, flags); 
+		throw new UnsupportedOperationException();
 	}
 
 	public Context newLocalContext(Context context, IMethodDeclaration declaration) throws PromptoError {
@@ -165,6 +197,8 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		else
 			return new MemberSelector(parent, id);
 	}
+
+	
 
 
 

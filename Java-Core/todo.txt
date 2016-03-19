@@ -19,6 +19,7 @@ tuple equals tuple
 a = null, null = a
 slice tuple
 return in loops and if/else
+composition
 
 language:
 send/receive

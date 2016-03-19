@@ -485,28 +485,11 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 
 	private void compileMethods(Context context, ClassFile classFile, Flags flags) {
-		// TODO Auto-generated method stub
-		
-	}
-	/*
-	protected MethodInfo createMethodInfo(Context context, ClassFile classFile, IType returnType) {
-		String proto = CompilerUtils.createProto(context, arguments, returnType);
-		MethodInfo method = new MethodInfo(getName(), proto); 
-		classFile.addMethod(method);
-		if(Modifier.isAbstract(classFile.getModifiers())) // TODO find another way
-			method.addModifier(Modifier.STATIC); // otherwise it's a member method
-		else {
-			IVerifierEntry.Type type = IVerifierEntry.Type.ITEM_UninitializedThis;
-			method.registerLocal("this", type, classFile.getThisClass());
+		for(IMethodDeclaration method : methods) {
+			if(method instanceof GetterMethodDeclaration || method instanceof SetterMethodDeclaration)
+				continue;
+			method.compile(context, classFile);
 		}
-		for(IArgument arg : arguments) {
-			String desc = arg.getJavaDescriptor(context);
-			IVerifierEntry.Type type = IVerifierEntry.Type.fromDescriptor(desc);
-			String className = arg.getJavaClassName(context).replace('.', '/');
-			ClassConstant classConstant = new ClassConstant(className);
-			method.registerLocal(arg.getName(), type, classConstant);
-		}
-		return method;
 	}
-	*/
+
 }

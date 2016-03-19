@@ -197,10 +197,8 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		classFile.addMethod(method);
 		if(Modifier.isAbstract(classFile.getModifiers())) // TODO find another way
 			method.addModifier(Modifier.STATIC); // otherwise it's a member method
-		else {
-			IVerifierEntry.Type type = IVerifierEntry.Type.ITEM_UninitializedThis;
-			method.registerLocal("this", type, classFile.getThisClass());
-		}
+		else 
+			method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
 		for(IArgument arg : arguments) {
 			String desc = arg.getJavaDescriptor(context);
 			IVerifierEntry.Type type = IVerifierEntry.Type.fromDescriptor(desc);
