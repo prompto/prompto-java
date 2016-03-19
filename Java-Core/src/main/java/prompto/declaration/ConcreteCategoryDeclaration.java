@@ -498,6 +498,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		for(IMethodDeclaration method : methods) {
 			if(method instanceof GetterMethodDeclaration || method instanceof SetterMethodDeclaration)
 				continue;
+			context = context.newCategoryContext(getType(context)).newChildContext();
 			method.compile(context, classFile);
 		}
 	}

@@ -123,24 +123,29 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		StackLocal local = method.getRegisteredLocal("this");
 		ClassConstant klass = ((StackLocal.ObjectLocal)local).getClassName();
 		method.addInstruction(Opcode.ALOAD_0, klass); // 'this' is always at index 0
+		return compileMember(context, method, flags, declaration, assignments, klass);
+	}
+
+	private ResultInfo compileMember(Context context, MethodInfo method, Flags flags, 
+			IMethodDeclaration declaration, ArgumentAssignmentList assignments, ClassConstant parentClass) throws SyntaxError {
 		// push arguments on the stack
 		if(assignments!=null) for(ArgumentAssignment assign : assignments)
 			assign.compile(context.getCallingContext(), method, flags);
 		// call virtual method
 		IType returnType = declaration.check(context);
 		String methodProto = CompilerUtils.createProto(context, declaration.getArguments(), returnType);
-		MethodConstant constant = new MethodConstant(klass, declaration.getName(), methodProto);
+		MethodConstant constant = new MethodConstant(parentClass, declaration.getName(), methodProto);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, constant);
 		return new ResultInfo(returnType.toJavaType(), true);
 	}
 
 	private ResultInfo compileExplicitMember(Context context, MethodInfo method, Flags flags, 
 			IMethodDeclaration declaration, ArgumentAssignmentList assignments) throws SyntaxError {
-		// TODO Auto-generated method stub
 		// calling an explicit instance or singleton member method
 		// push instance if any
-		parent.compile(context, method, flags); 
-		throw new UnsupportedOperationException();
+		ResultInfo info = parent.compile(context.getCallingContext(), method, flags); 
+		ClassConstant c = new ClassConstant(info.getType());
+		return compileMember(context, method, flags, declaration, assignments, c);
 	}
 
 	public Context newLocalContext(Context context, IMethodDeclaration declaration) throws PromptoError {

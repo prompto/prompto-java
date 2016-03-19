@@ -17,6 +17,11 @@ import prompto.value.IValue;
 public class ThisExpression implements IExpression {
 
 	@Override
+	public String toString() {
+		return "this";
+	}
+	
+	@Override
 	public IType check(Context context) throws SyntaxError {
 		if(context!=null && !(context instanceof Context.InstanceContext))
 			context = context.getParentContext();
