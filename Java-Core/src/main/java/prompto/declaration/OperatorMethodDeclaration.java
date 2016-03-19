@@ -1,6 +1,5 @@
 package prompto.declaration;
 
-import prompto.compiler.ClassFile;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.ArgumentList;
@@ -18,22 +17,15 @@ public class OperatorMethodDeclaration extends ConcreteMethodDeclaration impleme
 	Operator operator;
 	
 	public OperatorMethodDeclaration(Operator op, IArgument arg, IType returnType, StatementList stmts) {
-		super(new Identifier("operator_" + op.name()), new ArgumentList(arg), returnType, stmts);
+		super(new Identifier("operator-" + op.name()), new ArgumentList(arg), returnType, stmts);
 		this.operator = op;
 	}
-
 
 	@Override
 	public void check(ConcreteCategoryDeclaration declaration, Context context) throws SyntaxError {
 		// TODO Auto-generated method stub
 		
 	}	
-
-	@Override
-	public void compile(Context context, ClassFile classFile) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
-	}
 
 	protected void toSDialect(CodeWriter writer) {
 		writer.append("def operator ");

@@ -68,7 +68,8 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 					+ value.getClass().getSimpleName());
 	}
 	
-	public static ResultInfo compileAdd(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		// TODO: return right if left is empty (or left if right is empty)
 		// create result
 		ResultInfo info = CompilerUtils.newInstance(method, PromptoDict.class); 
@@ -120,7 +121,8 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 			throw new SyntaxError("No such item:" + index.toString());
 	}
 
-	public static ResultInfo compileItem(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compileItem(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		exp.compile(context, method, flags.withNative(true));
 		IOperand oper = new MethodConstant(PromptoDict.class, "get", 
 				Object.class, Object.class);
@@ -139,7 +141,8 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 		return dict.equals(((Dictionary) obj).dict);
 	}
 
-	public static ResultInfo compileEquals(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		exp.compile(context, method, flags);
 		IOperand oper = new MethodConstant(
 				PromptoDict.class, 

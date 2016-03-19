@@ -302,6 +302,6 @@ public class EqualsExpression implements IExpression, IAssertion {
 			System.err.println("Missing IOperatorFunction for = " + lval.getType().getTypeName());
 			throw new SyntaxError("Cannot check equality of " + lval.getType().getTypeName() + " with " + right.check(context).getName());
 		}
-		return tester.compile(context, method, lval, right, flags);
+		return tester.compile(context, method, flags, lval, right);
 	}
 }

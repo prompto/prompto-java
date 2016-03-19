@@ -4,10 +4,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 import prompto.compiler.ClassFile;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.grammar.MethodDeclarationList;
+import prompto.grammar.Operator;
+import prompto.java.JavaClassType;
 import prompto.runtime.Context;
 import prompto.store.IDataStore;
 import prompto.store.IStore;
@@ -277,5 +285,64 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		throw new UnsupportedOperationException(); // TODO -> abstract
 	}
 
+	public abstract IMethodDeclaration findOperator(Context context, Operator operator, IType type) throws SyntaxError;
+	
+	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression value) throws SyntaxError {
+		return compileOperator(context, method, flags, left, value, Operator.PLUS);
+	}
+	
+	public static ResultInfo compileDivide(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression value) throws SyntaxError {
+		return compileOperator(context, method, flags, left, value, Operator.DIVIDE);
+	}
 
+	public static ResultInfo compileIntDivide(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression value) throws SyntaxError {
+		return compileOperator(context, method, flags, left, value, Operator.IDIVIDE);
+	}
+
+	public static ResultInfo compileModulo(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression value) throws SyntaxError {
+		return compileOperator(context, method, flags, left, value, Operator.MODULO);
+	}
+
+	public static ResultInfo compileMultiply(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression value) throws SyntaxError {
+		return compileOperator(context, method, flags, left, value, Operator.MULTIPLY);
+	}
+
+	public static ResultInfo compileMultiply(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, ResultInfo right) throws SyntaxError {
+		IType argType = JavaClassType.javaTypeToPromptoType(right.getType());
+		return compileOperator(context, method, flags, left, right, argType, Operator.MULTIPLY);
+	}
+
+	public static ResultInfo compileMinus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression value) throws SyntaxError {
+		return compileOperator(context, method, flags, left, value, Operator.MINUS);
+	}
+
+	public static ResultInfo compileOperator(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression value, Operator oper) throws SyntaxError {
+		IType argType = value.check(context);
+		ResultInfo right = value.compile(context, method, flags);
+		return compileOperator(context, method, flags, left, right, argType, oper);
+	}
+
+	private static ResultInfo compileOperator(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, ResultInfo right, IType argType, Operator oper) throws SyntaxError {
+		String name = left.getType().getTypeName().substring("π.χ.".length());
+		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, new Identifier(name));
+		IMethodDeclaration operator = decl.findOperator(context, oper, argType);
+		if(operator==null)
+			throw new SyntaxError("No " + oper.getToken() + " operator method defined!");
+		Context local = context.newCategoryContext(decl.getType(context)).newChildContext();
+		operator.registerArguments(local);
+		IType resultType = operator.check(local);
+		String methodName = "operator-" + oper.name();
+		MethodConstant c = new MethodConstant(left.getType(), methodName, argType.toJavaType(), resultType.toJavaType());
+		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
+		return new ResultInfo(resultType.toJavaType(), true);
+	}
 }

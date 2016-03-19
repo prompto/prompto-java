@@ -181,7 +181,7 @@ public class ConstructorExpression implements IExpression {
 		// keep a copy of new instance on top of the stack
 		method.addInstruction(Opcode.DUP);
 		// get value
-		assignment.getExpression().compile(context, method, flags);
+		/* ResultInfo valueInfo = */assignment.getExpression().compile(context, method, flags);
 		// call setter
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, assignment.getId());
 		FieldInfo field = decl.toFieldInfo(context);

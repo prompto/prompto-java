@@ -11,6 +11,7 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.IOperand;
 import prompto.compiler.ResultInfo;
+import prompto.declaration.CategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
@@ -71,8 +72,10 @@ public class MultiplyExpression implements IExpression {
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		ResultInfo lval = left.compile(context, method, flags);
 		IOperatorFunction multiplier = multipliers.get(lval.getType());
+		if(multiplier==null && lval.getType().getTypeName().startsWith("π.χ."))
+			multiplier = CategoryDeclaration::compileMultiply;
 		if(multiplier!=null)
-			return multiplier.compile(context, method, lval, right, flags);
+			return multiplier.compile(context, method, flags, lval, right);
 		else if(IMultiplyable.class.isAssignableFrom((Class<?>)lval.getType())) // TODO for now
 			return compileMultiplyable(context, method, lval, flags);
 		else {

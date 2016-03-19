@@ -61,8 +61,9 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 		return new Text(this.value + value.toString());
 	}
 
-	public static ResultInfo compilePlus(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
-		ResultInfo right = exp.compile(context, method, flags);
+	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
+		ResultInfo right = exp.compile(context, method, flags.withNative(false));
 		// convert right to String
 		if(String.class!=right.getType()) {
 			MethodConstant oper = new MethodConstant(right.getType(), "toString", String.class);
@@ -86,7 +87,8 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 			throw new SyntaxError("Illegal: Chararacter * " + value.getClass().getSimpleName());
 	}
 
-	public static ResultInfo compileMultiply(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compileMultiply(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		ResultInfo right = exp.compile(context, method, flags);
 		if(Long.class==right.getType())
 			CompilerUtils.LongToint(method);
@@ -112,7 +114,8 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 			throw new SyntaxError("Illegal comparison: Text + " + value.getClass().getSimpleName());
 	}
 	
-	public static ResultInfo compileCompareTo(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compileCompareTo(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		exp.compile(context, method, flags);
 		IOperand oper = new MethodConstant(String.class, 
 				"compareTo", String.class, int.class);
@@ -150,7 +153,8 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 
 	}
 	
-	public static ResultInfo compileItem(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compileItem(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		ResultInfo right = exp.compile(context, method, flags);
 		if(Long.class==right.getType())
 			CompilerUtils.LongToint(method);
@@ -232,8 +236,8 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 		return value;
 	}
 
-	public static ResultInfo compileSlice(Context context, MethodInfo method, 
-			ResultInfo parent, IExpression first, IExpression last, Flags flags) throws SyntaxError {
+	public static ResultInfo compileSlice(Context context, MethodInfo method, Flags flags, 
+			ResultInfo parent, IExpression first, IExpression last) throws SyntaxError {
 		compileTextSliceFirst(context, method, flags, first);
 		compileTextSliceLast(context, method, flags, last);
 		MethodConstant m = new MethodConstant(String.class, "substring", 
@@ -300,7 +304,8 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 			return value.equals(obj);
 	}
 	
-	public static ResultInfo compileEquals(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		exp.compile(context, method, flags);
 		IOperand oper = flags.isRoughly() ?
 				new MethodConstant(String.class, "equalsIgnoreCase", String.class, boolean.class) :

@@ -19,7 +19,9 @@ tuple equals tuple
 a = null, null = a
 slice tuple
 return in loops and if/else
-composition
+category composition
+category abstract operator methods
+decimal * category
 
 language:
 send/receive

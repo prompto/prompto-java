@@ -99,7 +99,7 @@ public class Boolean extends BaseValue implements Comparable<Boolean> {
 		}
 	}
 	
-	public static ResultInfo compileEquals(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, ResultInfo left, IExpression exp) throws SyntaxError {
 		if(java.lang.Boolean.class==left.getType())
 			CompilerUtils.BooleanToboolean(method);
 		ResultInfo right = exp.compile(context, method, flags.withNative(true));

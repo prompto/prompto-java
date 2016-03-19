@@ -53,14 +53,15 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
         return new Text(this.value + value.toString());
     }
 
-	public static ResultInfo compilePlus(Context context, MethodInfo method, ResultInfo left, IExpression right, Flags flags) throws SyntaxError {
+	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression right) throws SyntaxError {
 		// convert to String
 		MethodConstant c = new MethodConstant(java.lang.Character.class, 
 									"toString", 
 									String.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
 		// use Text::compileAdd
-		return Text.compilePlus(context, method, left, right, flags);
+		return Text.compilePlus(context, method, flags, left, right);
 	}
 	
     @Override
@@ -74,7 +75,7 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
            throw new SyntaxError("Illegal: Chararacter * " + value.getClass().getSimpleName());
      }
 
-	public static ResultInfo compileMultiply(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compileMultiply(Context context, MethodInfo method, Flags flags, ResultInfo left, IExpression exp) throws SyntaxError {
 		CompilerUtils.CharacterTochar(method);
 		ResultInfo right = exp.compile(context, method, flags.withNative(true));
 		if(Long.class==right.getType())
@@ -111,7 +112,8 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
  		return opcodes;
  	}
     
-	public static ResultInfo compileCompareTo(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compileCompareTo(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		if(java.lang.Character.class==left.getType())
 			CompilerUtils.CharacterTochar(method);
 		ResultInfo right = exp.compile(context, method, flags.withNative(true));
@@ -151,7 +153,7 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
             return false;
     }
     
-	public static ResultInfo compileEquals(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, ResultInfo left, IExpression exp) throws SyntaxError {
 		if(java.lang.Character.class==left.getType())
 			CompilerUtils.CharacterTochar(method);
 		ResultInfo right = exp.compile(context, method, flags);

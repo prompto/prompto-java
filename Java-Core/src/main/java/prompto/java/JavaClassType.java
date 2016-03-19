@@ -40,28 +40,35 @@ import prompto.value.NativeInstance;
 
 public class JavaClassType extends BaseType {
 	
-	static Map<Class<?>,IType> javaToPromptoMap = new HashMap<Class<?>, IType>();
+	static final Map<Type,IType> javaToPromptoMap = createJavaToPromptoMap();
 	
-	static {
-		javaToPromptoMap.put(void.class, VoidType.instance());
-		javaToPromptoMap.put(boolean.class, BooleanType.instance());
-		javaToPromptoMap.put(Boolean.class, BooleanType.instance());
-		javaToPromptoMap.put(char.class, CharacterType.instance());
-		javaToPromptoMap.put(Character.class, CharacterType.instance());
-		javaToPromptoMap.put(int.class, IntegerType.instance());
-		javaToPromptoMap.put(Integer.class, IntegerType.instance());
-		javaToPromptoMap.put(long.class, IntegerType.instance());
-		javaToPromptoMap.put(Long.class, IntegerType.instance());
-		javaToPromptoMap.put(Double.class, DecimalType.instance());
-		javaToPromptoMap.put(String.class, TextType.instance());
-		javaToPromptoMap.put(PromptoDate.class, DateType.instance());
-		javaToPromptoMap.put(PromptoTime.class, TimeType.instance());
-		javaToPromptoMap.put(PromptoDateTime.class, DateTimeType.instance());
-		javaToPromptoMap.put(PromptoPeriod.class, PeriodType.instance());
-		javaToPromptoMap.put(Document.class, DocumentType.instance());
-		javaToPromptoMap.put(Object.class, AnyType.instance());
+	private static Map<Type, IType> createJavaToPromptoMap() {
+		Map<Type,IType> map = new HashMap<Type, IType>();
+		map.put(void.class, VoidType.instance());
+		map.put(boolean.class, BooleanType.instance());
+		map.put(Boolean.class, BooleanType.instance());
+		map.put(char.class, CharacterType.instance());
+		map.put(Character.class, CharacterType.instance());
+		map.put(int.class, IntegerType.instance());
+		map.put(Integer.class, IntegerType.instance());
+		map.put(long.class, IntegerType.instance());
+		map.put(Long.class, IntegerType.instance());
+		map.put(Double.class, DecimalType.instance());
+		map.put(String.class, TextType.instance());
+		map.put(PromptoDate.class, DateType.instance());
+		map.put(PromptoTime.class, TimeType.instance());
+		map.put(PromptoDateTime.class, DateTimeType.instance());
+		map.put(PromptoPeriod.class, PeriodType.instance());
+		map.put(Document.class, DocumentType.instance());
+		map.put(Object.class, AnyType.instance());
+		return map;
 	}
 	
+	public static IType javaTypeToPromptoType(Type type) {
+		return javaToPromptoMap.get(type);
+	}
+	
+
 	Type type;
 	
 	public JavaClassType(Type type) {

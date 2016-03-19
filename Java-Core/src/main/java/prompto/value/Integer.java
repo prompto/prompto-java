@@ -8,9 +8,11 @@ import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.IOperand;
+import prompto.compiler.PromptoType;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.ShortOperand;
 import prompto.compiler.StackState;
+import prompto.declaration.CategoryDeclaration;
 import prompto.error.DivideByZeroError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
@@ -61,7 +63,8 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 			throw new SyntaxError("Illegal: Integer + " + value.getClass().getSimpleName());
 	}
 
-	public static ResultInfo compilePlus(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		boolean isDecimal = isDecimal(context, exp);
 		CompilerUtils.numberToNative(method, left, isDecimal);
 		ResultInfo right = exp.compile(context, method, flags.withNative(true).withDecimal(isDecimal));
@@ -95,7 +98,8 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 			throw new SyntaxError("Illegal: Integer - " + value.getClass().getSimpleName());
 	}
 
-	public static ResultInfo compileMinus(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compileMinus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		boolean isDecimal = isDecimal(context, exp);
 		CompilerUtils.numberToNative(method, left, isDecimal);
 		ResultInfo right = exp.compile(context, method, flags.withNative(true).withDecimal(isDecimal));
@@ -127,22 +131,32 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 			throw new SyntaxError("Illegal: Integer * " + value.getClass().getSimpleName());
 	}
 
-	public static ResultInfo compileMultiply(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compileMultiply(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		IType type = exp.check(context);
 		if(type instanceof INumberType)
-			return compileMultiplyNumber(context, method, left, exp, flags);
+			return compileMultiplyNumber(context, method, flags, left, exp);
 		else if(type==CharacterType.instance())
-			return compileMultiplyCharacter(context, method, left, exp, flags);
+			return compileMultiplyCharacter(context, method, flags, left, exp);
 		else if(type==TextType.instance())
-			return compileMultiplyText(context, method, left, exp, flags);
+			return compileMultiplyText(context, method, flags, left, exp);
+		else if(type.toJavaType() instanceof PromptoType)
+			return compileMultiplyCategory(context, method, flags, left, exp);
 		else if(IMultiplyable.class.isAssignableFrom((Class<?>)type.toJavaType()))
-			return compileMultiplyMultiplyable(context, method, left, exp, flags);
+			return compileMultiplyMultiplyable(context, method, flags, left, exp);
 		else
 			throw new SyntaxError("Illegal: Integer * " + type.getClass().getSimpleName());
 	}
 
-	private static ResultInfo compileMultiplyCharacter(Context context, MethodInfo method, 
-			ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	private static ResultInfo compileMultiplyCategory(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
+		ResultInfo right = exp.compile(context, method, flags.withNative(true));
+		method.addInstruction(Opcode.SWAP);
+		return CategoryDeclaration.compileMultiply(context, method, flags, right, left);
+	}
+
+	private static ResultInfo compileMultiplyCharacter(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		if(Long.class==left.getType())
 			CompilerUtils.LongToint(method);
 		else
@@ -159,8 +173,8 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 		return new ResultInfo(String.class, true);
 	}
 	
-	private static ResultInfo compileMultiplyText(Context context, MethodInfo method, 
-			ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	private static ResultInfo compileMultiplyText(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		if(Long.class==left.getType())
 			CompilerUtils.LongToint(method);
 		else
@@ -175,8 +189,8 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 		return new ResultInfo(String.class, true);
 	}
 
-	private static ResultInfo compileMultiplyMultiplyable(Context context, MethodInfo method, 
-			ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	private static ResultInfo compileMultiplyMultiplyable(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		if(Long.class==left.getType())
 			CompilerUtils.LongToint(method);
 		else
@@ -195,8 +209,8 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 		}
 	}
 
-	private static ResultInfo compileMultiplyNumber(Context context, MethodInfo method, 
-			ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	private static ResultInfo compileMultiplyNumber(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		boolean isDecimal = isDecimal(context, exp);
 		CompilerUtils.numberToNative(method, left, isDecimal);
 		ResultInfo right = exp.compile(context, method, flags.withNative(true).withDecimal(isDecimal));
@@ -227,7 +241,8 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 			throw new SyntaxError("Illegal: Integer / " + value.getClass().getSimpleName());
 	}
 
-	public static ResultInfo compileDivide(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compileDivide(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		CompilerUtils.numberToNative(method, left, true);
 		ResultInfo right = exp.compile(context, method, flags.withNative(true).withDecimal(true));
 		CompilerUtils.numberToNative(method, right, true);
@@ -249,7 +264,8 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 			throw new SyntaxError("Illegal: Integer \\ " + value.getClass().getSimpleName());
 	}
 	
-	public static ResultInfo compileIntDivide(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compileIntDivide(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		CompilerUtils.numberToNative(method, left, false);
 		ResultInfo right = exp.compile(context, method, flags.withNative(true).withDecimal(false));
 		CompilerUtils.numberToNative(method, right, false);
@@ -271,7 +287,8 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 			throw new SyntaxError("Illegal: Integer % " + value.getClass().getSimpleName());
 	}
 
-	public static ResultInfo compileModulo(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compileModulo(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		CompilerUtils.numberToNative(method, left, false);
 		ResultInfo right = exp.compile(context, method, flags.withNative(true).withDecimal(false));
 		CompilerUtils.numberToNative(method, right, false);
@@ -297,7 +314,8 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 
 	}
 
-	public static ResultInfo compileCompareTo(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compileCompareTo(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		boolean isDecimal = isDecimal(context, exp);
 		CompilerUtils.numberToNative(method, left, isDecimal);
 		ResultInfo right = exp.compile(context, method, flags.withNative(true).withDecimal(isDecimal));
@@ -334,7 +352,8 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 			return false;
 	}
 	
-	public static ResultInfo compileEquals(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		left = CompilerUtils.numberTolong(method, left);
 		ResultInfo right = exp.compile(context, method, flags);
 		right = CompilerUtils.numberTolong(method, right);
@@ -373,7 +392,8 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 		return new Integer(-value);
 	}
 	
-	public static ResultInfo compileNegate(Context context, MethodInfo method, ResultInfo value, Flags flags) throws SyntaxError {
+	public static ResultInfo compileNegate(Context context, MethodInfo method, Flags flags, 
+			ResultInfo value) throws SyntaxError {
 		CompilerUtils.numberToNative(method, value, false);
 		method.addInstruction(Opcode.LNEG);
 		if(flags.toNative())

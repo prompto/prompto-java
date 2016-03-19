@@ -44,8 +44,8 @@ public class Period extends BaseValue implements IMultiplyable {
 					+ value.getClass().getSimpleName());
 	}
 
-	public static ResultInfo compilePlus(Context context, MethodInfo method,
-			ResultInfo left, IExpression exp, Flags flags)
+	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags,
+			ResultInfo left, IExpression exp)
 			throws SyntaxError {
 		ResultInfo right = exp.compile(context, method, flags);
 		if (right.getType() != PromptoPeriod.class)
@@ -66,8 +66,8 @@ public class Period extends BaseValue implements IMultiplyable {
 					+ value.getClass().getSimpleName());
 	}
 
-	public static ResultInfo compileMinus(Context context, MethodInfo method,
-			ResultInfo left, IExpression exp, Flags flags)
+	public static ResultInfo compileMinus(Context context, MethodInfo method, Flags flags,
+			ResultInfo left, IExpression exp)
 			throws SyntaxError {
 		ResultInfo right = exp.compile(context, method, flags);
 		if (right.getType() != PromptoPeriod.class)
@@ -115,7 +115,8 @@ public class Period extends BaseValue implements IMultiplyable {
 			return false;
 	}
 
-	public static ResultInfo compileEquals(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		exp.compile(context, method, flags);
 		IOperand oper = new MethodConstant(
 				PromptoPeriod.class, 
@@ -143,8 +144,8 @@ public class Period extends BaseValue implements IMultiplyable {
 		return new Period(value.negate());
 	}
 
-	public static ResultInfo compileNegate(Context context, MethodInfo method,
-			ResultInfo value, Flags flags) throws SyntaxError {
+	public static ResultInfo compileNegate(Context context, MethodInfo method, Flags flags,
+			ResultInfo value) throws SyntaxError {
 		MethodConstant oper = new MethodConstant(PromptoPeriod.class, "negate",
 				PromptoPeriod.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);

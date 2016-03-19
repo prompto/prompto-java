@@ -70,7 +70,8 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IListable
 			throw new SyntaxError("No such item:" + index.toString());
 	}
 	
-	public static ResultInfo compileItem(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compileItem(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		ResultInfo right = exp.compile(context, method, flags.withNative(true));
 		right = CompilerUtils.numberToint(method, right);
 		// minus 1
@@ -105,7 +106,8 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IListable
 		return items.equals(((SetValue)obj).items);
 	}
 
-	public static ResultInfo compileEquals(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		exp.compile(context, method, flags);
 		IOperand oper = new MethodConstant(
 				PromptoSet.class, 
@@ -156,7 +158,8 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IListable
             throw new SyntaxError("Illegal: " +this.type.getId() + " + " + value.getClass().getSimpleName());
     }
 
-	public static ResultInfo compileAdd(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		// TODO: return left if right is empty (or right if left is empty and is a set)
 		// create result
 		ResultInfo info = CompilerUtils.newInstance(method, PromptoSet.class); 

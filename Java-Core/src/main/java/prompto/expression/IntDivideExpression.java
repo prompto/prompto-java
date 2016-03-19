@@ -7,6 +7,7 @@ import prompto.compiler.Flags;
 import prompto.compiler.IOperatorFunction;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
+import prompto.declaration.CategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
@@ -62,10 +63,12 @@ public class IntDivideExpression implements IExpression {
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		ResultInfo lval = left.compile(context, method, flags);
 		IOperatorFunction divider = dividers.get(lval.getType());
+		if(divider==null && lval.getType().getTypeName().startsWith("π.χ."))
+			divider = CategoryDeclaration::compileIntDivide;
 		if(divider==null) {
 			System.err.println("Missing IOperatorFunction for idivide " + lval.getType().getTypeName());
 			throw new SyntaxError("Cannot idivide " + lval.getType().getTypeName() + " by " + right.check(context).getName());
 		}
-		return divider.compile(context, method, lval, right, flags);
+		return divider.compile(context, method, flags, lval, right);
 	}
 }

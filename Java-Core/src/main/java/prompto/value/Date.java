@@ -55,7 +55,8 @@ public class Date extends BaseValue implements Comparable<Date> {
 			throw new SyntaxError("Illegal: Date + " + value.getClass().getSimpleName());
 	}
 
-	public static ResultInfo compilePlus(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		ResultInfo right = exp.compile(context, method, flags);
 		if(right.getType()!=PromptoPeriod.class)
 			throw new SyntaxError("Illegal: Date + " + exp.getClass().getSimpleName());
@@ -78,7 +79,8 @@ public class Date extends BaseValue implements Comparable<Date> {
 					+ value.getClass().getSimpleName());
 	}
 
-	public static ResultInfo compileMinus(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compileMinus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		ResultInfo right = exp.compile(context, method, flags);
 		if(right.getType()==PromptoDate.class) {
 			MethodConstant oper = new MethodConstant(PromptoDate.class, "minus", 
@@ -104,7 +106,8 @@ public class Date extends BaseValue implements Comparable<Date> {
 
 	}
 	
-	public static ResultInfo compileCompareTo(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compileCompareTo(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		exp.compile(context, method, flags);
 		IOperand oper = new MethodConstant(PromptoDate.class, 
 				"compareTo", PromptoDate.class, int.class);
@@ -149,7 +152,8 @@ public class Date extends BaseValue implements Comparable<Date> {
 			return value.equals(obj);
 	}
 	
-	public static ResultInfo compileEquals(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		exp.compile(context, method, flags);
 		IOperand oper = new MethodConstant(
 				PromptoDate.class, 

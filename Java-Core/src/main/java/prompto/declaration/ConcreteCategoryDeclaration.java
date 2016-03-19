@@ -357,8 +357,9 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		cd.registerMemberMethods(context, result);
 	}
 
+	@Override
 	public IMethodDeclaration findOperator(Context context, Operator operator, IType type) throws SyntaxError {
-		Identifier methodName = new Identifier("operator_" + operator.name());
+		Identifier methodName = new Identifier("operator-" + operator.name());
 		MethodDeclarationMap methods = getMemberMethods(context, methodName);
 		if(methods==null)
 			return null;
@@ -418,7 +419,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	
 	private ClassConstant getSuperClass(Context context) {
 		if(derivedFrom==null) 
-			return new ClassConstant("java/lang/Object");
+			return new ClassConstant("prompto/intrinsic/PromptoRoot");
 		/* the JVM does not support multiple inheritance but we can still benefit from single inheritance */
 		Identifier id = derivedFrom.getFirst();
 		String className = CompilerUtils.getCategoryClassName(id, true);
@@ -494,13 +495,16 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		method.addInstruction(Opcode.RETURN);
 	}
 
-	private void compileMethods(Context context, ClassFile classFile, Flags flags) {
+	private void compileMethods(Context context, ClassFile classFile, Flags flags) throws SyntaxError {
 		for(IMethodDeclaration method : methods) {
-			if(method instanceof GetterMethodDeclaration || method instanceof SetterMethodDeclaration)
+			if(	method instanceof GetterMethodDeclaration || method instanceof SetterMethodDeclaration)
 				continue;
 			context = context.newCategoryContext(getType(context)).newChildContext();
+			method.registerArguments(context);
 			method.compile(context, classFile);
 		}
 	}
+	
+
 
 }

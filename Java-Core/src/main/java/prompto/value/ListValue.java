@@ -69,7 +69,8 @@ public class ListValue extends BaseList<ListValue, PromptoList<IValue>> {
 		return items.equals(((ListValue)obj).items);
 	}
 	
-	public static ResultInfo compileEquals(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		exp.compile(context, method, flags);
 		IOperand oper = new MethodConstant(
 				PromptoList.class, 
@@ -88,7 +89,8 @@ public class ListValue extends BaseList<ListValue, PromptoList<IValue>> {
 			return CompilerUtils.booleanToBoolean(method);
 	}
 	
-	public static ResultInfo compileAdd(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		// TODO: return left if right is empty (or right if left is empty and is a list)
 		// create result
 		ResultInfo info = CompilerUtils.newInstance(method, PromptoList.class); 
@@ -133,8 +135,8 @@ public class ListValue extends BaseList<ListValue, PromptoList<IValue>> {
 		return new ListValue(this.getItemType(), sliced);
 	}
 
-	public static ResultInfo compileSlice(Context context, MethodInfo method, 
-			ResultInfo parent, IExpression first, IExpression last, Flags flags) throws SyntaxError {
+	public static ResultInfo compileSlice(Context context, MethodInfo method, Flags flags, 
+			ResultInfo parent, IExpression first, IExpression last) throws SyntaxError {
 		compileSliceFirst(context, method, flags, first);
 		compileSliceLast(context, method, flags, last);
 		MethodConstant m = new MethodConstant(PromptoList.class, "slice", 
@@ -143,7 +145,8 @@ public class ListValue extends BaseList<ListValue, PromptoList<IValue>> {
 		return parent;
 	}
 
-	public static ResultInfo compileItem(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compileItem(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		ResultInfo right = exp.compile(context, method, flags.withNative(true));
 		right = CompilerUtils.numberToint(method, right);
 		// minus 1

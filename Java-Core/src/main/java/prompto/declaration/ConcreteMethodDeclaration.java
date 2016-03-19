@@ -209,8 +209,6 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		return method;
 	}
 
-
-	
 	@Override
 	public boolean isEligibleAsMain() {
 		if(arguments.size()==0)

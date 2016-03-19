@@ -7,6 +7,7 @@ import prompto.compiler.Flags;
 import prompto.compiler.IOperatorFunction;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
+import prompto.declaration.CategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.intrinsic.PromptoDate;
@@ -74,11 +75,13 @@ public class MinusExpression implements IExpression {
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		ResultInfo lval = left.compile(context, method, flags);
 		IOperatorFunction minuser = minusers.get(lval.getType());
+		if(minuser==null && lval.getType().getTypeName().startsWith("π.χ."))
+			minuser = CategoryDeclaration::compileMinus;
 		if(minuser==null) {
 			System.err.println("Missing IOperatorFunction for minus " + lval.getType().getTypeName());
 			throw new SyntaxError("Cannot sub " + right.check(context).getName()  + " from " + lval.getType().getTypeName() );
 		}
-		return minuser.compile(context, method, lval, right, flags);
+		return minuser.compile(context, method, flags, lval, right);
 	}
 
 }

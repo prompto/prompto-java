@@ -91,8 +91,8 @@ public class TupleValue extends BaseList<TupleValue, PromptoTuple<IValue>> {
 		return new TupleValue(sliced);
 	}
 	
-	public static ResultInfo compileSlice(Context context, MethodInfo method, 
-			ResultInfo parent, IExpression first, IExpression last, Flags flags) throws SyntaxError {
+	public static ResultInfo compileSlice(Context context, MethodInfo method, Flags flags, 
+			ResultInfo parent, IExpression first, IExpression last) throws SyntaxError {
 		compileSliceFirst(context, method, flags, first);
 		compileSliceLast(context, method, flags, last);
 		MethodConstant m = new MethodConstant(PromptoTuple.class, "slice", 
@@ -101,7 +101,8 @@ public class TupleValue extends BaseList<TupleValue, PromptoTuple<IValue>> {
 		return parent;
 	}
 
-	public static ResultInfo compileItem(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compileItem(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		ResultInfo right = exp.compile(context, method, flags.withNative(true));
 		right = CompilerUtils.numberToint(method, right);
 		// minus 1
@@ -151,7 +152,8 @@ public class TupleValue extends BaseList<TupleValue, PromptoTuple<IValue>> {
 			return 0;
 	}
 
-	public static ResultInfo compileAdd(Context context, MethodInfo method, ResultInfo left, IExpression exp, Flags flags) throws SyntaxError {
+	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) throws SyntaxError {
 		// TODO: return left if right is empty (or right if left is empty and is a list)
 		// create result
 		ResultInfo info = CompilerUtils.newInstance(method, PromptoTuple.class); 

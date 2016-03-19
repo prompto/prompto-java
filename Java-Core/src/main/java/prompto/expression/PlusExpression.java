@@ -7,6 +7,7 @@ import prompto.compiler.Flags;
 import prompto.compiler.IOperatorFunction;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
+import prompto.declaration.CategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.intrinsic.PromptoDate;
@@ -84,10 +85,10 @@ public class PlusExpression implements IExpression {
 		map.put(PromptoDateTime.class, DateTime::compilePlus);
 		map.put(PromptoTime.class, Time::compilePlus);
 		map.put(PromptoPeriod.class, Period::compilePlus);
-		map.put(PromptoDict.class, Dictionary::compileAdd);
-		map.put(PromptoSet.class, SetValue::compileAdd);
-		map.put(PromptoTuple.class, TupleValue::compileAdd);
-		map.put(PromptoList.class, ListValue::compileAdd);
+		map.put(PromptoDict.class, Dictionary::compilePlus);
+		map.put(PromptoSet.class, SetValue::compilePlus);
+		map.put(PromptoTuple.class, TupleValue::compilePlus);
+		map.put(PromptoList.class, ListValue::compilePlus);
 		return map;
 	}
 
@@ -95,11 +96,13 @@ public class PlusExpression implements IExpression {
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		ResultInfo lval = left.compile(context, method, flags);
 		IOperatorFunction adder = adders.get(lval.getType());
+		if(adder==null && lval.getType().getTypeName().startsWith("π.χ."))
+			adder = CategoryDeclaration::compilePlus;
 		if(adder==null) {
 			System.err.println("Missing IOperatorFunction for add " + lval.getType().getTypeName());
 			throw new SyntaxError("Cannot add " + lval.getType().getTypeName() + " to " + right.check(context).getName());
 		}
-		return adder.compile(context, method, lval, right, flags);
+		return adder.compile(context, method, flags, lval, right);
 	}
 
 	

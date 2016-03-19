@@ -102,7 +102,7 @@ public class ItemSelector extends SelectorExpression {
 			System.err.println("Missing IOperatorFunction for get item " + pinfo.getType().getTypeName());
 			throw new SyntaxError("Cannot get item from " + pinfo.getType().getTypeName());
 		}
-		ResultInfo result = getter.compile(context, method, pinfo, item, flags);
+		ResultInfo result = getter.compile(context, method, flags, pinfo, item);
 		if(Object.class==result.getType()) {
 			// need to downcast
 			Type klass = type.toJavaType();

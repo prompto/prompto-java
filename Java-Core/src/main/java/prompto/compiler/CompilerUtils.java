@@ -275,6 +275,11 @@ public abstract class CompilerUtils {
 		return new ResultInfo(long.class, true);
 	}
 
+	public static ResultInfo longToDouble(MethodInfo method) {
+		method.addInstruction(Opcode.L2D);
+		return doubleToDouble(method);
+	}
+	
 	public static ResultInfo doubleToDouble(MethodInfo method) {
 		IOperand oper = new MethodConstant(
 				Double.class, 
