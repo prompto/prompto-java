@@ -1,13 +1,20 @@
 package prompto.compiler;
 
+import java.lang.reflect.Type;
+
 public class InterfaceConstant extends MethodConstant {
 
-	public InterfaceConstant(Class<?> klass, String methodName, Class<?> ... params) {
+	public InterfaceConstant(Type klass, String methodName, Type ... params) {
 		super(klass, methodName, params);
 	}
 	
 	public InterfaceConstant(String className, String methodName, String proto) {
 		super(className, methodName, proto);
+	}
+
+
+	public InterfaceConstant(Type klass, String methodName, String proto) {
+		super(klass, methodName, proto);
 	}
 
 	@Override

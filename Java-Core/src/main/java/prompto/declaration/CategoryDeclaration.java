@@ -281,9 +281,14 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 
 	protected abstract void categoryTypeToPDialect(CodeWriter writer);
 
-	public void compile(Context context, ClassFile classFile) {
+	public void compileClass(Context context, ClassFile classFile) {
 		throw new UnsupportedOperationException(); // TODO -> abstract
 	}
+	
+	public void compileInterface(Context context, ClassFile classFile) {
+		throw new UnsupportedOperationException(); // TODO -> abstract
+	}
+
 
 	public abstract IMethodDeclaration findOperator(Context context, Operator operator, IType type) throws SyntaxError;
 	
@@ -345,4 +350,5 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
 		return new ResultInfo(resultType.toJavaType(), true);
 	}
+
 }

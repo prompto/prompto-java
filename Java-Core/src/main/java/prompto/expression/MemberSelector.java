@@ -6,6 +6,7 @@ import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.FieldConstant;
 import prompto.compiler.Flags;
+import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -188,8 +189,8 @@ public class MemberSelector extends SelectorExpression {
 				method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 				method.addInstruction(Opcode.CHECKCAST, new ClassConstant(resultType));
 			} else {
-				IOperand oper = new MethodConstant(parent.getType(), getterName, resultType);
-				method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+				IOperand oper = new InterfaceConstant(parent.getType(), getterName, resultType);
+				method.addInstruction(Opcode.INVOKEINTERFACE, oper);
 			}
 			return new ResultInfo(resultType, true);
 		}

@@ -1,8 +1,10 @@
 package prompto.declaration;
 
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -399,15 +401,68 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 	
 	@Override
-	public void compile(Context context, ClassFile classFile) {
+	public void compileClass(Context context, ClassFile classFile) {
 		try {
 			compileSuperClass(context, classFile, new Flags());
+			compileInterface(context, classFile, new Flags());
 			compileFields(context, classFile, new Flags());
 			compileConstructor(context, classFile, new Flags());
 			compileMethods(context, classFile, new Flags());
 		} catch(SyntaxError e) {
 			throw new CompilerException(e);
 		}
+	}
+	
+	@Override
+	public void compileInterface(Context context, ClassFile classFile) {
+		try {
+			compileInterfaces(context, classFile);
+			compileFieldPrototypes(context, classFile);
+			compileMethodPrototypes(context, classFile);
+		} catch(SyntaxError e) {
+			throw new CompilerException(e);
+		}
+	}
+
+	private void compileInterfaces(Context context, ClassFile classFile) throws SyntaxError {
+		if(derivedFrom!=null)
+			derivedFrom.forEach((id)->{
+				String name = CompilerUtils.getCategoryInterfaceClassName(id, true);
+				classFile.addInterface(name);
+			});
+	}
+
+	private void compileFieldPrototypes(Context context, ClassFile classFile) throws SyntaxError {
+		if(attributes!=null) for(Identifier id : attributes)
+			compileFieldPrototype(context, classFile, id);
+	}
+
+	private void compileFieldPrototype(Context context, ClassFile classFile, Identifier id) {
+		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
+		FieldInfo field = decl.toFieldInfo(context);
+		compileSetterPrototype(context, classFile, id, field);
+		compileGetterPrototype(context, classFile, id, field);
+	}
+
+	private void compileGetterPrototype(Context context, ClassFile classFile, Identifier id, FieldInfo field) {
+		String name = CompilerUtils.getterName(id.getName());
+		String proto = "()" + field.getDescriptor().getValue();
+		MethodInfo method = new MethodInfo(name, proto);
+		method.addModifier(Modifier.ABSTRACT);
+		classFile.addMethod(method);
+	}
+
+	private void compileSetterPrototype(Context context, ClassFile classFile, Identifier id, FieldInfo field) {
+		String name = CompilerUtils.setterName(field.getName().getValue());
+		String proto = "(" + field.getDescriptor().getValue() + ")V";
+		MethodInfo method = new MethodInfo(name, proto);
+		method.addModifier(Modifier.ABSTRACT);
+		classFile.addMethod(method);
+	}
+
+	private void compileMethodPrototypes(Context context, ClassFile classFile) throws SyntaxError {
+		// TODO Auto-generated method stub
+		
 	}
 
 	private void compileSuperClass(Context context, ClassFile classFile, Flags flags) {
@@ -416,40 +471,130 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			classFile.setSuperClass(superClass);
 	}
 	
-	
+	private void compileInterface(Context context, ClassFile classFile, Flags flags) {
+		ClassConstant interFace = getInterface(context);
+		if(interFace!=null)
+			classFile.addInterface(interFace);
+	}
+
+	private ClassConstant getInterface(Context context) {
+		String className = CompilerUtils.getCategoryInterfaceClassName(getId(), true);
+		return new ClassConstant(className);
+	}
+
 	private ClassConstant getSuperClass(Context context) {
 		if(derivedFrom==null) 
 			return new ClassConstant("prompto/intrinsic/PromptoRoot");
 		/* the JVM does not support multiple inheritance but we can still benefit from single inheritance */
-		Identifier id = derivedFrom.getFirst();
-		String className = CompilerUtils.getCategoryClassName(id, true);
+		String className = CompilerUtils.getCategoryConcreteClassName(derivedFrom.getFirst(), true);
 		return new ClassConstant(className);
 	}
 
 	private void compileFields(Context context, ClassFile classFile, Flags flags) throws SyntaxError {
-		if(attributes!=null) for(Identifier id : attributes)
+		Set<Identifier> ids = getAllAttributes(context);
+		for(Identifier id : ids)
 			compileField(context, classFile, flags, id);
 	}
 
 	private void compileField(Context context, ClassFile classFile, Flags flags, Identifier id) throws SyntaxError {
-		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
-		FieldInfo field = decl.toFieldInfo(context);
-		classFile.addField(field);
-		compileSetter(context, classFile, flags, id, field);
-		compileGetter(context, classFile, flags, id, field);
+		if(isSuperClassAttribute(context, id))
+			compileSuperClassField(context, classFile, flags, id);
+		else if(isInheritedAttribute(context, id))
+			compileInheritedField(context, classFile, flags, id);
+		else
+			compileLocalField(context, classFile, flags, id);
 	}
 	
 
-	private void compileSetter(Context context, ClassFile classFile, Flags flags, 
+	private void compileInheritedField(Context context, ClassFile classFile, Flags flags, 
+			Identifier id) throws SyntaxError {
+		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
+		FieldInfo field = decl.toFieldInfo(context);
+		classFile.addField(field);
+		compileInheritedSetterMethod(context, classFile, flags, id, field);
+		compileInheritedGetterMethod(context, classFile, flags, id, field);
+	}
+
+	private void compileInheritedSetterMethod(Context context, ClassFile classFile, Flags flags, 
+			Identifier id, FieldInfo field) throws SyntaxError {
+		SetterMethodDeclaration setter = findSetter(context, id);
+		if(setter!=null) synchronized(setter) {
+			ConcreteCategoryDeclaration owner = setter.getMemberOf();
+			setter.setMemberOf(this);
+			try {
+				setter.compile(context, classFile, flags, getType(context), field);
+			} finally {
+				setter.setMemberOf(owner);
+			}
+		} else
+			compileFieldSetter(context, classFile, flags, id, field);
+	}
+
+	private void compileInheritedGetterMethod(Context context, ClassFile classFile, Flags flags, 
+			Identifier id, FieldInfo field) throws SyntaxError {
+		GetterMethodDeclaration getter = findGetter(context, id);
+		if(getter!=null) synchronized(getter) {
+			ConcreteCategoryDeclaration owner = getter.getMemberOf();
+			getter.setMemberOf(this);
+			try {
+				getter.compile(context, classFile, flags, getType(context), field);
+			} finally {
+				getter.setMemberOf(owner);
+			}
+		} else
+			compileFieldGetter(context, classFile, flags, id, field);
+	}
+
+	private boolean isInheritedAttribute(Context context, Identifier id) {
+		if(derivedFrom==null)
+			return false;
+		Iterator<Identifier> iter = derivedFrom.iterator();
+		iter.next(); // skip first = inherited
+		while(iter.hasNext()) {
+			Identifier derived = iter.next();
+			CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, derived);
+			if(decl.hasAttribute(context, id))
+				return true;
+		}
+		return false;
+	}
+
+	private void compileLocalField(Context context, ClassFile classFile, Flags flags, Identifier id) throws SyntaxError {
+		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
+		FieldInfo field = decl.toFieldInfo(context);
+		classFile.addField(field);
+		compileLocalSetterMethod(context, classFile, flags, id, field);
+		compileLocalGetterMethod(context, classFile, flags, id, field);
+	}
+
+	private void compileSuperClassField(Context context, ClassFile classFile, Flags flags, Identifier id) throws SyntaxError {
+		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
+		FieldInfo field = decl.toFieldInfo(context);
+		GetterMethodDeclaration getter = findGetter(context, id);
+		if(getter!=null)
+			getter.compile(context, classFile, flags, getType(context), field);
+		SetterMethodDeclaration setter = findSetter(context, id);
+		if(setter!=null)
+			setter.compile(context, classFile, flags, getType(context), field);
+	}
+
+	private boolean isSuperClassAttribute(Context context, Identifier id) {
+		if(derivedFrom==null)
+			return false;
+		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, derivedFrom.getFirst());
+		return decl.hasAttribute(context, id);
+	}
+
+	private void compileLocalSetterMethod(Context context, ClassFile classFile, Flags flags, 
 			Identifier id, FieldInfo field) throws SyntaxError {
 		SetterMethodDeclaration setter = findSetter(context, id);
 		if(setter!=null)
 			setter.compile(context, classFile, flags, getType(context), field);
 		else
-			compileSetterField(context, classFile, flags, id, field);
+			compileFieldSetter(context, classFile, flags, id, field);
 	}
 	
-	private void compileSetterField(Context context, ClassFile classFile, Flags flags, 
+	private void compileFieldSetter(Context context, ClassFile classFile, Flags flags, 
 			Identifier id, FieldInfo field) {
 		String name = CompilerUtils.setterName(field.getName().getValue());
 		String proto = "(" + field.getDescriptor().getValue() + ")V";
@@ -465,15 +610,15 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		method.addInstruction(Opcode.RETURN);
 	}
 
-	private void compileGetter(Context context, ClassFile classFile, Flags flags,Identifier id, FieldInfo field) throws SyntaxError {
+	private void compileLocalGetterMethod(Context context, ClassFile classFile, Flags flags,Identifier id, FieldInfo field) throws SyntaxError {
 		GetterMethodDeclaration getter = findGetter(context, id);
 		if(getter!=null)
 			getter.compile(context, classFile, flags, getType(context), field);
 		else
-			compileGetterField(context, classFile, flags, id, field);
+			compileFieldGetter(context, classFile, flags, id, field);
 	}
 
-	private void compileGetterField(Context context, ClassFile classFile, Flags flags, Identifier id, FieldInfo field) {
+	private void compileFieldGetter(Context context, ClassFile classFile, Flags flags, Identifier id, FieldInfo field) {
 		String name = CompilerUtils.getterName(id.getName());
 		String proto = "()" + field.getDescriptor().getValue();
 		MethodInfo method = new MethodInfo(name, proto);

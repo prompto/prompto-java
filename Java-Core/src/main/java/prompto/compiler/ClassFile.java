@@ -9,10 +9,11 @@ public class ClassFile {
 	
 	ClassConstant thisClass;
 	ClassConstant superClass;
-	List<Utf8Constant> interfaces = new ArrayList<>();
+	List<ClassConstant> interfaces = new ArrayList<>();
 	List<FieldInfo> fields = new ArrayList<>();
 	List<MethodInfo> methods = new ArrayList<>();
 	List<IAttribute> attributes = new ArrayList<>();
+	InnerClassesAttribute innerClasses = null;
 	
 	int accessFlags = Tags.ACC_SUPER | Modifier.PUBLIC;
 	
@@ -37,15 +38,38 @@ public class ClassFile {
 	}
 
 	public void addModifier(int modifier) {
+		if((modifier&Modifier.INTERFACE)!=0)
+			accessFlags &= ~Tags.ACC_SUPER;
 		accessFlags |= modifier;
 	}
 	
+	public void addInterface(String name) {
+		addInterface(new ClassConstant(name));
+	}
+	
+	public void addInterface(ClassConstant interFace) {
+		interfaces.add(interFace);
+	}
+
 	public void addField(FieldInfo field) {
 		fields.add(field);
 	}
 
 	public void addMethod(MethodInfo method) {
 		methods.add(method);
+	}
+
+	public void addInnerClass(ClassFile classFile) {
+		InnerClassInfo info = new InnerClassInfo(classFile.getThisClass(), getThisClass());
+		addInnerClass(info);
+	}
+
+	private void addInnerClass(InnerClassInfo info) {
+		if(innerClasses==null) {
+			innerClasses = new InnerClassesAttribute();
+			attributes.add(innerClasses);
+		}
+		innerClasses.addInnerClass(info);
 	}
 
 	public void writeTo(OutputStream o) throws CompilerException {
@@ -112,8 +136,6 @@ public class ClassFile {
 		attributes.forEach((a)->
 			a.writeTo(writer));
 	}
-
-
 
 
 

@@ -6,6 +6,7 @@ import java.util.Set;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.FieldInfo;
 import prompto.compiler.Flags;
+import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -163,11 +164,11 @@ public class ConstructorExpression implements IExpression {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
-		Type klass = getType(context);
+		Type klass = getConcreteType(context);
 		ResultInfo result = CompilerUtils.newInstance(method, klass);
 		compileCopyFrom(context, method, flags, result);
 		compileAssignments(context, method, flags, result);
-		return result;
+		return new ResultInfo(getInterfaceType(context), true);
 	}
 
 	private void compileAssignments(Context context, MethodInfo method, Flags flags, ResultInfo thisInfo) throws SyntaxError {
@@ -214,12 +215,12 @@ public class ConstructorExpression implements IExpression {
 			return;
 		// keep a copy of copyFrom on top of the stack
 		method.addInstruction(Opcode.DUP); // -> new, copyFrom, copyFrom
-		// call getter on copyFrom instance
+		// call getter on copyFrom instance (an interface)
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, attrId);
 		FieldInfo field = decl.toFieldInfo(context);
-		MethodConstant m = new MethodConstant(copyFromInfo.getType(), 
+		InterfaceConstant i = new InterfaceConstant(copyFromInfo.getType(), 
 				CompilerUtils.getterName(attrId.getName()), "()" + field.getDescriptor().getValue());
-		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+		method.addInstruction(Opcode.INVOKEINTERFACE, i);
 		// keep the new instance at top of the stack (currently new, copyFrom, value)
 		method.addInstruction(Opcode.DUP_X2); // -> value, new, copyFrom, value
 		method.addInstruction(Opcode.POP); // -> value, new, copyFrom
@@ -227,8 +228,8 @@ public class ConstructorExpression implements IExpression {
 		method.addInstruction(Opcode.POP); // -> copyFrom, value, new
 		method.addInstruction(Opcode.DUP_X2); // -> new, copyFrom, value, new
 		method.addInstruction(Opcode.SWAP); // -> new, copyFrom, new, value
-		// call setter on new instance
-		m = new MethodConstant(thisInfo.getType(), 
+		// call setter on new instance (a class)
+		MethodConstant m = new MethodConstant(thisInfo.getType(), 
 				CompilerUtils.setterName(attrId.getName()), "(" + field.getDescriptor().getValue() + ")V");
 		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 	}
@@ -241,14 +242,23 @@ public class ConstructorExpression implements IExpression {
 		return false;
 	}
 
-	private Type getType(Context context) throws SyntaxError {
+	private Type getInterfaceType(Context context) throws SyntaxError {
 		CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getId());
 		if(cd instanceof NativeCategoryDeclaration)
 			return ((NativeCategoryDeclaration)cd).getBoundClass(context, false);
 		else {
-			String className = CompilerUtils.getCategoryClassName(cd.getId(), true);
+			String className = CompilerUtils.getCategoryInterfaceClassName(cd.getId(), true);
 			return CompilerUtils.getCategoryClass(className);	
 		}
 	}
 
+	private Type getConcreteType(Context context) throws SyntaxError {
+		CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getId());
+		if(cd instanceof NativeCategoryDeclaration)
+			return ((NativeCategoryDeclaration)cd).getBoundClass(context, false);
+		else {
+			String className = CompilerUtils.getCategoryConcreteClassName(cd.getId(), true);
+			return CompilerUtils.getCategoryClass(className);	
+		}
+	}
 }

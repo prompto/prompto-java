@@ -66,7 +66,7 @@ public class CategoryType extends BaseType {
 	
 	@Override
 	public Type toJavaType() {
-		return new PromptoType(CompilerUtils.getCategoryClassName(getId(), false));
+		return new PromptoType(CompilerUtils.getCategoryInterfaceClassName(getId(), false));
 	}
 	
 	@Override

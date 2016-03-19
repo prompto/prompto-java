@@ -48,9 +48,23 @@ public class Compiler {
 		return classFile;
 	}
 
-	public void compileCategory(Context context, CategoryDeclaration decl, String fullName) throws Exception {
-		ClassFile classFile = createCategoryClassFile(context, decl, fullName);
-		writeClassFile(classFile, fullName);
+	public void compileCategory(Context context, CategoryDeclaration decl, String interfaceFullName, String concreteFullName) throws Exception {
+		/* multiple inheritance is supported via interfaces */
+		/* concrete class is an inner class of the interface */
+		/* inner class is prefixed with '%' to prevent naming collisions */
+		ClassFile classFile = createCategoryClassFile(context, decl, concreteFullName);
+		writeClassFile(classFile, concreteFullName);
+		classFile = createCategoryInterfaceFile(context, decl, interfaceFullName, classFile);
+		writeClassFile(classFile, interfaceFullName);
+	}
+	
+	public ClassFile createCategoryInterfaceFile(Context context, CategoryDeclaration decl, String fullName, ClassFile innerClass) {
+		fullName = fullName.replace('.', '/');
+		ClassFile classFile = new ClassFile(fullName);
+		classFile.addModifier(Modifier.ABSTRACT | Modifier.INTERFACE);
+		classFile.addInnerClass(innerClass);
+		decl.compileInterface(context, classFile);
+		return classFile;
 	}
 	
 	public ClassFile createCategoryClassFile(Context context, CategoryDeclaration decl, String fullName) {
@@ -58,7 +72,7 @@ public class Compiler {
 		ClassFile classFile = new ClassFile(fullName);
 		if(decl.isAbstract())
 			classFile.addModifier(Modifier.ABSTRACT);
-		decl.compile(context, classFile);
+		decl.compileClass(context, classFile);
 		return classFile;
 	}
 

@@ -111,6 +111,7 @@ public abstract class CompilerUtils {
 	static final char PROMPTO_CHAR = 'π';
 	static final char METHOD_CHAR = 'µ';
 	static final char CATEGORY_CHAR = 'χ';
+	static final String INNER_SEPARATOR = "$%";
 
 	public static String getGlobalMethodClassName(Identifier id, boolean useSlash) {
 		return CompilerUtils.getGlobalMethodClassName(id.getName(), useSlash);
@@ -122,11 +123,41 @@ public abstract class CompilerUtils {
 				: "" + PROMPTO_CHAR + '.' + METHOD_CHAR + '.' + name;
 	}
 	
-	public static String getCategoryClassName(Identifier id, boolean useSlash) {
-		return CompilerUtils.getCategoryClassName(id.getName(), useSlash);
+	public static String concreteFullNameFrom(String fullName) {
+		int idx = fullName.indexOf('$');
+		if(idx<0)
+			fullName += INNER_SEPARATOR + simpleNameFrom(fullName);
+		return fullName;
 	}
 
-	public static String getCategoryClassName(String name, boolean useSlash) {
+	public static String interfaceFullNameFrom(String fullName) {
+		int idx = fullName.indexOf('$');
+		if(idx>=0)
+			fullName = fullName.substring(0, idx);
+		return fullName;
+	}
+
+	public static String simpleNameFrom(String fullName) {
+		String simpleName = fullName.substring(fullName.indexOf(".χ.") + 3);
+		int idx = simpleName.indexOf('$');
+		if(idx>=0)
+			simpleName = simpleName.substring(idx + 2); // skip $ and %
+		return simpleName;
+	}
+	
+	public static String getCategoryInterfaceClassName(Identifier id, boolean useSlash) {
+		return getCategoryInterfaceClassName(id.getName(), useSlash);
+	}
+
+	public static String getCategoryConcreteClassName(Identifier id, boolean useSlash) {
+		return getCategoryConcreteClassName(id.getName(), useSlash);
+	}
+
+	private static String getCategoryConcreteClassName(String name, boolean useSlash) {
+		return getCategoryInterfaceClassName(name, useSlash) + INNER_SEPARATOR + name;
+	}
+
+	public static String getCategoryInterfaceClassName(String name, boolean useSlash) {
 		return useSlash ?
 				"" + PROMPTO_CHAR + '/' + CATEGORY_CHAR + '/' + name
 				: "" + PROMPTO_CHAR + '.' + CATEGORY_CHAR + '.' + name;

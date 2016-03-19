@@ -20,6 +20,12 @@ public class ClassConstant implements CodeConstant {
 		return className;
 	}
 	
+	public String getSimpleName() {
+		String fullName = className.getValue();
+		return fullName.substring(fullName.lastIndexOf('.')+1);
+	}
+
+	
 	@Override
 	public String toString() {
 		return this.className.toString();
@@ -55,6 +61,7 @@ public class ClassConstant implements CodeConstant {
 		writer.writeU1(Tags.CONSTANT_Class);
 		writer.writeU2(className.getIndexInConstantPool());
 	}
+
 
 
 }
