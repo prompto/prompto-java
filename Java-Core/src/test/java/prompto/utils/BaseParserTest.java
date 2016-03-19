@@ -149,9 +149,9 @@ public abstract class BaseParserTest extends BaseTest {
 			if(!(decl instanceof TestMethodDeclaration))
 				continue;
 			Out.reset();
-			interpretTest(decl.getIdentifier());
+			interpretTest(decl.getId());
 			Out.reset();
-			executeTest(decl.getIdentifier());
+			executeTest(decl.getId());
 		}
 	}
 	
