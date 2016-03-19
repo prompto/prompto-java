@@ -65,7 +65,7 @@ public class TestClassFile {
 	@Test
 	public void testDefineClassForGlobalMethod() throws Exception {
 		String name = "π/χ/µ/print";
-		ClassFile c = new ClassFile(name, "java/lang/Object");
+		ClassFile c = new ClassFile(name);
 		c.addModifier(Modifier.ABSTRACT);
 		MethodInfo m = new MethodInfo("printAbstract", "(Ljava/lang/String;)V");
 		m.addModifier(Modifier.ABSTRACT);
@@ -92,7 +92,7 @@ public class TestClassFile {
 	public void testCallGlobalMethod() throws Exception {
 		Out.init();
 		String name = "π/χ/µ/print";
-		ClassFile c = new ClassFile(name, "java/lang/Object");
+		ClassFile c = new ClassFile(name);
 		c.addModifier(Modifier.ABSTRACT);
 		MethodInfo m = new MethodInfo("print", "(Ljava/lang/String;)V");
 		m.addModifier(Modifier.STATIC);
@@ -119,7 +119,7 @@ public class TestClassFile {
 	@Test
 	public void testClassWithLongConstant() throws Exception {
 		String name = "k1";
-		ClassFile c = new ClassFile(name, "java/lang/Object");
+		ClassFile c = new ClassFile(name);
 		c.addModifier(Modifier.ABSTRACT);
 		MethodInfo m = new MethodInfo("m3", "()Ljava/lang/Long;");
 		m.addModifier(Modifier.STATIC);
@@ -135,7 +135,7 @@ public class TestClassFile {
 	@Test
 	public void testClassWithStackLabel_FULL() throws Exception {
 		String name = "k1";
-		ClassFile c = new ClassFile(name, "java/lang/Object");
+		ClassFile c = new ClassFile(name);
 		c.addModifier(Modifier.ABSTRACT);
 		MethodInfo m = new MethodInfo("m", "()V");
 		m.addModifier(Modifier.STATIC);
