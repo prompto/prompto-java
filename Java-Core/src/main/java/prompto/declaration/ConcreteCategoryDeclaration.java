@@ -439,14 +439,24 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 	
 
-	private void compileSetter(Context context, ClassFile classFile, Flags flags, Identifier id, FieldInfo field) {
+	private void compileSetter(Context context, ClassFile classFile, Flags flags, 
+			Identifier id, FieldInfo field) throws SyntaxError {
+		SetterMethodDeclaration setter = findSetter(context, id);
+		if(setter!=null)
+			setter.compile(context, classFile, flags, getType(context), field);
+		else
+			compileSetterField(context, classFile, flags, id, field);
+	}
+	
+	private void compileSetterField(Context context, ClassFile classFile, Flags flags, 
+			Identifier id, FieldInfo field) {
 		String name = CompilerUtils.setterName(field.getName().getValue());
 		String proto = "(" + field.getDescriptor().getValue() + ")V";
 		MethodInfo method = new MethodInfo(name, proto);
 		classFile.addMethod(method);
 		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
 		ClassConstant fc = new ClassConstant(field.getClassName());
-		method.registerLocal("value", IVerifierEntry.Type.ITEM_Object, fc);
+		method.registerLocal("%value%", IVerifierEntry.Type.ITEM_Object, fc);
 		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
 		method.addInstruction(Opcode.ALOAD_1, fc);
 		FieldConstant f = new FieldConstant(classFile.getThisClass(), field.getName().getValue(), field.getDescriptor());
@@ -467,7 +477,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		String proto = "()" + field.getDescriptor().getValue();
 		MethodInfo method = new MethodInfo(name, proto);
 		classFile.addMethod(method);
-		method.registerLocal("this", IVerifierEntry.Type.ITEM_UninitializedThis, classFile.getThisClass());
+		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
 		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
 		FieldConstant f = new FieldConstant(classFile.getThisClass(), id.getName(), field.getDescriptor());
 		method.addInstruction(Opcode.GETFIELD, f);

@@ -16,6 +16,7 @@ public class Flags {
 		this.values.put("roughly", false);
 		this.values.put("decimal", false);
 		this.values.put("opcode", null);
+		this.values.put("setter", null);
 	}
 	
 	private Flags(Map<String, Object> values) {
@@ -76,7 +77,12 @@ public class Flags {
 		return clone("CmpOp", operator);
 	}
 
-
-
+	public FieldInfo setter() {
+		return (FieldInfo)values.get("setter");
+	}
 	
+	public Flags withSetter(FieldInfo field) {
+		return clone("setter", field);
+	}
+
 }

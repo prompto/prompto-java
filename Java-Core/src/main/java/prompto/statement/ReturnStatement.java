@@ -1,9 +1,13 @@
 package prompto.statement;
 
+import prompto.compiler.ClassConstant;
+import prompto.compiler.FieldConstant;
+import prompto.compiler.FieldInfo;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
+import prompto.compiler.StackLocal;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
@@ -70,6 +74,28 @@ public class ReturnStatement extends SimpleStatement {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		FieldInfo setter = flags.setter();
+		if(setter==null)
+			return compileReturn(context, method, flags);
+		else
+			return compileSetter(context, method, flags, setter);
+	}
+
+	private ResultInfo compileSetter(Context context, MethodInfo method, Flags flags, FieldInfo field) throws SyntaxError {
+		// load 'this'
+		StackLocal local = method.getRegisteredLocal("this");
+		ClassConstant c = ((StackLocal.ObjectLocal)local).getClassName();
+		method.addInstruction(Opcode.ALOAD_0, c); 
+		// load value
+		expression.compile(context, method, flags);
+		// store in field
+		FieldConstant f = new FieldConstant(c, field.getName().getValue(), field.getDescriptor());
+		method.addInstruction(Opcode.PUTFIELD, f);
+		method.addInstruction(Opcode.RETURN);
+		return new ResultInfo(void.class, false, true);
+	}
+
+	private ResultInfo compileReturn(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		if(expression==null) {
 			method.addInstruction(Opcode.RETURN);
 			return new ResultInfo(void.class, false, true);
