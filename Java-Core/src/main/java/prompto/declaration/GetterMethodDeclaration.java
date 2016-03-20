@@ -22,6 +22,15 @@ public class GetterMethodDeclaration extends ConcreteMethodDeclaration implement
 		super(id, null, null, statements);
 	}
 	
+	public static String getNameAsKey(Identifier id) {
+		return "getter:" + id.getName();
+	}
+
+	@Override
+	public String getNameAsKey() {
+		return getNameAsKey(getId());
+	}
+
 	@Override
 	protected void toODialect(CodeWriter writer) {
 		writer.append("getter ");
@@ -61,8 +70,8 @@ public class GetterMethodDeclaration extends ConcreteMethodDeclaration implement
 
 	@Override
 	public IType check(Context context) throws SyntaxError {
-		// TODO Auto-generated method stub
-		return null;
+		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, getId());
+		return decl.getType();
 	}
 
 	public void compile(Context context, ClassFile classFile, Flags flags, CategoryType type, FieldInfo field) throws SyntaxError {

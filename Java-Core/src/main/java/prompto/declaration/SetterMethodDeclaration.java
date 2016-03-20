@@ -24,6 +24,15 @@ public class SetterMethodDeclaration extends ConcreteMethodDeclaration implement
 		super(id, null, null, statements);
 	}
 
+	public static String getNameAsKey(Identifier id) {
+		return "Setter:" + id.getName();
+	}
+
+	@Override
+	public String getNameAsKey() {
+		return getNameAsKey(getId());
+	}
+
 	@Override
 	protected void toODialect(CodeWriter writer) {
 		writer.append("setter ");
@@ -63,8 +72,8 @@ public class SetterMethodDeclaration extends ConcreteMethodDeclaration implement
 
 	@Override
 	public IType check(Context context) throws SyntaxError {
-		// TODO Auto-generated method stub
-		return null;
+		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, getId());
+		return decl.getType();
 	}
 
 	@Override

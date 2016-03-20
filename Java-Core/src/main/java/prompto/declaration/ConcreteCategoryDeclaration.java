@@ -50,6 +50,11 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		this.derivedFrom = derivedFrom;
 		this.methods = methods!=null ? methods : new MethodDeclarationList();
 	}
+	
+	@Override
+	public MethodDeclarationList getLocalMethods() {
+		return methods;
+	}
 
 	@Override
 	public IdentifierList getDerivedFrom() {
@@ -198,30 +203,24 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			methodsMap = new HashMap<String,IDeclaration>();
 			for(IMethodDeclaration method : methods) {
 				method.setMemberOf(this);
-				registerMethod(method,context);
+				registerMethod(method, context);
 			}
 		}
 	}
 
 	private void registerMethod(IMethodDeclaration method, Context context) throws SyntaxError {
-		IDeclaration actual;
-		if(method instanceof SetterMethodDeclaration) {
-			actual = methodsMap.get("setter:"+method.getId().toString());
+		String methodKey = method.getNameAsKey();
+ 		IDeclaration actual	= methodsMap.get(methodKey);
+		if(method instanceof SetterMethodDeclaration || method instanceof GetterMethodDeclaration) {
 			if(actual!=null)
-				throw new SyntaxError("Duplicate setter: \"" + method.getId().toString() + "\"");
-			methodsMap.put("setter:"+method.getId().toString(),method);
-		} else if(method instanceof GetterMethodDeclaration) {
-			actual = methodsMap.get("getter:"+method.getId().toString());
-			if(actual!=null)
-				throw new SyntaxError("Duplicate getter: \"" + method.getId().toString() + "\"");
-			methodsMap.put("getter:"+method.getId().toString(),method);
-		} else {
-			actual = methodsMap.get(method.getId().toString());
+				throw new SyntaxError("Duplicate method: \"" + methodKey + "\"");
+			methodsMap.put(methodKey, method);
+		} else {			
 			if(actual==null) {
 				actual = new MethodDeclarationMap(method.getId());
-				methodsMap.put(method.getId().toString(), actual);
+				methodsMap.put(methodKey, actual);
 			}
-			((MethodDeclarationMap)actual).register(method,context);
+			((MethodDeclarationMap)actual).register(method, context);
 		}
 	}
 
@@ -262,7 +261,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	public GetterMethodDeclaration findGetter(Context context, Identifier attrName) throws SyntaxError {
 		if(methodsMap==null)
 			return null;
-		IDeclaration method = methodsMap.get("getter:"+attrName); 
+		IDeclaration method = methodsMap.get(GetterMethodDeclaration.getNameAsKey(attrName)); 
 		if(method instanceof GetterMethodDeclaration)
 			return (GetterMethodDeclaration)method;
 		if(method!=null)
@@ -292,7 +291,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	public SetterMethodDeclaration findSetter(Context context, Identifier attrName) throws SyntaxError {
 		if(methodsMap==null)
 			return null;
-		IDeclaration method = methodsMap.get("setter:"+attrName); 
+		IDeclaration method = methodsMap.get(SetterMethodDeclaration.getNameAsKey(attrName)); 
 		if(method instanceof SetterMethodDeclaration)
 			return (SetterMethodDeclaration)method;
 		if(method!=null)
@@ -361,7 +360,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 
 	@Override
 	public IMethodDeclaration findOperator(Context context, Operator operator, IType type) throws SyntaxError {
-		Identifier methodName = new Identifier("operator-" + operator.name());
+		Identifier methodName = new Identifier(OperatorMethodDeclaration.getNameAsKey(operator));
 		MethodDeclarationMap methods = getMemberMethods(context, methodName);
 		if(methods==null)
 			return null;
@@ -461,8 +460,53 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 
 	private void compileMethodPrototypes(Context context, ClassFile classFile) throws SyntaxError {
-		// TODO Auto-generated method stub
-		
+		Map<String, MethodDeclarationMap> all = collectInterfaceMethods(context);
+		all.values().forEach((map)->
+			map.values().forEach((method)->
+				compileMethodPrototype(context, classFile, method)));
+	}
+	
+	protected Map<String, MethodDeclarationMap> collectInterfaceMethods(Context context) {
+		// the methods to declare in the interface are those not already declared
+		Map<String, MethodDeclarationMap> local = super.getAllMethods(context);
+		Map<String, MethodDeclarationMap> all = getAllMethods(context);
+		removeInheritedMethods(local, all);
+		return local;
+	}
+
+	private void removeInheritedMethods(Map<String, MethodDeclarationMap> local, Map<String, MethodDeclarationMap> all) {
+		all.keySet().forEach((key)->{
+			MethodDeclarationMap localMap = local.get(key);
+			if(localMap!=null) {
+				MethodDeclarationMap allMap = all.get(key);
+				allMap.keySet().forEach((proto)->{
+					if(allMap.get(proto).getMemberOf()!=this)
+						localMap.remove(proto);
+				});
+				if(localMap.isEmpty())
+					local.remove(key);
+			}
+		});
+	}
+
+	@Override
+	public Map<String, MethodDeclarationMap> getAllMethods(Context context) {
+		Map<String, MethodDeclarationMap> map = super.getAllMethods(context);
+		if(derivedFrom!=null) derivedFrom.forEach((id)->{
+				CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, id);
+				decl.collectAllMethods(context, map);
+			});
+		return map;		
+	}
+
+	private void compileMethodPrototype(Context context, ClassFile classFile, IMethodDeclaration method) {
+		try {
+			context = context.newCategoryContext(getType(context)).newChildContext();
+			method.registerArguments(context);
+			method.compilePrototype(context, classFile);
+		} catch(SyntaxError e) {
+			throw new CompilerException(e);
+		}
 	}
 
 	private void compileSuperClass(Context context, ClassFile classFile, Flags flags) {

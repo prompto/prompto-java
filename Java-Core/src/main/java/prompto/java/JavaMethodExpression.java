@@ -69,7 +69,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 		// write method call
 		Method m = findMethod(context, parentType.getType());
 		String proto = CompilerUtils.createProto(m.getParameterTypes(), m.getReturnType());
-		String parentClassName = CompilerUtils.getClassName(parentType.getType());
+		String parentClassName = CompilerUtils.makeClassName(parentType.getType());
 		IConstantOperand operand = new MethodConstant(parentClassName, m.getName(), proto);
 		if(parentType.isInstance())
 			method.addInstruction(Opcode.INVOKEVIRTUAL, operand);

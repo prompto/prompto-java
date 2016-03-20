@@ -19,6 +19,9 @@ public interface IMethodDeclaration extends IDeclaration {
 	ArgumentList getArguments();
 	String getSignature(Dialect dialect);
 	boolean isEligibleAsMain();
+	default String getNameAsKey() {
+		return getName();
+	}
 	String getProto();
 	IValue interpret(Context context) throws PromptoError;
 	void check(ConcreteCategoryDeclaration declaration, Context context) throws SyntaxError;
@@ -28,6 +31,7 @@ public interface IMethodDeclaration extends IDeclaration {
 	void setMemberOf(ConcreteCategoryDeclaration declaration);
 	ConcreteCategoryDeclaration getMemberOf();
 	void compile(Context context, ClassFile classFile);
+	void compilePrototype(Context context, ClassFile classFile);
 
 }
 

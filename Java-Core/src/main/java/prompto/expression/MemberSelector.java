@@ -11,6 +11,7 @@ import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.IOperand;
+import prompto.compiler.PromptoType;
 import prompto.compiler.ResultInfo;
 import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
@@ -180,7 +181,8 @@ public class MemberSelector extends SelectorExpression {
 		else {
 			String getterName = CompilerUtils.getterName(getName());
 			if(isCompilingGetter(context, method, parent, getterName)) {
-				String className = CompilerUtils.getClassName(parent.getType());
+				String className = CompilerUtils.concreteFullNameFrom(parent.getType().getTypeName());
+				className = CompilerUtils.makeClassName(className);
 				String desc = CompilerUtils.getDescriptor(resultType);
 				FieldConstant f = new FieldConstant(className, id.getName(), desc);
 				method.addInstruction(Opcode.GETFIELD, f);
@@ -188,9 +190,12 @@ public class MemberSelector extends SelectorExpression {
 				IOperand oper = new MethodConstant(parent.getType(), getterName, Object.class);
 				method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 				method.addInstruction(Opcode.CHECKCAST, new ClassConstant(resultType));
-			} else {
+			} else if(parent.getType() instanceof PromptoType){
 				IOperand oper = new InterfaceConstant(parent.getType(), getterName, resultType);
 				method.addInstruction(Opcode.INVOKEINTERFACE, oper);
+			} else {
+				IOperand oper = new MethodConstant(parent.getType(), getterName, resultType);
+				method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 			}
 			return new ResultInfo(resultType, true);
 		}

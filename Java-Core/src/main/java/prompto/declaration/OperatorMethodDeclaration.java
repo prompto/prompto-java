@@ -17,8 +17,17 @@ public class OperatorMethodDeclaration extends ConcreteMethodDeclaration impleme
 	Operator operator;
 	
 	public OperatorMethodDeclaration(Operator op, IArgument arg, IType returnType, StatementList stmts) {
-		super(new Identifier("operator-" + op.name()), new ArgumentList(arg), returnType, stmts);
+		super(new Identifier(getNameAsKey(op)), new ArgumentList(arg), returnType, stmts);
 		this.operator = op;
+	}
+
+	public static String getNameAsKey(Operator operator) {
+		return "operator-" + operator.name();
+	}
+	
+	@Override
+	public String getNameAsKey() {
+		return getNameAsKey(operator);
 	}
 
 	@Override

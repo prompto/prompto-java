@@ -1,11 +1,13 @@
 package prompto.declaration;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import prompto.compiler.ClassFile;
 import prompto.compiler.Flags;
-import prompto.compiler.MethodConstant;
+import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
@@ -17,6 +19,7 @@ import prompto.grammar.MethodDeclarationList;
 import prompto.grammar.Operator;
 import prompto.java.JavaClassType;
 import prompto.runtime.Context;
+import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.store.IDataStore;
 import prompto.store.IStore;
 import prompto.store.IStored;
@@ -346,9 +349,30 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		operator.registerArguments(local);
 		IType resultType = operator.check(local);
 		String methodName = "operator-" + oper.name();
-		MethodConstant c = new MethodConstant(left.getType(), methodName, argType.toJavaType(), resultType.toJavaType());
-		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
+		InterfaceConstant c = new InterfaceConstant(left.getType(), methodName, argType.toJavaType(), resultType.toJavaType());
+		method.addInstruction(Opcode.INVOKEINTERFACE, c);
 		return new ResultInfo(resultType.toJavaType(), true);
 	}
 
+	public MethodDeclarationList getLocalMethods() {
+		throw new UnsupportedOperationException(); // TODO -> abstract
+	}
+
+	public Map<String, MethodDeclarationMap> getAllMethods(Context context) {
+		Map<String, MethodDeclarationMap> map = new HashMap<>();
+		collectAllMethods(context, map);
+		return map;
+	}
+
+	public void collectAllMethods(Context context, Map<String, MethodDeclarationMap> map) {
+		getLocalMethods().forEach((m)->{
+			MethodDeclarationMap current = map.get(m.getNameAsKey());
+			if(current==null) {
+				current = new MethodDeclarationMap(m.getId());
+				map.put(m.getNameAsKey(), current);
+			}
+			if(current.get(m.getNameAsKey())==null)
+				current.put(m.getNameAsKey(), m);
+		});
+	}
 }

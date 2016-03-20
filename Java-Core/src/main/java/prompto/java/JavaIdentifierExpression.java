@@ -147,7 +147,7 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 		try {
 			Class<?> klass = (Class<?>)info.getType();
 			Field field = klass.getField(name);
-			String parentClassName = CompilerUtils.getClassName(info.getType());
+			String parentClassName = CompilerUtils.makeClassName(info.getType());
 			String fieldClassName = CompilerUtils.getDescriptor(field.getType());
 			IOperand oper = new FieldConstant(parentClassName, name, fieldClassName);
 			if(info.isInstance())

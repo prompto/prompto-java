@@ -17,6 +17,15 @@ public class InterfaceConstant extends MethodConstant {
 		super(klass, methodName, proto);
 	}
 
+	public InterfaceConstant(ClassConstant klass, String methodName, String proto) {
+		super(klass, methodName, proto);
+	}
+
+	public int getArgsCount() {
+		String proto = methodNameAndType.getType().getValue();
+		return CompilerUtils.parseDescriptor(proto).length; // this + args.count - result
+	}
+
 	@Override
 	public void writeTo(ByteWriter writer) {
 		/*
@@ -30,7 +39,5 @@ public class InterfaceConstant extends MethodConstant {
 		writer.writeU2(className.getIndexInConstantPool());
 		writer.writeU2(methodNameAndType.getIndexInConstantPool());
 	}
-
-
 
 }

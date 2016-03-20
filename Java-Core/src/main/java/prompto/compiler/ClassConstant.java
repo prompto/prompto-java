@@ -9,7 +9,7 @@ public class ClassConstant implements CodeConstant {
 	int index = -1;
 	
 	public ClassConstant(Type klass) {
-		this(CompilerUtils.getClassName(klass));
+		this(CompilerUtils.makeClassName(klass));
 	}
 
 	public ClassConstant(String className) {
@@ -22,9 +22,12 @@ public class ClassConstant implements CodeConstant {
 	
 	public String getSimpleName() {
 		String fullName = className.getValue();
-		return fullName.substring(fullName.lastIndexOf('.')+1);
+		return fullName.substring(fullName.lastIndexOf('/')+1);
 	}
 
+	public boolean isInterface() {
+		return className.getValue().indexOf('$')<0;
+	}
 	
 	@Override
 	public String toString() {
@@ -61,7 +64,5 @@ public class ClassConstant implements CodeConstant {
 		writer.writeU1(Tags.CONSTANT_Class);
 		writer.writeU2(className.getIndexInConstantPool());
 	}
-
-
 
 }

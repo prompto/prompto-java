@@ -78,7 +78,7 @@ public class Instruction implements IInstruction {
 					break;
 				case CPREF_W_UBYTE_ZERO:
 					writer.writeU2(((IConstantOperand)operands[0]).getIndexInConstantPool());
-					writer.writeU1(1);
+					writer.writeU1(((InterfaceConstant)operands[0]).getArgsCount());
 					writer.writeU1(0);
 					break;
 				case NO_OPERANDS:

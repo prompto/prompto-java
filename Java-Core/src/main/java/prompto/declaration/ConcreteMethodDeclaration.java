@@ -171,21 +171,41 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	@Override
 	public void compile(Context context, ClassFile classFile) {
 		try {
-			if(context.isGlobalContext()) {
-				// coming from nowhere, so need a clean context in which to register arguments
-				context = context.newLocalContext();
-				registerArguments(context);
-			}
-			// create method
+			context = prepareContext(context);
 			IType returnType = check(context);
 			MethodInfo method = createMethodInfo(context, classFile, returnType);
-			// produce byte code
-			Flags flags = new Flags();
-			for(IStatement s : statements)
-				s.compile(context, method, flags);
-			// add return for void
-			if(returnType==VoidType.instance())
-				method.addInstruction(Opcode.RETURN);
+			registerLocals(context, classFile, method);
+			produceByteCode(context, method, returnType);
+		} catch (PromptoError e) {
+			throw new CompilerException(e);
+		}
+	}
+	
+	private void produceByteCode(Context context, MethodInfo method, IType returnType) throws SyntaxError {
+		Flags flags = new Flags();
+		for(IStatement s : statements)
+			s.compile(context, method, flags);
+		// add return for void
+		if(returnType==VoidType.instance())
+			method.addInstruction(Opcode.RETURN);
+	}
+
+	private Context prepareContext(Context context) throws SyntaxError {
+		if(context.isGlobalContext()) {
+			// coming from nowhere, so need a clean context in which to register arguments
+			context = context.newLocalContext();
+			registerArguments(context);
+		}
+		return context;
+	}
+
+	@Override
+	public void compilePrototype(Context context, ClassFile classFile) {
+		try {
+			context = prepareContext(context);
+			IType returnType = check(context);
+			MethodInfo method = createMethodInfo(context, classFile, returnType);
+			method.addModifier(Modifier.ABSTRACT);
 		} catch (PromptoError e) {
 			throw new CompilerException(e);
 		}
@@ -195,6 +215,10 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		String proto = CompilerUtils.createProto(context, arguments, returnType);
 		MethodInfo method = new MethodInfo(getName(), proto); 
 		classFile.addMethod(method);
+		return method;
+	}
+	
+	protected void registerLocals(Context context, ClassFile classFile, MethodInfo method) {
 		if(Modifier.isAbstract(classFile.getModifiers())) // TODO find another way
 			method.addModifier(Modifier.STATIC); // otherwise it's a member method
 		else 
@@ -206,8 +230,9 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 			ClassConstant classConstant = new ClassConstant(className);
 			method.registerLocal(arg.getName(), type, classConstant);
 		}
-		return method;
 	}
+
+
 
 	@Override
 	public boolean isEligibleAsMain() {

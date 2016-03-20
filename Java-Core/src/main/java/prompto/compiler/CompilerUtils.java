@@ -71,11 +71,15 @@ public abstract class CompilerUtils {
 		if(type instanceof Class<?> && ((Class<?>)type).isArray())
 			return "[" + getDescriptor(((Class<?>)type).getComponentType());
 		String s = descriptors.get(type);
-		return s!=null ? s : "L" + getClassName(type) + ';';
+		return s!=null ? s : "L" + makeClassName(type) + ';';
 	}
 
-	public static String getClassName(Type type) {
-		return type.getTypeName().replace('.', '/');
+	public static String makeClassName(Type type) {
+		return makeClassName(type.getTypeName());
+	}
+
+	public static String makeClassName(String name) {
+		return name.replace('.', '/');
 	}
 
 	public static String createProto(Type ... types) {
@@ -402,7 +406,7 @@ public abstract class CompilerUtils {
 	}
 	
 	public static ResultInfo callConstructor(MethodInfo method, Type klass, Type ... params) {
-		IOperand c = new MethodConstant(getClassName(klass), "<init>", createProto(params, void.class));
+		IOperand c = new MethodConstant(makeClassName(klass), "<init>", createProto(params, void.class));
 		method.addInstruction(Opcode.INVOKESPECIAL, c);
 		return new ResultInfo(klass, true);
 	}

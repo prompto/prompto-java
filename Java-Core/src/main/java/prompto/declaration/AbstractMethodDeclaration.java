@@ -42,6 +42,11 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 	
 	@Override
 	public void compile(Context context, ClassFile classFile) {
+		compilePrototype(context, classFile);
+	}
+	
+	@Override
+	public void compilePrototype(Context context, ClassFile classFile) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}

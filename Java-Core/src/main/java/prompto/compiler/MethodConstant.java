@@ -9,11 +9,11 @@ public class MethodConstant implements CodeConstant {
 	int index;
 	
 	public MethodConstant(Type type, String methodName, Type ... params) {
-		this(CompilerUtils.getClassName(type), methodName, CompilerUtils.createProto(params));
+		this(CompilerUtils.makeClassName(type), methodName, CompilerUtils.createProto(params));
 	}
 	
 	public MethodConstant(Type type, String methodName, String proto) {
-		this(CompilerUtils.getClassName(type), methodName, proto);
+		this(CompilerUtils.makeClassName(type), methodName, proto);
 	}
 
 	public MethodConstant(String className, String methodName, String proto) {

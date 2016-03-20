@@ -7,9 +7,11 @@ import java.util.Iterator;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.IOperand;
+import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
+import prompto.compiler.PromptoType;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.ShortOperand;
 import prompto.compiler.StackState;
@@ -66,8 +68,13 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 		ResultInfo right = exp.compile(context, method, flags.withNative(false));
 		// convert right to String
 		if(String.class!=right.getType()) {
-			MethodConstant oper = new MethodConstant(right.getType(), "toString", String.class);
-			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+			if(right.getType() instanceof PromptoType) {
+				InterfaceConstant oper = new InterfaceConstant(right.getType(), "toString", String.class);
+				method.addInstruction(Opcode.INVOKEINTERFACE, oper);
+			} else {
+				MethodConstant oper = new MethodConstant(right.getType(), "toString", String.class);
+				method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+			}
 		}
 		// and call concat
 		MethodConstant oper = new MethodConstant(String.class, "concat", 

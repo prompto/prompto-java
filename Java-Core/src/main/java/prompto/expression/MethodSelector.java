@@ -7,6 +7,7 @@ import java.util.List;
 import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
+import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -134,8 +135,13 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		// call virtual method
 		IType returnType = declaration.check(context);
 		String methodProto = CompilerUtils.createProto(context, declaration.getArguments(), returnType);
-		MethodConstant constant = new MethodConstant(parentClass, declaration.getName(), methodProto);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, constant);
+		if(parentClass.isInterface()) {
+			InterfaceConstant constant = new InterfaceConstant(parentClass, declaration.getName(), methodProto);
+			method.addInstruction(Opcode.INVOKEINTERFACE, constant);
+		} else {
+			MethodConstant constant = new MethodConstant(parentClass, declaration.getName(), methodProto);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, constant);
+		}
 		return new ResultInfo(returnType.toJavaType(), true);
 	}
 
