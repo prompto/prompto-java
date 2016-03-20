@@ -31,7 +31,7 @@ public class TimeType extends NativeType {
 	}
 
 	@Override
-	public Type toJavaType() {
+	public Type getJavaType() {
 		return PromptoTime.class;
 	}
 

@@ -6,30 +6,65 @@ import java.lang.reflect.Type;
 /* isInstance is also required to select GETFIELD/GETSTATIC or INVOKEVIRTUAL/INVOKESTATIC deterministically */ 
 public class ResultInfo {
 
-	Type type;
-	boolean isInstance;
-	boolean isReturn;
-	
-	public ResultInfo(Type type, boolean isInstance) {
-		this.type = type;
-		this.isInstance = isInstance;
-		this.isReturn = false;
-	}
-	
-	public ResultInfo(Type type, boolean isInstance, boolean isReturn) {
-		this.type = type;
-		this.isInstance = isInstance;
-		this.isReturn = isReturn;
+	public static enum Flag {
+		RETURN,
+		STATIC
 	}
 
+	Type type;
+	boolean isReturn = false;
+	boolean isStatic = false;
+	Boolean isPrimitive = null;
+	Boolean isInterface = null;
+	
+	public ResultInfo(Type type, Flag ...flags) {
+		this.type = type;
+		for(Flag flag : flags) switch(flag) {
+		case RETURN:
+			isReturn = true;
+			break;
+		case STATIC:
+			isStatic = true;
+			break;
+		}
+	}
+	
 	public Type getType() {
 		return type;
 	}
 	
-	public boolean isInstance() {
-		return isInstance;
+	public boolean isPrimitive() {
+		if(isPrimitive==null) {
+			if(type instanceof Class)
+				isPrimitive = ((Class<?>)type).isPrimitive();
+			else
+				isPrimitive = false;
+		}
+		return isPrimitive;
+	}
+
+	public boolean isInterface() {
+		if(isInterface==null) {
+			if(isPrimitive())
+				isInterface = false;
+			else if(type instanceof Class)
+				isInterface = ((Class<?>)type).isInterface();
+			else if(type instanceof PromptoType){
+				isInterface = type.getTypeName().indexOf('$')<0;
+			} else
+				throw new UnsupportedOperationException();
+		}
+		return isInterface;
+	}
+
+	public boolean isConcrete() {
+		return !isInterface();
 	}
 	
+	public boolean isStatic() {
+		return isStatic;
+	}
+
 	public boolean isReturn() {
 		return isReturn;
 	}

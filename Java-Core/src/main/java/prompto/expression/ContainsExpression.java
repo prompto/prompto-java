@@ -84,7 +84,7 @@ public class ContainsExpression implements IExpression, IAssertion {
 		method.addInstruction(Opcode.SWAP);
 		method.addInstruction(Opcode.ISUB);
 		if(flags.toNative())
-			return new ResultInfo(boolean.class, false);
+			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
 	}
@@ -115,14 +115,14 @@ public class ContainsExpression implements IExpression, IAssertion {
 			MethodConstant m = new MethodConstant(PromptoString.class, "contains", String.class, Object.class, boolean.class);
 			method.addInstruction(Opcode.INVOKESTATIC, m);
 			if(flags.toNative())
-				return new ResultInfo(boolean.class, true);
+				return new ResultInfo(boolean.class);
 			else
 				return CompilerUtils.booleanToBoolean(method);
 		} else {
 			MethodConstant m = new MethodConstant(linfo.getType(), "contains", Object.class, boolean.class);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 			if(flags.toNative())
-				return new ResultInfo(boolean.class, true);
+				return new ResultInfo(boolean.class);
 			else
 				return CompilerUtils.booleanToBoolean(method);
 		}
@@ -135,14 +135,14 @@ public class ContainsExpression implements IExpression, IAssertion {
 			MethodConstant m = new MethodConstant(PromptoString.class, "containsAll", String.class, Object.class, boolean.class);
 			method.addInstruction(Opcode.INVOKESTATIC, m);
 			if(flags.toNative())
-				return new ResultInfo(boolean.class, true);
+				return new ResultInfo(boolean.class);
 			else
 				return CompilerUtils.booleanToBoolean(method);
 		} else {
 			MethodConstant m = new MethodConstant(linfo.getType(), "containsAll", Collection.class, boolean.class);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 			if(flags.toNative())
-				return new ResultInfo(boolean.class, true);
+				return new ResultInfo(boolean.class);
 			else
 				return CompilerUtils.booleanToBoolean(method);
 		}
@@ -155,14 +155,14 @@ public class ContainsExpression implements IExpression, IAssertion {
 			MethodConstant m = new MethodConstant(PromptoString.class, "containsAny", String.class, Object.class, boolean.class);
 			method.addInstruction(Opcode.INVOKESTATIC, m);
 			if(flags.toNative())
-				return new ResultInfo(boolean.class, true);
+				return new ResultInfo(boolean.class);
 			else
 				return CompilerUtils.booleanToBoolean(method);
 		} else {
 			MethodConstant m = new MethodConstant(linfo.getType(), "containsAny", Collection.class, boolean.class);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 			if(flags.toNative())
-				return new ResultInfo(boolean.class, true);
+				return new ResultInfo(boolean.class);
 			else
 				return CompilerUtils.booleanToBoolean(method);
 		}

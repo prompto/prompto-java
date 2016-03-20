@@ -20,7 +20,7 @@ public class TupleType extends ContainerType {
 	}
 
 	@Override
-	public Type toJavaType() {
+	public Type getJavaType() {
 		return PromptoTuple.class;
 	}
 	

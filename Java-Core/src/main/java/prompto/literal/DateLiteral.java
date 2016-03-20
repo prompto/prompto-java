@@ -1,10 +1,10 @@
 package prompto.literal;
 
 import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.IOperand;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StringConstant;
 import prompto.error.SyntaxError;
@@ -40,7 +40,7 @@ public class DateLiteral extends Literal<Date> {
 		method.addInstruction(Opcode.LDC_W, new StringConstant(date.toString()));
 		IOperand oper = new MethodConstant(PromptoDate.class, "parse", String.class, PromptoDate.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
-		return new ResultInfo(PromptoDate.class, true);
+		return new ResultInfo(PromptoDate.class);
 	}
 
 	

@@ -1,19 +1,17 @@
 package prompto.compiler;
 
+
 public class NameAndTypeConstant implements CodeConstant {
 
+	Descriptor descriptor; 
 	Utf8Constant name;
 	Utf8Constant type;
 	int index;
 	
-	public NameAndTypeConstant(String name, String type) {
+	public NameAndTypeConstant(String name, Descriptor descriptor) {
+		this.descriptor = descriptor;
 		this.name = new Utf8Constant(name);
-		this.type = new Utf8Constant(type);
-	}
-
-	public NameAndTypeConstant(String name, Utf8Constant type) {
-		this.name = new Utf8Constant(name);
-		this.type = type;
+		this.type = new Utf8Constant(descriptor.toString());
 	}
 
 	@Override
@@ -21,14 +19,14 @@ public class NameAndTypeConstant implements CodeConstant {
 		return name.toString() + '/' + type.toString();
 	}
 	
+	public Descriptor getDescriptor() {
+		return descriptor;
+	}
+
 	public Utf8Constant getName() {
 		return name;
 	}
-	
-	public Utf8Constant getType() {
-		return type;
-	}
-	
+		
 	@Override
 	public boolean equals(Object obj) {
 		return obj instanceof NameAndTypeConstant

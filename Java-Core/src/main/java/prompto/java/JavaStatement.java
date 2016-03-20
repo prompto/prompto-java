@@ -102,7 +102,7 @@ public class JavaStatement {
 				info = consumer.apply(method);
 			else
 				method.addInstruction(Opcode.POP);
-			return new ResultInfo(void.class, false);
+			return new ResultInfo(void.class);
 		} else
 			return info;
 	}

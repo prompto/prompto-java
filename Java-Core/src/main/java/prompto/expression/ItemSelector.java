@@ -105,10 +105,10 @@ public class ItemSelector extends SelectorExpression {
 		ResultInfo result = getter.compile(context, method, flags, pinfo, item);
 		if(Object.class==result.getType()) {
 			// need to downcast
-			Type klass = type.toJavaType();
+			Type klass = type.getJavaType();
 			ClassConstant c = new ClassConstant(klass);
 			method.addInstruction(Opcode.CHECKCAST, c);
-			return new ResultInfo(klass, true);
+			return new ResultInfo(klass);
 		} else
 			return result;
 	}

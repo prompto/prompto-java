@@ -15,7 +15,7 @@ public class SetType extends ContainerType {
 	}
 	
 	@Override
-	public Type toJavaType() {
+	public Type getJavaType() {
 		return PromptoSet.class;
 	}
 	

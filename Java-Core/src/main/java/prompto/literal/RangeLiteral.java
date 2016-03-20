@@ -60,7 +60,7 @@ public class RangeLiteral implements IExpression {
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		IType itemType = checkType(context, first);
-		Type itemKlass = itemType.toJavaType();
+		Type itemKlass = itemType.getJavaType();
 		Type rangeKlass = rangeClassMap.get(itemKlass);
 		if(rangeKlass==null) {
 			System.err.println("Missing PromptoRange for = " + itemType.getName());

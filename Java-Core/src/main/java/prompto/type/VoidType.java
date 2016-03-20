@@ -18,15 +18,10 @@ public class VoidType extends NativeType {
 	}
 	
 	@Override
-	public Type toJavaType() {
+	public Type getJavaType() {
 		return void.class;
 	}
 
-	@Override
-	public String getJavaDescriptor(Context context) {
-		return "V";
-	}
-	
 	@Override
 	public boolean isAssignableTo(Context context, IType other) {
 		throw new RuntimeException("Should never get there !");

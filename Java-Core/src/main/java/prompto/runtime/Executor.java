@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.Map;
 
 import prompto.compiler.CompilerUtils;
@@ -31,9 +32,9 @@ public abstract class Executor {
 	}
 	
 	public static void executeMainMethod(Context context, Identifier methodName, String cmdLineArgs, File promptoDir) throws PromptoError {
-		String className = CompilerUtils.getGlobalMethodClassName(methodName, false);
+		Type classType = CompilerUtils.getGlobalMethodType(methodName);
 		try(PromptoClassLoader loader = new PromptoClassLoader(context, promptoDir)) {
-			Class<?> klass = loader.loadClass(className);
+			Class<?> klass = loader.loadClass(classType.getTypeName());
 			Method method = locateMainMethod(klass, cmdLineArgs);
 			PromptoDict<String, String> options = parseCmdLineArgs(cmdLineArgs);
 			method.invoke(null, options);

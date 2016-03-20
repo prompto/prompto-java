@@ -63,7 +63,7 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 		CompilerUtils.numberToNative(method, right, flags.isDecimal());
 		method.addInstruction(flags.opcode());
 		if(flags.toNative())
-			return new ResultInfo(double.class, false);
+			return new ResultInfo(double.class);
 		else if(flags.isDecimal())
 			return CompilerUtils.doubleToDouble(method);
 		else
@@ -210,7 +210,7 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 		StackState lastState = method.captureStackState();
 		method.placeLabel(lastState);
 		if(flags.toNative())
-			return new ResultInfo(boolean.class, false);
+			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
 	}
@@ -237,7 +237,7 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 		CompilerUtils.numberToNative(method, value, true);
 		method.addInstruction(Opcode.DNEG);
 		if(flags.toNative())
-			return new ResultInfo(double.class, false);
+			return new ResultInfo(double.class);
 		else
 			return CompilerUtils.doubleToDouble(method);
 	}

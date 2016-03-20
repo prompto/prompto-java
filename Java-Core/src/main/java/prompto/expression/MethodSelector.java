@@ -1,11 +1,13 @@
 package prompto.expression;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.Descriptor;
 import prompto.compiler.Flags;
 import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
@@ -109,13 +111,13 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		if(assignments!=null) for(ArgumentAssignment assign : assignments)
 			assign.compile(context.getCallingContext(), method, flags);
 		// call global method in its own class
-		String className = CompilerUtils.getGlobalMethodClassName(declaration.getName(), true);
+		Type classType = CompilerUtils.getGlobalMethodType(declaration.getName());
 		String methodName = declaration.getName();
 		IType returnType = declaration.check(context);
-		String methodProto = CompilerUtils.createProto(context, declaration.getArguments(), returnType);
-		MethodConstant constant = new MethodConstant(className, methodName, methodProto);
+		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getArguments(), returnType);
+		MethodConstant constant = new MethodConstant(classType, methodName, descriptor);
 		method.addInstruction(Opcode.INVOKESTATIC, constant);
-		return new ResultInfo(returnType.toJavaType(), true);
+		return new ResultInfo(returnType.getJavaType());
 	}
 
 	private ResultInfo compileImplicitMember(Context context, MethodInfo method, Flags flags, 
@@ -128,21 +130,22 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	}
 
 	private ResultInfo compileMember(Context context, MethodInfo method, Flags flags, 
-			IMethodDeclaration declaration, ArgumentAssignmentList assignments, ClassConstant parentClass) throws SyntaxError {
+			IMethodDeclaration declaration, ArgumentAssignmentList assignments, 
+			ClassConstant parentClass) throws SyntaxError {
 		// push arguments on the stack
 		if(assignments!=null) for(ArgumentAssignment assign : assignments)
 			assign.compile(context.getCallingContext(), method, flags);
 		// call virtual method
 		IType returnType = declaration.check(context);
-		String methodProto = CompilerUtils.createProto(context, declaration.getArguments(), returnType);
+		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getArguments(), returnType);
 		if(parentClass.isInterface()) {
-			InterfaceConstant constant = new InterfaceConstant(parentClass, declaration.getName(), methodProto);
+			InterfaceConstant constant = new InterfaceConstant(parentClass, declaration.getName(), descriptor);
 			method.addInstruction(Opcode.INVOKEINTERFACE, constant);
 		} else {
-			MethodConstant constant = new MethodConstant(parentClass, declaration.getName(), methodProto);
+			MethodConstant constant = new MethodConstant(parentClass, declaration.getName(), descriptor);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, constant);
 		}
-		return new ResultInfo(returnType.toJavaType(), true);
+		return new ResultInfo(returnType.getJavaType());
 	}
 
 	private ResultInfo compileExplicitMember(Context context, MethodInfo method, Flags flags, 

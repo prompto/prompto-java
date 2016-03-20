@@ -14,7 +14,7 @@ public class CursorType extends IterableType {
 	}
 	
 	@Override
-	public Type toJavaType() {
+	public Type getJavaType() {
 		return Cursor.class;
 	}
 	

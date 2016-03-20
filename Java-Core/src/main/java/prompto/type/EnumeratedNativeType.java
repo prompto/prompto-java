@@ -28,7 +28,7 @@ public class EnumeratedNativeType extends BaseType {
 	}
 
 	@Override
-	public Type toJavaType() {
+	public Type getJavaType() {
 		// TODO Auto-generated method stub
 		return null;
 	}

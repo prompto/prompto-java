@@ -144,8 +144,7 @@ public class AttributeDeclaration extends BaseDeclaration {
 	}
 
 	public FieldInfo toFieldInfo(Context context) {
-		String desc = type.getJavaDescriptor(context);
-		return new FieldInfo(getName(), desc);
+		return new FieldInfo(getName(), type.getJavaType());
 	}
 
 

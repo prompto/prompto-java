@@ -5,11 +5,11 @@ import java.util.Map;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
 import prompto.compiler.IOperatorFunction;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.IOperand;
 import prompto.compiler.ResultInfo;
 import prompto.declaration.CategoryDeclaration;
 import prompto.error.PromptoError;
@@ -97,7 +97,7 @@ public class MultiplyExpression implements IExpression {
 			IOperand oper = new MethodConstant(lval.getType(), "multiply", 
 					int.class, resultType);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-			return new ResultInfo(resultType, true);
+			return new ResultInfo(resultType);
 		} catch(NoSuchMethodException e) {
 			throw new SyntaxError(e.getMessage());
 		}

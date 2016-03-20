@@ -1,5 +1,7 @@
 package prompto.grammar;
 
+import java.lang.reflect.Type;
+
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.DefaultExpression;
@@ -21,7 +23,6 @@ public interface IArgument extends INamed {
 	DefaultExpression getDefaultExpression();
 	boolean setMutable(boolean set);
 	boolean isMutable();
-	String getJavaDescriptor(Context context);
-	String getJavaClassName(Context context);
+	Type getJavaType(Context context);
 	
 }

@@ -43,7 +43,7 @@ public class JavaCharacterLiteral extends JavaLiteral {
 			method.addInstruction(Opcode.SIPUSH, new ShortOperand((short)value.charValue()));
 		else
 			method.addInstruction(Opcode.LDC_W, new IntConstant(value.charValue()));
-		return new ResultInfo(char.class, false);
+		return new ResultInfo(char.class);
 	}
 
 }

@@ -124,7 +124,7 @@ public class SortedExpression implements IExpression {
 		ResultInfo info = source.compile(context, method, flags);
 		MethodConstant m = new MethodConstant(info.getType(), "sort", PromptoList.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
-		return new ResultInfo(PromptoList.class, true);
+		return new ResultInfo(PromptoList.class);
 	}
 
 	private ResultInfo compileSortCategory(Context context, MethodInfo method, Flags flags) {

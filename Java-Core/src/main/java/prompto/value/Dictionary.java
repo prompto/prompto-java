@@ -127,7 +127,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 		IOperand oper = new MethodConstant(PromptoDict.class, "get", 
 				Object.class, Object.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return new ResultInfo(Object.class, true);
+		return new ResultInfo(Object.class);
 	}
 	
 	public Object convertTo(Class<?> type) {
@@ -156,7 +156,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 			method.addInstruction(Opcode.ISUB);
 		}
 		if(flags.toNative())
-			return new ResultInfo(boolean.class, false);
+			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
 	}

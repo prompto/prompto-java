@@ -44,13 +44,13 @@ public class JavaIntegerLiteral extends JavaLiteral {
 			// ICONST_0 to ICONST_5 are consecutive
 			Opcode opcode = Opcode.values()[Opcode.ICONST_0.ordinal() + value.intValue()];
 			method.addInstruction(opcode);
-			return new ResultInfo(int.class, false);
+			return new ResultInfo(int.class);
 		} else if(value<=Integer.MAX_VALUE && value>=Integer.MIN_VALUE) {
 			method.addInstruction(Opcode.LDC_W, new IntConstant(value.intValue()));
-			return new ResultInfo(int.class, false);
+			return new ResultInfo(int.class);
 		} else {
 			method.addInstruction(Opcode.LDC2_W, new LongConstant(value));
-			return new ResultInfo(long.class, false);
+			return new ResultInfo(long.class);
 		}
 	}
 }

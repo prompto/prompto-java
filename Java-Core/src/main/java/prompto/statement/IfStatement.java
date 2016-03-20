@@ -142,7 +142,7 @@ public class IfStatement extends BaseStatement {
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
  		IType result = check(context);
 		compileIfElements(context, method, flags);
-		return new ResultInfo(result.toJavaType(), true);
+		return new ResultInfo(result.getJavaType());
 	}
 
 	static class IfElementBranch {
@@ -193,7 +193,7 @@ public class IfStatement extends BaseStatement {
 
 
 	private ResultInfo compileStatements(Context context, MethodInfo method, Flags flags, IfElement element, IfElementBranch branch) throws SyntaxError {
-		ResultInfo info = new ResultInfo(void.class, false);
+		ResultInfo info = new ResultInfo(void.class);
 		if(element.statements!=null) {
 			for(IStatement statement : element.statements)
 				info = statement.compile(context, method, flags);

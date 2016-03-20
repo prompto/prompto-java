@@ -1,19 +1,26 @@
 package prompto.compiler;
 
+import java.lang.reflect.Type;
+
 public class FieldConstant implements CodeConstant {
 
 	ClassConstant className;
 	NameAndTypeConstant fieldNameAndType;
 	int index;
 	
-	public FieldConstant(String className, String fieldName, String fieldType) {
+	public FieldConstant(Type className, String fieldName, Type fieldType) {
 		this.className = new ClassConstant(className);
-		this.fieldNameAndType = new NameAndTypeConstant(fieldName, fieldType);
+		this.fieldNameAndType = new NameAndTypeConstant(fieldName, new Descriptor.Field(fieldType));
 	}
 	
-	public FieldConstant(ClassConstant className, String fieldName, Utf8Constant fieldType) {
+	public FieldConstant(ClassConstant className, String fieldName, Type fieldType) {
 		this.className = className;
-		this.fieldNameAndType = new NameAndTypeConstant(fieldName, fieldType);
+		this.fieldNameAndType = new NameAndTypeConstant(fieldName, new Descriptor.Field(fieldType));
+	}
+
+	public FieldConstant(ClassConstant className, NameAndTypeConstant fieldNameAndType) {
+		this.className = className;
+		this.fieldNameAndType = fieldNameAndType;
 	}
 
 	@Override
@@ -22,13 +29,11 @@ public class FieldConstant implements CodeConstant {
 	}
 	
 	public StackEntry toStackEntry() {
-		String descriptor = fieldNameAndType.getType().getValue();
+		Descriptor descriptor = fieldNameAndType.getDescriptor();
 		IVerifierEntry.Type type = IVerifierEntry.Type.fromDescriptor(descriptor);
 		StackEntry entry = type.newStackEntry(null);
-		if(entry instanceof StackEntry.ObjectEntry) {
-			String className = descriptor.substring(1, descriptor.length()-1); // strip 'L' and ';'
-			((StackEntry.ObjectEntry)entry).setClassName(new ClassConstant(className));
-		}
+		if(entry instanceof StackEntry.ObjectEntry)
+			((StackEntry.ObjectEntry)entry).setClassName(new ClassConstant(fieldNameAndType.getDescriptor().getLastType()));
 		return entry;
 	}
 

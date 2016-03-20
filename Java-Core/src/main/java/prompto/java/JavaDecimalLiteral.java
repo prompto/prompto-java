@@ -40,6 +40,6 @@ public class JavaDecimalLiteral extends JavaLiteral {
 			method.addInstruction(Opcode.DCONST_1);
 		else
 			method.addInstruction(Opcode.LDC2_W, new DoubleConstant(value));
-		return new ResultInfo(double.class, false);
+		return new ResultInfo(double.class);
 	}
 }

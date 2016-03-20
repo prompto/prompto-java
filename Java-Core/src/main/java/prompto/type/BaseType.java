@@ -212,13 +212,4 @@ public abstract class BaseType implements IType {
 		throw new InvalidParameterException(value.toString());
 	}
 	
-	@Override
-	public String getJavaDescriptor(Context context) {
-		return "L" + this.getJavaClassName(context).replace('.', '/') + ';';
-	}
-
-	@Override
-	public String getJavaClassName(Context context) {
-		return this.toJavaType().getTypeName();
-	}
 }

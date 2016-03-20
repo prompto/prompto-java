@@ -5,12 +5,12 @@ import java.lang.reflect.Type;
 
 import prompto.compiler.ByteOperand;
 import prompto.compiler.ClassConstant;
-import prompto.compiler.CompilerUtils;
 import prompto.compiler.FieldConstant;
-import prompto.compiler.ResultInfo;
+import prompto.compiler.IOperand;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.IOperand;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.ResultInfo.Flag;
 import prompto.compiler.StackLocal;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -111,7 +111,7 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 		StackLocal local = method.getRegisteredLocal(name);
 		ClassConstant c = local instanceof StackLocal.ObjectLocal ? 
 				((StackLocal.ObjectLocal)local).getClassName() 
-				: new ClassConstant("java/lang/Object");
+				: new ClassConstant(Object.class);
 		switch(local.getIndex()) {
 		case 0:
 			method.addInstruction(Opcode.ALOAD_0, c);
@@ -132,7 +132,7 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 		}
 		// TODO return useful class so we can get members ?
 		// not sure we support this...
-		return new ResultInfo(Object.class, true); 
+		return new ResultInfo(Object.class); 
 	}
 
 	private ResultInfo compile_child(Context context, MethodInfo method) throws SyntaxError {
@@ -147,14 +147,12 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 		try {
 			Class<?> klass = (Class<?>)info.getType();
 			Field field = klass.getField(name);
-			String parentClassName = CompilerUtils.makeClassName(info.getType());
-			String fieldClassName = CompilerUtils.getDescriptor(field.getType());
-			IOperand oper = new FieldConstant(parentClassName, name, fieldClassName);
-			if(info.isInstance())
-				method.addInstruction(Opcode.GETFIELD, oper);
-			else
+			IOperand oper = new FieldConstant(info.getType(), name, field.getType());
+			if(info.isStatic())
 				method.addInstruction(Opcode.GETSTATIC, oper);
-			return new ResultInfo(field.getType(), true);
+			else
+				method.addInstruction(Opcode.GETFIELD, oper);
+			return new ResultInfo(field.getType());
 		} catch (NoSuchFieldException e) { 
 			return null;
 		}
@@ -163,12 +161,12 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 	private ResultInfo compile_class(Context context, MethodInfo method) {
 		String fullName = this.toString();
 		try {
-			return new ResultInfo(Class.forName(fullName), false);
+			return new ResultInfo(Class.forName(fullName), Flag.STATIC);
 		} catch (ClassNotFoundException e1) {
 			// package prefix not required for classes in java.lang package
 			if(parent==null) try {
 				fullName = "java.lang." + name;
-				return new ResultInfo(Class.forName(fullName), false);
+				return new ResultInfo(Class.forName(fullName), Flag.STATIC);
 			} catch (ClassNotFoundException e2) {
 			}	
 		}
@@ -314,7 +312,7 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 	IType check_field(IType t) {
 		if(!(t instanceof JavaClassType))
 			return null;
-		Type klass = t.toJavaType();
+		Type klass = t.getJavaType();
 		if(klass instanceof Class) try {
 			Field field = ((Class<?>)klass).getField(name);
 			return new JavaClassType(field.getType());

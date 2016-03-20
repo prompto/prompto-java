@@ -106,7 +106,7 @@ public class AndExpression implements IExpression, IAssertion {
 		StackState lastState = method.captureStackState();
 		method.placeLabel(lastState);
 		if(flags.toNative())
-			return new ResultInfo(boolean.class, false);
+			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
 	}

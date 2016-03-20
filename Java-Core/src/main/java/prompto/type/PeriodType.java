@@ -22,7 +22,7 @@ public class PeriodType extends NativeType {
 	}
 
 	@Override
-	public Type toJavaType() {
+	public Type getJavaType() {
 		return PromptoPeriod.class;
 	}
 	

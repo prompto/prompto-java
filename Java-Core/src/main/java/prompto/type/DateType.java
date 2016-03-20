@@ -31,7 +31,7 @@ public class DateType extends NativeType {
 	}
 
 	@Override
-	public Type toJavaType() {
+	public Type getJavaType() {
 		return PromptoDate.class;
 	}
 

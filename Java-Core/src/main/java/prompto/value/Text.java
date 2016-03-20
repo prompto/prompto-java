@@ -80,7 +80,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 		MethodConstant oper = new MethodConstant(String.class, "concat", 
 				String.class, String.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return new ResultInfo(String.class, true);
+		return new ResultInfo(String.class);
 	}
 	
 	@Override
@@ -105,7 +105,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 				"multiply", 
 				String.class, int.class, String.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
-		return new ResultInfo(String.class, true);
+		return new ResultInfo(String.class);
 	}
 	
 	
@@ -172,7 +172,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 				int.class, char.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		if(flags.toNative())
-			return new ResultInfo(char.class, true);
+			return new ResultInfo(char.class);
 		else
 			return CompilerUtils.charToCharacter(method);
 	}
@@ -325,7 +325,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 			method.addInstruction(Opcode.ISUB);
 		}
 		if(flags.toNative())
-			return new ResultInfo(boolean.class, false);
+			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
 	}

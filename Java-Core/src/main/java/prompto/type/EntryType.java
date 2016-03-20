@@ -21,7 +21,7 @@ public class EntryType extends BaseType {
 	}
 
 	@Override
-	public Type toJavaType() {
+	public Type getJavaType() {
 		return PromptoDict.Entry.class;
 	}
 

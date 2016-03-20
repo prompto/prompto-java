@@ -40,7 +40,7 @@ public class TimeLiteral extends Literal<Time> {
 		method.addInstruction(Opcode.LDC_W, new StringConstant(time.toString()));
 		IOperand oper = new MethodConstant(PromptoTime.class, "parse", String.class, PromptoTime.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
-		return new ResultInfo(PromptoTime.class, true);
+		return new ResultInfo(PromptoTime.class);
 	}
 
 	

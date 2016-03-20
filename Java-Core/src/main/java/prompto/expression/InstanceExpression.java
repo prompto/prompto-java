@@ -3,9 +3,9 @@ package prompto.expression;
 import prompto.compiler.ByteOperand;
 import prompto.compiler.ClassConstant;
 import prompto.compiler.Flags;
-import prompto.compiler.ResultInfo;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
@@ -16,9 +16,9 @@ import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
+import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.runtime.LinkedVariable;
 import prompto.runtime.Variable;
-import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.type.IType;
 import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
@@ -115,7 +115,9 @@ public class InstanceExpression implements IExpression {
 		StackLocal local = method.getRegisteredLocal(getName());
 		if(local==null)
 			return null;
-		ClassConstant c = local instanceof StackLocal.ObjectLocal ? ((StackLocal.ObjectLocal)local).getClassName() : new ClassConstant("java/lang/Object");   
+		ClassConstant c = local instanceof StackLocal.ObjectLocal ? 
+				((StackLocal.ObjectLocal)local).getClassName() : 
+					new ClassConstant(Object.class);   
 		switch(local.getIndex()) {
 			case 0:
 				method.addInstruction(Opcode.ALOAD_0, c);
@@ -134,7 +136,7 @@ public class InstanceExpression implements IExpression {
 				method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)local.getIndex()), c);
 		}
 		IType type = check(context);
-		return new ResultInfo(type.toJavaType(), true);	
+		return new ResultInfo(type.getJavaType());
 	}
 
 }

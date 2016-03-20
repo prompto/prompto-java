@@ -30,6 +30,6 @@ public class JavaBooleanLiteral extends JavaLiteral {
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
 		method.addInstruction(value ? Opcode.ICONST_1 : Opcode.ICONST_0);
-		return new ResultInfo(boolean.class, false);
+		return new ResultInfo(boolean.class);
 	}
 }

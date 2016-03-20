@@ -168,7 +168,7 @@ public class ConstructorExpression implements IExpression {
 		ResultInfo result = CompilerUtils.newInstance(method, klass);
 		compileCopyFrom(context, method, flags, result);
 		compileAssignments(context, method, flags, result);
-		return new ResultInfo(getInterfaceType(context), true);
+		return new ResultInfo(getInterfaceType(context));
 	}
 
 	private void compileAssignments(Context context, MethodInfo method, Flags flags, ResultInfo thisInfo) throws SyntaxError {
@@ -187,7 +187,7 @@ public class ConstructorExpression implements IExpression {
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, assignment.getId());
 		FieldInfo field = decl.toFieldInfo(context);
 		MethodConstant m = new MethodConstant(thisInfo.getType(), 
-				CompilerUtils.setterName(field.getName().getValue()), "(" + field.getDescriptor().getValue() + ")V");
+				CompilerUtils.setterName(field.getName().getValue()), field.getType(), void.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 	}
 
@@ -219,7 +219,7 @@ public class ConstructorExpression implements IExpression {
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, attrId);
 		FieldInfo field = decl.toFieldInfo(context);
 		InterfaceConstant i = new InterfaceConstant(copyFromInfo.getType(), 
-				CompilerUtils.getterName(attrId.getName()), "()" + field.getDescriptor().getValue());
+				CompilerUtils.getterName(attrId.getName()), field.getType());
 		method.addInstruction(Opcode.INVOKEINTERFACE, i);
 		// keep the new instance at top of the stack (currently new, copyFrom, value)
 		method.addInstruction(Opcode.DUP_X2); // -> value, new, copyFrom, value
@@ -230,7 +230,7 @@ public class ConstructorExpression implements IExpression {
 		method.addInstruction(Opcode.SWAP); // -> new, copyFrom, new, value
 		// call setter on new instance (a class)
 		MethodConstant m = new MethodConstant(thisInfo.getType(), 
-				CompilerUtils.setterName(attrId.getName()), "(" + field.getDescriptor().getValue() + ")V");
+				CompilerUtils.setterName(attrId.getName()), field.getType(), void.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 	}
 
@@ -246,19 +246,15 @@ public class ConstructorExpression implements IExpression {
 		CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getId());
 		if(cd instanceof NativeCategoryDeclaration)
 			return ((NativeCategoryDeclaration)cd).getBoundClass(context, false);
-		else {
-			String className = CompilerUtils.getCategoryInterfaceClassName(cd.getId(), true);
-			return CompilerUtils.getCategoryClass(className);	
-		}
+		else 
+			return CompilerUtils.getCategoryInterfaceType(cd.getId());
 	}
 
 	private Type getConcreteType(Context context) throws SyntaxError {
 		CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getId());
 		if(cd instanceof NativeCategoryDeclaration)
 			return ((NativeCategoryDeclaration)cd).getBoundClass(context, false);
-		else {
-			String className = CompilerUtils.getCategoryConcreteClassName(cd.getId(), true);
-			return CompilerUtils.getCategoryClass(className);	
-		}
+		else 
+			return CompilerUtils.getCategoryConcreteType(cd.getId());
 	}
 }

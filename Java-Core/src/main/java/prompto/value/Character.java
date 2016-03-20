@@ -86,7 +86,7 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
 				"multiply", 
 				char.class, int.class, String.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
-		return new ResultInfo(String.class, true);
+		return new ResultInfo(String.class);
 	}
 	
     public int compareTo(Character obj) {
@@ -130,7 +130,7 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
 		StackState lastState = method.captureStackState();
 		method.placeLabel(lastState);
 		if(flags.toNative())
-			return new ResultInfo(boolean.class, false);
+			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
 	}
@@ -170,7 +170,7 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
 		StackState lastState = method.captureStackState();
 		method.placeLabel(lastState);
 		if(flags.toNative())
-			return new ResultInfo(boolean.class, false);
+			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
 	}

@@ -2,28 +2,20 @@ package prompto.compiler;
 
 import java.lang.reflect.Type;
 
+import prompto.compiler.Descriptor.Method;
+
 public class InterfaceConstant extends MethodConstant {
 
 	public InterfaceConstant(Type klass, String methodName, Type ... params) {
 		super(klass, methodName, params);
 	}
 	
-	public InterfaceConstant(String className, String methodName, String proto) {
-		super(className, methodName, proto);
-	}
-
-
-	public InterfaceConstant(Type klass, String methodName, String proto) {
-		super(klass, methodName, proto);
-	}
-
-	public InterfaceConstant(ClassConstant klass, String methodName, String proto) {
-		super(klass, methodName, proto);
+	public InterfaceConstant(ClassConstant klass, String methodName, Method method) {
+		super(klass, methodName, method);
 	}
 
 	public int getArgsCount() {
-		String proto = methodNameAndType.getType().getValue();
-		return CompilerUtils.parseDescriptor(proto).length; // this + args.count - result
+		return methodNameAndType.getDescriptor().getTypes().length; // this + args.count - result
 	}
 
 	@Override

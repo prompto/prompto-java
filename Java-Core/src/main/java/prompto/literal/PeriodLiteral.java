@@ -1,10 +1,10 @@
 package prompto.literal;
 
 import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.IOperand;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StringConstant;
 import prompto.error.SyntaxError;
@@ -37,7 +37,7 @@ public class PeriodLiteral extends Literal<Period> {
 		IOperand oper = new MethodConstant(PromptoPeriod.class, "parse", 
 				String.class, PromptoPeriod.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
-		return new ResultInfo(PromptoPeriod.class, true);
+		return new ResultInfo(PromptoPeriod.class);
 	}
 	
 	

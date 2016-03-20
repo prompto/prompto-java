@@ -23,7 +23,7 @@ public class MethodType extends BaseType {
 	}
 	
 	@Override
-	public Type toJavaType() {
+	public Type getJavaType() {
 		return Method.class;
 	}
 	

@@ -27,7 +27,7 @@ public class BooleanLiteral extends Literal<Boolean> {
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		method.addInstruction(Opcode.BIPUSH, new ByteOperand(value.getValue() ? (byte)1 : 0));
 		if(flags.toNative())
-			return new ResultInfo(boolean.class, false);
+			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
 	}

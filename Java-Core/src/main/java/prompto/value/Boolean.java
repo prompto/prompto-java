@@ -116,7 +116,7 @@ public class Boolean extends BaseValue implements Comparable<Boolean> {
 		StackState lastState = method.captureStackState();
 		method.placeLabel(lastState);
 		if(flags.toNative())
-			return new ResultInfo(boolean.class, false);
+			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
 	}

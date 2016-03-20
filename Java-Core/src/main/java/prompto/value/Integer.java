@@ -4,10 +4,10 @@ import java.io.IOException;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.IOperand;
 import prompto.compiler.PromptoType;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.ShortOperand;
@@ -72,13 +72,13 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 		if(isDecimal) {
 			method.addInstruction(Opcode.DADD);
 			if(flags.toNative())
-				return new ResultInfo(double.class, false);
+				return new ResultInfo(double.class);
 			else
 				return CompilerUtils.doubleToDouble(method);
 		} else {
 			method.addInstruction(Opcode.LADD);
 			if(flags.toNative())
-				return new ResultInfo(long.class, false);
+				return new ResultInfo(long.class);
 			else
 				return CompilerUtils.longToLong(method);
 		}
@@ -107,13 +107,13 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 		if(isDecimal) {
 			method.addInstruction(Opcode.DSUB);
 			if(flags.toNative())
-				return new ResultInfo(double.class, false);
+				return new ResultInfo(double.class);
 			else
 				return CompilerUtils.doubleToDouble(method);
 		} else {
 			method.addInstruction(Opcode.LSUB);
 			if(flags.toNative())
-				return new ResultInfo(long.class, false);
+				return new ResultInfo(long.class);
 			else
 				return CompilerUtils.longToLong(method);
 		}
@@ -140,9 +140,9 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 			return compileMultiplyCharacter(context, method, flags, left, exp);
 		else if(type==TextType.instance())
 			return compileMultiplyText(context, method, flags, left, exp);
-		else if(type.toJavaType() instanceof PromptoType)
+		else if(type.getJavaType() instanceof PromptoType)
 			return compileMultiplyCategory(context, method, flags, left, exp);
-		else if(IMultiplyable.class.isAssignableFrom((Class<?>)type.toJavaType()))
+		else if(IMultiplyable.class.isAssignableFrom((Class<?>)type.getJavaType()))
 			return compileMultiplyMultiplyable(context, method, flags, left, exp);
 		else
 			throw new SyntaxError("Illegal: Integer * " + type.getClass().getSimpleName());
@@ -170,7 +170,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 				"multiply", 
 				char.class, int.class, String.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
-		return new ResultInfo(String.class, true);
+		return new ResultInfo(String.class);
 	}
 	
 	private static ResultInfo compileMultiplyText(Context context, MethodInfo method, Flags flags, 
@@ -186,7 +186,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 				"multiply", 
 				String.class, int.class, String.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
-		return new ResultInfo(String.class, true);
+		return new ResultInfo(String.class);
 	}
 
 	private static ResultInfo compileMultiplyMultiplyable(Context context, MethodInfo method, Flags flags, 
@@ -203,7 +203,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 			IOperand oper = new MethodConstant(rval.getType(), "multiply", 
 					int.class, resultType);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-			return new ResultInfo(resultType, true);
+			return new ResultInfo(resultType);
 		} catch(NoSuchMethodException e) {
 			throw new SyntaxError(e.getMessage());
 		}
@@ -218,13 +218,13 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 		if(isDecimal) {
 			method.addInstruction(Opcode.DMUL);
 			if(flags.toNative())
-				return new ResultInfo(double.class, false);
+				return new ResultInfo(double.class);
 			else
 				return CompilerUtils.doubleToDouble(method);
 		} else {
 			method.addInstruction(Opcode.LMUL);
 			if(flags.toNative())
-				return new ResultInfo(long.class, false);
+				return new ResultInfo(long.class);
 			else
 				return CompilerUtils.longToLong(method);
 		}
@@ -248,7 +248,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 		CompilerUtils.numberToNative(method, right, true);
 		method.addInstruction(Opcode.DDIV);
 		if(flags.toNative())
-			return new ResultInfo(double.class, false);
+			return new ResultInfo(double.class);
 		else
 			return CompilerUtils.doubleToDouble(method);
 	}
@@ -271,7 +271,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 		CompilerUtils.numberToNative(method, right, false);
 		method.addInstruction(Opcode.LDIV);
 		if(flags.toNative())
-			return new ResultInfo(long.class, false);
+			return new ResultInfo(long.class);
 		else
 			return CompilerUtils.longToLong(method);
 	}
@@ -294,7 +294,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 		CompilerUtils.numberToNative(method, right, false);
 		method.addInstruction(Opcode.LREM);
 		if(flags.toNative())
-			return new ResultInfo(long.class, false);
+			return new ResultInfo(long.class);
 		else
 			return CompilerUtils.longToLong(method);
 	}
@@ -369,7 +369,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 		StackState lastState = method.captureStackState();
 		method.placeLabel(lastState);
 		if(flags.toNative())
-			return new ResultInfo(boolean.class, false);
+			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
 	}
@@ -397,7 +397,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 		CompilerUtils.numberToNative(method, value, false);
 		method.addInstruction(Opcode.LNEG);
 		if(flags.toNative())
-			return new ResultInfo(long.class, false);
+			return new ResultInfo(long.class);
 		else
 			return CompilerUtils.longToLong(method);
 	}

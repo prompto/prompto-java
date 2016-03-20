@@ -60,7 +60,7 @@ public class Time extends BaseValue implements Comparable<Time> {
 			throw new SyntaxError("Illegal: Date + " + exp.getClass().getSimpleName());
 		MethodConstant oper = new MethodConstant(PromptoTime.class, "plus", PromptoPeriod.class, PromptoTime.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return new ResultInfo(PromptoTime.class, true);
+		return new ResultInfo(PromptoTime.class);
 	}
 	
 	@Override
@@ -80,11 +80,11 @@ public class Time extends BaseValue implements Comparable<Time> {
 			MethodConstant oper = new MethodConstant(PromptoTime.class, "minus", 
 					PromptoTime.class, PromptoPeriod.class);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-			return new ResultInfo(PromptoPeriod.class, true);
+			return new ResultInfo(PromptoPeriod.class);
 		} else if(right.getType()==PromptoPeriod.class) {
 			MethodConstant oper = new MethodConstant(PromptoTime.class, "minus", PromptoPeriod.class, PromptoTime.class);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-			return new ResultInfo(PromptoTime.class, true);
+			return new ResultInfo(PromptoTime.class);
 			
 		} else
 			throw new SyntaxError("Illegal: Date + " + exp.getClass().getSimpleName());
@@ -160,7 +160,7 @@ public class Time extends BaseValue implements Comparable<Time> {
 			method.addInstruction(Opcode.ISUB);
 		}
 		if(flags.toNative())
-			return new ResultInfo(boolean.class, false);
+			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
 	}

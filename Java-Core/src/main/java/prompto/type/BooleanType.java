@@ -24,7 +24,7 @@ public class BooleanType extends NativeType {
 	}
 
 	@Override
-	public Type toJavaType() {
+	public Type getJavaType() {
 		return java.lang.Boolean.class;
 	}
 	

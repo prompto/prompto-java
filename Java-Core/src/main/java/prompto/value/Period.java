@@ -54,7 +54,7 @@ public class Period extends BaseValue implements IMultiplyable {
 		MethodConstant c = new MethodConstant(PromptoPeriod.class, "plus",
 				PromptoPeriod.class, PromptoPeriod.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
-		return new ResultInfo(PromptoPeriod.class, true);
+		return new ResultInfo(PromptoPeriod.class);
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class Period extends BaseValue implements IMultiplyable {
 		MethodConstant c = new MethodConstant(PromptoPeriod.class, "minus",
 				PromptoPeriod.class, PromptoPeriod.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
-		return new ResultInfo(PromptoPeriod.class, true);
+		return new ResultInfo(PromptoPeriod.class);
 	}
 
 	@Override
@@ -130,7 +130,7 @@ public class Period extends BaseValue implements IMultiplyable {
 			method.addInstruction(Opcode.ISUB);
 		}
 		if(flags.toNative())
-			return new ResultInfo(boolean.class, false);
+			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
 	}
@@ -149,7 +149,7 @@ public class Period extends BaseValue implements IMultiplyable {
 		MethodConstant oper = new MethodConstant(PromptoPeriod.class, "negate",
 				PromptoPeriod.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return new ResultInfo(PromptoPeriod.class, true);
+		return new ResultInfo(PromptoPeriod.class);
 	}
 
 }

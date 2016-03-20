@@ -112,7 +112,7 @@ public class TupleValue extends BaseList<TupleValue, PromptoTuple<IValue>> {
 		IOperand oper = new MethodConstant(PromptoTuple.class, "get", 
 				int.class, Object.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return new ResultInfo(Object.class, true);
+		return new ResultInfo(Object.class);
 	}
 
 	@Override

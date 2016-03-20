@@ -31,7 +31,7 @@ public class RangeType extends ContainerType {
 	}
 	
 	@Override
-	public Type toJavaType() {
+	public Type getJavaType() {
 		return rangeClassMap.get(itemType); 
 	}
 	

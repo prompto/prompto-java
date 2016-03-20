@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 
 import prompto.declaration.CategoryDeclaration;
 import prompto.runtime.Context;
@@ -22,13 +23,13 @@ public class Compiler {
 			FileUtils.deleteRecursively(classDir, false);
 	}
 
-	void compileGlobalMethods(Context context, MethodDeclarationMap methods, String fullName) throws Exception {
-		ClassFile classFile = createGlobalMethodsClassFile(context, methods, fullName);
-		writeClassFile(classFile, fullName);
+	void compileGlobalMethods(Context context, MethodDeclarationMap methods, Type type) throws Exception {
+		ClassFile classFile = createGlobalMethodsClassFile(context, methods, type);
+		writeClassFile(classFile, type);
 	}
 
-	private void writeClassFile(ClassFile classFile, String fullName) throws Exception {
-		fullName = fullName.replace('.', '/');
+	private void writeClassFile(ClassFile classFile, Type type) throws Exception {
+		String fullName = type.getTypeName().replace('.', '/');
 		File parent = new File(classDir, fullName.substring(0, fullName.lastIndexOf('/')+1));
 		if(!parent.exists() && !parent.mkdirs())
 			throw new IOException("Could not create " + parent.getAbsolutePath());
@@ -39,37 +40,34 @@ public class Compiler {
 		}
 	}
 
-	private ClassFile createGlobalMethodsClassFile(Context context, MethodDeclarationMap methods, String fullName) {
-		fullName = fullName.replace('.', '/');
-		ClassFile classFile = new ClassFile(fullName);
+	private ClassFile createGlobalMethodsClassFile(Context context, MethodDeclarationMap methods, Type type) {
+		ClassFile classFile = new ClassFile(type);
 		classFile.addModifier(Modifier.ABSTRACT);
 		methods.values().forEach((m) -> 
 			m.compile(context, classFile));
 		return classFile;
 	}
 
-	public void compileCategory(Context context, CategoryDeclaration decl, String interfaceFullName, String concreteFullName) throws Exception {
+	public void compileCategory(Context context, CategoryDeclaration decl, Type interfaceType, Type concreteType) throws Exception {
 		/* multiple inheritance is supported via interfaces */
 		/* concrete class is an inner class of the interface */
 		/* inner class is prefixed with '%' to prevent naming collisions */
-		ClassFile classFile = createCategoryClassFile(context, decl, concreteFullName);
-		writeClassFile(classFile, concreteFullName);
-		classFile = createCategoryInterfaceFile(context, decl, interfaceFullName, classFile);
-		writeClassFile(classFile, interfaceFullName);
+		ClassFile classFile = createCategoryClassFile(context, decl, concreteType);
+		writeClassFile(classFile, concreteType);
+		classFile = createCategoryInterfaceFile(context, decl, interfaceType, classFile);
+		writeClassFile(classFile, interfaceType);
 	}
 	
-	public ClassFile createCategoryInterfaceFile(Context context, CategoryDeclaration decl, String fullName, ClassFile innerClass) {
-		fullName = fullName.replace('.', '/');
-		ClassFile classFile = new ClassFile(fullName);
+	public ClassFile createCategoryInterfaceFile(Context context, CategoryDeclaration decl, Type type, ClassFile innerClass) {
+		ClassFile classFile = new ClassFile(type);
 		classFile.addModifier(Modifier.ABSTRACT | Modifier.INTERFACE);
 		classFile.addInnerClass(innerClass);
 		decl.compileInterface(context, classFile);
 		return classFile;
 	}
 	
-	public ClassFile createCategoryClassFile(Context context, CategoryDeclaration decl, String fullName) {
-		fullName = fullName.replace('.', '/');
-		ClassFile classFile = new ClassFile(fullName);
+	public ClassFile createCategoryClassFile(Context context, CategoryDeclaration decl, Type type) {
+		ClassFile classFile = new ClassFile(type);
 		if(decl.isAbstract())
 			classFile.addModifier(Modifier.ABSTRACT);
 		decl.compileClass(context, classFile);

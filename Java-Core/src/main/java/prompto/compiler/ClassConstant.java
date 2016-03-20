@@ -5,15 +5,21 @@ import java.lang.reflect.Type;
 
 public class ClassConstant implements CodeConstant {
 
+	Type type;
 	Utf8Constant className;
 	int index = -1;
 	
-	public ClassConstant(Type klass) {
-		this(CompilerUtils.makeClassName(klass));
+	public ClassConstant(Type type) {
+		this.type = type;
+		this.className = new Utf8Constant(CompilerUtils.makeClassName(type));
 	}
 
-	public ClassConstant(String className) {
-		this.className = new Utf8Constant(className);
+	public Type getType() {
+		return type;
+	}
+	
+	public boolean isInterface() {
+		return new ResultInfo(type).isInterface();
 	}
 
 	public Utf8Constant getClassName() {
@@ -25,10 +31,6 @@ public class ClassConstant implements CodeConstant {
 		return fullName.substring(fullName.lastIndexOf('/')+1);
 	}
 
-	public boolean isInterface() {
-		return className.getValue().indexOf('$')<0;
-	}
-	
 	@Override
 	public String toString() {
 		return this.className.toString();
@@ -64,5 +66,6 @@ public class ClassConstant implements CodeConstant {
 		writer.writeU1(Tags.CONSTANT_Class);
 		writer.writeU2(className.getIndexInConstantPool());
 	}
+
 
 }

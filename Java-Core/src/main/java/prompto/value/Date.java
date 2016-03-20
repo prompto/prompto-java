@@ -62,7 +62,7 @@ public class Date extends BaseValue implements Comparable<Date> {
 			throw new SyntaxError("Illegal: Date + " + exp.getClass().getSimpleName());
 		MethodConstant oper = new MethodConstant(PromptoDate.class, "plus", PromptoPeriod.class, PromptoDate.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return new ResultInfo(PromptoDate.class, true);
+		return new ResultInfo(PromptoDate.class);
 	}
 	
 
@@ -86,12 +86,12 @@ public class Date extends BaseValue implements Comparable<Date> {
 			MethodConstant oper = new MethodConstant(PromptoDate.class, "minus", 
 					PromptoDate.class, PromptoPeriod.class);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-			return new ResultInfo(PromptoPeriod.class, true);
+			return new ResultInfo(PromptoPeriod.class);
 		} else if(right.getType()==PromptoPeriod.class) {
 			MethodConstant oper = new MethodConstant(PromptoDate.class, "minus", 
 					PromptoPeriod.class, PromptoDate.class);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-			return new ResultInfo(PromptoDate.class, true);
+			return new ResultInfo(PromptoDate.class);
 		} else
 			throw new SyntaxError("Illegal: Date - " + exp.getClass().getSimpleName());
 	}
@@ -167,7 +167,7 @@ public class Date extends BaseValue implements Comparable<Date> {
 			method.addInstruction(Opcode.ISUB);
 		}
 		if(flags.toNative())
-			return new ResultInfo(boolean.class, false);
+			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
 	}

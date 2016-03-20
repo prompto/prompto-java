@@ -6,10 +6,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
 import prompto.compiler.CompilerUtils;
-import prompto.compiler.PromptoType;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
@@ -40,6 +37,8 @@ import prompto.value.IInstance;
 import prompto.value.IValue;
 import prompto.value.ListValue;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 
 public class CategoryType extends BaseType {
 
@@ -65,8 +64,8 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public Type toJavaType() {
-		return new PromptoType(CompilerUtils.getCategoryInterfaceClassName(getId(), false));
+	public Type getJavaType() {
+		return CompilerUtils.getCategoryInterfaceType(getId());
 	}
 	
 	@Override

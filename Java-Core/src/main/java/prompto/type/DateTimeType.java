@@ -29,7 +29,7 @@ public class DateTimeType extends NativeType {
 	}
 
 	@Override
-	public Type toJavaType() {
+	public Type getJavaType() {
 		return PromptoDateTime.class;
 	}
 	

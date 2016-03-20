@@ -1,19 +1,22 @@
 package prompto.compiler;
 
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.List;
 
 public class FieldInfo {
 
 	int accessFlags = Modifier.PROTECTED;
+	Type type;
 	Utf8Constant name;
 	Utf8Constant desc;
 	List<IAttribute> attributes = new LinkedList<>();
 
-	public FieldInfo(String name, String desc) {
+	public FieldInfo(String name, Type type) {
+		this.type = type;
 		this.name = new Utf8Constant(name);
-		this.desc = new Utf8Constant(desc);
+		this.desc = new Utf8Constant(CompilerUtils.getDescriptor(type));
 	}
 	
 	public Utf8Constant getName() {
@@ -24,8 +27,8 @@ public class FieldInfo {
 		return desc;
 	}
 
-	public String getClassName() {
-		return desc.getValue().substring(1, desc.getValue().length()-1);
+	public Type getType() {
+		return type;
 	}
 
 	void register(ConstantsPool pool) {

@@ -46,10 +46,12 @@ public class ThisExpression implements IExpression {
 		StackLocal local = method.getRegisteredLocal("this");
 		if(local==null)
 			return null;
-		ClassConstant c = local instanceof StackLocal.ObjectLocal ? ((StackLocal.ObjectLocal)local).getClassName() : new ClassConstant("java/lang/Object");   
+		ClassConstant c = local instanceof StackLocal.ObjectLocal ? 
+				((StackLocal.ObjectLocal)local).getClassName() : 
+					new ClassConstant(Object.class);   
 		method.addInstruction(Opcode.ALOAD_0, c);
 		IType type = check(context);
-		return new ResultInfo(type.toJavaType(), true);	
+		return new ResultInfo(type.getJavaType());	
 	}
 	
 	

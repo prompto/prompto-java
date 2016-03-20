@@ -8,6 +8,7 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
+import prompto.compiler.ResultInfo.Flag;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
@@ -89,31 +90,37 @@ public class ReturnStatement extends SimpleStatement {
 		// load value
 		expression.compile(context, method, flags);
 		// store in field
-		FieldConstant f = new FieldConstant(c, field.getName().getValue(), field.getDescriptor());
+		FieldConstant f = new FieldConstant(c, field.getName().getValue(), field.getType());
 		method.addInstruction(Opcode.PUTFIELD, f);
 		method.addInstruction(Opcode.RETURN);
-		return new ResultInfo(void.class, false, true);
+		return new ResultInfo(void.class, Flag.RETURN);
 	}
 
 	private ResultInfo compileReturn(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		if(expression==null) {
 			method.addInstruction(Opcode.RETURN);
-			return new ResultInfo(void.class, false, true);
+			return new ResultInfo(void.class, Flag.RETURN);
 		} else {
 			ResultInfo info = expression.compile(context, method, flags);
-			if(boolean.class==info.getType())
+			if(boolean.class==info.getType()) {
 				method.addInstruction(Opcode.IRETURN);
-			else if(int.class==info.getType())
+				return new ResultInfo(info.getType(), Flag.RETURN);
+			} else if(int.class==info.getType()) {
 				method.addInstruction(Opcode.IRETURN);
-			else if(char.class==info.getType())
+				return new ResultInfo(info.getType(), Flag.RETURN);
+			} else if(char.class==info.getType()) {
 				method.addInstruction(Opcode.IRETURN);
-			else if(long.class==info.getType())
+				return new ResultInfo(info.getType(), Flag.RETURN);
+			} else if(long.class==info.getType()) {
 				method.addInstruction(Opcode.LRETURN);
-			else if(double.class==info.getType())
+				return new ResultInfo(info.getType(), Flag.RETURN);
+			} else if(double.class==info.getType()) {
 				method.addInstruction(Opcode.DRETURN);
-			else
+				return new ResultInfo(info.getType(), Flag.RETURN);
+			} else {
 				method.addInstruction(Opcode.ARETURN);
-			return new ResultInfo(info.getType(), info.isInstance(), true);
+				return new ResultInfo(info.getType(), Flag.RETURN);
+			}
 		}
 	}
 

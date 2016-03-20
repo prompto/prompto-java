@@ -195,7 +195,7 @@ public class ForEachStatement extends BaseStatement {
 	}
 
 	private ResultInfo compileWithIndex(Context context, MethodInfo method, Flags flags) throws SyntaxError {
-		java.lang.reflect.Type itemClass = source.check(context).checkIterator(context).toJavaType();
+		java.lang.reflect.Type itemClass = source.check(context).checkIterator(context).getJavaType();
 		StackLocal iterLocal = compileIterator(context, method, flags);
 		StackLocal v1Local = compileInitCounter(method);
 		// local needs to be ITEM_Top because that's what the verifier infers from INVOKEINTERFACE on Iterator.next
@@ -233,7 +233,7 @@ public class ForEachStatement extends BaseStatement {
 		// TODO method.unregisterLocal(v1.getName());
 		// TODO method.unregisterLocal(v2.getName());
 		// TODO manage return value in loop
-		return new ResultInfo(void.class, false);
+		return new ResultInfo(void.class);
 	}
 
 	private void compileIncrementCounter(MethodInfo method, StackLocal local) {
@@ -263,7 +263,7 @@ public class ForEachStatement extends BaseStatement {
 	}
 
 	private ResultInfo compileWithoutIndex(Context context, MethodInfo method, Flags flags) throws SyntaxError {
-		java.lang.reflect.Type itemClass = source.check(context).checkIterator(context).toJavaType();
+		java.lang.reflect.Type itemClass = source.check(context).checkIterator(context).getJavaType();
 		StackLocal iterLocal = compileIterator(context, method, flags);
 		// local needs to be ITEM_Top because that's what the verifier infers from INVOKEINTERFACE on Iterator.next
 		StackLocal v1Local = method.registerLocal(v1.getName(), Type.ITEM_Top, new ClassConstant(itemClass));
@@ -297,7 +297,7 @@ public class ForEachStatement extends BaseStatement {
 		// TODO method.unregisterLocal(iterLocal.getName());
 		// TODO method.unregisterLocal(v1.getName());
 		// TODO manage return value in loop
-		return new ResultInfo(void.class, false);
+		return new ResultInfo(void.class);
 	}
 
 	private StackLocal compileIterator(Context context, MethodInfo method, Flags flags) throws SyntaxError {

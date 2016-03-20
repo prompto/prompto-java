@@ -41,7 +41,7 @@ public class IntegerLiteral extends Literal<Integer> {
 		} else
 			method.addInstruction(Opcode.LDC2_W, new LongConstant(l));
 		if(flags.toNative())
-			return new ResultInfo(long.class, false);
+			return new ResultInfo(long.class);
 		else
 			return CompilerUtils.longToLong(method);
 	}

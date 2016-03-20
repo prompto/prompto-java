@@ -29,7 +29,7 @@ public class DecimalType extends NativeType implements INumberType {
 	}
 	
 	@Override
-	public Type toJavaType() {
+	public Type getJavaType() {
 		return Double.class;
 	}
 	

@@ -20,7 +20,7 @@ public class DocumentType extends NativeType {
 	}
 
 	@Override
-	public Type toJavaType() {
+	public Type getJavaType() {
 		return Document.class;
 	}
 	

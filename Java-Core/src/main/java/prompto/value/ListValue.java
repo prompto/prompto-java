@@ -84,7 +84,7 @@ public class ListValue extends BaseList<ListValue, PromptoList<IValue>> {
 			method.addInstruction(Opcode.ISUB);
 		}
 		if(flags.toNative())
-			return new ResultInfo(boolean.class, false);
+			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
 	}
@@ -156,7 +156,7 @@ public class ListValue extends BaseList<ListValue, PromptoList<IValue>> {
 		IOperand oper = new MethodConstant(PromptoList.class, "get", 
 				int.class, Object.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return new ResultInfo(Object.class, true);
+		return new ResultInfo(Object.class); // TODO refine
 	}
 	
 	@Override

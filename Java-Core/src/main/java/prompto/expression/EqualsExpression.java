@@ -259,23 +259,23 @@ public class EqualsExpression implements IExpression, IAssertion {
 			return compileIs(context, method, flags.withReverse(false));
 		case IS_NOT:
 			return compileIs(context, method, flags.withReverse(true));
-			/*
 		case IS_A:
-			equal = isA(context,lval,rval);
-			break;
+			return compileIsA(context, method, flags.withReverse(false));
 		case IS_NOT_A:
-			equal = !isA(context,lval,rval);
-			break;
-			equal = interpretEquals(context,lval,rval);
-			break;
-			equal = !interpretEquals(context,lval,rval);
-			break;
-		*/
+			return compileIsA(context, method, flags.withReverse(true));
 		default:
 			throw new UnsupportedOperationException();
 		}
 	}
 	
+	private ResultInfo compileIsA(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		ResultInfo rright = right.compile(context, method, flags.withNative(false));
+		if(!rright.isStatic())
+			throw new SyntaxError("Expecting a type");
+		ResultInfo rleft = left.compile(context, method, flags.withNative(false));
+		throw new UnsupportedOperationException();
+	}
+
 	public ResultInfo compileIs(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		left.compile(context, method, flags.withNative(false));
 		right.compile(context, method, flags.withNative(false));
@@ -290,7 +290,7 @@ public class EqualsExpression implements IExpression, IAssertion {
 		StackState lastState = method.captureStackState();
 		method.placeLabel(lastState);
 		if(flags.toNative())
-			return new ResultInfo(boolean.class, false);
+			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
 	}

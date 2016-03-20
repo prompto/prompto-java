@@ -53,7 +53,7 @@ public class VariableInstance implements IAssignableInstance {
 				// TODO: support ALOAD_W
 				method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)local.getIndex()));
 		}
-		return new ResultInfo(void.class, false);
+		return new ResultInfo(void.class);
 	}
 	
 	@Override

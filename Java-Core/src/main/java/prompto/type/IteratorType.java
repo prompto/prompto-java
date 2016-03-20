@@ -14,7 +14,7 @@ public class IteratorType extends IterableType {
 	}
 
 	@Override
-	public Type toJavaType() {
+	public Type getJavaType() {
 		return IteratorValue.class;
 	}
 	

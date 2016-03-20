@@ -6,6 +6,7 @@ import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
 import prompto.compiler.CompilerException;
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.Descriptor;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -212,22 +213,21 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 
 	protected MethodInfo createMethodInfo(Context context, ClassFile classFile, IType returnType) {
-		String proto = CompilerUtils.createProto(context, arguments, returnType);
-		MethodInfo method = new MethodInfo(getName(), proto); 
+		Descriptor.Method proto = CompilerUtils.createMethodDescriptor(context, arguments, returnType);
+		MethodInfo method = new MethodInfo(getName(), proto.toString()); 
 		classFile.addMethod(method);
 		return method;
 	}
 	
-	protected void registerLocals(Context context, ClassFile classFile, MethodInfo method) {
+	protected void registerLocals(Context context, ClassFile classFile, MethodInfo method) throws SyntaxError {
 		if(Modifier.isAbstract(classFile.getModifiers())) // TODO find another way
 			method.addModifier(Modifier.STATIC); // otherwise it's a member method
 		else 
 			method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
 		for(IArgument arg : arguments) {
-			String desc = arg.getJavaDescriptor(context);
+			String desc = CompilerUtils.getDescriptor(arg.getJavaType(context));
 			IVerifierEntry.Type type = IVerifierEntry.Type.fromDescriptor(desc);
-			String className = arg.getJavaClassName(context).replace('.', '/');
-			ClassConstant classConstant = new ClassConstant(className);
+			ClassConstant classConstant = new ClassConstant(arg.getType(context).getJavaType());
 			method.registerLocal(arg.getName(), type, classConstant);
 		}
 	}

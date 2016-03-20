@@ -117,7 +117,7 @@ public class DoWhileStatement extends BaseStatement {
 		method.inhibitOffsetListener(loop);
 		method.addInstruction(Opcode.IFNE, loop);
 		// TODO manage return value in loop
-		return new ResultInfo(void.class, false);
+		return new ResultInfo(void.class);
 	}
 	
 }

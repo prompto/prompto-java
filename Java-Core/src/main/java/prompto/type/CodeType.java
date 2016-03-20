@@ -17,7 +17,7 @@ public class CodeType extends NativeType {
 	}
 	
 	@Override
-	public Type toJavaType() {
+	public Type getJavaType() {
 		return null;
 	}
 }

@@ -20,7 +20,7 @@ public class DictType extends ContainerType {
 	}
 
 	@Override
-	public Type toJavaType() {
+	public Type getJavaType() {
 		return PromptoDict.class;
 	}
 	

@@ -1,5 +1,7 @@
 package prompto.grammar;
 
+import java.lang.reflect.Type;
+
 import prompto.compiler.CompilerException;
 import prompto.error.PromptoError;
 import prompto.expression.DefaultExpression;
@@ -50,21 +52,13 @@ public abstract class BaseArgument implements IArgument {
 	}
 	
 	@Override
-	public String getJavaDescriptor(Context context) {
+	public Type getJavaType(Context context) {
 		try {
-			return getType(context).getJavaDescriptor(context);
+			return getType(context).getJavaType();
 		} catch(PromptoError e) {
 			throw new CompilerException(e);
 		}
 	}
 	
-	@Override
-	public String getJavaClassName(Context context) {
-		try {
-			return getType(context).getJavaClassName(context);
-		} catch(PromptoError e) {
-			throw new CompilerException(e);
-		}
-	}
 
 }

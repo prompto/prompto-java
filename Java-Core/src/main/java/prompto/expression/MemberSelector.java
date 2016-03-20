@@ -6,11 +6,11 @@ import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.FieldConstant;
 import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
 import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.IOperand;
 import prompto.compiler.PromptoType;
 import prompto.compiler.ResultInfo;
 import prompto.error.NullReferenceError;
@@ -174,17 +174,14 @@ public class MemberSelector extends SelectorExpression {
 
 
 	private ResultInfo compileInstanceMember(Context context, MethodInfo method, ResultInfo parent, Flags flags) throws SyntaxError {
-		Type resultType = check(context).toJavaType();
+		Type resultType = check(context).getJavaType();
 		// special case for String.length() to avoid wrapping String.class for just one member
 		if(String.class==parent.getType() && "length".equals(getName()))
 			return compileStringLength(method, flags);
 		else {
 			String getterName = CompilerUtils.getterName(getName());
 			if(isCompilingGetter(context, method, parent, getterName)) {
-				String className = CompilerUtils.concreteFullNameFrom(parent.getType().getTypeName());
-				className = CompilerUtils.makeClassName(className);
-				String desc = CompilerUtils.getDescriptor(resultType);
-				FieldConstant f = new FieldConstant(className, id.getName(), desc);
+				FieldConstant f = new FieldConstant(parent.getType(), id.getName(), resultType);
 				method.addInstruction(Opcode.GETFIELD, f);
 			} else if(PromptoDict.Entry.class==parent.getType()) {
 				IOperand oper = new MethodConstant(parent.getType(), getterName, Object.class);
@@ -197,7 +194,7 @@ public class MemberSelector extends SelectorExpression {
 				IOperand oper = new MethodConstant(parent.getType(), getterName, resultType);
 				method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 			}
-			return new ResultInfo(resultType, true);
+			return new ResultInfo(resultType);
 		}
 	}
 

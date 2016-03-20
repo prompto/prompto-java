@@ -44,6 +44,6 @@ public class TextLiteral extends Literal<Text> {
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		IConstantOperand operand = new StringConstant(value.getValue());
 		method.addInstruction(Opcode.LDC_W, operand);
-		return new ResultInfo(String.class, true);
+		return new ResultInfo(String.class);
 	}
 }

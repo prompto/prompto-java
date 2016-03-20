@@ -18,11 +18,8 @@ public interface IType {
 	
 	Identifier getId();
 	String getName();
-	IValue getMember(Context context, Identifier name) throws PromptoError;
-	String toString(Object value);
-	void toDialect(CodeWriter writer);
-	IValue readJSONValue(Context context, JsonNode value);
-	
+	Type getJavaType();
+
 	IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError;
 	IType checkSubstract(Context context, IType other) throws SyntaxError;
 	IType checkDivide(Context context, IType other) throws SyntaxError;
@@ -47,10 +44,10 @@ public interface IType {
 	
 	RangeBase<?> newRange(Object first,Object last) throws SyntaxError;
 	IValue sort(Context context,IContainer<IValue> values) throws PromptoError;
-	
+	IValue getMember(Context context, Identifier name) throws PromptoError;
+	String toString(Object value);
+	void toDialect(CodeWriter writer);
+	IValue readJSONValue(Context context, JsonNode value);
 	IValue convertJavaValueToPromptoValue(Object value);
-	Type toJavaType();
-	String getJavaDescriptor(Context context);
-	String getJavaClassName(Context context);
 }
  

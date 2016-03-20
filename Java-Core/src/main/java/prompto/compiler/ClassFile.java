@@ -2,6 +2,7 @@ package prompto.compiler;
 
 import java.io.OutputStream;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class ClassFile {
 	
 	int accessFlags = Tags.ACC_SUPER | Modifier.PUBLIC;
 	
-	public ClassFile(String thisClassName) {
+	public ClassFile(Type thisClassName) {
 		this.thisClass = new ClassConstant(thisClassName);
 	}
 
@@ -43,8 +44,8 @@ public class ClassFile {
 		accessFlags |= modifier;
 	}
 	
-	public void addInterface(String name) {
-		addInterface(new ClassConstant(name));
+	public void addInterface(Type type) {
+		addInterface(new ClassConstant(type));
 	}
 	
 	public void addInterface(ClassConstant interFace) {
@@ -82,7 +83,7 @@ public class ClassFile {
 		ConstantsPool pool = new ConstantsPool();
 		thisClass.register(pool);
 		if(superClass==null)
-			superClass = new ClassConstant("java/lang/Object");
+			superClass = new ClassConstant(Object.class);
 		superClass.register(pool);
 		interfaces.forEach((s)-> 
 			s.register(pool));

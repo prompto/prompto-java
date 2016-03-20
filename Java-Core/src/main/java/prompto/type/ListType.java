@@ -19,7 +19,7 @@ public class ListType extends ContainerType {
 	}
 	
 	@Override
-	public Type toJavaType() {
+	public Type getJavaType() {
 		return PromptoList.class;
 	}
 	

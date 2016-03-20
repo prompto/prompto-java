@@ -18,7 +18,7 @@ public class ImageType extends BinaryType {
 	}
 
 	@Override
-	public Type toJavaType() {
+	public Type getJavaType() {
 		return Image.class;
 	}
 	

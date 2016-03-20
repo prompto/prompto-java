@@ -75,6 +75,6 @@ public class CommentStatement extends BaseStatement {
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		// nathing to do
-		return new ResultInfo(void.class, false);
+		return new ResultInfo(void.class);
 	}
 }

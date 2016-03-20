@@ -73,7 +73,7 @@ public class NotExpression implements IUnaryExpression, IAssertion {
 		method.addInstruction(Opcode.SWAP);
 		method.addInstruction(Opcode.ISUB);
 		if(flags.toNative())
-			return new ResultInfo(boolean.class, false);
+			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
 	}

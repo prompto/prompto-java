@@ -1,9 +1,9 @@
 package prompto.java;
 
-import prompto.compiler.ResultInfo;
 import prompto.compiler.IConstantOperand;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.compiler.StringConstant;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
@@ -37,7 +37,7 @@ public class JavaTextLiteral extends JavaLiteral {
 	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
 		IConstantOperand operand = new StringConstant(value);
 		method.addInstruction(Opcode.LDC_W, operand);
-		return new ResultInfo(String.class, true);
+		return new ResultInfo(String.class);
 	}
 
 }

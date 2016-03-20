@@ -65,7 +65,7 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 			method.addInstruction(Opcode.ISUB);
 		}
 		if(flags.toNative())
-			return new ResultInfo(boolean.class, false);
+			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
 	}
@@ -94,7 +94,7 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 		IOperand oper = new MethodConstant(PromptoRange.class, "getItem", 
 				long.class, Object.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return new ResultInfo(Object.class, true);
+		return new ResultInfo(Object.class);
 	}
 
 	public RangeBase<T> slice(Integer fi, Integer li) throws PromptoError {

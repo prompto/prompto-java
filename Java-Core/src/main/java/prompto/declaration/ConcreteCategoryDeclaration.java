@@ -25,6 +25,7 @@ import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.grammar.MethodDeclarationList;
 import prompto.grammar.Operator;
+import prompto.intrinsic.PromptoRoot;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.type.CategoryType;
@@ -425,10 +426,8 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 
 	private void compileInterfaces(Context context, ClassFile classFile) throws SyntaxError {
 		if(derivedFrom!=null)
-			derivedFrom.forEach((id)->{
-				String name = CompilerUtils.getCategoryInterfaceClassName(id, true);
-				classFile.addInterface(name);
-			});
+			derivedFrom.forEach((id)->
+				classFile.addInterface(CompilerUtils.getCategoryInterfaceType(id)));
 	}
 
 	private void compileFieldPrototypes(Context context, ClassFile classFile) throws SyntaxError {
@@ -522,16 +521,14 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 
 	private ClassConstant getInterface(Context context) {
-		String className = CompilerUtils.getCategoryInterfaceClassName(getId(), true);
-		return new ClassConstant(className);
+		return new ClassConstant(CompilerUtils.getCategoryInterfaceType(getId()));
 	}
 
 	private ClassConstant getSuperClass(Context context) {
 		if(derivedFrom==null) 
-			return new ClassConstant("prompto/intrinsic/PromptoRoot");
+			return new ClassConstant(PromptoRoot.class);
 		/* the JVM does not support multiple inheritance but we can still benefit from single inheritance */
-		String className = CompilerUtils.getCategoryConcreteClassName(derivedFrom.getFirst(), true);
-		return new ClassConstant(className);
+		return new ClassConstant(CompilerUtils.getCategoryConcreteType(derivedFrom.getFirst()));
 	}
 
 	private void compileFields(Context context, ClassFile classFile, Flags flags) throws SyntaxError {
@@ -645,11 +642,11 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		MethodInfo method = new MethodInfo(name, proto);
 		classFile.addMethod(method);
 		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
-		ClassConstant fc = new ClassConstant(field.getClassName());
+		ClassConstant fc = new ClassConstant(field.getType());
 		method.registerLocal("%value%", IVerifierEntry.Type.ITEM_Object, fc);
 		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
 		method.addInstruction(Opcode.ALOAD_1, fc);
-		FieldConstant f = new FieldConstant(classFile.getThisClass(), field.getName().getValue(), field.getDescriptor());
+		FieldConstant f = new FieldConstant(classFile.getThisClass(), field.getName().getValue(), field.getType());
 		method.addInstruction(Opcode.PUTFIELD, f);
 		method.addInstruction(Opcode.RETURN);
 	}
@@ -669,9 +666,9 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		classFile.addMethod(method);
 		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
 		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
-		FieldConstant f = new FieldConstant(classFile.getThisClass(), id.getName(), field.getDescriptor());
+		FieldConstant f = new FieldConstant(classFile.getThisClass(), id.getName(), field.getType());
 		method.addInstruction(Opcode.GETFIELD, f);
-		method.addInstruction(Opcode.ARETURN, new ClassConstant(field.getClassName()));
+		method.addInstruction(Opcode.ARETURN, new ClassConstant(field.getType()));
 	}
 
 	private void compileConstructor(Context context, ClassFile classFile, Flags flags) {

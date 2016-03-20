@@ -349,9 +349,9 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		operator.registerArguments(local);
 		IType resultType = operator.check(local);
 		String methodName = "operator-" + oper.name();
-		InterfaceConstant c = new InterfaceConstant(left.getType(), methodName, argType.toJavaType(), resultType.toJavaType());
+		InterfaceConstant c = new InterfaceConstant(left.getType(), methodName, argType.getJavaType(), resultType.getJavaType());
 		method.addInstruction(Opcode.INVOKEINTERFACE, c);
-		return new ResultInfo(resultType.toJavaType(), true);
+		return new ResultInfo(resultType.getJavaType()); 
 	}
 
 	public MethodDeclarationList getLocalMethods() {

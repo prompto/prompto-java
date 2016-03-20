@@ -122,6 +122,6 @@ public class WhileStatement extends BaseStatement {
 		method.restoreStackState(neutralState);
 		method.placeLabel(neutralState);
 		// TODO manage return value in loop
-		return new ResultInfo(void.class, false);
+		return new ResultInfo(void.class);
 	}
 }

@@ -4,7 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
-import prompto.compiler.CompilerUtils;
+import prompto.compiler.Descriptor;
 import prompto.compiler.IConstantOperand;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
@@ -68,14 +68,13 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 			arg.compile(context, method);
 		// write method call
 		Method m = findMethod(context, parentType.getType());
-		String proto = CompilerUtils.createProto(m.getParameterTypes(), m.getReturnType());
-		String parentClassName = CompilerUtils.makeClassName(parentType.getType());
-		IConstantOperand operand = new MethodConstant(parentClassName, m.getName(), proto);
-		if(parentType.isInstance())
-			method.addInstruction(Opcode.INVOKEVIRTUAL, operand);
-		else
+		Descriptor.Method dm = new Descriptor.Method(m.getParameterTypes(), m.getReturnType());
+		IConstantOperand operand = new MethodConstant(parentType.getType(), m.getName(), dm);
+		if(parentType.isStatic())
 			method.addInstruction(Opcode.INVOKESTATIC, operand);
-		return new ResultInfo(m.getReturnType(), true);
+		else
+			method.addInstruction(Opcode.INVOKEVIRTUAL, operand);
+		return new ResultInfo(m.getReturnType());
 	}
 	
 	@Override
@@ -131,7 +130,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 			if(named instanceof NativeCategoryDeclaration) 
 				return ((NativeCategoryDeclaration)named).getBoundClass(context, true);
 		}
-			return type.toJavaType();
+			return type.getJavaType();
 	}
 
 	public Method findMethod(Context context, Object instance) throws SyntaxError {
@@ -155,7 +154,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 		Class<?>[] types = new Class<?>[arguments.size()];
 		int i = 0;
 		for(JavaExpression exp  : arguments)
-			types[i++] = (Class<?>)exp.check(context).toJavaType();
+			types[i++] = (Class<?>)exp.check(context).getJavaType();
 		try {
 			return klass.getDeclaredMethod(name, types);
 		} catch (NoSuchMethodException e) {
@@ -187,6 +186,6 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 	
 	boolean validArgument(Context context, Class<?> klass, JavaExpression argument) throws SyntaxError {
 		IType type = argument.check(context);
-		return klass.isAssignableFrom((Class<?>)type.toJavaType());
+		return klass.isAssignableFrom((Class<?>)type.getJavaType());
 	}
 }

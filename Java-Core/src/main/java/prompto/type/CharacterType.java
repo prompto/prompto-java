@@ -29,7 +29,7 @@ public class CharacterType extends NativeType {
 	}
 	
 	@Override
-	public Type toJavaType() {
+	public Type getJavaType() {
 		return java.lang.Character.class;
 	}
 	

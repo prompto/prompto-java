@@ -29,7 +29,7 @@ public class TextType extends NativeType {
 	}
 	
 	@Override
-	public Type toJavaType() {
+	public Type getJavaType() {
 		return String.class;
 	}
 	

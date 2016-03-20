@@ -2,55 +2,50 @@ package prompto.compiler;
 
 import java.lang.reflect.Type;
 
+import prompto.compiler.Descriptor.Method;
+
 public class MethodConstant implements CodeConstant {
 
 	ClassConstant className;
 	NameAndTypeConstant methodNameAndType;
 	int index;
 	
-	public MethodConstant(Type type, String methodName, Type ... params) {
-		this(CompilerUtils.makeClassName(type), methodName, CompilerUtils.createProto(params));
+	public MethodConstant(Type klass, String methodName, Type ... params) {
+		this(new ClassConstant(klass), methodName, new Descriptor.Method(params));
 	}
 	
-	public MethodConstant(Type type, String methodName, String proto) {
-		this(CompilerUtils.makeClassName(type), methodName, proto);
+	public MethodConstant(Type klass, String methodName, Method method) {
+		this(new ClassConstant(klass), methodName, method);
 	}
 
-	public MethodConstant(String className, String methodName, String proto) {
-		this(new ClassConstant(className), new NameAndTypeConstant(methodName, proto));
+	public MethodConstant(ClassConstant klass, String methodName, Type ... params) {
+		this(klass, methodName, new Descriptor.Method(params));
 	}
 
-	public MethodConstant(ClassConstant superClass, String methodName, Type ... params) {
-		this(superClass, methodName, CompilerUtils.createProto(params));
-	}
-
-	public MethodConstant(ClassConstant superClass, String methodName, String proto) {
-		this(superClass, new NameAndTypeConstant(methodName, proto));
+	public MethodConstant(ClassConstant klass, String methodName, Method method) {
+		this(klass, new NameAndTypeConstant(methodName, method));
 	}
 	
-	public MethodConstant(ClassConstant className, NameAndTypeConstant nameAndType) {
-		this.className = className;
+	public MethodConstant(ClassConstant klass, NameAndTypeConstant nameAndType) {
+		this.className = klass;
 		this.methodNameAndType = nameAndType;
 	}
 
 
 
 	public short getArgumentsCount(boolean isStatic) {
-		String[] types = CompilerUtils.parseDescriptor(methodNameAndType.getType().getValue());
+		Type[] types = methodNameAndType.getDescriptor().getTypes();
 		return (short)(types.length - (isStatic ? 1 : 0));
 	}
 
 	public StackEntry resultToStackEntry() {
-		String[] types = CompilerUtils.parseDescriptor(methodNameAndType.getType().getValue());
-		String descriptor = types[types.length-1];
+		String descriptor = methodNameAndType.getDescriptor().getLastDescriptor();
 		if("V".equals(descriptor))
 			return null;
 		IVerifierEntry.Type type = IVerifierEntry.Type.fromDescriptor(descriptor);
 		StackEntry entry = type.newStackEntry(null);
-		if(entry instanceof StackEntry.ObjectEntry) {
-			String className = descriptor.substring(1, descriptor.length()-1); // strip 'L' and ';'
-			((StackEntry.ObjectEntry)entry).setClassName(new ClassConstant(className));
-		}
+		if(entry instanceof StackEntry.ObjectEntry)
+			((StackEntry.ObjectEntry)entry).setClassName(new ClassConstant(methodNameAndType.getDescriptor().getLastType()));
 		return entry;
 	}
 

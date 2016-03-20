@@ -68,7 +68,7 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 		MethodConstant c = new MethodConstant(PromptoDateTime.class, "plus", 
 				PromptoPeriod.class, PromptoDateTime.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
-		return new ResultInfo(PromptoDateTime.class, true);
+		return new ResultInfo(PromptoDateTime.class);
 	}
 
 	@Override
@@ -88,12 +88,12 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 			MethodConstant c = new MethodConstant(PromptoDateTime.class, "minus", 
 					PromptoDateTime.class, PromptoPeriod.class);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, c);
-			return new ResultInfo(PromptoPeriod.class, true);
+			return new ResultInfo(PromptoPeriod.class);
 		} else if(right.getType()==PromptoPeriod.class) {
 			MethodConstant c = new MethodConstant(PromptoDateTime.class, "minus", 
 					PromptoPeriod.class, PromptoDateTime.class);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, c);
-			return new ResultInfo(PromptoDateTime.class, true);
+			return new ResultInfo(PromptoDateTime.class);
 		} else
 			throw new SyntaxError("Illegal: DateTime - " + value.getClass().getSimpleName());
 	}
@@ -176,7 +176,7 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 			method.addInstruction(Opcode.ISUB);
 		}
 		if(flags.toNative())
-			return new ResultInfo(boolean.class, false);
+			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
 	}

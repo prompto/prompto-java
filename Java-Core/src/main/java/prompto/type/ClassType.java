@@ -18,7 +18,7 @@ public class ClassType extends BaseType {
 	}
 
 	@Override
-	public Type toJavaType() {
+	public Type getJavaType() {
 		return Class.class;
 	}
 

@@ -18,7 +18,7 @@ public class BlobType extends BinaryType {
 	}
 
 	@Override
-	public Type toJavaType() {
+	public Type getJavaType() {
 		return Blob.class;
 	}
 	

@@ -1,6 +1,7 @@
 package prompto.compiler;
 
 import java.io.File;
+import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -76,40 +77,42 @@ public class PromptoClassLoader extends URLClassLoader {
 	}
 
 	private void createCategoryClass(String fullName) throws ClassNotFoundException {
-		String interfaceFullName = CompilerUtils.interfaceFullNameFrom(fullName);
-		String concreteFullName = CompilerUtils.concreteFullNameFrom(fullName);
+		Type interfaceType = CompilerUtils.interfaceTypeFrom(fullName);
+		Type concreteType = CompilerUtils.concreteTypeFrom(fullName);
 		String simpleName = CompilerUtils.simpleNameFrom(fullName);
 		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, new Identifier(simpleName));
 		if(decl==null)
 			throw new ClassNotFoundException(simpleName);
 		else
-			createCategoryClass(interfaceFullName, concreteFullName, decl);
+			createCategoryClass(interfaceType, concreteType, decl);
 	}
 
-	private void createCategoryClass(String interfaceFullName, String concreteFullName, CategoryDeclaration decl) throws ClassNotFoundException {
+	private void createCategoryClass(Type interfaceType, Type concreteType, CategoryDeclaration decl) throws ClassNotFoundException {
 		try {
 			Compiler compiler = new Compiler(getClassDir()); // where to store .class
-			compiler.compileCategory(context, decl, interfaceFullName, concreteFullName);
+			compiler.compileCategory(context, decl, interfaceType, concreteType);
 		} catch(Exception e) {
-			throw new ClassNotFoundException(interfaceFullName, e);
+			throw new ClassNotFoundException(concreteType.getTypeName(), e);
 		}
 	}
 
 	private void createGlobalMethodsClass(String fullName) throws ClassNotFoundException {
+		Type abstractType = CompilerUtils.abstractTypeFrom(fullName);
 		String simpleName = fullName.substring(fullName.indexOf(".µ.") + 3);
-		MethodDeclarationMap methods = context.getRegisteredDeclaration(MethodDeclarationMap.class, new Identifier(simpleName), true);
+		MethodDeclarationMap methods = context.getRegisteredDeclaration(MethodDeclarationMap.class, 
+				new Identifier(simpleName), true);
 		if(methods==null)
 			throw new ClassNotFoundException(simpleName);
 		else
-			createGlobalMethodsClass(fullName, methods);
+			createGlobalMethodsClass(abstractType, methods);
 	}
 
-	private void createGlobalMethodsClass(String fullName, MethodDeclarationMap methods) throws ClassNotFoundException {
+	private void createGlobalMethodsClass(Type abstractType, MethodDeclarationMap methods) throws ClassNotFoundException {
 		try {
 			Compiler compiler = new Compiler(getClassDir()); // where to store .class
-			compiler.compileGlobalMethods(context, methods, fullName);
+			compiler.compileGlobalMethods(context, methods, abstractType);
 		} catch(Exception e) {
-			throw new ClassNotFoundException(fullName, e);
+			throw new ClassNotFoundException(abstractType.getTypeName(), e);
 		}
 	}
 }

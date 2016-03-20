@@ -103,6 +103,10 @@ public interface IVerifierEntry {
 			return entryFactory.newStackLocal(this, name, className);
 		}
 
+		public static Type fromDescriptor(Descriptor descriptor) {
+			return fromDescriptor(descriptor.toString());
+		}
+
 		public static Type fromDescriptor(String desc) {
 			switch(desc.charAt(0)) {
 			case 'Z': // boolean
@@ -126,6 +130,7 @@ public interface IVerifierEntry {
 				throw new UnsupportedOperationException(desc);
 			}
 		}
+
 
 
 	}

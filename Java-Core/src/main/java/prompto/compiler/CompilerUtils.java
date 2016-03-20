@@ -92,13 +92,10 @@ public abstract class CompilerUtils {
 		return sb.toString();
 	}
 	
-	public static String createProto(Context context, ArgumentList arguments, IType returnType) {
-		StringBuilder sb = new StringBuilder();
-		sb.append('(');
-		arguments.forEach((arg)->sb.append(arg.getJavaDescriptor(context)));
-		sb.append(')');
-		sb.append(returnType.getJavaDescriptor(context));
-		return sb.toString();
+	public static Descriptor.Method createMethodDescriptor(Context context, ArgumentList arguments, IType returnType) {
+		List<Type> argTypes = new ArrayList<>();
+		arguments.forEach((arg)->argTypes.add(arg.getJavaType(context)));
+		return new Descriptor.Method(argTypes.toArray(new Type[argTypes.size()]), returnType.getJavaType());
 	}
 
 	public static String createProto(Type[] parameterTypes, Type returnType) {
@@ -117,28 +114,30 @@ public abstract class CompilerUtils {
 	static final char CATEGORY_CHAR = 'χ';
 	static final String INNER_SEPARATOR = "$%";
 
-	public static String getGlobalMethodClassName(Identifier id, boolean useSlash) {
-		return CompilerUtils.getGlobalMethodClassName(id.getName(), useSlash);
+	public static Type getGlobalMethodType(Identifier id) {
+		return CompilerUtils.getGlobalMethodType(id.getName());
 	}
 
-	public static String getGlobalMethodClassName(String name, boolean useSlash) {
-		return useSlash ?
-				"" + PROMPTO_CHAR + '/' + METHOD_CHAR + '/' + name
-				: "" + PROMPTO_CHAR + '.' + METHOD_CHAR + '.' + name;
+	public static Type getGlobalMethodType(String name) {
+		return new PromptoType("" + PROMPTO_CHAR + '.' + METHOD_CHAR + '.' + name);
 	}
 	
-	public static String concreteFullNameFrom(String fullName) {
+	public static Type concreteTypeFrom(String fullName) {
 		int idx = fullName.indexOf('$');
 		if(idx<0)
 			fullName += INNER_SEPARATOR + simpleNameFrom(fullName);
-		return fullName;
+		return new PromptoType(fullName);
 	}
 
-	public static String interfaceFullNameFrom(String fullName) {
+	public static Type abstractTypeFrom(String fullName) {
+		return interfaceTypeFrom(fullName);
+	}
+	
+	public static Type interfaceTypeFrom(String fullName) {
 		int idx = fullName.indexOf('$');
 		if(idx>=0)
 			fullName = fullName.substring(0, idx);
-		return fullName;
+		return new PromptoType(fullName);
 	}
 
 	public static String simpleNameFrom(String fullName) {
@@ -149,31 +148,29 @@ public abstract class CompilerUtils {
 		return simpleName;
 	}
 	
-	public static String getCategoryInterfaceClassName(Identifier id, boolean useSlash) {
-		return getCategoryInterfaceClassName(id.getName(), useSlash);
+	public static Type getCategoryInterfaceType(Identifier id) {
+		return getCategoryInterfaceType(id.getName());
 	}
 
-	public static String getCategoryConcreteClassName(Identifier id, boolean useSlash) {
-		return getCategoryConcreteClassName(id.getName(), useSlash);
+	public static Type getCategoryConcreteType(Identifier id) {
+		return getCategoryConcreteType(id.getName());
 	}
 
-	private static String getCategoryConcreteClassName(String name, boolean useSlash) {
-		return getCategoryInterfaceClassName(name, useSlash) + INNER_SEPARATOR + name;
+	private static Type getCategoryConcreteType(String name) {
+		return new PromptoType("" + PROMPTO_CHAR + '.' + CATEGORY_CHAR + '.' + name + INNER_SEPARATOR + name);
 	}
 
-	public static String getCategoryInterfaceClassName(String name, boolean useSlash) {
-		return useSlash ?
-				"" + PROMPTO_CHAR + '/' + CATEGORY_CHAR + '/' + name
-				: "" + PROMPTO_CHAR + '.' + CATEGORY_CHAR + '.' + name;
+	public static Type getCategoryInterfaceType(String name) {
+		return new PromptoType("" + PROMPTO_CHAR + '.' + CATEGORY_CHAR + '.' + name);
 	}
-
+	
 	public static ResultInfo booleanToBoolean(MethodInfo method) {
 		IOperand oper = new MethodConstant(
 				Boolean.class, 
 				"valueOf",
 				boolean.class, Boolean.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
-		return new ResultInfo(Boolean.class, true);
+		return new ResultInfo(Boolean.class);
 	}
 	
 	public static ResultInfo BooleanToboolean(MethodInfo method) {
@@ -182,7 +179,7 @@ public abstract class CompilerUtils {
 				"booleanValue",
 				boolean.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return new ResultInfo(boolean.class, true);
+		return new ResultInfo(boolean.class);
 	}
 
 	public static ResultInfo ByteToLong(MethodInfo method) {
@@ -205,7 +202,7 @@ public abstract class CompilerUtils {
 
 	public static ResultInfo intTolong(MethodInfo method) {
 		method.addInstruction(Opcode.I2L);
-		return new ResultInfo(long.class, true);
+		return new ResultInfo(long.class);
 	}
 
 	public static ResultInfo intToLong(MethodInfo method) {
@@ -215,7 +212,7 @@ public abstract class CompilerUtils {
 
 	public static ResultInfo longToint(MethodInfo method) {
 		method.addInstruction(Opcode.L2I);
-		return new ResultInfo(int.class, true);
+		return new ResultInfo(int.class);
 	}
 
 	public static ResultInfo IntegerToLong(MethodInfo method) {
@@ -233,17 +230,17 @@ public abstract class CompilerUtils {
 				"valueOf",
 				long.class, Long.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
-		return new ResultInfo(Long.class, true);
+		return new ResultInfo(Long.class);
 	}
 	
 	public static ResultInfo longTodouble(MethodInfo method) {
 		method.addInstruction(Opcode.L2D);
-		return new ResultInfo(double.class, false);
+		return new ResultInfo(double.class);
 	}
 
 	public static ResultInfo doubleTolong(MethodInfo method) {
 		method.addInstruction(Opcode.D2L);
-		return new ResultInfo(long.class, false);
+		return new ResultInfo(long.class);
 	}
 
 	public static ResultInfo floatToDouble(MethodInfo method) {
@@ -266,7 +263,7 @@ public abstract class CompilerUtils {
 				"doubleValue",
 				double.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return new ResultInfo(double.class, true);
+		return new ResultInfo(double.class);
 	}
 
 	public static ResultInfo LongTolong(MethodInfo method) {
@@ -275,7 +272,7 @@ public abstract class CompilerUtils {
 				"longValue",
 				long.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return new ResultInfo(long.class, true);
+		return new ResultInfo(long.class);
 	}
 
 	public static ResultInfo LongToint(MethodInfo method) {
@@ -284,7 +281,7 @@ public abstract class CompilerUtils {
 				"intValue",
 				int.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return new ResultInfo(int.class, true);
+		return new ResultInfo(int.class);
 	}
 
 	public static ResultInfo LongToDouble(MethodInfo method) {
@@ -298,7 +295,7 @@ public abstract class CompilerUtils {
 				"doubleValue",
 				double.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return new ResultInfo(double.class, true);
+		return new ResultInfo(double.class);
 	}
 
 	public static ResultInfo DoubleTolong(MethodInfo method) {
@@ -307,7 +304,7 @@ public abstract class CompilerUtils {
 				"longValue",
 				long.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return new ResultInfo(long.class, true);
+		return new ResultInfo(long.class);
 	}
 
 	public static ResultInfo longToDouble(MethodInfo method) {
@@ -321,7 +318,7 @@ public abstract class CompilerUtils {
 				"valueOf",
 				double.class, Double.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
-		return new ResultInfo(Double.class, true);
+		return new ResultInfo(Double.class);
 	}
 
 	public static void numberToNative(MethodInfo method, ResultInfo info, boolean toDecimal) {
@@ -368,7 +365,7 @@ public abstract class CompilerUtils {
 				"valueOf",
 				char.class, Character.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
-		return new ResultInfo(Character.class, true);
+		return new ResultInfo(Character.class);
 	}
 	
 	public static ResultInfo charToString(MethodInfo method) {
@@ -377,7 +374,7 @@ public abstract class CompilerUtils {
 				"toString",
 				char.class, String.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
-		return new ResultInfo(String.class, true);
+		return new ResultInfo(String.class);
 	}
 
 	public static ResultInfo CharacterTochar(MethodInfo method) {
@@ -386,7 +383,7 @@ public abstract class CompilerUtils {
 				"charValue",
 				char.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return new ResultInfo(char.class, true);
+		return new ResultInfo(char.class);
 	}
 	
 	public static ResultInfo CharacterToString(MethodInfo method) {
@@ -395,20 +392,21 @@ public abstract class CompilerUtils {
 				"toString",
 				String.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return new ResultInfo(String.class, true);
+		return new ResultInfo(String.class);
 	}
 
 	public static ResultInfo newRawInstance(MethodInfo method, Type klass) {
 		IOperand c = new ClassConstant(klass);
 		method.addInstruction(Opcode.NEW, c);
 		method.addInstruction(Opcode.DUP); // need to keep a reference on top of stack
-		return new ResultInfo(klass, true);
+		return new ResultInfo(klass);
 	}
 	
 	public static ResultInfo callConstructor(MethodInfo method, Type klass, Type ... params) {
-		IOperand c = new MethodConstant(makeClassName(klass), "<init>", createProto(params, void.class));
+		Descriptor.Method desc = new Descriptor.Method(params, void.class);
+		IOperand c = new MethodConstant(klass, "<init>", desc);
 		method.addInstruction(Opcode.INVOKESPECIAL, c);
-		return new ResultInfo(klass, true);
+		return new ResultInfo(klass);
 	}
 	
 	public static ResultInfo newInstance(MethodInfo method, Type klass) {
