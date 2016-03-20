@@ -1,5 +1,10 @@
 package prompto.expression;
 
+import prompto.compiler.ClassConstant;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
@@ -28,6 +33,14 @@ public class CastExpression implements IExpression {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		return expression.interpret(context);
+	}
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		expression.compile(context, method, flags);
+		ClassConstant c = new ClassConstant(type.getJavaType());
+		method.addInstruction(Opcode.CHECKCAST, c);
+		return new ResultInfo(type.getJavaType());
 	}
 
 	@Override

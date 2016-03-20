@@ -164,6 +164,14 @@ public abstract class CompilerUtils {
 		return new PromptoType("" + PROMPTO_CHAR + '.' + CATEGORY_CHAR + '.' + name);
 	}
 	
+	public static ResultInfo reverseBoolean(MethodInfo method) {
+		// perform 1-0
+		method.addInstruction(Opcode.ICONST_1);
+		method.addInstruction(Opcode.SWAP);
+		method.addInstruction(Opcode.ISUB);
+		return new ResultInfo(boolean.class);
+	}
+
 	public static ResultInfo booleanToBoolean(MethodInfo method) {
 		IOperand oper = new MethodConstant(
 				Boolean.class, 
@@ -430,6 +438,8 @@ public abstract class CompilerUtils {
 	public static String getterName(String name) {
 		return "get" + name.substring(0,1).toUpperCase() + name.substring(1);
 	}
+
+
 
 
 

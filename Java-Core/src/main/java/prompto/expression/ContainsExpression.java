@@ -79,10 +79,7 @@ public class ContainsExpression implements IExpression, IAssertion {
     private ResultInfo compileNot(Context context, MethodInfo method, Flags flags, ResultInfo info) {
 		if(Boolean.class==info.getType())
 			CompilerUtils.BooleanToboolean(method);
-		// perform 1-0
-		method.addInstruction(Opcode.ICONST_1);
-		method.addInstruction(Opcode.SWAP);
-		method.addInstruction(Opcode.ISUB);
+		CompilerUtils.reverseBoolean(method);
 		if(flags.toNative())
 			return new ResultInfo(boolean.class);
 		else

@@ -170,6 +170,7 @@ public class IfStatement extends BaseStatement {
 		compileCondition(context, method, flags, element);
 		startListeningForNextBranch(method, element, branch);
 		compileBranch(method, element, branch);
+		context = element.downCastForCheck(context);
 		ResultInfo info = compileStatements(context, method, flags, element, branch);
 		startListeningForFinalThenGoto(context, method, flags, element, branch, info);
 	}

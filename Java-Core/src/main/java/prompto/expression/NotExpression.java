@@ -3,7 +3,6 @@ package prompto.expression;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
-import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
@@ -68,10 +67,7 @@ public class NotExpression implements IUnaryExpression, IAssertion {
 		ResultInfo info = expression.compile(context, method, flags.withNative(true));
 		if(Boolean.class==info.getType())
 			CompilerUtils.BooleanToboolean(method);
-		// perform 1-0
-		method.addInstruction(Opcode.ICONST_1);
-		method.addInstruction(Opcode.SWAP);
-		method.addInstruction(Opcode.ISUB);
+		CompilerUtils.reverseBoolean(method);
 		if(flags.toNative())
 			return new ResultInfo(boolean.class);
 		else

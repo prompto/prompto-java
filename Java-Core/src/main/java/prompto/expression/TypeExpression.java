@@ -1,5 +1,12 @@
 package prompto.expression;
 
+import prompto.compiler.ClassConstant;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.StringConstant;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
@@ -29,7 +36,7 @@ public class TypeExpression implements IExpression {
 	
 	@Override
 	public IType check(Context context) throws SyntaxError {
-		return this.type;
+		return type;
 	}
 	
 	@Override
@@ -37,6 +44,16 @@ public class TypeExpression implements IExpression {
 		return new TypeValue(type);
 	}
 
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		StringConstant s = new StringConstant(type.getJavaType().getTypeName());
+		method.addInstruction(Opcode.LDC_W, s);
+		ClassConstant c = new ClassConstant(Class.class);
+		MethodConstant m = new MethodConstant(c, "forName", String.class, Class.class);
+		method.addInstruction(Opcode.INVOKESTATIC, m);
+		return new ResultInfo(Class.class);
+	}
+	
 	public IValue getMember(Context context, Identifier name) throws PromptoError {
 		return type.getMember(context, name);
 	}

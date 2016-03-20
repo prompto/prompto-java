@@ -6,6 +6,7 @@ import java.util.Map;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.IOperatorFunction;
+import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
@@ -269,11 +270,16 @@ public class EqualsExpression implements IExpression, IAssertion {
 	}
 	
 	private ResultInfo compileIsA(Context context, MethodInfo method, Flags flags) throws SyntaxError {
-		ResultInfo rright = right.compile(context, method, flags.withNative(false));
-		if(!rright.isStatic())
-			throw new SyntaxError("Expecting a type");
-		ResultInfo rleft = left.compile(context, method, flags.withNative(false));
-		throw new UnsupportedOperationException();
+		right.compile(context, method, flags.withNative(false));
+		left.compile(context, method, flags.withNative(false));
+		MethodConstant m = new MethodConstant(Class.class, "isInstance", Object.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+		if(flags.isReverse())
+			CompilerUtils.reverseBoolean(method);
+		if(flags.toNative())
+			return new ResultInfo(boolean.class);
+		else
+			return CompilerUtils.booleanToBoolean(method);
 	}
 
 	public ResultInfo compileIs(Context context, MethodInfo method, Flags flags) throws SyntaxError {

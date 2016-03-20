@@ -123,12 +123,8 @@ public class Period extends BaseValue implements IMultiplyable {
 				"equals",
 				Object.class, boolean.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		if(flags.isReverse()) {
-			// perform 1-0
-			method.addInstruction(Opcode.ICONST_1);
-			method.addInstruction(Opcode.SWAP);
-			method.addInstruction(Opcode.ISUB);
-		}
+		if(flags.isReverse())
+			CompilerUtils.reverseBoolean(method);
 		if(flags.toNative())
 			return new ResultInfo(boolean.class);
 		else
