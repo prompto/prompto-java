@@ -109,30 +109,34 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 		if(named==null)
 			return null;
 		StackLocal local = method.getRegisteredLocal(name);
-		ClassConstant c = local instanceof StackLocal.ObjectLocal ? 
+		ClassConstant klass = local instanceof StackLocal.ObjectLocal ? 
 				((StackLocal.ObjectLocal)local).getClassName() 
 				: new ClassConstant(Object.class);
+		ClassConstant downcastTo = local instanceof StackLocal.ObjectLocal ? 
+				((StackLocal.ObjectLocal)local).getDowncastTo() : null; 
 		switch(local.getIndex()) {
 		case 0:
-			method.addInstruction(Opcode.ALOAD_0, c);
+			method.addInstruction(Opcode.ALOAD_0, klass);
 			break;
 		case 1:
-			method.addInstruction(Opcode.ALOAD_1, c);
+			method.addInstruction(Opcode.ALOAD_1, klass);
 			break;
 		case 2:
-			method.addInstruction(Opcode.ALOAD_2, c);
+			method.addInstruction(Opcode.ALOAD_2, klass);
 			break;
 		case 3:
-			method.addInstruction(Opcode.ALOAD_3, c);
+			method.addInstruction(Opcode.ALOAD_3, klass);
 			break;
 		default:
 			// TODO: support ALOAD_W
-			method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)local.getIndex()), c);
+			method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)local.getIndex()), klass);
 			break;
 		}
-		// TODO return useful class so we can get members ?
-		// not sure we support this...
-		return new ResultInfo(Object.class); 
+		if(downcastTo!=null) {
+			method.addInstruction(Opcode.CHECKCAST, downcastTo);
+			klass = downcastTo;
+		}
+		return new ResultInfo(klass.getType()); 
 	}
 
 	private ResultInfo compile_child(Context context, MethodInfo method) throws SyntaxError {

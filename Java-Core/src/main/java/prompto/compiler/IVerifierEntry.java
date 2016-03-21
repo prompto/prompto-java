@@ -8,7 +8,7 @@ public interface IVerifierEntry {
 	void writeTo(ByteWriter writer);
 
 	public static enum Type {
-		ITEM_Top(NativeFactory.instance),
+		ITEM_Top(TopFactory.instance),
 		ITEM_Integer(NativeFactory.instance),
 		ITEM_Float(NativeFactory.instance),
 		ITEM_Double(2, NativeFactory.instance),
@@ -37,7 +37,22 @@ public interface IVerifierEntry {
 				return new StackLocal.NativeLocal(type, name);
 			}
 		};
-	
+
+		static class TopFactory implements IFactory {
+			
+			static TopFactory instance = new TopFactory();
+			
+			@Override
+			public StackEntry newStackEntry(Type type, ClassConstant className) {
+				return new StackEntry.TopEntry(type, className);
+			}
+			
+			@Override
+			public StackLocal newStackLocal(Type type, String name, ClassConstant className) {
+				return new StackLocal.TopLocal(name, className);
+			}
+		};
+
 		static class ObjectFactory implements IFactory {
 			
 			static ObjectFactory instance = new ObjectFactory();

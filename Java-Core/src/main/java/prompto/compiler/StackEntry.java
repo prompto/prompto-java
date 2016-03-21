@@ -98,5 +98,26 @@ public abstract class StackEntry implements IVerifierEntry {
 		}
 		
 	}
+	
+	static class TopEntry extends NativeEntry {
+
+		ClassConstant className;
+		
+		public TopEntry(Type type, ClassConstant className) {
+			super(type);
+			this.className = className;
+		}
+		
+		public ClassConstant getClassName() {
+			return className;
+		}
+		
+		@Override
+		public String toString() {
+			return className==null ? super.toString() : className.toString();
+		}
+
+		
+	}
 
 }

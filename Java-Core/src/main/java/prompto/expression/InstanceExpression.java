@@ -3,6 +3,7 @@ package prompto.expression;
 import prompto.compiler.ByteOperand;
 import prompto.compiler.ClassConstant;
 import prompto.compiler.Flags;
+import prompto.compiler.IVerifierEntry.Type;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
@@ -115,28 +116,34 @@ public class InstanceExpression implements IExpression {
 		StackLocal local = method.getRegisteredLocal(getName());
 		if(local==null)
 			return null;
-		ClassConstant c = local instanceof StackLocal.ObjectLocal ? 
-				((StackLocal.ObjectLocal)local).getClassName() : 
-					new ClassConstant(Object.class);   
+		ClassConstant klass = new ClassConstant(Object.class);
+		ClassConstant downcastTo = null;
+		if(local instanceof StackLocal.ObjectLocal) {
+			klass = ((StackLocal.ObjectLocal)local).getClassName();
+			downcastTo = ((StackLocal.ObjectLocal)local).getDowncastTo();
+		}
 		switch(local.getIndex()) {
 			case 0:
-				method.addInstruction(Opcode.ALOAD_0, c);
+				method.addInstruction(Opcode.ALOAD_0, klass);
 				break;
 			case 1:
-				method.addInstruction(Opcode.ALOAD_1, c);
+				method.addInstruction(Opcode.ALOAD_1, klass);
 				break;
 			case 2:
-				method.addInstruction(Opcode.ALOAD_2, c);
+				method.addInstruction(Opcode.ALOAD_2, klass);
 				break;
 			case 3:
-				method.addInstruction(Opcode.ALOAD_3, c);
+				method.addInstruction(Opcode.ALOAD_3, klass);
 				break;
 			default:
 				// TODO: support ALOAD_W
-				method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)local.getIndex()), c);
+				method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)local.getIndex()), klass);
 		}
-		IType type = check(context);
-		return new ResultInfo(type.getJavaType());
+		if(downcastTo!=null) {
+			method.addInstruction(Opcode.CHECKCAST, downcastTo);
+			klass = downcastTo;
+		}
+		return new ResultInfo(klass.getType());
 	}
 
 }

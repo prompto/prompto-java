@@ -155,7 +155,7 @@ public class IfStatement extends BaseStatement {
 		IfElementBranch branch = new IfElementBranch();
 		branch.neutralState = method.captureStackState();
 		for(IfElement element : elements)
-			 compileElement(context, method, flags, element, branch);
+			 compileIfElement(context, method, flags, element, branch);
 		method.restoreStackState(branch.neutralState);
 		method.placeLabel(branch.neutralState);
 		stopListeningForThisBranch(method, branch);
@@ -164,18 +164,33 @@ public class IfStatement extends BaseStatement {
 	}
 
 	
-	private void compileElement(Context context, MethodInfo method, Flags flags, IfElement element, IfElementBranch branch) throws SyntaxError {
+	private void compileIfElement(Context context, MethodInfo method, Flags flags, IfElement element, IfElementBranch branch) throws SyntaxError {
 		restoreNeutralStackState(method, branch);
 		stopListeningForThisBranch(method, branch);
 		compileCondition(context, method, flags, element);
 		startListeningForNextBranch(method, element, branch);
 		compileBranch(method, element, branch);
-		context = element.downCastForCheck(context);
+		context = prepareAutodowncast(context, method, element);
 		ResultInfo info = compileStatements(context, method, flags, element, branch);
 		startListeningForFinalThenGoto(context, method, flags, element, branch, info);
+		cancelAutodowcast(context, method, element);
 	}
 
 	
+	private void cancelAutodowcast(Context context, MethodInfo method, IfElement element) {
+		if(element.condition instanceof EqualsExpression)
+			((EqualsExpression)element.condition).cancelAutodowcast(context, method);
+	}
+
+
+	private Context prepareAutodowncast(Context context, MethodInfo method, IfElement element) throws SyntaxError {
+		if(element.condition instanceof EqualsExpression)
+			return ((EqualsExpression)element.condition).prepareAutodowncast(context, method);
+		else
+			return context;
+	}
+
+
 	private void compileBranch(MethodInfo method, IfElement element, IfElementBranch branch) {
 		if(element.condition!=null) {
 			method.addInstruction(Opcode.IFEQ, branch.branchOffsetListener);
@@ -308,11 +323,11 @@ public class IfStatement extends BaseStatement {
 			IType cond = condition.check(context);
 			if(cond!=BooleanType.instance())
 				throw new SyntaxError("Expected a boolean condition!");
-			context = downCastForCheck(context);
+			context = downCastContext(context);
 			return statements.check(context, null);
 		}
 
-		private Context downCastForCheck(Context context) throws SyntaxError {
+		private Context downCastContext(Context context) throws SyntaxError {
 			Context parent = context;
 			if(condition instanceof EqualsExpression)
 				context = ((EqualsExpression)condition).downCastForCheck(context);
@@ -322,17 +337,10 @@ public class IfStatement extends BaseStatement {
 
 		@Override
 		public IValue interpret(Context context) throws PromptoError {
-			context = downCastForInterpret(context);
+			context = downCastContext(context);
 			return statements.interpret(context);
 		}
 
-		private Context downCastForInterpret(Context context) throws PromptoError {
-			Context parent = context;
-			if(condition instanceof EqualsExpression)
-				context = ((EqualsExpression)condition).downCastForInterpret(context);
-			context = parent!=context ? context : context.newChildContext();
-			return context;
-		}
 	}
 
 }

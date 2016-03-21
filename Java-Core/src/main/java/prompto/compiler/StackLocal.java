@@ -33,6 +33,7 @@ public abstract class StackLocal implements IVerifierEntry {
 	public static class ObjectLocal extends StackLocal {
 
 		ClassConstant className;
+		ClassConstant downcastTo;
 		
 		public ObjectLocal(Type type, String name, ClassConstant className) {
 			super(type, name);
@@ -43,6 +44,18 @@ public abstract class StackLocal implements IVerifierEntry {
 			return className;
 		}
 		
+		public void markForAutodowncast(ClassConstant downcastTo) {
+			this.downcastTo = downcastTo;
+		}
+
+		public void unmarkForAutodowncast() {
+			this.downcastTo = null;
+		}
+
+		public ClassConstant getDowncastTo() {
+			return downcastTo;
+		}
+
 		@Override
 		public String toString() {
 			return className.toString();
@@ -76,12 +89,31 @@ public abstract class StackLocal implements IVerifierEntry {
 			type.writeTo(writer);
 			writer.writeU2(className.getIndexInConstantPool());
 		}
+
+
 	}
 	
 	static class ThisLocal extends ObjectLocal {
 
 		public ThisLocal(ClassConstant className) {
 			super(Type.ITEM_UninitializedThis, "this", className);
+		}
+		
+		@Override
+		public int length() {
+			return 1;
+		}
+		
+		@Override
+		public void writeTo(ByteWriter writer) {
+			type.writeTo(writer);
+		}
+	}
+	
+	static class TopLocal extends ObjectLocal {
+
+		public TopLocal(String name, ClassConstant className) {
+			super(Type.ITEM_Top, name, className);
 		}
 		
 		@Override

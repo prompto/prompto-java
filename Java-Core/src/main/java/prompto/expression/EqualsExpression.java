@@ -3,6 +3,7 @@ package prompto.expression;
 import java.util.HashMap;
 import java.util.Map;
 
+import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.IOperatorFunction;
@@ -11,6 +12,7 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.ShortOperand;
+import prompto.compiler.StackLocal;
 import prompto.compiler.StackState;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
@@ -170,6 +172,30 @@ public class EqualsExpression implements IExpression, IAssertion {
 		return context;
 	}
 	
+	public Context prepareAutodowncast(Context context, MethodInfo method) throws SyntaxError {
+		if(operator==EqOp.IS_A) {
+			Identifier name = readLeftName();
+			if(name!=null) {
+				IType type = ((TypeExpression)right).getType();
+				ClassConstant c = new ClassConstant(type.getJavaType());
+				StackLocal local = method.getRegisteredLocal(name.getName());
+				((StackLocal.ObjectLocal)local).markForAutodowncast(c);
+				return downCastForCheck(context);
+			}
+		}
+		return context;
+	}
+
+	public void cancelAutodowcast(Context context, MethodInfo method) {
+		if(operator==EqOp.IS_A) {
+			Identifier name = readLeftName();
+			if(name!=null) {
+				StackLocal local = method.getRegisteredLocal(name.getName());
+				((StackLocal.ObjectLocal)local).unmarkForAutodowncast();
+			}
+		}
+	}
+	
 	private Identifier readLeftName() {
 		if(left instanceof InstanceExpression)
 			return ((InstanceExpression)left).getId();
@@ -310,4 +336,6 @@ public class EqualsExpression implements IExpression, IAssertion {
 		}
 		return tester.compile(context, method, flags, lval, right);
 	}
+
+
 }

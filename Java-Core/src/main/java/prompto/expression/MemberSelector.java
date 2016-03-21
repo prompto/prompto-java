@@ -181,7 +181,8 @@ public class MemberSelector extends SelectorExpression {
 		else {
 			String getterName = CompilerUtils.getterName(getName());
 			if(isCompilingGetter(context, method, parent, getterName)) {
-				FieldConstant f = new FieldConstant(parent.getType(), id.getName(), resultType);
+				Type classType = CompilerUtils.concreteTypeFrom(parent.getType().getTypeName());
+				FieldConstant f = new FieldConstant(classType, id.getName(), resultType);
 				method.addInstruction(Opcode.GETFIELD, f);
 			} else if(PromptoDict.Entry.class==parent.getType()) {
 				IOperand oper = new MethodConstant(parent.getType(), getterName, Object.class);
