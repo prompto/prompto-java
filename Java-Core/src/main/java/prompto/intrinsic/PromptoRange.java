@@ -21,7 +21,11 @@ public abstract class PromptoRange<T extends Object> implements IterableWithLeng
 		return high;
 	}
 	
-	public abstract long getLength();
+	public java.lang.Long getLength() {
+		return getNativeLength();
+	}
+	
+	public abstract long getNativeLength();
 	public abstract T getItem(long item);
 	
 	@Override
@@ -42,7 +46,7 @@ public abstract class PromptoRange<T extends Object> implements IterableWithLeng
 		if(last>=0)
 			return last;
 		else
-			return getLength() + 1 + last;
+			return getNativeLength() + 1 + last;
 	}
 	
 	public abstract boolean contains(Object item);
@@ -68,7 +72,7 @@ public abstract class PromptoRange<T extends Object> implements IterableWithLeng
 		return new IteratorWithLength<T>() {
 			
 			long index = 0;
-			long length = PromptoRange.this.getLength();
+			long length = PromptoRange.this.getNativeLength();
 			
 			@Override public long getLength() { return length; }
 			@Override public boolean hasNext() { return index<length; }
@@ -98,7 +102,7 @@ public abstract class PromptoRange<T extends Object> implements IterableWithLeng
 		}
 		
 		@Override
-		public long getLength() {
+		public long getNativeLength() {
 			return 1L + high.charValue() - low.charValue();
 		}
 		
@@ -132,7 +136,7 @@ public abstract class PromptoRange<T extends Object> implements IterableWithLeng
 		}
 		
 		@Override
-		public long getLength() {
+		public long getNativeLength() {
 			return 1L + high.longValue() - low.longValue();
 		}
 
@@ -167,7 +171,7 @@ public abstract class PromptoRange<T extends Object> implements IterableWithLeng
 		}
 
 		@Override
-		public long getLength() {
+		public long getNativeLength() {
 			long h = high.toJavaTime();
 			long l = low.toJavaTime();
 			return 1 + ( (h-l)/(24*60*60*1000));
@@ -203,7 +207,7 @@ public abstract class PromptoRange<T extends Object> implements IterableWithLeng
 		}
 		
 		@Override
-		public long getLength() {
+		public long getNativeLength() {
 			return 1 + (high.getNativeMillisOfDay() - low.getNativeMillisOfDay())/1000;
 		}
 

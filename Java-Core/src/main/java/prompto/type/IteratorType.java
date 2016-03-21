@@ -4,8 +4,8 @@ import java.lang.reflect.Type;
 
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.IteratorWithLength;
 import prompto.runtime.Context;
-import prompto.value.IteratorValue;
 
 public class IteratorType extends IterableType {
 
@@ -15,7 +15,7 @@ public class IteratorType extends IterableType {
 
 	@Override
 	public Type getJavaType() {
-		return IteratorValue.class;
+		return IteratorWithLength.class;
 	}
 	
 	@Override

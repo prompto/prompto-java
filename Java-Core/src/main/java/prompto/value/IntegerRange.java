@@ -21,7 +21,7 @@ public class IntegerRange extends RangeBase<Integer> {
 		}
 		
 		@Override
-		public long getLength() {
+		public long getNativeLength() {
 			return 1L + high.longValue() - low.longValue();
 		}
 			

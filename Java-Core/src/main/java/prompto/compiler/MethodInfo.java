@@ -13,10 +13,12 @@ public class MethodInfo {
 	Utf8Constant proto;
 	List<IAttribute> attributes = new LinkedList<>();
 	CodeAttribute codeAttribute = null;
+	Descriptor descriptor;
 	
-	public MethodInfo(String name, String proto) {
+	public MethodInfo(String name, Descriptor descriptor) {
+		this.descriptor = descriptor;
 		this.name = new Utf8Constant(name);
-		this.proto = new Utf8Constant(proto);
+		this.proto = new Utf8Constant(descriptor.toString());
 	}
 
 	public Utf8Constant getName() {
@@ -98,6 +100,8 @@ public class MethodInfo {
 
 
 	void writeTo(ByteWriter writer) {
+		if(Instruction.getDumpLevel()>0)
+			System.err.println("Writing method: " + this.toString());
 		/*
 		method_info {
 		    u2             access_flags;

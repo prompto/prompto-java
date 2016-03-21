@@ -1,5 +1,7 @@
 package prompto.declaration;
 
+import java.util.List;
+
 import prompto.compiler.ClassFile;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -19,9 +21,7 @@ public interface IMethodDeclaration extends IDeclaration {
 	ArgumentList getArguments();
 	String getSignature(Dialect dialect);
 	boolean isEligibleAsMain();
-	default String getNameAsKey() {
-		return getName();
-	}
+	default String getNameAsKey() { return getName(); }
 	String getProto();
 	IValue interpret(Context context) throws PromptoError;
 	void check(ConcreteCategoryDeclaration declaration, Context context) throws SyntaxError;
@@ -32,6 +32,7 @@ public interface IMethodDeclaration extends IDeclaration {
 	ConcreteCategoryDeclaration getMemberOf();
 	void compile(Context context, ClassFile classFile);
 	void compilePrototype(Context context, ClassFile classFile);
+	default void compileInnerClasses(Context context, java.lang.reflect.Type parentClass, List<ClassFile> list) {}
 
 }
 

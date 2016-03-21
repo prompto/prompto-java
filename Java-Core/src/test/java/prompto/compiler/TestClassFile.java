@@ -73,10 +73,11 @@ public class TestClassFile {
 		String name = "π/χ/µ/print";
 		ClassFile c = new ClassFile(new PromptoType(name));
 		c.addModifier(Modifier.ABSTRACT);
-		MethodInfo m = new MethodInfo("printAbstract", "(Ljava/lang/String;)V");
+		Descriptor proto = new Descriptor.Method(String.class, void.class);
+		MethodInfo m = new MethodInfo("printAbstract", proto);
 		m.addModifier(Modifier.ABSTRACT);
 		c.addMethod(m);
-		m = new MethodInfo("printStatic", "(Ljava/lang/String;)V");
+		m = new MethodInfo("printStatic", proto);
 		m.addModifier(Modifier.STATIC);
 		m.registerLocal("value", IVerifierEntry.Type.ITEM_Object, new ClassConstant(String.class));
 		m.addInstruction(Opcode.RETURN);
@@ -100,7 +101,8 @@ public class TestClassFile {
 		String name = "π/χ/µ/print";
 		ClassFile c = new ClassFile(new PromptoType(name));
 		c.addModifier(Modifier.ABSTRACT);
-		MethodInfo m = new MethodInfo("print", "(Ljava/lang/String;)V");
+		Descriptor proto = new Descriptor.Method(String.class, void.class);
+		MethodInfo m = new MethodInfo("print", proto);
 		m.addModifier(Modifier.STATIC);
 		m.registerLocal("value", IVerifierEntry.Type.ITEM_Object, new ClassConstant(String.class));
 		m.addInstruction(Opcode.GETSTATIC, new FieldConstant(System.class, "out", PrintStream.class));
@@ -127,7 +129,8 @@ public class TestClassFile {
 		String name = "k1";
 		ClassFile c = new ClassFile(new PromptoType(name));
 		c.addModifier(Modifier.ABSTRACT);
-		MethodInfo m = new MethodInfo("m3", "()Ljava/lang/Long;");
+		Descriptor proto = new Descriptor.Method(Long.class);
+		MethodInfo m = new MethodInfo("m3", proto);
 		m.addModifier(Modifier.STATIC);
 		m.addInstruction(Opcode.LDC2_W, new LongConstant(9876543210L));
 		c.addMethod(m);
@@ -143,7 +146,8 @@ public class TestClassFile {
 		String name = "k1";
 		ClassFile c = new ClassFile(new PromptoType(name));
 		c.addModifier(Modifier.ABSTRACT);
-		MethodInfo m = new MethodInfo("m", "()V");
+		Descriptor proto = new Descriptor.Method(void.class);
+		MethodInfo m = new MethodInfo("m", proto);
 		m.addModifier(Modifier.STATIC);
 		m.addInstruction(Opcode.ICONST_1);
 		m.addInstruction(Opcode.ICONST_1);

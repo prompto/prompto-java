@@ -3,6 +3,7 @@ package prompto.declaration;
 import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.Descriptor;
 import prompto.compiler.FieldInfo;
 import prompto.compiler.Flags;
 import prompto.compiler.IVerifierEntry;
@@ -85,7 +86,7 @@ public class SetterMethodDeclaration extends ConcreteMethodDeclaration implement
 	public void compile(Context context, ClassFile classFile, Flags flags,
 			CategoryType type, FieldInfo field) throws SyntaxError {
 		String name = CompilerUtils.setterName(this.getName());
-		String proto = "(" + field.getDescriptor().getValue() + ")V";
+		Descriptor proto = new Descriptor.Method(field.getType(), void.class);
 		MethodInfo method = new MethodInfo(name, proto);
 		classFile.addMethod(method);
 		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());

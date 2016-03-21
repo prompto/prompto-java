@@ -439,11 +439,15 @@ public abstract class CompilerUtils {
 		return "get" + name.substring(0,1).toUpperCase() + name.substring(1);
 	}
 
-
-
-
-
-	
-
-
+	public static MethodInfo compileEmptyConstructor(ClassFile classFile) {
+		Descriptor proto = new Descriptor.Method(void.class);
+		MethodInfo method = new MethodInfo("<init>", proto);
+		classFile.addMethod(method);
+		method.registerLocal("this", IVerifierEntry.Type.ITEM_UninitializedThis, classFile.getThisClass());
+		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
+		MethodConstant m = new MethodConstant(classFile.getSuperClass(), "<init>", void.class);
+		method.addInstruction(Opcode.INVOKESPECIAL, m);
+		method.addInstruction(Opcode.RETURN);
+		return method;
+	}
 }

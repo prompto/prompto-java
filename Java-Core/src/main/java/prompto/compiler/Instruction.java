@@ -4,7 +4,7 @@ public class Instruction implements IInstruction {
 
 	static int DUMP_LEVEL = getDumpLevel();
 	
-	private static int getDumpLevel() {
+	public static int getDumpLevel() {
 		return 0;
 	}
 	

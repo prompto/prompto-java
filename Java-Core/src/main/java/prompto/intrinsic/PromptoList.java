@@ -3,6 +3,7 @@ package prompto.intrinsic;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 
 import prompto.value.IMultiplyable;
 
@@ -54,7 +55,12 @@ public class PromptoList<V> extends ArrayList<V> implements IMultiplyable {
 	
 	@Override
 	public IteratorWithLength<V> iterator() {
-		return new PromptoIterator<V>(super.iterator(), this.size());
+		return new IteratorWithLength<V>() {
+			Iterator<V> iter = PromptoList.super.iterator();
+			@Override public long getLength() { return PromptoList.this.size(); }
+			@Override public boolean hasNext() { return iter.hasNext(); }
+			@Override public V next() { return iter.next(); }
+		};
 	}
 		
 }

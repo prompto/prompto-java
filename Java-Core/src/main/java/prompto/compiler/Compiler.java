@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 import prompto.declaration.CategoryDeclaration;
 import prompto.runtime.Context;
@@ -24,19 +26,34 @@ public class Compiler {
 	}
 
 	void compileGlobalMethods(Context context, MethodDeclarationMap methods, Type type) throws Exception {
+		List<ClassFile> innerClassFiles = compileGlobalMethodsInnerClasses(context, type, methods);
+		innerClassFiles.forEach((file)->
+			writeClassFile(file, file.getThisClass().getType()));
 		ClassFile classFile = createGlobalMethodsClassFile(context, methods, type);
 		writeClassFile(classFile, type);
 	}
 
-	private void writeClassFile(ClassFile classFile, Type type) throws Exception {
-		String fullName = type.getTypeName().replace('.', '/');
-		File parent = new File(classDir, fullName.substring(0, fullName.lastIndexOf('/')+1));
-		if(!parent.exists() && !parent.mkdirs())
-			throw new IOException("Could not create " + parent.getAbsolutePath());
-		File file = new File(parent, fullName.substring(fullName.lastIndexOf('/')+1) + ".class");
-		// System.err.println("Writing class file: " + file.getAbsolutePath());
-		try(OutputStream out = new FileOutputStream(file)) {
-			classFile.writeTo(out);
+	private List<ClassFile> compileGlobalMethodsInnerClasses(Context context, Type parentClass, MethodDeclarationMap methods) {
+		List<ClassFile> list = new ArrayList<>();
+		methods.values().forEach((m) -> 
+			m.compileInnerClasses(context, parentClass, list));
+		return list;
+	}
+
+	private void writeClassFile(ClassFile classFile, Type type) throws CompilerException {
+		try {
+			String fullName = type.getTypeName().replace('.', '/');
+			File parent = new File(classDir, fullName.substring(0, fullName.lastIndexOf('/')+1));
+			if(!parent.exists() && !parent.mkdirs())
+				throw new IOException("Could not create " + parent.getAbsolutePath());
+			File file = new File(parent, fullName.substring(fullName.lastIndexOf('/')+1) + ".class");
+			if(Instruction.getDumpLevel()>0)
+				System.err.println("Writing class file: " + file.getAbsolutePath());
+			try(OutputStream out = new FileOutputStream(file)) {
+				classFile.writeTo(out);
+			}
+		} catch(Exception e) {
+			throw new CompilerException(e);
 		}
 	}
 

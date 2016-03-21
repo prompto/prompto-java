@@ -29,7 +29,7 @@ public class DateRange extends RangeBase<Date> {
 		}
 
 		@Override
-		public long getLength() {
+		public long getNativeLength() {
 			long h = high.getValue().toJavaTime();
 			long l = low.getValue().toJavaTime();
 			return 1 + ( (h-l)/(24*60*60*1000));

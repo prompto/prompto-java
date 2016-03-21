@@ -21,7 +21,6 @@ import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.IterableWithLength;
 import prompto.intrinsic.IteratorWithLength;
-import prompto.intrinsic.PromptoIterator;
 import prompto.intrinsic.PromptoSet;
 import prompto.runtime.Context;
 import prompto.type.IType;
@@ -97,7 +96,12 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IListable
 		return new IterableWithLength<IValue>() {
 			@Override
 			public IteratorWithLength<IValue> iterator() {
-				return new PromptoIterator<IValue>(items.iterator(), items.size());
+				return new IteratorWithLength<IValue>() {
+					Iterator<IValue> iter = items.iterator();
+					@Override public long getLength() { return items.size(); }
+					@Override public boolean hasNext() { return iter.hasNext(); }
+					@Override public IValue next() { return iter.next(); }
+				};
 			}
 		};
 	}

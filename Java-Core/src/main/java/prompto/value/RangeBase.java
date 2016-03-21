@@ -42,7 +42,7 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 
 	@Override
 	public long getLength() {
-		return range.getLength();
+		return range.getNativeLength();
 	}
 	
 	@Override

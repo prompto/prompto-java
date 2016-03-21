@@ -1,6 +1,7 @@
 package prompto.declaration;
 
 import java.lang.reflect.Modifier;
+import java.util.List;
 
 import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
@@ -8,9 +9,9 @@ import prompto.compiler.CompilerException;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Descriptor;
 import prompto.compiler.Flags;
+import prompto.compiler.IVerifierEntry;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.IVerifierEntry;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.ArgumentList;
@@ -182,6 +183,29 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		}
 	}
 	
+	@Override
+	public void compilePrototype(Context context, ClassFile classFile) {
+		try {
+			context = prepareContext(context);
+			IType returnType = check(context);
+			MethodInfo method = createMethodInfo(context, classFile, returnType);
+			method.addModifier(Modifier.ABSTRACT);
+		} catch (PromptoError e) {
+			throw new CompilerException(e);
+		}
+	}
+
+	@Override
+	public void compileInnerClasses(Context context, java.lang.reflect.Type parentClass, List<ClassFile> list) {
+		try {
+			context = prepareContext(context);
+			for(IStatement s : statements)
+				s.compileInnerClasses(context, parentClass, list);
+		} catch (PromptoError e) {
+			throw new CompilerException(e);
+		}
+	}
+
 	private void produceByteCode(Context context, MethodInfo method, IType returnType) throws SyntaxError {
 		Flags flags = new Flags();
 		for(IStatement s : statements)
@@ -200,21 +224,10 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		return context;
 	}
 
-	@Override
-	public void compilePrototype(Context context, ClassFile classFile) {
-		try {
-			context = prepareContext(context);
-			IType returnType = check(context);
-			MethodInfo method = createMethodInfo(context, classFile, returnType);
-			method.addModifier(Modifier.ABSTRACT);
-		} catch (PromptoError e) {
-			throw new CompilerException(e);
-		}
-	}
-
+	
 	protected MethodInfo createMethodInfo(Context context, ClassFile classFile, IType returnType) {
 		Descriptor.Method proto = CompilerUtils.createMethodDescriptor(context, arguments, returnType);
-		MethodInfo method = new MethodInfo(getName(), proto.toString()); 
+		MethodInfo method = new MethodInfo(getName(), proto); 
 		classFile.addMethod(method);
 		return method;
 	}

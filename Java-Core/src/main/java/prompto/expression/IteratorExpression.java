@@ -1,15 +1,29 @@
 package prompto.expression;
 
+import java.lang.reflect.Type;
+import java.util.List;
+
+import prompto.compiler.ClassConstant;
+import prompto.compiler.ClassFile;
+import prompto.compiler.Descriptor;
 import prompto.compiler.Flags;
+import prompto.compiler.IVerifierEntry;
+import prompto.compiler.InterfaceConstant;
+import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.PromptoType;
 import prompto.compiler.ResultInfo;
+import prompto.compiler.Tags;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.IterableWithLength;
 import prompto.intrinsic.IteratorWithLength;
+import prompto.intrinsic.PromptoIterable;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
+import prompto.statement.ReturnStatement;
 import prompto.type.IType;
 import prompto.type.IteratorType;
 import prompto.utils.CodeWriter;
@@ -22,6 +36,7 @@ public class IteratorExpression implements IExpression {
 	Identifier name;
 	IExpression source;
 	IExpression expression;
+	String innerClassName;
 	
 	public IteratorExpression(Identifier name, IExpression source, IExpression exp) {
 		this.name = name;
@@ -31,12 +46,11 @@ public class IteratorExpression implements IExpression {
 
 	@Override
 	public IteratorType check(Context context) throws SyntaxError {
-		IType srcType = source.check(context);
-		IType elemType = srcType.checkIterator(context);
+		IType paramType = source.check(context).checkIterator(context);
 		Context child = context.newChildContext();
-		context.registerValue(new Variable(name, elemType));
-		IType itemType = expression.check(child);
-		return new IteratorType(itemType);
+		context.registerValue(new Variable(name, paramType));
+		IType resultType = expression.check(child);
+		return new IteratorType(resultType);
 	}
 
 	@Override
@@ -50,9 +64,97 @@ public class IteratorExpression implements IExpression {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		// instantiate inner class
+		ClassConstant innerClass = new ClassConstant(new PromptoType(innerClassName));
+		method.addInstruction(Opcode.NEW, innerClass);
+		method.addInstruction(Opcode.DUP);
+		// get iterable
 		ResultInfo srcinfo = source.compile(context, method, flags);
-		// TODO Auto-generated method stub
-		return IExpression.super.compile(context, method, flags);
+		// get the length
+		method.addInstruction(Opcode.DUP);
+		if(srcinfo.isInterface()) {
+			InterfaceConstant c = new InterfaceConstant(srcinfo.getType(), "getNativeLength", long.class);
+			method.addInstruction(Opcode.INVOKEINTERFACE, c);
+		} else {
+			MethodConstant c = new MethodConstant(srcinfo.getType(), "getNativeLength", long.class);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, c);
+		}
+		// call the constructor
+		Descriptor.Method proto = new Descriptor.Method(Iterable.class, long.class, void.class);
+		MethodConstant m = new MethodConstant(innerClass, "<init>", proto);
+		method.addInstruction(Opcode.INVOKESPECIAL, m);
+		// done
+		return new ResultInfo(IterableWithLength.class);
+	}
+
+	@Override
+	public void compileInnerClasses(Context context, Type parentClass, List<ClassFile> list) throws SyntaxError {
+		int innerClassIndex = 1 + list.size();
+		innerClassName = parentClass.getTypeName() + '$' + innerClassIndex;
+		ClassFile classFile = compileInnerClass(context);
+		list.add(classFile);
+	}
+
+	private ClassFile compileInnerClass(Context context) throws SyntaxError {
+		ClassFile classFile = new ClassFile(new PromptoType(innerClassName));
+		classFile.setSuperClass(new ClassConstant(PromptoIterable.class));
+		compileInnerClassConstructor(classFile);
+		compileInnerClassExpression(context, classFile);
+		return classFile;
+	}
+
+	private MethodInfo compileInnerClassConstructor(ClassFile classFile) {
+		Descriptor.Method proto = new Descriptor.Method(Iterable.class, long.class, void.class);
+		MethodInfo method = new MethodInfo("<init>", proto);
+		classFile.addMethod(method);
+		method.registerLocal("this", IVerifierEntry.Type.ITEM_UninitializedThis, classFile.getThisClass());
+		method.registerLocal("iterable", IVerifierEntry.Type.ITEM_Object, new ClassConstant(Iterable.class));
+		method.registerLocal("length", IVerifierEntry.Type.ITEM_Long, null);
+		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
+		method.addInstruction(Opcode.ALOAD_1, new ClassConstant(Iterable.class));
+		method.addInstruction(Opcode.LLOAD_2, new ClassConstant(long.class));
+		MethodConstant m = new MethodConstant(classFile.getSuperClass(), "<init>", proto);
+		method.addInstruction(Opcode.INVOKESPECIAL, m);
+		method.addInstruction(Opcode.RETURN);
+		return method;
+	}
+
+	private void compileInnerClassExpression(Context context, ClassFile classFile) throws SyntaxError {
+		IType paramIType = source.check(context).checkIterator(context);
+		context = context.newChildContext();
+		context.registerValue(new Variable(name, paramIType));
+		Type paramType = paramIType.getJavaType();
+		Type resultType = expression.check(context).getJavaType();
+		compileInnerClassBridgeMethod(classFile, paramType, resultType);
+		compileInnerClassApplyMethod(context, classFile, paramType, resultType);
+	}
+
+	private void compileInnerClassApplyMethod(Context context, ClassFile classFile, Type paramType, Type resultType) throws SyntaxError {
+		// create the "apply" method itself
+		Descriptor.Method proto = new Descriptor.Method(paramType, resultType);
+		MethodInfo method = new MethodInfo("apply", proto);
+		classFile.addMethod(method);
+		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
+		method.registerLocal(name.getName(), IVerifierEntry.Type.ITEM_Object, new ClassConstant(paramType));
+		ReturnStatement stmt = new ReturnStatement(expression);
+		stmt.compile(context, method, new Flags());
+	}
+
+	private void compileInnerClassBridgeMethod(ClassFile classFile, Type paramType, Type resultType) {
+		// create a bridge "apply" method to convert Object -> paramType
+		Descriptor.Method proto = new Descriptor.Method(Object.class, Object.class);
+		MethodInfo method = new MethodInfo("apply", proto);
+		method.addModifier(Tags.ACC_BRIDGE | Tags.ACC_SYNTHETIC);
+		classFile.addMethod(method);
+		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
+		method.registerLocal(name.getName(), IVerifierEntry.Type.ITEM_Object, new ClassConstant(Object.class));
+		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
+		method.addInstruction(Opcode.ALOAD_1, new ClassConstant(Object.class));
+		method.addInstruction(Opcode.CHECKCAST, new ClassConstant(paramType));
+		proto = new Descriptor.Method(paramType, resultType);
+		MethodConstant c = new MethodConstant(classFile.getThisClass(), "apply", proto);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
+		method.addInstruction(Opcode.ARETURN, new ClassConstant(resultType));
 	}
 
 	@SuppressWarnings("unchecked")

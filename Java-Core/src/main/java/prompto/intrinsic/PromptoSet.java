@@ -2,6 +2,7 @@ package prompto.intrinsic;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.TreeSet;
 
 @SuppressWarnings("serial")
@@ -55,7 +56,12 @@ public class PromptoSet<V> extends HashSet<V> {
 	
 	@Override
 	public IteratorWithLength<V> iterator() {
-		return new PromptoIterator<V>(super.iterator(), this.size());
+		return new IteratorWithLength<V>() {
+			Iterator<V> iter = PromptoSet.super.iterator();
+			@Override public long getLength() { return PromptoSet.this.size(); }
+			@Override public boolean hasNext() { return iter.hasNext(); }
+			@Override public V next() { return iter.next(); }
+		};
 	}
 
 }

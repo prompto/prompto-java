@@ -1,5 +1,9 @@
 package prompto.expression;
 
+import java.lang.reflect.Type;
+import java.util.List;
+
+import prompto.compiler.ClassFile;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
@@ -32,5 +36,6 @@ public interface IExpression {
 		throw new UnsupportedOperationException();
 	}
 	
+	default void compileInnerClasses(Context context, Type parentClass, List<ClassFile> list) throws SyntaxError {}
 
 }

@@ -1,6 +1,10 @@
 package prompto.statement;
 
+import java.lang.reflect.Type;
+import java.util.List;
+
 import prompto.compiler.ClassConstant;
+import prompto.compiler.ClassFile;
 import prompto.compiler.FieldConstant;
 import prompto.compiler.FieldInfo;
 import prompto.compiler.Flags;
@@ -80,6 +84,12 @@ public class ReturnStatement extends SimpleStatement {
 			return compileReturn(context, method, flags);
 		else
 			return compileSetter(context, method, flags, setter);
+	}
+	
+	@Override
+	public void compileInnerClasses(Context context, Type parentClass, List<ClassFile> list) throws SyntaxError {
+		if(expression!=null)
+			expression.compileInnerClasses(context, parentClass, list);
 	}
 
 	private ResultInfo compileSetter(Context context, MethodInfo method, Flags flags, FieldInfo field) throws SyntaxError {

@@ -13,11 +13,11 @@ import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
 import prompto.compiler.CompilerException;
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.Descriptor;
 import prompto.compiler.FieldConstant;
 import prompto.compiler.FieldInfo;
 import prompto.compiler.Flags;
 import prompto.compiler.IVerifierEntry;
-import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.error.PromptoError;
@@ -406,7 +406,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			compileSuperClass(context, classFile, new Flags());
 			compileInterface(context, classFile, new Flags());
 			compileFields(context, classFile, new Flags());
-			compileConstructor(context, classFile, new Flags());
+			CompilerUtils.compileEmptyConstructor(classFile);
 			compileMethods(context, classFile, new Flags());
 		} catch(SyntaxError e) {
 			throw new CompilerException(e);
@@ -444,7 +444,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 
 	private void compileGetterPrototype(Context context, ClassFile classFile, Identifier id, FieldInfo field) {
 		String name = CompilerUtils.getterName(id.getName());
-		String proto = "()" + field.getDescriptor().getValue();
+		Descriptor proto = new Descriptor.Method(field.getType());
 		MethodInfo method = new MethodInfo(name, proto);
 		method.addModifier(Modifier.ABSTRACT);
 		classFile.addMethod(method);
@@ -452,7 +452,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 
 	private void compileSetterPrototype(Context context, ClassFile classFile, Identifier id, FieldInfo field) {
 		String name = CompilerUtils.setterName(field.getName().getValue());
-		String proto = "(" + field.getDescriptor().getValue() + ")V";
+		Descriptor proto = new Descriptor.Method(field.getType(), void.class);
 		MethodInfo method = new MethodInfo(name, proto);
 		method.addModifier(Modifier.ABSTRACT);
 		classFile.addMethod(method);
@@ -638,7 +638,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	private void compileFieldSetter(Context context, ClassFile classFile, Flags flags, 
 			Identifier id, FieldInfo field) {
 		String name = CompilerUtils.setterName(field.getName().getValue());
-		String proto = "(" + field.getDescriptor().getValue() + ")V";
+		Descriptor proto = new Descriptor.Method(field.getType(), void.class);
 		MethodInfo method = new MethodInfo(name, proto);
 		classFile.addMethod(method);
 		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
@@ -661,7 +661,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 
 	private void compileFieldGetter(Context context, ClassFile classFile, Flags flags, Identifier id, FieldInfo field) {
 		String name = CompilerUtils.getterName(id.getName());
-		String proto = "()" + field.getDescriptor().getValue();
+		Descriptor proto = new Descriptor.Method(field.getType());
 		MethodInfo method = new MethodInfo(name, proto);
 		classFile.addMethod(method);
 		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
@@ -669,16 +669,6 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		FieldConstant f = new FieldConstant(classFile.getThisClass(), id.getName(), field.getType());
 		method.addInstruction(Opcode.GETFIELD, f);
 		method.addInstruction(Opcode.ARETURN, new ClassConstant(field.getType()));
-	}
-
-	private void compileConstructor(Context context, ClassFile classFile, Flags flags) {
-		MethodInfo method = new MethodInfo("<init>", "()V");
-		classFile.addMethod(method);
-		method.registerLocal("this", IVerifierEntry.Type.ITEM_UninitializedThis, classFile.getThisClass());
-		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
-		MethodConstant m = new MethodConstant(classFile.getSuperClass(), "<init>", void.class);
-		method.addInstruction(Opcode.INVOKESPECIAL, m);
-		method.addInstruction(Opcode.RETURN);
 	}
 
 	private void compileMethods(Context context, ClassFile classFile, Flags flags) throws SyntaxError {

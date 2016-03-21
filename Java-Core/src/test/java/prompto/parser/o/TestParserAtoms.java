@@ -447,7 +447,7 @@ public class TestParserAtoms {
 		assertNotNull(literal);
 		assertTrue(literal instanceof ListLiteral);
 		assertEquals("[]", literal.toString());
-		assertEquals(0, ((ListLiteral)literal).getValue().length());
+		assertEquals(0, ((ListLiteral)literal).getValue().getLength());
 	}
 	
 	@Test
