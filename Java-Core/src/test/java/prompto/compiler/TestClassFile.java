@@ -3,10 +3,16 @@ package prompto.compiler;
 import static org.junit.Assert.*;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.ByteBuffer;
+import java.nio.file.Files;
 import java.security.CodeSource;
 import java.security.SecureClassLoader;
 
@@ -54,7 +60,7 @@ public class TestClassFile {
 		c = new LongConstant(123);
 		c.register(pool);
 		assertEquals(4, pool.nextIndex);
-		NameAndTypeConstant ntc = new NameAndTypeConstant("xyw", "hkp");
+		NameAndTypeConstant ntc = new NameAndTypeConstant("xyw", new Descriptor.Field(new PromptoType("hkp")));
 		ntc.register(pool);
 		assertEquals(4, ntc.getIndexInConstantPool());
 		assertEquals(5, ntc.name.getIndexInConstantPool());
@@ -65,14 +71,14 @@ public class TestClassFile {
 	@Test
 	public void testDefineClassForGlobalMethod() throws Exception {
 		String name = "π/χ/µ/print";
-		ClassFile c = new ClassFile(name);
+		ClassFile c = new ClassFile(new PromptoType(name));
 		c.addModifier(Modifier.ABSTRACT);
 		MethodInfo m = new MethodInfo("printAbstract", "(Ljava/lang/String;)V");
 		m.addModifier(Modifier.ABSTRACT);
 		c.addMethod(m);
 		m = new MethodInfo("printStatic", "(Ljava/lang/String;)V");
 		m.addModifier(Modifier.STATIC);
-		m.registerLocal("value", IVerifierEntry.Type.ITEM_Object, new ClassConstant("java/lang/String"));
+		m.registerLocal("value", IVerifierEntry.Type.ITEM_Object, new ClassConstant(String.class));
 		m.addInstruction(Opcode.RETURN);
 		c.addMethod(m);
 		ByteArrayOutputStream o = new ByteArrayOutputStream();
@@ -92,12 +98,12 @@ public class TestClassFile {
 	public void testCallGlobalMethod() throws Exception {
 		Out.init();
 		String name = "π/χ/µ/print";
-		ClassFile c = new ClassFile(name);
+		ClassFile c = new ClassFile(new PromptoType(name));
 		c.addModifier(Modifier.ABSTRACT);
 		MethodInfo m = new MethodInfo("print", "(Ljava/lang/String;)V");
 		m.addModifier(Modifier.STATIC);
-		m.registerLocal("value", IVerifierEntry.Type.ITEM_Object, new ClassConstant("java/lang/String"));
-		m.addInstruction(Opcode.GETSTATIC, new FieldConstant("java/lang/System", "out", "Ljava/io/PrintStream;"));
+		m.registerLocal("value", IVerifierEntry.Type.ITEM_Object, new ClassConstant(String.class));
+		m.addInstruction(Opcode.GETSTATIC, new FieldConstant(System.class, "out", PrintStream.class));
 		m.addInstruction(Opcode.ALOAD_0); // the parameter
 		m.addInstruction(Opcode.INVOKEVIRTUAL, new MethodConstant(PrintStream.class, "print", String.class, void.class));
 		m.addInstruction(Opcode.RETURN);
@@ -119,7 +125,7 @@ public class TestClassFile {
 	@Test
 	public void testClassWithLongConstant() throws Exception {
 		String name = "k1";
-		ClassFile c = new ClassFile(name);
+		ClassFile c = new ClassFile(new PromptoType(name));
 		c.addModifier(Modifier.ABSTRACT);
 		MethodInfo m = new MethodInfo("m3", "()Ljava/lang/Long;");
 		m.addModifier(Modifier.STATIC);
@@ -135,7 +141,7 @@ public class TestClassFile {
 	@Test
 	public void testClassWithStackLabel_FULL() throws Exception {
 		String name = "k1";
-		ClassFile c = new ClassFile(name);
+		ClassFile c = new ClassFile(new PromptoType(name));
 		c.addModifier(Modifier.ABSTRACT);
 		MethodInfo m = new MethodInfo("m", "()V");
 		m.addModifier(Modifier.STATIC);
@@ -160,5 +166,39 @@ public class TestClassFile {
 		assertNotNull(klass);
 		Method mm = klass.getDeclaredMethod("m");
 		mm.invoke(null);
+	}
+	
+	@Test
+	public void testInterfaceWithInnerClass() throws Exception {
+		File dir = Files.createTempDirectory("prompto_").toFile();
+		String root = "Root";
+		ClassFile c = new ClassFile(new PromptoType(root));
+		c.addModifier(Modifier.INTERFACE | Modifier.ABSTRACT);
+		try(OutputStream o = new FileOutputStream(new File(dir, root + ".class"))) {
+			c.writeTo(o);
+		}
+		String derived = "Derived";
+		String inner = "%Inner";
+		ClassFile i = new ClassFile(new PromptoType(derived + '$' + inner));
+		i.addInterface(new PromptoType(derived));
+		try(OutputStream o = new FileOutputStream(new File(dir, derived + '$' + inner + ".class"))) {
+			i.writeTo(o);
+		}
+		ClassFile d = new ClassFile(new PromptoType(derived));
+		d.addModifier(Modifier.INTERFACE | Modifier.ABSTRACT);
+		d.addInterface(new PromptoType(root));
+		d.addInnerClass(i);
+		try(OutputStream o = new FileOutputStream(new File(dir, derived + ".class"))) {
+			d.writeTo(o);
+		}
+		URLClassLoader loader = URLClassLoader.newInstance(new URL[] { dir.toURI().toURL() }, Thread.currentThread().getContextClassLoader());
+		Class<?> klass = loader.loadClass(derived);
+		assertNotNull(klass);
+		assertEquals(derived, klass.getSimpleName());
+		assertTrue(klass.isInterface());
+		klass = loader.loadClass(derived + '$' + inner);
+		assertNotNull(klass);
+		assertEquals(derived + '$' + inner, klass.getSimpleName());
+		assertFalse(klass.isInterface());
 	}
 }
