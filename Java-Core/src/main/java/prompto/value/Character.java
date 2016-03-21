@@ -77,7 +77,7 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
 
 	public static ResultInfo compileMultiply(Context context, MethodInfo method, Flags flags, ResultInfo left, IExpression exp) throws SyntaxError {
 		CompilerUtils.CharacterTochar(method);
-		ResultInfo right = exp.compile(context, method, flags.withNative(true));
+		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true));
 		if(Long.class==right.getType())
 			CompilerUtils.LongToint(method);
 		else if(long.class==right.getType())
@@ -116,7 +116,7 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
 			ResultInfo left, IExpression exp) throws SyntaxError {
 		if(java.lang.Character.class==left.getType())
 			CompilerUtils.CharacterTochar(method);
-		ResultInfo right = exp.compile(context, method, flags.withNative(true));
+		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true));
 		if(java.lang.Character.class==right.getType())
 			CompilerUtils.CharacterTochar(method);
 		Opcode opcode = cmpOpcodes[flags.cmpOp().ordinal()];
@@ -129,7 +129,7 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
 		method.addInstruction(Opcode.ICONST_1);
 		StackState lastState = method.captureStackState();
 		method.placeLabel(lastState);
-		if(flags.toNative())
+		if(flags.toPrimitive())
 			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
@@ -169,7 +169,7 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
 		method.addInstruction(Opcode.ICONST_1);
 		StackState lastState = method.captureStackState();
 		method.placeLabel(lastState);
-		if(flags.toNative())
+		if(flags.toPrimitive())
 			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);

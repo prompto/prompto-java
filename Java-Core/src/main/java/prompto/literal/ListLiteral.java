@@ -107,7 +107,7 @@ public class ListLiteral extends Literal<ListValue> {
 
 	private void compileItems(Context context, MethodInfo method) throws SyntaxError {
 		Flags flags = new Flags();
-		flags.withNative(true);
+		flags.withPrimitive(true);
 		for(IExpression e : expressions) {
 			method.addInstruction(Opcode.DUP); // need to keep a reference to the list on top of stack
 			ResultInfo info = e.compile(context, method, flags);

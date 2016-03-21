@@ -296,21 +296,21 @@ public class EqualsExpression implements IExpression, IAssertion {
 	}
 	
 	private ResultInfo compileIsA(Context context, MethodInfo method, Flags flags) throws SyntaxError {
-		right.compile(context, method, flags.withNative(false));
-		left.compile(context, method, flags.withNative(false));
+		right.compile(context, method, flags.withPrimitive(false));
+		left.compile(context, method, flags.withPrimitive(false));
 		MethodConstant m = new MethodConstant(Class.class, "isInstance", Object.class, boolean.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 		if(flags.isReverse())
 			CompilerUtils.reverseBoolean(method);
-		if(flags.toNative())
+		if(flags.toPrimitive())
 			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
 	}
 
 	public ResultInfo compileIs(Context context, MethodInfo method, Flags flags) throws SyntaxError {
-		left.compile(context, method, flags.withNative(false));
-		right.compile(context, method, flags.withNative(false));
+		left.compile(context, method, flags.withPrimitive(false));
+		right.compile(context, method, flags.withPrimitive(false));
 		Opcode opcode = flags.isReverse() ? Opcode.IF_ACMPNE : Opcode.IF_ACMPEQ;
 		method.addInstruction(opcode, new ShortOperand((short)7));
 		StackState branchState = method.captureStackState();
@@ -321,14 +321,14 @@ public class EqualsExpression implements IExpression, IAssertion {
 		method.addInstruction(Opcode.ICONST_1);
 		StackState lastState = method.captureStackState();
 		method.placeLabel(lastState);
-		if(flags.toNative())
+		if(flags.toPrimitive())
 			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
 	}
 	
 	public ResultInfo compileEquals(Context context, MethodInfo method, Flags flags) throws SyntaxError {
-		ResultInfo lval = left.compile(context, method, flags.withNative(true));
+		ResultInfo lval = left.compile(context, method, flags.withPrimitive(true));
 		IOperatorFunction tester = testers.get(lval.getType());
 		if(tester==null) {
 			System.err.println("Missing IOperatorFunction for = " + lval.getType().getTypeName());

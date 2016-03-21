@@ -206,7 +206,7 @@ public class MemberSelector extends SelectorExpression {
 	private ResultInfo compileStringLength(MethodInfo method, Flags flags) {
 		IOperand oper = new MethodConstant(String.class, "length", int.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		if(flags.toNative())
+		if(flags.toPrimitive())
 			return CompilerUtils.intTolong(method);
 		else
 			return CompilerUtils.intToLong(method);

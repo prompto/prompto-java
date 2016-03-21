@@ -127,9 +127,9 @@ public abstract class StackLocal implements IVerifierEntry {
 		}
 	}
 	
-	static class NativeLocal extends StackLocal{
+	static class PrimitiveLocal extends StackLocal{
 
-		public NativeLocal(Type type, String name) {
+		public PrimitiveLocal(Type type, String name) {
 			super(type, name);
 		}
 		

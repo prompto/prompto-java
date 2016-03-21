@@ -21,7 +21,7 @@ public class IntegerRange extends RangeBase<Integer> {
 		}
 		
 		@Override
-		public long length() {
+		public long getLength() {
 			return 1L + high.longValue() - low.longValue();
 		}
 			
@@ -50,7 +50,7 @@ public class IntegerRange extends RangeBase<Integer> {
 	}
 
 	@Override
-	public long length() {
+	public long getLength() {
 		return 1 + getHigh().longValue() - getLow().longValue();
 	}
 

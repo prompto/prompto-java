@@ -202,7 +202,7 @@ public class ConstructorExpression implements IExpression {
 
 	private void compileCopyFrom(Context context, MethodInfo method, Flags flags, 
 			CategoryDeclaration thisCd, CategoryDeclaration otherCd, ResultInfo thisInfo) throws SyntaxError {
-		ResultInfo copyFromInfo = copyFrom.compile(context, method, flags.withNative(false));
+		ResultInfo copyFromInfo = copyFrom.compile(context, method, flags.withPrimitive(false));
 		Set<Identifier> attrIds = thisCd.getAllAttributes(context);
 		for(Identifier attrId : attrIds)
 			compileCopyFrom(context, method, flags, thisCd, otherCd, attrId, thisInfo, copyFromInfo);
@@ -245,7 +245,7 @@ public class ConstructorExpression implements IExpression {
 	private Type getInterfaceType(Context context) throws SyntaxError {
 		CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getId());
 		if(cd instanceof NativeCategoryDeclaration)
-			return ((NativeCategoryDeclaration)cd).getBoundClass(context, false);
+			return ((NativeCategoryDeclaration)cd).getBoundClass(false);
 		else 
 			return CompilerUtils.getCategoryInterfaceType(cd.getId());
 	}
@@ -253,7 +253,7 @@ public class ConstructorExpression implements IExpression {
 	private Type getConcreteType(Context context) throws SyntaxError {
 		CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getId());
 		if(cd instanceof NativeCategoryDeclaration)
-			return ((NativeCategoryDeclaration)cd).getBoundClass(context, false);
+			return ((NativeCategoryDeclaration)cd).getBoundClass(false);
 		else 
 			return CompilerUtils.getCategoryConcreteType(cd.getId());
 	}

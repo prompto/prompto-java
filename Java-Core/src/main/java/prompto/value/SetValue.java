@@ -19,6 +19,9 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.IterableWithLength;
+import prompto.intrinsic.IteratorWithLength;
+import prompto.intrinsic.PromptoIterator;
 import prompto.intrinsic.PromptoSet;
 import prompto.runtime.Context;
 import prompto.type.IType;
@@ -43,12 +46,7 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IListable
 	}
 
 	@Override
-	public boolean isEmpty() {
-		return items.isEmpty();
-	}
-
-	@Override
-	public long length() {
+	public long getLength() {
 		return items.size();
 	}
 
@@ -72,7 +70,7 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IListable
 	
 	public static ResultInfo compileItem(Context context, MethodInfo method, Flags flags, 
 			ResultInfo left, IExpression exp) throws SyntaxError {
-		ResultInfo right = exp.compile(context, method, flags.withNative(true));
+		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true));
 		right = CompilerUtils.numberToint(method, right);
 		// minus 1
 		method.addInstruction(Opcode.ICONST_M1);
@@ -95,8 +93,13 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IListable
 	}
 
 	@Override
-	public Iterable<IValue> getIterable(Context context) {
-		return items;
+	public IterableWithLength<IValue> getIterable(Context context) {
+		return new IterableWithLength<IValue>() {
+			@Override
+			public IteratorWithLength<IValue> iterator() {
+				return new PromptoIterator<IValue>(items.iterator(), items.size());
+			}
+		};
 	}
 
 	@Override
@@ -116,7 +119,7 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IListable
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		if(flags.isReverse())
 			CompilerUtils.reverseBoolean(method);
-		if(flags.toNative())
+		if(flags.toPrimitive())
 			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);

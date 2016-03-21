@@ -76,7 +76,7 @@ public class TupleLiteral extends Literal<TupleValue> {
 	private void addItems(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		for(IExpression e : expressions) {
 			method.addInstruction(Opcode.DUP); // need to keep a reference to the list on top of stack
-			e.compile(context, method, flags.withNative(false));
+			e.compile(context, method, flags.withPrimitive(false));
 			IOperand c = new MethodConstant(PromptoTuple.class, "add", 
 					Object.class, boolean.class);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, c);

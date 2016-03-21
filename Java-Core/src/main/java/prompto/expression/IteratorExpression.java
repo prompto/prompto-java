@@ -1,10 +1,13 @@
 package prompto.expression;
 
-import java.util.Iterator;
-
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.IterableWithLength;
+import prompto.intrinsic.IteratorWithLength;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.type.IType;
@@ -12,7 +15,6 @@ import prompto.type.IteratorType;
 import prompto.utils.CodeWriter;
 import prompto.value.IIterable;
 import prompto.value.IValue;
-import prompto.value.Integer;
 import prompto.value.IteratorValue;
 
 public class IteratorExpression implements IExpression {
@@ -42,17 +44,23 @@ public class IteratorExpression implements IExpression {
 		IteratorType iterType = check(context);
 		IType itemType = iterType.getItemType();
 		IValue items = source.interpret(context);
-		Integer length = (Integer)items.getMember(context, new Identifier("length"), false);
-		Iterator<IValue> iterator = getIterator(context, items);
-		return new IteratorValue(itemType, context, length, name, iterator, expression);
+		IteratorWithLength<IValue> iterator = getIterator(context, items);
+		return new IteratorValue(context, name, itemType, iterator, expression);
+	}
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		ResultInfo srcinfo = source.compile(context, method, flags);
+		// TODO Auto-generated method stub
+		return IExpression.super.compile(context, method, flags);
 	}
 
 	@SuppressWarnings("unchecked")
-	private Iterator<IValue> getIterator(Context context, Object src) {
+	private IteratorWithLength<IValue> getIterator(Context context, Object src) {
 		if (src instanceof IIterable) 
 			return ((IIterable<IValue>) src).getIterable(context).iterator();
-		else if(src instanceof Iterable)
-			return ((Iterable<IValue>)src).iterator();
+		else if(src instanceof IterableWithLength)
+			return ((IterableWithLength<IValue>)src).iterator();
 		else
 			throw new InternalError("Should never get there!");
 	}

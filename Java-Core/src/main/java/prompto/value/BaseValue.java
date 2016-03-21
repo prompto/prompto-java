@@ -126,7 +126,7 @@ public abstract class BaseValue implements IValue {
 		method.addInstruction(Opcode.ICONST_1);
 		StackState lastState = method.captureStackState();
 		method.placeLabel(lastState);
-		if(flags.toNative())
+		if(flags.toPrimitive())
 			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
@@ -137,7 +137,7 @@ public abstract class BaseValue implements IValue {
 			method.addInstruction(Opcode.LCONST_1);
 			method.addInstruction(Opcode.LNEG);
 		} else {
-			ResultInfo linfo = last.compile(context, method, flags.withNative(true));
+			ResultInfo linfo = last.compile(context, method, flags.withPrimitive(true));
 			linfo = CompilerUtils.numberTolong(method, linfo);
 		}
 	}
@@ -146,7 +146,7 @@ public abstract class BaseValue implements IValue {
 		if(first==null)
 			method.addInstruction(Opcode.LCONST_1);
 		else {
-			ResultInfo finfo = first.compile(context, method, flags.withNative(true));
+			ResultInfo finfo = first.compile(context, method, flags.withPrimitive(true));
 			finfo = CompilerUtils.numberTolong(method, finfo);
 		}
 	}

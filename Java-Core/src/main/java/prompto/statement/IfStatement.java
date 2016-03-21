@@ -236,7 +236,7 @@ public class IfStatement extends BaseStatement {
 
 	private void compileCondition(Context context, MethodInfo method, Flags flags, IfElement element) throws SyntaxError {
 		if(element.condition!=null) {
-			ResultInfo info = element.condition.compile(context, method, flags.withNative(true));
+			ResultInfo info = element.condition.compile(context, method, flags.withPrimitive(true));
 			if(Boolean.class==info.getType())
 				CompilerUtils.BooleanToboolean(method);
 		}
@@ -323,11 +323,17 @@ public class IfStatement extends BaseStatement {
 			IType cond = condition.check(context);
 			if(cond!=BooleanType.instance())
 				throw new SyntaxError("Expected a boolean condition!");
-			context = downCastContext(context);
+			context = downCastContextForCheck(context);
 			return statements.check(context, null);
 		}
 
-		private Context downCastContext(Context context) throws SyntaxError {
+		@Override
+		public IValue interpret(Context context) throws PromptoError {
+			context = downCastContextForInterpret(context);
+			return statements.interpret(context);
+		}
+
+		private Context downCastContextForCheck(Context context) throws SyntaxError {
 			Context parent = context;
 			if(condition instanceof EqualsExpression)
 				context = ((EqualsExpression)condition).downCastForCheck(context);
@@ -335,10 +341,12 @@ public class IfStatement extends BaseStatement {
 			return context;
 		}
 
-		@Override
-		public IValue interpret(Context context) throws PromptoError {
-			context = downCastContext(context);
-			return statements.interpret(context);
+		private Context downCastContextForInterpret(Context context) throws PromptoError {
+			Context parent = context;
+			if(condition instanceof EqualsExpression)
+				context = ((EqualsExpression)condition).downCastForInterpret(context);
+			context = parent!=context ? context : context.newChildContext();
+			return context;
 		}
 
 	}

@@ -52,4 +52,10 @@ public class PromptoSet<V> extends HashSet<V> {
 		}
 		throw new UnsupportedOperationException("Should never get there!");
 	}
+	
+	@Override
+	public IteratorWithLength<V> iterator() {
+		return new PromptoIterator<V>(super.iterator(), this.size());
+	}
+
 }

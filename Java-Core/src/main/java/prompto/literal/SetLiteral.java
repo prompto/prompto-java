@@ -100,7 +100,7 @@ public class SetLiteral extends Literal<SetValue> {
 	private void addItems(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		for(IExpression e : expressions) {
 			method.addInstruction(Opcode.DUP); // need to keep a reference to the list on top of stack
-			ResultInfo info = e.compile(context, method, flags.withNative(false));
+			ResultInfo info = e.compile(context, method, flags.withPrimitive(false));
 			compilePromotion(method, info);
 			IOperand oper = new MethodConstant(PromptoSet.class, "add", 
 					Object.class, boolean.class);

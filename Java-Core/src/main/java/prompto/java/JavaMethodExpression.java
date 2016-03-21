@@ -9,6 +9,7 @@ import prompto.compiler.IConstantOperand;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
+import prompto.compiler.PromptoType;
 import prompto.compiler.ResultInfo;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.NativeCategoryDeclaration;
@@ -128,7 +129,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 		if(type instanceof CategoryType) {
 			IDeclaration named = context.getRegisteredDeclaration(IDeclaration.class, type.getId());
 			if(named instanceof NativeCategoryDeclaration) 
-				return ((NativeCategoryDeclaration)named).getBoundClass(context, true);
+				return ((NativeCategoryDeclaration)named).getBoundClass(true);
 		}
 			return type.getJavaType();
 	}
@@ -153,11 +154,15 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 	private Method findExactMethod(Context context, Class<?> klass) throws SyntaxError {
 		Class<?>[] types = new Class<?>[arguments.size()];
 		int i = 0;
-		for(JavaExpression exp  : arguments)
-			types[i++] = (Class<?>)exp.check(context).getJavaType();
 		try {
+			for(JavaExpression exp  : arguments) {
+				Type argType = exp.check(context).getJavaType();
+				if(argType instanceof PromptoType)
+					argType = Class.forName(argType.getTypeName());
+				types[i++] = (Class<?>)argType;
+			}
 			return klass.getDeclaredMethod(name, types);
-		} catch (NoSuchMethodException e) {
+		} catch (NoSuchMethodException | ClassNotFoundException e) {
 			return null;
 		}
 	}
@@ -185,7 +190,12 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 	}
 	
 	boolean validArgument(Context context, Class<?> klass, JavaExpression argument) throws SyntaxError {
-		IType type = argument.check(context);
-		return klass.isAssignableFrom((Class<?>)type.getJavaType());
+		Type argType = argument.check(context).getJavaType();
+		if(argType instanceof PromptoType) try {
+			argType = Class.forName(argType.getTypeName());
+		} catch (ClassNotFoundException e) {
+			return false;
+		}
+		return klass.isAssignableFrom((Class<?>)argType);
 	}
 }

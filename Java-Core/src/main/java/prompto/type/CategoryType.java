@@ -307,7 +307,7 @@ public class CategoryType extends BaseType {
 	}
 	
 	public IValue sort(final Context context, IContainer<IValue> list, IExpression key) throws PromptoError {
-		if(list.length()==0)
+		if(list.getLength()==0)
 			return list;
 		if(key==null)
 			key = new UnresolvedIdentifier(new Identifier("key"));

@@ -1,13 +1,14 @@
 package prompto.value;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 
 import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.IterableWithLength;
+import prompto.intrinsic.IteratorWithLength;
 import prompto.runtime.Context;
 import prompto.store.IStored;
 import prompto.store.IStoredIterator;
@@ -18,7 +19,7 @@ import prompto.type.IterableType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
-public class Cursor extends BaseValue implements IIterable<IValue>, Iterable<IValue>, Iterator<IValue> {
+public class Cursor extends BaseValue implements IIterable<IValue>, IterableWithLength<IValue>, IteratorWithLength<IValue> {
 
 	Context context;
 	IStoredIterator documents;
@@ -30,22 +31,17 @@ public class Cursor extends BaseValue implements IIterable<IValue>, Iterable<IVa
 	}
 
 	@Override
-	public boolean isEmpty() {
-		return length()==0;
-	}
-
-	@Override
-	public long length() {
+	public long getLength() {
 		return documents.length();
 	}
 
 	@Override
-	public Iterable<IValue> getIterable(Context context) {
+	public IterableWithLength<IValue> getIterable(Context context) {
 		return this;
 	}
 	
 	@Override 
-	public Iterator<IValue> iterator() {
+	public IteratorWithLength<IValue> iterator() {
 		return this;
 	}
 	
@@ -80,7 +76,7 @@ public class Cursor extends BaseValue implements IIterable<IValue>, Iterable<IVa
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
 		if ("length".equals(name))
-			return new Integer(length());
+			return new Integer(getLength());
 		else
 			throw new InvalidDataError("No such member:" + name);
 	}

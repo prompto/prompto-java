@@ -36,7 +36,7 @@ public class DecimalLiteral extends Literal<Decimal> {
 			method.addInstruction(Opcode.DCONST_1);
 		else
 			method.addInstruction(Opcode.LDC2_W, new DoubleConstant(d));
-		if(flags.toNative())
+		if(flags.toPrimitive())
 			return new ResultInfo(double.class);
 		else
 			return CompilerUtils.doubleToDouble(method);

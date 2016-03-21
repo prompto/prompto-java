@@ -18,6 +18,8 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.IterableWithLength;
+import prompto.intrinsic.IteratorWithLength;
 import prompto.intrinsic.PromptoDict;
 import prompto.runtime.Context;
 import prompto.type.ContainerType;
@@ -51,13 +53,9 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 		return new Dictionary(((ContainerType) dict1.type).getItemType(), dict); 
 	}
 
-	public long length() {
-		return dict.size();
-	}
-
 	@Override
-	public boolean isEmpty() {
-		return dict.isEmpty();
+	public long getLength() {
+		return dict.size();
 	}
 
 	public IValue plus(Context context, IValue value) throws PromptoError {
@@ -123,7 +121,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 
 	public static ResultInfo compileItem(Context context, MethodInfo method, Flags flags, 
 			ResultInfo left, IExpression exp) throws SyntaxError {
-		exp.compile(context, method, flags.withNative(true));
+		exp.compile(context, method, flags.withPrimitive(true));
 		IOperand oper = new MethodConstant(PromptoDict.class, "get", 
 				Object.class, Object.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
@@ -151,7 +149,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		if(flags.isReverse())
 			CompilerUtils.reverseBoolean(method);
-		if(flags.toNative())
+		if(flags.toPrimitive())
 			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
@@ -163,11 +161,11 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 	}
 
 	@Override
-	public Iterable<IValue> getIterable(Context context) {
+	public IterableWithLength<IValue> getIterable(Context context) {
 		return new KVPIterable(context);
 	}
 
-	class KVPIterable implements Iterable<IValue> {
+	class KVPIterable implements IterableWithLength<IValue> {
 
 		Context context;
 
@@ -176,14 +174,20 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 		}
 
 		@Override
-		public Iterator<IValue> iterator() {
+		public IteratorWithLength<IValue> iterator() {
 			return new KVPIterator();
 		}
 
-		class KVPIterator implements Iterator<IValue> {
+		class KVPIterator implements IteratorWithLength<IValue> {
 
 			Iterator<Entry<Text, IValue>> iterator = dict.entrySet().iterator();
-
+			long length = dict.size();
+			
+			@Override
+			public long getLength() {
+				return length;
+			}
+			
 			@Override
 			public boolean hasNext() {
 				return iterator.hasNext();

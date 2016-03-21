@@ -79,7 +79,7 @@ public class ListValue extends BaseList<ListValue, PromptoList<IValue>> {
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		if(flags.isReverse()) 
 			CompilerUtils.reverseBoolean(method);
-		if(flags.toNative())
+		if(flags.toPrimitive())
 			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
@@ -143,7 +143,7 @@ public class ListValue extends BaseList<ListValue, PromptoList<IValue>> {
 
 	public static ResultInfo compileItem(Context context, MethodInfo method, Flags flags, 
 			ResultInfo left, IExpression exp) throws SyntaxError {
-		ResultInfo right = exp.compile(context, method, flags.withNative(true));
+		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true));
 		right = CompilerUtils.numberToint(method, right);
 		// minus 1
 		method.addInstruction(Opcode.ICONST_M1);

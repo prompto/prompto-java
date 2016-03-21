@@ -66,18 +66,18 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
 			ResultInfo left, IExpression exp) throws SyntaxError {
 		boolean isDecimal = isDecimal(context, exp);
-		CompilerUtils.numberToNative(method, left, isDecimal);
-		ResultInfo right = exp.compile(context, method, flags.withNative(true).withDecimal(isDecimal));
-		CompilerUtils.numberToNative(method, right, isDecimal);
+		CompilerUtils.numberToPrimitive(method, left, isDecimal);
+		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true).withDecimal(isDecimal));
+		CompilerUtils.numberToPrimitive(method, right, isDecimal);
 		if(isDecimal) {
 			method.addInstruction(Opcode.DADD);
-			if(flags.toNative())
+			if(flags.toPrimitive())
 				return new ResultInfo(double.class);
 			else
 				return CompilerUtils.doubleToDouble(method);
 		} else {
 			method.addInstruction(Opcode.LADD);
-			if(flags.toNative())
+			if(flags.toPrimitive())
 				return new ResultInfo(long.class);
 			else
 				return CompilerUtils.longToLong(method);
@@ -101,18 +101,18 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	public static ResultInfo compileMinus(Context context, MethodInfo method, Flags flags, 
 			ResultInfo left, IExpression exp) throws SyntaxError {
 		boolean isDecimal = isDecimal(context, exp);
-		CompilerUtils.numberToNative(method, left, isDecimal);
-		ResultInfo right = exp.compile(context, method, flags.withNative(true).withDecimal(isDecimal));
-		CompilerUtils.numberToNative(method, right, isDecimal);
+		CompilerUtils.numberToPrimitive(method, left, isDecimal);
+		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true).withDecimal(isDecimal));
+		CompilerUtils.numberToPrimitive(method, right, isDecimal);
 		if(isDecimal) {
 			method.addInstruction(Opcode.DSUB);
-			if(flags.toNative())
+			if(flags.toPrimitive())
 				return new ResultInfo(double.class);
 			else
 				return CompilerUtils.doubleToDouble(method);
 		} else {
 			method.addInstruction(Opcode.LSUB);
-			if(flags.toNative())
+			if(flags.toPrimitive())
 				return new ResultInfo(long.class);
 			else
 				return CompilerUtils.longToLong(method);
@@ -150,7 +150,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 
 	private static ResultInfo compileMultiplyCategory(Context context, MethodInfo method, Flags flags, 
 			ResultInfo left, IExpression exp) throws SyntaxError {
-		ResultInfo right = exp.compile(context, method, flags.withNative(true));
+		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true));
 		method.addInstruction(Opcode.SWAP);
 		return CategoryDeclaration.compileMultiply(context, method, flags, right, left);
 	}
@@ -161,7 +161,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 			CompilerUtils.LongToint(method);
 		else
 			CompilerUtils.longToint(method);
-		ResultInfo right = exp.compile(context, method, flags.withNative(true));
+		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true));
 		if(java.lang.Character.class==right.getType())
 			CompilerUtils.CharacterTochar(method);
 		// stack is int, char, need char, int
@@ -212,18 +212,18 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	private static ResultInfo compileMultiplyNumber(Context context, MethodInfo method, Flags flags, 
 			ResultInfo left, IExpression exp) throws SyntaxError {
 		boolean isDecimal = isDecimal(context, exp);
-		CompilerUtils.numberToNative(method, left, isDecimal);
-		ResultInfo right = exp.compile(context, method, flags.withNative(true).withDecimal(isDecimal));
-		CompilerUtils.numberToNative(method, right, isDecimal);
+		CompilerUtils.numberToPrimitive(method, left, isDecimal);
+		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true).withDecimal(isDecimal));
+		CompilerUtils.numberToPrimitive(method, right, isDecimal);
 		if(isDecimal) {
 			method.addInstruction(Opcode.DMUL);
-			if(flags.toNative())
+			if(flags.toPrimitive())
 				return new ResultInfo(double.class);
 			else
 				return CompilerUtils.doubleToDouble(method);
 		} else {
 			method.addInstruction(Opcode.LMUL);
-			if(flags.toNative())
+			if(flags.toPrimitive())
 				return new ResultInfo(long.class);
 			else
 				return CompilerUtils.longToLong(method);
@@ -243,11 +243,11 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 
 	public static ResultInfo compileDivide(Context context, MethodInfo method, Flags flags, 
 			ResultInfo left, IExpression exp) throws SyntaxError {
-		CompilerUtils.numberToNative(method, left, true);
-		ResultInfo right = exp.compile(context, method, flags.withNative(true).withDecimal(true));
-		CompilerUtils.numberToNative(method, right, true);
+		CompilerUtils.numberToPrimitive(method, left, true);
+		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true).withDecimal(true));
+		CompilerUtils.numberToPrimitive(method, right, true);
 		method.addInstruction(Opcode.DDIV);
-		if(flags.toNative())
+		if(flags.toPrimitive())
 			return new ResultInfo(double.class);
 		else
 			return CompilerUtils.doubleToDouble(method);
@@ -266,11 +266,11 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	
 	public static ResultInfo compileIntDivide(Context context, MethodInfo method, Flags flags, 
 			ResultInfo left, IExpression exp) throws SyntaxError {
-		CompilerUtils.numberToNative(method, left, false);
-		ResultInfo right = exp.compile(context, method, flags.withNative(true).withDecimal(false));
-		CompilerUtils.numberToNative(method, right, false);
+		CompilerUtils.numberToPrimitive(method, left, false);
+		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true).withDecimal(false));
+		CompilerUtils.numberToPrimitive(method, right, false);
 		method.addInstruction(Opcode.LDIV);
-		if(flags.toNative())
+		if(flags.toPrimitive())
 			return new ResultInfo(long.class);
 		else
 			return CompilerUtils.longToLong(method);
@@ -289,11 +289,11 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 
 	public static ResultInfo compileModulo(Context context, MethodInfo method, Flags flags, 
 			ResultInfo left, IExpression exp) throws SyntaxError {
-		CompilerUtils.numberToNative(method, left, false);
-		ResultInfo right = exp.compile(context, method, flags.withNative(true).withDecimal(false));
-		CompilerUtils.numberToNative(method, right, false);
+		CompilerUtils.numberToPrimitive(method, left, false);
+		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true).withDecimal(false));
+		CompilerUtils.numberToPrimitive(method, right, false);
 		method.addInstruction(Opcode.LREM);
-		if(flags.toNative())
+		if(flags.toPrimitive())
 			return new ResultInfo(long.class);
 		else
 			return CompilerUtils.longToLong(method);
@@ -317,9 +317,9 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	public static ResultInfo compileCompareTo(Context context, MethodInfo method, Flags flags, 
 			ResultInfo left, IExpression exp) throws SyntaxError {
 		boolean isDecimal = isDecimal(context, exp);
-		CompilerUtils.numberToNative(method, left, isDecimal);
-		ResultInfo right = exp.compile(context, method, flags.withNative(true).withDecimal(isDecimal));
-		CompilerUtils.numberToNative(method, right, isDecimal);
+		CompilerUtils.numberToPrimitive(method, left, isDecimal);
+		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true).withDecimal(isDecimal));
+		CompilerUtils.numberToPrimitive(method, right, isDecimal);
 		if(isDecimal)
 			method.addInstruction(Opcode.DCMPG);
 		else
@@ -368,7 +368,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 		method.addInstruction(Opcode.ICONST_1);
 		StackState lastState = method.captureStackState();
 		method.placeLabel(lastState);
-		if(flags.toNative())
+		if(flags.toPrimitive())
 			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
@@ -394,9 +394,9 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	
 	public static ResultInfo compileNegate(Context context, MethodInfo method, Flags flags, 
 			ResultInfo value) throws SyntaxError {
-		CompilerUtils.numberToNative(method, value, false);
+		CompilerUtils.numberToPrimitive(method, value, false);
 		method.addInstruction(Opcode.LNEG);
-		if(flags.toNative())
+		if(flags.toPrimitive())
 			return new ResultInfo(long.class);
 		else
 			return CompilerUtils.longToLong(method);

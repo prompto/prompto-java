@@ -108,7 +108,7 @@ public class WhileStatement extends BaseStatement {
 		method.placeLabel(neutralState);
 		IInstructionListener loop = method.addOffsetListener(new OffsetListenerConstant(true));
 		method.activateOffsetListener(loop);
-		ResultInfo info = condition.compile(context, method, flags.withNative(true));
+		ResultInfo info = condition.compile(context, method, flags.withPrimitive(true));
 		if(Boolean.class==info.getType())
 			CompilerUtils.BooleanToboolean(method);
 		IInstructionListener exit = method.addOffsetListener(new OffsetListenerConstant());

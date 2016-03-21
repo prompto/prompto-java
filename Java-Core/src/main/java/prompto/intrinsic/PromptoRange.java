@@ -1,10 +1,9 @@
 package prompto.intrinsic;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 
-public abstract class PromptoRange<T extends Object> implements Iterable<T> {
+public abstract class PromptoRange<T extends Object> implements IterableWithLength<T> {
 	
 	protected T low;
 	protected T high;
@@ -22,7 +21,7 @@ public abstract class PromptoRange<T extends Object> implements Iterable<T> {
 		return high;
 	}
 	
-	public abstract long length();
+	public abstract long getLength();
 	public abstract T getItem(long item);
 	
 	@Override
@@ -43,7 +42,7 @@ public abstract class PromptoRange<T extends Object> implements Iterable<T> {
 		if(last>=0)
 			return last;
 		else
-			return length() + 1 + last;
+			return getLength() + 1 + last;
 	}
 	
 	public abstract boolean contains(Object item);
@@ -65,17 +64,15 @@ public abstract class PromptoRange<T extends Object> implements Iterable<T> {
 	}
 	
 	@Override
-	public Iterator<T> iterator() {
-		return new Iterator<T>() {
+	public IteratorWithLength<T> iterator() {
+		return new IteratorWithLength<T>() {
 			
 			long index = 0;
-			long length = length();
+			long length = PromptoRange.this.getLength();
 			
-			@Override
-			public boolean hasNext() { return index<length; }
-
-			@Override
-			public T next() { return getItem(++index); }
+			@Override public long getLength() { return length; }
+			@Override public boolean hasNext() { return index<length; }
+			@Override public T next() { return getItem(++index); }
 			
 		};
 	}
@@ -101,7 +98,7 @@ public abstract class PromptoRange<T extends Object> implements Iterable<T> {
 		}
 		
 		@Override
-		public long length() {
+		public long getLength() {
 			return 1L + high.charValue() - low.charValue();
 		}
 		
@@ -135,7 +132,7 @@ public abstract class PromptoRange<T extends Object> implements Iterable<T> {
 		}
 		
 		@Override
-		public long length() {
+		public long getLength() {
 			return 1L + high.longValue() - low.longValue();
 		}
 
@@ -170,7 +167,7 @@ public abstract class PromptoRange<T extends Object> implements Iterable<T> {
 		}
 
 		@Override
-		public long length() {
+		public long getLength() {
 			long h = high.toJavaTime();
 			long l = low.toJavaTime();
 			return 1 + ( (h-l)/(24*60*60*1000));
@@ -206,7 +203,7 @@ public abstract class PromptoRange<T extends Object> implements Iterable<T> {
 		}
 		
 		@Override
-		public long length() {
+		public long getLength() {
 			return 1 + (high.getNativeMillisOfDay() - low.getNativeMillisOfDay())/1000;
 		}
 

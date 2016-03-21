@@ -9,11 +9,11 @@ public interface IVerifierEntry {
 
 	public static enum Type {
 		ITEM_Top(TopFactory.instance),
-		ITEM_Integer(NativeFactory.instance),
-		ITEM_Float(NativeFactory.instance),
-		ITEM_Double(2, NativeFactory.instance),
-		ITEM_Long(2, NativeFactory.instance),
-		ITEM_Null(NativeFactory.instance),
+		ITEM_Integer(PrimitiveFactory.instance),
+		ITEM_Float(PrimitiveFactory.instance),
+		ITEM_Double(2, PrimitiveFactory.instance),
+		ITEM_Long(2, PrimitiveFactory.instance),
+		ITEM_Null(PrimitiveFactory.instance),
 		ITEM_UninitializedThis(ThisFactory.instance),
 		ITEM_Object(ObjectFactory.instance),
 		ITEM_Uninitialized(ObjectFactory.instance);
@@ -23,18 +23,18 @@ public interface IVerifierEntry {
 			StackLocal newStackLocal(Type type, String name, ClassConstant className);
 		}
 		
-		static class NativeFactory implements IFactory {
+		static class PrimitiveFactory implements IFactory {
 			
-			static NativeFactory instance = new NativeFactory();
+			static PrimitiveFactory instance = new PrimitiveFactory();
 			
 			@Override
 			public StackEntry newStackEntry(Type type, ClassConstant className) {
-				return new StackEntry.NativeEntry(type);
+				return new StackEntry.PrimitiveEntry(type);
 			}
 			
 			@Override
 			public StackLocal newStackLocal(Type type, String name, ClassConstant className) {
-				return new StackLocal.NativeLocal(type, name);
+				return new StackLocal.PrimitiveLocal(type, name);
 			}
 		};
 

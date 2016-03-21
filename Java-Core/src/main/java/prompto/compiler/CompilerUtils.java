@@ -329,7 +329,7 @@ public abstract class CompilerUtils {
 		return new ResultInfo(Double.class);
 	}
 
-	public static void numberToNative(MethodInfo method, ResultInfo info, boolean toDecimal) {
+	public static void numberToPrimitive(MethodInfo method, ResultInfo info, boolean toDecimal) {
 		if(toDecimal)
 			numberTodouble(method, info);
 		else	

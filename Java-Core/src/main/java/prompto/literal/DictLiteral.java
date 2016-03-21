@@ -93,7 +93,7 @@ public class DictLiteral extends Literal<Dictionary> {
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		ResultInfo info = CompilerUtils.newInstance(method, PromptoDict.class);
-		addEntries(context, method, flags.withNative(false));
+		addEntries(context, method, flags.withPrimitive(false));
 		return info;
 	}
 

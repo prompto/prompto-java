@@ -52,4 +52,9 @@ public class PromptoList<V> extends ArrayList<V> implements IMultiplyable {
 		return false;
 	}
 	
+	@Override
+	public IteratorWithLength<V> iterator() {
+		return new PromptoIterator<V>(super.iterator(), this.size());
+	}
+		
 }

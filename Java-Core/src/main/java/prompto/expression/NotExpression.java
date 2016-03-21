@@ -64,11 +64,11 @@ public class NotExpression implements IUnaryExpression, IAssertion {
 
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
-		ResultInfo info = expression.compile(context, method, flags.withNative(true));
+		ResultInfo info = expression.compile(context, method, flags.withPrimitive(true));
 		if(Boolean.class==info.getType())
 			CompilerUtils.BooleanToboolean(method);
 		CompilerUtils.reverseBoolean(method);
-		if(flags.toNative())
+		if(flags.toPrimitive())
 			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);

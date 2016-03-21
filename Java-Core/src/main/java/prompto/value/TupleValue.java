@@ -103,7 +103,7 @@ public class TupleValue extends BaseList<TupleValue, PromptoTuple<IValue>> {
 
 	public static ResultInfo compileItem(Context context, MethodInfo method, Flags flags, 
 			ResultInfo left, IExpression exp) throws SyntaxError {
-		ResultInfo right = exp.compile(context, method, flags.withNative(true));
+		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true));
 		right = CompilerUtils.numberToint(method, right);
 		// minus 1
 		method.addInstruction(Opcode.ICONST_M1);

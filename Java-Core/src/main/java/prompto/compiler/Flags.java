@@ -11,7 +11,7 @@ public class Flags {
 	
 	public Flags() {
 		this.values = new HashMap<>();
-		this.values.put("native", false);
+		this.values.put("primitive", false);
 		this.values.put("reverse", false);
 		this.values.put("roughly", false);
 		this.values.put("decimal", false);
@@ -29,12 +29,12 @@ public class Flags {
 		return new Flags(values);
 	}
 	
-	public boolean toNative() {
-		return (boolean)values.get("native");
+	public boolean toPrimitive() {
+		return (boolean)values.get("primitive");
 	}
 
-	public Flags withNative(boolean set) {
-		return clone("native", set);
+	public Flags withPrimitive(boolean set) {
+		return clone("primitive", set);
 	}
 
 	public boolean isReverse() {

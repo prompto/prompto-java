@@ -107,7 +107,7 @@ public class SliceSelector extends SelectorExpression {
 
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
-		ResultInfo pinfo = parent.compile(context, method, flags.withNative(false));
+		ResultInfo pinfo = parent.compile(context, method, flags.withPrimitive(false));
 		ISlicerFunction slicer = slicers.get(pinfo.getType());
 		if(slicer==null) {
 			System.err.println("Missing ISlicerFunction for slice " + pinfo.getType().getTypeName());

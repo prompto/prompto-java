@@ -63,9 +63,9 @@ public abstract class StackEntry implements IVerifierEntry {
 
 	}
 	
-	static class NativeEntry extends StackEntry{
+	static class PrimitiveEntry extends StackEntry {
 
-		public NativeEntry(Type type) {
+		public PrimitiveEntry(Type type) {
 			super(type);
 		}
 		
@@ -99,7 +99,7 @@ public abstract class StackEntry implements IVerifierEntry {
 		
 	}
 	
-	static class TopEntry extends NativeEntry {
+	static class TopEntry extends PrimitiveEntry {
 
 		ClassConstant className;
 		

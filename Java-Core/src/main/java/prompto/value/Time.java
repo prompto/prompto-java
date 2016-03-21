@@ -155,7 +155,7 @@ public class Time extends BaseValue implements Comparable<Time> {
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		if(flags.isReverse()) 
 			CompilerUtils.reverseBoolean(method);
-		if(flags.toNative())
+		if(flags.toPrimitive())
 			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);

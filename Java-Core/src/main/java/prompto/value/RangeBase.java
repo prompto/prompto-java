@@ -1,7 +1,5 @@
 package prompto.value;
 
-import java.util.Iterator;
-
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.IOperand;
@@ -13,6 +11,8 @@ import prompto.error.IndexOutOfRangeError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
+import prompto.intrinsic.IterableWithLength;
+import prompto.intrinsic.IteratorWithLength;
 import prompto.intrinsic.PromptoRange;
 import prompto.runtime.Context;
 import prompto.type.IType;
@@ -41,8 +41,8 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 	}
 
 	@Override
-	public long length() {
-		return range.length();
+	public long getLength() {
+		return range.getLength();
 	}
 	
 	@Override
@@ -60,7 +60,7 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		if(flags.isReverse()) 
 			CompilerUtils.reverseBoolean(method);
-		if(flags.toNative())
+		if(flags.toPrimitive())
 			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
@@ -84,7 +84,7 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 	
 	public static ResultInfo compileItem(Context context, MethodInfo method, Flags flags, 
 			ResultInfo left, IExpression exp) throws SyntaxError {
-		ResultInfo right = exp.compile(context, method, flags.withNative(true));
+		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true));
 		right = CompilerUtils.numberTolong(method, right);
 		// create result
 		IOperand oper = new MethodConstant(PromptoRange.class, "getItem", 
@@ -115,11 +115,13 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 	}
 
 	@Override
-	public Iterable<T> getIterable(Context context) {
+	public IterableWithLength<T> getIterable(Context context) {
 		return new RangeIterable(context);
 	}	
 	
-	class RangeIterable implements Iterable<T> {
+	public abstract RangeBase<T> newInstance(PromptoRange<T> range);
+
+	class RangeIterable implements IterableWithLength<T> {
 		
 		Context context;
 		
@@ -128,17 +130,23 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 		}
 
 		@Override
-		public Iterator<T> iterator() {
+		public IteratorWithLength<T> iterator() {
 			return new RangeIterator();
 		}
 
-		class RangeIterator implements Iterator<T> {
+		class RangeIterator implements IteratorWithLength<T> {
 		
 			long index = 0L;
+			long length = RangeBase.this.getLength();
+			
+			@Override
+			public long getLength() {
+				return length;
+			}
 			
 			@Override
 			public boolean hasNext() {
-				return index<length();
+				return index<length;
 			}
 	
 			@Override
@@ -158,13 +166,6 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 		}
 	}
 	
-	@Override
-	public boolean isEmpty() {
-		return length()==0;
-	}
-	
-	public abstract RangeBase<T> newInstance(PromptoRange<T> range);
-
 
 
 }

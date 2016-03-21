@@ -1,58 +1,51 @@
 package prompto.value;
 
 import java.io.IOException;
-import java.util.Iterator;
-
-import com.fasterxml.jackson.core.JsonGenerator;
 
 import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.IterableWithLength;
+import prompto.intrinsic.IteratorWithLength;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.type.IType;
 import prompto.type.IteratorType;
 
-public class IteratorValue extends BaseValue implements IIterable<IValue>, Iterable<IValue>, Iterator<IValue> {
+import com.fasterxml.jackson.core.JsonGenerator;
+
+public class IteratorValue extends BaseValue implements IIterable<IValue>, IterableWithLength<IValue>, IteratorWithLength<IValue> {
 
 	IType itemType;
 	Context context;
-	Integer length;
 	Identifier name;
-	Iterator<IValue> source;
+	IteratorWithLength<IValue> source;
 	IExpression expression;
 	
-	public IteratorValue(IType itemType, 
-			Context context, Integer length, Identifier name, 
-			Iterator<IValue> source, IExpression expression) {
+	public IteratorValue(Context context, Identifier name, IType itemType, 
+			IteratorWithLength<IValue> source, IExpression expression) {
 		super(new IteratorType(itemType));
 		this.itemType = itemType;
 		this.context = context;
-		this.length = length;
 		this.name = name;
 		this.source = source;
 		this.expression = expression;
 	}
 
 	@Override
-	public boolean isEmpty() {
-		return length()==0;
+	public long getLength() {
+		return source.getLength();
 	}
 
 	@Override
-	public long length() {
-		return length.longValue();
-	}
-
-	@Override
-	public Iterable<IValue> getIterable(Context context) {
+	public IterableWithLength<IValue> getIterable(Context context) {
 		return this;
 	}
 
 	@Override 
-	public Iterator<IValue> iterator() {
+	public IteratorWithLength<IValue> iterator() {
 		return this;
 	}
 	
@@ -77,7 +70,7 @@ public class IteratorValue extends BaseValue implements IIterable<IValue>, Itera
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
 		if ("length".equals(name))
-			return length;
+			return new Integer(source.getLength());
 		else
 			throw new InvalidDataError("No such member:" + name);
 	}

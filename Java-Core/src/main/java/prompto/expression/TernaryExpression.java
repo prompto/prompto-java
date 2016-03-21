@@ -70,20 +70,20 @@ public class TernaryExpression implements IExpression {
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		StackState initialState = method.captureStackState();
-		ResultInfo li = condition.compile(context, method, flags.withNative(true));
+		ResultInfo li = condition.compile(context, method, flags.withPrimitive(true));
 		if(Boolean.class==li.getType())
 			CompilerUtils.BooleanToboolean(method);
 		IInstructionListener branchListener = method.addOffsetListener(new OffsetListenerConstant());
 		method.activateOffsetListener(branchListener);
 		method.addInstruction(Opcode.IFEQ, branchListener);
-		ResultInfo result = ifTrue.compile(context, method, flags.withNative(false));
+		ResultInfo result = ifTrue.compile(context, method, flags.withPrimitive(false));
 		IInstructionListener finalListener = method.addOffsetListener(new OffsetListenerConstant());
 		method.activateOffsetListener(finalListener);
 		method.addInstruction(Opcode.GOTO, finalListener);
 		method.restoreStackState(initialState);
 		method.placeLabel(initialState);
 		method.inhibitOffsetListener(branchListener);
-		ifFalse.compile(context, method, flags.withNative(false));
+		ifFalse.compile(context, method, flags.withPrimitive(false));
 		method.inhibitOffsetListener(finalListener);
 		StackState finalState = method.captureStackState();
 		method.restoreStackState(finalState);

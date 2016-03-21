@@ -28,6 +28,7 @@ import prompto.runtime.Variable;
 import prompto.store.IDataStore;
 import prompto.store.IStorable;
 import prompto.type.CategoryType;
+import prompto.type.NativeCategoryType;
 
 public class NativeInstance extends BaseValue implements IInstance {
 	
@@ -37,7 +38,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 	boolean mutable = false;
 	
 	public NativeInstance(Context context, NativeCategoryDeclaration declaration) throws SyntaxError {
-		super(new CategoryType(declaration.getId()));
+		super(new NativeCategoryType(declaration));
 		this.declaration = declaration;
 		this.instance = makeInstance(context);
 		if(declaration.isStorable()) {
@@ -47,7 +48,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 	}
 	
 	public NativeInstance(NativeCategoryDeclaration declaration, Object instance) {
-		super(new CategoryType(declaration.getId()));
+		super(new NativeCategoryType(declaration));
 		this.declaration = declaration;
 		this.instance = instance;
 		if(declaration.isStorable()) {
@@ -96,8 +97,8 @@ public class NativeInstance extends BaseValue implements IInstance {
 	}
 	
 	private Object makeInstance(Context context) throws SyntaxError {
-		Class<?> mapped = declaration.getBoundClass(context, true);
 		try {
+			Class<?> mapped = declaration.getBoundClass(true);
 			return mapped.newInstance();
 		} catch (Exception e) {
 			throw new RuntimeException(e);

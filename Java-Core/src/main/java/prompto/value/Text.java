@@ -2,7 +2,6 @@ package prompto.value;
 
 import java.io.IOException;
 import java.text.Collator;
-import java.util.Iterator;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -22,6 +21,8 @@ import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.IterableWithLength;
+import prompto.intrinsic.IteratorWithLength;
 import prompto.intrinsic.PromptoString;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
@@ -49,15 +50,10 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	}
 		
 	@Override
-	public long length() {
+	public long getLength() {
 		return value.length();
 	}
 	
-	@Override
-	public boolean isEmpty() {
-		return value.isEmpty();
-	}
-
 	@Override
 	public IValue plus(Context context, IValue value) {
 		return new Text(this.value + value.toString());
@@ -65,7 +61,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 
 	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
 			ResultInfo left, IExpression exp) throws SyntaxError {
-		ResultInfo right = exp.compile(context, method, flags.withNative(false));
+		ResultInfo right = exp.compile(context, method, flags.withPrimitive(false));
 		// convert right to String
 		if(String.class!=right.getType()) {
 			if(right.getType() instanceof PromptoType) {
@@ -171,18 +167,18 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 				"charAt", 
 				int.class, char.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		if(flags.toNative())
+		if(flags.toPrimitive())
 			return new ResultInfo(char.class);
 		else
 			return CompilerUtils.charToCharacter(method);
 	}
 	
 	@Override
-	public Iterable<Character> getIterable(Context context) {
+	public IterableWithLength<Character> getIterable(Context context) {
 		return new CharacterIterable(context);
 	}
 
-	class CharacterIterable implements Iterable<Character> {
+	class CharacterIterable implements IterableWithLength<Character> {
 
 		Context context;
 		
@@ -191,13 +187,18 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 		}
 		
 		@Override
-		public Iterator<Character> iterator() {
+		public IteratorWithLength<Character> iterator() {
 			return new CharacterIterator();
 		}
 		
-		class CharacterIterator implements Iterator<Character> {
+		class CharacterIterator implements IteratorWithLength<Character> {
 			
 			int index = -1;
+			
+			@Override
+			public long getLength() {
+				return value.length();
+			}
 			
 			@Override
 			public boolean hasNext() {
@@ -257,7 +258,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 		if(first==null)
 			method.addInstruction(Opcode.ICONST_0);
 		else {
-			ResultInfo finfo = first.compile(context, method, flags.withNative(true));
+			ResultInfo finfo = first.compile(context, method, flags.withPrimitive(true));
 			finfo = CompilerUtils.numberToint(method, finfo);
 			// convert from 1 based to 0 based
 			method.addInstruction(Opcode.ICONST_M1);
@@ -270,7 +271,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 		compileSliceMaxIndex(method);
 		// stack is now obj, int, int (max)
 		if(last!=null) {
-			ResultInfo linfo = last.compile(context, method, flags.withNative(true));
+			ResultInfo linfo = last.compile(context, method, flags.withPrimitive(true));
 			linfo = CompilerUtils.numberToint(method, linfo);
 			// stack is now obj, int, int (max), int (last)
 			// manage negative index
@@ -320,7 +321,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		if(flags.isReverse())
 			CompilerUtils.reverseBoolean(method);
-		if(flags.toNative())
+		if(flags.toPrimitive())
 			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);

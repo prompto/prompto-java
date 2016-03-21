@@ -98,7 +98,7 @@ public class CompareExpression extends Section implements IExpression, IAssertio
 
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
-		ResultInfo lval = left.compile(context, method, flags.withNative(true));
+		ResultInfo lval = left.compile(context, method, flags.withPrimitive(true));
 		IOperatorFunction tester = testers.get(lval.getType());
 		if(tester==null) {
 			System.err.println("Missing IOperatorFunction for compare " + lval.getType().getTypeName());

@@ -58,11 +58,11 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 
 	private static ResultInfo compileOperation(Context context, MethodInfo method, Flags flags, ResultInfo left, IExpression exp) throws SyntaxError {
-		CompilerUtils.numberToNative(method, left, flags.isDecimal());
+		CompilerUtils.numberToPrimitive(method, left, flags.isDecimal());
 		ResultInfo right = exp.compile(context, method, flags);
-		CompilerUtils.numberToNative(method, right, flags.isDecimal());
+		CompilerUtils.numberToPrimitive(method, right, flags.isDecimal());
 		method.addInstruction(flags.opcode());
-		if(flags.toNative())
+		if(flags.toPrimitive())
 			return new ResultInfo(double.class);
 		else if(flags.isDecimal())
 			return CompilerUtils.doubleToDouble(method);
@@ -167,7 +167,7 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 	public static ResultInfo compileCompareTo(Context context, MethodInfo method, Flags flags, 
 			ResultInfo left, IExpression exp) throws SyntaxError {
 		CompilerUtils.numberTodouble(method, left);
-		ResultInfo right = exp.compile(context, method, flags.withNative(true));
+		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true));
 		CompilerUtils.numberTodouble(method, right);
 		method.addInstruction(Opcode.DCMPG);
 		return BaseValue.compileCompareToEpilogue(method, flags);
@@ -196,7 +196,7 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
 			ResultInfo left, IExpression exp) throws SyntaxError {
 		left = CompilerUtils.numberTodouble(method, left);
-		ResultInfo right = exp.compile(context, method, flags.withNative(true));
+		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true));
 		right = CompilerUtils.numberTodouble(method, right);
 		method.addInstruction(Opcode.DCMPG);
 		Opcode opcode = flags.isReverse() ? Opcode.IFNE : Opcode.IFEQ;
@@ -209,7 +209,7 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 		method.addInstruction(Opcode.ICONST_1);
 		StackState lastState = method.captureStackState();
 		method.placeLabel(lastState);
-		if(flags.toNative())
+		if(flags.toPrimitive())
 			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
@@ -234,9 +234,9 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 	
 	public static ResultInfo compileNegate(Context context, MethodInfo method, Flags flags, ResultInfo value) throws SyntaxError {
-		CompilerUtils.numberToNative(method, value, true);
+		CompilerUtils.numberToPrimitive(method, value, true);
 		method.addInstruction(Opcode.DNEG);
-		if(flags.toNative())
+		if(flags.toPrimitive())
 			return new ResultInfo(double.class);
 		else
 			return CompilerUtils.doubleToDouble(method);

@@ -3,7 +3,6 @@ package prompto.expression;
 import prompto.compiler.ByteOperand;
 import prompto.compiler.ClassConstant;
 import prompto.compiler.Flags;
-import prompto.compiler.IVerifierEntry.Type;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;

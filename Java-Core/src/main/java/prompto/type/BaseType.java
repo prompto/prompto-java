@@ -183,7 +183,7 @@ public abstract class BaseType implements IType {
 	}
 
 	protected <T extends IValue> ListValue doSort(Context context, IContainer<IValue> list, Comparator<T> cmp) throws PromptoError {
-		PriorityQueue<T> queue = new PriorityQueue<T>((int) list.length(), cmp);
+		PriorityQueue<T> queue = new PriorityQueue<T>((int) list.getLength(), cmp);
 		for (Object o : list.getIterable(context)) {
 			if (o instanceof IExpression)
 				o = ((IExpression) o).interpret(context);

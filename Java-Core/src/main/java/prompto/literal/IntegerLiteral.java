@@ -40,7 +40,7 @@ public class IntegerLiteral extends Literal<Integer> {
 			method.addInstruction(opcode);
 		} else
 			method.addInstruction(Opcode.LDC2_W, new LongConstant(l));
-		if(flags.toNative())
+		if(flags.toPrimitive())
 			return new ResultInfo(long.class);
 		else
 			return CompilerUtils.longToLong(method);

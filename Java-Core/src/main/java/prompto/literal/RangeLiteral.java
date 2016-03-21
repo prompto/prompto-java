@@ -67,8 +67,8 @@ public class RangeLiteral implements IExpression {
 			throw new SyntaxError("Cannot build Range of " + itemType.getName());
 		}
 		CompilerUtils.newRawInstance(method, rangeKlass);
-		first.compile(context, method, flags.withNative(false));
-		last.compile(context, method, flags.withNative(false));
+		first.compile(context, method, flags.withPrimitive(false));
+		last.compile(context, method, flags.withPrimitive(false));
 		return CompilerUtils.callConstructor(method, rangeKlass, itemKlass, itemKlass);
 	}
 

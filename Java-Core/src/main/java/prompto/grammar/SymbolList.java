@@ -1,20 +1,21 @@
 package prompto.grammar;
 
 import prompto.error.PromptoError;
+import prompto.intrinsic.IterableWithLength;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.type.IType;
 import prompto.utils.IValueIterable;
 import prompto.utils.ObjectList;
-import prompto.value.IContainer;
 import prompto.value.IInstance;
+import prompto.value.IIterable;
 import prompto.value.ISliceable;
 import prompto.value.IValue;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
 @SuppressWarnings("serial")
-public abstract class SymbolList <T extends Symbol> extends ObjectList<T> implements IValue, IContainer<IValue> {
+public abstract class SymbolList <T extends Symbol> extends ObjectList<T> implements IValue, IIterable<IValue> {
 	
 	IType type;
 	
@@ -42,26 +43,8 @@ public abstract class SymbolList <T extends Symbol> extends ObjectList<T> implem
 	}
 	
 	@Override
-	public long length() {
-		return this.size();
-	}
-	
-	@Override
-	public boolean hasItem(Context context, IValue iValue) throws PromptoError {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
-	@Override
-	public IValue getItem(Context context, IValue item) throws PromptoError {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public Iterable<IValue> getIterable(Context context) {
-		return new IValueIterable(context, (Iterable<Object>)(Object)this);
+	public IterableWithLength<IValue> getIterable(Context context) {
+		return new IValueIterable<>(context, this);
 	}
 	
 	

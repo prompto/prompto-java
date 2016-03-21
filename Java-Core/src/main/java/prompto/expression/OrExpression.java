@@ -85,13 +85,13 @@ public class OrExpression implements IExpression, IAssertion {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
-		ResultInfo li = left.compile(context, method, flags.withNative(true));
+		ResultInfo li = left.compile(context, method, flags.withPrimitive(true));
 		if(Boolean.class==li.getType())
 			CompilerUtils.BooleanToboolean(method);
 		IInstructionListener olc = method.addOffsetListener(new OffsetListenerConstant());
 		method.activateOffsetListener(olc);
 		method.addInstruction(Opcode.IFNE, olc);
-		ResultInfo ri = right.compile(context, method, flags.withNative(true));
+		ResultInfo ri = right.compile(context, method, flags.withPrimitive(true));
 		if(Boolean.class==ri.getType())
 			CompilerUtils.BooleanToboolean(method);
 		method.addInstruction(Opcode.IFNE, new ShortOperand((short)7));
@@ -104,7 +104,7 @@ public class OrExpression implements IExpression, IAssertion {
 		method.addInstruction(Opcode.ICONST_1);
 		StackState lastState = method.captureStackState();
 		method.placeLabel(lastState);
-		if(flags.toNative())
+		if(flags.toPrimitive())
 			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);

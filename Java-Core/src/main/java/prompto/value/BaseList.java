@@ -8,6 +8,9 @@ import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.IterableWithLength;
+import prompto.intrinsic.IteratorWithLength;
+import prompto.intrinsic.PromptoIterator;
 import prompto.runtime.Context;
 import prompto.type.ContainerType;
 import prompto.type.IType;
@@ -61,15 +64,9 @@ public abstract class BaseList<T extends BaseList<T,I>,I extends List<IValue>> e
 	}
 	
 	@Override
-	public long length() {
+	public long getLength() {
 		return items.size();
 	}
-
-	@Override
-	public boolean isEmpty() {
-		return items.isEmpty();
-	}
-
 
 	public T merge(Collection<IValue> items) {
 		List<IValue> result = newItemsInstance();
@@ -107,8 +104,13 @@ public abstract class BaseList<T extends BaseList<T,I>,I extends List<IValue>> e
 
 
 	@Override
-	public Iterable<IValue> getIterable(Context context) {
-		return items;
+	public IterableWithLength<IValue> getIterable(Context context) {
+		return new IterableWithLength<IValue>() {
+			@Override
+			public IteratorWithLength<IValue> iterator() {
+				return new PromptoIterator<IValue>(items.iterator(), items.size());
+			}
+		};
 	}
 
 	@Override
