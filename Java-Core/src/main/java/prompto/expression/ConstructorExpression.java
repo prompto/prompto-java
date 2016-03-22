@@ -165,7 +165,7 @@ public class ConstructorExpression implements IExpression {
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		Type klass = getConcreteType(context);
-		ResultInfo result = CompilerUtils.newInstance(method, klass);
+		ResultInfo result = CompilerUtils.compileNewInstance(method, klass);
 		compileCopyFrom(context, method, flags, result);
 		compileAssignments(context, method, flags, result);
 		return new ResultInfo(getInterfaceType(context));

@@ -16,4 +16,9 @@ public class PromptoType implements Type {
 	public String getTypeName() {
 		return name;
 	}
+	
+	@Override
+	public String toString() {
+		return name;
+	}
 }

@@ -403,23 +403,23 @@ public abstract class CompilerUtils {
 		return new ResultInfo(String.class);
 	}
 
-	public static ResultInfo newRawInstance(MethodInfo method, Type klass) {
+	public static ResultInfo compileNewRawInstance(MethodInfo method, Type klass) {
 		IOperand c = new ClassConstant(klass);
 		method.addInstruction(Opcode.NEW, c);
-		method.addInstruction(Opcode.DUP); // need to keep a reference on top of stack
 		return new ResultInfo(klass);
 	}
 	
-	public static ResultInfo callConstructor(MethodInfo method, Type klass, Type ... params) {
+	public static ResultInfo compileCallConstructor(MethodInfo method, Type klass, Type ... params) {
 		Descriptor.Method desc = new Descriptor.Method(params, void.class);
 		IOperand c = new MethodConstant(klass, "<init>", desc);
 		method.addInstruction(Opcode.INVOKESPECIAL, c);
 		return new ResultInfo(klass);
 	}
 	
-	public static ResultInfo newInstance(MethodInfo method, Type klass) {
-		newRawInstance(method, klass);
-		return callConstructor(method, klass);
+	public static ResultInfo compileNewInstance(MethodInfo method, Type klass) {
+		compileNewRawInstance(method, klass);
+		method.addInstruction(Opcode.DUP); // need to keep a reference on top of stack
+		return compileCallConstructor(method, klass);
 	}
 
 	public static Type getCategoryClass(Identifier identifier) {

@@ -223,7 +223,7 @@ public enum Opcode {
     RETURN(0xb1, popsNone(), pushesNone()),
     GETSTATIC(0xb2, CPREF_W, popsNone(), pushesField())/*, 
     PUTSTATIC(0xb3, CPREF_W)*/,
-    GETFIELD(0xb4, CPREF_W, popsNone(), pushesField()), 
+    GETFIELD(0xb4, CPREF_W, pops(1), pushesField()), 
     PUTFIELD(0xb5, CPREF_W, pops(2), pushesNone()),
     INVOKEVIRTUAL(0xb6, CPREF_W, popsArguments(false), pushesResult()),
     INVOKESPECIAL(0xb7, CPREF_W, popsArguments(false), pushesResult()),

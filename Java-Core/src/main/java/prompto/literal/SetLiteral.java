@@ -90,7 +90,7 @@ public class SetLiteral extends Literal<SetValue> {
 
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
-		ResultInfo info = CompilerUtils.newInstance(method, PromptoSet.class);
+		ResultInfo info = CompilerUtils.compileNewInstance(method, PromptoSet.class);
 		if(expressions!=null)
 			addItems(context, method, flags);
 		return info;

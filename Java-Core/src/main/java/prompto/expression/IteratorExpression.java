@@ -62,9 +62,9 @@ public class IteratorExpression implements IExpression {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
-		String innerClassName = compileInnerClass(context, method.getClassFile());
+		Type innerClassType = compileInnerClass(context, method.getClassFile());
 		// instantiate inner class
-		ClassConstant innerClass = new ClassConstant(new PromptoType(innerClassName));
+		ClassConstant innerClass = new ClassConstant(innerClassType);
 		method.addInstruction(Opcode.NEW, innerClass);
 		method.addInstruction(Opcode.DUP);
 		// get iterable
@@ -86,15 +86,16 @@ public class IteratorExpression implements IExpression {
 		return new ResultInfo(IterableWithLength.class);
 	}
 
-	private String compileInnerClass(Context context, ClassFile parentClass) throws SyntaxError {
+	private Type compileInnerClass(Context context, ClassFile parentClass) throws SyntaxError {
 		int innerClassIndex = 1 + parentClass.getInnerClasses().size();
 		String innerClassName = parentClass.getThisClass().getType().getTypeName() + '$' + innerClassIndex;
-		ClassFile classFile = new ClassFile(new PromptoType(innerClassName));
+		Type innerClassType = new PromptoType(innerClassName); 
+		ClassFile classFile = new ClassFile(innerClassType);
 		classFile.setSuperClass(new ClassConstant(PromptoIterable.class));
 		compileInnerClassConstructor(classFile);
 		compileInnerClassExpression(context, classFile);
 		parentClass.addInnerClass(classFile);;
-		return innerClassName;
+		return innerClassType;
 	}
 
 	private MethodInfo compileInnerClassConstructor(ClassFile classFile) {

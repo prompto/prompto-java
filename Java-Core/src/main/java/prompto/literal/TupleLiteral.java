@@ -67,7 +67,7 @@ public class TupleLiteral extends Literal<TupleValue> {
 
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
-		ResultInfo info = CompilerUtils.newInstance(method, PromptoTuple.class);
+		ResultInfo info = CompilerUtils.compileNewInstance(method, PromptoTuple.class);
 		if(expressions!=null)
 			addItems(context, method, flags);
 		return info;

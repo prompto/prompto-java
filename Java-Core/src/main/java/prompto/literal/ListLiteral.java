@@ -99,7 +99,7 @@ public class ListLiteral extends Literal<ListValue> {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
-		ResultInfo info = CompilerUtils.newInstance(method, PromptoList.class);
+		ResultInfo info = CompilerUtils.compileNewInstance(method, PromptoList.class);
 		if(expressions!=null)
 			compileItems(context, method);
 		return info;

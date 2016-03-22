@@ -29,6 +29,11 @@ public class ResultInfo {
 		}
 	}
 	
+	@Override
+	public String toString() {
+		return type.toString();
+	}
+	
 	public Type getType() {
 		return type;
 	}

@@ -7,6 +7,7 @@ import java.util.Map;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -66,10 +67,11 @@ public class RangeLiteral implements IExpression {
 			System.err.println("Missing PromptoRange for = " + itemType.getName());
 			throw new SyntaxError("Cannot build Range of " + itemType.getName());
 		}
-		CompilerUtils.newRawInstance(method, rangeKlass);
+		CompilerUtils.compileNewRawInstance(method, rangeKlass);
+		method.addInstruction(Opcode.DUP); // need to keep a reference on top of stack
 		first.compile(context, method, flags.withPrimitive(false));
 		last.compile(context, method, flags.withPrimitive(false));
-		return CompilerUtils.callConstructor(method, rangeKlass, itemKlass, itemKlass);
+		return CompilerUtils.compileCallConstructor(method, rangeKlass, itemKlass, itemKlass);
 	}
 
 	public IExpression getFirst() {

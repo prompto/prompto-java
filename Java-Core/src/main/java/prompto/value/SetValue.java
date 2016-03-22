@@ -168,7 +168,7 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IFilterab
 			ResultInfo left, IExpression exp) throws SyntaxError {
 		// TODO: return left if right is empty (or right if left is empty and is a set)
 		// create result
-		ResultInfo info = CompilerUtils.newInstance(method, PromptoSet.class); 
+		ResultInfo info = CompilerUtils.compileNewInstance(method, PromptoSet.class); 
 		// add left, current stack is: left, result, we need: result, result, left
 		method.addInstruction(Opcode.DUP_X1); // stack is: result, left, result
 		method.addInstruction(Opcode.SWAP); // stack is: result, result, left
