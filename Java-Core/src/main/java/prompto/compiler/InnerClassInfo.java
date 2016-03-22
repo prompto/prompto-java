@@ -4,15 +4,21 @@ import java.lang.reflect.Modifier;
 
 public class InnerClassInfo {
 	
+	ClassFile classFile;
 	ClassConstant innerClass;
 	ClassConstant outerClass;
 	Utf8Constant simpleName;
 	int accessFlags = Tags.ACC_SUPER | Modifier.PUBLIC | Modifier.STATIC;
 
-	public InnerClassInfo(ClassConstant innerClass, ClassConstant outerClass) {
-		this.innerClass = innerClass;
+	public InnerClassInfo(ClassFile classFile, ClassConstant outerClass) {
+		this.classFile = classFile;
+		this.innerClass = classFile.getThisClass().clone();
 		this.outerClass = outerClass;
-		this.simpleName = new Utf8Constant(innerClass.getSimpleName());
+		this.simpleName = new Utf8Constant(this.innerClass.getSimpleName());
+	}
+	
+	public ClassFile getClassFile() {
+		return classFile;
 	}
 
 	public void register(ConstantsPool pool) {
@@ -33,4 +39,6 @@ public class InnerClassInfo {
 		writer.writeU2(simpleName.getIndexInConstantPool());
 		writer.writeU2(accessFlags);
 	}
+
+
 }

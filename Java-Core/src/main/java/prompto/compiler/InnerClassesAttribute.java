@@ -8,6 +8,10 @@ public class InnerClassesAttribute implements IAttribute {
 	Utf8Constant attributeName = new Utf8Constant("InnerClasses");
 	List<InnerClassInfo> classes = new ArrayList<>();
 	
+	public List<InnerClassInfo> getClasses() {
+		return classes;
+	}
+	
 	public void addInnerClass(InnerClassInfo info) {
 		classes.add(info);
 	}

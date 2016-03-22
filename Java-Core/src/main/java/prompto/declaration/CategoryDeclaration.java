@@ -284,15 +284,10 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 
 	protected abstract void categoryTypeToPDialect(CodeWriter writer);
 
-	public void compileClass(Context context, ClassFile classFile) {
+	public ClassFile compile(Context context, String fullName) {
 		throw new UnsupportedOperationException(); // TODO -> abstract
 	}
 	
-	public void compileInterface(Context context, ClassFile classFile) {
-		throw new UnsupportedOperationException(); // TODO -> abstract
-	}
-
-
 	public abstract IMethodDeclaration findOperator(Context context, Operator operator, IType type) throws SyntaxError;
 	
 	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 

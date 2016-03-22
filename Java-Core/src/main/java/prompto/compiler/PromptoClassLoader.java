@@ -77,22 +77,20 @@ public class PromptoClassLoader extends URLClassLoader {
 	}
 
 	private void createCategoryClass(String fullName) throws ClassNotFoundException {
-		Type interfaceType = CompilerUtils.interfaceTypeFrom(fullName);
-		Type concreteType = CompilerUtils.concreteTypeFrom(fullName);
 		String simpleName = CompilerUtils.simpleNameFrom(fullName);
 		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, new Identifier(simpleName));
 		if(decl==null)
 			throw new ClassNotFoundException(simpleName);
 		else
-			createCategoryClass(interfaceType, concreteType, decl);
+			createCategoryClass(fullName, decl);
 	}
 
-	private void createCategoryClass(Type interfaceType, Type concreteType, CategoryDeclaration decl) throws ClassNotFoundException {
+	private void createCategoryClass(String fullName, CategoryDeclaration decl) throws ClassNotFoundException {
 		try {
 			Compiler compiler = new Compiler(getClassDir()); // where to store .class
-			compiler.compileCategory(context, decl, interfaceType, concreteType);
+			compiler.compileCategory(context, fullName, decl);
 		} catch(Exception e) {
-			throw new ClassNotFoundException(concreteType.getTypeName(), e);
+			throw new ClassNotFoundException(fullName, e);
 		}
 	}
 

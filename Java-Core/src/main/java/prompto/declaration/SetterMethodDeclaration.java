@@ -87,8 +87,7 @@ public class SetterMethodDeclaration extends ConcreteMethodDeclaration implement
 			CategoryType type, FieldInfo field) throws SyntaxError {
 		String name = CompilerUtils.setterName(this.getName());
 		Descriptor proto = new Descriptor.Method(field.getType(), void.class);
-		MethodInfo method = new MethodInfo(name, proto);
-		classFile.addMethod(method);
+		MethodInfo method = classFile.newMethod(name, proto);
 		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, getId());
 		method.registerLocal(getName(), IVerifierEntry.Type.ITEM_Object, new ClassConstant(field.getType()));

@@ -1,7 +1,6 @@
 package prompto.expression;
 
 import java.lang.reflect.Type;
-import java.util.List;
 
 import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
@@ -36,7 +35,6 @@ public class IteratorExpression implements IExpression {
 	Identifier name;
 	IExpression source;
 	IExpression expression;
-	String innerClassName;
 	
 	public IteratorExpression(Identifier name, IExpression source, IExpression exp) {
 		this.name = name;
@@ -64,6 +62,7 @@ public class IteratorExpression implements IExpression {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		String innerClassName = compileInnerClass(context, method.getClassFile());
 		// instantiate inner class
 		ClassConstant innerClass = new ClassConstant(new PromptoType(innerClassName));
 		method.addInstruction(Opcode.NEW, innerClass);
@@ -87,26 +86,20 @@ public class IteratorExpression implements IExpression {
 		return new ResultInfo(IterableWithLength.class);
 	}
 
-	@Override
-	public void compileInnerClasses(Context context, Type parentClass, List<ClassFile> list) throws SyntaxError {
-		int innerClassIndex = 1 + list.size();
-		innerClassName = parentClass.getTypeName() + '$' + innerClassIndex;
-		ClassFile classFile = compileInnerClass(context);
-		list.add(classFile);
-	}
-
-	private ClassFile compileInnerClass(Context context) throws SyntaxError {
+	private String compileInnerClass(Context context, ClassFile parentClass) throws SyntaxError {
+		int innerClassIndex = 1 + parentClass.getInnerClasses().size();
+		String innerClassName = parentClass.getThisClass().getType().getTypeName() + '$' + innerClassIndex;
 		ClassFile classFile = new ClassFile(new PromptoType(innerClassName));
 		classFile.setSuperClass(new ClassConstant(PromptoIterable.class));
 		compileInnerClassConstructor(classFile);
 		compileInnerClassExpression(context, classFile);
-		return classFile;
+		parentClass.addInnerClass(classFile);;
+		return innerClassName;
 	}
 
 	private MethodInfo compileInnerClassConstructor(ClassFile classFile) {
 		Descriptor.Method proto = new Descriptor.Method(Iterable.class, long.class, void.class);
-		MethodInfo method = new MethodInfo("<init>", proto);
-		classFile.addMethod(method);
+		MethodInfo method = classFile.newMethod("<init>", proto);
 		method.registerLocal("this", IVerifierEntry.Type.ITEM_UninitializedThis, classFile.getThisClass());
 		method.registerLocal("iterable", IVerifierEntry.Type.ITEM_Object, new ClassConstant(Iterable.class));
 		method.registerLocal("length", IVerifierEntry.Type.ITEM_Long, null);
@@ -132,8 +125,7 @@ public class IteratorExpression implements IExpression {
 	private void compileInnerClassApplyMethod(Context context, ClassFile classFile, Type paramType, Type resultType) throws SyntaxError {
 		// create the "apply" method itself
 		Descriptor.Method proto = new Descriptor.Method(paramType, resultType);
-		MethodInfo method = new MethodInfo("apply", proto);
-		classFile.addMethod(method);
+		MethodInfo method = classFile.newMethod("apply", proto);
 		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
 		method.registerLocal(name.getName(), IVerifierEntry.Type.ITEM_Object, new ClassConstant(paramType));
 		ReturnStatement stmt = new ReturnStatement(expression);
@@ -143,9 +135,8 @@ public class IteratorExpression implements IExpression {
 	private void compileInnerClassBridgeMethod(ClassFile classFile, Type paramType, Type resultType) {
 		// create a bridge "apply" method to convert Object -> paramType
 		Descriptor.Method proto = new Descriptor.Method(Object.class, Object.class);
-		MethodInfo method = new MethodInfo("apply", proto);
+		MethodInfo method = classFile.newMethod("apply", proto);
 		method.addModifier(Tags.ACC_BRIDGE | Tags.ACC_SYNTHETIC);
-		classFile.addMethod(method);
 		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
 		method.registerLocal(name.getName(), IVerifierEntry.Type.ITEM_Object, new ClassConstant(Object.class));
 		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());

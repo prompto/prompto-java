@@ -14,6 +14,10 @@ public class ClassConstant implements CodeConstant {
 		this.className = new Utf8Constant(CompilerUtils.makeClassName(type));
 	}
 
+	public ClassConstant clone() {
+		return new ClassConstant(this.type);
+	}
+	
 	public Type getType() {
 		return type;
 	}

@@ -400,25 +400,38 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		}
 	}
 	
-	@Override
-	public void compileClass(Context context, ClassFile classFile) {
+	public ClassFile compileConcreteClass(Context context, String fullName) {
 		try {
+			java.lang.reflect.Type concreteType = CompilerUtils.concreteTypeFrom(fullName);
+			ClassFile classFile = new ClassFile(concreteType);
+			if(isAbstract())
+				classFile.addModifier(Modifier.ABSTRACT);
 			compileSuperClass(context, classFile, new Flags());
 			compileInterface(context, classFile, new Flags());
 			compileFields(context, classFile, new Flags());
 			CompilerUtils.compileEmptyConstructor(classFile);
 			compileMethods(context, classFile, new Flags());
+			return classFile;
 		} catch(SyntaxError e) {
 			throw new CompilerException(e);
 		}
 	}
 	
 	@Override
-	public void compileInterface(Context context, ClassFile classFile) {
+	public ClassFile compile(Context context, String fullName) {
+		/* multiple inheritance is supported via interfaces */
+		/* concrete class is an inner class of the interface */
+		/* inner class is prefixed with '%' to prevent naming collisions */
 		try {
+			java.lang.reflect.Type interfaceType = CompilerUtils.interfaceTypeFrom(fullName);
+			ClassFile classFile = new ClassFile(interfaceType);
+			classFile.addModifier(Modifier.ABSTRACT | Modifier.INTERFACE);
 			compileInterfaces(context, classFile);
 			compileFieldPrototypes(context, classFile);
 			compileMethodPrototypes(context, classFile);
+			ClassFile concrete = compileConcreteClass(context, fullName);
+			classFile.addInnerClass(concrete);
+			return classFile;
 		} catch(SyntaxError e) {
 			throw new CompilerException(e);
 		}
@@ -445,17 +458,15 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	private void compileGetterPrototype(Context context, ClassFile classFile, Identifier id, FieldInfo field) {
 		String name = CompilerUtils.getterName(id.getName());
 		Descriptor proto = new Descriptor.Method(field.getType());
-		MethodInfo method = new MethodInfo(name, proto);
+		MethodInfo method = classFile.newMethod(name, proto);
 		method.addModifier(Modifier.ABSTRACT);
-		classFile.addMethod(method);
 	}
 
 	private void compileSetterPrototype(Context context, ClassFile classFile, Identifier id, FieldInfo field) {
 		String name = CompilerUtils.setterName(field.getName().getValue());
 		Descriptor proto = new Descriptor.Method(field.getType(), void.class);
-		MethodInfo method = new MethodInfo(name, proto);
+		MethodInfo method = classFile.newMethod(name, proto);
 		method.addModifier(Modifier.ABSTRACT);
-		classFile.addMethod(method);
 	}
 
 	private void compileMethodPrototypes(Context context, ClassFile classFile) throws SyntaxError {
@@ -639,8 +650,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			Identifier id, FieldInfo field) {
 		String name = CompilerUtils.setterName(field.getName().getValue());
 		Descriptor proto = new Descriptor.Method(field.getType(), void.class);
-		MethodInfo method = new MethodInfo(name, proto);
-		classFile.addMethod(method);
+		MethodInfo method = classFile.newMethod(name, proto);
 		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
 		ClassConstant fc = new ClassConstant(field.getType());
 		method.registerLocal("%value%", IVerifierEntry.Type.ITEM_Object, fc);
@@ -662,8 +672,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	private void compileFieldGetter(Context context, ClassFile classFile, Flags flags, Identifier id, FieldInfo field) {
 		String name = CompilerUtils.getterName(id.getName());
 		Descriptor proto = new Descriptor.Method(field.getType());
-		MethodInfo method = new MethodInfo(name, proto);
-		classFile.addMethod(method);
+		MethodInfo method = classFile.newMethod(name, proto);
 		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
 		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
 		FieldConstant f = new FieldConstant(classFile.getThisClass(), id.getName(), field.getType());

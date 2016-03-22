@@ -4,6 +4,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class ClassFile {
@@ -56,12 +57,14 @@ public class ClassFile {
 		fields.add(field);
 	}
 
-	public void addMethod(MethodInfo method) {
+	public MethodInfo newMethod(String name, Descriptor descriptor) {
+		MethodInfo method = new MethodInfo(this, name, descriptor);
 		methods.add(method);
+		return method;
 	}
 
 	public void addInnerClass(ClassFile classFile) {
-		InnerClassInfo info = new InnerClassInfo(classFile.getThisClass(), getThisClass());
+		InnerClassInfo info = new InnerClassInfo(classFile, getThisClass());
 		addInnerClass(info);
 	}
 
@@ -72,6 +75,16 @@ public class ClassFile {
 		}
 		innerClasses.addInnerClass(info);
 	}
+	
+	public Collection<ClassFile> getInnerClasses() {
+		List<ClassFile> list = new ArrayList<>();
+		if(innerClasses!=null) 
+			innerClasses.getClasses().forEach((ici)->
+				list.add(ici.getClassFile()));
+		return list;
+	}
+
+
 
 	public void writeTo(OutputStream o) throws CompilerException {
 		ConstantsPool constantsPool = registerConstants();
@@ -137,8 +150,6 @@ public class ClassFile {
 		attributes.forEach((a)->
 			a.writeTo(writer));
 	}
-
-
 
 
 }

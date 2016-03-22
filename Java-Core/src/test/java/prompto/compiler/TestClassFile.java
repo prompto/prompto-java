@@ -74,14 +74,12 @@ public class TestClassFile {
 		ClassFile c = new ClassFile(new PromptoType(name));
 		c.addModifier(Modifier.ABSTRACT);
 		Descriptor proto = new Descriptor.Method(String.class, void.class);
-		MethodInfo m = new MethodInfo("printAbstract", proto);
+		MethodInfo m = c.newMethod("printAbstract", proto);
 		m.addModifier(Modifier.ABSTRACT);
-		c.addMethod(m);
-		m = new MethodInfo("printStatic", proto);
+		m = c.newMethod("printStatic", proto);
 		m.addModifier(Modifier.STATIC);
 		m.registerLocal("value", IVerifierEntry.Type.ITEM_Object, new ClassConstant(String.class));
 		m.addInstruction(Opcode.RETURN);
-		c.addMethod(m);
 		ByteArrayOutputStream o = new ByteArrayOutputStream();
 		c.writeTo(o);
 		byte[] gen = o.toByteArray();
@@ -102,14 +100,13 @@ public class TestClassFile {
 		ClassFile c = new ClassFile(new PromptoType(name));
 		c.addModifier(Modifier.ABSTRACT);
 		Descriptor proto = new Descriptor.Method(String.class, void.class);
-		MethodInfo m = new MethodInfo("print", proto);
+		MethodInfo m = c.newMethod("print", proto);
 		m.addModifier(Modifier.STATIC);
 		m.registerLocal("value", IVerifierEntry.Type.ITEM_Object, new ClassConstant(String.class));
 		m.addInstruction(Opcode.GETSTATIC, new FieldConstant(System.class, "out", PrintStream.class));
 		m.addInstruction(Opcode.ALOAD_0); // the parameter
 		m.addInstruction(Opcode.INVOKEVIRTUAL, new MethodConstant(PrintStream.class, "print", String.class, void.class));
 		m.addInstruction(Opcode.RETURN);
-		c.addMethod(m);
 		ByteArrayOutputStream o = new ByteArrayOutputStream();
 		c.writeTo(o);
 		byte[] gen = o.toByteArray();
@@ -130,10 +127,9 @@ public class TestClassFile {
 		ClassFile c = new ClassFile(new PromptoType(name));
 		c.addModifier(Modifier.ABSTRACT);
 		Descriptor proto = new Descriptor.Method(Long.class);
-		MethodInfo m = new MethodInfo("m3", proto);
+		MethodInfo m = c.newMethod("m3", proto);
 		m.addModifier(Modifier.STATIC);
 		m.addInstruction(Opcode.LDC2_W, new LongConstant(9876543210L));
-		c.addMethod(m);
 		ByteArrayOutputStream o = new ByteArrayOutputStream();
 		c.writeTo(o);
 		byte[] gen = o.toByteArray();
@@ -147,7 +143,7 @@ public class TestClassFile {
 		ClassFile c = new ClassFile(new PromptoType(name));
 		c.addModifier(Modifier.ABSTRACT);
 		Descriptor proto = new Descriptor.Method(void.class);
-		MethodInfo m = new MethodInfo("m", proto);
+		MethodInfo m = c.newMethod("m", proto);
 		m.addModifier(Modifier.STATIC);
 		m.addInstruction(Opcode.ICONST_1);
 		m.addInstruction(Opcode.ICONST_1);
@@ -162,7 +158,6 @@ public class TestClassFile {
 		m.placeLabel(lastState);
 		m.addInstruction(Opcode.POP);
 		m.addInstruction(Opcode.RETURN);
-		c.addMethod(m);
 		ByteArrayOutputStream o = new ByteArrayOutputStream();
 		c.writeTo(o);
 		byte[] gen = o.toByteArray();

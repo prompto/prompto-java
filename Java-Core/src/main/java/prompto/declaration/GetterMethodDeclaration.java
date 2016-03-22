@@ -78,8 +78,7 @@ public class GetterMethodDeclaration extends ConcreteMethodDeclaration implement
 	public void compile(Context context, ClassFile classFile, Flags flags, CategoryType type, FieldInfo field) throws SyntaxError {
 		String name = CompilerUtils.getterName(this.getName());
 		Descriptor proto = new Descriptor.Method(field.getType());
-		MethodInfo method = new MethodInfo(name, proto);
-		classFile.addMethod(method);
+		MethodInfo method = classFile.newMethod(name, proto);
 		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
 		context = context.newCategoryContext(type).newChildContext();
 		for(IStatement stmt : statements)

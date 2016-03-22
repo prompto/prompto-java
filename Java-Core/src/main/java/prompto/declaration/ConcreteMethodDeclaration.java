@@ -1,7 +1,6 @@
 package prompto.declaration;
 
 import java.lang.reflect.Modifier;
-import java.util.List;
 
 import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
@@ -195,17 +194,6 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		}
 	}
 
-	@Override
-	public void compileInnerClasses(Context context, java.lang.reflect.Type parentClass, List<ClassFile> list) {
-		try {
-			context = prepareContext(context);
-			for(IStatement s : statements)
-				s.compileInnerClasses(context, parentClass, list);
-		} catch (PromptoError e) {
-			throw new CompilerException(e);
-		}
-	}
-
 	private void produceByteCode(Context context, MethodInfo method, IType returnType) throws SyntaxError {
 		Flags flags = new Flags();
 		for(IStatement s : statements)
@@ -227,8 +215,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	
 	protected MethodInfo createMethodInfo(Context context, ClassFile classFile, IType returnType) {
 		Descriptor.Method proto = CompilerUtils.createMethodDescriptor(context, arguments, returnType);
-		MethodInfo method = new MethodInfo(getName(), proto); 
-		classFile.addMethod(method);
+		MethodInfo method = classFile.newMethod(getName(), proto); 
 		return method;
 	}
 	

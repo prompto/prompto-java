@@ -14,12 +14,19 @@ public class MethodInfo {
 	List<IAttribute> attributes = new LinkedList<>();
 	CodeAttribute codeAttribute = null;
 	Descriptor descriptor;
+	ClassFile classFile;
 	
-	public MethodInfo(String name, Descriptor descriptor) {
+	MethodInfo(ClassFile classFile, String name, Descriptor descriptor) {
+		this.classFile = classFile;
 		this.descriptor = descriptor;
 		this.name = new Utf8Constant(name);
 		this.proto = new Utf8Constant(descriptor.toString());
 	}
+	
+	public ClassFile getClassFile() {
+		return classFile;
+	}
+
 
 	public Utf8Constant getName() {
 		return name;
@@ -117,6 +124,7 @@ public class MethodInfo {
 		writer.writeU2(attributes.size());
 		attributes.forEach((a)->a.writeTo(writer));
 	}
+
 
 
 }

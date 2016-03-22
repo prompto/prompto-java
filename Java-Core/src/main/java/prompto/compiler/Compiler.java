@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 
 import prompto.declaration.CategoryDeclaration;
 import prompto.runtime.Context;
@@ -26,22 +24,13 @@ public class Compiler {
 	}
 
 	void compileGlobalMethods(Context context, MethodDeclarationMap methods, Type type) throws Exception {
-		List<ClassFile> innerClassFiles = compileGlobalMethodsInnerClasses(context, type, methods);
-		innerClassFiles.forEach((file)->
-			writeClassFile(file, file.getThisClass().getType()));
 		ClassFile classFile = createGlobalMethodsClassFile(context, methods, type);
-		writeClassFile(classFile, type);
+		writeClassFile(classFile);
 	}
 
-	private List<ClassFile> compileGlobalMethodsInnerClasses(Context context, Type parentClass, MethodDeclarationMap methods) {
-		List<ClassFile> list = new ArrayList<>();
-		methods.values().forEach((m) -> 
-			m.compileInnerClasses(context, parentClass, list));
-		return list;
-	}
-
-	private void writeClassFile(ClassFile classFile, Type type) throws CompilerException {
+	private void writeClassFile(ClassFile classFile) throws CompilerException {
 		try {
+			Type type = classFile.getThisClass().getType();
 			String fullName = type.getTypeName().replace('.', '/');
 			File parent = new File(classDir, fullName.substring(0, fullName.lastIndexOf('/')+1));
 			if(!parent.exists() && !parent.mkdirs())
@@ -52,6 +41,8 @@ public class Compiler {
 			try(OutputStream out = new FileOutputStream(file)) {
 				classFile.writeTo(out);
 			}
+			for(ClassFile inner : classFile.getInnerClasses())
+				writeClassFile(inner);
 		} catch(Exception e) {
 			throw new CompilerException(e);
 		}
@@ -65,30 +56,9 @@ public class Compiler {
 		return classFile;
 	}
 
-	public void compileCategory(Context context, CategoryDeclaration decl, Type interfaceType, Type concreteType) throws Exception {
-		/* multiple inheritance is supported via interfaces */
-		/* concrete class is an inner class of the interface */
-		/* inner class is prefixed with '%' to prevent naming collisions */
-		ClassFile classFile = createCategoryClassFile(context, decl, concreteType);
-		writeClassFile(classFile, concreteType);
-		classFile = createCategoryInterfaceFile(context, decl, interfaceType, classFile);
-		writeClassFile(classFile, interfaceType);
+	public void compileCategory(Context context, String fullName, CategoryDeclaration decl) throws Exception {
+		ClassFile classFile = decl.compile(context, fullName);
+		writeClassFile(classFile);
 	}
 	
-	public ClassFile createCategoryInterfaceFile(Context context, CategoryDeclaration decl, Type type, ClassFile innerClass) {
-		ClassFile classFile = new ClassFile(type);
-		classFile.addModifier(Modifier.ABSTRACT | Modifier.INTERFACE);
-		classFile.addInnerClass(innerClass);
-		decl.compileInterface(context, classFile);
-		return classFile;
-	}
-	
-	public ClassFile createCategoryClassFile(Context context, CategoryDeclaration decl, Type type) {
-		ClassFile classFile = new ClassFile(type);
-		if(decl.isAbstract())
-			classFile.addModifier(Modifier.ABSTRACT);
-		decl.compileClass(context, classFile);
-		return classFile;
-	}
-
 }
