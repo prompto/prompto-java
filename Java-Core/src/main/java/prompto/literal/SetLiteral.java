@@ -2,14 +2,13 @@ package prompto.literal;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.IOperand;
 import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -25,9 +24,9 @@ import prompto.utils.CodeWriter;
 import prompto.utils.ExpressionList;
 import prompto.utils.Utils;
 import prompto.value.Character;
-import prompto.value.Integer;
 import prompto.value.Decimal;
 import prompto.value.IValue;
+import prompto.value.Integer;
 import prompto.value.SetValue;
 
 public class SetLiteral extends Literal<SetValue> {
@@ -64,7 +63,7 @@ public class SetLiteral extends Literal<SetValue> {
 				list.add(exp.interpret(context));
 			if(itemType==null)
 				itemType = Utils.inferElementType(context, list); 
-			Set<IValue> set = new PromptoSet<IValue>();
+			PromptoSet<IValue> set = new PromptoSet<IValue>();
 			for(IValue item : list) {
 				if(DecimalType.instance()==itemType && item instanceof Integer)
 					item = new Decimal(((Integer)item).doubleValue());

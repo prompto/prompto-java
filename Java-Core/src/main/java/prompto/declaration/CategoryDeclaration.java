@@ -98,8 +98,8 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		return attributes!=null && attributes.contains(name);
 	}
 	
-	public boolean hasMethod(Context context, String key, Object object) {
-		return false;
+	public boolean hasMethod(Context context, Identifier key, Object object) {
+		return false; // TODO
 	}
 
 	public boolean isDerivedFrom(Context context, CategoryType categoryType) {

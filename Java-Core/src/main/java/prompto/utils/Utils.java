@@ -41,12 +41,12 @@ public class Utils {
 			return null;
 	}
 	
-	public static IType inferElementType(Context context, Collection<IValue> items) throws SyntaxError {
+	public static IType inferElementType(Context context, Collection<? extends IValue> items) throws SyntaxError {
 		Collection<IType> types = collectElementTypes(context, items);
 		return inferType(context, types);
 	}
 	
-	private static Collection<IType> collectElementTypes(Context context, Collection<IValue> items) {
+	private static Collection<IType> collectElementTypes(Context context, Collection<? extends IValue> items) {
 		List<IType> types = new ArrayList<IType>(items.size());
 		for(IValue item : items)
 			types.add(item.getType());

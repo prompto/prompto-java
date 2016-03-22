@@ -1,8 +1,7 @@
 package prompto.type;
 
 import java.lang.reflect.Type;
-
-import com.fasterxml.jackson.databind.JsonNode;
+import java.util.Comparator;
 
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -10,9 +9,10 @@ import prompto.grammar.Identifier;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.utils.CodeWriter;
-import prompto.value.IContainer;
 import prompto.value.IValue;
 import prompto.value.RangeBase;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 public interface IType {
 	
@@ -43,7 +43,7 @@ public interface IType {
 	boolean isMoreSpecificThan(Context context, IType other);
 	
 	RangeBase<?> newRange(Object first,Object last) throws SyntaxError;
-	IValue sort(Context context,IContainer<IValue> values) throws PromptoError;
+	Comparator<? extends IValue> getComparator();
 	IValue getMember(Context context, Identifier name) throws PromptoError;
 	String toString(Object value);
 	void toDialect(CodeWriter writer);

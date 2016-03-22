@@ -1,21 +1,19 @@
 package prompto.type;
 
 import java.lang.reflect.Type;
+import java.util.Comparator;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
-import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoTime;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
-import prompto.value.IContainer;
 import prompto.value.IValue;
-import prompto.value.ListValue;
 import prompto.value.RangeBase;
 import prompto.value.Time;
 import prompto.value.TimeRange;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 
 public class TimeType extends NativeType {
@@ -93,8 +91,13 @@ public class TimeType extends NativeType {
 	}
 
 	@Override
-	public ListValue sort(Context context, IContainer<IValue> list) throws PromptoError {
-		return this.doSort(context, list);
+	public Comparator<Time> getComparator() {
+		return new Comparator<Time>() {
+			@Override
+			public int compare(Time o1, Time o2) {
+				return o1.getValue().compareTo(o2.getValue());
+			}
+		};
 	}
 
 	@Override

@@ -1,20 +1,19 @@
 package prompto.type;
 
 import java.lang.reflect.Type;
-
-import com.fasterxml.jackson.databind.JsonNode;
+import java.util.Comparator;
 
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
-import prompto.value.IContainer;
 import prompto.value.IValue;
 import prompto.value.Integer;
 import prompto.value.IntegerRange;
-import prompto.value.ListValue;
 import prompto.value.RangeBase;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class IntegerType extends NativeType implements INumberType {
 
@@ -140,10 +139,15 @@ public class IntegerType extends NativeType implements INumberType {
 	}
 
 	@Override
-	public ListValue sort(Context context, IContainer<IValue> list) throws PromptoError {
-		return this.doSort(context,list);
+	public Comparator<Integer> getComparator() {
+		return new Comparator<Integer>() {
+			@Override
+			public int compare(Integer o1, Integer o2) {
+				return java.lang.Long.compare(o1.longValue(), o2.longValue());
+			}
+		};
 	}
-	
+
 	@Override
 	public IValue convertJavaValueToPromptoValue(Object value) {
         if (value instanceof Number)

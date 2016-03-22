@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -21,6 +20,7 @@ import prompto.grammar.Identifier;
 import prompto.intrinsic.IterableWithLength;
 import prompto.intrinsic.IteratorWithLength;
 import prompto.intrinsic.PromptoDict;
+import prompto.intrinsic.PromptoSet;
 import prompto.runtime.Context;
 import prompto.type.ContainerType;
 import prompto.type.DictType;
@@ -94,16 +94,15 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 					+ this.getClass().getSimpleName());
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
 		if ("length".equals(name))
 			return new Integer(this.dict.size());
 		else if ("keys".equals(name)) {
-			IType type = TextType.instance();
-			Set<IValue> values = (Set<IValue>) (Object) this.dict.keySet();
-			return new SetValue(type, values);
+			@SuppressWarnings("unchecked")
+			PromptoSet<IValue> values = (PromptoSet<IValue>)(Object)new PromptoSet<Text>(this.dict.keySet());
+			return new SetValue(TextType.instance(), values);
 		} else if ("values".equals(name)) {
 			IType itemType = ((ContainerType) this.type).getItemType();
 			Collection<IValue> values = this.dict.values();

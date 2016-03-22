@@ -1,10 +1,8 @@
 package prompto.type;
 
 import java.lang.reflect.Type;
+import java.util.Comparator;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
-import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDate;
@@ -12,10 +10,10 @@ import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.value.Date;
 import prompto.value.DateRange;
-import prompto.value.IContainer;
 import prompto.value.IValue;
-import prompto.value.ListValue;
 import prompto.value.RangeBase;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 
 public class DateType extends NativeType {
@@ -99,8 +97,13 @@ public class DateType extends NativeType {
 	}
 
 	@Override
-	public ListValue sort(Context context, IContainer<IValue> list) throws PromptoError {
-		return this.doSort(context, list);
+	public Comparator<Date> getComparator() {
+		return new Comparator<Date>() {
+			@Override
+			public int compare(Date o1, Date o2) {
+				return o1.getValue().compareTo(o2.getValue());
+			}
+		};
 	}
 
 	@Override

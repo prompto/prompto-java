@@ -2,7 +2,8 @@ package prompto.value;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.List;
+import java.util.Iterator;
+import java.util.function.Predicate;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -12,11 +13,15 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.error.IndexOutOfRangeError;
+import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.Filterable;
+import prompto.intrinsic.IterableWithLength;
+import prompto.intrinsic.IteratorWithLength;
 import prompto.intrinsic.PromptoList;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
@@ -26,41 +31,134 @@ import prompto.type.ListType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
-public class ListValue extends BaseList<ListValue, PromptoList<IValue>> {
+public class ListValue extends BaseValue implements IContainer<IValue>, ISliceable<IValue>, IFilterable  {
+
+	protected PromptoList<IValue> items;
 
 	public ListValue(IType itemType) {
 		super(new ListType(itemType));
+		this.items = new PromptoList<>();
 	}
-
+	
 	public ListValue(IType itemType, PromptoList<IValue> items) {
-		super(new ListType(itemType), items);
+		super(new ListType(itemType));
+		this.items = items;
 	}
 
-	public ListValue(IType itemType, Collection<IValue> items) {
-		super(new ListType(itemType), items);
+	public ListValue(IType itemType, Collection<? extends IValue> items) {
+		super(new ListType(itemType));
+		this.items = new PromptoList<>(items);
 	}
 	
 	@Override
-	protected PromptoList<IValue> newItemsInstance() {
-		return new PromptoList<IValue>();
+	public String toString() {
+		return items.toString();
+	}
+
+	public IType getItemType() {
+		return ((ContainerType)type).getItemType();
+	}
+
+	public PromptoList<IValue> getItems() {
+		return items;
+	}
+	
+	public void addItem(IValue item) {
+		items.add(item);
+	}
+	
+	public IValue getItem(int index) {
+		return items.get(index);
+	}
+	
+	public void setItem(int index, IValue element) {
+		items.set(index, element);
+	}
+	
+	
+	@Override
+	public IValue getItem(Context context, IValue index) throws PromptoError {
+		if (index instanceof Integer) {
+			try {
+				int idx = (int)((Integer)index).longValue() - 1;
+				return items.get(idx);
+			} catch (IndexOutOfBoundsException e) {
+				throw new IndexOutOfRangeError();
+			}
+
+		} else
+			throw new SyntaxError("No such item:" + index.toString());
+	}
+
+	@Override
+	public boolean hasItem(Context context, IValue lval) throws PromptoError {
+		return this.items.contains(lval); // TODO interpret before
+	}
+
+	@Override
+	public long getLength() {
+		return items.size();
+	}
+
+	@Override
+	public Filterable<IValue,IValue> getFilterable(Context context) {
+		return new Filterable<IValue, IValue>() {
+			@Override
+			public IValue filter(Predicate<IValue> p) {
+				PromptoList<IValue> filtered = items.filter(p);
+				return new ListValue(getItemType(), filtered);
+			}
+		};
 	}
 	
 	@Override
-	protected PromptoList<IValue> newItemsInstance(Collection<IValue> items) {
-		return new PromptoList<IValue>(items);
+	public IterableWithLength<IValue> getIterable(Context context) {
+		return new IterableWithLength<IValue>() {
+			@Override
+			public IteratorWithLength<IValue> iterator() {
+				return new IteratorWithLength<IValue>() {
+					Iterator<IValue> iter = items.iterator();
+					@Override public long getLength() { return items.size(); }
+					@Override public boolean hasNext() { return iter.hasNext(); }
+					@Override public IValue next() { return iter.next(); }
+				};
+			}
+		};
 	}
-
+	
+	@Override
+	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
+		String name = id.toString();
+		if ("length".equals(name))
+			return new Integer(items.size());
+		else
+			throw new InvalidDataError("No such member:" + name);
+	}
+	
 	@Override
 	public void storeValue(Context context, String name, IStorable storable) throws PromptoError {
 		for(IValue item : this.items)
 			item.storeValue(context, name, storable);
 	}
-	
+
 	@Override
-	public ListValue newInstance(List<IValue> items) {
-		IType itemType = ((ContainerType)this.type).getItemType();
-		return new ListValue(itemType, items);
+	public IValue plus(Context context, IValue value) throws PromptoError {
+        if (value instanceof ListValue)
+            return this.merge(((ListValue)value).getItems());
+        else if (value instanceof SetValue)
+            return this.merge(((SetValue)value).getItems());
+        else
+            throw new SyntaxError("Illegal: " +this.type.getId() + " + " + value.getClass().getSimpleName());
+    }
+	
+	protected ListValue merge(Collection<? extends IValue> items) {
+		PromptoList<IValue> result = new PromptoList<IValue>();
+		result.addAll(this.items);
+		result.addAll(items);
+		IType itemType = ((ListType)getType()).getItemType();
+		return new ListValue(itemType, result);
 	}
+	
 
 	@Override
 	public boolean equals(Object obj) {

@@ -1,10 +1,8 @@
 package prompto.value;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.function.Predicate;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -19,29 +17,36 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.Filterable;
 import prompto.intrinsic.IterableWithLength;
 import prompto.intrinsic.IteratorWithLength;
 import prompto.intrinsic.PromptoSet;
 import prompto.runtime.Context;
+import prompto.type.ContainerType;
 import prompto.type.IType;
 import prompto.type.SetType;
 
-public class SetValue extends BaseValue implements IContainer<IValue>, IListable<SetValue> {
+public class SetValue extends BaseValue implements IContainer<IValue>, IFilterable {
 
-	Set<IValue> items = null;
+	PromptoSet<IValue> items = null;
 	
 	public SetValue(IType itemType) {
 		super(new SetType(itemType));
-		this.items = newSet();
+		this.items = new PromptoSet<IValue>();
 	}
 	
-	public SetValue(IType itemType, Set<IValue> items) {
+	public SetValue(IType itemType, PromptoSet<IValue> items) {
 		super(new SetType(itemType));
 		this.items = items;
 	}
 
-	protected Set<IValue> newSet() {
-		return new PromptoSet<IValue>();
+	@Override
+	public String toString() {
+		return items.toString();
+	}
+
+	public IType getItemType() {
+		return ((ContainerType)type).getItemType();
 	}
 
 	@Override
@@ -49,7 +54,7 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IListable
 		return items.size();
 	}
 
-	public Collection<IValue> getItems() {
+	public PromptoSet<IValue> getItems() {
 		return items;
 	}
 	
@@ -82,13 +87,24 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IListable
 	}
 
 	private IValue getNthItem(int idx) throws PromptoError {
-		Iterator<IValue> it = items.iterator();
+		Iterator<? extends IValue> it = items.iterator();
 		while(it.hasNext()) {
 			IValue item = it.next();
 			if(idx--==0)
 				return item;
 		}
 		throw new IndexOutOfRangeError();
+	}
+	
+	@Override
+	public Filterable<IValue, IValue> getFilterable(Context context) {
+		return new Filterable<IValue, IValue>() {
+			@Override
+			public IValue filter(Predicate<IValue> p) {
+				PromptoSet<IValue> filtered = items.filter(p);
+				return new SetValue(getItemType(), filtered);
+			}
+		};
 	}
 
 	@Override
@@ -97,7 +113,7 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IListable
 			@Override
 			public IteratorWithLength<IValue> iterator() {
 				return new IteratorWithLength<IValue>() {
-					Iterator<IValue> iter = items.iterator();
+					Iterator<? extends IValue> iter = items.iterator();
 					@Override public long getLength() { return items.size(); }
 					@Override public boolean hasNext() { return iter.hasNext(); }
 					@Override public IValue next() { return iter.next(); }
@@ -130,19 +146,6 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IListable
 	}
 	
 	@Override
-	public SetValue newInstance(List<IValue> values) {
-		IType itemType = ((SetType)type).getItemType();
-		SetValue result = new SetValue(itemType);
-		result.items.addAll(values);
-		return result;
-	}
-	
-	@Override
-	public String toString() {
-		return items.toString();
-	}
-
-	@Override
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
 		if ("length".equals(name))
@@ -153,8 +156,8 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IListable
 
 	@Override
 	public IValue plus(Context context, IValue value) throws PromptoError {
-        if (value instanceof BaseList<?,?>)
-            return this.merge(((BaseList<?,?>)value).getItems());
+        if (value instanceof ListValue)
+            return this.merge(((ListValue)value).getItems());
         else if (value instanceof SetValue)
             return this.merge(((SetValue)value).getItems());
         else
@@ -183,11 +186,12 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IListable
 		return info;
 	}
 	
-	public SetValue merge(Collection<IValue> items) {
-		List<IValue> result = new ArrayList<IValue>();
+	public SetValue merge(Collection<? extends IValue> items) {
+		PromptoSet<IValue> result = new PromptoSet<IValue>();
 		result.addAll(this.items);
 		result.addAll(items);
-		return newInstance(result);
+		IType itemType = ((SetType)getType()).getItemType();
+		return new SetValue(itemType, result);
 	}
 
 }

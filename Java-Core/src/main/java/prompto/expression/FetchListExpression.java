@@ -1,36 +1,49 @@
 package prompto.expression;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Type;
+import java.util.function.Predicate;
 
+import prompto.compiler.ClassConstant;
+import prompto.compiler.ClassFile;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Descriptor;
+import prompto.compiler.Flags;
+import prompto.compiler.IVerifierEntry;
+import prompto.compiler.InterfaceConstant;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.PromptoType;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.Tags;
 import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.Filterable;
 import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
+import prompto.statement.ReturnStatement;
 import prompto.type.BooleanType;
 import prompto.type.ContainerType;
 import prompto.type.IType;
 import prompto.type.ListType;
 import prompto.utils.CodeWriter;
 import prompto.value.Boolean;
-import prompto.value.IContainer;
-import prompto.value.IIterable;
+import prompto.value.IFilterable;
 import prompto.value.IValue;
-import prompto.value.ListValue;
 
 public class FetchListExpression extends Section implements IExpression {
 
 	Identifier itemName;
 	IExpression source;
-	IExpression filter;
+	IExpression predicate;
 	
-	public FetchListExpression(Identifier itemName, IExpression source, IExpression filter) {
+	public FetchListExpression(Identifier itemName, IExpression source, IExpression predicate) {
 		this.itemName = itemName;
 		this.source = source;
-		this.filter = filter;
+		this.predicate = predicate;
 	}
 	
 
@@ -54,7 +67,7 @@ public class FetchListExpression extends Section implements IExpression {
 		writer.append(" from ");
 		source.toDialect(writer);
 		writer.append(" where ");
-		filter.toDialect(writer);
+		predicate.toDialect(writer);
 	}
 	
 	@Override
@@ -65,7 +78,7 @@ public class FetchListExpression extends Section implements IExpression {
 		Context local = context.newLocalContext();
 		IType itemType = ((ContainerType)sourceType).getItemType();
 		local.registerValue(new Variable(itemName, itemType));
-		IType filterType = filter.check(local);
+		IType filterType = predicate.check(local);
 		if(filterType!=BooleanType.instance())
 			throw new SyntaxError("Filtering expression must return a boolean !");
 		return new ListType(itemType);
@@ -73,27 +86,116 @@ public class FetchListExpression extends Section implements IExpression {
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		Object src = source.interpret(context);
-		if(src==null)
-			throw new NullReferenceError();
-		if(!(src instanceof IContainer<?>))
-			throw new InternalError("Illegal fetch source: " + source);
+		// prepare context for expression evaluation
 		IType sourceType = source.check(context);
 		if(!(sourceType instanceof ContainerType))
 			throw new InternalError("Illegal source type: " + sourceType.getId());
 		IType itemType = ((ContainerType)sourceType).getItemType();
-		List<IValue> result = new ArrayList<IValue>();
-		Context local = context.newLocalContext();
+		Context local = context.newChildContext();
 		Variable item = new Variable(itemName, itemType);
 		local.registerValue(item);
-		for(IValue o : ((IIterable<?>)src).getIterable(context)) {
-			local.setValue(itemName, o);
-			IValue test = filter.interpret(local);
-			if(!(test instanceof Boolean))
-				throw new InternalError("Illegal test result: " + test);
-			if(((Boolean)test).getValue())
-				result.add(o);
+		// fetch and check source
+		IValue src = source.interpret(context);
+		if(src==null)
+			throw new NullReferenceError();
+		if(!(src instanceof IFilterable))
+			throw new InternalError("Illegal fetch source: " + source);
+		Filterable<IValue,IValue> filterable = ((IFilterable)src).getFilterable(context);
+		try {
+			return filterable.filter(new Predicate<IValue>() {
+	
+				@Override
+				public boolean test(IValue value) {
+					try {
+						local.setValue(itemName, value);
+						IValue test = predicate.interpret(local);
+						if(!(test instanceof Boolean))
+							throw new InternalError("Illegal test result: " + test);
+						return ((Boolean)test).getValue();
+					} catch(PromptoError e) {
+						throw new InternalError(e);
+					}
+				}
+			});
+		} catch (InternalError e) {
+			if(e.getCause() instanceof PromptoError)
+				throw (PromptoError)e.getCause();
+			else
+				throw e;
 		}
-		return new ListValue(itemType, result);
+	}
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		// create inner class for filter
+		String innerClassName = compileInnerClass(context, method.getClassFile());
+		// get iterable
+		ResultInfo srcinfo = source.compile(context, method, flags);
+		// instantiate filter
+		ClassConstant innerClass = new ClassConstant(new PromptoType(innerClassName));
+		method.addInstruction(Opcode.NEW, innerClass);
+		method.addInstruction(Opcode.DUP);
+		// call filter constructor
+		Descriptor.Method proto = new Descriptor.Method(void.class);
+		MethodConstant m = new MethodConstant(innerClass, "<init>", proto);
+		method.addInstruction(Opcode.INVOKESPECIAL, m);
+		// invoke filter on source
+		Descriptor.Method desc = new Descriptor.Method(Predicate.class, srcinfo.getType());
+		if(srcinfo.isInterface()) {
+			InterfaceConstant i = new InterfaceConstant(new ClassConstant(srcinfo.getType()), "filter",  desc);
+			method.addInstruction(Opcode.INVOKEINTERFACE, i);
+		} else {
+			m = new MethodConstant(new ClassConstant(srcinfo.getType()), "filter",  desc);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+		}
+		return new ResultInfo(srcinfo.getType());
+	}
+
+
+	private String compileInnerClass(Context context, ClassFile parentClass) throws SyntaxError {
+		int innerClassIndex = 1 + parentClass.getInnerClasses().size();
+		String innerClassName = parentClass.getThisClass().getType().getTypeName() + '$' + innerClassIndex;
+		ClassFile classFile = new ClassFile(new PromptoType(innerClassName));
+		classFile.setSuperClass(new ClassConstant(Object.class));
+		classFile.addInterface(new ClassConstant(Predicate.class));
+		CompilerUtils.compileEmptyConstructor(classFile);
+		compileInnerClassExpression(context, classFile);
+		parentClass.addInnerClass(classFile);;
+		return innerClassName;
+	}
+
+	private void compileInnerClassExpression(Context context, ClassFile classFile) throws SyntaxError {
+		IType paramIType = source.check(context).checkIterator(context);
+		context = context.newChildContext();
+		context.registerValue(new Variable(itemName, paramIType));
+		Type paramType = paramIType.getJavaType();
+		compileInnerClassBridgeMethod(classFile, paramType);
+		compileInnerClassTestMethod(context, classFile, paramType);
+	}
+
+	private void compileInnerClassTestMethod(Context context, ClassFile classFile, Type paramType) throws SyntaxError {
+		// create the "apply" method itself
+		Descriptor.Method proto = new Descriptor.Method(paramType, boolean.class);
+		MethodInfo method = classFile.newMethod("test", proto);
+		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
+		method.registerLocal(itemName.getName(), IVerifierEntry.Type.ITEM_Object, new ClassConstant(paramType));
+		ReturnStatement stmt = new ReturnStatement(predicate);
+		stmt.compile(context, method, new Flags().withPrimitive(true));
+	}
+
+	private void compileInnerClassBridgeMethod(ClassFile classFile, Type paramType) {
+		// create a bridge "apply" method to convert Object -> paramType
+		Descriptor.Method proto = new Descriptor.Method(Object.class, boolean.class);
+		MethodInfo method = classFile.newMethod("test", proto);
+		method.addModifier(Tags.ACC_BRIDGE | Tags.ACC_SYNTHETIC);
+		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
+		method.registerLocal(itemName.getName(), IVerifierEntry.Type.ITEM_Object, new ClassConstant(Object.class));
+		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
+		method.addInstruction(Opcode.ALOAD_1, new ClassConstant(Object.class));
+		method.addInstruction(Opcode.CHECKCAST, new ClassConstant(paramType));
+		proto = new Descriptor.Method(paramType, boolean.class);
+		MethodConstant c = new MethodConstant(classFile.getThisClass(), "test", proto);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
+		method.addInstruction(Opcode.IRETURN);
 	}
 }

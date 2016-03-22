@@ -1,25 +1,18 @@
 package prompto.type;
 
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
-import java.util.PriorityQueue;
-
-import com.fasterxml.jackson.databind.JsonNode;
 
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
-import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.utils.CodeWriter;
-import prompto.value.ExpressionValue;
-import prompto.value.IContainer;
 import prompto.value.IValue;
-import prompto.value.ListValue;
 import prompto.value.RangeBase;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 public abstract class BaseType implements IType {
 
@@ -174,28 +167,8 @@ public abstract class BaseType implements IType {
 	}
 
 	@Override
-	public ListValue sort(Context context, IContainer<IValue> list) throws PromptoError {
+	public Comparator<? extends IValue> getComparator() {
 		throw new RuntimeException("Unsupported!");
-	}
-
-	protected ListValue doSort(Context context, IContainer<IValue> list) throws PromptoError {
-		return doSort(context, list, null);
-	}
-
-	protected <T extends IValue> ListValue doSort(Context context, IContainer<IValue> list, Comparator<T> cmp) throws PromptoError {
-		PriorityQueue<T> queue = new PriorityQueue<T>((int) list.getLength(), cmp);
-		for (Object o : list.getIterable(context)) {
-			if (o instanceof IExpression)
-				o = ((IExpression) o).interpret(context);
-			@SuppressWarnings("unchecked")
-			T value = (T) o;
-			queue.offer(value);
-		}
-		List<IValue> result = new ArrayList<IValue>();
-		while (queue.peek() != null)
-			result.add(new ExpressionValue(this, queue.poll()));
-		IType itemType = ((ContainerType)list.getType()).getItemType();
-		return new ListValue(itemType, result);
 	}
 
 	public IValue convertJavaValueToPromptoValue(Object value) {

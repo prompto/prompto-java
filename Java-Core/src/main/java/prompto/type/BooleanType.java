@@ -1,15 +1,13 @@
 package prompto.type;
 
 import java.lang.reflect.Type;
+import java.util.Comparator;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
-import prompto.error.PromptoError;
 import prompto.runtime.Context;
 import prompto.value.Boolean;
-import prompto.value.IContainer;
 import prompto.value.IValue;
-import prompto.value.ListValue;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class BooleanType extends NativeType {
 	
@@ -34,8 +32,13 @@ public class BooleanType extends NativeType {
 	}
 	
 	@Override
-	public ListValue sort(Context context, IContainer<IValue> list) throws PromptoError {
-		return this.doSort(context,list);
+	public Comparator<? extends IValue> getComparator() {
+		return new Comparator<Boolean>() {
+			@Override
+			public int compare(Boolean o1, Boolean o2) {
+				return java.lang.Boolean.compare(o1.getValue(), o2.getValue());
+			}
+		};
 	}
 	
 	@Override

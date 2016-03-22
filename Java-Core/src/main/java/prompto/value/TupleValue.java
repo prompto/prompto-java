@@ -3,7 +3,6 @@ package prompto.value;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -13,43 +12,58 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.error.IndexOutOfRangeError;
+import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
+import prompto.grammar.Identifier;
+import prompto.intrinsic.IterableWithLength;
+import prompto.intrinsic.IteratorWithLength;
 import prompto.intrinsic.PromptoTuple;
 import prompto.literal.Literal;
 import prompto.runtime.Context;
 import prompto.type.TupleType;
 import prompto.utils.CodeWriter;
 
-public class TupleValue extends BaseList<TupleValue, PromptoTuple<IValue>> {
+public class TupleValue extends BaseValue implements IContainer<IValue>, ISliceable<IValue>  {
 
+	protected PromptoTuple<IValue> items;
+	
 	public TupleValue() {
 		super(TupleType.instance());
+		this.items = new PromptoTuple<>();
 	}
 	
 	public TupleValue(PromptoTuple<IValue> items) {
-		super(TupleType.instance(), items);
+		super(TupleType.instance());
+		this.items = items;
 	}
 	
 	public TupleValue(Collection<IValue> items) {
-		super(TupleType.instance(), items);
-	}
-
-	@Override
-	protected PromptoTuple<IValue> newItemsInstance() {
-		return new PromptoTuple<IValue>();
-	}
-	
-	@Override
-	protected PromptoTuple<IValue> newItemsInstance(Collection<IValue> items) {
-		return new PromptoTuple<IValue>(items);
+		super(TupleType.instance());
+		this.items = new PromptoTuple<IValue>(items);
 	}
 
 	@Override
 	public String toString() {
-		String result = super.toString();
+		String result = items.toString();
 		return "(" + result.substring(1,result.length()-1) + ")";
+	}
+	
+	public void addItem(IValue item) {
+		items.add(item);
+	}
+	
+	public PromptoTuple<IValue> getItems() {
+		return items;
+	}
+	
+	public IValue getItem(int index) {
+		return items.get(index);
+	}
+	
+	public void setItem(int index, IValue element) {
+		items.set(index, element);
 	}
 	
 	@Override
@@ -59,11 +73,6 @@ public class TupleValue extends BaseList<TupleValue, PromptoTuple<IValue>> {
 		return items.equals(((TupleValue)obj).items);
 	}
 
-	@Override
-	public TupleValue newInstance(List<IValue> items) {
-		return new TupleValue(items);
-	}
-	
 	public void toDialect(CodeWriter writer) {
 		writer.append('(');
 		if(items.size()>0) {
@@ -90,6 +99,75 @@ public class TupleValue extends BaseList<TupleValue, PromptoTuple<IValue>> {
 		PromptoTuple<IValue> sliced = items.slice(_fi, _li); // 1 based
 		return new TupleValue(sliced);
 	}
+	
+	@Override
+	public long getLength() {
+		return items.size();
+	}
+
+	@Override
+	public boolean hasItem(Context context, IValue lval) throws PromptoError {
+		return this.items.contains(lval); // TODO interpret before
+	}
+
+	@Override
+	public IValue getItem(Context context, IValue index) throws PromptoError {
+		if (index instanceof Integer) {
+			try {
+				int idx = (int)((Integer)index).longValue() - 1;
+				return items.get(idx);
+			} catch (IndexOutOfBoundsException e) {
+				throw new IndexOutOfRangeError();
+			}
+
+		} else
+			throw new SyntaxError("No such item:" + index.toString());
+	}
+
+	@Override
+	public IValue plus(Context context, IValue value) throws PromptoError {
+        if (value instanceof ListValue)
+            return this.merge(((ListValue)value).getItems());
+        else if (value instanceof TupleValue)
+            return this.merge(((TupleValue)value).getItems());
+        else if (value instanceof SetValue)
+            return this.merge(((SetValue)value).getItems());
+        else
+            throw new SyntaxError("Illegal: " +this.type.getId() + " + " + value.getClass().getSimpleName());
+    }
+	
+	protected TupleValue merge(Collection<? extends IValue> items) {
+		PromptoTuple<IValue> result = new PromptoTuple<IValue>();
+		result.addAll(this.items);
+		result.addAll(items);
+		return new TupleValue(result);
+	}
+	
+	
+	@Override
+	public IterableWithLength<IValue> getIterable(Context context) {
+		return new IterableWithLength<IValue>() {
+			@Override
+			public IteratorWithLength<IValue> iterator() {
+				return new IteratorWithLength<IValue>() {
+					Iterator<IValue> iter = items.iterator();
+					@Override public long getLength() { return items.size(); }
+					@Override public boolean hasNext() { return iter.hasNext(); }
+					@Override public IValue next() { return iter.next(); }
+				};
+			}
+		};
+	}
+
+	@Override
+	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
+		String name = id.toString();
+		if ("length".equals(name))
+			return new Integer(items.size());
+		else
+			throw new InvalidDataError("No such member:" + name);
+	}
+	
 	
 	public static ResultInfo compileSlice(Context context, MethodInfo method, Flags flags, 
 			ResultInfo parent, IExpression first, IExpression last) throws SyntaxError {

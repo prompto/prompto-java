@@ -3,17 +3,13 @@ package prompto.type;
 import java.lang.reflect.Type;
 import java.util.Comparator;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
-import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.value.Decimal;
-import prompto.value.IContainer;
-import prompto.value.INumber;
 import prompto.value.IValue;
-import prompto.value.ListValue;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 
 public class DecimalType extends NativeType implements INumberType {
@@ -99,15 +95,15 @@ public class DecimalType extends NativeType implements INumberType {
 			return BooleanType.instance();
 		return super.checkCompare(context, other, section);
 	}
-	
+
 	@Override
-	public ListValue sort(Context context, IContainer<IValue> list) throws PromptoError {
-		return this.<INumber>doSort(context,list,new Comparator<INumber>() {
+	public Comparator<Decimal> getComparator() {
+		return new Comparator<Decimal>() {
 			@Override
-			public int compare(INumber o1, INumber o2) {
-				return o1.compareTo(o2);
-			};
-		});
+			public int compare(Decimal o1, Decimal o2) {
+				return java.lang.Double.compare(o1.doubleValue(), o2.doubleValue());
+			}
+		};
 	}
 
 	@Override

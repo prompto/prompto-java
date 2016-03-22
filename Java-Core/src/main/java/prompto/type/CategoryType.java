@@ -2,7 +2,6 @@ package prompto.type;
 
 import java.lang.reflect.Type;
 import java.security.InvalidParameterException;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -15,27 +14,16 @@ import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
-import prompto.expression.IExpression;
-import prompto.expression.MethodSelector;
-import prompto.grammar.ArgumentAssignment;
-import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
 import prompto.grammar.Operator;
-import prompto.grammar.UnresolvedIdentifier;
 import prompto.runtime.Context;
-import prompto.runtime.MethodFinder;
 import prompto.runtime.Score;
-import prompto.statement.MethodCall;
 import prompto.store.IDataStore;
 import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.utils.CodeWriter;
-import prompto.value.ConcreteInstance;
-import prompto.value.ExpressionValue;
-import prompto.value.IContainer;
 import prompto.value.IInstance;
 import prompto.value.IValue;
-import prompto.value.ListValue;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -87,7 +75,7 @@ public class CategoryType extends BaseType {
 			throw new SyntaxError("Duplicate name: \"" + id + "\"");
 	}
 	
-	IDeclaration getDeclaration(Context context) throws SyntaxError {
+	public IDeclaration getDeclaration(Context context) throws SyntaxError {
 		return getDeclaration(context, id);
 	}
 	
@@ -305,143 +293,6 @@ public class CategoryType extends BaseType {
 		inst.setMutable(this.mutable);
 		return inst;
 	}
-	
-	public IValue sort(final Context context, IContainer<IValue> list, IExpression key) throws PromptoError {
-		if(list.getLength()==0)
-			return list;
-		if(key==null)
-			key = new UnresolvedIdentifier(new Identifier("key"));
-		IDeclaration d = getDeclaration(context);
-		if(d instanceof CategoryDeclaration) {
-			CategoryDeclaration decl = (CategoryDeclaration)d;
-			if(decl.hasAttribute(context, new Identifier(key.toString())))
-				return sortByAttribute(context, list, new Identifier(key.toString()));
-			else if(decl.hasMethod(context, key.toString(), null))
-				return sortByClassMethod(context, list, key.toString());
-			else if(globalMethodExists(context, list, new Identifier(key.toString())))
-				return sortByGlobalMethod(context, list, new Identifier(key.toString()));
-			else
-				return sortByExpression(context, list, key);
-		} else
-			throw new UnsupportedOperationException(); // TODO
-	}
-	
-	
-	private ListValue sortByExpression(final Context context, IContainer<IValue> list, final IExpression key) throws PromptoError {
-		try {
-			return this.<ConcreteInstance>doSort(context,list,new Comparator<ConcreteInstance>() {
-				@Override
-				public int compare(ConcreteInstance o1, ConcreteInstance o2) {
-					try {
-						Context co = context.newInstanceContext(o1);
-						IValue key1 = key.interpret(co);
-						co = context.newInstanceContext(o2);
-						IValue key2 = key.interpret(co);
-						return compareKeys(key1,key2);
-					} catch(Throwable t) {
-						throw new RuntimeException(t);
-					}
-				}
-
-			});
-		} catch(RuntimeException e) {
-			if(e.getCause() instanceof PromptoError)
-				throw (PromptoError)e.getCause();
-			else
-				throw e;
-		}
-	}
-
-	private ListValue sortByAttribute(final Context context, IContainer<IValue> list, final Identifier name) throws PromptoError {
-		try {
-			return this.<IInstance>doSort(context,list,new Comparator<IInstance>() {
-				@Override
-				public int compare(IInstance o1, IInstance o2) {
-					try {
-						IValue key1 = o1.getMember(context, name, false);
-						IValue key2 = o2.getMember(context, name, false);
-						return compareKeys(key1,key2);
-					} catch(Throwable t) {
-						throw new RuntimeException(t);
-					}
-				}
-
-			});
-		} catch(RuntimeException e) {
-			if(e.getCause() instanceof PromptoError)
-				throw (PromptoError)e.getCause();
-			else
-				throw e;
-		}
-	}
-	
-	private ListValue sortByClassMethod(Context context, IContainer<IValue> list, final String name) {
-		return null;
-	}
-
-	private boolean globalMethodExists(Context context, IContainer<IValue> list, Identifier name) {
-		try {
-			IExpression exp = new ExpressionValue(this, newInstance(context));
-			ArgumentAssignment arg = new ArgumentAssignment(null, exp);
-			ArgumentAssignmentList args = new ArgumentAssignmentList(arg);
-			MethodCall proto = new MethodCall(new MethodSelector(name), args);
-			MethodFinder finder = new MethodFinder(context, proto);
-			return finder.findMethod(true)!=null;
-		} catch (PromptoError e) {
-			return false;
-		}
-	}
-
-	private ListValue sortByGlobalMethod(Context context, IContainer<IValue> list, final Identifier name) throws PromptoError {
-		IExpression exp = new ExpressionValue(this, newInstance(context));
-		ArgumentAssignment arg = new ArgumentAssignment(null, exp);
-		ArgumentAssignmentList args = new ArgumentAssignmentList(arg);
-		MethodCall proto = new MethodCall(new MethodSelector(name), args);
-		MethodFinder finder = new MethodFinder(context, proto);
-		IMethodDeclaration method = finder.findMethod(true);
-		return sortByGlobalMethod(context, list, proto, method);
-	}
-	
-	private ListValue sortByGlobalMethod(final Context context, IContainer<IValue> list, final MethodCall method, final IMethodDeclaration declaration) throws PromptoError {
-		try {
-			return this.<IInstance>doSort(context,list,new Comparator<IInstance>() {
-				@Override
-				public int compare(IInstance o1, IInstance o2) {
-					try {
-						ArgumentAssignment assignment = method.getAssignments().get(0);
-						assignment.setExpression(new ExpressionValue(CategoryType.this, o1));
-						IValue key1 = method.interpret(context);
-						assignment.setExpression(new ExpressionValue(CategoryType.this, o2));
-						IValue key2 = method.interpret(context);
-						return compareKeys(key1,key2);
-					} catch(Throwable t) {
-						throw new RuntimeException(t);
-					}
-				}
-
-			});
-		} catch(RuntimeException e) {
-			if(e.getCause() instanceof PromptoError)
-				throw (PromptoError)e.getCause();
-			else
-				throw e;
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private int compareKeys(IValue key1, IValue key2) {
-		if(key1==null && key2==null)
-			return 0;
-		else if(key1==null)
-			return -1;
-		else if(key2==null)
-			return 1;
-		else if(key1 instanceof Comparable)
-			return ((Comparable<Object>)key1).compareTo(key2);
-		else
-			return key1.toString().compareTo(key2.toString());
-	}
-
 
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value) {
@@ -512,4 +363,5 @@ public class CategoryType extends BaseType {
 			instance.setMember(context, IStore.dbIdIdentifier, dbid);
 		}
 	}
+
 }

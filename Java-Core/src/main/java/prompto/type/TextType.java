@@ -3,17 +3,14 @@ package prompto.type;
 import java.lang.reflect.Type;
 import java.util.Comparator;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
-import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
-import prompto.value.IContainer;
 import prompto.value.IValue;
-import prompto.value.ListValue;
 import prompto.value.Text;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 
 public class TextType extends NativeType {
@@ -99,15 +96,15 @@ public class TextType extends NativeType {
 	}
 
 	@Override
-	public ListValue sort(Context context, IContainer<IValue> list) throws PromptoError {
-		return this.<IValue>doSort(context,list, new Comparator<IValue>() {
+	public Comparator<Text> getComparator() {
+		return new Comparator<Text>() {
 			@Override
-			public int compare(IValue o1, IValue o2) {
-				return o1.toString().compareTo(o2.toString());
-			};
-		});
+			public int compare(Text o1, Text o2) {
+				return o1.getValue().compareTo(o2.getValue());
+			}
+		};
 	}
-	
+
 	@Override
 	public IValue convertJavaValueToPromptoValue(Object value) {
         if (value instanceof String)

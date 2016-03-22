@@ -2,19 +2,17 @@ package prompto.type;
 
 import java.lang.reflect.Type;
 import java.security.InvalidParameterException;
+import java.util.Comparator;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
-import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.value.Character;
 import prompto.value.CharacterRange;
-import prompto.value.IContainer;
 import prompto.value.IValue;
-import prompto.value.ListValue;
 import prompto.value.RangeBase;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class CharacterType extends NativeType {
 
@@ -74,8 +72,13 @@ public class CharacterType extends NativeType {
 	}
 
 	@Override
-	public ListValue sort(Context context, IContainer<IValue> list) throws PromptoError {
-		return this.doSort(context,list);
+	public Comparator<Character> getComparator() {
+		return new Comparator<Character>() {
+			@Override
+			public int compare(Character o1, Character o2) {
+				return java.lang.Character.compare(o1.getValue(), o2.getValue());
+			}
+		};
 	}
 	
 	@Override

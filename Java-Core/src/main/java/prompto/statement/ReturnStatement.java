@@ -1,6 +1,7 @@
 package prompto.statement;
 
 import prompto.compiler.ClassConstant;
+import prompto.compiler.CompilerUtils;
 import prompto.compiler.FieldConstant;
 import prompto.compiler.FieldInfo;
 import prompto.compiler.Flags;
@@ -102,22 +103,37 @@ public class ReturnStatement extends SimpleStatement {
 			return new ResultInfo(void.class, Flag.RETURN);
 		} else {
 			ResultInfo info = expression.compile(context, method, flags);
-			if(boolean.class==info.getType()) {
-				method.addInstruction(Opcode.IRETURN);
-				return new ResultInfo(info.getType(), Flag.RETURN);
-			} else if(int.class==info.getType()) {
-				method.addInstruction(Opcode.IRETURN);
-				return new ResultInfo(info.getType(), Flag.RETURN);
-			} else if(char.class==info.getType()) {
-				method.addInstruction(Opcode.IRETURN);
-				return new ResultInfo(info.getType(), Flag.RETURN);
-			} else if(long.class==info.getType()) {
-				method.addInstruction(Opcode.LRETURN);
-				return new ResultInfo(info.getType(), Flag.RETURN);
-			} else if(double.class==info.getType()) {
-				method.addInstruction(Opcode.DRETURN);
-				return new ResultInfo(info.getType(), Flag.RETURN);
+			if(flags.toPrimitive()) {
+				if(boolean.class==info.getType()) {
+					method.addInstruction(Opcode.IRETURN);
+					return new ResultInfo(info.getType(), Flag.RETURN);
+				} else if(int.class==info.getType()) {
+					method.addInstruction(Opcode.IRETURN);
+					return new ResultInfo(info.getType(), Flag.RETURN);
+				} else if(char.class==info.getType()) {
+					method.addInstruction(Opcode.IRETURN);
+					return new ResultInfo(info.getType(), Flag.RETURN);
+				} else if(long.class==info.getType()) {
+					method.addInstruction(Opcode.LRETURN);
+					return new ResultInfo(info.getType(), Flag.RETURN);
+				} else if(double.class==info.getType()) {
+					method.addInstruction(Opcode.DRETURN);
+					return new ResultInfo(info.getType(), Flag.RETURN);
+				} else {
+					method.addInstruction(Opcode.ARETURN);
+					return new ResultInfo(info.getType(), Flag.RETURN);
+				}
 			} else {
+				if(boolean.class==info.getType())
+					info = CompilerUtils.booleanToBoolean(method);
+				 else if(int.class==info.getType())
+				 	info = CompilerUtils.intTolong(method);
+				else if(char.class==info.getType())
+					info = CompilerUtils.charToCharacter(method);
+				else if(long.class==info.getType())
+					info = CompilerUtils.longToLong(method);
+				else if(double.class==info.getType())
+					info = CompilerUtils.doubleToDouble(method);
 				method.addInstruction(Opcode.ARETURN);
 				return new ResultInfo(info.getType(), Flag.RETURN);
 			}

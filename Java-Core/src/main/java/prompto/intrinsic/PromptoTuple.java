@@ -9,7 +9,7 @@ public class PromptoTuple<V> extends ArrayList<V> {
 	public PromptoTuple() {
 	}
 
-	public PromptoTuple(Collection<V> items) {
+	public PromptoTuple(Collection<? extends V> items) {
 		super(items);
 	}
 
