@@ -1,5 +1,6 @@
 package prompto.expression;
 
+import prompto.argument.IArgument;
 import prompto.compiler.ByteOperand;
 import prompto.compiler.ClassConstant;
 import prompto.compiler.Flags;
@@ -11,7 +12,6 @@ import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
-import prompto.grammar.IArgument;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;

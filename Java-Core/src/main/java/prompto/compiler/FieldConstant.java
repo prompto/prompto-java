@@ -2,7 +2,7 @@ package prompto.compiler;
 
 import java.lang.reflect.Type;
 
-public class FieldConstant implements CodeConstant {
+public class FieldConstant implements ICodeConstant {
 
 	ClassConstant className;
 	NameAndTypeConstant fieldNameAndType;

@@ -1,10 +1,12 @@
-package prompto.grammar;
+package prompto.argument;
 
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
+import prompto.grammar.INamedArgument;
+import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;

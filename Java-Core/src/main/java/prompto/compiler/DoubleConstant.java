@@ -2,7 +2,7 @@ package prompto.compiler;
 
 import prompto.compiler.IVerifierEntry.Type;
 
-public class DoubleConstant implements ValueConstant {
+public class DoubleConstant implements IValueConstant {
 	
 	double value;
 	int index;

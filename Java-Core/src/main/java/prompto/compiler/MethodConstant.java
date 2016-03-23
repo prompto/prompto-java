@@ -4,7 +4,7 @@ import java.lang.reflect.Type;
 
 import prompto.compiler.Descriptor.Method;
 
-public class MethodConstant implements CodeConstant {
+public class MethodConstant implements ICodeConstant {
 
 	ClassConstant className;
 	NameAndTypeConstant methodNameAndType;

@@ -9,6 +9,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
+import prompto.argument.IArgument;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.declaration.GetterMethodDeclaration;
@@ -19,7 +20,6 @@ import prompto.error.NotStorableError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
-import prompto.grammar.IArgument;
 import prompto.grammar.Identifier;
 import prompto.grammar.Operator;
 import prompto.runtime.Context;

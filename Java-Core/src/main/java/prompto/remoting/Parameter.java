@@ -3,10 +3,10 @@ package prompto.remoting;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 
+import prompto.argument.CategoryArgument;
+import prompto.argument.IArgument;
 import prompto.error.PromptoError;
 import prompto.grammar.ArgumentAssignment;
-import prompto.grammar.CategoryArgument;
-import prompto.grammar.IArgument;
 import prompto.grammar.Identifier;
 import prompto.parser.ECleverParser;
 import prompto.runtime.Context;

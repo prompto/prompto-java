@@ -1,7 +1,7 @@
 package prompto.compiler;
 
 
-public interface ValueConstant extends IConstantOperand {
+public interface IValueConstant extends IConstantOperand {
 
 	StackEntry toStackEntry();
 

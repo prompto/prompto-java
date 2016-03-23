@@ -1,7 +1,7 @@
 package prompto.compiler;
 
 
-public class LongConstant implements ValueConstant {
+public class LongConstant implements IValueConstant {
 	
 	long value;
 	int index;

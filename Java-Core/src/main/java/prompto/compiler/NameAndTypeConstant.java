@@ -1,7 +1,7 @@
 package prompto.compiler;
 
 
-public class NameAndTypeConstant implements CodeConstant {
+public class NameAndTypeConstant implements ICodeConstant {
 
 	Descriptor descriptor; 
 	Utf8Constant name;

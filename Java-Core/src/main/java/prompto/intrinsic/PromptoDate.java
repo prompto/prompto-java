@@ -3,7 +3,7 @@ package prompto.intrinsic;
 import org.joda.time.LocalDate;
 
 /* LocalDate is final so can't just extend it */
-public class PromptoDate implements Comparable<PromptoDate>{
+public class PromptoDate implements Comparable<PromptoDate> {
 
 	public static PromptoDate parse(String text) {
 		return new PromptoDate(LocalDate.parse(text));

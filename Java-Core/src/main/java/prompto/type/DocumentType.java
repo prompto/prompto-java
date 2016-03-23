@@ -4,8 +4,8 @@ import java.lang.reflect.Type;
 
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoDocument;
 import prompto.runtime.Context;
-import prompto.value.Document;
 
 public class DocumentType extends NativeType {
 	
@@ -21,7 +21,7 @@ public class DocumentType extends NativeType {
 
 	@Override
 	public Type getJavaType() {
-		return Document.class;
+		return PromptoDocument.class;
 	}
 	
 	@Override

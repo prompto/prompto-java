@@ -1,7 +1,7 @@
 package prompto.compiler;
 
 
-public class StringConstant implements ValueConstant {
+public class StringConstant implements IValueConstant {
 	
 	Utf8Constant value;
 	int index;

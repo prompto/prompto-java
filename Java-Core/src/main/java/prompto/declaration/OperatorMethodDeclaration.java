@@ -1,9 +1,9 @@
 package prompto.declaration;
 
+import prompto.argument.IArgument;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.ArgumentList;
-import prompto.grammar.IArgument;
 import prompto.grammar.Identifier;
 import prompto.grammar.Operator;
 import prompto.runtime.Context;

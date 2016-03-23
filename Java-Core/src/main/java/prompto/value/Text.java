@@ -68,7 +68,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 				InterfaceConstant oper = new InterfaceConstant(right.getType(), "toString", String.class);
 				method.addInstruction(Opcode.INVOKEINTERFACE, oper);
 			} else {
-				MethodConstant oper = new MethodConstant(right.getType(), "toString", String.class);
+				MethodConstant oper = new MethodConstant(Object.class, "toString", String.class);
 				method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 			}
 		}

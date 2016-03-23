@@ -1,12 +1,12 @@
 package prompto.error;
 
+import prompto.argument.UnresolvedArgument;
 import prompto.expression.ConstructorExpression;
 import prompto.expression.IExpression;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
-import prompto.grammar.UnresolvedArgument;
 import prompto.literal.TextLiteral;
 import prompto.runtime.Context;
 import prompto.runtime.ErrorVariable;

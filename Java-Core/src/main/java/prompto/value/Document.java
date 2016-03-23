@@ -1,15 +1,13 @@
 package prompto.value;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoDocument;
 import prompto.runtime.Context;
 import prompto.type.DocumentType;
 
 public class Document extends BaseValue {
 	
-	Map<Identifier,IValue> members = new HashMap<Identifier,IValue>();
+	PromptoDocument<Identifier,IValue> members = new PromptoDocument<Identifier,IValue>();
 	
 	public Document() {
 		super(DocumentType.instance());

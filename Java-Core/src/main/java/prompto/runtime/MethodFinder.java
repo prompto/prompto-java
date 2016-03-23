@@ -5,13 +5,13 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import prompto.argument.IArgument;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.MethodSelector;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
-import prompto.grammar.IArgument;
 import prompto.grammar.Specificity;
 import prompto.statement.MethodCall;
 import prompto.type.CategoryType;

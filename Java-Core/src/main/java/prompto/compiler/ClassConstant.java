@@ -1,15 +1,14 @@
 package prompto.compiler;
 
-import java.lang.reflect.Type;
+import prompto.compiler.IVerifierEntry.Type;
 
+public class ClassConstant implements ICodeConstant, IValueConstant {
 
-public class ClassConstant implements CodeConstant {
-
-	Type type;
+	java.lang.reflect.Type type;
 	Utf8Constant className;
 	int index = -1;
 	
-	public ClassConstant(Type type) {
+	public ClassConstant(java.lang.reflect.Type type) {
 		this.type = type;
 		this.className = new Utf8Constant(CompilerUtils.makeClassName(type));
 	}
@@ -18,8 +17,13 @@ public class ClassConstant implements CodeConstant {
 		return new ClassConstant(this.type);
 	}
 	
-	public Type getType() {
+	public java.lang.reflect.Type getType() {
 		return type;
+	}
+	
+	@Override
+	public StackEntry toStackEntry() {	
+		return Type.ITEM_Object.newStackEntry(this); // for dumping LDC_W <class> opcode
 	}
 	
 	public boolean isInterface() {

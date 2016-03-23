@@ -11,13 +11,15 @@ import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.PromptoType;
 import prompto.compiler.ResultInfo;
+import prompto.compiler.StringConstant;
 import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoAny;
 import prompto.intrinsic.PromptoDict;
+import prompto.intrinsic.PromptoDocument;
 import prompto.runtime.Context;
 import prompto.type.CategoryType;
 import prompto.type.IType;
@@ -183,11 +185,27 @@ public class MemberSelector extends SelectorExpression {
 				Type classType = CompilerUtils.concreteTypeFrom(parent.getType().getTypeName());
 				FieldConstant f = new FieldConstant(classType, id.getName(), resultType);
 				method.addInstruction(Opcode.GETFIELD, f);
+			} else if(PromptoAny.class==parent.getType()) {
+				IOperand oper = new StringConstant(getName());
+				method.addInstruction(Opcode.LDC_W, oper);
+				oper = new MethodConstant(PromptoAny.class, "getMember", Object.class, 
+						Object.class, Object.class);
+				method.addInstruction(Opcode.INVOKESTATIC, oper);
+				resultType = PromptoAny.class;
+			} else if(PromptoDocument.class==parent.getType()) {
+				IOperand oper = new StringConstant(getName());
+				method.addInstruction(Opcode.LDC_W, oper);
+				oper = new ClassConstant(PromptoDocument.class);
+				method.addInstruction(Opcode.LDC_W, oper);
+				oper = new MethodConstant(PromptoDocument.class, "getOrCreate", Object.class, 
+						Class.class, Object.class);
+				method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+				resultType = PromptoAny.class;
 			} else if(PromptoDict.Entry.class==parent.getType()) {
 				IOperand oper = new MethodConstant(parent.getType(), getterName, Object.class);
 				method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 				method.addInstruction(Opcode.CHECKCAST, new ClassConstant(resultType));
-			} else if(parent.getType() instanceof PromptoType){
+			} else if(parent.isInterface()){
 				IOperand oper = new InterfaceConstant(parent.getType(), getterName, resultType);
 				method.addInstruction(Opcode.INVOKEINTERFACE, oper);
 			} else {

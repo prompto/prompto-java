@@ -1,4 +1,4 @@
-package prompto.grammar;
+package prompto.instance;
 
 public interface IAssignableSelector extends IAssignableInstance {
 

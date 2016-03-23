@@ -2,6 +2,9 @@ package prompto.declaration;
 
 import java.lang.reflect.Modifier;
 
+import prompto.argument.CategoryArgument;
+import prompto.argument.CodeArgument;
+import prompto.argument.IArgument;
 import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
 import prompto.compiler.CompilerException;
@@ -14,9 +17,6 @@ import prompto.compiler.Opcode;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.ArgumentList;
-import prompto.grammar.CategoryArgument;
-import prompto.grammar.CodeArgument;
-import prompto.grammar.IArgument;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.statement.IStatement;

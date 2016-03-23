@@ -131,16 +131,16 @@ public class Instruction implements IInstruction {
 		return null;
 	}
 
-	public ValueConstant getValueConstant() {
+	public IValueConstant getValueConstant() {
 		for(IOperand operand : operands) {
-			if(operand instanceof ValueConstant)
-				return (ValueConstant)operand;
+			if(operand instanceof IValueConstant)
+				return (IValueConstant)operand;
 		}
 		return null;
 	}
 
 	public StackEntry getConstantStackEntry() {
-		ValueConstant v = getValueConstant();
+		IValueConstant v = getValueConstant();
 		return v.toStackEntry();
 	}
 

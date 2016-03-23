@@ -1,5 +1,6 @@
 package prompto.statement;
 
+import prompto.argument.IArgument;
 import prompto.compiler.Flags;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.MethodInfo;
@@ -16,7 +17,6 @@ import prompto.expression.IExpression;
 import prompto.expression.MethodSelector;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
-import prompto.grammar.IArgument;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.MethodFinder;

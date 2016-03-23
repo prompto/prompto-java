@@ -1,8 +1,9 @@
-package prompto.grammar;
+package prompto.instance;
 
 import prompto.compiler.ByteOperand;
 import prompto.compiler.ClassConstant;
 import prompto.compiler.IVerifierEntry.Type;
+import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
@@ -10,6 +11,8 @@ import prompto.compiler.StackLocal;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
+import prompto.grammar.INamed;
+import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.type.IType;
@@ -29,12 +32,36 @@ public class VariableInstance implements IAssignableInstance {
 	}
 	
 	@Override
-	public void register(MethodInfo method, ResultInfo info) {
-		method.registerLocal(id.getName(), Type.ITEM_Object, new ClassConstant(info.getType()));
+	public ResultInfo compileParent(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		StackLocal local = method.getRegisteredLocal(id.getName());
+		if(local instanceof StackLocal.ObjectLocal) {
+			ClassConstant klass = ((StackLocal.ObjectLocal)local).getClassName();
+			switch(local.getIndex()) {
+			case 0:
+				method.addInstruction(Opcode.ALOAD_0, klass);
+				break;
+			case 1:
+				method.addInstruction(Opcode.ALOAD_1, klass);
+				break;
+			case 2:
+				method.addInstruction(Opcode.ALOAD_2, klass);
+				break;
+			case 3:
+				method.addInstruction(Opcode.ALOAD_3, klass);
+				break;
+			default:
+				// TODO: support ALOAD_W
+				method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)local.getIndex()), klass);
+			}
+			return new ResultInfo(klass.getType());
+		} else
+			throw new UnsupportedOperationException();
 	}
 	
 	@Override
-	public ResultInfo compile(MethodInfo method, ResultInfo info) {
+	public ResultInfo compileAssign(Context context, MethodInfo method, Flags flags, IExpression expression) throws SyntaxError {
+		ResultInfo info = expression.compile(context, method, flags);
+		method.registerLocal(id.getName(), Type.ITEM_Object, new ClassConstant(info.getType()));
 		StackLocal local = method.getRegisteredLocal(id.getName());
 		switch(local.getIndex()) {
 			case 0:
@@ -50,7 +77,7 @@ public class VariableInstance implements IAssignableInstance {
 				method.addInstruction(Opcode.ASTORE_3);
 				break;
 			default:
-				// TODO: support ALOAD_W
+				// TODO: support ASTORE_W
 				method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)local.getIndex()));
 		}
 		return new ResultInfo(void.class);

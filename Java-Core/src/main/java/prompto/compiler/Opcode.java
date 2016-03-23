@@ -233,8 +233,8 @@ public enum Opcode {
     NEW(0xbb, CPREF_W, popsNone(), pushesObject())/*,
     NEWARRAY(0xbc, ATYPE),
     ANEWARRAY(0xbd, CPREF_W),
-    ARRAYLENGTH(0xbe),
-    ATHROW(0xbf)*/,
+    ARRAYLENGTH(0xbe)*/,
+    ATHROW(0xbf, pops(1), pushesNone()), // TODO to be refined
     CHECKCAST(0xc0, CPREF_W, pops(1), pushesObject())/*,
     INSTANCEOF(0xc1, CPREF_W),
     MONITORENTER(0xc2),
