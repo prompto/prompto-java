@@ -46,7 +46,7 @@ public class IteratorExpression implements IExpression {
 	public IteratorType check(Context context) throws SyntaxError {
 		IType paramType = source.check(context).checkIterator(context);
 		Context child = context.newChildContext();
-		context.registerValue(new Variable(name, paramType));
+		child.registerValue(new Variable(name, paramType));
 		IType resultType = expression.check(child);
 		return new IteratorType(resultType);
 	}
