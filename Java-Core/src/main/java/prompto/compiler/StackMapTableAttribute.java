@@ -9,7 +9,6 @@ public class StackMapTableAttribute implements IAttribute {
 	StackState state = new StackState();
 	LocalVariableTableAttribute locals;
 	List<StackLabel> labels = new ArrayList<>();
-	short currentStackSize = 0;
 	short maxStackSize = 0;
 	short maxLocalsCount = 0;
 	
@@ -39,10 +38,15 @@ public class StackMapTableAttribute implements IAttribute {
 	}
 	
 	public StackEntry push(StackEntry item) {
-		currentStackSize += item.getType().size();
-		if(currentStackSize>maxStackSize)
-			maxStackSize = currentStackSize;
-		return state.pushEntry(item);
+		StackEntry result = state.pushEntry(item);
+		if(state.getCurrentSize()>maxStackSize) {
+			if(DumpLevel.current()==DumpLevel.STACK)
+				System.err.print("maxStackSize " + maxStackSize);
+			maxStackSize = state.getCurrentSize();
+			if(DumpLevel.current()==DumpLevel.STACK)
+				System.err.println(" -> " + maxStackSize);
+		}
+		return result;
 	};
 	
 	public StackEntry[] pop(short popped) {
@@ -53,9 +57,7 @@ public class StackMapTableAttribute implements IAttribute {
 	}
 	
 	public StackEntry popEntry() {
-		StackEntry entry = state.popEntry();
-		currentStackSize -= entry.getType().size();
-		return entry;
+		return state.popEntry();
 	}
 
 	private int labelsLength() {

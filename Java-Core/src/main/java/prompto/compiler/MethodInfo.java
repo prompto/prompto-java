@@ -77,6 +77,8 @@ public class MethodInfo {
 	}
 
 	void register(ConstantsPool pool) {
+		if(DumpLevel.current().ordinal()>0)
+			System.err.println("Registering method: " + this.toString());
 		name.register(pool);
 		proto.register(pool);
 		attributes.forEach((a)->
@@ -107,8 +109,6 @@ public class MethodInfo {
 
 
 	void writeTo(ByteWriter writer) {
-		if(Instruction.getDumpLevel()>0)
-			System.err.println("Writing method: " + this.toString());
 		/*
 		method_info {
 		    u2             access_flags;
@@ -122,7 +122,8 @@ public class MethodInfo {
 		writer.writeU2(name.getIndexInConstantPool());
 		writer.writeU2(proto.getIndexInConstantPool());
 		writer.writeU2(attributes.size());
-		attributes.forEach((a)->a.writeTo(writer));
+		attributes.forEach((a)->
+			a.writeTo(writer));
 	}
 
 

@@ -8,12 +8,6 @@ import java.util.stream.IntStream;
 
 public class CodeAttribute implements IAttribute {
 	
-	static boolean DUMP = isDUMP();
-	
-	private static boolean isDUMP() {
-		return false;
-	}
-	
 	Utf8Constant attributeName = new Utf8Constant("Code");
 	List<IInstruction> instructions = new LinkedList<>(); 
 	List<IAttribute> attributes = new ArrayList<>();
@@ -108,8 +102,10 @@ public class CodeAttribute implements IAttribute {
 		@Override
 		public void rehearse(CodeAttribute code) {
 			code.getStack().getState().capture(state);
-			if(DUMP)
-				System.err.println("restore: " + state.toString());
+			if(DumpLevel.current().ordinal()>0) {
+				System.err.println("Restore stack: " + state.toString());
+				System.err.println();
+			}
 		}
 		
 		@Override

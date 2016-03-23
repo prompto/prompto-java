@@ -2,12 +2,6 @@ package prompto.compiler;
 
 public class Instruction implements IInstruction {
 
-	static int DUMP_LEVEL = getDumpLevel();
-	
-	public static int getDumpLevel() {
-		return 0;
-	}
-	
 	Opcode opcode;
 	IOperand[] operands;
 	
@@ -97,18 +91,19 @@ public class Instruction implements IInstruction {
 	}
 
 	private void updateStack(StackMapTableAttribute stack) {
-		if(DUMP_LEVEL>1) {
+		if(DumpLevel.current()==DumpLevel.STACK) {
 			System.err.println(this.toString());
 			System.err.println("Before pop: " + stack.getState().toString());
 		}
 		StackEntry[] popped = stack.pop(opcode.getPopped(this));
-		if(DUMP_LEVEL>1)
+		if(DumpLevel.current()==DumpLevel.STACK)
 			System.err.println("After pop: " + stack.getState().toString());
 		StackEntry[] pushed = opcode.getPushed(this, popped);
 		stack.push(pushed);
-		if(DUMP_LEVEL>1)
+		if(DumpLevel.current()==DumpLevel.STACK) {
 			System.err.println("After push: " + stack.getState().toString());
-		else if(DUMP_LEVEL>0)
+			System.err.println();
+		} else if(DumpLevel.current()==DumpLevel.OPCODE)
 			System.err.println("(" + opcode.kind.length + ") " + this.toString() + " -> " + stack.getState().toString());
 	}
 

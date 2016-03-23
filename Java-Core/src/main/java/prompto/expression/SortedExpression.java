@@ -3,6 +3,7 @@ package prompto.expression;
 import java.lang.reflect.Type;
 import java.util.Comparator;
 
+import prompto.compiler.ByteOperand;
 import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
 import prompto.compiler.CompilerUtils;
@@ -15,6 +16,7 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.PromptoType;
 import prompto.compiler.ResultInfo;
+import prompto.compiler.StackLocal;
 import prompto.compiler.Tags;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.IDeclaration;
@@ -286,89 +288,149 @@ public class SortedExpression implements IExpression {
 			key = new UnresolvedIdentifier(new Identifier("key"));
 		IDeclaration decl = itemType.getDeclaration(context);
 		if(decl instanceof CategoryDeclaration) {
-			Type cmpType = compileCategoryComparatorClass(context, method, flags, itemType, (CategoryDeclaration)decl);
+			Type cmpType = compileCategoryComparatorClass(context, method.getClassFile(), itemType, (CategoryDeclaration)decl);
 			return CompilerUtils.compileNewInstance(method, cmpType);
 		} else
 			throw new UnsupportedOperationException(); // TODO
 	}
 
-	private Type compileCategoryComparatorClass(Context context, MethodInfo method, Flags flags, CategoryType itemType, CategoryDeclaration decl) {
+	static interface CategoryComparatorCompiler {
+		Type compile(Context context, ClassFile parentClass, CategoryType itemType) throws SyntaxError;
+	}
+
+	private Type compileCategoryComparatorClass(Context context, ClassFile parentClass, CategoryType itemType, CategoryDeclaration decl) throws SyntaxError {
+		CategoryComparatorCompiler compiler = buildCategoryComparatorCompiler(context, itemType, decl);
+		return compiler.compile(context, parentClass, itemType);
+	}
+
+	
+	private CategoryComparatorCompiler buildCategoryComparatorCompiler(Context context, CategoryType itemType, CategoryDeclaration decl) {
 		Identifier keyAsId = new Identifier(key.toString());
 		if(decl.hasAttribute(context, keyAsId))
-			return compileCategoryAttributeComparatorClass(context, method.getClassFile(), itemType);
+			return new CategoryAttributeComparatorCompiler();
 		else if(decl.hasMethod(context, keyAsId, null))
-			return compileCategoryMethodComparator(context, keyAsId);
+			return new CategoryMethodComparatorCompiler();
 		else {
 			MethodCall call = createGlobalMethodCall(context, itemType, keyAsId);
 			if(call!=null)
-				return compileCategoryGlobalMethodComparator(context, itemType, call);
+				return new CategoryGlobalMethodComparatorCompiler(call);
 			else
-				return compileCategoryExpressionComparator(context);
+				return new CategoryExpressionComparatorCompiler();
+		}
+	}
+	
+	abstract class CategoryComparatorCompilerBase implements CategoryComparatorCompiler {
+		
+		CategoryType itemType;
+		
+		@Override
+		public Type compile(Context context, ClassFile parentClass, CategoryType itemType) throws SyntaxError {
+			this.itemType = itemType;
+			int innerClassIndex = 1 + parentClass.getInnerClasses().size();
+			String innerClassName = parentClass.getThisClass().getType().getTypeName() + '$' + innerClassIndex;
+			Type innerClassType = new PromptoType(innerClassName); 
+			ClassFile classFile = new ClassFile(innerClassType);
+			classFile.setSuperClass(new ClassConstant(Object.class));
+			classFile.addInterface(new ClassConstant(Comparator.class));
+			CompilerUtils.compileEmptyConstructor(classFile);
+			compileBridge(context, classFile, itemType.getJavaType());
+			compileMethod(context, classFile, itemType.getJavaType());
+			parentClass.addInnerClass(classFile);
+			return innerClassType;
+		}
+
+		private void compileMethod(Context context, ClassFile classFile, Type paramType) throws SyntaxError {
+			Descriptor.Method proto = new Descriptor.Method(paramType, paramType, int.class);
+			MethodInfo method = classFile.newMethod("compare", proto);
+			// use a dummy '$this', since we never use it, and we need 'this' for compiling expressions
+			method.registerLocal("$this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
+			method.registerLocal("o1", IVerifierEntry.Type.ITEM_Object, new ClassConstant(paramType));
+			method.registerLocal("o2", IVerifierEntry.Type.ITEM_Object, new ClassConstant(paramType));
+			compileMethodBody(context, method, paramType);
+		
+		}
+		
+		protected abstract void compileMethodBody(Context context, MethodInfo method, Type paramType) throws SyntaxError;
+
+		private void compileBridge(Context context, ClassFile classFile, Type paramType) {
+			// create a bridge "compare" method to convert Object -> paramType
+			Descriptor.Method proto = new Descriptor.Method(Object.class, Object.class, int.class);
+			MethodInfo method = classFile.newMethod("compare", proto);
+			method.addModifier(Tags.ACC_BRIDGE | Tags.ACC_SYNTHETIC);
+			method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
+			method.registerLocal("o1", IVerifierEntry.Type.ITEM_Object, new ClassConstant(Object.class));
+			method.registerLocal("o2", IVerifierEntry.Type.ITEM_Object, new ClassConstant(Object.class));
+			method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
+			method.addInstruction(Opcode.ALOAD_1, new ClassConstant(Object.class));
+			method.addInstruction(Opcode.CHECKCAST, new ClassConstant(paramType));
+			method.addInstruction(Opcode.ALOAD_2, new ClassConstant(Object.class));
+			method.addInstruction(Opcode.CHECKCAST, new ClassConstant(paramType));
+			proto = new Descriptor.Method(paramType, paramType, int.class);
+			MethodConstant c = new MethodConstant(classFile.getThisClass(), "compare", proto);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, c);
+			method.addInstruction(Opcode.IRETURN);
+		}
+	}
+	
+	class CategoryAttributeComparatorCompiler extends CategoryComparatorCompilerBase {
+
+		@Override
+		protected void compileMethodBody(Context context, MethodInfo method, Type paramType) {
+			method.addInstruction(Opcode.ALOAD_1, new ClassConstant(paramType));
+			Type fieldType = context.findAttribute(key.toString()).getType().getJavaType();
+			String getterName = CompilerUtils.getterName(key.toString());
+			InterfaceConstant getter = new InterfaceConstant(paramType, getterName, fieldType);
+			method.addInstruction(Opcode.INVOKEINTERFACE, getter);
+			method.addInstruction(Opcode.ALOAD_2, new ClassConstant(paramType));
+			method.addInstruction(Opcode.INVOKEINTERFACE, getter);
+			Descriptor.Method proto = new Descriptor.Method(fieldType, int.class);
+			MethodConstant c = new MethodConstant(new ClassConstant(fieldType), "compareTo", proto);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, c);
+			method.addInstruction(Opcode.IRETURN);
+		}
+
+	}
+
+	class CategoryExpressionComparatorCompiler extends CategoryComparatorCompilerBase {
+		
+		@Override
+		protected void compileMethodBody(Context context, MethodInfo method, Type paramType) throws SyntaxError {
+			StackLocal tmpThis = method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, new ClassConstant(paramType));
+			method.addInstruction(Opcode.ALOAD_1, new ClassConstant(paramType));
+			method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)tmpThis.getIndex()));
+			ResultInfo left = key.compile(context.newCategoryContext(itemType), method, new Flags());
+			method.addInstruction(Opcode.ALOAD_2, new ClassConstant(paramType));
+			method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)tmpThis.getIndex()));
+			ResultInfo right = key.compile(context.newCategoryContext(itemType), method, new Flags());
+			Descriptor.Method proto = new Descriptor.Method(right.getType(), int.class);
+			if(left.isInterface()) {
+				InterfaceConstant c = new InterfaceConstant(new ClassConstant(left.getType()), "compareTo", proto);
+				method.addInstruction(Opcode.INVOKEINTERFACE, c);
+			} else {
+				MethodConstant c = new MethodConstant(new ClassConstant(left.getType()), "compareTo", proto);
+				method.addInstruction(Opcode.INVOKEVIRTUAL, c);
+			}
+			method.addInstruction(Opcode.IRETURN);
 		}
 	}
 
-	private Type compileCategoryAttributeComparatorClass(Context context, ClassFile parentClass, CategoryType itemType) {
-		int innerClassIndex = 1 + parentClass.getInnerClasses().size();
-		String innerClassName = parentClass.getThisClass().getType().getTypeName() + '$' + innerClassIndex;
-		Type innerClassType = new PromptoType(innerClassName); 
-		ClassFile classFile = new ClassFile(innerClassType);
-		classFile.setSuperClass(new ClassConstant(Object.class));
-		classFile.addInterface(new ClassConstant(Comparator.class));
-		CompilerUtils.compileEmptyConstructor(classFile);
-		compileCategoryAttributeComparatorBridge(context, classFile, itemType.getJavaType());
-		compileCategoryAttributeComparatorMethod(context, classFile, itemType.getJavaType());
-		parentClass.addInnerClass(classFile);
-		return innerClassType;
-	}
-
-	private void compileCategoryAttributeComparatorMethod(Context context, ClassFile classFile, Type paramType) {
-		Descriptor.Method proto = new Descriptor.Method(paramType, paramType, int.class);
-		MethodInfo method = classFile.newMethod("compare", proto);
-		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
-		method.registerLocal("o1", IVerifierEntry.Type.ITEM_Object, new ClassConstant(paramType));
-		method.registerLocal("o2", IVerifierEntry.Type.ITEM_Object, new ClassConstant(paramType));
-		method.addInstruction(Opcode.ALOAD_1, new ClassConstant(paramType));
-		Type fieldType = context.findAttribute(key.toString()).getType().getJavaType();
-		String getterName = CompilerUtils.getterName(key.toString());
-		InterfaceConstant getter = new InterfaceConstant(paramType, getterName, fieldType);
-		method.addInstruction(Opcode.INVOKEINTERFACE, getter);
-		method.addInstruction(Opcode.ALOAD_2, new ClassConstant(paramType));
-		method.addInstruction(Opcode.INVOKEINTERFACE, getter);
-		proto = new Descriptor.Method(fieldType, int.class);
-		MethodConstant c = new MethodConstant(new ClassConstant(fieldType), "compareTo", proto);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
-		method.addInstruction(Opcode.IRETURN);
-	}
-
-	private void compileCategoryAttributeComparatorBridge(Context context, ClassFile classFile, Type paramType) {
-		// create a bridge "compare" method to convert Object -> paramType
-		Descriptor.Method proto = new Descriptor.Method(Object.class, Object.class, int.class);
-		MethodInfo method = classFile.newMethod("compare", proto);
-		method.addModifier(Tags.ACC_BRIDGE | Tags.ACC_SYNTHETIC);
-		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
-		method.registerLocal("o1", IVerifierEntry.Type.ITEM_Object, new ClassConstant(Object.class));
-		method.registerLocal("o2", IVerifierEntry.Type.ITEM_Object, new ClassConstant(Object.class));
-		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
-		method.addInstruction(Opcode.ALOAD_1, new ClassConstant(Object.class));
-		method.addInstruction(Opcode.CHECKCAST, new ClassConstant(paramType));
-		method.addInstruction(Opcode.ALOAD_2, new ClassConstant(Object.class));
-		method.addInstruction(Opcode.CHECKCAST, new ClassConstant(paramType));
-		proto = new Descriptor.Method(paramType, paramType, int.class);
-		MethodConstant c = new MethodConstant(classFile.getThisClass(), "compare", proto);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
-		method.addInstruction(Opcode.IRETURN);
-	}
-
-	private Type compileCategoryMethodComparator(Context context, Identifier keyAsId) {
-		throw new UnsupportedOperationException();
-	}
-
-	private Type compileCategoryGlobalMethodComparator(Context context, CategoryType itemType, MethodCall call) {
-		throw new UnsupportedOperationException();
-	}
-
-	private Type compileCategoryExpressionComparator(Context context) {
-		throw new UnsupportedOperationException();
+	class CategoryMethodComparatorCompiler extends CategoryComparatorCompilerBase {
+		@Override
+		protected void compileMethodBody(Context context, MethodInfo method, Type paramType) {
+			throw new UnsupportedOperationException();
+		}
 	}
 	
+	class CategoryGlobalMethodComparatorCompiler extends CategoryComparatorCompilerBase {
+		public CategoryGlobalMethodComparatorCompiler(MethodCall call) {
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		protected void compileMethodBody(Context context, MethodInfo method, Type paramType) {
+			throw new UnsupportedOperationException();
+		}
+	}
+
+
 }

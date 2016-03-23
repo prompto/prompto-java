@@ -36,7 +36,7 @@ public class Compiler {
 			if(!parent.exists() && !parent.mkdirs())
 				throw new IOException("Could not create " + parent.getAbsolutePath());
 			File file = new File(parent, fullName.substring(fullName.lastIndexOf('/')+1) + ".class");
-			if(Instruction.getDumpLevel()>0)
+			if(DumpLevel.current().ordinal()>0)
 				System.err.println("Writing class file: " + file.getAbsolutePath());
 			try(OutputStream out = new FileOutputStream(file)) {
 				classFile.writeTo(out);
