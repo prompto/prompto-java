@@ -13,6 +13,8 @@ import org.joda.time.LocalTime;
 import org.joda.time.tz.ZoneInfoProvider;
 import org.junit.Test;
 
+import prompto.argument.CategoryArgument;
+import prompto.argument.IArgument;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteMethodDeclaration;
@@ -27,8 +29,6 @@ import prompto.expression.TernaryExpression;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.ArgumentList;
-import prompto.grammar.CategoryArgument;
-import prompto.grammar.IArgument;
 import prompto.grammar.ITypedArgument;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDate;
