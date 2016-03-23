@@ -1,7 +1,7 @@
 package prompto.error;
 
+import prompto.expression.CategorySymbol;
 import prompto.expression.IExpression;
-import prompto.grammar.CategorySymbol;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 

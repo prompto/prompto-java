@@ -1,7 +1,6 @@
 package prompto.expression;
 
 import prompto.error.SyntaxError;
-import prompto.grammar.UnresolvedIdentifier;
 import prompto.runtime.Context;
 import prompto.type.IType;
 

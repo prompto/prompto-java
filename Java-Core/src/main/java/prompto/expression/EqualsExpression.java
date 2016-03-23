@@ -20,7 +20,6 @@ import prompto.error.SyntaxError;
 import prompto.grammar.EqOp;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
-import prompto.grammar.UnresolvedIdentifier;
 import prompto.intrinsic.PromptoDate;
 import prompto.intrinsic.PromptoDateTime;
 import prompto.intrinsic.PromptoDict;

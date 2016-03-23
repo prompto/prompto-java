@@ -17,7 +17,6 @@ import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
-import prompto.grammar.UnresolvedIdentifier;
 import prompto.intrinsic.PromptoDict;
 import prompto.runtime.Context;
 import prompto.type.CategoryType;

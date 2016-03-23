@@ -1,6 +1,7 @@
 package prompto.grammar;
 
 import prompto.error.PromptoError;
+import prompto.expression.Symbol;
 import prompto.intrinsic.IterableWithLength;
 import prompto.runtime.Context;
 import prompto.store.IStorable;

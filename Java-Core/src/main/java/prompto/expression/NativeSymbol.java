@@ -1,8 +1,8 @@
-package prompto.grammar;
+package prompto.expression;
 
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
-import prompto.expression.IExpression;
+import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.type.EnumeratedNativeType;
 import prompto.type.IType;

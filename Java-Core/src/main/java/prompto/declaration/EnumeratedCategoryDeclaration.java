@@ -1,10 +1,10 @@
 package prompto.declaration;
 
 import prompto.error.SyntaxError;
-import prompto.grammar.CategorySymbol;
+import prompto.expression.CategorySymbol;
+import prompto.expression.Symbol;
 import prompto.grammar.CategorySymbolList;
 import prompto.grammar.Identifier;
-import prompto.grammar.Symbol;
 import prompto.grammar.SymbolList;
 import prompto.runtime.Context;
 import prompto.type.EnumeratedCategoryType;

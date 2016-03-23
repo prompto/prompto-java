@@ -27,10 +27,10 @@ import prompto.error.SyntaxError;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
-import prompto.grammar.UnresolvedIdentifier;
 import prompto.intrinsic.PromptoList;
 import prompto.runtime.Context;
 import prompto.runtime.MethodFinder;
+import prompto.runtime.Variable;
 import prompto.statement.MethodCall;
 import prompto.type.CategoryType;
 import prompto.type.ContainerType;
@@ -396,12 +396,8 @@ public class SortedExpression implements IExpression {
 		@Override
 		protected void compileMethodBody(Context context, MethodInfo method, Type paramType) throws SyntaxError {
 			StackLocal tmpThis = method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, new ClassConstant(paramType));
-			method.addInstruction(Opcode.ALOAD_1, new ClassConstant(paramType));
-			method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)tmpThis.getIndex()));
-			ResultInfo left = key.compile(context.newCategoryContext(itemType), method, new Flags());
-			method.addInstruction(Opcode.ALOAD_2, new ClassConstant(paramType));
-			method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)tmpThis.getIndex()));
-			ResultInfo right = key.compile(context.newCategoryContext(itemType), method, new Flags());
+			ResultInfo left = compileValue(context, method, paramType, tmpThis, "o1");
+			ResultInfo right = compileValue(context, method, paramType, tmpThis, "o2");
 			Descriptor.Method proto = new Descriptor.Method(right.getType(), int.class);
 			if(left.isInterface()) {
 				InterfaceConstant c = new InterfaceConstant(new ClassConstant(left.getType()), "compareTo", proto);
@@ -411,6 +407,14 @@ public class SortedExpression implements IExpression {
 				method.addInstruction(Opcode.INVOKEVIRTUAL, c);
 			}
 			method.addInstruction(Opcode.IRETURN);
+		}
+
+		private ResultInfo compileValue(Context context, MethodInfo method, Type paramType, StackLocal tmpThis, String paramName) throws SyntaxError {
+			StackLocal param = method.getRegisteredLocal(paramName);
+			Opcode opcode = Opcode.values()[Opcode.ALOAD_0.ordinal() + param.getIndex()];
+			method.addInstruction(opcode, new ClassConstant(paramType));
+			method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)tmpThis.getIndex()));
+			return key.compile(context.newCategoryContext(itemType), method, new Flags());
 		}
 	}
 
@@ -422,13 +426,33 @@ public class SortedExpression implements IExpression {
 	}
 	
 	class CategoryGlobalMethodComparatorCompiler extends CategoryComparatorCompilerBase {
+		
+		MethodCall call;
+		
 		public CategoryGlobalMethodComparatorCompiler(MethodCall call) {
-			// TODO Auto-generated constructor stub
+			this.call = call;
 		}
 
 		@Override
-		protected void compileMethodBody(Context context, MethodInfo method, Type paramType) {
-			throw new UnsupportedOperationException();
+		protected void compileMethodBody(Context context, MethodInfo method, Type paramType) throws SyntaxError {
+			ResultInfo left = compileValue(context, method, paramType, "o1");
+			ResultInfo right = compileValue(context, method, paramType, "o2");
+			Descriptor.Method proto = new Descriptor.Method(right.getType(), int.class);
+			if(left.isInterface()) {
+				InterfaceConstant c = new InterfaceConstant(new ClassConstant(left.getType()), "compareTo", proto);
+				method.addInstruction(Opcode.INVOKEINTERFACE, c);
+			} else {
+				MethodConstant c = new MethodConstant(new ClassConstant(left.getType()), "compareTo", proto);
+				method.addInstruction(Opcode.INVOKEVIRTUAL, c);
+			}
+			method.addInstruction(Opcode.IRETURN);
+		}
+
+		private ResultInfo compileValue(Context context, MethodInfo method, Type paramType, String paramName) throws SyntaxError {
+			context.registerValue(new Variable(new Identifier(paramName), itemType));
+			ArgumentAssignment assignment = call.getAssignments().getFirst();
+			assignment.setExpression(new UnresolvedIdentifier(new Identifier(paramName)));
+			return call.compile(context, method, new Flags());
 		}
 	}
 

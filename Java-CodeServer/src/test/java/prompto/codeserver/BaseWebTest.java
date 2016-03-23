@@ -16,9 +16,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import prompto.expression.EqualsExpression;
 import prompto.expression.IExpression;
+import prompto.expression.UnresolvedIdentifier;
 import prompto.grammar.EqOp;
 import prompto.grammar.Identifier;
-import prompto.grammar.UnresolvedIdentifier;
 import prompto.literal.TextLiteral;
 import prompto.selenium.HtmlUnitWebDriverFactory;
 import prompto.selenium.WebDriverFactory;

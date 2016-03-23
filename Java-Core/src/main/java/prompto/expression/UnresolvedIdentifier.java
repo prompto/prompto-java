@@ -1,4 +1,4 @@
-package prompto.grammar;
+package prompto.expression;
 
 import prompto.compiler.Flags;
 import prompto.compiler.ResultInfo;
@@ -8,12 +8,7 @@ import prompto.declaration.EnumeratedNativeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
-import prompto.expression.ConstructorExpression;
-import prompto.expression.IExpression;
-import prompto.expression.InstanceExpression;
-import prompto.expression.MethodSelector;
-import prompto.expression.SymbolExpression;
-import prompto.expression.TypeExpression;
+import prompto.grammar.Identifier;
 import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.statement.MethodCall;
