@@ -16,4 +16,22 @@ public abstract class PromptoAny {
 		else
 			throw new UnsupportedOperationException("Cannot call getMember for " + instance.getClass().getName());
 	}
+	
+	public static void setItem(Object instance, Object index, Object value) {
+		if(instance instanceof PromptoList && index instanceof Long)
+			((PromptoList<Object>)instance).set(((Long)index).intValue(), value);
+		else if(instance instanceof PromptoTuple && index instanceof Long)
+			((PromptoTuple<Object>)instance).set(((Long)index).intValue(), value);
+		else
+			throw new UnsupportedOperationException("Cannot call setItem for " + instance.getClass().getName());
+	}
+
+	public static Object getItem(Object instance, Object index) {
+		if(instance instanceof PromptoList && index instanceof Long)
+			return ((PromptoList<Object>)instance).get(((Long)index).intValue());
+		else if(instance instanceof PromptoTuple && index instanceof Long)
+			return ((PromptoTuple<Object>)instance).get(((Long)index).intValue());
+		else
+			throw new UnsupportedOperationException("Cannot call setItem for " + instance.getClass().getName());
+	}
 }

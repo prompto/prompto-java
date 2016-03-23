@@ -13,6 +13,7 @@ import prompto.compiler.ResultInfo;
 import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.intrinsic.PromptoAny;
 import prompto.intrinsic.PromptoDict;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoRange;
@@ -21,6 +22,7 @@ import prompto.intrinsic.PromptoTuple;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
+import prompto.value.Any;
 import prompto.value.Dictionary;
 import prompto.value.IContainer;
 import prompto.value.IValue;
@@ -90,29 +92,33 @@ public class ItemSelector extends SelectorExpression {
 		map.put(PromptoTuple.class, TupleValue::compileItem);
 		map.put(PromptoSet.class, SetValue::compileItem);
 		map.put(PromptoList.class, ListValue::compileItem);
+		map.put(PromptoAny.class, Any::compileItem);
 		return map;
 	}
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		IType type = check(context);
-		ResultInfo pinfo = parent.compile(context, method, flags);
-		IOperatorFunction getter = getters.get(pinfo.getType());
-		if(getter==null) {
-			System.err.println("Missing IOperatorFunction for get item " + pinfo.getType().getTypeName());
-			throw new SyntaxError("Cannot get item from " + pinfo.getType().getTypeName());
-		}
-		ResultInfo result = getter.compile(context, method, flags, pinfo, item);
-		if(Object.class==result.getType()) {
+		ResultInfo parentInfo = parent.compile(context, method, flags);
+		ResultInfo itemInfo = compileGetItem(context, method, flags, parentInfo, item);
+		if(Object.class==itemInfo.getType()) {
 			// need to downcast
 			Type klass = type.getJavaType();
 			ClassConstant c = new ClassConstant(klass);
 			method.addInstruction(Opcode.CHECKCAST, c);
 			return new ResultInfo(klass);
 		} else
-			return result;
+			return itemInfo;
 	}
-
-
+	
+	public static ResultInfo compileGetItem(Context context, MethodInfo method, Flags flags, ResultInfo parentInfo, IExpression item) throws SyntaxError {
+		IOperatorFunction getter = getters.get(parentInfo.getType());
+		if(getter==null) {
+			System.err.println("Missing IOperatorFunction for get item " + parentInfo.getType().getTypeName());
+			throw new SyntaxError("Cannot get item from " + parentInfo.getType().getTypeName());
+		}
+		return getter.compile(context, method, flags, parentInfo, item);
+	}
+	
 
 }

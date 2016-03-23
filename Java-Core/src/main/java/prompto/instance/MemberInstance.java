@@ -107,7 +107,7 @@ public class MemberInstance implements IAssignableSelector {
 		else if(PromptoDocument.class==parent.getType())
 			return compileAssignDocument(context, method, flags, expression);
 		else
-			throw new UnsupportedOperationException();
+			throw new UnsupportedOperationException("Cannot assign item to " + parent.getType().getTypeName());
 	}
 	
 	private ResultInfo compileAssignAny(Context context, MethodInfo method, Flags flags, IExpression expression) throws SyntaxError {

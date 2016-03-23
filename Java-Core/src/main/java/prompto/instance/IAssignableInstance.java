@@ -21,7 +21,7 @@ public interface IAssignableInstance {
 	IValue interpret(Context context) throws PromptoError;
 	void toDialect(CodeWriter writer, IExpression expression);
 	default ResultInfo compileParent(Context context, MethodInfo method, Flags flags) throws SyntaxError {
-		System.err.println("Missing compileRegister for " + this.getClass().getName());
+		System.err.println("Missing compileParent for " + this.getClass().getName());
 		throw new UnsupportedOperationException();
 	}
 	default ResultInfo compileAssign(Context context, MethodInfo method, Flags flags, IExpression expression) throws SyntaxError {
