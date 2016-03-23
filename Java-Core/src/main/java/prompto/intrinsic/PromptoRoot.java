@@ -7,22 +7,13 @@ import java.util.List;
 
 public abstract class PromptoRoot {
 
-	String text;
-	
-	public String getText() {
-		return text!=null ? text : this.toString();
-	}
-	
-	public void setText(String text) {
-		this.text = text;
-	}
-	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("{id:");
-		sb.append(System.identityHashCode(this));
-		sb.append(", ");
+		sb.append('{');
+		// sb.append("{id:");
+		// sb.append(System.identityHashCode(this));
+		// sb.append(", ");
 		List<Field> fields = collectFields();
 		fields.forEach((field)-> {
 			sb.append(field.getName());
