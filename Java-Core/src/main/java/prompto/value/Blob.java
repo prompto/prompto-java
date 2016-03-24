@@ -1,26 +1,22 @@
 package prompto.value;
 
-import java.io.IOException;
-
+import prompto.intrinsic.PromptoBinary;
 import prompto.type.BlobType;
 
-public class Blob extends Binary {
+public class Blob extends BinaryValue {
 
 	public Blob() {
 		super(BlobType.instance());
 	}
 	
 	
-	public Blob(String mimeType, byte[] data) {
-		super(BlobType.instance(), mimeType, data);
+	public Blob(PromptoBinary data) {
+		super(BlobType.instance(), data);
 	}
 
 
-	public static Blob fromResource(String path) throws IOException {
-		Blob blob = new Blob();
-		Binary.fromResource(blob, path);
-		return blob;
+	public Blob(String mimeType, byte[] bytes) {
+		this(new PromptoBinary(mimeType, bytes));
 	}
-
 
 }

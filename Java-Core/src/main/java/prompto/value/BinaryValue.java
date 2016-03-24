@@ -10,8 +10,8 @@ import java.util.Set;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoBinary;
 import prompto.runtime.Context;
-import prompto.store.IStorable;
 import prompto.store.IStore;
 import prompto.type.IType;
 import prompto.utils.ResourceUtils;
@@ -20,43 +20,56 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public abstract class Binary extends BaseValue {
+public abstract class BinaryValue extends BaseValue {
 
-	public static Binary newInstance(String mimeType, byte[] dataBytes) {
-		if(mimeType.startsWith("image/"))
-			return new Image(mimeType, dataBytes);
+	public static BinaryValue fromResource(String path) throws IOException {
+		String ext = path.substring(path.lastIndexOf('.') + 1);
+		String mimeType = fileExtensionToMimeType(ext);
+		byte[] bytes = ResourceUtils.getResourceAsBytes(path);
+		return newInstance(new PromptoBinary(mimeType, bytes));
+	}
+	
+	public static BinaryValue newInstance(PromptoBinary data) {
+		if(data.getMimeType().startsWith("image/"))
+			return new Image(data);
 		else
-			return new Blob(mimeType, dataBytes);
+			return new Blob(data);
 	}
 
-	private String mimeType;
-	private byte[] data;
+	PromptoBinary data;
 	
-	protected Binary(IType type) {
+	
+	protected BinaryValue(IType type) {
 		super(type);
 	}
 	
-	protected Binary(IType type, String mimeType, byte[] data) {
+	protected BinaryValue(IType type, PromptoBinary data) {
 		super(type);
-		this.setMimeType(mimeType);
-		this.setData(data);
+		this.data = data;
 	}
 
+	@Override
+	public PromptoBinary getStorableData() {
+		return data;
+	}
+	
+	public String getMimeType() {
+		return data.getMimeType();
+	}
+	
+	public byte[] getBytes() {
+		return data.getBytes();
+	}
+	
 	@Override
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
 		if ("mimeType".equals(name))
-			return new Text(this.getMimeType());
+			return new Text(data.getMimeType());
 		else
 			return super.getMember(context, id, autoCreate);
 	}
 
-	public static void fromResource(Binary binary, String path) throws IOException {
-		String ext = path.substring(path.lastIndexOf('.') + 1);
-		binary.setMimeType(fileExtensionToMimeType(ext));
-		binary.setData(ResourceUtils.getResourceAsBytes(path));
-	}
-	
 	static Map<String, String> extensionToMimeType;
 	
 	static Map<String, Set<String>> mimeTypeToExtensions;
@@ -93,27 +106,6 @@ public abstract class Binary extends BaseValue {
 			return mimeType;
 	}
 
-	public String getMimeType() {
-		return mimeType;
-	}
-
-	public void setMimeType(String mimeType) {
-		this.mimeType = mimeType;
-	}
-
-	public byte[] getData() {
-		return data;
-	}
-
-	public void setData(byte[] data) {
-		this.data = data;
-	}
-
-	@Override
-	public void storeValue(Context context, String name, IStorable storable) throws PromptoError {
-		storable.setData(name, this);
-	}
-	
 	@Override
 	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
 		try {

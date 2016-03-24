@@ -18,7 +18,6 @@ import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDate;
 import prompto.intrinsic.PromptoPeriod;
 import prompto.runtime.Context;
-import prompto.store.IStorable;
 import prompto.type.DateType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -43,14 +42,15 @@ public class Date extends BaseValue implements Comparable<Date> {
 		value = new PromptoDate(year, month, day);
 	}
 
-	public PromptoDate getValue() {
+	@Override
+	public PromptoDate getStorableData() {
 		return value;
 	}
 
 	@Override
 	public IValue plus(Context context, IValue value) throws PromptoError {
 		if (value instanceof Period)
-			return new Date(this.value.plus(((Period)value).getValue()));
+			return new Date(this.value.plus(((Period)value).value));
 		else
 			throw new SyntaxError("Illegal: Date + " + value.getClass().getSimpleName());
 	}
@@ -73,7 +73,7 @@ public class Date extends BaseValue implements Comparable<Date> {
 			PromptoPeriod result = this.value.minus(other);
 			return new Period(result);
 		} else if (value instanceof Period)
-			return new Date(this.value.minus(((Period)value).getValue()));
+			return new Date(this.value.minus(((Period)value).value));
 		else
 			throw new SyntaxError("Illegal: Date - "
 					+ value.getClass().getSimpleName());
@@ -187,8 +187,4 @@ public class Date extends BaseValue implements Comparable<Date> {
 		}
 	}
 	
-	@Override
-	public void storeValue(Context context, String name, IStorable storable) throws PromptoError {
-		storable.setData(name, value);
-	}
 }

@@ -15,6 +15,4 @@ public class VoidResult extends BaseValue {
 		return instance;
 	}
 
-
-
 }

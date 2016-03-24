@@ -22,7 +22,6 @@ import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoChar;
 import prompto.intrinsic.PromptoString;
 import prompto.runtime.Context;
-import prompto.store.IStorable;
 import prompto.type.CharacterType;
 import prompto.type.DecimalType;
 import prompto.type.INumberType;
@@ -45,6 +44,11 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 		this.value = value;
 	}
 
+	@Override
+	public Long getStorableData() {
+		return value;
+	}
+	
 	public long longValue() {
 		return value;
 	}
@@ -381,11 +385,6 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		}
-	}
-
-	@Override
-	public void storeValue(Context context, String name, IStorable storable) throws PromptoError {
-		storable.setData(name, value);
 	}
 
 	public IValue negate() {

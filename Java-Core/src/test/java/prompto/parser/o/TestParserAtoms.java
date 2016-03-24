@@ -396,7 +396,7 @@ public class TestParserAtoms {
 		CodeWriter writer = new CodeWriter(Dialect.O, null);
 		literal.toDialect(writer);
 		assertEquals("\"hello\"", writer.toString());
-		assertEquals("hello", ((TextLiteral)literal).getValue().getValue());
+		assertEquals("hello", ((TextLiteral)literal).getValue().getStorableData());
 	}
 	
 	@Test
@@ -495,7 +495,7 @@ public class TestParserAtoms {
 		CodeWriter writer = new CodeWriter(Dialect.O, null);
 		literal.toDialect(writer);
 		assertEquals("'2012-10-09'", writer.toString());
-		assertEquals(new PromptoDate(2012, 10, 9), ((DateLiteral)literal).getValue().getValue());
+		assertEquals(new PromptoDate(2012, 10, 9), ((DateLiteral)literal).getValue().getStorableData());
 	}
 
 	@Test
@@ -508,7 +508,7 @@ public class TestParserAtoms {
 		CodeWriter writer = new CodeWriter(Dialect.O, null);
 		literal.toDialect(writer);
 		assertEquals("'15:03:10'", writer.toString());
-		assertEquals(new PromptoTime(new LocalTime(15, 03, 10)), ((TimeLiteral)literal).getValue().getValue());
+		assertEquals(new PromptoTime(new LocalTime(15, 03, 10)), ((TimeLiteral)literal).getValue().getStorableData());
 	}
 
 	@Test
@@ -521,7 +521,7 @@ public class TestParserAtoms {
 		CodeWriter writer = new CodeWriter(Dialect.O, null);
 		literal.toDialect(writer);
 		assertEquals("'2012-10-09T15:18:17'", writer.toString());
-		assertEquals(new PromptoDateTime(new DateTime(2012, 10, 9, 15, 18, 17)), ((DateTimeLiteral)literal).getValue().getValue());
+		assertEquals(new PromptoDateTime(new DateTime(2012, 10, 9, 15, 18, 17)), ((DateTimeLiteral)literal).getValue().getStorableData());
 	}
 	
 	@Test
@@ -534,7 +534,7 @@ public class TestParserAtoms {
 		CodeWriter writer = new CodeWriter(Dialect.O, null);
 		literal.toDialect(writer);
 		assertEquals("'2012-10-09T15:18:17.487'", writer.toString());
-		assertEquals(new PromptoDateTime(new DateTime(2012, 10, 9, 15, 18, 17, 487)), ((DateTimeLiteral)literal).getValue().getValue());
+		assertEquals(new PromptoDateTime(new DateTime(2012, 10, 9, 15, 18, 17, 487)), ((DateTimeLiteral)literal).getValue().getStorableData());
 	}
 	
 	@Test
@@ -551,7 +551,7 @@ public class TestParserAtoms {
 		DateTimeZone tz = provider.getZone("Etc/GMT-2");
 		DateTime dt = new DateTime(2012, 10, 9, 15, 18, 17, tz);
 		PromptoDateTime expected = new PromptoDateTime(dt);
-		PromptoDateTime actual = ((DateTimeLiteral)literal).getValue().getValue();
+		PromptoDateTime actual = ((DateTimeLiteral)literal).getValue().getStorableData();
 		assertTrue(expected.isEqual(actual));
 	}
 	
@@ -565,7 +565,7 @@ public class TestParserAtoms {
 		CodeWriter writer = new CodeWriter(Dialect.O, null);
 		literal.toDialect(writer);
 		assertEquals("'P3Y'", writer.toString());
-		assertEquals(3,((PeriodLiteral)literal).getValue().getValue().getNativeYears());
+		assertEquals(3,((PeriodLiteral)literal).getValue().getStorableData().getNativeYears());
 	}
 
 	@Test

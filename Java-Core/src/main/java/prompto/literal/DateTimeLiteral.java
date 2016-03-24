@@ -36,7 +36,7 @@ public class DateTimeLiteral extends Literal<DateTime> {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
-		PromptoDateTime dateTime = value.getValue();
+		PromptoDateTime dateTime = value.getStorableData();
 		method.addInstruction(Opcode.LDC_W, new StringConstant(dateTime.toString()));
 		IOperand oper = new MethodConstant(PromptoDateTime.class, "parse", 
 				String.class, PromptoDateTime.class);

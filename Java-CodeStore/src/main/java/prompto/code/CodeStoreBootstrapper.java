@@ -84,12 +84,12 @@ public class CodeStoreBootstrapper {
 	private Collection<AttributeDeclaration> getMinimalColumns(IStore store) {
 		List<AttributeDeclaration> columns = new ArrayList<AttributeDeclaration>();
 		// attributes with reserved names, the below declarations will be used
-		columns.add(new AttributeDeclaration(IStore.dbIdIdentifier, store.getDbIdType()));
+		columns.add(new AttributeDeclaration(IStore.dbIdIdentifier, store.getDbIdIType()));
 		columns.add(new AttributeDeclaration(new Identifier("storable"), BooleanType.instance()));
 		columns.add(new AttributeDeclaration(new Identifier("category"), 
 				new ListType(TextType.instance()), new IdentifierList(new Identifier("key"))));
 		// also add 'module' to avoid dependency on DevCenter
-		columns.add(new AttributeDeclaration(new Identifier("module"), store.getDbIdType()));
+		columns.add(new AttributeDeclaration(new Identifier("module"), store.getDbIdIType()));
 		// more required attributes which will be overridden by a prompto declaration
 		columns.add(new AttributeDeclaration(new Identifier("author"), TextType.instance()));
 		columns.add(new AttributeDeclaration(new Identifier("timeStamp"), DateTimeType.instance()));

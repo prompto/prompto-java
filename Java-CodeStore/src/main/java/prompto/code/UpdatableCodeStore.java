@@ -109,16 +109,16 @@ public class UpdatableCodeStore extends BaseCodeStore {
 		List<String> categories = Arrays.asList("Module", module.getType().getCategory().getName());
 		IStorable storable = store.newStorable(categories); 
 		module.populate(context, storable);
-		store.store(context, storable);
+		store.store(storable);
 	}
 	
 	private IValue storeDeclarationModule(IDeclaration decl) throws PromptoError {
 		ICodeStore origin = decl.getOrigin();
 		List<String> categories = Arrays.asList("Module", origin.getModuleType().getCategory().getName());
 		IStorable storable = store.newStorable(categories);
-		storable.setValue(context, new Identifier("name"),  new Text(origin.getModuleName()));
-		storable.setValue(context, new Identifier("version"),  new Text(origin.getModuleVersion().toString()));
-		store.store(context, storable);
+		storable.setValue(new Identifier("name"),  new Text(origin.getModuleName()));
+		storable.setValue(new Identifier("version"),  new Text(origin.getModuleVersion().toString()));
+		store.store(storable);
 		return storable.getOrCreateDbId();
 	}
 
@@ -130,11 +130,11 @@ public class UpdatableCodeStore extends BaseCodeStore {
 			if(stored==null)
 				return null;
 			Module module = type.getModuleClass().newInstance();
-			module.setName((Text)stored.getValue(context, new Identifier("name")));
-			module.setVersion((Text)stored.getValue(context, new Identifier("version")));
-			module.setDescription((Text)stored.getValue(context, new Identifier("description")));
+			module.setName((Text)stored.getValue(new Identifier("name")));
+			module.setVersion((Text)stored.getValue(new Identifier("version")));
+			module.setDescription((Text)stored.getValue(new Identifier("description")));
 			if(module instanceof Application)
-				((Application)module).setEntryPoint((Text)stored.getValue(context, new Identifier("entryPoint")));
+				((Application)module).setEntryPoint((Text)stored.getValue(new Identifier("entryPoint")));
 			return (T)module;
 		} catch(Exception e) {
 			throw new RuntimeException(e);
@@ -221,7 +221,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 		List<IStorable> list = new ArrayList<>();
 		while(declarations.hasNext())
 			collectStorables(list, declarations.next(), dialect, version, moduleId);
-		store.store(context, null, list);
+		store.store(null, list);
 	}
 	
 	private IValue fetchDeclarationModuleDbId(IDeclaration decl) throws PromptoError {
@@ -236,18 +236,18 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	private IStorable populateDeclarationStorable(List<String> categories, IDeclaration decl, Dialect dialect, Version version, IValue moduleId) {
 		IStorable storable = store.newStorable(categories); 
 		try {
-			storable.setValue(context, new Identifier("name"),  new Text(decl.getId().getName()));
-			storable.setValue(context, new Identifier("version"),  new Text(version.toString()));
+			storable.setValue(new Identifier("name"),  new Text(decl.getId().getName()));
+			storable.setValue(new Identifier("version"),  new Text(version.toString()));
 			if(decl instanceof IMethodDeclaration) {
 				String proto = ((IMethodDeclaration)decl).getProto();
-				storable.setValue(context, new Identifier("prototype"), new Text(proto));
+				storable.setValue(new Identifier("prototype"), new Text(proto));
 			}
-			storable.setValue(context, new Identifier("dialect"),  new Text(dialect.name()));
+			storable.setValue(new Identifier("dialect"),  new Text(dialect.name()));
 			CodeWriter writer = new CodeWriter(dialect, context);
 			decl.toDialect(writer);
 			String content = writer.toString();
-			storable.setValue(context, new Identifier("body"),  new Text(content));
-			storable.setValue(context, new Identifier("module"),  moduleId);
+			storable.setValue(new Identifier("body"),  new Text(content));
+			storable.setValue(new Identifier("module"),  moduleId);
 			return storable;
 		} catch(PromptoError e) {
 			throw new RuntimeException(e);
@@ -307,10 +307,10 @@ public class UpdatableCodeStore extends BaseCodeStore {
 		if(stored==null)
 			return null;
 		try {
-			Text value = (Text)stored.getValue(context, new Identifier("dialect"));
-			Dialect dialect = Dialect.valueOf(value.getValue());
-			value = (Text)stored.getValue(context, new Identifier("body"));
-			InputStream input = new ByteArrayInputStream(value.getValue().getBytes());
+			Text value = (Text)stored.getValue(new Identifier("dialect"));
+			Dialect dialect = Dialect.valueOf(value.getStorableData());
+			value = (Text)stored.getValue(new Identifier("body"));
+			InputStream input = new ByteArrayInputStream(value.getStorableData().getBytes());
 			DeclarationList decls = ICodeStore.parse(dialect, "__store__", input);
 			return decls.isEmpty() ? null : (T)decls.get(0);
 		} catch (Exception e) {

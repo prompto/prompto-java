@@ -41,6 +41,11 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IFilterab
 	}
 
 	@Override
+	public PromptoSet<IValue> getStorableData() {
+		return items;
+	}
+	
+	@Override
 	public String toString() {
 		return items.toString();
 	}

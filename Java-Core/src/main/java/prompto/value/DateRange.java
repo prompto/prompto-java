@@ -16,8 +16,8 @@ public class DateRange extends RangeBase<Date> {
 		
 		@Override
 		public prompto.value.Date getItem(long item) {
-			PromptoDate result = low.getValue().plusDays(item-1);
-			if(result.isAfter(high.getValue()))
+			PromptoDate result = low.value.plusDays(item-1);
+			if(result.isAfter(high.value))
 				throw new IndexOutOfBoundsException();
 			return new prompto.value.Date(result);
 		}
@@ -30,8 +30,8 @@ public class DateRange extends RangeBase<Date> {
 
 		@Override
 		public long getNativeLength() {
-			long h = high.getValue().toJavaTime();
-			long l = low.getValue().toJavaTime();
+			long h = high.value.toJavaTime();
+			long l = low.value.toJavaTime();
 			return 1 + ( (h-l)/(24*60*60*1000));
 		}
 

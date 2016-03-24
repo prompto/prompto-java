@@ -45,6 +45,11 @@ public class TupleValue extends BaseValue implements IContainer<IValue>, ISlicea
 	}
 
 	@Override
+	public PromptoTuple<IValue> getStorableData() {
+		return items;
+	}
+	
+	@Override
 	public String toString() {
 		String result = items.toString();
 		return "(" + result.substring(1,result.length()-1) + ")";

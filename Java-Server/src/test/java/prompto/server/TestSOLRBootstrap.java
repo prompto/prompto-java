@@ -39,15 +39,15 @@ public class TestSOLRBootstrap {
 		((EmbeddedSOLRStore)store).startContainer();
 		((EmbeddedSOLRStore)store).startServerWithEmptyCore();
 		AppServer.bootstrapCodeStore(store, "test", Version.parse("1.0.0"));
-		assertEquals(store.getDbIdType(), store.getColumnType(IStore.dbIdName));
-		assertEquals(DateTimeType.instance(), store.getColumnType("timeStamp"));
-		assertEquals(new ListType(TextType.instance()), store.getColumnType("category"));
-		assertEquals(TextType.instance(), store.getColumnType("name"));
-		assertEquals(BooleanType.instance(), store.getColumnType("storable"));
-		assertEquals(TextType.instance(), store.getColumnType("version"));
-		assertEquals(TextType.instance(), store.getColumnType("prototype"));
-		assertEquals(TextType.instance(), store.getColumnType("dialect"));
-		assertEquals(TextType.instance(), store.getColumnType("body"));
+		assertEquals(store.getDbIdIType(), store.getColumnIType(IStore.dbIdName));
+		assertEquals(DateTimeType.instance(), store.getColumnIType("timeStamp"));
+		assertEquals(new ListType(TextType.instance()), store.getColumnIType("category"));
+		assertEquals(TextType.instance(), store.getColumnIType("name"));
+		assertEquals(BooleanType.instance(), store.getColumnIType("storable"));
+		assertEquals(TextType.instance(), store.getColumnIType("version"));
+		assertEquals(TextType.instance(), store.getColumnIType("prototype"));
+		assertEquals(TextType.instance(), store.getColumnIType("dialect"));
+		assertEquals(TextType.instance(), store.getColumnIType("body"));
 	}
 	
 	@Test
@@ -61,9 +61,9 @@ public class TestSOLRBootstrap {
 		store.startContainer();
 		store.startServerWithEmptyCore();
 		AppServer.bootstrapCodeStore(store, "test", Version.parse("1.0.0"));
-		assertEquals(store.getDbIdType(), store.getColumnType(IStore.dbIdName));
-		assertEquals(TextType.instance(), store.getColumnType("name"));
-		assertEquals(TextType.instance(), store.getColumnType("version"));
+		assertEquals(store.getDbIdIType(), store.getColumnIType(IStore.dbIdName));
+		assertEquals(TextType.instance(), store.getColumnIType("name"));
+		assertEquals(TextType.instance(), store.getColumnIType("version"));
 		assertNull(AppServer.globalContext.findAttribute("prototype"));
 	}
 }

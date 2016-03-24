@@ -25,7 +25,6 @@ import prompto.intrinsic.IterableWithLength;
 import prompto.intrinsic.IteratorWithLength;
 import prompto.intrinsic.PromptoString;
 import prompto.runtime.Context;
-import prompto.store.IStorable;
 import prompto.type.TextType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -40,15 +39,11 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 		this.value = value;
 	}
 
-	public String getValue() {
+	@Override
+	public String getStorableData() {
 		return value;
 	}
 	
-	@Override
-	public void storeValue(Context context, String name, IStorable storable) throws PromptoError {
-		storable.setData(name, value);
-	}
-		
 	@Override
 	public long getLength() {
 		return value.length();
@@ -106,7 +101,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	
 	
 	public int compareTo(Text obj) {
-		return value.compareTo(obj.getValue());
+		return value.compareTo(obj.value);
 	}
 
 	@Override

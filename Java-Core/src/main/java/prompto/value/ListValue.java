@@ -24,7 +24,6 @@ import prompto.intrinsic.IterableWithLength;
 import prompto.intrinsic.IteratorWithLength;
 import prompto.intrinsic.PromptoList;
 import prompto.runtime.Context;
-import prompto.store.IStorable;
 import prompto.type.ContainerType;
 import prompto.type.IType;
 import prompto.type.ListType;
@@ -48,6 +47,11 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 	public ListValue(IType itemType, Collection<? extends IValue> items) {
 		super(new ListType(itemType));
 		this.items = new PromptoList<>(items);
+	}
+	
+	@Override
+	public Object getStorableData() {
+		return items;
 	}
 	
 	@Override
@@ -135,12 +139,6 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 			throw new InvalidDataError("No such member:" + name);
 	}
 	
-	@Override
-	public void storeValue(Context context, String name, IStorable storable) throws PromptoError {
-		for(IValue item : this.items)
-			item.storeValue(context, name, storable);
-	}
-
 	@Override
 	public IValue plus(Context context, IValue value) throws PromptoError {
         if (value instanceof ListValue)

@@ -16,8 +16,8 @@ public class TimeRange extends RangeBase<Time> {
 
 		@Override
 		public prompto.value.Time getItem(long item) {
-			PromptoTime result = low.getValue().plusSeconds(item-1);
-			if(result.isAfter(high.getValue()))
+			PromptoTime result = low.value.plusSeconds(item-1);
+			if(result.isAfter(high.value))
 				throw new IndexOutOfBoundsException();
 			return new prompto.value.Time(result);
 		}

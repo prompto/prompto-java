@@ -1,5 +1,6 @@
 package prompto.store;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -16,12 +17,12 @@ import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.grammar.OrderByClause;
 import prompto.grammar.OrderByClauseList;
+import prompto.intrinsic.PromptoBinary;
 import prompto.runtime.Context;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.type.IntegerType;
 import prompto.type.TextType;
-import prompto.value.Binary;
 import prompto.value.Boolean;
 import prompto.value.Document;
 import prompto.value.IValue;
@@ -37,12 +38,17 @@ public final class MemStore implements IStore {
 	private long lastDbId = 0;
 	
 	@Override
-	public IType getDbIdType() {
+	public IType getDbIdIType() {
 		return IntegerType.instance();
 	}
 	
 	@Override
-	public IType getColumnType(String name) {
+	public Type getDbIdType() {
+		return Long.class;
+	}
+	
+	@Override
+	public IType getColumnIType(String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -53,26 +59,26 @@ public final class MemStore implements IStore {
 	}
 	
 	@Override
-	public void store(Context context, Collection<IValue> deletables, Collection<IStorable> storables) throws PromptoError {
+	public void store(Collection<Object> deletables, Collection<IStorable> storables) throws PromptoError {
 		for(IStorable storable : storables) {
 			if(!(storable instanceof StorableDocument))
 				throw new IllegalStateException("Expecting a StorableDocument");
-			store(context, (StorableDocument)storable);
+			store((StorableDocument)storable);
 		}
 	}
 	
-	public void store(Context context, StorableDocument storable) throws PromptoError {
+	public void store(StorableDocument storable) throws PromptoError {
 		// ensure db id
-		IValue dbId = storable.getValue(context, dbIdIdentifier);
+		IValue dbId = storable.getValue(dbIdIdentifier);
 		if(!(dbId instanceof Integer)) {
 			dbId = new Integer(++lastDbId);
-			storable.setValue(context, dbIdIdentifier, dbId);
+			storable.setValue(dbIdIdentifier, dbId);
 		}
 		documents.put((Integer)dbId, storable);
 	}
 	
 	@Override
-	public Binary fetchBinary(String dbId, String attr) {
+	public PromptoBinary fetchBinary(String dbId, String attr) {
 		for(StorableDocument doc : documents.values()) {
 			Object data = doc.getData(IStore.dbIdName);
 			if(data==null || !dbId.equals(data.toString()))
@@ -125,7 +131,7 @@ public final class MemStore implements IStore {
 	private boolean matchesType(Context context, StorableDocument doc, CategoryType type) throws PromptoError {
 		if(type==null)
 			return true;
-		ListValue list = (ListValue) doc.getValue(context, new Identifier("category"));
+		ListValue list = (ListValue) doc.getValue(new Identifier("category"));
 		return list==null ? false : list.hasItem(context, new Text(type.getName()));
 	}
 
@@ -261,12 +267,12 @@ public final class MemStore implements IStore {
 
 		@Override
 		public IValue getDbId() {
-			return getValue(null, dbIdIdentifier);
+			return getValue(dbIdIdentifier);
 		}
 		
 		@Override
 		public IValue getOrCreateDbId() {
-			IValue dbId = getValue(null, dbIdIdentifier);
+			IValue dbId = getValue(dbIdIdentifier);
 			if(dbId==null) {
 				setDirty(true);
 				dbId = new Integer(++lastDbId);
@@ -289,7 +295,7 @@ public final class MemStore implements IStore {
 				ListValue value = new ListValue(TextType.instance());
 				for(String name : categories)
 					value.addItem(new Text(name));
-				doc.setMember(null, new Identifier("category"), value);
+				doc.setMember(new Identifier("category"), value);
 			}
 			return doc;
 		}
@@ -300,20 +306,20 @@ public final class MemStore implements IStore {
 		}
 
 		@Override
-		public IValue getValue(Context context, Identifier name) {
+		public IValue getValue(Identifier name) {
 			if(document==null)
 				return null;
 			else
-				return document.getMember(context, name, false);
+				return document.getMember(name, false);
 		}
 		
 		@Override
-		public void setValue(Context context, Identifier name, IValue value, IDbIdProvider provider) {
+		public void setValue(Identifier name, IValue value, IDbIdProvider provider) {
 			if(document==null)
 				document = newDocument();
 			if(value instanceof StorableDocument)
 				value = ((StorableDocument)value).document;
-			document.setMember(context, name, value);
+			document.setMember(name, value);
 		}
 		
 		@Override

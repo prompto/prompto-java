@@ -6,25 +6,25 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class BinaryValue {
+public class BinaryData {
 	
 	private String mimeType;
 	private byte[] data;
 	
-	public BinaryValue(String mimeType, byte[] data) {
+	public BinaryData(String mimeType, byte[] data) {
 		this.mimeType = mimeType;
 		this.data = data;
 	}
 
-	public BinaryValue(byte[] bytes) throws IOException {
+	public BinaryData(byte[] bytes) throws IOException {
 		this(bytes, 0, true);
 	}
 	
-	public BinaryValue(byte[] bytes, int offset) throws IOException {
+	public BinaryData(byte[] bytes, int offset) throws IOException {
 		this(bytes, offset, true);
 	}
 
-	BinaryValue(byte[] bytes, int offset, boolean readData) throws IOException {
+	BinaryData(byte[] bytes, int offset, boolean readData) throws IOException {
 		DataInputStream input = new DataInputStream(new ByteArrayInputStream(bytes, offset, bytes.length - offset));
 		int len = input.readInt();
 		byte[] mimeTypeBytes = new byte[len];

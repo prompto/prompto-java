@@ -45,6 +45,17 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 			storable = IDataStore.getInstance().newStorable(categories);
 		}
 	}
+	
+	@Override
+	public Object getStorableData() throws NotStorableError {
+		// this is called when storing the instance as a field value, so we just store the dbId
+		// the instance data itself will be collected as part of collectStorables
+		if(this.storable==null)
+			throw new NotStorableError();
+		else
+			return this.getOrCreateDbId();
+	}
+
 
 	@Override
 	public boolean setMutable(boolean mutable) {
@@ -72,15 +83,6 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 			if(value instanceof IInstance)
 				((IInstance)value).collectStorables(list);
 		}
-	}
-	
-	@Override
-	public void storeValue(Context context, String name, IStorable storable) throws PromptoError {
-		// this is called when storing the instance as a field value, so we just store the dbId
-		// the instance data itself will be collected as part of collectStorables
-		if(this.storable==null)
-			throw new NotStorableError();
-		storable.setValue(context, new Identifier(name), this.getOrCreateDbId());
 	}
 	
 	public ConcreteCategoryDeclaration getDeclaration() {
@@ -169,7 +171,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		value = autocast(decl, value);
 		values.put(attrName, value);
 		if(storable!=null && decl.isStorable()) {
-			storable.setValue(context, attrName, value, this::getDbId);
+			storable.setValue(attrName, value, this::getDbId);
 		}
 	}
 	

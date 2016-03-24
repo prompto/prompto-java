@@ -100,7 +100,7 @@ public class TextType extends NativeType {
 		return new Comparator<Text>() {
 			@Override
 			public int compare(Text o1, Text o2) {
-				return o1.getValue().compareTo(o2.getValue());
+				return o1.getStorableData().compareTo(o2.getStorableData());
 			}
 		};
 	}

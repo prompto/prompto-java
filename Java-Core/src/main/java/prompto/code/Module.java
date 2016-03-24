@@ -61,11 +61,11 @@ public abstract class Module {
 
 	public void populate(Context context, IStorable storable) throws PromptoError {
 		setDbId(storable.getOrCreateDbId());
-		storable.setValue(context, new Identifier("name"), name);
-		storable.setValue(context, new Identifier("version"), version);
+		storable.setValue(new Identifier("name"), name);
+		storable.setValue(new Identifier("version"), version);
 		if(description!=null)
-			storable.setValue(context, new Identifier("description"), description);
+			storable.setValue(new Identifier("description"), description);
 		if(image!=null)
-			storable.setValue(context, new Identifier("image"), image);
+			storable.setValue(new Identifier("image"), image);
 	}
 }

@@ -4,7 +4,6 @@ import prompto.error.PromptoError;
 import prompto.expression.Symbol;
 import prompto.intrinsic.IterableWithLength;
 import prompto.runtime.Context;
-import prompto.store.IStorable;
 import prompto.type.IType;
 import prompto.utils.IValueIterable;
 import prompto.utils.ObjectList;
@@ -25,10 +24,10 @@ public abstract class SymbolList <T extends Symbol> extends ObjectList<T> implem
 	}
 
 	@Override
-	public void storeValue(Context context, String name, IStorable storable) {
-		throw new UnsupportedOperationException("Cannot store " + this.getClass().getSimpleName());
+	public Object getStorableData() {
+		throw new UnsupportedOperationException(); // can't be stored
 	}
-	
+
 	@Override
 	public boolean isMutable() {
 		return false;

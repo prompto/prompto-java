@@ -27,7 +27,7 @@ public class Application extends Module {
 	@Override
 	public void populate(Context context, IStorable storable) throws PromptoError {
 		super.populate(context, storable);
-		storable.setValue(context, new Identifier("entryPoint"), entryPoint);
+		storable.setValue(new Identifier("entryPoint"), entryPoint);
 	}
 
 }

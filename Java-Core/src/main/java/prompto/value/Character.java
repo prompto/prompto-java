@@ -19,7 +19,6 @@ import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoChar;
 import prompto.runtime.Context;
-import prompto.store.IStorable;
 import prompto.type.CharacterType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -38,18 +37,17 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
     	return value; 
     }
     
+    @Override
+    public Object getStorableData() {
+    	return value;
+    }
+    
     public IValue asText() {
     	return new Text(java.lang.Character.toString(value));
     }
 
-	@Override
-	public void storeValue(Context context, String name, IStorable storable) throws PromptoError {
-		storable.setData(name, value);
-	}
-	    
     @Override
-    public IValue plus(Context context, IValue value)
-    {
+    public IValue plus(Context context, IValue value) {
         return new Text(this.value + value.toString());
     }
 

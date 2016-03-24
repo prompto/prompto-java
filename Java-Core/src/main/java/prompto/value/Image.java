@@ -1,23 +1,20 @@
 package prompto.value;
 
-import java.io.IOException;
-
+import prompto.intrinsic.PromptoBinary;
 import prompto.type.ImageType;
 
-public class Image extends Binary {
+public class Image extends BinaryValue {
 
 	public Image() {
 		super(ImageType.instance());
 	}
 	
-	public Image(String mimeType, byte[] dataBytes) {
-		super(ImageType.instance(), mimeType, dataBytes);
+	public Image(PromptoBinary data) {
+		super(ImageType.instance(), data);
 	}
 
-	public static Image fromResource(String path) throws IOException {
-		Image image = new Image();
-		Binary.fromResource(image, path);
-		return image;
+	public Image(String mimeType, byte[] bytes) {
+		this(new PromptoBinary(mimeType, bytes));
 	}
 
 }

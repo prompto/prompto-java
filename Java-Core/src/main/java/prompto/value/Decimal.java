@@ -16,7 +16,6 @@ import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
-import prompto.store.IStorable;
 import prompto.type.DecimalType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -32,6 +31,11 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 	public Decimal(double value) {
 		super(DecimalType.instance());
 		this.value = value;
+	}
+	
+	@Override
+	public Double getStorableData() {
+		return value;
 	}
 
 	public long longValue() {
@@ -222,11 +226,6 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		}
-	}
-
-	@Override
-	public void storeValue(Context context, String name, IStorable storable) throws PromptoError {
-		storable.setData(name, value);
 	}
 
 	public IValue negate() {

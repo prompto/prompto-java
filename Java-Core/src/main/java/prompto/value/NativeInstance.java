@@ -58,6 +58,12 @@ public class NativeInstance extends BaseValue implements IInstance {
 	}
 	
 	@Override
+	public Object getStorableData() {
+		throw new UnsupportedOperationException(); // TODO
+	}
+	
+
+	@Override
 	public IStorable getStorable() {
 		return storable;
 	}
@@ -203,7 +209,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 			Object data = value.convertTo(nativeSetter.getParameterTypes()[0]);
 			setValue(nativeSetter, data);
 			if(storable!=null && decl.isStorable()) {
-				storable.setValue(context, attrName, value);
+				storable.setValue(attrName, value);
 			}
 		}
 	}

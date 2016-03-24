@@ -65,8 +65,8 @@ public class TestQuery extends BaseSOLRTest {
 	@Test
 	public void testStore() throws Exception {
 		IStorable storable = store.newStorable(null);
-		storable.setValue(context, new Identifier("name"), new Text("John"));
-		store.store(context, storable);
+		storable.setValue(new Identifier("name"), new Text("John"));
+		store.store(storable);
 		store.commit();
 		SolrQuery query = new SolrQuery();
 		query.setQuery("*:*");

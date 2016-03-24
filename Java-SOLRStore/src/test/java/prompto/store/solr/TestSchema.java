@@ -131,11 +131,11 @@ public class TestSchema extends BaseSOLRTest {
 		SolrDocument result = resp.getResults().get(0);
 		assertNotNull(result);
 		Object data = result.getFieldValue("blob");
-		data = BinaryConverter.toBinary(data);
+		data = BinaryConverter.toBinaryValue(data);
 		assertTrue(data instanceof Blob);
 		blob = (Blob)data;
 		assertEquals("application/octet-stream", blob.getMimeType());
-		assertEquals("azertyuiop", new String(blob.getData()));
+		assertEquals("azertyuiop", new String(blob.getBytes()));
 	}
 
 	@Test
@@ -159,11 +159,11 @@ public class TestSchema extends BaseSOLRTest {
 		SolrDocument result = resp.getResults().get(0);
 		assertNotNull(result);
 		Object data = result.getFieldValue("image");
-		data = BinaryConverter.toBinary(data);
+		data = BinaryConverter.toBinaryValue(data);
 		assertTrue(data instanceof Image);
 		image = (Image)data;
 		assertEquals("image/jpeg", image.getMimeType());
-		assertEquals("JFIF", new String(image.getData()));
+		assertEquals("JFIF", new String(image.getBytes()));
 	}
 
 

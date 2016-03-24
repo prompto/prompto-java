@@ -43,8 +43,8 @@ public class TestMemStore {
 
 	private IStorable store(String name, String value) throws Exception {
 		IStorable doc = IDataStore.getInstance().newStorable(null);
-		doc.setValue(context, new Identifier(name), new Text(value));
-		IDataStore.getInstance().store(context, doc);
+		doc.setValue(new Identifier(name), new Text(value));
+		IDataStore.getInstance().store(doc);
 		return doc;
 	}
 
@@ -224,7 +224,7 @@ public class TestMemStore {
 		ListValue categories = new ListValue(TextType.instance());
 		categories.addItem(new Text("Project"));
 		categories.addItem(new Text("Application"));
-		d1.setValue(null, new Identifier("category"), categories);
+		d1.setValue(new Identifier("category"), categories);
 		IStored doc = IDataStore.getInstance().fetchOne(context, 
 				new CategoryType(new Identifier("Application")), null);
 		assertEquals(d1, doc);
@@ -237,7 +237,7 @@ public class TestMemStore {
 		ListValue categories = new ListValue(TextType.instance());
 		categories.addItem(new Text("Project"));
 		categories.addItem(new Text("Application"));
-		d1.setValue(null, new Identifier("category"), categories);
+		d1.setValue(new Identifier("category"), categories);
 		IStored doc = IDataStore.getInstance().fetchOne(context, 
 				new CategoryType(new Identifier("Project")), null);
 		assertEquals(d1, doc);
@@ -250,7 +250,7 @@ public class TestMemStore {
 		ListValue categories = new ListValue(TextType.instance());
 		categories.addItem(new Text("Project"));
 		categories.addItem(new Text("Application"));
-		d1.setValue(null, new Identifier("category"), categories);
+		d1.setValue(new Identifier("category"), categories);
 		IStoredIterator docs = IDataStore.getInstance().fetchMany(context, 
 				new CategoryType(new Identifier("Application")), 
 				null, null, null, null);

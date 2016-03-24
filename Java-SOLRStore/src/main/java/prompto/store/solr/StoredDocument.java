@@ -4,7 +4,6 @@ import org.apache.solr.common.SolrDocument;
 
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
-import prompto.runtime.Context;
 import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.value.IValue;
@@ -30,7 +29,7 @@ public class StoredDocument extends BaseDocument implements IStored {
 	}
 
 	@Override
-	public IValue getValue(Context context, Identifier id) throws PromptoError {
+	public IValue getValue(Identifier id) throws PromptoError {
 		Object data = getData(id.getName());
 		if(data==null)
 			return null;

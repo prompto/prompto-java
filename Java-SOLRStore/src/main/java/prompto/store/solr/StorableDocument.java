@@ -11,10 +11,8 @@ import org.apache.solr.common.SolrInputField;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.grammar.Identifier;
-import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.store.IStore;
-import prompto.value.Binary;
 import prompto.value.IValue;
 
 public class StorableDocument extends BaseDocument implements IStorable {
@@ -64,7 +62,7 @@ public class StorableDocument extends BaseDocument implements IStorable {
 				// in such a case, the scenario is an update scenario
 				IValue dbIdValue = provider.getDbId();
 				if(dbIdValue!=null) {
-					dbId = ((prompto.value.UUID)dbIdValue).getValue();
+					dbId = ((prompto.value.UUID)dbIdValue).getStorableData();
 					if(dbId!=null)
 						this.isUpdate = true;
 				}
@@ -84,30 +82,25 @@ public class StorableDocument extends BaseDocument implements IStorable {
 	}
 
 	@Override
-	public void setValue(Context context, Identifier id, IValue value, IDbIdProvider provider) throws PromptoError {
+	public void setValue(Identifier id, IValue value, IDbIdProvider provider) throws PromptoError {
 		ensureDocument(provider);
-		String fieldName = id.getName();
-		if(value==null) {
-			if(isUpdate)
-				document.setField(fieldName, Collections.singletonMap("set", null));
-		} else
-			value.storeValue(context, fieldName, this);
+		setData(id.getName(), value.getStorableData());
 	}
 	
 	@Override
 	public void setData(String name, Object value) throws PromptoError {
 		ensureDocument(null);
-		if(value instanceof Binary)
-			value = binaryValue((Binary)value);
+		if(value instanceof BinaryData)
+			value = toBytes((BinaryData)value);
 		if(isUpdate)
 			document.setField(name, Collections.singletonMap("set", value));
 		else
 			document.setField(name, value);
 	}
 
-	private Object binaryValue(Binary binary) throws PromptoError {
+	private byte[] toBytes(BinaryData binary) throws PromptoError {
 		try {
-			return new BinaryValue(binary.getMimeType(), binary.getData()).toByteArray();
+			return new BinaryData(binary.getMimeType(), binary.getData()).toByteArray();
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		}

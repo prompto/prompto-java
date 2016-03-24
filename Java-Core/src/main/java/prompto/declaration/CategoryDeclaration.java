@@ -128,7 +128,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	}
 
 	private void populateInstance(Context context, IStored stored, IInstance instance) throws PromptoError {
-		IValue dbId = stored.getValue(context, IStore.dbIdIdentifier);
+		IValue dbId = stored.getValue(IStore.dbIdIdentifier);
 		instance.setMember(context, IStore.dbIdIdentifier, dbId);
 		for(Identifier name : this.getAllAttributes(context)) 
 			populateMember(context, stored, instance, name);
@@ -140,7 +140,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, name);
 		if(!decl.isStorable())
 			return;
-		IValue value = stored.getValue(context, name);
+		IValue value = stored.getValue(name);
 		if(value==null)
 			return;
 		IType type = decl.getType(context);

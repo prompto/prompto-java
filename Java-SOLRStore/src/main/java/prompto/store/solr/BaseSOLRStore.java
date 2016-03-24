@@ -1,6 +1,7 @@
 package prompto.store.solr;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -9,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -28,6 +30,7 @@ import prompto.expression.IExpression;
 import prompto.grammar.EqOp;
 import prompto.grammar.OrderByClause;
 import prompto.grammar.OrderByClauseList;
+import prompto.intrinsic.PromptoBinary;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.store.IStore;
@@ -45,7 +48,6 @@ import prompto.type.ListType;
 import prompto.type.TextType;
 import prompto.type.UUIDType;
 import prompto.utils.IdentifierList;
-import prompto.value.Binary;
 import prompto.value.IValue;
 
 abstract class BaseSOLRStore implements IStore {
@@ -87,7 +89,7 @@ abstract class BaseSOLRStore implements IStore {
 		readerMap.put("text-value", readerMap.get("text"));
 		readerMap.put("text-words", readerMap.get("text"));
 		readerMap.put("version", (o) -> new prompto.value.Text(o.toString()));
-		readerMap.put("image", (o) -> BinaryConverter.toBinary(o));
+		readerMap.put("image", (o) -> BinaryConverter.toBinaryValue(o));
 		readerMap.put("integer", null);
 		readerMap.put("decimal", null);
 		readerMap.put("datetime", (o) -> new prompto.value.DateTime(o.toString()));
@@ -102,7 +104,7 @@ abstract class BaseSOLRStore implements IStore {
 	ConcurrentMap<String, IType> columnTypes = new ConcurrentHashMap<>();
 	
 	@Override
-	public IType getColumnType(String fieldName) throws PromptoError {
+	public IType getColumnIType(String fieldName) throws PromptoError {
 		IType type = columnTypes.get(fieldName);
 		if(type==null) try {
 			String typeName = getColumnTypeName(fieldName);
@@ -138,8 +140,13 @@ abstract class BaseSOLRStore implements IStore {
 	}
 
 	@Override
-	public IType getDbIdType() {
+	public IType getDbIdIType() {
 		return UUIDType.instance();
+	}
+	
+	@Override
+	public Type getDbIdType() {
+		return UUID.class;
 	}
 	
 	@Override
@@ -163,7 +170,7 @@ abstract class BaseSOLRStore implements IStore {
 			type = ((ListType)type).getItemType();
 		}
 		if(type instanceof CategoryType)
-			type = getDbIdType();
+			type = getDbIdIType();
 		if("version".equals(column.getName())) 
 			addField("version", "version", options);
 		else if(type==TextType.instance())
@@ -190,11 +197,11 @@ abstract class BaseSOLRStore implements IStore {
 	}
 
 	@Override
-	public void store(Context context, Collection<IValue> deletables, Collection<IStorable> storables) throws PromptoError {
+	public void store(Collection<Object> deletables, Collection<IStorable> storables) throws PromptoError {
 		List<String> dbIdsToDrop = null;
 		if(deletables!=null && deletables.size()>0) {
 			dbIdsToDrop = new ArrayList<>();
-			for(IValue dbId : deletables)
+			for(Object dbId : deletables)
 				dbIdsToDrop.add(dbId.toString()); // a simple UUID
 		}
 		List<SolrInputDocument> docsToAdd = null;
@@ -222,7 +229,7 @@ abstract class BaseSOLRStore implements IStore {
 	}
 
 	@Override
-	public Binary fetchBinary(String dbId, String attr) throws PromptoError {
+	public PromptoBinary fetchBinary(String dbId, String attr) throws PromptoError {
 		SolrQuery query = new SolrQuery();
 		query.setQuery("dbId:" + dbId);
 		query.setFields(attr);
@@ -239,7 +246,7 @@ abstract class BaseSOLRStore implements IStore {
 			if(data==null)
 				return null;
 			else
-				return BinaryConverter.toBinary(data);
+				return BinaryConverter.toPromptoBinary(data);
 		} catch(Exception e) {
 			throw new InternalError(e);
 		}

@@ -68,10 +68,10 @@ public class StoreStatement extends SimpleStatement {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		IStore store = IDataStore.getInstance();
-		List<IValue> dbIdsToDel = collectDbIdsToDel(context);
+		List<Object> dbIdsToDel = collectDbIdsToDel(context);
 		List<IStorable> docsToAdd = collectDocsToAdd(context);
 		if(dbIdsToDel!=null || docsToAdd!=null)
-			store.store(context, dbIdsToDel, docsToAdd);
+			store.store(dbIdsToDel, docsToAdd);
 		return null;
 	}
 
@@ -105,10 +105,10 @@ public class StoreStatement extends SimpleStatement {
 		}
 	}
 
-	private List<IValue> collectDbIdsToDel(Context context) throws PromptoError {
+	private List<Object> collectDbIdsToDel(Context context) throws PromptoError {
 		if(del==null || del.isEmpty())
 			return null;
-		List<IValue> dbIdsToDel = new ArrayList<>();
+		List<Object> dbIdsToDel = new ArrayList<>();
 		for(IExpression exp : del) {
 			IValue value = exp.interpret(context);
 			collectDbIdsToDel(context, dbIdsToDel, value);
@@ -119,11 +119,11 @@ public class StoreStatement extends SimpleStatement {
 			return dbIdsToDel;
 	}
 	
-	private void collectDbIdsToDel(Context context, List<IValue> dbIdsToDel, IValue value) throws PromptoError {
+	private void collectDbIdsToDel(Context context, List<Object> dbIdsToDel, IValue value) throws PromptoError {
 		if(value instanceof IInstance) {
 			IValue dbId = ((IInstance)value).getMember(context, IStore.dbIdIdentifier, false);
 			if(dbId!=null)
-				dbIdsToDel.add(dbId);
+				dbIdsToDel.add(dbId.getStorableData());
 		} else if(value instanceof ListValue) {
 			for(IValue item : ((ListValue)value).getItems()) {
 				collectDbIdsToDel(context, dbIdsToDel, item);
@@ -133,7 +133,7 @@ public class StoreStatement extends SimpleStatement {
 			while(iter.hasNext()) {
 				collectDbIdsToDel(context, dbIdsToDel, iter.next());
 			}
-		} else if(value.getType()==IDataStore.getInstance().getDbIdType())
+		} else if(value.getType()==IDataStore.getInstance().getDbIdIType())
 			dbIdsToDel.add(value);
 	}
 	

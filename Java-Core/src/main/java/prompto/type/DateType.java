@@ -101,7 +101,7 @@ public class DateType extends NativeType {
 		return new Comparator<Date>() {
 			@Override
 			public int compare(Date o1, Date o2) {
-				return o1.getValue().compareTo(o2.getValue());
+				return o1.getStorableData().compareTo(o2.getStorableData());
 			}
 		};
 	}

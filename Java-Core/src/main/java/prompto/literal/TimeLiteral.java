@@ -36,7 +36,7 @@ public class TimeLiteral extends Literal<Time> {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
-		PromptoTime time = value.getValue();
+		PromptoTime time = value.getStorableData();
 		method.addInstruction(Opcode.LDC_W, new StringConstant(time.toString()));
 		IOperand oper = new MethodConstant(PromptoTime.class, "parse", String.class, PromptoTime.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);

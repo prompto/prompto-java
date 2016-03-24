@@ -358,7 +358,7 @@ public class CategoryType extends BaseType {
 
 	private void readJSONDbId(Context context, JsonNode value, IInstance instance) throws PromptoError {
 		if(value.has(IStore.dbIdName)) {
-			IType type = IDataStore.getInstance().getDbIdType();
+			IType type = IDataStore.getInstance().getDbIdIType();
 			IValue dbid = type.readJSONValue(context, value.get(IStore.dbIdName));
 			instance.setMember(context, IStore.dbIdIdentifier, dbid);
 		}

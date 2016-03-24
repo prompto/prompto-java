@@ -7,7 +7,6 @@ import prompto.grammar.Identifier;
 import prompto.parser.ISection;
 import prompto.parser.Section;
 import prompto.runtime.Context;
-import prompto.store.IStorable;
 import prompto.type.IType;
 import prompto.value.IInstance;
 import prompto.value.ISliceable;
@@ -25,10 +24,10 @@ public abstract class Symbol extends Section implements IExpression, INamed, IVa
 	}
 
 	@Override
-	public void storeValue(Context context, String name, IStorable storable) throws PromptoError {
-		storable.setData(name, symbol.toString());
+	public String getStorableData() {
+		return symbol.toString();
 	}
-	
+
 	@Override
 	public boolean isMutable() {
 		return false;

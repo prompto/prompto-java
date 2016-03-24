@@ -31,6 +31,11 @@ public class Cursor extends BaseValue implements IIterable<IValue>, IterableWith
 	}
 
 	@Override
+	public Object getStorableData() {
+		throw new UnsupportedOperationException(); // can't be stored
+	}
+	
+	@Override
 	public long getLength() {
 		return documents.length();
 	}

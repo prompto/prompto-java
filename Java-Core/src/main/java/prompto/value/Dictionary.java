@@ -44,6 +44,11 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 		super(new DictType(itemType));
 		this.dict = dict;
 	}
+	
+	@Override
+	public PromptoDict<Text, IValue> getStorableData() {
+		return dict;
+	}
 
 	public static Dictionary merge(Dictionary dict1, Dictionary dict2) {
 		PromptoDict<Text, IValue> dict = new PromptoDict<Text, IValue>();
@@ -224,5 +229,6 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 			else
 				throw new InvalidDataError("No such member:" + name);
 		}
+		
 	}
 }

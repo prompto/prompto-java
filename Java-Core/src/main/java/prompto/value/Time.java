@@ -18,7 +18,6 @@ import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoPeriod;
 import prompto.intrinsic.PromptoTime;
 import prompto.runtime.Context;
-import prompto.store.IStorable;
 import prompto.type.TimeType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -41,7 +40,8 @@ public class Time extends BaseValue implements Comparable<Time> {
 		this.value = new PromptoTime(hours, minutes, seconds, millis);
 	}
 
-	public PromptoTime getValue() {
+	@Override
+	public PromptoTime getStorableData() {
 		return value;
 	}
 
@@ -180,10 +180,4 @@ public class Time extends BaseValue implements Comparable<Time> {
 		}
 	}
 	
-	@Override
-	public void storeValue(Context context, String name, IStorable storable) throws PromptoError {
-		storable.setData(name, value);
-	}
-
-
 }

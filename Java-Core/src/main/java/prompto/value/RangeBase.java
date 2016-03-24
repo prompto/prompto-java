@@ -28,6 +28,11 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 	}
 	
 	@Override
+	public Object getStorableData() {
+		return range;
+	}
+	
+	@Override
 	public String toString() {
 		return range.toString();
 	}

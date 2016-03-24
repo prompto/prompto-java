@@ -8,7 +8,6 @@ import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
-import prompto.store.IStorable;
 import prompto.type.NullType;
 
 
@@ -25,17 +24,17 @@ public class NullValue extends BaseValue {
 	}
 	
 	@Override
+	public Object getStorableData() {
+		return null; // YES! you read correctly
+	}
+	
+	@Override
 	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
 		try {
 			generator.writeNull();
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		}
-	}
-
-	@Override
-	public void storeValue(Context context, String name, IStorable storable) throws PromptoError {
-		storable.setData(name, null);
 	}
 
 }

@@ -2,7 +2,6 @@ package prompto.store;
 
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
-import prompto.runtime.Context;
 import prompto.value.IValue;
 
 
@@ -13,10 +12,11 @@ public interface IStorable {
 	void setDirty(boolean dirty);
 	boolean isDirty();
 	
-	default void setValue(Context context, Identifier name, IValue value) throws PromptoError {
-		setValue(context, name, value, null);
+	default void setValue(Identifier name, IValue value) throws PromptoError {
+		setValue(name, value, null);
 	}
-	void setValue(Context context, Identifier name, IValue value, IDbIdProvider provider) throws PromptoError;
+	
+	void setValue(Identifier name, IValue value, IDbIdProvider provider) throws PromptoError;
 	
 	void setData(String name, Object value) throws PromptoError;
 

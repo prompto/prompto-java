@@ -18,7 +18,6 @@ import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDateTime;
 import prompto.intrinsic.PromptoPeriod;
 import prompto.runtime.Context;
-import prompto.store.IStorable;
 import prompto.type.DateTimeType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -48,7 +47,8 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 		this.value = PromptoDateTime.parse(value);
 	}
 
-	public PromptoDateTime getValue() {
+	@Override
+	public PromptoDateTime getStorableData() {
 		return value;
 	}
 
@@ -74,9 +74,9 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 	@Override
 	public IValue minus(Context context, IValue value) throws PromptoError {
 		if (value instanceof DateTime)
-			return new Period(this.value.minus(((DateTime)value).getValue()));
+			return new Period(this.value.minus(((DateTime)value).value));
 		else if (value instanceof Period)
-			return new DateTime(this.value.minus(((Period)value).getValue()));
+			return new DateTime(this.value.minus(((Period)value).value));
 		else
 			throw new SyntaxError("Illegal: DateTime - " + value.getClass().getSimpleName());
 	}
@@ -196,11 +196,5 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 			throw new ReadWriteError(e.getMessage());
 		}
 	}
-
-	@Override
-	public void storeValue(Context context, String name, IStorable storable) throws PromptoError {
-		storable.setData(name, value);
-	}
-
 
 }

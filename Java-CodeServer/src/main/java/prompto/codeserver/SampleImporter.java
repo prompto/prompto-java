@@ -48,21 +48,21 @@ public class SampleImporter {
 	}
 
 	public void importSample(ICodeStore codeStore) throws Exception {
-		String name = application.getName().getValue();
-		Version version = Version.parse(application.getVersion().getValue());
+		String name = application.getName().getStorableData();
+		Version version = Version.parse(application.getVersion().getStorableData());
 		Application existing = codeStore.fetchApplication(name, version);
 		if(existing!=null)
 			return;
 		if(imageResource!=null)
-			application.setImage(Image.fromResource(imageResource));
+			application.setImage((Image)Image.fromResource(imageResource));
 		codeStore.storeModule(application);	
 		if(codeResource!=null)
 			storeAssociatedCode(codeStore);
 	}
 
 	private void storeAssociatedCode(ICodeStore codeStore) throws Exception {
-		ResourceCodeStore rcs = new ResourceCodeStore(null, ModuleType.APPLICATION, codeResource, application.getVersion().getValue());
-		codeStore.storeDeclarations(rcs.getDeclarations(), rcs.getModuleDialect(), Version.parse(application.getVersion().getValue()), application.getDbId());
+		ResourceCodeStore rcs = new ResourceCodeStore(null, ModuleType.APPLICATION, codeResource, application.getVersion().getStorableData());
+		codeStore.storeDeclarations(rcs.getDeclarations(), rcs.getModuleDialect(), Version.parse(application.getVersion().getStorableData()), application.getDbId());
 	}
 
 }

@@ -31,10 +31,11 @@ public class Period extends BaseValue implements IMultiplyable {
 		this.value = value;
 	}
 
-	public PromptoPeriod getValue() {
+	@Override
+	public PromptoPeriod getStorableData() {
 		return value;
 	}
-
+	
 	@Override
 	public IValue plus(Context context, IValue value) throws PromptoError {
 		if (value instanceof Period)

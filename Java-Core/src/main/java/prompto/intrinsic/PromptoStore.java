@@ -1,0 +1,22 @@
+package prompto.intrinsic;
+
+import java.util.List;
+
+import prompto.store.IDataStore;
+import prompto.store.IStorable;
+import prompto.store.IStore;
+
+public class PromptoStore {
+
+	List<Object> toDelete;
+	List<IStorable> toStore;
+	
+	public void store() {
+		IStore store = IDataStore.getInstance();
+		if(toDelete!=null || toStore!=null)
+			; // store.store(null, toDelete, toStore);
+	}
+
+	
+	
+}
