@@ -7,8 +7,8 @@ import prompto.runtime.Context;
 
 public abstract class BinaryType extends NativeType { 
 
-	protected BinaryType(String name) {
-		super(name);
+	protected BinaryType(Family family) {
+		super(family);
 	}
 
 	@Override

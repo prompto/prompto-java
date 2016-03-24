@@ -22,21 +22,39 @@ public interface IStore<T extends Object> {
 	
 	Type getDbIdType();
 	Type getColumnType(String name) throws PromptoError;
+	void createOrUpdateColumns(Collection<AttributeDeclaration> columns) throws PromptoError;
+
 	IStorable newStorable(List<String> categories);
+	
 	void store(Collection<T> deletables, Collection<IStorable> storables) throws PromptoError;
 	default void store(IStorable storable) throws PromptoError {
 		store(null, Arrays.asList(storable));
 	}
+	
 	void delete(Collection<T> dbIds) throws PromptoError;
 	default void delete(T dbId) throws PromptoError {
 		delete(Arrays.asList(dbId));
 	}
 	void deleteAll() throws PromptoError;
-	IStored fetchUnique(Context context, T dbId) throws PromptoError;
-	IStored fetchOne(Context context, CategoryType type, IExpression filter) throws PromptoError;
-	IStoredIterator fetchMany(Context context, CategoryType type, 
-			IExpression start, IExpression end, 
-			IExpression filter, OrderByClauseList orderBy) throws PromptoError;
-	void createOrUpdateColumns(Collection<AttributeDeclaration> columns) throws PromptoError;
+
 	PromptoBinary fetchBinary(T dbId, String attr) throws PromptoError;
+	IStored fetchUnique(T dbId) throws PromptoError;
+
+	default IStored fetchOne(Context context, CategoryType category, IExpression filter) throws PromptoError {
+		return fetchOne(getQueryBuilder(context, false).buildFetchOneQuery(category, filter));
+	};
+
+	default IStoredIterator fetchMany(Context context, CategoryType category, 
+						IExpression start, IExpression end, 
+						IExpression filter, OrderByClauseList orderBy) throws PromptoError {
+		return fetchMany(getQueryBuilder(context, false)
+				.buildFetchManyQuery(category, start, end, filter, orderBy));
+	}
+
+	IQueryBuilder<T> getQueryBuilder(Context context, boolean compiled);
+	// for the below, assumption is that IQuery was produced by the above IQueryBuilder
+	IStored fetchOne(IQuery query) throws PromptoError;
+	IStoredIterator fetchMany(IQuery query) throws PromptoError;
+
+	
 }

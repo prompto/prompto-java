@@ -128,7 +128,7 @@ public class IteratorExpression implements IExpression {
 		Descriptor.Method proto = new Descriptor.Method(paramType, resultType);
 		MethodInfo method = classFile.newMethod("apply", proto);
 		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
-		method.registerLocal(name.getName(), IVerifierEntry.Type.ITEM_Object, new ClassConstant(paramType));
+		method.registerLocal(name.toString(), IVerifierEntry.Type.ITEM_Object, new ClassConstant(paramType));
 		ReturnStatement stmt = new ReturnStatement(expression);
 		stmt.compile(context, method, new Flags());
 	}
@@ -139,7 +139,7 @@ public class IteratorExpression implements IExpression {
 		MethodInfo method = classFile.newMethod("apply", proto);
 		method.addModifier(Tags.ACC_BRIDGE | Tags.ACC_SYNTHETIC);
 		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
-		method.registerLocal(name.getName(), IVerifierEntry.Type.ITEM_Object, new ClassConstant(Object.class));
+		method.registerLocal(name.toString(), IVerifierEntry.Type.ITEM_Object, new ClassConstant(Object.class));
 		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
 		method.addInstruction(Opcode.ALOAD_1, new ClassConstant(Object.class));
 		method.addInstruction(Opcode.CHECKCAST, new ClassConstant(paramType));

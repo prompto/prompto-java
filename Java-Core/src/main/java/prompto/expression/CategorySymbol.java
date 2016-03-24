@@ -44,22 +44,22 @@ public class CategorySymbol extends Symbol implements IExpression  {
 		if(assignments!=null)
 			sb.append(assignments.toString());
 		if(sb.length()==0)
-			sb.append(type.getId());
+			sb.append(type.getTypeNameId());
 		return sb.toString();
 	}
 	
 	@Override
 	public IType check(Context context) throws SyntaxError {
 		EnumeratedCategoryDeclaration cd = context.getRegisteredDeclaration(
-				EnumeratedCategoryDeclaration.class, type.getId());
+				EnumeratedCategoryDeclaration.class, type.getTypeNameId());
 		if(cd==null)
-			throw new SyntaxError("Unknown category " + type.getId());
+			throw new SyntaxError("Unknown category " + type.getTypeName());
 		if(assignments!=null) {
 			context = context.newChildContext();
 			for(ArgumentAssignment assignment : assignments) {
 				if(!cd.hasAttribute(context, assignment.getId()))
 					throw new SyntaxError("\"" + assignment.getId() + 
-						"\" is not an attribute of " + type.getId());	
+						"\" is not an attribute of " + type.getTypeName());	
 				assignment.check(context);
 			}
 		}

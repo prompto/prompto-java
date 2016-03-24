@@ -25,18 +25,8 @@ public class TestLess extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledLtCharacter() throws Exception {
-		checkCompiledOutput("less/ltCharacter.pec");
-	}
-
-	@Test
 	public void testInterpretedLtDate() throws Exception {
 		checkInterpretedOutput("less/ltDate.pec");
-	}
-
-	@Test
-	public void testCompiledLtDate() throws Exception {
-		checkCompiledOutput("less/ltDate.pec");
 	}
 
 	@Test
@@ -45,18 +35,8 @@ public class TestLess extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledLtDateTime() throws Exception {
-		checkCompiledOutput("less/ltDateTime.pec");
-	}
-
-	@Test
 	public void testInterpretedLtDecimal() throws Exception {
 		checkInterpretedOutput("less/ltDecimal.pec");
-	}
-
-	@Test
-	public void testCompiledLtDecimal() throws Exception {
-		checkCompiledOutput("less/ltDecimal.pec");
 	}
 
 	@Test
@@ -65,18 +45,8 @@ public class TestLess extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledLteCharacter() throws Exception {
-		checkCompiledOutput("less/lteCharacter.pec");
-	}
-
-	@Test
 	public void testInterpretedLteDate() throws Exception {
 		checkInterpretedOutput("less/lteDate.pec");
-	}
-
-	@Test
-	public void testCompiledLteDate() throws Exception {
-		checkCompiledOutput("less/lteDate.pec");
 	}
 
 	@Test
@@ -85,18 +55,8 @@ public class TestLess extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledLteDateTime() throws Exception {
-		checkCompiledOutput("less/lteDateTime.pec");
-	}
-
-	@Test
 	public void testInterpretedLteDecimal() throws Exception {
 		checkInterpretedOutput("less/lteDecimal.pec");
-	}
-
-	@Test
-	public void testCompiledLteDecimal() throws Exception {
-		checkCompiledOutput("less/lteDecimal.pec");
 	}
 
 	@Test
@@ -105,18 +65,8 @@ public class TestLess extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledLteInteger() throws Exception {
-		checkCompiledOutput("less/lteInteger.pec");
-	}
-
-	@Test
 	public void testInterpretedLteText() throws Exception {
 		checkInterpretedOutput("less/lteText.pec");
-	}
-
-	@Test
-	public void testCompiledLteText() throws Exception {
-		checkCompiledOutput("less/lteText.pec");
 	}
 
 	@Test
@@ -125,18 +75,8 @@ public class TestLess extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledLteTime() throws Exception {
-		checkCompiledOutput("less/lteTime.pec");
-	}
-
-	@Test
 	public void testInterpretedLtInteger() throws Exception {
 		checkInterpretedOutput("less/ltInteger.pec");
-	}
-
-	@Test
-	public void testCompiledLtInteger() throws Exception {
-		checkCompiledOutput("less/ltInteger.pec");
 	}
 
 	@Test
@@ -145,18 +85,8 @@ public class TestLess extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledLtText() throws Exception {
-		checkCompiledOutput("less/ltText.pec");
-	}
-
-	@Test
 	public void testInterpretedLtTime() throws Exception {
 		checkInterpretedOutput("less/ltTime.pec");
-	}
-
-	@Test
-	public void testCompiledLtTime() throws Exception {
-		checkCompiledOutput("less/ltTime.pec");
 	}
 
 }

@@ -25,18 +25,8 @@ public class TestItem extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledItemDict() throws Exception {
-		checkCompiledOutput("item/itemDict.pec");
-	}
-
-	@Test
 	public void testInterpretedItemList() throws Exception {
 		checkInterpretedOutput("item/itemList.pec");
-	}
-
-	@Test
-	public void testCompiledItemList() throws Exception {
-		checkCompiledOutput("item/itemList.pec");
 	}
 
 	@Test
@@ -45,28 +35,13 @@ public class TestItem extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledItemRange() throws Exception {
-		checkCompiledOutput("item/itemRange.pec");
-	}
-
-	@Test
 	public void testInterpretedItemSet() throws Exception {
 		checkInterpretedOutput("item/itemSet.pec");
 	}
 
 	@Test
-	public void testCompiledItemSet() throws Exception {
-		checkCompiledOutput("item/itemSet.pec");
-	}
-
-	@Test
 	public void testInterpretedItemText() throws Exception {
 		checkInterpretedOutput("item/itemText.pec");
-	}
-
-	@Test
-	public void testCompiledItemText() throws Exception {
-		checkCompiledOutput("item/itemText.pec");
 	}
 
 }

@@ -25,28 +25,13 @@ public class TestSlice extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledSliceList() throws Exception {
-		checkCompiledOutput("slice/sliceList.poc");
-	}
-
-	@Test
 	public void testInterpretedSliceRange() throws Exception {
 		checkInterpretedOutput("slice/sliceRange.poc");
 	}
 
 	@Test
-	public void testCompiledSliceRange() throws Exception {
-		checkCompiledOutput("slice/sliceRange.poc");
-	}
-
-	@Test
 	public void testInterpretedSliceText() throws Exception {
 		checkInterpretedOutput("slice/sliceText.poc");
-	}
-
-	@Test
-	public void testCompiledSliceText() throws Exception {
-		checkCompiledOutput("slice/sliceText.poc");
 	}
 
 }

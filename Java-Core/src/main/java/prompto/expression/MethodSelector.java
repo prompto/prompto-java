@@ -70,7 +70,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		// if called from a member method, could be a member method called without this/self
 		if(context.getParentContext() instanceof InstanceContext) {
 			IType type = ((InstanceContext)context.getParentContext()).getInstanceType();
-			ConcreteCategoryDeclaration cd = context.getRegisteredDeclaration(ConcreteCategoryDeclaration.class, type.getId());
+			ConcreteCategoryDeclaration cd = context.getRegisteredDeclaration(ConcreteCategoryDeclaration.class, type.getTypeNameId());
 			if(cd!=null) {
 				MethodDeclarationMap members = cd.getMemberMethods(context, id);
 				if(members!=null)
@@ -87,9 +87,9 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		IType parentType = checkParent(context);
 		if(!(parentType instanceof CategoryType))
 			throw new SyntaxError(parent.toString() + " is not a category");
-		ConcreteCategoryDeclaration cd = context.getRegisteredDeclaration(ConcreteCategoryDeclaration.class, parentType.getId());
+		ConcreteCategoryDeclaration cd = context.getRegisteredDeclaration(ConcreteCategoryDeclaration.class, parentType.getTypeNameId());
 		if(cd==null)
-			throw new SyntaxError("Unknown category:" + parentType.getId());
+			throw new SyntaxError("Unknown category:" + parentType.getTypeName());
 		return cd.getMemberMethods(context, id).values();
 	}
 

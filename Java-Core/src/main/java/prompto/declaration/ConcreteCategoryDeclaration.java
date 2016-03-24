@@ -238,7 +238,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		if(derivedFrom==null) 
 			return false;
 		for(Identifier ancestor : derivedFrom) {
-			if(ancestor.equals(categoryType.getId()))
+			if(ancestor.equals(categoryType.getTypeNameId()))
 				return true;
 			if(isAncestorDerivedFrom(ancestor,context,categoryType))
 				return true;
@@ -456,7 +456,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 
 	private void compileGetterPrototype(Context context, ClassFile classFile, Identifier id, FieldInfo field) {
-		String name = CompilerUtils.getterName(id.getName());
+		String name = CompilerUtils.getterName(id.toString());
 		Descriptor proto = new Descriptor.Method(field.getType());
 		MethodInfo method = classFile.newMethod(name, proto);
 		method.addModifier(Modifier.ABSTRACT);
@@ -670,12 +670,12 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 
 	private void compileFieldGetter(Context context, ClassFile classFile, Flags flags, Identifier id, FieldInfo field) {
-		String name = CompilerUtils.getterName(id.getName());
+		String name = CompilerUtils.getterName(id.toString());
 		Descriptor proto = new Descriptor.Method(field.getType());
 		MethodInfo method = classFile.newMethod(name, proto);
 		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
 		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
-		FieldConstant f = new FieldConstant(classFile.getThisClass(), id.getName(), field.getType());
+		FieldConstant f = new FieldConstant(classFile.getThisClass(), id.toString(), field.getType());
 		method.addInstruction(Opcode.GETFIELD, f);
 		method.addInstruction(Opcode.ARETURN, new ClassConstant(field.getType()));
 	}

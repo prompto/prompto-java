@@ -22,7 +22,7 @@ public class TextType extends NativeType {
 	}
 	
 	private TextType() {
-		super("Text");
+		super(Family.TEXT);
 	}
 	
 	@Override

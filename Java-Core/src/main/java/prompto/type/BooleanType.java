@@ -18,7 +18,7 @@ public class BooleanType extends NativeType {
 	}
 	
 	private BooleanType() {
-		super("Boolean");
+		super(Family.BOOLEAN);
 	}
 
 	@Override

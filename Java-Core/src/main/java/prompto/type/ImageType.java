@@ -14,7 +14,7 @@ public class ImageType extends BinaryType {
 	}
 	
 	private ImageType() {
-		super("Image");
+		super(Family.IMAGE);
 	}
 
 	@Override

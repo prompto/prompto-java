@@ -7,6 +7,11 @@ import prompto.parser.e.BaseEParserTest;
 public class TestCategories extends BaseEParserTest {
 
 	@Test
+	public void testComposed() throws Exception {
+		compareResourceESE("categories/composed.pec");
+	}
+
+	@Test
 	public void testCopyFromAscendant() throws Exception {
 		compareResourceESE("categories/copyFromAscendant.pec");
 	}

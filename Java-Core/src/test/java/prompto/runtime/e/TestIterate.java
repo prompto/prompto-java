@@ -25,18 +25,8 @@ public class TestIterate extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledForEachCategoryList() throws Exception {
-		checkCompiledOutput("iterate/forEachCategoryList.pec");
-	}
-
-	@Test
 	public void testInterpretedForEachIntegerList() throws Exception {
 		checkInterpretedOutput("iterate/forEachIntegerList.pec");
-	}
-
-	@Test
-	public void testCompiledForEachIntegerList() throws Exception {
-		checkCompiledOutput("iterate/forEachIntegerList.pec");
 	}
 
 }

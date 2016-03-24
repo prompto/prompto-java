@@ -47,7 +47,7 @@ public class MemberSelector extends SelectorExpression {
 	}
 	
 	public String getName() {
-		return id.getName();
+		return id.toString();
 	}
 
 	@Override
@@ -183,7 +183,7 @@ public class MemberSelector extends SelectorExpression {
 			String getterName = CompilerUtils.getterName(getName());
 			if(isCompilingGetter(context, method, parent, getterName)) {
 				Type classType = CompilerUtils.concreteTypeFrom(parent.getType().getTypeName());
-				FieldConstant f = new FieldConstant(classType, id.getName(), resultType);
+				FieldConstant f = new FieldConstant(classType, id.toString(), resultType);
 				method.addInstruction(Opcode.GETFIELD, f);
 			} else if(PromptoAny.class==parent.getType()) {
 				IOperand oper = new StringConstant(getName());

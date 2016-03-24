@@ -17,7 +17,7 @@ public class UUIDType extends NativeType {
 	}
 	
 	private UUIDType() {
-		super("UUID");
+		super(Family.UUID);
 	}
 	
 	@Override

@@ -199,7 +199,7 @@ public class ForEachStatement extends BaseStatement {
 		StackLocal iterLocal = compileIterator(context, method, flags);
 		StackLocal v1Local = compileInitCounter(method);
 		// local needs to be ITEM_Top because that's what the verifier infers from INVOKEINTERFACE on Iterator.next
-		StackLocal v2Local = method.registerLocal(v2.getName(), Type.ITEM_Top, new ClassConstant(itemClass));
+		StackLocal v2Local = method.registerLocal(v2.toString(), Type.ITEM_Top, new ClassConstant(itemClass));
 		StackState iteratorState = method.captureStackState();
 		IInstructionListener test = method.addOffsetListener(new OffsetListenerConstant());
 		method.activateOffsetListener(test);
@@ -250,7 +250,7 @@ public class ForEachStatement extends BaseStatement {
 	}
 
 	private StackLocal compileInitCounter(MethodInfo method) {
-		StackLocal local = method.registerLocal(v1.getName(), Type.ITEM_Object, new ClassConstant(Long.class));
+		StackLocal local = method.registerLocal(v1.toString(), Type.ITEM_Object, new ClassConstant(Long.class));
 		method.addInstruction(Opcode.LCONST_0);
 		compileStoreCounter(method, local);
 		return local;
@@ -266,7 +266,7 @@ public class ForEachStatement extends BaseStatement {
 		java.lang.reflect.Type itemClass = source.check(context).checkIterator(context).getJavaType();
 		StackLocal iterLocal = compileIterator(context, method, flags);
 		// local needs to be ITEM_Top because that's what the verifier infers from INVOKEINTERFACE on Iterator.next
-		StackLocal v1Local = method.registerLocal(v1.getName(), Type.ITEM_Top, new ClassConstant(itemClass));
+		StackLocal v1Local = method.registerLocal(v1.toString(), Type.ITEM_Top, new ClassConstant(itemClass));
 		StackState iteratorState = method.captureStackState();
 		IInstructionListener test = method.addOffsetListener(new OffsetListenerConstant());
 		method.activateOffsetListener(test);

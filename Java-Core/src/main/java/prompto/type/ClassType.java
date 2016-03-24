@@ -14,7 +14,7 @@ public class ClassType extends BaseType {
 	}
 	
 	private ClassType() {
-		super("Type");
+		super(Family.TYPE);
 	}
 
 	@Override

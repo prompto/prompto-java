@@ -46,7 +46,7 @@ public class NegateExpression implements IUnaryExpression {
 		if(type instanceof IntegerType || type instanceof DecimalType || type instanceof PeriodType)
 			return type;
 		else
-			throw new SyntaxError("Cannot negate " + type.getId());
+			throw new SyntaxError("Cannot negate " + type.getTypeName());
 	}
 	
 	@Override

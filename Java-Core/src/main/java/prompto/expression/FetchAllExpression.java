@@ -119,7 +119,7 @@ public class FetchAllExpression extends FetchOneExpression {
 
 	@Override
 	public IType check(Context context) throws SyntaxError {
-		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, type.getId());
+		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, type.getTypeNameId());
 		if(decl==null)
 			throw new SyntaxError("Expecting a type type !");
 		checkFilter(context);

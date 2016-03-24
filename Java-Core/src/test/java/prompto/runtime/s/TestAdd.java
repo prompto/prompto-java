@@ -24,10 +24,5 @@ public class TestAdd extends BaseSParserTest {
 		checkInterpretedOutput("add/addInteger.psc");
 	}
 
-	@Test
-	public void testCompiledAddInteger() throws Exception {
-		checkCompiledOutput("add/addInteger.psc");
-	}
-
 }
 

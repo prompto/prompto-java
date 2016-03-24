@@ -26,6 +26,7 @@ import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
+import prompto.utils.Utils;
 import prompto.value.IInstance;
 import prompto.value.IValue;
 
@@ -146,7 +147,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		if(type instanceof CategoryType) {
 			// is this a foreign key?
 			if(!(value instanceof IInstance)) {
-				stored = IDataStore.getInstance().fetchUnique(context, value.getStorableData());
+				stored = IDataStore.getInstance().fetchUnique(value.getStorableData());
 				if(stored==null)
 					throw new InternalError("How did we get there?");
 				value = ((CategoryType)type).newInstance(context, stored);
@@ -316,7 +317,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 
 	public static ResultInfo compileMultiply(Context context, MethodInfo method, Flags flags, 
 			ResultInfo left, ResultInfo right) throws SyntaxError {
-		IType argType = IType.typeToIType(right.getType());
+		IType argType = Utils.typeToIType(right.getType());
 		return compileOperator(context, method, flags, left, right, argType, Operator.MULTIPLY);
 	}
 

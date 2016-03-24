@@ -128,14 +128,14 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 	protected void collectReturnTypes(Context context, TypeMap types) throws SyntaxError {
 		IType type = instructions.check(context, null);
 		if(type!=VoidType.instance())
-			types.put(type.getId(), type);
+			types.put(type.getTypeNameId(), type);
 		Context local = context.newLocalContext();
 		local.registerValue(new ErrorVariable(errorName));
 		super.collectReturnTypes(local, types);
 		if(alwaysInstructions!=null) {
 			type = alwaysInstructions.check(context, null);
 			if(type!=VoidType.instance())
-				types.put(type.getId(), type);
+				types.put(type.getTypeNameId(), type);
 		}
 	}
 

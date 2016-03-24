@@ -60,9 +60,9 @@ public class FetchOneExpression extends Section implements IExpression {
 	
 	@Override
 	public IType check(Context context) throws SyntaxError {
-		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getId());
+		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
 		if(decl==null)
-			throw new SyntaxError("Unknown category: " + type.getId().toString());
+			throw new SyntaxError("Unknown category: " + type.getTypeName());
 		IType filterType = filter.check(context);
 		if(filterType!=BooleanType.instance())
 			throw new SyntaxError("Filtering expresion must return a boolean !");

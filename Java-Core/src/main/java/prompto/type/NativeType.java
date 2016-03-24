@@ -28,8 +28,8 @@ public abstract class NativeType extends BaseType {
 		return all;
 	}
 	
-	public NativeType(String name) {
-		super(name);
+	public NativeType(Family family) {
+		super(family);
 	}
 	
 	@Override

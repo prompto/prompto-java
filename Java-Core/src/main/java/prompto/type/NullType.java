@@ -14,7 +14,7 @@ public class NullType extends BaseType {
 	}
 	
 	private NullType() {
-		super("Null");
+		super(Family.NULL);
 	}
 
 	@Override

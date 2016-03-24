@@ -4,30 +4,26 @@ import prompto.parser.Section;
 
 public class Identifier extends Section {
 
-	String name;
+	String value;
 	
-	public Identifier(String name) {
-		this.name = name;
+	public Identifier(String value) {
+		this.value = value;
 	}
 
-	public String getName() {
-		return name;
-	}
-	
 	@Override
 	public String toString() {
-		return name;
+		return value;
 	}
 	
 	@Override
 	public int hashCode() {
-		return name.hashCode();
+		return value.hashCode();
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
 		if(obj instanceof Identifier)
-			return name.equals(((Identifier)obj).name);
+			return value.equals(((Identifier)obj).value);
 		else
 			return false;
 	}

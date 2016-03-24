@@ -115,7 +115,7 @@ public abstract class CompilerUtils {
 	static final String INNER_SEPARATOR = "$%";
 
 	public static Type getGlobalMethodType(Identifier id) {
-		return CompilerUtils.getGlobalMethodType(id.getName());
+		return CompilerUtils.getGlobalMethodType(id.toString());
 	}
 
 	public static Type getGlobalMethodType(String name) {
@@ -149,11 +149,11 @@ public abstract class CompilerUtils {
 	}
 	
 	public static Type getCategoryInterfaceType(Identifier id) {
-		return getCategoryInterfaceType(id.getName());
+		return getCategoryInterfaceType(id.toString());
 	}
 
 	public static Type getCategoryConcreteType(Identifier id) {
-		return getCategoryConcreteType(id.getName());
+		return getCategoryConcreteType(id.toString());
 	}
 
 	private static Type getCategoryConcreteType(String name) {
@@ -423,7 +423,7 @@ public abstract class CompilerUtils {
 	}
 
 	public static Type getCategoryClass(Identifier identifier) {
-		return getCategoryClass(identifier.getName());
+		return getCategoryClass(identifier.toString());
 	}
 
 	public static Type getCategoryClass(String name) {

@@ -166,7 +166,7 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IFilterab
         else if (value instanceof SetValue)
             return this.merge(((SetValue)value).getItems());
         else
-            throw new SyntaxError("Illegal: " +this.type.getId() + " + " + value.getClass().getSimpleName());
+            throw new SyntaxError("Illegal: " + this.type.getTypeName() + " + " + value.getClass().getSimpleName());
     }
 
 	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 

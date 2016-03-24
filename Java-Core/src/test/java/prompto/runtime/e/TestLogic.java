@@ -25,28 +25,13 @@ public class TestLogic extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledAndBoolean() throws Exception {
-		checkCompiledOutput("logic/andBoolean.pec");
-	}
-
-	@Test
 	public void testInterpretedNotBoolean() throws Exception {
 		checkInterpretedOutput("logic/notBoolean.pec");
 	}
 
 	@Test
-	public void testCompiledNotBoolean() throws Exception {
-		checkCompiledOutput("logic/notBoolean.pec");
-	}
-
-	@Test
 	public void testInterpretedOrBoolean() throws Exception {
 		checkInterpretedOutput("logic/orBoolean.pec");
-	}
-
-	@Test
-	public void testCompiledOrBoolean() throws Exception {
-		checkCompiledOutput("logic/orBoolean.pec");
 	}
 
 }

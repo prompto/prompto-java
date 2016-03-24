@@ -25,18 +25,8 @@ public class TestNative extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledAnyId() throws Exception {
-		checkCompiledOutput("native/anyId.pec");
-	}
-
-	@Test
 	public void testInterpretedAnyText() throws Exception {
 		checkInterpretedOutput("native/anyText.pec");
-	}
-
-	@Test
-	public void testCompiledAnyText() throws Exception {
-		checkCompiledOutput("native/anyText.pec");
 	}
 
 	@Test
@@ -45,18 +35,8 @@ public class TestNative extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledAttribute() throws Exception {
-		checkCompiledOutput("native/attribute.pec");
-	}
-
-	@Test
 	public void testInterpretedCategory() throws Exception {
 		checkInterpretedOutput("native/category.pec");
-	}
-
-	@Test
-	public void testCompiledCategory() throws Exception {
-		checkCompiledOutput("native/category.pec");
 	}
 
 	@Test
@@ -65,28 +45,13 @@ public class TestNative extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledMethod() throws Exception {
-		checkCompiledOutput("native/method.pec");
-	}
-
-	@Test
 	public void testInterpretedNow() throws Exception {
 		checkInterpretedOutput("native/now.pec");
 	}
 
 	@Test
-	public void testCompiledNow() throws Exception {
-		checkCompiledOutput("native/now.pec");
-	}
-
-	@Test
 	public void testInterpretedPrinter() throws Exception {
 		checkInterpretedOutput("native/printer.pec");
-	}
-
-	@Test
-	public void testCompiledPrinter() throws Exception {
-		checkCompiledOutput("native/printer.pec");
 	}
 
 }

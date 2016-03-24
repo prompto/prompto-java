@@ -10,7 +10,7 @@ import prompto.value.Cursor;
 public class CursorType extends IterableType {
 	
 	public CursorType(IType itemType) {
-		super("Cursor<" + itemType.getId()+">", itemType);
+		super(Family.CURSOR, itemType, "Cursor<" + itemType.getTypeName()+">");
 	}
 	
 	@Override

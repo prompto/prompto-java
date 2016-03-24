@@ -18,7 +18,7 @@ public class PeriodType extends NativeType {
 	}
 	
 	private PeriodType() {
-		super("Duration");
+		super(Family.PERIOD);
 	}
 
 	@Override

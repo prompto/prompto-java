@@ -79,7 +79,7 @@ public class MinusExpression implements IExpression {
 			minuser = CategoryDeclaration::compileMinus;
 		if(minuser==null) {
 			System.err.println("Missing IOperatorFunction for minus " + lval.getType().getTypeName());
-			throw new SyntaxError("Cannot sub " + right.check(context).getName()  + " from " + lval.getType().getTypeName() );
+			throw new SyntaxError("Cannot sub " + right.check(context).getFamily()  + " from " + lval.getType().getTypeName() );
 		}
 		return minuser.compile(context, method, flags, lval, right);
 	}

@@ -25,18 +25,8 @@ public class TestOperators extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledAddAmount() throws Exception {
-		checkCompiledOutput("operators/addAmount.pec");
-	}
-
-	@Test
 	public void testInterpretedDivAmount() throws Exception {
 		checkInterpretedOutput("operators/divAmount.pec");
-	}
-
-	@Test
-	public void testCompiledDivAmount() throws Exception {
-		checkCompiledOutput("operators/divAmount.pec");
 	}
 
 	@Test
@@ -45,18 +35,8 @@ public class TestOperators extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledIdivAmount() throws Exception {
-		checkCompiledOutput("operators/idivAmount.pec");
-	}
-
-	@Test
 	public void testInterpretedModAmount() throws Exception {
 		checkInterpretedOutput("operators/modAmount.pec");
-	}
-
-	@Test
-	public void testCompiledModAmount() throws Exception {
-		checkCompiledOutput("operators/modAmount.pec");
 	}
 
 	@Test
@@ -65,18 +45,8 @@ public class TestOperators extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledMultAmount() throws Exception {
-		checkCompiledOutput("operators/multAmount.pec");
-	}
-
-	@Test
 	public void testInterpretedSubAmount() throws Exception {
 		checkInterpretedOutput("operators/subAmount.pec");
-	}
-
-	@Test
-	public void testCompiledSubAmount() throws Exception {
-		checkCompiledOutput("operators/subAmount.pec");
 	}
 
 }

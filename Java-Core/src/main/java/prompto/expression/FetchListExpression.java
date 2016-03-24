@@ -89,7 +89,7 @@ public class FetchListExpression extends Section implements IExpression {
 		// prepare context for expression evaluation
 		IType sourceType = source.check(context);
 		if(!(sourceType instanceof ContainerType))
-			throw new InternalError("Illegal source type: " + sourceType.getId());
+			throw new InternalError("Illegal source type: " + sourceType.getTypeName());
 		IType itemType = ((ContainerType)sourceType).getItemType();
 		Context local = context.newChildContext();
 		Variable item = new Variable(itemName, itemType);
@@ -178,7 +178,7 @@ public class FetchListExpression extends Section implements IExpression {
 		Descriptor.Method proto = new Descriptor.Method(paramType, boolean.class);
 		MethodInfo method = classFile.newMethod("test", proto);
 		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
-		method.registerLocal(itemName.getName(), IVerifierEntry.Type.ITEM_Object, new ClassConstant(paramType));
+		method.registerLocal(itemName.toString(), IVerifierEntry.Type.ITEM_Object, new ClassConstant(paramType));
 		ReturnStatement stmt = new ReturnStatement(predicate);
 		stmt.compile(context, method, new Flags().withPrimitive(true));
 	}
@@ -189,7 +189,7 @@ public class FetchListExpression extends Section implements IExpression {
 		MethodInfo method = classFile.newMethod("test", proto);
 		method.addModifier(Tags.ACC_BRIDGE | Tags.ACC_SYNTHETIC);
 		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
-		method.registerLocal(itemName.getName(), IVerifierEntry.Type.ITEM_Object, new ClassConstant(Object.class));
+		method.registerLocal(itemName.toString(), IVerifierEntry.Type.ITEM_Object, new ClassConstant(Object.class));
 		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
 		method.addInstruction(Opcode.ALOAD_1, new ClassConstant(Object.class));
 		method.addInstruction(Opcode.CHECKCAST, new ClassConstant(paramType));

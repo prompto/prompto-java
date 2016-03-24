@@ -25,18 +25,8 @@ public class TestGreater extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledGtCharacter() throws Exception {
-		checkCompiledOutput("greater/gtCharacter.poc");
-	}
-
-	@Test
 	public void testInterpretedGtDate() throws Exception {
 		checkInterpretedOutput("greater/gtDate.poc");
-	}
-
-	@Test
-	public void testCompiledGtDate() throws Exception {
-		checkCompiledOutput("greater/gtDate.poc");
 	}
 
 	@Test
@@ -45,18 +35,8 @@ public class TestGreater extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledGtDateTime() throws Exception {
-		checkCompiledOutput("greater/gtDateTime.poc");
-	}
-
-	@Test
 	public void testInterpretedGtDecimal() throws Exception {
 		checkInterpretedOutput("greater/gtDecimal.poc");
-	}
-
-	@Test
-	public void testCompiledGtDecimal() throws Exception {
-		checkCompiledOutput("greater/gtDecimal.poc");
 	}
 
 	@Test
@@ -65,18 +45,8 @@ public class TestGreater extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledGteCharacter() throws Exception {
-		checkCompiledOutput("greater/gteCharacter.poc");
-	}
-
-	@Test
 	public void testInterpretedGteDate() throws Exception {
 		checkInterpretedOutput("greater/gteDate.poc");
-	}
-
-	@Test
-	public void testCompiledGteDate() throws Exception {
-		checkCompiledOutput("greater/gteDate.poc");
 	}
 
 	@Test
@@ -85,18 +55,8 @@ public class TestGreater extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledGteDateTime() throws Exception {
-		checkCompiledOutput("greater/gteDateTime.poc");
-	}
-
-	@Test
 	public void testInterpretedGteDecimal() throws Exception {
 		checkInterpretedOutput("greater/gteDecimal.poc");
-	}
-
-	@Test
-	public void testCompiledGteDecimal() throws Exception {
-		checkCompiledOutput("greater/gteDecimal.poc");
 	}
 
 	@Test
@@ -105,18 +65,8 @@ public class TestGreater extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledGteInteger() throws Exception {
-		checkCompiledOutput("greater/gteInteger.poc");
-	}
-
-	@Test
 	public void testInterpretedGteText() throws Exception {
 		checkInterpretedOutput("greater/gteText.poc");
-	}
-
-	@Test
-	public void testCompiledGteText() throws Exception {
-		checkCompiledOutput("greater/gteText.poc");
 	}
 
 	@Test
@@ -125,18 +75,8 @@ public class TestGreater extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledGteTime() throws Exception {
-		checkCompiledOutput("greater/gteTime.poc");
-	}
-
-	@Test
 	public void testInterpretedGtInteger() throws Exception {
 		checkInterpretedOutput("greater/gtInteger.poc");
-	}
-
-	@Test
-	public void testCompiledGtInteger() throws Exception {
-		checkCompiledOutput("greater/gtInteger.poc");
 	}
 
 	@Test
@@ -145,18 +85,8 @@ public class TestGreater extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledGtText() throws Exception {
-		checkCompiledOutput("greater/gtText.poc");
-	}
-
-	@Test
 	public void testInterpretedGtTime() throws Exception {
 		checkInterpretedOutput("greater/gtTime.poc");
-	}
-
-	@Test
-	public void testCompiledGtTime() throws Exception {
-		checkCompiledOutput("greater/gtTime.poc");
 	}
 
 }

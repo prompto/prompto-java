@@ -31,7 +31,7 @@ public abstract class BaseDeclaration extends Section implements IDeclaration {
 	}
 	
 	public String getName() {
-		return id.getName();
+		return id.toString();
 	}
 	
 	@Override

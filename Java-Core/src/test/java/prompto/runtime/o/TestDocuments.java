@@ -25,18 +25,8 @@ public class TestDocuments extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledDeepItem() throws Exception {
-		checkCompiledOutput("documents/deepItem.poc");
-	}
-
-	@Test
 	public void testInterpretedDeepVariable() throws Exception {
 		checkInterpretedOutput("documents/deepVariable.poc");
-	}
-
-	@Test
-	public void testCompiledDeepVariable() throws Exception {
-		checkCompiledOutput("documents/deepVariable.poc");
 	}
 
 	@Test
@@ -45,18 +35,8 @@ public class TestDocuments extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledItem() throws Exception {
-		checkCompiledOutput("documents/item.poc");
-	}
-
-	@Test
 	public void testInterpretedVariable() throws Exception {
 		checkInterpretedOutput("documents/variable.poc");
-	}
-
-	@Test
-	public void testCompiledVariable() throws Exception {
-		checkCompiledOutput("documents/variable.poc");
 	}
 
 }

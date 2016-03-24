@@ -96,7 +96,7 @@ public class ResourceCodeStore extends BaseCodeStore {
 			declarations = new HashMap<String, List<IDeclaration>>();
 			for(IDeclaration decl : decls) {
 				decl.setOrigin(this);
-				String name = decl.getId().getName();
+				String name = decl.getId().toString();
 				if(declarations.get(name)==null)
 					declarations.put(name, new ArrayList<>());
 				declarations.get(name).add(decl);

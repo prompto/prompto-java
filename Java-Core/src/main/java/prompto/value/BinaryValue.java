@@ -110,7 +110,7 @@ public abstract class BinaryValue extends BaseValue {
 	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
 		try {
 			String dbId = instance.getMember(context, IStore.dbIdIdentifier, false).toString();
-			generator.writeString("/ws/bin/data?dbId=" + dbId + "&attribute=" + name.getName());
+			generator.writeString("/ws/bin/data?dbId=" + dbId + "&attribute=" + name.toString());
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		}

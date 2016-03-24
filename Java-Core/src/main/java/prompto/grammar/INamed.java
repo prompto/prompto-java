@@ -8,7 +8,7 @@ import prompto.type.IType;
 public interface INamed {
 	Identifier getId();
 	default String getName() {
-		return getId().getName();
+		return getId().toString();
 	}
 	IType getType(Context context) throws SyntaxError;
 }

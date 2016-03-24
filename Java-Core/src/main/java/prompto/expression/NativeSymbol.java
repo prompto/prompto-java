@@ -60,7 +60,7 @@ public class NativeSymbol extends Symbol implements IExpression {
 		IType actual = expression.check(context);
 		EnumeratedNativeType type = (EnumeratedNativeType)this.getType(context);
 		if(!actual.isAssignableTo(context, type.getDerivedFrom()))
-			throw new SyntaxError("Cannot assign " + actual.getId() + " to " + type.getDerivedFrom().getId());
+			throw new SyntaxError("Cannot assign " + actual.getTypeName() + " to " + type.getDerivedFrom().getTypeName());
 		return type;
 	}
 	

@@ -5,8 +5,8 @@ import prompto.runtime.Context;
 
 public abstract class ContainerType extends IterableType {
 
-	protected ContainerType(String name, IType itemType) {
-		super(name, itemType);
+	protected ContainerType(Family family, IType itemType, String fullName) {
+		super(family, itemType, fullName);
 	}
 	
 	@Override

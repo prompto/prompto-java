@@ -37,7 +37,7 @@ public class InstanceExpression implements IExpression {
 	}
 	
 	public String getName() {
-		return id.getName();
+		return id.toString();
 	}
 	
 	@Override

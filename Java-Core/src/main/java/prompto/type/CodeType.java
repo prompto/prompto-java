@@ -13,7 +13,7 @@ public class CodeType extends NativeType {
 	}
 	
 	private CodeType() {
-		super("Code");
+		super(Family.CODE);
 	}
 	
 	@Override

@@ -24,24 +24,24 @@ public class CodeArgument extends BaseArgument implements ITypedArgument {
 	
 	@Override
 	public String getSignature(Dialect dialect) {
-		return CodeType.instance().getId() + " " + id;
+		return CodeType.instance().getTypeName() + " " + id;
 	}
 	
 	@Override
 	public String getProto() {
-		return CodeType.instance().getId().toString();
+		return CodeType.instance().getTypeName();
 	}
 	
 	@Override
 	public void toDialect(CodeWriter writer) {
-		writer.append(CodeType.instance().getId().toString());
+		writer.append(CodeType.instance().getTypeName());
 		writer.append(" ");
 		writer.append(id);
 	}
 	
 	@Override
 	public String toString() {
-		return id.toString() + ':' + CodeType.instance().getId();
+		return id.toString() + ':' + CodeType.instance().getTypeName();
 	}
 	
 	@Override

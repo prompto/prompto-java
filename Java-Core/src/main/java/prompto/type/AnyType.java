@@ -16,9 +16,14 @@ public class AnyType extends NativeType {
 	}
 	
 	private AnyType() {
-		super("any");
+		super(Family.ANY);
 	}
 
+	@Override
+	public String getTypeName() {
+		return "any";
+	}
+	
 	@Override
 	public Type getJavaType() {
 		return Object.class;

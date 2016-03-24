@@ -48,7 +48,7 @@ public class UnresolvedArgument extends BaseArgument implements INamedArgument {
 	
 	@Override
 	public String getProto() {
-		return id.getName();
+		return id.toString();
 	}
 	
 	@Override

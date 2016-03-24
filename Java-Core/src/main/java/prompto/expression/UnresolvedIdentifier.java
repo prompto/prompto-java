@@ -37,7 +37,7 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 	}
 	
 	public String getName() {
-		return id.getName();
+		return id.toString();
 	}
 	
 	@Override
@@ -142,7 +142,7 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 		else if(decl instanceof EnumeratedNativeDeclaration)
 			return new TypeExpression(decl.getType(context));
 		else for(IType type : NativeType.getAll()) {
-			if(id.equals(type.getId()))
+			if(id.equals(type.getTypeNameId()))
 				return new TypeExpression(type);
 		}
 		return null;

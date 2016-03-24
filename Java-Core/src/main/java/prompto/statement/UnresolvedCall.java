@@ -112,7 +112,7 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 		}
 		decl = context.getRegisteredDeclaration(IDeclaration.class, id);
 		if(decl==null)
-			context.getProblemListener().reportUnknownIdentifier(id.getName(), id);
+			context.getProblemListener().reportUnknownIdentifier(id.toString(), id);
 		if(decl instanceof CategoryDeclaration)
 			return new ConstructorExpression(new CategoryType(id), assignments);
 		else
@@ -120,7 +120,7 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 	}
 
 	private IDeclaration resolveUnresolvedMember(InstanceContext context, Identifier name) throws SyntaxError {
-		ConcreteCategoryDeclaration decl = context.getRegisteredDeclaration(ConcreteCategoryDeclaration.class, context.getInstanceType().getId());
+		ConcreteCategoryDeclaration decl = context.getRegisteredDeclaration(ConcreteCategoryDeclaration.class, context.getInstanceType().getTypeNameId());
 		MethodDeclarationMap methods = decl.getMemberMethods(context, name);
 		if(methods!=null && methods.size()>0)
 			return methods;

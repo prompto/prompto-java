@@ -84,7 +84,7 @@ public class StorableDocument extends BaseDocument implements IStorable {
 	@Override
 	public void setValue(Identifier id, IValue value, IDbIdProvider provider) throws PromptoError {
 		ensureDocument(provider);
-		setData(id.getName(), value.getStorableData());
+		setData(id.toString(), value.getStorableData());
 	}
 	
 	@Override

@@ -17,12 +17,24 @@ import prompto.value.IValue;
 public class EnumeratedNativeType extends BaseType {
 
 	NativeType derivedFrom;
-
-	public EnumeratedNativeType(Identifier id, NativeType derivedFrom) {
-		super(id);
+	Identifier typeNameId;
+	
+	public EnumeratedNativeType(Identifier typeNameId, NativeType derivedFrom) {
+		super(Family.ENUMERATED);
+		this.typeNameId = typeNameId;
 		this.derivedFrom = derivedFrom;
 	}
 
+	@Override
+	public String getTypeName() {
+		return typeNameId.toString();
+	}
+	
+	@Override
+	public Identifier getTypeNameId() {
+		return typeNameId;
+	}
+	
 	public NativeType getDerivedFrom() {
 		return derivedFrom;
 	}
@@ -61,7 +73,7 @@ public class EnumeratedNativeType extends BaseType {
 	@Override
 	public IValue getMember(Context context, Identifier id) throws PromptoError {
 		String name = id.toString();
-		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, this.id);
+		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, typeNameId);
 		if(!(decl instanceof IEnumeratedDeclaration))
 			throw new SyntaxError(name + " is not an enumerated type!");
 		if ("symbols".equals(name))
@@ -83,7 +95,7 @@ public class EnumeratedNativeType extends BaseType {
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value) {
 		try {
-			EnumeratedNativeDeclaration decl = context.getRegisteredDeclaration(EnumeratedNativeDeclaration.class, this.getId());
+			EnumeratedNativeDeclaration decl = context.getRegisteredDeclaration(EnumeratedNativeDeclaration.class, typeNameId);
 			return decl.readJSONValue(context, value);
 		} catch (PromptoError e) {
 			throw new RuntimeException(e);

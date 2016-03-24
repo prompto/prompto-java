@@ -24,7 +24,7 @@ public class IntegerType extends NativeType implements INumberType {
 	}
 	
 	private IntegerType() {
-		super("Integer");
+		super(Family.INTEGER);
 	}
 	
 	@Override

@@ -26,7 +26,7 @@ public class SetterMethodDeclaration extends ConcreteMethodDeclaration implement
 	}
 
 	public static String getNameAsKey(Identifier id) {
-		return "Setter:" + id.getName();
+		return "Setter:" + id.toString();
 	}
 
 	@Override

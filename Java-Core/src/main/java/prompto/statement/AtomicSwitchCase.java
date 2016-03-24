@@ -19,7 +19,7 @@ public class AtomicSwitchCase extends SwitchCase {
 	public void checkSwitchType(Context context, IType type) throws SyntaxError {
 		IType thisType = expression.check(context);
 		if(!thisType.isAssignableTo(context, type))
-			throw new SyntaxError("Cannot assign:" + thisType.getId() + " to:" + type.getId());
+			throw new SyntaxError("Cannot assign:" + thisType.getTypeName() + " to:" + type.getTypeName());
 		
 	}
 	

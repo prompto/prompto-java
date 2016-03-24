@@ -98,7 +98,7 @@ public class TestParserAtoms {
 		assertNotNull(ad);
 		assertEquals("id",ad.getId().toString());
 		assertNotNull(ad.getType());
-		assertEquals("Integer",ad.getType().getId().toString());
+		assertEquals("Integer",ad.getType().getTypeName());
 	}
 
 	@Test
@@ -109,7 +109,7 @@ public class TestParserAtoms {
 		assertNotNull(ad);
 		assertEquals("id",ad.getId().toString());
 		assertNotNull(ad.getType());
-		assertEquals("Integer[]",ad.getType().getId().toString());
+		assertEquals("Integer[]",ad.getType().getTypeName());
 	}
 
 	@Test
@@ -183,7 +183,7 @@ public class TestParserAtoms {
 		ITypedArgument a = parser.parse_typed_argument();
 		assertNotNull(a);
 		assertNotNull(a.getType());
-		assertEquals("Person",a.getType().getId().toString());
+		assertEquals("Person",a.getType().getTypeName());
 		assertEquals("p",a.getId().toString());
 	}
 

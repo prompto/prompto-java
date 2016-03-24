@@ -25,18 +25,8 @@ public class TestDiv extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledDivDecimal() throws Exception {
-		checkCompiledOutput("div/divDecimal.poc");
-	}
-
-	@Test
 	public void testInterpretedDivInteger() throws Exception {
 		checkInterpretedOutput("div/divInteger.poc");
-	}
-
-	@Test
-	public void testCompiledDivInteger() throws Exception {
-		checkCompiledOutput("div/divInteger.poc");
 	}
 
 	@Test
@@ -45,18 +35,8 @@ public class TestDiv extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledIdivInteger() throws Exception {
-		checkCompiledOutput("div/idivInteger.poc");
-	}
-
-	@Test
 	public void testInterpretedModInteger() throws Exception {
 		checkInterpretedOutput("div/modInteger.poc");
-	}
-
-	@Test
-	public void testCompiledModInteger() throws Exception {
-		checkCompiledOutput("div/modInteger.poc");
 	}
 
 }

@@ -23,9 +23,14 @@ public class DateTimeType extends NativeType {
 	}
 
 	private DateTimeType() {
-		super("DateTime");
+		super(Family.DATETIME);
 	}
 
+	@Override
+	public String getTypeName() {
+		return "DateTime";
+	}
+	
 	@Override
 	public Type getJavaType() {
 		return PromptoDateTime.class;

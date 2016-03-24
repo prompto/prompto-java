@@ -4,16 +4,17 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+
 import prompto.declaration.AnyNativeCategoryDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.NativeCategoryDeclaration;
 import prompto.error.SyntaxError;
-import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.type.AnyType;
 import prompto.type.BaseType;
 import prompto.type.IType;
 import prompto.type.ListType;
+import prompto.utils.Utils;
 import prompto.value.IValue;
 import prompto.value.ListValue;
 import prompto.value.NativeInstance;
@@ -21,12 +22,10 @@ import prompto.value.NativeInstance;
 
 public class JavaClassType extends BaseType {
 	
-
-
 	Type type;
 	
 	public JavaClassType(Type type) {
-		super(new Identifier(type.getTypeName()));
+		super(Family.CLASS);
 		this.type = type;
 	}
 	
@@ -49,7 +48,7 @@ public class JavaClassType extends BaseType {
 	}
 	
 	private static IType convertJavaClassToPromptoType(Context context, Type type, IType returnType) {
-		IType result = typeToITypeMap.get(type);
+		IType result = Utils.typeToIType(type);
 		if(result!=null)
 			return result;
 		Type elemType = elemTypeFromListType(type);
@@ -105,14 +104,14 @@ public class JavaClassType extends BaseType {
 	}
 
 	private static IValue convertNative(Object value, Type type) {
-        IType itype = typeToITypeMap.get(type);
+        IType itype = Utils.typeToIType(type);
         return itype != null ? itype.convertJavaValueToPromptoValue(value) : null;
 	}
 
 
 	private static IValue convertCategory(Context context, Object value, Type type, IType returnType) {
 		// ensure the underlying declaration is loaded
-		context.getRegisteredDeclaration(IDeclaration.class, returnType.getId());
+		context.getRegisteredDeclaration(IDeclaration.class, returnType.getTypeNameId());
  		NativeCategoryDeclaration decl = context.getNativeBinding(type);
 		return decl!=null ? new NativeInstance(decl, value) : null;
 	}

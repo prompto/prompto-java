@@ -21,7 +21,7 @@ public class DecimalType extends NativeType implements INumberType {
 	}
 	
 	private DecimalType() {
-		super("Decimal");
+		super(Family.DECIMAL);
 	}
 	
 	@Override

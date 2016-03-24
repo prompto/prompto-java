@@ -14,7 +14,7 @@ public class BlobType extends BinaryType {
 	}
 	
 	private BlobType() {
-		super("Blob");
+		super(Family.BLOB);
 	}
 
 	@Override

@@ -33,7 +33,7 @@ public class VariableInstance implements IAssignableInstance {
 	
 	@Override
 	public ResultInfo compileParent(Context context, MethodInfo method, Flags flags) throws SyntaxError {
-		StackLocal local = method.getRegisteredLocal(id.getName());
+		StackLocal local = method.getRegisteredLocal(id.toString());
 		if(local instanceof StackLocal.ObjectLocal) {
 			ClassConstant klass = ((StackLocal.ObjectLocal)local).getClassName();
 			switch(local.getIndex()) {
@@ -61,8 +61,8 @@ public class VariableInstance implements IAssignableInstance {
 	@Override
 	public ResultInfo compileAssign(Context context, MethodInfo method, Flags flags, IExpression expression) throws SyntaxError {
 		ResultInfo info = expression.compile(context, method, flags);
-		method.registerLocal(id.getName(), Type.ITEM_Object, new ClassConstant(info.getType()));
-		StackLocal local = method.getRegisteredLocal(id.getName());
+		method.registerLocal(id.toString(), Type.ITEM_Object, new ClassConstant(info.getType()));
+		StackLocal local = method.getRegisteredLocal(id.toString());
 		switch(local.getIndex()) {
 			case 0:
 				method.addInstruction(Opcode.ASTORE_0);

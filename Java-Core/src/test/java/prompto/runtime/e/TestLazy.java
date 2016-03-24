@@ -25,18 +25,8 @@ public class TestLazy extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledCyclic() throws Exception {
-		checkCompiledOutput("lazy/cyclic.pec");
-	}
-
-	@Test
 	public void testInterpretedDict() throws Exception {
 		checkInterpretedOutput("lazy/dict.pec");
-	}
-
-	@Test
-	public void testCompiledDict() throws Exception {
-		checkCompiledOutput("lazy/dict.pec");
 	}
 
 	@Test
@@ -45,28 +35,13 @@ public class TestLazy extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledList() throws Exception {
-		checkCompiledOutput("lazy/list.pec");
-	}
-
-	@Test
 	public void testInterpretedSet() throws Exception {
 		checkInterpretedOutput("lazy/set.pec");
 	}
 
 	@Test
-	public void testCompiledSet() throws Exception {
-		checkCompiledOutput("lazy/set.pec");
-	}
-
-	@Test
 	public void testInterpretedTransient() throws Exception {
 		checkInterpretedOutput("lazy/transient.pec");
-	}
-
-	@Test
-	public void testCompiledTransient() throws Exception {
-		checkCompiledOutput("lazy/transient.pec");
 	}
 
 }

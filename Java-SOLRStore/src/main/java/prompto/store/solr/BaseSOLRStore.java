@@ -15,23 +15,20 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 
 import prompto.declaration.AttributeDeclaration;
-import prompto.error.PromptoError;
 import prompto.error.InternalError;
+import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
-import prompto.error.InvalidDataError;
-import prompto.expression.IExpression;
 import prompto.grammar.EqOp;
-import prompto.grammar.OrderByClause;
-import prompto.grammar.OrderByClauseList;
 import prompto.intrinsic.PromptoBinary;
 import prompto.runtime.Context;
+import prompto.store.IQuery;
+import prompto.store.IQueryBuilder;
 import prompto.store.IStorable;
 import prompto.store.IStore;
 import prompto.store.IStored;
@@ -48,7 +45,6 @@ import prompto.type.IntegerType;
 import prompto.type.ListType;
 import prompto.type.TextType;
 import prompto.type.UUIDType;
-import prompto.utils.IdentifierList;
 import prompto.value.IValue;
 
 abstract class BaseSOLRStore implements IStore<UUID> {
@@ -172,7 +168,7 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 		else if(type==TextType.instance())
 			addTextField(column.getName(), options, column.getIndexTypes());
 		else {
-			String typeName = type.getName().toLowerCase();
+			String typeName = type.getTypeName().toLowerCase();
 			addField(column.getName(), typeName, options);
 		}
 	}
@@ -249,34 +245,38 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 	}
 	
 	@Override
-	public IStored fetchUnique(Context context, UUID dbId) throws PromptoError {
+	public IStored fetchUnique(UUID dbId) throws PromptoError {
 		SOLRFilterBuilder builder = new SOLRFilterBuilder();
-		builder.push(context, IStore.dbIdName, EqOp.EQUALS, dbId);
+		builder.push(null, IStore.dbIdName, EqOp.EQUALS, dbId);
 		SolrQuery query = new SolrQuery();
 		query.setQuery(builder.toSolrQuery());
 		try {
 			commit();
 			QueryResponse result = query(query);
-			return getOne(context, result);
+			return getOne(result);
 		} catch(Exception e) {
 			throw new InternalError(e);
 		}
 	}
 	
 	@Override
-	public IStored fetchOne(Context context, CategoryType type, IExpression filterExpression) throws PromptoError {
-		SolrQuery query = buildQuery(context, type, null, null, filterExpression, null);
-		query.setRows(1);
+	public IQueryBuilder<UUID> getQueryBuilder(Context context, boolean compiled) {
+		return new SOLRQueryBuilder(context);
+	}
+	
+	@Override
+	public IStored fetchOne(IQuery query) throws PromptoError {
+		SolrQuery q = ((SOLRQuery)query).getQuery();
 		try {
 			commit();
-			QueryResponse result = query(query);
-			return getOne(context, result);
+			QueryResponse result = query(q);
+			return getOne(result);
 		} catch(Exception e) {
 			throw new InternalError(e);
 		}
 	}
 	
-	private IStored getOne(Context context, QueryResponse result) {
+	private IStored getOne(QueryResponse result) {
 		if(result.getResults().isEmpty())
 			return null;
 		else
@@ -284,21 +284,18 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 	}
 
 	@Override
-	public IStoredIterator fetchMany(Context context, CategoryType type,
-			IExpression start, IExpression end, 
-			IExpression filterExpression, OrderByClauseList orderBy)
-			throws PromptoError {
-		SolrQuery query = buildQuery(context, type, start, end, filterExpression, orderBy);
+	public IStoredIterator fetchMany(IQuery query) throws PromptoError {
+		SolrQuery q = ((SOLRQuery)query).getQuery();
 		try {
 			commit();
-			QueryResponse result = query(query);
-			return getMany(context, result);
+			QueryResponse result = query(q);
+			return getMany(result);
 		} catch(Exception e) {
 			throw new InternalError(e);
 		}
 	}
 	
-	private IStoredIterator getMany(Context context, QueryResponse response) {
+	private IStoredIterator getMany(QueryResponse response) {
 		return new IStoredIterator() {
 			
 			int current = 0;
@@ -318,47 +315,6 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 				return response.getResults().getNumFound();
 			}
 		};
-	}
-
-	private SolrQuery buildQuery(Context context, CategoryType type,
-			IExpression start, IExpression end, 
-			IExpression filterExpression, OrderByClauseList orderBy) throws PromptoError {
-		SOLRFilterBuilder builder = new SOLRFilterBuilder();
-		if(type!=null)
-			builder.pushCategory(type);
-		if(filterExpression!=null)
-			filterExpression.toFilter(context, builder);
-		if(type!=null && filterExpression!=null)
-			builder.and();
-		// TODO: based on the field type and operator, should we use query/filterQuery ?
-		SolrQuery query = new SolrQuery();
-		query.setQuery(builder.toSolrQuery());
-		Long intStart = getLong(context, start);
-		Long intEnd = getLong(context, end);
-		if(intStart!=null && intEnd!=null) {
-			query.setStart(intStart.intValue() - 1);
-			query.setRows(1 + (int)(intEnd - intStart));
-		}
-		if(orderBy!=null) for(OrderByClause clause : orderBy) {
-			IdentifierList names = clause.getNames();
-			// TODO manage member names: a.b
-			String fieldName = names.get(0).getName();
-			AttributeDeclaration column = context.findAttribute(fieldName);
-			TextFieldFlags flags = TextFieldFlags.computeFieldFlags(column);
-			if(flags!=null)
-				fieldName += flags.getSuffixForOrderBy();
-			query.addSort(fieldName, clause.isDescending() ? ORDER.desc : ORDER.asc);
-		}
-		return query;
-	}
-
-	private Long getLong(Context context, IExpression exp) throws PromptoError {
-		if(exp==null)
-			return null;
-		IValue value = exp.interpret(context);
-		if(!(value instanceof prompto.value.Integer))
-			throw new InvalidDataError("Expecting an Integer, got:" + value.getType().toString());
-		return ((prompto.value.Integer)value).longValue();
 	}
 
 	@Override

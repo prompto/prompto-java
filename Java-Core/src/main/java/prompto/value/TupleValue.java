@@ -138,7 +138,7 @@ public class TupleValue extends BaseValue implements IContainer<IValue>, ISlicea
         else if (value instanceof SetValue)
             return this.merge(((SetValue)value).getItems());
         else
-            throw new SyntaxError("Illegal: " +this.type.getId() + " + " + value.getClass().getSimpleName());
+            throw new SyntaxError("Illegal: " + this.type.getTypeName() + " + " + value.getClass().getSimpleName());
     }
 	
 	protected TupleValue merge(Collection<? extends IValue> items) {

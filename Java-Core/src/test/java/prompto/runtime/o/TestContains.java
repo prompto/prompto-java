@@ -25,18 +25,8 @@ public class TestContains extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledContainsAllList() throws Exception {
-		checkCompiledOutput("contains/containsAllList.poc");
-	}
-
-	@Test
 	public void testInterpretedContainsAllSet() throws Exception {
 		checkInterpretedOutput("contains/containsAllSet.poc");
-	}
-
-	@Test
-	public void testCompiledContainsAllSet() throws Exception {
-		checkCompiledOutput("contains/containsAllSet.poc");
 	}
 
 	@Test
@@ -45,18 +35,8 @@ public class TestContains extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledContainsAllText() throws Exception {
-		checkCompiledOutput("contains/containsAllText.poc");
-	}
-
-	@Test
 	public void testInterpretedContainsAllTuple() throws Exception {
 		checkInterpretedOutput("contains/containsAllTuple.poc");
-	}
-
-	@Test
-	public void testCompiledContainsAllTuple() throws Exception {
-		checkCompiledOutput("contains/containsAllTuple.poc");
 	}
 
 	@Test
@@ -65,18 +45,8 @@ public class TestContains extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledContainsAnyList() throws Exception {
-		checkCompiledOutput("contains/containsAnyList.poc");
-	}
-
-	@Test
 	public void testInterpretedContainsAnySet() throws Exception {
 		checkInterpretedOutput("contains/containsAnySet.poc");
-	}
-
-	@Test
-	public void testCompiledContainsAnySet() throws Exception {
-		checkCompiledOutput("contains/containsAnySet.poc");
 	}
 
 	@Test
@@ -85,18 +55,8 @@ public class TestContains extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledContainsAnyText() throws Exception {
-		checkCompiledOutput("contains/containsAnyText.poc");
-	}
-
-	@Test
 	public void testInterpretedContainsAnyTuple() throws Exception {
 		checkInterpretedOutput("contains/containsAnyTuple.poc");
-	}
-
-	@Test
-	public void testCompiledContainsAnyTuple() throws Exception {
-		checkCompiledOutput("contains/containsAnyTuple.poc");
 	}
 
 	@Test
@@ -105,18 +65,8 @@ public class TestContains extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledInCharacterRange() throws Exception {
-		checkCompiledOutput("contains/inCharacterRange.poc");
-	}
-
-	@Test
 	public void testInterpretedInDateRange() throws Exception {
 		checkInterpretedOutput("contains/inDateRange.poc");
-	}
-
-	@Test
-	public void testCompiledInDateRange() throws Exception {
-		checkCompiledOutput("contains/inDateRange.poc");
 	}
 
 	@Test
@@ -125,18 +75,8 @@ public class TestContains extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledInDict() throws Exception {
-		checkCompiledOutput("contains/inDict.poc");
-	}
-
-	@Test
 	public void testInterpretedInIntegerRange() throws Exception {
 		checkInterpretedOutput("contains/inIntegerRange.poc");
-	}
-
-	@Test
-	public void testCompiledInIntegerRange() throws Exception {
-		checkCompiledOutput("contains/inIntegerRange.poc");
 	}
 
 	@Test
@@ -145,18 +85,8 @@ public class TestContains extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledInList() throws Exception {
-		checkCompiledOutput("contains/inList.poc");
-	}
-
-	@Test
 	public void testInterpretedInSet() throws Exception {
 		checkInterpretedOutput("contains/inSet.poc");
-	}
-
-	@Test
-	public void testCompiledInSet() throws Exception {
-		checkCompiledOutput("contains/inSet.poc");
 	}
 
 	@Test
@@ -165,18 +95,8 @@ public class TestContains extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledInText() throws Exception {
-		checkCompiledOutput("contains/inText.poc");
-	}
-
-	@Test
 	public void testInterpretedInTimeRange() throws Exception {
 		checkInterpretedOutput("contains/inTimeRange.poc");
-	}
-
-	@Test
-	public void testCompiledInTimeRange() throws Exception {
-		checkCompiledOutput("contains/inTimeRange.poc");
 	}
 
 	@Test
@@ -185,18 +105,8 @@ public class TestContains extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledInTuple() throws Exception {
-		checkCompiledOutput("contains/inTuple.poc");
-	}
-
-	@Test
 	public void testInterpretedNinCharacterRange() throws Exception {
 		checkInterpretedOutput("contains/ninCharacterRange.poc");
-	}
-
-	@Test
-	public void testCompiledNinCharacterRange() throws Exception {
-		checkCompiledOutput("contains/ninCharacterRange.poc");
 	}
 
 	@Test
@@ -205,18 +115,8 @@ public class TestContains extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledNinDateRange() throws Exception {
-		checkCompiledOutput("contains/ninDateRange.poc");
-	}
-
-	@Test
 	public void testInterpretedNinDict() throws Exception {
 		checkInterpretedOutput("contains/ninDict.poc");
-	}
-
-	@Test
-	public void testCompiledNinDict() throws Exception {
-		checkCompiledOutput("contains/ninDict.poc");
 	}
 
 	@Test
@@ -225,18 +125,8 @@ public class TestContains extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledNinIntegerRange() throws Exception {
-		checkCompiledOutput("contains/ninIntegerRange.poc");
-	}
-
-	@Test
 	public void testInterpretedNinList() throws Exception {
 		checkInterpretedOutput("contains/ninList.poc");
-	}
-
-	@Test
-	public void testCompiledNinList() throws Exception {
-		checkCompiledOutput("contains/ninList.poc");
 	}
 
 	@Test
@@ -245,28 +135,13 @@ public class TestContains extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledNinSet() throws Exception {
-		checkCompiledOutput("contains/ninSet.poc");
-	}
-
-	@Test
 	public void testInterpretedNinText() throws Exception {
 		checkInterpretedOutput("contains/ninText.poc");
 	}
 
 	@Test
-	public void testCompiledNinText() throws Exception {
-		checkCompiledOutput("contains/ninText.poc");
-	}
-
-	@Test
 	public void testInterpretedNinTimeRange() throws Exception {
 		checkInterpretedOutput("contains/ninTimeRange.poc");
-	}
-
-	@Test
-	public void testCompiledNinTimeRange() throws Exception {
-		checkCompiledOutput("contains/ninTimeRange.poc");
 	}
 
 }

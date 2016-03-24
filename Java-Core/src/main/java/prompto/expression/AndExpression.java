@@ -63,7 +63,7 @@ public class AndExpression implements IExpression, IAssertion {
 		IType lt = left.check(context);
 		IType rt = right.check(context);
 		if(!(lt instanceof BooleanType) || !(rt instanceof BooleanType))
-			throw new SyntaxError("Cannot combine " + lt.getId() + " and " + rt.getId());
+			throw new SyntaxError("Cannot combine " + lt.getTypeName() + " and " + rt.getTypeName());
 		return BooleanType.instance();
 	}
 	

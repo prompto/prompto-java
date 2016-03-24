@@ -26,9 +26,10 @@ public class TestMemStore {
 
 	Context context;
 	
+	@SuppressWarnings("unchecked")
 	@Before
 	public void before() throws Exception {
-		IDataStore.setInstance(new MemStore());
+		IDataStore.setInstance((IStore<Object>)(Object)new MemStore());
 		context = Context.newGlobalContext();
 		AttributeDeclaration attr = new AttributeDeclaration(new Identifier("__id__"), TextType.instance());
 		attr.register(context);

@@ -30,11 +30,11 @@ public class StoredDocument extends BaseDocument implements IStored {
 
 	@Override
 	public IValue getValue(Identifier id) throws PromptoError {
-		Object data = getData(id.getName());
+		Object data = getData(id.toString());
 		if(data==null)
 			return null;
 		else
-			return store.readData(id.getName(), data);
+			return store.readData(id.toString(), data);
 	}
 
 	@Override

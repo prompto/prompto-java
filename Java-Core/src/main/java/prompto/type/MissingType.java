@@ -7,13 +7,14 @@ import prompto.runtime.Context;
 public class MissingType extends NativeType {
 
 	static MissingType instance = new MissingType();
+	static String typeName = "*";
 	
 	public static MissingType instance() {
 		return instance;
 	}
 	
 	private MissingType() {
-		super("*");
+		super(Family.MISSING);
 	}
 	
 	@Override

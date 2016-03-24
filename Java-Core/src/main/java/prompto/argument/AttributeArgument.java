@@ -79,7 +79,7 @@ public class AttributeArgument extends BaseArgument implements INamedArgument {
 	public IType getType(Context context) throws SyntaxError {
 		// dbId type can only be resolved at runtime
 		if(IStore.dbIdIdentifier.equals(id))
-			return IType.typeToIType(IDataStore.getInstance().getDbIdType());
+			return Utils.typeToIType(IDataStore.getInstance().getDbIdType());
 		else {
 			IDeclaration named = context.getRegisteredDeclaration(IDeclaration.class, id);
 			return named.getType(context);

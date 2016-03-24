@@ -19,7 +19,7 @@ public class IllegalNonBooleanError extends SyntaxProblemBase {
 	
 	@Override
 	public String getMessage() {
-		return "Illegal expression type in test method, expected Boolean, got:" + type.getId();
+		return "Illegal expression type in test method, expected Boolean, got:" + type.getTypeName();
 	}
 
 }

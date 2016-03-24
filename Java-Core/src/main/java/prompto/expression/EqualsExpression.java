@@ -177,7 +177,7 @@ public class EqualsExpression implements IExpression, IAssertion {
 			if(name!=null) {
 				IType type = ((TypeExpression)right).getType();
 				ClassConstant c = new ClassConstant(type.getJavaType());
-				StackLocal local = method.getRegisteredLocal(name.getName());
+				StackLocal local = method.getRegisteredLocal(name.toString());
 				((StackLocal.ObjectLocal)local).markForAutodowncast(c);
 				return downCastForCheck(context);
 			}
@@ -189,7 +189,7 @@ public class EqualsExpression implements IExpression, IAssertion {
 		if(operator==EqOp.IS_A) {
 			Identifier name = readLeftName();
 			if(name!=null) {
-				StackLocal local = method.getRegisteredLocal(name.getName());
+				StackLocal local = method.getRegisteredLocal(name.toString());
 				((StackLocal.ObjectLocal)local).unmarkForAutodowncast();
 			}
 		}
@@ -331,7 +331,7 @@ public class EqualsExpression implements IExpression, IAssertion {
 		IOperatorFunction tester = testers.get(lval.getType());
 		if(tester==null) {
 			System.err.println("Missing IOperatorFunction for = " + lval.getType().getTypeName());
-			throw new SyntaxError("Cannot check equality of " + lval.getType().getTypeName() + " with " + right.check(context).getName());
+			throw new SyntaxError("Cannot check equality of " + lval.getType().getTypeName() + " with " + right.check(context).getFamily());
 		}
 		return tester.compile(context, method, flags, lval, right);
 	}

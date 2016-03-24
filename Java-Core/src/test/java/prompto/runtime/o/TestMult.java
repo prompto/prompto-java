@@ -25,18 +25,8 @@ public class TestMult extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledMultCharacter() throws Exception {
-		checkCompiledOutput("mult/multCharacter.poc");
-	}
-
-	@Test
 	public void testInterpretedMultDecimal() throws Exception {
 		checkInterpretedOutput("mult/multDecimal.poc");
-	}
-
-	@Test
-	public void testCompiledMultDecimal() throws Exception {
-		checkCompiledOutput("mult/multDecimal.poc");
 	}
 
 	@Test
@@ -45,18 +35,8 @@ public class TestMult extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledMultInteger() throws Exception {
-		checkCompiledOutput("mult/multInteger.poc");
-	}
-
-	@Test
 	public void testInterpretedMultList() throws Exception {
 		checkInterpretedOutput("mult/multList.poc");
-	}
-
-	@Test
-	public void testCompiledMultList() throws Exception {
-		checkCompiledOutput("mult/multList.poc");
 	}
 
 	@Test
@@ -65,18 +45,8 @@ public class TestMult extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledMultPeriod() throws Exception {
-		checkCompiledOutput("mult/multPeriod.poc");
-	}
-
-	@Test
 	public void testInterpretedMultText() throws Exception {
 		checkInterpretedOutput("mult/multText.poc");
-	}
-
-	@Test
-	public void testCompiledMultText() throws Exception {
-		checkCompiledOutput("mult/multText.poc");
 	}
 
 }

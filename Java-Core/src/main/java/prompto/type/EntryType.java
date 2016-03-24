@@ -10,10 +10,12 @@ import prompto.runtime.Context;
 public class EntryType extends BaseType {
 
 	IType itemType;
-
+	String typeName;
+	
 	public EntryType(IType itemType) {
-		super(itemType.getId() + "{}[]");
+		super(null);
 		this.itemType = itemType;
+		this.typeName = itemType.getTypeName() + "{}[]";
 	}
 
 	public IType getItemType() {

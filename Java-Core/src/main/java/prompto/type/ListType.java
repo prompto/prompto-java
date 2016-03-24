@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class ListType extends ContainerType {
 	
 	public ListType(IType itemType) {
-		super(itemType.getId()+"[]", itemType);
+		super(Family.LIST, itemType, itemType.getTypeName() + "[]");
 	}
 	
 	@Override

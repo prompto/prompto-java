@@ -67,7 +67,7 @@ public class AssignTupleStatement extends SimpleStatement {
 	public IType check(Context context) throws SyntaxError {
 		IType type = expression.check(context);
 		if(type!=TupleType.instance())
-			throw new SyntaxError("Expecting a tuple expression, got " + type.getId());
+			throw new SyntaxError("Expecting a tuple expression, got " + type.getTypeName());
 		for(Identifier name : names) {
 			INamed actual = context.getRegistered(name);
 			if(actual==null)

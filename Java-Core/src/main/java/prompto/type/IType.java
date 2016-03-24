@@ -2,21 +2,14 @@ package prompto.type;
 
 import java.lang.reflect.Type;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
-import prompto.intrinsic.PromptoDate;
-import prompto.intrinsic.PromptoDateTime;
-import prompto.intrinsic.PromptoDocument;
-import prompto.intrinsic.PromptoPeriod;
-import prompto.intrinsic.PromptoTime;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.utils.CodeWriter;
+import prompto.utils.Utils;
 import prompto.value.IValue;
 import prompto.value.RangeBase;
 
@@ -24,38 +17,50 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public interface IType {
 	
-	static final Map<Type,IType> typeToITypeMap = createTypeToITypeMap();
-	
-	static Map<Type, IType> createTypeToITypeMap() {
-		Map<Type,IType> map = new HashMap<Type, IType>();
-		map.put(void.class, VoidType.instance());
-		map.put(boolean.class, BooleanType.instance());
-		map.put(Boolean.class, BooleanType.instance());
-		map.put(char.class, CharacterType.instance());
-		map.put(Character.class, CharacterType.instance());
-		map.put(int.class, IntegerType.instance());
-		map.put(Integer.class, IntegerType.instance());
-		map.put(long.class, IntegerType.instance());
-		map.put(Long.class, IntegerType.instance());
-		map.put(Double.class, DecimalType.instance());
-		map.put(String.class, TextType.instance());
-		map.put(UUID.class, UUIDType.instance());
-		map.put(PromptoDate.class, DateType.instance());
-		map.put(PromptoTime.class, TimeType.instance());
-		map.put(PromptoDateTime.class, DateTimeType.instance());
-		map.put(PromptoPeriod.class, PeriodType.instance());
-		map.put(PromptoDocument.class, DocumentType.instance());
-		map.put(Object.class, AnyType.instance());
-		return map;
+	public static enum Family {
+		// storable
+		BOOLEAN,
+		CHARACTER,
+		INTEGER,
+		DECIMAL,
+		TEXT,
+		UUID,
+		DATE,
+		TIME,
+		DATETIME,
+		PERIOD,
+		LIST,
+		SET,
+		TUPLE,
+		RANGE,
+		BLOB,
+		IMAGE,
+		DOCUMENT,
+		CATEGORY,
+		RESOURCE,
+		DICTIONARY,
+		ENUMERATED,
+		// non storable
+		VOID,
+		NULL,
+		ANY,
+		METHOD,
+		CURSOR,
+		ITERATOR,
+		CLASS,
+		TYPE,
+		CODE,
+		// volatile
+		MISSING
 	}
-	
-	static IType typeToIType(Type type) {
-		return typeToITypeMap.get(type);
+		
+	Family getFamily();
+	default String getTypeName() {
+		return Utils.capitalizeFirst(getFamily().name());
 	}
-	
-	
-	Identifier getId();
-	String getName();
+	default Identifier getTypeNameId() {
+		return new Identifier(getTypeName());
+	}
 	Type getJavaType();
 
 	IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError;

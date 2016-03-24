@@ -22,6 +22,7 @@ import prompto.type.IType;
 import prompto.type.ListType;
 import prompto.type.TextType;
 import prompto.utils.IdentifierList;
+import prompto.utils.Utils;
 
 // use a dedicated bootstrapper to ensure app and code store contexts do not spill
 public class CodeStoreBootstrapper {
@@ -83,7 +84,7 @@ public class CodeStoreBootstrapper {
 	}
 
 	private Collection<AttributeDeclaration> getMinimalColumns(IStore<?> store) {
-		IType dbIdIType = IType.typeToIType(store.getDbIdType());
+		IType dbIdIType = Utils.typeToIType(store.getDbIdType());
 		List<AttributeDeclaration> columns = new ArrayList<AttributeDeclaration>();
 		// attributes with reserved names, the below declarations will be used
 		columns.add(new AttributeDeclaration(IStore.dbIdIdentifier, dbIdIType));

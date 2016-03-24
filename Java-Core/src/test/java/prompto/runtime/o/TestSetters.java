@@ -25,18 +25,8 @@ public class TestSetters extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledGetter() throws Exception {
-		checkCompiledOutput("setters/getter.poc");
-	}
-
-	@Test
 	public void testInterpretedSetter() throws Exception {
 		checkInterpretedOutput("setters/setter.poc");
-	}
-
-	@Test
-	public void testCompiledSetter() throws Exception {
-		checkCompiledOutput("setters/setter.poc");
 	}
 
 }

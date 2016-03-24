@@ -25,7 +25,7 @@ public class TimeType extends NativeType {
 	}
 
 	private TimeType() {
-		super("Time");
+		super(Family.TYPE);
 	}
 
 	@Override

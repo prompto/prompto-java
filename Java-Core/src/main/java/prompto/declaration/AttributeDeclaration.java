@@ -52,7 +52,7 @@ public class AttributeDeclaration extends BaseDeclaration {
 	}
 	
 	public Collection<String> getIndexTypes() {
-		return indexTypes==null ? null : indexTypes.stream().map((id) -> id.getName()).collect(Collectors.toList());
+		return indexTypes==null ? null : indexTypes.stream().map((id) -> id.toString()).collect(Collectors.toList());
 	}
 	
 	public IType getType() {

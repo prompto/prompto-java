@@ -45,7 +45,7 @@ public class NotExpression implements IUnaryExpression, IAssertion {
 	public IType check(Context context) throws SyntaxError {
 		IType type = expression.check(context);
 		if(!(type instanceof BooleanType))
-			throw new SyntaxError("Cannot negate " + type.getId());
+			throw new SyntaxError("Cannot negate " + type.getTypeName());
 		return BooleanType.instance();
 	}
 	

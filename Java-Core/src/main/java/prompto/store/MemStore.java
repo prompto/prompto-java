@@ -91,16 +91,72 @@ public final class MemStore implements IStore<Long> {
 		documents = new HashMap<>();
 	}
 	
+	static interface MemStoreQuery extends IQuery {
+
+		boolean matches(StorableDocument doc) throws PromptoError;
+
+		List<StorableDocument> sort(List<StorableDocument> docs) throws PromptoError;
+
+		List<StorableDocument> slice(List<StorableDocument> docs) throws PromptoError;
+		
+	}
+
+	@Override
+	public IQueryBuilder<Long> getQueryBuilder(Context context, boolean compiled) {
+		return new IQueryBuilder<Long>() {
+		
+			@Override
+			public IQuery buildFetchOneQuery(CategoryType type, IExpression filter) throws PromptoError {
+				return new MemStoreQuery() {
+					@Override
+					public boolean matches(StorableDocument doc) throws PromptoError {
+						return MemStore.this.matches(context, doc, type, filter);
+					}
+					@Override
+					public List<StorableDocument> sort(List<StorableDocument> docs) throws PromptoError {
+						throw new UnsupportedOperationException();
+					}
+					@Override
+					public List<StorableDocument> slice(List<StorableDocument> docs) throws PromptoError {
+						throw new UnsupportedOperationException();
+					}
+				};
+			}
+			
+			@Override
+			public IQuery buildFetchManyQuery(CategoryType type, IExpression start,
+					IExpression end, IExpression filter, OrderByClauseList orderBy)
+					throws PromptoError {
+				return new MemStoreQuery() {
+					@Override
+					public boolean matches(StorableDocument doc) throws PromptoError {
+						return MemStore.this.matches(context, doc, type, filter);
+					}
+					@Override
+					public List<StorableDocument> sort(List<StorableDocument> docs) throws PromptoError {
+						return MemStore.this.sort(context, docs, orderBy);
+					}
+					@Override
+					public List<StorableDocument> slice(List<StorableDocument> docs) throws PromptoError {
+						return MemStore.this.slice(context, docs, start, end);
+					}
+				};
+			}
+	
+		};
+	}
+	
 	
 	@Override
-	public IStored fetchUnique(Context context, Long dbId) throws PromptoError {
+	public IStored fetchUnique(Long dbId) throws PromptoError {
 		return documents.get(dbId);
 	}
 	
 	@Override
-	public IStored fetchOne(Context context, CategoryType type, IExpression filter) throws PromptoError {
+	public IStored fetchOne(IQuery query) throws PromptoError {
+		MemStoreQuery mquery = (MemStoreQuery)query;
 		for(StorableDocument doc : documents.values()) {
-			if(matches(context, doc, type, filter))
+			if(mquery.matches(doc))
 				return doc;
 		}
 		return null;
@@ -124,15 +180,12 @@ public final class MemStore implements IStore<Long> {
 		if(type==null)
 			return true;
 		ListValue list = (ListValue) doc.getValue(new Identifier("category"));
-		return list==null ? false : list.hasItem(context, new Text(type.getName()));
+		return list==null ? false : list.hasItem(context, new Text(type.getTypeName()));
 	}
-
+	
 	@Override
-	public IStoredIterator fetchMany(Context context, CategoryType type, 
-				IExpression start, IExpression end, 
-				IExpression filter, OrderByClauseList orderBy) throws PromptoError {
-		
-		final List<StorableDocument> docs = fetchManyDocs(context, type, start, end, filter, orderBy);
+	public IStoredIterator fetchMany(IQuery query) throws PromptoError {
+		final List<StorableDocument> docs = fetchManyDocs((MemStoreQuery)query);
 		final Iterator<StorableDocument> iter = docs.iterator();
 		return new IStoredIterator() {
 			@Override public boolean hasNext() { return iter.hasNext(); }
@@ -141,24 +194,19 @@ public final class MemStore implements IStore<Long> {
 		};
 	}
 
-	private List<StorableDocument> fetchManyDocs(Context context, CategoryType type, 
-			IExpression start, IExpression end, 
-			IExpression filter, OrderByClauseList orderBy) throws PromptoError {
-		List<StorableDocument> docs = filterDocs(context, type, filter);
-		// sort it if required
-		docs = sort(context, docs, orderBy);
-		// slice it if required
-		docs = slice(context, docs, start, end);
-		// done
+	private List<StorableDocument> fetchManyDocs(MemStoreQuery query) throws PromptoError {
+		List<StorableDocument> docs = filterDocs(query);
+		docs = query.sort(docs);
+		docs = query.slice(docs);
 		return docs;
 	}
 
-	private List<StorableDocument> filterDocs(Context context, CategoryType type, IExpression filter) throws PromptoError {
+	private List<StorableDocument> filterDocs(MemStoreQuery query) throws PromptoError {
 		// create list of filtered docs
 		List<StorableDocument> docs = new ArrayList<StorableDocument>();
 		List<StorableDocument> all = new ArrayList<>(documents.values()); // need a copy to avoid concurrent modification
 		for(StorableDocument doc : all) {
-			if(matches(context, doc, type, filter))
+			if(query.matches(doc))
 				docs.add(doc);
 		}
 		return docs;
@@ -176,7 +224,7 @@ public final class MemStore implements IStore<Long> {
 			if(value==null)
 				throw new NullReferenceError();
 			else if(!(value instanceof Integer))
-				throw new SyntaxError("Expecting an integer, got " + value.getType().getId().getName());
+				throw new SyntaxError("Expecting an integer, got " + value.getType().getTypeName());
 			startValue = ((Integer)value).longValue();
 		}
 		if(end!=null) {
@@ -184,7 +232,7 @@ public final class MemStore implements IStore<Long> {
 			if(value==null)
 				throw new NullReferenceError();
 			else if(!(value instanceof Integer))
-				throw new SyntaxError("Expecting an integer, got " + value.getType().getId().getName());
+				throw new SyntaxError("Expecting an integer, got " + value.getType().getTypeName());
 			endValue = ((Integer)value).longValue();
 		}
 		if(startValue==null || startValue<1)

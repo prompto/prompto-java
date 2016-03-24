@@ -106,22 +106,22 @@ public class ConstructorExpression implements IExpression {
 	
 	@Override
 	public IType check(Context context) throws SyntaxError {
-		CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getId());
+		CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
 		if(cd==null)
-			throw new SyntaxError("Unknown category " + type.getId());
+			throw new SyntaxError("Unknown category " + type.getTypeName());
 		IType type = cd.getType(context); // could be a resource rather than a category
 		cd.checkConstructorContext(context);
 		if(copyFrom!=null) {
 			IType cft = copyFrom.check(context);
 			if(!(cft instanceof CategoryType))
-				throw new SyntaxError("Cannot copy from " + cft.getId());
+				throw new SyntaxError("Cannot copy from " + cft.getTypeName());
 		}
 		if(assignments!=null) {
 			context = context.newChildContext();
 			for(ArgumentAssignment assignment : assignments) {
 				if(!cd.hasAttribute(context, assignment.getId()))
 					throw new SyntaxError("\"" + assignment.getId() + 
-						"\" is not an attribute of " + type.getId());	
+						"\" is not an attribute of " + type.getTypeName());	
 				assignment.check(context);
 			}
 		}
@@ -137,7 +137,7 @@ public class ConstructorExpression implements IExpression {
 				Object copyObj = copyFrom.interpret(context);
 				if(copyObj instanceof IInstance) {
 					IInstance copyFrom = (IInstance)copyObj;
-					CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getId());
+					CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
 					for(Identifier name : copyFrom.getMemberNames()) {
 						if(cd.hasAttribute(context, name)) {
 							IValue value = copyFrom.getMember(context, name, false);
@@ -194,9 +194,9 @@ public class ConstructorExpression implements IExpression {
 	private void compileCopyFrom(Context context, MethodInfo method, Flags flags, ResultInfo thisInfo) throws SyntaxError {
 		if(copyFrom==null)
 			return;
-		CategoryDeclaration thisCd = context.getRegisteredDeclaration(CategoryDeclaration.class, this.type.getId());
+		CategoryDeclaration thisCd = context.getRegisteredDeclaration(CategoryDeclaration.class, this.type.getTypeNameId());
 		IType otherType = copyFrom.check(context);
-		CategoryDeclaration otherCd = context.getRegisteredDeclaration(CategoryDeclaration.class, otherType.getId());
+		CategoryDeclaration otherCd = context.getRegisteredDeclaration(CategoryDeclaration.class, otherType.getTypeNameId());
 		compileCopyFrom(context, method, flags, thisCd, otherCd, thisInfo);
 	}
 
@@ -219,7 +219,7 @@ public class ConstructorExpression implements IExpression {
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, attrId);
 		FieldInfo field = decl.toFieldInfo(context);
 		InterfaceConstant i = new InterfaceConstant(copyFromInfo.getType(), 
-				CompilerUtils.getterName(attrId.getName()), field.getType());
+				CompilerUtils.getterName(attrId.toString()), field.getType());
 		method.addInstruction(Opcode.INVOKEINTERFACE, i);
 		// keep the new instance at top of the stack (currently new, copyFrom, value)
 		method.addInstruction(Opcode.DUP_X2); // -> value, new, copyFrom, value
@@ -230,7 +230,7 @@ public class ConstructorExpression implements IExpression {
 		method.addInstruction(Opcode.SWAP); // -> new, copyFrom, new, value
 		// call setter on new instance (a class)
 		MethodConstant m = new MethodConstant(thisInfo.getType(), 
-				CompilerUtils.setterName(attrId.getName()), field.getType(), void.class);
+				CompilerUtils.setterName(attrId.toString()), field.getType(), void.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 	}
 
@@ -243,7 +243,7 @@ public class ConstructorExpression implements IExpression {
 	}
 
 	private Type getInterfaceType(Context context) throws SyntaxError {
-		CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getId());
+		CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
 		if(cd instanceof NativeCategoryDeclaration)
 			return ((NativeCategoryDeclaration)cd).getBoundClass(false);
 		else 
@@ -251,7 +251,7 @@ public class ConstructorExpression implements IExpression {
 	}
 
 	private Type getConcreteType(Context context) throws SyntaxError {
-		CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getId());
+		CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
 		if(cd instanceof NativeCategoryDeclaration)
 			return ((NativeCategoryDeclaration)cd).getBoundClass(false);
 		else 

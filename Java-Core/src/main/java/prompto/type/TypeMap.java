@@ -25,12 +25,12 @@ public class TypeMap extends HashMap<Identifier, IType> {
 			else if(type.isAssignableTo(context, t))
 				type = t;
 			else
-				throw new SyntaxError("Incompatible types: " + type.getId() + " and " + t.getId());
+				throw new SyntaxError("Incompatible types: " + type.getTypeName() + " and " + t.getTypeName());
 		}
 		// second pass: check compatible
 		for(IType t : values()) {
 			if(!t.isAssignableTo(context, type))
-				throw new SyntaxError("Incompatible types: " + type.getId() + " and " + t.getId());
+				throw new SyntaxError("Incompatible types: " + type.getTypeName() + " and " + t.getTypeName());
 		}
 		return type;
 	}

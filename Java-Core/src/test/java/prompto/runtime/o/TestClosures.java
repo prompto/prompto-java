@@ -25,28 +25,13 @@ public class TestClosures extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledGlobalClosureNoArg() throws Exception {
-		checkCompiledOutput("closures/globalClosureNoArg.poc");
-	}
-
-	@Test
 	public void testInterpretedGlobalClosureWithArg() throws Exception {
 		checkInterpretedOutput("closures/globalClosureWithArg.poc");
 	}
 
 	@Test
-	public void testCompiledGlobalClosureWithArg() throws Exception {
-		checkCompiledOutput("closures/globalClosureWithArg.poc");
-	}
-
-	@Test
 	public void testInterpretedInstanceClosureNoArg() throws Exception {
 		checkInterpretedOutput("closures/instanceClosureNoArg.poc");
-	}
-
-	@Test
-	public void testCompiledInstanceClosureNoArg() throws Exception {
-		checkCompiledOutput("closures/instanceClosureNoArg.poc");
 	}
 
 }

@@ -57,14 +57,14 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 		} else {
 			TypeMap types = new TypeMap();
 			if(returnType!=null)
-				types.put(returnType.getId(), returnType);
+				types.put(returnType.getTypeNameId(), returnType);
 			// TODO: ensure returnType is registered prior to the below 
 			IType type = statement.checkNative(context, returnType);
 			// TODO: remove the below workaround for unregistered native categories
 			if(type==null)
 				type = returnType;
 			if(type!=VoidType.instance())
-				types.put(type.getId(), type);
+				types.put(type.getTypeNameId(), type);
 			type = types.inferType(context);
 			if(returnType!=null)
 				return returnType;

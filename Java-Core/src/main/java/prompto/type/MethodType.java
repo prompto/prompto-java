@@ -12,15 +12,28 @@ import prompto.runtime.Context;
 public class MethodType extends BaseType {
 
 	Context context;
+	Identifier typeNameId;
 	
-	public MethodType(Context context, Identifier name) {
-		super(name);
+	public MethodType(Context context, Identifier typeNameId) {
+		super(Family.METHOD);
 		this.context = context;
+		this.typeNameId = typeNameId;
 	}
 	
 	public Context getContext() {
 		return context;
 	}
+	
+	@Override
+	public String getTypeName() {
+		return typeNameId.toString();
+	}
+	
+	@Override
+	public Identifier getTypeNameId() {
+		return typeNameId;
+	}
+	
 	
 	@Override
 	public Type getJavaType() {
@@ -36,20 +49,20 @@ public class MethodType extends BaseType {
 		if(!(obj instanceof MethodType))
 			return false;
 		MethodType other = (MethodType)obj;
-		return this.getId().equals(other.getId());
+		return this.typeNameId.equals(other.typeNameId);
 	}
 	
 	@Override
 	public void checkUnique(Context context) throws SyntaxError {
-		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, id);
+		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, typeNameId);
 		if(actual!=null)
-			throw new SyntaxError("Duplicate name: \"" + id + "\"");
+			throw new SyntaxError("Duplicate name: \"" + typeNameId + "\"");
 	}
 	
 	IMethodDeclaration getDeclaration(Context context) throws SyntaxError {
-		Context.MethodDeclarationMap map = this.context.getRegisteredDeclaration(Context.MethodDeclarationMap.class, id);
+		Context.MethodDeclarationMap map = this.context.getRegisteredDeclaration(Context.MethodDeclarationMap.class, typeNameId);
 		if(map==null)
-			throw new SyntaxError("Unknown method: \"" + id + "\"");
+			throw new SyntaxError("Unknown method: \"" + typeNameId + "\"");
 		return map.entrySet().iterator().next().getValue();
 	}
 	

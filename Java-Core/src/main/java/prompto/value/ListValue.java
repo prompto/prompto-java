@@ -146,7 +146,7 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
         else if (value instanceof SetValue)
             return this.merge(((SetValue)value).getItems());
         else
-            throw new SyntaxError("Illegal: " +this.type.getId() + " + " + value.getClass().getSimpleName());
+            throw new SyntaxError("Illegal: " + this.type.getTypeName() + " + " + value.getClass().getSimpleName());
     }
 	
 	protected ListValue merge(Collection<? extends IValue> items) {

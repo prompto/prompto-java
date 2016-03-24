@@ -25,18 +25,8 @@ public class TestTesting extends BaseSParserTest {
 	}
 
 	@Test
-	public void testCompiledAnd() throws Exception {
-		checkCompiledOutput("testing/and.psc");
-	}
-
-	@Test
 	public void testInterpretedContains() throws Exception {
 		checkInterpretedOutput("testing/contains.psc");
-	}
-
-	@Test
-	public void testCompiledContains() throws Exception {
-		checkCompiledOutput("testing/contains.psc");
 	}
 
 	@Test
@@ -45,18 +35,8 @@ public class TestTesting extends BaseSParserTest {
 	}
 
 	@Test
-	public void testCompiledGreater() throws Exception {
-		checkCompiledOutput("testing/greater.psc");
-	}
-
-	@Test
 	public void testInterpretedMethod() throws Exception {
 		checkInterpretedOutput("testing/method.psc");
-	}
-
-	@Test
-	public void testCompiledMethod() throws Exception {
-		checkCompiledOutput("testing/method.psc");
 	}
 
 	@Test
@@ -65,18 +45,8 @@ public class TestTesting extends BaseSParserTest {
 	}
 
 	@Test
-	public void testCompiledNegative() throws Exception {
-		checkCompiledOutput("testing/negative.psc");
-	}
-
-	@Test
 	public void testInterpretedNegativeError() throws Exception {
 		checkInterpretedOutput("testing/negativeError.psc");
-	}
-
-	@Test
-	public void testCompiledNegativeError() throws Exception {
-		checkCompiledOutput("testing/negativeError.psc");
 	}
 
 	@Test
@@ -85,18 +55,8 @@ public class TestTesting extends BaseSParserTest {
 	}
 
 	@Test
-	public void testCompiledNot() throws Exception {
-		checkCompiledOutput("testing/not.psc");
-	}
-
-	@Test
 	public void testInterpretedOr() throws Exception {
 		checkInterpretedOutput("testing/or.psc");
-	}
-
-	@Test
-	public void testCompiledOr() throws Exception {
-		checkCompiledOutput("testing/or.psc");
 	}
 
 	@Test
@@ -105,18 +65,8 @@ public class TestTesting extends BaseSParserTest {
 	}
 
 	@Test
-	public void testCompiledPositive() throws Exception {
-		checkCompiledOutput("testing/positive.psc");
-	}
-
-	@Test
 	public void testInterpretedPositiveError() throws Exception {
 		checkInterpretedOutput("testing/positiveError.psc");
-	}
-
-	@Test
-	public void testCompiledPositiveError() throws Exception {
-		checkCompiledOutput("testing/positiveError.psc");
 	}
 
 }

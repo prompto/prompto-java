@@ -25,7 +25,7 @@ public class DateType extends NativeType {
 	}
 
 	private DateType() {
-		super("Date");
+		super(Family.DATE);
 	}
 
 	@Override

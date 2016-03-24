@@ -40,7 +40,7 @@ public class MemberInstance implements IAssignableSelector {
 	}
 	
 	public String getName() {
-		return id.getName();
+		return id.toString();
 	}
 	
 	@Override

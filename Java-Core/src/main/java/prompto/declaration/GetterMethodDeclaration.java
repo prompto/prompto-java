@@ -24,7 +24,7 @@ public class GetterMethodDeclaration extends ConcreteMethodDeclaration implement
 	}
 	
 	public static String getNameAsKey(Identifier id) {
-		return "getter:" + id.getName();
+		return "getter:" + id.toString();
 	}
 
 	@Override

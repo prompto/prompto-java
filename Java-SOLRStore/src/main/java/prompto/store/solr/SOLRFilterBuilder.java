@@ -2,13 +2,12 @@ package prompto.store.solr;
 
 import java.util.Stack;
 
-import prompto.declaration.AttributeDeclaration;
 import prompto.grammar.EqOp;
 import prompto.runtime.Context;
 import prompto.store.IFilterBuilder;
 import prompto.type.CategoryType;
 
-public class SOLRFilterBuilder implements IFilterBuilder {
+class SOLRFilterBuilder implements IFilterBuilder {
 
 	Stack<String> stack = new Stack<>();
 	
@@ -20,9 +19,8 @@ public class SOLRFilterBuilder implements IFilterBuilder {
 	}
 	
 	@Override
-	public <T> void push(Context context, String fieldName, EqOp operator, T fieldValue) {
-		AttributeDeclaration column = context.findAttribute(fieldName);
-		TextFieldFlags flags = TextFieldFlags.computeFieldFlags(column);
+	public void push(Context context, String fieldName, EqOp operator, Object fieldValue) {
+		TextFieldFlags flags = TextFieldFlags.computeFieldFlags(context, fieldName);
 		StringBuilder sb = new StringBuilder();
 		switch(operator) {
 		case IS:
@@ -126,7 +124,7 @@ public class SOLRFilterBuilder implements IFilterBuilder {
 	}
 
 	public void pushCategory(CategoryType type) {
-		stack.push("category-key:" + type.getName());
+		stack.push("category-key:" + type.getFamily());
 	}
 	
 }

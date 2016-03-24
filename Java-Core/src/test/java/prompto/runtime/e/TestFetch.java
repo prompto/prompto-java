@@ -25,18 +25,8 @@ public class TestFetch extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledFetchFromList() throws Exception {
-		checkCompiledOutput("fetch/fetchFromList.pec");
-	}
-
-	@Test
 	public void testInterpretedFetchFromSet() throws Exception {
 		checkInterpretedOutput("fetch/fetchFromSet.pec");
-	}
-
-	@Test
-	public void testCompiledFetchFromSet() throws Exception {
-		checkCompiledOutput("fetch/fetchFromSet.pec");
 	}
 
 }

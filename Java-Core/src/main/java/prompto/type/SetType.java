@@ -11,7 +11,7 @@ import prompto.runtime.Context;
 public class SetType extends ContainerType {
 
 	public SetType(IType itemType) {
-		super(itemType.getId()+"<>", itemType);
+		super(Family.SET, itemType, itemType.getTypeName()+"<>");
 	}
 	
 	@Override

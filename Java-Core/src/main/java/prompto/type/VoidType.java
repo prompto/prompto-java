@@ -14,7 +14,7 @@ public class VoidType extends NativeType {
 	}
 	
 	private VoidType() {
-		super("Void");
+		super(Family.VOID);
 	}
 	
 	@Override

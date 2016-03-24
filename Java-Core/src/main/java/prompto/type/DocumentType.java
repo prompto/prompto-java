@@ -16,7 +16,7 @@ public class DocumentType extends NativeType {
 	}
 	
 	private DocumentType() {
-		super("Document");
+		super(Family.DOCUMENT);
 	}
 
 	@Override

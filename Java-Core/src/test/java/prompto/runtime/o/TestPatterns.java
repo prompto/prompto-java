@@ -25,18 +25,8 @@ public class TestPatterns extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledIntegerEnumeration() throws Exception {
-		checkCompiledOutput("patterns/integerEnumeration.poc");
-	}
-
-	@Test
 	public void testInterpretedIntegerPattern() throws Exception {
 		checkInterpretedOutput("patterns/integerPattern.poc");
-	}
-
-	@Test
-	public void testCompiledIntegerPattern() throws Exception {
-		checkCompiledOutput("patterns/integerPattern.poc");
 	}
 
 	@Test
@@ -45,18 +35,8 @@ public class TestPatterns extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledNegativeIntegerRange() throws Exception {
-		checkCompiledOutput("patterns/negativeIntegerRange.poc");
-	}
-
-	@Test
 	public void testInterpretedPositiveIntegerRange() throws Exception {
 		checkInterpretedOutput("patterns/positiveIntegerRange.poc");
-	}
-
-	@Test
-	public void testCompiledPositiveIntegerRange() throws Exception {
-		checkCompiledOutput("patterns/positiveIntegerRange.poc");
 	}
 
 	@Test
@@ -65,18 +45,8 @@ public class TestPatterns extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledTextEnumeration() throws Exception {
-		checkCompiledOutput("patterns/textEnumeration.poc");
-	}
-
-	@Test
 	public void testInterpretedTextPattern() throws Exception {
 		checkInterpretedOutput("patterns/textPattern.poc");
-	}
-
-	@Test
-	public void testCompiledTextPattern() throws Exception {
-		checkCompiledOutput("patterns/textPattern.poc");
 	}
 
 }

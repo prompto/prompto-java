@@ -106,7 +106,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	@Override
 	public void storeModule(Module module) throws PromptoError {
 		Context context = Context.newGlobalContext();
-		List<String> categories = Arrays.asList("Module", module.getType().getCategory().getName());
+		List<String> categories = Arrays.asList("Module", module.getType().getCategory().getTypeName());
 		IStorable storable = store.newStorable(categories); 
 		module.populate(context, storable);
 		store.store(storable);
@@ -114,7 +114,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	
 	private IValue storeDeclarationModule(IDeclaration decl) throws PromptoError {
 		ICodeStore origin = decl.getOrigin();
-		List<String> categories = Arrays.asList("Module", origin.getModuleType().getCategory().getName());
+		List<String> categories = Arrays.asList("Module", origin.getModuleType().getCategory().getTypeName());
 		IStorable storable = store.newStorable(categories);
 		storable.setValue(new Identifier("name"),  new Text(origin.getModuleName()));
 		storable.setValue(new Identifier("version"),  new Text(origin.getModuleVersion().toString()));
@@ -236,7 +236,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	private IStorable populateDeclarationStorable(List<String> categories, IDeclaration decl, Dialect dialect, Version version, IValue moduleId) {
 		IStorable storable = store.newStorable(categories); 
 		try {
-			storable.setValue(new Identifier("name"),  new Text(decl.getId().getName()));
+			storable.setValue(new Identifier("name"),  new Text(decl.getId().toString()));
 			storable.setValue(new Identifier("version"),  new Text(version.toString()));
 			if(decl instanceof IMethodDeclaration) {
 				String proto = ((IMethodDeclaration)decl).getProto();

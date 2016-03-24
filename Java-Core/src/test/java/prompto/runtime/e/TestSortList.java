@@ -25,18 +25,8 @@ public class TestSortList extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledSortBooleans() throws Exception {
-		checkCompiledOutput("sortList/sortBooleans.pec");
-	}
-
-	@Test
 	public void testInterpretedSortDates() throws Exception {
 		checkInterpretedOutput("sortList/sortDates.pec");
-	}
-
-	@Test
-	public void testCompiledSortDates() throws Exception {
-		checkCompiledOutput("sortList/sortDates.pec");
 	}
 
 	@Test
@@ -45,18 +35,8 @@ public class TestSortList extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledSortDateTimes() throws Exception {
-		checkCompiledOutput("sortList/sortDateTimes.pec");
-	}
-
-	@Test
 	public void testInterpretedSortDecimals() throws Exception {
 		checkInterpretedOutput("sortList/sortDecimals.pec");
-	}
-
-	@Test
-	public void testCompiledSortDecimals() throws Exception {
-		checkCompiledOutput("sortList/sortDecimals.pec");
 	}
 
 	@Test
@@ -65,18 +45,8 @@ public class TestSortList extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledSortExpressions() throws Exception {
-		checkCompiledOutput("sortList/sortExpressions.pec");
-	}
-
-	@Test
 	public void testInterpretedSortIntegers() throws Exception {
 		checkInterpretedOutput("sortList/sortIntegers.pec");
-	}
-
-	@Test
-	public void testCompiledSortIntegers() throws Exception {
-		checkCompiledOutput("sortList/sortIntegers.pec");
 	}
 
 	@Test
@@ -85,18 +55,8 @@ public class TestSortList extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledSortKeys() throws Exception {
-		checkCompiledOutput("sortList/sortKeys.pec");
-	}
-
-	@Test
 	public void testInterpretedSortMethods() throws Exception {
 		checkInterpretedOutput("sortList/sortMethods.pec");
-	}
-
-	@Test
-	public void testCompiledSortMethods() throws Exception {
-		checkCompiledOutput("sortList/sortMethods.pec");
 	}
 
 	@Test
@@ -105,28 +65,13 @@ public class TestSortList extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledSortNames() throws Exception {
-		checkCompiledOutput("sortList/sortNames.pec");
-	}
-
-	@Test
 	public void testInterpretedSortTexts() throws Exception {
 		checkInterpretedOutput("sortList/sortTexts.pec");
 	}
 
 	@Test
-	public void testCompiledSortTexts() throws Exception {
-		checkCompiledOutput("sortList/sortTexts.pec");
-	}
-
-	@Test
 	public void testInterpretedSortTimes() throws Exception {
 		checkInterpretedOutput("sortList/sortTimes.pec");
-	}
-
-	@Test
-	public void testCompiledSortTimes() throws Exception {
-		checkCompiledOutput("sortList/sortTimes.pec");
 	}
 
 }

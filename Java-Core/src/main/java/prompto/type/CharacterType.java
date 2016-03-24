@@ -23,7 +23,7 @@ public class CharacterType extends NativeType {
 	}
 	
 	private CharacterType() {
-		super("Character");
+		super(Family.CHARACTER);
 	}
 	
 	@Override

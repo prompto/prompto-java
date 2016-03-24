@@ -25,28 +25,13 @@ public class TestSetters extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledGetter() throws Exception {
-		checkCompiledOutput("setters/getter.pec");
-	}
-
-	@Test
 	public void testInterpretedGetterCall() throws Exception {
 		checkInterpretedOutput("setters/getterCall.pec");
 	}
 
 	@Test
-	public void testCompiledGetterCall() throws Exception {
-		checkCompiledOutput("setters/getterCall.pec");
-	}
-
-	@Test
 	public void testInterpretedSetter() throws Exception {
 		checkInterpretedOutput("setters/setter.pec");
-	}
-
-	@Test
-	public void testCompiledSetter() throws Exception {
-		checkCompiledOutput("setters/setter.pec");
 	}
 
 }

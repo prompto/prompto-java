@@ -25,18 +25,8 @@ public class TestErrors extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledDivideByZero() throws Exception {
-		checkCompiledOutput("errors/divideByZero.pec");
-	}
-
-	@Test
 	public void testInterpretedIndexOutOfRange_listItem() throws Exception {
 		checkInterpretedOutput("errors/indexOutOfRange-listItem.pec");
-	}
-
-	@Test
-	public void testCompiledIndexOutOfRange_listItem() throws Exception {
-		checkCompiledOutput("errors/indexOutOfRange-listItem.pec");
 	}
 
 	@Test
@@ -45,18 +35,8 @@ public class TestErrors extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledIndexOutOfRange_sliceList() throws Exception {
-		checkCompiledOutput("errors/indexOutOfRange-sliceList.pec");
-	}
-
-	@Test
 	public void testInterpretedIndexOutOfRange_sliceRange() throws Exception {
 		checkInterpretedOutput("errors/indexOutOfRange-sliceRange.pec");
-	}
-
-	@Test
-	public void testCompiledIndexOutOfRange_sliceRange() throws Exception {
-		checkCompiledOutput("errors/indexOutOfRange-sliceRange.pec");
 	}
 
 	@Test
@@ -65,18 +45,8 @@ public class TestErrors extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledIndexOutOfRange_sliceText() throws Exception {
-		checkCompiledOutput("errors/indexOutOfRange-sliceText.pec");
-	}
-
-	@Test
 	public void testInterpretedNullDict() throws Exception {
 		checkInterpretedOutput("errors/nullDict.pec");
-	}
-
-	@Test
-	public void testCompiledNullDict() throws Exception {
-		checkCompiledOutput("errors/nullDict.pec");
 	}
 
 	@Test
@@ -85,18 +55,8 @@ public class TestErrors extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledNullItem() throws Exception {
-		checkCompiledOutput("errors/nullItem.pec");
-	}
-
-	@Test
 	public void testInterpretedNullKey() throws Exception {
 		checkInterpretedOutput("errors/nullKey.pec");
-	}
-
-	@Test
-	public void testCompiledNullKey() throws Exception {
-		checkCompiledOutput("errors/nullKey.pec");
 	}
 
 	@Test
@@ -105,28 +65,13 @@ public class TestErrors extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledNullMember() throws Exception {
-		checkCompiledOutput("errors/nullMember.pec");
-	}
-
-	@Test
 	public void testInterpretedNullMethod() throws Exception {
 		checkInterpretedOutput("errors/nullMethod.pec");
 	}
 
 	@Test
-	public void testCompiledNullMethod() throws Exception {
-		checkCompiledOutput("errors/nullMethod.pec");
-	}
-
-	@Test
 	public void testInterpretedUserException() throws Exception {
 		checkInterpretedOutput("errors/userException.pec");
-	}
-
-	@Test
-	public void testCompiledUserException() throws Exception {
-		checkCompiledOutput("errors/userException.pec");
 	}
 
 }
