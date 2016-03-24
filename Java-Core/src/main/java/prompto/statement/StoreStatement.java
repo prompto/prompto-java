@@ -67,7 +67,7 @@ public class StoreStatement extends SimpleStatement {
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		IStore store = IDataStore.getInstance();
+		IStore<Object> store = IDataStore.getInstance();
 		List<Object> dbIdsToDel = collectDbIdsToDel(context);
 		List<IStorable> docsToAdd = collectDocsToAdd(context);
 		if(dbIdsToDel!=null || docsToAdd!=null)
@@ -133,7 +133,7 @@ public class StoreStatement extends SimpleStatement {
 			while(iter.hasNext()) {
 				collectDbIdsToDel(context, dbIdsToDel, iter.next());
 			}
-		} else if(value.getType()==IDataStore.getInstance().getDbIdIType())
+		} else if(value.getType().getJavaType()==IDataStore.getInstance().getDbIdType())
 			dbIdsToDel.add(value);
 	}
 	

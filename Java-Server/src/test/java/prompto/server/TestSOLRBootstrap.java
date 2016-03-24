@@ -8,14 +8,12 @@ import org.junit.After;
 import org.junit.Test;
 
 import prompto.code.Version;
+import prompto.intrinsic.PromptoDateTime;
+import prompto.intrinsic.PromptoList;
 import prompto.store.IStore;
 import prompto.store.IStoreFactory.Type;
 import prompto.store.solr.EmbeddedSOLRStore;
 import prompto.store.solr.SOLRStoreFactory;
-import prompto.type.BooleanType;
-import prompto.type.DateTimeType;
-import prompto.type.ListType;
-import prompto.type.TextType;
 
 public class TestSOLRBootstrap {
 	
@@ -39,15 +37,15 @@ public class TestSOLRBootstrap {
 		((EmbeddedSOLRStore)store).startContainer();
 		((EmbeddedSOLRStore)store).startServerWithEmptyCore();
 		AppServer.bootstrapCodeStore(store, "test", Version.parse("1.0.0"));
-		assertEquals(store.getDbIdIType(), store.getColumnIType(IStore.dbIdName));
-		assertEquals(DateTimeType.instance(), store.getColumnIType("timeStamp"));
-		assertEquals(new ListType(TextType.instance()), store.getColumnIType("category"));
-		assertEquals(TextType.instance(), store.getColumnIType("name"));
-		assertEquals(BooleanType.instance(), store.getColumnIType("storable"));
-		assertEquals(TextType.instance(), store.getColumnIType("version"));
-		assertEquals(TextType.instance(), store.getColumnIType("prototype"));
-		assertEquals(TextType.instance(), store.getColumnIType("dialect"));
-		assertEquals(TextType.instance(), store.getColumnIType("body"));
+		assertEquals(store.getDbIdType(), store.getColumnType(IStore.dbIdName));
+		assertEquals(PromptoDateTime.class, store.getColumnType("timeStamp"));
+		assertEquals(PromptoList.class, store.getColumnType("category"));
+		assertEquals(String.class, store.getColumnType("name"));
+		assertEquals(Boolean.class, store.getColumnType("storable"));
+		assertEquals(String.class, store.getColumnType("version"));
+		assertEquals(String.class, store.getColumnType("prototype"));
+		assertEquals(String.class, store.getColumnType("dialect"));
+		assertEquals(String.class, store.getColumnType("body"));
 	}
 	
 	@Test
@@ -61,9 +59,9 @@ public class TestSOLRBootstrap {
 		store.startContainer();
 		store.startServerWithEmptyCore();
 		AppServer.bootstrapCodeStore(store, "test", Version.parse("1.0.0"));
-		assertEquals(store.getDbIdIType(), store.getColumnIType(IStore.dbIdName));
-		assertEquals(TextType.instance(), store.getColumnIType("name"));
-		assertEquals(TextType.instance(), store.getColumnIType("version"));
+		assertEquals(store.getDbIdType(), store.getColumnType(IStore.dbIdName));
+		assertEquals(String.class, store.getColumnType("name"));
+		assertEquals(String.class, store.getColumnType("version"));
 		assertNull(AppServer.globalContext.findAttribute("prototype"));
 	}
 }

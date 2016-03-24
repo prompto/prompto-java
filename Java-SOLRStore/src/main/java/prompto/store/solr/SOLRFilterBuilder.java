@@ -7,7 +7,6 @@ import prompto.grammar.EqOp;
 import prompto.runtime.Context;
 import prompto.store.IFilterBuilder;
 import prompto.type.CategoryType;
-import prompto.value.IValue;
 
 public class SOLRFilterBuilder implements IFilterBuilder {
 
@@ -21,7 +20,7 @@ public class SOLRFilterBuilder implements IFilterBuilder {
 	}
 	
 	@Override
-	public void push(Context context, String fieldName, EqOp operator, IValue fieldValue) {
+	public <T> void push(Context context, String fieldName, EqOp operator, T fieldValue) {
 		AttributeDeclaration column = context.findAttribute(fieldName);
 		TextFieldFlags flags = TextFieldFlags.computeFieldFlags(column);
 		StringBuilder sb = new StringBuilder();
@@ -54,7 +53,7 @@ public class SOLRFilterBuilder implements IFilterBuilder {
 		stack.push(sb.toString());
 	}
 
-	private void escape(StringBuilder sb, IValue value) {
+	private <T> void escape(StringBuilder sb, T value) {
 		boolean wasAmpersand = false;
 		boolean wasPipe = false;
 		for(char c : value.toString().toCharArray()) {

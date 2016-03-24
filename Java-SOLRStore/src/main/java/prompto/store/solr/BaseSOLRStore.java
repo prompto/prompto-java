@@ -39,6 +39,7 @@ import prompto.store.IStoredIterator;
 import prompto.type.BlobType;
 import prompto.type.BooleanType;
 import prompto.type.CategoryType;
+import prompto.type.ContainerType;
 import prompto.type.DateTimeType;
 import prompto.type.DecimalType;
 import prompto.type.IType;
@@ -50,7 +51,7 @@ import prompto.type.UUIDType;
 import prompto.utils.IdentifierList;
 import prompto.value.IValue;
 
-abstract class BaseSOLRStore implements IStore {
+abstract class BaseSOLRStore implements IStore<UUID> {
 	
 	static Map<String, IType> typeMap = new HashMap<>();
 	
@@ -101,14 +102,14 @@ abstract class BaseSOLRStore implements IStore {
 	}
 	
 	ConcurrentMap<String, String> columnTypeNames = new ConcurrentHashMap<>();
-	ConcurrentMap<String, IType> columnTypes = new ConcurrentHashMap<>();
+	ConcurrentMap<String, Type> columnTypes = new ConcurrentHashMap<>();
 	
 	@Override
-	public IType getColumnIType(String fieldName) throws PromptoError {
-		IType type = columnTypes.get(fieldName);
+	public Type getColumnType(String fieldName) throws PromptoError {
+		Type type = columnTypes.get(fieldName);
 		if(type==null) try {
 			String typeName = getColumnTypeName(fieldName);
-			type = typeMap.get(typeName);
+			type = typeMap.get(typeName).getJavaType();
 			columnTypes.put(fieldName, type);
 		} catch(Exception e) {
 			throw new InternalError(e);
@@ -140,11 +141,6 @@ abstract class BaseSOLRStore implements IStore {
 	}
 
 	@Override
-	public IType getDbIdIType() {
-		return UUIDType.instance();
-	}
-	
-	@Override
 	public Type getDbIdType() {
 		return UUID.class;
 	}
@@ -165,12 +161,12 @@ abstract class BaseSOLRStore implements IStore {
 		options.put("indexed", true);
 		options.put("stored", true);
 		IType type = column.getType();
-		if(type instanceof ListType) {
+		if(type instanceof ContainerType) {
 			options.put("multiValued", true);
-			type = ((ListType)type).getItemType();
+			type = ((ContainerType)type).getItemType();
 		}
 		if(type instanceof CategoryType)
-			type = getDbIdIType();
+			type = UUIDType.instance();
 		if("version".equals(column.getName())) 
 			addField("version", "version", options);
 		else if(type==TextType.instance())
@@ -197,7 +193,7 @@ abstract class BaseSOLRStore implements IStore {
 	}
 
 	@Override
-	public void store(Collection<Object> deletables, Collection<IStorable> storables) throws PromptoError {
+	public void store(Collection<UUID> deletables, Collection<IStorable> storables) throws PromptoError {
 		List<String> dbIdsToDrop = null;
 		if(deletables!=null && deletables.size()>0) {
 			dbIdsToDrop = new ArrayList<>();
@@ -229,7 +225,7 @@ abstract class BaseSOLRStore implements IStore {
 	}
 
 	@Override
-	public PromptoBinary fetchBinary(String dbId, String attr) throws PromptoError {
+	public PromptoBinary fetchBinary(UUID dbId, String attr) throws PromptoError {
 		SolrQuery query = new SolrQuery();
 		query.setQuery("dbId:" + dbId);
 		query.setFields(attr);
@@ -253,7 +249,7 @@ abstract class BaseSOLRStore implements IStore {
 	}
 	
 	@Override
-	public IStored fetchUnique(Context context, IValue dbId) throws PromptoError {
+	public IStored fetchUnique(Context context, UUID dbId) throws PromptoError {
 		SOLRFilterBuilder builder = new SOLRFilterBuilder();
 		builder.push(context, IStore.dbIdName, EqOp.EQUALS, dbId);
 		SolrQuery query = new SolrQuery();

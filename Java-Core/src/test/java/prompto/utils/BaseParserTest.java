@@ -26,6 +26,7 @@ import prompto.runtime.Executor;
 import prompto.runtime.Interpreter;
 import prompto.runtime.utils.Out;
 import prompto.store.IDataStore;
+import prompto.store.IStore;
 import prompto.store.MemStore;
 import prompto.utils.CodeWriter;
 
@@ -124,8 +125,9 @@ public abstract class BaseParserTest extends BaseTest {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	protected void checkOutput(String resource, ResourceRunner runner) throws Exception {
-		IDataStore.setInstance(new MemStore());
+		IDataStore.setInstance((IStore<Object>)(Object)new MemStore());
 		boolean isTest = runner.runResource(resource, false);
 		String read = Out.read();
 		if(isTest && read.endsWith("\n"))

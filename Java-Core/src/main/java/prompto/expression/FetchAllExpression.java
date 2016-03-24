@@ -151,7 +151,7 @@ public class FetchAllExpression extends FetchOneExpression {
 
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		IStore store = IDataStore.getInstance();
+		IStore<Object> store = IDataStore.getInstance();
 		IStoredIterator docs = store.fetchMany(context, type, start, end, filter, orderBy);
 		return new Cursor(context, type, docs);
 	}

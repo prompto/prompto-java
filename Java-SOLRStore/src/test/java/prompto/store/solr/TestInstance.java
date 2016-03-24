@@ -54,12 +54,13 @@ public class TestInstance extends BaseSOLRTest {
 
 	Context context;
 	
+	@SuppressWarnings("unchecked")
 	@Before
 	public void before() throws Exception {
 		createStore("TestInstance");
 		store.startServerWithEmptyCore();
 		createField("category", "text", true);
-		IDataStore.setInstance(store);
+		IDataStore.setInstance((IStore<Object>)(Object)store);
 		context = Context.newGlobalContext();
 	}
 	

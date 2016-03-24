@@ -20,8 +20,6 @@ import prompto.grammar.OrderByClauseList;
 import prompto.intrinsic.PromptoBinary;
 import prompto.runtime.Context;
 import prompto.type.CategoryType;
-import prompto.type.IType;
-import prompto.type.IntegerType;
 import prompto.type.TextType;
 import prompto.value.Boolean;
 import prompto.value.Document;
@@ -32,15 +30,10 @@ import prompto.value.Text;
 import prompto.value.TupleValue;
 
 /* a utility class for running unit tests only */
-public final class MemStore implements IStore {
+public final class MemStore implements IStore<Long> {
 
 	private Map<Integer, StorableDocument> documents = new HashMap<>();
 	private long lastDbId = 0;
-	
-	@Override
-	public IType getDbIdIType() {
-		return IntegerType.instance();
-	}
 	
 	@Override
 	public Type getDbIdType() {
@@ -48,9 +41,8 @@ public final class MemStore implements IStore {
 	}
 	
 	@Override
-	public IType getColumnIType(String name) {
-		// TODO Auto-generated method stub
-		return null;
+	public Type getColumnType(String name) {
+		throw new UnsupportedOperationException();
 	}
 	
 	@Override
@@ -59,7 +51,7 @@ public final class MemStore implements IStore {
 	}
 	
 	@Override
-	public void store(Collection<Object> deletables, Collection<IStorable> storables) throws PromptoError {
+	public void store(Collection<Long> deletables, Collection<IStorable> storables) throws PromptoError {
 		for(IStorable storable : storables) {
 			if(!(storable instanceof StorableDocument))
 				throw new IllegalStateException("Expecting a StorableDocument");
@@ -78,7 +70,7 @@ public final class MemStore implements IStore {
 	}
 	
 	@Override
-	public PromptoBinary fetchBinary(String dbId, String attr) {
+	public PromptoBinary fetchBinary(Long dbId, String attr) {
 		for(StorableDocument doc : documents.values()) {
 			Object data = doc.getData(IStore.dbIdName);
 			if(data==null || !dbId.equals(data.toString()))
@@ -89,7 +81,7 @@ public final class MemStore implements IStore {
 	}
 	
 	@Override
-	public void delete(Collection<Object> dbIds) throws PromptoError {
+	public void delete(Collection<Long> dbIds) throws PromptoError {
 		for(Object dbId : dbIds)
 			documents.remove(dbId);
 	}
@@ -101,7 +93,7 @@ public final class MemStore implements IStore {
 	
 	
 	@Override
-	public IStored fetchUnique(Context context, IValue dbId) throws PromptoError {
+	public IStored fetchUnique(Context context, Long dbId) throws PromptoError {
 		return documents.get(dbId);
 	}
 	

@@ -2,10 +2,18 @@ package prompto.type;
 
 import java.lang.reflect.Type;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoDate;
+import prompto.intrinsic.PromptoDateTime;
+import prompto.intrinsic.PromptoDocument;
+import prompto.intrinsic.PromptoPeriod;
+import prompto.intrinsic.PromptoTime;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.utils.CodeWriter;
@@ -15,6 +23,36 @@ import prompto.value.RangeBase;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public interface IType {
+	
+	static final Map<Type,IType> typeToITypeMap = createTypeToITypeMap();
+	
+	static Map<Type, IType> createTypeToITypeMap() {
+		Map<Type,IType> map = new HashMap<Type, IType>();
+		map.put(void.class, VoidType.instance());
+		map.put(boolean.class, BooleanType.instance());
+		map.put(Boolean.class, BooleanType.instance());
+		map.put(char.class, CharacterType.instance());
+		map.put(Character.class, CharacterType.instance());
+		map.put(int.class, IntegerType.instance());
+		map.put(Integer.class, IntegerType.instance());
+		map.put(long.class, IntegerType.instance());
+		map.put(Long.class, IntegerType.instance());
+		map.put(Double.class, DecimalType.instance());
+		map.put(String.class, TextType.instance());
+		map.put(UUID.class, UUIDType.instance());
+		map.put(PromptoDate.class, DateType.instance());
+		map.put(PromptoTime.class, TimeType.instance());
+		map.put(PromptoDateTime.class, DateTimeType.instance());
+		map.put(PromptoPeriod.class, PeriodType.instance());
+		map.put(PromptoDocument.class, DocumentType.instance());
+		map.put(Object.class, AnyType.instance());
+		return map;
+	}
+	
+	static IType typeToIType(Type type) {
+		return typeToITypeMap.get(type);
+	}
+	
 	
 	Identifier getId();
 	String getName();

@@ -17,7 +17,6 @@ import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.grammar.MethodDeclarationList;
 import prompto.grammar.Operator;
-import prompto.java.JavaClassType;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.store.IDataStore;
@@ -147,7 +146,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		if(type instanceof CategoryType) {
 			// is this a foreign key?
 			if(!(value instanceof IInstance)) {
-				stored = IDataStore.getInstance().fetchUnique(context, value);
+				stored = IDataStore.getInstance().fetchUnique(context, value.getStorableData());
 				if(stored==null)
 					throw new InternalError("How did we get there?");
 				value = ((CategoryType)type).newInstance(context, stored);
@@ -317,7 +316,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 
 	public static ResultInfo compileMultiply(Context context, MethodInfo method, Flags flags, 
 			ResultInfo left, ResultInfo right) throws SyntaxError {
-		IType argType = JavaClassType.javaTypeToPromptoType(right.getType());
+		IType argType = IType.typeToIType(right.getType());
 		return compileOperator(context, method, flags, left, right, argType, Operator.MULTIPLY);
 	}
 

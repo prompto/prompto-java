@@ -71,7 +71,7 @@ public class FetchOneExpression extends Section implements IExpression {
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		IStore store = IDataStore.getInstance();
+		IStore<Object>store = IDataStore.getInstance();
 		IStored stored = store.fetchOne(context, type, filter);
 		if(stored==null)
 			return NullValue.instance();
