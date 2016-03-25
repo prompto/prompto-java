@@ -86,7 +86,7 @@ public final class MemStore implements IStore<Long> {
 	@Override
 	public IStored fetchOne(IQuery query) throws PromptoError {
 		for(StorableDocument doc : documents.values()) {
-			if(doc.matches(query.getPredicate()))
+			if(doc.matches(((Query)query).getPredicate()))
 				return doc;
 		}
 		return null;
@@ -104,8 +104,8 @@ public final class MemStore implements IStore<Long> {
 	}
 	
 	private List<StorableDocument> fetchManyDocs(IQuery query) throws PromptoError {
-		List<StorableDocument> docs = filterDocs(query.getPredicate());
-		docs = sort(query.getOrdering(), docs);
+		List<StorableDocument> docs = filterDocs(((Query)query).getPredicate());
+		docs = sort(((Query)query).getOrdering(), docs);
 		docs = slice(query, docs);
 		return docs;
 	}

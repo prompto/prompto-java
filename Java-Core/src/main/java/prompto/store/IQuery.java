@@ -1,6 +1,5 @@
 package prompto.store;
 
-import java.util.Collection;
 
 public interface IQuery {
 
@@ -12,8 +11,6 @@ public interface IQuery {
 		LESSER
 	}
 	
-	// filtering
-	IPredicate getPredicate();
 	// create atomic predicates
 	<T> void verify(String fieldName, MatchOp match, T fieldValue);
 	// the below make the assumption that the atomic predicates are available from a stack
@@ -26,7 +23,6 @@ public interface IQuery {
 	Long getFirst();
 	Long getLast();
 	// ordering
-	Collection<IOrderBy> getOrdering();
 	void addOrderByClause(String fieldName, boolean descending);
 
 }

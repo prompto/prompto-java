@@ -19,7 +19,6 @@ public class Query implements IQuery {
 		this.context = context;
 	}
 
-	@Override
 	public IPredicate getPredicate() {
 		if(predicates.isEmpty())
 			return null;
@@ -47,7 +46,6 @@ public class Query implements IQuery {
 		return last;
 	}
 	
-	@Override
 	public Collection<IOrderBy> getOrdering() {
 		if(orderBys.isEmpty())
 			return null;

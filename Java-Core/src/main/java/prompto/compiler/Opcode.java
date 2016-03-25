@@ -125,8 +125,8 @@ public enum Opcode {
     IASTORE(0x4f),
     LASTORE(0x50),
     FASTORE(0x51),
-    DASTORE(0x52),
-    AASTORE(0x53),
+    DASTORE(0x52)*/,
+    AASTORE(0x53, pops(3), pushesNone())/*,
     BASTORE(0x54),
     CASTORE(0x55),
     SASTORE(0x56) */,
@@ -221,8 +221,8 @@ public enum Opcode {
     DRETURN(0xaf, pops(1), pushesNone()),
     ARETURN(0xb0, pops(1), pushesNone()),
     RETURN(0xb1, popsNone(), pushesNone()),
-    GETSTATIC(0xb2, CPREF_W, popsNone(), pushesField())/*, 
-    PUTSTATIC(0xb3, CPREF_W)*/,
+    GETSTATIC(0xb2, CPREF_W, popsNone(), pushesField()), 
+    PUTSTATIC(0xb3, CPREF_W, pops(1), pushesNone()),
     GETFIELD(0xb4, CPREF_W, pops(1), pushesField()), 
     PUTFIELD(0xb5, CPREF_W, pops(2), pushesNone()),
     INVOKEVIRTUAL(0xb6, CPREF_W, popsArguments(false), pushesResult()),
@@ -231,8 +231,8 @@ public enum Opcode {
     INVOKEINTERFACE(0xb9, CPREF_W_UBYTE_ZERO, popsArguments(false), pushesResult())/*,
     INVOKEDYNAMIC(0xba, CPREF_W_UBYTE_ZERO)*/,
     NEW(0xbb, CPREF_W, popsNone(), pushesObject())/*,
-    NEWARRAY(0xbc, ATYPE),
-    ANEWARRAY(0xbd, CPREF_W),
+    NEWARRAY(0xbc, ATYPE)*/,
+    ANEWARRAY(0xbd, CPREF_W, pops(1), pushesArray())/*,
     ARRAYLENGTH(0xbe)*/,
     ATHROW(0xbf, pops(1), pushesNone()), // TODO to be refined
     CHECKCAST(0xc0, CPREF_W, pops(1), pushesObject())/*,
@@ -365,6 +365,13 @@ public enum Opcode {
     	};
     }
 
+    static Pusher pushesArray() {
+    	return new Pusher() {
+    		@Override public StackEntry[] apply(Instruction i, StackEntry[] popped) {
+    			return new StackEntry[] { ITEM_Object.newStackEntry(i.getClassConstant().toArray()) };
+    		}
+    	};
+    }
     
     static Pusher pushes(IVerifierEntry.Type e) {
     	return new Pusher() {

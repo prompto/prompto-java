@@ -2,6 +2,7 @@ package prompto.declaration;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -71,6 +72,8 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 			return null;
 	}
 		
+	public abstract List<String> collectCategories(Context context);
+	
 	@Override
 	public void register(Context context) throws SyntaxError {
 		context.registerDeclaration(this);
@@ -359,4 +362,6 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 				current.put(m.getNameAsKey(), m);
 		});
 	}
+
+	
 }

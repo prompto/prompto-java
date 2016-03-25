@@ -44,7 +44,7 @@ public class TestMemStore {
 	}
 
 	private IStorable store(String name, String value) throws Exception {
-		IStorable doc = IDataStore.getInstance().newStorable(null);
+		IStorable doc = IDataStore.getInstance().newStorable(new String[0]);
 		doc.setData(name, value);
 		IDataStore.getInstance().store(doc);
 		return doc;

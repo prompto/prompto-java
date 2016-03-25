@@ -5,8 +5,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import prompto.store.IStorable;
+
 public abstract class PromptoRoot {
 
+	protected IStorable storable;
+	
+	public IStorable getStorable() {
+		return storable;
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -44,6 +52,12 @@ public abstract class PromptoRoot {
 			return;
 		collectFields(list, klass.getSuperclass());
 		list.addAll(Arrays.asList(klass.getDeclaredFields()));
+	}
+
+	public void collectStorables(List<IStorable> storables) {
+		IStorable storable = getStorable();
+		if(storable!=null && storable.isDirty())
+			storables.add(storable);
 	}
 	
 }

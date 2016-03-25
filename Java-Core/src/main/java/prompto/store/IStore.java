@@ -22,6 +22,9 @@ public interface IStore<T extends Object> {
 	Type getColumnType(String name) throws PromptoError;
 	void createOrUpdateColumns(Collection<AttributeDeclaration> columns) throws PromptoError;
 
+	default IStorable newStorable(String[] categories) {
+		return newStorable(Arrays.asList(categories));
+	}
 	IStorable newStorable(List<String> categories);
 	
 	void store(Collection<T> deletables, Collection<IStorable> storables) throws PromptoError;

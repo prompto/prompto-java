@@ -65,7 +65,7 @@ public class TestQuery extends BaseSOLRTest {
 	
 	@Test
 	public void testStore() throws Exception {
-		IStorable storable = store.newStorable(null);
+		IStorable storable = store.newStorable(new String[0]);
 		storable.setData("name", "John");
 		store.store(storable);
 		store.commit();

@@ -1,13 +1,11 @@
 package prompto.store.solr;
 
 import java.util.Arrays;
-import java.util.Collection;
 
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrQuery.ORDER;
 
 import prompto.runtime.Context;
-import prompto.store.IOrderBy;
-import prompto.store.IPredicate;
 import prompto.store.IQuery;
 
 public class SOLRQuery implements IQuery {
@@ -26,11 +24,6 @@ public class SOLRQuery implements IQuery {
 			filter = null;
 		}
 		return query;
-	}
-
-	@Override
-	public IPredicate getPredicate() {
-		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -103,15 +96,8 @@ public class SOLRQuery implements IQuery {
 	}
 
 	@Override
-	public Collection<IOrderBy> getOrdering() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void addOrderByClause(String fieldName, boolean descending) {
-		// TODO Auto-generated method stub
-		
+		query.addSort(fieldName, descending ? ORDER.desc : ORDER.asc);
 	}
 
 

@@ -18,8 +18,12 @@ import prompto.compiler.FieldConstant;
 import prompto.compiler.FieldInfo;
 import prompto.compiler.Flags;
 import prompto.compiler.IVerifierEntry;
+import prompto.compiler.IntConstant;
+import prompto.compiler.InterfaceConstant;
+import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
+import prompto.compiler.StringConstant;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
@@ -28,6 +32,9 @@ import prompto.grammar.Operator;
 import prompto.intrinsic.PromptoRoot;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
+import prompto.store.IDataStore;
+import prompto.store.IStorable;
+import prompto.store.IStore;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -408,8 +415,9 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 				classFile.addModifier(Modifier.ABSTRACT);
 			compileSuperClass(context, classFile, new Flags());
 			compileInterface(context, classFile, new Flags());
+			compileCategoryField(context, classFile, new Flags());
 			compileFields(context, classFile, new Flags());
-			CompilerUtils.compileEmptyConstructor(classFile);
+			compileConstructor(context, classFile, new Flags());
 			compileMethods(context, classFile, new Flags());
 			return classFile;
 		} catch(SyntaxError e) {
@@ -417,6 +425,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		}
 	}
 	
+
 	@Override
 	public ClassFile compile(Context context, String fullName) {
 		/* multiple inheritance is supported via interfaces */
@@ -540,6 +549,40 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			return new ClassConstant(PromptoRoot.class);
 		/* the JVM does not support multiple inheritance but we can still benefit from single inheritance */
 		return new ClassConstant(CompilerUtils.getCategoryConcreteType(derivedFrom.getFirst()));
+	}
+
+	private void compileCategoryField(Context context, ClassFile classFile, Flags flags) {
+		if(isStorable()) {
+			// store array of category names in static String[] field
+			// use reserved 'category' keyword which can't collide with any field
+			FieldInfo field = new FieldInfo("category", String[].class); 
+			field.addModifier(Modifier.STATIC);
+			classFile.addField(field);
+			// populate the field
+			List<String> categories = collectCategories(context);
+			MethodInfo method = classFile.newMethod("<clinit>", new Descriptor.Method(void.class));
+			method.addModifier(Modifier.STATIC);
+			if(categories.size()<=5) {
+				Opcode opcode = Opcode.values()[Opcode.ICONST_0.ordinal() + categories.size()];
+				method.addInstruction(opcode);
+			} else
+				method.addInstruction(Opcode.LDC, new IntConstant(categories.size()));
+			method.addInstruction(Opcode.ANEWARRAY, new ClassConstant(String.class));
+			int idx = 0;
+			for(String s : categories) {
+				method.addInstruction(Opcode.DUP);
+				if(idx<=5) {
+					Opcode opcode = Opcode.values()[Opcode.ICONST_0.ordinal() + idx];
+					method.addInstruction(opcode);
+				} else
+					method.addInstruction(Opcode.LDC, new IntConstant(idx));
+				method.addInstruction(Opcode.LDC, new StringConstant(s));
+				method.addInstruction(Opcode.AASTORE);
+			}
+			FieldConstant f = new FieldConstant(classFile.getThisClass(), "category", String[].class);
+			method.addInstruction(Opcode.PUTSTATIC, f);
+			method.addInstruction(Opcode.RETURN);
+		}
 	}
 
 	private void compileFields(Context context, ClassFile classFile, Flags flags) throws SyntaxError {
@@ -678,6 +721,31 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		FieldConstant f = new FieldConstant(classFile.getThisClass(), id.toString(), field.getType());
 		method.addInstruction(Opcode.GETFIELD, f);
 		method.addInstruction(Opcode.ARETURN, new ClassConstant(field.getType()));
+	}
+
+	private void compileConstructor(Context context, ClassFile classFile, Flags flags) {
+		if(isStorable()) {
+			Descriptor proto = new Descriptor.Method(void.class);
+			MethodInfo method = classFile.newMethod("<init>", proto);
+			method.registerLocal("this", IVerifierEntry.Type.ITEM_UninitializedThis, classFile.getThisClass());
+			// call super()
+			method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
+			MethodConstant m = new MethodConstant(classFile.getSuperClass(), "<init>", void.class);
+			method.addInstruction(Opcode.INVOKESPECIAL, m);
+			// populate storable
+			method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass()); // -> this
+			m = new MethodConstant(new ClassConstant(IDataStore.class), "getInstance", IStore.class);
+			method.addInstruction(Opcode.INVOKESTATIC, m); // -> this, IStore
+			FieldConstant f = new FieldConstant(classFile.getThisClass(), "category", String[].class);
+			method.addInstruction(Opcode.GETSTATIC, f); // -> this, IStore, String[]
+			InterfaceConstant i = new InterfaceConstant(IStore.class, "newStorable", String[].class, IStorable.class);
+			method.addInstruction(Opcode.INVOKEINTERFACE, i); // this, IStorable
+			f = new FieldConstant(classFile.getThisClass(), "storable", IStorable.class);
+			method.addInstruction(Opcode.PUTFIELD, f);
+			// done
+			method.addInstruction(Opcode.RETURN);
+		} else
+			CompilerUtils.compileEmptyConstructor(classFile);
 	}
 
 	private void compileMethods(Context context, ClassFile classFile, Flags flags) throws SyntaxError {

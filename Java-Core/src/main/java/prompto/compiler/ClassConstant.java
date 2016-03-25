@@ -26,6 +26,16 @@ public class ClassConstant implements ICodeConstant, IValueConstant {
 		return Type.ITEM_Object.newStackEntry(this); // for dumping LDC_W <class> opcode
 	}
 	
+	public ClassConstant toArray() {
+		String className = this.className.toString().replace('/', '.') + "[]";
+		if(type instanceof Class) try {
+			Class<?> klass = Class.forName(className);
+			return new ClassConstant(klass);
+		} catch (Exception e) {
+		}
+		return new ClassConstant(new PromptoType(className));
+	}
+	
 	public boolean isInterface() {
 		return new ResultInfo(type).isInterface();
 	}

@@ -19,6 +19,10 @@ public class FieldInfo {
 		this.desc = new Utf8Constant(CompilerUtils.getDescriptor(type));
 	}
 	
+	public void addModifier(int modifier) {
+		accessFlags |= modifier;
+	}
+	
 	public Utf8Constant getName() {
 		return name;
 	}
