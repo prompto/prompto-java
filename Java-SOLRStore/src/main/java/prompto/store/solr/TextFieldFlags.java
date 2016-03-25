@@ -28,16 +28,8 @@ class TextFieldFlags {
 			IType type = column.getType();
 			if(type instanceof ListType)
 				type = ((ListType)type).getItemType();
-			if(type==TextType.instance()) {
-				flags = new TextFieldFlags();
-				Collection<String> indexTypes = column.getIndexTypes();
-				if(indexTypes!=null) {
-					flags.hasKey = indexTypes.contains(KEY);
-					flags.hasValue = indexTypes.contains(VALUE);
-					flags.hasWords = indexTypes.contains(WORDS);
-				} else
-					flags.hasValue = true;
-			}
+			if(type==TextType.instance())
+				flags = new TextFieldFlags(column.getIndexTypes());
 		}
 		return flags;
 	}
@@ -45,6 +37,16 @@ class TextFieldFlags {
 	public boolean hasWords = false;
 	public boolean hasValue = false;
 	public boolean hasKey = false;
+	
+	public TextFieldFlags(Collection<String> indexTypes) {
+		if(indexTypes!=null) {
+			hasKey = indexTypes.contains(KEY);
+			hasValue = indexTypes.contains(VALUE);
+			hasWords = indexTypes.contains(WORDS);
+		} else
+			hasValue = true;
+		
+	}
 	
 	public void addSuffixForEquals(StringBuilder sb) {
 		sb.append('-');

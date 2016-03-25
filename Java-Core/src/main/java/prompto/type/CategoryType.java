@@ -376,10 +376,30 @@ public class CategoryType extends BaseType {
 
 	private void readJSONDbId(Context context, JsonNode value, IInstance instance) throws PromptoError {
 		if(value.has(IStore.dbIdName)) {
-			IType type = Utils.typeToIType(IDataStore.getInstance().getDbIdType());
+			IType type = Utils.typeToIType(IDataStore.getInstance().getDbIdClass());
 			IValue dbid = type.readJSONValue(context, value.get(IStore.dbIdName));
-			instance.setMember(context, IStore.dbIdIdentifier, dbid);
+			instance.setMember(context, new Identifier(IStore.dbIdName), dbid);
 		}
+	}
+	
+	@Override
+	public IValue convertJavaValueToPromptoValue(Context context, Object value) {
+		try {
+			IDeclaration decl = getDeclaration(context);
+			if(decl instanceof CategoryDeclaration)
+				return convertJavaValueToPromptoValue(context, (CategoryDeclaration)decl, value);
+		} catch(Exception e) {
+		}
+		return super.convertJavaValueToPromptoValue(context, value);
+	}
+
+	private IValue convertJavaValueToPromptoValue(Context context, CategoryDeclaration decl, Object value) throws PromptoError {
+		if(IDataStore.getInstance().getDbIdClass().isInstance(value))
+			value = IDataStore.getInstance().fetchUnique(value);
+		if(value instanceof IStored)
+			return decl.newInstance(context, (IStored)value);
+		else
+			return super.convertJavaValueToPromptoValue(context, value);
 	}
 
 }

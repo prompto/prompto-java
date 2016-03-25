@@ -11,11 +11,16 @@ import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.CmpOp;
+import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDate;
 import prompto.intrinsic.PromptoDateTime;
 import prompto.intrinsic.PromptoTime;
 import prompto.parser.Section;
 import prompto.runtime.Context;
+import prompto.store.IPredicateExpression;
+import prompto.store.IQuery;
+import prompto.store.IQuery.MatchOp;
+import prompto.store.IStore;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.Boolean;
@@ -23,12 +28,13 @@ import prompto.value.Character;
 import prompto.value.Date;
 import prompto.value.DateTime;
 import prompto.value.Decimal;
+import prompto.value.IInstance;
 import prompto.value.IValue;
 import prompto.value.Integer;
 import prompto.value.Text;
 import prompto.value.Time;
 
-public class CompareExpression extends Section implements IExpression, IAssertion {
+public class CompareExpression extends Section implements IExpression, IPredicateExpression, IAssertion {
 
 	IExpression left;
 	CmpOp operator;
@@ -105,6 +111,47 @@ public class CompareExpression extends Section implements IExpression, IAssertio
 			throw new SyntaxError("Cannot compare " + lval.getType().getTypeName() + " with " + right.check(context).getFamily());
 		}
 		return tester.compile(context, method, flags.withCmpOp(operator), lval, right);
+	}
+	
+	@Override
+	public void interpretPredicate(Context context, IQuery query) throws PromptoError {
+		String name = null;
+		IValue value = null;
+		if(left instanceof UnresolvedIdentifier) {
+			name = ((UnresolvedIdentifier)left).getName();
+			value = right.interpret(context);
+		} else if(left instanceof InstanceExpression) {
+			name = ((InstanceExpression)left).getName();
+			value = right.interpret(context);
+		} else if(right instanceof UnresolvedIdentifier) {
+			name = ((UnresolvedIdentifier)right).getName();
+			value = left.interpret(context);
+		} else if(right instanceof InstanceExpression) {
+			name = ((InstanceExpression)right).getName();
+			value = left.interpret(context);
+		}
+		if(name==null)
+			throw new SyntaxError("Unable to interpret predicate");
+		else {
+			if(value instanceof IInstance)
+				value = ((IInstance)value).getMember(context, new Identifier(IStore.dbIdName), false);
+			switch(operator) {
+			case GT:
+				query.verify(name, MatchOp.GREATER, value==null ? null : value.getStorableData());
+				break;
+			case GTE:
+				query.verify(name, MatchOp.LESSER, value==null ? null : value.getStorableData());
+				query.not();
+				break;
+			case LT:
+				query.verify(name, MatchOp.LESSER, value==null ? null : value.getStorableData());
+				break;
+			case LTE:
+				query.verify(name, MatchOp.GREATER, value==null ? null : value.getStorableData());
+				query.not();
+				break;
+			}
+		}
 	}
 	
 	@Override

@@ -19,7 +19,6 @@ import prompto.grammar.MethodDeclarationList;
 import prompto.grammar.Operator;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
-import prompto.store.IDataStore;
 import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.type.CategoryType;
@@ -128,8 +127,9 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	}
 
 	private void populateInstance(Context context, IStored stored, IInstance instance) throws PromptoError {
-		IValue dbId = stored.getValue(IStore.dbIdIdentifier);
-		instance.setMember(context, IStore.dbIdIdentifier, dbId);
+		Object dbId = stored.getDbId();
+		IValue value = Utils.fieldToValue(context, IStore.dbIdName, dbId);
+		instance.setMember(context, new Identifier(IStore.dbIdName), value);
 		for(Identifier name : this.getAllAttributes(context)) 
 			populateMember(context, stored, instance, name);
 		if(instance.getStorable()!=null)
@@ -140,21 +140,10 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, name);
 		if(!decl.isStorable())
 			return;
-		IValue value = stored.getValue(name);
-		if(value==null)
-			return;
-		IType type = decl.getType(context);
-		if(type instanceof CategoryType) {
-			// is this a foreign key?
-			if(!(value instanceof IInstance)) {
-				stored = IDataStore.getInstance().fetchUnique(value.getStorableData());
-				if(stored==null)
-					throw new InternalError("How did we get there?");
-				value = ((CategoryType)type).newInstance(context, stored);
-			}
-		} else if(value instanceof IInstance)
-			throw new InternalError("How did we get there?");
-		instance.setMember(context, name, value);
+		Object data = stored.getData(name.toString());
+		IValue value = data==null ? null : decl.getType().convertJavaValueToPromptoValue(context, data);
+		if(value!=null)
+			instance.setMember(context, name, value);
 	}
 
 	public void checkConstructorContext(Context context) throws SyntaxError {

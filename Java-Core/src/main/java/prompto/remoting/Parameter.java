@@ -32,7 +32,7 @@ public class Parameter {
 		param.setName(field.asText());
 		// dbId type resolves to Any category, when it's actually a value, need a hack for this one
 		if(IStore.dbIdName.equals(param.getName()))
-			param.setType(Utils.typeToIType(IDataStore.getInstance().getDbIdType()));
+			param.setType(Utils.typeToIType(IDataStore.getInstance().getDbIdClass()));
 		else {
 			field = jsonParam.get("type");
 			if(field==null)

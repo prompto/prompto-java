@@ -9,13 +9,15 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
+import prompto.store.IPredicateExpression;
+import prompto.store.IQuery;
 import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.Boolean;
 import prompto.value.IValue;
 
-public class NotExpression implements IUnaryExpression, IAssertion {
+public class NotExpression implements IUnaryExpression, IPredicateExpression, IAssertion {
 
 	IExpression expression;
 	
@@ -60,6 +62,14 @@ public class NotExpression implements IUnaryExpression, IAssertion {
 			return ((Boolean)val).getNot();
 		else
 			throw new SyntaxError("Illegal: not " + val.getClass().getSimpleName());
+	}
+	
+	@Override
+	public void interpretPredicate(Context context, IQuery query) throws PromptoError {
+		if(!(expression instanceof IPredicateExpression))
+			throw new SyntaxError("Not a predicate: " + expression.toString());
+		((IPredicateExpression)expression).interpretPredicate(context, query);
+		query.not();
 	}
 
 	@Override

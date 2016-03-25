@@ -31,7 +31,9 @@ import prompto.intrinsic.PromptoTime;
 import prompto.runtime.Context;
 import prompto.runtime.LinkedValue;
 import prompto.runtime.LinkedVariable;
-import prompto.store.IFilterBuilder;
+import prompto.store.IPredicateExpression;
+import prompto.store.IQuery;
+import prompto.store.IQuery.MatchOp;
 import prompto.store.IStore;
 import prompto.type.BooleanType;
 import prompto.type.IType;
@@ -54,7 +56,7 @@ import prompto.value.Text;
 import prompto.value.Time;
 import prompto.value.TypeValue;
 
-public class EqualsExpression implements IExpression, IAssertion {
+public class EqualsExpression implements IExpression, IPredicateExpression, IAssertion {
 
 	IExpression left;
 	EqOp operator;
@@ -217,33 +219,48 @@ public class EqualsExpression implements IExpression, IAssertion {
 		test.printFailure(context, expected, actual);
 		return false;
 	}
-	
+
 	@Override
-	public void toFilter(Context context, IFilterBuilder builder) throws PromptoError {
-		String name = null;
+	public void interpretPredicate(Context context, IQuery query) throws PromptoError {
 		IValue value = null;
-		if(left instanceof UnresolvedIdentifier) {
-			name = ((UnresolvedIdentifier)left).getName();
+		String name = interpretFieldName(left);
+		if(name!=null)
 			value = right.interpret(context);
-		} else if(left instanceof InstanceExpression) {
-			name = ((InstanceExpression)left).getName();
-			value = right.interpret(context);
-		} else if(right instanceof UnresolvedIdentifier) {
-			name = ((UnresolvedIdentifier)right).getName();
-			value = left.interpret(context);
-		} else if(right instanceof InstanceExpression) {
-			name = ((InstanceExpression)right).getName();
-			value = left.interpret(context);
-		}
-		if(name==null || value==null)
-			IExpression.super.toFilter(context, builder);
 		else {
-			if(value instanceof IInstance)
-				value = ((IInstance)value).getMember(context, IStore.dbIdIdentifier, false);
-			builder.push(context, name, operator, value);
+			name = interpretFieldName(right);
+			if(name!=null)
+				value = left.interpret(context);
+			else
+				throw new SyntaxError("Unable to interpret predicate");
+		}
+		if(value instanceof IInstance)
+			value = ((IInstance)value).getMember(context, new Identifier(IStore.dbIdName), false);
+		Object data = value==null ? null : value.getStorableData();
+		switch(operator) {
+		case EQUALS:
+			query.<Object>verify(name, MatchOp.EQUALS, data);
+			break;
+		case ROUGHLY:
+			query.<Object>verify(name, MatchOp.ROUGHLY, data);
+			break;
+		case NOT_EQUALS:
+			query.<Object>verify(name, MatchOp.EQUALS, data);
+			query.not();
+			break;
+		default:
+			throw new UnsupportedOperationException();
 		}
 	}
 	
+	private String interpretFieldName(IExpression exp) {
+		if(exp instanceof UnresolvedIdentifier
+			|| exp instanceof InstanceExpression
+			|| exp instanceof MemberSelector)
+			return exp.toString();
+		else
+			return null;
+	}
+
 	static Map<Class<?>, IOperatorFunction> testers = createTesters();
 	
 	private static Map<Class<?>, IOperatorFunction> createTesters() {

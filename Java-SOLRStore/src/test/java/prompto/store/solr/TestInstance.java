@@ -26,6 +26,7 @@ import prompto.literal.TextLiteral;
 import prompto.literal.TimeLiteral;
 import prompto.runtime.Context;
 import prompto.store.IDataStore;
+import prompto.store.IPredicateExpression;
 import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.type.AnyType;
@@ -126,7 +127,7 @@ public class TestInstance extends BaseSOLRTest {
 		store.store(instance.getStorable());
 		IStored stored = fetchOne(fieldName, new DateLiteral(fieldValue));
 		assertNotNull(stored);
-		assertEquals(fieldValue.toString(), stored.getData(fieldName)); // value will be converted by reader
+		assertEquals(fieldValue, stored.getData(fieldName)); // value will be converted by reader
 	}
 
 	@Test
@@ -139,7 +140,7 @@ public class TestInstance extends BaseSOLRTest {
 		store.store(instance.getStorable());
 		IStored stored = fetchOne(fieldName, new TimeLiteral(fieldValue));
 		assertNotNull(stored);
-		assertEquals(fieldValue.toString(), stored.getData(fieldName));
+		assertEquals(fieldValue, stored.getData(fieldName));
 	}
 
 	@Test
@@ -152,7 +153,7 @@ public class TestInstance extends BaseSOLRTest {
 		store.store(instance.getStorable());
 		IStored stored = fetchOne(fieldName, new DateTimeLiteral(fieldValue));
 		assertNotNull(stored);
-		assertEquals(fieldValue.toString(), stored.getData(fieldName));
+		assertEquals(fieldValue, stored.getData(fieldName));
 	}
 
 	@Test
@@ -165,7 +166,7 @@ public class TestInstance extends BaseSOLRTest {
 		store.store(instance.getStorable());
 		IStored stored = fetchOne(fieldName, new ExpressionValue(UUIDType.instance(), new prompto.value.UUID(fieldValue)));
 		assertNotNull(stored);
-		assertEquals(fieldValue.toString(), stored.getData(fieldName));
+		assertEquals(fieldValue, stored.getData(fieldName));
 	}
 
 	@Test
@@ -176,7 +177,7 @@ public class TestInstance extends BaseSOLRTest {
 		String childValue = "childValue";
 		String childName = "childField";
 		createField(fieldName, "text", false);
-		createField(childName, "uuid", false);
+		createField(childName, "db-ref", false);
 		IInstance parent = createInstanceWith2Attributes(fieldName, TextType.instance(), childName, type);
 		ConcreteCategoryDeclaration cd = context.getRegisteredDeclaration(
 				ConcreteCategoryDeclaration.class, new Identifier("Test"), false);
@@ -198,7 +199,7 @@ public class TestInstance extends BaseSOLRTest {
 
 	private IStored fetchOne(String field, IExpression value) throws Exception {
 		CategoryType t = new CategoryType(new Identifier("Test"));
-		IExpression e = new EqualsExpression( 
+		IPredicateExpression e = new EqualsExpression( 
 				new UnresolvedIdentifier(new Identifier(field)), EqOp.EQUALS, value);
 		return store.fetchOne(context, t, e);
 	}
@@ -217,7 +218,7 @@ public class TestInstance extends BaseSOLRTest {
 	}
 
 	private IInstance createInstanceWith2Attributes(String name1, IType type1, String name2, IType type2) throws Exception {
-		AttributeDeclaration a = new AttributeDeclaration(IStore.dbIdIdentifier, AnyType.instance());
+		AttributeDeclaration a = new AttributeDeclaration(new Identifier(IStore.dbIdName), AnyType.instance());
 		context.registerDeclaration(a);
 		a = new AttributeDeclaration(new Identifier(name1), type1);
 		a.setStorable(true);

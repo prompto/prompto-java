@@ -12,7 +12,6 @@ import prompto.declaration.DeclarationList;
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
 import prompto.parser.Dialect;
-import prompto.value.IValue;
 
 /* resource base code store used to bootstrap modules  */
 public class ResourceCodeStore extends BaseCodeStore {
@@ -61,7 +60,7 @@ public class ResourceCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public void storeDeclarations(Iterator<IDeclaration> declarations, Dialect dialect, Version version, IValue projectId) throws PromptoError {
+	public void storeDeclarations(Iterator<IDeclaration> declarations, Dialect dialect, Version version, Object projectId) throws PromptoError {
 		throw new UnsupportedOperationException();
 	}
 	

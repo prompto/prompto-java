@@ -18,8 +18,6 @@ import prompto.parser.SCleverParser;
 import prompto.type.CategoryType;
 import prompto.utils.ISingleton;
 import prompto.utils.Utils;
-import prompto.value.IValue;
-import prompto.value.Text;
 
 /* a code store is a place where a code consumer (interpreter, compiler...) can fetch code from */
 public interface ICodeStore {
@@ -84,10 +82,6 @@ public interface ICodeStore {
 			return moduleClass;
 		}
 		
-		public Text asValue() {
-			return new Text(this.name());
-		}
-
 		public CategoryType getCategory() {
 			String capped = Utils.capitalizeFirst(name());
 			return new CategoryType( new Identifier(capped));
@@ -99,7 +93,7 @@ public interface ICodeStore {
 	String getModuleName();
 	Version getModuleVersion();
 
-	void storeDeclarations(Iterator<IDeclaration> declarations, Dialect dialect, Version version, IValue projectId) throws PromptoError;
+	void storeDeclarations(Iterator<IDeclaration> declarations, Dialect dialect, Version version, Object projectId) throws PromptoError;
 
 	default Iterator<IDeclaration> fetchLatestVersions(String name) throws PromptoError {
 		return fetchSpecificVersions(name, ICodeStore.LATEST);

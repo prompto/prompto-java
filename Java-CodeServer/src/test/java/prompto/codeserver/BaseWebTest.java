@@ -15,7 +15,6 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import prompto.expression.EqualsExpression;
-import prompto.expression.IExpression;
 import prompto.expression.UnresolvedIdentifier;
 import prompto.grammar.EqOp;
 import prompto.grammar.Identifier;
@@ -24,6 +23,7 @@ import prompto.selenium.HtmlUnitWebDriverFactory;
 import prompto.selenium.WebDriverFactory;
 import prompto.server.AppServer;
 import prompto.store.IDataStore;
+import prompto.store.IPredicateExpression;
 import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.type.CategoryType;
@@ -82,7 +82,7 @@ public abstract class BaseWebTest {
 
 	protected String getDbIdForModule(String name) throws Exception {
 		IStore<Object> store = IDataStore.getInstance();
-		IExpression filter = new EqualsExpression(
+		IPredicateExpression filter = new EqualsExpression(
 				new UnresolvedIdentifier(new Identifier("name")), 
 				EqOp.EQUALS, 
 				new TextLiteral( "'" + name + "'"));

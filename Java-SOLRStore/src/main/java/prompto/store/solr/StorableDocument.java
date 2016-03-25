@@ -10,7 +10,6 @@ import org.apache.solr.common.SolrInputField;
 
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
-import prompto.grammar.Identifier;
 import prompto.store.IStorable;
 import prompto.store.IStore;
 import prompto.value.IValue;
@@ -57,15 +56,12 @@ public class StorableDocument extends BaseDocument implements IStorable {
 		if(document==null) {
 			UUID dbId = null;
 			if(provider!=null) {
-				// the only scenario where we get an existing dbId is when  
-				// an instance passes a provider when calling setValue
+				// the scenario where we get an existing dbId is when  
+				// an instance passes a provider when calling setData
 				// in such a case, the scenario is an update scenario
-				IValue dbIdValue = provider.getDbId();
-				if(dbIdValue!=null) {
-					dbId = ((prompto.value.UUID)dbIdValue).getStorableData();
-					if(dbId!=null)
-						this.isUpdate = true;
-				}
+				dbId = (UUID)provider.getDbId();
+				if(dbId!=null)
+					this.isUpdate = true;
 			}
 			if(dbId==null)
 				dbId = java.util.UUID.randomUUID();
@@ -82,9 +78,9 @@ public class StorableDocument extends BaseDocument implements IStorable {
 	}
 
 	@Override
-	public void setValue(Identifier id, IValue value, IDbIdProvider provider) throws PromptoError {
+	public void setData(String name, Object value, IDbIdProvider provider) throws PromptoError {
 		ensureDocument(provider);
-		setData(id.toString(), value.getStorableData());
+		setData(name, value);
 	}
 	
 	@Override

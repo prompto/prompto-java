@@ -24,11 +24,16 @@ import prompto.declaration.AttributeDeclaration;
 import prompto.error.InternalError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
-import prompto.grammar.EqOp;
+import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoBinary;
+import prompto.intrinsic.PromptoDate;
+import prompto.intrinsic.PromptoDateTime;
+import prompto.intrinsic.PromptoPeriod;
+import prompto.intrinsic.PromptoTime;
 import prompto.runtime.Context;
 import prompto.store.IQuery;
-import prompto.store.IQueryBuilder;
+import prompto.store.IQuery.MatchOp;
+import prompto.store.IQueryFactory;
 import prompto.store.IStorable;
 import prompto.store.IStore;
 import prompto.store.IStored;
@@ -38,14 +43,16 @@ import prompto.type.BooleanType;
 import prompto.type.CategoryType;
 import prompto.type.ContainerType;
 import prompto.type.DateTimeType;
+import prompto.type.DateType;
 import prompto.type.DecimalType;
 import prompto.type.IType;
 import prompto.type.ImageType;
 import prompto.type.IntegerType;
 import prompto.type.ListType;
+import prompto.type.PeriodType;
 import prompto.type.TextType;
+import prompto.type.TimeType;
 import prompto.type.UUIDType;
-import prompto.value.IValue;
 
 abstract class BaseSOLRStore implements IStore<UUID> {
 	
@@ -53,6 +60,8 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 	
 	static {
 		typeMap.put("uuid", UUIDType.instance());
+		typeMap.put("db-id", UUIDType.instance());
+		typeMap.put("db-ref", new CategoryType(new Identifier("any")));
 		typeMap.put("blob", BlobType.instance());
 		typeMap.put("boolean", BooleanType.instance());
 		typeMap.put("text", TextType.instance());
@@ -63,6 +72,9 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 		typeMap.put("image", ImageType.instance());
 		typeMap.put("integer", IntegerType.instance());
 		typeMap.put("decimal", DecimalType.instance());
+		typeMap.put("date", DateType.instance());
+		typeMap.put("time", TimeType.instance());
+		typeMap.put("period", PeriodType.instance());
 		typeMap.put("datetime", DateTimeType.instance());
 		// create a list type for each atomic type (using a copy to avoid concurrent modification)
 		Set<Map.Entry<String, IType>> entries = new HashSet<>(typeMap.entrySet());
@@ -71,48 +83,54 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 		}
 	}
 	
-	static interface IValueReader {
-		IValue readValue(Object data) throws IOException;
+	
+	static interface IDataReader {
+		Object readValue(Object data) throws IOException;
 	}
 	
-	static Map<String, IValueReader> readerMap = new HashMap<>();
+	static Map<String, IDataReader> readerMap = new HashMap<>();
 	
 	static {
-		readerMap.put("uuid", (o) -> new prompto.value.UUID(o.toString()));
-		readerMap.put("blob", null);
-		readerMap.put("boolean", null);
-		readerMap.put("text", (o) -> new prompto.value.Text(o.toString()));
+		readerMap.put("uuid", (o) -> UUID.fromString(o.toString()));
+		readerMap.put("db-id", readerMap.get("uuid"));
+		readerMap.put("db-ref", readerMap.get("uuid"));
+		readerMap.put("blob", (o) -> BinaryConverter.toPromptoBinary(o));
+		readerMap.put("boolean", (o) -> o);
+		readerMap.put("text", (o) -> o.toString());
 		readerMap.put("text-key", readerMap.get("text"));
 		readerMap.put("text-value", readerMap.get("text"));
 		readerMap.put("text-words", readerMap.get("text"));
-		readerMap.put("version", (o) -> new prompto.value.Text(o.toString()));
-		readerMap.put("image", (o) -> BinaryConverter.toBinaryValue(o));
-		readerMap.put("integer", null);
-		readerMap.put("decimal", null);
-		readerMap.put("datetime", (o) -> new prompto.value.DateTime(o.toString()));
+		readerMap.put("version", (o) -> o.toString());
+		readerMap.put("image", (o) -> BinaryConverter.toPromptoBinary(o));
+		readerMap.put("integer", (o) -> o);
+		readerMap.put("decimal", (o) -> o);
+		readerMap.put("period", (o) -> PromptoPeriod.parse(o.toString()));
+		readerMap.put("date", (o) -> PromptoDate.parse(o.toString()));
+		readerMap.put("time", (o) -> PromptoTime.parse(o.toString()));
+		readerMap.put("datetime", (o) -> PromptoDateTime.parse(o.toString()));
 		// create a list type for each atomic type (using a copy to avoid concurrent modification)
-		Set<Map.Entry<String, IValueReader>> entries = new HashSet<>(readerMap.entrySet());
-		for(Map.Entry<String, IValueReader> entry : entries) {
+		Set<Map.Entry<String, IDataReader>> entries = new HashSet<>(readerMap.entrySet());
+		for(Map.Entry<String, IDataReader> entry : entries) {
 			readerMap.put(entry.getKey() + "[]", null);
 		}
 	}
 	
-	ConcurrentMap<String, String> columnTypeNames = new ConcurrentHashMap<>();
-	ConcurrentMap<String, Type> columnTypes = new ConcurrentHashMap<>();
-	
-	@Override
-	public Type getColumnType(String fieldName) throws PromptoError {
-		Type type = columnTypes.get(fieldName);
-		if(type==null) try {
-			String typeName = getColumnTypeName(fieldName);
-			type = typeMap.get(typeName).getJavaType();
-			columnTypes.put(fieldName, type);
+	public Object readData(String fieldName, Object data) throws PromptoError {
+		if(data==null)
+			return null;
+		String typeName = getColumnTypeName(fieldName);
+		IDataReader reader = readerMap.get(typeName);
+		if(reader==null)
+			throw new UnsupportedOperationException("read " + typeName);
+		try {
+			return reader.readValue(data);
 		} catch(Exception e) {
-			throw new InternalError(e);
+			throw new ReadWriteError(e.getMessage());
 		}
-		return type;
 	}
-	
+
+	ConcurrentMap<String, String> columnTypeNames = new ConcurrentHashMap<>();
+		
 	private String getColumnTypeName(String fieldName) throws PromptoError {
 		String typeName = columnTypeNames.get(fieldName);
 		if(typeName==null) try {
@@ -124,20 +142,15 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 		return typeName;
 	}
 
-	public IValue readData(String fieldName, Object data) throws PromptoError {
-		String typeName = getColumnTypeName(fieldName);
-		IValueReader reader = readerMap.get(typeName);
-		if(reader==null)
-			throw new UnsupportedOperationException("read " + typeName);
-		try {
-			return reader.readValue(data);
-		} catch(Exception e) {
-			throw new ReadWriteError(e.getMessage());
-		}
-	}
-
 	@Override
-	public Type getDbIdType() {
+	public Type getColumnType(String fieldName) throws PromptoError {
+		String typeName = getColumnTypeName(fieldName);
+		IType type = typeMap.get(typeName);
+		return type.getJavaType();
+	}
+	
+	@Override
+	public Class<?> getDbIdClass() {
 		return UUID.class;
 	}
 	
@@ -161,12 +174,12 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 			options.put("multiValued", true);
 			type = ((ContainerType)type).getItemType();
 		}
-		if(type instanceof CategoryType)
-			type = UUIDType.instance();
 		if("version".equals(column.getName())) 
 			addField("version", "version", options);
 		else if(type==TextType.instance())
 			addTextField(column.getName(), options, column.getIndexTypes());
+		else if(type instanceof CategoryType)
+			addField(column.getName(), "db-ref", options);
 		else {
 			String typeName = type.getTypeName().toLowerCase();
 			addField(column.getName(), typeName, options);
@@ -244,15 +257,14 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 		}
 	}
 	
+	
 	@Override
 	public IStored fetchUnique(UUID dbId) throws PromptoError {
-		SOLRFilterBuilder builder = new SOLRFilterBuilder();
-		builder.push(null, IStore.dbIdName, EqOp.EQUALS, dbId);
-		SolrQuery query = new SolrQuery();
-		query.setQuery(builder.toSolrQuery());
+		SOLRQuery query = new SOLRQuery(null);
+		query.verify(IStore.dbIdName, MatchOp.EQUALS, dbId);
 		try {
 			commit();
-			QueryResponse result = query(query);
+			QueryResponse result = query(query.getQuery());
 			return getOne(result);
 		} catch(Exception e) {
 			throw new InternalError(e);
@@ -260,8 +272,8 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 	}
 	
 	@Override
-	public IQueryBuilder<UUID> getQueryBuilder(Context context, boolean compiled) {
-		return new SOLRQueryBuilder(context);
+	public IQueryFactory<UUID> getInterpretedQueryFactory(Context context) {
+		return new SOLRQueryFactory(context);
 	}
 	
 	@Override

@@ -42,11 +42,11 @@ public class BooleanType extends NativeType {
 	}
 	
 	@Override
-	public IValue convertJavaValueToPromptoValue(Object value) {
+	public IValue convertJavaValueToPromptoValue(Context context, Object value) {
         if (value instanceof java.lang.Boolean)
             return Boolean.valueOf(((java.lang.Boolean)value).booleanValue());
         else
-        	return super.convertJavaValueToPromptoValue(value);
+        	return super.convertJavaValueToPromptoValue(context, value);
 	}
 	
 	@Override

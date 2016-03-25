@@ -1,21 +1,23 @@
 package prompto.grammar;
 
 import prompto.parser.Section;
+import prompto.runtime.Context;
+import prompto.store.IQuery;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
 
 public class OrderByClause extends Section {
 	
-	IdentifierList names;
+	IdentifierList qualifiedName;
 	boolean descending;
 	
-	public OrderByClause(IdentifierList names, boolean descending) {
-		this.names = names;
+	public OrderByClause(IdentifierList qualifiedName, boolean descending) {
+		this.qualifiedName = qualifiedName;
 		this.descending = descending;
 	}
 	
-	public IdentifierList getNames() {
-		return names;
+	public IdentifierList getQualifiedName() {
+		return qualifiedName;
 	}
 	
 	public boolean isDescending() {
@@ -23,12 +25,18 @@ public class OrderByClause extends Section {
 	}
 
 	public void toDialect(CodeWriter writer) {
-		for(Identifier name : names) {
+		for(Identifier name : qualifiedName) {
 			writer.append(name.toString());
 			writer.append(".");
 		}
 		writer.trimLast(1);
 		if(descending)
 			writer.append(" descending");
+	}
+
+	public void interpretQuery(Context context, IQuery q) {
+		// TODO members
+		Identifier name = qualifiedName.getFirst();
+		q.addOrderByClause(name.toString(), isDescending());
 	}
 }

@@ -2,33 +2,39 @@ package prompto.store.solr;
 
 import java.util.Stack;
 
-import prompto.grammar.EqOp;
 import prompto.runtime.Context;
-import prompto.store.IFilterBuilder;
-import prompto.type.CategoryType;
+import prompto.store.IQuery.MatchOp;
 
-class SOLRFilterBuilder implements IFilterBuilder {
+class SOLRFilterBuilder {
 
+	Context context;
 	Stack<String> stack = new Stack<>();
 	
-	@Override
+	public SOLRFilterBuilder(Context context) {
+		this.context = context;
+	}
+
 	public void and() {
 		String e1 = stack.pop();
 		String e2 = stack.pop();
 		stack.push("(" + e1 + " AND " + e2 + ")");
 	}
 	
-	@Override
-	public void push(Context context, String fieldName, EqOp operator, Object fieldValue) {
-		TextFieldFlags flags = TextFieldFlags.computeFieldFlags(context, fieldName);
+	public void or() {
+		String e1 = stack.pop();
+		String e2 = stack.pop();
+		stack.push("(" + e1 + " OR " + e2 + ")");
+	}
+	
+	public void not() {
+		String e = stack.pop();
+		stack.push("-" + e);
+	}
+
+	
+	public void push(String fieldName, MatchOp operator, Object fieldValue, TextFieldFlags flags) {
 		StringBuilder sb = new StringBuilder();
 		switch(operator) {
-		case IS:
-		case IS_NOT:
-		// TODO: could add a category clause	
-		case IS_A:
-		case IS_NOT_A:
-			throw new UnsupportedOperationException();
 		case EQUALS:
 			sb.append(fieldName);
 			if(flags!=null)
@@ -39,12 +45,8 @@ class SOLRFilterBuilder implements IFilterBuilder {
 			if(flags!=null)
 				flags.addSuffixForRoughly(sb);
 			break;
-		case NOT_EQUALS:
-			sb.append('-');
-			if(flags!=null)
-				flags.addSuffixForEquals(sb);
-			break;
 		default:
+			sb.append(fieldName);
 		}
 		sb.append(':');
 		escape(sb, fieldValue);
@@ -123,8 +125,5 @@ class SOLRFilterBuilder implements IFilterBuilder {
 		return stack.pop();
 	}
 
-	public void pushCategory(CategoryType type) {
-		stack.push("category-key:" + type.getFamily());
-	}
 	
 }

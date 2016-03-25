@@ -14,14 +14,15 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
-import prompto.store.IFilterBuilder;
+import prompto.store.IPredicateExpression;
+import prompto.store.IQuery;
 import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.Boolean;
 import prompto.value.IValue;
 
-public class AndExpression implements IExpression, IAssertion {
+public class AndExpression implements IExpression, IPredicateExpression, IAssertion {
 
 	IExpression left;
 	IExpression right;
@@ -125,12 +126,16 @@ public class AndExpression implements IExpression, IAssertion {
 		test.printFailure(context, expected, actual);
 		return false;
 	}
-
+	
 	@Override
-	public void toFilter(Context context, IFilterBuilder builder) throws PromptoError {
-		left.toFilter(context, builder);
-		right.toFilter(context, builder);
-		builder.and();
+	public void interpretPredicate(Context context, IQuery query) throws PromptoError {
+		if(!(left instanceof IPredicateExpression))
+			throw new SyntaxError("Not a predicate: " + left.toString());
+		((IPredicateExpression)left).interpretPredicate(context, query);
+		if(!(right instanceof IPredicateExpression))
+			throw new SyntaxError("Not a predicate: " + left.toString());
+		((IPredicateExpression)right).interpretPredicate(context, query);
+		query.and();
 	}
 
 

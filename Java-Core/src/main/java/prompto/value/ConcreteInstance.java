@@ -171,16 +171,21 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		value = autocast(decl, value);
 		values.put(attrName, value);
 		if(storable!=null && decl.isStorable()) {
-			storable.setValue(attrName, value, this::getDbId);
+			storable.setData(attrName.toString(), value.getStorableData(), this::getDbId);
 		}
 	}
 	
-	private IValue getDbId() {
-		return values.get(IStore.dbIdIdentifier);
+	private Object getDbId() {
+		try {
+			IValue dbId = values.get(new Identifier(IStore.dbIdName));
+			return dbId==null ? null : dbId.getStorableData();
+		} catch (NotStorableError e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
-	private IValue getOrCreateDbId() {
-		IValue dbId = values.get(IStore.dbIdIdentifier);
+	private Object getOrCreateDbId() throws NotStorableError {
+		Object dbId = getDbId();
 		return dbId!=null ? dbId : this.storable.getOrCreateDbId();
 	}
 

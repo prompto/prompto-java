@@ -84,7 +84,7 @@ public class JavaClassType extends BaseType {
     	IValue val = convertIValue(value);
     	if(val!=null)
     		return val;
-    	val = convertNative(value, type);
+    	val = convertNative(context, value, type);
     	if(val!=null)
     		return val;
     	val = convertList(context, value, type, returnType);
@@ -103,9 +103,9 @@ public class JavaClassType extends BaseType {
 	    return value instanceof IValue ? (IValue)value : null;
 	}
 
-	private static IValue convertNative(Object value, Type type) {
+	private static IValue convertNative(Context context, Object value, Type type) {
         IType itype = Utils.typeToIType(type);
-        return itype != null ? itype.convertJavaValueToPromptoValue(value) : null;
+        return itype != null ? itype.convertJavaValueToPromptoValue(context, value) : null;
 	}
 
 

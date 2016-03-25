@@ -6,6 +6,7 @@ import prompto.error.SyntaxError;
 import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.store.IDataStore;
+import prompto.store.IPredicateExpression;
 import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.type.BooleanType;
@@ -18,19 +19,19 @@ import prompto.value.NullValue;
 public class FetchOneExpression extends Section implements IExpression {
 
 	CategoryType type;
-	IExpression filter;
+	IExpression predicate;
 	
-	public FetchOneExpression(CategoryType type, IExpression filter) {
+	public FetchOneExpression(CategoryType type, IExpression predicate) {
 		this.type = type;
-		this.filter = filter;
+		this.predicate = predicate;
 	}
 	
 	public CategoryType getType() {
 		return type;
 	}
 	
-	public IExpression getFilter() {
-		return filter;
+	public IPredicateExpression getPredicate() {
+		return (IPredicateExpression)predicate; // assume this was checked earlier
 	}
 
 	@Override
@@ -40,20 +41,20 @@ public class FetchOneExpression extends Section implements IExpression {
 			writer.append("fetch one ");
 			type.toDialect(writer);
 			writer.append(" where ");
-			filter.toDialect(writer);
+			predicate.toDialect(writer);
 			break;
 		case O:
 			writer.append("fetch one (");
 			type.toDialect(writer);
 			writer.append(") where (");
-			filter.toDialect(writer);
+			predicate.toDialect(writer);
 			writer.append(")");
 			break;
 		case S:
 			writer.append("fetch one ");
 			type.toDialect(writer);
 			writer.append(" where ");
-			filter.toDialect(writer);
+			predicate.toDialect(writer);
 			break;
 		}
 	}
@@ -63,16 +64,20 @@ public class FetchOneExpression extends Section implements IExpression {
 		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
 		if(decl==null)
 			throw new SyntaxError("Unknown category: " + type.getTypeName());
-		IType filterType = filter.check(context);
+		if(!(predicate instanceof IPredicateExpression))
+			throw new SyntaxError("Filtering expression must be a predicate !");
+		IType filterType = predicate.check(context);
 		if(filterType!=BooleanType.instance())
-			throw new SyntaxError("Filtering expresion must return a boolean !");
+			throw new SyntaxError("Filtering expression must return a boolean !");
 		return type;
 	}
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
+		if(!(predicate instanceof IPredicateExpression))
+			throw new SyntaxError("Filtering expression must be a predicate !");
 		IStore<Object>store = IDataStore.getInstance();
-		IStored stored = store.fetchOne(context, type, filter);
+		IStored stored = store.fetchOne(context, type, (IPredicateExpression)predicate);
 		if(stored==null)
 			return NullValue.instance();
 		else

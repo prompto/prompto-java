@@ -1,12 +1,12 @@
 package prompto.store.solr;
 
+import java.util.UUID;
+
 import org.apache.solr.common.SolrDocument;
 
 import prompto.error.PromptoError;
-import prompto.grammar.Identifier;
 import prompto.store.IStore;
 import prompto.store.IStored;
-import prompto.value.IValue;
 
 public class StoredDocument extends BaseDocument implements IStored {
 
@@ -20,26 +20,18 @@ public class StoredDocument extends BaseDocument implements IStored {
 
 	
 	@Override
-	public IValue getDbId() {
+	public UUID getDbId() {
 		Object dbId = document.getFieldValue(IStore.dbIdName);
 		if(dbId==null)
 			return null;
 		else
-			return new prompto.value.UUID(String.valueOf(dbId));
+			return UUID.fromString(dbId.toString());
 	}
 
 	@Override
-	public IValue getValue(Identifier id) throws PromptoError {
-		Object data = getData(id.toString());
-		if(data==null)
-			return null;
-		else
-			return store.readData(id.toString(), data);
-	}
-
-	@Override
-	public Object getData(String name) {
-		return document.getFieldValue(name);
+	public Object getData(String fieldName) throws PromptoError {
+		Object data = document.getFieldValue(fieldName);
+		return store.readData(fieldName, data);
 	}
 
 }

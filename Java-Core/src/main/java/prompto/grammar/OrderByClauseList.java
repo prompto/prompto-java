@@ -1,6 +1,8 @@
 package prompto.grammar;
 
 import prompto.parser.Dialect;
+import prompto.runtime.Context;
+import prompto.store.IQuery;
 import prompto.utils.CodeWriter;
 import prompto.utils.ObjectList;
 
@@ -25,6 +27,11 @@ public class OrderByClauseList extends ObjectList<OrderByClause> {
 		writer.trimLast(2);
 		if(writer.getDialect()==Dialect.O)
 			writer.append(" )");
+	}
+
+	public void interpretQuery(Context context, IQuery q) {
+		this.forEach((clause)->
+			clause.interpretQuery(context, q));
 	}
 
 }

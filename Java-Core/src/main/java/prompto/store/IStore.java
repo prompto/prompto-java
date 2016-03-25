@@ -8,7 +8,6 @@ import java.util.List;
 import prompto.declaration.AttributeDeclaration;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
-import prompto.grammar.Identifier;
 import prompto.grammar.OrderByClauseList;
 import prompto.intrinsic.PromptoBinary;
 import prompto.runtime.Context;
@@ -18,9 +17,8 @@ import prompto.type.CategoryType;
 public interface IStore<T extends Object> {
 	
 	public static final String dbIdName = "dbId";
-	public static final Identifier dbIdIdentifier = new Identifier(dbIdName);
 	
-	Type getDbIdType();
+	Class<?> getDbIdClass();
 	Type getColumnType(String name) throws PromptoError;
 	void createOrUpdateColumns(Collection<AttributeDeclaration> columns) throws PromptoError;
 
@@ -40,18 +38,25 @@ public interface IStore<T extends Object> {
 	PromptoBinary fetchBinary(T dbId, String attr) throws PromptoError;
 	IStored fetchUnique(T dbId) throws PromptoError;
 
-	default IStored fetchOne(Context context, CategoryType category, IExpression filter) throws PromptoError {
-		return fetchOne(getQueryBuilder(context, false).buildFetchOneQuery(category, filter));
+	default IStored fetchOne(Context context, CategoryType category, IPredicateExpression filter) throws PromptoError {
+		return fetchOne(getInterpretedQueryFactory(context).buildFetchOneQuery(category, filter));
 	};
 
 	default IStoredIterator fetchMany(Context context, CategoryType category, 
 						IExpression start, IExpression end, 
-						IExpression filter, OrderByClauseList orderBy) throws PromptoError {
-		return fetchMany(getQueryBuilder(context, false)
+						IPredicateExpression filter, 
+						OrderByClauseList orderBy) throws PromptoError {
+		return fetchMany(getInterpretedQueryFactory(context)
 				.buildFetchManyQuery(category, start, end, filter, orderBy));
 	}
 
-	IQueryBuilder<T> getQueryBuilder(Context context, boolean compiled);
+	default IQueryFactory<T> getInterpretedQueryFactory(Context context) {
+		return new InterpretedQueryFactory<T>(context);
+	}
+	
+	default IQueryFactory<T> getCompiledQueryFactory(Context context) {
+		return new CompiledQueryFactory<T>(context);
+	}
 	// for the below, assumption is that IQuery was produced by the above IQueryBuilder
 	IStored fetchOne(IQuery query) throws PromptoError;
 	IStoredIterator fetchMany(IQuery query) throws PromptoError;

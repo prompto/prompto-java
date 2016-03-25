@@ -6,6 +6,7 @@ import java.util.List;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
+import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.store.IDataStore;
@@ -121,7 +122,7 @@ public class StoreStatement extends SimpleStatement {
 	
 	private void collectDbIdsToDel(Context context, List<Object> dbIdsToDel, IValue value) throws PromptoError {
 		if(value instanceof IInstance) {
-			IValue dbId = ((IInstance)value).getMember(context, IStore.dbIdIdentifier, false);
+			IValue dbId = ((IInstance)value).getMember(context, new Identifier(IStore.dbIdName), false);
 			if(dbId!=null)
 				dbIdsToDel.add(dbId.getStorableData());
 		} else if(value instanceof ListValue) {
@@ -133,7 +134,7 @@ public class StoreStatement extends SimpleStatement {
 			while(iter.hasNext()) {
 				collectDbIdsToDel(context, dbIdsToDel, iter.next());
 			}
-		} else if(value.getType().getJavaType()==IDataStore.getInstance().getDbIdType())
+		} else if(value.getType().getJavaType()==IDataStore.getInstance().getDbIdClass())
 			dbIdsToDel.add(value);
 	}
 	

@@ -8,7 +8,6 @@ import prompto.code.ICodeStore.ModuleType;
 import prompto.code.ResourceCodeStore;
 import prompto.code.Version;
 import prompto.value.Image;
-import prompto.value.Text;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,29 +39,30 @@ public class SampleImporter {
 		}
 	}
 
-	private Text readText(JsonNode descriptor, String fieldName) {
+	private String readText(JsonNode descriptor, String fieldName) {
 		JsonNode child = descriptor.get(fieldName);
 		if(child==null)
 			return null;
-		return new Text(child.asText());
+		else
+			return child.asText();
 	}
 
 	public void importSample(ICodeStore codeStore) throws Exception {
-		String name = application.getName().getStorableData();
-		Version version = Version.parse(application.getVersion().getStorableData());
+		String name = application.getName();
+		Version version = Version.parse(application.getVersion());
 		Application existing = codeStore.fetchApplication(name, version);
 		if(existing!=null)
 			return;
 		if(imageResource!=null)
-			application.setImage((Image)Image.fromResource(imageResource));
+			application.setImage(Image.fromResource(imageResource).getStorableData());
 		codeStore.storeModule(application);	
 		if(codeResource!=null)
 			storeAssociatedCode(codeStore);
 	}
 
 	private void storeAssociatedCode(ICodeStore codeStore) throws Exception {
-		ResourceCodeStore rcs = new ResourceCodeStore(null, ModuleType.APPLICATION, codeResource, application.getVersion().getStorableData());
-		codeStore.storeDeclarations(rcs.getDeclarations(), rcs.getModuleDialect(), Version.parse(application.getVersion().getStorableData()), application.getDbId());
+		ResourceCodeStore rcs = new ResourceCodeStore(null, ModuleType.APPLICATION, codeResource, application.getVersion());
+		codeStore.storeDeclarations(rcs.getDeclarations(), rcs.getModuleDialect(), Version.parse(application.getVersion()), application.getDbId());
 	}
 
 }

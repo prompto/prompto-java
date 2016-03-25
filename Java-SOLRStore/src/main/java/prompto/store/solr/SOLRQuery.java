@@ -1,20 +1,118 @@
 package prompto.store.solr;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import org.apache.solr.client.solrj.SolrQuery;
 
+import prompto.runtime.Context;
+import prompto.store.IOrderBy;
+import prompto.store.IPredicate;
 import prompto.store.IQuery;
 
-/* a simple wrapper to fit into the IStore API */
 public class SOLRQuery implements IQuery {
 
-	SolrQuery query;
+	Context context;
+	SolrQuery query = new SolrQuery();
+	SOLRFilterBuilder filter;
 	
-	public SOLRQuery(SolrQuery query) {
-		this.query = query;
+	public SOLRQuery(Context context) {
+		this.context = context;
 	}
 
 	public SolrQuery getQuery() {
+		if(filter!=null) {
+			query.setQuery(filter.toSolrQuery());
+			filter = null;
+		}
 		return query;
 	}
+
+	@Override
+	public IPredicate getPredicate() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public <T> void verify(String fieldName, MatchOp match, T fieldValue) {
+		if(filter==null)
+			filter = new SOLRFilterBuilder(context);
+		TextFieldFlags flags = computeFieldFlags(fieldName);
+		filter.push(fieldName, match, fieldValue, flags);
+	}
+
+	
+	private TextFieldFlags computeFieldFlags(String fieldName) {
+		if("category".equals(fieldName))
+			return new TextFieldFlags(Arrays.asList("key"));
+		else
+			return TextFieldFlags.computeFieldFlags(context, fieldName);
+	}
+	
+	@Override
+	public void and() {
+		filter.and();
+	}
+
+	@Override
+	public void or() {
+		filter.or();
+	}
+
+	@Override
+	public void not() {
+		filter.not();
+	}
+
+	@Override
+	public void setFirst(Long first) {
+		query.setStart(first.intValue() - 1);
+	}
+
+	@Override
+	public void setLast(Long end) {
+		Integer start = query.getStart();
+		if(start==null)
+			start = 1;
+		else
+			start += 1; // was 0 based
+		query.setRows((int)((end - start)+1));
+	}
+
+	public void setRows(int rows) {
+		query.setRows(rows);
+	}
+	
+	@Override
+	public Long getFirst() {
+		Integer start = query.getStart();
+		return start==null ? null : start.longValue() + 1;
+	}
+
+	@Override
+	public Long getLast() {
+		Integer rows = query.getRows();
+		if(rows==null)
+			return null;
+		Integer start = query.getStart();
+		if(start==null)
+			start = 1;
+		else
+			start += 1; // was 0 based
+		return start==null ? rows.longValue() : (1 + rows.longValue() - start.longValue());
+	}
+
+	@Override
+	public Collection<IOrderBy> getOrdering() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void addOrderByClause(String fieldName, boolean descending) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

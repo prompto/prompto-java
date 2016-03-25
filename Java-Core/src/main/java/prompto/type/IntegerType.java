@@ -149,7 +149,7 @@ public class IntegerType extends NativeType implements INumberType {
 	}
 
 	@Override
-	public IValue convertJavaValueToPromptoValue(Object value) {
+	public IValue convertJavaValueToPromptoValue(Context context, Object value) {
         if (value instanceof Number)
             return new Integer(((Number)value).longValue());
         else

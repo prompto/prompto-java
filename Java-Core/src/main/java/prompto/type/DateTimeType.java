@@ -37,11 +37,11 @@ public class DateTimeType extends NativeType {
 	}
 	
 	@Override
-	public IValue convertJavaValueToPromptoValue(Object value) {
+	public IValue convertJavaValueToPromptoValue(Context context, Object value) {
         if (value instanceof PromptoDateTime)
             return new prompto.value.DateTime((PromptoDateTime)value);
         else
-        	return super.convertJavaValueToPromptoValue(value);
+        	return super.convertJavaValueToPromptoValue(context, value);
 	}
 
 	@Override

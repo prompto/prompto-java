@@ -202,10 +202,10 @@ public class TupleValue extends BaseValue implements IContainer<IValue>, ISlicea
 	public int compareTo(Context context, IValue value) throws PromptoError {
 		if(!(value instanceof TupleValue))
 			return super.compareTo(context, value);
-		return CompareTo(context, (TupleValue)value, new ArrayList<java.lang.Boolean>());
+		return compareTo(context, (TupleValue)value, new ArrayList<java.lang.Boolean>());
 	}
 
-	public int CompareTo(Context context, TupleValue other, Collection<java.lang.Boolean> directions) throws PromptoError {
+	public int compareTo(Context context, TupleValue other, Collection<java.lang.Boolean> directions) throws PromptoError {
 		Iterator<java.lang.Boolean> iterDirs = directions.iterator();
 		Iterator<IValue> iterThis = this.items.iterator();
 		Iterator<IValue> iterOther = other.items.iterator();

@@ -14,10 +14,6 @@ public abstract class BinaryConverter {
 		return value.toByteArray();
 	}
 
-	public static BinaryValue toBinaryValue(Object data) throws IOException {
-		return BinaryValue.newInstance(toPromptoBinary(data));
-	}
-	
 	public static PromptoBinary toPromptoBinary(Object data) throws IOException {
 		if(data instanceof String)
 			data = Base64.base64ToByteArray(data.toString());

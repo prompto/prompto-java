@@ -6,7 +6,6 @@ import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
-import prompto.store.IFilterBuilder;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
@@ -23,10 +22,6 @@ public interface IExpression {
 	IValue interpret(Context context) throws PromptoError;
 	void toDialect(CodeWriter writer);
 
-	default void toFilter(Context context, IFilterBuilder builder) throws PromptoError {
-		throw new UnsupportedOperationException("toFilter not supported by " + this.getClass().getSimpleName());
-	}
-	
 	default ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		System.err.println("Need to implement compile for " + this.getClass().getName());
 		throw new UnsupportedOperationException();

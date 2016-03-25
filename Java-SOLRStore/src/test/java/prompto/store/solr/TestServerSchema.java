@@ -18,6 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import prompto.store.IStore;
+import prompto.value.BinaryValue;
 import prompto.value.Blob;
 import prompto.value.Image;
 
@@ -103,7 +104,7 @@ public class TestServerSchema {
 		SolrDocument result = resp.getResults().get(0);
 		assertNotNull(result);
 		Object data = result.getFieldValue("data");
-		data = BinaryConverter.toBinaryValue(data);
+		data = BinaryValue.newInstance(BinaryConverter.toPromptoBinary(data));
 		assertTrue(data instanceof Blob);
 		blob = (Blob)data;
 		assertEquals("application/octet-stream", blob.getMimeType());
@@ -131,7 +132,7 @@ public class TestServerSchema {
 		SolrDocument result = resp.getResults().get(0);
 		assertNotNull(result);
 		Object data = result.getFieldValue("data");
-		data = BinaryConverter.toBinaryValue(data);
+		data = BinaryValue.newInstance(BinaryConverter.toPromptoBinary(data));
 		assertTrue(data instanceof Image);
 		image = (Image)data;
 		assertEquals("image/jpeg", image.getMimeType());

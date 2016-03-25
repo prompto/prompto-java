@@ -14,13 +14,15 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
+import prompto.store.IPredicateExpression;
+import prompto.store.IQuery;
 import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.Boolean;
 import prompto.value.IValue;
 
-public class OrExpression implements IExpression, IAssertion {
+public class OrExpression implements IExpression, IPredicateExpression, IAssertion {
 	
 	IExpression left;
 	IExpression right;
@@ -81,6 +83,17 @@ public class OrExpression implements IExpression, IAssertion {
 				throw new SyntaxError("Illegal: Boolean and " + rval.getClass().getSimpleName());
 		} else
 			throw new SyntaxError("Illegal: " + lval.getClass().getSimpleName() + " + " + rval.getClass().getSimpleName());
+	}
+	
+	@Override
+	public void interpretPredicate(Context context, IQuery query) throws PromptoError {
+		if(!(left instanceof IPredicateExpression))
+			throw new SyntaxError("Not a predicate: " + left.toString());
+		((IPredicateExpression)left).interpretPredicate(context, query);
+		if(!(right instanceof IPredicateExpression))
+			throw new SyntaxError("Not a predicate: " + left.toString());
+		((IPredicateExpression)right).interpretPredicate(context, query);
+		query.or();
 	}
 	
 	@Override

@@ -87,7 +87,7 @@ public class CharacterType extends NativeType {
 	}
 	
 	@Override
-	public IValue convertJavaValueToPromptoValue(Object value) {
+	public IValue convertJavaValueToPromptoValue(Context context, Object value) {
         if (value instanceof java.lang.Character)
             return new Character(((java.lang.Character)value).charValue());
         else

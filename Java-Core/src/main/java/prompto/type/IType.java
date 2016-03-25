@@ -91,6 +91,6 @@ public interface IType {
 	String toString(Object value);
 	void toDialect(CodeWriter writer);
 	IValue readJSONValue(Context context, JsonNode value);
-	IValue convertJavaValueToPromptoValue(Object value);
+	IValue convertJavaValueToPromptoValue(Context context, Object value);
 }
  

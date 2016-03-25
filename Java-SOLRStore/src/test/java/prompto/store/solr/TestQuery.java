@@ -1,6 +1,8 @@
 package prompto.store.solr;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.util.UUID;
 
@@ -24,7 +26,6 @@ import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.type.AnyType;
 import prompto.type.TextType;
-import prompto.value.Text;
 
 public class TestQuery extends BaseSOLRTest {
 
@@ -41,7 +42,7 @@ public class TestQuery extends BaseSOLRTest {
 	}
 	
 	private void registerDbIdAttribute() throws SyntaxError {
-		AttributeDeclaration decl = new AttributeDeclaration( IStore.dbIdIdentifier, AnyType.instance());
+		AttributeDeclaration decl = new AttributeDeclaration( new Identifier(IStore.dbIdName), AnyType.instance());
 		context.registerDeclaration(decl);
 	}
 
@@ -59,13 +60,13 @@ public class TestQuery extends BaseSOLRTest {
 		ParseTreeWalker walker = new ParseTreeWalker();
 		walker.walk(builder, tree);
 		FetchOneExpression fetch = builder.<FetchOneExpression>getNodeValue(tree);
-		return store.fetchOne(context, fetch.getType(), fetch.getFilter());
+		return store.fetchOne(context, fetch.getType(), fetch.getPredicate());
 	}
 	
 	@Test
 	public void testStore() throws Exception {
 		IStorable storable = store.newStorable(null);
-		storable.setValue(new Identifier("name"), new Text("John"));
+		storable.setData("name", "John");
 		store.store(storable);
 		store.commit();
 		SolrQuery query = new SolrQuery();
@@ -104,10 +105,6 @@ public class TestQuery extends BaseSOLRTest {
 		IStored result = fetchOne(query);
 		assertNull(result);
 	}
-	
-	@Test
-	public void testTextField() throws Exception {
-		
-	}
+
 
 }

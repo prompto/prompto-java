@@ -6,6 +6,7 @@ import prompto.error.SyntaxError;
 import prompto.grammar.OrderByClauseList;
 import prompto.runtime.Context;
 import prompto.store.IDataStore;
+import prompto.store.IPredicateExpression;
 import prompto.store.IStoredIterator;
 import prompto.store.IStore;
 import prompto.type.BooleanType;
@@ -58,9 +59,9 @@ public class FetchAllExpression extends FetchOneExpression {
 		writer.append(" ( ");
 		type.toDialect(writer);
 		writer.append(" ) ");
-		if(filter!=null) {
+		if(predicate!=null) {
 			writer.append("where ");
-			filter.toDialect(writer);
+			predicate.toDialect(writer);
 			writer.append(" ");
 		}
 		if(orderBy!=null)
@@ -82,9 +83,9 @@ public class FetchAllExpression extends FetchOneExpression {
 			end.toDialect(writer);
 			writer.append(") ");
 		}
-		if(filter!=null) {
+		if(predicate!=null) {
 			writer.append(" where ( ");
-			filter.toDialect(writer);
+			predicate.toDialect(writer);
 			writer.append(") ");
 		}
 		if(orderBy!=null)
@@ -106,9 +107,9 @@ public class FetchAllExpression extends FetchOneExpression {
 			writer.append(" to ");
 			end.toDialect(writer);
 		} 
-		if(filter!=null) {
+		if(predicate!=null) {
 			writer.append(" where ");
-			filter.toDialect(writer);
+			predicate.toDialect(writer);
 		}
 		if(orderBy!=null) {
 			writer.append(" ");
@@ -122,7 +123,7 @@ public class FetchAllExpression extends FetchOneExpression {
 		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, type.getTypeNameId());
 		if(decl==null)
 			throw new SyntaxError("Expecting a type type !");
-		checkFilter(context);
+		checkPredicate(context);
 		checkOrderBy(context);
 		checkSlice(context);
 		return new CursorType(type);
@@ -140,10 +141,12 @@ public class FetchAllExpression extends FetchOneExpression {
 	}
 
 
-	private void checkFilter(Context context) throws SyntaxError {
-		if(filter==null)
+	private void checkPredicate(Context context) throws SyntaxError {
+		if(predicate==null)
 			return;
-		IType filterType = filter.check(context);
+		if(!(predicate instanceof IPredicateExpression))
+			throw new SyntaxError("Filtering expression must be a predicate !");
+		IType filterType = predicate.check(context);
 		if(filterType!=BooleanType.instance())
 			throw new SyntaxError("Filtering expression must return a boolean !");
 	}
@@ -152,7 +155,9 @@ public class FetchAllExpression extends FetchOneExpression {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		IStore<Object> store = IDataStore.getInstance();
-		IStoredIterator docs = store.fetchMany(context, type, start, end, filter, orderBy);
+		if(predicate!=null && !(predicate instanceof IPredicateExpression))
+			throw new SyntaxError("Filtering expression must be a predicate !");
+		IStoredIterator docs = store.fetchMany(context, type, start, end, (IPredicateExpression)predicate, orderBy);
 		return new Cursor(context, type, docs);
 	}
 }

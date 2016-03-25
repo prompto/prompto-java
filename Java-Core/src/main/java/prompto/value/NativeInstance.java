@@ -1,6 +1,7 @@
 package prompto.value;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -27,6 +28,7 @@ import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.store.IDataStore;
 import prompto.store.IStorable;
+import prompto.store.IStore;
 import prompto.type.CategoryType;
 import prompto.type.NativeCategoryType;
 
@@ -209,8 +211,17 @@ public class NativeInstance extends BaseValue implements IInstance {
 			Object data = value.convertTo(nativeSetter.getParameterTypes()[0]);
 			setValue(nativeSetter, data);
 			if(storable!=null && decl.isStorable()) {
-				storable.setValue(attrName, value);
+				storable.setData(attrName.toString(), data, this::getDbId);
 			}
+		}
+	}
+
+	private Object getDbId() {
+		try {
+			Field field = this.getClass().getField(IStore.dbIdName);
+			return field.get(this);
+		} catch (Throwable t) {
+			throw new RuntimeException(t);
 		}
 	}
 

@@ -106,11 +106,11 @@ public class TextType extends NativeType {
 	}
 
 	@Override
-	public IValue convertJavaValueToPromptoValue(Object value) {
+	public IValue convertJavaValueToPromptoValue(Context context, Object value) {
         if (value instanceof String)
             return new Text((String)value);
         else
-            return (IValue)value; // TODO for now
+            return super.convertJavaValueToPromptoValue(context, value);
 	}
 	
 	@Override

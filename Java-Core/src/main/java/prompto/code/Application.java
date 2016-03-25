@@ -2,20 +2,18 @@ package prompto.code;
 
 import prompto.code.ICodeStore.ModuleType;
 import prompto.error.PromptoError;
-import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
-import prompto.value.Text;
 
 public class Application extends Module {
 
-	private Text entryPoint;
+	private String entryPoint;
 
-	public Text getEntryPoint() {
+	public String getEntryPoint() {
 		return entryPoint;
 	}
 
-	public void setEntryPoint(Text entryPoint) {
+	public void setEntryPoint(String entryPoint) {
 		this.entryPoint = entryPoint;
 	}
 
@@ -27,7 +25,7 @@ public class Application extends Module {
 	@Override
 	public void populate(Context context, IStorable storable) throws PromptoError {
 		super.populate(context, storable);
-		storable.setValue(new Identifier("entryPoint"), entryPoint);
+		storable.setData("entryPoint", entryPoint);
 	}
 
 }

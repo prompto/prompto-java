@@ -22,12 +22,12 @@ import com.fasterxml.jackson.core.JsonGenerator;
 public class Cursor extends BaseValue implements IIterable<IValue>, IterableWithLength<IValue>, IteratorWithLength<IValue> {
 
 	Context context;
-	IStoredIterator documents;
+	IStoredIterator iterator;
 	
 	public Cursor(Context context, IType itemType, IStoredIterator documents) {
 		super(new CursorType(itemType));
 		this.context = context;
-		this.documents = documents;
+		this.iterator = documents;
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class Cursor extends BaseValue implements IIterable<IValue>, IterableWith
 	
 	@Override
 	public long getLength() {
-		return documents.length();
+		return iterator.length();
 	}
 
 	@Override
@@ -52,13 +52,13 @@ public class Cursor extends BaseValue implements IIterable<IValue>, IterableWith
 	
 	@Override
 	public boolean hasNext() {
-		return documents.hasNext();
+		return iterator.hasNext();
 	}
 	
 	@Override
 	public IValue next() {
 		try {
-			IStored stored = documents.next();
+			IStored stored = iterator.next();
 			CategoryType itemType = readItemType(stored);
 			return itemType.newInstance(context, stored);
 		} catch (PromptoError e) {

@@ -84,10 +84,10 @@ public class CodeStoreBootstrapper {
 	}
 
 	private Collection<AttributeDeclaration> getMinimalColumns(IStore<?> store) {
-		IType dbIdIType = Utils.typeToIType(store.getDbIdType());
+		IType dbIdIType = Utils.typeToIType(store.getDbIdClass());
 		List<AttributeDeclaration> columns = new ArrayList<AttributeDeclaration>();
 		// attributes with reserved names, the below declarations will be used
-		columns.add(new AttributeDeclaration(IStore.dbIdIdentifier, dbIdIType));
+		columns.add(new AttributeDeclaration(new Identifier(IStore.dbIdName), dbIdIType));
 		columns.add(new AttributeDeclaration(new Identifier("storable"), BooleanType.instance()));
 		columns.add(new AttributeDeclaration(new Identifier("category"), 
 				new ListType(TextType.instance()), new IdentifierList(new Identifier("key"))));

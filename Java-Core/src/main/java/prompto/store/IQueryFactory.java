@@ -5,11 +5,12 @@ import prompto.expression.IExpression;
 import prompto.grammar.OrderByClauseList;
 import prompto.type.CategoryType;
 
-public interface IQueryBuilder<T> {
+public interface IQueryFactory<T> {
 	
-	IQuery buildFetchOneQuery(CategoryType type, IExpression filter) throws PromptoError;
+	IQuery buildFetchOneQuery(CategoryType type, IPredicateExpression predicate) throws PromptoError;
 	IQuery buildFetchManyQuery(CategoryType type, 
 			IExpression start, IExpression end, 
-			IExpression filter, OrderByClauseList orderBy) throws PromptoError;
+			IPredicateExpression predicate, 
+			OrderByClauseList orderBy) throws PromptoError;
 
 }

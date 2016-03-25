@@ -39,10 +39,5 @@ public class TestStore extends BaseEParserTest {
 		checkInterpretedOutput("store/sortedRecords.pec");
 	}
 
-	@Test
-	public void testInterpretedSubRecord() throws Exception {
-		checkInterpretedOutput("store/subRecord.pec");
-	}
-
 }
 

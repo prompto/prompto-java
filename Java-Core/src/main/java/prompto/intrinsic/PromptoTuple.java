@@ -2,6 +2,8 @@ package prompto.intrinsic;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class PromptoTuple<V> extends ArrayList<V> {
@@ -47,5 +49,37 @@ public class PromptoTuple<V> extends ArrayList<V> {
 				return true;
 		}
 		return false;
+	}
+
+	@SuppressWarnings("unchecked")
+	public int compareTo(PromptoTuple<?> other, List<Boolean> directions) {
+		Iterator<java.lang.Boolean> iterDirs = directions.iterator();
+		Iterator<V> iterThis = this.iterator();
+		Iterator<?> iterOther = other.iterator();
+		while(iterThis.hasNext() && iterOther.hasNext()) {
+			boolean descending = iterDirs.hasNext() ? iterDirs.next() : false;
+			// compare items
+			V thisVal = iterThis.next();
+			Object otherVal = iterOther.next();
+			if(thisVal==null && otherVal==null)
+				continue;
+			else if(thisVal==null)
+				return descending ? 1 : -1;
+			else if(otherVal==null)
+				return descending ? -1 : 1;
+			if(!(thisVal instanceof Comparable<?> && thisVal.getClass().isInstance(otherVal)))
+				return 0;
+			int cmp = ((Comparable<V>)thisVal).compareTo((V)otherVal);
+			// if not equal, done
+			if(cmp!=0)
+				return descending ? -cmp : cmp;
+		}
+		boolean descending = iterDirs.hasNext() ? iterDirs.next() : false;
+		if(iterThis.hasNext())
+			return descending ? -1 : 1;
+		else if(iterOther.hasNext())
+			return descending ? 1 : -1;
+		else
+			return 0;
 	}
 }
