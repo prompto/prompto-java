@@ -3,23 +3,24 @@ package prompto.store;
 import java.util.Collection;
 import java.util.Map;
 
+import prompto.declaration.AttributeInfo;
 import prompto.store.IQuery.MatchOp;
 
 public class MatchesPredicate<T extends Object> implements IPredicate {
 
-	String name;
+	AttributeInfo info;
 	MatchOp match;
 	T value;
 	
-	public MatchesPredicate(String name, MatchOp match, T value) {
-		this.name = name;
+	public MatchesPredicate(AttributeInfo info, MatchOp match, T value) {
+		this.info = info;
 		this.match = match;
 		this.value = value;
 	}
 	
 	@Override
 	public boolean matches(Map<String, Object> document) {
-		Object data = document.get(name);
+		Object data = document.get(info.getName());
 		switch(match) {
 		case EQUALS:
 			return matchesEQUALS(data);

@@ -5,14 +5,17 @@ import prompto.compiler.CompilerUtils;
 import prompto.compiler.FieldConstant;
 import prompto.compiler.FieldInfo;
 import prompto.compiler.Flags;
+import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
+import prompto.compiler.StringConstant;
 import prompto.compiler.ResultInfo.Flag;
 import prompto.compiler.StackLocal;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
+import prompto.intrinsic.PromptoRoot;
 import prompto.runtime.Context;
 import prompto.runtime.VoidResult;
 import prompto.type.IType;
@@ -91,8 +94,16 @@ public class ReturnStatement extends SimpleStatement {
 		// load value
 		expression.compile(context, method, flags);
 		// store in field
-		FieldConstant f = new FieldConstant(c, field.getName().getValue(), field.getType());
+		String name = field.getName().getValue();
+		FieldConstant f = new FieldConstant(c, name, field.getType());
 		method.addInstruction(Opcode.PUTFIELD, f);
+		// also store data in storable
+		MethodConstant m = new MethodConstant(PromptoRoot.class, "setStorable", String.class, Object.class, void.class);
+		method.addInstruction(Opcode.ALOAD_0, c);
+		method.addInstruction(Opcode.LDC, new StringConstant(name));
+		method.addInstruction(Opcode.ALOAD_1, new ClassConstant(Object.class));
+		method.addInstruction(Opcode.INVOKESPECIAL, m);
+		// done
 		method.addInstruction(Opcode.RETURN);
 		return new ResultInfo(void.class, Flag.RETURN);
 	}

@@ -60,12 +60,12 @@ public class TestQuery extends BaseSOLRTest {
 		ParseTreeWalker walker = new ParseTreeWalker();
 		walker.walk(builder, tree);
 		FetchOneExpression fetch = builder.<FetchOneExpression>getNodeValue(tree);
-		return store.fetchOne(context, fetch.getType(), fetch.getPredicate());
+		return store.interpretFetchOne(context, fetch.getType(), fetch.getPredicate());
 	}
 	
 	@Test
 	public void testStore() throws Exception {
-		IStorable storable = store.newStorable(new String[0]);
+		IStorable storable = store.newStorable(new String[0], null);
 		storable.setData("name", "John");
 		store.store(storable);
 		store.commit();

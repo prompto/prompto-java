@@ -1,12 +1,15 @@
 package prompto.store.solr;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Arrays;
 import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.expression.EqualsExpression;
@@ -29,6 +32,7 @@ import prompto.store.IDataStore;
 import prompto.store.IPredicateExpression;
 import prompto.store.IStore;
 import prompto.store.IStored;
+import prompto.store.IStoredIterator;
 import prompto.type.AnyType;
 import prompto.type.BooleanType;
 import prompto.type.CategoryType;
@@ -41,13 +45,13 @@ import prompto.type.TimeType;
 import prompto.type.UUIDType;
 import prompto.utils.IdentifierList;
 import prompto.value.Boolean;
+import prompto.value.ConcreteInstance;
 import prompto.value.Date;
 import prompto.value.Decimal;
 import prompto.value.ExpressionValue;
+import prompto.value.IInstance;
 import prompto.value.IValue;
 import prompto.value.Integer;
-import prompto.value.ConcreteInstance;
-import prompto.value.IInstance;
 import prompto.value.Text;
 import prompto.value.Time;
 
@@ -67,9 +71,10 @@ public class TestInstance extends BaseSOLRTest {
 	
 	@Test
 	public void testStoreTextField() throws Exception {
-		String fieldName = "text";
-		String fieldValue = "text";
-		createField(fieldName, "text", false);
+		String fieldName = "msg";
+		String fieldType = "text";
+		String fieldValue = "hello";
+		createField(fieldName, fieldType, false);
 		IInstance instance = createInstanceWith1Attribute(fieldName, TextType.instance());
 		instance.setMember(context, new Identifier(fieldName), new Text(fieldValue));
 		store.store(instance.getStorable());
@@ -201,7 +206,12 @@ public class TestInstance extends BaseSOLRTest {
 		CategoryType t = new CategoryType(new Identifier("Test"));
 		IPredicateExpression e = new EqualsExpression( 
 				new UnresolvedIdentifier(new Identifier(field)), EqOp.EQUALS, value);
-		return store.fetchOne(context, t, e);
+		return store.interpretFetchOne(context, t, e);
+	}
+	
+	@SuppressWarnings("unused")
+	private IStoredIterator fetchAll() throws Exception {
+		return store.interpretFetchMany(context, null, null, null, null, null);
 	}
 
 	private IInstance createInstanceWith1Attribute(String name, IType type) throws Exception {

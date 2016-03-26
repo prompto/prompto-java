@@ -1,5 +1,7 @@
 package prompto.store;
 
+import prompto.declaration.AttributeInfo;
+
 
 public interface IQuery {
 
@@ -12,7 +14,7 @@ public interface IQuery {
 	}
 	
 	// create atomic predicates
-	<T> void verify(String fieldName, MatchOp match, T fieldValue);
+	<T> void verify(AttributeInfo attribute, MatchOp match, T fieldValue);
 	// the below make the assumption that the atomic predicates are available from a stack
 	void and();
 	void or();
@@ -23,6 +25,6 @@ public interface IQuery {
 	Long getFirst();
 	Long getLast();
 	// ordering
-	void addOrderByClause(String fieldName, boolean descending);
+	void addOrderByClause(AttributeInfo attribute, boolean descending);
 
 }

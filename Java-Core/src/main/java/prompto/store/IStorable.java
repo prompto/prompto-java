@@ -15,9 +15,11 @@ public interface IStorable {
 	
 	void setData(String name, Object value, IDbIdProvider provider) throws PromptoError;
 
-
 	public static interface IDbIdProvider {
 		Object getDbId();
 	}
 	
+	public static interface IDbIdListener {
+		void setDbId(Object dbId);
+	}
 }

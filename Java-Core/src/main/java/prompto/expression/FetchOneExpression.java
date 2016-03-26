@@ -1,5 +1,11 @@
 package prompto.expression;
 
+import prompto.compiler.ClassConstant;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.declaration.CategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -77,11 +83,24 @@ public class FetchOneExpression extends Section implements IExpression {
 		if(!(predicate instanceof IPredicateExpression))
 			throw new SyntaxError("Filtering expression must be a predicate !");
 		IStore<Object>store = IDataStore.getInstance();
-		IStored stored = store.fetchOne(context, type, (IPredicateExpression)predicate);
+		IStored stored = store.interpretFetchOne(context, type, (IPredicateExpression)predicate);
 		if(stored==null)
 			return NullValue.instance();
 		else
 			return type.newInstance(context, stored);
+	}
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		// need the data store
+		MethodConstant m = new MethodConstant(new ClassConstant(IDataStore.class), "getInstance", IDataStore.class);
+		method.addInstruction(Opcode.INVOKESTATIC, m);
+		// need the global context
+		
+		// need a query factory
+		
+		// TODO Auto-generated method stub
+		return IExpression.super.compile(context, method, flags);
 	}
 
 }

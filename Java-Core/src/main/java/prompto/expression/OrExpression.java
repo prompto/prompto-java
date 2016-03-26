@@ -86,13 +86,13 @@ public class OrExpression implements IExpression, IPredicateExpression, IAsserti
 	}
 	
 	@Override
-	public void interpretPredicate(Context context, IQuery query) throws PromptoError {
+	public void interpretQuery(Context context, IQuery query) throws PromptoError {
 		if(!(left instanceof IPredicateExpression))
 			throw new SyntaxError("Not a predicate: " + left.toString());
-		((IPredicateExpression)left).interpretPredicate(context, query);
+		((IPredicateExpression)left).interpretQuery(context, query);
 		if(!(right instanceof IPredicateExpression))
 			throw new SyntaxError("Not a predicate: " + left.toString());
-		((IPredicateExpression)right).interpretPredicate(context, query);
+		((IPredicateExpression)right).interpretQuery(context, query);
 		query.or();
 	}
 	

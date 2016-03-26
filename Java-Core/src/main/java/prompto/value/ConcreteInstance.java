@@ -42,7 +42,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		this.declaration = declaration;
 		if(declaration.isStorable()) {
 			List<String> categories = declaration.collectCategories(context);
-			storable = IDataStore.getInstance().newStorable(categories);
+			storable = IDataStore.getInstance().newStorable(categories, null);
 		}
 	}
 	

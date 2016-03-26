@@ -157,7 +157,7 @@ public class FetchAllExpression extends FetchOneExpression {
 		IStore<Object> store = IDataStore.getInstance();
 		if(predicate!=null && !(predicate instanceof IPredicateExpression))
 			throw new SyntaxError("Filtering expression must be a predicate !");
-		IStoredIterator docs = store.fetchMany(context, type, start, end, (IPredicateExpression)predicate, orderBy);
+		IStoredIterator docs = store.interpretFetchMany(context, type, start, end, (IPredicateExpression)predicate, orderBy);
 		return new Cursor(context, type, docs);
 	}
 }

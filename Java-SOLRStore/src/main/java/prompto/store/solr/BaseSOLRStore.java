@@ -21,6 +21,7 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 
 import prompto.declaration.AttributeDeclaration;
+import prompto.declaration.AttributeInfo;
 import prompto.error.InternalError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
@@ -33,7 +34,9 @@ import prompto.intrinsic.PromptoTime;
 import prompto.runtime.Context;
 import prompto.store.IQuery;
 import prompto.store.IQuery.MatchOp;
+import prompto.store.IStorable.IDbIdListener;
 import prompto.store.IQueryFactory;
+import prompto.store.IQueryInterpreter;
 import prompto.store.IStorable;
 import prompto.store.IStore;
 import prompto.store.IStored;
@@ -46,6 +49,7 @@ import prompto.type.DateTimeType;
 import prompto.type.DateType;
 import prompto.type.DecimalType;
 import prompto.type.IType;
+import prompto.type.IType.Family;
 import prompto.type.ImageType;
 import prompto.type.IntegerType;
 import prompto.type.ListType;
@@ -177,7 +181,7 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 		if("version".equals(column.getName())) 
 			addField("version", "version", options);
 		else if(type==TextType.instance())
-			addTextField(column.getName(), options, column.getIndexTypes());
+			addTextField(column.getName(), options, column.getAttributeInfo());
 		else if(type instanceof CategoryType)
 			addField(column.getName(), "db-ref", options);
 		else {
@@ -187,7 +191,7 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 	}
 	
 	
-	private void addTextField(String fieldName, Map<String, Object> options, Collection<String> indexTypes) throws SolrServerException, IOException {
+	private void addTextField(String fieldName, Map<String, Object> options, AttributeInfo indexTypes) throws SolrServerException, IOException {
 		options = new HashMap<>(options); // use a copy
 		options.put("indexed", false);
 		options.put("stored", true);
@@ -195,9 +199,14 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 		options = new HashMap<>(options); // use a copy
 		options.put("indexed", true);
 		options.put("stored", false);
-		if(indexTypes!=null) for(String indexType : indexTypes)
-			addCopyField(fieldName + "-" + indexType, "text-" + indexType, options, fieldName);
-		else
+		if(indexTypes!=null) {
+			if(indexTypes.isKey())
+				addCopyField(fieldName + "-" + AttributeInfo.KEY, "text-" + AttributeInfo.KEY, options, fieldName);
+			if(indexTypes.isValue())
+				addCopyField(fieldName + "-" + AttributeInfo.VALUE, "text-" + AttributeInfo.VALUE, options, fieldName);
+			if(indexTypes.isWords())
+				addCopyField(fieldName + "-" + AttributeInfo.WORDS, "text-" + AttributeInfo.WORDS, options, fieldName);
+		} else
 			addCopyField(fieldName + "-key", "text-key", options, fieldName);
 	}
 
@@ -260,8 +269,8 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 	
 	@Override
 	public IStored fetchUnique(UUID dbId) throws PromptoError {
-		SOLRQuery query = new SOLRQuery(null);
-		query.verify(IStore.dbIdName, MatchOp.EQUALS, dbId);
+		SOLRQuery query = new SOLRQuery();
+		query.verify(new SOLRAttributeInfo(IStore.dbIdName, Family.UUID, false, null), MatchOp.EQUALS, dbId);
 		try {
 			commit();
 			QueryResponse result = query(query.getQuery());
@@ -272,8 +281,13 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 	}
 	
 	@Override
-	public IQueryFactory<UUID> getInterpretedQueryFactory(Context context) {
-		return new SOLRQueryFactory(context);
+	public IQueryInterpreter<UUID> getQueryInterpreter(Context context) {
+		return new SOLRQueryInterpreter(context);
+	}
+	
+	@Override
+	public IQueryFactory getQueryFactory() {
+		return new SOLRQueryFactory();
 	}
 	
 	@Override
@@ -330,8 +344,8 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 	}
 
 	@Override
-	public IStorable newStorable(List<String> categories) {
-		return new StorableDocument(categories);
+	public IStorable newStorable(List<String> categories, IDbIdListener listener) {
+		return new StorableDocument(categories, listener);
 	}
 	
 	public abstract void createCoreIfRequired() throws SolrServerException, IOException;

@@ -17,11 +17,13 @@ import prompto.value.IValue;
 public class StorableDocument extends BaseDocument implements IStorable {
 
 	SolrInputDocument document = null;
+	IDbIdListener listener;
 	List<String> categories;
 	boolean isUpdate; // partial updates require operations instead of values
 	
-	public StorableDocument(List<String> categories) {
+	public StorableDocument(List<String> categories, IDbIdListener listener) {
 		this.categories = categories;
+		this.listener = listener;
 	}
 
 	@Override
@@ -54,21 +56,19 @@ public class StorableDocument extends BaseDocument implements IStorable {
 	
 	private void ensureDocument(IDbIdProvider provider) {
 		if(document==null) {
-			UUID dbId = null;
-			if(provider!=null) {
-				// the scenario where we get an existing dbId is when  
-				// an instance passes a provider when calling setData
-				// in such a case, the scenario is an update scenario
-				dbId = (UUID)provider.getDbId();
-				if(dbId!=null)
-					this.isUpdate = true;
-			}
-			if(dbId==null)
+			UUID dbId = provider==null ? null : (UUID)provider.getDbId();
+			// the scenario where we get an existing dbId is when  
+			// an instance passes a provider when calling setData
+			// in such a case, the scenario is an update scenario
+			if(dbId!=null)
+				this.isUpdate = true;
+			else
 				dbId = java.util.UUID.randomUUID();
 			document = new SolrInputDocument();
 			document.setField(IStore.dbIdName, dbId);
 			if(categories!=null && !this.isUpdate)
 				document.setField("category", categories); 
+				
 		}
 	}
 

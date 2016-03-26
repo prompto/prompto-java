@@ -6,6 +6,6 @@ import prompto.runtime.Context;
 
 public interface IPredicateExpression extends IExpression {
 
-	void interpretPredicate(Context context, IQuery query) throws PromptoError;
+	void interpretQuery(Context context, IQuery query) throws PromptoError;
 
 }

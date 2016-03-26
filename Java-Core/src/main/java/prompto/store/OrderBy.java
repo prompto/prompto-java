@@ -1,19 +1,23 @@
 package prompto.store;
 
+import prompto.declaration.AttributeInfo;
+
 public class OrderBy implements IOrderBy {
 	
-	String fieldName;
+	AttributeInfo attribute;
 	boolean descending;
 	
-	public OrderBy(String fieldName, boolean descending) {
-		this.fieldName = fieldName;
+	public OrderBy(AttributeInfo attribute, boolean descending) {
+		this.attribute = attribute;
 		this.descending = descending;
 	}
 	
-	public String getFieldName() {
-		return fieldName;
+	@Override
+	public AttributeInfo getAttributeInfo() {
+		return attribute;
 	}
 	
+	@Override
 	public boolean isDescending() {
 		return descending;
 	}

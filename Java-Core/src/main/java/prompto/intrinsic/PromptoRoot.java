@@ -5,14 +5,36 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import prompto.error.PromptoError;
 import prompto.store.IStorable;
+import prompto.store.IStorable.IDbIdListener;
+import prompto.store.IStorable.IDbIdProvider;
 
-public abstract class PromptoRoot {
+public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener {
 
+	protected Object dbId;
 	protected IStorable storable;
+	
+	
+	public final Object getDbId() {
+		return dbId;
+	}
+	
+	public final void setDbId(Object dbId) {
+		this.dbId = dbId;
+	}
 	
 	public IStorable getStorable() {
 		return storable;
+	}
+	
+	/* not a great name, but avoids collision with field setters */
+	protected final void setStorable(String name, Object value) {
+		if(storable!=null) try {
+			storable.setData(name, value, this);
+		} catch(PromptoError e) {
+			throw new RuntimeException(e); // TODO for now
+		}
 	}
 	
 	@Override

@@ -45,7 +45,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 		this.instance = makeInstance(context);
 		if(declaration.isStorable()) {
 			List<String> categories = Arrays.asList(declaration.getName()); 
-			storable = IDataStore.getInstance().newStorable(categories);
+			storable = IDataStore.getInstance().newStorable(categories, null);
 		}
 	}
 	
@@ -55,7 +55,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 		this.instance = instance;
 		if(declaration.isStorable()) {
 			List<String> categories = Arrays.asList(declaration.getName()); 
-			storable = IDataStore.getInstance().newStorable(categories);
+			storable = IDataStore.getInstance().newStorable(categories, null);
 		}
 	}
 	

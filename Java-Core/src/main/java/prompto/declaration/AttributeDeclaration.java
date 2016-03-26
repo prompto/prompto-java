@@ -1,6 +1,6 @@
 package prompto.declaration;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import prompto.compiler.FieldInfo;
@@ -10,7 +10,9 @@ import prompto.expression.IExpression;
 import prompto.grammar.IAttributeConstraint;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.type.ContainerType;
 import prompto.type.IType;
+import prompto.type.IType.Family;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
 import prompto.value.IValue;
@@ -51,8 +53,12 @@ public class AttributeDeclaration extends BaseDeclaration {
 		return this.type.toString() + " " + this.getName();
 	}
 	
-	public Collection<String> getIndexTypes() {
-		return indexTypes==null ? null : indexTypes.stream().map((id) -> id.toString()).collect(Collectors.toList());
+	public AttributeInfo getAttributeInfo() {
+		List<String> list = indexTypes==null ? null : indexTypes.stream().map((id)->
+			id.toString()).collect(Collectors.toList());
+		boolean collection = type instanceof ContainerType;
+		Family family = collection ? ((ContainerType)type).getItemType().getFamily() : type.getFamily();
+		return new AttributeInfo(getName(), family, collection, list);
 	}
 	
 	public IType getType() {

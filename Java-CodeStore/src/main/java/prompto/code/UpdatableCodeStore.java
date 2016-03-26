@@ -106,7 +106,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	public void storeModule(Module module) throws PromptoError {
 		Context context = Context.newGlobalContext();
 		List<String> categories = Arrays.asList("Module", module.getType().getCategory().getTypeName());
-		IStorable storable = store.newStorable(categories); 
+		IStorable storable = store.newStorable(categories, null); 
 		module.populate(context, storable);
 		store.store(storable);
 	}
@@ -114,7 +114,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	private Object storeDeclarationModule(IDeclaration decl) throws PromptoError {
 		ICodeStore origin = decl.getOrigin();
 		List<String> categories = Arrays.asList("Module", origin.getModuleType().getCategory().getTypeName());
-		IStorable storable = store.newStorable(categories);
+		IStorable storable = store.newStorable(categories, null);
 		storable.setData("name", origin.getModuleName());
 		storable.setData("version", origin.getModuleVersion().toString());
 		store.store(storable);
@@ -233,7 +233,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	}
 
 	private IStorable populateDeclarationStorable(List<String> categories, IDeclaration decl, Dialect dialect, Version version, Object moduleId) {
-		IStorable storable = store.newStorable(categories); 
+		IStorable storable = store.newStorable(categories, null); 
 		try {
 			storable.setData("name", decl.getId().toString());
 			storable.setData("version", version.toString());
@@ -271,9 +271,9 @@ public class UpdatableCodeStore extends BaseCodeStore {
 		if(LATEST.equals(version)) {
 			IdentifierList names = new IdentifierList(new Identifier("version"));
 			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
-			return store.fetchMany(context, type, one, one, filter, orderBy);
+			return store.interpretFetchMany(context, type, one, one, filter, orderBy);
 		} else
-			return store.fetchMany(context, type, one, one, filter, null); 
+			return store.interpretFetchMany(context, type, one, one, filter, null); 
 	}
 
 	private IStored fetchOneInStore(String name, CategoryType type, Version version) throws PromptoError {
@@ -282,10 +282,10 @@ public class UpdatableCodeStore extends BaseCodeStore {
 			IdentifierList names = new IdentifierList(new Identifier("version"));
 			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
 			IntegerLiteral one = new IntegerLiteral(1);
-			IStoredIterator result = store.fetchMany(context, type, one, one, filter, orderBy);
+			IStoredIterator result = store.interpretFetchMany(context, type, one, one, filter, orderBy);
 			return result.hasNext() ? result.next() : null;
 		} else
-			return store.fetchOne(context, null, filter); 
+			return store.interpretFetchOne(context, null, filter); 
 	}
 
 	private IPredicateExpression buildNameAndVersionFilter(String name, Version version) {
@@ -323,7 +323,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 		IExpression right = new BooleanLiteral("true");
 		IPredicateExpression filter = new EqualsExpression(left, EqOp.EQUALS, right);
 		CategoryType type = new CategoryType(new Identifier("Attribute"));
-		IStoredIterator result = store.fetchMany(context, type, null, null, filter, null);
+		IStoredIterator result = store.interpretFetchMany(context, type, null, null, filter, null);
 		while(result.hasNext()) {
 			AttributeDeclaration attr = parseDeclaration(result.next());
 			list.add(attr);		

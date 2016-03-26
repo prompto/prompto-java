@@ -15,6 +15,8 @@ import prompto.error.PromptoError;
 import prompto.intrinsic.PromptoBinary;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoTuple;
+import prompto.runtime.Context;
+import prompto.store.IStorable.IDbIdListener;
 
 /* a utility class for running unit tests only */
 public final class MemStore implements IStore<Long> {
@@ -81,6 +83,16 @@ public final class MemStore implements IStore<Long> {
 	@Override
 	public IStored fetchUnique(Long dbId) throws PromptoError {
 		return documents.get(dbId);
+	}
+	
+	@Override
+	public IQueryInterpreter<Long> getQueryInterpreter(Context context) {
+		return new QueryInterpreter<Long>(context);
+	}
+	
+	@Override
+	public IQueryFactory getQueryFactory() {
+		return new QueryFactory();
 	}
 	
 	@Override
@@ -162,23 +174,25 @@ public final class MemStore implements IStore<Long> {
 	private PromptoTuple<Comparable<?>> readTuple(StorableDocument doc, Collection<IOrderBy> orderBy) throws PromptoError {
 		PromptoTuple<Comparable<?>> tuple = new PromptoTuple<>();
 		orderBy.forEach((o)->
-			tuple.add((Comparable<?>)doc.getData(o.getFieldName())));
+			tuple.add((Comparable<?>)doc.getData(o.getAttributeInfo().getName())));
 		return tuple;
 	}
 
 	
 	@Override
-	public IStorable newStorable(List<String> categories) {
-		return new StorableDocument(categories);
+	public IStorable newStorable(List<String> categories, IDbIdListener listener) {
+		return new StorableDocument(categories, listener);
 	}
 	
 	class StorableDocument implements IStored, IStorable {
 
 		Map<String, Object> document = null;
+		IDbIdListener listener;
 		List<String> categories;
 		
-		public StorableDocument(List<String> categories) {
+		public StorableDocument(List<String> categories, IDbIdListener listener) {
 			this.categories = categories;
+			this.listener = listener;
 		}
 
 		public boolean matches(IPredicate predicate) {
@@ -212,7 +226,7 @@ public final class MemStore implements IStore<Long> {
 				document = newDocument(null);
 		}
 
-		private Map<String, Object> newDocument(IDbIdProvider provider) {
+		private Map<String, Object> newDocument(Object dbId) {
 			Map<String, Object> doc = new HashMap<>();
 			if(categories!=null) {
 				PromptoList<String> value = new PromptoList<>();
@@ -220,10 +234,8 @@ public final class MemStore implements IStore<Long> {
 					value.add(name);
 				doc.put("category", value);
 			}
-			if(provider!=null) {
-				Object dbId = provider.getDbId();
+			if(dbId!=null)
 				doc.put(dbIdName, dbId);
-			}
 			return doc;
 		}
 
@@ -242,8 +254,10 @@ public final class MemStore implements IStore<Long> {
 		
 		@Override
 		public void setData(String name, Object value, IDbIdProvider provider) {
-			if(document==null)
-				document = newDocument(provider);
+			if(document==null) {
+				Object dbId = provider==null ? null : provider.getDbId();
+				document = newDocument(dbId);
+			}
 			document.put(name, value);
 		}
 		

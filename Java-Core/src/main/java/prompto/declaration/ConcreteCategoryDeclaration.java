@@ -34,6 +34,7 @@ import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.store.IDataStore;
 import prompto.store.IStorable;
+import prompto.store.IStorable.IDbIdListener;
 import prompto.store.IStore;
 import prompto.type.CategoryType;
 import prompto.type.IType;
@@ -697,10 +698,18 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
 		ClassConstant fc = new ClassConstant(field.getType());
 		method.registerLocal("%value%", IVerifierEntry.Type.ITEM_Object, fc);
+		// store data in field
 		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
 		method.addInstruction(Opcode.ALOAD_1, fc);
 		FieldConstant f = new FieldConstant(classFile.getThisClass(), field.getName().getValue(), field.getType());
 		method.addInstruction(Opcode.PUTFIELD, f);
+		// also store data in storable
+		MethodConstant m = new MethodConstant(PromptoRoot.class, "setStorable", String.class, Object.class, void.class);
+		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
+		method.addInstruction(Opcode.LDC, new StringConstant(name));
+		method.addInstruction(Opcode.ALOAD_1, new ClassConstant(Object.class));
+		method.addInstruction(Opcode.INVOKESPECIAL, m);
+		// done
 		method.addInstruction(Opcode.RETURN);
 	}
 
@@ -738,7 +747,8 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			method.addInstruction(Opcode.INVOKESTATIC, m); // -> this, IStore
 			FieldConstant f = new FieldConstant(classFile.getThisClass(), "category", String[].class);
 			method.addInstruction(Opcode.GETSTATIC, f); // -> this, IStore, String[]
-			InterfaceConstant i = new InterfaceConstant(IStore.class, "newStorable", String[].class, IStorable.class);
+			method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass()); // -> this, IStore, String[], this (as listener)
+			InterfaceConstant i = new InterfaceConstant(IStore.class, "newStorable", String[].class, IDbIdListener.class, IStorable.class);
 			method.addInstruction(Opcode.INVOKEINTERFACE, i); // this, IStorable
 			f = new FieldConstant(classFile.getThisClass(), "storable", IStorable.class);
 			method.addInstruction(Opcode.PUTFIELD, f);

@@ -1,5 +1,6 @@
 package prompto.store;
 
+import prompto.declaration.AttributeInfo;
 import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
@@ -7,49 +8,50 @@ import prompto.grammar.OrderByClauseList;
 import prompto.runtime.Context;
 import prompto.store.IQuery.MatchOp;
 import prompto.type.CategoryType;
+import prompto.type.IType.Family;
 import prompto.value.IValue;
 
-public class InterpretedQueryFactory<T> implements IQueryFactory<T> {
+public abstract class QueryInterpreterBase<T> implements IQueryInterpreter<T> {
 
-	Context context;
+	protected Context context;
 	
-	public InterpretedQueryFactory(Context context) {
+	protected QueryInterpreterBase(Context context) {
 		this.context = context;
 	}
 
 	@Override
 	public IQuery buildFetchOneQuery(CategoryType type, IPredicateExpression predicate) throws PromptoError {
-		IQuery q = new Query(context);
+		IQuery q = newQuery();
 		if(type!=null)
-			q.<String>verify("category", MatchOp.CONTAINS, type.getTypeName());
+			q.<String>verify(new AttributeInfo("category", Family.TEXT, true, null), MatchOp.CONTAINS, type.getTypeName());
 		if(predicate!=null)
-			predicate.interpretPredicate(context, q);
+			predicate.interpretQuery(context, q);
 		if(type!=null && predicate!=null)
 			q.and();
 		return q;
 	}
-
+	
 	@Override
 	public IQuery buildFetchManyQuery(CategoryType type, 
 			IExpression start, IExpression end, 
 			IPredicateExpression predicate, 
 			OrderByClauseList orderBy)
 			throws PromptoError {
-		IQuery q = new Query(context);
+		IQuery q = newQuery();
 		if(type!=null)
-			q.<String>verify("category", MatchOp.CONTAINS, type.getTypeName());
-		q.setFirst(getLong(context, start));
-		q.setLast(getLong(context, end));
+			q.<String>verify(new AttributeInfo("category", Family.TEXT, true, null), MatchOp.CONTAINS, type.getTypeName());
+		q.setFirst(getLimit(context, start));
+		q.setLast(getLimit(context, end));
 		if(orderBy!=null)
 			orderBy.interpretQuery(context, q);
 		if(predicate!=null)
-			predicate.interpretPredicate(context, q);
+			predicate.interpretQuery(context, q);
 		if(type!=null && predicate!=null)
 			q.and();
 		return q;
 	}
 
-	private Long getLong(Context context, IExpression exp) throws PromptoError {
+	private Long getLimit(Context context, IExpression exp) throws PromptoError {
 		if(exp==null)
 			return null;
 		IValue value = exp.interpret(context);

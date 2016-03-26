@@ -86,7 +86,7 @@ public abstract class BaseWebTest {
 				new UnresolvedIdentifier(new Identifier("name")), 
 				EqOp.EQUALS, 
 				new TextLiteral( "'" + name + "'"));
-		IStored stored = store.fetchOne(AppServer.getGlobalContext(), 
+		IStored stored = store.interpretFetchOne(AppServer.getGlobalContext(), 
 				new CategoryType(new Identifier("Module")), filter);
 		return stored.getDbId().toString();
 	}

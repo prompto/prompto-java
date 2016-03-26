@@ -5,20 +5,15 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Stack;
 
-import prompto.runtime.Context;
+import prompto.declaration.AttributeInfo;
 
 public class Query implements IQuery {
 
-	Context context;
 	Stack<IPredicate> predicates = new Stack<>();
 	List<IOrderBy> orderBys = new ArrayList<>();
 	Long first; // 1 based
 	Long last; // 1 based
 	
-	public Query(Context context) {
-		this.context = context;
-	}
-
 	public IPredicate getPredicate() {
 		if(predicates.isEmpty())
 			return null;
@@ -54,13 +49,13 @@ public class Query implements IQuery {
 	}
 	
 	@Override
-	public void addOrderByClause(String fieldName, boolean descending) {
-		orderBys.add(new OrderBy(fieldName, descending));
+	public void addOrderByClause(AttributeInfo attribute, boolean descending) {
+		orderBys.add(new OrderBy(attribute, descending));
 	}
 	
 	@Override
-	public <T> void verify(String fieldName, MatchOp match, T fieldValue) {
-		predicates.push(new MatchesPredicate<T>(fieldName, match, fieldValue));
+	public <T> void verify(AttributeInfo info, MatchOp match, T fieldValue) {
+		predicates.push(new MatchesPredicate<T>(info, match, fieldValue));
 	}
 
 	@Override

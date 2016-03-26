@@ -65,10 +65,10 @@ public class NotExpression implements IUnaryExpression, IPredicateExpression, IA
 	}
 	
 	@Override
-	public void interpretPredicate(Context context, IQuery query) throws PromptoError {
+	public void interpretQuery(Context context, IQuery query) throws PromptoError {
 		if(!(expression instanceof IPredicateExpression))
 			throw new SyntaxError("Not a predicate: " + expression.toString());
-		((IPredicateExpression)expression).interpretPredicate(context, query);
+		((IPredicateExpression)expression).interpretQuery(context, query);
 		query.not();
 	}
 

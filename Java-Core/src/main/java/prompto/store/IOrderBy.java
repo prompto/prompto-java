@@ -1,8 +1,10 @@
 package prompto.store;
 
+import prompto.declaration.AttributeInfo;
+
 public interface IOrderBy {
 
-	String getFieldName();
+	AttributeInfo getAttributeInfo();
 	boolean isDescending();
 
 }

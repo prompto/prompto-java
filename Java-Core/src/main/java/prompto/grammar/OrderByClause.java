@@ -1,5 +1,6 @@
 package prompto.grammar;
 
+import prompto.declaration.AttributeInfo;
 import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.store.IQuery;
@@ -37,6 +38,7 @@ public class OrderByClause extends Section {
 	public void interpretQuery(Context context, IQuery q) {
 		// TODO members
 		Identifier name = qualifiedName.getFirst();
-		q.addOrderByClause(name.toString(), isDescending());
+		AttributeInfo info = context.findAttribute(name.toString()).getAttributeInfo();
+		q.addOrderByClause(info, isDescending());
 	}
 }

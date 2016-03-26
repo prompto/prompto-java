@@ -14,6 +14,8 @@ import prompto.compiler.ResultInfo;
 import prompto.compiler.ShortOperand;
 import prompto.compiler.StackLocal;
 import prompto.compiler.StackState;
+import prompto.declaration.AttributeDeclaration;
+import prompto.declaration.AttributeInfo;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -221,7 +223,7 @@ public class EqualsExpression implements IExpression, IPredicateExpression, IAss
 	}
 
 	@Override
-	public void interpretPredicate(Context context, IQuery query) throws PromptoError {
+	public void interpretQuery(Context context, IQuery query) throws PromptoError {
 		IValue value = null;
 		String name = interpretFieldName(left);
 		if(name!=null)
@@ -235,16 +237,18 @@ public class EqualsExpression implements IExpression, IPredicateExpression, IAss
 		}
 		if(value instanceof IInstance)
 			value = ((IInstance)value).getMember(context, new Identifier(IStore.dbIdName), false);
+		AttributeDeclaration decl = context.findAttribute(name);
+		AttributeInfo info = decl==null ? null : decl.getAttributeInfo();
 		Object data = value==null ? null : value.getStorableData();
 		switch(operator) {
 		case EQUALS:
-			query.<Object>verify(name, MatchOp.EQUALS, data);
+			query.<Object>verify(info, MatchOp.EQUALS, data);
 			break;
 		case ROUGHLY:
-			query.<Object>verify(name, MatchOp.ROUGHLY, data);
+			query.<Object>verify(info, MatchOp.ROUGHLY, data);
 			break;
 		case NOT_EQUALS:
-			query.<Object>verify(name, MatchOp.EQUALS, data);
+			query.<Object>verify(info, MatchOp.EQUALS, data);
 			query.not();
 			break;
 		default:

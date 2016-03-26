@@ -7,6 +7,8 @@ import prompto.compiler.Flags;
 import prompto.compiler.IOperatorFunction;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
+import prompto.declaration.AttributeDeclaration;
+import prompto.declaration.AttributeInfo;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -114,7 +116,7 @@ public class CompareExpression extends Section implements IExpression, IPredicat
 	}
 	
 	@Override
-	public void interpretPredicate(Context context, IQuery query) throws PromptoError {
+	public void interpretQuery(Context context, IQuery query) throws PromptoError {
 		String name = null;
 		IValue value = null;
 		if(left instanceof UnresolvedIdentifier) {
@@ -133,21 +135,23 @@ public class CompareExpression extends Section implements IExpression, IPredicat
 		if(name==null)
 			throw new SyntaxError("Unable to interpret predicate");
 		else {
+			AttributeDeclaration decl = context.findAttribute(name);
+			AttributeInfo info = decl==null ? null : decl.getAttributeInfo();
 			if(value instanceof IInstance)
 				value = ((IInstance)value).getMember(context, new Identifier(IStore.dbIdName), false);
 			switch(operator) {
 			case GT:
-				query.verify(name, MatchOp.GREATER, value==null ? null : value.getStorableData());
+				query.verify(info, MatchOp.GREATER, value==null ? null : value.getStorableData());
 				break;
 			case GTE:
-				query.verify(name, MatchOp.LESSER, value==null ? null : value.getStorableData());
+				query.verify(info, MatchOp.LESSER, value==null ? null : value.getStorableData());
 				query.not();
 				break;
 			case LT:
-				query.verify(name, MatchOp.LESSER, value==null ? null : value.getStorableData());
+				query.verify(info, MatchOp.LESSER, value==null ? null : value.getStorableData());
 				break;
 			case LTE:
-				query.verify(name, MatchOp.GREATER, value==null ? null : value.getStorableData());
+				query.verify(info, MatchOp.GREATER, value==null ? null : value.getStorableData());
 				query.not();
 				break;
 			}

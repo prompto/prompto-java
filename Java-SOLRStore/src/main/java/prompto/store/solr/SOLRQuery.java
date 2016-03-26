@@ -1,46 +1,33 @@
 package prompto.store.solr;
 
-import java.util.Arrays;
-
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 
-import prompto.runtime.Context;
+import prompto.declaration.AttributeInfo;
 import prompto.store.IQuery;
 
 public class SOLRQuery implements IQuery {
 
-	Context context;
 	SolrQuery query = new SolrQuery();
 	SOLRFilterBuilder filter;
 	
-	public SOLRQuery(Context context) {
-		this.context = context;
-	}
-
 	public SolrQuery getQuery() {
 		if(filter!=null) {
 			query.setQuery(filter.toSolrQuery());
 			filter = null;
-		}
+		} else if(query.getQuery()==null)
+			query.setQuery("*:*");
 		return query;
 	}
 
 	@Override
-	public <T> void verify(String fieldName, MatchOp match, T fieldValue) {
+	public <T> void verify(AttributeInfo info, MatchOp match, T fieldValue) {
 		if(filter==null)
-			filter = new SOLRFilterBuilder(context);
-		TextFieldFlags flags = computeFieldFlags(fieldName);
-		filter.push(fieldName, match, fieldValue, flags);
+			filter = new SOLRFilterBuilder();
+		SOLRAttributeInfo solrInfo = new SOLRAttributeInfo(info);
+		filter.push(solrInfo, match, fieldValue);
 	}
 
-	
-	private TextFieldFlags computeFieldFlags(String fieldName) {
-		if("category".equals(fieldName))
-			return new TextFieldFlags(Arrays.asList("key"));
-		else
-			return TextFieldFlags.computeFieldFlags(context, fieldName);
-	}
 	
 	@Override
 	public void and() {
@@ -59,17 +46,20 @@ public class SOLRQuery implements IQuery {
 
 	@Override
 	public void setFirst(Long first) {
-		query.setStart(first.intValue() - 1);
+		if(first!=null)
+			query.setStart(first.intValue() - 1);
 	}
 
 	@Override
 	public void setLast(Long end) {
-		Integer start = query.getStart();
-		if(start==null)
-			start = 1;
-		else
-			start += 1; // was 0 based
-		query.setRows((int)((end - start)+1));
+		if(end!=null) {
+			Integer start = query.getStart();
+			if(start==null)
+				start = 1;
+			else
+				start += 1; // was 0 based
+			query.setRows((int)((end - start)+1));
+		}
 	}
 
 	public void setRows(int rows) {
@@ -96,8 +86,9 @@ public class SOLRQuery implements IQuery {
 	}
 
 	@Override
-	public void addOrderByClause(String fieldName, boolean descending) {
-		query.addSort(fieldName, descending ? ORDER.desc : ORDER.asc);
+	public void addOrderByClause(AttributeInfo attribute, boolean descending) {
+		SOLRAttributeInfo solrAttribute = new SOLRAttributeInfo(attribute);
+		query.addSort(solrAttribute.getFieldNameForOrderBy(), descending ? ORDER.desc : ORDER.asc);
 	}
 
 

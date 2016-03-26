@@ -2,18 +2,12 @@ package prompto.store.solr;
 
 import java.util.Stack;
 
-import prompto.runtime.Context;
 import prompto.store.IQuery.MatchOp;
 
 class SOLRFilterBuilder {
 
-	Context context;
 	Stack<String> stack = new Stack<>();
 	
-	public SOLRFilterBuilder(Context context) {
-		this.context = context;
-	}
-
 	public void and() {
 		String e1 = stack.pop();
 		String e2 = stack.pop();
@@ -32,22 +26,9 @@ class SOLRFilterBuilder {
 	}
 
 	
-	public void push(String fieldName, MatchOp operator, Object fieldValue, TextFieldFlags flags) {
+	public void push(SOLRAttributeInfo info, MatchOp operator, Object fieldValue) {
 		StringBuilder sb = new StringBuilder();
-		switch(operator) {
-		case EQUALS:
-			sb.append(fieldName);
-			if(flags!=null)
-				flags.addSuffixForEquals(sb);
-			break;
-		case ROUGHLY:
-			sb.append(fieldName);
-			if(flags!=null)
-				flags.addSuffixForRoughly(sb);
-			break;
-		default:
-			sb.append(fieldName);
-		}
+		info.addFieldNameFor(sb, operator);
 		sb.append(':');
 		escape(sb, fieldValue);
 		stack.push(sb.toString());

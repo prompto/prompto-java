@@ -11,6 +11,7 @@ javascript timezone name
 check return types
 check member methods
 return sorted sets 
+implement dbIdListener strategy (store, ConcreteInstance... )
 
 missing tests:
 null member is empty
@@ -22,6 +23,7 @@ return in loops and if/else
 category composition
 category abstract operator methods
 decimal * category
+delete
 
 language:
 send/receive
