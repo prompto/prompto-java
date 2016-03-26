@@ -28,15 +28,16 @@ public abstract class Executor {
 	}
 
 	public static void executeMainNoArgs(Context context, File promptoDir) throws PromptoError {
-		executeMainMethod(context, new Identifier("main"), "", promptoDir);
+		executeMainMethod(context, new Identifier("main"), "-test=true", promptoDir);
 	}
 	
 	public static void executeMainMethod(Context context, Identifier methodName, String cmdLineArgs, File promptoDir) throws PromptoError {
+		PromptoDict<String, String> options = parseCmdLineArgs(cmdLineArgs);
+		boolean testMode = options.containsKey("test");
 		Type classType = CompilerUtils.getGlobalMethodType(methodName);
-		try(PromptoClassLoader loader = new PromptoClassLoader(context, promptoDir)) {
+		try(PromptoClassLoader loader = PromptoClassLoader.initialize(context, promptoDir, testMode)) {
 			Class<?> klass = loader.loadClass(classType.getTypeName());
 			Method method = locateMainMethod(klass, cmdLineArgs);
-			PromptoDict<String, String> options = parseCmdLineArgs(cmdLineArgs);
 			method.invoke(null, options);
 		} catch(ClassNotFoundException | NoSuchMethodException e) {
 			throw new SyntaxError("Could not find a compatible \"" + methodName + "\" method.");

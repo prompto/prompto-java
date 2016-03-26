@@ -1,6 +1,5 @@
 package prompto.expression;
 
-import prompto.compiler.ClassConstant;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
@@ -48,8 +47,7 @@ public class TypeExpression implements IExpression {
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		StringConstant s = new StringConstant(type.getJavaType().getTypeName());
 		method.addInstruction(Opcode.LDC_W, s);
-		ClassConstant c = new ClassConstant(Class.class);
-		MethodConstant m = new MethodConstant(c, "forName", String.class, Class.class);
+		MethodConstant m = new MethodConstant(Class.class, "forName", String.class, Class.class);
 		method.addInstruction(Opcode.INVOKESTATIC, m);
 		return new ResultInfo(Class.class);
 	}

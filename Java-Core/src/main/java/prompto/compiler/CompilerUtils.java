@@ -7,10 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import prompto.declaration.AttributeInfo;
 import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.type.IType;
+import prompto.type.IType.Family;
 
 public abstract class CompilerUtils {
 
@@ -109,10 +111,10 @@ public abstract class CompilerUtils {
 		return sb.toString();
 	}
 
-	static final char PROMPTO_CHAR = 'π';
-	static final char METHOD_CHAR = 'µ';
-	static final char CATEGORY_CHAR = 'χ';
-	static final String INNER_SEPARATOR = "$%";
+	public static final char PROMPTO_CHAR = 'π';
+	public static final char METHOD_CHAR = 'µ';
+	public static final char CATEGORY_CHAR = 'χ';
+	public static final String INNER_SEPARATOR = "$%";
 
 	public static Type getGlobalMethodType(Identifier id) {
 		return CompilerUtils.getGlobalMethodType(id.toString());
@@ -448,5 +450,24 @@ public abstract class CompilerUtils {
 		method.addInstruction(Opcode.INVOKESPECIAL, m);
 		method.addInstruction(Opcode.RETURN);
 		return method;
+	}
+
+	public static void compileEnum(Context context, MethodInfo method, Flags flags, Enum<?> value) {
+		method.addInstruction(Opcode.GETSTATIC, 
+				new FieldConstant(value.getClass(), value.name(), value.getClass()));
+	}
+
+	public static void compileAttributeInfo(Context context, MethodInfo method, Flags flags, AttributeInfo info) {
+		compileNewRawInstance(method, AttributeInfo.class);
+		method.addInstruction(Opcode.DUP);
+		method.addInstruction(Opcode.LDC, new StringConstant(info.getName()));
+		compileEnum(context, method, flags, info.getFamily());
+		method.addInstruction(info.isCollection() ? Opcode.ICONST_1 : Opcode.ICONST_0);
+		method.addInstruction(info.isKey() ? Opcode.ICONST_1 : Opcode.ICONST_0);
+		method.addInstruction(info.isValue() ? Opcode.ICONST_1 : Opcode.ICONST_0);
+		method.addInstruction(info.isWords() ? Opcode.ICONST_1 : Opcode.ICONST_0);
+		compileCallConstructor(method, AttributeInfo.class,
+				String.class, Family.class, boolean.class, 
+				boolean.class, boolean.class, boolean.class);
 	}
 }

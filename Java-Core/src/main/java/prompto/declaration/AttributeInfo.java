@@ -28,6 +28,15 @@ public class AttributeInfo {
 		} 
 	}
 	
+	public AttributeInfo(String name, Family family, boolean collection, boolean key, boolean value, boolean words) {
+		this.name = name;
+		this.family = family;
+		this.collection = collection;
+		this.key = key;
+		this.value = value;
+		this.words = words;
+	}
+
 	public AttributeInfo(AttributeInfo info) {
 		this.name = info.getName();
 		this.family = info.getFamily();

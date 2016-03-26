@@ -6,11 +6,9 @@ import java.text.Collator;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.IOperand;
-import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.PromptoType;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.ShortOperand;
 import prompto.compiler.StackState;
@@ -56,19 +54,12 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 
 	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
 			ResultInfo left, IExpression exp) throws SyntaxError {
-		ResultInfo right = exp.compile(context, method, flags.withPrimitive(false));
+		exp.compile(context, method, flags.withPrimitive(false));
 		// convert right to String
-		if(String.class!=right.getType()) {
-			if(right.getType() instanceof PromptoType) {
-				InterfaceConstant oper = new InterfaceConstant(right.getType(), "toString", String.class);
-				method.addInstruction(Opcode.INVOKEINTERFACE, oper);
-			} else {
-				MethodConstant oper = new MethodConstant(Object.class, "toString", String.class);
-				method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-			}
-		}
+		MethodConstant oper = new MethodConstant(String.class, "valueOf", Object.class, String.class);
+		method.addInstruction(Opcode.INVOKESTATIC, oper);
 		// and call concat
-		MethodConstant oper = new MethodConstant(String.class, "concat", 
+		oper = new MethodConstant(String.class, "concat", 
 				String.class, String.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		return new ResultInfo(String.class);

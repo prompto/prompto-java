@@ -36,6 +36,7 @@ import prompto.store.IDataStore;
 import prompto.store.IStorable;
 import prompto.store.IStorable.IDbIdListener;
 import prompto.store.IStore;
+import prompto.store.IStored;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -418,7 +419,8 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			compileInterface(context, classFile, new Flags());
 			compileCategoryField(context, classFile, new Flags());
 			compileFields(context, classFile, new Flags());
-			compileConstructor(context, classFile, new Flags());
+			compileEmptyConstructor(context, classFile, new Flags());
+			compileCopyConstructor(context, classFile, new Flags());
 			compileMethods(context, classFile, new Flags());
 			return classFile;
 		} catch(SyntaxError e) {
@@ -706,7 +708,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		// also store data in storable
 		MethodConstant m = new MethodConstant(PromptoRoot.class, "setStorable", String.class, Object.class, void.class);
 		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
-		method.addInstruction(Opcode.LDC, new StringConstant(name));
+		method.addInstruction(Opcode.LDC, new StringConstant(field.getName().getValue()));
 		method.addInstruction(Opcode.ALOAD_1, new ClassConstant(Object.class));
 		method.addInstruction(Opcode.INVOKESPECIAL, m);
 		// done
@@ -732,7 +734,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		method.addInstruction(Opcode.ARETURN, new ClassConstant(field.getType()));
 	}
 
-	private void compileConstructor(Context context, ClassFile classFile, Flags flags) {
+	private void compileEmptyConstructor(Context context, ClassFile classFile, Flags flags) {
 		if(isStorable()) {
 			Descriptor proto = new Descriptor.Method(void.class);
 			MethodInfo method = classFile.newMethod("<init>", proto);
@@ -742,20 +744,78 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			MethodConstant m = new MethodConstant(classFile.getSuperClass(), "<init>", void.class);
 			method.addInstruction(Opcode.INVOKESPECIAL, m);
 			// populate storable
-			method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass()); // -> this
-			m = new MethodConstant(new ClassConstant(IDataStore.class), "getInstance", IStore.class);
-			method.addInstruction(Opcode.INVOKESTATIC, m); // -> this, IStore
-			FieldConstant f = new FieldConstant(classFile.getThisClass(), "category", String[].class);
-			method.addInstruction(Opcode.GETSTATIC, f); // -> this, IStore, String[]
-			method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass()); // -> this, IStore, String[], this (as listener)
-			InterfaceConstant i = new InterfaceConstant(IStore.class, "newStorable", String[].class, IDbIdListener.class, IStorable.class);
-			method.addInstruction(Opcode.INVOKEINTERFACE, i); // this, IStorable
-			f = new FieldConstant(classFile.getThisClass(), "storable", IStorable.class);
-			method.addInstruction(Opcode.PUTFIELD, f);
+			compileNewStorable(context, method, flags);
 			// done
 			method.addInstruction(Opcode.RETURN);
 		} else
 			CompilerUtils.compileEmptyConstructor(classFile);
+	}
+
+	private void compileCopyConstructor(Context context, ClassFile classFile, Flags flags) {
+		if(!isStorable())
+			return;
+		Descriptor proto = new Descriptor.Method(IStored.class, void.class);
+		MethodInfo method = classFile.newMethod("<init>", proto);
+		method.registerLocal("this", IVerifierEntry.Type.ITEM_UninitializedThis, classFile.getThisClass());
+		// call super()
+		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
+		method.addInstruction(Opcode.ALOAD_1, new ClassConstant(IStored.class));
+		MethodConstant m = new MethodConstant(classFile.getSuperClass(), "<init>", IStored.class, void.class);
+		method.addInstruction(Opcode.INVOKESPECIAL, m);
+		// populate storable
+		compileNewStorable(context, method, flags);
+		// populate fields
+		compilePopulateFields(context, method, flags);
+		// done
+		method.addInstruction(Opcode.RETURN);
+	}
+
+	private void compilePopulateFields(Context context, MethodInfo method, Flags flags) {
+		boolean skipSuperClassFields = isSuperClassStorable(context);
+		getAllAttributes(context).forEach((id)->{
+			if(skipSuperClassFields && isSuperClassAttribute(context, id))
+				return;
+			compilePopulateField(context, method, flags, id);
+		});
+	}
+
+	private void compilePopulateField(Context context, MethodInfo method, Flags flags, Identifier id) {
+		ClassConstant thisClass = method.getClassFile().getThisClass();
+		method.addInstruction(Opcode.ALOAD_0, thisClass);
+		// get the data from the received IStored
+		method.addInstruction(Opcode.ALOAD_1, new ClassConstant(IStored.class));
+		method.addInstruction(Opcode.LDC, new StringConstant(id.toString()));
+		InterfaceConstant i = new InterfaceConstant(IStored.class, "getData", String.class, Object.class);
+		method.addInstruction(Opcode.INVOKEINTERFACE, i);
+		// cast to actual type
+		FieldInfo field = context.getRegisteredDeclaration(AttributeDeclaration.class, id).toFieldInfo(context);
+		method.addInstruction(Opcode.CHECKCAST, new ClassConstant(field.getType()));
+		// call setter
+		String setterName = CompilerUtils.setterName(field.getName().getValue());
+		MethodConstant m = new MethodConstant(thisClass, setterName, field.getType(), void.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+	}
+
+	private void compileNewStorable(Context context, MethodInfo method, Flags flags) {
+		if(isSuperClassStorable(context))
+			return;
+		ClassConstant thisClass = method.getClassFile().getThisClass();
+		method.addInstruction(Opcode.ALOAD_0, thisClass); // -> this
+		MethodConstant m = new MethodConstant(new ClassConstant(IDataStore.class), "getInstance", IStore.class);
+		method.addInstruction(Opcode.INVOKESTATIC, m); // -> this, IStore
+		FieldConstant f = new FieldConstant(thisClass, "category", String[].class);
+		method.addInstruction(Opcode.GETSTATIC, f); // -> this, IStore, String[]
+		method.addInstruction(Opcode.ALOAD_0, thisClass); // -> this, IStore, String[], this (as listener)
+		InterfaceConstant i = new InterfaceConstant(IStore.class, "newStorable", String[].class, IDbIdListener.class, IStorable.class);
+		method.addInstruction(Opcode.INVOKEINTERFACE, i); // this, IStorable
+		f = new FieldConstant(thisClass, "storable", IStorable.class);
+		method.addInstruction(Opcode.PUTFIELD, f);
+	}
+
+	boolean isSuperClassStorable(Context context) {
+		if(derivedFrom==null || derivedFrom.isEmpty())
+			return false;
+		return context.getRegisteredDeclaration(CategoryDeclaration.class, derivedFrom.getFirst()).isStorable();
 	}
 
 	private void compileMethods(Context context, ClassFile classFile, Flags flags) throws SyntaxError {

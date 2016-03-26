@@ -22,7 +22,7 @@ import prompto.utils.CodeWriter;
 import prompto.value.Boolean;
 import prompto.value.IValue;
 
-public class OrExpression implements IExpression, IPredicateExpression, IAssertion {
+public class OrExpression implements IPredicateExpression, IAssertion {
 	
 	IExpression left;
 	IExpression right;

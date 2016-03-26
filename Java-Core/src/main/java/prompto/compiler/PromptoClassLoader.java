@@ -36,10 +36,40 @@ public class PromptoClassLoader extends URLClassLoader {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	private static PromptoClassLoader instance = null;
+	
+	/* during testing, mutiple threads may refer to different paths */
+	private static Boolean testMode;
+	private static ThreadLocal<PromptoClassLoader> testInstance;
+	public static PromptoClassLoader getInstance() {
+		return testInstance.get();
+	}
+	
+	public static PromptoClassLoader initialize(Context context, File promptoDir, boolean testMode) {
+		synchronized(PromptoClassLoader.class) {
+			if(PromptoClassLoader.testMode==null)
+				PromptoClassLoader.testMode = testMode;
+			boolean currentMode = PromptoClassLoader.testMode;
+			if(currentMode!=testMode)
+				throw new UnsupportedOperationException("Cannot run test mode with regular mode!");
+			if(testMode) {
+				if(testInstance==null)
+					testInstance = new ThreadLocal<>();
+				testInstance.set(new PromptoClassLoader(context, promptoDir));
+				return testInstance.get();
+			} else {
+				if(instance!=null)
+					throw new UnsupportedOperationException("Can only have one PromptoClassLoader!");
+				instance = new PromptoClassLoader(context, promptoDir);
+				return instance;
+			}
+		}
+	}
 
 	Context context;
 	
-	public PromptoClassLoader(Context context, File promptoDir) {
+	private PromptoClassLoader(Context context, File promptoDir) {
 		super(makeClassDirURLs(makeClassDir(promptoDir)), getParentClassLoader());
 		this.context = context;
 	}

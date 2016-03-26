@@ -36,7 +36,7 @@ import prompto.value.Integer;
 import prompto.value.Text;
 import prompto.value.Time;
 
-public class CompareExpression extends Section implements IExpression, IPredicateExpression, IAssertion {
+public class CompareExpression extends Section implements IPredicateExpression, IAssertion {
 
 	IExpression left;
 	CmpOp operator;

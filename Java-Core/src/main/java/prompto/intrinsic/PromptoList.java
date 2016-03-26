@@ -26,6 +26,10 @@ public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoLi
 	public long getNativeLength() {
 		return size();
 	}
+	
+	public V getLast() {
+		return get(this.size()-1);
+	}
 
 	public PromptoList<V> multiply(int count) {
 		PromptoList<V> result = new PromptoList<>();

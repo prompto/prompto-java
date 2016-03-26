@@ -1,6 +1,5 @@
 package prompto.statement;
 
-import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodConstant;
@@ -90,8 +89,7 @@ public class StoreStatement extends SimpleStatement {
 
 	private void compileStorablesToStore(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		if(storables!=null) {
-			ClassConstant c = new ClassConstant(PromptoStoreQuery.class);
-			MethodConstant m = new MethodConstant(c, "store", Object.class, void.class);
+			MethodConstant m = new MethodConstant(PromptoStoreQuery.class, "store", Object.class, void.class);
 			for(IExpression exp : storables) {
 				method.addInstruction(Opcode.DUP);
 				exp.compile(context, method, flags);
@@ -102,8 +100,7 @@ public class StoreStatement extends SimpleStatement {
 	
 	private void compileObjectsToDelete(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		if(deletables!=null) {
-			ClassConstant c = new ClassConstant(PromptoStoreQuery.class);
-			MethodConstant m = new MethodConstant(c, "delete", Object.class, void.class);
+			MethodConstant m = new MethodConstant(PromptoStoreQuery.class, "delete", Object.class, void.class);
 			for(IExpression exp : deletables) {
 				method.addInstruction(Opcode.DUP);
 				exp.compile(context, method, flags);
@@ -113,8 +110,7 @@ public class StoreStatement extends SimpleStatement {
 	}
 
 	private void compileExecute(Context context, MethodInfo method, Flags flags) {
-		ClassConstant c = new ClassConstant(PromptoStoreQuery.class);
-		MethodConstant m = new MethodConstant(c, "execute", void.class);
+		MethodConstant m = new MethodConstant(PromptoStoreQuery.class, "execute", void.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 	}
 	

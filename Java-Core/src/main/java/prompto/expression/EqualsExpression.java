@@ -7,6 +7,7 @@ import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.IOperatorFunction;
+import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -58,7 +59,7 @@ import prompto.value.Text;
 import prompto.value.Time;
 import prompto.value.TypeValue;
 
-public class EqualsExpression implements IExpression, IPredicateExpression, IAssertion {
+public class EqualsExpression implements IPredicateExpression, IAssertion {
 
 	IExpression left;
 	EqOp operator;
@@ -225,11 +226,11 @@ public class EqualsExpression implements IExpression, IPredicateExpression, IAss
 	@Override
 	public void interpretQuery(Context context, IQuery query) throws PromptoError {
 		IValue value = null;
-		String name = interpretFieldName(left);
+		String name = readFieldName(left);
 		if(name!=null)
 			value = right.interpret(context);
 		else {
-			name = interpretFieldName(right);
+			name = readFieldName(right);
 			if(name!=null)
 				value = left.interpret(context);
 			else
@@ -240,23 +241,50 @@ public class EqualsExpression implements IExpression, IPredicateExpression, IAss
 		AttributeDeclaration decl = context.findAttribute(name);
 		AttributeInfo info = decl==null ? null : decl.getAttributeInfo();
 		Object data = value==null ? null : value.getStorableData();
+		MatchOp match = getMatchOp();
+		query.<Object>verify(info, match, data);
+	}
+	
+	private MatchOp getMatchOp() {
 		switch(operator) {
 		case EQUALS:
-			query.<Object>verify(info, MatchOp.EQUALS, data);
-			break;
+			return MatchOp.EQUALS;
 		case ROUGHLY:
-			query.<Object>verify(info, MatchOp.ROUGHLY, data);
-			break;
+			return MatchOp.ROUGHLY;
 		case NOT_EQUALS:
-			query.<Object>verify(info, MatchOp.EQUALS, data);
-			query.not();
-			break;
+			return MatchOp.EQUALS;
 		default:
 			throw new UnsupportedOperationException();
 		}
 	}
+
+	@Override
+	public void compileQuery(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		method.addInstruction(Opcode.DUP); // IQuery -> IQuery, IQuery
+		boolean reverse = compileAttributeInfo(context, method, flags);
+		MatchOp match = getMatchOp();
+		CompilerUtils.compileEnum(context, method, flags, match);
+		if(reverse)
+			left.compile(context, method, flags);
+		else
+			right.compile(context, method, flags);
+		InterfaceConstant m = new InterfaceConstant(IQuery.class,
+				"verify", AttributeInfo.class, MatchOp.class, Object.class, void.class);
+		method.addInstruction(Opcode.INVOKEINTERFACE, m);
+	}
 	
-	private String interpretFieldName(IExpression exp) {
+
+	private boolean compileAttributeInfo(Context context, MethodInfo method, Flags flags) {
+		String name = readFieldName(left);
+		boolean reverse = name==null;
+		if(reverse)
+			name = readFieldName(right);
+		AttributeInfo info = context.findAttribute(name).getAttributeInfo();
+		CompilerUtils.compileAttributeInfo(context, method, flags, info);
+		return reverse;
+	}
+
+	private String readFieldName(IExpression exp) {
 		if(exp instanceof UnresolvedIdentifier
 			|| exp instanceof InstanceExpression
 			|| exp instanceof MemberSelector)
