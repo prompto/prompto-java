@@ -1,5 +1,7 @@
 package prompto.value;
 
+import java.util.Iterator;
+
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.IOperand;
@@ -12,7 +14,6 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.intrinsic.IterableWithLength;
-import prompto.intrinsic.IteratorWithLength;
 import prompto.intrinsic.PromptoRange;
 import prompto.runtime.Context;
 import prompto.type.IType;
@@ -135,38 +136,36 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 		}
 
 		@Override
-		public IteratorWithLength<T> iterator() {
-			return new RangeIterator();
+		public Long getLength() {
+			return RangeBase.this.getLength();
 		}
-
-		class RangeIterator implements IteratorWithLength<T> {
 		
-			long index = 0L;
-			long length = RangeBase.this.getLength();
-			
-			@Override
-			public long getLength() {
-				return length;
-			}
-			
-			@Override
-			public boolean hasNext() {
-				return index<length;
-			}
-	
-			@Override
-			public T next() {
-				try {
-					return getItem(context, new Integer(++index));
-				} catch(Throwable t) {
-					throw new InternalError(t.getMessage());
+		@Override
+		public Iterator<T> iterator() {
+			return new Iterator<T>() {
+		
+				long index = 0L;
+				long length = RangeBase.this.getLength();
+				
+				@Override
+				public boolean hasNext() {
+					return index<length;
 				}
-			}
-	
-			@Override
-			public void remove() {
-				throw new RuntimeException("Shold never get there!");
-			}
+		
+				@Override
+				public T next() {
+					try {
+						return getItem(context, new Integer(++index));
+					} catch(Throwable t) {
+						throw new InternalError(t.getMessage());
+					}
+				}
+		
+				@Override
+				public void remove() {
+					throw new RuntimeException("Shold never get there!");
+				}
+			};
 			
 		}
 	}

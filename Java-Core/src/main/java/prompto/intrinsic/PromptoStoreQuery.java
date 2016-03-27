@@ -54,7 +54,7 @@ public class PromptoStoreQuery {
 			((TupleValue)value).getItems().forEach((item)->
 				delete(context, item));
 		else if(value instanceof IteratorValue) {
-			IteratorValue iter = (IteratorValue)value;
+			Iterator<IValue> iter = ((IteratorValue)value).iterator();
 			while(iter.hasNext())
 				delete(context, iter.next());
 		} else
@@ -76,7 +76,7 @@ public class PromptoStoreQuery {
 			((TupleValue)value).getItems().forEach((item)->
 				store(context, item));
 		else if(value instanceof IteratorValue) {
-			IteratorValue iter = (IteratorValue)value;
+			Iterator<IValue> iter = ((IteratorValue)value).iterator();
 			while(iter.hasNext())
 				store(context, iter.next());
 		} else

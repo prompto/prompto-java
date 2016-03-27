@@ -3,6 +3,7 @@ package prompto.expression;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.IInstructionListener;
+import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.OffsetListenerConstant;
 import prompto.compiler.Opcode;
@@ -112,6 +113,16 @@ public class AndExpression implements IPredicateExpression, IAssertion {
 			return CompilerUtils.booleanToBoolean(method);
 	}
 	
+	@Override
+	public void compileQuery(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		((IPredicateExpression)left).compileQuery(context, method, flags);
+		((IPredicateExpression)right).compileQuery(context, method, flags);
+		method.addInstruction(Opcode.DUP); // IQuery -> IQuery, IQuery
+		InterfaceConstant m = new InterfaceConstant(IQuery.class, "and", void.class);
+		method.addInstruction(Opcode.INVOKEINTERFACE, m);
+	}
+
+
 	@Override
 	public boolean interpretAssert(Context context, TestMethodDeclaration test) throws PromptoError {
 		IValue lval = left.interpret(context);

@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -40,7 +41,7 @@ import prompto.store.IQueryInterpreter;
 import prompto.store.IStorable;
 import prompto.store.IStore;
 import prompto.store.IStored;
-import prompto.store.IStoredIterator;
+import prompto.store.IStoredIterable;
 import prompto.type.BlobType;
 import prompto.type.BooleanType;
 import prompto.type.CategoryType;
@@ -310,7 +311,7 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 	}
 
 	@Override
-	public IStoredIterator fetchMany(IQuery query) throws PromptoError {
+	public IStoredIterable fetchMany(IQuery query) throws PromptoError {
 		SolrQuery q = ((SOLRQuery)query).getQuery();
 		try {
 			commit();
@@ -321,19 +322,24 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 		}
 	}
 	
-	private IStoredIterator getMany(QueryResponse response) {
-		return new IStoredIterator() {
-			
-			int current = 0;
+	private IStoredIterable getMany(QueryResponse response) {
+		return new IStoredIterable() {
 			
 			@Override
-			public IStored next() {
-				return new StoredDocument(BaseSOLRStore.this, response.getResults().get(current++));
-			}
-			
-			@Override
-			public boolean hasNext() {
-				return current < response.getResults().getNumFound();
+			public Iterator<IStored> iterator() {
+				return new Iterator<IStored>() {
+					int current = 0;
+					
+					@Override
+					public IStored next() {
+						return new StoredDocument(BaseSOLRStore.this, response.getResults().get(current++));
+					}
+					
+					@Override
+					public boolean hasNext() {
+						return current < response.getResults().getNumFound();
+					}
+				};
 			}
 			
 			@Override

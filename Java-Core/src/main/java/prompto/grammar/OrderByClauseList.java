@@ -1,5 +1,7 @@
 package prompto.grammar;
 
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.store.IQuery;
@@ -32,6 +34,11 @@ public class OrderByClauseList extends ObjectList<OrderByClause> {
 	public void interpretQuery(Context context, IQuery q) {
 		this.forEach((clause)->
 			clause.interpretQuery(context, q));
+	}
+
+	public void compileQuery(Context context, MethodInfo method, Flags flags) {
+		this.forEach((clause)->
+			clause.compileQuery(context, method, flags));
 	}
 
 }

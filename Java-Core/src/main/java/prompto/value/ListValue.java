@@ -21,7 +21,6 @@ import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.Filterable;
 import prompto.intrinsic.IterableWithLength;
-import prompto.intrinsic.IteratorWithLength;
 import prompto.intrinsic.PromptoList;
 import prompto.runtime.Context;
 import prompto.type.ContainerType;
@@ -119,13 +118,12 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 	public IterableWithLength<IValue> getIterable(Context context) {
 		return new IterableWithLength<IValue>() {
 			@Override
-			public IteratorWithLength<IValue> iterator() {
-				return new IteratorWithLength<IValue>() {
-					Iterator<IValue> iter = items.iterator();
-					@Override public long getLength() { return items.size(); }
-					@Override public boolean hasNext() { return iter.hasNext(); }
-					@Override public IValue next() { return iter.next(); }
-				};
+			public Long getLength() {
+				return (long)items.size();
+			}
+			@Override
+			public Iterator<IValue> iterator() {
+				return items.iterator();
 			}
 		};
 	}

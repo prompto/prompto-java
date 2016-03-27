@@ -127,7 +127,7 @@ public class FetchOneExpression extends Section implements IExpression {
 		method.addInstruction(Opcode.INVOKEINTERFACE, i);
 	}
 
-	private void compilePredicates(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	protected void compilePredicates(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		if(type!=null) {
 			method.addInstruction(Opcode.DUP);
 			AttributeInfo info = new AttributeInfo("category", Family.TEXT, true, null);
@@ -148,7 +148,7 @@ public class FetchOneExpression extends Section implements IExpression {
 		}
 	}
 
-	private void compileNewQuery(Context context, MethodInfo method, Flags flags) {
+	protected void compileNewQuery(Context context, MethodInfo method, Flags flags) {
 		// need the data store
 		MethodConstant m = new MethodConstant(IDataStore.class, "getInstance", IStore.class);
 		method.addInstruction(Opcode.INVOKESTATIC, m);

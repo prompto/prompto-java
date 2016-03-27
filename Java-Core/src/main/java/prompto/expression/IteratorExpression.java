@@ -18,7 +18,6 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.IterableWithLength;
-import prompto.intrinsic.IteratorWithLength;
 import prompto.intrinsic.PromptoIterable;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
@@ -56,8 +55,8 @@ public class IteratorExpression implements IExpression {
 		IteratorType iterType = check(context);
 		IType itemType = iterType.getItemType();
 		IValue items = source.interpret(context);
-		IteratorWithLength<IValue> iterator = getIterator(context, items);
-		return new IteratorValue(context, name, itemType, iterator, expression);
+		IterableWithLength<IValue> iterable = getIterable(context, items);
+		return new IteratorValue(context, name, itemType, iterable, expression);
 	}
 	
 	@Override
@@ -150,11 +149,11 @@ public class IteratorExpression implements IExpression {
 	}
 
 	@SuppressWarnings("unchecked")
-	private IteratorWithLength<IValue> getIterator(Context context, Object src) {
+	private IterableWithLength<IValue> getIterable(Context context, Object src) {
 		if (src instanceof IIterable) 
-			return ((IIterable<IValue>) src).getIterable(context).iterator();
+			return ((IIterable<IValue>) src).getIterable(context);
 		else if(src instanceof IterableWithLength)
-			return ((IterableWithLength<IValue>)src).iterator();
+			return (IterableWithLength<IValue>)src;
 		else
 			throw new InternalError("Should never get there!");
 	}

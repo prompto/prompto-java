@@ -76,10 +76,9 @@ public class PromptoDict<K,V> extends HashMap<K,V> implements Iterable<PromptoDi
 	}
 
 	@Override
-	public IteratorWithLength<Entry<K, V>> iterator() {
-		return new IteratorWithLength<Entry<K, V>>() {
+	public Iterator<Entry<K, V>> iterator() {
+		return new Iterator<Entry<K, V>>() {
 			Iterator<HashMap.Entry<K,V>> iter = entrySet().iterator();
-			@Override public long getLength() { return size(); }
 			@Override public boolean hasNext() { return iter.hasNext(); }
 			@Override public Entry<K, V> next() { return new PromptoDict.Entry<>(iter.next()); }
 			

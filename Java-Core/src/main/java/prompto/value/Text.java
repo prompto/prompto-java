@@ -2,6 +2,7 @@ package prompto.value;
 
 import java.io.IOException;
 import java.text.Collator;
+import java.util.Iterator;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -20,7 +21,6 @@ import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.IterableWithLength;
-import prompto.intrinsic.IteratorWithLength;
 import prompto.intrinsic.PromptoString;
 import prompto.runtime.Context;
 import prompto.type.TextType;
@@ -173,34 +173,31 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 		}
 		
 		@Override
-		public IteratorWithLength<Character> iterator() {
-			return new CharacterIterator();
+		public Long getLength() {
+			return (long)value.length();
 		}
 		
-		class CharacterIterator implements IteratorWithLength<Character> {
-			
-			int index = -1;
-			
-			@Override
-			public long getLength() {
-				return value.length();
-			}
-			
-			@Override
-			public boolean hasNext() {
-				return index < value.length() - 1;
-			}
-			
-			@Override
-			public Character next() {
-				return new Character(value.charAt(++index));
-			}
-			
-			@Override
-			public void remove() {
-				throw new InternalError("Should never get there!");
-			}
-		}
+		@Override
+		public Iterator<Character> iterator() {
+			return new Iterator<Character>() {
+				int index = -1;
+				
+				@Override
+				public boolean hasNext() {
+					return index < value.length() - 1;
+				}
+				
+				@Override
+				public Character next() {
+					return new Character(value.charAt(++index));
+				}
+				
+				@Override
+				public void remove() {
+					throw new InternalError("Should never get there!");
+				}
+			};
+		};
 	}
 	
 	@Override

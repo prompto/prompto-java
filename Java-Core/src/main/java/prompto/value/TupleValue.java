@@ -18,7 +18,6 @@ import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.IterableWithLength;
-import prompto.intrinsic.IteratorWithLength;
 import prompto.intrinsic.PromptoTuple;
 import prompto.literal.Literal;
 import prompto.runtime.Context;
@@ -153,13 +152,12 @@ public class TupleValue extends BaseValue implements IContainer<IValue>, ISlicea
 	public IterableWithLength<IValue> getIterable(Context context) {
 		return new IterableWithLength<IValue>() {
 			@Override
-			public IteratorWithLength<IValue> iterator() {
-				return new IteratorWithLength<IValue>() {
-					Iterator<IValue> iter = items.iterator();
-					@Override public long getLength() { return items.size(); }
-					@Override public boolean hasNext() { return iter.hasNext(); }
-					@Override public IValue next() { return iter.next(); }
-				};
+			public Long getLength() {
+				return (long)items.size();
+			}
+			@Override
+			public Iterator<IValue> iterator() {
+				return items.iterator();
 			}
 		};
 	}

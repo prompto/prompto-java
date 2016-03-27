@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.function.Predicate;
 
 import prompto.value.IMultiplyable;
@@ -64,16 +63,6 @@ public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoLi
 				return true;
 		}
 		return false;
-	}
-	
-	@Override
-	public IteratorWithLength<V> iterator() {
-		return new IteratorWithLength<V>() {
-			Iterator<V> iter = PromptoList.super.iterator();
-			@Override public long getLength() { return PromptoList.this.size(); }
-			@Override public boolean hasNext() { return iter.hasNext(); }
-			@Override public V next() { return iter.next(); }
-		};
 	}
 	
 	public PromptoList<V> filter(Predicate<V> p) {

@@ -105,13 +105,18 @@ public final class MemStore implements IStore<Long> {
 	}
 	
 	@Override
-	public IStoredIterator fetchMany(IQuery query) throws PromptoError {
+	public IStoredIterable fetchMany(IQuery query) throws PromptoError {
 		final List<StorableDocument> docs = fetchManyDocs(query);
-		final Iterator<StorableDocument> iter = docs.iterator();
-		return new IStoredIterator() {
-			@Override public boolean hasNext() { return iter.hasNext(); }
-			@Override public IStored next() { return iter.next(); }
-			@Override public long length() { return docs.size(); }
+		return new IStoredIterable() {
+			@Override
+			public long length() {
+				return (long)docs.size();
+			}
+			@SuppressWarnings("unchecked")
+			@Override
+			public Iterator<IStored> iterator() {
+				return (Iterator<IStored>)(Object)docs.iterator();
+			};
 		};
 	}
 	

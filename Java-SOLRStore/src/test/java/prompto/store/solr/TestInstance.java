@@ -32,7 +32,7 @@ import prompto.store.IDataStore;
 import prompto.store.IPredicateExpression;
 import prompto.store.IStore;
 import prompto.store.IStored;
-import prompto.store.IStoredIterator;
+import prompto.store.IStoredIterable;
 import prompto.type.AnyType;
 import prompto.type.BooleanType;
 import prompto.type.CategoryType;
@@ -210,7 +210,7 @@ public class TestInstance extends BaseSOLRTest {
 	}
 	
 	@SuppressWarnings("unused")
-	private IStoredIterator fetchAll() throws Exception {
+	private IStoredIterable fetchAll() throws Exception {
 		return store.interpretFetchMany(context, null, null, null, null, null);
 	}
 

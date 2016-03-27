@@ -37,7 +37,7 @@ public interface IValueStore {
 	void deleteAll() throws PromptoError;
 	IStored fetchUnique(Context context, IValue dbId) throws PromptoError;
 	IStored fetchOne(Context context, CategoryType type, IExpression filter) throws PromptoError;
-	IStoredIterator fetchMany(Context context, CategoryType type, 
+	IStoredIterable fetchMany(Context context, CategoryType type, 
 			IExpression start, IExpression end, 
 			IExpression filter, OrderByClauseList orderBy) throws PromptoError;
 	void createOrUpdateColumns(Collection<AttributeDeclaration> columns) throws PromptoError;

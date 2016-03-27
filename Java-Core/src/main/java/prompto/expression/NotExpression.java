@@ -2,7 +2,9 @@ package prompto.expression;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
+import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
@@ -84,6 +86,15 @@ public class NotExpression implements IUnaryExpression, IPredicateExpression, IA
 			return CompilerUtils.booleanToBoolean(method);
 	}
 	
+	@Override
+	public void compileQuery(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		((IPredicateExpression)expression).compileQuery(context, method, flags);
+		method.addInstruction(Opcode.DUP); // IQuery -> IQuery, IQuery
+		InterfaceConstant m = new InterfaceConstant(IQuery.class, "not", void.class);
+		method.addInstruction(Opcode.INVOKEINTERFACE, m);
+	}
+
+
 	@Override
 	public boolean interpretAssert(Context context, TestMethodDeclaration test) throws PromptoError {
 		IValue val = expression.interpret(context);

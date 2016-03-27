@@ -13,15 +13,13 @@ public abstract class PromptoIterable<S,R> implements IterableWithLength<R> {
 	}
 	
 	@Override
-	public IteratorWithLength<R> iterator() {
+	public Iterator<R> iterator() {
 		return new PromptoIterator();
 	}
 	
-	class PromptoIterator implements IteratorWithLength<R> {
+	class PromptoIterator implements Iterator<R> {
 		
 		Iterator<S> iter = source.iterator();
-		
-		@Override public long getLength() { return length; }
 		
 		@Override
 		public boolean hasNext() { return iter.hasNext(); }

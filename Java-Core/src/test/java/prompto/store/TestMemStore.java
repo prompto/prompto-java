@@ -5,6 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Iterator;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -88,7 +90,8 @@ public class TestMemStore {
 	@Test
 	public void testFetchManyEmpty() throws Exception {
 		IPredicateExpression filter = createPredicate("__id__", EqOp.EQUALS, "__test__");
-		IStoredIterator docs = IDataStore.getInstance().interpretFetchMany(context, null, null, null, filter, null);
+		IStoredIterable iterable = IDataStore.getInstance().interpretFetchMany(context, null, null, null, filter, null);
+		Iterator<IStored> docs = iterable.iterator();
 		assertFalse(docs.hasNext());
 	}
 
@@ -97,7 +100,8 @@ public class TestMemStore {
 		IStorable d1 = store("__id__", "__test1__");
 		store("__id__", "__test2__");
 		IPredicateExpression filter = createPredicate("__id__", EqOp.EQUALS, "__test1__");
-		IStoredIterator docs = IDataStore.getInstance().interpretFetchMany(context, null, null, null, filter, null);
+		IStoredIterable iterable = IDataStore.getInstance().interpretFetchMany(context, null, null, null, filter, null);
+		Iterator<IStored> docs = iterable.iterator();
 		assertTrue(docs.hasNext());
 		assertEquals(d1,  docs.next());
 		assertFalse(docs.hasNext());
@@ -107,7 +111,8 @@ public class TestMemStore {
 	public void testFetchManyOneMissing() throws Exception {
 		store("__id__", "__test1__");
 		IPredicateExpression filter = createPredicate("__id__", EqOp.EQUALS, "__test2__");
-		IStoredIterator docs = IDataStore.getInstance().interpretFetchMany(context, null, null, null, filter, null);
+		IStoredIterable iterable = IDataStore.getInstance().interpretFetchMany(context, null, null, null, filter, null);
+		Iterator<IStored> docs = iterable.iterator();
 		assertFalse(docs.hasNext());
 	}
 
@@ -118,7 +123,8 @@ public class TestMemStore {
 		store("__id__", "__test1__");
 		store("__id__", "__test2__");
 		IPredicateExpression filter = createPredicate("__id__", EqOp.EQUALS, "__test1__");
-		IStoredIterator docs = IDataStore.getInstance().interpretFetchMany(context, null, null, null, filter, null);
+		IStoredIterable iterable = IDataStore.getInstance().interpretFetchMany(context, null, null, null, filter, null);
+		Iterator<IStored> docs = iterable.iterator();
 		assertTrue(docs.hasNext());
 		docs.next();
 		assertTrue(docs.hasNext());
@@ -138,7 +144,8 @@ public class TestMemStore {
 				new OrderByClause(
 						new IdentifierList(new Identifier("__id__")), 
 						false));
-		IStoredIterator docs = IDataStore.getInstance().interpretFetchMany(context, null, null, null, null, obc);
+		IStoredIterable iterable = IDataStore.getInstance().interpretFetchMany(context, null, null, null, null, obc);
+		Iterator<IStored> docs = iterable.iterator();
 		assertTrue(docs.hasNext());
 		assertEquals(d1,  docs.next());
 		assertTrue(docs.hasNext());
@@ -160,7 +167,8 @@ public class TestMemStore {
 				new OrderByClause(
 						new IdentifierList(new Identifier("__id__")), 
 						true));
-		IStoredIterator docs = IDataStore.getInstance().interpretFetchMany(context, null, null, null, null, obc);
+		IStoredIterable iterable = IDataStore.getInstance().interpretFetchMany(context, null, null, null, null, obc);
+		Iterator<IStored> docs = iterable.iterator();
 		assertTrue(docs.hasNext());
 		assertEquals(d4,  docs.next());
 		assertTrue(docs.hasNext());
@@ -174,14 +182,16 @@ public class TestMemStore {
 	
 	@Test
 	public void testSliceEmpty() throws Exception {
-		IStoredIterator docs = IDataStore.getInstance().interpretFetchMany(context, null, new IntegerLiteral(1), new IntegerLiteral(10), null, null);
+		IStoredIterable iterable = IDataStore.getInstance().interpretFetchMany(context, null, new IntegerLiteral(1), new IntegerLiteral(10), null, null);
+		Iterator<IStored> docs = iterable.iterator();
 		assertFalse(docs.hasNext());
 	}
 
 	@Test
 	public void testSliceBeyond() throws Exception {
 		IStorable d1 = store("__id__", "__test1__");
-		IStoredIterator docs = IDataStore.getInstance().interpretFetchMany(context, null, new IntegerLiteral(1), new IntegerLiteral(10), null, null);
+		IStoredIterable iterable = IDataStore.getInstance().interpretFetchMany(context, null, new IntegerLiteral(1), new IntegerLiteral(10), null, null);
+		Iterator<IStored> docs = iterable.iterator();
 		assertTrue(docs.hasNext());
 		assertEquals(d1,  docs.next());
 		assertFalse(docs.hasNext());
@@ -193,7 +203,8 @@ public class TestMemStore {
 		store("__id__", "__test2__");
 		store("__id__", "__test3__");
 		store("__id__", "__test4__");
-		IStoredIterator docs = IDataStore.getInstance().interpretFetchMany(context, null, new IntegerLiteral(1), new IntegerLiteral(4), null, null);
+		IStoredIterable iterable = IDataStore.getInstance().interpretFetchMany(context, null, new IntegerLiteral(1), new IntegerLiteral(4), null, null);
+		Iterator<IStored> docs = iterable.iterator();
 		assertTrue(docs.hasNext());
 		docs.next();
 		assertTrue(docs.hasNext());
@@ -211,7 +222,8 @@ public class TestMemStore {
 		store("__id__", "__test2__");
 		store("__id__", "__test3__");
 		store("__id__", "__test4__");
-		IStoredIterator docs = IDataStore.getInstance().interpretFetchMany(context, null, new IntegerLiteral(2), new IntegerLiteral(3), null, null);
+		IStoredIterable iterable = IDataStore.getInstance().interpretFetchMany(context, null, new IntegerLiteral(2), new IntegerLiteral(3), null, null);
+		Iterator<IStored> docs = iterable.iterator();
 		assertTrue(docs.hasNext());
 		docs.next();
 		assertTrue(docs.hasNext());
@@ -253,9 +265,10 @@ public class TestMemStore {
 		categories.add("Project");
 		categories.add("Application");
 		d1.setData("category", categories);
-		IStoredIterator docs = IDataStore.getInstance().interpretFetchMany(context, 
+		IStoredIterable iterable = IDataStore.getInstance().interpretFetchMany(context, 
 				new CategoryType(new Identifier("Application")), 
 				null, null, null, null);
+		Iterator<IStored> docs = iterable.iterator();
 		assertTrue(docs.hasNext());
 		docs.next();
 		assertFalse(docs.hasNext());

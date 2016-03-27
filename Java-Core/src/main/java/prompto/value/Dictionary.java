@@ -18,7 +18,6 @@ import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.IterableWithLength;
-import prompto.intrinsic.IteratorWithLength;
 import prompto.intrinsic.PromptoDict;
 import prompto.intrinsic.PromptoSet;
 import prompto.runtime.Context;
@@ -178,34 +177,31 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 		}
 
 		@Override
-		public IteratorWithLength<IValue> iterator() {
-			return new KVPIterator();
+		public Long getLength() {
+			return (long)dict.size();
 		}
+		
+		@Override
+		public Iterator<IValue> iterator() {
+			return new Iterator<IValue>() {
 
-		class KVPIterator implements IteratorWithLength<IValue> {
-
-			Iterator<Entry<Text, IValue>> iterator = dict.entrySet().iterator();
-			long length = dict.size();
-			
-			@Override
-			public long getLength() {
-				return length;
-			}
-			
-			@Override
-			public boolean hasNext() {
-				return iterator.hasNext();
-			}
-
-			@Override
-			public KVPValue next() {
-				return new KVPValue(iterator.next());
-			}
-
-			@Override
-			public void remove() {
-				iterator.remove();
-			}
+				Iterator<Entry<Text, IValue>> iterator = dict.entrySet().iterator();
+				
+				@Override
+				public boolean hasNext() {
+					return iterator.hasNext();
+				}
+	
+				@Override
+				public KVPValue next() {
+					return new KVPValue(iterator.next());
+				}
+	
+				@Override
+				public void remove() {
+					iterator.remove();
+				}
+			};
 
 		}
 

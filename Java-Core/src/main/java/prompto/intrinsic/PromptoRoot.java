@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,6 +15,7 @@ import prompto.store.IStorable;
 import prompto.store.IStored;
 import prompto.store.IStorable.IDbIdListener;
 import prompto.store.IStorable.IDbIdProvider;
+import prompto.store.IStoredIterable;
 
 public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener {
 
@@ -38,6 +40,31 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener {
 		} catch (Exception e) {
 			throw new RuntimeException(e); // TODO for now
 		}
+	}
+	
+	public static IterableWithLength<PromptoRoot> newIterable(IStoredIterable iterable) {
+		return new IterableWithLength<PromptoRoot>() {
+			
+			@Override
+			public Long getLength() {
+				return iterable.length();
+			}
+
+			@Override
+			public Iterator<PromptoRoot> iterator() {
+				return new Iterator<PromptoRoot>() {
+					
+					Iterator<IStored> iterator = iterable.iterator();
+					
+					@Override public boolean hasNext() { 
+						return iterator.hasNext(); 
+					}
+					@Override public PromptoRoot next() { 
+						return newInstance(iterator.next()); 
+					}
+				};
+			}
+		};
 	}
 	
 	protected Object dbId;

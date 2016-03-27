@@ -33,7 +33,7 @@ import prompto.store.IPredicateExpression;
 import prompto.store.IStorable;
 import prompto.store.IStore;
 import prompto.store.IStored;
-import prompto.store.IStoredIterator;
+import prompto.store.IStoredIterable;
 import prompto.type.CategoryType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
@@ -255,7 +255,8 @@ public class UpdatableCodeStore extends BaseCodeStore {
 
 	private Iterator<IDeclaration> fetchDeclarationsInStore(String name, Version version) {
 		try {
-			IStoredIterator stored = fetchManyInStore(name, null, version);
+			IStoredIterable iterable = fetchManyInStore(name, null, version);
+			Iterator<IStored> stored = iterable.iterator();
 			return new Iterator<IDeclaration>() {
 				@Override public boolean hasNext() { return stored.hasNext(); }
 				@Override public IDeclaration next() { return parseDeclaration(stored.next()); }
@@ -265,7 +266,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 		}
 	}
 
-	private IStoredIterator fetchManyInStore(String name, CategoryType type, Version version) throws PromptoError {
+	private IStoredIterable fetchManyInStore(String name, CategoryType type, Version version) throws PromptoError {
 		IntegerLiteral one = new IntegerLiteral(1);
 		IPredicateExpression filter = buildNameAndVersionFilter(name, version);
 		if(LATEST.equals(version)) {
@@ -282,8 +283,9 @@ public class UpdatableCodeStore extends BaseCodeStore {
 			IdentifierList names = new IdentifierList(new Identifier("version"));
 			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
 			IntegerLiteral one = new IntegerLiteral(1);
-			IStoredIterator result = store.interpretFetchMany(context, type, one, one, filter, orderBy);
-			return result.hasNext() ? result.next() : null;
+			IStoredIterable iterable = store.interpretFetchMany(context, type, one, one, filter, orderBy);
+			Iterator<IStored> stored = iterable.iterator();
+			return stored.hasNext() ? stored.next() : null;
 		} else
 			return store.interpretFetchOne(context, null, filter); 
 	}
@@ -323,9 +325,10 @@ public class UpdatableCodeStore extends BaseCodeStore {
 		IExpression right = new BooleanLiteral("true");
 		IPredicateExpression filter = new EqualsExpression(left, EqOp.EQUALS, right);
 		CategoryType type = new CategoryType(new Identifier("Attribute"));
-		IStoredIterator result = store.interpretFetchMany(context, type, null, null, filter, null);
-		while(result.hasNext()) {
-			AttributeDeclaration attr = parseDeclaration(result.next());
+		IStoredIterable iterable = store.interpretFetchMany(context, type, null, null, filter, null);
+		Iterator<IStored> stored = iterable.iterator();
+		while(stored.hasNext()) {
+			AttributeDeclaration attr = parseDeclaration(stored.next());
 			list.add(attr);		
 		}
 	}

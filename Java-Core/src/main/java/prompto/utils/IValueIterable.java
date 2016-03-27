@@ -5,7 +5,6 @@ import java.util.Iterator;
 
 import prompto.expression.IExpression;
 import prompto.intrinsic.IterableWithLength;
-import prompto.intrinsic.IteratorWithLength;
 import prompto.runtime.Context;
 import prompto.value.IValue;
 
@@ -20,16 +19,16 @@ public class IValueIterable<T extends Object> implements IterableWithLength<IVal
 	}
 
 	@Override
-	public IteratorWithLength<IValue> iterator() {
-		return new IteratorWithLength<IValue>() {
+	public Long getLength() {
+		return (long)iterable.size();
+	}
+	
+	@Override
+	public Iterator<IValue> iterator() {
+		return new Iterator<IValue>() {
 		
 			Iterator<T> iterator = iterable.iterator();
 			
-			@Override
-			public long getLength() {
-				return iterable.size();
-			}
-	
 			@Override
 			public boolean hasNext() {
 				return iterator.hasNext();

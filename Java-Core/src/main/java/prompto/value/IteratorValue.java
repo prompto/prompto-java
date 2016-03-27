@@ -1,6 +1,7 @@
 package prompto.value;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
@@ -8,7 +9,6 @@ import prompto.error.ReadWriteError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.IterableWithLength;
-import prompto.intrinsic.IteratorWithLength;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.type.IType;
@@ -16,16 +16,16 @@ import prompto.type.IteratorType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
-public class IteratorValue extends BaseValue implements IIterable<IValue>, IterableWithLength<IValue>, IteratorWithLength<IValue> {
+public class IteratorValue extends BaseValue implements IIterable<IValue>, IterableWithLength<IValue> {
 
 	IType itemType;
 	Context context;
 	Identifier name;
-	IteratorWithLength<IValue> source;
+	IterableWithLength<IValue> source;
 	IExpression expression;
 	
 	public IteratorValue(Context context, Identifier name, IType itemType, 
-			IteratorWithLength<IValue> source, IExpression expression) {
+			IterableWithLength<IValue> source, IExpression expression) {
 		super(new IteratorType(itemType));
 		this.itemType = itemType;
 		this.context = context;
@@ -35,7 +35,7 @@ public class IteratorValue extends BaseValue implements IIterable<IValue>, Itera
 	}
 
 	@Override
-	public long getLength() {
+	public Long getLength() {
 		return source.getLength();
 	}
 
@@ -45,25 +45,28 @@ public class IteratorValue extends BaseValue implements IIterable<IValue>, Itera
 	}
 
 	@Override 
-	public IteratorWithLength<IValue> iterator() {
-		return this;
-	}
-	
-	@Override
-	public boolean hasNext() {
-		return source.hasNext();
-	}
-	
-	@Override
-	public IValue next() {
-		try {
-			Context child = context.newChildContext();
-			child.registerValue(new Variable(name, itemType));
-			child.setValue(name, source.next());
-			return expression.interpret(child);
-		} catch (PromptoError e) {
-			throw new RuntimeException(e);
-		}
+	public Iterator<IValue> iterator() {
+		return new Iterator<IValue>() {
+			
+			Iterator<IValue> iterator = source.iterator();
+			
+			@Override
+			public boolean hasNext() {
+				return iterator.hasNext();
+			}
+			
+			@Override
+			public IValue next() {
+				try {
+					Context child = context.newChildContext();
+					child.registerValue(new Variable(name, itemType));
+					child.setValue(name, iterator.next());
+					return expression.interpret(child);
+				} catch (PromptoError e) {
+					throw new RuntimeException(e);
+				}
+			}
+		};
 	}
 	
 	@Override
@@ -79,8 +82,9 @@ public class IteratorValue extends BaseValue implements IIterable<IValue>, Itera
 	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
 		try {
 			generator.writeStartArray();
-			while(hasNext())
-				next().toJson(context, generator, null, null);
+			Iterator<IValue> iterator = iterator();
+			while(iterator.hasNext())
+				iterator.next().toJson(context, generator, null, null);
 			generator.writeEndArray();
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());

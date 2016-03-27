@@ -46,13 +46,13 @@ public interface IStore<T extends Object> {
 	IQueryFactory getQueryFactory();
 	// for the below, it is guaranteed that IQuery was produced by the above
 	IStored fetchOne(IQuery query) throws PromptoError;
-	IStoredIterator fetchMany(IQuery query) throws PromptoError;
+	IStoredIterable fetchMany(IQuery query) throws PromptoError;
 	
 	default IStored interpretFetchOne(Context context, CategoryType category, IPredicateExpression filter) throws PromptoError {
 		return fetchOne(getQueryInterpreter(context).buildFetchOneQuery(category, filter));
 	};
 
-	default IStoredIterator interpretFetchMany(Context context, CategoryType category, 
+	default IStoredIterable interpretFetchMany(Context context, CategoryType category, 
 						IExpression start, IExpression end, 
 						IPredicateExpression filter, 
 						OrderByClauseList orderBy) throws PromptoError {

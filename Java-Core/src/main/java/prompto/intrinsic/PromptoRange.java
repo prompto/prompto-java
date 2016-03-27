@@ -1,6 +1,7 @@
 package prompto.intrinsic;
 
 import java.util.Collection;
+import java.util.Iterator;
 
 
 public abstract class PromptoRange<T extends Object> implements IterableWithLength<T> {
@@ -68,13 +69,12 @@ public abstract class PromptoRange<T extends Object> implements IterableWithLeng
 	}
 	
 	@Override
-	public IteratorWithLength<T> iterator() {
-		return new IteratorWithLength<T>() {
+	public Iterator<T> iterator() {
+		return new Iterator<T>() {
 			
 			long index = 0;
 			long length = PromptoRange.this.getNativeLength();
 			
-			@Override public long getLength() { return length; }
 			@Override public boolean hasNext() { return index<length; }
 			@Override public T next() { return getItem(++index); }
 			
