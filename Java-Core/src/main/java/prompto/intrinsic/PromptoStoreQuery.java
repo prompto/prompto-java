@@ -12,7 +12,7 @@ import prompto.store.IStorable;
 import prompto.store.IStore;
 import prompto.value.IInstance;
 import prompto.value.IValue;
-import prompto.value.IteratorValue;
+import prompto.value.IterableValue;
 import prompto.value.ListValue;
 import prompto.value.SetValue;
 import prompto.value.TupleValue;
@@ -53,8 +53,8 @@ public class PromptoStoreQuery {
 		else if(value instanceof TupleValue)
 			((TupleValue)value).getItems().forEach((item)->
 				delete(context, item));
-		else if(value instanceof IteratorValue) {
-			Iterator<IValue> iter = ((IteratorValue)value).iterator();
+		else if(value instanceof IterableValue) {
+			Iterator<IValue> iter = ((IterableValue)value).iterator();
 			while(iter.hasNext())
 				delete(context, iter.next());
 		} else
@@ -75,8 +75,8 @@ public class PromptoStoreQuery {
 		else if(value instanceof TupleValue)
 			((TupleValue)value).getItems().forEach((item)->
 				store(context, item));
-		else if(value instanceof IteratorValue) {
-			Iterator<IValue> iter = ((IteratorValue)value).iterator();
+		else if(value instanceof IterableValue) {
+			Iterator<IValue> iter = ((IterableValue)value).iterator();
 			while(iter.hasNext())
 				store(context, iter.next());
 		} else

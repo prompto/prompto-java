@@ -1,5 +1,8 @@
 package prompto.expression;
 
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
@@ -68,5 +71,11 @@ public class NativeSymbol extends Symbol implements IExpression {
 	public IValue interpret(Context context) throws PromptoError {
 		return expression.interpret(context);
 	}
-
+	
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		return expression.compile(context, method, flags);
+	}
+	
 }

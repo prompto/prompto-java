@@ -12,6 +12,11 @@ check return types
 check member methods
 return sorted sets 
 implement dbIdListener strategy (store, ConcreteInstance... )
+attribute type
+attribute as variable: parameter
+method as attribute
+attribute as attribute
+move MIN_INT && MAX_INT to enum
 
 missing tests:
 null member is empty
@@ -19,11 +24,13 @@ pass/empty statement
 tuple equals tuple
 a = null, null = a
 slice tuple
-return in loops and if/else
-category composition
+return in loops and in if/else
 category abstract operator methods
 decimal * category
-delete
+delete/store
+store mutable child
+iterating over enumerated category symbols for name/value/other
+iterating over enumerated native symbols for name/value/other
 
 language:
 send/receive

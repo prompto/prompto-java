@@ -7,8 +7,8 @@ import prompto.runtime.Context;
 
 public class EnumeratedCategoryType extends CategoryType {
 
-	public EnumeratedCategoryType(Identifier name) {
-		super(name); 
+	public EnumeratedCategoryType(Identifier id) {
+		super(id); 
 	}
 	
 	@Override

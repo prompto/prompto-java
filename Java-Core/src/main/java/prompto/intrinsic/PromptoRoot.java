@@ -26,10 +26,7 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener {
 			Object list = stored.getData("category");
 			@SuppressWarnings("unchecked")
 			String name = ((PromptoList<String>)list).getLast();
-			String concreteName = "" + CompilerUtils.PROMPTO_CHAR + '.' 
-									+ CompilerUtils.CATEGORY_CHAR + '.'
-									+ name + CompilerUtils.INNER_SEPARATOR
-									+ name;
+			String concreteName = CompilerUtils.getCategoryConcreteType(name).getTypeName();
 			PromptoClassLoader loader = PromptoClassLoader.getInstance();
 			if(loader==null)
 				throw new UnsupportedOperationException("newPromptoRoot can only be used in compiled mode!");

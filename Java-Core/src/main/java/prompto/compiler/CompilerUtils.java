@@ -112,22 +112,25 @@ public abstract class CompilerUtils {
 	}
 
 	public static final char PROMPTO_CHAR = 'π';
-	public static final char METHOD_CHAR = 'µ';
-	public static final char CATEGORY_CHAR = 'χ';
 	public static final String INNER_SEPARATOR = "$%";
+
+	public static final String GLOBAL_METHOD_PACKAGE_PREFIX = "π.µ.";
+	public static final String CATEGORY_PACKAGE_PREFIX = "π.χ.";
+	public static final String CATEGORY_ENUM_PACKAGE_PREFIX = "π.ε.";
+	public static final String NATIVE_ENUM_PACKAGE_PREFIX = "π.η.";
 
 	public static Type getGlobalMethodType(Identifier id) {
 		return CompilerUtils.getGlobalMethodType(id.toString());
 	}
 
 	public static Type getGlobalMethodType(String name) {
-		return new PromptoType("" + PROMPTO_CHAR + '.' + METHOD_CHAR + '.' + name);
+		return new PromptoType(GLOBAL_METHOD_PACKAGE_PREFIX + name);
 	}
 	
 	public static Type concreteTypeFrom(String fullName) {
 		int idx = fullName.indexOf('$');
 		if(idx<0)
-			fullName += INNER_SEPARATOR + simpleNameFrom(fullName);
+			fullName += INNER_SEPARATOR + categorySimpleNameFrom(fullName);
 		return new PromptoType(fullName);
 	}
 
@@ -136,17 +139,33 @@ public abstract class CompilerUtils {
 	}
 	
 	public static Type interfaceTypeFrom(String fullName) {
-		int idx = fullName.indexOf('$');
+		int idx = fullName.indexOf(INNER_SEPARATOR);
 		if(idx>=0)
 			fullName = fullName.substring(0, idx);
 		return new PromptoType(fullName);
 	}
 
-	public static String simpleNameFrom(String fullName) {
-		String simpleName = fullName.substring(fullName.indexOf(".χ.") + 3);
-		int idx = simpleName.indexOf('$');
+	public static String categorySimpleNameFrom(String fullName) {
+		String simpleName = fullName.substring(CATEGORY_PACKAGE_PREFIX.length());
+		int idx = simpleName.indexOf(INNER_SEPARATOR);
 		if(idx>=0)
-			simpleName = simpleName.substring(idx + 2); // skip $ and %
+			simpleName = simpleName.substring(idx + INNER_SEPARATOR.length()); 
+		return simpleName;
+	}
+	
+	public static String categoryEnumSimpleNameFrom(String fullName) {
+		String simpleName =  fullName.substring(CATEGORY_ENUM_PACKAGE_PREFIX.length());
+		int idx = simpleName.indexOf(INNER_SEPARATOR);
+		if(idx>=0)
+			simpleName = simpleName.substring(idx + INNER_SEPARATOR.length()); 
+		return simpleName;
+	}
+	
+	public static String nativeEnumSimpleNameFrom(String fullName) {
+		String simpleName =  fullName.substring(NATIVE_ENUM_PACKAGE_PREFIX.length());
+		int idx = simpleName.indexOf(INNER_SEPARATOR);
+		if(idx>=0)
+			simpleName = simpleName.substring(idx + INNER_SEPARATOR.length()); 
 		return simpleName;
 	}
 	
@@ -157,15 +176,39 @@ public abstract class CompilerUtils {
 	public static Type getCategoryConcreteType(Identifier id) {
 		return getCategoryConcreteType(id.toString());
 	}
-
-	private static Type getCategoryConcreteType(String name) {
-		return new PromptoType("" + PROMPTO_CHAR + '.' + CATEGORY_CHAR + '.' + name + INNER_SEPARATOR + name);
-	}
-
+	
 	public static Type getCategoryInterfaceType(String name) {
-		return new PromptoType("" + PROMPTO_CHAR + '.' + CATEGORY_CHAR + '.' + name);
+		return new PromptoType(CATEGORY_PACKAGE_PREFIX + name);
 	}
 	
+	public static Type getCategoryConcreteType(String name) {
+		return new PromptoType(CATEGORY_PACKAGE_PREFIX + name + INNER_SEPARATOR + name);
+	}
+	
+	public static Type getCategoryEnumInterfaceType(Identifier id) {
+		return getCategoryEnumInterfaceType(id.toString());
+	}
+
+	public static Type getCategoryEnumConcreteType(Identifier id) {
+		return getCategoryEnumConcreteType(id.toString());
+	}
+
+	public static Type getNativeEnumType(Identifier id) {
+		return getNativeEnumType(id.toString());
+	}
+
+	public static Type getNativeEnumType(String name) {
+		return new PromptoType(NATIVE_ENUM_PACKAGE_PREFIX + name);
+	}
+
+	public static Type getCategoryEnumInterfaceType(String name) {
+		return new PromptoType(CATEGORY_ENUM_PACKAGE_PREFIX + name);
+	}
+
+	public static Type getCategoryEnumConcreteType(String name) {
+		return new PromptoType(CATEGORY_ENUM_PACKAGE_PREFIX + name + INNER_SEPARATOR + name);
+	}
+
 	public static ResultInfo reverseBoolean(MethodInfo method) {
 		// perform 1-0
 		method.addInstruction(Opcode.ICONST_1);
@@ -452,7 +495,7 @@ public abstract class CompilerUtils {
 		return method;
 	}
 
-	public static void compileEnum(Context context, MethodInfo method, Flags flags, Enum<?> value) {
+	public static void compileJavaEnum(Context context, MethodInfo method, Flags flags, Enum<?> value) {
 		method.addInstruction(Opcode.GETSTATIC, 
 				new FieldConstant(value.getClass(), value.name(), value.getClass()));
 	}
@@ -461,7 +504,7 @@ public abstract class CompilerUtils {
 		compileNewRawInstance(method, AttributeInfo.class);
 		method.addInstruction(Opcode.DUP);
 		method.addInstruction(Opcode.LDC, new StringConstant(info.getName()));
-		compileEnum(context, method, flags, info.getFamily());
+		compileJavaEnum(context, method, flags, info.getFamily());
 		method.addInstruction(info.isCollection() ? Opcode.ICONST_1 : Opcode.ICONST_0);
 		method.addInstruction(info.isKey() ? Opcode.ICONST_1 : Opcode.ICONST_0);
 		method.addInstruction(info.isValue() ? Opcode.ICONST_1 : Opcode.ICONST_0);
@@ -470,4 +513,8 @@ public abstract class CompilerUtils {
 				String.class, Family.class, boolean.class, 
 				boolean.class, boolean.class, boolean.class);
 	}
+
+
+
+
 }

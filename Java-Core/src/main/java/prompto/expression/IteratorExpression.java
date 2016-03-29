@@ -27,7 +27,7 @@ import prompto.type.IteratorType;
 import prompto.utils.CodeWriter;
 import prompto.value.IIterable;
 import prompto.value.IValue;
-import prompto.value.IteratorValue;
+import prompto.value.IterableValue;
 
 public class IteratorExpression implements IExpression {
 
@@ -56,7 +56,7 @@ public class IteratorExpression implements IExpression {
 		IType itemType = iterType.getItemType();
 		IValue items = source.interpret(context);
 		IterableWithLength<IValue> iterable = getIterable(context, items);
-		return new IteratorValue(context, name, itemType, iterable, expression);
+		return new IterableValue(context, name, itemType, iterable, expression);
 	}
 	
 	@Override

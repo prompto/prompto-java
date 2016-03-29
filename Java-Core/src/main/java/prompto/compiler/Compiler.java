@@ -8,6 +8,8 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 
 import prompto.declaration.CategoryDeclaration;
+import prompto.declaration.EnumeratedCategoryDeclaration;
+import prompto.declaration.EnumeratedNativeDeclaration;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.utils.FileUtils;
@@ -57,6 +59,16 @@ public class Compiler {
 	}
 
 	public void compileCategory(Context context, String fullName, CategoryDeclaration decl) throws Exception {
+		ClassFile classFile = decl.compile(context, fullName);
+		writeClassFile(classFile);
+	}
+
+	public void compileEnumeratedCategory(Context context, String fullName, EnumeratedCategoryDeclaration decl) throws Exception {
+		ClassFile classFile = decl.compile(context, fullName);
+		writeClassFile(classFile);
+	}
+
+	public void compileEnumeratedNative(Context context, String fullName, EnumeratedNativeDeclaration decl) {
 		ClassFile classFile = decl.compile(context, fullName);
 		writeClassFile(classFile);
 	}

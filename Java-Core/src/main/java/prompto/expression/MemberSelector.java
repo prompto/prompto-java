@@ -138,61 +138,73 @@ public class MemberSelector extends SelectorExpression {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
-		ResultInfo info = compileParent(context, method, flags);
+        // resolve parent to keep clarity
+		IExpression parent = resolveParent(context);
         // special case for Symbol which evaluates as value
-		ResultInfo result = compileSymbol(context, method, info, flags);
+		ResultInfo result = compileSymbol(context, method, flags, parent);
 		if(result!=null)
 			return result;
 		else
 			// special case for singletons 
-			result = compileSingleton(context, method, info, flags);
+			result = compileSingleton(context, method, flags, parent);
 		if(result!=null)
 			return result;
 		else
 			// special case for 'static' type members (like Enum.symbols, Type.name etc...)
-			result = compileTypeMember(context, method, info, flags);
+			result = compileTypeMember(context, method, flags, parent);
 		if(result!=null)
 			return result;
 		else
 			// finally resolve instance member
-			return compileInstanceMember(context, method,info, flags);		
+			return compileInstanceMember(context, method, flags, parent);		
 	}
 
-	private ResultInfo compileSymbol(Context context, MethodInfo method, ResultInfo parent, Flags flags) {
-		System.err.println("TODO: MemberSelector.compileSymbol");
+	private ResultInfo compileSymbol(Context context, MethodInfo method, Flags flags, IExpression parent) throws SyntaxError {
+		if (parent instanceof SymbolExpression) {
+			if ("name".equals(id.toString())) {
+				StringConstant c = new StringConstant(((SymbolExpression)parent).getName().toString());
+				method.addInstruction(Opcode.LDC, c);
+				return new ResultInfo(String.class);
+			} else if("value".equals(id.toString()))
+				return parent.compile(context, method, flags);
+		}
 		return null;
 	}
 
-	private ResultInfo compileSingleton(Context context, MethodInfo method, ResultInfo parent, Flags flags) {
+	private ResultInfo compileSingleton(Context context, MethodInfo method, Flags flags, IExpression parent) {
 		System.err.println("TODO: MemberSelector.compileSingleton");
 		return null;
 	}
 
-	private ResultInfo compileTypeMember(Context context, MethodInfo method, ResultInfo parent, Flags flags) {
-		System.err.println("TODO: MemberSelector.compileTypeMember");
-		return null;
+	private ResultInfo compileTypeMember(Context context, MethodInfo method, Flags flags, IExpression parent) throws SyntaxError {
+	       if(parent instanceof TypeExpression) {
+	    	   IType type = ((TypeExpression)parent).getType();
+	    	   return type.compileGetMember(context, method, flags, parent, id);
+	       } else
+	    	   return null;
 	}
 
 
-	private ResultInfo compileInstanceMember(Context context, MethodInfo method, ResultInfo parent, Flags flags) throws SyntaxError {
+	private ResultInfo compileInstanceMember(Context context, MethodInfo method, Flags flags, IExpression parent) throws SyntaxError {
 		Type resultType = check(context).getJavaType();
+		ResultInfo info = parent.compile(context, method, flags);
 		// special case for String.length() to avoid wrapping String.class for just one member
-		if(String.class==parent.getType() && "length".equals(getName()))
+		if(String.class==info.getType() && "length".equals(getName()))
 			return compileStringLength(method, flags);
 		else {
 			String getterName = CompilerUtils.getterName(getName());
-			if(isCompilingGetter(context, method, parent, getterName)) {
-				Type classType = CompilerUtils.concreteTypeFrom(parent.getType().getTypeName());
+			if(isCompilingGetter(context, method, info, getterName)) {
+				Type classType = CompilerUtils.concreteTypeFrom(info.getType().getTypeName());
 				FieldConstant f = new FieldConstant(classType, id.toString(), resultType);
 				method.addInstruction(Opcode.GETFIELD, f);
-			} else if(PromptoAny.class==parent.getType()) {
+			} else if(PromptoAny.class==info.getType()) {
 				IOperand oper = new StringConstant(getName());
 				method.addInstruction(Opcode.LDC_W, oper);
 				oper = new MethodConstant(PromptoAny.class, "getMember", Object.class, 
 						Object.class, Object.class);
 				method.addInstruction(Opcode.INVOKESTATIC, oper);
 				resultType = PromptoAny.class;
-			} else if(PromptoDocument.class==parent.getType()) {
+			} else if(PromptoDocument.class==info.getType()) {
 				IOperand oper = new StringConstant(getName());
 				method.addInstruction(Opcode.LDC_W, oper);
 				oper = new ClassConstant(PromptoDocument.class);
@@ -201,15 +213,15 @@ public class MemberSelector extends SelectorExpression {
 						Class.class, Object.class);
 				method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 				resultType = PromptoAny.class;
-			} else if(PromptoDict.Entry.class==parent.getType()) {
-				IOperand oper = new MethodConstant(parent.getType(), getterName, Object.class);
+			} else if(PromptoDict.Entry.class==info.getType()) {
+				IOperand oper = new MethodConstant(info.getType(), getterName, Object.class);
 				method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 				method.addInstruction(Opcode.CHECKCAST, new ClassConstant(resultType));
-			} else if(parent.isInterface()){
-				IOperand oper = new InterfaceConstant(parent.getType(), getterName, resultType);
+			} else if(info.isInterface()){
+				IOperand oper = new InterfaceConstant(info.getType(), getterName, resultType);
 				method.addInstruction(Opcode.INVOKEINTERFACE, oper);
 			} else {
-				IOperand oper = new MethodConstant(parent.getType(), getterName, resultType);
+				IOperand oper = new MethodConstant(info.getType(), getterName, resultType);
 				method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 			}
 			return new ResultInfo(resultType);
@@ -228,11 +240,5 @@ public class MemberSelector extends SelectorExpression {
 		else
 			return CompilerUtils.intToLong(method);
 	}
-
-	private ResultInfo compileParent(Context context, MethodInfo method, Flags flags) throws SyntaxError {
-		IExpression parent = resolveParent(context);
-		return parent.compile(context, method, flags);
-	}
-
 
 }

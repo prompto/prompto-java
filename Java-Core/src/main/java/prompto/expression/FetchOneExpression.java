@@ -132,7 +132,7 @@ public class FetchOneExpression extends Section implements IExpression {
 			method.addInstruction(Opcode.DUP);
 			AttributeInfo info = new AttributeInfo("category", Family.TEXT, true, null);
 			CompilerUtils.compileAttributeInfo(context, method, flags, info);
-			CompilerUtils.compileEnum(context, method, flags, MatchOp.CONTAINS);
+			CompilerUtils.compileJavaEnum(context, method, flags, MatchOp.CONTAINS);
 			method.addInstruction(Opcode.LDC, new StringConstant(type.toString()));
 			InterfaceConstant i = new InterfaceConstant(IQuery.class, "verify", 
 					AttributeInfo.class, MatchOp.class, Object.class, void.class);

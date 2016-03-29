@@ -59,4 +59,5 @@ public class TypeExpression implements IExpression {
 	public IType getType() {
 		return type;
 	}
+
 }

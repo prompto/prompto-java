@@ -263,7 +263,7 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 		method.addInstruction(Opcode.DUP); // IQuery -> IQuery, IQuery
 		boolean reverse = compileAttributeInfo(context, method, flags);
 		MatchOp match = getMatchOp();
-		CompilerUtils.compileEnum(context, method, flags, match);
+		CompilerUtils.compileJavaEnum(context, method, flags, match);
 		if(reverse)
 			left.compile(context, method, flags);
 		else

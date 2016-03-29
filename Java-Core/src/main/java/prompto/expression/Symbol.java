@@ -130,5 +130,4 @@ public abstract class Symbol extends Section implements IExpression, INamed, IVa
 		throw new UnsupportedOperationException("toJson not supported by " + this.getClass().getSimpleName());
 	}
 
-	
 }

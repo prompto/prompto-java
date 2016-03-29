@@ -1,5 +1,16 @@
 package prompto.expression;
 
+import java.lang.reflect.Type;
+
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.FieldConstant;
+import prompto.compiler.FieldInfo;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.EnumeratedCategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -82,6 +93,41 @@ public class CategorySymbol extends Symbol implements IExpression  {
 		instance.setMutable(false);
 		return instance;
 	}
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		EnumeratedCategoryType itype = (EnumeratedCategoryType)this.getType(context);
+		Type type = CompilerUtils.getCategoryEnumConcreteType(itype.getTypeNameId());
+		FieldConstant field = new FieldConstant(type, this.getId().toString(), type);
+		method.addInstruction(Opcode.GETSTATIC, field);
+		return new ResultInfo(type);
+	}
 
+	public void compileCallConstructor(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		EnumeratedCategoryType itype = (EnumeratedCategoryType)this.getType(context);
+		Type type = CompilerUtils.getCategoryEnumConcreteType(itype.getTypeNameId());
+		ResultInfo result = CompilerUtils.compileNewInstance(method, type);
+		compileAssignments(context, method, flags, result);
+	}
+
+	private void compileAssignments(Context context, MethodInfo method, Flags flags, ResultInfo thisInfo) throws SyntaxError {
+		if(assignments!=null)
+			for(ArgumentAssignment assignment : assignments)
+				compileAssignment(context, method, flags, thisInfo, assignment);
+	}
+	
+	private void compileAssignment(Context context, MethodInfo method, Flags flags, 
+			ResultInfo thisInfo, ArgumentAssignment assignment) throws SyntaxError {
+		// keep a copy of new instance on top of the stack
+		method.addInstruction(Opcode.DUP);
+		// get value
+		/* ResultInfo valueInfo = */assignment.getExpression().compile(context, method, flags);
+		// call setter
+		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, assignment.getId());
+		FieldInfo field = decl.toFieldInfo(context);
+		MethodConstant m = new MethodConstant(thisInfo.getType(), 
+				CompilerUtils.setterName(field.getName().getValue()), field.getType(), void.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+	}
 
 }

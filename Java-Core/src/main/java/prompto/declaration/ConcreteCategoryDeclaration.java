@@ -409,7 +409,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		}
 	}
 	
-	public ClassFile compileConcreteClass(Context context, String fullName) {
+	protected ClassFile compileConcreteClass(Context context, String fullName) {
 		try {
 			java.lang.reflect.Type concreteType = CompilerUtils.concreteTypeFrom(fullName);
 			ClassFile classFile = new ClassFile(concreteType);
@@ -418,6 +418,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			compileSuperClass(context, classFile, new Flags());
 			compileInterface(context, classFile, new Flags());
 			compileCategoryField(context, classFile, new Flags());
+			compileClassConstructor(context, classFile, new Flags());
 			compileFields(context, classFile, new Flags());
 			compileEmptyConstructor(context, classFile, new Flags());
 			compileCopyConstructor(context, classFile, new Flags());
@@ -428,6 +429,46 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		}
 	}
 	
+
+	protected void compileClassConstructor(Context context, ClassFile classFile, Flags flags) throws SyntaxError {
+		if(needsClassConstructor()) {
+			MethodInfo method = classFile.newMethod("<clinit>", new Descriptor.Method(void.class));
+			method.addModifier(Modifier.STATIC);
+			compileClassConstructorBody(context, method, flags);
+			method.addInstruction(Opcode.RETURN);
+		}
+	}
+
+	protected void compileClassConstructorBody(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		compilePopulateCategoryField(context, method, flags);
+	}
+
+	protected void compilePopulateCategoryField(Context context, MethodInfo method, Flags flags) {
+		List<String> categories = collectCategories(context);
+		if(categories.size()<=5) {
+			Opcode opcode = Opcode.values()[Opcode.ICONST_0.ordinal() + categories.size()];
+			method.addInstruction(opcode);
+		} else
+			method.addInstruction(Opcode.LDC, new IntConstant(categories.size()));
+		method.addInstruction(Opcode.ANEWARRAY, new ClassConstant(String.class));
+		int idx = 0;
+		for(String s : categories) {
+			method.addInstruction(Opcode.DUP);
+			if(idx<=5) {
+				Opcode opcode = Opcode.values()[Opcode.ICONST_0.ordinal() + idx];
+				method.addInstruction(opcode);
+			} else
+				method.addInstruction(Opcode.LDC, new IntConstant(idx));
+			method.addInstruction(Opcode.LDC, new StringConstant(s));
+			method.addInstruction(Opcode.AASTORE);
+		}
+		FieldConstant f = new FieldConstant(method.getClassFile().getThisClass(), "category", String[].class);
+		method.addInstruction(Opcode.PUTSTATIC, f);
+	}
+
+	protected boolean needsClassConstructor() {
+		return isStorable();
+	}
 
 	@Override
 	public ClassFile compile(Context context, String fullName) {
@@ -531,13 +572,13 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		}
 	}
 
-	private void compileSuperClass(Context context, ClassFile classFile, Flags flags) {
+	protected void compileSuperClass(Context context, ClassFile classFile, Flags flags) {
 		ClassConstant superClass = getSuperClass(context);
 		if(superClass!=null)
 			classFile.setSuperClass(superClass);
 	}
 	
-	private void compileInterface(Context context, ClassFile classFile, Flags flags) {
+	protected void compileInterface(Context context, ClassFile classFile, Flags flags) {
 		ClassConstant interFace = getInterface(context);
 		if(interFace!=null)
 			classFile.addInterface(interFace);
@@ -554,41 +595,17 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return new ClassConstant(CompilerUtils.getCategoryConcreteType(derivedFrom.getFirst()));
 	}
 
-	private void compileCategoryField(Context context, ClassFile classFile, Flags flags) {
+	protected void compileCategoryField(Context context, ClassFile classFile, Flags flags) {
 		if(isStorable()) {
 			// store array of category names in static String[] field
 			// use reserved 'category' keyword which can't collide with any field
 			FieldInfo field = new FieldInfo("category", String[].class); 
 			field.addModifier(Modifier.STATIC);
 			classFile.addField(field);
-			// populate the field
-			List<String> categories = collectCategories(context);
-			MethodInfo method = classFile.newMethod("<clinit>", new Descriptor.Method(void.class));
-			method.addModifier(Modifier.STATIC);
-			if(categories.size()<=5) {
-				Opcode opcode = Opcode.values()[Opcode.ICONST_0.ordinal() + categories.size()];
-				method.addInstruction(opcode);
-			} else
-				method.addInstruction(Opcode.LDC, new IntConstant(categories.size()));
-			method.addInstruction(Opcode.ANEWARRAY, new ClassConstant(String.class));
-			int idx = 0;
-			for(String s : categories) {
-				method.addInstruction(Opcode.DUP);
-				if(idx<=5) {
-					Opcode opcode = Opcode.values()[Opcode.ICONST_0.ordinal() + idx];
-					method.addInstruction(opcode);
-				} else
-					method.addInstruction(Opcode.LDC, new IntConstant(idx));
-				method.addInstruction(Opcode.LDC, new StringConstant(s));
-				method.addInstruction(Opcode.AASTORE);
-			}
-			FieldConstant f = new FieldConstant(classFile.getThisClass(), "category", String[].class);
-			method.addInstruction(Opcode.PUTSTATIC, f);
-			method.addInstruction(Opcode.RETURN);
 		}
 	}
 
-	private void compileFields(Context context, ClassFile classFile, Flags flags) throws SyntaxError {
+	protected void compileFields(Context context, ClassFile classFile, Flags flags) throws SyntaxError {
 		Set<Identifier> ids = getAllAttributes(context);
 		for(Identifier id : ids)
 			compileField(context, classFile, flags, id);
@@ -734,7 +751,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		method.addInstruction(Opcode.ARETURN, new ClassConstant(field.getType()));
 	}
 
-	private void compileEmptyConstructor(Context context, ClassFile classFile, Flags flags) {
+	protected void compileEmptyConstructor(Context context, ClassFile classFile, Flags flags) {
 		if(isStorable()) {
 			Descriptor proto = new Descriptor.Method(void.class);
 			MethodInfo method = classFile.newMethod("<init>", proto);
@@ -777,6 +794,14 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 				return;
 			compilePopulateField(context, method, flags, id);
 		});
+		// this.storable.setDirty(false)
+		ClassConstant thisClass = method.getClassFile().getThisClass();
+		method.addInstruction(Opcode.ALOAD_0, thisClass);
+		FieldConstant field = new FieldConstant(thisClass, "storable", IStorable.class);
+		method.addInstruction(Opcode.GETFIELD, field);
+		method.addInstruction(Opcode.ICONST_0);
+		InterfaceConstant i = new InterfaceConstant(IStorable.class, "setDirty", boolean.class, void.class);
+		method.addInstruction(Opcode.INVOKEINTERFACE, i);
 	}
 
 	private void compilePopulateField(Context context, MethodInfo method, Flags flags, Identifier id) {
@@ -818,7 +843,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return context.getRegisteredDeclaration(CategoryDeclaration.class, derivedFrom.getFirst()).isStorable();
 	}
 
-	private void compileMethods(Context context, ClassFile classFile, Flags flags) throws SyntaxError {
+	protected void compileMethods(Context context, ClassFile classFile, Flags flags) throws SyntaxError {
 		for(IMethodDeclaration method : methods) {
 			if(	method instanceof GetterMethodDeclaration || method instanceof SetterMethodDeclaration)
 				continue;

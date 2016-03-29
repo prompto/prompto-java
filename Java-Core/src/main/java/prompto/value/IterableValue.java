@@ -16,27 +16,27 @@ import prompto.type.IteratorType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
-public class IteratorValue extends BaseValue implements IIterable<IValue>, IterableWithLength<IValue> {
+public class IterableValue extends BaseValue implements IIterable<IValue>, IterableWithLength<IValue> {
 
 	IType itemType;
 	Context context;
 	Identifier name;
-	IterableWithLength<IValue> source;
+	IterableWithLength<IValue> iterable;
 	IExpression expression;
 	
-	public IteratorValue(Context context, Identifier name, IType itemType, 
-			IterableWithLength<IValue> source, IExpression expression) {
+	public IterableValue(Context context, Identifier name, IType itemType, 
+			IterableWithLength<IValue> iterable, IExpression expression) {
 		super(new IteratorType(itemType));
 		this.itemType = itemType;
 		this.context = context;
 		this.name = name;
-		this.source = source;
+		this.iterable = iterable;
 		this.expression = expression;
 	}
 
 	@Override
 	public Long getLength() {
-		return source.getLength();
+		return iterable.getLength();
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class IteratorValue extends BaseValue implements IIterable<IValue>, Itera
 	public Iterator<IValue> iterator() {
 		return new Iterator<IValue>() {
 			
-			Iterator<IValue> iterator = source.iterator();
+			Iterator<IValue> iterator = iterable.iterator();
 			
 			@Override
 			public boolean hasNext() {
@@ -73,7 +73,7 @@ public class IteratorValue extends BaseValue implements IIterable<IValue>, Itera
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
 		if ("length".equals(name))
-			return new Integer(source.getLength());
+			return new Integer(iterable.getLength());
 		else
 			throw new InvalidDataError("No such member:" + name);
 	}

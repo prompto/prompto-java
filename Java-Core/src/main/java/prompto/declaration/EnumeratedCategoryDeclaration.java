@@ -1,11 +1,24 @@
 package prompto.declaration;
 
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
+
+import prompto.compiler.ClassConstant;
+import prompto.compiler.ClassFile;
+import prompto.compiler.CompilerException;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.FieldConstant;
+import prompto.compiler.FieldInfo;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
 import prompto.error.SyntaxError;
 import prompto.expression.CategorySymbol;
 import prompto.expression.Symbol;
 import prompto.grammar.CategorySymbolList;
 import prompto.grammar.Identifier;
-import prompto.grammar.SymbolList;
 import prompto.runtime.Context;
 import prompto.type.EnumeratedCategoryType;
 import prompto.type.IType;
@@ -34,7 +47,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration i
 	}
 	
 	@Override
-	public SymbolList<?> getSymbols() {
+	public CategorySymbolList getSymbols() {
 		return symbols;
 	}
 	
@@ -141,6 +154,80 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration i
 	@Override
 	public EnumeratedCategoryType getType(Context context) {
 		return new EnumeratedCategoryType(getId());
+	}
+	
+	@Override
+	protected ClassFile compileConcreteClass(Context context, String fullName) {
+		try {
+			java.lang.reflect.Type concreteType = CompilerUtils.concreteTypeFrom(fullName);
+			ClassFile classFile = new ClassFile(concreteType);
+			compileSuperClass(context, classFile, new Flags());
+			compileInterface(context, classFile, new Flags());
+			compileCategoryField(context, classFile, new Flags());
+			compileSymbolsField(context, classFile, new Flags());
+			compileSymbolFields(context, classFile, new Flags());
+			compileClassConstructor(context, classFile, new Flags());
+			compileFields(context, classFile, new Flags());
+			compileEmptyConstructor(context, classFile, new Flags());
+			compileMethods(context, classFile, new Flags());
+			return classFile;
+		} catch(SyntaxError e) {
+			throw new CompilerException(e);
+		}
+	}
+
+	@Override
+	protected boolean needsClassConstructor() {
+		return true;
+	}
+	
+	@Override
+	protected void compileClassConstructorBody(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		if(isStorable())
+			compilePopulateCategoryField(context, method, flags);
+		for(CategorySymbol s : getSymbols())
+			compilePopulateSymbolField(context, method, flags, s);
+		compilePopulateSymbolsField(context, method, flags);
+	}
+	
+	private void compilePopulateSymbolsField(Context context, MethodInfo method, Flags flags) {
+		ClassConstant thisClass = method.getClassFile().getThisClass();
+		CompilerUtils.compileNewInstance(method, ArrayList.class);
+		MethodConstant m = new MethodConstant(ArrayList.class, "add", Object.class, boolean.class);
+		for(CategorySymbol s : getSymbols()) {
+			method.addInstruction(Opcode.DUP);
+			FieldConstant f = new FieldConstant(thisClass, s.getName(), thisClass.getType());
+			method.addInstruction(Opcode.GETSTATIC, f);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+			method.addInstruction(Opcode.POP); // ignore returned boolean
+		}
+		FieldConstant f = new FieldConstant(thisClass, "%symbols", List.class);
+		method.addInstruction(Opcode.PUTSTATIC, f);
+	}
+
+	private void compilePopulateSymbolField(Context context, MethodInfo method, Flags flags, CategorySymbol s) throws SyntaxError {
+		s.compileCallConstructor(context, method, flags);
+		ClassConstant c = method.getClassFile().getThisClass();
+		FieldConstant f = new FieldConstant(c, s.getName(), c.getType());
+		method.addInstruction(Opcode.PUTSTATIC, f);
+	}
+
+	private void compileSymbolsField(Context context, ClassFile classFile, Flags flags) {
+		FieldInfo field = new FieldInfo("%symbols", List.class); 
+		field.addModifier(Modifier.STATIC);
+		classFile.addField(field);
+	}
+
+	private void compileSymbolFields(Context context, ClassFile classFile, Flags flags) {
+		getSymbols().forEach((s)->
+			compileSymbolField(context, classFile, flags, s));
+	}
+
+	private void compileSymbolField(Context context, ClassFile classFile, Flags flags, Symbol s) {
+		FieldInfo field = new FieldInfo(s.getName(), classFile.getThisClass().getType());
+		field.clearModifier(Modifier.PROTECTED);
+		field.addModifier(Modifier.STATIC | Modifier.PUBLIC);
+		classFile.addField(field);
 	}
 
 }

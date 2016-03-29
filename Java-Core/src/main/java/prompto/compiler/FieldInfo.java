@@ -23,6 +23,10 @@ public class FieldInfo {
 		accessFlags |= modifier;
 	}
 	
+	public void clearModifier(int modifier) {
+		accessFlags &= ~modifier;
+	}
+
 	public Utf8Constant getName() {
 		return name;
 	}

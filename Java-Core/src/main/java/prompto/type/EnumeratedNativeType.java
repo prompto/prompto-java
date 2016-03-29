@@ -1,18 +1,27 @@
 package prompto.type;
 
 import java.lang.reflect.Type;
+import java.util.List;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
+import prompto.compiler.ClassConstant;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.FieldConstant;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.declaration.EnumeratedNativeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IEnumeratedDeclaration;
 import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.value.IValue;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class EnumeratedNativeType extends BaseType {
 
@@ -41,8 +50,7 @@ public class EnumeratedNativeType extends BaseType {
 
 	@Override
 	public Type getJavaType() {
-		// TODO Auto-generated method stub
-		return null;
+		return CompilerUtils.getNativeEnumType(typeNameId);
 	}
 
 	@Override
@@ -80,6 +88,22 @@ public class EnumeratedNativeType extends BaseType {
 			return ((IEnumeratedDeclaration)decl).getSymbols();
 		else
 			throw new InvalidDataError("No such member:" + name);
+	}
+	
+	@Override
+	public ResultInfo compileGetMember(Context context, MethodInfo method,
+			Flags flags, IExpression parent, Identifier id) throws SyntaxError {
+		String name = id.toString();
+		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, typeNameId);
+		if(!(decl instanceof IEnumeratedDeclaration))
+			throw new SyntaxError(name + " is not an enumerated type!");
+		if ("symbols".equals(name)) {
+			ClassConstant cc = new ClassConstant(CompilerUtils.getNativeEnumType(typeNameId));
+			FieldConstant fc = new FieldConstant(cc, "%symbols", List.class);
+			method.addInstruction(Opcode.GETSTATIC, fc);
+			return new ResultInfo(List.class);
+		} else
+			throw new SyntaxError("No such member:" + name);
 	}
 	
 	@Override

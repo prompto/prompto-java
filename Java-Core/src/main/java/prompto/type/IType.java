@@ -3,8 +3,12 @@ package prompto.type;
 import java.lang.reflect.Type;
 import java.util.Comparator;
 
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
@@ -92,5 +96,9 @@ public interface IType {
 	void toDialect(CodeWriter writer);
 	IValue readJSONValue(Context context, JsonNode value);
 	IValue convertJavaValueToPromptoValue(Context context, Object value);
+	default ResultInfo compileGetMember(Context context, MethodInfo method,
+			Flags flags, IExpression parent, Identifier id) throws SyntaxError {
+		throw new UnsupportedOperationException("Cannot compileGetMember for " + this.getClass());
+	}
 }
  
