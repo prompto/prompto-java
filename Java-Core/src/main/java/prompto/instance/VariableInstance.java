@@ -63,23 +63,11 @@ public class VariableInstance implements IAssignableInstance {
 		ResultInfo info = expression.compile(context, method, flags);
 		method.registerLocal(id.toString(), Type.ITEM_Object, new ClassConstant(info.getType()));
 		StackLocal local = method.getRegisteredLocal(id.toString());
-		switch(local.getIndex()) {
-			case 0:
-				method.addInstruction(Opcode.ASTORE_0);
-				break;
-			case 1:
-				method.addInstruction(Opcode.ASTORE_1);
-				break;
-			case 2:
-				method.addInstruction(Opcode.ASTORE_2);
-				break;
-			case 3:
-				method.addInstruction(Opcode.ASTORE_3);
-				break;
-			default:
-				// TODO: support ASTORE_W
-				method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)local.getIndex()));
-		}
+		if(local.getIndex()<4) {
+			Opcode opcode = Opcode.values()[local.getIndex() + Opcode.ASTORE_0.ordinal()];
+			method.addInstruction(opcode);
+		} else 
+			method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)local.getIndex()));
 		return new ResultInfo(void.class);
 	}
 	
