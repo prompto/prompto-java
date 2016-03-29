@@ -48,7 +48,6 @@ public class AssignInstanceStatement extends SimpleStatement {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
-		instance.checkAssignValue(context, expression);
 		return instance.compileAssign(context, method, flags, expression);
 	}
 }

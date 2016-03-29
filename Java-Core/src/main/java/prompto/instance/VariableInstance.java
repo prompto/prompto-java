@@ -14,6 +14,7 @@ import prompto.expression.IExpression;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Variable;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -36,23 +37,11 @@ public class VariableInstance implements IAssignableInstance {
 		StackLocal local = method.getRegisteredLocal(id.toString());
 		if(local instanceof StackLocal.ObjectLocal) {
 			ClassConstant klass = ((StackLocal.ObjectLocal)local).getClassName();
-			switch(local.getIndex()) {
-			case 0:
-				method.addInstruction(Opcode.ALOAD_0, klass);
-				break;
-			case 1:
-				method.addInstruction(Opcode.ALOAD_1, klass);
-				break;
-			case 2:
-				method.addInstruction(Opcode.ALOAD_2, klass);
-				break;
-			case 3:
-				method.addInstruction(Opcode.ALOAD_3, klass);
-				break;
-			default:
-				// TODO: support ALOAD_W
+			if(local.getIndex()<4) {
+				Opcode opcode = Opcode.values()[local.getIndex() + Opcode.ALOAD_0.ordinal()];
+				method.addInstruction(opcode, klass);
+			} else 
 				method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)local.getIndex()), klass);
-			}
 			return new ResultInfo(klass.getType());
 		} else
 			throw new UnsupportedOperationException();
@@ -60,6 +49,14 @@ public class VariableInstance implements IAssignableInstance {
 	
 	@Override
 	public ResultInfo compileAssign(Context context, MethodInfo method, Flags flags, IExpression expression) throws SyntaxError {
+		Context actual = context.contextForValue(id);
+		if(actual instanceof InstanceContext)
+			return ((InstanceContext)actual).getInstanceType().compileSetMember(context, method, flags, null, expression, id);
+		else
+			return compileAssignVariable(context, method, flags, expression);
+	}
+	
+	public ResultInfo compileAssignVariable(Context context, MethodInfo method, Flags flags, IExpression expression) throws SyntaxError {
 		ResultInfo info = expression.compile(context, method, flags);
 		method.registerLocal(id.toString(), Type.ITEM_Object, new ClassConstant(info.getType()));
 		StackLocal local = method.getRegisteredLocal(id.toString());

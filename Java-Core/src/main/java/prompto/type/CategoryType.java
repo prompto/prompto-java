@@ -6,14 +6,19 @@ import java.util.Iterator;
 import java.util.Map;
 
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.declaration.EnumeratedNativeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
+import prompto.declaration.SingletonCategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.grammar.Operator;
 import prompto.runtime.Context;
@@ -400,6 +405,25 @@ public class CategoryType extends BaseType {
 			return decl.newInstance(context, (IStored)value);
 		else
 			return super.convertJavaValueToPromptoValue(context, value);
+	}
+	
+	@Override
+	public ResultInfo compileGetMember(Context context, MethodInfo method,
+			Flags flags, IExpression parent, Identifier id) throws SyntaxError {
+		IDeclaration decl = getDeclaration(context);
+		if(decl instanceof SingletonCategoryDeclaration)
+			return ((SingletonCategoryDeclaration)decl).compileGetMember(context, method, flags, parent, id);
+		else
+			throw new SyntaxError("No static member support for non-singleton " + decl.getName());
+	}
+
+	public ResultInfo compileSetMember(Context context, MethodInfo method,
+			Flags flags, IExpression parent, IExpression value, Identifier id) throws SyntaxError {
+		IDeclaration decl = getDeclaration(context);
+		if(decl instanceof SingletonCategoryDeclaration)
+			return ((SingletonCategoryDeclaration)decl).compileSetMember(context, method, flags, value, id);
+		else
+			throw new SyntaxError("No static member support for non-singleton " + decl.getName());
 	}
 
 }

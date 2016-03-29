@@ -16,9 +16,11 @@ import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
+import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.runtime.LinkedVariable;
 import prompto.runtime.Variable;
+import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
@@ -95,14 +97,25 @@ public class InstanceExpression implements IExpression {
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		ResultInfo info = compileLocal(context, method, flags);
 		if(info==null)
-			info = compileField(context, method, flags);
+			info = compileInstanceField(context, method, flags);
+		if(info==null)
+			info = compileSingletonField(context, method, flags);
 		if(info==null)
 			throw new SyntaxError("Unknown identifier: " + getName());
 		else
 			return info;
 	}
 
-	private ResultInfo compileField(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	private ResultInfo compileSingletonField(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+		Context actual = context.contextForValue(getId());
+		if(actual instanceof InstanceContext) {
+			CategoryType type = ((InstanceContext)actual).getInstanceType();
+			return type.compileGetMember(context, method, flags, null, id);
+		} else
+			return null;
+	}
+	
+	private ResultInfo compileInstanceField(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		StackLocal local = method.getRegisteredLocal("this");
 		if(local==null)
 			return null;
@@ -121,23 +134,11 @@ public class InstanceExpression implements IExpression {
 			klass = ((StackLocal.ObjectLocal)local).getClassName();
 			downcastTo = ((StackLocal.ObjectLocal)local).getDowncastTo();
 		}
-		switch(local.getIndex()) {
-			case 0:
-				method.addInstruction(Opcode.ALOAD_0, klass);
-				break;
-			case 1:
-				method.addInstruction(Opcode.ALOAD_1, klass);
-				break;
-			case 2:
-				method.addInstruction(Opcode.ALOAD_2, klass);
-				break;
-			case 3:
-				method.addInstruction(Opcode.ALOAD_3, klass);
-				break;
-			default:
-				// TODO: support ALOAD_W
-				method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)local.getIndex()), klass);
-		}
+		if(local.getIndex()<4) {
+			Opcode opcode = Opcode.values()[local.getIndex() + Opcode.ALOAD_0.ordinal()];
+			method.addInstruction(opcode, klass);
+		} else
+			method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)local.getIndex()), klass);
 		if(downcastTo!=null) {
 			method.addInstruction(Opcode.CHECKCAST, downcastTo);
 			klass = downcastTo;

@@ -114,24 +114,11 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 				: new ClassConstant(Object.class);
 		ClassConstant downcastTo = local instanceof StackLocal.ObjectLocal ? 
 				((StackLocal.ObjectLocal)local).getDowncastTo() : null; 
-		switch(local.getIndex()) {
-		case 0:
-			method.addInstruction(Opcode.ALOAD_0, klass);
-			break;
-		case 1:
-			method.addInstruction(Opcode.ALOAD_1, klass);
-			break;
-		case 2:
-			method.addInstruction(Opcode.ALOAD_2, klass);
-			break;
-		case 3:
-			method.addInstruction(Opcode.ALOAD_3, klass);
-			break;
-		default:
-			// TODO: support ALOAD_W
+		if(local.getIndex()<4) {
+			Opcode opcode = Opcode.values()[local.getIndex() + Opcode.ALOAD_0.ordinal()];
+			method.addInstruction(opcode, klass);
+		} else
 			method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)local.getIndex()), klass);
-			break;
-		}
 		if(downcastTo!=null) {
 			method.addInstruction(Opcode.CHECKCAST, downcastTo);
 			klass = downcastTo;

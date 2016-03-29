@@ -138,6 +138,10 @@ public abstract class CompilerUtils {
 		return interfaceTypeFrom(fullName);
 	}
 	
+	public static Type singletonTypeFrom(String fullName) {
+		return interfaceTypeFrom(fullName);
+	}
+	
 	public static Type interfaceTypeFrom(String fullName) {
 		int idx = fullName.indexOf(INNER_SEPARATOR);
 		if(idx>=0)
@@ -173,6 +177,10 @@ public abstract class CompilerUtils {
 		return getCategoryInterfaceType(id.toString());
 	}
 
+	public static Type getCategorySingletonType(Identifier id) {
+		return getCategoryInterfaceType(id.toString());
+	}
+	
 	public static Type getCategoryConcreteType(Identifier id) {
 		return getCategoryConcreteType(id.toString());
 	}

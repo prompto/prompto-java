@@ -555,7 +555,7 @@ public class Context implements IContext {
 		return value;
 	}
 
-	protected Context contextForValue(Identifier name) {
+	public Context contextForValue(Identifier name) {
 		// resolve upwards, since local names override global ones
 		INamed actual = instances.get(name);
 		if(actual!=null)
@@ -694,7 +694,7 @@ public class Context implements IContext {
 		}
 		
 		@Override
-		protected Context contextForValue(Identifier name) {
+		public Context contextForValue(Identifier name) {
 			// params and variables have precedence over members
 			// so first look in context values
 			Context context = super.contextForValue(name);
@@ -755,7 +755,7 @@ public class Context implements IContext {
 		}
 		
 		@Override
-		protected Context contextForValue(Identifier name) {
+		public Context contextForValue(Identifier name) {
 			// params and variables have precedence over members
 			// so first look in context values
 			Context context = super.contextForValue(name);

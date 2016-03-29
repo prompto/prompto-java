@@ -236,9 +236,9 @@ public enum Opcode {
     ARRAYLENGTH(0xbe)*/,
     ATHROW(0xbf, pops(1), pushesNone()), // TODO to be refined
     CHECKCAST(0xc0, CPREF_W, pops(1), pushesObject())/*,
-    INSTANCEOF(0xc1, CPREF_W),
-    MONITORENTER(0xc2),
-    MONITOREXIT(0xc3),
+    INSTANCEOF(0xc1, CPREF_W)*/,
+    MONITORENTER(0xc2, pops(1), pushesNone()),
+    MONITOREXIT(0xc3, pops(1), pushesNone())/*,
     // wide 0xc4
     MULTIANEWARRAY(0xc5, CPREF_W_UBYTE),
     IFNULL(0xc6, BRANCH),

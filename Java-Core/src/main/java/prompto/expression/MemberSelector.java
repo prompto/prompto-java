@@ -109,8 +109,10 @@ public class MemberSelector extends SelectorExpression {
 	}
 
 	private IValue interpretSingleton(Context context, IExpression parent) throws PromptoError {
-        if(parent instanceof TypeExpression && ((TypeExpression)parent).getType() instanceof CategoryType) {
-        	ConcreteInstance instance = context.loadSingleton(context, (CategoryType)((TypeExpression)parent).getType());
+        if(parent instanceof TypeExpression 
+        		&& ((TypeExpression)parent).getType() instanceof CategoryType) {
+        	ConcreteInstance instance = context.loadSingleton(context, 
+        			(CategoryType)((TypeExpression)parent).getType());
         	if(instance!=null)
         		return instance.getMember(context, id, false); 
         }
@@ -145,11 +147,6 @@ public class MemberSelector extends SelectorExpression {
 		if(result!=null)
 			return result;
 		else
-			// special case for singletons 
-			result = compileSingleton(context, method, flags, parent);
-		if(result!=null)
-			return result;
-		else
 			// special case for 'static' type members (like Enum.symbols, Type.name etc...)
 			result = compileTypeMember(context, method, flags, parent);
 		if(result!=null)
@@ -168,11 +165,6 @@ public class MemberSelector extends SelectorExpression {
 			} else if("value".equals(id.toString()))
 				return parent.compile(context, method, flags);
 		}
-		return null;
-	}
-
-	private ResultInfo compileSingleton(Context context, MethodInfo method, Flags flags, IExpression parent) {
-		System.err.println("TODO: MemberSelector.compileSingleton");
 		return null;
 	}
 

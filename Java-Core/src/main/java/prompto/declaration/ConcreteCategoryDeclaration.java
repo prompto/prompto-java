@@ -611,7 +611,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			compileField(context, classFile, flags, id);
 	}
 
-	private void compileField(Context context, ClassFile classFile, Flags flags, Identifier id) throws SyntaxError {
+	protected void compileField(Context context, ClassFile classFile, Flags flags, Identifier id) throws SyntaxError {
 		if(isSuperClassAttribute(context, id))
 			compileSuperClassField(context, classFile, flags, id);
 		else if(isInheritedAttribute(context, id))

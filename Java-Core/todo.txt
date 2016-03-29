@@ -24,7 +24,7 @@ pass/empty statement
 tuple equals tuple
 a = null, null = a
 slice tuple
-return in loops and in if/else
+return in loops, if/else and with singleton
 category abstract operator methods
 decimal * category
 delete/store
