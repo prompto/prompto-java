@@ -57,6 +57,7 @@ public class VariableInstance implements IAssignableInstance {
 	}
 	
 	public ResultInfo compileAssignVariable(Context context, MethodInfo method, Flags flags, IExpression expression) throws SyntaxError {
+		checkAssignValue(context, expression);
 		ResultInfo info = expression.compile(context, method, flags);
 		method.registerLocal(id.toString(), Type.ITEM_Object, new ClassConstant(info.getType()));
 		StackLocal local = method.getRegisteredLocal(id.toString());

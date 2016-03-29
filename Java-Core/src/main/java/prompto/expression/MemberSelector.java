@@ -130,14 +130,6 @@ public class MemberSelector extends SelectorExpression {
  		return null;
 	}
 
-	private IExpression resolveParent(Context context) throws SyntaxError {
-        if(parent instanceof UnresolvedIdentifier) {
-        	((UnresolvedIdentifier) parent).checkMember(context);
-        	return ((UnresolvedIdentifier) parent).getResolved();
-        } else
-        	return parent;
-	}
-	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
         // resolve parent to keep clarity

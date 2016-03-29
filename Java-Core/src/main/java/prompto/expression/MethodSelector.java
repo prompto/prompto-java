@@ -15,8 +15,10 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
+import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.declaration.IMethodDeclaration;
+import prompto.declaration.SingletonCategoryDeclaration;
 import prompto.error.InvalidDataError;
 import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
@@ -125,10 +127,10 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		StackLocal local = method.getRegisteredLocal("this");
 		ClassConstant klass = ((StackLocal.ObjectLocal)local).getClassName();
 		method.addInstruction(Opcode.ALOAD_0, klass); // 'this' is always at index 0
-		return compileMember(context, method, flags, declaration, assignments, klass);
+		return compileInstanceMember(context, method, flags, declaration, assignments, klass);
 	}
 
-	private ResultInfo compileMember(Context context, MethodInfo method, Flags flags, 
+	private ResultInfo compileInstanceMember(Context context, MethodInfo method, Flags flags, 
 			IMethodDeclaration declaration, ArgumentAssignmentList assignments, 
 			ClassConstant parentClass) throws SyntaxError {
 		// push arguments on the stack
@@ -146,14 +148,46 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		}
 		return new ResultInfo(returnType.getJavaType());
 	}
+	
+	private ResultInfo compileStaticMember(Context context, MethodInfo method, Flags flags, 
+			IExpression parent, IMethodDeclaration declaration, ArgumentAssignmentList assignments) throws SyntaxError {
+		// find class
+		Type type = getSingletonType(context, parent);
+		ClassConstant parentClass = new ClassConstant(type);
+		// push arguments on the stack
+		if(assignments!=null) for(ArgumentAssignment assign : assignments)
+			assign.compile(context.getCallingContext(), method, flags);
+		// call static method
+		IType returnType = declaration.check(context);
+		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getArguments(), returnType);
+		MethodConstant constant = new MethodConstant(parentClass, declaration.getName(), descriptor);
+		method.addInstruction(Opcode.INVOKESTATIC, constant);
+		return new ResultInfo(returnType.getJavaType());
+	}
+
+	private Type getSingletonType(Context context, IExpression parent) throws SyntaxError {
+		if(!(((TypeExpression)parent).getType() instanceof CategoryType))
+			throw new SyntaxError("Expecting a category type!");
+		CategoryType type = (CategoryType)((TypeExpression)parent).getType();
+		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
+		if(decl instanceof SingletonCategoryDeclaration)
+			return CompilerUtils.getCategorySingletonType(type.getTypeNameId());
+		else
+			throw new SyntaxError("Expecting a singleton type!");
+	}
 
 	private ResultInfo compileExplicitMember(Context context, MethodInfo method, Flags flags, 
 			IMethodDeclaration declaration, ArgumentAssignmentList assignments) throws SyntaxError {
 		// calling an explicit instance or singleton member method
-		// push instance if any
-		ResultInfo info = parent.compile(context.getCallingContext(), method, flags); 
-		ClassConstant c = new ClassConstant(info.getType());
-		return compileMember(context, method, flags, declaration, assignments, c);
+		IExpression parent = resolveParent(context.getCallingContext());
+		if(parent instanceof TypeExpression)
+			return compileStaticMember(context, method, flags, parent, declaration, assignments);
+		else {
+			// push instance if any
+			ResultInfo info = parent.compile(context.getCallingContext(), method, flags); 
+			ClassConstant c = new ClassConstant(info.getType());
+			return compileInstanceMember(context, method, flags, declaration, assignments, c);
+		}
 	}
 
 	public Context newLocalContext(Context context, IMethodDeclaration declaration) throws PromptoError {

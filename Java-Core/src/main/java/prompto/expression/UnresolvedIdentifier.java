@@ -122,7 +122,7 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 			return method;
 		} catch(SyntaxError e) {
 			return null;
-				}
+		}
 	}
 
 	private IExpression resolveConstructor(Context context) {
