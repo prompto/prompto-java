@@ -190,7 +190,7 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 		return context;
 	}
 
-	public void cancelAutodowcast(Context context, MethodInfo method) {
+	public void cancelAutodowncast(Context context, MethodInfo method) {
 		if(operator==EqOp.IS_A) {
 			Identifier name = readLeftName();
 			if(name!=null) {

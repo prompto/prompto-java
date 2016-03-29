@@ -3,8 +3,8 @@ package prompto.java;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 
-import prompto.compiler.ByteOperand;
 import prompto.compiler.ClassConstant;
+import prompto.compiler.CompilerUtils;
 import prompto.compiler.FieldConstant;
 import prompto.compiler.IOperand;
 import prompto.compiler.MethodInfo;
@@ -109,21 +109,16 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 		if(named==null)
 			return null;
 		StackLocal local = method.getRegisteredLocal(name);
-		ClassConstant klass = local instanceof StackLocal.ObjectLocal ? 
-				((StackLocal.ObjectLocal)local).getClassName() 
-				: new ClassConstant(Object.class);
-		ClassConstant downcastTo = local instanceof StackLocal.ObjectLocal ? 
-				((StackLocal.ObjectLocal)local).getDowncastTo() : null; 
-		if(local.getIndex()<4) {
-			Opcode opcode = Opcode.values()[local.getIndex() + Opcode.ALOAD_0.ordinal()];
-			method.addInstruction(opcode, klass);
-		} else
-			method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)local.getIndex()), klass);
-		if(downcastTo!=null) {
+		ClassConstant downcastTo = null;
+		if(local instanceof StackLocal.ObjectLocal)
+			downcastTo = ((StackLocal.ObjectLocal)local).getDowncastTo(); 
+		ResultInfo info = CompilerUtils.compileALOAD(method, local);
+		if(downcastTo==null)
+			return info;
+		else {
 			method.addInstruction(Opcode.CHECKCAST, downcastTo);
-			klass = downcastTo;
+			return new ResultInfo(downcastTo.getType()); 
 		}
-		return new ResultInfo(klass.getType()); 
 	}
 
 	private ResultInfo compile_child(Context context, MethodInfo method) throws SyntaxError {

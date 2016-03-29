@@ -7,6 +7,7 @@ import prompto.compiler.ClassConstant;
 import prompto.compiler.Flags;
 import prompto.compiler.IInstructionListener;
 import prompto.compiler.IVerifierEntry.Type;
+import prompto.compiler.CompilerUtils;
 import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
@@ -209,7 +210,7 @@ public class ForEachStatement extends BaseStatement {
 		method.restoreStackState(iteratorState);
 		method.placeLabel(iteratorState);
 		// call next and store in v2
-		method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)iterLocal.getIndex()), new ClassConstant(Iterator.class));
+		CompilerUtils.compileALOAD(method, iterLocal);
 		InterfaceConstant m = new InterfaceConstant(Iterator.class, "next", Object.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, m);
 		method.addInstruction(Opcode.CHECKCAST, new ClassConstant(itemClass));
@@ -223,7 +224,7 @@ public class ForEachStatement extends BaseStatement {
 		method.inhibitOffsetListener(test);
 		method.restoreStackState(iteratorState);
 		method.placeLabel(iteratorState);
-		method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)iterLocal.getIndex()), new ClassConstant(Iterator.class));
+		CompilerUtils.compileALOAD(method, iterLocal);
 		m = new InterfaceConstant(Iterator.class, "hasNext", boolean.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, m);
 		// branch if done
@@ -244,7 +245,7 @@ public class ForEachStatement extends BaseStatement {
 	}
 
 	private void compileLoadCounter(MethodInfo method, StackLocal local) {
-		method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)local.getIndex()), new ClassConstant(Long.class));
+		CompilerUtils.compileALOAD(method, local);
 		MethodConstant m = new MethodConstant(Long.class, "longValue", long.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 	}
@@ -276,7 +277,7 @@ public class ForEachStatement extends BaseStatement {
 		method.restoreStackState(iteratorState);
 		method.placeLabel(iteratorState);
 		// call next and store in v1
-		method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)iterLocal.getIndex()), new ClassConstant(Iterator.class));
+		CompilerUtils.compileALOAD(method, iterLocal);
 		InterfaceConstant m = new InterfaceConstant(Iterator.class, "next", Object.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, m);
 		method.addInstruction(Opcode.CHECKCAST, new ClassConstant(itemClass));
@@ -288,7 +289,7 @@ public class ForEachStatement extends BaseStatement {
 		method.inhibitOffsetListener(test);
 		method.restoreStackState(iteratorState);
 		method.placeLabel(iteratorState);
-		method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)iterLocal.getIndex()), new ClassConstant(Iterator.class));
+		CompilerUtils.compileALOAD(method, iterLocal);
 		m = new InterfaceConstant(Iterator.class, "hasNext", boolean.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, m);
 		// branch if done

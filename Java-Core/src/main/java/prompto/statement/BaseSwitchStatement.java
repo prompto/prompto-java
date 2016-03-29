@@ -101,7 +101,7 @@ public abstract class BaseSwitchStatement extends BaseStatement {
 		}
 	}
 
-	protected IValue evaluateSwitch(Context context, IValue switchValue, ExecutionError toThrow) throws PromptoError {
+	protected IValue interpretSwitch(Context context, IValue switchValue, ExecutionError toThrow) throws PromptoError {
 		for(SwitchCase sc : switchCases) {
 			if(sc.matches(context, switchValue))
 				return sc.interpret(context);

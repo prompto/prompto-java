@@ -3,18 +3,11 @@ package prompto.compiler;
 
 public abstract class StackLabel {
 
-	static boolean DUMP = isDump();
-	
-	private static boolean isDump() {
-		return false;
-	}
-
-	
 	int realOffset = -1;
 	int deltaOffset = -1;
 
 	public void setRealOffset(int offset) {
-		if(DUMP)
+		if(DumpLevel.current()==DumpLevel.STACK)
 			System.err.println("Setting state real offset " + this.toString() + " to " + offset);
 		this.realOffset = offset;
 	}
@@ -24,7 +17,7 @@ public abstract class StackLabel {
 	}
 	
 	public void setDeltaOffset(int offset) {
-		if(DUMP)
+		if(DumpLevel.current()==DumpLevel.STACK)
 			System.err.println("Setting state delta offset " + this.toString() + " to " + offset);
 		this.deltaOffset = offset;
 	}
@@ -85,14 +78,14 @@ public abstract class StackLabel {
 		StackState state;
 		
 		public FULL(StackState state) {
-			if(DUMP)
+			if(DumpLevel.current()==DumpLevel.STACK)
 				System.err.println("New state " + this.toString());
 			this.state = state;
 		}
 		
 		@Override
 		public void register(ConstantsPool pool) {
-			if(DUMP)
+			if(DumpLevel.current()==DumpLevel.STACK)
 				System.err.println("Registering state " + this.toString());
 			state.register(pool);
 		}
@@ -109,7 +102,7 @@ public abstract class StackLabel {
 			    verification_type_info stack[number_of_stack_items];
 			}
 			*/
-			if(DUMP)
+			if(DumpLevel.current()==DumpLevel.STACK)
 				System.err.println("Computing length of state " + this.toString());
 			return 1 + 2 + 2 + state.localsLength() + 2 + state.stackLength();
 		}
@@ -126,7 +119,7 @@ public abstract class StackLabel {
 			    verification_type_info stack[number_of_stack_items];
 			}
 			*/
-			if(DUMP)
+			if(DumpLevel.current()==DumpLevel.STACK)
 				System.err.println("Writing state " + this.toString());
 			if(deltaOffset==-1)
 				throw new UnsupportedOperationException();

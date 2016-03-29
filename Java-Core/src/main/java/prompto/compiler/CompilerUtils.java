@@ -522,6 +522,40 @@ public abstract class CompilerUtils {
 				boolean.class, boolean.class, boolean.class);
 	}
 
+	public static ResultInfo compileALOAD(MethodInfo method, String localName) {
+		StackLocal value = method.getRegisteredLocal(localName);
+		return compileALOAD(method, value);
+	}
+	
+	public static ResultInfo compileALOAD(MethodInfo method, StackLocal value) {
+		ClassConstant klass = value instanceof StackLocal.ObjectLocal ?
+				((StackLocal.ObjectLocal)value).getClassName() :
+				new ClassConstant(Object.class);
+		if(value.getIndex()<4) {
+			Opcode opcode = Opcode.values()[value.getIndex()+Opcode.ALOAD_0.ordinal()];
+			method.addInstruction(opcode, klass);
+		} else if(value.getIndex()<255)
+			method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)value.getIndex()), klass);
+		else
+			throw new UnsupportedOperationException();
+		return new ResultInfo(klass.getType());
+	}
+
+	public static void compileASTORE(MethodInfo method, StackLocal value) {
+		ClassConstant klass = value instanceof StackLocal.ObjectLocal ?
+				((StackLocal.ObjectLocal)value).getClassName() :
+				new ClassConstant(Object.class);
+		if(value.getIndex()<4) {
+			Opcode opcode = Opcode.values()[value.getIndex() + Opcode.ASTORE_0.ordinal()];
+			method.addInstruction(opcode, klass);
+		} else if(value.getIndex()<255)
+			method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)value.getIndex()), klass);
+		else
+			throw new UnsupportedOperationException();
+	}
+
+
+
 
 
 

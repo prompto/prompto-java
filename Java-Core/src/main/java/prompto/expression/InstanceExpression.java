@@ -1,8 +1,8 @@
 package prompto.expression;
 
 import prompto.argument.IArgument;
-import prompto.compiler.ByteOperand;
 import prompto.compiler.ClassConstant;
+import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -128,22 +128,16 @@ public class InstanceExpression implements IExpression {
 		StackLocal local = method.getRegisteredLocal(getName());
 		if(local==null)
 			return null;
-		ClassConstant klass = new ClassConstant(Object.class);
 		ClassConstant downcastTo = null;
-		if(local instanceof StackLocal.ObjectLocal) {
-			klass = ((StackLocal.ObjectLocal)local).getClassName();
+		if(local instanceof StackLocal.ObjectLocal)
 			downcastTo = ((StackLocal.ObjectLocal)local).getDowncastTo();
-		}
-		if(local.getIndex()<4) {
-			Opcode opcode = Opcode.values()[local.getIndex() + Opcode.ALOAD_0.ordinal()];
-			method.addInstruction(opcode, klass);
-		} else
-			method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)local.getIndex()), klass);
-		if(downcastTo!=null) {
+		ResultInfo info = CompilerUtils.compileALOAD(method, local);
+		if(downcastTo==null)
+			return info;
+		else {
 			method.addInstruction(Opcode.CHECKCAST, downcastTo);
-			klass = downcastTo;
+			return new ResultInfo(downcastTo.getType());
 		}
-		return new ResultInfo(klass.getType());
 	}
 
 }

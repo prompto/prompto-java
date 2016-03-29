@@ -173,13 +173,13 @@ public class IfStatement extends BaseStatement {
 		context = prepareAutodowncast(context, method, element);
 		ResultInfo info = compileStatements(context, method, flags, element, branch);
 		startListeningForFinalThenGoto(context, method, flags, element, branch, info);
-		cancelAutodowcast(context, method, element);
+		cancelAutodowncast(context, method, element);
 	}
 
 	
-	private void cancelAutodowcast(Context context, MethodInfo method, IfElement element) {
+	private void cancelAutodowncast(Context context, MethodInfo method, IfElement element) {
 		if(element.condition instanceof EqualsExpression)
-			((EqualsExpression)element.condition).cancelAutodowcast(context, method);
+			((EqualsExpression)element.condition).cancelAutodowncast(context, method);
 	}
 
 

@@ -1,11 +1,10 @@
 package prompto.instance;
 
-import prompto.compiler.ByteOperand;
 import prompto.compiler.ClassConstant;
-import prompto.compiler.IVerifierEntry.Type;
+import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
+import prompto.compiler.IVerifierEntry.Type;
 import prompto.compiler.MethodInfo;
-import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
 import prompto.error.PromptoError;
@@ -35,15 +34,9 @@ public class VariableInstance implements IAssignableInstance {
 	@Override
 	public ResultInfo compileParent(Context context, MethodInfo method, Flags flags) throws SyntaxError {
 		StackLocal local = method.getRegisteredLocal(id.toString());
-		if(local instanceof StackLocal.ObjectLocal) {
-			ClassConstant klass = ((StackLocal.ObjectLocal)local).getClassName();
-			if(local.getIndex()<4) {
-				Opcode opcode = Opcode.values()[local.getIndex() + Opcode.ALOAD_0.ordinal()];
-				method.addInstruction(opcode, klass);
-			} else 
-				method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)local.getIndex()), klass);
-			return new ResultInfo(klass.getType());
-		} else
+		if(local instanceof StackLocal.ObjectLocal)
+			return CompilerUtils.compileALOAD(method, local);
+		else
 			throw new UnsupportedOperationException();
 	}
 	
@@ -59,13 +52,8 @@ public class VariableInstance implements IAssignableInstance {
 	public ResultInfo compileAssignVariable(Context context, MethodInfo method, Flags flags, IExpression expression) throws SyntaxError {
 		checkAssignValue(context, expression);
 		ResultInfo info = expression.compile(context, method, flags);
-		method.registerLocal(id.toString(), Type.ITEM_Object, new ClassConstant(info.getType()));
-		StackLocal local = method.getRegisteredLocal(id.toString());
-		if(local.getIndex()<4) {
-			Opcode opcode = Opcode.values()[local.getIndex() + Opcode.ASTORE_0.ordinal()];
-			method.addInstruction(opcode);
-		} else 
-			method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)local.getIndex()));
+		StackLocal local = method.registerLocal(id.toString(), Type.ITEM_Object, new ClassConstant(info.getType()));
+		CompilerUtils.compileASTORE(method, local);
 		return new ResultInfo(void.class);
 	}
 	

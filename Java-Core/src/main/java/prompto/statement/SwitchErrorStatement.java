@@ -146,7 +146,7 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 			result = instructions.interpret(context);
 		} catch (ExecutionError e) {
 			IValue switchValue = e.interpret(context, errorName);
-			result = evaluateSwitch(context, switchValue, e);
+			result = interpretSwitch(context, switchValue, e);
 		} finally {
 			if(alwaysInstructions!=null)
 				alwaysInstructions.interpret(context);

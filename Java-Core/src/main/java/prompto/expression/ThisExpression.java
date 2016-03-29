@@ -1,10 +1,8 @@
 package prompto.expression;
 
-import prompto.compiler.ByteOperand;
-import prompto.compiler.ClassConstant;
+import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
-import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
 import prompto.error.PromptoError;
@@ -47,13 +45,7 @@ public class ThisExpression implements IExpression {
 		StackLocal local = method.getRegisteredLocal("this");
 		if(local==null)
 			return null;
-		ClassConstant c = local instanceof StackLocal.ObjectLocal ? 
-				((StackLocal.ObjectLocal)local).getClassName() : 
-					new ClassConstant(Object.class);   
-		if(local.getIndex()==0)
-			method.addInstruction(Opcode.ALOAD_0, c);
-		else
-			method.addInstruction(Opcode.ALOAD, new ByteOperand((byte)local.getIndex()), c);
+		CompilerUtils.compileALOAD(method, local);
 		IType type = check(context);
 		return new ResultInfo(type.getJavaType());	
 	}
