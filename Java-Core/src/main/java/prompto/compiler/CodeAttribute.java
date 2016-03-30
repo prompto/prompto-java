@@ -4,22 +4,26 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.IntStream;
+
+import prompto.compiler.IInstructionListener.Phase;
 
 public class CodeAttribute implements IAttribute {
 	
 	Utf8Constant attributeName = new Utf8Constant("Code");
 	List<IInstruction> instructions = new LinkedList<>(); 
+	List<ExceptionHandler> handlers = new LinkedList<>(); 
 	List<IAttribute> attributes = new ArrayList<>();
 	LocalVariableTableAttribute locals = new LocalVariableTableAttribute();
-	StackMapTableAttribute stack = new StackMapTableAttribute(locals);
-	{ attributes.add(stack); } // TODO add locals so they get stored
+	StackMapTableAttribute stackMapTable = new StackMapTableAttribute(locals);
+	{ attributes.add(stackMapTable); } // TODO add locals so they get stored
 	List<IInstructionListener> listeners = new ArrayList<>();
 	byte[] opcodes = null;
 	
 	
-	public StackMapTableAttribute getStack() {
-		return stack;
+	public StackMapTableAttribute getStackMapTable() {
+		return stackMapTable;
 	}
 	
 
@@ -33,7 +37,7 @@ public class CodeAttribute implements IAttribute {
 		
 		@Override
 		public void rehearse(CodeAttribute code) {
-			state.capture(code.getStack().getState());
+			state.capture(code.getStackMapTable().getState());
 		}
 		
 		@Override
@@ -55,18 +59,23 @@ public class CodeAttribute implements IAttribute {
 	
 	static class ListenerActivator implements IInstruction {
 
-		Runnable method;
+		Consumer<Phase> method;
 		
-		public ListenerActivator(Runnable method) {
+		public ListenerActivator(Consumer<Phase> method) {
 			this.method = method;
 		}
 
 		@Override public void rehearse(CodeAttribute code) { 
-			method.run();
+			method.accept(Phase.REHEARSE);
 		}
 		
-		@Override public void register(ConstantsPool pool) { /* nothing to do */ }
-		@Override public void writeTo(ByteWriter writer) { /* nothing to do */ }
+		@Override public void register(ConstantsPool pool) { 
+			method.accept(Phase.REGISTER);
+		}
+		
+		@Override public void writeTo(ByteWriter writer) {
+			method.accept(Phase.WRITE);
+		}
 		
 	}
 	
@@ -101,7 +110,7 @@ public class CodeAttribute implements IAttribute {
 		
 		@Override
 		public void rehearse(CodeAttribute code) {
-			code.getStack().getState().capture(state);
+			code.getStackMapTable().getState().capture(state);
 			if(DumpLevel.current().ordinal()>0) {
 				System.err.println("Restore stack: " + state.toString());
 				System.err.println();
@@ -133,7 +142,7 @@ public class CodeAttribute implements IAttribute {
 		
 		@Override
 		public void rehearse(CodeAttribute code) {
-			code.getStack().addLabel(label);
+			code.getStackMapTable().addLabel(label);
 		}
 		
 		@Override
@@ -153,20 +162,43 @@ public class CodeAttribute implements IAttribute {
 		return label;
 	}
 	
+	public ExceptionHandler registerExceptionHandler(java.lang.reflect.Type type) {
+		ExceptionHandler handler = new ExceptionHandler(type);
+		handler.setStackState(captureStackState());
+		handlers.add(handler);
+		listeners.add(handler);
+		return handler;
+	}
+
+	public StackLabel placeExceptionHandler(ExceptionHandler handler) {
+		StackState state = handler.getStackState();
+		StackLabel label = new StackLabel.FULL(state);
+		instructions.add(new PlaceLabelInstruction(label));
+		handler.setLabel(label);
+		restoreStackState(state);
+		return label;
+	}
+
 	@Override
 	public void register(ConstantsPool pool) {
 		instructions.forEach((i)-> {
 			listeners.forEach((l)->
-				l.onRehearse(i));
+				l.onBeforeRehearse(i));
 			i.rehearse(this);
+			listeners.forEach((l)->
+				l.onAfterRehearse(i));
 		});
 
 		instructions.forEach((i)-> {
 			listeners.forEach((l)->
-				l.onRegister(i));
+				l.onBeforeRegister(i));
 			i.register(pool);
+			listeners.forEach((l)->
+				l.onAfterRegister(i));
 		});
 		attributeName.register(pool);
+		handlers.forEach((h)->
+			h.register(pool));
 		attributes.forEach((a)->
 			a.register(pool));
 	}	
@@ -181,8 +213,10 @@ public class CodeAttribute implements IAttribute {
 		ByteWriter w = new ByteWriter(o);
 		instructions.forEach((i)-> {
 			listeners.forEach((l)->
-				l.onWriteTo(i));
+				l.onBeforeWriteTo(w, i));
 			i.writeTo(w);
+			listeners.forEach((l)->
+				l.onAfterWriteTo(w, i));
 		});
 		return o.toByteArray();
 	}
@@ -195,11 +229,15 @@ public class CodeAttribute implements IAttribute {
 							.summaryStatistics().getSum();
 	}
 
+	private int handlersLength() {
+		return handlers.size() * 8;
+	}
+
 	@Override
 	public int lengthWithoutHeader() {
 		if(opcodes==null)
 			opcodes = createOpcodes();
-		return 2 + 2 + 4 + opcodes.length + 2 + 2 + attributesLength();
+		return 2 + 2 + 4 + opcodes.length + 2 + handlersLength() + 2 + attributesLength();
 	}
 
 	@Override
@@ -224,11 +262,13 @@ public class CodeAttribute implements IAttribute {
 		*/	
 		writer.writeU2(attributeName.getIndexInConstantPool());
 		writer.writeU4(lengthWithoutHeader());
-		writer.writeU2(stack.getMaxStack());
-		writer.writeU2(stack.getMaxLocals());
+		writer.writeU2(stackMapTable.getMaxStack());
+		writer.writeU2(stackMapTable.getMaxLocals());
 		writer.writeU4(opcodes.length);
 		writer.writeBytes(opcodes);
-		writer.writeU2(0); // TODO exceptions
+		writer.writeU2((short)handlers.size());
+		handlers.forEach((h)->
+			h.writeTo(writer));
 		writer.writeU2((short)attributes.size()); 
 		attributes.forEach((a)->
 			a.writeTo(writer));

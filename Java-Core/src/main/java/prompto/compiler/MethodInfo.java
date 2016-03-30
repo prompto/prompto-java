@@ -68,12 +68,21 @@ public class MethodInfo {
 		if(local!=null)
 			return local;
 		else
-			return codeAttribute.getStack().registerLocal(type.newStackLocal(name, className));
+			return codeAttribute.getStackMapTable().registerLocal(type.newStackLocal(name, className));
 	}
 	
 	public StackLocal getRegisteredLocal(String name) {
 		createCodeAttribute();
-		return codeAttribute.getStack().getRegisteredLocal(name);
+		return codeAttribute.getStackMapTable().getRegisteredLocal(name);
+	}
+	
+	public ExceptionHandler registerExceptionHandler(java.lang.reflect.Type type) {
+		createCodeAttribute();
+		return codeAttribute.registerExceptionHandler(type);
+	}
+
+	public void placeExceptionHandler(ExceptionHandler tb) {
+		codeAttribute.placeExceptionHandler(tb);
 	}
 
 	void register(ConstantsPool pool) {

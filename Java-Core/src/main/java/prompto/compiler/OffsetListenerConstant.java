@@ -15,17 +15,19 @@ public class OffsetListenerConstant extends ShortOperand implements IInstruction
 	}
 	
 	@Override
-	public void activate() {
-		active = true;
+	public void activate(Phase phase) {
+		if(phase==Phase.REHEARSE)
+			active = true;
 	}
 	
 	@Override
-	public void inhibit() {
-		active = false;
+	public void inhibit(Phase phase) {
+		if(phase==Phase.REHEARSE)
+			active = false;
 	}
 	
 	@Override
-	public void onRehearse(IInstruction instruction) {
+	public void onBeforeRehearse(IInstruction instruction) {
 		if(active && instruction instanceof Instruction) {
 			this.value += factor*((Instruction)instruction).opcode.kind.length;
 		}

@@ -30,7 +30,7 @@ public class Instruction implements IInstruction {
 	
 	@Override
 	public void rehearse(CodeAttribute code) {
-		updateStack(code.getStack());
+		updateStack(code.getStackMapTable());
 	}
 	
 	@Override
