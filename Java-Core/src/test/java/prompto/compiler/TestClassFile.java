@@ -200,4 +200,35 @@ public class TestClassFile {
 		assertEquals(derived + '$' + inner, klass.getSimpleName());
 		assertFalse(klass.isInterface());
 	}
+	
+	@Test
+	public void testMethodWithException() throws Exception {
+		String name = "π/χ/µ/print";
+		ClassFile c = new ClassFile(new PromptoType(name));
+		c.addModifier(Modifier.ABSTRACT);
+		Descriptor proto = new Descriptor.Method(Object.class, String.class);
+		MethodInfo m = c.newMethod("stringValueOf", proto);
+		m.addModifier(Modifier.STATIC);
+		m.registerLocal("%value%", IVerifierEntry.Type.ITEM_Object, new ClassConstant(Object.class));
+		ExceptionHandler handler = m.registerExceptionHandler(NullPointerException.class);
+		m.activateOffsetListener(handler);
+		m.addInstruction(Opcode.ALOAD_0); // the parameter
+		m.addInstruction(Opcode.INVOKEVIRTUAL, new MethodConstant(Object.class, "toString", String.class));
+		m.addInstruction(Opcode.ARETURN, new ClassConstant(String.class));
+		m.inhibitOffsetListener(handler);
+		m.placeExceptionHandler(handler);
+		m.addInstruction(Opcode.LDC, new StringConstant("Caught!"));
+		m.addInstruction(Opcode.ARETURN, new ClassConstant(String.class));
+		ByteArrayOutputStream o = new ByteArrayOutputStream();
+		c.writeTo(o);
+		byte[] gen = o.toByteArray();
+		Class<?> klass = ByteClassLoader.defineAndResolveClass(name.replace("/", "."), gen);
+		assertNotNull(klass);
+		assertTrue(Modifier.isAbstract(klass.getModifiers()));
+		Method mm = klass.getMethod("stringValueOf", Object.class);
+		assertTrue(Modifier.isStatic(mm.getModifiers()));
+		Object s = mm.invoke((Object)null, (Object)null);
+		assertEquals("Caught!", s);
+	}
+	
 }
