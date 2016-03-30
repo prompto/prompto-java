@@ -1,7 +1,6 @@
 package prompto.grammar;
 
 import prompto.argument.IArgument;
-import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.utils.CodeWriter;
 import prompto.utils.ObjectList;

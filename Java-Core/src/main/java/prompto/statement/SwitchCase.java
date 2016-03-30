@@ -1,7 +1,6 @@
 package prompto.statement;
 
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.parser.ISection;
 import prompto.parser.Section;

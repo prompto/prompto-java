@@ -4,7 +4,6 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
-import prompto.error.SyntaxError;
 import prompto.intrinsic.PromptoRange;
 import prompto.runtime.Context;
 

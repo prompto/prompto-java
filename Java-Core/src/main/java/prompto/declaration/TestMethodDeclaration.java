@@ -2,7 +2,6 @@ package prompto.declaration;
 
 import prompto.error.ExecutionError;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.expression.SymbolExpression;
 import prompto.grammar.Identifier;
 import prompto.parser.Assertion;

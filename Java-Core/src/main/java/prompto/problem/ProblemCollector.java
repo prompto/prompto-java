@@ -14,7 +14,6 @@ import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
 
-import prompto.error.SyntaxError;
 import prompto.parser.ISection;
 import prompto.parser.MissingTokenException;
 import prompto.parser.UnwantedTokenException;

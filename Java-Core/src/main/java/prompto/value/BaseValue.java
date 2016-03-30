@@ -8,7 +8,6 @@ import prompto.compiler.ResultInfo;
 import prompto.compiler.ShortOperand;
 import prompto.compiler.StackState;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;

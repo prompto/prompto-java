@@ -10,7 +10,6 @@ import prompto.compiler.ResultInfo;
 import prompto.compiler.StringConstant;
 import prompto.error.NotMutableError;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoAny;

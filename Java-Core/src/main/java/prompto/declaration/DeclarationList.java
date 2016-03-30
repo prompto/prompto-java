@@ -2,7 +2,6 @@ package prompto.declaration;
 
 import java.util.LinkedList;
 
-import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.statement.CommentStatement;
 import prompto.utils.CodeWriter;

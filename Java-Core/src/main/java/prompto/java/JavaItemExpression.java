@@ -1,6 +1,5 @@
 package prompto.java;
 
-import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;

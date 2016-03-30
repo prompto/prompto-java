@@ -3,7 +3,6 @@ package prompto.type;
 import java.lang.reflect.Type;
 import java.util.Comparator;
 
-import prompto.error.SyntaxError;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.value.Decimal;

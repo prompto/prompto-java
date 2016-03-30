@@ -3,7 +3,6 @@ package prompto.declaration;
 import java.util.Collection;
 
 import prompto.code.ICodeStore;
-import prompto.error.SyntaxError;
 import prompto.grammar.INamed;
 import prompto.parser.ISection;
 import prompto.runtime.Context;

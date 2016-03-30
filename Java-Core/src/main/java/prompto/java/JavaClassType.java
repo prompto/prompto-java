@@ -8,7 +8,6 @@ import java.util.List;
 import prompto.declaration.AnyNativeCategoryDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.NativeCategoryDeclaration;
-import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.type.AnyType;
 import prompto.type.BaseType;

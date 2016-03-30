@@ -1,7 +1,6 @@
 package prompto.java;
 
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.expression.ThisExpression;
 import prompto.parser.Section;
 import prompto.runtime.Context;

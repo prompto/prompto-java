@@ -7,7 +7,6 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StringConstant;
-import prompto.error.SyntaxError;
 import prompto.intrinsic.PromptoDateTime;
 import prompto.runtime.Context;
 import prompto.type.DateTimeType;

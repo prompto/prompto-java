@@ -1,6 +1,5 @@
 package prompto.type;
 
-import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 
 public abstract class NativeType extends BaseType {

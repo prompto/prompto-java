@@ -1,7 +1,6 @@
 package prompto.python;
 
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.statement.NativeCall;
 import prompto.type.IType;

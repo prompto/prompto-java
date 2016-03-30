@@ -15,7 +15,6 @@ import prompto.compiler.PromptoType;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.Tags;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.IterableWithLength;
 import prompto.intrinsic.PromptoIterable;

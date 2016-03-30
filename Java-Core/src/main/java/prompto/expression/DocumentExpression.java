@@ -5,7 +5,6 @@ import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.intrinsic.PromptoDocument;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;

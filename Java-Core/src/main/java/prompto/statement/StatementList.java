@@ -3,7 +3,6 @@ package prompto.statement;
 import java.util.LinkedList;
 
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.java.JavaNativeCall;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;

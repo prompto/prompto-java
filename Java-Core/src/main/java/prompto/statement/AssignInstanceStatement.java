@@ -4,7 +4,6 @@ import prompto.compiler.Flags;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.MethodInfo;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.instance.IAssignableInstance;
 import prompto.runtime.Context;

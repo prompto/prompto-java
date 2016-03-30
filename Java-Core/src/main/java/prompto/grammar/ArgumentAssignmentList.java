@@ -3,7 +3,6 @@ package prompto.grammar;
 import java.util.LinkedList;
 
 import prompto.declaration.IMethodDeclaration;
-import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.utils.CodeWriter;
 

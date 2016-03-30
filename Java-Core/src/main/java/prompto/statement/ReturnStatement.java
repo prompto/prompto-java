@@ -13,7 +13,6 @@ import prompto.compiler.StringConstant;
 import prompto.compiler.ResultInfo.Flag;
 import prompto.compiler.StackLocal;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.intrinsic.PromptoRoot;
 import prompto.runtime.Context;

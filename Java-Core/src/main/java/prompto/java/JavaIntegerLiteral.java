@@ -5,7 +5,6 @@ import prompto.compiler.LongConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
-import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.type.IType;
 

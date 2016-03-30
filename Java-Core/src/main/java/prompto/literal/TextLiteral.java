@@ -10,7 +10,6 @@ import prompto.compiler.IConstantOperand;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.StringConstant;
-import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.type.TextType;

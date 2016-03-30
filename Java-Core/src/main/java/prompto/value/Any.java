@@ -6,7 +6,6 @@ import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
-import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.intrinsic.PromptoAny;
 import prompto.runtime.Context;

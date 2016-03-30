@@ -10,7 +10,6 @@ import prompto.compiler.Opcode;
 import prompto.compiler.IOperand;
 import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.intrinsic.PromptoTuple;
 import prompto.runtime.Context;

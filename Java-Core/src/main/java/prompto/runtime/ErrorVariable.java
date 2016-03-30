@@ -1,6 +1,5 @@
 package prompto.runtime;
 
-import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.type.EnumeratedCategoryType;
 import prompto.type.IType;

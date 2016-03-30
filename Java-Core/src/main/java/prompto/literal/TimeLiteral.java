@@ -7,7 +7,6 @@ import prompto.compiler.Opcode;
 import prompto.compiler.IOperand;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StringConstant;
-import prompto.error.SyntaxError;
 import prompto.intrinsic.PromptoTime;
 import prompto.runtime.Context;
 import prompto.type.IType;

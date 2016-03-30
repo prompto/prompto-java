@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 
 import prompto.compiler.FieldInfo;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.IAttributeConstraint;
 import prompto.grammar.Identifier;

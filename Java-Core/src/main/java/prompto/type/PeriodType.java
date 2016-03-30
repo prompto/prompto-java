@@ -2,7 +2,6 @@ package prompto.type;
 
 import java.lang.reflect.Type;
 
-import prompto.error.SyntaxError;
 import prompto.intrinsic.PromptoPeriod;
 import prompto.parser.ISection;
 import prompto.runtime.Context;

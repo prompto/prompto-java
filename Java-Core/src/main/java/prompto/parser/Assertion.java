@@ -2,7 +2,6 @@ package prompto.parser;
 
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.expression.IAssertion;
 import prompto.expression.IExpression;
 import prompto.runtime.Context;

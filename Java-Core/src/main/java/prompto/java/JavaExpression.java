@@ -3,7 +3,6 @@ package prompto.java;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.MethodInfo;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.type.IType;

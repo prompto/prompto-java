@@ -15,7 +15,6 @@ import prompto.compiler.IVerifierEntry;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;

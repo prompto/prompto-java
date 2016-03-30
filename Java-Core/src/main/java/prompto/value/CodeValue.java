@@ -1,7 +1,6 @@
 package prompto.value;
 
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.expression.CodeExpression;
 import prompto.runtime.Context;
 import prompto.type.CodeType;

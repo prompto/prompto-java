@@ -4,7 +4,6 @@ import java.util.LinkedList;
 
 import prompto.error.ExecutionError;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.type.TypeMap;

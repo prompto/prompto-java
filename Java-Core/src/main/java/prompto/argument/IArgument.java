@@ -3,7 +3,6 @@ package prompto.argument;
 import java.lang.reflect.Type;
 
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.expression.DefaultExpression;
 import prompto.expression.IExpression;
 import prompto.grammar.INamed;

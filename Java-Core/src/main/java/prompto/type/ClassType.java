@@ -2,7 +2,6 @@ package prompto.type;
 
 import java.lang.reflect.Type;
 
-import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 
 public class ClassType extends BaseType {

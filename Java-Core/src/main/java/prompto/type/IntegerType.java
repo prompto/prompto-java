@@ -4,7 +4,6 @@ import java.lang.reflect.Type;
 import java.util.Comparator;
 
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
