@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.URL;
@@ -229,6 +230,32 @@ public class TestClassFile {
 		assertTrue(Modifier.isStatic(mm.getModifiers()));
 		Object s = mm.invoke((Object)null, (Object)null);
 		assertEquals("Caught!", s);
+	}
+	
+	@Test(expected=UnsupportedOperationException.class)
+	public void testMethodWithThrow() throws Throwable {
+		String name = "π/χ/µ/print";
+		ClassFile c = new ClassFile(new PromptoType(name));
+		c.addModifier(Modifier.ABSTRACT);
+		Descriptor proto = new Descriptor.Method(Object.class, String.class);
+		MethodInfo m = c.newMethod("stringValueOf", proto);
+		m.addModifier(Modifier.STATIC);
+		m.registerLocal("%value%", IVerifierEntry.Type.ITEM_Object, new ClassConstant(Object.class));
+		CompilerUtils.compileNewInstance(m, UnsupportedOperationException.class);
+		m.addInstruction(Opcode.ATHROW, new ClassConstant(UnsupportedOperationException.class));
+		ByteArrayOutputStream o = new ByteArrayOutputStream();
+		c.writeTo(o);
+		byte[] gen = o.toByteArray();
+		Class<?> klass = ByteClassLoader.defineAndResolveClass(name.replace("/", "."), gen);
+		assertNotNull(klass);
+		assertTrue(Modifier.isAbstract(klass.getModifiers()));
+		Method mm = klass.getMethod("stringValueOf", Object.class);
+		assertTrue(Modifier.isStatic(mm.getModifiers()));
+		try {
+			mm.invoke((Object)null, (Object)null);
+		} catch(InvocationTargetException e) {
+			throw e.getTargetException();
+		}
 	}
 	
 }
