@@ -23,7 +23,7 @@ public class CastExpression implements IExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		IType actual = expression.check(context);
 		if(!type.isAssignableTo(context, actual))
 			throw new SyntaxError("Cannot cast " + actual.toString() + " to " + type.toString());
@@ -36,7 +36,7 @@ public class CastExpression implements IExpression {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		expression.compile(context, method, flags);
 		ClassConstant c = new ClassConstant(type.getJavaType());
 		method.addInstruction(Opcode.CHECKCAST, c);

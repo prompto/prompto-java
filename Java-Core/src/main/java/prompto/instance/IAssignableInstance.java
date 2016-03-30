@@ -14,17 +14,17 @@ import prompto.value.IValue;
 
 public interface IAssignableInstance {
 
-	IType checkAssignValue(Context context, IExpression expression) throws SyntaxError;
-	IType checkAssignMember(Context context, Identifier name) throws SyntaxError;
-	IType checkAssignElement(Context context) throws SyntaxError;
+	IType checkAssignValue(Context context, IExpression expression);
+	IType checkAssignMember(Context context, Identifier name);
+	IType checkAssignElement(Context context);
 	void assign(Context context, IExpression expression) throws PromptoError;
 	IValue interpret(Context context) throws PromptoError;
 	void toDialect(CodeWriter writer, IExpression expression);
-	default ResultInfo compileParent(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	default ResultInfo compileParent(Context context, MethodInfo method, Flags flags) {
 		System.err.println("Missing compileParent for " + this.getClass().getName());
 		throw new UnsupportedOperationException();
 	}
-	default ResultInfo compileAssign(Context context, MethodInfo method, Flags flags, IExpression expression) throws SyntaxError {
+	default ResultInfo compileAssign(Context context, MethodInfo method, Flags flags, IExpression expression) {
 		System.err.println("Missing compileAssign for " + this.getClass().getName());
 		throw new UnsupportedOperationException();
 	}

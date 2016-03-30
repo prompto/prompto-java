@@ -50,7 +50,7 @@ public abstract class BaseType implements IType {
 	}
 	
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkAdd(Context context, IType other, boolean tryReverse) {
 		if(tryReverse)
 			return other.checkAdd(context, this, false);
 		else
@@ -58,22 +58,22 @@ public abstract class BaseType implements IType {
 	}
 
 	@Override
-	public IType checkSubstract(Context context, IType other) throws SyntaxError {
+	public IType checkSubstract(Context context, IType other) {
 		throw new SyntaxError("Cannot substract " + this.getTypeName() + " from " + other.getTypeName());
 	}
 
 	@Override
-	public IType checkDivide(Context context, IType other) throws SyntaxError {
+	public IType checkDivide(Context context, IType other) {
 		throw new SyntaxError("Cannot divide " + this.getTypeName() + " with " + other.getTypeName());
 	}
 
 	@Override
-	public IType checkIntDivide(Context context, IType other) throws SyntaxError {
+	public IType checkIntDivide(Context context, IType other) {
 		throw new SyntaxError("Cannot divide " + this.getTypeName() + " with " + other.getTypeName());
 	}
 
 	@Override
-	public IType checkMultiply(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkMultiply(Context context, IType other, boolean tryReverse) {
 		if(tryReverse)
 			return other.checkMultiply(context, this, false);
 		else
@@ -81,52 +81,52 @@ public abstract class BaseType implements IType {
 	}
 
 	@Override
-	public IType checkModulo(Context context, IType other) throws SyntaxError {
+	public IType checkModulo(Context context, IType other) {
 		throw new SyntaxError("Cannot modulo " + this.getTypeName() + " with " + other.getTypeName());
 	}
 	
 	@Override
-	public IType checkCompare(Context context, IType other, ISection section) throws SyntaxError {
+	public IType checkCompare(Context context, IType other, ISection section) {
 		context.getProblemListener().reportIllegalComparison(this, other, section);
 		return BooleanType.instance();
 	}
 
 	@Override
-	public IType checkContains(Context context, IType other) throws SyntaxError {
+	public IType checkContains(Context context, IType other) {
 		throw new SyntaxError(this.getTypeName() + " cannot contain " + other.getTypeName());
 	}
 
 	@Override
-	public IType checkContainsAllOrAny(Context context, IType other) throws SyntaxError {
+	public IType checkContainsAllOrAny(Context context, IType other) {
 		throw new SyntaxError(this.getTypeName() + " cannot contain " + other.getTypeName());
 	}
 
 	@Override
-	public IType checkItem(Context context, IType itemType) throws SyntaxError {
+	public IType checkItem(Context context, IType itemType) {
 		throw new SyntaxError("Cannot read item from " + this.getTypeName());
 	}
 
 	@Override
-	public IType checkMember(Context context, Identifier name) throws SyntaxError {
+	public IType checkMember(Context context, Identifier name) {
 		context.getProblemListener().reportIllegalMember(name.toString(), name);
 		return VoidType.instance();
 	}
 
 	@Override
-	public IType checkSlice(Context context) throws SyntaxError {
+	public IType checkSlice(Context context) {
 		throw new SyntaxError("Cannot slice " + this.getTypeName());
 	}
 
 	@Override
-	public IType checkIterator(Context context) throws SyntaxError {
+	public IType checkIterator(Context context) {
 		throw new SyntaxError("Cannot iterate over " + this.getTypeName());
 	}
 
 	@Override
-	public abstract void checkUnique(Context context) throws SyntaxError;
+	public abstract void checkUnique(Context context);
 
 	@Override
-	public abstract void checkExists(Context context) throws SyntaxError;
+	public abstract void checkExists(Context context);
 
 	@Override
 	public abstract boolean isAssignableTo(Context context, IType other);
@@ -135,7 +135,7 @@ public abstract class BaseType implements IType {
 	public abstract boolean isMoreSpecificThan(Context context, IType other);
 
 	@Override
-	public final void checkAssignableTo(Context context, IType other) throws SyntaxError {
+	public final void checkAssignableTo(Context context, IType other) {
 		if(other==DocumentType.instance() || other==AnyType.instance())
 			return;
 		if (!isAssignableTo(context, other))
@@ -143,12 +143,12 @@ public abstract class BaseType implements IType {
 	}
 
 	@Override
-	public IType checkRange(Context context, IType other) throws SyntaxError {
+	public IType checkRange(Context context, IType other) {
 		throw new SyntaxError("Cannot create range of " + this.getTypeName() + " and " + other.getTypeName());
 	}
 
 	@Override
-	public RangeBase<?> newRange(Object left, Object right) throws SyntaxError {
+	public RangeBase<?> newRange(Object left, Object right) {
 		throw new SyntaxError("Cannot create range of " + this.getTypeName());
 	}
 

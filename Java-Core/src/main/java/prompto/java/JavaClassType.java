@@ -131,10 +131,10 @@ public class JavaClassType extends BaseType {
 	}
 
 	@Override
-	public void checkUnique(Context context) throws SyntaxError { }
+	public void checkUnique(Context context) { }
 
 	@Override
-	public void checkExists(Context context) throws SyntaxError { }
+	public void checkExists(Context context) { }
 
 	@Override
 	public boolean isAssignableTo(Context context, IType other) { return false; }

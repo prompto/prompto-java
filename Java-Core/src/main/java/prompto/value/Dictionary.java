@@ -71,7 +71,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 	}
 	
 	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		// TODO: return right if left is empty (or left if right is empty)
 		// create result
 		ResultInfo info = CompilerUtils.compileNewInstance(method, PromptoDict.class); 
@@ -90,7 +90,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 		return info;
 	}
 
-	public boolean hasItem(Context context, IValue value) throws SyntaxError {
+	public boolean hasItem(Context context, IValue value) {
 		if (value instanceof Text)
 			return this.dict.containsKey((Text) value);
 		else
@@ -123,7 +123,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 	}
 
 	public static ResultInfo compileItem(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		exp.compile(context, method, flags.withPrimitive(true));
 		IOperand oper = new MethodConstant(PromptoDict.class, "get", 
 				Object.class, Object.class);
@@ -143,7 +143,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 	}
 
 	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		exp.compile(context, method, flags);
 		IOperand oper = new MethodConstant(
 				PromptoDict.class, 

@@ -43,7 +43,7 @@ public class MinusExpression implements IExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		IType lt = left.check(context);
 		IType rt = right.check(context);
 		return lt.checkSubstract(context,rt);
@@ -72,7 +72,7 @@ public class MinusExpression implements IExpression {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		ResultInfo lval = left.compile(context, method, flags);
 		IOperatorFunction minuser = minusers.get(lval.getType());
 		if(minuser==null && lval.getType().getTypeName().startsWith("π.χ."))

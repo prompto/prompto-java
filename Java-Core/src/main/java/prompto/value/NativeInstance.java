@@ -39,7 +39,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 	IStorable storable = null;
 	boolean mutable = false;
 	
-	public NativeInstance(Context context, NativeCategoryDeclaration declaration) throws SyntaxError {
+	public NativeInstance(Context context, NativeCategoryDeclaration declaration) {
 		super(new NativeCategoryType(declaration));
 		this.declaration = declaration;
 		this.instance = makeInstance(context);
@@ -104,7 +104,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 		return instance;
 	}
 	
-	private Object makeInstance(Context context) throws SyntaxError {
+	private Object makeInstance(Context context) {
 		try {
 			Class<?> mapped = declaration.getBoundClass(true);
 			return mapped.newInstance();
@@ -237,7 +237,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 		} 
 	}
 
-	private Method getSetter(Identifier attrName) throws SyntaxError {
+	private Method getSetter(Identifier attrName) {
 		String setterName = "set" + attrName.toString().substring(0,1).toUpperCase() 
 				+ attrName.toString().substring(1);
 		Method m = getMethod(attrName, setterName);
@@ -247,7 +247,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 			return m;
 	}
 	
-	private Method getGetter(Identifier attrName) throws SyntaxError {
+	private Method getGetter(Identifier attrName) {
 		String setterName = "get" + attrName.toString().substring(0,1).toUpperCase() 
 				+ attrName.toString().substring(1);
 		Method m = getMethod(attrName, setterName);

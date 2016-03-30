@@ -24,14 +24,14 @@ public abstract class SelectorExpression implements IExpression {
 		this.parent = parent;
 	}
 	
-	public IType checkParent(Context context) throws SyntaxError {
+	public IType checkParent(Context context) {
 		if (parent instanceof UnresolvedIdentifier)
 			return ((UnresolvedIdentifier)parent).checkMember(context);
 		else
 			return parent.check(context);
  	}
 
-	protected IExpression resolveParent(Context context) throws SyntaxError {
+	protected IExpression resolveParent(Context context) {
         if(parent instanceof UnresolvedIdentifier) {
         	((UnresolvedIdentifier) parent).checkMember(context);
         	return ((UnresolvedIdentifier) parent).getResolved();

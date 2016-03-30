@@ -56,7 +56,7 @@ public class RaiseStatement extends SimpleStatement {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		IType type = expression.check(context);
 		if(!type.isAssignableTo(context, new CategoryType(new Identifier("Error"))))
 			throw new SyntaxError(type.getTypeName() + " does not extend Error");

@@ -45,14 +45,14 @@ public class DictLiteral extends Literal<Dictionary> {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		if(itemType==null)
 			itemType = inferElementType(context);
 		return new DictType(itemType); 
 	}
 	
 	// can't use Utils.inferElementType with list of DictEntry
-	private IType inferElementType(Context context) throws SyntaxError {
+	private IType inferElementType(Context context) {
 		if(entries.isEmpty())
 			return MissingType.instance();
 		IType lastType = null;
@@ -91,13 +91,13 @@ public class DictLiteral extends Literal<Dictionary> {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		ResultInfo info = CompilerUtils.compileNewInstance(method, PromptoDict.class);
 		addEntries(context, method, flags.withPrimitive(false));
 		return info;
 	}
 
-	private void addEntries(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	private void addEntries(Context context, MethodInfo method, Flags flags) {
 		for(DictEntry e : entries) {
 			method.addInstruction(Opcode.DUP); // need to keep a reference to the map on top of stack
 			ResultInfo info = e.getKey().compile(context, method, flags);

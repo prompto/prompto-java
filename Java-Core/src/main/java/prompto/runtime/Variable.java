@@ -26,7 +26,7 @@ public class Variable implements INamed {
 	}
 
 	@Override
-	public IType getType(Context context) throws SyntaxError {
+	public IType getType(Context context) {
 		return type;
 	}
 	

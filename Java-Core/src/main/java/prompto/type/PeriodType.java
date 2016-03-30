@@ -33,28 +33,28 @@ public class PeriodType extends NativeType {
 	}
 
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkAdd(Context context, IType other, boolean tryReverse) {
 		if(other instanceof PeriodType)
 			return this;
 		return super.checkAdd(context, other, tryReverse);
 	}
 	
 	@Override
-	public IType checkSubstract(Context context, IType other) throws SyntaxError {
+	public IType checkSubstract(Context context, IType other) {
 		if(other instanceof PeriodType)
 			return this;
 		return super.checkSubstract(context, other);
 	}
 
 	@Override
-	public IType checkMultiply(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkMultiply(Context context, IType other, boolean tryReverse) {
 		if(other instanceof IntegerType)
 			return this;
 		return super.checkMultiply(context, other, tryReverse);
 	}
 
 	@Override
-	public IType checkCompare(Context context, IType other, ISection section) throws SyntaxError {
+	public IType checkCompare(Context context, IType other, ISection section) {
 		if(other instanceof PeriodType)
 			return BooleanType.instance();
 		return super.checkCompare(context, other, section);

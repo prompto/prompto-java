@@ -23,7 +23,7 @@ public class JavaDecimalLiteral extends JavaLiteral {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return new JavaClassType(Double.class);
 	}
 	
@@ -33,7 +33,7 @@ public class JavaDecimalLiteral extends JavaLiteral {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method) {
 		if(value==0.0)
 			method.addInstruction(Opcode.DCONST_0);
 		else if(value==1.0)

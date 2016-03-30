@@ -81,7 +81,7 @@ public class SwitchStatement extends BaseSwitchStatement {
 	}
 
 	@Override
-	IType checkSwitchType(Context context) throws SyntaxError {
+	IType checkSwitchType(Context context) {
 		return expression.check(context);
 	}
 	
@@ -92,7 +92,7 @@ public class SwitchStatement extends BaseSwitchStatement {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		IType result = check(context);
 		compileSwitchCases(context, method, flags);
 		return new ResultInfo(result.getJavaType());
@@ -104,7 +104,7 @@ public class SwitchStatement extends BaseSwitchStatement {
 		StackState neutralState = null;
 	}
 	
-	private void compileSwitchCases(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	private void compileSwitchCases(Context context, MethodInfo method, Flags flags) {
 		compileSwitchValue(context, method, flags);
 		SwitchCaseBranch branch = new SwitchCaseBranch();
 		branch.neutralState = method.captureStackState();
@@ -118,7 +118,7 @@ public class SwitchStatement extends BaseSwitchStatement {
 			method.inhibitOffsetListener(l));
 	}
 	
-	private void compileSwitchValue(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	private void compileSwitchValue(Context context, MethodInfo method, Flags flags) {
 		context = context.newChildContext();
 		context.registerValue(new Variable(new Identifier("%value%"), expression.check(context)));
 		ResultInfo info = expression.compile(context, method, flags);
@@ -126,7 +126,7 @@ public class SwitchStatement extends BaseSwitchStatement {
 		CompilerUtils.compileASTORE(method, value);
 	}
 
-	private void compileSwitchCase(Context context, MethodInfo method, Flags flags, SwitchCase element, SwitchCaseBranch branch) throws SyntaxError {
+	private void compileSwitchCase(Context context, MethodInfo method, Flags flags, SwitchCase element, SwitchCaseBranch branch) {
 		restoreNeutralStackState(method, branch);
 		stopListeningForThisBranch(method, branch);
 		compileCondition(context, method, flags, element);
@@ -136,7 +136,7 @@ public class SwitchStatement extends BaseSwitchStatement {
 		startListeningForFinalThenGoto(context, method, flags, element, branch, info);
 	}
 	
-	private ResultInfo compileDefaultCase(Context context, MethodInfo method, Flags flags, SwitchCaseBranch branch) throws SyntaxError {
+	private ResultInfo compileDefaultCase(Context context, MethodInfo method, Flags flags, SwitchCaseBranch branch) {
 		if(this.defaultCase==null)
 			return null;
 		restoreNeutralStackState(method, branch);
@@ -147,7 +147,7 @@ public class SwitchStatement extends BaseSwitchStatement {
 		return info; // we assume all statements are reachable
 	}
 	
-	private void compileCondition(Context context, MethodInfo method, Flags flags, SwitchCase switchCase) throws SyntaxError {
+	private void compileCondition(Context context, MethodInfo method, Flags flags, SwitchCase switchCase) {
 		if(switchCase instanceof CollectionSwitchCase) {
 			ResultInfo info = switchCase.expression.compile(context, method, flags);
 			CompilerUtils.compileALOAD(method, "%value%");
@@ -167,7 +167,7 @@ public class SwitchStatement extends BaseSwitchStatement {
 		method.addInstruction(Opcode.IFEQ, branch.branchOffsetListener);
 	}
 	
-	private ResultInfo compileStatements(Context context, MethodInfo method, Flags flags, SwitchCase switchCase, SwitchCaseBranch branch) throws SyntaxError {
+	private ResultInfo compileStatements(Context context, MethodInfo method, Flags flags, SwitchCase switchCase, SwitchCaseBranch branch) {
 		ResultInfo info = new ResultInfo(void.class);
 		if(switchCase.statements!=null) {
 			for(IStatement statement : switchCase.statements)

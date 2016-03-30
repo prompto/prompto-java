@@ -68,7 +68,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 
 	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		boolean isDecimal = isDecimal(context, exp);
 		CompilerUtils.numberToPrimitive(method, left, isDecimal);
 		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true).withDecimal(isDecimal));
@@ -88,7 +88,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 		}
 	}
 
-	private static boolean isDecimal(Context context, IExpression exp) throws SyntaxError {
+	private static boolean isDecimal(Context context, IExpression exp) {
 		return exp.check(context)==DecimalType.instance();
 	}
 
@@ -103,7 +103,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 
 	public static ResultInfo compileMinus(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		boolean isDecimal = isDecimal(context, exp);
 		CompilerUtils.numberToPrimitive(method, left, isDecimal);
 		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true).withDecimal(isDecimal));
@@ -136,7 +136,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 
 	public static ResultInfo compileMultiply(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		IType type = exp.check(context);
 		if(type instanceof INumberType)
 			return compileMultiplyNumber(context, method, flags, left, exp);
@@ -153,14 +153,14 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 
 	private static ResultInfo compileMultiplyCategory(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true));
 		method.addInstruction(Opcode.SWAP);
 		return CategoryDeclaration.compileMultiply(context, method, flags, right, left);
 	}
 
 	private static ResultInfo compileMultiplyCharacter(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		if(Long.class==left.getType())
 			CompilerUtils.LongToint(method);
 		else
@@ -178,7 +178,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 	
 	private static ResultInfo compileMultiplyText(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		if(Long.class==left.getType())
 			CompilerUtils.LongToint(method);
 		else
@@ -194,7 +194,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 
 	private static ResultInfo compileMultiplyMultiplyable(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		if(Long.class==left.getType())
 			CompilerUtils.LongToint(method);
 		else
@@ -214,7 +214,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 
 	private static ResultInfo compileMultiplyNumber(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		boolean isDecimal = isDecimal(context, exp);
 		CompilerUtils.numberToPrimitive(method, left, isDecimal);
 		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true).withDecimal(isDecimal));
@@ -246,7 +246,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 
 	public static ResultInfo compileDivide(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		CompilerUtils.numberToPrimitive(method, left, true);
 		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true).withDecimal(true));
 		CompilerUtils.numberToPrimitive(method, right, true);
@@ -269,7 +269,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 	
 	public static ResultInfo compileIntDivide(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		CompilerUtils.numberToPrimitive(method, left, false);
 		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true).withDecimal(false));
 		CompilerUtils.numberToPrimitive(method, right, false);
@@ -292,7 +292,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 
 	public static ResultInfo compileModulo(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		CompilerUtils.numberToPrimitive(method, left, false);
 		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true).withDecimal(false));
 		CompilerUtils.numberToPrimitive(method, right, false);
@@ -319,7 +319,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 
 	public static ResultInfo compileCompareTo(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		boolean isDecimal = isDecimal(context, exp);
 		CompilerUtils.numberToPrimitive(method, left, isDecimal);
 		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true).withDecimal(isDecimal));
@@ -357,7 +357,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 	
 	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		left = CompilerUtils.numberTolong(method, left);
 		ResultInfo right = exp.compile(context, method, flags);
 		right = CompilerUtils.numberTolong(method, right);
@@ -392,7 +392,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 	
 	public static ResultInfo compileNegate(Context context, MethodInfo method, Flags flags, 
-			ResultInfo value) throws SyntaxError {
+			ResultInfo value) {
 		CompilerUtils.numberToPrimitive(method, value, false);
 		method.addInstruction(Opcode.LNEG);
 		if(flags.toPrimitive())

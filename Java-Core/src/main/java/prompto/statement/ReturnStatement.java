@@ -63,7 +63,7 @@ public class ReturnStatement extends SimpleStatement {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return expression==null ? VoidType.instance() : expression.check(context);
 	}
 	
@@ -78,7 +78,7 @@ public class ReturnStatement extends SimpleStatement {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		FieldInfo setter = flags.setter();
 		if(setter==null)
 			return compileReturn(context, method, flags);
@@ -86,7 +86,7 @@ public class ReturnStatement extends SimpleStatement {
 			return compileSetter(context, method, flags, setter);
 	}
 	
-	private ResultInfo compileSetter(Context context, MethodInfo method, Flags flags, FieldInfo field) throws SyntaxError {
+	private ResultInfo compileSetter(Context context, MethodInfo method, Flags flags, FieldInfo field) {
 		// load 'this'
 		StackLocal local = method.getRegisteredLocal("this");
 		ClassConstant c = ((StackLocal.ObjectLocal)local).getClassName();
@@ -108,7 +108,7 @@ public class ReturnStatement extends SimpleStatement {
 		return new ResultInfo(void.class, Flag.RETURN);
 	}
 
-	private ResultInfo compileReturn(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	private ResultInfo compileReturn(Context context, MethodInfo method, Flags flags) {
 		if(expression==null) {
 			method.addInstruction(Opcode.RETURN);
 			return new ResultInfo(void.class, Flag.RETURN);

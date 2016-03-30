@@ -60,7 +60,7 @@ public class CategorySymbol extends Symbol implements IExpression  {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		EnumeratedCategoryDeclaration cd = context.getRegisteredDeclaration(
 				EnumeratedCategoryDeclaration.class, type.getTypeNameId());
 		if(cd==null)
@@ -95,7 +95,7 @@ public class CategorySymbol extends Symbol implements IExpression  {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		EnumeratedCategoryType itype = (EnumeratedCategoryType)this.getType(context);
 		Type type = CompilerUtils.getCategoryEnumConcreteType(itype.getTypeNameId());
 		FieldConstant field = new FieldConstant(type, this.getId().toString(), type);
@@ -103,21 +103,21 @@ public class CategorySymbol extends Symbol implements IExpression  {
 		return new ResultInfo(type);
 	}
 
-	public void compileCallConstructor(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public void compileCallConstructor(Context context, MethodInfo method, Flags flags) {
 		EnumeratedCategoryType itype = (EnumeratedCategoryType)this.getType(context);
 		Type type = CompilerUtils.getCategoryEnumConcreteType(itype.getTypeNameId());
 		ResultInfo result = CompilerUtils.compileNewInstance(method, type);
 		compileAssignments(context, method, flags, result);
 	}
 
-	private void compileAssignments(Context context, MethodInfo method, Flags flags, ResultInfo thisInfo) throws SyntaxError {
+	private void compileAssignments(Context context, MethodInfo method, Flags flags, ResultInfo thisInfo) {
 		if(assignments!=null)
 			for(ArgumentAssignment assignment : assignments)
 				compileAssignment(context, method, flags, thisInfo, assignment);
 	}
 	
 	private void compileAssignment(Context context, MethodInfo method, Flags flags, 
-			ResultInfo thisInfo, ArgumentAssignment assignment) throws SyntaxError {
+			ResultInfo thisInfo, ArgumentAssignment assignment) {
 		// keep a copy of new instance on top of the stack
 		method.addInstruction(Opcode.DUP);
 		// get value

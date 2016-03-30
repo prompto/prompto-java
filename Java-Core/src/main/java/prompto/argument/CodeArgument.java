@@ -57,7 +57,7 @@ public class CodeArgument extends BaseArgument implements ITypedArgument {
 	}
 
 	@Override
-	public void register(Context context) throws SyntaxError {
+	public void register(Context context) {
 		INamed actual = context.getRegisteredValue(INamed.class, id);
 		if(actual!=null)
 			throw new SyntaxError("Duplicate argument: \"" + id + "\"");
@@ -65,11 +65,11 @@ public class CodeArgument extends BaseArgument implements ITypedArgument {
 	}
 	
 	@Override
-	public void check(Context context) throws SyntaxError {
+	public void check(Context context) {
 	}
 	
 	@Override
-	public IType getType(Context context) throws SyntaxError {
+	public IType getType(Context context) {
 		return CodeType.instance();
 	}
 

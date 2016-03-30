@@ -89,7 +89,7 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		left.check(context);
 		right.check(context);
 		return BooleanType.instance(); // can compare all objects
@@ -148,7 +148,7 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 			return lval.equals(rval);
 	}
 
-	public Context downCastForCheck(Context context) throws SyntaxError {
+	public Context downCastForCheck(Context context) {
 		try {
 			return downCast(context, false);
 		} catch(PromptoError e) {
@@ -176,7 +176,7 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 		return context;
 	}
 	
-	public Context prepareAutodowncast(Context context, MethodInfo method) throws SyntaxError {
+	public Context prepareAutodowncast(Context context, MethodInfo method) {
 		if(operator==EqOp.IS_A) {
 			Identifier name = readLeftName();
 			if(name!=null) {
@@ -259,7 +259,7 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 	}
 
 	@Override
-	public void compileQuery(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public void compileQuery(Context context, MethodInfo method, Flags flags) {
 		method.addInstruction(Opcode.DUP); // IQuery -> IQuery, IQuery
 		boolean reverse = compileAttributeInfo(context, method, flags);
 		MatchOp match = getMatchOp();
@@ -322,7 +322,7 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		switch(operator) {
 		case EQUALS:
 			return compileEquals(context, method, flags.withReverse(false));
@@ -343,7 +343,7 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 		}
 	}
 	
-	private ResultInfo compileIsA(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	private ResultInfo compileIsA(Context context, MethodInfo method, Flags flags) {
 		right.compile(context, method, flags.withPrimitive(false));
 		left.compile(context, method, flags.withPrimitive(false));
 		MethodConstant m = new MethodConstant(Class.class, "isInstance", Object.class, boolean.class);
@@ -356,7 +356,7 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 			return CompilerUtils.booleanToBoolean(method);
 	}
 
-	public ResultInfo compileIs(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compileIs(Context context, MethodInfo method, Flags flags) {
 		left.compile(context, method, flags.withPrimitive(false));
 		right.compile(context, method, flags.withPrimitive(false));
 		Opcode opcode = flags.isReverse() ? Opcode.IF_ACMPNE : Opcode.IF_ACMPEQ;
@@ -375,7 +375,7 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 			return CompilerUtils.booleanToBoolean(method);
 	}
 	
-	public ResultInfo compileEquals(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compileEquals(Context context, MethodInfo method, Flags flags) {
 		ResultInfo lval = left.compile(context, method, flags.withPrimitive(true));
 		IOperatorFunction tester = testers.get(lval.getType());
 		if(tester==null) {

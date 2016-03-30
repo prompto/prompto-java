@@ -31,12 +31,12 @@ public class JavaCharacterLiteral extends JavaLiteral {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return new JavaClassType(Character.class);
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method) {
 		if((value&0xFFFFFF00)==0)
 			method.addInstruction(Opcode.BIPUSH, new ByteOperand((byte)value.charValue()));
 		else if((value&0xFFFF0000)==0)

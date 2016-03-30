@@ -66,7 +66,7 @@ public class Utils {
 			return null;
 	}
 	
-	public static IType inferElementType(Context context, Collection<? extends IValue> items) throws SyntaxError {
+	public static IType inferElementType(Context context, Collection<? extends IValue> items) {
 		Collection<IType> types = collectElementTypes(context, items);
 		return inferType(context, types);
 	}
@@ -78,7 +78,7 @@ public class Utils {
 		return types;
 	}
 	
-	private static IType inferType(Context context, Collection<IType> types) throws SyntaxError {
+	private static IType inferType(Context context, Collection<IType> types) {
 		if(types.isEmpty())
 			return MissingType.instance();
 		IType lastType = null;
@@ -97,12 +97,12 @@ public class Utils {
 		return lastType; 
 	}
 
-	public static IType inferElementType(Context context, ExpressionList expressions) throws SyntaxError {
+	public static IType inferElementType(Context context, ExpressionList expressions) {
 		Collection<IType> types = collectElementTypes(context, expressions);
 		return inferType(context, types);
 	}
 
-	private static Collection<IType> collectElementTypes(Context context, ExpressionList expressions) throws SyntaxError {
+	private static Collection<IType> collectElementTypes(Context context, ExpressionList expressions) {
 		List<IType> types = new ArrayList<IType>(expressions.size());
 		for(IExpression expression : expressions)
 			types.add(expression.check(context));

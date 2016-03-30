@@ -129,7 +129,7 @@ public class FetchAllExpression extends FetchOneExpression {
 
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, type.getTypeNameId());
 		if(decl==null)
 			throw new SyntaxError("Expecting a type type !");
@@ -151,7 +151,7 @@ public class FetchAllExpression extends FetchOneExpression {
 	}
 
 
-	private void checkPredicate(Context context) throws SyntaxError {
+	private void checkPredicate(Context context) {
 		if(predicate==null)
 			return;
 		if(!(predicate instanceof IPredicateExpression))
@@ -172,7 +172,7 @@ public class FetchAllExpression extends FetchOneExpression {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		compileNewQuery(context, method, flags); // -> IStore, IQuery
 		compilePredicates(context, method, flags); // -> IStore, IQuery
 		compileLimits(context, method, flags); // -> IStore, IQuery
@@ -187,7 +187,7 @@ public class FetchAllExpression extends FetchOneExpression {
 	}
 
 
-	private void compileLimits(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	private void compileLimits(Context context, MethodInfo method, Flags flags) {
 		if(first!=null) {
 			method.addInstruction(Opcode.DUP);
 			ResultInfo info = first.compile(context, method, flags.withPrimitive(false));

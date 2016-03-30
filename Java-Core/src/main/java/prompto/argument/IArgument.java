@@ -17,8 +17,8 @@ public interface IArgument extends INamed {
 	
 	String getSignature(Dialect dialect);
 	String getProto();
-	void register(Context context) throws SyntaxError;
-	void check(Context context) throws SyntaxError;
+	void register(Context context);
+	void check(Context context);
 	IValue checkValue(Context context,IExpression value) throws PromptoError;
 	void toDialect(CodeWriter writer);
 	DefaultExpression getDefaultExpression();

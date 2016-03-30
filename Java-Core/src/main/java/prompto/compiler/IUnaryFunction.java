@@ -5,5 +5,5 @@ import prompto.runtime.Context;
 
 
 public interface IUnaryFunction {
-	ResultInfo compile(Context context, MethodInfo method, Flags flags, ResultInfo exp) throws SyntaxError;
+	ResultInfo compile(Context context, MethodInfo method, Flags flags, ResultInfo exp);
 }

@@ -120,14 +120,14 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration implements IEnu
 	}
 
 	@Override
-	public void register(Context context) throws SyntaxError {
+	public void register(Context context) {
 		context.registerDeclaration(this);
 		for(Symbol s : symbols)
 			s.register(context);
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		for(Symbol s : symbols)
 			s.check(context);
 		return type;
@@ -184,7 +184,7 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration implements IEnu
 		classFile.addField(field);
 	}
 	
-	protected void compileClassConstructor(Context context, ClassFile classFile, Flags flags) throws SyntaxError {
+	protected void compileClassConstructor(Context context, ClassFile classFile, Flags flags) {
 		MethodInfo method = classFile.newMethod("<clinit>", new Descriptor.Method(void.class));
 		method.addModifier(Modifier.STATIC);
 		for(Symbol s : getSymbols())
@@ -193,7 +193,7 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration implements IEnu
 		method.addInstruction(Opcode.RETURN);
 	}
 	
-	private void compilePopulateSymbolField(Context context, MethodInfo method, Flags flags, Symbol s) throws SyntaxError {
+	private void compilePopulateSymbolField(Context context, MethodInfo method, Flags flags, Symbol s) {
 		s.compile(context, method, flags);
 		FieldConstant f = new FieldConstant(method.getClassFile().getThisClass(), s.getName(), getSymbolJavaType());
 		method.addInstruction(Opcode.PUTSTATIC, f);

@@ -69,26 +69,26 @@ public abstract class BaseSwitchStatement extends BaseStatement {
 	protected abstract void toSDialect(CodeWriter writer);
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		checkSwitchCasesType(context);
 		return checkReturnType(context);
 	}
 	
-	protected void checkSwitchCasesType(Context context) throws SyntaxError {
+	protected void checkSwitchCasesType(Context context) {
 		IType type = checkSwitchType(context);
 		for(SwitchCase sc : switchCases)
 			sc.checkSwitchType(context,type);
 	}
 
-	abstract IType checkSwitchType(Context context) throws SyntaxError;
+	abstract IType checkSwitchType(Context context);
 
-	private IType checkReturnType(Context context) throws SyntaxError {
+	private IType checkReturnType(Context context) {
 		TypeMap types = new TypeMap();
 		collectReturnTypes(context, types);
 		return types.inferType(context);
 	}
 	
-	protected void collectReturnTypes(Context context, TypeMap types) throws SyntaxError {
+	protected void collectReturnTypes(Context context, TypeMap types) {
 		for(SwitchCase sc : switchCases) {
 			IType type = sc.checkReturnType(context);
 			if(type!=VoidType.instance())

@@ -54,19 +54,19 @@ public class EnumeratedNativeType extends BaseType {
 	}
 
 	@Override
-	public void checkUnique(Context context) throws SyntaxError {
+	public void checkUnique(Context context) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void checkExists(Context context) throws SyntaxError {
+	public void checkExists(Context context) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public IType checkMember(Context context, Identifier id) throws SyntaxError {
+	public IType checkMember(Context context, Identifier id) {
 		String name = id.toString();
 		if ("symbols".equals(name))
 			return new ListType(derivedFrom);
@@ -92,7 +92,7 @@ public class EnumeratedNativeType extends BaseType {
 	
 	@Override
 	public ResultInfo compileGetMember(Context context, MethodInfo method,
-			Flags flags, IExpression parent, Identifier id) throws SyntaxError {
+			Flags flags, IExpression parent, Identifier id) {
 		String name = id.toString();
 		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, typeNameId);
 		if(!(decl instanceof IEnumeratedDeclaration))

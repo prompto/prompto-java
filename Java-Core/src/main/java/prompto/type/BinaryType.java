@@ -12,7 +12,7 @@ public abstract class BinaryType extends NativeType {
 	}
 
 	@Override
-	public IType checkMember(Context context, Identifier id) throws SyntaxError {
+	public IType checkMember(Context context, Identifier id) {
 		String name = id.toString();
 		if ("name".equals(name))
 			return TextType.instance();

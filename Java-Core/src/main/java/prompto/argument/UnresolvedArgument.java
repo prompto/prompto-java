@@ -42,7 +42,7 @@ public class UnresolvedArgument extends BaseArgument implements INamedArgument {
 	}
 	
 	@Override
-	public void check(Context context) throws SyntaxError {
+	public void check(Context context) {
 		resolveAndCheck(context);
 	}
 	
@@ -52,13 +52,13 @@ public class UnresolvedArgument extends BaseArgument implements INamedArgument {
 	}
 	
 	@Override
-	public IType getType(Context context) throws SyntaxError {
+	public IType getType(Context context) {
 		resolveAndCheck(context);
 		return resolved.getType(context);
 	}
 	
 	@Override
-	public void register(Context context) throws SyntaxError {
+	public void register(Context context) {
 		resolveAndCheck(context);
 		resolved.register(context);
 	}
@@ -69,7 +69,7 @@ public class UnresolvedArgument extends BaseArgument implements INamedArgument {
 		return resolved.checkValue(context, value);
 	}
 	
-	private void resolveAndCheck(Context context) throws SyntaxError {
+	private void resolveAndCheck(Context context) {
 		if(resolved!=null) 
 			return;
 		IDeclaration named = context.getRegisteredDeclaration(IDeclaration.class, id);

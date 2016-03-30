@@ -57,7 +57,7 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 	}
 		
 	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		exp.compile(context, method, flags);
 		IOperand oper = new MethodConstant(
 				PromptoRange.class, 
@@ -89,7 +89,7 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 	}
 	
 	public static ResultInfo compileItem(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true));
 		right = CompilerUtils.numberTolong(method, right);
 		// create result
@@ -111,7 +111,7 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 	}
 
 	public static ResultInfo compileSlice(Context context, MethodInfo method, Flags flags, 
-			ResultInfo parent, IExpression first, IExpression last) throws SyntaxError {
+			ResultInfo parent, IExpression first, IExpression last) {
 		compileSliceFirst(context, method, flags, first);
 		compileSliceLast(context, method, flags, last);
 		MethodConstant m = new MethodConstant(parent.getType(), "slice", 

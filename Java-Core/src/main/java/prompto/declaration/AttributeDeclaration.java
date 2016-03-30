@@ -126,12 +126,12 @@ public class AttributeDeclaration extends BaseDeclaration {
 	}
 	
 	@Override
-	public void register(Context context) throws SyntaxError {
+	public void register(Context context) {
 		context.registerDeclaration(this);
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		type.checkExists(context);
 		return type;
 	}

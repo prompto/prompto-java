@@ -12,7 +12,7 @@ public class TypeMap extends HashMap<Identifier, IType> {
 
 	private static final long serialVersionUID = 1L;
 
-	public IType inferType(Context context) throws SyntaxError {
+	public IType inferType(Context context) {
 		if(size()==0)
 			return VoidType.instance();
 		IType type = null;

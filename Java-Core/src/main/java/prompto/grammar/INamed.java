@@ -10,5 +10,5 @@ public interface INamed {
 	default String getName() {
 		return getId().toString();
 	}
-	IType getType(Context context) throws SyntaxError;
+	IType getType(Context context);
 }

@@ -58,7 +58,7 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 	}
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		IType lt = left.check(context);
 		IType rt = right.check(context);
 		return lt.checkCompare(context, rt, this);
@@ -105,7 +105,7 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		ResultInfo lval = left.compile(context, method, flags.withPrimitive(true));
 		IOperatorFunction tester = testers.get(lval.getType());
 		if(tester==null) {

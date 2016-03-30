@@ -44,7 +44,7 @@ public class SetLiteral extends Literal<SetValue> {
 	}
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		if(itemType==null) {
 			if(value.isEmpty() && expressions!=null && !expressions.isEmpty())
 				itemType = Utils.inferElementType(context, expressions);
@@ -89,14 +89,14 @@ public class SetLiteral extends Literal<SetValue> {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		ResultInfo info = CompilerUtils.compileNewInstance(method, PromptoSet.class);
 		if(expressions!=null)
 			addItems(context, method, flags);
 		return info;
 	}
 
-	private void addItems(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	private void addItems(Context context, MethodInfo method, Flags flags) {
 		for(IExpression e : expressions) {
 			method.addInstruction(Opcode.DUP); // need to keep a reference to the list on top of stack
 			ResultInfo info = e.compile(context, method, flags.withPrimitive(false));

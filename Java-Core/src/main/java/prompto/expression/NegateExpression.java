@@ -41,7 +41,7 @@ public class NegateExpression implements IUnaryExpression {
 	}
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		IType type = expression.check(context);
 		if(type instanceof IntegerType || type instanceof DecimalType || type instanceof PeriodType)
 			return type;
@@ -79,7 +79,7 @@ public class NegateExpression implements IUnaryExpression {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		ResultInfo val = expression.compile(context, method, flags);
 		IUnaryFunction negator = negators.get(val.getType());
 		if(negator==null) {

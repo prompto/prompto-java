@@ -22,9 +22,9 @@ public interface IMethodDeclaration extends IDeclaration {
 	default String getNameAsKey() { return getName(); }
 	String getProto();
 	IValue interpret(Context context) throws PromptoError;
-	void check(ConcreteCategoryDeclaration declaration, Context context) throws SyntaxError;
+	void check(ConcreteCategoryDeclaration declaration, Context context);
 	boolean isAssignableTo(Context context, ArgumentAssignmentList assignments, boolean checkInstance);
-	void registerArguments(Context local) throws SyntaxError;
+	void registerArguments(Context local);
 	Specificity computeSpecificity(Context context, IArgument argument, ArgumentAssignment assignment, boolean checkInstance);
 	void setMemberOf(ConcreteCategoryDeclaration declaration);
 	ConcreteCategoryDeclaration getMemberOf();

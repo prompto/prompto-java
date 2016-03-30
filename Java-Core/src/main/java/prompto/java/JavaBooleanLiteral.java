@@ -23,12 +23,12 @@ public class JavaBooleanLiteral extends JavaLiteral {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return new JavaClassType(Boolean.class);
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method) {
 		method.addInstruction(value ? Opcode.ICONST_1 : Opcode.ICONST_0);
 		return new ResultInfo(boolean.class);
 	}

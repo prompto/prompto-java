@@ -32,7 +32,7 @@ public class IntegerLiteral extends Literal<Integer> {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		long l = value.longValue();
 		if(l>=0 && l<=1) {
 			// LCONST_0 to LCONST_1 are consecutive

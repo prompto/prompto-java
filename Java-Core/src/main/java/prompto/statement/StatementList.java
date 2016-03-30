@@ -33,7 +33,7 @@ public class StatementList extends LinkedList<IStatement> {
 			return false;
 	}
 	
-	public IType check(Context context, IType returnType) throws SyntaxError {
+	public IType check(Context context, IType returnType) {
 		if(returnType==VoidType.instance()) {
 			for(IStatement statement : this) {
 				IType type = statement.check(context);
@@ -58,7 +58,7 @@ public class StatementList extends LinkedList<IStatement> {
 		}
 	}
 
-	public IType checkNative(Context context, IType returnType) throws SyntaxError {
+	public IType checkNative(Context context, IType returnType) {
 		if(returnType==VoidType.instance()) {
 			// don't check return type
 			for(IStatement statement : this) {

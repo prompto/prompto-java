@@ -77,7 +77,7 @@ public class DoWhileStatement extends BaseStatement {
 	}
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		IType cond = condition.check(context);
 		if(cond!=BooleanType.instance())
 			throw new SyntaxError("Expected a Boolean condition!");
@@ -104,7 +104,7 @@ public class DoWhileStatement extends BaseStatement {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		StackState neutralState = method.captureStackState();
 		method.placeLabel(neutralState);
 		IInstructionListener loop = method.addOffsetListener(new OffsetListenerConstant(true));

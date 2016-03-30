@@ -77,7 +77,7 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IFilterab
 	}
 	
 	public static ResultInfo compileItem(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true));
 		right = CompilerUtils.numberToint(method, right);
 		// minus 1
@@ -133,7 +133,7 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IFilterab
 	}
 
 	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		exp.compile(context, method, flags);
 		IOperand oper = new MethodConstant(
 				PromptoSet.class, 
@@ -168,7 +168,7 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IFilterab
     }
 
 	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		// TODO: return left if right is empty (or right if left is empty and is a set)
 		// create result
 		ResultInfo info = CompilerUtils.compileNewInstance(method, PromptoSet.class); 

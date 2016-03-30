@@ -21,7 +21,7 @@ public class CommentStatement extends BaseStatement {
 	}
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return VoidType.instance();
 	}
 
@@ -73,7 +73,7 @@ public class CommentStatement extends BaseStatement {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		// nathing to do
 		return new ResultInfo(void.class);
 	}

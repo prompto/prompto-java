@@ -42,7 +42,7 @@ public class MultiplyExpression implements IExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		IType lt = left.check(context);
 		IType rt = right.check(context);
 		return lt.checkMultiply(context, rt, true);
@@ -69,7 +69,7 @@ public class MultiplyExpression implements IExpression {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		ResultInfo lval = left.compile(context, method, flags);
 		IOperatorFunction multiplier = multipliers.get(lval.getType());
 		if(multiplier==null && lval.getType().getTypeName().startsWith("π.χ."))
@@ -84,7 +84,7 @@ public class MultiplyExpression implements IExpression {
 		}
 	}
 
-	private ResultInfo compileMultiplyable(Context context, MethodInfo method, ResultInfo lval, Flags flags) throws SyntaxError {
+	private ResultInfo compileMultiplyable(Context context, MethodInfo method, ResultInfo lval, Flags flags) {
 		try {
 			ResultInfo rval = right.compile(context, method, flags);
 			// for now we only support multiply by Integer

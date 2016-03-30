@@ -15,7 +15,7 @@ public class JavaItemExpression extends JavaSelectorExpression {
 	}
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		// TODO Auto-generated method stub
 		return null;
 	}

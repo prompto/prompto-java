@@ -31,7 +31,7 @@ public class MethodExpression implements IExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		INamed named = context.getRegistered(name);
 		if(named instanceof Context.MethodDeclarationMap)
 			return new MethodType(context, name);

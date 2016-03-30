@@ -12,7 +12,7 @@ public class EnumeratedCategoryType extends CategoryType {
 	}
 	
 	@Override
-	public IType checkMember(Context context, Identifier id) throws SyntaxError {
+	public IType checkMember(Context context, Identifier id) {
 		String name = id.toString();
 		if ("value".equals(name))
 			return this;

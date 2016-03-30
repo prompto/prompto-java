@@ -57,7 +57,7 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return resolveAndCheck(context);
 	}
 	
@@ -68,7 +68,7 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		resolveAndCheck(context);
 		return resolved.compile(context, method, flags);
 	}
@@ -86,13 +86,13 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 		}
 	}
 	
-	private IType resolveAndCheck(Context context) throws SyntaxError {
+	private IType resolveAndCheck(Context context) {
 		resolve(context);
 		return resolved.check(context);
 	}
 	
 	
-	private void resolve(Context context) throws SyntaxError {
+	private void resolve(Context context) {
 		if(resolved!=null)
 			return;
 		if(caller instanceof UnresolvedIdentifier)
@@ -101,7 +101,7 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 			resolved = resolveMember(context);
 	}
 	
-	private IExpression resolveUnresolvedIdentifier(Context context) throws SyntaxError {
+	private IExpression resolveUnresolvedIdentifier(Context context) {
 		Identifier id = ((UnresolvedIdentifier)caller).getId();
 		IDeclaration decl = null;
 		// if this happens in the context of a member method, then we need to check for category members first
@@ -119,7 +119,7 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 			return new MethodCall(new MethodSelector(id), assignments);
 	}
 
-	private IDeclaration resolveUnresolvedMember(InstanceContext context, Identifier name) throws SyntaxError {
+	private IDeclaration resolveUnresolvedMember(InstanceContext context, Identifier name) {
 		ConcreteCategoryDeclaration decl = context.getRegisteredDeclaration(ConcreteCategoryDeclaration.class, context.getInstanceType().getTypeNameId());
 		MethodDeclarationMap methods = decl.getMemberMethods(context, name);
 		if(methods!=null && methods.size()>0)
@@ -128,7 +128,7 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 			return null;
 	}
 
-	private IExpression resolveMember(Context context) throws SyntaxError {
+	private IExpression resolveMember(Context context) {
 		IExpression parent = ((MemberSelector)caller).getParent();
 		Identifier id = ((MemberSelector)caller).getId();
 		return new MethodCall(new MethodSelector(parent, id), assignments);

@@ -105,7 +105,7 @@ public class ConstructorExpression implements IExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
 		if(cd==null)
 			throw new SyntaxError("Unknown category " + type.getTypeName());
@@ -163,7 +163,7 @@ public class ConstructorExpression implements IExpression {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		Type klass = getConcreteType(context);
 		ResultInfo result = CompilerUtils.compileNewInstance(method, klass);
 		compileCopyFrom(context, method, flags, result);
@@ -171,14 +171,14 @@ public class ConstructorExpression implements IExpression {
 		return new ResultInfo(getInterfaceType(context));
 	}
 
-	private void compileAssignments(Context context, MethodInfo method, Flags flags, ResultInfo thisInfo) throws SyntaxError {
+	private void compileAssignments(Context context, MethodInfo method, Flags flags, ResultInfo thisInfo) {
 		if(assignments!=null)
 			for(ArgumentAssignment assignment : assignments)
 				compileAssignment(context, method, flags, thisInfo, assignment);
 	}
 
 	private void compileAssignment(Context context, MethodInfo method, Flags flags, 
-			ResultInfo thisInfo, ArgumentAssignment assignment) throws SyntaxError {
+			ResultInfo thisInfo, ArgumentAssignment assignment) {
 		// keep a copy of new instance on top of the stack
 		method.addInstruction(Opcode.DUP);
 		// get value
@@ -191,7 +191,7 @@ public class ConstructorExpression implements IExpression {
 		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 	}
 
-	private void compileCopyFrom(Context context, MethodInfo method, Flags flags, ResultInfo thisInfo) throws SyntaxError {
+	private void compileCopyFrom(Context context, MethodInfo method, Flags flags, ResultInfo thisInfo) {
 		if(copyFrom==null)
 			return;
 		CategoryDeclaration thisCd = context.getRegisteredDeclaration(CategoryDeclaration.class, this.type.getTypeNameId());
@@ -201,7 +201,7 @@ public class ConstructorExpression implements IExpression {
 	}
 
 	private void compileCopyFrom(Context context, MethodInfo method, Flags flags, 
-			CategoryDeclaration thisCd, CategoryDeclaration otherCd, ResultInfo thisInfo) throws SyntaxError {
+			CategoryDeclaration thisCd, CategoryDeclaration otherCd, ResultInfo thisInfo) {
 		ResultInfo copyFromInfo = copyFrom.compile(context, method, flags.withPrimitive(false));
 		Set<Identifier> attrIds = thisCd.getAllAttributes(context);
 		for(Identifier attrId : attrIds)
@@ -242,7 +242,7 @@ public class ConstructorExpression implements IExpression {
 		return false;
 	}
 
-	private Type getInterfaceType(Context context) throws SyntaxError {
+	private Type getInterfaceType(Context context) {
 		CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
 		if(cd instanceof NativeCategoryDeclaration)
 			return ((NativeCategoryDeclaration)cd).getBoundClass(false);
@@ -250,7 +250,7 @@ public class ConstructorExpression implements IExpression {
 			return CompilerUtils.getCategoryInterfaceType(cd.getId());
 	}
 
-	private Type getConcreteType(Context context) throws SyntaxError {
+	private Type getConcreteType(Context context) {
 		CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
 		if(cd instanceof NativeCategoryDeclaration)
 			return ((NativeCategoryDeclaration)cd).getBoundClass(false);

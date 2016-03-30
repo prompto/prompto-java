@@ -4,6 +4,7 @@ no getters from setters
 translate to E may change parameters, see test: is instance
 review types: document, method as parameters
 date/time/ check return type
+compiled for each/inner switch
 
 missing code:
 python timezone name

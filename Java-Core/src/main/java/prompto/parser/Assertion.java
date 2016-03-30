@@ -23,7 +23,7 @@ public class Assertion extends Section {
 		expression.toDialect(writer);
 	}
 
-	public void check(Context context) throws SyntaxError {
+	public void check(Context context) {
 		IType type = expression.check(context);
 		if(type!=BooleanType.instance())
 			context.getProblemListener().reportIllegalNonBoolean(this, type);

@@ -77,7 +77,7 @@ public class FetchOneExpression extends Section implements IExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
 		if(decl==null)
 			throw new SyntaxError("Unknown category: " + type.getTypeName());
@@ -108,7 +108,7 @@ public class FetchOneExpression extends Section implements IExpression {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		compileNewQuery(context, method, flags); // -> IStore, IQuery
 		compilePredicates(context, method, flags); // -> IStore, IQuery
 		compileFetchOne(context, method, flags); // -> IStored
@@ -127,7 +127,7 @@ public class FetchOneExpression extends Section implements IExpression {
 		method.addInstruction(Opcode.INVOKEINTERFACE, i);
 	}
 
-	protected void compilePredicates(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	protected void compilePredicates(Context context, MethodInfo method, Flags flags) {
 		if(type!=null) {
 			method.addInstruction(Opcode.DUP);
 			AttributeInfo info = new AttributeInfo("category", Family.TEXT, true, null);

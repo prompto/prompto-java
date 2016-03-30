@@ -75,12 +75,12 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	public abstract List<String> collectCategories(Context context);
 	
 	@Override
-	public void register(Context context) throws SyntaxError {
+	public void register(Context context) {
 		context.registerDeclaration(this);
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		if(attributes!=null) for(Identifier attribute : attributes) {
 			if(attribute==null)
 				continue; // problem already handled by parser
@@ -149,7 +149,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 			instance.setMember(context, name, value);
 	}
 
-	public void checkConstructorContext(Context context) throws SyntaxError {
+	public void checkConstructorContext(Context context) {
 		// nothing to do
 	}
 	
@@ -280,53 +280,53 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		throw new UnsupportedOperationException(); // TODO -> abstract
 	}
 	
-	public abstract IMethodDeclaration findOperator(Context context, Operator operator, IType type) throws SyntaxError;
+	public abstract IMethodDeclaration findOperator(Context context, Operator operator, IType type);
 	
 	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression value) throws SyntaxError {
+			ResultInfo left, IExpression value) {
 		return compileOperator(context, method, flags, left, value, Operator.PLUS);
 	}
 	
 	public static ResultInfo compileDivide(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression value) throws SyntaxError {
+			ResultInfo left, IExpression value) {
 		return compileOperator(context, method, flags, left, value, Operator.DIVIDE);
 	}
 
 	public static ResultInfo compileIntDivide(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression value) throws SyntaxError {
+			ResultInfo left, IExpression value) {
 		return compileOperator(context, method, flags, left, value, Operator.IDIVIDE);
 	}
 
 	public static ResultInfo compileModulo(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression value) throws SyntaxError {
+			ResultInfo left, IExpression value) {
 		return compileOperator(context, method, flags, left, value, Operator.MODULO);
 	}
 
 	public static ResultInfo compileMultiply(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression value) throws SyntaxError {
+			ResultInfo left, IExpression value) {
 		return compileOperator(context, method, flags, left, value, Operator.MULTIPLY);
 	}
 
 	public static ResultInfo compileMultiply(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, ResultInfo right) throws SyntaxError {
+			ResultInfo left, ResultInfo right) {
 		IType argType = Utils.typeToIType(right.getType());
 		return compileOperator(context, method, flags, left, right, argType, Operator.MULTIPLY);
 	}
 
 	public static ResultInfo compileMinus(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression value) throws SyntaxError {
+			ResultInfo left, IExpression value) {
 		return compileOperator(context, method, flags, left, value, Operator.MINUS);
 	}
 
 	public static ResultInfo compileOperator(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression value, Operator oper) throws SyntaxError {
+			ResultInfo left, IExpression value, Operator oper) {
 		IType argType = value.check(context);
 		ResultInfo right = value.compile(context, method, flags);
 		return compileOperator(context, method, flags, left, right, argType, oper);
 	}
 
 	private static ResultInfo compileOperator(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, ResultInfo right, IType argType, Operator oper) throws SyntaxError {
+			ResultInfo left, ResultInfo right, IType argType, Operator oper) {
 		String name = left.getType().getTypeName().substring("π.χ.".length());
 		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, new Identifier(name));
 		IMethodDeclaration operator = decl.findOperator(context, oper, argType);

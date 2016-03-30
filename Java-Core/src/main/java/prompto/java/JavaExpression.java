@@ -11,11 +11,11 @@ import prompto.utils.CodeWriter;
 
 public interface JavaExpression extends ISection {
 	
-	IType check(Context context) throws SyntaxError;
+	IType check(Context context);
 	Object interpret(Context context) throws PromptoError;
 	void toDialect(CodeWriter writer);
 	
-	default ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
+	default ResultInfo compile(Context context, MethodInfo method) {
 		System.err.println("Need to implement compile for " + this.getClass().getName());
 		throw new UnsupportedOperationException();
 	}

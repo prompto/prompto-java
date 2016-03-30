@@ -25,7 +25,7 @@ public class ContextualExpression extends BaseValue implements IExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return expression.check(this.calling);
 	}
 

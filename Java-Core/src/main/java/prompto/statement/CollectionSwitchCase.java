@@ -19,7 +19,7 @@ public class CollectionSwitchCase extends SwitchCase {
 	}
 
 	@Override
-	public void checkSwitchType(Context context, IType type) throws SyntaxError {
+	public void checkSwitchType(Context context, IType type) {
 		IType thisType = expression.check(context);
 		if(thisType instanceof ContainerType)
 			thisType = ((ContainerType)thisType).getItemType();

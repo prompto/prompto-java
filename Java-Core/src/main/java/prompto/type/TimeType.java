@@ -39,14 +39,14 @@ public class TimeType extends NativeType {
 	}
 
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkAdd(Context context, IType other, boolean tryReverse) {
 		if (other instanceof PeriodType)
 			return DateTimeType.instance();
 		return super.checkAdd(context, other, tryReverse);
 	}
 
 	@Override
-	public IType checkSubstract(Context context, IType other) throws SyntaxError {
+	public IType checkSubstract(Context context, IType other) {
 		if (other instanceof TimeType)
 			return PeriodType.instance();
 		if (other instanceof PeriodType)
@@ -55,21 +55,21 @@ public class TimeType extends NativeType {
 	}
 
 	@Override
-	public IType checkCompare(Context context, IType other, ISection section) throws SyntaxError {
+	public IType checkCompare(Context context, IType other, ISection section) {
 		if (other instanceof TimeType)
 			return BooleanType.instance();
 		return super.checkCompare(context, other, section);
 	}
 
 	@Override
-	public IType checkRange(Context context, IType other) throws SyntaxError {
+	public IType checkRange(Context context, IType other) {
 		if (other instanceof TimeType)
 			return new RangeType(this);
 		return super.checkRange(context, other);
 	}
 
 	@Override
-	public IType checkMember(Context context, Identifier id) throws SyntaxError {
+	public IType checkMember(Context context, Identifier id) {
 		String name = id.toString();
 		if ("hour".equals(name))
 			return IntegerType.instance();
@@ -84,7 +84,7 @@ public class TimeType extends NativeType {
 	}
 
 	@Override
-	public RangeBase<?> newRange(Object left, Object right) throws SyntaxError {
+	public RangeBase<?> newRange(Object left, Object right) {
 		if (left instanceof Time && right instanceof Time)
 			return new TimeRange((Time) left, (Time) right);
 		return super.newRange(left, right);

@@ -100,7 +100,7 @@ public class ArgumentAssignment {
 				&& this.getExpression().equals(other.getExpression());
 	}
 	
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		INamed actual = context.getRegisteredValue(INamed.class,argument.getId());
 		if(actual==null) {
 			IType actualType = expression.check(context);
@@ -131,7 +131,7 @@ public class ArgumentAssignment {
 		return expression; 
 	}
 
-	public ArgumentAssignment makeAssignment(Context context, IMethodDeclaration declaration) throws SyntaxError {
+	public ArgumentAssignment makeAssignment(Context context, IMethodDeclaration declaration) {
 		IArgument argument = this.argument;
 		// when 1st argument, can be unnamed
 		if(argument==null) {
@@ -146,7 +146,7 @@ public class ArgumentAssignment {
 		return new ArgumentAssignment(argument,expression);
 	}
 
-	public void compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public void compile(Context context, MethodInfo method, Flags flags) {
 		expression.compile(context, method, flags);
 	}
 

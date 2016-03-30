@@ -198,7 +198,7 @@ public class Context implements IContext {
 				&& values.isEmpty();
 	}
 	
-	public void unregister(String path) throws SyntaxError {
+	public void unregister(String path) {
 		if(globals!=this)
 			globals.unregister(path);
 		else {
@@ -230,7 +230,7 @@ public class Context implements IContext {
 			tests.remove(decl.getId());
 	}
 
-	private void unregisterDeclarations(String path) throws SyntaxError {
+	private void unregisterDeclarations(String path) {
 		List<IDeclaration> toRemove = new ArrayList<IDeclaration>();
 		for(IDeclaration decl : declarations.values()) {
 			if(path.equals(decl.getPath()))
@@ -326,19 +326,19 @@ public class Context implements IContext {
 		}
 	}
 
-	public void registerDeclaration(IDeclaration declaration) throws SyntaxError {
+	public void registerDeclaration(IDeclaration declaration) {
 		if(checkDuplicate(declaration))
 			declarations.put(declaration.getId(), declaration);
 	}
 
-	private boolean checkDuplicate(IDeclaration declaration) throws SyntaxError {
+	private boolean checkDuplicate(IDeclaration declaration) {
 		INamed current = getRegistered(declaration.getId());
 		if(current!=null)
 			problemListener.reportDuplicate(declaration.getId().toString(), declaration, current.getId());
 		return current==null;
 	}
 
-	public void registerDeclaration(IMethodDeclaration declaration) throws SyntaxError {
+	public void registerDeclaration(IMethodDeclaration declaration) {
 		MethodDeclarationMap current = checkDuplicate(declaration);
 		if(current==null) {
 			current = new MethodDeclarationMap(declaration.getId());
@@ -347,19 +347,19 @@ public class Context implements IContext {
 		current.register(declaration,this);
 	}
 	
-	private MethodDeclarationMap checkDuplicate(IMethodDeclaration declaration) throws SyntaxError {
+	private MethodDeclarationMap checkDuplicate(IMethodDeclaration declaration) {
 		INamed current = getRegistered(declaration.getId());
 		if(current!=null && !(current instanceof MethodDeclarationMap))
 			problemListener.reportDuplicate(declaration.getId().toString(), declaration, (ISection)current);
 		return (MethodDeclarationMap)current;
 	}
 
-	public void registerDeclaration(TestMethodDeclaration declaration) throws SyntaxError {
+	public void registerDeclaration(TestMethodDeclaration declaration) {
 		if(checkDuplicate(declaration))
 			tests.put(declaration.getId(), declaration);
 	}
 	
-	private boolean checkDuplicate(TestMethodDeclaration declaration) throws SyntaxError {
+	private boolean checkDuplicate(TestMethodDeclaration declaration) {
 		TestMethodDeclaration current = tests.get(declaration.getId());
 		if(current!=null)
 			problemListener.reportDuplicate(declaration.getId().toString(), declaration, (ISection)current);
@@ -402,7 +402,7 @@ public class Context implements IContext {
 			this.origin = origin;
 		}
 		
-		public void unregister(String path) throws SyntaxError {
+		public void unregister(String path) {
 			List<IMethodDeclaration> toRemove = new ArrayList<IMethodDeclaration>();
 			for(IMethodDeclaration decl : this.values()) {
 				if(path.equals(decl.getPath()))
@@ -423,16 +423,16 @@ public class Context implements IContext {
 		}
 		
 		@Override
-		public IType check(Context context) throws SyntaxError {
+		public IType check(Context context) {
 			throw new RuntimeException("Should never get there!");
 		}
 		
 		@Override
-		public void register(Context context) throws SyntaxError {
+		public void register(Context context) {
 			throw new RuntimeException("Should never get there!");
 		}
 		
-		public void register(IMethodDeclaration declaration, Context context) throws SyntaxError {
+		public void register(IMethodDeclaration declaration, Context context) {
 			String proto = declaration.getProto();
 			if(this.containsKey(proto))
 				context.getProblemListener().reportDuplicate(declaration.getId().toString(), declaration, this.get(proto));
@@ -440,14 +440,14 @@ public class Context implements IContext {
 				this.put(proto, declaration);
 		}
 		
-		public void registerIfMissing(IMethodDeclaration declaration,Context context) throws SyntaxError {
+		public void registerIfMissing(IMethodDeclaration declaration,Context context) {
 			String proto = declaration.getProto();
 			if(!this.containsKey(proto))
 				this.put(proto, declaration);
 		}
 		
 		@Override
-		public IType getType(Context context) throws SyntaxError {
+		public IType getType(Context context) {
 			throw new SyntaxError("Should never get there!");
 		}
 
@@ -495,11 +495,11 @@ public class Context implements IContext {
 	}
 	
 	
-	public void registerValue(INamed value) throws SyntaxError {
+	public void registerValue(INamed value) {
 		registerValue(value, true);
 	}
 	
-	public void registerValue(INamed value, boolean checkDuplicate) throws SyntaxError {
+	public void registerValue(INamed value, boolean checkDuplicate) {
 		if(checkDuplicate) {
 			// only explore current context
 			if(instances.get(value.getId())!=null)
@@ -542,7 +542,7 @@ public class Context implements IContext {
 			values.put(name, value);
 	}
 
-	private IValue autocast(Identifier name, IValue value) throws SyntaxError {
+	private IValue autocast(Identifier name, IValue value) {
 		if(value!=null) {
 			if(value instanceof ExpressionValue)
 				value = ((ExpressionValue)value).getValue();

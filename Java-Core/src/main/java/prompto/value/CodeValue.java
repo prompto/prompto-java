@@ -16,7 +16,7 @@ public class CodeValue extends BaseValue {
 		this.expression = expression;
 	}
 
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return expression.checkCode(context);
 	}
 

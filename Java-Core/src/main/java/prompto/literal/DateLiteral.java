@@ -35,7 +35,7 @@ public class DateLiteral extends Literal<Date> {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		PromptoDate date = value.getStorableData();
 		method.addInstruction(Opcode.LDC_W, new StringConstant(date.toString()));
 		IOperand oper = new MethodConstant(PromptoDate.class, "parse", String.class, PromptoDate.class);

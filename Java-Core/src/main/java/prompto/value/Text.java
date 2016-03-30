@@ -53,7 +53,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	}
 
 	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		exp.compile(context, method, flags.withPrimitive(false));
 		// convert right to String
 		MethodConstant oper = new MethodConstant(String.class, "valueOf", Object.class, String.class);
@@ -77,7 +77,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	}
 
 	public static ResultInfo compileMultiply(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		ResultInfo right = exp.compile(context, method, flags);
 		if(Long.class==right.getType())
 			CompilerUtils.LongToint(method);
@@ -104,7 +104,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	}
 	
 	public static ResultInfo compileCompareTo(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		exp.compile(context, method, flags);
 		IOperand oper = new MethodConstant(String.class, 
 				"compareTo", String.class, int.class);
@@ -143,7 +143,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	}
 	
 	public static ResultInfo compileItem(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		ResultInfo right = exp.compile(context, method, flags);
 		if(Long.class==right.getType())
 			CompilerUtils.LongToint(method);
@@ -228,7 +228,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	}
 
 	public static ResultInfo compileSlice(Context context, MethodInfo method, Flags flags, 
-			ResultInfo parent, IExpression first, IExpression last) throws SyntaxError {
+			ResultInfo parent, IExpression first, IExpression last) {
 		compileTextSliceFirst(context, method, flags, first);
 		compileTextSliceLast(context, method, flags, last);
 		MethodConstant m = new MethodConstant(String.class, "substring", 
@@ -237,7 +237,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 		return parent;
 	}
 	
-	private static void compileTextSliceFirst(Context context, MethodInfo method, Flags flags, IExpression first) throws SyntaxError {
+	private static void compileTextSliceFirst(Context context, MethodInfo method, Flags flags, IExpression first) {
 		if(first==null)
 			method.addInstruction(Opcode.ICONST_0);
 		else {
@@ -249,7 +249,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 		}
 	}
 
-	private static void compileTextSliceLast(Context context, MethodInfo method, Flags flags, IExpression last) throws SyntaxError {
+	private static void compileTextSliceLast(Context context, MethodInfo method, Flags flags, IExpression last) {
 		// always compile last index since we need to manage negative values
 		compileSliceMaxIndex(method);
 		// stack is now obj, int, int (max)
@@ -296,7 +296,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	}
 	
 	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		exp.compile(context, method, flags);
 		IOperand oper = flags.isRoughly() ?
 				new MethodConstant(String.class, "equalsIgnoreCase", String.class, boolean.class) :

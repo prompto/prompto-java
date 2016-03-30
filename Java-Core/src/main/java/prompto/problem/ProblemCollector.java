@@ -113,14 +113,14 @@ public class ProblemCollector implements ANTLRErrorListener, IProblemListener {
 	}
 	
 	@Override
-	public void reportIllegalComparison(IType type, IType other, ISection section) throws SyntaxError {
+	public void reportIllegalComparison(IType type, IType other, ISection section) {
 		synchronized(problems) {
 			problems.add(new IllegalComparisonError(type, other, section));
 		}
 	}
 	
 	@Override
-	public void reportIllegalMember(String name, ISection section) throws SyntaxError {
+	public void reportIllegalMember(String name, ISection section) {
 		synchronized(problems) {
 			problems.add(new IllegalMemberError(name, section));
 		}

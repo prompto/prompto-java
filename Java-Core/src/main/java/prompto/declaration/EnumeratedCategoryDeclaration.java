@@ -137,14 +137,14 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration i
 	}
 
 	@Override
-	public void register(Context context) throws SyntaxError {
+	public void register(Context context) {
 		context.registerDeclaration(this);
 		for(Symbol s : symbols)
 			s.register(context);
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		super.check(context);
 		for(Symbol s : symbols)
 			s.check(context); // TODO
@@ -182,7 +182,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration i
 	}
 	
 	@Override
-	protected void compileClassConstructorBody(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	protected void compileClassConstructorBody(Context context, MethodInfo method, Flags flags) {
 		if(isStorable())
 			compilePopulateCategoryField(context, method, flags);
 		for(CategorySymbol s : getSymbols())
@@ -205,7 +205,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration i
 		method.addInstruction(Opcode.PUTSTATIC, f);
 	}
 
-	private void compilePopulateSymbolField(Context context, MethodInfo method, Flags flags, CategorySymbol s) throws SyntaxError {
+	private void compilePopulateSymbolField(Context context, MethodInfo method, Flags flags, CategorySymbol s) {
 		s.compileCallConstructor(context, method, flags);
 		ClassConstant c = method.getClassFile().getThisClass();
 		FieldConstant f = new FieldConstant(c, s.getName(), c.getType());

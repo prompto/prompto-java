@@ -71,7 +71,7 @@ public class FetchListExpression extends Section implements IExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		IType sourceType = source.check(context);
 		if(!(sourceType instanceof ContainerType))
 			throw new SyntaxError("Expecting a list, set or tuple as data source !");
@@ -126,7 +126,7 @@ public class FetchListExpression extends Section implements IExpression {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		// create inner class for filter
 		String innerClassName = compileInnerClass(context, method.getClassFile());
 		// get iterable
@@ -152,7 +152,7 @@ public class FetchListExpression extends Section implements IExpression {
 	}
 
 
-	private String compileInnerClass(Context context, ClassFile parentClass) throws SyntaxError {
+	private String compileInnerClass(Context context, ClassFile parentClass) {
 		int innerClassIndex = 1 + parentClass.getInnerClasses().size();
 		String innerClassName = parentClass.getThisClass().getType().getTypeName() + '$' + innerClassIndex;
 		ClassFile classFile = new ClassFile(new PromptoType(innerClassName));
@@ -164,7 +164,7 @@ public class FetchListExpression extends Section implements IExpression {
 		return innerClassName;
 	}
 
-	private void compileInnerClassExpression(Context context, ClassFile classFile) throws SyntaxError {
+	private void compileInnerClassExpression(Context context, ClassFile classFile) {
 		IType paramIType = source.check(context).checkIterator(context);
 		context = context.newChildContext();
 		context.registerValue(new Variable(itemName, paramIType));
@@ -173,7 +173,7 @@ public class FetchListExpression extends Section implements IExpression {
 		compileInnerClassTestMethod(context, classFile, paramType);
 	}
 
-	private void compileInnerClassTestMethod(Context context, ClassFile classFile, Type paramType) throws SyntaxError {
+	private void compileInnerClassTestMethod(Context context, ClassFile classFile, Type paramType) {
 		// create the "apply" method itself
 		Descriptor.Method proto = new Descriptor.Method(paramType, boolean.class);
 		MethodInfo method = classFile.newMethod("test", proto);

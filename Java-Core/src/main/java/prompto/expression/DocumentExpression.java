@@ -18,7 +18,7 @@ import prompto.value.IValue;
 public class DocumentExpression implements IExpression {
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return DocumentType.instance();
 	}
 	
@@ -28,7 +28,7 @@ public class DocumentExpression implements IExpression {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		return CompilerUtils.compileNewInstance(method, PromptoDocument.class);
 	}
 	

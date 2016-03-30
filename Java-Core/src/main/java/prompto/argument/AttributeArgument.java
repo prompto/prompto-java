@@ -59,7 +59,7 @@ public class AttributeArgument extends BaseArgument implements INamedArgument {
 	}
 
 	@Override
-	public void register(Context context) throws SyntaxError {
+	public void register(Context context) {
 		context.registerValue(this, true);
 		if(defaultExpression!=null) try {
 			context.setValue(id, defaultExpression.interpret(context));
@@ -69,14 +69,14 @@ public class AttributeArgument extends BaseArgument implements INamedArgument {
 	}
 	
 	@Override
-	public void check(Context context) throws SyntaxError {
+	public void check(Context context) {
 		AttributeDeclaration actual = context.getRegisteredDeclaration(AttributeDeclaration.class,id);
 		if(actual==null)
 			throw new SyntaxError("Unknown attribute: \"" + id + "\"");
 	}
 	
 	@Override
-	public IType getType(Context context) throws SyntaxError {
+	public IType getType(Context context) {
 		// dbId type can only be resolved at runtime
 		if(IStore.dbIdName.equals(id.toString()))
 			return Utils.typeToIType(IDataStore.getInstance().getDbIdClass());

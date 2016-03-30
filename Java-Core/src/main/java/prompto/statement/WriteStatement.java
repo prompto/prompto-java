@@ -46,7 +46,7 @@ public class WriteStatement extends SimpleStatement {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		context = context.newResourceContext();
 		IType resourceType = resource.check(context);
 		if(!(resourceType instanceof ResourceType))

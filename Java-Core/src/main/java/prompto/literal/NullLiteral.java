@@ -22,7 +22,7 @@ public class NullLiteral implements IExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return NullType.instance();
 	}
 

@@ -92,17 +92,17 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public void checkUnique(Context context) throws SyntaxError {
+	public void checkUnique(Context context) {
 		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, typeNameId);
 		if(actual!=null)
 			throw new SyntaxError("Duplicate name: \"" + typeNameId + "\"");
 	}
 	
-	public IDeclaration getDeclaration(Context context) throws SyntaxError {
+	public IDeclaration getDeclaration(Context context) {
 		return getDeclaration(context, typeNameId);
 	}
 	
-	private static IDeclaration getDeclaration(Context context, Identifier id) throws SyntaxError {
+	private static IDeclaration getDeclaration(Context context, Identifier id) {
 		IDeclaration actual = context.getRegisteredDeclaration(CategoryDeclaration.class, id);
 		if(actual==null)
 			actual = context.getRegisteredDeclaration(EnumeratedNativeDeclaration.class, id);
@@ -112,7 +112,7 @@ public class CategoryType extends BaseType {
 	}
 
 	@Override
-	public IType checkMultiply(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkMultiply(Context context, IType other, boolean tryReverse) {
 		IType type = checkOperator(context, other, tryReverse, Operator.MULTIPLY);
 		if(type!=null)
 			return type;
@@ -121,7 +121,7 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public IType checkDivide(Context context, IType other) throws SyntaxError {
+	public IType checkDivide(Context context, IType other) {
 		IType type = checkOperator(context, other, false, Operator.DIVIDE);
 		if(type!=null)
 			return type;
@@ -130,7 +130,7 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public IType checkIntDivide(Context context, IType other) throws SyntaxError {
+	public IType checkIntDivide(Context context, IType other) {
 		IType type = checkOperator(context, other, false, Operator.IDIVIDE);
 		if(type!=null)
 			return type;
@@ -139,7 +139,7 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public IType checkModulo(Context context, IType other) throws SyntaxError {
+	public IType checkModulo(Context context, IType other) {
 		IType type = checkOperator(context, other, false, Operator.MODULO);
 		if(type!=null)
 			return type;
@@ -148,7 +148,7 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkAdd(Context context, IType other, boolean tryReverse) {
 		IType type = checkOperator(context, other, tryReverse, Operator.PLUS);
 		if(type!=null)
 			return type;
@@ -157,7 +157,7 @@ public class CategoryType extends BaseType {
 	}
 
 	@Override
-	public IType checkSubstract(Context context, IType other) throws SyntaxError {
+	public IType checkSubstract(Context context, IType other) {
 		IType type = checkOperator(context, other, false, Operator.MINUS);
 		if(type!=null)
 			return type;
@@ -165,7 +165,7 @@ public class CategoryType extends BaseType {
 			return super.checkSubstract(context, other);
 	}
 	
-	private IType checkOperator(Context context, IType other, boolean tryReverse, Operator operator) throws SyntaxError {
+	private IType checkOperator(Context context, IType other, boolean tryReverse, Operator operator) {
 		IDeclaration actual = getDeclaration(context);
 		if(actual instanceof ConcreteCategoryDeclaration) try {
 			IMethodDeclaration method = ((ConcreteCategoryDeclaration)actual).findOperator(context, operator, other);
@@ -185,12 +185,12 @@ public class CategoryType extends BaseType {
 	}
 
 	@Override
-	public void checkExists(Context context) throws SyntaxError {
+	public void checkExists(Context context) {
 		getDeclaration(context);
 	}
 	
 	@Override
-    public IType checkMember(Context context, Identifier name) throws SyntaxError
+    public IType checkMember(Context context, Identifier name)
     {
         CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, typeNameId);
         if (cd == null)
@@ -361,13 +361,13 @@ public class CategoryType extends BaseType {
 			instance.setMember(context, fieldId, fieldValue);
 	}
 
-	private IType readJSONFieldType(Context context, Identifier fieldId, JsonNode fieldData) throws SyntaxError {
+	private IType readJSONFieldType(Context context, Identifier fieldId, JsonNode fieldData) {
 		AttributeDeclaration attribute = context.getRegisteredDeclaration(AttributeDeclaration.class, fieldId);
 		IType fieldType = attribute.getType(context);
 		return checkDerivedType(context, fieldType, fieldData);
 	}
 
-	private IType checkDerivedType(Context context, IType fieldType, JsonNode fieldData) throws SyntaxError {
+	private IType checkDerivedType(Context context, IType fieldType, JsonNode fieldData) {
 		if(fieldType instanceof CategoryType) {
 			if(fieldData.isObject())
 				return new CategoryType(new Identifier(fieldData.get("type").asText()));
@@ -409,7 +409,7 @@ public class CategoryType extends BaseType {
 	
 	@Override
 	public ResultInfo compileGetMember(Context context, MethodInfo method,
-			Flags flags, IExpression parent, Identifier id) throws SyntaxError {
+			Flags flags, IExpression parent, Identifier id) {
 		IDeclaration decl = getDeclaration(context);
 		if(decl instanceof SingletonCategoryDeclaration)
 			return ((SingletonCategoryDeclaration)decl).compileGetMember(context, method, flags, parent, id);
@@ -418,7 +418,7 @@ public class CategoryType extends BaseType {
 	}
 
 	public ResultInfo compileSetMember(Context context, MethodInfo method,
-			Flags flags, IExpression parent, IExpression value, Identifier id) throws SyntaxError {
+			Flags flags, IExpression parent, IExpression value, Identifier id) {
 		IDeclaration decl = getDeclaration(context);
 		if(decl instanceof SingletonCategoryDeclaration)
 			return ((SingletonCategoryDeclaration)decl).compileSetMember(context, method, flags, value, id);

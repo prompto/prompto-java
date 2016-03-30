@@ -23,12 +23,12 @@ public class NullType extends BaseType {
 	}
 
 	@Override
-	public void checkUnique(Context context) throws SyntaxError {
+	public void checkUnique(Context context) {
 		// ok
 	}
 
 	@Override
-	public void checkExists(Context context) throws SyntaxError {
+	public void checkExists(Context context) {
 		// ok
 	}
 

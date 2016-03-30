@@ -37,7 +37,7 @@ public class Any extends BaseValue {
 		return "{id:" + System.identityHashCode(this) + ", text:" + text + "}";
 	}
 	
-	public static ResultInfo compileItem(Context context, MethodInfo method, Flags flags, ResultInfo parentInfo, IExpression expression) throws SyntaxError {
+	public static ResultInfo compileItem(Context context, MethodInfo method, Flags flags, ResultInfo parentInfo, IExpression expression) {
 		expression.compile(context, method, flags);
 		IOperand oper = new MethodConstant(PromptoAny.class, "getItem", Object.class, Object.class, Object.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);

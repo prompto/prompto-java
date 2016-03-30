@@ -47,7 +47,7 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 
 	@Override
-	public IValue plus(Context context, IValue value) throws SyntaxError {
+	public IValue plus(Context context, IValue value) {
 		if (value instanceof Integer)
 			return new Decimal(this.value + ((Integer) value).longValue());
 		else if (value instanceof Decimal)
@@ -57,11 +57,11 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 
 	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		return compileOperation(context, method, flags.withDecimal(true).withOpcode(Opcode.DADD), left, exp);
 	}
 
-	private static ResultInfo compileOperation(Context context, MethodInfo method, Flags flags, ResultInfo left, IExpression exp) throws SyntaxError {
+	private static ResultInfo compileOperation(Context context, MethodInfo method, Flags flags, ResultInfo left, IExpression exp) {
 		CompilerUtils.numberToPrimitive(method, left, flags.isDecimal());
 		ResultInfo right = exp.compile(context, method, flags);
 		CompilerUtils.numberToPrimitive(method, right, flags.isDecimal());
@@ -76,7 +76,7 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 
 
 	@Override
-	public IValue minus(Context context, IValue value) throws SyntaxError {
+	public IValue minus(Context context, IValue value) {
 		if (value instanceof Integer)
 			return new Decimal(this.value - ((Integer) value).longValue());
 		else if (value instanceof Decimal)
@@ -86,12 +86,12 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 
 	public static ResultInfo compileMinus(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		return compileOperation(context, method, flags.withDecimal(true).withOpcode(Opcode.DSUB), left, exp);
 	}
 
 	@Override
-	public IValue multiply(Context context, IValue value) throws SyntaxError {
+	public IValue multiply(Context context, IValue value) {
 		if (value instanceof Integer)
 			return new Decimal(this.doubleValue() * ((Integer) value).longValue());
 		else if (value instanceof Decimal)
@@ -101,7 +101,7 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 
 	public static ResultInfo compileMultiply(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		return compileOperation(context, method, flags.withDecimal(true).withOpcode(Opcode.DMUL), left, exp);
 	}
 
@@ -117,7 +117,7 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 	
 	public static ResultInfo compileDivide(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		return compileOperation(context, method, flags.withDecimal(true).withOpcode(Opcode.DDIV), left, exp);
 	}
 
@@ -133,7 +133,7 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 
 	public static ResultInfo compileIntDivide(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		return compileOperation(context, method, flags.withDecimal(false).withOpcode(Opcode.LDIV), left, exp);
 	}
 
@@ -150,7 +150,7 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 	
 	public static ResultInfo compileModulo(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		return compileOperation(context, method, flags.withDecimal(true).withOpcode(Opcode.DREM), left, exp);
 	}
 
@@ -169,7 +169,7 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 	
 	public static ResultInfo compileCompareTo(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		CompilerUtils.numberTodouble(method, left);
 		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true));
 		CompilerUtils.numberTodouble(method, right);
@@ -198,7 +198,7 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 	
 	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		left = CompilerUtils.numberTodouble(method, left);
 		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true));
 		right = CompilerUtils.numberTodouble(method, right);
@@ -232,7 +232,7 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 		return new Decimal(-value);
 	}
 	
-	public static ResultInfo compileNegate(Context context, MethodInfo method, Flags flags, ResultInfo value) throws SyntaxError {
+	public static ResultInfo compileNegate(Context context, MethodInfo method, Flags flags, ResultInfo value) {
 		CompilerUtils.numberToPrimitive(method, value, true);
 		method.addInstruction(Opcode.DNEG);
 		if(flags.toPrimitive())

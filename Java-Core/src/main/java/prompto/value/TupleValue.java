@@ -173,7 +173,7 @@ public class TupleValue extends BaseValue implements IContainer<IValue>, ISlicea
 	
 	
 	public static ResultInfo compileSlice(Context context, MethodInfo method, Flags flags, 
-			ResultInfo parent, IExpression first, IExpression last) throws SyntaxError {
+			ResultInfo parent, IExpression first, IExpression last) {
 		compileSliceFirst(context, method, flags, first);
 		compileSliceLast(context, method, flags, last);
 		MethodConstant m = new MethodConstant(PromptoTuple.class, "slice", 
@@ -183,7 +183,7 @@ public class TupleValue extends BaseValue implements IContainer<IValue>, ISlicea
 	}
 
 	public static ResultInfo compileItem(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true));
 		right = CompilerUtils.numberToint(method, right);
 		// minus 1
@@ -234,7 +234,7 @@ public class TupleValue extends BaseValue implements IContainer<IValue>, ISlicea
 	}
 
 	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		// TODO: return left if right is empty (or right if left is empty and is a list)
 		// create result
 		ResultInfo info = CompilerUtils.compileNewInstance(method, PromptoTuple.class); 

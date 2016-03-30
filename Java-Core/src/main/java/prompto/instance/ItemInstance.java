@@ -51,7 +51,7 @@ public class ItemInstance implements IAssignableSelector {
 	}
 	
 	@Override
-	public IType checkAssignValue(Context context, IExpression expression) throws SyntaxError {
+	public IType checkAssignValue(Context context, IExpression expression) {
 		IType elemType = parent.checkAssignElement(context);
 		IType itemType = item.check(context);
 		if(itemType!=IntegerType.instance())
@@ -60,12 +60,12 @@ public class ItemInstance implements IAssignableSelector {
 	}
 	
 	@Override
-	public IType checkAssignMember(Context context, Identifier memberName) throws SyntaxError {
+	public IType checkAssignMember(Context context, Identifier memberName) {
 		return AnyType.instance(); // TODO 
 	}
 	
 	@Override
-	public IType checkAssignElement(Context context) throws SyntaxError {
+	public IType checkAssignElement(Context context) {
 		throw new UnsupportedOperationException();
 	}
 	
@@ -95,13 +95,13 @@ public class ItemInstance implements IAssignableSelector {
 	}
 	
 	@Override
-	public ResultInfo compileParent(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compileParent(Context context, MethodInfo method, Flags flags) {
 		ResultInfo parentInfo = this.parent.compileParent(context, method, flags);
 		return ItemSelector.compileGetItem(context, method, flags, parentInfo, item);
 	}
 	
 	@Override
-	public ResultInfo compileAssign(Context context, MethodInfo method, Flags flags, IExpression value) throws SyntaxError {
+	public ResultInfo compileAssign(Context context, MethodInfo method, Flags flags, IExpression value) {
 		ResultInfo parentInfo = this.parent.compileParent(context, method, flags);
 		if(PromptoAny.class==parentInfo.getType())
 			return compileAssignAny(context, method, flags, item, value);
@@ -109,7 +109,7 @@ public class ItemInstance implements IAssignableSelector {
 			throw new UnsupportedOperationException("Cannot compileAssign for " + parentInfo.getType().getTypeName());
 	}
 	
-	private ResultInfo compileAssignAny(Context context, MethodInfo method, Flags flags, IExpression item, IExpression value) throws SyntaxError {
+	private ResultInfo compileAssignAny(Context context, MethodInfo method, Flags flags, IExpression item, IExpression value) {
 		item.compile(context, method, flags.withPrimitive(false));
 		value.compile(context, method, flags.withPrimitive(false));
 		IOperand oper = new MethodConstant(PromptoAny.class, "setItem", Object.class, Object.class, Object.class, void.class);

@@ -27,7 +27,7 @@ public class DeclarationList extends LinkedList<IDeclaration> {
 			return false;
 	}
 	
-	public void register(Context context) throws SyntaxError {
+	public void register(Context context) {
 		// register attributes first, since they may be required by other declarations
 		registerAttributes(context);
 		// ok now
@@ -37,37 +37,37 @@ public class DeclarationList extends LinkedList<IDeclaration> {
 		registerTests(context);
 	}
 	
-	private void registerTests(Context context) throws SyntaxError {
+	private void registerTests(Context context) {
 		for(IDeclaration d : (Iterable<IDeclaration>)this.stream().filter(d -> (d instanceof TestMethodDeclaration))::iterator) {
 			d.register(context);
 		}
 	}
 
-	private void registerMethods(Context context) throws SyntaxError {
+	private void registerMethods(Context context) {
 		for(IDeclaration d : (Iterable<IDeclaration>)this.stream().filter(d -> (d instanceof IMethodDeclaration))::iterator) {
 			d.register(context);
 		}
 	}
 
-	private void registerEnumerated(Context context) throws SyntaxError {
+	private void registerEnumerated(Context context) {
 		for(IDeclaration d : (Iterable<IDeclaration>)this.stream().filter(d -> (d instanceof EnumeratedNativeDeclaration))::iterator) {
 			d.register(context);
 		}
 	}
 
-	private void registerCategories(Context context) throws SyntaxError {
+	private void registerCategories(Context context) {
 		for(IDeclaration d : (Iterable<IDeclaration>)this.stream().filter(d -> (d instanceof CategoryDeclaration))::iterator) {
 			d.register(context);
 		}
 	}
 
-	private void registerAttributes(Context context) throws SyntaxError {
+	private void registerAttributes(Context context) {
 		for(IDeclaration d : (Iterable<IDeclaration>)this.stream().filter(d -> (d instanceof AttributeDeclaration))::iterator) {
 			d.register(context);
 		}
 	}
 
-	public void check(Context context) throws SyntaxError {
+	public void check(Context context) {
 		for(IDeclaration declaration : this) {
 			declaration.check(context);
 		}

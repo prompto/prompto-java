@@ -61,7 +61,7 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 	}
 	
 	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression value) throws SyntaxError {
+			ResultInfo left, IExpression value) {
 		ResultInfo right = value.compile(context, method, flags);
 		if(right.getType()!=PromptoPeriod.class)
 			throw new SyntaxError("Illegal: DateTime + " + value.getClass().getSimpleName());
@@ -82,7 +82,7 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 	}
 
 	public static ResultInfo compileMinus(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression value) throws SyntaxError {
+			ResultInfo left, IExpression value) {
 		ResultInfo right = value.compile(context, method, flags);
 		if(right.getType()==PromptoDateTime.class) {
 			MethodConstant c = new MethodConstant(PromptoDateTime.class, "minus", 
@@ -108,7 +108,7 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 	}
 	
 	public static ResultInfo compileCompareTo(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		exp.compile(context, method, flags);
 		IOperand oper = new MethodConstant(PromptoDateTime.class, 
 				"compareTo", PromptoDateTime.class, int.class);
@@ -162,7 +162,7 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 	}
 	
 	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		exp.compile(context, method, flags);
 		IOperand oper = new MethodConstant(
 				PromptoDateTime.class, 

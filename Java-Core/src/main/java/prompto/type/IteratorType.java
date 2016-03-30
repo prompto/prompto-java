@@ -34,12 +34,12 @@ public class IteratorType extends IterableType {
 	}
 	
 	@Override
-	public IType checkIterator(Context context) throws SyntaxError {
+	public IType checkIterator(Context context) {
 		return itemType;
 	}
 
 	@Override
-	public IType checkMember(Context context, Identifier id) throws SyntaxError {
+	public IType checkMember(Context context, Identifier id) {
 		String name = id.toString();
         if ("length".equals(name))
             return IntegerType.instance();

@@ -31,7 +31,7 @@ public class ParenthesisExpression implements IExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return expression.check(context);
 	}
 	
@@ -41,7 +41,7 @@ public class ParenthesisExpression implements IExpression {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		return expression.compile(context, method, flags);
 	}
 }

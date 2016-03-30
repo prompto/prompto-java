@@ -60,14 +60,14 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 			super.toDialect(writer);
 	}
 	
-	public Collection<IMethodDeclaration> getCandidates(Context context) throws SyntaxError {
+	public Collection<IMethodDeclaration> getCandidates(Context context) {
 		if(parent==null)
 			return getGlobalCandidates(context);
 		else
 			return getCategoryCandidates(context);
 	}
 	
-	private Collection<IMethodDeclaration> getGlobalCandidates(Context context) throws SyntaxError {
+	private Collection<IMethodDeclaration> getGlobalCandidates(Context context) {
 		List<IMethodDeclaration> methods = new ArrayList<IMethodDeclaration>();
 		// if called from a member method, could be a member method called without this/self
 		if(context.getParentContext() instanceof InstanceContext) {
@@ -85,7 +85,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		return methods;
 	}
 	
-	private Collection<IMethodDeclaration> getCategoryCandidates(Context context) throws SyntaxError {
+	private Collection<IMethodDeclaration> getCategoryCandidates(Context context) {
 		IType parentType = checkParent(context);
 		if(!(parentType instanceof CategoryType))
 			throw new SyntaxError(parent.toString() + " is not a category");
@@ -96,7 +96,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	}
 
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags, 
-				IMethodDeclaration declaration, ArgumentAssignmentList assignments) throws SyntaxError {
+				IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
 		// TODO use invokedynamic when multiple candidates
 		if(parent!=null)
 			return compileExplicitMember(context, method, flags, declaration, assignments);
@@ -107,7 +107,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	}
 
 	private ResultInfo compileGlobalMethod(Context context, MethodInfo method, Flags flags, 
-			IMethodDeclaration declaration, ArgumentAssignmentList assignments) throws SyntaxError {
+			IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
 		// push arguments on the stack
 		if(assignments!=null) for(ArgumentAssignment assign : assignments)
 			assign.compile(context.getCallingContext(), method, flags);
@@ -122,7 +122,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	}
 
 	private ResultInfo compileImplicitMember(Context context, MethodInfo method, Flags flags, 
-			IMethodDeclaration declaration, ArgumentAssignmentList assignments) throws SyntaxError {
+			IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
 		// calling method with implicit this
 		StackLocal local = method.getRegisteredLocal("this");
 		ClassConstant klass = ((StackLocal.ObjectLocal)local).getClassName();
@@ -132,7 +132,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 
 	private ResultInfo compileInstanceMember(Context context, MethodInfo method, Flags flags, 
 			IMethodDeclaration declaration, ArgumentAssignmentList assignments, 
-			ClassConstant parentClass) throws SyntaxError {
+			ClassConstant parentClass) {
 		// push arguments on the stack
 		if(assignments!=null) for(ArgumentAssignment assign : assignments)
 			assign.compile(context.getCallingContext(), method, flags);
@@ -150,7 +150,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	}
 	
 	private ResultInfo compileStaticMember(Context context, MethodInfo method, Flags flags, 
-			IExpression parent, IMethodDeclaration declaration, ArgumentAssignmentList assignments) throws SyntaxError {
+			IExpression parent, IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
 		// find class
 		Type type = getSingletonType(context, parent);
 		ClassConstant parentClass = new ClassConstant(type);
@@ -165,7 +165,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		return new ResultInfo(returnType.getJavaType());
 	}
 
-	private Type getSingletonType(Context context, IExpression parent) throws SyntaxError {
+	private Type getSingletonType(Context context, IExpression parent) {
 		if(!(((TypeExpression)parent).getType() instanceof CategoryType))
 			throw new SyntaxError("Expecting a category type!");
 		CategoryType type = (CategoryType)((TypeExpression)parent).getType();
@@ -177,7 +177,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	}
 
 	private ResultInfo compileExplicitMember(Context context, MethodInfo method, Flags flags, 
-			IMethodDeclaration declaration, ArgumentAssignmentList assignments) throws SyntaxError {
+			IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
 		// calling an explicit instance or singleton member method
 		IExpression parent = resolveParent(context.getCallingContext());
 		if(parent instanceof TypeExpression)
@@ -199,7 +199,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 			return context.newLocalContext();
 	}
 
-	public Context newLocalCheckContext(Context context, IMethodDeclaration declaration) throws SyntaxError {
+	public Context newLocalCheckContext(Context context, IMethodDeclaration declaration) {
 		if(parent!=null)
 			return newInstanceCheckContext(context);
 		else if(declaration.getMemberOf()!=null)
@@ -208,7 +208,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 			return context.newLocalContext();
 	}
 
-	private Context newInstanceCheckContext(Context context) throws SyntaxError {
+	private Context newInstanceCheckContext(Context context) {
 		IType type = parent.check(context);
 		if(!(type instanceof CategoryType))
 			throw new SyntaxError("Not an instance !");
@@ -228,7 +228,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		return context.newChildContext();
 	}
 
-	private Context newLocalInstanceContext(Context context) throws SyntaxError {
+	private Context newLocalInstanceContext(Context context) {
 		Context parent = context.getParentContext();
 		if(!(parent instanceof InstanceContext))
 			throw new SyntaxError("Not in instance context !");

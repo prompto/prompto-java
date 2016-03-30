@@ -22,7 +22,7 @@ public class ExpressionValue extends BaseValue implements IExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return type;
 	}
 

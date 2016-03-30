@@ -27,7 +27,7 @@ public class JavaStatement {
 		this.isReturn = isReturn;
 	}
 
-	public IType check(Context context, IType returnType) throws SyntaxError {
+	public IType check(Context context, IType returnType) {
 		IType type = expression.check(context);
 		if(type instanceof JavaClassType) 
 			type = ((JavaClassType)type).convertJavaClassToPromptoType(context, returnType);
@@ -85,7 +85,7 @@ public class JavaStatement {
 		return map;
 	}
 
-	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method) {
 		ResultInfo info = expression.compile(context, method);
 		if(isReturn) {
 			if(info.getType()==void.class)

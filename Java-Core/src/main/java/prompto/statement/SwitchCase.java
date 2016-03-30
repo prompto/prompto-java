@@ -20,9 +20,9 @@ public abstract class SwitchCase extends Section implements ISection {
 		this.statements = statements;
 	}
 
-	public abstract void checkSwitchType(Context context, IType type) throws SyntaxError;
+	public abstract void checkSwitchType(Context context, IType type);
 
-	public IType checkReturnType(Context context) throws SyntaxError {
+	public IType checkReturnType(Context context) {
 		return statements.check(context, null);
 	}
 

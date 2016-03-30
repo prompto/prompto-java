@@ -58,7 +58,7 @@ public class StoreStatement extends SimpleStatement {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		// TODO check expressions
 		return VoidType.instance();
 	}
@@ -79,7 +79,7 @@ public class StoreStatement extends SimpleStatement {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		CompilerUtils.compileNewInstance(method, PromptoStoreQuery.class);
 		compileObjectsToDelete(context, method, flags);
 		compileStorablesToStore(context, method, flags);
@@ -87,7 +87,7 @@ public class StoreStatement extends SimpleStatement {
 		return new ResultInfo(void.class);
 	}
 
-	private void compileStorablesToStore(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	private void compileStorablesToStore(Context context, MethodInfo method, Flags flags) {
 		if(storables!=null) {
 			MethodConstant m = new MethodConstant(PromptoStoreQuery.class, "store", Object.class, void.class);
 			for(IExpression exp : storables) {
@@ -98,7 +98,7 @@ public class StoreStatement extends SimpleStatement {
 		}
 	}
 	
-	private void compileObjectsToDelete(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	private void compileObjectsToDelete(Context context, MethodInfo method, Flags flags) {
 		if(deletables!=null) {
 			MethodConstant m = new MethodConstant(PromptoStoreQuery.class, "delete", Object.class, void.class);
 			for(IExpression exp : deletables) {

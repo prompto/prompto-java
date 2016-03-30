@@ -32,7 +32,7 @@ public class VariableInstance implements IAssignableInstance {
 	}
 	
 	@Override
-	public ResultInfo compileParent(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compileParent(Context context, MethodInfo method, Flags flags) {
 		StackLocal local = method.getRegisteredLocal(id.toString());
 		if(local instanceof StackLocal.ObjectLocal)
 			return CompilerUtils.compileALOAD(method, local);
@@ -41,7 +41,7 @@ public class VariableInstance implements IAssignableInstance {
 	}
 	
 	@Override
-	public ResultInfo compileAssign(Context context, MethodInfo method, Flags flags, IExpression expression) throws SyntaxError {
+	public ResultInfo compileAssign(Context context, MethodInfo method, Flags flags, IExpression expression) {
 		Context actual = context.contextForValue(id);
 		if(actual instanceof InstanceContext)
 			return ((InstanceContext)actual).getInstanceType().compileSetMember(context, method, flags, null, expression, id);
@@ -49,7 +49,7 @@ public class VariableInstance implements IAssignableInstance {
 			return compileAssignVariable(context, method, flags, expression);
 	}
 	
-	public ResultInfo compileAssignVariable(Context context, MethodInfo method, Flags flags, IExpression expression) throws SyntaxError {
+	public ResultInfo compileAssignVariable(Context context, MethodInfo method, Flags flags, IExpression expression) {
 		checkAssignValue(context, expression);
 		ResultInfo info = expression.compile(context, method, flags);
 		StackLocal local = method.registerLocal(id.toString(), Type.ITEM_Object, new ClassConstant(info.getType()));
@@ -71,7 +71,7 @@ public class VariableInstance implements IAssignableInstance {
 	}
 	
 	@Override
-	public IType checkAssignValue(Context context, IExpression expression) throws SyntaxError {
+	public IType checkAssignValue(Context context, IExpression expression) {
 		IType type = expression.check(context);
 		INamed actual = context.getRegisteredValue(INamed.class,id);
 		if(actual==null)
@@ -86,7 +86,7 @@ public class VariableInstance implements IAssignableInstance {
 	}
 	
 	@Override
-	public IType checkAssignMember(Context context, Identifier memberName) throws SyntaxError {
+	public IType checkAssignMember(Context context, Identifier memberName) {
 		INamed actual = context.getRegisteredValue(INamed.class, id);
 		if(actual==null) 
 			throw new SyntaxError("Unknown variable:" + this.id);
@@ -95,7 +95,7 @@ public class VariableInstance implements IAssignableInstance {
 	}
 	
 	@Override
-	public IType checkAssignElement(Context context) throws SyntaxError {
+	public IType checkAssignElement(Context context) {
 		throw new UnsupportedOperationException();
 	}
 	

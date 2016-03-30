@@ -113,19 +113,19 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 	}
 
 	@Override
-	protected void checkSwitchCasesType(Context context) throws SyntaxError {
+	protected void checkSwitchCasesType(Context context) {
 		Context local = context.newLocalContext();
 		local.registerValue(new ErrorVariable(errorName));
 		super.checkSwitchCasesType(local);
 	}
 	
 	@Override
-	IType checkSwitchType(Context context) throws SyntaxError {
+	IType checkSwitchType(Context context) {
 		return new EnumeratedCategoryType(new Identifier("Error"));
 	}
 	
 	@Override
-	protected void collectReturnTypes(Context context, TypeMap types) throws SyntaxError {
+	protected void collectReturnTypes(Context context, TypeMap types) {
 		IType type = instructions.check(context, null);
 		if(type!=VoidType.instance())
 			types.put(type.getTypeNameId(), type);

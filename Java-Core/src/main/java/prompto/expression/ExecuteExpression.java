@@ -40,7 +40,7 @@ public class ExecuteExpression extends Section implements IExpression, ISection 
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		try {
 			IValue value = context.getValue(name);
 			if(value instanceof CodeValue)

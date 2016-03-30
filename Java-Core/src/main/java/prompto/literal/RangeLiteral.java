@@ -59,7 +59,7 @@ public class RangeLiteral implements IExpression {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		IType itemType = checkType(context, first);
 		Type itemKlass = itemType.getJavaType();
 		Type rangeKlass = rangeClassMap.get(itemKlass);
@@ -83,11 +83,11 @@ public class RangeLiteral implements IExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return checkType(context, first).checkRange(context, checkType(context, last));
 	}
 	
-	private static IType checkType(Context context, IExpression exp) throws SyntaxError {
+	private static IType checkType(Context context, IExpression exp) {
 		IType type = exp.check(context);
 		if(!"IntegerLimits".equals(type.getTypeName()))
 			return type;

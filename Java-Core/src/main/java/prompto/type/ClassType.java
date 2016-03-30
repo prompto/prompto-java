@@ -23,11 +23,11 @@ public class ClassType extends BaseType {
 	}
 
 	@Override
-	public void checkUnique(Context context) throws SyntaxError {
+	public void checkUnique(Context context) {
 	}
 
 	@Override
-	public void checkExists(Context context) throws SyntaxError {
+	public void checkExists(Context context) {
 	}
 
 	@Override

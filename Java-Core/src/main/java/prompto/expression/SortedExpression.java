@@ -108,7 +108,7 @@ public class SortedExpression implements IExpression {
 	
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		IType type = source.check(context);
 		if(!(type instanceof ListType || type instanceof SetType))
 			throw new SyntaxError("Unsupported type: " + type);
@@ -259,7 +259,7 @@ public class SortedExpression implements IExpression {
 
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		IType type = source.check(context);
 		IType itemType = ((ContainerType)type).getItemType();
 		if(itemType instanceof CategoryType) 
@@ -268,14 +268,14 @@ public class SortedExpression implements IExpression {
 			return compileSortNative(context, method, flags);
 	}
 
-	private ResultInfo compileSortNative(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	private ResultInfo compileSortNative(Context context, MethodInfo method, Flags flags) {
 		ResultInfo info = source.compile(context, method, flags);
 		MethodConstant m = new MethodConstant(info.getType(), "sort", PromptoList.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 		return new ResultInfo(PromptoList.class);
 	}
 
-	private ResultInfo compileSortCategory(Context context, MethodInfo method, Flags flags, CategoryType itemType) throws SyntaxError {
+	private ResultInfo compileSortCategory(Context context, MethodInfo method, Flags flags, CategoryType itemType) {
 		ResultInfo srcinfo = source.compile(context, method, flags);
 		compileCategoryComparator(context, method, flags, itemType);
 		MethodConstant m = new MethodConstant(srcinfo.getType(), "sortUsing", Comparator.class, PromptoList.class);
@@ -283,7 +283,7 @@ public class SortedExpression implements IExpression {
 		return new ResultInfo(PromptoList.class);
 	}
 
-	private ResultInfo compileCategoryComparator(Context context, MethodInfo method, Flags flags, CategoryType itemType) throws SyntaxError {
+	private ResultInfo compileCategoryComparator(Context context, MethodInfo method, Flags flags, CategoryType itemType) {
 		if(key==null)
 			key = new UnresolvedIdentifier(new Identifier("key"));
 		IDeclaration decl = itemType.getDeclaration(context);
@@ -295,10 +295,10 @@ public class SortedExpression implements IExpression {
 	}
 
 	static interface CategoryComparatorCompiler {
-		Type compile(Context context, ClassFile parentClass, CategoryType itemType) throws SyntaxError;
+		Type compile(Context context, ClassFile parentClass, CategoryType itemType);
 	}
 
-	private Type compileCategoryComparatorClass(Context context, ClassFile parentClass, CategoryType itemType, CategoryDeclaration decl) throws SyntaxError {
+	private Type compileCategoryComparatorClass(Context context, ClassFile parentClass, CategoryType itemType, CategoryDeclaration decl) {
 		CategoryComparatorCompiler compiler = buildCategoryComparatorCompiler(context, itemType, decl);
 		return compiler.compile(context, parentClass, itemType);
 	}
@@ -324,7 +324,7 @@ public class SortedExpression implements IExpression {
 		CategoryType itemType;
 		
 		@Override
-		public Type compile(Context context, ClassFile parentClass, CategoryType itemType) throws SyntaxError {
+		public Type compile(Context context, ClassFile parentClass, CategoryType itemType) {
 			this.itemType = itemType;
 			int innerClassIndex = 1 + parentClass.getInnerClasses().size();
 			String innerClassName = parentClass.getThisClass().getType().getTypeName() + '$' + innerClassIndex;
@@ -339,7 +339,7 @@ public class SortedExpression implements IExpression {
 			return innerClassType;
 		}
 
-		private void compileMethod(Context context, ClassFile classFile, Type paramType) throws SyntaxError {
+		private void compileMethod(Context context, ClassFile classFile, Type paramType) {
 			Descriptor.Method proto = new Descriptor.Method(paramType, paramType, int.class);
 			MethodInfo method = classFile.newMethod("compare", proto);
 			// use a dummy '$this', since we never use it, and we need 'this' for compiling expressions
@@ -350,7 +350,7 @@ public class SortedExpression implements IExpression {
 		
 		}
 		
-		protected abstract void compileMethodBody(Context context, MethodInfo method, Type paramType) throws SyntaxError;
+		protected abstract void compileMethodBody(Context context, MethodInfo method, Type paramType);
 
 		private void compileBridge(Context context, ClassFile classFile, Type paramType) {
 			// create a bridge "compare" method to convert Object -> paramType
@@ -394,7 +394,7 @@ public class SortedExpression implements IExpression {
 	class CategoryExpressionComparatorCompiler extends CategoryComparatorCompilerBase {
 		
 		@Override
-		protected void compileMethodBody(Context context, MethodInfo method, Type paramType) throws SyntaxError {
+		protected void compileMethodBody(Context context, MethodInfo method, Type paramType) {
 			StackLocal tmpThis = method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, new ClassConstant(paramType));
 			ResultInfo left = compileValue(context, method, paramType, tmpThis, "o1");
 			ResultInfo right = compileValue(context, method, paramType, tmpThis, "o2");
@@ -409,7 +409,7 @@ public class SortedExpression implements IExpression {
 			method.addInstruction(Opcode.IRETURN);
 		}
 
-		private ResultInfo compileValue(Context context, MethodInfo method, Type paramType, StackLocal tmpThis, String paramName) throws SyntaxError {
+		private ResultInfo compileValue(Context context, MethodInfo method, Type paramType, StackLocal tmpThis, String paramName) {
 			StackLocal param = method.getRegisteredLocal(paramName);
 			Opcode opcode = Opcode.values()[Opcode.ALOAD_0.ordinal() + param.getIndex()];
 			method.addInstruction(opcode, new ClassConstant(paramType));
@@ -434,7 +434,7 @@ public class SortedExpression implements IExpression {
 		}
 
 		@Override
-		protected void compileMethodBody(Context context, MethodInfo method, Type paramType) throws SyntaxError {
+		protected void compileMethodBody(Context context, MethodInfo method, Type paramType) {
 			ResultInfo left = compileValue(context, method, paramType, "o1");
 			ResultInfo right = compileValue(context, method, paramType, "o2");
 			Descriptor.Method proto = new Descriptor.Method(right.getType(), int.class);
@@ -448,7 +448,7 @@ public class SortedExpression implements IExpression {
 			method.addInstruction(Opcode.IRETURN);
 		}
 
-		private ResultInfo compileValue(Context context, MethodInfo method, Type paramType, String paramName) throws SyntaxError {
+		private ResultInfo compileValue(Context context, MethodInfo method, Type paramType, String paramName) {
 			context.registerValue(new Variable(new Identifier(paramName), itemType));
 			ArgumentAssignment assignment = call.getAssignments().getFirst();
 			assignment.setExpression(new UnresolvedIdentifier(new Identifier(paramName)));

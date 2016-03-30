@@ -195,20 +195,20 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		checkDerived(context);
 		checkMethods(context);
 		return super.check(context);
 	}
 
-	private void checkMethods(Context context) throws SyntaxError {
+	private void checkMethods(Context context) {
 		registerMethods(context);
 		for(IMethodDeclaration method : methods)
 			method.check(this,context);
 	}
 			
 			
-	private void registerMethods(Context context) throws SyntaxError {
+	private void registerMethods(Context context) {
 		if(methodsMap==null) {
 			methodsMap = new HashMap<String,IDeclaration>();
 			for(IMethodDeclaration method : methods) {
@@ -218,7 +218,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		}
 	}
 
-	private void registerMethod(IMethodDeclaration method, Context context) throws SyntaxError {
+	private void registerMethod(IMethodDeclaration method, Context context) {
 		String methodKey = method.getNameAsKey();
  		IDeclaration actual	= methodsMap.get(methodKey);
 		if(method instanceof SetterMethodDeclaration || method instanceof GetterMethodDeclaration) {
@@ -234,7 +234,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		}
 	}
 
-	private void checkDerived(Context context) throws SyntaxError {
+	private void checkDerived(Context context) {
 		if(derivedFrom!=null) for(Identifier category : derivedFrom) {
 			ConcreteCategoryDeclaration cd = context.getRegisteredDeclaration(ConcreteCategoryDeclaration.class, category);
 			if(cd==null)
@@ -268,7 +268,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return new ConcreteInstance(context, this);
 	}
 	
-	public GetterMethodDeclaration findGetter(Context context, Identifier attrName) throws SyntaxError {
+	public GetterMethodDeclaration findGetter(Context context, Identifier attrName) {
 		if(methodsMap==null)
 			return null;
 		IDeclaration method = methodsMap.get(GetterMethodDeclaration.getNameAsKey(attrName)); 
@@ -279,7 +279,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return findDerivedGetter(context, attrName);
 	}
 
-	private GetterMethodDeclaration findDerivedGetter(Context context, Identifier attrName) throws SyntaxError {
+	private GetterMethodDeclaration findDerivedGetter(Context context, Identifier attrName) {
 		if(derivedFrom==null) 
 			return null;
 		for(Identifier ancestor : derivedFrom) {
@@ -290,7 +290,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return null;
 	}
 
-	private static GetterMethodDeclaration findAncestorGetter(Identifier ancestor, Context context, Identifier attrName) throws SyntaxError {
+	private static GetterMethodDeclaration findAncestorGetter(Identifier ancestor, Context context, Identifier attrName) {
 		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, ancestor);
 		if(actual==null || !(actual instanceof ConcreteCategoryDeclaration))
 			return null;
@@ -298,7 +298,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return cd.findGetter(context, attrName);
 	}
 
-	public SetterMethodDeclaration findSetter(Context context, Identifier attrName) throws SyntaxError {
+	public SetterMethodDeclaration findSetter(Context context, Identifier attrName) {
 		if(methodsMap==null)
 			return null;
 		IDeclaration method = methodsMap.get(SetterMethodDeclaration.getNameAsKey(attrName)); 
@@ -309,7 +309,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return findDerivedSetter(context,attrName);
 	}
 
-	private SetterMethodDeclaration findDerivedSetter(Context context, Identifier attrName) throws SyntaxError {
+	private SetterMethodDeclaration findDerivedSetter(Context context, Identifier attrName) {
 		if(derivedFrom==null) 
 			return null;
 		for(Identifier ancestor : derivedFrom) {
@@ -320,7 +320,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return null;
 	}
 	
-	private static SetterMethodDeclaration findAncestorSetter(Identifier ancestor, Context context, Identifier attrName) throws SyntaxError {
+	private static SetterMethodDeclaration findAncestorSetter(Identifier ancestor, Context context, Identifier attrName) {
 		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, ancestor);
 		if(actual==null || !(actual instanceof ConcreteCategoryDeclaration))
 			return null;
@@ -328,20 +328,20 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return cd.findSetter(context, attrName);
 	}
 	
-	public MethodDeclarationMap getMemberMethods(Context context, Identifier name) throws SyntaxError {
+	public MethodDeclarationMap getMemberMethods(Context context, Identifier name) {
 		registerMethods(context);
 		MethodDeclarationMap result = new MethodDeclarationMap(name);
 		registerMemberMethods(context,result);
 		return result; 
 	}
 	
-	private void registerMemberMethods(Context context, MethodDeclarationMap result) throws SyntaxError {
+	private void registerMemberMethods(Context context, MethodDeclarationMap result) {
 		registerThisMemberMethods(context,result);
 		registerDerivedMemberMethods(context,result);
 	}
 
 	
-	private void registerThisMemberMethods(Context context, MethodDeclarationMap result) throws SyntaxError {
+	private void registerThisMemberMethods(Context context, MethodDeclarationMap result) {
 		if(methodsMap==null)
 			return;
 		IDeclaration actual = methodsMap.get(result.getId().toString()); 
@@ -353,14 +353,14 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			result.registerIfMissing(method, context);
 	}
 
-	private void registerDerivedMemberMethods(Context context, MethodDeclarationMap result) throws SyntaxError {
+	private void registerDerivedMemberMethods(Context context, MethodDeclarationMap result) {
 		if(derivedFrom==null) 
 			return;
 		for(Identifier ancestor : derivedFrom)
 			registerAncestorMemberMethods(ancestor,context,result); 
 	}
 	
-	private void registerAncestorMemberMethods(Identifier ancestor, Context context, MethodDeclarationMap result) throws SyntaxError {
+	private void registerAncestorMemberMethods(Identifier ancestor, Context context, MethodDeclarationMap result) {
 		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, ancestor);
 		if(actual==null || !(actual instanceof ConcreteCategoryDeclaration))
 			return;
@@ -369,7 +369,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 
 	@Override
-	public IMethodDeclaration findOperator(Context context, Operator operator, IType type) throws SyntaxError {
+	public IMethodDeclaration findOperator(Context context, Operator operator, IType type) {
 		Identifier methodName = new Identifier(OperatorMethodDeclaration.getNameAsKey(operator));
 		MethodDeclarationMap methods = getMemberMethods(context, methodName);
 		if(methods==null)
@@ -430,7 +430,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 	
 
-	protected void compileClassConstructor(Context context, ClassFile classFile, Flags flags) throws SyntaxError {
+	protected void compileClassConstructor(Context context, ClassFile classFile, Flags flags) {
 		if(needsClassConstructor()) {
 			MethodInfo method = classFile.newMethod("<clinit>", new Descriptor.Method(void.class));
 			method.addModifier(Modifier.STATIC);
@@ -439,7 +439,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		}
 	}
 
-	protected void compileClassConstructorBody(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	protected void compileClassConstructorBody(Context context, MethodInfo method, Flags flags) {
 		compilePopulateCategoryField(context, method, flags);
 	}
 
@@ -490,13 +490,13 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		}
 	}
 
-	private void compileInterfaces(Context context, ClassFile classFile) throws SyntaxError {
+	private void compileInterfaces(Context context, ClassFile classFile) {
 		if(derivedFrom!=null)
 			derivedFrom.forEach((id)->
 				classFile.addInterface(CompilerUtils.getCategoryInterfaceType(id)));
 	}
 
-	private void compileFieldPrototypes(Context context, ClassFile classFile) throws SyntaxError {
+	private void compileFieldPrototypes(Context context, ClassFile classFile) {
 		if(attributes!=null) for(Identifier id : attributes)
 			compileFieldPrototype(context, classFile, id);
 	}
@@ -522,7 +522,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		method.addModifier(Modifier.ABSTRACT);
 	}
 
-	private void compileMethodPrototypes(Context context, ClassFile classFile) throws SyntaxError {
+	private void compileMethodPrototypes(Context context, ClassFile classFile) {
 		Map<String, MethodDeclarationMap> all = collectInterfaceMethods(context);
 		all.values().forEach((map)->
 			map.values().forEach((method)->
@@ -605,13 +605,13 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		}
 	}
 
-	protected void compileFields(Context context, ClassFile classFile, Flags flags) throws SyntaxError {
+	protected void compileFields(Context context, ClassFile classFile, Flags flags) {
 		Set<Identifier> ids = getAllAttributes(context);
 		for(Identifier id : ids)
 			compileField(context, classFile, flags, id);
 	}
 
-	protected void compileField(Context context, ClassFile classFile, Flags flags, Identifier id) throws SyntaxError {
+	protected void compileField(Context context, ClassFile classFile, Flags flags, Identifier id) {
 		if(isSuperClassAttribute(context, id))
 			compileSuperClassField(context, classFile, flags, id);
 		else if(isInheritedAttribute(context, id))
@@ -622,7 +622,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	
 
 	private void compileInheritedField(Context context, ClassFile classFile, Flags flags, 
-			Identifier id) throws SyntaxError {
+			Identifier id) {
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
 		FieldInfo field = decl.toFieldInfo(context);
 		classFile.addField(field);
@@ -631,7 +631,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 
 	private void compileInheritedSetterMethod(Context context, ClassFile classFile, Flags flags, 
-			Identifier id, FieldInfo field) throws SyntaxError {
+			Identifier id, FieldInfo field) {
 		SetterMethodDeclaration setter = findSetter(context, id);
 		if(setter!=null) synchronized(setter) {
 			ConcreteCategoryDeclaration owner = setter.getMemberOf();
@@ -646,7 +646,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 
 	private void compileInheritedGetterMethod(Context context, ClassFile classFile, Flags flags, 
-			Identifier id, FieldInfo field) throws SyntaxError {
+			Identifier id, FieldInfo field) {
 		GetterMethodDeclaration getter = findGetter(context, id);
 		if(getter!=null) synchronized(getter) {
 			ConcreteCategoryDeclaration owner = getter.getMemberOf();
@@ -674,7 +674,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return false;
 	}
 
-	private void compileLocalField(Context context, ClassFile classFile, Flags flags, Identifier id) throws SyntaxError {
+	private void compileLocalField(Context context, ClassFile classFile, Flags flags, Identifier id) {
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
 		FieldInfo field = decl.toFieldInfo(context);
 		classFile.addField(field);
@@ -682,7 +682,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		compileLocalGetterMethod(context, classFile, flags, id, field);
 	}
 
-	private void compileSuperClassField(Context context, ClassFile classFile, Flags flags, Identifier id) throws SyntaxError {
+	private void compileSuperClassField(Context context, ClassFile classFile, Flags flags, Identifier id) {
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
 		FieldInfo field = decl.toFieldInfo(context);
 		GetterMethodDeclaration getter = findGetter(context, id);
@@ -701,7 +701,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 
 	private void compileLocalSetterMethod(Context context, ClassFile classFile, Flags flags, 
-			Identifier id, FieldInfo field) throws SyntaxError {
+			Identifier id, FieldInfo field) {
 		SetterMethodDeclaration setter = findSetter(context, id);
 		if(setter!=null)
 			setter.compile(context, classFile, flags, getType(context), field);
@@ -732,7 +732,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		method.addInstruction(Opcode.RETURN);
 	}
 
-	private void compileLocalGetterMethod(Context context, ClassFile classFile, Flags flags,Identifier id, FieldInfo field) throws SyntaxError {
+	private void compileLocalGetterMethod(Context context, ClassFile classFile, Flags flags,Identifier id, FieldInfo field) {
 		GetterMethodDeclaration getter = findGetter(context, id);
 		if(getter!=null)
 			getter.compile(context, classFile, flags, getType(context), field);
@@ -843,7 +843,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return context.getRegisteredDeclaration(CategoryDeclaration.class, derivedFrom.getFirst()).isStorable();
 	}
 
-	protected void compileMethods(Context context, ClassFile classFile, Flags flags) throws SyntaxError {
+	protected void compileMethods(Context context, ClassFile classFile, Flags flags) {
 		for(IMethodDeclaration method : methods) {
 			if(	method instanceof GetterMethodDeclaration || method instanceof SetterMethodDeclaration)
 				continue;

@@ -8,7 +8,7 @@ import prompto.runtime.Context;
 
 public class NativeResource extends NativeInstance implements IResource {
 
-	public NativeResource(Context context, NativeResourceDeclaration declaration) throws SyntaxError {
+	public NativeResource(Context context, NativeResourceDeclaration declaration) {
 		super(context, declaration);
 	}
 	

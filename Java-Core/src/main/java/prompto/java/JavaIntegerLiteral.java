@@ -25,7 +25,7 @@ public class JavaIntegerLiteral extends JavaLiteral {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return new JavaClassType(Long.class);
 	}
 	
@@ -39,7 +39,7 @@ public class JavaIntegerLiteral extends JavaLiteral {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method) {
 		if(value>=0 && value<=5) {
 			// ICONST_0 to ICONST_5 are consecutive
 			Opcode opcode = Opcode.values()[Opcode.ICONST_0.ordinal() + value.intValue()];

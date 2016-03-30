@@ -77,14 +77,14 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method) {
 		if(parent==null)
 			return compile_root(context, method);
 		else
 			return compile_child(context, method);
 	}
 	
-	private ResultInfo compile_root(Context context, MethodInfo method) throws SyntaxError {
+	private ResultInfo compile_root(Context context, MethodInfo method) {
 		ResultInfo info = compile_prompto(context, method);
 		if(info!=null)
 			return info;
@@ -121,7 +121,7 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 		}
 	}
 
-	private ResultInfo compile_child(Context context, MethodInfo method) throws SyntaxError {
+	private ResultInfo compile_child(Context context, MethodInfo method) {
 		ResultInfo info = parent.compile(context, method);
 		if(info!=null)
 			return compile_field(context, method, info);
@@ -233,14 +233,14 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 	}
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		if(parent==null)
 			return check_root(context);
 		else
 			return check_child(context);
 	}
 	
-	IType check_root(Context context) throws SyntaxError {
+	IType check_root(Context context) {
 		IType t = check_prompto(context);
 		if(t!=null)
 			return t;
@@ -259,7 +259,7 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 		return null;
 	}
 
-	IType check_instance(Context context) throws SyntaxError {
+	IType check_instance(Context context) {
 		INamed named = context.getRegisteredValue(INamed.class, new Identifier(name)); 
 		if(named==null)
 			return null;
@@ -287,7 +287,7 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 		return null;
 	}
 	
-	IType check_child(Context context) throws SyntaxError {
+	IType check_child(Context context) {
 		IType t = parent.check(context); 
 		if(t!=null)
 			return check_field(t);

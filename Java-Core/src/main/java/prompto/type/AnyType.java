@@ -30,12 +30,12 @@ public class AnyType extends NativeType {
 	}
 	
 	@Override
-	public IType checkItem(Context context, IType itemType) throws SyntaxError {
+	public IType checkItem(Context context, IType itemType) {
 		return AnyType.instance(); // needed to support lists in Documents
 	}
 	
 	@Override
-	public IType checkMember(Context context, Identifier name) throws SyntaxError {
+	public IType checkMember(Context context, Identifier name) {
 		return AnyType.instance(); // needed to support members in Documents
 	}
 

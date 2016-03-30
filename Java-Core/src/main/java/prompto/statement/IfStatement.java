@@ -122,7 +122,7 @@ public class IfStatement extends BaseStatement {
 
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return elements.get(0).check(context);
 		// TODO check consistency with additional elements
 	}
@@ -139,7 +139,7 @@ public class IfStatement extends BaseStatement {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
  		IType result = check(context);
 		compileIfElements(context, method, flags);
 		return new ResultInfo(result.getJavaType());
@@ -151,7 +151,7 @@ public class IfStatement extends BaseStatement {
 		StackState neutralState = null;
 	}
 	
-	private void compileIfElements(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	private void compileIfElements(Context context, MethodInfo method, Flags flags) {
 		IfElementBranch branch = new IfElementBranch();
 		branch.neutralState = method.captureStackState();
 		for(IfElement element : elements)
@@ -164,7 +164,7 @@ public class IfStatement extends BaseStatement {
 	}
 
 	
-	private void compileIfElement(Context context, MethodInfo method, Flags flags, IfElement element, IfElementBranch branch) throws SyntaxError {
+	private void compileIfElement(Context context, MethodInfo method, Flags flags, IfElement element, IfElementBranch branch) {
 		restoreNeutralStackState(method, branch);
 		stopListeningForThisBranch(method, branch);
 		compileCondition(context, method, flags, element);
@@ -183,7 +183,7 @@ public class IfStatement extends BaseStatement {
 	}
 
 
-	private Context prepareAutodowncast(Context context, MethodInfo method, IfElement element) throws SyntaxError {
+	private Context prepareAutodowncast(Context context, MethodInfo method, IfElement element) {
 		if(element.condition instanceof EqualsExpression)
 			return ((EqualsExpression)element.condition).prepareAutodowncast(context, method);
 		else
@@ -208,7 +208,7 @@ public class IfStatement extends BaseStatement {
 	}
 
 
-	private ResultInfo compileStatements(Context context, MethodInfo method, Flags flags, IfElement element, IfElementBranch branch) throws SyntaxError {
+	private ResultInfo compileStatements(Context context, MethodInfo method, Flags flags, IfElement element, IfElementBranch branch) {
 		ResultInfo info = new ResultInfo(void.class);
 		if(element.statements!=null) {
 			for(IStatement statement : element.statements)
@@ -234,7 +234,7 @@ public class IfStatement extends BaseStatement {
 	}
 
 
-	private void compileCondition(Context context, MethodInfo method, Flags flags, IfElement element) throws SyntaxError {
+	private void compileCondition(Context context, MethodInfo method, Flags flags, IfElement element) {
 		if(element.condition!=null) {
 			ResultInfo info = element.condition.compile(context, method, flags.withPrimitive(true));
 			if(Boolean.class==info.getType())
@@ -319,7 +319,7 @@ public class IfStatement extends BaseStatement {
 		}
 		
 		@Override
-		public IType check(Context context) throws SyntaxError {
+		public IType check(Context context) {
 			IType cond = condition.check(context);
 			if(cond!=BooleanType.instance())
 				throw new SyntaxError("Expected a boolean condition!");
@@ -333,7 +333,7 @@ public class IfStatement extends BaseStatement {
 			return statements.interpret(context);
 		}
 
-		private Context downCastContextForCheck(Context context) throws SyntaxError {
+		private Context downCastContextForCheck(Context context) {
 			Context parent = context;
 			if(condition instanceof EqualsExpression)
 				context = ((EqualsExpression)condition).downCastForCheck(context);

@@ -42,7 +42,7 @@ public class ContainsExpression implements IExpression, IAssertion {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		IType lt = left.check(context);
 		IType rt = right.check(context);
 		switch(operator) {
@@ -66,7 +66,7 @@ public class ContainsExpression implements IExpression, IAssertion {
     }
     
     @Override
-    public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+    public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
     	ResultInfo result = compileOperator(context, method, flags.withPrimitive(true));
     	if (operator.name().startsWith("NOT_"))
     		return compileNot(context, method, flags, result);
@@ -86,7 +86,7 @@ public class ContainsExpression implements IExpression, IAssertion {
 			return CompilerUtils.booleanToBoolean(method);
 	}
 
-	private ResultInfo compileOperator(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	private ResultInfo compileOperator(Context context, MethodInfo method, Flags flags) {
     	switch (operator) {
             case IN:
             case NOT_IN:
@@ -105,7 +105,7 @@ public class ContainsExpression implements IExpression, IAssertion {
         }
     }
 
-	private ResultInfo compileContains(Context context, MethodInfo method, Flags flags, IExpression left, IExpression right) throws SyntaxError {
+	private ResultInfo compileContains(Context context, MethodInfo method, Flags flags, IExpression left, IExpression right) {
 		ResultInfo linfo = left.compile(context, method, flags);
 		right.compile(context, method, flags.withPrimitive(false));
 		if(String.class==linfo.getType()) {
@@ -125,7 +125,7 @@ public class ContainsExpression implements IExpression, IAssertion {
 		}
 	}
 
-	private ResultInfo compileContainsAll(Context context, MethodInfo method, Flags flags, IExpression left, IExpression right) throws SyntaxError {
+	private ResultInfo compileContainsAll(Context context, MethodInfo method, Flags flags, IExpression left, IExpression right) {
 		ResultInfo linfo = left.compile(context, method, flags);
 		right.compile(context, method, flags.withPrimitive(false));
 		if(String.class==linfo.getType()) {
@@ -145,7 +145,7 @@ public class ContainsExpression implements IExpression, IAssertion {
 		}
 	}
 
-	private ResultInfo compileContainsAny(Context context, MethodInfo method, Flags flags, IExpression left, IExpression right) throws SyntaxError {
+	private ResultInfo compileContainsAny(Context context, MethodInfo method, Flags flags, IExpression left, IExpression right) {
 		ResultInfo linfo = left.compile(context, method, flags);
 		right.compile(context, method, flags.withPrimitive(false));
 		if(String.class==linfo.getType()) {

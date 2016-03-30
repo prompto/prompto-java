@@ -35,7 +35,7 @@ public class AssignInstanceStatement extends SimpleStatement {
 	}
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		instance.checkAssignValue(context, expression);
 		return VoidType.instance();
 	}
@@ -47,7 +47,7 @@ public class AssignInstanceStatement extends SimpleStatement {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		return instance.compileAssign(context, method, flags, expression);
 	}
 }

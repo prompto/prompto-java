@@ -23,7 +23,7 @@ public class JavaParenthesisExpression extends Section implements JavaExpression
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return expression.check(context);
 	}
 	

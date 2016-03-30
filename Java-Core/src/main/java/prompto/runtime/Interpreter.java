@@ -94,21 +94,21 @@ public class Interpreter {
 		}
 	}
 
-	 private static IMethodDeclaration locateMethod(Context context, Identifier methodName, String cmdLineArgs) throws SyntaxError {
+	 private static IMethodDeclaration locateMethod(Context context, Identifier methodName, String cmdLineArgs) {
 		MethodDeclarationMap map = context.getRegisteredDeclaration(MethodDeclarationMap.class, methodName);
 		if(map==null)
 			throw new SyntaxError("Could not find a \"" + methodName + "\" method.");
 		return locateMethod(map, cmdLineArgs);
 	}
 			
-	private static IMethodDeclaration locateMethod(MethodDeclarationMap map, String cmdLineArgs) throws SyntaxError {
+	private static IMethodDeclaration locateMethod(MethodDeclarationMap map, String cmdLineArgs) {
 		if(cmdLineArgs==null)
 			return locateMethod(map);
 		else
 			return locateMethod(map, new DictType(TextType.instance()));
 	}
 
-	private static IMethodDeclaration locateMethod(MethodDeclarationMap map, IType ... argTypes) throws SyntaxError {
+	private static IMethodDeclaration locateMethod(MethodDeclarationMap map, IType ... argTypes) {
 		// try exact match first
 		for(IMethodDeclaration method : map.values()) {
 			if(identicalArguments(method.getArguments(), argTypes))

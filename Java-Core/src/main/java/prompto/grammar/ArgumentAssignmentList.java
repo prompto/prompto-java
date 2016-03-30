@@ -37,7 +37,7 @@ public class ArgumentAssignmentList extends LinkedList<ArgumentAssignment> {
 		return null;
 	}
 
-	public ArgumentAssignmentList makeAssignments(Context context, IMethodDeclaration declaration) throws SyntaxError {
+	public ArgumentAssignmentList makeAssignments(Context context, IMethodDeclaration declaration) {
 		ArgumentAssignmentList assignments = new ArgumentAssignmentList();
 		for(ArgumentAssignment assignment : this)
 			assignments.add(assignment.makeAssignment(context, declaration));

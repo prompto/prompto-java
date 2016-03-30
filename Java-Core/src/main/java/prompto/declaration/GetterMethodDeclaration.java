@@ -64,18 +64,18 @@ public class GetterMethodDeclaration extends ConcreteMethodDeclaration implement
 	}
 
 	@Override
-	public void check(ConcreteCategoryDeclaration declaration, Context context) throws SyntaxError {
+	public void check(ConcreteCategoryDeclaration declaration, Context context) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, getId());
 		return decl.getType();
 	}
 
-	public void compile(Context context, ClassFile classFile, Flags flags, CategoryType type, FieldInfo field) throws SyntaxError {
+	public void compile(Context context, ClassFile classFile, Flags flags, CategoryType type, FieldInfo field) {
 		String name = CompilerUtils.getterName(this.getName());
 		Descriptor proto = new Descriptor.Method(field.getType());
 		MethodInfo method = classFile.newMethod(name, proto);

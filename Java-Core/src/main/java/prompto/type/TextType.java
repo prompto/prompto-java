@@ -38,7 +38,7 @@ public class TextType extends NativeType {
 	}
 
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkAdd(Context context, IType other, boolean tryReverse) {
 		if(tryReverse)
 			return this; // we're lhs, ok
 		else
@@ -46,7 +46,7 @@ public class TextType extends NativeType {
 	}
 	
 	@Override
-	public IType checkMultiply(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkMultiply(Context context, IType other, boolean tryReverse) {
 		if(other instanceof IntegerType)
 			return this;
 		else
@@ -54,14 +54,14 @@ public class TextType extends NativeType {
 	}
 	
 	@Override
-	public IType checkCompare(Context context, IType other, ISection section) throws SyntaxError {
+	public IType checkCompare(Context context, IType other, ISection section) {
 		if(other instanceof TextType || other instanceof CharacterType)
 			return BooleanType.instance();
 		return super.checkCompare(context, other, section);
 	}
 	
 	@Override
-	public IType checkItem(Context context, IType other) throws SyntaxError {
+	public IType checkItem(Context context, IType other) {
 		if(other==IntegerType.instance())
 			return CharacterType.instance();
 		else
@@ -69,7 +69,7 @@ public class TextType extends NativeType {
 	}
 	
 	@Override
-	public IType checkMember(Context context, Identifier id) throws SyntaxError {
+	public IType checkMember(Context context, Identifier id) {
 		String name = id.toString();
        if ("length".equals(name))
             return IntegerType.instance();
@@ -79,19 +79,19 @@ public class TextType extends NativeType {
 
 	
 	@Override
-	public IType checkContains(Context context, IType other) throws SyntaxError {
+	public IType checkContains(Context context, IType other) {
 		if(other instanceof TextType || other instanceof CharacterType)
 			return BooleanType.instance();
 		return super.checkContains(context, other);
 	}
 	
 	@Override
-	public IType checkContainsAllOrAny(Context context, IType other) throws SyntaxError {
+	public IType checkContainsAllOrAny(Context context, IType other) {
 		return BooleanType.instance();
 	}
 	
 	@Override
-	public IType checkSlice(Context context) throws SyntaxError {
+	public IType checkSlice(Context context) {
 		return this;
 	}
 

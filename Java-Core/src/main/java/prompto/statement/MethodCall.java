@@ -83,14 +83,14 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	}
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		MethodFinder finder = new MethodFinder(context, this);
 		IMethodDeclaration declaration = finder.findMethod(false);
 		Context local = method.newLocalCheckContext(context, declaration);
 		return check(declaration, context, local);
 	}
 
-	private IType check(IMethodDeclaration declaration, Context parent, Context local) throws SyntaxError {
+	private IType check(IMethodDeclaration declaration, Context parent, Context local) {
 		if (declaration instanceof ConcreteMethodDeclaration
 				&& ((ConcreteMethodDeclaration) declaration).mustBeBeCheckedInCallContext(parent))
 			return fullCheck((ConcreteMethodDeclaration) declaration, parent, local);
@@ -98,12 +98,12 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 			return lightCheck(declaration, parent, local);
 	}
 
-	private IType lightCheck(IMethodDeclaration declaration, Context parent, Context local) throws SyntaxError {
+	private IType lightCheck(IMethodDeclaration declaration, Context parent, Context local) {
 		declaration.registerArguments(local);
 		return declaration.check(local);
 	}
 
-	private IType fullCheck(ConcreteMethodDeclaration declaration, Context parent, Context local) throws SyntaxError {
+	private IType fullCheck(ConcreteMethodDeclaration declaration, Context parent, Context local) {
 		try {
 			ArgumentAssignmentList assignments = makeAssignments(parent, declaration);
 			declaration.registerArguments(local);
@@ -118,7 +118,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		}
 	}
 
-	public ArgumentAssignmentList makeAssignments(Context context, IMethodDeclaration declaration) throws SyntaxError {
+	public ArgumentAssignmentList makeAssignments(Context context, IMethodDeclaration declaration) {
 		if (assignments == null)
 			return new ArgumentAssignmentList();
 		else
@@ -126,7 +126,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		MethodFinder finder = new MethodFinder(context, this);
 		IMethodDeclaration declaration = finder.findMethod(false);
 		Context local = this.method.newLocalCheckContext(context, declaration);
@@ -168,7 +168,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		}
 	}
 	
-	private IMethodDeclaration findDeclaration(Context context) throws SyntaxError {
+	private IMethodDeclaration findDeclaration(Context context) {
 		try {
 			Object o = context.getValue(method.getId());
 			if (o instanceof ClosureValue)

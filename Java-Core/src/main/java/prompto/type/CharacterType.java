@@ -38,12 +38,12 @@ public class CharacterType extends NativeType {
 	}
 
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkAdd(Context context, IType other, boolean tryReverse) {
 		return TextType.instance();
 	}
 	
 	@Override
-	public IType checkMultiply(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkMultiply(Context context, IType other, boolean tryReverse) {
 		if(other instanceof IntegerType)
 			return TextType.instance();
 		else
@@ -51,21 +51,21 @@ public class CharacterType extends NativeType {
 	}
 	
 	@Override
-	public IType checkCompare(Context context, IType other, ISection section) throws SyntaxError {
+	public IType checkCompare(Context context, IType other, ISection section) {
 		if(other instanceof CharacterType || other instanceof TextType)
 			return BooleanType.instance();
 		return super.checkCompare(context, other, section);
 	}
 	
 	@Override
-	public IType checkRange(Context context, IType other) throws SyntaxError {
+	public IType checkRange(Context context, IType other) {
 		if(other instanceof CharacterType)
 			return new RangeType(this);
 		return super.checkRange(context, other);
 	}
 	
 	@Override
-	public RangeBase<?> newRange(Object left, Object right) throws SyntaxError {
+	public RangeBase<?> newRange(Object left, Object right) {
 		if(left instanceof Character && right instanceof Character)
 			return new CharacterRange((Character)left,(Character)right);
 		return super.newRange(left, right);

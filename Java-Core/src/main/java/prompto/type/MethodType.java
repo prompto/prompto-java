@@ -53,13 +53,13 @@ public class MethodType extends BaseType {
 	}
 	
 	@Override
-	public void checkUnique(Context context) throws SyntaxError {
+	public void checkUnique(Context context) {
 		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, typeNameId);
 		if(actual!=null)
 			throw new SyntaxError("Duplicate name: \"" + typeNameId + "\"");
 	}
 	
-	IMethodDeclaration getDeclaration(Context context) throws SyntaxError {
+	IMethodDeclaration getDeclaration(Context context) {
 		Context.MethodDeclarationMap map = this.context.getRegisteredDeclaration(Context.MethodDeclarationMap.class, typeNameId);
 		if(map==null)
 			throw new SyntaxError("Unknown method: \"" + typeNameId + "\"");
@@ -67,7 +67,7 @@ public class MethodType extends BaseType {
 	}
 	
 	@Override
-	public void checkExists(Context context) throws SyntaxError {
+	public void checkExists(Context context) {
 		getDeclaration(context);
 	}
 	

@@ -28,7 +28,7 @@ public class WithSingletonStatement extends BaseStatement {
 	}
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		Context instanceContext = context.newSingletonContext(type);
 		Context childContext = instanceContext.newChildContext();
 		return statements.check(childContext, null);
@@ -45,7 +45,7 @@ public class WithSingletonStatement extends BaseStatement {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		Type thisType = type.getJavaType();
 		StringConstant s = new StringConstant(thisType.getTypeName());
 		method.addInstruction(Opcode.LDC_W, s);

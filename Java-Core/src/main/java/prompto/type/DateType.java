@@ -39,14 +39,14 @@ public class DateType extends NativeType {
 	}
 
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkAdd(Context context, IType other, boolean tryReverse) {
 		if (other instanceof PeriodType)
 			return this; // ignore time section
 		return super.checkAdd(context, other, tryReverse);
 	}
 
 	@Override
-	public IType checkSubstract(Context context, IType other) throws SyntaxError {
+	public IType checkSubstract(Context context, IType other) {
 		if (other instanceof PeriodType)
 			return this; // ignore time section
 		else if (other instanceof DateType)
@@ -59,7 +59,7 @@ public class DateType extends NativeType {
 	}
 
 	@Override
-	public IType checkCompare(Context context, IType other, ISection section) throws SyntaxError {
+	public IType checkCompare(Context context, IType other, ISection section) {
 		if (other instanceof DateType)
 			return BooleanType.instance();
 		if (other instanceof DateTimeType)
@@ -68,14 +68,14 @@ public class DateType extends NativeType {
 	}
 
 	@Override
-	public IType checkRange(Context context, IType other) throws SyntaxError {
+	public IType checkRange(Context context, IType other) {
 		if (other instanceof DateType)
 			return new RangeType(this);
 		return super.checkRange(context, other);
 	}
 
 	@Override
-	public IType checkMember(Context context, Identifier id) throws SyntaxError {
+	public IType checkMember(Context context, Identifier id) {
 		String name = id.toString();
 		if ("year".equals(name))
 			return IntegerType.instance();
@@ -90,7 +90,7 @@ public class DateType extends NativeType {
 	}
 
 	@Override
-	public RangeBase<?> newRange(Object left, Object right) throws SyntaxError {
+	public RangeBase<?> newRange(Object left, Object right) {
 		if (left instanceof Date && right instanceof Date)
 			return new DateRange((Date) left, (Date) right);
 		return super.newRange(left, right);

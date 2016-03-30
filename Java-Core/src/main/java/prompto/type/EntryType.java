@@ -28,17 +28,17 @@ public class EntryType extends BaseType {
 	}
 
 	@Override
-	public void checkUnique(Context context) throws SyntaxError {
+	public void checkUnique(Context context) {
 		throw new RuntimeException("Should never get there!");
 	}
 
 	@Override
-	public void checkExists(Context context) throws SyntaxError {
+	public void checkExists(Context context) {
 		throw new RuntimeException("Should never get there!");
 	}
 
 	@Override
-	public IType checkMember(Context context, Identifier id) throws SyntaxError {
+	public IType checkMember(Context context, Identifier id) {
 		String name = id.toString();
 		if ("key".equals(name))
 			return TextType.instance();

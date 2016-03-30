@@ -17,7 +17,7 @@ public class ErrorVariable extends Variable {
 	}
 	
 	@Override
-	public IType getType(Context context) throws SyntaxError {
+	public IType getType(Context context) {
 		return new EnumeratedCategoryType(new Identifier("Error"));
 	}
 	

@@ -151,7 +151,7 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 	}
 
 	@Override
-	public void register(Context context) throws SyntaxError {
+	public void register(Context context) {
 		INamed actual = context.getRegisteredValue(INamed.class, id);
 		if(actual!=null)
 			throw new SyntaxError("Duplicate argument: \"" + id + "\"");
@@ -170,7 +170,7 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 	}
 	
 	@Override
-	public void check(Context context) throws SyntaxError {
+	public void check(Context context) {
 		type.checkExists(context);
 		if(attributes!=null) for(Identifier attribute : attributes) {
 			AttributeDeclaration actual = context.getRegisteredDeclaration(AttributeDeclaration.class, attribute);
@@ -180,7 +180,7 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 	}
 	
 	@Override
-	public IType getType(Context context) throws SyntaxError {
+	public IType getType(Context context) {
 		if(attributes==null)
 			return type;
 		else

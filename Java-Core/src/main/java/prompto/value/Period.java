@@ -117,7 +117,7 @@ public class Period extends BaseValue implements IMultiplyable {
 	}
 
 	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		exp.compile(context, method, flags);
 		IOperand oper = new MethodConstant(
 				PromptoPeriod.class, 
@@ -142,7 +142,7 @@ public class Period extends BaseValue implements IMultiplyable {
 	}
 
 	public static ResultInfo compileNegate(Context context, MethodInfo method, Flags flags,
-			ResultInfo value) throws SyntaxError {
+			ResultInfo value) {
 		MethodConstant oper = new MethodConstant(PromptoPeriod.class, "negate",
 				PromptoPeriod.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);

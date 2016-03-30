@@ -48,7 +48,7 @@ public abstract class Symbol extends Section implements IExpression, INamed, IVa
 	}
 	
 	@Override
-	public IType getType(Context context) throws SyntaxError {
+	public IType getType(Context context) {
 		return type;
 	}
 
@@ -61,7 +61,7 @@ public abstract class Symbol extends Section implements IExpression, INamed, IVa
 		return symbol.toString();
 	}
 	
-	public void register(Context context) throws SyntaxError {
+	public void register(Context context) {
 		context.registerValue(this);
 	}
 

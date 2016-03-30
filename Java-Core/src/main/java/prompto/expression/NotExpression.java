@@ -46,7 +46,7 @@ public class NotExpression implements IUnaryExpression, IPredicateExpression, IA
 	}
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		IType type = expression.check(context);
 		if(!(type instanceof BooleanType))
 			throw new SyntaxError("Cannot negate " + type.getTypeName());
@@ -75,7 +75,7 @@ public class NotExpression implements IUnaryExpression, IPredicateExpression, IA
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		ResultInfo info = expression.compile(context, method, flags.withPrimitive(true));
 		if(Boolean.class==info.getType())
 			CompilerUtils.BooleanToboolean(method);
@@ -87,7 +87,7 @@ public class NotExpression implements IUnaryExpression, IPredicateExpression, IA
 	}
 	
 	@Override
-	public void compileQuery(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public void compileQuery(Context context, MethodInfo method, Flags flags) {
 		((IPredicateExpression)expression).compileQuery(context, method, flags);
 		method.addInstruction(Opcode.DUP); // IQuery -> IQuery, IQuery
 		InterfaceConstant m = new InterfaceConstant(IQuery.class, "not", void.class);

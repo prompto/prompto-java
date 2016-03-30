@@ -10,7 +10,7 @@ public abstract class ContainerType extends IterableType {
 	}
 	
 	@Override
-	public IType checkContains(Context context, IType other) throws SyntaxError {
+	public IType checkContains(Context context, IType other) {
 		if(itemType.isAssignableTo(context, other))
 			return BooleanType.instance();
 		else

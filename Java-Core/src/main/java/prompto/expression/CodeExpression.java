@@ -34,7 +34,7 @@ public class CodeExpression implements IExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return CodeType.instance();
 	}
 	
@@ -45,7 +45,7 @@ public class CodeExpression implements IExpression {
 	
 	// expression can only be checked and evaluated in the context of an execute:
 
-	public IType checkCode(Context context) throws SyntaxError {
+	public IType checkCode(Context context) {
 		return expression.check(context);
 	}
 

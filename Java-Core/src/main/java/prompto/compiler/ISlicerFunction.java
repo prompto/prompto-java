@@ -6,5 +6,5 @@ import prompto.runtime.Context;
 
 
 public interface ISlicerFunction {
-	ResultInfo compile(Context context, MethodInfo method, Flags flags, ResultInfo parent, IExpression first, IExpression last) throws SyntaxError;
+	ResultInfo compile(Context context, MethodInfo method, Flags flags, ResultInfo parent, IExpression first, IExpression last);
 }

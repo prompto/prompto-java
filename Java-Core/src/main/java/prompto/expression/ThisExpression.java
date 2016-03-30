@@ -21,7 +21,7 @@ public class ThisExpression implements IExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		if(context!=null && !(context instanceof Context.InstanceContext))
 			context = context.getParentContext();
 		if( context instanceof Context.InstanceContext)
@@ -41,7 +41,7 @@ public class ThisExpression implements IExpression {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		StackLocal local = method.getRegisteredLocal("this");
 		if(local==null)
 			return null;

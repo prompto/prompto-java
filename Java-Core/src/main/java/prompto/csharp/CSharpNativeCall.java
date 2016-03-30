@@ -24,7 +24,7 @@ public class CSharpNativeCall extends NativeCall {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return VoidType.instance(); // TODO
 	}
 	

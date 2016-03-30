@@ -42,7 +42,7 @@ public class CharacterLiteral extends Literal<Character> {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		char c = value.getValue();
 		if((c&0xFFFFFF00)==0)
 			method.addInstruction(Opcode.BIPUSH, new ByteOperand((byte)c));

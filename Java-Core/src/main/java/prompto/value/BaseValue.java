@@ -89,7 +89,7 @@ public abstract class BaseValue implements IValue {
 			return CompilerUtils.booleanToBoolean(method);
 	}
 	
-	public static void compileSliceLast(Context context, MethodInfo method, Flags flags, IExpression last) throws SyntaxError {
+	public static void compileSliceLast(Context context, MethodInfo method, Flags flags, IExpression last) {
 		if(last==null) {
 			method.addInstruction(Opcode.LCONST_1);
 			method.addInstruction(Opcode.LNEG);
@@ -99,7 +99,7 @@ public abstract class BaseValue implements IValue {
 		}
 	}
 	
-	public static void compileSliceFirst(Context context, MethodInfo method, Flags flags, IExpression first) throws SyntaxError {
+	public static void compileSliceFirst(Context context, MethodInfo method, Flags flags, IExpression first) {
 		if(first==null)
 			method.addInstruction(Opcode.LCONST_1);
 		else {

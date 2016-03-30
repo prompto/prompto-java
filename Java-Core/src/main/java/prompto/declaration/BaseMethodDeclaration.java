@@ -85,12 +85,12 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	}
 
 	@Override
-	public void register(Context context) throws SyntaxError {
+	public void register(Context context) {
 		context.registerDeclaration(this);
 	}
 	
 	@Override
-	public void registerArguments (Context context) throws SyntaxError {
+	public void registerArguments (Context context) {
 		if(arguments!=null)
 			arguments.register(context);
 	}

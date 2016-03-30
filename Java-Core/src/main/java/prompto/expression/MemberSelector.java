@@ -68,7 +68,7 @@ public class MemberSelector extends SelectorExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		IType parentType = checkParent(context);
         return parentType.checkMember(context, id);
 	}
@@ -131,7 +131,7 @@ public class MemberSelector extends SelectorExpression {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
         // resolve parent to keep clarity
 		IExpression parent = resolveParent(context);
         // special case for Symbol which evaluates as value
@@ -148,7 +148,7 @@ public class MemberSelector extends SelectorExpression {
 			return compileInstanceMember(context, method, flags, parent);		
 	}
 
-	private ResultInfo compileSymbol(Context context, MethodInfo method, Flags flags, IExpression parent) throws SyntaxError {
+	private ResultInfo compileSymbol(Context context, MethodInfo method, Flags flags, IExpression parent) {
 		if (parent instanceof SymbolExpression) {
 			if ("name".equals(id.toString())) {
 				StringConstant c = new StringConstant(((SymbolExpression)parent).getName().toString());
@@ -160,7 +160,7 @@ public class MemberSelector extends SelectorExpression {
 		return null;
 	}
 
-	private ResultInfo compileTypeMember(Context context, MethodInfo method, Flags flags, IExpression parent) throws SyntaxError {
+	private ResultInfo compileTypeMember(Context context, MethodInfo method, Flags flags, IExpression parent) {
 	       if(parent instanceof TypeExpression) {
 	    	   IType type = ((TypeExpression)parent).getType();
 	    	   return type.compileGetMember(context, method, flags, parent, id);
@@ -169,7 +169,7 @@ public class MemberSelector extends SelectorExpression {
 	}
 
 
-	private ResultInfo compileInstanceMember(Context context, MethodInfo method, Flags flags, IExpression parent) throws SyntaxError {
+	private ResultInfo compileInstanceMember(Context context, MethodInfo method, Flags flags, IExpression parent) {
 		Type resultType = check(context).getJavaType();
 		ResultInfo info = parent.compile(context, method, flags);
 		// special case for String.length() to avoid wrapping String.class for just one member

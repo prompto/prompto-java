@@ -34,7 +34,7 @@ public class TypeExpression implements IExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return type;
 	}
 	
@@ -44,7 +44,7 @@ public class TypeExpression implements IExpression {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		StringConstant s = new StringConstant(type.getJavaType().getTypeName());
 		method.addInstruction(Opcode.LDC_W, s);
 		MethodConstant m = new MethodConstant(Class.class, "forName", String.class, Class.class);

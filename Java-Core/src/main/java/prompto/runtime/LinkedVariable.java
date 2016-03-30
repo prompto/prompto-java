@@ -22,7 +22,7 @@ public class LinkedVariable implements INamed {
 	}
 	
 	@Override
-	public IType getType(Context context) throws SyntaxError {
+	public IType getType(Context context) {
 		return type;
 	}
 }

@@ -17,12 +17,12 @@ public class ArgumentList extends ObjectList<IArgument> {
 		this.add(argument);
 	}
 	
-	public void register(Context context) throws SyntaxError {
+	public void register(Context context) {
 		for(IArgument argument : this) 
 			argument.register(context);
 	}
 
-	public void check(Context context) throws SyntaxError {
+	public void check(Context context) {
 		for(IArgument argument : this) 
 			argument.check(context);
 	}

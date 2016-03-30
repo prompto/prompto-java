@@ -61,7 +61,7 @@ public class AndExpression implements IPredicateExpression, IAssertion {
 	}
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		IType lt = left.check(context);
 		IType rt = right.check(context);
 		if(!(lt instanceof BooleanType) || !(rt instanceof BooleanType))
@@ -87,7 +87,7 @@ public class AndExpression implements IPredicateExpression, IAssertion {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		ResultInfo li = left.compile(context, method, flags.withPrimitive(true));
 		if(Boolean.class==li.getType())
 			CompilerUtils.BooleanToboolean(method);
@@ -114,7 +114,7 @@ public class AndExpression implements IPredicateExpression, IAssertion {
 	}
 	
 	@Override
-	public void compileQuery(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public void compileQuery(Context context, MethodInfo method, Flags flags) {
 		((IPredicateExpression)left).compileQuery(context, method, flags);
 		((IPredicateExpression)right).compileQuery(context, method, flags);
 		method.addInstruction(Opcode.DUP); // IQuery -> IQuery, IQuery

@@ -30,7 +30,7 @@ public class DocumentType extends NativeType {
 	}
 	
 	@Override
-	public IType checkMember(Context context, Identifier name) throws SyntaxError {
+	public IType checkMember(Context context, Identifier name) {
 		return AnyType.instance();
 	}
 	

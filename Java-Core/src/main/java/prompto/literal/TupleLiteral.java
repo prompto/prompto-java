@@ -35,7 +35,7 @@ public class TupleLiteral extends Literal<TupleValue> {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return TupleType.instance(); 
 	}
 	
@@ -66,14 +66,14 @@ public class TupleLiteral extends Literal<TupleValue> {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		ResultInfo info = CompilerUtils.compileNewInstance(method, PromptoTuple.class);
 		if(expressions!=null)
 			addItems(context, method, flags);
 		return info;
 	}
 
-	private void addItems(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	private void addItems(Context context, MethodInfo method, Flags flags) {
 		for(IExpression e : expressions) {
 			method.addInstruction(Opcode.DUP); // need to keep a reference to the list on top of stack
 			e.compile(context, method, flags.withPrimitive(false));

@@ -42,7 +42,7 @@ public class IteratorExpression implements IExpression {
 	}
 
 	@Override
-	public IteratorType check(Context context) throws SyntaxError {
+	public IteratorType check(Context context) {
 		IType paramType = source.check(context).checkIterator(context);
 		Context child = context.newChildContext();
 		child.registerValue(new Variable(name, paramType));
@@ -60,7 +60,7 @@ public class IteratorExpression implements IExpression {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		Type innerClassType = compileInnerClass(context, method.getClassFile());
 		// instantiate inner class
 		ClassConstant innerClass = new ClassConstant(innerClassType);
@@ -85,7 +85,7 @@ public class IteratorExpression implements IExpression {
 		return new ResultInfo(IterableWithLength.class);
 	}
 
-	private Type compileInnerClass(Context context, ClassFile parentClass) throws SyntaxError {
+	private Type compileInnerClass(Context context, ClassFile parentClass) {
 		int innerClassIndex = 1 + parentClass.getInnerClasses().size();
 		String innerClassName = parentClass.getThisClass().getType().getTypeName() + '$' + innerClassIndex;
 		Type innerClassType = new PromptoType(innerClassName); 
@@ -112,7 +112,7 @@ public class IteratorExpression implements IExpression {
 		return method;
 	}
 
-	private void compileInnerClassExpression(Context context, ClassFile classFile) throws SyntaxError {
+	private void compileInnerClassExpression(Context context, ClassFile classFile) {
 		IType paramIType = source.check(context).checkIterator(context);
 		context = context.newChildContext();
 		context.registerValue(new Variable(name, paramIType));
@@ -122,7 +122,7 @@ public class IteratorExpression implements IExpression {
 		compileInnerClassApplyMethod(context, classFile, paramType, resultType);
 	}
 
-	private void compileInnerClassApplyMethod(Context context, ClassFile classFile, Type paramType, Type resultType) throws SyntaxError {
+	private void compileInnerClassApplyMethod(Context context, ClassFile classFile, Type paramType, Type resultType) {
 		// create the "apply" method itself
 		Descriptor.Method proto = new Descriptor.Method(paramType, resultType);
 		MethodInfo method = classFile.newMethod("apply", proto);

@@ -46,7 +46,7 @@ public class Time extends BaseValue implements Comparable<Time> {
 	}
 
 	@Override
-	public IValue plus(Context context, IValue value) throws SyntaxError {
+	public IValue plus(Context context, IValue value) {
 		if (value instanceof Period)
 			return new Time(this.value.plus(((Period)value).value));
 		else
@@ -54,7 +54,7 @@ public class Time extends BaseValue implements Comparable<Time> {
 	}
 
 	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		ResultInfo right = exp.compile(context, method, flags);
 		if(right.getType()!=PromptoPeriod.class)
 			throw new SyntaxError("Illegal: Date + " + exp.getClass().getSimpleName());
@@ -74,7 +74,7 @@ public class Time extends BaseValue implements Comparable<Time> {
 	}
 
 	public static ResultInfo compileMinus(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		ResultInfo right = exp.compile(context, method, flags);
 		if(right.getType()==PromptoTime.class) {
 			MethodConstant oper = new MethodConstant(PromptoTime.class, "minus", 
@@ -91,7 +91,7 @@ public class Time extends BaseValue implements Comparable<Time> {
 	}
 
 	@Override
-	public int compareTo(Context context, IValue value) throws SyntaxError {
+	public int compareTo(Context context, IValue value) {
 		if (value instanceof Time)
 			return this.value.compareTo(((Time) value).value);
 		else
@@ -99,7 +99,7 @@ public class Time extends BaseValue implements Comparable<Time> {
 	}
 	
 	public static ResultInfo compileCompareTo(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		exp.compile(context, method, flags);
 		IOperand oper = new MethodConstant(PromptoTime.class, 
 				"compareTo", PromptoTime.class, int.class);
@@ -146,7 +146,7 @@ public class Time extends BaseValue implements Comparable<Time> {
 	}
 
 	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		exp.compile(context, method, flags);
 		IOperand oper = new MethodConstant(
 				PromptoTime.class, 

@@ -59,7 +59,7 @@ public class Boolean extends BaseValue implements Comparable<Boolean> {
 	}
 
 	@Override
-	public int compareTo(Context context, IValue value) throws SyntaxError {
+	public int compareTo(Context context, IValue value) {
 		if (value instanceof Boolean)
 			return compareTo((Boolean) value);
 		else
@@ -98,7 +98,7 @@ public class Boolean extends BaseValue implements Comparable<Boolean> {
 		}
 	}
 	
-	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, ResultInfo left, IExpression exp) throws SyntaxError {
+	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, ResultInfo left, IExpression exp) {
 		if(java.lang.Boolean.class==left.getType())
 			CompilerUtils.BooleanToboolean(method);
 		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true));

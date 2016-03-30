@@ -60,7 +60,7 @@ public class SliceSelector extends SelectorExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		IType firstType = first!=null ? first.check(context) : null;
 		IType lastType = last!=null ? last.check(context) : null;
 		if(firstType!=null && !(firstType instanceof IntegerType))
@@ -106,7 +106,7 @@ public class SliceSelector extends SelectorExpression {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		ResultInfo pinfo = parent.compile(context, method, flags.withPrimitive(false));
 		ISlicerFunction slicer = slicers.get(pinfo.getType());
 		if(slicer==null) {

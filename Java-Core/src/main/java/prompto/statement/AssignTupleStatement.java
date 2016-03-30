@@ -75,7 +75,7 @@ public class AssignTupleStatement extends SimpleStatement {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		IType type = expression.check(context);
 		if(type!=TupleType.instance())
 			throw new SyntaxError("Expecting a tuple expression, got " + type.getTypeName());
@@ -109,7 +109,7 @@ public class AssignTupleStatement extends SimpleStatement {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		ResultInfo info = expression.compile(context, method, flags);
 		if(PromptoTuple.class!=info.getType())
 			throw new SyntaxError("Expecting a Tuple!");

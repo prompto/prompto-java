@@ -58,11 +58,11 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return resolveAndCheck(context, false);
 	}
 	
-	public IType checkMember(Context context) throws SyntaxError {
+	public IType checkMember(Context context) {
 		return resolveAndCheck(context, true);
 	}
 	
@@ -73,17 +73,17 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		resolveAndCheck(context, false);
 		return resolved.compile(context, method, flags);
 	}
 	
-	private IType resolveAndCheck(Context context, boolean forMember) throws SyntaxError {
+	private IType resolveAndCheck(Context context, boolean forMember) {
 		resolve(context, forMember);
 		return resolved!=null ? resolved.check(context) : AnyType.instance();
 	}
 
-	public IExpression resolve(Context context, boolean forMember) throws SyntaxError {
+	public IExpression resolve(Context context, boolean forMember) {
 		if(resolved==null) {
 			resolved = resolveSymbol(context);
 			if(resolved==null) {
@@ -135,7 +135,7 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 		}
 	}
 
-	private IExpression resolveType(Context context) throws SyntaxError {
+	private IExpression resolveType(Context context) {
 		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, id);
 		if(decl instanceof CategoryDeclaration)
 			return new TypeExpression(new CategoryType(id));

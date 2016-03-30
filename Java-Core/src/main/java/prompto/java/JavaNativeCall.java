@@ -31,11 +31,11 @@ public class JavaNativeCall extends NativeCall {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		throw new RuntimeException("Should never get there!");
 	}
 	
-	public IType checkNative(Context context, IType returnType) throws SyntaxError {
+	public IType checkNative(Context context, IType returnType) {
 		return statement.check(context, returnType);
 	}
 	
@@ -49,7 +49,7 @@ public class JavaNativeCall extends NativeCall {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		return statement.compile(context, method);
 	}
 }

@@ -68,7 +68,7 @@ public class InstanceExpression implements IExpression {
 	}
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		INamed named = context.getRegistered(id);
 		if(named==null)
 			throw new SyntaxError("Unknown identifier: " + id);
@@ -94,7 +94,7 @@ public class InstanceExpression implements IExpression {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		ResultInfo info = compileLocal(context, method, flags);
 		if(info==null)
 			info = compileInstanceField(context, method, flags);
@@ -106,7 +106,7 @@ public class InstanceExpression implements IExpression {
 			return info;
 	}
 
-	private ResultInfo compileSingletonField(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	private ResultInfo compileSingletonField(Context context, MethodInfo method, Flags flags) {
 		Context actual = context.contextForValue(getId());
 		if(actual instanceof InstanceContext) {
 			CategoryType type = ((InstanceContext)actual).getInstanceType();
@@ -115,7 +115,7 @@ public class InstanceExpression implements IExpression {
 			return null;
 	}
 	
-	private ResultInfo compileInstanceField(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	private ResultInfo compileInstanceField(Context context, MethodInfo method, Flags flags) {
 		StackLocal local = method.getRegisteredLocal("this");
 		if(local==null)
 			return null;
@@ -124,7 +124,7 @@ public class InstanceExpression implements IExpression {
 		return selector.compile(context, method, flags);
 	}
 
-	private ResultInfo compileLocal(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	private ResultInfo compileLocal(Context context, MethodInfo method, Flags flags) {
 		StackLocal local = method.getRegisteredLocal(getName());
 		if(local==null)
 			return null;

@@ -67,29 +67,29 @@ public interface IType {
 	}
 	Type getJavaType();
 
-	IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError;
-	IType checkSubstract(Context context, IType other) throws SyntaxError;
-	IType checkDivide(Context context, IType other) throws SyntaxError;
-	IType checkIntDivide(Context context, IType other) throws SyntaxError;
-	IType checkMultiply(Context context, IType other, boolean tryReverse) throws SyntaxError;
-	IType checkModulo(Context context, IType rt) throws SyntaxError;
-	IType checkCompare(Context context, IType other, ISection section) throws SyntaxError;
-	IType checkItem(Context context, IType itemType)  throws SyntaxError;
-	IType checkRange(Context context, IType other) throws SyntaxError;
-	IType checkContains(Context context, IType other) throws SyntaxError;
-	IType checkContainsAllOrAny(Context context, IType other) throws SyntaxError;
-	IType checkIterator(Context context) throws SyntaxError;
-	IType checkSlice(Context context) throws SyntaxError;
-	IType checkMember(Context context, Identifier name) throws SyntaxError;
+	IType checkAdd(Context context, IType other, boolean tryReverse);
+	IType checkSubstract(Context context, IType other);
+	IType checkDivide(Context context, IType other);
+	IType checkIntDivide(Context context, IType other);
+	IType checkMultiply(Context context, IType other, boolean tryReverse);
+	IType checkModulo(Context context, IType rt);
+	IType checkCompare(Context context, IType other, ISection section);
+	IType checkItem(Context context, IType itemType) ;
+	IType checkRange(Context context, IType other);
+	IType checkContains(Context context, IType other);
+	IType checkContainsAllOrAny(Context context, IType other);
+	IType checkIterator(Context context);
+	IType checkSlice(Context context);
+	IType checkMember(Context context, Identifier name);
 	
-	void checkUnique(Context context) throws SyntaxError;
-	void checkExists(Context context) throws SyntaxError;
+	void checkUnique(Context context);
+	void checkExists(Context context);
 
-	void checkAssignableTo(Context context, IType other) throws SyntaxError;
+	void checkAssignableTo(Context context, IType other);
 	boolean isAssignableTo(Context context, IType other);
 	boolean isMoreSpecificThan(Context context, IType other);
 	
-	RangeBase<?> newRange(Object first,Object last) throws SyntaxError;
+	RangeBase<?> newRange(Object first,Object last);
 	Comparator<? extends IValue> getComparator();
 	IValue getMember(Context context, Identifier name) throws PromptoError;
 	String toString(Object value);
@@ -97,7 +97,7 @@ public interface IType {
 	IValue readJSONValue(Context context, JsonNode value);
 	IValue convertJavaValueToPromptoValue(Context context, Object value);
 	default ResultInfo compileGetMember(Context context, MethodInfo method,
-			Flags flags, IExpression parent, Identifier id) throws SyntaxError {
+			Flags flags, IExpression parent, Identifier id) {
 		throw new UnsupportedOperationException("Cannot compileGetMember for " + this.getClass());
 	}
 }

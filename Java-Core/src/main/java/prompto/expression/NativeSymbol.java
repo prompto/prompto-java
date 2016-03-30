@@ -59,7 +59,7 @@ public class NativeSymbol extends Symbol implements IExpression {
 	}
 	
 	@Override
-	public EnumeratedNativeType check(Context context) throws SyntaxError {
+	public EnumeratedNativeType check(Context context) {
 		IType actual = expression.check(context);
 		EnumeratedNativeType type = (EnumeratedNativeType)this.getType(context);
 		if(!actual.isAssignableTo(context, type.getDerivedFrom()))
@@ -74,7 +74,7 @@ public class NativeSymbol extends Symbol implements IExpression {
 	
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		return expression.compile(context, method, flags);
 	}
 	

@@ -72,7 +72,7 @@ public class SetterMethodDeclaration extends ConcreteMethodDeclaration implement
 	
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, getId());
 		return decl.getType();
 	}
@@ -84,7 +84,7 @@ public class SetterMethodDeclaration extends ConcreteMethodDeclaration implement
 	}
 
 	public void compile(Context context, ClassFile classFile, Flags flags,
-			CategoryType type, FieldInfo field) throws SyntaxError {
+			CategoryType type, FieldInfo field) {
 		String name = CompilerUtils.setterName(this.getName());
 		Descriptor proto = new Descriptor.Method(field.getType(), void.class);
 		MethodInfo method = classFile.newMethod(name, proto);

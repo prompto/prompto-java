@@ -34,7 +34,7 @@ public class MethodFinder {
 		return methodCall.toString();
 	}
 	
-	public IMethodDeclaration findMethod(boolean checkInstance) throws SyntaxError {
+	public IMethodDeclaration findMethod(boolean checkInstance) {
 		MethodSelector selector = methodCall.getMethod();
 		Collection<IMethodDeclaration> candidates = selector.getCandidates(context);
 		if(candidates.size()==0)
@@ -51,7 +51,7 @@ public class MethodFinder {
 		}
 	}
 	
-	IMethodDeclaration findMostSpecific(Collection<IMethodDeclaration> candidates, boolean checkInstance) throws SyntaxError {
+	IMethodDeclaration findMostSpecific(Collection<IMethodDeclaration> candidates, boolean checkInstance) {
 		IMethodDeclaration candidate = null;
 		List<IMethodDeclaration> ambiguous = new ArrayList<IMethodDeclaration>();
 		for(IMethodDeclaration declaration : candidates) {
@@ -123,7 +123,7 @@ public class MethodFinder {
 		return Score.SIMILAR;
 	}
 	
-	List<IMethodDeclaration> filterCompatible(Collection<IMethodDeclaration> candidates, boolean checkInstance) throws SyntaxError {
+	List<IMethodDeclaration> filterCompatible(Collection<IMethodDeclaration> candidates, boolean checkInstance) {
 		List<IMethodDeclaration> compatibles = new ArrayList<IMethodDeclaration>();
 		for(IMethodDeclaration declaration : candidates) {
 			try {

@@ -59,7 +59,7 @@ public class ItemSelector extends SelectorExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		IType parentType = parent.check(context);
 		IType itemType = item.check(context);
 		return parentType.checkItem(context,itemType);
@@ -97,7 +97,7 @@ public class ItemSelector extends SelectorExpression {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		IType type = check(context);
 		ResultInfo parentInfo = parent.compile(context, method, flags);
 		ResultInfo itemInfo = compileGetItem(context, method, flags, parentInfo, item);
@@ -111,7 +111,7 @@ public class ItemSelector extends SelectorExpression {
 			return itemInfo;
 	}
 	
-	public static ResultInfo compileGetItem(Context context, MethodInfo method, Flags flags, ResultInfo parentInfo, IExpression item) throws SyntaxError {
+	public static ResultInfo compileGetItem(Context context, MethodInfo method, Flags flags, ResultInfo parentInfo, IExpression item) {
 		IOperatorFunction getter = getters.get(parentInfo.getType());
 		if(getter==null) {
 			System.err.println("Missing IOperatorFunction for get item " + parentInfo.getType().getTypeName());

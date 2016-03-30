@@ -48,7 +48,7 @@ public class TernaryExpression implements IExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		IType type = condition.check(context);
 		if(!(type instanceof BooleanType))
 			throw new SyntaxError("Cannot test condition on " +  type.getTypeName() );
@@ -68,7 +68,7 @@ public class TernaryExpression implements IExpression {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		StackState initialState = method.captureStackState();
 		ResultInfo li = condition.compile(context, method, flags.withPrimitive(true));
 		if(Boolean.class==li.getType())

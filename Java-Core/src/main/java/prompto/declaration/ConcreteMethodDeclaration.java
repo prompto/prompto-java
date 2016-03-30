@@ -107,20 +107,20 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		if(canBeChecked(context))
 			return fullCheck(context);
 		else
 			return VoidType.instance();
 	}
 	
-	private boolean canBeChecked(Context context) throws SyntaxError {
+	private boolean canBeChecked(Context context) {
 		if(context.isGlobalContext())
 			return !mustBeBeCheckedInCallContext(context);
 		else
 			return true;
 	}
-	public boolean mustBeBeCheckedInCallContext(Context context) throws SyntaxError {
+	public boolean mustBeBeCheckedInCallContext(Context context) {
 		// if at least one argument is 'Code'
 		if(arguments==null)
 			return false;
@@ -131,7 +131,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		return false;
 	}
 
-	private IType fullCheck(Context context) throws SyntaxError {
+	private IType fullCheck(Context context) {
 		if(context.isGlobalContext()) {
 			context = context.newLocalContext();
 			registerArguments(context);
@@ -141,11 +141,11 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		return checkStatements(context);
 	}
 
-	protected IType checkStatements(Context context) throws SyntaxError {
+	protected IType checkStatements(Context context) {
 		return statements.check(context, returnType);
 	}
 
-	public IType checkChild(Context context) throws SyntaxError {
+	public IType checkChild(Context context) {
 		if(arguments!=null)
 			arguments.check(context);
 		Context child = context.newChildContext();
@@ -154,7 +154,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 
 	@Override
-	public void check(ConcreteCategoryDeclaration declaration, Context context) throws SyntaxError {
+	public void check(ConcreteCategoryDeclaration declaration, Context context) {
 		// TODO Auto-generated method stub
 		
 	}	
@@ -194,7 +194,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		}
 	}
 
-	private void produceByteCode(Context context, MethodInfo method, IType returnType) throws SyntaxError {
+	private void produceByteCode(Context context, MethodInfo method, IType returnType) {
 		Flags flags = new Flags();
 		for(IStatement s : statements)
 			s.compile(context, method, flags);
@@ -203,7 +203,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 			method.addInstruction(Opcode.RETURN);
 	}
 
-	private Context prepareContext(Context context) throws SyntaxError {
+	private Context prepareContext(Context context) {
 		if(context.isGlobalContext()) {
 			// coming from nowhere, so need a clean context in which to register arguments
 			context = context.newLocalContext();
@@ -219,7 +219,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		return method;
 	}
 	
-	protected void registerLocals(Context context, ClassFile classFile, MethodInfo method) throws SyntaxError {
+	protected void registerLocals(Context context, ClassFile classFile, MethodInfo method) {
 		if(Modifier.isAbstract(classFile.getModifiers())) // TODO find another way
 			method.addModifier(Modifier.STATIC); // otherwise it's a member method
 		else 

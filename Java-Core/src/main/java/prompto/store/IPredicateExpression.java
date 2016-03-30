@@ -10,7 +10,7 @@ import prompto.runtime.Context;
 public interface IPredicateExpression extends IExpression {
 
 	void interpretQuery(Context context, IQuery query) throws PromptoError;
-	default void compileQuery(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	default void compileQuery(Context context, MethodInfo method, Flags flags) {
 		System.err.println("Need to implement compileQuery for " + this.getClass().getName());
 		throw new UnsupportedOperationException();
 	}

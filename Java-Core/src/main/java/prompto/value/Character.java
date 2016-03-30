@@ -52,7 +52,7 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
     }
 
 	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression right) throws SyntaxError {
+			ResultInfo left, IExpression right) {
 		// convert to String
 		MethodConstant c = new MethodConstant(java.lang.Character.class, 
 									"toString", 
@@ -73,7 +73,7 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
            throw new SyntaxError("Illegal: Chararacter * " + value.getClass().getSimpleName());
      }
 
-	public static ResultInfo compileMultiply(Context context, MethodInfo method, Flags flags, ResultInfo left, IExpression exp) throws SyntaxError {
+	public static ResultInfo compileMultiply(Context context, MethodInfo method, Flags flags, ResultInfo left, IExpression exp) {
 		CompilerUtils.CharacterTochar(method);
 		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true));
 		if(Long.class==right.getType())
@@ -92,7 +92,7 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
     }
 
     @Override
-    public int compareTo(Context context, IValue value) throws SyntaxError {
+    public int compareTo(Context context, IValue value) {
         if (value instanceof Character)
             return java.lang.Character.compare(this.value, ((Character)value).value);
         else
@@ -111,7 +111,7 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
  	}
     
 	public static ResultInfo compileCompareTo(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		if(java.lang.Character.class==left.getType())
 			CompilerUtils.CharacterTochar(method);
 		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true));
@@ -151,7 +151,7 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
             return false;
     }
     
-	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, ResultInfo left, IExpression exp) throws SyntaxError {
+	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, ResultInfo left, IExpression exp) {
 		if(java.lang.Character.class==left.getType())
 			CompilerUtils.CharacterTochar(method);
 		ResultInfo right = exp.compile(context, method, flags);

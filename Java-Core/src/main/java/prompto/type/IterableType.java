@@ -24,7 +24,7 @@ public abstract class IterableType extends NativeType {
 	}
 	
 	@Override
-	public void checkExists(Context context) throws SyntaxError {
+	public void checkExists(Context context) {
 		itemType.checkExists(context);
 	}
 	

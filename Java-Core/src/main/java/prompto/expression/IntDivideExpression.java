@@ -35,7 +35,7 @@ public class IntDivideExpression implements IExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		IType lt = left.check(context);
 		IType rt = right.check(context);
 		return lt.checkIntDivide(context,rt);
@@ -60,7 +60,7 @@ public class IntDivideExpression implements IExpression {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		ResultInfo lval = left.compile(context, method, flags);
 		IOperatorFunction divider = dividers.get(lval.getType());
 		if(divider==null && lval.getType().getTypeName().startsWith("π.χ."))

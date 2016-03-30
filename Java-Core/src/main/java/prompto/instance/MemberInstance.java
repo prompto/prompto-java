@@ -51,7 +51,7 @@ public class MemberInstance implements IAssignableSelector {
 	}
 	
 	@Override
-	public IType checkAssignValue(Context context, IExpression expression) throws SyntaxError {
+	public IType checkAssignValue(Context context, IExpression expression) {
 		IType type = parent.checkAssignMember(context, id);
 		IType actualType = expression.check(context);
 		actualType.checkAssignableTo(context, type);
@@ -59,12 +59,12 @@ public class MemberInstance implements IAssignableSelector {
 	}
 	
 	@Override
-	public IType checkAssignMember(Context context, Identifier memberName) throws SyntaxError {
+	public IType checkAssignMember(Context context, Identifier memberName) {
 		return parent.checkAssignMember(context, id); // TODO
 	}
 	
 	@Override
-	public IType checkAssignElement(Context context) throws SyntaxError {
+	public IType checkAssignElement(Context context) {
 		return AnyType.instance(); // TODO
 	}
 	
@@ -84,7 +84,7 @@ public class MemberInstance implements IAssignableSelector {
 	}
 	
 	@Override
-	public ResultInfo compileParent(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compileParent(Context context, MethodInfo method, Flags flags) {
 		ResultInfo parent = this.parent.compileParent(context, method, flags);
 		if(PromptoDocument.class==parent.getType()) {
 			StringConstant key = new StringConstant(getName());
@@ -100,7 +100,7 @@ public class MemberInstance implements IAssignableSelector {
 	}
 	
 	@Override
-	public ResultInfo compileAssign(Context context, MethodInfo method, Flags flags, IExpression expression) throws SyntaxError {
+	public ResultInfo compileAssign(Context context, MethodInfo method, Flags flags, IExpression expression) {
 		ResultInfo parent = this.parent.compileParent(context, method, flags);
 		if(PromptoAny.class==parent.getType())
 			return compileAssignAny(context, method, flags, expression);
@@ -110,7 +110,7 @@ public class MemberInstance implements IAssignableSelector {
 			throw new UnsupportedOperationException("Cannot assign item to " + parent.getType().getTypeName());
 	}
 	
-	private ResultInfo compileAssignAny(Context context, MethodInfo method, Flags flags, IExpression expression) throws SyntaxError {
+	private ResultInfo compileAssignAny(Context context, MethodInfo method, Flags flags, IExpression expression) {
 		StringConstant key = new StringConstant(getName());
 		method.addInstruction(Opcode.LDC_W, key);
 		expression.compile(context, method, flags);
@@ -120,7 +120,7 @@ public class MemberInstance implements IAssignableSelector {
 	}
 	
 
-	private ResultInfo compileAssignDocument(Context context, MethodInfo method, Flags flags, IExpression expression) throws SyntaxError {
+	private ResultInfo compileAssignDocument(Context context, MethodInfo method, Flags flags, IExpression expression) {
 		method.addInstruction(Opcode.CHECKCAST, new ClassConstant(PromptoDocument.class));
 		StringConstant key = new StringConstant(getName());
 		method.addInstruction(Opcode.LDC_W, key);

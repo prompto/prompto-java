@@ -117,13 +117,13 @@ public class ForEachStatement extends BaseStatement {
 	}
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		IType srcType = source.check(context);
 		IType elemType = srcType.checkIterator(context);
 		return checkItemIterator(elemType, context);
 	}
 
-	private IType checkItemIterator(IType elemType, Context context) throws SyntaxError {
+	private IType checkItemIterator(IType elemType, Context context) {
 		Context child = context.newChildContext();
 		Identifier itemName = v2 == null ? v1 : v2;
 		context.registerValue(new Variable(itemName, elemType));
@@ -188,14 +188,14 @@ public class ForEachStatement extends BaseStatement {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		if(v2==null)
 			return compileWithoutIndex(context, method, flags);
 		else
 			return compileWithIndex(context, method, flags);
 	}
 
-	private ResultInfo compileWithIndex(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	private ResultInfo compileWithIndex(Context context, MethodInfo method, Flags flags) {
 		java.lang.reflect.Type itemClass = source.check(context).checkIterator(context).getJavaType();
 		StackLocal iterLocal = compileIterator(context, method, flags);
 		StackLocal v1Local = compileInitCounter(method);
@@ -263,7 +263,7 @@ public class ForEachStatement extends BaseStatement {
 		method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)local.getIndex()));		
 	}
 
-	private ResultInfo compileWithoutIndex(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	private ResultInfo compileWithoutIndex(Context context, MethodInfo method, Flags flags) {
 		java.lang.reflect.Type itemClass = source.check(context).checkIterator(context).getJavaType();
 		StackLocal iterLocal = compileIterator(context, method, flags);
 		// local needs to be ITEM_Top because that's what the verifier infers from INVOKEINTERFACE on Iterator.next
@@ -301,7 +301,7 @@ public class ForEachStatement extends BaseStatement {
 		return new ResultInfo(void.class);
 	}
 
-	private StackLocal compileIterator(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	private StackLocal compileIterator(Context context, MethodInfo method, Flags flags) {
 		source.compile(context, method, flags);
 		InterfaceConstant m = new InterfaceConstant(Iterable.class, "iterator", Iterator.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, m);

@@ -29,12 +29,12 @@ public class JavaTextLiteral extends JavaLiteral {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return new JavaClassType(String.class);
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method) {
 		IConstantOperand operand = new StringConstant(value);
 		method.addInstruction(Opcode.LDC_W, operand);
 		return new ResultInfo(String.class);

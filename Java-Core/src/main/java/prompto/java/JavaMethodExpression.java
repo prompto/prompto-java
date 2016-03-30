@@ -51,7 +51,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		Method method = findMethod(context);
 		if(method==null) {
 			context.getProblemListener().reportUnknownMethod(name, this);
@@ -61,7 +61,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method) {
 		// push instance if any
 		ResultInfo parentType = parent.compile(context, method); 
 		// push arguments if any
@@ -114,7 +114,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
         return value;
     }
 
-	public Method findMethod(Context context) throws SyntaxError {
+	public Method findMethod(Context context) {
 		IType type = parent.check(context);
 		if(type==null) {
 			context.getProblemListener().reportUnknownIdentifier(parent.toString(), parent);
@@ -125,7 +125,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 		}
 	}
 	
-	private Type findClass(Context context, IType type) throws SyntaxError {
+	private Type findClass(Context context, IType type) {
 		if(type instanceof CategoryType) {
 			IDeclaration named = context.getRegisteredDeclaration(IDeclaration.class, type.getTypeNameId());
 			if(named instanceof NativeCategoryDeclaration) 
@@ -134,14 +134,14 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 			return type.getJavaType();
 	}
 
-	public Method findMethod(Context context, Object instance) throws SyntaxError {
+	public Method findMethod(Context context, Object instance) {
 		if(instance instanceof Class<?>)
 			return findMethod(context, (Class<?>)instance);
 		else
 			return findMethod(context, instance.getClass());
 	}
 	
-	public Method findMethod(Context context, Class<?> klass) throws SyntaxError {
+	public Method findMethod(Context context, Class<?> klass) {
 		if(klass==null)
 			return null;
 		Method method = findExactMethod(context, klass);
@@ -151,7 +151,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 			return findCompatibleMethod(context, klass);
 	}
 	
-	private Method findExactMethod(Context context, Class<?> klass) throws SyntaxError {
+	private Method findExactMethod(Context context, Class<?> klass) {
 		Class<?>[] types = new Class<?>[arguments.size()];
 		int i = 0;
 		try {
@@ -167,7 +167,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 		}
 	}
 
-	private Method findCompatibleMethod(Context context, Class<?> klass) throws SyntaxError {
+	private Method findCompatibleMethod(Context context, Class<?> klass) {
 		Method[] methods = klass.getMethods();
 		for(Method m : methods) {
 			if(!name.equals(m.getName())) 
@@ -178,7 +178,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 		return null; 
 	}
 
-	boolean validPrototype(Context context,Method method) throws SyntaxError {
+	boolean validPrototype(Context context,Method method) {
 		Class<?>[] types = method.getParameterTypes();
 		if(types.length!=arguments.size())
 			return false;
@@ -189,7 +189,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 		return true;
 	}
 	
-	boolean validArgument(Context context, Class<?> klass, JavaExpression argument) throws SyntaxError {
+	boolean validArgument(Context context, Class<?> klass, JavaExpression argument) {
 		Type argType = argument.check(context).getJavaType();
 		if(argType instanceof PromptoType) try {
 			argType = Class.forName(argType.getTypeName());

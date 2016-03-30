@@ -62,7 +62,7 @@ public class SingletonCategoryDeclaration extends ConcreteCategoryDeclaration {
 	}
 	
 	@Override
-	protected void compileField(Context context, ClassFile classFile, Flags flags, Identifier id) throws SyntaxError {
+	protected void compileField(Context context, ClassFile classFile, Flags flags, Identifier id) {
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
 		FieldInfo field = decl.toFieldInfo(context);
 		field.addModifier(Modifier.STATIC);
@@ -71,7 +71,7 @@ public class SingletonCategoryDeclaration extends ConcreteCategoryDeclaration {
 		compileStaticGetterMethod(context, classFile, flags, id, field);
 	}
 	
-	private void compileStaticGetterMethod(Context context, ClassFile classFile, Flags flags,Identifier id, FieldInfo field) throws SyntaxError {
+	private void compileStaticGetterMethod(Context context, ClassFile classFile, Flags flags,Identifier id, FieldInfo field) {
 		GetterMethodDeclaration getter = findGetter(context, id);
 		if(getter!=null)
 			getter.compile(context, classFile, flags, getType(context), field);
@@ -90,7 +90,7 @@ public class SingletonCategoryDeclaration extends ConcreteCategoryDeclaration {
 	}
 
 	private void compileStaticSetterMethod(Context context, ClassFile classFile, Flags flags, 
-			Identifier id, FieldInfo field) throws SyntaxError {
+			Identifier id, FieldInfo field) {
 		SetterMethodDeclaration setter = findSetter(context, id);
 		if(setter!=null)
 			setter.compile(context, classFile, flags, getType(context), field);
@@ -124,7 +124,7 @@ public class SingletonCategoryDeclaration extends ConcreteCategoryDeclaration {
 		return new ResultInfo(field.getType());
 	}
 
-	public ResultInfo compileSetMember(Context context, MethodInfo method, Flags flags, IExpression value, Identifier id) throws SyntaxError {
+	public ResultInfo compileSetMember(Context context, MethodInfo method, Flags flags, IExpression value, Identifier id) {
 		value.compile(context, method, flags);
 		java.lang.reflect.Type concreteType = CompilerUtils.getCategorySingletonType(getId());
 		String setterName = CompilerUtils.setterName(id.toString());

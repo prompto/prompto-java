@@ -51,7 +51,7 @@ public class MethodArgument extends BaseArgument implements INamedArgument {
 	}
 
 	@Override
-	public void register(Context context) throws SyntaxError {
+	public void register(Context context) {
 		INamed actual = context.getRegisteredValue(INamed.class,id);
 		if(actual!=null)
 			throw new SyntaxError("Duplicate argument: \"" + id + "\"");
@@ -59,14 +59,14 @@ public class MethodArgument extends BaseArgument implements INamedArgument {
 	}
 	
 	@Override
-	public void check(Context context) throws SyntaxError {
+	public void check(Context context) {
 		IMethodDeclaration actual = context.getRegisteredDeclaration(IMethodDeclaration.class,id);
 		if(actual==null)
 			throw new SyntaxError("Unknown method: \"" + id + "\"");
 	}
 	
 	@Override
-	public IType getType(Context context) throws SyntaxError {
+	public IType getType(Context context) {
 		return new MethodType(context,id);
 	}
 	

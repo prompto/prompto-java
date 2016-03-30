@@ -30,7 +30,7 @@ public class TupleType extends ContainerType {
 	}
 
 	@Override
-	public IType checkItem(Context context, IType other) throws SyntaxError {
+	public IType checkItem(Context context, IType other) {
 		if(other==IntegerType.instance())
 			return AnyType.instance();
 		else
@@ -39,7 +39,7 @@ public class TupleType extends ContainerType {
 	
 
 	@Override
-	public IType checkMember(Context context, Identifier id) throws SyntaxError {
+	public IType checkMember(Context context, Identifier id) {
 		String name = id.toString();
         if ("length".equals(name))
             return IntegerType.instance();
@@ -48,19 +48,19 @@ public class TupleType extends ContainerType {
 }
 	
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkAdd(Context context, IType other, boolean tryReverse) {
 		if(other instanceof TupleType || other instanceof ListType || other instanceof SetType)
 			return this; 
 		return super.checkAdd(context, other, tryReverse);
 	}
 	
 	@Override
-	public IType checkContains(Context context, IType other) throws SyntaxError {
+	public IType checkContains(Context context, IType other) {
 		return BooleanType.instance(); 
 	}
 	
 	@Override
-	public IType checkContainsAllOrAny(Context context, IType other) throws SyntaxError {
+	public IType checkContainsAllOrAny(Context context, IType other) {
 		return BooleanType.instance(); 
 	}
 	

@@ -36,7 +36,7 @@ public class DecimalType extends NativeType implements INumberType {
 	}
 	
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkAdd(Context context, IType other, boolean tryReverse) {
 		if(other instanceof IntegerType)
 			return this;
 		if(other instanceof DecimalType)
@@ -45,7 +45,7 @@ public class DecimalType extends NativeType implements INumberType {
 	}
 	
 	@Override
-	public IType checkSubstract(Context context, IType other) throws SyntaxError {
+	public IType checkSubstract(Context context, IType other) {
 		if(other instanceof IntegerType)
 			return this;
 		if(other instanceof DecimalType)
@@ -54,7 +54,7 @@ public class DecimalType extends NativeType implements INumberType {
 	}
 
 	@Override
-	public IType checkMultiply(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkMultiply(Context context, IType other, boolean tryReverse) {
 		if(other instanceof IntegerType)
 			return this;
 		if(other instanceof DecimalType)
@@ -63,7 +63,7 @@ public class DecimalType extends NativeType implements INumberType {
 	}
 
 	@Override
-	public IType checkDivide(Context context, IType other) throws SyntaxError {
+	public IType checkDivide(Context context, IType other) {
 		if(other instanceof IntegerType)
 			return this;
 		if(other instanceof DecimalType)
@@ -72,14 +72,14 @@ public class DecimalType extends NativeType implements INumberType {
 	}
 	
 	@Override
-	public IType checkIntDivide(Context context, IType other) throws SyntaxError {
+	public IType checkIntDivide(Context context, IType other) {
 		if(other instanceof IntegerType)
 			return other;
 		return super.checkIntDivide(context, other);
 	}
 	
 	@Override
-	public IType checkModulo(Context context, IType other) throws SyntaxError {
+	public IType checkModulo(Context context, IType other) {
 		if(other instanceof IntegerType)
 			return this;
 		if(other instanceof DecimalType)
@@ -88,7 +88,7 @@ public class DecimalType extends NativeType implements INumberType {
 	}
 
 	@Override
-	public IType checkCompare(Context context, IType other, ISection section) throws SyntaxError {
+	public IType checkCompare(Context context, IType other, ISection section) {
 		if(other instanceof IntegerType)
 			return BooleanType.instance();
 		if(other instanceof DecimalType)

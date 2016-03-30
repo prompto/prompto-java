@@ -44,7 +44,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		context = context.newLocalContext();
 		for(IStatement statement : statements)
 			checkStatement(context, statement);
@@ -55,19 +55,19 @@ public class TestMethodDeclaration extends BaseDeclaration {
 		return VoidType.instance();
 	}
 	
-	private void checkStatement(Context context, IStatement statement) throws SyntaxError {
+	private void checkStatement(Context context, IStatement statement) {
 		IType type = statement.check(context);
 		if(type!=VoidType.instance())
 			context.getProblemListener().reportIllegalReturn(statement);
 	}
 
 	@Override
-	public void register(Context context) throws SyntaxError {
+	public void register(Context context) {
 		context.registerDeclaration(this);
 	}
 	
 	@Override
-	public IType getType(Context context) throws SyntaxError {
+	public IType getType(Context context) {
 		return VoidType.instance();
 	}
 

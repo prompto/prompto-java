@@ -21,7 +21,7 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		if(arguments!=null)
 			arguments.check(context);
 		Context local = context.newLocalContext();
@@ -30,7 +30,7 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 	
 	@Override
-	public void check(ConcreteCategoryDeclaration declaration, Context context) throws SyntaxError {
+	public void check(ConcreteCategoryDeclaration declaration, Context context) {
 		// TODO Auto-generated method stub
 		
 	}	

@@ -33,12 +33,12 @@ public abstract class NativeType extends BaseType {
 	}
 	
 	@Override
-	public void checkUnique(Context context) throws SyntaxError {
+	public void checkUnique(Context context) {
 		// nothing to do
 	}
 	
 	@Override
-	public void checkExists(Context context) throws SyntaxError {
+	public void checkExists(Context context) {
 		// nothing to do
 	}
 	

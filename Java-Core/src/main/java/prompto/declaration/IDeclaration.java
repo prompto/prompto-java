@@ -21,8 +21,8 @@ public interface IDeclaration extends INamed, ISection {
 		TEST;
 	}
 	
-	void register(Context context) throws SyntaxError;
-	IType check(Context context) throws SyntaxError;
+	void register(Context context);
+	IType check(Context context);
 	void toDialect(CodeWriter writer);
 	void setOrigin(ICodeStore origin);
 	ICodeStore getOrigin();

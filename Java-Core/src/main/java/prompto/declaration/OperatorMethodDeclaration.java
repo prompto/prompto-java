@@ -31,7 +31,7 @@ public class OperatorMethodDeclaration extends ConcreteMethodDeclaration impleme
 	}
 
 	@Override
-	public void check(ConcreteCategoryDeclaration declaration, Context context) throws SyntaxError {
+	public void check(ConcreteCategoryDeclaration declaration, Context context) {
 		// TODO Auto-generated method stub
 		
 	}	

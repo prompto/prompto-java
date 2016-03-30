@@ -13,7 +13,7 @@ public class JavaThisExpression extends Section implements JavaExpression {
 	ThisExpression expression = new ThisExpression();
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return expression.check(context);
 	}
 	

@@ -56,7 +56,7 @@ public class Date extends BaseValue implements Comparable<Date> {
 	}
 
 	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		ResultInfo right = exp.compile(context, method, flags);
 		if(right.getType()!=PromptoPeriod.class)
 			throw new SyntaxError("Illegal: Date + " + exp.getClass().getSimpleName());
@@ -80,7 +80,7 @@ public class Date extends BaseValue implements Comparable<Date> {
 	}
 
 	public static ResultInfo compileMinus(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		ResultInfo right = exp.compile(context, method, flags);
 		if(right.getType()==PromptoDate.class) {
 			MethodConstant oper = new MethodConstant(PromptoDate.class, "minus", 
@@ -107,7 +107,7 @@ public class Date extends BaseValue implements Comparable<Date> {
 	}
 	
 	public static ResultInfo compileCompareTo(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		exp.compile(context, method, flags);
 		IOperand oper = new MethodConstant(PromptoDate.class, 
 				"compareTo", PromptoDate.class, int.class);
@@ -153,7 +153,7 @@ public class Date extends BaseValue implements Comparable<Date> {
 	}
 	
 	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) throws SyntaxError {
+			ResultInfo left, IExpression exp) {
 		exp.compile(context, method, flags);
 		IOperand oper = new MethodConstant(
 				PromptoDate.class, 

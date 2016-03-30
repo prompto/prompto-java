@@ -37,7 +37,7 @@ public class DeclarationInstruction<T extends IDeclaration> extends BaseStatemen
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		if(declaration instanceof ConcreteMethodDeclaration) {
 			ConcreteMethodDeclaration method = (ConcreteMethodDeclaration)declaration;
 			method.checkChild(context);

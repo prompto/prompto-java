@@ -58,7 +58,7 @@ public class PlusExpression implements IExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		IType lt = left.check(context);
 		IType rt = right.check(context);
 		return lt.checkAdd(context, rt, true);
@@ -93,7 +93,7 @@ public class PlusExpression implements IExpression {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		ResultInfo lval = left.compile(context, method, flags);
 		IOperatorFunction adder = adders.get(lval.getType());
 		if(adder==null && lval.getType().getTypeName().startsWith("π.χ."))

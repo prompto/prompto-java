@@ -49,7 +49,7 @@ public class RangeType extends ContainerType {
 	}
 	
 	@Override
-	public IType checkItem(Context context, IType other) throws SyntaxError {
+	public IType checkItem(Context context, IType other) {
 		if(other==IntegerType.instance())
 			return itemType;
 		else
@@ -57,12 +57,12 @@ public class RangeType extends ContainerType {
 	}
 	
 	@Override
-	public IType checkSlice(Context context) throws SyntaxError {
+	public IType checkSlice(Context context) {
 		return this;
 	}
 	
 	@Override
-	public IType checkIterator(Context context) throws SyntaxError {
+	public IType checkIterator(Context context) {
 		return itemType;
 	}
 

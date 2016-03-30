@@ -38,7 +38,7 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 	}
 
 	@Override
-	protected IType checkStatements(Context context) throws SyntaxError {
+	protected IType checkStatements(Context context) {
 		if(statement!=null)
 			return checkNative(context);
 		else if(returnType!=null)
@@ -47,7 +47,7 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 			return VoidType.instance();
 	}
 	
-	private IType checkNative(Context context) throws SyntaxError {
+	private IType checkNative(Context context) {
 		if(returnType==VoidType.instance()) {
 			// don't check return type
 			IType type = ((JavaNativeCall)statement).checkNative(context, returnType);

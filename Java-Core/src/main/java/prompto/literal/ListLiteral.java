@@ -45,7 +45,7 @@ public class ListLiteral extends Literal<ListValue> {
 	}
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		if(itemType==null) {
 			if(expressions!=null)
 				itemType = Utils.inferElementType(context, expressions);
@@ -98,14 +98,14 @@ public class ListLiteral extends Literal<ListValue> {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		ResultInfo info = CompilerUtils.compileNewInstance(method, PromptoList.class);
 		if(expressions!=null)
 			compileItems(context, method);
 		return info;
 	}
 
-	private void compileItems(Context context, MethodInfo method) throws SyntaxError {
+	private void compileItems(Context context, MethodInfo method) {
 		Flags flags = new Flags();
 		flags.withPrimitive(true);
 		for(IExpression e : expressions) {

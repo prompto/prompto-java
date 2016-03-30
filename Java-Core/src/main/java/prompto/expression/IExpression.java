@@ -18,11 +18,11 @@ import prompto.value.IValue;
  */
 public interface IExpression {
 	
-	IType check(Context context) throws SyntaxError;
+	IType check(Context context);
 	IValue interpret(Context context) throws PromptoError;
 	void toDialect(CodeWriter writer);
 
-	default ResultInfo compile(Context context, MethodInfo method, Flags flags) throws SyntaxError {
+	default ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		System.err.println("Need to implement compile for " + this.getClass().getName());
 		throw new UnsupportedOperationException();
 	}
