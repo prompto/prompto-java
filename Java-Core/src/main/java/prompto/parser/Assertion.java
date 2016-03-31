@@ -1,5 +1,7 @@
 package prompto.parser;
 
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.expression.IAssertion;
@@ -30,6 +32,10 @@ public class Assertion extends Section {
 
 	public boolean interpret(Context context, TestMethodDeclaration test) throws PromptoError {
 		return ((IAssertion)expression).interpretAssert(context, test);
+	}
+
+	public void compile(Context context, MethodInfo method, Flags flags, TestMethodDeclaration test) {
+		((IAssertion)expression).compileAssert(context, method, flags, test);
 	}
 
 }

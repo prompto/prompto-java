@@ -1,15 +1,20 @@
 package prompto.expression;
 
+import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.IInstructionListener;
 import prompto.compiler.InterfaceConstant;
+import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.OffsetListenerConstant;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.ShortOperand;
+import prompto.compiler.StackLocal;
 import prompto.compiler.StackState;
+import prompto.compiler.IVerifierEntry.Type;
+import prompto.compiler.StringConstant;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -102,9 +107,9 @@ public class OrExpression implements IPredicateExpression, IAssertion {
 		ResultInfo li = left.compile(context, method, flags.withPrimitive(true));
 		if(Boolean.class==li.getType())
 			CompilerUtils.BooleanToboolean(method);
-		IInstructionListener olc = method.addOffsetListener(new OffsetListenerConstant());
-		method.activateOffsetListener(olc);
-		method.addInstruction(Opcode.IFNE, olc);
+		IInstructionListener finalListener = method.addOffsetListener(new OffsetListenerConstant());
+		method.activateOffsetListener(finalListener);
+		method.addInstruction(Opcode.IFNE, finalListener);
 		ResultInfo ri = right.compile(context, method, flags.withPrimitive(true));
 		if(Boolean.class==ri.getType())
 			CompilerUtils.BooleanToboolean(method);
@@ -114,7 +119,7 @@ public class OrExpression implements IPredicateExpression, IAssertion {
 		method.addInstruction(Opcode.GOTO, new ShortOperand((short)4));
 		method.restoreFullStackState(branchState);
 		method.placeLabel(branchState);
-		method.inhibitOffsetListener(olc);
+		method.inhibitOffsetListener(finalListener);
 		method.addInstruction(Opcode.ICONST_1);
 		StackState lastState = method.captureStackState();
 		method.placeLabel(lastState);
@@ -140,11 +145,63 @@ public class OrExpression implements IPredicateExpression, IAssertion {
 		IValue result = interpret(lval, rval);
 		if(result==Boolean.TRUE) 
 			return true;
-		CodeWriter writer = new CodeWriter(test.getDialect(), context);
-		this.toDialect(writer);
-		String expected = writer.toString();
+		String expected = buildExpectedMessage(context, test);
 		String actual = lval.toString() + operatorToDialect(test.getDialect()) + rval.toString();
 		test.printFailure(context, expected, actual);
 		return false;
 	}
+	
+	private String buildExpectedMessage(Context context, TestMethodDeclaration test) {
+		CodeWriter writer = new CodeWriter(test.getDialect(), context);
+		this.toDialect(writer);
+		return writer.toString();
+	}
+
+	@Override
+	public void compileAssert(Context context, MethodInfo method, Flags flags, TestMethodDeclaration test) {
+		StackState finalState = method.captureStackState();
+		// compile left and store in local
+		ResultInfo info = this.left.compile(context, method, flags.withPrimitive(true));
+		if(Boolean.class==info.getType())
+			CompilerUtils.BooleanToboolean(method);
+		StackLocal left = method.registerLocal("%left%", Type.ITEM_Integer, new ClassConstant(boolean.class));
+		CompilerUtils.compileISTORE(method, left);
+		// compile right and store in local
+		info = this.right.compile(context, method, flags.withPrimitive(true));
+		if(Boolean.class==info.getType())
+			CompilerUtils.BooleanToboolean(method);
+		StackLocal right = method.registerLocal("%right%", Type.ITEM_Integer, new ClassConstant(boolean.class));
+		CompilerUtils.compileISTORE(method, right);
+		// check success of left or right
+		CompilerUtils.compileILOAD(method, left);
+		CompilerUtils.compileILOAD(method, right);
+		method.addInstruction(Opcode.IADD);
+		// 0 = failure
+		IInstructionListener finalListener = method.addOffsetListener(new OffsetListenerConstant());
+		method.activateOffsetListener(finalListener);
+		method.addInstruction(Opcode.IFNE, finalListener); 
+		// increment failure counter
+		method.addInstruction(Opcode.ICONST_1);
+		method.addInstruction(Opcode.IADD);
+		// build failure message
+		String message = buildExpectedMessage(context, test);
+		message = test.buildFailureMessagePrefix(message);
+		method.addInstruction(Opcode.LDC, new StringConstant(message));
+		CompilerUtils.compileILOAD(method, left);
+		MethodConstant valueOf = new MethodConstant(String.class, "valueOf", boolean.class, String.class);
+		method.addInstruction(Opcode.INVOKESTATIC, valueOf);
+		MethodConstant concat = new MethodConstant(String.class, "concat", String.class, String.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, concat);
+		method.addInstruction(Opcode.LDC, new StringConstant(operatorToDialect(test.getDialect())));
+		method.addInstruction(Opcode.INVOKEVIRTUAL, concat);
+		CompilerUtils.compileILOAD(method, right);
+		method.addInstruction(Opcode.INVOKESTATIC, valueOf);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, concat);
+		test.compileFailure(context, method, flags);
+		// success/final
+		method.restoreFullStackState(finalState);
+		method.placeLabel(finalState);
+		method.inhibitOffsetListener(finalListener);
+	}
+	
 }

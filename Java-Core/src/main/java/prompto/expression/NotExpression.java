@@ -2,10 +2,15 @@ package prompto.expression;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
+import prompto.compiler.IInstructionListener;
 import prompto.compiler.InterfaceConstant;
+import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
+import prompto.compiler.OffsetListenerConstant;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
+import prompto.compiler.StackState;
+import prompto.compiler.StringConstant;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -101,11 +106,47 @@ public class NotExpression implements IUnaryExpression, IPredicateExpression, IA
 		IValue result = interpret(val);
 		if(result==Boolean.TRUE) 
 			return true;
-		CodeWriter writer = new CodeWriter(test.getDialect(), context);
-		this.toDialect(writer);
-		String expected = writer.toString();
+		String expected = buildExpectedMessage(context, test);
 		String actual = operatorToDialect(test.getDialect()) + val.toString();
 		test.printFailure(context, expected, actual);
 		return false;	
+	}
+	
+	private String buildExpectedMessage(Context context, TestMethodDeclaration test) {
+		CodeWriter writer = new CodeWriter(test.getDialect(), context);
+		this.toDialect(writer);
+		return writer.toString();
+	}
+
+	@Override
+	public void compileAssert(Context context, MethodInfo method, Flags flags, TestMethodDeclaration test) {
+		StackState finalState = method.captureStackState();
+		// compile left and store in local
+		ResultInfo info = expression.compile(context, method, flags.withPrimitive(true));
+		if(Boolean.class==info.getType())
+			CompilerUtils.BooleanToboolean(method);
+		// 0 = success (since we have not applied the not)
+		IInstructionListener finalListener = method.addOffsetListener(new OffsetListenerConstant());
+		method.activateOffsetListener(finalListener);
+		method.addInstruction(Opcode.IFEQ, finalListener); 
+		// increment failure counter
+		method.addInstruction(Opcode.ICONST_1);
+		method.addInstruction(Opcode.IADD);
+		// build failure message
+		String message = buildExpectedMessage(context, test);
+		message = test.buildFailureMessagePrefix(message);
+		method.addInstruction(Opcode.LDC, new StringConstant(message));
+		method.addInstruction(Opcode.LDC, new StringConstant(operatorToDialect(test.getDialect())));
+		MethodConstant concat = new MethodConstant(String.class, "concat", String.class, String.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, concat);
+		method.addInstruction(Opcode.ICONST_1); // not it!
+		MethodConstant valueOf = new MethodConstant(String.class, "valueOf", boolean.class, String.class);
+		method.addInstruction(Opcode.INVOKESTATIC, valueOf);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, concat);
+		test.compileFailure(context, method, flags);
+		// success/final
+		method.restoreFullStackState(finalState);
+		method.placeLabel(finalState);
+		method.inhibitOffsetListener(finalListener);
 	}
 }

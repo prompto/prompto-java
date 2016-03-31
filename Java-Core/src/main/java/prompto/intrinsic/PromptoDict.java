@@ -23,6 +23,20 @@ public class PromptoDict<K,V> extends HashMap<K,V> implements Iterable<PromptoDi
 		return sb.toString();
 	}
 	
+	@Override
+	public V get(Object key) {
+		if(key==null)
+			throw new NullPointerException();
+		return super.get(key);
+	}
+	
+	@Override
+	public V put(K key, V value) {
+		if(key==null)
+			throw new NullPointerException();
+		return super.put(key, value);
+	}
+	
 	public Long getLength() {
 		return (long)size();
 	}

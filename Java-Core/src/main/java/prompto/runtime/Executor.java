@@ -5,10 +5,12 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.Map;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.PromptoClassLoader;
+import prompto.declaration.TestMethodDeclaration;
 import prompto.error.InternalError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -18,9 +20,27 @@ import prompto.utils.CmdLineParser;
 
 public abstract class Executor {
 
-	public static void executeTests(Context context) {
-		// TODO Auto-generated method stub
-		
+	public static void executeTests(Context context, File promptoDir) {
+		Collection<TestMethodDeclaration> tests = context.getTests();
+		for(TestMethodDeclaration test : tests) {
+			Context local = context.newLocalContext();
+			executeTest(local, promptoDir, test.getName(), true);
+		}
+	}
+
+	private static void executeTest(Context context, File promptoDir, String testName, boolean testMode) {
+		Type classType = CompilerUtils.getTestType(testName);
+		try(PromptoClassLoader loader = PromptoClassLoader.initialize(context, promptoDir, testMode)) {
+			Class<?> klass = loader.loadClass(classType.getTypeName());
+			Method method = klass.getDeclaredMethod("run");
+			method.invoke(null);
+		} catch(ClassNotFoundException | NoSuchMethodException e) {
+			throw new SyntaxError("Could not find a compatible \"" + testName + "\" test.");
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | IOException e) {
+			throw new InternalError(e);
+		} finally {
+			context.terminated();
+		}	
 	}
 
 	public static void executeMainNoArgs(Context context) throws PromptoError {

@@ -1,5 +1,7 @@
 package prompto.expression;
 
+import java.lang.reflect.Type;
+
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
@@ -54,6 +56,13 @@ public class SymbolExpression implements IExpression {
 		if(symbol==null)
 			throw new SyntaxError("Unknown symbol:" + id);
 		return symbol.compile(context, method, flags);			
+	}
+
+	public Type getJavaType(Context context) {
+		Symbol symbol = context.<Symbol>getRegisteredValue(Symbol.class, id);
+		if(symbol==null)
+			throw new SyntaxError("Unknown symbol:" + id);
+		return symbol.getJavaType(context);
 	}
 
 }

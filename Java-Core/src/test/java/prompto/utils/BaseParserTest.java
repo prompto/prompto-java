@@ -90,11 +90,11 @@ public abstract class BaseParserTest extends BaseTest {
 	protected boolean executeResource(String resourceName, boolean reThrow) throws PromptoError {
 		try {
 			loadResource(resourceName);
+			File root = Files.createTempDirectory("prompto_").toFile();
 			if(context.hasTests()) {
-				Executor.executeTests(context);
+				Executor.executeTests(context, root);
 				return true;
 			} else {
-				File root = Files.createTempDirectory("prompto_").toFile();
 				Executor.executeMainNoArgs(context, root);
 				return false;
 			}

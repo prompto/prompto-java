@@ -1,5 +1,7 @@
 package prompto.expression;
 
+import java.lang.reflect.Type;
+
 import prompto.error.PromptoError;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
@@ -127,6 +129,10 @@ public abstract class Symbol extends Section implements IExpression, INamed, IVa
 	@Override
 	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
 		throw new UnsupportedOperationException("toJson not supported by " + this.getClass().getSimpleName());
+	}
+
+	public Type getJavaType(Context context) {
+		throw new UnsupportedOperationException("getJavaType not supported by " + this.getClass().getSimpleName());
 	}
 
 }

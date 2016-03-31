@@ -2,6 +2,8 @@ package prompto.expression;
 
 import java.lang.reflect.Type;
 
+import prompto.compiler.ClassConstant;
+import prompto.compiler.ClassFile;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.FieldConstant;
 import prompto.compiler.FieldInfo;
@@ -96,11 +98,11 @@ public class CategorySymbol extends Symbol implements IExpression  {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		EnumeratedCategoryType itype = (EnumeratedCategoryType)this.getType(context);
-		Type type = CompilerUtils.getCategoryEnumConcreteType(itype.getTypeNameId());
-		FieldConstant field = new FieldConstant(type, this.getId().toString(), type);
+		Type parentType = getParentJavaType(context);
+		Type fieldType = getJavaType(context, parentType);
+		FieldConstant field = new FieldConstant(parentType, this.getId().toString(), fieldType);
 		method.addInstruction(Opcode.GETSTATIC, field);
-		return new ResultInfo(type);
+		return new ResultInfo(fieldType);
 	}
 
 	public void compileCallConstructor(Context context, MethodInfo method, Flags flags) {
@@ -108,6 +110,21 @@ public class CategorySymbol extends Symbol implements IExpression  {
 		Type type = CompilerUtils.getCategoryEnumConcreteType(itype.getTypeNameId());
 		ResultInfo result = CompilerUtils.compileNewInstance(method, type);
 		compileAssignments(context, method, flags, result);
+	}
+	
+	public void compileInnerClassAndCallConstructor(Context context, MethodInfo method, Flags flags, 
+			ClassConstant parentClass, Type fieldType) {
+		ClassFile thisClass = compileInnerClass(method.getClassFile().getThisClass().getType(), fieldType);
+		method.getClassFile().addInnerClass(thisClass);
+		ResultInfo result = CompilerUtils.compileNewInstance(method, fieldType);
+		compileAssignments(context, method, flags, result);
+	}
+
+	private ClassFile compileInnerClass(Type parentType, Type fieldType) {
+		ClassFile classFile = new ClassFile(fieldType);
+		classFile.setSuperClass(new ClassConstant(parentType));
+		CompilerUtils.compileEmptyConstructor(classFile);
+		return classFile;
 	}
 
 	private void compileAssignments(Context context, MethodInfo method, Flags flags, ResultInfo thisInfo) {
@@ -129,5 +146,27 @@ public class CategorySymbol extends Symbol implements IExpression  {
 				CompilerUtils.setterName(field.getName().getValue()), field.getType(), void.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 	}
+
+	private Type getParentJavaType(Context context) {
+		EnumeratedCategoryType itype = (EnumeratedCategoryType)this.getType(context);
+		return CompilerUtils.getCategoryEnumConcreteType(itype.getTypeNameId());
+	}
+
+
+	@Override
+	public Type getJavaType(Context context) {
+		Type parentType = getParentJavaType(context);
+		return getJavaType(context, parentType);
+	}
+
+	private Type getJavaType(Context context, Type parentType) {
+		EnumeratedCategoryDeclaration cd = 
+				context.getRegisteredDeclaration(EnumeratedCategoryDeclaration.class, type.getTypeNameId());
+		if(cd.isPromptoRoot(context))
+			return parentType;
+		else
+			return CompilerUtils.getExceptionType(parentType, this.getName());
+	}
+
 
 }

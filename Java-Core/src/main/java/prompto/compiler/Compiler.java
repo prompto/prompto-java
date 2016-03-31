@@ -10,6 +10,8 @@ import java.lang.reflect.Type;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.EnumeratedCategoryDeclaration;
 import prompto.declaration.EnumeratedNativeDeclaration;
+import prompto.declaration.TestMethodDeclaration;
+import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.utils.FileUtils;
@@ -25,10 +27,83 @@ public class Compiler {
 			FileUtils.deleteRecursively(classDir, false);
 	}
 
-	void compileGlobalMethods(Context context, MethodDeclarationMap methods, Type type) throws Exception {
-		ClassFile classFile = createGlobalMethodsClassFile(context, methods, type);
+	public void compileClass(Context context, String fullName) throws ClassNotFoundException {
+		ClassFile classFile = createClassFile(context, fullName);
 		writeClassFile(classFile);
 	}
+	
+	private ClassFile createClassFile(Context context, String fullName) throws ClassNotFoundException {
+		if(fullName.startsWith(CompilerUtils.GLOBAL_METHOD_PACKAGE_PREFIX)) 
+			return createGlobalMethodsClassFile(context, fullName);
+		else if(fullName.startsWith(CompilerUtils.CATEGORY_PACKAGE_PREFIX))
+			return createCategoryClassFile(context, fullName);
+		else if(fullName.startsWith(CompilerUtils.CATEGORY_ENUM_PACKAGE_PREFIX))
+			return createEnumeratedCategoryClassFile(context, fullName);
+		else if(fullName.startsWith(CompilerUtils.NATIVE_ENUM_PACKAGE_PREFIX))
+			return createEnumeratedNativeClassFile(context, fullName);
+		else if(fullName.startsWith(CompilerUtils.TEST_METHOD_PACKAGE_PREFIX))
+			return createTestClassFile(context, fullName);
+		else
+			throw new ClassNotFoundException(fullName);
+	}
+
+	private ClassFile createTestClassFile(Context context, String fullName) throws ClassNotFoundException {
+		String simpleName = CompilerUtils.testSimpleNameFrom(fullName);
+		TestMethodDeclaration decl = context.getTest(new Identifier(simpleName));
+		if(decl==null)
+			throw new ClassNotFoundException(simpleName);
+		else 
+			return decl.compile(context, fullName);
+	}
+	
+	private ClassFile createEnumeratedNativeClassFile(Context context, String fullName) throws ClassNotFoundException {
+		String simpleName = CompilerUtils.nativeEnumSimpleNameFrom(fullName);
+		EnumeratedNativeDeclaration decl = 
+				context.getRegisteredDeclaration(EnumeratedNativeDeclaration.class, new Identifier(simpleName));
+		if(decl==null)
+			throw new ClassNotFoundException(simpleName);
+		else 
+			return decl.compile(context, fullName);
+	}
+
+	private ClassFile createEnumeratedCategoryClassFile(Context context, String fullName) throws ClassNotFoundException {
+		String simpleName = CompilerUtils.categoryEnumSimpleNameFrom(fullName);
+		EnumeratedCategoryDeclaration decl = 
+				context.getRegisteredDeclaration(EnumeratedCategoryDeclaration.class, new Identifier(simpleName));
+		if(decl==null)
+			throw new ClassNotFoundException(simpleName);
+		else 
+			return decl.compile(context, fullName);
+	}
+
+	private ClassFile createCategoryClassFile(Context context, String fullName) throws ClassNotFoundException {
+		String simpleName = CompilerUtils.categorySimpleNameFrom(fullName);
+		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, new Identifier(simpleName));
+		if(decl==null)
+			throw new ClassNotFoundException(simpleName);
+		else
+			return decl.compile(context, fullName);
+	}
+
+	private ClassFile createGlobalMethodsClassFile(Context context, String fullName) throws ClassNotFoundException {
+		Type abstractType = CompilerUtils.abstractTypeFrom(fullName);
+		String simpleName = fullName.substring(fullName.indexOf(".µ.") + 3);
+		MethodDeclarationMap methods = context.getRegisteredDeclaration(MethodDeclarationMap.class, 
+				new Identifier(simpleName), true);
+		if(methods==null)
+			throw new ClassNotFoundException(simpleName);
+		else
+			return createGlobalMethodsClassFile(context, methods, abstractType);
+	}
+
+	private ClassFile createGlobalMethodsClassFile(Context context, MethodDeclarationMap methods, Type type) {
+		ClassFile classFile = new ClassFile(type);
+		classFile.addModifier(Modifier.ABSTRACT);
+		methods.values().forEach((m) -> 
+			m.compile(context, classFile));
+		return classFile;
+	}
+
 
 	private void writeClassFile(ClassFile classFile) throws CompilerException {
 		try {
@@ -50,27 +125,4 @@ public class Compiler {
 		}
 	}
 
-	private ClassFile createGlobalMethodsClassFile(Context context, MethodDeclarationMap methods, Type type) {
-		ClassFile classFile = new ClassFile(type);
-		classFile.addModifier(Modifier.ABSTRACT);
-		methods.values().forEach((m) -> 
-			m.compile(context, classFile));
-		return classFile;
-	}
-
-	public void compileCategory(Context context, String fullName, CategoryDeclaration decl) throws Exception {
-		ClassFile classFile = decl.compile(context, fullName);
-		writeClassFile(classFile);
-	}
-
-	public void compileEnumeratedCategory(Context context, String fullName, EnumeratedCategoryDeclaration decl) throws Exception {
-		ClassFile classFile = decl.compile(context, fullName);
-		writeClassFile(classFile);
-	}
-
-	public void compileEnumeratedNative(Context context, String fullName, EnumeratedNativeDeclaration decl) {
-		ClassFile classFile = decl.compile(context, fullName);
-		writeClassFile(classFile);
-	}
-	
 }

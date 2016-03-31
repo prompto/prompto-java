@@ -191,7 +191,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration i
 	}
 	
 	@Override
-	protected boolean isPromptoRoot(Context context) {
+	public boolean isPromptoRoot(Context context) {
 		if("Error".equals(getName()))
 			return false;
 		else
@@ -213,7 +213,8 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration i
 		MethodConstant m = new MethodConstant(ArrayList.class, "add", Object.class, boolean.class);
 		for(CategorySymbol s : getSymbols()) {
 			method.addInstruction(Opcode.DUP);
-			FieldConstant f = new FieldConstant(thisClass, s.getName(), thisClass.getType());
+			java.lang.reflect.Type fieldType = getFieldType(context, thisClass.getType(), s);
+			FieldConstant f = new FieldConstant(thisClass, s.getName(), fieldType);
 			method.addInstruction(Opcode.GETSTATIC, f);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 			method.addInstruction(Opcode.POP); // ignore returned boolean
@@ -222,10 +223,14 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration i
 		method.addInstruction(Opcode.PUTSTATIC, f);
 	}
 
-	private void compilePopulateSymbolField(Context context, MethodInfo method, Flags flags, CategorySymbol s) {
-		s.compileCallConstructor(context, method, flags);
-		ClassConstant c = method.getClassFile().getThisClass();
-		FieldConstant f = new FieldConstant(c, s.getName(), c.getType());
+	private void compilePopulateSymbolField(Context context, MethodInfo method, Flags flags, CategorySymbol symbol) {
+		ClassConstant thisClass = method.getClassFile().getThisClass();
+		java.lang.reflect.Type fieldType = getFieldType(context, thisClass.getType(), symbol); 
+		if(fieldType==thisClass.getType())
+			symbol.compileCallConstructor(context, method, flags);
+		else
+			symbol.compileInnerClassAndCallConstructor(context, method, flags, thisClass, fieldType);
+		FieldConstant f = new FieldConstant(thisClass, symbol.getName(), fieldType);
 		method.addInstruction(Opcode.PUTSTATIC, f);
 	}
 
@@ -240,11 +245,19 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration i
 			compileSymbolField(context, classFile, flags, s));
 	}
 
-	private void compileSymbolField(Context context, ClassFile classFile, Flags flags, Symbol s) {
-		FieldInfo field = new FieldInfo(s.getName(), classFile.getThisClass().getType());
+	private void compileSymbolField(Context context, ClassFile classFile, Flags flags, Symbol symbol) {
+		java.lang.reflect.Type type = getFieldType(context, classFile.getThisClass().getType(), symbol);
+		FieldInfo field = new FieldInfo(symbol.getName(), type);
 		field.clearModifier(Modifier.PROTECTED);
 		field.addModifier(Modifier.STATIC | Modifier.PUBLIC);
 		classFile.addField(field);
+	}
+
+	private java.lang.reflect.Type getFieldType(Context context, java.lang.reflect.Type thisType, Symbol symbol) {
+		if(isPromptoRoot(context))
+			return thisType;
+		else
+			return CompilerUtils.getExceptionType(thisType, symbol.getName());
 	}
 
 }

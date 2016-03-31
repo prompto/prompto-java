@@ -1,5 +1,20 @@
 package prompto.declaration;
 
+import java.io.PrintStream;
+import java.lang.reflect.Modifier;
+
+import prompto.compiler.ClassFile;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Descriptor;
+import prompto.compiler.FieldConstant;
+import prompto.compiler.Flags;
+import prompto.compiler.IInstructionListener;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.OffsetListenerConstant;
+import prompto.compiler.Opcode;
+import prompto.compiler.StackState;
+import prompto.compiler.StringConstant;
 import prompto.error.ExecutionError;
 import prompto.error.PromptoError;
 import prompto.expression.SymbolExpression;
@@ -30,7 +45,6 @@ public class TestMethodDeclaration extends BaseDeclaration {
 	
 	@Override
 	public Type getDeclarationType() {
-		// TODO Auto-generated method stub
 		return Type.TEST;
 	}
 	
@@ -99,11 +113,20 @@ public class TestMethodDeclaration extends BaseDeclaration {
 	}
 
 	public void printFailure(Context context, String expected, String actual) {
-		System.out.println(getName() + " test failed, expected: " + expected + ", actual: " + actual);
+		String message = buildFailureMessagePrefix(expected);
+		System.out.println(message + actual);
+	}
+
+	public String buildFailureMessagePrefix(String expected) {
+		return getName() + " test failed, expected: " + expected + ", actual: ";
 	}
 
 	private void printSuccess(Context context) {
-		System.out.println(getName() + " test successful");
+		System.out.println(buildSuccessMessage());
+	}
+
+	public String buildSuccessMessage() {
+		return getName() + " test successful";
 	}
 
 	private boolean interpretBody(Context context) throws PromptoError {
@@ -208,4 +231,67 @@ public class TestMethodDeclaration extends BaseDeclaration {
 			writer.append("}\n");
 		}
 	}
+
+	public ClassFile compile(Context context, String fullName) {
+		java.lang.reflect.Type type = CompilerUtils.abstractTypeFrom(fullName);
+		ClassFile classFile = new ClassFile(type);
+		classFile.addModifier(Modifier.ABSTRACT);
+		Descriptor.Method proto = new Descriptor.Method(void.class);
+		MethodInfo method = classFile.newMethod("run", proto);
+		method.addModifier(Modifier.STATIC);
+		if(error!=null)
+			compileTestWithError(context, method, new Flags());
+		else
+			compileTestNoError(context, method, new Flags());
+		return classFile;
+	}
+
+	private void compileTestNoError(Context context, MethodInfo method, Flags flags) {
+		// don't use statements.compile because we need the locals for the assertions
+		statements.forEach((s)->
+			s.compile(context, method, flags));
+		method.addInstruction(Opcode.ICONST_0); // failures counter
+		assertions.forEach((a)->
+			a.compile(context, method, flags, this));
+		compileCheckSuccess(context, method, flags);
+		method.addInstruction(Opcode.RETURN);
+	}
+
+	private void compileCheckSuccess(Context context, MethodInfo method, Flags flags) {
+		IInstructionListener finalListener = method.addOffsetListener(new OffsetListenerConstant());
+		method.activateOffsetListener(finalListener);
+		method.addInstruction(Opcode.IFNE, finalListener); // 0 = no failures
+		StackState finalState = method.captureStackState();
+		compileSuccess(context, method, flags);
+		// final
+		method.restoreFullStackState(finalState);
+		method.placeLabel(finalState);
+		method.inhibitOffsetListener(finalListener);
+		
+	}
+
+	public void compileSuccess(Context context, MethodInfo method, Flags flags) {
+		String message = buildSuccessMessage();
+		method.addInstruction(Opcode.LDC, new StringConstant(message));
+		compilePrintResult(context, method, flags);
+	}
+
+	private void compileTestWithError(Context context, MethodInfo method, Flags flags) {
+		throw new UnsupportedOperationException(); // TODO for now
+	}
+
+	public void compileFailure(Context context, MethodInfo method, Flags flags) {
+		compilePrintResult(context, method, flags);
+	}
+	
+	public void compilePrintResult(Context context, MethodInfo method, Flags flags) {
+		// the message is on top of the stack
+		FieldConstant fc = new FieldConstant(System.class, "out", PrintStream.class);
+		method.addInstruction(Opcode.GETSTATIC, fc);
+		method.addInstruction(Opcode.SWAP);
+		MethodConstant mc = new MethodConstant(PrintStream.class, "println", String.class, void.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, mc);
+	}
+
+
 }

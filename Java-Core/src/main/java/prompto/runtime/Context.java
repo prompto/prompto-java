@@ -618,11 +618,17 @@ public class Context implements IContext {
 	}
 
 	public Collection<TestMethodDeclaration> getTests() {
-		return tests.values();
+		if(globals!=this)
+			return globals.getTests();
+		else
+			return tests.values();
 	}
 
 	public TestMethodDeclaration getTest(Identifier name) {
-		return tests.get(name);
+		if(globals!=this)
+			return globals.getTest(name);
+		else
+			return tests.get(name);
 	}
 	
 	@Override

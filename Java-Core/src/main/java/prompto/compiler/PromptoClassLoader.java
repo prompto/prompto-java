@@ -1,18 +1,12 @@
 package prompto.compiler;
 
 import java.io.File;
-import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Paths;
 
-import prompto.declaration.CategoryDeclaration;
-import prompto.declaration.EnumeratedCategoryDeclaration;
-import prompto.declaration.EnumeratedNativeDeclaration;
-import prompto.grammar.Identifier;
 import prompto.runtime.Context;
-import prompto.runtime.Context.MethodDeclarationMap;
 
 /* a class loader which is able to create and store classes for prompto objects */
 public class PromptoClassLoader extends URLClassLoader {
@@ -100,91 +94,13 @@ public class PromptoClassLoader extends URLClassLoader {
 	}
 
 	private void createPromptoClass(String fullName) throws ClassNotFoundException {
-		if(fullName.startsWith(CompilerUtils.GLOBAL_METHOD_PACKAGE_PREFIX)) {
-			createGlobalMethodsClass(fullName);
-		} else if(fullName.startsWith(CompilerUtils.CATEGORY_PACKAGE_PREFIX)) {
-			createCategoryClass(fullName);
-		} else if(fullName.startsWith(CompilerUtils.CATEGORY_ENUM_PACKAGE_PREFIX)) {
-			createEnumeratedCategoryClass(fullName);
-		} else if(fullName.startsWith(CompilerUtils.NATIVE_ENUM_PACKAGE_PREFIX)) {
-			createEnumeratedNativeClass(fullName);
-		} else
-			throw new ClassNotFoundException(fullName);
-	}
-
-	private void createEnumeratedNativeClass(String fullName) throws ClassNotFoundException {
-		String simpleName = CompilerUtils.nativeEnumSimpleNameFrom(fullName);
-		EnumeratedNativeDeclaration decl = 
-				context.getRegisteredDeclaration(EnumeratedNativeDeclaration.class, new Identifier(simpleName));
-		if(decl==null)
-			throw new ClassNotFoundException(simpleName);
-		else
-			createEnumeratedNativeClass(fullName, decl);
-	}
-
-	private void createEnumeratedNativeClass(String fullName, EnumeratedNativeDeclaration decl) throws ClassNotFoundException {
 		try {
 			Compiler compiler = new Compiler(getClassDir()); // where to store .class
-			compiler.compileEnumeratedNative(context, fullName, decl);
-		} catch(Exception e) {
-			throw new ClassNotFoundException(fullName, e);
-		}
-	}
-
-	private void createEnumeratedCategoryClass(String fullName) throws ClassNotFoundException {
-		String simpleName = CompilerUtils.categoryEnumSimpleNameFrom(fullName);
-		EnumeratedCategoryDeclaration decl = 
-				context.getRegisteredDeclaration(EnumeratedCategoryDeclaration.class, new Identifier(simpleName));
-		if(decl==null)
-			throw new ClassNotFoundException(simpleName);
-		else
-			createEnumeratedCategoryClass(fullName, decl);
-	}
-
-	private void createEnumeratedCategoryClass(String fullName, EnumeratedCategoryDeclaration decl) throws ClassNotFoundException {
-		try {
-			Compiler compiler = new Compiler(getClassDir()); // where to store .class
-			compiler.compileEnumeratedCategory(context, fullName, decl);
+			compiler.compileClass(context, fullName);
 		} catch(Exception e) {
 			throw new ClassNotFoundException(fullName, e);
 		}
 	}
 	
-	private void createCategoryClass(String fullName) throws ClassNotFoundException {
-		String simpleName = CompilerUtils.categorySimpleNameFrom(fullName);
-		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, new Identifier(simpleName));
-		if(decl==null)
-			throw new ClassNotFoundException(simpleName);
-		else
-			createCategoryClass(fullName, decl);
-	}
 
-	private void createCategoryClass(String fullName, CategoryDeclaration decl) throws ClassNotFoundException {
-		try {
-			Compiler compiler = new Compiler(getClassDir()); // where to store .class
-			compiler.compileCategory(context, fullName, decl);
-		} catch(Exception e) {
-			throw new ClassNotFoundException(fullName, e);
-		}
-	}
-
-	private void createGlobalMethodsClass(String fullName) throws ClassNotFoundException {
-		Type abstractType = CompilerUtils.abstractTypeFrom(fullName);
-		String simpleName = fullName.substring(fullName.indexOf(".µ.") + 3);
-		MethodDeclarationMap methods = context.getRegisteredDeclaration(MethodDeclarationMap.class, 
-				new Identifier(simpleName), true);
-		if(methods==null)
-			throw new ClassNotFoundException(simpleName);
-		else
-			createGlobalMethodsClass(abstractType, methods);
-	}
-
-	private void createGlobalMethodsClass(Type abstractType, MethodDeclarationMap methods) throws ClassNotFoundException {
-		try {
-			Compiler compiler = new Compiler(getClassDir()); // where to store .class
-			compiler.compileGlobalMethods(context, methods, abstractType);
-		} catch(Exception e) {
-			throw new ClassNotFoundException(abstractType.getTypeName(), e);
-		}
-	}
 }

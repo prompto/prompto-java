@@ -111,13 +111,82 @@ public abstract class CompilerUtils {
 		return sb.toString();
 	}
 
-	public static final char PROMPTO_CHAR = 'π';
-	public static final String INNER_SEPARATOR = "$%";
-
 	public static final String GLOBAL_METHOD_PACKAGE_PREFIX = "π.µ.";
+	public static final String TEST_METHOD_PACKAGE_PREFIX = "π.τ.";
+	public static final String ATTRIBUTE_PACKAGE_PREFIX = "π.α.";
 	public static final String CATEGORY_PACKAGE_PREFIX = "π.χ.";
 	public static final String CATEGORY_ENUM_PACKAGE_PREFIX = "π.ε.";
 	public static final String NATIVE_ENUM_PACKAGE_PREFIX = "π.η.";
+
+	public static final String INNER_SEPARATOR = "$%";
+
+	public static Type getTestType(String testName) {
+		testName = encodeName(testName);
+		return new PromptoType(TEST_METHOD_PACKAGE_PREFIX + testName);
+	}
+	
+	// see https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-4.html#jvms-4.2.2
+	// also make file separators invalid, and '&' for encoding
+	static Map<Character, String> invalidCharMap = createInvalidCharMap();
+	static Map<String, Character> entityCharMap = createEntityCharMap();
+	
+	private static Map<Character, String> createInvalidCharMap() {
+		Map<Character, String> map = new HashMap<>();
+		// all entities must be 5 chars for decode to work!
+		map.put('.', "&#46;");
+		map.put(';', "&#59;");
+		map.put('[', "&#91;");
+		map.put('/', "&#47;");
+		map.put(':', "&#58;");
+		map.put(':', "&#92;");
+		map.put('&', "&amp;");
+		return map;
+	}
+	
+	private static Map<String, Character> createEntityCharMap() {
+		Map<String, Character> map = new HashMap<>();
+		invalidCharMap.entrySet().forEach((e)->
+			map.put(e.getValue(), e.getKey()));
+		return map;
+	}
+
+	private static String decodeName(String name) {
+		StringBuilder sb = new StringBuilder();
+		while(name.length()>0) {
+			int idx = name.indexOf('&');
+			if(idx<0) {
+				sb.append(name);
+				return sb.toString();
+			}
+			if(idx>0) {
+				sb.append(name.substring(0, idx));
+				name = name.substring(idx);
+			}
+			if(name.length()>=5) {
+				String key = name.substring(0, 5);
+				if(entityCharMap.containsKey(key)) {
+					name = name.substring(5);
+					sb.append(entityCharMap.get(key));
+				}
+			} else {
+				sb.append(name);
+				return sb.toString();
+			}
+		}
+		throw new UnsupportedOperationException("Should never get there!");
+	}
+	
+	private static String encodeName(String name) {
+		StringBuilder sb = new StringBuilder();
+		for(char c : name.toCharArray())
+			sb.append(encodeChar(c));
+		return sb.toString();
+	}
+
+	private static String encodeChar(Character c) {
+		String s = invalidCharMap.get(c);
+		return s==null ? c.toString() : s;
+	}
 
 	public static Type getGlobalMethodType(Identifier id) {
 		return CompilerUtils.getGlobalMethodType(id.toString());
@@ -151,27 +220,33 @@ public abstract class CompilerUtils {
 
 	public static String categorySimpleNameFrom(String fullName) {
 		String simpleName = fullName.substring(CATEGORY_PACKAGE_PREFIX.length());
-		int idx = simpleName.indexOf(INNER_SEPARATOR);
+		int idx = simpleName.indexOf('$');
 		if(idx>=0)
-			simpleName = simpleName.substring(idx + INNER_SEPARATOR.length()); 
+			simpleName = simpleName.substring(0, idx); 
 		return simpleName;
 	}
 	
 	public static String categoryEnumSimpleNameFrom(String fullName) {
 		String simpleName =  fullName.substring(CATEGORY_ENUM_PACKAGE_PREFIX.length());
-		int idx = simpleName.indexOf(INNER_SEPARATOR);
+		int idx = simpleName.indexOf('$');
 		if(idx>=0)
-			simpleName = simpleName.substring(idx + INNER_SEPARATOR.length()); 
+			simpleName = simpleName.substring(0, idx); 
 		return simpleName;
 	}
 	
 	public static String nativeEnumSimpleNameFrom(String fullName) {
 		String simpleName =  fullName.substring(NATIVE_ENUM_PACKAGE_PREFIX.length());
-		int idx = simpleName.indexOf(INNER_SEPARATOR);
+		int idx = simpleName.indexOf('$');
 		if(idx>=0)
-			simpleName = simpleName.substring(idx + INNER_SEPARATOR.length()); 
+			simpleName = simpleName.substring(0, idx); 
 		return simpleName;
 	}
+	
+	public static String testSimpleNameFrom(String fullName) {
+		String simpleName =  fullName.substring(TEST_METHOD_PACKAGE_PREFIX.length());
+		return decodeName(simpleName);
+	}
+
 	
 	public static Type getCategoryInterfaceType(Identifier id) {
 		return getCategoryInterfaceType(id.toString());
@@ -199,6 +274,10 @@ public abstract class CompilerUtils {
 
 	public static Type getCategoryEnumConcreteType(Identifier id) {
 		return getCategoryEnumConcreteType(id.toString());
+	}
+	
+	public static Type getExceptionType(Type type, String name) {
+		return new PromptoType(type.getTypeName() + '$' + name);
 	}
 
 	public static Type getNativeEnumType(Identifier id) {
@@ -475,11 +554,11 @@ public abstract class CompilerUtils {
 		return compileCallConstructor(method, klass);
 	}
 
-	public static Type getCategoryClass(Identifier identifier) {
-		return getCategoryClass(identifier.toString());
+	public static Type getType(Identifier identifier) {
+		return getType(identifier.toString());
 	}
 
-	public static Type getCategoryClass(String name) {
+	public static Type getType(String name) {
 		name = name.replace('.', '/');
 		return new PromptoType(name);
 	}
@@ -553,10 +632,26 @@ public abstract class CompilerUtils {
 		else
 			throw new UnsupportedOperationException();
 	}
+	
+	public static ResultInfo compileILOAD(MethodInfo method, StackLocal value) {
+		if(value.getIndex()<4) {
+			Opcode opcode = Opcode.values()[value.getIndex()+Opcode.ILOAD_0.ordinal()];
+			method.addInstruction(opcode);
+		} else if(value.getIndex()<255)
+			method.addInstruction(Opcode.ILOAD, new ByteOperand((byte)value.getIndex()));
+		else
+			throw new UnsupportedOperationException();
+		return new ResultInfo(int.class);
+	}
 
-
-
-
-
+	public static void compileISTORE(MethodInfo method, StackLocal value) {
+		if(value.getIndex()<4) {
+			Opcode opcode = Opcode.values()[value.getIndex() + Opcode.ISTORE_0.ordinal()];
+			method.addInstruction(opcode);
+		} else if(value.getIndex()<255)
+			method.addInstruction(Opcode.ISTORE, new ByteOperand((byte)value.getIndex()));
+		else
+			throw new UnsupportedOperationException();
+	}
 
 }

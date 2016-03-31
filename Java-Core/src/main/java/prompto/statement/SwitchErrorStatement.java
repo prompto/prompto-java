@@ -176,7 +176,7 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		List<List<ExceptionHandler>> handlers = installExceptionHandlers(context, method, flags);
 		ResultInfo result = statements.compile(context, method, flags);
-		if(result.isReturn()) 
+		if(result.isReturn() || result.isThrow()) 
 			compileExceptionHandlers(context, method, flags, handlers, null);
 		else {
 			List<OffsetListenerConstant> finalOffsets = new LinkedList<>();
@@ -228,8 +228,10 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 
 	private Type compileConvertException(Context context, MethodInfo method, Flags flags, String name) {
 		method.addInstruction(Opcode.POP); // the original exception
-		ClassConstant cc = new ClassConstant(CompilerUtils.getCategoryEnumConcreteType("Error"));
-		FieldConstant fc = new FieldConstant(cc, name, cc.getType());
+		Type classType = CompilerUtils.getCategoryEnumConcreteType("Error");
+		ClassConstant cc = new ClassConstant(classType);
+		Type fieldType = CompilerUtils.getExceptionType(classType, name);
+		FieldConstant fc = new FieldConstant(cc, name, fieldType);
 		method.addInstruction(Opcode.GETSTATIC, fc);
 		return cc.getType();
 	}
@@ -315,7 +317,7 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 			type = NullPointerException.class;
 			break;
 		default:
-			throw new UnsupportedOperationException();
+			type = symbol.getJavaType(context);
 		}
 		ExceptionHandler handler = method.registerExceptionHandler(type);
 		method.activateOffsetListener(handler);
