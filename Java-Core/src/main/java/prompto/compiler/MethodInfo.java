@@ -45,12 +45,12 @@ public class MethodInfo {
 		return addInstruction(new Instruction(op, operands));
 	}
 	
-	public IInstruction addInstruction(IInstruction instruction) {
+	public <T extends IInstruction> T addInstruction(T instruction) {
 		createCodeAttribute();
 		return codeAttribute.addInstruction(instruction);
 	}
 
-	public IInstructionListener addOffsetListener(IInstructionListener listener) {
+	public <T extends IInstructionListener> T addOffsetListener(T listener) {
 		createCodeAttribute();
 		return codeAttribute.addOffsetListener(listener);
 	}
@@ -76,6 +76,10 @@ public class MethodInfo {
 		return codeAttribute.getStackMapTable().getRegisteredLocal(name);
 	}
 	
+	public void unregisterLocal(StackLocal local) {
+		codeAttribute.getStackMapTable().unregisterLocal(local);
+	}
+
 	public ExceptionHandler registerExceptionHandler(java.lang.reflect.Type type) {
 		createCodeAttribute();
 		return codeAttribute.registerExceptionHandler(type);
@@ -134,6 +138,7 @@ public class MethodInfo {
 		attributes.forEach((a)->
 			a.writeTo(writer));
 	}
+
 
 
 

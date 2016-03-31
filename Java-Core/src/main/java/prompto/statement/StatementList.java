@@ -2,6 +2,9 @@ package prompto.statement;
 
 import java.util.LinkedList;
 
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.java.JavaNativeCall;
 import prompto.parser.Dialect;
@@ -119,6 +122,16 @@ public class StatementList extends LinkedList<IStatement> {
 				writer.newLine();
 			}
 		}
+	}
+
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		ResultInfo info = null;
+		for(IStatement statement : this) {
+			ResultInfo ri = statement.compile(context, method, flags);
+			if(info==null)
+				info = ri; // TODO refine
+		};
+		return info;
 	}
 
 

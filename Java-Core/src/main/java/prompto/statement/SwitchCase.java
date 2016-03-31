@@ -18,6 +18,10 @@ public abstract class SwitchCase extends Section implements ISection {
 		this.expression = expression;
 		this.statements = statements;
 	}
+	
+	public IExpression getExpression() {
+		return expression;
+	}
 
 	public abstract void checkSwitchType(Context context, IType type);
 

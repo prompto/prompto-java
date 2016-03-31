@@ -70,6 +70,14 @@ public class StackState {
 	public StackLocal pushLocal(StackLocal item) {
 		return locals.push(item);
 	}
+	
+	public StackLocal peekLocal() {
+		return locals.peek();
+	}
+
+	public StackLocal popLocal() {
+		return locals.pop();
+	}
 
 	public void register(ConstantsPool pool) {
 		entries.forEach((e)->

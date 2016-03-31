@@ -588,7 +588,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return new ClassConstant(CompilerUtils.getCategoryInterfaceType(getId()));
 	}
 
-	private ClassConstant getSuperClass(Context context) {
+	protected ClassConstant getSuperClass(Context context) {
 		if(derivedFrom==null) 
 			return new ClassConstant(PromptoRoot.class);
 		/* the JVM does not support multiple inheritance but we can still benefit from single inheritance */
@@ -722,14 +722,25 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		method.addInstruction(Opcode.ALOAD_1, fc);
 		FieldConstant f = new FieldConstant(classFile.getThisClass(), field.getName().getValue(), field.getType());
 		method.addInstruction(Opcode.PUTFIELD, f);
-		// also store data in storable
-		MethodConstant m = new MethodConstant(PromptoRoot.class, "setStorable", String.class, Object.class, void.class);
-		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
-		method.addInstruction(Opcode.LDC, new StringConstant(field.getName().getValue()));
-		method.addInstruction(Opcode.ALOAD_1, new ClassConstant(Object.class));
-		method.addInstruction(Opcode.INVOKESPECIAL, m);
+		if(isPromptoRoot(context)) {
+			// also store data in storable
+			MethodConstant m = new MethodConstant(PromptoRoot.class, "setStorable", String.class, Object.class, void.class);
+			method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
+			method.addInstruction(Opcode.LDC, new StringConstant(field.getName().getValue()));
+			method.addInstruction(Opcode.ALOAD_1, new ClassConstant(Object.class));
+			method.addInstruction(Opcode.INVOKESPECIAL, m);
+		}
 		// done
 		method.addInstruction(Opcode.RETURN);
+	}
+
+	protected boolean isPromptoRoot(Context context) {
+		if(PromptoRoot.class==getSuperClass(context).getType())
+			return true;
+		else {
+			CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, derivedFrom.getFirst());
+			return decl.isPromptoRoot(context);
+		}
 	}
 
 	private void compileLocalGetterMethod(Context context, ClassFile classFile, Flags flags,Identifier id, FieldInfo field) {

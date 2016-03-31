@@ -17,6 +17,10 @@ public class ExceptionHandler implements IInstructionListener {
 		exception = new ClassConstant(type);
 	}
 
+	public ClassConstant getException() {
+		return exception;
+	}
+	
 	public void setStackState(StackState state) {
 		this.state = state;
 	}

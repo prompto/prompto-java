@@ -79,6 +79,13 @@ public class StackMapTableAttribute implements IAttribute {
 		state.pushLocal(local);
 		return other;
 	}
+	
+	public StackLocal unregisterLocal(StackLocal local) {
+		if(!local.equals(state.peekLocal()))
+			throw new UnsupportedOperationException();
+		return state.popLocal();
+	}
+
 
 	public StackLocal getRegisteredLocal(String name) {
 		return locals.getRegisteredLocal(name);

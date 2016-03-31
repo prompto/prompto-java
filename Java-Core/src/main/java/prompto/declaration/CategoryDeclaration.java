@@ -363,5 +363,9 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		});
 	}
 
+	protected boolean isPromptoRoot(Context context) {
+		return false;
+	}
+
 	
 }

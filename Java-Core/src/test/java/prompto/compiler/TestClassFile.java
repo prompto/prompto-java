@@ -213,13 +213,15 @@ public class TestClassFile {
 		m.registerLocal("%value%", IVerifierEntry.Type.ITEM_Object, new ClassConstant(Object.class));
 		ExceptionHandler handler = m.registerExceptionHandler(NullPointerException.class);
 		m.activateOffsetListener(handler);
-		m.addInstruction(Opcode.ALOAD_0); // the parameter
+		m.addInstruction(Opcode.ALOAD_0, new ClassConstant(Object.class)); // the parameter
 		m.addInstruction(Opcode.INVOKEVIRTUAL, new MethodConstant(Object.class, "toString", String.class));
 		m.addInstruction(Opcode.ARETURN, new ClassConstant(String.class));
 		m.inhibitOffsetListener(handler);
 		m.placeExceptionHandler(handler);
+		StackLocal error = m.registerLocal("%error%", IVerifierEntry.Type.ITEM_Object, new ClassConstant(NullPointerException.class));
 		m.addInstruction(Opcode.LDC, new StringConstant("Caught!"));
 		m.addInstruction(Opcode.ARETURN, new ClassConstant(String.class));
+		m.unregisterLocal(error);
 		ByteArrayOutputStream o = new ByteArrayOutputStream();
 		c.writeTo(o);
 		byte[] gen = o.toByteArray();

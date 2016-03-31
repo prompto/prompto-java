@@ -181,6 +181,23 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration i
 		return true;
 	}
 	
+
+	@Override
+	protected ClassConstant getSuperClass(Context context) {
+		if("Error".equals(getName()))
+			return new ClassConstant(Throwable.class);
+		else
+			return super.getSuperClass(context);
+	}
+	
+	@Override
+	protected boolean isPromptoRoot(Context context) {
+		if("Error".equals(getName()))
+			return false;
+		else
+			return super.isPromptoRoot(context);
+	}
+	
 	@Override
 	protected void compileClassConstructorBody(Context context, MethodInfo method, Flags flags) {
 		if(isStorable())

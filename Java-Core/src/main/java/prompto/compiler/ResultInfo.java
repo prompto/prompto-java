@@ -8,11 +8,13 @@ public class ResultInfo {
 
 	public static enum Flag {
 		RETURN,
+		THROW,
 		STATIC
 	}
 
 	Type type;
 	boolean isReturn = false;
+	boolean isThrow = false;
 	boolean isStatic = false;
 	Boolean isPrimitive = null;
 	Boolean isInterface = null;
@@ -22,6 +24,9 @@ public class ResultInfo {
 		for(Flag flag : flags) switch(flag) {
 		case RETURN:
 			isReturn = true;
+			break;
+		case THROW:
+			isThrow = true;
 			break;
 		case STATIC:
 			isStatic = true;
@@ -74,4 +79,7 @@ public class ResultInfo {
 		return isReturn;
 	}
 
+	public boolean isThrow() {
+		return isThrow;
+	}
 }

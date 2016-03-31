@@ -79,7 +79,7 @@ public class CodeAttribute implements IAttribute {
 		
 	}
 	
-	public IInstructionListener addOffsetListener(IInstructionListener listener) {
+	public <T extends IInstructionListener> T addOffsetListener(T listener) {
 		listeners.add(listener);
 		return listener;
 	}
@@ -203,7 +203,7 @@ public class CodeAttribute implements IAttribute {
 			a.register(pool));
 	}	
 	
-	public IInstruction addInstruction(IInstruction instruction) {
+	public <T extends IInstruction> T addInstruction(T instruction) {
 		instructions.add(instruction);
 		return instruction;
 	}
