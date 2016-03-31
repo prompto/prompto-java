@@ -80,13 +80,13 @@ public class TernaryExpression implements IExpression {
 		IInstructionListener finalListener = method.addOffsetListener(new OffsetListenerConstant());
 		method.activateOffsetListener(finalListener);
 		method.addInstruction(Opcode.GOTO, finalListener);
-		method.restoreStackState(initialState);
+		method.restoreFullStackState(initialState);
 		method.placeLabel(initialState);
 		method.inhibitOffsetListener(branchListener);
 		ifFalse.compile(context, method, flags.withPrimitive(false));
 		method.inhibitOffsetListener(finalListener);
 		StackState finalState = method.captureStackState();
-		method.restoreStackState(finalState);
+		method.restoreFullStackState(finalState);
 		method.placeLabel(finalState);
 		return result;
 	}

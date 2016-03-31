@@ -114,12 +114,11 @@ public class WhileStatement extends BaseStatement {
 		IInstructionListener exit = method.addOffsetListener(new OffsetListenerConstant());
 		method.activateOffsetListener(exit);
 		method.addInstruction(Opcode.IFEQ, exit);
-		for(IStatement statement : statements)
-			statement.compile(context, method, flags);
+		statements.compile(context, method, flags);
 		method.inhibitOffsetListener(loop);
 		method.addInstruction(Opcode.GOTO, loop);
 		method.inhibitOffsetListener(exit);
-		method.restoreStackState(neutralState);
+		method.restoreFullStackState(neutralState);
 		method.placeLabel(neutralState);
 		// TODO manage return value in loop
 		return new ResultInfo(void.class);

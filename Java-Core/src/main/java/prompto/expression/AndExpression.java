@@ -101,7 +101,7 @@ public class AndExpression implements IPredicateExpression, IAssertion {
 		StackState branchState = method.captureStackState();
 		method.addInstruction(Opcode.ICONST_1);
 		method.addInstruction(Opcode.GOTO, new ShortOperand((short)4));
-		method.restoreStackState(branchState);
+		method.restoreFullStackState(branchState);
 		method.placeLabel(branchState);
 		method.inhibitOffsetListener(olc);
 		method.addInstruction(Opcode.ICONST_0);

@@ -104,25 +104,32 @@ public class SwitchStatement extends BaseSwitchStatement {
 	}
 	
 	private void compileSwitchCases(Context context, MethodInfo method, Flags flags) {
+		StackState beforeValue = method.captureStackState();
 		compileSwitchValue(context, method, flags);
-		SwitchCaseBranch branch = new SwitchCaseBranch();
-		branch.neutralState = method.captureStackState();
-		for(SwitchCase switchCase : switchCases)
-			 compileSwitchCase(context, method, flags, switchCase, branch);
-		compileDefaultCase(context, method, flags, branch);
-		method.restoreStackState(branch.neutralState);
-		method.placeLabel(branch.neutralState);
+		SwitchCaseBranch branch = compileSwitchCasesWithValue(context, method, flags);
+		method.restoreFullStackState(beforeValue);
+		method.placeLabel(beforeValue);
 		stopListeningForThisBranch(method, branch);
 		branch.finalOffsetListeners.forEach((l)->
 			method.inhibitOffsetListener(l));
 	}
 	
-	private void compileSwitchValue(Context context, MethodInfo method, Flags flags) {
+	private SwitchCaseBranch compileSwitchCasesWithValue(Context context, MethodInfo method, Flags flags) {
+		SwitchCaseBranch branch = new SwitchCaseBranch();
+		branch.neutralState = method.captureStackState();
+		for(SwitchCase switchCase : switchCases)
+			 compileSwitchCase(context, method, flags, switchCase, branch);
+		compileDefaultCase(context, method, flags, branch);
+		return branch;
+	}
+
+	private StackLocal compileSwitchValue(Context context, MethodInfo method, Flags flags) {
 		context = context.newChildContext();
 		context.registerValue(new Variable(new Identifier("%value%"), expression.check(context)));
 		ResultInfo info = expression.compile(context, method, flags);
 		StackLocal value = method.registerLocal("%value%", Type.ITEM_Object, new ClassConstant(info.getType()));
 		CompilerUtils.compileASTORE(method, value);
+		return value;
 	}
 
 	private void compileSwitchCase(Context context, MethodInfo method, Flags flags, SwitchCase element, SwitchCaseBranch branch) {
@@ -167,19 +174,17 @@ public class SwitchStatement extends BaseSwitchStatement {
 	}
 	
 	private ResultInfo compileStatements(Context context, MethodInfo method, Flags flags, SwitchCase switchCase, SwitchCaseBranch branch) {
-		ResultInfo info = new ResultInfo(void.class);
-		if(switchCase.statements!=null) {
-			for(IStatement statement : switchCase.statements)
-				info = statement.compile(context, method, flags);
-		}
-		return info; // we assume all statements are reachable
+		if(switchCase.statements!=null)
+			return switchCase.statements.compile(context, method, flags);
+		else
+			return new ResultInfo(void.class); 
 	}
 
 	
 	private void restoreNeutralStackState(MethodInfo method, SwitchCaseBranch branch) {
 		// is there a need to restore the stack?
 		if(branch.branchOffsetListener!=null) {
-			method.restoreStackState(branch.neutralState);
+			method.restoreFullStackState(branch.neutralState);
 			method.placeLabel(branch.neutralState);
 		}
 	}

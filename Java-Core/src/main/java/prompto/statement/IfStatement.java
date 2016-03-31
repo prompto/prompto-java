@@ -156,7 +156,7 @@ public class IfStatement extends BaseStatement {
 		branch.neutralState = method.captureStackState();
 		for(IfElement element : elements)
 			 compileIfElement(context, method, flags, element, branch);
-		method.restoreStackState(branch.neutralState);
+		method.restoreFullStackState(branch.neutralState);
 		method.placeLabel(branch.neutralState);
 		stopListeningForThisBranch(method, branch);
 		branch.finalOffsetListeners.forEach((l)->
@@ -209,12 +209,10 @@ public class IfStatement extends BaseStatement {
 
 
 	private ResultInfo compileStatements(Context context, MethodInfo method, Flags flags, IfElement element, IfElementBranch branch) {
-		ResultInfo info = new ResultInfo(void.class);
-		if(element.statements!=null) {
-			for(IStatement statement : element.statements)
-				info = statement.compile(context, method, flags);
-		}
-		return info; // we assume all statements are reachable
+		if(element.statements!=null)
+			return element.statements.compile(context, method, flags);
+		else
+			return new ResultInfo(void.class);
 	}
 
 
@@ -246,7 +244,7 @@ public class IfStatement extends BaseStatement {
 	private void restoreNeutralStackState(MethodInfo method, IfElementBranch branch) {
 		// is there a need to restore the stack?
 		if(branch.branchOffsetListener!=null) {
-			method.restoreStackState(branch.neutralState);
+			method.restoreFullStackState(branch.neutralState);
 			method.placeLabel(branch.neutralState);
 		}
 	}

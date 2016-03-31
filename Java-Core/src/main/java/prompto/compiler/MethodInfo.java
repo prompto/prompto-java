@@ -64,20 +64,17 @@ public class MethodInfo {
 	}
 
 	public StackLocal registerLocal(String name, Type type, ClassConstant className) {
-		StackLocal local = getRegisteredLocal(name);
-		if(local!=null)
-			return local;
-		else
-			return codeAttribute.getStackMapTable().registerLocal(type.newStackLocal(name, className));
+		createCodeAttribute();
+		return codeAttribute.registerLocal(type.newStackLocal(name, className));
 	}
 	
 	public StackLocal getRegisteredLocal(String name) {
 		createCodeAttribute();
-		return codeAttribute.getStackMapTable().getRegisteredLocal(name);
+		return codeAttribute.getRegisteredLocal(name);
 	}
 	
 	public void unregisterLocal(StackLocal local) {
-		codeAttribute.getStackMapTable().unregisterLocal(local);
+		codeAttribute.unregisterLocal(local);
 	}
 
 	public ExceptionHandler registerExceptionHandler(java.lang.reflect.Type type) {
@@ -111,8 +108,12 @@ public class MethodInfo {
 		return codeAttribute.captureStackState();
 	}
 
-	public void restoreStackState(StackState state) {
-		codeAttribute.restoreStackState(state);
+	public void restoreFullStackState(StackState state) {
+		codeAttribute.restoreFullStackState(state);
+	}
+	
+	public void restoreStackLocals(StackState state) {
+		codeAttribute.restoreStackLocals(state);
 	}
 
 	public StackLabel placeLabel(StackState state) {
@@ -138,8 +139,5 @@ public class MethodInfo {
 		attributes.forEach((a)->
 			a.writeTo(writer));
 	}
-
-
-
 
 }

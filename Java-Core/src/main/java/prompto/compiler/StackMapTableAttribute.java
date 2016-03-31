@@ -7,15 +7,10 @@ public class StackMapTableAttribute implements IAttribute {
 
 	Utf8Constant attributeName = new Utf8Constant("StackMapTable");
 	StackState state = new StackState();
-	LocalVariableTableAttribute locals;
 	List<StackLabel> labels = new ArrayList<>();
 	short maxStackSize = 0;
 	short maxLocalsCount = 0;
 	
-	public StackMapTableAttribute(LocalVariableTableAttribute locals) {
-		this.locals = locals;
-	}
-
 	public StackState getState() {
 		return state;
 	}
@@ -72,25 +67,20 @@ public class StackMapTableAttribute implements IAttribute {
 			l.register(pool));
 	}
 
-	public StackLocal registerLocal(StackLocal local) {
-		StackLocal other = locals.registerLocal(local);
-		if(other.getIndex()>=maxLocalsCount)
-			maxLocalsCount = (short)(1 + other.getIndex());
+	public StackLocal pushLocal(StackLocal local) {
+		if(local.getIndex()>=maxLocalsCount)
+			maxLocalsCount = (short)(1 + local.getIndex());
 		state.pushLocal(local);
-		return other;
+		return local;
 	}
 	
-	public StackLocal unregisterLocal(StackLocal local) {
-		if(!local.equals(state.peekLocal()))
+	public StackLocal popLocal(StackLocal local) {
+		if(local!=state.peekLocal())
 			throw new UnsupportedOperationException();
 		return state.popLocal();
 	}
 
 
-	public StackLocal getRegisteredLocal(String name) {
-		return locals.getRegisteredLocal(name);
-	}
-	
 	@Override
 	public int lengthWithoutHeader() {
 		/*

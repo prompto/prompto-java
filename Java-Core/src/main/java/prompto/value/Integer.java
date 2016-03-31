@@ -367,7 +367,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 		StackState branchState = method.captureStackState();
 		method.addInstruction(Opcode.ICONST_0);
 		method.addInstruction(Opcode.GOTO, new ShortOperand((short)4));
-		method.restoreStackState(branchState);
+		method.restoreFullStackState(branchState);
 		method.placeLabel(branchState);
 		method.addInstruction(Opcode.ICONST_1);
 		StackState lastState = method.captureStackState();

@@ -16,7 +16,7 @@ public class CodeAttribute implements IAttribute {
 	List<ExceptionHandler> handlers = new LinkedList<>(); 
 	List<IAttribute> attributes = new ArrayList<>();
 	LocalVariableTableAttribute locals = new LocalVariableTableAttribute();
-	StackMapTableAttribute stackMapTable = new StackMapTableAttribute(locals);
+	StackMapTableAttribute stackMapTable = new StackMapTableAttribute();
 	{ attributes.add(stackMapTable); } // TODO add locals so they get stored
 	List<IInstructionListener> listeners = new ArrayList<>();
 	byte[] opcodes = null;
@@ -37,16 +37,16 @@ public class CodeAttribute implements IAttribute {
 		
 		@Override
 		public void rehearse(CodeAttribute code) {
-			state.capture(code.getStackMapTable().getState());
+			state.capture(code.getStackMapTable().getState(), true, true);
+			if(DumpLevel.current().ordinal()>0) {
+				System.err.println("Capture stack: " + state.toString());
+				System.err.println();
+			}
 		}
 		
 		@Override
 		public void register(ConstantsPool pool) {
 			state.register(pool);
-		}
-		
-		@Override
-		public void writeTo(ByteWriter writer) {
 		}
 		
 	}
@@ -99,9 +99,13 @@ public class CodeAttribute implements IAttribute {
 	static class RestoreStackState implements IInstruction {
 
 		StackState state;
+		boolean entries;
+		boolean locals;
 		
-		public RestoreStackState(StackState state) {
+		public RestoreStackState(StackState state, boolean entries, boolean locals) {
 			this.state = state;
+			this.entries = entries;
+			this.locals = locals;
 		}
 		
 		public StackState getState() {
@@ -110,28 +114,30 @@ public class CodeAttribute implements IAttribute {
 		
 		@Override
 		public void rehearse(CodeAttribute code) {
-			code.getStackMapTable().getState().capture(state);
+			code.getStackMapTable().getState().capture(state, entries, locals);
 			if(DumpLevel.current().ordinal()>0) {
 				System.err.println("Restore stack: " + state.toString());
 				System.err.println();
 			}
 		}
 		
-		@Override
-		public void register(ConstantsPool pool) {
-		}
-		
-		@Override
-		public void writeTo(ByteWriter writer) {
-		}
-		
 	}
 	
-	public void restoreStackState(StackState state) {
-		RestoreStackState restore = new RestoreStackState(state);
+	public void restoreFullStackState(StackState state) {
+		RestoreStackState restore = new RestoreStackState(state, true, true);
 		instructions.add(restore);
 	}
 	
+	public void restoreStackEntries(StackState state) {
+		RestoreStackState restore = new RestoreStackState(state, true, false);
+		instructions.add(restore);
+	}
+
+	public void restoreStackLocals(StackState state) {
+		RestoreStackState restore = new RestoreStackState(state, false, true);
+		instructions.add(restore);
+	}
+
 	static class PlaceLabelInstruction implements IInstruction {
 		
 		StackLabel label;
@@ -175,9 +181,59 @@ public class CodeAttribute implements IAttribute {
 		StackLabel label = new StackLabel.FULL(state);
 		instructions.add(new PlaceLabelInstruction(label));
 		handler.setLabel(label);
-		restoreStackState(state);
+		restoreFullStackState(state);
 		return label;
 	}
+	
+	static class PushLocalInstruction implements IInstruction {
+
+		StackLocal local;
+		
+		public PushLocalInstruction(StackLocal local) {
+			this.local = local;
+		}
+		
+		@Override
+		public void rehearse(CodeAttribute code) {
+			code.getStackMapTable().pushLocal(local);
+		}
+
+	}
+	
+	public StackLocal registerLocal(StackLocal local) {
+		// TODO manage code range
+		StackLocal other = locals.registerLocal(local);
+		if(other==local)
+			instructions.add(new PushLocalInstruction(local));
+		return other;
+	}
+	
+	public StackLocal getRegisteredLocal(String name) {
+		// TODO manage code range
+		return locals.getRegisteredLocal(name);
+	}
+
+	static class PopLocalInstruction implements IInstruction {
+
+		StackLocal local;
+		
+		public PopLocalInstruction(StackLocal local) {
+			this.local = local;
+		}
+		
+		@Override
+		public void rehearse(CodeAttribute code) {
+			code.getStackMapTable().popLocal(local);
+		}
+
+	}
+
+	public void unregisterLocal(StackLocal local) {
+		// TODO manage code range
+		instructions.add(new PopLocalInstruction(local));
+	}
+
+
 
 	@Override
 	public void register(ConstantsPool pool) {
@@ -273,6 +329,5 @@ public class CodeAttribute implements IAttribute {
 		attributes.forEach((a)->
 			a.writeTo(writer));
 	}
-
 
 }

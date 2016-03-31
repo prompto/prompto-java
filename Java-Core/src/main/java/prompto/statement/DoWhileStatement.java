@@ -109,8 +109,7 @@ public class DoWhileStatement extends BaseStatement {
 		method.placeLabel(neutralState);
 		IInstructionListener loop = method.addOffsetListener(new OffsetListenerConstant(true));
 		method.activateOffsetListener(loop);
-		for(IStatement statement : statements)
-			statement.compile(context, method, flags);
+		statements.compile(context, method, flags);
 		ResultInfo info = condition.compile(context, method, flags.withPrimitive(true));
 		if(Boolean.class==info.getType())
 			CompilerUtils.BooleanToboolean(method);

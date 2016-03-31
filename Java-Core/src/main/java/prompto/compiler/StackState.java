@@ -24,13 +24,18 @@ public class StackState {
 		return currentSize;
 	}
 	
-	public void capture(StackState state) {
-		entries = new Stack<>();
-		this.entries.addAll(state.entries);
-		locals = new Stack<>();
-		this.locals.addAll(state.locals);
-		this.currentSize = state.currentSize;
+	public void capture(StackState state, boolean entries, boolean locals) {
+		if(entries) {
+			this.entries = new Stack<>();
+			this.entries.addAll(state.entries);
+			this.currentSize = state.currentSize;
+		}
+		if(locals) {
+			this.locals = new Stack<>();
+			this.locals.addAll(state.locals);
+		}
 	}
+	
 
 	public int stackLength() {
 		return length(entries);
@@ -85,6 +90,7 @@ public class StackState {
 		locals.forEach((l)->
 			l.register(pool));
 	}
+
 
 
 }

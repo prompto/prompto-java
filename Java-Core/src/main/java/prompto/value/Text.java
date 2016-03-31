@@ -265,7 +265,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 			method.addInstruction(Opcode.ICONST_1); // -> OIII
 			method.addInstruction(Opcode.IADD); // add 1 to last -> OII
 			method.addInstruction(Opcode.GOTO, new ShortOperand((short)5));
-			method.restoreStackState(branchState);
+			method.restoreFullStackState(branchState);
 			method.placeLabel(branchState);
 			method.addInstruction(Opcode.SWAP); // swap max and last -> OIII
 			method.addInstruction(Opcode.POP); // forget max -> OII

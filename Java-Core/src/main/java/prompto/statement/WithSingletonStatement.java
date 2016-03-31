@@ -54,8 +54,7 @@ public class WithSingletonStatement extends BaseStatement {
 		method.addInstruction(Opcode.MONITORENTER);
 		Context instanceContext = context.newCategoryContext(type);
 		Context childContext = instanceContext.newChildContext();
-		for(IStatement stmt : statements)
-			stmt.compile(childContext, method, flags);
+		statements.compile(childContext, method, flags);
 		method.addInstruction(Opcode.MONITOREXIT);
 		return new ResultInfo(void.class);
 	}

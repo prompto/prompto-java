@@ -27,6 +27,11 @@ public class LocalVariableTableAttribute implements IAttribute {
 		return entries.get(name);
 	}
 	
+	public void unregisterLocal(StackLocal local) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	@Override
 	public void register(ConstantsPool pool) {
 		throw new UnsupportedOperationException(); // TODO

@@ -152,7 +152,7 @@ public class TestClassFile {
 		StackState branchState = m.captureStackState();
 		m.addInstruction(Opcode.ICONST_1);
 		m.addInstruction(Opcode.GOTO, new ShortOperand((short)4));
-		m.restoreStackState(branchState);
+		m.restoreFullStackState(branchState);
 		m.placeLabel(branchState);
 		m.addInstruction(Opcode.ICONST_0);
 		StackState lastState = m.captureStackState();

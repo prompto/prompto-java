@@ -206,7 +206,7 @@ public class ForEachStatement extends BaseStatement {
 		method.addInstruction(Opcode.GOTO, test);
 		IInstructionListener loop = method.addOffsetListener(new OffsetListenerConstant(true));
 		method.activateOffsetListener(loop);
-		method.restoreStackState(iteratorState);
+		method.restoreFullStackState(iteratorState);
 		method.placeLabel(iteratorState);
 		// call next and store in v2
 		CompilerUtils.compileALOAD(method, iterLocal);
@@ -217,11 +217,10 @@ public class ForEachStatement extends BaseStatement {
 		// increment v1
 		compileIncrementCounter(method, v1Local);
 		// compile statements
-		for(IStatement statement : statements)
-			statement.compile(context, method, flags);
+		statements.compile(context, method, flags);
 		// call hasNext
 		method.inhibitOffsetListener(test);
-		method.restoreStackState(iteratorState);
+		method.restoreFullStackState(iteratorState);
 		method.placeLabel(iteratorState);
 		CompilerUtils.compileALOAD(method, iterLocal);
 		m = new InterfaceConstant(Iterator.class, "hasNext", boolean.class);
@@ -273,7 +272,7 @@ public class ForEachStatement extends BaseStatement {
 		method.addInstruction(Opcode.GOTO, test);
 		IInstructionListener loop = method.addOffsetListener(new OffsetListenerConstant(true));
 		method.activateOffsetListener(loop);
-		method.restoreStackState(iteratorState);
+		method.restoreFullStackState(iteratorState);
 		method.placeLabel(iteratorState);
 		// call next and store in v1
 		CompilerUtils.compileALOAD(method, iterLocal);
@@ -282,11 +281,10 @@ public class ForEachStatement extends BaseStatement {
 		method.addInstruction(Opcode.CHECKCAST, new ClassConstant(itemClass));
 		method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)v1Local.getIndex()));
 		// compile statements
-		for(IStatement statement : statements)
-			statement.compile(context, method, flags);
+		statements.compile(context, method, flags);
 		// call hasNext
 		method.inhibitOffsetListener(test);
-		method.restoreStackState(iteratorState);
+		method.restoreFullStackState(iteratorState);
 		method.placeLabel(iteratorState);
 		CompilerUtils.compileALOAD(method, iterLocal);
 		m = new InterfaceConstant(Iterator.class, "hasNext", boolean.class);

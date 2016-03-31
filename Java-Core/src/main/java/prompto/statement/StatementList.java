@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
+import prompto.compiler.StackState;
 import prompto.error.PromptoError;
 import prompto.java.JavaNativeCall;
 import prompto.parser.Dialect;
@@ -125,13 +126,16 @@ public class StatementList extends LinkedList<IStatement> {
 	}
 
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		ResultInfo info = null;
-		for(IStatement statement : this) {
-			ResultInfo ri = statement.compile(context, method, flags);
-			if(info==null)
-				info = ri; // TODO refine
-		};
-		return info;
+		if(this.size()>0) {
+			ResultInfo info = null;
+			StackState state = method.captureStackState(); 
+			for(IStatement statement : this)
+				// TODO refine actual info, here we assume all statements are reachable
+				info = statement.compile(context, method, flags);
+			method.restoreStackLocals(state);
+			return info;
+		} else
+			return new ResultInfo(void.class);
 	}
 
 

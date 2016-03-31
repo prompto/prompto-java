@@ -188,7 +188,7 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 			compileExceptionHandlers(context, method, flags, handlers, finalOffsets);
 			finalOffsets.forEach((o)->
 				method.inhibitOffsetListener(o));
-			method.restoreStackState(neutral);
+			method.restoreFullStackState(neutral);
 			method.placeLabel(neutral);
 		}
 		return result;
@@ -224,14 +224,6 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 			method.addInstruction(Opcode.GOTO, finalOffset);
 		}
 		method.unregisterLocal(error);
-	}
-
-	private Type compileConvertException(Context context, MethodInfo method, Flags flags, ExceptionHandler handler) {
-		Type type = handler.getException().getType();
-		if(ArithmeticException.class==type)
-			return compileConvertException(context, method, flags, "DIVIDE_BY_ZERO");
-		else
-			return type;
 	}
 
 	private Type compileConvertException(Context context, MethodInfo method, Flags flags, String name) {
@@ -297,12 +289,30 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 
 	}
 
+	private Type compileConvertException(Context context, MethodInfo method, Flags flags, ExceptionHandler handler) {
+		Type type = handler.getException().getType();
+		if(ArithmeticException.class==type)
+			return compileConvertException(context, method, flags, "DIVIDE_BY_ZERO");
+		else if(IndexOutOfBoundsException.class==type)
+			return compileConvertException(context, method, flags, "INDEX_OUT_OF_RANGE");
+		else if(NullPointerException.class==type)
+			return compileConvertException(context, method, flags, "NULL_REFERENCE");
+		else
+			return type;
+	}
+
 	private ExceptionHandler installExceptionHandler(Context context, MethodInfo method,
 			Flags flags, SymbolExpression symbol) {
 		Type type = null;
 		switch(symbol.getName()) {
 		case "DIVIDE_BY_ZERO":
 			type = ArithmeticException.class;
+			break;
+		case "INDEX_OUT_OF_RANGE":
+			type = IndexOutOfBoundsException.class;
+			break;
+		case "NULL_REFERENCE":
+			type = NullPointerException.class;
 			break;
 		default:
 			throw new UnsupportedOperationException();
