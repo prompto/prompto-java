@@ -121,7 +121,7 @@ public class NotExpression implements IUnaryExpression, IPredicateExpression, IA
 	@Override
 	public void compileAssert(Context context, MethodInfo method, Flags flags, TestMethodDeclaration test) {
 		StackState finalState = method.captureStackState();
-		// compile left and store in local
+		// compile
 		ResultInfo info = expression.compile(context, method, flags.withPrimitive(true));
 		if(Boolean.class==info.getType())
 			CompilerUtils.BooleanToboolean(method);
@@ -139,9 +139,7 @@ public class NotExpression implements IUnaryExpression, IPredicateExpression, IA
 		method.addInstruction(Opcode.LDC, new StringConstant(operatorToDialect(test.getDialect())));
 		MethodConstant concat = new MethodConstant(String.class, "concat", String.class, String.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, concat);
-		method.addInstruction(Opcode.ICONST_1); // not it!
-		MethodConstant valueOf = new MethodConstant(String.class, "valueOf", boolean.class, String.class);
-		method.addInstruction(Opcode.INVOKESTATIC, valueOf);
+		method.addInstruction(Opcode.LDC, new StringConstant(Boolean.FALSE.toString()));
 		method.addInstruction(Opcode.INVOKEVIRTUAL, concat);
 		test.compileFailure(context, method, flags);
 		// success/final

@@ -74,11 +74,24 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 	}
 
 	@Override
-	public boolean interpretAssert(Context context, TestMethodDeclaration testMethodDeclaration) throws PromptoError {
+	public boolean interpretAssert(Context context, TestMethodDeclaration test) throws PromptoError {
 		if(resolved==null)
 			resolveAndCheck(context);
 		if(resolved instanceof IAssertion)
-			return ((IAssertion)resolved).interpretAssert(context, testMethodDeclaration);
+			return ((IAssertion)resolved).interpretAssert(context, test);
+		else {
+			CodeWriter writer = new CodeWriter(this.getDialect(), context);
+			resolved.toDialect(writer);
+			throw new SyntaxError("Cannot test '" + writer.toString() + "'");
+		}
+	}
+	
+	@Override
+	public void compileAssert(Context context, MethodInfo method, Flags flags, TestMethodDeclaration test) {
+		if(resolved==null)
+			resolveAndCheck(context);
+		if(resolved instanceof IAssertion)
+			((IAssertion)resolved).compileAssert(context, method, flags, test);
 		else {
 			CodeWriter writer = new CodeWriter(this.getDialect(), context);
 			resolved.toDialect(writer);

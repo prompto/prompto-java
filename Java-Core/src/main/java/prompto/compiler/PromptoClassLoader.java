@@ -96,7 +96,7 @@ public class PromptoClassLoader extends URLClassLoader {
 	private void createPromptoClass(String fullName) throws ClassNotFoundException {
 		try {
 			Compiler compiler = new Compiler(getClassDir()); // where to store .class
-			compiler.compileClass(context, fullName);
+			compiler.compileClass(context.getGlobalContext(), fullName);
 		} catch(Exception e) {
 			throw new ClassNotFoundException(fullName, e);
 		}

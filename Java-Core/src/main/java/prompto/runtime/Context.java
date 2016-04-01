@@ -72,6 +72,10 @@ public class Context implements IContext {
 	protected Context() {
 	}
 
+	public Context getGlobalContext() {
+		return globals;
+	}
+
 	public boolean isGlobalContext() {
 		return this==globals;
 	}
@@ -790,7 +794,6 @@ public class Context implements IContext {
 			instance.setMember(calling, name, value);
 		}
 	}
-
 
 
 }

@@ -1,9 +1,16 @@
 package prompto.statement;
 
 import prompto.argument.IArgument;
+import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
+import prompto.compiler.IInstructionListener;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.OffsetListenerConstant;
+import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.MethodInfo;
+import prompto.compiler.StackState;
+import prompto.compiler.StringConstant;
 import prompto.declaration.AbstractMethodDeclaration;
 import prompto.declaration.ClosureDeclaration;
 import prompto.declaration.ConcreteMethodDeclaration;
@@ -157,17 +164,57 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	}
 
 	@Override
-	public boolean interpretAssert(Context context, TestMethodDeclaration testMethodDeclaration) throws PromptoError {
+	public boolean interpretAssert(Context context, TestMethodDeclaration test) throws PromptoError {
 		IValue value = this.interpret(context);
-		if(value instanceof Boolean)
-			return ((Boolean)value).getValue();
-		else {
+		if(value instanceof Boolean) {
+			if(((Boolean)value).getValue())
+				return true;
+			else {
+				String expected = buildExpectedMessage(context, test);
+				String actual = value.toString();
+				test.printFailure(context, expected, actual);
+				return false;
+			}
+		} else {
 			CodeWriter writer = new CodeWriter(this.getDialect(), context);
 			this.toDialect(writer);
 			throw new SyntaxError("Cannot test '" + writer.toString() + "'");
 		}
 	}
 	
+	private String buildExpectedMessage(Context context, TestMethodDeclaration test) {
+		CodeWriter writer = new CodeWriter(test.getDialect(), context);
+		this.toDialect(writer);
+		return writer.toString();
+	}
+
+	@Override
+	public void compileAssert(Context context, MethodInfo method, Flags flags, TestMethodDeclaration test) {
+		StackState finalState = method.captureStackState();
+		// compile
+		ResultInfo info = this.compile(context, method, flags.withPrimitive(true));
+		if(java.lang.Boolean.class==info.getType())
+			CompilerUtils.BooleanToboolean(method);
+		// 1 = success 
+		IInstructionListener finalListener = method.addOffsetListener(new OffsetListenerConstant());
+		method.activateOffsetListener(finalListener);
+		method.addInstruction(Opcode.IFNE, finalListener); 
+		// increment failure counter
+		method.addInstruction(Opcode.ICONST_1);
+		method.addInstruction(Opcode.IADD);
+		// build failure message
+		String message = buildExpectedMessage(context, test);
+		message = test.buildFailureMessagePrefix(message);
+		method.addInstruction(Opcode.LDC, new StringConstant(message));
+		method.addInstruction(Opcode.LDC, new StringConstant(Boolean.FALSE.toString()));
+		MethodConstant concat = new MethodConstant(String.class, "concat", String.class, String.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, concat);
+		test.compileFailure(context, method, flags);
+		// success/final
+		method.restoreFullStackState(finalState);
+		method.placeLabel(finalState);
+		method.inhibitOffsetListener(finalListener);
+	}
 	private IMethodDeclaration findDeclaration(Context context) {
 		try {
 			Object o = context.getValue(method.getId());
