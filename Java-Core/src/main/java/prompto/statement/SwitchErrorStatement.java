@@ -21,6 +21,7 @@ import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.expression.SymbolExpression;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoException;
 import prompto.literal.ListLiteral;
 import prompto.runtime.Context;
 import prompto.runtime.ErrorVariable;
@@ -293,32 +294,21 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 
 	private Type compileConvertException(Context context, MethodInfo method, Flags flags, ExceptionHandler handler) {
 		Type type = handler.getException().getType();
-		if(ArithmeticException.class==type)
-			return compileConvertException(context, method, flags, "DIVIDE_BY_ZERO");
-		else if(IndexOutOfBoundsException.class==type)
-			return compileConvertException(context, method, flags, "INDEX_OUT_OF_RANGE");
-		else if(NullPointerException.class==type)
-			return compileConvertException(context, method, flags, "NULL_REFERENCE");
-		else
+		if(type instanceof Class) {
+			String simpleName = PromptoException.getExceptionTypeName((Class<?>)type);
+			if(type.getTypeName().endsWith(simpleName))
+				return type;
+			else
+				return compileConvertException(context, method, flags, simpleName);
+		} else
 			return type;
 	}
 
 	private ExceptionHandler installExceptionHandler(Context context, MethodInfo method,
 			Flags flags, SymbolExpression symbol) {
-		Type type = null;
-		switch(symbol.getName()) {
-		case "DIVIDE_BY_ZERO":
-			type = ArithmeticException.class;
-			break;
-		case "INDEX_OUT_OF_RANGE":
-			type = IndexOutOfBoundsException.class;
-			break;
-		case "NULL_REFERENCE":
-			type = NullPointerException.class;
-			break;
-		default:
+		Type type = PromptoException.getExceptionType(symbol.getName());
+		if(type==null)
 			type = symbol.getJavaType(context);
-		}
 		ExceptionHandler handler = method.registerExceptionHandler(type);
 		method.activateOffsetListener(handler);
 		return handler;

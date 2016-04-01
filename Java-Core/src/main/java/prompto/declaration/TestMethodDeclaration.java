@@ -6,6 +6,7 @@ import java.lang.reflect.Modifier;
 import prompto.compiler.ClassFile;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Descriptor;
+import prompto.compiler.ExceptionHandler;
 import prompto.compiler.FieldConstant;
 import prompto.compiler.Flags;
 import prompto.compiler.IInstructionListener;
@@ -19,6 +20,7 @@ import prompto.error.ExecutionError;
 import prompto.error.PromptoError;
 import prompto.expression.SymbolExpression;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoException;
 import prompto.parser.Assertion;
 import prompto.runtime.Context;
 import prompto.statement.IStatement;
@@ -242,11 +244,11 @@ public class TestMethodDeclaration extends BaseDeclaration {
 		if(error!=null)
 			compileTestWithError(context, method, new Flags());
 		else
-			compileTestNoError(context, method, new Flags());
+			compileTestWithAsserts(context, method, new Flags());
 		return classFile;
 	}
 
-	private void compileTestNoError(Context context, MethodInfo method, Flags flags) {
+	private void compileTestWithAsserts(Context context, MethodInfo method, Flags flags) {
 		// don't use statements.compile because we need the locals for the assertions
 		statements.forEach((s)->
 			s.compile(context, method, flags));
@@ -276,10 +278,6 @@ public class TestMethodDeclaration extends BaseDeclaration {
 		compilePrintResult(context, method, flags);
 	}
 
-	private void compileTestWithError(Context context, MethodInfo method, Flags flags) {
-		throw new UnsupportedOperationException(); // TODO for now
-	}
-
 	public void compileFailure(Context context, MethodInfo method, Flags flags) {
 		compilePrintResult(context, method, flags);
 	}
@@ -293,5 +291,73 @@ public class TestMethodDeclaration extends BaseDeclaration {
 		method.addInstruction(Opcode.INVOKEVIRTUAL, mc);
 	}
 
+	private void compileTestWithError(Context context, MethodInfo method, Flags flags) {
+		ExceptionHandler expected = installExpectedExceptionHandler(context, method, flags);
+		ExceptionHandler unexpected = installUnexpectedExceptionHandler(context, method, flags);
+		statements.compile(context, method, flags);
+		// missing exception
+		compileMissingExceptionHandler(context, method, flags);
+		method.addInstruction(Opcode.RETURN);
+		// expected exception
+		compileExpectedExceptionHandler(context, method, flags, expected);
+		method.addInstruction(Opcode.RETURN);
+		// unexpected exception
+		compileUnexpectedExceptionHandler(context, method, flags, unexpected);
+		method.addInstruction(Opcode.RETURN);
+	}
+
+	private void compileUnexpectedExceptionHandler(Context context, MethodInfo method, Flags flags, ExceptionHandler handler) {
+		method.placeExceptionHandler(handler); 
+		// get actual exception type name
+		MethodConstant mc = new MethodConstant(PromptoException.class, "getExceptionTypeName", Object.class, String.class);
+		method.addInstruction(Opcode.INVOKESTATIC, mc); 
+		// produce failure message
+		String message = buildFailureMessagePrefix(error.getName().toString());
+		method.addInstruction(Opcode.LDC, new StringConstant(message)); 
+		method.addInstruction(Opcode.SWAP);  
+		mc = new MethodConstant(String.class, "concat", String.class, String.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, mc); 
+		// done
+		compilePrintResult(context, method, flags);
+	}
+
+	private void compileExpectedExceptionHandler(Context context, MethodInfo method, Flags flags, ExceptionHandler handler) {
+		method.placeExceptionHandler(handler);
+		method.addInstruction(Opcode.POP); // the thrown exception
+		compileSuccess(context, method, flags);
+	}
+
+	private void compileMissingExceptionHandler(Context context, MethodInfo method, Flags flags) {
+		// produce failure
+		String message = buildFailureMessagePrefix(error.getName().toString()) + "no error";
+		method.addInstruction(Opcode.LDC, new StringConstant(message));
+		compilePrintResult(context, method, flags);
+	}
+
+	private ExceptionHandler installUnexpectedExceptionHandler(Context context, MethodInfo method, Flags flags) {
+		ExceptionHandler handler = method.registerExceptionHandler(Throwable.class);
+		method.activateOffsetListener(handler);
+		return handler;
+	}
+
+	private ExceptionHandler installExpectedExceptionHandler(Context context, MethodInfo method, Flags flags) {
+		java.lang.reflect.Type type = null;
+		switch(error.getName()) {
+		case "DIVIDE_BY_ZERO":
+			type = ArithmeticException.class;
+			break;
+		case "INDEX_OUT_OF_RANGE":
+			type = IndexOutOfBoundsException.class;
+			break;
+		case "NULL_REFERENCE":
+			type = NullPointerException.class;
+			break;
+		default:
+			type = error.getJavaType(context);
+		}
+		ExceptionHandler handler = method.registerExceptionHandler(type);
+		method.activateOffsetListener(handler);
+		return handler;
+	}
 
 }

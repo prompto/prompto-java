@@ -82,8 +82,8 @@ public class MethodInfo {
 		return codeAttribute.registerExceptionHandler(type);
 	}
 
-	public void placeExceptionHandler(ExceptionHandler tb) {
-		codeAttribute.placeExceptionHandler(tb);
+	public void placeExceptionHandler(ExceptionHandler handler) {
+		codeAttribute.placeExceptionHandler(handler);
 	}
 
 	void register(ConstantsPool pool) {
