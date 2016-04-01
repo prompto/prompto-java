@@ -198,7 +198,7 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 		CompilerUtils.compileASTORE(method, left);
 		// compile right and store in local
 		IType rightType = this.right.check(context);
-		ResultInfo rightInfo = this.right.compile(context, method, flags.withPrimitive(true));
+		ResultInfo rightInfo = this.right.compile(context, method, flags.withPrimitive(false));
 		StackLocal right = method.registerLocal("%right%", Type.ITEM_Object, new ClassConstant(rightInfo.getType()));
 		CompilerUtils.compileASTORE(method, right);
 		// call regular compile

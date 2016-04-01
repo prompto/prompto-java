@@ -18,6 +18,7 @@ attribute as variable: parameter
 method as attribute
 attribute as attribute
 move MIN_INT && MAX_INT to enum
+factor compileAssert
 
 missing tests:
 null member is empty
