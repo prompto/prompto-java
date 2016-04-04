@@ -10,11 +10,10 @@ import java.util.stream.Collectors;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.PromptoClassLoader;
-import prompto.error.PromptoError;
 import prompto.store.IStorable;
-import prompto.store.IStored;
 import prompto.store.IStorable.IDbIdListener;
 import prompto.store.IStorable.IDbIdProvider;
+import prompto.store.IStored;
 import prompto.store.IStoredIterable;
 
 public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMutable {
@@ -90,11 +89,8 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMuta
 	
 	/* not a great name, but avoids collision with field setters */
 	protected final void setStorable(String name, Object value) {
-		if(storable!=null) try {
+		if(storable!=null)
 			storable.setData(name, value, this);
-		} catch(PromptoError e) {
-			throw new RuntimeException(e); // TODO for now
-		}
 	}
 	
 	@Override
@@ -110,21 +106,21 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMuta
 	@Override
 	public void checkMutable() {
 		if(!this.mutable) 
-			throwNotMutableException();
+			throwEnumeratedException("NOT_MUTABLE");
 	}
 	
 	@Override
 	public void checkImmutable() {
 		if(this.mutable) 
-			throwNotMutableException();
+			throwEnumeratedException("NOT_MUTABLE");
 	}
 
-	private void throwNotMutableException() {
+	protected void throwEnumeratedException(String name) {
 		try {
 			String exceptionName = "π.ε.Error$%Error";
 			ClassLoader loader = this.getClass().getClassLoader();
 			Class<?> klass = loader.loadClass(exceptionName);
-			Field field = klass.getDeclaredField("NOT_MUTABLE");
+			Field field = klass.getDeclaredField(name);
 			RuntimeException instance = (RuntimeException)(field.get(null));
 			throw instance;
 		} catch(ClassNotFoundException | NoSuchFieldException | IllegalAccessException | SecurityException e) {

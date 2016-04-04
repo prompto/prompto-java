@@ -109,8 +109,9 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	private ResultInfo compileGlobalMethod(Context context, MethodInfo method, Flags flags, 
 			IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
 		// push arguments on the stack
-		if(assignments!=null) for(ArgumentAssignment assign : assignments)
-			assign.compile(context.getCallingContext(), method, flags);
+		if(assignments!=null) 
+			assignments.forEach((a)->
+				a.compile(context.getCallingContext(), method, flags));
 		// call global method in its own class
 		Type classType = CompilerUtils.getGlobalMethodType(declaration.getName());
 		String methodName = declaration.getName();

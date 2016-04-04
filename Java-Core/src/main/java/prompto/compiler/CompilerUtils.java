@@ -96,7 +96,8 @@ public abstract class CompilerUtils {
 	
 	public static Descriptor.Method createMethodDescriptor(Context context, ArgumentList arguments, IType returnType) {
 		List<Type> argTypes = new ArrayList<>();
-		arguments.forEach((arg)->argTypes.add(arg.getJavaType(context)));
+		arguments.forEach((arg)->
+			argTypes.add(arg.getJavaType(context)));
 		return new Descriptor.Method(argTypes.toArray(new Type[argTypes.size()]), returnType.getJavaType());
 	}
 
@@ -196,6 +197,10 @@ public abstract class CompilerUtils {
 		return new PromptoType(GLOBAL_METHOD_PACKAGE_PREFIX + name);
 	}
 	
+	public static Type attributeTypeFrom(String fullName) {
+		return interfaceTypeFrom(fullName);
+	}
+
 	public static Type concreteTypeFrom(String fullName) {
 		int idx = fullName.indexOf('$');
 		if(idx<0)
@@ -249,12 +254,23 @@ public abstract class CompilerUtils {
 		return simpleName;
 	}
 	
+	public static String attributeSimpleNameFrom(String fullName) {
+		return fullName.substring(ATTRIBUTE_PACKAGE_PREFIX.length());
+	}
+
 	public static String testSimpleNameFrom(String fullName) {
-		String simpleName =  fullName.substring(TEST_METHOD_PACKAGE_PREFIX.length());
+		String simpleName = fullName.substring(TEST_METHOD_PACKAGE_PREFIX.length());
 		return decodeName(simpleName);
 	}
 
-	
+	public static Type getAttributeType(Identifier id) {
+		return getAttributeType(id.toString());
+	}
+
+	private static Type getAttributeType(String name) {
+		return new PromptoType(ATTRIBUTE_PACKAGE_PREFIX + name);
+	}
+
 	public static Type getCategoryInterfaceType(Identifier id) {
 		return getCategoryInterfaceType(id.toString());
 	}
@@ -660,5 +676,7 @@ public abstract class CompilerUtils {
 		else
 			throw new UnsupportedOperationException();
 	}
+
+
 
 }

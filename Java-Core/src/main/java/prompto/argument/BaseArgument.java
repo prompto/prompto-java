@@ -2,7 +2,11 @@ package prompto.argument;
 
 import java.lang.reflect.Type;
 
-import prompto.compiler.CompilerException;
+import prompto.compiler.ClassConstant;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.IVerifierEntry;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.StackLocal;
 import prompto.error.PromptoError;
 import prompto.expression.DefaultExpression;
 import prompto.expression.IExpression;
@@ -54,12 +58,15 @@ public abstract class BaseArgument implements IArgument {
 	
 	@Override
 	public Type getJavaType(Context context) {
-		try {
-			return getType(context).getJavaType();
-		} catch(PromptoError e) {
-			throw new CompilerException(e);
-		}
+		return getType(context).getJavaType();
 	}
 	
+	@Override
+	public StackLocal registerLocal(Context context, MethodInfo method) {
+		String desc = CompilerUtils.getDescriptor(getJavaType(context));
+		IVerifierEntry.Type type = IVerifierEntry.Type.fromDescriptor(desc);
+		ClassConstant classConstant = new ClassConstant(getJavaType(context));
+		return method.registerLocal(getName(), type, classConstant);
+	}
 
 }

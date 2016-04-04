@@ -5,7 +5,6 @@ import java.lang.reflect.Modifier;
 import prompto.argument.CategoryArgument;
 import prompto.argument.CodeArgument;
 import prompto.argument.IArgument;
-import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
 import prompto.compiler.CompilerException;
 import prompto.compiler.CompilerUtils;
@@ -217,16 +216,14 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 	
 	protected void registerLocals(Context context, ClassFile classFile, MethodInfo method) {
-		if(Modifier.isAbstract(classFile.getModifiers())) // TODO find another way
+		if(Modifier.isAbstract(classFile.getModifiers())) // TODO find a more accurate way
 			method.addModifier(Modifier.STATIC); // otherwise it's a member method
 		else 
 			method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
-		for(IArgument arg : arguments) {
-			String desc = CompilerUtils.getDescriptor(arg.getJavaType(context));
-			IVerifierEntry.Type type = IVerifierEntry.Type.fromDescriptor(desc);
-			ClassConstant classConstant = new ClassConstant(arg.getType(context).getJavaType());
-			method.registerLocal(arg.getName(), type, classConstant);
-		}
+		arguments.forEach((arg)->
+			arg.registerLocal(context, method));
+		arguments.forEach((arg)->
+			arg.extractLocal(context, method));
 	}
 
 

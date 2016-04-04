@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 
+import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.EnumeratedCategoryDeclaration;
 import prompto.declaration.EnumeratedNativeDeclaration;
@@ -33,7 +34,9 @@ public class Compiler {
 	}
 	
 	private ClassFile createClassFile(Context context, String fullName) throws ClassNotFoundException {
-		if(fullName.startsWith(CompilerUtils.GLOBAL_METHOD_PACKAGE_PREFIX)) 
+		if(fullName.startsWith(CompilerUtils.ATTRIBUTE_PACKAGE_PREFIX)) 
+			return createAttributeClassFile(context, fullName);
+		else if(fullName.startsWith(CompilerUtils.GLOBAL_METHOD_PACKAGE_PREFIX)) 
 			return createGlobalMethodsClassFile(context, fullName);
 		else if(fullName.startsWith(CompilerUtils.CATEGORY_PACKAGE_PREFIX))
 			return createCategoryClassFile(context, fullName);
@@ -45,6 +48,15 @@ public class Compiler {
 			return createTestClassFile(context, fullName);
 		else
 			throw new ClassNotFoundException(fullName);
+	}
+
+	private ClassFile createAttributeClassFile(Context context, String fullName) throws ClassNotFoundException {
+		String simpleName = CompilerUtils.attributeSimpleNameFrom(fullName);
+		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, new Identifier(simpleName));
+		if(decl==null)
+			throw new ClassNotFoundException(simpleName);
+		else 
+			return decl.compile(context, fullName);
 	}
 
 	private ClassFile createTestClassFile(Context context, String fullName) throws ClassNotFoundException {

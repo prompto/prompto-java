@@ -1,5 +1,15 @@
 package prompto.argument;
 
+import java.lang.reflect.Type;
+
+import prompto.compiler.ClassConstant;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.FieldInfo;
+import prompto.compiler.IVerifierEntry;
+import prompto.compiler.InterfaceConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.StackLocal;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
@@ -92,4 +102,32 @@ public class AttributeArgument extends BaseArgument implements INamedArgument {
 		return actual.checkValue(context, expression);
 	}
 	
+	@Override
+	public Type getJavaType(Context context) {
+		return CompilerUtils.getAttributeType(id);
+	}
+	
+	@Override
+	public StackLocal registerLocal(Context context, MethodInfo method) {
+		String desc = CompilerUtils.getDescriptor(getJavaType(context));
+		IVerifierEntry.Type type = IVerifierEntry.Type.fromDescriptor(desc);
+		ClassConstant classConstant = new ClassConstant(getJavaType(context));
+		String instanceName = "%" + getName() + "%";
+		return method.registerLocal( instanceName, type, classConstant);
+	}
+	
+	@Override
+	public void extractLocal(Context context, MethodInfo method) {
+		super.registerLocal(context, method);
+		String instanceName = "%" + getName() + "%";
+		CompilerUtils.compileALOAD(method, instanceName);
+		Type klass = getJavaType(context);
+		String getterName = CompilerUtils.getterName(getName());
+		AttributeDeclaration actual = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
+		FieldInfo field = actual.toFieldInfo(context);
+		InterfaceConstant m = new InterfaceConstant(klass, getterName, field.getType());
+		method.addInstruction(Opcode.INVOKEINTERFACE, m);
+		StackLocal local = method.getRegisteredLocal(getName());
+		CompilerUtils.compileASTORE(method, local);
+	}
 }

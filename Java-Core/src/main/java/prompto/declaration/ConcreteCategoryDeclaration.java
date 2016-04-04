@@ -480,7 +480,6 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			ClassFile classFile = new ClassFile(interfaceType);
 			classFile.addModifier(Modifier.ABSTRACT | Modifier.INTERFACE);
 			compileInterfaces(context, classFile);
-			compileFieldPrototypes(context, classFile);
 			compileMethodPrototypes(context, classFile);
 			ClassFile concrete = compileConcreteClass(context, fullName);
 			classFile.addInnerClass(concrete);
@@ -494,34 +493,13 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		if(derivedFrom!=null)
 			derivedFrom.forEach((id)->
 				classFile.addInterface(CompilerUtils.getCategoryInterfaceType(id)));
+		if(attributes!=null) 
+			attributes.forEach((id)->{
+				if(!isSuperClassAttribute(context, id) && !isInheritedAttribute(context, id))
+					classFile.addInterface(CompilerUtils.getAttributeType(id));
+			});
 	}
-
-	private void compileFieldPrototypes(Context context, ClassFile classFile) {
-		if(attributes!=null) for(Identifier id : attributes)
-			compileFieldPrototype(context, classFile, id);
-	}
-
-	private void compileFieldPrototype(Context context, ClassFile classFile, Identifier id) {
-		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
-		FieldInfo field = decl.toFieldInfo(context);
-		compileSetterPrototype(context, classFile, id, field);
-		compileGetterPrototype(context, classFile, id, field);
-	}
-
-	private void compileGetterPrototype(Context context, ClassFile classFile, Identifier id, FieldInfo field) {
-		String name = CompilerUtils.getterName(id.toString());
-		Descriptor proto = new Descriptor.Method(field.getType());
-		MethodInfo method = classFile.newMethod(name, proto);
-		method.addModifier(Modifier.ABSTRACT);
-	}
-
-	private void compileSetterPrototype(Context context, ClassFile classFile, Identifier id, FieldInfo field) {
-		String name = CompilerUtils.setterName(field.getName().getValue());
-		Descriptor proto = new Descriptor.Method(field.getType(), void.class);
-		MethodInfo method = classFile.newMethod(name, proto);
-		method.addModifier(Modifier.ABSTRACT);
-	}
-
+	
 	private void compileMethodPrototypes(Context context, ClassFile classFile) {
 		Map<String, MethodDeclarationMap> all = collectInterfaceMethods(context);
 		all.values().forEach((map)->

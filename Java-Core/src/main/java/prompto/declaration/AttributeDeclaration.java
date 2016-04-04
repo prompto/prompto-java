@@ -1,9 +1,14 @@
 package prompto.declaration;
 
+import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import prompto.compiler.ClassFile;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Descriptor;
 import prompto.compiler.FieldInfo;
+import prompto.compiler.MethodInfo;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.grammar.IAttributeConstraint;
@@ -152,6 +157,28 @@ public class AttributeDeclaration extends BaseDeclaration {
 		return new FieldInfo(getName(), type.getJavaType());
 	}
 
+	public ClassFile compile(Context context, String fullName) {
+		java.lang.reflect.Type type = CompilerUtils.attributeTypeFrom(fullName);
+		ClassFile classFile = new ClassFile(type);
+		classFile.addModifier(Modifier.ABSTRACT | Modifier.INTERFACE);
+		FieldInfo field = this.toFieldInfo(context);
+		compileSetterPrototype(context, classFile, field);
+		compileGetterPrototype(context, classFile, field);
+		return classFile;
+	}
 
+	private void compileGetterPrototype(Context context, ClassFile classFile, FieldInfo field) {
+		String name = CompilerUtils.getterName(field.getName().getValue());
+		Descriptor proto = new Descriptor.Method(field.getType());
+		MethodInfo method = classFile.newMethod(name, proto);
+		method.addModifier(Modifier.ABSTRACT);
+	}
+
+	private void compileSetterPrototype(Context context, ClassFile classFile, FieldInfo field) {
+		String name = CompilerUtils.setterName(field.getName().getValue());
+		Descriptor proto = new Descriptor.Method(field.getType(), void.class);
+		MethodInfo method = classFile.newMethod(name, proto);
+		method.addModifier(Modifier.ABSTRACT);
+	}
 
 }
