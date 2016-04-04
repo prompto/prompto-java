@@ -197,22 +197,29 @@ public abstract class CompilerUtils {
 		return new PromptoType(GLOBAL_METHOD_PACKAGE_PREFIX + name);
 	}
 	
-	public static Type attributeTypeFrom(String fullName) {
+	public static Type attributeInterfaceTypeFrom(String fullName) {
 		return interfaceTypeFrom(fullName);
 	}
 
-	public static Type concreteTypeFrom(String fullName) {
+	public static java.lang.reflect.Type attributeConcreteTypeFrom(String fullName) {
+		int idx = fullName.indexOf('$');
+		if(idx<0)
+			fullName += INNER_SEPARATOR + attributeSimpleNameFrom(fullName);
+		return new PromptoType(fullName);
+	}
+
+	public static Type categoryConcreteTypeFrom(String fullName) {
 		int idx = fullName.indexOf('$');
 		if(idx<0)
 			fullName += INNER_SEPARATOR + categorySimpleNameFrom(fullName);
 		return new PromptoType(fullName);
 	}
 
-	public static Type concreteParentTypeFrom(String fullName) {
+	public static Type categoryConcreteParentTypeFrom(String fullName) {
 		// strip out enumerated inner class
 		if(fullName.indexOf('$')!=fullName.lastIndexOf('$'))
 			fullName = fullName.substring(0, fullName.lastIndexOf('$'));
-		return concreteTypeFrom(fullName);
+		return categoryConcreteTypeFrom(fullName);
 	}
 	
 	public static Type abstractTypeFrom(String fullName) {
@@ -223,7 +230,11 @@ public abstract class CompilerUtils {
 		return interfaceTypeFrom(fullName);
 	}
 	
-	public static Type interfaceTypeFrom(String fullName) {
+	public static Type categoryInterfaceTypeFrom(String fullName) {
+		return interfaceTypeFrom(fullName);
+	}
+	
+	private static Type interfaceTypeFrom(String fullName) {
 		int idx = fullName.indexOf(INNER_SEPARATOR);
 		if(idx>=0)
 			fullName = fullName.substring(0, idx);
@@ -263,12 +274,20 @@ public abstract class CompilerUtils {
 		return decodeName(simpleName);
 	}
 
-	public static Type getAttributeType(Identifier id) {
-		return getAttributeType(id.toString());
+	public static Type getAttributeInterfaceType(Identifier id) {
+		return getAttributeInterfaceType(id.toString());
 	}
 
-	private static Type getAttributeType(String name) {
+	public static Type getAttributeInterfaceType(String name) {
 		return new PromptoType(ATTRIBUTE_PACKAGE_PREFIX + name);
+	}
+
+	public static Type getAttributeConcreteType(Identifier id) {
+		return getAttributeConcreteType(id.toString());
+	}
+
+	public static Type getAttributeConcreteType(String name) {
+		return new PromptoType(ATTRIBUTE_PACKAGE_PREFIX + name + INNER_SEPARATOR + name);
 	}
 
 	public static Type getCategoryInterfaceType(Identifier id) {
@@ -594,6 +613,10 @@ public abstract class CompilerUtils {
 		return "get" + name.substring(0,1).toUpperCase() + name.substring(1);
 	}
 
+	public static String checkerName(String name) {
+		return "check" + name.substring(0,1).toUpperCase() + name.substring(1);
+	}
+
 	public static MethodInfo compileEmptyConstructor(ClassFile classFile) {
 		Descriptor proto = new Descriptor.Method(void.class);
 		MethodInfo method = classFile.newMethod("<init>", proto);
@@ -604,6 +627,19 @@ public abstract class CompilerUtils {
 		method.addInstruction(Opcode.RETURN);
 		return method;
 	}
+
+	public static MethodInfo compileSuperConstructor(ClassFile classFile, Type paramType) {
+		Descriptor proto = new Descriptor.Method(paramType, void.class);
+		MethodInfo method = classFile.newMethod("<init>", proto);
+		method.registerLocal("this", IVerifierEntry.Type.ITEM_UninitializedThis, classFile.getThisClass());
+		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
+		method.addInstruction(Opcode.ALOAD_1, new ClassConstant(paramType));
+		MethodConstant m = new MethodConstant(classFile.getSuperClass(), "<init>", paramType, void.class);
+		method.addInstruction(Opcode.INVOKESPECIAL, m);
+		method.addInstruction(Opcode.RETURN);
+		return method;
+	}
+
 
 	public static void compileJavaEnum(Context context, MethodInfo method, Flags flags, Enum<?> value) {
 		method.addInstruction(Opcode.GETSTATIC, 
@@ -676,6 +712,7 @@ public abstract class CompilerUtils {
 		else
 			throw new UnsupportedOperationException();
 	}
+
 
 
 

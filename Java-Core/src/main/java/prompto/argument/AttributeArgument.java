@@ -5,10 +5,12 @@ import java.lang.reflect.Type;
 import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.FieldInfo;
+import prompto.compiler.Flags;
 import prompto.compiler.IVerifierEntry;
 import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.IDeclaration;
@@ -21,6 +23,7 @@ import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.store.IDataStore;
 import prompto.store.IStore;
+import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.utils.Utils;
@@ -104,11 +107,11 @@ public class AttributeArgument extends BaseArgument implements INamedArgument {
 	
 	@Override
 	public Type getJavaType(Context context) {
-		return CompilerUtils.getAttributeType(id);
+		return CompilerUtils.getAttributeInterfaceType(id);
 	}
 	
 	@Override
-	public StackLocal registerLocal(Context context, MethodInfo method) {
+	public StackLocal registerLocal(Context context, MethodInfo method, Flags flags) {
 		String desc = CompilerUtils.getDescriptor(getJavaType(context));
 		IVerifierEntry.Type type = IVerifierEntry.Type.fromDescriptor(desc);
 		ClassConstant classConstant = new ClassConstant(getJavaType(context));
@@ -117,8 +120,8 @@ public class AttributeArgument extends BaseArgument implements INamedArgument {
 	}
 	
 	@Override
-	public void extractLocal(Context context, MethodInfo method) {
-		super.registerLocal(context, method);
+	public void extractLocal(Context context, MethodInfo method, Flags flags) {
+		super.registerLocal(context, method, flags);
 		String instanceName = "%" + getName() + "%";
 		CompilerUtils.compileALOAD(method, instanceName);
 		Type klass = getJavaType(context);
@@ -129,5 +132,21 @@ public class AttributeArgument extends BaseArgument implements INamedArgument {
 		method.addInstruction(Opcode.INVOKEINTERFACE, m);
 		StackLocal local = method.getRegisteredLocal(getName());
 		CompilerUtils.compileASTORE(method, local);
+	}
+	
+	@Override
+	public void compileAssignment(Context context, MethodInfo method, Flags flags, IExpression assigned) {
+		IType itype = assigned.check(context);
+		// if param is a category, assume it implements the required attribute interface
+		if(itype instanceof CategoryType)
+			assigned.compile(context, method, flags);
+		// if param is a value, wrap it into an attribute wrapper
+		else {
+			Type type = CompilerUtils.getAttributeConcreteType(id);
+			CompilerUtils.compileNewRawInstance(method, type);
+			method.addInstruction(Opcode.DUP);
+			ResultInfo info = assigned.compile(context, method, flags);
+			CompilerUtils.compileCallConstructor(method, type, info.getType());
+		}
 	}
 }

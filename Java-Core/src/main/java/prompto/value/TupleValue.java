@@ -12,7 +12,6 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.error.IndexOutOfRangeError;
-import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
@@ -168,7 +167,7 @@ public class TupleValue extends BaseValue implements IContainer<IValue>, ISlicea
 		if ("length".equals(name))
 			return new Integer(items.size());
 		else
-			throw new InvalidDataError("No such member:" + name);
+			throw new SyntaxError("No such member:" + name);
 	}
 	
 	

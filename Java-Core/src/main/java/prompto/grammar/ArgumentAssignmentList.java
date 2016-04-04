@@ -36,10 +36,10 @@ public class ArgumentAssignmentList extends LinkedList<ArgumentAssignment> {
 		return null;
 	}
 
-	public ArgumentAssignmentList makeAssignments(Context context, IMethodDeclaration declaration) {
+	public ArgumentAssignmentList resolveAndCheck(Context context, IMethodDeclaration declaration, boolean makeContextual) {
 		ArgumentAssignmentList assignments = new ArgumentAssignmentList();
 		for(ArgumentAssignment assignment : this)
-			assignments.add(assignment.makeAssignment(context, declaration));
+			assignments.add(assignment.resolveAndCheck(context, declaration.getArguments(), makeContextual));
 		return assignments;
 	}
 	

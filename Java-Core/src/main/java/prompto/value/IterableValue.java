@@ -3,9 +3,9 @@ package prompto.value;
 import java.io.IOException;
 import java.util.Iterator;
 
-import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
+import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.IterableWithLength;
@@ -75,7 +75,7 @@ public class IterableValue extends BaseValue implements IIterable<IValue>, Itera
 		if ("length".equals(name))
 			return new Integer(iterable.getLength());
 		else
-			throw new InvalidDataError("No such member:" + name);
+			throw new SyntaxError("No such member:" + name);
 	}
 
 	@Override

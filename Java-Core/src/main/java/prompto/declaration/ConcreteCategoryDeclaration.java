@@ -411,7 +411,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	
 	protected ClassFile compileConcreteClass(Context context, String fullName) {
 		try {
-			java.lang.reflect.Type concreteType = CompilerUtils.concreteParentTypeFrom(fullName);
+			java.lang.reflect.Type concreteType = CompilerUtils.categoryConcreteParentTypeFrom(fullName);
 			ClassFile classFile = new ClassFile(concreteType);
 			if(isAbstract())
 				classFile.addModifier(Modifier.ABSTRACT);
@@ -476,7 +476,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		/* concrete class is an inner class of the interface */
 		/* inner class is prefixed with '%' to prevent naming collisions */
 		try {
-			java.lang.reflect.Type interfaceType = CompilerUtils.interfaceTypeFrom(fullName);
+			java.lang.reflect.Type interfaceType = CompilerUtils.categoryInterfaceTypeFrom(fullName);
 			ClassFile classFile = new ClassFile(interfaceType);
 			classFile.addModifier(Modifier.ABSTRACT | Modifier.INTERFACE);
 			compileInterfaces(context, classFile);
@@ -496,7 +496,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		if(attributes!=null) 
 			attributes.forEach((id)->{
 				if(!isSuperClassAttribute(context, id) && !isInheritedAttribute(context, id))
-					classFile.addInterface(CompilerUtils.getAttributeType(id));
+					classFile.addInterface(CompilerUtils.getAttributeInterfaceType(id));
 			});
 	}
 	
@@ -719,6 +719,10 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, derivedFrom.getFirst());
 			return decl.isPromptoRoot(context);
 		}
+	}
+	
+	protected boolean isPromptoError(Context context) {
+		return false;
 	}
 
 	private void compileLocalGetterMethod(Context context, ClassFile classFile, Flags flags,Identifier id, FieldInfo field) {

@@ -14,7 +14,7 @@ public class ExceptionHandler implements IInstructionListener {
 	StackLabel label;
 	
 	public ExceptionHandler(Type type) {
-		exception = new ClassConstant(type);
+		exception = type==null ? null : new ClassConstant(type);
 	}
 
 	public ClassConstant getException() {

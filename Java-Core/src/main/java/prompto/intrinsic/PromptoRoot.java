@@ -106,26 +106,13 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMuta
 	@Override
 	public void checkMutable() {
 		if(!this.mutable) 
-			throwEnumeratedException("NOT_MUTABLE");
+			PromptoException.throwEnumeratedException("NOT_MUTABLE");
 	}
 	
 	@Override
 	public void checkImmutable() {
 		if(this.mutable) 
-			throwEnumeratedException("NOT_MUTABLE");
-	}
-
-	protected void throwEnumeratedException(String name) {
-		try {
-			String exceptionName = "π.ε.Error$%Error";
-			ClassLoader loader = this.getClass().getClassLoader();
-			Class<?> klass = loader.loadClass(exceptionName);
-			Field field = klass.getDeclaredField(name);
-			RuntimeException instance = (RuntimeException)(field.get(null));
-			throw instance;
-		} catch(ClassNotFoundException | NoSuchFieldException | IllegalAccessException | SecurityException e) {
-			throw new RuntimeException(e);
-		}
+			PromptoException.throwEnumeratedException("NOT_MUTABLE");
 	}
 
 	@Override

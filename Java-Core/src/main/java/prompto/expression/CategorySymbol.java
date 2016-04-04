@@ -124,6 +124,7 @@ public class CategorySymbol extends Symbol implements IExpression  {
 		ClassFile classFile = new ClassFile(fieldType);
 		classFile.setSuperClass(new ClassConstant(parentType));
 		CompilerUtils.compileEmptyConstructor(classFile);
+		CompilerUtils.compileSuperConstructor(classFile, String.class);
 		return classFile;
 	}
 

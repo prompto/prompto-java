@@ -112,7 +112,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 
 	private IType fullCheck(ConcreteMethodDeclaration declaration, Context parent, Context local) {
 		try {
-			ArgumentAssignmentList assignments = makeAssignments(parent, declaration);
+			ArgumentAssignmentList assignments = makeAssignments(parent, declaration, true);
 			declaration.registerArguments(local);
 			for (ArgumentAssignment assignment : assignments) {
 				IExpression expression = assignment.resolve(local, declaration, true);
@@ -125,11 +125,11 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		}
 	}
 
-	public ArgumentAssignmentList makeAssignments(Context context, IMethodDeclaration declaration) {
+	public ArgumentAssignmentList makeAssignments(Context context, IMethodDeclaration declaration, boolean makeContextual) {
 		if (assignments == null)
 			return new ArgumentAssignmentList();
 		else
-			return assignments.makeAssignments(context, declaration);
+			return assignments.resolveAndCheck(context, declaration, makeContextual);
 	}
 
 	@Override
@@ -144,7 +144,6 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		IMethodDeclaration declaration = findDeclaration(context);
-		// if called from within a member method without 
 		Context local = method.newLocalContext(context, declaration);
 		declaration.registerArguments(local);
 		registerAssignments(context, local, declaration);
@@ -152,7 +151,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	}
 
 	private void registerAssignments(Context context, Context local, IMethodDeclaration declaration) throws PromptoError {
-		ArgumentAssignmentList assignments = makeAssignments(context, declaration);
+		ArgumentAssignmentList assignments = makeAssignments(context, declaration, true);
 		for (ArgumentAssignment assignment : assignments) {
 			IExpression expression = assignment.resolve(local, declaration, true);
 			IArgument argument = assignment.getArgument();

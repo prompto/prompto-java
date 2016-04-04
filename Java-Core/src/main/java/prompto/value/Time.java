@@ -9,7 +9,6 @@ import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
-import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
@@ -120,7 +119,7 @@ public class Time extends BaseValue implements Comparable<Time> {
 		else if ("millis".equals(name))
 			return new Integer(this.value.getNativeMillis());
 		else
-			throw new InvalidDataError("No such member:" + name);
+			throw new SyntaxError("No such member:" + name);
 	}
 
 	@Override

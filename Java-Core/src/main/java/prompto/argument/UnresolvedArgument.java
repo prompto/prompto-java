@@ -2,6 +2,7 @@ package prompto.argument;
 
 import java.lang.reflect.Type;
 
+import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.StackLocal;
 import prompto.declaration.AttributeDeclaration;
@@ -92,15 +93,21 @@ public class UnresolvedArgument extends BaseArgument implements INamedArgument {
 	}
 	
 	@Override
-	public StackLocal registerLocal(Context context, MethodInfo method) {
+	public StackLocal registerLocal(Context context, MethodInfo method, Flags flags) {
 		resolve(context);
-		return resolved.registerLocal(context, method);
+		return resolved.registerLocal(context, method, flags);
 	}
 	
 	@Override
-	public void extractLocal(Context context, MethodInfo method) {
+	public void extractLocal(Context context, MethodInfo method, Flags flags) {
 		resolve(context);
-		resolved.extractLocal(context, method);
+		resolved.extractLocal(context, method, flags);
+	}
+	
+	@Override
+	public void compileAssignment(Context context, MethodInfo method, Flags flags, IExpression assigned) {
+		resolve(context);
+		resolved.compileAssignment(context, method, flags, assigned);
 	}
 
 

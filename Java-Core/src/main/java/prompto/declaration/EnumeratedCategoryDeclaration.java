@@ -159,7 +159,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration i
 	@Override
 	protected ClassFile compileConcreteClass(Context context, String fullName) {
 		try {
-			java.lang.reflect.Type concreteType = CompilerUtils.concreteParentTypeFrom(fullName);
+			java.lang.reflect.Type concreteType = CompilerUtils.categoryConcreteParentTypeFrom(fullName);
 			ClassFile classFile = new ClassFile(concreteType);
 			compileSuperClass(context, classFile, new Flags());
 			compileInterface(context, classFile, new Flags());
@@ -169,11 +169,17 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration i
 			compileClassConstructor(context, classFile, new Flags());
 			compileFields(context, classFile, new Flags());
 			compileEmptyConstructor(context, classFile, new Flags());
+			compileSuperConstructor(context, classFile, new Flags());
 			compileMethods(context, classFile, new Flags());
 			return classFile;
 		} catch(SyntaxError e) {
 			throw new CompilerException(e);
 		}
+	}
+
+	private void compileSuperConstructor(Context context, ClassFile classFile, Flags flags) {
+		if(isPromptoError(context))
+			CompilerUtils.compileSuperConstructor(classFile, String.class);
 	}
 
 	@Override
@@ -192,12 +198,18 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration i
 	
 	@Override
 	public boolean isPromptoRoot(Context context) {
-		if("Error".equals(getName()))
-			return false;
-		else
-			return super.isPromptoRoot(context);
+		return !isPromptoError(context);
 	}
 	
+	@Override
+	public boolean isPromptoError(Context context) {
+		if("Error".equals(getName()))
+			return true;
+		else
+			return super.isPromptoError(context);
+	}
+
+
 	@Override
 	protected void compileClassConstructorBody(Context context, MethodInfo method, Flags flags) {
 		if(isStorable())

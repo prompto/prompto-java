@@ -1,7 +1,7 @@
 package prompto.store;
 
 import prompto.declaration.AttributeInfo;
-import prompto.error.InvalidDataError;
+import prompto.error.InvalidValueError;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.grammar.OrderByClauseList;
@@ -56,7 +56,7 @@ public abstract class QueryInterpreterBase<T> implements IQueryInterpreter<T> {
 			return null;
 		IValue value = exp.interpret(context);
 		if(!(value instanceof prompto.value.Integer))
-			throw new InvalidDataError("Expecting an Integer, got:" + value.getType().toString());
+			throw new InvalidValueError("Expecting an Integer, got:" + value.getType().toString());
 		return ((prompto.value.Integer)value).longValue();
 	}
 }

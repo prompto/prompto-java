@@ -9,7 +9,6 @@ import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
-import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
@@ -128,7 +127,7 @@ public class Date extends BaseValue implements Comparable<Date> {
 		else if ("dayOfYear".equals(name))
 			return new Integer(this.value.getNativeDayOfYear());
 		else
-			throw new InvalidDataError("No such member:" + name);
+			throw new SyntaxError("No such member:" + name);
 	}
 
 	@Override

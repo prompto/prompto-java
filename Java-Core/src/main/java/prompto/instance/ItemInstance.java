@@ -7,7 +7,7 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.error.IndexOutOfRangeError;
-import prompto.error.InvalidDataError;
+import prompto.error.InvalidValueError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
@@ -73,11 +73,11 @@ public class ItemInstance implements IAssignableSelector {
 	public void assign(Context context, IExpression expression) throws PromptoError {
 		IValue obj = parent.interpret(context);
 		if(!(obj instanceof ListValue))
-			throw new InvalidDataError("Expected a List, got:" + obj.getClass().getName());
+			throw new InvalidValueError("Expected a List, got:" + obj.getClass().getName());
 		ListValue list = (ListValue)obj;
 		IValue idx = item.interpret(context);
 		if(!(idx instanceof Integer))
-			throw new InvalidDataError("Expected an Integer, got:" + idx.getClass().getName());
+			throw new InvalidValueError("Expected an Integer, got:" + idx.getClass().getName());
 		int index = (int)((Integer)idx).longValue();
 		if(index<1 || index>list.getLength())
 			throw new IndexOutOfRangeError();

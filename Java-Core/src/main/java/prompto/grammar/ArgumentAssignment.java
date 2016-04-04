@@ -131,23 +131,23 @@ public class ArgumentAssignment {
 		return expression; 
 	}
 
-	public ArgumentAssignment makeAssignment(Context context, IMethodDeclaration declaration) {
+	public ArgumentAssignment resolveAndCheck(Context context, ArgumentList argumentList, boolean makeContextual) {
 		IArgument argument = this.argument;
 		// when 1st argument, can be unnamed
 		if(argument==null) {
-			if(declaration.getArguments().size()==0)
+			if(argumentList.size()==0)
 				throw new SyntaxError("Method has no argument");
-			argument = declaration.getArguments().get(0);
+			argument = argumentList.get(0);
 		} else
-			argument = declaration.getArguments().find(this.getId());
+			argument = argumentList.find(this.getId());
 		if(argument==null)
 			throw new SyntaxError("Method has no argument:" + this.getId());
-		IExpression expression = new ContextualExpression(context, this.expression);
+		IExpression expression = makeContextual ? new ContextualExpression(context, this.expression) : this.expression;
 		return new ArgumentAssignment(argument,expression);
 	}
 
 	public void compile(Context context, MethodInfo method, Flags flags) {
-		expression.compile(context, method, flags);
+		argument.compileAssignment(context, method, flags, expression);
 	}
 
 

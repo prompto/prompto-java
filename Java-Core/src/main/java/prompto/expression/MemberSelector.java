@@ -178,7 +178,7 @@ public class MemberSelector extends SelectorExpression {
 		else {
 			String getterName = CompilerUtils.getterName(getName());
 			if(isCompilingGetter(context, method, info, getterName)) {
-				Type classType = CompilerUtils.concreteTypeFrom(info.getType().getTypeName());
+				Type classType = CompilerUtils.categoryConcreteTypeFrom(info.getType().getTypeName());
 				FieldConstant f = new FieldConstant(classType, id.toString(), resultType);
 				method.addInstruction(Opcode.GETFIELD, f);
 			} else if(PromptoAny.class==info.getType()) {

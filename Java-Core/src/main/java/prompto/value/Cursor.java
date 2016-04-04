@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
+import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.IterableWithLength;
 import prompto.runtime.Context;
@@ -81,16 +81,16 @@ public class Cursor extends BaseValue implements IIterable<IValue>, IterableWith
 	}
 
 	@Override
-	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
+	public IValue getMember(Context context, Identifier id, boolean autoCreate) {
 		String name = id.toString();
 		if ("length".equals(name))
 			return new Integer(getLength());
 		else
-			throw new InvalidDataError("No such member:" + name);
+			throw new SyntaxError("No such member:" + name);
 	}
 
 	@Override
-	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
+	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) {
 		try {
 			generator.writeStartArray();
 			Iterator<IValue> iter = iterator();

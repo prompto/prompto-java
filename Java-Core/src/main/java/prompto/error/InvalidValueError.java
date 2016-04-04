@@ -4,11 +4,11 @@ import prompto.expression.IExpression;
 import prompto.literal.TextLiteral;
 import prompto.runtime.Context;
 
-public class InvalidDataError extends ExecutionError {
+public class InvalidValueError extends ExecutionError {
 
 	private static final long serialVersionUID = 1L;
 
-	public InvalidDataError(String message) {
+	public InvalidValueError(String message) {
 		super(message);
 	}
 	

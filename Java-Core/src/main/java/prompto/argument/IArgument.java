@@ -2,6 +2,7 @@ package prompto.argument;
 
 import java.lang.reflect.Type;
 
+import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.StackLocal;
 import prompto.error.PromptoError;
@@ -26,7 +27,8 @@ public interface IArgument extends INamed {
 	boolean setMutable(boolean set);
 	boolean isMutable();
 	Type getJavaType(Context context);
-	StackLocal registerLocal(Context context, MethodInfo method);
-	default void extractLocal(Context context, MethodInfo method) {};
+	StackLocal registerLocal(Context context, MethodInfo method, Flags flags);
+	default void extractLocal(Context context, MethodInfo method, Flags flags) {}
+	void compileAssignment(Context context, MethodInfo method, Flags flags, IExpression assigned);
 	
 }

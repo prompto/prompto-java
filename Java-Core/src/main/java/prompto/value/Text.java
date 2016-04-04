@@ -14,7 +14,6 @@ import prompto.compiler.ResultInfo;
 import prompto.compiler.ShortOperand;
 import prompto.compiler.StackState;
 import prompto.error.IndexOutOfRangeError;
-import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
@@ -122,12 +121,12 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	}
 
 	@Override
-	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
+	public IValue getMember(Context context, Identifier id, boolean autoCreate) {
 		String name = id.toString();
 		if ("length".equals(name))
 			return new Integer(value.length());
 		else
-			throw new InvalidDataError("No such member:" + name);
+			throw new SyntaxError("No such member:" + name);
 	}
 
 	public Character getItem(Context context, IValue index) throws PromptoError {
@@ -135,7 +134,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 			if (index instanceof Integer)
 				return new Character(value.charAt((int) ((Integer) index).longValue() - 1));
 			else
-				throw new InvalidDataError("No such item:" + index.toString());
+				throw new SyntaxError("No such item:" + index.toString());
 		} catch (IndexOutOfBoundsException e) {
 			throw new IndexOutOfRangeError();
 		}

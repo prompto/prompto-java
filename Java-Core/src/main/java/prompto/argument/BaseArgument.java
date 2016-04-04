@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 
 import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
 import prompto.compiler.IVerifierEntry;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.StackLocal;
@@ -62,11 +63,15 @@ public abstract class BaseArgument implements IArgument {
 	}
 	
 	@Override
-	public StackLocal registerLocal(Context context, MethodInfo method) {
+	public StackLocal registerLocal(Context context, MethodInfo method, Flags flags) {
 		String desc = CompilerUtils.getDescriptor(getJavaType(context));
 		IVerifierEntry.Type type = IVerifierEntry.Type.fromDescriptor(desc);
 		ClassConstant classConstant = new ClassConstant(getJavaType(context));
 		return method.registerLocal(getName(), type, classConstant);
 	}
 
+	@Override
+	public void compileAssignment(Context context, MethodInfo method, Flags flags, IExpression expression) {
+		expression.compile(context, method, flags);
+	}
 }

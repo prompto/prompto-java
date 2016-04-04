@@ -19,11 +19,10 @@ import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.SingletonCategoryDeclaration;
-import prompto.error.InvalidDataError;
+import prompto.error.InvalidValueError;
 import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
-import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
@@ -109,9 +108,11 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	private ResultInfo compileGlobalMethod(Context context, MethodInfo method, Flags flags, 
 			IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
 		// push arguments on the stack
-		if(assignments!=null) 
+		if(assignments!=null) {
+			assignments = assignments.resolveAndCheck(context, declaration, false);
 			assignments.forEach((a)->
 				a.compile(context.getCallingContext(), method, flags));
+		}
 		// call global method in its own class
 		Type classType = CompilerUtils.getGlobalMethodType(declaration.getName());
 		String methodName = declaration.getName();
@@ -135,8 +136,11 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 			IMethodDeclaration declaration, ArgumentAssignmentList assignments, 
 			ClassConstant parentClass) {
 		// push arguments on the stack
-		if(assignments!=null) for(ArgumentAssignment assign : assignments)
-			assign.compile(context.getCallingContext(), method, flags);
+		if(assignments!=null) {
+			assignments = assignments.resolveAndCheck(context, declaration, false);
+			assignments.forEach((a)->
+				a.compile(context.getCallingContext(), method, flags));
+		}
 		// call virtual method
 		IType returnType = declaration.check(context);
 		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getArguments(), returnType);
@@ -156,8 +160,11 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		Type type = getSingletonType(context, parent);
 		ClassConstant parentClass = new ClassConstant(type);
 		// push arguments on the stack
-		if(assignments!=null) for(ArgumentAssignment assign : assignments)
-			assign.compile(context.getCallingContext(), method, flags);
+		if(assignments!=null) {
+			assignments = assignments.resolveAndCheck(context, declaration, false);
+			assignments.forEach((a)->
+				a.compile(context.getCallingContext(), method, flags));
+		}
 		// call static method
 		IType returnType = declaration.check(context);
 		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getArguments(), returnType);
@@ -224,7 +231,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		if(value instanceof TypeValue && ((TypeValue)value).getValue() instanceof CategoryType)
 			value = context.loadSingleton(context, (CategoryType)((TypeValue)value).getValue());
 		if(!(value instanceof ConcreteInstance))
-			throw new InvalidDataError("Not an instance !");
+			throw new InvalidValueError("Not an instance !");
 		context = context.newInstanceContext((ConcreteInstance)value);
 		return context.newChildContext();
 	}

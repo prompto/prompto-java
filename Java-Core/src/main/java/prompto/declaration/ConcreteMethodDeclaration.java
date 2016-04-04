@@ -221,9 +221,9 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		else 
 			method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
 		arguments.forEach((arg)->
-			arg.registerLocal(context, method));
+			arg.registerLocal(context, method, new Flags()));
 		arguments.forEach((arg)->
-			arg.extractLocal(context, method));
+			arg.extractLocal(context, method, new Flags()));
 	}
 
 

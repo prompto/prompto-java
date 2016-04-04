@@ -1,6 +1,11 @@
 package prompto.intrinsic;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
+
+import prompto.compiler.PromptoClassLoader;
 
 public abstract class PromptoException {
 
@@ -30,6 +35,37 @@ public abstract class PromptoException {
 			return NullPointerException.class;
 		default:
 			return null;
+		}
+	}
+	
+	public static void throwEnumeratedException(String name) {
+		try {
+			String exceptionName = "π.ε.Error$%Error";
+			PromptoClassLoader loader = PromptoClassLoader.getInstance();
+			if(loader==null)
+				throw new UnsupportedOperationException("throwEnumeratedException can only be used in compiled mode!");
+			Class<?> klass = Class.forName(exceptionName, true, loader);
+			Field field = klass.getDeclaredField(name);
+			RuntimeException instance = (RuntimeException)(field.get(null));
+			throw instance;
+		} catch(ClassNotFoundException | NoSuchFieldException | IllegalAccessException | SecurityException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static void throwEnumeratedException(String name, String message) {
+		try {
+			String exceptionName = "π.ε.Error$%Error$" + name;
+			PromptoClassLoader loader = PromptoClassLoader.getInstance();
+			if(loader==null)
+				throw new UnsupportedOperationException("throwEnumeratedException can only be used in compiled mode!");
+			Class<RuntimeException> klass = (Class<RuntimeException>) Class.forName(exceptionName, true, loader);
+			Constructor<RuntimeException> ctor = klass.getDeclaredConstructor(String.class);
+			RuntimeException instance = ctor.newInstance(message);
+			throw instance;
+		} catch(ClassNotFoundException | InstantiationException | IllegalAccessException | SecurityException | NoSuchMethodException | IllegalArgumentException | InvocationTargetException e) {
+			throw new RuntimeException(e);
 		}
 	}
 }

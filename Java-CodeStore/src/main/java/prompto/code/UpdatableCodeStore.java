@@ -13,7 +13,6 @@ import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.DeclarationList;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
-import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
 import prompto.expression.AndExpression;
 import prompto.expression.EqualsExpression;
@@ -188,7 +187,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 			return;
 		ICodeStore origin = decl.getOrigin();
 		if(origin==null)
-			throw new InvalidDataError("Cannot store declaration with no origin!");
+			throw new InternalError("Cannot store declaration with no origin!");
 		Object moduleId = fetchDeclarationModuleDbId(decl);
 		if(moduleId==null)
 			moduleId = storeDeclarationModule(decl);

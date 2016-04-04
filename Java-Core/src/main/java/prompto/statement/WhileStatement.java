@@ -8,7 +8,7 @@ import prompto.compiler.OffsetListenerConstant;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StackState;
-import prompto.error.InvalidDataError;
+import prompto.error.InvalidValueError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
@@ -98,7 +98,7 @@ public class WhileStatement extends BaseStatement {
 	private boolean interpretCondition(Context context) throws PromptoError {
 		Object value = condition.interpret(context);
 		if(!(value instanceof Boolean))
-			throw new InvalidDataError("Expected a Boolean, got:" + value.getClass().getSimpleName());
+			throw new InvalidValueError("Expected a Boolean, got:" + value.getClass().getSimpleName());
 		return ((Boolean)value).getValue();
 	}
 	

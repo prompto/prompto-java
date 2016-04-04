@@ -12,7 +12,6 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.error.IndexOutOfRangeError;
-import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
@@ -149,16 +148,16 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IFilterab
 	}
 	
 	@Override
-	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
+	public IValue getMember(Context context, Identifier id, boolean autoCreate) {
 		String name = id.toString();
 		if ("length".equals(name))
 			return new Integer(items.size());
 		else
-			throw new InvalidDataError("No such member:" + name);
+			throw new SyntaxError("No such member:" + name);
 	}
 
 	@Override
-	public IValue plus(Context context, IValue value) throws PromptoError {
+	public IValue plus(Context context, IValue value) {
         if (value instanceof ListValue)
             return this.merge(((ListValue)value).getItems());
         else if (value instanceof SetValue)

@@ -13,7 +13,6 @@ import prompto.compiler.ResultInfo;
 import prompto.declaration.EnumeratedNativeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IEnumeratedDeclaration;
-import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
@@ -79,7 +78,7 @@ public class EnumeratedNativeType extends BaseType {
 	}
 	
 	@Override
-	public IValue getMember(Context context, Identifier id) throws PromptoError {
+	public IValue getMember(Context context, Identifier id) {
 		String name = id.toString();
 		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, typeNameId);
 		if(!(decl instanceof IEnumeratedDeclaration))
@@ -87,7 +86,7 @@ public class EnumeratedNativeType extends BaseType {
 		if ("symbols".equals(name))
 			return ((IEnumeratedDeclaration)decl).getSymbols();
 		else
-			throw new InvalidDataError("No such member:" + name);
+			throw new SyntaxError("No such member:" + name);
 	}
 	
 	@Override

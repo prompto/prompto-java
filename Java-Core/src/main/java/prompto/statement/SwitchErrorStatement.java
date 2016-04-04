@@ -201,6 +201,8 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 		Iterator<List<ExceptionHandler>> iterHandler = handlerList.iterator();
 		if(iterCases.hasNext())
 			compileExceptionHandler(context, method, flags, iterCases.next(), iterHandler.next(), finalOffsets);
+		if(defaultCase!=null)
+			compileExceptionHandler(context, method, flags, null, iterHandler.next(), finalOffsets);
 		// TODO 'finally'
 	}
 
@@ -217,7 +219,9 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 		CompilerUtils.compileASTORE(method, error);
 		Context local = context.newLocalContext();
 		local.registerValue(new ErrorVariable(errorName));
-		ResultInfo result = switchCase.statements.compile(local, method, flags);
+		ResultInfo result = switchCase!=null ? 
+				switchCase.statements.compile(local, method, flags) :
+				defaultCase.compile(context, method, flags);
 		if(finalOffsets!=null && !result.isReturn() && !result.isThrow()) {
 			OffsetListenerConstant finalOffset = method.addOffsetListener(new OffsetListenerConstant());
 			method.activateOffsetListener(finalOffset);
@@ -249,8 +253,17 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 		List<List<ExceptionHandler>> handlers = new LinkedList<>();
 		for(SwitchCase sc : switchCases)
 			handlers.add(installExceptionHandlers(context, method, flags, sc));
+		if(defaultCase!=null)
+			handlers.add(installDefaultExceptionHandlers(context, method, flags));
+			
 		// TODO 'finally'
 		return handlers;
+	}
+
+	private List<ExceptionHandler> installDefaultExceptionHandlers(Context context, MethodInfo method, Flags flags) {
+		List<ExceptionHandler> list = new LinkedList<ExceptionHandler>();
+		list.add(installExceptionHandler(context, method, flags, (SymbolExpression)null));
+		return list;
 	}
 
 	private List<ExceptionHandler> installExceptionHandlers(Context context, MethodInfo method,
@@ -306,11 +319,21 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 
 	private ExceptionHandler installExceptionHandler(Context context, MethodInfo method,
 			Flags flags, SymbolExpression symbol) {
-		Type type = PromptoException.getExceptionType(symbol.getName());
-		if(type==null)
-			type = symbol.getJavaType(context);
+		Type type = getExceptionType(context, symbol);
 		ExceptionHandler handler = method.registerExceptionHandler(type);
 		method.activateOffsetListener(handler);
 		return handler;
+	}
+
+	private Type getExceptionType(Context context, SymbolExpression symbol) {
+		if(symbol==null)
+			return CompilerUtils.getCategoryEnumConcreteType("Error");
+		else {
+			Type type = PromptoException.getExceptionType(symbol.getName());
+			if(type!=null)
+				return type;
+			else
+				return symbol.getJavaType(context);
+		}
 	}
 }

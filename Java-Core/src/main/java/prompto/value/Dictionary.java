@@ -12,7 +12,6 @@ import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
-import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
@@ -223,7 +222,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 			else if ("value".equals(name))
 				return kvp.getValue();
 			else
-				throw new InvalidDataError("No such member:" + name);
+				throw new SyntaxError("No such member:" + name);
 		}
 		
 	}
