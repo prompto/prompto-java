@@ -120,8 +120,8 @@ public class ConstructorExpression implements IExpression {
 		if(assignments!=null) {
 			context = context.newChildContext();
 			for(ArgumentAssignment assignment : assignments) {
-				if(!cd.hasAttribute(context, assignment.getId()))
-					throw new SyntaxError("\"" + assignment.getId() + 
+				if(!cd.hasAttribute(context, assignment.getArgumentId()))
+					throw new SyntaxError("\"" + assignment.getArgumentId() + 
 						"\" is not an attribute of " + type.getTypeName());	
 				assignment.check(context);
 			}
@@ -154,7 +154,7 @@ public class ConstructorExpression implements IExpression {
 					IValue value = assignment.getExpression().interpret(context);
 					if(value!=null && value.isMutable() && !type.isMutable())
 						throw new NotMutableError();
-					instance.setMember(context, assignment.getId(), value);
+					instance.setMember(context, assignment.getArgumentId(), value);
 				}
 			}
 		} finally {
@@ -200,7 +200,7 @@ public class ConstructorExpression implements IExpression {
 			method.addInstruction(Opcode.INVOKEINTERFACE, m);
 		}
 		// call setter
-		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, assignment.getId());
+		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, assignment.getArgumentId());
 		FieldInfo field = decl.toFieldInfo(context);
 		MethodConstant m = new MethodConstant(thisInfo.getType(), 
 				CompilerUtils.setterName(field.getName().getValue()), field.getType(), void.class);
@@ -253,7 +253,7 @@ public class ConstructorExpression implements IExpression {
 	private boolean willBeAssigned(Identifier name) {
 		if(assignments!=null) 
 			for(ArgumentAssignment assignment : assignments) 
-				if(name.equals(assignment.getId()))
+				if(name.equals(assignment.getArgumentId()))
 					return true;
 		return false;
 	}

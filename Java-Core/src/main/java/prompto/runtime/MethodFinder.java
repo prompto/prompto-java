@@ -83,14 +83,14 @@ public class MethodFinder {
 			d1.registerArguments(s1);
 			Context s2 = context.newLocalContext();
 			d2.registerArguments(s2);
-			Iterator<ArgumentAssignment> it1 = methodCall.makeAssignments(context, d1, true).iterator();
-			Iterator<ArgumentAssignment> it2 = methodCall.makeAssignments(context, d2, true).iterator();
+			Iterator<ArgumentAssignment> it1 = methodCall.makeAssignments(context, d1).iterator();
+			Iterator<ArgumentAssignment> it2 = methodCall.makeAssignments(context, d2).iterator();
 			while(it1.hasNext() && it2.hasNext()) {
 				ArgumentAssignment as1 = it1.next();
 				ArgumentAssignment as2 = it2.next();
-				IArgument ar1 = d1.getArguments().find(as1.getId());
-				IArgument ar2 = d2.getArguments().find(as2.getId());
-				if(as1.getId().equals(as2.getId())) {
+				IArgument ar1 = d1.getArguments().find(as1.getArgumentId());
+				IArgument ar2 = d2.getArguments().find(as2.getArgumentId());
+				if(as1.getArgumentId().equals(as2.getArgumentId())) {
 					// the general case with named arguments
 					IType t1 = ar1.getType(s1);
 					IType t2 = ar2.getType(s2);
@@ -127,7 +127,7 @@ public class MethodFinder {
 		List<IMethodDeclaration> compatibles = new ArrayList<IMethodDeclaration>();
 		for(IMethodDeclaration declaration : candidates) {
 			try {
-				ArgumentAssignmentList args = methodCall.makeAssignments(context, declaration, true);
+				ArgumentAssignmentList args = methodCall.makeAssignments(context, declaration);
 				if(declaration.isAssignableTo(context, args, checkInstance))
 					compatibles.add(declaration);
 			} catch(SyntaxError e) {

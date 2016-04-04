@@ -2,6 +2,8 @@ package prompto.declaration;
 
 import prompto.argument.IArgument;
 import prompto.compiler.ClassFile;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
 import prompto.error.PromptoError;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
@@ -29,6 +31,7 @@ public interface IMethodDeclaration extends IDeclaration {
 	ConcreteCategoryDeclaration getMemberOf();
 	void compile(Context context, ClassFile classFile);
 	void compilePrototype(Context context, ClassFile classFile);
+	void compileAssignments(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments);
 	
 }
 

@@ -17,6 +17,8 @@ import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
+import prompto.grammar.ArgumentAssignment;
+import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.INamedArgument;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
@@ -135,17 +137,18 @@ public class AttributeArgument extends BaseArgument implements INamedArgument {
 	}
 	
 	@Override
-	public void compileAssignment(Context context, MethodInfo method, Flags flags, IExpression assigned) {
-		IType itype = assigned.check(context);
+	public void compileAssignment(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments) {
+		ArgumentAssignment assign = makeAssignment(assignments);
+		IType itype = assign.getExpression().check(context.getCallingContext());
 		// if param is a category, assume it implements the required attribute interface
 		if(itype instanceof CategoryType)
-			assigned.compile(context, method, flags);
+			assign.getExpression().compile(context.getCallingContext(), method, flags);
 		// if param is a value, wrap it into an attribute wrapper
 		else {
 			Type type = CompilerUtils.getAttributeConcreteType(id);
 			CompilerUtils.compileNewRawInstance(method, type);
 			method.addInstruction(Opcode.DUP);
-			ResultInfo info = assigned.compile(context, method, flags);
+			ResultInfo info = assign.getExpression().compile(context.getCallingContext(), method, flags);
 			CompilerUtils.compileCallConstructor(method, type, info.getType());
 		}
 	}

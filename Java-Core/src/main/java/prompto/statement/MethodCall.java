@@ -112,12 +112,12 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 
 	private IType fullCheck(ConcreteMethodDeclaration declaration, Context parent, Context local) {
 		try {
-			ArgumentAssignmentList assignments = makeAssignments(parent, declaration, true);
+			ArgumentAssignmentList assignments = makeAssignments(parent, declaration);
 			declaration.registerArguments(local);
 			for (ArgumentAssignment assignment : assignments) {
 				IExpression expression = assignment.resolve(local, declaration, true);
 				IValue value = assignment.getArgument().checkValue(parent, expression);
-				local.setValue(assignment.getId(), value);
+				local.setValue(assignment.getArgumentId(), value);
 			}
 			return declaration.check(local);
 		} catch (PromptoError e) {
@@ -125,11 +125,11 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		}
 	}
 
-	public ArgumentAssignmentList makeAssignments(Context context, IMethodDeclaration declaration, boolean makeContextual) {
+	public ArgumentAssignmentList makeAssignments(Context context, IMethodDeclaration declaration) {
 		if (assignments == null)
 			return new ArgumentAssignmentList();
 		else
-			return assignments.resolveAndCheck(context, declaration, makeContextual);
+			return assignments.resolveAndCheck(context, declaration);
 	}
 
 	@Override
@@ -138,6 +138,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		IMethodDeclaration declaration = finder.findMethod(false);
 		Context local = this.method.newLocalCheckContext(context, declaration);
 		declaration.registerArguments(local);
+		ArgumentAssignmentList assignments = this.assignments!=null ? this.assignments : new ArgumentAssignmentList();
 		return this.method.compile(local, method, flags, declaration, assignments);
 	}
 	
@@ -151,14 +152,14 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	}
 
 	private void registerAssignments(Context context, Context local, IMethodDeclaration declaration) throws PromptoError {
-		ArgumentAssignmentList assignments = makeAssignments(context, declaration, true);
+		ArgumentAssignmentList assignments = makeAssignments(context, declaration);
 		for (ArgumentAssignment assignment : assignments) {
 			IExpression expression = assignment.resolve(local, declaration, true);
 			IArgument argument = assignment.getArgument();
 			IValue value = argument.checkValue(context, expression);
 			if(value!=null && argument.isMutable() & !value.isMutable()) 
 				throw new NotMutableError();
-			local.setValue(assignment.getId(), value);
+			local.setValue(assignment.getArgumentId(), value);
 		}
 	}
 

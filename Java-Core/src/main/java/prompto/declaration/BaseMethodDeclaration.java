@@ -1,6 +1,8 @@
 package prompto.declaration;
 
 import prompto.argument.IArgument;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
@@ -165,6 +167,13 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	@Override
 	public boolean isEligibleAsMain() {
 		return false;
+	}
+	
+	@Override
+	public void compileAssignments(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments) {
+		arguments.forEach((arg)->
+			arg.compileAssignment(context, method, flags, assignments));
+		
 	}
 }
 

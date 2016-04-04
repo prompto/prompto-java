@@ -1,5 +1,8 @@
 package prompto.expression;
 
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.runtime.Context;
 import prompto.type.IType;
@@ -23,12 +26,17 @@ public class DefaultExpression implements IExpression {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		if(value==null)
-			value = expression.interpret(context);
+			value = expression.interpret(context.getGlobalContext());
 		return value;
 	}
 
 	@Override
 	public void toDialect(CodeWriter writer) {
 		expression.toDialect(writer);
+	}
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		return expression.compile(context.getGlobalContext(), method, flags);
 	}
 }

@@ -1,8 +1,6 @@
 package prompto.grammar;
 
 import prompto.argument.IArgument;
-import prompto.compiler.Flags;
-import prompto.compiler.MethodInfo;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -31,8 +29,8 @@ public class ArgumentAssignment {
 		return argument;
 	}
 
-	public Identifier getId() {
-		return argument.getId();
+	public Identifier getArgumentId() {
+		return argument==null ? null : argument.getId();
 	} 
 	
 	public IExpression getExpression() {
@@ -45,7 +43,6 @@ public class ArgumentAssignment {
 	
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return (argument!=null ? argument.getId() + " = " : "") + expression.toString();
 	}
 	
@@ -131,7 +128,7 @@ public class ArgumentAssignment {
 		return expression; 
 	}
 
-	public ArgumentAssignment resolveAndCheck(Context context, ArgumentList argumentList, boolean makeContextual) {
+	public ArgumentAssignment resolveAndCheck(Context context, ArgumentList argumentList) {
 		IArgument argument = this.argument;
 		// when 1st argument, can be unnamed
 		if(argument==null) {
@@ -139,17 +136,10 @@ public class ArgumentAssignment {
 				throw new SyntaxError("Method has no argument");
 			argument = argumentList.get(0);
 		} else
-			argument = argumentList.find(this.getId());
+			argument = argumentList.find(this.getArgumentId());
 		if(argument==null)
-			throw new SyntaxError("Method has no argument:" + this.getId());
-		IExpression expression = makeContextual ? new ContextualExpression(context, this.expression) : this.expression;
+			throw new SyntaxError("Method has no argument:" + this.getArgumentId());
+		IExpression expression = new ContextualExpression(context, this.expression);
 		return new ArgumentAssignment(argument,expression);
 	}
-
-	public void compile(Context context, MethodInfo method, Flags flags) {
-		argument.compileAssignment(context, method, flags, expression);
-	}
-
-
-
 }

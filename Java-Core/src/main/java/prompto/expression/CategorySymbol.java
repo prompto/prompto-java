@@ -70,8 +70,8 @@ public class CategorySymbol extends Symbol implements IExpression  {
 		if(assignments!=null) {
 			context = context.newChildContext();
 			for(ArgumentAssignment assignment : assignments) {
-				if(!cd.hasAttribute(context, assignment.getId()))
-					throw new SyntaxError("\"" + assignment.getId() + 
+				if(!cd.hasAttribute(context, assignment.getArgumentId()))
+					throw new SyntaxError("\"" + assignment.getArgumentId() + 
 						"\" is not an attribute of " + type.getTypeName());	
 				assignment.check(context);
 			}
@@ -88,7 +88,7 @@ public class CategorySymbol extends Symbol implements IExpression  {
 			context = context.newLocalContext();
 			for(ArgumentAssignment assignment : assignments) {
 				IValue value = assignment.getExpression().interpret(context);
-				instance.setMember(context, assignment.getId(), value);
+				instance.setMember(context, assignment.getArgumentId(), value);
 			}
 		}
 		instance.setMember(context, new Identifier("name"), new Text(this.getId().toString()));
@@ -141,7 +141,7 @@ public class CategorySymbol extends Symbol implements IExpression  {
 		// get value
 		/* ResultInfo valueInfo = */assignment.getExpression().compile(context, method, flags);
 		// call setter
-		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, assignment.getId());
+		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, assignment.getArgumentId());
 		FieldInfo field = decl.toFieldInfo(context);
 		MethodConstant m = new MethodConstant(thisInfo.getType(), 
 				CompilerUtils.setterName(field.getName().getValue()), field.getType(), void.class);

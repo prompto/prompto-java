@@ -8,6 +8,7 @@ import prompto.compiler.StackLocal;
 import prompto.error.PromptoError;
 import prompto.expression.DefaultExpression;
 import prompto.expression.IExpression;
+import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.INamed;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
@@ -29,6 +30,6 @@ public interface IArgument extends INamed {
 	Type getJavaType(Context context);
 	StackLocal registerLocal(Context context, MethodInfo method, Flags flags);
 	default void extractLocal(Context context, MethodInfo method, Flags flags) {}
-	void compileAssignment(Context context, MethodInfo method, Flags flags, IExpression assigned);
+	void compileAssignment(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments);
 	
 }

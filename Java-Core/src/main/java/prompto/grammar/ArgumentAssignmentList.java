@@ -30,16 +30,16 @@ public class ArgumentAssignmentList extends LinkedList<ArgumentAssignment> {
 
 	public ArgumentAssignment find(Identifier name) {
 		for(ArgumentAssignment assignment : this) {
-			if(name.equals(assignment.getId()))
+			if(name.equals(assignment.getArgumentId()))
 				return assignment;
 		}
 		return null;
 	}
 
-	public ArgumentAssignmentList resolveAndCheck(Context context, IMethodDeclaration declaration, boolean makeContextual) {
+	public ArgumentAssignmentList resolveAndCheck(Context context, IMethodDeclaration declaration) {
 		ArgumentAssignmentList assignments = new ArgumentAssignmentList();
 		for(ArgumentAssignment assignment : this)
-			assignments.add(assignment.resolveAndCheck(context, declaration.getArguments(), makeContextual));
+			assignments.add(assignment.resolveAndCheck(context, declaration.getArguments()));
 		return assignments;
 	}
 	

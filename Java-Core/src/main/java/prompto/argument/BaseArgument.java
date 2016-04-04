@@ -9,8 +9,11 @@ import prompto.compiler.IVerifierEntry;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.StackLocal;
 import prompto.error.PromptoError;
+import prompto.error.SyntaxError;
 import prompto.expression.DefaultExpression;
 import prompto.expression.IExpression;
+import prompto.grammar.ArgumentAssignment;
+import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.value.IValue;
@@ -71,7 +74,21 @@ public abstract class BaseArgument implements IArgument {
 	}
 
 	@Override
-	public void compileAssignment(Context context, MethodInfo method, Flags flags, IExpression expression) {
-		expression.compile(context, method, flags);
+	public void compileAssignment(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments) {
+		ArgumentAssignment assign = makeAssignment(assignments);
+		assign.getExpression().compile(context.getCallingContext(), method, flags);
+	}
+
+	protected ArgumentAssignment makeAssignment(ArgumentAssignmentList assignments) {
+		ArgumentAssignment assign = assignments.find(id);
+		if(assign!=null)
+			return assign;
+		// single argument can be anonymous
+		else if(assignments.size()==1 && assignments.get(0).getArgument()==null)
+			return assignments.get(0);
+		else if(defaultExpression!=null)
+			return new ArgumentAssignment(this, defaultExpression);
+		else
+			throw new SyntaxError("Missing assignment for argument " + getName());
 	}
 }

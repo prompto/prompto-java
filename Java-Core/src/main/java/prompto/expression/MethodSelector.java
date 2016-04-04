@@ -108,11 +108,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	private ResultInfo compileGlobalMethod(Context context, MethodInfo method, Flags flags, 
 			IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
 		// push arguments on the stack
-		if(assignments!=null) {
-			assignments = assignments.resolveAndCheck(context, declaration, false);
-			assignments.forEach((a)->
-				a.compile(context.getCallingContext(), method, flags));
-		}
+		declaration.compileAssignments(context, method, flags, assignments);
 		// call global method in its own class
 		Type classType = CompilerUtils.getGlobalMethodType(declaration.getName());
 		String methodName = declaration.getName();
@@ -136,11 +132,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 			IMethodDeclaration declaration, ArgumentAssignmentList assignments, 
 			ClassConstant parentClass) {
 		// push arguments on the stack
-		if(assignments!=null) {
-			assignments = assignments.resolveAndCheck(context, declaration, false);
-			assignments.forEach((a)->
-				a.compile(context.getCallingContext(), method, flags));
-		}
+		declaration.compileAssignments(context, method, flags, assignments);
 		// call virtual method
 		IType returnType = declaration.check(context);
 		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getArguments(), returnType);
@@ -160,11 +152,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		Type type = getSingletonType(context, parent);
 		ClassConstant parentClass = new ClassConstant(type);
 		// push arguments on the stack
-		if(assignments!=null) {
-			assignments = assignments.resolveAndCheck(context, declaration, false);
-			assignments.forEach((a)->
-				a.compile(context.getCallingContext(), method, flags));
-		}
+		declaration.compileAssignments(context, method, flags, assignments);
 		// call static method
 		IType returnType = declaration.check(context);
 		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getArguments(), returnType);

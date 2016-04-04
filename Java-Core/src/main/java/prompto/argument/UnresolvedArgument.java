@@ -9,6 +9,7 @@ import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
+import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.INamedArgument;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
@@ -105,9 +106,9 @@ public class UnresolvedArgument extends BaseArgument implements INamedArgument {
 	}
 	
 	@Override
-	public void compileAssignment(Context context, MethodInfo method, Flags flags, IExpression assigned) {
+	public void compileAssignment(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments) {
 		resolve(context);
-		resolved.compileAssignment(context, method, flags, assigned);
+		resolved.compileAssignment(context, method, flags, assignments);
 	}
 
 

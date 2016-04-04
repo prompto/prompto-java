@@ -223,7 +223,7 @@ public class TestParserAtoms {
 		assertEquals("print",mc.getCaller().toString());
 		assertNotNull(mc.getAssignments());
 		ArgumentAssignment as = mc.getAssignments().get(0);
-		assertEquals("value",as.getId().toString());
+		assertEquals("value",as.getArgumentId().toString());
 		IExpression exp = as.getExpression();
 		assertTrue(exp instanceof PlusExpression);
 		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalContext());
@@ -317,13 +317,13 @@ public class TestParserAtoms {
 		assertEquals(2, l.size());
 		ArgumentAssignment a = l.get(0);
 		assertNotNull(a);
-		assertEquals("id",a.getId().toString());
+		assertEquals("id",a.getArgumentId().toString());
 		IExpression e = a.getExpression();
 		assertNotNull(e);
 		assertTrue(e instanceof IntegerLiteral);
 		a = l.get(1);
 		assertNotNull(a);
-		assertEquals("name",a.getId().toString());
+		assertEquals("name",a.getArgumentId().toString());
 		e = a.getExpression();
 		assertNotNull(e);
 		assertTrue(e instanceof TextLiteral);
