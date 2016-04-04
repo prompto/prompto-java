@@ -358,8 +358,8 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 				current = new MethodDeclarationMap(m.getId());
 				map.put(m.getNameAsKey(), current);
 			}
-			if(current.get(m.getNameAsKey())==null)
-				current.put(m.getNameAsKey(), m);
+			if(current.get(m.getProto())==null)
+				current.put(m.getProto(), m);
 		});
 	}
 
