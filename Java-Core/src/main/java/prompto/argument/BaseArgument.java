@@ -74,17 +74,17 @@ public abstract class BaseArgument implements IArgument {
 	}
 
 	@Override
-	public void compileAssignment(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments) {
-		ArgumentAssignment assign = makeAssignment(assignments);
+	public void compileAssignment(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments, boolean isFirst) {
+		ArgumentAssignment assign = makeAssignment(assignments, isFirst);
 		assign.getExpression().compile(context.getCallingContext(), method, flags);
 	}
 
-	protected ArgumentAssignment makeAssignment(ArgumentAssignmentList assignments) {
+	protected ArgumentAssignment makeAssignment(ArgumentAssignmentList assignments, boolean isFirst) {
 		ArgumentAssignment assign = assignments.find(id);
 		if(assign!=null)
 			return assign;
-		// single argument can be anonymous
-		else if(assignments.size()==1 && assignments.get(0).getArgument()==null)
+		// first argument can be anonymous
+		else if(isFirst && assignments.size()>0 && assignments.get(0).getArgument()==null)
 			return assignments.get(0);
 		else if(defaultExpression!=null)
 			return new ArgumentAssignment(this, defaultExpression);

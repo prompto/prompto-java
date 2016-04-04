@@ -171,9 +171,11 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	
 	@Override
 	public void compileAssignments(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments) {
-		arguments.forEach((arg)->
-			arg.compileAssignment(context, method, flags, assignments));
-		
+		boolean isFirst = true;
+		for(IArgument arg : arguments) {
+			arg.compileAssignment(context, method, flags, assignments, isFirst);
+			isFirst = false;
+		}
 	}
 }
 

@@ -137,8 +137,8 @@ public class AttributeArgument extends BaseArgument implements INamedArgument {
 	}
 	
 	@Override
-	public void compileAssignment(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments) {
-		ArgumentAssignment assign = makeAssignment(assignments);
+	public void compileAssignment(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments, boolean isFirst) {
+		ArgumentAssignment assign = makeAssignment(assignments, isFirst);
 		IType itype = assign.getExpression().check(context.getCallingContext());
 		// if param is a category, assume it implements the required attribute interface
 		if(itype instanceof CategoryType)

@@ -30,6 +30,7 @@ public interface IArgument extends INamed {
 	Type getJavaType(Context context);
 	StackLocal registerLocal(Context context, MethodInfo method, Flags flags);
 	default void extractLocal(Context context, MethodInfo method, Flags flags) {}
-	void compileAssignment(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments);
+	void compileAssignment(Context context, MethodInfo method, Flags flags, 
+			ArgumentAssignmentList assignments, boolean isFirst);
 	
 }

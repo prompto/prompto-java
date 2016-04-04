@@ -106,9 +106,9 @@ public class UnresolvedArgument extends BaseArgument implements INamedArgument {
 	}
 	
 	@Override
-	public void compileAssignment(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments) {
+	public void compileAssignment(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments, boolean isFirst) {
 		resolve(context);
-		resolved.compileAssignment(context, method, flags, assignments);
+		resolved.compileAssignment(context, method, flags, assignments, isFirst);
 	}
 
 
