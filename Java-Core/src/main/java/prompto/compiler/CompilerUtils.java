@@ -203,6 +203,13 @@ public abstract class CompilerUtils {
 		return new PromptoType(fullName);
 	}
 
+	public static Type concreteParentTypeFrom(String fullName) {
+		// strip out enumerated inner class
+		if(fullName.indexOf('$')!=fullName.lastIndexOf('$'))
+			fullName = fullName.substring(0, fullName.lastIndexOf('$'));
+		return concreteTypeFrom(fullName);
+	}
+	
 	public static Type abstractTypeFrom(String fullName) {
 		return interfaceTypeFrom(fullName);
 	}

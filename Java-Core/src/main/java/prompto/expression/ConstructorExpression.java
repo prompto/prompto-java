@@ -20,6 +20,7 @@ import prompto.error.SyntaxError;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.IMutable;
 import prompto.runtime.Context;
 import prompto.type.CategoryType;
 import prompto.type.IType;
@@ -166,15 +167,24 @@ public class ConstructorExpression implements IExpression {
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		Type klass = getConcreteType(context);
 		ResultInfo result = CompilerUtils.compileNewInstance(method, klass);
+		compileSetMutable(context, method, flags, result, true);
 		compileCopyFrom(context, method, flags, result);
 		compileAssignments(context, method, flags, result);
+		compileSetMutable(context, method, flags, result, type.isMutable());
 		return new ResultInfo(getInterfaceType(context));
 	}
 
+	private void compileSetMutable(Context context, MethodInfo method, Flags flags, ResultInfo thisInfo, boolean set) {
+		method.addInstruction(Opcode.DUP); // this
+		method.addInstruction(set ? Opcode.ICONST_1 : Opcode.ICONST_0); 
+		MethodConstant m = new MethodConstant(thisInfo.getType(), "setMutable", boolean.class, void.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+	}
+
 	private void compileAssignments(Context context, MethodInfo method, Flags flags, ResultInfo thisInfo) {
-		if(assignments!=null)
-			for(ArgumentAssignment assignment : assignments)
-				compileAssignment(context, method, flags, thisInfo, assignment);
+		if(assignments!=null) 
+			assignments.forEach((a)->
+				compileAssignment(context, method, flags, thisInfo, a));
 	}
 
 	private void compileAssignment(Context context, MethodInfo method, Flags flags, 
@@ -182,7 +192,13 @@ public class ConstructorExpression implements IExpression {
 		// keep a copy of new instance on top of the stack
 		method.addInstruction(Opcode.DUP);
 		// get value
-		/* ResultInfo valueInfo = */assignment.getExpression().compile(context, method, flags);
+		ResultInfo valueInfo = assignment.getExpression().compile(context, method, flags);
+		// check immutable member
+		if(!type.isMutable() && valueInfo.isCategory()) {
+			method.addInstruction(Opcode.DUP); 
+			InterfaceConstant m = new InterfaceConstant(IMutable.class, "checkImmutable", void.class);
+			method.addInstruction(Opcode.INVOKEINTERFACE, m);
+		}
 		// call setter
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, assignment.getId());
 		FieldInfo field = decl.toFieldInfo(context);

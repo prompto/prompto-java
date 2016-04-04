@@ -18,7 +18,6 @@ import prompto.error.PromptoError;
 import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
-import prompto.statement.IStatement;
 import prompto.statement.StatementList;
 import prompto.type.DictType;
 import prompto.type.IType;
@@ -194,9 +193,8 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 
 	private void produceByteCode(Context context, MethodInfo method, IType returnType) {
-		Flags flags = new Flags();
-		for(IStatement s : statements)
-			s.compile(context, method, flags);
+		statements.forEach((s)->
+			s.compile(context, method, new Flags().withMember(this.memberOf!=null)));
 		// add return for void
 		if(returnType==VoidType.instance())
 			method.addInstruction(Opcode.RETURN);

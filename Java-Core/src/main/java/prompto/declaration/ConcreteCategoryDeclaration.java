@@ -411,7 +411,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	
 	protected ClassFile compileConcreteClass(Context context, String fullName) {
 		try {
-			java.lang.reflect.Type concreteType = CompilerUtils.concreteTypeFrom(fullName);
+			java.lang.reflect.Type concreteType = CompilerUtils.concreteParentTypeFrom(fullName);
 			ClassFile classFile = new ClassFile(concreteType);
 			if(isAbstract())
 				classFile.addModifier(Modifier.ABSTRACT);
@@ -864,6 +864,4 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		}
 	}
 	
-
-
 }

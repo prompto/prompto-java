@@ -15,6 +15,7 @@ public class Flags {
 		this.values.put("reverse", false);
 		this.values.put("roughly", false);
 		this.values.put("decimal", false);
+		this.values.put("member", false);
 		this.values.put("opcode", null);
 		this.values.put("setter", null);
 	}
@@ -83,6 +84,14 @@ public class Flags {
 	
 	public Flags withSetter(FieldInfo field) {
 		return clone("setter", field);
+	}
+	
+	public boolean isMember() {
+		return (boolean)values.get("member");
+	}
+
+	public Flags withMember(boolean set) {
+		return clone("member", set);
 	}
 
 }

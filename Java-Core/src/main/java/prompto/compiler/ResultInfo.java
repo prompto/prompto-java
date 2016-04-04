@@ -18,6 +18,7 @@ public class ResultInfo {
 	boolean isStatic = false;
 	Boolean isPrimitive = null;
 	Boolean isInterface = null;
+	Boolean isCategory = null;
 	
 	public ResultInfo(Type type, Flag ...flags) {
 		this.type = type;
@@ -81,5 +82,19 @@ public class ResultInfo {
 
 	public boolean isThrow() {
 		return isThrow;
+	}
+	
+	public boolean isCategory() {
+		if(isCategory==null) {
+			if(isPrimitive())
+				isCategory = false;
+			else if(type instanceof Class)
+				isCategory = false;
+			else if(type instanceof PromptoType){
+				isCategory = type.getTypeName().startsWith(CompilerUtils.CATEGORY_PACKAGE_PREFIX);
+			} else
+				throw new UnsupportedOperationException();
+		}
+		return isCategory;
 	}
 }

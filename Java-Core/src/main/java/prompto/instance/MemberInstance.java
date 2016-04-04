@@ -1,17 +1,22 @@
 package prompto.instance;
 
 import prompto.compiler.ClassConstant;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.FieldInfo;
 import prompto.compiler.Flags;
 import prompto.compiler.IOperand;
+import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StringConstant;
+import prompto.declaration.AttributeDeclaration;
 import prompto.error.NotMutableError;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.IMutable;
 import prompto.intrinsic.PromptoAny;
 import prompto.intrinsic.PromptoDocument;
 import prompto.runtime.Context;
@@ -105,10 +110,37 @@ public class MemberInstance implements IAssignableSelector {
 			return compileAssignAny(context, method, flags, expression);
 		else if(PromptoDocument.class==parent.getType())
 			return compileAssignDocument(context, method, flags, expression);
+		else if(parent.isCategory())
+			return compileAssignMember(context, method, flags, parent, expression);
 		else
 			throw new UnsupportedOperationException("Cannot assign item to " + parent.getType().getTypeName());
 	}
 	
+	private ResultInfo compileAssignMember(Context context, MethodInfo method, Flags flags, ResultInfo parent, IExpression expression) {
+		compileCheckMutable(context, method, flags, parent);
+		return compileCallSetter(context, method, flags, parent, expression, id);
+	}
+
+	private void compileCheckMutable(Context context, MethodInfo method, Flags flags, ResultInfo parent) {
+		method.addInstruction(Opcode.DUP); // parent
+		InterfaceConstant m = new InterfaceConstant(IMutable.class, "checkMutable", void.class);
+		method.addInstruction(Opcode.INVOKEINTERFACE, m);
+	}
+
+	private ResultInfo compileCallSetter(Context context, MethodInfo method, Flags flags, ResultInfo parent, IExpression value, Identifier id) {
+		/*ResultInfo valueInfo = */value.compile(context, method, flags);
+		FieldInfo field = context.getRegisteredDeclaration(AttributeDeclaration.class, id).toFieldInfo(context);
+		String setterName = CompilerUtils.setterName(field.getName().getValue());
+		if(parent.isInterface()) {
+			InterfaceConstant m = new InterfaceConstant(parent.getType(), setterName, field.getType(), void.class);
+			method.addInstruction(Opcode.INVOKEINTERFACE, m);
+		} else {
+			MethodConstant m = new MethodConstant(parent.getType(), setterName, field.getType(), void.class);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+		}
+		return new ResultInfo(void.class);
+	}
+
 	private ResultInfo compileAssignAny(Context context, MethodInfo method, Flags flags, IExpression expression) {
 		StringConstant key = new StringConstant(getName());
 		method.addInstruction(Opcode.LDC_W, key);

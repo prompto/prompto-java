@@ -21,6 +21,8 @@ import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.grammar.Operator;
+import prompto.instance.MemberInstance;
+import prompto.instance.VariableInstance;
 import prompto.runtime.Context;
 import prompto.runtime.Score;
 import prompto.store.IDataStore;
@@ -421,9 +423,19 @@ public class CategoryType extends BaseType {
 			Flags flags, IExpression parent, IExpression value, Identifier id) {
 		IDeclaration decl = getDeclaration(context);
 		if(decl instanceof SingletonCategoryDeclaration)
-			return ((SingletonCategoryDeclaration)decl).compileSetMember(context, method, flags, value, id);
-		else
+			return ((SingletonCategoryDeclaration)decl).compileSetStaticMember(context, method, flags, value, id);
+		else if(couldBeImplicitThis(decl, flags)) {
+			MemberInstance instance = new MemberInstance(id);
+			instance.setParent(new VariableInstance(new Identifier("this")));
+			return instance.compileAssign(context, method, flags, value);
+		} else
 			throw new SyntaxError("No static member support for non-singleton " + decl.getName());
 	}
+
+	private boolean couldBeImplicitThis(IDeclaration decl, Flags flags) {
+		return decl instanceof ConcreteCategoryDeclaration && flags.isMember();
+	}
+
+
 
 }

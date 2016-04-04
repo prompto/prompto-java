@@ -159,7 +159,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration i
 	@Override
 	protected ClassFile compileConcreteClass(Context context, String fullName) {
 		try {
-			java.lang.reflect.Type concreteType = CompilerUtils.concreteTypeFrom(fullName);
+			java.lang.reflect.Type concreteType = CompilerUtils.concreteParentTypeFrom(fullName);
 			ClassFile classFile = new ClassFile(concreteType);
 			compileSuperClass(context, classFile, new Flags());
 			compileInterface(context, classFile, new Flags());
@@ -185,7 +185,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration i
 	@Override
 	protected ClassConstant getSuperClass(Context context) {
 		if("Error".equals(getName()))
-			return new ClassConstant(Throwable.class);
+			return new ClassConstant(RuntimeException.class);
 		else
 			return super.getSuperClass(context);
 	}

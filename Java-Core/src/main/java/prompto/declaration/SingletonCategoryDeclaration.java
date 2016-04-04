@@ -124,7 +124,7 @@ public class SingletonCategoryDeclaration extends ConcreteCategoryDeclaration {
 		return new ResultInfo(field.getType());
 	}
 
-	public ResultInfo compileSetMember(Context context, MethodInfo method, Flags flags, IExpression value, Identifier id) {
+	public ResultInfo compileSetStaticMember(Context context, MethodInfo method, Flags flags, IExpression value, Identifier id) {
 		value.compile(context, method, flags);
 		java.lang.reflect.Type concreteType = CompilerUtils.getCategorySingletonType(getId());
 		String setterName = CompilerUtils.setterName(id.toString());

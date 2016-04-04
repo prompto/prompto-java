@@ -17,7 +17,7 @@ import prompto.store.IStorable.IDbIdListener;
 import prompto.store.IStorable.IDbIdProvider;
 import prompto.store.IStoredIterable;
 
-public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener {
+public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMutable {
 
 	public static PromptoRoot newInstance(IStored stored) {
 		if(stored==null) // happens on an unsuccessful fetchOne
@@ -66,6 +66,7 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener {
 	
 	protected Object dbId;
 	protected IStorable storable;
+	protected boolean mutable;
 	
 	protected PromptoRoot() {
 	}
@@ -96,6 +97,41 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener {
 		}
 	}
 	
+	@Override
+	public boolean isMutable() {
+		return mutable;
+	}
+	
+	@Override
+	public void setMutable(boolean mutable) {
+		this.mutable = mutable;
+	}
+	
+	@Override
+	public void checkMutable() {
+		if(!this.mutable) 
+			throwNotMutableException();
+	}
+	
+	@Override
+	public void checkImmutable() {
+		if(this.mutable) 
+			throwNotMutableException();
+	}
+
+	private void throwNotMutableException() {
+		try {
+			String exceptionName = "π.ε.Error$%Error";
+			ClassLoader loader = this.getClass().getClassLoader();
+			Class<?> klass = loader.loadClass(exceptionName);
+			Field field = klass.getDeclaredField("NOT_MUTABLE");
+			RuntimeException instance = (RuntimeException)(field.get(null));
+			throw instance;
+		} catch(ClassNotFoundException | NoSuchFieldException | IllegalAccessException | SecurityException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -139,6 +175,8 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener {
 					!"dbId".equals(f.getName()))
 				.filter((f)->
 					!"storable".equals(f.getName()))
+				.filter((f)->
+					!"mutable".equals(f.getName()))
 				.collect(Collectors.toList()));
 	}
 
