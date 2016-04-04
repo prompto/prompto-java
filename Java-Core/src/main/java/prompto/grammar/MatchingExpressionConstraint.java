@@ -37,13 +37,13 @@ public class MatchingExpressionConstraint extends Section implements IAttributeC
 		child.setValue(new Identifier("value"), value);
 		Object test = expression.interpret(child);
 		if(!Boolean.TRUE.equals(test))
-			throw new InvalidValueError(String.valueOf(value) + " does not match:" + expressionToString(context));
+			throw new InvalidValueError(String.valueOf(value) + expressionToString(context));
 	}
 	
 	private String expressionToString(Context context) {
 		CodeWriter cw = new CodeWriter(this.getDialect(), context);
 		expression.toDialect(cw);
-		return cw.toString();
+		return " does not match:" + cw.toString();
 	}
 
 	@Override
@@ -69,8 +69,7 @@ public class MatchingExpressionConstraint extends Section implements IAttributeC
 		CompilerUtils.compileALOAD(method, "value");
 		MethodConstant m = new MethodConstant(String.class, "valueOf", Object.class, String.class);
 		method.addInstruction(Opcode.INVOKESTATIC, m);
-		String message = " does not match:" + expressionToString(context);
-		method.addInstruction(Opcode.LDC, new StringConstant(message));
+		method.addInstruction(Opcode.LDC, new StringConstant(expressionToString(context)));
 		m = new MethodConstant(String.class, "concat", String.class, String.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 		// throw exception
