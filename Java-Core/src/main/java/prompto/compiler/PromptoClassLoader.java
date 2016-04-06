@@ -39,7 +39,7 @@ public class PromptoClassLoader extends URLClassLoader {
 	private static Boolean testMode;
 	private static ThreadLocal<PromptoClassLoader> testInstance;
 	public static PromptoClassLoader getInstance() {
-		return testInstance.get();
+		return instance!=null ? instance : testInstance.get();
 	}
 	
 	public static PromptoClassLoader initialize(Context context, File promptoDir, boolean testMode) {

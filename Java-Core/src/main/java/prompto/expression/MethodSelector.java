@@ -1,10 +1,14 @@
 package prompto.expression;
 
+import java.lang.invoke.CallSite;
+import java.lang.invoke.MethodType;
+import java.lang.invoke.MethodHandles.Lookup;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import prompto.compiler.BootstrapMethod;
 import prompto.compiler.CallSiteConstant;
 import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
@@ -12,7 +16,9 @@ import prompto.compiler.Descriptor;
 import prompto.compiler.Flags;
 import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodHandleConstant;
 import prompto.compiler.MethodInfo;
+import prompto.compiler.NameAndTypeConstant;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
@@ -119,11 +125,18 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 			IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
 		// push arguments on the stack
 		declaration.compileAssignments(context, method, flags, assignments);
-		// call global method in its own class
+		// call global method bootstrap method in its own class
 		Type classType = CompilerUtils.getGlobalMethodType(declaration.getName());
 		String methodName = declaration.getName();
+		MethodConstant mc = new MethodConstant(classType, "bootstrap", 
+				Lookup.class, String.class, MethodType.class, CallSite.class);
+		MethodHandleConstant mhc = new MethodHandleConstant(mc);
+		BootstrapMethod bsm = new BootstrapMethod(mhc);
+		method.getClassFile().addBootstrapMethod(bsm);
 		IType returnType = declaration.check(context);
-		CallSiteConstant constant = null; // new CallSiteConstant();
+		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getArguments(), returnType);
+		NameAndTypeConstant nameAndType = new NameAndTypeConstant(methodName, descriptor);
+		CallSiteConstant constant = new CallSiteConstant(bsm, nameAndType);
 		method.addInstruction(Opcode.INVOKEDYNAMIC, constant);
 		return new ResultInfo(returnType.getJavaType());
 	}

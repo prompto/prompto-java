@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import prompto.code.ICodeStore;
 import prompto.debug.Debugger;
@@ -478,6 +479,15 @@ public class Context implements IContext {
 		@Override
 		public boolean isBreakpoint() {
 			throw new RuntimeException("Should never get there!");
+		}
+
+		public Collection<IMethodDeclaration> globalConcreteMethods() {
+			return values().stream()
+					.filter((m)->
+						!m.isAbstract())
+					.filter((m)->
+						m.getMemberOf()==null)
+					.collect(Collectors.toList());
 		}
 
 	}

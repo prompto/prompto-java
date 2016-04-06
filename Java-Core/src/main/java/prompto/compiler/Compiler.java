@@ -4,19 +4,30 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.invoke.CallSite;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodHandles.Lookup;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+import prompto.argument.IArgument;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.EnumeratedCategoryDeclaration;
 import prompto.declaration.EnumeratedNativeDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.TestMethodDeclaration;
+import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoCallSite;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
+import prompto.type.IType;
 import prompto.utils.FileUtils;
 
 public class Compiler {
@@ -113,20 +124,143 @@ public class Compiler {
 	private ClassFile createGlobalMethodsClassFile(Context context, MethodDeclarationMap methods, Type type) {
 		ClassFile classFile = new ClassFile(type);
 		classFile.addModifier(Modifier.ABSTRACT);
-		Collection<IMethodDeclaration> decls = methods.values();
+		Collection<IMethodDeclaration> decls = methods.globalConcreteMethods();
 		decls.forEach((m) -> 
 			m.compile(context, classFile));
 		if(decls.size()>1) {
-			// classFile.setSuperClass(new ClassConstant(PromptoDispatcher.class));
-			// populateGlobalMethodHandles(classFile, decls);
+			createGlobalMethodHandles(classFile);
+			populateGlobalMethodHandles(context, classFile, decls);
+			createGlobalCheckParamsMethods(context, classFile, decls);
+			createGlobalBootstrapMethod(classFile);
 		}
 		return classFile;
 	}
 
 
-	private void populateGlobalMethodHandles(ClassFile classFile, Collection<IMethodDeclaration> decls) {
-		// TODO Auto-generated method stub
-		
+	private void createGlobalMethodHandles(ClassFile classFile) {
+		FieldInfo field = new FieldInfo("methodHandles", MethodHandle[].class);
+		field.addModifier(Modifier.STATIC);
+		classFile.addField(field);
+	}
+
+	private void populateGlobalMethodHandles(Context context, ClassFile classFile, Collection<IMethodDeclaration> decls) {
+		Descriptor proto = new Descriptor.Method(void.class);
+		MethodInfo method = classFile.newMethod("<clinit>", proto);
+		method.addModifier(Modifier.STATIC);
+		method.addInstruction(Opcode.LDC, new IntConstant(decls.size()));
+		method.addInstruction(Opcode.ANEWARRAY, new ClassConstant(MethodHandle.class));
+		// initialize counter
+		method.registerLocal("i", prompto.compiler.IVerifierEntry.Type.ITEM_Integer, null);
+		method.addInstruction(Opcode.ICONST_0); 
+		method.addInstruction(Opcode.ISTORE_0);
+		for(IMethodDeclaration decl : decls) {
+			method.addInstruction(Opcode.DUP); // the array
+			method.addInstruction(Opcode.ILOAD_0); // the index
+			createGlobalMethodHandle(context, method, decl); // the value
+			method.addInstruction(Opcode.AASTORE);
+			method.addInstruction(Opcode.IINC, new ByteOperand((byte)0), new ByteOperand((byte)1)); 
+		}
+		FieldConstant fc = new FieldConstant(classFile.getThisClass(), "methodHandles", MethodHandle[].class);
+		method.addInstruction(Opcode.PUTSTATIC, fc);
+		method.addInstruction(Opcode.RETURN);
+	}
+	
+	private void createGlobalMethodHandle(Context context, MethodInfo method, IMethodDeclaration decl) {
+		// MethodHandles.lookup().findStatic(klass, "print",  MethodType.methodType(void.class, k1))
+		MethodConstant mc = new MethodConstant(MethodHandles.class, "lookup", Lookup.class);
+		method.addInstruction(Opcode.INVOKESTATIC, mc);
+		// klass
+		method.addInstruction(Opcode.LDC, method.getClassFile().getThisClass());
+		// name
+		method.addInstruction(Opcode.LDC, new StringConstant(decl.getName()));
+		// descriptor
+		IType returnType = decl.check(context);
+		String descriptor = CompilerUtils.createMethodDescriptor(context, decl.getArguments(), returnType).toString();
+		method.addInstruction(Opcode.LDC, new StringConstant(descriptor));
+		// loader
+		mc = new MethodConstant(PromptoClassLoader.class, "getInstance", PromptoClassLoader.class);
+		method.addInstruction(Opcode.INVOKESTATIC, mc);
+		// type
+		mc = new MethodConstant(MethodType.class, "fromMethodDescriptorString", 
+				String.class, ClassLoader.class, MethodType.class);
+		method.addInstruction(Opcode.INVOKESTATIC, mc);
+		// handle
+		mc = new MethodConstant(Lookup.class, "findStatic", 
+				Class.class, String.class, MethodType.class, MethodHandle.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, mc);
+	}
+
+	private void createGlobalBootstrapMethod(ClassFile classFile) {
+		Descriptor proto = new Descriptor.Method(Lookup.class, String.class, MethodType.class, CallSite.class);
+		MethodInfo method = classFile.newMethod("bootstrap", proto);
+		method.addModifier(Modifier.STATIC);
+		StackLocal lookup = method.registerLocal("lookup", prompto.compiler.IVerifierEntry.Type.ITEM_Object, new ClassConstant(Lookup.class));
+		method.registerLocal("name", prompto.compiler.IVerifierEntry.Type.ITEM_Object, new ClassConstant(String.class));
+		StackLocal type = method.registerLocal("type", prompto.compiler.IVerifierEntry.Type.ITEM_Object, new ClassConstant(MethodType.class));
+		// return PromptoCallSite.bootstrap(lookup, TestCallSite.class, methods, type);
+		CompilerUtils.compileALOAD(method, lookup);
+		method.addInstruction(Opcode.LDC, classFile.getThisClass());
+		FieldConstant fc = new FieldConstant(classFile.getThisClass(), "methodHandles", MethodHandle[].class);
+		method.addInstruction(Opcode.GETSTATIC, fc);
+		CompilerUtils.compileALOAD(method, type);
+		MethodConstant mc = new MethodConstant(PromptoCallSite.class, "bootstrap", 
+				Lookup.class, Class.class, MethodHandle[].class, MethodType.class, CallSite.class);
+		method.addInstruction(Opcode.INVOKESTATIC, mc);
+		method.addInstruction(Opcode.ARETURN);
+	}
+
+	private void createGlobalCheckParamsMethods(Context context, ClassFile classFile, Collection<IMethodDeclaration> decls) {
+		for(IMethodDeclaration decl : decls)
+			createGlobalCheckParamsMethod(context, classFile, decl.getArguments());
+	}
+
+	private void createGlobalCheckParamsMethod(Context context, ClassFile classFile, ArgumentList arguments) {
+		String name = buildGlobalCheckParamsMethodName(context, arguments);
+		Type[] types = buildGlobalCheckParamsMethodTypes(arguments.size());
+		Descriptor desc = new Descriptor.Method(types, boolean.class);
+		MethodInfo method = classFile.newMethod(name, desc);
+		method.addModifier(Modifier.STATIC);
+		StackState state = method.captureStackState();
+		List<IInstructionListener> listeners = new ArrayList<IInstructionListener>();
+		for(int i=0;i<arguments.size();i++) {
+			method.registerLocal("p" + i, prompto.compiler.IVerifierEntry.Type.ITEM_Object, new ClassConstant(Object.class));
+			method.addInstruction(Opcode.LDC, new ClassConstant(arguments.get(i).getJavaType(context)));
+			CompilerUtils.compileALOAD(method, "p" + i);
+			MethodConstant mc = new MethodConstant(Class.class, "isInstance", Object.class, boolean.class);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, mc);
+			OffsetListenerConstant listener = method.addOffsetListener(new OffsetListenerConstant());
+			listeners.add(listener);
+			method.activateOffsetListener(listener);
+			method.addInstruction(Opcode.IFEQ, listener);
+		}
+		// success
+		method.addInstruction(Opcode.ICONST_1);
+		method.addInstruction(Opcode.IRETURN);
+		// failure
+		listeners.forEach((l)->
+			method.inhibitOffsetListener(l));
+		method.restoreFullStackState(state);
+		method.placeLabel(state);
+		method.addInstruction(Opcode.ICONST_0);
+		method.addInstruction(Opcode.IRETURN);
+	}
+
+	private Type[] buildGlobalCheckParamsMethodTypes(int size) {
+		Type[] types = new Type[size];
+		while(size-->0)
+			types[size] = Object.class;
+		return types;
+	}
+
+	private String buildGlobalCheckParamsMethodName(Context context, ArgumentList arguments) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("checkParams");
+		for(IArgument arg : arguments) {
+			String typeName = arg.getJavaType(context).getTypeName();
+			String name = typeName.substring(typeName.lastIndexOf('.') + 1);
+			sb.append(name);
+		}
+		return sb.toString();
 	}
 
 	private void writeClassFile(ClassFile classFile) throws CompilerException {

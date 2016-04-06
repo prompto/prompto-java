@@ -290,7 +290,7 @@ public class CategoryType extends BaseType {
 		return false;
 	}
 
-	public Score scoreMostSpecific(Context context, CategoryType t1, CategoryType t2) {
+	public Score compareSpecificity(Context context, CategoryType t1, CategoryType t2) {
 		if(t1.equals(t2))
 			return Score.SIMILAR;
 		if(this.equals(t1))

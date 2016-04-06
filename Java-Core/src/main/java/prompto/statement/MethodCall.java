@@ -137,7 +137,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		MethodFinder finder = new MethodFinder(context, this);
-		Collection<IMethodDeclaration> declarations = finder.findCompatibleMethods(false);
+		Collection<IMethodDeclaration> declarations = finder.findPotentialMethods();
 		switch(declarations.size()) {
 		case 0:
 			throw new SyntaxError("No matching prototype for:" + this.toString()); 

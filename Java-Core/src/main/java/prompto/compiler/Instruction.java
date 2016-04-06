@@ -64,6 +64,10 @@ public class Instruction implements IInstruction {
 				case LOCAL:
 					writer.writeU1(((ByteOperand)operands[0]).value());
 					break;
+				case LOCAL_BYTE:
+					writer.writeU1(((ByteOperand)operands[0]).value());
+					writer.writeU1(((ByteOperand)operands[1]).value());
+					break;
 				case CPREF:
 					writer.writeU1(((IConstantOperand)operands[0]).getIndexInConstantPool());
 					break;

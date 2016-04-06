@@ -266,7 +266,7 @@ public class TestClassFile {
 	}
 	
 	public static void print(String value) {
-		System.out.println(value);
+		System.out.print(value);
 	}
 	
 	public static CallSite bootstrap(Lookup lookup, String name, MethodType type) throws Throwable {
@@ -276,31 +276,37 @@ public class TestClassFile {
 	
 	@Test
 	public void testDynamicMethod() throws Throwable {
-		String name = "π/χ/µ/print";
-		ClassFile c = new ClassFile(new PromptoType(name));
-		c.addModifier(Modifier.ABSTRACT);
-		Descriptor proto = new Descriptor.Method(String.class, void.class);
-		MethodInfo m = c.newMethod("test", proto);
-		m.addModifier(Modifier.STATIC);
-		m.registerLocal("%value%", IVerifierEntry.Type.ITEM_Object, new ClassConstant(String.class));
-		CompilerUtils.compileALOAD(m, "%value%");
-		MethodConstant mc = new MethodConstant(this.getClass(), "bootstrap", 
-				Lookup.class, String.class, MethodType.class, CallSite.class);
-		MethodHandleConstant mhc = new MethodHandleConstant(mc);
-		BootstrapMethod bsm = new BootstrapMethod(mhc);
-		c.addBootstrapMethhod(bsm);
-		NameAndTypeConstant nameAndType = new NameAndTypeConstant("print", proto);
-		CallSiteConstant constant = new CallSiteConstant(bsm, nameAndType);
-		m.addInstruction(Opcode.INVOKEDYNAMIC, constant);
-		m.addInstruction(Opcode.RETURN);
-		ByteArrayOutputStream o = new ByteArrayOutputStream();
-		c.writeTo(o);
-		byte[] gen = o.toByteArray();
-		Class<?> klass = ByteClassLoader.defineAndResolveClass(name.replace("/", "."), gen);
-		assertNotNull(klass);
-		assertTrue(Modifier.isAbstract(klass.getModifiers()));
-		Method mm = klass.getMethod("test", String.class);
-		assertTrue(Modifier.isStatic(mm.getModifiers()));
-		mm.invoke((Object)null, "Hello");
+		Out.init();
+		try {
+			String name = "π/χ/µ/print";
+			ClassFile c = new ClassFile(new PromptoType(name));
+			c.addModifier(Modifier.ABSTRACT);
+			Descriptor proto = new Descriptor.Method(String.class, void.class);
+			MethodInfo m = c.newMethod("test", proto);
+			m.addModifier(Modifier.STATIC);
+			m.registerLocal("%value%", IVerifierEntry.Type.ITEM_Object, new ClassConstant(String.class));
+			CompilerUtils.compileALOAD(m, "%value%");
+			MethodConstant mc = new MethodConstant(this.getClass(), "bootstrap", 
+					Lookup.class, String.class, MethodType.class, CallSite.class);
+			MethodHandleConstant mhc = new MethodHandleConstant(mc);
+			BootstrapMethod bsm = new BootstrapMethod(mhc);
+			c.addBootstrapMethod(bsm);
+			NameAndTypeConstant nameAndType = new NameAndTypeConstant("print", proto);
+			CallSiteConstant constant = new CallSiteConstant(bsm, nameAndType);
+			m.addInstruction(Opcode.INVOKEDYNAMIC, constant);
+			m.addInstruction(Opcode.RETURN);
+			ByteArrayOutputStream o = new ByteArrayOutputStream();
+			c.writeTo(o);
+			byte[] gen = o.toByteArray();
+			Class<?> klass = ByteClassLoader.defineAndResolveClass(name.replace("/", "."), gen);
+			assertNotNull(klass);
+			assertTrue(Modifier.isAbstract(klass.getModifiers()));
+			Method mm = klass.getMethod("test", String.class);
+			assertTrue(Modifier.isStatic(mm.getModifiers()));
+			mm.invoke((Object)null, "Hello");
+			assertEquals("Hello", Out.read());
+		} finally {
+			Out.restore();
+		}
 	}
 }

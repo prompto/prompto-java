@@ -21,6 +21,11 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 	
 	@Override
+	public boolean isAbstract() {
+		return true;
+	}
+	
+	@Override
 	public IType check(Context context) {
 		if(arguments!=null)
 			arguments.check(context);

@@ -137,17 +137,62 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 		}
 	}
 	
-	boolean isAssignableTo(Context context, IArgument argument, ArgumentAssignment assignment, boolean checkInstance) {
-		return computeSpecificity(context, argument, assignment, checkInstance)!=Specificity.INCOMPATIBLE;
+	@Override
+	public boolean isAssignableFrom(Context context, ArgumentAssignmentList assignments) {
+		try {
+			Context local = context.newLocalContext();
+			registerArguments(local);
+			ArgumentAssignmentList assignmentsList = new ArgumentAssignmentList(assignments);
+			for(IArgument argument : arguments) {
+				ArgumentAssignment assignment = assignmentsList.find(argument.getId());
+				if(assignment==null) {
+					IExpression expression = argument.getDefaultExpression();
+					if(expression!=null)
+						assignment = new ArgumentAssignment(argument, expression);
+				}
+				if(assignment==null) // missing argument
+					return false;
+				if(!isAssignableFrom(local,argument,assignment))
+					return false;
+				assignmentsList.remove(assignment);
+			}
+			return assignmentsList.isEmpty();
+		} catch (SyntaxError e) {
+			return false;
+		}
 	}
 	
+	boolean isAssignableTo(Context context, IArgument argument, ArgumentAssignment assignment, 
+			boolean useInstance) {
+		Specificity spec = computeSpecificity(context, argument, assignment, false, useInstance);
+		return spec.isAssignable();
+	}
+	
+	boolean isAssignableFrom(Context context, IArgument argument, ArgumentAssignment assignment) {
+		try {
+			IType required = argument.getType(context);
+			IType actual = assignment.getExpression().check(context);
+			if(actual.equals(required)
+					|| actual.isAssignableTo(context, required)
+					|| required.isAssignableTo(context, actual))
+				return true;
+			actual = assignment.resolve(context, this, false).check(context);
+			return actual.equals(required)
+					|| actual.isAssignableTo(context, required)
+					|| required.isAssignableTo(context, actual);
+		} catch(PromptoError error) {
+			return false;
+		}
+	}
+
 	@Override
-	public Specificity computeSpecificity(Context context, IArgument argument, ArgumentAssignment assignment,boolean checkInstance) {
+	public Specificity computeSpecificity(Context context, IArgument argument, ArgumentAssignment assignment,
+				boolean allowAncestor, boolean useInstance) {
 		try {
 			IType required = argument.getType(context);
 			IType actual = assignment.getExpression().check(context);
 			// retrieve actual runtime type
-			if(checkInstance && actual instanceof CategoryType) {
+			if(useInstance && actual instanceof CategoryType) {
 				// TODO: potential side effects here with function called multiple times
 				IValue value = assignment.getExpression().interpret(context.getCallingContext());
 				if(value instanceof IInstance)
@@ -157,7 +202,9 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 				return Specificity.EXACT;
 			if(actual.isAssignableTo(context, required)) 
 				return Specificity.INHERITED;
-			actual = assignment.resolve(context,this,checkInstance).check(context);
+			if(allowAncestor && required.isAssignableTo(context, actual)) 
+				return Specificity.ANCESTOR;
+			actual = assignment.resolve(context, this, useInstance).check(context);
 			if(actual.isAssignableTo(context, required))
 				return Specificity.RESOLVED;
 		} catch(PromptoError error) {

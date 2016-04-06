@@ -35,6 +35,11 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	public StatementList getStatements() {
 		return statements;
 	}
+	
+	@Override
+	public boolean isAbstract() {
+		return false;
+	}
 
 	@Override
 	public void toDialect(CodeWriter writer) {

@@ -77,7 +77,7 @@ public class ClassFile {
 		innerClasses.addInnerClass(info);
 	}
 	
-	public void addBootstrapMethhod(BootstrapMethod method) {
+	public void addBootstrapMethod(BootstrapMethod method) {
 		if(bootstrapMethods==null) {
 			bootstrapMethods = new BootstrapMethodsAttribute();
 			attributes.add(bootstrapMethods);

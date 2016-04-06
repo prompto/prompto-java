@@ -243,7 +243,7 @@ public class TestCallSite {
 	
 	public static CallSite bootstrap(Lookup lookup, String name, MethodType type) throws Throwable {
 		MethodHandle[] methods = collectAllMethods();
-		return PromptoCallSite.bootstrap(MethodHandles.lookup(), methods, type);
+		return PromptoCallSite.bootstrap(lookup, TestCallSite.class, methods, type);
 	}
 	
 	@Test

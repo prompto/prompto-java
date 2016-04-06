@@ -19,14 +19,17 @@ public interface IMethodDeclaration extends IDeclaration {
 	IType getReturnType();
 	ArgumentList getArguments();
 	String getSignature(Dialect dialect);
+	boolean isAbstract();
 	boolean isEligibleAsMain();
 	default String getNameAsKey() { return getName(); }
 	String getProto();
 	IValue interpret(Context context) throws PromptoError;
 	void check(ConcreteCategoryDeclaration declaration, Context context);
 	boolean isAssignableTo(Context context, ArgumentAssignmentList assignments, boolean checkInstance);
+	boolean isAssignableFrom(Context context, ArgumentAssignmentList assignments);
 	void registerArguments(Context local);
-	Specificity computeSpecificity(Context context, IArgument argument, ArgumentAssignment assignment, boolean checkInstance);
+	Specificity computeSpecificity(Context context, IArgument argument, ArgumentAssignment assignment, 
+			boolean allowAncestor, boolean useInstance);
 	void setMemberOf(ConcreteCategoryDeclaration declaration);
 	ConcreteCategoryDeclaration getMemberOf();
 	void compile(Context context, ClassFile classFile);

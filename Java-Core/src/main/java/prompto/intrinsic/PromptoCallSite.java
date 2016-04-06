@@ -14,11 +14,11 @@ import java.util.stream.Collectors;
 
 public class PromptoCallSite {
 
-	public static CallSite bootstrap(MethodHandles.Lookup lookup, MethodHandle[] methods, MethodType type) throws Throwable {
-		return bootstrap(lookup, Arrays.asList(methods), type);
+	public static CallSite bootstrap(MethodHandles.Lookup lookup, Class<?> checkParamsClass, MethodHandle[] methods, MethodType type) throws Throwable {
+		return bootstrap(lookup, checkParamsClass, Arrays.asList(methods), type);
 	}
 
-	public static CallSite bootstrap(Lookup lookup, List<MethodHandle> methods, MethodType calling) throws Throwable {
+	public static CallSite bootstrap(Lookup lookup, Class<?> checkParamsClass, List<MethodHandle> methods, MethodType calling) throws Throwable {
 		// get a list of methods compatible with type sorted by specificity (less specific first)
 		methods = methods.stream()
 			.filter((mh)->
@@ -26,29 +26,29 @@ public class PromptoCallSite {
 			.sorted(methodTypesComparator(false))
 			.collect(Collectors.toList());
 		// get a method handle guarded with an instance check	
-		MethodHandle method = guardWithTest(lookup, methods, calling);
+		MethodHandle method = guardWithTest(lookup, checkParamsClass, methods, calling);
 		// done
 		return new ConstantCallSite(method);
 	}
 
-	private static MethodHandle guardWithTest(Lookup lookup, List<MethodHandle> methods, MethodType callingType) throws Throwable {
+	private static MethodHandle guardWithTest(Lookup lookup, Class<?> checkParamsClass, List<MethodHandle> methods, MethodType callingType) throws Throwable {
 		MethodType testType = callingType.changeReturnType(boolean.class);
 		Iterator<MethodHandle> iter = methods.iterator();
 		MethodHandle fallback = iter.next(); 
 		while(iter.hasNext()) {
 			MethodHandle target = iter.next();
-			MethodHandle test = findTest(lookup, target.type());
+			MethodHandle test = findCheckParamsMethod(lookup, checkParamsClass, target.type());
 			fallback = MethodHandles.guardWithTest(test.asType(testType), target.asType(callingType), fallback.asType(callingType));
 		}
 		return fallback.asType(callingType);
 	}
 
-	private static MethodHandle findTest(Lookup lookup, MethodType type) throws Throwable {
+	private static MethodHandle findCheckParamsMethod(Lookup lookup, Class<?> checkParamsClass, MethodType type) throws Throwable {
 		String name = buildTestMethodName(type);
 		MethodType proto = type.changeReturnType(boolean.class);
 		for(int i=0;i<proto.parameterCount();i++)
 			proto = proto.changeParameterType(i, Object.class);
-		return lookup.findStatic(lookup.lookupClass(), name, proto);
+		return lookup.findStatic(checkParamsClass, name, proto);
 	}
 
 	private static String buildTestMethodName(MethodType type) {

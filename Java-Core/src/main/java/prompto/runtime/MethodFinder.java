@@ -47,13 +47,22 @@ public class MethodFinder {
 		}
 	}
 	
-	public Collection<IMethodDeclaration> findCompatibleMethods( boolean checkInstance) {
+	public Collection<IMethodDeclaration> findCompatibleMethods(boolean checkInstance) {
 		MethodSelector selector = methodCall.getMethod();
 		Collection<IMethodDeclaration> candidates = selector.getCandidates(context);
 		if(candidates.size()==0)
 			throw new SyntaxError("No method named:" + methodCall.getMethod().getName()); 
 		return filterCompatible(candidates, checkInstance);
 	}
+	
+	public Collection<IMethodDeclaration> findPotentialMethods() {
+		MethodSelector selector = methodCall.getMethod();
+		Collection<IMethodDeclaration> candidates = selector.getCandidates(context);
+		if(candidates.size()==0)
+			throw new SyntaxError("No method named:" + methodCall.getMethod().getName()); 
+		return filterPotential(candidates);
+	}
+
 
 	public IMethodDeclaration findLessSpecific(Collection<IMethodDeclaration> candidates) {
 		IMethodDeclaration candidate = null;
@@ -62,7 +71,7 @@ public class MethodFinder {
 			if(candidate==null)
 				candidate = declaration;
 			else {
-				Score score = scoreMostSpecific(candidate, declaration, false);
+				Score score = compareSpecifity(candidate, declaration, true, false);
 				switch(score) {
 				case BETTER:
 					candidate = declaration;
@@ -88,7 +97,7 @@ public class MethodFinder {
 			if(candidate==null)
 				candidate = declaration;
 			else {
-				Score score = scoreMostSpecific(candidate, declaration, checkInstance);
+				Score score = compareSpecifity(candidate, declaration, false, checkInstance);
 				switch(score) {
 				case WORSE:
 					candidate = declaration;
@@ -107,7 +116,7 @@ public class MethodFinder {
 		return candidate;
 	}
 	
-	Score scoreMostSpecific(IMethodDeclaration d1, IMethodDeclaration d2,boolean checkInstance) {
+	Score compareSpecifity(IMethodDeclaration d1, IMethodDeclaration d2, boolean allowAncestor, boolean useInstance) {
 		try {
 			Context s1 = context.newLocalContext();
 			d1.registerArguments(s1);
@@ -125,11 +134,11 @@ public class MethodFinder {
 					IType t1 = ar1.getType(s1);
 					IType t2 = ar2.getType(s2);
 					// try resolving runtime type
-					if(checkInstance && t1 instanceof CategoryType && t2 instanceof CategoryType) {
+					if(useInstance && t1 instanceof CategoryType && t2 instanceof CategoryType) {
 						Object value = as1.getExpression().interpret(context); // in the named case as1==as2, so only evaluate 1
 						if(value instanceof IInstance) {
 							CategoryType actual = ((IInstance)value).getType();
-							Score score = actual.scoreMostSpecific(context,(CategoryType)t1,(CategoryType)t2);
+							Score score = actual.compareSpecificity(context, (CategoryType)t1, (CategoryType)t2);
 							if(score!=Score.SIMILAR)
 								return score;
 						}
@@ -140,11 +149,11 @@ public class MethodFinder {
 						return Score.WORSE;
 				} else {
 					// specific case for single anonymous argument
-					Specificity sp1 = d1.computeSpecificity(s1,ar1,as1,checkInstance);
-					Specificity sp2 = d2.computeSpecificity(s2,ar2,as2,checkInstance);
-					if(sp1.greaterThan(sp2))
+					Specificity sp1 = d1.computeSpecificity(s1, ar1, as1, allowAncestor, useInstance);
+					Specificity sp2 = d2.computeSpecificity(s2, ar2, as2, allowAncestor, useInstance);
+					if(sp1.ordinal()>sp2.ordinal())
 						return Score.BETTER;
-					if(sp2.greaterThan(sp1))
+					if(sp2.ordinal()>sp1.ordinal())
 						return Score.WORSE;
 				}
 			}
@@ -166,6 +175,21 @@ public class MethodFinder {
 		}
 		return compatibles;
 	}
+	
+	Collection<IMethodDeclaration> filterPotential(Collection<IMethodDeclaration> candidates) {
+		List<IMethodDeclaration> potential = new ArrayList<IMethodDeclaration>();
+		for(IMethodDeclaration declaration : candidates) {
+			try {
+				ArgumentAssignmentList args = methodCall.makeAssignments(context, declaration);
+				if(declaration.isAssignableFrom(context, args))
+					potential.add(declaration);
+			} catch(SyntaxError e) {
+				// OK
+			}
+		}
+		return potential;
+	}
+
 
 
 }
