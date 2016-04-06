@@ -21,6 +21,16 @@ public abstract class Tags {
 	static final int CONSTANT_MethodType = 16;
 	static final int CONSTANT_InvokeDynamic = 18;
 	
+	static final int REF_getField = 1;
+	static final int REF_getStatic = 2;
+	static final int REF_putField = 3;
+	static final int REF_putStatic = 4;
+	static final int REF_invokeVirtual = 5;
+	static final int REF_invokeStatic = 6;
+	static final int REF_invokeSpecial = 7;
+	static final int REF_newInvokeSpecial = 8;
+	static final int REF_invokeInterface = 9;
+	
 	/*
 	ACC_PUBLIC	0x0001	Declared public; may be accessed from outside its package.
 	ACC_PRIVATE	0x0002	Declared private; accessible only within the defining class.

@@ -7,8 +7,6 @@ import prompto.argument.CodeArgument;
 import prompto.argument.IArgument;
 import prompto.compiler.ClassFile;
 import prompto.compiler.CompilerException;
-import prompto.compiler.CompilerUtils;
-import prompto.compiler.Descriptor;
 import prompto.compiler.Flags;
 import prompto.compiler.IVerifierEntry;
 import prompto.compiler.MethodInfo;
@@ -179,18 +177,6 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		}
 	}
 	
-	@Override
-	public void compilePrototype(Context context, ClassFile classFile) {
-		try {
-			context = prepareContext(context);
-			IType returnType = check(context);
-			MethodInfo method = createMethodInfo(context, classFile, returnType);
-			method.addModifier(Modifier.ABSTRACT);
-		} catch (PromptoError e) {
-			throw new CompilerException(e);
-		}
-	}
-
 	private void produceByteCode(Context context, MethodInfo method, IType returnType) {
 		statements.forEach((s)->
 			s.compile(context, method, new Flags().withMember(this.memberOf!=null)));
@@ -199,22 +185,6 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 			method.addInstruction(Opcode.RETURN);
 	}
 
-	private Context prepareContext(Context context) {
-		if(context.isGlobalContext()) {
-			// coming from nowhere, so need a clean context in which to register arguments
-			context = context.newLocalContext();
-			registerArguments(context);
-		}
-		return context;
-	}
-
-	
-	protected MethodInfo createMethodInfo(Context context, ClassFile classFile, IType returnType) {
-		Descriptor.Method proto = CompilerUtils.createMethodDescriptor(context, arguments, returnType);
-		MethodInfo method = classFile.newMethod(getName(), proto); 
-		return method;
-	}
-	
 	protected void registerLocals(Context context, ClassFile classFile, MethodInfo method) {
 		if(Modifier.isAbstract(classFile.getModifiers())) // TODO find a more accurate way
 			method.addModifier(Modifier.STATIC); // otherwise it's a member method

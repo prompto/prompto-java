@@ -34,31 +34,61 @@ public class MethodFinder {
 		return methodCall.toString();
 	}
 	
-	public IMethodDeclaration findMethod(boolean checkInstance) {
-		MethodSelector selector = methodCall.getMethod();
-		Collection<IMethodDeclaration> candidates = selector.getCandidates(context);
-		if(candidates.size()==0)
-			throw new SyntaxError("No method named:" + methodCall.getMethod().getName()); 
-		List<IMethodDeclaration> compatibles = filterCompatible(candidates, checkInstance);
+	public IMethodDeclaration findBestMethod(boolean checkInstance) {
+		Collection<IMethodDeclaration> compatibles = findCompatibleMethods(checkInstance);
 		switch(compatibles.size()) {
 		case 0:
 			// TODO refine
 			throw new SyntaxError("No matching prototype for:" + methodCall.toString()); 
 		case 1:
-			return compatibles.get(0);
+			return compatibles.iterator().next();
 		default:
 			return findMostSpecific(compatibles,checkInstance);
 		}
 	}
 	
-	IMethodDeclaration findMostSpecific(Collection<IMethodDeclaration> candidates, boolean checkInstance) {
+	public Collection<IMethodDeclaration> findCompatibleMethods( boolean checkInstance) {
+		MethodSelector selector = methodCall.getMethod();
+		Collection<IMethodDeclaration> candidates = selector.getCandidates(context);
+		if(candidates.size()==0)
+			throw new SyntaxError("No method named:" + methodCall.getMethod().getName()); 
+		return filterCompatible(candidates, checkInstance);
+	}
+
+	public IMethodDeclaration findLessSpecific(Collection<IMethodDeclaration> candidates) {
 		IMethodDeclaration candidate = null;
 		List<IMethodDeclaration> ambiguous = new ArrayList<IMethodDeclaration>();
 		for(IMethodDeclaration declaration : candidates) {
 			if(candidate==null)
 				candidate = declaration;
 			else {
-				Score score = scoreMostSpecific(candidate,declaration,checkInstance);
+				Score score = scoreMostSpecific(candidate, declaration, false);
+				switch(score) {
+				case BETTER:
+					candidate = declaration;
+					ambiguous.clear();
+					break;
+				case WORSE:
+					break;
+				case SIMILAR:
+					ambiguous.add(declaration);
+					break;
+				}
+			}
+		}
+		if(ambiguous.size()>0)
+			throw new SyntaxError("Too many prototypes!"); // TODO refine
+		return candidate;
+	}
+
+	public IMethodDeclaration findMostSpecific(Collection<IMethodDeclaration> candidates, boolean checkInstance) {
+		IMethodDeclaration candidate = null;
+		List<IMethodDeclaration> ambiguous = new ArrayList<IMethodDeclaration>();
+		for(IMethodDeclaration declaration : candidates) {
+			if(candidate==null)
+				candidate = declaration;
+			else {
+				Score score = scoreMostSpecific(candidate, declaration, checkInstance);
 				switch(score) {
 				case WORSE:
 					candidate = declaration;
@@ -123,7 +153,7 @@ public class MethodFinder {
 		return Score.SIMILAR;
 	}
 	
-	List<IMethodDeclaration> filterCompatible(Collection<IMethodDeclaration> candidates, boolean checkInstance) {
+	Collection<IMethodDeclaration> filterCompatible(Collection<IMethodDeclaration> candidates, boolean checkInstance) {
 		List<IMethodDeclaration> compatibles = new ArrayList<IMethodDeclaration>();
 		for(IMethodDeclaration declaration : candidates) {
 			try {
@@ -136,5 +166,6 @@ public class MethodFinder {
 		}
 		return compatibles;
 	}
+
 
 }

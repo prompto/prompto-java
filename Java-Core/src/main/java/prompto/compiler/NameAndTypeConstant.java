@@ -1,5 +1,7 @@
 package prompto.compiler;
 
+import java.lang.reflect.Type;
+
 
 public class NameAndTypeConstant implements ICodeConstant {
 
@@ -60,5 +62,21 @@ public class NameAndTypeConstant implements ICodeConstant {
 		writer.writeU1(Tags.CONSTANT_NameAndType);
 		writer.writeU2(name.getIndexInConstantPool());
 		writer.writeU2(type.getIndexInConstantPool());
+	}
+
+	public short getArgumentsCount(boolean isStatic) {
+		Type[] types = getDescriptor().getTypes();
+		return (short)(types.length - (isStatic ? 1 : 0));
+	}
+
+	public StackEntry resultToStackEntry() {
+		String descriptor = getDescriptor().getLastDescriptor();
+		if("V".equals(descriptor))
+			return null;
+		IVerifierEntry.Type type = IVerifierEntry.Type.fromDescriptor(descriptor);
+		StackEntry entry = type.newStackEntry(null);
+		if(entry instanceof StackEntry.ObjectEntry)
+			((StackEntry.ObjectEntry)entry).setClassName(new ClassConstant(getDescriptor().getLastType()));
+		return entry;
 	}
 }

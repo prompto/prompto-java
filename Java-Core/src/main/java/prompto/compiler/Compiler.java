@@ -6,11 +6,13 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.util.Collection;
 
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.EnumeratedCategoryDeclaration;
 import prompto.declaration.EnumeratedNativeDeclaration;
+import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
@@ -111,11 +113,21 @@ public class Compiler {
 	private ClassFile createGlobalMethodsClassFile(Context context, MethodDeclarationMap methods, Type type) {
 		ClassFile classFile = new ClassFile(type);
 		classFile.addModifier(Modifier.ABSTRACT);
-		methods.values().forEach((m) -> 
+		Collection<IMethodDeclaration> decls = methods.values();
+		decls.forEach((m) -> 
 			m.compile(context, classFile));
+		if(decls.size()>1) {
+			// classFile.setSuperClass(new ClassConstant(PromptoDispatcher.class));
+			// populateGlobalMethodHandles(classFile, decls);
+		}
 		return classFile;
 	}
 
+
+	private void populateGlobalMethodHandles(ClassFile classFile, Collection<IMethodDeclaration> decls) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	private void writeClassFile(ClassFile classFile) throws CompilerException {
 		try {

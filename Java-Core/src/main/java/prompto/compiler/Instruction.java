@@ -71,9 +71,14 @@ public class Instruction implements IInstruction {
 					writer.writeU2(((IConstantOperand)operands[0]).getIndexInConstantPool());
 					break;
 				case CPREF_W_UBYTE_ZERO:
-					writer.writeU2(((IConstantOperand)operands[0]).getIndexInConstantPool());
-					writer.writeU1(((InterfaceConstant)operands[0]).getArgsCount());
-					writer.writeU1(0);
+					if(opcode==Opcode.INVOKEDYNAMIC) {
+						writer.writeU2(((IConstantOperand)operands[0]).getIndexInConstantPool());
+						writer.writeU2(0);
+					} else {
+						writer.writeU2(((IConstantOperand)operands[0]).getIndexInConstantPool());
+						writer.writeU1(((InterfaceConstant)operands[0]).getArgsCount());
+						writer.writeU1(0);
+					}
 					break;
 				case NO_OPERANDS:
 					break;
@@ -115,6 +120,14 @@ public class Instruction implements IInstruction {
 		return null;
 	}
 
+	public CallSiteConstant getCallSiteConstant() {
+		for(IOperand operand : operands) {
+			if(operand instanceof CallSiteConstant)
+				return (CallSiteConstant)operand;
+		}
+		return null;
+	}
+
 	public MethodConstant getMethodConstant() {
 		for(IOperand operand : operands) {
 			if(operand instanceof MethodConstant)
@@ -150,13 +163,23 @@ public class Instruction implements IInstruction {
 	}
 
 	public StackEntry getMethodResultStackEntry() {
-		MethodConstant m = getMethodConstant();
-		return m.resultToStackEntry();
+		if(opcode==Opcode.INVOKEDYNAMIC) {
+			CallSiteConstant c = getCallSiteConstant();
+			return c.resultToStackEntry();
+		} else {
+			MethodConstant m = getMethodConstant();
+			return m.resultToStackEntry();
+		}
 	}
 
 	public short getArgumentsCount(boolean isStatic) {
-		MethodConstant m = getMethodConstant();
-		return m.getArgumentsCount(isStatic);
+		if(opcode==Opcode.INVOKEDYNAMIC) {
+			CallSiteConstant c = getCallSiteConstant();
+			return c.getArgumentsCount(isStatic);
+		} else {
+			MethodConstant m = getMethodConstant();
+			return m.getArgumentsCount(isStatic);
+		}
 	}
 
 

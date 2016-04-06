@@ -31,22 +31,12 @@ public class MethodConstant implements ICodeConstant {
 		this.methodNameAndType = nameAndType;
 	}
 
-
-
 	public short getArgumentsCount(boolean isStatic) {
-		Type[] types = methodNameAndType.getDescriptor().getTypes();
-		return (short)(types.length - (isStatic ? 1 : 0));
+		return methodNameAndType.getArgumentsCount(isStatic);
 	}
 
 	public StackEntry resultToStackEntry() {
-		String descriptor = methodNameAndType.getDescriptor().getLastDescriptor();
-		if("V".equals(descriptor))
-			return null;
-		IVerifierEntry.Type type = IVerifierEntry.Type.fromDescriptor(descriptor);
-		StackEntry entry = type.newStackEntry(null);
-		if(entry instanceof StackEntry.ObjectEntry)
-			((StackEntry.ObjectEntry)entry).setClassName(new ClassConstant(methodNameAndType.getDescriptor().getLastType()));
-		return entry;
+		return methodNameAndType.resultToStackEntry();
 	}
 
 	@Override

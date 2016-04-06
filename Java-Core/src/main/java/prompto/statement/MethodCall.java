@@ -1,5 +1,7 @@
 package prompto.statement;
 
+import java.util.Collection;
+
 import prompto.argument.IArgument;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -73,7 +75,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 			return false;
 		try {
 			MethodFinder finder = new MethodFinder(writer.getContext(), this);
-			IMethodDeclaration declaration = finder.findMethod(false);
+			IMethodDeclaration declaration = finder.findBestMethod(false);
 			/* if method is abstract, need to prefix with invoke */
 			if(declaration instanceof AbstractMethodDeclaration)
 				return true;
@@ -92,7 +94,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	@Override
 	public IType check(Context context) {
 		MethodFinder finder = new MethodFinder(context, this);
-		IMethodDeclaration declaration = finder.findMethod(false);
+		IMethodDeclaration declaration = finder.findBestMethod(false);
 		Context local = method.newLocalCheckContext(context, declaration);
 		return check(declaration, context, local);
 	}
@@ -135,13 +137,31 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		MethodFinder finder = new MethodFinder(context, this);
-		IMethodDeclaration declaration = finder.findMethod(false);
+		Collection<IMethodDeclaration> declarations = finder.findCompatibleMethods(false);
+		switch(declarations.size()) {
+		case 0:
+			throw new SyntaxError("No matching prototype for:" + this.toString()); 
+		case 1:
+			return compileExact(context, method, flags, declarations.iterator().next());
+		default:
+			return compileDynamic(context, method, flags, finder.findLessSpecific(declarations));
+		}
+	}
+	
+	private ResultInfo compileDynamic(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration) {
 		Context local = this.method.newLocalCheckContext(context, declaration);
 		declaration.registerArguments(local);
 		ArgumentAssignmentList assignments = this.assignments!=null ? this.assignments : new ArgumentAssignmentList();
-		return this.method.compile(local, method, flags, declaration, assignments);
+		return this.method.compileDynamic(local, method, flags, declaration, assignments);
 	}
-	
+
+	private ResultInfo compileExact(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration) {
+		Context local = this.method.newLocalCheckContext(context, declaration);
+		declaration.registerArguments(local);
+		ArgumentAssignmentList assignments = this.assignments!=null ? this.assignments : new ArgumentAssignmentList();
+		return this.method.compileExact(local, method, flags, declaration, assignments);
+	}
+
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		IMethodDeclaration declaration = findDeclaration(context);
@@ -223,7 +243,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		} catch (PromptoError e) {
 		}
 		MethodFinder finder = new MethodFinder(context, this);
-		return finder.findMethod(true);
+		return finder.findBestMethod(true);
 	}
 
 }

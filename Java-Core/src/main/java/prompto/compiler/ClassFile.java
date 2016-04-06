@@ -16,6 +16,7 @@ public class ClassFile {
 	List<MethodInfo> methods = new ArrayList<>();
 	List<IAttribute> attributes = new ArrayList<>();
 	InnerClassesAttribute innerClasses = null;
+	BootstrapMethodsAttribute bootstrapMethods = null;
 	
 	int accessFlags = Tags.ACC_SUPER | Modifier.PUBLIC;
 	
@@ -68,12 +69,20 @@ public class ClassFile {
 		addInnerClass(info);
 	}
 
-	private void addInnerClass(InnerClassInfo info) {
+	public void addInnerClass(InnerClassInfo info) {
 		if(innerClasses==null) {
 			innerClasses = new InnerClassesAttribute();
 			attributes.add(innerClasses);
 		}
 		innerClasses.addInnerClass(info);
+	}
+	
+	public void addBootstrapMethhod(BootstrapMethod method) {
+		if(bootstrapMethods==null) {
+			bootstrapMethods = new BootstrapMethodsAttribute();
+			attributes.add(bootstrapMethods);
+		}
+		bootstrapMethods.addBootstrapMethod(method);
 	}
 	
 	public Collection<ClassFile> getInnerClasses() {

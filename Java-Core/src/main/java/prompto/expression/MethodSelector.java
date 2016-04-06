@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import prompto.compiler.CallSiteConstant;
 import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Descriptor;
@@ -94,18 +95,50 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		return cd.getMemberMethods(context, id).values();
 	}
 
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags, 
+	public ResultInfo compileExact(Context context, MethodInfo method, Flags flags, 
 				IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
-		// TODO use invokedynamic when multiple candidates
 		if(parent!=null)
-			return compileExplicitMember(context, method, flags, declaration, assignments);
+			return compileExactExplicitMember(context, method, flags, declaration, assignments);
 		else if(declaration.getMemberOf()!=null) 
-			return compileImplicitMember(context, method, flags, declaration, assignments);
+			return compileExactImplicitMember(context, method, flags, declaration, assignments);
 		else 
-			return compileGlobalMethod(context, method, flags, declaration, assignments);
+			return compileExactGlobalMethod(context, method, flags, declaration, assignments);
+	}
+	
+	public ResultInfo compileDynamic(Context context, MethodInfo method, Flags flags, 
+			IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
+	if(parent!=null)
+		return compileDynamicExplicitMember(context, method, flags, declaration, assignments);
+	else if(declaration.getMemberOf()!=null) 
+		return compileDynamicImplicitMember(context, method, flags, declaration, assignments);
+	else 
+		return compileDynamicGlobalMethod(context, method, flags, declaration, assignments);
+}
+
+	private ResultInfo compileDynamicGlobalMethod(Context context, MethodInfo method, Flags flags, 
+			IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
+		// push arguments on the stack
+		declaration.compileAssignments(context, method, flags, assignments);
+		// call global method in its own class
+		Type classType = CompilerUtils.getGlobalMethodType(declaration.getName());
+		String methodName = declaration.getName();
+		IType returnType = declaration.check(context);
+		CallSiteConstant constant = null; // new CallSiteConstant();
+		method.addInstruction(Opcode.INVOKEDYNAMIC, constant);
+		return new ResultInfo(returnType.getJavaType());
 	}
 
-	private ResultInfo compileGlobalMethod(Context context, MethodInfo method, Flags flags, 
+	private ResultInfo compileDynamicImplicitMember(Context context, MethodInfo method, Flags flags, 
+			IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
+		throw new UnsupportedOperationException();
+	}
+
+	private ResultInfo compileDynamicExplicitMember(Context context, MethodInfo method, Flags flags, 
+			IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
+		throw new UnsupportedOperationException();
+	}
+
+	private ResultInfo compileExactGlobalMethod(Context context, MethodInfo method, Flags flags, 
 			IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
 		// push arguments on the stack
 		declaration.compileAssignments(context, method, flags, assignments);
@@ -119,16 +152,16 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		return new ResultInfo(returnType.getJavaType());
 	}
 
-	private ResultInfo compileImplicitMember(Context context, MethodInfo method, Flags flags, 
+	private ResultInfo compileExactImplicitMember(Context context, MethodInfo method, Flags flags, 
 			IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
 		// calling method with implicit this
 		StackLocal local = method.getRegisteredLocal("this");
 		ClassConstant klass = ((StackLocal.ObjectLocal)local).getClassName();
 		method.addInstruction(Opcode.ALOAD_0, klass); // 'this' is always at index 0
-		return compileInstanceMember(context, method, flags, declaration, assignments, klass);
+		return compileExactInstanceMember(context, method, flags, declaration, assignments, klass);
 	}
 
-	private ResultInfo compileInstanceMember(Context context, MethodInfo method, Flags flags, 
+	private ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, 
 			IMethodDeclaration declaration, ArgumentAssignmentList assignments, 
 			ClassConstant parentClass) {
 		// push arguments on the stack
@@ -146,7 +179,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		return new ResultInfo(returnType.getJavaType());
 	}
 	
-	private ResultInfo compileStaticMember(Context context, MethodInfo method, Flags flags, 
+	private ResultInfo compileExactStaticMember(Context context, MethodInfo method, Flags flags, 
 			IExpression parent, IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
 		// find class
 		Type type = getSingletonType(context, parent);
@@ -172,17 +205,17 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 			throw new SyntaxError("Expecting a singleton type!");
 	}
 
-	private ResultInfo compileExplicitMember(Context context, MethodInfo method, Flags flags, 
+	private ResultInfo compileExactExplicitMember(Context context, MethodInfo method, Flags flags, 
 			IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
 		// calling an explicit instance or singleton member method
 		IExpression parent = resolveParent(context.getCallingContext());
 		if(parent instanceof TypeExpression)
-			return compileStaticMember(context, method, flags, parent, declaration, assignments);
+			return compileExactStaticMember(context, method, flags, parent, declaration, assignments);
 		else {
 			// push instance if any
 			ResultInfo info = parent.compile(context.getCallingContext(), method, flags); 
 			ClassConstant c = new ClassConstant(info.getType());
-			return compileInstanceMember(context, method, flags, declaration, assignments, c);
+			return compileExactInstanceMember(context, method, flags, declaration, assignments, c);
 		}
 	}
 

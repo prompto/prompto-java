@@ -1,6 +1,12 @@
 package prompto.declaration;
 
+import java.lang.reflect.Modifier;
+
 import prompto.argument.IArgument;
+import prompto.compiler.ClassFile;
+import prompto.compiler.CompilerException;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Descriptor;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.error.PromptoError;
@@ -169,6 +175,33 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 		return false;
 	}
 	
+	@Override
+	public void compilePrototype(Context context, ClassFile classFile) {
+		try {
+			context = prepareContext(context);
+			IType returnType = check(context);
+			MethodInfo method = createMethodInfo(context, classFile, returnType);
+			method.addModifier(Modifier.ABSTRACT);
+		} catch (PromptoError e) {
+			throw new CompilerException(e);
+		}
+	}
+
+	protected Context prepareContext(Context context) {
+		if(context.isGlobalContext()) {
+			// coming from nowhere, so need a clean context in which to register arguments
+			context = context.newLocalContext();
+			registerArguments(context);
+		}
+		return context;
+	}
+	
+	protected MethodInfo createMethodInfo(Context context, ClassFile classFile, IType returnType) {
+		Descriptor.Method proto = CompilerUtils.createMethodDescriptor(context, arguments, returnType);
+		MethodInfo method = classFile.newMethod(getName(), proto); 
+		return method;
+	}
+
 	@Override
 	public void compileAssignments(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments) {
 		boolean isFirst = true;
