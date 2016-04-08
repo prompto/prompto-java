@@ -13,12 +13,13 @@ check return types
 check member methods
 return sorted sets 
 implement dbIdListener strategy (store, ConcreteInstance... )
-attribute type
-attribute as variable: parameter
 method as attribute
+attribute as type
+attribute as variable: parameter
 attribute as attribute
 move MIN_INT && MAX_INT to enum
 factor compileAssert
+fix invokedynamic parameter names/order issue
 
 missing tests:
 null member is empty

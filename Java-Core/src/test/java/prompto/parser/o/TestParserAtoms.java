@@ -14,6 +14,7 @@ import org.joda.time.tz.ZoneInfoProvider;
 import org.junit.Test;
 
 import prompto.argument.CategoryArgument;
+import prompto.argument.ExtendedArgument;
 import prompto.argument.IArgument;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
@@ -243,8 +244,7 @@ public class TestParserAtoms {
 		assertTrue(ad.getArguments().contains(
 				new CategoryArgument(
 						new CategoryType(new Identifier("Person")),
-						new Identifier("p"),
-								null)));
+						new Identifier("p"))));
 		assertNotNull(ad.getStatements());
 		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalContext());
 		ad.getStatements().getFirst().toDialect(writer);
@@ -259,7 +259,7 @@ public class TestParserAtoms {
 		assertNotNull(ad);
 		assertEquals("printName",ad.getId().toString());
 		assertNotNull(ad.getArguments());
-		IArgument expected = new CategoryArgument(
+		IArgument expected = new ExtendedArgument(
 				new CategoryType(new Identifier("Object")), 
 				new Identifier("o"), 
 				new IdentifierList( new Identifier("name")));
@@ -282,7 +282,7 @@ public class TestParserAtoms {
 		IArgument expected = new CategoryArgument(
 				new ListType(
 						new CategoryType(new Identifier("Option"))),
-						new Identifier("options"),null);
+						new Identifier("options"));
 		assertTrue(ad.getArguments().contains(expected)); 
 		assertNotNull(ad.getStatements());
 		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalContext());

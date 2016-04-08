@@ -1,8 +1,5 @@
 package prompto.argument;
 
-import prompto.declaration.AttributeDeclaration;
-import prompto.declaration.ConcreteCategoryDeclaration;
-import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.INamed;
@@ -12,29 +9,17 @@ import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.utils.IdentifierList;
 import prompto.utils.Utils;
 
 public class CategoryArgument extends BaseArgument implements ITypedArgument {
 	
 	IType type;
-	IdentifierList attributes;
 	
-	public CategoryArgument(IType type, Identifier id, IdentifierList attributes) {
-		super(id);
-		this.type = type;
-		this.attributes = attributes;
-	}
-
 	public CategoryArgument(IType type, Identifier name) {
 		super(name);
 		this.type = type;
 	}
 
-	public void setAttributes(IdentifierList attributes) {
-		this.attributes = attributes;
-	}
-	
 	@Override
 	public IType getType() {
 		return type;
@@ -47,10 +32,7 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 	
 	@Override
 	public String getProto() {
-		if(attributes==null)
-			return type.getTypeNameId().toString();
-		else
-			return type.getTypeNameId().toString() + '(' + attributes.toString() + ')';
+		return type.getTypeNameId().toString();
 	}
 	
 	@Override
@@ -81,20 +63,6 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 			writer.append(' ');
 			writer.append(id);
 		}
-		if(attributes!=null) {
-			switch(attributes.size()) {
-			case 0:
-				break;
-			case 1:
-				writer.append(" with attribute ");
-				attributes.toDialect(writer, false);
-				break;
-			default:
-				writer.append(" with attributes ");
-				attributes.toDialect(writer, true);
-				break;
-			}
-		}
 		if(!anonymous) {
 			writer.append(' ');
 			writer.append(id);
@@ -103,11 +71,6 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 
 	private void toODialect(CodeWriter writer) {
 		type.toDialect(writer);
-		if(attributes!=null) {
-			writer.append('(');
-			attributes.toDialect(writer, false);
-			writer.append(')');
-		}
 		writer.append(' ');
 		writer.append(id);
 	}
@@ -116,24 +79,11 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 		writer.append(id);
 		writer.append(':');
 		type.toDialect(writer);
-		if(attributes!=null) {
-			writer.append('(');
-			attributes.toDialect(writer, false);
-			writer.append(')');
-		}
 	}
 
 	@Override
 	public String toString() {
 		return id.toString() + ':' + getProto();
-	}
-	
-	public boolean hasAttributes() {
-		return attributes!=null;
-	}
-
-	public IdentifierList getAttributes() {
-		return attributes;
 	}
 	
 	@Override
@@ -146,8 +96,7 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 			return false;
 		CategoryArgument other = (CategoryArgument)obj;
 		return Utils.equal(this.getType(),other.getType())
-				&& Utils.equal(this.getId(),other.getId())
-				&& Utils.equal(this.getAttributes(),other.getAttributes());
+				&& Utils.equal(this.getId(),other.getId());
 	}
 
 	@Override
@@ -155,12 +104,6 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 		INamed actual = context.getRegisteredValue(INamed.class, id);
 		if(actual!=null)
 			throw new SyntaxError("Duplicate argument: \"" + id + "\"");
-		if(attributes!=null) {
-			ConcreteCategoryDeclaration declaration = 
-					new ConcreteCategoryDeclaration(id, attributes,
-							new IdentifierList(type.getTypeNameId()), null);
-			context.registerDeclaration(declaration);
-		}
 		context.registerValue(this);
 		if(defaultExpression!=null) try {
 			context.setValue(id, defaultExpression.interpret(context));
@@ -172,19 +115,11 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 	@Override
 	public void check(Context context) {
 		type.checkExists(context);
-		if(attributes!=null) for(Identifier attribute : attributes) {
-			AttributeDeclaration actual = context.getRegisteredDeclaration(AttributeDeclaration.class, attribute);
-			if(actual==null)
-				throw new SyntaxError("Unknown attribute: \"" + attribute + "\"");
-		}
 	}
 	
 	@Override
 	public IType getType(Context context) {
-		if(attributes==null)
-			return type;
-		else
-			return context.getRegisteredDeclaration(IDeclaration.class, id).getType(context);
+		return type;
 	}
-
+	
 }

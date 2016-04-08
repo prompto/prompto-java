@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import prompto.declaration.AttributeInfo;
 import prompto.grammar.ArgumentList;
@@ -13,6 +14,7 @@ import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.type.IType.Family;
+import prompto.utils.IdentifierList;
 
 public abstract class CompilerUtils {
 
@@ -293,7 +295,27 @@ public abstract class CompilerUtils {
 	public static Type getCategoryInterfaceType(Identifier id) {
 		return getCategoryInterfaceType(id.toString());
 	}
+	
+	public static Type getExtendedInterfaceType(Identifier id, IdentifierList attributes) {
+		List<String> names = attributes.stream()
+				.map((name)->
+					name.toString())
+				.sorted()
+				.collect(Collectors.toList());
+		return getExtendedInterfaceType(id.toString(), names);
+	}
 
+	public static Type getExtendedInterfaceType(String name, List<String> names) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(CATEGORY_PACKAGE_PREFIX);
+		sb.append(name);
+		names.forEach((n)->{
+			sb.append('%');
+			sb.append(n);
+		});
+		return new PromptoType(sb.toString());
+	}
+	
 	public static Type getCategorySingletonType(Identifier id) {
 		return getCategoryInterfaceType(id.toString());
 	}
@@ -712,8 +734,6 @@ public abstract class CompilerUtils {
 		else
 			throw new UnsupportedOperationException();
 	}
-
-
 
 
 }

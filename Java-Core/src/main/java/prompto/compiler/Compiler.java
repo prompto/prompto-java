@@ -20,6 +20,7 @@ import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.EnumeratedCategoryDeclaration;
 import prompto.declaration.EnumeratedNativeDeclaration;
+import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.grammar.ArgumentList;
@@ -103,6 +104,32 @@ public class Compiler {
 
 	private ClassFile createCategoryClassFile(Context context, String fullName) throws ClassNotFoundException {
 		String simpleName = CompilerUtils.categorySimpleNameFrom(fullName);
+		if(simpleName.indexOf('%')>=0)
+			return createExtendedClassFile(context, simpleName, fullName);
+		else
+			return createRegularClassFile(context, simpleName, fullName);
+	}
+	
+	
+	private ClassFile createExtendedClassFile(Context context, String simpleName, String fullName) throws ClassNotFoundException {
+		ClassFile classFile = new ClassFile(new PromptoType(fullName));
+		classFile.addModifier(Modifier.ABSTRACT | Modifier.INTERFACE);
+		String[] interfaces = simpleName.split("%");
+		for(String s : interfaces) {
+			if("any".equals(s))
+				continue;
+			IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, new Identifier(s));
+			if(decl instanceof CategoryDeclaration)
+				classFile.setSuperClass(new ClassConstant(CompilerUtils.getCategoryInterfaceType(s)));
+			else if(decl instanceof AttributeDeclaration)
+				classFile.addInterface(new ClassConstant(CompilerUtils.getAttributeInterfaceType(s)));
+			else
+				throw new UnsupportedOperationException();
+		}
+		return classFile;
+	}
+	
+	private ClassFile createRegularClassFile(Context context, String simpleName, String fullName) throws ClassNotFoundException {
 		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, new Identifier(simpleName));
 		if(decl==null)
 			throw new ClassNotFoundException(simpleName);

@@ -12,6 +12,7 @@ import org.antlr.v4.runtime.tree.ParseTreeProperty;
 import static prompto.parser.SParser.*;
 import prompto.argument.CategoryArgument;
 import prompto.argument.CodeArgument;
+import prompto.argument.ExtendedArgument;
 import prompto.argument.IArgument;
 import prompto.argument.UnresolvedArgument;
 import prompto.csharp.CSharpBooleanLiteral;
@@ -2562,7 +2563,9 @@ public class SPromptoBuilder extends SParserBaseListener {
 		IType type = this.<IType>getNodeValue(ctx.typ);
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
 		IdentifierList attrs = this.<IdentifierList>getNodeValue(ctx.attrs);
-		CategoryArgument arg = new CategoryArgument(type, name, attrs);
+		CategoryArgument arg = attrs==null ?
+				new CategoryArgument(type, name) : 
+				new ExtendedArgument(type, name, attrs); 
 		IExpression exp = this.<IExpression>getNodeValue(ctx.value);
 		arg.setDefaultExpression(exp);
 		setNodeValue(ctx, arg);

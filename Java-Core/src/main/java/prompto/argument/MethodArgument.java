@@ -1,12 +1,12 @@
 package prompto.argument;
 
-import prompto.declaration.IMethodDeclaration;
 import prompto.error.SyntaxError;
 import prompto.grammar.INamed;
 import prompto.grammar.INamedArgument;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
+import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.type.IType;
 import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
@@ -60,7 +60,7 @@ public class MethodArgument extends BaseArgument implements INamedArgument {
 	
 	@Override
 	public void check(Context context) {
-		IMethodDeclaration actual = context.getRegisteredDeclaration(IMethodDeclaration.class,id);
+		MethodDeclarationMap actual = context.getRegisteredDeclaration(MethodDeclarationMap.class,id);
 		if(actual==null)
 			throw new SyntaxError("Unknown method: \"" + id + "\"");
 	}
