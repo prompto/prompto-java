@@ -808,6 +808,10 @@ public class Context implements IContext {
 				return null;
 		}
 		
+		Context superContextForValue(Identifier name) {
+			return super.contextForValue(name);
+		}
+		
 		private ConcreteCategoryDeclaration getDeclaration() {
 			if(instance!=null)
 				return instance.getDeclaration();
@@ -830,6 +834,11 @@ public class Context implements IContext {
 
 		public ClosureContext(MethodType type) {
 			super(type);
+		}
+		
+		@Override
+		public Context contextForValue(Identifier name) {
+			return superContextForValue(name);
 		}
 		
 	}

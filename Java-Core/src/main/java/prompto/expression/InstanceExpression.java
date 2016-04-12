@@ -70,18 +70,14 @@ public class InstanceExpression implements IExpression {
 		INamed named = context.getRegistered(id);
 		if(named==null)
 			throw new SyntaxError("Unknown identifier: " + id);
-		else if(named instanceof Variable) // local variable
-			return named.getType(context);
-		else if(named instanceof LinkedVariable) // local variable
-			return named.getType(context);
-		else if(named instanceof IArgument) // named argument
-			return named.getType(context);
-		else if(named instanceof CategoryDeclaration) // any p with x
-			return named.getType(context);
-		else if(named instanceof AttributeDeclaration) // in category method
+		else if(named instanceof Variable // local variable
+				|| named instanceof LinkedVariable // local variable with downcast
+				|| named instanceof IArgument // named argument
+				|| named instanceof CategoryDeclaration // any p with x
+				|| named instanceof AttributeDeclaration) // in category method
 			return named.getType(context);
 		else if(named instanceof MethodDeclarationMap) // global method or closure
-			return null; //  new MethodType(context, id);
+			throw new UnsupportedOperationException(); // return new MethodType(context, id);
 		else
 			throw new SyntaxError(id + "  is not an instance:" + named.getClass().getSimpleName());
 	}

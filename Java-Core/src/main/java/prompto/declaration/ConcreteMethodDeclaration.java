@@ -244,6 +244,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		compileClosureFields(context, classFile, locals);
 		compileClosureConstructor(context, classFile, locals);
 		context = context.newClosureContext(new MethodType(this));
+		registerArguments(context);
 		compile(context, classFile);
 		method.getClassFile().addInnerClass(classFile);
 	}
