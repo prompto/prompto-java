@@ -20,9 +20,7 @@ import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.runtime.LinkedVariable;
 import prompto.runtime.Variable;
-import prompto.type.CategoryType;
 import prompto.type.IType;
-import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
@@ -82,8 +80,8 @@ public class InstanceExpression implements IExpression {
 			return named.getType(context);
 		else if(named instanceof AttributeDeclaration) // in category method
 			return named.getType(context);
-		else if(named instanceof Context.MethodDeclarationMap) // global method or closure
-			return new MethodType(context, id);
+		else if(named instanceof MethodDeclarationMap) // global method or closure
+			return null; //  new MethodType(context, id);
 		else
 			throw new SyntaxError(id + "  is not an instance:" + named.getClass().getSimpleName());
 	}
@@ -96,20 +94,24 @@ public class InstanceExpression implements IExpression {
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		ResultInfo info = compileLocal(context, method, flags);
-		if(info==null)
-			info = compileInstanceField(context, method, flags);
-		if(info==null)
-			info = compileSingletonField(context, method, flags);
-		if(info==null)
-			throw new SyntaxError("Unknown identifier: " + getName());
-		else
+		if(info!=null)
 			return info;
+		else
+			info = compileInstanceField(context, method, flags);
+		if(info!=null)
+			return info;
+		else
+			info = compileSingletonField(context, method, flags);
+		if(info!=null)
+			return info;
+		else
+			throw new SyntaxError("Unknown identifier: " + getName());
 	}
 
 	private ResultInfo compileSingletonField(Context context, MethodInfo method, Flags flags) {
 		Context actual = context.contextForValue(getId());
 		if(actual instanceof InstanceContext) {
-			CategoryType type = ((InstanceContext)actual).getInstanceType();
+			IType type = ((InstanceContext)actual).getInstanceType();
 			return type.compileGetMember(context, method, flags, null, id);
 		} else
 			return null;

@@ -27,6 +27,7 @@ import prompto.intrinsic.PromptoAny;
 import prompto.intrinsic.PromptoDict;
 import prompto.intrinsic.PromptoDocument;
 import prompto.runtime.Context;
+import prompto.runtime.Context.ClosureContext;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -183,7 +184,7 @@ public class MemberSelector extends SelectorExpression {
 			return compileStringLength(method, flags);
 		else {
 			String getterName = CompilerUtils.getterName(getName());
-			if(isCompilingGetter(context, method, info, getterName))
+			if(isCompilingGetter(context, method, info, getterName) || context instanceof ClosureContext)
 				compileGetField(context, method, flags, info, resultType);
 			else if(PromptoAny.class==info.getType()) 
 				compileGetMember(context, method, flags, info, resultType);

@@ -16,7 +16,7 @@ public class MethodInfo {
 	Descriptor descriptor;
 	ClassFile classFile;
 	
-	MethodInfo(ClassFile classFile, String name, Descriptor descriptor) {
+	MethodInfo(ClassFile classFile, String name, Descriptor.Method descriptor) {
 		this.classFile = classFile;
 		this.descriptor = descriptor;
 		this.name = new Utf8Constant(name);
@@ -39,6 +39,11 @@ public class MethodInfo {
 		return codeAttribute;
 	}
 
+	public LocalVariableTableAttribute getLocals() {
+		ensureCodeAttribute();
+		return codeAttribute.getLocals();
+	}
+
 	@Override
 	public String toString() {
 		return name.toString() + '/' + signature.toString();
@@ -58,12 +63,12 @@ public class MethodInfo {
 	}
 	
 	public <T extends IInstruction> T addInstruction(T instruction) {
-		createCodeAttribute();
+		ensureCodeAttribute();
 		return codeAttribute.addInstruction(instruction);
 	}
 
 	public <T extends IInstructionListener> T addOffsetListener(T listener) {
-		createCodeAttribute();
+		ensureCodeAttribute();
 		return codeAttribute.addOffsetListener(listener);
 	}
 	
@@ -76,12 +81,12 @@ public class MethodInfo {
 	}
 
 	public StackLocal registerLocal(String name, VerifierType type, ClassConstant className) {
-		createCodeAttribute();
+		ensureCodeAttribute();
 		return codeAttribute.registerLocal(type.newStackLocal(name, className));
 	}
 	
 	public StackLocal getRegisteredLocal(String name) {
-		createCodeAttribute();
+		ensureCodeAttribute();
 		return codeAttribute.getRegisteredLocal(name);
 	}
 	
@@ -90,7 +95,7 @@ public class MethodInfo {
 	}
 
 	public ExceptionHandler registerExceptionHandler(java.lang.reflect.Type type) {
-		createCodeAttribute();
+		ensureCodeAttribute();
 		return codeAttribute.registerExceptionHandler(type);
 	}
 
@@ -107,7 +112,7 @@ public class MethodInfo {
 			a.register(pool));
 	}
 
-	public CodeAttribute createCodeAttribute() {
+	public CodeAttribute ensureCodeAttribute() {
 		if(codeAttribute==null) {
 			codeAttribute = new CodeAttribute();
 			attributes.add(codeAttribute);
@@ -116,7 +121,7 @@ public class MethodInfo {
 	}
 
 	public StackState captureStackState() {
-		createCodeAttribute();
+		ensureCodeAttribute();
 		return codeAttribute.captureStackState();
 	}
 
@@ -129,7 +134,7 @@ public class MethodInfo {
 	}
 
 	public StackLabel placeLabel(StackState state) {
-		createCodeAttribute();
+		ensureCodeAttribute();
 		return codeAttribute.placeLabel(state);
 	}
 

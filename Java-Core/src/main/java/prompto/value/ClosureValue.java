@@ -1,6 +1,5 @@
 package prompto.value;
 
-import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
@@ -10,36 +9,33 @@ import prompto.type.MethodType;
 
 public class ClosureValue extends BaseValue {
 	
-	IMethodDeclaration method;
+	Context context;
+	MethodType type;
 	
-	public ClosureValue(Context context, IMethodDeclaration method) {
-		super(new MethodType(context, method.getId()));
-		this.method = method;
-	}
-	
-	public IMethodDeclaration getMethodDeclaration() {
-		return method;
+	public ClosureValue(Context context, MethodType type) {
+		super(type);
+		this.context = context;
+		this.type = type;
 	}
 	
 	public IValue interpret(Context context) throws PromptoError {
-		Context thisContext = ((MethodType)type).getContext();
-		Context parentMost = thisContext.getParentMostContext();
+		Context parentMost = this.context.getParentMostContext();
 		parentMost.setParentContext(context);
-		IValue result = method.interpret(thisContext);
+		IValue result = type.getMethod().interpret(this.context);
 		parentMost.setParentContext(null);
 		return result;
 	}
 
 	public Identifier getName() {
-		return method.getId();
+		return type.getMethod().getId();
 	}
 
 	public ArgumentList getArguments() {
-		return method.getArguments();
+		return type.getMethod().getArguments();
 	}
 
 	public IType getReturnType() {
-		return method.getReturnType();
+		return type.getMethod().getReturnType();
 	}
 
 }

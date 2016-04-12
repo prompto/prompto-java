@@ -182,7 +182,7 @@ public class AttributeDeclaration extends BaseDeclaration {
 	private void compileDefaultChecker(Context context, ClassFile classFile, FieldInfo field) {
 		if(constraint!=null) {
 			String checkerName = CompilerUtils.checkerName(field.getName().getValue());
-			Descriptor proto = new Descriptor.Method(field.getType(), void.class);
+			Descriptor.Method proto = new Descriptor.Method(field.getType(), void.class);
 			MethodInfo method = classFile.newMethod(checkerName, proto);
 			method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
 			method.registerLocal("value", VerifierType.ITEM_Object, new ClassConstant(field.getType()));
@@ -209,7 +209,7 @@ public class AttributeDeclaration extends BaseDeclaration {
 	}
 
 	private void compileCopyConstructor(Context context, ClassFile classFile, FieldInfo field) {
-		Descriptor proto = new Descriptor.Method(field.getType(), void.class);
+		Descriptor.Method proto = new Descriptor.Method(field.getType(), void.class);
 		MethodInfo method = classFile.newMethod("<init>", proto);
 		// call super()
 		StackLocal local = method.registerLocal("this", VerifierType.ITEM_UninitializedThis, classFile.getThisClass());
@@ -229,7 +229,7 @@ public class AttributeDeclaration extends BaseDeclaration {
 
 	private void compileSetter(Context context, ClassFile classFile, FieldInfo field) {
 		String setterName = CompilerUtils.setterName(field.getName().getValue());
-		Descriptor proto = new Descriptor.Method(field.getType(), void.class);
+		Descriptor.Method proto = new Descriptor.Method(field.getType(), void.class);
 		MethodInfo method = classFile.newMethod(setterName, proto);
 		StackLocal local = method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
 		StackLocal value = method.registerLocal("%value%", VerifierType.ITEM_Object, new ClassConstant(field.getType()));
@@ -249,7 +249,7 @@ public class AttributeDeclaration extends BaseDeclaration {
 
 	private void compileGetter(Context context, ClassFile classFile, FieldInfo field) {
 		String getterName = CompilerUtils.getterName(field.getName().getValue());
-		Descriptor proto = new Descriptor.Method(field.getType());
+		Descriptor.Method proto = new Descriptor.Method(field.getType());
 		MethodInfo method = classFile.newMethod(getterName, proto);
 		StackLocal local = method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
 		CompilerUtils.compileALOAD(method, local);
@@ -260,14 +260,14 @@ public class AttributeDeclaration extends BaseDeclaration {
 
 	private void compileGetterPrototype(Context context, ClassFile classFile, FieldInfo field) {
 		String name = CompilerUtils.getterName(field.getName().getValue());
-		Descriptor proto = new Descriptor.Method(field.getType());
+		Descriptor.Method proto = new Descriptor.Method(field.getType());
 		MethodInfo method = classFile.newMethod(name, proto);
 		method.addModifier(Modifier.ABSTRACT);
 	}
 
 	private void compileSetterPrototype(Context context, ClassFile classFile, FieldInfo field) {
 		String name = CompilerUtils.setterName(field.getName().getValue());
-		Descriptor proto = new Descriptor.Method(field.getType(), void.class);
+		Descriptor.Method proto = new Descriptor.Method(field.getType(), void.class);
 		MethodInfo method = classFile.newMethod(name, proto);
 		method.addModifier(Modifier.ABSTRACT);
 	}

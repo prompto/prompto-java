@@ -32,6 +32,7 @@ import prompto.statement.IStatement;
 import prompto.type.CategoryType;
 import prompto.type.DecimalType;
 import prompto.type.IType;
+import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
 import prompto.utils.Utils;
 import prompto.value.ConcreteInstance;
@@ -175,6 +176,11 @@ public class Context implements IContext {
 		return initInstanceContext(new DocumentContext(document), isChild);
 	}
 
+	public Context newClosureContext(MethodType type) {
+		return initInstanceContext(new ClosureContext(type), true);
+	}
+
+
 	private Context initInstanceContext(Context context, boolean isChild) {
 		context.globals = this.globals;
 		context.calling = isChild ? this.calling : this;
@@ -290,11 +296,17 @@ public class Context implements IContext {
 	public <T extends IDeclaration> T getRegisteredDeclaration(Class<T> klass, Identifier name, boolean lookInStore) {
 		// resolve upwards, since local names override global ones
 		IDeclaration actual = declarations.get(name);
-		if(actual==null && parent!=null)
+		if(actual!=null)
+			return Utils.downcast(klass,actual);
+		else if(parent!=null)
 			actual = parent.getRegisteredDeclaration(klass, name, lookInStore);
-		if(actual==null && globals!=this)
+		if(actual!=null)
+			return Utils.downcast(klass,actual);
+		else if(globals!=this)
 			actual = globals.getRegisteredDeclaration(klass, name, lookInStore);
-		if(actual==null && lookInStore && globals==this)
+		if(actual!=null)
+			return Utils.downcast(klass,actual);
+		else if(lookInStore && globals==this)
 			actual = fetchAndRegister(name);
 		if(actual!=null)
 			return Utils.downcast(klass,actual);
@@ -352,6 +364,15 @@ public class Context implements IContext {
 		current.register(declaration,this);
 	}
 	
+	public void registerDeclarationIfMissing(IMethodDeclaration declaration) {
+		MethodDeclarationMap current = getRegisteredDeclaration(MethodDeclarationMap.class, declaration.getId());
+		if(current==null) {
+			current = new MethodDeclarationMap(declaration.getId());
+			declarations.put(declaration.getId(), (MethodDeclarationMap)current);
+		}
+		current.registerIfMissing(declaration,this);
+	}
+
 	private MethodDeclarationMap checkDuplicate(IMethodDeclaration declaration) {
 		INamed current = getRegistered(declaration.getId());
 		if(current!=null && !(current instanceof MethodDeclarationMap))
@@ -741,14 +762,14 @@ public class Context implements IContext {
 	public static class InstanceContext extends Context {
 		
 		IInstance instance;
-		CategoryType type;
+		IType type;
 		
 		InstanceContext(IInstance instance) {
 			this.instance = instance;
 			this.type = instance.getType();
 		}
 		
-		InstanceContext(CategoryType type) {
+		InstanceContext(IType type) {
 			this.type = type;
 		}
 
@@ -756,7 +777,7 @@ public class Context implements IContext {
 			return instance;
 		}
 		
-		public CategoryType getInstanceType() {
+		public IType getInstanceType() {
 			return type;
 		}
 
@@ -805,5 +826,12 @@ public class Context implements IContext {
 		}
 	}
 
+	public static class ClosureContext extends InstanceContext {
+
+		public ClosureContext(MethodType type) {
+			super(type);
+		}
+		
+	}
 
 }

@@ -612,7 +612,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			Identifier id, FieldInfo field) {
 		SetterMethodDeclaration setter = findSetter(context, id);
 		if(setter!=null) synchronized(setter) {
-			ConcreteCategoryDeclaration owner = setter.getMemberOf();
+			CategoryDeclaration owner = setter.getMemberOf();
 			setter.setMemberOf(this);
 			try {
 				setter.compile(context, classFile, flags, getType(context), field);
@@ -627,7 +627,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			Identifier id, FieldInfo field) {
 		GetterMethodDeclaration getter = findGetter(context, id);
 		if(getter!=null) synchronized(getter) {
-			ConcreteCategoryDeclaration owner = getter.getMemberOf();
+			CategoryDeclaration owner = getter.getMemberOf();
 			getter.setMemberOf(this);
 			try {
 				getter.compile(context, classFile, flags, getType(context), field);
@@ -690,7 +690,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	private void compileFieldSetter(Context context, ClassFile classFile, Flags flags, 
 			Identifier id, FieldInfo field) {
 		String name = CompilerUtils.setterName(field.getName().getValue());
-		Descriptor proto = new Descriptor.Method(field.getType(), void.class);
+		Descriptor.Method proto = new Descriptor.Method(field.getType(), void.class);
 		MethodInfo method = classFile.newMethod(name, proto);
 		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
 		ClassConstant fc = new ClassConstant(field.getType());
@@ -735,7 +735,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 
 	private void compileFieldGetter(Context context, ClassFile classFile, Flags flags, Identifier id, FieldInfo field) {
 		String name = CompilerUtils.getterName(id.toString());
-		Descriptor proto = new Descriptor.Method(field.getType());
+		Descriptor.Method proto = new Descriptor.Method(field.getType());
 		MethodInfo method = classFile.newMethod(name, proto);
 		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
 		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
@@ -746,7 +746,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 
 	protected void compileEmptyConstructor(Context context, ClassFile classFile, Flags flags) {
 		if(isStorable()) {
-			Descriptor proto = new Descriptor.Method(void.class);
+			Descriptor.Method proto = new Descriptor.Method(void.class);
 			MethodInfo method = classFile.newMethod("<init>", proto);
 			method.registerLocal("this", VerifierType.ITEM_UninitializedThis, classFile.getThisClass());
 			// call super()
@@ -764,7 +764,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	private void compileCopyConstructor(Context context, ClassFile classFile, Flags flags) {
 		if(!isStorable())
 			return;
-		Descriptor proto = new Descriptor.Method(IStored.class, void.class);
+		Descriptor.Method proto = new Descriptor.Method(IStored.class, void.class);
 		MethodInfo method = classFile.newMethod("<init>", proto);
 		method.registerLocal("this", VerifierType.ITEM_UninitializedThis, classFile.getThisClass());
 		// call super()

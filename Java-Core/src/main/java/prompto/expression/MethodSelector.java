@@ -107,8 +107,10 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 			return compileExactExplicitMember(context, method, flags, declaration, assignments);
 		else if(declaration.getMemberOf()!=null) 
 			return compileExactImplicitMember(context, method, flags, declaration, assignments);
-		else 
-			return compileExactGlobalMethod(context, method, flags, declaration, assignments);
+		else if(declaration.isAbstract())
+			return compileExactAbstractMethod(context, method, flags, declaration, assignments);
+		else
+			return compileExactStaticMethod(context, method, flags, declaration, assignments);
 	}
 	
 	public ResultInfo compileDynamic(Context context, MethodInfo method, Flags flags, 
@@ -151,7 +153,24 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		throw new UnsupportedOperationException();
 	}
 
-	private ResultInfo compileExactGlobalMethod(Context context, MethodInfo method, Flags flags, 
+	private ResultInfo compileExactAbstractMethod(Context context, MethodInfo method, Flags flags, 
+			IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
+		// get closure instance
+		StackLocal local = method.getRegisteredLocal(declaration.getName());
+		CompilerUtils.compileALOAD(method, local);
+		// push arguments on the stack
+		declaration.compileAssignments(context, method, flags, assignments);
+		// call global method in its own class
+		Type classType = CompilerUtils.getGlobalMethodType(declaration.getName());
+		String methodName = declaration.getName();
+		IType returnType = declaration.check(context);
+		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getArguments(), returnType);
+		InterfaceConstant constant = new InterfaceConstant(classType, methodName, descriptor);
+		method.addInstruction(Opcode.INVOKEINTERFACE, constant);
+		return new ResultInfo(returnType.getJavaType(context));
+	}
+
+	private ResultInfo compileExactStaticMethod(Context context, MethodInfo method, Flags flags, 
 			IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
 		// push arguments on the stack
 		declaration.compileAssignments(context, method, flags, assignments);

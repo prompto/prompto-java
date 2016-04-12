@@ -15,6 +15,7 @@ import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Variable;
+import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
@@ -43,10 +44,12 @@ public class VariableInstance implements IAssignableInstance {
 	@Override
 	public ResultInfo compileAssign(Context context, MethodInfo method, Flags flags, IExpression expression) {
 		Context actual = context.contextForValue(id);
-		if(actual instanceof InstanceContext)
-			return ((InstanceContext)actual).getInstanceType().compileSetMember(context, method, flags, null, expression, id);
-		else
-			return compileAssignVariable(context, method, flags, expression);
+		if(actual instanceof InstanceContext) {
+			IType type = ((InstanceContext)actual).getInstanceType();
+			if(type instanceof CategoryType) // could be a closure
+				return ((CategoryType)type).compileSetMember(context, method, flags, null, expression, id);
+		}
+		return compileAssignVariable(context, method, flags, expression);
 	}
 	
 	public ResultInfo compileAssignVariable(Context context, MethodInfo method, Flags flags, IExpression expression) {

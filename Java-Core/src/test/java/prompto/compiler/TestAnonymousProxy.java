@@ -7,7 +7,7 @@ import org.junit.Test;
 import prompto.intrinsic.PromptoProxy;
 import prompto.runtime.utils.Out;
 
-public class TestProxy {
+public class TestAnonymousProxy {
 
 	public static interface name {
 		String getName();

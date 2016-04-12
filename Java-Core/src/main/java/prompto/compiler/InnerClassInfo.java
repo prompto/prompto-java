@@ -17,6 +17,13 @@ public class InnerClassInfo {
 		this.simpleName = new Utf8Constant(this.innerClass.getSimpleName());
 	}
 	
+	public InnerClassInfo(ClassFile classFile, MethodInfo method) {
+		this.classFile = classFile;
+		this.innerClass = classFile.getThisClass().clone();
+		this.outerClass = method.getClassFile().getThisClass();
+		this.simpleName = new Utf8Constant(this.innerClass.getSimpleName());
+	}
+
 	public ClassFile getClassFile() {
 		return classFile;
 	}

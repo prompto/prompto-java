@@ -1,9 +1,21 @@
 package prompto.argument;
 
+import prompto.compiler.ClassConstant;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.StringConstant;
+import prompto.declaration.IMethodDeclaration;
 import prompto.error.SyntaxError;
+import prompto.expression.IExpression;
+import prompto.grammar.ArgumentAssignment;
+import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.INamed;
 import prompto.grammar.INamedArgument;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoProxy;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
@@ -60,14 +72,40 @@ public class MethodArgument extends BaseArgument implements INamedArgument {
 	
 	@Override
 	public void check(Context context) {
-		MethodDeclarationMap actual = context.getRegisteredDeclaration(MethodDeclarationMap.class,id);
+		IMethodDeclaration actual = getDeclaration(context);
 		if(actual==null)
 			throw new SyntaxError("Unknown method: \"" + id + "\"");
 	}
 	
 	@Override
 	public IType getType(Context context) {
-		return new MethodType(context,id);
+		IMethodDeclaration actual = getDeclaration(context);
+		return new MethodType(actual);
 	}
 	
+	private IMethodDeclaration getDeclaration(Context context) {
+		MethodDeclarationMap methods = context.getRegisteredDeclaration(MethodDeclarationMap.class, id);
+		if(methods!=null)
+			return (IMethodDeclaration)(methods.values().iterator().next());
+		else
+			return null;
+	}
+	
+	@Override
+	public void compileAssignment(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments, boolean isFirst) {
+		// create a proxy to the required java type
+		ClassConstant c = new ClassConstant(getJavaType(context));
+		method.addInstruction(Opcode.LDC, c);
+		ArgumentAssignment assign = makeAssignment(assignments, isFirst);
+		IExpression expression = assign.getExpression();
+		ResultInfo info = expression.compile(context.getCallingContext(), method, flags);
+		String className = info.getType().getTypeName();
+		String methodName = className.substring(className.lastIndexOf('$')+1);
+		method.addInstruction(Opcode.LDC, new StringConstant(methodName));
+		MethodConstant m = new MethodConstant(PromptoProxy.class, "newProxy", Class.class, Object.class, String.class, Object.class);
+		method.addInstruction(Opcode.INVOKESTATIC, m);
+		method.addInstruction(Opcode.CHECKCAST, c);
+	}
+
+
 }

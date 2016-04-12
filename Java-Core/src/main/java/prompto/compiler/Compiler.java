@@ -17,6 +17,7 @@ import java.util.List;
 
 import prompto.argument.IArgument;
 import prompto.compiler.IVerifierEntry.VerifierType;
+import prompto.declaration.AbstractMethodDeclaration;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.EnumeratedCategoryDeclaration;
@@ -142,8 +143,10 @@ public class Compiler {
 	private ClassFile createGlobalMethodsClassFile(Context context, String fullName) throws ClassNotFoundException {
 		Type abstractType = CompilerUtils.abstractTypeFrom(fullName);
 		String simpleName = fullName.substring(fullName.indexOf(".µ.") + 3);
-		MethodDeclarationMap methods = context.getRegisteredDeclaration(MethodDeclarationMap.class, 
-				new Identifier(simpleName), true);
+		int idx = simpleName.indexOf('$');
+		if(idx>0)
+			simpleName = simpleName.substring(0, idx);
+		MethodDeclarationMap methods = context.getRegisteredDeclaration(MethodDeclarationMap.class, new Identifier(simpleName), true);
 		if(methods==null)
 			throw new ClassNotFoundException(simpleName);
 		else
@@ -151,20 +154,35 @@ public class Compiler {
 	}
 
 	private ClassFile createGlobalMethodsClassFile(Context context, MethodDeclarationMap methods, Type type) {
-		ClassFile classFile = new ClassFile(type);
-		classFile.addModifier(Modifier.ABSTRACT);
 		Collection<IMethodDeclaration> decls = methods.globalConcreteMethods();
-		decls.forEach((m) -> 
-			m.compile(context, classFile));
-		if(decls.size()>1) {
-			createGlobalMethodHandles(classFile);
-			populateGlobalMethodHandles(context, classFile, decls);
-			createGlobalCheckParamsMethods(context, classFile, decls);
-			createGlobalBootstrapMethod(classFile);
+		if(decls.isEmpty())
+			return createGlobalMethodsInterfaceFile(context, methods, type);
+		else {
+			ClassFile classFile = new ClassFile(type);
+			classFile.addModifier(Modifier.ABSTRACT);
+			decls.forEach((m) -> 
+				m.compile(context, classFile));
+			if(decls.size()>1) {
+				createGlobalMethodHandles(classFile);
+				populateGlobalMethodHandles(context, classFile, decls);
+				createGlobalCheckParamsMethods(context, classFile, decls);
+				createGlobalBootstrapMethod(classFile);
+			}
+			return classFile;
 		}
-		return classFile;
 	}
 
+
+	private ClassFile createGlobalMethodsInterfaceFile(Context context, MethodDeclarationMap methods, Type type) {
+		IMethodDeclaration method = methods.values().iterator().next();
+		if(method instanceof AbstractMethodDeclaration) {
+			ClassFile classFile = new ClassFile(type);
+			classFile.addModifier(Modifier.ABSTRACT | Modifier.INTERFACE);
+			method.compile(context, classFile);
+			return classFile;
+		} else
+			throw new UnsupportedOperationException();
+	}
 
 	private void createGlobalMethodHandles(ClassFile classFile) {
 		FieldInfo field = new FieldInfo("methodHandles", MethodHandle[].class);
@@ -173,7 +191,7 @@ public class Compiler {
 	}
 
 	private void populateGlobalMethodHandles(Context context, ClassFile classFile, Collection<IMethodDeclaration> decls) {
-		Descriptor proto = new Descriptor.Method(void.class);
+		Descriptor.Method proto = new Descriptor.Method(void.class);
 		MethodInfo method = classFile.newMethod("<clinit>", proto);
 		method.addModifier(Modifier.STATIC);
 		method.addInstruction(Opcode.LDC, new IntConstant(decls.size()));
@@ -220,7 +238,7 @@ public class Compiler {
 	}
 
 	private void createGlobalBootstrapMethod(ClassFile classFile) {
-		Descriptor proto = new Descriptor.Method(Lookup.class, String.class, MethodType.class, CallSite.class);
+		Descriptor.Method proto = new Descriptor.Method(Lookup.class, String.class, MethodType.class, CallSite.class);
 		MethodInfo method = classFile.newMethod("bootstrap", proto);
 		method.addModifier(Modifier.STATIC);
 		StackLocal lookup = method.registerLocal("lookup", VerifierType.ITEM_Object, new ClassConstant(Lookup.class));
@@ -246,7 +264,7 @@ public class Compiler {
 	private void createGlobalCheckParamsMethod(Context context, ClassFile classFile, ArgumentList arguments) {
 		String name = buildGlobalCheckParamsMethodName(context, arguments);
 		Type[] types = buildGlobalCheckParamsMethodTypes(arguments.size());
-		Descriptor desc = new Descriptor.Method(types, boolean.class);
+		Descriptor.Method desc = new Descriptor.Method(types, boolean.class);
 		MethodInfo method = classFile.newMethod(name, desc);
 		method.addModifier(Modifier.STATIC);
 		StackState state = method.captureStackState();

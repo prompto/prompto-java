@@ -196,7 +196,7 @@ import prompto.statement.AssignVariableStatement;
 import prompto.statement.AtomicSwitchCase;
 import prompto.statement.CollectionSwitchCase;
 import prompto.statement.CommentStatement;
-import prompto.statement.DeclarationInstruction;
+import prompto.statement.DeclarationStatement;
 import prompto.statement.DoWhileStatement;
 import prompto.statement.ForEachStatement;
 import prompto.statement.IStatement;
@@ -573,7 +573,7 @@ public class SPromptoBuilder extends SParserBaseListener {
 	@Override
 	public void exitClosureStatement(ClosureStatementContext ctx) {
 		ConcreteMethodDeclaration decl = this.<ConcreteMethodDeclaration>getNodeValue(ctx.decl);
-		setNodeValue(ctx, new DeclarationInstruction<ConcreteMethodDeclaration>(decl));
+		setNodeValue(ctx, new DeclarationStatement<ConcreteMethodDeclaration>(decl));
 	}
 	
 	@Override

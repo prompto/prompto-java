@@ -84,7 +84,7 @@ public class TestClassFile {
 		String name = "π/χ/µ/print";
 		ClassFile c = new ClassFile(new PromptoType(name));
 		c.addModifier(Modifier.ABSTRACT);
-		Descriptor proto = new Descriptor.Method(String.class, void.class);
+		Descriptor.Method proto = new Descriptor.Method(String.class, void.class);
 		MethodInfo m = c.newMethod("printAbstract", proto);
 		m.addModifier(Modifier.ABSTRACT);
 		m = c.newMethod("printStatic", proto);
@@ -110,7 +110,7 @@ public class TestClassFile {
 		String name = "π/χ/µ/print";
 		ClassFile c = new ClassFile(new PromptoType(name));
 		c.addModifier(Modifier.ABSTRACT);
-		Descriptor proto = new Descriptor.Method(String.class, void.class);
+		Descriptor.Method proto = new Descriptor.Method(String.class, void.class);
 		MethodInfo m = c.newMethod("print", proto);
 		m.addModifier(Modifier.STATIC);
 		m.registerLocal("value", VerifierType.ITEM_Object, new ClassConstant(String.class));
@@ -137,7 +137,7 @@ public class TestClassFile {
 		String name = "k1";
 		ClassFile c = new ClassFile(new PromptoType(name));
 		c.addModifier(Modifier.ABSTRACT);
-		Descriptor proto = new Descriptor.Method(Long.class);
+		Descriptor.Method proto = new Descriptor.Method(Long.class);
 		MethodInfo m = c.newMethod("m3", proto);
 		m.addModifier(Modifier.STATIC);
 		m.addInstruction(Opcode.LDC2_W, new LongConstant(9876543210L));
@@ -153,7 +153,7 @@ public class TestClassFile {
 		String name = "k1";
 		ClassFile c = new ClassFile(new PromptoType(name));
 		c.addModifier(Modifier.ABSTRACT);
-		Descriptor proto = new Descriptor.Method(void.class);
+		Descriptor.Method proto = new Descriptor.Method(void.class);
 		MethodInfo m = c.newMethod("m", proto);
 		m.addModifier(Modifier.STATIC);
 		m.addInstruction(Opcode.ICONST_1);
@@ -217,7 +217,7 @@ public class TestClassFile {
 		String name = "π/χ/µ/print";
 		ClassFile c = new ClassFile(new PromptoType(name));
 		c.addModifier(Modifier.ABSTRACT);
-		Descriptor proto = new Descriptor.Method(Object.class, String.class);
+		Descriptor.Method proto = new Descriptor.Method(Object.class, String.class);
 		MethodInfo m = c.newMethod("stringValueOf", proto);
 		m.addModifier(Modifier.STATIC);
 		m.registerLocal("%value%", VerifierType.ITEM_Object, new ClassConstant(Object.class));
@@ -249,7 +249,7 @@ public class TestClassFile {
 		String name = "π/χ/µ/print";
 		ClassFile c = new ClassFile(new PromptoType(name));
 		c.addModifier(Modifier.ABSTRACT);
-		Descriptor proto = new Descriptor.Method(Object.class, String.class);
+		Descriptor.Method proto = new Descriptor.Method(Object.class, String.class);
 		MethodInfo m = c.newMethod("stringValueOf", proto);
 		m.addModifier(Modifier.STATIC);
 		m.registerLocal("%value%", VerifierType.ITEM_Object, new ClassConstant(Object.class));
@@ -286,7 +286,7 @@ public class TestClassFile {
 			String name = "π/χ/µ/print";
 			ClassFile c = new ClassFile(new PromptoType(name));
 			c.addModifier(Modifier.ABSTRACT);
-			Descriptor proto = new Descriptor.Method(String.class, void.class);
+			Descriptor.Method proto = new Descriptor.Method(String.class, void.class);
 			MethodInfo m = c.newMethod("test", proto);
 			m.addModifier(Modifier.STATIC);
 			m.registerLocal("%value%", VerifierType.ITEM_Object, new ClassConstant(String.class));

@@ -25,4 +25,21 @@ public abstract class PromptoProxy {
 				});
 		
 	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T newProxy(Class<T> klass, Object o, String methodName) {
+		return (T)Proxy.newProxyInstance(
+				klass.getClassLoader(), 
+				new Class<?>[] { klass }, 
+				new InvocationHandler() {
+
+					@Override
+					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+						method = o.getClass().getMethod(methodName, method.getParameterTypes());
+						return method.invoke(o, args);
+					}
+					
+				});
+		
+	}
 }

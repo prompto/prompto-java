@@ -1,43 +1,51 @@
 package prompto.type;
 
-import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.PromptoType;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.SyntaxError;
+import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.runtime.Context.ClosureContext;
 
 public class MethodType extends BaseType {
 
-	Context context;
-	Identifier typeNameId;
+	IMethodDeclaration method;
 	
-	public MethodType(Context context, Identifier typeNameId) {
+	public MethodType(IMethodDeclaration method) {
 		super(Family.METHOD);
-		this.context = context;
-		this.typeNameId = typeNameId;
+		this.method = method;
 	}
 	
-	public Context getContext() {
-		return context;
+	public IMethodDeclaration getMethod() {
+		return method;
 	}
 	
 	@Override
 	public String getTypeName() {
-		return typeNameId.toString();
+		return method.getName();
 	}
 	
 	@Override
 	public Identifier getTypeNameId() {
-		return typeNameId;
+		return method.getId();
 	}
 	
 	
 	@Override
 	public Type getJavaType(Context context) {
-		return Method.class;
+		IMethodDeclaration embedding = method.getClosureOf();
+		if(embedding==null) {
+			return CompilerUtils.getGlobalMethodType(method.getId());
+		} else if(embedding.getMemberOf()==null) {
+			Type outer = CompilerUtils.getGlobalMethodType(embedding.getId()); 
+			return new PromptoType(outer.getTypeName() + '$' + method.getName());
+		} else
+			throw new UnsupportedOperationException();
 	}
 	
 	@Override
@@ -49,26 +57,19 @@ public class MethodType extends BaseType {
 		if(!(obj instanceof MethodType))
 			return false;
 		MethodType other = (MethodType)obj;
-		return this.typeNameId.equals(other.typeNameId);
+		return this.method==other.method;
 	}
 	
 	@Override
 	public void checkUnique(Context context) {
-		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, typeNameId);
+		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, method.getId());
 		if(actual!=null)
-			throw new SyntaxError("Duplicate name: \"" + typeNameId + "\"");
-	}
-	
-	IMethodDeclaration getDeclaration(Context context) {
-		Context.MethodDeclarationMap map = this.context.getRegisteredDeclaration(Context.MethodDeclarationMap.class, typeNameId);
-		if(map==null)
-			throw new SyntaxError("Unknown method: \"" + typeNameId + "\"");
-		return map.entrySet().iterator().next().getValue();
+			throw new SyntaxError("Duplicate name: \"" + method.getId() + "\"");
 	}
 	
 	@Override
 	public void checkExists(Context context) {
-		getDeclaration(context);
+		// nothing to do
 	}
 	
 	@Override
@@ -77,9 +78,7 @@ public class MethodType extends BaseType {
 			return false;
 		MethodType otherType = (MethodType)other;
 		try {
-			IMethodDeclaration thisMethod = getDeclaration(context);
-			IMethodDeclaration otherMethod = otherType.getDeclaration(context);
-			return thisMethod.getProto().equals(otherMethod.getProto()); // TODO: refine
+			return this.method.getProto().equals(otherType.method.getProto()); // TODO: refine
 		} catch (SyntaxError e) {
 			return false;
 		}
@@ -91,5 +90,14 @@ public class MethodType extends BaseType {
 		return false;
 	}
 	
+	@Override
+	public IType checkMember(Context context, Identifier name) {
+		if(context instanceof ClosureContext) {
+			INamed named = context.getRegistered(name);
+			if(named!=null)
+				return named.getType(context);
+		}
+		return super.checkMember(context, name);
+	}
 
 }

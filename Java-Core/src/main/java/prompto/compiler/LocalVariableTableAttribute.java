@@ -1,5 +1,6 @@
 package prompto.compiler;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,8 +9,8 @@ public class LocalVariableTableAttribute implements IAttribute {
 	Utf8Constant attributeName = new Utf8Constant("LocalVariableTable");
 	private Map<String, StackLocal> entries = new HashMap<>();
 
-	public Map<String, StackLocal> getEntries() {
-		return entries;
+	public Collection<StackLocal> getEntries() {
+		return entries.values();
 	}
 	
 	public StackLocal registerLocal(StackLocal local) {

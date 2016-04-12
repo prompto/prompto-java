@@ -28,5 +28,6 @@ public interface IDeclaration extends INamed, ISection {
 	DeclarationType getDeclarationType();
 	void setComments(Collection<CommentStatement> comments);
 	Collection<CommentStatement> getComments();
-	
+	default void setClosureOf(IMethodDeclaration declaration) { throw new UnsupportedOperationException(); }
+	default IMethodDeclaration getClosureOf() { throw new UnsupportedOperationException(); }
 }

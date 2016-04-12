@@ -1,23 +1,39 @@
 package prompto.declaration;
 
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 import prompto.argument.CategoryArgument;
 import prompto.argument.CodeArgument;
 import prompto.argument.IArgument;
+import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
-import prompto.compiler.CompilerException;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Descriptor.Method;
+import prompto.compiler.FieldConstant;
+import prompto.compiler.FieldInfo;
 import prompto.compiler.Flags;
 import prompto.compiler.IVerifierEntry.VerifierType;
+import prompto.compiler.Descriptor;
+import prompto.compiler.IOperand;
+import prompto.compiler.LocalVariableTableAttribute;
+import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
+import prompto.compiler.PromptoType;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.StackLocal;
 import prompto.error.PromptoError;
 import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.statement.DeclarationStatement;
 import prompto.statement.StatementList;
 import prompto.type.DictType;
 import prompto.type.IType;
+import prompto.type.MethodType;
 import prompto.type.TextType;
 import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
@@ -27,9 +43,14 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 
 	StatementList statements;
 	
+	@SuppressWarnings("unchecked")
 	public ConcreteMethodDeclaration(Identifier name, ArgumentList arguments, IType returnType, StatementList statements) {
 		super(name, arguments, returnType);
 		this.statements = statements;
+		statements.forEach((s)->{
+			if(s instanceof DeclarationStatement)
+				((DeclarationStatement<IDeclaration>)s).getDeclaration().setClosureOf(this);
+		});
 	}
 
 	public StatementList getStatements() {
@@ -171,15 +192,11 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	
 	@Override
 	public void compile(Context context, ClassFile classFile) {
-		try {
-			context = prepareContext(context);
-			IType returnType = check(context);
-			MethodInfo method = createMethodInfo(context, classFile, returnType);
-			registerLocals(context, classFile, method);
-			produceByteCode(context, method, returnType);
-		} catch (PromptoError e) {
-			throw new CompilerException(e);
-		}
+		context = prepareContext(context);
+		IType returnType = check(context);
+		MethodInfo method = createMethodInfo(context, classFile, returnType);
+		registerLocals(context, classFile, method);
+		produceByteCode(context, method, returnType);
 	}
 	
 	private void produceByteCode(Context context, MethodInfo method, IType returnType) {
@@ -216,6 +233,84 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 			}
 		}
 		return super.isEligibleAsMain();
+	}
+
+	public void compileClosureClass(Context context, MethodInfo method) {
+		Type innerType = getClosureClassType(method);
+		ClassFile classFile = new ClassFile(innerType);
+		classFile.setSuperClass(new ClassConstant(Object.class));
+		classFile.setEnclosingMethod(method);
+		LocalVariableTableAttribute locals = method.getLocals();
+		compileClosureFields(context, classFile, locals);
+		compileClosureConstructor(context, classFile, locals);
+		context = context.newClosureContext(new MethodType(this));
+		compile(context, classFile);
+		method.getClassFile().addInnerClass(classFile);
+	}
+
+	private Type getClosureClassType(MethodInfo method) {
+		ClassFile parentClass = method.getClassFile();
+		String innerClassName = parentClass.getThisClass().getType().getTypeName() + '$' + this.getName();
+		return new PromptoType(innerClassName); 
+	}
+
+	private void compileClosureConstructor(Context context, ClassFile classFile, LocalVariableTableAttribute locals) {
+		if(locals.getEntries().isEmpty())
+			CompilerUtils.compileEmptyConstructor(classFile);
+		else {
+			Descriptor.Method proto = getClosureConstructorProto(locals);
+			MethodInfo method = classFile.newMethod("<init>", proto);
+			method.registerLocal("this", VerifierType.ITEM_UninitializedThis, classFile.getThisClass());
+			locals.getEntries().forEach((local)->{
+				Type type = ((StackLocal.ObjectLocal)local).getClassName().getType();
+				method.registerLocal(local.getName(), VerifierType.ITEM_Object, new ClassConstant(type));
+				});
+			method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
+			MethodConstant m = new MethodConstant(classFile.getSuperClass(), "<init>", void.class);
+			method.addInstruction(Opcode.INVOKESPECIAL, m);
+			locals.getEntries().forEach((local)->{
+				method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
+				CompilerUtils.compileALOAD(method, local.getName());
+				Type type = ((StackLocal.ObjectLocal)local).getClassName().getType();
+				FieldConstant field = new FieldConstant(classFile.getThisClass(), local.getName(), type);
+				method.addInstruction(Opcode.PUTFIELD, field);
+				});
+			method.addInstruction(Opcode.RETURN);
+		}
+	}
+
+	private Method getClosureConstructorProto(LocalVariableTableAttribute locals) {
+		List<Type> list = new ArrayList<>();
+		locals.getEntries().forEach((local)->
+			list.add(((StackLocal.ObjectLocal)local).getClassName().getType()));
+		return new Descriptor.Method(list.toArray(new Type[list.size()]), void.class);
+	}
+
+	private void compileClosureFields(Context context, ClassFile classFile, LocalVariableTableAttribute locals) {
+		locals.getEntries().forEach((local)->
+			compileClosureField(context, classFile, local));
+	}
+
+	private void compileClosureField(Context context, ClassFile classFile, StackLocal local) {
+		FieldInfo field = new FieldInfo(local.getName(), ((StackLocal.ObjectLocal)local).getClassName().getType());
+		classFile.addField(field);
+	}
+	
+	public ResultInfo compileClosureInstance(Context context, MethodInfo method, Flags flags) {
+		Type innerType = getClosureClassType(method);
+		LocalVariableTableAttribute locals = method.getLocals(); // TODO: use a copy saved when constructor is created
+		if(locals.getEntries().isEmpty())
+			return CompilerUtils.compileNewInstance(method, innerType); 
+		else {
+			CompilerUtils.compileNewRawInstance(method, innerType);
+			method.addInstruction(Opcode.DUP); 
+			locals.getEntries().forEach((local)->
+				CompilerUtils.compileALOAD(method, local.getName()));
+			Descriptor.Method proto = getClosureConstructorProto(locals);
+			IOperand c = new MethodConstant(innerType, "<init>", proto);
+			method.addInstruction(Opcode.INVOKESPECIAL, c);
+			return new ResultInfo(innerType);
+		}
 	}
 
 }

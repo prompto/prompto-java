@@ -1,7 +1,11 @@
 package prompto.statement;
 
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.declaration.ConcreteMethodDeclaration;
 import prompto.declaration.IDeclaration;
+import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
@@ -13,11 +17,11 @@ import prompto.utils.CodeWriter;
 import prompto.value.ClosureValue;
 import prompto.value.IValue;
 
-public class DeclarationInstruction<T extends IDeclaration> extends BaseStatement {
+public class DeclarationStatement<T extends IDeclaration> extends BaseStatement {
 
 	T declaration;
 	
-	public DeclarationInstruction(T declaration) {
+	public DeclarationStatement(T declaration) {
 		this.declaration = declaration;
 	}
 	
@@ -49,15 +53,27 @@ public class DeclarationInstruction<T extends IDeclaration> extends BaseStatemen
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		if(declaration instanceof ConcreteMethodDeclaration) {
-			ConcreteMethodDeclaration method = (ConcreteMethodDeclaration)declaration;
-			context.registerDeclaration(method);
-			IType type = new MethodType(context, method.getId());
-			context.registerValue(new Variable(method.getId(), type)); 
-			context.setValue(method.getId(), new ClosureValue(context, method));
+		if(declaration instanceof IMethodDeclaration) {
+			IMethodDeclaration decl = (IMethodDeclaration)declaration;
+			context.registerDeclarationIfMissing(decl);
+			MethodType type = new MethodType(decl);
+			context.registerValue(new Variable(decl.getId(), type)); 
+			context.setValue(decl.getId(), new ClosureValue(context, type));
 			return null;
 		} else
 			throw new SyntaxError("Unsupported:" + declaration.getClass().getSimpleName());
 	}
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		if(declaration instanceof ConcreteMethodDeclaration) {
+			ConcreteMethodDeclaration decl = (ConcreteMethodDeclaration)declaration;
+			context.registerDeclarationIfMissing(decl);
+			decl.compileClosureClass(context, method);
+			return new ResultInfo(void.class);		
+		} else
+			throw new SyntaxError("Unsupported:" + declaration.getClass().getSimpleName());
+	}
+
 	
 }

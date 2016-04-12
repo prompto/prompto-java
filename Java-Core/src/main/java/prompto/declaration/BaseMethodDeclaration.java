@@ -26,7 +26,8 @@ import prompto.value.IValue;
 
 public abstract class BaseMethodDeclaration extends BaseDeclaration implements IMethodDeclaration {
 
-	ConcreteCategoryDeclaration memberOf;
+	CategoryDeclaration memberOf;
+	IMethodDeclaration closureOf;
 	ArgumentList arguments;
 	IType returnType;
 	
@@ -48,13 +49,23 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	}
 	
 	@Override
-	public void setMemberOf(ConcreteCategoryDeclaration declaration) {
+	public void setMemberOf(CategoryDeclaration declaration) {
 		this.memberOf = declaration;
 	}
 	
 	@Override
-	public ConcreteCategoryDeclaration getMemberOf() {
+	public CategoryDeclaration getMemberOf() {
 		return memberOf;
+	}
+	
+	@Override
+	public void setClosureOf(IMethodDeclaration declaration) {
+		this.closureOf = declaration;
+	}
+	
+	@Override
+	public IMethodDeclaration getClosureOf() {
+		return closureOf;
 	}
 	
 	@Override

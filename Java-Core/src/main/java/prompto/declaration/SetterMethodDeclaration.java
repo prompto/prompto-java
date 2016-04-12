@@ -85,7 +85,7 @@ public class SetterMethodDeclaration extends ConcreteMethodDeclaration implement
 	public void compile(Context context, ClassFile classFile, Flags flags,
 			CategoryType type, FieldInfo field) {
 		String name = CompilerUtils.setterName(this.getName());
-		Descriptor proto = new Descriptor.Method(field.getType(), void.class);
+		Descriptor.Method proto = new Descriptor.Method(field.getType(), void.class);
 		MethodInfo method = classFile.newMethod(name, proto);
 		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, getId());

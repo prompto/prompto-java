@@ -81,7 +81,7 @@ public class SingletonCategoryDeclaration extends ConcreteCategoryDeclaration {
 
 	private void compileStaticFieldGetter(Context context, ClassFile classFile, Flags flags, Identifier id, FieldInfo field) {
 		String name = CompilerUtils.getterName(id.toString());
-		Descriptor proto = new Descriptor.Method(field.getType());
+		Descriptor.Method proto = new Descriptor.Method(field.getType());
 		MethodInfo method = classFile.newMethod(name, proto);
 		method.addModifier(Modifier.STATIC);
 		FieldConstant f = new FieldConstant(classFile.getThisClass(), id.toString(), field.getType());
@@ -101,7 +101,7 @@ public class SingletonCategoryDeclaration extends ConcreteCategoryDeclaration {
 	private void compileStaticFieldSetter(Context context, ClassFile classFile, Flags flags, 
 			Identifier id, FieldInfo field) {
 		String name = CompilerUtils.setterName(field.getName().getValue());
-		Descriptor proto = new Descriptor.Method(field.getType(), void.class);
+		Descriptor.Method proto = new Descriptor.Method(field.getType(), void.class);
 		MethodInfo method = classFile.newMethod(name, proto);
 		method.addModifier(Modifier.STATIC);
 		ClassConstant fc = new ClassConstant(field.getType());

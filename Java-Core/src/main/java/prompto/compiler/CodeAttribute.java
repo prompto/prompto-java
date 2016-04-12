@@ -21,6 +21,9 @@ public class CodeAttribute implements IAttribute {
 	List<IInstructionListener> listeners = new ArrayList<>();
 	byte[] opcodes = null;
 	
+	public LocalVariableTableAttribute getLocals() {
+		return locals;
+	}
 	
 	public StackMapTableAttribute getStackMapTable() {
 		return stackMapTable;

@@ -1,11 +1,17 @@
 package prompto.expression;
 
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
+import prompto.declaration.ConcreteMethodDeclaration;
+import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
+import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.type.IType;
 import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
@@ -13,35 +19,57 @@ import prompto.value.IValue;
 
 public class MethodExpression implements IExpression {
 
-	Identifier name;
+	Identifier id;
 	
-	public MethodExpression(Identifier name) {
-		this.name = name;
+	public MethodExpression(Identifier id) {
+		this.id = id;
 	}
 
-	public Identifier getName() {
-		return name;
+	public Identifier getId() {
+		return id;
 	}
 	
+	public String getName() {
+		return id.toString();
+	}
+
 	@Override
 	public void toDialect(CodeWriter writer) {
 		if(writer.getDialect()==Dialect.E)
 			writer.append("Method: ");
-		writer.append(name);
+		writer.append(id);
 	}
 	
 	@Override
 	public IType check(Context context) {
-		INamed named = context.getRegistered(name);
-		if(named instanceof Context.MethodDeclarationMap)
-			return new MethodType(context, name);
+		IMethodDeclaration declaration = getDeclaration(context);
+		if(declaration!=null)
+			return new MethodType(declaration);
 		else
-			throw new SyntaxError("No method with name:" + name);
+			throw new SyntaxError("No method with name:" + id);
+	}
+	
+	private IMethodDeclaration getDeclaration(Context context) {
+		MethodDeclarationMap methods = context.getRegisteredDeclaration(MethodDeclarationMap.class, id);
+		if(methods!=null)
+			return (IMethodDeclaration)(methods.values().iterator().next());
+		else
+			return null;
+	}
+
+	@Override
+	public IValue interpret(Context context) throws PromptoError {
+		return context.getValue(id);
 	}
 	
 	@Override
-	public IValue interpret(Context context) throws PromptoError {
-		return context.getValue(name);
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		INamed named = context.getRegistered(id);
+		if(named instanceof Context.MethodDeclarationMap) {
+			ConcreteMethodDeclaration decl = (ConcreteMethodDeclaration)((MethodDeclarationMap)named).values().iterator().next();
+			return decl.compileClosureInstance(context, method, flags);
+		} else
+			throw new SyntaxError("No method with name:" + id);
 	}
 	
 }

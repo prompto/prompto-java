@@ -68,7 +68,7 @@ public class ClassFile {
 		fields.add(field);
 	}
 
-	public MethodInfo newMethod(String name, Descriptor descriptor) {
+	public MethodInfo newMethod(String name, Descriptor.Method descriptor) {
 		MethodInfo method = new MethodInfo(this, name, descriptor);
 		methods.add(method);
 		return method;
@@ -82,7 +82,7 @@ public class ClassFile {
 		InnerClassInfo info = new InnerClassInfo(classFile, getThisClass());
 		addInnerClass(info);
 	}
-
+	
 	public void addInnerClass(InnerClassInfo info) {
 		if(innerClasses==null) {
 			innerClasses = new InnerClassesAttribute();
@@ -173,6 +173,11 @@ public class ClassFile {
 		attributes.forEach((a)->
 			a.writeTo(writer));
 	}
+
+	public void setEnclosingMethod(MethodInfo method) {
+		System.err.println("TODO: setEnclosingMethod");
+	}
+
 
 
 

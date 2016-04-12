@@ -76,7 +76,7 @@ public class GetterMethodDeclaration extends ConcreteMethodDeclaration implement
 
 	public void compile(Context context, ClassFile classFile, Flags flags, CategoryType type, FieldInfo field) {
 		String name = CompilerUtils.getterName(this.getName());
-		Descriptor proto = new Descriptor.Method(field.getType());
+		Descriptor.Method proto = new Descriptor.Method(field.getType());
 		MethodInfo method = classFile.newMethod(name, proto);
 		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
 		context = context.newCategoryContext(type).newChildContext();

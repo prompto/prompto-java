@@ -29,7 +29,7 @@ public class TypeMap extends HashMap<Identifier, IType> {
 		}
 		// second pass: check compatible
 		for(IType t : values()) {
-			if(!t.isAssignableTo(context, type))
+			if(t!=type && !t.isAssignableTo(context, type))
 				throw new SyntaxError("Incompatible types: " + type.getTypeName() + " and " + t.getTypeName());
 		}
 		return type;

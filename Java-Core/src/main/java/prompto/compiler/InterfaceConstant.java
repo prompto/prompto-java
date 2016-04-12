@@ -6,13 +6,18 @@ import prompto.compiler.Descriptor.Method;
 
 public class InterfaceConstant extends MethodConstant {
 
-	public InterfaceConstant(Type klass, String methodName, Type ... params) {
-		super(klass, methodName, params);
+	public InterfaceConstant(Type klass, String methodName, Method descriptor) {
+		super(klass, methodName, descriptor);
 	}
 	
 	public InterfaceConstant(ClassConstant klass, String methodName, Method method) {
 		super(klass, methodName, method);
 	}
+
+	public InterfaceConstant(Type klass, String methodName, Type ... params) {
+		super(klass, methodName, params);
+	}
+	
 
 	public int getArgsCount() {
 		return methodNameAndType.getDescriptor().getTypes().length; // this + args.count - result

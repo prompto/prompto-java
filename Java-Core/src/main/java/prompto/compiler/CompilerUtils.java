@@ -641,7 +641,7 @@ public abstract class CompilerUtils {
 	}
 
 	public static MethodInfo compileEmptyConstructor(ClassFile classFile) {
-		Descriptor proto = new Descriptor.Method(void.class);
+		Descriptor.Method proto = new Descriptor.Method(void.class);
 		MethodInfo method = classFile.newMethod("<init>", proto);
 		method.registerLocal("this", VerifierType.ITEM_UninitializedThis, classFile.getThisClass());
 		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
@@ -652,7 +652,7 @@ public abstract class CompilerUtils {
 	}
 
 	public static MethodInfo compileSuperConstructor(ClassFile classFile, Type paramType) {
-		Descriptor proto = new Descriptor.Method(paramType, void.class);
+		Descriptor.Method proto = new Descriptor.Method(paramType, void.class);
 		MethodInfo method = classFile.newMethod("<init>", proto);
 		method.registerLocal("this", VerifierType.ITEM_UninitializedThis, classFile.getThisClass());
 		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
