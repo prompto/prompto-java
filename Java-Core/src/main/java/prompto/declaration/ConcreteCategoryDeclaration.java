@@ -17,7 +17,7 @@ import prompto.compiler.Descriptor;
 import prompto.compiler.FieldConstant;
 import prompto.compiler.FieldInfo;
 import prompto.compiler.Flags;
-import prompto.compiler.IVerifierEntry;
+import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.IntConstant;
 import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
@@ -692,9 +692,9 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		String name = CompilerUtils.setterName(field.getName().getValue());
 		Descriptor proto = new Descriptor.Method(field.getType(), void.class);
 		MethodInfo method = classFile.newMethod(name, proto);
-		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
+		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
 		ClassConstant fc = new ClassConstant(field.getType());
-		method.registerLocal("%value%", IVerifierEntry.Type.ITEM_Object, fc);
+		method.registerLocal("%value%", VerifierType.ITEM_Object, fc);
 		// store data in field
 		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
 		method.addInstruction(Opcode.ALOAD_1, fc);
@@ -737,7 +737,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		String name = CompilerUtils.getterName(id.toString());
 		Descriptor proto = new Descriptor.Method(field.getType());
 		MethodInfo method = classFile.newMethod(name, proto);
-		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
+		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
 		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
 		FieldConstant f = new FieldConstant(classFile.getThisClass(), id.toString(), field.getType());
 		method.addInstruction(Opcode.GETFIELD, f);
@@ -748,7 +748,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		if(isStorable()) {
 			Descriptor proto = new Descriptor.Method(void.class);
 			MethodInfo method = classFile.newMethod("<init>", proto);
-			method.registerLocal("this", IVerifierEntry.Type.ITEM_UninitializedThis, classFile.getThisClass());
+			method.registerLocal("this", VerifierType.ITEM_UninitializedThis, classFile.getThisClass());
 			// call super()
 			method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
 			MethodConstant m = new MethodConstant(classFile.getSuperClass(), "<init>", void.class);
@@ -766,7 +766,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			return;
 		Descriptor proto = new Descriptor.Method(IStored.class, void.class);
 		MethodInfo method = classFile.newMethod("<init>", proto);
-		method.registerLocal("this", IVerifierEntry.Type.ITEM_UninitializedThis, classFile.getThisClass());
+		method.registerLocal("this", VerifierType.ITEM_UninitializedThis, classFile.getThisClass());
 		// call super()
 		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
 		method.addInstruction(Opcode.ALOAD_1, new ClassConstant(IStored.class));

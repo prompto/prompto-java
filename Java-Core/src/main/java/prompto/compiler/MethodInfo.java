@@ -4,13 +4,13 @@ import java.lang.reflect.Modifier;
 import java.util.LinkedList;
 import java.util.List;
 
-import prompto.compiler.IVerifierEntry.Type;
+import prompto.compiler.IVerifierEntry.VerifierType;
 
 public class MethodInfo {
 	
 	int accessFlags = Modifier.PUBLIC;
 	Utf8Constant name;
-	Utf8Constant proto;
+	Utf8Constant signature;
 	List<IAttribute> attributes = new LinkedList<>();
 	CodeAttribute codeAttribute = null;
 	Descriptor descriptor;
@@ -20,26 +20,38 @@ public class MethodInfo {
 		this.classFile = classFile;
 		this.descriptor = descriptor;
 		this.name = new Utf8Constant(name);
-		this.proto = new Utf8Constant(descriptor.toString());
+		this.signature = new Utf8Constant(descriptor.toString());
 	}
 	
 	public ClassFile getClassFile() {
 		return classFile;
 	}
 
-
 	public Utf8Constant getName() {
 		return name;
 	}
 	
+	public Utf8Constant getSignature() {
+		return signature;
+	}
+	
+	public CodeAttribute getCodeAttribute() {
+		return codeAttribute;
+	}
+
 	@Override
 	public String toString() {
-		return name.toString() + '/' + proto.toString();
+		return name.toString() + '/' + signature.toString();
 	}
 	
 	public void addModifier(int modifier) {
 		accessFlags |= modifier;
 	}
+	
+	public boolean isStatic() {
+		return (accessFlags & Modifier.STATIC) != 0;
+	}
+
 
 	public IInstruction addInstruction(Opcode op, IOperand ... operands) {
 		return addInstruction(new Instruction(op, operands));
@@ -63,7 +75,7 @@ public class MethodInfo {
 		return codeAttribute.inhibitOffsetListener(listener);
 	}
 
-	public StackLocal registerLocal(String name, Type type, ClassConstant className) {
+	public StackLocal registerLocal(String name, VerifierType type, ClassConstant className) {
 		createCodeAttribute();
 		return codeAttribute.registerLocal(type.newStackLocal(name, className));
 	}
@@ -90,7 +102,7 @@ public class MethodInfo {
 		if(DumpLevel.current().ordinal()>0)
 			System.err.println("Registering method: " + this.toString());
 		name.register(pool);
-		proto.register(pool);
+		signature.register(pool);
 		attributes.forEach((a)->
 			a.register(pool));
 	}
@@ -134,10 +146,11 @@ public class MethodInfo {
 		*/
 		writer.writeU2(accessFlags);
 		writer.writeU2(name.getIndexInConstantPool());
-		writer.writeU2(proto.getIndexInConstantPool());
+		writer.writeU2(signature.getIndexInConstantPool());
 		writer.writeU2(attributes.size());
 		attributes.forEach((a)->
 			a.writeTo(writer));
 	}
+
 
 }

@@ -27,7 +27,7 @@ public class IntegerType extends NativeType implements INumberType {
 	}
 	
 	@Override
-	public Type getJavaType() {
+	public Type getJavaType(Context context) {
 		return Long.class;
 	}
 	

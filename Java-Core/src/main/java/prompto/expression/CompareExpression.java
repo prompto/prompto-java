@@ -8,6 +8,7 @@ import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.IInstructionListener;
 import prompto.compiler.IOperatorFunction;
+import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.OffsetListenerConstant;
@@ -16,7 +17,6 @@ import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
 import prompto.compiler.StackState;
 import prompto.compiler.StringConstant;
-import prompto.compiler.IVerifierEntry.Type;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.AttributeInfo;
 import prompto.declaration.TestMethodDeclaration;
@@ -194,12 +194,12 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 		// compile left and store in local
 		IType leftType = this.left.check(context);
 		ResultInfo leftInfo = this.left.compile(context, method, flags.withPrimitive(false));
-		StackLocal left = method.registerLocal("%left%", Type.ITEM_Object, new ClassConstant(leftInfo.getType()));
+		StackLocal left = method.registerLocal("%left%", VerifierType.ITEM_Object, new ClassConstant(leftInfo.getType()));
 		CompilerUtils.compileASTORE(method, left);
 		// compile right and store in local
 		IType rightType = this.right.check(context);
 		ResultInfo rightInfo = this.right.compile(context, method, flags.withPrimitive(false));
-		StackLocal right = method.registerLocal("%right%", Type.ITEM_Object, new ClassConstant(rightInfo.getType()));
+		StackLocal right = method.registerLocal("%right%", VerifierType.ITEM_Object, new ClassConstant(rightInfo.getType()));
 		CompilerUtils.compileASTORE(method, right);
 		// call regular compile
 		IExpression savedLeft = this.left;

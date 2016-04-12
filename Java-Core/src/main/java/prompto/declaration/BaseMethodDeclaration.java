@@ -43,8 +43,8 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	}
 
 	@Override
-	public Type getDeclarationType() {
-		return Type.METHOD;
+	public DeclarationType getDeclarationType() {
+		return DeclarationType.METHOD;
 	}
 	
 	@Override

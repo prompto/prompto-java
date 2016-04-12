@@ -393,7 +393,7 @@ public class Context implements IContext {
 		}
 		
 		@Override
-		public Type getDeclarationType() {
+		public DeclarationType getDeclarationType() {
 			throw new UnsupportedOperationException();
 		}
 		

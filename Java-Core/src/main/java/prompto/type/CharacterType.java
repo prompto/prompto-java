@@ -26,7 +26,7 @@ public class CharacterType extends NativeType {
 	}
 	
 	@Override
-	public Type getJavaType() {
+	public Type getJavaType(Context context) {
 		return java.lang.Character.class;
 	}
 	

@@ -3,7 +3,7 @@ package prompto.statement;
 import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
-import prompto.compiler.IVerifierEntry.Type;
+import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.IntConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
@@ -129,7 +129,7 @@ public class AssignTupleStatement extends SimpleStatement {
 		MethodConstant m = new MethodConstant(PromptoTuple.class, "get", int.class, Object.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 		Identifier name = names.get(i);
-		StackLocal local = method.registerLocal(name.toString(), Type.ITEM_Object, new ClassConstant(Object.class));
+		StackLocal local = method.registerLocal(name.toString(), VerifierType.ITEM_Object, new ClassConstant(Object.class));
 		CompilerUtils.compileASTORE(method, local);
 	}
 

@@ -14,12 +14,12 @@ public abstract class Tags {
 	static final int CONSTANT_Class = 7;
 	static final int CONSTANT_String = 8;
 	static final int CONSTANT_Fieldref = 9;
-	static final int CONSTANT_Methodref = 10;
-	static final int CONSTANT_InterfaceMethodref = 11;
+	public static final int CONSTANT_Methodref = 10;
+	public static final int CONSTANT_InterfaceMethodref = 11;
 	static final int CONSTANT_NameAndType = 12;
 	static final int CONSTANT_MethodHandle = 15;
 	static final int CONSTANT_MethodType = 16;
-	static final int CONSTANT_InvokeDynamic = 18;
+	public static final int CONSTANT_InvokeDynamic = 18;
 	
 	static final int REF_getField = 1;
 	static final int REF_getStatic = 2;

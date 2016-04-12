@@ -3,14 +3,14 @@ package prompto.compiler;
 
 public abstract class StackEntry implements IVerifierEntry {
 
-	Type type;
+	VerifierType type;
 	
-	protected StackEntry(Type type) {
+	protected StackEntry(VerifierType type) {
 		this.type = type;
 	}
 	
 	@Override
-	public Type getType() {
+	public VerifierType getType() {
 		return type;
 	}
 	
@@ -18,7 +18,7 @@ public abstract class StackEntry implements IVerifierEntry {
 
 		ClassConstant className;
 		
-		public ObjectEntry(Type type, ClassConstant className) {
+		public ObjectEntry(VerifierType type, ClassConstant className) {
 			super(type);
 			this.className = className;
 		}
@@ -65,7 +65,7 @@ public abstract class StackEntry implements IVerifierEntry {
 	
 	static class PrimitiveEntry extends StackEntry {
 
-		public PrimitiveEntry(Type type) {
+		public PrimitiveEntry(VerifierType type) {
 			super(type);
 		}
 		
@@ -103,7 +103,7 @@ public abstract class StackEntry implements IVerifierEntry {
 
 		ClassConstant className;
 		
-		public TopEntry(Type type, ClassConstant className) {
+		public TopEntry(VerifierType type, ClassConstant className) {
 			super(type);
 			this.className = className;
 		}

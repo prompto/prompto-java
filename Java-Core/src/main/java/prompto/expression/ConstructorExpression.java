@@ -175,10 +175,12 @@ public class ConstructorExpression implements IExpression {
 	}
 
 	private void compileSetMutable(Context context, MethodInfo method, Flags flags, ResultInfo thisInfo, boolean set) {
-		method.addInstruction(Opcode.DUP); // this
-		method.addInstruction(set ? Opcode.ICONST_1 : Opcode.ICONST_0); 
-		MethodConstant m = new MethodConstant(thisInfo.getType(), "setMutable", boolean.class, void.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+		if(thisInfo.isPromptoCategory()) {
+			method.addInstruction(Opcode.DUP); // this
+			method.addInstruction(set ? Opcode.ICONST_1 : Opcode.ICONST_0); 
+			MethodConstant m = new MethodConstant(thisInfo.getType(), "setMutable", boolean.class, void.class);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+		}
 	}
 
 	private void compileAssignments(Context context, MethodInfo method, Flags flags, ResultInfo thisInfo) {
@@ -194,7 +196,7 @@ public class ConstructorExpression implements IExpression {
 		// get value
 		ResultInfo valueInfo = assignment.getExpression().compile(context, method, flags);
 		// check immutable member
-		if(!type.isMutable() && valueInfo.isCategory()) {
+		if(!type.isMutable() && valueInfo.isPromptoCategory()) {
 			method.addInstruction(Opcode.DUP); 
 			InterfaceConstant m = new InterfaceConstant(IMutable.class, "checkImmutable", void.class);
 			method.addInstruction(Opcode.INVOKEINTERFACE, m);

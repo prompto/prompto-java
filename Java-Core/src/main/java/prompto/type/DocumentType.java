@@ -19,7 +19,7 @@ public class DocumentType extends NativeType {
 	}
 
 	@Override
-	public Type getJavaType() {
+	public Type getJavaType(Context context) {
 		return PromptoDocument.class;
 	}
 	

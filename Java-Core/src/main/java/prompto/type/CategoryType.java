@@ -8,6 +8,7 @@ import java.util.Map;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
+import prompto.compiler.PromptoType;
 import prompto.compiler.ResultInfo;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
@@ -15,6 +16,7 @@ import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.declaration.EnumeratedNativeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
+import prompto.declaration.NativeCategoryDeclaration;
 import prompto.declaration.SingletonCategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -77,8 +79,12 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public Type getJavaType() {
-		return CompilerUtils.getCategoryInterfaceType(getTypeName());
+	public Type getJavaType(Context context) {
+		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, typeNameId);
+		if(decl instanceof NativeCategoryDeclaration)
+			return new PromptoType(((NativeCategoryDeclaration) decl).getBoundClassName());
+		else
+			return CompilerUtils.getCategoryInterfaceType(getTypeName());
 	}
 	
 	@Override

@@ -1,6 +1,6 @@
 package prompto.compiler;
 
-import prompto.compiler.IVerifierEntry.Type;
+import prompto.compiler.IVerifierEntry.VerifierType;
 
 public class ClassConstant implements ICodeConstant, IValueConstant {
 
@@ -13,6 +13,12 @@ public class ClassConstant implements ICodeConstant, IValueConstant {
 		this.className = new Utf8Constant(CompilerUtils.makeClassName(type));
 	}
 
+	@Override
+	public int getTag() {
+		return Tags.CONSTANT_Class;
+	}
+	
+
 	public ClassConstant clone() {
 		return new ClassConstant(this.type);
 	}
@@ -23,7 +29,7 @@ public class ClassConstant implements ICodeConstant, IValueConstant {
 	
 	@Override
 	public StackEntry toStackEntry() {	
-		return Type.ITEM_Object.newStackEntry(this); // for dumping LDC_W <class> opcode
+		return VerifierType.ITEM_Object.newStackEntry(this); // for dumping LDC_W <class> opcode
 	}
 	
 	public ClassConstant toArray() {

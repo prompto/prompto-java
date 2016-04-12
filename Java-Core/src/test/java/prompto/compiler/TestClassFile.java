@@ -1,6 +1,10 @@
 package prompto.compiler;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -24,6 +28,7 @@ import java.security.SecureClassLoader;
 
 import org.junit.Test;
 
+import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.runtime.utils.Out;
 
 public class TestClassFile {
@@ -84,7 +89,7 @@ public class TestClassFile {
 		m.addModifier(Modifier.ABSTRACT);
 		m = c.newMethod("printStatic", proto);
 		m.addModifier(Modifier.STATIC);
-		m.registerLocal("value", IVerifierEntry.Type.ITEM_Object, new ClassConstant(String.class));
+		m.registerLocal("value", VerifierType.ITEM_Object, new ClassConstant(String.class));
 		m.addInstruction(Opcode.RETURN);
 		ByteArrayOutputStream o = new ByteArrayOutputStream();
 		c.writeTo(o);
@@ -108,7 +113,7 @@ public class TestClassFile {
 		Descriptor proto = new Descriptor.Method(String.class, void.class);
 		MethodInfo m = c.newMethod("print", proto);
 		m.addModifier(Modifier.STATIC);
-		m.registerLocal("value", IVerifierEntry.Type.ITEM_Object, new ClassConstant(String.class));
+		m.registerLocal("value", VerifierType.ITEM_Object, new ClassConstant(String.class));
 		m.addInstruction(Opcode.GETSTATIC, new FieldConstant(System.class, "out", PrintStream.class));
 		m.addInstruction(Opcode.ALOAD_0); // the parameter
 		m.addInstruction(Opcode.INVOKEVIRTUAL, new MethodConstant(PrintStream.class, "print", String.class, void.class));
@@ -215,7 +220,7 @@ public class TestClassFile {
 		Descriptor proto = new Descriptor.Method(Object.class, String.class);
 		MethodInfo m = c.newMethod("stringValueOf", proto);
 		m.addModifier(Modifier.STATIC);
-		m.registerLocal("%value%", IVerifierEntry.Type.ITEM_Object, new ClassConstant(Object.class));
+		m.registerLocal("%value%", VerifierType.ITEM_Object, new ClassConstant(Object.class));
 		ExceptionHandler handler = m.registerExceptionHandler(NullPointerException.class);
 		m.activateOffsetListener(handler);
 		m.addInstruction(Opcode.ALOAD_0, new ClassConstant(Object.class)); // the parameter
@@ -223,7 +228,7 @@ public class TestClassFile {
 		m.addInstruction(Opcode.ARETURN, new ClassConstant(String.class));
 		m.inhibitOffsetListener(handler);
 		m.placeExceptionHandler(handler);
-		StackLocal error = m.registerLocal("%error%", IVerifierEntry.Type.ITEM_Object, new ClassConstant(NullPointerException.class));
+		StackLocal error = m.registerLocal("%error%", VerifierType.ITEM_Object, new ClassConstant(NullPointerException.class));
 		m.addInstruction(Opcode.LDC, new StringConstant("Caught!"));
 		m.addInstruction(Opcode.ARETURN, new ClassConstant(String.class));
 		m.unregisterLocal(error);
@@ -247,7 +252,7 @@ public class TestClassFile {
 		Descriptor proto = new Descriptor.Method(Object.class, String.class);
 		MethodInfo m = c.newMethod("stringValueOf", proto);
 		m.addModifier(Modifier.STATIC);
-		m.registerLocal("%value%", IVerifierEntry.Type.ITEM_Object, new ClassConstant(Object.class));
+		m.registerLocal("%value%", VerifierType.ITEM_Object, new ClassConstant(Object.class));
 		CompilerUtils.compileNewInstance(m, UnsupportedOperationException.class);
 		m.addInstruction(Opcode.ATHROW, new ClassConstant(UnsupportedOperationException.class));
 		ByteArrayOutputStream o = new ByteArrayOutputStream();
@@ -284,7 +289,7 @@ public class TestClassFile {
 			Descriptor proto = new Descriptor.Method(String.class, void.class);
 			MethodInfo m = c.newMethod("test", proto);
 			m.addModifier(Modifier.STATIC);
-			m.registerLocal("%value%", IVerifierEntry.Type.ITEM_Object, new ClassConstant(String.class));
+			m.registerLocal("%value%", VerifierType.ITEM_Object, new ClassConstant(String.class));
 			CompilerUtils.compileALOAD(m, "%value%");
 			MethodConstant mc = new MethodConstant(this.getClass(), "bootstrap", 
 					Lookup.class, String.class, MethodType.class, CallSite.class);

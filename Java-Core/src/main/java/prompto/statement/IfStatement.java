@@ -142,7 +142,7 @@ public class IfStatement extends BaseStatement {
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
  		IType result = check(context);
 		compileIfElements(context, method, flags);
-		return new ResultInfo(result.getJavaType());
+		return new ResultInfo(result.getJavaType(context));
 	}
 
 	static class IfElementBranch {

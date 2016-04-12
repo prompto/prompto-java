@@ -109,6 +109,16 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitSetter_method_declaration(@NotNull SParser.Setter_method_declarationContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SParser#native_setter_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterNative_setter_declaration(@NotNull SParser.Native_setter_declarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SParser#native_setter_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitNative_setter_declaration(@NotNull SParser.Native_setter_declarationContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SParser#getter_method_declaration}.
 	 * @param ctx the parse tree
 	 */
@@ -118,6 +128,16 @@ public interface SParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitGetter_method_declaration(@NotNull SParser.Getter_method_declarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SParser#native_getter_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterNative_getter_declaration(@NotNull SParser.Native_getter_declarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SParser#native_getter_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitNative_getter_declaration(@NotNull SParser.Native_getter_declarationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SParser#native_category_declaration}.
 	 * @param ctx the parse tree

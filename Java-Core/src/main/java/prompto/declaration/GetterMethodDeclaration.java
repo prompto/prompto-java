@@ -5,7 +5,7 @@ import prompto.compiler.CompilerUtils;
 import prompto.compiler.Descriptor;
 import prompto.compiler.FieldInfo;
 import prompto.compiler.Flags;
-import prompto.compiler.IVerifierEntry;
+import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.MethodInfo;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
@@ -46,7 +46,7 @@ public class GetterMethodDeclaration extends ConcreteMethodDeclaration implement
 	protected void toEDialect(CodeWriter writer) {
 		writer.append("define ");
 		writer.append(getName());
-		writer.append(" getter doing:\n");
+		writer.append(" as getter doing:\n");
 		writer.indent();
 		statements.toDialect(writer);
 		writer.dedent();
@@ -78,7 +78,7 @@ public class GetterMethodDeclaration extends ConcreteMethodDeclaration implement
 		String name = CompilerUtils.getterName(this.getName());
 		Descriptor proto = new Descriptor.Method(field.getType());
 		MethodInfo method = classFile.newMethod(name, proto);
-		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
+		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
 		context = context.newCategoryContext(type).newChildContext();
 		for(IStatement stmt : statements)
 			stmt.compile(context, method, flags);

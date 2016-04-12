@@ -1,8 +1,7 @@
 package prompto.compiler;
 
 import static org.junit.Assert.*;
-
-import static prompto.compiler.IVerifierEntry.Type.*;
+import static prompto.compiler.IVerifierEntry.VerifierType.*;
 
 import org.junit.Test;
 

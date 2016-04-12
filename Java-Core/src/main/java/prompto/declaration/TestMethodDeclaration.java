@@ -46,8 +46,8 @@ public class TestMethodDeclaration extends BaseDeclaration {
 	}
 	
 	@Override
-	public Type getDeclarationType() {
-		return Type.TEST;
+	public DeclarationType getDeclarationType() {
+		return DeclarationType.TEST;
 	}
 	
 	public StatementList getStatements() {

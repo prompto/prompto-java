@@ -3,7 +3,7 @@ package prompto.instance;
 import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
-import prompto.compiler.IVerifierEntry.Type;
+import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
@@ -52,7 +52,7 @@ public class VariableInstance implements IAssignableInstance {
 	public ResultInfo compileAssignVariable(Context context, MethodInfo method, Flags flags, IExpression expression) {
 		checkAssignValue(context, expression);
 		ResultInfo info = expression.compile(context, method, flags);
-		StackLocal local = method.registerLocal(id.toString(), Type.ITEM_Object, new ClassConstant(info.getType()));
+		StackLocal local = method.registerLocal(id.toString(), VerifierType.ITEM_Object, new ClassConstant(info.getType()));
 		CompilerUtils.compileASTORE(method, local);
 		return new ResultInfo(void.class);
 	}

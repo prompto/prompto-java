@@ -18,7 +18,7 @@ public class DictType extends ContainerType {
 	}
 
 	@Override
-	public Type getJavaType() {
+	public Type getJavaType(Context context) {
 		return PromptoDict.class;
 	}
 	

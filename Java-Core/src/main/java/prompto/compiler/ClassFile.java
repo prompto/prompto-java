@@ -9,6 +9,7 @@ import java.util.List;
 
 public class ClassFile {
 	
+	ConstantsPool constantsPool;
 	ClassConstant thisClass;
 	ClassConstant superClass;
 	List<ClassConstant> interfaces = new ArrayList<>();
@@ -24,6 +25,10 @@ public class ClassFile {
 		this.thisClass = new ClassConstant(thisClassName);
 	}
 
+	public ConstantsPool getConstantsPool() {
+		return constantsPool;
+	}
+	
 	public ClassConstant getThisClass() {
 		return thisClass;
 	}
@@ -41,10 +46,15 @@ public class ClassFile {
 	}
 
 	public void addModifier(int modifier) {
-		if((modifier&Modifier.INTERFACE)!=0)
+		if((modifier & Modifier.INTERFACE)!=0)
 			accessFlags &= ~Tags.ACC_SUPER;
 		accessFlags |= modifier;
 	}
+	
+	public boolean isInterface() {
+		return (accessFlags & Modifier.INTERFACE)!=0;
+	}
+
 	
 	public void addInterface(Type type) {
 		addInterface(new ClassConstant(type));
@@ -62,6 +72,10 @@ public class ClassFile {
 		MethodInfo method = new MethodInfo(this, name, descriptor);
 		methods.add(method);
 		return method;
+	}
+	
+	public List<MethodInfo> getMethods() {
+		return methods;
 	}
 
 	public void addInnerClass(ClassFile classFile) {
@@ -96,9 +110,9 @@ public class ClassFile {
 
 
 	public void writeTo(OutputStream o) throws CompilerException {
-		ConstantsPool constantsPool = registerConstants();
+		constantsPool = registerConstants();
 		ByteWriter writer = new ByteWriter(o);
-		writeTo(writer, constantsPool);
+		writeTo(writer);
 	}
 
 	private ConstantsPool registerConstants() {
@@ -118,7 +132,7 @@ public class ClassFile {
 		return pool;
 	}
 
-	private void writeTo(ByteWriter writer, ConstantsPool constantsPool) throws CompilerException {
+	private void writeTo(ByteWriter writer) throws CompilerException {
 		/*
 		ClassFile {
 		    u4             magic;
@@ -159,6 +173,7 @@ public class ClassFile {
 		attributes.forEach((a)->
 			a.writeTo(writer));
 	}
+
 
 
 }

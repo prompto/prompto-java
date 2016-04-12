@@ -6,7 +6,7 @@ import prompto.compiler.CompilerUtils;
 import prompto.compiler.Descriptor;
 import prompto.compiler.FieldInfo;
 import prompto.compiler.Flags;
-import prompto.compiler.IVerifierEntry;
+import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.MethodInfo;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
@@ -48,7 +48,7 @@ public class SetterMethodDeclaration extends ConcreteMethodDeclaration implement
 	protected void toEDialect(CodeWriter writer) {
 		writer.append("define ");
 		writer.append(getName());
-		writer.append(" setter doing:\n");
+		writer.append(" as setter doing:\n");
 		writer.indent();
 		statements.toDialect(writer);
 		writer.dedent();
@@ -87,9 +87,9 @@ public class SetterMethodDeclaration extends ConcreteMethodDeclaration implement
 		String name = CompilerUtils.setterName(this.getName());
 		Descriptor proto = new Descriptor.Method(field.getType(), void.class);
 		MethodInfo method = classFile.newMethod(name, proto);
-		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
+		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, getId());
-		method.registerLocal(getName(), IVerifierEntry.Type.ITEM_Object, new ClassConstant(field.getType()));
+		method.registerLocal(getName(), VerifierType.ITEM_Object, new ClassConstant(field.getType()));
 		context = context.newCategoryContext(type).newChildContext();
 		context.registerValue(new Variable(getId(), decl.getType()));
 		for(IStatement stmt : statements)

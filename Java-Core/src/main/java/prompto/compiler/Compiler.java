@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.List;
 
 import prompto.argument.IArgument;
+import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.EnumeratedCategoryDeclaration;
@@ -30,6 +31,7 @@ import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.type.IType;
 import prompto.utils.FileUtils;
+import prompto.verifier.ClassVerifier;
 
 public class Compiler {
 
@@ -177,7 +179,7 @@ public class Compiler {
 		method.addInstruction(Opcode.LDC, new IntConstant(decls.size()));
 		method.addInstruction(Opcode.ANEWARRAY, new ClassConstant(MethodHandle.class));
 		// initialize counter
-		method.registerLocal("i", prompto.compiler.IVerifierEntry.Type.ITEM_Integer, null);
+		method.registerLocal("i", VerifierType.ITEM_Integer, null);
 		method.addInstruction(Opcode.ICONST_0); 
 		method.addInstruction(Opcode.ISTORE_0);
 		for(IMethodDeclaration decl : decls) {
@@ -221,9 +223,9 @@ public class Compiler {
 		Descriptor proto = new Descriptor.Method(Lookup.class, String.class, MethodType.class, CallSite.class);
 		MethodInfo method = classFile.newMethod("bootstrap", proto);
 		method.addModifier(Modifier.STATIC);
-		StackLocal lookup = method.registerLocal("lookup", prompto.compiler.IVerifierEntry.Type.ITEM_Object, new ClassConstant(Lookup.class));
-		method.registerLocal("name", prompto.compiler.IVerifierEntry.Type.ITEM_Object, new ClassConstant(String.class));
-		StackLocal type = method.registerLocal("type", prompto.compiler.IVerifierEntry.Type.ITEM_Object, new ClassConstant(MethodType.class));
+		StackLocal lookup = method.registerLocal("lookup", VerifierType.ITEM_Object, new ClassConstant(Lookup.class));
+		method.registerLocal("name", VerifierType.ITEM_Object, new ClassConstant(String.class));
+		StackLocal type = method.registerLocal("type", VerifierType.ITEM_Object, new ClassConstant(MethodType.class));
 		// return PromptoCallSite.bootstrap(lookup, TestCallSite.class, methods, type);
 		CompilerUtils.compileALOAD(method, lookup);
 		method.addInstruction(Opcode.LDC, classFile.getThisClass());
@@ -250,7 +252,7 @@ public class Compiler {
 		StackState state = method.captureStackState();
 		List<IInstructionListener> listeners = new ArrayList<IInstructionListener>();
 		for(int i=0;i<arguments.size();i++) {
-			method.registerLocal("p" + i, prompto.compiler.IVerifierEntry.Type.ITEM_Object, new ClassConstant(Object.class));
+			method.registerLocal("p" + i, VerifierType.ITEM_Object, new ClassConstant(Object.class));
 			method.addInstruction(Opcode.LDC, new ClassConstant(arguments.get(i).getJavaType(context)));
 			CompilerUtils.compileALOAD(method, "p" + i);
 			MethodConstant mc = new MethodConstant(Class.class, "isInstance", Object.class, boolean.class);
@@ -302,6 +304,10 @@ public class Compiler {
 				System.err.println("Writing class file: " + file.getAbsolutePath());
 			try(OutputStream out = new FileOutputStream(file)) {
 				classFile.writeTo(out);
+			}
+			if("true".equals(System.getProperty("prompto-verify-class"))) {
+				ClassVerifier verifier = new ClassVerifier(classFile);
+				verifier.verify();
 			}
 			for(ClassFile inner : classFile.getInnerClasses())
 				writeClassFile(inner);

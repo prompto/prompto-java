@@ -4,16 +4,19 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
+import prompto.compiler.CompilerException;
 import prompto.compiler.Descriptor;
 import prompto.compiler.IConstantOperand;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
+import prompto.compiler.PromptoClassLoader;
 import prompto.compiler.PromptoType;
 import prompto.compiler.ResultInfo;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.NativeCategoryDeclaration;
 import prompto.error.PromptoError;
+import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.runtime.Context;
 import prompto.type.CategoryType;
@@ -51,12 +54,16 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 	
 	@Override
 	public IType check(Context context) {
-		Method method = findMethod(context);
-		if(method==null) {
-			context.getProblemListener().reportUnknownMethod(name, this);
-			return VoidType.instance();
-		} else
-			return new JavaClassType(method.getGenericReturnType());
+		try {
+			Method method = findMethod(context);
+			if(method==null) {
+				context.getProblemListener().reportUnknownMethod(name, this);
+				return VoidType.instance();
+			} else
+				return new JavaClassType(method.getGenericReturnType());
+		} catch(ClassNotFoundException e) {
+			throw new SyntaxError(e.getMessage());
+		}
 	}
 	
 	@Override
@@ -67,14 +74,18 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 		for(JavaExpression arg : arguments)
 			arg.compile(context, method);
 		// write method call
-		Method m = findMethod(context, parentType.getType());
-		Descriptor.Method dm = new Descriptor.Method(m.getParameterTypes(), m.getReturnType());
-		IConstantOperand operand = new MethodConstant(parentType.getType(), m.getName(), dm);
-		if(parentType.isStatic())
-			method.addInstruction(Opcode.INVOKESTATIC, operand);
-		else
-			method.addInstruction(Opcode.INVOKEVIRTUAL, operand);
-		return new ResultInfo(m.getReturnType());
+		try {
+			Method m = findMethod(context, parentType.getType());
+			Descriptor.Method dm = new Descriptor.Method(m.getParameterTypes(), m.getReturnType());
+			IConstantOperand operand = new MethodConstant(parentType.getType(), m.getName(), dm);
+			if(parentType.isStatic())
+				method.addInstruction(Opcode.INVOKESTATIC, operand);
+			else
+				method.addInstruction(Opcode.INVOKEVIRTUAL, operand);
+			return new ResultInfo(m.getReturnType());
+		} catch(ClassNotFoundException e) {
+			throw new CompilerException(e);
+		}
 	}
 	
 	@Override
@@ -82,15 +93,19 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 		Object instance = parent.interpret(context);
 		if(instance instanceof NativeInstance)
 			instance = ((NativeInstance)instance).getInstance();
-		Method method = findMethod(context, instance);
-		Object[] args = evaluate_arguments(context, method);
-		Class<?> klass = instance instanceof Class<?> ? (Class<?>)instance : instance.getClass(); 
-		if(klass==instance)
-			instance = null;
 		try {
-			return method.invoke(instance, args);
-		} catch (IllegalArgumentException | InvocationTargetException | IllegalAccessException e) {
-			throw new RuntimeException(e);
+			Method method = findMethod(context, instance);
+			Object[] args = evaluate_arguments(context, method);
+			Class<?> klass = instance instanceof Class<?> ? (Class<?>)instance : instance.getClass(); 
+			if(klass==instance)
+				instance = null;
+			try {
+				return method.invoke(instance, args);
+			} catch (IllegalArgumentException | InvocationTargetException | IllegalAccessException e) {
+				throw new RuntimeException(e);
+			}
+		} catch(ClassNotFoundException e) {
+			throw new InternalError(e);
 		}
 	}
 	
@@ -113,7 +128,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
         return value;
     }
 
-	public Method findMethod(Context context) {
+	public Method findMethod(Context context) throws ClassNotFoundException {
 		IType type = parent.check(context);
 		if(type==null) {
 			context.getProblemListener().reportUnknownIdentifier(parent.toString(), parent);
@@ -130,10 +145,12 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 			if(named instanceof NativeCategoryDeclaration) 
 				return ((NativeCategoryDeclaration)named).getBoundClass(true);
 		}
-			return type.getJavaType();
+		return type.getJavaType(context);
 	}
 
-	public Method findMethod(Context context, Object instance) {
+	public Method findMethod(Context context, Object instance) throws ClassNotFoundException {
+		if(instance instanceof PromptoType)
+			instance = Class.forName(((PromptoType)instance).getTypeName(), true, PromptoClassLoader.getInstance());
 		if(instance instanceof Class<?>)
 			return findMethod(context, (Class<?>)instance);
 		else
@@ -155,7 +172,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 		int i = 0;
 		try {
 			for(JavaExpression exp  : arguments) {
-				Type argType = exp.check(context).getJavaType();
+				Type argType = exp.check(context).getJavaType(context);
 				if(argType instanceof PromptoType)
 					argType = Class.forName(argType.getTypeName());
 				types[i++] = (Class<?>)argType;
@@ -189,7 +206,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 	}
 	
 	boolean validArgument(Context context, Class<?> klass, JavaExpression argument) {
-		Type argType = argument.check(context).getJavaType();
+		Type argType = argument.check(context).getJavaType(context);
 		if(argType instanceof PromptoType) try {
 			argType = Class.forName(argType.getTypeName());
 		} catch (ClassNotFoundException e) {

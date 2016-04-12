@@ -45,8 +45,8 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	}
 	
 	@Override
-	public Type getDeclarationType() {
-		return Type.CATEGORY;
+	public DeclarationType getDeclarationType() {
+		return DeclarationType.CATEGORY;
 	}
 	
 	public void setStorable(boolean storable) {
@@ -336,9 +336,9 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		operator.registerArguments(local);
 		IType resultType = operator.check(local);
 		String methodName = "operator-" + oper.name();
-		InterfaceConstant c = new InterfaceConstant(left.getType(), methodName, argType.getJavaType(), resultType.getJavaType());
+		InterfaceConstant c = new InterfaceConstant(left.getType(), methodName, argType.getJavaType(context), resultType.getJavaType(context));
 		method.addInstruction(Opcode.INVOKEINTERFACE, c);
-		return new ResultInfo(resultType.getJavaType()); 
+		return new ResultInfo(resultType.getJavaType(context)); 
 	}
 
 	public MethodDeclarationList getLocalMethods() {

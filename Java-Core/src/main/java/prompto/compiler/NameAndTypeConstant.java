@@ -2,6 +2,8 @@ package prompto.compiler;
 
 import java.lang.reflect.Type;
 
+import prompto.compiler.IVerifierEntry.VerifierType;
+
 
 public class NameAndTypeConstant implements ICodeConstant {
 
@@ -15,6 +17,12 @@ public class NameAndTypeConstant implements ICodeConstant {
 		this.name = new Utf8Constant(name);
 		this.type = new Utf8Constant(descriptor.toString());
 	}
+
+	@Override
+	public int getTag() {
+		return Tags.CONSTANT_NameAndType;
+	}
+	
 
 	@Override
 	public String toString() {
@@ -73,7 +81,7 @@ public class NameAndTypeConstant implements ICodeConstant {
 		String descriptor = getDescriptor().getLastDescriptor();
 		if("V".equals(descriptor))
 			return null;
-		IVerifierEntry.Type type = IVerifierEntry.Type.fromDescriptor(descriptor);
+		VerifierType type = VerifierType.fromDescriptor(descriptor);
 		StackEntry entry = type.newStackEntry(null);
 		if(entry instanceof StackEntry.ObjectEntry)
 			((StackEntry.ObjectEntry)entry).setClassName(new ClassConstant(getDescriptor().getLastType()));

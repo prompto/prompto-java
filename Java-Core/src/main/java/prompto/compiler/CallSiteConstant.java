@@ -11,6 +11,13 @@ public class CallSiteConstant implements ICodeConstant {
 		this.bootstrapMethod = bootstrapMethod;
 		this.methodNameAndType = methodNameAndType;
 	}
+	
+	@Override
+	public int getTag() {
+		return Tags.CONSTANT_InvokeDynamic;
+	}
+	
+
 
 	@Override
 	public void register(ConstantsPool pool) {

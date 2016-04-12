@@ -30,7 +30,7 @@ package prompto.compiler;
 
 /** The kind of an instruction, as determined by the position, size and
  *  types of its operands. */
-enum OpcodeKind {
+public enum OpcodeKind {
     /** Opcode is not followed by any operands. */
     NO_OPERANDS(1),
     /** Opcode is followed by a byte indicating a type. */
@@ -71,8 +71,8 @@ enum OpcodeKind {
     /** Opcode was not recognized. */
     UNKNOWN(1);
 
-    final int width;  // opcode length	
-    final int length; // full length in bytes, or -1 if it depends on the instruction
+    public final int width;  // opcode length	
+    public final int length; // full length in bytes, or -1 if it depends on the instruction
 
     OpcodeKind(int length) {
         this(1, length);

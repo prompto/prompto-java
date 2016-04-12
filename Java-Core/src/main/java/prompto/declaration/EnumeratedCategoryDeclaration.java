@@ -42,8 +42,8 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration i
 	}
 	
 	@Override
-	public Type getDeclarationType() {
-		return Type.ENUM;
+	public DeclarationType getDeclarationType() {
+		return DeclarationType.ENUM;
 	}
 	
 	@Override

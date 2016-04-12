@@ -44,7 +44,7 @@ public class TypeExpression implements IExpression {
 
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		StringConstant s = new StringConstant(type.getJavaType().getTypeName());
+		StringConstant s = new StringConstant(type.getJavaType(context).getTypeName());
 		method.addInstruction(Opcode.LDC_W, s);
 		MethodConstant m = new MethodConstant(Class.class, "forName", String.class, Class.class);
 		method.addInstruction(Opcode.INVOKESTATIC, m);

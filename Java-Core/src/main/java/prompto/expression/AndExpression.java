@@ -4,6 +4,7 @@ import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.IInstructionListener;
+import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
@@ -14,7 +15,6 @@ import prompto.compiler.ShortOperand;
 import prompto.compiler.StackLocal;
 import prompto.compiler.StackState;
 import prompto.compiler.StringConstant;
-import prompto.compiler.IVerifierEntry.Type;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -166,13 +166,13 @@ public class AndExpression implements IPredicateExpression, IAssertion {
 		ResultInfo info = this.left.compile(context, method, flags.withPrimitive(true));
 		if(Boolean.class==info.getType())
 			CompilerUtils.BooleanToboolean(method);
-		StackLocal left = method.registerLocal("%left%", Type.ITEM_Integer, new ClassConstant(boolean.class));
+		StackLocal left = method.registerLocal("%left%", VerifierType.ITEM_Integer, new ClassConstant(boolean.class));
 		CompilerUtils.compileISTORE(method, left);
 		// compile right and store in local
 		info = this.right.compile(context, method, flags.withPrimitive(true));
 		if(Boolean.class==info.getType())
 			CompilerUtils.BooleanToboolean(method);
-		StackLocal right = method.registerLocal("%right%", Type.ITEM_Integer, new ClassConstant(boolean.class));
+		StackLocal right = method.registerLocal("%right%", VerifierType.ITEM_Integer, new ClassConstant(boolean.class));
 		CompilerUtils.compileISTORE(method, right);
 		// check success of left and right
 		CompilerUtils.compileILOAD(method, left);

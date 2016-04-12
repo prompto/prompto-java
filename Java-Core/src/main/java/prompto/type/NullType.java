@@ -17,7 +17,7 @@ public class NullType extends BaseType {
 	}
 
 	@Override
-	public Type getJavaType() {
+	public Type getJavaType(Context context) {
 		return null;
 	}
 

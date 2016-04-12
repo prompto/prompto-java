@@ -7,8 +7,10 @@ import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.FieldConstant;
 import prompto.compiler.IOperand;
+import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
+import prompto.compiler.PromptoClassLoader;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.ResultInfo.Flag;
 import prompto.compiler.StackLocal;
@@ -99,9 +101,18 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 	private ResultInfo compile_prompto(Context context, MethodInfo method) {
 		switch(name) {
 		case "$context":
-			throw new UnsupportedOperationException();
+			return compile_prompto_context(context, method);
 		}
 		return null;
+	}
+
+	private ResultInfo compile_prompto_context(Context context, MethodInfo method) {
+		// PromptoClassLoader.getInstance().getContext()
+		MethodConstant m = new MethodConstant(PromptoClassLoader.class, "getInstance", PromptoClassLoader.class);
+		method.addInstruction(Opcode.INVOKESTATIC, m);
+		m = new MethodConstant(PromptoClassLoader.class, "getContext", Context.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+		return new ResultInfo(Context.class);
 	}
 
 	private ResultInfo compile_instance(Context context, MethodInfo method) {
@@ -290,15 +301,15 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 	IType check_child(Context context) {
 		IType t = parent.check(context); 
 		if(t!=null)
-			return check_field(t);
+			return check_field(context, t);
 		else
 			return check_class();
 	}
 	
-	IType check_field(IType t) {
+	IType check_field(Context context, IType t) {
 		if(!(t instanceof JavaClassType))
 			return null;
-		Type klass = t.getJavaType();
+		Type klass = t.getJavaType(context);
 		if(klass instanceof Class) try {
 			Field field = ((Class<?>)klass).getField(name);
 			return new JavaClassType(field.getType());

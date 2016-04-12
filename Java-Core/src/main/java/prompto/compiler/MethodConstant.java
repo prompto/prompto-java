@@ -31,6 +31,19 @@ public class MethodConstant implements ICodeConstant {
 		this.methodNameAndType = nameAndType;
 	}
 
+	@Override
+	public int getTag() {
+		return Tags.CONSTANT_Methodref;
+	}
+	
+	public ClassConstant getClassName() {
+		return className;
+	}
+	
+	public NameAndTypeConstant getMethodNameAndType() {
+		return methodNameAndType;
+	}
+
 	public short getArgumentsCount(boolean isStatic) {
 		return methodNameAndType.getArgumentsCount(isStatic);
 	}

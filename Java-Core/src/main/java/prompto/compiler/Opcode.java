@@ -27,9 +27,11 @@
 package prompto.compiler;
 
 import static prompto.compiler.OpcodeKind.*;
-import static prompto.compiler.IVerifierEntry.Type.*;
 
 import java.util.function.Function;
+
+import prompto.compiler.IVerifierEntry.VerifierType;
+import static prompto.compiler.IVerifierEntry.VerifierType.*;
 
 /**
  * See JVMS, chapter 6.
@@ -43,7 +45,8 @@ import java.util.function.Function;
  *  deletion without notice.</b>
  */
 public enum Opcode {
-    // NOP(0x0),
+	ILLEGAL(0xFF, UNKNOWN, popsNone(), pushesNone()),
+    NOP(0x0, popsNone(), pushesNone()),
     ACONST_NULL(0x1, popsNone(), pushes(ITEM_Null)), 
     ICONST_M1(0x2, popsNone(), pushes(ITEM_Integer)),
     ICONST_0(0x3, popsNone(), pushes(ITEM_Integer)),
@@ -64,10 +67,10 @@ public enum Opcode {
     LDC(0x12, CPREF, popsNone(), pushesConstant()),
     LDC_W(0x13, CPREF_W, popsNone(), pushesConstant()), 
     LDC2_W(0x14, CPREF_W, popsNone(), pushesConstant()),
-    ILOAD(0x15, LOCAL, popsNone(), pushes(ITEM_Integer)) /*,
-    LLOAD(0x16, LOCAL),
-    FLOAD(0x17, LOCAL),
-    DLOAD(0x18, LOCAL) */,
+    ILOAD(0x15, LOCAL, popsNone(), pushes(ITEM_Integer)),
+    LLOAD(0x16, LOCAL, popsNone(), pushes(ITEM_Long)),
+    FLOAD(0x17, LOCAL, popsNone(), pushes(ITEM_Float)),
+    DLOAD(0x18, LOCAL, popsNone(), pushes(ITEM_Double)),
     ALOAD(0x19, LOCAL, popsNone(), pushesObject()),
     ILOAD_0(0x1a, popsNone(), pushes(ITEM_Integer)),
     ILOAD_1(0x1b, popsNone(), pushes(ITEM_Integer)),
@@ -97,10 +100,10 @@ public enum Opcode {
     BALOAD(0x33),
     CALOAD(0x34),
     SALOAD(0x35) */,
-    ISTORE(0x36, LOCAL, pops(1), pushesNone()) /*,
-    LSTORE(0x37, LOCAL),
-    FSTORE(0x38, LOCAL),
-    DSTORE(0x39, LOCAL) */,
+    ISTORE(0x36, LOCAL, pops(1), pushesNone()),
+    LSTORE(0x37, LOCAL, pops(1), pushesNone()),
+    FSTORE(0x38, LOCAL, pops(1), pushesNone()),
+    DSTORE(0x39, LOCAL, pops(1), pushesNone()),
     ASTORE(0x3a, LOCAL, pops(1), pushesNone()),
     ISTORE_0(0x3b, pops(1), pushesNone()),
     ISTORE_1(0x3c, pops(1), pushesNone()),
@@ -240,9 +243,9 @@ public enum Opcode {
     MONITORENTER(0xc2, pops(1), pushesNone()),
     MONITOREXIT(0xc3, pops(1), pushesNone())/*,
     // wide 0xc4
-    MULTIANEWARRAY(0xc5, CPREF_W_UBYTE),
-    IFNULL(0xc6, BRANCH),
-    IFNONNULL(0xc7, BRANCH),
+    MULTIANEWARRAY(0xc5, CPREF_W_UBYTE)*/,
+    IFNULL(0xc6, BRANCH, pops(1), pushesNone()),
+    IFNONNULL(0xc7, BRANCH, pops(1), pushesNone())/*,
     GOTO_W(0xc8, BRANCH_W),
     JSR_W(0xc9, BRANCH_W),
 
@@ -373,7 +376,7 @@ public enum Opcode {
     	};
     }
     
-    static Pusher pushes(IVerifierEntry.Type e) {
+    static Pusher pushes(VerifierType e) {
     	return new Pusher() {
     		@Override public StackEntry[] apply(Instruction i, StackEntry[] popped) {
     			return new StackEntry[] { e.newStackEntry(null) };
@@ -414,7 +417,7 @@ public enum Opcode {
     
     /** Get the Opcode for a simple standard 1-byte opcode. */
     public static Opcode get(byte opcode) {
-        return stdOpcodes[opcode];
+        return stdOpcodes[opcode & 0xFF];
     }
 
     /** Get the Opcode for 1- or 2-byte opcode. */

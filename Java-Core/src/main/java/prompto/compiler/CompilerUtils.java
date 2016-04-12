@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.declaration.AttributeInfo;
 import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
@@ -100,7 +101,7 @@ public abstract class CompilerUtils {
 		List<Type> argTypes = new ArrayList<>();
 		arguments.forEach((arg)->
 			argTypes.add(arg.getJavaType(context)));
-		return new Descriptor.Method(argTypes.toArray(new Type[argTypes.size()]), returnType.getJavaType());
+		return new Descriptor.Method(argTypes.toArray(new Type[argTypes.size()]), returnType.getJavaType(context));
 	}
 
 	public static String createProto(Type[] parameterTypes, Type returnType) {
@@ -642,7 +643,7 @@ public abstract class CompilerUtils {
 	public static MethodInfo compileEmptyConstructor(ClassFile classFile) {
 		Descriptor proto = new Descriptor.Method(void.class);
 		MethodInfo method = classFile.newMethod("<init>", proto);
-		method.registerLocal("this", IVerifierEntry.Type.ITEM_UninitializedThis, classFile.getThisClass());
+		method.registerLocal("this", VerifierType.ITEM_UninitializedThis, classFile.getThisClass());
 		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
 		MethodConstant m = new MethodConstant(classFile.getSuperClass(), "<init>", void.class);
 		method.addInstruction(Opcode.INVOKESPECIAL, m);
@@ -653,7 +654,7 @@ public abstract class CompilerUtils {
 	public static MethodInfo compileSuperConstructor(ClassFile classFile, Type paramType) {
 		Descriptor proto = new Descriptor.Method(paramType, void.class);
 		MethodInfo method = classFile.newMethod("<init>", proto);
-		method.registerLocal("this", IVerifierEntry.Type.ITEM_UninitializedThis, classFile.getThisClass());
+		method.registerLocal("this", VerifierType.ITEM_UninitializedThis, classFile.getThisClass());
 		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
 		method.addInstruction(Opcode.ALOAD_1, new ClassConstant(paramType));
 		MethodConstant m = new MethodConstant(classFile.getSuperClass(), "<init>", paramType, void.class);

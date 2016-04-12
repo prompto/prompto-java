@@ -22,7 +22,7 @@ public class EntryType extends BaseType {
 	}
 
 	@Override
-	public Type getJavaType() {
+	public Type getJavaType(Context context) {
 		return PromptoDict.Entry.class;
 	}
 

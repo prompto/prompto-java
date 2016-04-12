@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
@@ -85,7 +86,7 @@ public class JavaStatement {
 		return map;
 	}
 
-	public ResultInfo compile(Context context, MethodInfo method) {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		ResultInfo info = expression.compile(context, method);
 		if(isReturn) {
 			if(info.getType()==void.class)
@@ -94,7 +95,8 @@ public class JavaStatement {
 			Function<MethodInfo, ResultInfo> converter = resultConverters.get(info.getType());
 			if(converter!=null)
 				info = converter.apply(method);
-			method.addInstruction(Opcode.ARETURN);
+			if(flags.setter()==null && flags.getter()==null)
+				method.addInstruction(Opcode.ARETURN);
 			return info;
 		} else if(info.getType()!=void.class) {
 			Function<MethodInfo, ResultInfo> consumer = resultConsumers.get(info.getType());

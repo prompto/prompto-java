@@ -2,17 +2,17 @@ package prompto.compiler;
 
 public abstract class StackLocal implements IVerifierEntry {
 
-	Type type;
+	VerifierType type;
 	String name;
 	short index = -1;
 	
-	public StackLocal(Type type, String name) {
+	public StackLocal(VerifierType type, String name) {
 		this.type = type;
 		this.name = name;
 	}
 	
 	@Override
-	public Type getType() {
+	public VerifierType getType() {
 		return type;
 	}
 	
@@ -35,7 +35,7 @@ public abstract class StackLocal implements IVerifierEntry {
 		ClassConstant className;
 		ClassConstant downcastTo;
 		
-		public ObjectLocal(Type type, String name, ClassConstant className) {
+		public ObjectLocal(VerifierType type, String name, ClassConstant className) {
 			super(type, name);
 			this.className = className;
 		}
@@ -96,7 +96,7 @@ public abstract class StackLocal implements IVerifierEntry {
 	static class ThisLocal extends ObjectLocal {
 
 		public ThisLocal(ClassConstant className) {
-			super(Type.ITEM_UninitializedThis, "this", className);
+			super(VerifierType.ITEM_UninitializedThis, "this", className);
 		}
 		
 		@Override
@@ -113,7 +113,7 @@ public abstract class StackLocal implements IVerifierEntry {
 	static class TopLocal extends ObjectLocal {
 
 		public TopLocal(String name, ClassConstant className) {
-			super(Type.ITEM_Top, name, className);
+			super(VerifierType.ITEM_Top, name, className);
 		}
 		
 		@Override
@@ -129,7 +129,7 @@ public abstract class StackLocal implements IVerifierEntry {
 	
 	static class PrimitiveLocal extends StackLocal{
 
-		public PrimitiveLocal(Type type, String name) {
+		public PrimitiveLocal(VerifierType type, String name) {
 			super(type, name);
 		}
 		

@@ -1,5 +1,6 @@
 package prompto.compiler;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,6 +117,13 @@ public class StackMapTableAttribute implements IAttribute {
 		}
 		labels.forEach((l)->
 			l.writeTo(writer));
+	}
+
+	public byte[] getData() {
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		ByteWriter writer = new ByteWriter(output);
+		writeTo(writer);
+		return output.toByteArray();
 	}
 
 

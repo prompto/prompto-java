@@ -8,7 +8,7 @@ import prompto.argument.IArgument;
 import prompto.compiler.ClassFile;
 import prompto.compiler.CompilerException;
 import prompto.compiler.Flags;
-import prompto.compiler.IVerifierEntry;
+import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.error.PromptoError;
@@ -194,7 +194,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		if(Modifier.isAbstract(classFile.getModifiers())) // TODO find a more accurate way
 			method.addModifier(Modifier.STATIC); // otherwise it's a member method
 		else 
-			method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
+			method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
 		arguments.forEach((arg)->
 			arg.registerLocal(context, method, new Flags()));
 		arguments.forEach((arg)->

@@ -4,10 +4,10 @@ import java.util.Iterator;
 
 import prompto.compiler.ByteOperand;
 import prompto.compiler.ClassConstant;
+import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.IInstructionListener;
-import prompto.compiler.IVerifierEntry.Type;
-import prompto.compiler.CompilerUtils;
+import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
@@ -195,11 +195,11 @@ public class ForEachStatement extends BaseStatement {
 	}
 
 	private ResultInfo compileWithIndex(Context context, MethodInfo method, Flags flags) {
-		java.lang.reflect.Type itemClass = source.check(context).checkIterator(context).getJavaType();
+		java.lang.reflect.Type itemClass = source.check(context).checkIterator(context).getJavaType(context);
 		StackLocal iterLocal = compileIterator(context, method, flags);
 		StackLocal v1Local = compileInitCounter(method);
 		// local needs to be ITEM_Top because that's what the verifier infers from INVOKEINTERFACE on Iterator.next
-		StackLocal v2Local = method.registerLocal(v2.toString(), Type.ITEM_Top, new ClassConstant(itemClass));
+		StackLocal v2Local = method.registerLocal(v2.toString(), VerifierType.ITEM_Top, new ClassConstant(itemClass));
 		StackState iteratorState = method.captureStackState();
 		IInstructionListener test = method.addOffsetListener(new OffsetListenerConstant());
 		method.activateOffsetListener(test);
@@ -249,7 +249,7 @@ public class ForEachStatement extends BaseStatement {
 	}
 
 	private StackLocal compileInitCounter(MethodInfo method) {
-		StackLocal local = method.registerLocal(v1.toString(), Type.ITEM_Object, new ClassConstant(Long.class));
+		StackLocal local = method.registerLocal(v1.toString(), VerifierType.ITEM_Object, new ClassConstant(Long.class));
 		method.addInstruction(Opcode.LCONST_0);
 		compileStoreCounter(method, local);
 		return local;
@@ -262,10 +262,10 @@ public class ForEachStatement extends BaseStatement {
 	}
 
 	private ResultInfo compileWithoutIndex(Context context, MethodInfo method, Flags flags) {
-		java.lang.reflect.Type itemClass = source.check(context).checkIterator(context).getJavaType();
+		java.lang.reflect.Type itemClass = source.check(context).checkIterator(context).getJavaType(context);
 		StackLocal iterLocal = compileIterator(context, method, flags);
 		// local needs to be ITEM_Top because that's what the verifier infers from INVOKEINTERFACE on Iterator.next
-		StackLocal v1Local = method.registerLocal(v1.toString(), Type.ITEM_Top, new ClassConstant(itemClass));
+		StackLocal v1Local = method.registerLocal(v1.toString(), VerifierType.ITEM_Top, new ClassConstant(itemClass));
 		StackState iteratorState = method.captureStackState();
 		IInstructionListener test = method.addOffsetListener(new OffsetListenerConstant());
 		method.activateOffsetListener(test);
@@ -302,7 +302,7 @@ public class ForEachStatement extends BaseStatement {
 		source.compile(context, method, flags);
 		InterfaceConstant m = new InterfaceConstant(Iterable.class, "iterator", Iterator.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, m);
-		StackLocal iterLocal = method.registerLocal("%iter%", Type.ITEM_Object, new ClassConstant(Iterator.class));
+		StackLocal iterLocal = method.registerLocal("%iter%", VerifierType.ITEM_Object, new ClassConstant(Iterator.class));
 		method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)iterLocal.getIndex()), new ClassConstant(Iterator.class));
 		return iterLocal;
 	}

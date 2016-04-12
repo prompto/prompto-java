@@ -208,6 +208,12 @@ public class CodeAttribute implements IAttribute {
 		return other;
 	}
 	
+	public void unregisterLocal(StackLocal local) {
+		// TODO manage code range
+		locals.unregisterLocal(local);
+		instructions.add(new PopLocalInstruction(local));
+	}
+
 	public StackLocal getRegisteredLocal(String name) {
 		// TODO manage code range
 		return locals.getRegisteredLocal(name);
@@ -227,13 +233,6 @@ public class CodeAttribute implements IAttribute {
 		}
 
 	}
-
-	public void unregisterLocal(StackLocal local) {
-		// TODO manage code range
-		instructions.add(new PopLocalInstruction(local));
-	}
-
-
 
 	@Override
 	public void register(ConstantsPool pool) {
@@ -295,7 +294,11 @@ public class CodeAttribute implements IAttribute {
 			opcodes = createOpcodes();
 		return 2 + 2 + 4 + opcodes.length + 2 + handlersLength() + 2 + attributesLength();
 	}
-
+	
+	public byte[] getOpcodes() {
+		return opcodes;
+	}
+	
 	@Override
 	public void writeTo(ByteWriter writer) {
 		/*
@@ -329,5 +332,6 @@ public class CodeAttribute implements IAttribute {
 		attributes.forEach((a)->
 			a.writeTo(writer));
 	}
+
 
 }

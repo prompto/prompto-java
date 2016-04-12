@@ -12,7 +12,7 @@ import prompto.compiler.Descriptor;
 import prompto.compiler.FieldConstant;
 import prompto.compiler.FieldInfo;
 import prompto.compiler.Flags;
-import prompto.compiler.IVerifierEntry;
+import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -57,8 +57,8 @@ public class AttributeDeclaration extends BaseDeclaration {
 	}
 
 	@Override
-	public Type getDeclarationType() {
-		return Type.ATTRIBUTE;
+	public DeclarationType getDeclarationType() {
+		return DeclarationType.ATTRIBUTE;
 	}
 	
 	@Override
@@ -163,7 +163,7 @@ public class AttributeDeclaration extends BaseDeclaration {
 	}
 
 	public FieldInfo toFieldInfo(Context context) {
-		return new FieldInfo(getName(), type.getJavaType());
+		return new FieldInfo(getName(), type.getJavaType(context));
 	}
 
 	public ClassFile compile(Context context, String fullName) {
@@ -184,8 +184,8 @@ public class AttributeDeclaration extends BaseDeclaration {
 			String checkerName = CompilerUtils.checkerName(field.getName().getValue());
 			Descriptor proto = new Descriptor.Method(field.getType(), void.class);
 			MethodInfo method = classFile.newMethod(checkerName, proto);
-			method.registerLocal("this", prompto.compiler.IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
-			method.registerLocal("value", prompto.compiler.IVerifierEntry.Type.ITEM_Object, new ClassConstant(field.getType()));
+			method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
+			method.registerLocal("value", VerifierType.ITEM_Object, new ClassConstant(field.getType()));
 			constraint.compile(context, method, new Flags());
 			method.addInstruction(Opcode.RETURN);
 		}
@@ -212,13 +212,13 @@ public class AttributeDeclaration extends BaseDeclaration {
 		Descriptor proto = new Descriptor.Method(field.getType(), void.class);
 		MethodInfo method = classFile.newMethod("<init>", proto);
 		// call super()
-		StackLocal local = method.registerLocal("this", IVerifierEntry.Type.ITEM_UninitializedThis, classFile.getThisClass());
+		StackLocal local = method.registerLocal("this", VerifierType.ITEM_UninitializedThis, classFile.getThisClass());
 		CompilerUtils.compileALOAD(method, local);
 		MethodConstant m = new MethodConstant(classFile.getSuperClass(), "<init>", void.class);
 		method.addInstruction(Opcode.INVOKESPECIAL, m);
 		// call setter
 		CompilerUtils.compileALOAD(method, local);
-		StackLocal value = method.registerLocal("%value%", prompto.compiler.IVerifierEntry.Type.ITEM_Object, new ClassConstant(field.getType()));
+		StackLocal value = method.registerLocal("%value%", VerifierType.ITEM_Object, new ClassConstant(field.getType()));
 		CompilerUtils.compileALOAD(method, value);
 		String setterName = CompilerUtils.setterName(field.getName().getValue());
 		m = new MethodConstant(classFile.getThisClass(), setterName, field.getType(), void.class);
@@ -231,8 +231,8 @@ public class AttributeDeclaration extends BaseDeclaration {
 		String setterName = CompilerUtils.setterName(field.getName().getValue());
 		Descriptor proto = new Descriptor.Method(field.getType(), void.class);
 		MethodInfo method = classFile.newMethod(setterName, proto);
-		StackLocal local = method.registerLocal("this", prompto.compiler.IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
-		StackLocal value = method.registerLocal("%value%", prompto.compiler.IVerifierEntry.Type.ITEM_Object, new ClassConstant(field.getType()));
+		StackLocal local = method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
+		StackLocal value = method.registerLocal("%value%", VerifierType.ITEM_Object, new ClassConstant(field.getType()));
 		if(constraint!=null) {
 			CompilerUtils.compileALOAD(method, local);
 			CompilerUtils.compileALOAD(method, value);
@@ -251,7 +251,7 @@ public class AttributeDeclaration extends BaseDeclaration {
 		String getterName = CompilerUtils.getterName(field.getName().getValue());
 		Descriptor proto = new Descriptor.Method(field.getType());
 		MethodInfo method = classFile.newMethod(getterName, proto);
-		StackLocal local = method.registerLocal("this", prompto.compiler.IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
+		StackLocal local = method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
 		CompilerUtils.compileALOAD(method, local);
 		FieldConstant fc = new FieldConstant(classFile.getThisClass(), field.getName().getValue(), field.getType());
 		method.addInstruction(Opcode.GETFIELD, fc);

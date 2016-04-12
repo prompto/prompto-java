@@ -138,7 +138,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		NameAndTypeConstant nameAndType = new NameAndTypeConstant(methodName, descriptor);
 		CallSiteConstant constant = new CallSiteConstant(bsm, nameAndType);
 		method.addInstruction(Opcode.INVOKEDYNAMIC, constant);
-		return new ResultInfo(returnType.getJavaType());
+		return new ResultInfo(returnType.getJavaType(context));
 	}
 
 	private ResultInfo compileDynamicImplicitMember(Context context, MethodInfo method, Flags flags, 
@@ -162,7 +162,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getArguments(), returnType);
 		MethodConstant constant = new MethodConstant(classType, methodName, descriptor);
 		method.addInstruction(Opcode.INVOKESTATIC, constant);
-		return new ResultInfo(returnType.getJavaType());
+		return new ResultInfo(returnType.getJavaType(context));
 	}
 
 	private ResultInfo compileExactImplicitMember(Context context, MethodInfo method, Flags flags, 
@@ -189,7 +189,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 			MethodConstant constant = new MethodConstant(parentClass, declaration.getName(), descriptor);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, constant);
 		}
-		return new ResultInfo(returnType.getJavaType());
+		return new ResultInfo(returnType.getJavaType(context));
 	}
 	
 	private ResultInfo compileExactStaticMember(Context context, MethodInfo method, Flags flags, 
@@ -204,7 +204,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getArguments(), returnType);
 		MethodConstant constant = new MethodConstant(parentClass, declaration.getName(), descriptor);
 		method.addInstruction(Opcode.INVOKESTATIC, constant);
-		return new ResultInfo(returnType.getJavaType());
+		return new ResultInfo(returnType.getJavaType(context));
 	}
 
 	private Type getSingletonType(Context context, IExpression parent) {

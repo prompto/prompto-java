@@ -64,7 +64,7 @@ public interface IType {
 	default Identifier getTypeNameId() {
 		return new Identifier(getTypeName());
 	}
-	Type getJavaType();
+	Type getJavaType(Context context);
 
 	IType checkAdd(Context context, IType other, boolean tryReverse);
 	IType checkSubstract(Context context, IType other);

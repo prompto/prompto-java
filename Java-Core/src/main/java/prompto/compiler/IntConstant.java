@@ -1,6 +1,6 @@
 package prompto.compiler;
 
-import prompto.compiler.IVerifierEntry.Type;
+import prompto.compiler.IVerifierEntry.VerifierType;
 
 public class IntConstant implements IValueConstant {
 	
@@ -12,8 +12,14 @@ public class IntConstant implements IValueConstant {
 	}
 
 	@Override
+	public int getTag() {
+		return Tags.CONSTANT_Integer;
+	}
+	
+
+	@Override
 	public StackEntry toStackEntry() {
-		return Type.ITEM_Integer.newStackEntry(null);
+		return VerifierType.ITEM_Integer.newStackEntry(null);
 	}
 	
 	@Override

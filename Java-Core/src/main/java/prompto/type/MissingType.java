@@ -18,7 +18,7 @@ public class MissingType extends NativeType {
 	}
 	
 	@Override
-	public Type getJavaType() {
+	public Type getJavaType(Context context) {
 		return Object.class;
 	}
 

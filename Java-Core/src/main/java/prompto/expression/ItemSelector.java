@@ -6,7 +6,9 @@ import java.util.Map;
 
 import prompto.compiler.ClassConstant;
 import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
 import prompto.compiler.IOperatorFunction;
+import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
@@ -22,7 +24,6 @@ import prompto.intrinsic.PromptoTuple;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.value.Any;
 import prompto.value.Dictionary;
 import prompto.value.IContainer;
 import prompto.value.IValue;
@@ -92,10 +93,17 @@ public class ItemSelector extends SelectorExpression {
 		map.put(PromptoTuple.class, TupleValue::compileItem);
 		map.put(PromptoSet.class, SetValue::compileItem);
 		map.put(PromptoList.class, ListValue::compileItem);
-		map.put(PromptoAny.class, Any::compileItem);
+		map.put(PromptoAny.class, ItemSelector::compileAnyItem);
 		return map;
 	}
 	
+	public static ResultInfo compileAnyItem(Context context, MethodInfo method, Flags flags, ResultInfo parentInfo, IExpression expression) {
+		expression.compile(context, method, flags);
+		IOperand oper = new MethodConstant(PromptoAny.class, "getItem", Object.class, Object.class, Object.class);
+		method.addInstruction(Opcode.INVOKESTATIC, oper);
+		return new ResultInfo(PromptoAny.class);
+	}
+
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		IType type = check(context);
@@ -103,7 +111,7 @@ public class ItemSelector extends SelectorExpression {
 		ResultInfo itemInfo = compileGetItem(context, method, flags, parentInfo, item);
 		if(Object.class==itemInfo.getType()) {
 			// need to downcast
-			Type klass = type.getJavaType();
+			Type klass = type.getJavaType(context);
 			ClassConstant c = new ClassConstant(klass);
 			method.addInstruction(Opcode.CHECKCAST, c);
 			return new ResultInfo(klass);

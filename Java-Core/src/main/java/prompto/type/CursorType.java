@@ -13,7 +13,7 @@ public class CursorType extends IterableType {
 	}
 	
 	@Override
-	public Type getJavaType() {
+	public Type getJavaType(Context context) {
 		return Cursor.class;
 	}
 	

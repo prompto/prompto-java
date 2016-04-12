@@ -45,8 +45,8 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration implements IEnu
 	}
 	
 	@Override
-	public Type getDeclarationType() {
-		return Type.ENUM;
+	public DeclarationType getDeclarationType() {
+		return DeclarationType.ENUM;
 	}
 	
 	@Override
@@ -173,12 +173,12 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration implements IEnu
 			compileSymbolField(context, classFile, flags, s));
 	}
 
-	private java.lang.reflect.Type getSymbolJavaType() {
-		return type.getDerivedFrom().getJavaType();
+	private java.lang.reflect.Type getSymbolJavaType(Context context) {
+		return type.getDerivedFrom().getJavaType(context);
 	}
 	
 	private void compileSymbolField(Context context, ClassFile classFile, Flags flags, Symbol s) {
-		FieldInfo field = new FieldInfo(s.getName(), getSymbolJavaType());
+		FieldInfo field = new FieldInfo(s.getName(), getSymbolJavaType(context));
 		field.clearModifier(Modifier.PROTECTED);
 		field.addModifier(Modifier.STATIC | Modifier.PUBLIC);
 		classFile.addField(field);
@@ -195,7 +195,7 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration implements IEnu
 	
 	private void compilePopulateSymbolField(Context context, MethodInfo method, Flags flags, Symbol s) {
 		s.compile(context, method, flags);
-		FieldConstant f = new FieldConstant(method.getClassFile().getThisClass(), s.getName(), getSymbolJavaType());
+		FieldConstant f = new FieldConstant(method.getClassFile().getThisClass(), s.getName(), getSymbolJavaType(context));
 		method.addInstruction(Opcode.PUTSTATIC, f);
 	}
 
@@ -205,7 +205,7 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration implements IEnu
 		MethodConstant m = new MethodConstant(ArrayList.class, "add", Object.class, boolean.class);
 		for(NativeSymbol s : getSymbols()) {
 			method.addInstruction(Opcode.DUP);
-			FieldConstant f = new FieldConstant(thisClass, s.getName(), getSymbolJavaType());
+			FieldConstant f = new FieldConstant(thisClass, s.getName(), getSymbolJavaType(context));
 			method.addInstruction(Opcode.GETSTATIC, f);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 			method.addInstruction(Opcode.POP); // ignore returned boolean

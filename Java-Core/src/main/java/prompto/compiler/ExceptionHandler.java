@@ -3,6 +3,7 @@ package prompto.compiler;
 import java.lang.reflect.Type;
 
 import prompto.compiler.CodeAttribute.CaptureStackState;
+import prompto.compiler.IVerifierEntry.VerifierType;
 
 public class ExceptionHandler implements IInstructionListener {
 
@@ -63,7 +64,7 @@ public class ExceptionHandler implements IInstructionListener {
 		if(this.state==capture.getState()) {
 			this.state.pushEntry(
 					new StackEntry.ObjectEntry(
-							prompto.compiler.IVerifierEntry.Type.ITEM_Object, 
+							VerifierType.ITEM_Object, 
 								exception));
 		}
 	}

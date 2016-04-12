@@ -8,6 +8,7 @@ import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.IInstructionListener;
 import prompto.compiler.IOperatorFunction;
+import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
@@ -18,7 +19,6 @@ import prompto.compiler.ShortOperand;
 import prompto.compiler.StackLocal;
 import prompto.compiler.StackState;
 import prompto.compiler.StringConstant;
-import prompto.compiler.IVerifierEntry.Type;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.AttributeInfo;
 import prompto.declaration.TestMethodDeclaration;
@@ -35,6 +35,7 @@ import prompto.intrinsic.PromptoPeriod;
 import prompto.intrinsic.PromptoRange;
 import prompto.intrinsic.PromptoSet;
 import prompto.intrinsic.PromptoTime;
+import prompto.literal.NullLiteral;
 import prompto.runtime.Context;
 import prompto.runtime.LinkedValue;
 import prompto.runtime.LinkedVariable;
@@ -186,7 +187,7 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 			Identifier name = readLeftName();
 			if(name!=null) {
 				IType type = ((TypeExpression)right).getType();
-				ClassConstant c = new ClassConstant(type.getJavaType());
+				ClassConstant c = new ClassConstant(type.getJavaType(context));
 				StackLocal local = method.getRegisteredLocal(name.toString());
 				((StackLocal.ObjectLocal)local).markForAutodowncast(c);
 				return downCastForCheck(context);
@@ -238,12 +239,12 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 		// compile left and store in local
 		IType leftType = this.left.check(context);
 		ResultInfo leftInfo = this.left.compile(context, method, flags.withPrimitive(false));
-		StackLocal left = method.registerLocal("%left%", Type.ITEM_Object, new ClassConstant(leftInfo.getType()));
+		StackLocal left = method.registerLocal("%left%", VerifierType.ITEM_Object, new ClassConstant(leftInfo.getType()));
 		CompilerUtils.compileASTORE(method, left);
 		// compile right and store in local
 		IType rightType = this.right.check(context);
 		ResultInfo rightInfo = this.right.compile(context, method, flags.withPrimitive(false));
-		StackLocal right = method.registerLocal("%right%", Type.ITEM_Object, new ClassConstant(rightInfo.getType()));
+		StackLocal right = method.registerLocal("%right%", VerifierType.ITEM_Object, new ClassConstant(rightInfo.getType()));
 		CompilerUtils.compileASTORE(method, right);
 		// call regular compile
 		IExpression savedLeft = this.left;
@@ -269,15 +270,14 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 		message = test.buildFailureMessagePrefix(message);
 		method.addInstruction(Opcode.LDC, new StringConstant(message));
 		CompilerUtils.compileALOAD(method, left);
-		MethodConstant toString = new MethodConstant(leftInfo.getType(), "toString", String.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, toString);
+		MethodConstant stringValueOf = new MethodConstant(String.class, "valueOf", Object.class, String.class);
+		method.addInstruction(Opcode.INVOKESTATIC, stringValueOf);
 		MethodConstant concat = new MethodConstant(String.class, "concat", String.class, String.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, concat);
 		method.addInstruction(Opcode.LDC, new StringConstant(" " + operator.toString(test.getDialect()) + " "));
 		method.addInstruction(Opcode.INVOKEVIRTUAL, concat);
 		CompilerUtils.compileALOAD(method, right);
-		toString = new MethodConstant(rightInfo.getType(), "toString", String.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, toString);
+		method.addInstruction(Opcode.INVOKESTATIC, stringValueOf);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, concat);
 		test.compileFailure(context, method, flags);
 		// success/final
@@ -419,24 +419,47 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 	}
 
 	public ResultInfo compileIs(Context context, MethodInfo method, Flags flags) {
-		left.compile(context, method, flags.withPrimitive(false));
-		right.compile(context, method, flags.withPrimitive(false));
-		Opcode opcode = flags.isReverse() ? Opcode.IF_ACMPNE : Opcode.IF_ACMPEQ;
-		method.addInstruction(opcode, new ShortOperand((short)7));
-		StackState branchState = method.captureStackState();
-		method.addInstruction(Opcode.ICONST_0);
-		method.addInstruction(Opcode.GOTO, new ShortOperand((short)4));
-		method.restoreFullStackState(branchState);
-		method.placeLabel(branchState);
-		method.addInstruction(Opcode.ICONST_1);
-		StackState lastState = method.captureStackState();
-		method.placeLabel(lastState);
+		if(left.equals(right)) 
+			method.addInstruction(flags.isReverse() ? Opcode.ICONST_0 : Opcode.ICONST_1);
+		else if(left instanceof NullLiteral)
+			compileIsNull(context, method, flags, right);
+		else if(right instanceof NullLiteral)
+			compileIsNull(context, method, flags, left);
+		else 
+			compileIsInstance(context, method, flags);
 		if(flags.toPrimitive())
 			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
 	}
 	
+	private void compileIsNull(Context context, MethodInfo method, Flags flags, IExpression value) {
+		StackState initialState = method.captureStackState();
+		value.compile(context, method, flags.withPrimitive(false));
+		Opcode opcode = flags.isReverse() ? Opcode.IFNONNULL : Opcode.IFNULL;
+		method.addInstruction(opcode, new ShortOperand((short)7));
+		compileIsEpilogue(context, method, flags, initialState);
+	}
+
+	private void compileIsEpilogue(Context context, MethodInfo method, Flags flags, StackState initialState) {
+		method.addInstruction(Opcode.ICONST_0);
+		method.addInstruction(Opcode.GOTO, new ShortOperand((short)4));
+		method.restoreFullStackState(initialState);
+		method.placeLabel(initialState);
+		method.addInstruction(Opcode.ICONST_1);
+		StackState lastState = method.captureStackState();
+		method.placeLabel(lastState);
+	}
+
+	private void compileIsInstance(Context context, MethodInfo method, Flags flags) {
+		StackState initialState = method.captureStackState();
+		left.compile(context, method, flags.withPrimitive(false));
+		right.compile(context, method, flags.withPrimitive(false));
+		Opcode opcode = flags.isReverse() ? Opcode.IF_ACMPNE : Opcode.IF_ACMPEQ;
+		method.addInstruction(opcode, new ShortOperand((short)7));
+		compileIsEpilogue(context, method, flags, initialState);
+	}
+
 	public ResultInfo compileEquals(Context context, MethodInfo method, Flags flags) {
 		ResultInfo lval = left.compile(context, method, flags.withPrimitive(true));
 		IOperatorFunction tester = testers.get(lval.getType());

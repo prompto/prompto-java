@@ -7,12 +7,18 @@ import prompto.compiler.CompilerUtils;
 import prompto.compiler.FieldConstant;
 import prompto.compiler.Flags;
 import prompto.compiler.IOperand;
+import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
+import prompto.compiler.StackLocal;
+import prompto.compiler.StackState;
 import prompto.compiler.StringConstant;
+import prompto.declaration.IDeclaration;
+import prompto.declaration.NativeCategoryDeclaration;
+import prompto.declaration.NativeGetterMethodDeclaration;
 import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -170,46 +176,98 @@ public class MemberSelector extends SelectorExpression {
 
 
 	private ResultInfo compileInstanceMember(Context context, MethodInfo method, Flags flags, IExpression parent) {
-		Type resultType = check(context).getJavaType();
+		Type resultType = check(context).getJavaType(context);
 		ResultInfo info = parent.compile(context, method, flags);
 		// special case for String.length() to avoid wrapping String.class for just one member
 		if(String.class==info.getType() && "length".equals(getName()))
 			return compileStringLength(method, flags);
 		else {
 			String getterName = CompilerUtils.getterName(getName());
-			if(isCompilingGetter(context, method, info, getterName)) {
-				Type classType = CompilerUtils.categoryConcreteTypeFrom(info.getType().getTypeName());
-				FieldConstant f = new FieldConstant(classType, id.toString(), resultType);
-				method.addInstruction(Opcode.GETFIELD, f);
-			} else if(PromptoAny.class==info.getType()) {
-				IOperand oper = new StringConstant(getName());
-				method.addInstruction(Opcode.LDC_W, oper);
-				oper = new MethodConstant(PromptoAny.class, "getMember", Object.class, 
-						Object.class, Object.class);
-				method.addInstruction(Opcode.INVOKESTATIC, oper);
-				resultType = PromptoAny.class;
-			} else if(PromptoDocument.class==info.getType()) {
-				IOperand oper = new StringConstant(getName());
-				method.addInstruction(Opcode.LDC_W, oper);
-				oper = new ClassConstant(PromptoDocument.class);
-				method.addInstruction(Opcode.LDC_W, oper);
-				oper = new MethodConstant(PromptoDocument.class, "getOrCreate", Object.class, 
-						Class.class, Object.class);
-				method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-				resultType = PromptoAny.class;
-			} else if(PromptoDict.Entry.class==info.getType()) {
-				IOperand oper = new MethodConstant(info.getType(), getterName, Object.class);
-				method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-				method.addInstruction(Opcode.CHECKCAST, new ClassConstant(resultType));
-			} else if(info.isInterface()){
-				IOperand oper = new InterfaceConstant(info.getType(), getterName, resultType);
-				method.addInstruction(Opcode.INVOKEINTERFACE, oper);
-			} else {
-				IOperand oper = new MethodConstant(info.getType(), getterName, resultType);
-				method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-			}
+			if(isCompilingGetter(context, method, info, getterName))
+				compileGetField(context, method, flags, info, resultType);
+			else if(PromptoAny.class==info.getType()) 
+				compileGetMember(context, method, flags, info, resultType);
+			else if(PromptoDocument.class==info.getType())
+				resultType = compileGetOrCreate(context, method, flags, info, resultType);
+			else if(PromptoDict.Entry.class==info.getType()) // TODo manage all generics
+				compileGenericGetter(context, method, flags, getterName, info, resultType);
+			else if(info.isNativeCategory())
+				compileNativeGetter(context, method, flags, getterName, info, resultType);
+			else if(info.isInterface()) 
+				compileInterfaceGetter(context, method, flags, getterName, info, resultType);
+			else 
+				compileBeanGetter(context, method, flags, getterName, info, resultType);
 			return new ResultInfo(resultType);
 		}
+	}
+		
+	private void compileNativeGetter(Context context, MethodInfo method, Flags flags, String getterName, ResultInfo info, Type resultType) {
+		NativeGetterMethodDeclaration getter = getNativeGetter(context);
+		if(getter!=null) {
+			StackState state = method.captureStackState();
+			// can't use 'this' since it could refer to another abject than the native parent
+			StackLocal local = method.registerLocal("$this$", VerifierType.ITEM_Object, new ClassConstant(info.getType())); 
+			CompilerUtils.compileASTORE(method, local);
+			context = context.newCategoryContext(getter.getMemberOf().getType(context)).newChildContext(); // mimic method call
+			getter.compile(context, method, new Flags());
+			method.unregisterLocal(local);
+			method.restoreStackLocals(state);
+			state = method.captureStackState();
+			method.placeLabel(state);
+			return;
+		} else
+			compileBeanGetter(context, method, flags, getterName, info, resultType);
+	}
+
+	private NativeGetterMethodDeclaration getNativeGetter(Context context) {
+		IType type = parent.check(context);
+		IDeclaration declaration = type instanceof CategoryType ? ((CategoryType)type).getDeclaration(context) : null;
+		if(declaration instanceof NativeCategoryDeclaration)
+			return (NativeGetterMethodDeclaration)((NativeCategoryDeclaration)declaration).findGetter(context, id);
+		else
+			return null;
+	}
+
+	private void compileBeanGetter(Context context, MethodInfo method, Flags flags, String getterName, ResultInfo info, Type resultType) {
+		IOperand oper = new MethodConstant(info.getType(), getterName, resultType);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+	}
+
+	private void compileInterfaceGetter(Context context, MethodInfo method, Flags flags, String getterName, ResultInfo info, Type resultType) {
+		IOperand oper = new InterfaceConstant(info.getType(), getterName, resultType);
+		method.addInstruction(Opcode.INVOKEINTERFACE, oper);
+	}
+
+	private void compileGenericGetter(Context context, MethodInfo method, Flags flags, String getterName, ResultInfo info, Type resultType) {
+		IOperand oper = new MethodConstant(info.getType(), getterName, Object.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		method.addInstruction(Opcode.CHECKCAST, new ClassConstant(resultType));
+	}
+
+	private Type compileGetOrCreate(Context context, MethodInfo method, Flags flags, ResultInfo info, Type resultType) {
+		IOperand oper = new StringConstant(getName());
+		method.addInstruction(Opcode.LDC_W, oper);
+		oper = new ClassConstant(PromptoDocument.class);
+		method.addInstruction(Opcode.LDC_W, oper);
+		oper = new MethodConstant(PromptoDocument.class, "getOrCreate", Object.class, 
+				Class.class, Object.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return PromptoAny.class;
+	}
+
+	private void compileGetMember(Context context, MethodInfo method, Flags flags, ResultInfo info, Type resultType) {
+		IOperand oper = new StringConstant(getName());
+		method.addInstruction(Opcode.LDC_W, oper);
+		oper = new MethodConstant(PromptoAny.class, "getMember", Object.class, 
+				Object.class, Object.class);
+		method.addInstruction(Opcode.INVOKESTATIC, oper);
+		resultType = PromptoAny.class;
+	}
+
+	private void compileGetField(Context context, MethodInfo method, Flags flags, ResultInfo info, Type resultType) {
+		Type classType = CompilerUtils.categoryConcreteTypeFrom(info.getType().getTypeName());
+		FieldConstant f = new FieldConstant(classType, id.toString(), resultType);
+		method.addInstruction(Opcode.GETFIELD, f);
 	}
 
 	private boolean isCompilingGetter(Context context, MethodInfo method, ResultInfo parent, String getterName) {

@@ -45,7 +45,7 @@ public class WithSingletonStatement extends BaseStatement {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		Type thisType = type.getJavaType();
+		Type thisType = type.getJavaType(context);
 		StringConstant s = new StringConstant(thisType.getTypeName());
 		method.addInstruction(Opcode.LDC_W, s);
 		MethodConstant m = new MethodConstant(Class.class, "forName", String.class, Class.class);

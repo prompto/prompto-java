@@ -2,6 +2,8 @@ package prompto.compiler;
 
 import java.lang.reflect.Type;
 
+import prompto.compiler.IVerifierEntry.VerifierType;
+
 public class FieldConstant implements ICodeConstant {
 
 	ClassConstant className;
@@ -24,13 +26,22 @@ public class FieldConstant implements ICodeConstant {
 	}
 
 	@Override
+	public int getTag() {
+		return Tags.CONSTANT_Fieldref;
+	}
+	
+	public ClassConstant getClassName() {
+		return className;
+	}
+	
+	@Override
 	public String toString() {
 		return className.toString() + ':' + fieldNameAndType.toString();
 	}
 	
 	public StackEntry toStackEntry() {
 		Descriptor descriptor = fieldNameAndType.getDescriptor();
-		IVerifierEntry.Type type = IVerifierEntry.Type.fromDescriptor(descriptor);
+		VerifierType type = VerifierType.fromDescriptor(descriptor);
 		StackEntry entry = type.newStackEntry(null);
 		if(entry instanceof StackEntry.ObjectEntry)
 			((StackEntry.ObjectEntry)entry).setClassName(new ClassConstant(fieldNameAndType.getDescriptor().getLastType()));

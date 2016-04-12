@@ -47,7 +47,7 @@ public class ThisExpression implements IExpression {
 			return null;
 		CompilerUtils.compileALOAD(method, local);
 		IType type = check(context);
-		return new ResultInfo(type.getJavaType());	
+		return new ResultInfo(type.getJavaType(context));	
 	}
 	
 	

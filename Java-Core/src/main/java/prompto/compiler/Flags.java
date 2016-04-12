@@ -86,6 +86,14 @@ public class Flags {
 		return clone("setter", field);
 	}
 	
+	public FieldInfo getter() {
+		return (FieldInfo)values.get("getter");
+	}
+	
+	public Flags withGetter(FieldInfo field) {
+		return clone("getter", field);
+	}
+	
 	public boolean isMember() {
 		return (boolean)values.get("member");
 	}
@@ -93,5 +101,6 @@ public class Flags {
 	public Flags withMember(boolean set) {
 		return clone("member", set);
 	}
+
 
 }

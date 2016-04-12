@@ -49,6 +49,6 @@ public class JavaNativeCall extends NativeCall {
 
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		return statement.compile(context, method);
+		return statement.compile(context, method, flags);
 	}
 }

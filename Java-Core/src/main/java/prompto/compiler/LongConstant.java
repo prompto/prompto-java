@@ -1,5 +1,7 @@
 package prompto.compiler;
 
+import prompto.compiler.IVerifierEntry.VerifierType;
+
 
 public class LongConstant implements IValueConstant {
 	
@@ -11,8 +13,14 @@ public class LongConstant implements IValueConstant {
 	}
 	
 	@Override
+	public int getTag() {
+		return Tags.CONSTANT_Long;
+	}
+	
+
+	@Override
 	public StackEntry toStackEntry() {
-		return IVerifierEntry.Type.ITEM_Long.newStackEntry(null);
+		return VerifierType.ITEM_Long.newStackEntry(null);
 	}
 
 	@Override

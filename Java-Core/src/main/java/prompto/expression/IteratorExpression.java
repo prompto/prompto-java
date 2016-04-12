@@ -6,7 +6,7 @@ import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
 import prompto.compiler.Descriptor;
 import prompto.compiler.Flags;
-import prompto.compiler.IVerifierEntry;
+import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
@@ -99,9 +99,9 @@ public class IteratorExpression implements IExpression {
 	private MethodInfo compileInnerClassConstructor(ClassFile classFile) {
 		Descriptor.Method proto = new Descriptor.Method(Iterable.class, long.class, void.class);
 		MethodInfo method = classFile.newMethod("<init>", proto);
-		method.registerLocal("this", IVerifierEntry.Type.ITEM_UninitializedThis, classFile.getThisClass());
-		method.registerLocal("iterable", IVerifierEntry.Type.ITEM_Object, new ClassConstant(Iterable.class));
-		method.registerLocal("length", IVerifierEntry.Type.ITEM_Long, null);
+		method.registerLocal("this", VerifierType.ITEM_UninitializedThis, classFile.getThisClass());
+		method.registerLocal("iterable", VerifierType.ITEM_Object, new ClassConstant(Iterable.class));
+		method.registerLocal("length", VerifierType.ITEM_Long, null);
 		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
 		method.addInstruction(Opcode.ALOAD_1, new ClassConstant(Iterable.class));
 		method.addInstruction(Opcode.LLOAD_2, new ClassConstant(long.class));
@@ -115,8 +115,8 @@ public class IteratorExpression implements IExpression {
 		IType paramIType = source.check(context).checkIterator(context);
 		context = context.newChildContext();
 		context.registerValue(new Variable(name, paramIType));
-		Type paramType = paramIType.getJavaType();
-		Type resultType = expression.check(context).getJavaType();
+		Type paramType = paramIType.getJavaType(context);
+		Type resultType = expression.check(context).getJavaType(context);
 		compileInnerClassBridgeMethod(classFile, paramType, resultType);
 		compileInnerClassApplyMethod(context, classFile, paramType, resultType);
 	}
@@ -125,8 +125,8 @@ public class IteratorExpression implements IExpression {
 		// create the "apply" method itself
 		Descriptor.Method proto = new Descriptor.Method(paramType, resultType);
 		MethodInfo method = classFile.newMethod("apply", proto);
-		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
-		method.registerLocal(name.toString(), IVerifierEntry.Type.ITEM_Object, new ClassConstant(paramType));
+		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
+		method.registerLocal(name.toString(), VerifierType.ITEM_Object, new ClassConstant(paramType));
 		ReturnStatement stmt = new ReturnStatement(expression);
 		stmt.compile(context, method, new Flags());
 	}
@@ -136,8 +136,8 @@ public class IteratorExpression implements IExpression {
 		Descriptor.Method proto = new Descriptor.Method(Object.class, Object.class);
 		MethodInfo method = classFile.newMethod("apply", proto);
 		method.addModifier(Tags.ACC_BRIDGE | Tags.ACC_SYNTHETIC);
-		method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
-		method.registerLocal(name.toString(), IVerifierEntry.Type.ITEM_Object, new ClassConstant(Object.class));
+		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
+		method.registerLocal(name.toString(), VerifierType.ITEM_Object, new ClassConstant(Object.class));
 		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
 		method.addInstruction(Opcode.ALOAD_1, new ClassConstant(Object.class));
 		method.addInstruction(Opcode.CHECKCAST, new ClassConstant(paramType));

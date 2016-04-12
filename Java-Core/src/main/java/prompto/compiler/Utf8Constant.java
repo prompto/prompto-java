@@ -10,6 +10,11 @@ public class Utf8Constant implements IInternalConstant {
 	}
 
 	@Override
+	public int getTag() {
+		return Tags.CONSTANT_Utf8;
+	}
+	
+	@Override
 	public String toString() {
 		return this.value;
 	}

@@ -11,6 +11,12 @@ public class MethodHandleConstant implements ICodeConstant {
 	}
 	
 	@Override
+	public int getTag() {
+		return Tags.CONSTANT_MethodHandle;
+	}
+	
+
+	@Override
 	public void register(ConstantsPool pool) {
 		method.register(pool);
 		index = pool.registerConstant(this);

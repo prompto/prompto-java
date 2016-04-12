@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import prompto.compiler.CompilerException;
 import prompto.declaration.NativeCategoryDeclaration;
 import prompto.error.SyntaxError;
+import prompto.runtime.Context;
 
 public class NativeCategoryType extends CategoryType {
 
@@ -16,7 +17,7 @@ public class NativeCategoryType extends CategoryType {
 	}
 
 	@Override
-	public Type getJavaType() {
+	public Type getJavaType(Context context) {
 		try {
 			return decl.getBoundClass(true);
 		} catch (SyntaxError e) {

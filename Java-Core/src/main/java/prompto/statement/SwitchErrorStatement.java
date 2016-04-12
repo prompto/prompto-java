@@ -10,6 +10,7 @@ import prompto.compiler.CompilerUtils;
 import prompto.compiler.ExceptionHandler;
 import prompto.compiler.FieldConstant;
 import prompto.compiler.Flags;
+import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.OffsetListenerConstant;
 import prompto.compiler.Opcode;
@@ -215,7 +216,7 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 		method.placeExceptionHandler(handler);
 		Type exception = compileConvertException(context, method, flags, handler);
 		StackLocal error = method.registerLocal(errorName.toString(), 
-				prompto.compiler.IVerifierEntry.Type.ITEM_Object, new ClassConstant(exception));
+				VerifierType.ITEM_Object, new ClassConstant(exception));
 		CompilerUtils.compileASTORE(method, error);
 		Context local = context.newLocalContext();
 		local.registerValue(new ErrorVariable(errorName));

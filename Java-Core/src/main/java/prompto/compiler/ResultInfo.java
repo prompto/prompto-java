@@ -18,7 +18,8 @@ public class ResultInfo {
 	boolean isStatic = false;
 	Boolean isPrimitive = null;
 	Boolean isInterface = null;
-	Boolean isCategory = null;
+	Boolean isPromptoCategory = null;
+	Boolean isNativeCategory = null;
 	
 	public ResultInfo(Type type, Flag ...flags) {
 		this.type = type;
@@ -60,8 +61,8 @@ public class ResultInfo {
 				isInterface = false;
 			else if(type instanceof Class)
 				isInterface = ((Class<?>)type).isInterface();
-			else if(type instanceof PromptoType){
-				isInterface = type.getTypeName().indexOf('$')<0;
+			else if(type instanceof PromptoType) {
+				isInterface = type.getTypeName().startsWith("π.") && type.getTypeName().indexOf('$')<0;
 			} else
 				throw new UnsupportedOperationException();
 		}
@@ -84,17 +85,35 @@ public class ResultInfo {
 		return isThrow;
 	}
 	
-	public boolean isCategory() {
-		if(isCategory==null) {
+	public boolean isPromptoCategory() {
+		if(isPromptoCategory==null) {
 			if(isPrimitive())
-				isCategory = false;
+				isPromptoCategory = false;
 			else if(type instanceof Class)
-				isCategory = false;
+				isPromptoCategory = false;
 			else if(type instanceof PromptoType){
-				isCategory = type.getTypeName().startsWith(CompilerUtils.CATEGORY_PACKAGE_PREFIX);
+				isPromptoCategory = type.getTypeName().startsWith(CompilerUtils.CATEGORY_PACKAGE_PREFIX);
 			} else
 				throw new UnsupportedOperationException();
 		}
-		return isCategory;
+		return isPromptoCategory;
+	}
+
+	public boolean isNativeCategory() {
+		if(isNativeCategory==null) {
+			if(isPrimitive())
+				isNativeCategory = false;
+			else if(type instanceof Class)
+				isNativeCategory = !((Class<?>)type).isInterface();
+			else if(type instanceof PromptoType){
+				isNativeCategory = !type.getTypeName().startsWith(CompilerUtils.CATEGORY_PACKAGE_PREFIX);
+			} else
+				throw new UnsupportedOperationException();
+		}
+		return isNativeCategory;
+	}
+
+	public boolean isCategory() {
+		return isPromptoCategory() || isNativeCategory();
 	}
 }

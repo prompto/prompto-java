@@ -21,7 +21,7 @@ public class PeriodType extends NativeType {
 	}
 
 	@Override
-	public Type getJavaType() {
+	public Type getJavaType(Context context) {
 		return PromptoPeriod.class;
 	}
 	

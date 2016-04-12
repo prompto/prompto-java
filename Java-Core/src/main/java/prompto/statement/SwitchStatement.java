@@ -7,7 +7,7 @@ import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.IInstructionListener;
-import prompto.compiler.IVerifierEntry.Type;
+import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.OffsetListenerConstant;
@@ -94,7 +94,7 @@ public class SwitchStatement extends BaseSwitchStatement {
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		IType result = check(context);
 		compileSwitchCases(context, method, flags);
-		return new ResultInfo(result.getJavaType());
+		return new ResultInfo(result.getJavaType(context));
 	}
 	
 	static class SwitchCaseBranch {
@@ -127,7 +127,7 @@ public class SwitchStatement extends BaseSwitchStatement {
 		context = context.newChildContext();
 		context.registerValue(new Variable(new Identifier("%value%"), expression.check(context)));
 		ResultInfo info = expression.compile(context, method, flags);
-		StackLocal value = method.registerLocal("%value%", Type.ITEM_Object, new ClassConstant(info.getType()));
+		StackLocal value = method.registerLocal("%value%", VerifierType.ITEM_Object, new ClassConstant(info.getType()));
 		CompilerUtils.compileASTORE(method, value);
 		return value;
 	}

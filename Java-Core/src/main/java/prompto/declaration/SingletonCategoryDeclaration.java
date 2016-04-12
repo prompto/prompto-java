@@ -10,7 +10,7 @@ import prompto.compiler.Descriptor;
 import prompto.compiler.FieldConstant;
 import prompto.compiler.FieldInfo;
 import prompto.compiler.Flags;
-import prompto.compiler.IVerifierEntry;
+import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -105,7 +105,7 @@ public class SingletonCategoryDeclaration extends ConcreteCategoryDeclaration {
 		MethodInfo method = classFile.newMethod(name, proto);
 		method.addModifier(Modifier.STATIC);
 		ClassConstant fc = new ClassConstant(field.getType());
-		method.registerLocal("%value%", IVerifierEntry.Type.ITEM_Object, fc);
+		method.registerLocal("%value%", VerifierType.ITEM_Object, fc);
 		// store data in field
 		method.addInstruction(Opcode.ALOAD_0, fc);
 		FieldConstant f = new FieldConstant(classFile.getThisClass(), field.getName().getValue(), field.getType());

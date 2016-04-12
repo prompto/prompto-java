@@ -40,8 +40,10 @@ import prompto.declaration.GetterMethodDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.NativeCategoryDeclaration;
+import prompto.declaration.NativeGetterMethodDeclaration;
 import prompto.declaration.NativeMethodDeclaration;
 import prompto.declaration.NativeResourceDeclaration;
+import prompto.declaration.NativeSetterMethodDeclaration;
 import prompto.declaration.OperatorMethodDeclaration;
 import prompto.declaration.SetterMethodDeclaration;
 import prompto.declaration.SingletonCategoryDeclaration;
@@ -166,6 +168,8 @@ import prompto.parser.SParserBaseListener;
 import prompto.parser.SParser.BlobTypeContext;
 import prompto.parser.SParser.ImageTypeContext;
 import prompto.parser.SParser.Javascript_new_expressionContext;
+import prompto.parser.SParser.Native_getter_declarationContext;
+import prompto.parser.SParser.Native_setter_declarationContext;
 import prompto.parser.SParser.UUIDTypeContext;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
@@ -1778,6 +1782,13 @@ public class SPromptoBuilder extends SParserBaseListener {
 	}
 	
 	@Override
+	public void exitNative_getter_declaration(Native_getter_declarationContext ctx) {
+		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		setNodeValue(ctx, new NativeGetterMethodDeclaration(name, stmts));
+	}
+	
+	@Override
 	public void exitNative_member_method_declaration(Native_member_method_declarationContext ctx) {
 		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.getChild(0));
 		setNodeValue(ctx, decl);
@@ -1799,6 +1810,13 @@ public class SPromptoBuilder extends SParserBaseListener {
 		NativeCategoryBindingList bindings = this.<NativeCategoryBindingList>getNodeValue(ctx.bindings);
 		MethodDeclarationList methods = this.<MethodDeclarationList>getNodeValue(ctx.methods);
 		setNodeValue(ctx, new NativeResourceDeclaration(name, attrs, bindings, null, methods));
+	}
+	
+	@Override
+	public void exitNative_setter_declaration(Native_setter_declarationContext ctx) {
+		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		setNodeValue(ctx, new NativeSetterMethodDeclaration(name, stmts));
 	}
 	
 	@Override

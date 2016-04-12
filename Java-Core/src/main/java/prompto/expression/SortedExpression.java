@@ -9,7 +9,7 @@ import prompto.compiler.ClassFile;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Descriptor;
 import prompto.compiler.Flags;
-import prompto.compiler.IVerifierEntry;
+import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
@@ -333,8 +333,8 @@ public class SortedExpression implements IExpression {
 			classFile.setSuperClass(new ClassConstant(Object.class));
 			classFile.addInterface(new ClassConstant(Comparator.class));
 			CompilerUtils.compileEmptyConstructor(classFile);
-			compileBridge(context, classFile, itemType.getJavaType());
-			compileMethod(context, classFile, itemType.getJavaType());
+			compileBridge(context, classFile, itemType.getJavaType(context));
+			compileMethod(context, classFile, itemType.getJavaType(context));
 			parentClass.addInnerClass(classFile);
 			return innerClassType;
 		}
@@ -343,9 +343,9 @@ public class SortedExpression implements IExpression {
 			Descriptor.Method proto = new Descriptor.Method(paramType, paramType, int.class);
 			MethodInfo method = classFile.newMethod("compare", proto);
 			// use a dummy '$this', since we never use it, and we need 'this' for compiling expressions
-			method.registerLocal("$this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
-			method.registerLocal("o1", IVerifierEntry.Type.ITEM_Object, new ClassConstant(paramType));
-			method.registerLocal("o2", IVerifierEntry.Type.ITEM_Object, new ClassConstant(paramType));
+			method.registerLocal("$this", VerifierType.ITEM_Object, classFile.getThisClass());
+			method.registerLocal("o1", VerifierType.ITEM_Object, new ClassConstant(paramType));
+			method.registerLocal("o2", VerifierType.ITEM_Object, new ClassConstant(paramType));
 			compileMethodBody(context, method, paramType);
 		
 		}
@@ -357,9 +357,9 @@ public class SortedExpression implements IExpression {
 			Descriptor.Method proto = new Descriptor.Method(Object.class, Object.class, int.class);
 			MethodInfo method = classFile.newMethod("compare", proto);
 			method.addModifier(Tags.ACC_BRIDGE | Tags.ACC_SYNTHETIC);
-			method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, classFile.getThisClass());
-			method.registerLocal("o1", IVerifierEntry.Type.ITEM_Object, new ClassConstant(Object.class));
-			method.registerLocal("o2", IVerifierEntry.Type.ITEM_Object, new ClassConstant(Object.class));
+			method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
+			method.registerLocal("o1", VerifierType.ITEM_Object, new ClassConstant(Object.class));
+			method.registerLocal("o2", VerifierType.ITEM_Object, new ClassConstant(Object.class));
 			method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
 			method.addInstruction(Opcode.ALOAD_1, new ClassConstant(Object.class));
 			method.addInstruction(Opcode.CHECKCAST, new ClassConstant(paramType));
@@ -377,7 +377,7 @@ public class SortedExpression implements IExpression {
 		@Override
 		protected void compileMethodBody(Context context, MethodInfo method, Type paramType) {
 			method.addInstruction(Opcode.ALOAD_1, new ClassConstant(paramType));
-			Type fieldType = context.findAttribute(key.toString()).getType().getJavaType();
+			Type fieldType = context.findAttribute(key.toString()).getType().getJavaType(context);
 			String getterName = CompilerUtils.getterName(key.toString());
 			InterfaceConstant getter = new InterfaceConstant(paramType, getterName, fieldType);
 			method.addInstruction(Opcode.INVOKEINTERFACE, getter);
@@ -395,7 +395,7 @@ public class SortedExpression implements IExpression {
 		
 		@Override
 		protected void compileMethodBody(Context context, MethodInfo method, Type paramType) {
-			StackLocal tmpThis = method.registerLocal("this", IVerifierEntry.Type.ITEM_Object, new ClassConstant(paramType));
+			StackLocal tmpThis = method.registerLocal("this", VerifierType.ITEM_Object, new ClassConstant(paramType));
 			ResultInfo left = compileValue(context, method, paramType, tmpThis, "o1");
 			ResultInfo right = compileValue(context, method, paramType, tmpThis, "o2");
 			Descriptor.Method proto = new Descriptor.Method(right.getType(), int.class);

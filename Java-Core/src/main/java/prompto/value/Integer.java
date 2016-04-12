@@ -144,9 +144,9 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 			return compileMultiplyCharacter(context, method, flags, left, exp);
 		else if(type==TextType.instance())
 			return compileMultiplyText(context, method, flags, left, exp);
-		else if(type.getJavaType() instanceof PromptoType)
+		else if(type.getJavaType(context) instanceof PromptoType)
 			return compileMultiplyCategory(context, method, flags, left, exp);
-		else if(IMultiplyable.class.isAssignableFrom((Class<?>)type.getJavaType()))
+		else if(IMultiplyable.class.isAssignableFrom((Class<?>)type.getJavaType(context)))
 			return compileMultiplyMultiplyable(context, method, flags, left, exp);
 		else
 			throw new SyntaxError("Illegal: Integer * " + type.getClass().getSimpleName());

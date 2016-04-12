@@ -151,7 +151,7 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 	public Type getColumnType(String fieldName) throws PromptoError {
 		String typeName = getColumnTypeName(fieldName);
 		IType type = typeMap.get(typeName);
-		return type.getJavaType();
+		return type.getJavaType(null);
 	}
 	
 	@Override

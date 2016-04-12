@@ -1,5 +1,9 @@
 package prompto.java;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.StackLocal;
 import prompto.error.PromptoError;
 import prompto.expression.ThisExpression;
 import prompto.parser.Section;
@@ -24,5 +28,11 @@ public class JavaThisExpression extends Section implements JavaExpression {
 	@Override
 	public void toDialect(CodeWriter writer) {
 		expression.toDialect(writer);
+	}
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method) {
+		StackLocal local = method.getRegisteredLocal("$this$");
+		return CompilerUtils.compileALOAD(method, local);
 	}
 }

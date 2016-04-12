@@ -36,7 +36,7 @@ public class MethodType extends BaseType {
 	
 	
 	@Override
-	public Type getJavaType() {
+	public Type getJavaType(Context context) {
 		return Method.class;
 	}
 	

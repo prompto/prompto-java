@@ -3,7 +3,7 @@ package prompto.compiler;
 import java.util.LinkedList;
 
 @SuppressWarnings("serial")
-class ConstantsPool extends LinkedList<IConstantOperand> {
+public class ConstantsPool extends LinkedList<IConstantOperand> {
 
 	int nextIndex = 1; // 1 based index
 	
@@ -23,6 +23,14 @@ class ConstantsPool extends LinkedList<IConstantOperand> {
 		writer.writeU2(nextIndex);
 		this.forEach((c) -> 
 			c.writeTo(writer));
+	}
+
+	public IConstantOperand constantWithIndex(int index) {
+		for(IConstantOperand operand : this) {
+			if(operand.getIndexInConstantPool()==index)
+				return operand;
+		}
+		return null;
 	}
 
 }

@@ -21,7 +21,7 @@ public class UUIDType extends NativeType {
 	}
 	
 	@Override
-	public Type getJavaType() {
+	public Type getJavaType(Context context) {
 		return UUID.class;
 	}
 	

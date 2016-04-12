@@ -2,12 +2,12 @@ package prompto.compiler;
 
 public interface IVerifierEntry {
 	
-	Type getType();
+	VerifierType getType();
 	int length();
 	default void register(ConstantsPool pool) {} // nothing to do
 	void writeTo(ByteWriter writer);
 
-	public static enum Type {
+	public static enum VerifierType {
 		ITEM_Top(TopFactory.instance),
 		ITEM_Integer(PrimitiveFactory.instance),
 		ITEM_Float(PrimitiveFactory.instance),
@@ -19,8 +19,8 @@ public interface IVerifierEntry {
 		ITEM_Uninitialized(ObjectFactory.instance);
 		
 		static interface IFactory {
-			StackEntry newStackEntry(Type type, ClassConstant className);
-			StackLocal newStackLocal(Type type, String name, ClassConstant className);
+			StackEntry newStackEntry(VerifierType type, ClassConstant className);
+			StackLocal newStackLocal(VerifierType type, String name, ClassConstant className);
 		}
 		
 		static class PrimitiveFactory implements IFactory {
@@ -28,12 +28,12 @@ public interface IVerifierEntry {
 			static PrimitiveFactory instance = new PrimitiveFactory();
 			
 			@Override
-			public StackEntry newStackEntry(Type type, ClassConstant className) {
+			public StackEntry newStackEntry(VerifierType type, ClassConstant className) {
 				return new StackEntry.PrimitiveEntry(type);
 			}
 			
 			@Override
-			public StackLocal newStackLocal(Type type, String name, ClassConstant className) {
+			public StackLocal newStackLocal(VerifierType type, String name, ClassConstant className) {
 				return new StackLocal.PrimitiveLocal(type, name);
 			}
 		};
@@ -43,12 +43,12 @@ public interface IVerifierEntry {
 			static TopFactory instance = new TopFactory();
 			
 			@Override
-			public StackEntry newStackEntry(Type type, ClassConstant className) {
+			public StackEntry newStackEntry(VerifierType type, ClassConstant className) {
 				return new StackEntry.TopEntry(type, className);
 			}
 			
 			@Override
-			public StackLocal newStackLocal(Type type, String name, ClassConstant className) {
+			public StackLocal newStackLocal(VerifierType type, String name, ClassConstant className) {
 				return new StackLocal.TopLocal(name, className);
 			}
 		};
@@ -58,12 +58,12 @@ public interface IVerifierEntry {
 			static ObjectFactory instance = new ObjectFactory();
 			
 			@Override
-			public StackEntry newStackEntry(Type type, ClassConstant className) {
+			public StackEntry newStackEntry(VerifierType type, ClassConstant className) {
 				return new StackEntry.ObjectEntry(type, className);
 			}
 			
 			@Override
-			public StackLocal newStackLocal(Type type, String name, ClassConstant className) {
+			public StackLocal newStackLocal(VerifierType type, String name, ClassConstant className) {
 				return new StackLocal.ObjectLocal(type, name, className);
 			}
 		};
@@ -73,7 +73,7 @@ public interface IVerifierEntry {
 			static ThisFactory instance = new ThisFactory();
 			
 			@Override
-			public StackLocal newStackLocal(Type type, String name, ClassConstant className) {
+			public StackLocal newStackLocal(VerifierType type, String name, ClassConstant className) {
 				if(!"this".equals(name))
 					throw new UnsupportedOperationException();
 				return new StackLocal.ThisLocal(className);
@@ -83,17 +83,17 @@ public interface IVerifierEntry {
 		final short size;
 		final IFactory entryFactory;
 		
-		private Type() {
+		private VerifierType() {
 			size = 1;
 			entryFactory = null;
 		}
 		
-		private Type(IFactory entryFactory) {
+		private VerifierType(IFactory entryFactory) {
 			size = 1;
 			this.entryFactory = entryFactory;
 		}
 
-		private Type(int size, IFactory entryFactory) {
+		private VerifierType(int size, IFactory entryFactory) {
 			this.size = (short)size;
 			this.entryFactory = entryFactory;
 		}
@@ -118,11 +118,11 @@ public interface IVerifierEntry {
 			return entryFactory.newStackLocal(this, name, className);
 		}
 
-		public static Type fromDescriptor(Descriptor descriptor) {
+		public static VerifierType fromDescriptor(Descriptor descriptor) {
 			return fromDescriptor(descriptor.toString());
 		}
 
-		public static Type fromDescriptor(String desc) {
+		public static VerifierType fromDescriptor(String desc) {
 			switch(desc.charAt(0)) {
 			case 'Z': // boolean
 			case 'B': // byte

@@ -38,9 +38,9 @@ public class CastExpression implements IExpression {
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		expression.compile(context, method, flags);
-		ClassConstant c = new ClassConstant(type.getJavaType());
+		ClassConstant c = new ClassConstant(type.getJavaType(context));
 		method.addInstruction(Opcode.CHECKCAST, c);
-		return new ResultInfo(type.getJavaType());
+		return new ResultInfo(type.getJavaType(context));
 	}
 
 	@Override

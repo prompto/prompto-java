@@ -118,8 +118,8 @@ public class FetchOneExpression extends Section implements IExpression {
 	private ResultInfo compileInstantiation(Context context, MethodInfo method, Flags flags) {
 		MethodConstant m = new MethodConstant(PromptoRoot.class, "newInstance", IStored.class, PromptoRoot.class);
 		method.addInstruction(Opcode.INVOKESTATIC, m);
-		method.addInstruction(Opcode.CHECKCAST, new ClassConstant(type.getJavaType()));
-		return new ResultInfo(type.getJavaType());
+		method.addInstruction(Opcode.CHECKCAST, new ClassConstant(type.getJavaType(context)));
+		return new ResultInfo(type.getJavaType(context));
 	}
 
 	private void compileFetchOne(Context context, MethodInfo method, Flags flags) {

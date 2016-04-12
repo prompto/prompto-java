@@ -23,14 +23,17 @@ public class LocalVariableTableAttribute implements IAttribute {
 		return local;
 	}
 		
+	public void unregisterLocal(StackLocal local) {
+		int index = local.getIndex();
+		if(index!=entries.size()-1)
+			throw new CompilerException("Can only unregister top local!");
+		entries.remove(local.getName());
+	}
+
 	public StackLocal getRegisteredLocal(String name) {
 		return entries.get(name);
 	}
 	
-	public void unregisterLocal(StackLocal local) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void register(ConstantsPool pool) {

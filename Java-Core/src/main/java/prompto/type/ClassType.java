@@ -17,7 +17,7 @@ public class ClassType extends BaseType {
 	}
 
 	@Override
-	public Type getJavaType() {
+	public Type getJavaType(Context context) {
 		return Class.class;
 	}
 

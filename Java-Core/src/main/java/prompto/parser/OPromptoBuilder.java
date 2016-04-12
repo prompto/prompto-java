@@ -39,8 +39,10 @@ import prompto.declaration.GetterMethodDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.NativeCategoryDeclaration;
+import prompto.declaration.NativeGetterMethodDeclaration;
 import prompto.declaration.NativeMethodDeclaration;
 import prompto.declaration.NativeResourceDeclaration;
+import prompto.declaration.NativeSetterMethodDeclaration;
 import prompto.declaration.OperatorMethodDeclaration;
 import prompto.declaration.SetterMethodDeclaration;
 import prompto.declaration.SingletonCategoryDeclaration;
@@ -1861,6 +1863,14 @@ public class OPromptoBuilder extends OParserBaseListener {
 		setNodeValue(ctx, decl);
 	}
 	
+	
+	@Override
+	public void exitNative_getter_declaration(Native_getter_declarationContext ctx) {
+		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		setNodeValue(ctx, new NativeGetterMethodDeclaration(name, stmts));
+	}
+	
 	@Override
 	public void exitNative_member_method_declaration(Native_member_method_declarationContext ctx) {
 		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.getChild(0));
@@ -1883,6 +1893,13 @@ public class OPromptoBuilder extends OParserBaseListener {
 		NativeCategoryBindingList bindings = this.<NativeCategoryBindingList>getNodeValue(ctx.bindings);
 		MethodDeclarationList methods = this.<MethodDeclarationList>getNodeValue(ctx.methods);
 		setNodeValue(ctx, new NativeResourceDeclaration(name, attrs, bindings, null, methods));
+	}
+	
+	@Override
+	public void exitNative_setter_declaration(Native_setter_declarationContext ctx) {
+		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		setNodeValue(ctx, new NativeSetterMethodDeclaration(name, stmts));
 	}
 	
 	@Override
