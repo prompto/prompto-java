@@ -25,8 +25,18 @@ public class TestItem extends BaseOParserTest {
 	}
 
 	@Test
+	public void testCompiledItemDict() throws Exception {
+		checkCompiledOutput("item/itemDict.poc");
+	}
+
+	@Test
 	public void testInterpretedItemList() throws Exception {
 		checkInterpretedOutput("item/itemList.poc");
+	}
+
+	@Test
+	public void testCompiledItemList() throws Exception {
+		checkCompiledOutput("item/itemList.poc");
 	}
 
 	@Test
@@ -35,13 +45,28 @@ public class TestItem extends BaseOParserTest {
 	}
 
 	@Test
+	public void testCompiledItemRange() throws Exception {
+		checkCompiledOutput("item/itemRange.poc");
+	}
+
+	@Test
 	public void testInterpretedItemSet() throws Exception {
 		checkInterpretedOutput("item/itemSet.poc");
 	}
 
 	@Test
+	public void testCompiledItemSet() throws Exception {
+		checkCompiledOutput("item/itemSet.poc");
+	}
+
+	@Test
 	public void testInterpretedItemText() throws Exception {
 		checkInterpretedOutput("item/itemText.poc");
+	}
+
+	@Test
+	public void testCompiledItemText() throws Exception {
+		checkCompiledOutput("item/itemText.poc");
 	}
 
 }

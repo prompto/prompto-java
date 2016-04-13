@@ -25,8 +25,18 @@ public class TestGreater extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledGtCharacter() throws Exception {
+		checkCompiledOutput("greater/gtCharacter.pec");
+	}
+
+	@Test
 	public void testInterpretedGtDate() throws Exception {
 		checkInterpretedOutput("greater/gtDate.pec");
+	}
+
+	@Test
+	public void testCompiledGtDate() throws Exception {
+		checkCompiledOutput("greater/gtDate.pec");
 	}
 
 	@Test
@@ -35,8 +45,18 @@ public class TestGreater extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledGtDateTime() throws Exception {
+		checkCompiledOutput("greater/gtDateTime.pec");
+	}
+
+	@Test
 	public void testInterpretedGtDecimal() throws Exception {
 		checkInterpretedOutput("greater/gtDecimal.pec");
+	}
+
+	@Test
+	public void testCompiledGtDecimal() throws Exception {
+		checkCompiledOutput("greater/gtDecimal.pec");
 	}
 
 	@Test
@@ -45,8 +65,18 @@ public class TestGreater extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledGteCharacter() throws Exception {
+		checkCompiledOutput("greater/gteCharacter.pec");
+	}
+
+	@Test
 	public void testInterpretedGteDate() throws Exception {
 		checkInterpretedOutput("greater/gteDate.pec");
+	}
+
+	@Test
+	public void testCompiledGteDate() throws Exception {
+		checkCompiledOutput("greater/gteDate.pec");
 	}
 
 	@Test
@@ -55,8 +85,18 @@ public class TestGreater extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledGteDateTime() throws Exception {
+		checkCompiledOutput("greater/gteDateTime.pec");
+	}
+
+	@Test
 	public void testInterpretedGteDecimal() throws Exception {
 		checkInterpretedOutput("greater/gteDecimal.pec");
+	}
+
+	@Test
+	public void testCompiledGteDecimal() throws Exception {
+		checkCompiledOutput("greater/gteDecimal.pec");
 	}
 
 	@Test
@@ -65,8 +105,18 @@ public class TestGreater extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledGteInteger() throws Exception {
+		checkCompiledOutput("greater/gteInteger.pec");
+	}
+
+	@Test
 	public void testInterpretedGteText() throws Exception {
 		checkInterpretedOutput("greater/gteText.pec");
+	}
+
+	@Test
+	public void testCompiledGteText() throws Exception {
+		checkCompiledOutput("greater/gteText.pec");
 	}
 
 	@Test
@@ -75,8 +125,18 @@ public class TestGreater extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledGteTime() throws Exception {
+		checkCompiledOutput("greater/gteTime.pec");
+	}
+
+	@Test
 	public void testInterpretedGtInteger() throws Exception {
 		checkInterpretedOutput("greater/gtInteger.pec");
+	}
+
+	@Test
+	public void testCompiledGtInteger() throws Exception {
+		checkCompiledOutput("greater/gtInteger.pec");
 	}
 
 	@Test
@@ -85,8 +145,18 @@ public class TestGreater extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledGtText() throws Exception {
+		checkCompiledOutput("greater/gtText.pec");
+	}
+
+	@Test
 	public void testInterpretedGtTime() throws Exception {
 		checkInterpretedOutput("greater/gtTime.pec");
+	}
+
+	@Test
+	public void testCompiledGtTime() throws Exception {
+		checkCompiledOutput("greater/gtTime.pec");
 	}
 
 }

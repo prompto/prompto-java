@@ -19,9 +19,12 @@ attribute as variable: parameter
 attribute as attribute
 move MIN_INT && MAX_INT to enum
 factor compileAssert
-fix invokedynamic parameter names/order issue
 make id a global native method or implement it for all types
 save StackLocals between closure definition and instantiation
+
+issues:
+invokedynamic parameter names/order
+test/asserts naming of parameters
 
 missing tests:
 null member is empty

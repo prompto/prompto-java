@@ -25,8 +25,18 @@ public class TestCondition extends BaseOParserTest {
 	}
 
 	@Test
+	public void testCompiledComplexIf() throws Exception {
+		checkCompiledOutput("condition/complexIf.poc");
+	}
+
+	@Test
 	public void testInterpretedReturnIf() throws Exception {
 		checkInterpretedOutput("condition/returnIf.poc");
+	}
+
+	@Test
+	public void testCompiledReturnIf() throws Exception {
+		checkCompiledOutput("condition/returnIf.poc");
 	}
 
 	@Test
@@ -35,13 +45,28 @@ public class TestCondition extends BaseOParserTest {
 	}
 
 	@Test
+	public void testCompiledSimpleIf() throws Exception {
+		checkCompiledOutput("condition/simpleIf.poc");
+	}
+
+	@Test
 	public void testInterpretedSwitch() throws Exception {
 		checkInterpretedOutput("condition/switch.poc");
 	}
 
 	@Test
+	public void testCompiledSwitch() throws Exception {
+		checkCompiledOutput("condition/switch.poc");
+	}
+
+	@Test
 	public void testInterpretedTernary() throws Exception {
 		checkInterpretedOutput("condition/ternary.poc");
+	}
+
+	@Test
+	public void testCompiledTernary() throws Exception {
+		checkCompiledOutput("condition/ternary.poc");
 	}
 
 }

@@ -25,8 +25,18 @@ public class TestLoops extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledDoWhile() throws Exception {
+		checkCompiledOutput("loops/doWhile.pec");
+	}
+
+	@Test
 	public void testInterpretedForEachCharacterRange() throws Exception {
 		checkInterpretedOutput("loops/forEachCharacterRange.pec");
+	}
+
+	@Test
+	public void testCompiledForEachCharacterRange() throws Exception {
+		checkCompiledOutput("loops/forEachCharacterRange.pec");
 	}
 
 	@Test
@@ -35,8 +45,18 @@ public class TestLoops extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledForEachCharacterRangeWithIndex() throws Exception {
+		checkCompiledOutput("loops/forEachCharacterRangeWithIndex.pec");
+	}
+
+	@Test
 	public void testInterpretedForEachDateRange() throws Exception {
 		checkInterpretedOutput("loops/forEachDateRange.pec");
+	}
+
+	@Test
+	public void testCompiledForEachDateRange() throws Exception {
+		checkCompiledOutput("loops/forEachDateRange.pec");
 	}
 
 	@Test
@@ -45,8 +65,18 @@ public class TestLoops extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledForEachDateRangeWithIndex() throws Exception {
+		checkCompiledOutput("loops/forEachDateRangeWithIndex.pec");
+	}
+
+	@Test
 	public void testInterpretedForEachDictionaryItem() throws Exception {
 		checkInterpretedOutput("loops/forEachDictionaryItem.pec");
+	}
+
+	@Test
+	public void testCompiledForEachDictionaryItem() throws Exception {
+		checkCompiledOutput("loops/forEachDictionaryItem.pec");
 	}
 
 	@Test
@@ -55,8 +85,18 @@ public class TestLoops extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledForEachDictionaryItemWithIndex() throws Exception {
+		checkCompiledOutput("loops/forEachDictionaryItemWithIndex.pec");
+	}
+
+	@Test
 	public void testInterpretedForEachDictionaryKey() throws Exception {
 		checkInterpretedOutput("loops/forEachDictionaryKey.pec");
+	}
+
+	@Test
+	public void testCompiledForEachDictionaryKey() throws Exception {
+		checkCompiledOutput("loops/forEachDictionaryKey.pec");
 	}
 
 	@Test
@@ -65,8 +105,18 @@ public class TestLoops extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledForEachDictionaryKeyWithIndex() throws Exception {
+		checkCompiledOutput("loops/forEachDictionaryKeyWithIndex.pec");
+	}
+
+	@Test
 	public void testInterpretedForEachDictionaryValue() throws Exception {
 		checkInterpretedOutput("loops/forEachDictionaryValue.pec");
+	}
+
+	@Test
+	public void testCompiledForEachDictionaryValue() throws Exception {
+		checkCompiledOutput("loops/forEachDictionaryValue.pec");
 	}
 
 	@Test
@@ -75,8 +125,18 @@ public class TestLoops extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledForEachDictionaryValueWithIndex() throws Exception {
+		checkCompiledOutput("loops/forEachDictionaryValueWithIndex.pec");
+	}
+
+	@Test
 	public void testInterpretedForEachInstanceList() throws Exception {
 		checkInterpretedOutput("loops/forEachInstanceList.pec");
+	}
+
+	@Test
+	public void testCompiledForEachInstanceList() throws Exception {
+		checkCompiledOutput("loops/forEachInstanceList.pec");
 	}
 
 	@Test
@@ -85,8 +145,18 @@ public class TestLoops extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledForEachInstanceListWithIndex() throws Exception {
+		checkCompiledOutput("loops/forEachInstanceListWithIndex.pec");
+	}
+
+	@Test
 	public void testInterpretedForEachInstanceSet() throws Exception {
 		checkInterpretedOutput("loops/forEachInstanceSet.pec");
+	}
+
+	@Test
+	public void testCompiledForEachInstanceSet() throws Exception {
+		checkCompiledOutput("loops/forEachInstanceSet.pec");
 	}
 
 	@Test
@@ -95,8 +165,18 @@ public class TestLoops extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledForEachInstanceSetWithIndex() throws Exception {
+		checkCompiledOutput("loops/forEachInstanceSetWithIndex.pec");
+	}
+
+	@Test
 	public void testInterpretedForEachIntegerList() throws Exception {
 		checkInterpretedOutput("loops/forEachIntegerList.pec");
+	}
+
+	@Test
+	public void testCompiledForEachIntegerList() throws Exception {
+		checkCompiledOutput("loops/forEachIntegerList.pec");
 	}
 
 	@Test
@@ -105,8 +185,18 @@ public class TestLoops extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledForEachIntegerListWithIndex() throws Exception {
+		checkCompiledOutput("loops/forEachIntegerListWithIndex.pec");
+	}
+
+	@Test
 	public void testInterpretedForEachIntegerRange() throws Exception {
 		checkInterpretedOutput("loops/forEachIntegerRange.pec");
+	}
+
+	@Test
+	public void testCompiledForEachIntegerRange() throws Exception {
+		checkCompiledOutput("loops/forEachIntegerRange.pec");
 	}
 
 	@Test
@@ -115,8 +205,18 @@ public class TestLoops extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledForEachIntegerRangeWithIndex() throws Exception {
+		checkCompiledOutput("loops/forEachIntegerRangeWithIndex.pec");
+	}
+
+	@Test
 	public void testInterpretedForEachIntegerSet() throws Exception {
 		checkInterpretedOutput("loops/forEachIntegerSet.pec");
+	}
+
+	@Test
+	public void testCompiledForEachIntegerSet() throws Exception {
+		checkCompiledOutput("loops/forEachIntegerSet.pec");
 	}
 
 	@Test
@@ -125,8 +225,18 @@ public class TestLoops extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledForEachIntegerSetWithIndex() throws Exception {
+		checkCompiledOutput("loops/forEachIntegerSetWithIndex.pec");
+	}
+
+	@Test
 	public void testInterpretedForEachTimeRange() throws Exception {
 		checkInterpretedOutput("loops/forEachTimeRange.pec");
+	}
+
+	@Test
+	public void testCompiledForEachTimeRange() throws Exception {
+		checkCompiledOutput("loops/forEachTimeRange.pec");
 	}
 
 	@Test
@@ -135,8 +245,18 @@ public class TestLoops extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledForEachTimeRangeWithIndex() throws Exception {
+		checkCompiledOutput("loops/forEachTimeRangeWithIndex.pec");
+	}
+
+	@Test
 	public void testInterpretedForEachTupleList() throws Exception {
 		checkInterpretedOutput("loops/forEachTupleList.pec");
+	}
+
+	@Test
+	public void testCompiledForEachTupleList() throws Exception {
+		checkCompiledOutput("loops/forEachTupleList.pec");
 	}
 
 	@Test
@@ -145,8 +265,18 @@ public class TestLoops extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledForEachTupleListWithIndex() throws Exception {
+		checkCompiledOutput("loops/forEachTupleListWithIndex.pec");
+	}
+
+	@Test
 	public void testInterpretedForEachTupleSet() throws Exception {
 		checkInterpretedOutput("loops/forEachTupleSet.pec");
+	}
+
+	@Test
+	public void testCompiledForEachTupleSet() throws Exception {
+		checkCompiledOutput("loops/forEachTupleSet.pec");
 	}
 
 	@Test
@@ -155,8 +285,18 @@ public class TestLoops extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledForEachTupleSetWithIndex() throws Exception {
+		checkCompiledOutput("loops/forEachTupleSetWithIndex.pec");
+	}
+
+	@Test
 	public void testInterpretedWhile() throws Exception {
 		checkInterpretedOutput("loops/while.pec");
+	}
+
+	@Test
+	public void testCompiledWhile() throws Exception {
+		checkCompiledOutput("loops/while.pec");
 	}
 
 }

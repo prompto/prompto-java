@@ -10,6 +10,8 @@ import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
+import prompto.declaration.ConcreteMethodDeclaration;
+import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.INamed;
@@ -22,6 +24,7 @@ import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.runtime.LinkedVariable;
 import prompto.runtime.Variable;
 import prompto.type.IType;
+import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
@@ -77,9 +80,10 @@ public class InstanceExpression implements IExpression {
 				|| named instanceof CategoryDeclaration // any p with x
 				|| named instanceof AttributeDeclaration) // in category method
 			return named.getType(context);
-		else if(named instanceof MethodDeclarationMap) // global method or closure
-			throw new UnsupportedOperationException(); // return new MethodType(context, id);
-		else
+		else if(named instanceof MethodDeclarationMap) { // global method or closure
+			IMethodDeclaration decl = ((MethodDeclarationMap)named).values().iterator().next();
+			return new MethodType(decl);
+		} else
 			throw new SyntaxError(id + "  is not an instance:" + named.getClass().getSimpleName());
 	}
 	
@@ -94,6 +98,10 @@ public class InstanceExpression implements IExpression {
 		if(info!=null)
 			return info;
 		else
+			info = compileRegistered(context, method, flags);
+		if(info!=null)
+			return info;
+		else
 			info = compileInstanceField(context, method, flags);
 		if(info!=null)
 			return info;
@@ -103,6 +111,15 @@ public class InstanceExpression implements IExpression {
 			return info;
 		else
 			throw new SyntaxError("Unknown identifier: " + getName());
+	}
+
+	private ResultInfo compileRegistered(Context context, MethodInfo method, Flags flags) {
+		INamed named = context.getRegistered(getId());
+		if(named instanceof Context.MethodDeclarationMap) {
+			ConcreteMethodDeclaration decl = (ConcreteMethodDeclaration)((MethodDeclarationMap)named).values().iterator().next();
+			return decl.compileClosureInstance(context, method, flags);
+		} else
+			return null;
 	}
 
 	private ResultInfo compileSingletonField(Context context, MethodInfo method, Flags flags) {

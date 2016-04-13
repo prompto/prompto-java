@@ -1,5 +1,8 @@
 package prompto.expression;
 
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.runtime.Context;
 import prompto.type.CodeType;
@@ -42,7 +45,7 @@ public class CodeExpression implements IExpression {
 		return new CodeValue(this);
 	}
 	
-	// expression can only be checked and evaluated in the context of an execute:
+	// expression can only be checked, interpreted or compiled in the context of an execute:
 
 	public IType checkCode(Context context) {
 		return expression.check(context);
@@ -50,6 +53,10 @@ public class CodeExpression implements IExpression {
 
 	public IValue interpretCode(Context context) throws PromptoError {
 		return expression.interpret(context);
+	}
+
+	public ResultInfo compileCode(Context context, MethodInfo method, Flags flags) {
+		return expression.compile(context, method, flags);
 	}
 	
 }

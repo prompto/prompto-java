@@ -25,8 +25,18 @@ public class TestErrors extends BaseOParserTest {
 	}
 
 	@Test
+	public void testCompiledDivideByZero() throws Exception {
+		checkCompiledOutput("errors/divideByZero.poc");
+	}
+
+	@Test
 	public void testInterpretedIndexOutOfRange_listItem() throws Exception {
 		checkInterpretedOutput("errors/indexOutOfRange-listItem.poc");
+	}
+
+	@Test
+	public void testCompiledIndexOutOfRange_listItem() throws Exception {
+		checkCompiledOutput("errors/indexOutOfRange-listItem.poc");
 	}
 
 	@Test
@@ -35,8 +45,18 @@ public class TestErrors extends BaseOParserTest {
 	}
 
 	@Test
+	public void testCompiledIndexOutOfRange_sliceList() throws Exception {
+		checkCompiledOutput("errors/indexOutOfRange-sliceList.poc");
+	}
+
+	@Test
 	public void testInterpretedIndexOutOfRange_sliceRange() throws Exception {
 		checkInterpretedOutput("errors/indexOutOfRange-sliceRange.poc");
+	}
+
+	@Test
+	public void testCompiledIndexOutOfRange_sliceRange() throws Exception {
+		checkCompiledOutput("errors/indexOutOfRange-sliceRange.poc");
 	}
 
 	@Test
@@ -45,8 +65,18 @@ public class TestErrors extends BaseOParserTest {
 	}
 
 	@Test
+	public void testCompiledIndexOutOfRange_sliceText() throws Exception {
+		checkCompiledOutput("errors/indexOutOfRange-sliceText.poc");
+	}
+
+	@Test
 	public void testInterpretedNullDict() throws Exception {
 		checkInterpretedOutput("errors/nullDict.poc");
+	}
+
+	@Test
+	public void testCompiledNullDict() throws Exception {
+		checkCompiledOutput("errors/nullDict.poc");
 	}
 
 	@Test
@@ -55,8 +85,18 @@ public class TestErrors extends BaseOParserTest {
 	}
 
 	@Test
+	public void testCompiledNullItem() throws Exception {
+		checkCompiledOutput("errors/nullItem.poc");
+	}
+
+	@Test
 	public void testInterpretedNullKey() throws Exception {
 		checkInterpretedOutput("errors/nullKey.poc");
+	}
+
+	@Test
+	public void testCompiledNullKey() throws Exception {
+		checkCompiledOutput("errors/nullKey.poc");
 	}
 
 	@Test
@@ -65,13 +105,28 @@ public class TestErrors extends BaseOParserTest {
 	}
 
 	@Test
+	public void testCompiledNullMember() throws Exception {
+		checkCompiledOutput("errors/nullMember.poc");
+	}
+
+	@Test
 	public void testInterpretedNullMethod() throws Exception {
 		checkInterpretedOutput("errors/nullMethod.poc");
 	}
 
 	@Test
+	public void testCompiledNullMethod() throws Exception {
+		checkCompiledOutput("errors/nullMethod.poc");
+	}
+
+	@Test
 	public void testInterpretedUserException() throws Exception {
 		checkInterpretedOutput("errors/userException.poc");
+	}
+
+	@Test
+	public void testCompiledUserException() throws Exception {
+		checkCompiledOutput("errors/userException.poc");
 	}
 
 }

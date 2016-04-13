@@ -238,7 +238,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 		try {
 			context = prepareContext(context);
 			IType returnType = check(context);
-			MethodInfo method = createMethodInfo(context, classFile, returnType);
+			MethodInfo method = createMethodInfo(context, classFile, returnType, getName());
 			method.addModifier(Modifier.ABSTRACT);
 		} catch (PromptoError e) {
 			throw new CompilerException(e);
@@ -254,16 +254,16 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 		return context;
 	}
 	
-	protected MethodInfo createMethodInfo(Context context, ClassFile classFile, IType returnType) {
+	protected MethodInfo createMethodInfo(Context context, ClassFile classFile, IType returnType, String methodName) {
 		Descriptor.Method proto = CompilerUtils.createMethodDescriptor(context, arguments, returnType);
-		MethodInfo method = classFile.newMethod(getName(), proto); 
+		MethodInfo method = classFile.newMethod(methodName, proto); 
 		return method;
 	}
 
 	@Override
 	public void compileAssignments(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments) {
 		boolean isFirst = true;
-		for(IArgument arg : arguments) {
+		for(IArgument arg : arguments.stripOutTemplateArguments()) {
 			arg.compileAssignment(context, method, flags, assignments, isFirst);
 			isFirst = false;
 		}

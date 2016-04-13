@@ -11,13 +11,13 @@ import prompto.argument.IArgument;
 import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.Descriptor;
 import prompto.compiler.Descriptor.Method;
 import prompto.compiler.FieldConstant;
 import prompto.compiler.FieldInfo;
 import prompto.compiler.Flags;
-import prompto.compiler.IVerifierEntry.VerifierType;
-import prompto.compiler.Descriptor;
 import prompto.compiler.IOperand;
+import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.LocalVariableTableAttribute;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
@@ -137,11 +137,13 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	
 	private boolean canBeChecked(Context context) {
 		if(context.isGlobalContext())
-			return !mustBeBeCheckedInCallContext(context);
+			return !isTemplate();
 		else
 			return true;
 	}
-	public boolean mustBeBeCheckedInCallContext(Context context) {
+	
+	@Override
+	public boolean isTemplate() {
 		// if at least one argument is 'Code'
 		if(arguments==null)
 			return false;
@@ -192,9 +194,13 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	
 	@Override
 	public void compile(Context context, ClassFile classFile) {
+		compile(context, classFile, getName());
+	}
+	
+	public void compile(Context context, ClassFile classFile, String methodName) {
 		context = prepareContext(context);
 		IType returnType = check(context);
-		MethodInfo method = createMethodInfo(context, classFile, returnType);
+		MethodInfo method = createMethodInfo(context, classFile, returnType, methodName);
 		registerLocals(context, classFile, method);
 		produceByteCode(context, method, returnType);
 	}
@@ -212,13 +218,29 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 			method.addModifier(Modifier.STATIC); // otherwise it's a member method
 		else 
 			method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
-		arguments.forEach((arg)->
+		List<IArgument> args = arguments.stripOutTemplateArguments();
+		args.forEach((arg)->
 			arg.registerLocal(context, method, new Flags()));
-		arguments.forEach((arg)->
+		args.forEach((arg)->
 			arg.extractLocal(context, method, new Flags()));
 	}
 
+	@Override
+	public String compileTemplate(Context context, ClassFile classFile) {
+		String methodName = computeTemplateName(classFile);
+		compile(context, classFile, methodName);
+		return methodName;
+	}
 
+
+	private String computeTemplateName(ClassFile classFile) {
+		int i = 0;
+		while(true) {
+			String methodName = this.getName() + '$' + (++i);
+			if(!classFile.hasMethod(methodName))
+				return methodName;
+		}
+	}
 
 	@Override
 	public boolean isEligibleAsMain() {

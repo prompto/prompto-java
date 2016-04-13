@@ -98,9 +98,12 @@ public abstract class CompilerUtils {
 	}
 	
 	public static Descriptor.Method createMethodDescriptor(Context context, ArgumentList arguments, IType returnType) {
-		List<Type> argTypes = new ArrayList<>();
-		arguments.forEach((arg)->
-			argTypes.add(arg.getJavaType(context)));
+		List<Type> argTypes = arguments
+			.stripOutTemplateArguments()
+			.stream()
+			.map((arg)->
+				arg.getJavaType(context))
+			.collect(Collectors.toList());
 		return new Descriptor.Method(argTypes.toArray(new Type[argTypes.size()]), returnType.getJavaType(context));
 	}
 

@@ -25,8 +25,18 @@ public class TestCategories extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledComposed() throws Exception {
+		checkCompiledOutput("categories/composed.pec");
+	}
+
+	@Test
 	public void testInterpretedCopyFromAscendant() throws Exception {
 		checkInterpretedOutput("categories/copyFromAscendant.pec");
+	}
+
+	@Test
+	public void testCompiledCopyFromAscendant() throws Exception {
+		checkCompiledOutput("categories/copyFromAscendant.pec");
 	}
 
 	@Test
@@ -35,13 +45,28 @@ public class TestCategories extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledCopyFromAscendantWithOverride() throws Exception {
+		checkCompiledOutput("categories/copyFromAscendantWithOverride.pec");
+	}
+
+	@Test
 	public void testInterpretedCopyFromDescendant() throws Exception {
 		checkInterpretedOutput("categories/copyFromDescendant.pec");
 	}
 
 	@Test
+	public void testCompiledCopyFromDescendant() throws Exception {
+		checkCompiledOutput("categories/copyFromDescendant.pec");
+	}
+
+	@Test
 	public void testInterpretedCopyFromDescendantWithOverride() throws Exception {
 		checkInterpretedOutput("categories/copyFromDescendantWithOverride.pec");
+	}
+
+	@Test
+	public void testCompiledCopyFromDescendantWithOverride() throws Exception {
+		checkCompiledOutput("categories/copyFromDescendantWithOverride.pec");
 	}
 
 }

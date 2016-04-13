@@ -78,6 +78,18 @@ public class ClassFile {
 		return methods;
 	}
 
+	public boolean hasMethod(String methodName) {
+		for(MethodInfo m : methods) {
+			if(methodName.equals(m.getName().getValue()))
+				return true;
+		}
+		return false;
+	}
+
+	public void setEnclosingMethod(MethodInfo method) {
+		System.err.println("TODO: setEnclosingMethod");
+	}
+
 	public void addInnerClass(ClassFile classFile) {
 		InnerClassInfo info = new InnerClassInfo(classFile, getThisClass());
 		addInnerClass(info);
@@ -173,12 +185,5 @@ public class ClassFile {
 		attributes.forEach((a)->
 			a.writeTo(writer));
 	}
-
-	public void setEnclosingMethod(MethodInfo method) {
-		System.err.println("TODO: setEnclosingMethod");
-	}
-
-
-
 
 }

@@ -25,8 +25,18 @@ public class TestCast extends BaseOParserTest {
 	}
 
 	@Test
+	public void testCompiledAutoDowncast() throws Exception {
+		checkCompiledOutput("cast/autoDowncast.poc");
+	}
+
+	@Test
 	public void testInterpretedCastChild() throws Exception {
 		checkInterpretedOutput("cast/castChild.poc");
+	}
+
+	@Test
+	public void testCompiledCastChild() throws Exception {
+		checkCompiledOutput("cast/castChild.poc");
 	}
 
 	@Test
@@ -35,8 +45,18 @@ public class TestCast extends BaseOParserTest {
 	}
 
 	@Test
+	public void testCompiledIsAChild() throws Exception {
+		checkCompiledOutput("cast/isAChild.poc");
+	}
+
+	@Test
 	public void testInterpretedIsAText() throws Exception {
 		checkInterpretedOutput("cast/isAText.poc");
+	}
+
+	@Test
+	public void testCompiledIsAText() throws Exception {
+		checkCompiledOutput("cast/isAText.poc");
 	}
 
 }

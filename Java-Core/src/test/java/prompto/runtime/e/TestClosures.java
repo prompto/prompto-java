@@ -25,13 +25,28 @@ public class TestClosures extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledGlobalClosureNoArg() throws Exception {
+		checkCompiledOutput("closures/globalClosureNoArg.pec");
+	}
+
+	@Test
 	public void testInterpretedGlobalClosureWithArg() throws Exception {
 		checkInterpretedOutput("closures/globalClosureWithArg.pec");
 	}
 
 	@Test
+	public void testCompiledGlobalClosureWithArg() throws Exception {
+		checkCompiledOutput("closures/globalClosureWithArg.pec");
+	}
+
+	@Test
 	public void testInterpretedInstanceClosureNoArg() throws Exception {
 		checkInterpretedOutput("closures/instanceClosureNoArg.pec");
+	}
+
+	@Test
+	public void testCompiledInstanceClosureNoArg() throws Exception {
+		checkCompiledOutput("closures/instanceClosureNoArg.pec");
 	}
 
 }

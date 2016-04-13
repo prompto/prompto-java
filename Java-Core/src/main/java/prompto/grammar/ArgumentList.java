@@ -1,5 +1,9 @@
 package prompto.grammar;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import prompto.argument.CodeArgument;
 import prompto.argument.IArgument;
 import prompto.runtime.Context;
 import prompto.utils.CodeWriter;
@@ -33,6 +37,14 @@ public class ArgumentList extends ObjectList<IArgument> {
 		}
 		return null;
 	}
+	
+	public List<IArgument> stripOutTemplateArguments() {
+		return this.stream()
+			.filter((a)->
+				!(a instanceof CodeArgument))
+			.collect(Collectors.toList());
+	}
+
 
 	public void toDialect(CodeWriter writer) {
 		if(this.size()==0)

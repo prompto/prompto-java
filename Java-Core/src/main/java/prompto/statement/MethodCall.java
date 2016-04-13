@@ -1,16 +1,17 @@
 package prompto.statement;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import prompto.argument.IArgument;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.IInstructionListener;
 import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
 import prompto.compiler.OffsetListenerConstant;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
-import prompto.compiler.MethodInfo;
 import prompto.compiler.StackState;
 import prompto.compiler.StringConstant;
 import prompto.declaration.AbstractMethodDeclaration;
@@ -21,11 +22,14 @@ import prompto.declaration.TestMethodDeclaration;
 import prompto.error.NotMutableError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.expression.CodeExpression;
 import prompto.expression.IAssertion;
 import prompto.expression.IExpression;
 import prompto.expression.MethodSelector;
+import prompto.expression.ThisExpression;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
+import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.MethodFinder;
@@ -100,8 +104,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	}
 
 	private IType check(IMethodDeclaration declaration, Context parent, Context local) {
-		if (declaration instanceof ConcreteMethodDeclaration
-				&& ((ConcreteMethodDeclaration) declaration).mustBeBeCheckedInCallContext(parent))
+		if (declaration.isTemplate())
 			return fullCheck((ConcreteMethodDeclaration) declaration, parent, local);
 		else
 			return lightCheck(declaration, parent, local);
@@ -134,6 +137,19 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 			return assignments.resolveAndCheck(context, declaration);
 	}
 
+	public ArgumentAssignmentList makeCodeAssignments(Context context, IMethodDeclaration declaration) {
+		if (assignments == null)
+			return new ArgumentAssignmentList();
+		else {
+			ArgumentAssignmentList list = new ArgumentAssignmentList();
+			list.addAll(assignments.stream()
+					.filter((a)->
+						(a.getExpression() instanceof CodeExpression))
+					.collect(Collectors.toList()));
+			return list.resolveAndCheck(context, declaration);
+		}
+	}
+
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		MethodFinder finder = new MethodFinder(context, this);
@@ -156,10 +172,43 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	}
 
 	private ResultInfo compileExact(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration) {
+		if(declaration.isTemplate())
+			return compileTemplate(context, method, flags, declaration);
+		else
+			return compileConcrete(context, method, flags, declaration);
+	}
+
+	private ResultInfo compileConcrete(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration) {
 		Context local = this.method.newLocalCheckContext(context, declaration);
 		declaration.registerArguments(local);
 		ArgumentAssignmentList assignments = this.assignments!=null ? this.assignments : new ArgumentAssignmentList();
 		return this.method.compileExact(local, method, flags, declaration, assignments);
+	}
+
+	private ResultInfo compileTemplate(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration) {
+		// compile the method as a member method
+		Context local = context.newLocalContext();
+		declaration.registerArguments(local);
+		registerCodeAssignments(context, local, declaration);
+		String methodName = declaration.compileTemplate(local, method.getClassFile());
+		// compile the method call
+		IExpression parent = method.isStatic() ? null : new ThisExpression();
+		MethodSelector selector = new MethodSelector(parent, new Identifier(methodName));
+		local = selector.newLocalContext(context, declaration);
+		declaration.registerArguments(local);
+		registerCodeAssignments(context, local, declaration);
+		ArgumentAssignmentList assignments = this.assignments!=null ? this.assignments : new ArgumentAssignmentList();
+		return selector.compileTemplate(local, method, flags, declaration, assignments, methodName);
+	}
+
+	private void registerCodeAssignments(Context context, Context local, IMethodDeclaration declaration) {
+		ArgumentAssignmentList assignments = makeCodeAssignments(context, declaration);
+		for (ArgumentAssignment assignment : assignments) {
+			IExpression expression = assignment.resolve(local, declaration, true);
+			IArgument argument = assignment.getArgument();
+			IValue value = argument.checkValue(context, expression);
+			local.setValue(assignment.getArgumentId(), value);
+		}	
 	}
 
 	@Override
@@ -235,6 +284,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		method.placeLabel(finalState);
 		method.inhibitOffsetListener(finalListener);
 	}
+	
 	private IMethodDeclaration findDeclaration(Context context) {
 		try {
 			Object o = context.getValue(method.getId());

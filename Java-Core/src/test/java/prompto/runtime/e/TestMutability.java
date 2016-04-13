@@ -25,8 +25,18 @@ public class TestMutability extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledImmutable() throws Exception {
+		checkCompiledOutput("mutability/immutable.pec");
+	}
+
+	@Test
 	public void testInterpretedImmutableArgument() throws Exception {
 		checkInterpretedOutput("mutability/immutableArgument.pec");
+	}
+
+	@Test
+	public void testCompiledImmutableArgument() throws Exception {
+		checkCompiledOutput("mutability/immutableArgument.pec");
 	}
 
 	@Test
@@ -35,8 +45,18 @@ public class TestMutability extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledImmutableMember() throws Exception {
+		checkCompiledOutput("mutability/immutableMember.pec");
+	}
+
+	@Test
 	public void testInterpretedMutable() throws Exception {
 		checkInterpretedOutput("mutability/mutable.pec");
+	}
+
+	@Test
+	public void testCompiledMutable() throws Exception {
+		checkCompiledOutput("mutability/mutable.pec");
 	}
 
 	@Test
@@ -45,8 +65,18 @@ public class TestMutability extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledMutableArgument() throws Exception {
+		checkCompiledOutput("mutability/mutableArgument.pec");
+	}
+
+	@Test
 	public void testInterpretedMutableMember() throws Exception {
 		checkInterpretedOutput("mutability/mutableMember.pec");
+	}
+
+	@Test
+	public void testCompiledMutableMember() throws Exception {
+		checkCompiledOutput("mutability/mutableMember.pec");
 	}
 
 }

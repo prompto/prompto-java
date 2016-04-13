@@ -25,8 +25,18 @@ public class TestTesting extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledAnd() throws Exception {
+		checkCompiledOutput("testing/and.pec");
+	}
+
+	@Test
 	public void testInterpretedContains() throws Exception {
 		checkInterpretedOutput("testing/contains.pec");
+	}
+
+	@Test
+	public void testCompiledContains() throws Exception {
+		checkCompiledOutput("testing/contains.pec");
 	}
 
 	@Test
@@ -35,8 +45,18 @@ public class TestTesting extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledGreater() throws Exception {
+		checkCompiledOutput("testing/greater.pec");
+	}
+
+	@Test
 	public void testInterpretedMethod() throws Exception {
 		checkInterpretedOutput("testing/method.pec");
+	}
+
+	@Test
+	public void testCompiledMethod() throws Exception {
+		checkCompiledOutput("testing/method.pec");
 	}
 
 	@Test
@@ -45,8 +65,18 @@ public class TestTesting extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledNegative() throws Exception {
+		checkCompiledOutput("testing/negative.pec");
+	}
+
+	@Test
 	public void testInterpretedNegativeError() throws Exception {
 		checkInterpretedOutput("testing/negativeError.pec");
+	}
+
+	@Test
+	public void testCompiledNegativeError() throws Exception {
+		checkCompiledOutput("testing/negativeError.pec");
 	}
 
 	@Test
@@ -55,8 +85,18 @@ public class TestTesting extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledNot() throws Exception {
+		checkCompiledOutput("testing/not.pec");
+	}
+
+	@Test
 	public void testInterpretedOr() throws Exception {
 		checkInterpretedOutput("testing/or.pec");
+	}
+
+	@Test
+	public void testCompiledOr() throws Exception {
+		checkCompiledOutput("testing/or.pec");
 	}
 
 	@Test
@@ -65,8 +105,18 @@ public class TestTesting extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledPositive() throws Exception {
+		checkCompiledOutput("testing/positive.pec");
+	}
+
+	@Test
 	public void testInterpretedPositiveError() throws Exception {
 		checkInterpretedOutput("testing/positiveError.pec");
+	}
+
+	@Test
+	public void testCompiledPositiveError() throws Exception {
+		checkCompiledOutput("testing/positiveError.pec");
 	}
 
 }

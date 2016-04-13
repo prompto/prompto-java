@@ -103,7 +103,7 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 			context = context.newLocalContext();
 			registerArguments(context);
 			IType returnType = this.checkNative(context);
-			MethodInfo method = createMethodInfo(context, classFile, returnType);
+			MethodInfo method = createMethodInfo(context, classFile, returnType, getName());
 			registerLocals(context, classFile, method);
 			if(statement!=null)
 				statement.compile(context, method, new Flags());

@@ -24,5 +24,10 @@ public class TestIterate extends BaseOParserTest {
 		checkInterpretedOutput("iterate/forEachIntegerList.poc");
 	}
 
+	@Test
+	public void testCompiledForEachIntegerList() throws Exception {
+		checkCompiledOutput("iterate/forEachIntegerList.poc");
+	}
+
 }
 

@@ -1,7 +1,6 @@
 package prompto.declaration;
 
 import prompto.compiler.ClassFile;
-import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
@@ -26,6 +25,11 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 	
 	@Override
+	public boolean isTemplate() {
+		return false;
+	}
+
+	@Override
 	public IType check(Context context) {
 		if(arguments!=null)
 			arguments.check(context);
@@ -41,13 +45,18 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 	}	
 
 	@Override
-	public IValue interpret(Context context) throws PromptoError {
+	public IValue interpret(Context context) {
 		throw new SyntaxError("Should never get there !");
 	}
 	
 	@Override
 	public void compile(Context context, ClassFile classFile) {
 		compilePrototype(context, classFile);
+	}
+	
+	@Override
+	public String compileTemplate(Context context, ClassFile classFile) {
+		throw new SyntaxError("Should never get there !");
 	}
 	
 	@Override

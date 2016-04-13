@@ -25,8 +25,18 @@ public class TestSingleton extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledAttribute() throws Exception {
+		checkCompiledOutput("singleton/attribute.pec");
+	}
+
+	@Test
 	public void testInterpretedMember() throws Exception {
 		checkInterpretedOutput("singleton/member.pec");
+	}
+
+	@Test
+	public void testCompiledMember() throws Exception {
+		checkCompiledOutput("singleton/member.pec");
 	}
 
 }

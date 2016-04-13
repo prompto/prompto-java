@@ -25,8 +25,18 @@ public class TestSub extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledSubDate() throws Exception {
+		checkCompiledOutput("sub/subDate.pec");
+	}
+
+	@Test
 	public void testInterpretedSubDateTime() throws Exception {
 		checkInterpretedOutput("sub/subDateTime.pec");
+	}
+
+	@Test
+	public void testCompiledSubDateTime() throws Exception {
+		checkCompiledOutput("sub/subDateTime.pec");
 	}
 
 	@Test
@@ -35,8 +45,18 @@ public class TestSub extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledSubDecimal() throws Exception {
+		checkCompiledOutput("sub/subDecimal.pec");
+	}
+
+	@Test
 	public void testInterpretedSubInteger() throws Exception {
 		checkInterpretedOutput("sub/subInteger.pec");
+	}
+
+	@Test
+	public void testCompiledSubInteger() throws Exception {
+		checkCompiledOutput("sub/subInteger.pec");
 	}
 
 	@Test
@@ -45,8 +65,18 @@ public class TestSub extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompiledSubPeriod() throws Exception {
+		checkCompiledOutput("sub/subPeriod.pec");
+	}
+
+	@Test
 	public void testInterpretedSubTime() throws Exception {
 		checkInterpretedOutput("sub/subTime.pec");
+	}
+
+	@Test
+	public void testCompiledSubTime() throws Exception {
+		checkCompiledOutput("sub/subTime.pec");
 	}
 
 }
