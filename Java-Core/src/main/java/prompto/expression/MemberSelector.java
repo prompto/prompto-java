@@ -28,6 +28,7 @@ import prompto.intrinsic.PromptoDict;
 import prompto.intrinsic.PromptoDocument;
 import prompto.runtime.Context;
 import prompto.runtime.Context.ClosureContext;
+import prompto.runtime.Context.InstanceContext;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -76,8 +77,13 @@ public class MemberSelector extends SelectorExpression {
 	
 	@Override
 	public IType check(Context context) {
-		IType parentType = checkParent(context);
-        return parentType.checkMember(context, id);
+		if("this$0".equals(id.toString())) {
+			InstanceContext instance = context.getClosestInstanceContext();
+			return instance.getInstanceType();
+		} else {
+			IType parentType = checkParent(context);
+			return parentType.checkMember(context, id);
+		}
 	}
 	
 	@Override
@@ -184,7 +190,9 @@ public class MemberSelector extends SelectorExpression {
 			return compileStringLength(method, flags);
 		else {
 			String getterName = CompilerUtils.getterName(getName());
-			if(isCompilingGetter(context, method, info, getterName) || context instanceof ClosureContext)
+			if(isCompilingGetter(context, method, info, getterName))
+				compileGetField(context, method, flags, info, resultType);
+			else if(context instanceof ClosureContext)
 				compileGetField(context, method, flags, info, resultType);
 			else if(PromptoAny.class==info.getType()) 
 				compileGetMember(context, method, flags, info, resultType);
@@ -267,6 +275,8 @@ public class MemberSelector extends SelectorExpression {
 
 	private void compileGetField(Context context, MethodInfo method, Flags flags, ResultInfo info, Type resultType) {
 		Type classType = CompilerUtils.categoryConcreteTypeFrom(info.getType().getTypeName());
+		if("this$0".equals(id.toString()))
+			resultType = CompilerUtils.categoryConcreteTypeFrom(resultType.getTypeName());
 		FieldConstant f = new FieldConstant(classType, id.toString(), resultType);
 		method.addInstruction(Opcode.GETFIELD, f);
 	}

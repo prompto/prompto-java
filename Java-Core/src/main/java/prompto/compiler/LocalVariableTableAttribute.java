@@ -3,6 +3,7 @@ package prompto.compiler;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class LocalVariableTableAttribute implements IAttribute {
 
@@ -10,7 +11,10 @@ public class LocalVariableTableAttribute implements IAttribute {
 	private Map<String, StackLocal> entries = new HashMap<>();
 
 	public Collection<StackLocal> getEntries() {
-		return entries.values();
+		return entries.values().stream()
+				.sorted((a, b)->
+					Short.compare(a.getIndex(), b.getIndex()))
+				.collect(Collectors.toList());
 	}
 	
 	public StackLocal registerLocal(StackLocal local) {

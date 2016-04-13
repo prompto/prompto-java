@@ -125,6 +125,15 @@ public class Context implements IContext {
 		return calling;
 	}
 
+	public InstanceContext getClosestInstanceContext() {
+		if(parent==null)
+			return null;
+		else if(parent instanceof InstanceContext)
+			return (InstanceContext)parent;
+		else
+			return parent.getClosestInstanceContext();
+	}
+	
 	public Context getParentMostContext() {
 		if(parent==null)
 			return this;
@@ -842,5 +851,6 @@ public class Context implements IContext {
 		}
 		
 	}
+
 
 }

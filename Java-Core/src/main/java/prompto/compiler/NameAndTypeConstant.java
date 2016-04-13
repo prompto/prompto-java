@@ -26,7 +26,7 @@ public class NameAndTypeConstant implements ICodeConstant {
 
 	@Override
 	public String toString() {
-		return name.toString() + '/' + type.toString();
+		return name.toString() + '(' + type.toString() + ')';
 	}
 	
 	public Descriptor getDescriptor() {

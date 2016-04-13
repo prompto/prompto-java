@@ -250,8 +250,10 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 
 	private Type getClosureClassType(MethodInfo method) {
-		ClassFile parentClass = method.getClassFile();
-		String innerClassName = parentClass.getThisClass().getType().getTypeName() + '$' + this.getName();
+		String innerClassName = method.getClassFile().getThisClass().getType().getTypeName();
+		if(closureOf.getMemberOf()!=null)
+			innerClassName += "$" + closureOf.getName();
+		innerClassName += "$" + this.getName();
 		return new PromptoType(innerClassName); 
 	}
 
@@ -264,16 +266,26 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 			method.registerLocal("this", VerifierType.ITEM_UninitializedThis, classFile.getThisClass());
 			locals.getEntries().forEach((local)->{
 				Type type = ((StackLocal.ObjectLocal)local).getClassName().getType();
-				method.registerLocal(local.getName(), VerifierType.ITEM_Object, new ClassConstant(type));
+				String name = "this".equals(local.getName()) ? "this$0" : local.getName();
+				if("this".equals(name)) {
+					name = "this$0";
+					type = CompilerUtils.categoryConcreteTypeFrom(type.getTypeName());
+				}
+				method.registerLocal(name, VerifierType.ITEM_Object, new ClassConstant(type));
 				});
 			method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
 			MethodConstant m = new MethodConstant(classFile.getSuperClass(), "<init>", void.class);
 			method.addInstruction(Opcode.INVOKESPECIAL, m);
 			locals.getEntries().forEach((local)->{
 				method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
-				CompilerUtils.compileALOAD(method, local.getName());
 				Type type = ((StackLocal.ObjectLocal)local).getClassName().getType();
-				FieldConstant field = new FieldConstant(classFile.getThisClass(), local.getName(), type);
+				String name = local.getName();
+				if("this".equals(name)) {
+					name = "this$0";
+					type = CompilerUtils.categoryConcreteTypeFrom(type.getTypeName());
+				}
+				CompilerUtils.compileALOAD(method, name);
+				FieldConstant field = new FieldConstant(classFile.getThisClass(), name, type);
 				method.addInstruction(Opcode.PUTFIELD, field);
 				});
 			method.addInstruction(Opcode.RETURN);
@@ -293,7 +305,13 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 
 	private void compileClosureField(Context context, ClassFile classFile, StackLocal local) {
-		FieldInfo field = new FieldInfo(local.getName(), ((StackLocal.ObjectLocal)local).getClassName().getType());
+		Type type = ((StackLocal.ObjectLocal)local).getClassName().getType();
+		String name = local.getName();
+		if("this".equals(name)) {
+			name = "this$0";
+			type = CompilerUtils.categoryConcreteTypeFrom(type.getTypeName());
+		}
+		FieldInfo field = new FieldInfo(name, type);
 		classFile.addField(field);
 	}
 	

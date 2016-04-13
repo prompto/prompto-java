@@ -44,8 +44,10 @@ public class MethodType extends BaseType {
 		} else if(embedding.getMemberOf()==null) {
 			Type outer = CompilerUtils.getGlobalMethodType(embedding.getId()); 
 			return new PromptoType(outer.getTypeName() + '$' + method.getName());
-		} else
-			throw new UnsupportedOperationException();
+		} else {
+			Type outer = CompilerUtils.getCategoryConcreteType(embedding.getMemberOf().getId()); 
+			return new PromptoType(outer.getTypeName() + '$' + embedding.getName() + '$' + method.getName());
+		}
 	}
 	
 	@Override

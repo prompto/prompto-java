@@ -16,6 +16,7 @@ import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
+import prompto.runtime.Context.ClosureContext;
 import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.runtime.LinkedVariable;
@@ -117,7 +118,12 @@ public class InstanceExpression implements IExpression {
 		StackLocal local = method.getRegisteredLocal("this");
 		if(local==null)
 			return null;
-		ThisExpression parent = new ThisExpression();
+		IExpression parent = new ThisExpression();
+		if(context instanceof ClosureContext) {
+			Context owner = context.contextForValue(id);
+			if(owner instanceof InstanceContext)
+				parent = new MemberSelector(parent, new Identifier("this$0"));
+		}
 		MemberSelector selector = new MemberSelector(parent, id);
 		return selector.compile(context, method, flags);
 	}
