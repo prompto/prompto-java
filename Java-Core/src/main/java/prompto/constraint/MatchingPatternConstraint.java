@@ -1,4 +1,4 @@
-package prompto.grammar;
+package prompto.constraint;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

@@ -1,4 +1,4 @@
-package prompto.grammar;
+package prompto.constraint;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -13,6 +13,7 @@ import prompto.compiler.StringConstant;
 import prompto.error.InvalidValueError;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
+import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoException;
 import prompto.parser.Section;
 import prompto.runtime.Context;

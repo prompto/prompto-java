@@ -1,4 +1,4 @@
-package prompto.grammar;
+package prompto.constraint;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
