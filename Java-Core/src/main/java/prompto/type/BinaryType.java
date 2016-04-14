@@ -1,7 +1,10 @@
 package prompto.type;
 
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoBinary;
 import prompto.runtime.Context;
+import prompto.value.BinaryValue;
+import prompto.value.IValue;
 
 
 public abstract class BinaryType extends NativeType { 
@@ -19,6 +22,14 @@ public abstract class BinaryType extends NativeType {
 			return TextType.instance();
 		else
 			return super.checkMember(context, id);
+	}
+	
+	@Override
+	public IValue convertJavaValueToPromptoValue(Context context, Object value) {
+		if(value instanceof PromptoBinary)
+			return BinaryValue.newInstance((PromptoBinary)value);
+		else
+			return super.convertJavaValueToPromptoValue(context, value);
 	}
 
 }

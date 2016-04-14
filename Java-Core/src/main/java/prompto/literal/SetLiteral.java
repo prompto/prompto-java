@@ -1,8 +1,5 @@
 package prompto.literal;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.IOperand;
@@ -14,8 +11,10 @@ import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.intrinsic.PromptoSet;
 import prompto.runtime.Context;
+import prompto.type.CharacterType;
 import prompto.type.DecimalType;
 import prompto.type.IType;
+import prompto.type.IntegerType;
 import prompto.type.MissingType;
 import prompto.type.SetType;
 import prompto.type.TextType;
@@ -57,17 +56,10 @@ public class SetLiteral extends Literal<SetValue> {
 	public IValue interpret(Context context) throws PromptoError {
 		if(value.isEmpty() && expressions!=null && !expressions.isEmpty()) {
 			check(context); // force computation of itemType
-			List<IValue> list = new ArrayList<>();
-			for(IExpression exp : expressions)
-				list.add(exp.interpret(context));
-			if(itemType==null)
-				itemType = Utils.inferElementType(context, list); 
 			PromptoSet<IValue> set = new PromptoSet<IValue>();
-			for(IValue item : list) {
-				if(DecimalType.instance()==itemType && item instanceof Integer)
-					item = new Decimal(((Integer)item).doubleValue());
-				else if(TextType.instance()==itemType && item instanceof Character)
-					item = ((Character)item).asText();
+			for(IExpression exp : expressions) {
+				IValue item = exp.interpret(context);
+				item = interpretPromotion(item);
 				set.add(item);
 			}
 			value = new SetValue(itemType, set);
@@ -76,7 +68,16 @@ public class SetLiteral extends Literal<SetValue> {
 		return value;
 	}
 
-
+	private IValue interpretPromotion(IValue item) {
+		if(item==null)
+			return item;
+		if(DecimalType.instance()==itemType && item.getType()==IntegerType.instance())
+			return new Decimal(((Integer)item).doubleValue());
+		else if(TextType.instance()==itemType && item.getType()==CharacterType.instance())
+			return ((Character)item).asText();
+		else
+			return item;
+	}
 	@Override
 	public void toDialect(CodeWriter writer) {
 		if(expressions!=null) {

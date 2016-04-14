@@ -13,7 +13,6 @@ import prompto.expression.IExpression;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.INamed;
-import prompto.grammar.INamedArgument;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoProxy;
 import prompto.parser.Dialect;

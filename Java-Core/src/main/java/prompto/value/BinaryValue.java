@@ -61,6 +61,10 @@ public abstract class BinaryValue extends BaseValue {
 		return data.getBytes();
 	}
 	
+	public PromptoBinary getData() {
+		return data;
+	}
+	
 	@Override
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();

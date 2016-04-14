@@ -5,14 +5,8 @@ import java.io.IOException;
 import org.apache.solr.common.util.Base64;
 
 import prompto.intrinsic.PromptoBinary;
-import prompto.value.BinaryValue;
 
 public abstract class BinaryConverter {
-
-	public static byte[] toBytes(BinaryValue binary) throws IOException {
-		BinaryData value = new BinaryData(binary.getMimeType(), binary.getBytes());
-		return value.toByteArray();
-	}
 
 	public static PromptoBinary toPromptoBinary(Object data) throws IOException {
 		if(data instanceof String)

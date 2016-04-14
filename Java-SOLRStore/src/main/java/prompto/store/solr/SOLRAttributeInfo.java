@@ -22,15 +22,15 @@ class SOLRAttributeInfo extends AttributeInfo {
 	}
 	
 	static SOLRAttributeInfo computeFieldFlags(AttributeDeclaration column) {
-		SOLRAttributeInfo flags = null; 
+		SOLRAttributeInfo info = null; 
 		if(!"version".equals(column.getName())) {
 			IType type = column.getType();
 			if(type instanceof ListType)
 				type = ((ListType)type).getItemType();
 			if(type==TextType.instance())
-				flags = new SOLRAttributeInfo(column.getAttributeInfo());
+				info = new SOLRAttributeInfo(column.getAttributeInfo());
 		}
-		return flags;
+		return info;
 	}
 
 	public SOLRAttributeInfo(AttributeInfo info) {
@@ -41,7 +41,7 @@ class SOLRAttributeInfo extends AttributeInfo {
 	private void adjustIndexFlags() {
 		if("category".equals(name))
 			key = true;
-		else if(family==Family.TEXT) {
+		else if(family==Family.TEXT && !"version".equals(name)) {
 			if(!key && !value && !words)
 				value = true;
 		} else {
@@ -62,7 +62,7 @@ class SOLRAttributeInfo extends AttributeInfo {
 	
 	public void addFieldNameForEquals(StringBuilder sb) {
 		sb.append(name);
-		if(family==Family.TEXT) {
+		if(family==Family.TEXT && !"version".equals(name)) {
 			sb.append('-');
 			if(isKey())
 				sb.append(KEY);
@@ -75,7 +75,7 @@ class SOLRAttributeInfo extends AttributeInfo {
 
 	public void addFieldNameForRoughly(StringBuilder sb) {
 		sb.append(name);
-		if(family==Family.TEXT) {
+		if(family==Family.TEXT && !"version".equals(name)) {
 			sb.append('-');
 			if(isValue())
 				sb.append(VALUE);
@@ -87,7 +87,7 @@ class SOLRAttributeInfo extends AttributeInfo {
 	}
 
 	public String getFieldNameForOrderBy() {
-		if(family==Family.TEXT) {
+		if(family==Family.TEXT && !"version".equals(name)) {
 			if(isKey())
 				return name + '-' + KEY;
 			else if(isValue())

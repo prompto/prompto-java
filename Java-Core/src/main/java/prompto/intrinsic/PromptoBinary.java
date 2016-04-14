@@ -24,9 +24,5 @@ public class PromptoBinary {
 		return bytes;
 	}
 
-	public static PromptoBinary read(byte[] data) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 }

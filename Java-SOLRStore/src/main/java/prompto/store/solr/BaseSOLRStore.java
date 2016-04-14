@@ -30,6 +30,7 @@ import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoBinary;
 import prompto.intrinsic.PromptoDate;
 import prompto.intrinsic.PromptoDateTime;
+import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoPeriod;
 import prompto.intrinsic.PromptoTime;
 import prompto.runtime.Context;
@@ -101,7 +102,7 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 		readerMap.put("db-ref", readerMap.get("uuid"));
 		readerMap.put("blob", (o) -> BinaryConverter.toPromptoBinary(o));
 		readerMap.put("boolean", (o) -> o);
-		readerMap.put("text", (o) -> o.toString());
+		readerMap.put("text", (o) -> String.valueOf(o));
 		readerMap.put("text-key", readerMap.get("text"));
 		readerMap.put("text-value", readerMap.get("text"));
 		readerMap.put("text-words", readerMap.get("text"));
@@ -113,22 +114,42 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 		readerMap.put("date", (o) -> PromptoDate.parse(o.toString()));
 		readerMap.put("time", (o) -> PromptoTime.parse(o.toString()));
 		readerMap.put("datetime", (o) -> PromptoDateTime.parse(o.toString()));
-		// create a list type for each atomic type (using a copy to avoid concurrent modification)
-		Set<Map.Entry<String, IDataReader>> entries = new HashSet<>(readerMap.entrySet());
-		for(Map.Entry<String, IDataReader> entry : entries) {
-			readerMap.put(entry.getKey() + "[]", null);
-		}
 	}
 	
-	public Object readData(String fieldName, Object data) throws PromptoError {
+	public Object readFieldData(String fieldName, Object data) throws PromptoError {
 		if(data==null)
 			return null;
 		String typeName = getColumnTypeName(fieldName);
+		if(typeName.endsWith("[]"))
+			return readArrayData(typeName, data);
+		else
+			return readAtomicData(typeName, data);
+	}
+
+	private Object readAtomicData(String typeName, Object data) {
 		IDataReader reader = readerMap.get(typeName);
 		if(reader==null)
 			throw new UnsupportedOperationException("read " + typeName);
 		try {
 			return reader.readValue(data);
+		} catch(Exception e) {
+			throw new ReadWriteError(e.getMessage());
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private Object readArrayData(String typeName, Object data) {
+		if(!(data instanceof Collection))
+			throw new UnsupportedOperationException("data " + data.getClass().getName());
+		String itemTypeName = typeName.substring(0, typeName.indexOf('[')); 
+		IDataReader reader = readerMap.get(itemTypeName);
+		if(reader==null)
+			throw new UnsupportedOperationException("read " + typeName);
+		try {
+			PromptoList<Object> result = new PromptoList<>();
+			for(Object item : ((Collection<Object>)data))
+				result.add(reader.readValue(item));
+			return result;
 		} catch(Exception e) {
 			throw new ReadWriteError(e.getMessage());
 		}

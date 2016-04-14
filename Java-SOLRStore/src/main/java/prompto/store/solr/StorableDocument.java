@@ -10,6 +10,7 @@ import org.apache.solr.common.SolrInputField;
 
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
+import prompto.intrinsic.PromptoBinary;
 import prompto.store.IStorable;
 import prompto.store.IStore;
 import prompto.value.IValue;
@@ -86,17 +87,17 @@ public class StorableDocument extends BaseDocument implements IStorable {
 	@Override
 	public void setData(String name, Object value) throws PromptoError {
 		ensureDocument(null);
-		if(value instanceof BinaryData)
-			value = toBytes((BinaryData)value);
+		if(value instanceof PromptoBinary)
+			value = toBytes((PromptoBinary)value);
 		if(isUpdate)
 			document.setField(name, Collections.singletonMap("set", value));
 		else
 			document.setField(name, value);
 	}
 
-	private byte[] toBytes(BinaryData binary) throws PromptoError {
+	private byte[] toBytes(PromptoBinary binary) throws PromptoError {
 		try {
-			return new BinaryData(binary.getMimeType(), binary.getData()).toByteArray();
+			return new BinaryData(binary.getMimeType(), binary.getBytes()).toByteArray();
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		}

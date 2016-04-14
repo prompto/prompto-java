@@ -3,7 +3,6 @@ package prompto.argument;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.INamed;
-import prompto.grammar.ITypedArgument;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;

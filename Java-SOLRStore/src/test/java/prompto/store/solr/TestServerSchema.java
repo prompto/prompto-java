@@ -89,11 +89,11 @@ public class TestServerSchema {
 		options.put("indexed", "true");
 		options.put("stored", "true");
 		store.addField("data", "blob", options);
-		SolrInputDocument doc = new SolrInputDocument();
-		doc.addField(IStore.dbIdName, UUID.randomUUID());
+		StorableDocument doc = new StorableDocument(null, null);
+		doc.setData(IStore.dbIdName, UUID.randomUUID());
 		Blob blob = new Blob("application/octet-stream","azertyuiop".getBytes());
-		doc.addField("data", BinaryConverter.toBytes(blob));
-		store.addDocuments(doc);
+		doc.setData("data", blob.getData());
+		store.addDocuments(doc.getDocument());
 		store.commit();
 		// Test the basics
 		SolrQuery query = new SolrQuery();
@@ -117,11 +117,11 @@ public class TestServerSchema {
 		options.put("indexed", "true");
 		options.put("stored", "true");
 		store.addField("data", "image", options);
-		SolrInputDocument doc = new SolrInputDocument();
-		doc.addField(IStore.dbIdName, UUID.randomUUID());
+		StorableDocument doc = new StorableDocument(null, null);
+		doc.setData(IStore.dbIdName, UUID.randomUUID());
 		Image image = new Image("image/jpeg","JFIF".getBytes());
-		doc.addField("data", BinaryConverter.toBytes(image));
-		store.addDocuments(doc);
+		doc.setData("data", image.getData());
+		store.addDocuments(doc.getDocument());
 		store.commit();
 		// Test the basics
 		SolrQuery query = new SolrQuery();

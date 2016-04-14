@@ -10,7 +10,6 @@ import prompto.declaration.IDeclaration;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.ArgumentAssignmentList;
-import prompto.grammar.INamedArgument;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;

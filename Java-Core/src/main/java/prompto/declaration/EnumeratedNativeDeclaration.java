@@ -33,7 +33,8 @@ import prompto.value.IValue;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-public class EnumeratedNativeDeclaration extends BaseDeclaration implements IEnumeratedDeclaration {
+public class EnumeratedNativeDeclaration extends BaseDeclaration 
+	implements IEnumeratedDeclaration<NativeSymbol> {
 	
 	NativeSymbolList symbols;
 	EnumeratedNativeType type;

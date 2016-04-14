@@ -1,6 +1,5 @@
-package prompto.grammar;
+package prompto.argument;
 
-import prompto.argument.IArgument;
 import prompto.type.IType;
 
 public interface ITypedArgument extends IArgument {

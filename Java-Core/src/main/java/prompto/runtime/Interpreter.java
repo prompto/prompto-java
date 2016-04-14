@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import prompto.argument.IArgument;
+import prompto.argument.ITypedArgument;
 import prompto.argument.UnresolvedArgument;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.TestMethodDeclaration;
@@ -15,7 +16,6 @@ import prompto.expression.MethodSelector;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.ArgumentList;
-import prompto.grammar.ITypedArgument;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDict;
 import prompto.literal.DictLiteral;

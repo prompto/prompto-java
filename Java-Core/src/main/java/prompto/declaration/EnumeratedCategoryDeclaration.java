@@ -26,7 +26,8 @@ import prompto.type.ListType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
 
-public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration implements IEnumeratedDeclaration {
+public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration 
+	implements IEnumeratedDeclaration<CategorySymbol> {
 	
 	CategorySymbolList symbols;
 	EnumeratedCategoryType type;

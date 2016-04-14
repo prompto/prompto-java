@@ -5,8 +5,6 @@ import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
-import prompto.error.NullReferenceError;
-import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
 import prompto.java.JavaNativeCall;
 import prompto.runtime.Context;
@@ -32,19 +30,16 @@ public class NativeGetterMethodDeclaration extends GetterMethodDeclaration {
 	}
 
 	@Override
-	public IValue interpret(Context context) throws PromptoError {
+	public IValue interpret(Context context) {
 		context.enterMethod(this);
 		try {
 			return doInterpretNative(context);
-		} catch(NullPointerException e) {
-			e.printStackTrace();
-			throw new NullReferenceError();
 		} finally {
 			context.leaveMethod(this);
 		}
 	}
 	
-	private IValue doInterpretNative(Context context) throws PromptoError {
+	private IValue doInterpretNative(Context context) {
 		context.enterStatement(statement);
 		try {
 			IValue result = statement.interpretNative(context, returnType);
