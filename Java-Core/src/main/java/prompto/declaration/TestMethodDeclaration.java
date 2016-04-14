@@ -1,10 +1,26 @@
 package prompto.declaration;
 
+import java.io.PrintStream;
+import java.lang.reflect.Modifier;
+
+import prompto.compiler.ClassFile;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Descriptor;
+import prompto.compiler.ExceptionHandler;
+import prompto.compiler.FieldConstant;
+import prompto.compiler.Flags;
+import prompto.compiler.IInstructionListener;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.OffsetListenerConstant;
+import prompto.compiler.Opcode;
+import prompto.compiler.StackState;
+import prompto.compiler.StringConstant;
 import prompto.error.ExecutionError;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.expression.SymbolExpression;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoException;
 import prompto.parser.Assertion;
 import prompto.runtime.Context;
 import prompto.statement.IStatement;
@@ -30,9 +46,8 @@ public class TestMethodDeclaration extends BaseDeclaration {
 	}
 	
 	@Override
-	public Type getDeclarationType() {
-		// TODO Auto-generated method stub
-		return Type.TEST;
+	public DeclarationType getDeclarationType() {
+		return DeclarationType.TEST;
 	}
 	
 	public StatementList getStatements() {
@@ -44,7 +59,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		context = context.newLocalContext();
 		for(IStatement statement : statements)
 			checkStatement(context, statement);
@@ -55,19 +70,19 @@ public class TestMethodDeclaration extends BaseDeclaration {
 		return VoidType.instance();
 	}
 	
-	private void checkStatement(Context context, IStatement statement) throws SyntaxError {
+	private void checkStatement(Context context, IStatement statement) {
 		IType type = statement.check(context);
 		if(type!=VoidType.instance())
 			context.getProblemListener().reportIllegalReturn(statement);
 	}
 
 	@Override
-	public void register(Context context) throws SyntaxError {
+	public void register(Context context) {
 		context.registerDeclaration(this);
 	}
 	
 	@Override
-	public IType getType(Context context) throws SyntaxError {
+	public IType getType(Context context) {
 		return VoidType.instance();
 	}
 
@@ -100,11 +115,20 @@ public class TestMethodDeclaration extends BaseDeclaration {
 	}
 
 	public void printFailure(Context context, String expected, String actual) {
-		System.out.println(getName() + " test failed, expected: " + expected + ", actual: " + actual);
+		String message = buildFailureMessagePrefix(expected);
+		System.out.println(message + actual);
+	}
+
+	public String buildFailureMessagePrefix(String expected) {
+		return getName() + " test failed, expected: " + expected + ", actual: ";
 	}
 
 	private void printSuccess(Context context) {
-		System.out.println(getName() + " test successful");
+		System.out.println(buildSuccessMessage());
+	}
+
+	public String buildSuccessMessage() {
+		return getName() + " test successful";
 	}
 
 	private boolean interpretBody(Context context) throws PromptoError {
@@ -209,4 +233,131 @@ public class TestMethodDeclaration extends BaseDeclaration {
 			writer.append("}\n");
 		}
 	}
+
+	public ClassFile compile(Context context, String fullName) {
+		java.lang.reflect.Type type = CompilerUtils.abstractTypeFrom(fullName);
+		ClassFile classFile = new ClassFile(type);
+		classFile.addModifier(Modifier.ABSTRACT);
+		Descriptor.Method proto = new Descriptor.Method(void.class);
+		MethodInfo method = classFile.newMethod("run", proto);
+		method.addModifier(Modifier.STATIC);
+		if(error!=null)
+			compileTestWithError(context, method, new Flags());
+		else
+			compileTestWithAsserts(context, method, new Flags());
+		return classFile;
+	}
+
+	private void compileTestWithAsserts(Context context, MethodInfo method, Flags flags) {
+		// don't use statements.compile because we need the locals for the assertions
+		statements.forEach((s)->
+			s.compile(context, method, flags));
+		method.addInstruction(Opcode.ICONST_0); // failures counter
+		assertions.forEach((a)->
+			a.compile(context, method, flags, this));
+		compileCheckSuccess(context, method, flags);
+		method.addInstruction(Opcode.RETURN);
+	}
+
+	private void compileCheckSuccess(Context context, MethodInfo method, Flags flags) {
+		IInstructionListener finalListener = method.addOffsetListener(new OffsetListenerConstant());
+		method.activateOffsetListener(finalListener);
+		method.addInstruction(Opcode.IFNE, finalListener); // 0 = no failures
+		StackState finalState = method.captureStackState();
+		compileSuccess(context, method, flags);
+		// final
+		method.restoreFullStackState(finalState);
+		method.placeLabel(finalState);
+		method.inhibitOffsetListener(finalListener);
+		
+	}
+
+	public void compileSuccess(Context context, MethodInfo method, Flags flags) {
+		String message = buildSuccessMessage();
+		method.addInstruction(Opcode.LDC, new StringConstant(message));
+		compilePrintResult(context, method, flags);
+	}
+
+	public void compileFailure(Context context, MethodInfo method, Flags flags) {
+		compilePrintResult(context, method, flags);
+	}
+	
+	public void compilePrintResult(Context context, MethodInfo method, Flags flags) {
+		// the message is on top of the stack
+		FieldConstant fc = new FieldConstant(System.class, "out", PrintStream.class);
+		method.addInstruction(Opcode.GETSTATIC, fc);
+		method.addInstruction(Opcode.SWAP);
+		MethodConstant mc = new MethodConstant(PrintStream.class, "println", String.class, void.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, mc);
+	}
+
+	private void compileTestWithError(Context context, MethodInfo method, Flags flags) {
+		ExceptionHandler expected = installExpectedExceptionHandler(context, method, flags);
+		ExceptionHandler unexpected = installUnexpectedExceptionHandler(context, method, flags);
+		statements.compile(context, method, flags);
+		// missing exception
+		compileMissingExceptionHandler(context, method, flags);
+		method.addInstruction(Opcode.RETURN);
+		// expected exception
+		compileExpectedExceptionHandler(context, method, flags, expected);
+		method.addInstruction(Opcode.RETURN);
+		// unexpected exception
+		compileUnexpectedExceptionHandler(context, method, flags, unexpected);
+		method.addInstruction(Opcode.RETURN);
+	}
+
+	private void compileUnexpectedExceptionHandler(Context context, MethodInfo method, Flags flags, ExceptionHandler handler) {
+		method.placeExceptionHandler(handler); 
+		// get actual exception type name
+		MethodConstant mc = new MethodConstant(PromptoException.class, "getExceptionTypeName", Object.class, String.class);
+		method.addInstruction(Opcode.INVOKESTATIC, mc); 
+		// produce failure message
+		String message = buildFailureMessagePrefix(error.getName().toString());
+		method.addInstruction(Opcode.LDC, new StringConstant(message)); 
+		method.addInstruction(Opcode.SWAP);  
+		mc = new MethodConstant(String.class, "concat", String.class, String.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, mc); 
+		// done
+		compilePrintResult(context, method, flags);
+	}
+
+	private void compileExpectedExceptionHandler(Context context, MethodInfo method, Flags flags, ExceptionHandler handler) {
+		method.placeExceptionHandler(handler);
+		method.addInstruction(Opcode.POP); // the thrown exception
+		compileSuccess(context, method, flags);
+	}
+
+	private void compileMissingExceptionHandler(Context context, MethodInfo method, Flags flags) {
+		// produce failure
+		String message = buildFailureMessagePrefix(error.getName().toString()) + "no error";
+		method.addInstruction(Opcode.LDC, new StringConstant(message));
+		compilePrintResult(context, method, flags);
+	}
+
+	private ExceptionHandler installUnexpectedExceptionHandler(Context context, MethodInfo method, Flags flags) {
+		ExceptionHandler handler = method.registerExceptionHandler(Throwable.class);
+		method.activateOffsetListener(handler);
+		return handler;
+	}
+
+	private ExceptionHandler installExpectedExceptionHandler(Context context, MethodInfo method, Flags flags) {
+		java.lang.reflect.Type type = null;
+		switch(error.getName()) {
+		case "DIVIDE_BY_ZERO":
+			type = ArithmeticException.class;
+			break;
+		case "INDEX_OUT_OF_RANGE":
+			type = IndexOutOfBoundsException.class;
+			break;
+		case "NULL_REFERENCE":
+			type = NullPointerException.class;
+			break;
+		default:
+			type = error.getJavaType(context);
+		}
+		ExceptionHandler handler = method.registerExceptionHandler(type);
+		method.activateOffsetListener(handler);
+		return handler;
+	}
+
 }

@@ -1,8 +1,9 @@
 package prompto.parser;
 
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.expression.IAssertion;
 import prompto.expression.IExpression;
 import prompto.runtime.Context;
@@ -23,7 +24,7 @@ public class Assertion extends Section {
 		expression.toDialect(writer);
 	}
 
-	public void check(Context context) throws SyntaxError {
+	public void check(Context context) {
 		IType type = expression.check(context);
 		if(type!=BooleanType.instance())
 			context.getProblemListener().reportIllegalNonBoolean(this, type);
@@ -31,6 +32,10 @@ public class Assertion extends Section {
 
 	public boolean interpret(Context context, TestMethodDeclaration test) throws PromptoError {
 		return ((IAssertion)expression).interpretAssert(context, test);
+	}
+
+	public void compile(Context context, MethodInfo method, Flags flags, TestMethodDeclaration test) {
+		((IAssertion)expression).compileAssert(context, method, flags, test);
 	}
 
 }

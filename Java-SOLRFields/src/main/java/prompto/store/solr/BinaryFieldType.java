@@ -43,7 +43,7 @@ public class BinaryFieldType extends BinaryField {
 
 	private String extractMimeType(byte[] value) {
 		try {
-			BinaryValue binary = new BinaryValue(value, 0, false);
+			BinaryData binary = new BinaryData(value, 0, false);
 			return binary.getMimeType();
 		} catch (Exception e) {
 			throw new RuntimeException(e); // TODO: log
@@ -53,7 +53,7 @@ public class BinaryFieldType extends BinaryField {
 	private String extractMimeType(ByteBuffer value) {
 		try {
 			if (value.hasArray()) {
-				BinaryValue binary = new BinaryValue(value.array(), value.arrayOffset(), false);
+				BinaryData binary = new BinaryData(value.array(), value.arrayOffset(), false);
 				return binary.getMimeType();
 			} else {
 				ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -83,7 +83,7 @@ public class BinaryFieldType extends BinaryField {
 			length = ( 7 + (( length * 4 ) / 3) ) & ~0x00000003; // we must read multiples of 4 chars
 			segment = value.toString().substring(0, length);
 			data = Base64.base64ToByteArray(segment);
-			BinaryValue binary = new BinaryValue(data, 0, false);
+			BinaryData binary = new BinaryData(data, 0, false);
 			return binary.getMimeType();
 		} catch (Exception e) {
 			throw new RuntimeException(e); // TODO: log

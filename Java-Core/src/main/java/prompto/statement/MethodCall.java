@@ -1,5 +1,19 @@
 package prompto.statement;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+
+import prompto.argument.IArgument;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.IInstructionListener;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.OffsetListenerConstant;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.StackState;
+import prompto.compiler.StringConstant;
 import prompto.declaration.AbstractMethodDeclaration;
 import prompto.declaration.ClosureDeclaration;
 import prompto.declaration.ConcreteMethodDeclaration;
@@ -8,12 +22,14 @@ import prompto.declaration.TestMethodDeclaration;
 import prompto.error.NotMutableError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.expression.CodeExpression;
 import prompto.expression.IAssertion;
 import prompto.expression.IExpression;
 import prompto.expression.MethodSelector;
+import prompto.expression.ThisExpression;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
-import prompto.grammar.IArgument;
+import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.MethodFinder;
@@ -63,7 +79,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 			return false;
 		try {
 			MethodFinder finder = new MethodFinder(writer.getContext(), this);
-			IMethodDeclaration declaration = finder.findMethod(false);
+			IMethodDeclaration declaration = finder.findBestMethod(false);
 			/* if method is abstract, need to prefix with invoke */
 			if(declaration instanceof AbstractMethodDeclaration)
 				return true;
@@ -80,34 +96,33 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	}
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		MethodFinder finder = new MethodFinder(context, this);
-		IMethodDeclaration declaration = finder.findMethod(false);
+		IMethodDeclaration declaration = finder.findBestMethod(false);
 		Context local = method.newLocalCheckContext(context, declaration);
 		return check(declaration, context, local);
 	}
 
-	private IType check(IMethodDeclaration declaration, Context parent, Context local) throws SyntaxError {
-		if (declaration instanceof ConcreteMethodDeclaration
-				&& ((ConcreteMethodDeclaration) declaration).mustBeBeCheckedInCallContext(parent))
+	private IType check(IMethodDeclaration declaration, Context parent, Context local) {
+		if (declaration.isTemplate())
 			return fullCheck((ConcreteMethodDeclaration) declaration, parent, local);
 		else
 			return lightCheck(declaration, parent, local);
 	}
 
-	private IType lightCheck(IMethodDeclaration declaration, Context parent, Context local) throws SyntaxError {
+	private IType lightCheck(IMethodDeclaration declaration, Context parent, Context local) {
 		declaration.registerArguments(local);
 		return declaration.check(local);
 	}
 
-	private IType fullCheck(ConcreteMethodDeclaration declaration, Context parent, Context local) throws SyntaxError {
+	private IType fullCheck(ConcreteMethodDeclaration declaration, Context parent, Context local) {
 		try {
 			ArgumentAssignmentList assignments = makeAssignments(parent, declaration);
 			declaration.registerArguments(local);
 			for (ArgumentAssignment assignment : assignments) {
 				IExpression expression = assignment.resolve(local, declaration, true);
 				IValue value = assignment.getArgument().checkValue(parent, expression);
-				local.setValue(assignment.getName(), value);
+				local.setValue(assignment.getArgumentId(), value);
 			}
 			return declaration.check(local);
 		} catch (PromptoError e) {
@@ -115,17 +130,90 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		}
 	}
 
-	public ArgumentAssignmentList makeAssignments(Context context, IMethodDeclaration declaration) throws SyntaxError {
+	public ArgumentAssignmentList makeAssignments(Context context, IMethodDeclaration declaration) {
 		if (assignments == null)
 			return new ArgumentAssignmentList();
 		else
-			return assignments.makeAssignments(context, declaration);
+			return assignments.resolveAndCheck(context, declaration);
+	}
+
+	public ArgumentAssignmentList makeCodeAssignments(Context context, IMethodDeclaration declaration) {
+		if (assignments == null)
+			return new ArgumentAssignmentList();
+		else {
+			ArgumentAssignmentList list = new ArgumentAssignmentList();
+			list.addAll(assignments.stream()
+					.filter((a)->
+						(a.getExpression() instanceof CodeExpression))
+					.collect(Collectors.toList()));
+			return list.resolveAndCheck(context, declaration);
+		}
+	}
+
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		MethodFinder finder = new MethodFinder(context, this);
+		Collection<IMethodDeclaration> declarations = finder.findPotentialMethods();
+		switch(declarations.size()) {
+		case 0:
+			throw new SyntaxError("No matching prototype for:" + this.toString()); 
+		case 1:
+			return compileExact(context, method, flags, declarations.iterator().next());
+		default:
+			return compileDynamic(context, method, flags, finder.findLessSpecific(declarations));
+		}
+	}
+	
+	private ResultInfo compileDynamic(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration) {
+		Context local = this.method.newLocalCheckContext(context, declaration);
+		declaration.registerArguments(local);
+		ArgumentAssignmentList assignments = this.assignments!=null ? this.assignments : new ArgumentAssignmentList();
+		return this.method.compileDynamic(local, method, flags, declaration, assignments);
+	}
+
+	private ResultInfo compileExact(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration) {
+		if(declaration.isTemplate())
+			return compileTemplate(context, method, flags, declaration);
+		else
+			return compileConcrete(context, method, flags, declaration);
+	}
+
+	private ResultInfo compileConcrete(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration) {
+		Context local = this.method.newLocalCheckContext(context, declaration);
+		declaration.registerArguments(local);
+		ArgumentAssignmentList assignments = this.assignments!=null ? this.assignments : new ArgumentAssignmentList();
+		return this.method.compileExact(local, method, flags, declaration, assignments);
+	}
+
+	private ResultInfo compileTemplate(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration) {
+		// compile the method as a member method
+		Context local = context.newLocalContext();
+		declaration.registerArguments(local);
+		registerCodeAssignments(context, local, declaration);
+		String methodName = declaration.compileTemplate(local, method.getClassFile());
+		// compile the method call
+		IExpression parent = method.isStatic() ? null : new ThisExpression();
+		MethodSelector selector = new MethodSelector(parent, new Identifier(methodName));
+		local = selector.newLocalContext(context, declaration);
+		declaration.registerArguments(local);
+		registerCodeAssignments(context, local, declaration);
+		ArgumentAssignmentList assignments = this.assignments!=null ? this.assignments : new ArgumentAssignmentList();
+		return selector.compileTemplate(local, method, flags, declaration, assignments, methodName);
+	}
+
+	private void registerCodeAssignments(Context context, Context local, IMethodDeclaration declaration) {
+		ArgumentAssignmentList assignments = makeCodeAssignments(context, declaration);
+		for (ArgumentAssignment assignment : assignments) {
+			IExpression expression = assignment.resolve(local, declaration, true);
+			IArgument argument = assignment.getArgument();
+			IValue value = argument.checkValue(context, expression);
+			local.setValue(assignment.getArgumentId(), value);
+		}	
 	}
 
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		IMethodDeclaration declaration = findDeclaration(context);
-		// if called from within a member method without 
 		Context local = method.newLocalContext(context, declaration);
 		declaration.registerArguments(local);
 		registerAssignments(context, local, declaration);
@@ -140,31 +228,72 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 			IValue value = argument.checkValue(context, expression);
 			if(value!=null && argument.isMutable() & !value.isMutable()) 
 				throw new NotMutableError();
-			local.setValue(assignment.getName(), value);
+			local.setValue(assignment.getArgumentId(), value);
 		}
 	}
 
 	@Override
-	public boolean interpretAssert(Context context, TestMethodDeclaration testMethodDeclaration) throws PromptoError {
+	public boolean interpretAssert(Context context, TestMethodDeclaration test) throws PromptoError {
 		IValue value = this.interpret(context);
-		if(value instanceof Boolean)
-			return ((Boolean)value).getValue();
-		else {
+		if(value instanceof Boolean) {
+			if(((Boolean)value).getValue())
+				return true;
+			else {
+				String expected = buildExpectedMessage(context, test);
+				String actual = value.toString();
+				test.printFailure(context, expected, actual);
+				return false;
+			}
+		} else {
 			CodeWriter writer = new CodeWriter(this.getDialect(), context);
 			this.toDialect(writer);
 			throw new SyntaxError("Cannot test '" + writer.toString() + "'");
 		}
 	}
 	
-	private IMethodDeclaration findDeclaration(Context context) throws SyntaxError {
+	private String buildExpectedMessage(Context context, TestMethodDeclaration test) {
+		CodeWriter writer = new CodeWriter(test.getDialect(), context);
+		this.toDialect(writer);
+		return writer.toString();
+	}
+
+	@Override
+	public void compileAssert(Context context, MethodInfo method, Flags flags, TestMethodDeclaration test) {
+		StackState finalState = method.captureStackState();
+		// compile
+		ResultInfo info = this.compile(context, method, flags.withPrimitive(true));
+		if(java.lang.Boolean.class==info.getType())
+			CompilerUtils.BooleanToboolean(method);
+		// 1 = success 
+		IInstructionListener finalListener = method.addOffsetListener(new OffsetListenerConstant());
+		method.activateOffsetListener(finalListener);
+		method.addInstruction(Opcode.IFNE, finalListener); 
+		// increment failure counter
+		method.addInstruction(Opcode.ICONST_1);
+		method.addInstruction(Opcode.IADD);
+		// build failure message
+		String message = buildExpectedMessage(context, test);
+		message = test.buildFailureMessagePrefix(message);
+		method.addInstruction(Opcode.LDC, new StringConstant(message));
+		method.addInstruction(Opcode.LDC, new StringConstant(Boolean.FALSE.toString()));
+		MethodConstant concat = new MethodConstant(String.class, "concat", String.class, String.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, concat);
+		test.compileFailure(context, method, flags);
+		// success/final
+		method.restoreFullStackState(finalState);
+		method.placeLabel(finalState);
+		method.inhibitOffsetListener(finalListener);
+	}
+	
+	private IMethodDeclaration findDeclaration(Context context) {
 		try {
-			Object o = context.getValue(method.getName());
+			Object o = context.getValue(method.getId());
 			if (o instanceof ClosureValue)
 				return new ClosureDeclaration((ClosureValue)o);
 		} catch (PromptoError e) {
 		}
 		MethodFinder finder = new MethodFinder(context, this);
-		return finder.findMethod(true);
+		return finder.findBestMethod(true);
 	}
 
 }

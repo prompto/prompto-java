@@ -20,13 +20,23 @@ public class TestSingleton extends BaseOParserTest {
 	}
 
 	@Test
-	public void testAttribute() throws Exception {
-		checkOutput("singleton/attribute.poc");
+	public void testInterpretedAttribute() throws Exception {
+		checkInterpretedOutput("singleton/attribute.poc");
 	}
 
 	@Test
-	public void testMember() throws Exception {
-		checkOutput("singleton/member.poc");
+	public void testCompiledAttribute() throws Exception {
+		checkCompiledOutput("singleton/attribute.poc");
+	}
+
+	@Test
+	public void testInterpretedMember() throws Exception {
+		checkInterpretedOutput("singleton/member.poc");
+	}
+
+	@Test
+	public void testCompiledMember() throws Exception {
+		checkCompiledOutput("singleton/member.poc");
 	}
 
 }

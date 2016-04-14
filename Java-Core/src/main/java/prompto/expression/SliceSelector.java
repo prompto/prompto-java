@@ -1,8 +1,17 @@
 package prompto.expression;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import prompto.compiler.Flags;
+import prompto.compiler.ISlicerFunction;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.intrinsic.PromptoList;
+import prompto.intrinsic.PromptoRange;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.type.IntegerType;
@@ -10,6 +19,9 @@ import prompto.utils.CodeWriter;
 import prompto.value.ISliceable;
 import prompto.value.IValue;
 import prompto.value.Integer;
+import prompto.value.ListValue;
+import prompto.value.RangeBase;
+import prompto.value.Text;
 
 public class SliceSelector extends SelectorExpression {
 
@@ -48,7 +60,7 @@ public class SliceSelector extends SelectorExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		IType firstType = first!=null ? first.check(context) : null;
 		IType lastType = last!=null ? last.check(context) : null;
 		if(firstType!=null && !(firstType instanceof IntegerType))
@@ -77,6 +89,31 @@ public class SliceSelector extends SelectorExpression {
         }
         else
 			throw new SyntaxError("Illegal sliced object: " + parent);
+	}
+
+	static Map<Class<?>, ISlicerFunction> slicers = createSlicers();
+	
+	private static Map<Class<?>, ISlicerFunction> createSlicers() {
+		Map<Class<?>, ISlicerFunction> map = new HashMap<>(); 
+		map.put(String.class, Text::compileSlice); 
+		map.put(PromptoRange.Character.class, RangeBase::compileSlice);
+		map.put(PromptoRange.Date.class, RangeBase::compileSlice);
+		map.put(PromptoRange.Time.class, RangeBase::compileSlice);
+		map.put(PromptoRange.Long.class, RangeBase::compileSlice);
+		/*map.put(PromptoTuple.class, RangeBase::compileSlice)*/;
+		map.put(PromptoList.class, ListValue::compileSlice);
+		return map;
+	}
+
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		ResultInfo pinfo = parent.compile(context, method, flags.withPrimitive(false));
+		ISlicerFunction slicer = slicers.get(pinfo.getType());
+		if(slicer==null) {
+			System.err.println("Missing ISlicerFunction for slice " + pinfo.getType().getTypeName());
+			throw new SyntaxError("Cannot slice " + pinfo.getType().getTypeName());
+		}
+		return slicer.compile(context, method, flags, pinfo, first, last);
 	}
 
 }

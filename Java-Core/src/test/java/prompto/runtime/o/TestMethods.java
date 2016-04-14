@@ -20,63 +20,123 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
-	public void testAnonymous() throws Exception {
-		checkOutput("methods/anonymous.poc");
+	public void testInterpretedAnonymous() throws Exception {
+		checkInterpretedOutput("methods/anonymous.poc");
 	}
 
 	@Test
-	public void testAttribute() throws Exception {
-		checkOutput("methods/attribute.poc");
+	public void testCompiledAnonymous() throws Exception {
+		checkCompiledOutput("methods/anonymous.poc");
 	}
 
 	@Test
-	public void testDefault() throws Exception {
-		checkOutput("methods/default.poc");
+	public void testInterpretedAttribute() throws Exception {
+		checkInterpretedOutput("methods/attribute.poc");
 	}
 
 	@Test
-	public void testE_as_e_bug() throws Exception {
-		checkOutput("methods/e_as_e_bug.poc");
+	public void testCompiledAttribute() throws Exception {
+		checkCompiledOutput("methods/attribute.poc");
 	}
 
 	@Test
-	public void testExpressionWith() throws Exception {
-		checkOutput("methods/expressionWith.poc");
+	public void testInterpretedDefault() throws Exception {
+		checkInterpretedOutput("methods/default.poc");
 	}
 
 	@Test
-	public void testImplicit() throws Exception {
-		checkOutput("methods/implicit.poc");
+	public void testCompiledDefault() throws Exception {
+		checkCompiledOutput("methods/default.poc");
 	}
 
 	@Test
-	public void testMember() throws Exception {
-		checkOutput("methods/member.poc");
+	public void testInterpretedE_as_e_bug() throws Exception {
+		checkInterpretedOutput("methods/e_as_e_bug.poc");
 	}
 
 	@Test
-	public void testPolymorphic_abstract() throws Exception {
-		checkOutput("methods/polymorphic_abstract.poc");
+	public void testCompiledE_as_e_bug() throws Exception {
+		checkCompiledOutput("methods/e_as_e_bug.poc");
 	}
 
 	@Test
-	public void testPolymorphic_implicit() throws Exception {
-		checkOutput("methods/polymorphic_implicit.poc");
+	public void testInterpretedExpressionWith() throws Exception {
+		checkInterpretedOutput("methods/expressionWith.poc");
 	}
 
 	@Test
-	public void testPolymorphic_named() throws Exception {
-		checkOutput("methods/polymorphic_named.poc");
+	public void testCompiledExpressionWith() throws Exception {
+		checkCompiledOutput("methods/expressionWith.poc");
 	}
 
 	@Test
-	public void testPolymorphic_runtime() throws Exception {
-		checkOutput("methods/polymorphic_runtime.poc");
+	public void testInterpretedImplicit() throws Exception {
+		checkInterpretedOutput("methods/implicit.poc");
 	}
 
 	@Test
-	public void testSpecified() throws Exception {
-		checkOutput("methods/specified.poc");
+	public void testCompiledImplicit() throws Exception {
+		checkCompiledOutput("methods/implicit.poc");
+	}
+
+	@Test
+	public void testInterpretedMember() throws Exception {
+		checkInterpretedOutput("methods/member.poc");
+	}
+
+	@Test
+	public void testCompiledMember() throws Exception {
+		checkCompiledOutput("methods/member.poc");
+	}
+
+	@Test
+	public void testInterpretedPolymorphic_abstract() throws Exception {
+		checkInterpretedOutput("methods/polymorphic_abstract.poc");
+	}
+
+	@Test
+	public void testCompiledPolymorphic_abstract() throws Exception {
+		checkCompiledOutput("methods/polymorphic_abstract.poc");
+	}
+
+	@Test
+	public void testInterpretedPolymorphic_implicit() throws Exception {
+		checkInterpretedOutput("methods/polymorphic_implicit.poc");
+	}
+
+	@Test
+	public void testCompiledPolymorphic_implicit() throws Exception {
+		checkCompiledOutput("methods/polymorphic_implicit.poc");
+	}
+
+	@Test
+	public void testInterpretedPolymorphic_named() throws Exception {
+		checkInterpretedOutput("methods/polymorphic_named.poc");
+	}
+
+	@Test
+	public void testCompiledPolymorphic_named() throws Exception {
+		checkCompiledOutput("methods/polymorphic_named.poc");
+	}
+
+	@Test
+	public void testInterpretedPolymorphic_runtime() throws Exception {
+		checkInterpretedOutput("methods/polymorphic_runtime.poc");
+	}
+
+	@Test
+	public void testCompiledPolymorphic_runtime() throws Exception {
+		checkCompiledOutput("methods/polymorphic_runtime.poc");
+	}
+
+	@Test
+	public void testInterpretedSpecified() throws Exception {
+		checkInterpretedOutput("methods/specified.poc");
+	}
+
+	@Test
+	public void testCompiledSpecified() throws Exception {
+		checkCompiledOutput("methods/specified.poc");
 	}
 
 }

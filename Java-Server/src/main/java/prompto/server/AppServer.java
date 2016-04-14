@@ -87,12 +87,12 @@ public class AppServer {
 		}
 		// initialize code store
 		IStoreFactory factory = newStoreFactory(codeStoreFactory);
-		IStore store = factory.newStore(args, codeStoreType);
+		IStore<?> store = factory.newStore(args, codeStoreType);
 		ICodeStore codeStore = bootstrapCodeStore(store, application, version, resources);
 		// initialize data store
 		factory = newStoreFactory(dataStoreFactory);
 		store = factory.newStore(args, dataStoreType);
-		IStore dataStore = bootstrapDataStore(store);
+		IStore<?> dataStore = bootstrapDataStore(store);
 		synchronizeSchema(codeStore, dataStore);
 		// standard resource handlers
 		Handler handler = prepareHandlers();
@@ -103,7 +103,7 @@ public class AppServer {
 		startServer(httpPort, handler);
 	}
 
-	private static IStore bootstrapDataStore(IStore store) {
+	private static IStore<?> bootstrapDataStore(IStore<?> store) {
 		IDataStore.setInstance(store);
 		return store;
 	}
@@ -124,7 +124,7 @@ public class AppServer {
 			System.out.println("Additional argument: -version (optional)");
 	}
 
-	public static ICodeStore bootstrapCodeStore(IStore store, String application, Version version, String ...resourceNames) throws Exception {
+	public static ICodeStore bootstrapCodeStore(IStore<?> store, String application, Version version, String ...resourceNames) throws Exception {
 		globalContext = Context.newGlobalContext();
 		System.out.println("Bootstrapping prompto...");
 		ICodeStore codeStore = new UpdatableCodeStore(store, application, version.toString(), resourceNames);
@@ -133,7 +133,7 @@ public class AppServer {
 		return codeStore;
 	}
 
-	private static void synchronizeSchema(ICodeStore codeStore, IStore dataStore) throws PromptoError {
+	private static void synchronizeSchema(ICodeStore codeStore, IStore<?> dataStore) throws PromptoError {
 		System.out.println("Initializing schema...");
 		List<AttributeDeclaration> columns = new ArrayList<>();
 		codeStore.collectStorableAttributes(columns);

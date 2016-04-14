@@ -1,5 +1,10 @@
 package prompto.expression;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.StackLocal;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.parser.Dialect;
@@ -11,7 +16,12 @@ import prompto.value.IValue;
 public class ThisExpression implements IExpression {
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public String toString() {
+		return "this";
+	}
+	
+	@Override
+	public IType check(Context context) {
 		if(context!=null && !(context instanceof Context.InstanceContext))
 			context = context.getParentContext();
 		if( context instanceof Context.InstanceContext)
@@ -29,6 +39,17 @@ public class ThisExpression implements IExpression {
 		else
 			throw new SyntaxError("Not in an instance context!");
 	}
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		StackLocal local = method.getRegisteredLocal("this");
+		if(local==null)
+			return null;
+		CompilerUtils.compileALOAD(method, local);
+		IType type = check(context);
+		return new ResultInfo(type.getJavaType(context));	
+	}
+	
 	
 	@Override
 	public void toDialect(CodeWriter writer) {

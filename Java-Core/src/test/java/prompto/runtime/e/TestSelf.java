@@ -20,13 +20,23 @@ public class TestSelf extends BaseEParserTest {
 	}
 
 	@Test
-	public void testSelfAsParameter() throws Exception {
-		checkOutput("self/selfAsParameter.pec");
+	public void testInterpretedSelfAsParameter() throws Exception {
+		checkInterpretedOutput("self/selfAsParameter.pec");
 	}
 
 	@Test
-	public void testSelfMember() throws Exception {
-		checkOutput("self/selfMember.pec");
+	public void testCompiledSelfAsParameter() throws Exception {
+		checkCompiledOutput("self/selfAsParameter.pec");
+	}
+
+	@Test
+	public void testInterpretedSelfMember() throws Exception {
+		checkInterpretedOutput("self/selfMember.pec");
+	}
+
+	@Test
+	public void testCompiledSelfMember() throws Exception {
+		checkCompiledOutput("self/selfMember.pec");
 	}
 
 }

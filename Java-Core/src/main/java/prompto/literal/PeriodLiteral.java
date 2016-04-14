@@ -1,5 +1,13 @@
 package prompto.literal;
 
+import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.StringConstant;
+import prompto.intrinsic.PromptoPeriod;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.type.PeriodType;
@@ -18,10 +26,18 @@ public class PeriodLiteral extends Literal<Period> {
 	}
 	
 	public static Period parseDuration(String text) {
-		return new Period(org.joda.time.Period.parse(text));
+		return new Period(PromptoPeriod.parse(text));
 	}
 	
-	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		PromptoPeriod period = value.getStorableData();
+		method.addInstruction(Opcode.LDC_W, new StringConstant(period.toString()));
+		IOperand oper = new MethodConstant(PromptoPeriod.class, "parse", 
+				String.class, PromptoPeriod.class);
+		method.addInstruction(Opcode.INVOKESTATIC, oper);
+		return new ResultInfo(PromptoPeriod.class);
+	}
 	
 	
 }

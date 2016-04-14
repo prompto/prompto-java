@@ -9,16 +9,20 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.joda.time.tz.ZoneInfoProvider;
 import org.junit.Test;
 
+import prompto.argument.CategoryArgument;
+import prompto.argument.ExtendedArgument;
+import prompto.argument.IArgument;
+import prompto.argument.ITypedArgument;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteMethodDeclaration;
 import prompto.declaration.NativeMethodDeclaration;
-import prompto.expression.AddExpression;
+import prompto.expression.NativeSymbol;
+import prompto.expression.PlusExpression;
 import prompto.expression.ConstructorExpression;
 import prompto.expression.IExpression;
 import prompto.expression.InstanceExpression;
@@ -27,11 +31,10 @@ import prompto.expression.TernaryExpression;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.ArgumentList;
-import prompto.grammar.CategoryArgument;
-import prompto.grammar.IArgument;
-import prompto.grammar.ITypedArgument;
 import prompto.grammar.Identifier;
-import prompto.grammar.NativeSymbol;
+import prompto.intrinsic.PromptoDate;
+import prompto.intrinsic.PromptoDateTime;
+import prompto.intrinsic.PromptoTime;
 import prompto.literal.BooleanLiteral;
 import prompto.literal.DateLiteral;
 import prompto.literal.DateTimeLiteral;
@@ -94,9 +97,9 @@ public class TestParserAtoms {
 		OTestParser parser = new OTestParser(statement);
 		AttributeDeclaration ad = parser.parse_attribute_declaration();
 		assertNotNull(ad);
-		assertEquals("id",ad.getIdentifier().toString());
+		assertEquals("id",ad.getId().toString());
 		assertNotNull(ad.getType());
-		assertEquals("Integer",ad.getType().getId().toString());
+		assertEquals("Integer",ad.getType().getTypeName());
 	}
 
 	@Test
@@ -105,9 +108,9 @@ public class TestParserAtoms {
 		OTestParser parser = new OTestParser(statement);
 		AttributeDeclaration ad = parser.parse_attribute_declaration();
 		assertNotNull(ad);
-		assertEquals("id",ad.getIdentifier().toString());
+		assertEquals("id",ad.getId().toString());
 		assertNotNull(ad.getType());
-		assertEquals("Integer[]",ad.getType().getId().toString());
+		assertEquals("Integer[]",ad.getType().getTypeName());
 	}
 
 	@Test
@@ -116,7 +119,7 @@ public class TestParserAtoms {
 		OTestParser parser = new OTestParser(statement);
 		CategoryDeclaration cd = parser.parse_category_declaration();
 		assertNotNull(cd);
-		assertEquals("Person",cd.getIdentifier().toString());
+		assertEquals("Person",cd.getId().toString());
 		assertNull(cd.getDerivedFrom());
 		assertNotNull(cd.getAttributes());
 		assertTrue(cd.getAttributes().contains(new Identifier("id")));
@@ -128,7 +131,7 @@ public class TestParserAtoms {
 		OTestParser parser = new OTestParser(statement);
 		CategoryDeclaration cd = parser.parse_category_declaration();
 		assertNotNull(cd);
-		assertEquals("Person",cd.getIdentifier().toString());
+		assertEquals("Person",cd.getId().toString());
 		assertNull(cd.getDerivedFrom());
 		assertNotNull(cd.getAttributes());
 		assertTrue(cd.getAttributes().contains(new Identifier("id")));
@@ -141,7 +144,7 @@ public class TestParserAtoms {
 		OTestParser parser = new OTestParser(statement);
 		CategoryDeclaration cd = parser.parse_category_declaration();
 		assertNotNull(cd);
-		assertEquals("Employee",cd.getIdentifier().toString());
+		assertEquals("Employee",cd.getId().toString());
 		assertNotNull(cd.getDerivedFrom());
 		assertTrue(cd.getDerivedFrom().contains(new Identifier("Person")));
 		assertNotNull(cd.getAttributes());
@@ -154,7 +157,7 @@ public class TestParserAtoms {
 		OTestParser parser = new OTestParser(statement);
 		CategoryDeclaration cd = parser.parse_category_declaration();
 		assertNotNull(cd);
-		assertEquals("Entrepreneur",cd.getIdentifier().toString());
+		assertEquals("Entrepreneur",cd.getId().toString());
 		assertNotNull(cd.getDerivedFrom());
 		assertTrue(cd.getDerivedFrom().contains(new Identifier("Person")));
 		assertTrue(cd.getDerivedFrom().contains(new Identifier("Company")));
@@ -168,7 +171,7 @@ public class TestParserAtoms {
 		IExpression e = parser.parse_instance_expression();
 		assertTrue(e instanceof MemberSelector);
 		MemberSelector me = (MemberSelector)e;
-		assertEquals("name",me.getName().toString());
+		assertEquals("name",me.getName());
 		assertTrue(me.getParent() instanceof InstanceExpression);
 		InstanceExpression uie = (InstanceExpression)me.getParent();
 		assertEquals("p",uie.getName().toString());
@@ -181,8 +184,8 @@ public class TestParserAtoms {
 		ITypedArgument a = parser.parse_typed_argument();
 		assertNotNull(a);
 		assertNotNull(a.getType());
-		assertEquals("Person",a.getType().getId().toString());
-		assertEquals("p",a.getIdentifier().toString());
+		assertEquals("Person",a.getType().getTypeName());
+		assertEquals("p",a.getId().toString());
 	}
 
 	@Test
@@ -221,9 +224,9 @@ public class TestParserAtoms {
 		assertEquals("print",mc.getCaller().toString());
 		assertNotNull(mc.getAssignments());
 		ArgumentAssignment as = mc.getAssignments().get(0);
-		assertEquals("value",as.getName().toString());
+		assertEquals("value",as.getArgumentId().toString());
 		IExpression exp = as.getExpression();
-		assertTrue(exp instanceof AddExpression);
+		assertTrue(exp instanceof PlusExpression);
 		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalContext());
 		mc.toDialect(writer);
 		assertEquals("print(value = \"person\" + p.name)", writer.toString());
@@ -236,13 +239,12 @@ public class TestParserAtoms {
 		OTestParser parser = new OTestParser(statement);
 		ConcreteMethodDeclaration ad = parser.parse_concrete_method_declaration();
 		assertNotNull(ad);
-		assertEquals("printName",ad.getIdentifier().toString());
+		assertEquals("printName",ad.getId().toString());
 		assertNotNull(ad.getArguments());
 		assertTrue(ad.getArguments().contains(
 				new CategoryArgument(
 						new CategoryType(new Identifier("Person")),
-						new Identifier("p"),
-								null)));
+						new Identifier("p"))));
 		assertNotNull(ad.getStatements());
 		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalContext());
 		ad.getStatements().getFirst().toDialect(writer);
@@ -255,9 +257,9 @@ public class TestParserAtoms {
 		OTestParser parser = new OTestParser(statement);
 		ConcreteMethodDeclaration ad = parser.parse_concrete_method_declaration();
 		assertNotNull(ad);
-		assertEquals("printName",ad.getIdentifier().toString());
+		assertEquals("printName",ad.getId().toString());
 		assertNotNull(ad.getArguments());
-		IArgument expected = new CategoryArgument(
+		IArgument expected = new ExtendedArgument(
 				new CategoryType(new Identifier("Object")), 
 				new Identifier("o"), 
 				new IdentifierList( new Identifier("name")));
@@ -275,12 +277,12 @@ public class TestParserAtoms {
 		OTestParser parser = new OTestParser(statement);
 		ConcreteMethodDeclaration ad = parser.parse_concrete_method_declaration();
 		assertNotNull(ad);
-		assertEquals("printName",ad.getIdentifier().toString());
+		assertEquals("printName",ad.getId().toString());
 		assertNotNull(ad.getArguments());
 		IArgument expected = new CategoryArgument(
 				new ListType(
 						new CategoryType(new Identifier("Option"))),
-						new Identifier("options"),null);
+						new Identifier("options"));
 		assertTrue(ad.getArguments().contains(expected)); 
 		assertNotNull(ad.getStatements());
 		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalContext());
@@ -315,13 +317,13 @@ public class TestParserAtoms {
 		assertEquals(2, l.size());
 		ArgumentAssignment a = l.get(0);
 		assertNotNull(a);
-		assertEquals("id",a.getName().toString());
+		assertEquals("id",a.getArgumentId().toString());
 		IExpression e = a.getExpression();
 		assertNotNull(e);
 		assertTrue(e instanceof IntegerLiteral);
 		a = l.get(1);
 		assertNotNull(a);
-		assertEquals("name",a.getName().toString());
+		assertEquals("name",a.getArgumentId().toString());
 		e = a.getExpression();
 		assertNotNull(e);
 		assertTrue(e instanceof TextLiteral);
@@ -394,7 +396,7 @@ public class TestParserAtoms {
 		CodeWriter writer = new CodeWriter(Dialect.O, null);
 		literal.toDialect(writer);
 		assertEquals("\"hello\"", writer.toString());
-		assertEquals("hello", ((TextLiteral)literal).getValue().getValue());
+		assertEquals("hello", ((TextLiteral)literal).getValue().getStorableData());
 	}
 	
 	@Test
@@ -405,12 +407,12 @@ public class TestParserAtoms {
 		assertNotNull(literal);
 		assertTrue(literal instanceof IntegerLiteral);
 		assertEquals("1234", literal.toString());
-		assertEquals(1234, ((IntegerLiteral)literal).getValue().IntegerValue());
+		assertEquals(1234, ((IntegerLiteral)literal).getValue().longValue());
 	}
 	
 	@Test
 	public void testParseHexa() throws Exception {
-		assertEquals(0x0A11, HexaLiteral.parseHexa("0x0A11").IntegerValue());
+		assertEquals(0x0A11, HexaLiteral.parseHexa("0x0A11").longValue());
 	}
 	
 	@Test
@@ -423,7 +425,7 @@ public class TestParserAtoms {
 		CodeWriter writer = new CodeWriter(Dialect.O, null);
 		literal.toDialect(writer);
 		assertEquals("0x0A11", writer.toString());
-		assertEquals(0x0A11, ((HexaLiteral)literal).getValue().IntegerValue());
+		assertEquals(0x0A11, ((HexaLiteral)literal).getValue().longValue());
 	}
 
 	@Test
@@ -434,7 +436,7 @@ public class TestParserAtoms {
 		assertNotNull(literal);
 		assertTrue(literal instanceof DecimalLiteral);
 		assertEquals("1234.13", literal.toString());
-		assertEquals(1234.13, ((DecimalLiteral)literal).getValue().DecimalValue(),0.0000001);
+		assertEquals(1234.13, ((DecimalLiteral)literal).getValue().doubleValue(),0.0000001);
 	}
 	
 	@Test
@@ -445,7 +447,7 @@ public class TestParserAtoms {
 		assertNotNull(literal);
 		assertTrue(literal instanceof ListLiteral);
 		assertEquals("[]", literal.toString());
-		assertEquals(0, ((ListLiteral)literal).getValue().length());
+		assertEquals(0, ((ListLiteral)literal).getValue().getLength());
 	}
 	
 	@Test
@@ -493,7 +495,7 @@ public class TestParserAtoms {
 		CodeWriter writer = new CodeWriter(Dialect.O, null);
 		literal.toDialect(writer);
 		assertEquals("'2012-10-09'", writer.toString());
-		assertEquals(new LocalDate(2012, 10, 9), ((DateLiteral)literal).getValue().getValue());
+		assertEquals(new PromptoDate(2012, 10, 9), ((DateLiteral)literal).getValue().getStorableData());
 	}
 
 	@Test
@@ -506,7 +508,7 @@ public class TestParserAtoms {
 		CodeWriter writer = new CodeWriter(Dialect.O, null);
 		literal.toDialect(writer);
 		assertEquals("'15:03:10'", writer.toString());
-		assertEquals(new LocalTime(15, 03, 10), ((TimeLiteral)literal).getValue().getValue());
+		assertEquals(new PromptoTime(new LocalTime(15, 03, 10)), ((TimeLiteral)literal).getValue().getStorableData());
 	}
 
 	@Test
@@ -519,7 +521,7 @@ public class TestParserAtoms {
 		CodeWriter writer = new CodeWriter(Dialect.O, null);
 		literal.toDialect(writer);
 		assertEquals("'2012-10-09T15:18:17'", writer.toString());
-		assertEquals(new DateTime(2012, 10, 9, 15, 18, 17), ((DateTimeLiteral)literal).getValue().getValue());
+		assertEquals(new PromptoDateTime(new DateTime(2012, 10, 9, 15, 18, 17)), ((DateTimeLiteral)literal).getValue().getStorableData());
 	}
 	
 	@Test
@@ -532,7 +534,7 @@ public class TestParserAtoms {
 		CodeWriter writer = new CodeWriter(Dialect.O, null);
 		literal.toDialect(writer);
 		assertEquals("'2012-10-09T15:18:17.487'", writer.toString());
-		assertEquals(new DateTime(2012, 10, 9, 15, 18, 17, 487), ((DateTimeLiteral)literal).getValue().getValue());
+		assertEquals(new PromptoDateTime(new DateTime(2012, 10, 9, 15, 18, 17, 487)), ((DateTimeLiteral)literal).getValue().getStorableData());
 	}
 	
 	@Test
@@ -547,8 +549,9 @@ public class TestParserAtoms {
 		assertEquals("'2012-10-09T15:18:17+02:00'", writer.toString());
 		ZoneInfoProvider provider = new ZoneInfoProvider("org/joda/time/tz/data");
 		DateTimeZone tz = provider.getZone("Etc/GMT-2");
-		DateTime expected = new DateTime(2012, 10, 9, 15, 18, 17, tz);
-		DateTime actual = ((DateTimeLiteral)literal).getValue().getValue();
+		DateTime dt = new DateTime(2012, 10, 9, 15, 18, 17, tz);
+		PromptoDateTime expected = new PromptoDateTime(dt);
+		PromptoDateTime actual = ((DateTimeLiteral)literal).getValue().getStorableData();
 		assertTrue(expected.isEqual(actual));
 	}
 	
@@ -562,7 +565,7 @@ public class TestParserAtoms {
 		CodeWriter writer = new CodeWriter(Dialect.O, null);
 		literal.toDialect(writer);
 		assertEquals("'P3Y'", writer.toString());
-		assertEquals(3,((PeriodLiteral)literal).getValue().getValue().getYears());
+		assertEquals(3,((PeriodLiteral)literal).getValue().getStorableData().getNativeYears());
 	}
 
 	@Test

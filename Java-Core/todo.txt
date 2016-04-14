@@ -4,16 +4,41 @@ no getters from setters
 translate to E may change parameters, see test: is instance
 review types: document, method as parameters
 date/time/ check return type
+compiled for each/inner switch
 
 missing code:
 python timezone name
 javascript timezone name
 check return types
 check member methods
+return sorted sets 
+implement dbIdListener strategy (store, ConcreteInstance... )
+method as attribute
+attribute as type
+attribute as variable: parameter
+attribute as attribute
+move MIN_INT && MAX_INT to enum
+factor compileAssert
+make id a global native method or implement it for all types
+save StackLocals between closure definition and instantiation
+
+issues:
+invokedynamic parameter names/order
+test/asserts naming of parameters
 
 missing tests:
 null member is empty
 pass/empty statement
+tuple equals tuple
+a = null, null = a
+slice tuple
+return in loops, if/else and with singleton
+category abstract operator methods
+decimal * category
+delete/store
+store mutable child
+iterating over enumerated category symbols for name/value/other
+iterating over enumerated native symbols for name/value/other
 
 language:
 send/receive
@@ -22,6 +47,9 @@ method as attribute, AnyMethod
 pattern literals
 typed tuples?
 uuid literal
+
+runtime:
+shared versioned singletons
 
 framework:
 json

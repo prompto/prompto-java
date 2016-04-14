@@ -1,5 +1,8 @@
 package prompto.statement;
 
+import prompto.compiler.Flags;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.MethodInfo;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.declaration.IDeclaration;
@@ -11,9 +14,9 @@ import prompto.expression.IAssertion;
 import prompto.expression.IExpression;
 import prompto.expression.MemberSelector;
 import prompto.expression.MethodSelector;
+import prompto.expression.UnresolvedIdentifier;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
-import prompto.grammar.UnresolvedIdentifier;
 import prompto.runtime.Context;
 import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Context.MethodDeclarationMap;
@@ -54,23 +57,28 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return resolveAndCheck(context);
 	}
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		if(resolved==null)
-			resolveAndCheck(context);
+		resolveAndCheck(context);
 		return resolved.interpret(context);
+	}
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		resolveAndCheck(context);
+		return resolved.compile(context, method, flags);
 	}
 
 	@Override
-	public boolean interpretAssert(Context context, TestMethodDeclaration testMethodDeclaration) throws PromptoError {
+	public boolean interpretAssert(Context context, TestMethodDeclaration test) throws PromptoError {
 		if(resolved==null)
 			resolveAndCheck(context);
 		if(resolved instanceof IAssertion)
-			return ((IAssertion)resolved).interpretAssert(context, testMethodDeclaration);
+			return ((IAssertion)resolved).interpretAssert(context, test);
 		else {
 			CodeWriter writer = new CodeWriter(this.getDialect(), context);
 			resolved.toDialect(writer);
@@ -78,13 +86,26 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 		}
 	}
 	
-	private IType resolveAndCheck(Context context) throws SyntaxError {
+	@Override
+	public void compileAssert(Context context, MethodInfo method, Flags flags, TestMethodDeclaration test) {
+		if(resolved==null)
+			resolveAndCheck(context);
+		if(resolved instanceof IAssertion)
+			((IAssertion)resolved).compileAssert(context, method, flags, test);
+		else {
+			CodeWriter writer = new CodeWriter(this.getDialect(), context);
+			resolved.toDialect(writer);
+			throw new SyntaxError("Cannot test '" + writer.toString() + "'");
+		}
+	}
+	
+	private IType resolveAndCheck(Context context) {
 		resolve(context);
 		return resolved.check(context);
 	}
 	
 	
-	private void resolve(Context context) throws SyntaxError {
+	private void resolve(Context context) {
 		if(resolved!=null)
 			return;
 		if(caller instanceof UnresolvedIdentifier)
@@ -93,7 +114,7 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 			resolved = resolveMember(context);
 	}
 	
-	private IExpression resolveUnresolvedIdentifier(Context context) throws SyntaxError {
+	private IExpression resolveUnresolvedIdentifier(Context context) {
 		Identifier id = ((UnresolvedIdentifier)caller).getId();
 		IDeclaration decl = null;
 		// if this happens in the context of a member method, then we need to check for category members first
@@ -104,15 +125,15 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 		}
 		decl = context.getRegisteredDeclaration(IDeclaration.class, id);
 		if(decl==null)
-			context.getProblemListener().reportUnknownIdentifier(id.getName(), id);
+			context.getProblemListener().reportUnknownIdentifier(id.toString(), id);
 		if(decl instanceof CategoryDeclaration)
 			return new ConstructorExpression(new CategoryType(id), assignments);
 		else
 			return new MethodCall(new MethodSelector(id), assignments);
 	}
 
-	private IDeclaration resolveUnresolvedMember(InstanceContext context, Identifier name) throws SyntaxError {
-		ConcreteCategoryDeclaration decl = context.getRegisteredDeclaration(ConcreteCategoryDeclaration.class, context.getInstanceType().getId());
+	private IDeclaration resolveUnresolvedMember(InstanceContext context, Identifier name) {
+		ConcreteCategoryDeclaration decl = context.getRegisteredDeclaration(ConcreteCategoryDeclaration.class, context.getInstanceType().getTypeNameId());
 		MethodDeclarationMap methods = decl.getMemberMethods(context, name);
 		if(methods!=null && methods.size()>0)
 			return methods;
@@ -120,10 +141,10 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 			return null;
 	}
 
-	private IExpression resolveMember(Context context) throws SyntaxError {
+	private IExpression resolveMember(Context context) {
 		IExpression parent = ((MemberSelector)caller).getParent();
-		Identifier name = ((MemberSelector)caller).getName();
-		return new MethodCall(new MethodSelector(parent, name), assignments);
+		Identifier id = ((MemberSelector)caller).getId();
+		return new MethodCall(new MethodSelector(parent, id), assignments);
 	}
 
 }

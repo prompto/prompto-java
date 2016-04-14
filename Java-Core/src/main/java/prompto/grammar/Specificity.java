@@ -4,9 +4,10 @@ public enum Specificity {
 	INCOMPATIBLE,
 	RESOLVED,
 	INHERITED,
-	EXACT;
+	EXACT,
+	ANCESTOR;
 	
-	public boolean greaterThan(Specificity other) {
-		return new Integer(this.ordinal()).compareTo(new Integer(other.ordinal()))>0;
+	public boolean isAssignable() {
+		return this!=INCOMPATIBLE && this!=ANCESTOR;
 	}
 }

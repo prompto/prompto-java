@@ -1,13 +1,28 @@
 package prompto.declaration;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
 
+import prompto.compiler.ClassConstant;
+import prompto.compiler.ClassFile;
+import prompto.compiler.CompilerException;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Descriptor;
+import prompto.compiler.FieldConstant;
+import prompto.compiler.FieldInfo;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.PromptoType;
 import prompto.error.InvalidSymbolError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.expression.NativeSymbol;
+import prompto.expression.Symbol;
 import prompto.grammar.Identifier;
 import prompto.grammar.NativeSymbolList;
-import prompto.grammar.Symbol;
 import prompto.runtime.Context;
 import prompto.type.EnumeratedNativeType;
 import prompto.type.IType;
@@ -16,7 +31,10 @@ import prompto.type.NativeType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
-public class EnumeratedNativeDeclaration extends BaseDeclaration implements IEnumeratedDeclaration {
+import com.fasterxml.jackson.databind.JsonNode;
+
+public class EnumeratedNativeDeclaration extends BaseDeclaration 
+	implements IEnumeratedDeclaration<NativeSymbol> {
 	
 	NativeSymbolList symbols;
 	EnumeratedNativeType type;
@@ -28,8 +46,8 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration implements IEnu
 	}
 	
 	@Override
-	public Type getDeclarationType() {
-		return Type.ENUM;
+	public DeclarationType getDeclarationType() {
+		return DeclarationType.ENUM;
 	}
 	
 	@Override
@@ -103,14 +121,14 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration implements IEnu
 	}
 
 	@Override
-	public void register(Context context) throws SyntaxError {
+	public void register(Context context) {
 		context.registerDeclaration(this);
 		for(Symbol s : symbols)
 			s.register(context);
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		for(Symbol s : symbols)
 			s.check(context);
 		return type;
@@ -129,4 +147,72 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration implements IEnu
 		}
 		throw new InvalidSymbolError(name = " is not a valid " + this.getName() + " symbol.");
 	}
+
+	public ClassFile compile(Context context, String fullName) {
+		try {
+			ClassFile classFile = new ClassFile(new PromptoType(fullName));
+			classFile.setSuperClass(new ClassConstant(Object.class));
+			compileSymbolFields(context, classFile, new Flags());
+			compileSymbolsField(context, classFile, new Flags());
+			compileClassConstructor(context, classFile, new Flags());
+			CompilerUtils.compileEmptyConstructor(classFile);
+			return classFile;
+		} catch(SyntaxError e) {
+			throw new CompilerException(e);
+		}
+	}
+	
+	private void compileSymbolsField(Context context, ClassFile classFile, Flags flags) {
+		FieldInfo field = new FieldInfo("%symbols", List.class); 
+		field.clearModifier(Modifier.PROTECTED);
+		field.addModifier(Modifier.STATIC | Modifier.PUBLIC);
+		classFile.addField(field);
+	}
+
+	private void compileSymbolFields(Context context, ClassFile classFile, Flags flags) {
+		getSymbols().forEach((s)->
+			compileSymbolField(context, classFile, flags, s));
+	}
+
+	private java.lang.reflect.Type getSymbolJavaType(Context context) {
+		return type.getDerivedFrom().getJavaType(context);
+	}
+	
+	private void compileSymbolField(Context context, ClassFile classFile, Flags flags, Symbol s) {
+		FieldInfo field = new FieldInfo(s.getName(), getSymbolJavaType(context));
+		field.clearModifier(Modifier.PROTECTED);
+		field.addModifier(Modifier.STATIC | Modifier.PUBLIC);
+		classFile.addField(field);
+	}
+	
+	protected void compileClassConstructor(Context context, ClassFile classFile, Flags flags) {
+		MethodInfo method = classFile.newMethod("<clinit>", new Descriptor.Method(void.class));
+		method.addModifier(Modifier.STATIC);
+		for(Symbol s : getSymbols())
+			compilePopulateSymbolField(context, method, flags, s);
+		compilePopulateSymbolsField(context, method, flags);
+		method.addInstruction(Opcode.RETURN);
+	}
+	
+	private void compilePopulateSymbolField(Context context, MethodInfo method, Flags flags, Symbol s) {
+		s.compile(context, method, flags);
+		FieldConstant f = new FieldConstant(method.getClassFile().getThisClass(), s.getName(), getSymbolJavaType(context));
+		method.addInstruction(Opcode.PUTSTATIC, f);
+	}
+
+	private void compilePopulateSymbolsField(Context context, MethodInfo method, Flags flags) {
+		ClassConstant thisClass = method.getClassFile().getThisClass();
+		CompilerUtils.compileNewInstance(method, ArrayList.class);
+		MethodConstant m = new MethodConstant(ArrayList.class, "add", Object.class, boolean.class);
+		for(NativeSymbol s : getSymbols()) {
+			method.addInstruction(Opcode.DUP);
+			FieldConstant f = new FieldConstant(thisClass, s.getName(), getSymbolJavaType(context));
+			method.addInstruction(Opcode.GETSTATIC, f);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+			method.addInstruction(Opcode.POP); // ignore returned boolean
+		}
+		FieldConstant f = new FieldConstant(thisClass, "%symbols", List.class);
+		method.addInstruction(Opcode.PUTSTATIC, f);
+	}
+
 }

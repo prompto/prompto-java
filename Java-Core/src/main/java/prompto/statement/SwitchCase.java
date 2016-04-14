@@ -1,7 +1,6 @@
 package prompto.statement;
 
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.parser.ISection;
 import prompto.parser.Section;
@@ -19,10 +18,14 @@ public abstract class SwitchCase extends Section implements ISection {
 		this.expression = expression;
 		this.statements = statements;
 	}
+	
+	public IExpression getExpression() {
+		return expression;
+	}
 
-	public abstract void checkSwitchType(Context context, IType type) throws SyntaxError;
+	public abstract void checkSwitchType(Context context, IType type);
 
-	public IType checkReturnType(Context context) throws SyntaxError {
+	public IType checkReturnType(Context context) {
 		return statements.check(context, null);
 	}
 

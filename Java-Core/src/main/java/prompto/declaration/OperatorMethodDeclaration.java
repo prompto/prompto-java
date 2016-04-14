@@ -1,9 +1,8 @@
 package prompto.declaration;
 
-import prompto.error.SyntaxError;
+import prompto.argument.IArgument;
 import prompto.expression.IExpression;
 import prompto.grammar.ArgumentList;
-import prompto.grammar.IArgument;
 import prompto.grammar.Identifier;
 import prompto.grammar.Operator;
 import prompto.runtime.Context;
@@ -17,13 +16,21 @@ public class OperatorMethodDeclaration extends ConcreteMethodDeclaration impleme
 	Operator operator;
 	
 	public OperatorMethodDeclaration(Operator op, IArgument arg, IType returnType, StatementList stmts) {
-		super(new Identifier("operator_" + op.name()), new ArgumentList(arg), returnType, stmts);
+		super(new Identifier(getNameAsKey(op)), new ArgumentList(arg), returnType, stmts);
 		this.operator = op;
 	}
 
+	public static String getNameAsKey(Operator operator) {
+		return "operator-" + operator.name();
+	}
+	
+	@Override
+	public String getNameAsKey() {
+		return getNameAsKey(operator);
+	}
 
 	@Override
-	public void check(ConcreteCategoryDeclaration declaration, Context context) throws SyntaxError {
+	public void check(ConcreteCategoryDeclaration declaration, Context context) {
 		// TODO Auto-generated method stub
 		
 	}	

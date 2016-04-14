@@ -1,6 +1,5 @@
 package prompto.type;
 
-import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 
 public abstract class NativeType extends BaseType {
@@ -28,17 +27,17 @@ public abstract class NativeType extends BaseType {
 		return all;
 	}
 	
-	public NativeType(String name) {
-		super(name);
+	public NativeType(Family family) {
+		super(family);
 	}
 	
 	@Override
-	public void checkUnique(Context context) throws SyntaxError {
+	public void checkUnique(Context context) {
 		// nothing to do
 	}
 	
 	@Override
-	public void checkExists(Context context) throws SyntaxError {
+	public void checkExists(Context context) {
 		// nothing to do
 	}
 	

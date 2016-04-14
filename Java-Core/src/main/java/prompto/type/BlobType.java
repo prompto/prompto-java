@@ -1,5 +1,7 @@
 package prompto.type;
 
+import java.lang.reflect.Type;
+
 import prompto.runtime.Context;
 import prompto.value.Blob;
 
@@ -12,11 +14,11 @@ public class BlobType extends BinaryType {
 	}
 	
 	private BlobType() {
-		super("Blob");
+		super(Family.BLOB);
 	}
 
 	@Override
-	public Class<?> toJavaClass() {
+	public Type getJavaType(Context context) {
 		return Blob.class;
 	}
 	

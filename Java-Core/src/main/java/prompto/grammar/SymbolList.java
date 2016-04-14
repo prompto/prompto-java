@@ -1,20 +1,21 @@
 package prompto.grammar;
 
 import prompto.error.PromptoError;
+import prompto.expression.Symbol;
+import prompto.intrinsic.IterableWithLength;
 import prompto.runtime.Context;
-import prompto.store.IStorable;
 import prompto.type.IType;
 import prompto.utils.IValueIterable;
 import prompto.utils.ObjectList;
-import prompto.value.IContainer;
 import prompto.value.IInstance;
+import prompto.value.IIterable;
 import prompto.value.ISliceable;
 import prompto.value.IValue;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
 @SuppressWarnings("serial")
-public abstract class SymbolList <T extends Symbol> extends ObjectList<T> implements IValue, IContainer<IValue> {
+public abstract class SymbolList <T extends Symbol> extends ObjectList<T> implements IValue, IIterable<IValue> {
 	
 	IType type;
 	
@@ -23,10 +24,10 @@ public abstract class SymbolList <T extends Symbol> extends ObjectList<T> implem
 	}
 
 	@Override
-	public void storeValue(Context context, String name, IStorable storable) {
-		throw new UnsupportedOperationException("Cannot store " + this.getClass().getSimpleName());
+	public Object getStorableData() {
+		throw new UnsupportedOperationException(); // can't be stored
 	}
-	
+
 	@Override
 	public boolean isMutable() {
 		return false;
@@ -42,54 +43,36 @@ public abstract class SymbolList <T extends Symbol> extends ObjectList<T> implem
 	}
 	
 	@Override
-	public long length() {
-		return this.size();
-	}
-	
-	@Override
-	public boolean hasItem(Context context, IValue iValue) throws PromptoError {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
-	@Override
-	public IValue getItem(Context context, IValue item) throws PromptoError {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public Iterable<IValue> getIterable(Context context) {
-		return new IValueIterable(context, (Iterable<Object>)(Object)this);
+	public IterableWithLength<IValue> getIterable(Context context) {
+		return new IValueIterable<>(context, this);
 	}
 	
 	
-	public IValue Add(Context context, IValue value) throws PromptoError {
+	public IValue plus(Context context, IValue value) throws PromptoError {
 		throw new UnsupportedOperationException("Add not supported by " + this.getClass().getSimpleName());
 	}
 
-	public IValue Subtract(Context context, IValue value) throws PromptoError {
+	public IValue minus(Context context, IValue value) throws PromptoError {
 		throw new UnsupportedOperationException("Subtract not supported by " + this.getClass().getSimpleName());
 	}
 
-	public IValue Multiply(Context context, IValue value) throws PromptoError {
+	public IValue multiply(Context context, IValue value) throws PromptoError {
 		throw new UnsupportedOperationException("Multiply not supported by " + this.getClass().getSimpleName());
 	}
 
-	public IValue Divide(Context context, IValue value) throws PromptoError {
+	public IValue divide(Context context, IValue value) throws PromptoError {
 		throw new UnsupportedOperationException("Divide not supported by " + this.getClass().getSimpleName());
 	}
 
-	public IValue IntDivide(Context context, IValue value) throws PromptoError {
+	public IValue intDivide(Context context, IValue value) throws PromptoError {
 		throw new UnsupportedOperationException("Integer divide not supported by " + this.getClass().getSimpleName());
 	}
 
-	public IValue Modulo(Context context, IValue value) throws PromptoError {
+	public IValue modulo(Context context, IValue value) throws PromptoError {
 		throw new UnsupportedOperationException("Integer divide not supported by " + this.getClass().getSimpleName());
 	}
 
-	public int CompareTo(Context context, IValue value) throws PromptoError {
+	public int compareTo(Context context, IValue value) throws PromptoError {
 		throw new UnsupportedOperationException("Compare not supported by " + this.getClass().getSimpleName());
 	}
 
@@ -103,12 +86,12 @@ public abstract class SymbolList <T extends Symbol> extends ObjectList<T> implem
 		throw new UnsupportedOperationException("No member support for " + this.getClass().getSimpleName());
 	}
 
-	public Object ConvertTo(Class<?> type) {
+	public Object convertTo(Class<?> type) {
 		return this;
 	}
 	
 	@Override
-	public boolean Roughly(Context context, IValue value) throws PromptoError {
+	public boolean roughly(Context context, IValue value) throws PromptoError {
 		return this.equals(value);
 	}
 	

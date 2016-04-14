@@ -1,32 +1,30 @@
 package prompto.type;
 
-import java.util.List;
+import java.lang.reflect.Type;
 
-
-import com.fasterxml.jackson.databind.JsonNode;
-
-
-import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoList;
 import prompto.parser.ECleverParser;
 import prompto.runtime.Context;
 import prompto.value.IValue;
 import prompto.value.ListValue;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 public class ListType extends ContainerType {
 	
 	public ListType(IType itemType) {
-		super(itemType.getId()+"[]", itemType);
+		super(Family.LIST, itemType, itemType.getTypeName() + "[]");
 	}
 	
 	@Override
-	public Class<?> toJavaClass() {
-		return List.class;
+	public Type getJavaType(Context context) {
+		return PromptoList.class;
 	}
 	
 	@Override
 	public boolean isAssignableTo(Context context, IType other) {
-		return (other instanceof ListType) && itemType.isAssignableTo(context, ((ListType)other).getItemType());
+		return other instanceof ListType && itemType.isAssignableTo(context, ((ListType)other).getItemType());
 	}
 
 	@Override
@@ -42,7 +40,7 @@ public class ListType extends ContainerType {
 	}
 	
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkAdd(Context context, IType other, boolean tryReverse) {
 		if(other instanceof ContainerType) {
 			IType itemType = ((ContainerType)other).getItemType();
 			if((other instanceof ListType || other instanceof SetType) 
@@ -53,7 +51,7 @@ public class ListType extends ContainerType {
 	}
 	
 	@Override
-	public IType checkItem(Context context, IType other) throws SyntaxError {
+	public IType checkItem(Context context, IType other) {
 		if(other==IntegerType.instance())
 			return itemType;
 		else
@@ -61,29 +59,29 @@ public class ListType extends ContainerType {
 	}
 	
 	@Override
-	public IType checkSlice(Context context) throws SyntaxError {
+	public IType checkSlice(Context context) {
 		return this;
 	}
 	
 	@Override
-	public IType checkMultiply(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkMultiply(Context context, IType other, boolean tryReverse) {
 		if(other instanceof IntegerType)
 			return this;
 		return super.checkMultiply(context, other, tryReverse);
 	}
 	
 	@Override
-	public IType checkContainsAllOrAny(Context context, IType other) throws SyntaxError {
+	public IType checkContainsAllOrAny(Context context, IType other) {
 		return BooleanType.instance();
 	}
 	
 	@Override
-	public IType checkIterator(Context context) throws SyntaxError {
+	public IType checkIterator(Context context) {
 		return itemType;
 	}
 
 	@Override
-	public IType checkMember(Context context, Identifier id) throws SyntaxError {
+	public IType checkMember(Context context, Identifier id) {
 		String name = id.toString();
         if ("length".equals(name))
             return IntegerType.instance();

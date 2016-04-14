@@ -10,6 +10,11 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 import static prompto.parser.SParser.*;
+import prompto.argument.CategoryArgument;
+import prompto.argument.CodeArgument;
+import prompto.argument.ExtendedArgument;
+import prompto.argument.IArgument;
+import prompto.argument.UnresolvedArgument;
 import prompto.csharp.CSharpBooleanLiteral;
 import prompto.csharp.CSharpCharacterLiteral;
 import prompto.csharp.CSharpDecimalLiteral;
@@ -35,13 +40,17 @@ import prompto.declaration.GetterMethodDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.NativeCategoryDeclaration;
+import prompto.declaration.NativeGetterMethodDeclaration;
 import prompto.declaration.NativeMethodDeclaration;
 import prompto.declaration.NativeResourceDeclaration;
+import prompto.declaration.NativeSetterMethodDeclaration;
 import prompto.declaration.OperatorMethodDeclaration;
 import prompto.declaration.SetterMethodDeclaration;
 import prompto.declaration.SingletonCategoryDeclaration;
 import prompto.declaration.TestMethodDeclaration;
-import prompto.expression.AddExpression;
+import prompto.expression.CategorySymbol;
+import prompto.expression.NativeSymbol;
+import prompto.expression.PlusExpression;
 import prompto.expression.AndExpression;
 import prompto.expression.CastExpression;
 import prompto.expression.CodeExpression;
@@ -62,7 +71,7 @@ import prompto.expression.IteratorExpression;
 import prompto.expression.MemberSelector;
 import prompto.expression.MethodExpression;
 import prompto.expression.MethodSelector;
-import prompto.expression.MinusExpression;
+import prompto.expression.NegateExpression;
 import prompto.expression.ModuloExpression;
 import prompto.expression.MultiplyExpression;
 import prompto.expression.NotExpression;
@@ -72,42 +81,36 @@ import prompto.expression.ReadExpression;
 import prompto.expression.SelectorExpression;
 import prompto.expression.SliceSelector;
 import prompto.expression.SortedExpression;
-import prompto.expression.SubtractExpression;
+import prompto.expression.MinusExpression;
 import prompto.expression.SymbolExpression;
 import prompto.expression.TernaryExpression;
 import prompto.expression.ThisExpression;
 import prompto.expression.TypeExpression;
+import prompto.expression.UnresolvedIdentifier;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.ArgumentList;
-import prompto.grammar.CategoryArgument;
-import prompto.grammar.CategorySymbol;
 import prompto.grammar.CategorySymbolList;
 import prompto.grammar.CmpOp;
-import prompto.grammar.CodeArgument;
 import prompto.grammar.ContOp;
 import prompto.grammar.EqOp;
-import prompto.grammar.IArgument;
-import prompto.grammar.IAssignableInstance;
-import prompto.grammar.IAssignableSelector;
 import prompto.grammar.IAttributeConstraint;
 import prompto.grammar.Identifier;
-import prompto.grammar.ItemInstance;
 import prompto.grammar.MatchingCollectionConstraint;
 import prompto.grammar.MatchingExpressionConstraint;
 import prompto.grammar.MatchingPatternConstraint;
-import prompto.grammar.MemberInstance;
 import prompto.grammar.MethodDeclarationList;
 import prompto.grammar.NativeCategoryBinding;
 import prompto.grammar.NativeCategoryBindingList;
-import prompto.grammar.NativeSymbol;
 import prompto.grammar.NativeSymbolList;
 import prompto.grammar.Operator;
 import prompto.grammar.OrderByClause;
 import prompto.grammar.OrderByClauseList;
-import prompto.grammar.UnresolvedArgument;
-import prompto.grammar.UnresolvedIdentifier;
-import prompto.grammar.VariableInstance;
+import prompto.instance.IAssignableInstance;
+import prompto.instance.IAssignableSelector;
+import prompto.instance.ItemInstance;
+import prompto.instance.MemberInstance;
+import prompto.instance.VariableInstance;
 import prompto.java.JavaBooleanLiteral;
 import prompto.java.JavaCharacterLiteral;
 import prompto.java.JavaDecimalLiteral;
@@ -165,6 +168,8 @@ import prompto.parser.SParserBaseListener;
 import prompto.parser.SParser.BlobTypeContext;
 import prompto.parser.SParser.ImageTypeContext;
 import prompto.parser.SParser.Javascript_new_expressionContext;
+import prompto.parser.SParser.Native_getter_declarationContext;
+import prompto.parser.SParser.Native_setter_declarationContext;
 import prompto.parser.SParser.UUIDTypeContext;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
@@ -191,7 +196,7 @@ import prompto.statement.AssignVariableStatement;
 import prompto.statement.AtomicSwitchCase;
 import prompto.statement.CollectionSwitchCase;
 import prompto.statement.CommentStatement;
-import prompto.statement.DeclarationInstruction;
+import prompto.statement.DeclarationStatement;
 import prompto.statement.DoWhileStatement;
 import prompto.statement.ForEachStatement;
 import prompto.statement.IStatement;
@@ -270,7 +275,7 @@ public class SPromptoBuilder extends SParserBaseListener {
 	public void exitAddExpression(AddExpressionContext ctx) {
 		IExpression left = this.<IExpression>getNodeValue(ctx.left);
 		IExpression right = this.<IExpression>getNodeValue(ctx.right);
-		IExpression exp = ctx.op.getType()==SParser.PLUS ? new AddExpression(left, right) : new SubtractExpression(left, right);
+		IExpression exp = ctx.op.getType()==SParser.PLUS ? new PlusExpression(left, right) : new MinusExpression(left, right);
 		setNodeValue(ctx, exp);
 	}
 
@@ -568,7 +573,7 @@ public class SPromptoBuilder extends SParserBaseListener {
 	@Override
 	public void exitClosureStatement(ClosureStatementContext ctx) {
 		ConcreteMethodDeclaration decl = this.<ConcreteMethodDeclaration>getNodeValue(ctx.decl);
-		setNodeValue(ctx, new DeclarationInstruction<ConcreteMethodDeclaration>(decl));
+		setNodeValue(ctx, new DeclarationStatement<ConcreteMethodDeclaration>(decl));
 	}
 	
 	@Override
@@ -1720,7 +1725,7 @@ public class SPromptoBuilder extends SParserBaseListener {
 	@Override
 	public void exitMinusExpression(MinusExpressionContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, new MinusExpression(exp));
+		setNodeValue(ctx, new NegateExpression(exp));
 	}
 	
 	@Override
@@ -1777,6 +1782,13 @@ public class SPromptoBuilder extends SParserBaseListener {
 	}
 	
 	@Override
+	public void exitNative_getter_declaration(Native_getter_declarationContext ctx) {
+		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		setNodeValue(ctx, new NativeGetterMethodDeclaration(name, stmts));
+	}
+	
+	@Override
 	public void exitNative_member_method_declaration(Native_member_method_declarationContext ctx) {
 		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.getChild(0));
 		setNodeValue(ctx, decl);
@@ -1798,6 +1810,13 @@ public class SPromptoBuilder extends SParserBaseListener {
 		NativeCategoryBindingList bindings = this.<NativeCategoryBindingList>getNodeValue(ctx.bindings);
 		MethodDeclarationList methods = this.<MethodDeclarationList>getNodeValue(ctx.methods);
 		setNodeValue(ctx, new NativeResourceDeclaration(name, attrs, bindings, null, methods));
+	}
+	
+	@Override
+	public void exitNative_setter_declaration(Native_setter_declarationContext ctx) {
+		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		setNodeValue(ctx, new NativeSetterMethodDeclaration(name, stmts));
 	}
 	
 	@Override
@@ -2562,7 +2581,9 @@ public class SPromptoBuilder extends SParserBaseListener {
 		IType type = this.<IType>getNodeValue(ctx.typ);
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
 		IdentifierList attrs = this.<IdentifierList>getNodeValue(ctx.attrs);
-		CategoryArgument arg = new CategoryArgument(type, name, attrs);
+		CategoryArgument arg = attrs==null ?
+				new CategoryArgument(type, name) : 
+				new ExtendedArgument(type, name, attrs); 
 		IExpression exp = this.<IExpression>getNodeValue(ctx.value);
 		arg.setDefaultExpression(exp);
 		setNodeValue(ctx, arg);

@@ -1,9 +1,11 @@
 package prompto.statement;
 
+import prompto.compiler.Flags;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.MethodInfo;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
-import prompto.grammar.IAssignableInstance;
+import prompto.instance.IAssignableInstance;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.type.VoidType;
@@ -32,7 +34,7 @@ public class AssignInstanceStatement extends SimpleStatement {
 	}
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		instance.checkAssignValue(context, expression);
 		return VoidType.instance();
 	}
@@ -41,5 +43,10 @@ public class AssignInstanceStatement extends SimpleStatement {
 	public IValue interpret(Context context) throws PromptoError {
 		instance.assign(context,expression);
 		return null;
+	}
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		return instance.compileAssign(context, method, flags, expression);
 	}
 }

@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -126,9 +127,9 @@ public class EmbeddedSOLRStore extends BaseSOLRStore {
 	}
 	
 	@Override
-	public void delete(Collection<Object> dbIds) throws PromptoError {
+	public void delete(Collection<UUID> dbIds) throws PromptoError {
 		try {
-			for(Object dbId : dbIds)
+			for(UUID dbId : dbIds)
 				server.deleteById(String.valueOf(dbId));
 			server.commit();
 		} catch(IOException | SolrServerException e) {

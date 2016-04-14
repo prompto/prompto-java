@@ -20,23 +20,43 @@ public class TestDocuments extends BaseEParserTest {
 	}
 
 	@Test
-	public void testDeepItem() throws Exception {
-		checkOutput("documents/deepItem.pec");
+	public void testInterpretedDeepItem() throws Exception {
+		checkInterpretedOutput("documents/deepItem.pec");
 	}
 
 	@Test
-	public void testDeepVariable() throws Exception {
-		checkOutput("documents/deepVariable.pec");
+	public void testCompiledDeepItem() throws Exception {
+		checkCompiledOutput("documents/deepItem.pec");
 	}
 
 	@Test
-	public void testItem() throws Exception {
-		checkOutput("documents/item.pec");
+	public void testInterpretedDeepVariable() throws Exception {
+		checkInterpretedOutput("documents/deepVariable.pec");
 	}
 
 	@Test
-	public void testVariable() throws Exception {
-		checkOutput("documents/variable.pec");
+	public void testCompiledDeepVariable() throws Exception {
+		checkCompiledOutput("documents/deepVariable.pec");
+	}
+
+	@Test
+	public void testInterpretedItem() throws Exception {
+		checkInterpretedOutput("documents/item.pec");
+	}
+
+	@Test
+	public void testCompiledItem() throws Exception {
+		checkCompiledOutput("documents/item.pec");
+	}
+
+	@Test
+	public void testInterpretedVariable() throws Exception {
+		checkInterpretedOutput("documents/variable.pec");
+	}
+
+	@Test
+	public void testCompiledVariable() throws Exception {
+		checkCompiledOutput("documents/variable.pec");
 	}
 
 }

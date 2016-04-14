@@ -1,20 +1,18 @@
 package prompto.type;
 
-import org.joda.time.LocalTime;
+import java.lang.reflect.Type;
+import java.util.Comparator;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
-import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoTime;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
-import prompto.value.IContainer;
 import prompto.value.IValue;
-import prompto.value.ListValue;
-import prompto.value.Range;
+import prompto.value.RangeBase;
 import prompto.value.Time;
 import prompto.value.TimeRange;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 
 public class TimeType extends NativeType {
@@ -26,12 +24,12 @@ public class TimeType extends NativeType {
 	}
 
 	private TimeType() {
-		super("Time");
+		super(Family.TYPE);
 	}
 
 	@Override
-	public Class<?> toJavaClass() {
-		return LocalTime.class;
+	public Type getJavaType(Context context) {
+		return PromptoTime.class;
 	}
 
 	@Override
@@ -40,14 +38,14 @@ public class TimeType extends NativeType {
 	}
 
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkAdd(Context context, IType other, boolean tryReverse) {
 		if (other instanceof PeriodType)
 			return DateTimeType.instance();
 		return super.checkAdd(context, other, tryReverse);
 	}
 
 	@Override
-	public IType checkSubstract(Context context, IType other) throws SyntaxError {
+	public IType checkSubstract(Context context, IType other) {
 		if (other instanceof TimeType)
 			return PeriodType.instance();
 		if (other instanceof PeriodType)
@@ -56,21 +54,21 @@ public class TimeType extends NativeType {
 	}
 
 	@Override
-	public IType checkCompare(Context context, IType other, ISection section) throws SyntaxError {
+	public IType checkCompare(Context context, IType other, ISection section) {
 		if (other instanceof TimeType)
 			return BooleanType.instance();
 		return super.checkCompare(context, other, section);
 	}
 
 	@Override
-	public IType checkRange(Context context, IType other) throws SyntaxError {
+	public IType checkRange(Context context, IType other) {
 		if (other instanceof TimeType)
 			return new RangeType(this);
 		return super.checkRange(context, other);
 	}
 
 	@Override
-	public IType checkMember(Context context, Identifier id) throws SyntaxError {
+	public IType checkMember(Context context, Identifier id) {
 		String name = id.toString();
 		if ("hour".equals(name))
 			return IntegerType.instance();
@@ -85,15 +83,20 @@ public class TimeType extends NativeType {
 	}
 
 	@Override
-	public Range<?> newRange(Object left, Object right) throws SyntaxError {
+	public RangeBase<?> newRange(Object left, Object right) {
 		if (left instanceof Time && right instanceof Time)
 			return new TimeRange((Time) left, (Time) right);
 		return super.newRange(left, right);
 	}
 
 	@Override
-	public ListValue sort(Context context, IContainer<IValue> list) throws PromptoError {
-		return this.doSort(context, list);
+	public Comparator<Time> getComparator() {
+		return new Comparator<Time>() {
+			@Override
+			public int compare(Time o1, Time o2) {
+				return o1.getStorableData().compareTo(o2.getStorableData());
+			}
+		};
 	}
 
 	@Override
@@ -103,7 +106,7 @@ public class TimeType extends NativeType {
 	
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value) {
-		LocalTime time = LocalTime.parse(value.asText());
+		PromptoTime time = PromptoTime.parse(value.asText());
 		return new Time(time);
 	}
 

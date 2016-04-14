@@ -1,7 +1,6 @@
 package prompto.statement;
 
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -70,7 +69,7 @@ public class WithResourceStatement extends BaseStatement {
 
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		context = context.newResourceContext();
 		resource.checkResource(context);
 		return statements.check(context, null);

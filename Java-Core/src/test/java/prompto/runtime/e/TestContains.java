@@ -20,128 +20,253 @@ public class TestContains extends BaseEParserTest {
 	}
 
 	@Test
-	public void testContainsAllList() throws Exception {
-		checkOutput("contains/containsAllList.pec");
+	public void testInterpretedContainsAllList() throws Exception {
+		checkInterpretedOutput("contains/containsAllList.pec");
 	}
 
 	@Test
-	public void testContainsAllSet() throws Exception {
-		checkOutput("contains/containsAllSet.pec");
+	public void testCompiledContainsAllList() throws Exception {
+		checkCompiledOutput("contains/containsAllList.pec");
 	}
 
 	@Test
-	public void testContainsAllText() throws Exception {
-		checkOutput("contains/containsAllText.pec");
+	public void testInterpretedContainsAllSet() throws Exception {
+		checkInterpretedOutput("contains/containsAllSet.pec");
 	}
 
 	@Test
-	public void testContainsAllTuple() throws Exception {
-		checkOutput("contains/containsAllTuple.pec");
+	public void testCompiledContainsAllSet() throws Exception {
+		checkCompiledOutput("contains/containsAllSet.pec");
 	}
 
 	@Test
-	public void testContainsAnyList() throws Exception {
-		checkOutput("contains/containsAnyList.pec");
+	public void testInterpretedContainsAllText() throws Exception {
+		checkInterpretedOutput("contains/containsAllText.pec");
 	}
 
 	@Test
-	public void testContainsAnySet() throws Exception {
-		checkOutput("contains/containsAnySet.pec");
+	public void testCompiledContainsAllText() throws Exception {
+		checkCompiledOutput("contains/containsAllText.pec");
 	}
 
 	@Test
-	public void testContainsAnyText() throws Exception {
-		checkOutput("contains/containsAnyText.pec");
+	public void testInterpretedContainsAllTuple() throws Exception {
+		checkInterpretedOutput("contains/containsAllTuple.pec");
 	}
 
 	@Test
-	public void testContainsAnyTuple() throws Exception {
-		checkOutput("contains/containsAnyTuple.pec");
+	public void testCompiledContainsAllTuple() throws Exception {
+		checkCompiledOutput("contains/containsAllTuple.pec");
 	}
 
 	@Test
-	public void testInCharacterRange() throws Exception {
-		checkOutput("contains/inCharacterRange.pec");
+	public void testInterpretedContainsAnyList() throws Exception {
+		checkInterpretedOutput("contains/containsAnyList.pec");
 	}
 
 	@Test
-	public void testInDateRange() throws Exception {
-		checkOutput("contains/inDateRange.pec");
+	public void testCompiledContainsAnyList() throws Exception {
+		checkCompiledOutput("contains/containsAnyList.pec");
 	}
 
 	@Test
-	public void testInDict() throws Exception {
-		checkOutput("contains/inDict.pec");
+	public void testInterpretedContainsAnySet() throws Exception {
+		checkInterpretedOutput("contains/containsAnySet.pec");
 	}
 
 	@Test
-	public void testInIntegerRange() throws Exception {
-		checkOutput("contains/inIntegerRange.pec");
+	public void testCompiledContainsAnySet() throws Exception {
+		checkCompiledOutput("contains/containsAnySet.pec");
 	}
 
 	@Test
-	public void testInList() throws Exception {
-		checkOutput("contains/inList.pec");
+	public void testInterpretedContainsAnyText() throws Exception {
+		checkInterpretedOutput("contains/containsAnyText.pec");
 	}
 
 	@Test
-	public void testInSet() throws Exception {
-		checkOutput("contains/inSet.pec");
+	public void testCompiledContainsAnyText() throws Exception {
+		checkCompiledOutput("contains/containsAnyText.pec");
 	}
 
 	@Test
-	public void testInText() throws Exception {
-		checkOutput("contains/inText.pec");
+	public void testInterpretedContainsAnyTuple() throws Exception {
+		checkInterpretedOutput("contains/containsAnyTuple.pec");
 	}
 
 	@Test
-	public void testInTimeRange() throws Exception {
-		checkOutput("contains/inTimeRange.pec");
+	public void testCompiledContainsAnyTuple() throws Exception {
+		checkCompiledOutput("contains/containsAnyTuple.pec");
 	}
 
 	@Test
-	public void testInTuple() throws Exception {
-		checkOutput("contains/inTuple.pec");
+	public void testInterpretedInCharacterRange() throws Exception {
+		checkInterpretedOutput("contains/inCharacterRange.pec");
 	}
 
 	@Test
-	public void testNinCharacterRange() throws Exception {
-		checkOutput("contains/ninCharacterRange.pec");
+	public void testCompiledInCharacterRange() throws Exception {
+		checkCompiledOutput("contains/inCharacterRange.pec");
 	}
 
 	@Test
-	public void testNinDateRange() throws Exception {
-		checkOutput("contains/ninDateRange.pec");
+	public void testInterpretedInDateRange() throws Exception {
+		checkInterpretedOutput("contains/inDateRange.pec");
 	}
 
 	@Test
-	public void testNinDict() throws Exception {
-		checkOutput("contains/ninDict.pec");
+	public void testCompiledInDateRange() throws Exception {
+		checkCompiledOutput("contains/inDateRange.pec");
 	}
 
 	@Test
-	public void testNinIntegerRange() throws Exception {
-		checkOutput("contains/ninIntegerRange.pec");
+	public void testInterpretedInDict() throws Exception {
+		checkInterpretedOutput("contains/inDict.pec");
 	}
 
 	@Test
-	public void testNinList() throws Exception {
-		checkOutput("contains/ninList.pec");
+	public void testCompiledInDict() throws Exception {
+		checkCompiledOutput("contains/inDict.pec");
 	}
 
 	@Test
-	public void testNinSet() throws Exception {
-		checkOutput("contains/ninSet.pec");
+	public void testInterpretedInIntegerRange() throws Exception {
+		checkInterpretedOutput("contains/inIntegerRange.pec");
 	}
 
 	@Test
-	public void testNinText() throws Exception {
-		checkOutput("contains/ninText.pec");
+	public void testCompiledInIntegerRange() throws Exception {
+		checkCompiledOutput("contains/inIntegerRange.pec");
 	}
 
 	@Test
-	public void testNinTimeRange() throws Exception {
-		checkOutput("contains/ninTimeRange.pec");
+	public void testInterpretedInList() throws Exception {
+		checkInterpretedOutput("contains/inList.pec");
+	}
+
+	@Test
+	public void testCompiledInList() throws Exception {
+		checkCompiledOutput("contains/inList.pec");
+	}
+
+	@Test
+	public void testInterpretedInSet() throws Exception {
+		checkInterpretedOutput("contains/inSet.pec");
+	}
+
+	@Test
+	public void testCompiledInSet() throws Exception {
+		checkCompiledOutput("contains/inSet.pec");
+	}
+
+	@Test
+	public void testInterpretedInText() throws Exception {
+		checkInterpretedOutput("contains/inText.pec");
+	}
+
+	@Test
+	public void testCompiledInText() throws Exception {
+		checkCompiledOutput("contains/inText.pec");
+	}
+
+	@Test
+	public void testInterpretedInTimeRange() throws Exception {
+		checkInterpretedOutput("contains/inTimeRange.pec");
+	}
+
+	@Test
+	public void testCompiledInTimeRange() throws Exception {
+		checkCompiledOutput("contains/inTimeRange.pec");
+	}
+
+	@Test
+	public void testInterpretedInTuple() throws Exception {
+		checkInterpretedOutput("contains/inTuple.pec");
+	}
+
+	@Test
+	public void testCompiledInTuple() throws Exception {
+		checkCompiledOutput("contains/inTuple.pec");
+	}
+
+	@Test
+	public void testInterpretedNinCharacterRange() throws Exception {
+		checkInterpretedOutput("contains/ninCharacterRange.pec");
+	}
+
+	@Test
+	public void testCompiledNinCharacterRange() throws Exception {
+		checkCompiledOutput("contains/ninCharacterRange.pec");
+	}
+
+	@Test
+	public void testInterpretedNinDateRange() throws Exception {
+		checkInterpretedOutput("contains/ninDateRange.pec");
+	}
+
+	@Test
+	public void testCompiledNinDateRange() throws Exception {
+		checkCompiledOutput("contains/ninDateRange.pec");
+	}
+
+	@Test
+	public void testInterpretedNinDict() throws Exception {
+		checkInterpretedOutput("contains/ninDict.pec");
+	}
+
+	@Test
+	public void testCompiledNinDict() throws Exception {
+		checkCompiledOutput("contains/ninDict.pec");
+	}
+
+	@Test
+	public void testInterpretedNinIntegerRange() throws Exception {
+		checkInterpretedOutput("contains/ninIntegerRange.pec");
+	}
+
+	@Test
+	public void testCompiledNinIntegerRange() throws Exception {
+		checkCompiledOutput("contains/ninIntegerRange.pec");
+	}
+
+	@Test
+	public void testInterpretedNinList() throws Exception {
+		checkInterpretedOutput("contains/ninList.pec");
+	}
+
+	@Test
+	public void testCompiledNinList() throws Exception {
+		checkCompiledOutput("contains/ninList.pec");
+	}
+
+	@Test
+	public void testInterpretedNinSet() throws Exception {
+		checkInterpretedOutput("contains/ninSet.pec");
+	}
+
+	@Test
+	public void testCompiledNinSet() throws Exception {
+		checkCompiledOutput("contains/ninSet.pec");
+	}
+
+	@Test
+	public void testInterpretedNinText() throws Exception {
+		checkInterpretedOutput("contains/ninText.pec");
+	}
+
+	@Test
+	public void testCompiledNinText() throws Exception {
+		checkCompiledOutput("contains/ninText.pec");
+	}
+
+	@Test
+	public void testInterpretedNinTimeRange() throws Exception {
+		checkInterpretedOutput("contains/ninTimeRange.pec");
+	}
+
+	@Test
+	public void testCompiledNinTimeRange() throws Exception {
+		checkCompiledOutput("contains/ninTimeRange.pec");
 	}
 
 }

@@ -1,7 +1,5 @@
 package prompto.expression;
 
-import prompto.error.SyntaxError;
-import prompto.grammar.UnresolvedIdentifier;
 import prompto.runtime.Context;
 import prompto.type.IType;
 
@@ -25,12 +23,21 @@ public abstract class SelectorExpression implements IExpression {
 		this.parent = parent;
 	}
 	
-	public IType checkParent(Context context) throws SyntaxError {
+	public IType checkParent(Context context) {
 		if (parent instanceof UnresolvedIdentifier)
 			return ((UnresolvedIdentifier)parent).checkMember(context);
 		else
 			return parent.check(context);
  	}
+
+	protected IExpression resolveParent(Context context) {
+        if(parent instanceof UnresolvedIdentifier) {
+        	((UnresolvedIdentifier) parent).checkMember(context);
+        	return ((UnresolvedIdentifier) parent).getResolved();
+        } else
+        	return parent;
+	}
+	
 
 
 }

@@ -1,37 +1,120 @@
 package prompto.declaration;
 
+import prompto.compiler.ClassFile;
+import prompto.compiler.CompilerException;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
+import prompto.java.JavaNativeCall;
 import prompto.runtime.Context;
 import prompto.statement.IStatement;
 import prompto.statement.StatementList;
 import prompto.type.IType;
+import prompto.type.TypeMap;
 import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
 public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 
+	JavaNativeCall statement;
+	
 	public NativeMethodDeclaration(Identifier name, ArgumentList arguments, IType returnType, StatementList instructions) {
 		super(name, arguments, returnType, instructions);
+		statement = findNativeStatement();
+	}
+
+	private JavaNativeCall findNativeStatement() {
+		for(IStatement statement : statements) {
+			if(statement instanceof JavaNativeCall)
+				return (JavaNativeCall)statement;
+		}
+		return null;
 	}
 
 	@Override
-	protected IType checkStatements(Context context) throws SyntaxError {
-		return statements.checkNative(context, returnType);
+	protected IType checkStatements(Context context) {
+		if(statement!=null)
+			return checkNative(context);
+		else if(returnType!=null)
+			return returnType;
+		else
+			return VoidType.instance();
+	}
+	
+	private IType checkNative(Context context) {
+		if(returnType==VoidType.instance()) {
+			// don't check return type
+			IType type = ((JavaNativeCall)statement).checkNative(context, returnType);
+			if(type!=VoidType.instance())
+				context.getProblemListener().reportIllegalReturn(statement);
+			return returnType;
+		} else {
+			TypeMap types = new TypeMap();
+			if(returnType!=null)
+				types.put(returnType.getTypeNameId(), returnType);
+			// TODO: ensure returnType is registered prior to the below 
+			IType type = statement.checkNative(context, returnType);
+			// TODO: remove the below workaround for unregistered native categories
+			if(type==null)
+				type = returnType;
+			if(type!=VoidType.instance())
+				types.put(type.getTypeNameId(), type);
+			type = types.inferType(context);
+			if(returnType!=null)
+				return returnType;
+			else
+				return type;
+		}
 	}
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		context.enterMethod(this);
 		try {
-			return statements.interpretNative(context, returnType);
+			return doInterpretNative(context);
+		} catch(NullPointerException e) {
+			e.printStackTrace();
+			throw new NullReferenceError();
 		} finally {
 			context.leaveMethod(this);
 		}
 	}
+	
+	private IValue doInterpretNative(Context context) throws PromptoError {
+		context.enterStatement(statement);
+		try {
+			IValue result = statement.interpretNative(context, returnType);
+			if(result!=null)
+				return result;
+		} finally {
+			context.leaveStatement(statement);
+		}
+		return null;
+	}
+	
+	@Override
+	public void compile(Context context, ClassFile classFile) {
+		try {
+			context = context.newLocalContext();
+			registerArguments(context);
+			IType returnType = this.checkNative(context);
+			MethodInfo method = createMethodInfo(context, classFile, returnType, getName());
+			registerLocals(context, classFile, method);
+			if(statement!=null)
+				statement.compile(context, method, new Flags());
+			// ensure we always return
+			if(returnType==VoidType.instance())
+				method.addInstruction(Opcode.RETURN);
+		} catch (PromptoError e) {
+			throw new CompilerException(e);
+		}
+	}
+
 	
 	@Override
 	protected void toSDialect(CodeWriter writer) {

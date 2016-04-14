@@ -1,22 +1,37 @@
 package prompto.type;
 
-import prompto.error.SyntaxError;
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
+
+import prompto.intrinsic.PromptoRange;
 import prompto.runtime.Context;
 
 public class RangeType extends ContainerType {
 	
 	public RangeType(IType itemType) {
-		super(itemType.getId()+"[..]",itemType);
+		super(Family.RANGE, itemType, itemType.getTypeName()+"[..]");
 	}
 	
 	@Override
 	public boolean isAssignableTo(Context context, IType other) {
 		return this.equals(other);
 	}
-
+	
+	static Map<IType,Class<?>> rangeClassMap = createRangeClassMap();
+	
+	private static Map<IType, Class<?>> createRangeClassMap() {
+		Map<IType,Class<?>> map = new HashMap<>();
+		map.put(CharacterType.instance(), PromptoRange.Character.class);
+		map.put(IntegerType.instance(), PromptoRange.Long.class);
+		map.put(DateType.instance(), PromptoRange.Date.class);
+		map.put(TimeType.instance(), PromptoRange.Time.class);
+		return map;
+	}
+	
 	@Override
-	public Class<?> toJavaClass() {
-		return null; // no equivalent
+	public Type getJavaType(Context context) {
+		return rangeClassMap.get(itemType); 
 	}
 	
 
@@ -33,7 +48,7 @@ public class RangeType extends ContainerType {
 	}
 	
 	@Override
-	public IType checkItem(Context context, IType other) throws SyntaxError {
+	public IType checkItem(Context context, IType other) {
 		if(other==IntegerType.instance())
 			return itemType;
 		else
@@ -41,12 +56,12 @@ public class RangeType extends ContainerType {
 	}
 	
 	@Override
-	public IType checkSlice(Context context) throws SyntaxError {
+	public IType checkSlice(Context context) {
 		return this;
 	}
 	
 	@Override
-	public IType checkIterator(Context context) throws SyntaxError {
+	public IType checkIterator(Context context) {
 		return itemType;
 	}
 

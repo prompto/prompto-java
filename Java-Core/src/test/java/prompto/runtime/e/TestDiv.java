@@ -20,23 +20,43 @@ public class TestDiv extends BaseEParserTest {
 	}
 
 	@Test
-	public void testDivDecimal() throws Exception {
-		checkOutput("div/divDecimal.pec");
+	public void testInterpretedDivDecimal() throws Exception {
+		checkInterpretedOutput("div/divDecimal.pec");
 	}
 
 	@Test
-	public void testDivInteger() throws Exception {
-		checkOutput("div/divInteger.pec");
+	public void testCompiledDivDecimal() throws Exception {
+		checkCompiledOutput("div/divDecimal.pec");
 	}
 
 	@Test
-	public void testIdivInteger() throws Exception {
-		checkOutput("div/idivInteger.pec");
+	public void testInterpretedDivInteger() throws Exception {
+		checkInterpretedOutput("div/divInteger.pec");
 	}
 
 	@Test
-	public void testModInteger() throws Exception {
-		checkOutput("div/modInteger.pec");
+	public void testCompiledDivInteger() throws Exception {
+		checkCompiledOutput("div/divInteger.pec");
+	}
+
+	@Test
+	public void testInterpretedIdivInteger() throws Exception {
+		checkInterpretedOutput("div/idivInteger.pec");
+	}
+
+	@Test
+	public void testCompiledIdivInteger() throws Exception {
+		checkCompiledOutput("div/idivInteger.pec");
+	}
+
+	@Test
+	public void testInterpretedModInteger() throws Exception {
+		checkInterpretedOutput("div/modInteger.pec");
+	}
+
+	@Test
+	public void testCompiledModInteger() throws Exception {
+		checkCompiledOutput("div/modInteger.pec");
 	}
 
 }

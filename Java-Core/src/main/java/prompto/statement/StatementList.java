@@ -2,9 +2,11 @@ package prompto.statement;
 
 import java.util.LinkedList;
 
-import prompto.error.NullReferenceError;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.StackState;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.java.JavaNativeCall;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
@@ -34,7 +36,7 @@ public class StatementList extends LinkedList<IStatement> {
 			return false;
 	}
 	
-	public IType check(Context context, IType returnType) throws SyntaxError {
+	public IType check(Context context, IType returnType) {
 		if(returnType==VoidType.instance()) {
 			for(IStatement statement : this) {
 				IType type = statement.check(context);
@@ -45,11 +47,11 @@ public class StatementList extends LinkedList<IStatement> {
 		} else {
 			TypeMap types = new TypeMap();
 			if(returnType!=null)
-				types.put(returnType.getId(), returnType);
+				types.put(returnType.getTypeNameId(), returnType);
 			for(IStatement statement : this) {
 				IType type = statement.check(context);
 				if(type!=VoidType.instance())
-					types.put(type.getId(), type);
+					types.put(type.getTypeNameId(), type);
 			}
 			IType type = types.inferType(context);
 			if(returnType!=null)
@@ -59,7 +61,7 @@ public class StatementList extends LinkedList<IStatement> {
 		}
 	}
 
-	public IType checkNative(Context context, IType returnType) throws SyntaxError {
+	public IType checkNative(Context context, IType returnType) {
 		if(returnType==VoidType.instance()) {
 			// don't check return type
 			for(IStatement statement : this) {
@@ -73,7 +75,7 @@ public class StatementList extends LinkedList<IStatement> {
 		} else {
 			TypeMap types = new TypeMap();
 			if(returnType!=null)
-				types.put(returnType.getId(), returnType);
+				types.put(returnType.getTypeNameId(), returnType);
 			for(IStatement statement : this) {
 				if(!(statement instanceof JavaNativeCall))
 					continue;
@@ -83,7 +85,7 @@ public class StatementList extends LinkedList<IStatement> {
 				if(type==null)
 					type = returnType;
 				if(type!=VoidType.instance())
-					types.put(type.getId(), type);
+					types.put(type.getTypeNameId(), type);
 			}
 			IType type = types.inferType(context);
 			if(returnType!=null)
@@ -111,40 +113,29 @@ public class StatementList extends LinkedList<IStatement> {
 		return null;
 	}
 	
-	public IValue interpretNative(Context context, IType returnType) throws PromptoError {
-		try {
-			return doInterpretNative(context, returnType);
-		} catch(NullPointerException e) {
-			e.printStackTrace();
-			throw new NullReferenceError();
-		}
-	}
-	
-	private IValue doInterpretNative(Context context, IType returnType) throws PromptoError {
-		for(IStatement statement : this) {
-			if(!(statement instanceof JavaNativeCall))
-				continue;
-			context.enterStatement(statement);
-			try {
-				IValue result = ((JavaNativeCall)statement).interpretNative(context, returnType);
-				if(result!=null)
-					return result;
-			} finally {
-				context.leaveStatement(statement);
-			}
-		}
-		return null;
-	}
 
 	public void toDialect(CodeWriter writer) {
 		for(IStatement statement : this) {
 			statement.toDialect(writer);
 			if(statement instanceof SimpleStatement) {
-				if(writer.getDialect()==Dialect.O)
+				if(writer.getDialect()==Dialect.O && !(statement instanceof NativeCall))
 					writer.append(';');
 				writer.newLine();
 			}
 		}
+	}
+
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		if(this.size()>0) {
+			ResultInfo info = null;
+			StackState state = method.captureStackState(); 
+			for(IStatement statement : this)
+				// TODO refine actual info, here we assume all statements are reachable
+				info = statement.compile(context, method, flags);
+			method.restoreStackLocals(state);
+			return info;
+		} else
+			return new ResultInfo(void.class);
 	}
 
 

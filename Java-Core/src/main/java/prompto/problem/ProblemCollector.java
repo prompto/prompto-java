@@ -14,7 +14,6 @@ import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
 
-import prompto.error.SyntaxError;
 import prompto.parser.ISection;
 import prompto.parser.MissingTokenException;
 import prompto.parser.UnwantedTokenException;
@@ -113,14 +112,14 @@ public class ProblemCollector implements ANTLRErrorListener, IProblemListener {
 	}
 	
 	@Override
-	public void reportIllegalComparison(IType type, IType other, ISection section) throws SyntaxError {
+	public void reportIllegalComparison(IType type, IType other, ISection section) {
 		synchronized(problems) {
 			problems.add(new IllegalComparisonError(type, other, section));
 		}
 	}
 	
 	@Override
-	public void reportIllegalMember(String name, ISection section) throws SyntaxError {
+	public void reportIllegalMember(String name, ISection section) {
 		synchronized(problems) {
 			problems.add(new IllegalMemberError(name, section));
 		}

@@ -1,35 +1,62 @@
 package prompto.value;
 
+import prompto.intrinsic.PromptoRange;
 import prompto.type.IntegerType;
 
 
-public class IntegerRange extends Range<Integer> {
+public class IntegerRange extends RangeBase<Integer> {
 
-	public IntegerRange(Integer left, Integer right) {
-		super(IntegerType.instance(), left, right);
-	}
+	static class PromptoIntegerRange extends PromptoRange<Integer> {
 
-	@Override
-	public long length() {
-		return 1 + high.IntegerValue() - low.IntegerValue();
-	}
+		public PromptoIntegerRange(Integer low, Integer high) {
+			super(low, high);
+		}
+		
+		@Override
+		public Integer getItem(long item) {
+			java.lang.Long result = low.longValue() + item - 1;
+			if(result>high.longValue())
+				throw new IndexOutOfBoundsException();
+			return new Integer(result);
+		}
+		
+		@Override
+		public long getNativeLength() {
+			return 1L + high.longValue() - low.longValue();
+		}
+			
+		@Override
+		public PromptoIntegerRange slice(long first, long last) {
+			last = adjustLastSliceIndex(last);
+			return new PromptoIntegerRange(getItem(first), getItem(last));
+		}
 
-	@Override
-	public int compare(Integer o1, Integer o2) {
-		return o1.compareTo(o2);
+		@Override
+		public boolean contains(Object item) {
+			if(!(item instanceof prompto.value.Integer))
+				return false;
+			prompto.value.Integer other = (prompto.value.Integer)item;
+			return other.compareTo(low)>=0 && high.compareTo(other)>=0;
+		}
+
 	}
 	
-	@Override
-	public Integer getItem(long index) {
-		Long result = low.IntegerValue() + index - 1;
-		if(result>high.IntegerValue())
-			throw new IndexOutOfBoundsException();
-		return new Integer(result);
+	public IntegerRange(Integer left, Integer right) {
+		this(new PromptoIntegerRange(left, right));
+	}
+
+	public IntegerRange(PromptoRange<Integer> range) {
+		super(IntegerType.instance(), range);
 	}
 
 	@Override
-	public Range<Integer> newInstance(Integer left, Integer right) {
-		return new IntegerRange(left, right);
+	public long getLength() {
+		return 1 + getHigh().longValue() - getLow().longValue();
+	}
+
+	@Override
+	public RangeBase<Integer> newInstance(PromptoRange<Integer> range) {
+		return new IntegerRange(range);
 	}
 	
 

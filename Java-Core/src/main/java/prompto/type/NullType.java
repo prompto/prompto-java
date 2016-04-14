@@ -1,6 +1,7 @@
 package prompto.type;
 
-import prompto.error.SyntaxError;
+import java.lang.reflect.Type;
+
 import prompto.runtime.Context;
 
 public class NullType extends BaseType {
@@ -12,21 +13,21 @@ public class NullType extends BaseType {
 	}
 	
 	private NullType() {
-		super("Null");
+		super(Family.NULL);
 	}
 
 	@Override
-	public Class<?> toJavaClass() {
+	public Type getJavaType(Context context) {
 		return null;
 	}
 
 	@Override
-	public void checkUnique(Context context) throws SyntaxError {
+	public void checkUnique(Context context) {
 		// ok
 	}
 
 	@Override
-	public void checkExists(Context context) throws SyntaxError {
+	public void checkExists(Context context) {
 		// ok
 	}
 

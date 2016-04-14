@@ -1,49 +1,66 @@
 package prompto.type;
 
+import java.lang.reflect.Type;
 import java.security.InvalidParameterException;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.PromptoType;
+import prompto.compiler.ResultInfo;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.declaration.EnumeratedNativeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
+import prompto.declaration.NativeCategoryDeclaration;
+import prompto.declaration.SingletonCategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
-import prompto.expression.MethodSelector;
-import prompto.grammar.ArgumentAssignment;
-import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
 import prompto.grammar.Operator;
-import prompto.grammar.UnresolvedIdentifier;
+import prompto.instance.MemberInstance;
+import prompto.instance.VariableInstance;
 import prompto.runtime.Context;
-import prompto.runtime.MethodFinder;
 import prompto.runtime.Score;
-import prompto.statement.MethodCall;
 import prompto.store.IDataStore;
 import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.utils.CodeWriter;
-import prompto.value.ConcreteInstance;
-import prompto.value.ExpressionValue;
-import prompto.value.IContainer;
+import prompto.utils.Utils;
 import prompto.value.IInstance;
 import prompto.value.IValue;
-import prompto.value.ListValue;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 
 public class CategoryType extends BaseType {
 
 	boolean mutable = false;
+	Identifier typeNameId;
 	
-	public CategoryType(Identifier name) {
-		super(name);
+	public CategoryType(Identifier typeNameId) {
+		super(Family.CATEGORY);
+		this.typeNameId = typeNameId;
+	}
+	
+	protected CategoryType(Family family, Identifier typeNameId) {
+		super(family);
+		this.typeNameId = typeNameId;
+	}
+
+	@Override
+	public String getTypeName() {
+		return typeNameId.toString();
+	}
+	
+	@Override
+	public Identifier getTypeNameId() {
+		return typeNameId;
 	}
 	
 	public void setMutable(boolean mutable) {
@@ -62,8 +79,12 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public Class<?> toJavaClass() {
-		return Object.class;
+	public Type getJavaType(Context context) {
+		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, typeNameId);
+		if(decl instanceof NativeCategoryDeclaration)
+			return new PromptoType(((NativeCategoryDeclaration) decl).getBoundClassName());
+		else
+			return CompilerUtils.getCategoryInterfaceType(getTypeName());
 	}
 	
 	@Override
@@ -75,21 +96,21 @@ public class CategoryType extends BaseType {
 		if(!(obj instanceof CategoryType))
 			return false;
 		CategoryType other = (CategoryType)obj;
-		return this.getId().equals(other.getId());
+		return this.getTypeName().equals(other.getTypeName());
 	}
 	
 	@Override
-	public void checkUnique(Context context) throws SyntaxError {
-		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class,id);
+	public void checkUnique(Context context) {
+		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, typeNameId);
 		if(actual!=null)
-			throw new SyntaxError("Duplicate name: \"" + id + "\"");
+			throw new SyntaxError("Duplicate name: \"" + typeNameId + "\"");
 	}
 	
-	IDeclaration getDeclaration(Context context) throws SyntaxError {
-		return getDeclaration(context, id);
+	public IDeclaration getDeclaration(Context context) {
+		return getDeclaration(context, typeNameId);
 	}
 	
-	private static IDeclaration getDeclaration(Context context, Identifier id) throws SyntaxError {
+	private static IDeclaration getDeclaration(Context context, Identifier id) {
 		IDeclaration actual = context.getRegisteredDeclaration(CategoryDeclaration.class, id);
 		if(actual==null)
 			actual = context.getRegisteredDeclaration(EnumeratedNativeDeclaration.class, id);
@@ -99,7 +120,7 @@ public class CategoryType extends BaseType {
 	}
 
 	@Override
-	public IType checkMultiply(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkMultiply(Context context, IType other, boolean tryReverse) {
 		IType type = checkOperator(context, other, tryReverse, Operator.MULTIPLY);
 		if(type!=null)
 			return type;
@@ -108,7 +129,7 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public IType checkDivide(Context context, IType other) throws SyntaxError {
+	public IType checkDivide(Context context, IType other) {
 		IType type = checkOperator(context, other, false, Operator.DIVIDE);
 		if(type!=null)
 			return type;
@@ -117,7 +138,7 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public IType checkIntDivide(Context context, IType other) throws SyntaxError {
+	public IType checkIntDivide(Context context, IType other) {
 		IType type = checkOperator(context, other, false, Operator.IDIVIDE);
 		if(type!=null)
 			return type;
@@ -126,7 +147,7 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public IType checkModulo(Context context, IType other) throws SyntaxError {
+	public IType checkModulo(Context context, IType other) {
 		IType type = checkOperator(context, other, false, Operator.MODULO);
 		if(type!=null)
 			return type;
@@ -135,7 +156,7 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkAdd(Context context, IType other, boolean tryReverse) {
 		IType type = checkOperator(context, other, tryReverse, Operator.PLUS);
 		if(type!=null)
 			return type;
@@ -144,7 +165,7 @@ public class CategoryType extends BaseType {
 	}
 
 	@Override
-	public IType checkSubstract(Context context, IType other) throws SyntaxError {
+	public IType checkSubstract(Context context, IType other) {
 		IType type = checkOperator(context, other, false, Operator.MINUS);
 		if(type!=null)
 			return type;
@@ -152,7 +173,7 @@ public class CategoryType extends BaseType {
 			return super.checkSubstract(context, other);
 	}
 	
-	private IType checkOperator(Context context, IType other, boolean tryReverse, Operator operator) throws SyntaxError {
+	private IType checkOperator(Context context, IType other, boolean tryReverse, Operator operator) {
 		IDeclaration actual = getDeclaration(context);
 		if(actual instanceof ConcreteCategoryDeclaration) try {
 			IMethodDeclaration method = ((ConcreteCategoryDeclaration)actual).findOperator(context, operator, other);
@@ -168,22 +189,21 @@ public class CategoryType extends BaseType {
 		if(tryReverse)
 			return null;
 		else
-			throw new SyntaxError("Unsupported operation: " + this.id + " " + operator.getToken() + " " + other.getId());
+			throw new SyntaxError("Unsupported operation: " + this.typeNameId + " " + operator.getToken() + " " + other.getTypeName());
 	}
 
 	@Override
-	public void checkExists(Context context) throws SyntaxError {
+	public void checkExists(Context context) {
 		getDeclaration(context);
 	}
 	
 	@Override
-    public IType checkMember(Context context, Identifier name) throws SyntaxError
-    {
-        CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, getId());
+    public IType checkMember(Context context, Identifier name) {
+        CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, typeNameId);
         if (cd == null)
-            throw new SyntaxError("Unknown category:" + getId());
+            throw new SyntaxError("Unknown category:" + typeNameId);
         if (!cd.hasAttribute(context, name))
-            throw new SyntaxError("No attribute:" + name + " in category:" + getId());
+            throw new SyntaxError("No attribute:" + name + " in category:" + typeNameId);
         AttributeDeclaration ad = context.getRegisteredDeclaration(AttributeDeclaration.class, name);
         if (ad == null)
             throw new SyntaxError("Unknown atttribute:" + name);
@@ -194,7 +214,7 @@ public class CategoryType extends BaseType {
 	
 	@Override
 	public boolean isAssignableTo(Context context, IType other) {
-		if(id.equals(other.getId()))
+		if(getTypeName().equals(other.getTypeName()))
 			return true;
 		if(other instanceof AnyType)
 			return true;
@@ -204,7 +224,7 @@ public class CategoryType extends BaseType {
 	}
 	
 	boolean isAssignableTo(Context context, CategoryType other) {
-		if(id.equals(other.getId()))
+		if(getTypeName().equals(other.getTypeName()))
 			return true;
 		try {
 			IDeclaration d = getDeclaration(context);
@@ -246,7 +266,7 @@ public class CategoryType extends BaseType {
 	}
 	
 	public boolean isAnonymous() {
-		return Character.isLowerCase(id.toString().charAt(0)); // since it's the name of the argument
+		return Character.isLowerCase(getTypeName().charAt(0)); // since it's the name of the argument
 	}
 	
 	boolean isAssignableToAnonymousCategory(Context context, CategoryDeclaration decl, CategoryDeclaration other) {
@@ -269,13 +289,13 @@ public class CategoryType extends BaseType {
 		CategoryType otherCat = (CategoryType)other;
 		if(otherCat.isAnonymous())
 			return true;
-		CategoryDeclaration thisDecl = context.getRegisteredDeclaration(CategoryDeclaration.class, this.getId());
+		CategoryDeclaration thisDecl = context.getRegisteredDeclaration(CategoryDeclaration.class, typeNameId);
 		if(thisDecl.isDerivedFrom(context, otherCat))
 			return true;
 		return false;
 	}
 
-	public Score scoreMostSpecific(Context context, CategoryType t1, CategoryType t2) {
+	public Score compareSpecificity(Context context, CategoryType t1, CategoryType t2) {
 		if(t1.equals(t2))
 			return Score.SIMILAR;
 		if(this.equals(t1))
@@ -291,155 +311,18 @@ public class CategoryType extends BaseType {
 	}
 
 	public IInstance newInstance(Context context) throws PromptoError {
-		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, this.getId());
+		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, typeNameId);
 		IInstance inst = decl.newInstance(context);
 		inst.setMutable(this.mutable);
 		return inst;
 	}
 	
 	public IInstance newInstance(Context context, IStored stored) throws PromptoError {
-		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, this.getId());
+		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, typeNameId);
 		IInstance inst = decl.newInstance(context, stored);
 		inst.setMutable(this.mutable);
 		return inst;
 	}
-	
-	public IValue sort(final Context context, IContainer<IValue> list, IExpression key) throws PromptoError {
-		if(list.length()==0)
-			return list;
-		if(key==null)
-			key = new UnresolvedIdentifier(new Identifier("key"));
-		IDeclaration d = getDeclaration(context);
-		if(d instanceof CategoryDeclaration) {
-			CategoryDeclaration decl = (CategoryDeclaration)d;
-			if(decl.hasAttribute(context, new Identifier(key.toString())))
-				return sortByAttribute(context, list, new Identifier(key.toString()));
-			else if(decl.hasMethod(context, key.toString(), null))
-				return sortByClassMethod(context, list, key.toString());
-			else if(globalMethodExists(context, list, new Identifier(key.toString())))
-				return sortByGlobalMethod(context, list, new Identifier(key.toString()));
-			else
-				return sortByExpression(context, list, key);
-		} else
-			throw new UnsupportedOperationException(); // TODO
-	}
-	
-	
-	private ListValue sortByExpression(final Context context, IContainer<IValue> list, final IExpression key) throws PromptoError {
-		try {
-			return this.<ConcreteInstance>doSort(context,list,new Comparator<ConcreteInstance>() {
-				@Override
-				public int compare(ConcreteInstance o1, ConcreteInstance o2) {
-					try {
-						Context co = context.newInstanceContext(o1);
-						IValue key1 = key.interpret(co);
-						co = context.newInstanceContext(o2);
-						IValue key2 = key.interpret(co);
-						return compareKeys(key1,key2);
-					} catch(Throwable t) {
-						throw new RuntimeException(t);
-					}
-				}
-
-			});
-		} catch(RuntimeException e) {
-			if(e.getCause() instanceof PromptoError)
-				throw (PromptoError)e.getCause();
-			else
-				throw e;
-		}
-	}
-
-	private ListValue sortByAttribute(final Context context, IContainer<IValue> list, final Identifier name) throws PromptoError {
-		try {
-			return this.<IInstance>doSort(context,list,new Comparator<IInstance>() {
-				@Override
-				public int compare(IInstance o1, IInstance o2) {
-					try {
-						IValue key1 = o1.getMember(context, name, false);
-						IValue key2 = o2.getMember(context, name, false);
-						return compareKeys(key1,key2);
-					} catch(Throwable t) {
-						throw new RuntimeException(t);
-					}
-				}
-
-			});
-		} catch(RuntimeException e) {
-			if(e.getCause() instanceof PromptoError)
-				throw (PromptoError)e.getCause();
-			else
-				throw e;
-		}
-	}
-	
-	private ListValue sortByClassMethod(Context context, IContainer<IValue> list, final String name) {
-		return null;
-	}
-
-	private boolean globalMethodExists(Context context, IContainer<IValue> list, Identifier name) {
-		try {
-			IExpression exp = new ExpressionValue(this, newInstance(context));
-			ArgumentAssignment arg = new ArgumentAssignment(null, exp);
-			ArgumentAssignmentList args = new ArgumentAssignmentList(arg);
-			MethodCall proto = new MethodCall(new MethodSelector(name), args);
-			MethodFinder finder = new MethodFinder(context, proto);
-			return finder.findMethod(true)!=null;
-		} catch (PromptoError e) {
-			return false;
-		}
-	}
-
-	private ListValue sortByGlobalMethod(Context context, IContainer<IValue> list, final Identifier name) throws PromptoError {
-		IExpression exp = new ExpressionValue(this, newInstance(context));
-		ArgumentAssignment arg = new ArgumentAssignment(null, exp);
-		ArgumentAssignmentList args = new ArgumentAssignmentList(arg);
-		MethodCall proto = new MethodCall(new MethodSelector(name), args);
-		MethodFinder finder = new MethodFinder(context, proto);
-		IMethodDeclaration method = finder.findMethod(true);
-		return sortByGlobalMethod(context, list, proto, method);
-	}
-	
-	private ListValue sortByGlobalMethod(final Context context, IContainer<IValue> list, final MethodCall method, final IMethodDeclaration declaration) throws PromptoError {
-		try {
-			return this.<IInstance>doSort(context,list,new Comparator<IInstance>() {
-				@Override
-				public int compare(IInstance o1, IInstance o2) {
-					try {
-						ArgumentAssignment assignment = method.getAssignments().get(0);
-						assignment.setExpression(new ExpressionValue(CategoryType.this, o1));
-						IValue key1 = method.interpret(context);
-						assignment.setExpression(new ExpressionValue(CategoryType.this, o2));
-						IValue key2 = method.interpret(context);
-						return compareKeys(key1,key2);
-					} catch(Throwable t) {
-						throw new RuntimeException(t);
-					}
-				}
-
-			});
-		} catch(RuntimeException e) {
-			if(e.getCause() instanceof PromptoError)
-				throw (PromptoError)e.getCause();
-			else
-				throw e;
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private int compareKeys(IValue key1, IValue key2) {
-		if(key1==null && key2==null)
-			return 0;
-		else if(key1==null)
-			return -1;
-		else if(key2==null)
-			return 1;
-		else if(key1 instanceof Comparable)
-			return ((Comparable<Object>)key1).compareTo(key2);
-		else
-			return key1.toString().compareTo(key2.toString());
-	}
-
 
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value) {
@@ -485,18 +368,18 @@ public class CategoryType extends BaseType {
 			instance.setMember(context, fieldId, fieldValue);
 	}
 
-	private IType readJSONFieldType(Context context, Identifier fieldId, JsonNode fieldData) throws SyntaxError {
+	private IType readJSONFieldType(Context context, Identifier fieldId, JsonNode fieldData) {
 		AttributeDeclaration attribute = context.getRegisteredDeclaration(AttributeDeclaration.class, fieldId);
 		IType fieldType = attribute.getType(context);
 		return checkDerivedType(context, fieldType, fieldData);
 	}
 
-	private IType checkDerivedType(Context context, IType fieldType, JsonNode fieldData) throws SyntaxError {
+	private IType checkDerivedType(Context context, IType fieldType, JsonNode fieldData) {
 		if(fieldType instanceof CategoryType) {
 			if(fieldData.isObject())
 				return new CategoryType(new Identifier(fieldData.get("type").asText()));
 			else {
-				IDeclaration declaration = getDeclaration(context, fieldType.getId());
+				IDeclaration declaration = getDeclaration(context, fieldType.getTypeNameId());
 				return declaration.getType(context);
 			}
 		}
@@ -505,9 +388,59 @@ public class CategoryType extends BaseType {
 
 	private void readJSONDbId(Context context, JsonNode value, IInstance instance) throws PromptoError {
 		if(value.has(IStore.dbIdName)) {
-			IType type = IDataStore.getInstance().getDbIdType();
+			IType type = Utils.typeToIType(IDataStore.getInstance().getDbIdClass());
 			IValue dbid = type.readJSONValue(context, value.get(IStore.dbIdName));
-			instance.setMember(context, IStore.dbIdIdentifier, dbid);
+			instance.setMember(context, new Identifier(IStore.dbIdName), dbid);
 		}
 	}
+	
+	@Override
+	public IValue convertJavaValueToPromptoValue(Context context, Object value) {
+		try {
+			IDeclaration decl = getDeclaration(context);
+			if(decl instanceof CategoryDeclaration)
+				return convertJavaValueToPromptoValue(context, (CategoryDeclaration)decl, value);
+		} catch(Exception e) {
+		}
+		return super.convertJavaValueToPromptoValue(context, value);
+	}
+
+	private IValue convertJavaValueToPromptoValue(Context context, CategoryDeclaration decl, Object value) throws PromptoError {
+		if(IDataStore.getInstance().getDbIdClass().isInstance(value))
+			value = IDataStore.getInstance().fetchUnique(value);
+		if(value instanceof IStored)
+			return decl.newInstance(context, (IStored)value);
+		else
+			return super.convertJavaValueToPromptoValue(context, value);
+	}
+	
+	@Override
+	public ResultInfo compileGetMember(Context context, MethodInfo method,
+			Flags flags, IExpression parent, Identifier id) {
+		IDeclaration decl = getDeclaration(context);
+		if(decl instanceof SingletonCategoryDeclaration)
+			return ((SingletonCategoryDeclaration)decl).compileGetMember(context, method, flags, parent, id);
+		else
+			throw new SyntaxError("No static member support for non-singleton " + decl.getName());
+	}
+
+	public ResultInfo compileSetMember(Context context, MethodInfo method,
+			Flags flags, IExpression parent, IExpression value, Identifier id) {
+		IDeclaration decl = getDeclaration(context);
+		if(decl instanceof SingletonCategoryDeclaration)
+			return ((SingletonCategoryDeclaration)decl).compileSetStaticMember(context, method, flags, value, id);
+		else if(couldBeImplicitThis(decl, flags)) {
+			MemberInstance instance = new MemberInstance(id);
+			instance.setParent(new VariableInstance(new Identifier("this")));
+			return instance.compileAssign(context, method, flags, value);
+		} else
+			throw new SyntaxError("No static member support for non-singleton " + decl.getName());
+	}
+
+	private boolean couldBeImplicitThis(IDeclaration decl, Flags flags) {
+		return decl instanceof ConcreteCategoryDeclaration && flags.isMember();
+	}
+
+
+
 }

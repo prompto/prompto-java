@@ -1,50 +1,47 @@
 package prompto.statement;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
+import prompto.intrinsic.PromptoStoreQuery;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
-import prompto.store.IDataStore;
-import prompto.store.IStorable;
-import prompto.store.IStore;
 import prompto.type.IType;
 import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.utils.ExpressionList;
-import prompto.value.IInstance;
 import prompto.value.IValue;
-import prompto.value.IteratorValue;
-import prompto.value.ListValue;
 
 public class StoreStatement extends SimpleStatement {
 	
-	ExpressionList del;
-	ExpressionList add;
+	ExpressionList deletables;
+	ExpressionList storables;
 	
-	public StoreStatement(ExpressionList del, ExpressionList add) {
-		this.del = del;
-		this.add = add;
+	public StoreStatement(ExpressionList delete, ExpressionList add) {
+		this.deletables = delete;
+		this.storables = add;
 	}
 
 	@Override
 	public void toDialect(CodeWriter writer) {
 		writer.append("store ");
 		if(writer.getDialect()==Dialect.E)
-			add.toDialect(writer);
+			storables.toDialect(writer);
 		else {
 			writer.append('(');
-			add.toDialect(writer);
+			storables.toDialect(writer);
 			writer.append(')');
 		}
 	}
 	
 	@Override
 	public String toString() {
-		return "store " + add.toString();
+		return "store " + storables.toString();
 	}
 	
 	@Override
@@ -56,85 +53,66 @@ public class StoreStatement extends SimpleStatement {
 		if(!(obj instanceof StoreStatement))
 			return false;
 		StoreStatement other = (StoreStatement)obj;
-		return this.add.equals(other.add);
+		return this.storables.equals(other.storables);
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
-		// TODO check expression
+	public IType check(Context context) {
+		// TODO check expressions
 		return VoidType.instance();
 	}
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		IStore store = IDataStore.getInstance();
-		List<IValue> dbIdsToDel = collectDbIdsToDel(context);
-		List<IStorable> docsToAdd = collectDocsToAdd(context);
-		if(dbIdsToDel!=null || docsToAdd!=null)
-			store.store(context, dbIdsToDel, docsToAdd);
+		PromptoStoreQuery store = new PromptoStoreQuery();
+		if(deletables!=null) for(IExpression exp : deletables) {
+			IValue value = exp.interpret(context);
+			store.delete(context, value);
+		}
+		if(storables!=null) for(IExpression exp : storables) {
+			IValue value = exp.interpret(context);
+			store.store(context, value);
+		}
+		store.execute();
 		return null;
 	}
 
-	private List<IStorable> collectDocsToAdd(Context context) throws PromptoError {
-		if(add==null || add.isEmpty())
-			return null;
-		List<IStorable> docsToAdd = new ArrayList<>();
-		for(IExpression exp : add) {
-			IValue value = exp.interpret(context);
-			collectDocsToAdd(context, docsToAdd, value);
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		CompilerUtils.compileNewInstance(method, PromptoStoreQuery.class);
+		compileObjectsToDelete(context, method, flags);
+		compileStorablesToStore(context, method, flags);
+		compileExecute(context, method, flags);
+		return new ResultInfo(void.class);
+	}
+
+	private void compileStorablesToStore(Context context, MethodInfo method, Flags flags) {
+		if(storables!=null) {
+			MethodConstant m = new MethodConstant(PromptoStoreQuery.class, "store", Object.class, void.class);
+			for(IExpression exp : storables) {
+				method.addInstruction(Opcode.DUP);
+				exp.compile(context, method, flags);
+				method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+			}
 		}
-		if(docsToAdd.isEmpty())
-			return null;
-		else
-			return docsToAdd;
 	}
 	
-	private void collectDocsToAdd(Context context, List<IStorable> docsToAdd, IValue value) throws PromptoError {
-		if(value instanceof IInstance)
-			((IInstance)value).collectStorables(docsToAdd);
-		else if(value instanceof ListValue) {
-			ListValue list = (ListValue)value;
-			for(IValue item : list.getItems()) {
-				collectDocsToAdd(context, docsToAdd, item);
-			}
-		} else if(value instanceof IteratorValue) {
-			IteratorValue iter = (IteratorValue)value;
-			while(iter.hasNext()) {
-				collectDocsToAdd(context, docsToAdd, iter.next());
+	private void compileObjectsToDelete(Context context, MethodInfo method, Flags flags) {
+		if(deletables!=null) {
+			MethodConstant m = new MethodConstant(PromptoStoreQuery.class, "delete", Object.class, void.class);
+			for(IExpression exp : deletables) {
+				method.addInstruction(Opcode.DUP);
+				exp.compile(context, method, flags);
+				method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 			}
 		}
 	}
 
-	private List<IValue> collectDbIdsToDel(Context context) throws PromptoError {
-		if(del==null || del.isEmpty())
-			return null;
-		List<IValue> dbIdsToDel = new ArrayList<>();
-		for(IExpression exp : del) {
-			IValue value = exp.interpret(context);
-			collectDbIdsToDel(context, dbIdsToDel, value);
-		}
-		if(dbIdsToDel.isEmpty())
-			return null;
-		else
-			return dbIdsToDel;
+	private void compileExecute(Context context, MethodInfo method, Flags flags) {
+		MethodConstant m = new MethodConstant(PromptoStoreQuery.class, "execute", void.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 	}
 	
-	private void collectDbIdsToDel(Context context, List<IValue> dbIdsToDel, IValue value) throws PromptoError {
-		if(value instanceof IInstance) {
-			IValue dbId = ((IInstance)value).getMember(context, IStore.dbIdIdentifier, false);
-			if(dbId!=null)
-				dbIdsToDel.add(dbId);
-		} else if(value instanceof ListValue) {
-			for(IValue item : ((ListValue)value).getItems()) {
-				collectDbIdsToDel(context, dbIdsToDel, item);
-			}
-		} else if(value instanceof IteratorValue) {
-			IteratorValue iter = (IteratorValue)value;
-			while(iter.hasNext()) {
-				collectDbIdsToDel(context, dbIdsToDel, iter.next());
-			}
-		} else if(value.getType()==IDataStore.getInstance().getDbIdType())
-			dbIdsToDel.add(value);
-	}
+
 	
 }

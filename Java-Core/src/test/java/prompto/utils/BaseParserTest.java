@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,15 +15,18 @@ import org.junit.Before;
 import prompto.declaration.DeclarationList;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.TestMethodDeclaration;
+import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
 import prompto.parser.ECleverParser;
 import prompto.parser.OCleverParser;
 import prompto.parser.SCleverParser;
 import prompto.runtime.Context;
+import prompto.runtime.Executor;
 import prompto.runtime.Interpreter;
 import prompto.runtime.utils.Out;
 import prompto.store.IDataStore;
+import prompto.store.IStore;
 import prompto.store.MemStore;
 import prompto.utils.CodeWriter;
 
@@ -60,25 +64,71 @@ public abstract class BaseParserTest extends BaseTest {
 
 	public abstract DeclarationList parseResource(String resourceName) throws Exception;
 
-	protected boolean runResource(String resourceName) throws Exception {
-		loadResource(resourceName);
-		if(context.hasTests()) {
-			Interpreter.interpretTests(context);
-			return true;
-		} else {
-			Interpreter.interpretMainNoArgs(context);
+	static interface ResourceRunner {
+		boolean runResource(String resourceName, boolean catchExceptions) throws PromptoError;
+	}
+	
+	protected boolean interpretResource(String resourceName, boolean reThrow) throws PromptoError {
+		try {
+			loadResource(resourceName);
+			if(context.hasTests()) {
+				Interpreter.interpretTests(context);
+				return true;
+			} else {
+				Interpreter.interpretMainNoArgs(context);
+				return false;
+			}
+		} catch(Exception e) {
+			if(reThrow && e instanceof PromptoError)
+				throw (PromptoError)e;
+			e.printStackTrace(System.err);
+			fail(e.getMessage());
 			return false;
 		}
 	}
 
-	protected void runResource(String resourceName, String methodName, String cmdLineArgs) throws Exception {
+	protected boolean executeResource(String resourceName, boolean reThrow) throws PromptoError {
+		try {
+			loadResource(resourceName);
+			File root = Files.createTempDirectory("prompto_").toFile();
+			if(context.hasTests()) {
+				Executor.executeTests(context, root);
+				return true;
+			} else {
+				Executor.executeMainNoArgs(context, root);
+				return false;
+			}
+		} catch(Exception e) {
+			if(reThrow && e instanceof PromptoError)
+				throw (PromptoError)e;
+			e.printStackTrace(System.err);
+			fail(e.getMessage());
+			return false;
+		}
+	}
+
+	protected void interpretResource(String resourceName, String methodName, String cmdLineArgs) throws Exception {
 		loadResource(resourceName);
 		Interpreter.interpretMethod(context, new Identifier(methodName), cmdLineArgs);
 	}
 	
-	protected void checkOutput(String resource) throws Exception {
-		IDataStore.setInstance(new MemStore());
-		boolean isTest = runResource(resource);
+	protected void checkInterpretedOutput(String resource) throws Exception {
+		checkOutput(resource, this::interpretResource);
+	}
+
+	protected void checkCompiledOutput(String resource) throws Exception {
+		try {
+			checkOutput(resource, this::executeResource);
+		} catch(Throwable t) {
+			t.printStackTrace(System.err);
+			throw t;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	protected void checkOutput(String resource, ResourceRunner runner) throws Exception {
+		IDataStore.setInstance((IStore<Object>)(Object)new MemStore());
+		boolean isTest = runner.runResource(resource, false);
 		String read = Out.read();
 		if(isTest && read.endsWith("\n"))
 			read = read.substring(0, read.length() - 1);
@@ -100,30 +150,43 @@ public abstract class BaseParserTest extends BaseTest {
 			if(!(decl instanceof TestMethodDeclaration))
 				continue;
 			Out.reset();
-			Interpreter.interpretTest(coreContext, decl.getIdentifier());
-			String expected = decl.getIdentifier().getName() + " test successful\n";
-			String read = Out.read();
-			assertEquals(expected, read);
+			interpretTest(decl.getId());
+			Out.reset();
+			executeTest(decl.getId());
 		}
 	}
 	
-	protected List<String> readExpected(String resourceName) throws Exception {
-		int idx = resourceName.lastIndexOf('.');
-		resourceName = resourceName.substring(0, idx) + ".txt";
-		InputStream input = getResourceAsStream(resourceName);
-		assertNotNull("resource not found:"+resourceName,input);
+	private void executeTest(Identifier identifier) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void interpretTest(Identifier identifier) throws Exception {
+		Interpreter.interpretTest(coreContext, identifier);
+		String expected = identifier.toString() + " test successful\n";
+		String read = Out.read();
+		assertEquals(expected, read);
+	}
+
+	protected List<String> readExpected(String resourceName) {
 		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-			List<String> expected = new ArrayList<String>();
-			for(;;) {
-				String read = reader.readLine();
-				if(read==null || read.length()==0)
-					return expected;
-				expected.add(read);
-			}
-				
-		} finally {
-			input.close();
+			int idx = resourceName.lastIndexOf('.');
+			resourceName = resourceName.substring(0, idx) + ".txt";
+			try(InputStream input = getResourceAsStream(resourceName)) {
+				assertNotNull("resource not found:" + resourceName, input);
+				BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+				List<String> expected = new ArrayList<String>();
+				for(;;) {
+					String read = reader.readLine();
+					if(read==null || read.length()==0)
+						return expected;
+					expected.add(read);
+				}
+					
+			} 
+		} catch(Exception e) {
+			fail(e.getMessage());
+			return null;
 		}
 	}
 

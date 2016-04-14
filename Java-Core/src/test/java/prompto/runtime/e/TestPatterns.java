@@ -20,33 +20,63 @@ public class TestPatterns extends BaseEParserTest {
 	}
 
 	@Test
-	public void testIntegerEnumeration() throws Exception {
-		checkOutput("patterns/integerEnumeration.pec");
+	public void testInterpretedIntegerEnumeration() throws Exception {
+		checkInterpretedOutput("patterns/integerEnumeration.pec");
 	}
 
 	@Test
-	public void testIntegerPattern() throws Exception {
-		checkOutput("patterns/integerPattern.pec");
+	public void testCompiledIntegerEnumeration() throws Exception {
+		checkCompiledOutput("patterns/integerEnumeration.pec");
 	}
 
 	@Test
-	public void testNegativeIntegerRange() throws Exception {
-		checkOutput("patterns/negativeIntegerRange.pec");
+	public void testInterpretedIntegerPattern() throws Exception {
+		checkInterpretedOutput("patterns/integerPattern.pec");
 	}
 
 	@Test
-	public void testPositiveIntegerRange() throws Exception {
-		checkOutput("patterns/positiveIntegerRange.pec");
+	public void testCompiledIntegerPattern() throws Exception {
+		checkCompiledOutput("patterns/integerPattern.pec");
 	}
 
 	@Test
-	public void testTextEnumeration() throws Exception {
-		checkOutput("patterns/textEnumeration.pec");
+	public void testInterpretedNegativeIntegerRange() throws Exception {
+		checkInterpretedOutput("patterns/negativeIntegerRange.pec");
 	}
 
 	@Test
-	public void testTextPattern() throws Exception {
-		checkOutput("patterns/textPattern.pec");
+	public void testCompiledNegativeIntegerRange() throws Exception {
+		checkCompiledOutput("patterns/negativeIntegerRange.pec");
+	}
+
+	@Test
+	public void testInterpretedPositiveIntegerRange() throws Exception {
+		checkInterpretedOutput("patterns/positiveIntegerRange.pec");
+	}
+
+	@Test
+	public void testCompiledPositiveIntegerRange() throws Exception {
+		checkCompiledOutput("patterns/positiveIntegerRange.pec");
+	}
+
+	@Test
+	public void testInterpretedTextEnumeration() throws Exception {
+		checkInterpretedOutput("patterns/textEnumeration.pec");
+	}
+
+	@Test
+	public void testCompiledTextEnumeration() throws Exception {
+		checkCompiledOutput("patterns/textEnumeration.pec");
+	}
+
+	@Test
+	public void testInterpretedTextPattern() throws Exception {
+		checkInterpretedOutput("patterns/textPattern.pec");
+	}
+
+	@Test
+	public void testCompiledTextPattern() throws Exception {
+		checkCompiledOutput("patterns/textPattern.pec");
 	}
 
 }

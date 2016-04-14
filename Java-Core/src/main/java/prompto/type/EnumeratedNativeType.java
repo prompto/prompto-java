@@ -1,50 +1,71 @@
 package prompto.type;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import java.lang.reflect.Type;
+import java.util.List;
 
+import prompto.compiler.ClassConstant;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.FieldConstant;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.declaration.EnumeratedNativeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IEnumeratedDeclaration;
-import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.value.IValue;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 public class EnumeratedNativeType extends BaseType {
 
 	NativeType derivedFrom;
-
-	public EnumeratedNativeType(Identifier id, NativeType derivedFrom) {
-		super(id);
+	Identifier typeNameId;
+	
+	public EnumeratedNativeType(Identifier typeNameId, NativeType derivedFrom) {
+		super(Family.ENUMERATED);
+		this.typeNameId = typeNameId;
 		this.derivedFrom = derivedFrom;
 	}
 
+	@Override
+	public String getTypeName() {
+		return typeNameId.toString();
+	}
+	
+	@Override
+	public Identifier getTypeNameId() {
+		return typeNameId;
+	}
+	
 	public NativeType getDerivedFrom() {
 		return derivedFrom;
 	}
 
 	@Override
-	public Class<?> toJavaClass() {
-		// TODO Auto-generated method stub
-		return null;
+	public Type getJavaType(Context context) {
+		return CompilerUtils.getNativeEnumType(typeNameId);
 	}
 
 	@Override
-	public void checkUnique(Context context) throws SyntaxError {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void checkExists(Context context) throws SyntaxError {
+	public void checkUnique(Context context) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public IType checkMember(Context context, Identifier id) throws SyntaxError {
+	public void checkExists(Context context) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public IType checkMember(Context context, Identifier id) {
 		String name = id.toString();
 		if ("symbols".equals(name))
 			return new ListType(derivedFrom);
@@ -57,15 +78,31 @@ public class EnumeratedNativeType extends BaseType {
 	}
 	
 	@Override
-	public IValue getMember(Context context, Identifier id) throws PromptoError {
+	public IValue getMember(Context context, Identifier id) {
 		String name = id.toString();
-		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, this.id);
+		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, typeNameId);
 		if(!(decl instanceof IEnumeratedDeclaration))
 			throw new SyntaxError(name + " is not an enumerated type!");
 		if ("symbols".equals(name))
-			return ((IEnumeratedDeclaration)decl).getSymbols();
+			return ((IEnumeratedDeclaration<?>)decl).getSymbols();
 		else
-			throw new InvalidDataError("No such member:" + name);
+			throw new SyntaxError("No such member:" + name);
+	}
+	
+	@Override
+	public ResultInfo compileGetMember(Context context, MethodInfo method,
+			Flags flags, IExpression parent, Identifier id) {
+		String name = id.toString();
+		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, typeNameId);
+		if(!(decl instanceof IEnumeratedDeclaration))
+			throw new SyntaxError(name + " is not an enumerated type!");
+		if ("symbols".equals(name)) {
+			ClassConstant cc = new ClassConstant(CompilerUtils.getNativeEnumType(typeNameId));
+			FieldConstant fc = new FieldConstant(cc, "%symbols", List.class);
+			method.addInstruction(Opcode.GETSTATIC, fc);
+			return new ResultInfo(List.class);
+		} else
+			throw new SyntaxError("No such member:" + name);
 	}
 	
 	@Override
@@ -81,7 +118,7 @@ public class EnumeratedNativeType extends BaseType {
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value) {
 		try {
-			EnumeratedNativeDeclaration decl = context.getRegisteredDeclaration(EnumeratedNativeDeclaration.class, this.getId());
+			EnumeratedNativeDeclaration decl = context.getRegisteredDeclaration(EnumeratedNativeDeclaration.class, typeNameId);
 			return decl.readJSONValue(context, value);
 		} catch (PromptoError e) {
 			throw new RuntimeException(e);

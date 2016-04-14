@@ -1,6 +1,7 @@
 package prompto.type;
 
-import prompto.error.SyntaxError;
+import java.lang.reflect.Type;
+
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.value.Cursor;
@@ -8,11 +9,11 @@ import prompto.value.Cursor;
 public class CursorType extends IterableType {
 	
 	public CursorType(IType itemType) {
-		super("Cursor<" + itemType.getId()+">", itemType);
+		super(Family.CURSOR, itemType, "Cursor<" + itemType.getTypeName()+">");
 	}
 	
 	@Override
-	public Class<?> toJavaClass() {
+	public Type getJavaType(Context context) {
 		return Cursor.class;
 	}
 	
@@ -32,12 +33,12 @@ public class CursorType extends IterableType {
 	}
 	
 	@Override
-	public IType checkIterator(Context context) throws SyntaxError {
+	public IType checkIterator(Context context) {
 		return itemType;
 	}
 
 	@Override
-	public IType checkMember(Context context, Identifier id) throws SyntaxError {
+	public IType checkMember(Context context, Identifier id) {
 		String name = id.toString();
         if ("length".equals(name))
             return IntegerType.instance();

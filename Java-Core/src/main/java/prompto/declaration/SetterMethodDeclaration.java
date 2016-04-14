@@ -1,17 +1,36 @@
 package prompto.declaration;
 
-import prompto.error.SyntaxError;
+import prompto.compiler.ClassConstant;
+import prompto.compiler.ClassFile;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Descriptor;
+import prompto.compiler.FieldInfo;
+import prompto.compiler.Flags;
+import prompto.compiler.IVerifierEntry.VerifierType;
+import prompto.compiler.MethodInfo;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.runtime.Variable;
+import prompto.statement.IStatement;
 import prompto.statement.StatementList;
+import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 
 public class SetterMethodDeclaration extends ConcreteMethodDeclaration implements IExpression {
 
-	public SetterMethodDeclaration(Identifier name, StatementList statements) {
-		super(name, null, null, statements);
+	public SetterMethodDeclaration(Identifier id, StatementList statements) {
+		super(id, null, null, statements);
+	}
+
+	public static String getNameAsKey(Identifier id) {
+		return "Setter:" + id.toString();
+	}
+
+	@Override
+	public String getNameAsKey() {
+		return getNameAsKey(getId());
 	}
 
 	@Override
@@ -29,7 +48,7 @@ public class SetterMethodDeclaration extends ConcreteMethodDeclaration implement
 	protected void toEDialect(CodeWriter writer) {
 		writer.append("define ");
 		writer.append(getName());
-		writer.append(" setter doing:\n");
+		writer.append(" as setter doing:\n");
 		writer.indent();
 		statements.toDialect(writer);
 		writer.dedent();
@@ -52,9 +71,29 @@ public class SetterMethodDeclaration extends ConcreteMethodDeclaration implement
 	
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
+		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, getId());
+		return decl.getType();
+	}
+
+	@Override
+	public void compile(Context context, ClassFile classFile) {
 		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
+	}
+
+	public void compile(Context context, ClassFile classFile, Flags flags,
+			CategoryType type, FieldInfo field) {
+		String name = CompilerUtils.setterName(this.getName());
+		Descriptor.Method proto = new Descriptor.Method(field.getType(), void.class);
+		MethodInfo method = classFile.newMethod(name, proto);
+		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
+		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, getId());
+		method.registerLocal(getName(), VerifierType.ITEM_Object, new ClassConstant(field.getType()));
+		context = context.newCategoryContext(type).newChildContext();
+		context.registerValue(new Variable(getId(), decl.getType()));
+		for(IStatement stmt : statements)
+			stmt.compile(context, method, flags.withSetter(field));
 	}
 
 }

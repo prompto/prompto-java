@@ -1,28 +1,44 @@
 package prompto.type;
 
-import prompto.error.SyntaxError;
+import java.lang.reflect.Type;
+
+import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoSet;
 import prompto.runtime.Context;
 
 
 public class SetType extends ContainerType {
 
 	public SetType(IType itemType) {
-		super(itemType.getId()+"<>", itemType);
+		super(Family.SET, itemType, itemType.getTypeName()+"<>");
 	}
 	
 	@Override
-	public Class<?> toJavaClass() {
-		// TODO Auto-generated method stub
-		return null;
+	public Type getJavaType(Context context) {
+		return PromptoSet.class;
 	}
 	
 	@Override
-	public IType checkIterator(Context context) throws SyntaxError {
+	public boolean isAssignableTo(Context context, IType other) {
+		return (other instanceof SetType) && itemType.isAssignableTo(context, ((SetType)other).getItemType());
+	}
+
+	@Override
+	public IType checkIterator(Context context) {
 		return itemType;
 	}
 	
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkMember(Context context, Identifier id) {
+		String name = id.toString();
+        if ("length".equals(name))
+            return IntegerType.instance();
+        else
+    		return super.checkMember(context, id);
+    }
+
+	@Override
+	public IType checkAdd(Context context, IType other, boolean tryReverse) {
 		if(other instanceof ContainerType) {
 			IType itemType = ((ContainerType)other).getItemType();
 			if((other instanceof ListType || other instanceof SetType) 
@@ -33,7 +49,7 @@ public class SetType extends ContainerType {
 	}
 	
 	@Override
-	public IType checkItem(Context context, IType other) throws SyntaxError {
+	public IType checkItem(Context context, IType other) {
 		if(other==IntegerType.instance())
 			return itemType;
 		else
@@ -41,7 +57,7 @@ public class SetType extends ContainerType {
 	}
 
 	@Override
-	public IType checkContainsAllOrAny(Context context, IType other) throws SyntaxError {
+	public IType checkContainsAllOrAny(Context context, IType other) {
 		return BooleanType.instance();
 	}
 	

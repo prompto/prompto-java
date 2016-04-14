@@ -18,6 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import prompto.store.IStore;
+import prompto.value.BinaryValue;
 import prompto.value.Blob;
 import prompto.value.Image;
 
@@ -88,11 +89,11 @@ public class TestServerSchema {
 		options.put("indexed", "true");
 		options.put("stored", "true");
 		store.addField("data", "blob", options);
-		SolrInputDocument doc = new SolrInputDocument();
-		doc.addField(IStore.dbIdName, UUID.randomUUID());
+		StorableDocument doc = new StorableDocument(null, null);
+		doc.setData(IStore.dbIdName, UUID.randomUUID());
 		Blob blob = new Blob("application/octet-stream","azertyuiop".getBytes());
-		doc.addField("data", BinaryConverter.toBytes(blob));
-		store.addDocuments(doc);
+		doc.setData("data", blob.getData());
+		store.addDocuments(doc.getDocument());
 		store.commit();
 		// Test the basics
 		SolrQuery query = new SolrQuery();
@@ -103,11 +104,11 @@ public class TestServerSchema {
 		SolrDocument result = resp.getResults().get(0);
 		assertNotNull(result);
 		Object data = result.getFieldValue("data");
-		data = BinaryConverter.toBinary(data);
+		data = BinaryValue.newInstance(BinaryConverter.toPromptoBinary(data));
 		assertTrue(data instanceof Blob);
 		blob = (Blob)data;
 		assertEquals("application/octet-stream", blob.getMimeType());
-		assertEquals("azertyuiop", new String(blob.getData()));
+		assertEquals("azertyuiop", new String(blob.getBytes()));
 	}
 
 	@Test
@@ -116,11 +117,11 @@ public class TestServerSchema {
 		options.put("indexed", "true");
 		options.put("stored", "true");
 		store.addField("data", "image", options);
-		SolrInputDocument doc = new SolrInputDocument();
-		doc.addField(IStore.dbIdName, UUID.randomUUID());
+		StorableDocument doc = new StorableDocument(null, null);
+		doc.setData(IStore.dbIdName, UUID.randomUUID());
 		Image image = new Image("image/jpeg","JFIF".getBytes());
-		doc.addField("data", BinaryConverter.toBytes(image));
-		store.addDocuments(doc);
+		doc.setData("data", image.getData());
+		store.addDocuments(doc.getDocument());
 		store.commit();
 		// Test the basics
 		SolrQuery query = new SolrQuery();
@@ -131,11 +132,11 @@ public class TestServerSchema {
 		SolrDocument result = resp.getResults().get(0);
 		assertNotNull(result);
 		Object data = result.getFieldValue("data");
-		data = BinaryConverter.toBinary(data);
+		data = BinaryValue.newInstance(BinaryConverter.toPromptoBinary(data));
 		assertTrue(data instanceof Image);
 		image = (Image)data;
 		assertEquals("image/jpeg", image.getMimeType());
-		assertEquals("JFIF", new String(image.getData()));
+		assertEquals("JFIF", new String(image.getBytes()));
 	}
 
 

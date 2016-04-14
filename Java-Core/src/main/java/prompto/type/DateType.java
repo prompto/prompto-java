@@ -1,20 +1,18 @@
 package prompto.type;
 
-import org.joda.time.LocalDate;
+import java.lang.reflect.Type;
+import java.util.Comparator;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
-import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoDate;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.value.Date;
 import prompto.value.DateRange;
-import prompto.value.IContainer;
 import prompto.value.IValue;
-import prompto.value.ListValue;
-import prompto.value.Range;
+import prompto.value.RangeBase;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 
 public class DateType extends NativeType {
@@ -26,12 +24,12 @@ public class DateType extends NativeType {
 	}
 
 	private DateType() {
-		super("Date");
+		super(Family.DATE);
 	}
 
 	@Override
-	public Class<?> toJavaClass() {
-		return Date.class;
+	public Type getJavaType(Context context) {
+		return PromptoDate.class;
 	}
 
 	@Override
@@ -40,14 +38,14 @@ public class DateType extends NativeType {
 	}
 
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkAdd(Context context, IType other, boolean tryReverse) {
 		if (other instanceof PeriodType)
 			return this; // ignore time section
 		return super.checkAdd(context, other, tryReverse);
 	}
 
 	@Override
-	public IType checkSubstract(Context context, IType other) throws SyntaxError {
+	public IType checkSubstract(Context context, IType other) {
 		if (other instanceof PeriodType)
 			return this; // ignore time section
 		else if (other instanceof DateType)
@@ -60,7 +58,7 @@ public class DateType extends NativeType {
 	}
 
 	@Override
-	public IType checkCompare(Context context, IType other, ISection section) throws SyntaxError {
+	public IType checkCompare(Context context, IType other, ISection section) {
 		if (other instanceof DateType)
 			return BooleanType.instance();
 		if (other instanceof DateTimeType)
@@ -69,14 +67,14 @@ public class DateType extends NativeType {
 	}
 
 	@Override
-	public IType checkRange(Context context, IType other) throws SyntaxError {
+	public IType checkRange(Context context, IType other) {
 		if (other instanceof DateType)
 			return new RangeType(this);
 		return super.checkRange(context, other);
 	}
 
 	@Override
-	public IType checkMember(Context context, Identifier id) throws SyntaxError {
+	public IType checkMember(Context context, Identifier id) {
 		String name = id.toString();
 		if ("year".equals(name))
 			return IntegerType.instance();
@@ -91,15 +89,20 @@ public class DateType extends NativeType {
 	}
 
 	@Override
-	public Range<?> newRange(Object left, Object right) throws SyntaxError {
+	public RangeBase<?> newRange(Object left, Object right) {
 		if (left instanceof Date && right instanceof Date)
 			return new DateRange((Date) left, (Date) right);
 		return super.newRange(left, right);
 	}
 
 	@Override
-	public ListValue sort(Context context, IContainer<IValue> list) throws PromptoError {
-		return this.doSort(context, list);
+	public Comparator<Date> getComparator() {
+		return new Comparator<Date>() {
+			@Override
+			public int compare(Date o1, Date o2) {
+				return o1.getStorableData().compareTo(o2.getStorableData());
+			}
+		};
 	}
 
 	@Override
@@ -109,7 +112,7 @@ public class DateType extends NativeType {
 	
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value) {
-		LocalDate date = LocalDate.parse(value.asText());
+		PromptoDate date = PromptoDate.parse(value.asText());
 		return new Date(date);
 	}
 }

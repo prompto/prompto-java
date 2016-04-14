@@ -1,17 +1,30 @@
 package prompto.expression;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.IInstructionListener;
+import prompto.compiler.InterfaceConstant;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.OffsetListenerConstant;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.StackState;
+import prompto.compiler.StringConstant;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
+import prompto.store.IPredicateExpression;
+import prompto.store.IQuery;
 import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.Boolean;
 import prompto.value.IValue;
 
-public class NotExpression implements IUnaryExpression, IAssertion {
+public class NotExpression implements IUnaryExpression, IPredicateExpression, IAssertion {
 
 	IExpression expression;
 	
@@ -38,10 +51,10 @@ public class NotExpression implements IUnaryExpression, IAssertion {
 	}
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		IType type = expression.check(context);
 		if(!(type instanceof BooleanType))
-			throw new SyntaxError("Cannot negate " + type.getId());
+			throw new SyntaxError("Cannot negate " + type.getTypeName());
 		return BooleanType.instance();
 	}
 	
@@ -57,6 +70,35 @@ public class NotExpression implements IUnaryExpression, IAssertion {
 		else
 			throw new SyntaxError("Illegal: not " + val.getClass().getSimpleName());
 	}
+	
+	@Override
+	public void interpretQuery(Context context, IQuery query) throws PromptoError {
+		if(!(expression instanceof IPredicateExpression))
+			throw new SyntaxError("Not a predicate: " + expression.toString());
+		((IPredicateExpression)expression).interpretQuery(context, query);
+		query.not();
+	}
+
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		ResultInfo info = expression.compile(context, method, flags.withPrimitive(true));
+		if(Boolean.class==info.getType())
+			CompilerUtils.BooleanToboolean(method);
+		CompilerUtils.reverseBoolean(method);
+		if(flags.toPrimitive())
+			return new ResultInfo(boolean.class);
+		else
+			return CompilerUtils.booleanToBoolean(method);
+	}
+	
+	@Override
+	public void compileQuery(Context context, MethodInfo method, Flags flags) {
+		((IPredicateExpression)expression).compileQuery(context, method, flags);
+		method.addInstruction(Opcode.DUP); // IQuery -> IQuery, IQuery
+		InterfaceConstant m = new InterfaceConstant(IQuery.class, "not", void.class);
+		method.addInstruction(Opcode.INVOKEINTERFACE, m);
+	}
+
 
 	@Override
 	public boolean interpretAssert(Context context, TestMethodDeclaration test) throws PromptoError {
@@ -64,11 +106,45 @@ public class NotExpression implements IUnaryExpression, IAssertion {
 		IValue result = interpret(val);
 		if(result==Boolean.TRUE) 
 			return true;
-		CodeWriter writer = new CodeWriter(test.getDialect(), context);
-		this.toDialect(writer);
-		String expected = writer.toString();
+		String expected = buildExpectedMessage(context, test);
 		String actual = operatorToDialect(test.getDialect()) + val.toString();
 		test.printFailure(context, expected, actual);
 		return false;	
+	}
+	
+	private String buildExpectedMessage(Context context, TestMethodDeclaration test) {
+		CodeWriter writer = new CodeWriter(test.getDialect(), context);
+		this.toDialect(writer);
+		return writer.toString();
+	}
+
+	@Override
+	public void compileAssert(Context context, MethodInfo method, Flags flags, TestMethodDeclaration test) {
+		StackState finalState = method.captureStackState();
+		// compile
+		ResultInfo info = expression.compile(context, method, flags.withPrimitive(true));
+		if(Boolean.class==info.getType())
+			CompilerUtils.BooleanToboolean(method);
+		// 0 = success (since we have not applied the not)
+		IInstructionListener finalListener = method.addOffsetListener(new OffsetListenerConstant());
+		method.activateOffsetListener(finalListener);
+		method.addInstruction(Opcode.IFEQ, finalListener); 
+		// increment failure counter
+		method.addInstruction(Opcode.ICONST_1);
+		method.addInstruction(Opcode.IADD);
+		// build failure message
+		String message = buildExpectedMessage(context, test);
+		message = test.buildFailureMessagePrefix(message);
+		method.addInstruction(Opcode.LDC, new StringConstant(message));
+		method.addInstruction(Opcode.LDC, new StringConstant(operatorToDialect(test.getDialect())));
+		MethodConstant concat = new MethodConstant(String.class, "concat", String.class, String.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, concat);
+		method.addInstruction(Opcode.LDC, new StringConstant(Boolean.FALSE.toString()));
+		method.addInstruction(Opcode.INVOKEVIRTUAL, concat);
+		test.compileFailure(context, method, flags);
+		// success/final
+		method.restoreFullStackState(finalState);
+		method.placeLabel(finalState);
+		method.inhibitOffsetListener(finalListener);
 	}
 }

@@ -1,7 +1,6 @@
 package prompto.value;
 
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.runtime.Context;
 import prompto.type.IType;
@@ -22,7 +21,7 @@ public class ExpressionValue extends BaseValue implements IExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return type;
 	}
 

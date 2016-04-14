@@ -1,8 +1,8 @@
 package prompto.type;
 
-import org.joda.time.Period;
+import java.lang.reflect.Type;
 
-import prompto.error.SyntaxError;
+import prompto.intrinsic.PromptoPeriod;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 
@@ -17,12 +17,12 @@ public class PeriodType extends NativeType {
 	}
 	
 	private PeriodType() {
-		super("Duration");
+		super(Family.PERIOD);
 	}
 
 	@Override
-	public Class<?> toJavaClass() {
-		return Period.class;
+	public Type getJavaType(Context context) {
+		return PromptoPeriod.class;
 	}
 	
 
@@ -32,28 +32,28 @@ public class PeriodType extends NativeType {
 	}
 
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkAdd(Context context, IType other, boolean tryReverse) {
 		if(other instanceof PeriodType)
 			return this;
 		return super.checkAdd(context, other, tryReverse);
 	}
 	
 	@Override
-	public IType checkSubstract(Context context, IType other) throws SyntaxError {
+	public IType checkSubstract(Context context, IType other) {
 		if(other instanceof PeriodType)
 			return this;
 		return super.checkSubstract(context, other);
 	}
 
 	@Override
-	public IType checkMultiply(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkMultiply(Context context, IType other, boolean tryReverse) {
 		if(other instanceof IntegerType)
 			return this;
 		return super.checkMultiply(context, other, tryReverse);
 	}
 
 	@Override
-	public IType checkCompare(Context context, IType other, ISection section) throws SyntaxError {
+	public IType checkCompare(Context context, IType other, ISection section) {
 		if(other instanceof PeriodType)
 			return BooleanType.instance();
 		return super.checkCompare(context, other, section);

@@ -1,7 +1,10 @@
 package prompto.literal;
 
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.runtime.Context;
 import prompto.type.IType;
@@ -22,13 +25,19 @@ public class NullLiteral implements IExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return NullType.instance();
 	}
 
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		return NullValue.instance();
+	}
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		method.addInstruction(Opcode.ACONST_NULL);
+		return new ResultInfo(Object.class);
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package prompto.runtime;
 
-import prompto.error.SyntaxError;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.type.IType;
@@ -17,12 +16,12 @@ public class LinkedVariable implements INamed {
 	}
 
 	@Override
-	public Identifier getIdentifier() {
-		return linked.getIdentifier();
+	public Identifier getId() {
+		return linked.getId();
 	}
 	
 	@Override
-	public IType getType(Context context) throws SyntaxError {
+	public IType getType(Context context) {
 		return type;
 	}
 }

@@ -1,18 +1,21 @@
 package prompto.value;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoDocument;
 import prompto.runtime.Context;
 import prompto.type.DocumentType;
 
 public class Document extends BaseValue {
 	
-	Map<Identifier,IValue> members = new HashMap<Identifier,IValue>();
+	PromptoDocument<Identifier,IValue> members = new PromptoDocument<Identifier,IValue>();
 	
 	public Document() {
 		super(DocumentType.instance());
+	}
+	
+	@Override
+	public PromptoDocument<Identifier,IValue> getStorableData() {
+		return members;
 	}
 	
 	@Override
@@ -22,6 +25,10 @@ public class Document extends BaseValue {
 	
     @Override
     public IValue getMember(Context context, Identifier name, boolean autoCreate) {
+    	return getMember(name, autoCreate);
+ 	}
+
+    public IValue getMember(Identifier name, boolean autoCreate) {
         IValue result = members.get(name);
         if(autoCreate && result==null) {
             result = new Document();
@@ -35,6 +42,10 @@ public class Document extends BaseValue {
     	members.put(name, value);
     }
 
+   public void setMember(Identifier name, IValue value) {
+    	members.put(name, value);
+    }
+	
 	public boolean hasMember(Identifier name) {
 		return members.containsKey(name);
 	}

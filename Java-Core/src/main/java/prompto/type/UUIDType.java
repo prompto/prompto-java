@@ -1,5 +1,6 @@
 package prompto.type;
 
+import java.lang.reflect.Type;
 import java.util.UUID;
 
 import prompto.runtime.Context;
@@ -16,11 +17,11 @@ public class UUIDType extends NativeType {
 	}
 	
 	private UUIDType() {
-		super("UUID");
+		super(Family.UUID);
 	}
 	
 	@Override
-	public Class<?> toJavaClass() {
+	public Type getJavaType(Context context) {
 		return UUID.class;
 	}
 	
@@ -32,5 +33,10 @@ public class UUIDType extends NativeType {
 	@Override
 	public boolean isAssignableTo(Context context, IType other) {
 		return (other instanceof UUIDType) || (other instanceof AnyType);
+	}
+	
+	@Override
+	public IValue convertJavaValueToPromptoValue(Context context, Object value) {
+		return new prompto.value.UUID((UUID)value);
 	}
 }

@@ -1,5 +1,7 @@
 package prompto.type;
 
+import java.lang.reflect.Type;
+
 import prompto.runtime.Context;
 
 
@@ -12,11 +14,11 @@ public class VoidType extends NativeType {
 	}
 	
 	private VoidType() {
-		super("Void");
+		super(Family.VOID);
 	}
 	
 	@Override
-	public Class<?> toJavaClass() {
+	public Type getJavaType(Context context) {
 		return void.class;
 	}
 

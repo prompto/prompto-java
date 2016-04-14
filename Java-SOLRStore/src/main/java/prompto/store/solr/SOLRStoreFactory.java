@@ -4,14 +4,13 @@ import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
-import prompto.store.IStore;
 import prompto.store.IStoreFactory;
 import prompto.utils.Utils;
 
 public class SOLRStoreFactory implements IStoreFactory {
 
 	@Override
-	public IStore newStore(String[] args, Type type) throws Exception {
+	public BaseSOLRStore newStore(String[] args, Type type) throws Exception {
 		BaseSOLRStore store = newStoreFromArgs(args, type);
 		store.createCoreIfRequired();
 		return store;

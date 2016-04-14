@@ -1,17 +1,53 @@
 package prompto.expression;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import prompto.compiler.ClassConstant;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.IInstructionListener;
+import prompto.compiler.IOperatorFunction;
+import prompto.compiler.IVerifierEntry.VerifierType;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.OffsetListenerConstant;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.StackLocal;
+import prompto.compiler.StackState;
+import prompto.compiler.StringConstant;
+import prompto.declaration.AttributeDeclaration;
+import prompto.declaration.AttributeInfo;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.CmpOp;
+import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoDate;
+import prompto.intrinsic.PromptoDateTime;
+import prompto.intrinsic.PromptoTime;
 import prompto.parser.Section;
 import prompto.runtime.Context;
+import prompto.runtime.Variable;
+import prompto.store.IPredicateExpression;
+import prompto.store.IQuery;
+import prompto.store.IQuery.MatchOp;
+import prompto.store.IStore;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.Boolean;
+import prompto.value.Character;
+import prompto.value.Date;
+import prompto.value.DateTime;
+import prompto.value.Decimal;
+import prompto.value.IInstance;
 import prompto.value.IValue;
+import prompto.value.Integer;
+import prompto.value.Text;
+import prompto.value.Time;
 
-public class CompareExpression extends Section implements IExpression, IAssertion {
+public class CompareExpression extends Section implements IPredicateExpression, IAssertion {
 
 	IExpression left;
 	CmpOp operator;
@@ -33,7 +69,7 @@ public class CompareExpression extends Section implements IExpression, IAssertio
 	}
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		IType lt = left.check(context);
 		IType rt = right.check(context);
 		return lt.checkCompare(context, rt, this);
@@ -47,7 +83,7 @@ public class CompareExpression extends Section implements IExpression, IAssertio
 	}
 
 	private Boolean compare(Context context, IValue lval, IValue rval) throws PromptoError {
-		int cmp = lval.CompareTo(context, rval);
+		int cmp = lval.compareTo(context, rval);
 		switch (operator) {
 		case GT:
 			return Boolean.valueOf(cmp > 0);
@@ -61,7 +97,78 @@ public class CompareExpression extends Section implements IExpression, IAssertio
 			throw new SyntaxError("Illegal compare operand: " + operator.toString());
 		}
 	}
+	
+	static Map<Class<?>, IOperatorFunction> testers = createTesters();
+	
+	private static Map<Class<?>, IOperatorFunction> createTesters() {
+		Map<Class<?>, IOperatorFunction> map = new HashMap<>(); 
+		map.put(char.class, Character::compileCompareTo);
+		map.put(java.lang.Character.class, Character::compileCompareTo); 
+		map.put(String.class, Text::compileCompareTo); 
+		map.put(double.class, Decimal::compileCompareTo);
+		map.put(Double.class, Decimal::compileCompareTo); 
+		map.put(long.class, Integer::compileCompareTo);
+		map.put(Long.class, Integer::compileCompareTo); 
+		map.put(PromptoDate.class, Date::compileCompareTo); 
+		map.put(PromptoDateTime.class, DateTime::compileCompareTo); 
+		map.put(PromptoTime.class, Time::compileCompareTo); 
+		return map;
+	}
 
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		ResultInfo lval = left.compile(context, method, flags.withPrimitive(true));
+		IOperatorFunction tester = testers.get(lval.getType());
+		if(tester==null) {
+			System.err.println("Missing IOperatorFunction for compare " + lval.getType().getTypeName());
+			throw new SyntaxError("Cannot compare " + lval.getType().getTypeName() + " with " + right.check(context).getFamily());
+		}
+		return tester.compile(context, method, flags.withCmpOp(operator), lval, right);
+	}
+	
+	@Override
+	public void interpretQuery(Context context, IQuery query) throws PromptoError {
+		String name = null;
+		IValue value = null;
+		if(left instanceof UnresolvedIdentifier) {
+			name = ((UnresolvedIdentifier)left).getName();
+			value = right.interpret(context);
+		} else if(left instanceof InstanceExpression) {
+			name = ((InstanceExpression)left).getName();
+			value = right.interpret(context);
+		} else if(right instanceof UnresolvedIdentifier) {
+			name = ((UnresolvedIdentifier)right).getName();
+			value = left.interpret(context);
+		} else if(right instanceof InstanceExpression) {
+			name = ((InstanceExpression)right).getName();
+			value = left.interpret(context);
+		}
+		if(name==null)
+			throw new SyntaxError("Unable to interpret predicate");
+		else {
+			AttributeDeclaration decl = context.findAttribute(name);
+			AttributeInfo info = decl==null ? null : decl.getAttributeInfo();
+			if(value instanceof IInstance)
+				value = ((IInstance)value).getMember(context, new Identifier(IStore.dbIdName), false);
+			switch(operator) {
+			case GT:
+				query.verify(info, MatchOp.GREATER, value==null ? null : value.getStorableData());
+				break;
+			case GTE:
+				query.verify(info, MatchOp.LESSER, value==null ? null : value.getStorableData());
+				query.not();
+				break;
+			case LT:
+				query.verify(info, MatchOp.LESSER, value==null ? null : value.getStorableData());
+				break;
+			case LTE:
+				query.verify(info, MatchOp.GREATER, value==null ? null : value.getStorableData());
+				query.not();
+				break;
+			}
+		}
+	}
+	
 	@Override
 	public boolean interpretAssert(Context context, TestMethodDeclaration test) throws PromptoError {
 		IValue lval = left.interpret(context);
@@ -69,11 +176,70 @@ public class CompareExpression extends Section implements IExpression, IAssertio
 		IValue result = compare(context, lval, rval);
 		if(result==Boolean.TRUE) 
 			return true;
-		CodeWriter writer = new CodeWriter(test.getDialect(), context);
-		this.toDialect(writer);
-		String expected = writer.toString();
+		String expected = buildExpectedMessage(context, test);
 		String actual = lval.toString() + " " + operator.toString() + " " + rval.toString();
 		test.printFailure(context, expected, actual);
 		return false;
 	}
+	
+	private String buildExpectedMessage(Context context, TestMethodDeclaration test) {
+		CodeWriter writer = new CodeWriter(test.getDialect(), context);
+		this.toDialect(writer);
+		return writer.toString();
+	}
+
+	@Override
+	public void compileAssert(Context context, MethodInfo method, Flags flags, TestMethodDeclaration test) {
+		StackState finalState = method.captureStackState();
+		// compile left and store in local
+		IType leftType = this.left.check(context);
+		ResultInfo leftInfo = this.left.compile(context, method, flags.withPrimitive(false));
+		StackLocal left = method.registerLocal("%left%", VerifierType.ITEM_Object, new ClassConstant(leftInfo.getType()));
+		CompilerUtils.compileASTORE(method, left);
+		// compile right and store in local
+		IType rightType = this.right.check(context);
+		ResultInfo rightInfo = this.right.compile(context, method, flags.withPrimitive(false));
+		StackLocal right = method.registerLocal("%right%", VerifierType.ITEM_Object, new ClassConstant(rightInfo.getType()));
+		CompilerUtils.compileASTORE(method, right);
+		// call regular compile
+		IExpression savedLeft = this.left;
+		this.left = new InstanceExpression(new Identifier("%left%"));
+		context.registerValue(new Variable(new Identifier("%left%"), leftType));
+		IExpression savedRight = this.right;
+		this.right = new InstanceExpression(new Identifier("%right%"));
+		context.registerValue(new Variable(new Identifier("%right%"), rightType));
+		ResultInfo info = compile(context, method, flags.withPrimitive(true));
+		if(Boolean.class==info.getType())
+			CompilerUtils.BooleanToboolean(method);
+		this.left = savedLeft;
+		this.right = savedRight;
+		// 1 = success
+		IInstructionListener finalListener = method.addOffsetListener(new OffsetListenerConstant());
+		method.activateOffsetListener(finalListener);
+		method.addInstruction(Opcode.IFNE, finalListener); 
+		// increment failure counter
+		method.addInstruction(Opcode.ICONST_1);
+		method.addInstruction(Opcode.IADD);
+		// build failure message
+		String message = buildExpectedMessage(context, test);
+		message = test.buildFailureMessagePrefix(message);
+		method.addInstruction(Opcode.LDC, new StringConstant(message));
+		CompilerUtils.compileALOAD(method, left);
+		MethodConstant toString = new MethodConstant(leftInfo.getType(), "toString", String.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, toString);
+		MethodConstant concat = new MethodConstant(String.class, "concat", String.class, String.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, concat);
+		method.addInstruction(Opcode.LDC, new StringConstant(" " + operator.toString() + " "));
+		method.addInstruction(Opcode.INVOKEVIRTUAL, concat);
+		CompilerUtils.compileALOAD(method, right);
+		toString = new MethodConstant(rightInfo.getType(), "toString", String.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, toString);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, concat);
+		test.compileFailure(context, method, flags);
+		// success/final
+		method.restoreFullStackState(finalState);
+		method.placeLabel(finalState);
+		method.inhibitOffsetListener(finalListener);
+	}
+
 }

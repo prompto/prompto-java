@@ -1,11 +1,21 @@
 package prompto.expression;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import prompto.compiler.Flags;
+import prompto.compiler.IOperatorFunction;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
+import prompto.declaration.CategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
+import prompto.value.Decimal;
 import prompto.value.IValue;
+import prompto.value.Integer;
 
 public class ModuloExpression implements IExpression {
 
@@ -25,7 +35,7 @@ public class ModuloExpression implements IExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		IType lt = left.check(context);
 		IType rt = right.check(context);
 		return lt.checkModulo(context, rt);
@@ -35,6 +45,30 @@ public class ModuloExpression implements IExpression {
 	public IValue interpret(Context context) throws PromptoError {
 		IValue lval = left.interpret(context);
 		IValue rval = right.interpret(context);
-        return lval.Modulo(context, rval);
+        return lval.modulo(context, rval);
+	}
+	
+	static Map<Class<?>, IOperatorFunction> dividers = createDividers();
+	
+	private static Map<Class<?>, IOperatorFunction> createDividers() {
+		Map<Class<?>, IOperatorFunction> map = new HashMap<>();
+		map.put(double.class, Decimal::compileModulo);
+		map.put(Double.class, Decimal::compileModulo);
+		map.put(long.class, Integer::compileModulo);
+		map.put(Long.class, Integer::compileModulo);
+		return map;
+	}
+
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		ResultInfo lval = left.compile(context, method, flags);
+		IOperatorFunction divider = dividers.get(lval.getType());
+		if(divider==null && lval.getType().getTypeName().startsWith("π.χ."))
+			divider = CategoryDeclaration::compileModulo;
+		if(divider==null) {
+			System.err.println("Missing IOperatorFunction for modulo " + lval.getType().getTypeName());
+			throw new SyntaxError("Cannot modulo " + lval.getType().getTypeName() + " by " + right.check(context).getFamily());
+		}
+		return divider.compile(context, method, flags, lval, right);
 	}
 }

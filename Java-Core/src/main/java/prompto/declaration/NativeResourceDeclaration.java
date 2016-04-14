@@ -25,7 +25,7 @@ public class NativeResourceDeclaration extends NativeCategoryDeclaration {
 	
 	@Override
 	public ResourceType getType(Context context) {
-		return new ResourceType(getIdentifier());
+		return new ResourceType(getId());
 	}
 	
 	@Override
@@ -34,7 +34,7 @@ public class NativeResourceDeclaration extends NativeCategoryDeclaration {
 	}
 	
 	@Override
-	public void checkConstructorContext(Context context) throws SyntaxError {
+	public void checkConstructorContext(Context context) {
 		if(!(context instanceof ResourceContext))
 			throw new SyntaxError("Not a resource context!");
 	}

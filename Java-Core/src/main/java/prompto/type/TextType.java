@@ -1,18 +1,15 @@
 package prompto.type;
 
+import java.lang.reflect.Type;
 import java.util.Comparator;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
-import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
-import prompto.value.IContainer;
 import prompto.value.IValue;
-import prompto.value.ListValue;
 import prompto.value.Text;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 
 public class TextType extends NativeType {
@@ -24,11 +21,11 @@ public class TextType extends NativeType {
 	}
 	
 	private TextType() {
-		super("Text");
+		super(Family.TEXT);
 	}
 	
 	@Override
-	public Class<?> toJavaClass() {
+	public Type getJavaType(Context context) {
 		return String.class;
 	}
 	
@@ -36,11 +33,11 @@ public class TextType extends NativeType {
 	
 	@Override
 	public boolean isAssignableTo(Context context, IType other) {
-		return (other instanceof TextType) || (other instanceof AnyType);
+		return other==TextType.instance() || other==AnyType.instance();
 	}
 
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkAdd(Context context, IType other, boolean tryReverse) {
 		if(tryReverse)
 			return this; // we're lhs, ok
 		else
@@ -48,7 +45,7 @@ public class TextType extends NativeType {
 	}
 	
 	@Override
-	public IType checkMultiply(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkMultiply(Context context, IType other, boolean tryReverse) {
 		if(other instanceof IntegerType)
 			return this;
 		else
@@ -56,14 +53,14 @@ public class TextType extends NativeType {
 	}
 	
 	@Override
-	public IType checkCompare(Context context, IType other, ISection section) throws SyntaxError {
+	public IType checkCompare(Context context, IType other, ISection section) {
 		if(other instanceof TextType || other instanceof CharacterType)
 			return BooleanType.instance();
 		return super.checkCompare(context, other, section);
 	}
 	
 	@Override
-	public IType checkItem(Context context, IType other) throws SyntaxError {
+	public IType checkItem(Context context, IType other) {
 		if(other==IntegerType.instance())
 			return CharacterType.instance();
 		else
@@ -71,7 +68,7 @@ public class TextType extends NativeType {
 	}
 	
 	@Override
-	public IType checkMember(Context context, Identifier id) throws SyntaxError {
+	public IType checkMember(Context context, Identifier id) {
 		String name = id.toString();
        if ("length".equals(name))
             return IntegerType.instance();
@@ -81,38 +78,38 @@ public class TextType extends NativeType {
 
 	
 	@Override
-	public IType checkContains(Context context, IType other) throws SyntaxError {
+	public IType checkContains(Context context, IType other) {
 		if(other instanceof TextType || other instanceof CharacterType)
 			return BooleanType.instance();
 		return super.checkContains(context, other);
 	}
 	
 	@Override
-	public IType checkContainsAllOrAny(Context context, IType other) throws SyntaxError {
+	public IType checkContainsAllOrAny(Context context, IType other) {
 		return BooleanType.instance();
 	}
 	
 	@Override
-	public IType checkSlice(Context context) throws SyntaxError {
+	public IType checkSlice(Context context) {
 		return this;
 	}
 
 	@Override
-	public ListValue sort(Context context, IContainer<IValue> list) throws PromptoError {
-		return this.<IValue>doSort(context,list, new Comparator<IValue>() {
+	public Comparator<Text> getComparator() {
+		return new Comparator<Text>() {
 			@Override
-			public int compare(IValue o1, IValue o2) {
-				return o1.toString().compareTo(o2.toString());
-			};
-		});
+			public int compare(Text o1, Text o2) {
+				return o1.getStorableData().compareTo(o2.getStorableData());
+			}
+		};
 	}
-	
+
 	@Override
-	public IValue convertJavaValueToPromptoValue(Object value) {
+	public IValue convertJavaValueToPromptoValue(Context context, Object value) {
         if (value instanceof String)
             return new Text((String)value);
         else
-            return (IValue)value; // TODO for now
+            return super.convertJavaValueToPromptoValue(context, value);
 	}
 	
 	@Override

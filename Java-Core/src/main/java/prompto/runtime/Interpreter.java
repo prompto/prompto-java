@@ -1,10 +1,12 @@
 package prompto.runtime;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import prompto.argument.IArgument;
+import prompto.argument.ITypedArgument;
+import prompto.argument.UnresolvedArgument;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
@@ -14,10 +16,8 @@ import prompto.expression.MethodSelector;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.ArgumentList;
-import prompto.grammar.IArgument;
-import prompto.grammar.ITypedArgument;
 import prompto.grammar.Identifier;
-import prompto.grammar.UnresolvedArgument;
+import prompto.intrinsic.PromptoDict;
 import prompto.literal.DictLiteral;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.statement.MethodCall;
@@ -73,7 +73,7 @@ public class Interpreter {
 	private static ArgumentAssignmentList buildAssignments(IMethodDeclaration method, String cmdLineArgs) {
 		ArgumentAssignmentList assignments = new ArgumentAssignmentList();
 		if(method.getArguments().size()==1) {
-			Identifier name = method.getArguments().getFirst().getIdentifier();
+			Identifier name = method.getArguments().getFirst().getId();
 			IExpression value = parseCmdLineArgs(cmdLineArgs);
 			assignments.add(new ArgumentAssignment(new UnresolvedArgument(name), value)); 
 		}
@@ -83,7 +83,7 @@ public class Interpreter {
 	private static IExpression parseCmdLineArgs(String cmdLineArgs) {
 		try {
 			Map<String,String> args = CmdLineParser.parse(cmdLineArgs);
-			Map<Text, IValue> valueArgs = new HashMap<Text, IValue>();
+			PromptoDict<Text, IValue> valueArgs = new PromptoDict<Text, IValue>();
 			for(Entry<String,String> entry : args.entrySet())
 				valueArgs.put(new Text(entry.getKey()), new Text(entry.getValue()));
 			Dictionary dict = new Dictionary(TextType.instance(), valueArgs);
@@ -94,21 +94,21 @@ public class Interpreter {
 		}
 	}
 
-	 private static IMethodDeclaration locateMethod(Context context, Identifier methodName, String cmdLineArgs) throws SyntaxError {
+	 private static IMethodDeclaration locateMethod(Context context, Identifier methodName, String cmdLineArgs) {
 		MethodDeclarationMap map = context.getRegisteredDeclaration(MethodDeclarationMap.class, methodName);
 		if(map==null)
 			throw new SyntaxError("Could not find a \"" + methodName + "\" method.");
 		return locateMethod(map, cmdLineArgs);
 	}
 			
-	private static IMethodDeclaration locateMethod(MethodDeclarationMap map, String cmdLineArgs) throws SyntaxError {
+	private static IMethodDeclaration locateMethod(MethodDeclarationMap map, String cmdLineArgs) {
 		if(cmdLineArgs==null)
 			return locateMethod(map);
 		else
 			return locateMethod(map, new DictType(TextType.instance()));
 	}
 
-	private static IMethodDeclaration locateMethod(MethodDeclarationMap map, IType ... argTypes) throws SyntaxError {
+	private static IMethodDeclaration locateMethod(MethodDeclarationMap map, IType ... argTypes) {
 		// try exact match first
 		for(IMethodDeclaration method : map.values()) {
 			if(identicalArguments(method.getArguments(), argTypes))
@@ -124,7 +124,7 @@ public class Interpreter {
 			if(method.getArguments().size()==0)
 				return method;
 		}
-		throw new SyntaxError("Could not find a compatible \"" + map.getIdentifier() + "\" method.");
+		throw new SyntaxError("Could not find a compatible \"" + map.getId() + "\" method.");
 	}
 
 	private static boolean isSingleTextDictArgument(ArgumentList arguments) {

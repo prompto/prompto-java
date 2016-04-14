@@ -1,5 +1,11 @@
 package prompto.statement;
 
+import prompto.compiler.ClassConstant;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.ResultInfo.Flag;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.error.UserError;
@@ -56,16 +62,23 @@ public class RaiseStatement extends SimpleStatement {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		IType type = expression.check(context);
 		if(!type.isAssignableTo(context, new CategoryType(new Identifier("Error"))))
-			throw new SyntaxError(type.getId() + " does not extend Error");
+			throw new SyntaxError(type.getTypeName() + " does not extend Error");
 		return VoidType.instance();
 	}
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		throw new UserError(expression);
+	}
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		ResultInfo info = expression.compile(context, method, flags);
+		method.addInstruction(Opcode.ATHROW, new ClassConstant(info.getType()));
+		return new ResultInfo(void.class, Flag.THROW);
 	}
 
 }

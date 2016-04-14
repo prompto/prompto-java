@@ -1,8 +1,20 @@
 package prompto.statement;
 
+import prompto.compiler.ClassConstant;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.FieldConstant;
+import prompto.compiler.FieldInfo;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.StringConstant;
+import prompto.compiler.ResultInfo.Flag;
+import prompto.compiler.StackLocal;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
+import prompto.intrinsic.PromptoRoot;
 import prompto.runtime.Context;
 import prompto.runtime.VoidResult;
 import prompto.type.IType;
@@ -50,7 +62,7 @@ public class ReturnStatement extends SimpleStatement {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return expression==null ? VoidType.instance() : expression.check(context);
 	}
 	
@@ -61,6 +73,80 @@ public class ReturnStatement extends SimpleStatement {
 		else {
 			IValue value = expression.interpret(context);
 			return value==null ? NullValue.instance() : value;
+		}
+	}
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		FieldInfo setter = flags.setter();
+		if(setter==null)
+			return compileReturn(context, method, flags);
+		else
+			return compileSetter(context, method, flags, setter);
+	}
+	
+	private ResultInfo compileSetter(Context context, MethodInfo method, Flags flags, FieldInfo field) {
+		// load 'this'
+		StackLocal local = method.getRegisteredLocal("this");
+		ClassConstant c = ((StackLocal.ObjectLocal)local).getClassName();
+		method.addInstruction(Opcode.ALOAD_0, c); 
+		// load value
+		expression.compile(context, method, flags);
+		// store in field
+		String name = field.getName().getValue();
+		FieldConstant f = new FieldConstant(c, name, field.getType());
+		method.addInstruction(Opcode.PUTFIELD, f);
+		// also store data in storable
+		MethodConstant m = new MethodConstant(PromptoRoot.class, "setStorable", String.class, Object.class, void.class);
+		method.addInstruction(Opcode.ALOAD_0, c);
+		method.addInstruction(Opcode.LDC, new StringConstant(name));
+		method.addInstruction(Opcode.ALOAD_1, new ClassConstant(Object.class));
+		method.addInstruction(Opcode.INVOKESPECIAL, m);
+		// done
+		method.addInstruction(Opcode.RETURN);
+		return new ResultInfo(void.class, Flag.RETURN);
+	}
+
+	private ResultInfo compileReturn(Context context, MethodInfo method, Flags flags) {
+		if(expression==null) {
+			method.addInstruction(Opcode.RETURN);
+			return new ResultInfo(void.class, Flag.RETURN);
+		} else {
+			ResultInfo info = expression.compile(context, method, flags);
+			if(flags.toPrimitive()) {
+				if(boolean.class==info.getType()) {
+					method.addInstruction(Opcode.IRETURN);
+					return new ResultInfo(info.getType(), Flag.RETURN);
+				} else if(int.class==info.getType()) {
+					method.addInstruction(Opcode.IRETURN);
+					return new ResultInfo(info.getType(), Flag.RETURN);
+				} else if(char.class==info.getType()) {
+					method.addInstruction(Opcode.IRETURN);
+					return new ResultInfo(info.getType(), Flag.RETURN);
+				} else if(long.class==info.getType()) {
+					method.addInstruction(Opcode.LRETURN);
+					return new ResultInfo(info.getType(), Flag.RETURN);
+				} else if(double.class==info.getType()) {
+					method.addInstruction(Opcode.DRETURN);
+					return new ResultInfo(info.getType(), Flag.RETURN);
+				} else {
+					method.addInstruction(Opcode.ARETURN);
+					return new ResultInfo(info.getType(), Flag.RETURN);
+				}
+			} else {
+				if(boolean.class==info.getType())
+					info = CompilerUtils.booleanToBoolean(method);
+				 else if(int.class==info.getType())
+				 	info = CompilerUtils.intTolong(method);
+				else if(char.class==info.getType())
+					info = CompilerUtils.charToCharacter(method);
+				else if(long.class==info.getType())
+					info = CompilerUtils.longToLong(method);
+				else if(double.class==info.getType())
+					info = CompilerUtils.doubleToDouble(method);
+				method.addInstruction(Opcode.ARETURN);
+				return new ResultInfo(info.getType(), Flag.RETURN);
+			}
 		}
 	}
 

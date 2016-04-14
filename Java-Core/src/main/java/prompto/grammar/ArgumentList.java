@@ -1,6 +1,10 @@
 package prompto.grammar;
 
-import prompto.error.SyntaxError;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import prompto.argument.CodeArgument;
+import prompto.argument.IArgument;
 import prompto.runtime.Context;
 import prompto.utils.CodeWriter;
 import prompto.utils.ObjectList;
@@ -16,23 +20,31 @@ public class ArgumentList extends ObjectList<IArgument> {
 		this.add(argument);
 	}
 	
-	public void register(Context context) throws SyntaxError {
+	public void register(Context context) {
 		for(IArgument argument : this) 
 			argument.register(context);
 	}
 
-	public void check(Context context) throws SyntaxError {
+	public void check(Context context) {
 		for(IArgument argument : this) 
 			argument.check(context);
 	}
 
 	public IArgument find(Identifier name) {
 		for(IArgument argument : this) {
-			if(name.equals(argument.getIdentifier()))
+			if(name.equals(argument.getId()))
 					return argument;
 		}
 		return null;
 	}
+	
+	public List<IArgument> stripOutTemplateArguments() {
+		return this.stream()
+			.filter((a)->
+				!(a instanceof CodeArgument))
+			.collect(Collectors.toList());
+	}
+
 
 	public void toDialect(CodeWriter writer) {
 		if(this.size()==0)

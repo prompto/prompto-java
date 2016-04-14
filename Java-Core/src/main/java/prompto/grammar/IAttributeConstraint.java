@@ -1,5 +1,7 @@
 package prompto.grammar;
 
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
 import prompto.error.PromptoError;
 import prompto.runtime.Context;
 import prompto.utils.CodeWriter;
@@ -9,5 +11,6 @@ public interface IAttributeConstraint {
 
 	void checkValue(Context context, IValue value) throws PromptoError;
 	void toDialect(CodeWriter writer);
+	void compile(Context context, MethodInfo method, Flags flags);
 
 }

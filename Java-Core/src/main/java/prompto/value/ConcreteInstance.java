@@ -9,6 +9,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
+import prompto.argument.IArgument;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.declaration.GetterMethodDeclaration;
@@ -19,7 +20,6 @@ import prompto.error.NotStorableError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
-import prompto.grammar.IArgument;
 import prompto.grammar.Identifier;
 import prompto.grammar.Operator;
 import prompto.runtime.Context;
@@ -38,13 +38,24 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	boolean mutable = false;
 	
 	public ConcreteInstance(Context context, ConcreteCategoryDeclaration declaration) {
-		super(new CategoryType(declaration.getIdentifier()));
+		super(new CategoryType(declaration.getId()));
 		this.declaration = declaration;
 		if(declaration.isStorable()) {
 			List<String> categories = declaration.collectCategories(context);
-			storable = IDataStore.getInstance().newStorable(categories);
+			storable = IDataStore.getInstance().newStorable(categories, null);
 		}
 	}
+	
+	@Override
+	public Object getStorableData() throws NotStorableError {
+		// this is called when storing the instance as a field value, so we just store the dbId
+		// the instance data itself will be collected as part of collectStorables
+		if(this.storable==null)
+			throw new NotStorableError();
+		else
+			return this.getOrCreateDbId();
+	}
+
 
 	@Override
 	public boolean setMutable(boolean mutable) {
@@ -72,15 +83,6 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 			if(value instanceof IInstance)
 				((IInstance)value).collectStorables(list);
 		}
-	}
-	
-	@Override
-	public void storeValue(Context context, String name, IStorable storable) throws PromptoError {
-		// this is called when storing the instance as a field value, so we just store the dbId
-		// the instance data itself will be collected as part of collectStorables
-		if(this.storable==null)
-			throw new NotStorableError();
-		storable.setValue(context, new Identifier(name), this.getOrCreateDbId());
 	}
 	
 	public ConcreteCategoryDeclaration getDeclaration() {
@@ -169,22 +171,27 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		value = autocast(decl, value);
 		values.put(attrName, value);
 		if(storable!=null && decl.isStorable()) {
-			storable.setValue(context, attrName, value, this::getDbId);
+			storable.setData(attrName.toString(), value.getStorableData(), this::getDbId);
 		}
 	}
 	
-	private IValue getDbId() {
-		return values.get(IStore.dbIdIdentifier);
+	private Object getDbId() {
+		try {
+			IValue dbId = values.get(new Identifier(IStore.dbIdName));
+			return dbId==null ? null : dbId.getStorableData();
+		} catch (NotStorableError e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
-	private IValue getOrCreateDbId() {
-		IValue dbId = values.get(IStore.dbIdIdentifier);
+	private Object getOrCreateDbId() throws NotStorableError {
+		Object dbId = getDbId();
 		return dbId!=null ? dbId : this.storable.getOrCreateDbId();
 	}
 
 	private IValue autocast(AttributeDeclaration decl, IValue value) {
 		if(value!=null && value instanceof prompto.value.Integer && decl.getType()==DecimalType.instance())
-			value = new Decimal(((prompto.value.Integer)value).DecimalValue());
+			value = new Decimal(((prompto.value.Integer)value).doubleValue());
 		return value;
 	}
 
@@ -213,67 +220,66 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	}
 	
 	@Override
-	public IValue Multiply(Context context, IValue value) throws PromptoError {
+	public IValue multiply(Context context, IValue value) throws PromptoError {
 		try {
 			return interpretOperator(context, value, Operator.MULTIPLY);
 		} catch(SyntaxError e) {
-			return super.Multiply(context, value);
+			return super.multiply(context, value);
 		}
 	}
 	
 	@Override
-	public IValue Divide(Context context, IValue value) throws PromptoError {
+	public IValue divide(Context context, IValue value) throws PromptoError {
 		try {
 			return interpretOperator(context, value, Operator.DIVIDE);
 		} catch(SyntaxError e) {
-			return super.Divide(context, value);
+			return super.divide(context, value);
 		}
 	}
 	
 	@Override
-	public IValue IntDivide(Context context, IValue value) throws PromptoError {
+	public IValue intDivide(Context context, IValue value) throws PromptoError {
 		try {
 			return interpretOperator(context, value, Operator.IDIVIDE);
 		} catch(SyntaxError e) {
-			return super.IntDivide(context, value);
+			return super.intDivide(context, value);
 		}
 	}
 	
 	@Override
-	public IValue Modulo(Context context, IValue value) throws PromptoError {
+	public IValue modulo(Context context, IValue value) throws PromptoError {
 		try {
 			return interpretOperator(context, value, Operator.MODULO);
 		} catch(SyntaxError e) {
-			return super.Modulo(context, value);
+			return super.modulo(context, value);
 		}
 	}
 	
 	@Override
-	public IValue Add(Context context, IValue value) throws PromptoError {
+	public IValue plus(Context context, IValue value) throws PromptoError {
 		try {
 			return interpretOperator(context, value, Operator.PLUS);
 		} catch(SyntaxError e) {
-			return super.Add(context, value);
+			return super.plus(context, value);
 		}
 	}
 	
 	@Override
-	public IValue Subtract(Context context, IValue value) throws PromptoError {
+	public IValue minus(Context context, IValue value) throws PromptoError {
 		try {
 			return interpretOperator(context, value, Operator.MINUS);
 		} catch(SyntaxError e) {
-			return super.Subtract(context, value);
+			return super.minus(context, value);
 		}
 	}
 	
-
 	private IValue interpretOperator(Context context, IValue value, Operator operator) throws PromptoError {
 		IMethodDeclaration decl = declaration.findOperator(context, operator, value.getType());
 		context = context.newInstanceContext(this);
 		Context local = context.newChildContext();
 		decl.registerArguments(local);
 		IArgument arg = decl.getArguments().getFirst();
-		local.setValue(arg.getIdentifier(), value);
+		local.setValue(arg.getId(), value);
 		return decl.interpret(local);
 	}
 
@@ -282,11 +288,11 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		try {
 			generator.writeStartObject();
 			generator.writeFieldName("type");
-			generator.writeString(this.getType().getName());
+			generator.writeString(this.getType().getTypeName());
 			generator.writeFieldName("value");
 			generator.writeStartObject();
 			for(Entry<Identifier, IValue> entry : values.entrySet()) {
-				generator.writeFieldName(entry.getKey().getName());
+				generator.writeFieldName(entry.getKey().toString());
 				IValue value = entry.getValue();
 				if(value==null)
 					generator.writeNull();

@@ -10,21 +10,21 @@ import org.apache.solr.common.SolrInputField;
 
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
-import prompto.grammar.Identifier;
-import prompto.runtime.Context;
+import prompto.intrinsic.PromptoBinary;
 import prompto.store.IStorable;
 import prompto.store.IStore;
-import prompto.value.Binary;
 import prompto.value.IValue;
 
 public class StorableDocument extends BaseDocument implements IStorable {
 
 	SolrInputDocument document = null;
+	IDbIdListener listener;
 	List<String> categories;
 	boolean isUpdate; // partial updates require operations instead of values
 	
-	public StorableDocument(List<String> categories) {
+	public StorableDocument(List<String> categories, IDbIdListener listener) {
 		this.categories = categories;
+		this.listener = listener;
 	}
 
 	@Override
@@ -57,24 +57,19 @@ public class StorableDocument extends BaseDocument implements IStorable {
 	
 	private void ensureDocument(IDbIdProvider provider) {
 		if(document==null) {
-			UUID dbId = null;
-			if(provider!=null) {
-				// the only scenario where we get an existing dbId is when  
-				// an instance passes a provider when calling setValue
-				// in such a case, the scenario is an update scenario
-				IValue dbIdValue = provider.getDbId();
-				if(dbIdValue!=null) {
-					dbId = ((prompto.value.UUID)dbIdValue).getValue();
-					if(dbId!=null)
-						this.isUpdate = true;
-				}
-			}
-			if(dbId==null)
+			UUID dbId = provider==null ? null : (UUID)provider.getDbId();
+			// the scenario where we get an existing dbId is when  
+			// an instance passes a provider when calling setData
+			// in such a case, the scenario is an update scenario
+			if(dbId!=null)
+				this.isUpdate = true;
+			else
 				dbId = java.util.UUID.randomUUID();
 			document = new SolrInputDocument();
 			document.setField(IStore.dbIdName, dbId);
 			if(categories!=null && !this.isUpdate)
 				document.setField("category", categories); 
+				
 		}
 	}
 
@@ -84,30 +79,25 @@ public class StorableDocument extends BaseDocument implements IStorable {
 	}
 
 	@Override
-	public void setValue(Context context, Identifier id, IValue value, IDbIdProvider provider) throws PromptoError {
+	public void setData(String name, Object value, IDbIdProvider provider) throws PromptoError {
 		ensureDocument(provider);
-		String fieldName = id.getName();
-		if(value==null) {
-			if(isUpdate)
-				document.setField(fieldName, Collections.singletonMap("set", null));
-		} else
-			value.storeValue(context, fieldName, this);
+		setData(name, value);
 	}
 	
 	@Override
 	public void setData(String name, Object value) throws PromptoError {
 		ensureDocument(null);
-		if(value instanceof Binary)
-			value = binaryValue((Binary)value);
+		if(value instanceof PromptoBinary)
+			value = toBytes((PromptoBinary)value);
 		if(isUpdate)
 			document.setField(name, Collections.singletonMap("set", value));
 		else
 			document.setField(name, value);
 	}
 
-	private Object binaryValue(Binary binary) throws PromptoError {
+	private byte[] toBytes(PromptoBinary binary) throws PromptoError {
 		try {
-			return new BinaryValue(binary.getMimeType(), binary.getData()).toByteArray();
+			return new BinaryData(binary.getMimeType(), binary.getBytes()).toByteArray();
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		}

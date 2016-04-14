@@ -1,17 +1,32 @@
 package prompto.declaration;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import prompto.compiler.ClassFile;
+import prompto.compiler.Flags;
+import prompto.compiler.InterfaceConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.grammar.MethodDeclarationList;
+import prompto.grammar.Operator;
 import prompto.runtime.Context;
-import prompto.store.IDataStore;
+import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
+import prompto.utils.Utils;
 import prompto.value.IInstance;
 import prompto.value.IValue;
 
@@ -20,8 +35,8 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	IdentifierList attributes;
 	boolean storable = false;
 	
-	public CategoryDeclaration(Identifier name) {
-		super(name);
+	public CategoryDeclaration(Identifier id) {
+		super(id);
 	}
 
 	public CategoryDeclaration(Identifier name, IdentifierList attributes) {
@@ -30,8 +45,8 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	}
 	
 	@Override
-	public Type getDeclarationType() {
-		return Type.CATEGORY;
+	public DeclarationType getDeclarationType() {
+		return DeclarationType.CATEGORY;
 	}
 	
 	public void setStorable(boolean storable) {
@@ -50,17 +65,22 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		return attributes;
 	}
 	
-	public IdentifierList getAllAttributes(Context context) {
-		return attributes;
+	public Set<Identifier> getAllAttributes(Context context) {
+		if(attributes!=null)
+			return new HashSet<Identifier>(attributes);
+		else
+			return null;
 	}
 		
+	public abstract List<String> collectCategories(Context context);
+	
 	@Override
-	public void register(Context context) throws SyntaxError {
+	public void register(Context context) {
 		context.registerDeclaration(this);
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		if(attributes!=null) for(Identifier attribute : attributes) {
 			if(attribute==null)
 				continue; // problem already handled by parser
@@ -68,20 +88,20 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 			if(ad==null)
 				context.getProblemListener().reportUnknownAttribute(attribute.toString(), attribute);
 		}
-		return new CategoryType(this.getIdentifier());
+		return new CategoryType(this.getId());
 	}
 	
 	@Override
 	public CategoryType getType(Context context) {
-		return new CategoryType(getIdentifier());
+		return new CategoryType(getId());
 	}
 
 	public boolean hasAttribute(Context context, Identifier name) {
 		return attributes!=null && attributes.contains(name);
 	}
 	
-	public boolean hasMethod(Context context, String key, Object object) {
-		return false;
+	public boolean hasMethod(Context context, Identifier key, Object object) {
+		return false; // TODO
 	}
 
 	public boolean isDerivedFrom(Context context, CategoryType categoryType) {
@@ -92,6 +112,10 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		return null;
 	}
 
+	public boolean isAbstract() {
+		return false;
+	}
+	
 	public abstract IInstance newInstance(Context context) throws PromptoError;
 	
 	public IInstance newInstance(Context context, IStored stored) throws PromptoError {
@@ -106,8 +130,9 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	}
 
 	private void populateInstance(Context context, IStored stored, IInstance instance) throws PromptoError {
-		IValue dbId = stored.getValue(context, IStore.dbIdIdentifier);
-		instance.setMember(context, IStore.dbIdIdentifier, dbId);
+		Object dbId = stored.getDbId();
+		IValue value = Utils.fieldToValue(context, IStore.dbIdName, dbId);
+		instance.setMember(context, new Identifier(IStore.dbIdName), value);
 		for(Identifier name : this.getAllAttributes(context)) 
 			populateMember(context, stored, instance, name);
 		if(instance.getStorable()!=null)
@@ -118,24 +143,13 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, name);
 		if(!decl.isStorable())
 			return;
-		IValue value = stored.getValue(context, name);
-		if(value==null)
-			return;
-		IType type = decl.getType(context);
-		if(type instanceof CategoryType) {
-			// is this a foreign key?
-			if(!(value instanceof IInstance)) {
-				stored = IDataStore.getInstance().fetchUnique(context, value);
-				if(stored==null)
-					throw new InternalError("How did we get there?");
-				value = ((CategoryType)type).newInstance(context, stored);
-			}
-		} else if(value instanceof IInstance)
-			throw new InternalError("How did we get there?");
-		instance.setMember(context, name, value);
+		Object data = stored.getData(name.toString());
+		IValue value = data==null ? null : decl.getType().convertJavaValueToPromptoValue(context, data);
+		if(value!=null)
+			instance.setMember(context, name, value);
 	}
 
-	public void checkConstructorContext(Context context) throws SyntaxError {
+	public void checkConstructorContext(Context context) {
 		// nothing to do
 	}
 	
@@ -262,5 +276,96 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 
 	protected abstract void categoryTypeToPDialect(CodeWriter writer);
 
+	public ClassFile compile(Context context, String fullName) {
+		throw new UnsupportedOperationException(); // TODO -> abstract
+	}
+	
+	public abstract IMethodDeclaration findOperator(Context context, Operator operator, IType type);
+	
+	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression value) {
+		return compileOperator(context, method, flags, left, value, Operator.PLUS);
+	}
+	
+	public static ResultInfo compileDivide(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression value) {
+		return compileOperator(context, method, flags, left, value, Operator.DIVIDE);
+	}
 
+	public static ResultInfo compileIntDivide(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression value) {
+		return compileOperator(context, method, flags, left, value, Operator.IDIVIDE);
+	}
+
+	public static ResultInfo compileModulo(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression value) {
+		return compileOperator(context, method, flags, left, value, Operator.MODULO);
+	}
+
+	public static ResultInfo compileMultiply(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression value) {
+		return compileOperator(context, method, flags, left, value, Operator.MULTIPLY);
+	}
+
+	public static ResultInfo compileMultiply(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, ResultInfo right) {
+		IType argType = Utils.typeToIType(right.getType());
+		return compileOperator(context, method, flags, left, right, argType, Operator.MULTIPLY);
+	}
+
+	public static ResultInfo compileMinus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression value) {
+		return compileOperator(context, method, flags, left, value, Operator.MINUS);
+	}
+
+	public static ResultInfo compileOperator(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression value, Operator oper) {
+		IType argType = value.check(context);
+		ResultInfo right = value.compile(context, method, flags);
+		return compileOperator(context, method, flags, left, right, argType, oper);
+	}
+
+	private static ResultInfo compileOperator(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, ResultInfo right, IType argType, Operator oper) {
+		String name = left.getType().getTypeName().substring("π.χ.".length());
+		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, new Identifier(name));
+		IMethodDeclaration operator = decl.findOperator(context, oper, argType);
+		if(operator==null)
+			throw new SyntaxError("No " + oper.getToken() + " operator method defined!");
+		Context local = context.newCategoryContext(decl.getType(context)).newChildContext();
+		operator.registerArguments(local);
+		IType resultType = operator.check(local);
+		String methodName = "operator-" + oper.name();
+		InterfaceConstant c = new InterfaceConstant(left.getType(), methodName, argType.getJavaType(context), resultType.getJavaType(context));
+		method.addInstruction(Opcode.INVOKEINTERFACE, c);
+		return new ResultInfo(resultType.getJavaType(context)); 
+	}
+
+	public MethodDeclarationList getLocalMethods() {
+		throw new UnsupportedOperationException(); // TODO -> abstract
+	}
+
+	public Map<String, MethodDeclarationMap> getAllMethods(Context context) {
+		Map<String, MethodDeclarationMap> map = new HashMap<>();
+		collectAllMethods(context, map);
+		return map;
+	}
+
+	public void collectAllMethods(Context context, Map<String, MethodDeclarationMap> map) {
+		getLocalMethods().forEach((m)->{
+			MethodDeclarationMap current = map.get(m.getNameAsKey());
+			if(current==null) {
+				current = new MethodDeclarationMap(m.getId());
+				map.put(m.getNameAsKey(), current);
+			}
+			if(current.get(m.getProto())==null)
+				current.put(m.getProto(), m);
+		});
+	}
+
+	protected boolean isPromptoRoot(Context context) {
+		return false;
+	}
+
+	
 }

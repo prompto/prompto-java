@@ -1,7 +1,9 @@
 package prompto.java;
 
+import prompto.compiler.Flags;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.MethodInfo;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.statement.NativeCall;
 import prompto.type.IType;
@@ -28,11 +30,11 @@ public class JavaNativeCall extends NativeCall {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		throw new RuntimeException("Should never get there!");
 	}
 	
-	public IType checkNative(Context context, IType returnType) throws SyntaxError {
+	public IType checkNative(Context context, IType returnType) {
 		return statement.check(context, returnType);
 	}
 	
@@ -45,4 +47,8 @@ public class JavaNativeCall extends NativeCall {
 		return statement.interpret(context, returnType);
 	}
 
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		return statement.compile(context, method, flags);
+	}
 }

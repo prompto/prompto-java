@@ -12,8 +12,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import prompto.grammar.CategoryArgument;
-import prompto.grammar.IArgument;
+import prompto.argument.CategoryArgument;
+import prompto.argument.IArgument;
 import prompto.grammar.Identifier;
 import prompto.java.JavaStatement;
 import prompto.parser.ECleverParser;
@@ -57,13 +57,19 @@ public class TestRuntime extends BaseEParserTest {
 
 	@Test
 	public void testReturn() throws Exception {
-		runResource("native/return.pec");
+		interpretResource("native/return.pec", false);
 		assertEquals(System.getProperty("os.name"), Out.read());
 	}
 	
 	@Test
+	public void testCompiledReturn() throws Exception {
+		executeResource("native/return.pec", false);
+		assertEquals(System.getProperty("os.name"), Out.read());
+	}
+
+	@Test
 	public void testDateTimeTZName() throws Exception {
-		runResource("builtins/dateTimeTZName.pec");
+		interpretResource("builtins/dateTimeTZName.pec", false);
 		String tzName = TimeZone.getTimeZone("UTC").getDisplayName(Locale.ENGLISH);
 		assertEquals("tzName=" + tzName, Out.read());
 	}

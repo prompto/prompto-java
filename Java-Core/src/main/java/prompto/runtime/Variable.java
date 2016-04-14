@@ -1,6 +1,5 @@
 package prompto.runtime;
 
-import prompto.error.SyntaxError;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.type.IType;
@@ -21,12 +20,12 @@ public class Variable implements INamed {
 	}
 	
 	@Override
-	public Identifier getIdentifier() {
+	public Identifier getId() {
 		return name;
 	}
 
 	@Override
-	public IType getType(Context context) throws SyntaxError {
+	public IType getType(Context context) {
 		return type;
 	}
 	

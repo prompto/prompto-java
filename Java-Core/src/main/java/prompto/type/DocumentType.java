@@ -1,9 +1,10 @@
 package prompto.type;
 
-import prompto.error.SyntaxError;
+import java.lang.reflect.Type;
+
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoDocument;
 import prompto.runtime.Context;
-import prompto.value.Document;
 
 public class DocumentType extends NativeType {
 	
@@ -14,12 +15,12 @@ public class DocumentType extends NativeType {
 	}
 	
 	private DocumentType() {
-		super("Document");
+		super(Family.DOCUMENT);
 	}
 
 	@Override
-	public Class<?> toJavaClass() {
-		return Document.class;
+	public Type getJavaType(Context context) {
+		return PromptoDocument.class;
 	}
 	
 	@Override
@@ -28,7 +29,7 @@ public class DocumentType extends NativeType {
 	}
 	
 	@Override
-	public IType checkMember(Context context, Identifier name) throws SyntaxError {
+	public IType checkMember(Context context, Identifier name) {
 		return AnyType.instance();
 	}
 	

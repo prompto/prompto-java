@@ -1,5 +1,6 @@
 package prompto.store;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -7,44 +8,30 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import prompto.declaration.AttributeDeclaration;
-import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
-import prompto.expression.IExpression;
-import prompto.grammar.Identifier;
-import prompto.grammar.OrderByClause;
-import prompto.grammar.OrderByClauseList;
+import prompto.intrinsic.PromptoBinary;
+import prompto.intrinsic.PromptoList;
+import prompto.intrinsic.PromptoTuple;
 import prompto.runtime.Context;
-import prompto.type.CategoryType;
-import prompto.type.IType;
-import prompto.type.IntegerType;
-import prompto.type.TextType;
-import prompto.value.Binary;
-import prompto.value.Boolean;
-import prompto.value.Document;
-import prompto.value.IValue;
-import prompto.value.Integer;
-import prompto.value.ListValue;
-import prompto.value.Text;
-import prompto.value.TupleValue;
+import prompto.store.IStorable.IDbIdListener;
 
 /* a utility class for running unit tests only */
-public final class MemStore implements IStore {
+public final class MemStore implements IStore<Long> {
 
-	private Map<Integer, StorableDocument> documents = new HashMap<>();
+	private Map<Long, StorableDocument> documents = new HashMap<>();
 	private long lastDbId = 0;
 	
 	@Override
-	public IType getDbIdType() {
-		return IntegerType.instance();
+	public Class<?> getDbIdClass() {
+		return Long.class;
 	}
 	
 	@Override
-	public IType getColumnType(String name) {
-		// TODO Auto-generated method stub
-		return null;
+	public Type getColumnType(String name) {
+		throw new UnsupportedOperationException();
 	}
 	
 	@Override
@@ -53,26 +40,37 @@ public final class MemStore implements IStore {
 	}
 	
 	@Override
-	public void store(Context context, Collection<IValue> deletables, Collection<IStorable> storables) throws PromptoError {
+	public void store(Collection<Long> deletables, Collection<IStorable> storables) throws PromptoError {
 		for(IStorable storable : storables) {
 			if(!(storable instanceof StorableDocument))
 				throw new IllegalStateException("Expecting a StorableDocument");
-			store(context, (StorableDocument)storable);
+			store((StorableDocument)storable);
 		}
 	}
 	
-	public void store(Context context, StorableDocument storable) throws PromptoError {
+	public void store(StorableDocument storable) throws PromptoError {
 		// ensure db id
-		IValue dbId = storable.getValue(context, dbIdIdentifier);
-		if(!(dbId instanceof Integer)) {
-			dbId = new Integer(++lastDbId);
-			storable.setValue(context, dbIdIdentifier, dbId);
+		Object dbId = storable.getData(dbIdName);
+		if(!(dbId instanceof Long)) {
+			dbId = Long.valueOf(++lastDbId);
+			storable.setData(dbIdName, dbId);
 		}
-		documents.put((Integer)dbId, storable);
+		documents.put((Long)dbId, storable);
 	}
 	
 	@Override
-	public Binary fetchBinary(String dbId, String attr) {
+	public void delete(Collection<Long> dbIds) throws PromptoError {
+		for(Long dbId : dbIds)
+			documents.remove(dbId);
+	}
+	
+	@Override
+	public void deleteAll() throws PromptoError {
+		documents = new HashMap<>();
+	}
+	
+	@Override
+	public PromptoBinary fetchBinary(Long dbId, String attr) {
 		for(StorableDocument doc : documents.values()) {
 			Object data = doc.getData(IStore.dbIdName);
 			if(data==null || !dbId.equals(data.toString()))
@@ -83,194 +81,144 @@ public final class MemStore implements IStore {
 	}
 	
 	@Override
-	public void delete(Collection<Object> dbIds) throws PromptoError {
-		for(Object dbId : dbIds)
-			documents.remove(dbId);
-	}
-	
-	@Override
-	public void deleteAll() throws PromptoError {
-		documents = new HashMap<>();
-	}
-	
-	
-	@Override
-	public IStored fetchUnique(Context context, IValue dbId) throws PromptoError {
+	public IStored fetchUnique(Long dbId) throws PromptoError {
 		return documents.get(dbId);
 	}
 	
 	@Override
-	public IStored fetchOne(Context context, CategoryType type, IExpression filter) throws PromptoError {
+	public IQueryInterpreter<Long> getQueryInterpreter(Context context) {
+		return new QueryInterpreter<Long>(context);
+	}
+	
+	@Override
+	public IQueryFactory getQueryFactory() {
+		return new QueryFactory();
+	}
+	
+	@Override
+	public IStored fetchOne(IQuery query) throws PromptoError {
 		for(StorableDocument doc : documents.values()) {
-			if(matches(context, doc, type, filter))
+			if(doc.matches(((Query)query).getPredicate()))
 				return doc;
 		}
 		return null;
 	}
 	
-	private boolean matches(Context context, StorableDocument doc, CategoryType type, IExpression filter) throws PromptoError {
-		return matchesType(context, doc, type) && matchesFilter(context, doc, filter);
-	}
-	
-	private boolean matchesFilter(Context context, StorableDocument doc, IExpression filter) throws PromptoError {
-		if(filter==null)
-			return true;
-		Context local = context.newDocumentContext(doc.document, true);
-		IValue test = filter.interpret(local);
-		if(!(test instanceof Boolean))
-			throw new InternalError("Illegal test result: " + test);
-		return ((Boolean)test).getValue();
-	}
-
-	private boolean matchesType(Context context, StorableDocument doc, CategoryType type) throws PromptoError {
-		if(type==null)
-			return true;
-		ListValue list = (ListValue) doc.getValue(context, new Identifier("category"));
-		return list==null ? false : list.hasItem(context, new Text(type.getName()));
-	}
-
 	@Override
-	public IStoredIterator fetchMany(Context context, CategoryType type, 
-				IExpression start, IExpression end, 
-				IExpression filter, OrderByClauseList orderBy) throws PromptoError {
-		
-		final List<StorableDocument> docs = fetchManyDocs(context, type, start, end, filter, orderBy);
-		final Iterator<StorableDocument> iter = docs.iterator();
-		return new IStoredIterator() {
-			@Override public boolean hasNext() { return iter.hasNext(); }
-			@Override public IStored next() { return iter.next(); }
-			@Override public long length() { return docs.size(); }
+	public IStoredIterable fetchMany(IQuery query) throws PromptoError {
+		final List<StorableDocument> docs = fetchManyDocs(query);
+		return new IStoredIterable() {
+			@Override
+			public long length() {
+				return (long)docs.size();
+			}
+			@SuppressWarnings("unchecked")
+			@Override
+			public Iterator<IStored> iterator() {
+				return (Iterator<IStored>)(Object)docs.iterator();
+			};
 		};
 	}
-
-	private List<StorableDocument> fetchManyDocs(Context context, CategoryType type, 
-			IExpression start, IExpression end, 
-			IExpression filter, OrderByClauseList orderBy) throws PromptoError {
-		List<StorableDocument> docs = filterDocs(context, type, filter);
-		// sort it if required
-		docs = sort(context, docs, orderBy);
-		// slice it if required
-		docs = slice(context, docs, start, end);
-		// done
+	
+	private List<StorableDocument> fetchManyDocs(IQuery query) throws PromptoError {
+		List<StorableDocument> docs = filterDocs(((Query)query).getPredicate());
+		docs = sort(((Query)query).getOrdering(), docs);
+		docs = slice(query, docs);
 		return docs;
 	}
 
-	private List<StorableDocument> filterDocs(Context context, CategoryType type, IExpression filter) throws PromptoError {
+	private List<StorableDocument> filterDocs(IPredicate predicate) throws PromptoError {
 		// create list of filtered docs
 		List<StorableDocument> docs = new ArrayList<StorableDocument>();
 		List<StorableDocument> all = new ArrayList<>(documents.values()); // need a copy to avoid concurrent modification
 		for(StorableDocument doc : all) {
-			if(matches(context, doc, type, filter))
+			if(doc.matches(predicate))
 				docs.add(doc);
 		}
 		return docs;
 	}
-
-	private List<StorableDocument> slice(Context context, List<StorableDocument> docs, IExpression start, IExpression end) throws PromptoError {
-		if(docs.isEmpty())
+	
+	private List<StorableDocument> slice(IQuery query, List<StorableDocument> docs) {
+		if(docs==null || docs.isEmpty())
 			return docs;
-		if(start==null && end==null)
+		Long first = query.getFirst();
+		Long last = query.getLast();
+		if(first==null && last==null)
 			return docs;
-		Long startValue = null;
-		Long endValue = null;
-		if(start!=null) {
-			IValue value = start.interpret(context);
-			if(value==null)
-				throw new NullReferenceError();
-			else if(!(value instanceof Integer))
-				throw new SyntaxError("Expecting an integer, got " + value.getType().getId().getName());
-			startValue = ((Integer)value).IntegerValue();
-		}
-		if(end!=null) {
-			IValue value = end.interpret(context);
-			if(value==null)
-				throw new NullReferenceError();
-			else if(!(value instanceof Integer))
-				throw new SyntaxError("Expecting an integer, got " + value.getType().getId().getName());
-			endValue = ((Integer)value).IntegerValue();
-		}
-		if(startValue==null || startValue<1)
-			startValue = 1L;
-		if(endValue==null || endValue>docs.size())
-			endValue = new Long(docs.size());
-		if(startValue>docs.size() || startValue > endValue)
+		if(first==null || first<1)
+			first = 1L;
+		if(last==null || last>docs.size())
+			last = new Long(docs.size());
+		if(first > last)
 			return new ArrayList<StorableDocument>();
-		return docs.subList(startValue.intValue() - 1, endValue.intValue());
+		return docs.subList(first.intValue() - 1, last.intValue());
 	}
 
-	private List<StorableDocument> sort(Context context, List<StorableDocument> docs, OrderByClauseList orderBy) {
-		if(orderBy!=null) {
-			Collection<java.lang.Boolean> directions = collectDirections(orderBy);
-			docs.sort(new Comparator<StorableDocument>() {
+	private List<StorableDocument> sort(Collection<IOrderBy> orderBy, List<StorableDocument> docs) {
+		if(orderBy==null || orderBy.isEmpty() || docs.size()<2)
+			return docs;
+		List<java.lang.Boolean> directions = orderBy.stream().map((o)->
+				o.isDescending()).collect(Collectors.toList());
+		docs.sort(new Comparator<StorableDocument>() {
 
-				@Override
-				public int compare(StorableDocument o1, StorableDocument o2) {
-					try {
-						TupleValue v1 = readValue(context, o1, orderBy);
-						TupleValue v2 = readValue(context, o2, orderBy);
-						return v1.CompareTo(context, v2, directions);
-					} catch (PromptoError e) {
-						throw new RuntimeException(e);
-					}
+			@Override
+			public int compare(StorableDocument o1, StorableDocument o2) {
+				try {
+					PromptoTuple<Comparable<?>> v1 = readTuple(o1, orderBy);
+					PromptoTuple<Comparable<?>> v2 = readTuple(o2, orderBy);
+					return v1.compareTo(v2, directions);
+				} catch (PromptoError e) {
+					throw new RuntimeException(e);
 				}
+			}
 
-			});
-		}
+		});
 		return docs;
 	}
 	
-	private List<java.lang.Boolean> collectDirections(OrderByClauseList orderBy) {
-		List<java.lang.Boolean> list = new ArrayList<>();
-		for(OrderByClause clause : orderBy)
-			list.add(clause.isDescending());
-		return list;
-	}
-
-	private TupleValue readValue(Context context, StorableDocument doc, OrderByClauseList orderBy) throws PromptoError {
-		TupleValue tuple = new TupleValue();
-		for(OrderByClause clause : orderBy)
-			tuple.addItem(readValue(context, doc, clause));
+	private PromptoTuple<Comparable<?>> readTuple(StorableDocument doc, Collection<IOrderBy> orderBy) throws PromptoError {
+		PromptoTuple<Comparable<?>> tuple = new PromptoTuple<>();
+		orderBy.forEach((o)->
+			tuple.add((Comparable<?>)doc.getData(o.getAttributeInfo().getName())));
 		return tuple;
 	}
 
-	private IValue readValue(Context context, StorableDocument doc, OrderByClause clause) throws PromptoError {
-		IValue source = doc.document;
-		IValue value = null;
-		for(Identifier name : clause.getNames()) {
-			if(!(source instanceof Document))
-				return null;
-			value = source.getMember(context, name, false);
-			source = value;
-		}
-		return value;
-	}
 	
 	@Override
-	public IStorable newStorable(List<String> categories) {
-		return new StorableDocument(categories);
+	public IStorable newStorable(List<String> categories, IDbIdListener listener) {
+		return new StorableDocument(categories, listener);
 	}
 	
 	class StorableDocument implements IStored, IStorable {
 
-		Document document = null;
+		Map<String, Object> document = null;
+		IDbIdListener listener;
 		List<String> categories;
 		
-		public StorableDocument(List<String> categories) {
+		public StorableDocument(List<String> categories, IDbIdListener listener) {
 			this.categories = categories;
+			this.listener = listener;
+		}
+
+		public boolean matches(IPredicate predicate) {
+			if(predicate==null)
+				return true;
+			else
+				return predicate.matches(document);
 		}
 
 		@Override
-		public IValue getDbId() {
-			return getValue(null, dbIdIdentifier);
+		public Object getDbId() {
+			return getData(dbIdName);
 		}
 		
 		@Override
-		public IValue getOrCreateDbId() {
-			IValue dbId = getValue(null, dbIdIdentifier);
+		public Object getOrCreateDbId() {
+			Object dbId = getData(dbIdName);
 			if(dbId==null) {
 				setDirty(true);
-				dbId = new Integer(++lastDbId);
-				document.setMember(null, dbIdIdentifier, dbId);
+				dbId = Long.valueOf(++lastDbId);
+				document.put(dbIdName, dbId);
 			}
 			return dbId;
 		}
@@ -280,17 +228,19 @@ public final class MemStore implements IStore {
 			if(!set)
 				document = null;
 			else if(document==null)
-				document = newDocument();
+				document = newDocument(null);
 		}
 
-		private Document newDocument() {
-			Document doc = new Document();
+		private Map<String, Object> newDocument(Object dbId) {
+			Map<String, Object> doc = new HashMap<>();
 			if(categories!=null) {
-				ListValue value = new ListValue(TextType.instance());
+				PromptoList<String> value = new PromptoList<>();
 				for(String name : categories)
-					value.addItem(new Text(name));
-				doc.setMember(null, new Identifier("category"), value);
+					value.add(name);
+				doc.put("category", value);
 			}
+			if(dbId!=null)
+				doc.put(dbIdName, dbId);
 			return doc;
 		}
 
@@ -300,41 +250,22 @@ public final class MemStore implements IStore {
 		}
 
 		@Override
-		public IValue getValue(Context context, Identifier name) {
+		public Object getData(String name) {
 			if(document==null)
 				return null;
 			else
-				return document.getMember(context, name, false);
+				return document.get(name);
 		}
 		
 		@Override
-		public void setValue(Context context, Identifier name, IValue value, IDbIdProvider provider) {
-			if(document==null)
-				document = newDocument();
-			if(value instanceof StorableDocument)
-				value = ((StorableDocument)value).document;
-			document.setMember(context, name, value);
+		public void setData(String name, Object value, IDbIdProvider provider) {
+			if(document==null) {
+				Object dbId = provider==null ? null : provider.getDbId();
+				document = newDocument(dbId);
+			}
+			document.put(name, value);
 		}
 		
-		@Override
-		public Object getData(String name) {
-			return document.getMember(null, new Identifier(name), false);
-		}
-		
-		@Override
-		public void setData(String name, Object value) {
-			if(document==null)
-				document = newDocument();
-			if(value==null)
-				document.setMember(null, new Identifier(name), null);
-			else if(value instanceof StorableDocument)
-				document.setMember(null, new Identifier(name), ((StorableDocument)value).document);
-			else if(value instanceof IValue)
-				document.setMember(null, new Identifier(name), (IValue)value);
-			else
-				throw new IllegalStateException();
-		}
-
 	}
 
 	

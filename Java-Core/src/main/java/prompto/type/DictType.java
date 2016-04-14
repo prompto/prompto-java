@@ -1,18 +1,15 @@
 package prompto.type;
 
-import java.util.Map;
+import java.lang.reflect.Type;
 
-import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoDict;
 import prompto.runtime.Context;
-
-
 
 public class DictType extends ContainerType {
 	
 	public DictType(IType itemType) {
-		super(itemType.getId()+"{}",itemType);
-		this.itemType = itemType;
+		super(Family.DICTIONARY, itemType, itemType.getTypeName()+"{}");
 	}
 	
 	@Override
@@ -21,8 +18,8 @@ public class DictType extends ContainerType {
 	}
 
 	@Override
-	public Class<?> toJavaClass() {
-		return Map.class;
+	public Type getJavaType(Context context) {
+		return PromptoDict.class;
 	}
 	
 	@Override
@@ -38,7 +35,7 @@ public class DictType extends ContainerType {
 	}
 	
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkAdd(Context context, IType other, boolean tryReverse) {
 		if(other instanceof DictType 
 			&& this.getItemType().equals(((DictType)other).getItemType()))
 			return this;
@@ -47,7 +44,7 @@ public class DictType extends ContainerType {
 	}
 	
 	@Override
-	public IType checkContains(Context context, IType other) throws SyntaxError {
+	public IType checkContains(Context context, IType other) {
 		if(other==TextType.instance())
 			return BooleanType.instance();
 		else
@@ -55,7 +52,7 @@ public class DictType extends ContainerType {
 	}
 	
 	@Override
-	public IType checkItem(Context context, IType other) throws SyntaxError {
+	public IType checkItem(Context context, IType other) {
 		if(other==TextType.instance())
 			return itemType;
 		else
@@ -63,17 +60,17 @@ public class DictType extends ContainerType {
 	}
 	
 	@Override
-	public IType checkIterator(Context context) throws SyntaxError {
+	public IType checkIterator(Context context) {
 		return new EntryType(itemType);
 	}
 	
 	@Override
-	public IType checkMember(Context context, Identifier id) throws SyntaxError {
+	public IType checkMember(Context context, Identifier id) {
 		String name = id.toString();
         if ("length".equals(name))
             return IntegerType.instance();
         else if("keys".equals(name))
-            return new ListType(TextType.instance());
+            return new SetType(TextType.instance());
         else if ("values".equals(name))
             return new ListType(getItemType());
         else

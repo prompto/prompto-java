@@ -1,59 +1,73 @@
 package prompto.store.solr;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 
 import prompto.declaration.AttributeDeclaration;
-import prompto.error.PromptoError;
+import prompto.declaration.AttributeInfo;
 import prompto.error.InternalError;
+import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
-import prompto.error.InvalidDataError;
-import prompto.expression.IExpression;
-import prompto.grammar.EqOp;
-import prompto.grammar.OrderByClause;
-import prompto.grammar.OrderByClauseList;
+import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoBinary;
+import prompto.intrinsic.PromptoDate;
+import prompto.intrinsic.PromptoDateTime;
+import prompto.intrinsic.PromptoList;
+import prompto.intrinsic.PromptoPeriod;
+import prompto.intrinsic.PromptoTime;
 import prompto.runtime.Context;
+import prompto.store.IQuery;
+import prompto.store.IQuery.MatchOp;
+import prompto.store.IStorable.IDbIdListener;
+import prompto.store.IQueryFactory;
+import prompto.store.IQueryInterpreter;
 import prompto.store.IStorable;
 import prompto.store.IStore;
 import prompto.store.IStored;
-import prompto.store.IStoredIterator;
+import prompto.store.IStoredIterable;
 import prompto.type.BlobType;
 import prompto.type.BooleanType;
 import prompto.type.CategoryType;
+import prompto.type.ContainerType;
 import prompto.type.DateTimeType;
+import prompto.type.DateType;
 import prompto.type.DecimalType;
 import prompto.type.IType;
+import prompto.type.IType.Family;
 import prompto.type.ImageType;
 import prompto.type.IntegerType;
 import prompto.type.ListType;
+import prompto.type.PeriodType;
 import prompto.type.TextType;
+import prompto.type.TimeType;
 import prompto.type.UUIDType;
-import prompto.utils.IdentifierList;
-import prompto.value.Binary;
-import prompto.value.IValue;
 
-abstract class BaseSOLRStore implements IStore {
+abstract class BaseSOLRStore implements IStore<UUID> {
 	
 	static Map<String, IType> typeMap = new HashMap<>();
 	
 	static {
 		typeMap.put("uuid", UUIDType.instance());
+		typeMap.put("db-id", UUIDType.instance());
+		typeMap.put("db-ref", new CategoryType(new Identifier("any")));
 		typeMap.put("blob", BlobType.instance());
 		typeMap.put("boolean", BooleanType.instance());
 		typeMap.put("text", TextType.instance());
@@ -64,6 +78,9 @@ abstract class BaseSOLRStore implements IStore {
 		typeMap.put("image", ImageType.instance());
 		typeMap.put("integer", IntegerType.instance());
 		typeMap.put("decimal", DecimalType.instance());
+		typeMap.put("date", DateType.instance());
+		typeMap.put("time", TimeType.instance());
+		typeMap.put("period", PeriodType.instance());
 		typeMap.put("datetime", DateTimeType.instance());
 		// create a list type for each atomic type (using a copy to avoid concurrent modification)
 		Set<Map.Entry<String, IType>> entries = new HashSet<>(typeMap.entrySet());
@@ -72,48 +89,74 @@ abstract class BaseSOLRStore implements IStore {
 		}
 	}
 	
-	static interface IValueReader {
-		IValue readValue(Object data) throws IOException;
+	
+	static interface IDataReader {
+		Object readValue(Object data) throws IOException;
 	}
 	
-	static Map<String, IValueReader> readerMap = new HashMap<>();
+	static Map<String, IDataReader> readerMap = new HashMap<>();
 	
 	static {
-		readerMap.put("uuid", (o) -> new prompto.value.UUID(o.toString()));
-		readerMap.put("blob", null);
-		readerMap.put("boolean", null);
-		readerMap.put("text", (o) -> new prompto.value.Text(o.toString()));
+		readerMap.put("uuid", (o) -> UUID.fromString(o.toString()));
+		readerMap.put("db-id", readerMap.get("uuid"));
+		readerMap.put("db-ref", readerMap.get("uuid"));
+		readerMap.put("blob", (o) -> BinaryConverter.toPromptoBinary(o));
+		readerMap.put("boolean", (o) -> o);
+		readerMap.put("text", (o) -> String.valueOf(o));
 		readerMap.put("text-key", readerMap.get("text"));
 		readerMap.put("text-value", readerMap.get("text"));
 		readerMap.put("text-words", readerMap.get("text"));
-		readerMap.put("version", (o) -> new prompto.value.Text(o.toString()));
-		readerMap.put("image", (o) -> BinaryConverter.toBinary(o));
-		readerMap.put("integer", null);
-		readerMap.put("decimal", null);
-		readerMap.put("datetime", (o) -> new prompto.value.DateTime(o.toString()));
-		// create a list type for each atomic type (using a copy to avoid concurrent modification)
-		Set<Map.Entry<String, IValueReader>> entries = new HashSet<>(readerMap.entrySet());
-		for(Map.Entry<String, IValueReader> entry : entries) {
-			readerMap.put(entry.getKey() + "[]", null);
-		}
+		readerMap.put("version", (o) -> o.toString());
+		readerMap.put("image", (o) -> BinaryConverter.toPromptoBinary(o));
+		readerMap.put("integer", (o) -> o);
+		readerMap.put("decimal", (o) -> o);
+		readerMap.put("period", (o) -> PromptoPeriod.parse(o.toString()));
+		readerMap.put("date", (o) -> PromptoDate.parse(o.toString()));
+		readerMap.put("time", (o) -> PromptoTime.parse(o.toString()));
+		readerMap.put("datetime", (o) -> PromptoDateTime.parse(o.toString()));
 	}
 	
-	ConcurrentMap<String, String> columnTypeNames = new ConcurrentHashMap<>();
-	ConcurrentMap<String, IType> columnTypes = new ConcurrentHashMap<>();
-	
-	@Override
-	public IType getColumnType(String fieldName) throws PromptoError {
-		IType type = columnTypes.get(fieldName);
-		if(type==null) try {
-			String typeName = getColumnTypeName(fieldName);
-			type = typeMap.get(typeName);
-			columnTypes.put(fieldName, type);
+	public Object readFieldData(String fieldName, Object data) throws PromptoError {
+		if(data==null)
+			return null;
+		String typeName = getColumnTypeName(fieldName);
+		if(typeName.endsWith("[]"))
+			return readArrayData(typeName, data);
+		else
+			return readAtomicData(typeName, data);
+	}
+
+	private Object readAtomicData(String typeName, Object data) {
+		IDataReader reader = readerMap.get(typeName);
+		if(reader==null)
+			throw new UnsupportedOperationException("read " + typeName);
+		try {
+			return reader.readValue(data);
 		} catch(Exception e) {
-			throw new InternalError(e);
+			throw new ReadWriteError(e.getMessage());
 		}
-		return type;
 	}
-	
+
+	@SuppressWarnings("unchecked")
+	private Object readArrayData(String typeName, Object data) {
+		if(!(data instanceof Collection))
+			throw new UnsupportedOperationException("data " + data.getClass().getName());
+		String itemTypeName = typeName.substring(0, typeName.indexOf('[')); 
+		IDataReader reader = readerMap.get(itemTypeName);
+		if(reader==null)
+			throw new UnsupportedOperationException("read " + typeName);
+		try {
+			PromptoList<Object> result = new PromptoList<>();
+			for(Object item : ((Collection<Object>)data))
+				result.add(reader.readValue(item));
+			return result;
+		} catch(Exception e) {
+			throw new ReadWriteError(e.getMessage());
+		}
+	}
+
+	ConcurrentMap<String, String> columnTypeNames = new ConcurrentHashMap<>();
+		
 	private String getColumnTypeName(String fieldName) throws PromptoError {
 		String typeName = columnTypeNames.get(fieldName);
 		if(typeName==null) try {
@@ -125,21 +168,16 @@ abstract class BaseSOLRStore implements IStore {
 		return typeName;
 	}
 
-	public IValue readData(String fieldName, Object data) throws PromptoError {
-		String typeName = getColumnTypeName(fieldName);
-		IValueReader reader = readerMap.get(typeName);
-		if(reader==null)
-			throw new UnsupportedOperationException("read " + typeName);
-		try {
-			return reader.readValue(data);
-		} catch(Exception e) {
-			throw new ReadWriteError(e.getMessage());
-		}
-	}
-
 	@Override
-	public IType getDbIdType() {
-		return UUIDType.instance();
+	public Type getColumnType(String fieldName) throws PromptoError {
+		String typeName = getColumnTypeName(fieldName);
+		IType type = typeMap.get(typeName);
+		return type.getJavaType(null);
+	}
+	
+	@Override
+	public Class<?> getDbIdClass() {
+		return UUID.class;
 	}
 	
 	@Override
@@ -158,24 +196,24 @@ abstract class BaseSOLRStore implements IStore {
 		options.put("indexed", true);
 		options.put("stored", true);
 		IType type = column.getType();
-		if(type instanceof ListType) {
+		if(type instanceof ContainerType) {
 			options.put("multiValued", true);
-			type = ((ListType)type).getItemType();
+			type = ((ContainerType)type).getItemType();
 		}
-		if(type instanceof CategoryType)
-			type = getDbIdType();
 		if("version".equals(column.getName())) 
 			addField("version", "version", options);
 		else if(type==TextType.instance())
-			addTextField(column.getName(), options, column.getIndexTypes());
+			addTextField(column.getName(), options, column.getAttributeInfo());
+		else if(type instanceof CategoryType)
+			addField(column.getName(), "db-ref", options);
 		else {
-			String typeName = type.getName().toLowerCase();
+			String typeName = type.getTypeName().toLowerCase();
 			addField(column.getName(), typeName, options);
 		}
 	}
 	
 	
-	private void addTextField(String fieldName, Map<String, Object> options, Collection<String> indexTypes) throws SolrServerException, IOException {
+	private void addTextField(String fieldName, Map<String, Object> options, AttributeInfo indexTypes) throws SolrServerException, IOException {
 		options = new HashMap<>(options); // use a copy
 		options.put("indexed", false);
 		options.put("stored", true);
@@ -183,18 +221,23 @@ abstract class BaseSOLRStore implements IStore {
 		options = new HashMap<>(options); // use a copy
 		options.put("indexed", true);
 		options.put("stored", false);
-		if(indexTypes!=null) for(String indexType : indexTypes)
-			addCopyField(fieldName + "-" + indexType, "text-" + indexType, options, fieldName);
-		else
+		if(indexTypes!=null) {
+			if(indexTypes.isKey())
+				addCopyField(fieldName + "-" + AttributeInfo.KEY, "text-" + AttributeInfo.KEY, options, fieldName);
+			if(indexTypes.isValue())
+				addCopyField(fieldName + "-" + AttributeInfo.VALUE, "text-" + AttributeInfo.VALUE, options, fieldName);
+			if(indexTypes.isWords())
+				addCopyField(fieldName + "-" + AttributeInfo.WORDS, "text-" + AttributeInfo.WORDS, options, fieldName);
+		} else
 			addCopyField(fieldName + "-key", "text-key", options, fieldName);
 	}
 
 	@Override
-	public void store(Context context, Collection<IValue> deletables, Collection<IStorable> storables) throws PromptoError {
+	public void store(Collection<UUID> deletables, Collection<IStorable> storables) throws PromptoError {
 		List<String> dbIdsToDrop = null;
 		if(deletables!=null && deletables.size()>0) {
 			dbIdsToDrop = new ArrayList<>();
-			for(IValue dbId : deletables)
+			for(Object dbId : deletables)
 				dbIdsToDrop.add(dbId.toString()); // a simple UUID
 		}
 		List<SolrInputDocument> docsToAdd = null;
@@ -222,7 +265,7 @@ abstract class BaseSOLRStore implements IStore {
 	}
 
 	@Override
-	public Binary fetchBinary(String dbId, String attr) throws PromptoError {
+	public PromptoBinary fetchBinary(UUID dbId, String attr) throws PromptoError {
 		SolrQuery query = new SolrQuery();
 		query.setQuery("dbId:" + dbId);
 		query.setFields(attr);
@@ -239,41 +282,49 @@ abstract class BaseSOLRStore implements IStore {
 			if(data==null)
 				return null;
 			else
-				return BinaryConverter.toBinary(data);
+				return BinaryConverter.toPromptoBinary(data);
+		} catch(Exception e) {
+			throw new InternalError(e);
+		}
+	}
+	
+	
+	@Override
+	public IStored fetchUnique(UUID dbId) throws PromptoError {
+		SOLRQuery query = new SOLRQuery();
+		query.verify(new SOLRAttributeInfo(IStore.dbIdName, Family.UUID, false, null), MatchOp.EQUALS, dbId);
+		try {
+			commit();
+			QueryResponse result = query(query.getQuery());
+			return getOne(result);
 		} catch(Exception e) {
 			throw new InternalError(e);
 		}
 	}
 	
 	@Override
-	public IStored fetchUnique(Context context, IValue dbId) throws PromptoError {
-		SOLRFilterBuilder builder = new SOLRFilterBuilder();
-		builder.push(context, IStore.dbIdName, EqOp.EQUALS, dbId);
-		SolrQuery query = new SolrQuery();
-		query.setQuery(builder.toSolrQuery());
-		try {
-			commit();
-			QueryResponse result = query(query);
-			return getOne(context, result);
-		} catch(Exception e) {
-			throw new InternalError(e);
-		}
+	public IQueryInterpreter<UUID> getQueryInterpreter(Context context) {
+		return new SOLRQueryInterpreter(context);
 	}
 	
 	@Override
-	public IStored fetchOne(Context context, CategoryType type, IExpression filterExpression) throws PromptoError {
-		SolrQuery query = buildQuery(context, type, null, null, filterExpression, null);
-		query.setRows(1);
+	public IQueryFactory getQueryFactory() {
+		return new SOLRQueryFactory();
+	}
+	
+	@Override
+	public IStored fetchOne(IQuery query) throws PromptoError {
+		SolrQuery q = ((SOLRQuery)query).getQuery();
 		try {
 			commit();
-			QueryResponse result = query(query);
-			return getOne(context, result);
+			QueryResponse result = query(q);
+			return getOne(result);
 		} catch(Exception e) {
 			throw new InternalError(e);
 		}
 	}
 	
-	private IStored getOne(Context context, QueryResponse result) {
+	private IStored getOne(QueryResponse result) {
 		if(result.getResults().isEmpty())
 			return null;
 		else
@@ -281,33 +332,35 @@ abstract class BaseSOLRStore implements IStore {
 	}
 
 	@Override
-	public IStoredIterator fetchMany(Context context, CategoryType type,
-			IExpression start, IExpression end, 
-			IExpression filterExpression, OrderByClauseList orderBy)
-			throws PromptoError {
-		SolrQuery query = buildQuery(context, type, start, end, filterExpression, orderBy);
+	public IStoredIterable fetchMany(IQuery query) throws PromptoError {
+		SolrQuery q = ((SOLRQuery)query).getQuery();
 		try {
 			commit();
-			QueryResponse result = query(query);
-			return getMany(context, result);
+			QueryResponse result = query(q);
+			return getMany(result);
 		} catch(Exception e) {
 			throw new InternalError(e);
 		}
 	}
 	
-	private IStoredIterator getMany(Context context, QueryResponse response) {
-		return new IStoredIterator() {
-			
-			int current = 0;
+	private IStoredIterable getMany(QueryResponse response) {
+		return new IStoredIterable() {
 			
 			@Override
-			public IStored next() {
-				return new StoredDocument(BaseSOLRStore.this, response.getResults().get(current++));
-			}
-			
-			@Override
-			public boolean hasNext() {
-				return current < response.getResults().getNumFound();
+			public Iterator<IStored> iterator() {
+				return new Iterator<IStored>() {
+					int current = 0;
+					
+					@Override
+					public IStored next() {
+						return new StoredDocument(BaseSOLRStore.this, response.getResults().get(current++));
+					}
+					
+					@Override
+					public boolean hasNext() {
+						return current < response.getResults().getNumFound();
+					}
+				};
 			}
 			
 			@Override
@@ -317,50 +370,9 @@ abstract class BaseSOLRStore implements IStore {
 		};
 	}
 
-	private SolrQuery buildQuery(Context context, CategoryType type,
-			IExpression start, IExpression end, 
-			IExpression filterExpression, OrderByClauseList orderBy) throws PromptoError {
-		SOLRFilterBuilder builder = new SOLRFilterBuilder();
-		if(type!=null)
-			builder.pushCategory(type);
-		if(filterExpression!=null)
-			filterExpression.toFilter(context, builder);
-		if(type!=null && filterExpression!=null)
-			builder.and();
-		// TODO: based on the field type and operator, should we use query/filterQuery ?
-		SolrQuery query = new SolrQuery();
-		query.setQuery(builder.toSolrQuery());
-		Long intStart = getLong(context, start);
-		Long intEnd = getLong(context, end);
-		if(intStart!=null && intEnd!=null) {
-			query.setStart(intStart.intValue() - 1);
-			query.setRows(1 + (int)(intEnd - intStart));
-		}
-		if(orderBy!=null) for(OrderByClause clause : orderBy) {
-			IdentifierList names = clause.getNames();
-			// TODO manage member names: a.b
-			String fieldName = names.get(0).getName();
-			AttributeDeclaration column = context.findAttribute(fieldName);
-			TextFieldFlags flags = TextFieldFlags.computeFieldFlags(column);
-			if(flags!=null)
-				fieldName += flags.getSuffixForOrderBy();
-			query.addSort(fieldName, clause.isDescending() ? ORDER.desc : ORDER.asc);
-		}
-		return query;
-	}
-
-	private Long getLong(Context context, IExpression exp) throws PromptoError {
-		if(exp==null)
-			return null;
-		IValue value = exp.interpret(context);
-		if(!(value instanceof prompto.value.Integer))
-			throw new InvalidDataError("Expecting an Integer, got:" + value.getType().toString());
-		return ((prompto.value.Integer)value).IntegerValue();
-	}
-
 	@Override
-	public IStorable newStorable(List<String> categories) {
-		return new StorableDocument(categories);
+	public IStorable newStorable(List<String> categories, IDbIdListener listener) {
+		return new StorableDocument(categories, listener);
 	}
 	
 	public abstract void createCoreIfRequired() throws SolrServerException, IOException;

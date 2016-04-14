@@ -1,21 +1,29 @@
 package prompto.grammar;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.InterfaceConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.declaration.AttributeInfo;
 import prompto.parser.Section;
+import prompto.runtime.Context;
+import prompto.store.IQuery;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
 
 public class OrderByClause extends Section {
 	
-	IdentifierList names;
+	IdentifierList qualifiedName;
 	boolean descending;
 	
-	public OrderByClause(IdentifierList names, boolean descending) {
-		this.names = names;
+	public OrderByClause(IdentifierList qualifiedName, boolean descending) {
+		this.qualifiedName = qualifiedName;
 		this.descending = descending;
 	}
 	
-	public IdentifierList getNames() {
-		return names;
+	public IdentifierList getQualifiedName() {
+		return qualifiedName;
 	}
 	
 	public boolean isDescending() {
@@ -23,12 +31,30 @@ public class OrderByClause extends Section {
 	}
 
 	public void toDialect(CodeWriter writer) {
-		for(Identifier name : names) {
+		for(Identifier name : qualifiedName) {
 			writer.append(name.toString());
 			writer.append(".");
 		}
 		writer.trimLast(1);
 		if(descending)
 			writer.append(" descending");
+	}
+
+	public void interpretQuery(Context context, IQuery q) {
+		// TODO members
+		Identifier name = qualifiedName.getFirst();
+		AttributeInfo info = context.findAttribute(name.toString()).getAttributeInfo();
+		q.addOrderByClause(info, isDescending());
+	}
+
+	public void compileQuery(Context context, MethodInfo method, Flags flags) {
+		method.addInstruction(Opcode.DUP);
+		Identifier name = qualifiedName.getFirst();
+		AttributeInfo info = context.findAttribute(name.toString()).getAttributeInfo();
+		CompilerUtils.compileAttributeInfo(context, method, flags, info);
+		method.addInstruction(descending ? Opcode.ICONST_1 : Opcode.ICONST_0);
+		InterfaceConstant i = new InterfaceConstant(IQuery.class, "addOrderByClause", 
+				AttributeInfo.class, boolean.class, void.class);
+		method.addInstruction(Opcode.INVOKEINTERFACE, i);
 	}
 }

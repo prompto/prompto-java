@@ -1,5 +1,9 @@
 package prompto.type;
 
+import java.lang.reflect.Type;
+
+import prompto.runtime.Context;
+
 
 
 public class CodeType extends NativeType {
@@ -11,11 +15,11 @@ public class CodeType extends NativeType {
 	}
 	
 	private CodeType() {
-		super("Code");
+		super(Family.CODE);
 	}
 	
 	@Override
-	public Class<?> toJavaClass() {
+	public Type getJavaType(Context context) {
 		return null;
 	}
 }

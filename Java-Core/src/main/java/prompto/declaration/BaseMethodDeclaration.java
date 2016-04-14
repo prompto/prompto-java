@@ -1,12 +1,20 @@
 package prompto.declaration;
 
+import java.lang.reflect.Modifier;
+
+import prompto.argument.IArgument;
+import prompto.compiler.ClassFile;
+import prompto.compiler.CompilerException;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Descriptor;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.ArgumentList;
-import prompto.grammar.IArgument;
 import prompto.grammar.Identifier;
 import prompto.grammar.Specificity;
 import prompto.parser.Dialect;
@@ -18,7 +26,8 @@ import prompto.value.IValue;
 
 public abstract class BaseMethodDeclaration extends BaseDeclaration implements IMethodDeclaration {
 
-	ConcreteCategoryDeclaration memberOf;
+	CategoryDeclaration memberOf;
+	IMethodDeclaration closureOf;
 	ArgumentList arguments;
 	IType returnType;
 	
@@ -35,23 +44,33 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	}
 
 	@Override
-	public Type getDeclarationType() {
-		return Type.METHOD;
+	public DeclarationType getDeclarationType() {
+		return DeclarationType.METHOD;
 	}
 	
 	@Override
-	public void setMemberOf(ConcreteCategoryDeclaration declaration) {
+	public void setMemberOf(CategoryDeclaration declaration) {
 		this.memberOf = declaration;
 	}
 	
 	@Override
-	public ConcreteCategoryDeclaration getMemberOf() {
+	public CategoryDeclaration getMemberOf() {
 		return memberOf;
 	}
 	
 	@Override
+	public void setClosureOf(IMethodDeclaration declaration) {
+		this.closureOf = declaration;
+	}
+	
+	@Override
+	public IMethodDeclaration getClosureOf() {
+		return closureOf;
+	}
+	
+	@Override
 	public String getSignature(Dialect dialect) {
-		StringBuilder sb = new StringBuilder(getIdentifier().toString());
+		StringBuilder sb = new StringBuilder(getId().toString());
 		sb.append('(');
 		for(IArgument arg : arguments) {
 			sb.append(arg.getSignature(dialect));
@@ -85,12 +104,12 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	}
 
 	@Override
-	public void register(Context context) throws SyntaxError {
+	public void register(Context context) {
 		context.registerDeclaration(this);
 	}
 	
 	@Override
-	public void registerArguments (Context context) throws SyntaxError {
+	public void registerArguments (Context context) {
 		if(arguments!=null)
 			arguments.register(context);
 	}
@@ -111,7 +130,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 			registerArguments(local);
 			ArgumentAssignmentList assignmentsList = new ArgumentAssignmentList(assignments);
 			for(IArgument argument : arguments) {
-				ArgumentAssignment assignment = assignmentsList.find(argument.getIdentifier());
+				ArgumentAssignment assignment = assignmentsList.find(argument.getId());
 				if(assignment==null) {
 					IExpression expression = argument.getDefaultExpression();
 					if(expression!=null)
@@ -129,17 +148,62 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 		}
 	}
 	
-	boolean isAssignableTo(Context context, IArgument argument, ArgumentAssignment assignment, boolean checkInstance) {
-		return computeSpecificity(context, argument, assignment, checkInstance)!=Specificity.INCOMPATIBLE;
+	@Override
+	public boolean isAssignableFrom(Context context, ArgumentAssignmentList assignments) {
+		try {
+			Context local = context.newLocalContext();
+			registerArguments(local);
+			ArgumentAssignmentList assignmentsList = new ArgumentAssignmentList(assignments);
+			for(IArgument argument : arguments) {
+				ArgumentAssignment assignment = assignmentsList.find(argument.getId());
+				if(assignment==null) {
+					IExpression expression = argument.getDefaultExpression();
+					if(expression!=null)
+						assignment = new ArgumentAssignment(argument, expression);
+				}
+				if(assignment==null) // missing argument
+					return false;
+				if(!isAssignableFrom(local,argument,assignment))
+					return false;
+				assignmentsList.remove(assignment);
+			}
+			return assignmentsList.isEmpty();
+		} catch (SyntaxError e) {
+			return false;
+		}
 	}
 	
+	boolean isAssignableTo(Context context, IArgument argument, ArgumentAssignment assignment, 
+			boolean useInstance) {
+		Specificity spec = computeSpecificity(context, argument, assignment, false, useInstance);
+		return spec.isAssignable();
+	}
+	
+	boolean isAssignableFrom(Context context, IArgument argument, ArgumentAssignment assignment) {
+		try {
+			IType required = argument.getType(context);
+			IType actual = assignment.getExpression().check(context);
+			if(actual.equals(required)
+					|| actual.isAssignableTo(context, required)
+					|| required.isAssignableTo(context, actual))
+				return true;
+			actual = assignment.resolve(context, this, false).check(context);
+			return actual.equals(required)
+					|| actual.isAssignableTo(context, required)
+					|| required.isAssignableTo(context, actual);
+		} catch(PromptoError error) {
+			return false;
+		}
+	}
+
 	@Override
-	public Specificity computeSpecificity(Context context, IArgument argument, ArgumentAssignment assignment,boolean checkInstance) {
+	public Specificity computeSpecificity(Context context, IArgument argument, ArgumentAssignment assignment,
+				boolean allowAncestor, boolean useInstance) {
 		try {
 			IType required = argument.getType(context);
 			IType actual = assignment.getExpression().check(context);
 			// retrieve actual runtime type
-			if(checkInstance && actual instanceof CategoryType) {
+			if(useInstance && actual instanceof CategoryType) {
 				// TODO: potential side effects here with function called multiple times
 				IValue value = assignment.getExpression().interpret(context.getCallingContext());
 				if(value instanceof IInstance)
@@ -149,7 +213,9 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 				return Specificity.EXACT;
 			if(actual.isAssignableTo(context, required)) 
 				return Specificity.INHERITED;
-			actual = assignment.resolve(context,this,checkInstance).check(context);
+			if(allowAncestor && required.isAssignableTo(context, actual)) 
+				return Specificity.ANCESTOR;
+			actual = assignment.resolve(context, this, useInstance).check(context);
 			if(actual.isAssignableTo(context, required))
 				return Specificity.RESOLVED;
 		} catch(PromptoError error) {
@@ -165,6 +231,42 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	@Override
 	public boolean isEligibleAsMain() {
 		return false;
+	}
+	
+	@Override
+	public void compilePrototype(Context context, ClassFile classFile) {
+		try {
+			context = prepareContext(context);
+			IType returnType = check(context);
+			MethodInfo method = createMethodInfo(context, classFile, returnType, getName());
+			method.addModifier(Modifier.ABSTRACT);
+		} catch (PromptoError e) {
+			throw new CompilerException(e);
+		}
+	}
+
+	protected Context prepareContext(Context context) {
+		if(context.isGlobalContext()) {
+			// coming from nowhere, so need a clean context in which to register arguments
+			context = context.newLocalContext();
+			registerArguments(context);
+		}
+		return context;
+	}
+	
+	protected MethodInfo createMethodInfo(Context context, ClassFile classFile, IType returnType, String methodName) {
+		Descriptor.Method proto = CompilerUtils.createMethodDescriptor(context, arguments, returnType);
+		MethodInfo method = classFile.newMethod(methodName, proto); 
+		return method;
+	}
+
+	@Override
+	public void compileAssignments(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments) {
+		boolean isFirst = true;
+		for(IArgument arg : arguments.stripOutTemplateArguments()) {
+			arg.compileAssignment(context, method, flags, assignments, isFirst);
+			isFirst = false;
+		}
 	}
 }
 

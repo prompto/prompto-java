@@ -4,13 +4,14 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
+import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.IterableWithLength;
 import prompto.runtime.Context;
 import prompto.store.IStored;
-import prompto.store.IStoredIterator;
+import prompto.store.IStoredIterable;
 import prompto.type.CategoryType;
 import prompto.type.CursorType;
 import prompto.type.IType;
@@ -18,51 +19,54 @@ import prompto.type.IterableType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
-public class Cursor extends BaseValue implements IIterable<IValue>, Iterable<IValue>, Iterator<IValue> {
+public class Cursor extends BaseValue implements IIterable<IValue>, IterableWithLength<IValue> {
 
 	Context context;
-	IStoredIterator documents;
+	IStoredIterable iterable;
 	
-	public Cursor(Context context, IType itemType, IStoredIterator documents) {
+	public Cursor(Context context, IType itemType, IStoredIterable documents) {
 		super(new CursorType(itemType));
 		this.context = context;
-		this.documents = documents;
+		this.iterable = documents;
 	}
 
 	@Override
-	public boolean isEmpty() {
-		return length()==0;
+	public Object getStorableData() {
+		throw new UnsupportedOperationException(); // can't be stored
+	}
+	
+	@Override
+	public Long getLength() {
+		return iterable.length();
 	}
 
 	@Override
-	public long length() {
-		return documents.length();
-	}
-
-	@Override
-	public Iterable<IValue> getIterable(Context context) {
+	public IterableWithLength<IValue> getIterable(Context context) {
 		return this;
 	}
 	
 	@Override 
 	public Iterator<IValue> iterator() {
-		return this;
-	}
-	
-	@Override
-	public boolean hasNext() {
-		return documents.hasNext();
-	}
-	
-	@Override
-	public IValue next() {
-		try {
-			IStored stored = documents.next();
-			CategoryType itemType = readItemType(stored);
-			return itemType.newInstance(context, stored);
-		} catch (PromptoError e) {
-			throw new RuntimeException(e);
-		}
+		return new Iterator<IValue>() {
+			
+			Iterator<IStored> iterator = iterable.iterator();
+			
+			@Override
+			public boolean hasNext() {
+				return iterator.hasNext();
+			}
+			
+			@Override
+			public IValue next() {
+				try {
+					IStored stored = iterator.next();
+					CategoryType itemType = readItemType(stored);
+					return itemType.newInstance(context, stored);
+				} catch (PromptoError e) {
+					throw new RuntimeException(e);
+				}
+			}
+		};
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -77,20 +81,21 @@ public class Cursor extends BaseValue implements IIterable<IValue>, Iterable<IVa
 	}
 
 	@Override
-	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
+	public IValue getMember(Context context, Identifier id, boolean autoCreate) {
 		String name = id.toString();
 		if ("length".equals(name))
-			return new Integer(length());
+			return new Integer(getLength());
 		else
-			throw new InvalidDataError("No such member:" + name);
+			throw new SyntaxError("No such member:" + name);
 	}
 
 	@Override
-	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
+	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) {
 		try {
 			generator.writeStartArray();
-			while(hasNext())
-				next().toJson(context, generator, null, null);
+			Iterator<IValue> iter = iterator();
+			while(iter.hasNext())
+				iter.next().toJson(context, generator, null, null);
 			generator.writeEndArray();
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());

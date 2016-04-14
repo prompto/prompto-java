@@ -5,9 +5,10 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import prompto.argument.CategoryArgument;
+import prompto.argument.ExtendedArgument;
+import prompto.argument.IArgument;
 import prompto.declaration.DeclarationList;
-import prompto.grammar.CategoryArgument;
-import prompto.grammar.IArgument;
 import prompto.grammar.Identifier;
 import prompto.type.AnyType;
 import prompto.type.BooleanType;
@@ -40,7 +41,7 @@ public class TestAnonymousTypes extends BaseEParserTest {
 	@Test
 	public void testAnonymousAnyType() throws Exception {
 		// any x
-		IArgument argument = new CategoryArgument(AnyType.instance(), new Identifier("x"), null);
+		IArgument argument = new CategoryArgument(AnyType.instance(), new Identifier("x"));
 		argument.register(context);
 		IType st = argument.getType(context);
 		assertTrue(st instanceof AnyType);
@@ -62,7 +63,7 @@ public class TestAnonymousTypes extends BaseEParserTest {
 	public void testAnonymousAnyTypeWithAttribute() throws Exception {
 		// any x with attribute: name
 		IdentifierList list = new IdentifierList(new Identifier("name"));
-		IArgument argument = new CategoryArgument(AnyType.instance(), new Identifier("x"), list);
+		IArgument argument = new ExtendedArgument(AnyType.instance(), new Identifier("x"), list);
 		argument.register(context);
 		IType st = argument.getType(context);
 		assertTrue(st instanceof CategoryType);
@@ -83,7 +84,7 @@ public class TestAnonymousTypes extends BaseEParserTest {
 	@Test
 	public void testAnonymousCategoryType() throws Exception {
 		// Root x
-		IArgument argument = new CategoryArgument(new CategoryType(new Identifier("Root")), new Identifier("x"), null);
+		IArgument argument = new CategoryArgument(new CategoryType(new Identifier("Root")), new Identifier("x"));
 		argument.register(context);
 		IType st = argument.getType(context);
 		assertTrue(st instanceof CategoryType);
@@ -105,7 +106,7 @@ public class TestAnonymousTypes extends BaseEParserTest {
 	public void testAnonymousCategoryTypeWithAttribute() throws Exception {
 		// Root x with attribute: name
 		IdentifierList list = new IdentifierList(new Identifier("name"));
-		IArgument argument = new CategoryArgument(new CategoryType(new Identifier("Root")), new Identifier("test"), list);
+		IArgument argument = new ExtendedArgument(new CategoryType(new Identifier("Root")), new Identifier("test"), list);
 		argument.register(context);
 		IType st = argument.getType(context);
 		assertTrue(st instanceof CategoryType);

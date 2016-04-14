@@ -1,13 +1,15 @@
 package prompto.value;
 
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 
-/* a value which can only be determined when expression is interpreted in specific context */
+/* a value which can only be determined when expression is interpreted in a specific context */
 public class ContextualExpression extends BaseValue implements IExpression {
 
 	Context calling;
@@ -25,13 +27,18 @@ public class ContextualExpression extends BaseValue implements IExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return expression.check(this.calling);
 	}
 
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		return expression.interpret(this.calling);
+	}
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		return expression.compile(this.calling, method, flags);
 	}
 
 }

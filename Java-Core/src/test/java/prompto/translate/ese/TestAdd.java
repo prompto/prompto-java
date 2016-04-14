@@ -52,6 +52,11 @@ public class TestAdd extends BaseEParserTest {
 	}
 
 	@Test
+	public void testAddTextCharacter() throws Exception {
+		compareResourceESE("add/addTextCharacter.pec");
+	}
+
+	@Test
 	public void testAddTextDecimal() throws Exception {
 		compareResourceESE("add/addTextDecimal.pec");
 	}

@@ -52,6 +52,11 @@ public class TestAdd extends BaseOParserTest {
 	}
 
 	@Test
+	public void testAddTextCharacter() throws Exception {
+		compareResourceOSO("add/addTextCharacter.poc");
+	}
+
+	@Test
 	public void testAddTextDecimal() throws Exception {
 		compareResourceOSO("add/addTextDecimal.poc");
 	}

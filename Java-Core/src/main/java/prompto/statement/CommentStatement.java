@@ -1,7 +1,9 @@
 package prompto.statement;
 
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.type.VoidType;
@@ -18,7 +20,7 @@ public class CommentStatement extends BaseStatement {
 	}
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return VoidType.instance();
 	}
 
@@ -69,4 +71,9 @@ public class CommentStatement extends BaseStatement {
 			return line;
 	}
 
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		// nathing to do
+		return new ResultInfo(void.class);
+	}
 }

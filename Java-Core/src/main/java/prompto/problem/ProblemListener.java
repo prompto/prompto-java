@@ -33,42 +33,42 @@ public class ProblemListener implements ANTLRErrorListener, IProblemListener {
 	}
 	
 	@Override
-	public void reportDuplicate(String name, ISection section, ISection existing) throws SyntaxError {
+	public void reportDuplicate(String name, ISection section, ISection existing) {
 		throw new SyntaxError("Duplicate name: \"" + name + "\"");
 	}
 	
 	@Override
-	public void reportIllegalNonBoolean(ISection section, IType type) throws SyntaxError {
-		throw new SyntaxError("Illegal expression type, expected Boolean, got:" + type.getId());
+	public void reportIllegalNonBoolean(ISection section, IType type) {
+		throw new SyntaxError("Illegal expression type, expected Boolean, got:" + type.getTypeName());
 	}
 	
 	@Override
-	public void reportIllegalReturn(ISection section) throws SyntaxError {
+	public void reportIllegalReturn(ISection section) {
 		throw new SyntaxError("Illegal return statement in test method!");
 	}
 	
 	@Override
-	public void reportUnknownIdentifier(String name, ISection section) throws SyntaxError {
+	public void reportUnknownIdentifier(String name, ISection section) {
 		throw new SyntaxError("Unknown identifier: " + name);
 	}
 	
 	@Override
-	public void reportUnknownAttribute(String name, ISection section) throws SyntaxError {
+	public void reportUnknownAttribute(String name, ISection section) {
 		throw new SyntaxError("Unknown attribute: \"" + name + "\"");
 	}
 	
 	@Override
-	public void reportUnknownMethod(String name, ISection section) throws SyntaxError {
+	public void reportUnknownMethod(String name, ISection section) {
 		throw new SyntaxError("Unknown method: \"" + name + "\"");
 	}
 	
 	@Override
-	public void reportIllegalComparison(IType type, IType other, ISection section) throws SyntaxError {
-		throw new SyntaxError("Cannot compare " +type.getId() + " to " + other.getId());
+	public void reportIllegalComparison(IType type, IType other, ISection section) {
+		throw new SyntaxError("Cannot compare " +type.getTypeName() + " to " + other.getTypeName());
 	}
 	
 	@Override
-	public void reportIllegalMember(String name, ISection section) throws SyntaxError {
+	public void reportIllegalMember(String name, ISection section) {
 		throw new SyntaxError("Cannot read member from " + name);
 	}
 }

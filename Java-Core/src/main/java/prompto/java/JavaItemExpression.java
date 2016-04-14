@@ -1,6 +1,5 @@
 package prompto.java;
 
-import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -15,7 +14,7 @@ public class JavaItemExpression extends JavaSelectorExpression {
 	}
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -12,7 +12,7 @@ public class TypeMap extends HashMap<Identifier, IType> {
 
 	private static final long serialVersionUID = 1L;
 
-	public IType inferType(Context context) throws SyntaxError {
+	public IType inferType(Context context) {
 		if(size()==0)
 			return VoidType.instance();
 		IType type = null;
@@ -25,12 +25,12 @@ public class TypeMap extends HashMap<Identifier, IType> {
 			else if(type.isAssignableTo(context, t))
 				type = t;
 			else
-				throw new SyntaxError("Incompatible types: " + type.getId() + " and " + t.getId());
+				throw new SyntaxError("Incompatible types: " + type.getTypeName() + " and " + t.getTypeName());
 		}
 		// second pass: check compatible
 		for(IType t : values()) {
-			if(!t.isAssignableTo(context, type))
-				throw new SyntaxError("Incompatible types: " + type.getId() + " and " + t.getId());
+			if(t!=type && !t.isAssignableTo(context, type))
+				throw new SyntaxError("Incompatible types: " + type.getTypeName() + " and " + t.getTypeName());
 		}
 		return type;
 	}

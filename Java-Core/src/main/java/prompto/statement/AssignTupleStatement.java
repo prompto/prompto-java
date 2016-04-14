@@ -1,10 +1,21 @@
 package prompto.statement;
 
+import prompto.compiler.ClassConstant;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.IVerifierEntry.VerifierType;
+import prompto.compiler.IntConstant;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.StackLocal;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoTuple;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.type.AnyType;
@@ -64,10 +75,10 @@ public class AssignTupleStatement extends SimpleStatement {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		IType type = expression.check(context);
 		if(type!=TupleType.instance())
-			throw new SyntaxError("Expecting a tuple expression, got " + type.getId());
+			throw new SyntaxError("Expecting a tuple expression, got " + type.getTypeName());
 		for(Identifier name : names) {
 			INamed actual = context.getRegistered(name);
 			if(actual==null)
@@ -97,5 +108,29 @@ public class AssignTupleStatement extends SimpleStatement {
 		return null;
 	}
 
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		ResultInfo info = expression.compile(context, method, flags);
+		if(PromptoTuple.class!=info.getType())
+			throw new SyntaxError("Expecting a Tuple!");
+		for(int i=0;i<names.size();i++)
+			compileAssignTupleItem(context, method, flags, i);
+		method.addInstruction(Opcode.POP);
+		return new ResultInfo(void.class);
+	}
+
+	private void compileAssignTupleItem(Context context, MethodInfo method, Flags flags, int i) {
+		method.addInstruction(Opcode.DUP);
+		if(i<6) {
+			Opcode opcode = Opcode.values()[i + Opcode.ICONST_0.ordinal()];
+			method.addInstruction(opcode);
+		} else
+			method.addInstruction(Opcode.LDC, new IntConstant(i));
+		MethodConstant m = new MethodConstant(PromptoTuple.class, "get", int.class, Object.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+		Identifier name = names.get(i);
+		StackLocal local = method.registerLocal(name.toString(), VerifierType.ITEM_Object, new ClassConstant(Object.class));
+		CompilerUtils.compileASTORE(method, local);
+	}
 
 }

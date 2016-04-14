@@ -1,20 +1,20 @@
 package prompto.type;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import java.lang.reflect.Type;
+import java.util.Comparator;
 
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
-import prompto.value.IContainer;
 import prompto.value.IValue;
 import prompto.value.Integer;
 import prompto.value.IntegerRange;
-import prompto.value.ListValue;
-import prompto.value.Range;
+import prompto.value.RangeBase;
 
-public class IntegerType extends NativeType {
+import com.fasterxml.jackson.databind.JsonNode;
+
+public class IntegerType extends NativeType implements INumberType {
 
 	static IntegerType instance = new IntegerType();
 	
@@ -23,11 +23,11 @@ public class IntegerType extends NativeType {
 	}
 	
 	private IntegerType() {
-		super("Integer");
+		super(Family.INTEGER);
 	}
 	
 	@Override
-	public Class<?> toJavaClass() {
+	public Type getJavaType(Context context) {
 		return Long.class;
 	}
 	
@@ -37,7 +37,7 @@ public class IntegerType extends NativeType {
 	}
 	
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkAdd(Context context, IType other, boolean tryReverse) {
 		if(other instanceof IntegerType)
 			return this;
 		if(other instanceof DecimalType)
@@ -46,7 +46,7 @@ public class IntegerType extends NativeType {
 	}
 	
 	@Override
-	public IType checkSubstract(Context context, IType other) throws SyntaxError {
+	public IType checkSubstract(Context context, IType other) {
 		if(other instanceof IntegerType)
 			return this;
 		if(other instanceof DecimalType)
@@ -55,7 +55,7 @@ public class IntegerType extends NativeType {
 	}
 	
 	@Override
-	public IType checkMultiply(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkMultiply(Context context, IType other, boolean tryReverse) {
 		if(other instanceof IntegerType)
 			return this;
 		if(other instanceof DecimalType)
@@ -72,7 +72,7 @@ public class IntegerType extends NativeType {
 	}
 
 	@Override
-	public IType checkDivide(Context context, IType other) throws SyntaxError {
+	public IType checkDivide(Context context, IType other) {
 		if(other instanceof IntegerType)
 			return DecimalType.instance();
 		if(other instanceof DecimalType)
@@ -81,21 +81,21 @@ public class IntegerType extends NativeType {
 	}
 	
 	@Override
-	public IType checkIntDivide(Context context, IType other) throws SyntaxError {
+	public IType checkIntDivide(Context context, IType other) {
 		if(other instanceof IntegerType)
 			return this;
 		return super.checkIntDivide(context, other);
 	}
 
 	@Override
-	public IType checkModulo(Context context, IType other) throws SyntaxError {
+	public IType checkModulo(Context context, IType other) {
 		if(other instanceof IntegerType)
 			return this;
 		return super.checkModulo(context, other);
 	}
 
 	@Override
-	public IType checkMember(Context context, Identifier name) throws SyntaxError {
+	public IType checkMember(Context context, Identifier name) {
 		if(name.equals("min"))
 			return this;
 		else if(name.equals("max"))
@@ -115,7 +115,7 @@ public class IntegerType extends NativeType {
 	}
 	
 	@Override
-	public IType checkCompare(Context context, IType other, ISection section) throws SyntaxError {
+	public IType checkCompare(Context context, IType other, ISection section) {
 		if(other instanceof IntegerType)
 			return BooleanType.instance();
 		if(other instanceof DecimalType)
@@ -124,26 +124,31 @@ public class IntegerType extends NativeType {
 	}
 	
 	@Override
-	public IType checkRange(Context context, IType other) throws SyntaxError {
+	public IType checkRange(Context context, IType other) {
 		if(other instanceof IntegerType)
 			return new RangeType(this);
 		return super.checkRange(context, other);
 	}
 	
 	@Override
-	public Range<?> newRange(Object left, Object right) throws SyntaxError {
+	public RangeBase<?> newRange(Object left, Object right) {
 		if(left instanceof Integer && right instanceof Integer)
 			return new IntegerRange((Integer)left,(Integer)right);
 		return super.newRange(left, right);
 	}
 
 	@Override
-	public ListValue sort(Context context, IContainer<IValue> list) throws PromptoError {
-		return this.doSort(context,list);
+	public Comparator<Integer> getComparator() {
+		return new Comparator<Integer>() {
+			@Override
+			public int compare(Integer o1, Integer o2) {
+				return java.lang.Long.compare(o1.longValue(), o2.longValue());
+			}
+		};
 	}
-	
+
 	@Override
-	public IValue convertJavaValueToPromptoValue(Object value) {
+	public IValue convertJavaValueToPromptoValue(Context context, Object value) {
         if (value instanceof Number)
             return new Integer(((Number)value).longValue());
         else

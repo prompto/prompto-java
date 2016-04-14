@@ -1,21 +1,17 @@
 package prompto.type;
 
+import java.lang.reflect.Type;
 import java.util.Comparator;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
-import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.value.Decimal;
-import prompto.value.IContainer;
-import prompto.value.INumber;
 import prompto.value.IValue;
-import prompto.value.ListValue;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 
-public class DecimalType extends NativeType {
+public class DecimalType extends NativeType implements INumberType {
 
 	static DecimalType instance = new DecimalType();
 	
@@ -24,11 +20,11 @@ public class DecimalType extends NativeType {
 	}
 	
 	private DecimalType() {
-		super("Decimal");
+		super(Family.DECIMAL);
 	}
 	
 	@Override
-	public Class<?> toJavaClass() {
+	public Type getJavaType(Context context) {
 		return Double.class;
 	}
 	
@@ -39,7 +35,7 @@ public class DecimalType extends NativeType {
 	}
 	
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkAdd(Context context, IType other, boolean tryReverse) {
 		if(other instanceof IntegerType)
 			return this;
 		if(other instanceof DecimalType)
@@ -48,7 +44,7 @@ public class DecimalType extends NativeType {
 	}
 	
 	@Override
-	public IType checkSubstract(Context context, IType other) throws SyntaxError {
+	public IType checkSubstract(Context context, IType other) {
 		if(other instanceof IntegerType)
 			return this;
 		if(other instanceof DecimalType)
@@ -57,7 +53,7 @@ public class DecimalType extends NativeType {
 	}
 
 	@Override
-	public IType checkMultiply(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkMultiply(Context context, IType other, boolean tryReverse) {
 		if(other instanceof IntegerType)
 			return this;
 		if(other instanceof DecimalType)
@@ -66,7 +62,7 @@ public class DecimalType extends NativeType {
 	}
 
 	@Override
-	public IType checkDivide(Context context, IType other) throws SyntaxError {
+	public IType checkDivide(Context context, IType other) {
 		if(other instanceof IntegerType)
 			return this;
 		if(other instanceof DecimalType)
@@ -75,14 +71,14 @@ public class DecimalType extends NativeType {
 	}
 	
 	@Override
-	public IType checkIntDivide(Context context, IType other) throws SyntaxError {
+	public IType checkIntDivide(Context context, IType other) {
 		if(other instanceof IntegerType)
 			return other;
 		return super.checkIntDivide(context, other);
 	}
 	
 	@Override
-	public IType checkModulo(Context context, IType other) throws SyntaxError {
+	public IType checkModulo(Context context, IType other) {
 		if(other instanceof IntegerType)
 			return this;
 		if(other instanceof DecimalType)
@@ -91,26 +87,26 @@ public class DecimalType extends NativeType {
 	}
 
 	@Override
-	public IType checkCompare(Context context, IType other, ISection section) throws SyntaxError {
+	public IType checkCompare(Context context, IType other, ISection section) {
 		if(other instanceof IntegerType)
 			return BooleanType.instance();
 		if(other instanceof DecimalType)
 			return BooleanType.instance();
 		return super.checkCompare(context, other, section);
 	}
-	
+
 	@Override
-	public ListValue sort(Context context, IContainer<IValue> list) throws PromptoError {
-		return this.<INumber>doSort(context,list,new Comparator<INumber>() {
+	public Comparator<Decimal> getComparator() {
+		return new Comparator<Decimal>() {
 			@Override
-			public int compare(INumber o1, INumber o2) {
-				return o1.compareTo(o2);
-			};
-		});
+			public int compare(Decimal o1, Decimal o2) {
+				return java.lang.Double.compare(o1.doubleValue(), o2.doubleValue());
+			}
+		};
 	}
 
 	@Override
-	public IValue convertJavaValueToPromptoValue(Object value) {
+	public IValue convertJavaValueToPromptoValue(Context context, Object value) {
         if (value instanceof Number)
             return new Decimal(((Number)value).doubleValue());
         else

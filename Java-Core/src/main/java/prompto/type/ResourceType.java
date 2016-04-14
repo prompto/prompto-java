@@ -6,7 +6,7 @@ import prompto.runtime.Context;
 public class ResourceType extends CategoryType {
 
 	public ResourceType(Identifier name) {
-		super(name);
+		super(Family.RESOURCE, name);
 	}
 	
 	@Override
@@ -18,7 +18,7 @@ public class ResourceType extends CategoryType {
 		if(!(obj instanceof ResourceType))
 			return false;
 		ResourceType other = (ResourceType)obj;
-		return this.getId().equals(other.getId());
+		return this.getTypeNameId().equals(other.getTypeNameId());
 	}
 	
 	@Override

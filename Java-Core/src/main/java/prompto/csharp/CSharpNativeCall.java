@@ -1,7 +1,6 @@
 package prompto.csharp;
 
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.statement.NativeCall;
 import prompto.type.IType;
@@ -24,7 +23,7 @@ public class CSharpNativeCall extends NativeCall {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return VoidType.instance(); // TODO
 	}
 	

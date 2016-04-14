@@ -18,14 +18,16 @@ import prompto.runtime.Context;
 import prompto.store.IStore;
 import prompto.type.BooleanType;
 import prompto.type.DateTimeType;
+import prompto.type.IType;
 import prompto.type.ListType;
 import prompto.type.TextType;
 import prompto.utils.IdentifierList;
+import prompto.utils.Utils;
 
 // use a dedicated bootstrapper to ensure app and code store contexts do not spill
 public class CodeStoreBootstrapper {
 
-	public static Context bootstrap(IStore store, ICodeStore runtime) throws PromptoError {
+	public static Context bootstrap(IStore<?> store, ICodeStore runtime) throws PromptoError {
 		System.out.println("Initializing code store...");
 		CodeStoreBootstrapper bs = new CodeStoreBootstrapper(store, runtime);
 		bs.bootstrap();
@@ -34,9 +36,9 @@ public class CodeStoreBootstrapper {
 	
 	Context context = Context.newGlobalContext();
 	ICodeStore next;
-	IStore store;
+	IStore<?> store;
 	
-	private CodeStoreBootstrapper(IStore store, ICodeStore runtime) {
+	private CodeStoreBootstrapper(IStore<?> store, ICodeStore runtime) {
 		this.store = store;
 		this.next = new ResourceCodeStore(runtime, ModuleType.LIBRARY, "CodeStore.pec", "1.0.0");
 	}
@@ -81,15 +83,16 @@ public class CodeStoreBootstrapper {
 		}
 	}
 
-	private Collection<AttributeDeclaration> getMinimalColumns(IStore store) {
+	private Collection<AttributeDeclaration> getMinimalColumns(IStore<?> store) {
+		IType dbIdIType = Utils.typeToIType(store.getDbIdClass());
 		List<AttributeDeclaration> columns = new ArrayList<AttributeDeclaration>();
 		// attributes with reserved names, the below declarations will be used
-		columns.add(new AttributeDeclaration(IStore.dbIdIdentifier, store.getDbIdType()));
+		columns.add(new AttributeDeclaration(new Identifier(IStore.dbIdName), dbIdIType));
 		columns.add(new AttributeDeclaration(new Identifier("storable"), BooleanType.instance()));
 		columns.add(new AttributeDeclaration(new Identifier("category"), 
 				new ListType(TextType.instance()), new IdentifierList(new Identifier("key"))));
 		// also add 'module' to avoid dependency on DevCenter
-		columns.add(new AttributeDeclaration(new Identifier("module"), store.getDbIdType()));
+		columns.add(new AttributeDeclaration(new Identifier("module"), dbIdIType));
 		// more required attributes which will be overridden by a prompto declaration
 		columns.add(new AttributeDeclaration(new Identifier("author"), TextType.instance()));
 		columns.add(new AttributeDeclaration(new Identifier("timeStamp"), DateTimeType.instance()));

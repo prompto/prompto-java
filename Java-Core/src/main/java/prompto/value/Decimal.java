@@ -2,16 +2,23 @@ package prompto.value;
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.ShortOperand;
+import prompto.compiler.StackState;
 import prompto.error.DivideByZeroError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
+import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
-import prompto.store.IStorable;
 import prompto.type.DecimalType;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 public class Decimal extends BaseValue implements INumber, Comparable<INumber>, IMultiplyable {
 	
@@ -25,93 +32,153 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 		super(DecimalType.instance());
 		this.value = value;
 	}
+	
+	@Override
+	public Double getStorableData() {
+		return value;
+	}
 
-	public long IntegerValue() {
+	public long longValue() {
 		return (long) value;
 	}
 
-	public double DecimalValue() {
+	public double doubleValue() {
 		return value;
 	}
 
 	@Override
-	public IValue Add(Context context, IValue value) throws SyntaxError {
+	public IValue plus(Context context, IValue value) {
 		if (value instanceof Integer)
-			return new Decimal(this.value + ((Integer) value).IntegerValue());
+			return new Decimal(this.value + ((Integer) value).longValue());
 		else if (value instanceof Decimal)
-			return new Decimal(this.value + ((Decimal) value).DecimalValue());
+			return new Decimal(this.value + ((Decimal) value).doubleValue());
 		else
 			throw new SyntaxError("Illegal: Decimal + " + value.getClass().getSimpleName());
 	}
 
+	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		return compileOperation(context, method, flags.withDecimal(true).withOpcode(Opcode.DADD), left, exp);
+	}
+
+	private static ResultInfo compileOperation(Context context, MethodInfo method, Flags flags, ResultInfo left, IExpression exp) {
+		CompilerUtils.numberToPrimitive(method, left, flags.isDecimal());
+		ResultInfo right = exp.compile(context, method, flags);
+		CompilerUtils.numberToPrimitive(method, right, flags.isDecimal());
+		method.addInstruction(flags.opcode());
+		if(flags.toPrimitive())
+			return new ResultInfo(double.class);
+		else if(flags.isDecimal())
+			return CompilerUtils.doubleToDouble(method);
+		else
+			return CompilerUtils.longToDouble(method);
+	}
+
+
 	@Override
-	public IValue Subtract(Context context, IValue value) throws SyntaxError {
+	public IValue minus(Context context, IValue value) {
 		if (value instanceof Integer)
-			return new Decimal(this.value - ((Integer) value).IntegerValue());
+			return new Decimal(this.value - ((Integer) value).longValue());
 		else if (value instanceof Decimal)
-			return new Decimal(this.value - ((Decimal) value).DecimalValue());
+			return new Decimal(this.value - ((Decimal) value).doubleValue());
 		else
 			throw new SyntaxError("Illegal: Decimal - " + value.getClass().getSimpleName());
 	}
 
+	public static ResultInfo compileMinus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		return compileOperation(context, method, flags.withDecimal(true).withOpcode(Opcode.DSUB), left, exp);
+	}
+
 	@Override
-	public IValue Multiply(Context context, IValue value) throws SyntaxError {
+	public IValue multiply(Context context, IValue value) {
 		if (value instanceof Integer)
-			return new Decimal(this.DecimalValue() * ((Integer) value).IntegerValue());
+			return new Decimal(this.doubleValue() * ((Integer) value).longValue());
 		else if (value instanceof Decimal)
-			return new Decimal(this.DecimalValue() * ((Decimal) value).DecimalValue());
+			return new Decimal(this.doubleValue() * ((Decimal) value).doubleValue());
 		else
 			throw new SyntaxError("Illegal: Decimal * " + value.getClass().getSimpleName());
 	}
 
+	public static ResultInfo compileMultiply(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		return compileOperation(context, method, flags.withDecimal(true).withOpcode(Opcode.DMUL), left, exp);
+	}
+
 	@Override
-	public IValue Divide(Context context, IValue value) throws PromptoError {
+	public IValue divide(Context context, IValue value) throws PromptoError {
 		if (value instanceof INumber) {
-			if (((INumber) value).DecimalValue() == 0.0)
+			if (((INumber) value).doubleValue() == 0.0)
 				throw new DivideByZeroError();
 			else
-				return new Decimal(this.DecimalValue() / ((INumber) value).DecimalValue());
+				return new Decimal(this.doubleValue() / ((INumber) value).doubleValue());
 		} else
 			throw new SyntaxError("Illegal: Decimal / " + value.getClass().getSimpleName());
 	}
 	
+	public static ResultInfo compileDivide(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		return compileOperation(context, method, flags.withDecimal(true).withOpcode(Opcode.DDIV), left, exp);
+	}
+
 	@Override
-	public IValue IntDivide(Context context, IValue value) throws PromptoError {
+	public IValue intDivide(Context context, IValue value) throws PromptoError {
 		if (value instanceof Integer) {
-			if (((Integer) value).IntegerValue() == 0)
+			if (((Integer) value).longValue() == 0)
 				throw new DivideByZeroError();
 			else
-				return new Integer(this.IntegerValue() / ((Integer) value).IntegerValue());
+				return new Integer(this.longValue() / ((Integer) value).longValue());
 		} else
 			throw new SyntaxError("Illegal: Decimal \\ " + value.getClass().getSimpleName());
 	}
 
+	public static ResultInfo compileIntDivide(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		return compileOperation(context, method, flags.withDecimal(false).withOpcode(Opcode.LDIV), left, exp);
+	}
+
+
 	@Override
-	public IValue Modulo(Context context, IValue value) throws PromptoError {
+	public IValue modulo(Context context, IValue value) throws PromptoError {
 		if (value instanceof INumber) {
-			if (((INumber) value).DecimalValue() == 0.0)
+			if (((INumber) value).doubleValue() == 0.0)
 				throw new DivideByZeroError();
 			else
-				return new Decimal(this.DecimalValue() % ((INumber) value).DecimalValue());
+				return new Decimal(this.doubleValue() % ((INumber) value).doubleValue());
 		} else
 			throw new SyntaxError("Illegal: Decimal % " + value.getClass().getSimpleName());
 	}
 	
+	public static ResultInfo compileModulo(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		return compileOperation(context, method, flags.withDecimal(true).withOpcode(Opcode.DREM), left, exp);
+	}
+
+
 	public int compareTo(INumber obj) {
-		return Double.compare(value, obj.DecimalValue());
+		return Double.compare(value, obj.doubleValue());
 	}
 
 	@Override
-	public int CompareTo(Context context, IValue value) throws PromptoError {
+	public int compareTo(Context context, IValue value) throws PromptoError {
 		if (value instanceof INumber)
-			return Double.compare(this.value, ((INumber) value).DecimalValue());
+			return Double.compare(this.value, ((INumber) value).doubleValue());
 		else
 			throw new SyntaxError("Illegal comparison: Decimal and " + value.getClass().getSimpleName());
 
 	}
+	
+	public static ResultInfo compileCompareTo(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		CompilerUtils.numberTodouble(method, left);
+		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true));
+		CompilerUtils.numberTodouble(method, right);
+		method.addInstruction(Opcode.DCMPG);
+		return BaseValue.compileCompareToEpilogue(method, flags);
+	}
 
 	@Override
-	public Object ConvertTo(Class<?> type) {
+	public Object convertTo(Class<?> type) {
 		return value;
 	}
 
@@ -130,6 +197,28 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 			return false;
 	}
 	
+	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		left = CompilerUtils.numberTodouble(method, left);
+		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true));
+		right = CompilerUtils.numberTodouble(method, right);
+		method.addInstruction(Opcode.DCMPG);
+		Opcode opcode = flags.isReverse() ? Opcode.IFNE : Opcode.IFEQ;
+		method.addInstruction(opcode, new ShortOperand((short)7));
+		StackState branchState = method.captureStackState();
+		method.addInstruction(Opcode.ICONST_0);
+		method.addInstruction(Opcode.GOTO, new ShortOperand((short)4));
+		method.restoreFullStackState(branchState);
+		method.placeLabel(branchState);
+		method.addInstruction(Opcode.ICONST_1);
+		StackState lastState = method.captureStackState();
+		method.placeLabel(lastState);
+		if(flags.toPrimitive())
+			return new ResultInfo(boolean.class);
+		else
+			return CompilerUtils.booleanToBoolean(method);
+	}
+
 	@Override
 	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
 		try {
@@ -139,9 +228,17 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 		}
 	}
 
-	@Override
-	public void storeValue(Context context, String name, IStorable storable) throws PromptoError {
-		storable.setData(name, value);
+	public IValue negate() {
+		return new Decimal(-value);
+	}
+	
+	public static ResultInfo compileNegate(Context context, MethodInfo method, Flags flags, ResultInfo value) {
+		CompilerUtils.numberToPrimitive(method, value, true);
+		method.addInstruction(Opcode.DNEG);
+		if(flags.toPrimitive())
+			return new ResultInfo(double.class);
+		else
+			return CompilerUtils.doubleToDouble(method);
 	}
 
 }

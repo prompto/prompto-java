@@ -4,17 +4,27 @@ import java.io.IOException;
 import java.text.Collator;
 import java.util.Iterator;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.ShortOperand;
+import prompto.compiler.StackState;
 import prompto.error.IndexOutOfRangeError;
-import prompto.error.InvalidDataError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
+import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.IterableWithLength;
+import prompto.intrinsic.PromptoString;
 import prompto.runtime.Context;
-import prompto.store.IStorable;
 import prompto.type.TextType;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 
 public class Text extends BaseValue implements Comparable<Text>, IContainer<Character>, ISliceable<Character>, IMultiplyable {
@@ -26,59 +36,79 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 		this.value = value;
 	}
 
-	public String getValue() {
+	@Override
+	public String getStorableData() {
 		return value;
 	}
 	
 	@Override
-	public void storeValue(Context context, String name, IStorable storable) throws PromptoError {
-		storable.setData(name, value);
-	}
-		
-	@Override
-	public long length() {
+	public long getLength() {
 		return value.length();
 	}
 	
 	@Override
-	public boolean isEmpty() {
-		return value.isEmpty();
-	}
-
-	@Override
-	public IValue Add(Context context, IValue value) {
+	public IValue plus(Context context, IValue value) {
 		return new Text(this.value + value.toString());
 	}
 
+	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		exp.compile(context, method, flags.withPrimitive(false));
+		// convert right to String
+		MethodConstant oper = new MethodConstant(String.class, "valueOf", Object.class, String.class);
+		method.addInstruction(Opcode.INVOKESTATIC, oper);
+		// and call concat
+		oper = new MethodConstant(String.class, "concat", 
+				String.class, String.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return new ResultInfo(String.class);
+	}
+	
 	@Override
-	public IValue Multiply(Context context, IValue value) throws PromptoError {
+	public IValue multiply(Context context, IValue value) throws PromptoError {
 		if (value instanceof Integer) {
-			int count = (int) ((Integer) value).IntegerValue();
+			int count = (int) ((Integer) value).longValue();
 			if (count < 0)
 				throw new SyntaxError("Negative repeat count:" + count);
-			if (count == 0)
-				return new Text("");
-			if (count == 1)
-				return new Text(this.value);
-			char[] src = this.value.toCharArray();
-			char[] cc = new char[count * src.length];
-			for (int i = 0; i < count; i++)
-				System.arraycopy(src, 0, cc, i * src.length, src.length);
-			return new Text(new String(cc));
+			return new Text(PromptoString.multiply(this.value, count));
 		} else
 			throw new SyntaxError("Illegal: Chararacter * " + value.getClass().getSimpleName());
 	}
 
+	public static ResultInfo compileMultiply(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		ResultInfo right = exp.compile(context, method, flags);
+		if(Long.class==right.getType())
+			CompilerUtils.LongToint(method);
+		else if(long.class==right.getType())
+			CompilerUtils.longToint(method);
+		MethodConstant oper = new MethodConstant(PromptoString.class, 
+				"multiply", 
+				String.class, int.class, String.class);
+		method.addInstruction(Opcode.INVOKESTATIC, oper);
+		return new ResultInfo(String.class);
+	}
+	
+	
 	public int compareTo(Text obj) {
-		return value.compareTo(obj.getValue());
+		return value.compareTo(obj.value);
 	}
 
 	@Override
-	public int CompareTo(Context context, IValue value) throws PromptoError {
+	public int compareTo(Context context, IValue value) throws PromptoError {
 		if (value instanceof Text)
 			return this.value.compareTo(((Text) value).value);
 		else
 			throw new SyntaxError("Illegal comparison: Text + " + value.getClass().getSimpleName());
+	}
+	
+	public static ResultInfo compileCompareTo(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		exp.compile(context, method, flags);
+		IOperand oper = new MethodConstant(String.class, 
+				"compareTo", String.class, int.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return BaseValue.compileCompareToEpilogue(method, flags);
 	}
 
 	public boolean hasItem(Context context, IValue value) throws PromptoError {
@@ -91,32 +121,49 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	}
 
 	@Override
-	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
+	public IValue getMember(Context context, Identifier id, boolean autoCreate) {
 		String name = id.toString();
 		if ("length".equals(name))
 			return new Integer(value.length());
 		else
-			throw new InvalidDataError("No such member:" + name);
+			throw new SyntaxError("No such member:" + name);
 	}
 
 	public Character getItem(Context context, IValue index) throws PromptoError {
 		try {
 			if (index instanceof Integer)
-				return new Character(value.charAt((int) ((Integer) index).IntegerValue() - 1));
+				return new Character(value.charAt((int) ((Integer) index).longValue() - 1));
 			else
-				throw new InvalidDataError("No such item:" + index.toString());
+				throw new SyntaxError("No such item:" + index.toString());
 		} catch (IndexOutOfBoundsException e) {
 			throw new IndexOutOfRangeError();
 		}
 
 	}
 	
+	public static ResultInfo compileItem(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		ResultInfo right = exp.compile(context, method, flags);
+		if(Long.class==right.getType())
+			CompilerUtils.LongToint(method);
+		else if(long.class==right.getType())
+			CompilerUtils.longToint(method);
+		MethodConstant oper = new MethodConstant(String.class, 
+				"charAt", 
+				int.class, char.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		if(flags.toPrimitive())
+			return new ResultInfo(char.class);
+		else
+			return CompilerUtils.charToCharacter(method);
+	}
+	
 	@Override
-	public Iterable<Character> getIterable(Context context) {
+	public IterableWithLength<Character> getIterable(Context context) {
 		return new CharacterIterable(context);
 	}
 
-	class CharacterIterable implements Iterable<Character> {
+	class CharacterIterable implements IterableWithLength<Character> {
 
 		Context context;
 		
@@ -125,56 +172,113 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 		}
 		
 		@Override
-		public Iterator<Character> iterator() {
-			return new CharacterIterator();
+		public Long getLength() {
+			return (long)value.length();
 		}
 		
-		class CharacterIterator implements Iterator<Character> {
-			
-			int index = -1;
-			
-			@Override
-			public boolean hasNext() {
-				return index < value.length() - 1;
-			}
-			
-			@Override
-			public Character next() {
-				return new Character(value.charAt(++index));
-			}
-			
-			@Override
-			public void remove() {
-				throw new InternalError("Should never get there!");
-			}
-		}
+		@Override
+		public Iterator<Character> iterator() {
+			return new Iterator<Character>() {
+				int index = -1;
+				
+				@Override
+				public boolean hasNext() {
+					return index < value.length() - 1;
+				}
+				
+				@Override
+				public Character next() {
+					return new Character(value.charAt(++index));
+				}
+				
+				@Override
+				public void remove() {
+					throw new InternalError("Should never get there!");
+				}
+			};
+		};
 	}
 	
 	@Override
-	public Object ConvertTo(Class<?> type) {
+	public Object convertTo(Class<?> type) {
 		return value;
 	}
 
 	public ISliceable<Character> slice(Integer fi, Integer li) throws PromptoError {
-		int first = checkFirst(fi);
-		int last = checkLast(li);
+		int first = checkSliceFirst(fi);
+		int last = checkSliceLast(li);
 		return new Text(value.substring(first - 1, last ));
 	}
-
-	private int checkFirst(Integer fi) throws IndexOutOfRangeError {
-		int value = (fi == null) ? 1 : (int) fi.IntegerValue();
+	
+	private int checkSliceFirst(Integer fi) throws IndexOutOfRangeError {
+		int value = (fi == null) ? 1 : (int) fi.longValue();
 		if (value < 1 || value > this.value.length())
 			throw new IndexOutOfRangeError();
 		return value;
 	}
 
-	private int checkLast(Integer li) throws IndexOutOfRangeError {
-		int value = (li == null) ? this.value.length() : (int) li.IntegerValue();
+	private int checkSliceLast(Integer li) throws IndexOutOfRangeError {
+		int value = (li == null) ? this.value.length() : (int) li.longValue();
 		if (value < 0)
-			value = this.value.length() + 1 + (int) li.IntegerValue();
+			value = this.value.length() + 1 + (int) li.longValue();
 		if (value < 1 || value > this.value.length())
 			throw new IndexOutOfRangeError();
 		return value;
+	}
+
+	public static ResultInfo compileSlice(Context context, MethodInfo method, Flags flags, 
+			ResultInfo parent, IExpression first, IExpression last) {
+		compileTextSliceFirst(context, method, flags, first);
+		compileTextSliceLast(context, method, flags, last);
+		MethodConstant m = new MethodConstant(String.class, "substring", 
+				int.class, int.class, String.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+		return parent;
+	}
+	
+	private static void compileTextSliceFirst(Context context, MethodInfo method, Flags flags, IExpression first) {
+		if(first==null)
+			method.addInstruction(Opcode.ICONST_0);
+		else {
+			ResultInfo finfo = first.compile(context, method, flags.withPrimitive(true));
+			finfo = CompilerUtils.numberToint(method, finfo);
+			// convert from 1 based to 0 based
+			method.addInstruction(Opcode.ICONST_M1);
+			method.addInstruction(Opcode.IADD);
+		}
+	}
+
+	private static void compileTextSliceLast(Context context, MethodInfo method, Flags flags, IExpression last) {
+		// always compile last index since we need to manage negative values
+		compileSliceMaxIndex(method);
+		// stack is now obj, int, int (max)
+		if(last!=null) {
+			ResultInfo linfo = last.compile(context, method, flags.withPrimitive(true));
+			linfo = CompilerUtils.numberToint(method, linfo);
+			// stack is now obj, int, int (max), int (last)
+			// manage negative index
+			method.addInstruction(Opcode.DUP); // push last -> OIIII
+			method.addInstruction(Opcode.IFGE, new ShortOperand((short)9)); // consume last -> OIII
+			StackState branchState = method.captureStackState();
+			method.addInstruction(Opcode.IADD); // add max to negative last -> OII
+			method.addInstruction(Opcode.ICONST_1); // -> OIII
+			method.addInstruction(Opcode.IADD); // add 1 to last -> OII
+			method.addInstruction(Opcode.GOTO, new ShortOperand((short)5));
+			method.restoreFullStackState(branchState);
+			method.placeLabel(branchState);
+			method.addInstruction(Opcode.SWAP); // swap max and last -> OIII
+			method.addInstruction(Opcode.POP); // forget max -> OII
+			StackState lastState = method.captureStackState();
+			method.placeLabel(lastState);			
+		}
+	}
+
+	private static void compileSliceMaxIndex(MethodInfo method) {
+		// stack is obj, int we need obj, int, obj
+		method.addInstruction(Opcode.SWAP); // -> int, obj
+		method.addInstruction(Opcode.DUP_X1); // obj, int, obj
+		MethodConstant m = new MethodConstant(String.class, "length", int.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 	}
 
 	@Override
@@ -189,9 +293,24 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 		else
 			return value.equals(obj);
 	}
+	
+	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		exp.compile(context, method, flags);
+		IOperand oper = flags.isRoughly() ?
+				new MethodConstant(String.class, "equalsIgnoreCase", String.class, boolean.class) :
+				new MethodConstant(String.class, "equals", Object.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		if(flags.isReverse())
+			CompilerUtils.reverseBoolean(method);
+		if(flags.toPrimitive())
+			return new ResultInfo(boolean.class);
+		else
+			return CompilerUtils.booleanToBoolean(method);
+	}
 
     @Override
-    public boolean Roughly(Context context, IValue obj) throws PromptoError {
+    public boolean roughly(Context context, IValue obj) throws PromptoError {
         if (obj instanceof Character || obj instanceof Text) {
         	Collator c = Collator.getInstance();
         	c.setStrength(Collator.PRIMARY);

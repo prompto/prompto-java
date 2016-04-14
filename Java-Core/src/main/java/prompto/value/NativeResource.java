@@ -3,12 +3,11 @@ package prompto.value;
 import java.io.IOException;
 
 import prompto.declaration.NativeResourceDeclaration;
-import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 
 public class NativeResource extends NativeInstance implements IResource {
 
-	public NativeResource(Context context, NativeResourceDeclaration declaration) throws SyntaxError {
+	public NativeResource(Context context, NativeResourceDeclaration declaration) {
 		super(context, declaration);
 	}
 	

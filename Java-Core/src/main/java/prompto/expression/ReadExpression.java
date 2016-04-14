@@ -32,7 +32,7 @@ public class ReadExpression implements IExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		context = context.newResourceContext();
 		IType sourceType = resource.check(context);
 		if(!(sourceType instanceof ResourceType))

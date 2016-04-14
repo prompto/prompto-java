@@ -20,28 +20,53 @@ public class TestItem extends BaseEParserTest {
 	}
 
 	@Test
-	public void testItemDict() throws Exception {
-		checkOutput("item/itemDict.pec");
+	public void testInterpretedItemDict() throws Exception {
+		checkInterpretedOutput("item/itemDict.pec");
 	}
 
 	@Test
-	public void testItemList() throws Exception {
-		checkOutput("item/itemList.pec");
+	public void testCompiledItemDict() throws Exception {
+		checkCompiledOutput("item/itemDict.pec");
 	}
 
 	@Test
-	public void testItemRange() throws Exception {
-		checkOutput("item/itemRange.pec");
+	public void testInterpretedItemList() throws Exception {
+		checkInterpretedOutput("item/itemList.pec");
 	}
 
 	@Test
-	public void testItemSet() throws Exception {
-		checkOutput("item/itemSet.pec");
+	public void testCompiledItemList() throws Exception {
+		checkCompiledOutput("item/itemList.pec");
 	}
 
 	@Test
-	public void testItemText() throws Exception {
-		checkOutput("item/itemText.pec");
+	public void testInterpretedItemRange() throws Exception {
+		checkInterpretedOutput("item/itemRange.pec");
+	}
+
+	@Test
+	public void testCompiledItemRange() throws Exception {
+		checkCompiledOutput("item/itemRange.pec");
+	}
+
+	@Test
+	public void testInterpretedItemSet() throws Exception {
+		checkInterpretedOutput("item/itemSet.pec");
+	}
+
+	@Test
+	public void testCompiledItemSet() throws Exception {
+		checkCompiledOutput("item/itemSet.pec");
+	}
+
+	@Test
+	public void testInterpretedItemText() throws Exception {
+		checkInterpretedOutput("item/itemText.pec");
+	}
+
+	@Test
+	public void testCompiledItemText() throws Exception {
+		checkCompiledOutput("item/itemText.pec");
 	}
 
 }

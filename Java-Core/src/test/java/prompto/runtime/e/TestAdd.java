@@ -20,73 +20,153 @@ public class TestAdd extends BaseEParserTest {
 	}
 
 	@Test
-	public void testAddCharacter() throws Exception {
-		checkOutput("add/addCharacter.pec");
+	public void testInterpretedAddCharacter() throws Exception {
+		checkInterpretedOutput("add/addCharacter.pec");
 	}
 
 	@Test
-	public void testAddDate() throws Exception {
-		checkOutput("add/addDate.pec");
+	public void testCompiledAddCharacter() throws Exception {
+		checkCompiledOutput("add/addCharacter.pec");
 	}
 
 	@Test
-	public void testAddDateTime() throws Exception {
-		checkOutput("add/addDateTime.pec");
+	public void testInterpretedAddDate() throws Exception {
+		checkInterpretedOutput("add/addDate.pec");
 	}
 
 	@Test
-	public void testAddDecimal() throws Exception {
-		checkOutput("add/addDecimal.pec");
+	public void testCompiledAddDate() throws Exception {
+		checkCompiledOutput("add/addDate.pec");
 	}
 
 	@Test
-	public void testAddDict() throws Exception {
-		checkOutput("add/addDict.pec");
+	public void testInterpretedAddDateTime() throws Exception {
+		checkInterpretedOutput("add/addDateTime.pec");
 	}
 
 	@Test
-	public void testAddInteger() throws Exception {
-		checkOutput("add/addInteger.pec");
+	public void testCompiledAddDateTime() throws Exception {
+		checkCompiledOutput("add/addDateTime.pec");
 	}
 
 	@Test
-	public void testAddList() throws Exception {
-		checkOutput("add/addList.pec");
+	public void testInterpretedAddDecimal() throws Exception {
+		checkInterpretedOutput("add/addDecimal.pec");
 	}
 
 	@Test
-	public void testAddPeriod() throws Exception {
-		checkOutput("add/addPeriod.pec");
+	public void testCompiledAddDecimal() throws Exception {
+		checkCompiledOutput("add/addDecimal.pec");
 	}
 
 	@Test
-	public void testAddSet() throws Exception {
-		checkOutput("add/addSet.pec");
+	public void testInterpretedAddDict() throws Exception {
+		checkInterpretedOutput("add/addDict.pec");
 	}
 
 	@Test
-	public void testAddTextDecimal() throws Exception {
-		checkOutput("add/addTextDecimal.pec");
+	public void testCompiledAddDict() throws Exception {
+		checkCompiledOutput("add/addDict.pec");
 	}
 
 	@Test
-	public void testAddTextInteger() throws Exception {
-		checkOutput("add/addTextInteger.pec");
+	public void testInterpretedAddInteger() throws Exception {
+		checkInterpretedOutput("add/addInteger.pec");
 	}
 
 	@Test
-	public void testAddTextText() throws Exception {
-		checkOutput("add/addTextText.pec");
+	public void testCompiledAddInteger() throws Exception {
+		checkCompiledOutput("add/addInteger.pec");
 	}
 
 	@Test
-	public void testAddTime() throws Exception {
-		checkOutput("add/addTime.pec");
+	public void testInterpretedAddList() throws Exception {
+		checkInterpretedOutput("add/addList.pec");
 	}
 
 	@Test
-	public void testAddTuple() throws Exception {
-		checkOutput("add/addTuple.pec");
+	public void testCompiledAddList() throws Exception {
+		checkCompiledOutput("add/addList.pec");
+	}
+
+	@Test
+	public void testInterpretedAddPeriod() throws Exception {
+		checkInterpretedOutput("add/addPeriod.pec");
+	}
+
+	@Test
+	public void testCompiledAddPeriod() throws Exception {
+		checkCompiledOutput("add/addPeriod.pec");
+	}
+
+	@Test
+	public void testInterpretedAddSet() throws Exception {
+		checkInterpretedOutput("add/addSet.pec");
+	}
+
+	@Test
+	public void testCompiledAddSet() throws Exception {
+		checkCompiledOutput("add/addSet.pec");
+	}
+
+	@Test
+	public void testInterpretedAddTextCharacter() throws Exception {
+		checkInterpretedOutput("add/addTextCharacter.pec");
+	}
+
+	@Test
+	public void testCompiledAddTextCharacter() throws Exception {
+		checkCompiledOutput("add/addTextCharacter.pec");
+	}
+
+	@Test
+	public void testInterpretedAddTextDecimal() throws Exception {
+		checkInterpretedOutput("add/addTextDecimal.pec");
+	}
+
+	@Test
+	public void testCompiledAddTextDecimal() throws Exception {
+		checkCompiledOutput("add/addTextDecimal.pec");
+	}
+
+	@Test
+	public void testInterpretedAddTextInteger() throws Exception {
+		checkInterpretedOutput("add/addTextInteger.pec");
+	}
+
+	@Test
+	public void testCompiledAddTextInteger() throws Exception {
+		checkCompiledOutput("add/addTextInteger.pec");
+	}
+
+	@Test
+	public void testInterpretedAddTextText() throws Exception {
+		checkInterpretedOutput("add/addTextText.pec");
+	}
+
+	@Test
+	public void testCompiledAddTextText() throws Exception {
+		checkCompiledOutput("add/addTextText.pec");
+	}
+
+	@Test
+	public void testInterpretedAddTime() throws Exception {
+		checkInterpretedOutput("add/addTime.pec");
+	}
+
+	@Test
+	public void testCompiledAddTime() throws Exception {
+		checkCompiledOutput("add/addTime.pec");
+	}
+
+	@Test
+	public void testInterpretedAddTuple() throws Exception {
+		checkInterpretedOutput("add/addTuple.pec");
+	}
+
+	@Test
+	public void testCompiledAddTuple() throws Exception {
+		checkCompiledOutput("add/addTuple.pec");
 	}
 
 }

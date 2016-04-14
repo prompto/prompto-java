@@ -147,6 +147,16 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitSetter_method_declaration(@NotNull OParser.Setter_method_declarationContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link OParser#native_setter_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterNative_setter_declaration(@NotNull OParser.Native_setter_declarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#native_setter_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitNative_setter_declaration(@NotNull OParser.Native_setter_declarationContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link OParser#getter_method_declaration}.
 	 * @param ctx the parse tree
 	 */
@@ -156,6 +166,16 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitGetter_method_declaration(@NotNull OParser.Getter_method_declarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#native_getter_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterNative_getter_declaration(@NotNull OParser.Native_getter_declarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#native_getter_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitNative_getter_declaration(@NotNull OParser.Native_getter_declarationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link OParser#native_resource_declaration}.
 	 * @param ctx the parse tree

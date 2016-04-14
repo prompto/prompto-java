@@ -1,22 +1,25 @@
 package prompto.store.solr;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Arrays;
 import java.util.UUID;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.expression.EqualsExpression;
 import prompto.expression.IExpression;
+import prompto.expression.UnresolvedIdentifier;
 import prompto.grammar.EqOp;
 import prompto.grammar.Identifier;
-import prompto.grammar.UnresolvedIdentifier;
+import prompto.intrinsic.PromptoDate;
+import prompto.intrinsic.PromptoDateTime;
+import prompto.intrinsic.PromptoTime;
 import prompto.literal.BooleanLiteral;
 import prompto.literal.DateLiteral;
 import prompto.literal.DateTimeLiteral;
@@ -26,8 +29,10 @@ import prompto.literal.TextLiteral;
 import prompto.literal.TimeLiteral;
 import prompto.runtime.Context;
 import prompto.store.IDataStore;
+import prompto.store.IPredicateExpression;
 import prompto.store.IStore;
 import prompto.store.IStored;
+import prompto.store.IStoredIterable;
 import prompto.type.AnyType;
 import prompto.type.BooleanType;
 import prompto.type.CategoryType;
@@ -40,13 +45,13 @@ import prompto.type.TimeType;
 import prompto.type.UUIDType;
 import prompto.utils.IdentifierList;
 import prompto.value.Boolean;
+import prompto.value.ConcreteInstance;
 import prompto.value.Date;
 import prompto.value.Decimal;
 import prompto.value.ExpressionValue;
+import prompto.value.IInstance;
 import prompto.value.IValue;
 import prompto.value.Integer;
-import prompto.value.ConcreteInstance;
-import prompto.value.IInstance;
 import prompto.value.Text;
 import prompto.value.Time;
 
@@ -54,23 +59,25 @@ public class TestInstance extends BaseSOLRTest {
 
 	Context context;
 	
+	@SuppressWarnings("unchecked")
 	@Before
 	public void before() throws Exception {
 		createStore("TestInstance");
 		store.startServerWithEmptyCore();
 		createField("category", "text", true);
-		IDataStore.setInstance(store);
+		IDataStore.setInstance((IStore<Object>)(Object)store);
 		context = Context.newGlobalContext();
 	}
 	
 	@Test
 	public void testStoreTextField() throws Exception {
-		String fieldName = "text";
-		String fieldValue = "text";
-		createField(fieldName, "text", false);
+		String fieldName = "msg";
+		String fieldType = "text";
+		String fieldValue = "hello";
+		createField(fieldName, fieldType, false);
 		IInstance instance = createInstanceWith1Attribute(fieldName, TextType.instance());
 		instance.setMember(context, new Identifier(fieldName), new Text(fieldValue));
-		store.store(context, instance.getStorable());
+		store.store(instance.getStorable());
 		IStored stored = fetchOne(fieldName, new TextLiteral(fieldValue));
 		assertNotNull(stored);
 		assertEquals(fieldValue, stored.getData(fieldName));
@@ -83,7 +90,7 @@ public class TestInstance extends BaseSOLRTest {
 		createField(fieldName, "integer", false);
 		IInstance instance = createInstanceWith1Attribute(fieldName, IntegerType.instance());
 		instance.setMember(context, new Identifier(fieldName), new Integer(fieldValue));
-		store.store(context, instance.getStorable());
+		store.store(instance.getStorable());
 		IStored stored = fetchOne(fieldName, new IntegerLiteral(fieldValue));
 		assertNotNull(stored);
 		assertEquals(fieldValue, stored.getData(fieldName));
@@ -96,7 +103,7 @@ public class TestInstance extends BaseSOLRTest {
 		createField(fieldName, "decimal", false);
 		IInstance instance = createInstanceWith1Attribute(fieldName, IntegerType.instance());
 		instance.setMember(context, new Identifier(fieldName), new Decimal(fieldValue));
-		store.store(context, instance.getStorable());
+		store.store(instance.getStorable());
 		IStored stored = fetchOne(fieldName, new DecimalLiteral(fieldValue));
 		assertNotNull(stored);
 		assertEquals(fieldValue, stored.getData(fieldName));
@@ -109,7 +116,7 @@ public class TestInstance extends BaseSOLRTest {
 		createField(fieldName, "boolean", false);
 		IInstance instance = createInstanceWith1Attribute(fieldName, BooleanType.instance());
 		instance.setMember(context, new Identifier(fieldName), Boolean.valueOf(fieldValue));
-		store.store(context, instance.getStorable());
+		store.store(instance.getStorable());
 		IStored stored = fetchOne(fieldName, new BooleanLiteral("true"));
 		assertNotNull(stored);
 		assertEquals(fieldValue, stored.getData(fieldName));
@@ -118,40 +125,40 @@ public class TestInstance extends BaseSOLRTest {
 	@Test
 	public void testStoreDateField() throws Exception {
 		String fieldName = "date";
-		LocalDate fieldValue = LocalDate.parse("2015-03-12");
+		PromptoDate fieldValue = PromptoDate.parse("2015-03-12");
 		createField(fieldName, "date", false);
 		IInstance instance = createInstanceWith1Attribute(fieldName, DateType.instance());
 		instance.setMember(context, new Identifier(fieldName), new Date(fieldValue));
-		store.store(context, instance.getStorable());
+		store.store(instance.getStorable());
 		IStored stored = fetchOne(fieldName, new DateLiteral(fieldValue));
 		assertNotNull(stored);
-		assertEquals(fieldValue.toString(), stored.getData(fieldName)); // value will be converted by reader
+		assertEquals(fieldValue, stored.getData(fieldName)); // value will be converted by reader
 	}
 
 	@Test
 	public void testStoreTimeField() throws Exception {
 		String fieldName = "time";
-		LocalTime fieldValue = LocalTime.parse("13:15:16.012");
+		PromptoTime fieldValue = PromptoTime.parse("13:15:16.012");
 		createField(fieldName, "time", false);
 		IInstance instance = createInstanceWith1Attribute(fieldName, TimeType.instance());
 		instance.setMember(context, new Identifier(fieldName), new Time(fieldValue));
-		store.store(context, instance.getStorable());
+		store.store(instance.getStorable());
 		IStored stored = fetchOne(fieldName, new TimeLiteral(fieldValue));
 		assertNotNull(stored);
-		assertEquals(fieldValue.toString(), stored.getData(fieldName));
+		assertEquals(fieldValue, stored.getData(fieldName));
 	}
 
 	@Test
 	public void testStoreDateTimeField() throws Exception {
 		String fieldName = "datetime";
-		DateTime fieldValue = DateTime.parse("2015-03-12T13:15:16.012Z");
+		PromptoDateTime fieldValue = PromptoDateTime.parse("2015-03-12T13:15:16.012Z");
 		createField(fieldName, "datetime", false);
 		IInstance instance = createInstanceWith1Attribute(fieldName, DateTimeType.instance());
 		instance.setMember(context, new Identifier(fieldName), new prompto.value.DateTime(fieldValue));
-		store.store(context, instance.getStorable());
+		store.store(instance.getStorable());
 		IStored stored = fetchOne(fieldName, new DateTimeLiteral(fieldValue));
 		assertNotNull(stored);
-		assertEquals(fieldValue.toString(), stored.getData(fieldName));
+		assertEquals(fieldValue, stored.getData(fieldName));
 	}
 
 	@Test
@@ -161,10 +168,10 @@ public class TestInstance extends BaseSOLRTest {
 		createField(fieldName, "uuid", false);
 		IInstance instance = createInstanceWith1Attribute(fieldName, UUIDType.instance());
 		instance.setMember(context, new Identifier(fieldName), new prompto.value.UUID(fieldValue));
-		store.store(context, instance.getStorable());
+		store.store(instance.getStorable());
 		IStored stored = fetchOne(fieldName, new ExpressionValue(UUIDType.instance(), new prompto.value.UUID(fieldValue)));
 		assertNotNull(stored);
-		assertEquals(fieldValue.toString(), stored.getData(fieldName));
+		assertEquals(fieldValue, stored.getData(fieldName));
 	}
 
 	@Test
@@ -175,7 +182,7 @@ public class TestInstance extends BaseSOLRTest {
 		String childValue = "childValue";
 		String childName = "childField";
 		createField(fieldName, "text", false);
-		createField(childName, "uuid", false);
+		createField(childName, "db-ref", false);
 		IInstance parent = createInstanceWith2Attributes(fieldName, TextType.instance(), childName, type);
 		ConcreteCategoryDeclaration cd = context.getRegisteredDeclaration(
 				ConcreteCategoryDeclaration.class, new Identifier("Test"), false);
@@ -184,7 +191,7 @@ public class TestInstance extends BaseSOLRTest {
 		child.setMember(context, new Identifier(fieldName), new Text(childValue));
 		parent.setMember(context, new Identifier(fieldName), new Text(fieldValue));
 		parent.setMember(context, new Identifier(childName), child);
-		store.store(context, null, Arrays.asList(parent.getStorable(), child.getStorable()));
+		store.store(null, Arrays.asList(parent.getStorable(), child.getStorable()));
 		IStored stored = fetchOne(fieldName, new TextLiteral(fieldValue));
 		assertNotNull(stored);
 		assertEquals(fieldValue, stored.getData(fieldName));
@@ -197,9 +204,14 @@ public class TestInstance extends BaseSOLRTest {
 
 	private IStored fetchOne(String field, IExpression value) throws Exception {
 		CategoryType t = new CategoryType(new Identifier("Test"));
-		IExpression e = new EqualsExpression( 
+		IPredicateExpression e = new EqualsExpression( 
 				new UnresolvedIdentifier(new Identifier(field)), EqOp.EQUALS, value);
-		return store.fetchOne(context, t, e);
+		return store.interpretFetchOne(context, t, e);
+	}
+	
+	@SuppressWarnings("unused")
+	private IStoredIterable fetchAll() throws Exception {
+		return store.interpretFetchMany(context, null, null, null, null, null);
 	}
 
 	private IInstance createInstanceWith1Attribute(String name, IType type) throws Exception {
@@ -216,7 +228,7 @@ public class TestInstance extends BaseSOLRTest {
 	}
 
 	private IInstance createInstanceWith2Attributes(String name1, IType type1, String name2, IType type2) throws Exception {
-		AttributeDeclaration a = new AttributeDeclaration(IStore.dbIdIdentifier, AnyType.instance());
+		AttributeDeclaration a = new AttributeDeclaration(new Identifier(IStore.dbIdName), AnyType.instance());
 		context.registerDeclaration(a);
 		a = new AttributeDeclaration(new Identifier(name1), type1);
 		a.setStorable(true);

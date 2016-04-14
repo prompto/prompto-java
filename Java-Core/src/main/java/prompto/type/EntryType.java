@@ -1,16 +1,20 @@
 package prompto.type;
 
-import prompto.error.SyntaxError;
+import java.lang.reflect.Type;
+
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoDict;
 import prompto.runtime.Context;
 
 public class EntryType extends BaseType {
 
 	IType itemType;
-
+	String typeName;
+	
 	public EntryType(IType itemType) {
-		super(itemType.getId() + "{}[]");
+		super(null);
 		this.itemType = itemType;
+		this.typeName = itemType.getTypeName() + "{}[]";
 	}
 
 	public IType getItemType() {
@@ -18,22 +22,22 @@ public class EntryType extends BaseType {
 	}
 
 	@Override
-	public Class<?> toJavaClass() {
+	public Type getJavaType(Context context) {
+		return PromptoDict.Entry.class;
+	}
+
+	@Override
+	public void checkUnique(Context context) {
 		throw new RuntimeException("Should never get there!");
 	}
 
 	@Override
-	public void checkUnique(Context context) throws SyntaxError {
+	public void checkExists(Context context) {
 		throw new RuntimeException("Should never get there!");
 	}
 
 	@Override
-	public void checkExists(Context context) throws SyntaxError {
-		throw new RuntimeException("Should never get there!");
-	}
-
-	@Override
-	public IType checkMember(Context context, Identifier id) throws SyntaxError {
+	public IType checkMember(Context context, Identifier id) {
 		String name = id.toString();
 		if ("key".equals(name))
 			return TextType.instance();

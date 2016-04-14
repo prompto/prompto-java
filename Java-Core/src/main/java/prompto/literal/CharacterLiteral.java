@@ -4,6 +4,14 @@ import java.io.IOException;
 import java.io.StreamTokenizer;
 import java.io.StringReader;
 
+import prompto.compiler.ByteOperand;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.IntConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.ShortOperand;
 import prompto.runtime.Context;
 import prompto.type.CharacterType;
 import prompto.type.IType;
@@ -32,5 +40,18 @@ public class CharacterLiteral extends Literal<Character> {
 		return CharacterType.instance();
 	}
 	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		char c = value.getValue();
+		if((c&0xFFFFFF00)==0)
+			method.addInstruction(Opcode.BIPUSH, new ByteOperand((byte)c));
+		else if((c&0xFFFF0000)==0)
+			method.addInstruction(Opcode.SIPUSH, new ShortOperand((short)c));
+		else
+			method.addInstruction(Opcode.LDC_W, new IntConstant(c));
+		return CompilerUtils.charToCharacter(method);
+	}
+
+
 
 }

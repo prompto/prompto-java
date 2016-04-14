@@ -63,7 +63,7 @@ public class Debugger {
 	
 	public void enterMethod(Context context, IDeclaration method) throws PromptoError {
 		terminateIfRequested();
-		stack.push(new StackFrame(context, method.getIdentifier().toString(), method));
+		stack.push(new StackFrame(context, method.getId().toString(), method));
 		if(stack.size()>0 && stack.size()<=stepDepth)
 			suspend(SuspendReason.STEPPING, context, method);
 		else if(method.isBreakpoint())

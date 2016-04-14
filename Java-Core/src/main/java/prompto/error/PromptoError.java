@@ -1,6 +1,6 @@
 package prompto.error;
 
-public class PromptoError extends Exception {
+public class PromptoError extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 

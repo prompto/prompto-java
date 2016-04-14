@@ -1,8 +1,20 @@
 package prompto.literal;
 
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
+
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
+import prompto.intrinsic.PromptoDate;
+import prompto.intrinsic.PromptoRange;
+import prompto.intrinsic.PromptoTime;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.type.IntegerType;
@@ -32,6 +44,35 @@ public class RangeLiteral implements IExpression {
 		last.toDialect(writer);
 		writer.append("]");
 	}
+	
+	static Map<Type,Type> rangeClassMap = createRangeClassMap();
+	
+	private static Map<Type, Type> createRangeClassMap() {
+		Map<Type,Type> map = new HashMap<>();
+		map.put(char.class, PromptoRange.Character.class);
+		map.put(Character.class, PromptoRange.Character.class);
+		map.put(long.class, PromptoRange.Long.class);
+		map.put(Long.class, PromptoRange.Long.class);
+		map.put(PromptoDate.class, PromptoRange.Date.class);
+		map.put(PromptoTime.class, PromptoRange.Time.class);
+		return map;
+	}
+
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		IType itemType = checkType(context, first);
+		Type itemKlass = itemType.getJavaType(context);
+		Type rangeKlass = rangeClassMap.get(itemKlass);
+		if(rangeKlass==null) {
+			System.err.println("Missing PromptoRange for = " + itemType.getFamily());
+			throw new SyntaxError("Cannot build Range of " + itemType.getFamily());
+		}
+		CompilerUtils.compileNewRawInstance(method, rangeKlass);
+		method.addInstruction(Opcode.DUP); // need to keep a reference on top of stack
+		first.compile(context, method, flags.withPrimitive(false));
+		last.compile(context, method, flags.withPrimitive(false));
+		return CompilerUtils.compileCallConstructor(method, rangeKlass, itemKlass, itemKlass);
+	}
 
 	public IExpression getFirst() {
 		return first;
@@ -42,17 +83,21 @@ public class RangeLiteral implements IExpression {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
-		IType firstType = first.check(context);
-		IType lastType = last.check(context);
-		return firstType.checkRange(context,lastType);
+	public IType check(Context context) {
+		return checkType(context, first).checkRange(context, checkType(context, last));
 	}
 	
+	private static IType checkType(Context context, IExpression exp) {
+		IType type = exp.check(context);
+		if(!"IntegerLimits".equals(type.getTypeName()))
+			return type;
+		else
+			return IntegerType.instance();
+	}
+
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		IType type = first.check(context);
-		if("IntegerLimits".equals(type.getId()))
-			type = IntegerType.instance();
+		IType type = checkType(context, first);
 		Object of = first.interpret(context);
 		Object ol = last.interpret(context);
 		return type.newRange(of,ol);

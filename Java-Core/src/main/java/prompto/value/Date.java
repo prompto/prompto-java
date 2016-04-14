@@ -2,71 +2,101 @@ package prompto.value;
 
 import java.io.IOException;
 
-import org.joda.time.LocalDate;
-
-import com.fasterxml.jackson.core.JsonGenerator;
-
-import prompto.error.InvalidDataError;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
+import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoDate;
+import prompto.intrinsic.PromptoPeriod;
 import prompto.runtime.Context;
-import prompto.store.IStorable;
 import prompto.type.DateType;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 public class Date extends BaseValue implements Comparable<Date> {
 
 	public static Date Parse(String text) {
-		LocalDate value = LocalDate.parse(text);
+		PromptoDate value = PromptoDate.parse(text);
 		return new Date(value);
 	}
 
-	LocalDate value;
+	PromptoDate value;
 
-	public Date(LocalDate value) {
+	public Date(PromptoDate date) {
 		super(DateType.instance());
-		this.value = value;
+		this.value = date;
 
 	}
 
 	public Date(int year, int month, int day) {
 		super(DateType.instance());
-		value = new LocalDate(year, month, day);
+		value = new PromptoDate(year, month, day);
 	}
 
-	public LocalDate getValue() {
+	@Override
+	public PromptoDate getStorableData() {
 		return value;
 	}
 
 	@Override
-	public IValue Add(Context context, IValue value) throws PromptoError {
+	public IValue plus(Context context, IValue value) throws PromptoError {
 		if (value instanceof Period)
-			return this.plus((Period) value);
+			return new Date(this.value.plus(((Period)value).value));
 		else
-			throw new SyntaxError("Illegal: Date + "
-					+ value.getClass().getSimpleName());
+			throw new SyntaxError("Illegal: Date + " + value.getClass().getSimpleName());
 	}
 
+	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		ResultInfo right = exp.compile(context, method, flags);
+		if(right.getType()!=PromptoPeriod.class)
+			throw new SyntaxError("Illegal: Date + " + exp.getClass().getSimpleName());
+		MethodConstant oper = new MethodConstant(PromptoDate.class, "plus", PromptoPeriod.class, PromptoDate.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return new ResultInfo(PromptoDate.class);
+	}
+	
+
 	@Override
-	public IValue Subtract(Context context, IValue value) throws PromptoError {
+	public IValue minus(Context context, IValue value) throws PromptoError {
 		if (value instanceof Date) {
-			LocalDate other = ((Date) value).value;
-			org.joda.time.Period result = new org.joda.time.Period(
-					this.value.getYear() - other.getYear(),
-					this.value.getMonthOfYear() - other.getMonthOfYear(), 0,
-					this.value.getDayOfMonth() - other.getDayOfMonth(), 0, 0,
-					0, 0);
+			PromptoDate other = ((Date) value).value;
+			PromptoPeriod result = this.value.minus(other);
 			return new Period(result);
 		} else if (value instanceof Period)
-			return this.minus((Period) value);
+			return new Date(this.value.minus(((Period)value).value));
 		else
 			throw new SyntaxError("Illegal: Date - "
 					+ value.getClass().getSimpleName());
 	}
 
+	public static ResultInfo compileMinus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		ResultInfo right = exp.compile(context, method, flags);
+		if(right.getType()==PromptoDate.class) {
+			MethodConstant oper = new MethodConstant(PromptoDate.class, "minus", 
+					PromptoDate.class, PromptoPeriod.class);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+			return new ResultInfo(PromptoPeriod.class);
+		} else if(right.getType()==PromptoPeriod.class) {
+			MethodConstant oper = new MethodConstant(PromptoDate.class, "minus", 
+					PromptoPeriod.class, PromptoDate.class);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+			return new ResultInfo(PromptoDate.class);
+		} else
+			throw new SyntaxError("Illegal: Date - " + exp.getClass().getSimpleName());
+	}
+	
 	@Override
-	public int CompareTo(Context context, IValue value) throws PromptoError {
+	public int compareTo(Context context, IValue value) throws PromptoError {
 		if (value instanceof Date)
 			return this.value.compareTo(((Date) value).value);
 		else
@@ -74,37 +104,39 @@ public class Date extends BaseValue implements Comparable<Date> {
 					+ value.getClass().getSimpleName());
 
 	}
+	
+	public static ResultInfo compileCompareTo(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		exp.compile(context, method, flags);
+		IOperand oper = new MethodConstant(PromptoDate.class, 
+				"compareTo", PromptoDate.class, int.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return BaseValue.compileCompareToEpilogue(method, flags);
+	}
+
 
 	@Override
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
 		if ("year".equals(name))
-			return new Integer(this.value.getYear());
+			return new Integer(this.value.getNativeYear());
 		else if ("month".equals(name))
-			return new Integer(this.value.getMonthOfYear());
+			return new Integer(this.value.getNativeMonth());
 		else if ("dayOfMonth".equals(name))
-			return new Integer(this.value.getDayOfMonth());
+			return new Integer(this.value.getNativeDayOfMonth());
 		else if ("dayOfYear".equals(name))
-			return new Integer(this.value.getDayOfYear());
+			return new Integer(this.value.getNativeDayOfYear());
 		else
-			throw new InvalidDataError("No such member:" + name);
+			throw new SyntaxError("No such member:" + name);
 	}
 
 	@Override
-	public Object ConvertTo(Class<?> type) {
+	public Object convertTo(Class<?> type) {
 		return value;
-	}
-
-	public Date minus(Period period) {
-		return new Date(this.value.minus(period.value));
 	}
 
 	public Date toDateMidnight() {
 		return this;
-	}
-
-	Date plus(Period period) {
-		return new Date(this.value.plus(period.value));
 	}
 
 	public int compareTo(Date other) {
@@ -118,6 +150,22 @@ public class Date extends BaseValue implements Comparable<Date> {
 		else
 			return value.equals(obj);
 	}
+	
+	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		exp.compile(context, method, flags);
+		IOperand oper = new MethodConstant(
+				PromptoDate.class, 
+				"equals",
+				Object.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		if(flags.isReverse())
+			CompilerUtils.reverseBoolean(method);
+		if(flags.toPrimitive())
+			return new ResultInfo(boolean.class);
+		else
+			return CompilerUtils.booleanToBoolean(method);
+	}
 
 	@Override
 	public int hashCode() {
@@ -126,7 +174,7 @@ public class Date extends BaseValue implements Comparable<Date> {
 
 	@Override
 	public String toString() {
-		return value.toString("yyyy-MM-dd");
+		return value.format("yyyy-MM-dd");
 	}
 	
 	@Override
@@ -138,8 +186,4 @@ public class Date extends BaseValue implements Comparable<Date> {
 		}
 	}
 	
-	@Override
-	public void storeValue(Context context, String name, IStorable storable) throws PromptoError {
-		storable.setData(name, value);
-	}
 }

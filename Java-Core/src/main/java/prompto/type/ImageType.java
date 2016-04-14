@@ -1,5 +1,7 @@
 package prompto.type;
 
+import java.lang.reflect.Type;
+
 import prompto.runtime.Context;
 import prompto.value.Image;
 
@@ -12,11 +14,11 @@ public class ImageType extends BinaryType {
 	}
 	
 	private ImageType() {
-		super("Image");
+		super(Family.IMAGE);
 	}
 
 	@Override
-	public Class<?> toJavaClass() {
+	public Type getJavaType(Context context) {
 		return Image.class;
 	}
 	

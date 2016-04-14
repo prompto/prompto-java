@@ -1,19 +1,20 @@
 package prompto.type;
 
-import prompto.error.SyntaxError;
+import java.lang.reflect.Type;
+import java.util.Iterator;
+
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
-import prompto.value.IteratorValue;
 
 public class IteratorType extends IterableType {
 
 	public IteratorType(IType itemType) {
-		super("Iterator<" + itemType.getId()+">", itemType);
+		super(Family.ITERATOR, itemType, "Iterator<" + itemType.getTypeName()+">");
 	}
 
 	@Override
-	public Class<?> toJavaClass() {
-		return IteratorValue.class;
+	public Type getJavaType(Context context) {
+		return Iterator.class;
 	}
 	
 	@Override
@@ -32,12 +33,12 @@ public class IteratorType extends IterableType {
 	}
 	
 	@Override
-	public IType checkIterator(Context context) throws SyntaxError {
+	public IType checkIterator(Context context) {
 		return itemType;
 	}
 
 	@Override
-	public IType checkMember(Context context, Identifier id) throws SyntaxError {
+	public IType checkMember(Context context, Identifier id) {
 		String name = id.toString();
         if ("length".equals(name))
             return IntegerType.instance();

@@ -1,27 +1,71 @@
 package prompto.expression;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import prompto.compiler.ClassConstant;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.IInstructionListener;
+import prompto.compiler.IOperatorFunction;
+import prompto.compiler.IVerifierEntry.VerifierType;
+import prompto.compiler.InterfaceConstant;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.OffsetListenerConstant;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.ShortOperand;
+import prompto.compiler.StackLocal;
+import prompto.compiler.StackState;
+import prompto.compiler.StringConstant;
+import prompto.declaration.AttributeDeclaration;
+import prompto.declaration.AttributeInfo;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.EqOp;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
-import prompto.grammar.UnresolvedIdentifier;
+import prompto.intrinsic.PromptoDate;
+import prompto.intrinsic.PromptoDateTime;
+import prompto.intrinsic.PromptoDict;
+import prompto.intrinsic.PromptoList;
+import prompto.intrinsic.PromptoPeriod;
+import prompto.intrinsic.PromptoRange;
+import prompto.intrinsic.PromptoSet;
+import prompto.intrinsic.PromptoTime;
+import prompto.literal.NullLiteral;
 import prompto.runtime.Context;
 import prompto.runtime.LinkedValue;
 import prompto.runtime.LinkedVariable;
-import prompto.store.IFilterBuilder;
+import prompto.runtime.Variable;
+import prompto.store.IPredicateExpression;
+import prompto.store.IQuery;
+import prompto.store.IQuery.MatchOp;
 import prompto.store.IStore;
 import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.Boolean;
+import prompto.value.Character;
+import prompto.value.Date;
+import prompto.value.DateTime;
+import prompto.value.Decimal;
+import prompto.value.Dictionary;
 import prompto.value.IInstance;
 import prompto.value.IValue;
+import prompto.value.Integer;
+import prompto.value.ListValue;
 import prompto.value.NullValue;
+import prompto.value.Period;
+import prompto.value.RangeBase;
+import prompto.value.SetValue;
+import prompto.value.Text;
+import prompto.value.Time;
 import prompto.value.TypeValue;
 
-public class EqualsExpression implements IExpression, IAssertion {
+public class EqualsExpression implements IPredicateExpression, IAssertion {
 
 	IExpression left;
 	EqOp operator;
@@ -51,7 +95,7 @@ public class EqualsExpression implements IExpression, IAssertion {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		left.check(context);
 		right.check(context);
 		return BooleanType.instance(); // can compare all objects
@@ -78,10 +122,10 @@ public class EqualsExpression implements IExpression, IAssertion {
 			equal = lval!=rval;
 			break;
 		case IS_A:
-			equal = isA(context,lval,rval);
+			equal = interpretIsA(context,lval,rval);
 			break;
 		case IS_NOT_A:
-			equal = !isA(context,lval,rval);
+			equal = !interpretIsA(context,lval,rval);
 			break;
 		case EQUALS:
 			equal = interpretEquals(context,lval,rval);
@@ -90,12 +134,12 @@ public class EqualsExpression implements IExpression, IAssertion {
 			equal = !interpretEquals(context,lval,rval);
 			break;
 		case ROUGHLY:
-			equal = lval.Roughly(context, rval);
+			equal = lval.roughly(context, rval);
 			break;
 		}
 		return Boolean.valueOf(equal);	}
 
-	private boolean isA(Context context, IValue lval, IValue rval) throws PromptoError {
+	private boolean interpretIsA(Context context, IValue lval, IValue rval) throws PromptoError {
 		IType actual = lval.getType();
 		IType toCheck = ((TypeValue)rval).getValue();
 		return actual.isAssignableTo(context, toCheck);
@@ -110,7 +154,7 @@ public class EqualsExpression implements IExpression, IAssertion {
 			return lval.equals(rval);
 	}
 
-	public Context downCastForCheck(Context context) throws SyntaxError {
+	public Context downCastForCheck(Context context) {
 		try {
 			return downCast(context, false);
 		} catch(PromptoError e) {
@@ -138,6 +182,30 @@ public class EqualsExpression implements IExpression, IAssertion {
 		return context;
 	}
 	
+	public Context prepareAutodowncast(Context context, MethodInfo method) {
+		if(operator==EqOp.IS_A) {
+			Identifier name = readLeftName();
+			if(name!=null) {
+				IType type = ((TypeExpression)right).getType();
+				ClassConstant c = new ClassConstant(type.getJavaType(context));
+				StackLocal local = method.getRegisteredLocal(name.toString());
+				((StackLocal.ObjectLocal)local).markForAutodowncast(c);
+				return downCastForCheck(context);
+			}
+		}
+		return context;
+	}
+
+	public void cancelAutodowncast(Context context, MethodInfo method) {
+		if(operator==EqOp.IS_A) {
+			Identifier name = readLeftName();
+			if(name!=null) {
+				StackLocal local = method.getRegisteredLocal(name.toString());
+				((StackLocal.ObjectLocal)local).unmarkForAutodowncast();
+			}
+		}
+	}
+	
 	private Identifier readLeftName() {
 		if(left instanceof InstanceExpression)
 			return ((InstanceExpression)left).getId();
@@ -153,37 +221,254 @@ public class EqualsExpression implements IExpression, IAssertion {
 		IValue result = interpret(context, lval, rval);
 		if(result==Boolean.TRUE) 
 			return true;
-		CodeWriter writer = new CodeWriter(test.getDialect(), context);
-		this.toDialect(writer);
-		String expected = writer.toString();
+		String expected = buildExpectedMessage(context, test);
 		String actual = lval.toString() + " " + operator.toString(test.getDialect()) + " " + rval.toString();
 		test.printFailure(context, expected, actual);
 		return false;
 	}
-	
+
+	private String buildExpectedMessage(Context context, TestMethodDeclaration test) {
+		CodeWriter writer = new CodeWriter(test.getDialect(), context);
+		this.toDialect(writer);
+		return writer.toString();
+	}
+
 	@Override
-	public void toFilter(Context context, IFilterBuilder builder) throws PromptoError {
-		String name = null;
+	public void compileAssert(Context context, MethodInfo method, Flags flags, TestMethodDeclaration test) {
+		StackState finalState = method.captureStackState();
+		// compile left and store in local
+		IType leftType = this.left.check(context);
+		ResultInfo leftInfo = this.left.compile(context, method, flags.withPrimitive(false));
+		StackLocal left = method.registerLocal("%left%", VerifierType.ITEM_Object, new ClassConstant(leftInfo.getType()));
+		CompilerUtils.compileASTORE(method, left);
+		// compile right and store in local
+		IType rightType = this.right.check(context);
+		ResultInfo rightInfo = this.right.compile(context, method, flags.withPrimitive(false));
+		StackLocal right = method.registerLocal("%right%", VerifierType.ITEM_Object, new ClassConstant(rightInfo.getType()));
+		CompilerUtils.compileASTORE(method, right);
+		// call regular compile
+		IExpression savedLeft = this.left;
+		this.left = new InstanceExpression(new Identifier("%left%"));
+		context.registerValue(new Variable(new Identifier("%left%"), leftType));
+		IExpression savedRight = this.right;
+		this.right = new InstanceExpression(new Identifier("%right%"));
+		context.registerValue(new Variable(new Identifier("%right%"), rightType));
+		ResultInfo info = compile(context, method, flags.withPrimitive(true));
+		if(Boolean.class==info.getType())
+			CompilerUtils.BooleanToboolean(method);
+		this.left = savedLeft;
+		this.right = savedRight;
+		// 1 = success
+		IInstructionListener finalListener = method.addOffsetListener(new OffsetListenerConstant());
+		method.activateOffsetListener(finalListener);
+		method.addInstruction(Opcode.IFNE, finalListener); 
+		// increment failure counter
+		method.addInstruction(Opcode.ICONST_1);
+		method.addInstruction(Opcode.IADD);
+		// build failure message
+		String message = buildExpectedMessage(context, test);
+		message = test.buildFailureMessagePrefix(message);
+		method.addInstruction(Opcode.LDC, new StringConstant(message));
+		CompilerUtils.compileALOAD(method, left);
+		MethodConstant stringValueOf = new MethodConstant(String.class, "valueOf", Object.class, String.class);
+		method.addInstruction(Opcode.INVOKESTATIC, stringValueOf);
+		MethodConstant concat = new MethodConstant(String.class, "concat", String.class, String.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, concat);
+		method.addInstruction(Opcode.LDC, new StringConstant(" " + operator.toString(test.getDialect()) + " "));
+		method.addInstruction(Opcode.INVOKEVIRTUAL, concat);
+		CompilerUtils.compileALOAD(method, right);
+		method.addInstruction(Opcode.INVOKESTATIC, stringValueOf);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, concat);
+		test.compileFailure(context, method, flags);
+		// success/final
+		method.restoreFullStackState(finalState);
+		method.placeLabel(finalState);
+		method.inhibitOffsetListener(finalListener);
+	}
+	@Override
+	public void interpretQuery(Context context, IQuery query) throws PromptoError {
 		IValue value = null;
-		if(left instanceof UnresolvedIdentifier) {
-			name = ((UnresolvedIdentifier)left).getName();
+		String name = readFieldName(left);
+		if(name!=null)
 			value = right.interpret(context);
-		} else if(left instanceof InstanceExpression) {
-			name = ((InstanceExpression)left).getName();
-			value = right.interpret(context);
-		} else if(right instanceof UnresolvedIdentifier) {
-			name = ((UnresolvedIdentifier)right).getName();
-			value = left.interpret(context);
-		} else if(right instanceof InstanceExpression) {
-			name = ((InstanceExpression)right).getName();
-			value = left.interpret(context);
-		}
-		if(name==null || value==null)
-			IExpression.super.toFilter(context, builder);
 		else {
-			if(value instanceof IInstance)
-				value = ((IInstance)value).getMember(context, IStore.dbIdIdentifier, false);
-			builder.push(context, name, operator, value);
+			name = readFieldName(right);
+			if(name!=null)
+				value = left.interpret(context);
+			else
+				throw new SyntaxError("Unable to interpret predicate");
+		}
+		if(value instanceof IInstance)
+			value = ((IInstance)value).getMember(context, new Identifier(IStore.dbIdName), false);
+		AttributeDeclaration decl = context.findAttribute(name);
+		AttributeInfo info = decl==null ? null : decl.getAttributeInfo();
+		Object data = value==null ? null : value.getStorableData();
+		MatchOp match = getMatchOp();
+		query.<Object>verify(info, match, data);
+	}
+	
+	private MatchOp getMatchOp() {
+		switch(operator) {
+		case EQUALS:
+			return MatchOp.EQUALS;
+		case ROUGHLY:
+			return MatchOp.ROUGHLY;
+		case NOT_EQUALS:
+			return MatchOp.EQUALS;
+		default:
+			throw new UnsupportedOperationException();
 		}
 	}
+
+	@Override
+	public void compileQuery(Context context, MethodInfo method, Flags flags) {
+		method.addInstruction(Opcode.DUP); // IQuery -> IQuery, IQuery
+		boolean reverse = compileAttributeInfo(context, method, flags);
+		MatchOp match = getMatchOp();
+		CompilerUtils.compileJavaEnum(context, method, flags, match);
+		if(reverse)
+			left.compile(context, method, flags);
+		else
+			right.compile(context, method, flags);
+		InterfaceConstant m = new InterfaceConstant(IQuery.class,
+				"verify", AttributeInfo.class, MatchOp.class, Object.class, void.class);
+		method.addInstruction(Opcode.INVOKEINTERFACE, m);
+	}
+	
+
+	private boolean compileAttributeInfo(Context context, MethodInfo method, Flags flags) {
+		String name = readFieldName(left);
+		boolean reverse = name==null;
+		if(reverse)
+			name = readFieldName(right);
+		AttributeInfo info = context.findAttribute(name).getAttributeInfo();
+		CompilerUtils.compileAttributeInfo(context, method, flags, info);
+		return reverse;
+	}
+
+	private String readFieldName(IExpression exp) {
+		if(exp instanceof UnresolvedIdentifier
+			|| exp instanceof InstanceExpression
+			|| exp instanceof MemberSelector)
+			return exp.toString();
+		else
+			return null;
+	}
+
+	static Map<Class<?>, IOperatorFunction> testers = createTesters();
+	
+	private static Map<Class<?>, IOperatorFunction> createTesters() {
+		Map<Class<?>, IOperatorFunction> map = new HashMap<>();
+		map.put(boolean.class, Boolean::compileEquals); 
+		map.put(java.lang.Boolean.class, Boolean::compileEquals); 
+		map.put(char.class, Character::compileEquals);
+		map.put(java.lang.Character.class, Character::compileEquals);
+		map.put(String.class, Text::compileEquals); 
+		map.put(double.class, Decimal::compileEquals);
+		map.put(Double.class, Decimal::compileEquals); 
+		map.put(long.class, Integer::compileEquals);
+		map.put(Long.class, Integer::compileEquals); 
+		map.put(PromptoRange.Long.class, RangeBase::compileEquals); 
+		map.put(PromptoRange.Character.class, RangeBase::compileEquals); 
+		map.put(PromptoRange.Date.class, RangeBase::compileEquals); 
+		map.put(PromptoRange.Time.class, RangeBase::compileEquals); 
+		map.put(PromptoDate.class, Date::compileEquals); 
+		map.put(PromptoDateTime.class, DateTime::compileEquals); 
+		map.put(PromptoTime.class, Time::compileEquals); 
+		map.put(PromptoPeriod.class, Period::compileEquals); 
+		map.put(PromptoDict.class, Dictionary::compileEquals);
+		map.put(PromptoSet.class, SetValue::compileEquals);  /*
+		map.put(PromptoTuple.class, TupleValue::compileEquals); */
+		map.put(PromptoList.class, ListValue::compileEquals); 
+		return map;
+	}
+
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		switch(operator) {
+		case EQUALS:
+			return compileEquals(context, method, flags.withReverse(false));
+		case NOT_EQUALS:
+			return compileEquals(context, method, flags.withReverse(true));
+		case ROUGHLY:
+			return compileEquals(context, method, flags.withReverse(false).withRoughly(true));
+		case IS:
+			return compileIs(context, method, flags.withReverse(false));
+		case IS_NOT:
+			return compileIs(context, method, flags.withReverse(true));
+		case IS_A:
+			return compileIsA(context, method, flags.withReverse(false));
+		case IS_NOT_A:
+			return compileIsA(context, method, flags.withReverse(true));
+		default:
+			throw new UnsupportedOperationException();
+		}
+	}
+	
+	private ResultInfo compileIsA(Context context, MethodInfo method, Flags flags) {
+		right.compile(context, method, flags.withPrimitive(false));
+		left.compile(context, method, flags.withPrimitive(false));
+		MethodConstant m = new MethodConstant(Class.class, "isInstance", Object.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+		if(flags.isReverse())
+			CompilerUtils.reverseBoolean(method);
+		if(flags.toPrimitive())
+			return new ResultInfo(boolean.class);
+		else
+			return CompilerUtils.booleanToBoolean(method);
+	}
+
+	public ResultInfo compileIs(Context context, MethodInfo method, Flags flags) {
+		if(left.equals(right)) 
+			method.addInstruction(flags.isReverse() ? Opcode.ICONST_0 : Opcode.ICONST_1);
+		else if(left instanceof NullLiteral)
+			compileIsNull(context, method, flags, right);
+		else if(right instanceof NullLiteral)
+			compileIsNull(context, method, flags, left);
+		else 
+			compileIsInstance(context, method, flags);
+		if(flags.toPrimitive())
+			return new ResultInfo(boolean.class);
+		else
+			return CompilerUtils.booleanToBoolean(method);
+	}
+	
+	private void compileIsNull(Context context, MethodInfo method, Flags flags, IExpression value) {
+		StackState initialState = method.captureStackState();
+		value.compile(context, method, flags.withPrimitive(false));
+		Opcode opcode = flags.isReverse() ? Opcode.IFNONNULL : Opcode.IFNULL;
+		method.addInstruction(opcode, new ShortOperand((short)7));
+		compileIsEpilogue(context, method, flags, initialState);
+	}
+
+	private void compileIsEpilogue(Context context, MethodInfo method, Flags flags, StackState initialState) {
+		method.addInstruction(Opcode.ICONST_0);
+		method.addInstruction(Opcode.GOTO, new ShortOperand((short)4));
+		method.restoreFullStackState(initialState);
+		method.placeLabel(initialState);
+		method.addInstruction(Opcode.ICONST_1);
+		StackState lastState = method.captureStackState();
+		method.placeLabel(lastState);
+	}
+
+	private void compileIsInstance(Context context, MethodInfo method, Flags flags) {
+		StackState initialState = method.captureStackState();
+		left.compile(context, method, flags.withPrimitive(false));
+		right.compile(context, method, flags.withPrimitive(false));
+		Opcode opcode = flags.isReverse() ? Opcode.IF_ACMPNE : Opcode.IF_ACMPEQ;
+		method.addInstruction(opcode, new ShortOperand((short)7));
+		compileIsEpilogue(context, method, flags, initialState);
+	}
+
+	public ResultInfo compileEquals(Context context, MethodInfo method, Flags flags) {
+		ResultInfo lval = left.compile(context, method, flags.withPrimitive(true));
+		IOperatorFunction tester = testers.get(lval.getType());
+		if(tester==null) {
+			System.err.println("Missing IOperatorFunction for = " + lval.getType().getTypeName());
+			throw new SyntaxError("Cannot check equality of " + lval.getType().getTypeName() + " with " + right.check(context).getFamily());
+		}
+		return tester.compile(context, method, flags, lval, right);
+	}
+
+
 }

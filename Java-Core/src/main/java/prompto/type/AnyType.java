@@ -1,6 +1,7 @@
 package prompto.type;
 
-import prompto.error.SyntaxError;
+import java.lang.reflect.Type;
+
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 
@@ -14,21 +15,26 @@ public class AnyType extends NativeType {
 	}
 	
 	private AnyType() {
-		super("any");
+		super(Family.ANY);
 	}
 
 	@Override
-	public Class<?> toJavaClass() {
+	public String getTypeName() {
+		return "any";
+	}
+	
+	@Override
+	public Type getJavaType(Context context) {
 		return Object.class;
 	}
 	
 	@Override
-	public IType checkItem(Context context, IType itemType) throws SyntaxError {
+	public IType checkItem(Context context, IType itemType) {
 		return AnyType.instance(); // needed to support lists in Documents
 	}
 	
 	@Override
-	public IType checkMember(Context context, Identifier name) throws SyntaxError {
+	public IType checkMember(Context context, Identifier name) {
 		return AnyType.instance(); // needed to support members in Documents
 	}
 

@@ -30,9 +30,9 @@ public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 	}
 
 	@Override
-	public void register(Context context) throws SyntaxError {
+	public void register(Context context) {
 		super.register(context);
-		Class<?> klass = getBoundClass(context, false);
+		Class<?> klass = getBoundClass(false);
 		if(klass!=null)
 			context.registerNativeBinding(klass, this);
 	}
@@ -111,9 +111,17 @@ public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 		return new NativeInstance(context, this);
 	}
 
-	public Class<?> getBoundClass(Context context, boolean fail) throws SyntaxError {
+	public String getBoundClassName() {
+		JavaNativeCategoryBinding mapping = getBinding(false);
+		if(mapping==null)
+			return null;
+		else
+			return mapping.getExpression().toString();
+	}
+	
+	public Class<?> getBoundClass(boolean fail) {
 		if(boundClass==null) {
-			JavaNativeCategoryBinding mapping = getBinding(context, fail);
+			JavaNativeCategoryBinding mapping = getBinding(fail);
 			if(mapping!=null) {
 				boundClass = mapping.getExpression().interpret_class();
 				if(boundClass==null && fail)
@@ -123,7 +131,7 @@ public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 		return boundClass;
 	}
 
-	private JavaNativeCategoryBinding getBinding(Context context, boolean fail) throws SyntaxError {
+	private JavaNativeCategoryBinding getBinding(boolean fail) {
 		for(NativeCategoryBinding mapping : categoryBindings) {
 			if(mapping instanceof JavaNativeCategoryBinding)
 				return (JavaNativeCategoryBinding)mapping;

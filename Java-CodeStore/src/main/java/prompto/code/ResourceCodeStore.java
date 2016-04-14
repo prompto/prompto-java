@@ -12,7 +12,6 @@ import prompto.declaration.DeclarationList;
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
 import prompto.parser.Dialect;
-import prompto.value.IValue;
 
 /* resource base code store used to bootstrap modules  */
 public class ResourceCodeStore extends BaseCodeStore {
@@ -61,7 +60,7 @@ public class ResourceCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public void storeDeclarations(Iterator<IDeclaration> declarations, Dialect dialect, Version version, IValue projectId) throws PromptoError {
+	public void storeDeclarations(Iterator<IDeclaration> declarations, Dialect dialect, Version version, Object projectId) throws PromptoError {
 		throw new UnsupportedOperationException();
 	}
 	
@@ -96,7 +95,7 @@ public class ResourceCodeStore extends BaseCodeStore {
 			declarations = new HashMap<String, List<IDeclaration>>();
 			for(IDeclaration decl : decls) {
 				decl.setOrigin(this);
-				String name = decl.getIdentifier().getName();
+				String name = decl.getId().toString();
 				if(declarations.get(name)==null)
 					declarations.put(name, new ArrayList<>());
 				declarations.get(name).add(decl);

@@ -1,7 +1,11 @@
 package prompto.expression;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
+import prompto.intrinsic.PromptoDocument;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.type.DocumentType;
@@ -13,13 +17,18 @@ import prompto.value.IValue;
 public class DocumentExpression implements IExpression {
 
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return DocumentType.instance();
 	}
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		return new Document();
+	}
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		return CompilerUtils.compileNewInstance(method, PromptoDocument.class);
 	}
 	
 	@Override

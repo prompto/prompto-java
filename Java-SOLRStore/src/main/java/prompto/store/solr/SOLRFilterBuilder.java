@@ -2,59 +2,39 @@ package prompto.store.solr;
 
 import java.util.Stack;
 
-import prompto.declaration.AttributeDeclaration;
-import prompto.grammar.EqOp;
-import prompto.runtime.Context;
-import prompto.store.IFilterBuilder;
-import prompto.type.CategoryType;
-import prompto.value.IValue;
+import prompto.store.IQuery.MatchOp;
 
-public class SOLRFilterBuilder implements IFilterBuilder {
+class SOLRFilterBuilder {
 
 	Stack<String> stack = new Stack<>();
 	
-	@Override
 	public void and() {
 		String e1 = stack.pop();
 		String e2 = stack.pop();
 		stack.push("(" + e1 + " AND " + e2 + ")");
 	}
 	
-	@Override
-	public void push(Context context, String fieldName, EqOp operator, IValue fieldValue) {
-		AttributeDeclaration column = context.findAttribute(fieldName);
-		TextFieldFlags flags = TextFieldFlags.computeFieldFlags(column);
+	public void or() {
+		String e1 = stack.pop();
+		String e2 = stack.pop();
+		stack.push("(" + e1 + " OR " + e2 + ")");
+	}
+	
+	public void not() {
+		String e = stack.pop();
+		stack.push("-" + e);
+	}
+
+	
+	public void push(SOLRAttributeInfo info, MatchOp operator, Object fieldValue) {
 		StringBuilder sb = new StringBuilder();
-		switch(operator) {
-		case IS:
-		case IS_NOT:
-		// TODO: could add a category clause	
-		case IS_A:
-		case IS_NOT_A:
-			throw new UnsupportedOperationException();
-		case EQUALS:
-			sb.append(fieldName);
-			if(flags!=null)
-				flags.addSuffixForEquals(sb);
-			break;
-		case ROUGHLY:
-			sb.append(fieldName);
-			if(flags!=null)
-				flags.addSuffixForRoughly(sb);
-			break;
-		case NOT_EQUALS:
-			sb.append('-');
-			if(flags!=null)
-				flags.addSuffixForEquals(sb);
-			break;
-		default:
-		}
+		info.addFieldNameFor(sb, operator);
 		sb.append(':');
 		escape(sb, fieldValue);
 		stack.push(sb.toString());
 	}
 
-	private void escape(StringBuilder sb, IValue value) {
+	private <T> void escape(StringBuilder sb, T value) {
 		boolean wasAmpersand = false;
 		boolean wasPipe = false;
 		for(char c : value.toString().toCharArray()) {
@@ -126,8 +106,5 @@ public class SOLRFilterBuilder implements IFilterBuilder {
 		return stack.pop();
 	}
 
-	public void pushCategory(CategoryType type) {
-		stack.push("category-key:" + type.getName());
-	}
 	
 }

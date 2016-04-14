@@ -20,28 +20,53 @@ public class TestLazy extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCyclic() throws Exception {
-		checkOutput("lazy/cyclic.pec");
+	public void testInterpretedCyclic() throws Exception {
+		checkInterpretedOutput("lazy/cyclic.pec");
 	}
 
 	@Test
-	public void testDict() throws Exception {
-		checkOutput("lazy/dict.pec");
+	public void testCompiledCyclic() throws Exception {
+		checkCompiledOutput("lazy/cyclic.pec");
 	}
 
 	@Test
-	public void testList() throws Exception {
-		checkOutput("lazy/list.pec");
+	public void testInterpretedDict() throws Exception {
+		checkInterpretedOutput("lazy/dict.pec");
 	}
 
 	@Test
-	public void testSet() throws Exception {
-		checkOutput("lazy/set.pec");
+	public void testCompiledDict() throws Exception {
+		checkCompiledOutput("lazy/dict.pec");
 	}
 
 	@Test
-	public void testTransient() throws Exception {
-		checkOutput("lazy/transient.pec");
+	public void testInterpretedList() throws Exception {
+		checkInterpretedOutput("lazy/list.pec");
+	}
+
+	@Test
+	public void testCompiledList() throws Exception {
+		checkCompiledOutput("lazy/list.pec");
+	}
+
+	@Test
+	public void testInterpretedSet() throws Exception {
+		checkInterpretedOutput("lazy/set.pec");
+	}
+
+	@Test
+	public void testCompiledSet() throws Exception {
+		checkCompiledOutput("lazy/set.pec");
+	}
+
+	@Test
+	public void testInterpretedTransient() throws Exception {
+		checkInterpretedOutput("lazy/transient.pec");
+	}
+
+	@Test
+	public void testCompiledTransient() throws Exception {
+		checkCompiledOutput("lazy/transient.pec");
 	}
 
 }

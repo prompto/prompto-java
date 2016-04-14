@@ -1,7 +1,6 @@
 package prompto.java;
 
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.type.IType;
@@ -23,7 +22,7 @@ public class JavaParenthesisExpression extends Section implements JavaExpression
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return expression.check(context);
 	}
 	

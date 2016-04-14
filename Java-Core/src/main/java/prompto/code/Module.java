@@ -2,70 +2,67 @@ package prompto.code;
 
 import prompto.code.ICodeStore.ModuleType;
 import prompto.error.PromptoError;
-import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoBinary;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
-import prompto.value.IValue;
-import prompto.value.Image;
-import prompto.value.Text;
 
 public abstract class Module {
 	
-	private IValue dbId;
-	private Text name;
-	private Text version;
-	private Text description;
-	private Image image;
+	private Object dbId;
+	private String name;
+	private String version;
+	private String description;
+	private PromptoBinary image;
 	
 	public abstract ModuleType getType();
 	
-	public IValue getDbId() {
+	public Object getDbId() {
 		return dbId;
 	}
 	
-	public void setDbId(IValue dbId) {
+	public void setDbId(Object dbId) {
 		this.dbId = dbId;
 	}
 	
-	public Text getName() {
+	public String getName() {
 		return name;
 	}
 	
-	public void setName(Text name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 	
-	public Text getVersion() {
+	public String getVersion() {
 		return version;
 	}
 	
-	public void setVersion(Text version) {
+	public void setVersion(String version) {
 		this.version = version;
 	}
 	
-	public Text getDescription() {
+	public String getDescription() {
 		return description;
 	}
 	
-	public void setDescription(Text description) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
 	
-	public Image getImage() {
+	public PromptoBinary getImage() {
 		return image;
 	}
 	
-	public void setImage(Image image) {
+	public void setImage(PromptoBinary image) {
 		this.image = image;
 	}
 
 	public void populate(Context context, IStorable storable) throws PromptoError {
 		setDbId(storable.getOrCreateDbId());
-		storable.setValue(context, new Identifier("name"), name);
-		storable.setValue(context, new Identifier("version"), version);
+		storable.setData("name", name);
+		storable.setData("version", version);
 		if(description!=null)
-			storable.setValue(context, new Identifier("description"), description);
+			storable.setData("description", description);
 		if(image!=null)
-			storable.setValue(context, new Identifier("image"), image);
+			storable.setData("image", image);
 	}
 }

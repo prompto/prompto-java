@@ -3,7 +3,6 @@ package prompto.grammar;
 import java.util.LinkedList;
 
 import prompto.declaration.IMethodDeclaration;
-import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.utils.CodeWriter;
 
@@ -31,16 +30,16 @@ public class ArgumentAssignmentList extends LinkedList<ArgumentAssignment> {
 
 	public ArgumentAssignment find(Identifier name) {
 		for(ArgumentAssignment assignment : this) {
-			if(name.equals(assignment.getName()))
+			if(name.equals(assignment.getArgumentId()))
 				return assignment;
 		}
 		return null;
 	}
 
-	public ArgumentAssignmentList makeAssignments(Context context, IMethodDeclaration declaration) throws SyntaxError {
+	public ArgumentAssignmentList resolveAndCheck(Context context, IMethodDeclaration declaration) {
 		ArgumentAssignmentList assignments = new ArgumentAssignmentList();
 		for(ArgumentAssignment assignment : this)
-			assignments.add(assignment.makeAssignment(context, declaration));
+			assignments.add(assignment.resolveAndCheck(context, declaration.getArguments()));
 		return assignments;
 	}
 	

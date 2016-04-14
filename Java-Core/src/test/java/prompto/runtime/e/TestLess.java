@@ -20,73 +20,143 @@ public class TestLess extends BaseEParserTest {
 	}
 
 	@Test
-	public void testLtCharacter() throws Exception {
-		checkOutput("less/ltCharacter.pec");
+	public void testInterpretedLtCharacter() throws Exception {
+		checkInterpretedOutput("less/ltCharacter.pec");
 	}
 
 	@Test
-	public void testLtDate() throws Exception {
-		checkOutput("less/ltDate.pec");
+	public void testCompiledLtCharacter() throws Exception {
+		checkCompiledOutput("less/ltCharacter.pec");
 	}
 
 	@Test
-	public void testLtDateTime() throws Exception {
-		checkOutput("less/ltDateTime.pec");
+	public void testInterpretedLtDate() throws Exception {
+		checkInterpretedOutput("less/ltDate.pec");
 	}
 
 	@Test
-	public void testLtDecimal() throws Exception {
-		checkOutput("less/ltDecimal.pec");
+	public void testCompiledLtDate() throws Exception {
+		checkCompiledOutput("less/ltDate.pec");
 	}
 
 	@Test
-	public void testLteCharacter() throws Exception {
-		checkOutput("less/lteCharacter.pec");
+	public void testInterpretedLtDateTime() throws Exception {
+		checkInterpretedOutput("less/ltDateTime.pec");
 	}
 
 	@Test
-	public void testLteDate() throws Exception {
-		checkOutput("less/lteDate.pec");
+	public void testCompiledLtDateTime() throws Exception {
+		checkCompiledOutput("less/ltDateTime.pec");
 	}
 
 	@Test
-	public void testLteDateTime() throws Exception {
-		checkOutput("less/lteDateTime.pec");
+	public void testInterpretedLtDecimal() throws Exception {
+		checkInterpretedOutput("less/ltDecimal.pec");
 	}
 
 	@Test
-	public void testLteDecimal() throws Exception {
-		checkOutput("less/lteDecimal.pec");
+	public void testCompiledLtDecimal() throws Exception {
+		checkCompiledOutput("less/ltDecimal.pec");
 	}
 
 	@Test
-	public void testLteInteger() throws Exception {
-		checkOutput("less/lteInteger.pec");
+	public void testInterpretedLteCharacter() throws Exception {
+		checkInterpretedOutput("less/lteCharacter.pec");
 	}
 
 	@Test
-	public void testLteText() throws Exception {
-		checkOutput("less/lteText.pec");
+	public void testCompiledLteCharacter() throws Exception {
+		checkCompiledOutput("less/lteCharacter.pec");
 	}
 
 	@Test
-	public void testLteTime() throws Exception {
-		checkOutput("less/lteTime.pec");
+	public void testInterpretedLteDate() throws Exception {
+		checkInterpretedOutput("less/lteDate.pec");
 	}
 
 	@Test
-	public void testLtInteger() throws Exception {
-		checkOutput("less/ltInteger.pec");
+	public void testCompiledLteDate() throws Exception {
+		checkCompiledOutput("less/lteDate.pec");
 	}
 
 	@Test
-	public void testLtText() throws Exception {
-		checkOutput("less/ltText.pec");
+	public void testInterpretedLteDateTime() throws Exception {
+		checkInterpretedOutput("less/lteDateTime.pec");
 	}
 
 	@Test
-	public void testLtTime() throws Exception {
-		checkOutput("less/ltTime.pec");
+	public void testCompiledLteDateTime() throws Exception {
+		checkCompiledOutput("less/lteDateTime.pec");
+	}
+
+	@Test
+	public void testInterpretedLteDecimal() throws Exception {
+		checkInterpretedOutput("less/lteDecimal.pec");
+	}
+
+	@Test
+	public void testCompiledLteDecimal() throws Exception {
+		checkCompiledOutput("less/lteDecimal.pec");
+	}
+
+	@Test
+	public void testInterpretedLteInteger() throws Exception {
+		checkInterpretedOutput("less/lteInteger.pec");
+	}
+
+	@Test
+	public void testCompiledLteInteger() throws Exception {
+		checkCompiledOutput("less/lteInteger.pec");
+	}
+
+	@Test
+	public void testInterpretedLteText() throws Exception {
+		checkInterpretedOutput("less/lteText.pec");
+	}
+
+	@Test
+	public void testCompiledLteText() throws Exception {
+		checkCompiledOutput("less/lteText.pec");
+	}
+
+	@Test
+	public void testInterpretedLteTime() throws Exception {
+		checkInterpretedOutput("less/lteTime.pec");
+	}
+
+	@Test
+	public void testCompiledLteTime() throws Exception {
+		checkCompiledOutput("less/lteTime.pec");
+	}
+
+	@Test
+	public void testInterpretedLtInteger() throws Exception {
+		checkInterpretedOutput("less/ltInteger.pec");
+	}
+
+	@Test
+	public void testCompiledLtInteger() throws Exception {
+		checkCompiledOutput("less/ltInteger.pec");
+	}
+
+	@Test
+	public void testInterpretedLtText() throws Exception {
+		checkInterpretedOutput("less/ltText.pec");
+	}
+
+	@Test
+	public void testCompiledLtText() throws Exception {
+		checkCompiledOutput("less/ltText.pec");
+	}
+
+	@Test
+	public void testInterpretedLtTime() throws Exception {
+		checkInterpretedOutput("less/ltTime.pec");
+	}
+
+	@Test
+	public void testCompiledLtTime() throws Exception {
+		checkCompiledOutput("less/ltTime.pec");
 	}
 
 }

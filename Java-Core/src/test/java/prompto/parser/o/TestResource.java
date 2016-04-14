@@ -24,37 +24,37 @@ public class TestResource extends BaseOParserTest {
 	
 	@Test(expected = SyntaxError.class)
 	public void testBadRead() throws Exception {
-		runResource("resource/badRead.poc");
+		interpretResource("resource/badRead.poc", true);
 	}
 
 	@Test(expected = SyntaxError.class)
 	public void testBadWrite() throws Exception {
-		runResource("resource/badWrite.poc");
+		interpretResource("resource/badWrite.poc", true);
 	}
 
 	@Test(expected = SyntaxError.class)
 	public void testBadResource() throws Exception {
-		runResource("resource/badResource.poc");
+		interpretResource("resource/badResource.poc", true);
 	}
 	
 	@Test
 	public void testReadResource() throws Exception {
-		checkOutput("resource/readResource.poc");
+		checkInterpretedOutput("resource/readResource.poc");
 	}
 	
 	@Test
 	public void testWriteResource() throws Exception {
-		checkOutput("resource/writeResource.poc");
+		checkInterpretedOutput("resource/writeResource.poc");
 	}
 
 	@Test
 	public void testReadWithResource() throws Exception {
-		checkOutput("resource/readWithResource.poc");
+		checkInterpretedOutput("resource/readWithResource.poc");
 	}
 
 	@Test
 	public void testWriteWithResource() throws Exception {
-		checkOutput("resource/writeWithResource.poc");
+		checkInterpretedOutput("resource/writeWithResource.poc");
 	}
 
 

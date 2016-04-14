@@ -9,20 +9,14 @@ define Any as native category with attributes id and text, and bindings:
 
 and methods: 
 
-	define id getter doing:
-		return nativeId
-	
-	define nativeId as native method returning any doing:
+	define id as getter doing:
 		Java: return System.identityHashCode(self);
 		C#: return System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(self);
 		Python2: return id(self)
 		Python3: return id(self)
 		JavaScript: return self.id;
 	
-	define text getter doing:
-		return text if text is not nothing else nativeText	
-	
-	define nativeText as native method returning Text doing:
+	define text as getter doing:
 		Java: return self.toString();
 		C#: return self.ToString();
 		Python2: return str(self)
@@ -101,7 +95,7 @@ define Error as enumerated category with attributes name and text, and symbols:
 	NOT_STORABLE with "Not a storable object!" as text
 	READ_WRITE with "Read/write failed!" as text
 define now as native method returning DateTime doing:
-	Java: return org.joda.time.DateTime.now();
+	Java: return prompto.intrinsic.PromptoDateTime.now();
 	C#: return System.DateTimeOffset.Now;
 	Python2: return datetime.utcnow() from module: datetime
 	Python3: return datetime.utcnow() from module: datetime

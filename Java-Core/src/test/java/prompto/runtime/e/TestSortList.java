@@ -20,58 +20,113 @@ public class TestSortList extends BaseEParserTest {
 	}
 
 	@Test
-	public void testSortBooleans() throws Exception {
-		checkOutput("sortList/sortBooleans.pec");
+	public void testInterpretedSortBooleans() throws Exception {
+		checkInterpretedOutput("sortList/sortBooleans.pec");
 	}
 
 	@Test
-	public void testSortDates() throws Exception {
-		checkOutput("sortList/sortDates.pec");
+	public void testCompiledSortBooleans() throws Exception {
+		checkCompiledOutput("sortList/sortBooleans.pec");
 	}
 
 	@Test
-	public void testSortDateTimes() throws Exception {
-		checkOutput("sortList/sortDateTimes.pec");
+	public void testInterpretedSortDates() throws Exception {
+		checkInterpretedOutput("sortList/sortDates.pec");
 	}
 
 	@Test
-	public void testSortDecimals() throws Exception {
-		checkOutput("sortList/sortDecimals.pec");
+	public void testCompiledSortDates() throws Exception {
+		checkCompiledOutput("sortList/sortDates.pec");
 	}
 
 	@Test
-	public void testSortExpressions() throws Exception {
-		checkOutput("sortList/sortExpressions.pec");
+	public void testInterpretedSortDateTimes() throws Exception {
+		checkInterpretedOutput("sortList/sortDateTimes.pec");
 	}
 
 	@Test
-	public void testSortIntegers() throws Exception {
-		checkOutput("sortList/sortIntegers.pec");
+	public void testCompiledSortDateTimes() throws Exception {
+		checkCompiledOutput("sortList/sortDateTimes.pec");
 	}
 
 	@Test
-	public void testSortKeys() throws Exception {
-		checkOutput("sortList/sortKeys.pec");
+	public void testInterpretedSortDecimals() throws Exception {
+		checkInterpretedOutput("sortList/sortDecimals.pec");
 	}
 
 	@Test
-	public void testSortMethods() throws Exception {
-		checkOutput("sortList/sortMethods.pec");
+	public void testCompiledSortDecimals() throws Exception {
+		checkCompiledOutput("sortList/sortDecimals.pec");
 	}
 
 	@Test
-	public void testSortNames() throws Exception {
-		checkOutput("sortList/sortNames.pec");
+	public void testInterpretedSortExpressions() throws Exception {
+		checkInterpretedOutput("sortList/sortExpressions.pec");
 	}
 
 	@Test
-	public void testSortTexts() throws Exception {
-		checkOutput("sortList/sortTexts.pec");
+	public void testCompiledSortExpressions() throws Exception {
+		checkCompiledOutput("sortList/sortExpressions.pec");
 	}
 
 	@Test
-	public void testSortTimes() throws Exception {
-		checkOutput("sortList/sortTimes.pec");
+	public void testInterpretedSortIntegers() throws Exception {
+		checkInterpretedOutput("sortList/sortIntegers.pec");
+	}
+
+	@Test
+	public void testCompiledSortIntegers() throws Exception {
+		checkCompiledOutput("sortList/sortIntegers.pec");
+	}
+
+	@Test
+	public void testInterpretedSortKeys() throws Exception {
+		checkInterpretedOutput("sortList/sortKeys.pec");
+	}
+
+	@Test
+	public void testCompiledSortKeys() throws Exception {
+		checkCompiledOutput("sortList/sortKeys.pec");
+	}
+
+	@Test
+	public void testInterpretedSortMethods() throws Exception {
+		checkInterpretedOutput("sortList/sortMethods.pec");
+	}
+
+	@Test
+	public void testCompiledSortMethods() throws Exception {
+		checkCompiledOutput("sortList/sortMethods.pec");
+	}
+
+	@Test
+	public void testInterpretedSortNames() throws Exception {
+		checkInterpretedOutput("sortList/sortNames.pec");
+	}
+
+	@Test
+	public void testCompiledSortNames() throws Exception {
+		checkCompiledOutput("sortList/sortNames.pec");
+	}
+
+	@Test
+	public void testInterpretedSortTexts() throws Exception {
+		checkInterpretedOutput("sortList/sortTexts.pec");
+	}
+
+	@Test
+	public void testCompiledSortTexts() throws Exception {
+		checkCompiledOutput("sortList/sortTexts.pec");
+	}
+
+	@Test
+	public void testInterpretedSortTimes() throws Exception {
+		checkInterpretedOutput("sortList/sortTimes.pec");
+	}
+
+	@Test
+	public void testCompiledSortTimes() throws Exception {
+		checkCompiledOutput("sortList/sortTimes.pec");
 	}
 
 }

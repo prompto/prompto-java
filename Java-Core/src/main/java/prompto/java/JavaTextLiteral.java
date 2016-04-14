@@ -1,6 +1,10 @@
 package prompto.java;
 
-import prompto.error.SyntaxError;
+import prompto.compiler.IConstantOperand;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.StringConstant;
 import prompto.runtime.Context;
 import prompto.type.IType;
 
@@ -24,7 +28,15 @@ public class JavaTextLiteral extends JavaLiteral {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return new JavaClassType(String.class);
 	}
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method) {
+		IConstantOperand operand = new StringConstant(value);
+		method.addInstruction(Opcode.LDC_W, operand);
+		return new ResultInfo(String.class);
+	}
+
 }

@@ -1,6 +1,8 @@
 package prompto.java;
 
-import prompto.error.SyntaxError;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.runtime.Context;
 import prompto.type.IType;
 
@@ -20,8 +22,13 @@ public class JavaBooleanLiteral extends JavaLiteral {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		return new JavaClassType(Boolean.class);
 	}
 
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method) {
+		method.addInstruction(value ? Opcode.ICONST_1 : Opcode.ICONST_0);
+		return new ResultInfo(boolean.class);
+	}
 }

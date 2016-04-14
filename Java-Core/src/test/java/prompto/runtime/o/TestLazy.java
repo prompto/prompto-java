@@ -20,28 +20,53 @@ public class TestLazy extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCyclic() throws Exception {
-		checkOutput("lazy/cyclic.poc");
+	public void testInterpretedCyclic() throws Exception {
+		checkInterpretedOutput("lazy/cyclic.poc");
 	}
 
 	@Test
-	public void testDict() throws Exception {
-		checkOutput("lazy/dict.poc");
+	public void testCompiledCyclic() throws Exception {
+		checkCompiledOutput("lazy/cyclic.poc");
 	}
 
 	@Test
-	public void testList() throws Exception {
-		checkOutput("lazy/list.poc");
+	public void testInterpretedDict() throws Exception {
+		checkInterpretedOutput("lazy/dict.poc");
 	}
 
 	@Test
-	public void testSet() throws Exception {
-		checkOutput("lazy/set.poc");
+	public void testCompiledDict() throws Exception {
+		checkCompiledOutput("lazy/dict.poc");
 	}
 
 	@Test
-	public void testTransient() throws Exception {
-		checkOutput("lazy/transient.poc");
+	public void testInterpretedList() throws Exception {
+		checkInterpretedOutput("lazy/list.poc");
+	}
+
+	@Test
+	public void testCompiledList() throws Exception {
+		checkCompiledOutput("lazy/list.poc");
+	}
+
+	@Test
+	public void testInterpretedSet() throws Exception {
+		checkInterpretedOutput("lazy/set.poc");
+	}
+
+	@Test
+	public void testCompiledSet() throws Exception {
+		checkCompiledOutput("lazy/set.poc");
+	}
+
+	@Test
+	public void testInterpretedTransient() throws Exception {
+		checkInterpretedOutput("lazy/transient.poc");
+	}
+
+	@Test
+	public void testCompiledTransient() throws Exception {
+		checkCompiledOutput("lazy/transient.poc");
 	}
 
 }

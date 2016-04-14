@@ -48,7 +48,7 @@ public class Application {
 	}
 	
 	static void importSamples() throws Exception {
-		IStore dataStore = IDataStore.getInstance();
+		IStore<Object> dataStore = IDataStore.getInstance();
 		ICodeStore codeStore = new UpdatableCodeStore(dataStore, "dev-center", "1.0.0");
 		Collection<String> samples = ResourceUtils.listResourcesAt("samples/");
 		for(String sample : samples) {

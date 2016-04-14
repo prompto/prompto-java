@@ -1,16 +1,15 @@
 package prompto.type;
 
-import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 
 public abstract class ContainerType extends IterableType {
 
-	protected ContainerType(String name, IType itemType) {
-		super(name, itemType);
+	protected ContainerType(Family family, IType itemType, String fullName) {
+		super(family, itemType, fullName);
 	}
 	
 	@Override
-	public IType checkContains(Context context, IType other) throws SyntaxError {
+	public IType checkContains(Context context, IType other) {
 		if(itemType.isAssignableTo(context, other))
 			return BooleanType.instance();
 		else

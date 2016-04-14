@@ -1,13 +1,13 @@
 package prompto.type;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import java.lang.reflect.Type;
+import java.util.Comparator;
 
-import prompto.error.PromptoError;
 import prompto.runtime.Context;
 import prompto.value.Boolean;
-import prompto.value.IContainer;
 import prompto.value.IValue;
-import prompto.value.ListValue;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class BooleanType extends NativeType {
 	
@@ -18,11 +18,11 @@ public class BooleanType extends NativeType {
 	}
 	
 	private BooleanType() {
-		super("Boolean");
+		super(Family.BOOLEAN);
 	}
 
 	@Override
-	public Class<?> toJavaClass() {
+	public Type getJavaType(Context context) {
 		return java.lang.Boolean.class;
 	}
 	
@@ -32,16 +32,21 @@ public class BooleanType extends NativeType {
 	}
 	
 	@Override
-	public ListValue sort(Context context, IContainer<IValue> list) throws PromptoError {
-		return this.doSort(context,list);
+	public Comparator<? extends IValue> getComparator() {
+		return new Comparator<Boolean>() {
+			@Override
+			public int compare(Boolean o1, Boolean o2) {
+				return java.lang.Boolean.compare(o1.getValue(), o2.getValue());
+			}
+		};
 	}
 	
 	@Override
-	public IValue convertJavaValueToPromptoValue(Object value) {
+	public IValue convertJavaValueToPromptoValue(Context context, Object value) {
         if (value instanceof java.lang.Boolean)
             return Boolean.valueOf(((java.lang.Boolean)value).booleanValue());
         else
-        	return super.convertJavaValueToPromptoValue(value);
+        	return super.convertJavaValueToPromptoValue(context, value);
 	}
 	
 	@Override

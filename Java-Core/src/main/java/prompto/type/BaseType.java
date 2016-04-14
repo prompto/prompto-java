@@ -1,46 +1,30 @@
 package prompto.type;
 
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
-import java.util.PriorityQueue;
-
-import com.fasterxml.jackson.databind.JsonNode;
 
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
-import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.utils.CodeWriter;
-import prompto.value.ExpressionValue;
-import prompto.value.IContainer;
 import prompto.value.IValue;
-import prompto.value.ListValue;
-import prompto.value.Range;
+import prompto.value.RangeBase;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 public abstract class BaseType implements IType {
 
-	Identifier id;
+	Family family;
 
-	protected BaseType(String name) {
-		this(new Identifier(name));
-	}
-
-	protected BaseType(Identifier id) {
-		this.id = id;
+	protected BaseType(Family family) {
+		this.family = family;
 	}
 
 	@Override
-	public Identifier getId() {
-		return id;
-	}
-	
-	@Override
-	public String getName() {
-		return id.getName();
+	public Family getFamily() {
+		return family;
 	}
 
 	@Override
@@ -52,97 +36,97 @@ public abstract class BaseType implements IType {
 		if (!(obj instanceof IType))
 			return false;
 		IType type = (IType) obj;
-		return this.getId().equals(type.getId());
+		return this.getTypeName().equals(type.getTypeName());
 	}
 
 	@Override
 	public String toString() {
-		return id.toString();
+		return getTypeName();
 	}
 
 	@Override
 	public void toDialect(CodeWriter writer) {
-		writer.append(id);
+		writer.append(getTypeName());
 	}
 	
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkAdd(Context context, IType other, boolean tryReverse) {
 		if(tryReverse)
 			return other.checkAdd(context, this, false);
 		else
-			throw new SyntaxError("Cannot add " + this.getId() + " to " + other.getId());
+			throw new SyntaxError("Cannot add " + this.getTypeName() + " to " + other.getTypeName());
 	}
 
 	@Override
-	public IType checkSubstract(Context context, IType other) throws SyntaxError {
-		throw new SyntaxError("Cannot substract " + this.getId() + " from " + other.getId());
+	public IType checkSubstract(Context context, IType other) {
+		throw new SyntaxError("Cannot substract " + this.getTypeName() + " from " + other.getTypeName());
 	}
 
 	@Override
-	public IType checkDivide(Context context, IType other) throws SyntaxError {
-		throw new SyntaxError("Cannot divide " + this.getId() + " with " + other.getId());
+	public IType checkDivide(Context context, IType other) {
+		throw new SyntaxError("Cannot divide " + this.getTypeName() + " with " + other.getTypeName());
 	}
 
 	@Override
-	public IType checkIntDivide(Context context, IType other) throws SyntaxError {
-		throw new SyntaxError("Cannot divide " + this.getId() + " with " + other.getId());
+	public IType checkIntDivide(Context context, IType other) {
+		throw new SyntaxError("Cannot divide " + this.getTypeName() + " with " + other.getTypeName());
 	}
 
 	@Override
-	public IType checkMultiply(Context context, IType other, boolean tryReverse) throws SyntaxError {
+	public IType checkMultiply(Context context, IType other, boolean tryReverse) {
 		if(tryReverse)
 			return other.checkMultiply(context, this, false);
 		else
-			throw new SyntaxError("Cannot multiply " + this.getId() + " with " + other.getId());
+			throw new SyntaxError("Cannot multiply " + this.getTypeName() + " with " + other.getTypeName());
 	}
 
 	@Override
-	public IType checkModulo(Context context, IType other) throws SyntaxError {
-		throw new SyntaxError("Cannot modulo " + this.getId() + " with " + other.getId());
+	public IType checkModulo(Context context, IType other) {
+		throw new SyntaxError("Cannot modulo " + this.getTypeName() + " with " + other.getTypeName());
 	}
 	
 	@Override
-	public IType checkCompare(Context context, IType other, ISection section) throws SyntaxError {
+	public IType checkCompare(Context context, IType other, ISection section) {
 		context.getProblemListener().reportIllegalComparison(this, other, section);
 		return BooleanType.instance();
 	}
 
 	@Override
-	public IType checkContains(Context context, IType other) throws SyntaxError {
-		throw new SyntaxError(this.getId() + " cannot contain " + other.getId());
+	public IType checkContains(Context context, IType other) {
+		throw new SyntaxError(this.getTypeName() + " cannot contain " + other.getTypeName());
 	}
 
 	@Override
-	public IType checkContainsAllOrAny(Context context, IType other) throws SyntaxError {
-		throw new SyntaxError(this.getId() + " cannot contain " + other.getId());
+	public IType checkContainsAllOrAny(Context context, IType other) {
+		throw new SyntaxError(this.getTypeName() + " cannot contain " + other.getTypeName());
 	}
 
 	@Override
-	public IType checkItem(Context context, IType itemType) throws SyntaxError {
-		throw new SyntaxError("Cannot read item from " + this.getId());
+	public IType checkItem(Context context, IType itemType) {
+		throw new SyntaxError("Cannot read item from " + this.getTypeName());
 	}
 
 	@Override
-	public IType checkMember(Context context, Identifier name) throws SyntaxError {
-		context.getProblemListener().reportIllegalMember(name.getName(), name);
+	public IType checkMember(Context context, Identifier name) {
+		context.getProblemListener().reportIllegalMember(name.toString(), name);
 		return VoidType.instance();
 	}
 
 	@Override
-	public IType checkSlice(Context context) throws SyntaxError {
-		throw new SyntaxError("Cannot slice " + this.getId());
+	public IType checkSlice(Context context) {
+		throw new SyntaxError("Cannot slice " + this.getTypeName());
 	}
 
 	@Override
-	public IType checkIterator(Context context) throws SyntaxError {
-		throw new SyntaxError("Cannot iterate over " + this.getId());
+	public IType checkIterator(Context context) {
+		throw new SyntaxError("Cannot iterate over " + this.getTypeName());
 	}
 
 	@Override
-	public abstract void checkUnique(Context context) throws SyntaxError;
+	public abstract void checkUnique(Context context);
 
 	@Override
-	public abstract void checkExists(Context context) throws SyntaxError;
+	public abstract void checkExists(Context context);
 
 	@Override
 	public abstract boolean isAssignableTo(Context context, IType other);
@@ -151,19 +135,21 @@ public abstract class BaseType implements IType {
 	public abstract boolean isMoreSpecificThan(Context context, IType other);
 
 	@Override
-	public final void checkAssignableTo(Context context, IType other) throws SyntaxError {
+	public final void checkAssignableTo(Context context, IType other) {
+		if(other==DocumentType.instance() || other==AnyType.instance())
+			return;
 		if (!isAssignableTo(context, other))
-			throw new SyntaxError("Type: " + this.getId() + " is not compatible with: " + other.getId());
+			throw new SyntaxError("Type: " + this.getTypeName() + " is not compatible with: " + other.getTypeName());
 	}
 
 	@Override
-	public IType checkRange(Context context, IType other) throws SyntaxError {
-		throw new SyntaxError("Cannot create range of " + this.getId() + " and " + other.getId());
+	public IType checkRange(Context context, IType other) {
+		throw new SyntaxError("Cannot create range of " + this.getTypeName() + " and " + other.getTypeName());
 	}
 
 	@Override
-	public Range<?> newRange(Object left, Object right) throws SyntaxError {
-		throw new SyntaxError("Cannot create range of " + this.getId());
+	public RangeBase<?> newRange(Object left, Object right) {
+		throw new SyntaxError("Cannot create range of " + this.getTypeName());
 	}
 
 	@Override
@@ -172,41 +158,22 @@ public abstract class BaseType implements IType {
 	}
 
 	@Override
-	public ListValue sort(Context context, IContainer<IValue> list) throws PromptoError {
+	public Comparator<? extends IValue> getComparator() {
 		throw new RuntimeException("Unsupported!");
 	}
 
-	protected ListValue doSort(Context context, IContainer<IValue> list) throws PromptoError {
-		return doSort(context, list, null);
-	}
-
-	protected <T extends IValue> ListValue doSort(Context context, IContainer<IValue> list, Comparator<T> cmp) throws PromptoError {
-		PriorityQueue<T> queue = new PriorityQueue<T>((int) list.length(), cmp);
-		for (Object o : list.getIterable(context)) {
-			if (o instanceof IExpression)
-				o = ((IExpression) o).interpret(context);
-			@SuppressWarnings("unchecked")
-			T value = (T) o;
-			queue.offer(value);
-		}
-		List<IValue> result = new ArrayList<IValue>();
-		while (queue.peek() != null)
-			result.add(new ExpressionValue(this, queue.poll()));
-		IType itemType = ((ContainerType)list.getType()).getItemType();
-		return new ListValue(itemType, result);
-	}
-
-	public IValue convertJavaValueToPromptoValue(Object value) {
-		return (IValue) value; // TODO for now
+	public IValue convertJavaValueToPromptoValue(Context context, Object value) {
+		throw new RuntimeException("Unsupported convertJavaValueToPromptoValue for " + this.getClass());
 	}
 	
 	@Override
 	public IValue getMember(Context context, Identifier name) throws PromptoError {
-		throw new SyntaxError("Cannot read member from " + this.getId());
+		throw new SyntaxError("Cannot read member from " + this.getTypeName());
 	}
 
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value) {
 		throw new InvalidParameterException(value.toString());
 	}
+	
 }

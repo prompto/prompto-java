@@ -20,28 +20,53 @@ public class TestItem extends BaseOParserTest {
 	}
 
 	@Test
-	public void testItemDict() throws Exception {
-		checkOutput("item/itemDict.poc");
+	public void testInterpretedItemDict() throws Exception {
+		checkInterpretedOutput("item/itemDict.poc");
 	}
 
 	@Test
-	public void testItemList() throws Exception {
-		checkOutput("item/itemList.poc");
+	public void testCompiledItemDict() throws Exception {
+		checkCompiledOutput("item/itemDict.poc");
 	}
 
 	@Test
-	public void testItemRange() throws Exception {
-		checkOutput("item/itemRange.poc");
+	public void testInterpretedItemList() throws Exception {
+		checkInterpretedOutput("item/itemList.poc");
 	}
 
 	@Test
-	public void testItemSet() throws Exception {
-		checkOutput("item/itemSet.poc");
+	public void testCompiledItemList() throws Exception {
+		checkCompiledOutput("item/itemList.poc");
 	}
 
 	@Test
-	public void testItemText() throws Exception {
-		checkOutput("item/itemText.poc");
+	public void testInterpretedItemRange() throws Exception {
+		checkInterpretedOutput("item/itemRange.poc");
+	}
+
+	@Test
+	public void testCompiledItemRange() throws Exception {
+		checkCompiledOutput("item/itemRange.poc");
+	}
+
+	@Test
+	public void testInterpretedItemSet() throws Exception {
+		checkInterpretedOutput("item/itemSet.poc");
+	}
+
+	@Test
+	public void testCompiledItemSet() throws Exception {
+		checkCompiledOutput("item/itemSet.poc");
+	}
+
+	@Test
+	public void testInterpretedItemText() throws Exception {
+		checkInterpretedOutput("item/itemText.poc");
+	}
+
+	@Test
+	public void testCompiledItemText() throws Exception {
+		checkCompiledOutput("item/itemText.poc");
 	}
 
 }

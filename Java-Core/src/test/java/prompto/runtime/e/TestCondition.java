@@ -20,33 +20,53 @@ public class TestCondition extends BaseEParserTest {
 	}
 
 	@Test
-	public void testComplexIf() throws Exception {
-		checkOutput("condition/complexIf.pec");
+	public void testInterpretedComplexIf() throws Exception {
+		checkInterpretedOutput("condition/complexIf.pec");
 	}
 
 	@Test
-	public void testElseIf() throws Exception {
-		checkOutput("condition/elseIf.pec");
+	public void testCompiledComplexIf() throws Exception {
+		checkCompiledOutput("condition/complexIf.pec");
 	}
 
 	@Test
-	public void testReturnIf() throws Exception {
-		checkOutput("condition/returnIf.pec");
+	public void testInterpretedReturnIf() throws Exception {
+		checkInterpretedOutput("condition/returnIf.pec");
 	}
 
 	@Test
-	public void testSimpleIf() throws Exception {
-		checkOutput("condition/simpleIf.pec");
+	public void testCompiledReturnIf() throws Exception {
+		checkCompiledOutput("condition/returnIf.pec");
 	}
 
 	@Test
-	public void testSwitch() throws Exception {
-		checkOutput("condition/switch.pec");
+	public void testInterpretedSimpleIf() throws Exception {
+		checkInterpretedOutput("condition/simpleIf.pec");
 	}
 
 	@Test
-	public void testTernary() throws Exception {
-		checkOutput("condition/ternary.pec");
+	public void testCompiledSimpleIf() throws Exception {
+		checkCompiledOutput("condition/simpleIf.pec");
+	}
+
+	@Test
+	public void testInterpretedSwitch() throws Exception {
+		checkInterpretedOutput("condition/switch.pec");
+	}
+
+	@Test
+	public void testCompiledSwitch() throws Exception {
+		checkCompiledOutput("condition/switch.pec");
+	}
+
+	@Test
+	public void testInterpretedTernary() throws Exception {
+		checkInterpretedOutput("condition/ternary.pec");
+	}
+
+	@Test
+	public void testCompiledTernary() throws Exception {
+		checkCompiledOutput("condition/ternary.pec");
 	}
 
 }

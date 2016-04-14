@@ -20,58 +20,113 @@ public class TestSortSet extends BaseOParserTest {
 	}
 
 	@Test
-	public void testSortBooleans() throws Exception {
-		checkOutput("sortSet/sortBooleans.poc");
+	public void testInterpretedSortBooleans() throws Exception {
+		checkInterpretedOutput("sortSet/sortBooleans.poc");
 	}
 
 	@Test
-	public void testSortDates() throws Exception {
-		checkOutput("sortSet/sortDates.poc");
+	public void testCompiledSortBooleans() throws Exception {
+		checkCompiledOutput("sortSet/sortBooleans.poc");
 	}
 
 	@Test
-	public void testSortDateTimes() throws Exception {
-		checkOutput("sortSet/sortDateTimes.poc");
+	public void testInterpretedSortDates() throws Exception {
+		checkInterpretedOutput("sortSet/sortDates.poc");
 	}
 
 	@Test
-	public void testSortDecimals() throws Exception {
-		checkOutput("sortSet/sortDecimals.poc");
+	public void testCompiledSortDates() throws Exception {
+		checkCompiledOutput("sortSet/sortDates.poc");
 	}
 
 	@Test
-	public void testSortExpressions() throws Exception {
-		checkOutput("sortSet/sortExpressions.poc");
+	public void testInterpretedSortDateTimes() throws Exception {
+		checkInterpretedOutput("sortSet/sortDateTimes.poc");
 	}
 
 	@Test
-	public void testSortIntegers() throws Exception {
-		checkOutput("sortSet/sortIntegers.poc");
+	public void testCompiledSortDateTimes() throws Exception {
+		checkCompiledOutput("sortSet/sortDateTimes.poc");
 	}
 
 	@Test
-	public void testSortKeys() throws Exception {
-		checkOutput("sortSet/sortKeys.poc");
+	public void testInterpretedSortDecimals() throws Exception {
+		checkInterpretedOutput("sortSet/sortDecimals.poc");
 	}
 
 	@Test
-	public void testSortMethods() throws Exception {
-		checkOutput("sortSet/sortMethods.poc");
+	public void testCompiledSortDecimals() throws Exception {
+		checkCompiledOutput("sortSet/sortDecimals.poc");
 	}
 
 	@Test
-	public void testSortNames() throws Exception {
-		checkOutput("sortSet/sortNames.poc");
+	public void testInterpretedSortExpressions() throws Exception {
+		checkInterpretedOutput("sortSet/sortExpressions.poc");
 	}
 
 	@Test
-	public void testSortTexts() throws Exception {
-		checkOutput("sortSet/sortTexts.poc");
+	public void testCompiledSortExpressions() throws Exception {
+		checkCompiledOutput("sortSet/sortExpressions.poc");
 	}
 
 	@Test
-	public void testSortTimes() throws Exception {
-		checkOutput("sortSet/sortTimes.poc");
+	public void testInterpretedSortIntegers() throws Exception {
+		checkInterpretedOutput("sortSet/sortIntegers.poc");
+	}
+
+	@Test
+	public void testCompiledSortIntegers() throws Exception {
+		checkCompiledOutput("sortSet/sortIntegers.poc");
+	}
+
+	@Test
+	public void testInterpretedSortKeys() throws Exception {
+		checkInterpretedOutput("sortSet/sortKeys.poc");
+	}
+
+	@Test
+	public void testCompiledSortKeys() throws Exception {
+		checkCompiledOutput("sortSet/sortKeys.poc");
+	}
+
+	@Test
+	public void testInterpretedSortMethods() throws Exception {
+		checkInterpretedOutput("sortSet/sortMethods.poc");
+	}
+
+	@Test
+	public void testCompiledSortMethods() throws Exception {
+		checkCompiledOutput("sortSet/sortMethods.poc");
+	}
+
+	@Test
+	public void testInterpretedSortNames() throws Exception {
+		checkInterpretedOutput("sortSet/sortNames.poc");
+	}
+
+	@Test
+	public void testCompiledSortNames() throws Exception {
+		checkCompiledOutput("sortSet/sortNames.poc");
+	}
+
+	@Test
+	public void testInterpretedSortTexts() throws Exception {
+		checkInterpretedOutput("sortSet/sortTexts.poc");
+	}
+
+	@Test
+	public void testCompiledSortTexts() throws Exception {
+		checkCompiledOutput("sortSet/sortTexts.poc");
+	}
+
+	@Test
+	public void testInterpretedSortTimes() throws Exception {
+		checkInterpretedOutput("sortSet/sortTimes.poc");
+	}
+
+	@Test
+	public void testCompiledSortTimes() throws Exception {
+		checkCompiledOutput("sortSet/sortTimes.poc");
 	}
 
 }

@@ -1,15 +1,21 @@
 package prompto.type;
 
-import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 
 public abstract class IterableType extends NativeType {
 
 	IType itemType;
+	String typeName;
 	
-	protected IterableType(String name, IType itemType) {
-		super(name);
+	protected IterableType(Family family, IType itemType, String typeName) {
+		super(family);
 		this.itemType = itemType;
+		this.typeName = typeName;
+	}
+	
+	@Override
+	public String getTypeName() {
+		return typeName;
 	}
 	
 	public IType getItemType() {
@@ -17,7 +23,7 @@ public abstract class IterableType extends NativeType {
 	}
 	
 	@Override
-	public void checkExists(Context context) throws SyntaxError {
+	public void checkExists(Context context) {
 		itemType.checkExists(context);
 	}
 	

@@ -20,8 +20,13 @@ public class TestInjections extends BaseOParserTest {
 	}
 
 	@Test
-	public void testExpressionInjection() throws Exception {
-		checkOutput("injections/expressionInjection.poc");
+	public void testInterpretedExpressionInjection() throws Exception {
+		checkInterpretedOutput("injections/expressionInjection.poc");
+	}
+
+	@Test
+	public void testCompiledExpressionInjection() throws Exception {
+		checkCompiledOutput("injections/expressionInjection.poc");
 	}
 
 }

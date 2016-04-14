@@ -1,6 +1,7 @@
 package prompto.value;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -27,7 +28,9 @@ import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.store.IDataStore;
 import prompto.store.IStorable;
+import prompto.store.IStore;
 import prompto.type.CategoryType;
+import prompto.type.NativeCategoryType;
 
 public class NativeInstance extends BaseValue implements IInstance {
 	
@@ -36,26 +39,32 @@ public class NativeInstance extends BaseValue implements IInstance {
 	IStorable storable = null;
 	boolean mutable = false;
 	
-	public NativeInstance(Context context, NativeCategoryDeclaration declaration) throws SyntaxError {
-		super(new CategoryType(declaration.getIdentifier()));
+	public NativeInstance(Context context, NativeCategoryDeclaration declaration) {
+		super(new NativeCategoryType(declaration));
 		this.declaration = declaration;
 		this.instance = makeInstance(context);
 		if(declaration.isStorable()) {
 			List<String> categories = Arrays.asList(declaration.getName()); 
-			storable = IDataStore.getInstance().newStorable(categories);
+			storable = IDataStore.getInstance().newStorable(categories, null);
 		}
 	}
 	
 	public NativeInstance(NativeCategoryDeclaration declaration, Object instance) {
-		super(new CategoryType(declaration.getIdentifier()));
+		super(new NativeCategoryType(declaration));
 		this.declaration = declaration;
 		this.instance = instance;
 		if(declaration.isStorable()) {
 			List<String> categories = Arrays.asList(declaration.getName()); 
-			storable = IDataStore.getInstance().newStorable(categories);
+			storable = IDataStore.getInstance().newStorable(categories, null);
 		}
 	}
 	
+	@Override
+	public Object getStorableData() {
+		throw new UnsupportedOperationException(); // TODO
+	}
+	
+
 	@Override
 	public IStorable getStorable() {
 		return storable;
@@ -95,9 +104,9 @@ public class NativeInstance extends BaseValue implements IInstance {
 		return instance;
 	}
 	
-	private Object makeInstance(Context context) throws SyntaxError {
-		Class<?> mapped = declaration.getBoundClass(context, true);
+	private Object makeInstance(Context context) {
 		try {
+			Class<?> mapped = declaration.getBoundClass(true);
 			return mapped.newInstance();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -199,11 +208,20 @@ public class NativeInstance extends BaseValue implements IInstance {
 			value = promptoSetter.interpret(context);
 		} else {
 			Method nativeSetter = getSetter(attrName);
-			Object data = value.ConvertTo(nativeSetter.getParameterTypes()[0]);
+			Object data = value.convertTo(nativeSetter.getParameterTypes()[0]);
 			setValue(nativeSetter, data);
 			if(storable!=null && decl.isStorable()) {
-				storable.setValue(context, attrName, value);
+				storable.setData(attrName.toString(), data, this::getDbId);
 			}
+		}
+	}
+
+	private Object getDbId() {
+		try {
+			Field field = this.getClass().getField(IStore.dbIdName);
+			return field.get(this);
+		} catch (Throwable t) {
+			throw new RuntimeException(t);
 		}
 	}
 
@@ -219,7 +237,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 		} 
 	}
 
-	private Method getSetter(Identifier attrName) throws SyntaxError {
+	private Method getSetter(Identifier attrName) {
 		String setterName = "set" + attrName.toString().substring(0,1).toUpperCase() 
 				+ attrName.toString().substring(1);
 		Method m = getMethod(attrName, setterName);
@@ -229,7 +247,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 			return m;
 	}
 	
-	private Method getGetter(Identifier attrName) throws SyntaxError {
+	private Method getGetter(Identifier attrName) {
 		String setterName = "get" + attrName.toString().substring(0,1).toUpperCase() 
 				+ attrName.toString().substring(1);
 		Method m = getMethod(attrName, setterName);

@@ -43,7 +43,7 @@ public class AssignVariableStatement extends SimpleStatement {
 		expression.toDialect(writer);
 	}
 
-	public IType checkResource(Context context) throws SyntaxError {
+	public IType checkResource(Context context) {
 		IType type = expression.check(context);
 		if(!(type instanceof ResourceType))
 			throw new SyntaxError("Not a resource!");
@@ -72,7 +72,7 @@ public class AssignVariableStatement extends SimpleStatement {
 	}
 	
 	@Override
-	public IType check(Context context) throws SyntaxError {
+	public IType check(Context context) {
 		INamed actual = context.getRegisteredValue(INamed.class,name);
 		if(actual==null) {
 			IType actualType = expression.check(context);

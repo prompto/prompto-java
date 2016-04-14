@@ -15,4 +15,10 @@ public class TypeValue extends BaseValue {
 		return value;
 	}
 
+	@Override
+	public Object getStorableData() {
+		throw new UnsupportedOperationException(); // can't be stored
+	}
+	
+
 }
