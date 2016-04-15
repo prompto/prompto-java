@@ -181,6 +181,14 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 	}
 	
 	@Override
+	public UUID convertToDbId(Object dbId) {
+		if(dbId instanceof UUID)
+			return (UUID)dbId;
+		else
+			return UUID.fromString(String.valueOf(dbId));
+	}
+	
+	@Override
 	public void createOrUpdateColumns(Collection<AttributeDeclaration> columns) throws PromptoError {
 		for(AttributeDeclaration column : columns) try {
 			createOrUpdateColumn(column);

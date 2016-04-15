@@ -20,6 +20,7 @@ public interface IStore<T extends Object> {
 	public static final String dbIdName = "dbId";
 	
 	Class<?> getDbIdClass();
+	T convertToDbId(Object dbId);
 	Type getColumnType(String name) throws PromptoError;
 	void createOrUpdateColumns(Collection<AttributeDeclaration> columns) throws PromptoError;
 

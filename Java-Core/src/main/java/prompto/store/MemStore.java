@@ -30,6 +30,14 @@ public final class MemStore implements IStore<Long> {
 	}
 	
 	@Override
+	public Long convertToDbId(Object dbId) {
+		if(dbId instanceof Long)
+			return (Long)dbId;
+		else
+			return Long.decode(String.valueOf(dbId));
+	}
+	
+	@Override
 	public Type getColumnType(String name) {
 		throw new UnsupportedOperationException();
 	}

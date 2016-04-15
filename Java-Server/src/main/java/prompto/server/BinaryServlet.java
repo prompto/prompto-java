@@ -23,9 +23,10 @@ public class BinaryServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
-			String dbId = req.getParameter(IStore.dbIdName);
+			String dbIdString = req.getParameter(IStore.dbIdName);
 			String attr = req.getParameter("attribute");
 			IStore<?> store = IDataStore.getInstance();
+			Object dbId = store.convertToDbId(dbIdString);
 			@SuppressWarnings("unchecked")
 			PromptoBinary binary = ((IStore<Object>)store).fetchBinary(dbId, attr);
 			resp.setContentType(binary.getMimeType());
