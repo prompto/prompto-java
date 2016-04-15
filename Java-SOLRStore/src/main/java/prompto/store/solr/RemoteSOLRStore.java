@@ -155,7 +155,9 @@ public class RemoteSOLRStore extends BaseSOLRStore {
 		SchemaRequest.Field getField = new SchemaRequest.Field(fieldName);
 		SchemaResponse.FieldResponse response = getField.process(client, coreName);
 	    Map<String, Object> field = response.getField();
-		return String.valueOf(field.get("type"));
+	    String type = String.valueOf(field.get("type"));
+	    Boolean multi = (Boolean)field.getOrDefault("multiValued", false);
+		return type + (multi ? "[]" : "");
 	}
 	
 	@Override
