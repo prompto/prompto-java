@@ -2,6 +2,7 @@ package prompto.type;
 
 import java.security.InvalidParameterException;
 import java.util.Comparator;
+import java.util.Map;
 
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -172,7 +173,7 @@ public abstract class BaseType implements IType {
 	}
 
 	@Override
-	public IValue readJSONValue(Context context, JsonNode value) {
+	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		throw new InvalidParameterException(value.toString());
 	}
 	

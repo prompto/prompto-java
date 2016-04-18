@@ -1,6 +1,7 @@
 package prompto.type;
 
 import java.lang.reflect.Type;
+import java.util.Map;
 
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoList;
@@ -90,13 +91,13 @@ public class ListType extends ContainerType {
    }
 
 	@Override
-	public IValue readJSONValue(Context context, JsonNode array) {
+	public IValue readJSONValue(Context context, JsonNode array, Map<String, byte[]> parts) {
 		ListValue list = new ListValue(itemType);
 		array.forEach( (node) -> { try {
 				String typeName = node.get("type").asText(itemType.toString());
 				IType itemType = new ECleverParser(typeName).parse_standalone_type();
 				JsonNode itemNode = node.get("value");
-				IValue item = itemType.readJSONValue(context, itemNode);
+				IValue item = itemType.readJSONValue(context, itemNode, parts);
 				list.addItem(item);
 			} catch (Exception e) {
 				throw new RuntimeException(e);

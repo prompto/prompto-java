@@ -2,6 +2,7 @@ package prompto.type;
 
 import java.lang.reflect.Type;
 import java.util.Comparator;
+import java.util.Map;
 
 import prompto.grammar.Identifier;
 import prompto.parser.ISection;
@@ -28,8 +29,6 @@ public class TextType extends NativeType {
 	public Type getJavaType(Context context) {
 		return String.class;
 	}
-	
-
 	
 	@Override
 	public boolean isAssignableTo(Context context, IType other) {
@@ -113,7 +112,7 @@ public class TextType extends NativeType {
 	}
 	
 	@Override
-	public IValue readJSONValue(Context context, JsonNode value) {
+	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		return new Text(value.asText());
 	}
 }

@@ -2,6 +2,7 @@ package prompto.type;
 
 import java.lang.reflect.Type;
 import java.util.Comparator;
+import java.util.Map;
 
 import prompto.parser.ISection;
 import prompto.runtime.Context;
@@ -114,7 +115,7 @@ public class DecimalType extends NativeType implements INumberType {
 	}
 	
 	@Override
-	public IValue readJSONValue(Context context, JsonNode value) {
+	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		return new Decimal(value.asDouble());
 	}
 

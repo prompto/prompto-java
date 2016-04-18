@@ -83,7 +83,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 
 	@Override
 	public ModuleType getModuleType() {
-		return ModuleType.APPLICATION;
+		return ModuleType.WEBSITE;
 	}
 	
 	@Override
@@ -131,8 +131,8 @@ public class UpdatableCodeStore extends BaseCodeStore {
 			module.setName((String)stored.getData("name"));
 			module.setVersion((String)stored.getData("version"));
 			module.setDescription((String)stored.getData("description"));
-			if(module instanceof Application)
-				((Application)module).setEntryPoint((String)stored.getData("entryPoint"));
+			if(module instanceof WebSite)
+				((WebSite)module).setEntryPoint((String)stored.getData("entryPoint"));
 			return (T)module;
 		} catch(Exception e) {
 			throw new RuntimeException(e);

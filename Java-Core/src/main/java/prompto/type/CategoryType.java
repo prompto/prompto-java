@@ -325,11 +325,11 @@ public class CategoryType extends BaseType {
 	}
 
 	@Override
-	public IValue readJSONValue(Context context, JsonNode value) {
+	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		try {
 			IDeclaration declaration = getDeclaration(context);
 			if(declaration instanceof CategoryDeclaration) 
-				return readJSONInstance(context, (CategoryDeclaration)declaration, value);
+				return readJSONInstance(context, (CategoryDeclaration)declaration, value, parts);
 			else if(declaration instanceof EnumeratedNativeDeclaration)
 				return ((EnumeratedNativeDeclaration)declaration).readJSONValue(context, value);
 			else
@@ -339,31 +339,31 @@ public class CategoryType extends BaseType {
 		} 
 	}
 
-	private IValue readJSONInstance(Context context, CategoryDeclaration declaration, JsonNode value) throws PromptoError {
+	private IValue readJSONInstance(Context context, CategoryDeclaration declaration, JsonNode value, Map<String, byte[]> parts) throws PromptoError {
 		IInstance instance = newInstance(context);
 		instance.setMutable(true);
 		readJSONDbId(context, value, instance); // start by dbId to avoid creating a new one
-		readJSONFields(context, value, instance); // then copy all the remaining fields
+		readJSONFields(context, value, instance, parts); // then copy all the remaining fields
 		instance.setMutable(this.mutable);
 		return instance;
 	}
 
-	private void readJSONFields(Context context, JsonNode value, IInstance instance) throws PromptoError {
+	private void readJSONFields(Context context, JsonNode value, IInstance instance, Map<String, byte[]> parts) throws PromptoError {
 		Iterator<Map.Entry<String, JsonNode>> fields = value.fields();
 		while(fields.hasNext()) {
 			Map.Entry<String, JsonNode> field = fields.next();
 			if(IStore.dbIdName.equals(field.getKey()))
 					continue;
-			readJSONField(context, instance, field.getKey(), field.getValue());
+			readJSONField(context, instance, field.getKey(), field.getValue(), parts);
 		}
 	}
 
-	private void readJSONField(Context context, IInstance instance, String fieldName, JsonNode fieldData) throws PromptoError {
+	private void readJSONField(Context context, IInstance instance, String fieldName, JsonNode fieldData, Map<String, byte[]> parts) throws PromptoError {
 		Identifier fieldId = new Identifier(fieldName);
 		IType fieldType = readJSONFieldType(context, fieldId, fieldData);
 		if(fieldType instanceof CategoryType)
 			fieldData = fieldData.get("value");
-		IValue fieldValue = fieldType.readJSONValue(context, fieldData);
+		IValue fieldValue = fieldType.readJSONValue(context, fieldData, parts);
 		if(fieldValue!=null)
 			instance.setMember(context, fieldId, fieldValue);
 	}
@@ -389,7 +389,7 @@ public class CategoryType extends BaseType {
 	private void readJSONDbId(Context context, JsonNode value, IInstance instance) throws PromptoError {
 		if(value.has(IStore.dbIdName)) {
 			IType type = Utils.typeToIType(IDataStore.getInstance().getDbIdClass());
-			IValue dbid = type.readJSONValue(context, value.get(IStore.dbIdName));
+			IValue dbid = type.readJSONValue(context, value.get(IStore.dbIdName), null);
 			instance.setMember(context, new Identifier(IStore.dbIdName), dbid);
 		}
 	}

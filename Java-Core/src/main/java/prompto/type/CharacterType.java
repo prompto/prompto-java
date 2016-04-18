@@ -3,6 +3,7 @@ package prompto.type;
 import java.lang.reflect.Type;
 import java.security.InvalidParameterException;
 import java.util.Comparator;
+import java.util.Map;
 
 import prompto.parser.ISection;
 import prompto.runtime.Context;
@@ -94,7 +95,7 @@ public class CharacterType extends NativeType {
 	}
 	
 	@Override
-	public IValue readJSONValue(Context context, JsonNode value) {
+	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		if(value.asText().length()>1)
 			throw new InvalidParameterException(value.toString());
 		return new Character(value.asText().charAt(0));

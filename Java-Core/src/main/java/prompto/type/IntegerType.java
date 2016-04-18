@@ -2,6 +2,7 @@ package prompto.type;
 
 import java.lang.reflect.Type;
 import java.util.Comparator;
+import java.util.Map;
 
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
@@ -156,7 +157,7 @@ public class IntegerType extends NativeType implements INumberType {
 	}
 
 	@Override
-	public IValue readJSONValue(Context context, JsonNode value) {
+	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		return new Integer(value.asLong());
 	}
 }

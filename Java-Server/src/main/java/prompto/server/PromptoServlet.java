@@ -3,6 +3,8 @@ package prompto.server;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -29,12 +31,11 @@ public class PromptoServlet extends HttpServlet {
 		try {
 			authenticate(req);
 			readSession(req);
-			String path = req.getPathInfo();
-			Identifier methodName = new Identifier(path.substring(1));
+			Identifier methodName = readMethod(req);
 			String[] httpParams = req.getParameterMap().get("params");
 			String jsonParams = httpParams==null || httpParams.length==0 ? null : httpParams[0];
 			RequestRouter handler = new RequestRouter(AppServer.globalContext);
-			handler.handleRequest(methodName, jsonParams, resp.getOutputStream());
+			handler.handleRequest(methodName, jsonParams, null, resp.getOutputStream());
 			resp.getOutputStream().close();
 			resp.flushBuffer();
 			resp.setContentType("application/json");
@@ -63,27 +64,48 @@ public class PromptoServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
-			authenticate(req);
-			readSession(req);
-			String path = req.getPathInfo();
-			Identifier methodName = new Identifier(path.substring(1));
-			String jsonParams = readParams(req);
-			RequestRouter handler = new RequestRouter(AppServer.globalContext);
-			handler.handleRequest(methodName, jsonParams, resp.getOutputStream());
-			resp.getOutputStream().close();
-			resp.flushBuffer();
-			resp.setContentType("application/json");
-			resp.setStatus(200);
+			String contentType = req.getContentType();
+			if(contentType.startsWith("application/x-www-form-urlencoded"))
+				doPostUrlEncoded(req, resp);
+			else if(contentType.startsWith("multipart/form-data"))
+				doPostMultipart(req, resp);
 		} catch(Throwable t) {
 			t.printStackTrace();
 			resp.setStatus(500);
 		}
 	}
 
-	private String readParams(HttpServletRequest req) throws ServletException, IOException {
-		Part part = req.getPart("params");
-		if(part==null)
-			return null;
+	private void doPostMultipart(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+		authenticate(req);
+		readSession(req);
+		Identifier methodName = readMethod(req);
+		Map<String, byte[]> parts = readParts(req);
+		String jsonParams = new String(parts.get("params"));
+		RequestRouter handler = new RequestRouter(AppServer.globalContext);
+		handler.handleRequest(methodName, jsonParams, parts, resp.getOutputStream());
+		resp.getOutputStream().close();
+		resp.flushBuffer();
+		resp.setContentType("application/json");
+		resp.setStatus(200);
+	}
+
+	private Identifier readMethod(HttpServletRequest req) {
+		String path = req.getPathInfo();
+		return new Identifier(path.substring(1));
+	}
+
+	private void doPostUrlEncoded(HttpServletRequest req, HttpServletResponse resp) {
+		throw new UnsupportedOperationException();
+	}
+
+	private Map<String, byte[]> readParts(HttpServletRequest req) throws ServletException, IOException {
+		Map<String, byte[]> parts = new HashMap<>();
+		for(Part part : req.getParts())
+			parts.put(part.getName(), readPartData(part));
+		return parts;
+	}
+
+	private byte[] readPartData(Part part) throws IOException {
 		try(InputStream input = part.getInputStream()) {
 			try(ByteArrayOutputStream output = new ByteArrayOutputStream()) {
 				byte[] buffer = new byte[4096];
@@ -95,7 +117,7 @@ public class PromptoServlet extends HttpServlet {
 						output.write(buffer, 0, read);
 				}
 				output.flush();
-				return new String(output.toByteArray());
+				return output.toByteArray();
 			}
 		}
 	}

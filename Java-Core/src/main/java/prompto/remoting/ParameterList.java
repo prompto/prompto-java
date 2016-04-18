@@ -6,6 +6,7 @@ import java.io.Writer;
 import java.net.URLEncoder;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -47,9 +48,9 @@ public class ParameterList extends ArrayList<Parameter> {
 		return writer.toString();
 	}
 
-	public static ParameterList read(Context context, String jsonParams) throws Exception {
+	public static ParameterList read(Context context, String jsonParams, Map<String, byte[]> parts) throws Exception {
 		JsonNode params = parseParams(jsonParams);
-		return read(context, params);
+		return read(context, params, parts);
 	}
 	
 	private static JsonNode parseParams(String jsonParams) throws Exception {
@@ -59,14 +60,14 @@ public class ParameterList extends ArrayList<Parameter> {
 		return parser.readValueAsTree();
 	}
 
-	public static ParameterList read(Context context, JsonNode jsonParams) throws Exception {
+	public static ParameterList read(Context context, JsonNode jsonParams, Map<String, byte[]> parts) throws Exception {
 		ParameterList params = new ParameterList();
 		if(jsonParams==null)
 			return params;
 		if(!jsonParams.isArray())
 			throw new InvalidParameterException("Expecting a JSON array!");
 		for(JsonNode node : jsonParams)
-			params.add(Parameter.read(context, node));
+			params.add(Parameter.read(context, node, parts));
 		return params;
 	}
 

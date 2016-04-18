@@ -2,6 +2,7 @@ package prompto.remoting;
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
+import java.util.Map;
 
 import prompto.argument.CategoryArgument;
 import prompto.argument.IArgument;
@@ -22,7 +23,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public class Parameter {
 
-	public static Parameter read(Context context, JsonNode jsonParam) throws Exception {
+	public static Parameter read(Context context, JsonNode jsonParam, Map<String, byte[]> parts) throws Exception {
 		if(!jsonParam.isObject())
 			throw new InvalidParameterException("Expecting a JSON object!");
 		Parameter param = new Parameter();
@@ -42,7 +43,7 @@ public class Parameter {
 		field = jsonParam.get("value");
 		if(field==null)
 			throw new InvalidParameterException("Expecting a 'value' field!");
-		param.setValue(new ExpressionValue(param.getType(), param.getType().readJSONValue(context, field)));
+		param.setValue(new ExpressionValue(param.getType(), param.getType().readJSONValue(context, field, parts)));
 		return param;
 	}
 

@@ -1,4 +1,5 @@
 {
+	"type" : "BATCH",
 	"name" : "MyApp",
 	"version" : "1.0.0",
 	"description" : "A killer app!",

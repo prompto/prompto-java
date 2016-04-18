@@ -1,0 +1,2 @@
+define printHelloInventory as method receiving Text{} options doing:
+    print "Hello Inventory!"

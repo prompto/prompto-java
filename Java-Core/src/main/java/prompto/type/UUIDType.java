@@ -1,6 +1,7 @@
 package prompto.type;
 
 import java.lang.reflect.Type;
+import java.util.Map;
 import java.util.UUID;
 
 import prompto.runtime.Context;
@@ -26,7 +27,7 @@ public class UUIDType extends NativeType {
 	}
 	
 	@Override
-	public IValue readJSONValue(Context context, JsonNode value) {
+	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		return new prompto.value.UUID(value.asText());
 	}
 	

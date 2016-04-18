@@ -1,0 +1,9 @@
+{
+	"type" : "BATCH",
+	"name" : "Sales",
+	"version" : "1.0.0",
+	"description" : "Sales report",
+	"entryPoint" : "printHelloSales",
+	"imageResource" : "Sales.png",
+	"codeResource" : "Sales.pec"
+}

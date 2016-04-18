@@ -2,6 +2,7 @@ package prompto.type;
 
 import java.lang.reflect.Type;
 import java.util.Comparator;
+import java.util.Map;
 
 import prompto.runtime.Context;
 import prompto.value.Boolean;
@@ -50,7 +51,7 @@ public class BooleanType extends NativeType {
 	}
 	
 	@Override
-	public IValue readJSONValue(Context context, JsonNode value) {
+	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		return prompto.value.Boolean.valueOf(value.asBoolean());
 	}
 

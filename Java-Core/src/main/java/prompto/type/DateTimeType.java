@@ -2,6 +2,7 @@ package prompto.type;
 
 import java.lang.reflect.Type;
 import java.util.Comparator;
+import java.util.Map;
 
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDateTime;
@@ -120,7 +121,7 @@ public class DateTimeType extends NativeType {
 	}
 
 	@Override
-	public IValue readJSONValue(Context context, JsonNode value) {
+	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		PromptoDateTime dt = PromptoDateTime.parse(value.asText());
 		return new DateTime(dt);
 	}

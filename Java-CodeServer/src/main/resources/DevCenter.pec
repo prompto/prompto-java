@@ -1,11 +1,13 @@
 define Module as storable category with attributes name, version, description and image
 
+define Thesaurus as storable Module
 define Library as storable Module
 define Service as storable Module
+define WebSite as storable Module
 define Script as storable Module
 
 define entryPoint as storable Text attribute
-define Application as storable Module with attribute entryPoint
+define Batch as storable Module with attribute entryPoint
 
 define module as storable Module attribute
 
@@ -63,5 +65,27 @@ define storeDeclarations as method receiving EditedDeclaration[] edited doing:
 	updated = d3.declaration for each d3 in fetch any d from edited where d.editStatus = DIRTY
 	delete deleted and store created, updated 
 
+define createModule as method receiving Text type, name, description, Boolean createEntryPoint, entryPoint, image doing:
+	module = Module with name as name, "1.0.0.0" as version, description as description and image as image
+	switch on type:
+		when "library":
+			module = Library from module
+		when "service":
+			module = Service from module
+		when "website":
+			module = WebSite from module
+		when "script":
+			module = Script from module
+		when "batch":
+			if createEntryPoint:
+				entryPoint = "main_" + name
+			batch = Batch from module with entryPoint as entryPoint
+			decl = createMainMethod with batch as batch
+			module = batch
+	store decl, module
 
-
+define createMainMethod as method receiving Batch batch doing:
+	body = "define " + batch.entryPoint + " as method receiving Text{} options doing:\n"
+	body = body + "\tprint \"Hello " + batch.name + "\"\n" 
+	decl = MethodDeclaration with batch.entryPoint as name, "1.0.0.0" as version, "E" as dialect, "Text{} options" as prototype, body as body and batch as module
+	return decl 

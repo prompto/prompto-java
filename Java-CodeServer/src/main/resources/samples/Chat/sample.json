@@ -1,8 +1,0 @@
-{
-	"name" : "Chat",
-	"version" : "1.0.0",
-	"description" : "Wanna chat?",
-	"entryPoint" : "printHelloChat",
-	"imageResource" : "ChatApp.png",
-	"codeResource" : "ChatApp.pec"
-}

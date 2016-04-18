@@ -1,0 +1,9 @@
+{
+	"type" : "BATCH",
+	"name" : "Inventory",
+	"version" : "1.0.0",
+	"description" : "Inventory report",
+	"entryPoint" : "printHelloInventory",
+	"imageResource" : "Inventory.jpg",
+	"codeResource" : "Inventory.pec"
+}

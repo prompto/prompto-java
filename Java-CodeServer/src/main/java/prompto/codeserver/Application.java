@@ -43,17 +43,19 @@ public class Application {
 	}
 	
 	static void aboutToStart() throws Exception {
-		importSamples();
+		createThesaurusAndImportSamples();
 		
 	}
 	
-	static void importSamples() throws Exception {
+	static void createThesaurusAndImportSamples() throws Exception {
 		IStore<Object> dataStore = IDataStore.getInstance();
 		ICodeStore codeStore = new UpdatableCodeStore(dataStore, "dev-center", "1.0.0");
+		ModuleImporter importer = new ModuleImporter("thesaurus/");
+		importer.importModule(codeStore);
 		Collection<String> samples = ResourceUtils.listResourcesAt("samples/");
 		for(String sample : samples) {
-			SampleImporter importer = new SampleImporter("samples/" + sample);
-			importer.importSample(codeStore);
+			importer = new ModuleImporter("samples/" + sample);
+			importer.importModule(codeStore);
 		}
 	}
 }

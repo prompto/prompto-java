@@ -67,10 +67,12 @@ public interface ICodeStore {
 	static final Version LATEST = Version.parse("-1.-1.-1");
 	
 	static public enum ModuleType {
-		APPLICATION(Application.class), // which interacts with users through a UI
-		SERVICE(Service.class), // back end service (web/messaging)
+		THESAURUS(Thesaurus.class), // storable attributes and categories
 		LIBRARY(Library.class), // reusable classes and methods
-		SCRIPT(Script.class); // script that can be scheduled or launched by user
+		BATCH(Batch.class), // which can be scheduled
+		SCRIPT(Script.class), // which has no entry point
+		SERVICE(Service.class), // back end only web service (must be hosted)
+		WEBSITE(WebSite.class); // full fledged web app (must be hosted)
 		
 		Class<? extends Module> moduleClass;
 		
@@ -101,20 +103,24 @@ public interface ICodeStore {
 	
 	Iterator<IDeclaration> fetchSpecificVersions(String name, Version version) throws PromptoError;
 
-	default public Application fetchApplication(String name, Version version) throws PromptoError {
-		return fetchModule(ModuleType.APPLICATION, name, version);
+	default public WebSite fetchApplication(String name, Version version) throws PromptoError {
+		return fetchModule(ModuleType.WEBSITE, name, version);
 	}
 	
-	default public Library fetchLibrary(String name, Version version) throws PromptoError {
-		return fetchModule(ModuleType.LIBRARY, name, version);
+	default public Script fetchScript(String name, Version version) throws PromptoError {
+		return fetchModule(ModuleType.SCRIPT, name, version);
 	}
 	
 	default public Service fetchService(String name, Version version) throws PromptoError {
 		return fetchModule(ModuleType.SERVICE, name, version);
 	}
 
-	default public Script fetchScript(String name, Version version) throws PromptoError {
-		return fetchModule(ModuleType.SCRIPT, name, version);
+	default public Library fetchLibrary(String name, Version version) throws PromptoError {
+		return fetchModule(ModuleType.LIBRARY, name, version);
+	}
+	
+	default public Script fetchThesaurus(Version version) throws PromptoError {
+		return fetchModule(ModuleType.THESAURUS, ModuleType.THESAURUS.name(), version);
 	}
 	
 	<T extends Module> T fetchModule(ModuleType type, String name, Version version) throws PromptoError;

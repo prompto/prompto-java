@@ -102,7 +102,7 @@ public abstract class BinaryValue extends BaseValue {
 		}
 	}
 	
-	private static String fileExtensionToMimeType(String ext) {
+	public static String fileExtensionToMimeType(String ext) {
 		String mimeType = extensionToMimeType.get(ext.toLowerCase());
 		if(mimeType==null)
 			return "application/octet-stream";

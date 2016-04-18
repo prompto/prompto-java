@@ -5,7 +5,7 @@ import prompto.error.PromptoError;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 
-public class Application extends Module {
+public class WebSite extends Module {
 
 	private String entryPoint;
 
@@ -19,7 +19,7 @@ public class Application extends Module {
 
 	@Override
 	public ModuleType getType() {
-		return ModuleType.APPLICATION;
+		return ModuleType.WEBSITE;
 	}
 	
 	@Override

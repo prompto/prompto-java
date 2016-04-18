@@ -2,6 +2,7 @@ package prompto.type;
 
 import java.lang.reflect.Type;
 import java.util.Comparator;
+import java.util.Map;
 
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
@@ -93,7 +94,7 @@ public interface IType {
 	IValue getMember(Context context, Identifier name) throws PromptoError;
 	String toString(Object value);
 	void toDialect(CodeWriter writer);
-	IValue readJSONValue(Context context, JsonNode value);
+	IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts);
 	IValue convertJavaValueToPromptoValue(Context context, Object value);
 	default ResultInfo compileGetMember(Context context, MethodInfo method,
 			Flags flags, IExpression parent, Identifier id) {

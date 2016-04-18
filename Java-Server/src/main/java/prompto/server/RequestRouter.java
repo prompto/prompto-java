@@ -2,6 +2,7 @@ package prompto.server;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Map;
 
 import prompto.error.PromptoError;
 import prompto.expression.MethodSelector;
@@ -23,9 +24,9 @@ public class RequestRouter {
 		this.context = context.newLocalContext();
 	}
 
-	public void handleRequest(Identifier methodName, String jsonParams, OutputStream output) throws Exception {
+	public void handleRequest(Identifier methodName, String jsonParams, Map<String, byte[]> parts, OutputStream output) throws Exception {
 		try {
-			ParameterList params = ParameterList.read(context, jsonParams);
+			ParameterList params = ParameterList.read(context, jsonParams, parts);
 			ArgumentAssignmentList assignments = params.toAssignments(context);
 			MethodCall methodCall = new MethodCall(new MethodSelector(methodName),assignments);
 			IValue value = methodCall.interpret(context);	
