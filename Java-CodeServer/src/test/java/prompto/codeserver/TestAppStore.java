@@ -44,9 +44,9 @@ public class TestAppStore extends BaseWebTest {
 	public void testLoadAppStore() throws Exception {
 		webDriver.get(ROOT_URL);
 		webDriver.switchTo().frame("content-frame");
-		String dbId = getDbIdForModule("Mail");
+		String dbId = getDbIdForModule("Inventory");
 		WebElement we = waitElement(By.id(dbId));
-		assertTrue(we.getText().startsWith("Mail"));
+		assertTrue(we.getText().startsWith("Inventory"));
 	}
 
 }
