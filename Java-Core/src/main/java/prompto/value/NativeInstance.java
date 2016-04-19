@@ -275,9 +275,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 				if(value==null)
 					generator.writeNull();
 				else {
-					Object id = this.getDbId();
-					if(id==null)
-						id = System.identityHashCode(this);
+					Object id = System.identityHashCode(this);
 					value.toJson(context, generator, id, attrName, data);
 				}
 			}
