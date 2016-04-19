@@ -7,6 +7,11 @@ import prompto.parser.e.BaseEParserTest;
 public class TestDocuments extends BaseEParserTest {
 
 	@Test
+	public void testBlob() throws Exception {
+		compareResourceESE("documents/blob.pec");
+	}
+
+	@Test
 	public void testDeepItem() throws Exception {
 		compareResourceESE("documents/deepItem.pec");
 	}

@@ -11,6 +11,7 @@ import prompto.grammar.Identifier;
 import prompto.remoting.ParameterList;
 import prompto.runtime.Context;
 import prompto.statement.MethodCall;
+import prompto.value.BinaryValue;
 import prompto.value.IValue;
 
 import com.fasterxml.jackson.core.JsonFactory;
@@ -24,20 +25,28 @@ public class RequestRouter {
 		this.context = context.newLocalContext();
 	}
 
-	public void handleRequest(Identifier methodName, String jsonParams, Map<String, byte[]> parts, OutputStream output) throws Exception {
+	public String interpretRequest(Identifier methodName, String jsonParams, Map<String, byte[]> parts, OutputStream output) throws Exception {
 		try {
 			ParameterList params = ParameterList.read(context, jsonParams, parts);
 			ArgumentAssignmentList assignments = params.toAssignments(context);
 			MethodCall methodCall = new MethodCall(new MethodSelector(methodName),assignments);
-			IValue value = methodCall.interpret(context);	
-			writeResponse(context, value, output);
+			IValue value = methodCall.interpret(context);
+			if(value instanceof BinaryValue)
+				return writeBinaryResponse((BinaryValue)value, output);
+			else
+				return writeJsonResponse(value, output);
 		} finally {
 			context.terminated();
 		}
 		
 	}
 
-	private void writeResponse(Context context, IValue value, OutputStream output) throws IOException, PromptoError {
+	private String writeBinaryResponse(BinaryValue value, OutputStream output) throws IOException {
+		output.write(value.getBytes());
+		return value.getMimeType();
+	}
+
+	private String writeJsonResponse(IValue value, OutputStream output) throws IOException, PromptoError {
 		JsonGenerator generator = new JsonFactory().createGenerator(output);
 		generator.writeStartObject();
 		generator.writeNullField("error");
@@ -45,11 +54,12 @@ public class RequestRouter {
 			generator.writeNullField("data");
 		else {
 			generator.writeFieldName("data");
-			value.toJson(context, generator, null, null);
+			value.toJson(context, generator, null, null, null);
 		}
 		generator.writeEndObject();
 		generator.flush();
 		generator.close();
+		return "application/json";
 	}
 
 }

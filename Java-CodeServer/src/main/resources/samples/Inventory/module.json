@@ -4,6 +4,6 @@
 	"version" : "1.0.0",
 	"description" : "Inventory report",
 	"entryPoint" : "printHelloInventory",
-	"imageResource" : "Inventory.jpg",
+	"imageResource" : "Inventory.png",
 	"codeResource" : "Inventory.pec"
 }

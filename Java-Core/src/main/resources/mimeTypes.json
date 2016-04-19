@@ -25,7 +25,6 @@
 			"py"
 		]
 	},
-
 	{
 		"mimeType": "text/css",
 		"extensions": 
@@ -33,7 +32,6 @@
 			"css"
 		]
 	},
-
 	{
 		"mimeType": "text/xml",
 		"extensions": 
@@ -41,7 +39,6 @@
 			"xml"
 		]
 	},
-
 	{
 		"mimeType": "text/richtext",
 		"extensions": 
@@ -51,7 +48,6 @@
 			"rtx"
 		]
 	},
-
 	{
 		"mimeType": "text/sgml",
 		"extensions": 
@@ -61,7 +57,6 @@
 			"text/sgml"
 		]
 	},
-
 	{
 		"mimeType": "text/html",
 		"extensions": 
@@ -72,7 +67,6 @@
 			"shtml"
 		]
 	},
-
 	{
 		"mimeType": "image/gif",
 		"extensions": 
@@ -80,7 +74,6 @@
 			"gif"
 		]
 	},
-
 	{
 		"mimeType": "image/tiff",
 		"extensions": 
@@ -89,7 +82,6 @@
 			"tiff"
 		]
 	},
-
 	{
 		"mimeType": "image/jpeg",
 		"extensions": 
@@ -100,12 +92,18 @@
 			"jpeg"
 		]
 	},
-
 	{
 		"mimeType": "image/png",
 		"extensions": 
 		[
 			"png"
+		]
+	},
+	{
+		"mimeType": "application/zip",
+		"extensions": 
+		[
+			"zip"
 		]
 	}
 ]

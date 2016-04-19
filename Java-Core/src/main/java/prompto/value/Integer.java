@@ -1,6 +1,7 @@
 package prompto.value;
 
 import java.io.IOException;
+import java.util.Map;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -379,7 +380,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
+	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, Map<String, byte[]> data) throws PromptoError {
 		try {
 			generator.writeNumber(value);
 		} catch(IOException e) {

@@ -1,21 +1,30 @@
 package prompto.value;
 
+import java.io.IOException;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import prompto.error.PromptoError;
+import prompto.error.ReadWriteError;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDocument;
 import prompto.runtime.Context;
 import prompto.type.DocumentType;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+
 public class Document extends BaseValue {
 	
-	PromptoDocument<Identifier,IValue> members = new PromptoDocument<Identifier,IValue>();
+	PromptoDocument<Identifier,IValue> values = new PromptoDocument<Identifier,IValue>();
 	
 	public Document() {
 		super(DocumentType.instance());
 	}
 	
+
 	@Override
 	public PromptoDocument<Identifier,IValue> getStorableData() {
-		return members;
+		return values;
 	}
 	
 	@Override
@@ -29,37 +38,60 @@ public class Document extends BaseValue {
  	}
 
     public IValue getMember(Identifier name, boolean autoCreate) {
-        IValue result = members.get(name);
+        IValue result = values.get(name);
         if(autoCreate && result==null) {
             result = new Document();
-            members.put(name, result);
+            values.put(name, result);
         }
         return result;
  	}
 
 	@Override
     public void setMember(Context context, Identifier name, IValue value) {
-    	members.put(name, value);
+    	values.put(name, value);
     }
 
    public void setMember(Identifier name, IValue value) {
-    	members.put(name, value);
+    	values.put(name, value);
     }
 	
 	public boolean hasMember(Identifier name) {
-		return members.containsKey(name);
+		return values.containsKey(name);
 	}
 	
 	@Override
 	public String toString() {
-		return members.toString();
+		return values.toString();
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
 		if(obj instanceof Document)
-			return members.equals(((Document)obj).members);
+			return values.equals(((Document)obj).values);
 		else
 			return false;
+	}
+	
+	@Override
+	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, Map<String, byte[]> binaries) throws PromptoError {
+		try {
+			generator.writeStartObject();
+			generator.writeFieldName("type");
+			generator.writeString(DocumentType.instance().getTypeName());
+			generator.writeFieldName("value");
+			generator.writeStartObject();
+			for(Entry<Identifier, IValue> entry : values.entrySet()) {
+				generator.writeFieldName(entry.getKey().toString());
+				IValue value = entry.getValue();
+				if(value==null)
+					generator.writeNull();
+				else
+					value.toJson(context, generator, System.identityHashCode(this), entry.getKey(), binaries);
+			}
+			generator.writeEndObject();
+			generator.writeEndObject();
+		} catch(IOException e) {
+			throw new ReadWriteError(e.getMessage());
+		}
 	}
 }

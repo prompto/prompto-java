@@ -2,6 +2,7 @@ package prompto.value;
 
 import java.io.IOException;
 import java.text.Collator;
+import java.util.Map;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -184,9 +185,14 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
     }
     
    @Override
-   public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
+   public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, Map<String, byte[]> data) throws PromptoError {
 		try {
+			generator.writeStartObject();
+			generator.writeFieldName("type");
+			generator.writeString(CharacterType.instance().getTypeName());
+			generator.writeFieldName("value");
 			generator.writeString("" + value);
+			generator.writeEndObject();
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		}

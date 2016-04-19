@@ -31,7 +31,7 @@ import prompto.intrinsic.PromptoCallSite;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.type.IType;
-import prompto.utils.FileUtils;
+import prompto.utils.IOUtils;
 import prompto.verifier.ClassVerifier;
 
 public class Compiler {
@@ -42,7 +42,7 @@ public class Compiler {
 		this.classDir = classDir;
 		String clean = System.getProperty("prompto.compiler.clean"); // for testing
 		if("true".equals(clean))
-			FileUtils.deleteRecursively(classDir, false);
+			IOUtils.deleteFilesRecursively(classDir, false);
 	}
 
 	public void compileClass(Context context, String fullName) throws ClassNotFoundException {

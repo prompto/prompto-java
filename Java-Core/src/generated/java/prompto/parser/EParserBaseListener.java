@@ -1013,6 +1013,18 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterBlobExpression(@NotNull EParser.BlobExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBlobExpression(@NotNull EParser.BlobExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterNotContainsAnyExpression(@NotNull EParser.NotContainsAnyExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1416,6 +1428,18 @@ public class EParserBaseListener implements EParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitDocument_expression(@NotNull EParser.Document_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBlob_expression(@NotNull EParser.Blob_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBlob_expression(@NotNull EParser.Blob_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -266,16 +266,20 @@ public class NativeInstance extends BaseValue implements IInstance {
 	}
 
 	@Override
-	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
+	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, Map<String, byte[]> data) throws PromptoError {
 		try {
 			generator.writeStartObject();
 			for(Identifier attrName : declaration.getAllAttributes(context)) {
 				generator.writeFieldName(attrName.toString());
 				IValue value = getMember(context, attrName, false);
-				if(value!=null)
-					value.toJson(context, generator, this, attrName);
-				else
+				if(value==null)
 					generator.writeNull();
+				else {
+					Object id = this.getDbId();
+					if(id==null)
+						id = System.identityHashCode(this);
+					value.toJson(context, generator, id, attrName, data);
+				}
 			}
 			generator.writeEndObject();
 		} catch(IOException e) {

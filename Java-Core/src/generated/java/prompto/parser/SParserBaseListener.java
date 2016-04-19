@@ -1253,6 +1253,18 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterBlobExpression(@NotNull SParser.BlobExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBlobExpression(@NotNull SParser.BlobExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterDocumentExpression(@NotNull SParser.DocumentExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1356,6 +1368,18 @@ public class SParserBaseListener implements SParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitItemSelector(@NotNull SParser.ItemSelectorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBlob_expression(@NotNull SParser.Blob_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBlob_expression(@NotNull SParser.Blob_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

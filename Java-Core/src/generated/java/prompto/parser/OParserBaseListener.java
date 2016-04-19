@@ -1361,6 +1361,18 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterBlobExpression(@NotNull OParser.BlobExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBlobExpression(@NotNull OParser.BlobExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterDocumentExpression(@NotNull OParser.DocumentExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1428,6 +1440,18 @@ public class OParserBaseListener implements OParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitConstructorExpression(@NotNull OParser.ConstructorExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBlob_expression(@NotNull OParser.Blob_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBlob_expression(@NotNull OParser.Blob_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

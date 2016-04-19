@@ -1173,6 +1173,18 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitSelectableExpression(@NotNull SParser.SelectableExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code BlobExpression}
+	 * labeled alternative in {@link SParser#method_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterBlobExpression(@NotNull SParser.BlobExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code BlobExpression}
+	 * labeled alternative in {@link SParser#method_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitBlobExpression(@NotNull SParser.BlobExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code DocumentExpression}
 	 * labeled alternative in {@link SParser#method_expression}.
 	 * @param ctx the parse tree
@@ -1280,6 +1292,16 @@ public interface SParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitItemSelector(@NotNull SParser.ItemSelectorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SParser#blob_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterBlob_expression(@NotNull SParser.Blob_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SParser#blob_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitBlob_expression(@NotNull SParser.Blob_expressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SParser#document_expression}.
 	 * @param ctx the parse tree

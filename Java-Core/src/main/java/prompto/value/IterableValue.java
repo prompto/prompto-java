@@ -2,6 +2,7 @@ package prompto.value;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.Map;
 
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
@@ -79,12 +80,12 @@ public class IterableValue extends BaseValue implements IIterable<IValue>, Itera
 	}
 
 	@Override
-	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
+	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, Map<String, byte[]> data) throws PromptoError {
 		try {
 			generator.writeStartArray();
 			Iterator<IValue> iterator = iterator();
 			while(iterator.hasNext())
-				iterator.next().toJson(context, generator, null, null);
+				iterator.next().toJson(context, generator, null, null, data);
 			generator.writeEndArray();
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());

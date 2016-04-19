@@ -1,14 +1,15 @@
 package prompto.value;
 
 import java.io.IOException;
-
-import com.fasterxml.jackson.core.JsonGenerator;
+import java.util.Map;
 
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.type.UUIDType;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 public class UUID extends BaseValue {
 
@@ -35,9 +36,14 @@ public class UUID extends BaseValue {
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
+	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, Map<String, byte[]> data) throws PromptoError {
 		try {
-			generator.writeString(value.toString());
+			generator.writeStartObject();
+			generator.writeFieldName("type");
+			generator.writeString(UUIDType.instance().getTypeName());
+			generator.writeFieldName("value");
+			generator.writeString(this.toString());
+			generator.writeEndObject();
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		}

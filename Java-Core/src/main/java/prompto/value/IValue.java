@@ -1,5 +1,7 @@
 package prompto.value;
 
+import java.util.Map;
+
 import prompto.error.NotStorableError;
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
@@ -88,7 +90,7 @@ public interface IValue {
 		throw new UnsupportedOperationException("convertTo not supported by " + this.getClass().getSimpleName());
 	};
 
-	default void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
+	default void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, Map<String, byte[]> binaries) throws PromptoError {
 		throw new UnsupportedOperationException("toJson not supported by " + this.getClass().getSimpleName());
 	};
 

@@ -89,3 +89,29 @@ define createMainMethod as method receiving Batch batch doing:
 	body = body + "\tprint \"Hello " + batch.name + "\"\n" 
 	decl = MethodDeclaration with batch.entryPoint as name, "1.0.0.0" as version, "E" as dialect, "Text{} options" as prototype, body as body and batch as module
 	return decl 
+
+define exportModule as method receiving dbId doing:
+	module = fetch one Module where dbId = dbId
+	if module is nothing:
+		raise NULL_REFERENCE
+	type = ""
+	if module is a Batch:
+		type = "batch"
+	else if module is a Script:
+		type = "script"
+	else if module is a WebSite:
+		type = "website"
+	else if module is a Service:
+		type = "service"
+	else if module is a Library:
+		type = "library"
+	doc = Document
+	doc.type = type
+	doc.name = module.name
+	doc.version = module.version
+	doc.description = module.description
+	doc.image = module.image
+	if module is a Batch:
+		doc.entryPoint = module.entryPoint
+	doc.declarations = fetch all Declaration where module = module
+	return Blob from doc

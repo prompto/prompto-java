@@ -52,6 +52,7 @@ import prompto.declaration.OperatorMethodDeclaration;
 import prompto.declaration.SetterMethodDeclaration;
 import prompto.declaration.SingletonCategoryDeclaration;
 import prompto.declaration.TestMethodDeclaration;
+import prompto.expression.BlobExpression;
 import prompto.expression.CategorySymbol;
 import prompto.expression.NativeSymbol;
 import prompto.expression.PlusExpression;
@@ -428,6 +429,18 @@ public class SPromptoBuilder extends SParserBaseListener {
 	public void exitAttribute_list(Attribute_listContext ctx) {
 		IdentifierList items = this.<IdentifierList>getNodeValue(ctx.items);
 		setNodeValue(ctx, items);
+	}
+	
+	@Override
+	public void exitBlobExpression(BlobExpressionContext ctx) {
+		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		setNodeValue(ctx, exp);
+	}
+
+	@Override
+	public void exitBlob_expression(Blob_expressionContext ctx) {
+		IExpression exp = this.<IExpression>getNodeValue(ctx.expression());
+		setNodeValue(ctx, new BlobExpression(exp));
 	}
 	
 	@Override
@@ -953,7 +966,8 @@ public class SPromptoBuilder extends SParserBaseListener {
 	
 	@Override
 	public void exitDocument_expression(Document_expressionContext ctx) {
-		setNodeValue(ctx, new DocumentExpression());
+		IExpression exp = this.<IExpression>getNodeValue(ctx.expression());
+		setNodeValue(ctx, new DocumentExpression(exp));
 	}
 	
 	

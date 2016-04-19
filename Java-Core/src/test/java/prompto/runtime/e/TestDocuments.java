@@ -20,6 +20,16 @@ public class TestDocuments extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedBlob() throws Exception {
+		checkInterpretedOutput("documents/blob.pec");
+	}
+
+	@Test
+	public void testCompiledBlob() throws Exception {
+		checkCompiledOutput("documents/blob.pec");
+	}
+
+	@Test
 	public void testInterpretedDeepItem() throws Exception {
 		checkInterpretedOutput("documents/deepItem.pec");
 	}

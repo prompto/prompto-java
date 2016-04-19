@@ -25,6 +25,7 @@ save StackLocals between closure definition and instantiation
 issues:
 invokedynamic parameter names/order
 test/asserts naming of parameters
+toJson needs an Avro like output to be readable
 
 missing tests:
 null member is empty

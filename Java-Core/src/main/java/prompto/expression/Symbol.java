@@ -1,6 +1,7 @@
 package prompto.expression;
 
 import java.lang.reflect.Type;
+import java.util.Map;
 
 import prompto.error.PromptoError;
 import prompto.grammar.INamed;
@@ -9,7 +10,6 @@ import prompto.parser.ISection;
 import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.type.IType;
-import prompto.value.IInstance;
 import prompto.value.ISliceable;
 import prompto.value.IValue;
 
@@ -127,7 +127,7 @@ public abstract class Symbol extends Section implements IExpression, INamed, IVa
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
+	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, Map<String, byte[]> data) throws PromptoError {
 		throw new UnsupportedOperationException("toJson not supported by " + this.getClass().getSimpleName());
 	}
 

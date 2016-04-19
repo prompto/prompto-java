@@ -3,6 +3,7 @@ package prompto.value;
 import java.io.IOException;
 import java.text.Collator;
 import java.util.Iterator;
+import java.util.Map;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -325,7 +326,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
+	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, Map<String, byte[]> data) throws PromptoError {
 		try {
 			generator.writeString(value);
 		} catch(IOException e) {

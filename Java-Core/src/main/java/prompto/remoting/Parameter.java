@@ -96,7 +96,7 @@ public class Parameter {
 			generator.writeNullField("value");
 		else {
 			generator.writeFieldName("value");
-			value.toJson(context, generator, null, null);
+			value.toJson(context, generator, null, null, null);
 		}
 		generator.writeEndObject();
 	}

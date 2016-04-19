@@ -3,6 +3,7 @@ package prompto.value;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.function.Predicate;
 
 import prompto.compiler.CompilerUtils;
@@ -249,12 +250,14 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
+	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, Map<String, byte[]> data) throws PromptoError {
 		try {
 			generator.writeStartArray();
 			for(IValue value : this.items)
-				value.toJson(context, generator, null, null);
+				value.toJson(context, generator, null, null, data);
 			generator.writeEndArray();
+			generator.writeFieldName("itemType");
+			generator.writeString(getItemType().getTypeName());
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		}

@@ -35,10 +35,10 @@ public class PromptoServlet extends HttpServlet {
 			String[] httpParams = req.getParameterMap().get("params");
 			String jsonParams = httpParams==null || httpParams.length==0 ? null : httpParams[0];
 			RequestRouter handler = new RequestRouter(AppServer.globalContext);
-			handler.handleRequest(methodName, jsonParams, null, resp.getOutputStream());
+			String contentType = handler.interpretRequest(methodName, jsonParams, null, resp.getOutputStream());
 			resp.getOutputStream().close();
 			resp.flushBuffer();
-			resp.setContentType("application/json");
+			resp.setContentType(contentType);
 			resp.setStatus(200);
 		} catch(Throwable t) {
 			t.printStackTrace();
@@ -82,7 +82,7 @@ public class PromptoServlet extends HttpServlet {
 		Map<String, byte[]> parts = readParts(req);
 		String jsonParams = new String(parts.get("params"));
 		RequestRouter handler = new RequestRouter(AppServer.globalContext);
-		handler.handleRequest(methodName, jsonParams, parts, resp.getOutputStream());
+		handler.interpretRequest(methodName, jsonParams, parts, resp.getOutputStream());
 		resp.getOutputStream().close();
 		resp.flushBuffer();
 		resp.setContentType("application/json");

@@ -3,6 +3,7 @@ package prompto.value;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
@@ -90,12 +91,12 @@ public class Cursor extends BaseValue implements IIterable<IValue>, IterableWith
 	}
 
 	@Override
-	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) {
+	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, Map<String, byte[]> data) {
 		try {
 			generator.writeStartArray();
 			Iterator<IValue> iter = iterator();
 			while(iter.hasNext())
-				iter.next().toJson(context, generator, null, null);
+				iter.next().toJson(context, generator, null, null, data);
 			generator.writeEndArray();
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());

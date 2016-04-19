@@ -12,7 +12,6 @@ import prompto.error.ReadWriteError;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoBinary;
 import prompto.runtime.Context;
-import prompto.store.IStore;
 import prompto.type.IType;
 import prompto.utils.ResourceUtils;
 
@@ -111,13 +110,19 @@ public abstract class BinaryValue extends BaseValue {
 	}
 
 	@Override
-	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
+	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, Map<String, byte[]> binaries) throws PromptoError {
 		try {
-			String dbId = instance.getMember(context, new Identifier(IStore.dbIdName), false).toString();
-			generator.writeString("/ws/bin/data?dbId=" + dbId + "&attribute=" + name.toString());
+			// if no binaries container, store a relative URL
+			if(binaries==null) 
+				generator.writeString("/ws/bin/data?dbId=" + instanceId + "&attribute=" + fieldName.toString());
+			else {
+				String partId = "@" + instanceId + '/' + fieldName + '/' + getMimeType();
+				generator.writeString(partId);
+				binaries.put(partId, getBytes());
+			}
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
-		}
+		} 
 	}
 
 }

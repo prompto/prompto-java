@@ -1,6 +1,7 @@
 package prompto.value;
 
 import java.io.IOException;
+import java.util.Map;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -188,9 +189,14 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator, IInstance instance, Identifier name) throws PromptoError {
+	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, Map<String, byte[]> data) throws PromptoError {
 		try {
+			generator.writeStartObject();
+			generator.writeFieldName("type");
+			generator.writeString(DateTimeType.instance().getTypeName());
+			generator.writeFieldName("value");
 			generator.writeString(this.toString());
+			generator.writeEndObject();
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		}
