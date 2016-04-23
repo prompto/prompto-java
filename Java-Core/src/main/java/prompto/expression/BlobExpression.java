@@ -93,16 +93,13 @@ public class BlobExpression implements IExpression {
 		writer.append("Blob");
 		switch(writer.getDialect()) {
 		case E:
-			if(source!=null) {
-				writer.append(" from ");
-				source.toDialect(writer);
-			}
+			writer.append(" from ");
+			source.toDialect(writer);
 			break;
 		case O:
 		case S:
 			writer.append('(');
-			if(source!=null)
-				source.toDialect(writer);
+			source.toDialect(writer);
 			writer.append(')');
 			break;
 		}
