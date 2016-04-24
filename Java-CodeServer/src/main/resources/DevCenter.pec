@@ -66,6 +66,7 @@ define storeDeclarations as method receiving EditedDeclaration[] edited doing:
 	delete deleted and store created, updated 
 
 define createModule as method receiving Text type, name, description, Boolean createEntryPoint, entryPoint, image doing:
+	decl = nothing as Declaration
 	module = Module with name as name, "1.0.0.0" as version, description as description and image as image
 	switch on type:
 		when "library":
