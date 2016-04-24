@@ -8,7 +8,6 @@ import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
-import prompto.type.ContainerType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
@@ -33,11 +32,7 @@ public class CastExpression implements IExpression {
 
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		IValue value = expression.interpret(context);
-		if(value!=null && type instanceof ContainerType && value.getType() instanceof ContainerType) {
-			((ContainerType)value.getType()).setItemType(((ContainerType)type).getItemType());
-		}
-		return value;
+		return expression.interpret(context);
 	}
 	
 	@Override
