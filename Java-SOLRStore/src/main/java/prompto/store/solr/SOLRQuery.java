@@ -8,8 +8,13 @@ import prompto.store.IQuery;
 
 public class SOLRQuery implements IQuery {
 
-	SolrQuery query = new SolrQuery();
+	SolrQuery query;
 	SOLRFilterBuilder filter;
+	
+	public SOLRQuery() {
+		query = new SolrQuery();
+		query.setRows(Integer.MAX_VALUE);
+	}
 	
 	public SolrQuery getQuery() {
 		if(filter!=null) {
@@ -75,7 +80,7 @@ public class SOLRQuery implements IQuery {
 	@Override
 	public Long getLast() {
 		Integer rows = query.getRows();
-		if(rows==null)
+		if(rows==null || rows.intValue()==Integer.MAX_VALUE)
 			return null;
 		Integer start = query.getStart();
 		if(start==null)
