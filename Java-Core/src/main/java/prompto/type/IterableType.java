@@ -22,6 +22,10 @@ public abstract class IterableType extends NativeType {
 		return itemType;
 	}
 	
+	public void setItemType(IType itemType) {
+		this.itemType = itemType;
+	}
+	
 	@Override
 	public void checkExists(Context context) {
 		itemType.checkExists(context);

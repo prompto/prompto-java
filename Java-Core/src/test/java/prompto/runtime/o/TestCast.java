@@ -40,6 +40,16 @@ public class TestCast extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedCastMissing() throws Exception {
+		checkInterpretedOutput("cast/castMissing.poc");
+	}
+
+	@Test
+	public void testCompiledCastMissing() throws Exception {
+		checkCompiledOutput("cast/castMissing.poc");
+	}
+
+	@Test
 	public void testInterpretedIsAChild() throws Exception {
 		checkInterpretedOutput("cast/isAChild.poc");
 	}

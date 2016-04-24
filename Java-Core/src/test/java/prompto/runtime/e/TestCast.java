@@ -40,6 +40,16 @@ public class TestCast extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedCastMissing() throws Exception {
+		checkInterpretedOutput("cast/castMissing.pec");
+	}
+
+	@Test
+	public void testCompiledCastMissing() throws Exception {
+		checkCompiledOutput("cast/castMissing.pec");
+	}
+
+	@Test
 	public void testInterpretedIsAChild() throws Exception {
 		checkInterpretedOutput("cast/isAChild.pec");
 	}

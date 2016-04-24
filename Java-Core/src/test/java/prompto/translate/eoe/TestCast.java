@@ -17,6 +17,11 @@ public class TestCast extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCastMissing() throws Exception {
+		compareResourceEOE("cast/castMissing.pec");
+	}
+
+	@Test
 	public void testIsAChild() throws Exception {
 		compareResourceEOE("cast/isAChild.pec");
 	}
