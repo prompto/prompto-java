@@ -24,8 +24,13 @@ public class VariableInstance implements IAssignableInstance {
 	
 	Identifier id;
 	
-	public VariableInstance(Identifier name) {
-		this.id = name;
+	public VariableInstance(Identifier id) {
+		this.id = id;
+	}
+	
+	@Override
+	public String toString() {
+		return id.toString();
 	}
 	
 	public Identifier getId() {

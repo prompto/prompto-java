@@ -91,8 +91,19 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 
 	@Override
 	public String toString() {
-		return method.toString()
-				+ (assignments != null ? assignments.toString() : "");
+		StringBuilder sb = new StringBuilder();
+		sb.append(method.toString());
+		sb.append('(');
+		if(assignments != null) {
+			assignments.forEach((ass)->
+				{
+					sb.append(ass.toString());
+					sb.append(", ");
+				});
+			sb.setLength(sb.length()-2);
+		}
+		sb.append(')');
+		return sb.toString();
 	}
 
 	@Override

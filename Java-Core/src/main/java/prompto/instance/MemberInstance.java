@@ -30,8 +30,13 @@ public class MemberInstance implements IAssignableSelector {
 	IAssignableInstance parent;
 	Identifier id;
 	
-	public MemberInstance(Identifier name) {
-		this.id = name;
+	public MemberInstance(Identifier id) {
+		this.id = id;
+	}
+	
+	@Override
+	public String toString() {
+		return parent.toString() + '.' + id.toString();
 	}
 	
 	@Override
