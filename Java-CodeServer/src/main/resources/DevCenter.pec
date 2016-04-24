@@ -113,5 +113,10 @@ define exportModule as method receiving dbId doing:
 	doc.image = module.image
 	if module is a Batch:
 		doc.entryPoint = module.entryPoint
-	doc.declarations = fetch all Declaration where module = module
+	declarations = [] as Declaration[]
+	fetched = fetch all mutable Declaration where module = module
+	for each declaration in fetched:
+		declaration.module = Nothing 
+		declarations = declarations + [declaration]
+	doc.declarations = declarations
 	return Blob from doc
