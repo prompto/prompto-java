@@ -24,11 +24,13 @@ public class Cursor extends BaseValue implements IIterable<IValue>, IterableWith
 
 	Context context;
 	IStoredIterable iterable;
+	boolean mutable;
 	
 	public Cursor(Context context, IType itemType, IStoredIterable documents) {
 		super(new CursorType(itemType));
 		this.context = context;
 		this.iterable = documents;
+		this.mutable = itemType instanceof CategoryType ? ((CategoryType)itemType).isMutable() : false;
 	}
 
 	@Override
@@ -76,7 +78,9 @@ public class Cursor extends BaseValue implements IIterable<IValue>, IterableWith
 		if(value instanceof List<?>) {
 			List<String> categories = (List<String>)value;
 			String category = categories.get(categories.size()-1);
-			return new CategoryType(new Identifier(category));
+			CategoryType type = new CategoryType(new Identifier(category));
+			type.setMutable(this.mutable);
+			return type;
 		} else
 			return (CategoryType) ((IterableType)type).getItemType();
 	}
