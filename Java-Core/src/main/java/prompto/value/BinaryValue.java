@@ -116,7 +116,7 @@ public abstract class BinaryValue extends BaseValue {
 			if(binaries==null) 
 				generator.writeString("/ws/bin/data?dbId=" + instanceId + "&attribute=" + fieldName.toString());
 			else {
-				String partId = "@" + instanceId + '/' + fieldName + '/' + getMimeType();
+				String partId = "@" + instanceId + '/' + fieldName + '/' + getMimeType().replace('/', '.');
 				generator.writeString(partId);
 				binaries.put(partId, getBytes());
 			}

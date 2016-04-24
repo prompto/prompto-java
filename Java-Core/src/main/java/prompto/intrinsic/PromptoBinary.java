@@ -63,7 +63,7 @@ public class PromptoBinary {
 		generator.flush();
 		generator.close();
 		// add it
-		binaries.put("value", output.toByteArray());
+		binaries.put("value.json", output.toByteArray());
 		return binaries;
 	}
 

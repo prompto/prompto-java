@@ -157,9 +157,9 @@ public class PromptoDocument<K,V> extends HashMap<K,V> implements ISerializable 
 	}
 
 	public static JsonNode readValue(Map<String, byte[]> parts) throws IOException {
-		byte[] data = parts.get("value");
+		byte[] data = parts.get("value.json");
 		if(data==null)
-			throw new InvalidParameterException("Expecting a 'value' part!");
+			throw new InvalidParameterException("Expecting a 'value.json' part!");
 		JsonParser parser = new ObjectMapper().getFactory().createParser(data);
 		return parser.readValueAsTree();
 	}
