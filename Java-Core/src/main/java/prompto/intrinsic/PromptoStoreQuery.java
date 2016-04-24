@@ -14,6 +14,7 @@ import prompto.value.IInstance;
 import prompto.value.IValue;
 import prompto.value.IterableValue;
 import prompto.value.ListValue;
+import prompto.value.NullValue;
 import prompto.value.SetValue;
 import prompto.value.TupleValue;
 
@@ -38,7 +39,9 @@ public class PromptoStoreQuery {
 	}
 
 	public void delete(Context context, IValue value) {
-		if(value instanceof IInstance) try {
+		if(value instanceof NullValue)
+			return;
+		else if(value instanceof IInstance) try {
 			IValue dbId = ((IInstance)value).getMember(context, new Identifier(IStore.dbIdName), false);
 			if(dbId!=null)
 				deletables.add(dbId.getStorableData());
@@ -62,7 +65,9 @@ public class PromptoStoreQuery {
 	}
 
 	public void store(Context context, IValue value) {
-		if(value instanceof IInstance) try {
+		if(value instanceof NullValue)
+			return;
+		else if(value instanceof IInstance) try {
 			((IInstance)value).collectStorables(storables);
 		} catch(PromptoError e) {
 			throw new RuntimeException(e);
@@ -80,7 +85,7 @@ public class PromptoStoreQuery {
 			while(iter.hasNext())
 				store(context, iter.next());
 		} else
-			throw new UnsupportedOperationException("Can't delete " + value.getClass());
+			throw new UnsupportedOperationException("Can't store " + value.getClass());
 	}
 
 	public void store(Object value) {
