@@ -31,5 +31,10 @@ public abstract class IterableType extends NativeType {
 		itemType.checkExists(context);
 	}
 	
+	@Override
+	public boolean isMoreSpecificThan(Context context, IType other) {
+		return other instanceof IterableType
+			&& itemType.isMoreSpecificThan(context, ((IterableType)other).itemType);
+	}
 	
 }

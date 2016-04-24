@@ -216,7 +216,7 @@ public class CategoryType extends BaseType {
 	public boolean isAssignableTo(Context context, IType other) {
 		if(getTypeName().equals(other.getTypeName()))
 			return true;
-		if(other instanceof AnyType || other instanceof MissingType)
+		if(other instanceof NullType || other instanceof AnyType || other instanceof MissingType)
 			return true;
 		if(!(other instanceof CategoryType))
 			return false;
@@ -284,6 +284,8 @@ public class CategoryType extends BaseType {
 	
 	@Override
 	public boolean isMoreSpecificThan(Context context, IType other) {
+		if(other instanceof NullType || other instanceof AnyType || other instanceof MissingType)
+			return true;
 		if(!(other instanceof CategoryType))
 			return false;
 		CategoryType otherCat = (CategoryType)other;

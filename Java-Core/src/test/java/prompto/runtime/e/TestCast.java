@@ -50,6 +50,16 @@ public class TestCast extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedCastNull() throws Exception {
+		checkInterpretedOutput("cast/castNull.pec");
+	}
+
+	@Test
+	public void testCompiledCastNull() throws Exception {
+		checkCompiledOutput("cast/castNull.pec");
+	}
+
+	@Test
 	public void testInterpretedIsAChild() throws Exception {
 		checkInterpretedOutput("cast/isAChild.pec");
 	}

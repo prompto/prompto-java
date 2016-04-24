@@ -22,6 +22,11 @@ public class TestCast extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCastNull() throws Exception {
+		compareResourceEOE("cast/castNull.pec");
+	}
+
+	@Test
 	public void testIsAChild() throws Exception {
 		compareResourceEOE("cast/isAChild.pec");
 	}

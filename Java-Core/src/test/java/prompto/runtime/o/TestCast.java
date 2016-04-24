@@ -50,6 +50,16 @@ public class TestCast extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedCastNull() throws Exception {
+		checkInterpretedOutput("cast/castNull.poc");
+	}
+
+	@Test
+	public void testCompiledCastNull() throws Exception {
+		checkCompiledOutput("cast/castNull.poc");
+	}
+
+	@Test
 	public void testInterpretedIsAChild() throws Exception {
 		checkInterpretedOutput("cast/isAChild.poc");
 	}

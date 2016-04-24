@@ -34,6 +34,8 @@ public interface IValue {
 		throw new UnsupportedOperationException("getStorableData not supported by " + this.getClass().getSimpleName());
 	};
 	
+	void setType(IType type);
+	
 	default IType getType() {
 		throw new UnsupportedOperationException("getType not supported by " + this.getClass().getSimpleName());
 	};

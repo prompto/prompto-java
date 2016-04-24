@@ -22,6 +22,11 @@ public class TestCast extends BaseOParserTest {
 	}
 
 	@Test
+	public void testCastNull() throws Exception {
+		compareResourceOSO("cast/castNull.poc");
+	}
+
+	@Test
 	public void testIsAChild() throws Exception {
 		compareResourceOSO("cast/isAChild.poc");
 	}
