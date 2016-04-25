@@ -11,6 +11,18 @@ import org.apache.solr.schema.TrieLongField;
 public class TimeFieldType extends TrieLongField {
 
 	@Override
+	public Object toNativeType(Object val) {
+	    if(val==null) 
+	    	return null;
+	    else if (val instanceof Number) 
+	    	return ((Number) val).longValue();
+	    else if (val instanceof String) 
+	    	return parseTimeString((String) val);
+	    else
+	    	return super.toNativeType(val);
+	}
+
+	@Override
 	public String toExternal(IndexableField field) {
 		long value = field.numericValue().longValue();
 		return buildTimeString(value);

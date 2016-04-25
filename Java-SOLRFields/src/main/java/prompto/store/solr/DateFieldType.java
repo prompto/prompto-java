@@ -11,6 +11,18 @@ import org.apache.solr.schema.TrieIntField;
 public class DateFieldType extends TrieIntField {
 
 	@Override
+	public Object toNativeType(Object val) {
+	    if(val==null) 
+	    	return null;
+	    else if (val instanceof Number) 
+	    	return ((Number) val).intValue();
+	    else if (val instanceof String) 
+	    	return parseDateString((String) val);
+	    else
+	    	return super.toNativeType(val);
+	}
+
+	@Override
 	public String toExternal(IndexableField field) {
 		int value = field.numericValue().intValue();
 		return buildDateString(value);
