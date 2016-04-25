@@ -363,7 +363,7 @@ public class CategoryType extends BaseType {
 	private void readJSONField(Context context, IInstance instance, String fieldName, JsonNode fieldData, Map<String, byte[]> parts) throws PromptoError {
 		Identifier fieldId = new Identifier(fieldName);
 		IType fieldType = readJSONFieldType(context, fieldId, fieldData);
-		if(fieldType instanceof CategoryType)
+		if(fieldData.isObject())
 			fieldData = fieldData.get("value");
 		IValue fieldValue = fieldType.readJSONValue(context, fieldData, parts);
 		if(fieldValue!=null)
@@ -390,8 +390,11 @@ public class CategoryType extends BaseType {
 
 	private void readJSONDbId(Context context, JsonNode value, IInstance instance) throws PromptoError {
 		if(value.has(IStore.dbIdName)) {
-			IType type = Utils.typeToIType(IDataStore.getInstance().getDbIdClass());
-			IValue dbid = type.readJSONValue(context, value.get(IStore.dbIdName), null);
+			IType fieldType = Utils.typeToIType(IDataStore.getInstance().getDbIdClass());
+			JsonNode fieldData = value.get(IStore.dbIdName);
+			if(fieldData.isObject())
+				fieldData = fieldData.get("value");
+			IValue dbid = fieldType.readJSONValue(context, fieldData, null);
 			instance.setMember(context, new Identifier(IStore.dbIdName), dbid);
 		}
 	}
