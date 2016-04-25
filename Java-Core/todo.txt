@@ -21,7 +21,8 @@ move MIN_INT && MAX_INT to enum
 factor compileAssert
 make id a global native method or implement it for all types
 save StackLocals between closure definition and instantiation
-list/set from cursor
+list/set from cursor/iterator
+SOLR queryAndStreamResponse
 
 issues:
 invokedynamic parameter names/order
