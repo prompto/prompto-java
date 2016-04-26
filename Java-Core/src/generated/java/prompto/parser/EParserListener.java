@@ -2279,6 +2279,16 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitVariable_identifier(@NotNull EParser.Variable_identifierContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link EParser#attribute_identifier}.
+	 * @param ctx the parse tree
+	 */
+	void enterAttribute_identifier(@NotNull EParser.Attribute_identifierContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EParser#attribute_identifier}.
+	 * @param ctx the parse tree
+	 */
+	void exitAttribute_identifier(@NotNull EParser.Attribute_identifierContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link EParser#type_identifier}.
 	 * @param ctx the parse tree
 	 */
@@ -2629,29 +2639,25 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitJavascript_module(@NotNull EParser.Javascript_moduleContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code VariableList}
-	 * labeled alternative in {@link EParser#variable_identifier_list}.
+	 * Enter a parse tree produced by {@link EParser#variable_identifier_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterVariableList(@NotNull EParser.VariableListContext ctx);
+	void enterVariable_identifier_list(@NotNull EParser.Variable_identifier_listContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code VariableList}
-	 * labeled alternative in {@link EParser#variable_identifier_list}.
+	 * Exit a parse tree produced by {@link EParser#variable_identifier_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitVariableList(@NotNull EParser.VariableListContext ctx);
+	void exitVariable_identifier_list(@NotNull EParser.Variable_identifier_listContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code VariableListItem}
-	 * labeled alternative in {@link EParser#variable_identifier_list}.
+	 * Enter a parse tree produced by {@link EParser#attribute_identifier_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterVariableListItem(@NotNull EParser.VariableListItemContext ctx);
+	void enterAttribute_identifier_list(@NotNull EParser.Attribute_identifier_listContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code VariableListItem}
-	 * labeled alternative in {@link EParser#variable_identifier_list}.
+	 * Exit a parse tree produced by {@link EParser#attribute_identifier_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitVariableListItem(@NotNull EParser.VariableListItemContext ctx);
+	void exitAttribute_identifier_list(@NotNull EParser.Attribute_identifier_listContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code AbstractMethod}
 	 * labeled alternative in {@link EParser#method_declaration}.

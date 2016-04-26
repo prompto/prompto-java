@@ -233,18 +233,6 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAttribute_list(@NotNull SParser.Attribute_listContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAttribute_list(@NotNull SParser.Attribute_listContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterAbstract_method_declaration(@NotNull SParser.Abstract_method_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2321,6 +2309,18 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAttribute_identifier(@NotNull SParser.Attribute_identifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAttribute_identifier(@NotNull SParser.Attribute_identifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterType_identifier(@NotNull SParser.Type_identifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2693,25 +2693,25 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVariableList(@NotNull SParser.VariableListContext ctx) { }
+	@Override public void enterVariable_identifier_list(@NotNull SParser.Variable_identifier_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVariableList(@NotNull SParser.VariableListContext ctx) { }
+	@Override public void exitVariable_identifier_list(@NotNull SParser.Variable_identifier_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVariableListItem(@NotNull SParser.VariableListItemContext ctx) { }
+	@Override public void enterAttribute_identifier_list(@NotNull SParser.Attribute_identifier_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVariableListItem(@NotNull SParser.VariableListItemContext ctx) { }
+	@Override public void exitAttribute_identifier_list(@NotNull SParser.Attribute_identifier_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

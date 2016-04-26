@@ -448,6 +448,21 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 
 	@Override
+	public void exitAttribute_identifier(Attribute_identifierContext ctx) {
+		setNodeValue(ctx, new Identifier(ctx.getText()));
+	}
+	
+	@Override
+	public void exitAttribute_identifier_list(Attribute_identifier_listContext ctx) {
+		IdentifierList list = new IdentifierList();
+		for(Attribute_identifierContext v : ctx.attribute_identifier()){
+			Identifier item = this.<Identifier>getNodeValue(v);
+			list.add(item);
+		}
+		setNodeValue(ctx, list);
+	}
+	
+	@Override
 	public void exitAttributeList(AttributeListContext ctx) {
 		Identifier item = this.<Identifier>getNodeValue(ctx.item);
 		setNodeValue(ctx, new IdentifierList(item));
@@ -2763,17 +2778,13 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitVariableList(VariableListContext ctx) {
-		Identifier item = this.<Identifier>getNodeValue(ctx.item);
-		setNodeValue(ctx, new IdentifierList(item));
-	}
-	
-	@Override
-	public void exitVariableListItem(VariableListItemContext ctx) {
-		Identifier item = this.<Identifier>getNodeValue(ctx.item);
-		IdentifierList items = this.<IdentifierList>getNodeValue(ctx.items);
-		items.add(item);
-		setNodeValue(ctx, items);
+	public void exitVariable_identifier_list(Variable_identifier_listContext ctx) {
+		IdentifierList list = new IdentifierList();
+		for(Variable_identifierContext v : ctx.variable_identifier()){
+			Identifier item = this.<Identifier>getNodeValue(v);
+			list.add(item);
+		}
+		setNodeValue(ctx, list);
 	}
 	
 	@Override

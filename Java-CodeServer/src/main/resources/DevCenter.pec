@@ -15,7 +15,8 @@ define lastOpened as storable DateTime attribute
 define CodingSession as storable category with attributes user, module and lastOpened
 define RecentSession as storable CodingSession
 
-define Declaration as storable category with attributes name, version, dialect, body and module
+define storable as storable Boolean attribute
+define Declaration as storable category with attributes name, version, dialect, storable, body and module
 define AttributeDeclaration as storable Declaration
 define CategoryDeclaration as storable Declaration
 define MethodDeclaration as storable Declaration with attribute prototype

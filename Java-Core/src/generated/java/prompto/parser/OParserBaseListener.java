@@ -269,30 +269,6 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAttributeList(@NotNull OParser.AttributeListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAttributeList(@NotNull OParser.AttributeListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAttributeListItem(@NotNull OParser.AttributeListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAttributeListItem(@NotNull OParser.AttributeListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterAbstract_method_declaration(@NotNull OParser.Abstract_method_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2381,6 +2357,18 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAttribute_identifier(@NotNull OParser.Attribute_identifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAttribute_identifier(@NotNull OParser.Attribute_identifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterType_identifier(@NotNull OParser.Type_identifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2753,25 +2741,25 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVariableList(@NotNull OParser.VariableListContext ctx) { }
+	@Override public void enterVariable_identifier_list(@NotNull OParser.Variable_identifier_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVariableList(@NotNull OParser.VariableListContext ctx) { }
+	@Override public void exitVariable_identifier_list(@NotNull OParser.Variable_identifier_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVariableListItem(@NotNull OParser.VariableListItemContext ctx) { }
+	@Override public void enterAttribute_identifier_list(@NotNull OParser.Attribute_identifier_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVariableListItem(@NotNull OParser.VariableListItemContext ctx) { }
+	@Override public void exitAttribute_identifier_list(@NotNull OParser.Attribute_identifier_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

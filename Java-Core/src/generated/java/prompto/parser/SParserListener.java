@@ -193,16 +193,6 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitNativeCategoryBindingList(@NotNull SParser.NativeCategoryBindingListContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SParser#attribute_list}.
-	 * @param ctx the parse tree
-	 */
-	void enterAttribute_list(@NotNull SParser.Attribute_listContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SParser#attribute_list}.
-	 * @param ctx the parse tree
-	 */
-	void exitAttribute_list(@NotNull SParser.Attribute_listContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link SParser#abstract_method_declaration}.
 	 * @param ctx the parse tree
 	 */
@@ -2195,6 +2185,16 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitVariable_identifier(@NotNull SParser.Variable_identifierContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SParser#attribute_identifier}.
+	 * @param ctx the parse tree
+	 */
+	void enterAttribute_identifier(@NotNull SParser.Attribute_identifierContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SParser#attribute_identifier}.
+	 * @param ctx the parse tree
+	 */
+	void exitAttribute_identifier(@NotNull SParser.Attribute_identifierContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SParser#type_identifier}.
 	 * @param ctx the parse tree
 	 */
@@ -2545,29 +2545,25 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitJavascript_module(@NotNull SParser.Javascript_moduleContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code VariableList}
-	 * labeled alternative in {@link SParser#variable_identifier_list}.
+	 * Enter a parse tree produced by {@link SParser#variable_identifier_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterVariableList(@NotNull SParser.VariableListContext ctx);
+	void enterVariable_identifier_list(@NotNull SParser.Variable_identifier_listContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code VariableList}
-	 * labeled alternative in {@link SParser#variable_identifier_list}.
+	 * Exit a parse tree produced by {@link SParser#variable_identifier_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitVariableList(@NotNull SParser.VariableListContext ctx);
+	void exitVariable_identifier_list(@NotNull SParser.Variable_identifier_listContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code VariableListItem}
-	 * labeled alternative in {@link SParser#variable_identifier_list}.
+	 * Enter a parse tree produced by {@link SParser#attribute_identifier_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterVariableListItem(@NotNull SParser.VariableListItemContext ctx);
+	void enterAttribute_identifier_list(@NotNull SParser.Attribute_identifier_listContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code VariableListItem}
-	 * labeled alternative in {@link SParser#variable_identifier_list}.
+	 * Exit a parse tree produced by {@link SParser#attribute_identifier_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitVariableListItem(@NotNull SParser.VariableListItemContext ctx);
+	void exitAttribute_identifier_list(@NotNull SParser.Attribute_identifier_listContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code AbstractMethod}
 	 * labeled alternative in {@link SParser#method_declaration}.

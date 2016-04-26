@@ -9,7 +9,6 @@ import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
-import static prompto.parser.SParser.*;
 import prompto.argument.CategoryArgument;
 import prompto.argument.CodeArgument;
 import prompto.argument.ExtendedArgument;
@@ -166,12 +165,7 @@ import prompto.literal.TimeLiteral;
 import prompto.literal.TupleLiteral;
 import prompto.parser.SParser;
 import prompto.parser.SParserBaseListener;
-import prompto.parser.SParser.BlobTypeContext;
-import prompto.parser.SParser.ImageTypeContext;
-import prompto.parser.SParser.Javascript_new_expressionContext;
-import prompto.parser.SParser.Native_getter_declarationContext;
-import prompto.parser.SParser.Native_setter_declarationContext;
-import prompto.parser.SParser.UUIDTypeContext;
+import static prompto.parser.SParser.*;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -426,9 +420,18 @@ public class SPromptoBuilder extends SParserBaseListener {
 	}
 
 	@Override
-	public void exitAttribute_list(Attribute_listContext ctx) {
-		IdentifierList items = this.<IdentifierList>getNodeValue(ctx.items);
-		setNodeValue(ctx, items);
+	public void exitAttribute_identifier(Attribute_identifierContext ctx) {
+		setNodeValue(ctx, new Identifier(ctx.getText()));
+	}
+	
+	@Override
+	public void exitAttribute_identifier_list(Attribute_identifier_listContext ctx) {
+		IdentifierList list = new IdentifierList();
+		for(Attribute_identifierContext v : ctx.attribute_identifier()){
+			Identifier item = this.<Identifier>getNodeValue(v);
+			list.add(item);
+		}
+		setNodeValue(ctx, list);
 	}
 	
 	@Override
@@ -2679,17 +2682,13 @@ public class SPromptoBuilder extends SParserBaseListener {
 	}
 	
 	@Override
-	public void exitVariableList(VariableListContext ctx) {
-		Identifier item = this.<Identifier>getNodeValue(ctx.item);
-		setNodeValue(ctx, new IdentifierList(item));
-	}
-	
-	@Override
-	public void exitVariableListItem(VariableListItemContext ctx) {
-		Identifier item = this.<Identifier>getNodeValue(ctx.item);
-		IdentifierList items = this.<IdentifierList>getNodeValue(ctx.items);
-		items.add(item);
-		setNodeValue(ctx, items);
+	public void exitVariable_identifier_list(Variable_identifier_listContext ctx) {
+		IdentifierList list = new IdentifierList();
+		for(Variable_identifierContext v : ctx.variable_identifier()){
+			Identifier item = this.<Identifier>getNodeValue(v);
+			list.add(item);
+		}
+		setNodeValue(ctx, list);
 	}
 	
 	@Override

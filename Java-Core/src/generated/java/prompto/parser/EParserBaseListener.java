@@ -2405,6 +2405,18 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAttribute_identifier(@NotNull EParser.Attribute_identifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAttribute_identifier(@NotNull EParser.Attribute_identifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterType_identifier(@NotNull EParser.Type_identifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2777,25 +2789,25 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVariableList(@NotNull EParser.VariableListContext ctx) { }
+	@Override public void enterVariable_identifier_list(@NotNull EParser.Variable_identifier_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVariableList(@NotNull EParser.VariableListContext ctx) { }
+	@Override public void exitVariable_identifier_list(@NotNull EParser.Variable_identifier_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVariableListItem(@NotNull EParser.VariableListItemContext ctx) { }
+	@Override public void enterAttribute_identifier_list(@NotNull EParser.Attribute_identifier_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVariableListItem(@NotNull EParser.VariableListItemContext ctx) { }
+	@Override public void exitAttribute_identifier_list(@NotNull EParser.Attribute_identifier_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
