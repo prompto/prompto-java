@@ -323,7 +323,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 		IExpression left = new UnresolvedIdentifier(new Identifier("storable"));
 		IExpression right = new BooleanLiteral("true");
 		IPredicateExpression filter = new EqualsExpression(left, EqOp.EQUALS, right);
-		CategoryType type = new CategoryType(new Identifier("Attribute"));
+		CategoryType type = new CategoryType(new Identifier("AttributeDeclaration"));
 		IStoredIterable iterable = store.interpretFetchMany(context, type, null, null, filter, null);
 		Iterator<IStored> stored = iterable.iterator();
 		while(stored.hasNext()) {
