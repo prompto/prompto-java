@@ -1,3 +1,6 @@
+define getDataExplorerURL as method doing:
+	return "http://localhost:8081/index.html"
+
 define Module as storable category with attributes name, version, description and image
 
 define Thesaurus as storable Module
@@ -66,7 +69,7 @@ define storeDeclarations as method receiving EditedDeclaration[] edited doing:
 	updated = d3.declaration for each d3 in fetch any d from edited where d.editStatus = DIRTY
 	delete deleted and store created, updated 
 
-define createModule as method receiving Text type, name, description, Boolean createEntryPoint, entryPoint, image doing:
+define createModule as method receiving Text type, name, description = nothing, image = nothing, Boolean createEntryPoint, entryPoint = nothing doing:
 	decl = nothing as Declaration
 	module = Module with name as name, "1.0.0.0" as version, description as description and image as image
 	switch on type:
