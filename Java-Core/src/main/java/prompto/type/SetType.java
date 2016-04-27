@@ -19,8 +19,10 @@ public class SetType extends ContainerType {
 	}
 	
 	@Override
-	public boolean isAssignableTo(Context context, IType other) {
-		return (other instanceof SetType) && itemType.isAssignableTo(context, ((SetType)other).getItemType());
+	public boolean isAssignableFrom(Context context, IType other) {
+		return super.isAssignableFrom(context, other) ||
+			(other instanceof SetType && 
+			((SetType)other).getItemType().isAssignableFrom(context, itemType));
 	}
 
 	@Override

@@ -28,11 +28,6 @@ public class BooleanType extends NativeType {
 	}
 	
 	@Override
-	public boolean isAssignableTo(Context context, IType other) {
-		return (other instanceof BooleanType) || (other instanceof AnyType);
-	}
-	
-	@Override
 	public Comparator<? extends IValue> getComparator() {
 		return new Comparator<Boolean>() {
 			@Override

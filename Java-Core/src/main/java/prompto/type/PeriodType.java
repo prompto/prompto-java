@@ -27,11 +27,6 @@ public class PeriodType extends NativeType {
 	
 
 	@Override
-	public boolean isAssignableTo(Context context, IType other) {
-		return (other instanceof PeriodType) || (other instanceof AnyType);
-	}
-
-	@Override
 	public IType checkAdd(Context context, IType other, boolean tryReverse) {
 		if(other instanceof PeriodType)
 			return this;

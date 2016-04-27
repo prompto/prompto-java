@@ -184,13 +184,13 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 			IType required = argument.getType(context);
 			IType actual = assignment.getExpression().check(context);
 			if(actual.equals(required)
-					|| actual.isAssignableTo(context, required)
-					|| required.isAssignableTo(context, actual))
+					|| actual.isAssignableFrom(context, required)
+					|| required.isAssignableFrom(context, actual))
 				return true;
 			actual = assignment.resolve(context, this, false).check(context);
 			return actual.equals(required)
-					|| actual.isAssignableTo(context, required)
-					|| required.isAssignableTo(context, actual);
+					|| actual.isAssignableFrom(context, required)
+					|| required.isAssignableFrom(context, actual);
 		} catch(PromptoError error) {
 			return false;
 		}
@@ -211,12 +211,12 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 			}
 			if(actual.equals(required))
 				return Specificity.EXACT;
-			if(actual.isAssignableTo(context, required)) 
+			if(required.isAssignableFrom(context, actual)) 
 				return Specificity.INHERITED;
-			if(allowAncestor && required.isAssignableTo(context, actual)) 
+			if(allowAncestor && actual.isAssignableFrom(context, required)) 
 				return Specificity.ANCESTOR;
 			actual = assignment.resolve(context, this, useInstance).check(context);
-			if(actual.isAssignableTo(context, required))
+			if(required.isAssignableFrom(context, actual))
 				return Specificity.RESOLVED;
 		} catch(PromptoError error) {
 		}

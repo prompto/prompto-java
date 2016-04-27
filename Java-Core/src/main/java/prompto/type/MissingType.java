@@ -23,7 +23,7 @@ public class MissingType extends NativeType {
 	}
 
 	@Override
-	public boolean isAssignableTo(Context context, IType other) {
+	public boolean isAssignableFrom(Context context, IType other) {
 		return true;
 	}
 	

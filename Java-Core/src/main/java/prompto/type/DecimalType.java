@@ -31,8 +31,9 @@ public class DecimalType extends NativeType implements INumberType {
 	
 
 	@Override
-	public boolean isAssignableTo(Context context, IType other) {
-		return (other instanceof IntegerType) || (other instanceof DecimalType) || (other instanceof AnyType);
+	public boolean isAssignableFrom(Context context, IType other) {
+		return super.isAssignableFrom(context, other) ||
+				other==IntegerType.instance();
 	}
 	
 	@Override

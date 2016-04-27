@@ -45,11 +45,6 @@ public class DateTimeType extends NativeType {
 	}
 
 	@Override
-	public boolean isAssignableTo(Context context, IType other) {
-		return (other instanceof DateTimeType) || (other instanceof DateType) || (other instanceof TimeType) || (other instanceof AnyType);
-	}
-
-	@Override
 	public IType checkAdd(Context context, IType other, boolean tryReverse) {
 		if (other instanceof PeriodType)
 			return this;

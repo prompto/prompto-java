@@ -24,20 +24,19 @@ public class ListType extends ContainerType {
 	}
 	
 	@Override
-	public boolean isAssignableTo(Context context, IType other) {
-		return other instanceof ListType && itemType.isAssignableTo(context, ((ListType)other).getItemType());
-	}
-
-	@Override
 	public boolean equals(Object obj) {
 		if(obj==this)
 			return true; 
-		if(obj==null)
-			return false;
-		if(!(obj instanceof ListType))
-			return false;
-		ListType other = (ListType)obj;
-		return this.getItemType().equals(other.getItemType());
+		else 
+			return (obj instanceof ListType) && 
+					this.getItemType().equals(((ListType)obj).getItemType());
+	}
+	
+	@Override
+	public boolean isAssignableFrom(Context context, IType other) {
+		return super.isAssignableFrom(context, other) ||
+				(other instanceof ListType && 
+				this.getItemType().isAssignableFrom(context, ((ListType)other).getItemType()));
 	}
 	
 	@Override
@@ -86,6 +85,8 @@ public class ListType extends ContainerType {
 		String name = id.toString();
         if ("length".equals(name))
             return IntegerType.instance();
+        else if("iterator".equals(name))
+        	return new IteratorType(itemType);
         else
     		return super.checkMember(context, id);
    }

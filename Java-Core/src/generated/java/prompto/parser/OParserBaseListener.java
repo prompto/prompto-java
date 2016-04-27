@@ -1949,6 +1949,18 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterIteratorType(@NotNull OParser.IteratorTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIteratorType(@NotNull OParser.IteratorTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterSetType(@NotNull OParser.SetTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1980,6 +1992,18 @@ public class OParserBaseListener implements OParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitDictType(@NotNull OParser.DictTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCursorType(@NotNull OParser.CursorTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCursorType(@NotNull OParser.CursorTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

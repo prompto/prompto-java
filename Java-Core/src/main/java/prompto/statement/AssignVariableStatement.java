@@ -53,7 +53,7 @@ public class AssignVariableStatement extends SimpleStatement {
 		else {
 			// need to check type compatibility
 			IType actualType = actual.getType(context);
-			type.checkAssignableTo(context,actualType);
+			actualType.checkAssignableFrom(context, type);
 		}
 		return VoidType.instance();
 	}
@@ -81,7 +81,7 @@ public class AssignVariableStatement extends SimpleStatement {
 			// need to check type compatibility
 			IType actualType = actual.getType(context);
 			IType newType = expression.check(context);
-			newType.checkAssignableTo(context,actualType);
+			actualType.checkAssignableFrom(context, newType);
 		}
 		return VoidType.instance();
 	}

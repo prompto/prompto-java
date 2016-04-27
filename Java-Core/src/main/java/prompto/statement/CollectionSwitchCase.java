@@ -23,7 +23,7 @@ public class CollectionSwitchCase extends SwitchCase {
 		IType thisType = expression.check(context);
 		if(thisType instanceof ContainerType)
 			thisType = ((ContainerType)thisType).getItemType();
-		if(!thisType.isAssignableTo(context, type))
+		if(!type.isAssignableFrom(context, thisType))
 			throw new SyntaxError("Cannot assign:" + thisType.getTypeName() + " to:" + type.getTypeName());
 	}
 	

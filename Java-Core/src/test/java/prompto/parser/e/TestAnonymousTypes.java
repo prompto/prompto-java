@@ -73,7 +73,7 @@ public class TestAnonymousTypes extends BaseEParserTest {
 		assertFalse(TextType.instance().isAssignableTo(context,st));
 		assertFalse(DateType.instance().isAssignableTo(context,st));
 		assertFalse(DateTimeType.instance().isAssignableTo(context,st));
-		assertTrue(MissingType.instance().isAssignableTo(context,st)); // missing type always compatible
+		assertFalse(MissingType.instance().isAssignableTo(context,st)); // missing type assertFalse compatible
 		assertFalse(AnyType.instance().isAssignableTo(context,st)); // any type never compatible
 		assertTrue(new CategoryType(new Identifier("Simple")).isAssignableTo(context,st)); // since Simple has a name
 		assertFalse(new CategoryType(new Identifier("Root")).isAssignableTo(context,st)); // since Root has no name
@@ -94,7 +94,7 @@ public class TestAnonymousTypes extends BaseEParserTest {
 		assertFalse(TextType.instance().isAssignableTo(context,st));
 		assertFalse(DateType.instance().isAssignableTo(context,st));
 		assertFalse(DateTimeType.instance().isAssignableTo(context,st));
-		assertTrue(MissingType.instance().isAssignableTo(context,st)); // missing type always compatible
+		assertFalse(MissingType.instance().isAssignableTo(context,st)); // missing type assertFalse compatible
 		assertFalse(AnyType.instance().isAssignableTo(context,st)); // any type never compatible
 		assertFalse(new CategoryType(new Identifier("Simple")).isAssignableTo(context,st));  // since Simple does not extend Root
 		assertTrue(new CategoryType(new Identifier("Root")).isAssignableTo(context,st)); // since Root is Root
@@ -116,7 +116,7 @@ public class TestAnonymousTypes extends BaseEParserTest {
 		assertFalse(TextType.instance().isAssignableTo(context,st));
 		assertFalse(DateType.instance().isAssignableTo(context,st));
 		assertFalse(DateTimeType.instance().isAssignableTo(context,st));
-		assertTrue(MissingType.instance().isAssignableTo(context,st)); // missing type always compatible
+		assertFalse(MissingType.instance().isAssignableTo(context,st)); // missing type always compatible
 		assertFalse(AnyType.instance().isAssignableTo(context,st)); // any type never compatible
 		assertFalse(new CategoryType(new Identifier("Simple")).isAssignableTo(context,st));  // since Simple does not extend Root
 		assertFalse(new CategoryType(new Identifier("Root")).isAssignableTo(context,st)); // since Root has no name

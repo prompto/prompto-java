@@ -46,9 +46,5 @@ public abstract class NativeType extends BaseType {
 		return false;
 	}
 	
-	@Override
-	public boolean isAssignableTo(Context context, IType other) {
-		return other==this;
-	}
-		
+
 }

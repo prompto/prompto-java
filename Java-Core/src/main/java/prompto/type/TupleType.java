@@ -24,8 +24,10 @@ public class TupleType extends ContainerType {
 	}
 	
 	@Override
-	public boolean isAssignableTo(Context context, IType other) {
-		return (other instanceof TupleType) || (other instanceof AnyType);
+	public boolean isAssignableFrom(Context context, IType other) {
+		return super.isAssignableFrom(context, other) ||
+				other instanceof ListType ||
+				other instanceof SetType;
 	}
 
 	@Override

@@ -86,9 +86,9 @@ public class Utils {
 			if(lastType==null)
 				lastType = type;
 			else if(!lastType.equals(type)) { 
-				if(type.isAssignableTo(context, lastType))
+				if(lastType.isAssignableFrom(context, type))
 					; // lastType is less specific
-				else if(lastType.isAssignableTo(context, type))
+				else if(type.isAssignableFrom(context, lastType))
 					lastType = type; // elemType is less specific
 				else 
 					throw new SyntaxError("Incompatible types: " + type.toString() + " and " + lastType.toString());

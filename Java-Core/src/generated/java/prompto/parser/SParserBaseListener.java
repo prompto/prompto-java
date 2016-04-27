@@ -1901,6 +1901,18 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterIteratorType(@NotNull SParser.IteratorTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIteratorType(@NotNull SParser.IteratorTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterSetType(@NotNull SParser.SetTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1932,6 +1944,18 @@ public class SParserBaseListener implements SParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitDictType(@NotNull SParser.DictTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCursorType(@NotNull SParser.CursorTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCursorType(@NotNull SParser.CursorTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

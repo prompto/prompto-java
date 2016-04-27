@@ -1785,6 +1785,18 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitRange_literal(@NotNull SParser.Range_literalContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code IteratorType}
+	 * labeled alternative in {@link SParser#typedef}.
+	 * @param ctx the parse tree
+	 */
+	void enterIteratorType(@NotNull SParser.IteratorTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code IteratorType}
+	 * labeled alternative in {@link SParser#typedef}.
+	 * @param ctx the parse tree
+	 */
+	void exitIteratorType(@NotNull SParser.IteratorTypeContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code SetType}
 	 * labeled alternative in {@link SParser#typedef}.
 	 * @param ctx the parse tree
@@ -1820,6 +1832,18 @@ public interface SParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDictType(@NotNull SParser.DictTypeContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code CursorType}
+	 * labeled alternative in {@link SParser#typedef}.
+	 * @param ctx the parse tree
+	 */
+	void enterCursorType(@NotNull SParser.CursorTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code CursorType}
+	 * labeled alternative in {@link SParser#typedef}.
+	 * @param ctx the parse tree
+	 */
+	void exitCursorType(@NotNull SParser.CursorTypeContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code PrimaryType}
 	 * labeled alternative in {@link SParser#typedef}.

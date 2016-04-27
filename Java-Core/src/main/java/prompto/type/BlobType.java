@@ -22,10 +22,4 @@ public class BlobType extends BinaryType {
 		return Blob.class;
 	}
 	
-	@Override
-	public boolean isAssignableTo(Context context, IType other) {
-		return (other instanceof BlobType);
-	}
-	
-
 }

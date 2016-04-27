@@ -13,8 +13,10 @@ public class DictType extends ContainerType {
 	}
 	
 	@Override
-	public boolean isAssignableTo(Context context, IType other) {
-		return (other instanceof DictType) && itemType.isAssignableTo(context, ((DictType)other).getItemType());
+	public boolean isAssignableFrom(Context context, IType other) {
+		return super.isAssignableFrom(context, other) ||
+				(other instanceof DictType && 
+				itemType.isAssignableFrom(context, ((DictType)other).getItemType()));
 	}
 
 	@Override

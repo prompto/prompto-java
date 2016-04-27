@@ -25,7 +25,7 @@ public class CastExpression implements IExpression {
 	@Override
 	public IType check(Context context) {
 		IType actual = expression.check(context);
-		if(!type.isAssignableTo(context, actual))
+		if(!actual.isAssignableFrom(context, type))
 			throw new SyntaxError("Cannot cast " + actual.toString() + " to " + type.toString());
 		return type;
 	}

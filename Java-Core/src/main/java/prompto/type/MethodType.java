@@ -54,12 +54,12 @@ public class MethodType extends BaseType {
 	public boolean equals(Object obj) {
 		if(obj==this)
 			return true;
-		if(obj==null)
+		else  try {
+			return (obj instanceof MethodType) && 
+					this.method.getProto().equals(((MethodType)obj).method.getProto()); // TODO: refine
+		} catch (SyntaxError e) {
 			return false;
-		if(!(obj instanceof MethodType))
-			return false;
-		MethodType other = (MethodType)obj;
-		return this.method==other.method;
+		}
 	}
 	
 	@Override
@@ -72,18 +72,6 @@ public class MethodType extends BaseType {
 	@Override
 	public void checkExists(Context context) {
 		// nothing to do
-	}
-	
-	@Override
-	public boolean isAssignableTo(Context context, IType other) {
-		if(!(other instanceof MethodType))
-			return false;
-		MethodType otherType = (MethodType)other;
-		try {
-			return this.method.getProto().equals(otherType.method.getProto()); // TODO: refine
-		} catch (SyntaxError e) {
-			return false;
-		}
 	}
 	
 	@Override

@@ -1841,6 +1841,18 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitRange_literal(@NotNull OParser.Range_literalContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code IteratorType}
+	 * labeled alternative in {@link OParser#typedef}.
+	 * @param ctx the parse tree
+	 */
+	void enterIteratorType(@NotNull OParser.IteratorTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code IteratorType}
+	 * labeled alternative in {@link OParser#typedef}.
+	 * @param ctx the parse tree
+	 */
+	void exitIteratorType(@NotNull OParser.IteratorTypeContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code SetType}
 	 * labeled alternative in {@link OParser#typedef}.
 	 * @param ctx the parse tree
@@ -1876,6 +1888,18 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDictType(@NotNull OParser.DictTypeContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code CursorType}
+	 * labeled alternative in {@link OParser#typedef}.
+	 * @param ctx the parse tree
+	 */
+	void enterCursorType(@NotNull OParser.CursorTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code CursorType}
+	 * labeled alternative in {@link OParser#typedef}.
+	 * @param ctx the parse tree
+	 */
+	void exitCursorType(@NotNull OParser.CursorTypeContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code PrimaryType}
 	 * labeled alternative in {@link OParser#typedef}.

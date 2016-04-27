@@ -32,11 +32,6 @@ public class DocumentType extends NativeType {
 	}
 	
 	@Override
-	public boolean isAssignableTo(Context context, IType other) {
-		return (other instanceof DocumentType) || (other instanceof AnyType);
-	}
-	
-	@Override
 	public IType checkMember(Context context, Identifier name) {
 		return AnyType.instance();
 	}

@@ -18,8 +18,10 @@ public class CursorType extends IterableType {
 	}
 	
 	@Override
-	public boolean isAssignableTo(Context context, IType other) {
-		return (other instanceof CursorType) && itemType.isAssignableTo(context, ((CursorType)other).getItemType());
+	public boolean isAssignableFrom(Context context, IType other) {
+		return super.isAssignableFrom(context, other) ||
+				(other instanceof CursorType) && 
+				itemType.isAssignableFrom(context, ((CursorType)other).getItemType());
 	}
 
 	@Override

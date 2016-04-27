@@ -1,7 +1,6 @@
 package prompto.type;
 
 import prompto.grammar.Identifier;
-import prompto.runtime.Context;
 
 public class ResourceType extends CategoryType {
 
@@ -20,10 +19,5 @@ public class ResourceType extends CategoryType {
 		ResourceType other = (ResourceType)obj;
 		return this.getTypeNameId().equals(other.getTypeNameId());
 	}
-	
-	@Override
-	public boolean isAssignableTo(Context context, IType other) {
-		return this.equals(other);
-	}
-	
+		
 }

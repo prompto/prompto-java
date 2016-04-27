@@ -378,13 +378,13 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		IMethodDeclaration candidate = null;
 		for(IMethodDeclaration method : methods.values()) {
 			IType potential = method.getArguments().getFirst().getType(context);
-			if(!type.isAssignableTo(context, potential))
+			if(!potential.isAssignableFrom(context, type))
 				continue;
 			if(candidate==null)
 				candidate = method;
 			else {
 				IType currentBest = candidate.getArguments().getFirst().getType(context);
-				if(currentBest.isAssignableTo(context, potential))
+				if(potential.isAssignableFrom(context, currentBest))
 					candidate = method;
 			}
 		}

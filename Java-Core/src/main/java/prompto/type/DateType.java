@@ -32,10 +32,11 @@ public class DateType extends NativeType {
 	public Type getJavaType(Context context) {
 		return PromptoDate.class;
 	}
-
+	
 	@Override
-	public boolean isAssignableTo(Context context, IType other) {
-		return (other instanceof DateType) || (other instanceof AnyType);
+	public boolean isAssignableFrom(Context context, IType other) {
+		return super.isAssignableFrom(context, other) ||
+				other==DateTimeType.instance();
 	}
 
 	@Override

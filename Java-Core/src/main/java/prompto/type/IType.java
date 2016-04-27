@@ -85,7 +85,8 @@ public interface IType {
 	void checkUnique(Context context);
 	void checkExists(Context context);
 
-	void checkAssignableTo(Context context, IType other);
+	void checkAssignableFrom(Context context, IType other);
+	boolean isAssignableFrom(Context context, IType other);
 	boolean isAssignableTo(Context context, IType other);
 	boolean isMoreSpecificThan(Context context, IType other);
 	

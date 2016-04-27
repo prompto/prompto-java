@@ -18,18 +18,18 @@ public class IteratorType extends IterableType {
 	}
 	
 	@Override
-	public boolean isAssignableTo(Context context, IType other) {
-		return (other instanceof IteratorType) && itemType.isAssignableTo(context, ((IteratorType)other).getItemType());
+	public boolean isAssignableFrom(Context context, IType other) {
+		return super.isAssignableFrom(context, other) ||
+				(other instanceof IteratorType && 
+				itemType.isAssignableFrom(context, ((IteratorType)other).getItemType()));
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		if(obj==this)
 			return true; 
-		if(!(obj instanceof IteratorType))
-			return false;
-		IteratorType other = (IteratorType)obj;
-		return this.getItemType().equals(other.getItemType());
+		return (obj instanceof IteratorType
+				&& this.getItemType().equals(((IteratorType)obj).getItemType()));
 	}
 	
 	@Override

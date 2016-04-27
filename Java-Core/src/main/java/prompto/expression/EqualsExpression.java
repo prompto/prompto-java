@@ -142,7 +142,7 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 	private boolean interpretIsA(Context context, IValue lval, IValue rval) throws PromptoError {
 		IType actual = lval.getType();
 		IType toCheck = ((TypeValue)rval).getValue();
-		return actual.isAssignableTo(context, toCheck);
+		return toCheck.isAssignableFrom(context, actual);
 	}
 
 	private boolean interpretEquals(Context context, IValue lval, IValue rval) throws PromptoError {

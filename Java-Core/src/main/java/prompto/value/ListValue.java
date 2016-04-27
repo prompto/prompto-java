@@ -133,6 +133,8 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 		String name = id.toString();
 		if ("length".equals(name))
 			return new Integer(items.size());
+		else if ("iterator".equals(name))
+			return new IteratorValue(getItemType(), getIterable(context).iterator());
 		else
 			throw new SyntaxError("No such member:" + name);
 	}

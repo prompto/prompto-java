@@ -63,7 +63,7 @@ public class MemberInstance implements IAssignableSelector {
 	public IType checkAssignValue(Context context, IExpression expression) {
 		IType type = parent.checkAssignMember(context, id);
 		IType actualType = expression.check(context);
-		actualType.checkAssignableTo(context, type);
+		type.checkAssignableFrom(context, actualType);
 		return type;
 	}
 	

@@ -106,7 +106,7 @@ public class ArgumentAssignment {
 			// need to check type compatibility
 			IType actualType = actual.getType(context);
 			IType newType = expression.check(context);
-			newType.checkAssignableTo(context,actualType);
+			actualType.checkAssignableFrom(context, newType);
 		}
 		return VoidType.instance();
 	}
@@ -123,7 +123,7 @@ public class ArgumentAssignment {
 			if(value instanceof IInstance)
 				actual = ((IInstance)value).getType();
 		}
-		if(!actual.isAssignableTo(context, required) && (actual instanceof CategoryType)) 
+		if(!required.isAssignableFrom(context, actual) && (actual instanceof CategoryType)) 
 			expression = new MemberSelector(expression,name);
 		return expression; 
 	}

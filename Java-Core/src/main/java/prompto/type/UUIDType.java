@@ -32,11 +32,6 @@ public class UUIDType extends NativeType {
 	}
 	
 	@Override
-	public boolean isAssignableTo(Context context, IType other) {
-		return (other instanceof UUIDType) || (other instanceof AnyType);
-	}
-	
-	@Override
 	public IValue convertJavaValueToPromptoValue(Context context, Object value) {
 		return new prompto.value.UUID((UUID)value);
 	}

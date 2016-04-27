@@ -20,16 +20,16 @@ public class TypeMap extends HashMap<Identifier, IType> {
 		for(IType t : values()) {
 			if(type==null)
 				type = t;
-			else if(t.isAssignableTo(context, type))
+			else if(type.isAssignableFrom(context, t))
 				continue;
-			else if(type.isAssignableTo(context, t))
+			else if(t.isAssignableFrom(context, type))
 				type = t;
 			else
 				throw new SyntaxError("Incompatible types: " + type.getTypeName() + " and " + t.getTypeName());
 		}
 		// second pass: check compatible
 		for(IType t : values()) {
-			if(t!=type && !t.isAssignableTo(context, type))
+			if(t!=type && !type.isAssignableFrom(context, t))
 				throw new SyntaxError("Incompatible types: " + type.getTypeName() + " and " + t.getTypeName());
 		}
 		return type;

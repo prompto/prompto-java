@@ -213,14 +213,11 @@ public class CategoryType extends BaseType {
 
 	
 	@Override
-	public boolean isAssignableTo(Context context, IType other) {
-		if(getTypeName().equals(other.getTypeName()))
-			return true;
-		if(other instanceof NullType || other instanceof AnyType || other instanceof MissingType)
-			return true;
-		if(!(other instanceof CategoryType))
-			return false;
-		return isAssignableTo(context,(CategoryType)other);
+	public boolean isAssignableFrom(Context context, IType other) {
+		return super.isAssignableFrom(context, other) ||
+				getTypeName().equals(other.getTypeName()) ||
+				(other instanceof CategoryType && 
+				((CategoryType)other).isAssignableTo(context,this));
 	}
 	
 	boolean isAssignableTo(Context context, CategoryType other) {
@@ -230,8 +227,8 @@ public class CategoryType extends BaseType {
 			IDeclaration d = getDeclaration(context);
 			if(d instanceof CategoryDeclaration) {
 				CategoryDeclaration cd = (CategoryDeclaration)d;
-				return isDerivedFromCompatibleCategory(context,cd,other)
-					|| isAssignableToAnonymousCategory(context,cd,other);	
+				return isDerivedFromCompatibleCategory(context, cd, other)
+					|| isAssignableToAnonymousCategory(context, cd, other);	
 			} else
 				return false; // TODO
 		} catch (SyntaxError e) {

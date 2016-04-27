@@ -130,17 +130,22 @@ public abstract class BaseType implements IType {
 	public abstract void checkExists(Context context);
 
 	@Override
-	public abstract boolean isAssignableTo(Context context, IType other);
+	public boolean isAssignableFrom(Context context, IType other) {
+		return this==other || this.equals(other) || other.equals(NullType.instance());
+	}
+
+	@Override
+	public final boolean isAssignableTo(Context context, IType other) {
+		return other.isAssignableFrom(context, this);
+	}
 
 	@Override
 	public abstract boolean isMoreSpecificThan(Context context, IType other);
 
 	@Override
-	public final void checkAssignableTo(Context context, IType other) {
-		if(other==DocumentType.instance() || other==AnyType.instance())
-			return;
-		if (!isAssignableTo(context, other))
-			throw new SyntaxError("Type: " + this.getTypeName() + " is not compatible with: " + other.getTypeName());
+	public final void checkAssignableFrom(Context context, IType other) {
+		if (!isAssignableFrom(context, other))
+			throw new SyntaxError("Type: " + other.getTypeName() + " is not compatible with: " + this.getTypeName());
 	}
 
 	@Override

@@ -225,6 +225,7 @@ import prompto.type.DocumentType;
 import prompto.type.IType;
 import prompto.type.ImageType;
 import prompto.type.IntegerType;
+import prompto.type.IteratorType;
 import prompto.type.ListType;
 import prompto.type.NativeType;
 import prompto.type.SetType;
@@ -1328,6 +1329,14 @@ public class EPromptoBuilder extends EParserBaseListener {
 		IExpression source = this.<IExpression>getNodeValue(ctx.source);
 		setNodeValue(ctx, new IteratorExpression(name, source, exp));
 	}
+	
+	
+	@Override
+	public void exitIteratorType(IteratorTypeContext ctx) {
+		IType type = this.<IType>getNodeValue(ctx.i);
+		setNodeValue(ctx, new IteratorType(type));
+	}
+	
 	
 	@Override
 	public void exitJava_identifier(Java_identifierContext ctx) {

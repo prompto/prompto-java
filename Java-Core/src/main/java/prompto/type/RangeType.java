@@ -13,11 +13,6 @@ public class RangeType extends ContainerType {
 		super(Family.RANGE, itemType, itemType.getTypeName()+"[..]");
 	}
 	
-	@Override
-	public boolean isAssignableTo(Context context, IType other) {
-		return this.equals(other);
-	}
-	
 	static Map<IType,Class<?>> rangeClassMap = createRangeClassMap();
 	
 	private static Map<IType, Class<?>> createRangeClassMap() {

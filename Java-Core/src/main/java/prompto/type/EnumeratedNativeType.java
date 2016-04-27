@@ -107,7 +107,7 @@ public class EnumeratedNativeType extends BaseType {
 	}
 	
 	@Override
-	public boolean isAssignableTo(Context context, IType other) {
+	public boolean isAssignableFrom(Context context, IType other) {
 		throw new UnsupportedOperationException(); // TODO
 	}
 

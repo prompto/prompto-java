@@ -32,7 +32,7 @@ public class NullType extends BaseType {
 	}
 
 	@Override
-	public boolean isAssignableTo(Context context, IType other) {
+	public boolean isAssignableFrom(Context context, IType other) {
 		return true;
 	}
 

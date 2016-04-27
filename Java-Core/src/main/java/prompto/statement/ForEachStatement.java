@@ -178,10 +178,12 @@ public class ForEachStatement extends BaseStatement {
 
 	@SuppressWarnings("unchecked")
 	private Iterator<IValue> getIterator(Context context, Object src) {
-		if (src instanceof IIterable) 
-			return ((IIterable<IValue>) src).getIterable(context).iterator();
+		if(src instanceof Iterator)
+			return (Iterator<IValue>)src;
 		else if(src instanceof Iterable)
 			return ((Iterable<IValue>)src).iterator();
+		else if (src instanceof IIterable) 
+			return ((IIterable<IValue>) src).getIterable(context).iterator();
 		else
 			throw new InternalError("Should never get there!");
 	}

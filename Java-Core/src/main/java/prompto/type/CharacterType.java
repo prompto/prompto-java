@@ -33,11 +33,6 @@ public class CharacterType extends NativeType {
 	
 
 	@Override
-	public boolean isAssignableTo(Context context, IType other) {
-		return (other instanceof CharacterType) || (other instanceof TextType) || (other instanceof AnyType);
-	}
-
-	@Override
 	public IType checkAdd(Context context, IType other, boolean tryReverse) {
 		return TextType.instance();
 	}

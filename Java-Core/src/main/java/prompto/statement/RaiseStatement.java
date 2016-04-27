@@ -20,6 +20,8 @@ import prompto.value.IValue;
 
 public class RaiseStatement extends SimpleStatement {
 	
+	static final IType ERROR_TYPE = new CategoryType(new Identifier("Error"));
+	
 	IExpression expression;
 	
 	public RaiseStatement(IExpression expression) {
@@ -64,7 +66,7 @@ public class RaiseStatement extends SimpleStatement {
 	@Override
 	public IType check(Context context) {
 		IType type = expression.check(context);
-		if(!type.isAssignableTo(context, new CategoryType(new Identifier("Error"))))
+		if(!ERROR_TYPE.isAssignableFrom(context, type))
 			throw new SyntaxError(type.getTypeName() + " does not extend Error");
 		return VoidType.instance();
 	}

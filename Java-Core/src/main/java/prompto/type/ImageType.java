@@ -30,11 +30,6 @@ public class ImageType extends BinaryType {
 	}
 	
 	@Override
-	public boolean isAssignableTo(Context context, IType other) {
-		return (other instanceof ImageType);
-	}
-	
-	@Override
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		if(value.isNull())
 			return NullValue.instance();

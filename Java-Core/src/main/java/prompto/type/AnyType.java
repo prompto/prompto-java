@@ -39,8 +39,8 @@ public class AnyType extends NativeType {
 	}
 
 	@Override
-	public boolean isAssignableTo(Context context, IType other) {
-		return (other instanceof AnyType);
+	public boolean isAssignableFrom(Context context, IType other) {
+		return true;
 	}
 	
 }

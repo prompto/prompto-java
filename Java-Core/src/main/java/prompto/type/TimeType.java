@@ -34,8 +34,9 @@ public class TimeType extends NativeType {
 	}
 
 	@Override
-	public boolean isAssignableTo(Context context, IType other) {
-		return (other instanceof TimeType) || (other instanceof AnyType);
+	public boolean isAssignableFrom(Context context, IType other) {
+		return super.isAssignableFrom(context, other) ||
+				other==DateTimeType.instance();
 	}
 
 	@Override
