@@ -188,7 +188,7 @@ public class JavaClassType extends BaseType {
 		if(!(value instanceof List<?>) || !(returnType instanceof ListType))
 			return null;
 		Type elemType = nthArgTypeFromParameterizedType(type, 0);
-		IType itemType = ((SetType)returnType).getItemType();
+		IType itemType = ((ListType)returnType).getItemType();
 		PromptoList<IValue> list = new PromptoList<IValue>();
 		for(Object obj : (List<Object>)value) {
 			IValue val = convertJavaValueToPromptoValue(context, obj, elemType, itemType);
