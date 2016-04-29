@@ -164,7 +164,9 @@ import prompto.literal.SetLiteral;
 import prompto.literal.TextLiteral;
 import prompto.literal.TimeLiteral;
 import prompto.literal.TupleLiteral;
-import static prompto.parser.EParser.*;
+import prompto.parser.EParser;
+import prompto.parser.EParserBaseListener;
+import prompto.parser.EParser.*;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -262,12 +264,6 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitAbstractMethod(AbstractMethodContext ctx) {
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
-		setNodeValue(ctx, decl);
-	}
-
-	@Override
 	public void exitAddExpression(AddExpressionContext ctx) {
 		IExpression left = this.<IExpression>getNodeValue(ctx.left);
 		IExpression right = this.<IExpression>getNodeValue(ctx.right);
@@ -283,20 +279,14 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitAnyArgumentType(AnyArgumentTypeContext ctx) {
-		IType type = this.<IType>getNodeValue(ctx.typ);
-		setNodeValue(ctx, type);
-	}
-	
-	@Override
 	public void exitAnyDictType(AnyDictTypeContext ctx) {
-		IType type = this.<IType>getNodeValue(ctx.typ);
+		IType type = this.<IType>getNodeValue(ctx.any_type());
 		setNodeValue(ctx, new DictType(type));
 	}
 
 	@Override
 	public void exitAnyListType(AnyListTypeContext ctx) {
-		IType type = this.<IType>getNodeValue(ctx.typ);
+		IType type = this.<IType>getNodeValue(ctx.any_type());
 		setNodeValue(ctx, new ListType(type));
 	}
 	
@@ -312,6 +302,16 @@ public class EPromptoBuilder extends EParserBaseListener {
 		IArgument arg = new UnresolvedArgument(name);
 		ArgumentAssignment item = new ArgumentAssignment(arg, exp);
 		setNodeValue(ctx, item);
+	}
+
+	@Override
+	public void exitArgument_list(Argument_listContext ctx) {
+		ArgumentList items = new ArgumentList();
+		ctx.argument().forEach((a)->{
+			IArgument item = this.<IArgument>getNodeValue(a); 
+			items.add(item);
+		});
+		setNodeValue(ctx, items);
 	}
 
 	@Override
@@ -350,21 +350,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 			items.add(item);
 		setNodeValue(ctx, items);
 	}
-		
-	@Override
-	public void exitArgumentList(ArgumentListContext ctx) {
-		IArgument item = this.<IArgument>getNodeValue(ctx.item); 
-		setNodeValue(ctx, new ArgumentList(item));
-	}
 	
-	@Override
-	public void exitArgumentListItem(ArgumentListItemContext ctx) {
-		ArgumentList items = this.<ArgumentList>getNodeValue(ctx.items); 
-		IArgument item = this.<IArgument>getNodeValue(ctx.item); 
-		items.add(item);
-		setNodeValue(ctx, items);
-	}
-
 	@Override
 	public void exitAssertion(AssertionContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
@@ -372,17 +358,12 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitAssertionList(AssertionListContext ctx) {
-		Assertion item = this.<Assertion>getNodeValue(ctx.item);
-		AssertionList items = new AssertionList(item);
-		setNodeValue(ctx, items);
-	}
-	
-	@Override
-	public void exitAssertionListItem(AssertionListItemContext ctx) {
-		Assertion item = this.<Assertion>getNodeValue(ctx.item);
-		AssertionList items = this.<AssertionList>getNodeValue(ctx.items);
-		items.add(item);
+	public void exitAssertion_list(Assertion_listContext ctx) {
+		AssertionList items = new AssertionList();
+		ctx.assertion().forEach((a)->{
+			Assertion item = this.<Assertion>getNodeValue(a);
+			items.add(item);
+		});
 		setNodeValue(ctx, items);
 	}
 	
@@ -402,8 +383,8 @@ public class EPromptoBuilder extends EParserBaseListener {
 
 	@Override
 	public void exitAssign_variable_statement(Assign_variable_statementContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		Identifier name = this.<Identifier>getNodeValue(ctx.variable_identifier());
+		IExpression exp = this.<IExpression>getNodeValue(ctx.expression());
 		setNodeValue(ctx, new AssignVariableStatement(name, exp));
 	}
 	
@@ -419,12 +400,6 @@ public class EPromptoBuilder extends EParserBaseListener {
 		setNodeValue(ctx, stmt);
 	}
 	
-	@Override
-	public void exitAtomicLiteral(AtomicLiteralContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, exp);
-	}
-
 	@Override
 	public void exitAtomicSwitchCase(AtomicSwitchCaseContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
@@ -526,18 +501,21 @@ public class EPromptoBuilder extends EParserBaseListener {
 		setNodeValue(ctx, new CollectionSwitchCase(exp, stmts));
 	}
 	
+	
 	@Override
-	public void exitCatchStatementList(CatchStatementListContext ctx) {
-		SwitchCase item = this.<SwitchCase>getNodeValue(ctx.item);
-		setNodeValue(ctx, new SwitchCaseList(item));
+	public void exitCatch_statement_list(Catch_statement_listContext ctx) {
+		SwitchCaseList items = new SwitchCaseList();
+		ctx.catch_statement().forEach((s)->{
+			SwitchCase item = this.<SwitchCase>getNodeValue(s);
+			items.add(item);
+		});
+		setNodeValue(ctx, items);
 	}
 	
 	@Override
-	public void exitCatchStatementListItem(CatchStatementListItemContext ctx) {
-		SwitchCase item = this.<SwitchCase>getNodeValue(ctx.item);
-		SwitchCaseList items = this.<SwitchCaseList>getNodeValue(ctx.items);
-		items.add(item);
-		setNodeValue(ctx, items);
+	public void exitCategory_or_any_type(Category_or_any_typeContext ctx) {
+		IType type = this.<IType>getNodeValue(ctx.getChild(0));
+		setNodeValue(ctx, type);
 	}
 	
 	@Override
@@ -551,45 +529,23 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
+	public void exitCategory_symbol_list(Category_symbol_listContext ctx) {
+		CategorySymbolList items = new CategorySymbolList();
+		ctx.category_symbol().forEach((s)->{
+			CategorySymbol item = this.<CategorySymbol>getNodeValue(s);
+			items.add(item);
+		});
+		setNodeValue(ctx, items);
+	}
+	
+
+	
+	@Override
 	public void exitCategory_type(Category_typeContext ctx) {
 		Identifier name = new Identifier(ctx.getText());
 		setNodeValue(ctx, new CategoryType(name));
 	}
 
-	@Override
-	public void exitCategoryArgumentType(CategoryArgumentTypeContext ctx) {
-		IType type = this.<IType>getNodeValue(ctx.typ);
-		setNodeValue(ctx, type);
-	}
-
-	@Override
-	public void exitCategoryMethodList(CategoryMethodListContext ctx) {
-		IMethodDeclaration item = this.<IMethodDeclaration>getNodeValue(ctx.item);
-		MethodDeclarationList items = new MethodDeclarationList(item);
-		setNodeValue(ctx, items);
-	}
-
-	@Override
-	public void exitCategoryMethodListItem(CategoryMethodListItemContext ctx) {
-		IMethodDeclaration item = this.<IMethodDeclaration>getNodeValue(ctx.item);
-		MethodDeclarationList items = this.<MethodDeclarationList>getNodeValue(ctx.items);
-		items.add(item);
-		setNodeValue(ctx, items);
-	}
-	
-	@Override
-	public void exitCategorySymbolList(CategorySymbolListContext ctx) {
-		CategorySymbol item = this.<CategorySymbol>getNodeValue(ctx.item);
-		setNodeValue(ctx, new CategorySymbolList(item));
-	}
-	
-	@Override
-	public void exitCategorySymbolListItem(CategorySymbolListItemContext ctx) {
-		CategorySymbol item = this.<CategorySymbol>getNodeValue(ctx.item);
-		CategorySymbolList items = this.<CategorySymbolList>getNodeValue(ctx.items);
-		items.add(item);
-		setNodeValue(ctx, items);
-	}
 
 	@Override
 	public void exitCategoryType(CategoryTypeContext ctx) {
@@ -609,8 +565,8 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitChildInstance(ChildInstanceContext ctx) {
-		IAssignableInstance parent = this.<IAssignableInstance>getNodeValue(ctx.parent);
-		IAssignableSelector child = this.<IAssignableSelector>getNodeValue(ctx.child);
+		IAssignableInstance parent = this.<IAssignableInstance>getNodeValue(ctx.assignable_instance());
+		IAssignableSelector child = this.<IAssignableSelector>getNodeValue(ctx.child_instance());
 		child.setParent(parent);
 		setNodeValue(ctx, child);
 	}
@@ -655,12 +611,13 @@ public class EPromptoBuilder extends EParserBaseListener {
 		setNodeValue(ctx, CodeType.instance());
 	}
 	
+
 	@Override
-	public void exitCollectionLiteral(CollectionLiteralContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+	public void exitCollection_literal(Collection_literalContext ctx) {
+		IExpression exp = this.<IExpression>getNodeValue(ctx.getChild(0));
 		setNodeValue(ctx, exp);
 	}
-
+	
 	@Override
 	public void exitCollectionSwitchCase(CollectionSwitchCaseContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
@@ -684,7 +641,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 		IdentifierList attrs = this.<IdentifierList>getNodeValue(ctx.attrs);
 		IdentifierList derived = this.<IdentifierList>getNodeValue(ctx.derived);
 		MethodDeclarationList methods = this.<MethodDeclarationList>getNodeValue(ctx.methods);
-		CategoryDeclaration decl = new ConcreteCategoryDeclaration(name, attrs, derived, methods);
+		ConcreteCategoryDeclaration decl = new ConcreteCategoryDeclaration(name, attrs, derived, methods);
 		decl.setStorable(ctx.STORABLE()!=null);
 		setNodeValue(ctx, decl);
 	}
@@ -701,12 +658,6 @@ public class EPromptoBuilder extends EParserBaseListener {
 	@Override
 	public void exitConcreteCategoryDeclaration(ConcreteCategoryDeclarationContext ctx) {
 		ConcreteCategoryDeclaration decl = this.<ConcreteCategoryDeclaration>getNodeValue(ctx.decl);
-		setNodeValue(ctx, decl);
-	}
-
-	@Override
-	public void exitConcreteMethod(ConcreteMethodContext ctx) {
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
 		setNodeValue(ctx, decl);
 	}
 
@@ -849,7 +800,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitCSharpNativeStatement(CSharpNativeStatementContext ctx) {
-		CSharpStatement stmt = this.<CSharpStatement>getNodeValue(ctx.stmt);
+		CSharpStatement stmt = this.<CSharpStatement>getNodeValue(ctx.csharp_statement());
 		setNodeValue(ctx, new CSharpNativeCall(stmt));
 	}
 	
@@ -949,25 +900,22 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 
 	@Override
-	public void exitDeclarationList(DeclarationListContext ctx) {
-		IDeclaration item = this.<IDeclaration>getNodeValue(ctx.item);
-		DeclarationList items = new DeclarationList(item);
+	public void exitDeclarations(DeclarationsContext ctx) {
+		DeclarationList items = new DeclarationList();
+		ctx.declaration().forEach((d)->{
+			IDeclaration item = this.<IDeclaration>getNodeValue(d);
+			items.add(item);
+		});
 		setNodeValue(ctx, items);
 	}
 	
-	@Override
-	public void exitDeclarationListItem(DeclarationListItemContext ctx) {
-		IDeclaration item = this.<IDeclaration>getNodeValue(ctx.item);
-		DeclarationList items = this.<DeclarationList>getNodeValue(ctx.items);
-		items.add(item);
-		setNodeValue(ctx, items);
-	}
 	
 	@Override
 	public void exitDerivedList(DerivedListContext ctx) {
 		IdentifierList items = this.<IdentifierList>getNodeValue(ctx.items);
 		setNodeValue(ctx, items);
 	}
+	
 	
 	@Override
 	public void exitDerivedListItem(DerivedListItemContext ctx) {
@@ -976,6 +924,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 		items.add(item);
 		setNodeValue(ctx, items);
 	}
+	
 	
 	@Override
 	public void exitDict_entry(Dict_entryContext ctx) {
@@ -987,30 +936,22 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitDict_literal(Dict_literalContext ctx) {
-		DictEntryList items = this.<DictEntryList>getNodeValue(ctx.items);
+		DictEntryList items = this.<DictEntryList>getNodeValue(ctx.dict_entry_list());
 		IExpression value = items==null ? new DictLiteral() : new DictLiteral(items);
 		setNodeValue(ctx, value);
 	}
 	
-	@Override
-	public void exitDictEntryList(DictEntryListContext ctx) {
-		DictEntry item = this.<DictEntry>getNodeValue(ctx.item);
-		setNodeValue(ctx, new DictEntryList(item));
-	}
 	
 	@Override
-	public void exitDictEntryListItem(DictEntryListItemContext ctx) {
-		DictEntryList items = this.<DictEntryList>getNodeValue(ctx.items);
-		DictEntry item = this.<DictEntry>getNodeValue(ctx.item);
-		items.add(item);
+	public void exitDict_entry_list(Dict_entry_listContext ctx) {
+		DictEntryList items = new DictEntryList();
+		ctx.dict_entry().forEach((e)->{
+			DictEntry item = this.<DictEntry>getNodeValue(e);
+			items.add(item);
+		});
 		setNodeValue(ctx, items);
 	}
-	
-	@Override
-	public void exitDictLiteral(DictLiteralContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, exp);
-	}
+
 	
 	@Override
 	public void exitDictType(DictTypeContext ctx) {
@@ -1093,14 +1034,8 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitEnumCategoryDeclaration(EnumCategoryDeclarationContext ctx) {
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
-		setNodeValue(ctx, decl);
-	}
-	
-	@Override
-	public void exitEnumNativeDeclaration(EnumNativeDeclarationContext ctx) {
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
+	public void exitEnum_declaration(Enum_declarationContext ctx) {
+		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.getChild(0));
 		setNodeValue(ctx, decl);
 	}
 	
@@ -1110,6 +1045,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 		IExpression right = this.<IExpression>getNodeValue(ctx.right);
 		setNodeValue(ctx, new EqualsExpression(left, EqOp.EQUALS, right));
 	}
+
 	
 	@Override
 	public void exitExecuteExpression(ExecuteExpressionContext ctx) {
@@ -1173,7 +1109,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 
 	@Override
 	public void exitFullDeclarationList(FullDeclarationListContext ctx) {
-		DeclarationList items = this.<DeclarationList>getNodeValue(ctx.items);
+		DeclarationList items = this.<DeclarationList>getNodeValue(ctx.declarations());
 		if(items==null)
 			items = new DeclarationList();
 		setNodeValue(ctx, items);
@@ -1282,7 +1218,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitIsATypeExpression(IsATypeExpressionContext ctx) {
-		IType type = this.<IType>getNodeValue(ctx.typ);
+		IType type = this.<IType>getNodeValue(ctx.category_or_any_type());
 		IExpression exp = new TypeExpression(type);
 		setNodeValue(ctx, exp);
 	}
@@ -1306,7 +1242,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitIsOtherExpression(IsOtherExpressionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		IExpression exp = this.<IExpression>getNodeValue(ctx.expression());
 		setNodeValue(ctx, exp);
 	}
 	
@@ -1456,7 +1392,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitJavaNativeStatement(JavaNativeStatementContext ctx) {
-		JavaStatement stmt = this.<JavaStatement>getNodeValue(ctx.stmt);
+		JavaStatement stmt = this.<JavaStatement>getNodeValue(ctx.java_statement());
 		setNodeValue(ctx, new JavaNativeCall(stmt));
 	}
 	
@@ -1513,8 +1449,8 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitJavascript_native_statement(Javascript_native_statementContext ctx) {
-		JavaScriptStatement stmt = this.<JavaScriptStatement>getNodeValue(ctx.stmt);
-		JavaScriptModule module = this.<JavaScriptModule>getNodeValue(ctx.module);
+		JavaScriptStatement stmt = this.<JavaScriptStatement>getNodeValue(ctx.javascript_statement());
+		JavaScriptModule module = this.<JavaScriptModule>getNodeValue(ctx.javascript_module());
 		stmt.setModule(module);
 		setNodeValue(ctx, stmt);
 	}
@@ -1588,7 +1524,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitJavaScriptNativeStatement(JavaScriptNativeStatementContext ctx) {
-		JavaScriptStatement stmt = this.<JavaScriptStatement>getNodeValue(ctx.stmt);
+		JavaScriptStatement stmt = this.<JavaScriptStatement>getNodeValue(ctx.javascript_native_statement());
 		setNodeValue(ctx, new JavaScriptNativeCall(stmt));
 	}
 	
@@ -1670,22 +1606,24 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitList_literal(List_literalContext ctx) {
-		ExpressionList items = this.<ExpressionList>getNodeValue(ctx.items);
-		IExpression value = items==null ? new ListLiteral() : new ListLiteral(items);
+		boolean mutable = ctx.MUTABLE()!=null;
+		ExpressionList items = this.<ExpressionList>getNodeValue(ctx.expression_list());
+		IExpression value = items==null ? new ListLiteral(mutable) : new ListLiteral(items, mutable);
 		setNodeValue(ctx, value);
 	}
 	
 	
 	@Override
-	public void exitListLiteral(ListLiteralContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, exp);
-	}
-
-	@Override
 	public void exitListType(ListTypeContext ctx) {
 		IType type = this.<IType>getNodeValue(ctx.l);
 		setNodeValue(ctx, new ListType(type));
+	}
+	
+	
+	@Override
+	public void exitLiteral_expression(Literal_expressionContext ctx) {
+		IExpression exp = this.<IExpression>getNodeValue(ctx.getChild(0));
+		setNodeValue(ctx, exp);
 	}
 	
 	@Override
@@ -1695,23 +1633,19 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitLiteralList(LiteralListContext ctx) {
-		IExpression item = this.<IExpression>getNodeValue(ctx.item);
-		setNodeValue(ctx, new ExpressionList(item));
-	}
-	
-	@Override
-	public void exitLiteralListItem(LiteralListItemContext ctx) {
-		ExpressionList items = this.<ExpressionList>getNodeValue(ctx.items);
-		IExpression item = this.<IExpression>getNodeValue(ctx.item);
-		items.add(item);
+	public void exitLiteral_list_literal(Literal_list_literalContext ctx) {
+		ExpressionList items = new ExpressionList();
+		ctx.atomic_literal().forEach((l)->{
+			IExpression item = this.<IExpression>getNodeValue(l);
+			items.add(item);
+		});
 		setNodeValue(ctx, items);
 	}
 
 	@Override
 	public void exitLiteralListLiteral(LiteralListLiteralContext ctx) {
-		ExpressionList items = this.<ExpressionList>getNodeValue(ctx.exp);
-		setNodeValue(ctx, new ListLiteral(items));
+		ExpressionList items = this.<ExpressionList>getNodeValue(ctx.literal_list_literal());
+		setNodeValue(ctx, new ListLiteral(items, false));
 	}
 	
 	@Override
@@ -1723,7 +1657,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitLiteralSetLiteral(LiteralSetLiteralContext ctx) {
-		ExpressionList items = this.<ExpressionList>getNodeValue(ctx.exp);
+		ExpressionList items = this.<ExpressionList>getNodeValue(ctx.literal_list_literal());
 		setNodeValue(ctx, new SetLiteral(items));
 	}
 	
@@ -1769,6 +1703,16 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
+	public void exitMember_method_declaration_list(Member_method_declaration_listContext ctx) {
+		MethodDeclarationList items = new MethodDeclarationList();
+		ctx.member_method_declaration().forEach((m)->{
+			IMethodDeclaration item = this.<IMethodDeclaration>getNodeValue(m);
+			items.add(item);
+		});
+		setNodeValue(ctx, items);
+	}
+	
+	@Override
 	public void exitMemberInstance(MemberInstanceContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
 		setNodeValue(ctx, new MemberInstance(name));
@@ -1778,6 +1722,19 @@ public class EPromptoBuilder extends EParserBaseListener {
 	public void exitMemberSelector(MemberSelectorContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
 		setNodeValue(ctx, new MemberSelector(name));
+	}
+	
+	
+	@Override
+	public void exitMethod_declaration(Method_declarationContext ctx) {
+		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.getChild(0));
+		setNodeValue(ctx, decl);
+	}
+	
+	@Override
+	public void exitMethod_identifier(Method_identifierContext ctx) {
+		Object id = this.<Object>getNodeValue(ctx.getChild(0));
+		setNodeValue(ctx, id);
 	}
 	
 	@Override
@@ -1792,19 +1749,6 @@ public class EPromptoBuilder extends EParserBaseListener {
 	public void exitMethodCallStatement(MethodCallStatementContext ctx) {
 		IStatement stmt = this.<IStatement>getNodeValue(ctx.stmt);
 		setNodeValue(ctx, stmt);
-	}
-	
-
-	@Override
-	public void exitMethodTypeIdentifier(MethodTypeIdentifierContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		setNodeValue(ctx, name);
-	}
-	
-	@Override
-	public void exitMethodVariableIdentifier(MethodVariableIdentifierContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		setNodeValue(ctx, name);
 	}
 	
 	@Override
@@ -1841,16 +1785,10 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitNamed_argument(Named_argumentContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		Identifier name = this.<Identifier>getNodeValue(ctx.variable_identifier());
 		UnresolvedArgument arg = new UnresolvedArgument(name);
-		IExpression exp = this.<IExpression>getNodeValue(ctx.value);
+		IExpression exp = this.<IExpression>getNodeValue(ctx.literal_expression());
 		arg.setDefaultExpression(exp);
-		setNodeValue(ctx, arg);
-	}
-	
-	@Override
-	public void exitNamedArgument(NamedArgumentContext ctx) {
-		IArgument arg = this.<IArgument>getNodeValue(ctx.arg);
 		setNodeValue(ctx, arg);
 	}
 	
@@ -1938,54 +1876,35 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitNativeCategoryMethodList(NativeCategoryMethodListContext ctx) {
-		IMethodDeclaration item = this.<IMethodDeclaration>getNodeValue(ctx.item);
-		MethodDeclarationList items = new MethodDeclarationList(item);
+	public void exitNative_member_method_declaration_list(Native_member_method_declaration_listContext ctx) {
+		MethodDeclarationList items = new MethodDeclarationList();
+		ctx.native_member_method_declaration().forEach((m)->{
+			IMethodDeclaration item = this.<IMethodDeclaration>getNodeValue(m);
+			items.add(item);
+		});
 		setNodeValue(ctx, items);
 	}
 	
 	@Override
-	public void exitNativeCategoryMethodListItem(NativeCategoryMethodListItemContext ctx) {
-		IMethodDeclaration item = this.<IMethodDeclaration>getNodeValue(ctx.item);
-		MethodDeclarationList items = this.<MethodDeclarationList>getNodeValue(ctx.items);
-		items.add(item);
+	public void exitNative_statement_list(Native_statement_listContext ctx) {
+		StatementList items = new StatementList();
+		ctx.native_statement().forEach((s)->{
+			IStatement item = this.<IStatement>getNodeValue(s);
+			items.add(item);
+		});
 		setNodeValue(ctx, items);
 	}
 	
 	@Override
-	public void exitNativeMethod(NativeMethodContext ctx) {
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
-		setNodeValue(ctx, decl);
-	}
-	
-	@Override
-	public void exitNativeStatementList(NativeStatementListContext ctx) {
-		IStatement item = this.<IStatement>getNodeValue(ctx.item);
-		StatementList items = new StatementList(item);
+	public void exitNative_symbol_list(Native_symbol_listContext ctx) {
+		NativeSymbolList items = new NativeSymbolList();
+		ctx.native_symbol().forEach((s)->{
+			NativeSymbol item = this.<NativeSymbol>getNodeValue(s);
+			items.add(item);
+		});
 		setNodeValue(ctx, items);
 	}
-	
-	@Override
-	public void exitNativeStatementListItem(NativeStatementListItemContext ctx) {
-		IStatement item = this.<IStatement>getNodeValue(ctx.item);
-		StatementList items = this.<StatementList>getNodeValue(ctx.items);
-		items.add(item);
-		setNodeValue(ctx, items);
-	}
-	
-	@Override
-	public void exitNativeSymbolList(NativeSymbolListContext ctx) {
-		NativeSymbol item = this.<NativeSymbol>getNodeValue(ctx.item);
-		setNodeValue(ctx, new NativeSymbolList(item));
-	}
-	
-	@Override
-	public void exitNativeSymbolListItem(NativeSymbolListItemContext ctx) {
-		NativeSymbol item = this.<NativeSymbol>getNodeValue(ctx.item);
-		NativeSymbolList items = this.<NativeSymbolList>getNodeValue(ctx.items);
-		items.add(item);
-		setNodeValue(ctx, items);
-	}
+
 	
 	@Override
 	public void exitNativeType(NativeTypeContext ctx) {
@@ -2037,6 +1956,13 @@ public class EPromptoBuilder extends EParserBaseListener {
 	@Override
 	public void exitNullLiteral(NullLiteralContext ctx) {
 		setNodeValue(ctx, NullLiteral.instance());
+	}
+	
+	
+	@Override
+	public void exitOperator_argument(Operator_argumentContext ctx) {
+		IArgument arg = this.<IArgument>getNodeValue(ctx.getChild(0));
+		setNodeValue(ctx, arg);
 	}
 	
 	@Override
@@ -2113,7 +2039,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitParenthesis_expression(Parenthesis_expressionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		IExpression exp = this.<IExpression>getNodeValue(ctx.expression());
 		setNodeValue(ctx, new ParenthesisExpression(exp));
 	}
 	
@@ -2166,8 +2092,8 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitPython_native_statement(Python_native_statementContext ctx) {
-		PythonStatement stmt = this.<PythonStatement>getNodeValue(ctx.stmt);
-		PythonModule module = this.<PythonModule>getNodeValue(ctx.module);
+		PythonStatement stmt = this.<PythonStatement>getNodeValue(ctx.python_statement());
+		PythonModule module = this.<PythonModule>getNodeValue(ctx.python_module());
 		stmt.setModule(module);
 		setNodeValue(ctx, stmt);
 	}
@@ -2180,7 +2106,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitPython2NativeStatement(Python2NativeStatementContext ctx) {
-		PythonStatement stmt = this.<PythonStatement>getNodeValue(ctx.stmt);
+		PythonStatement stmt = this.<PythonStatement>getNodeValue(ctx.python_native_statement());
 		setNodeValue(ctx, new Python2NativeCall(stmt));
 	}
 	
@@ -2192,7 +2118,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitPython3NativeStatement(Python3NativeStatementContext ctx) {
-		PythonStatement stmt = this.<PythonStatement>getNodeValue(ctx.stmt);
+		PythonStatement stmt = this.<PythonStatement>getNodeValue(ctx.python_native_statement());
 		setNodeValue(ctx, new Python3NativeCall(stmt));
 	}
 	
@@ -2368,12 +2294,6 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitRangeLiteral(RangeLiteralContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, exp);
-	}
-	
-	@Override
 	public void exitRead_expression(Read_expressionContext ctx) {
 		IExpression source = this.<IExpression>getNodeValue(ctx.source);
 		setNodeValue(ctx, new ReadExpression(source));
@@ -2387,7 +2307,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitResource_declaration(Resource_declarationContext ctx) {
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
+		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.native_resource_declaration());
 		setNodeValue(ctx, decl);
 	}
 	
@@ -2405,7 +2325,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitRootInstance(RootInstanceContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		Identifier name = this.<Identifier>getNodeValue(ctx.variable_identifier());
 		setNodeValue(ctx, new VariableInstance(name));
 	}
 	
@@ -2418,7 +2338,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitSelectableExpression(SelectableExpressionContext ctx) {
-		IExpression parent = this.<IExpression>getNodeValue(ctx.parent);
+		IExpression parent = this.<IExpression>getNodeValue(ctx.selectable_expression());
 		setNodeValue(ctx, parent);
 	}
 	
@@ -2432,16 +2352,11 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitSet_literal(Set_literalContext ctx) {
-		ExpressionList items = this.<ExpressionList>getNodeValue(ctx.items);
+		ExpressionList items = this.<ExpressionList>getNodeValue(ctx.expression_list());
 		SetLiteral set = items==null ? new SetLiteral() : new SetLiteral(items);
 		setNodeValue(ctx, set);
 	}
 	
-	@Override
-	public void exitSetLiteral(SetLiteralContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, exp);
-	}
 	
 	@Override
 	public void exitSetter_method_declaration(Setter_method_declarationContext ctx) {
@@ -2508,17 +2423,14 @@ public class EPromptoBuilder extends EParserBaseListener {
 		setNodeValue(ctx, exp);
 	}
 	
-	@Override
-	public void exitStatementList(StatementListContext ctx) {
-		IStatement item = this.<IStatement>getNodeValue(ctx.item);
-		setNodeValue(ctx, new StatementList(item));
-	}
 	
 	@Override
-	public void exitStatementListItem(StatementListItemContext ctx) {
-		IStatement item = this.<IStatement>getNodeValue(ctx.item);
-		StatementList items = this.<StatementList>getNodeValue(ctx.items);
-		items.add(item);
+	public void exitStatement_list(Statement_listContext ctx) {
+		StatementList items = new StatementList();
+		ctx.statement().forEach((s)->{
+			IStatement item = this.<IStatement>getNodeValue(s);
+			items.add(item);
+		});
 		setNodeValue(ctx, items);
 	}
 	
@@ -2545,19 +2457,15 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitSwitchCaseStatementList(SwitchCaseStatementListContext ctx) {
-		SwitchCase item = this.<SwitchCase>getNodeValue(ctx.item);
-		setNodeValue(ctx, new SwitchCaseList(item));
-	}
-	
-	@Override
-	public void exitSwitchCaseStatementListItem(SwitchCaseStatementListItemContext ctx) {
-		SwitchCase item = this.<SwitchCase>getNodeValue(ctx.item);
-		SwitchCaseList items = this.<SwitchCaseList>getNodeValue(ctx.items);
-		items.add(item);
+	public void exitSwitch_case_statement_list(Switch_case_statement_listContext ctx) {
+		SwitchCaseList items = new SwitchCaseList();
+		ctx.switch_case_statement().forEach((s)->{
+			SwitchCase item = this.<SwitchCase>getNodeValue(s);
+			items.add(item);
+		});
 		setNodeValue(ctx, items);
 	}
-	
+
 	@Override
 	public void exitSwitchStatement(SwitchStatementContext ctx) {
 		IStatement stmt = this.<IStatement>getNodeValue(ctx.stmt);
@@ -2570,8 +2478,14 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
+	public void exitSymbol_list(Symbol_listContext ctx) {
+		throw new UnsupportedOperationException();
+	}
+	
+
+	@Override
 	public void exitSymbolIdentifier(SymbolIdentifierContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		Identifier name = this.<Identifier>getNodeValue(ctx.symbol_identifier());
 		setNodeValue(ctx, name);
 	}
 	
@@ -2599,12 +2513,6 @@ public class EPromptoBuilder extends EParserBaseListener {
 		setNodeValue(ctx, new TestMethodDeclaration(name, stmts, exps, error));
 	}
 
-	@Override
-	public void exitTestMethod(TestMethodContext ctx) {
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
-		setNodeValue(ctx, decl);
-	}
-	
 	@Override
 	public void exitTextLiteral(TextLiteralContext ctx) {
 		setNodeValue(ctx, new TextLiteral(ctx.t.getText()));
@@ -2649,21 +2557,27 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitTuple_literal(Tuple_literalContext ctx) {
-		ExpressionList items = this.<ExpressionList>getNodeValue(ctx.items);
+		ExpressionList items = this.<ExpressionList>getNodeValue(ctx.expression_tuple());
 		IExpression value = items==null ? new TupleLiteral() : new TupleLiteral(items);
 		setNodeValue(ctx, value);
-	}
-	
-	@Override
-	public void exitTupleLiteral(TupleLiteralContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, exp);
 	}
 	
 	@Override
 	public void exitType_identifier(Type_identifierContext ctx) {
 		setNodeValue(ctx, new Identifier(ctx.getText()));
 	}
+	
+	
+	@Override
+	public void exitType_identifier_list(Type_identifier_listContext ctx) {
+		IdentifierList items = new IdentifierList();
+		ctx.type_identifier().forEach((i)->{
+			Identifier item = this.<Identifier>getNodeValue(i);
+			items.add(item);
+		});
+		setNodeValue(ctx, items);
+	}
+	
 	
 	@Override
 	public void exitTyped_argument(Typed_argumentContext ctx) {
@@ -2679,29 +2593,9 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitTypedArgument(TypedArgumentContext ctx) {
-		IArgument arg = this.<IArgument>getNodeValue(ctx.arg); 
-		setNodeValue(ctx, arg);
-	}
-	
-	@Override
 	public void exitTypeIdentifier(TypeIdentifierContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		Identifier name = this.<Identifier>getNodeValue(ctx.type_identifier());
 		setNodeValue(ctx, name);
-	}
-	
-	@Override
-	public void exitTypeIdentifierList(TypeIdentifierListContext ctx) {
-		Identifier item = this.<Identifier>getNodeValue(ctx.item);
-		setNodeValue(ctx, new IdentifierList(item));
-	}
-	
-	@Override
-	public void exitTypeIdentifierListItem(TypeIdentifierListItemContext ctx) {
-		IdentifierList items = this.<IdentifierList>getNodeValue(ctx.items);
-		Identifier item = this.<Identifier>getNodeValue(ctx.item);
-		items.add(item);
-		setNodeValue(ctx, items);
 	}
 	
 	@Override
@@ -2748,30 +2642,22 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitValueList(ValueListContext ctx) {
-		IExpression item = this.<IExpression>getNodeValue(ctx.item);
-		setNodeValue(ctx, new ExpressionList(item));
-	}
-	
-	@Override
-	public void exitValueListItem(ValueListItemContext ctx) {
-		ExpressionList items = this.<ExpressionList>getNodeValue(ctx.items);
-		IExpression item = this.<IExpression>getNodeValue(ctx.item);
-		items.add(item);
+	public void exitExpression_list(Expression_listContext ctx) {
+		ExpressionList items = new ExpressionList();
+		ctx.expression().forEach((e)->{
+			IExpression item = this.<IExpression>getNodeValue(e);
+			items.add(item);
+		});
 		setNodeValue(ctx, items);
 	}
 	
 	@Override
-	public void exitValueTuple(ValueTupleContext ctx) {
-		IExpression item = this.<IExpression>getNodeValue(ctx.item);
-		setNodeValue(ctx, new ExpressionList(item));
-	}
-	
-	@Override
-	public void exitValueTupleItem(ValueTupleItemContext ctx) {
-		ExpressionList items = this.<ExpressionList>getNodeValue(ctx.items);
-		IExpression item = this.<IExpression>getNodeValue(ctx.item);
-		items.add(item);
+	public void exitExpression_tuple(Expression_tupleContext ctx) {
+		ExpressionList items = new ExpressionList();
+		ctx.expression().forEach((e)->{
+			IExpression item = this.<IExpression>getNodeValue(e);
+			items.add(item);
+		});
 		setNodeValue(ctx, items);
 	}
 	
@@ -2782,7 +2668,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitVariableIdentifier(VariableIdentifierContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		Identifier name = this.<Identifier>getNodeValue(ctx.variable_identifier());
 		setNodeValue(ctx, name);
 	}
 	

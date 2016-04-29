@@ -1637,25 +1637,13 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclarationListItem(@NotNull SParser.DeclarationListItemContext ctx) { }
+	@Override public void enterDeclarations(@NotNull SParser.DeclarationsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclarationListItem(@NotNull SParser.DeclarationListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDeclarationList(@NotNull SParser.DeclarationListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDeclarationList(@NotNull SParser.DeclarationListContext ctx) { }
+	@Override public void exitDeclarations(@NotNull SParser.DeclarationsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1685,97 +1673,49 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEnumCategoryDeclaration(@NotNull SParser.EnumCategoryDeclarationContext ctx) { }
+	@Override public void enterEnum_declaration(@NotNull SParser.Enum_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitEnumCategoryDeclaration(@NotNull SParser.EnumCategoryDeclarationContext ctx) { }
+	@Override public void exitEnum_declaration(@NotNull SParser.Enum_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEnumNativeDeclaration(@NotNull SParser.EnumNativeDeclarationContext ctx) { }
+	@Override public void enterNative_symbol_list(@NotNull SParser.Native_symbol_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitEnumNativeDeclaration(@NotNull SParser.EnumNativeDeclarationContext ctx) { }
+	@Override public void exitNative_symbol_list(@NotNull SParser.Native_symbol_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNativeSymbolList(@NotNull SParser.NativeSymbolListContext ctx) { }
+	@Override public void enterCategory_symbol_list(@NotNull SParser.Category_symbol_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNativeSymbolList(@NotNull SParser.NativeSymbolListContext ctx) { }
+	@Override public void exitCategory_symbol_list(@NotNull SParser.Category_symbol_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNativeSymbolListItem(@NotNull SParser.NativeSymbolListItemContext ctx) { }
+	@Override public void enterSymbol_list(@NotNull SParser.Symbol_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNativeSymbolListItem(@NotNull SParser.NativeSymbolListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCategorySymbolListItem(@NotNull SParser.CategorySymbolListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCategorySymbolListItem(@NotNull SParser.CategorySymbolListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCategorySymbolList(@NotNull SParser.CategorySymbolListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCategorySymbolList(@NotNull SParser.CategorySymbolListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSymbolList(@NotNull SParser.SymbolListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSymbolList(@NotNull SParser.SymbolListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSymbolListItem(@NotNull SParser.SymbolListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSymbolListItem(@NotNull SParser.SymbolListItemContext ctx) { }
+	@Override public void exitSymbol_list(@NotNull SParser.Symbol_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1865,25 +1805,13 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterValueList(@NotNull SParser.ValueListContext ctx) { }
+	@Override public void enterExpression_list(@NotNull SParser.Expression_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitValueList(@NotNull SParser.ValueListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterValueListItem(@NotNull SParser.ValueListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitValueListItem(@NotNull SParser.ValueListItemContext ctx) { }
+	@Override public void exitExpression_list(@NotNull SParser.Expression_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2237,49 +2165,25 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTypeIdentifierList(@NotNull SParser.TypeIdentifierListContext ctx) { }
+	@Override public void enterType_identifier_list(@NotNull SParser.Type_identifier_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTypeIdentifierList(@NotNull SParser.TypeIdentifierListContext ctx) { }
+	@Override public void exitType_identifier_list(@NotNull SParser.Type_identifier_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTypeIdentifierListItem(@NotNull SParser.TypeIdentifierListItemContext ctx) { }
+	@Override public void enterMethod_identifier(@NotNull SParser.Method_identifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTypeIdentifierListItem(@NotNull SParser.TypeIdentifierListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterMethodVariableIdentifier(@NotNull SParser.MethodVariableIdentifierContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMethodVariableIdentifier(@NotNull SParser.MethodVariableIdentifierContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterMethodTypeIdentifier(@NotNull SParser.MethodTypeIdentifierContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMethodTypeIdentifier(@NotNull SParser.MethodTypeIdentifierContext ctx) { }
+	@Override public void exitMethod_identifier(@NotNull SParser.Method_identifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2369,25 +2273,13 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArgumentListItem(@NotNull SParser.ArgumentListItemContext ctx) { }
+	@Override public void enterArgument_list(@NotNull SParser.Argument_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArgumentListItem(@NotNull SParser.ArgumentListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterArgumentList(@NotNull SParser.ArgumentListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitArgumentList(@NotNull SParser.ArgumentListContext ctx) { }
+	@Override public void exitArgument_list(@NotNull SParser.Argument_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2417,25 +2309,13 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNamedArgument(@NotNull SParser.NamedArgumentContext ctx) { }
+	@Override public void enterOperator_argument(@NotNull SParser.Operator_argumentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNamedArgument(@NotNull SParser.NamedArgumentContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterTypedArgument(@NotNull SParser.TypedArgumentContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTypedArgument(@NotNull SParser.TypedArgumentContext ctx) { }
+	@Override public void exitOperator_argument(@NotNull SParser.Operator_argumentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2465,25 +2345,13 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCategoryArgumentType(@NotNull SParser.CategoryArgumentTypeContext ctx) { }
+	@Override public void enterCategory_or_any_type(@NotNull SParser.Category_or_any_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCategoryArgumentType(@NotNull SParser.CategoryArgumentTypeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAnyArgumentType(@NotNull SParser.AnyArgumentTypeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAnyArgumentType(@NotNull SParser.AnyArgumentTypeContext ctx) { }
+	@Override public void exitCategory_or_any_type(@NotNull SParser.Category_or_any_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2525,25 +2393,13 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCategoryMethodListItem(@NotNull SParser.CategoryMethodListItemContext ctx) { }
+	@Override public void enterMember_method_declaration_list(@NotNull SParser.Member_method_declaration_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCategoryMethodListItem(@NotNull SParser.CategoryMethodListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCategoryMethodList(@NotNull SParser.CategoryMethodListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCategoryMethodList(@NotNull SParser.CategoryMethodListContext ctx) { }
+	@Override public void exitMember_method_declaration_list(@NotNull SParser.Member_method_declaration_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2561,25 +2417,13 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNativeCategoryMethodList(@NotNull SParser.NativeCategoryMethodListContext ctx) { }
+	@Override public void enterNative_member_method_declaration_list(@NotNull SParser.Native_member_method_declaration_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNativeCategoryMethodList(@NotNull SParser.NativeCategoryMethodListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterNativeCategoryMethodListItem(@NotNull SParser.NativeCategoryMethodListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitNativeCategoryMethodListItem(@NotNull SParser.NativeCategoryMethodListItemContext ctx) { }
+	@Override public void exitNative_member_method_declaration_list(@NotNull SParser.Native_member_method_declaration_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2681,18 +2525,6 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterModule_token(@NotNull SParser.Module_tokenContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitModule_token(@NotNull SParser.Module_tokenContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterJavascript_category_binding(@NotNull SParser.Javascript_category_bindingContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2741,49 +2573,13 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAbstractMethod(@NotNull SParser.AbstractMethodContext ctx) { }
+	@Override public void enterMethod_declaration(@NotNull SParser.Method_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAbstractMethod(@NotNull SParser.AbstractMethodContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterConcreteMethod(@NotNull SParser.ConcreteMethodContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitConcreteMethod(@NotNull SParser.ConcreteMethodContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterNativeMethod(@NotNull SParser.NativeMethodContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitNativeMethod(@NotNull SParser.NativeMethodContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterTestMethod(@NotNull SParser.TestMethodContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTestMethod(@NotNull SParser.TestMethodContext ctx) { }
+	@Override public void exitMethod_declaration(@NotNull SParser.Method_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2801,25 +2597,13 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNativeStatementListItem(@NotNull SParser.NativeStatementListItemContext ctx) { }
+	@Override public void enterNative_statement_list(@NotNull SParser.Native_statement_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNativeStatementListItem(@NotNull SParser.NativeStatementListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterNativeStatementList(@NotNull SParser.NativeStatementListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitNativeStatementList(@NotNull SParser.NativeStatementListContext ctx) { }
+	@Override public void exitNative_statement_list(@NotNull SParser.Native_statement_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2909,97 +2693,49 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStatementList(@NotNull SParser.StatementListContext ctx) { }
+	@Override public void enterStatement_list(@NotNull SParser.Statement_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStatementList(@NotNull SParser.StatementListContext ctx) { }
+	@Override public void exitStatement_list(@NotNull SParser.Statement_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStatementListItem(@NotNull SParser.StatementListItemContext ctx) { }
+	@Override public void enterAssertion_list(@NotNull SParser.Assertion_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStatementListItem(@NotNull SParser.StatementListItemContext ctx) { }
+	@Override public void exitAssertion_list(@NotNull SParser.Assertion_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAssertionList(@NotNull SParser.AssertionListContext ctx) { }
+	@Override public void enterSwitch_case_statement_list(@NotNull SParser.Switch_case_statement_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAssertionList(@NotNull SParser.AssertionListContext ctx) { }
+	@Override public void exitSwitch_case_statement_list(@NotNull SParser.Switch_case_statement_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAssertionListItem(@NotNull SParser.AssertionListItemContext ctx) { }
+	@Override public void enterCatch_statement_list(@NotNull SParser.Catch_statement_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAssertionListItem(@NotNull SParser.AssertionListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSwitchCaseStatementList(@NotNull SParser.SwitchCaseStatementListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSwitchCaseStatementList(@NotNull SParser.SwitchCaseStatementListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSwitchCaseStatementListItem(@NotNull SParser.SwitchCaseStatementListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSwitchCaseStatementListItem(@NotNull SParser.SwitchCaseStatementListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCatchStatementList(@NotNull SParser.CatchStatementListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCatchStatementList(@NotNull SParser.CatchStatementListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCatchStatementListItem(@NotNull SParser.CatchStatementListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCatchStatementListItem(@NotNull SParser.CatchStatementListItemContext ctx) { }
+	@Override public void exitCatch_statement_list(@NotNull SParser.Catch_statement_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -3197,25 +2933,13 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLiteralList(@NotNull SParser.LiteralListContext ctx) { }
+	@Override public void enterLiteral_list_literal(@NotNull SParser.Literal_list_literalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLiteralList(@NotNull SParser.LiteralListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterLiteralListItem(@NotNull SParser.LiteralListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLiteralListItem(@NotNull SParser.LiteralListItemContext ctx) { }
+	@Override public void exitLiteral_list_literal(@NotNull SParser.Literal_list_literalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -3293,85 +3017,25 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAtomicLiteral(@NotNull SParser.AtomicLiteralContext ctx) { }
+	@Override public void enterLiteral_expression(@NotNull SParser.Literal_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAtomicLiteral(@NotNull SParser.AtomicLiteralContext ctx) { }
+	@Override public void exitLiteral_expression(@NotNull SParser.Literal_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCollectionLiteral(@NotNull SParser.CollectionLiteralContext ctx) { }
+	@Override public void enterCollection_literal(@NotNull SParser.Collection_literalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCollectionLiteral(@NotNull SParser.CollectionLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterRangeLiteral(@NotNull SParser.RangeLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitRangeLiteral(@NotNull SParser.RangeLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterListLiteral(@NotNull SParser.ListLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitListLiteral(@NotNull SParser.ListLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSetLiteral(@NotNull SParser.SetLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSetLiteral(@NotNull SParser.SetLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDictLiteral(@NotNull SParser.DictLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDictLiteral(@NotNull SParser.DictLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterTupleLiteral(@NotNull SParser.TupleLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTupleLiteral(@NotNull SParser.TupleLiteralContext ctx) { }
+	@Override public void exitCollection_literal(@NotNull SParser.Collection_literalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -3401,49 +3065,25 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterValueTuple(@NotNull SParser.ValueTupleContext ctx) { }
+	@Override public void enterExpression_tuple(@NotNull SParser.Expression_tupleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitValueTuple(@NotNull SParser.ValueTupleContext ctx) { }
+	@Override public void exitExpression_tuple(@NotNull SParser.Expression_tupleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterValueTupleItem(@NotNull SParser.ValueTupleItemContext ctx) { }
+	@Override public void enterDict_entry_list(@NotNull SParser.Dict_entry_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitValueTupleItem(@NotNull SParser.ValueTupleItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDictEntryList(@NotNull SParser.DictEntryListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDictEntryList(@NotNull SParser.DictEntryListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDictEntryListItem(@NotNull SParser.DictEntryListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDictEntryListItem(@NotNull SParser.DictEntryListItemContext ctx) { }
+	@Override public void exitDict_entry_list(@NotNull SParser.Dict_entry_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -3672,6 +3312,18 @@ public class SParserBaseListener implements SParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitKey_token(@NotNull SParser.Key_tokenContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterModule_token(@NotNull SParser.Module_tokenContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitModule_token(@NotNull SParser.Module_tokenContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

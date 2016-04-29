@@ -1531,29 +1531,15 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitFullDeclarationList(@NotNull SParser.FullDeclarationListContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code DeclarationListItem}
-	 * labeled alternative in {@link SParser#declarations}.
+	 * Enter a parse tree produced by {@link SParser#declarations}.
 	 * @param ctx the parse tree
 	 */
-	void enterDeclarationListItem(@NotNull SParser.DeclarationListItemContext ctx);
+	void enterDeclarations(@NotNull SParser.DeclarationsContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code DeclarationListItem}
-	 * labeled alternative in {@link SParser#declarations}.
+	 * Exit a parse tree produced by {@link SParser#declarations}.
 	 * @param ctx the parse tree
 	 */
-	void exitDeclarationListItem(@NotNull SParser.DeclarationListItemContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code DeclarationList}
-	 * labeled alternative in {@link SParser#declarations}.
-	 * @param ctx the parse tree
-	 */
-	void enterDeclarationList(@NotNull SParser.DeclarationListContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code DeclarationList}
-	 * labeled alternative in {@link SParser#declarations}.
-	 * @param ctx the parse tree
-	 */
-	void exitDeclarationList(@NotNull SParser.DeclarationListContext ctx);
+	void exitDeclarations(@NotNull SParser.DeclarationsContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SParser#declaration}.
 	 * @param ctx the parse tree
@@ -1575,101 +1561,45 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitResource_declaration(@NotNull SParser.Resource_declarationContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code EnumCategoryDeclaration}
-	 * labeled alternative in {@link SParser#enum_declaration}.
+	 * Enter a parse tree produced by {@link SParser#enum_declaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterEnumCategoryDeclaration(@NotNull SParser.EnumCategoryDeclarationContext ctx);
+	void enterEnum_declaration(@NotNull SParser.Enum_declarationContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code EnumCategoryDeclaration}
-	 * labeled alternative in {@link SParser#enum_declaration}.
+	 * Exit a parse tree produced by {@link SParser#enum_declaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitEnumCategoryDeclaration(@NotNull SParser.EnumCategoryDeclarationContext ctx);
+	void exitEnum_declaration(@NotNull SParser.Enum_declarationContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code EnumNativeDeclaration}
-	 * labeled alternative in {@link SParser#enum_declaration}.
+	 * Enter a parse tree produced by {@link SParser#native_symbol_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterEnumNativeDeclaration(@NotNull SParser.EnumNativeDeclarationContext ctx);
+	void enterNative_symbol_list(@NotNull SParser.Native_symbol_listContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code EnumNativeDeclaration}
-	 * labeled alternative in {@link SParser#enum_declaration}.
+	 * Exit a parse tree produced by {@link SParser#native_symbol_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitEnumNativeDeclaration(@NotNull SParser.EnumNativeDeclarationContext ctx);
+	void exitNative_symbol_list(@NotNull SParser.Native_symbol_listContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code NativeSymbolList}
-	 * labeled alternative in {@link SParser#native_symbol_list}.
+	 * Enter a parse tree produced by {@link SParser#category_symbol_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterNativeSymbolList(@NotNull SParser.NativeSymbolListContext ctx);
+	void enterCategory_symbol_list(@NotNull SParser.Category_symbol_listContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code NativeSymbolList}
-	 * labeled alternative in {@link SParser#native_symbol_list}.
+	 * Exit a parse tree produced by {@link SParser#category_symbol_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitNativeSymbolList(@NotNull SParser.NativeSymbolListContext ctx);
+	void exitCategory_symbol_list(@NotNull SParser.Category_symbol_listContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code NativeSymbolListItem}
-	 * labeled alternative in {@link SParser#native_symbol_list}.
+	 * Enter a parse tree produced by {@link SParser#symbol_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterNativeSymbolListItem(@NotNull SParser.NativeSymbolListItemContext ctx);
+	void enterSymbol_list(@NotNull SParser.Symbol_listContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code NativeSymbolListItem}
-	 * labeled alternative in {@link SParser#native_symbol_list}.
+	 * Exit a parse tree produced by {@link SParser#symbol_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitNativeSymbolListItem(@NotNull SParser.NativeSymbolListItemContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code CategorySymbolListItem}
-	 * labeled alternative in {@link SParser#category_symbol_list}.
-	 * @param ctx the parse tree
-	 */
-	void enterCategorySymbolListItem(@NotNull SParser.CategorySymbolListItemContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code CategorySymbolListItem}
-	 * labeled alternative in {@link SParser#category_symbol_list}.
-	 * @param ctx the parse tree
-	 */
-	void exitCategorySymbolListItem(@NotNull SParser.CategorySymbolListItemContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code CategorySymbolList}
-	 * labeled alternative in {@link SParser#category_symbol_list}.
-	 * @param ctx the parse tree
-	 */
-	void enterCategorySymbolList(@NotNull SParser.CategorySymbolListContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code CategorySymbolList}
-	 * labeled alternative in {@link SParser#category_symbol_list}.
-	 * @param ctx the parse tree
-	 */
-	void exitCategorySymbolList(@NotNull SParser.CategorySymbolListContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code SymbolList}
-	 * labeled alternative in {@link SParser#symbol_list}.
-	 * @param ctx the parse tree
-	 */
-	void enterSymbolList(@NotNull SParser.SymbolListContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code SymbolList}
-	 * labeled alternative in {@link SParser#symbol_list}.
-	 * @param ctx the parse tree
-	 */
-	void exitSymbolList(@NotNull SParser.SymbolListContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code SymbolListItem}
-	 * labeled alternative in {@link SParser#symbol_list}.
-	 * @param ctx the parse tree
-	 */
-	void enterSymbolListItem(@NotNull SParser.SymbolListItemContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code SymbolListItem}
-	 * labeled alternative in {@link SParser#symbol_list}.
-	 * @param ctx the parse tree
-	 */
-	void exitSymbolListItem(@NotNull SParser.SymbolListItemContext ctx);
+	void exitSymbol_list(@NotNull SParser.Symbol_listContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code MatchingList}
 	 * labeled alternative in {@link SParser#attribute_constraint}.
@@ -1751,29 +1681,15 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitSet_literal(@NotNull SParser.Set_literalContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code ValueList}
-	 * labeled alternative in {@link SParser#expression_list}.
+	 * Enter a parse tree produced by {@link SParser#expression_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterValueList(@NotNull SParser.ValueListContext ctx);
+	void enterExpression_list(@NotNull SParser.Expression_listContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code ValueList}
-	 * labeled alternative in {@link SParser#expression_list}.
+	 * Exit a parse tree produced by {@link SParser#expression_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitValueList(@NotNull SParser.ValueListContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ValueListItem}
-	 * labeled alternative in {@link SParser#expression_list}.
-	 * @param ctx the parse tree
-	 */
-	void enterValueListItem(@NotNull SParser.ValueListItemContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ValueListItem}
-	 * labeled alternative in {@link SParser#expression_list}.
-	 * @param ctx the parse tree
-	 */
-	void exitValueListItem(@NotNull SParser.ValueListItemContext ctx);
+	void exitExpression_list(@NotNull SParser.Expression_listContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SParser#range_literal}.
 	 * @param ctx the parse tree
@@ -2115,53 +2031,25 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitSingletonCategoryDeclaration(@NotNull SParser.SingletonCategoryDeclarationContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code TypeIdentifierList}
-	 * labeled alternative in {@link SParser#type_identifier_list}.
+	 * Enter a parse tree produced by {@link SParser#type_identifier_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterTypeIdentifierList(@NotNull SParser.TypeIdentifierListContext ctx);
+	void enterType_identifier_list(@NotNull SParser.Type_identifier_listContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code TypeIdentifierList}
-	 * labeled alternative in {@link SParser#type_identifier_list}.
+	 * Exit a parse tree produced by {@link SParser#type_identifier_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitTypeIdentifierList(@NotNull SParser.TypeIdentifierListContext ctx);
+	void exitType_identifier_list(@NotNull SParser.Type_identifier_listContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code TypeIdentifierListItem}
-	 * labeled alternative in {@link SParser#type_identifier_list}.
+	 * Enter a parse tree produced by {@link SParser#method_identifier}.
 	 * @param ctx the parse tree
 	 */
-	void enterTypeIdentifierListItem(@NotNull SParser.TypeIdentifierListItemContext ctx);
+	void enterMethod_identifier(@NotNull SParser.Method_identifierContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code TypeIdentifierListItem}
-	 * labeled alternative in {@link SParser#type_identifier_list}.
+	 * Exit a parse tree produced by {@link SParser#method_identifier}.
 	 * @param ctx the parse tree
 	 */
-	void exitTypeIdentifierListItem(@NotNull SParser.TypeIdentifierListItemContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code MethodVariableIdentifier}
-	 * labeled alternative in {@link SParser#method_identifier}.
-	 * @param ctx the parse tree
-	 */
-	void enterMethodVariableIdentifier(@NotNull SParser.MethodVariableIdentifierContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code MethodVariableIdentifier}
-	 * labeled alternative in {@link SParser#method_identifier}.
-	 * @param ctx the parse tree
-	 */
-	void exitMethodVariableIdentifier(@NotNull SParser.MethodVariableIdentifierContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code MethodTypeIdentifier}
-	 * labeled alternative in {@link SParser#method_identifier}.
-	 * @param ctx the parse tree
-	 */
-	void enterMethodTypeIdentifier(@NotNull SParser.MethodTypeIdentifierContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code MethodTypeIdentifier}
-	 * labeled alternative in {@link SParser#method_identifier}.
-	 * @param ctx the parse tree
-	 */
-	void exitMethodTypeIdentifier(@NotNull SParser.MethodTypeIdentifierContext ctx);
+	void exitMethod_identifier(@NotNull SParser.Method_identifierContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code VariableIdentifier}
 	 * labeled alternative in {@link SParser#identifier}.
@@ -2239,29 +2127,15 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitSymbol_identifier(@NotNull SParser.Symbol_identifierContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code ArgumentListItem}
-	 * labeled alternative in {@link SParser#argument_list}.
+	 * Enter a parse tree produced by {@link SParser#argument_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterArgumentListItem(@NotNull SParser.ArgumentListItemContext ctx);
+	void enterArgument_list(@NotNull SParser.Argument_listContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code ArgumentListItem}
-	 * labeled alternative in {@link SParser#argument_list}.
+	 * Exit a parse tree produced by {@link SParser#argument_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitArgumentListItem(@NotNull SParser.ArgumentListItemContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ArgumentList}
-	 * labeled alternative in {@link SParser#argument_list}.
-	 * @param ctx the parse tree
-	 */
-	void enterArgumentList(@NotNull SParser.ArgumentListContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ArgumentList}
-	 * labeled alternative in {@link SParser#argument_list}.
-	 * @param ctx the parse tree
-	 */
-	void exitArgumentList(@NotNull SParser.ArgumentListContext ctx);
+	void exitArgument_list(@NotNull SParser.Argument_listContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code CodeArgument}
 	 * labeled alternative in {@link SParser#argument}.
@@ -2287,29 +2161,15 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitOperatorArgument(@NotNull SParser.OperatorArgumentContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code NamedArgument}
-	 * labeled alternative in {@link SParser#operator_argument}.
+	 * Enter a parse tree produced by {@link SParser#operator_argument}.
 	 * @param ctx the parse tree
 	 */
-	void enterNamedArgument(@NotNull SParser.NamedArgumentContext ctx);
+	void enterOperator_argument(@NotNull SParser.Operator_argumentContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code NamedArgument}
-	 * labeled alternative in {@link SParser#operator_argument}.
+	 * Exit a parse tree produced by {@link SParser#operator_argument}.
 	 * @param ctx the parse tree
 	 */
-	void exitNamedArgument(@NotNull SParser.NamedArgumentContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code TypedArgument}
-	 * labeled alternative in {@link SParser#operator_argument}.
-	 * @param ctx the parse tree
-	 */
-	void enterTypedArgument(@NotNull SParser.TypedArgumentContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code TypedArgument}
-	 * labeled alternative in {@link SParser#operator_argument}.
-	 * @param ctx the parse tree
-	 */
-	void exitTypedArgument(@NotNull SParser.TypedArgumentContext ctx);
+	void exitOperator_argument(@NotNull SParser.Operator_argumentContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SParser#named_argument}.
 	 * @param ctx the parse tree
@@ -2331,29 +2191,15 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitCode_argument(@NotNull SParser.Code_argumentContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code CategoryArgumentType}
-	 * labeled alternative in {@link SParser#category_or_any_type}.
+	 * Enter a parse tree produced by {@link SParser#category_or_any_type}.
 	 * @param ctx the parse tree
 	 */
-	void enterCategoryArgumentType(@NotNull SParser.CategoryArgumentTypeContext ctx);
+	void enterCategory_or_any_type(@NotNull SParser.Category_or_any_typeContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code CategoryArgumentType}
-	 * labeled alternative in {@link SParser#category_or_any_type}.
+	 * Exit a parse tree produced by {@link SParser#category_or_any_type}.
 	 * @param ctx the parse tree
 	 */
-	void exitCategoryArgumentType(@NotNull SParser.CategoryArgumentTypeContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code AnyArgumentType}
-	 * labeled alternative in {@link SParser#category_or_any_type}.
-	 * @param ctx the parse tree
-	 */
-	void enterAnyArgumentType(@NotNull SParser.AnyArgumentTypeContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code AnyArgumentType}
-	 * labeled alternative in {@link SParser#category_or_any_type}.
-	 * @param ctx the parse tree
-	 */
-	void exitAnyArgumentType(@NotNull SParser.AnyArgumentTypeContext ctx);
+	void exitCategory_or_any_type(@NotNull SParser.Category_or_any_typeContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code AnyListType}
 	 * labeled alternative in {@link SParser#any_type}.
@@ -2391,29 +2237,15 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitAnyDictType(@NotNull SParser.AnyDictTypeContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code CategoryMethodListItem}
-	 * labeled alternative in {@link SParser#member_method_declaration_list}.
+	 * Enter a parse tree produced by {@link SParser#member_method_declaration_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterCategoryMethodListItem(@NotNull SParser.CategoryMethodListItemContext ctx);
+	void enterMember_method_declaration_list(@NotNull SParser.Member_method_declaration_listContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code CategoryMethodListItem}
-	 * labeled alternative in {@link SParser#member_method_declaration_list}.
+	 * Exit a parse tree produced by {@link SParser#member_method_declaration_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitCategoryMethodListItem(@NotNull SParser.CategoryMethodListItemContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code CategoryMethodList}
-	 * labeled alternative in {@link SParser#member_method_declaration_list}.
-	 * @param ctx the parse tree
-	 */
-	void enterCategoryMethodList(@NotNull SParser.CategoryMethodListContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code CategoryMethodList}
-	 * labeled alternative in {@link SParser#member_method_declaration_list}.
-	 * @param ctx the parse tree
-	 */
-	void exitCategoryMethodList(@NotNull SParser.CategoryMethodListContext ctx);
+	void exitMember_method_declaration_list(@NotNull SParser.Member_method_declaration_listContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SParser#member_method_declaration}.
 	 * @param ctx the parse tree
@@ -2425,29 +2257,15 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitMember_method_declaration(@NotNull SParser.Member_method_declarationContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code NativeCategoryMethodList}
-	 * labeled alternative in {@link SParser#native_member_method_declaration_list}.
+	 * Enter a parse tree produced by {@link SParser#native_member_method_declaration_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterNativeCategoryMethodList(@NotNull SParser.NativeCategoryMethodListContext ctx);
+	void enterNative_member_method_declaration_list(@NotNull SParser.Native_member_method_declaration_listContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code NativeCategoryMethodList}
-	 * labeled alternative in {@link SParser#native_member_method_declaration_list}.
+	 * Exit a parse tree produced by {@link SParser#native_member_method_declaration_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitNativeCategoryMethodList(@NotNull SParser.NativeCategoryMethodListContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code NativeCategoryMethodListItem}
-	 * labeled alternative in {@link SParser#native_member_method_declaration_list}.
-	 * @param ctx the parse tree
-	 */
-	void enterNativeCategoryMethodListItem(@NotNull SParser.NativeCategoryMethodListItemContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code NativeCategoryMethodListItem}
-	 * labeled alternative in {@link SParser#native_member_method_declaration_list}.
-	 * @param ctx the parse tree
-	 */
-	void exitNativeCategoryMethodListItem(@NotNull SParser.NativeCategoryMethodListItemContext ctx);
+	void exitNative_member_method_declaration_list(@NotNull SParser.Native_member_method_declaration_listContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SParser#native_member_method_declaration}.
 	 * @param ctx the parse tree
@@ -2539,16 +2357,6 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitPython_module(@NotNull SParser.Python_moduleContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SParser#module_token}.
-	 * @param ctx the parse tree
-	 */
-	void enterModule_token(@NotNull SParser.Module_tokenContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SParser#module_token}.
-	 * @param ctx the parse tree
-	 */
-	void exitModule_token(@NotNull SParser.Module_tokenContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link SParser#javascript_category_binding}.
 	 * @param ctx the parse tree
 	 */
@@ -2589,53 +2397,15 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitAttribute_identifier_list(@NotNull SParser.Attribute_identifier_listContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code AbstractMethod}
-	 * labeled alternative in {@link SParser#method_declaration}.
+	 * Enter a parse tree produced by {@link SParser#method_declaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterAbstractMethod(@NotNull SParser.AbstractMethodContext ctx);
+	void enterMethod_declaration(@NotNull SParser.Method_declarationContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code AbstractMethod}
-	 * labeled alternative in {@link SParser#method_declaration}.
+	 * Exit a parse tree produced by {@link SParser#method_declaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitAbstractMethod(@NotNull SParser.AbstractMethodContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ConcreteMethod}
-	 * labeled alternative in {@link SParser#method_declaration}.
-	 * @param ctx the parse tree
-	 */
-	void enterConcreteMethod(@NotNull SParser.ConcreteMethodContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ConcreteMethod}
-	 * labeled alternative in {@link SParser#method_declaration}.
-	 * @param ctx the parse tree
-	 */
-	void exitConcreteMethod(@NotNull SParser.ConcreteMethodContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code NativeMethod}
-	 * labeled alternative in {@link SParser#method_declaration}.
-	 * @param ctx the parse tree
-	 */
-	void enterNativeMethod(@NotNull SParser.NativeMethodContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code NativeMethod}
-	 * labeled alternative in {@link SParser#method_declaration}.
-	 * @param ctx the parse tree
-	 */
-	void exitNativeMethod(@NotNull SParser.NativeMethodContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code TestMethod}
-	 * labeled alternative in {@link SParser#method_declaration}.
-	 * @param ctx the parse tree
-	 */
-	void enterTestMethod(@NotNull SParser.TestMethodContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code TestMethod}
-	 * labeled alternative in {@link SParser#method_declaration}.
-	 * @param ctx the parse tree
-	 */
-	void exitTestMethod(@NotNull SParser.TestMethodContext ctx);
+	void exitMethod_declaration(@NotNull SParser.Method_declarationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SParser#comment_statement}.
 	 * @param ctx the parse tree
@@ -2647,29 +2417,15 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitComment_statement(@NotNull SParser.Comment_statementContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code NativeStatementListItem}
-	 * labeled alternative in {@link SParser#native_statement_list}.
+	 * Enter a parse tree produced by {@link SParser#native_statement_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterNativeStatementListItem(@NotNull SParser.NativeStatementListItemContext ctx);
+	void enterNative_statement_list(@NotNull SParser.Native_statement_listContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code NativeStatementListItem}
-	 * labeled alternative in {@link SParser#native_statement_list}.
+	 * Exit a parse tree produced by {@link SParser#native_statement_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitNativeStatementListItem(@NotNull SParser.NativeStatementListItemContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code NativeStatementList}
-	 * labeled alternative in {@link SParser#native_statement_list}.
-	 * @param ctx the parse tree
-	 */
-	void enterNativeStatementList(@NotNull SParser.NativeStatementListContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code NativeStatementList}
-	 * labeled alternative in {@link SParser#native_statement_list}.
-	 * @param ctx the parse tree
-	 */
-	void exitNativeStatementList(@NotNull SParser.NativeStatementListContext ctx);
+	void exitNative_statement_list(@NotNull SParser.Native_statement_listContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code JavaNativeStatement}
 	 * labeled alternative in {@link SParser#native_statement}.
@@ -2751,101 +2507,45 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitJavascript_native_statement(@NotNull SParser.Javascript_native_statementContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code StatementList}
-	 * labeled alternative in {@link SParser#statement_list}.
+	 * Enter a parse tree produced by {@link SParser#statement_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterStatementList(@NotNull SParser.StatementListContext ctx);
+	void enterStatement_list(@NotNull SParser.Statement_listContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code StatementList}
-	 * labeled alternative in {@link SParser#statement_list}.
+	 * Exit a parse tree produced by {@link SParser#statement_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitStatementList(@NotNull SParser.StatementListContext ctx);
+	void exitStatement_list(@NotNull SParser.Statement_listContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code StatementListItem}
-	 * labeled alternative in {@link SParser#statement_list}.
+	 * Enter a parse tree produced by {@link SParser#assertion_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterStatementListItem(@NotNull SParser.StatementListItemContext ctx);
+	void enterAssertion_list(@NotNull SParser.Assertion_listContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code StatementListItem}
-	 * labeled alternative in {@link SParser#statement_list}.
+	 * Exit a parse tree produced by {@link SParser#assertion_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitStatementListItem(@NotNull SParser.StatementListItemContext ctx);
+	void exitAssertion_list(@NotNull SParser.Assertion_listContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code AssertionList}
-	 * labeled alternative in {@link SParser#assertion_list}.
+	 * Enter a parse tree produced by {@link SParser#switch_case_statement_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterAssertionList(@NotNull SParser.AssertionListContext ctx);
+	void enterSwitch_case_statement_list(@NotNull SParser.Switch_case_statement_listContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code AssertionList}
-	 * labeled alternative in {@link SParser#assertion_list}.
+	 * Exit a parse tree produced by {@link SParser#switch_case_statement_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitAssertionList(@NotNull SParser.AssertionListContext ctx);
+	void exitSwitch_case_statement_list(@NotNull SParser.Switch_case_statement_listContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code AssertionListItem}
-	 * labeled alternative in {@link SParser#assertion_list}.
+	 * Enter a parse tree produced by {@link SParser#catch_statement_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterAssertionListItem(@NotNull SParser.AssertionListItemContext ctx);
+	void enterCatch_statement_list(@NotNull SParser.Catch_statement_listContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code AssertionListItem}
-	 * labeled alternative in {@link SParser#assertion_list}.
+	 * Exit a parse tree produced by {@link SParser#catch_statement_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitAssertionListItem(@NotNull SParser.AssertionListItemContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code SwitchCaseStatementList}
-	 * labeled alternative in {@link SParser#switch_case_statement_list}.
-	 * @param ctx the parse tree
-	 */
-	void enterSwitchCaseStatementList(@NotNull SParser.SwitchCaseStatementListContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code SwitchCaseStatementList}
-	 * labeled alternative in {@link SParser#switch_case_statement_list}.
-	 * @param ctx the parse tree
-	 */
-	void exitSwitchCaseStatementList(@NotNull SParser.SwitchCaseStatementListContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code SwitchCaseStatementListItem}
-	 * labeled alternative in {@link SParser#switch_case_statement_list}.
-	 * @param ctx the parse tree
-	 */
-	void enterSwitchCaseStatementListItem(@NotNull SParser.SwitchCaseStatementListItemContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code SwitchCaseStatementListItem}
-	 * labeled alternative in {@link SParser#switch_case_statement_list}.
-	 * @param ctx the parse tree
-	 */
-	void exitSwitchCaseStatementListItem(@NotNull SParser.SwitchCaseStatementListItemContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code CatchStatementList}
-	 * labeled alternative in {@link SParser#catch_statement_list}.
-	 * @param ctx the parse tree
-	 */
-	void enterCatchStatementList(@NotNull SParser.CatchStatementListContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code CatchStatementList}
-	 * labeled alternative in {@link SParser#catch_statement_list}.
-	 * @param ctx the parse tree
-	 */
-	void exitCatchStatementList(@NotNull SParser.CatchStatementListContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code CatchStatementListItem}
-	 * labeled alternative in {@link SParser#catch_statement_list}.
-	 * @param ctx the parse tree
-	 */
-	void enterCatchStatementListItem(@NotNull SParser.CatchStatementListItemContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code CatchStatementListItem}
-	 * labeled alternative in {@link SParser#catch_statement_list}.
-	 * @param ctx the parse tree
-	 */
-	void exitCatchStatementListItem(@NotNull SParser.CatchStatementListItemContext ctx);
+	void exitCatch_statement_list(@NotNull SParser.Catch_statement_listContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code LiteralRangeLiteral}
 	 * labeled alternative in {@link SParser#literal_collection}.
@@ -3039,29 +2739,15 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitNullLiteral(@NotNull SParser.NullLiteralContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code LiteralList}
-	 * labeled alternative in {@link SParser#literal_list_literal}.
+	 * Enter a parse tree produced by {@link SParser#literal_list_literal}.
 	 * @param ctx the parse tree
 	 */
-	void enterLiteralList(@NotNull SParser.LiteralListContext ctx);
+	void enterLiteral_list_literal(@NotNull SParser.Literal_list_literalContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code LiteralList}
-	 * labeled alternative in {@link SParser#literal_list_literal}.
+	 * Exit a parse tree produced by {@link SParser#literal_list_literal}.
 	 * @param ctx the parse tree
 	 */
-	void exitLiteralList(@NotNull SParser.LiteralListContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code LiteralListItem}
-	 * labeled alternative in {@link SParser#literal_list_literal}.
-	 * @param ctx the parse tree
-	 */
-	void enterLiteralListItem(@NotNull SParser.LiteralListItemContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code LiteralListItem}
-	 * labeled alternative in {@link SParser#literal_list_literal}.
-	 * @param ctx the parse tree
-	 */
-	void exitLiteralListItem(@NotNull SParser.LiteralListItemContext ctx);
+	void exitLiteral_list_literal(@NotNull SParser.Literal_list_literalContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ParenthesisExpression}
 	 * labeled alternative in {@link SParser#selectable_expression}.
@@ -3131,89 +2817,25 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitParenthesis_expression(@NotNull SParser.Parenthesis_expressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code AtomicLiteral}
-	 * labeled alternative in {@link SParser#literal_expression}.
+	 * Enter a parse tree produced by {@link SParser#literal_expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterAtomicLiteral(@NotNull SParser.AtomicLiteralContext ctx);
+	void enterLiteral_expression(@NotNull SParser.Literal_expressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code AtomicLiteral}
-	 * labeled alternative in {@link SParser#literal_expression}.
+	 * Exit a parse tree produced by {@link SParser#literal_expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitAtomicLiteral(@NotNull SParser.AtomicLiteralContext ctx);
+	void exitLiteral_expression(@NotNull SParser.Literal_expressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code CollectionLiteral}
-	 * labeled alternative in {@link SParser#literal_expression}.
+	 * Enter a parse tree produced by {@link SParser#collection_literal}.
 	 * @param ctx the parse tree
 	 */
-	void enterCollectionLiteral(@NotNull SParser.CollectionLiteralContext ctx);
+	void enterCollection_literal(@NotNull SParser.Collection_literalContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code CollectionLiteral}
-	 * labeled alternative in {@link SParser#literal_expression}.
+	 * Exit a parse tree produced by {@link SParser#collection_literal}.
 	 * @param ctx the parse tree
 	 */
-	void exitCollectionLiteral(@NotNull SParser.CollectionLiteralContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code RangeLiteral}
-	 * labeled alternative in {@link SParser#collection_literal}.
-	 * @param ctx the parse tree
-	 */
-	void enterRangeLiteral(@NotNull SParser.RangeLiteralContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code RangeLiteral}
-	 * labeled alternative in {@link SParser#collection_literal}.
-	 * @param ctx the parse tree
-	 */
-	void exitRangeLiteral(@NotNull SParser.RangeLiteralContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ListLiteral}
-	 * labeled alternative in {@link SParser#collection_literal}.
-	 * @param ctx the parse tree
-	 */
-	void enterListLiteral(@NotNull SParser.ListLiteralContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ListLiteral}
-	 * labeled alternative in {@link SParser#collection_literal}.
-	 * @param ctx the parse tree
-	 */
-	void exitListLiteral(@NotNull SParser.ListLiteralContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code SetLiteral}
-	 * labeled alternative in {@link SParser#collection_literal}.
-	 * @param ctx the parse tree
-	 */
-	void enterSetLiteral(@NotNull SParser.SetLiteralContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code SetLiteral}
-	 * labeled alternative in {@link SParser#collection_literal}.
-	 * @param ctx the parse tree
-	 */
-	void exitSetLiteral(@NotNull SParser.SetLiteralContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code DictLiteral}
-	 * labeled alternative in {@link SParser#collection_literal}.
-	 * @param ctx the parse tree
-	 */
-	void enterDictLiteral(@NotNull SParser.DictLiteralContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code DictLiteral}
-	 * labeled alternative in {@link SParser#collection_literal}.
-	 * @param ctx the parse tree
-	 */
-	void exitDictLiteral(@NotNull SParser.DictLiteralContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code TupleLiteral}
-	 * labeled alternative in {@link SParser#collection_literal}.
-	 * @param ctx the parse tree
-	 */
-	void enterTupleLiteral(@NotNull SParser.TupleLiteralContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code TupleLiteral}
-	 * labeled alternative in {@link SParser#collection_literal}.
-	 * @param ctx the parse tree
-	 */
-	void exitTupleLiteral(@NotNull SParser.TupleLiteralContext ctx);
+	void exitCollection_literal(@NotNull SParser.Collection_literalContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SParser#tuple_literal}.
 	 * @param ctx the parse tree
@@ -3235,53 +2857,25 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitDict_literal(@NotNull SParser.Dict_literalContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code ValueTuple}
-	 * labeled alternative in {@link SParser#expression_tuple}.
+	 * Enter a parse tree produced by {@link SParser#expression_tuple}.
 	 * @param ctx the parse tree
 	 */
-	void enterValueTuple(@NotNull SParser.ValueTupleContext ctx);
+	void enterExpression_tuple(@NotNull SParser.Expression_tupleContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code ValueTuple}
-	 * labeled alternative in {@link SParser#expression_tuple}.
+	 * Exit a parse tree produced by {@link SParser#expression_tuple}.
 	 * @param ctx the parse tree
 	 */
-	void exitValueTuple(@NotNull SParser.ValueTupleContext ctx);
+	void exitExpression_tuple(@NotNull SParser.Expression_tupleContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code ValueTupleItem}
-	 * labeled alternative in {@link SParser#expression_tuple}.
+	 * Enter a parse tree produced by {@link SParser#dict_entry_list}.
 	 * @param ctx the parse tree
 	 */
-	void enterValueTupleItem(@NotNull SParser.ValueTupleItemContext ctx);
+	void enterDict_entry_list(@NotNull SParser.Dict_entry_listContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code ValueTupleItem}
-	 * labeled alternative in {@link SParser#expression_tuple}.
+	 * Exit a parse tree produced by {@link SParser#dict_entry_list}.
 	 * @param ctx the parse tree
 	 */
-	void exitValueTupleItem(@NotNull SParser.ValueTupleItemContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code DictEntryList}
-	 * labeled alternative in {@link SParser#dict_entry_list}.
-	 * @param ctx the parse tree
-	 */
-	void enterDictEntryList(@NotNull SParser.DictEntryListContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code DictEntryList}
-	 * labeled alternative in {@link SParser#dict_entry_list}.
-	 * @param ctx the parse tree
-	 */
-	void exitDictEntryList(@NotNull SParser.DictEntryListContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code DictEntryListItem}
-	 * labeled alternative in {@link SParser#dict_entry_list}.
-	 * @param ctx the parse tree
-	 */
-	void enterDictEntryListItem(@NotNull SParser.DictEntryListItemContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code DictEntryListItem}
-	 * labeled alternative in {@link SParser#dict_entry_list}.
-	 * @param ctx the parse tree
-	 */
-	void exitDictEntryListItem(@NotNull SParser.DictEntryListItemContext ctx);
+	void exitDict_entry_list(@NotNull SParser.Dict_entry_listContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SParser#dict_entry}.
 	 * @param ctx the parse tree
@@ -3498,6 +3092,16 @@ public interface SParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitKey_token(@NotNull SParser.Key_tokenContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SParser#module_token}.
+	 * @param ctx the parse tree
+	 */
+	void enterModule_token(@NotNull SParser.Module_tokenContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SParser#module_token}.
+	 * @param ctx the parse tree
+	 */
+	void exitModule_token(@NotNull SParser.Module_tokenContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SParser#value_token}.
 	 * @param ctx the parse tree

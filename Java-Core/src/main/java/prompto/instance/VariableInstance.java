@@ -103,8 +103,12 @@ public class VariableInstance implements IAssignableInstance {
 	}
 	
 	@Override
-	public IType checkAssignElement(Context context) {
-		throw new UnsupportedOperationException();
+	public IType checkAssignItem(Context context, IType itemType) {
+		INamed actual = context.getRegisteredValue(INamed.class, id);
+		if(actual==null) 
+			throw new SyntaxError("Unknown variable:" + this.id);
+		IType parentType = actual.getType(context);
+		return parentType.checkItem(context, itemType);
 	}
 	
 	@Override

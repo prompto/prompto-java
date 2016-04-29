@@ -14,6 +14,7 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.error.IndexOutOfRangeError;
+import prompto.error.InvalidValueError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
@@ -31,8 +32,9 @@ import com.fasterxml.jackson.core.JsonGenerator;
 
 public class ListValue extends BaseValue implements IContainer<IValue>, ISliceable<IValue>, IFilterable  {
 
-	protected PromptoList<IValue> items;
-
+	PromptoList<IValue> items;
+	boolean mutable = false;
+	
 	public ListValue(IType itemType) {
 		super(new ListType(itemType));
 		this.items = new PromptoList<>();
@@ -46,6 +48,17 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 	public ListValue(IType itemType, Collection<? extends IValue> items) {
 		super(new ListType(itemType));
 		this.items = new PromptoList<>(items);
+	}
+	
+	public ListValue(IType itemType, Collection<? extends IValue> items, boolean mutable) {
+		super(new ListType(itemType));
+		this.items = new PromptoList<>(items);
+		this.mutable = mutable;
+	}
+
+	@Override
+	public boolean isMutable() {
+		return mutable;
 	}
 	
 	@Override
@@ -78,6 +91,15 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 		items.set(index, element);
 	}
 	
+	@Override
+	public void setItem(Context context, IValue item, IValue value) {
+		if(!(item instanceof Integer))
+			throw new InvalidValueError("Expected an Integer, got:" + item.getClass().getName());
+		int index = (int)((Integer)item).longValue();
+		if(index<1 || index>this.getLength())
+			throw new IndexOutOfRangeError();
+		this.setItem(index-1, value);
+	}
 	
 	@Override
 	public IValue getItem(Context context, IValue index) throws PromptoError {

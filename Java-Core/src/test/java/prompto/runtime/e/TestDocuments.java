@@ -60,6 +60,16 @@ public class TestDocuments extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedNamedItem() throws Exception {
+		checkInterpretedOutput("documents/namedItem.pec");
+	}
+
+	@Test
+	public void testCompiledNamedItem() throws Exception {
+		checkCompiledOutput("documents/namedItem.pec");
+	}
+
+	@Test
 	public void testInterpretedVariable() throws Exception {
 		checkInterpretedOutput("documents/variable.pec");
 	}

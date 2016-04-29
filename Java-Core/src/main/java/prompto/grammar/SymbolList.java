@@ -20,7 +20,10 @@ public abstract class SymbolList <T extends Symbol> extends ObjectList<T> implem
 	
 	IType type;
 	
-	public SymbolList(T symbol) {
+	protected SymbolList() {
+	}
+
+	protected SymbolList(T symbol) {
 		this.add(symbol);
 	}
 

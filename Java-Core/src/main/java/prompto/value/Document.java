@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import prompto.error.InvalidValueError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.grammar.Identifier;
@@ -59,6 +60,22 @@ public class Document extends BaseValue {
 		return values.containsKey(name);
 	}
 	
+	
+	@Override
+	public void setItem(Context context, IValue item, IValue value) {
+		if(!(item instanceof Text))
+			throw new InvalidValueError("Expected a Text, got:" + item.getClass().getName());
+		values.put(new Identifier(item.toString()), value);
+	}
+	
+	@Override
+	public IValue getItem(Context context, IValue item) {
+		if(!(item instanceof Text))
+			throw new InvalidValueError("Expected a Text, got:" + item.getClass().getName());
+		return values.get(new Identifier(item.toString()));
+	}
+	
+
 	@Override
 	public String toString() {
 		return values.toString();

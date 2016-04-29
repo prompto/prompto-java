@@ -80,6 +80,14 @@ public interface IValue {
 		throw new UnsupportedOperationException("No member support for " + this.getClass().getSimpleName());
 	}
 
+	default void setItem(Context context, IValue item, IValue value) {
+		throw new UnsupportedOperationException("No item support for " + this.getClass().getSimpleName());
+	}
+
+	default IValue getItem(Context context, IValue item) {
+		throw new UnsupportedOperationException("No item support for " + this.getClass().getSimpleName());
+	}
+
 	default boolean roughly(Context context, IValue value) throws PromptoError {
 		throw new UnsupportedOperationException("roughly not supported by " + this.getClass().getSimpleName());
 	};
@@ -94,7 +102,8 @@ public interface IValue {
 
 	default void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, Map<String, byte[]> binaries) throws PromptoError {
 		throw new UnsupportedOperationException("toJson not supported by " + this.getClass().getSimpleName());
-	};
+	}
+
 
 	
 }

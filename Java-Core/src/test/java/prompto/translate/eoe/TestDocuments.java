@@ -27,6 +27,11 @@ public class TestDocuments extends BaseEParserTest {
 	}
 
 	@Test
+	public void testNamedItem() throws Exception {
+		compareResourceEOE("documents/namedItem.pec");
+	}
+
+	@Test
 	public void testVariable() throws Exception {
 		compareResourceEOE("documents/variable.pec");
 	}

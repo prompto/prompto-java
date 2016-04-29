@@ -11,6 +11,8 @@ python timezone name
 javascript timezone name
 check return types
 check member methods
+check assign item
+check assign member
 return sorted sets 
 implement dbIdListener strategy (store, ConcreteInstance... )
 method as attribute

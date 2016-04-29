@@ -15,7 +15,7 @@ public interface IAssignableInstance {
 
 	IType checkAssignValue(Context context, IExpression expression);
 	IType checkAssignMember(Context context, Identifier name);
-	IType checkAssignElement(Context context);
+	IType checkAssignItem(Context context, IType itemType);
 	void assign(Context context, IExpression expression) throws PromptoError;
 	IValue interpret(Context context) throws PromptoError;
 	void toDialect(CodeWriter writer, IExpression expression);

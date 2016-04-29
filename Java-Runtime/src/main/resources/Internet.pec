@@ -25,4 +25,4 @@ define "reads from www.html5rocks.com" as test method doing:
 	content = read from Url with "http://www.html5rocks.com/en/" as path
 and verifying: 
 	content contains "HTML5 Rocks"
- 
+

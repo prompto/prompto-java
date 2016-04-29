@@ -1685,25 +1685,13 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclarationListItem(@NotNull OParser.DeclarationListItemContext ctx) { }
+	@Override public void enterDeclarations(@NotNull OParser.DeclarationsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclarationListItem(@NotNull OParser.DeclarationListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDeclarationList(@NotNull OParser.DeclarationListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDeclarationList(@NotNull OParser.DeclarationListContext ctx) { }
+	@Override public void exitDeclarations(@NotNull OParser.DeclarationsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1733,97 +1721,49 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEnumCategoryDeclaration(@NotNull OParser.EnumCategoryDeclarationContext ctx) { }
+	@Override public void enterEnum_declaration(@NotNull OParser.Enum_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitEnumCategoryDeclaration(@NotNull OParser.EnumCategoryDeclarationContext ctx) { }
+	@Override public void exitEnum_declaration(@NotNull OParser.Enum_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEnumNativeDeclaration(@NotNull OParser.EnumNativeDeclarationContext ctx) { }
+	@Override public void enterNative_symbol_list(@NotNull OParser.Native_symbol_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitEnumNativeDeclaration(@NotNull OParser.EnumNativeDeclarationContext ctx) { }
+	@Override public void exitNative_symbol_list(@NotNull OParser.Native_symbol_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNativeSymbolList(@NotNull OParser.NativeSymbolListContext ctx) { }
+	@Override public void enterCategory_symbol_list(@NotNull OParser.Category_symbol_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNativeSymbolList(@NotNull OParser.NativeSymbolListContext ctx) { }
+	@Override public void exitCategory_symbol_list(@NotNull OParser.Category_symbol_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNativeSymbolListItem(@NotNull OParser.NativeSymbolListItemContext ctx) { }
+	@Override public void enterSymbol_list(@NotNull OParser.Symbol_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNativeSymbolListItem(@NotNull OParser.NativeSymbolListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCategorySymbolListItem(@NotNull OParser.CategorySymbolListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCategorySymbolListItem(@NotNull OParser.CategorySymbolListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCategorySymbolList(@NotNull OParser.CategorySymbolListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCategorySymbolList(@NotNull OParser.CategorySymbolListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSymbolList(@NotNull OParser.SymbolListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSymbolList(@NotNull OParser.SymbolListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSymbolListItem(@NotNull OParser.SymbolListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSymbolListItem(@NotNull OParser.SymbolListItemContext ctx) { }
+	@Override public void exitSymbol_list(@NotNull OParser.Symbol_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1913,25 +1853,13 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterValueList(@NotNull OParser.ValueListContext ctx) { }
+	@Override public void enterExpression_list(@NotNull OParser.Expression_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitValueList(@NotNull OParser.ValueListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterValueListItem(@NotNull OParser.ValueListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitValueListItem(@NotNull OParser.ValueListItemContext ctx) { }
+	@Override public void exitExpression_list(@NotNull OParser.Expression_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2285,49 +2213,25 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTypeIdentifierList(@NotNull OParser.TypeIdentifierListContext ctx) { }
+	@Override public void enterType_identifier_list(@NotNull OParser.Type_identifier_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTypeIdentifierList(@NotNull OParser.TypeIdentifierListContext ctx) { }
+	@Override public void exitType_identifier_list(@NotNull OParser.Type_identifier_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTypeIdentifierListItem(@NotNull OParser.TypeIdentifierListItemContext ctx) { }
+	@Override public void enterMethod_identifier(@NotNull OParser.Method_identifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTypeIdentifierListItem(@NotNull OParser.TypeIdentifierListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterMethodVariableIdentifier(@NotNull OParser.MethodVariableIdentifierContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMethodVariableIdentifier(@NotNull OParser.MethodVariableIdentifierContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterMethodTypeIdentifier(@NotNull OParser.MethodTypeIdentifierContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMethodTypeIdentifier(@NotNull OParser.MethodTypeIdentifierContext ctx) { }
+	@Override public void exitMethod_identifier(@NotNull OParser.Method_identifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2417,25 +2321,13 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArgumentListItem(@NotNull OParser.ArgumentListItemContext ctx) { }
+	@Override public void enterArgument_list(@NotNull OParser.Argument_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArgumentListItem(@NotNull OParser.ArgumentListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterArgumentList(@NotNull OParser.ArgumentListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitArgumentList(@NotNull OParser.ArgumentListContext ctx) { }
+	@Override public void exitArgument_list(@NotNull OParser.Argument_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2465,25 +2357,13 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNamedArgument(@NotNull OParser.NamedArgumentContext ctx) { }
+	@Override public void enterOperator_argument(@NotNull OParser.Operator_argumentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNamedArgument(@NotNull OParser.NamedArgumentContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterTypedArgument(@NotNull OParser.TypedArgumentContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTypedArgument(@NotNull OParser.TypedArgumentContext ctx) { }
+	@Override public void exitOperator_argument(@NotNull OParser.Operator_argumentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2513,25 +2393,13 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCategoryArgumentType(@NotNull OParser.CategoryArgumentTypeContext ctx) { }
+	@Override public void enterCategory_or_any_type(@NotNull OParser.Category_or_any_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCategoryArgumentType(@NotNull OParser.CategoryArgumentTypeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAnyArgumentType(@NotNull OParser.AnyArgumentTypeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAnyArgumentType(@NotNull OParser.AnyArgumentTypeContext ctx) { }
+	@Override public void exitCategory_or_any_type(@NotNull OParser.Category_or_any_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2573,25 +2441,13 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCategoryMethodListItem(@NotNull OParser.CategoryMethodListItemContext ctx) { }
+	@Override public void enterMember_method_declaration_list(@NotNull OParser.Member_method_declaration_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCategoryMethodListItem(@NotNull OParser.CategoryMethodListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCategoryMethodList(@NotNull OParser.CategoryMethodListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCategoryMethodList(@NotNull OParser.CategoryMethodListContext ctx) { }
+	@Override public void exitMember_method_declaration_list(@NotNull OParser.Member_method_declaration_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2609,25 +2465,13 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNativeCategoryMethodList(@NotNull OParser.NativeCategoryMethodListContext ctx) { }
+	@Override public void enterNative_member_method_declaration_list(@NotNull OParser.Native_member_method_declaration_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNativeCategoryMethodList(@NotNull OParser.NativeCategoryMethodListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterNativeCategoryMethodListItem(@NotNull OParser.NativeCategoryMethodListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitNativeCategoryMethodListItem(@NotNull OParser.NativeCategoryMethodListItemContext ctx) { }
+	@Override public void exitNative_member_method_declaration_list(@NotNull OParser.Native_member_method_declaration_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2729,18 +2573,6 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterModule_token(@NotNull OParser.Module_tokenContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitModule_token(@NotNull OParser.Module_tokenContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterJavascript_category_binding(@NotNull OParser.Javascript_category_bindingContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2789,49 +2621,13 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAbstractMethod(@NotNull OParser.AbstractMethodContext ctx) { }
+	@Override public void enterMethod_declaration(@NotNull OParser.Method_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAbstractMethod(@NotNull OParser.AbstractMethodContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterConcreteMethod(@NotNull OParser.ConcreteMethodContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitConcreteMethod(@NotNull OParser.ConcreteMethodContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterNativeMethod(@NotNull OParser.NativeMethodContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitNativeMethod(@NotNull OParser.NativeMethodContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterTestMethod(@NotNull OParser.TestMethodContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTestMethod(@NotNull OParser.TestMethodContext ctx) { }
+	@Override public void exitMethod_declaration(@NotNull OParser.Method_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2849,25 +2645,13 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNativeStatementListItem(@NotNull OParser.NativeStatementListItemContext ctx) { }
+	@Override public void enterNative_statement_list(@NotNull OParser.Native_statement_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNativeStatementListItem(@NotNull OParser.NativeStatementListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterNativeStatementList(@NotNull OParser.NativeStatementListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitNativeStatementList(@NotNull OParser.NativeStatementListContext ctx) { }
+	@Override public void exitNative_statement_list(@NotNull OParser.Native_statement_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2957,97 +2741,49 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStatementList(@NotNull OParser.StatementListContext ctx) { }
+	@Override public void enterStatement_list(@NotNull OParser.Statement_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStatementList(@NotNull OParser.StatementListContext ctx) { }
+	@Override public void exitStatement_list(@NotNull OParser.Statement_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStatementListItem(@NotNull OParser.StatementListItemContext ctx) { }
+	@Override public void enterAssertion_list(@NotNull OParser.Assertion_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStatementListItem(@NotNull OParser.StatementListItemContext ctx) { }
+	@Override public void exitAssertion_list(@NotNull OParser.Assertion_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAssertionList(@NotNull OParser.AssertionListContext ctx) { }
+	@Override public void enterSwitch_case_statement_list(@NotNull OParser.Switch_case_statement_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAssertionList(@NotNull OParser.AssertionListContext ctx) { }
+	@Override public void exitSwitch_case_statement_list(@NotNull OParser.Switch_case_statement_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAssertionListItem(@NotNull OParser.AssertionListItemContext ctx) { }
+	@Override public void enterCatch_statement_list(@NotNull OParser.Catch_statement_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAssertionListItem(@NotNull OParser.AssertionListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSwitchCaseStatementList(@NotNull OParser.SwitchCaseStatementListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSwitchCaseStatementList(@NotNull OParser.SwitchCaseStatementListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSwitchCaseStatementListItem(@NotNull OParser.SwitchCaseStatementListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSwitchCaseStatementListItem(@NotNull OParser.SwitchCaseStatementListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCatchStatementList(@NotNull OParser.CatchStatementListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCatchStatementList(@NotNull OParser.CatchStatementListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCatchStatementListItem(@NotNull OParser.CatchStatementListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCatchStatementListItem(@NotNull OParser.CatchStatementListItemContext ctx) { }
+	@Override public void exitCatch_statement_list(@NotNull OParser.Catch_statement_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -3245,25 +2981,13 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLiteralList(@NotNull OParser.LiteralListContext ctx) { }
+	@Override public void enterLiteral_list_literal(@NotNull OParser.Literal_list_literalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLiteralList(@NotNull OParser.LiteralListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterLiteralListItem(@NotNull OParser.LiteralListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLiteralListItem(@NotNull OParser.LiteralListItemContext ctx) { }
+	@Override public void exitLiteral_list_literal(@NotNull OParser.Literal_list_literalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -3341,85 +3065,25 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAtomicLiteral(@NotNull OParser.AtomicLiteralContext ctx) { }
+	@Override public void enterLiteral_expression(@NotNull OParser.Literal_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAtomicLiteral(@NotNull OParser.AtomicLiteralContext ctx) { }
+	@Override public void exitLiteral_expression(@NotNull OParser.Literal_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCollectionLiteral(@NotNull OParser.CollectionLiteralContext ctx) { }
+	@Override public void enterCollection_literal(@NotNull OParser.Collection_literalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCollectionLiteral(@NotNull OParser.CollectionLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterRangeLiteral(@NotNull OParser.RangeLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitRangeLiteral(@NotNull OParser.RangeLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterListLiteral(@NotNull OParser.ListLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitListLiteral(@NotNull OParser.ListLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSetLiteral(@NotNull OParser.SetLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSetLiteral(@NotNull OParser.SetLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDictLiteral(@NotNull OParser.DictLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDictLiteral(@NotNull OParser.DictLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterTupleLiteral(@NotNull OParser.TupleLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTupleLiteral(@NotNull OParser.TupleLiteralContext ctx) { }
+	@Override public void exitCollection_literal(@NotNull OParser.Collection_literalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -3449,49 +3113,25 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterValueTuple(@NotNull OParser.ValueTupleContext ctx) { }
+	@Override public void enterExpression_tuple(@NotNull OParser.Expression_tupleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitValueTuple(@NotNull OParser.ValueTupleContext ctx) { }
+	@Override public void exitExpression_tuple(@NotNull OParser.Expression_tupleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterValueTupleItem(@NotNull OParser.ValueTupleItemContext ctx) { }
+	@Override public void enterDict_entry_list(@NotNull OParser.Dict_entry_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitValueTupleItem(@NotNull OParser.ValueTupleItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDictEntryList(@NotNull OParser.DictEntryListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDictEntryList(@NotNull OParser.DictEntryListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDictEntryListItem(@NotNull OParser.DictEntryListItemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDictEntryListItem(@NotNull OParser.DictEntryListItemContext ctx) { }
+	@Override public void exitDict_entry_list(@NotNull OParser.Dict_entry_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -3720,6 +3360,18 @@ public class OParserBaseListener implements OParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitKey_token(@NotNull OParser.Key_tokenContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterModule_token(@NotNull OParser.Module_tokenContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitModule_token(@NotNull OParser.Module_tokenContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

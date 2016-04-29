@@ -73,7 +73,7 @@ public class MemberInstance implements IAssignableSelector {
 	}
 	
 	@Override
-	public IType checkAssignElement(Context context) {
+	public IType checkAssignItem(Context context, IType itemType) {
 		return AnyType.instance(); // TODO
 	}
 	

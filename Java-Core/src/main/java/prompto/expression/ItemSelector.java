@@ -17,6 +17,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.intrinsic.PromptoAny;
 import prompto.intrinsic.PromptoDict;
+import prompto.intrinsic.PromptoDocument;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoRange;
 import prompto.intrinsic.PromptoSet;
@@ -25,6 +26,7 @@ import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.Dictionary;
+import prompto.value.Document;
 import prompto.value.IContainer;
 import prompto.value.IValue;
 import prompto.value.ListValue;
@@ -81,6 +83,8 @@ public class ItemSelector extends SelectorExpression {
             throw new NullReferenceError();
         if (o instanceof IContainer)
             return ((IContainer<?>)o).getItem(context, i);
+        else if (o instanceof Document)
+            return ((Document)o).getItem(context, i);
         else
         	throw new SyntaxError("Unknown collection: " + parent);
 	}
@@ -99,6 +103,7 @@ public class ItemSelector extends SelectorExpression {
 		map.put(PromptoSet.class, SetValue::compileItem);
 		map.put(PromptoList.class, ListValue::compileItem);
 		map.put(PromptoAny.class, ItemSelector::compileAnyItem);
+		map.put(PromptoDocument.class, ItemSelector::compileAnyItem);
 		return map;
 	}
 	

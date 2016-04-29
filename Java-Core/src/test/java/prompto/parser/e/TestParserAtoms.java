@@ -100,7 +100,7 @@ public class TestParserAtoms {
 	
 	@Test
 	public void testSimpleTuple() throws Exception {
-		String statement = "(1)";
+		String statement = "(1,)";
 		ETestParser parser = new ETestParser(statement, false);
 		IExpression tl = parser.parse_literal_expression();
 		assertTrue(tl instanceof TupleLiteral);

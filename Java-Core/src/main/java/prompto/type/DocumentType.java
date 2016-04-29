@@ -32,6 +32,12 @@ public class DocumentType extends NativeType {
 	}
 	
 	@Override
+	public IType checkItem(Context context, IType itemType) {
+		// TODO check Integer or Text
+		return AnyType.instance();
+	}
+
+	@Override
 	public IType checkMember(Context context, Identifier name) {
 		return AnyType.instance();
 	}

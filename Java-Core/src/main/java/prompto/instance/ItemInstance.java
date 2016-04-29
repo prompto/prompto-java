@@ -6,23 +6,20 @@ import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
-import prompto.error.IndexOutOfRangeError;
-import prompto.error.InvalidValueError;
+import prompto.error.NotMutableError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.expression.ItemSelector;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoAny;
+import prompto.intrinsic.PromptoDocument;
 import prompto.runtime.Context;
 import prompto.type.AnyType;
 import prompto.type.IType;
-import prompto.type.IntegerType;
 import prompto.utils.CodeWriter;
 import prompto.value.IContainer;
 import prompto.value.IValue;
-import prompto.value.Integer;
-import prompto.value.ListValue;
 
 public class ItemInstance implements IAssignableSelector {
 
@@ -52,36 +49,33 @@ public class ItemInstance implements IAssignableSelector {
 	
 	@Override
 	public IType checkAssignValue(Context context, IExpression expression) {
-		IType elemType = parent.checkAssignElement(context);
+		// called when a[3] = value
 		IType itemType = item.check(context);
-		if(itemType!=IntegerType.instance())
-			throw new SyntaxError("Expecting an Integer, got:" + itemType.toString());
-		return elemType;
+		return parent.checkAssignItem(context, itemType);
 	}
 	
 	@Override
 	public IType checkAssignMember(Context context, Identifier memberName) {
+		// called when a[3].member = value
 		return AnyType.instance(); // TODO 
 	}
 	
 	@Override
-	public IType checkAssignElement(Context context) {
-		throw new UnsupportedOperationException();
+	public IType checkAssignItem(Context context, IType itemType) {
+		// called when a[3][x] = value
+		IType thisItemType = item.check(context);
+		IType parentType = parent.checkAssignItem(context, thisItemType);
+		return parentType.checkItem(context, itemType); 
 	}
 	
 	@Override
 	public void assign(Context context, IExpression expression) throws PromptoError {
-		IValue obj = parent.interpret(context);
-		if(!(obj instanceof ListValue))
-			throw new InvalidValueError("Expected a List, got:" + obj.getClass().getName());
-		ListValue list = (ListValue)obj;
+		IValue root = parent.interpret(context);
+		if(!root.isMutable())
+			throw new NotMutableError();
 		IValue idx = item.interpret(context);
-		if(!(idx instanceof Integer))
-			throw new InvalidValueError("Expected an Integer, got:" + idx.getClass().getName());
-		int index = (int)((Integer)idx).longValue();
-		if(index<1 || index>list.getLength())
-			throw new IndexOutOfRangeError();
-		list.setItem(index-1, expression.interpret(context));
+		IValue value = expression.interpret(context);
+		root.setItem(context, idx, value);
 	}
 	
 	@Override
@@ -103,7 +97,7 @@ public class ItemInstance implements IAssignableSelector {
 	@Override
 	public ResultInfo compileAssign(Context context, MethodInfo method, Flags flags, IExpression value) {
 		ResultInfo parentInfo = this.parent.compileParent(context, method, flags);
-		if(PromptoAny.class==parentInfo.getType())
+		if(PromptoAny.class==parentInfo.getType() || PromptoDocument.class==parentInfo.getType())
 			return compileAssignAny(context, method, flags, item, value);
 		else 
 			throw new UnsupportedOperationException("Cannot compileAssign for " + parentInfo.getType().getTypeName());

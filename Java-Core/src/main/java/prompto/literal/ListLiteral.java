@@ -31,16 +31,28 @@ import prompto.value.ListValue;
 
 public class ListLiteral extends Literal<ListValue> {
 
+	private static String getText(ExpressionList expressions, boolean mutable) {
+		return (mutable ? "mutable " : "") 
+				+ (expressions==null ? "[]" : "[" + expressions.toString() + "]");
+	}
+	
+	boolean mutable;
 	IType itemType = null;
 	ExpressionList expressions = null;
 	
-	public ListLiteral() {
-		super("[]",new ListValue(MissingType.instance()));
+	public ListLiteral(boolean mutable) {
+		super(getText(null, mutable),new ListValue(MissingType.instance()));
+		this.mutable = mutable;
 	}
 	
-	public ListLiteral(ExpressionList expressions) {
-		super("[" + expressions.toString() + "]",new ListValue(MissingType.instance()));
+	public ListLiteral(ExpressionList expressions, boolean mutable) {
+		super(getText(expressions, mutable),new ListValue(MissingType.instance()));
 		this.expressions = expressions;
+		this.mutable = mutable;
+	}
+	
+	public boolean isMutable() {
+		return mutable;
 	}
 
 	@Override
@@ -65,8 +77,7 @@ public class ListLiteral extends Literal<ListValue> {
 				item = interpretPromotion(item);
 				list.add(item);
 			}
-			return new ListValue(itemType, list);
-			// don't dispose of expressions, they are required by translation 
+			return new ListValue(itemType, list, mutable);
 		} else
 			return value;
 	}
@@ -88,6 +99,8 @@ public class ListLiteral extends Literal<ListValue> {
 	
 	@Override
 	public void toDialect(CodeWriter writer) {
+		if(mutable)
+			writer.append("mutable ");
 		if(expressions!=null) {
 			writer.append('[');
 			expressions.toDialect(writer);
