@@ -26,8 +26,6 @@ import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.Dictionary;
-import prompto.value.Document;
-import prompto.value.IContainer;
 import prompto.value.IValue;
 import prompto.value.ListValue;
 import prompto.value.NullValue;
@@ -81,12 +79,7 @@ public class ItemSelector extends SelectorExpression {
         IValue i = item.interpret(context);
         if (i == null || i==NullValue.instance())
             throw new NullReferenceError();
-        if (o instanceof IContainer)
-            return ((IContainer<?>)o).getItem(context, i);
-        else if (o instanceof Document)
-            return ((Document)o).getItem(context, i);
-        else
-        	throw new SyntaxError("Unknown collection: " + parent);
+        return o.getItem(context, i);
 	}
 	
 	static Map<Class<?>, IOperatorFunction> getters = createGetters();
