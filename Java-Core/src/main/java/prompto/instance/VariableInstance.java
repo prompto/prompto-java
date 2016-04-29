@@ -58,7 +58,8 @@ public class VariableInstance implements IAssignableInstance {
 	}
 	
 	public ResultInfo compileAssignVariable(Context context, MethodInfo method, Flags flags, IExpression expression) {
-		checkAssignValue(context, expression);
+		IType valueType = expression.check(context);
+		checkAssignValue(context, valueType);
 		ResultInfo info = expression.compile(context, method, flags);
 		StackLocal local = method.registerLocal(id.toString(), VerifierType.ITEM_Object, new ClassConstant(info.getType()));
 		CompilerUtils.compileASTORE(method, local);
@@ -79,18 +80,17 @@ public class VariableInstance implements IAssignableInstance {
 	}
 	
 	@Override
-	public IType checkAssignValue(Context context, IExpression expression) {
-		IType type = expression.check(context);
+	public IType checkAssignValue(Context context, IType valueType) {
 		INamed actual = context.getRegisteredValue(INamed.class,id);
 		if(actual==null)
-			context.registerValue(new Variable(id, type));
+			context.registerValue(new Variable(id, valueType));
 		else {
 			// need to check type compatibility
 			IType actualType = actual.getType(context);
-			actualType.checkAssignableFrom(context, type);
-			type = actualType;
+			actualType.checkAssignableFrom(context, valueType);
+			valueType = actualType;
 		}
-		return type;
+		return valueType;
 	}
 	
 	@Override
@@ -103,7 +103,7 @@ public class VariableInstance implements IAssignableInstance {
 	}
 	
 	@Override
-	public IType checkAssignItem(Context context, IType itemType) {
+	public IType checkAssignItem(Context context, IType itemType, IType valueType) {
 		INamed actual = context.getRegisteredValue(INamed.class, id);
 		if(actual==null) 
 			throw new SyntaxError("Unknown variable:" + this.id);

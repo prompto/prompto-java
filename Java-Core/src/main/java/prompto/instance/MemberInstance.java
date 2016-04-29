@@ -60,10 +60,9 @@ public class MemberInstance implements IAssignableSelector {
 	}
 	
 	@Override
-	public IType checkAssignValue(Context context, IExpression expression) {
+	public IType checkAssignValue(Context context, IType valueType) {
 		IType type = parent.checkAssignMember(context, id);
-		IType actualType = expression.check(context);
-		type.checkAssignableFrom(context, actualType);
+		type.checkAssignableFrom(context, valueType);
 		return type;
 	}
 	
@@ -73,7 +72,7 @@ public class MemberInstance implements IAssignableSelector {
 	}
 	
 	@Override
-	public IType checkAssignItem(Context context, IType itemType) {
+	public IType checkAssignItem(Context context, IType itemType, IType valueType) {
 		return AnyType.instance(); // TODO
 	}
 	

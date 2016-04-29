@@ -48,10 +48,10 @@ public class ItemInstance implements IAssignableSelector {
 	}
 	
 	@Override
-	public IType checkAssignValue(Context context, IExpression expression) {
+	public IType checkAssignValue(Context context, IType valueType) {
 		// called when a[3] = value
 		IType itemType = item.check(context);
-		return parent.checkAssignItem(context, itemType);
+		return parent.checkAssignItem(context, itemType, valueType);
 	}
 	
 	@Override
@@ -61,10 +61,10 @@ public class ItemInstance implements IAssignableSelector {
 	}
 	
 	@Override
-	public IType checkAssignItem(Context context, IType itemType) {
+	public IType checkAssignItem(Context context, IType itemType, IType valueType) {
 		// called when a[3][x] = value
 		IType thisItemType = item.check(context);
-		IType parentType = parent.checkAssignItem(context, thisItemType);
+		IType parentType = parent.checkAssignItem(context, thisItemType, valueType);
 		return parentType.checkItem(context, itemType); 
 	}
 	
