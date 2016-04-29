@@ -81,6 +81,7 @@ public class VariableInstance implements IAssignableInstance {
 	
 	@Override
 	public IType checkAssignValue(Context context, IType valueType) {
+		// called for a=x
 		INamed actual = context.getRegisteredValue(INamed.class,id);
 		if(actual==null)
 			context.registerValue(new Variable(id, valueType));
@@ -94,7 +95,8 @@ public class VariableInstance implements IAssignableInstance {
 	}
 	
 	@Override
-	public IType checkAssignMember(Context context, Identifier memberName) {
+	public IType checkAssignMember(Context context, Identifier memberName, IType valueType) {
+		// called for a.x = y
 		INamed actual = context.getRegisteredValue(INamed.class, id);
 		if(actual==null) 
 			throw new SyntaxError("Unknown variable:" + this.id);
@@ -104,6 +106,7 @@ public class VariableInstance implements IAssignableInstance {
 	
 	@Override
 	public IType checkAssignItem(Context context, IType itemType, IType valueType) {
+		// called for a[x] = y
 		INamed actual = context.getRegisteredValue(INamed.class, id);
 		if(actual==null) 
 			throw new SyntaxError("Unknown variable:" + this.id);

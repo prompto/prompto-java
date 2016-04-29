@@ -55,7 +55,7 @@ public class ItemInstance implements IAssignableSelector {
 	}
 	
 	@Override
-	public IType checkAssignMember(Context context, Identifier memberName) {
+	public IType checkAssignMember(Context context, Identifier memberName, IType valueType) {
 		// called when a[3].member = value
 		return AnyType.instance(); // TODO 
 	}

@@ -61,14 +61,14 @@ public class MemberInstance implements IAssignableSelector {
 	
 	@Override
 	public IType checkAssignValue(Context context, IType valueType) {
-		IType type = parent.checkAssignMember(context, id);
+		IType type = parent.checkAssignMember(context, id, valueType);
 		type.checkAssignableFrom(context, valueType);
 		return type;
 	}
 	
 	@Override
-	public IType checkAssignMember(Context context, Identifier memberName) {
-		return parent.checkAssignMember(context, id); // TODO
+	public IType checkAssignMember(Context context, Identifier memberName, IType valueType) {
+		return parent.checkAssignMember(context, id, valueType); // TODO
 	}
 	
 	@Override

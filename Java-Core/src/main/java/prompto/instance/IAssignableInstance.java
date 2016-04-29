@@ -14,7 +14,7 @@ import prompto.value.IValue;
 public interface IAssignableInstance {
 
 	IType checkAssignValue(Context context, IType valueType);
-	IType checkAssignMember(Context context, Identifier name);
+	IType checkAssignMember(Context context, Identifier name, IType valueType);
 	IType checkAssignItem(Context context, IType itemType, IType valueType);
 	void assign(Context context, IExpression expression) throws PromptoError;
 	IValue interpret(Context context) throws PromptoError;
