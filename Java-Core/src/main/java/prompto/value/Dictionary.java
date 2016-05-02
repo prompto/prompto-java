@@ -1,5 +1,6 @@
 package prompto.value;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -49,7 +50,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 	}
 
 	public static Dictionary merge(Dictionary dict1, Dictionary dict2) {
-		PromptoDict<Text, IValue> dict = new PromptoDict<Text, IValue>();
+		PromptoDict<Text, IValue> dict = new PromptoDict<>();
 		dict.putAll(dict1.dict);
 		dict.putAll(dict2.dict);
 		// TODO check type fungibility		
@@ -115,11 +116,17 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 	}
 
 	public IValue getItem(Context context, IValue index) throws PromptoError {
+		return getItem(index);
+	}
+	
+	
+	public IValue getItem(IValue index) throws PromptoError {
 		if (index instanceof Text)
 			return dict.get((Text) index);
 		else
 			throw new SyntaxError("No such item:" + index.toString());
 	}
+
 
 	public static ResultInfo compileItem(Context context, MethodInfo method, Flags flags, 
 			ResultInfo left, IExpression exp) {
@@ -130,8 +137,16 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 		return new ResultInfo(Object.class);
 	}
 	
+	@Override
 	public Object convertTo(Class<?> type) {
-		return this;
+		Class<?> itemType = Object.class; // TODO (Class<?>)((ParameterizedType)(Object)type).getActualTypeArguments()[1];
+		PromptoDict<String, Object> dict = new PromptoDict<>();
+		for(Map.Entry<Text, IValue> entry : this.dict.entrySet()) {
+			String key = entry.getKey().toString();
+			Object value = entry.getValue().convertTo(itemType);
+			dict.put(key, value);
+		}
+		return dict;
 	}
 
 	@Override

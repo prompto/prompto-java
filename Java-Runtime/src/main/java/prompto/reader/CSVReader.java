@@ -7,16 +7,31 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import prompto.error.ReadWriteError;
+import prompto.intrinsic.PromptoDict;
 import prompto.intrinsic.PromptoDocument;
+import prompto.intrinsic.PromptoList;
 
 public abstract class CSVReader {
 	
-	public static Iterator<PromptoDocument<String, Object>> iterator(String data, Character separator, Character encloser) throws IOException {
+	public static PromptoList<PromptoDocument<String, Object>> read(String data, PromptoDict<String, String> columns, Character separator, Character encloser) throws IOException {
 		BufferedReader reader = data==null ? null : new BufferedReader(new StringReader(data));
-		return iterator(reader, separator, encloser);
+		return read(reader, columns, separator, encloser);
 	}
 	
-	public static Iterator<PromptoDocument<String, Object>> iterator(final BufferedReader reader, Character separator, Character encloser) {
+	public static PromptoList<PromptoDocument<String, Object>> read(final BufferedReader reader, PromptoDict<String, String> columns, Character separator, Character encloser) {
+		PromptoList<PromptoDocument<String, Object>> list = new PromptoList<>();
+		Iterator<PromptoDocument<String, Object>> iter = iterator(reader, columns, separator, encloser);
+		while(iter.hasNext())
+			list.add(iter.next());
+		return list;
+	}
+	
+	public static Iterator<PromptoDocument<String, Object>> iterator(String data, PromptoDict<String, String> columns, Character separator, Character encloser) throws IOException {
+		BufferedReader reader = data==null ? null : new BufferedReader(new StringReader(data));
+		return iterator(reader, columns, separator, encloser);
+	}
+	
+	public static Iterator<PromptoDocument<String, Object>> iterator(final BufferedReader reader, PromptoDict<String, String> columns, Character separator, Character encloser) {
 		
 		char sep = separator==null ? ',' : separator.charValue();
 		char quote = encloser==null ? '"' : encloser.charValue();
@@ -31,7 +46,7 @@ public abstract class CSVReader {
 			public boolean hasNext() {
 				try {
 					if(headers==null)
-						parseHeaders();
+						parseHeaders(columns);
 					if(nextLine==null)
 						nextLine = nextLine();
 					return nextLine!=null;
@@ -51,10 +66,18 @@ public abstract class CSVReader {
 				return line;
 			}
 
-			private void parseHeaders() throws IOException {
+			private void parseHeaders(PromptoDict<String, String> columns) throws IOException {
 				String line = nextLine();
 				if(line!=null)
 					headers = parseLine(line);
+				if(columns!=null) {
+					for(int i=0;i<headers.size(); i++) {
+						String header = headers.get(i);
+						String value = columns.get(header);
+						if(value!=null)
+							headers.set(i, value.toString());
+					}
+				}
 			}
 
 			private ArrayList<String> parseLine(String line) {

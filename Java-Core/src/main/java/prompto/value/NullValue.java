@@ -29,6 +29,12 @@ public class NullValue extends BaseValue {
 		return null; // YES! you read correctly
 	}
 	
+	
+	@Override
+	public Object convertTo(Class<?> type) {
+		return null; // YES! you read correctly
+	}
+	
 	@Override
 	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, Map<String, byte[]> data) throws PromptoError {
 		try {
