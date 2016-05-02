@@ -118,6 +118,14 @@ public class AttributeDeclaration extends BaseDeclaration {
 			type.toDialect(writer);
 			if(constraint!=null)
 				constraint.toDialect(writer);
+			if(indexTypes!=null) {
+				writer.append(" with index");
+				if(!indexTypes.isEmpty()) {
+					writer.append(" (");
+					indexTypes.toDialect(writer, false);
+					writer.append(')');
+				}
+			}
 			writer.append(';');
 			break;
 		case S:
@@ -125,13 +133,20 @@ public class AttributeDeclaration extends BaseDeclaration {
 				writer.append("storable ");
 			writer.append("attr ");
 			writer.append(getId());
-			writer.append(" ( ");
+			writer.append(" (");
 			type.toDialect(writer);
-			writer.append(" ):\n");
+			writer.append("):\n");
 			writer.indent();
 			if(constraint!=null)
 				constraint.toDialect(writer);
-			else
+			if(indexTypes!=null) {
+				if(constraint!=null)
+					writer.newLine();
+				writer.append("index (");
+				indexTypes.toDialect(writer, false);
+				writer.append(')');
+			}
+			if(constraint==null && indexTypes==null)
 				writer.append("pass");
 			writer.dedent();
 			break;

@@ -394,15 +394,19 @@ public class SPromptoBuilder extends SParserBaseListener {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
 		IType type = this.<IType>getNodeValue(ctx.typ);
 		IAttributeConstraint match = this.<IAttributeConstraint>getNodeValue(ctx.match);
-		IdentifierList indices = null; /* TODO this.<IdentifierList>getNodeValue(ctx.indices);
-		if(indices!=null) {
-			Identifier index = this.<Identifier>getNodeValue(ctx.index);
-			if(index!=null)
-				indices.add(index);
-		}*/
+		IdentifierList indices = ctx.index_clause()!=null ? this.<IdentifierList>getNodeValue(ctx.index_clause()) : null;
 		AttributeDeclaration decl = new AttributeDeclaration(name, type, match, indices);
 		decl.setStorable(ctx.STORABLE()!=null);
 		setNodeValue(ctx, decl);
+	}
+	
+	
+	@Override
+	public void exitIndex_clause(Index_clauseContext ctx) {
+		IdentifierList indices = ctx.indices!=null ? 
+				this.<IdentifierList>getNodeValue(ctx.indices) :
+				new IdentifierList();
+		setNodeValue(ctx, indices);
 	}
 
 	@Override

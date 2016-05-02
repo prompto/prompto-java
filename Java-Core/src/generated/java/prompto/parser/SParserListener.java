@@ -59,6 +59,16 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitAttribute_declaration(@NotNull SParser.Attribute_declarationContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SParser#index_clause}.
+	 * @param ctx the parse tree
+	 */
+	void enterIndex_clause(@NotNull SParser.Index_clauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SParser#index_clause}.
+	 * @param ctx the parse tree
+	 */
+	void exitIndex_clause(@NotNull SParser.Index_clauseContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SParser#concrete_category_declaration}.
 	 * @param ctx the parse tree
 	 */
