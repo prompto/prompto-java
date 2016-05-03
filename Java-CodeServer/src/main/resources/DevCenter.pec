@@ -1,6 +1,8 @@
 define getDataExplorerURL as method doing:
 	return "http://localhost:8081/index.html"
 
+// don't directly connect Modules to keep them lightweight
+// and also break any (accidental) cyclical dependency
 define Dependency as storable category with attributes name and version
 define dependencies as storable Dependency[] attribute
 
@@ -50,7 +52,8 @@ define getRecentModules as method receiving Integer count doing:
 define getAllModules as method doing:
 	return fetch all Module order by name
 
-define getModuleDeclarations as method receiving dbId and Boolean register doing:
+
+define getModuleDescription as method receiving dbId and Boolean register doing:
 	user = getHttpUser
 	if user is nothing:
 		raise NULL_REFERENCE
@@ -67,15 +70,36 @@ define getModuleDeclarations as method receiving dbId and Boolean register doing
 			recent = RecentSession with user as user, module as module and now as lastOpened 
 		else:
 			recent.lastOpened = now 
-	store recent
-	
+		store recent
+	return module
+
+
+define getModuleDeclarations as method receiving name and version doing:
+	user = getHttpUser
+	if user is nothing:
+		raise NULL_REFERENCE
+	module = fetch one Module where name = name and version = version
+	if module is nothing:
+		raise NULL_REFERENCE
 	return fetch all Declaration where module = module
+
+
+define getModuleDeclarations as method receiving dbId doing:
+	user = getHttpUser
+	if user is nothing:
+		raise NULL_REFERENCE
+	module = fetch one Module where dbId = dbId
+	if module is nothing:
+		raise NULL_REFERENCE
+	return fetch all Declaration where module = module
+
 
 define storeDeclarations as method receiving EditedDeclaration[] edited doing:
 	deleted = d1.declaration for each d1 in fetch any d from edited where d.editStatus = DELETED
 	created = d2.declaration for each d2 in fetch any d from edited where d.editStatus = CREATED
 	updated = d3.declaration for each d3 in fetch any d from edited where d.editStatus = DIRTY
 	delete deleted and store created, updated 
+
 
 define createModule as method receiving Text type, name, description = nothing, image = nothing, Boolean createEntryPoint, entryPoint = nothing doing:
 	decl = nothing as Declaration
@@ -100,11 +124,13 @@ define createModule as method receiving Text type, name, description = nothing, 
 			module = batch
 	store decl, module
 
+
 define createMainMethod as method receiving Batch batch doing:
 	body = "define " + batch.entryPoint + " as method receiving Text{} options doing:\n"
 	body = body + "\tprint \"Hello " + batch.name + "\"\n" 
 	decl = MethodDeclaration with batch.entryPoint as name, "1.0.0.0" as version, "E" as dialect, "Text{} options" as prototype, body as body and batch as module
 	return decl 
+
 
 define exportModule as method receiving dbId doing:
 	module = fetch one Module where dbId = dbId
