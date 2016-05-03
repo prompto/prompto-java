@@ -1,8 +1,10 @@
 package prompto.type;
 
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.Map;
 
+import prompto.error.ReadWriteError;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoList;
 import prompto.parser.ECleverParser;
@@ -101,10 +103,21 @@ public class ListType extends ContainerType {
 				IValue item = itemType.readJSONValue(context, itemNode, parts);
 				list.addItem(item);
 			} catch (Exception e) {
-				throw new RuntimeException(e);
+				throw new ReadWriteError(e.getMessage());
 			}
 		});
 		return list;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public IValue convertJavaValueToPromptoValue(Context context, Object value) {
+		if(value instanceof Collection) {
+			ListValue list = new ListValue(itemType);
+			((Collection<Object>)value).forEach((item)->
+				list.addItem(itemType.convertJavaValueToPromptoValue(context, item)));
+			return list;
+		} else
+			return super.convertJavaValueToPromptoValue(context, value);
+	}
 }

@@ -104,10 +104,9 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	@Override
 	public void storeModule(Module module) throws PromptoError {
 		Context context = Context.newGlobalContext();
-		List<String> categories = Arrays.asList("Module", module.getType().getCategory().getTypeName());
-		IStorable storable = store.newStorable(categories, null); 
-		module.populate(context, storable);
-		store.store(storable);
+		List<IStorable> storables = new ArrayList<>();
+		module.populate(context, store, storables);
+		store.store(null, storables);
 	}
 	
 	private Object storeDeclarationModule(IDeclaration decl) throws PromptoError {

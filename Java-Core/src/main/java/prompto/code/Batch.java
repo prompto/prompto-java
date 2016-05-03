@@ -1,9 +1,12 @@
 package prompto.code;
 
+import java.util.List;
+
 import prompto.code.ICodeStore.ModuleType;
 import prompto.error.PromptoError;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
+import prompto.store.IStore;
 
 public class Batch extends Module {
 
@@ -23,9 +26,10 @@ public class Batch extends Module {
 	}
 	
 	@Override
-	public void populate(Context context, IStorable storable) throws PromptoError {
-		super.populate(context, storable);
+	public IStorable populate(Context context, IStore<?> store, List<IStorable> storables) throws PromptoError {
+		IStorable storable = super.populate(context, store, storables);
 		storable.setData("entryPoint", entryPoint);
+		return storable;
 	}
 
 }

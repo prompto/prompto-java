@@ -1,7 +1,10 @@
 define getDataExplorerURL as method doing:
 	return "http://localhost:8081/index.html"
 
-define Module as storable category with attributes name, version, description and image
+define Dependency as storable category with attributes name and version
+define dependencies as storable Dependency[] attribute
+
+define Module as storable category with attributes name, version, description, image and dependencies
 
 define Thesaurus as storable Module
 define Library as storable Module
@@ -39,26 +42,31 @@ define EditedDeclaration as category with attributes editStatus and declaration
 
 define getRecentModules as method receiving Integer count doing:
 	user = getHttpUser
+	if user is nothing:
+		raise NULL_REFERENCE
 	sessions = fetch RecentSession 1 to count where user = user order by lastOpened desc
 	return session.module for each session in sessions
 
 define getAllModules as method doing:
 	return fetch all Module order by name
 
-define getModuleDeclarations as method receiving dbId doing:
+define getModuleDeclarations as method receiving dbId and Boolean register doing:
 	user = getHttpUser
+	if user is nothing:
+		raise NULL_REFERENCE
 	module = fetch one Module where dbId = dbId
 	if module is nothing:
 		raise NULL_REFERENCE
-	// use this opportunity to keep track of coding sessions
-	session = CodingSession with user as user, module as module and now as lastOpened 
-	store session
-	// use this opportunity to keep track of recent projects
-	recent = fetch one mutable RecentSession where user = user and module = module
-	if recent is nothing:
-		recent = RecentSession with user as user, module as module and now as lastOpened 
-	else:
-		recent.lastOpened = now 
+	if register:
+		// use this opportunity to keep track of coding sessions
+		session = CodingSession with user as user, module as module and now as lastOpened 
+		store session
+		// use this opportunity to keep track of recent projects
+		recent = fetch one mutable RecentSession where user = user and module = module
+		if recent is nothing:
+			recent = RecentSession with user as user, module as module and now as lastOpened 
+		else:
+			recent.lastOpened = now 
 	store recent
 	
 	return fetch all Declaration where module = module
@@ -71,7 +79,10 @@ define storeDeclarations as method receiving EditedDeclaration[] edited doing:
 
 define createModule as method receiving Text type, name, description = nothing, image = nothing, Boolean createEntryPoint, entryPoint = nothing doing:
 	decl = nothing as Declaration
-	module = Module with name as name, "1.0.0.0" as version, description as description and image as image
+	// at minimal, all modules depend on Thesaurus
+	libs = fetch all Library where name = "Thesaurus"
+	dependencies = (Dependency from lib) for each lib in libs
+	module = Module with name as name, "1.0.0.0" as version, description as description, image as image and dependencies as dependencies
 	switch on type:
 		when "library":
 			module = Library from module

@@ -5,5 +5,6 @@
 	"description" : "A supper app!",
 	"entryPoint" : "printHelloSoup",
 	"imageResource" : "SoupApp.png",
-	"codeResource" : "SoupApp.pec"
+	"codeResource" : "SoupApp.pec",
+	"dependencies" : [ { "name" : "Thesaurus", "version" : "1.0.0" } ]
 }
