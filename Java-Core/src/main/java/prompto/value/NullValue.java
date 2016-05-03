@@ -25,6 +25,11 @@ public class NullValue extends BaseValue {
 	}
 	
 	@Override
+	public String toString() {
+		return "null";
+	}
+	
+	@Override
 	public Object getStorableData() {
 		return null; // YES! you read correctly
 	}

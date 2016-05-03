@@ -23,6 +23,11 @@ public class AssignInstanceStatement extends SimpleStatement {
 	}
 
 	@Override
+	public String toString() {
+		return instance.toString() + " = " + expression.toString();
+	}
+	
+	@Override
 	public void toDialect(CodeWriter writer) {
 		instance.toDialect(writer, expression);
 		writer.append(" = ");
