@@ -11,6 +11,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -28,6 +29,7 @@ import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.type.CategoryType;
 
+@SuppressWarnings("unused")
 public abstract class BaseWebTest {
 
 	protected static WebDriver webDriver;
@@ -58,6 +60,20 @@ public abstract class BaseWebTest {
 			webDriver.quit();
 			webDriver = null;
 		}
+	}
+	
+	protected void click(WebElement we, int waitMillis) throws InterruptedException {
+		// Actions actions = new Actions(webDriver);
+		// actions.moveToElement(we).perform();
+		we.click();
+		Thread.sleep(waitMillis);
+	}
+
+	protected void sendKeys(WebElement we, String keysToSend, int waitMillis) throws InterruptedException {
+		// Actions actions = new Actions(webDriver);
+		// actions.moveToElement(we).perform();
+		we.sendKeys(keysToSend);
+		Thread.sleep(waitMillis);
 	}
 	
 	protected WebElement waitElement(By by) {
