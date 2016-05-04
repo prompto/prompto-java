@@ -1,8 +1,10 @@
 package prompto.value;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -24,6 +26,7 @@ import prompto.intrinsic.Filterable;
 import prompto.intrinsic.IterableWithLength;
 import prompto.intrinsic.PromptoList;
 import prompto.runtime.Context;
+import prompto.store.IStorable;
 import prompto.type.ContainerType;
 import prompto.type.IType;
 import prompto.type.ListType;
@@ -33,6 +36,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 public class ListValue extends BaseValue implements IContainer<IValue>, ISliceable<IValue>, IFilterable  {
 
 	PromptoList<IValue> items;
+	List<Object> storables;
 	boolean mutable = false;
 	
 	public ListValue(IType itemType) {
@@ -63,7 +67,19 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 	
 	@Override
 	public Object getStorableData() {
-		return items;
+		if(storables==null) {
+			storables = new ArrayList<>();
+			for(IValue item : items)
+				storables.add(item.getStorableData());
+			return storables;
+		}
+		return storables;
+	}
+	
+	@Override
+	public void collectStorables(List<IStorable> storables) {
+		items.forEach((value)->
+			value.collectStorables(storables));
 	}
 	
 	@Override

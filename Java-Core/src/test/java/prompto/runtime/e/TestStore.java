@@ -20,6 +20,16 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedListRecords() throws Exception {
+		checkInterpretedOutput("store/listRecords.pec");
+	}
+
+	@Test
+	public void testCompiledListRecords() throws Exception {
+		checkCompiledOutput("store/listRecords.pec");
+	}
+
+	@Test
 	public void testInterpretedManyRecords() throws Exception {
 		checkInterpretedOutput("store/manyRecords.pec");
 	}

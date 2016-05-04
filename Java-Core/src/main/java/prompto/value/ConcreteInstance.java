@@ -74,15 +74,13 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	}
 
 	@Override
-	public void collectStorables(List<IStorable> list) throws PromptoError {
+	public void collectStorables(List<IStorable> list) {
 		if(storable==null)
 			throw new NotStorableError();
 		if(storable.isDirty())
 			list.add(storable);
-		for(IValue value : values.values()) {
-			if(value instanceof IInstance)
-				((IInstance)value).collectStorables(list);
-		}
+		values.values().forEach((value)->
+			value.collectStorables(list));
 	}
 	
 	public ConcreteCategoryDeclaration getDeclaration() {

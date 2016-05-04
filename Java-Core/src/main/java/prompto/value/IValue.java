@@ -1,11 +1,13 @@
 package prompto.value;
 
+import java.util.List;
 import java.util.Map;
 
 import prompto.error.NotStorableError;
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.store.IStorable;
 import prompto.type.IType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -32,6 +34,10 @@ public interface IValue {
 	 // the underlying primitive/intrinsic data
 	default Object getStorableData() throws NotStorableError {
 		throw new UnsupportedOperationException("getStorableData not supported by " + this.getClass().getSimpleName());
+	};
+	
+	default void collectStorables(List<IStorable> storables) throws NotStorableError {
+		throw new UnsupportedOperationException("collectStorables not supported by " + this.getClass().getSimpleName());
 	};
 	
 	void setType(IType type);

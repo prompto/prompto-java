@@ -1,5 +1,6 @@
 package prompto.value;
 
+import java.util.List;
 import java.util.Map;
 
 import prompto.compiler.CompilerUtils;
@@ -9,11 +10,13 @@ import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.ShortOperand;
 import prompto.compiler.StackState;
+import prompto.error.NotStorableError;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.store.IStorable;
 import prompto.type.IType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -59,6 +62,11 @@ public abstract class BaseValue implements IValue {
 	@Override
 	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, Map<String, byte[]> data) throws PromptoError {
 		throw new UnsupportedOperationException("toJson not supported by " + this.getClass().getSimpleName());
+	}
+	
+	@Override
+	public void collectStorables(List<IStorable> storables) throws NotStorableError {
+		// nothing to do
 	}
 
     static Opcode[] cmpOpcodes = createOpcodes();
