@@ -47,7 +47,7 @@ public class AssignInstanceStatement extends SimpleStatement {
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		instance.assign(context,expression);
+		instance.assign(context, expression);
 		return null;
 	}
 	

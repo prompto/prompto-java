@@ -93,14 +93,14 @@ public class FetchOneExpression extends Section implements IExpression {
 	public IValue interpret(Context context) throws PromptoError {
 		if(!(predicate instanceof IPredicateExpression))
 			throw new SyntaxError("Filtering expression must be a predicate !");
-		IStore<Object>store = IDataStore.getInstance();
+		IStore<Object> store = IDataStore.getInstance();
 		IStored stored = store.interpretFetchOne(context, type, (IPredicateExpression)predicate);
 		if(stored==null)
 			return NullValue.instance();
 		else {
 			@SuppressWarnings("unchecked")
 			PromptoList<String> categories = ((PromptoList<String>)stored.getData("category"));
-			String actualTypeName = categories.get(categories.size()-1);
+			String actualTypeName = categories.getLast();
 			CategoryType type = new CategoryType(new Identifier(actualTypeName));
 			type.setMutable(this.type.isMutable());
 			return type.newInstance(context, stored);
