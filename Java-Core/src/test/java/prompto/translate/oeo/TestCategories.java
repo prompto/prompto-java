@@ -26,5 +26,10 @@ public class TestCategories extends BaseOParserTest {
 		compareResourceOEO("categories/copyFromDescendantWithOverride.poc");
 	}
 
+	@Test
+	public void testCopyFromDocument() throws Exception {
+		compareResourceOEO("categories/copyFromDocument.poc");
+	}
+
 }
 

@@ -111,13 +111,13 @@ public class ListType extends ContainerType {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public IValue convertJavaValueToPromptoValue(Context context, Object value) {
+	public IValue convertJavaValueToIValue(Context context, Object value) {
 		if(value instanceof Collection) {
 			ListValue list = new ListValue(itemType);
 			((Collection<Object>)value).forEach((item)->
-				list.addItem(itemType.convertJavaValueToPromptoValue(context, item)));
+				list.addItem(itemType.convertJavaValueToIValue(context, item)));
 			return list;
 		} else
-			return super.convertJavaValueToPromptoValue(context, value);
+			return super.convertJavaValueToIValue(context, value);
 	}
 }

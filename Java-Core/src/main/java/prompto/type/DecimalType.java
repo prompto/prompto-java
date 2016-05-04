@@ -108,7 +108,7 @@ public class DecimalType extends NativeType implements INumberType {
 	}
 
 	@Override
-	public IValue convertJavaValueToPromptoValue(Context context, Object value) {
+	public IValue convertJavaValueToIValue(Context context, Object value) {
         if (value instanceof Number)
             return new Decimal(((Number)value).doubleValue());
         else

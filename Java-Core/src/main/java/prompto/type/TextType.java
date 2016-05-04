@@ -4,7 +4,12 @@ import java.lang.reflect.Type;
 import java.util.Comparator;
 import java.util.Map;
 
+import prompto.compiler.Flags;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoString;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.value.IValue;
@@ -105,11 +110,27 @@ public class TextType extends NativeType {
 	}
 
 	@Override
-	public IValue convertJavaValueToPromptoValue(Context context, Object value) {
+	public IValue convertIValueToIValue(Context context, IValue value) {
+       if (value instanceof Text)
+            return value;
+        else
+            return super.convertJavaValueToIValue(context, value);
+	}
+	
+	
+	@Override
+	public IValue convertJavaValueToIValue(Context context, Object value) {
         if (value instanceof String)
             return new Text((String)value);
         else
-            return super.convertJavaValueToPromptoValue(context, value);
+            return super.convertJavaValueToIValue(context, value);
+	}
+	
+	
+	@Override
+	public void compileConvertObjectToExact(Context context, MethodInfo method, Flags flags) {
+		MethodConstant m = new MethodConstant(PromptoString.class, "convertObjectToExact", Object.class, String.class);
+		method.addInstruction(Opcode.INVOKESTATIC, m);
 	}
 	
 	@Override

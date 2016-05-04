@@ -172,7 +172,7 @@ public class JavaClassType extends BaseType {
 
 	private static IValue convertNative(Context context, Object value, Type type) {
         IType itype = Utils.typeToIType(type);
-        return itype != null ? itype.convertJavaValueToPromptoValue(context, value) : null;
+        return itype != null ? itype.convertJavaValueToIValue(context, value) : null;
 	}
 
 

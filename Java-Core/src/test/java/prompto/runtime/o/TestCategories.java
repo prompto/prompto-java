@@ -59,5 +59,15 @@ public class TestCategories extends BaseOParserTest {
 		checkCompiledOutput("categories/copyFromDescendantWithOverride.poc");
 	}
 
+	@Test
+	public void testInterpretedCopyFromDocument() throws Exception {
+		checkInterpretedOutput("categories/copyFromDocument.poc");
+	}
+
+	@Test
+	public void testCompiledCopyFromDocument() throws Exception {
+		checkCompiledOutput("categories/copyFromDocument.poc");
+	}
+
 }
 

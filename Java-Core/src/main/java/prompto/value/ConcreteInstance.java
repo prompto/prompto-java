@@ -127,7 +127,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 			context = context.newInstanceContext(this).newChildContext(); // mimic method call
 			return getter.interpret(context);
 		} else
-			return values.get(attrName);
+			return values.getOrDefault(attrName, NullValue.instance());
 	}
 	
 	// don't call setters from setters, so register them

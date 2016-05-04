@@ -397,14 +397,14 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public IValue convertJavaValueToPromptoValue(Context context, Object value) {
+	public IValue convertJavaValueToIValue(Context context, Object value) {
 		try {
 			IDeclaration decl = getDeclaration(context);
 			if(decl instanceof CategoryDeclaration)
 				return convertJavaValueToPromptoValue(context, (CategoryDeclaration)decl, value);
 		} catch(Exception e) {
 		}
-		return super.convertJavaValueToPromptoValue(context, value);
+		return super.convertJavaValueToIValue(context, value);
 	}
 
 	private IValue convertJavaValueToPromptoValue(Context context, CategoryDeclaration decl, Object value) throws PromptoError {
@@ -413,7 +413,7 @@ public class CategoryType extends BaseType {
 		if(value instanceof IStored)
 			return decl.newInstance(context, (IStored)value);
 		else
-			return super.convertJavaValueToPromptoValue(context, value);
+			return super.convertJavaValueToIValue(context, value);
 	}
 	
 	@Override

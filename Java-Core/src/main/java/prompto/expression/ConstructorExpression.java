@@ -11,6 +11,7 @@ import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
+import prompto.compiler.StringConstant;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.NativeCategoryDeclaration;
@@ -21,10 +22,13 @@ import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.IMutable;
+import prompto.intrinsic.PromptoDocument;
 import prompto.runtime.Context;
 import prompto.type.CategoryType;
+import prompto.type.DocumentType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
+import prompto.value.Document;
 import prompto.value.IInstance;
 import prompto.value.IValue;
 
@@ -114,7 +118,7 @@ public class ConstructorExpression implements IExpression {
 		cd.checkConstructorContext(context);
 		if(copyFrom!=null) {
 			IType cft = copyFrom.check(context);
-			if(!(cft instanceof CategoryType))
+			if(!(cft instanceof CategoryType) && (cft!=DocumentType.instance()))
 				throw new SyntaxError("Cannot copy from " + cft.getTypeName());
 		}
 		if(assignments!=null) {
@@ -134,11 +138,11 @@ public class ConstructorExpression implements IExpression {
 		IInstance instance = type.newInstance(context);
 		instance.setMutable(true);
 		try {
+			CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
 			if(copyFrom!=null) {
 				Object copyObj = copyFrom.interpret(context);
 				if(copyObj instanceof IInstance) {
 					IInstance copyFrom = (IInstance)copyObj;
-					CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
 					for(Identifier name : copyFrom.getMemberNames()) {
 						if(cd.hasAttribute(context, name)) {
 							IValue value = copyFrom.getMember(context, name, false);
@@ -147,14 +151,30 @@ public class ConstructorExpression implements IExpression {
 							instance.setMember(context, name, value);
 						}
 					}
+				} else if (copyObj instanceof Document) {
+					Document copyFrom = (Document)copyObj;
+					for(Identifier name : copyFrom.getMemberNames()) {
+						if(cd.hasAttribute(context, name)) {
+							IValue value = copyFrom.getMember(context, name, false);
+							if(value!=null && value.isMutable() && !type.isMutable())
+								throw new NotMutableError();
+							AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, name);
+							value = decl.getType(context).convertIValueToIValue(context, value);
+							instance.setMember(context, name, value);
+						}
+					}
 				}
 			}
 			if(assignments!=null) {
 				for(ArgumentAssignment assignment : assignments) {
-					IValue value = assignment.getExpression().interpret(context);
-					if(value!=null && value.isMutable() && !type.isMutable())
-						throw new NotMutableError();
-					instance.setMember(context, assignment.getArgumentId(), value);
+					Identifier argId = assignment.getArgumentId();
+					if(cd.hasAttribute(context, argId)) {
+						IValue value = assignment.getExpression().interpret(context);
+						if(value!=null && value.isMutable() && !type.isMutable())
+							throw new NotMutableError();
+						instance.setMember(context, argId, value);
+					} else 
+						context.getProblemListener().reportIllegalMember(argId.toString(), argId);
 				}
 			}
 		} finally {
@@ -214,20 +234,61 @@ public class ConstructorExpression implements IExpression {
 			return;
 		CategoryDeclaration thisCd = context.getRegisteredDeclaration(CategoryDeclaration.class, this.type.getTypeNameId());
 		IType otherType = copyFrom.check(context);
-		CategoryDeclaration otherCd = context.getRegisteredDeclaration(CategoryDeclaration.class, otherType.getTypeNameId());
-		compileCopyFrom(context, method, flags, thisCd, otherCd, thisInfo);
+		if(otherType==DocumentType.instance())
+			compileCopyFromDocument(context, method, flags, thisCd, thisInfo);
+		else {
+			CategoryDeclaration otherCd = context.getRegisteredDeclaration(CategoryDeclaration.class, otherType.getTypeNameId());
+			compileCopyFromInstance(context, method, flags, thisCd, otherCd, thisInfo);
+		}
 	}
 
-	private void compileCopyFrom(Context context, MethodInfo method, Flags flags, 
+	private void compileCopyFromDocument(Context context, MethodInfo method, Flags flags, 
+			CategoryDeclaration thisCd, ResultInfo thisInfo) {
+		ResultInfo copyFromInfo = copyFrom.compile(context, method, flags.withPrimitive(false));
+		Set<Identifier> attrIds = thisCd.getAllAttributes(context);
+		for(Identifier attrId : attrIds)
+			compileCopyAttributeFromDocument(context, method, flags, thisCd, attrId, thisInfo, copyFromInfo);
+		method.addInstruction(Opcode.POP);
+	}
+
+	
+	private void compileCopyAttributeFromDocument(Context context, MethodInfo method, Flags flags, 
+			CategoryDeclaration thisCd, Identifier attrId, ResultInfo thisInfo, ResultInfo copyFromInfo) {
+		if(willBeAssigned(attrId))
+			return;
+		// keep a copy of copyFrom on top of the stack
+		method.addInstruction(Opcode.DUP); // -> new, copyFrom, copyFrom
+		// call get on copyFrom document
+		method.addInstruction(Opcode.LDC, new StringConstant(attrId.toString()));
+		MethodConstant m = new MethodConstant(PromptoDocument.class, "get", Object.class, Object.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+		// convert to target type
+		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, attrId);
+		FieldInfo field = decl.toFieldInfo(context);
+		decl.getType(context).compileConvertObjectToExact(context, method, flags);
+		// keep the new instance at top of the stack (currently new, copyFrom, value)
+		method.addInstruction(Opcode.DUP_X2); // -> value, new, copyFrom, value
+		method.addInstruction(Opcode.POP); // -> value, new, copyFrom
+		method.addInstruction(Opcode.DUP_X2); // -> copyFrom, value, new, copyFrom
+		method.addInstruction(Opcode.POP); // -> copyFrom, value, new
+		method.addInstruction(Opcode.DUP_X2); // -> new, copyFrom, value, new
+		method.addInstruction(Opcode.SWAP); // -> new, copyFrom, new, value
+		// call setter on new instance (a class)
+		m = new MethodConstant(thisInfo.getType(), 
+				CompilerUtils.setterName(attrId.toString()), field.getType(), void.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+	}
+	
+	private void compileCopyFromInstance(Context context, MethodInfo method, Flags flags, 
 			CategoryDeclaration thisCd, CategoryDeclaration otherCd, ResultInfo thisInfo) {
 		ResultInfo copyFromInfo = copyFrom.compile(context, method, flags.withPrimitive(false));
 		Set<Identifier> attrIds = thisCd.getAllAttributes(context);
 		for(Identifier attrId : attrIds)
-			compileCopyFrom(context, method, flags, thisCd, otherCd, attrId, thisInfo, copyFromInfo);
+			compileCopyAttributeFromInstance(context, method, flags, thisCd, otherCd, attrId, thisInfo, copyFromInfo);
 		method.addInstruction(Opcode.POP);
 	}
 
-	private void compileCopyFrom(Context context, MethodInfo method, Flags flags, 
+	private void compileCopyAttributeFromInstance(Context context, MethodInfo method, Flags flags, 
 			CategoryDeclaration thisCd, CategoryDeclaration otherCd, Identifier attrId, ResultInfo thisInfo, ResultInfo copyFromInfo) {
 		if(willBeAssigned(attrId) || !otherCd.hasAttribute(context, attrId))
 			return;

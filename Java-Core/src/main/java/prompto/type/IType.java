@@ -59,9 +59,11 @@ public interface IType {
 	}
 		
 	Family getFamily();
+	
 	default String getTypeName() {
 		return Utils.capitalizeFirst(getFamily().name());
 	}
+	
 	default Identifier getTypeNameId() {
 		return new Identifier(getTypeName());
 	}
@@ -96,10 +98,22 @@ public interface IType {
 	String toString(Object value);
 	void toDialect(CodeWriter writer);
 	IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts);
-	IValue convertJavaValueToPromptoValue(Context context, Object value);
+	
+	default IValue convertIValueToIValue(Context context, IValue value) {
+		throw new UnsupportedOperationException("Cannot convertIValueToPromptoValue for " + this.getClass());
+	}
+
+	default IValue convertJavaValueToIValue(Context context, Object value) {
+		throw new UnsupportedOperationException("Cannot convertJavaValueToPromptoValue for " + this.getClass());
+	}
+	
 	default ResultInfo compileGetMember(Context context, MethodInfo method,
 			Flags flags, IExpression parent, Identifier id) {
 		throw new UnsupportedOperationException("Cannot compileGetMember for " + this.getClass());
+	}
+
+	default void compileConvertObjectToExact(Context context, MethodInfo method, Flags flags) {
+		throw new UnsupportedOperationException("Cannot compileConvertObjectToExact for " + this.getClass());
 	}
 }
  

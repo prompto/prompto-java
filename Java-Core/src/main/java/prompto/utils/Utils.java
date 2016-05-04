@@ -142,7 +142,7 @@ public class Utils {
 		if(data==null)
 			return null;
 		IType type = fieldType(context, name, data);
-		return type.convertJavaValueToPromptoValue(context, data);
+		return type.convertJavaValueToIValue(context, data);
 	}
 
 	private static IType fieldType(Context context, String name, Object data) {

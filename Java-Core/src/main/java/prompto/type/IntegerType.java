@@ -4,14 +4,21 @@ import java.lang.reflect.Type;
 import java.util.Comparator;
 import java.util.Map;
 
+import prompto.compiler.Flags;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoLong;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
+import prompto.value.Decimal;
 import prompto.value.IValue;
 import prompto.value.Integer;
 import prompto.value.IntegerRange;
 import prompto.value.RangeBase;
+import prompto.value.Text;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -150,12 +157,31 @@ public class IntegerType extends NativeType implements INumberType {
 	}
 
 	@Override
-	public IValue convertJavaValueToPromptoValue(Context context, Object value) {
+	public IValue convertIValueToIValue(Context context, IValue value) {
+		if (value instanceof Integer)
+			return value;
+		else if(value instanceof Decimal)
+			return new Integer(((Decimal)value).longValue());
+		else if (value instanceof Text)
+            return Integer.Parse(value.toString());
+        else
+            return super.convertJavaValueToIValue(context, value);
+	}
+	
+	@Override
+	public IValue convertJavaValueToIValue(Context context, Object value) {
         if (value instanceof Number)
             return new Integer(((Number)value).longValue());
         else
             return (IValue)value; // TODO for now
 	}
+
+	@Override
+	public void compileConvertObjectToExact(Context context, MethodInfo method, Flags flags) {
+		MethodConstant m = new MethodConstant(PromptoLong.class, "convertObjectToExact", Object.class, Long.class);
+		method.addInstruction(Opcode.INVOKESTATIC, m);
+	}
+	
 
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {

@@ -69,5 +69,15 @@ public class TestCategories extends BaseEParserTest {
 		checkCompiledOutput("categories/copyFromDescendantWithOverride.pec");
 	}
 
+	@Test
+	public void testInterpretedCopyFromDocument() throws Exception {
+		checkInterpretedOutput("categories/copyFromDocument.pec");
+	}
+
+	@Test
+	public void testCompiledCopyFromDocument() throws Exception {
+		checkCompiledOutput("categories/copyFromDocument.pec");
+	}
+
 }
 

@@ -31,5 +31,10 @@ public class TestCategories extends BaseEParserTest {
 		compareResourceESE("categories/copyFromDescendantWithOverride.pec");
 	}
 
+	@Test
+	public void testCopyFromDocument() throws Exception {
+		compareResourceESE("categories/copyFromDocument.pec");
+	}
+
 }
 

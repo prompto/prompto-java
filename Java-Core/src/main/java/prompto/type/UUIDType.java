@@ -32,7 +32,7 @@ public class UUIDType extends NativeType {
 	}
 	
 	@Override
-	public IValue convertJavaValueToPromptoValue(Context context, Object value) {
+	public IValue convertJavaValueToIValue(Context context, Object value) {
 		return new prompto.value.UUID((UUID)value);
 	}
 }

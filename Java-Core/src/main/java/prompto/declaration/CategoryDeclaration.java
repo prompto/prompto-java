@@ -144,7 +144,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		if(!decl.isStorable())
 			return;
 		Object data = stored.getData(name.toString());
-		IValue value = data==null ? null : decl.getType().convertJavaValueToPromptoValue(context, data);
+		IValue value = data==null ? null : decl.getType().convertJavaValueToIValue(context, data);
 		if(value!=null)
 			instance.setMember(context, name, value);
 	}

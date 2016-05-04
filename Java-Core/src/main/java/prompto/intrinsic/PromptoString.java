@@ -70,5 +70,13 @@ public abstract class PromptoString {
 		}
 		return false;
 	}
+	
+	public static String convertObjectToExact(Object o) {
+		if(o==null)
+			return null;
+		else
+			return o.toString();
+	}
+
 
 }

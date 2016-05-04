@@ -3,6 +3,7 @@ package prompto.value;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import prompto.error.InvalidValueError;
 import prompto.error.PromptoError;
@@ -37,6 +38,11 @@ public class Document extends BaseValue {
     public IValue getMember(Context context, Identifier name, boolean autoCreate) {
     	return getMember(name, autoCreate);
  	}
+    
+    
+    public Set<Identifier> getMemberNames() {
+    	return values.keySet();
+    }
 
     public IValue getMember(Identifier name, boolean autoCreate) {
         IValue result = values.get(name);
