@@ -64,16 +64,16 @@ public class StoreStatement extends SimpleStatement {
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		PromptoStoreQuery store = new PromptoStoreQuery();
+		PromptoStoreQuery query = new PromptoStoreQuery();
 		if(deletables!=null) for(IExpression exp : deletables) {
 			IValue value = exp.interpret(context);
-			store.delete(context, value);
+			query.delete(context, value);
 		}
 		if(storables!=null) for(IExpression exp : storables) {
 			IValue value = exp.interpret(context);
-			store.store(context, value);
+			query.store(context, value);
 		}
-		store.execute();
+		query.execute();
 		return null;
 	}
 

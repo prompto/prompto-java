@@ -11,12 +11,9 @@ import prompto.store.IDataStore;
 import prompto.store.IStorable;
 import prompto.store.IStore;
 import prompto.value.IInstance;
+import prompto.value.IIterable;
 import prompto.value.IValue;
-import prompto.value.IterableValue;
-import prompto.value.ListValue;
 import prompto.value.NullValue;
-import prompto.value.SetValue;
-import prompto.value.TupleValue;
 
 public class PromptoStoreQuery {
 
@@ -38,8 +35,9 @@ public class PromptoStoreQuery {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public void delete(Context context, IValue value) {
-		if(value instanceof NullValue)
+		if(value==NullValue.instance())
 			return;
 		else if(value instanceof IInstance) try {
 			IValue dbId = ((IInstance)value).getMember(context, new Identifier(IStore.dbIdName), false);
@@ -47,43 +45,32 @@ public class PromptoStoreQuery {
 				deletables.add(dbId.getStorableData());
 		} catch(PromptoError e) {
 			throw new RuntimeException(e); // TODO for now
-		} else if(value instanceof ListValue)
-			((ListValue)value).getItems().forEach((item)->
+		} else if(value instanceof IIterable)
+			((IIterable<IValue>)value).getIterable(context).forEach((item)->
 				delete(context, item));
-		else if(value instanceof SetValue)
-			((SetValue)value).getItems().forEach((item)->
-				delete(context, item));
-		else if(value instanceof TupleValue)
-			((TupleValue)value).getItems().forEach((item)->
-				delete(context, item));
-		else if(value instanceof IterableValue) {
-			Iterator<IValue> iter = ((IterableValue)value).iterator();
+		else if(value instanceof Iterator) {
+			Iterator<IValue> iter = (Iterator<IValue>)value;
 			while(iter.hasNext())
 				delete(context, iter.next());
 		} else
 			throw new UnsupportedOperationException("Can't delete " + value.getClass());
 	}
 
+	@SuppressWarnings("unchecked")
 	public void store(Context context, IValue value) {
-		if(value instanceof NullValue)
+		if(value==NullValue.instance())
 			return;
 		else if(value instanceof IInstance) try {
 			((IInstance)value).collectStorables(storables);
 		} catch(PromptoError e) {
 			throw new RuntimeException(e);
-		} else if(value instanceof ListValue)
-			((ListValue)value).getItems().forEach((item)->
+		} else if(value instanceof IIterable) {
+			((IIterable<IValue>)value).getIterable(context).forEach((item)->
 				store(context, item));
-		else if(value instanceof SetValue)
-			((SetValue)value).getItems().forEach((item)->
-				store(context, item));
-		else if(value instanceof TupleValue)
-			((TupleValue)value).getItems().forEach((item)->
-				store(context, item));
-		else if(value instanceof IterableValue) {
-			Iterator<IValue> iter = ((IterableValue)value).iterator();
+		} else if(value instanceof Iterator) {
+			Iterator<IValue> iter = (Iterator<IValue>)value;
 			while(iter.hasNext())
-				store(context, iter.next());
+				store(iter.next());
 		} else
 			throw new UnsupportedOperationException("Can't store " + value.getClass());
 	}
@@ -93,16 +80,10 @@ public class PromptoStoreQuery {
 			return;
 		else if(value instanceof PromptoRoot)
 			((PromptoRoot)value).collectStorables(storables);
-		else if(value instanceof PromptoList)
-			((PromptoList<?>)value).forEach((item)->
+		else if(value instanceof Iterable) {
+			((Iterable<?>)value).forEach((item)->
 				store(item));
-		else if(value instanceof PromptoSet)
-			((PromptoSet<?>)value).forEach((item)->
-				store(item));
-		else if(value instanceof PromptoTuple)
-			((PromptoTuple<?>)value).forEach((item)->
-				store(item));
-		else if(value instanceof Iterator) {
+		} else if(value instanceof Iterator) {
 			Iterator<?> iter = (Iterator<?>)value;
 			while(iter.hasNext())
 				store(iter.next());
