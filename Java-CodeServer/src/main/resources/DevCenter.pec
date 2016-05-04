@@ -104,9 +104,9 @@ define storeDeclarations as method receiving EditedDeclaration[] edited doing:
 define createModule as method receiving Text type, name, description = nothing, image = nothing, Boolean createEntryPoint, entryPoint = nothing doing:
 	decl = nothing as Declaration
 	// at minimal, all modules depend on Thesaurus
-	libs = fetch all Library where name = "Thesaurus"
-	dependencies = (Dependency from lib) for each lib in libs
-	module = Module with name as name, "1.0.0.0" as version, description as description, image as image and dependencies as dependencies
+	lib = fetch one Library where name = "Thesaurus"
+	deps = [Dependency from lib]
+	module = Module with name as name, "1.0.0.0" as version, description as description, image as image and deps as dependencies
 	switch on type:
 		when "library":
 			module = Library from module
