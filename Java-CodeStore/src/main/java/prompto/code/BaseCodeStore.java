@@ -1,10 +1,8 @@
 package prompto.code;
 
 import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
 
-import prompto.code.ICodeStore;
-import prompto.code.Version;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
@@ -31,9 +29,9 @@ public abstract class BaseCodeStore implements ICodeStore {
 	}
 	
 	@Override
-	public void collectStorableAttributes(List<AttributeDeclaration> list) throws PromptoError {
+	public void collectStorableAttributes(Map<String, AttributeDeclaration> columns) throws PromptoError {
 		if(next!=null)
-			next.collectStorableAttributes(list);
+			next.collectStorableAttributes(columns);
 		
 	}
 

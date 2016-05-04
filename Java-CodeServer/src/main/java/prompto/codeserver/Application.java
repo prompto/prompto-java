@@ -5,8 +5,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import prompto.code.UpdatableCodeStore;
 import prompto.code.ICodeStore;
+import prompto.code.UpdatableCodeStore;
 import prompto.server.AppServer;
 import prompto.store.IDataStore;
 import prompto.store.IStore;

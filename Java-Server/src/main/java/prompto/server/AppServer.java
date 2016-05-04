@@ -1,8 +1,8 @@
 package prompto.server;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.server.Connector;
@@ -17,17 +17,23 @@ import org.eclipse.jetty.webapp.Configuration;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.eclipse.jetty.webapp.WebXmlConfiguration;
 
-import prompto.code.UpdatableCodeStore;
 import prompto.code.ICodeStore;
+import prompto.code.UpdatableCodeStore;
 import prompto.code.Version;
 import prompto.declaration.AttributeDeclaration;
 import prompto.error.PromptoError;
+import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.IDataStore;
+import prompto.store.IStore;
 import prompto.store.IStoreFactory;
 import prompto.store.IStoreFactory.Type;
 import prompto.store.MemStoreFactory;
-import prompto.store.IStore;
+import prompto.type.IType;
+import prompto.type.ListType;
+import prompto.type.TextType;
+import prompto.utils.IdentifierList;
+import prompto.utils.Utils;
 
 public class AppServer {
 	
@@ -52,7 +58,7 @@ public class AppServer {
 		String application = null;
 		String codeStoreFactory = MemStoreFactory.class.getName();
 		String dataStoreFactory = MemStoreFactory.class.getName();
-		Version version = ICodeStore.LATEST;
+		Version version = ICodeStore.LATEST_VERSION;
 		Type codeStoreType = Type.CODE;
 		Type dataStoreType = Type.DATA;
 		
@@ -120,7 +126,7 @@ public class AppServer {
 			System.out.println("Missing argument: -http_port");
 		if(application==null)
 			System.out.println("Missing argument: -application");
-		if(version.equals(ICodeStore.LATEST))
+		if(version.equals(ICodeStore.LATEST_VERSION))
 			System.out.println("Additional argument: -version (optional)");
 	}
 
@@ -135,12 +141,22 @@ public class AppServer {
 
 	private static void synchronizeSchema(ICodeStore codeStore, IStore<?> dataStore) throws PromptoError {
 		System.out.println("Initializing schema...");
-		List<AttributeDeclaration> columns = new ArrayList<>();
+		Map<String, AttributeDeclaration> columns = getMinimalDataColumns(dataStore);
 		codeStore.collectStorableAttributes(columns);
-		dataStore.createOrUpdateColumns(columns);
+		dataStore.createOrUpdateColumns(columns.values());
 		System.out.println("Schema successfully initialized.");
 	}
 
+
+	private static Map<String, AttributeDeclaration> getMinimalDataColumns(IStore<?> dataStore) {
+		Map<String, AttributeDeclaration> columns = new HashMap<String, AttributeDeclaration>();
+		// attributes with reserved names, the below declarations will be used
+		IType dbIdIType = Utils.typeToIType(dataStore.getDbIdClass());
+		columns.put(IStore.dbIdName, new AttributeDeclaration(new Identifier(IStore.dbIdName), dbIdIType));
+		columns.put("category", new AttributeDeclaration(new Identifier("category"), 
+				new ListType(TextType.instance()), new IdentifierList(new Identifier("key"))));
+		return columns;
+	}
 
 	static int startServer(Integer httpPort, Handler handler) throws Throwable {
 		System.out.println("Starting web server on port " + httpPort + "...");

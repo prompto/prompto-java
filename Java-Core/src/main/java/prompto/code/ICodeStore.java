@@ -3,7 +3,7 @@ package prompto.code;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
 
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.DeclarationList;
@@ -64,7 +64,7 @@ public interface ICodeStore {
 		return Dialect.valueOf(s.toUpperCase());
 	}
 
-	static final Version LATEST = Version.parse("-1.-1.-1");
+	static final Version LATEST_VERSION = Version.parse("-1.-1.-1");
 	
 	static public enum ModuleType {
 		THESAURUS(Thesaurus.class), // storable attributes and categories
@@ -100,7 +100,7 @@ public interface ICodeStore {
 	void storeDeclarations(Iterator<IDeclaration> declarations, Dialect dialect, Version version, Object projectId) throws PromptoError;
 
 	default Iterator<IDeclaration> fetchLatestVersions(String name) throws PromptoError {
-		return fetchSpecificVersions(name, ICodeStore.LATEST);
+		return fetchSpecificVersions(name, ICodeStore.LATEST_VERSION);
 	}
 	
 	Iterator<IDeclaration> fetchSpecificVersions(String name, Version version) throws PromptoError;
@@ -128,5 +128,5 @@ public interface ICodeStore {
 	<T extends Module> T fetchModule(ModuleType type, String name, Version version) throws PromptoError;
 	void storeModule(Module module) throws PromptoError;
 
-	void collectStorableAttributes(List<AttributeDeclaration> list) throws PromptoError;
+	void collectStorableAttributes(Map<String, AttributeDeclaration> columns) throws PromptoError;
 }

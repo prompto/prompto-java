@@ -1,6 +1,7 @@
 package prompto.code;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,6 +15,7 @@ import prompto.declaration.DeclarationList;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
+import prompto.error.ReadWriteError;
 import prompto.expression.AndExpression;
 import prompto.expression.EqualsExpression;
 import prompto.expression.IExpression;
@@ -36,6 +38,7 @@ import prompto.store.IStoredIterable;
 import prompto.type.CategoryType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
+import prompto.utils.ResourceUtils;
 import prompto.utils.Utils;
 
 
@@ -60,9 +63,14 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	
 	private ICodeStore bootstrapRuntime() {
 		System.out.println("Connecting to prompto runtime libraries...");
-		ICodeStore runtime = new ResourceCodeStore(null, ModuleType.LIBRARY, "Core.pec", "1.0.0");
-		runtime = new ResourceCodeStore(runtime, ModuleType.LIBRARY, "Console.pec", "1.0.0");
-		return new ResourceCodeStore(runtime, ModuleType.LIBRARY, "Internet.pec", "1.0.0");
+		try {
+			ICodeStore runtime = null;
+			for(String name : ResourceUtils.listResourcesAt("libraries"))
+				runtime = new ResourceCodeStore(runtime, ModuleType.LIBRARY, "libraries/" + name, "1.0.0");
+			return runtime;
+		} catch(IOException e) {
+			throw new ReadWriteError(e.getMessage());
+		}
 	}
 
 	public IStore<?> getStore() {
@@ -156,6 +164,13 @@ public class UpdatableCodeStore extends BaseCodeStore {
 		registering.get().remove(name);
 	}
 	
+	
+	@Override
+	public Iterator<IDeclaration> fetchLatestVersions(String name) throws PromptoError {
+		return fetchSpecificVersions(name, LATEST_VERSION);
+	}
+	
+	
 	@Override
 	public Iterator<IDeclaration> fetchSpecificVersions(String name, Version version) throws PromptoError {
 		Iterator<IDeclaration> decls = fetchDeclarationsInStore(name, version);
@@ -170,7 +185,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 						decls = super.fetchLatestVersions(name);
 						if(decls!=null) {
 							storeRegisteringDeclarations(name, decls);
-							storeDeclarations(decls);
+							decls = storeDeclarations(decls);
 							deleteRegisteringDeclarations(name);
 						}
 					}
@@ -180,10 +195,11 @@ public class UpdatableCodeStore extends BaseCodeStore {
 		return decls;
 	}
 
-	private void storeDeclarations(Iterator<IDeclaration> decls) throws PromptoError {
+	private Iterator<IDeclaration> storeDeclarations(Iterator<IDeclaration> decls) throws PromptoError {
+		List<IDeclaration> result = new ArrayList<>();
 		final IDeclaration decl = decls.next();
 		if(decl==null)
-			return;
+			return null;
 		ICodeStore origin = decl.getOrigin();
 		if(origin==null)
 			throw new InternalError("Cannot store declaration with no origin!");
@@ -201,6 +217,13 @@ public class UpdatableCodeStore extends BaseCodeStore {
 
 			@Override
 			public IDeclaration next() {
+				IDeclaration res = getNext();
+				if(res!=null)
+					result.add(res);
+				return res;
+			}
+			
+			protected IDeclaration getNext() {
 				if(first!=null) {
 					IDeclaration res = first;
 					first = null;
@@ -208,10 +231,11 @@ public class UpdatableCodeStore extends BaseCodeStore {
 				} else
 					return decls.next();
 			}
-			
 		};
 		storeDeclarations(iter, origin.getModuleDialect(), origin.getModuleVersion(), moduleId);
+		return result.isEmpty() ? null : result.iterator();
 	}
+
 
 	@Override
 	public void storeDeclarations(Iterator<IDeclaration> declarations, Dialect dialect, Version version, Object moduleId) throws PromptoError {
@@ -254,11 +278,14 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	private Iterator<IDeclaration> fetchDeclarationsInStore(String name, Version version) {
 		try {
 			IStoredIterable iterable = fetchManyInStore(name, null, version);
-			Iterator<IStored> stored = iterable.iterator();
-			return new Iterator<IDeclaration>() {
-				@Override public boolean hasNext() { return stored.hasNext(); }
-				@Override public IDeclaration next() { return parseDeclaration(stored.next()); }
-			};
+			Iterator<IStored> iterator = iterable.iterator();
+			if(iterator.hasNext())
+				return new Iterator<IDeclaration>() {
+					@Override public boolean hasNext() { return iterator.hasNext(); }
+					@Override public IDeclaration next() { return parseDeclaration(iterator.next()); }
+				};
+			else
+				return null;
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -267,7 +294,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	private IStoredIterable fetchManyInStore(String name, CategoryType type, Version version) throws PromptoError {
 		IntegerLiteral one = new IntegerLiteral(1);
 		IPredicateExpression filter = buildNameAndVersionFilter(name, version);
-		if(LATEST.equals(version)) {
+		if(LATEST_VERSION.equals(version)) {
 			IdentifierList names = new IdentifierList(new Identifier("version"));
 			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
 			return store.interpretFetchMany(context, type, one, one, filter, orderBy);
@@ -277,7 +304,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 
 	private IStored fetchOneInStore(String name, CategoryType type, Version version) throws PromptoError {
 		IPredicateExpression filter = buildNameAndVersionFilter(name, version);
-		if(LATEST.equals(version)) {
+		if(LATEST_VERSION.equals(version)) {
 			IdentifierList names = new IdentifierList(new Identifier("version"));
 			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
 			IntegerLiteral one = new IntegerLiteral(1);
@@ -292,7 +319,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 		IExpression left = new UnresolvedIdentifier(new Identifier("name"));
 		IExpression right = new TextLiteral("'" + name + "'");
 		IPredicateExpression filter = new EqualsExpression(left, EqOp.EQUALS, right);
-		if(!LATEST.equals(version)) {
+		if(!LATEST_VERSION.equals(version)) {
 			left = new UnresolvedIdentifier(new Identifier("version"));
 			right = new TextLiteral('"' + version.toString() + '"');
 			IExpression condition = new EqualsExpression(left, EqOp.EQUALS, right);
@@ -317,8 +344,8 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	}
 
 	@Override
-	public void collectStorableAttributes(List<AttributeDeclaration> list) throws PromptoError {
-		super.collectStorableAttributes(list);
+	public void collectStorableAttributes(Map<String, AttributeDeclaration> map) throws PromptoError {
+		super.collectStorableAttributes(map);
 		IExpression left = new UnresolvedIdentifier(new Identifier("storable"));
 		IExpression right = new BooleanLiteral("true");
 		IPredicateExpression filter = new EqualsExpression(left, EqOp.EQUALS, right);
@@ -327,7 +354,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 		Iterator<IStored> stored = iterable.iterator();
 		while(stored.hasNext()) {
 			AttributeDeclaration attr = parseDeclaration(stored.next());
-			list.add(attr);		
+			map.put(attr.getName(), attr);		
 		}
 	}
 }

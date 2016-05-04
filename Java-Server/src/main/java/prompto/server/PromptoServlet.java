@@ -39,7 +39,8 @@ public class PromptoServlet extends HttpServlet {
 			resp.getOutputStream().close();
 			resp.flushBuffer();
 			resp.setContentType(contentType);
-			resp.setStatus(200);
+			resp.setStatus(HttpServletResponse.SC_OK);
+			// resp.addHeader("Access-Control-Allow-Origin", true);
 		} catch(Throwable t) {
 			t.printStackTrace();
 			resp.setStatus(500);
@@ -90,8 +91,8 @@ public class PromptoServlet extends HttpServlet {
 	}
 
 	private Identifier readMethod(HttpServletRequest req) {
-		String path = req.getPathInfo();
-		return new Identifier(path.substring(1));
+		String[] parts = req.getPathInfo().split("/");
+		return new Identifier(parts[parts.length-1]);
 	}
 
 	private void doPostUrlEncoded(HttpServletRequest req, HttpServletResponse resp) {

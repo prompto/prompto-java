@@ -138,13 +138,13 @@ public class ResourceCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public void collectStorableAttributes(List<AttributeDeclaration> list) throws PromptoError {
-		super.collectStorableAttributes(list);
+	public void collectStorableAttributes(Map<String, AttributeDeclaration> columns) throws PromptoError {
+		super.collectStorableAttributes(columns);
 		loadResource();
 		declarations.values().forEach( (decls) -> {
 			decls.stream().filter( (decl) -> decl instanceof AttributeDeclaration)
 			.filter( (decl) -> ((AttributeDeclaration)decl).isStorable())
-			.forEach( (decl) -> list.add((AttributeDeclaration)decl));
+			.forEach( (decl) -> columns.put(decl.getName(), (AttributeDeclaration)decl));
 		});
 	}
 }

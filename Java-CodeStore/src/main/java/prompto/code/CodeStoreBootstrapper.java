@@ -1,13 +1,12 @@
 package prompto.code;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import prompto.code.ICodeStore.ModuleType;
 import prompto.declaration.AttributeDeclaration;
@@ -44,10 +43,10 @@ public class CodeStoreBootstrapper {
 	}
 
 	private void bootstrap() throws PromptoError {
-		Collection<AttributeDeclaration> columns = getMinimalColumns(store);
+		Map<String, AttributeDeclaration> columns = getMinimalColumns(store);
 		columns = fetchLatestDeclarations(columns);
-		registerColumnAttributes(columns);
-		store.createOrUpdateColumns(columns);
+		registerColumnAttributes(columns.values());
+		store.createOrUpdateColumns(columns.values());
 	}
 
 	private void registerColumnAttributes(Collection<AttributeDeclaration> columns) throws PromptoError {
@@ -55,9 +54,12 @@ public class CodeStoreBootstrapper {
 			column.register(context);
 	}
 
-	private List<AttributeDeclaration> fetchLatestDeclarations(Collection<AttributeDeclaration> decls) throws PromptoError {
+	private Map<String, AttributeDeclaration> fetchLatestDeclarations(Map<String, AttributeDeclaration> decls) throws PromptoError {
 		try {
-			return decls.stream().map((d) -> fetchLatestDeclaration(d)).collect(Collectors.toList());
+			Map<String, AttributeDeclaration> latest = new HashMap<>();
+			for(Map.Entry<String, AttributeDeclaration> entry : decls.entrySet())
+				latest.put(entry.getKey(), fetchLatestDeclaration(entry.getValue()));
+			return latest;
 		} catch (RuntimeException e) {
 			if(e.getCause() instanceof PromptoError)
 				throw (PromptoError)e.getCause();
@@ -83,25 +85,25 @@ public class CodeStoreBootstrapper {
 		}
 	}
 
-	private Collection<AttributeDeclaration> getMinimalColumns(IStore<?> store) {
+	private Map<String, AttributeDeclaration> getMinimalColumns(IStore<?> store) {
 		IType dbIdIType = Utils.typeToIType(store.getDbIdClass());
-		List<AttributeDeclaration> columns = new ArrayList<AttributeDeclaration>();
+		Map<String, AttributeDeclaration> columns = new HashMap<>();
 		// attributes with reserved names, the below declarations will be used
-		columns.add(new AttributeDeclaration(new Identifier(IStore.dbIdName), dbIdIType));
-		columns.add(new AttributeDeclaration(new Identifier("storable"), BooleanType.instance()));
-		columns.add(new AttributeDeclaration(new Identifier("category"), 
+		columns.put(IStore.dbIdName, new AttributeDeclaration(new Identifier(IStore.dbIdName), dbIdIType));
+		columns.put("storable", new AttributeDeclaration(new Identifier("storable"), BooleanType.instance()));
+		columns.put("category", new AttributeDeclaration(new Identifier("category"), 
 				new ListType(TextType.instance()), new IdentifierList(new Identifier("key"))));
 		// also add 'module' to avoid dependency on DevCenter
-		columns.add(new AttributeDeclaration(new Identifier("module"), dbIdIType));
+		columns.put("module", new AttributeDeclaration(new Identifier("module"), dbIdIType));
 		// more required attributes which will be overridden by a prompto declaration
-		columns.add(new AttributeDeclaration(new Identifier("author"), TextType.instance()));
-		columns.add(new AttributeDeclaration(new Identifier("timeStamp"), DateTimeType.instance()));
-		columns.add(new AttributeDeclaration(new Identifier("name"), TextType.instance()));
-		columns.add(new AttributeDeclaration(new Identifier("description"), TextType.instance()));
-		columns.add(new AttributeDeclaration(new Identifier("version"), TextType.instance())); // TODO add VersionType ?
-		columns.add(new AttributeDeclaration(new Identifier("prototype"), TextType.instance()));
-		columns.add(new AttributeDeclaration(new Identifier("dialect"), TextType.instance()));
-		columns.add(new AttributeDeclaration(new Identifier("body"), TextType.instance()));
+		columns.put("author", new AttributeDeclaration(new Identifier("author"), TextType.instance()));
+		columns.put("timeStamp", new AttributeDeclaration(new Identifier("timeStamp"), DateTimeType.instance()));
+		columns.put("name", new AttributeDeclaration(new Identifier("name"), TextType.instance()));
+		columns.put("description", new AttributeDeclaration(new Identifier("description"), TextType.instance()));
+		columns.put("version", new AttributeDeclaration(new Identifier("version"), TextType.instance())); // TODO add VersionType ?
+		columns.put("prototype", new AttributeDeclaration(new Identifier("prototype"), TextType.instance()));
+		columns.put("dialect", new AttributeDeclaration(new Identifier("dialect"), TextType.instance()));
+		columns.put("body", new AttributeDeclaration(new Identifier("body"), TextType.instance()));
 		return columns;
 	}
 
