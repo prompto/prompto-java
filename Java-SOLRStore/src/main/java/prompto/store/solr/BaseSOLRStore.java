@@ -198,8 +198,6 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 	}
 	
 	private void createOrUpdateColumn(AttributeDeclaration column) throws SolrServerException, IOException {
-		if(hasField(column.getName()))
-			return;
 		Map<String, Object> options = new HashMap<>();
 		options.put("indexed", true);
 		options.put("stored", true);
@@ -208,34 +206,49 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 			options.put("multiValued", true);
 			type = ((ContainerType)type).getItemType();
 		}
-		if("version".equals(column.getName())) 
-			addField("version", "version", options);
-		else if(type==TextType.instance())
-			addTextField(column.getName(), options, column.getAttributeInfo());
-		else if(type instanceof CategoryType)
-			addField(column.getName(), "db-ref", options);
-		else {
+		if("version".equals(column.getName()))  {
+			if(!hasField("version"))
+				addField("version", "version", options);
+		} else if(type==TextType.instance())
+			createOrUpdateTextColumn(column, options);
+		else if(!hasField(column.getName())) {
+			if(type instanceof CategoryType) {
+				addField(column.getName(), "db-ref", options);
+			} else {
 			String typeName = type.getTypeName().toLowerCase();
 			addField(column.getName(), typeName, options);
+			}
 		}
 	}
 	
 	
-	private void addTextField(String fieldName, Map<String, Object> options, AttributeInfo indexTypes) throws SolrServerException, IOException {
+	private void createOrUpdateTextColumn(AttributeDeclaration column, Map<String, Object> options) throws SolrServerException, IOException {
+		String fieldName = column.getName();
 		options = new HashMap<>(options); // use a copy
 		options.put("indexed", false);
 		options.put("stored", true);
-		addField(fieldName, "text", options);
+		if(!hasField(fieldName))
+			addField(fieldName, "text", options);
 		options = new HashMap<>(options); // use a copy
 		options.put("indexed", true);
 		options.put("stored", false);
+		SOLRAttributeInfo indexTypes = SOLRAttributeInfo.computeFieldFlags(column);
 		if(indexTypes!=null) {
-			if(indexTypes.isKey())
-				addCopyField(fieldName + "-" + AttributeInfo.KEY, "text-" + AttributeInfo.KEY, options, fieldName);
-			if(indexTypes.isValue())
-				addCopyField(fieldName + "-" + AttributeInfo.VALUE, "text-" + AttributeInfo.VALUE, options, fieldName);
-			if(indexTypes.isWords())
-				addCopyField(fieldName + "-" + AttributeInfo.WORDS, "text-" + AttributeInfo.WORDS, options, fieldName);
+			if(indexTypes.isKey()) {
+				String indexFieldName = fieldName + "-" + AttributeInfo.KEY;
+				if(!hasField(indexFieldName))
+					addCopyField(indexFieldName, "text-" + AttributeInfo.KEY, options, fieldName);
+			}
+			if(indexTypes.isValue()) {
+				String indexFieldName = fieldName + "-" + AttributeInfo.VALUE;
+				if(!hasField(indexFieldName))
+					addCopyField(indexFieldName, "text-" + AttributeInfo.VALUE, options, fieldName);
+			}
+			if(indexTypes.isWords()) {
+				String indexFieldName = fieldName + "-" + AttributeInfo.WORDS;
+				if(!hasField(indexFieldName))
+					addCopyField(indexFieldName, "text-" + AttributeInfo.WORDS, options, fieldName);
+			}
 		} else
 			addCopyField(fieldName + "-key", "text-key", options, fieldName);
 	}
@@ -366,14 +379,14 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 					
 					@Override
 					public boolean hasNext() {
-						return current < response.getResults().getNumFound();
+						return current < length();
 					}
 				};
 			}
 			
 			@Override
 			public long length() {
-				return response.getResults().getNumFound();
+				return response.getResults().size();
 			}
 		};
 	}
