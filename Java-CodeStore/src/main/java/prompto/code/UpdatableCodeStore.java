@@ -6,13 +6,16 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.DeclarationList;
 import prompto.declaration.IDeclaration;
+import prompto.declaration.IDeclaration.DeclarationType;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
@@ -38,8 +41,9 @@ import prompto.store.IStoredIterable;
 import prompto.type.CategoryType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
+import prompto.utils.ObjectUtils;
 import prompto.utils.ResourceUtils;
-import prompto.utils.Utils;
+import prompto.utils.StringUtils;
 
 
 public class UpdatableCodeStore extends BaseCodeStore {
@@ -48,7 +52,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	String application;
 	Version version;
 	// fetching and storing declarations requires a context holding code store attributes
-	// some of these are code store specific and cannot/should not be found in the app context
+	// some of these are code store specific and should not be looked for in the app context
 	Context context; 
 	
 	public UpdatableCodeStore(IStore<?> store, String application, String version, String ...resourceNames) throws PromptoError {
@@ -82,7 +86,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 			for(IDeclaration method : ((MethodDeclarationMap)declaration).values())
 				collectStorables(list, method, dialect, version, moduleId);
 		} else {
-			String typeName = Utils.capitalizeFirst(declaration.getDeclarationType().name()) + "Declaration";
+			String typeName = StringUtils.capitalizeFirst(declaration.getDeclarationType().name()) + "Declaration";
 			List<String> categories = Arrays.asList("Declaration", typeName);
 			IStorable storable = populateDeclarationStorable(categories, declaration, dialect, version, moduleId);
 			list.add(storable);
@@ -196,10 +200,10 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	}
 
 	private Iterator<IDeclaration> storeDeclarations(Iterator<IDeclaration> decls) throws PromptoError {
+		if(!decls.hasNext())
+			return decls;
 		List<IDeclaration> result = new ArrayList<>();
 		final IDeclaration decl = decls.next();
-		if(decl==null)
-			return null;
 		ICodeStore origin = decl.getOrigin();
 		if(origin==null)
 			throw new InternalError("Cannot store declaration with no origin!");
@@ -277,7 +281,8 @@ public class UpdatableCodeStore extends BaseCodeStore {
 
 	private Iterator<IDeclaration> fetchDeclarationsInStore(String name, Version version) {
 		try {
-			IStoredIterable iterable = fetchManyInStore(name, null, version);
+			CategoryType category = new CategoryType(new Identifier("Declaration"));
+			IStoredIterable iterable = fetchManyInStore(name, category, version);
 			Iterator<IStored> iterator = iterable.iterator();
 			if(iterator.hasNext())
 				return new Iterator<IDeclaration>() {
@@ -291,15 +296,39 @@ public class UpdatableCodeStore extends BaseCodeStore {
 		}
 	}
 
+	private static Set<String> uniqueDecls = new HashSet<>(
+			Arrays.asList(DeclarationType.ATTRIBUTE.name(), DeclarationType.CATEGORY.name(), DeclarationType.TEST.name()));
+	
 	private IStoredIterable fetchManyInStore(String name, CategoryType type, Version version) throws PromptoError {
-		IntegerLiteral one = new IntegerLiteral(1);
+		IntegerLiteral one = uniqueDecls.contains(type.toString().toUpperCase()) ? new IntegerLiteral(1) : null;
 		IPredicateExpression filter = buildNameAndVersionFilter(name, version);
 		if(LATEST_VERSION.equals(version)) {
-			IdentifierList names = new IdentifierList(new Identifier("version"));
+			IdentifierList names = IdentifierList.parse("prototype,version");
 			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
-			return store.interpretFetchMany(context, type, one, one, filter, orderBy);
+			IStoredIterable stored = store.interpretFetchMany(context, type, one, one, filter, orderBy);
+			return fetchDistinct(stored);
 		} else
 			return store.interpretFetchMany(context, type, one, one, filter, null); 
+	}
+
+	private IStoredIterable fetchDistinct(IStoredIterable iterable) {
+		/* we don't support distinct/group by yet, so need to do it "by hand" */
+		List<IStored> distinct = new ArrayList<>();
+		Object lastName = null;
+		Object lastProto = null;
+		for(IStored stored : iterable) {
+			Object thisName = stored.getData("name");
+			Object thisProto = stored.getData("prototype");
+			if(!ObjectUtils.areEqual(thisName, lastName) || !ObjectUtils.areEqual(thisProto, lastProto)) {
+				distinct.add(stored);
+				lastName = thisName;
+				lastProto = thisProto;
+			}
+		}
+		return new IStoredIterable() {
+			@Override public Iterator<IStored> iterator() { return distinct.iterator(); }
+			@Override public long length() { return distinct.size(); }
+		};
 	}
 
 	private IStored fetchOneInStore(String name, CategoryType type, Version version) throws PromptoError {
