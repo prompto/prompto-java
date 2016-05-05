@@ -292,12 +292,15 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 	@Override
 	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, Map<String, byte[]> data) throws PromptoError {
 		try {
+			generator.writeStartObject();
+			generator.writeFieldName("type");
+			generator.writeString(this.getType().getTypeName());
+			generator.writeFieldName("value");
 			generator.writeStartArray();
 			for(IValue value : this.items)
 				value.toJson(context, generator, null, null, data);
 			generator.writeEndArray();
-			generator.writeFieldName("itemType");
-			generator.writeString(getItemType().getTypeName());
+			generator.writeEndObject();
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		}
