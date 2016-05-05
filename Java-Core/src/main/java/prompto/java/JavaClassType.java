@@ -25,7 +25,7 @@ import prompto.type.IteratorType;
 import prompto.type.ListType;
 import prompto.type.SetType;
 import prompto.type.TextType;
-import prompto.utils.Utils;
+import prompto.utils.TypeUtils;
 import prompto.value.Dictionary;
 import prompto.value.Document;
 import prompto.value.IValue;
@@ -64,7 +64,7 @@ public class JavaClassType extends BaseType {
 	}
 	
 	private static IType convertJavaClassToPromptoType(Context context, Type type, IType returnType) {
-		IType result = Utils.typeToIType(type);
+		IType result = TypeUtils.typeToIType(type);
 		if(result!=null)
 			return result;
 		result = convertParameterizedType(context, type); 
@@ -171,7 +171,7 @@ public class JavaClassType extends BaseType {
 	}
 
 	private static IValue convertNative(Context context, Object value, Type type) {
-        IType itype = Utils.typeToIType(type);
+        IType itype = TypeUtils.typeToIType(type);
         return itype != null ? itype.convertJavaValueToIValue(context, value) : null;
 	}
 

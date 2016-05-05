@@ -20,7 +20,7 @@ import prompto.type.SetType;
 import prompto.type.TextType;
 import prompto.utils.CodeWriter;
 import prompto.utils.ExpressionList;
-import prompto.utils.Utils;
+import prompto.utils.TypeUtils;
 import prompto.value.Character;
 import prompto.value.Decimal;
 import prompto.value.IValue;
@@ -45,9 +45,9 @@ public class SetLiteral extends Literal<SetValue> {
 	public IType check(Context context) {
 		if(itemType==null) {
 			if(value.isEmpty() && expressions!=null && !expressions.isEmpty())
-				itemType = Utils.inferElementType(context, expressions);
+				itemType = TypeUtils.inferElementType(context, expressions);
 			else
-				itemType = Utils.inferElementType(context, value.getItems());
+				itemType = TypeUtils.inferElementType(context, value.getItems());
 		}
 		return new SetType(itemType); 
 	}

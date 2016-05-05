@@ -5,7 +5,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 import prompto.store.IStoreFactory;
-import prompto.utils.Utils;
+import prompto.utils.StringUtils;
 
 public class SOLRStoreFactory implements IStoreFactory {
 
@@ -55,7 +55,7 @@ public class SOLRStoreFactory implements IStoreFactory {
 		@SuppressWarnings("unchecked")
 		Class<? extends BaseSOLRStore> klass = (Class<? extends BaseSOLRStore>) Class.forName("prompto.store.solr.EmbeddedSOLRStore");
 		Constructor<? extends BaseSOLRStore> ctor = klass.getConstructor(File.class, String.class);
-		String coreName = Utils.capitalizeFirst(type.name()) + "Store";
+		String coreName = StringUtils.capitalizeFirst(type.name()) + "Store";
 		BaseSOLRStore store = ctor.newInstance(new File(root), coreName);
 		Method method = klass.getDeclaredMethod("startContainer");
 		method.invoke(store);

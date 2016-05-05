@@ -17,7 +17,7 @@ import prompto.parser.OCleverParser;
 import prompto.parser.SCleverParser;
 import prompto.type.CategoryType;
 import prompto.utils.ISingleton;
-import prompto.utils.Utils;
+import prompto.utils.StringUtils;
 
 /* a code store is a place where a code consumer (interpreter, compiler...) can fetch code from */
 public interface ICodeStore {
@@ -87,7 +87,7 @@ public interface ICodeStore {
 		public CategoryType getCategory() {
 			// THESAURUS is only a specific type of LIBRARY for use by Importer
 			String name = this==THESAURUS ? LIBRARY.name() : this.name();
-			String capped = Utils.capitalizeFirst(name);
+			String capped = StringUtils.capitalizeFirst(name);
 			return new CategoryType( new Identifier(capped));
 		}
 	}

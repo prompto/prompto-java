@@ -8,7 +8,7 @@ import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.utils.Utils;
+import prompto.utils.ObjectUtils;
 
 public class CategoryArgument extends BaseArgument implements ITypedArgument {
 	
@@ -94,8 +94,8 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 		if(!(obj instanceof CategoryArgument))
 			return false;
 		CategoryArgument other = (CategoryArgument)obj;
-		return Utils.equal(this.getType(),other.getType())
-				&& Utils.equal(this.getId(),other.getId());
+		return ObjectUtils.areEqual(this.getType(),other.getType())
+				&& ObjectUtils.areEqual(this.getId(),other.getId());
 	}
 
 	@Override

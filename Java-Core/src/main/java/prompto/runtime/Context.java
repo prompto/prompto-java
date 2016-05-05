@@ -34,7 +34,7 @@ import prompto.type.DecimalType;
 import prompto.type.IType;
 import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
-import prompto.utils.Utils;
+import prompto.utils.ObjectUtils;
 import prompto.value.ConcreteInstance;
 import prompto.value.Decimal;
 import prompto.value.Document;
@@ -306,19 +306,19 @@ public class Context implements IContext {
 		// resolve upwards, since local names override global ones
 		IDeclaration actual = declarations.get(name);
 		if(actual!=null)
-			return Utils.downcast(klass,actual);
+			return ObjectUtils.downcast(klass,actual);
 		else if(parent!=null)
 			actual = parent.getRegisteredDeclaration(klass, name, lookInStore);
 		if(actual!=null)
-			return Utils.downcast(klass,actual);
+			return ObjectUtils.downcast(klass,actual);
 		else if(globals!=this)
 			actual = globals.getRegisteredDeclaration(klass, name, lookInStore);
 		if(actual!=null)
-			return Utils.downcast(klass,actual);
+			return ObjectUtils.downcast(klass,actual);
 		else if(lookInStore && globals==this)
 			actual = fetchAndRegister(name);
 		if(actual!=null)
-			return Utils.downcast(klass,actual);
+			return ObjectUtils.downcast(klass,actual);
 		else
 			return null;
 	}
@@ -533,7 +533,7 @@ public class Context implements IContext {
 	protected <T extends INamed> T readRegisteredValue(Class<T> klass, Identifier name) {
 		INamed actual = instances.get(name);
 		if(actual!=null)
-			return Utils.downcast(klass,actual);
+			return ObjectUtils.downcast(klass,actual);
 		else
 			return null;
 	}
@@ -801,7 +801,7 @@ public class Context implements IContext {
 					instances.put(name, actual);
 				}
 			}
-			return Utils.downcast(klass,actual);
+			return ObjectUtils.downcast(klass,actual);
 		}
 		
 		@Override

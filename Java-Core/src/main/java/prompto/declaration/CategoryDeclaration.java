@@ -26,7 +26,7 @@ import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
-import prompto.utils.Utils;
+import prompto.utils.TypeUtils;
 import prompto.value.IInstance;
 import prompto.value.IValue;
 
@@ -131,7 +131,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 
 	private void populateInstance(Context context, IStored stored, IInstance instance) throws PromptoError {
 		Object dbId = stored.getDbId();
-		IValue value = Utils.fieldToValue(context, IStore.dbIdName, dbId);
+		IValue value = TypeUtils.fieldToValue(context, IStore.dbIdName, dbId);
 		instance.setMember(context, new Identifier(IStore.dbIdName), value);
 		for(Identifier name : this.getAllAttributes(context)) 
 			populateMember(context, stored, instance, name);
@@ -309,7 +309,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 
 	public static ResultInfo compileMultiply(Context context, MethodInfo method, Flags flags, 
 			ResultInfo left, ResultInfo right) {
-		IType argType = Utils.typeToIType(right.getType());
+		IType argType = TypeUtils.typeToIType(right.getType());
 		return compileOperator(context, method, flags, left, right, argType, Operator.MULTIPLY);
 	}
 

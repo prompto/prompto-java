@@ -33,7 +33,7 @@ import prompto.type.IType;
 import prompto.type.ListType;
 import prompto.type.TextType;
 import prompto.utils.IdentifierList;
-import prompto.utils.Utils;
+import prompto.utils.TypeUtils;
 
 public class AppServer {
 	
@@ -151,7 +151,7 @@ public class AppServer {
 	private static Map<String, AttributeDeclaration> getMinimalDataColumns(IStore<?> dataStore) {
 		Map<String, AttributeDeclaration> columns = new HashMap<String, AttributeDeclaration>();
 		// attributes with reserved names, the below declarations will be used
-		IType dbIdIType = Utils.typeToIType(dataStore.getDbIdClass());
+		IType dbIdIType = TypeUtils.typeToIType(dataStore.getDbIdClass());
 		columns.put(IStore.dbIdName, new AttributeDeclaration(new Identifier(IStore.dbIdName), dbIdIType));
 		columns.put("category", new AttributeDeclaration(new Identifier("category"), 
 				new ListType(TextType.instance()), new IdentifierList(new Identifier("key"))));

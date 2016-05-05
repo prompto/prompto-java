@@ -36,35 +36,7 @@ import prompto.type.UUIDType;
 import prompto.type.VoidType;
 import prompto.value.IValue;
 
-public class Utils {
-	
-	public static boolean equal(Object o1,Object o2) {
-		if(o1==o2)
-			return true;
-		if(o1==null || o2==null)
-			return false;
-		return o1.equals(o2);
-	}
-	
-	public static String capitalizeFirst(String value) {
-		return Character.toUpperCase(value.charAt(0)) + value.substring(1).toLowerCase();
-	}
-	
-	public static Character[] stringToCharacterArray(String value) {
-		char[] chars = value.toCharArray();
-		List<Character> list = new ArrayList<Character>(chars.length);
-		for(int i=0;i<chars.length;i++)
-			list.add(chars[i]);
-		return list.toArray(new Character[chars.length]);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public static <T> T downcast(Class<T> klass,Object actual) {
-		if(actual!=null && klass.isAssignableFrom(actual.getClass()))
-			return (T)actual;
-		else
-			return null;
-	}
+public abstract class TypeUtils {
 	
 	public static IType inferElementType(Context context, Collection<? extends IValue> items) {
 		Collection<IType> types = collectElementTypes(context, items);

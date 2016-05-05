@@ -27,7 +27,8 @@ import prompto.store.IStore;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.utils.Utils;
+import prompto.utils.ObjectUtils;
+import prompto.utils.TypeUtils;
 import prompto.value.IValue;
 
 public class AttributeArgument extends BaseArgument implements INamedArgument {
@@ -69,7 +70,7 @@ public class AttributeArgument extends BaseArgument implements INamedArgument {
 		if(!(obj instanceof AttributeArgument))
 			return false;
 		AttributeArgument other = (AttributeArgument)obj;
-		return Utils.equal(this.getId(),other.getId());
+		return ObjectUtils.areEqual(this.getId(),other.getId());
 	}
 
 	@Override
@@ -93,7 +94,7 @@ public class AttributeArgument extends BaseArgument implements INamedArgument {
 	public IType getType(Context context) {
 		// dbId type can only be resolved at runtime
 		if(IStore.dbIdName.equals(id.toString()))
-			return Utils.typeToIType(IDataStore.getInstance().getDbIdClass());
+			return TypeUtils.typeToIType(IDataStore.getInstance().getDbIdClass());
 		else {
 			IDeclaration named = context.getRegisteredDeclaration(IDeclaration.class, id);
 			return named.getType(context);

@@ -22,7 +22,7 @@ import prompto.type.MissingType;
 import prompto.type.TextType;
 import prompto.utils.CodeWriter;
 import prompto.utils.ExpressionList;
-import prompto.utils.Utils;
+import prompto.utils.TypeUtils;
 import prompto.value.Character;
 import prompto.value.Decimal;
 import prompto.value.IValue;
@@ -59,9 +59,9 @@ public class ListLiteral extends Literal<ListValue> {
 	public IType check(Context context) {
 		if(itemType==null) {
 			if(expressions!=null)
-				itemType = Utils.inferElementType(context, expressions);
+				itemType = TypeUtils.inferElementType(context, expressions);
 			else
-				itemType = Utils.inferElementType(context, value.getItems());
+				itemType = TypeUtils.inferElementType(context, value.getItems());
 		}
 		return new ListType(itemType); 
 	}

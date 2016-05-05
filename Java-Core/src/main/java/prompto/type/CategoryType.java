@@ -31,7 +31,7 @@ import prompto.store.IDataStore;
 import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.utils.CodeWriter;
-import prompto.utils.Utils;
+import prompto.utils.TypeUtils;
 import prompto.value.IInstance;
 import prompto.value.IValue;
 
@@ -352,7 +352,7 @@ public class CategoryType extends BaseType {
 		while(fields.hasNext()) {
 			Map.Entry<String, JsonNode> field = fields.next();
 			if(IStore.dbIdName.equals(field.getKey()))
-					continue;
+				continue;
 			readJSONField(context, instance, field.getKey(), field.getValue(), parts);
 		}
 	}
@@ -387,7 +387,7 @@ public class CategoryType extends BaseType {
 
 	private void readJSONDbId(Context context, JsonNode value, IInstance instance) throws PromptoError {
 		if(value.has(IStore.dbIdName)) {
-			IType fieldType = Utils.typeToIType(IDataStore.getInstance().getDbIdClass());
+			IType fieldType = TypeUtils.typeToIType(IDataStore.getInstance().getDbIdClass());
 			JsonNode fieldData = value.get(IStore.dbIdName);
 			if(fieldData.isObject())
 				fieldData = fieldData.get("value");

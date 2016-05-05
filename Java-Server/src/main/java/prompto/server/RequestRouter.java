@@ -38,7 +38,6 @@ public class RequestRouter {
 		} finally {
 			context.terminated();
 		}
-		
 	}
 
 	private String writeBinaryResponse(BinaryValue value, OutputStream output) throws IOException {

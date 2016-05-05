@@ -21,7 +21,7 @@ import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
-import prompto.utils.Utils;
+import prompto.utils.ObjectUtils;
 
 public class ExtendedArgument extends CategoryArgument {
 	
@@ -119,9 +119,9 @@ public class ExtendedArgument extends CategoryArgument {
 		if(!(obj instanceof ExtendedArgument))
 			return false;
 		ExtendedArgument other = (ExtendedArgument)obj;
-		return Utils.equal(this.getType(),other.getType())
-				&& Utils.equal(this.getId(),other.getId())
-				&& Utils.equal(this.getAttributes(),other.getAttributes());
+		return ObjectUtils.areEqual(this.getType(),other.getType())
+				&& ObjectUtils.areEqual(this.getId(),other.getId())
+				&& ObjectUtils.areEqual(this.getAttributes(),other.getAttributes());
 	}
 
 	@Override

@@ -13,7 +13,7 @@ import prompto.grammar.Identifier;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.utils.CodeWriter;
-import prompto.utils.Utils;
+import prompto.utils.StringUtils;
 import prompto.value.IValue;
 import prompto.value.RangeBase;
 
@@ -61,7 +61,7 @@ public interface IType {
 	Family getFamily();
 	
 	default String getTypeName() {
-		return Utils.capitalizeFirst(getFamily().name());
+		return StringUtils.capitalizeFirst(getFamily().name());
 	}
 	
 	default Identifier getTypeNameId() {

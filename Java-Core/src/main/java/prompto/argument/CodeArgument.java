@@ -8,7 +8,7 @@ import prompto.runtime.Context;
 import prompto.type.CodeType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.utils.Utils;
+import prompto.utils.ObjectUtils;
 
 public class CodeArgument extends BaseArgument implements ITypedArgument {
 	
@@ -52,7 +52,7 @@ public class CodeArgument extends BaseArgument implements ITypedArgument {
 		if(!(obj instanceof CodeArgument))
 			return false;
 		CodeArgument other = (CodeArgument)obj;
-		return Utils.equal(this.getId(),other.getId());
+		return ObjectUtils.areEqual(this.getId(),other.getId());
 	}
 
 	@Override

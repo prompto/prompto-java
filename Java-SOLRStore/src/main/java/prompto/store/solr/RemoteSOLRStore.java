@@ -26,7 +26,7 @@ import prompto.error.InternalError;
 import prompto.error.PromptoError;
 import prompto.store.IStore;
 import prompto.store.IStoreFactory.Type;
-import prompto.utils.Utils;
+import prompto.utils.StringUtils;
 
 
 public class RemoteSOLRStore extends BaseSOLRStore {
@@ -35,7 +35,7 @@ public class RemoteSOLRStore extends BaseSOLRStore {
 	String coreName;
 	
 	public RemoteSOLRStore(String protocol, String host, int port, Type type) {
-		this(protocol, host, port, Utils.capitalizeFirst(type.name()) + "Store");
+		this(protocol, host, port, StringUtils.capitalizeFirst(type.name()) + "Store");
 	}
 
 	public RemoteSOLRStore(String protocol, String host, int port, String coreName) {
