@@ -29,13 +29,27 @@ public class StoreStatement extends SimpleStatement {
 
 	@Override
 	public void toDialect(CodeWriter writer) {
-		writer.append("store ");
-		if(writer.getDialect()==Dialect.E)
-			storables.toDialect(writer);
-		else {
-			writer.append('(');
-			storables.toDialect(writer);
-			writer.append(')');
+		if(deletables!=null) {
+			writer.append("delete ");
+			if(writer.getDialect()==Dialect.E)
+				deletables.toDialect(writer);
+			else {
+				writer.append('(');
+				deletables.toDialect(writer);
+				writer.append(')');
+			}
+			if(storables!=null)
+				writer.append(" and ");
+		}
+		if(storables!=null) {
+			writer.append("store ");
+			if(writer.getDialect()==Dialect.E)
+				storables.toDialect(writer);
+			else {
+				writer.append('(');
+				storables.toDialect(writer);
+				writer.append(')');
+			}
 		}
 	}
 	
