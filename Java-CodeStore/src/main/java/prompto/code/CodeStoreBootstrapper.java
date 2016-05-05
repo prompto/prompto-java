@@ -21,7 +21,7 @@ import prompto.type.IType;
 import prompto.type.ListType;
 import prompto.type.TextType;
 import prompto.utils.IdentifierList;
-import prompto.utils.Utils;
+import prompto.utils.TypeUtils;
 
 // use a dedicated bootstrapper to ensure app and code store contexts do not spill
 public class CodeStoreBootstrapper {
@@ -76,7 +76,9 @@ public class CodeStoreBootstrapper {
 			if(reserved.contains(column.getName()))
 				return column;
 			Iterator<IDeclaration> decls = next.fetchLatestVersions(column.getName());
-			IDeclaration decl = decls==null ? null : decls.next(); // can only get one attribute
+			if(decls==null || !decls.hasNext())
+				throw new RuntimeException("Invalid column attribute: " + column.getName());
+			IDeclaration decl = decls.next(); // can only get one attribute
 			if(!(decl instanceof AttributeDeclaration))
 				throw new RuntimeException("Invalid column attribute: " + column.getName());
 			return (AttributeDeclaration)decl;
@@ -86,7 +88,7 @@ public class CodeStoreBootstrapper {
 	}
 
 	private Map<String, AttributeDeclaration> getMinimalColumns(IStore<?> store) {
-		IType dbIdIType = Utils.typeToIType(store.getDbIdClass());
+		IType dbIdIType = TypeUtils.typeToIType(store.getDbIdClass());
 		Map<String, AttributeDeclaration> columns = new HashMap<>();
 		// attributes with reserved names, the below declarations will be used
 		columns.put(IStore.dbIdName, new AttributeDeclaration(new Identifier(IStore.dbIdName), dbIdIType));
