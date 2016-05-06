@@ -44,7 +44,6 @@ public class Application {
 	
 	static void aboutToStart() throws Exception {
 		createThesaurusAndImportSamples();
-		
 	}
 	
 	static void createThesaurusAndImportSamples() throws Exception {
