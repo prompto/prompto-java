@@ -56,7 +56,7 @@ public abstract class Executor {
 	}
 
 	public static void executeMainNoArgs(Context context, File promptoDir) throws PromptoError {
-		executeMainMethod(context, new Identifier("main"), "-test=true", promptoDir);
+		executeMainMethod(context, new Identifier("main"), "-testMode=true", promptoDir);
 	}
 	
 	private static PromptoDict<String, String> parseCmdLineArgs(String cmdLineArgs) {
@@ -72,7 +72,7 @@ public abstract class Executor {
 	
 	public static void executeMainMethod(Context context, Identifier methodName, String cmdLineArgs, File promptoDir) throws PromptoError {
 		PromptoDict<String, String> options = parseCmdLineArgs(cmdLineArgs);
-		boolean testMode = options.containsKey("test");
+		boolean testMode = options.containsKey("testMode");
 		Class<?>[] argTypes = cmdLineArgs==null ? new Class<?>[0] : new Class<?>[] { PromptoDict.class };
 		Object[] args = cmdLineArgs==null ? new Object[0] : new Object[] { options };
 		try(PromptoClassLoader loader = PromptoClassLoader.initialize(context, promptoDir, testMode)) {

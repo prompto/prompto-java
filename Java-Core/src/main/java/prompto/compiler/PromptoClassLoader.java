@@ -48,7 +48,7 @@ public class PromptoClassLoader extends URLClassLoader {
 				PromptoClassLoader.testMode = testMode;
 			boolean currentMode = PromptoClassLoader.testMode;
 			if(currentMode!=testMode)
-				throw new UnsupportedOperationException("Cannot run test mode with regular mode!");
+				throw new UnsupportedOperationException("Cannot run test mode and regular mode in parallel!");
 			if(testMode) {
 				if(testInstance==null)
 					testInstance = new ThreadLocal<>();
@@ -63,6 +63,17 @@ public class PromptoClassLoader extends URLClassLoader {
 		}
 	}
 
+	public static void uninitialize() {
+		synchronized(PromptoClassLoader.class) {
+			if(PromptoClassLoader.testMode==null)
+				return;
+			if(PromptoClassLoader.testMode)
+				testInstance = null;
+			else
+				instance = null;
+		}		
+	}
+	
 	Context context;
 	
 	private PromptoClassLoader(Context context, File promptoDir) {

@@ -69,13 +69,16 @@ public class AppServer {
 		Version version = ICodeStore.LATEST_VERSION;
 		Type codeStoreType = Type.CODE;
 		Type dataStoreType = Type.DATA;
+		Boolean testMode = false;
 		
 		// parse parameters
 		for(int i=0; i<args.length; i++) {
 			String arg = args[i];
 			if(!arg.startsWith("-"))
 				continue;
-			if(arg.equalsIgnoreCase("-http_port")) {
+			if(arg.equalsIgnoreCase("-test-mode")) {
+				testMode = Boolean.valueOf(args[++i]);
+			} else if(arg.equalsIgnoreCase("-http_port")) {
 				httpPort = Integer.parseInt(args[++i]);
 			} else if(arg.equalsIgnoreCase("-resources")) {
 				resources = args[++i].split(",");
@@ -102,7 +105,7 @@ public class AppServer {
 		// initialize code store
 		IStoreFactory factory = newStoreFactory(codeStoreFactory);
 		IStore<?> store = factory.newStore(args, codeStoreType);
-		ICodeStore codeStore = bootstrapCodeStore(store, application, version, resources);
+		ICodeStore codeStore = bootstrapCodeStore(store, application, version, testMode, resources);
 		// initialize data store
 		factory = newStoreFactory(dataStoreFactory);
 		store = factory.newStore(args, dataStoreType);
@@ -138,11 +141,11 @@ public class AppServer {
 			System.out.println("Additional argument: -version (optional)");
 	}
 
-	public static ICodeStore bootstrapCodeStore(IStore<?> store, String application, Version version, String ...resourceNames) throws Exception {
+	public static ICodeStore bootstrapCodeStore(IStore<?> store, String application, Version version, boolean testMode, String ...resourceNames) throws Exception {
 		System.out.println("Initializing class loader...");
 		globalContext = Context.newGlobalContext();
 		File promptoDir = Files.createTempDirectory("prompto_").toFile();
-		classLoader = PromptoClassLoader.initialize(globalContext, promptoDir, false);
+		classLoader = PromptoClassLoader.initialize(globalContext, promptoDir, testMode);
 		System.out.println("Class loader initialized.");
 		System.out.println("Bootstrapping prompto...");
 		ICodeStore codeStore = new UpdatableCodeStore(store, application, version.toString(), resourceNames);
