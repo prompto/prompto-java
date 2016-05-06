@@ -2,6 +2,14 @@ package prompto.type;
 
 import java.lang.reflect.Type;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 
@@ -43,4 +51,20 @@ public class AnyType extends NativeType {
 		return true;
 	}
 	
+	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		exp.compile(context, method, flags);
+		IOperand oper = new MethodConstant(
+				Object.class, 
+				"equals",
+				Object.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		if(flags.isReverse()) 
+			CompilerUtils.reverseBoolean(method);
+		if(flags.toPrimitive())
+			return new ResultInfo(boolean.class);
+		else
+			return CompilerUtils.booleanToBoolean(method);
+	}
+
 }
