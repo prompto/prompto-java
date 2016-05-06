@@ -37,7 +37,11 @@ class SOLRFilterBuilder {
 	private <T> void escape(StringBuilder sb, T value) {
 		boolean wasAmpersand = false;
 		boolean wasPipe = false;
-		for(char c : value.toString().toCharArray()) {
+		char[] chars = value.toString().toCharArray();
+		boolean isDoubleQuoted = chars[0]=='"' && chars[chars.length-1]=='"';
+		if(isDoubleQuoted)
+			sb.append('"');
+		for(char c : chars) {
 			switch(c) {
 			case '+':
 			case '-':
@@ -100,6 +104,8 @@ class SOLRFilterBuilder {
 			sb.append('|');
 			wasPipe = false;
 		}
+		if(isDoubleQuoted)
+			sb.append('"');
 	}
 
 	public String toSolrQuery() {
