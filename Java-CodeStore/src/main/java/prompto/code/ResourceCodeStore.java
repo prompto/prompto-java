@@ -41,7 +41,14 @@ public class ResourceCodeStore extends BaseCodeStore {
 	
 	@Override
 	public String getModuleName() {
-		return resourceName.substring(0, resourceName.indexOf('.'));
+		String moduleName = resourceName;
+		int idx = moduleName.lastIndexOf('/');
+		if(idx>=0)
+			moduleName = moduleName.substring(idx+1);
+		idx = moduleName.indexOf('.');
+		if(idx>=0)
+			moduleName = moduleName.substring(0, idx);
+		return moduleName;
 	}
 	
 	@Override
