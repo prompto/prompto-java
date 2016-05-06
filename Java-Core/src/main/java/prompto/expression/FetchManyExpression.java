@@ -28,13 +28,13 @@ import prompto.value.Cursor;
 import prompto.value.IValue;
 
 
-public class FetchAllExpression extends FetchOneExpression {
+public class FetchManyExpression extends FetchOneExpression {
 
 	IExpression first;
 	IExpression last;
 	OrderByClauseList orderBy;
 	
-	public FetchAllExpression(CategoryType type, IExpression first, IExpression last, IExpression filter, OrderByClauseList orderBy) {
+	public FetchManyExpression(CategoryType type, IExpression first, IExpression last, IExpression filter, OrderByClauseList orderBy) {
 		super(type, filter);
 		this.first = first;
 		this.last = last;

@@ -65,7 +65,7 @@ import prompto.expression.DivideExpression;
 import prompto.expression.DocumentExpression;
 import prompto.expression.EqualsExpression;
 import prompto.expression.ExecuteExpression;
-import prompto.expression.FetchAllExpression;
+import prompto.expression.FetchManyExpression;
 import prompto.expression.FetchListExpression;
 import prompto.expression.FetchOneExpression;
 import prompto.expression.IExpression;
@@ -1055,7 +1055,7 @@ public class SPromptoBuilder extends SParserBaseListener {
 		IExpression stop = this.<IExpression>getNodeValue(ctx.xstop);
 		IExpression filter = this.<IExpression>getNodeValue(ctx.xfilter);
 		OrderByClauseList orderBy = this.<OrderByClauseList>getNodeValue(ctx.xorder);
-		setNodeValue(ctx, new FetchAllExpression(category, start, stop, filter, orderBy));
+		setNodeValue(ctx, new FetchManyExpression(category, start, stop, filter, orderBy));
 	}
 	
 	@Override
