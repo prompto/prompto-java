@@ -1,6 +1,8 @@
 package prompto.server;
 
+import java.io.File;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +22,7 @@ import org.eclipse.jetty.webapp.WebXmlConfiguration;
 import prompto.code.ICodeStore;
 import prompto.code.UpdatableCodeStore;
 import prompto.code.Version;
+import prompto.compiler.PromptoClassLoader;
 import prompto.declaration.AttributeDeclaration;
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
@@ -39,9 +42,14 @@ public class AppServer {
 	
 	static Server jettyServer;
 	static Context globalContext;
+	static PromptoClassLoader classLoader;
 	
 	public static Context getGlobalContext() {
 		return globalContext;
+	}
+	
+	public static PromptoClassLoader getClassLoader() {
+		return classLoader;
 	}
 	
 	public static void main(String[] args) throws Throwable {
@@ -131,7 +139,11 @@ public class AppServer {
 	}
 
 	public static ICodeStore bootstrapCodeStore(IStore<?> store, String application, Version version, String ...resourceNames) throws Exception {
+		System.out.println("Initializing class loader...");
 		globalContext = Context.newGlobalContext();
+		File promptoDir = Files.createTempDirectory("prompto_").toFile();
+		classLoader = PromptoClassLoader.initialize(globalContext, promptoDir, false);
+		System.out.println("Class loader initialized.");
 		System.out.println("Bootstrapping prompto...");
 		ICodeStore codeStore = new UpdatableCodeStore(store, application, version.toString(), resourceNames);
 		ICodeStore.setInstance(codeStore);
@@ -139,6 +151,7 @@ public class AppServer {
 		return codeStore;
 	}
 
+	
 	private static void synchronizeSchema(ICodeStore codeStore, IStore<?> dataStore) throws PromptoError {
 		System.out.println("Initializing schema...");
 		Map<String, AttributeDeclaration> columns = getMinimalDataColumns(dataStore);
@@ -146,7 +159,6 @@ public class AppServer {
 		dataStore.createOrUpdateColumns(columns.values());
 		System.out.println("Schema successfully initialized.");
 	}
-
 
 	private static Map<String, AttributeDeclaration> getMinimalDataColumns(IStore<?> dataStore) {
 		Map<String, AttributeDeclaration> columns = new HashMap<String, AttributeDeclaration>();

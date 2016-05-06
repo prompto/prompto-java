@@ -31,11 +31,12 @@ public class PromptoServlet extends HttpServlet {
 		try {
 			authenticate(req);
 			readSession(req);
+			ExecutionMode mode = readMode(req);
 			Identifier methodName = readMethod(req);
 			String[] httpParams = req.getParameterMap().get("params");
 			String jsonParams = httpParams==null || httpParams.length==0 ? null : httpParams[0];
-			RequestRouter handler = new RequestRouter(AppServer.globalContext);
-			String contentType = handler.interpretRequest(methodName, jsonParams, null, resp.getOutputStream());
+			RequestRouter handler = new RequestRouter(AppServer.classLoader, AppServer.globalContext);
+			String contentType = handler.runMethodOrTest(mode, methodName, jsonParams, null, resp.getOutputStream());
 			resp.getOutputStream().close();
 			resp.flushBuffer();
 			resp.setContentType(contentType);
@@ -47,6 +48,14 @@ public class PromptoServlet extends HttpServlet {
 		}
 	}
 	
+	private ExecutionMode readMode(HttpServletRequest req) {
+		String[] parts = req.getPathInfo().substring(1).split("/");
+		if(parts.length>1)
+			return ExecutionMode.valueOf(parts[0].toUpperCase());
+		else
+			return ExecutionMode.INTERPRET;
+	}
+
 	private void readSession(HttpServletRequest req) {
 		Document doc = (Document)req.getSession(true).getAttribute("__prompto_http_session__");
 		if(doc==null) {
@@ -79,11 +88,12 @@ public class PromptoServlet extends HttpServlet {
 	private void doPostMultipart(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		authenticate(req);
 		readSession(req);
+		ExecutionMode mode = readMode(req);
 		Identifier methodName = readMethod(req);
 		Map<String, byte[]> parts = readParts(req);
 		String jsonParams = new String(parts.get("params"));
-		RequestRouter handler = new RequestRouter(AppServer.globalContext);
-		handler.interpretRequest(methodName, jsonParams, parts, resp.getOutputStream());
+		RequestRouter handler = new RequestRouter(AppServer.classLoader, AppServer.globalContext);
+		handler.runMethodOrTest(mode, methodName, jsonParams, parts, resp.getOutputStream());
 		resp.getOutputStream().close();
 		resp.flushBuffer();
 		resp.setContentType("application/json");

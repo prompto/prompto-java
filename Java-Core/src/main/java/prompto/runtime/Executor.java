@@ -29,8 +29,8 @@ public abstract class Executor {
 	}
 
 	private static void executeTest(Context context, File promptoDir, String testName, boolean testMode) {
-		Type classType = CompilerUtils.getTestType(testName);
 		try(PromptoClassLoader loader = PromptoClassLoader.initialize(context, promptoDir, testMode)) {
+			Type classType = CompilerUtils.getTestType(testName);
 			Class<?> klass = loader.loadClass(classType.getTypeName());
 			Method method = klass.getDeclaredMethod("run");
 			method.invoke(null);
@@ -42,6 +42,14 @@ public abstract class Executor {
 			context.terminated();
 		}	
 	}
+	
+	public static void executeTest(PromptoClassLoader loader, String testName) throws ClassNotFoundException, NoSuchMethodException, 
+			SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		Type classType = CompilerUtils.getTestType(testName);
+		Class<?> klass = loader.loadClass(classType.getTypeName());
+		Method method = klass.getDeclaredMethod("run");
+		method.invoke(null);
+	}
 
 	public static void executeMainNoArgs(Context context) throws PromptoError {
 		executeMainMethod(context, new Identifier("main"), "", null);
@@ -51,23 +59,6 @@ public abstract class Executor {
 		executeMainMethod(context, new Identifier("main"), "-test=true", promptoDir);
 	}
 	
-	public static void executeMainMethod(Context context, Identifier methodName, String cmdLineArgs, File promptoDir) throws PromptoError {
-		PromptoDict<String, String> options = parseCmdLineArgs(cmdLineArgs);
-		boolean testMode = options.containsKey("test");
-		Type classType = CompilerUtils.getGlobalMethodType(methodName);
-		try(PromptoClassLoader loader = PromptoClassLoader.initialize(context, promptoDir, testMode)) {
-			Class<?> klass = loader.loadClass(classType.getTypeName());
-			Method method = locateMainMethod(klass, cmdLineArgs);
-			method.invoke(null, options);
-		} catch(ClassNotFoundException | NoSuchMethodException e) {
-			throw new SyntaxError("Could not find a compatible \"" + methodName + "\" method.");
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | IOException e) {
-			throw new InternalError(e);
-		} finally {
-			context.terminated();
-		}
-	}
-
 	private static PromptoDict<String, String> parseCmdLineArgs(String cmdLineArgs) {
 		PromptoDict<String, String> result = new PromptoDict<>();
 		try {
@@ -78,15 +69,33 @@ public abstract class Executor {
 		}
 		return result;
 	}
-
-	private static Method locateMainMethod(Class<?> klass, String cmdLineArgs) throws NoSuchMethodException {
-		if(cmdLineArgs==null)
-			return locateMainMethod(klass);
-		else
-			return locateMainMethod(klass, PromptoDict.class);
+	
+	public static void executeMainMethod(Context context, Identifier methodName, String cmdLineArgs, File promptoDir) throws PromptoError {
+		PromptoDict<String, String> options = parseCmdLineArgs(cmdLineArgs);
+		boolean testMode = options.containsKey("test");
+		Class<?>[] argTypes = cmdLineArgs==null ? new Class<?>[0] : new Class<?>[] { PromptoDict.class };
+		Object[] args = cmdLineArgs==null ? new Object[0] : new Object[] { options };
+		try(PromptoClassLoader loader = PromptoClassLoader.initialize(context, promptoDir, testMode)) {
+			executeGlobalMethod(loader, methodName, argTypes, args);
+		} catch(ClassNotFoundException | NoSuchMethodException e) {
+			throw new SyntaxError("Could not find a compatible \"" + methodName + "\" method.");
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | IOException e) {
+			throw new InternalError(e);
+		} finally {
+			context.terminated();
+		}
 	}
 
-	private static Method locateMainMethod(Class<?> klass, Class<?> ... argTypes) throws NoSuchMethodException {
+	public static Object executeGlobalMethod(PromptoClassLoader loader, Identifier methodName, Class<?>[] argTypes, Object[] args) 
+			throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, 
+				IllegalArgumentException, InvocationTargetException {
+		Type classType = CompilerUtils.getGlobalMethodType(methodName);
+		Class<?> klass = loader.loadClass(classType.getTypeName());
+		Method method = locateGlobalMethod(klass, argTypes);
+		return method.invoke(null, args);
+	}
+
+	public static Method locateGlobalMethod(Class<?> klass, Class<?> ... argTypes) throws NoSuchMethodException {
 		// try exact match first
 		for(Method method : klass.getDeclaredMethods()) {
 			if(identicalArguments(method.getParameterTypes(), argTypes))
@@ -117,5 +126,7 @@ public abstract class Executor {
 		}
 		return true;
 	}
+
+
 
 }

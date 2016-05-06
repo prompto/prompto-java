@@ -1,6 +1,7 @@
 package prompto.remoting;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.security.InvalidParameterException;
 import java.util.Map;
 
@@ -83,6 +84,21 @@ public class Parameter {
 		this.value = value;
 	}
 
+	public Class<?> toJavaType(Context context, ClassLoader classLoader) {
+		Type type = this.type.getJavaType(context);
+		if(type instanceof Class<?>)
+			return (Class<?>)type;
+		else try {
+			return classLoader.loadClass(type.getTypeName().replace('.', '/'));
+		} catch(ClassNotFoundException e) {
+			throw new InternalError(e);
+		}
+	}
+	
+	public Object toJavaValue(Context context) {
+		return value.convertTo(Object.class);
+	}
+	
 	public ArgumentAssignment toAssignment(Context context) {
 		IArgument argument = new CategoryArgument(type, new Identifier(name));
 		return new ArgumentAssignment(argument, new ExpressionValue(type, value));
@@ -100,4 +116,6 @@ public class Parameter {
 		}
 		generator.writeEndObject();
 	}
+
+
 }
