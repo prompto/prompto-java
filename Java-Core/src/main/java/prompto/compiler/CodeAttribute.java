@@ -203,6 +203,12 @@ public class CodeAttribute implements IAttribute {
 
 	}
 	
+	/* a work-around to get a unique transient variable name */
+	/* the real solution is to manage variable scope */
+	public String nextTransientName(String core) {
+		return locals.nextTransientName(core);
+	}
+
 	public StackLocal registerLocal(StackLocal local) {
 		// TODO manage code range
 		StackLocal other = locals.registerLocal(local);
@@ -335,6 +341,7 @@ public class CodeAttribute implements IAttribute {
 		attributes.forEach((a)->
 			a.writeTo(writer));
 	}
+
 
 
 }

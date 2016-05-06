@@ -17,6 +17,17 @@ public class LocalVariableTableAttribute implements IAttribute {
 				.collect(Collectors.toList());
 	}
 	
+	/* a work-around to get a unique transient variable name */
+	/* the real solution is to manage variable scope */
+	public String nextTransientName(String core) {
+		int i = 0;
+		while(true) {
+			String name = String.format("%%%s-%03d%%", core, i++);
+			if(!entries.containsKey(name))
+				return name;
+		}
+	}
+
 	public StackLocal registerLocal(StackLocal local) {
 		String name = local.getName();
 		StackLocal current = entries.get(name);
@@ -54,6 +65,7 @@ public class LocalVariableTableAttribute implements IAttribute {
 	public void writeTo(ByteWriter writer) {
 		throw new UnsupportedOperationException(); // TODO
 	}
+
 
 
 }

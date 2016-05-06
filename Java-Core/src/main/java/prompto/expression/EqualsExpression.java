@@ -27,6 +27,7 @@ import prompto.error.SyntaxError;
 import prompto.grammar.EqOp;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoAny;
 import prompto.intrinsic.PromptoDate;
 import prompto.intrinsic.PromptoDateTime;
 import prompto.intrinsic.PromptoDict;
@@ -44,6 +45,7 @@ import prompto.store.IPredicateExpression;
 import prompto.store.IQuery;
 import prompto.store.IQuery.MatchOp;
 import prompto.store.IStore;
+import prompto.type.AnyType;
 import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -75,6 +77,11 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 		this.left = left;
 		this.operator = operator;
 		this.right = right;
+	}
+	
+	@Override
+	public String toString() {
+		return left.toString() + ' ' + operator.toString() + ' ' + right.toString();
 	}
 	
 	static final String VOWELS = "AEIO"; // sufficient here
@@ -235,29 +242,29 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 
 	@Override
 	public void compileAssert(Context context, MethodInfo method, Flags flags, TestMethodDeclaration test) {
+		context = context.newChildContext();
 		StackState finalState = method.captureStackState();
 		// compile left and store in local
 		IType leftType = this.left.check(context);
 		ResultInfo leftInfo = this.left.compile(context, method, flags.withPrimitive(false));
-		StackLocal left = method.registerLocal("%left%", VerifierType.ITEM_Object, new ClassConstant(leftInfo.getType()));
+		String leftName = method.nextTransientName("left");
+		StackLocal left = method.registerLocal(leftName, VerifierType.ITEM_Object, new ClassConstant(leftInfo.getType()));
 		CompilerUtils.compileASTORE(method, left);
 		// compile right and store in local
 		IType rightType = this.right.check(context);
 		ResultInfo rightInfo = this.right.compile(context, method, flags.withPrimitive(false));
-		StackLocal right = method.registerLocal("%right%", VerifierType.ITEM_Object, new ClassConstant(rightInfo.getType()));
+		String rightName = method.nextTransientName("right");
+		StackLocal right = method.registerLocal(rightName, VerifierType.ITEM_Object, new ClassConstant(rightInfo.getType()));
 		CompilerUtils.compileASTORE(method, right);
 		// call regular compile
-		IExpression savedLeft = this.left;
-		this.left = new InstanceExpression(new Identifier("%left%"));
-		context.registerValue(new Variable(new Identifier("%left%"), leftType));
-		IExpression savedRight = this.right;
-		this.right = new InstanceExpression(new Identifier("%right%"));
-		context.registerValue(new Variable(new Identifier("%right%"), rightType));
-		ResultInfo info = compile(context, method, flags.withPrimitive(true));
+		IExpression newLeft = new InstanceExpression(new Identifier(leftName));
+		context.registerValue(new Variable(new Identifier(leftName), leftType));
+		IExpression newRight = new InstanceExpression(new Identifier(rightName));
+		context.registerValue(new Variable(new Identifier(rightName), rightType));
+		EqualsExpression newExp = new EqualsExpression(newLeft, this.operator, newRight);
+		ResultInfo info = newExp.compile(context, method, flags.withPrimitive(true));
 		if(Boolean.class==info.getType())
 			CompilerUtils.BooleanToboolean(method);
-		this.left = savedLeft;
-		this.right = savedRight;
 		// 1 = success
 		IInstructionListener finalListener = method.addOffsetListener(new OffsetListenerConstant());
 		method.activateOffsetListener(finalListener);
@@ -281,10 +288,13 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 		method.addInstruction(Opcode.INVOKEVIRTUAL, concat);
 		test.compileFailure(context, method, flags);
 		// success/final
+		method.unregisterLocal(right);
+		method.unregisterLocal(left);
 		method.restoreFullStackState(finalState);
 		method.placeLabel(finalState);
 		method.inhibitOffsetListener(finalListener);
 	}
+	
 	@Override
 	public void interpretQuery(Context context, IQuery query) throws PromptoError {
 		IValue value = null;
@@ -368,6 +378,7 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 		map.put(Double.class, Decimal::compileEquals); 
 		map.put(long.class, Integer::compileEquals);
 		map.put(Long.class, Integer::compileEquals); 
+		map.put(PromptoAny.class, AnyType::compileEquals); 
 		map.put(PromptoRange.Long.class, RangeBase::compileEquals); 
 		map.put(PromptoRange.Character.class, RangeBase::compileEquals); 
 		map.put(PromptoRange.Date.class, RangeBase::compileEquals); 

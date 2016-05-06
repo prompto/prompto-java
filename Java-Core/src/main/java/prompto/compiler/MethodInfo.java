@@ -85,6 +85,13 @@ public class MethodInfo {
 		return codeAttribute.registerLocal(type.newStackLocal(name, className));
 	}
 	
+	/* a work-around to get a unique transient variable name */
+	/* the real solution is to manage variable scope */
+	public String nextTransientName(String core) {
+		ensureCodeAttribute();
+		return codeAttribute.nextTransientName(core);
+	}
+
 	public StackLocal getRegisteredLocal(String name) {
 		ensureCodeAttribute();
 		return codeAttribute.getRegisteredLocal(name);
@@ -156,6 +163,7 @@ public class MethodInfo {
 		attributes.forEach((a)->
 			a.writeTo(writer));
 	}
+
 
 
 }

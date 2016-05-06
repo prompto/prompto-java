@@ -161,18 +161,21 @@ public class AndExpression implements IPredicateExpression, IAssertion {
 
 	@Override
 	public void compileAssert(Context context, MethodInfo method, Flags flags, TestMethodDeclaration test) {
+		context = context.newChildContext();
 		StackState finalState = method.captureStackState();
 		// compile left and store in local
 		ResultInfo info = this.left.compile(context, method, flags.withPrimitive(true));
 		if(Boolean.class==info.getType())
 			CompilerUtils.BooleanToboolean(method);
-		StackLocal left = method.registerLocal("%left%", VerifierType.ITEM_Integer, new ClassConstant(boolean.class));
+		String leftName = method.nextTransientName("left");
+		StackLocal left = method.registerLocal(leftName, VerifierType.ITEM_Integer, new ClassConstant(boolean.class));
 		CompilerUtils.compileISTORE(method, left);
 		// compile right and store in local
 		info = this.right.compile(context, method, flags.withPrimitive(true));
 		if(Boolean.class==info.getType())
 			CompilerUtils.BooleanToboolean(method);
-		StackLocal right = method.registerLocal("%right%", VerifierType.ITEM_Integer, new ClassConstant(boolean.class));
+		String rightName = method.nextTransientName("right");
+		StackLocal right = method.registerLocal(rightName, VerifierType.ITEM_Integer, new ClassConstant(boolean.class));
 		CompilerUtils.compileISTORE(method, right);
 		// check success of left and right
 		CompilerUtils.compileILOAD(method, left);
@@ -203,6 +206,8 @@ public class AndExpression implements IPredicateExpression, IAssertion {
 		method.addInstruction(Opcode.INVOKEVIRTUAL, concat);
 		test.compileFailure(context, method, flags);
 		// success/final
+		method.unregisterLocal(right);
+		method.unregisterLocal(left);
 		method.restoreFullStackState(finalState);
 		method.placeLabel(finalState);
 		method.inhibitOffsetListener(finalListener);
