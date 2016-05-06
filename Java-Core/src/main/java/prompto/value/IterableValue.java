@@ -14,6 +14,7 @@ import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.type.IType;
 import prompto.type.IteratorType;
+import prompto.type.ListType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
@@ -82,11 +83,18 @@ public class IterableValue extends BaseValue implements IIterable<IValue>, Itera
 	@Override
 	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, Map<String, byte[]> data) throws PromptoError {
 		try {
+			generator.writeStartObject();
+			generator.writeFieldName("type");
+			// serialize Cursor as list
+			IType type = new ListType(((IteratorType)getType()).getItemType());
+			generator.writeString(type.getTypeName());
+			generator.writeFieldName("value");
 			generator.writeStartArray();
-			Iterator<IValue> iterator = iterator();
-			while(iterator.hasNext())
-				iterator.next().toJson(context, generator, null, null, data);
+			Iterator<IValue> iter = iterator();
+			while(iter.hasNext())
+				iter.next().toJson(context, generator, null, null, data);
 			generator.writeEndArray();
+			generator.writeEndObject();
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		}
