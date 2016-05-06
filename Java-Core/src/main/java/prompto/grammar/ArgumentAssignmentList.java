@@ -1,5 +1,6 @@
 package prompto.grammar;
 
+import java.util.Collection;
 import java.util.LinkedList;
 
 import prompto.declaration.IMethodDeclaration;
@@ -19,11 +20,11 @@ public class ArgumentAssignmentList extends LinkedList<ArgumentAssignment> {
 		this.add(assignment);
 	}
 	
-	public ArgumentAssignmentList(ArgumentAssignmentList assignments) {
+	public ArgumentAssignmentList(Collection<ArgumentAssignment> assignments) {
 		super(assignments);
 	}
 
-	public ArgumentAssignmentList(ArgumentAssignmentList assignments, ArgumentAssignment assignment) {
+	public ArgumentAssignmentList(Collection<ArgumentAssignment> assignments, ArgumentAssignment assignment) {
 		super(assignments);
 		this.add(assignment);
 	}
