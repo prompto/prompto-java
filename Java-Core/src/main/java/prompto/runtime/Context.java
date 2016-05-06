@@ -353,12 +353,12 @@ public class Context implements IContext {
 	}
 
 	public void registerDeclaration(IDeclaration declaration) {
-		if(checkDuplicate(declaration))
+		if(checkDuplicateDeclaration(declaration))
 			declarations.put(declaration.getId(), declaration);
 	}
 
-	private boolean checkDuplicate(IDeclaration declaration) {
-		INamed current = getRegistered(declaration.getId());
+	private boolean checkDuplicateDeclaration(IDeclaration declaration) {
+		IDeclaration current = getRegisteredDeclaration(IDeclaration.class, declaration.getId(), false);
 		if(current!=null)
 			problemListener.reportDuplicate(declaration.getId().toString(), declaration, current.getId());
 		return current==null;
