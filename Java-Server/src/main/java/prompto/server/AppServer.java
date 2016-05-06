@@ -76,7 +76,7 @@ public class AppServer {
 			String arg = args[i];
 			if(!arg.startsWith("-"))
 				continue;
-			if(arg.equalsIgnoreCase("-test-mode")) {
+			if(arg.equalsIgnoreCase("-testMode")) {
 				testMode = Boolean.valueOf(args[++i]);
 			} else if(arg.equalsIgnoreCase("-http_port")) {
 				httpPort = Integer.parseInt(args[++i]);
@@ -142,7 +142,7 @@ public class AppServer {
 	}
 
 	public static ICodeStore bootstrapCodeStore(IStore<?> store, String application, Version version, boolean testMode, String ...resourceNames) throws Exception {
-		System.out.println("Initializing class loader...");
+		System.out.println("Initializing class loader " + (testMode ? "in test mode" : "") + "...");
 		globalContext = Context.newGlobalContext();
 		File promptoDir = Files.createTempDirectory("prompto_").toFile();
 		classLoader = PromptoClassLoader.initialize(globalContext, promptoDir, testMode);
