@@ -15,6 +15,7 @@ public class TestAppStore extends BaseWebTest {
 	@BeforeClass
 	public static void startCodeServer() throws Throwable {
 		String[] args = {
+				"-testMode=true",
 				"-http_port",
 				"8888",
 				"-codeStoreFactory",

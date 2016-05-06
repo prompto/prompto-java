@@ -44,7 +44,7 @@ public class TestEditor extends BaseWebTest {
 	
 	@Test
 	public void testSelectMethod() throws Exception { 
-		loadSalesAppAndHideCore();
+		loadSalesAppAndHideLibraries();
 		// ensure no code is loaded in editor
 		String content = getEditorContent();
 		assertEquals("", content);
@@ -57,12 +57,12 @@ public class TestEditor extends BaseWebTest {
 		assertTrue(content.length()>0);
 	}
 
-	private void loadSalesAppAndHideCore() throws Exception {
+	private void loadSalesAppAndHideLibraries() throws Exception {
 		String dbId = getDbIdForModule("Sales");
 		String url = EDITOR_URL.replace("$dbId$", dbId).replace("$name$", "Sales");
 		webDriver.get(url);
 		// hide core declarations
-		WebElement we = waitElement(By.id("show-core"));
+		WebElement we = waitElement(By.id("show-libs"));
 		if(we.isSelected())
 			we.click();
 		we = waitElement(By.id("method_printHelloSales"));
@@ -70,7 +70,7 @@ public class TestEditor extends BaseWebTest {
 
 	@Test
 	public void testNewButton() throws Exception { 
-		loadSalesAppAndHideCore();
+		loadSalesAppAndHideLibraries();
 		// locate method item
 		WebElement we = waitObjectLink("method_printHelloSales");
 		assertEquals("printHelloSales", we.getText());
@@ -89,7 +89,7 @@ public class TestEditor extends BaseWebTest {
 
 	@Test
 	public void testNewAttribute() throws Exception { 
-		loadSalesAppAndHideCore();
+		loadSalesAppAndHideLibraries();
 		WebElement we = getEditorInput();
 		String code = "define dummy as Text attribute";
 		sendKeys(we, code, 500);
@@ -107,7 +107,7 @@ public class TestEditor extends BaseWebTest {
 	
 	@Test
 	public void testDeleteAttribute() throws Exception { 
-		loadSalesAppAndHideCore();
+		loadSalesAppAndHideLibraries();
 		WebElement we = getEditorInput();
 		String code = "define dummy as Text attribute";
 		sendKeys(we, code, 500);
@@ -127,7 +127,7 @@ public class TestEditor extends BaseWebTest {
 
 	@Test
 	public void testNewCategory() throws Exception {  
-		loadSalesAppAndHideCore();
+		loadSalesAppAndHideLibraries();
 		WebElement we = getEditorInput();
 		String code = "define Dummy as category with attribute name";
 		sendKeys(we, code, 500);
@@ -145,7 +145,7 @@ public class TestEditor extends BaseWebTest {
 	
 	@Test
 	public void testDeleteCategory() throws Exception { 
-		loadSalesAppAndHideCore();
+		loadSalesAppAndHideLibraries();
 		WebElement we = getEditorInput();
 		String code = "define Dummy as category with attribute name";
 		sendKeys(we, code, 500);
@@ -165,7 +165,7 @@ public class TestEditor extends BaseWebTest {
 
 	@Test
 	public void testNewTest() throws Exception {  
-		loadSalesAppAndHideCore();
+		loadSalesAppAndHideLibraries();
 		WebElement we = getEditorInput();
 		String code = "define \"dummy test\" as test method doing:\n"
 				+ "    a = \"Hello\"\n"
@@ -186,7 +186,7 @@ public class TestEditor extends BaseWebTest {
 
 	@Test
 	public void testDeleteTest() throws Exception { 
-		loadSalesAppAndHideCore();
+		loadSalesAppAndHideLibraries();
 		WebElement we = getEditorInput();
 		String code = "define \"dummy test\" as test method doing:\n"
 				+ "    a = \"Hello\"\n"
@@ -209,7 +209,7 @@ public class TestEditor extends BaseWebTest {
 
 	@Test
 	public void testNewMethod1Proto() throws Exception {  
-		loadSalesAppAndHideCore();
+		loadSalesAppAndHideLibraries();
 		WebElement we = getEditorInput();
 		String code = "define dummyMethod as method receiving name doing:\n"
 					+ "    print with \"name=\" + name as value";
@@ -228,7 +228,7 @@ public class TestEditor extends BaseWebTest {
 
 	@Test
 	public void testNewMethod2Protos() throws Exception {  
-		loadSalesAppAndHideCore();
+		loadSalesAppAndHideLibraries();
 		WebElement we = getEditorInput();
 		String code1 = "define dummyMethod as method receiving name doing:\n"
 					+ "    print with \"name=\" + name as value";
@@ -262,7 +262,7 @@ public class TestEditor extends BaseWebTest {
 
 	@Test
 	public void testDeleteMethod1Proto() throws Exception { 
-		loadSalesAppAndHideCore();
+		loadSalesAppAndHideLibraries();
 		WebElement we = getEditorInput();
 		String code = "define dummyMethod as method receiving name doing:\n"
 					+ "    print with \"name=\" + name as value";
@@ -283,7 +283,7 @@ public class TestEditor extends BaseWebTest {
 
 	@Test
 	public void testDeleteMethod2Protos() throws Exception { 
-		loadSalesAppAndHideCore();
+		loadSalesAppAndHideLibraries();
 		WebElement we = getEditorInput();
 		String code = "define dummyMethod as method receiving name doing:\n"
 					+ "    print with \"name=\" + name as value";
@@ -318,7 +318,7 @@ public class TestEditor extends BaseWebTest {
 	
 	@Test
 	public void testRevertButton() throws Exception { 
-		loadSalesAppAndHideCore();
+		loadSalesAppAndHideLibraries();
 		WebElement we = getEditorInput();
 		// create an attribute
 		String code = "define dummy as Text attribute";
@@ -380,7 +380,7 @@ public class TestEditor extends BaseWebTest {
 	
 	@Test
 	public void testCommitAttribute() throws Exception { 
-		loadSalesAppAndHideCore();
+		loadSalesAppAndHideLibraries();
 		WebElement we = getEditorInput();
 		// create an attribute
 		String code = "define dummy as Text attribute";
@@ -421,7 +421,7 @@ public class TestEditor extends BaseWebTest {
 	
 	@Test
 	public void testCommitCategory() throws Exception { 
-		loadSalesAppAndHideCore();
+		loadSalesAppAndHideLibraries();
 		WebElement we = getEditorInput();
 		// create a category
 		String code = "define Dummy as category with attribute name";
@@ -462,7 +462,7 @@ public class TestEditor extends BaseWebTest {
 	
 	@Test
 	public void testCommitTest() throws Exception { 
-		loadSalesAppAndHideCore();
+		loadSalesAppAndHideLibraries();
 		WebElement we = getEditorInput();
 		// create a test
 		String code = "define \"dummy test\" as test method doing:\n"
@@ -506,7 +506,7 @@ public class TestEditor extends BaseWebTest {
 	
 	@Test
 	public void testCommitMethod() throws Exception { 
-		loadSalesAppAndHideCore();
+		loadSalesAppAndHideLibraries();
 		WebElement we = getEditorInput();
 		// create a method
 		String code = "define dummyMethod as method receiving name doing:\n"
@@ -548,7 +548,7 @@ public class TestEditor extends BaseWebTest {
 	
 	@Test
 	public void testCommitMany() throws Exception { 
-		loadSalesAppAndHideCore();
+		loadSalesAppAndHideLibraries();
 		WebElement we = getEditorInput();
 		// create an attribute
 		String code = "define dummy as Text attribute";
