@@ -75,6 +75,27 @@ public class PromptoStoreQuery {
 			throw new UnsupportedOperationException("Can't store " + value.getClass());
 	}
 
+	@SuppressWarnings("unchecked")
+	public void delete(Object value) {
+		if(value==null)
+			return;
+		else if(value instanceof PromptoRoot) try {
+			Object dbId = ((PromptoRoot)value).getDbId();
+			if(dbId!=null)
+				deletables.add(dbId);
+		} catch(PromptoError e) {
+			throw new RuntimeException(e); // TODO for now
+		} else if(value instanceof Iterable)
+			((Iterable<Object>)value).forEach((item)->
+				delete(item));
+		else if(value instanceof Iterator) {
+			Iterator<Object> iter = (Iterator<Object>)value;
+			while(iter.hasNext())
+				delete(iter.next());
+		} else
+			throw new UnsupportedOperationException("Can't delete " + value.getClass());
+	}
+
 	public void store(Object value) {
 		if(value==null)
 			return;
