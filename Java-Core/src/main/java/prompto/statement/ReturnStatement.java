@@ -10,6 +10,7 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StringConstant;
+import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.ResultInfo.Flag;
 import prompto.compiler.StackLocal;
 import prompto.error.PromptoError;
@@ -78,14 +79,26 @@ public class ReturnStatement extends SimpleStatement {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		FieldInfo setter = flags.setter();
-		if(setter==null)
-			return compileReturn(context, method, flags);
+		if(flags.setter()!=null)
+			return compileSetter(context, method, flags);
+		else if(flags.variable()!=null)
+			return compileVariable(context, method, flags);
 		else
-			return compileSetter(context, method, flags, setter);
+			return compileReturn(context, method, flags);
 	}
 	
-	private ResultInfo compileSetter(Context context, MethodInfo method, Flags flags, FieldInfo field) {
+	private ResultInfo compileVariable(Context context, MethodInfo method, Flags flags) {
+		String name = flags.variable();
+		if(expression!=null) {
+			ResultInfo info = expression.compile(context, method, flags.withPrimitive(false));
+			StackLocal result = method.registerLocal(name, VerifierType.ITEM_Object, new ClassConstant(info.getType()));
+			CompilerUtils.compileASTORE(method, result);
+		}
+		return new ResultInfo(void.class, Flag.RETURN);
+	}
+
+	private ResultInfo compileSetter(Context context, MethodInfo method, Flags flags) {
+		FieldInfo field = flags.setter();
 		// load 'this'
 		StackLocal local = method.getRegisteredLocal("this");
 		ClassConstant c = ((StackLocal.ObjectLocal)local).getClassName();

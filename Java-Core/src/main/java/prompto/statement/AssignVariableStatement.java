@@ -1,10 +1,14 @@
 package prompto.statement;
 
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
+import prompto.instance.VariableInstance;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.type.IType;
@@ -16,16 +20,20 @@ import prompto.value.IValue;
 
 public class AssignVariableStatement extends SimpleStatement {
 	
-	Identifier name;
+	VariableInstance variable;
 	IExpression expression;
 	
-	public AssignVariableStatement(Identifier name, IExpression expression) {
-		this.name = name;
+	public AssignVariableStatement(Identifier id, IExpression expression) {
+		this.variable = new VariableInstance(id);
 		this.expression = expression;
 	}
 
-	public Identifier getName() {
-		return name;
+	public Identifier getVariableId() {
+		return variable.getId();
+	}
+
+	public String getVariableName() {
+		return variable.getName();
 	}
 
 	public IExpression getExpression() {
@@ -38,7 +46,7 @@ public class AssignVariableStatement extends SimpleStatement {
 	
 	@Override
 	public void toDialect(CodeWriter writer) {
-		writer.append(name);
+		writer.append(variable.getName());
 		writer.append(" = ");
 		expression.toDialect(writer);
 	}
@@ -47,9 +55,9 @@ public class AssignVariableStatement extends SimpleStatement {
 		IType type = expression.check(context);
 		if(!(type instanceof ResourceType))
 			throw new SyntaxError("Not a resource!");
-		INamed actual = context.getRegisteredValue(INamed.class,name);
+		INamed actual = context.getRegisteredValue(INamed.class, variable.getId());
 		if(actual==null)
-			context.registerValue(new Variable(name, type));
+			context.registerValue(new Variable(variable.getId(), type));
 		else {
 			// need to check type compatibility
 			IType actualType = actual.getType(context);
@@ -67,16 +75,16 @@ public class AssignVariableStatement extends SimpleStatement {
 		if(!(obj instanceof AssignVariableStatement))
 			return false;
 		AssignVariableStatement other = (AssignVariableStatement)obj;
-		return this.name.equals(other.name)
+		return this.variable.getId().equals(other.variable.getId())
 				&& this.getExpression().equals(other.getExpression());
 	}
 	
 	@Override
 	public IType check(Context context) {
-		INamed actual = context.getRegisteredValue(INamed.class,name);
+		INamed actual = context.getRegisteredValue(INamed.class, variable.getId());
 		if(actual==null) {
 			IType actualType = expression.check(context);
-			context.registerValue(new Variable(name, actualType));
+			context.registerValue(new Variable(variable.getId(), actualType));
 		} else {
 			// need to check type compatibility
 			IType actualType = actual.getType(context);
@@ -88,14 +96,25 @@ public class AssignVariableStatement extends SimpleStatement {
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		INamed actual = context.getRegisteredValue(INamed.class,name);
+		INamed actual = context.getRegisteredValue(INamed.class, variable.getId());
 		if(actual==null) {
 			IType actualType = expression.check(context);
-			context.registerValue(new Variable(name, actualType));
+			context.registerValue(new Variable(variable.getId(), actualType));
 		}
-		context.setValue(name, expression.interpret(context));
+		context.setValue(variable.getId(), expression.interpret(context));
 		return null;
 	}
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		INamed actual = context.getRegisteredValue(INamed.class, variable.getId());
+		if(actual==null) {
+			IType actualType = expression.check(context);
+			context.registerValue(new Variable(variable.getId(), actualType));
+		}
+		return variable.compileAssign(context, method, flags, expression);
+	}
+
 
 
 }

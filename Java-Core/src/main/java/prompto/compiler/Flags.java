@@ -17,7 +17,9 @@ public class Flags {
 		this.values.put("decimal", false);
 		this.values.put("member", false);
 		this.values.put("opcode", null);
+		this.values.put("getter", null);
 		this.values.put("setter", null);
+		this.values.put("variable", null);
 	}
 	
 	private Flags(Map<String, Object> values) {
@@ -92,6 +94,14 @@ public class Flags {
 	
 	public Flags withGetter(FieldInfo field) {
 		return clone("getter", field);
+	}
+	
+	public String variable() {
+		return (String)values.get("variable");
+	}
+	
+	public Flags withVariable(String variable) {
+		return clone("variable", variable);
 	}
 	
 	public boolean isMember() {

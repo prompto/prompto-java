@@ -2,6 +2,11 @@ package prompto.statement;
 
 import java.io.IOException;
 
+import prompto.compiler.Flags;
+import prompto.compiler.InterfaceConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.error.InvalidResourceError;
 import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
@@ -9,6 +14,7 @@ import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.runtime.Context;
+import prompto.runtime.Context.ResourceContext;
 import prompto.type.IType;
 import prompto.type.ResourceType;
 import prompto.type.VoidType;
@@ -47,7 +53,7 @@ public class WriteStatement extends SimpleStatement {
 	
 	@Override
 	public IType check(Context context) {
-		context = context.newResourceContext();
+		context = context instanceof ResourceContext ? context : context.newResourceContext();
 		IType resourceType = resource.check(context);
 		if(!(resourceType instanceof ResourceType))
 			throw new SyntaxError("Not a resource!");
@@ -56,8 +62,8 @@ public class WriteStatement extends SimpleStatement {
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		context = context.newResourceContext();
-		Object o = resource.interpret(context);
+		Context resContext = context instanceof ResourceContext ? context : context.newResourceContext();
+		Object o = resource.interpret(resContext);
 		if(o==null)
 			throw new NullReferenceError();
 		if(!(o instanceof IResource))
@@ -66,10 +72,29 @@ public class WriteStatement extends SimpleStatement {
 		if(!res.isWritable())
 			throw new InvalidResourceError("Not writable");
 		try {
-			res.writeFully(content.interpret(context).toString());
+			res.writeFully(content.interpret(resContext).toString());
 			return null;
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
+		} finally {
+			if(resContext!=context)
+				res.close();
 		}
+	}
+	
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		Context resContext = context instanceof ResourceContext ? context : context.newResourceContext();
+		/*ResultInfo info = */resource.compile(resContext, method, flags);
+		if(resContext!=context)
+			method.addInstruction(Opcode.DUP);
+		content.compile(resContext, method, flags);
+		InterfaceConstant c = new InterfaceConstant(IResource.class, "writeFully", String.class, void.class);
+		method.addInstruction(Opcode.INVOKEINTERFACE, c);
+		if(resContext!=context) {
+			c = new InterfaceConstant(IResource.class, "close", void.class);
+			method.addInstruction(Opcode.INVOKEINTERFACE, c);
+		}
+		return new ResultInfo(void.class);
 	}
 }

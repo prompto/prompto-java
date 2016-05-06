@@ -37,6 +37,11 @@ public class VariableInstance implements IAssignableInstance {
 		return id;
 	}
 	
+	public String getName() {
+		return id.toString();
+	}
+
+	
 	@Override
 	public ResultInfo compileParent(Context context, MethodInfo method, Flags flags) {
 		StackLocal local = method.getRegisteredLocal(id.toString());
@@ -126,5 +131,6 @@ public class VariableInstance implements IAssignableInstance {
 	public IValue interpret(Context context) throws PromptoError {
 		return context.getValue(id);
 	}
+
 
 }

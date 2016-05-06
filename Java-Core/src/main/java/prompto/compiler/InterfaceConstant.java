@@ -2,15 +2,13 @@ package prompto.compiler;
 
 import java.lang.reflect.Type;
 
-import prompto.compiler.Descriptor.Method;
-
 public class InterfaceConstant extends MethodConstant {
 
-	public InterfaceConstant(Type klass, String methodName, Method descriptor) {
+	public InterfaceConstant(Type klass, String methodName, Descriptor.Method descriptor) {
 		super(klass, methodName, descriptor);
 	}
 	
-	public InterfaceConstant(ClassConstant klass, String methodName, Method method) {
+	public InterfaceConstant(ClassConstant klass, String methodName, Descriptor.Method method) {
 		super(klass, methodName, method);
 	}
 

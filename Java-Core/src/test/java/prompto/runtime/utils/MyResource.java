@@ -4,7 +4,9 @@ import prompto.value.IResource;
 
 public class MyResource implements IResource {
 
-	public static String content;
+	static ThreadLocal<String> content = new ThreadLocal<String>() { 
+		@Override protected String initialValue() { return "readFullyOk"; }
+	};
 	
 	String path;
 	
@@ -32,11 +34,11 @@ public class MyResource implements IResource {
 	
 	@Override
 	public String readFully() {
-		return content;
+		return content.get();
 	}
 	
 	@Override
 	public void writeFully(String data) {
-		content = data;
+		content.set(data);
 	}
 }

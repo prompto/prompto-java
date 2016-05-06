@@ -7,21 +7,6 @@ import prompto.parser.e.BaseEParserTest;
 public class TestResource extends BaseEParserTest {
 
 	@Test
-	public void testBadRead() throws Exception {
-		compareResourceEOE("resource/badRead.pec");
-	}
-
-	@Test
-	public void testBadResource() throws Exception {
-		compareResourceEOE("resource/badResource.pec");
-	}
-
-	@Test
-	public void testBadWrite() throws Exception {
-		compareResourceEOE("resource/badWrite.pec");
-	}
-
-	@Test
 	public void testReadResource() throws Exception {
 		compareResourceEOE("resource/readResource.pec");
 	}
