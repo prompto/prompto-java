@@ -26,21 +26,30 @@ public abstract class CSVReader {
 		return list;
 	}
 	
-	public static Iterator<PromptoDocument<String, Object>> iterator(String data, PromptoDict<String, String> columns, Character separator, Character encloser) throws IOException {
+	static interface CSVIterable extends Iterable<PromptoDocument<String, Object>>, Iterator<PromptoDocument<String, Object>> {
+	}
+	
+	public static CSVIterable iterator(String data, PromptoDict<String, String> columns, Character separator, Character encloser) throws IOException {
 		BufferedReader reader = data==null ? null : new BufferedReader(new StringReader(data));
 		return iterator(reader, columns, separator, encloser);
 	}
 	
-	public static Iterator<PromptoDocument<String, Object>> iterator(final BufferedReader reader, PromptoDict<String, String> columns, Character separator, Character encloser) {
+	public static CSVIterable iterator(final BufferedReader reader, PromptoDict<String, String> columns, Character separator, Character encloser) {
 		
 		char sep = separator==null ? ',' : separator.charValue();
 		char quote = encloser==null ? '"' : encloser.charValue();
 		
-		return new Iterator<PromptoDocument<String, Object>>() {
+		return new CSVIterable() {
 			
 			BufferedReader buffered = reader;
 			ArrayList<String> headers = null;
 			String nextLine;
+			
+			
+			@Override
+			public Iterator<PromptoDocument<String, Object>> iterator() {
+				return this;
+			}
 			
 			@Override
 			public boolean hasNext() {
