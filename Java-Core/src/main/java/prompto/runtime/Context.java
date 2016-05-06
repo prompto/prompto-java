@@ -316,14 +316,14 @@ public class Context implements IContext {
 		if(actual!=null)
 			return ObjectUtils.downcast(klass,actual);
 		else if(lookInStore && globals==this)
-			actual = fetchAndRegister(name);
+			actual = fetchAndRegisterDeclaration(name);
 		if(actual!=null)
 			return ObjectUtils.downcast(klass,actual);
 		else
 			return null;
 	}
 
-	private IDeclaration fetchAndRegister(Identifier name) {
+	private IDeclaration fetchAndRegisterDeclaration(Identifier name) {
 		ICodeStore store = ICodeStore.getInstance();
 		if(store==null)
 			return null;
@@ -674,13 +674,43 @@ public class Context implements IContext {
 		else {
 			IDeclaration test = tests.get(name);
 			if(test==null && lookInStore)
-				test = fetchAndRegister(name);
+				test = fetchAndRegisterTest(name);
 			if(test instanceof TestMethodDeclaration)
 				return (TestMethodDeclaration)test;
 			else
 				return null;
 		}
 	}
+	
+	private IDeclaration fetchAndRegisterTest(Identifier name) {
+		ICodeStore store = ICodeStore.getInstance();
+		if(store==null)
+			return null;
+		// fetch and register atomically
+		synchronized(this) {
+			IDeclaration decl = tests.get(name); // may have happened in another thread
+			if(decl!=null)
+				return decl;
+			try {
+				Iterator<IDeclaration> decls = store.fetchLatestVersions(name.toString());
+				if(decls==null)
+					return null;
+				while(decls.hasNext()) {
+					decl = decls.next();
+					if(decl instanceof MethodDeclarationMap) {
+						MethodDeclarationMap map = (MethodDeclarationMap)decl;
+						for(Map.Entry<String, IMethodDeclaration> entry : map.entrySet())
+							entry.getValue().register(this);
+					} else
+						decl.register(this);
+				}
+				return tests.get(name);
+			} catch(PromptoError e) {
+				throw new RuntimeException(e); // TODO define a strategy
+			}
+		}
+	}
+	
 	
 	@Override
 	public ISection findSectionFor(String path, int lineNumber) {
