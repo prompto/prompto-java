@@ -32,6 +32,7 @@ import prompto.value.IValue;
 import prompto.value.IteratorValue;
 import prompto.value.ListValue;
 import prompto.value.NativeInstance;
+import prompto.value.NullValue;
 import prompto.value.SetValue;
 import prompto.value.Text;
 
@@ -158,8 +159,8 @@ public class JavaClassType extends BaseType {
 		Document doc = new Document();
 		for(Object key : src.keySet()) {
 			value = src.get(key);
-			type = value==null ? Object.class : value.getClass();
-			IValue item = convertJavaValueToPromptoValue(context, value, type, AnyType.instance());
+			IValue item = value==null ? NullValue.instance() :
+				convertJavaValueToPromptoValue(context, value, value.getClass(), AnyType.instance());
 			Identifier keyId = new Identifier(String.valueOf(key));
 			doc.setMember(keyId, item);
 		}
