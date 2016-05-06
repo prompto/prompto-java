@@ -668,11 +668,18 @@ public class Context implements IContext {
 			return tests.values();
 	}
 
-	public TestMethodDeclaration getTest(Identifier name) {
+	public TestMethodDeclaration getTest(Identifier name, boolean lookInStore) {
 		if(globals!=this)
-			return globals.getTest(name);
-		else
-			return tests.get(name);
+			return globals.getTest(name, lookInStore);
+		else {
+			IDeclaration test = tests.get(name);
+			if(test==null && lookInStore)
+				test = fetchAndRegister(name);
+			if(test instanceof TestMethodDeclaration)
+				return (TestMethodDeclaration)test;
+			else
+				return null;
+		}
 	}
 	
 	@Override

@@ -46,8 +46,8 @@ public class Interpreter {
 		
 	}
 
-	public static void interpretTest(Context context, Identifier testName) throws PromptoError {
-		TestMethodDeclaration test = context.getTest(testName);
+	public static void interpretTest(Context context, Identifier testName, boolean lookInStore) throws PromptoError {
+		TestMethodDeclaration test = context.getTest(testName, lookInStore);
 		Context local = context.newLocalContext();
 		test.interpret(local);
 	}

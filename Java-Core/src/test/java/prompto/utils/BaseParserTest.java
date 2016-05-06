@@ -162,7 +162,7 @@ public abstract class BaseParserTest extends BaseTest {
 	}
 
 	private void interpretTest(Identifier identifier) throws Exception {
-		Interpreter.interpretTest(coreContext, identifier);
+		Interpreter.interpretTest(coreContext, identifier, false);
 		String expected = identifier.toString() + " test successful\n";
 		String read = Out.read();
 		assertEquals(expected, read);

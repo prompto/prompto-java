@@ -78,7 +78,7 @@ public class Compiler {
 
 	private ClassFile createTestClassFile(Context context, String fullName) throws ClassNotFoundException {
 		String simpleName = CompilerUtils.testSimpleNameFrom(fullName);
-		TestMethodDeclaration decl = context.getTest(new Identifier(simpleName));
+		TestMethodDeclaration decl = context.getTest(new Identifier(simpleName), true);
 		if(decl==null)
 			throw new ClassNotFoundException(simpleName);
 		else 
