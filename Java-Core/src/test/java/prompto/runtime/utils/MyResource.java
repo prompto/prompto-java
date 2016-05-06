@@ -1,12 +1,13 @@
 package prompto.runtime.utils;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import prompto.value.IResource;
 
 public class MyResource implements IResource {
 
-	static ThreadLocal<String> content = new ThreadLocal<String>() { 
-		@Override protected String initialValue() { return "readFullyOk"; }
-	};
+	static Map<String,String> contents = new ConcurrentHashMap<>();
 	
 	String path;
 	
@@ -16,6 +17,14 @@ public class MyResource implements IResource {
 	
 	public void setPath(String path) {
 		this.path = path;
+	}
+	
+	public String getContent() {
+		return contents.get(path);
+	}
+	
+	public void setContent(String content) {
+		contents.put(path, content);
 	}
 	
 	@Override
@@ -34,11 +43,11 @@ public class MyResource implements IResource {
 	
 	@Override
 	public String readFully() {
-		return content.get();
+		return getContent();
 	}
 	
 	@Override
 	public void writeFully(String data) {
-		content.set(data);
+		setContent(data);
 	}
 }
