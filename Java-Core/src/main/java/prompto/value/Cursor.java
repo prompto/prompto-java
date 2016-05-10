@@ -9,7 +9,7 @@ import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
-import prompto.intrinsic.IterableWithLength;
+import prompto.intrinsic.IterableWithLengths;
 import prompto.runtime.Context;
 import prompto.store.IStored;
 import prompto.store.IStoredIterable;
@@ -21,7 +21,7 @@ import prompto.type.ListType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
-public class Cursor extends BaseValue implements IIterable<IValue>, IterableWithLength<IValue> {
+public class Cursor extends BaseValue implements IIterable<IValue>, IterableWithLengths<IValue> {
 
 	Context context;
 	IStoredIterable iterable;
@@ -43,9 +43,14 @@ public class Cursor extends BaseValue implements IIterable<IValue>, IterableWith
 	public Long getLength() {
 		return iterable.length();
 	}
+	
+	@Override
+	public Long getTotalLength() {
+		return iterable.totalLength();
+	}
 
 	@Override
-	public IterableWithLength<IValue> getIterable(Context context) {
+	public IterableWithLengths<IValue> getIterable(Context context) {
 		return this;
 	}
 	
@@ -103,6 +108,8 @@ public class Cursor extends BaseValue implements IIterable<IValue>, IterableWith
 			// serialize Cursor as list
 			IType type = new ListType(((CursorType)getType()).getItemType());
 			generator.writeString(type.getTypeName());
+			generator.writeFieldName("totalLength");
+			generator.writeNumber(iterable.totalLength());
 			generator.writeFieldName("value");
 			generator.writeStartArray();
 			Iterator<IValue> iter = iterator();

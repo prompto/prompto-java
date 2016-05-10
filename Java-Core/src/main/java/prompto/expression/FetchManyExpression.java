@@ -11,7 +11,7 @@ import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.OrderByClauseList;
-import prompto.intrinsic.IterableWithLength;
+import prompto.intrinsic.IterableWithLengths;
 import prompto.intrinsic.PromptoRoot;
 import prompto.runtime.Context;
 import prompto.store.IDataStore;
@@ -19,6 +19,7 @@ import prompto.store.IPredicateExpression;
 import prompto.store.IQuery;
 import prompto.store.IStore;
 import prompto.store.IStoredIterable;
+import prompto.type.AnyType;
 import prompto.type.BooleanType;
 import prompto.type.CategoryType;
 import prompto.type.CursorType;
@@ -39,6 +40,23 @@ public class FetchManyExpression extends FetchOneExpression {
 		this.first = first;
 		this.last = last;
 		this.orderBy = orderBy;
+	}
+	
+	public void setFirst(IExpression first) {
+		this.first = first;
+	}
+	
+	public IExpression getFirst() {
+		return first;
+	}
+	
+	
+	public void setLast(IExpression last) {
+		this.last = last;
+	}
+	
+	public IExpression getLast() {
+		return last;
 	}
 	
 
@@ -168,6 +186,7 @@ public class FetchManyExpression extends FetchOneExpression {
 		if(predicate!=null && !(predicate instanceof IPredicateExpression))
 			throw new SyntaxError("Filtering expression must be a predicate !");
 		IStoredIterable docs = store.interpretFetchMany(context, type, first, last, (IPredicateExpression)predicate, orderBy);
+		IType type = this.type==null ? AnyType.instance() : this.type;
 		return new Cursor(context, type, docs);
 	}
 	
@@ -213,9 +232,9 @@ public class FetchManyExpression extends FetchOneExpression {
 	}
 
 	private ResultInfo compileInstantiation(Context context, MethodInfo method, Flags flags) {
-		MethodConstant m = new MethodConstant(PromptoRoot.class, "newIterable", IStoredIterable.class, IterableWithLength.class);
+		MethodConstant m = new MethodConstant(PromptoRoot.class, "newIterable", IStoredIterable.class, IterableWithLengths.class);
 		method.addInstruction(Opcode.INVOKESTATIC, m);
-		return new ResultInfo(IterableWithLength.class);
+		return new ResultInfo(IterableWithLengths.class);
 	}
 
 }

@@ -425,12 +425,6 @@ public class SPromptoBuilder extends SParserBaseListener {
 	}
 	
 	@Override
-	public void exitBlobExpression(BlobExpressionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, exp);
-	}
-
-	@Override
 	public void exitBlob_expression(Blob_expressionContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.expression());
 		setNodeValue(ctx, new BlobExpression(exp));
@@ -644,12 +638,6 @@ public class SPromptoBuilder extends SParserBaseListener {
 		CategoryType type = this.<CategoryType>getNodeValue(ctx.typ);
 		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
 		setNodeValue(ctx, new ConstructorExpression(type, args));
-	}
-
-	@Override
-	public void exitConstructorExpression(ConstructorExpressionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, exp);
 	}
 
 	@Override
@@ -930,12 +918,6 @@ public class SPromptoBuilder extends SParserBaseListener {
 	}
 	
 	@Override
-	public void exitDocumentExpression(DocumentExpressionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, exp);
-	}
-	
-	@Override
 	public void exitDoWhileStatement(DoWhileStatementContext ctx) {
 		IStatement stmt = this.<IStatement>getNodeValue(ctx.stmt);
 		setNodeValue(ctx, stmt);
@@ -1027,34 +1009,29 @@ public class SPromptoBuilder extends SParserBaseListener {
 		setNodeValue(ctx, items);
 	}
 	
-	@Override
-	public void exitFetchExpression(FetchExpressionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, exp);
-	}
 	
 	@Override
-	public void exitFetchList(FetchListContext ctx) {
+	public void exitFetch_list_expression(Fetch_list_expressionContext ctx) {
 		Identifier itemName = this.<Identifier>getNodeValue(ctx.name);
 		IExpression source = this.<IExpression>getNodeValue(ctx.source);
-		IExpression filter = this.<IExpression>getNodeValue(ctx.xfilter);
+		IExpression filter = this.<IExpression>getNodeValue(ctx.predicate);
 		setNodeValue(ctx, new FetchListExpression(itemName, source, filter));
 	}
 	
 	@Override
 	public void exitFetchOne(FetchOneContext ctx) {
 		CategoryType category = this.<CategoryType>getNodeValue(ctx.typ);
-		IExpression filter = this.<IExpression>getNodeValue(ctx.xfilter);
+		IExpression filter = this.<IExpression>getNodeValue(ctx.predicate);
 		setNodeValue(ctx, new FetchOneExpression(category, filter));
 	}
 	
 	@Override
-	public void exitFetchAll(FetchAllContext ctx) {
+	public void exitFetchMany(FetchManyContext ctx) {
 		CategoryType category = this.<CategoryType>getNodeValue(ctx.typ);
 		IExpression start = this.<IExpression>getNodeValue(ctx.xstart);
 		IExpression stop = this.<IExpression>getNodeValue(ctx.xstop);
-		IExpression filter = this.<IExpression>getNodeValue(ctx.xfilter);
-		OrderByClauseList orderBy = this.<OrderByClauseList>getNodeValue(ctx.xorder);
+		IExpression filter = this.<IExpression>getNodeValue(ctx.predicate);
+		OrderByClauseList orderBy = this.<OrderByClauseList>getNodeValue(ctx.orderby);
 		setNodeValue(ctx, new FetchManyExpression(category, start, stop, filter, orderBy));
 	}
 	
@@ -1681,15 +1658,16 @@ public class SPromptoBuilder extends SParserBaseListener {
 	
 	
 	@Override
+	public void exitMethod_expression(Method_expressionContext ctx) {
+		IExpression decl = this.<IExpression>getNodeValue(ctx.getChild(0));
+		setNodeValue(ctx, decl);
+	}
+	
+	
+	@Override
 	public void exitMethod_identifier(Method_identifierContext ctx) {
 		Object id = this.<Object>getNodeValue(ctx.getChild(0));
 		setNodeValue(ctx, id);
-	}
-	
-	@Override
-	public void exitMethodCallExpression(MethodCallExpressionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, exp);
 	}
 	
 	@Override
@@ -2269,12 +2247,6 @@ public class SPromptoBuilder extends SParserBaseListener {
 	}
 	
 	@Override
-	public void exitReadExpression(ReadExpressionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, exp);
-	}
-	
-	@Override
 	public void exitResource_declaration(Resource_declarationContext ctx) {
 		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.native_resource_declaration());
 		setNodeValue(ctx, decl);
@@ -2385,13 +2357,7 @@ public class SPromptoBuilder extends SParserBaseListener {
 		setNodeValue(ctx, new SortedExpression(source, key));
 	}
 	
-	@Override
-	public void exitSortedExpression(SortedExpressionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, exp);
-	}
-	
-	
+
 	@Override
 	public void exitStatement_list(Statement_listContext ctx) {
 		StatementList items = new StatementList();

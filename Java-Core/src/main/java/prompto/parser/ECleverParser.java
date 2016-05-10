@@ -12,6 +12,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import prompto.declaration.DeclarationList;
+import prompto.expression.IFetchExpression;
 import prompto.parser.EParser;
 import prompto.problem.IProblemListener;
 import prompto.type.IType;
@@ -82,22 +83,31 @@ public class ECleverParser extends EParser implements IParser {
 		return parse_declaration_list();
 	}
 	
+	@FunctionalInterface
+	static interface ParseMethod {
+		ParseTree parse();
+	}
+	
 	public DeclarationList parse_declaration_list() throws Exception {
-		getLexer().setAddLF(true);
-		ParseTree tree = this.declaration_list();
-		EPromptoBuilder builder = new EPromptoBuilder(this);
-		ParseTreeWalker walker = new ParseTreeWalker();
-		walker.walk(builder, tree);
-		return builder.<DeclarationList>getNodeValue(tree);
+		return this.<DeclarationList>doParse(this::declaration_list, true);
 	}
 	
 	public IType parse_standalone_type() throws Exception {
-		getLexer().setAddLF(false);
-		ParseTree tree = this.category_or_any_type();
+		return this.<IType>doParse(this::category_or_any_type, false);
+	}
+
+	public IFetchExpression parse_fetch_store_expression() throws Exception {
+		return this.<IFetchExpression>doParse(this::fetch_store_expression, false);
+	}
+	
+	private <T extends Object> T doParse(ParseMethod method, boolean addLF) {
+		getLexer().setAddLF(addLF);
+		ParseTree tree = method.parse();
 		EPromptoBuilder builder = new EPromptoBuilder(this);
 		ParseTreeWalker walker = new ParseTreeWalker();
 		walker.walk(builder, tree);
-		return builder.<IType>getNodeValue(tree);
+		return builder.<T>getNodeValue(tree);
 	}
+
 	
 }

@@ -33,7 +33,7 @@ import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 import prompto.value.NullValue;
 
-public class FetchOneExpression extends Section implements IExpression {
+public class FetchOneExpression extends Section implements IFetchExpression {
 
 	CategoryType type;
 	IExpression predicate;

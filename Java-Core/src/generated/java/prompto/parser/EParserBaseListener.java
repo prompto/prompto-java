@@ -821,6 +821,18 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterFetchStoreExpression(@NotNull EParser.FetchStoreExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFetchStoreExpression(@NotNull EParser.FetchStoreExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterContainsAllExpression(@NotNull EParser.ContainsAllExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -977,18 +989,6 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFetchExpression(@NotNull EParser.FetchExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFetchExpression(@NotNull EParser.FetchExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterClosureExpression(@NotNull EParser.ClosureExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1104,6 +1104,18 @@ public class EParserBaseListener implements EParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitExecuteExpression(@NotNull EParser.ExecuteExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFetchListExpression(@NotNull EParser.FetchListExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFetchListExpression(@NotNull EParser.FetchListExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1505,13 +1517,13 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFetchList(@NotNull EParser.FetchListContext ctx) { }
+	@Override public void enterFetch_list_expression(@NotNull EParser.Fetch_list_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFetchList(@NotNull EParser.FetchListContext ctx) { }
+	@Override public void exitFetch_list_expression(@NotNull EParser.Fetch_list_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1529,13 +1541,13 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFetchAll(@NotNull EParser.FetchAllContext ctx) { }
+	@Override public void enterFetchMany(@NotNull EParser.FetchManyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFetchAll(@NotNull EParser.FetchAllContext ctx) { }
+	@Override public void exitFetchMany(@NotNull EParser.FetchManyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

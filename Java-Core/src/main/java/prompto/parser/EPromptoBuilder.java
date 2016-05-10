@@ -1052,35 +1052,40 @@ public class EPromptoBuilder extends EParserBaseListener {
 		setNodeValue(ctx, new ExecuteExpression(name));
 	}
 	
+	
 	@Override
-	public void exitFetchList(FetchListContext ctx) {
-		Identifier itemName = this.<Identifier>getNodeValue(ctx.name);
+	public void exitFetch_list_expression(Fetch_list_expressionContext ctx) {
+		Identifier itemName = this.<Identifier>getNodeValue(ctx.variable_identifier());
 		IExpression source = this.<IExpression>getNodeValue(ctx.source);
-		IExpression filter = this.<IExpression>getNodeValue(ctx.xfilter);
+		IExpression filter = this.<IExpression>getNodeValue(ctx.predicate);
 		setNodeValue(ctx, new FetchListExpression(itemName, source, filter));
 	}
 	
 	@Override
 	public void exitFetchOne(FetchOneContext ctx) {
 		CategoryType category = this.<CategoryType>getNodeValue(ctx.typ);
-		IExpression filter = this.<IExpression>getNodeValue(ctx.xfilter);
+		IExpression filter = this.<IExpression>getNodeValue(ctx.predicate);
 		setNodeValue(ctx, new FetchOneExpression(category, filter));
 	}
 	
 	@Override
-	public void exitFetchExpression(FetchExpressionContext ctx) {
+	public void exitFetchListExpression(FetchListExpressionContext ctx) {
 		setNodeValue(ctx, getNodeValue(ctx.exp));
 	}
 	
 	@Override
-	public void exitFetchAll(FetchAllContext ctx) {
+	public void exitFetchMany(FetchManyContext ctx) {
 		CategoryType category = this.<CategoryType>getNodeValue(ctx.typ);
 		IExpression start = this.<IExpression>getNodeValue(ctx.xstart);
 		IExpression stop = this.<IExpression>getNodeValue(ctx.xstop);
-		IExpression filter = this.<IExpression>getNodeValue(ctx.xfilter);
-		OrderByClauseList orderBy = this.<OrderByClauseList>getNodeValue(ctx.xorder);
+		IExpression filter = this.<IExpression>getNodeValue(ctx.predicate);
+		OrderByClauseList orderBy = this.<OrderByClauseList>getNodeValue(ctx.orderby);
 		setNodeValue(ctx, new FetchManyExpression(category, start, stop, filter, orderBy));
 	}
+	
+	public void exitFetchStoreExpression(FetchStoreExpressionContext ctx) {
+		setNodeValue(ctx, getNodeValue(ctx.exp));
+	};
 	
 	@Override
 	public void exitFor_each_statement(For_each_statementContext ctx) {

@@ -16,7 +16,7 @@ import prompto.compiler.ResultInfo;
 import prompto.compiler.Tags;
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
-import prompto.intrinsic.IterableWithLength;
+import prompto.intrinsic.IterableWithLengths;
 import prompto.intrinsic.PromptoIterable;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
@@ -54,7 +54,7 @@ public class IteratorExpression implements IExpression {
 		IteratorType iterType = check(context);
 		IType itemType = iterType.getItemType();
 		IValue items = source.interpret(context);
-		IterableWithLength<IValue> iterable = getIterable(context, items);
+		IterableWithLengths<IValue> iterable = getIterable(context, items);
 		return new IterableValue(context, name, itemType, iterable, expression);
 	}
 	
@@ -81,7 +81,7 @@ public class IteratorExpression implements IExpression {
 		MethodConstant m = new MethodConstant(innerClass, "<init>", proto);
 		method.addInstruction(Opcode.INVOKESPECIAL, m);
 		// done
-		return new ResultInfo(IterableWithLength.class);
+		return new ResultInfo(IterableWithLengths.class);
 	}
 
 	private Type compileInnerClass(Context context, ClassFile parentClass) {
@@ -148,11 +148,11 @@ public class IteratorExpression implements IExpression {
 	}
 
 	@SuppressWarnings("unchecked")
-	private IterableWithLength<IValue> getIterable(Context context, Object src) {
+	private IterableWithLengths<IValue> getIterable(Context context, Object src) {
 		if (src instanceof IIterable) 
 			return ((IIterable<IValue>) src).getIterable(context);
-		else if(src instanceof IterableWithLength)
-			return (IterableWithLength<IValue>)src;
+		else if(src instanceof IterableWithLengths)
+			return (IterableWithLengths<IValue>)src;
 		else
 			throw new InternalError("Should never get there!");
 	}

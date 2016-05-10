@@ -13,7 +13,7 @@ import prompto.error.IndexOutOfRangeError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
-import prompto.intrinsic.IterableWithLength;
+import prompto.intrinsic.IterableWithLengths;
 import prompto.intrinsic.PromptoRange;
 import prompto.runtime.Context;
 import prompto.type.IType;
@@ -121,13 +121,13 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 	}
 
 	@Override
-	public IterableWithLength<T> getIterable(Context context) {
+	public IterableWithLengths<T> getIterable(Context context) {
 		return new RangeIterable(context);
 	}	
 	
 	public abstract RangeBase<T> newInstance(PromptoRange<T> range);
 
-	class RangeIterable implements IterableWithLength<T> {
+	class RangeIterable implements IterableWithLengths<T> {
 		
 		Context context;
 		
@@ -137,6 +137,11 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 
 		@Override
 		public Long getLength() {
+			return RangeBase.this.getLength();
+		}
+		
+		@Override
+		public Long getTotalLength() {
 			return RangeBase.this.getLength();
 		}
 		

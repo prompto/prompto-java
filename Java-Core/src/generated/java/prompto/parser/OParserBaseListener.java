@@ -1337,85 +1337,13 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBlobExpression(@NotNull OParser.BlobExpressionContext ctx) { }
+	@Override public void enterMethod_expression(@NotNull OParser.Method_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBlobExpression(@NotNull OParser.BlobExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDocumentExpression(@NotNull OParser.DocumentExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDocumentExpression(@NotNull OParser.DocumentExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterFetchExpression(@NotNull OParser.FetchExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFetchExpression(@NotNull OParser.FetchExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterReadExpression(@NotNull OParser.ReadExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitReadExpression(@NotNull OParser.ReadExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSortedExpression(@NotNull OParser.SortedExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSortedExpression(@NotNull OParser.SortedExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterMethodCallExpression(@NotNull OParser.MethodCallExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMethodCallExpression(@NotNull OParser.MethodCallExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterConstructorExpression(@NotNull OParser.ConstructorExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitConstructorExpression(@NotNull OParser.ConstructorExpressionContext ctx) { }
+	@Override public void exitMethod_expression(@NotNull OParser.Method_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1469,13 +1397,13 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFetchList(@NotNull OParser.FetchListContext ctx) { }
+	@Override public void enterFetch_list_expression(@NotNull OParser.Fetch_list_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFetchList(@NotNull OParser.FetchListContext ctx) { }
+	@Override public void exitFetch_list_expression(@NotNull OParser.Fetch_list_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1493,13 +1421,13 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFetchAll(@NotNull OParser.FetchAllContext ctx) { }
+	@Override public void enterFetchMany(@NotNull OParser.FetchManyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFetchAll(@NotNull OParser.FetchAllContext ctx) { }
+	@Override public void exitFetchMany(@NotNull OParser.FetchManyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 
-public abstract class PromptoRange<T extends Object> implements IterableWithLength<T> {
+public abstract class PromptoRange<T extends Object> implements IterableWithLengths<T> {
 	
 	protected T low;
 	protected T high;
@@ -23,6 +23,11 @@ public abstract class PromptoRange<T extends Object> implements IterableWithLeng
 	}
 	
 	public java.lang.Long getLength() {
+		return getNativeLength();
+	}
+	
+	@Override
+	public java.lang.Long getTotalLength() {
 		return getNativeLength();
 	}
 	

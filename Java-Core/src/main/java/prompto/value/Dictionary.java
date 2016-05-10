@@ -16,7 +16,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
-import prompto.intrinsic.IterableWithLength;
+import prompto.intrinsic.IterableWithLengths;
 import prompto.intrinsic.PromptoDict;
 import prompto.intrinsic.PromptoSet;
 import prompto.runtime.Context;
@@ -177,11 +177,11 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 	}
 
 	@Override
-	public IterableWithLength<IValue> getIterable(Context context) {
+	public IterableWithLengths<IValue> getIterable(Context context) {
 		return new KVPIterable(context);
 	}
 
-	class KVPIterable implements IterableWithLength<IValue> {
+	class KVPIterable implements IterableWithLengths<IValue> {
 
 		Context context;
 
@@ -191,6 +191,11 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 
 		@Override
 		public Long getLength() {
+			return (long)dict.size();
+		}
+		
+		@Override
+		public Long getTotalLength() {
 			return (long)dict.size();
 		}
 		

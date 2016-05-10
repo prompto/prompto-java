@@ -38,12 +38,17 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMuta
 		}
 	}
 	
-	public static IterableWithLength<PromptoRoot> newIterable(IStoredIterable iterable) {
-		return new IterableWithLength<PromptoRoot>() {
+	public static IterableWithLengths<PromptoRoot> newIterable(IStoredIterable iterable) {
+		return new IterableWithLengths<PromptoRoot>() {
 			
 			@Override
 			public Long getLength() {
 				return iterable.length();
+			}
+			
+			@Override
+			public Long getTotalLength() {
+				return iterable.totalLength();
 			}
 
 			@Override

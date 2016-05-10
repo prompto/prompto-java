@@ -114,16 +114,21 @@ public final class MemStore implements IStore<Long> {
 	
 	@Override
 	public IStoredIterable fetchMany(IQuery query) throws PromptoError {
-		final List<StorableDocument> docs = fetchManyDocs(query);
+		final List<StorableDocument> allDocs = fetchManyDocs(query);
+		final List<StorableDocument> slicedDocs = slice(query, allDocs);
 		return new IStoredIterable() {
 			@Override
 			public long length() {
-				return (long)docs.size();
+				return (long)slicedDocs.size();
+			}
+			@Override
+			public long totalLength() {
+				return (long)allDocs.size(); 
 			}
 			@SuppressWarnings("unchecked")
 			@Override
 			public Iterator<IStored> iterator() {
-				return (Iterator<IStored>)(Object)docs.iterator();
+				return (Iterator<IStored>)(Object)slicedDocs.iterator();
 			};
 		};
 	}
@@ -131,7 +136,6 @@ public final class MemStore implements IStore<Long> {
 	private List<StorableDocument> fetchManyDocs(IQuery query) throws PromptoError {
 		List<StorableDocument> docs = filterDocs(((Query)query).getPredicate());
 		docs = sort(((Query)query).getOrdering(), docs);
-		docs = slice(query, docs);
 		return docs;
 	}
 

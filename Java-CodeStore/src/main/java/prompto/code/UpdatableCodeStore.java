@@ -328,6 +328,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 		return new IStoredIterable() {
 			@Override public Iterator<IStored> iterator() { return distinct.iterator(); }
 			@Override public long length() { return distinct.size(); }
+			@Override public long totalLength() { return distinct.size(); }
 		};
 	}
 

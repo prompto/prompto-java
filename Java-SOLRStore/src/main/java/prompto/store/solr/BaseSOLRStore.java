@@ -388,6 +388,11 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 			public long length() {
 				return response.getResults().size();
 			}
+			
+			@Override
+			public long totalLength() {
+				return response.getResults().getNumFound();
+			}
 		};
 	}
 

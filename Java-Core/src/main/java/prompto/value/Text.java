@@ -20,7 +20,7 @@ import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
-import prompto.intrinsic.IterableWithLength;
+import prompto.intrinsic.IterableWithLengths;
 import prompto.intrinsic.PromptoString;
 import prompto.runtime.Context;
 import prompto.type.TextType;
@@ -160,11 +160,11 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	}
 	
 	@Override
-	public IterableWithLength<Character> getIterable(Context context) {
+	public IterableWithLengths<Character> getIterable(Context context) {
 		return new CharacterIterable(context);
 	}
 
-	class CharacterIterable implements IterableWithLength<Character> {
+	class CharacterIterable implements IterableWithLengths<Character> {
 
 		Context context;
 		
@@ -174,6 +174,11 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 		
 		@Override
 		public Long getLength() {
+			return (long)value.length();
+		}
+		
+		@Override
+		public Long getTotalLength() {
 			return (long)value.length();
 		}
 		

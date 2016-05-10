@@ -1259,89 +1259,15 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitSelectableExpression(@NotNull OParser.SelectableExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code BlobExpression}
-	 * labeled alternative in {@link OParser#method_expression}.
+	 * Enter a parse tree produced by {@link OParser#method_expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterBlobExpression(@NotNull OParser.BlobExpressionContext ctx);
+	void enterMethod_expression(@NotNull OParser.Method_expressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code BlobExpression}
-	 * labeled alternative in {@link OParser#method_expression}.
+	 * Exit a parse tree produced by {@link OParser#method_expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitBlobExpression(@NotNull OParser.BlobExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code DocumentExpression}
-	 * labeled alternative in {@link OParser#method_expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterDocumentExpression(@NotNull OParser.DocumentExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code DocumentExpression}
-	 * labeled alternative in {@link OParser#method_expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitDocumentExpression(@NotNull OParser.DocumentExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code FetchExpression}
-	 * labeled alternative in {@link OParser#method_expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterFetchExpression(@NotNull OParser.FetchExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code FetchExpression}
-	 * labeled alternative in {@link OParser#method_expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitFetchExpression(@NotNull OParser.FetchExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ReadExpression}
-	 * labeled alternative in {@link OParser#method_expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterReadExpression(@NotNull OParser.ReadExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ReadExpression}
-	 * labeled alternative in {@link OParser#method_expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitReadExpression(@NotNull OParser.ReadExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code SortedExpression}
-	 * labeled alternative in {@link OParser#method_expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterSortedExpression(@NotNull OParser.SortedExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code SortedExpression}
-	 * labeled alternative in {@link OParser#method_expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitSortedExpression(@NotNull OParser.SortedExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code MethodCallExpression}
-	 * labeled alternative in {@link OParser#method_expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterMethodCallExpression(@NotNull OParser.MethodCallExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code MethodCallExpression}
-	 * labeled alternative in {@link OParser#method_expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitMethodCallExpression(@NotNull OParser.MethodCallExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ConstructorExpression}
-	 * labeled alternative in {@link OParser#method_expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterConstructorExpression(@NotNull OParser.ConstructorExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ConstructorExpression}
-	 * labeled alternative in {@link OParser#method_expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitConstructorExpression(@NotNull OParser.ConstructorExpressionContext ctx);
+	void exitMethod_expression(@NotNull OParser.Method_expressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link OParser#blob_expression}.
 	 * @param ctx the parse tree
@@ -1383,41 +1309,39 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitWrite_statement(@NotNull OParser.Write_statementContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code FetchList}
-	 * labeled alternative in {@link OParser#fetch_expression}.
+	 * Enter a parse tree produced by {@link OParser#fetch_list_expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterFetchList(@NotNull OParser.FetchListContext ctx);
+	void enterFetch_list_expression(@NotNull OParser.Fetch_list_expressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code FetchList}
-	 * labeled alternative in {@link OParser#fetch_expression}.
+	 * Exit a parse tree produced by {@link OParser#fetch_list_expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitFetchList(@NotNull OParser.FetchListContext ctx);
+	void exitFetch_list_expression(@NotNull OParser.Fetch_list_expressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code FetchOne}
-	 * labeled alternative in {@link OParser#fetch_expression}.
+	 * labeled alternative in {@link OParser#fetch_store_expression}.
 	 * @param ctx the parse tree
 	 */
 	void enterFetchOne(@NotNull OParser.FetchOneContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code FetchOne}
-	 * labeled alternative in {@link OParser#fetch_expression}.
+	 * labeled alternative in {@link OParser#fetch_store_expression}.
 	 * @param ctx the parse tree
 	 */
 	void exitFetchOne(@NotNull OParser.FetchOneContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code FetchAll}
-	 * labeled alternative in {@link OParser#fetch_expression}.
+	 * Enter a parse tree produced by the {@code FetchMany}
+	 * labeled alternative in {@link OParser#fetch_store_expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterFetchAll(@NotNull OParser.FetchAllContext ctx);
+	void enterFetchMany(@NotNull OParser.FetchManyContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code FetchAll}
-	 * labeled alternative in {@link OParser#fetch_expression}.
+	 * Exit a parse tree produced by the {@code FetchMany}
+	 * labeled alternative in {@link OParser#fetch_store_expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitFetchAll(@NotNull OParser.FetchAllContext ctx);
+	void exitFetchMany(@NotNull OParser.FetchManyContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link OParser#sorted_expression}.
 	 * @param ctx the parse tree

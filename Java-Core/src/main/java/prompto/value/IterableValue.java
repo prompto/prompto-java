@@ -9,7 +9,7 @@ import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
-import prompto.intrinsic.IterableWithLength;
+import prompto.intrinsic.IterableWithLengths;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.type.IType;
@@ -18,16 +18,16 @@ import prompto.type.ListType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
-public class IterableValue extends BaseValue implements IIterable<IValue>, IterableWithLength<IValue> {
+public class IterableValue extends BaseValue implements IIterable<IValue>, IterableWithLengths<IValue> {
 
 	IType itemType;
 	Context context;
 	Identifier name;
-	IterableWithLength<IValue> iterable;
+	IterableWithLengths<IValue> iterable;
 	IExpression expression;
 	
 	public IterableValue(Context context, Identifier name, IType itemType, 
-			IterableWithLength<IValue> iterable, IExpression expression) {
+			IterableWithLengths<IValue> iterable, IExpression expression) {
 		super(new IteratorType(itemType));
 		this.itemType = itemType;
 		this.context = context;
@@ -40,9 +40,14 @@ public class IterableValue extends BaseValue implements IIterable<IValue>, Itera
 	public Long getLength() {
 		return iterable.getLength();
 	}
+	
+	@Override
+	public Long getTotalLength() {
+		return iterable.getTotalLength();
+	}
 
 	@Override
-	public IterableWithLength<IValue> getIterable(Context context) {
+	public IterableWithLengths<IValue> getIterable(Context context) {
 		return this;
 	}
 
