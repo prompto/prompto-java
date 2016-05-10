@@ -31,6 +31,7 @@ import prompto.utils.CodeWriter;
 import prompto.value.Document;
 import prompto.value.IInstance;
 import prompto.value.IValue;
+import prompto.value.NullValue;
 
 public class ConstructorExpression implements IExpression {
 	
@@ -158,8 +159,10 @@ public class ConstructorExpression implements IExpression {
 							IValue value = copyFrom.getMember(context, name, false);
 							if(value!=null && value.isMutable() && !type.isMutable())
 								throw new NotMutableError();
-							AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, name);
-							value = decl.getType(context).convertIValueToIValue(context, value);
+							if(value!=NullValue.instance()) {
+								AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, name);
+								value = decl.getType(context).convertIValueToIValue(context, value);
+							}
 							instance.setMember(context, name, value);
 						}
 					}
