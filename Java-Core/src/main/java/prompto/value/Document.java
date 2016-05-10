@@ -45,8 +45,8 @@ public class Document extends BaseValue {
     }
 
     public IValue getMember(Identifier name, boolean autoCreate) {
-        IValue result = values.get(name);
-        if(autoCreate && result==null) {
+        IValue result = values.getOrDefault(name, NullValue.instance());
+        if(autoCreate && result==NullValue.instance()) {
             result = new Document();
             values.put(name, result);
         }
