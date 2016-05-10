@@ -7,7 +7,9 @@ import java.util.Map;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
+import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
 import prompto.compiler.PromptoType;
 import prompto.compiler.ResultInfo;
 import prompto.declaration.AttributeDeclaration;
@@ -25,6 +27,7 @@ import prompto.grammar.Identifier;
 import prompto.grammar.Operator;
 import prompto.instance.MemberInstance;
 import prompto.instance.VariableInstance;
+import prompto.intrinsic.PromptoRoot;
 import prompto.runtime.Context;
 import prompto.runtime.Score;
 import prompto.store.IDataStore;
@@ -444,5 +447,10 @@ public class CategoryType extends BaseType {
 	}
 
 
+	@Override
+	public void compileGetStorableData(Context context, MethodInfo method, Flags flags) {
+		MethodConstant m = new MethodConstant(PromptoRoot.class, "getStorableData", Object.class, Object.class);
+		method.addInstruction(Opcode.INVOKESTATIC, m);
+	}
 
 }

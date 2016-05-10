@@ -115,5 +115,9 @@ public interface IType {
 	default void compileConvertObjectToExact(Context context, MethodInfo method, Flags flags) {
 		throw new UnsupportedOperationException("Cannot compileConvertObjectToExact for " + this.getClass());
 	}
+
+	default void compileGetStorableData(Context context, MethodInfo method, Flags flags) {
+		// nothing to do
+	}
 }
  

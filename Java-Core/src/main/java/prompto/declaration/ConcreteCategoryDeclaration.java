@@ -706,10 +706,16 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
 			method.addInstruction(Opcode.LDC, new StringConstant(field.getName().getValue()));
 			method.addInstruction(Opcode.ALOAD_1, new ClassConstant(Object.class));
+			compileGetStorableData(context, method, flags, id);
 			method.addInstruction(Opcode.INVOKESPECIAL, m);
 		}
 		// done
 		method.addInstruction(Opcode.RETURN);
+	}
+
+	private void compileGetStorableData(Context context, MethodInfo method, Flags flags, Identifier id) {
+		IType type = context.getRegisteredDeclaration(AttributeDeclaration.class, id).getType();
+		type.compileGetStorableData(context, method, flags);
 	}
 
 	protected boolean isPromptoRoot(Context context) {
@@ -805,6 +811,8 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		method.addInstruction(Opcode.LDC, new StringConstant(id.toString()));
 		InterfaceConstant i = new InterfaceConstant(IStored.class, "getData", String.class, Object.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, i);
+		// convert to instance
+		compileConvertFieldToInstance(context, method, flags, id);
 		// cast to actual type
 		FieldInfo field = context.getRegisteredDeclaration(AttributeDeclaration.class, id).toFieldInfo(context);
 		method.addInstruction(Opcode.CHECKCAST, new ClassConstant(field.getType()));
@@ -812,6 +820,14 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		String setterName = CompilerUtils.setterName(field.getName().getValue());
 		MethodConstant m = new MethodConstant(thisClass, setterName, field.getType(), void.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+	}
+
+	private void compileConvertFieldToInstance(Context context, MethodInfo method, Flags flags, Identifier id) {
+		IType type = context.getRegisteredDeclaration(AttributeDeclaration.class, id).getType(context);
+		if(type instanceof CategoryType) {
+			MethodConstant m = new MethodConstant(PromptoRoot.class, "newInstanceFromDbIdRef", Object.class, PromptoRoot.class);
+			method.addInstruction(Opcode.INVOKESTATIC, m);
+		}
 	}
 
 	private void compileNewStorable(Context context, MethodInfo method, Flags flags) {
