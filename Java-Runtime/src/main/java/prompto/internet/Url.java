@@ -50,8 +50,10 @@ public class Url implements IResource {
 	private String readFully(InputStream input) throws IOException {
 		ByteArrayOutputStream data = new ByteArrayOutputStream();
 		byte[] buffer = new byte[4096];
-		while(input.available()>0) {
+		for(;;) {
 			int read = input.read(buffer);
+			if(read==-1)
+				break;
 			data.write(buffer, 0, read);
 		}
 		return data.toString(encoding);

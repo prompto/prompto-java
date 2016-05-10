@@ -33,6 +33,11 @@
 		<servlet-class>prompto.server.BinaryServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	<servlet>
+		<servlet-name>Data</servlet-name>
+		<servlet-class>prompto.server.DataServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>Prompto</servlet-name>
 		<url-pattern>/run/*</url-pattern>
@@ -40,6 +45,10 @@
 	<servlet-mapping>
 		<servlet-name>Binary</servlet-name>
 		<url-pattern>/bin/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Data</servlet-name>
+		<url-pattern>/data/*</url-pattern>
 	</servlet-mapping>
 
 </web-app>
