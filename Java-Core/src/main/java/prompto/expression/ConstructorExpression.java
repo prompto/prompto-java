@@ -9,8 +9,10 @@ import prompto.compiler.Flags;
 import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
+import prompto.compiler.OffsetListenerConstant;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
+import prompto.compiler.StackState;
 import prompto.compiler.StringConstant;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
@@ -23,6 +25,7 @@ import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.IMutable;
 import prompto.intrinsic.PromptoDocument;
+import prompto.intrinsic.PromptoRoot;
 import prompto.runtime.Context;
 import prompto.type.CategoryType;
 import prompto.type.DocumentType;
@@ -219,17 +222,29 @@ public class ConstructorExpression implements IExpression {
 		// get value
 		ResultInfo valueInfo = assignment.getExpression().compile(context, method, flags);
 		// check immutable member
-		if(!type.isMutable() && valueInfo.isPromptoCategory()) {
-			method.addInstruction(Opcode.DUP); 
-			InterfaceConstant m = new InterfaceConstant(IMutable.class, "checkImmutable", void.class);
-			method.addInstruction(Opcode.INVOKEINTERFACE, m);
-		}
+		compileCheckImmutable(context, method, flags, valueInfo);
 		// call setter
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, assignment.getArgumentId());
 		FieldInfo field = decl.toFieldInfo(context);
 		MethodConstant m = new MethodConstant(thisInfo.getType(), 
 				CompilerUtils.setterName(field.getName().getValue()), field.getType(), void.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+	}
+
+	private void compileCheckImmutable(Context context, MethodInfo method, Flags flags, ResultInfo valueInfo) {
+		if(!type.isMutable() && valueInfo.isPromptoCategory()) {
+			StackState stackState = method.captureStackState();
+			method.addInstruction(Opcode.DUP); 
+			OffsetListenerConstant offsetListener = method.addOffsetListener(new OffsetListenerConstant());
+			method.activateOffsetListener(offsetListener);
+			method.addInstruction(Opcode.IFNULL, offsetListener);
+			method.addInstruction(Opcode.DUP); 
+			InterfaceConstant m = new InterfaceConstant(IMutable.class, "checkImmutable", void.class);
+			method.addInstruction(Opcode.INVOKEINTERFACE, m);
+			method.inhibitOffsetListener(offsetListener);
+			method.restoreFullStackState(stackState);
+			method.placeLabel(stackState);
+		}
 	}
 
 	private void compileCopyFrom(Context context, MethodInfo method, Flags flags, ResultInfo thisInfo) {
