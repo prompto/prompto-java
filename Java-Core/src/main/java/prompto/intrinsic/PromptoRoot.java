@@ -13,6 +13,7 @@ import prompto.compiler.PromptoClassLoader;
 import prompto.store.IStorable;
 import prompto.store.IStorable.IDbIdListener;
 import prompto.store.IStorable.IDbIdProvider;
+import prompto.store.IDataStore;
 import prompto.store.IStored;
 import prompto.store.IStoredIterable;
 
@@ -36,6 +37,17 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMuta
 		} catch (Exception e) {
 			throw new RuntimeException(e); // TODO for now
 		}
+	}
+	
+	public static PromptoRoot newInstanceFromDbIdRef(Object value) {
+		if(value instanceof PromptoRoot)
+			return (PromptoRoot)value;
+		if(IDataStore.getInstance().getDbIdClass().isInstance(value))
+			value = IDataStore.getInstance().fetchUnique(value);
+		if(value instanceof IStored)
+			return newInstance((IStored)value);
+		else
+			return (PromptoRoot)value; // will eventually throw an InvalidCastException 
 	}
 	
 	public static IterableWithLengths<PromptoRoot> newIterable(IStoredIterable iterable) {
@@ -68,6 +80,14 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMuta
 		};
 	}
 	
+	
+	public static Object getStorableData(Object value) {
+		if(value instanceof PromptoRoot)
+			return ((PromptoRoot)value).getDbId();
+		else
+			return null;
+	}
+		
 	protected Object dbId;
 	protected IStorable storable;
 	protected boolean mutable;
@@ -169,8 +189,14 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMuta
 	}
 
 	public void collectStorables(List<IStorable> storables) {
-		IStorable storable = getStorable();
-		if(storable!=null && storable.isDirty())
+		collectStorables(storables, getStorable());
+	}
+
+	public static void collectStorables(List<IStorable> storables, IStorable storable) {
+		if(storable==null) 
+			return;
+		// storable.values().forEach((value)-> collectStorables(storables, value)); TODO collect storables
+		if(storable.isDirty())
 			storables.add(storable);
 	}
 	
