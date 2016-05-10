@@ -21,7 +21,7 @@ public class TestIssues extends BaseEParserTest {
 
 	@Test
 	public void testMinimal() throws Exception {
-		interpretResource("issues/minimal.pec","mainNoCmdLine",null);
+		executeResource("issues/minimal.pec", true);
 	}
 
 }
