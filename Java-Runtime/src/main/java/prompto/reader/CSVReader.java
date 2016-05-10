@@ -126,8 +126,13 @@ public abstract class CSVReader {
 				int endIdx = startIdx;
 				while(endIdx<chars.length) {
 					if(chars[endIdx]==endChar) {
-						found = true;
-						break;
+						if(endIdx<chars.length-1 && chars[endIdx+1]==endChar) {
+							escape = true;
+							endIdx++;
+						} else {
+							found = true;
+							break;
+						}
 					}
 					if(chars[endIdx]=='\\') {
 						escape = true;
@@ -137,17 +142,19 @@ public abstract class CSVReader {
 						endIdx++;
 				}
 				String value = escape ? 
-						unescape(chars, startIdx, endIdx) :
+						unescape(chars, startIdx, endIdx, endChar) :
 						new String(chars, startIdx, endIdx - startIdx);
 				list.add(value);
 				return endIdx + (found ? 1 : 0); 
 			}
 
 
-			private String unescape(char[] chars, int startIdx, int endIdx) {
+			private String unescape(char[] chars, int startIdx, int endIdx, char endChar) {
 				StringBuilder sb = new StringBuilder();
 				while(startIdx<endIdx) {
 					if(chars[startIdx]=='\\')
+						startIdx++;
+					else if(chars[startIdx]==endChar && startIdx<endIdx-1 && chars[startIdx+1]==endChar)
 						startIdx++;
 					if(startIdx<endIdx)
 						sb.append(chars[startIdx++]);

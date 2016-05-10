@@ -106,4 +106,32 @@ public class TestCSVReader {
 		assertEquals("2", doc.get("id"));
 		assertEquals("Sylvie", doc.get("name"));
 	}
+	
+	@Test
+	public void testInnerQuote() throws Exception {
+		String csv = "id,name\n1,Jo\"hn\n2,Sylvie\n";
+		Iterator<PromptoDocument<String, Object>> iter = CSVReader.iterator(csv, null, ',', '"');
+		PromptoDocument<String, Object> doc = iter.next();
+		assertNotNull(doc);
+		assertEquals("1", doc.get("id"));
+		assertEquals("Jo\"hn", doc.get("name"));
+		doc = iter.next();
+		assertNotNull(doc);
+		assertEquals("2", doc.get("id"));
+		assertEquals("Sylvie", doc.get("name"));
+	}
+	
+	@Test
+	public void testQuotedInnerQuote() throws Exception {
+		String csv = "id,name\n1,\"Jo\"\"hn\"\n2,Sylvie\n";
+		Iterator<PromptoDocument<String, Object>> iter = CSVReader.iterator(csv, null, ',', '"');
+		PromptoDocument<String, Object> doc = iter.next();
+		assertNotNull(doc);
+		assertEquals("1", doc.get("id"));
+		assertEquals("Jo\"hn", doc.get("name"));
+		doc = iter.next();
+		assertNotNull(doc);
+		assertEquals("2", doc.get("id"));
+		assertEquals("Sylvie", doc.get("name"));
+	}
 }
