@@ -1,7 +1,7 @@
 package prompto.reader;
 
-import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -14,13 +14,14 @@ import prompto.intrinsic.PromptoList;
 public abstract class CSVReader {
 	
 	public static PromptoList<PromptoDocument<String, Object>> read(String data, PromptoDict<String, String> columns, Character separator, Character encloser) throws IOException {
-		BufferedReader reader = data==null ? null : new BufferedReader(new StringReader(data));
-		return read(reader, columns, separator, encloser);
+		try(StringReader reader = data==null ? null : new StringReader(data)) {
+			return read(reader, columns, separator, encloser);
+		}
 	}
 	
-	public static PromptoList<PromptoDocument<String, Object>> read(final BufferedReader reader, PromptoDict<String, String> columns, Character separator, Character encloser) {
+	public static PromptoList<PromptoDocument<String, Object>> read(final Reader buffered, PromptoDict<String, String> columns, Character separator, Character encloser) {
 		PromptoList<PromptoDocument<String, Object>> list = new PromptoList<>();
-		Iterator<PromptoDocument<String, Object>> iter = iterator(reader, columns, separator, encloser);
+		Iterator<PromptoDocument<String, Object>> iter = iterator(buffered, columns, separator, encloser);
 		while(iter.hasNext())
 			list.add(iter.next());
 		return list;
@@ -30,21 +31,21 @@ public abstract class CSVReader {
 	}
 	
 	public static CSVIterable iterator(String data, PromptoDict<String, String> columns, Character separator, Character encloser) throws IOException {
-		BufferedReader reader = data==null ? null : new BufferedReader(new StringReader(data));
+		Reader reader = data==null ? null : new StringReader(data);
 		return iterator(reader, columns, separator, encloser);
 	}
 	
-	public static CSVIterable iterator(final BufferedReader reader, PromptoDict<String, String> columns, Character separator, Character encloser) {
+	public static CSVIterable iterator(final Reader _reader, PromptoDict<String, String> columns, Character separator, Character encloser) {
 		
 		char sep = separator==null ? ',' : separator.charValue();
 		char quote = encloser==null ? '"' : encloser.charValue();
 		
 		return new CSVIterable() {
 			
-			BufferedReader buffered = reader;
+			Reader reader = _reader;
 			ArrayList<String> headers = null;
-			String nextLine;
-			
+			Integer peekedChar = null;
+			int nextChar = 0;
 			
 			@Override
 			public Iterator<PromptoDocument<String, Object>> iterator() {
@@ -53,32 +54,51 @@ public abstract class CSVReader {
 			
 			@Override
 			public boolean hasNext() {
-				try {
-					if(headers==null)
-						parseHeaders(columns);
-					if(nextLine==null)
-						nextLine = nextLine();
-					return nextLine!=null;
-				} catch (IOException e) {
+				if(nextChar==0)
+					fetchChar(true);
+				if(headers==null)
+					parseHeaders(columns);
+				return nextChar>0;
+			}
+			
+			private void fetchChar() {
+				fetchChar(false);
+			}
+			
+			private void fetchChar(boolean eatNewLine) {
+				if(reader==null)
+					nextChar = -1; // EOF
+				else if(peekedChar!=null) {
+					int c = peekedChar.intValue();
+					peekedChar = null;
+					nextChar = c;
+				} else try {
+					int c = reader.read();
+					if(c=='\r')
+						fetchChar(eatNewLine);
+					else if(eatNewLine && (c=='\n'))
+						fetchChar(eatNewLine);
+					else
+						nextChar = c;
+				} catch(IOException e) {
 					throw new ReadWriteError(e.getMessage());
 				}
 			}
 			
-			private String nextLine() throws IOException {
-				if(buffered==null)
-					return null;
-				String line = buffered.readLine();
-				if(line!=null)
-					return line;
-				buffered.close();
-				buffered = null;
-				return line;
+			private int peekChar() {
+				if(peekedChar==null) {
+					int oldChar = nextChar;
+					fetchChar();
+					peekedChar = nextChar;
+					nextChar = oldChar;
+				}
+				return peekedChar.intValue();
 			}
 
-			private void parseHeaders(PromptoDict<String, String> columns) throws IOException {
-				String line = nextLine();
-				if(line!=null)
-					headers = parseLine(line);
+
+
+			private void parseHeaders(PromptoDict<String, String> columns) {
+				headers = parseLine();
 				if(columns!=null) {
 					for(int i=0;i<headers.size(); i++) {
 						String header = headers.get(i);
@@ -89,86 +109,113 @@ public abstract class CSVReader {
 				}
 			}
 
-			private ArrayList<String> parseLine(String line) {
+			private ArrayList<String> parseLine() {
 				ArrayList<String> list = new ArrayList<>();
-				char[] chars = line.toCharArray();
-				int nextIdx = 0;
-				while(nextIdx<chars.length)
-					nextIdx = parseValue(chars, nextIdx, list);
+				while(parseValue(list))
+					;
+				if(nextChar=='\n')
+					fetchChar();
 				return list;
 			}
 
-			private int parseValue(char[] chars, int startIdx, ArrayList<String> list) {
-				if(chars[startIdx]==sep) {
-					list.add(null);
-					return startIdx + 1;
-				} else if(chars[startIdx]==quote)
-					return parseQuotedValue(chars, startIdx + 1, list);
+			private boolean parseValue(ArrayList<String> list) {
+				if(nextChar==sep)
+					parseEmptyValue(list);
+				else if(nextChar==quote)
+					parseQuotedValue(list);
 				else 
-					return parseUnquotedValue(chars, startIdx, list);
+					parseUnquotedValue(list);
+				return nextChar!=-1 && nextChar!='\n';
 			}
 
-			private int parseQuotedValue(char[] chars, int startIdx, ArrayList<String> list) {
-				int endIdx = parseValue(chars, startIdx, quote, list);
+			private void parseEmptyValue(ArrayList<String> list) {
+				list.add(null);
+				fetchChar();
+			}
+
+			private void parseQuotedValue(ArrayList<String> list) {
+				fetchChar(); // consume the leading double quote
+				parseValue(quote, list);
 				// look for next sep
-				while(endIdx<chars.length && chars[endIdx]!=sep)
-					endIdx++;
-				return endIdx + 1;
+				while(nextChar!=sep && nextChar!=-1 && nextChar!='\n')
+					fetchChar();
+				if(nextChar==sep)
+					fetchChar();
 			}
 
-			private int parseUnquotedValue(char[] chars, int startIdx, ArrayList<String> list) {
-				return parseValue(chars, startIdx, sep, list);
+			private void parseUnquotedValue(ArrayList<String> list) {
+				parseValue(sep, list);
 			}
 			
-			private int parseValue(char[] chars, int startIdx, char endChar, ArrayList<String> list) {
-				boolean escape = false;
-				boolean found = false;
-				int endIdx = startIdx;
-				while(endIdx<chars.length) {
-					if(chars[endIdx]==endChar) {
-						if(endIdx<chars.length-1 && chars[endIdx+1]==endChar) {
-							escape = true;
-							endIdx++;
-						} else {
-							found = true;
-							break;
-						}
-					}
-					if(chars[endIdx]=='\\') {
-						escape = true;
-						endIdx++;
-					}
-					if(endIdx<=chars.length)
-						endIdx++;
-				}
-				String value = escape ? 
-						unescape(chars, startIdx, endIdx, endChar) :
-						new String(chars, startIdx, endIdx - startIdx);
-				list.add(value);
-				return endIdx + (found ? 1 : 0); 
-			}
-
-
-			private String unescape(char[] chars, int startIdx, int endIdx, char endChar) {
+			private void parseValue(char endChar, ArrayList<String> list) {
 				StringBuilder sb = new StringBuilder();
-				while(startIdx<endIdx) {
-					if(chars[startIdx]=='\\')
-						startIdx++;
-					else if(chars[startIdx]==endChar && startIdx<endIdx-1 && chars[startIdx+1]==endChar)
-						startIdx++;
-					if(startIdx<endIdx)
-						sb.append(chars[startIdx++]);
+				boolean exit = false;
+				for(;;) {
+					if(nextChar==-1)
+						exit = handleEOF(sb, endChar, list);
+					else if(nextChar=='\n')
+						exit = handleNewLine(sb, endChar, list);
+					else if(nextChar==endChar)
+						exit = handleEndChar(sb, endChar, list);
+					else if(nextChar=='\\')
+						exit = handleEscape(sb, endChar, list);
+					else
+						exit = handleOtherChar(sb, endChar, list);
+					if(exit) {
+						if(sb.length()>0)
+							list.add(sb.toString());
+						return;
+					}
 				}
-				return sb.toString();
 			}
 
+			private boolean handleOtherChar(StringBuilder sb, char endChar, ArrayList<String> list) {
+				sb.append((char)nextChar);
+				fetchChar();
+				return false;
+			}
+
+			private boolean handleEscape(StringBuilder sb, char endChar, ArrayList<String> list) {
+				if(peekChar()!=-1) {
+					sb.append((char)peekChar());
+					fetchChar();
+				}
+				fetchChar();
+				return false;
+			}
+
+			private boolean handleEOF(StringBuilder sb, char endChar, ArrayList<String> list) {
+				return true;
+			}
+
+			private boolean handleEndChar(StringBuilder sb, char endChar, ArrayList<String> list) {
+				if(endChar=='"' && peekChar()==endChar) {
+					sb.append((char)nextChar);
+					fetchChar();
+					fetchChar();
+					return false;
+				} else {
+					fetchChar();
+					return true;
+				}
+			}
+
+			private boolean handleNewLine(StringBuilder sb, char endChar, ArrayList<String> list) {
+				if(endChar=='"') {
+					sb.append((char)nextChar);
+					fetchChar();
+					return false;
+				} else {
+					return true;
+				}
+			}
+			
+			
 			@Override
 			public PromptoDocument<String, Object> next() {
 				if(!hasNext())
 					return null;
-				String line = nextLine;
-				nextLine = null;
-				ArrayList<String> values = parseLine(line);
+				ArrayList<String> values = parseLine();
 				PromptoDocument<String, Object> doc = new PromptoDocument<>();
 				for(int i=0;i<headers.size();i++) {
 					if(i<values.size())

@@ -1,8 +1,13 @@
 package prompto.reader;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Iterator;
 
 import org.junit.Test;
@@ -133,5 +138,19 @@ public class TestCSVReader {
 		assertNotNull(doc);
 		assertEquals("2", doc.get("id"));
 		assertEquals("Sylvie", doc.get("name"));
+	}
+	
+	@Test
+	public void testMarkets() throws Exception {
+		try(InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("markets.csv")) {
+			try(InputStreamReader reader = new InputStreamReader(input)) {
+				Iterator<PromptoDocument<String, Object>> iter = CSVReader.iterator(reader, null, ';', '"');
+				while(iter.hasNext()) {
+					PromptoDocument<String, Object> doc = iter.next();
+					assertNotNull(doc.get("MIC"));
+				}
+			}
+		}
+		
 	}
 }
