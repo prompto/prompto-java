@@ -771,7 +771,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		method.addInstruction(Opcode.ALOAD_1, fc);
 		FieldConstant f = new FieldConstant(classFile.getThisClass(), field.getName().getValue(), field.getType());
 		method.addInstruction(Opcode.PUTFIELD, f);
-		if(isPromptoRoot(context)) {
+		if(isPromptoRoot(context) && isStorableAttribute(context, id)) {
 			// also store data in storable
 			MethodConstant m = new MethodConstant(PromptoRoot.class, "setStorable", String.class, Object.class, void.class);
 			method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
@@ -782,6 +782,10 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		}
 		// done
 		method.addInstruction(Opcode.RETURN);
+	}
+
+	private boolean isStorableAttribute(Context context, Identifier id) {
+		return context.getRegisteredDeclaration(AttributeDeclaration.class, id).isStorable();
 	}
 
 	private void compileGetStorableData(Context context, MethodInfo method, Flags flags, Identifier id) {
