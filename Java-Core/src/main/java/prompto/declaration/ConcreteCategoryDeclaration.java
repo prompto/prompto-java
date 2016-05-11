@@ -8,6 +8,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+
 
 import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
@@ -22,7 +25,10 @@ import prompto.compiler.IntConstant;
 import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
+import prompto.compiler.OffsetListenerConstant;
 import prompto.compiler.Opcode;
+import prompto.compiler.StackLocal;
+import prompto.compiler.StackState;
 import prompto.compiler.StringConstant;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -155,11 +161,26 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 					all.addAll(ids);
 			});
 		}
-		if(all.isEmpty())
-			return null;
-		else
-			return all;
+		return all.isEmpty() ? null : all;
 	}
+	
+	private Set<Identifier> getLocalCategoryAttributes(Context context) {
+		Set<Identifier> set = getLocalAttributes(context);
+		if(set==null)
+			return null;
+		set = set.stream().filter((id)->isCategoryAttribute(context, id)).collect(Collectors.toSet());
+		return set.isEmpty() ? null : set;
+	}
+	
+	private Set<Identifier> getLocalAttributes(Context context) {
+		Set<Identifier> set = getAllAttributes(context);
+		if(set==null)
+			return null;
+		set = set.stream().filter((id)->!isSuperClassAttribute(context, id)).collect(Collectors.toSet());
+		return set.isEmpty() ? null : set;
+	}
+
+
 	
 	private Set<Identifier> getAncestorAttributes(Context context, Identifier ancestor) {
 		CategoryDeclaration actual = context.getRegisteredDeclaration(CategoryDeclaration.class, ancestor);
@@ -422,6 +443,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			compileFields(context, classFile, new Flags());
 			compileEmptyConstructor(context, classFile, new Flags());
 			compileCopyConstructor(context, classFile, new Flags());
+			compileCollectStorables(context, classFile, new Flags());
 			compileMethods(context, classFile, new Flags());
 			return classFile;
 		} catch(SyntaxError e) {
@@ -429,6 +451,48 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		}
 	}
 	
+
+	private void compileCollectStorables(Context context, ClassFile classFile, Flags flags) {
+		Set<Identifier> attributes = getLocalCategoryAttributes(context);
+		if(attributes==null)
+			return;
+		MethodInfo method = classFile.newMethod("collectStorables", new Descriptor.Method(List.class, void.class));
+		StackLocal $this = method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
+		StackLocal $storables = method.registerLocal("storables", VerifierType.ITEM_Object, new ClassConstant(List.class));
+		// call super
+		CompilerUtils.compileALOAD(method, $this);
+		CompilerUtils.compileALOAD(method, $storables);
+		MethodConstant m = new MethodConstant(classFile.getSuperClass(), "collectStorables", List.class, void.class);
+		method.addInstruction(Opcode.INVOKESPECIAL, m);
+		attributes.forEach((id)->{
+			StackState state = method.captureStackState();
+			// call getter 
+			CompilerUtils.compileALOAD(method, $this); 
+			AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
+			FieldInfo field = decl.toFieldInfo(context);
+			MethodConstant mx = new MethodConstant(classFile.getThisClass(), 
+					CompilerUtils.getterName(id.toString()), field.getType());
+			method.addInstruction(Opcode.INVOKEVIRTUAL, mx); 
+			StackLocal $field = method.registerLocal("$" + id.toString(), 
+					VerifierType.ITEM_Object, new ClassConstant(field.getType()));
+			CompilerUtils.compileASTORE(method, $field);
+			// check if null
+			CompilerUtils.compileALOAD(method, $field); 
+			OffsetListenerConstant listener = method.addOffsetListener(new OffsetListenerConstant());
+			method.activateOffsetListener(listener);
+			method.addInstruction(Opcode.IFNULL, listener);
+			// call collectStorables
+			CompilerUtils.compileALOAD(method, $field); 
+			method.addInstruction(Opcode.CHECKCAST, new ClassConstant(PromptoRoot.class));
+			CompilerUtils.compileALOAD(method, $storables);
+			mx = new MethodConstant(PromptoRoot.class, "collectStorables", List.class, void.class);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, mx);
+			method.inhibitOffsetListener(listener);
+			method.restoreFullStackState(state);
+			method.placeLabel(state);
+		});
+		method.addInstruction(Opcode.RETURN);
+	}
 
 	protected void compileClassConstructor(Context context, ClassFile classFile, Flags flags) {
 		if(needsClassConstructor()) {
@@ -678,6 +742,13 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return decl.hasAttribute(context, id);
 	}
 
+	
+	private boolean isCategoryAttribute(Context context, Identifier id) {
+		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
+		return decl.getType(context) instanceof CategoryType;
+	}
+	
+	
 	private void compileLocalSetterMethod(Context context, ClassFile classFile, Flags flags, 
 			Identifier id, FieldInfo field) {
 		SetterMethodDeclaration setter = findSetter(context, id);

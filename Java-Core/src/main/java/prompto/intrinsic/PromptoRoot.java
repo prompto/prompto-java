@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.PromptoClassLoader;
+import prompto.error.NotStorableError;
 import prompto.store.IStorable;
 import prompto.store.IStorable.IDbIdListener;
 import prompto.store.IStorable.IDbIdProvider;
@@ -83,11 +84,11 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMuta
 	
 	public static Object getStorableData(Object value) {
 		if(value instanceof PromptoRoot)
-			return ((PromptoRoot)value).getDbId();
+			return ((PromptoRoot)value).getStorableData();
 		else
 			return null;
 	}
-		
+	
 	protected Object dbId;
 	protected IStorable storable;
 	protected boolean mutable;
@@ -112,6 +113,20 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMuta
 		return storable;
 	}
 	
+	public final Object getStorableData() {
+		// this is called when storing the instance as a field value, so we just return the dbId
+		// the instance data itself will be collected as part of collectStorables
+		if(this.storable==null)
+			throw new NotStorableError();
+		else
+			return this.getOrCreateDbId();
+	}
+	
+	private Object getOrCreateDbId() throws NotStorableError {
+		Object dbId = getDbId();
+		return dbId!=null ? dbId : this.storable.getOrCreateDbId();
+	}
+
 	/* not a great name, but avoids collision with field setters */
 	protected final void setStorable(String name, Object value) {
 		if(storable!=null)
@@ -189,14 +204,7 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMuta
 	}
 
 	public void collectStorables(List<IStorable> storables) {
-		collectStorables(storables, getStorable());
-	}
-
-	public static void collectStorables(List<IStorable> storables, IStorable storable) {
-		if(storable==null) 
-			return;
-		// storable.values().forEach((value)-> collectStorables(storables, value)); TODO collect storables
-		if(storable.isDirty())
+		if(storable!=null && storable.isDirty())
 			storables.add(storable);
 	}
 	
