@@ -9,6 +9,7 @@ import prompto.compiler.Flags;
 import prompto.compiler.IInstructionListener;
 import prompto.compiler.IOperatorFunction;
 import prompto.compiler.IVerifierEntry.VerifierType;
+import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.OffsetListenerConstant;
@@ -150,24 +151,85 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 			AttributeInfo info = decl==null ? null : decl.getAttributeInfo();
 			if(value instanceof IInstance)
 				value = ((IInstance)value).getMember(context, new Identifier(IStore.dbIdName), false);
+			MatchOp matchOp = getMatchOp();
+			query.verify(info, matchOp, value==null ? null : value.getStorableData());
 			switch(operator) {
-			case GT:
-				query.verify(info, MatchOp.GREATER, value==null ? null : value.getStorableData());
-				break;
 			case GTE:
-				query.verify(info, MatchOp.LESSER, value==null ? null : value.getStorableData());
-				query.not();
-				break;
-			case LT:
-				query.verify(info, MatchOp.LESSER, value==null ? null : value.getStorableData());
-				break;
 			case LTE:
-				query.verify(info, MatchOp.GREATER, value==null ? null : value.getStorableData());
 				query.not();
 				break;
+			default:
+				// nothing to do
 			}
 		}
 	}
+	
+	private MatchOp getMatchOp() {
+		switch(operator) {
+		case GT:
+		case LTE:
+			return MatchOp.GREATER;
+		case GTE:
+		case LT:
+			return MatchOp.LESSER;
+		default:
+			throw new IllegalArgumentException(operator.name());
+		}
+	}
+
+	@Override
+	public void compileQuery(Context context, MethodInfo method, Flags flags) {
+		method.addInstruction(Opcode.DUP); // IQuery -> IQuery, IQuery
+		switch(operator) {
+		case GTE:
+		case LTE:
+			method.addInstruction(Opcode.DUP);
+			break;
+		default:
+			// ok
+		}
+		boolean reverse = compileAttributeInfo(context, method, flags);
+		MatchOp match = getMatchOp();
+		CompilerUtils.compileJavaEnum(context, method, flags, match);
+		if(reverse)
+			left.compile(context, method, flags);
+		else
+			right.compile(context, method, flags);
+		InterfaceConstant m = new InterfaceConstant(IQuery.class,
+				"verify", AttributeInfo.class, MatchOp.class, Object.class, void.class);
+		method.addInstruction(Opcode.INVOKEINTERFACE, m);
+		switch(operator) {
+		case GTE:
+		case LTE:
+			m = new InterfaceConstant(IQuery.class, "not", void.class);
+			method.addInstruction(Opcode.INVOKEINTERFACE, m);
+			break;
+		default:
+			// ok
+		}
+	}
+	
+	
+	private boolean compileAttributeInfo(Context context, MethodInfo method, Flags flags) {
+		String name = readFieldName(left);
+		boolean reverse = name==null;
+		if(reverse)
+			name = readFieldName(right);
+		AttributeInfo info = context.findAttribute(name).getAttributeInfo();
+		CompilerUtils.compileAttributeInfo(context, method, flags, info);
+		return reverse;
+	}
+
+	
+	private String readFieldName(IExpression exp) {
+		if(exp instanceof UnresolvedIdentifier
+			|| exp instanceof InstanceExpression
+			|| exp instanceof MemberSelector)
+			return exp.toString();
+		else
+			return null;
+	}
+
 	
 	@Override
 	public boolean interpretAssert(Context context, TestMethodDeclaration test) throws PromptoError {
