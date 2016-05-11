@@ -25,7 +25,6 @@ import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.IMutable;
 import prompto.intrinsic.PromptoDocument;
-import prompto.intrinsic.PromptoRoot;
 import prompto.runtime.Context;
 import prompto.type.CategoryType;
 import prompto.type.DocumentType;
