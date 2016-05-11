@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 import prompto.declaration.AttributeDeclaration;
@@ -22,7 +23,7 @@ import prompto.store.IStorable.IDbIdListener;
 public final class MemStore implements IStore<Long> {
 
 	private Map<Long, StorableDocument> documents = new HashMap<>();
-	private long lastDbId = 0;
+	private AtomicLong lastDbId = new AtomicLong(0);
 	
 	@Override
 	public Class<?> getDbIdClass() {
@@ -60,7 +61,7 @@ public final class MemStore implements IStore<Long> {
 		// ensure db id
 		Object dbId = storable.getData(dbIdName);
 		if(!(dbId instanceof Long)) {
-			dbId = Long.valueOf(++lastDbId);
+			dbId = Long.valueOf(lastDbId.incrementAndGet());
 			storable.setData(dbIdName, dbId);
 		}
 		documents.put((Long)dbId, storable);
@@ -229,7 +230,7 @@ public final class MemStore implements IStore<Long> {
 			Object dbId = getData(dbIdName);
 			if(dbId==null) {
 				setDirty(true);
-				dbId = Long.valueOf(++lastDbId);
+				dbId = Long.valueOf(lastDbId.incrementAndGet());
 				document.put(dbIdName, dbId);
 			}
 			return dbId;
@@ -251,8 +252,9 @@ public final class MemStore implements IStore<Long> {
 					value.add(name);
 				doc.put("category", value);
 			}
-			if(dbId!=null)
-				doc.put(dbIdName, dbId);
+			if(dbId==null)
+				dbId = Long.valueOf(lastDbId.incrementAndGet());
+			doc.put(dbIdName, dbId);
 			return doc;
 		}
 
