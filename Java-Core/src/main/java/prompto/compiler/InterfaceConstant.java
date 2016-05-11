@@ -12,6 +12,10 @@ public class InterfaceConstant extends MethodConstant {
 		super(klass, methodName, method);
 	}
 
+	public InterfaceConstant(ClassConstant klass, String methodName, Type ... params) {
+		super(klass, methodName, params);
+	}
+	
 	public InterfaceConstant(Type klass, String methodName, Type ... params) {
 		super(klass, methodName, params);
 	}
