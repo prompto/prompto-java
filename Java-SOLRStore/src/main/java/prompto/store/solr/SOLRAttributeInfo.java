@@ -57,25 +57,38 @@ class SOLRAttributeInfo extends AttributeInfo {
 		super(name, family, collection, indexTypes);
 		adjustIndexFlags();
 	}
-
-	public void addFieldName(StringBuilder sb) {
-		sb.append(name);
-	}
 	
-	public void addFieldNameForEquals(StringBuilder sb) {
-		sb.append(name);
-		addTextFieldNameSuffix(sb, this::appendKey, this::appendValue, this::appendWords);
+	
+	public void addFieldNameFor(StringBuilder sb, MatchOp operator) {
+		switch(operator) {
+		case EQUALS:
+			addFieldNameForEquals(sb);
+			break;
+		case ROUGHLY:
+			addFieldNameForRoughly(sb);
+			break;
+		case LESSER:
+			addFieldNameForLesser(sb);
+			break;
+		case GREATER:
+			addFieldNameForGreater(sb);
+			break;
+		case CONTAINS:
+			addFieldNameForContains(sb);
+			break;
+		case CONTAINED:
+			addFieldNameForContained(sb);
+			break;
+		default:
+			throw new InvalidParameterException(operator.name());
+		}
 	}
 
-	
-	private void addFieldNameForGreater(StringBuilder sb) {
+	public String getFieldNameForOrderBy() {
+		StringBuilder sb = new StringBuilder();
 		sb.append(name);
 		addTextFieldNameSuffix(sb, this::appendValue, this::appendKey, this::appendWords);
-	}
-
-	private void addFieldNameForLesser(StringBuilder sb) {
-		sb.append(name);
-		addTextFieldNameSuffix(sb, this::appendValue, this::appendKey, this::appendWords);
+		return sb.toString();
 	}
 
 
@@ -115,9 +128,27 @@ class SOLRAttributeInfo extends AttributeInfo {
 	}
 
 
-	public void addFieldNameForContains(StringBuilder sb) {
+
+	public void addFieldNameForEquals(StringBuilder sb) {
 		sb.append(name);
 		addTextFieldNameSuffix(sb, this::appendKey, this::appendValue, this::appendWords);
+	}
+
+	
+	private void addFieldNameForGreater(StringBuilder sb) {
+		sb.append(name);
+		addTextFieldNameSuffix(sb, this::appendValue, this::appendKey, this::appendWords);
+	}
+
+	private void addFieldNameForLesser(StringBuilder sb) {
+		sb.append(name);
+		addTextFieldNameSuffix(sb, this::appendValue, this::appendKey, this::appendWords);
+	}
+
+
+	public void addFieldNameForContains(StringBuilder sb) {
+		sb.append(name);
+		addTextFieldNameSuffix(sb, this::appendValue, this::appendKey, this::appendWords);
 	}
 	
 	private void addFieldNameForContained(StringBuilder sb) {
@@ -130,37 +161,6 @@ class SOLRAttributeInfo extends AttributeInfo {
 		addTextFieldNameSuffix(sb, this::appendValue, this::appendKey, this::appendWords);
 	}
 
-	public String getFieldNameForOrderBy() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(name);
-		addTextFieldNameSuffix(sb, this::appendKey, this::appendValue, this::appendWords);
-		return sb.toString();
-	}
-
-	public void addFieldNameFor(StringBuilder sb, MatchOp operator) {
-		switch(operator) {
-		case EQUALS:
-			addFieldNameForEquals(sb);
-			break;
-		case ROUGHLY:
-			addFieldNameForRoughly(sb);
-			break;
-		case LESSER:
-			addFieldNameForLesser(sb);
-			break;
-		case GREATER:
-			addFieldNameForGreater(sb);
-			break;
-		case CONTAINS:
-			addFieldNameForContains(sb);
-			break;
-		case CONTAINED:
-			addFieldNameForContained(sb);
-			break;
-		default:
-			throw new InvalidParameterException(operator.name());
-		}
-	}
 
 
 
