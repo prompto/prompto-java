@@ -18,6 +18,7 @@ import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoRoot;
 import prompto.parser.Section;
 import prompto.runtime.Context;
+import prompto.statement.UnresolvedCall;
 import prompto.store.IDataStore;
 import prompto.store.IPredicateExpression;
 import prompto.store.IQuery;
@@ -47,7 +48,10 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 		return type;
 	}
 	
-	public IPredicateExpression getPredicate() {
+	public IPredicateExpression getPredicate(Context context) {
+		IExpression predicate = this.predicate;
+		if(predicate instanceof UnresolvedCall)
+			predicate = ((UnresolvedCall)predicate).getResolved(context);
 		return (IPredicateExpression)predicate; // assume this was checked earlier
 	}
 
