@@ -1,5 +1,6 @@
 package prompto.store.solr;
 
+import java.util.Collection;
 import java.util.Stack;
 
 import prompto.store.IQuery.MatchOp;
@@ -26,11 +27,21 @@ class SOLRFilterBuilder {
 	}
 
 	
+	@SuppressWarnings("unchecked")
 	public void push(SOLRAttributeInfo info, MatchOp operator, Object fieldValue) {
 		StringBuilder sb = new StringBuilder();
 		info.addFieldNameFor(sb, operator);
 		sb.append(':');
-		escape(sb, fieldValue);
+		if(fieldValue instanceof Collection) {
+			sb.append('(');
+			((Collection<Object>)fieldValue).forEach((value)->{
+				escape(sb, value);
+				sb.append(" OR ");
+			});
+			sb.setLength(sb.length() - " OR ".length());
+			sb.append(')');
+		} else
+			escape(sb, fieldValue);
 		stack.push(sb.toString());
 	}
 

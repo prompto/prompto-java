@@ -9,6 +9,7 @@ public interface IQuery {
 		EQUALS,
 		ROUGHLY,
 		CONTAINS,
+		CONTAINED,
 		GREATER,
 		LESSER
 	}

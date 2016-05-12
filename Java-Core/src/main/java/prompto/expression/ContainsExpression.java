@@ -7,6 +7,7 @@ import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.IInstructionListener;
 import prompto.compiler.IVerifierEntry.VerifierType;
+import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.OffsetListenerConstant;
@@ -15,21 +16,32 @@ import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
 import prompto.compiler.StackState;
 import prompto.compiler.StringConstant;
+import prompto.declaration.AttributeDeclaration;
+import prompto.declaration.AttributeInfo;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.ContOp;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoString;
+import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
+import prompto.store.IPredicateExpression;
+import prompto.store.IQuery;
+import prompto.store.IStore;
+import prompto.store.IQuery.MatchOp;
+import prompto.type.CharacterType;
+import prompto.type.ContainerType;
 import prompto.type.IType;
+import prompto.type.TextType;
 import prompto.utils.CodeWriter;
 import prompto.value.Boolean;
 import prompto.value.IContainer;
+import prompto.value.IInstance;
 import prompto.value.IValue;
 
-public class ContainsExpression implements IExpression, IAssertion {
+public class ContainsExpression extends Section implements IPredicateExpression, IAssertion {
 
 	IExpression left;
 	ContOp operator;
@@ -307,5 +319,116 @@ public class ContainsExpression implements IExpression, IAssertion {
 		method.placeLabel(finalState);
 		method.inhibitOffsetListener(finalListener);
 	}
+	
+	@Override
+	public void interpretQuery(Context context, IQuery query) throws PromptoError {
+		IValue value = null;
+		String name = readFieldName(left);
+		boolean reverse = name==null;
+		if(name!=null)
+			value = right.interpret(context);
+		else {
+			name = readFieldName(right);
+			if(name!=null)
+				value = left.interpret(context);
+			else
+				throw new SyntaxError("Unable to interpret predicate");
+		}
+		MatchOp matchOp = getMatchOp(context, getAttributeType(context, name), value.getType(), this.operator, reverse);
+		if(value instanceof IInstance)
+			value = ((IInstance)value).getMember(context, new Identifier(IStore.dbIdName), false);
+		AttributeInfo info = context.findAttribute(name).getAttributeInfo();
+		Object data = value==null ? null : value.getStorableData();
+		query.<Object>verify(info, matchOp, data);
+		if(operator.name().startsWith("NOT_"))
+			query.not();
+	}
+	
+	@Override
+	public void compileQuery(Context context, MethodInfo method, Flags flags) {
+		method.addInstruction(Opcode.DUP); // IQuery -> IQuery, IQuery
+		if(operator.name().startsWith("NOT_"))
+			method.addInstruction(Opcode.DUP);
+		IType valueType = null;
+		String name = readFieldName(left);
+		boolean reverse = name==null;
+		if(name!=null)
+			valueType = right.check(context);
+		else {
+			name = readFieldName(right);
+			if(name!=null)
+				valueType = left.check(context);
+			else
+				throw new SyntaxError("Unable to interpret predicate");
+		}
+		AttributeInfo info = context.findAttribute(name).getAttributeInfo();
+		CompilerUtils.compileAttributeInfo(context, method, flags, info);
+		MatchOp match = getMatchOp(context, getAttributeType(context, name), valueType, this.operator, reverse);
+		CompilerUtils.compileJavaEnum(context, method, flags, match);
+		if(reverse)
+			left.compile(context, method, flags);
+		else
+			right.compile(context, method, flags);
+		InterfaceConstant m = new InterfaceConstant(IQuery.class,
+				"verify", AttributeInfo.class, MatchOp.class, Object.class, void.class);
+		method.addInstruction(Opcode.INVOKEINTERFACE, m);
+		if(operator.name().startsWith("NOT_")) {
+			m = new InterfaceConstant(IQuery.class, "not", void.class);
+			method.addInstruction(Opcode.INVOKEINTERFACE, m);
+		}
+	}
+	
+	
+	private IType getAttributeType(Context context, String name) {
+		return context.getRegisteredDeclaration(AttributeDeclaration.class, new Identifier(name)).getType();
+	}
+
+	private MatchOp getMatchOp(Context context, IType fieldType, IType valueType, ContOp operator, boolean reverse) {
+		if(reverse) {
+			operator = operator.reverse();
+			if(operator==null)
+				context.getProblemListener().reportIllegalOperation("Cannot reverse " + this.operator, this);
+			return getMatchOp(context, valueType, fieldType, operator, false);
+		}
+		if((fieldType==TextType.instance() || valueType==CharacterType.instance()) &&
+				(valueType==TextType.instance() || valueType==CharacterType.instance())) {
+			switch(operator) {
+			case CONTAINS:
+			case NOT_CONTAINS:
+				return MatchOp.CONTAINS;
+			default:
+				// throw below
+			}
+		} 
+		if(valueType instanceof ContainerType) {
+			switch(operator) {
+			case IN:
+			case NOT_IN:
+				return MatchOp.CONTAINED;
+			default:
+				// throw below
+			}
+		} 
+		if(fieldType instanceof ContainerType) {
+			switch(operator) {
+			case CONTAINS:
+			case NOT_CONTAINS:
+				return MatchOp.CONTAINS;
+			default:
+				// throw below
+			}
+		} 
+		throw new SyntaxError("Unsupported operator: " + operator.name());
+	}
+
+	private String readFieldName(IExpression exp) {
+		if(exp instanceof UnresolvedIdentifier
+			|| exp instanceof InstanceExpression
+			|| exp instanceof MemberSelector)
+			return exp.toString();
+		else
+			return null;
+	}
+
 
 }

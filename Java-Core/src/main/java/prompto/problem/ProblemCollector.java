@@ -125,4 +125,11 @@ public class ProblemCollector implements ANTLRErrorListener, IProblemListener {
 		}
 	}
 	
+	@Override
+	public void reportIllegalOperation(String message, ISection section) {
+		synchronized(problems) {
+			problems.add(new IllegalOperationError(message, section));
+		}
+	}
+	
 }

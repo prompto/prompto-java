@@ -71,4 +71,9 @@ public class ProblemListener implements ANTLRErrorListener, IProblemListener {
 	public void reportIllegalMember(String name, ISection section) {
 		throw new SyntaxError("Cannot read member from " + name);
 	}
+	
+	@Override
+	public void reportIllegalOperation(String message, ISection section) {
+		throw new SyntaxError(message);
+	}
 }

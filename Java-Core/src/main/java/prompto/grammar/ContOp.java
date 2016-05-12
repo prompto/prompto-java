@@ -1,6 +1,5 @@
 package prompto.grammar;
 
-
 public enum ContOp {
 	IN,
 	CONTAINS,
@@ -13,5 +12,20 @@ public enum ContOp {
 
 	public String toString() {
 		return this.name().toLowerCase().replace('_', ' ');
+	}
+
+	public ContOp reverse() {
+		switch(this) {
+		case IN:
+			return CONTAINS;
+		case CONTAINS:
+			return IN;
+		case NOT_IN:
+			return NOT_CONTAINS;
+		case NOT_CONTAINS:
+			return NOT_IN;
+		default:
+			return null;
+		}
 	}
 }
