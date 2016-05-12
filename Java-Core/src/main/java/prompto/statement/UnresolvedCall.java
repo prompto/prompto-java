@@ -99,6 +99,11 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 		}
 	}
 	
+	public IExpression getResolved(Context context) {
+		resolve(context);
+		return resolved;
+	}
+	
 	private IType resolveAndCheck(Context context) {
 		resolve(context);
 		return resolved.check(context);
