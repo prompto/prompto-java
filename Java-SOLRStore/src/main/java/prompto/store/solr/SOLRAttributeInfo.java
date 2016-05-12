@@ -1,6 +1,8 @@
 package prompto.store.solr;
 
+import java.security.InvalidParameterException;
 import java.util.Collection;
+import java.util.function.Function;
 
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.AttributeInfo;
@@ -62,45 +64,80 @@ class SOLRAttributeInfo extends AttributeInfo {
 	
 	public void addFieldNameForEquals(StringBuilder sb) {
 		sb.append(name);
-		if(family==Family.TEXT && !"version".equals(name)) {
+		addTextFieldNameSuffix(sb, this::appendKey, this::appendValue, this::appendWords);
+	}
+
+	
+	private void addFieldNameForGreater(StringBuilder sb) {
+		sb.append(name);
+		addTextFieldNameSuffix(sb, this::appendValue, this::appendKey, this::appendWords);
+	}
+
+	private void addFieldNameForLesser(StringBuilder sb) {
+		sb.append(name);
+		addTextFieldNameSuffix(sb, this::appendValue, this::appendKey, this::appendWords);
+	}
+
+
+	@SafeVarargs
+	private final void addTextFieldNameSuffix(StringBuilder sb, Function<StringBuilder, Boolean> ... predicates) {
+		if(family==Family.TEXT && !"version".equals(name) && predicates.length>0) {
 			sb.append('-');
-			if(isKey())
-				sb.append(KEY);
-			else if(isValue())
-				sb.append(VALUE);
-			else if(isWords())
-				sb.append(WORDS);
+			for(Function<StringBuilder, Boolean> predicate : predicates) {
+				if(predicate.apply(sb))
+					break;
+			}
 		}
+	}
+
+	boolean appendKey(StringBuilder sb) {
+		if(isKey()) {
+			sb.append(KEY);
+			return true;
+		} else
+			return false;
+	}
+	
+	boolean appendValue(StringBuilder sb) {
+		if(isValue()) {
+			sb.append(VALUE);
+			return true;
+		} else
+			return false;
+	}
+	
+	boolean appendWords(StringBuilder sb) {
+		if(isWords()) {
+			sb.append(WORDS);
+			return true;
+		} else
+			return false;
+	}
+
+
+	public void addFieldNameForContains(StringBuilder sb) {
+		sb.append(name);
+		addTextFieldNameSuffix(sb, this::appendKey, this::appendValue, this::appendWords);
+	}
+	
+	private void addFieldNameForContained(StringBuilder sb) {
+		sb.append(name);
+		addTextFieldNameSuffix(sb, this::appendKey, this::appendValue, this::appendWords);
 	}
 
 	public void addFieldNameForRoughly(StringBuilder sb) {
 		sb.append(name);
-		if(family==Family.TEXT && !"version".equals(name)) {
-			sb.append('-');
-			if(isValue())
-				sb.append(VALUE);
-			else if(isKey())
-				sb.append(KEY);
-			else if(isWords())
-				sb.append(WORDS);
-		}
+		addTextFieldNameSuffix(sb, this::appendValue, this::appendKey, this::appendWords);
 	}
 
 	public String getFieldNameForOrderBy() {
-		if(family==Family.TEXT && !"version".equals(name)) {
-			if(isKey())
-				return name + '-' + KEY;
-			else if(isValue())
-				return name + '-' + VALUE;
-			else if(isWords())
-				return name + '-' + WORDS;
-		}
-		return name;
+		StringBuilder sb = new StringBuilder();
+		sb.append(name);
+		addTextFieldNameSuffix(sb, this::appendKey, this::appendValue, this::appendWords);
+		return sb.toString();
 	}
 
 	public void addFieldNameFor(StringBuilder sb, MatchOp operator) {
-		if(collection && operator==MatchOp.CONTAINS)
-			operator = MatchOp.EQUALS;
 		switch(operator) {
 		case EQUALS:
 			addFieldNameForEquals(sb);
@@ -108,8 +145,20 @@ class SOLRAttributeInfo extends AttributeInfo {
 		case ROUGHLY:
 			addFieldNameForRoughly(sb);
 			break;
+		case LESSER:
+			addFieldNameForLesser(sb);
+			break;
+		case GREATER:
+			addFieldNameForGreater(sb);
+			break;
+		case CONTAINS:
+			addFieldNameForContains(sb);
+			break;
+		case CONTAINED:
+			addFieldNameForContained(sb);
+			break;
 		default:
-			addFieldName(sb);
+			throw new InvalidParameterException(operator.name());
 		}
 	}
 

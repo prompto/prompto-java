@@ -1,9 +1,8 @@
 package prompto.store.solr;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -25,6 +24,8 @@ import prompto.store.IStorable;
 import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.type.AnyType;
+import prompto.type.IntegerType;
+import prompto.type.ListType;
 import prompto.type.TextType;
 
 public class TestQuery extends BaseSOLRTest {
@@ -38,7 +39,13 @@ public class TestQuery extends BaseSOLRTest {
 		context = Context.newGlobalContext();
 		registerDbIdAttribute();
 		registerNameAttribute();
+		registerAliasesAttribute();
+		registerQuantityAttribute();
+		registerQuantitiesAttribute();
 		createField("name", "text", false);
+		createField("aliases", "text", true);
+		createField("quantity", "integer", false);
+		createField("quantities", "integer", true);
 	}
 	
 	private void registerDbIdAttribute() throws SyntaxError {
@@ -52,6 +59,25 @@ public class TestQuery extends BaseSOLRTest {
 		context.registerDeclaration(decl);
 	}
 
+	
+	private void registerAliasesAttribute() throws SyntaxError {
+		AttributeDeclaration decl = new AttributeDeclaration( new Identifier("aliases"), new ListType(TextType.instance()));
+		decl.setStorable(true);
+		context.registerDeclaration(decl);
+	}
+	
+	private void registerQuantityAttribute() throws SyntaxError {
+		AttributeDeclaration decl = new AttributeDeclaration( new Identifier("quantity"), IntegerType.instance());
+		decl.setStorable(true);
+		context.registerDeclaration(decl);
+	}
+
+	private void registerQuantitiesAttribute() throws SyntaxError {
+		AttributeDeclaration decl = new AttributeDeclaration( new Identifier("quantities"), new ListType(IntegerType.instance()));
+		decl.setStorable(true);
+		context.registerDeclaration(decl);
+	}
+
 	private IStored fetchOne(String query) throws Exception {
 		ECleverParser parser = new ECleverParser(query);
 		parser.getLexer().setAddLF(false);
@@ -60,7 +86,7 @@ public class TestQuery extends BaseSOLRTest {
 		ParseTreeWalker walker = new ParseTreeWalker();
 		walker.walk(builder, tree);
 		FetchOneExpression fetch = builder.<FetchOneExpression>getNodeValue(tree);
-		return store.interpretFetchOne(context, fetch.getType(), fetch.getPredicate());
+		return store.interpretFetchOne(context, fetch.getType(), fetch.getPredicate(context));
 	}
 	
 	@Test
@@ -74,20 +100,6 @@ public class TestQuery extends BaseSOLRTest {
 		QueryResponse resp = store.query(query);
 		assertNotNull(resp);
 		assertEquals(1, resp.getResults().size());
-	}
-
-	@Test
-	public void testFetchOneByName() throws Exception {
-		SolrInputDocument doc = new SolrInputDocument();
-		doc.addField(IStore.dbIdName, UUID.randomUUID());
-		doc.addField("name", "John");
-		store.addDocuments(doc);
-		store.commit();
-		// Test the basics
-		String query = "fetch one where name = \"John\"";
-		IStored result = fetchOne(query);
-		assertNotNull(result);
-		assertEquals("John", result.getData("name"));
 	}
 
 	@Test
@@ -106,5 +118,210 @@ public class TestQuery extends BaseSOLRTest {
 		assertNull(result);
 	}
 
+	@Test
+	public void testFetchTextEquals() throws Exception {
+		SolrInputDocument doc = new SolrInputDocument();
+		doc.addField(IStore.dbIdName, UUID.randomUUID());
+		doc.addField("name", "John");
+		store.addDocuments(doc);
+		store.commit();
+		// Test the basics
+		String query = "fetch one where name = \"John\"";
+		IStored result = fetchOne(query);
+		assertNotNull(result);
+		assertEquals("John", result.getData("name"));
+	}
 
+	@Test
+	public void testFetchTextRoughly() throws Exception {
+		SolrInputDocument doc = new SolrInputDocument();
+		doc.addField(IStore.dbIdName, UUID.randomUUID());
+		doc.addField("name", "John");
+		store.addDocuments(doc);
+		store.commit();
+		// Test the basics
+		String query = "fetch one where name ~ \"joHn\"";
+		IStored result = fetchOne(query);
+		assertNotNull(result);
+		assertEquals("John", result.getData("name"));
+	}
+
+	@Test
+	public void testFetchTextContains() throws Exception {
+		SolrInputDocument doc = new SolrInputDocument();
+		doc.addField(IStore.dbIdName, UUID.randomUUID());
+		doc.addField("name", "John");
+		store.addDocuments(doc);
+		store.commit();
+		// Test the basics
+		String query = "fetch one where name contains \"oh\"";
+		IStored result = fetchOne(query);
+		assertNotNull(result);
+		assertEquals("John", result.getData("name"));
+	}
+
+	@Test
+	public void testFetchTextLesser() throws Exception {
+		SolrInputDocument doc1 = new SolrInputDocument();
+		doc1.addField(IStore.dbIdName, UUID.randomUUID());
+		doc1.addField("name", "John");
+		SolrInputDocument doc2 = new SolrInputDocument();
+		doc2.addField(IStore.dbIdName, UUID.randomUUID());
+		doc2.addField("name", "Lionel");
+		store.addDocuments(doc1, doc2);
+		store.commit();
+		// Test the basics
+		String query = "fetch one where name < \"King\"";
+		IStored result = fetchOne(query);
+		assertNotNull(result);
+		assertEquals("John", result.getData("name"));
+	}
+
+	
+	@Test
+	public void testFetchTextGreater() throws Exception {
+		SolrInputDocument doc1 = new SolrInputDocument();
+		doc1.addField(IStore.dbIdName, UUID.randomUUID());
+		doc1.addField("name", "John");
+		SolrInputDocument doc2 = new SolrInputDocument();
+		doc2.addField(IStore.dbIdName, UUID.randomUUID());
+		doc2.addField("name", "Lionel");
+		store.addDocuments(doc1, doc2);
+		store.commit();
+		// Test the basics
+		String query = "fetch one where name > \"King\"";
+		IStored result = fetchOne(query);
+		assertNotNull(result);
+		assertEquals("Lionel", result.getData("name"));
+	}
+	
+
+	@Test
+	public void testFetchTextInText() throws Exception {
+		SolrInputDocument doc = new SolrInputDocument();
+		doc.addField(IStore.dbIdName, UUID.randomUUID());
+		doc.addField("name", "John");
+		store.addDocuments(doc);
+		store.commit();
+		// Test the basics
+		String query = "fetch one where \"oh\" in name";
+		IStored result = fetchOne(query);
+		assertNotNull(result);
+		assertEquals("John", result.getData("name"));
+	}
+	
+	@Test
+	public void testFetchTextInCollection() throws Exception {
+		SolrInputDocument doc = new SolrInputDocument();
+		doc.addField(IStore.dbIdName, UUID.randomUUID());
+		doc.addField("name", "John");
+		store.addDocuments(doc);
+		store.commit();
+		// Test the basics
+		String query = "fetch one where name in [\"John\", \"Jim\"]";
+		IStored result = fetchOne(query);
+		assertNotNull(result);
+		assertEquals("John", result.getData("name"));
+	}
+	
+	@Test
+	public void testFetchTextInTextCollection() throws Exception {
+		SolrInputDocument doc = new SolrInputDocument();
+		doc.addField(IStore.dbIdName, UUID.randomUUID());
+		doc.addField("name", "John");
+		doc.addField("aliases", Arrays.asList("Johnny", "Jim"));
+		store.addDocuments(doc);
+		store.commit();
+		// Test the basics
+		String query = "fetch one where aliases contains \"Jim\"";
+		IStored result = fetchOne(query);
+		assertNotNull(result);
+		assertEquals("John", result.getData("name"));
+	}
+
+	@Test
+	public void testFetchNonTextEquals() throws Exception {
+		SolrInputDocument doc = new SolrInputDocument();
+		doc.addField(IStore.dbIdName, UUID.randomUUID());
+		doc.addField("name", "John");
+		doc.addField("quantity", 3L);
+		store.addDocuments(doc);
+		store.commit();
+		// Test the basics
+		String query = "fetch one where quantity = 3";
+		IStored result = fetchOne(query);
+		assertNotNull(result);
+		assertEquals("John", result.getData("name"));
+	}
+
+
+	@Test
+	public void testFetchNonTextLesser() throws Exception {
+		SolrInputDocument doc1 = new SolrInputDocument();
+		doc1.addField(IStore.dbIdName, UUID.randomUUID());
+		doc1.addField("name", "John");
+		doc1.addField("quantity", 3L);
+		SolrInputDocument doc2 = new SolrInputDocument();
+		doc2.addField(IStore.dbIdName, UUID.randomUUID());
+		doc2.addField("name", "Lionel");
+		doc2.addField("quantity", 13L);
+		store.addDocuments(doc1, doc2);
+		store.commit();
+		// Test the basics
+		String query = "fetch one where quantity < 10";
+		IStored result = fetchOne(query);
+		assertNotNull(result);
+		assertEquals("John", result.getData("name"));
+	}
+
+	@Test
+	public void testFetchNonTextGreater() throws Exception {
+		SolrInputDocument doc1 = new SolrInputDocument();
+		doc1.addField(IStore.dbIdName, UUID.randomUUID());
+		doc1.addField("name", "John");
+		doc1.addField("quantity", 3L);
+		SolrInputDocument doc2 = new SolrInputDocument();
+		doc2.addField(IStore.dbIdName, UUID.randomUUID());
+		doc2.addField("name", "Lionel");
+		doc2.addField("quantity", 13L);
+		store.addDocuments(doc1, doc2);
+		store.commit();
+		// Test the basics
+		String query = "fetch one where quantity > 10";
+		IStored result = fetchOne(query);
+		assertNotNull(result);
+		assertEquals("Lionel", result.getData("name"));
+	}
+	
+	@Test
+	public void testFetchNonTextInCollection() throws Exception {
+		SolrInputDocument doc = new SolrInputDocument();
+		doc.addField(IStore.dbIdName, UUID.randomUUID());
+		doc.addField("name", "John");
+		doc.addField("quantity", 13L);
+		store.addDocuments(doc);
+		store.commit();
+		// Test the basics
+		String query = "fetch one where quantity in [10, 13]";
+		IStored result = fetchOne(query);
+		assertNotNull(result);
+		assertEquals("John", result.getData("name"));
+	}
+
+	@Test
+	public void testFetchNonTextInNonTextCollection() throws Exception {
+		SolrInputDocument doc = new SolrInputDocument();
+		doc.addField(IStore.dbIdName, UUID.randomUUID());
+		doc.addField("name", "John");
+		doc.addField("quantities", Arrays.asList(10L, 13L));
+		store.addDocuments(doc);
+		store.commit();
+		// Test the basics
+		String query = "fetch one where quantities contains 10";
+		IStored result = fetchOne(query);
+		assertNotNull(result);
+		assertEquals("John", result.getData("name"));
+	}
+	
+	
 }

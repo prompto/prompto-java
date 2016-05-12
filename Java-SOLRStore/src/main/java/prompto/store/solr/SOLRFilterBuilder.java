@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Stack;
 
 import prompto.store.IQuery.MatchOp;
+import prompto.type.IType.Family;
 
 class SOLRFilterBuilder {
 
@@ -27,11 +28,42 @@ class SOLRFilterBuilder {
 	}
 
 	
-	@SuppressWarnings("unchecked")
 	public void push(SOLRAttributeInfo info, MatchOp operator, Object fieldValue) {
 		StringBuilder sb = new StringBuilder();
 		info.addFieldNameFor(sb, operator);
 		sb.append(':');
+		switch(operator) {
+		case EQUALS:
+		case ROUGHLY:
+			pushExact(sb, info, operator, fieldValue);
+			break;
+		case GREATER:
+			pushGreater(sb, info, operator, fieldValue);
+			break;
+		case LESSER:
+			pushLesser(sb, info, operator, fieldValue);
+			break;
+		case CONTAINS:
+			pushContains(sb, info, operator, fieldValue);
+			break;
+		case CONTAINED:
+			pushContained(sb, info, operator, fieldValue);
+			break;
+		}
+		stack.push(sb.toString());
+	}
+
+	private void pushContains(StringBuilder sb, SOLRAttributeInfo info, MatchOp operator, Object fieldValue) {
+		if(info.getFamily()==Family.TEXT && !info.isCollection()) {
+			sb.append('*');
+			escape(sb, fieldValue);
+			sb.append('*');
+		} else
+			escape(sb, fieldValue);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void pushContained(StringBuilder sb, SOLRAttributeInfo info, MatchOp operator, Object fieldValue) {
 		if(fieldValue instanceof Collection) {
 			sb.append('(');
 			((Collection<Object>)fieldValue).forEach((value)->{
@@ -42,7 +74,22 @@ class SOLRFilterBuilder {
 			sb.append(')');
 		} else
 			escape(sb, fieldValue);
-		stack.push(sb.toString());
+	}
+
+	private void pushGreater(StringBuilder sb, SOLRAttributeInfo info, MatchOp operator, Object fieldValue) {
+		sb.append('{');
+		escape(sb, fieldValue);
+		sb.append(" TO *}");
+	}
+
+	private void pushLesser(StringBuilder sb, SOLRAttributeInfo info, MatchOp operator, Object fieldValue) {
+		sb.append("{* TO ");
+		escape(sb, fieldValue);
+		sb.append('}');
+	}
+
+	private void pushExact(StringBuilder sb, SOLRAttributeInfo info, MatchOp operator, Object fieldValue) {
+		escape(sb, fieldValue);
 	}
 
 	private <T> void escape(StringBuilder sb, T value) {
