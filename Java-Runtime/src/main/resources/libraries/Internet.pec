@@ -1,3 +1,28 @@
+define htmlEncode as native method receiving Text value returning Text doing:
+	Java: return prompto.internet.Html.encode(value);
+
+
+define htmlDecode as native method receiving Text value returning Text doing:
+	Java: return prompto.internet.Html.decode(value);
+
+
+define "encode Html entity" as test method doing:
+	encoded = htmlEncode "<ab>"
+and verifying:
+	encoded = "&lt;ab&gt;"
+
+
+define "decode Html entity" as test method doing:
+	encoded = htmlDecode "&lt;ab&gt;"
+and verifying:
+	encoded = "<ab>"
+
+
+define "decode Html charcode" as test method doing:
+	encoded = htmlDecode "a&#39;b"
+and verifying:
+	encoded = "a'b"
+
 define getHttpUser as native method returning Text doing:
 	Java: return prompto.server.Server.getHttpUser();
 	C#: return prompto.server.Server.getHttpUser();

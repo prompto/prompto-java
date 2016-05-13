@@ -23,6 +23,11 @@ public class TestInternet extends BaseEParserTest {
 	}
 
 	@Test
+	public void testHtml() throws Exception {
+		runTests("internet/html.pec");
+	}
+
+	@Test
 	public void testServer() throws Exception {
 		runTests("internet/server.pec");
 	}
