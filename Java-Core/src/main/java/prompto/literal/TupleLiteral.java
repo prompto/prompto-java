@@ -66,9 +66,13 @@ public class TupleLiteral extends Literal<TupleValue> {
 	
 	@Override
 	public void toDialect(CodeWriter writer) {
+		if(mutable)
+			writer.append("mutable ");
 		if(expressions!=null) {
 			writer.append('(');
 			expressions.toDialect(writer);
+			if(expressions.size()==1)
+				writer.append(',');
 			writer.append(')');
 		} else
 			writer.append("()");

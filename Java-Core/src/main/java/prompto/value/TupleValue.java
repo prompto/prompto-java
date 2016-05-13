@@ -18,7 +18,6 @@ import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.IterableWithLengths;
-import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoTuple;
 import prompto.literal.Literal;
 import prompto.runtime.Context;

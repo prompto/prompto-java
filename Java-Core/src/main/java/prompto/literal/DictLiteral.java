@@ -47,6 +47,8 @@ public class DictLiteral extends Literal<Dictionary> {
 	
 	@Override
 	public void toDialect(CodeWriter writer) {
+		if(mutable)
+			writer.append("mutable ");
 		this.entries.toDialect(writer);
 	}
 	
