@@ -5,7 +5,6 @@ import prompto.compiler.Flags;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.IOperand;
 import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -26,19 +25,26 @@ public class DictLiteral extends Literal<Dictionary> {
 	// we can only compute keys by evaluating key expressions
 	// so we can't just inherit from Map<String,Expression>. 
 	// so we keep the full entry list.
+	boolean mutable;
 	DictEntryList entries;
 	IType itemType = null;
 	
-	public DictLiteral() {
+	public DictLiteral(boolean mutable) {
 		super("{}",new Dictionary(MissingType.instance()));
 		this.entries = new DictEntryList();
+		this.mutable = mutable;
 	}
 	
-	public DictLiteral(DictEntryList entries) {
+	public DictLiteral(DictEntryList entries, boolean mutable) {
 		super(entries.toString(),new Dictionary(MissingType.instance()));
 		this.entries = entries;
+		this.mutable = mutable;
 	}
 
+	public boolean isMutable() {
+		return mutable;
+	}
+	
 	@Override
 	public void toDialect(CodeWriter writer) {
 		this.entries.toDialect(writer);
@@ -79,21 +85,31 @@ public class DictLiteral extends Literal<Dictionary> {
 	public IValue interpret(Context context) throws PromptoError {
 		if(value.isEmpty() && entries.size()>0) {
 			check(context); // to compute itemType
-			PromptoDict<Text,IValue> map = new PromptoDict<Text, IValue>();
+			PromptoDict<Text,IValue> dict = new PromptoDict<Text, IValue>(true);
 			for(DictEntry e : entries) {
 				Text key = (Text)e.getKey().interpret(context);
 				IValue val = e.getValue().interpret(context); 
-				map.put(key, val);
+				dict.put(key, val);
 			}
-			value = new Dictionary(itemType, map);
+			dict.setMutable(mutable);
+			value = new Dictionary(itemType, dict);
 		}
 		return value;
 	}
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		ResultInfo info = CompilerUtils.compileNewInstance(method, PromptoDict.class);
+		ResultInfo info = CompilerUtils.compileNewRawInstance(method, PromptoDict.class);
+		method.addInstruction(Opcode.DUP);
+		method.addInstruction(Opcode.ICONST_1);
+		CompilerUtils.compileCallConstructor(method, PromptoDict.class, boolean.class);
 		addEntries(context, method, flags.withPrimitive(false));
+		if(!mutable) {
+			method.addInstruction(Opcode.DUP);
+			method.addInstruction(Opcode.ICONST_0);
+			MethodConstant m = new MethodConstant(PromptoDict.class, "setMutable", boolean.class, void.class);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+		}
 		return info;
 	}
 
@@ -102,14 +118,14 @@ public class DictLiteral extends Literal<Dictionary> {
 			method.addInstruction(Opcode.DUP); // need to keep a reference to the map on top of stack
 			ResultInfo info = e.getKey().compile(context, method, flags);
 			if(info.getType()!=String.class) {
-				IOperand oper = new MethodConstant(info.getType(), "put", 
+				MethodConstant m = new MethodConstant(info.getType(), "toString", 
 						String.class);
-				method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+				method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 			}
 			e.getValue().compile(context, method, flags);
-			IOperand oper = new MethodConstant(PromptoDict.class, "put", 
+			MethodConstant m = new MethodConstant(PromptoDict.class, "put", 
 					Object.class, Object.class, Object.class);
-			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 			method.addInstruction(Opcode.POP); // consume the returned value (null since this is a new Map)
 		}
 	}

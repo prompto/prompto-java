@@ -83,14 +83,15 @@ public class Interpreter {
 	private static IExpression parseCmdLineArgs(String cmdLineArgs) {
 		try {
 			Map<String,String> args = CmdLineParser.parse(cmdLineArgs);
-			PromptoDict<Text, IValue> valueArgs = new PromptoDict<Text, IValue>();
+			PromptoDict<Text, IValue> valueArgs = new PromptoDict<Text, IValue>(true);
 			for(Entry<String,String> entry : args.entrySet())
 				valueArgs.put(new Text(entry.getKey()), new Text(entry.getValue()));
+			valueArgs.setMutable(false);
 			Dictionary dict = new Dictionary(TextType.instance(), valueArgs);
 			return new ExpressionValue(argsType, dict);
 		} catch(Exception e) {
 			// TODO
-			return new DictLiteral();
+			return new DictLiteral(false);
 		}
 	}
 

@@ -37,11 +37,10 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 
 	PromptoList<IValue> items;
 	List<Object> storables;
-	boolean mutable = false;
 	
 	public ListValue(IType itemType) {
 		super(new ListType(itemType));
-		this.items = new PromptoList<>();
+		this.items = new PromptoList<>(false);
 	}
 	
 	public ListValue(IType itemType, PromptoList<IValue> items) {
@@ -51,18 +50,17 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 
 	public ListValue(IType itemType, Collection<? extends IValue> items) {
 		super(new ListType(itemType));
-		this.items = new PromptoList<>(items);
+		this.items = new PromptoList<>(items, false);
 	}
 	
 	public ListValue(IType itemType, Collection<? extends IValue> items, boolean mutable) {
 		super(new ListType(itemType));
-		this.items = new PromptoList<>(items);
-		this.mutable = mutable;
+		this.items = new PromptoList<>(items, mutable);
 	}
 
 	@Override
 	public boolean isMutable() {
-		return mutable;
+		return items.isMutable();
 	}
 	
 	@Override
@@ -192,7 +190,7 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
     }
 	
 	protected ListValue merge(Collection<? extends IValue> items) {
-		PromptoList<IValue> result = new PromptoList<IValue>();
+		PromptoList<IValue> result = new PromptoList<IValue>(false);
 		result.addAll(this.items);
 		result.addAll(items);
 		IType itemType = ((ListType)getType()).getItemType();
@@ -227,7 +225,10 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 			ResultInfo left, IExpression exp) {
 		// TODO: return left if right is empty (or right if left is empty and is a list)
 		// create result
-		ResultInfo info = CompilerUtils.compileNewInstance(method, PromptoList.class); 
+		ResultInfo info = CompilerUtils.compileNewRawInstance(method, PromptoList.class);
+		method.addInstruction(Opcode.DUP);
+		method.addInstruction(Opcode.ICONST_0); // not mutable
+		CompilerUtils.compileCallConstructor(method, PromptoList.class, boolean.class);
 		// add left, current stack is: left, result, we need: result, result, left
 		method.addInstruction(Opcode.DUP_X1); // stack is: result, left, result
 		method.addInstruction(Opcode.SWAP); // stack is: result, result, left

@@ -40,12 +40,12 @@ public class PromptoSet<V> extends HashSet<V> implements Filterable<PromptoSet<V
 	
 	public PromptoList<V> sort() {
 		TreeSet<V> sorted = new TreeSet<>(this);
-		return new PromptoList<>(sorted);
+		return new PromptoList<>(sorted, false);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public PromptoList<? extends V> sortUsing(Comparator<? extends V> cmp) {
-		PromptoList<V> sorted = new PromptoList<>(this);
+		PromptoList<V> sorted = new PromptoList<>(this, false);
 		sorted.sort((Comparator<V>)cmp);
 		return sorted;
 	}

@@ -60,7 +60,7 @@ public abstract class Executor {
 	}
 	
 	private static PromptoDict<String, String> parseCmdLineArgs(String cmdLineArgs) {
-		PromptoDict<String, String> result = new PromptoDict<>();
+		PromptoDict<String, String> result = new PromptoDict<>(false);
 		try {
 			Map<String, String> args = CmdLineParser.parse(cmdLineArgs);
 			result.putAll(args);

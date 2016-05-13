@@ -40,6 +40,26 @@ public class TestMutability extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedImmutableDict() throws Exception {
+		checkInterpretedOutput("mutability/immutableDict.pec");
+	}
+
+	@Test
+	public void testCompiledImmutableDict() throws Exception {
+		checkCompiledOutput("mutability/immutableDict.pec");
+	}
+
+	@Test
+	public void testInterpretedImmutableList() throws Exception {
+		checkInterpretedOutput("mutability/immutableList.pec");
+	}
+
+	@Test
+	public void testCompiledImmutableList() throws Exception {
+		checkCompiledOutput("mutability/immutableList.pec");
+	}
+
+	@Test
 	public void testInterpretedImmutableMember() throws Exception {
 		checkInterpretedOutput("mutability/immutableMember.pec");
 	}
@@ -47,6 +67,16 @@ public class TestMutability extends BaseEParserTest {
 	@Test
 	public void testCompiledImmutableMember() throws Exception {
 		checkCompiledOutput("mutability/immutableMember.pec");
+	}
+
+	@Test
+	public void testInterpretedImmutableTuple() throws Exception {
+		checkInterpretedOutput("mutability/immutableTuple.pec");
+	}
+
+	@Test
+	public void testCompiledImmutableTuple() throws Exception {
+		checkCompiledOutput("mutability/immutableTuple.pec");
 	}
 
 	@Test
@@ -70,6 +100,26 @@ public class TestMutability extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedMutableDict() throws Exception {
+		checkInterpretedOutput("mutability/mutableDict.pec");
+	}
+
+	@Test
+	public void testCompiledMutableDict() throws Exception {
+		checkCompiledOutput("mutability/mutableDict.pec");
+	}
+
+	@Test
+	public void testInterpretedMutableList() throws Exception {
+		checkInterpretedOutput("mutability/mutableList.pec");
+	}
+
+	@Test
+	public void testCompiledMutableList() throws Exception {
+		checkCompiledOutput("mutability/mutableList.pec");
+	}
+
+	@Test
 	public void testInterpretedMutableMember() throws Exception {
 		checkInterpretedOutput("mutability/mutableMember.pec");
 	}
@@ -77,6 +127,16 @@ public class TestMutability extends BaseEParserTest {
 	@Test
 	public void testCompiledMutableMember() throws Exception {
 		checkCompiledOutput("mutability/mutableMember.pec");
+	}
+
+	@Test
+	public void testInterpretedMutableTuple() throws Exception {
+		checkInterpretedOutput("mutability/mutableTuple.pec");
+	}
+
+	@Test
+	public void testCompiledMutableTuple() throws Exception {
+		checkCompiledOutput("mutability/mutableTuple.pec");
 	}
 
 }

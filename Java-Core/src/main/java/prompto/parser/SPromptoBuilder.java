@@ -869,8 +869,9 @@ public class SPromptoBuilder extends SParserBaseListener {
 	
 	@Override
 	public void exitDict_literal(Dict_literalContext ctx) {
+		boolean mutable = ctx.MUTABLE()!=null;
 		DictEntryList items = this.<DictEntryList>getNodeValue(ctx.dict_entry_list());
-		IExpression value = items==null ? new DictLiteral() : new DictLiteral(items);
+		IExpression value = items==null ? new DictLiteral(mutable) : new DictLiteral(items, mutable);
 		setNodeValue(ctx, value);
 	}
 	
@@ -2492,8 +2493,9 @@ public class SPromptoBuilder extends SParserBaseListener {
 	
 	@Override
 	public void exitTuple_literal(Tuple_literalContext ctx) {
+		boolean mutable = ctx.MUTABLE()!=null;
 		ExpressionList items = this.<ExpressionList>getNodeValue(ctx.expression_tuple());
-		IExpression value = items==null ? new TupleLiteral() : new TupleLiteral(items);
+		IExpression value = items==null ? new TupleLiteral(mutable) : new TupleLiteral(items, mutable);
 		setNodeValue(ctx, value);
 	}
 	

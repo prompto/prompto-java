@@ -1,13 +1,11 @@
 package prompto.literal;
 
-import java.util.List;
-
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.IOperand;
 import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
@@ -23,14 +21,26 @@ import prompto.value.TupleValue;
 public class TupleLiteral extends Literal<TupleValue> {
 
 	ExpressionList expressions = null;
+	boolean mutable = false;
 	
-	public TupleLiteral() {
-		super("()",new TupleValue());
+	public TupleLiteral(boolean mutable) {
+		super("()",new TupleValue(mutable));
+		this.mutable = mutable;
 	}
 	
-	public TupleLiteral(ExpressionList expressions) {
-		super("(" + expressions.toString() + ")",new TupleValue());
+	public TupleLiteral(ExpressionList expressions, boolean mutable) {
+		super(toTupleString(expressions),new TupleValue(mutable));
 		this.expressions = expressions;
+		this.mutable = mutable;
+	}
+	
+	
+	private static String toTupleString(ExpressionList expressions) {
+		return "(" + expressions.toString() + (expressions.size()==1 ? "," : "") + ")";
+	}
+
+	public boolean isMutable() {
+		return mutable;
 	}
 	
 	@Override
@@ -41,7 +51,7 @@ public class TupleLiteral extends Literal<TupleValue> {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		if(value.isEmpty() && expressions!=null) {
-			List<IValue> list = new PromptoTuple<IValue>();
+			PromptoTuple<IValue> list = new PromptoTuple<IValue>(mutable);
 			for(IExpression exp : expressions) 
 				list.add(exp.interpret(context));
 			value = new TupleValue(list);
@@ -66,7 +76,10 @@ public class TupleLiteral extends Literal<TupleValue> {
 
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		ResultInfo info = CompilerUtils.compileNewInstance(method, PromptoTuple.class);
+		ResultInfo info = CompilerUtils.compileNewRawInstance(method, PromptoTuple.class);
+		method.addInstruction(Opcode.DUP);
+		method.addInstruction(mutable ? Opcode.ICONST_1 : Opcode.ICONST_0);
+		CompilerUtils.compileCallConstructor(method, PromptoTuple.class, boolean.class);
 		if(expressions!=null)
 			addItems(context, method, flags);
 		return info;

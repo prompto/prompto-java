@@ -20,7 +20,7 @@ public abstract class CSVReader {
 	}
 	
 	public static PromptoList<PromptoDocument<String, Object>> read(final Reader buffered, PromptoDict<String, String> columns, Character separator, Character encloser) {
-		PromptoList<PromptoDocument<String, Object>> list = new PromptoList<>();
+		PromptoList<PromptoDocument<String, Object>> list = new PromptoList<>(false);
 		Iterator<PromptoDocument<String, Object>> iter = iterator(buffered, columns, separator, encloser);
 		while(iter.hasNext())
 			list.add(iter.next());

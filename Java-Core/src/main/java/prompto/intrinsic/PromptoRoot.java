@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.PromptoClassLoader;
+import prompto.error.InvalidValueError;
 import prompto.error.NotStorableError;
 import prompto.store.IStorable;
 import prompto.store.IStorable.IDbIdListener;
@@ -89,6 +90,17 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMuta
 			return null;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public static <T extends PromptoRoot> T convertObjectToExact(Object o, Class<T> klass) {
+		if(o==null)
+			return null;
+		else if(klass.isInstance(o))
+			return (T)o;
+		// TODO: convert Document to instance
+		else
+			throw new InvalidValueError("Expected a " + klass.getSimpleName() +", got " + o.getClass().getSimpleName());
+	}
+
 	protected Object dbId;
 	protected IStorable storable;
 	protected boolean mutable;

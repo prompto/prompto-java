@@ -11,11 +11,19 @@ import prompto.value.IMultiplyable;
 @SuppressWarnings("serial")
 public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoList<V>, V>, IMultiplyable {
 
-	public PromptoList() {
+	boolean mutable;
+	
+	public PromptoList(boolean mutable) {
+		this.mutable = mutable;
 	}
 
-	public PromptoList(Collection<? extends V> items) {
+	public PromptoList(Collection<? extends V> items, boolean mutable) {
 		super(items);
+		this.mutable = mutable;
+	}
+	
+	public boolean isMutable() {
+		return mutable;
 	}
 
 	public Long getLength() {
@@ -31,7 +39,7 @@ public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoLi
 	}
 
 	public PromptoList<V> multiply(int count) {
-		PromptoList<V> result = new PromptoList<>();
+		PromptoList<V> result = new PromptoList<>(false);
 		while(count-->0)
 			result.addAll(this);
 		return result;
@@ -40,19 +48,19 @@ public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoLi
 	public PromptoList<V> slice(long first, long last) {
 		if (last < 0)
 			last = this.size() + 1 + last;
-		return new PromptoList<>(this.subList((int)(first-1), (int)last));
+		return new PromptoList<>(this.subList((int)(first-1), (int)last), false);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public PromptoList<V> sort() {
-		PromptoList<V> sorted = new PromptoList<>(this);
+		PromptoList<V> sorted = new PromptoList<>(this, false);
 		Collections.sort((PromptoList<Comparable>)sorted); // work around non Comparable V
 		return sorted;
 	}
 	
 	@SuppressWarnings("unchecked")
 	public PromptoList<? extends V> sortUsing(Comparator<? extends V> cmp) {
-		PromptoList<? extends V> sorted = new PromptoList<>(this);
+		PromptoList<? extends V> sorted = new PromptoList<>(this, false);
 		sorted.sort((Comparator<V>)cmp);
 		return sorted;
 	}
@@ -66,7 +74,7 @@ public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoLi
 	}
 	
 	public PromptoList<V> filter(Predicate<V> p) {
-		PromptoList<V> filtered = new PromptoList<>();
+		PromptoList<V> filtered = new PromptoList<>(false);
 		this.forEach((v)->{
 			if(p.test(v))
 				filtered.add(v);
@@ -74,5 +82,11 @@ public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoLi
 		return filtered;
 	}
 	
+	@Override
+	public V set(int index, V element) {
+		if(!mutable)
+			PromptoException.throwEnumeratedException("NOT_MUTABLE");
+		return super.set(index, element);
+	}
 		
 }

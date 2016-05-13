@@ -7,6 +7,20 @@ import java.util.Iterator;
 @SuppressWarnings("serial")
 public class PromptoDict<K,V> extends HashMap<K,V> implements Iterable<PromptoDict.Entry<K,V>> {
 
+	boolean mutable;
+
+	public PromptoDict(boolean mutable) {
+		this.mutable = mutable;
+	}
+	
+	public boolean isMutable() {
+		return mutable;
+	}
+	
+	public void setMutable(boolean mutable) {
+		this.mutable = mutable;
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -32,6 +46,8 @@ public class PromptoDict<K,V> extends HashMap<K,V> implements Iterable<PromptoDi
 	
 	@Override
 	public V put(K key, V value) {
+		if(!mutable)
+			PromptoException.throwEnumeratedException("NOT_MUTABLE");
 		if(key==null)
 			throw new NullPointerException();
 		return super.put(key, value);
@@ -68,7 +84,7 @@ public class PromptoDict<K,V> extends HashMap<K,V> implements Iterable<PromptoDi
 	}
 	
 	public PromptoList<V> getValues() {
-		return new PromptoList<V>(values()); // TODO worth the copy?
+		return new PromptoList<V>(values(), false); // TODO worth the copy?
 	}
 	
 	public static class Entry<K,V> {

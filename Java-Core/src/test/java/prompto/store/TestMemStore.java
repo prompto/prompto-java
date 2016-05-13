@@ -235,7 +235,7 @@ public class TestMemStore {
 	public void testFetchOneFinalCategory() throws Exception {
 		store("__id__", "__test0__");
 		IStorable d1 = store("__id__", "__test1__");
-		PromptoList<String> categories = new PromptoList<>();
+		PromptoList<String> categories = new PromptoList<>(false);
 		categories.add("Project");
 		categories.add("Application");
 		d1.setData("category", categories);
@@ -248,7 +248,7 @@ public class TestMemStore {
 	public void testFetchOneRootCategory() throws Exception {
 		store("__id__", "__test0__");
 		IStorable d1 = store("__id__", "__test1__");
-		PromptoList<String> categories = new PromptoList<>();
+		PromptoList<String> categories = new PromptoList<>(false);
 		categories.add("Project");
 		categories.add("Application");
 		d1.setData("category", categories);
@@ -261,7 +261,7 @@ public class TestMemStore {
 	public void testFetchManyCategory() throws Exception {
 		store("__id__", "__test0__");
 		IStorable d1 = store("__id__", "__test1__");
-		PromptoList<String> categories = new PromptoList<>();
+		PromptoList<String> categories = new PromptoList<>(false);
 		categories.add("Project");
 		categories.add("Application");
 		d1.setData("category", categories);

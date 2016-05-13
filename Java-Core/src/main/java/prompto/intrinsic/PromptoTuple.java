@@ -8,11 +8,20 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class PromptoTuple<V> extends ArrayList<V> {
 
-	public PromptoTuple() {
+	boolean mutable;
+
+	public PromptoTuple(boolean mutable) {
+		this.mutable = mutable;
 	}
 
-	public PromptoTuple(Collection<? extends V> items) {
+	public PromptoTuple(Collection<? extends V> items, boolean mutable) {
 		super(items);
+		this.mutable = mutable;
+	}
+	
+	
+	public boolean isMutable() {
+		return mutable;
 	}
 
 	@Override
@@ -40,7 +49,7 @@ public class PromptoTuple<V> extends ArrayList<V> {
 	public PromptoTuple<V> slice(long first, long last) {
 		if (last < 0)
 			last = this.size() + 1 + last;
-		return new PromptoTuple<>(this.subList((int)(first-1), (int)last));
+		return new PromptoTuple<>(this.subList((int)(first-1), (int)last), false);
 	}
 	
 	public boolean containsAny(Collection<Object> items) {
@@ -82,4 +91,12 @@ public class PromptoTuple<V> extends ArrayList<V> {
 		else
 			return 0;
 	}
+	
+	@Override
+	public V set(int index, V element) {
+		if(!mutable)
+			PromptoException.throwEnumeratedException("NOT_MUTABLE");
+		return super.set(index, element);
+	}
+
 }

@@ -12,6 +12,7 @@ import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
+import prompto.error.InvalidValueError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
@@ -28,10 +29,10 @@ import prompto.type.TextType;
 public class Dictionary extends BaseValue implements IContainer<IValue> {
 
 	PromptoDict<Text, IValue> dict;
-
+	
 	public Dictionary(IType itemType) {
 		super(new DictType(itemType));
-		dict = new PromptoDict<>();
+		dict = new PromptoDict<>(false);
 	}
 
 	public Dictionary(Dictionary from) {
@@ -49,7 +50,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 	}
 
 	public static Dictionary merge(Dictionary dict1, Dictionary dict2) {
-		PromptoDict<Text, IValue> dict = new PromptoDict<>();
+		PromptoDict<Text, IValue> dict = new PromptoDict<>(false);
 		dict.putAll(dict1.dict);
 		dict.putAll(dict2.dict);
 		// TODO check type fungibility		
@@ -72,8 +73,11 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
 			ResultInfo left, IExpression exp) {
 		// TODO: return right if left is empty (or left if right is empty)
-		// create result
-		ResultInfo info = CompilerUtils.compileNewInstance(method, PromptoDict.class); 
+		// create result (temporarily mutable)
+		ResultInfo info = CompilerUtils.compileNewRawInstance(method, PromptoDict.class);
+		method.addInstruction(Opcode.DUP);
+		method.addInstruction(Opcode.ICONST_1);
+		CompilerUtils.compileCallConstructor(method, PromptoDict.class, boolean.class);
 		// add left, current stack is: left, result, we need: result, result, left
 		method.addInstruction(Opcode.DUP_X1); // stack is: result, left, result
 		method.addInstruction(Opcode.SWAP); // stack is: result, result, left
@@ -86,6 +90,11 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 		oper = new MethodConstant(PromptoDict.class, "putAll", 
 				Map.class, void.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		// set immutable
+		method.addInstruction(Opcode.DUP);
+		method.addInstruction(Opcode.ICONST_0);
+		MethodConstant m = new MethodConstant(PromptoDict.class, "setMutable", boolean.class, void.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 		return info;
 	}
 
@@ -97,6 +106,11 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 					+ this.getClass().getSimpleName());
 	}
 
+	@Override
+	public boolean isMutable() {
+		return this.dict.isMutable();
+	}
+	
 	@Override
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
@@ -113,7 +127,17 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 		} else
 			return super.getMember(context, id, autoCreate);
 	}
+	
+	
+	
+	@Override
+	public void setItem(Context context, IValue item, IValue value) {
+		if(!(item instanceof Text))
+			throw new InvalidValueError("Expected a Text, got:" + item.getClass().getName());
+		this.dict.put((Text)item, value);
+	}
 
+	@Override
 	public IValue getItem(Context context, IValue index) throws PromptoError {
 		return getItem(index);
 	}
@@ -139,12 +163,13 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 	@Override
 	public Object convertTo(Class<?> type) {
 		Class<?> itemType = Object.class; // TODO (Class<?>)((ParameterizedType)(Object)type).getActualTypeArguments()[1];
-		PromptoDict<String, Object> dict = new PromptoDict<>();
+		PromptoDict<String, Object> dict = new PromptoDict<>(true);
 		for(Map.Entry<Text, IValue> entry : this.dict.entrySet()) {
 			String key = entry.getKey().toString();
 			Object value = entry.getValue().convertTo(itemType);
 			dict.put(key, value);
 		}
+		dict.setMutable(this.isMutable());
 		return dict;
 	}
 

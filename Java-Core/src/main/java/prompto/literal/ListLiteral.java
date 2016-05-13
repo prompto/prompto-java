@@ -1,13 +1,11 @@
 package prompto.literal;
 
-import java.util.List;
-
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.IOperand;
 import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
@@ -71,13 +69,13 @@ public class ListLiteral extends Literal<ListValue> {
 	public IValue interpret(Context context) throws PromptoError {
 		if(expressions!=null) {
 			check(context); // force computation of itemType
-			List<IValue> list = new PromptoList<IValue>();
+			PromptoList<IValue> list = new PromptoList<IValue>(mutable);
 			for(IExpression exp : expressions) {
 				IValue item = exp.interpret(context);
 				item = interpretPromotion(item);
 				list.add(item);
 			}
-			return new ListValue(itemType, list, mutable);
+			return new ListValue(itemType, list);
 		} else
 			return value;
 	}
@@ -111,7 +109,10 @@ public class ListLiteral extends Literal<ListValue> {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		ResultInfo info = CompilerUtils.compileNewInstance(method, PromptoList.class);
+		ResultInfo info = CompilerUtils.compileNewRawInstance(method, PromptoList.class);
+		method.addInstruction(Opcode.DUP);
+		method.addInstruction(mutable ? Opcode.ICONST_1 : Opcode.ICONST_0);
+		CompilerUtils.compileCallConstructor(method, PromptoList.class, boolean.class);
 		if(expressions!=null)
 			compileItems(context, method);
 		return info;

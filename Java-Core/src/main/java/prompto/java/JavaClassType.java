@@ -190,7 +190,7 @@ public class JavaClassType extends BaseType {
 			return null;
 		Type elemType = nthArgTypeFromParameterizedType(type, 0);
 		IType itemType = ((ListType)returnType).getItemType();
-		PromptoList<IValue> list = new PromptoList<IValue>();
+		PromptoList<IValue> list = new PromptoList<IValue>(false);
 		for(Object obj : (List<Object>)value) {
 			IValue val = convertJavaValueToPromptoValue(context, obj, elemType, itemType);
 			list.add(val);
@@ -219,14 +219,15 @@ public class JavaClassType extends BaseType {
 		Type keyType = nthArgTypeFromParameterizedType(type, 0);
 		Type elemType = nthArgTypeFromParameterizedType(type, 1);
 		IType itemType = ((DictType)returnType).getItemType();
-		PromptoDict<Text, IValue> dict = new PromptoDict<Text, IValue>();
+		PromptoDict<Text, IValue> dict = new PromptoDict<Text, IValue>(true);
 		for(Object obj : ((Map<Object,Object>)value).keySet()) {
 			Object val = ((Map<Object,Object>)value).get(obj);
 			Text key = (Text)convertJavaValueToPromptoValue(context, obj, keyType, TextType.instance());
 			IValue ivalue = convertJavaValueToPromptoValue(context, val, elemType, itemType);
 			dict.put(key, ivalue);
 		}
-		return new Dictionary(itemType, dict);
+		dict.setMutable(false); // TODO: mutable in return type ?
+		return new Dictionary(itemType, dict); 
 	}
 	
 	private static IValue convertIterator(Context context, Object value, Type type, IType returnType) {

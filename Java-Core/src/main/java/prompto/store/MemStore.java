@@ -190,7 +190,7 @@ public final class MemStore implements IStore<Long> {
 	}
 	
 	private PromptoTuple<Comparable<?>> readTuple(StorableDocument doc, Collection<IOrderBy> orderBy) throws PromptoError {
-		PromptoTuple<Comparable<?>> tuple = new PromptoTuple<>();
+		PromptoTuple<Comparable<?>> tuple = new PromptoTuple<>(false);
 		orderBy.forEach((o)->
 			tuple.add((Comparable<?>)doc.getData(o.getAttributeInfo().getName())));
 		return tuple;
@@ -247,7 +247,7 @@ public final class MemStore implements IStore<Long> {
 		private Map<String, Object> newDocument(Object dbId) {
 			Map<String, Object> doc = new HashMap<>();
 			if(categories!=null) {
-				PromptoList<String> value = new PromptoList<>();
+				PromptoList<String> value = new PromptoList<>(false);
 				for(String name : categories)
 					value.add(name);
 				doc.put("category", value);

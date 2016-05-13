@@ -5,6 +5,7 @@ import java.security.InvalidParameterException;
 import java.util.Iterator;
 import java.util.Map;
 
+import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodConstant;
@@ -452,5 +453,15 @@ public class CategoryType extends BaseType {
 		MethodConstant m = new MethodConstant(PromptoRoot.class, "getStorableData", Object.class, Object.class);
 		method.addInstruction(Opcode.INVOKESTATIC, m);
 	}
+	
+	@Override
+	public void compileConvertObjectToExact(Context context, MethodInfo method, Flags flags) {
+		ClassConstant k = new ClassConstant(getJavaType(context));
+		method.addInstruction(Opcode.LDC, k);
+		MethodConstant m = new MethodConstant(PromptoRoot.class, "convertObjectToExact", Object.class, Class.class, PromptoRoot.class);
+		method.addInstruction(Opcode.INVOKESTATIC, m);
+		method.addInstruction(Opcode.CHECKCAST, k);
+	}
+
 
 }

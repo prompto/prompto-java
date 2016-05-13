@@ -17,8 +17,23 @@ public class TestMutability extends BaseEParserTest {
 	}
 
 	@Test
+	public void testImmutableDict() throws Exception {
+		compareResourceEOE("mutability/immutableDict.pec");
+	}
+
+	@Test
+	public void testImmutableList() throws Exception {
+		compareResourceEOE("mutability/immutableList.pec");
+	}
+
+	@Test
 	public void testImmutableMember() throws Exception {
 		compareResourceEOE("mutability/immutableMember.pec");
+	}
+
+	@Test
+	public void testImmutableTuple() throws Exception {
+		compareResourceEOE("mutability/immutableTuple.pec");
 	}
 
 	@Test
@@ -32,8 +47,23 @@ public class TestMutability extends BaseEParserTest {
 	}
 
 	@Test
+	public void testMutableDict() throws Exception {
+		compareResourceEOE("mutability/mutableDict.pec");
+	}
+
+	@Test
+	public void testMutableList() throws Exception {
+		compareResourceEOE("mutability/mutableList.pec");
+	}
+
+	@Test
 	public void testMutableMember() throws Exception {
 		compareResourceEOE("mutability/mutableMember.pec");
+	}
+
+	@Test
+	public void testMutableTuple() throws Exception {
+		compareResourceEOE("mutability/mutableTuple.pec");
 	}
 
 }

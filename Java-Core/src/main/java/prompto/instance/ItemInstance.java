@@ -1,5 +1,6 @@
 package prompto.instance;
 
+import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.IOperand;
 import prompto.compiler.MethodConstant;
@@ -13,7 +14,10 @@ import prompto.expression.IExpression;
 import prompto.expression.ItemSelector;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoAny;
+import prompto.intrinsic.PromptoDict;
 import prompto.intrinsic.PromptoDocument;
+import prompto.intrinsic.PromptoList;
+import prompto.intrinsic.PromptoTuple;
 import prompto.runtime.Context;
 import prompto.type.AnyType;
 import prompto.type.IType;
@@ -99,10 +103,49 @@ public class ItemInstance implements IAssignableSelector {
 		ResultInfo parentInfo = this.parent.compileParent(context, method, flags);
 		if(PromptoAny.class==parentInfo.getType() || PromptoDocument.class==parentInfo.getType())
 			return compileAssignAny(context, method, flags, item, value);
+		else if(PromptoList.class==parentInfo.getType())
+			return compileAssignList(context, method, flags, item, value);
+		else if(PromptoTuple.class==parentInfo.getType())
+			return compileAssignTuple(context, method, flags, item, value);
+		else if(PromptoDict.class==parentInfo.getType())
+			return compileAssignDict(context, method, flags, item, value);
 		else 
 			throw new UnsupportedOperationException("Cannot compileAssign for " + parentInfo.getType().getTypeName());
 	}
 	
+	private ResultInfo compileAssignList(Context context, MethodInfo method, Flags flags, IExpression item2, IExpression value) {
+		ResultInfo itemInfo = item.compile(context, method, flags.withPrimitive(true));
+		CompilerUtils.numberToint(method, itemInfo);
+		method.addInstruction(Opcode.ICONST_M1);
+		method.addInstruction(Opcode.IADD);
+		value.compile(context, method, flags.withPrimitive(false));
+		IOperand oper = new MethodConstant(PromptoList.class, "set", int.class, Object.class, Object.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		method.addInstruction(Opcode.POP); // consume result
+		return new ResultInfo(void.class);
+	}
+
+	private ResultInfo compileAssignTuple(Context context, MethodInfo method, Flags flags, IExpression item2, IExpression value) {
+		ResultInfo itemInfo = item.compile(context, method, flags.withPrimitive(true));
+		CompilerUtils.numberToint(method, itemInfo);
+		method.addInstruction(Opcode.ICONST_M1);
+		method.addInstruction(Opcode.IADD);
+		value.compile(context, method, flags.withPrimitive(false));
+		IOperand oper = new MethodConstant(PromptoTuple.class, "set", int.class, Object.class, Object.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		method.addInstruction(Opcode.POP); // consume result
+		return new ResultInfo(void.class);
+	}
+
+	private ResultInfo compileAssignDict(Context context, MethodInfo method, Flags flags, IExpression item2, IExpression value) {
+		item.compile(context, method, flags.withPrimitive(false));
+		value.compile(context, method, flags.withPrimitive(false));
+		IOperand oper = new MethodConstant(PromptoDict.class, "put", Object.class, Object.class, Object.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		method.addInstruction(Opcode.POP); // consume result
+		return new ResultInfo(void.class);
+	}
+
 	private ResultInfo compileAssignAny(Context context, MethodInfo method, Flags flags, IExpression item, IExpression value) {
 		item.compile(context, method, flags.withPrimitive(false));
 		value.compile(context, method, flags.withPrimitive(false));

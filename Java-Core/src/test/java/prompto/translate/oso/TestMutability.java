@@ -17,8 +17,23 @@ public class TestMutability extends BaseOParserTest {
 	}
 
 	@Test
+	public void testImmutableDict() throws Exception {
+		compareResourceOSO("mutability/immutableDict.poc");
+	}
+
+	@Test
+	public void testImmutableList() throws Exception {
+		compareResourceOSO("mutability/immutableList.poc");
+	}
+
+	@Test
 	public void testImmutableMember() throws Exception {
 		compareResourceOSO("mutability/immutableMember.poc");
+	}
+
+	@Test
+	public void testImmutableTuple() throws Exception {
+		compareResourceOSO("mutability/immutableTuple.poc");
 	}
 
 	@Test
@@ -32,8 +47,23 @@ public class TestMutability extends BaseOParserTest {
 	}
 
 	@Test
+	public void testMutableDict() throws Exception {
+		compareResourceOSO("mutability/mutableDict.poc");
+	}
+
+	@Test
+	public void testMutableList() throws Exception {
+		compareResourceOSO("mutability/mutableList.poc");
+	}
+
+	@Test
 	public void testMutableMember() throws Exception {
 		compareResourceOSO("mutability/mutableMember.poc");
+	}
+
+	@Test
+	public void testMutableTuple() throws Exception {
+		compareResourceOSO("mutability/mutableTuple.poc");
 	}
 
 }

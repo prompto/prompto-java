@@ -12,11 +12,13 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.error.IndexOutOfRangeError;
+import prompto.error.InvalidValueError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.IterableWithLengths;
+import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoTuple;
 import prompto.literal.Literal;
 import prompto.runtime.Context;
@@ -27,9 +29,9 @@ public class TupleValue extends BaseValue implements IContainer<IValue>, ISlicea
 
 	protected PromptoTuple<IValue> items;
 	
-	public TupleValue() {
+	public TupleValue(boolean mutable) {
 		super(TupleType.instance());
-		this.items = new PromptoTuple<>();
+		this.items = new PromptoTuple<>(mutable);
 	}
 	
 	public TupleValue(PromptoTuple<IValue> items) {
@@ -37,11 +39,17 @@ public class TupleValue extends BaseValue implements IContainer<IValue>, ISlicea
 		this.items = items;
 	}
 	
-	public TupleValue(Collection<IValue> items) {
+	public TupleValue(Collection<IValue> items, boolean mutable) {
 		super(TupleType.instance());
-		this.items = new PromptoTuple<IValue>(items);
+		this.items = new PromptoTuple<IValue>(items, mutable);
 	}
 
+	
+	@Override
+	public boolean isMutable() {
+		return items.isMutable();
+	}
+	
 	@Override
 	public PromptoTuple<IValue> getStorableData() {
 		return items;
@@ -100,7 +108,7 @@ public class TupleValue extends BaseValue implements IContainer<IValue>, ISlicea
 		if (_li > items.size())
 			throw new IndexOutOfRangeError();
 		PromptoTuple<IValue> sliced = items.slice(_fi, _li); // 1 based
-		return new TupleValue(sliced);
+		return new TupleValue(sliced, false);
 	}
 	
 	@Override
@@ -113,6 +121,18 @@ public class TupleValue extends BaseValue implements IContainer<IValue>, ISlicea
 		return this.items.contains(lval); // TODO interpret before
 	}
 
+	
+	@Override
+	public void setItem(Context context, IValue item, IValue value) {
+		if(!(item instanceof Integer))
+			throw new InvalidValueError("Expected an Integer, got:" + item.getClass().getName());
+		int index = (int)((Integer)item).longValue();
+		if(index<1 || index>this.getLength())
+			throw new IndexOutOfRangeError();
+		this.setItem(index-1, value);
+	}
+
+	
 	@Override
 	public IValue getItem(Context context, IValue index) throws PromptoError {
 		if (index instanceof Integer) {
@@ -140,7 +160,7 @@ public class TupleValue extends BaseValue implements IContainer<IValue>, ISlicea
     }
 	
 	protected TupleValue merge(Collection<? extends IValue> items) {
-		PromptoTuple<IValue> result = new PromptoTuple<IValue>();
+		PromptoTuple<IValue> result = new PromptoTuple<IValue>(false);
 		result.addAll(this.items);
 		result.addAll(items);
 		return new TupleValue(result);
@@ -240,7 +260,10 @@ public class TupleValue extends BaseValue implements IContainer<IValue>, ISlicea
 			ResultInfo left, IExpression exp) {
 		// TODO: return left if right is empty (or right if left is empty and is a list)
 		// create result
-		ResultInfo info = CompilerUtils.compileNewInstance(method, PromptoTuple.class); 
+		ResultInfo info = CompilerUtils.compileNewRawInstance(method, PromptoTuple.class);
+		method.addInstruction(Opcode.DUP);
+		method.addInstruction(Opcode.ICONST_0); // not mutable
+		CompilerUtils.compileCallConstructor(method, PromptoTuple.class, boolean.class);
 		// add left, current stack is: left, result, we need: result, result, left
 		method.addInstruction(Opcode.DUP_X1); // stack is: result, left, result
 		method.addInstruction(Opcode.SWAP); // stack is: result, result, left

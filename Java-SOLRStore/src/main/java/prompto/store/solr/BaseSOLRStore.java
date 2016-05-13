@@ -146,7 +146,7 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 		if(reader==null)
 			throw new UnsupportedOperationException("read " + typeName);
 		try {
-			PromptoList<Object> result = new PromptoList<>();
+			PromptoList<Object> result = new PromptoList<>(false);
 			for(Object item : ((Collection<Object>)data))
 				result.add(reader.readValue(item));
 			return result;
