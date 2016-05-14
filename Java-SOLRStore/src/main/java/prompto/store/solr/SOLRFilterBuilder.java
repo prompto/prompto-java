@@ -96,8 +96,8 @@ class SOLRFilterBuilder {
 		boolean wasAmpersand = false;
 		boolean wasPipe = false;
 		char[] chars = value.toString().toCharArray();
-		boolean isDoubleQuoted = chars[0]=='"' && chars[chars.length-1]=='"';
-		if(isDoubleQuoted)
+		boolean needsDoubleQuotes = chars[0]=='"' && chars[chars.length-1]=='"';
+		if(needsDoubleQuotes)
 			sb.append('"');
 		for(char c : chars) {
 			switch(c) {
@@ -117,6 +117,7 @@ class SOLRFilterBuilder {
 			case '?':
 			case ':':
 			case '\\':
+			case ' ':
 				if(wasAmpersand) {
 					sb.append('&');
 					wasAmpersand = false;
@@ -162,7 +163,7 @@ class SOLRFilterBuilder {
 			sb.append('|');
 			wasPipe = false;
 		}
-		if(isDoubleQuoted)
+		if(needsDoubleQuotes)
 			sb.append('"');
 	}
 

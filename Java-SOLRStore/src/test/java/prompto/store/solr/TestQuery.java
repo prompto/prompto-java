@@ -133,6 +133,20 @@ public class TestQuery extends BaseSOLRTest {
 	}
 
 	@Test
+	public void testFetchTextEqualsWithSpace() throws Exception {
+		SolrInputDocument doc = new SolrInputDocument();
+		doc.addField(IStore.dbIdName, UUID.randomUUID());
+		doc.addField("name", "John Smith");
+		store.addDocuments(doc);
+		store.commit();
+		// Test the basics
+		String query = "fetch one where name = \"John Smith\"";
+		IStored result = fetchOne(query);
+		assertNotNull(result);
+		assertEquals("John Smith", result.getData("name"));
+	}
+
+	@Test
 	public void testFetchTextRoughly() throws Exception {
 		SolrInputDocument doc = new SolrInputDocument();
 		doc.addField(IStore.dbIdName, UUID.randomUUID());
