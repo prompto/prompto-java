@@ -401,6 +401,14 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
+	public IValue convertIValueToIValue(Context context, IValue value) {
+		if(this.isAssignableFrom(context, value.getType()))
+			return value;
+		else
+			return super.convertIValueToIValue(context, value);
+	}
+	
+	@Override
 	public IValue convertJavaValueToIValue(Context context, Object value) {
 		try {
 			IDeclaration decl = getDeclaration(context);
