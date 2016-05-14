@@ -30,9 +30,9 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 
 	PromptoDict<Text, IValue> dict;
 	
-	public Dictionary(IType itemType) {
+	public Dictionary(IType itemType, boolean mutable) {
 		super(new DictType(itemType));
-		dict = new PromptoDict<>(false);
+		dict = new PromptoDict<>(mutable);
 	}
 
 	public Dictionary(Dictionary from) {

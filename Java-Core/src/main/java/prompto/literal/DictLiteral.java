@@ -30,13 +30,13 @@ public class DictLiteral extends Literal<Dictionary> {
 	IType itemType = null;
 	
 	public DictLiteral(boolean mutable) {
-		super("{}",new Dictionary(MissingType.instance()));
+		super("{}",new Dictionary(MissingType.instance(), mutable));
 		this.entries = new DictEntryList();
 		this.mutable = mutable;
 	}
 	
 	public DictLiteral(DictEntryList entries, boolean mutable) {
-		super(entries.toString(),new Dictionary(MissingType.instance()));
+		super(entries.toString(),new Dictionary(MissingType.instance(), mutable));
 		this.entries = entries;
 		this.mutable = mutable;
 	}
@@ -85,7 +85,7 @@ public class DictLiteral extends Literal<Dictionary> {
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		if(value.isEmpty() && entries.size()>0) {
+		if(entries.size()>0) {
 			check(context); // to compute itemType
 			PromptoDict<Text,IValue> dict = new PromptoDict<Text, IValue>(true);
 			for(DictEntry e : entries) {
@@ -94,9 +94,9 @@ public class DictLiteral extends Literal<Dictionary> {
 				dict.put(key, val);
 			}
 			dict.setMutable(mutable);
-			value = new Dictionary(itemType, dict);
-		}
-		return value;
+			return new Dictionary(itemType, dict);
+		} else
+			return value;
 	}
 	
 	@Override
