@@ -12,6 +12,11 @@ public class TestCondition extends BaseEParserTest {
 	}
 
 	@Test
+	public void testEmbeddedIf() throws Exception {
+		compareResourceESE("condition/embeddedIf.pec");
+	}
+
+	@Test
 	public void testReturnIf() throws Exception {
 		compareResourceESE("condition/returnIf.pec");
 	}

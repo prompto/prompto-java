@@ -1,7 +1,7 @@
 package prompto.compiler;
 
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -10,7 +10,11 @@ public class LocalVariableTableAttribute implements IAttribute {
 	Utf8Constant attributeName = new Utf8Constant("LocalVariableTable");
 	private Map<String, StackLocal> entries = new HashMap<>();
 
-	public Collection<StackLocal> getEntries() {
+	public int numLocals() {
+		return entries.size();
+	}
+	
+	public List<StackLocal> getEntries() {
 		return entries.values().stream()
 				.sorted((a, b)->
 					Short.compare(a.getIndex(), b.getIndex()))
@@ -50,7 +54,6 @@ public class LocalVariableTableAttribute implements IAttribute {
 		return entries.get(name);
 	}
 	
-
 	@Override
 	public void register(ConstantsPool pool) {
 		throw new UnsupportedOperationException(); // TODO

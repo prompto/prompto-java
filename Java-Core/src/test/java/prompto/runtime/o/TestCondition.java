@@ -30,6 +30,16 @@ public class TestCondition extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedEmbeddedIf() throws Exception {
+		checkInterpretedOutput("condition/embeddedIf.poc");
+	}
+
+	@Test
+	public void testCompiledEmbeddedIf() throws Exception {
+		checkCompiledOutput("condition/embeddedIf.poc");
+	}
+
+	@Test
 	public void testInterpretedReturnIf() throws Exception {
 		checkInterpretedOutput("condition/returnIf.poc");
 	}

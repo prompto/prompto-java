@@ -30,6 +30,16 @@ public class TestLoops extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedEmbeddedForEach() throws Exception {
+		checkInterpretedOutput("loops/embeddedForEach.poc");
+	}
+
+	@Test
+	public void testCompiledEmbeddedForEach() throws Exception {
+		checkCompiledOutput("loops/embeddedForEach.poc");
+	}
+
+	@Test
 	public void testInterpretedForEachCharacterRange() throws Exception {
 		checkInterpretedOutput("loops/forEachCharacterRange.poc");
 	}

@@ -12,6 +12,11 @@ public class TestCondition extends BaseOParserTest {
 	}
 
 	@Test
+	public void testEmbeddedIf() throws Exception {
+		compareResourceOSO("condition/embeddedIf.poc");
+	}
+
+	@Test
 	public void testReturnIf() throws Exception {
 		compareResourceOSO("condition/returnIf.poc");
 	}

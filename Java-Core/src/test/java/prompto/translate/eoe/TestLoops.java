@@ -12,6 +12,11 @@ public class TestLoops extends BaseEParserTest {
 	}
 
 	@Test
+	public void testEmbeddedForEach() throws Exception {
+		compareResourceEOE("loops/embeddedForEach.pec");
+	}
+
+	@Test
 	public void testForEachCharacterRange() throws Exception {
 		compareResourceEOE("loops/forEachCharacterRange.pec");
 	}

@@ -41,14 +41,14 @@ public class IfStatement extends BaseStatement {
 	
 	IfElementList elements = new IfElementList();
 	
-	public IfStatement(IExpression condition, StatementList instructions) {
-		elements.add(new IfElement(condition,instructions));
+	public IfStatement(IExpression condition, StatementList statements) {
+		elements.add(new IfElement(condition,statements));
 	}
 
 
-	public IfStatement(IExpression condition, StatementList instructions, 
+	public IfStatement(IExpression condition, StatementList statements, 
 			IfElementList elseIfs, StatementList elseStmts) {
-		elements.add(new IfElement(condition,instructions));
+		elements.add(new IfElement(condition,statements));
 		if(elseIfs!=null)
 			elements.addAll(elseIfs);
 		if(elseStmts!=null)

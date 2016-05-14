@@ -3,6 +3,7 @@ package prompto.compiler;
 import java.lang.reflect.Modifier;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 import prompto.compiler.IVerifierEntry.VerifierType;
 
@@ -127,6 +128,30 @@ public class MethodInfo {
 		return codeAttribute;
 	}
 
+	public StackLocals captureStackLocals() {
+		// register stack locals, both planned (StackState) and current (locals)
+		StackLocals locals = new StackLocals();
+		locals.stackState = captureStackState(); 
+		locals.numLocals = getLocals().numLocals();
+		return locals;
+	}
+	
+	public void restoreStackLocals(StackLocals stackLocals) {
+		// restore stack locals
+		List<StackLocal> locals = getLocals().getEntries();
+		ListIterator<StackLocal> iterLocals = locals.listIterator(locals.size());
+		while(iterLocals.hasPrevious()) {
+			StackLocal local = iterLocals.previous();
+			if(local.getIndex()>=stackLocals.numLocals)
+				unregisterLocal(local);
+			else
+				break;
+		}
+		restoreStackLocals(stackLocals.stackState);
+	}
+
+
+
 	public StackState captureStackState() {
 		ensureCodeAttribute();
 		return codeAttribute.captureStackState();
@@ -163,6 +188,7 @@ public class MethodInfo {
 		attributes.forEach((a)->
 			a.writeTo(writer));
 	}
+
 
 
 

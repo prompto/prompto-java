@@ -201,8 +201,6 @@ public class ForEachStatement extends BaseStatement {
 		java.lang.reflect.Type itemClass = source.check(context).checkIterator(context).getJavaType(context);
 		StackLocal iterLocal = compileIterator(context, method, flags);
 		StackLocal v1Local = compileInitCounter(method);
-		// local needs to be ITEM_Top because that's what the verifier infers from INVOKEINTERFACE on Iterator.next
-		StackLocal v2Local = method.registerLocal(v2.toString(), VerifierType.ITEM_Top, new ClassConstant(itemClass));
 		StackState iteratorState = method.captureStackState();
 		IInstructionListener test = method.addOffsetListener(new OffsetListenerConstant());
 		method.activateOffsetListener(test);
@@ -216,11 +214,14 @@ public class ForEachStatement extends BaseStatement {
 		InterfaceConstant m = new InterfaceConstant(Iterator.class, "next", Object.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, m);
 		method.addInstruction(Opcode.CHECKCAST, new ClassConstant(itemClass));
+		StackLocal v2Local = method.registerLocal(v2.toString(), VerifierType.ITEM_Object, new ClassConstant(itemClass));
 		method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)v2Local.getIndex()));
 		// increment v1
 		compileIncrementCounter(method, v1Local);
 		// compile statements
 		statements.compile(context, method, flags);
+		// done inner loop
+		method.unregisterLocal(v2Local);
 		// call hasNext
 		method.inhibitOffsetListener(test);
 		method.restoreFullStackState(iteratorState);
@@ -231,9 +232,8 @@ public class ForEachStatement extends BaseStatement {
 		// branch if done
 		method.inhibitOffsetListener(loop);
 		method.addInstruction(Opcode.IFNE, loop);
-		// TODO method.unregisterLocal(iterLocal.getName());
-		// TODO method.unregisterLocal(v1.getName());
-		// TODO method.unregisterLocal(v2.getName());
+		method.unregisterLocal(v1Local);
+		method.unregisterLocal(iterLocal);
 		// TODO manage return value in loop
 		return new ResultInfo(void.class);
 	}
@@ -267,8 +267,6 @@ public class ForEachStatement extends BaseStatement {
 	private ResultInfo compileWithoutIndex(Context context, MethodInfo method, Flags flags) {
 		java.lang.reflect.Type itemClass = source.check(context).checkIterator(context).getJavaType(context);
 		StackLocal iterLocal = compileIterator(context, method, flags);
-		// local needs to be ITEM_Top because that's what the verifier infers from INVOKEINTERFACE on Iterator.next
-		StackLocal v1Local = method.registerLocal(v1.toString(), VerifierType.ITEM_Top, new ClassConstant(itemClass));
 		StackState iteratorState = method.captureStackState();
 		IInstructionListener test = method.addOffsetListener(new OffsetListenerConstant());
 		method.activateOffsetListener(test);
@@ -282,9 +280,12 @@ public class ForEachStatement extends BaseStatement {
 		InterfaceConstant m = new InterfaceConstant(Iterator.class, "next", Object.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, m);
 		method.addInstruction(Opcode.CHECKCAST, new ClassConstant(itemClass));
+		StackLocal v1Local = method.registerLocal(v1.toString(), VerifierType.ITEM_Object, new ClassConstant(itemClass));
 		method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)v1Local.getIndex()));
 		// compile statements
 		statements.compile(context, method, flags);
+		// done inner loop
+		method.unregisterLocal(v1Local);
 		// call hasNext
 		method.inhibitOffsetListener(test);
 		method.restoreFullStackState(iteratorState);
@@ -295,8 +296,7 @@ public class ForEachStatement extends BaseStatement {
 		// branch if done
 		method.inhibitOffsetListener(loop);
 		method.addInstruction(Opcode.IFNE, loop);
-		// TODO method.unregisterLocal(iterLocal.getName());
-		// TODO method.unregisterLocal(v1.getName());
+		method.unregisterLocal(iterLocal);
 		// TODO manage return value in loop
 		return new ResultInfo(void.class);
 	}
@@ -305,7 +305,8 @@ public class ForEachStatement extends BaseStatement {
 		source.compile(context, method, flags);
 		InterfaceConstant m = new InterfaceConstant(Iterable.class, "iterator", Iterator.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, m);
-		StackLocal iterLocal = method.registerLocal("%iter%", VerifierType.ITEM_Object, new ClassConstant(Iterator.class));
+		String iterName = method.nextTransientName("iter");
+		StackLocal iterLocal = method.registerLocal(iterName, VerifierType.ITEM_Object, new ClassConstant(Iterator.class));
 		method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)iterLocal.getIndex()), new ClassConstant(Iterator.class));
 		return iterLocal;
 	}

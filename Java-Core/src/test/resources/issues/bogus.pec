@@ -16,7 +16,7 @@ define market as storable Market attribute
 define htmlDecode as method receiving Text data doing:
 	return data
 	
-define importNYSEStocks as method doing:
+define main as method receiving Text{} args doing:
 	sectors = mutable {} as Sector{}
 	market = fetch one Market where marketCode = "XNYS"
 	docs = [] as Document[]

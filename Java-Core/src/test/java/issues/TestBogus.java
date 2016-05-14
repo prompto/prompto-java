@@ -4,10 +4,11 @@ import java.io.InputStream;
 
 import org.junit.Test;
 
-import prompto.declaration.ConcreteMethodDeclaration;
 import prompto.declaration.DeclarationList;
 import prompto.parser.ECleverParser;
 import prompto.runtime.Context;
+import prompto.runtime.Executor;
+import prompto.runtime.Interpreter;
 
 public class TestBogus {
 
@@ -18,7 +19,8 @@ public class TestBogus {
 			Context context = Context.newGlobalContext();
 			decls.register(context);
 			decls.check(context);
-			((ConcreteMethodDeclaration)decls.getLast()).interpret(context);
+			Interpreter.interpretMainNoArgs(context);
+			Executor.executeMainNoArgs(context);
 			
 		}
 	}
