@@ -52,7 +52,7 @@ public abstract class Executor {
 	}
 
 	public static void executeMainNoArgs(Context context) throws PromptoError {
-		executeMainMethod(context, new Identifier("main"), "", null);
+		executeMainMethod(context, new Identifier("main"), "-testMode=true", null);
 	}
 
 	public static void executeMainNoArgs(Context context, File promptoDir) throws PromptoError {
