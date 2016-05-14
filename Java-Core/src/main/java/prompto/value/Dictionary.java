@@ -145,7 +145,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 	
 	public IValue getItem(IValue index) throws PromptoError {
 		if (index instanceof Text)
-			return dict.get((Text) index);
+			return dict.getOrDefault((Text) index, NullValue.instance());
 		else
 			throw new SyntaxError("No such item:" + index.toString());
 	}
