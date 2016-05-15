@@ -39,16 +39,16 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 	StatementList statements;
 	StatementList finallyStatements;
 	
-	public SwitchErrorStatement(Identifier errorName, StatementList instructions) {
+	public SwitchErrorStatement(Identifier errorName, StatementList statements) {
 		this.errorName = errorName;
-		this.statements = instructions;
+		this.statements = statements;
 	}
 	
-	public SwitchErrorStatement(Identifier errorName, StatementList instructions, 
+	public SwitchErrorStatement(Identifier errorName, StatementList statements, 
 			SwitchCaseList handlers, StatementList anyStmts, StatementList finalStmts) {
 		super(handlers, anyStmts);
 		this.errorName = errorName;
-		this.statements = instructions;
+		this.statements = statements;
 		this.finallyStatements = finalStmts;
 	}
 
