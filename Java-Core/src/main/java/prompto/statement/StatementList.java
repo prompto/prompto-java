@@ -127,7 +127,7 @@ public class StatementList extends LinkedList<IStatement> {
 
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		if(this.size()>0) {
-			ResultInfo info = null;
+			ResultInfo info = new ResultInfo(void.class);
 			StackLocals state = method.captureStackLocals();
 			for(IStatement statement : this)
 				// TODO refine actual info, here we assume all statements are reachable
