@@ -101,11 +101,11 @@ public class SwitchStatement extends BaseSwitchStatement {
 		List<IInstructionListener> finalOffsetListeners = new ArrayList<>();
 		IInstructionListener branchOffsetListener = null;
 		StackState neutralState = null;
+		StackLocal valueLocal;
 	}
 	
 	private void compileSwitchCases(Context context, MethodInfo method, Flags flags) {
 		StackState beforeValue = method.captureStackState();
-		compileSwitchValue(context, method, flags);
 		SwitchCaseBranch branch = compileSwitchCasesWithValue(context, method, flags);
 		method.restoreFullStackState(beforeValue);
 		method.placeLabel(beforeValue);
@@ -116,18 +116,21 @@ public class SwitchStatement extends BaseSwitchStatement {
 	
 	private SwitchCaseBranch compileSwitchCasesWithValue(Context context, MethodInfo method, Flags flags) {
 		SwitchCaseBranch branch = new SwitchCaseBranch();
+		branch.valueLocal = compileSwitchValue(context, method, flags);
 		branch.neutralState = method.captureStackState();
 		for(SwitchCase switchCase : switchCases)
 			 compileSwitchCase(context, method, flags, switchCase, branch);
 		compileDefaultCase(context, method, flags, branch);
+		method.unregisterLocal(branch.valueLocal);
 		return branch;
 	}
 
 	private StackLocal compileSwitchValue(Context context, MethodInfo method, Flags flags) {
 		context = context.newChildContext();
-		context.registerValue(new Variable(new Identifier("%value%"), expression.check(context)));
+		String valueName = method.nextTransientName("value");
+		context.registerValue(new Variable(new Identifier(valueName), expression.check(context)));
 		ResultInfo info = expression.compile(context, method, flags);
-		StackLocal value = method.registerLocal("%value%", VerifierType.ITEM_Object, new ClassConstant(info.getType()));
+		StackLocal value = method.registerLocal(valueName, VerifierType.ITEM_Object, new ClassConstant(info.getType()));
 		CompilerUtils.compileASTORE(method, value);
 		return value;
 	}
@@ -135,7 +138,7 @@ public class SwitchStatement extends BaseSwitchStatement {
 	private void compileSwitchCase(Context context, MethodInfo method, Flags flags, SwitchCase element, SwitchCaseBranch branch) {
 		restoreNeutralStackState(method, branch);
 		stopListeningForThisBranch(method, branch);
-		compileCondition(context, method, flags, element);
+		compileCondition(context, method, flags, element, branch);
 		startListeningForNextBranch(method, element, branch);
 		compileBranch(method, element, branch);
 		ResultInfo info = compileStatements(context, method, flags, element, branch);
@@ -147,21 +150,18 @@ public class SwitchStatement extends BaseSwitchStatement {
 			return null;
 		restoreNeutralStackState(method, branch);
 		stopListeningForThisBranch(method, branch);
-		ResultInfo info = new ResultInfo(void.class);
-		for(IStatement statement : this.defaultCase)
-			info = statement.compile(context, method, flags);
-		return info; // we assume all statements are reachable
+		return this.defaultCase.compile(context, method, flags);
 	}
 	
-	private void compileCondition(Context context, MethodInfo method, Flags flags, SwitchCase switchCase) {
+	private void compileCondition(Context context, MethodInfo method, Flags flags, SwitchCase switchCase, SwitchCaseBranch branch) {
 		if(switchCase instanceof CollectionSwitchCase) {
 			ResultInfo info = switchCase.expression.compile(context, method, flags);
-			CompilerUtils.compileALOAD(method, "%value%");
+			CompilerUtils.compileALOAD(method, branch.valueLocal);
 			MethodConstant m = new MethodConstant(info.getType(), "contains", Object.class, boolean.class);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 		} else {
 			IExpression equals = new EqualsExpression(
-					new InstanceExpression(new Identifier("%value%")),
+					new InstanceExpression(new Identifier(branch.valueLocal.getName())),
 					EqOp.EQUALS, switchCase.expression);
 			ResultInfo info = equals.compile(context, method, flags.withPrimitive(true));
 			if(Boolean.class==info.getType())
