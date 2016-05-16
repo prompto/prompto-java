@@ -1,6 +1,7 @@
 package prompto.store.solr;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -27,6 +28,11 @@ public class StorableDocument extends BaseDocument implements IStorable {
 		this.listener = listener;
 	}
 
+	@Override
+	public void setCategories(String[] categories) throws PromptoError {
+		this.categories = Arrays.asList(categories);
+	}
+	
 	@Override
 	public IValue getOrCreateDbId() {
 		UUID dbId = getNativeDbId();

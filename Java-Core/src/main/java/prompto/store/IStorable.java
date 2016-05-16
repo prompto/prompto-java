@@ -9,6 +9,8 @@ public interface IStorable {
 	void setDirty(boolean dirty);
 	boolean isDirty();
 	
+	void setCategories(String[] categories) throws PromptoError;
+	
 	default void setData(String name, Object value) throws PromptoError {
 		setData(name, value, null);
 	}

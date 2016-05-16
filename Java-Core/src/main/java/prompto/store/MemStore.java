@@ -2,6 +2,7 @@ package prompto.store;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -218,6 +219,11 @@ public final class MemStore implements IStore<Long> {
 				return true;
 			else
 				return predicate.matches(document);
+		}
+		
+		@Override
+		public void setCategories(String[] categories) throws PromptoError {
+			this.categories = Arrays.asList(categories);
 		}
 
 		@Override

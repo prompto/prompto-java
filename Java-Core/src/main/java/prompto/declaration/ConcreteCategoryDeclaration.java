@@ -519,10 +519,10 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		for(String s : categories) {
 			method.addInstruction(Opcode.DUP);
 			if(idx<=5) {
-				Opcode opcode = Opcode.values()[Opcode.ICONST_0.ordinal() + idx];
+				Opcode opcode = Opcode.values()[Opcode.ICONST_0.ordinal() + idx++];
 				method.addInstruction(opcode);
 			} else
-				method.addInstruction(Opcode.LDC, new IntConstant(idx));
+				method.addInstruction(Opcode.LDC, new IntConstant(idx++));
 			method.addInstruction(Opcode.LDC, new StringConstant(s));
 			method.addInstruction(Opcode.AASTORE);
 		}
@@ -907,7 +907,23 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 
 	private void compileNewStorable(Context context, MethodInfo method, Flags flags) {
 		if(isSuperClassStorable(context))
-			return;
+			compileSetStorableCategories(context, method, flags);
+		else 
+			compileNewStorableInstance(context, method, flags);
+	}
+
+	private void compileSetStorableCategories(Context context, MethodInfo method, Flags flags) {
+		ClassConstant thisClass = method.getClassFile().getThisClass();
+		method.addInstruction(Opcode.ALOAD_0, thisClass); // -> this
+		FieldConstant f = new FieldConstant(thisClass, "storable", IStorable.class);
+		method.addInstruction(Opcode.GETFIELD, f); // -> storable
+		f = new FieldConstant(thisClass, "category", String[].class);
+		method.addInstruction(Opcode.GETSTATIC, f); // -> storable, String[]
+		InterfaceConstant i = new InterfaceConstant(IStorable.class, "setCategories", String[].class, void.class);
+		method.addInstruction(Opcode.INVOKEINTERFACE, i); 
+	}
+
+	private void compileNewStorableInstance(Context context, MethodInfo method, Flags flags) {
 		ClassConstant thisClass = method.getClassFile().getThisClass();
 		method.addInstruction(Opcode.ALOAD_0, thisClass); // -> this
 		MethodConstant m = new MethodConstant(new ClassConstant(IDataStore.class), "getInstance", IStore.class);
