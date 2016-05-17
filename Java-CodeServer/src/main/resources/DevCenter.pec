@@ -128,7 +128,7 @@ define createModule as method receiving Text type, name, description = nothing, 
 define createMainMethod as method receiving Batch batch doing:
 	body = "define " + batch.entryPoint + " as method receiving Text{} options doing:\n"
 	body = body + "\tprint \"Hello " + batch.name + "\"\n" 
-	decl = MethodDeclaration with batch.entryPoint as name, "1.0.0.0" as version, "E" as dialect, "Text{} options" as prototype, body as body and batch as module
+	decl = MethodDeclaration with batch.entryPoint as name, "0.0.0.1" as version, "E" as dialect, "Text{}" as prototype, body as body and batch as module
 	return decl 
 
 
