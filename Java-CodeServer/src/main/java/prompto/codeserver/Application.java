@@ -56,5 +56,6 @@ public class Application {
 			importer = new ModuleImporter("samples/" + sample);
 			importer.importModule(codeStore);
 		}
+		dataStore.flush();
 	}
 }
