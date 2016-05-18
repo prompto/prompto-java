@@ -349,6 +349,18 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitStoreStatement(@NotNull EParser.StoreStatementContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code FlushStatement}
+	 * labeled alternative in {@link EParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterFlushStatement(@NotNull EParser.FlushStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code FlushStatement}
+	 * labeled alternative in {@link EParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitFlushStatement(@NotNull EParser.FlushStatementContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code ReturnStatement}
 	 * labeled alternative in {@link EParser#statement}.
 	 * @param ctx the parse tree
@@ -504,6 +516,16 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCommentStatement(@NotNull EParser.CommentStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link EParser#flush_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterFlush_statement(@NotNull EParser.Flush_statementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EParser#flush_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitFlush_statement(@NotNull EParser.Flush_statementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link EParser#store_statement}.
 	 * @param ctx the parse tree

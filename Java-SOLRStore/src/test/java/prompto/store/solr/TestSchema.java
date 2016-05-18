@@ -45,7 +45,7 @@ public class TestSchema extends BaseSOLRTest {
 		SolrInputDocument doc = new SolrInputDocument();
 		doc.addField(IStore.dbIdName, uuid);
 		store.addDocuments(doc);
-		store.commit();
+		store.flush();
 		// Test the basics
 		SolrQuery query = new SolrQuery();
 		query.setQuery("dbId:" + uuid.toString());
@@ -64,7 +64,7 @@ public class TestSchema extends BaseSOLRTest {
 		doc.addField(IStore.dbIdName, UUID.randomUUID());
 		doc.addField("text", "sample");
 		store.addDocuments(doc);
-		store.commit();
+		store.flush();
 		// Test the basics
 		SolrQuery query = new SolrQuery();
 		query.setQuery("text:sample");
@@ -87,7 +87,7 @@ public class TestSchema extends BaseSOLRTest {
 		doc.addField(IStore.dbIdName, UUID.randomUUID());
 		doc.addField("text-key", "Sample");
 		store.addDocuments(doc);
-		store.commit();
+		store.flush();
 		// Test the basics
 		SolrQuery query = new SolrQuery();
 		query.setQuery("text-key:Sample");
@@ -122,7 +122,7 @@ public class TestSchema extends BaseSOLRTest {
 		Blob blob = new Blob("application/octet-stream","azertyuiop".getBytes());
 		doc.setData("blob", blob.getData());
 		store.addDocuments(doc.getDocument());
-		store.commit();
+		store.flush();
 		// Test the basics
 		SolrQuery query = new SolrQuery();
 		query.setQuery("*:*");
@@ -150,7 +150,7 @@ public class TestSchema extends BaseSOLRTest {
 		Image image = new Image("image/jpeg","JFIF".getBytes());
 		doc.setData("image", image.getData());
 		store.addDocuments(doc.getDocument());
-		store.commit();
+		store.flush();
 		// Test the basics
 		SolrQuery query = new SolrQuery();
 		query.setQuery("*:*");
@@ -178,7 +178,7 @@ public class TestSchema extends BaseSOLRTest {
 		doc.addField(IStore.dbIdName, UUID.randomUUID());
 		doc.addField("version", "1.0.3");
 		store.addDocuments(doc);
-		store.commit();
+		store.flush();
 		// Test the basics
 		SolrQuery query = new SolrQuery();
 		query.setQuery("*:*");
@@ -205,7 +205,7 @@ public class TestSchema extends BaseSOLRTest {
 			doc.addField("version", version);
 			store.addDocuments(doc);
 		}
-		store.commit();
+		store.flush();
 		// Test ascending sort
 		SolrQuery query = new SolrQuery();
 		query.setQuery("*:*");
@@ -238,7 +238,7 @@ public class TestSchema extends BaseSOLRTest {
 		doc.addField(IStore.dbIdName, UUID.randomUUID());
 		doc.addField("time", "13:02:17.4578");
 		store.addDocuments(doc);
-		store.commit();
+		store.flush();
 		// Test the basics
 		SolrQuery query = new SolrQuery();
 		query.setQuery("*:*");
@@ -265,7 +265,7 @@ public class TestSchema extends BaseSOLRTest {
 			doc.addField("time", time);
 			store.addDocuments(doc);
 		}
-		store.commit();
+		store.flush();
 		// Test ascending sort
 		SolrQuery query = new SolrQuery();
 		query.setQuery("*:*");
@@ -298,7 +298,7 @@ public class TestSchema extends BaseSOLRTest {
 		doc.addField(IStore.dbIdName, UUID.randomUUID());
 		doc.addField("date", "2015-10-22");
 		store.addDocuments(doc);
-		store.commit();
+		store.flush();
 		// Test the basics
 		SolrQuery query = new SolrQuery();
 		query.setQuery("*:*");
@@ -325,7 +325,7 @@ public class TestSchema extends BaseSOLRTest {
 			doc.addField("date", date);
 			store.addDocuments(doc);
 		}
-		store.commit();
+		store.flush();
 		// Test ascending sort
 		SolrQuery query = new SolrQuery();
 		query.setQuery("*:*");
@@ -358,7 +358,7 @@ public class TestSchema extends BaseSOLRTest {
 		doc.addField(IStore.dbIdName, UUID.randomUUID());
 		doc.addField("datetime", "2015-10-22T15:02:17Z");
 		store.addDocuments(doc);
-		store.commit();
+		store.flush();
 		// Test the basics
 		SolrQuery query = new SolrQuery();
 		query.setQuery("*:*");
@@ -385,7 +385,7 @@ public class TestSchema extends BaseSOLRTest {
 			doc.addField("datetime", datetime);
 			store.addDocuments(doc);
 		}
-		store.commit();
+		store.flush();
 		// Test ascending sort
 		SolrQuery query = new SolrQuery();
 		query.setQuery("*:*");
@@ -423,7 +423,7 @@ public class TestSchema extends BaseSOLRTest {
 			doc.addField("datetime", datetime);
 			store.addDocuments(doc);
 		}
-		store.commit();
+		store.flush();
 		// Test ascending sort
 		SolrQuery query = new SolrQuery();
 		query.setQuery("*:*");

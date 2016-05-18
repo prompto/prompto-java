@@ -278,8 +278,6 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 				dropDocuments(dbIdsToDrop);
 			if(docsToAdd!=null)
 				addDocuments(docsToAdd);
-			if(dbIdsToDrop!=null || docsToAdd!=null)
-				commit();
 		} catch(Exception e) {
 			throw new InternalError(e); // TODO much better
 		}
@@ -292,7 +290,6 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 		query.setFields(attr);
 		query.setRows(1);
 		try {
-			commit();
 			QueryResponse response = query(query);
 			if(response.getResults().isEmpty())
 				return null;
@@ -315,7 +312,6 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 		SOLRQuery query = new SOLRQuery();
 		query.verify(new SOLRAttributeInfo(IStore.dbIdName, Family.UUID, false, null), MatchOp.EQUALS, dbId);
 		try {
-			commit();
 			QueryResponse result = query(query.getQuery());
 			return getOne(result);
 		} catch(Exception e) {
@@ -337,7 +333,6 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 	public IStored fetchOne(IQuery query) throws PromptoError {
 		SolrQuery q = ((SOLRQuery)query).getQuery();
 		try {
-			commit();
 			QueryResponse result = query(q);
 			return getOne(result);
 		} catch(Exception e) {
@@ -356,7 +351,6 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 	public IStoredIterable fetchMany(IQuery query) throws PromptoError {
 		SolrQuery q = ((SOLRQuery)query).getQuery();
 		try {
-			commit();
 			QueryResponse result = query(q);
 			return getMany(result);
 		} catch(Exception e) {
@@ -415,8 +409,6 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 
 	public abstract void dropDocuments(List<String> dbIds) throws SolrServerException, IOException;
 
-	public abstract void commit() throws SolrServerException, IOException;
-
 	public abstract boolean hasField(String fieldName)throws SolrServerException, IOException;
 	
 	public abstract void addField(String fieldName, String fieldType, Map<String, Object> options) throws SolrServerException, IOException;
@@ -426,4 +418,6 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 	public abstract String getFieldType(String fieldName) throws SolrServerException, IOException;
 
 	public abstract void dropField(String fieldName) throws SolrServerException, IOException;
+
+	public abstract void setCommitDelay(int commitDelay) throws SolrServerException;
 }

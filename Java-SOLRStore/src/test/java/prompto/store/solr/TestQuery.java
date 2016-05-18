@@ -94,7 +94,7 @@ public class TestQuery extends BaseSOLRTest {
 		IStorable storable = store.newStorable(new String[0], null);
 		storable.setData("name", "John");
 		store.store(storable);
-		store.commit();
+		store.flush();
 		SolrQuery query = new SolrQuery();
 		query.setQuery("*:*");
 		QueryResponse resp = store.query(query);
@@ -109,10 +109,10 @@ public class TestQuery extends BaseSOLRTest {
 		doc.addField(IStore.dbIdName, uuid);
 		doc.addField("name", "John");
 		store.addDocuments(doc);
-		store.commit();
+		store.flush();
 		// Test the basics
 		store.delete(uuid);
-		store.commit();
+		store.flush();
 		String query = "fetch one where name = \"John\"";
 		IStored result = fetchOne(query);
 		assertNull(result);
@@ -124,7 +124,7 @@ public class TestQuery extends BaseSOLRTest {
 		doc.addField(IStore.dbIdName, UUID.randomUUID());
 		doc.addField("name", "John");
 		store.addDocuments(doc);
-		store.commit();
+		store.flush();
 		// Test the basics
 		String query = "fetch one where name = \"John\"";
 		IStored result = fetchOne(query);
@@ -138,7 +138,7 @@ public class TestQuery extends BaseSOLRTest {
 		doc.addField(IStore.dbIdName, UUID.randomUUID());
 		doc.addField("name", "John Smith");
 		store.addDocuments(doc);
-		store.commit();
+		store.flush();
 		// Test the basics
 		String query = "fetch one where name = \"John Smith\"";
 		IStored result = fetchOne(query);
@@ -152,7 +152,7 @@ public class TestQuery extends BaseSOLRTest {
 		doc.addField(IStore.dbIdName, UUID.randomUUID());
 		doc.addField("name", "John");
 		store.addDocuments(doc);
-		store.commit();
+		store.flush();
 		// Test the basics
 		String query = "fetch one where name ~ \"joHn\"";
 		IStored result = fetchOne(query);
@@ -166,7 +166,7 @@ public class TestQuery extends BaseSOLRTest {
 		doc.addField(IStore.dbIdName, UUID.randomUUID());
 		doc.addField("name", "John");
 		store.addDocuments(doc);
-		store.commit();
+		store.flush();
 		// Test the basics
 		String query = "fetch one where name contains \"oh\"";
 		IStored result = fetchOne(query);
@@ -183,7 +183,7 @@ public class TestQuery extends BaseSOLRTest {
 		doc2.addField(IStore.dbIdName, UUID.randomUUID());
 		doc2.addField("name", "Lionel");
 		store.addDocuments(doc1, doc2);
-		store.commit();
+		store.flush();
 		// Test the basics
 		String query = "fetch one where name < \"King\"";
 		IStored result = fetchOne(query);
@@ -201,7 +201,7 @@ public class TestQuery extends BaseSOLRTest {
 		doc2.addField(IStore.dbIdName, UUID.randomUUID());
 		doc2.addField("name", "Lionel");
 		store.addDocuments(doc1, doc2);
-		store.commit();
+		store.flush();
 		// Test the basics
 		String query = "fetch one where name > \"King\"";
 		IStored result = fetchOne(query);
@@ -216,7 +216,7 @@ public class TestQuery extends BaseSOLRTest {
 		doc.addField(IStore.dbIdName, UUID.randomUUID());
 		doc.addField("name", "John");
 		store.addDocuments(doc);
-		store.commit();
+		store.flush();
 		// Test the basics
 		String query = "fetch one where \"oh\" in name";
 		IStored result = fetchOne(query);
@@ -230,7 +230,7 @@ public class TestQuery extends BaseSOLRTest {
 		doc.addField(IStore.dbIdName, UUID.randomUUID());
 		doc.addField("name", "John");
 		store.addDocuments(doc);
-		store.commit();
+		store.flush();
 		// Test the basics
 		String query = "fetch one where name in [\"John\", \"Jim\"]";
 		IStored result = fetchOne(query);
@@ -245,7 +245,7 @@ public class TestQuery extends BaseSOLRTest {
 		doc.addField("name", "John");
 		doc.addField("aliases", Arrays.asList("Johnny", "Jim"));
 		store.addDocuments(doc);
-		store.commit();
+		store.flush();
 		// Test the basics
 		String query = "fetch one where aliases contains \"Jim\"";
 		IStored result = fetchOne(query);
@@ -260,7 +260,7 @@ public class TestQuery extends BaseSOLRTest {
 		doc.addField("name", "John");
 		doc.addField("quantity", 3L);
 		store.addDocuments(doc);
-		store.commit();
+		store.flush();
 		// Test the basics
 		String query = "fetch one where quantity = 3";
 		IStored result = fetchOne(query);
@@ -280,7 +280,7 @@ public class TestQuery extends BaseSOLRTest {
 		doc2.addField("name", "Lionel");
 		doc2.addField("quantity", 13L);
 		store.addDocuments(doc1, doc2);
-		store.commit();
+		store.flush();
 		// Test the basics
 		String query = "fetch one where quantity < 10";
 		IStored result = fetchOne(query);
@@ -299,7 +299,7 @@ public class TestQuery extends BaseSOLRTest {
 		doc2.addField("name", "Lionel");
 		doc2.addField("quantity", 13L);
 		store.addDocuments(doc1, doc2);
-		store.commit();
+		store.flush();
 		// Test the basics
 		String query = "fetch one where quantity > 10";
 		IStored result = fetchOne(query);
@@ -314,7 +314,7 @@ public class TestQuery extends BaseSOLRTest {
 		doc.addField("name", "John");
 		doc.addField("quantity", 13L);
 		store.addDocuments(doc);
-		store.commit();
+		store.flush();
 		// Test the basics
 		String query = "fetch one where quantity in [10, 13]";
 		IStored result = fetchOne(query);
@@ -329,7 +329,7 @@ public class TestQuery extends BaseSOLRTest {
 		doc.addField("name", "John");
 		doc.addField("quantities", Arrays.asList(10L, 13L));
 		store.addDocuments(doc);
-		store.commit();
+		store.flush();
 		// Test the basics
 		String query = "fetch one where quantities contains 10";
 		IStored result = fetchOne(query);

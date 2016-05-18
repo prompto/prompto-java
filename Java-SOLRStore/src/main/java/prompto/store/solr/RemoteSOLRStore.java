@@ -33,6 +33,7 @@ public class RemoteSOLRStore extends BaseSOLRStore {
 	
 	SolrClient client;
 	String coreName;
+	int commitDelay = 15000; // ms
 	
 	public RemoteSOLRStore(String protocol, String host, int port, Type type) {
 		this(protocol, host, port, StringUtils.capitalizeFirst(type.name()) + "Store");
@@ -44,6 +45,11 @@ public class RemoteSOLRStore extends BaseSOLRStore {
 		this.coreName = coreName;
 	}
 
+	@Override
+	public void setCommitDelay(int commitDelay) throws SolrServerException {
+		this.commitDelay = commitDelay;
+	}
+	
 	@Override
 	public void createCoreIfRequired() throws SolrServerException, IOException {
 		if(!coreExists())
@@ -74,8 +80,7 @@ public class RemoteSOLRStore extends BaseSOLRStore {
 	public void delete(Collection<UUID> dbIds) throws PromptoError {
 		try {
 			for(UUID dbId : dbIds)
-				client.deleteById(coreName, String.valueOf(dbId));
-			client.commit();
+				client.deleteById(coreName, String.valueOf(dbId), commitDelay);
 		} catch(IOException | SolrServerException e) {
 			throw new InternalError(e);
 		}
@@ -84,8 +89,7 @@ public class RemoteSOLRStore extends BaseSOLRStore {
 	@Override
 	public void deleteAll() throws PromptoError {
 		try {
-			client.deleteByQuery(coreName, "*:*");
-			client.commit();
+			client.deleteByQuery(coreName, "*:*", commitDelay);
 		} catch(IOException | SolrServerException e) {
 			throw new InternalError(e);
 		}
@@ -98,17 +102,21 @@ public class RemoteSOLRStore extends BaseSOLRStore {
 	
 	@Override
 	public void addDocuments(Collection<SolrInputDocument> docs) throws SolrServerException, IOException {
-		client.add(coreName, docs);
+		client.add(coreName, docs, commitDelay);
 	}
 	
 	@Override
 	public void dropDocuments(List<String> dbIds) throws SolrServerException, IOException {
-		client.deleteById(coreName, dbIds);
+		client.deleteById(coreName, dbIds, commitDelay);
 	}
 	
 	@Override
-	public void commit() throws SolrServerException, IOException {
-		client.commit(coreName);
+	public void flush() throws PromptoError {
+		try {
+			client.commit(coreName);
+		} catch(SolrServerException | IOException e) {
+			throw new InternalError(e);
+		}
 	}
 
 	@Override

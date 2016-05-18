@@ -203,6 +203,12 @@ public final class MemStore implements IStore<Long> {
 		return new StorableDocument(categories, listener);
 	}
 	
+	
+	@Override
+	public void flush() throws PromptoError {
+		// nothing to do
+	}
+	
 	class StorableDocument implements IStored, IStorable {
 
 		Map<String, Object> document = null;

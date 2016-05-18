@@ -195,6 +195,7 @@ import prompto.statement.CollectionSwitchCase;
 import prompto.statement.CommentStatement;
 import prompto.statement.DeclarationStatement;
 import prompto.statement.DoWhileStatement;
+import prompto.statement.FlushStatement;
 import prompto.statement.ForEachStatement;
 import prompto.statement.IStatement;
 import prompto.statement.IfStatement;
@@ -1085,6 +1086,18 @@ public class OPromptoBuilder extends OParserBaseListener {
 	}
 	
 	
+	@Override
+	public void exitFlush_statement(Flush_statementContext ctx) {
+		setNodeValue(ctx, new FlushStatement());
+	}
+	
+	
+	@Override
+	public void exitFlushStatement(FlushStatementContext ctx) {
+		setNodeValue(ctx, getNodeValue(ctx.stmt));
+	}
+	
+
 	@Override
 	public void exitFor_each_statement(For_each_statementContext ctx) {
 		Identifier name1 = this.<Identifier>getNodeValue(ctx.name1);

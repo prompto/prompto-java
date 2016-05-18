@@ -193,6 +193,7 @@ import prompto.statement.CollectionSwitchCase;
 import prompto.statement.CommentStatement;
 import prompto.statement.DeclarationStatement;
 import prompto.statement.DoWhileStatement;
+import prompto.statement.FlushStatement;
 import prompto.statement.ForEachStatement;
 import prompto.statement.IStatement;
 import prompto.statement.IfStatement;
@@ -1025,6 +1026,19 @@ public class SPromptoBuilder extends SParserBaseListener {
 		IExpression filter = this.<IExpression>getNodeValue(ctx.predicate);
 		setNodeValue(ctx, new FetchOneExpression(category, filter));
 	}
+	
+	@Override
+	public void exitFlush_statement(Flush_statementContext ctx) {
+		setNodeValue(ctx, new FlushStatement());
+	}
+	
+	
+	@Override
+	public void exitFlushStatement(FlushStatementContext ctx) {
+		setNodeValue(ctx, getNodeValue(ctx.stmt));
+	}
+	
+	
 	
 	@Override
 	public void exitFetchMany(FetchManyContext ctx) {

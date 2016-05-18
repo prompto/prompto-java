@@ -32,10 +32,16 @@ public class EmbeddedSOLRStore extends BaseSOLRStore {
 	CoreContainer container;
 	SolrCore core;
 	EmbeddedSolrServer server;
-
+	int commitDelay = 15000; // ms
+	
 	public EmbeddedSOLRStore(File root, String coreName) {
 		this.root = root;
 		this.coreName = coreName;
+	}
+	
+	@Override
+	public void setCommitDelay(int commitDelay) throws SolrServerException {
+		this.commitDelay = commitDelay;
 	}
 
 	public void startContainer() {
@@ -118,20 +124,19 @@ public class EmbeddedSOLRStore extends BaseSOLRStore {
 
 	@Override
 	public void addDocuments(Collection<SolrInputDocument> docs) throws SolrServerException, IOException {
-		server.add(docs, 1000);
+		server.add(docs, commitDelay);
 	}
 
 	@Override
 	public void dropDocuments(List<String> dbIds) throws SolrServerException, IOException {
-		server.deleteById(dbIds);
+		server.deleteById(dbIds, commitDelay);
 	}
 	
 	@Override
 	public void delete(Collection<UUID> dbIds) throws PromptoError {
 		try {
 			for(UUID dbId : dbIds)
-				server.deleteById(String.valueOf(dbId));
-			server.commit();
+				server.deleteById(String.valueOf(dbId), commitDelay);
 		} catch(IOException | SolrServerException e) {
 			throw new InternalError(e);
 		}
@@ -140,16 +145,19 @@ public class EmbeddedSOLRStore extends BaseSOLRStore {
 	@Override
 	public void deleteAll() throws PromptoError {
 		try {
-			server.deleteByQuery("*:*");
-			server.commit();
+			server.deleteByQuery("*:*", commitDelay);
 		} catch(IOException | SolrServerException e) {
 			throw new InternalError(e);
 		}
 	}
 	
 	@Override
-	public void commit() throws SolrServerException, IOException {
-		server.commit();
+	public void flush() throws PromptoError {
+		try {
+			server.commit();
+		} catch(SolrServerException | IOException e) {
+			throw new InternalError(e);
+		}
 	}
 
 	@Override

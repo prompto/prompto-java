@@ -61,6 +61,6 @@ public interface IStore<T extends Object> {
 				.buildFetchManyQuery(category, start, end, filter, orderBy));
 	}
 
-
+	void flush()  throws PromptoError;
 	
 }

@@ -21,6 +21,7 @@ public class SOLRStoreFactory implements IStoreFactory {
 		String root = null;
 		String protocol = "http";
 		String server = null;
+		int commitDelay = 15000;
 		int port = 8983;
 		
 		final String argKey = "-solr-" + type.name().toLowerCase() + "-";
@@ -39,11 +40,16 @@ public class SOLRStoreFactory implements IStoreFactory {
 				server = args[++i];
 			else if(arg.equalsIgnoreCase("port"))
 				port = Integer.decode(args[++i]);
+			else if(arg.equalsIgnoreCase("commitDelay"))
+				commitDelay = Integer.decode(args[++i]);
 		}
+		BaseSOLRStore store = null;
 		if(embedded)
-			return newEmbeddedSOLRStore(root, type);
+			store = newEmbeddedSOLRStore(root, type);
 		else
-			return newRemoteSOLRStore(protocol, server, port, type);
+			store = newRemoteSOLRStore(protocol, server, port, type);
+		store.setCommitDelay(commitDelay);
+		return store;
 	}
 
 	private BaseSOLRStore newRemoteSOLRStore(String protocol, String host, int port, Type type) {

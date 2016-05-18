@@ -78,6 +78,7 @@ public class TestInstance extends BaseSOLRTest {
 		IInstance instance = createInstanceWith1Attribute(fieldName, TextType.instance());
 		instance.setMember(context, new Identifier(fieldName), new Text(fieldValue));
 		store.store(instance.getStorable());
+		store.flush();
 		IStored stored = fetchOne(fieldName, new TextLiteral(fieldValue));
 		assertNotNull(stored);
 		assertEquals(fieldValue, stored.getData(fieldName));
@@ -91,6 +92,7 @@ public class TestInstance extends BaseSOLRTest {
 		IInstance instance = createInstanceWith1Attribute(fieldName, IntegerType.instance());
 		instance.setMember(context, new Identifier(fieldName), new Integer(fieldValue));
 		store.store(instance.getStorable());
+		store.flush();
 		IStored stored = fetchOne(fieldName, new IntegerLiteral(fieldValue));
 		assertNotNull(stored);
 		assertEquals(fieldValue, stored.getData(fieldName));
@@ -104,6 +106,7 @@ public class TestInstance extends BaseSOLRTest {
 		IInstance instance = createInstanceWith1Attribute(fieldName, IntegerType.instance());
 		instance.setMember(context, new Identifier(fieldName), new Decimal(fieldValue));
 		store.store(instance.getStorable());
+		store.flush();
 		IStored stored = fetchOne(fieldName, new DecimalLiteral(fieldValue));
 		assertNotNull(stored);
 		assertEquals(fieldValue, stored.getData(fieldName));
@@ -117,6 +120,7 @@ public class TestInstance extends BaseSOLRTest {
 		IInstance instance = createInstanceWith1Attribute(fieldName, BooleanType.instance());
 		instance.setMember(context, new Identifier(fieldName), Boolean.valueOf(fieldValue));
 		store.store(instance.getStorable());
+		store.flush();
 		IStored stored = fetchOne(fieldName, new BooleanLiteral("true"));
 		assertNotNull(stored);
 		assertEquals(fieldValue, stored.getData(fieldName));
@@ -130,6 +134,7 @@ public class TestInstance extends BaseSOLRTest {
 		IInstance instance = createInstanceWith1Attribute(fieldName, DateType.instance());
 		instance.setMember(context, new Identifier(fieldName), new Date(fieldValue));
 		store.store(instance.getStorable());
+		store.flush();
 		IStored stored = fetchOne(fieldName, new DateLiteral(fieldValue));
 		assertNotNull(stored);
 		assertEquals(fieldValue, stored.getData(fieldName)); // value will be converted by reader
@@ -143,6 +148,7 @@ public class TestInstance extends BaseSOLRTest {
 		IInstance instance = createInstanceWith1Attribute(fieldName, TimeType.instance());
 		instance.setMember(context, new Identifier(fieldName), new Time(fieldValue));
 		store.store(instance.getStorable());
+		store.flush();
 		IStored stored = fetchOne(fieldName, new TimeLiteral(fieldValue));
 		assertNotNull(stored);
 		assertEquals(fieldValue, stored.getData(fieldName));
@@ -156,6 +162,7 @@ public class TestInstance extends BaseSOLRTest {
 		IInstance instance = createInstanceWith1Attribute(fieldName, DateTimeType.instance());
 		instance.setMember(context, new Identifier(fieldName), new prompto.value.DateTime(fieldValue));
 		store.store(instance.getStorable());
+		store.flush();
 		IStored stored = fetchOne(fieldName, new DateTimeLiteral(fieldValue));
 		assertNotNull(stored);
 		assertEquals(fieldValue, stored.getData(fieldName));
@@ -169,6 +176,7 @@ public class TestInstance extends BaseSOLRTest {
 		IInstance instance = createInstanceWith1Attribute(fieldName, UUIDType.instance());
 		instance.setMember(context, new Identifier(fieldName), new prompto.value.UUID(fieldValue));
 		store.store(instance.getStorable());
+		store.flush();
 		IStored stored = fetchOne(fieldName, new ExpressionValue(UUIDType.instance(), new prompto.value.UUID(fieldValue)));
 		assertNotNull(stored);
 		assertEquals(fieldValue, stored.getData(fieldName));
@@ -192,6 +200,7 @@ public class TestInstance extends BaseSOLRTest {
 		parent.setMember(context, new Identifier(fieldName), new Text(fieldValue));
 		parent.setMember(context, new Identifier(childName), child);
 		store.store(null, Arrays.asList(parent.getStorable(), child.getStorable()));
+		store.flush();
 		IStored stored = fetchOne(fieldName, new TextLiteral(fieldValue));
 		assertNotNull(stored);
 		assertEquals(fieldValue, stored.getData(fieldName));

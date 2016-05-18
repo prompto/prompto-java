@@ -12,6 +12,11 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testFlush() throws Exception {
+		compareResourceEOE("store/flush.pec");
+	}
+
+	@Test
 	public void testListRecords() throws Exception {
 		compareResourceEOE("store/listRecords.pec");
 	}

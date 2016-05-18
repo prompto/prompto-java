@@ -363,6 +363,18 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitStoreStatement(@NotNull OParser.StoreStatementContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code FlushStatement}
+	 * labeled alternative in {@link OParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterFlushStatement(@NotNull OParser.FlushStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code FlushStatement}
+	 * labeled alternative in {@link OParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitFlushStatement(@NotNull OParser.FlushStatementContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code ReturnStatement}
 	 * labeled alternative in {@link OParser#statement}.
 	 * @param ctx the parse tree
@@ -518,6 +530,16 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCommentStatement(@NotNull OParser.CommentStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#flush_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterFlush_statement(@NotNull OParser.Flush_statementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#flush_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitFlush_statement(@NotNull OParser.Flush_statementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link OParser#store_statement}.
 	 * @param ctx the parse tree
