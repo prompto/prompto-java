@@ -98,6 +98,7 @@ public abstract class BaseWebTest {
 
 	protected String getDbIdForModule(String name) throws Exception {
 		IStore<Object> store = IDataStore.getInstance();
+		store.flush();
 		IPredicateExpression filter = new EqualsExpression(
 				new UnresolvedIdentifier(new Identifier("name")), 
 				EqOp.EQUALS, 
