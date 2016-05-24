@@ -77,7 +77,7 @@ public abstract class BaseWebTest {
 	}
 	
 	protected WebElement waitElement(By by) {
-		WebDriverWait wait = new WebDriverWait(webDriver, 10);
+		WebDriverWait wait = new WebDriverWait(webDriver, 1000);
 		return wait.until( new ExpectedCondition<WebElement>() {
 
 			@Override public WebElement apply(WebDriver input) {
@@ -87,7 +87,7 @@ public abstract class BaseWebTest {
 	}
 
 	protected WebElement waitElement(WebElement start, By by) {
-		WebDriverWait wait = new WebDriverWait(webDriver, 10);
+		WebDriverWait wait = new WebDriverWait(webDriver, 1000);
 		return wait.until( new ExpectedCondition<WebElement>() {
 
 			@Override public WebElement apply(WebDriver input) {
