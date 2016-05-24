@@ -2,7 +2,7 @@ define getDataExplorerURL as method doing:
 	return "http://localhost:8081/index.html"
 
 // don't directly connect Modules to keep them lightweight
-// and also break any (accidental) cyclical dependency
+// also eliminates any (accidental) cyclical dependency
 define Dependency as storable category with attributes name and version
 define dependencies as storable Dependency[] attribute
 
@@ -27,6 +27,7 @@ define storable as storable Boolean attribute
 define Declaration as storable category with attributes name, version, dialect, storable, body and module
 define AttributeDeclaration as storable Declaration
 define CategoryDeclaration as storable Declaration
+define EnumeratedDeclaration as storable Declaration
 define MethodDeclaration as storable Declaration with attribute prototype
 define TestDeclaration as storable Declaration
 

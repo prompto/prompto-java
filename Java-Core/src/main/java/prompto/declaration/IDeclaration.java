@@ -16,7 +16,7 @@ public interface IDeclaration extends INamed, ISection {
 		ATTRIBUTE,
 		CATEGORY,
 		METHOD,
-		ENUM, 
+		ENUMERATED, 
 		TEST;
 	}
 	

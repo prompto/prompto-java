@@ -162,6 +162,45 @@ public class TestEditor extends BaseWebTest {
 		webDriver.switchTo().defaultContent();
 		assertEquals(0, webDriver.findElements(By.id("category_Dummy")).size());
 	}
+	
+	
+	@Test
+	public void testNewEnumeration() throws Exception {  
+		loadSalesAppAndHideLibraries();
+		WebElement we = getEditorInput();
+		String code = "define Dummy as enumerated Text with symbols:\n    PUT with \"Put\" as value\nCALL with \"Call\" as value";
+		sendKeys(we, code, 500);
+		assertEquals(code.replace("CALL", "    CALL"), getEditorContent());
+		we = waitObjectLink("enumeration_Dummy");
+		// press the New button to clear the editor
+		webDriver.switchTo().defaultContent();
+		we = waitElement(By.id("btnNew"));
+		click(we, 100);
+		// press the newly created enumeration link
+		we = waitObjectLink("enumeration_Dummy");
+		click(we, 100);
+		assertEquals(code.replace("CALL", "    CALL"), getEditorContent());
+	}
+	
+	@Test
+	public void testDeleteEnumeration() throws Exception { 
+		loadSalesAppAndHideLibraries();
+		WebElement we = getEditorInput();
+		String code = "define Dummy as enumerated Text with symbols:\n    PUT with \"Put\" as value\nCALL with \"Call\" as value";
+		sendKeys(we, code, 500);
+		assertEquals(code.replace("CALL", "    CALL"), getEditorContent());
+		// press the newly created category link
+		we = waitObjectLink("enumeration_Dummy");
+		click(we, 100);
+		// press the Delete button to clear the editor
+		webDriver.switchTo().defaultContent();
+		we = waitElement(By.id("btnDelete"));
+		click(we, 500);
+		assertEquals("", getEditorContent());
+		// ensure the newly created enumeration was deleted
+		webDriver.switchTo().defaultContent();
+		assertEquals(0, webDriver.findElements(By.id("enumeration_Dummy")).size());
+	}
 
 	@Test
 	public void testNewTest() throws Exception {  
@@ -295,7 +334,7 @@ public class TestEditor extends BaseWebTest {
 		// press the New button to clear the editor
 		webDriver.switchTo().defaultContent();
 		we = waitElement(By.id("btnNew"));
-		click(we, 50);
+		click(we, 100);
 		// create a method with same name but different proto
 		we = getEditorInput();
 		String code2 = "define dummyMethod as method receiving description doing:\n"
@@ -558,86 +597,86 @@ public class TestEditor extends BaseWebTest {
 		// press the New button to clear the editor
 		webDriver.switchTo().defaultContent();
 		we = waitElement(By.id("btnNew"));
-		we.click();
+		click(we, 500);
 		// create a category
 		we = getEditorInput();
 		code = "define Dummy as category with attribute name";
-		we.sendKeys(code);
+		sendKeys(we, code, 500);
 		assertEquals(code, getEditorContent());
 		we = waitObjectLink("category_Dummy");
 		// press the New button to clear the editor
 		webDriver.switchTo().defaultContent();
 		we = waitElement(By.id("btnNew"));
-		we.click();
+		click(we, 500);
 		// create a method
 		we = getEditorInput();
 		code = "define dummyMethod as method receiving name doing:\n"
 					+ "    print with \"name=\" + name as value";
-		we.sendKeys(code);
+		sendKeys(we, code, 500);
 		assertEquals(code, getEditorContent());
 		we = waitObjectLink("method_dummyMethod");
 		// press the New button to clear the editor
 		webDriver.switchTo().defaultContent();
 		we = waitElement(By.id("btnNew"));
-		we.click();
+		click(we, 500);
 		// create a test
 		we = getEditorInput();
 		code = "define \"dummy test\" as test method doing:\n"
 				+ "    a = \"Hello\"\n"
 				+ "\band verifying:\n"
 				+ "    a = \"Hello\"";
-		we.sendKeys(code);
+		sendKeys(we, code, 500);
 		assertEquals(code.replace("\b",""), getEditorContent());
 		we = waitObjectLink("test_dummy_test");
 		// press the New button to clear the editor
 		webDriver.switchTo().defaultContent();
 		we = waitElement(By.id("btnNew"));
-		we.click();
+		click(we, 100);
 		// press the commit button
 		webDriver.switchTo().defaultContent();
 		we = waitElement(By.id("btnCommit"));
-		we.click();
+		click(we, 100);
 		Thread.sleep(1000); // need to wait for the commit to be effective
 		we = waitElement(By.id("btnRevert"));
-		we.click();
+		click(we, 100);
 		assertEquals("", getEditorContent());
 		Thread.sleep(1000); // need to wait for the new WebElements
 		// ensure the newly created objects still exist, and delete them
 		webDriver.switchTo().defaultContent();
 		we = waitObjectLink("attribute_dummy");
-		we.click();
+		click(we, 100);
 		// press the Delete button to clear the editor
 		webDriver.switchTo().defaultContent();
 		we = waitElement(By.id("btnDelete"));
-		we.click();
+		click(we, 100);
 		// next element
 		we = waitObjectLink("category_Dummy");
-		we.click();
+		click(we, 100);
 		// press the Delete button to clear the editor
 		webDriver.switchTo().defaultContent();
 		we = waitElement(By.id("btnDelete"));
-		we.click();
+		click(we, 100);
 		// next element
 		we = waitObjectLink("method_dummyMethod");
-		we.click();
+		click(we, 100);
 		// press the Delete button to clear the editor
 		webDriver.switchTo().defaultContent();
 		we = waitElement(By.id("btnDelete"));
-		we.click();
+		click(we, 100);
 		// next element
 		we = waitObjectLink("test_dummy_test");
-		we.click();
+		click(we, 100);
 		// press the Delete button to clear the editor
 		webDriver.switchTo().defaultContent();
 		we = waitElement(By.id("btnDelete"));
-		we.click();
+		click(we, 100);
 		// press the commit button
 		webDriver.switchTo().defaultContent();
 		we = waitElement(By.id("btnCommit"));
-		we.click();
+		click(we, 100);
 		Thread.sleep(1000); // need to wait for the commit to be effective
 		we = waitElement(By.id("btnRevert"));
-		we.click();
+		click(we, 100);
 		assertEquals("", getEditorContent());
 		Thread.sleep(1000); // need to wait for the new WebElements
 		// ensure the objects were deleted

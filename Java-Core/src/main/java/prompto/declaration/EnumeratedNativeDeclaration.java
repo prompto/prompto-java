@@ -47,7 +47,7 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 	
 	@Override
 	public DeclarationType getDeclarationType() {
-		return DeclarationType.ENUM;
+		return DeclarationType.ENUMERATED;
 	}
 	
 	@Override
