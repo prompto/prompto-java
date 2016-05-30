@@ -88,7 +88,7 @@ public class AndExpression implements IPredicateExpression, IAssertion {
 			else
 				throw new SyntaxError("Illegal: Boolean and " + rval.getClass().getSimpleName());
 		} else
-			throw new SyntaxError("Illegal: " + lval.getClass().getSimpleName() + " + " + rval.getClass().getSimpleName());
+			throw new SyntaxError("Illegal: " + lval.getClass().getSimpleName() + " and " + rval.getClass().getSimpleName());
 	}
 
 	@Override
