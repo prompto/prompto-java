@@ -191,6 +191,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 							storeRegisteringDeclarations(name, decls);
 							decls = storeDeclarations(decls);
 							deleteRegisteringDeclarations(name);
+							store.flush();
 						}
 					}
 				}
