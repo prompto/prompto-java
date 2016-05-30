@@ -136,6 +136,16 @@ define createMainMethod as method receiving Batch batch doing:
 	return decl 
 
 
+define deleteModule as method receiving dbId doing:
+	module = fetch one Module where dbId = dbId
+	if module is nothing:
+		raise NULL_REFERENCE
+	delarations = fetch all Declaration where module = module
+	sessions = fetch all RecentSession where module = module
+	delete delarations, sessions, module
+	flush
+
+
 define exportModule as method receiving dbId doing:
 	module = fetch one Module where dbId = dbId
 	if module is nothing:
