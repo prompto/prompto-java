@@ -3,9 +3,9 @@ package prompto.parser;
 
 
 public enum Dialect {
-	E("English", new EParserFactory()),
-	O("Orient", new OParserFactory()),
-	S("Snake", new SParserFactory());
+	E("Engly", new EParserFactory()),
+	O("Objy", new OParserFactory()),
+	S("Snaky", new SParserFactory());
 	
 	String friendlyName;
 	IParserFactory parserFactory;
