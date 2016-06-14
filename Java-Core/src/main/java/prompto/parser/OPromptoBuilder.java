@@ -165,6 +165,7 @@ import prompto.literal.SetLiteral;
 import prompto.literal.TextLiteral;
 import prompto.literal.TimeLiteral;
 import prompto.literal.TupleLiteral;
+import prompto.literal.UUIDLiteral;
 import prompto.parser.OParser;
 import prompto.parser.OParserBaseListener;
 import prompto.parser.OParser.*;
@@ -2614,6 +2615,11 @@ public class OPromptoBuilder extends OParserBaseListener {
 			items.add(item);
 		});
 		setNodeValue(ctx, items);
+	}
+	
+	@Override
+	public void exitUUIDLiteral(UUIDLiteralContext ctx) {
+		setNodeValue(ctx, new UUIDLiteral(ctx.t.getText()));
 	}
 	
 	

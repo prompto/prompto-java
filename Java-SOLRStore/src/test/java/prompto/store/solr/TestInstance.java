@@ -174,10 +174,10 @@ public class TestInstance extends BaseSOLRTest {
 		UUID fieldValue = UUID.randomUUID();
 		createField(fieldName, "uuid", false);
 		IInstance instance = createInstanceWith1Attribute(fieldName, UUIDType.instance());
-		instance.setMember(context, new Identifier(fieldName), new prompto.value.UUID(fieldValue));
+		instance.setMember(context, new Identifier(fieldName), new prompto.value.UUIDValue(fieldValue));
 		store.store(instance.getStorable());
 		store.flush();
-		IStored stored = fetchOne(fieldName, new ExpressionValue(UUIDType.instance(), new prompto.value.UUID(fieldValue)));
+		IStored stored = fetchOne(fieldName, new ExpressionValue(UUIDType.instance(), new prompto.value.UUIDValue(fieldValue)));
 		assertNotNull(stored);
 		assertEquals(fieldValue, stored.getData(fieldName));
 	}

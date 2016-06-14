@@ -2885,6 +2885,18 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterUUIDLiteral(@NotNull SParser.UUIDLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUUIDLiteral(@NotNull SParser.UUIDLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterNullLiteral(@NotNull SParser.NullLiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}

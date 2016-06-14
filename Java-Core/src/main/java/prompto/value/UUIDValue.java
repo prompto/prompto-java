@@ -11,20 +11,24 @@ import prompto.type.UUIDType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
-public class UUID extends BaseValue {
+public class UUIDValue extends BaseValue {
 
 	java.util.UUID value;
 	
-	public UUID(String value) {
+	public UUIDValue(String value) {
 		super(UUIDType.instance());
 		this.value = java.util.UUID.fromString(value);
 	}
 
-	public UUID(java.util.UUID value) {
+	public UUIDValue(java.util.UUID value) {
 		super(UUIDType.instance());
 		this.value = value;
 	}
 
+	public java.util.UUID getValue() {
+		return value;
+	}
+	
 	@Override
 	public java.util.UUID getStorableData() {
 		return value;

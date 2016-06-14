@@ -2683,6 +2683,18 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitPeriodLiteral(@NotNull SParser.PeriodLiteralContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code UUIDLiteral}
+	 * labeled alternative in {@link SParser#atomic_literal}.
+	 * @param ctx the parse tree
+	 */
+	void enterUUIDLiteral(@NotNull SParser.UUIDLiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code UUIDLiteral}
+	 * labeled alternative in {@link SParser#atomic_literal}.
+	 * @param ctx the parse tree
+	 */
+	void exitUUIDLiteral(@NotNull SParser.UUIDLiteralContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code NullLiteral}
 	 * labeled alternative in {@link SParser#atomic_literal}.
 	 * @param ctx the parse tree

@@ -2853,6 +2853,18 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitPeriodLiteral(@NotNull EParser.PeriodLiteralContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code UUIDLiteral}
+	 * labeled alternative in {@link EParser#atomic_literal}.
+	 * @param ctx the parse tree
+	 */
+	void enterUUIDLiteral(@NotNull EParser.UUIDLiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code UUIDLiteral}
+	 * labeled alternative in {@link EParser#atomic_literal}.
+	 * @param ctx the parse tree
+	 */
+	void exitUUIDLiteral(@NotNull EParser.UUIDLiteralContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code NullLiteral}
 	 * labeled alternative in {@link EParser#atomic_literal}.
 	 * @param ctx the parse tree

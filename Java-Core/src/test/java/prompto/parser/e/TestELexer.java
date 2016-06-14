@@ -130,5 +130,14 @@ public class TestELexer extends BaseELexerTest {
 				ELexer.VARIABLE_IDENTIFIER, ELexer.AS, ELexer.VARIABLE_IDENTIFIER, ELexer.LF });
 		assertEquals(expected,actual);
 	}
+
+	@Test
+	public void testUUID() {
+		String actual = parseTokenNamesFromString("'11223344-AABB-CCDD-EEFF-112233445566'");
+		String expected = tokenNamesAsString(new int[] { ELexer.UUID_LITERAL, ELexer.LF });
+		assertEquals(expected,actual);
+	}
+
+	
 	
 }

@@ -164,6 +164,7 @@ import prompto.literal.SetLiteral;
 import prompto.literal.TextLiteral;
 import prompto.literal.TimeLiteral;
 import prompto.literal.TupleLiteral;
+import prompto.literal.UUIDLiteral;
 import prompto.parser.EParser;
 import prompto.parser.EParserBaseListener;
 import prompto.parser.EParser.*;
@@ -2650,6 +2651,12 @@ public class EPromptoBuilder extends EParserBaseListener {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
 		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
 		setNodeValue(ctx, new UnresolvedCall(exp, args));
+	}
+	
+	
+	@Override
+	public void exitUUIDLiteral(UUIDLiteralContext ctx) {
+		setNodeValue(ctx, new UUIDLiteral(ctx.t.getText()));
 	}
 	
 	@Override

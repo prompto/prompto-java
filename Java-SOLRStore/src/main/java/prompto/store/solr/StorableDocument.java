@@ -36,7 +36,7 @@ public class StorableDocument extends BaseDocument implements IStorable {
 	@Override
 	public IValue getOrCreateDbId() {
 		UUID dbId = getNativeDbId();
-		return dbId==null ? null : new prompto.value.UUID(dbId);
+		return dbId==null ? null : new prompto.value.UUIDValue(dbId);
 	}
 	
 	private UUID getNativeDbId() {

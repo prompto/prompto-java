@@ -3053,6 +3053,18 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterUUIDLiteral(@NotNull EParser.UUIDLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUUIDLiteral(@NotNull EParser.UUIDLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterNullLiteral(@NotNull EParser.NullLiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}

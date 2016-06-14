@@ -2921,6 +2921,18 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterUUIDLiteral(@NotNull OParser.UUIDLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUUIDLiteral(@NotNull OParser.UUIDLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterNullLiteral(@NotNull OParser.NullLiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}

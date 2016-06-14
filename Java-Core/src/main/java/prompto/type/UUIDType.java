@@ -28,11 +28,11 @@ public class UUIDType extends NativeType {
 	
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
-		return new prompto.value.UUID(value.asText());
+		return new prompto.value.UUIDValue(value.asText());
 	}
 	
 	@Override
 	public IValue convertJavaValueToIValue(Context context, Object value) {
-		return new prompto.value.UUID((UUID)value);
+		return new prompto.value.UUIDValue((UUID)value);
 	}
 }

@@ -2,3 +2,4 @@
 **/.p4ignore
 **/target/*
 .DS_Store
+Java-Core/java/classes
