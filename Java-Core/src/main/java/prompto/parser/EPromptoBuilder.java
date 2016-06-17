@@ -74,11 +74,11 @@ import prompto.expression.IteratorExpression;
 import prompto.expression.MemberSelector;
 import prompto.expression.MethodExpression;
 import prompto.expression.MethodSelector;
-import prompto.expression.MinusExpression;
+import prompto.expression.SubtractExpression;
 import prompto.expression.ModuloExpression;
 import prompto.expression.MultiplyExpression;
 import prompto.expression.NativeSymbol;
-import prompto.expression.NegateExpression;
+import prompto.expression.MinusExpression;
 import prompto.expression.NotExpression;
 import prompto.expression.OrExpression;
 import prompto.expression.ParenthesisExpression;
@@ -269,7 +269,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	public void exitAddExpression(AddExpressionContext ctx) {
 		IExpression left = this.<IExpression>getNodeValue(ctx.left);
 		IExpression right = this.<IExpression>getNodeValue(ctx.right);
-		IExpression exp = ctx.op.getType()==EParser.PLUS ? new PlusExpression(left, right) : new MinusExpression(left, right);
+		IExpression exp = ctx.op.getType()==EParser.PLUS ? new PlusExpression(left, right) : new SubtractExpression(left, right);
 		setNodeValue(ctx, exp);
 	}
 
@@ -1780,7 +1780,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	@Override
 	public void exitMinusExpression(MinusExpressionContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, new NegateExpression(exp));
+		setNodeValue(ctx, new MinusExpression(exp));
 	}
 	
 	@Override
