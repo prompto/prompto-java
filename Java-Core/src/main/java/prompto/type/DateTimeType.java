@@ -55,13 +55,10 @@ public class DateTimeType extends NativeType {
 	public IType checkSubstract(Context context, IType other) {
 		if (other instanceof DateTimeType)
 			return PeriodType.instance();
-		if (other instanceof DateType)
-			return PeriodType.instance();
-		if (other instanceof TimeType)
-			return PeriodType.instance();
-		if (other instanceof PeriodType)
+		else if (other instanceof PeriodType)
 			return this;
-		return super.checkSubstract(context, other);
+		else
+			return super.checkSubstract(context, other);
 	}
 
 	@Override

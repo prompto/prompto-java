@@ -52,11 +52,8 @@ public class DateType extends NativeType {
 			return this; // ignore time section
 		else if (other instanceof DateType)
 			return PeriodType.instance();
-		else if (other instanceof TimeType)
-			return PeriodType.instance();
-		else if (other instanceof DateTimeType)
-			return PeriodType.instance();
-		return super.checkSubstract(context, other);
+		else 
+			return super.checkSubstract(context, other);
 	}
 
 	@Override
