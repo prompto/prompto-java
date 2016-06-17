@@ -42,7 +42,7 @@ public class TimeType extends NativeType {
 	@Override
 	public IType checkAdd(Context context, IType other, boolean tryReverse) {
 		if (other instanceof PeriodType)
-			return DateTimeType.instance();
+			return TimeType.instance();
 		return super.checkAdd(context, other, tryReverse);
 	}
 
