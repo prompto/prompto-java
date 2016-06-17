@@ -41,12 +41,9 @@ public class SetType extends ContainerType {
 
 	@Override
 	public IType checkAdd(Context context, IType other, boolean tryReverse) {
-		if(other instanceof ContainerType) {
-			IType itemType = ((ContainerType)other).getItemType();
-			if((other instanceof ListType || other instanceof SetType) 
-					&& this.getItemType().equals(itemType))
+		if(	(other instanceof ListType || other instanceof SetType) &&
+			this.getItemType().equals(((ContainerType)other).getItemType()) )
 				return this;
-		} 
 		return super.checkAdd(context, other, tryReverse);
 	}
 	
