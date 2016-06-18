@@ -18,7 +18,6 @@ import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.type.DecimalType;
-import prompto.type.IType;
 import prompto.type.IntegerType;
 import prompto.value.Decimal;
 import prompto.value.IValue;
