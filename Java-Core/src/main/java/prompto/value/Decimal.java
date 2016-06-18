@@ -67,12 +67,17 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 		ResultInfo right = exp.compile(context, method, flags);
 		CompilerUtils.numberToPrimitive(method, right, flags.isDecimal());
 		method.addInstruction(flags.opcode());
-		if(flags.toPrimitive())
-			return new ResultInfo(double.class);
-		else if(flags.isDecimal())
-			return CompilerUtils.doubleToDouble(method);
-		else
-			return CompilerUtils.longToDouble(method);
+		if(flags.isDecimal()) {
+			if(flags.toPrimitive())
+				return new ResultInfo(double.class);
+			else 
+				return CompilerUtils.doubleToDouble(method);
+		} else {
+			if(flags.toPrimitive())
+				return new ResultInfo(long.class);
+			else 
+				return CompilerUtils.longToLong(method);
+		}
 	}
 
 
