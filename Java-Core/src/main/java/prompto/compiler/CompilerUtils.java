@@ -515,6 +515,16 @@ public abstract class CompilerUtils {
 		return new ResultInfo(long.class);
 	}
 
+	public static ResultInfo DoubleToLong(MethodInfo method) {
+		DoubleTolong(method);
+		return longToLong(method);
+	}
+
+	public static ResultInfo doubleToLong(MethodInfo method) {
+		method.addInstruction(Opcode.D2L);
+		return longToLong(method);
+	}
+
 	public static ResultInfo longToDouble(MethodInfo method) {
 		method.addInstruction(Opcode.L2D);
 		return doubleToDouble(method);
@@ -549,6 +559,19 @@ public abstract class CompilerUtils {
 			throw new CompilerException("Cannot convert " + info.getType().getTypeName() + " to double");
 	}
 
+	public static ResultInfo numberToDouble(MethodInfo method, ResultInfo info) {
+		 if(double.class==info.getType())
+			return doubleToDouble(method);
+		 else if(long.class==info.getType())
+			return longToDouble(method);
+		else if(Long.class==info.getType())
+			return LongToDouble(method);
+		else if(Double.class==info.getType())
+			return info;
+		else
+			throw new CompilerException("Cannot convert " + info.getType().getTypeName() + " to double");
+	}
+
 	public static ResultInfo numberTolong(MethodInfo method, ResultInfo info) {
 		 if(long.class==info.getType())
 			return info;
@@ -561,12 +584,26 @@ public abstract class CompilerUtils {
 		else
 			throw new CompilerException("Cannot convert " + info.getType().getTypeName() + " to long");
 	}
+	
+	public static ResultInfo numberToLong(MethodInfo method, ResultInfo info) {
+		 if(long.class==info.getType())
+			return longToLong(method);
+		 else if(double.class==info.getType())
+			return doubleToLong(method);
+		else if(Long.class==info.getType())
+			return info;
+		else if(Double.class==info.getType())
+			return DoubleToLong(method);
+		else
+			throw new CompilerException("Cannot convert " + info.getType().getTypeName() + " to long");
+	}
+
 
 	public static ResultInfo numberToint(MethodInfo method, ResultInfo info) {
 		numberTolong(method, info);
 		return longToint(method);
 	}
-
+	
 	public static ResultInfo charToCharacter(MethodInfo method) {
 		IOperand oper = new MethodConstant(
 				Character.class, 
@@ -738,6 +775,7 @@ public abstract class CompilerUtils {
 		else
 			throw new UnsupportedOperationException();
 	}
+
 
 
 }

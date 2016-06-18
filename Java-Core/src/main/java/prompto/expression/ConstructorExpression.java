@@ -225,6 +225,12 @@ public class ConstructorExpression implements IExpression {
 		// call setter
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, assignment.getArgumentId());
 		FieldInfo field = decl.toFieldInfo(context);
+		// cast if required
+		if(field.getType()==Double.class)
+			CompilerUtils.numberToDouble(method, valueInfo);
+		else if(field.getType()==Long.class)
+			CompilerUtils.numberToLong(method, valueInfo);
+		// call setter
 		MethodConstant m = new MethodConstant(thisInfo.getType(), 
 				CompilerUtils.setterName(field.getName().getValue()), field.getType(), void.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, m);

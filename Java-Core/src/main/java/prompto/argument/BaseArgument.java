@@ -7,6 +7,7 @@ import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -76,7 +77,14 @@ public abstract class BaseArgument implements IArgument {
 	@Override
 	public void compileAssignment(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments, boolean isFirst) {
 		ArgumentAssignment assign = makeAssignment(assignments, isFirst);
-		assign.getExpression().compile(context.getCallingContext(), method, flags);
+		ResultInfo valueInfo = assign.getExpression().compile(context.getCallingContext(), method, flags);
+		// cast if required
+		Type type = assign.getArgument().getJavaType(context);
+		if(type==Double.class)
+			CompilerUtils.numberToDouble(method, valueInfo);
+		else if(type==Long.class)
+			CompilerUtils.numberToLong(method, valueInfo);
+		
 	}
 
 	protected ArgumentAssignment makeAssignment(ArgumentAssignmentList assignments, boolean isFirst) {

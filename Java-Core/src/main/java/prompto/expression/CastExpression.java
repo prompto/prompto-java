@@ -1,6 +1,9 @@
 package prompto.expression;
 
+import java.lang.reflect.Type;
+
 import prompto.compiler.ClassConstant;
+import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -40,10 +43,17 @@ public class CastExpression implements IExpression {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		expression.compile(context, method, flags);
-		ClassConstant c = new ClassConstant(type.getJavaType(context));
-		method.addInstruction(Opcode.CHECKCAST, c);
-		return new ResultInfo(type.getJavaType(context));
+		ResultInfo src = expression.compile(context, method, flags);
+		Type dst = type.getJavaType(context);
+		if(dst==Long.class)
+			return CompilerUtils.numberToLong(method, src);
+		else if(dst==Double.class)
+			return CompilerUtils.numberToDouble(method, src);
+		else {
+			ClassConstant c = new ClassConstant(dst);
+			method.addInstruction(Opcode.CHECKCAST, c);
+			return new ResultInfo(type.getJavaType(context));
+		}
 	}
 
 	@Override
