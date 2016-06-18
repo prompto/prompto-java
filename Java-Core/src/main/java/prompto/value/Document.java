@@ -78,7 +78,7 @@ public class Document extends BaseValue {
 	public IValue getItem(Context context, IValue item) {
 		if(!(item instanceof Text))
 			throw new InvalidValueError("Expected a Text, got:" + item.getClass().getName());
-		return values.get(new Identifier(item.toString()));
+		return values.getOrDefault(new Identifier(item.toString()), NullValue.instance());
 	}
 	
 
