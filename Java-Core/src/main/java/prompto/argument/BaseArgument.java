@@ -79,7 +79,7 @@ public abstract class BaseArgument implements IArgument {
 		ArgumentAssignment assign = makeAssignment(assignments, isFirst);
 		ResultInfo valueInfo = assign.getExpression().compile(context.getCallingContext(), method, flags);
 		// cast if required
-		Type type = assign.getArgument().getJavaType(context);
+		Type type = this.getJavaType(context);
 		if(type==Double.class)
 			CompilerUtils.numberToDouble(method, valueInfo);
 		else if(type==Long.class)
