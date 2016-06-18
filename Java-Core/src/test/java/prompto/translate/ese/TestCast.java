@@ -7,13 +7,33 @@ import prompto.parser.e.BaseEParserTest;
 public class TestCast extends BaseEParserTest {
 
 	@Test
+	public void testAutoDecimalCast() throws Exception {
+		compareResourceESE("cast/autoDecimalCast.pec");
+	}
+
+	@Test
 	public void testAutoDowncast() throws Exception {
 		compareResourceESE("cast/autoDowncast.pec");
 	}
 
 	@Test
+	public void testAutoIntegerCast() throws Exception {
+		compareResourceESE("cast/autoIntegerCast.pec");
+	}
+
+	@Test
 	public void testCastChild() throws Exception {
 		compareResourceESE("cast/castChild.pec");
+	}
+
+	@Test
+	public void testCastDecimal() throws Exception {
+		compareResourceESE("cast/castDecimal.pec");
+	}
+
+	@Test
+	public void testCastInteger() throws Exception {
+		compareResourceESE("cast/castInteger.pec");
 	}
 
 	@Test

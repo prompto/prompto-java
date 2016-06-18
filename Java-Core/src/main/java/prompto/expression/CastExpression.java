@@ -11,8 +11,12 @@ import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
+import prompto.type.DecimalType;
 import prompto.type.IType;
+import prompto.type.IntegerType;
 import prompto.utils.CodeWriter;
+import prompto.value.Decimal;
+import prompto.value.Integer;
 import prompto.value.IValue;
 
 public class CastExpression implements IExpression {
@@ -36,8 +40,14 @@ public class CastExpression implements IExpression {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		IValue value = expression.interpret(context);
-		if(value!=null && type.isMoreSpecificThan(context, value.getType()))
-			value.setType(type);
+		if(value!=null) {
+			if(type==DecimalType.instance() && value instanceof Integer)
+				value = new Decimal(((Integer)value).doubleValue());
+			else if(type==IntegerType.instance() && value instanceof Decimal)
+				value = new Integer(((Decimal)value).longValue());
+			else if(type.isMoreSpecificThan(context, value.getType()))
+				value.setType(type);
+		}
 		return value;
 	}
 	

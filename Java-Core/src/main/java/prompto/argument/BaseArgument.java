@@ -17,7 +17,12 @@ import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.type.DecimalType;
+import prompto.type.IType;
+import prompto.type.IntegerType;
+import prompto.value.Decimal;
 import prompto.value.IValue;
+import prompto.value.Integer;
 
 
 public abstract class BaseArgument implements IArgument {
@@ -58,7 +63,13 @@ public abstract class BaseArgument implements IArgument {
 	
 	@Override
 	public IValue checkValue(Context context, IExpression expression) throws PromptoError {
-		return expression.interpret(context);
+		IValue value = expression.interpret(context);
+		if(value instanceof Integer && getType(context)==DecimalType.instance())
+			return new Decimal(((Integer)value).doubleValue()); 
+		else if(value instanceof Decimal && getType(context)==IntegerType.instance())
+			return new Integer(((Decimal)value).longValue()); 
+		else
+			return value;
 	}
 	
 	@Override

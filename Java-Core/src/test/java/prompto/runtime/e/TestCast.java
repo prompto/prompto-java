@@ -20,6 +20,16 @@ public class TestCast extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedAutoDecimalCast() throws Exception {
+		checkInterpretedOutput("cast/autoDecimalCast.pec");
+	}
+
+	@Test
+	public void testCompiledAutoDecimalCast() throws Exception {
+		checkCompiledOutput("cast/autoDecimalCast.pec");
+	}
+
+	@Test
 	public void testInterpretedAutoDowncast() throws Exception {
 		checkInterpretedOutput("cast/autoDowncast.pec");
 	}
@@ -30,6 +40,16 @@ public class TestCast extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedAutoIntegerCast() throws Exception {
+		checkInterpretedOutput("cast/autoIntegerCast.pec");
+	}
+
+	@Test
+	public void testCompiledAutoIntegerCast() throws Exception {
+		checkCompiledOutput("cast/autoIntegerCast.pec");
+	}
+
+	@Test
 	public void testInterpretedCastChild() throws Exception {
 		checkInterpretedOutput("cast/castChild.pec");
 	}
@@ -37,6 +57,26 @@ public class TestCast extends BaseEParserTest {
 	@Test
 	public void testCompiledCastChild() throws Exception {
 		checkCompiledOutput("cast/castChild.pec");
+	}
+
+	@Test
+	public void testInterpretedCastDecimal() throws Exception {
+		checkInterpretedOutput("cast/castDecimal.pec");
+	}
+
+	@Test
+	public void testCompiledCastDecimal() throws Exception {
+		checkCompiledOutput("cast/castDecimal.pec");
+	}
+
+	@Test
+	public void testInterpretedCastInteger() throws Exception {
+		checkInterpretedOutput("cast/castInteger.pec");
+	}
+
+	@Test
+	public void testCompiledCastInteger() throws Exception {
+		checkCompiledOutput("cast/castInteger.pec");
 	}
 
 	@Test
