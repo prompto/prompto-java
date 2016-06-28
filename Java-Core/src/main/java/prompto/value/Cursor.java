@@ -9,7 +9,7 @@ import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
-import prompto.intrinsic.IterableWithLengths;
+import prompto.intrinsic.IterableWithCounts;
 import prompto.runtime.Context;
 import prompto.store.IStored;
 import prompto.store.IStoredIterable;
@@ -21,7 +21,7 @@ import prompto.type.ListType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
-public class Cursor extends BaseValue implements IIterable<IValue>, IterableWithLengths<IValue> {
+public class Cursor extends BaseValue implements IIterable<IValue>, IterableWithCounts<IValue> {
 
 	Context context;
 	IStoredIterable iterable;
@@ -40,17 +40,17 @@ public class Cursor extends BaseValue implements IIterable<IValue>, IterableWith
 	}
 	
 	@Override
-	public Long getLength() {
+	public Long getCount() {
 		return iterable.length();
 	}
 	
 	@Override
-	public Long getTotalLength() {
+	public Long getTotalCount() {
 		return iterable.totalLength();
 	}
 
 	@Override
-	public IterableWithLengths<IValue> getIterable(Context context) {
+	public IterableWithCounts<IValue> getIterable(Context context) {
 		return this;
 	}
 	
@@ -95,7 +95,7 @@ public class Cursor extends BaseValue implements IIterable<IValue>, IterableWith
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) {
 		String name = id.toString();
 		if ("count".equals(name))
-			return new Integer(getLength());
+			return new Integer(getCount());
 		else
 			throw new SyntaxError("No such member:" + name);
 	}

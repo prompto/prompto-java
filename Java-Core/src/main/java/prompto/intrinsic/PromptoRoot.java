@@ -52,16 +52,16 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMuta
 			return (PromptoRoot)value; // will eventually throw an InvalidCastException 
 	}
 	
-	public static IterableWithLengths<PromptoRoot> newIterable(IStoredIterable iterable) {
-		return new IterableWithLengths<PromptoRoot>() {
+	public static IterableWithCounts<PromptoRoot> newIterable(IStoredIterable iterable) {
+		return new IterableWithCounts<PromptoRoot>() {
 			
 			@Override
-			public Long getLength() {
+			public Long getCount() {
 				return iterable.length();
 			}
 			
 			@Override
-			public Long getTotalLength() {
+			public Long getTotalCount() {
 				return iterable.totalLength();
 			}
 

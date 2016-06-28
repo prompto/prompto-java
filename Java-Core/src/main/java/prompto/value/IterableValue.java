@@ -9,7 +9,7 @@ import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
-import prompto.intrinsic.IterableWithLengths;
+import prompto.intrinsic.IterableWithCounts;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.type.IType;
@@ -18,16 +18,16 @@ import prompto.type.ListType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
-public class IterableValue extends BaseValue implements IIterable<IValue>, IterableWithLengths<IValue> {
+public class IterableValue extends BaseValue implements IIterable<IValue>, IterableWithCounts<IValue> {
 
 	IType itemType;
 	Context context;
 	Identifier name;
-	IterableWithLengths<IValue> iterable;
+	IterableWithCounts<IValue> iterable;
 	IExpression expression;
 	
 	public IterableValue(Context context, Identifier name, IType itemType, 
-			IterableWithLengths<IValue> iterable, IExpression expression) {
+			IterableWithCounts<IValue> iterable, IExpression expression) {
 		super(new IteratorType(itemType));
 		this.itemType = itemType;
 		this.context = context;
@@ -37,17 +37,17 @@ public class IterableValue extends BaseValue implements IIterable<IValue>, Itera
 	}
 
 	@Override
-	public Long getLength() {
-		return iterable.getLength();
+	public Long getCount() {
+		return iterable.getCount();
 	}
 	
 	@Override
-	public Long getTotalLength() {
-		return iterable.getTotalLength();
+	public Long getTotalCount() {
+		return iterable.getTotalCount();
 	}
 
 	@Override
-	public IterableWithLengths<IValue> getIterable(Context context) {
+	public IterableWithCounts<IValue> getIterable(Context context) {
 		return this;
 	}
 
@@ -80,7 +80,7 @@ public class IterableValue extends BaseValue implements IIterable<IValue>, Itera
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
 		if ("count".equals(name))
-			return new Integer(iterable.getLength());
+			return new Integer(iterable.getCount());
 		else
 			throw new SyntaxError("No such member:" + name);
 	}

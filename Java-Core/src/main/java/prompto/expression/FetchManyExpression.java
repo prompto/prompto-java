@@ -11,7 +11,7 @@ import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.OrderByClauseList;
-import prompto.intrinsic.IterableWithLengths;
+import prompto.intrinsic.IterableWithCounts;
 import prompto.intrinsic.PromptoRoot;
 import prompto.runtime.Context;
 import prompto.store.IDataStore;
@@ -232,9 +232,9 @@ public class FetchManyExpression extends FetchOneExpression {
 	}
 
 	private ResultInfo compileInstantiation(Context context, MethodInfo method, Flags flags) {
-		MethodConstant m = new MethodConstant(PromptoRoot.class, "newIterable", IStoredIterable.class, IterableWithLengths.class);
+		MethodConstant m = new MethodConstant(PromptoRoot.class, "newIterable", IStoredIterable.class, IterableWithCounts.class);
 		method.addInstruction(Opcode.INVOKESTATIC, m);
-		return new ResultInfo(IterableWithLengths.class);
+		return new ResultInfo(IterableWithCounts.class);
 	}
 
 }

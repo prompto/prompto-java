@@ -17,7 +17,7 @@ import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.Filterable;
-import prompto.intrinsic.IterableWithLengths;
+import prompto.intrinsic.IterableWithCounts;
 import prompto.intrinsic.PromptoSet;
 import prompto.runtime.Context;
 import prompto.type.ContainerType;
@@ -111,14 +111,14 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IFilterab
 	}
 
 	@Override
-	public IterableWithLengths<IValue> getIterable(Context context) {
-		return new IterableWithLengths<IValue>() {
+	public IterableWithCounts<IValue> getIterable(Context context) {
+		return new IterableWithCounts<IValue>() {
 			@Override
-			public Long getLength() {
+			public Long getCount() {
 				return (long)items.size();
 			}
 			@Override
-			public Long getTotalLength() {
+			public Long getTotalCount() {
 				return (long)items.size();
 			}
 			@Override

@@ -4,7 +4,7 @@ import java.util.Map;
 
 import prompto.error.PromptoError;
 import prompto.expression.Symbol;
-import prompto.intrinsic.IterableWithLengths;
+import prompto.intrinsic.IterableWithCounts;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.IValueIterable;
@@ -47,7 +47,7 @@ public abstract class SymbolList <T extends Symbol> extends ObjectList<T> implem
 	}
 	
 	@Override
-	public IterableWithLengths<IValue> getIterable(Context context) {
+	public IterableWithCounts<IValue> getIterable(Context context) {
 		return new IValueIterable<>(context, this);
 	}
 	

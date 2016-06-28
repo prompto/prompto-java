@@ -2,7 +2,7 @@ package prompto.intrinsic;
 
 import java.util.Iterator;
 
-public abstract class PromptoIterable<S,R> implements IterableWithLengths<R> {
+public abstract class PromptoIterable<S,R> implements IterableWithCounts<R> {
 
 	Iterable<S> source;
 	long length;

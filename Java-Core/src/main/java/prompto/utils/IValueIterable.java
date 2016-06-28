@@ -4,11 +4,11 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import prompto.expression.IExpression;
-import prompto.intrinsic.IterableWithLengths;
+import prompto.intrinsic.IterableWithCounts;
 import prompto.runtime.Context;
 import prompto.value.IValue;
 
-public class IValueIterable<T extends Object> implements IterableWithLengths<IValue> {
+public class IValueIterable<T extends Object> implements IterableWithCounts<IValue> {
 
 	Context context;
 	Collection<T> iterable;
@@ -19,12 +19,12 @@ public class IValueIterable<T extends Object> implements IterableWithLengths<IVa
 	}
 
 	@Override
-	public Long getLength() {
+	public Long getCount() {
 		return (long)iterable.size();
 	}
 	
 	@Override
-	public Long getTotalLength() {
+	public Long getTotalCount() {
 		return (long)iterable.size();
 	}
 	
