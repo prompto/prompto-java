@@ -17,7 +17,7 @@ define readCsv as native method receiving text, Text{} columnNames = nothing, Ch
 define "reads from csv text" as test method doing:
 	docs = readCsv with "id,name\n1,John\n2,Riou\\, Sylvie\n" as text
 and verifying: 
-	docs.length = 2
+	docs.count = 2
 	docs[1].id = "1"
 	docs[1].name = "John"
 	docs[2].id = "2"
@@ -29,7 +29,7 @@ define "iterates from csv text" as test method doing:
 	for each doc in iterCsv:
 		docs = docs + [doc]
 and verifying: 
-	docs.length = 2
+	docs.count = 2
 	docs[1].id = "1"
 	docs[1].name = "John"
 	docs[2].id = "2"
@@ -39,7 +39,7 @@ define "maps csv headers" as test method doing:
 	names = { "Code" : "id", "Name" : "name" }
 	docs = readCsv with "Code,Name\n1,John\n2,Riou\\, Sylvie\n" as text and names as columnNames
 and verifying: 
-	docs.length = 2
+	docs.count = 2
 	docs[1].id = "1"
 	docs[1].name = "John"
 	docs[2].id = "2"

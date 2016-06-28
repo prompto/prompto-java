@@ -70,10 +70,10 @@ public class IteratorExpression implements IExpression {
 		// get the length
 		method.addInstruction(Opcode.DUP);
 		if(srcinfo.isInterface()) {
-			InterfaceConstant c = new InterfaceConstant(srcinfo.getType(), "getNativeLength", long.class);
+			InterfaceConstant c = new InterfaceConstant(srcinfo.getType(), "getNativeCount", long.class);
 			method.addInstruction(Opcode.INVOKEINTERFACE, c);
 		} else {
-			MethodConstant c = new MethodConstant(srcinfo.getType(), "getNativeLength", long.class);
+			MethodConstant c = new MethodConstant(srcinfo.getType(), "getNativeCount", long.class);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, c);
 		}
 		// call the constructor
@@ -101,7 +101,7 @@ public class IteratorExpression implements IExpression {
 		MethodInfo method = classFile.newMethod("<init>", proto);
 		method.registerLocal("this", VerifierType.ITEM_UninitializedThis, classFile.getThisClass());
 		method.registerLocal("iterable", VerifierType.ITEM_Object, new ClassConstant(Iterable.class));
-		method.registerLocal("length", VerifierType.ITEM_Long, null);
+		method.registerLocal("count", VerifierType.ITEM_Long, null);
 		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
 		method.addInstruction(Opcode.ALOAD_1, new ClassConstant(Iterable.class));
 		method.addInstruction(Opcode.LLOAD_2, new ClassConstant(long.class));

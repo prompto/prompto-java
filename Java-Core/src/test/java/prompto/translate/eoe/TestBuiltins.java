@@ -77,8 +77,8 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
-	public void testDictLength() throws Exception {
-		compareResourceEOE("builtins/dictLength.pec");
+	public void testDictCount() throws Exception {
+		compareResourceEOE("builtins/dictCount.pec");
 	}
 
 	@Test
@@ -97,18 +97,18 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
-	public void testListLength() throws Exception {
-		compareResourceEOE("builtins/listLength.pec");
+	public void testListCount() throws Exception {
+		compareResourceEOE("builtins/listCount.pec");
 	}
 
 	@Test
-	public void testSetLength() throws Exception {
-		compareResourceEOE("builtins/setLength.pec");
+	public void testSetCount() throws Exception {
+		compareResourceEOE("builtins/setCount.pec");
 	}
 
 	@Test
-	public void testTextLength() throws Exception {
-		compareResourceEOE("builtins/textLength.pec");
+	public void testTextCount() throws Exception {
+		compareResourceEOE("builtins/textCount.pec");
 	}
 
 	@Test
@@ -127,8 +127,8 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
-	public void testTupleLength() throws Exception {
-		compareResourceEOE("builtins/tupleLength.pec");
+	public void testTupleCount() throws Exception {
+		compareResourceEOE("builtins/tupleCount.pec");
 	}
 
 }

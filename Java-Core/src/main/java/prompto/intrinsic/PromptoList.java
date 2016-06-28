@@ -26,11 +26,11 @@ public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoLi
 		return mutable;
 	}
 
-	public Long getLength() {
+	public Long getCount() {
 		return (long)size();
 	}
 	
-	public long getNativeLength() {
+	public long getNativeCount() {
 		return size();
 	}
 	

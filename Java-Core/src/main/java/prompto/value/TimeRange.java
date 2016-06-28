@@ -29,7 +29,7 @@ public class TimeRange extends RangeBase<Time> {
 		}
 
 		@Override
-		public long getNativeLength() {
+		public long getNativeCount() {
 			return 1 + (high.getMillisOfDay() - low.getMillisOfDay())/1000;
 		}
 		

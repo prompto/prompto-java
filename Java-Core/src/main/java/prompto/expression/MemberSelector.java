@@ -189,7 +189,7 @@ public class MemberSelector extends SelectorExpression {
 		if(Character.class==info.getType() && "codePoint".equals(getName()))
 			return compileCharacterCodePoint(method, flags);
 		// special case for String.length() to avoid wrapping String.class for just one member
-		else if(String.class==info.getType() && "length".equals(getName()))
+		else if(String.class==info.getType() && "count".equals(getName()))
 			return compileStringLength(method, flags);
 		else {
 			String getterName = CompilerUtils.getterName(getName());
@@ -298,7 +298,7 @@ public class MemberSelector extends SelectorExpression {
 	}
 
 	private ResultInfo compileStringLength(MethodInfo method, Flags flags) {
-		IOperand oper = new MethodConstant(String.class, "length", int.class);
+		IOperand oper = new MethodConstant(String.class, "count", int.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		if(flags.toPrimitive())
 			return CompilerUtils.intTolong(method);

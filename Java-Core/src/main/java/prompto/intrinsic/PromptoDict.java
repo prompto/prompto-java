@@ -53,11 +53,11 @@ public class PromptoDict<K,V> extends HashMap<K,V> implements Iterable<PromptoDi
 		return super.put(key, value);
 	}
 	
-	public Long getLength() {
+	public Long getCount() {
 		return (long)size();
 	}
 	
-	public long getNativeLength() {
+	public long getNativeCount() {
 		return size();
 	}
 	

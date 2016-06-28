@@ -187,7 +187,7 @@ public class TupleValue extends BaseValue implements IContainer<IValue>, ISlicea
 	@Override
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
-		if ("length".equals(name))
+		if ("count".equals(name))
 			return new Integer(items.size());
 		else
 			throw new SyntaxError("No such member:" + name);

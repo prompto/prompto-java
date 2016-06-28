@@ -27,7 +27,7 @@ public class CharacterRange extends RangeBase<Character> {
 		}
 	
 		@Override
-		public long getNativeLength() {
+		public long getNativeCount() {
 			return 1L + high.getValue() - low.getValue();
 		}
 		

@@ -171,7 +171,7 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 	@Override
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) {
 		String name = id.toString();
-		if ("length".equals(name))
+		if ("count".equals(name))
 			return new Integer(items.size());
 		else if ("iterator".equals(name))
 			return new IteratorValue(getItemType(), getIterable(context).iterator());

@@ -38,11 +38,11 @@ public class PromptoTuple<V> extends ArrayList<V> {
 		return sb.toString();
 	}
 	
-	public Long getLength() {
+	public Long getCount() {
 		return (long)size();
 	}
 	
-	public long getNativeLength() {
+	public long getNativeCount() {
 		return size();
 	}
 

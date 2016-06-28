@@ -124,7 +124,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	@Override
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) {
 		String name = id.toString();
-		if ("length".equals(name))
+		if ("count".equals(name))
 			return new Integer(value.length());
 		else
 			throw new SyntaxError("No such member:" + name);

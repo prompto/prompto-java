@@ -30,11 +30,11 @@ public class PromptoSet<V> extends HashSet<V> implements Filterable<PromptoSet<V
 		return sb.toString();
 	}
 	
-	public Long getLength() {
+	public Long getCount() {
 		return (long)size();
 	}
 	
-	public long getNativeLength() {
+	public long getNativeCount() {
 		return size();
 	}
 	

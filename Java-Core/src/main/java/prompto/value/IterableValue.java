@@ -79,7 +79,7 @@ public class IterableValue extends BaseValue implements IIterable<IValue>, Itera
 	@Override
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
-		if ("length".equals(name))
+		if ("count".equals(name))
 			return new Integer(iterable.getLength());
 		else
 			throw new SyntaxError("No such member:" + name);

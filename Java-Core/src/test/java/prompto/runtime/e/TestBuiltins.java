@@ -150,13 +150,13 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
-	public void testInterpretedDictLength() throws Exception {
-		checkInterpretedOutput("builtins/dictLength.pec");
+	public void testInterpretedDictCount() throws Exception {
+		checkInterpretedOutput("builtins/dictCount.pec");
 	}
 
 	@Test
-	public void testCompiledDictLength() throws Exception {
-		checkCompiledOutput("builtins/dictLength.pec");
+	public void testCompiledDictCount() throws Exception {
+		checkCompiledOutput("builtins/dictCount.pec");
 	}
 
 	@Test
@@ -190,33 +190,33 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
-	public void testInterpretedListLength() throws Exception {
-		checkInterpretedOutput("builtins/listLength.pec");
+	public void testInterpretedListCount() throws Exception {
+		checkInterpretedOutput("builtins/listCount.pec");
 	}
 
 	@Test
-	public void testCompiledListLength() throws Exception {
-		checkCompiledOutput("builtins/listLength.pec");
+	public void testCompiledListCount() throws Exception {
+		checkCompiledOutput("builtins/listCount.pec");
 	}
 
 	@Test
-	public void testInterpretedSetLength() throws Exception {
-		checkInterpretedOutput("builtins/setLength.pec");
+	public void testInterpretedSetCount() throws Exception {
+		checkInterpretedOutput("builtins/setCount.pec");
 	}
 
 	@Test
-	public void testCompiledSetLength() throws Exception {
-		checkCompiledOutput("builtins/setLength.pec");
+	public void testCompiledSetCount() throws Exception {
+		checkCompiledOutput("builtins/setCount.pec");
 	}
 
 	@Test
-	public void testInterpretedTextLength() throws Exception {
-		checkInterpretedOutput("builtins/textLength.pec");
+	public void testInterpretedTextCount() throws Exception {
+		checkInterpretedOutput("builtins/textCount.pec");
 	}
 
 	@Test
-	public void testCompiledTextLength() throws Exception {
-		checkCompiledOutput("builtins/textLength.pec");
+	public void testCompiledTextCount() throws Exception {
+		checkCompiledOutput("builtins/textCount.pec");
 	}
 
 	@Test
@@ -250,13 +250,13 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
-	public void testInterpretedTupleLength() throws Exception {
-		checkInterpretedOutput("builtins/tupleLength.pec");
+	public void testInterpretedTupleCount() throws Exception {
+		checkInterpretedOutput("builtins/tupleCount.pec");
 	}
 
 	@Test
-	public void testCompiledTupleLength() throws Exception {
-		checkCompiledOutput("builtins/tupleLength.pec");
+	public void testCompiledTupleCount() throws Exception {
+		checkCompiledOutput("builtins/tupleCount.pec");
 	}
 
 }

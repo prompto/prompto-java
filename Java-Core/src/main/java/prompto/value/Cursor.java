@@ -94,7 +94,7 @@ public class Cursor extends BaseValue implements IIterable<IValue>, IterableWith
 	@Override
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) {
 		String name = id.toString();
-		if ("length".equals(name))
+		if ("count".equals(name))
 			return new Integer(getLength());
 		else
 			throw new SyntaxError("No such member:" + name);

@@ -114,7 +114,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 	@Override
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
-		if ("length".equals(name))
+		if ("count".equals(name))
 			return new Integer(this.dict.size());
 		else if ("keys".equals(name)) {
 			@SuppressWarnings("unchecked")

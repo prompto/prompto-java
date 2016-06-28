@@ -72,8 +72,8 @@ public class TestBuiltins extends BaseOParserTest {
 	}
 
 	@Test
-	public void testDictLength() throws Exception {
-		compareResourceOEO("builtins/dictLength.poc");
+	public void testDictCount() throws Exception {
+		compareResourceOEO("builtins/dictCount.poc");
 	}
 
 	@Test
@@ -92,18 +92,18 @@ public class TestBuiltins extends BaseOParserTest {
 	}
 
 	@Test
-	public void testListLength() throws Exception {
-		compareResourceOEO("builtins/listLength.poc");
+	public void testListCount() throws Exception {
+		compareResourceOEO("builtins/listCount.poc");
 	}
 
 	@Test
-	public void testSetLength() throws Exception {
-		compareResourceOEO("builtins/setLength.poc");
+	public void testSetCount() throws Exception {
+		compareResourceOEO("builtins/setCount.poc");
 	}
 
 	@Test
-	public void testTextLength() throws Exception {
-		compareResourceOEO("builtins/textLength.poc");
+	public void testTextCount() throws Exception {
+		compareResourceOEO("builtins/textCount.poc");
 	}
 
 	@Test
@@ -122,8 +122,8 @@ public class TestBuiltins extends BaseOParserTest {
 	}
 
 	@Test
-	public void testTupleLength() throws Exception {
-		compareResourceOEO("builtins/tupleLength.poc");
+	public void testTupleCount() throws Exception {
+		compareResourceOEO("builtins/tupleCount.poc");
 	}
 
 }

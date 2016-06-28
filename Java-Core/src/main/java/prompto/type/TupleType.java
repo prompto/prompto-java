@@ -42,7 +42,7 @@ public class TupleType extends ContainerType {
 	@Override
 	public IType checkMember(Context context, Identifier id) {
 		String name = id.toString();
-        if ("length".equals(name))
+        if ("count".equals(name))
             return IntegerType.instance();
         else
             return super.checkMember(context, id);

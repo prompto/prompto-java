@@ -23,15 +23,15 @@ public abstract class PromptoRange<T extends Object> implements IterableWithLeng
 	}
 	
 	public java.lang.Long getLength() {
-		return getNativeLength();
+		return getNativeCount();
 	}
 	
 	@Override
 	public java.lang.Long getTotalLength() {
-		return getNativeLength();
+		return getNativeCount();
 	}
 	
-	public abstract long getNativeLength();
+	public abstract long getNativeCount();
 	public abstract T getItem(long item);
 	
 	@Override
@@ -52,7 +52,7 @@ public abstract class PromptoRange<T extends Object> implements IterableWithLeng
 		if(last>=0)
 			return last;
 		else
-			return getNativeLength() + 1 + last;
+			return getNativeCount() + 1 + last;
 	}
 	
 	public abstract boolean contains(Object item);
@@ -78,7 +78,7 @@ public abstract class PromptoRange<T extends Object> implements IterableWithLeng
 		return new Iterator<T>() {
 			
 			long index = 0;
-			long length = PromptoRange.this.getNativeLength();
+			long length = PromptoRange.this.getNativeCount();
 			
 			@Override public boolean hasNext() { return index<length; }
 			@Override public T next() { return getItem(++index); }
@@ -107,7 +107,7 @@ public abstract class PromptoRange<T extends Object> implements IterableWithLeng
 		}
 		
 		@Override
-		public long getNativeLength() {
+		public long getNativeCount() {
 			return 1L + high.charValue() - low.charValue();
 		}
 		
@@ -141,7 +141,7 @@ public abstract class PromptoRange<T extends Object> implements IterableWithLeng
 		}
 		
 		@Override
-		public long getNativeLength() {
+		public long getNativeCount() {
 			return 1L + high.longValue() - low.longValue();
 		}
 
@@ -176,7 +176,7 @@ public abstract class PromptoRange<T extends Object> implements IterableWithLeng
 		}
 
 		@Override
-		public long getNativeLength() {
+		public long getNativeCount() {
 			long h = high.toJavaTime();
 			long l = low.toJavaTime();
 			return 1 + ( (h-l)/(24*60*60*1000));
@@ -212,7 +212,7 @@ public abstract class PromptoRange<T extends Object> implements IterableWithLeng
 		}
 		
 		@Override
-		public long getNativeLength() {
+		public long getNativeCount() {
 			return 1 + (high.getNativeMillisOfDay() - low.getNativeMillisOfDay())/1000;
 		}
 

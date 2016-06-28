@@ -72,8 +72,8 @@ public class TestBuiltins extends BaseOParserTest {
 	}
 
 	@Test
-	public void testDictLength() throws Exception {
-		compareResourceOSO("builtins/dictLength.poc");
+	public void testDictCount() throws Exception {
+		compareResourceOSO("builtins/dictCount.poc");
 	}
 
 	@Test
@@ -92,18 +92,18 @@ public class TestBuiltins extends BaseOParserTest {
 	}
 
 	@Test
-	public void testListLength() throws Exception {
-		compareResourceOSO("builtins/listLength.poc");
+	public void testListCount() throws Exception {
+		compareResourceOSO("builtins/listCount.poc");
 	}
 
 	@Test
-	public void testSetLength() throws Exception {
-		compareResourceOSO("builtins/setLength.poc");
+	public void testSetCount() throws Exception {
+		compareResourceOSO("builtins/setCount.poc");
 	}
 
 	@Test
-	public void testTextLength() throws Exception {
-		compareResourceOSO("builtins/textLength.poc");
+	public void testTextCount() throws Exception {
+		compareResourceOSO("builtins/textCount.poc");
 	}
 
 	@Test
@@ -122,8 +122,8 @@ public class TestBuiltins extends BaseOParserTest {
 	}
 
 	@Test
-	public void testTupleLength() throws Exception {
-		compareResourceOSO("builtins/tupleLength.poc");
+	public void testTupleCount() throws Exception {
+		compareResourceOSO("builtins/tupleCount.poc");
 	}
 
 }
