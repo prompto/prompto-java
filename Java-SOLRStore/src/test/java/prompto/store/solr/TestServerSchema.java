@@ -15,6 +15,7 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import prompto.store.IStore;
@@ -22,6 +23,7 @@ import prompto.value.BinaryValue;
 import prompto.value.Blob;
 import prompto.value.Image;
 
+@Ignore
 public class TestServerSchema {
 
 	RemoteSOLRStore store;
