@@ -99,6 +99,15 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
         else
             throw new SyntaxError("Illegal comparison: Character + " + value.getClass().getSimpleName());
     }
+    
+    @Override
+    public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
+		String name = id.toString();
+		if ("codePoint".equals(name))
+			return new Integer((int)value);
+		else
+			throw new SyntaxError("No such member:" + name);
+    }
 
     static Opcode[] cmpOpcodes = createOpcodes();
     

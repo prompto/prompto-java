@@ -7,6 +7,11 @@ import prompto.parser.e.BaseEParserTest;
 public class TestBuiltins extends BaseEParserTest {
 
 	@Test
+	public void testCharCodePoint() throws Exception {
+		compareResourceESE("builtins/charCodePoint.pec");
+	}
+
+	@Test
 	public void testDateDayOfMonth() throws Exception {
 		compareResourceESE("builtins/dateDayOfMonth.pec");
 	}

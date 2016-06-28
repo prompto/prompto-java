@@ -20,6 +20,16 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedCharCodePoint() throws Exception {
+		checkInterpretedOutput("builtins/charCodePoint.pec");
+	}
+
+	@Test
+	public void testCompiledCharCodePoint() throws Exception {
+		checkCompiledOutput("builtins/charCodePoint.pec");
+	}
+
+	@Test
 	public void testInterpretedDateDayOfMonth() throws Exception {
 		checkInterpretedOutput("builtins/dateDayOfMonth.pec");
 	}
