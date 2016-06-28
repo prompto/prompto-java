@@ -87,6 +87,16 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testDictKeys() throws Exception {
+		compareResourceEOE("builtins/dictKeys.pec");
+	}
+
+	@Test
+	public void testDictValues() throws Exception {
+		compareResourceEOE("builtins/dictValues.pec");
+	}
+
+	@Test
 	public void testEnumName() throws Exception {
 		compareResourceEOE("builtins/enumName.pec");
 	}

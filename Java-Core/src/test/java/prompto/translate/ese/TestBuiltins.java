@@ -87,6 +87,16 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testDictKeys() throws Exception {
+		compareResourceESE("builtins/dictKeys.pec");
+	}
+
+	@Test
+	public void testDictValues() throws Exception {
+		compareResourceESE("builtins/dictValues.pec");
+	}
+
+	@Test
 	public void testEnumName() throws Exception {
 		compareResourceESE("builtins/enumName.pec");
 	}

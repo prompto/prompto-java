@@ -110,16 +110,6 @@ public class TestBuiltins extends BaseOParserTest {
 	}
 
 	@Test
-	public void testInterpretedDateTimeTZOffset() throws Exception {
-		checkInterpretedOutput("builtins/dateTimeTZOffset.poc");
-	}
-
-	@Test
-	public void testCompiledDateTimeTZOffset() throws Exception {
-		checkCompiledOutput("builtins/dateTimeTZOffset.poc");
-	}
-
-	@Test
 	public void testInterpretedDateTimeYear() throws Exception {
 		checkInterpretedOutput("builtins/dateTimeYear.poc");
 	}

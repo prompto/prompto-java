@@ -130,16 +130,6 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
-	public void testInterpretedDateTimeTZOffset() throws Exception {
-		checkInterpretedOutput("builtins/dateTimeTZOffset.pec");
-	}
-
-	@Test
-	public void testCompiledDateTimeTZOffset() throws Exception {
-		checkCompiledOutput("builtins/dateTimeTZOffset.pec");
-	}
-
-	@Test
 	public void testInterpretedDateTimeYear() throws Exception {
 		checkInterpretedOutput("builtins/dateTimeYear.pec");
 	}
@@ -167,6 +157,26 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCompiledDictCount() throws Exception {
 		checkCompiledOutput("builtins/dictCount.pec");
+	}
+
+	@Test
+	public void testInterpretedDictKeys() throws Exception {
+		checkInterpretedOutput("builtins/dictKeys.pec");
+	}
+
+	@Test
+	public void testCompiledDictKeys() throws Exception {
+		checkCompiledOutput("builtins/dictKeys.pec");
+	}
+
+	@Test
+	public void testInterpretedDictValues() throws Exception {
+		checkInterpretedOutput("builtins/dictValues.pec");
+	}
+
+	@Test
+	public void testCompiledDictValues() throws Exception {
+		checkCompiledOutput("builtins/dictValues.pec");
 	}
 
 	@Test
