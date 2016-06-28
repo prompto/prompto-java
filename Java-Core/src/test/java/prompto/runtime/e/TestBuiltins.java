@@ -90,6 +90,16 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedDateTimeMilli() throws Exception {
+		checkInterpretedOutput("builtins/dateTimeMilli.pec");
+	}
+
+	@Test
+	public void testCompiledDateTimeMilli() throws Exception {
+		checkCompiledOutput("builtins/dateTimeMilli.pec");
+	}
+
+	@Test
 	public void testInterpretedDateTimeMinute() throws Exception {
 		checkInterpretedOutput("builtins/dateTimeMinute.pec");
 	}
@@ -227,6 +237,16 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCompiledTimeHour() throws Exception {
 		checkCompiledOutput("builtins/timeHour.pec");
+	}
+
+	@Test
+	public void testInterpretedTimeMilli() throws Exception {
+		checkInterpretedOutput("builtins/timeMilli.pec");
+	}
+
+	@Test
+	public void testCompiledTimeMilli() throws Exception {
+		checkCompiledOutput("builtins/timeMilli.pec");
 	}
 
 	@Test

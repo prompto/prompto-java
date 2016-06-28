@@ -42,6 +42,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testDateTimeMilli() throws Exception {
+		compareResourceEOE("builtins/dateTimeMilli.pec");
+	}
+
+	@Test
 	public void testDateTimeMinute() throws Exception {
 		compareResourceEOE("builtins/dateTimeMinute.pec");
 	}
@@ -114,6 +119,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testTimeHour() throws Exception {
 		compareResourceEOE("builtins/timeHour.pec");
+	}
+
+	@Test
+	public void testTimeMilli() throws Exception {
+		compareResourceEOE("builtins/timeMilli.pec");
 	}
 
 	@Test

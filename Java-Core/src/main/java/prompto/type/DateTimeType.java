@@ -87,7 +87,7 @@ public class DateTimeType extends NativeType {
 			return IntegerType.instance();
 		else if ("second".equals(name))
 			return IntegerType.instance();
-		else if ("millis".equals(name))
+		else if ("millisecond".equals(name))
 			return IntegerType.instance();
 		else if ("tzOffset".equals(name))
 			return IntegerType.instance();

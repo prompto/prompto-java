@@ -51,7 +51,7 @@ public class PromptoTime implements Comparable<PromptoTime> {
 		return (long)wrapped.getSecondOfMinute();
 	}
 
-	public Long getMillis() {
+	public Long getMillisecond() {
 		return (long)wrapped.getMillisOfSecond();
 	}
 	

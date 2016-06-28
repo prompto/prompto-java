@@ -73,7 +73,7 @@ public class PromptoDateTime implements Comparable<PromptoDateTime> {
 		return (long)wrapped.getSecondOfMinute();
 	}
 
-	public Long getMillis() {
+	public Long getMillisecond() {
 		return (long)wrapped.getMillisOfSecond();
 	}
 	

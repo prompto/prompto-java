@@ -134,7 +134,7 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 			return new Integer(this.value.getNativeMinute());
 		else if ("second".equals(name))
 			return new Integer(this.value.getNativeSecond());
-		else if ("millis".equals(name))
+		else if ("millisecond".equals(name))
 			return new Integer(this.value.getNativeMillis());
 		else if ("tzOffset".equals(name))
 			return new Integer(this.value.getNativeTzOffset());
