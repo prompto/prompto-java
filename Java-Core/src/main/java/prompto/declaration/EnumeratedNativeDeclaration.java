@@ -23,6 +23,7 @@ import prompto.expression.NativeSymbol;
 import prompto.expression.Symbol;
 import prompto.grammar.Identifier;
 import prompto.grammar.NativeSymbolList;
+import prompto.intrinsic.PromptoSymbol;
 import prompto.runtime.Context;
 import prompto.type.EnumeratedNativeType;
 import prompto.type.IType;
@@ -151,24 +152,17 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 	public ClassFile compile(Context context, String fullName) {
 		try {
 			ClassFile classFile = new ClassFile(new PromptoType(fullName));
-			classFile.setSuperClass(new ClassConstant(Object.class));
+			classFile.setSuperClass(new ClassConstant(PromptoSymbol.class));
 			compileSymbolFields(context, classFile, new Flags());
-			compileSymbolsField(context, classFile, new Flags());
 			compileClassConstructor(context, classFile, new Flags());
 			CompilerUtils.compileEmptyConstructor(classFile);
+			compileGetSymbolsMethod(context, classFile, new Flags());
 			return classFile;
 		} catch(SyntaxError e) {
 			throw new CompilerException(e);
 		}
 	}
 	
-	private void compileSymbolsField(Context context, ClassFile classFile, Flags flags) {
-		FieldInfo field = new FieldInfo("%symbols", List.class); 
-		field.clearModifier(Modifier.PROTECTED);
-		field.addModifier(Modifier.STATIC | Modifier.PUBLIC);
-		classFile.addField(field);
-	}
-
 	private void compileSymbolFields(Context context, ClassFile classFile, Flags flags) {
 		getSymbols().forEach((s)->
 			compileSymbolField(context, classFile, flags, s));
@@ -190,7 +184,6 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 		method.addModifier(Modifier.STATIC);
 		for(Symbol s : getSymbols())
 			compilePopulateSymbolField(context, method, flags, s);
-		compilePopulateSymbolsField(context, method, flags);
 		method.addInstruction(Opcode.RETURN);
 	}
 	
@@ -199,20 +192,18 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 		FieldConstant f = new FieldConstant(method.getClassFile().getThisClass(), s.getName(), getSymbolJavaType(context));
 		method.addInstruction(Opcode.PUTSTATIC, f);
 	}
-
-	private void compilePopulateSymbolsField(Context context, MethodInfo method, Flags flags) {
-		ClassConstant thisClass = method.getClassFile().getThisClass();
-		CompilerUtils.compileNewInstance(method, ArrayList.class);
-		MethodConstant m = new MethodConstant(ArrayList.class, "add", Object.class, boolean.class);
-		for(NativeSymbol s : getSymbols()) {
-			method.addInstruction(Opcode.DUP);
-			FieldConstant f = new FieldConstant(thisClass, s.getName(), getSymbolJavaType(context));
-			method.addInstruction(Opcode.GETSTATIC, f);
-			method.addInstruction(Opcode.INVOKEVIRTUAL, m);
-			method.addInstruction(Opcode.POP); // ignore returned boolean
-		}
-		FieldConstant f = new FieldConstant(thisClass, "%symbols", List.class);
-		method.addInstruction(Opcode.PUTSTATIC, f);
+	
+	private void compileGetSymbolsMethod(Context context, ClassFile classFile, Flags flags) {
+		MethodInfo method = classFile.newMethod("getSymbols", new Descriptor.Method(List.class));
+		method.addModifier(Modifier.STATIC);
+		method.addInstruction(Opcode.LDC, classFile.getThisClass());
+		MethodConstant m = new MethodConstant(PromptoSymbol.class, "getSymbols", 
+				new Descriptor.Method(Class.class, List.class));
+		method.addInstruction(Opcode.INVOKESTATIC, m);
+		method.addInstruction(Opcode.ARETURN);
 	}
+
+
+
 
 }

@@ -15,6 +15,7 @@ import prompto.value.IValue;
 public class NativeSymbol extends Symbol implements IExpression {
 	
 	IExpression expression;
+	Object value;
 	
 	public NativeSymbol(Identifier name, IExpression expression) {
 		super(name);

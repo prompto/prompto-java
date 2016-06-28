@@ -8,6 +8,7 @@ import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.FieldConstant;
 import prompto.compiler.Flags;
+import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
@@ -99,8 +100,8 @@ public class EnumeratedNativeType extends BaseType {
 			throw new SyntaxError(name + " is not an enumerated type!");
 		if ("symbols".equals(name)) {
 			ClassConstant cc = new ClassConstant(CompilerUtils.getNativeEnumType(typeNameId));
-			FieldConstant fc = new FieldConstant(cc, "%symbols", List.class);
-			method.addInstruction(Opcode.GETSTATIC, fc);
+			MethodConstant mc = new MethodConstant(cc, "getSymbols", List.class);
+			method.addInstruction(Opcode.INVOKESTATIC, mc);
 			return new ResultInfo(List.class);
 		} else
 			throw new SyntaxError("No such member:" + name);

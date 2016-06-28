@@ -108,5 +108,18 @@ public abstract class SymbolList <T extends Symbol> extends ObjectList<T> implem
 	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, Map<String, byte[]> data) throws PromptoError {
 		throw new UnsupportedOperationException("toJson not supported by " + this.getClass().getSimpleName());
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("[");
+		for(Symbol s : this) {
+			sb.append(s.getName());
+			sb.append(", ");
+		}
+		sb.setLength(sb.length() - ", ".length());
+		sb.append("]");
+		return sb.toString();
+	}
 
 }
