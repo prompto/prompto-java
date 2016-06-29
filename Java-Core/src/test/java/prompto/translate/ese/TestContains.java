@@ -12,6 +12,11 @@ public class TestContains extends BaseEParserTest {
 	}
 
 	@Test
+	public void testContainsAllRange() throws Exception {
+		compareResourceESE("contains/containsAllRange.pec");
+	}
+
+	@Test
 	public void testContainsAllSet() throws Exception {
 		compareResourceESE("contains/containsAllSet.pec");
 	}
@@ -29,6 +34,11 @@ public class TestContains extends BaseEParserTest {
 	@Test
 	public void testContainsAnyList() throws Exception {
 		compareResourceESE("contains/containsAnyList.pec");
+	}
+
+	@Test
+	public void testContainsAnyRange() throws Exception {
+		compareResourceESE("contains/containsAnyRange.pec");
 	}
 
 	@Test

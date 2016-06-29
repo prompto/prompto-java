@@ -30,6 +30,16 @@ public class TestContains extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedContainsAllRange() throws Exception {
+		checkInterpretedOutput("contains/containsAllRange.pec");
+	}
+
+	@Test
+	public void testCompiledContainsAllRange() throws Exception {
+		checkCompiledOutput("contains/containsAllRange.pec");
+	}
+
+	@Test
 	public void testInterpretedContainsAllSet() throws Exception {
 		checkInterpretedOutput("contains/containsAllSet.pec");
 	}
@@ -67,6 +77,16 @@ public class TestContains extends BaseEParserTest {
 	@Test
 	public void testCompiledContainsAnyList() throws Exception {
 		checkCompiledOutput("contains/containsAnyList.pec");
+	}
+
+	@Test
+	public void testInterpretedContainsAnyRange() throws Exception {
+		checkInterpretedOutput("contains/containsAnyRange.pec");
+	}
+
+	@Test
+	public void testCompiledContainsAnyRange() throws Exception {
+		checkCompiledOutput("contains/containsAnyRange.pec");
 	}
 
 	@Test

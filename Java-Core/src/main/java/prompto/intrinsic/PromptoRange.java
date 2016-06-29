@@ -59,10 +59,10 @@ public abstract class PromptoRange<T extends Object> implements IterableWithCoun
 
 	public boolean containsAll(Collection<Object> items) {
 		for(Object item : items) {
-			if(contains(item))
-				return true;
+			if(!contains(item))
+				return false;
 		}
-		return false;
+		return true;
 	}
 	
 	public boolean containsAny(Collection<Object> items) {

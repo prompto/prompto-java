@@ -59,6 +59,11 @@ public class RangeType extends ContainerType {
 	public IType checkIterator(Context context) {
 		return itemType;
 	}
+	
+	@Override
+	public IType checkContainsAllOrAny(Context context, IType other) {
+		return BooleanType.instance();
+	}
 
 	
 }
