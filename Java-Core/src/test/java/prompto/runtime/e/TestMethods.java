@@ -60,6 +60,16 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedExplicit() throws Exception {
+		checkInterpretedOutput("methods/explicit.pec");
+	}
+
+	@Test
+	public void testCompiledExplicit() throws Exception {
+		checkCompiledOutput("methods/explicit.pec");
+	}
+
+	@Test
 	public void testInterpretedExpressionWith() throws Exception {
 		checkInterpretedOutput("methods/expressionWith.pec");
 	}

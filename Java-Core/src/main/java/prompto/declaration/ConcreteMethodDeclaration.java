@@ -273,7 +273,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 
 	private Type getClosureClassType(MethodInfo method) {
 		String innerClassName = method.getClassFile().getThisClass().getType().getTypeName();
-		if(closureOf.getMemberOf()!=null)
+		if(closureOf!=null && closureOf.getMemberOf()!=null)
 			innerClassName += "$" + closureOf.getName();
 		innerClassName += "$" + this.getName();
 		return new PromptoType(innerClassName); 
@@ -335,6 +335,12 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		}
 		FieldInfo field = new FieldInfo(name, type);
 		classFile.addField(field);
+	}
+
+	public ResultInfo compileMethodInstance(Context context, MethodInfo method, Flags flags) {
+		if(closureOf==null)
+			compileClosureClass(context, method);
+		return compileClosureInstance(context, method, flags);
 	}
 	
 	public ResultInfo compileClosureInstance(Context context, MethodInfo method, Flags flags) {

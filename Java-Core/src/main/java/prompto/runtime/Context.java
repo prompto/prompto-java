@@ -552,11 +552,17 @@ public class Context implements IContext {
 		instances.put(value.getId(), value);
 	}
 	
-	public IValue getValue(Identifier name) throws PromptoError {
-		Context context = contextForValue(name);
+
+	public boolean hasValue(Identifier id) {
+		return contextForValue(id)!=null;
+	}
+
+
+	public IValue getValue(Identifier id) throws PromptoError {
+		Context context = contextForValue(id);
 		if(context==null)
-			throw new SyntaxError(name + " is not defined");
-		return context.readValue(name);
+			throw new SyntaxError(id + " is not defined");
+		return context.readValue(id);
 	}
 	
 	
@@ -888,6 +894,5 @@ public class Context implements IContext {
 		}
 		
 	}
-
 
 }

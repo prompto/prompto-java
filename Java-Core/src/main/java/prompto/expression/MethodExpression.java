@@ -15,6 +15,7 @@ import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.type.IType;
 import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
+import prompto.value.ClosureValue;
 import prompto.value.IValue;
 
 public class MethodExpression implements IExpression {
@@ -59,7 +60,15 @@ public class MethodExpression implements IExpression {
 
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		return context.getValue(id);
+		if(context.hasValue(id))
+			return context.getValue(id);
+		INamed named = context.getRegistered(id);
+		if(named instanceof Context.MethodDeclarationMap) {
+			ConcreteMethodDeclaration decl = (ConcreteMethodDeclaration)((MethodDeclarationMap)named).values().iterator().next();
+			MethodType type = new MethodType(decl);
+			return new ClosureValue(context, type);
+		} else
+			throw new SyntaxError("No method with name:" + id);
 	}
 	
 	@Override
@@ -67,7 +76,7 @@ public class MethodExpression implements IExpression {
 		INamed named = context.getRegistered(id);
 		if(named instanceof Context.MethodDeclarationMap) {
 			ConcreteMethodDeclaration decl = (ConcreteMethodDeclaration)((MethodDeclarationMap)named).values().iterator().next();
-			return decl.compileClosureInstance(context, method, flags);
+			return decl.compileMethodInstance(context, method, flags);
 		} else
 			throw new SyntaxError("No method with name:" + id);
 	}

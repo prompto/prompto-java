@@ -27,6 +27,11 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testExplicit() throws Exception {
+		compareResourceESE("methods/explicit.pec");
+	}
+
+	@Test
 	public void testExpressionWith() throws Exception {
 		compareResourceESE("methods/expressionWith.pec");
 	}

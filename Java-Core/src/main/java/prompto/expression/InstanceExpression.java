@@ -117,7 +117,7 @@ public class InstanceExpression implements IExpression {
 		INamed named = context.getRegistered(getId());
 		if(named instanceof Context.MethodDeclarationMap) {
 			ConcreteMethodDeclaration decl = (ConcreteMethodDeclaration)((MethodDeclarationMap)named).values().iterator().next();
-			return decl.compileClosureInstance(context, method, flags);
+			return decl.compileMethodInstance(context, method, flags);
 		} else
 			return null;
 	}
