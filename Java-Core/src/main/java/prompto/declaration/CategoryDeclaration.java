@@ -256,10 +256,10 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 
 	protected abstract void toSDialect(CodeWriter writer);
 
-	protected void protoToPDialect(CodeWriter writer, IdentifierList derivedFrom) {
+	protected void protoToSDialect(CodeWriter writer, IdentifierList derivedFrom) {
 		if(storable)
 			writer.append("storable ");
-		categoryTypeToPDialect(writer);
+		categoryTypeToSDialect(writer);
 		writer.append(" ");
 		writer.append(getName());
 		writer.append("(");
@@ -271,10 +271,9 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		if(attributes!=null)
 			attributes.toDialect(writer, false);
 		writer.append("):\n");
-		writer.newLine();
 	}
 
-	protected abstract void categoryTypeToPDialect(CodeWriter writer);
+	protected abstract void categoryTypeToSDialect(CodeWriter writer);
 
 	public ClassFile compile(Context context, String fullName) {
 		throw new UnsupportedOperationException(); // TODO -> abstract

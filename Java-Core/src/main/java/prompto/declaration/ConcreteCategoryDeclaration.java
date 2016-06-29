@@ -126,12 +126,12 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	
 	@Override
 	protected void toSDialect(CodeWriter writer) {
-		protoToPDialect(writer, derivedFrom);
+		protoToSDialect(writer, derivedFrom);
 		methodsToSDialect(writer);
 	}
 	
 	@Override
-	protected void categoryTypeToPDialect(CodeWriter writer) {
+	protected void categoryTypeToSDialect(CodeWriter writer) {
 		writer.append("class");
 	}
 
@@ -139,10 +139,13 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		writer.indent();
 		if(methods==null || methods.size()==0)
 			writer.append("pass\n");
-		else for(IDeclaration decl : methods) {
-			CodeWriter w = writer.newMemberWriter();
-			decl.toDialect(w);
+		else {
 			writer.newLine();
+			for(IDeclaration decl : methods) {
+				CodeWriter w = writer.newMemberWriter();
+				decl.toDialect(w);
+				writer.newLine();
+			}
 		}
 		writer.dedent();
 	}

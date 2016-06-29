@@ -86,7 +86,7 @@ public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 
 	@Override
 	protected void toSDialect(CodeWriter writer) {
-		protoToPDialect(writer, null);
+		protoToSDialect(writer, null);
 		writer.indent();
 		writer.newLine();
 		categoryBindings.toDialect(writer);
@@ -102,7 +102,7 @@ public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 	}
 	
 	@Override
-	protected void categoryTypeToPDialect(CodeWriter writer) {
+	protected void categoryTypeToSDialect(CodeWriter writer) {
 		writer.append("native category");
 	}
 

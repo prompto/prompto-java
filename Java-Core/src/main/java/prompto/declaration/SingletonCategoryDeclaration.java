@@ -41,7 +41,7 @@ public class SingletonCategoryDeclaration extends ConcreteCategoryDeclaration {
 	}
 
 	@Override
-	protected void categoryTypeToPDialect(CodeWriter writer) {
+	protected void categoryTypeToSDialect(CodeWriter writer) {
 		writer.append("singleton");
 	}
 	

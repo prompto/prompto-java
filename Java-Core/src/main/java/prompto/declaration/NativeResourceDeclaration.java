@@ -50,7 +50,7 @@ public class NativeResourceDeclaration extends NativeCategoryDeclaration {
 	}
 
 	@Override
-	protected void categoryTypeToPDialect(CodeWriter writer) {
+	protected void categoryTypeToSDialect(CodeWriter writer) {
 		writer.append("native resource");
 	}
 }
