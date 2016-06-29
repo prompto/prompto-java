@@ -102,8 +102,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 		if (value instanceof Text)
 			return this.dict.containsKey((Text) value);
 		else
-			throw new SyntaxError("Only Text key instanceof supported by "
-					+ this.getClass().getSimpleName());
+			throw new SyntaxError("Only Text key supported by " + this.getClass().getSimpleName());
 	}
 
 	@Override

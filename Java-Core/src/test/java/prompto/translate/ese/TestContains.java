@@ -7,6 +7,11 @@ import prompto.parser.e.BaseEParserTest;
 public class TestContains extends BaseEParserTest {
 
 	@Test
+	public void testContainsAllDict() throws Exception {
+		compareResourceESE("contains/containsAllDict.pec");
+	}
+
+	@Test
 	public void testContainsAllList() throws Exception {
 		compareResourceESE("contains/containsAllList.pec");
 	}
@@ -29,6 +34,11 @@ public class TestContains extends BaseEParserTest {
 	@Test
 	public void testContainsAllTuple() throws Exception {
 		compareResourceESE("contains/containsAllTuple.pec");
+	}
+
+	@Test
+	public void testContainsAnyDict() throws Exception {
+		compareResourceESE("contains/containsAnyDict.pec");
 	}
 
 	@Test

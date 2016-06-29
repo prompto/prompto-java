@@ -79,6 +79,10 @@ public class DictType extends ContainerType {
         	return super.checkMember(context, id);
 	}
 	
+	@Override
+	public IType checkContainsAllOrAny(Context context, IType other) {
+		return BooleanType.instance();
+	}
 
 	
 }

@@ -20,6 +20,16 @@ public class TestContains extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedContainsAllDict() throws Exception {
+		checkInterpretedOutput("contains/containsAllDict.pec");
+	}
+
+	@Test
+	public void testCompiledContainsAllDict() throws Exception {
+		checkCompiledOutput("contains/containsAllDict.pec");
+	}
+
+	@Test
 	public void testInterpretedContainsAllList() throws Exception {
 		checkInterpretedOutput("contains/containsAllList.pec");
 	}
@@ -67,6 +77,16 @@ public class TestContains extends BaseEParserTest {
 	@Test
 	public void testCompiledContainsAllTuple() throws Exception {
 		checkCompiledOutput("contains/containsAllTuple.pec");
+	}
+
+	@Test
+	public void testInterpretedContainsAnyDict() throws Exception {
+		checkInterpretedOutput("contains/containsAnyDict.pec");
+	}
+
+	@Test
+	public void testCompiledContainsAnyDict() throws Exception {
+		checkCompiledOutput("contains/containsAnyDict.pec");
 	}
 
 	@Test
