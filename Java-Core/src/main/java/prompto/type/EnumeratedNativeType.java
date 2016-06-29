@@ -6,7 +6,6 @@ import java.util.Map;
 
 import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
-import prompto.compiler.FieldConstant;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
