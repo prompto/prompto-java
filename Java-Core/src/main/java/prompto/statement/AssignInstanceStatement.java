@@ -7,6 +7,7 @@ import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.instance.IAssignableInstance;
 import prompto.runtime.Context;
+import prompto.type.CodeType;
 import prompto.type.IType;
 import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
@@ -42,6 +43,9 @@ public class AssignInstanceStatement extends SimpleStatement {
 	public IType check(Context context) {
 		IType valueType = expression.check(context);
 		instance.checkAssignValue(context, valueType);
+		// Code expressions need to be interpreted as part of full check
+		if(valueType==CodeType.instance())
+			instance.assign(context, expression);
 		return VoidType.instance();
 	}
 	

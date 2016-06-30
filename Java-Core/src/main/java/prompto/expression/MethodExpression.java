@@ -62,13 +62,15 @@ public class MethodExpression implements IExpression {
 	public IValue interpret(Context context) throws PromptoError {
 		if(context.hasValue(id))
 			return context.getValue(id);
-		INamed named = context.getRegistered(id);
-		if(named instanceof Context.MethodDeclarationMap) {
-			ConcreteMethodDeclaration decl = (ConcreteMethodDeclaration)((MethodDeclarationMap)named).values().iterator().next();
-			MethodType type = new MethodType(decl);
-			return new ClosureValue(context, type);
-		} else
-			throw new SyntaxError("No method with name:" + id);
+		else {
+			INamed named = context.getRegistered(id);
+			if(named instanceof Context.MethodDeclarationMap) {
+				ConcreteMethodDeclaration decl = (ConcreteMethodDeclaration)((MethodDeclarationMap)named).values().iterator().next();
+				MethodType type = new MethodType(decl);
+				return new ClosureValue(context, type);
+			} else
+				throw new SyntaxError("No method with name:" + id);
+		}
 	}
 	
 	@Override

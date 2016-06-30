@@ -16,6 +16,7 @@ import prompto.runtime.Context;
 import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Variable;
 import prompto.type.CategoryType;
+import prompto.type.CodeType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
@@ -64,11 +65,16 @@ public class VariableInstance implements IAssignableInstance {
 	
 	public ResultInfo compileAssignVariable(Context context, MethodInfo method, Flags flags, IExpression expression) {
 		IType valueType = expression.check(context);
-		checkAssignValue(context, valueType);
-		ResultInfo info = expression.compile(context, method, flags);
-		StackLocal local = method.registerLocal(id.toString(), VerifierType.ITEM_Object, new ClassConstant(info.getType()));
-		CompilerUtils.compileASTORE(method, local);
-		return new ResultInfo(void.class);
+		if(valueType==CodeType.instance()) {
+			assign(context, expression);
+			return new ResultInfo(void.class);
+		} else {
+			checkAssignValue(context, valueType);
+			ResultInfo info = expression.compile(context, method, flags);
+			StackLocal local = method.registerLocal(id.toString(), VerifierType.ITEM_Object, new ClassConstant(info.getType()));
+			CompilerUtils.compileASTORE(method, local);
+			return new ResultInfo(void.class);
+		}
 	}
 	
 	@Override

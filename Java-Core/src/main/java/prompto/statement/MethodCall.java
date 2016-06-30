@@ -33,6 +33,7 @@ import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.MethodFinder;
+import prompto.type.CodeType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.Boolean;
@@ -155,7 +156,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 			ArgumentAssignmentList list = new ArgumentAssignmentList();
 			list.addAll(assignments.stream()
 					.filter((a)->
-						(a.getExpression() instanceof CodeExpression))
+						(a.getExpression().check(context)==CodeType.instance()))
 					.collect(Collectors.toList()));
 			return list.resolveAndCheck(context, declaration);
 		}
