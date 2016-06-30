@@ -65,6 +65,7 @@ public class VariableInstance implements IAssignableInstance {
 	
 	public ResultInfo compileAssignVariable(Context context, MethodInfo method, Flags flags, IExpression expression) {
 		IType valueType = expression.check(context);
+		// Code expressions need to be interpreted as part of compile
 		if(valueType==CodeType.instance()) {
 			assign(context, expression);
 			return new ResultInfo(void.class);

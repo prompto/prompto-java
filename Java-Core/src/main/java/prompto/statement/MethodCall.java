@@ -22,7 +22,6 @@ import prompto.declaration.TestMethodDeclaration;
 import prompto.error.NotMutableError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
-import prompto.expression.CodeExpression;
 import prompto.expression.IAssertion;
 import prompto.expression.IExpression;
 import prompto.expression.MethodSelector;
