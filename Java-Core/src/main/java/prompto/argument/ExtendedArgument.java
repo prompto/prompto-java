@@ -63,12 +63,9 @@ public class ExtendedArgument extends CategoryArgument {
 	}
 	
 	private void toEDialect(CodeWriter writer) {
-		boolean anonymous = "any".equals(type.getTypeName());
 		type.toDialect(writer);
-		if(anonymous) {
-			writer.append(' ');
-			writer.append(id);
-		}
+		writer.append(' ');
+		writer.append(id);
 		switch(attributes.size()) {
 		case 0:
 			break;
@@ -80,10 +77,6 @@ public class ExtendedArgument extends CategoryArgument {
 			writer.append(" with attributes ");
 			attributes.toDialect(writer, true);
 			break;
-		}
-		if(!anonymous) {
-			writer.append(' ');
-			writer.append(id);
 		}
 	}
 

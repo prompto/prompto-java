@@ -70,6 +70,16 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedExtended() throws Exception {
+		checkInterpretedOutput("methods/extended.poc");
+	}
+
+	@Test
+	public void testCompiledExtended() throws Exception {
+		checkCompiledOutput("methods/extended.poc");
+	}
+
+	@Test
 	public void testInterpretedImplicit() throws Exception {
 		checkInterpretedOutput("methods/implicit.poc");
 	}

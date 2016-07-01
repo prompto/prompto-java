@@ -37,6 +37,11 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testExtended() throws Exception {
+		compareResourceESE("methods/extended.pec");
+	}
+
+	@Test
 	public void testImplicit() throws Exception {
 		compareResourceESE("methods/implicit.pec");
 	}

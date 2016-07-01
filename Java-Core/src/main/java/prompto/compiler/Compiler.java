@@ -123,7 +123,7 @@ public class Compiler {
 				continue;
 			IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, new Identifier(s));
 			if(decl instanceof CategoryDeclaration)
-				classFile.setSuperClass(new ClassConstant(CompilerUtils.getCategoryInterfaceType(s)));
+				classFile.addInterface(new ClassConstant(CompilerUtils.getCategoryInterfaceType(s)));
 			else if(decl instanceof AttributeDeclaration)
 				classFile.addInterface(new ClassConstant(CompilerUtils.getAttributeInterfaceType(s)));
 			else
