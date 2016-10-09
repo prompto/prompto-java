@@ -100,7 +100,7 @@ define Error as enumerated category with attributes name and text, and symbols:
 	READ_WRITE with "Read/write failed!" as text
 define DecimalConstant as enumerated Decimal with symbols:
 	PI with 3.14159265358979323846 as value
-	LNE with 2.7182818284590452354 as value
+	E with 2.7182818284590452354 as value
 define now as native method returning DateTime doing:
 	Java: return prompto.intrinsic.PromptoDateTime.now();
 	C#: return System.DateTimeOffset.Now;
