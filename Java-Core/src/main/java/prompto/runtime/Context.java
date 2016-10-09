@@ -293,8 +293,6 @@ public class Context implements IContext {
 			return actual;
 		if(parent!=null)
 			return parent.getRegistered(name);
-		if(calling!=null && calling!=parent)
-			return calling.getRegistered(name);
 		if(globals!=this)
 			return globals.getRegistered(name);
 		return null;	
@@ -311,10 +309,6 @@ public class Context implements IContext {
 			return ObjectUtils.downcast(klass,actual);
 		else if(parent!=null)
 			actual = parent.getRegisteredDeclaration(klass, name, lookInStore);
-		if(actual!=null)
-			return ObjectUtils.downcast(klass,actual);
-		else if(calling!=null && calling!=parent)
-			actual = calling.getRegisteredDeclaration(klass, name, lookInStore);
 		if(actual!=null)
 			return ObjectUtils.downcast(klass,actual);
 		else if(globals!=this)
