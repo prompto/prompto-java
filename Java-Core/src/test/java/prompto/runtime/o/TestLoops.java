@@ -30,6 +30,16 @@ public class TestLoops extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedDoWhileBreak() throws Exception {
+		checkInterpretedOutput("loops/doWhileBreak.poc");
+	}
+
+	@Test
+	public void testCompiledDoWhileBreak() throws Exception {
+		checkCompiledOutput("loops/doWhileBreak.poc");
+	}
+
+	@Test
 	public void testInterpretedEmbeddedForEach() throws Exception {
 		checkInterpretedOutput("loops/embeddedForEach.poc");
 	}
@@ -37,6 +47,16 @@ public class TestLoops extends BaseOParserTest {
 	@Test
 	public void testCompiledEmbeddedForEach() throws Exception {
 		checkCompiledOutput("loops/embeddedForEach.poc");
+	}
+
+	@Test
+	public void testInterpretedForEachBreak() throws Exception {
+		checkInterpretedOutput("loops/forEachBreak.poc");
+	}
+
+	@Test
+	public void testCompiledForEachBreak() throws Exception {
+		checkCompiledOutput("loops/forEachBreak.poc");
 	}
 
 	@Test
@@ -307,6 +327,16 @@ public class TestLoops extends BaseOParserTest {
 	@Test
 	public void testCompiledWhile() throws Exception {
 		checkCompiledOutput("loops/while.poc");
+	}
+
+	@Test
+	public void testInterpretedWhileBreak() throws Exception {
+		checkInterpretedOutput("loops/whileBreak.poc");
+	}
+
+	@Test
+	public void testCompiledWhileBreak() throws Exception {
+		checkCompiledOutput("loops/whileBreak.poc");
 	}
 
 }

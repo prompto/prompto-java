@@ -199,12 +199,14 @@ public class IfStatement extends BaseStatement {
 
 
 	private void startListeningForFinalThenGoto(Context context, MethodInfo method, Flags flags, IfElement element, IfElementBranch branch, ResultInfo info) {
-		if(element.condition!=null && !info.isReturn()) {
-			IInstructionListener finalOffset = method.addOffsetListener(new OffsetListenerConstant());
-			method.activateOffsetListener(finalOffset);
-			branch.finalOffsetListeners.add(finalOffset);
-			method.addInstruction(Opcode.GOTO, finalOffset);
-		}
+		if (element.condition==null 
+				|| info.isReturn() 
+				|| info.isBreak())
+			return;
+		IInstructionListener finalOffset = method.addOffsetListener(new OffsetListenerConstant());
+		method.activateOffsetListener(finalOffset);
+		branch.finalOffsetListeners.add(finalOffset);
+		method.addInstruction(Opcode.GOTO, finalOffset);
 	}
 
 

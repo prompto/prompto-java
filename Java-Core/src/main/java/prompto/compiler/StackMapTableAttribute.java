@@ -92,9 +92,26 @@ public class StackMapTableAttribute implements IAttribute {
 		    stack_map_frame entries[number_of_entries];
 		}
 		*/
+		cleanupAndOptimize();
 		return 2 + labelsLength();
 	}
 	
+	private void cleanupAndOptimize() {
+		removeRedundantLabels();
+		// TODO convert FULL to SAME etc...
+	}
+
+	private void removeRedundantLabels() {
+		int lastRealOffset = -1;
+		List<StackLabel> labels = new ArrayList<>();
+		for(StackLabel label : this.labels) {
+			if(lastRealOffset!=label.getRealOffset())
+				labels.add(label);
+			lastRealOffset = label.getRealOffset();
+		};
+		this.labels = labels;
+	}
+
 	@Override
 	public void writeTo(ByteWriter writer) {
 		/*

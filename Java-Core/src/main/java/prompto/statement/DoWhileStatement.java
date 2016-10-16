@@ -1,5 +1,8 @@
 package prompto.statement;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.IInstructionListener;
@@ -12,6 +15,7 @@ import prompto.error.InvalidValueError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
+import prompto.runtime.BreakResult;
 import prompto.runtime.Context;
 import prompto.type.BooleanType;
 import prompto.type.IType;
@@ -90,6 +94,8 @@ public class DoWhileStatement extends BaseStatement {
 		do {
 			Context child = context.newChildContext();
 			IValue value = statements.interpret(child);
+			if(value==BreakResult.instance())
+				break;
 			if(value!=null)
 				return value;
 		} while(interpretCondition(context));
@@ -105,16 +111,27 @@ public class DoWhileStatement extends BaseStatement {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		List<IInstructionListener> breakLoopListeners = new ArrayList<>();
+		flags = flags.withBreakLoopListeners(breakLoopListeners);
 		StackState neutralState = method.captureStackState();
 		method.placeLabel(neutralState);
 		IInstructionListener loop = method.addOffsetListener(new OffsetListenerConstant(true));
 		method.activateOffsetListener(loop);
 		statements.compile(context, method, flags);
+		// check condition
 		ResultInfo info = condition.compile(context, method, flags.withPrimitive(true));
 		if(Boolean.class==info.getType())
 			CompilerUtils.BooleanToboolean(method);
+		// loop if not done
 		method.inhibitOffsetListener(loop);
 		method.addInstruction(Opcode.IFNE, loop);
+		// add labels for break statements
+		if(!breakLoopListeners.isEmpty()) {
+			for(IInstructionListener listener : breakLoopListeners)
+				method.inhibitOffsetListener(listener);
+			method.restoreFullStackState(neutralState);
+			method.placeLabel(neutralState);
+		}
 		// TODO manage return value in loop
 		return new ResultInfo(void.class);
 	}

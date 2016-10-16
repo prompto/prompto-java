@@ -192,6 +192,7 @@ import prompto.statement.AssignInstanceStatement;
 import prompto.statement.AssignTupleStatement;
 import prompto.statement.AssignVariableStatement;
 import prompto.statement.AtomicSwitchCase;
+import prompto.statement.BreakStatement;
 import prompto.statement.CollectionSwitchCase;
 import prompto.statement.CommentStatement;
 import prompto.statement.DeclarationStatement;
@@ -443,6 +444,12 @@ public class OPromptoBuilder extends OParserBaseListener {
 	public void exitBooleanType(BooleanTypeContext ctx) {
 		setNodeValue(ctx, BooleanType.instance());
 	}
+	
+	@Override
+	public void exitBreakStatement(BreakStatementContext ctx) {
+		setNodeValue(ctx, new BreakStatement());
+	}
+
 	
 	@Override
 	public void exitCallableItemSelector(CallableItemSelectorContext ctx) {

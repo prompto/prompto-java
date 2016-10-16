@@ -323,6 +323,18 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitFlushStatement(@NotNull SParser.FlushStatementContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code BreakStatement}
+	 * labeled alternative in {@link SParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterBreakStatement(@NotNull SParser.BreakStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code BreakStatement}
+	 * labeled alternative in {@link SParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitBreakStatement(@NotNull SParser.BreakStatementContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code ReturnStatement}
 	 * labeled alternative in {@link SParser#statement}.
 	 * @param ctx the parse tree
@@ -742,6 +754,16 @@ public interface SParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCatchCollectionStatement(@NotNull SParser.CatchCollectionStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SParser#break_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterBreak_statement(@NotNull SParser.Break_statementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SParser#break_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitBreak_statement(@NotNull SParser.Break_statementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SParser#return_statement}.
 	 * @param ctx the parse tree

@@ -1,6 +1,7 @@
 package prompto.compiler;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import prompto.grammar.CmpOp;
@@ -20,6 +21,7 @@ public class Flags {
 		this.values.put("getter", null);
 		this.values.put("setter", null);
 		this.values.put("variable", null);
+		this.values.put("loopListeners", null);
 	}
 	
 	private Flags(Map<String, Object> values) {
@@ -55,7 +57,7 @@ public class Flags {
 	public Flags withDecimal(boolean set) {
 		return clone("decimal", set);
 	}
-
+	
 	public Opcode opcode() {
 		return (Opcode)values.get("opcode");
 	}
@@ -110,6 +112,19 @@ public class Flags {
 
 	public Flags withMember(boolean set) {
 		return clone("member", set);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<IInstructionListener> getBreakLoopListeners() {
+		return (List<IInstructionListener>)values.get("loopListeners");
+	}
+	
+	public Flags withBreakLoopListeners(List<IInstructionListener> listeners) {
+		return clone("loopListeners", listeners);
+	}
+	
+	public void addBreakLoopListener(IInstructionListener listener) {
+		getBreakLoopListeners().add(listener);
 	}
 
 

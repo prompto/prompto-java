@@ -8,12 +8,14 @@ public class ResultInfo {
 
 	public static enum Flag {
 		RETURN,
+		BREAK,
 		THROW,
 		STATIC
 	}
 
 	Type type;
 	boolean isReturn = false;
+	boolean isBreak = false;
 	boolean isThrow = false;
 	boolean isStatic = false;
 	Boolean isPrimitive = null;
@@ -26,6 +28,9 @@ public class ResultInfo {
 		for(Flag flag : flags) switch(flag) {
 		case RETURN:
 			isReturn = true;
+			break;
+		case BREAK:
+			isBreak = true;
 			break;
 		case THROW:
 			isThrow = true;
@@ -79,6 +84,10 @@ public class ResultInfo {
 
 	public boolean isReturn() {
 		return isReturn;
+	}
+	
+	public boolean isBreak() {
+		return isBreak;
 	}
 
 	public boolean isThrow() {

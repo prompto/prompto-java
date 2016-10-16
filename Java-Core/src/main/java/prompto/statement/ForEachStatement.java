@@ -1,6 +1,8 @@
 package prompto.statement;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import prompto.compiler.ByteOperand;
 import prompto.compiler.ClassConstant;
@@ -19,6 +21,7 @@ import prompto.compiler.StackState;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
+import prompto.runtime.BreakResult;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.type.IType;
@@ -153,6 +156,8 @@ public class ForEachStatement extends BaseStatement {
 			child.registerValue(new Variable(v1, elemType));
 			child.setValue(v1, iterator.next());
 			IValue value = statements.interpret(child);
+			if ( value == BreakResult.instance() )
+				break;
 			if (value != null)
 				return value;
 		}
@@ -198,6 +203,8 @@ public class ForEachStatement extends BaseStatement {
 	}
 
 	private ResultInfo compileWithIndex(Context context, MethodInfo method, Flags flags) {
+		List<IInstructionListener> breakLoopListeners = new ArrayList<>();
+		flags = flags.withBreakLoopListeners(breakLoopListeners);
 		java.lang.reflect.Type itemClass = source.check(context).checkIterator(context).getJavaType(context);
 		StackLocal iterLocal = compileIterator(context, method, flags);
 		StackLocal v1Local = compileInitCounter(method);
@@ -222,6 +229,7 @@ public class ForEachStatement extends BaseStatement {
 		statements.compile(context, method, flags);
 		// done inner loop
 		method.unregisterLocal(v2Local);
+		method.addInstruction(Opcode.NOP); // avoid StackFrame collisions
 		// call hasNext
 		method.inhibitOffsetListener(test);
 		method.restoreFullStackState(iteratorState);
@@ -229,11 +237,18 @@ public class ForEachStatement extends BaseStatement {
 		CompilerUtils.compileALOAD(method, iterLocal);
 		m = new InterfaceConstant(Iterator.class, "hasNext", boolean.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, m);
-		// branch if done
+		// loop if not done
 		method.inhibitOffsetListener(loop);
 		method.addInstruction(Opcode.IFNE, loop);
 		method.unregisterLocal(v1Local);
 		method.unregisterLocal(iterLocal);
+		// add labels for break statements
+		if(!breakLoopListeners.isEmpty()) {
+			for(IInstructionListener listener : breakLoopListeners)
+				method.inhibitOffsetListener(listener);
+			method.restoreFullStackState(iteratorState);
+			method.placeLabel(iteratorState);
+		}
 		// TODO manage return value in loop
 		return new ResultInfo(void.class);
 	}
@@ -265,6 +280,8 @@ public class ForEachStatement extends BaseStatement {
 	}
 
 	private ResultInfo compileWithoutIndex(Context context, MethodInfo method, Flags flags) {
+		List<IInstructionListener> breakLoopListeners = new ArrayList<>();
+		flags = flags.withBreakLoopListeners(breakLoopListeners);
 		java.lang.reflect.Type itemClass = source.check(context).checkIterator(context).getJavaType(context);
 		StackLocal iterLocal = compileIterator(context, method, flags);
 		StackState iteratorState = method.captureStackState();
@@ -286,6 +303,7 @@ public class ForEachStatement extends BaseStatement {
 		statements.compile(context, method, flags);
 		// done inner loop
 		method.unregisterLocal(v1Local);
+		method.addInstruction(Opcode.NOP); // avoid StackFrame collisions
 		// call hasNext
 		method.inhibitOffsetListener(test);
 		method.restoreFullStackState(iteratorState);
@@ -293,10 +311,17 @@ public class ForEachStatement extends BaseStatement {
 		CompilerUtils.compileALOAD(method, iterLocal);
 		m = new InterfaceConstant(Iterator.class, "hasNext", boolean.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, m);
-		// branch if done
+		// loop if not done
 		method.inhibitOffsetListener(loop);
 		method.addInstruction(Opcode.IFNE, loop);
 		method.unregisterLocal(iterLocal);
+		// add labels for break statements
+		if(!breakLoopListeners.isEmpty()) {
+			for(IInstructionListener listener : breakLoopListeners)
+				method.inhibitOffsetListener(listener);
+			method.restoreFullStackState(iteratorState);
+			method.placeLabel(iteratorState);
+		}
 		// TODO manage return value in loop
 		return new ResultInfo(void.class);
 	}

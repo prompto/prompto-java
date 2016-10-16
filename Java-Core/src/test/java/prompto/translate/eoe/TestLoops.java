@@ -12,8 +12,18 @@ public class TestLoops extends BaseEParserTest {
 	}
 
 	@Test
+	public void testDoWhileBreak() throws Exception {
+		compareResourceEOE("loops/doWhileBreak.pec");
+	}
+
+	@Test
 	public void testEmbeddedForEach() throws Exception {
 		compareResourceEOE("loops/embeddedForEach.pec");
+	}
+
+	@Test
+	public void testForEachBreak() throws Exception {
+		compareResourceEOE("loops/forEachBreak.pec");
 	}
 
 	@Test
@@ -149,6 +159,11 @@ public class TestLoops extends BaseEParserTest {
 	@Test
 	public void testWhile() throws Exception {
 		compareResourceEOE("loops/while.pec");
+	}
+
+	@Test
+	public void testWhileBreak() throws Exception {
+		compareResourceEOE("loops/whileBreak.pec");
 	}
 
 }

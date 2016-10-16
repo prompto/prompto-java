@@ -192,6 +192,7 @@ import prompto.statement.AssignTupleStatement;
 import prompto.statement.AssignVariableStatement;
 import prompto.statement.AtomicSwitchCase;
 import prompto.statement.BaseSwitchStatement.SwitchCaseList;
+import prompto.statement.BreakStatement;
 import prompto.statement.CollectionSwitchCase;
 import prompto.statement.CommentStatement;
 import prompto.statement.DeclarationStatement;
@@ -479,6 +480,12 @@ public class EPromptoBuilder extends EParserBaseListener {
 	@Override
 	public void exitBooleanType(BooleanTypeContext ctx) {
 		setNodeValue(ctx, BooleanType.instance());
+	}
+	
+	
+	@Override
+	public void exitBreakStatement(BreakStatementContext ctx) {
+		setNodeValue(ctx, new BreakStatement());
 	}
 	
 	@Override

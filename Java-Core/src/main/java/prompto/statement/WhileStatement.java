@@ -1,5 +1,8 @@
 package prompto.statement;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.IInstructionListener;
@@ -12,6 +15,7 @@ import prompto.error.InvalidValueError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
+import prompto.runtime.BreakResult;
 import prompto.runtime.Context;
 import prompto.type.BooleanType;
 import prompto.type.IType;
@@ -89,6 +93,8 @@ public class WhileStatement extends BaseStatement {
 		while(interpretCondition(context)) {
 			Context child = context.newChildContext();
 			IValue value = statements.interpret(child);
+			if(value==BreakResult.instance())
+				break;
 			if(value!=null)
 				return value;
 		}
@@ -104,6 +110,8 @@ public class WhileStatement extends BaseStatement {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		List<IInstructionListener> breakLoopListeners = new ArrayList<>();
+		flags = flags.withBreakLoopListeners(breakLoopListeners);
 		StackState neutralState = method.captureStackState();
 		method.placeLabel(neutralState);
 		IInstructionListener loop = method.addOffsetListener(new OffsetListenerConstant(true));
@@ -118,6 +126,8 @@ public class WhileStatement extends BaseStatement {
 		method.inhibitOffsetListener(loop);
 		method.addInstruction(Opcode.GOTO, loop);
 		method.inhibitOffsetListener(exit);
+		for(IInstructionListener listener : breakLoopListeners)
+			method.inhibitOffsetListener(listener);
 		method.restoreFullStackState(neutralState);
 		method.placeLabel(neutralState);
 		// TODO manage return value in loop

@@ -12,8 +12,18 @@ public class TestLoops extends BaseOParserTest {
 	}
 
 	@Test
+	public void testDoWhileBreak() throws Exception {
+		compareResourceOEO("loops/doWhileBreak.poc");
+	}
+
+	@Test
 	public void testEmbeddedForEach() throws Exception {
 		compareResourceOEO("loops/embeddedForEach.poc");
+	}
+
+	@Test
+	public void testForEachBreak() throws Exception {
+		compareResourceOEO("loops/forEachBreak.poc");
 	}
 
 	@Test
@@ -149,6 +159,11 @@ public class TestLoops extends BaseOParserTest {
 	@Test
 	public void testWhile() throws Exception {
 		compareResourceOEO("loops/while.poc");
+	}
+
+	@Test
+	public void testWhileBreak() throws Exception {
+		compareResourceOEO("loops/whileBreak.poc");
 	}
 
 }
