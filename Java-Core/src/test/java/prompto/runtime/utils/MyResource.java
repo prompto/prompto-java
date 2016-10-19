@@ -64,14 +64,19 @@ public class MyResource implements IResource {
 	
 	@Override
 	public String readLine() throws IOException {
-		if(reader==null)
+		if(reader==null) {
+			if(getContent()==null)
+				return null;
 			reader = new BufferedReader(new StringReader(getContent()));
+		}
 		return reader.readLine();
 	}
 	
 	@Override
 	public void writeLine(String data) throws IOException {
 		String content = contents.getOrDefault(path, "");
-		setContent(content + data + "\n");
+		if(content.length()>0)
+			content += "\n";
+		setContent(content + data);
 	}
 }
