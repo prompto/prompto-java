@@ -1,5 +1,8 @@
 package prompto.runtime.utils;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -10,6 +13,7 @@ public class MyResource implements IResource {
 	static Map<String,String> contents = new ConcurrentHashMap<>();
 	
 	String path;
+	BufferedReader reader;
 	
 	public String getPath() {
 		return path;
@@ -39,6 +43,13 @@ public class MyResource implements IResource {
 	
 	@Override
 	public void close() {
+		if(reader!=null) try {
+			reader.close();
+		} catch(IOException e) {
+			// simply ignore
+		} finally {
+			reader = null;
+		}
 	}
 	
 	@Override
@@ -49,5 +60,18 @@ public class MyResource implements IResource {
 	@Override
 	public void writeFully(String data) {
 		setContent(data);
+	}
+	
+	@Override
+	public String readLine() throws IOException {
+		if(reader==null)
+			reader = new BufferedReader(new StringReader(getContent()));
+		return reader.readLine();
+	}
+	
+	@Override
+	public void writeLine(String data) throws IOException {
+		String content = contents.getOrDefault(path, "");
+		setContent(content + data + "\n");
 	}
 }

@@ -22,6 +22,11 @@ public class TestConsole extends BaseEParserTest {
 	}
 
 	@Test
+	public void testBuffer() throws Exception {
+		runTests("console/buffer.pec");
+	}
+
+	@Test
 	public void testPrint() throws Exception {
 		runTests("console/print.pec");
 	}

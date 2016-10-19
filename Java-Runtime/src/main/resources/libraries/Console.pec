@@ -1,3 +1,22 @@
+define Buffer as native resource with attribute text, and bindings:
+	
+	define category bindings as:
+		Java: prompto.io.Buffer
+		C#: prompto.io.Buffer
+		Python2: Buffer from module: prompto.io.Buffer
+		Python3: Buffer from module: prompto.io.Buffer
+		JavaScript: Buffer from module: prompto/io/Buffer.js
+
+define "writes to Buffer" as test method doing:
+	content = ""
+	with buffer = Buffer, do:
+		write "some content" to buffer
+		write "other content" to buffer
+		content = buffer.text	
+and verifying: 
+	"some content" in content
+	"other content" in content
+
 define Writer as native category with bindings:
 
 	define category bindings as:

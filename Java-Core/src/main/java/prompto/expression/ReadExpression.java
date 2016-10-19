@@ -58,8 +58,10 @@ public class ReadExpression implements IExpression {
 		if(!res.isReadable())
 			throw new InvalidResourceError("Not readable");
 		try {
-			String str = res.readFully();
-			return new Text(str);
+			if(context==resContext)
+				return new Text(res.readLine());
+			else
+				return new Text(res.readFully());
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		} finally {

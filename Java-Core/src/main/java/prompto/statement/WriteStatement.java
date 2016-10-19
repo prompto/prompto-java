@@ -72,7 +72,11 @@ public class WriteStatement extends SimpleStatement {
 		if(!res.isWritable())
 			throw new InvalidResourceError("Not writable");
 		try {
-			res.writeFully(content.interpret(resContext).toString());
+			String text = content.interpret(resContext).toString();
+			if(context==resContext)
+				res.writeLine(text);
+			else
+				res.writeFully(text);
 			return null;
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());

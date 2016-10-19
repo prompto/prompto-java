@@ -32,6 +32,16 @@ public class NativeResource extends NativeInstance implements IResource {
 	}
 	
 	@Override
+	public String readLine() throws IOException {
+		return ((IResource)instance).readLine();
+	}
+	
+	@Override
+	public void writeLine(String data) throws IOException {
+		((IResource)instance).writeLine(data);
+	}
+	
+	@Override
 	public void close() {
 		((IResource)instance).close();
 	}
