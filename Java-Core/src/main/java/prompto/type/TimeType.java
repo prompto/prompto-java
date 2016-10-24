@@ -93,13 +93,20 @@ public class TimeType extends NativeType {
 	}
 
 	@Override
-	public Comparator<Time> getComparator() {
-		return new Comparator<Time>() {
-			@Override
-			public int compare(Time o1, Time o2) {
-				return o1.getStorableData().compareTo(o2.getStorableData());
-			}
-		};
+	public Comparator<Time> getComparator(boolean descending) {
+		return descending ?
+				new Comparator<Time>() {
+					@Override
+					public int compare(Time o1, Time o2) {
+						return o2.getStorableData().compareTo(o1.getStorableData());
+					}
+				} :
+				new Comparator<Time>() {
+					@Override
+					public int compare(Time o1, Time o2) {
+						return o1.getStorableData().compareTo(o2.getStorableData());
+					}
+				};
 	}
 
 	@Override

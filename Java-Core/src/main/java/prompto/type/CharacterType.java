@@ -76,13 +76,20 @@ public class CharacterType extends NativeType {
 	}
 
 	@Override
-	public Comparator<Character> getComparator() {
-		return new Comparator<Character>() {
-			@Override
-			public int compare(Character o1, Character o2) {
-				return java.lang.Character.compare(o1.getValue(), o2.getValue());
-			}
-		};
+	public Comparator<Character> getComparator(boolean descending) {
+		return descending ? 
+				new Comparator<Character>() {
+					@Override
+					public int compare(Character o1, Character o2) {
+						return java.lang.Character.compare(o2.getValue(), o1.getValue());
+					}
+				} :
+				new Comparator<Character>() {
+					@Override
+					public int compare(Character o1, Character o2) {
+						return java.lang.Character.compare(o1.getValue(), o2.getValue());
+					}
+				};
 	}
 
 	@Override

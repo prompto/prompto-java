@@ -164,7 +164,7 @@ public abstract class BaseType implements IType {
 	}
 
 	@Override
-	public Comparator<? extends IValue> getComparator() {
+	public Comparator<? extends IValue> getComparator(boolean descending) {
 		throw new RuntimeException("Unsupported!");
 	}
 

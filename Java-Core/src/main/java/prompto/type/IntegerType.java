@@ -147,13 +147,20 @@ public class IntegerType extends NativeType implements INumberType {
 	}
 
 	@Override
-	public Comparator<Integer> getComparator() {
-		return new Comparator<Integer>() {
-			@Override
-			public int compare(Integer o1, Integer o2) {
-				return java.lang.Long.compare(o1.longValue(), o2.longValue());
-			}
-		};
+	public Comparator<Integer> getComparator(boolean descending) {
+		return descending ?
+				new Comparator<Integer>() {
+					@Override
+					public int compare(Integer o1, Integer o2) {
+						return java.lang.Long.compare(o2.longValue(), o1.longValue());
+					}
+				} :
+				new Comparator<Integer>() {
+					@Override
+					public int compare(Integer o1, Integer o2) {
+						return java.lang.Long.compare(o1.longValue(), o2.longValue());
+					}
+				};
 	}
 
 	@Override

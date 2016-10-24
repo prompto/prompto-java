@@ -93,7 +93,7 @@ public interface IType {
 	boolean isMoreSpecificThan(Context context, IType other);
 	
 	RangeBase<?> newRange(Object first,Object last);
-	Comparator<? extends IValue> getComparator();
+	Comparator<? extends IValue> getComparator(boolean descending);
 	IValue getMember(Context context, Identifier name) throws PromptoError;
 	String toString(Object value);
 	void toDialect(CodeWriter writer);

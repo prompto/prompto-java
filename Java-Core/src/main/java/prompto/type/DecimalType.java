@@ -98,13 +98,20 @@ public class DecimalType extends NativeType implements INumberType {
 	}
 
 	@Override
-	public Comparator<Decimal> getComparator() {
-		return new Comparator<Decimal>() {
-			@Override
-			public int compare(Decimal o1, Decimal o2) {
-				return java.lang.Double.compare(o1.doubleValue(), o2.doubleValue());
-			}
-		};
+	public Comparator<Decimal> getComparator(boolean descending) {
+		return descending ? 
+				new Comparator<Decimal>() {
+					@Override
+					public int compare(Decimal o1, Decimal o2) {
+						return java.lang.Double.compare(o2.doubleValue(), o1.doubleValue());
+					}
+				} :
+				new Comparator<Decimal>() {
+					@Override
+					public int compare(Decimal o1, Decimal o2) {
+						return java.lang.Double.compare(o1.doubleValue(), o2.doubleValue());
+					}
+				};
 	}
 
 	@Override

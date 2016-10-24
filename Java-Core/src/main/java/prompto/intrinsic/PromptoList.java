@@ -2,7 +2,6 @@ package prompto.intrinsic;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.function.Predicate;
 
@@ -52,9 +51,25 @@ public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoLi
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public PromptoList<V> sort() {
+	public PromptoList<V> sort(boolean descending) {
 		PromptoList<V> sorted = new PromptoList<>(this, false);
-		Collections.sort((PromptoList<Comparable>)sorted); // work around non Comparable V
+		Comparator<V> cmp = descending ?
+				new Comparator<V>() {
+
+					@Override
+					public int compare(V o1, V o2) {
+						return ((Comparable)o2).compareTo(o1);
+					}
+			
+				} : 
+				new Comparator<V>() {
+					
+					@Override
+					public int compare(V o1, V o2) {
+						return ((Comparable)o1).compareTo(o2);
+					}
+				};
+		sorted.sort(cmp);
 		return sorted;
 	}
 	

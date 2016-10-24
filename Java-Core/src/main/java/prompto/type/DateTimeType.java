@@ -98,13 +98,20 @@ public class DateTimeType extends NativeType {
 	}
 
 	@Override
-	public Comparator<DateTime> getComparator() {
-		return new Comparator<DateTime>() {
-			@Override
-			public int compare(DateTime o1, DateTime o2) {
-				return o1.getStorableData().compareTo(o2.getStorableData());
-			}
-		};
+	public Comparator<DateTime> getComparator(boolean descending) {
+		return descending ? 
+				new Comparator<DateTime>() {
+					@Override
+					public int compare(DateTime o1, DateTime o2) {
+						return o2.getStorableData().compareTo(o1.getStorableData());
+					}
+				} :
+				new Comparator<DateTime>() {
+					@Override
+					public int compare(DateTime o1, DateTime o2) {
+						return o1.getStorableData().compareTo(o2.getStorableData());
+					}
+				};
 	}
 
 	@Override

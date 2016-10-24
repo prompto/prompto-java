@@ -27,6 +27,61 @@ public class TestSortList extends BaseEParserTest {
 	}
 
 	@Test
+	public void testSortDescBooleans() throws Exception {
+		compareResourceESE("sortList/sortDescBooleans.pec");
+	}
+
+	@Test
+	public void testSortDescDates() throws Exception {
+		compareResourceESE("sortList/sortDescDates.pec");
+	}
+
+	@Test
+	public void testSortDescDateTimes() throws Exception {
+		compareResourceESE("sortList/sortDescDateTimes.pec");
+	}
+
+	@Test
+	public void testSortDescDecimals() throws Exception {
+		compareResourceESE("sortList/sortDescDecimals.pec");
+	}
+
+	@Test
+	public void testSortDescExpressions() throws Exception {
+		compareResourceESE("sortList/sortDescExpressions.pec");
+	}
+
+	@Test
+	public void testSortDescIntegers() throws Exception {
+		compareResourceESE("sortList/sortDescIntegers.pec");
+	}
+
+	@Test
+	public void testSortDescKeys() throws Exception {
+		compareResourceESE("sortList/sortDescKeys.pec");
+	}
+
+	@Test
+	public void testSortDescMethods() throws Exception {
+		compareResourceESE("sortList/sortDescMethods.pec");
+	}
+
+	@Test
+	public void testSortDescNames() throws Exception {
+		compareResourceESE("sortList/sortDescNames.pec");
+	}
+
+	@Test
+	public void testSortDescTexts() throws Exception {
+		compareResourceESE("sortList/sortDescTexts.pec");
+	}
+
+	@Test
+	public void testSortDescTimes() throws Exception {
+		compareResourceESE("sortList/sortDescTimes.pec");
+	}
+
+	@Test
 	public void testSortExpressions() throws Exception {
 		compareResourceESE("sortList/sortExpressions.pec");
 	}

@@ -2441,8 +2441,9 @@ public class EPromptoBuilder extends EParserBaseListener {
 	@Override
 	public void exitSorted_expression(Sorted_expressionContext ctx) {
 		IExpression source = this.<IExpression>getNodeValue(ctx.source);
+		boolean descending = ctx.DESC()!=null;
 		IExpression key = this.<IExpression>getNodeValue(ctx.key);
-		setNodeValue(ctx, new SortedExpression(source, key));
+		setNodeValue(ctx, new SortedExpression(source, descending, key));
 	}
 	
 	@Override

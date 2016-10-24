@@ -95,12 +95,19 @@ public class DateType extends NativeType {
 	}
 
 	@Override
-	public Comparator<Date> getComparator() {
-		return new Comparator<Date>() {
-			@Override
-			public int compare(Date o1, Date o2) {
-				return o1.getStorableData().compareTo(o2.getStorableData());
-			}
+	public Comparator<Date> getComparator(boolean descending) {
+		return descending ?
+				new Comparator<Date>() {
+					@Override
+					public int compare(Date o1, Date o2) {
+						return o2.getStorableData().compareTo(o1.getStorableData());
+					}
+				} :
+				new Comparator<Date>() {
+					@Override
+					public int compare(Date o1, Date o2) {
+						return o1.getStorableData().compareTo(o2.getStorableData());
+					}
 		};
 	}
 

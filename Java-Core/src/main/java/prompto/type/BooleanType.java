@@ -28,13 +28,20 @@ public class BooleanType extends NativeType {
 	}
 	
 	@Override
-	public Comparator<? extends IValue> getComparator() {
-		return new Comparator<Boolean>() {
-			@Override
-			public int compare(Boolean o1, Boolean o2) {
-				return java.lang.Boolean.compare(o1.getValue(), o2.getValue());
-			}
-		};
+	public Comparator<? extends IValue> getComparator(boolean descending) {
+		return descending ?
+				new Comparator<Boolean>() {
+					@Override
+					public int compare(Boolean o1, Boolean o2) {
+						return java.lang.Boolean.compare(o2.getValue(), o1.getValue());
+					}
+				} :
+				new Comparator<Boolean>() {
+					@Override
+					public int compare(Boolean o1, Boolean o2) {
+						return java.lang.Boolean.compare(o1.getValue(), o2.getValue());
+					}
+				};
 	}
 	
 	@Override

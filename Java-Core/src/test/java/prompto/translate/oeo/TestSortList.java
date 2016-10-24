@@ -27,6 +27,61 @@ public class TestSortList extends BaseOParserTest {
 	}
 
 	@Test
+	public void testSortDescBooleans() throws Exception {
+		compareResourceOEO("sortList/sortDescBooleans.poc");
+	}
+
+	@Test
+	public void testSortDescDates() throws Exception {
+		compareResourceOEO("sortList/sortDescDates.poc");
+	}
+
+	@Test
+	public void testSortDescDateTimes() throws Exception {
+		compareResourceOEO("sortList/sortDescDateTimes.poc");
+	}
+
+	@Test
+	public void testSortDescDecimals() throws Exception {
+		compareResourceOEO("sortList/sortDescDecimals.poc");
+	}
+
+	@Test
+	public void testSortDescExpressions() throws Exception {
+		compareResourceOEO("sortList/sortDescExpressions.poc");
+	}
+
+	@Test
+	public void testSortDescIntegers() throws Exception {
+		compareResourceOEO("sortList/sortDescIntegers.poc");
+	}
+
+	@Test
+	public void testSortDescKeys() throws Exception {
+		compareResourceOEO("sortList/sortDescKeys.poc");
+	}
+
+	@Test
+	public void testSortDescMethods() throws Exception {
+		compareResourceOEO("sortList/sortDescMethods.poc");
+	}
+
+	@Test
+	public void testSortDescNames() throws Exception {
+		compareResourceOEO("sortList/sortDescNames.poc");
+	}
+
+	@Test
+	public void testSortDescTexts() throws Exception {
+		compareResourceOEO("sortList/sortDescTexts.poc");
+	}
+
+	@Test
+	public void testSortDescTimes() throws Exception {
+		compareResourceOEO("sortList/sortDescTimes.poc");
+	}
+
+	@Test
 	public void testSortExpressions() throws Exception {
 		compareResourceOEO("sortList/sortExpressions.poc");
 	}

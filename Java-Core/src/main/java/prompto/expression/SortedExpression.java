@@ -2,6 +2,7 @@ package prompto.expression;
 
 import java.lang.reflect.Type;
 import java.util.Comparator;
+import java.util.function.BiFunction;
 
 import prompto.compiler.ByteOperand;
 import prompto.compiler.ClassConstant;
@@ -48,13 +49,16 @@ public class SortedExpression implements IExpression {
 
 	IExpression source;
 	IExpression key;
+	boolean descending;
 	
-	public SortedExpression(IExpression source) {
+	public SortedExpression(IExpression source, boolean descending) {
 		this.source = source;
+		this.descending = descending;
 	}
 
-	public SortedExpression(IExpression source, IExpression key) {
+	public SortedExpression(IExpression source, boolean descending, IExpression key) {
 		this.source = source;
+		this.descending = descending;
 		this.key = key;
 	}
 
@@ -75,6 +79,8 @@ public class SortedExpression implements IExpression {
 
 	private void toEDialect(CodeWriter writer) {
 		writer.append("sorted ");
+		if(descending)
+			writer.append("descending ");
 		source.toDialect(writer);
 		if(key!=null) {
 			writer.append(" with ");
@@ -93,7 +99,10 @@ public class SortedExpression implements IExpression {
 	}	
 
 	private void toODialect(CodeWriter writer) {
-		writer.append("sorted (");
+		writer.append("sorted ");
+		if(descending)
+			writer.append("desc ");
+		writer.append("(");
 		source.toDialect(writer);
 		if(key!=null) {
 			writer.append(", key = ");
@@ -155,7 +164,7 @@ public class SortedExpression implements IExpression {
 		if(itemType instanceof CategoryType)
 			return getCategoryComparator(context, (CategoryType)itemType, value);
 		else
-			return itemType.getComparator();	
+			return itemType.getComparator(descending);	
 	}
 
 	private Comparator<? extends IValue> getCategoryComparator(Context context, CategoryType itemType, IValue value) throws PromptoError {
@@ -181,13 +190,17 @@ public class SortedExpression implements IExpression {
 	}
 
 	private Comparator<? extends IValue> getCategoryExpressionComparator(Context context) {
+		BiFunction<IValue, IValue, Integer> cmpValues =
+				descending ? 
+						((k1, k2) -> IValue.compareValues(k2, k1)) :
+						((k1, k2) -> IValue.compareValues(k1, k2));
 		return new Comparator<IInstance>() {
 			@Override
 			public int compare(IInstance o1, IInstance o2) {
 				try {
 					IValue key1 = interpret(o1);
 					IValue key2 = interpret(o2);
-					return IValue.compareValues(key1, key2);
+					return cmpValues.apply(key1, key2);
 				} catch(Throwable t) {
 					throw new RuntimeException(t);
 				}
@@ -222,13 +235,17 @@ public class SortedExpression implements IExpression {
 	}
 
 	private Comparator<? extends IValue> getCategoryGlobalMethodComparator(Context context, CategoryType itemType, MethodCall call) throws PromptoError {
+		BiFunction<IValue, IValue, Integer> cmpValues =
+				descending ? 
+						((k1, k2) -> IValue.compareValues(k2, k1)) :
+						((k1, k2) -> IValue.compareValues(k1, k2));
 		return new Comparator<IInstance>() {
 			@Override
 			public int compare(IInstance o1, IInstance o2) {
 				try {
 					IValue key1 = interpret(o1);
 					IValue key2 = interpret(o2);
-					return IValue.compareValues(key1,key2);
+					return cmpValues.apply(key1,key2);
 				} catch(Throwable t) {
 					throw new RuntimeException(t);
 				}
@@ -243,13 +260,17 @@ public class SortedExpression implements IExpression {
 	}
 
 	private Comparator<? extends IValue> getCategoryAttributeComparator(Context context, Identifier name) {
+		BiFunction<IValue, IValue, Integer> cmpValues =
+				descending ? 
+						((k1, k2) -> IValue.compareValues(k2, k1)) :
+						((k1, k2) -> IValue.compareValues(k1, k2));
 		return new Comparator<IInstance>() {
 			@Override
 			public int compare(IInstance o1, IInstance o2) {
 				try {
 					IValue key1 = o1.getMember(context, name, false);
 					IValue key2 = o2.getMember(context, name, false);
-					return IValue.compareValues(key1, key2);
+					return cmpValues.apply(key1, key2);
 				} catch(Throwable t) {
 					throw new RuntimeException(t);
 				}
@@ -270,7 +291,8 @@ public class SortedExpression implements IExpression {
 
 	private ResultInfo compileSortNative(Context context, MethodInfo method, Flags flags) {
 		ResultInfo info = source.compile(context, method, flags);
-		MethodConstant m = new MethodConstant(info.getType(), "sort", PromptoList.class);
+		method.addInstruction(descending ? Opcode.ICONST_1 : Opcode.ICONST_0);
+		MethodConstant m = new MethodConstant(info.getType(), "sort", boolean.class, PromptoList.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 		return new ResultInfo(PromptoList.class);
 	}
@@ -361,10 +383,17 @@ public class SortedExpression implements IExpression {
 			method.registerLocal("o1", VerifierType.ITEM_Object, new ClassConstant(Object.class));
 			method.registerLocal("o2", VerifierType.ITEM_Object, new ClassConstant(Object.class));
 			method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
-			method.addInstruction(Opcode.ALOAD_1, new ClassConstant(Object.class));
-			method.addInstruction(Opcode.CHECKCAST, new ClassConstant(paramType));
-			method.addInstruction(Opcode.ALOAD_2, new ClassConstant(Object.class));
-			method.addInstruction(Opcode.CHECKCAST, new ClassConstant(paramType));
+			if(descending) {
+				method.addInstruction(Opcode.ALOAD_2, new ClassConstant(Object.class));
+				method.addInstruction(Opcode.CHECKCAST, new ClassConstant(paramType));
+				method.addInstruction(Opcode.ALOAD_1, new ClassConstant(Object.class));
+				method.addInstruction(Opcode.CHECKCAST, new ClassConstant(paramType));
+			} else {
+				method.addInstruction(Opcode.ALOAD_1, new ClassConstant(Object.class));
+				method.addInstruction(Opcode.CHECKCAST, new ClassConstant(paramType));
+				method.addInstruction(Opcode.ALOAD_2, new ClassConstant(Object.class));
+				method.addInstruction(Opcode.CHECKCAST, new ClassConstant(paramType));
+			}
 			proto = new Descriptor.Method(paramType, paramType, int.class);
 			MethodConstant c = new MethodConstant(classFile.getThisClass(), "compare", proto);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, c);
