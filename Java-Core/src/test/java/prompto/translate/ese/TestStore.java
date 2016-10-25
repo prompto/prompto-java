@@ -46,5 +46,10 @@ public class TestStore extends BaseEParserTest {
 		compareResourceESE("store/subRecord.pec");
 	}
 
+	@Test
+	public void testUntypedRecord() throws Exception {
+		compareResourceESE("store/untypedRecord.pec");
+	}
+
 }
 

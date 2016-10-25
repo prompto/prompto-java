@@ -4,8 +4,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import prompto.compiler.CompilerUtils;
@@ -199,6 +201,8 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMuta
 		return list;
 	}
 
+	private static Set<String> hiddenFields = new HashSet<>(Arrays.asList("category", "dbId", "storable", "mutable", "hiddenFields"));
+	
 	private void collectFields(List<Field> list, Class<?> klass) {
 		if(Object.class==klass)
 			return;
@@ -207,11 +211,7 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMuta
 				Arrays.asList(klass.getDeclaredFields())
 				.stream()
 				.filter((f)->
-					!"dbId".equals(f.getName()))
-				.filter((f)->
-					!"storable".equals(f.getName()))
-				.filter((f)->
-					!"mutable".equals(f.getName()))
+					!hiddenFields.contains(f.getName()))
 				.collect(Collectors.toList()));
 	}
 

@@ -46,5 +46,10 @@ public class TestStore extends BaseEParserTest {
 		compareResourceEOE("store/subRecord.pec");
 	}
 
+	@Test
+	public void testUntypedRecord() throws Exception {
+		compareResourceEOE("store/untypedRecord.pec");
+	}
+
 }
 

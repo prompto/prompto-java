@@ -89,5 +89,15 @@ public class TestStore extends BaseEParserTest {
 		checkCompiledOutput("store/subRecord.pec");
 	}
 
+	@Test
+	public void testInterpretedUntypedRecord() throws Exception {
+		checkInterpretedOutput("store/untypedRecord.pec");
+	}
+
+	@Test
+	public void testCompiledUntypedRecord() throws Exception {
+		checkCompiledOutput("store/untypedRecord.pec");
+	}
+
 }
 

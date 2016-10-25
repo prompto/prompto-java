@@ -206,6 +206,8 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
         sb.append("{");
         for (Entry<Identifier, IValue> kvp : this.values.entrySet())
         {
+        	if("dbId".equals(kvp.getKey().toString()))
+        		continue;
             sb.append(kvp.getKey().toString());
             sb.append(":");
             sb.append(kvp.getValue().toString());

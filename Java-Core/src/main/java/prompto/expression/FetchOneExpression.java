@@ -26,6 +26,7 @@ import prompto.store.IQuery.MatchOp;
 import prompto.store.IQueryFactory;
 import prompto.store.IStore;
 import prompto.store.IStored;
+import prompto.type.AnyType;
 import prompto.type.BooleanType;
 import prompto.type.CategoryType;
 import prompto.type.IType;
@@ -60,21 +61,31 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 		switch(writer.getDialect()) {
 		case E:
 			writer.append("fetch one ");
-			type.toDialect(writer);
-			writer.append(" where ");
+			if(type!=null) {
+				type.toDialect(writer);
+				writer.append(" ");
+			}
+			writer.append("where ");
 			predicate.toDialect(writer);
 			break;
 		case O:
-			writer.append("fetch one (");
-			type.toDialect(writer);
-			writer.append(") where (");
+			writer.append("fetch one ");
+			if(type!=null) {
+				writer.append("(");
+				type.toDialect(writer);
+				writer.append(") ");
+			}
+			writer.append("where (");
 			predicate.toDialect(writer);
 			writer.append(")");
 			break;
 		case S:
 			writer.append("fetch one ");
-			type.toDialect(writer);
-			writer.append(" where ");
+			if(type!=null) {
+				type.toDialect(writer);
+				writer.append(" ");
+			}
+			writer.append("where ");
 			predicate.toDialect(writer);
 			break;
 		}
@@ -82,15 +93,17 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 	
 	@Override
 	public IType check(Context context) {
-		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
-		if(decl==null)
-			throw new SyntaxError("Unknown category: " + type.getTypeName());
+		if(type!=null) {
+			CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
+			if(decl==null)
+				throw new SyntaxError("Unknown category: " + type.getTypeName());
+		}
 		if(!(predicate instanceof IPredicateExpression))
 			throw new SyntaxError("Filtering expression must be a predicate !");
 		IType filterType = predicate.check(context);
 		if(filterType!=BooleanType.instance())
 			throw new SyntaxError("Filtering expression must return a boolean !");
-		return type;
+		return type!=null ? type : AnyType.instance();
 	}
 	
 	@Override
@@ -106,7 +119,8 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 			PromptoList<String> categories = ((PromptoList<String>)stored.getData("category"));
 			String actualTypeName = categories.getLast();
 			CategoryType type = new CategoryType(new Identifier(actualTypeName));
-			type.setMutable(this.type.isMutable());
+			if(this.type!=null)
+				type.setMutable(this.type.isMutable());
 			return type.newInstance(context, stored);
 		}
 	}
@@ -122,8 +136,11 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 	private ResultInfo compileInstantiation(Context context, MethodInfo method, Flags flags) {
 		MethodConstant m = new MethodConstant(PromptoRoot.class, "newInstance", IStored.class, PromptoRoot.class);
 		method.addInstruction(Opcode.INVOKESTATIC, m);
-		method.addInstruction(Opcode.CHECKCAST, new ClassConstant(type.getJavaType(context)));
-		return new ResultInfo(type.getJavaType(context));
+		if(type!=null) {
+			method.addInstruction(Opcode.CHECKCAST, new ClassConstant(type.getJavaType(context)));
+			return new ResultInfo(type.getJavaType(context));
+		} else
+			return new ResultInfo(AnyType.instance().getJavaType(context));
 	}
 
 	private void compileFetchOne(Context context, MethodInfo method, Flags flags) {
