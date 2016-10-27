@@ -26,7 +26,7 @@ public class WebSite extends Module {
 	}
 	
 	@Override
-	public IStorable populate(Context context, IStore<?> store, List<IStorable> storables) throws PromptoError {
+	public IStorable populate(Context context, IStore store, List<IStorable> storables) throws PromptoError {
 		IStorable storable = super.populate(context, store, storables);
 		storable.setData("entryPoint", entryPoint);
 		return storable;

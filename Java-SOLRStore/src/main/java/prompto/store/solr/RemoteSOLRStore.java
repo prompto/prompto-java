@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.apache.http.HttpStatus;
 import org.apache.solr.client.solrj.SolrClient;
@@ -77,9 +76,9 @@ public class RemoteSOLRStore extends BaseSOLRStore {
 	}
 
 	@Override
-	public void delete(Collection<UUID> dbIds) throws PromptoError {
+	public void delete(Collection<?> dbIds) throws PromptoError {
 		try {
-			for(UUID dbId : dbIds)
+			for(Object dbId : dbIds)
 				client.deleteById(coreName, String.valueOf(dbId), commitDelay);
 		} catch(IOException | SolrServerException e) {
 			throw new InternalError(e);

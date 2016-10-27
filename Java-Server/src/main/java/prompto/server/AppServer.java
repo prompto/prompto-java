@@ -104,12 +104,12 @@ public class AppServer {
 		}
 		// initialize code store
 		IStoreFactory factory = newStoreFactory(codeStoreFactory);
-		IStore<?> store = factory.newStore(args, codeStoreType);
+		IStore store = factory.newStore(args, codeStoreType);
 		ICodeStore codeStore = bootstrapCodeStore(store, application, version, testMode, resources);
 		// initialize data store
 		factory = newStoreFactory(dataStoreFactory);
 		store = factory.newStore(args, dataStoreType);
-		IStore<?> dataStore = bootstrapDataStore(store);
+		IStore dataStore = bootstrapDataStore(store);
 		synchronizeSchema(codeStore, dataStore);
 		// standard resource handlers
 		Handler handler = prepareHandlers();
@@ -120,7 +120,7 @@ public class AppServer {
 		startServer(httpPort, handler);
 	}
 
-	private static IStore<?> bootstrapDataStore(IStore<?> store) {
+	private static IStore bootstrapDataStore(IStore store) {
 		IDataStore.setInstance(store);
 		return store;
 	}
@@ -141,7 +141,7 @@ public class AppServer {
 			System.out.println("Additional argument: -version (optional)");
 	}
 
-	public static ICodeStore bootstrapCodeStore(IStore<?> store, String application, Version version, boolean testMode, String ...resourceNames) throws Exception {
+	public static ICodeStore bootstrapCodeStore(IStore store, String application, Version version, boolean testMode, String ...resourceNames) throws Exception {
 		System.out.println("Initializing class loader " + (testMode ? "in test mode" : "") + "...");
 		globalContext = Context.newGlobalContext();
 		File promptoDir = Files.createTempDirectory("prompto_").toFile();
@@ -155,7 +155,7 @@ public class AppServer {
 	}
 
 	
-	private static void synchronizeSchema(ICodeStore codeStore, IStore<?> dataStore) throws PromptoError {
+	private static void synchronizeSchema(ICodeStore codeStore, IStore dataStore) throws PromptoError {
 		System.out.println("Initializing schema...");
 		Map<String, AttributeDeclaration> columns = getMinimalDataColumns(dataStore);
 		codeStore.collectStorableAttributes(columns);
@@ -163,7 +163,7 @@ public class AppServer {
 		System.out.println("Schema successfully initialized.");
 	}
 
-	private static Map<String, AttributeDeclaration> getMinimalDataColumns(IStore<?> dataStore) {
+	private static Map<String, AttributeDeclaration> getMinimalDataColumns(IStore dataStore) {
 		Map<String, AttributeDeclaration> columns = new HashMap<String, AttributeDeclaration>();
 		// attributes with reserved names, the below declarations will be used
 		IType dbIdIType = TypeUtils.typeToIType(dataStore.getDbIdClass());

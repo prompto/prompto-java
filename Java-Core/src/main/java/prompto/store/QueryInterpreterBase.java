@@ -11,7 +11,7 @@ import prompto.type.CategoryType;
 import prompto.type.IType.Family;
 import prompto.value.IValue;
 
-public abstract class QueryInterpreterBase<T> implements IQueryInterpreter<T> {
+public abstract class QueryInterpreterBase implements IQueryInterpreter {
 
 	protected Context context;
 	

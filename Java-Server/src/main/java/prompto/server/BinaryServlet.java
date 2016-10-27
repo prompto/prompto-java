@@ -25,10 +25,9 @@ public class BinaryServlet extends HttpServlet {
 		try {
 			String dbIdString = req.getParameter(IStore.dbIdName);
 			String attr = req.getParameter("attribute");
-			IStore<?> store = IDataStore.getInstance();
+			IStore store = IDataStore.getInstance();
 			Object dbId = store.convertToDbId(dbIdString);
-			@SuppressWarnings("unchecked")
-			PromptoBinary binary = ((IStore<Object>)store).fetchBinary(dbId, attr);
+			PromptoBinary binary = store.fetchBinary(dbId, attr);
 			resp.setContentType(binary.getMimeType());
 			resp.getOutputStream().write(binary.getBytes());
 		} catch(Throwable t) {

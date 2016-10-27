@@ -15,12 +15,12 @@ import prompto.store.IStorable.IDbIdListener;
 import prompto.type.CategoryType;
 
 /* a mean to store and fetch data */
-public interface IStore<T extends Object> {
+public interface IStore {
 	
 	public static final String dbIdName = "dbId";
 	
 	Class<?> getDbIdClass();
-	T convertToDbId(Object dbId);
+	Object convertToDbId(Object dbId);
 	Type getColumnType(String name) throws PromptoError;
 	void createOrUpdateColumns(Collection<AttributeDeclaration> columns) throws PromptoError;
 
@@ -29,21 +29,21 @@ public interface IStore<T extends Object> {
 	}
 	IStorable newStorable(List<String> categories, IDbIdListener listener);
 	
-	void store(Collection<T> deletables, Collection<IStorable> storables) throws PromptoError;
+	void store(Collection<?> deletables, Collection<IStorable> storables) throws PromptoError;
 	default void store(IStorable storable) throws PromptoError {
 		store(null, Arrays.asList(storable));
 	}
 	
-	void delete(Collection<T> dbIds) throws PromptoError;
-	default void delete(T dbId) throws PromptoError {
+	void delete(Collection<?> dbIds) throws PromptoError;
+	default void delete(Object dbId) throws PromptoError {
 		delete(Arrays.asList(dbId));
 	}
 	void deleteAll() throws PromptoError;
 
-	PromptoBinary fetchBinary(T dbId, String attr) throws PromptoError;
-	IStored fetchUnique(T dbId) throws PromptoError;
+	PromptoBinary fetchBinary(Object dbId, String attr) throws PromptoError;
+	IStored fetchUnique(Object dbId) throws PromptoError;
 
-	IQueryInterpreter<T> getQueryInterpreter(Context context);
+	IQueryInterpreter getQueryInterpreter(Context context);
 	IQueryFactory getQueryFactory();
 	// for the below, it is guaranteed that IQuery was produced by the above
 	IStored fetchOne(IQuery query) throws PromptoError;

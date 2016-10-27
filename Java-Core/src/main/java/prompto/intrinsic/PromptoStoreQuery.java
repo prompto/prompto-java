@@ -26,7 +26,7 @@ public class PromptoStoreQuery {
 		if(storables.isEmpty())
 			storables = null;
 		if(deletables!=null || storables!=null) {
-			IStore<Object> store = IDataStore.getInstance();
+			IStore store = IDataStore.getInstance();
 			try {
 				store.store(deletables, storables);
 			} catch(PromptoError e) {

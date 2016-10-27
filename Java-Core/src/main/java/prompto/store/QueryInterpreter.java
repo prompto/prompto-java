@@ -2,7 +2,7 @@ package prompto.store;
 
 import prompto.runtime.Context;
 
-public class QueryInterpreter<T> extends QueryInterpreterBase<T> {
+public class QueryInterpreter extends QueryInterpreterBase {
 
 	public QueryInterpreter(Context context) {
 		super(context);

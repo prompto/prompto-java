@@ -21,7 +21,7 @@ import prompto.runtime.Context;
 import prompto.store.IStorable.IDbIdListener;
 
 /* a utility class for running unit tests only */
-public final class MemStore implements IStore<Long> {
+public final class MemStore implements IStore {
 
 	private Map<Long, StorableDocument> documents = new HashMap<>();
 	private AtomicLong lastDbId = new AtomicLong(0);
@@ -50,7 +50,7 @@ public final class MemStore implements IStore<Long> {
 	}
 	
 	@Override
-	public void store(Collection<Long> deletables, Collection<IStorable> storables) throws PromptoError {
+	public void store(Collection<?> deletables, Collection<IStorable> storables) throws PromptoError {
 		for(IStorable storable : storables) {
 			if(!(storable instanceof StorableDocument))
 				throw new IllegalStateException("Expecting a StorableDocument");
@@ -69,8 +69,8 @@ public final class MemStore implements IStore<Long> {
 	}
 	
 	@Override
-	public void delete(Collection<Long> dbIds) throws PromptoError {
-		for(Long dbId : dbIds)
+	public void delete(Collection<?> dbIds) throws PromptoError {
+		for(Object dbId : dbIds)
 			documents.remove(dbId);
 	}
 	
@@ -80,7 +80,7 @@ public final class MemStore implements IStore<Long> {
 	}
 	
 	@Override
-	public PromptoBinary fetchBinary(Long dbId, String attr) {
+	public PromptoBinary fetchBinary(Object dbId, String attr) {
 		for(StorableDocument doc : documents.values()) {
 			Object data = doc.getData(IStore.dbIdName);
 			if(data==null || !dbId.equals(data.toString()))
@@ -91,13 +91,13 @@ public final class MemStore implements IStore<Long> {
 	}
 	
 	@Override
-	public IStored fetchUnique(Long dbId) throws PromptoError {
+	public IStored fetchUnique(Object dbId) throws PromptoError {
 		return documents.get(dbId);
 	}
 	
 	@Override
-	public IQueryInterpreter<Long> getQueryInterpreter(Context context) {
-		return new QueryInterpreter<Long>(context);
+	public IQueryInterpreter getQueryInterpreter(Context context) {
+		return new QueryInterpreter(context);
 	}
 	
 	@Override

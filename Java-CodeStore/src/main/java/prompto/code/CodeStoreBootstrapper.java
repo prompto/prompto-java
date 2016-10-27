@@ -26,7 +26,7 @@ import prompto.utils.TypeUtils;
 // use a dedicated bootstrapper to ensure app and code store contexts do not spill
 public class CodeStoreBootstrapper {
 
-	public static Context bootstrap(IStore<?> store, ICodeStore runtime) throws PromptoError {
+	public static Context bootstrap(IStore store, ICodeStore runtime) throws PromptoError {
 		System.out.println("Initializing code store...");
 		CodeStoreBootstrapper bs = new CodeStoreBootstrapper(store, runtime);
 		bs.bootstrap();
@@ -35,9 +35,9 @@ public class CodeStoreBootstrapper {
 	
 	Context context = Context.newGlobalContext();
 	ICodeStore next;
-	IStore<?> store;
+	IStore store;
 	
-	private CodeStoreBootstrapper(IStore<?> store, ICodeStore runtime) {
+	private CodeStoreBootstrapper(IStore store, ICodeStore runtime) {
 		this.store = store;
 		this.next = new ResourceCodeStore(runtime, ModuleType.LIBRARY, "CodeStore.pec", "1.0.0");
 	}
@@ -87,7 +87,7 @@ public class CodeStoreBootstrapper {
 		}
 	}
 
-	private Map<String, AttributeDeclaration> getMinimalColumns(IStore<?> store) {
+	private Map<String, AttributeDeclaration> getMinimalColumns(IStore store) {
 		IType dbIdIType = TypeUtils.typeToIType(store.getDbIdClass());
 		Map<String, AttributeDeclaration> columns = new HashMap<>();
 		// attributes with reserved names, the below declarations will be used

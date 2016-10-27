@@ -110,7 +110,7 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 	public IValue interpret(Context context) throws PromptoError {
 		if(!(predicate instanceof IPredicateExpression))
 			throw new SyntaxError("Filtering expression must be a predicate !");
-		IStore<Object> store = IDataStore.getInstance();
+		IStore store = IDataStore.getInstance();
 		IStored stored = store.interpretFetchOne(context, type, (IPredicateExpression)predicate);
 		if(stored==null)
 			return NullValue.instance();

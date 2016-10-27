@@ -37,7 +37,7 @@ public class Dependency {
 		this.version = version;
 	}
 
-	public IStorable populate(Context context, IStore<?> store, List<IStorable> storables) {
+	public IStorable populate(Context context, IStore store, List<IStorable> storables) {
 		List<String> categories = Arrays.asList("Dependency");
 		IStorable storable = store.newStorable(categories, null); 
 		storables.add(storable);

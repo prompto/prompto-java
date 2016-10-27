@@ -60,7 +60,7 @@ import prompto.type.TextType;
 import prompto.type.TimeType;
 import prompto.type.UUIDType;
 
-abstract class BaseSOLRStore implements IStore<UUID> {
+abstract class BaseSOLRStore implements IStore {
 	
 	static Map<String, IType> typeMap = new HashMap<>();
 	
@@ -254,7 +254,7 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 	}
 
 	@Override
-	public void store(Collection<UUID> deletables, Collection<IStorable> storables) throws PromptoError {
+	public void store(Collection<?> deletables, Collection<IStorable> storables) throws PromptoError {
 		List<String> dbIdsToDrop = null;
 		if(deletables!=null && deletables.size()>0) {
 			dbIdsToDrop = new ArrayList<>();
@@ -284,7 +284,7 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 	}
 
 	@Override
-	public PromptoBinary fetchBinary(UUID dbId, String attr) throws PromptoError {
+	public PromptoBinary fetchBinary(Object dbId, String attr) throws PromptoError {
 		SolrQuery query = new SolrQuery();
 		query.setQuery("dbId:" + dbId);
 		query.setFields(attr);
@@ -308,7 +308,7 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 	
 	
 	@Override
-	public IStored fetchUnique(UUID dbId) throws PromptoError {
+	public IStored fetchUnique(Object dbId) throws PromptoError {
 		SOLRQuery query = new SOLRQuery();
 		query.verify(new SOLRAttributeInfo(IStore.dbIdName, Family.UUID, false, null), MatchOp.EQUALS, dbId);
 		try {
@@ -320,7 +320,7 @@ abstract class BaseSOLRStore implements IStore<UUID> {
 	}
 	
 	@Override
-	public IQueryInterpreter<UUID> getQueryInterpreter(Context context) {
+	public IQueryInterpreter getQueryInterpreter(Context context) {
 		return new SOLRQueryInterpreter(context);
 	}
 	

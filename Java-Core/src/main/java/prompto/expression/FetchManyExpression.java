@@ -182,7 +182,7 @@ public class FetchManyExpression extends FetchOneExpression {
 
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		IStore<Object> store = IDataStore.getInstance();
+		IStore store = IDataStore.getInstance();
 		if(predicate!=null && !(predicate instanceof IPredicateExpression))
 			throw new SyntaxError("Filtering expression must be a predicate !");
 		IStoredIterable docs = store.interpretFetchMany(context, type, first, last, (IPredicateExpression)predicate, orderBy);

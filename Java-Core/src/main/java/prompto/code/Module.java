@@ -62,7 +62,7 @@ public abstract class Module {
 		this.image = image;
 	}
 
-	public IStorable populate(Context context, IStore<?> store, List<IStorable> storables) throws PromptoError {
+	public IStorable populate(Context context, IStore store, List<IStorable> storables) throws PromptoError {
 		List<String> categories = Arrays.asList("Module", getType().getCategory().getTypeName());
 		IStorable storable = store.newStorable(categories, null); 
 		storables.add(storable);

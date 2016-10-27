@@ -1,6 +1,8 @@
 package prompto.utils;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,9 +28,7 @@ import prompto.runtime.Executor;
 import prompto.runtime.Interpreter;
 import prompto.runtime.utils.Out;
 import prompto.store.IDataStore;
-import prompto.store.IStore;
 import prompto.store.MemStore;
-import prompto.utils.CodeWriter;
 
 public abstract class BaseParserTest extends BaseTest {
 
@@ -125,9 +125,8 @@ public abstract class BaseParserTest extends BaseTest {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	protected void checkOutput(String resource, ResourceRunner runner) throws Exception {
-		IDataStore.setInstance((IStore<Object>)(Object)new MemStore());
+		IDataStore.setInstance(new MemStore());
 		boolean isTest = runner.runResource(resource, false);
 		String read = Out.read();
 		if(isTest && read.endsWith("\n"))

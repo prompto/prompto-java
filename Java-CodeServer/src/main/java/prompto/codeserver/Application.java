@@ -47,7 +47,7 @@ public class Application {
 	}
 	
 	static void createThesaurusAndImportSamples() throws Exception {
-		IStore<Object> dataStore = IDataStore.getInstance();
+		IStore dataStore = IDataStore.getInstance();
 		ICodeStore codeStore = new UpdatableCodeStore(dataStore, "dev-center", "1.0.0");
 		ModuleImporter importer = new ModuleImporter("thesaurus/");
 		importer.importModule(codeStore);

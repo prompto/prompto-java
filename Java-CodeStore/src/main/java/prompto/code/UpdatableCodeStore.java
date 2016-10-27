@@ -48,14 +48,14 @@ import prompto.utils.StringUtils;
 
 public class UpdatableCodeStore extends BaseCodeStore {
 
-	IStore<?> store; // data store where to store/fetch the code
+	IStore store; // data store where to store/fetch the code
 	String application;
 	Version version;
 	// fetching and storing declarations requires a context holding code store attributes
 	// some of these are code store specific and should not be looked for in the app context
 	Context context; 
 	
-	public UpdatableCodeStore(IStore<?> store, String application, String version, String ...resourceNames) throws PromptoError {
+	public UpdatableCodeStore(IStore store, String application, String version, String ...resourceNames) throws PromptoError {
 		super(null);
 		this.store = store;
 		this.application = application;
@@ -77,7 +77,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 		}
 	}
 
-	public IStore<?> getStore() {
+	public IStore getStore() {
 		return store;
 	}
 	
