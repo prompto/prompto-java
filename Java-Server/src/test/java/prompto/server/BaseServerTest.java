@@ -9,7 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 
 import prompto.code.Version;
-import prompto.store.MemStore;
+import prompto.memstore.MemStore;
 
 public abstract class BaseServerTest {
 	

@@ -1,6 +1,7 @@
 package prompto.type;
 
 import prompto.runtime.Context;
+import prompto.store.Family;
 
 public abstract class IterableType extends NativeType {
 

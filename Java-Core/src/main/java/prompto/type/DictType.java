@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDict;
 import prompto.runtime.Context;
+import prompto.store.Family;
 
 public class DictType extends ContainerType {
 	

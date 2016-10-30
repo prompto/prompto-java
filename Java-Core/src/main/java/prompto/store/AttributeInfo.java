@@ -1,8 +1,6 @@
-package prompto.declaration;
+package prompto.store;
 
 import java.util.Collection;
-
-import prompto.type.IType.Family;
 
 public class AttributeInfo {
 

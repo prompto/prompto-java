@@ -13,6 +13,7 @@ import org.junit.Test;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.expression.EqualsExpression;
+import prompto.expression.FetchOneExpression;
 import prompto.expression.IExpression;
 import prompto.expression.UnresolvedIdentifier;
 import prompto.grammar.EqOp;
@@ -29,7 +30,7 @@ import prompto.literal.TextLiteral;
 import prompto.literal.TimeLiteral;
 import prompto.runtime.Context;
 import prompto.store.IDataStore;
-import prompto.store.IPredicateExpression;
+import prompto.store.IQuery;
 import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.store.IStoredIterable;
@@ -211,15 +212,17 @@ public class TestInstance extends BaseSOLRTest {
 	}
 
 	private IStored fetchOne(String field, IExpression value) throws Exception {
-		CategoryType t = new CategoryType(new Identifier("Test"));
-		IPredicateExpression e = new EqualsExpression( 
-				new UnresolvedIdentifier(new Identifier(field)), EqOp.EQUALS, value);
-		return store.interpretFetchOne(context, t, e);
+		FetchOneExpression expression = new FetchOneExpression(
+				new CategoryType(new Identifier("Test")), 
+				new EqualsExpression(new UnresolvedIdentifier(new Identifier(field)), EqOp.EQUALS, value));
+		IQuery query = expression.buildFetchOneQuery(context, store);
+		return store.fetchOne(query);
 	}
 	
 	@SuppressWarnings("unused")
 	private IStoredIterable fetchAll() throws Exception {
-		return store.interpretFetchMany(context, null, null, null, null, null);
+		IQuery query = store.newQueryBuilder().build();
+		return store.fetchMany(query);
 	}
 
 	private IInstance createInstanceWith1Attribute(String name, IType type) throws Exception {

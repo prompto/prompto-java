@@ -1,6 +1,6 @@
-package prompto.store;
+package prompto.memstore;
 
-import prompto.declaration.AttributeInfo;
+import prompto.store.AttributeInfo;
 
 public interface IOrderBy {
 

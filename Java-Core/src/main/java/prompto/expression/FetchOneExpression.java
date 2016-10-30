@@ -9,7 +9,6 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StringConstant;
-import prompto.declaration.AttributeInfo;
 import prompto.declaration.CategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -19,18 +18,18 @@ import prompto.intrinsic.PromptoRoot;
 import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.statement.UnresolvedCall;
+import prompto.store.AttributeInfo;
+import prompto.store.Family;
 import prompto.store.IDataStore;
-import prompto.store.IPredicateExpression;
 import prompto.store.IQuery;
-import prompto.store.IQuery.MatchOp;
-import prompto.store.IQueryFactory;
+import prompto.store.IQueryBuilder;
+import prompto.store.IQueryBuilder.MatchOp;
 import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.type.AnyType;
 import prompto.type.BooleanType;
 import prompto.type.CategoryType;
 import prompto.type.IType;
-import prompto.type.IType.Family;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 import prompto.value.NullValue;
@@ -108,10 +107,9 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		if(!(predicate instanceof IPredicateExpression))
-			throw new SyntaxError("Filtering expression must be a predicate !");
 		IStore store = IDataStore.getInstance();
-		IStored stored = store.interpretFetchOne(context, type, (IPredicateExpression)predicate);
+		IQuery query = buildFetchOneQuery(context, store);
+		IStored stored = store.fetchOne(query);
 		if(stored==null)
 			return NullValue.instance();
 		else {
@@ -125,12 +123,35 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 		}
 	}
 	
+	public IQuery buildFetchOneQuery(Context context, IStore store) {
+		IQueryBuilder builder = store.newQueryBuilder();
+		if(type!=null) {
+			AttributeInfo info = new AttributeInfo("category", Family.TEXT, true, null);
+			builder.verify(info, MatchOp.CONTAINS, type.getTypeName());
+		}
+		if(predicate!=null) {
+			if(!(predicate instanceof IPredicateExpression))
+				throw new SyntaxError("Filtering expression must be a predicate !");
+			((IPredicateExpression)predicate).interpretQuery(context, builder);
+		}
+		if(type!=null && predicate!=null)
+			builder.and();
+		return builder.build();
+	}
+
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		compileNewQuery(context, method, flags); // -> IStore, IQuery
-		compilePredicates(context, method, flags); // -> IStore, IQuery
+		compileNewQueryBuilder(context, method, flags); // -> IStore, IQueryBuilder
+		compilePredicates(context, method, flags); // -> IStore, IQueryBuilder
+		compileBuildQuery(context, method, flags); // -> IStore, IQuery
 		compileFetchOne(context, method, flags); // -> IStored
 		return compileInstantiation(context, method, flags);
+	}
+
+	protected void compileBuildQuery(Context context, MethodInfo method, Flags flags) {
+		// need a query
+		InterfaceConstant i = new InterfaceConstant(IQueryBuilder.class, "build", IQuery.class);
+		method.addInstruction(Opcode.INVOKEINTERFACE, i);
 	}
 
 	private ResultInfo compileInstantiation(Context context, MethodInfo method, Flags flags) {
@@ -155,31 +176,27 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 			CompilerUtils.compileAttributeInfo(context, method, flags, info);
 			CompilerUtils.compileJavaEnum(context, method, flags, MatchOp.CONTAINS);
 			method.addInstruction(Opcode.LDC, new StringConstant(type.toString()));
-			InterfaceConstant i = new InterfaceConstant(IQuery.class, "verify", 
+			InterfaceConstant i = new InterfaceConstant(IQueryBuilder.class, "verify", 
 					AttributeInfo.class, MatchOp.class, Object.class, void.class);
 			method.addInstruction(Opcode.INVOKEINTERFACE, i);
 		}
 		if(predicate!=null)
 			((IPredicateExpression)predicate).compileQuery(context, method, flags);
-			
 		if(type!=null && predicate!=null) {
 			method.addInstruction(Opcode.DUP);
-			InterfaceConstant i = new InterfaceConstant(IQuery.class, "and", void.class);
+			InterfaceConstant i = new InterfaceConstant(IQueryBuilder.class, "and", void.class);
 			method.addInstruction(Opcode.INVOKEINTERFACE, i);
 		}
 	}
 
-	protected void compileNewQuery(Context context, MethodInfo method, Flags flags) {
+	protected void compileNewQueryBuilder(Context context, MethodInfo method, Flags flags) {
 		// need the data store
 		MethodConstant m = new MethodConstant(IDataStore.class, "getInstance", IStore.class);
 		method.addInstruction(Opcode.INVOKESTATIC, m);
 		// need a copy for fetch one
 		method.addInstruction(Opcode.DUP);
 		// need a query factory
-		InterfaceConstant i = new InterfaceConstant(IStore.class, "getQueryFactory", IQueryFactory.class);
-		method.addInstruction(Opcode.INVOKEINTERFACE, i);
-		// need a query
-		i = new InterfaceConstant(IQueryFactory.class, "newQuery", IQuery.class);
+		InterfaceConstant i = new InterfaceConstant(IStore.class, "newQueryBuilder", IQueryBuilder.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, i);
 	}
 

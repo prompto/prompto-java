@@ -3,6 +3,7 @@ package prompto.type;
 import java.lang.reflect.Type;
 
 import prompto.runtime.Context;
+import prompto.store.Family;
 
 public class NullType extends BaseType {
 

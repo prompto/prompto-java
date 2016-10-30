@@ -1,4 +1,6 @@
-package prompto.store;
+package prompto.memstore;
+
+import prompto.store.IStoreFactory;
 
 public class MemStoreFactory implements IStoreFactory {
 

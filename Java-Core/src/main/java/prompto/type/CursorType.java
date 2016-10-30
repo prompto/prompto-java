@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.store.Family;
 import prompto.value.Cursor;
 
 public class CursorType extends IterableType {

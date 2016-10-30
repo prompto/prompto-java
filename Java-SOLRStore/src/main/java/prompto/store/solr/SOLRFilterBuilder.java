@@ -3,8 +3,8 @@ package prompto.store.solr;
 import java.util.Collection;
 import java.util.Stack;
 
-import prompto.store.IQuery.MatchOp;
-import prompto.type.IType.Family;
+import prompto.store.Family;
+import prompto.store.IQueryBuilder.MatchOp;
 
 class SOLRFilterBuilder {
 

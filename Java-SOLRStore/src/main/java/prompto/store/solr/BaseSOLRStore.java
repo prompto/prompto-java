@@ -1,16 +1,13 @@
 package prompto.store.solr;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -21,72 +18,47 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 
-import prompto.declaration.AttributeDeclaration;
-import prompto.declaration.AttributeInfo;
 import prompto.error.InternalError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
-import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoBinary;
 import prompto.intrinsic.PromptoDate;
 import prompto.intrinsic.PromptoDateTime;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoPeriod;
 import prompto.intrinsic.PromptoTime;
-import prompto.runtime.Context;
+import prompto.store.AttributeInfo;
+import prompto.store.Family;
 import prompto.store.IQuery;
-import prompto.store.IQuery.MatchOp;
-import prompto.store.IStorable.IDbIdListener;
-import prompto.store.IQueryFactory;
-import prompto.store.IQueryInterpreter;
+import prompto.store.IQueryBuilder.MatchOp;
 import prompto.store.IStorable;
+import prompto.store.IStorable.IDbIdListener;
 import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.store.IStoredIterable;
-import prompto.type.BlobType;
-import prompto.type.BooleanType;
-import prompto.type.CategoryType;
-import prompto.type.ContainerType;
-import prompto.type.DateTimeType;
-import prompto.type.DateType;
-import prompto.type.DecimalType;
-import prompto.type.IType;
-import prompto.type.IType.Family;
-import prompto.type.ImageType;
-import prompto.type.IntegerType;
-import prompto.type.ListType;
-import prompto.type.PeriodType;
-import prompto.type.TextType;
-import prompto.type.TimeType;
-import prompto.type.UUIDType;
 
 abstract class BaseSOLRStore implements IStore {
 	
-	static Map<String, IType> typeMap = new HashMap<>();
+	static Map<String, Family> typeMap = new HashMap<>();
 	
 	static {
-		typeMap.put("uuid", UUIDType.instance());
-		typeMap.put("db-id", UUIDType.instance());
-		typeMap.put("db-ref", new CategoryType(new Identifier("any")));
-		typeMap.put("blob", BlobType.instance());
-		typeMap.put("boolean", BooleanType.instance());
-		typeMap.put("text", TextType.instance());
+		typeMap.put("uuid", Family.UUID);
+		typeMap.put("db-id", Family.UUID);
+		typeMap.put("db-ref", Family.ANY);
+		typeMap.put("blob", Family.BLOB);
+		typeMap.put("boolean", Family.BOOLEAN);
+		typeMap.put("text", Family.TEXT);
 		typeMap.put("text-key", typeMap.get("text"));
 		typeMap.put("text-value", typeMap.get("text"));
 		typeMap.put("text-words", typeMap.get("text"));
-		typeMap.put("version", TextType.instance()); // TODO create Version type?
-		typeMap.put("image", ImageType.instance());
-		typeMap.put("integer", IntegerType.instance());
-		typeMap.put("decimal", DecimalType.instance());
-		typeMap.put("date", DateType.instance());
-		typeMap.put("time", TimeType.instance());
-		typeMap.put("period", PeriodType.instance());
-		typeMap.put("datetime", DateTimeType.instance());
-		// create a list type for each atomic type (using a copy to avoid concurrent modification)
-		Set<Map.Entry<String, IType>> entries = new HashSet<>(typeMap.entrySet());
-		for(Map.Entry<String, IType> entry : entries) {
-			typeMap.put(entry.getKey() + "[]", new ListType(entry.getValue()));
-		}
+		typeMap.put("version", Family.TEXT); // TODO create Version type?
+		typeMap.put("image", Family.IMAGE);
+		typeMap.put("integer", Family.INTEGER);
+		typeMap.put("decimal", Family.DECIMAL);
+		typeMap.put("date", Family.DATE);
+		typeMap.put("time", Family.TIME);
+		typeMap.put("period", Family.PERIOD);
+		typeMap.put("datetime", Family.DATETIME);
 	}
 	
 	
@@ -169,10 +141,9 @@ abstract class BaseSOLRStore implements IStore {
 	}
 
 	@Override
-	public Type getColumnType(String fieldName) throws PromptoError {
+	public Family getColumnTypeFamily(String fieldName) throws PromptoError {
 		String typeName = getColumnTypeName(fieldName);
-		IType type = typeMap.get(typeName);
-		return type.getJavaType(null);
+		return typeMap.get(typeName);
 	}
 	
 	@Override
@@ -189,40 +160,37 @@ abstract class BaseSOLRStore implements IStore {
 	}
 	
 	@Override
-	public void createOrUpdateColumns(Collection<AttributeDeclaration> columns) throws PromptoError {
-		for(AttributeDeclaration column : columns) try {
+	public void createOrUpdateColumns(Collection<AttributeInfo> columns) throws PromptoError {
+		for(AttributeInfo column : columns) try {
 			createOrUpdateColumn(column);
 		} catch(Exception e) {
 			throw new InternalError(e);
 		}
 	}
 	
-	private void createOrUpdateColumn(AttributeDeclaration column) throws SolrServerException, IOException {
+	private void createOrUpdateColumn(AttributeInfo column) throws SolrServerException, IOException {
 		Map<String, Object> options = new HashMap<>();
 		options.put("indexed", true);
 		options.put("stored", true);
-		IType type = column.getType();
-		if(type instanceof ContainerType) {
+		if(column.isCollection()) 
 			options.put("multiValued", true);
-			type = ((ContainerType)type).getItemType();
-		}
 		if("version".equals(column.getName()))  {
 			if(!hasField("version"))
 				addField("version", "version", options);
-		} else if(type==TextType.instance())
+		} else if(column.getFamily()==Family.TEXT)
 			createOrUpdateTextColumn(column, options);
 		else if(!hasField(column.getName())) {
-			if(type instanceof CategoryType) {
+			if(column.getFamily()==Family.CATEGORY) {
 				addField(column.getName(), "db-ref", options);
 			} else {
-			String typeName = type.getTypeName().toLowerCase();
+			String typeName = column.getFamily().name().toLowerCase();
 			addField(column.getName(), typeName, options);
 			}
 		}
 	}
 	
 	
-	private void createOrUpdateTextColumn(AttributeDeclaration column, Map<String, Object> options) throws SolrServerException, IOException {
+	private void createOrUpdateTextColumn(AttributeInfo column, Map<String, Object> options) throws SolrServerException, IOException {
 		String fieldName = column.getName();
 		options = new HashMap<>(options); // use a copy
 		options.put("indexed", false);
@@ -309,9 +277,10 @@ abstract class BaseSOLRStore implements IStore {
 	
 	@Override
 	public IStored fetchUnique(Object dbId) throws PromptoError {
-		SOLRQuery query = new SOLRQuery();
-		query.verify(new SOLRAttributeInfo(IStore.dbIdName, Family.UUID, false, null), MatchOp.EQUALS, dbId);
+		SOLRQueryBuilder builder = new SOLRQueryBuilder();
+		builder.verify(new SOLRAttributeInfo(IStore.dbIdName, Family.UUID, false, null), MatchOp.EQUALS, dbId);
 		try {
+			SOLRQuery query = builder.build();
 			QueryResponse result = query(query.getQuery());
 			return getOne(result);
 		} catch(Exception e) {
@@ -320,13 +289,8 @@ abstract class BaseSOLRStore implements IStore {
 	}
 	
 	@Override
-	public IQueryInterpreter getQueryInterpreter(Context context) {
-		return new SOLRQueryInterpreter(context);
-	}
-	
-	@Override
-	public IQueryFactory getQueryFactory() {
-		return new SOLRQueryFactory();
+	public SOLRQueryBuilder newQueryBuilder() {
+		return new SOLRQueryBuilder();
 	}
 	
 	@Override

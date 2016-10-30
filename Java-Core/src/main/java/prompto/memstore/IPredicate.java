@@ -1,4 +1,4 @@
-package prompto.store;
+package prompto.memstore;
 
 import java.util.Map;
 

@@ -20,7 +20,6 @@ import prompto.compiler.StackLocal;
 import prompto.compiler.StackState;
 import prompto.compiler.StringConstant;
 import prompto.declaration.AttributeDeclaration;
-import prompto.declaration.AttributeInfo;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -41,9 +40,9 @@ import prompto.runtime.Context;
 import prompto.runtime.LinkedValue;
 import prompto.runtime.LinkedVariable;
 import prompto.runtime.Variable;
-import prompto.store.IPredicateExpression;
-import prompto.store.IQuery;
-import prompto.store.IQuery.MatchOp;
+import prompto.store.AttributeInfo;
+import prompto.store.IQueryBuilder;
+import prompto.store.IQueryBuilder.MatchOp;
 import prompto.store.IStore;
 import prompto.type.AnyType;
 import prompto.type.BooleanType;
@@ -296,7 +295,7 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 	}
 	
 	@Override
-	public void interpretQuery(Context context, IQuery query) throws PromptoError {
+	public void interpretQuery(Context context, IQueryBuilder query) throws PromptoError {
 		IValue value = null;
 		String name = readFieldName(left);
 		if(name!=null)
@@ -334,7 +333,7 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 
 	@Override
 	public void compileQuery(Context context, MethodInfo method, Flags flags) {
-		method.addInstruction(Opcode.DUP); // IQuery -> IQuery, IQuery
+		method.addInstruction(Opcode.DUP); // IQueryBuilder -> IQueryBuilder, IQueryBuilder
 		if(operator==EqOp.NOT_EQUALS)
 			method.addInstruction(Opcode.DUP);
 		boolean reverse = compileAttributeInfo(context, method, flags);
@@ -344,11 +343,11 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 			left.compile(context, method, flags);
 		else
 			right.compile(context, method, flags);
-		InterfaceConstant m = new InterfaceConstant(IQuery.class,
+		InterfaceConstant m = new InterfaceConstant(IQueryBuilder.class,
 				"verify", AttributeInfo.class, MatchOp.class, Object.class, void.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, m);
 		if(operator==EqOp.NOT_EQUALS) {
-			m = new InterfaceConstant(IQuery.class, "not", void.class);
+			m = new InterfaceConstant(IQueryBuilder.class, "not", void.class);
 			method.addInstruction(Opcode.INVOKEINTERFACE, m);
 		}
 	}

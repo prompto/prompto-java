@@ -12,6 +12,7 @@ import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
+import prompto.store.Family;
 import prompto.utils.CodeWriter;
 import prompto.utils.StringUtils;
 import prompto.value.IValue;
@@ -21,43 +22,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public interface IType {
 	
-	public static enum Family {
-		// storable
-		BOOLEAN,
-		CHARACTER,
-		INTEGER,
-		DECIMAL,
-		TEXT,
-		UUID,
-		DATE,
-		TIME,
-		DATETIME,
-		PERIOD,
-		LIST,
-		SET,
-		TUPLE,
-		RANGE,
-		BLOB,
-		IMAGE,
-		DOCUMENT,
-		CATEGORY,
-		RESOURCE,
-		DICTIONARY,
-		ENUMERATED,
-		// non storable
-		VOID,
-		NULL,
-		ANY,
-		METHOD,
-		CURSOR,
-		ITERATOR,
-		CLASS,
-		TYPE,
-		CODE,
-		// volatile
-		MISSING
-	}
-		
 	Family getFamily();
 	
 	default String getTypeName() {

@@ -17,7 +17,6 @@ import prompto.compiler.StackLocal;
 import prompto.compiler.StackState;
 import prompto.compiler.StringConstant;
 import prompto.declaration.AttributeDeclaration;
-import prompto.declaration.AttributeInfo;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -27,10 +26,10 @@ import prompto.intrinsic.PromptoString;
 import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
-import prompto.store.IPredicateExpression;
-import prompto.store.IQuery;
+import prompto.store.AttributeInfo;
+import prompto.store.IQueryBuilder;
 import prompto.store.IStore;
-import prompto.store.IQuery.MatchOp;
+import prompto.store.IQueryBuilder.MatchOp;
 import prompto.type.CharacterType;
 import prompto.type.ContainerType;
 import prompto.type.IType;
@@ -321,7 +320,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	}
 	
 	@Override
-	public void interpretQuery(Context context, IQuery query) throws PromptoError {
+	public void interpretQuery(Context context, IQueryBuilder query) throws PromptoError {
 		IValue value = null;
 		String name = readFieldName(left);
 		boolean reverse = name==null;
@@ -346,7 +345,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	
 	@Override
 	public void compileQuery(Context context, MethodInfo method, Flags flags) {
-		method.addInstruction(Opcode.DUP); // IQuery -> IQuery, IQuery
+		method.addInstruction(Opcode.DUP); // IQueryBuilder -> IQueryBuilder, IQueryBuilder
 		if(operator.name().startsWith("NOT_"))
 			method.addInstruction(Opcode.DUP);
 		IType valueType = null;
@@ -369,11 +368,11 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 			left.compile(context, method, flags);
 		else
 			right.compile(context, method, flags);
-		InterfaceConstant m = new InterfaceConstant(IQuery.class,
+		InterfaceConstant m = new InterfaceConstant(IQueryBuilder.class,
 				"verify", AttributeInfo.class, MatchOp.class, Object.class, void.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, m);
 		if(operator.name().startsWith("NOT_")) {
-			m = new InterfaceConstant(IQuery.class, "not", void.class);
+			m = new InterfaceConstant(IQueryBuilder.class, "not", void.class);
 			method.addInstruction(Opcode.INVOKEINTERFACE, m);
 		}
 	}

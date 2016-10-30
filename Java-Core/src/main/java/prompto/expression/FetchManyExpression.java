@@ -8,17 +8,21 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.declaration.IDeclaration;
+import prompto.error.InvalidValueError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.OrderByClauseList;
 import prompto.intrinsic.IterableWithCounts;
 import prompto.intrinsic.PromptoRoot;
 import prompto.runtime.Context;
+import prompto.store.AttributeInfo;
+import prompto.store.Family;
 import prompto.store.IDataStore;
-import prompto.store.IPredicateExpression;
 import prompto.store.IQuery;
+import prompto.store.IQueryBuilder;
 import prompto.store.IStore;
 import prompto.store.IStoredIterable;
+import prompto.store.IQueryBuilder.MatchOp;
 import prompto.type.AnyType;
 import prompto.type.BooleanType;
 import prompto.type.CategoryType;
@@ -183,19 +187,48 @@ public class FetchManyExpression extends FetchOneExpression {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		IStore store = IDataStore.getInstance();
-		if(predicate!=null && !(predicate instanceof IPredicateExpression))
-			throw new SyntaxError("Filtering expression must be a predicate !");
-		IStoredIterable docs = store.interpretFetchMany(context, type, first, last, (IPredicateExpression)predicate, orderBy);
+		IQuery query = buildFetchManyQuery(context, store);
+		IStoredIterable docs = store.fetchMany(query);
 		IType type = this.type==null ? AnyType.instance() : this.type;
 		return new Cursor(context, type, docs);
 	}
 	
+	private IQuery buildFetchManyQuery(Context context, IStore store) {
+		IQueryBuilder builder = store.newQueryBuilder();
+		if(type!=null) {
+			AttributeInfo info = new AttributeInfo("category", Family.TEXT, true, null);
+			builder.verify(info, MatchOp.CONTAINS, type.getTypeName());
+		}
+		if(predicate!=null) {
+			if(!(predicate instanceof IPredicateExpression))
+				throw new SyntaxError("Filtering expression must be a predicate !");
+			((IPredicateExpression)predicate).interpretQuery(context, builder);
+		}
+		if(type!=null && predicate!=null)
+			builder.and();
+		builder.setFirst(interpretLimit(context, first));
+		builder.setLast(interpretLimit(context, last));
+		if(orderBy!=null)
+			orderBy.interpretQuery(context, builder);
+		return builder.build();
+	}
+
+	private Long interpretLimit(Context context, IExpression exp) throws PromptoError {
+		if(exp==null)
+			return null;
+		IValue value = exp.interpret(context);
+		if(!(value instanceof prompto.value.Integer))
+			throw new InvalidValueError("Expecting an Integer, got:" + value.getType().toString());
+		return ((prompto.value.Integer)value).longValue();
+	}	
+
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		compileNewQuery(context, method, flags); // -> IStore, IQuery
-		compilePredicates(context, method, flags); // -> IStore, IQuery
-		compileLimits(context, method, flags); // -> IStore, IQuery
-		compileOrderBy(context, method, flags); // -> IStore, IQuery
+		compileNewQueryBuilder(context, method, flags); // -> IStore, IQueryBuilder
+		compilePredicates(context, method, flags); // -> IStore, IQueryBuilder
+		compileLimits(context, method, flags); // -> IStore, IQueryBuilder
+		compileOrderBy(context, method, flags); // -> IStore, IQueryBuilder
+		compileBuildQuery(context, method, flags); // -> IStore, IQuery
 		compileFetchMany(context, method, flags); // -> IStored
 		return compileInstantiation(context, method, flags);
 	}
@@ -212,7 +245,7 @@ public class FetchManyExpression extends FetchOneExpression {
 			ResultInfo info = first.compile(context, method, flags.withPrimitive(false));
 			if(long.class==info.getType())
 				CompilerUtils.longToLong(method);
-			InterfaceConstant i = new InterfaceConstant(IQuery.class, "setFirst", Long.class, void.class);
+			InterfaceConstant i = new InterfaceConstant(IQueryBuilder.class, "setFirst", Long.class, void.class);
 			method.addInstruction(Opcode.INVOKEINTERFACE, i);
 		}
 		if(last!=null) {
@@ -220,7 +253,7 @@ public class FetchManyExpression extends FetchOneExpression {
 			ResultInfo info = last.compile(context, method, flags.withPrimitive(false));
 			if(long.class==info.getType())
 				CompilerUtils.longToLong(method);
-			InterfaceConstant i = new InterfaceConstant(IQuery.class, "setLast", Long.class, void.class);
+			InterfaceConstant i = new InterfaceConstant(IQueryBuilder.class, "setLast", Long.class, void.class);
 			method.addInstruction(Opcode.INVOKEINTERFACE, i);
 		}
 	}

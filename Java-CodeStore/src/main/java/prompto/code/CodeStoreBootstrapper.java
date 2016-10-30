@@ -5,8 +5,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import prompto.code.ICodeStore.ModuleType;
 import prompto.declaration.AttributeDeclaration;
@@ -14,6 +16,7 @@ import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.store.AttributeInfo;
 import prompto.store.IStore;
 import prompto.type.BooleanType;
 import prompto.type.DateTimeType;
@@ -46,7 +49,8 @@ public class CodeStoreBootstrapper {
 		Map<String, AttributeDeclaration> columns = getMinimalColumns(store);
 		columns = fetchLatestDeclarations(columns);
 		registerColumnAttributes(columns.values());
-		store.createOrUpdateColumns(columns.values());
+		List<AttributeInfo> infos = columns.values().stream().map((c)->c.getAttributeInfo()).collect(Collectors.toList());
+		store.createOrUpdateColumns(infos);
 	}
 
 	private void registerColumnAttributes(Collection<AttributeDeclaration> columns) throws PromptoError {

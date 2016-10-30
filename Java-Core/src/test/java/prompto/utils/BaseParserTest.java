@@ -19,6 +19,7 @@ import prompto.declaration.IDeclaration;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
+import prompto.memstore.MemStore;
 import prompto.parser.Dialect;
 import prompto.parser.ECleverParser;
 import prompto.parser.OCleverParser;
@@ -28,7 +29,6 @@ import prompto.runtime.Executor;
 import prompto.runtime.Interpreter;
 import prompto.runtime.utils.Out;
 import prompto.store.IDataStore;
-import prompto.store.MemStore;
 
 public abstract class BaseParserTest extends BaseTest {
 

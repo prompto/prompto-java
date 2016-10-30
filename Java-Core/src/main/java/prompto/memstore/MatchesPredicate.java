@@ -1,10 +1,10 @@
-package prompto.store;
+package prompto.memstore;
 
 import java.util.Collection;
 import java.util.Map;
 
-import prompto.declaration.AttributeInfo;
-import prompto.store.IQuery.MatchOp;
+import prompto.store.AttributeInfo;
+import prompto.store.IQueryBuilder.MatchOp;
 
 public class MatchesPredicate<T extends Object> implements IPredicate {
 

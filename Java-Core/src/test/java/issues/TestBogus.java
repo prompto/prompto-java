@@ -2,6 +2,7 @@ package issues;
 
 import java.io.InputStream;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import prompto.declaration.DeclarationList;
@@ -10,6 +11,7 @@ import prompto.runtime.Context;
 import prompto.runtime.Executor;
 import prompto.runtime.Interpreter;
 
+@Ignore
 public class TestBogus {
 
 	@Test

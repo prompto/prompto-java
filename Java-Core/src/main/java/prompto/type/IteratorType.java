@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.store.Family;
 
 public class IteratorType extends IterableType {
 

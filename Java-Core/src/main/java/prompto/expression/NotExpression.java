@@ -16,8 +16,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
-import prompto.store.IPredicateExpression;
-import prompto.store.IQuery;
+import prompto.store.IQueryBuilder;
 import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -72,7 +71,7 @@ public class NotExpression implements IUnaryExpression, IPredicateExpression, IA
 	}
 	
 	@Override
-	public void interpretQuery(Context context, IQuery query) throws PromptoError {
+	public void interpretQuery(Context context, IQueryBuilder query) throws PromptoError {
 		if(!(expression instanceof IPredicateExpression))
 			throw new SyntaxError("Not a predicate: " + expression.toString());
 		((IPredicateExpression)expression).interpretQuery(context, query);
@@ -94,8 +93,8 @@ public class NotExpression implements IUnaryExpression, IPredicateExpression, IA
 	@Override
 	public void compileQuery(Context context, MethodInfo method, Flags flags) {
 		((IPredicateExpression)expression).compileQuery(context, method, flags);
-		method.addInstruction(Opcode.DUP); // IQuery -> IQuery, IQuery
-		InterfaceConstant m = new InterfaceConstant(IQuery.class, "not", void.class);
+		method.addInstruction(Opcode.DUP); // IQueryBuilder -> IQueryBuilder, IQueryBuilder
+		InterfaceConstant m = new InterfaceConstant(IQueryBuilder.class, "not", void.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, m);
 	}
 

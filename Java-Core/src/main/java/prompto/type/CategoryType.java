@@ -31,6 +31,7 @@ import prompto.instance.VariableInstance;
 import prompto.intrinsic.PromptoRoot;
 import prompto.runtime.Context;
 import prompto.runtime.Score;
+import prompto.store.Family;
 import prompto.store.IDataStore;
 import prompto.store.IStore;
 import prompto.store.IStored;

@@ -12,16 +12,18 @@ import org.junit.Test;
 
 import prompto.declaration.AttributeDeclaration;
 import prompto.expression.EqualsExpression;
+import prompto.expression.IPredicateExpression;
 import prompto.expression.UnresolvedIdentifier;
 import prompto.grammar.EqOp;
 import prompto.grammar.Identifier;
 import prompto.grammar.OrderByClause;
 import prompto.grammar.OrderByClauseList;
 import prompto.intrinsic.PromptoList;
-import prompto.literal.IntegerLiteral;
 import prompto.literal.TextLiteral;
+import prompto.memstore.MemStore;
+import prompto.memstore.QueryBuilder;
 import prompto.runtime.Context;
-import prompto.type.CategoryType;
+import prompto.store.IQueryBuilder.MatchOp;
 import prompto.type.TextType;
 import prompto.utils.IdentifierList;
 
@@ -54,8 +56,10 @@ public class TestMemStore {
 
 	@Test
 	public void testFetchOneEmpty() throws Exception {
+		IQueryBuilder builder = new QueryBuilder();
 		IPredicateExpression filter = createPredicate("__id__", EqOp.EQUALS, "__test__");
-		IStored d = IDataStore.getInstance().interpretFetchOne(context, null, filter);
+		filter.interpretQuery(context, builder);
+		IStored d = IDataStore.getInstance().fetchOne(builder.build());
 		assertNull(d);
 	}
 
@@ -63,16 +67,20 @@ public class TestMemStore {
 	@Test
 	public void testFetchOneExists() throws Exception {
 		IStorable d1 = store("__id__", "__test__");
+		IQueryBuilder builder = new QueryBuilder();
 		IPredicateExpression filter = createPredicate("__id__", EqOp.EQUALS, "__test__");
-		IStored d2 = IDataStore.getInstance().interpretFetchOne(context, null, filter);
+		filter.interpretQuery(context, builder);
+		IStored d2 = IDataStore.getInstance().fetchOne(builder.build());
 		assertEquals(d1,  d2);
 	}
 
 	@Test
 	public void testFetchOneMissing() throws Exception {
 		store("__id__", "__test__");
+		IQueryBuilder builder = new QueryBuilder();
 		IPredicateExpression filter = createPredicate("__id__", EqOp.EQUALS, "__test1__");
-		IStored d2 = IDataStore.getInstance().interpretFetchOne(context, null, filter);
+		filter.interpretQuery(context, builder);
+		IStored d2 = IDataStore.getInstance().fetchOne(builder.build());
 		assertNull(d2);
 	}
 
@@ -81,15 +89,19 @@ public class TestMemStore {
 		store("__id__", "__test1__");
 		IStorable d2 = store("__id__", "__test2__");
 		store("__id__", "__test3__");
+		IQueryBuilder builder = new QueryBuilder();
 		IPredicateExpression filter = createPredicate("__id__", EqOp.EQUALS, "__test2__");
-		IStored d4 = IDataStore.getInstance().interpretFetchOne(context, null, filter);
+		filter.interpretQuery(context, builder);
+		IStored d4 = IDataStore.getInstance().fetchOne(builder.build());
 		assertEquals(d2,  d4);
 	}
 
 	@Test
 	public void testFetchManyEmpty() throws Exception {
+		IQueryBuilder builder = new QueryBuilder();
 		IPredicateExpression filter = createPredicate("__id__", EqOp.EQUALS, "__test__");
-		IStoredIterable iterable = IDataStore.getInstance().interpretFetchMany(context, null, null, null, filter, null);
+		filter.interpretQuery(context, builder);
+		IStoredIterable iterable = IDataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertFalse(docs.hasNext());
 	}
@@ -98,8 +110,10 @@ public class TestMemStore {
 	public void testFetchManyOneExists() throws Exception {
 		IStorable d1 = store("__id__", "__test1__");
 		store("__id__", "__test2__");
+		IQueryBuilder builder = new QueryBuilder();
 		IPredicateExpression filter = createPredicate("__id__", EqOp.EQUALS, "__test1__");
-		IStoredIterable iterable = IDataStore.getInstance().interpretFetchMany(context, null, null, null, filter, null);
+		filter.interpretQuery(context, builder);
+		IStoredIterable iterable = IDataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertTrue(docs.hasNext());
 		assertEquals(d1,  docs.next());
@@ -109,8 +123,10 @@ public class TestMemStore {
 	@Test
 	public void testFetchManyOneMissing() throws Exception {
 		store("__id__", "__test1__");
+		IQueryBuilder builder = new QueryBuilder();
 		IPredicateExpression filter = createPredicate("__id__", EqOp.EQUALS, "__test2__");
-		IStoredIterable iterable = IDataStore.getInstance().interpretFetchMany(context, null, null, null, filter, null);
+		filter.interpretQuery(context, builder);
+		IStoredIterable iterable = IDataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertFalse(docs.hasNext());
 	}
@@ -121,8 +137,10 @@ public class TestMemStore {
 		store("__id__", "__test1__");
 		store("__id__", "__test1__");
 		store("__id__", "__test2__");
+		IQueryBuilder builder = new QueryBuilder();
 		IPredicateExpression filter = createPredicate("__id__", EqOp.EQUALS, "__test1__");
-		IStoredIterable iterable = IDataStore.getInstance().interpretFetchMany(context, null, null, null, filter, null);
+		filter.interpretQuery(context, builder);
+		IStoredIterable iterable = IDataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertTrue(docs.hasNext());
 		docs.next();
@@ -139,11 +157,13 @@ public class TestMemStore {
 		IStorable d1 = store("__id__", "__test1__");
 		IStorable d4 = store("__id__", "__test4__");
 		IStorable d2 = store("__id__", "__test2__");
+		IQueryBuilder builder = new QueryBuilder();
 		OrderByClauseList obc = new OrderByClauseList(
 				new OrderByClause(
 						new IdentifierList(new Identifier("__id__")), 
 						false));
-		IStoredIterable iterable = IDataStore.getInstance().interpretFetchMany(context, null, null, null, null, obc);
+		obc.interpretQuery(context, builder);
+		IStoredIterable iterable = IDataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertTrue(docs.hasNext());
 		assertEquals(d1,  docs.next());
@@ -162,11 +182,13 @@ public class TestMemStore {
 		IStorable d1 = store("__id__", "__test1__");
 		IStorable d4 = store("__id__", "__test4__");
 		IStorable d2 = store("__id__", "__test2__");
+		IQueryBuilder builder = new QueryBuilder();
 		OrderByClauseList obc = new OrderByClauseList(
 				new OrderByClause(
 						new IdentifierList(new Identifier("__id__")), 
 						true));
-		IStoredIterable iterable = IDataStore.getInstance().interpretFetchMany(context, null, null, null, null, obc);
+		obc.interpretQuery(context, builder);
+		IStoredIterable iterable = IDataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertTrue(docs.hasNext());
 		assertEquals(d4,  docs.next());
@@ -181,7 +203,10 @@ public class TestMemStore {
 	
 	@Test
 	public void testSliceEmpty() throws Exception {
-		IStoredIterable iterable = IDataStore.getInstance().interpretFetchMany(context, null, new IntegerLiteral(1), new IntegerLiteral(10), null, null);
+		IQueryBuilder builder = new QueryBuilder();
+		builder.setFirst(1L);
+		builder.setLast(10L);
+		IStoredIterable iterable = IDataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertFalse(docs.hasNext());
 	}
@@ -189,7 +214,10 @@ public class TestMemStore {
 	@Test
 	public void testSliceBeyond() throws Exception {
 		IStorable d1 = store("__id__", "__test1__");
-		IStoredIterable iterable = IDataStore.getInstance().interpretFetchMany(context, null, new IntegerLiteral(1), new IntegerLiteral(10), null, null);
+		IQueryBuilder builder = new QueryBuilder();
+		builder.setFirst(1L);
+		builder.setLast(10L);
+		IStoredIterable iterable = IDataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertTrue(docs.hasNext());
 		assertEquals(d1,  docs.next());
@@ -202,7 +230,10 @@ public class TestMemStore {
 		store("__id__", "__test2__");
 		store("__id__", "__test3__");
 		store("__id__", "__test4__");
-		IStoredIterable iterable = IDataStore.getInstance().interpretFetchMany(context, null, new IntegerLiteral(1), new IntegerLiteral(4), null, null);
+		IQueryBuilder builder = new QueryBuilder();
+		builder.setFirst(1L);
+		builder.setLast(4L);
+		IStoredIterable iterable = IDataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertTrue(docs.hasNext());
 		docs.next();
@@ -221,7 +252,10 @@ public class TestMemStore {
 		store("__id__", "__test2__");
 		store("__id__", "__test3__");
 		store("__id__", "__test4__");
-		IStoredIterable iterable = IDataStore.getInstance().interpretFetchMany(context, null, new IntegerLiteral(2), new IntegerLiteral(3), null, null);
+		IQueryBuilder builder = new QueryBuilder();
+		builder.setFirst(2L);
+		builder.setLast(3L);
+		IStoredIterable iterable = IDataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertTrue(docs.hasNext());
 		docs.next();
@@ -238,8 +272,10 @@ public class TestMemStore {
 		categories.add("Project");
 		categories.add("Application");
 		d1.setData("category", categories);
-		IStored doc = IDataStore.getInstance().interpretFetchOne(context, 
-				new CategoryType(new Identifier("Application")), null);
+		IQueryBuilder builder = new QueryBuilder();
+		AttributeInfo info = new AttributeInfo("category", Family.TEXT, true, null);
+		builder.verify(info, MatchOp.CONTAINS, "Application");
+		IStored doc = IDataStore.getInstance().fetchOne(builder.build());
 		assertEquals(d1, doc);
 	}
 
@@ -251,8 +287,10 @@ public class TestMemStore {
 		categories.add("Project");
 		categories.add("Application");
 		d1.setData("category", categories);
-		IStored doc = IDataStore.getInstance().interpretFetchOne(context, 
-				new CategoryType(new Identifier("Project")), null);
+		IQueryBuilder builder = new QueryBuilder();
+		AttributeInfo info = new AttributeInfo("category", Family.TEXT, true, null);
+		builder.verify(info, MatchOp.CONTAINS, "Project");
+		IStored doc = IDataStore.getInstance().fetchOne(builder.build());
 		assertEquals(d1, doc);
 	}
 
@@ -264,9 +302,10 @@ public class TestMemStore {
 		categories.add("Project");
 		categories.add("Application");
 		d1.setData("category", categories);
-		IStoredIterable iterable = IDataStore.getInstance().interpretFetchMany(context, 
-				new CategoryType(new Identifier("Application")), 
-				null, null, null, null);
+		IQueryBuilder builder = new QueryBuilder();
+		AttributeInfo info = new AttributeInfo("category", Family.TEXT, true, null);
+		builder.verify(info, MatchOp.CONTAINS, "Application");
+		IStoredIterable iterable = IDataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertTrue(docs.hasNext());
 		docs.next();

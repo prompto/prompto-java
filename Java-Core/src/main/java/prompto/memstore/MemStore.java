@@ -1,6 +1,5 @@
-package prompto.store;
+package prompto.memstore;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -12,13 +11,19 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
-import prompto.declaration.AttributeDeclaration;
 import prompto.error.PromptoError;
 import prompto.intrinsic.PromptoBinary;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoTuple;
-import prompto.runtime.Context;
+import prompto.store.AttributeInfo;
+import prompto.store.Family;
+import prompto.store.IQuery;
+import prompto.store.IQueryBuilder;
+import prompto.store.IStorable;
 import prompto.store.IStorable.IDbIdListener;
+import prompto.store.IStore;
+import prompto.store.IStored;
+import prompto.store.IStoredIterable;
 
 /* a utility class for running unit tests only */
 public final class MemStore implements IStore {
@@ -40,12 +45,12 @@ public final class MemStore implements IStore {
 	}
 	
 	@Override
-	public Type getColumnType(String name) {
+	public Family getColumnTypeFamily(String name) {
 		throw new UnsupportedOperationException();
 	}
 	
 	@Override
-	public void createOrUpdateColumns(Collection<AttributeDeclaration> columns) {
+	public void createOrUpdateColumns(Collection<AttributeInfo> columns) {
 		// nothing to do
 	}
 	
@@ -95,20 +100,17 @@ public final class MemStore implements IStore {
 		return documents.get(dbId);
 	}
 	
-	@Override
-	public IQueryInterpreter getQueryInterpreter(Context context) {
-		return new QueryInterpreter(context);
-	}
 	
 	@Override
-	public IQueryFactory getQueryFactory() {
-		return new QueryFactory();
+	public IQueryBuilder newQueryBuilder() {
+		return new QueryBuilder();
 	}
 	
 	@Override
 	public IStored fetchOne(IQuery query) throws PromptoError {
+		Query q = (Query)query;
 		for(StorableDocument doc : documents.values()) {
-			if(doc.matches(((Query)query).getPredicate()))
+			if(doc.matches(q.getPredicate()))
 				return doc;
 		}
 		return null;
@@ -116,8 +118,9 @@ public final class MemStore implements IStore {
 	
 	@Override
 	public IStoredIterable fetchMany(IQuery query) throws PromptoError {
-		final List<StorableDocument> allDocs = fetchManyDocs(query);
-		final List<StorableDocument> slicedDocs = slice(query, allDocs);
+		Query q = (Query)query;
+		final List<StorableDocument> allDocs = fetchManyDocs(q);
+		final List<StorableDocument> slicedDocs = slice(q, allDocs);
 		return new IStoredIterable() {
 			@Override
 			public long length() {
@@ -135,9 +138,9 @@ public final class MemStore implements IStore {
 		};
 	}
 	
-	private List<StorableDocument> fetchManyDocs(IQuery query) throws PromptoError {
-		List<StorableDocument> docs = filterDocs(((Query)query).getPredicate());
-		docs = sort(((Query)query).getOrdering(), docs);
+	private List<StorableDocument> fetchManyDocs(Query query) throws PromptoError {
+		List<StorableDocument> docs = filterDocs((query).getPredicate());
+		docs = sort(query.getOrdering(), docs);
 		return docs;
 	}
 
@@ -152,7 +155,7 @@ public final class MemStore implements IStore {
 		return docs;
 	}
 	
-	private List<StorableDocument> slice(IQuery query, List<StorableDocument> docs) {
+	private List<StorableDocument> slice(Query query, List<StorableDocument> docs) {
 		if(docs==null || docs.isEmpty())
 			return docs;
 		Long first = query.getFirst();

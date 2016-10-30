@@ -1,6 +1,7 @@
 package prompto.type;
 
 import prompto.grammar.Identifier;
+import prompto.store.Family;
 
 public class ResourceType extends CategoryType {
 

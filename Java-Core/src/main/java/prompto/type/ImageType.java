@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import prompto.intrinsic.PromptoBinary;
 import prompto.runtime.Context;
+import prompto.store.Family;
 import prompto.value.BinaryValue;
 import prompto.value.IValue;
 import prompto.value.Image;

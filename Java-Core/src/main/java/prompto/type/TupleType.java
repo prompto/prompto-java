@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoTuple;
 import prompto.runtime.Context;
+import prompto.store.Family;
 
 public class TupleType extends ContainerType {
 

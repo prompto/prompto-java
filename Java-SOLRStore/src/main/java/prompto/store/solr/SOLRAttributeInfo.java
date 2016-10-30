@@ -4,33 +4,17 @@ import java.security.InvalidParameterException;
 import java.util.Collection;
 import java.util.function.Function;
 
-import prompto.declaration.AttributeDeclaration;
-import prompto.declaration.AttributeInfo;
-import prompto.runtime.Context;
-import prompto.store.IQuery.MatchOp;
-import prompto.type.IType;
-import prompto.type.IType.Family;
-import prompto.type.ListType;
-import prompto.type.TextType;
+import prompto.store.AttributeInfo;
+import prompto.store.Family;
+import prompto.store.IQueryBuilder.MatchOp;
 
 class SOLRAttributeInfo extends AttributeInfo {
 	
-	public static SOLRAttributeInfo computeFieldFlags(Context context, String fieldName) {
-		if(context!=null) {
-			AttributeDeclaration column = context.findAttribute(fieldName);
-			return computeFieldFlags(column);
-		} else
-			return null;
-	}
-	
-	static SOLRAttributeInfo computeFieldFlags(AttributeDeclaration column) {
+	static SOLRAttributeInfo computeFieldFlags(AttributeInfo column) {
 		SOLRAttributeInfo info = null; 
 		if(!"version".equals(column.getName())) {
-			IType type = column.getType();
-			if(type instanceof ListType)
-				type = ((ListType)type).getItemType();
-			if(type==TextType.instance())
-				info = new SOLRAttributeInfo(column.getAttributeInfo());
+			if(column.getFamily()==Family.TEXT)
+				info = new SOLRAttributeInfo(column);
 		}
 		return info;
 	}

@@ -16,6 +16,7 @@ import prompto.intrinsic.PromptoDocument;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoSet;
 import prompto.runtime.Context;
+import prompto.store.Family;
 import prompto.type.AnyType;
 import prompto.type.BaseType;
 import prompto.type.DictType;

@@ -11,6 +11,7 @@ import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.runtime.Context.ClosureContext;
+import prompto.store.Family;
 
 public class MethodType extends BaseType {
 

@@ -5,10 +5,10 @@ import prompto.compiler.Flags;
 import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.declaration.AttributeInfo;
 import prompto.parser.Section;
 import prompto.runtime.Context;
-import prompto.store.IQuery;
+import prompto.store.AttributeInfo;
+import prompto.store.IQueryBuilder;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
 
@@ -40,7 +40,7 @@ public class OrderByClause extends Section {
 			writer.append(" descending");
 	}
 
-	public void interpretQuery(Context context, IQuery q) {
+	public void interpretQuery(Context context, IQueryBuilder q) {
 		// TODO members
 		Identifier name = qualifiedName.getFirst();
 		AttributeInfo info = context.findAttribute(name.toString()).getAttributeInfo();
@@ -53,7 +53,7 @@ public class OrderByClause extends Section {
 		AttributeInfo info = context.findAttribute(name.toString()).getAttributeInfo();
 		CompilerUtils.compileAttributeInfo(context, method, flags, info);
 		method.addInstruction(descending ? Opcode.ICONST_1 : Opcode.ICONST_0);
-		InterfaceConstant i = new InterfaceConstant(IQuery.class, "addOrderByClause", 
+		InterfaceConstant i = new InterfaceConstant(IQueryBuilder.class, "addOrderByClause", 
 				AttributeInfo.class, boolean.class, void.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, i);
 	}

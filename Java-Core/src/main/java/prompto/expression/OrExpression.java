@@ -20,8 +20,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
-import prompto.store.IPredicateExpression;
-import prompto.store.IQuery;
+import prompto.store.IQueryBuilder;
 import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -92,7 +91,7 @@ public class OrExpression implements IPredicateExpression, IAssertion {
 	}
 	
 	@Override
-	public void interpretQuery(Context context, IQuery query) throws PromptoError {
+	public void interpretQuery(Context context, IQueryBuilder query) throws PromptoError {
 		if(!(left instanceof IPredicateExpression))
 			throw new SyntaxError("Not a predicate: " + left.toString());
 		((IPredicateExpression)left).interpretQuery(context, query);
@@ -133,8 +132,8 @@ public class OrExpression implements IPredicateExpression, IAssertion {
 	public void compileQuery(Context context, MethodInfo method, Flags flags) {
 		((IPredicateExpression)left).compileQuery(context, method, flags);
 		((IPredicateExpression)right).compileQuery(context, method, flags);
-		method.addInstruction(Opcode.DUP); // IQuery -> IQuery, IQuery
-		InterfaceConstant m = new InterfaceConstant(IQuery.class, "or", void.class);
+		method.addInstruction(Opcode.DUP); // IQueryBuilder -> IQueryBuilder, IQueryBuilder
+		InterfaceConstant m = new InterfaceConstant(IQueryBuilder.class, "or", void.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, m);
 	}
 

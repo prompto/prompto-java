@@ -4,7 +4,7 @@ import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
-import prompto.store.IQuery;
+import prompto.store.IQueryBuilder;
 import prompto.utils.CodeWriter;
 import prompto.utils.ObjectList;
 
@@ -31,7 +31,7 @@ public class OrderByClauseList extends ObjectList<OrderByClause> {
 			writer.append(" )");
 	}
 
-	public void interpretQuery(Context context, IQuery q) {
+	public void interpretQuery(Context context, IQueryBuilder q) {
 		this.forEach((clause)->
 			clause.interpretQuery(context, q));
 	}

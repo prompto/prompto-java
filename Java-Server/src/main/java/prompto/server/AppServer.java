@@ -4,7 +4,9 @@ import java.io.File;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.server.Connector;
@@ -26,12 +28,13 @@ import prompto.compiler.PromptoClassLoader;
 import prompto.declaration.AttributeDeclaration;
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
+import prompto.memstore.MemStoreFactory;
 import prompto.runtime.Context;
+import prompto.store.AttributeInfo;
 import prompto.store.IDataStore;
 import prompto.store.IStore;
 import prompto.store.IStoreFactory;
 import prompto.store.IStoreFactory.Type;
-import prompto.store.MemStoreFactory;
 import prompto.type.IType;
 import prompto.type.ListType;
 import prompto.type.TextType;
@@ -159,7 +162,8 @@ public class AppServer {
 		System.out.println("Initializing schema...");
 		Map<String, AttributeDeclaration> columns = getMinimalDataColumns(dataStore);
 		codeStore.collectStorableAttributes(columns);
-		dataStore.createOrUpdateColumns(columns.values());
+		List<AttributeInfo> infos = columns.values().stream().map((c)->c.getAttributeInfo()).collect(Collectors.toList());
+		dataStore.createOrUpdateColumns(infos);
 		System.out.println("Schema successfully initialized.");
 	}
 

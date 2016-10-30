@@ -1,5 +1,6 @@
 package prompto.store;
 
+import prompto.memstore.MemStore;
 import prompto.utils.ISingleton;
 
 public interface IDataStore extends IStore {

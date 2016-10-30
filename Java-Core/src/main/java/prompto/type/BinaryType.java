@@ -3,6 +3,7 @@ package prompto.type;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoBinary;
 import prompto.runtime.Context;
+import prompto.store.Family;
 import prompto.value.BinaryValue;
 import prompto.value.IValue;
 

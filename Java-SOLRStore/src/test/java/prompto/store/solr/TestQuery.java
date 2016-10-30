@@ -20,6 +20,7 @@ import prompto.grammar.Identifier;
 import prompto.parser.ECleverParser;
 import prompto.parser.EPromptoBuilder;
 import prompto.runtime.Context;
+import prompto.store.IQuery;
 import prompto.store.IStorable;
 import prompto.store.IStore;
 import prompto.store.IStored;
@@ -86,7 +87,8 @@ public class TestQuery extends BaseSOLRTest {
 		ParseTreeWalker walker = new ParseTreeWalker();
 		walker.walk(builder, tree);
 		FetchOneExpression fetch = builder.<FetchOneExpression>getNodeValue(tree);
-		return store.interpretFetchOne(context, fetch.getType(), fetch.getPredicate(context));
+		IQuery q = fetch.buildFetchOneQuery(context, store); 
+		return store.fetchOne(q);
 	}
 	
 	@Test

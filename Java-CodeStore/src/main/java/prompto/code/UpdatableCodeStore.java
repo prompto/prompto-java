@@ -22,18 +22,20 @@ import prompto.error.ReadWriteError;
 import prompto.expression.AndExpression;
 import prompto.expression.EqualsExpression;
 import prompto.expression.IExpression;
+import prompto.expression.IPredicateExpression;
 import prompto.expression.UnresolvedIdentifier;
 import prompto.grammar.EqOp;
 import prompto.grammar.Identifier;
 import prompto.grammar.OrderByClause;
 import prompto.grammar.OrderByClauseList;
-import prompto.literal.BooleanLiteral;
-import prompto.literal.IntegerLiteral;
 import prompto.literal.TextLiteral;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
-import prompto.store.IPredicateExpression;
+import prompto.store.AttributeInfo;
+import prompto.store.Family;
+import prompto.store.IQueryBuilder;
+import prompto.store.IQueryBuilder.MatchOp;
 import prompto.store.IStorable;
 import prompto.store.IStore;
 import prompto.store.IStored;
@@ -301,16 +303,62 @@ public class UpdatableCodeStore extends BaseCodeStore {
 			Arrays.asList(DeclarationType.ATTRIBUTE.name(), DeclarationType.CATEGORY.name(), DeclarationType.TEST.name()));
 	
 	private IStoredIterable fetchManyInStore(String name, CategoryType type, Version version) throws PromptoError {
-		IntegerLiteral one = uniqueDecls.contains(type.toString().toUpperCase()) ? new IntegerLiteral(1) : null;
+		IQueryBuilder builder = store.newQueryBuilder();
+		if(uniqueDecls.contains(type.toString().toUpperCase())) {
+			builder.setFirst(1L);
+			builder.setLast(1L);
+		}
+		AttributeInfo info = new AttributeInfo("category", Family.TEXT, true, null);
+		builder.verify(info, MatchOp.CONTAINS, type.getTypeName());
 		IPredicateExpression filter = buildNameAndVersionFilter(name, version);
+		filter.interpretQuery(context, builder);
 		if(LATEST_VERSION.equals(version)) {
 			IdentifierList names = IdentifierList.parse("prototype,version");
 			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
-			IStoredIterable stored = store.interpretFetchMany(context, type, one, one, filter, orderBy);
+			orderBy.interpretQuery(context, builder);
+			IStoredIterable stored = store.fetchMany(builder.build());
 			return fetchDistinct(stored);
 		} else
-			return store.interpretFetchMany(context, type, one, one, filter, null); 
+			return store.fetchMany(builder.build()); 
 	}
+	
+	private IStored fetchOneInStore(String name, CategoryType type, Version version) throws PromptoError {
+		IQueryBuilder builder = store.newQueryBuilder();
+		AttributeInfo info = new AttributeInfo("category", Family.TEXT, true, null);
+		builder.verify(info, MatchOp.CONTAINS, type.getTypeName());
+		IPredicateExpression filter = buildNameAndVersionFilter(name, version);
+		filter.interpretQuery(context, builder);
+		builder.and();
+		if(LATEST_VERSION.equals(version)) {
+			IdentifierList names = new IdentifierList(new Identifier("version"));
+			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
+			orderBy.interpretQuery(context, builder);
+			builder.setFirst(1L);
+			builder.setLast(1L);
+			IStoredIterable iterable = store.fetchMany(builder.build());
+			Iterator<IStored> stored = iterable.iterator();
+			return stored.hasNext() ? stored.next() : null;
+		} else
+			return store.fetchOne(builder.build()); 
+	}
+
+	@Override
+	public void collectStorableAttributes(Map<String, AttributeDeclaration> map) throws PromptoError {
+		super.collectStorableAttributes(map);
+		IQueryBuilder builder = store.newQueryBuilder();
+		AttributeInfo info = new AttributeInfo("category", Family.TEXT, true, null);
+		builder.verify(info, MatchOp.CONTAINS, "AttributeDeclaration");
+		info = new AttributeInfo("storable", Family.BOOLEAN, false, null);
+		builder.verify(info, MatchOp.EQUALS, true);
+		builder.and();
+		IStoredIterable iterable = store.fetchMany(builder.build());
+		Iterator<IStored> stored = iterable.iterator();
+		while(stored.hasNext()) {
+			AttributeDeclaration attr = parseDeclaration(stored.next());
+			map.put(attr.getName(), attr);		
+		}
+	}
+
 
 	private IStoredIterable fetchDistinct(IStoredIterable iterable) {
 		/* we don't support distinct/group by yet, so need to do it "by hand" */
@@ -331,19 +379,6 @@ public class UpdatableCodeStore extends BaseCodeStore {
 			@Override public long length() { return distinct.size(); }
 			@Override public long totalLength() { return distinct.size(); }
 		};
-	}
-
-	private IStored fetchOneInStore(String name, CategoryType type, Version version) throws PromptoError {
-		IPredicateExpression filter = buildNameAndVersionFilter(name, version);
-		if(LATEST_VERSION.equals(version)) {
-			IdentifierList names = new IdentifierList(new Identifier("version"));
-			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
-			IntegerLiteral one = new IntegerLiteral(1);
-			IStoredIterable iterable = store.interpretFetchMany(context, type, one, one, filter, orderBy);
-			Iterator<IStored> stored = iterable.iterator();
-			return stored.hasNext() ? stored.next() : null;
-		} else
-			return store.interpretFetchOne(context, null, filter); 
 	}
 
 	private IPredicateExpression buildNameAndVersionFilter(String name, Version version) {
@@ -374,18 +409,4 @@ public class UpdatableCodeStore extends BaseCodeStore {
 		}
 	}
 
-	@Override
-	public void collectStorableAttributes(Map<String, AttributeDeclaration> map) throws PromptoError {
-		super.collectStorableAttributes(map);
-		IExpression left = new UnresolvedIdentifier(new Identifier("storable"));
-		IExpression right = new BooleanLiteral("true");
-		IPredicateExpression filter = new EqualsExpression(left, EqOp.EQUALS, right);
-		CategoryType type = new CategoryType(new Identifier("AttributeDeclaration"));
-		IStoredIterable iterable = store.interpretFetchMany(context, type, null, null, filter, null);
-		Iterator<IStored> stored = iterable.iterator();
-		while(stored.hasNext()) {
-			AttributeDeclaration attr = parseDeclaration(stored.next());
-			map.put(attr.getName(), attr);		
-		}
-	}
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import prompto.intrinsic.PromptoRange;
 import prompto.runtime.Context;
+import prompto.store.Family;
 
 public class RangeType extends ContainerType {
 	

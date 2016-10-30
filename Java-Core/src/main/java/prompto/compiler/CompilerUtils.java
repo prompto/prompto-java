@@ -9,12 +9,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import prompto.compiler.IVerifierEntry.VerifierType;
-import prompto.declaration.AttributeInfo;
 import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.store.AttributeInfo;
+import prompto.store.Family;
 import prompto.type.IType;
-import prompto.type.IType.Family;
 import prompto.utils.IdentifierList;
 
 public abstract class CompilerUtils {

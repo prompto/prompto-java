@@ -7,8 +7,8 @@ import org.junit.Test;
 
 import prompto.code.ICodeStore;
 import prompto.code.Version;
+import prompto.memstore.MemStore;
 import prompto.server.AppServer;
-import prompto.store.MemStore;
 
 public class TestModuleImporter {
 
