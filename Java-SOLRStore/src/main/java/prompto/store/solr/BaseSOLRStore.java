@@ -143,6 +143,8 @@ abstract class BaseSOLRStore implements IStore {
 	@Override
 	public Family getColumnTypeFamily(String fieldName) throws PromptoError {
 		String typeName = getColumnTypeName(fieldName);
+		if(typeName.endsWith("[]"))
+			typeName = typeName.substring(0, typeName.length()-"[]".length());
 		return typeMap.get(typeName);
 	}
 	

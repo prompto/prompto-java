@@ -8,8 +8,7 @@ import org.junit.After;
 import org.junit.Test;
 
 import prompto.code.Version;
-import prompto.intrinsic.PromptoDateTime;
-import prompto.intrinsic.PromptoList;
+import prompto.store.Family;
 import prompto.store.IStore;
 import prompto.store.IStoreFactory.Type;
 import prompto.store.solr.EmbeddedSOLRStore;
@@ -37,15 +36,15 @@ public class TestSOLRBootstrap {
 		((EmbeddedSOLRStore)store).startContainer();
 		((EmbeddedSOLRStore)store).startServerWithEmptyCore();
 		AppServer.bootstrapCodeStore(store, "test", Version.parse("1.0.0"), true);
-		assertEquals(store.getDbIdClass(), store.getColumnTypeFamily(IStore.dbIdName));
-		assertEquals(PromptoDateTime.class, store.getColumnTypeFamily("timeStamp"));
-		assertEquals(PromptoList.class, store.getColumnTypeFamily("category"));
-		assertEquals(String.class, store.getColumnTypeFamily("name"));
-		assertEquals(Boolean.class, store.getColumnTypeFamily("storable"));
-		assertEquals(String.class, store.getColumnTypeFamily("version"));
-		assertEquals(String.class, store.getColumnTypeFamily("prototype"));
-		assertEquals(String.class, store.getColumnTypeFamily("dialect"));
-		assertEquals(String.class, store.getColumnTypeFamily("body"));
+		assertEquals(Family.UUID, store.getColumnTypeFamily(IStore.dbIdName));
+		assertEquals(Family.DATETIME, store.getColumnTypeFamily("timeStamp"));
+		assertEquals(Family.TEXT, store.getColumnTypeFamily("category"));
+		assertEquals(Family.TEXT, store.getColumnTypeFamily("name"));
+		assertEquals(Family.BOOLEAN, store.getColumnTypeFamily("storable"));
+		assertEquals(Family.TEXT, store.getColumnTypeFamily("version"));
+		assertEquals(Family.TEXT, store.getColumnTypeFamily("prototype"));
+		assertEquals(Family.TEXT, store.getColumnTypeFamily("dialect"));
+		assertEquals(Family.TEXT, store.getColumnTypeFamily("body"));
 	}
 	
 	@Test
@@ -59,9 +58,9 @@ public class TestSOLRBootstrap {
 		store.startContainer();
 		store.startServerWithEmptyCore();
 		AppServer.bootstrapCodeStore(store, "test", Version.parse("1.0.0"), true);
-		assertEquals(store.getDbIdClass(), store.getColumnTypeFamily(IStore.dbIdName));
-		assertEquals(String.class, store.getColumnTypeFamily("name"));
-		assertEquals(String.class, store.getColumnTypeFamily("version"));
+		assertEquals(Family.UUID, store.getColumnTypeFamily(IStore.dbIdName));
+		assertEquals(Family.TEXT, store.getColumnTypeFamily("name"));
+		assertEquals(Family.TEXT, store.getColumnTypeFamily("version"));
 		assertNull(AppServer.globalContext.findAttribute("prototype"));
 	}
 }
