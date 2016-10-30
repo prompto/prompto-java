@@ -40,8 +40,8 @@ public abstract class QueryInterpreterBase implements IQueryInterpreter {
 		IQuery q = newQuery();
 		if(type!=null)
 			q.<String>verify(new AttributeInfo("category", Family.TEXT, true, null), MatchOp.CONTAINS, type.getTypeName());
-		q.setFirst(getLimit(context, start));
-		q.setLast(getLimit(context, end));
+		q.setFirst(interpretLimit(context, start));
+		q.setLast(interpretLimit(context, end));
 		if(orderBy!=null)
 			orderBy.interpretQuery(context, q);
 		if(predicate!=null)
@@ -51,7 +51,7 @@ public abstract class QueryInterpreterBase implements IQueryInterpreter {
 		return q;
 	}
 
-	private Long getLimit(Context context, IExpression exp) throws PromptoError {
+	private Long interpretLimit(Context context, IExpression exp) throws PromptoError {
 		if(exp==null)
 			return null;
 		IValue value = exp.interpret(context);

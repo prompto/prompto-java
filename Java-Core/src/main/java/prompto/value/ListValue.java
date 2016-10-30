@@ -69,7 +69,6 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 			storables = new ArrayList<>();
 			for(IValue item : items)
 				storables.add(item.getStorableData());
-			return storables;
 		}
 		return storables;
 	}
