@@ -9,7 +9,7 @@ public class SOLRQuery implements IQuery {
 	SolrQuery query;
 	
 	public SOLRQuery(SolrQuery query) {
-		query = new SolrQuery();
+		this.query = query;
 	}
 	
 	public SolrQuery getQuery() {
