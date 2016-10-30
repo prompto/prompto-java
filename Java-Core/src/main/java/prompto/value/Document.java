@@ -5,12 +5,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import prompto.error.InvalidValueError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDocument;
 import prompto.runtime.Context;
+import prompto.store.InvalidValueError;
 import prompto.type.DocumentType;
 
 import com.fasterxml.jackson.core.JsonGenerator;

@@ -12,11 +12,11 @@ import prompto.compiler.OffsetListenerConstant;
 import prompto.compiler.Opcode;
 import prompto.compiler.StackState;
 import prompto.compiler.StringConstant;
-import prompto.error.InvalidValueError;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.intrinsic.PromptoException;
 import prompto.runtime.Context;
+import prompto.store.InvalidValueError;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 

@@ -1,5 +1,6 @@
-package prompto.error;
+package prompto.store;
 
+import prompto.error.ExecutionError;
 import prompto.expression.IExpression;
 import prompto.literal.TextLiteral;
 import prompto.runtime.Context;

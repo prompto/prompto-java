@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.PromptoClassLoader;
-import prompto.error.InvalidValueError;
 import prompto.error.NotStorableError;
 import prompto.store.IStorable;
 import prompto.store.IStorable.IDbIdListener;
@@ -20,6 +19,7 @@ import prompto.store.IStorable.IDbIdProvider;
 import prompto.store.IDataStore;
 import prompto.store.IStored;
 import prompto.store.IStoredIterable;
+import prompto.store.InvalidValueError;
 
 public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMutable {
 

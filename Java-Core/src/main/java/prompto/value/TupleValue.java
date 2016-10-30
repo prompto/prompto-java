@@ -12,7 +12,6 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.error.IndexOutOfRangeError;
-import prompto.error.InvalidValueError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
@@ -21,6 +20,7 @@ import prompto.intrinsic.IterableWithCounts;
 import prompto.intrinsic.PromptoTuple;
 import prompto.literal.Literal;
 import prompto.runtime.Context;
+import prompto.store.InvalidValueError;
 import prompto.type.TupleType;
 import prompto.utils.CodeWriter;
 
