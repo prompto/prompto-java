@@ -20,6 +20,7 @@ import prompto.type.CodeType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
+import prompto.value.NullValue;
 
 public class VariableInstance implements IAssignableInstance {
 	
@@ -129,8 +130,10 @@ public class VariableInstance implements IAssignableInstance {
 	@Override
 	public void assign(Context context, IExpression expression) throws PromptoError {
  		IValue value = expression.interpret(context);
-		if(context.getRegisteredValue(INamed.class,id)==null)
-			context.registerValue(new Variable(id, value.getType())); 
+		if(context.getRegisteredValue(INamed.class,id)==null) {
+			IType type = value!=NullValue.instance() ? value.getType() : expression.check(context);
+			context.registerValue(new Variable(id, type)); 
+		}
 		context.setValue(id, value);
 	}
 	
