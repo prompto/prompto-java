@@ -39,6 +39,7 @@ import prompto.utils.CodeWriter;
 import prompto.utils.TypeUtils;
 import prompto.value.IInstance;
 import prompto.value.IValue;
+import prompto.value.NullValue;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -423,7 +424,9 @@ public class CategoryType extends BaseType {
 	private IValue convertJavaValueToPromptoValue(Context context, CategoryDeclaration decl, Object value) throws PromptoError {
 		if(IDataStore.getInstance().getDbIdClass().isInstance(value))
 			value = IDataStore.getInstance().fetchUnique(value);
-		if(value instanceof IStored)
+		if(value==null)
+			return NullValue.instance();
+		else if(value instanceof IStored)
 			return decl.newInstance(context, (IStored)value);
 		else
 			return super.convertJavaValueToIValue(context, value);
