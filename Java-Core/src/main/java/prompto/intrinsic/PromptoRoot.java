@@ -138,7 +138,11 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMuta
 	
 	private Object getOrCreateDbId() throws NotStorableError {
 		Object dbId = getDbId();
-		return dbId!=null ? dbId : this.storable.getOrCreateDbId();
+		if(dbId==null) {
+			dbId = this.storable.getOrCreateDbId();
+			setDbId(dbId);
+		}
+		return dbId;
 	}
 
 	/* not a great name, but avoids collision with field setters */
@@ -216,8 +220,10 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMuta
 	}
 
 	public void collectStorables(List<IStorable> storables) {
-		if(storable!=null && storable.isDirty())
+		if(storable!=null && storable.isDirty()) {
+			getOrCreateDbId();
 			storables.add(storable);
+		}
 	}
 	
 }
