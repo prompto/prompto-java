@@ -29,6 +29,7 @@ import prompto.store.IStorable;
 import prompto.store.IStore;
 import prompto.type.CategoryType;
 import prompto.type.DecimalType;
+import prompto.utils.TypeUtils;
 
 public class ConcreteInstance extends BaseValue implements IInstance, IMultiplyable {
 
@@ -77,8 +78,10 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	public void collectStorables(List<IStorable> list) {
 		if(storable==null)
 			throw new NotStorableError();
-		if(storable.isDirty())
+		if(storable.isDirty()) {
+			getOrCreateDbId();
 			list.add(storable);
+		}
 		values.values().forEach((value)->
 			value.collectStorables(list));
 	}
@@ -184,7 +187,14 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	
 	private Object getOrCreateDbId() throws NotStorableError {
 		Object dbId = getDbId();
-		return dbId!=null ? dbId : this.storable.getOrCreateDbId();
+		if(dbId!=null)
+			return dbId;
+		else {
+			dbId = this.storable.getOrCreateDbId();
+			IValue value = TypeUtils.fieldToValue(null, IStore.dbIdName, dbId);
+			values.put(new Identifier(IStore.dbIdName), value);
+			return dbId;
+		}
 	}
 
 	private IValue autocast(AttributeDeclaration decl, IValue value) {

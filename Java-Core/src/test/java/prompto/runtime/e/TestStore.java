@@ -20,6 +20,16 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedDeleteRecords() throws Exception {
+		checkInterpretedOutput("store/deleteRecords.pec");
+	}
+
+	@Test
+	public void testCompiledDeleteRecords() throws Exception {
+		checkCompiledOutput("store/deleteRecords.pec");
+	}
+
+	@Test
 	public void testInterpretedFlush() throws Exception {
 		checkInterpretedOutput("store/flush.pec");
 	}

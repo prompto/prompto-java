@@ -55,14 +55,21 @@ public final class MemStore implements IStore {
 	}
 	
 	@Override
-	public void store(Collection<?> deletables, Collection<IStorable> storables) throws PromptoError {
+	public void store(Collection<?> dbIds, Collection<IStorable> storables) throws PromptoError {
+		if(dbIds!=null) 
+			delete(dbIds);
+		if(storables!=null)
+			store(storables);
+	}
+
+	public void store(Collection<IStorable> storables) throws PromptoError {
 		for(IStorable storable : storables) {
 			if(!(storable instanceof StorableDocument))
 				throw new IllegalStateException("Expecting a StorableDocument");
 			store((StorableDocument)storable);
 		}
 	}
-	
+
 	public void store(StorableDocument storable) throws PromptoError {
 		// ensure db id
 		Object dbId = storable.getData(dbIdName);

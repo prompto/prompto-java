@@ -24,13 +24,18 @@ public interface IStore {
 	IStorable newStorable(List<String> categories, IDbIdListener listener);
 	
 	void store(Collection<?> deletables, Collection<IStorable> storables) throws PromptoError;
+	default void store(Collection<IStorable> storables) throws PromptoError {
+		store(null, storables);
+	}
 	default void store(IStorable storable) throws PromptoError {
 		store(null, Arrays.asList(storable));
 	}
 	
-	void delete(Collection<?> dbIds) throws PromptoError;
+	default void delete(Collection<?> dbIds) throws PromptoError {
+		store(dbIds, null);
+	}
 	default void delete(Object dbId) throws PromptoError {
-		delete(Arrays.asList(dbId));
+		store(Arrays.asList(dbId), null);
 	}
 	void deleteAll() throws PromptoError;
 
