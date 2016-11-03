@@ -187,14 +187,12 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	
 	private Object getOrCreateDbId() throws NotStorableError {
 		Object dbId = getDbId();
-		if(dbId!=null)
-			return dbId;
-		else {
+		if(dbId==null) {
 			dbId = this.storable.getOrCreateDbId();
 			IValue value = TypeUtils.fieldToValue(null, IStore.dbIdName, dbId);
 			values.put(new Identifier(IStore.dbIdName), value);
-			return dbId;
 		}
+		return dbId;
 	}
 
 	private IValue autocast(AttributeDeclaration decl, IValue value) {
