@@ -14,7 +14,6 @@ import prompto.error.ReadWriteError;
 import prompto.intrinsic.PromptoBinary;
 import prompto.store.IStorable;
 import prompto.store.IStore;
-import prompto.value.IValue;
 
 public class StorableDocument extends BaseDocument implements IStorable {
 
@@ -34,20 +33,12 @@ public class StorableDocument extends BaseDocument implements IStorable {
 	}
 	
 	@Override
-	public IValue getOrCreateDbId() {
-		UUID dbId = getNativeDbId();
-		return dbId==null ? null : new prompto.value.UUIDValue(dbId);
-	}
-	
-	private UUID getNativeDbId() {
+	public UUID getOrCreateDbId() {
 		ensureDocument(null);
 		SolrInputField dbIdField = document.getField(IStore.dbIdName);
-		if(dbIdField!=null)
-			return (UUID)dbIdField.getValue();
-		else
-			return null;
+		return (UUID)dbIdField.getValue();
 	}
-
+	
 	@Override
 	public void setDirty(boolean set) {
 		if(!set) {

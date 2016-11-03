@@ -4,9 +4,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+import org.apache.solr.common.SolrInputDocument;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,6 +33,7 @@ import prompto.literal.TimeLiteral;
 import prompto.runtime.Context;
 import prompto.store.IDataStore;
 import prompto.store.IQuery;
+import prompto.store.IStorable;
 import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.store.IStoredIterable;
@@ -182,6 +185,22 @@ public class TestInstance extends BaseSOLRTest {
 		assertEquals(fieldValue, stored.getData(fieldName));
 	}
 
+	private static boolean isDump() {
+		return false;
+	}
+	
+	private static void dumpDbIds(String which, IInstance instance) {
+		if(isDump()) {
+			IValue value = instance.getMember(null, new Identifier("dbId"), false);
+			Object dbId = value==null ? null : value.getStorableData();
+			System.err.print(which + ": ivalue: " + String.valueOf(dbId));
+			IStorable storable = instance.getStorable();
+			SolrInputDocument document = storable==null ? null : ((StorableDocument)storable).getDocument();
+			dbId = document == null ? null : document.getFieldValue("dbId");
+			System.err.println(", dbvalue: " + String.valueOf(dbId));
+		}
+	}
+	
 	@Test
 	public void testStoreChildField() throws Exception {
 		CategoryType type = new CategoryType(new Identifier("Test"));
@@ -192,14 +211,24 @@ public class TestInstance extends BaseSOLRTest {
 		createField(fieldName, "text", false);
 		createField(childName, "db-ref", false);
 		IInstance parent = createInstanceWith2Attributes(fieldName, TextType.instance(), childName, type);
+		dumpDbIds("parent", parent);
 		ConcreteCategoryDeclaration cd = context.getRegisteredDeclaration(
 				ConcreteCategoryDeclaration.class, new Identifier("Test"), false);
 		ConcreteInstance child = new ConcreteInstance(context, cd);
+		dumpDbIds("child", child);
 		child.setMutable(true);
 		child.setMember(context, new Identifier(fieldName), new Text(childValue));
+		dumpDbIds("child", child);
 		parent.setMember(context, new Identifier(fieldName), new Text(fieldValue));
+		dumpDbIds("parent", parent);
 		parent.setMember(context, new Identifier(childName), child);
-		store.store(null, Arrays.asList(parent.getStorable(), child.getStorable()));
+		dumpDbIds("parent", parent);
+		dumpDbIds("child", child);
+		List<IStorable> storables = new ArrayList<IStorable>();
+		parent.collectStorables(storables);
+		dumpDbIds("parent", parent);
+		dumpDbIds("child", child);
+		store.store(null, storables);
 		store.flush();
 		IStored stored = fetchOne(fieldName, new TextLiteral(fieldValue));
 		assertNotNull(stored);
