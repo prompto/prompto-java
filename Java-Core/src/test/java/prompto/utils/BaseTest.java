@@ -37,7 +37,7 @@ public class BaseTest {
 	private InputStream tryLoadLibraryFile(String resourceName) throws FileNotFoundException {
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
 		String dirPath = loader.getResource("").getFile();
-		int idx = dirPath.lastIndexOf("/prompto-java/Java-Runtime/");
+		int idx = dirPath.lastIndexOf("/Java-Runtime/");
 		if(idx<0)
 			return null;
 		String libsPath = dirPath.substring(0, idx) + "/prompto-libraries/";
@@ -51,7 +51,7 @@ public class BaseTest {
 	public File[] listLibraryFiles(String libraryName) {
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
 		String dirPath = loader.getResource("").getFile();
-		int idx = dirPath.lastIndexOf("/prompto-java/Java-Runtime/");
+		int idx = dirPath.lastIndexOf("/Java-Runtime/");
 		if(idx<0)
 			return null;
 		String libsPath = dirPath.substring(0, idx) + "/prompto-libraries/";
@@ -71,7 +71,7 @@ public class BaseTest {
 	private InputStream tryLoadRuntimeFile(String resourceName) throws FileNotFoundException {
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
 		String dirPath = loader.getResource("").getFile();
-		int idx = dirPath.lastIndexOf("/prompto-java/Java-Core/");
+		int idx = dirPath.lastIndexOf("/Java-Core/");
 		if(idx<0)
 			return null;
 		String testsPath = dirPath.substring(0, idx) + "/prompto-tests/Tests/resources/";

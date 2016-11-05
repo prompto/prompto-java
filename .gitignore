@@ -8,3 +8,5 @@
 **/.settings/*
 **/.classpath
 travis.yml
+prompto-libraries
+prompto-tests
