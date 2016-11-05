@@ -6,6 +6,7 @@
 		<groupId>org.prompto</groupId>
 		<artifactId>Parent</artifactId>
 		<version>${parent.version}</version>
+		<relativePath>../</relativePath>
 	</parent>
 	<artifactId>Core</artifactId>
 	<packaging>jar</packaging>
