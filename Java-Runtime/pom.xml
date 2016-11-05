@@ -5,8 +5,8 @@
 	<parent>
 		<groupId>org.prompto</groupId>
 		<artifactId>Parent</artifactId>
-		<version>${parent.version}</version>
-		<relativePath>../</relativePath>
+		<version>trunk-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>Runtime</artifactId>
 
