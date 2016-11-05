@@ -10,3 +10,5 @@ before_install:
   - curl https://codeload.github.com/prompto/prompto-libraries/zip/master > prompto-libraries.zip
   - unzip prompto-libraries.zip
   - mv prompto-libraries-master prompto-libraries
+script:
+  - mvn install

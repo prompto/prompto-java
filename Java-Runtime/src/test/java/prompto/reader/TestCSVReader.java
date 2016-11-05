@@ -51,6 +51,7 @@ public class TestCSVReader {
 		assertNotNull(doc);
 		assertEquals("2", doc.get("id"));
 		assertEquals("Riou, Sylvie", doc.get("name"));
+		assertTrue(false);
 	}
 
 	@Test
