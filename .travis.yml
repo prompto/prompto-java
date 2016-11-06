@@ -3,10 +3,10 @@ language: java
 jdk:
   - oraclejdk8
 before_install:
-  - sudo apt-get install unzip
-  - curl https://codeload.github.com/prompto/prompto-tests/zip/master > prompto-tests.zip
-  - unzip prompto-tests.zip
-  - mv prompto-tests-master prompto-tests
-  - curl https://codeload.github.com/prompto/prompto-libraries/zip/master > prompto-libraries.zip
-  - unzip prompto-libraries.zip
-  - mv prompto-libraries-master prompto-libraries
+#  - sudo apt-get install unzip
+#  - curl https://codeload.github.com/prompto/prompto-tests/zip/master > prompto-tests.zip
+#  - unzip prompto-tests.zip
+#  - mv prompto-tests-master prompto-tests
+#  - curl https://codeload.github.com/prompto/prompto-libraries/zip/master > prompto-libraries.zip
+#  - unzip prompto-libraries.zip
+#  - mv prompto-libraries-master prompto-libraries

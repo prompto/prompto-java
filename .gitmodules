@@ -1,0 +1,6 @@
+[submodule "prompto-tests"]
+	path = prompto-tests
+	url = https://ericvergnaud@github.com/prompto/prompto-tests.git
+[submodule "prompto-libraries"]
+	path = prompto-libraries
+	url = https://ericvergnaud@github.com/prompto/prompto-libraries.git
