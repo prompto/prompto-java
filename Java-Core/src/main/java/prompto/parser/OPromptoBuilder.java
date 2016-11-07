@@ -66,7 +66,7 @@ import prompto.expression.DocumentExpression;
 import prompto.expression.EqualsExpression;
 import prompto.expression.ExecuteExpression;
 import prompto.expression.FetchManyExpression;
-import prompto.expression.FetchListExpression;
+import prompto.expression.FilteredListExpression;
 import prompto.expression.FetchOneExpression;
 import prompto.expression.IExpression;
 import prompto.expression.InstanceExpression;
@@ -1068,15 +1068,6 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	
 	@Override
-	public void exitFetch_list_expression(Fetch_list_expressionContext ctx) {
-		Identifier itemName = this.<Identifier>getNodeValue(ctx.name);
-		IExpression source = this.<IExpression>getNodeValue(ctx.source);
-		IExpression filter = this.<IExpression>getNodeValue(ctx.predicate);
-		setNodeValue(ctx, new FetchListExpression(itemName, source, filter));
-	}
-	
-	
-	@Override
 	public void exitFetchOne(FetchOneContext ctx) {
 		CategoryType category = this.<CategoryType>getNodeValue(ctx.typ);
 		IExpression filter = this.<IExpression>getNodeValue(ctx.predicate);
@@ -1091,6 +1082,15 @@ public class OPromptoBuilder extends OParserBaseListener {
 		IExpression filter = this.<IExpression>getNodeValue(ctx.predicate);
 		OrderByClauseList orderBy = this.<OrderByClauseList>getNodeValue(ctx.orderby);
 		setNodeValue(ctx, new FetchManyExpression(category, start, stop, filter, orderBy));
+	}
+	
+	
+	@Override
+	public void exitFiltered_list_expression(Filtered_list_expressionContext ctx) {
+		Identifier itemName = this.<Identifier>getNodeValue(ctx.name);
+		IExpression source = this.<IExpression>getNodeValue(ctx.source);
+		IExpression filter = this.<IExpression>getNodeValue(ctx.predicate);
+		setNodeValue(ctx, new FilteredListExpression(itemName, source, filter));
 	}
 	
 	

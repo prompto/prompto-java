@@ -1025,6 +1025,18 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterFilteredListExpression(@NotNull SParser.FilteredListExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFilteredListExpression(@NotNull SParser.FilteredListExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterNotContainsExpression(@NotNull SParser.NotContainsExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1457,13 +1469,13 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFetch_list_expression(@NotNull SParser.Fetch_list_expressionContext ctx) { }
+	@Override public void enterFiltered_list_suffix(@NotNull SParser.Filtered_list_suffixContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFetch_list_expression(@NotNull SParser.Fetch_list_expressionContext ctx) { }
+	@Override public void exitFiltered_list_suffix(@NotNull SParser.Filtered_list_suffixContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -1019,6 +1019,18 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitContainsExpression(@NotNull EParser.ContainsExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code FilteredListExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterFilteredListExpression(@NotNull EParser.FilteredListExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code FilteredListExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitFilteredListExpression(@NotNull EParser.FilteredListExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code ConstructorExpression}
 	 * labeled alternative in {@link EParser#expression}.
 	 * @param ctx the parse tree
@@ -1078,18 +1090,6 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitExecuteExpression(@NotNull EParser.ExecuteExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code FetchListExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterFetchListExpression(@NotNull EParser.FetchListExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code FetchListExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitFetchListExpression(@NotNull EParser.FetchListExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code GreaterThanOrEqualExpression}
 	 * labeled alternative in {@link EParser#expression}.
@@ -1471,15 +1471,15 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitAmbiguous_expression(@NotNull EParser.Ambiguous_expressionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link EParser#fetch_list_expression}.
+	 * Enter a parse tree produced by {@link EParser#filtered_list_suffix}.
 	 * @param ctx the parse tree
 	 */
-	void enterFetch_list_expression(@NotNull EParser.Fetch_list_expressionContext ctx);
+	void enterFiltered_list_suffix(@NotNull EParser.Filtered_list_suffixContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link EParser#fetch_list_expression}.
+	 * Exit a parse tree produced by {@link EParser#filtered_list_suffix}.
 	 * @param ctx the parse tree
 	 */
-	void exitFetch_list_expression(@NotNull EParser.Fetch_list_expressionContext ctx);
+	void exitFiltered_list_suffix(@NotNull EParser.Filtered_list_suffixContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code FetchOne}
 	 * labeled alternative in {@link EParser#fetch_store_expression}.

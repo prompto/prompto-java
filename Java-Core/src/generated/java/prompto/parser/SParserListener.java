@@ -943,6 +943,18 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitContainsExpression(@NotNull SParser.ContainsExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code FilteredListExpression}
+	 * labeled alternative in {@link SParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterFilteredListExpression(@NotNull SParser.FilteredListExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code FilteredListExpression}
+	 * labeled alternative in {@link SParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitFilteredListExpression(@NotNull SParser.FilteredListExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code NotContainsExpression}
 	 * labeled alternative in {@link SParser#expression}.
 	 * @param ctx the parse tree
@@ -1359,15 +1371,15 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitWrite_statement(@NotNull SParser.Write_statementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SParser#fetch_list_expression}.
+	 * Enter a parse tree produced by {@link SParser#filtered_list_suffix}.
 	 * @param ctx the parse tree
 	 */
-	void enterFetch_list_expression(@NotNull SParser.Fetch_list_expressionContext ctx);
+	void enterFiltered_list_suffix(@NotNull SParser.Filtered_list_suffixContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SParser#fetch_list_expression}.
+	 * Exit a parse tree produced by {@link SParser#filtered_list_suffix}.
 	 * @param ctx the parse tree
 	 */
-	void exitFetch_list_expression(@NotNull SParser.Fetch_list_expressionContext ctx);
+	void exitFiltered_list_suffix(@NotNull SParser.Filtered_list_suffixContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code FetchOne}
 	 * labeled alternative in {@link SParser#fetch_store_expression}.
