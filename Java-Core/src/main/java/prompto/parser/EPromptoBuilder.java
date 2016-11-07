@@ -65,7 +65,7 @@ import prompto.expression.DocumentExpression;
 import prompto.expression.EqualsExpression;
 import prompto.expression.ExecuteExpression;
 import prompto.expression.FetchManyExpression;
-import prompto.expression.FetchListExpression;
+import prompto.expression.FilteredListExpression;
 import prompto.expression.FetchOneExpression;
 import prompto.expression.IExpression;
 import prompto.expression.IntDivideExpression;
@@ -1064,34 +1064,40 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	
 	@Override
-	public void exitFetch_list_expression(Fetch_list_expressionContext ctx) {
-		Identifier itemName = this.<Identifier>getNodeValue(ctx.variable_identifier());
-		IExpression source = this.<IExpression>getNodeValue(ctx.source);
-		IExpression filter = this.<IExpression>getNodeValue(ctx.predicate);
-		setNodeValue(ctx, new FetchListExpression(itemName, source, filter));
-	}
-	
-	@Override
 	public void exitFetchOne(FetchOneContext ctx) {
 		CategoryType category = this.<CategoryType>getNodeValue(ctx.typ);
 		IExpression filter = this.<IExpression>getNodeValue(ctx.predicate);
 		setNodeValue(ctx, new FetchOneExpression(category, filter));
 	}
 	
-	@Override
-	public void exitFetchListExpression(FetchListExpressionContext ctx) {
-		setNodeValue(ctx, getNodeValue(ctx.exp));
-	}
 	
 	@Override
 	public void exitFetchMany(FetchManyContext ctx) {
 		CategoryType category = this.<CategoryType>getNodeValue(ctx.typ);
 		IExpression start = this.<IExpression>getNodeValue(ctx.xstart);
 		IExpression stop = this.<IExpression>getNodeValue(ctx.xstop);
-		IExpression filter = this.<IExpression>getNodeValue(ctx.predicate);
+		IExpression predicate = this.<IExpression>getNodeValue(ctx.predicate);
 		OrderByClauseList orderBy = this.<OrderByClauseList>getNodeValue(ctx.orderby);
-		setNodeValue(ctx, new FetchManyExpression(category, start, stop, filter, orderBy));
+		setNodeValue(ctx, new FetchManyExpression(category, start, stop, predicate, orderBy));
 	}
+
+	
+	@Override
+	public void exitFilteredListExpression(FilteredListExpressionContext ctx) {
+		FilteredListExpression fetch = this.<FilteredListExpression>getNodeValue(ctx.filtered_list_suffix());
+		IExpression source = this.<IExpression>getNodeValue(ctx.src);
+		fetch.setSource(source);
+		setNodeValue(ctx, fetch);
+	}
+	
+	@Override
+	public void exitFiltered_list_suffix(Filtered_list_suffixContext ctx) {
+		Identifier itemName = this.<Identifier>getNodeValue(ctx.variable_identifier());
+		IExpression predicate = this.<IExpression>getNodeValue(ctx.predicate);
+		setNodeValue(ctx, new FilteredListExpression(itemName, null, predicate));
+	}
+	
+	
 	
 	
 	@Override

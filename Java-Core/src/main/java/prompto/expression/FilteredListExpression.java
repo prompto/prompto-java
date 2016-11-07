@@ -34,40 +34,43 @@ import prompto.value.Boolean;
 import prompto.value.IFilterable;
 import prompto.value.IValue;
 
-public class FetchListExpression extends Section implements IExpression {
+public class FilteredListExpression extends Section implements IExpression {
 
 	Identifier itemName;
 	IExpression source;
 	IExpression predicate;
 	
-	public FetchListExpression(Identifier itemName, IExpression source, IExpression predicate) {
+	public FilteredListExpression(Identifier itemName, IExpression source, IExpression predicate) {
 		this.itemName = itemName;
 		this.source = source;
 		this.predicate = predicate;
 	}
 	
-
+	public void setSource(IExpression source) {
+		this.source = source;
+	}
+	
 	@Override
 	public void toDialect(CodeWriter writer) {
 		switch(writer.getDialect()) {
 		case E:
-			writer.append("fetch any ");
+		case S:
+			source.toDialect(writer);
+			writer.append(" filtered with ");
 			writer.append(itemName);
+			writer.append(" where ");
+			predicate.toDialect(writer);
 			break;
 		case O:
-			writer.append("fetch (");
+			writer.append("filtered (");
+			source.toDialect(writer);
+			writer.append(") with (");
 			writer.append(itemName);
+			writer.append(") where (");
+			predicate.toDialect(writer);
 			writer.append(")");
 			break;
-		case S:
-			writer.append("fetch ");
-			writer.append(itemName);
-			break;
 		}
-		writer.append(" from ");
-		source.toDialect(writer);
-		writer.append(" where ");
-		predicate.toDialect(writer);
 	}
 	
 	@Override
@@ -198,4 +201,7 @@ public class FetchListExpression extends Section implements IExpression {
 		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
 		method.addInstruction(Opcode.IRETURN);
 	}
+
+
+
 }

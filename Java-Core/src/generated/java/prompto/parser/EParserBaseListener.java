@@ -1097,6 +1097,18 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterFilteredListExpression(@NotNull EParser.FilteredListExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFilteredListExpression(@NotNull EParser.FilteredListExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterConstructorExpression(@NotNull EParser.ConstructorExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1152,18 +1164,6 @@ public class EParserBaseListener implements EParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitExecuteExpression(@NotNull EParser.ExecuteExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterFetchListExpression(@NotNull EParser.FetchListExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFetchListExpression(@NotNull EParser.FetchListExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1565,13 +1565,13 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFetch_list_expression(@NotNull EParser.Fetch_list_expressionContext ctx) { }
+	@Override public void enterFiltered_list_suffix(@NotNull EParser.Filtered_list_suffixContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFetch_list_expression(@NotNull EParser.Fetch_list_expressionContext ctx) { }
+	@Override public void exitFiltered_list_suffix(@NotNull EParser.Filtered_list_suffixContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

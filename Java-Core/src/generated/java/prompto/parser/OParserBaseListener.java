@@ -1445,13 +1445,13 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFetch_list_expression(@NotNull OParser.Fetch_list_expressionContext ctx) { }
+	@Override public void enterFiltered_list_expression(@NotNull OParser.Filtered_list_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFetch_list_expression(@NotNull OParser.Fetch_list_expressionContext ctx) { }
+	@Override public void exitFiltered_list_expression(@NotNull OParser.Filtered_list_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

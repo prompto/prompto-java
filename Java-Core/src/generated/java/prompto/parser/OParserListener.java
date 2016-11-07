@@ -1353,15 +1353,15 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitWrite_statement(@NotNull OParser.Write_statementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link OParser#fetch_list_expression}.
+	 * Enter a parse tree produced by {@link OParser#filtered_list_expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterFetch_list_expression(@NotNull OParser.Fetch_list_expressionContext ctx);
+	void enterFiltered_list_expression(@NotNull OParser.Filtered_list_expressionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link OParser#fetch_list_expression}.
+	 * Exit a parse tree produced by {@link OParser#filtered_list_expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitFetch_list_expression(@NotNull OParser.Fetch_list_expressionContext ctx);
+	void exitFiltered_list_expression(@NotNull OParser.Filtered_list_expressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code FetchOne}
 	 * labeled alternative in {@link OParser#fetch_store_expression}.
