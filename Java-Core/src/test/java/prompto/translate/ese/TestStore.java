@@ -27,6 +27,11 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testManyUntypedRecords() throws Exception {
+		compareResourceESE("store/manyUntypedRecords.pec");
+	}
+
+	@Test
 	public void testSimpleRecord() throws Exception {
 		compareResourceESE("store/simpleRecord.pec");
 	}

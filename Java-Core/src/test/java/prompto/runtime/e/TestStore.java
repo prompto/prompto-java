@@ -60,6 +60,16 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedManyUntypedRecords() throws Exception {
+		checkInterpretedOutput("store/manyUntypedRecords.pec");
+	}
+
+	@Test
+	public void testCompiledManyUntypedRecords() throws Exception {
+		checkCompiledOutput("store/manyUntypedRecords.pec");
+	}
+
+	@Test
 	public void testInterpretedSimpleRecord() throws Exception {
 		checkInterpretedOutput("store/simpleRecord.pec");
 	}
