@@ -90,9 +90,11 @@ public class FetchManyExpression extends FetchOneExpression {
 		} else
 			writer.append("all ");
 		writer.append("( ");
-		if(type!=null)
+		if(type!=null) {
 			type.toDialect(writer);
-		writer.append(" ) ");
+			writer.append(" ");
+		}
+		writer.append(") ");
 		if(predicate!=null) {
 			writer.append("where ");
 			predicate.toDialect(writer);
@@ -130,21 +132,21 @@ public class FetchManyExpression extends FetchOneExpression {
 
 
 	private void toEDialect(CodeWriter writer) {
-		writer.append("fetch");
+		writer.append("fetch ");
 		if(first==null)
-			writer.append(" all");
+			writer.append("all ");
 		if(type!=null) {
-			writer.append(" ");
 			type.toDialect(writer);
+			writer.append(" ");
 		}
 		if(first!=null) {
-			writer.append(" ");
 			first.toDialect(writer);
 			writer.append(" to ");
 			last.toDialect(writer);
+			writer.append(" ");
 		} 
 		if(predicate!=null) {
-			writer.append(" where ");
+			writer.append("where ");
 			predicate.toDialect(writer);
 		}
 		if(orderBy!=null) {
