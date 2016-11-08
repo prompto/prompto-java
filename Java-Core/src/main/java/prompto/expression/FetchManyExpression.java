@@ -89,7 +89,8 @@ public class FetchManyExpression extends FetchOneExpression {
 		} else
 			writer.append("all ");
 		writer.append(" ( ");
-		type.toDialect(writer);
+		if(type!=null)
+			type.toDialect(writer);
 		writer.append(" ) ");
 		if(predicate!=null) {
 			writer.append("where ");
@@ -105,9 +106,11 @@ public class FetchManyExpression extends FetchOneExpression {
 		writer.append("fetch ");
 		if(first==null)
 			writer.append("all ");
-		writer.append("( ");
-		type.toDialect(writer);
-		writer.append(" ) ");
+		if(type!=null) {
+			writer.append("( ");
+			type.toDialect(writer);
+			writer.append(" ) ");
+		}
 		if(first!=null) {
 			writer.append("rows ( ");
 			first.toDialect(writer);
@@ -152,9 +155,14 @@ public class FetchManyExpression extends FetchOneExpression {
 
 	@Override
 	public IType check(Context context) {
-		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, type.getTypeNameId());
-		if(decl==null)
-			throw new SyntaxError("Expecting a type type !");
+		IType type = this.type;
+		if(type==null)
+			type = AnyType.instance();
+		else {
+			IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, type.getTypeNameId());
+			if(decl==null)
+				throw new SyntaxError("Expecting a type type !");
+		}
 		checkPredicate(context);
 		checkOrderBy(context);
 		checkSlice(context);
