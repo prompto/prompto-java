@@ -86,9 +86,10 @@ public class FetchManyExpression extends FetchOneExpression {
 			first.toDialect(writer);
 			writer.append(" to ");
 			last.toDialect(writer);
+			writer.append(" ");
 		} else
 			writer.append("all ");
-		writer.append(" ( ");
+		writer.append("( ");
 		if(type!=null)
 			type.toDialect(writer);
 		writer.append(" ) ");
