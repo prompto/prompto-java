@@ -100,6 +100,16 @@ public class TestCast extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedCastRoot() throws Exception {
+		checkInterpretedOutput("cast/castRoot.pec");
+	}
+
+	@Test
+	public void testCompiledCastRoot() throws Exception {
+		checkCompiledOutput("cast/castRoot.pec");
+	}
+
+	@Test
 	public void testInterpretedIsAChild() throws Exception {
 		checkInterpretedOutput("cast/isAChild.pec");
 	}

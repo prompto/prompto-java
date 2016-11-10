@@ -11,6 +11,7 @@ import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
+import prompto.type.CategoryType;
 import prompto.type.DecimalType;
 import prompto.type.IType;
 import prompto.type.IntegerType;
@@ -32,9 +33,14 @@ public class CastExpression implements IExpression {
 	@Override
 	public IType check(Context context) {
 		IType actual = expression.check(context);
-		if(!actual.isAssignableFrom(context, type))
-			throw new SyntaxError("Cannot cast " + actual.toString() + " to " + type.toString());
-		return type;
+		// check simple update
+		if(actual instanceof CategoryType
+			&& ((CategoryType)actual).isDerivedFrom(context, type))
+			return type;
+		// check downcast
+		if(actual.isAssignableFrom(context, type))
+			return type;
+		throw new SyntaxError("Cannot cast " + actual.toString() + " to " + type.toString());
 	}
 
 	@Override

@@ -47,6 +47,11 @@ public class TestCast extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCastRoot() throws Exception {
+		compareResourceESE("cast/castRoot.pec");
+	}
+
+	@Test
 	public void testIsAChild() throws Exception {
 		compareResourceESE("cast/isAChild.pec");
 	}

@@ -132,7 +132,9 @@ public abstract class BaseType implements IType {
 
 	@Override
 	public boolean isAssignableFrom(Context context, IType other) {
-		return this==other || this.equals(other) || other.equals(NullType.instance());
+		return this==other 
+				|| this.equals(other) 
+				|| other.equals(NullType.instance());
 	}
 
 	@Override

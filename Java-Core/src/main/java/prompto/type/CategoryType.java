@@ -242,6 +242,22 @@ public class CategoryType extends BaseType {
 		}
 	}
 
+	public boolean isDerivedFrom(Context context, IType other) {
+		if(!(other instanceof CategoryType))
+			return false;
+		return isDerivedFrom(context, (CategoryType)other);
+	}
+	
+	public boolean isDerivedFrom(Context context, CategoryType other) {
+		IDeclaration d = getDeclaration(context);
+		if(d instanceof CategoryDeclaration) {
+			CategoryDeclaration cd = (CategoryDeclaration)d;
+			return isDerivedFromCompatibleCategory(context, cd, other)
+					|| isAssignableToAnonymousCategory(context, cd, other);	
+		} else
+			return false; // TODO
+	}
+	
 	boolean isDerivedFromCompatibleCategory(Context context, CategoryDeclaration decl, CategoryType other) {
 		if(decl.getDerivedFrom()==null)
 			return false;
