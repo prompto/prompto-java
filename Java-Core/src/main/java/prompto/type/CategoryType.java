@@ -291,7 +291,7 @@ public class CategoryType extends BaseType {
 	public boolean isDerivedFromAnonymous(Context context, CategoryDeclaration thisDecl, CategoryDeclaration otherDecl) {
 		// an anonymous category extends 1 and only 1 category
 		Identifier baseName = otherDecl.getDerivedFrom().get(0);
-		// check we derive from root category (if not extending 'Any')
+		// check we derive from root category (if not extending 'any')
 		if(!"any".equals(baseName.toString()) && !thisDecl.isDerivedFrom(context,new CategoryType(baseName)))
 			return false;
 		for(Identifier attribute : otherDecl.getAllAttributes(context)) {
@@ -303,7 +303,7 @@ public class CategoryType extends BaseType {
 	
 	
 	public boolean isAnonymous() {
-		return Character.isLowerCase(getTypeName().charAt(0)); // since it's the name of the argument
+		return Character.isLowerCase(getTypeName().charAt(0)); // since it's the name of the argument 'p' in: any p with name
 	}
 	
 	@Override
