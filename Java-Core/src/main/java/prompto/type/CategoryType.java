@@ -220,26 +220,14 @@ public class CategoryType extends BaseType {
 	
 	@Override
 	public boolean isAssignableFrom(Context context, IType other) {
-		return super.isAssignableFrom(context, other) ||
-				getTypeName().equals(other.getTypeName()) ||
-				(other instanceof CategoryType && 
-				((CategoryType)other).isAssignableTo(context,this));
+		return super.isAssignableFrom(context, other) 
+				|| ( other instanceof CategoryType 
+					 && isAssignableFrom(context, (CategoryType)other));
 	}
 	
-	boolean isAssignableTo(Context context, CategoryType other) {
-		if(getTypeName().equals(other.getTypeName()))
-			return true;
-		try {
-			IDeclaration d = getDeclaration(context);
-			if(d instanceof CategoryDeclaration) {
-				CategoryDeclaration cd = (CategoryDeclaration)d;
-				return isDerivedFromCompatibleCategory(context, cd, other)
-					|| isAssignableToAnonymousCategory(context, cd, other);	
-			} else
-				return false; // TODO
-		} catch (SyntaxError e) {
-			return false;			
-		}
+	public boolean isAssignableFrom(Context context, CategoryType other) {
+		return other.isDerivedFrom(context, this)
+				|| other.isDerivedFromAnonymous(context, this);
 	}
 
 	public boolean isDerivedFrom(Context context, IType other) {
@@ -249,56 +237,73 @@ public class CategoryType extends BaseType {
 	}
 	
 	public boolean isDerivedFrom(Context context, CategoryType other) {
-		IDeclaration d = getDeclaration(context);
-		if(d instanceof CategoryDeclaration) {
-			CategoryDeclaration cd = (CategoryDeclaration)d;
-			return isDerivedFromCompatibleCategory(context, cd, other)
-					|| isAssignableToAnonymousCategory(context, cd, other);	
-		} else
-			return false; // TODO
+		try {
+			IDeclaration thisDecl = getDeclaration(context);
+			if(thisDecl instanceof CategoryDeclaration)
+				return isDerivedFrom(context, (CategoryDeclaration)thisDecl, other);	
+		} catch(SyntaxError e) {
+		}
+		return false; // TODO
 	}
 	
-	boolean isDerivedFromCompatibleCategory(Context context, CategoryDeclaration decl, CategoryType other) {
+	public boolean isDerivedFrom(Context context, CategoryDeclaration decl, CategoryType other) {
 		if(decl.getDerivedFrom()==null)
 			return false;
 		for(Identifier derived : decl.getDerivedFrom()) {
 			CategoryType ct = new CategoryType(derived);
-			if(ct.isAssignableTo(context, other))
+			if(ct.equals(other) || ct.isDerivedFrom(context, other))
 				return true;
 		}
 		return false;
 	}
 	
-	boolean isAssignableToAnonymousCategory(Context context, CategoryDeclaration decl, CategoryType other) {
+	public boolean isDerivedFromAnonymous(Context context, IType other) {
+		if(!(other instanceof CategoryType))
+			return false;
+		return isDerivedFromAnonymous(context, (CategoryType)other);
+	}
+	
+	public boolean isDerivedFromAnonymous(Context context, CategoryType other) {
 		if(!other.isAnonymous())
 			return false;
 		try {
-			IDeclaration d = other.getDeclaration(context);
-			if(d instanceof CategoryDeclaration) {
-				CategoryDeclaration cd = (CategoryDeclaration)d;
-				return isAssignableToAnonymousCategory(context, decl, cd);
-			} else
-				return false; // TODO
-		} catch (SyntaxError e) {
-			return false;			
+			IDeclaration thisDecl = getDeclaration(context);
+			if(thisDecl instanceof CategoryDeclaration)
+				return isDerivedFromAnonymous(context, (CategoryDeclaration)thisDecl, other);	
+		} catch(SyntaxError e) {
 		}
+		return false; // TODO
 	}
-	
-	public boolean isAnonymous() {
-		return Character.isLowerCase(getTypeName().charAt(0)); // since it's the name of the argument
-	}
-	
-	boolean isAssignableToAnonymousCategory(Context context, CategoryDeclaration decl, CategoryDeclaration other) {
-		// an anonymous category extends 1 and only 1 category
-		Identifier baseName = other.getDerivedFrom().get(0);
-		// check we derive from root category (if not extending 'Any')
-		if(!"any".equals(baseName.toString()) && !decl.isDerivedFrom(context,new CategoryType(baseName)))
+
+
+	public boolean isDerivedFromAnonymous(Context context, CategoryDeclaration thisDecl, CategoryType other) {
+		if(!other.isAnonymous())
 			return false;
-		for(Identifier attribute : other.getAllAttributes(context)) {
-			if(!decl.hasAttribute(context,attribute))
+		try {
+			IDeclaration otherDecl = other.getDeclaration(context);
+			if(otherDecl instanceof CategoryDeclaration)
+				return isDerivedFromAnonymous(context, thisDecl, (CategoryDeclaration)otherDecl);	
+		} catch(SyntaxError e) {
+		}
+		return false; // TODO
+	}
+	
+	public boolean isDerivedFromAnonymous(Context context, CategoryDeclaration thisDecl, CategoryDeclaration otherDecl) {
+		// an anonymous category extends 1 and only 1 category
+		Identifier baseName = otherDecl.getDerivedFrom().get(0);
+		// check we derive from root category (if not extending 'Any')
+		if(!"any".equals(baseName.toString()) && !thisDecl.isDerivedFrom(context,new CategoryType(baseName)))
+			return false;
+		for(Identifier attribute : otherDecl.getAllAttributes(context)) {
+			if(!thisDecl.hasAttribute(context,attribute))
 				return false;
 		}
 		return true;
+	}
+	
+	
+	public boolean isAnonymous() {
+		return Character.isLowerCase(getTypeName().charAt(0)); // since it's the name of the argument
 	}
 	
 	@Override
