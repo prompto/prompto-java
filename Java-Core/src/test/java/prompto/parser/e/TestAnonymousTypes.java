@@ -45,18 +45,18 @@ public class TestAnonymousTypes extends BaseEParserTest {
 		argument.register(context);
 		IType st = argument.getType(context);
 		assertTrue(st instanceof AnyType);
-		assertTrue(BooleanType.instance().isAssignableTo(context,st));
-		assertTrue(IntegerType.instance().isAssignableTo(context,st));
-		assertTrue(DecimalType.instance().isAssignableTo(context,st));
-		assertTrue(TextType.instance().isAssignableTo(context,st));
-		assertTrue(DateType.instance().isAssignableTo(context,st));
-		assertTrue(DateTimeType.instance().isAssignableTo(context,st));
-		assertTrue(MissingType.instance().isAssignableTo(context,st)); // missing type always compatible
-		assertTrue(AnyType.instance().isAssignableTo(context,st)); 
-		assertTrue(new CategoryType(new Identifier("Simple")).isAssignableTo(context,st));
-		assertTrue(new CategoryType(new Identifier("Root")).isAssignableTo(context,st));
-		assertTrue(new CategoryType(new Identifier("DerivedWithOther")).isAssignableTo(context,st));
-		assertTrue(new CategoryType(new Identifier("DerivedWithName")).isAssignableTo(context,st));
+		assertTrue(st.isAssignableFrom(context, BooleanType.instance()));
+		assertTrue(st.isAssignableFrom(context, IntegerType.instance()));
+		assertTrue(st.isAssignableFrom(context, DecimalType.instance()));
+		assertTrue(st.isAssignableFrom(context, TextType.instance()));
+		assertTrue(st.isAssignableFrom(context, DateType.instance()));
+		assertTrue(st.isAssignableFrom(context, DateTimeType.instance()));
+		assertTrue(st.isAssignableFrom(context, MissingType.instance())); // missing type always compatible
+		assertTrue(st.isAssignableFrom(context, AnyType.instance())); 
+		assertTrue(st.isAssignableFrom(context, new CategoryType(new Identifier("Simple"))));
+		assertTrue(st.isAssignableFrom(context, new CategoryType(new Identifier("Root"))));
+		assertTrue(st.isAssignableFrom(context, new CategoryType(new Identifier("DerivedWithOther"))));
+		assertTrue(st.isAssignableFrom(context, new CategoryType(new Identifier("DerivedWithName"))));
 	}
 	
 	@Test
@@ -67,18 +67,18 @@ public class TestAnonymousTypes extends BaseEParserTest {
 		argument.register(context);
 		IType st = argument.getType(context);
 		assertTrue(st instanceof CategoryType);
-		assertFalse(BooleanType.instance().isAssignableTo(context,st));
-		assertFalse(IntegerType.instance().isAssignableTo(context,st));
-		assertFalse(DecimalType.instance().isAssignableTo(context,st));
-		assertFalse(TextType.instance().isAssignableTo(context,st));
-		assertFalse(DateType.instance().isAssignableTo(context,st));
-		assertFalse(DateTimeType.instance().isAssignableTo(context,st));
-		assertFalse(MissingType.instance().isAssignableTo(context,st)); // missing type assertFalse compatible
-		assertFalse(AnyType.instance().isAssignableTo(context,st)); // any type never compatible
-		assertTrue(new CategoryType(new Identifier("Simple")).isAssignableTo(context,st)); // since Simple has a name
-		assertFalse(new CategoryType(new Identifier("Root")).isAssignableTo(context,st)); // since Root has no name
-		assertFalse(new CategoryType(new Identifier("DerivedWithOther")).isAssignableTo(context,st)); // since DerivedWithOther has no name
-		assertTrue(new CategoryType(new Identifier("DerivedWithName")).isAssignableTo(context,st)); // since DerivedWithName has a name
+		assertFalse(st.isAssignableFrom(context, BooleanType.instance()));
+		assertFalse(st.isAssignableFrom(context, IntegerType.instance()));
+		assertFalse(st.isAssignableFrom(context, DecimalType.instance()));
+		assertFalse(st.isAssignableFrom(context, TextType.instance()));
+		assertFalse(st.isAssignableFrom(context, DateType.instance()));
+		assertFalse(st.isAssignableFrom(context, DateTimeType.instance()));
+		assertFalse(st.isAssignableFrom(context, MissingType.instance())); // missing type assertFalse compatible
+		assertFalse(st.isAssignableFrom(context, AnyType.instance())); // any type never compatible
+		assertTrue(st.isAssignableFrom(context, new CategoryType(new Identifier("Simple")))); // since Simple has a name
+		assertFalse(st.isAssignableFrom(context, new CategoryType(new Identifier("Root")))); // since Root has no name
+		assertFalse(st.isAssignableFrom(context, new CategoryType(new Identifier("DerivedWithOther")))); // since DerivedWithOther has no name
+		assertTrue(st.isAssignableFrom(context, new CategoryType(new Identifier("DerivedWithName")))); // since DerivedWithName has a name
 	}
 	
 	@Test
@@ -88,18 +88,18 @@ public class TestAnonymousTypes extends BaseEParserTest {
 		argument.register(context);
 		IType st = argument.getType(context);
 		assertTrue(st instanceof CategoryType);
-		assertFalse(BooleanType.instance().isAssignableTo(context,st));
-		assertFalse(IntegerType.instance().isAssignableTo(context,st));
-		assertFalse(DecimalType.instance().isAssignableTo(context,st));
-		assertFalse(TextType.instance().isAssignableTo(context,st));
-		assertFalse(DateType.instance().isAssignableTo(context,st));
-		assertFalse(DateTimeType.instance().isAssignableTo(context,st));
-		assertFalse(MissingType.instance().isAssignableTo(context,st)); // missing type assertFalse compatible
-		assertFalse(AnyType.instance().isAssignableTo(context,st)); // any type never compatible
-		assertFalse(new CategoryType(new Identifier("Simple")).isAssignableTo(context,st));  // since Simple does not extend Root
-		assertTrue(new CategoryType(new Identifier("Root")).isAssignableTo(context,st)); // since Root is Root
-		assertTrue(new CategoryType(new Identifier("DerivedWithOther")).isAssignableTo(context,st)); // since DerivedWithOther extends Root
-		assertTrue(new CategoryType(new Identifier("DerivedWithName")).isAssignableTo(context,st)); // since DerivedWithName extends Root
+		assertFalse(st.isAssignableFrom(context, BooleanType.instance()));
+		assertFalse(st.isAssignableFrom(context, IntegerType.instance()));
+		assertFalse(st.isAssignableFrom(context, DecimalType.instance()));
+		assertFalse(st.isAssignableFrom(context, TextType.instance()));
+		assertFalse(st.isAssignableFrom(context, DateType.instance()));
+		assertFalse(st.isAssignableFrom(context, DateTimeType.instance()));
+		assertFalse(st.isAssignableFrom(context, MissingType.instance())); // missing type assertFalse compatible
+		assertFalse(st.isAssignableFrom(context, AnyType.instance())); // any type never compatible
+		assertFalse(st.isAssignableFrom(context, new CategoryType(new Identifier("Simple"))));  // since Simple does not extend Root
+		assertTrue(st.isAssignableFrom(context, new CategoryType(new Identifier("Root")))); // since Root is Root
+		assertTrue(st.isAssignableFrom(context, new CategoryType(new Identifier("DerivedWithOther")))); // since DerivedWithOther extends Root
+		assertTrue(st.isAssignableFrom(context, new CategoryType(new Identifier("DerivedWithName")))); // since DerivedWithName extends Root
 	}
 
 	@Test
@@ -110,18 +110,18 @@ public class TestAnonymousTypes extends BaseEParserTest {
 		argument.register(context);
 		IType st = argument.getType(context);
 		assertTrue(st instanceof CategoryType);
-		assertFalse(BooleanType.instance().isAssignableTo(context,st));
-		assertFalse(IntegerType.instance().isAssignableTo(context,st));
-		assertFalse(DecimalType.instance().isAssignableTo(context,st));
-		assertFalse(TextType.instance().isAssignableTo(context,st));
-		assertFalse(DateType.instance().isAssignableTo(context,st));
-		assertFalse(DateTimeType.instance().isAssignableTo(context,st));
-		assertFalse(MissingType.instance().isAssignableTo(context,st)); // missing type always compatible
-		assertFalse(AnyType.instance().isAssignableTo(context,st)); // any type never compatible
-		assertFalse(new CategoryType(new Identifier("Simple")).isAssignableTo(context,st));  // since Simple does not extend Root
-		assertFalse(new CategoryType(new Identifier("Root")).isAssignableTo(context,st)); // since Root has no name
-		assertFalse(new CategoryType(new Identifier("DerivedWithOther")).isAssignableTo(context,st)); // since DerivedWithOther has no name
-		assertTrue(new CategoryType(new Identifier("DerivedWithName")).isAssignableTo(context,st)); // since DerivedWithName has a name
+		assertFalse(st.isAssignableFrom(context, BooleanType.instance()));
+		assertFalse(st.isAssignableFrom(context, IntegerType.instance()));
+		assertFalse(st.isAssignableFrom(context, DecimalType.instance()));
+		assertFalse(st.isAssignableFrom(context, TextType.instance()));
+		assertFalse(st.isAssignableFrom(context, DateType.instance()));
+		assertFalse(st.isAssignableFrom(context, DateTimeType.instance()));
+		assertFalse(st.isAssignableFrom(context, MissingType.instance())); // missing type always compatible
+		assertFalse(st.isAssignableFrom(context, AnyType.instance())); // any type never compatible
+		assertFalse(st.isAssignableFrom(context, new CategoryType(new Identifier("Simple"))));  // since Simple does not extend Root
+		assertFalse(st.isAssignableFrom(context, new CategoryType(new Identifier("Root")))); // since Root has no name
+		assertFalse(st.isAssignableFrom(context, new CategoryType(new Identifier("DerivedWithOther")))); // since DerivedWithOther has no name
+		assertTrue(st.isAssignableFrom(context, new CategoryType(new Identifier("DerivedWithName")))); // since DerivedWithName has a name
 	}
 	
 }

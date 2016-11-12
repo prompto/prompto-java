@@ -138,11 +138,6 @@ public abstract class BaseType implements IType {
 	}
 
 	@Override
-	public final boolean isAssignableTo(Context context, IType other) {
-		return other.isAssignableFrom(context, this);
-	}
-
-	@Override
 	public abstract boolean isMoreSpecificThan(Context context, IType other);
 
 	@Override

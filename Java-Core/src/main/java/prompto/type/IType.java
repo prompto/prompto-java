@@ -53,7 +53,6 @@ public interface IType {
 
 	void checkAssignableFrom(Context context, IType other);
 	boolean isAssignableFrom(Context context, IType other);
-	boolean isAssignableTo(Context context, IType other);
 	boolean isMoreSpecificThan(Context context, IType other);
 	
 	RangeBase<?> newRange(Object first,Object last);
