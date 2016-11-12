@@ -8,7 +8,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.junit.experimental.categories.Categories.IncludeCategory;
+
 import prompto.declaration.AttributeDeclaration;
+import prompto.declaration.CategoryDeclaration;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
@@ -21,6 +24,7 @@ import prompto.runtime.Context;
 import prompto.store.IStore;
 import prompto.type.AnyType;
 import prompto.type.BooleanType;
+import prompto.type.CategoryType;
 import prompto.type.CharacterType;
 import prompto.type.DateTimeType;
 import prompto.type.DateType;
@@ -62,11 +66,49 @@ public abstract class TypeUtils {
 					; // lastType is less specific
 				else if(type.isAssignableFrom(context, lastType))
 					lastType = type; // elemType is less specific
-				else 
-					throw new SyntaxError("Incompatible types: " + type.toString() + " and " + lastType.toString());
+				else {
+					IType common = inferCommonRootType(context, lastType, type);
+					if(common!=null)
+						lastType = common;
+					else
+						throw new SyntaxError("Incompatible types: " + type.toString() + " and " + lastType.toString());
+				}
+					
 			}
 		}
 		return lastType; 
+	}
+	
+	
+
+	private static IType inferCommonRootType(Context context, IType type1, IType type2) {
+		if(type1 instanceof CategoryType && type2 instanceof CategoryType)
+			return inferCommonRootType(context, (CategoryType)type1, (CategoryType)type2, true);
+		else
+			return null;
+	}
+	
+	
+	private static IType inferCommonRootType(Context context, CategoryType type1, CategoryType type2, boolean trySwap) {
+		CategoryDeclaration decl1 = context.getRegisteredDeclaration(CategoryDeclaration.class, type1.getTypeNameId());
+		if(decl1.getDerivedFrom()!=null) {
+			for(Identifier id : decl1.getDerivedFrom()) {
+				CategoryType parentType = new CategoryType(id);
+				if(parentType.isAssignableFrom(context, type2))
+					return parentType;
+			}
+			// climb up the tree
+			for(Identifier id : decl1.getDerivedFrom()) {
+				CategoryType parentType = new CategoryType(id);
+				IType commonType = inferCommonRootType(context, parentType, type2);
+				if(commonType!=null)
+					return commonType;
+			}
+		}
+		if(trySwap)
+			return inferCommonRootType(context, type2, type1, false);
+		else
+			return null;
 	}
 
 	public static IType inferElementType(Context context, ExpressionList expressions) {
