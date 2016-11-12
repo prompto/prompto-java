@@ -33,7 +33,7 @@ public class CastExpression implements IExpression {
 	@Override
 	public IType check(Context context) {
 		IType actual = expression.check(context);
-		// check simple update
+		// check upcast
 		if(actual instanceof CategoryType
 			&& ((CategoryType)actual).isDerivedFrom(context, type))
 			return type;
