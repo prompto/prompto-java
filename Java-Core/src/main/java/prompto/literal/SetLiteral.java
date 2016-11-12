@@ -47,7 +47,7 @@ public class SetLiteral extends Literal<SetValue> {
 			if(value.isEmpty() && expressions!=null && !expressions.isEmpty())
 				itemType = TypeUtils.inferElementType(context, expressions);
 			else
-				itemType = TypeUtils.inferElementType(context, value.getItems());
+				itemType = TypeUtils.inferValuesType(context, value.getItems());
 		}
 		return new SetType(itemType); 
 	}

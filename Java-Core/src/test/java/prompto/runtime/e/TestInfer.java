@@ -20,6 +20,16 @@ public class TestInfer extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedInferDict() throws Exception {
+		checkInterpretedOutput("infer/inferDict.pec");
+	}
+
+	@Test
+	public void testCompiledInferDict() throws Exception {
+		checkCompiledOutput("infer/inferDict.pec");
+	}
+
+	@Test
 	public void testInterpretedInferList() throws Exception {
 		checkInterpretedOutput("infer/inferList.pec");
 	}
@@ -27,6 +37,16 @@ public class TestInfer extends BaseEParserTest {
 	@Test
 	public void testCompiledInferList() throws Exception {
 		checkCompiledOutput("infer/inferList.pec");
+	}
+
+	@Test
+	public void testInterpretedInferSet() throws Exception {
+		checkInterpretedOutput("infer/inferSet.pec");
+	}
+
+	@Test
+	public void testCompiledInferSet() throws Exception {
+		checkCompiledOutput("infer/inferSet.pec");
 	}
 
 }

@@ -59,7 +59,7 @@ public class ListLiteral extends Literal<ListValue> {
 			if(expressions!=null)
 				itemType = TypeUtils.inferElementType(context, expressions);
 			else
-				itemType = TypeUtils.inferElementType(context, value.getItems());
+				itemType = TypeUtils.inferValuesType(context, value.getItems());
 		}
 		return new ListType(itemType); 
 	}

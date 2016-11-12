@@ -40,19 +40,19 @@ import prompto.value.IValue;
 
 public abstract class TypeUtils {
 	
-	public static IType inferElementType(Context context, Collection<? extends IValue> items) {
+	public static IType inferValuesType(Context context, Collection<? extends IValue> items) {
 		Collection<IType> types = collectElementTypes(context, items);
-		return inferType(context, types);
+		return inferCollectionType(context, types);
 	}
 	
-	private static Collection<IType> collectElementTypes(Context context, Collection<? extends IValue> items) {
+	public static Collection<IType> collectElementTypes(Context context, Collection<? extends IValue> items) {
 		List<IType> types = new ArrayList<IType>(items.size());
 		for(IValue item : items)
 			types.add(item.getType());
 		return types;
 	}
 	
-	private static IType inferType(Context context, Collection<IType> types) {
+	public static IType inferCollectionType(Context context, Collection<IType> types) {
 		if(types.isEmpty())
 			return MissingType.instance();
 		IType lastType = null;
@@ -79,7 +79,7 @@ public abstract class TypeUtils {
 	
 	
 
-	private static IType inferCommonRootType(Context context, IType type1, IType type2) {
+	public static IType inferCommonRootType(Context context, IType type1, IType type2) {
 		if(type1 instanceof CategoryType && type2 instanceof CategoryType)
 			return inferCommonRootType(context, (CategoryType)type1, (CategoryType)type2, true);
 		else
@@ -87,7 +87,7 @@ public abstract class TypeUtils {
 	}
 	
 	
-	private static IType inferCommonRootType(Context context, CategoryType type1, CategoryType type2, boolean trySwap) {
+	public static IType inferCommonRootType(Context context, CategoryType type1, CategoryType type2, boolean trySwap) {
 		CategoryDeclaration decl1 = context.getRegisteredDeclaration(CategoryDeclaration.class, type1.getTypeNameId());
 		if(decl1.getDerivedFrom()!=null) {
 			for(Identifier id : decl1.getDerivedFrom()) {
@@ -111,7 +111,7 @@ public abstract class TypeUtils {
 
 	public static IType inferElementType(Context context, ExpressionList expressions) {
 		Collection<IType> types = collectElementTypes(context, expressions);
-		return inferType(context, types);
+		return inferCollectionType(context, types);
 	}
 
 	private static Collection<IType> collectElementTypes(Context context, ExpressionList expressions) {

@@ -1,5 +1,8 @@
 package prompto.literal;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodConstant;
@@ -15,6 +18,7 @@ import prompto.type.IType;
 import prompto.type.MissingType;
 import prompto.type.TextType;
 import prompto.utils.CodeWriter;
+import prompto.utils.TypeUtils;
 import prompto.value.Dictionary;
 import prompto.value.IValue;
 import prompto.value.Text;
@@ -63,24 +67,13 @@ public class DictLiteral extends Literal<Dictionary> {
 	private IType inferElementType(Context context) {
 		if(entries.isEmpty())
 			return MissingType.instance();
-		IType lastType = null;
-		for(DictEntry e : entries) {
+		entries.forEach((e)->{
 			IType keyType = e.getKey().check(context);
 			if(keyType!=TextType.instance())
 				throw new SyntaxError("Illegal key type: " + keyType.toString());
-			IType elemType = e.getValue().check(context);
-			if(lastType==null)
-				lastType = elemType;
-			else if(!lastType.equals(elemType)) { 
-				if(lastType.isAssignableFrom(context, elemType))
-					; // lastType is less specific
-				else if(elemType.isAssignableFrom(context, lastType))
-					lastType = elemType; // elemType is less specific
-				else 
-					throw new SyntaxError("Incompatible value types: " + elemType.toString() + " and " + lastType.toString());
-			}
-		}
-		return lastType; 
+		});
+		List<IType> types = entries.stream().map(e->e.getValue().check(context)).collect(Collectors.toList());
+		return TypeUtils.inferCollectionType(context, types);
 	}	
 	
 	@Override
