@@ -49,5 +49,15 @@ public class TestClosures extends BaseEParserTest {
 		checkCompiledOutput("closures/instanceClosureNoArg.pec");
 	}
 
+	@Test
+	public void testInterpretedParameterClosure() throws Exception {
+		checkInterpretedOutput("closures/parameterClosure.pec");
+	}
+
+	@Test
+	public void testCompiledParameterClosure() throws Exception {
+		checkCompiledOutput("closures/parameterClosure.pec");
+	}
+
 }
 

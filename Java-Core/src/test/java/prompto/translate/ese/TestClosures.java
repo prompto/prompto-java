@@ -21,5 +21,10 @@ public class TestClosures extends BaseEParserTest {
 		compareResourceESE("closures/instanceClosureNoArg.pec");
 	}
 
+	@Test
+	public void testParameterClosure() throws Exception {
+		compareResourceESE("closures/parameterClosure.pec");
+	}
+
 }
 
