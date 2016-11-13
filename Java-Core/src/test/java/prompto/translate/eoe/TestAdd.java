@@ -27,6 +27,11 @@ public class TestAdd extends BaseEParserTest {
 	}
 
 	@Test
+	public void testAddDecimalEnum() throws Exception {
+		compareResourceEOE("add/addDecimalEnum.pec");
+	}
+
+	@Test
 	public void testAddDict() throws Exception {
 		compareResourceEOE("add/addDict.pec");
 	}
@@ -34,6 +39,11 @@ public class TestAdd extends BaseEParserTest {
 	@Test
 	public void testAddInteger() throws Exception {
 		compareResourceEOE("add/addInteger.pec");
+	}
+
+	@Test
+	public void testAddIntegerEnum() throws Exception {
+		compareResourceEOE("add/addIntegerEnum.pec");
 	}
 
 	@Test
@@ -59,6 +69,11 @@ public class TestAdd extends BaseEParserTest {
 	@Test
 	public void testAddTextDecimal() throws Exception {
 		compareResourceEOE("add/addTextDecimal.pec");
+	}
+
+	@Test
+	public void testAddTextEnum() throws Exception {
+		compareResourceEOE("add/addTextEnum.pec");
 	}
 
 	@Test

@@ -60,6 +60,16 @@ public class TestAdd extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedAddDecimalEnum() throws Exception {
+		checkInterpretedOutput("add/addDecimalEnum.pec");
+	}
+
+	@Test
+	public void testCompiledAddDecimalEnum() throws Exception {
+		checkCompiledOutput("add/addDecimalEnum.pec");
+	}
+
+	@Test
 	public void testInterpretedAddDict() throws Exception {
 		checkInterpretedOutput("add/addDict.pec");
 	}
@@ -77,6 +87,16 @@ public class TestAdd extends BaseEParserTest {
 	@Test
 	public void testCompiledAddInteger() throws Exception {
 		checkCompiledOutput("add/addInteger.pec");
+	}
+
+	@Test
+	public void testInterpretedAddIntegerEnum() throws Exception {
+		checkInterpretedOutput("add/addIntegerEnum.pec");
+	}
+
+	@Test
+	public void testCompiledAddIntegerEnum() throws Exception {
+		checkCompiledOutput("add/addIntegerEnum.pec");
 	}
 
 	@Test
@@ -127,6 +147,16 @@ public class TestAdd extends BaseEParserTest {
 	@Test
 	public void testCompiledAddTextDecimal() throws Exception {
 		checkCompiledOutput("add/addTextDecimal.pec");
+	}
+
+	@Test
+	public void testInterpretedAddTextEnum() throws Exception {
+		checkInterpretedOutput("add/addTextEnum.pec");
+	}
+
+	@Test
+	public void testCompiledAddTextEnum() throws Exception {
+		checkCompiledOutput("add/addTextEnum.pec");
 	}
 
 	@Test

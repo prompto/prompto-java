@@ -22,8 +22,18 @@ public class TestSub extends BaseEParserTest {
 	}
 
 	@Test
+	public void testSubDecimalEnum() throws Exception {
+		compareResourceESE("sub/subDecimalEnum.pec");
+	}
+
+	@Test
 	public void testSubInteger() throws Exception {
 		compareResourceESE("sub/subInteger.pec");
+	}
+
+	@Test
+	public void testSubIntegerEnum() throws Exception {
+		compareResourceESE("sub/subIntegerEnum.pec");
 	}
 
 	@Test

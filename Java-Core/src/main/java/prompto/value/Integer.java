@@ -25,6 +25,7 @@ import prompto.intrinsic.PromptoString;
 import prompto.runtime.Context;
 import prompto.type.CharacterType;
 import prompto.type.DecimalType;
+import prompto.type.EnumeratedNativeType;
 import prompto.type.INumberType;
 import prompto.type.IType;
 import prompto.type.IntegerType;
@@ -90,7 +91,10 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 
 	private static boolean isDecimal(Context context, IExpression exp) {
-		return exp.check(context)==DecimalType.instance();
+		IType other = exp.check(context);
+		if(other instanceof EnumeratedNativeType)
+			other = ((EnumeratedNativeType)other).getDerivedFrom();
+		return other==DecimalType.instance();
 	}
 
 	@Override

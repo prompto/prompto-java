@@ -50,6 +50,16 @@ public class TestSub extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedSubDecimalEnum() throws Exception {
+		checkInterpretedOutput("sub/subDecimalEnum.pec");
+	}
+
+	@Test
+	public void testCompiledSubDecimalEnum() throws Exception {
+		checkCompiledOutput("sub/subDecimalEnum.pec");
+	}
+
+	@Test
 	public void testInterpretedSubInteger() throws Exception {
 		checkInterpretedOutput("sub/subInteger.pec");
 	}
@@ -57,6 +67,16 @@ public class TestSub extends BaseEParserTest {
 	@Test
 	public void testCompiledSubInteger() throws Exception {
 		checkCompiledOutput("sub/subInteger.pec");
+	}
+
+	@Test
+	public void testInterpretedSubIntegerEnum() throws Exception {
+		checkInterpretedOutput("sub/subIntegerEnum.pec");
+	}
+
+	@Test
+	public void testCompiledSubIntegerEnum() throws Exception {
+		checkCompiledOutput("sub/subIntegerEnum.pec");
 	}
 
 	@Test
