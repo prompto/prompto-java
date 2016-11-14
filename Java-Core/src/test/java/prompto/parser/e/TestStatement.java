@@ -14,7 +14,7 @@ public class TestStatement {
 	@Test
 	public void testMethodCallWith3Arguments() {
 		String code = "myMethod with 3 as x, 7 as y and 22 as 7";
-		IStatement stmt = parse_statement(code);
+		parse_statement(code);
 	}
 	
 	IStatement parse_statement(String code) {
