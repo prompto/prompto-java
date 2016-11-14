@@ -92,7 +92,10 @@ public abstract class Executor {
 		Type classType = CompilerUtils.getGlobalMethodType(methodName);
 		Class<?> klass = loader.loadClass(classType.getTypeName());
 		Method method = locateGlobalMethod(klass, argTypes);
-		return method.invoke(null, args);
+		if(method.getParameterCount()==0)
+			return method.invoke(null);
+		else
+			return method.invoke(null, args);
 	}
 
 	public static Method locateGlobalMethod(Class<?> klass, Class<?> ... argTypes) throws NoSuchMethodException {
