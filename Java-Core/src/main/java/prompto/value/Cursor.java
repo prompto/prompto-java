@@ -96,6 +96,8 @@ public class Cursor extends BaseValue implements IIterable<IValue>, IterableWith
 		String name = id.toString();
 		if ("count".equals(name))
 			return new Integer(getCount());
+		else if ("totalCount".equals(name))
+			return new Integer(getTotalCount());
 		else
 			throw new SyntaxError("No such member:" + name);
 	}

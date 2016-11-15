@@ -45,6 +45,8 @@ public class CursorType extends IterableType {
 		String name = id.toString();
         if ("count".equals(name))
             return IntegerType.instance();
+        else if ("totalCount".equals(name))
+            return IntegerType.instance();
         else
     		return super.checkMember(context, id);
    }
