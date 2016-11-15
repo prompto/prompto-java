@@ -767,18 +767,6 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitIntDivideExpression(@NotNull EParser.IntDivideExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code ReadExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterReadExpression(@NotNull EParser.ReadExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ReadExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitReadExpression(@NotNull EParser.ReadExpressionContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code TernaryExpression}
 	 * labeled alternative in {@link EParser#expression}.
 	 * @param ctx the parse tree
@@ -934,6 +922,18 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLessThanOrEqualExpression(@NotNull EParser.LessThanOrEqualExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ReadOneExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterReadOneExpression(@NotNull EParser.ReadOneExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ReadOneExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitReadOneExpression(@NotNull EParser.ReadOneExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code AndExpression}
 	 * labeled alternative in {@link EParser#expression}.
@@ -1223,6 +1223,18 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitInstanceExpression(@NotNull EParser.InstanceExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code ReadAllExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterReadAllExpression(@NotNull EParser.ReadAllExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ReadAllExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitReadAllExpression(@NotNull EParser.ReadAllExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code ContainsAnyExpression}
 	 * labeled alternative in {@link EParser#expression}.
 	 * @param ctx the parse tree
@@ -1440,16 +1452,6 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitConstructorNoFrom(@NotNull EParser.ConstructorNoFromContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link EParser#read_expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterRead_expression(@NotNull EParser.Read_expressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link EParser#read_expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitRead_expression(@NotNull EParser.Read_expressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link EParser#write_statement}.
 	 * @param ctx the parse tree
@@ -3140,6 +3142,26 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitIsOtherExpression(@NotNull EParser.IsOtherExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link EParser#read_all_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterRead_all_expression(@NotNull EParser.Read_all_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EParser#read_all_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitRead_all_expression(@NotNull EParser.Read_all_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link EParser#read_one_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterRead_one_expression(@NotNull EParser.Read_one_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EParser#read_one_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitRead_one_expression(@NotNull EParser.Read_one_expressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link EParser#order_by_list}.
 	 * @param ctx the parse tree

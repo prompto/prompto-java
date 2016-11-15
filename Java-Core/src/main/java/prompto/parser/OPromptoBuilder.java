@@ -51,12 +51,10 @@ import prompto.declaration.OperatorMethodDeclaration;
 import prompto.declaration.SetterMethodDeclaration;
 import prompto.declaration.SingletonCategoryDeclaration;
 import prompto.declaration.TestMethodDeclaration;
-import prompto.expression.BlobExpression;
-import prompto.expression.CategorySymbol;
-import prompto.expression.NativeSymbol;
-import prompto.expression.PlusExpression;
 import prompto.expression.AndExpression;
+import prompto.expression.BlobExpression;
 import prompto.expression.CastExpression;
+import prompto.expression.CategorySymbol;
 import prompto.expression.CodeExpression;
 import prompto.expression.CompareExpression;
 import prompto.expression.ConstructorExpression;
@@ -66,8 +64,8 @@ import prompto.expression.DocumentExpression;
 import prompto.expression.EqualsExpression;
 import prompto.expression.ExecuteExpression;
 import prompto.expression.FetchManyExpression;
-import prompto.expression.FilteredListExpression;
 import prompto.expression.FetchOneExpression;
+import prompto.expression.FilteredListExpression;
 import prompto.expression.IExpression;
 import prompto.expression.InstanceExpression;
 import prompto.expression.IntDivideExpression;
@@ -79,10 +77,13 @@ import prompto.expression.MethodSelector;
 import prompto.expression.MinusExpression;
 import prompto.expression.ModuloExpression;
 import prompto.expression.MultiplyExpression;
+import prompto.expression.NativeSymbol;
 import prompto.expression.NotExpression;
 import prompto.expression.OrExpression;
 import prompto.expression.ParenthesisExpression;
-import prompto.expression.ReadExpression;
+import prompto.expression.PlusExpression;
+import prompto.expression.ReadAllExpression;
+import prompto.expression.ReadOneExpression;
 import prompto.expression.SelectorExpression;
 import prompto.expression.SliceSelector;
 import prompto.expression.SortedExpression;
@@ -166,9 +167,7 @@ import prompto.literal.TextLiteral;
 import prompto.literal.TimeLiteral;
 import prompto.literal.TupleLiteral;
 import prompto.literal.UUIDLiteral;
-import prompto.parser.OParser;
-import prompto.parser.OParserBaseListener;
-import prompto.parser.OParser.*;
+import static prompto.parser.OParser.*;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -192,6 +191,7 @@ import prompto.statement.AssignInstanceStatement;
 import prompto.statement.AssignTupleStatement;
 import prompto.statement.AssignVariableStatement;
 import prompto.statement.AtomicSwitchCase;
+import prompto.statement.BaseSwitchStatement.SwitchCaseList;
 import prompto.statement.BreakStatement;
 import prompto.statement.CollectionSwitchCase;
 import prompto.statement.CommentStatement;
@@ -201,6 +201,8 @@ import prompto.statement.FlushStatement;
 import prompto.statement.ForEachStatement;
 import prompto.statement.IStatement;
 import prompto.statement.IfStatement;
+import prompto.statement.IfStatement.IfElement;
+import prompto.statement.IfStatement.IfElementList;
 import prompto.statement.RaiseStatement;
 import prompto.statement.ReturnStatement;
 import prompto.statement.StatementList;
@@ -213,9 +215,6 @@ import prompto.statement.WhileStatement;
 import prompto.statement.WithResourceStatement;
 import prompto.statement.WithSingletonStatement;
 import prompto.statement.WriteStatement;
-import prompto.statement.BaseSwitchStatement.SwitchCaseList;
-import prompto.statement.IfStatement.IfElement;
-import prompto.statement.IfStatement.IfElementList;
 import prompto.type.AnyType;
 import prompto.type.BlobType;
 import prompto.type.BooleanType;
@@ -2331,9 +2330,15 @@ public class OPromptoBuilder extends OParserBaseListener {
 	}
 	
 	@Override
-	public void exitRead_expression(Read_expressionContext ctx) {
+	public void exitRead_all_expression(Read_all_expressionContext ctx) {
 		IExpression source = this.<IExpression>getNodeValue(ctx.source);
-		setNodeValue(ctx, new ReadExpression(source));
+		setNodeValue(ctx, new ReadAllExpression(source));
+	}
+	
+	@Override
+	public void exitRead_one_expression(Read_one_expressionContext ctx) {
+		IExpression source = this.<IExpression>getNodeValue(ctx.source);
+		setNodeValue(ctx, new ReadOneExpression(source));
 	}
 	
 	@Override

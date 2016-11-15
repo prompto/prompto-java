@@ -1351,16 +1351,6 @@ public interface SParserListener extends ParseTreeListener {
 	 */
 	void exitArgument_assignment(@NotNull SParser.Argument_assignmentContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SParser#read_expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterRead_expression(@NotNull SParser.Read_expressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SParser#read_expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitRead_expression(@NotNull SParser.Read_expressionContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link SParser#write_statement}.
 	 * @param ctx the parse tree
 	 */
@@ -2982,6 +2972,26 @@ public interface SParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitIsOtherExpression(@NotNull SParser.IsOtherExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SParser#read_all_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterRead_all_expression(@NotNull SParser.Read_all_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SParser#read_all_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitRead_all_expression(@NotNull SParser.Read_all_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SParser#read_one_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterRead_one_expression(@NotNull SParser.Read_one_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SParser#read_one_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitRead_one_expression(@NotNull SParser.Read_one_expressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SParser#order_by_list}.
 	 * @param ctx the parse tree

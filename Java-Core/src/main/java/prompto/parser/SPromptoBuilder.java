@@ -81,7 +81,8 @@ import prompto.expression.MultiplyExpression;
 import prompto.expression.NotExpression;
 import prompto.expression.OrExpression;
 import prompto.expression.ParenthesisExpression;
-import prompto.expression.ReadExpression;
+import prompto.expression.ReadAllExpression;
+import prompto.expression.ReadOneExpression;
 import prompto.expression.SelectorExpression;
 import prompto.expression.SliceSelector;
 import prompto.expression.SortedExpression;
@@ -2271,9 +2272,15 @@ public class SPromptoBuilder extends SParserBaseListener {
 	}
 	
 	@Override
-	public void exitRead_expression(Read_expressionContext ctx) {
+	public void exitRead_all_expression(Read_all_expressionContext ctx) {
 		IExpression source = this.<IExpression>getNodeValue(ctx.source);
-		setNodeValue(ctx, new ReadExpression(source));
+		setNodeValue(ctx, new ReadAllExpression(source));
+	}
+	
+	@Override
+	public void exitRead_one_expression(Read_one_expressionContext ctx) {
+		IExpression source = this.<IExpression>getNodeValue(ctx.source);
+		setNodeValue(ctx, new ReadOneExpression(source));
 	}
 	
 	@Override

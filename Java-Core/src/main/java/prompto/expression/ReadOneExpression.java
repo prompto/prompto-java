@@ -22,24 +22,25 @@ import prompto.value.IResource;
 import prompto.value.IValue;
 import prompto.value.Text;
 
-public class ReadExpression implements IExpression {
+public class ReadOneExpression implements IExpression {
 
 	IExpression resource;
 	
-	public ReadExpression(IExpression resource) {
+	public ReadOneExpression(IExpression resource) {
 		this.resource = resource;
 	}
 	
 
 	@Override
 	public void toDialect(CodeWriter writer) {
-		writer.append("read from ");
+		writer.append("read one from ");
 		resource.toDialect(writer);
 	}
 	
 	@Override
 	public IType check(Context context) {
-		context = context instanceof ResourceContext ? context : context.newResourceContext();
+		if(!(context instanceof ResourceContext))
+			throw new SyntaxError("Not a resource context!");
 		IType sourceType = resource.check(context);
 		if(!(sourceType instanceof ResourceType))
 			throw new SyntaxError("Not a readable resource!");
@@ -48,8 +49,9 @@ public class ReadExpression implements IExpression {
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		Context resContext = context instanceof ResourceContext ? context : context.newResourceContext();
-		IValue o = resource.interpret(resContext);
+		if(!(context instanceof ResourceContext))
+			throw new SyntaxError("Not a resource context!");
+		IValue o = resource.interpret(context);
 		if(o==null)
 			throw new NullReferenceError();
 		if(!(o instanceof IResource))
@@ -58,31 +60,17 @@ public class ReadExpression implements IExpression {
 		if(!res.isReadable())
 			throw new InvalidResourceError("Not readable");
 		try {
-			if(context==resContext)
-				return new Text(res.readLine());
-			else
-				return new Text(res.readFully());
+			return new Text(res.readLine());
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
-		} finally {
-			if(resContext!=context)
-				res.close();
-		}
+		} 
 	}
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		Context resContext = context instanceof ResourceContext ? context : context.newResourceContext();
-		/*ResultInfo info = */resource.compile(resContext, method, flags);
-		if(resContext!=context)
-			method.addInstruction(Opcode.DUP);
-		InterfaceConstant c = new InterfaceConstant(IResource.class, "readFully", String.class);
+		/*ResultInfo info = */resource.compile(context, method, flags);
+		InterfaceConstant c = new InterfaceConstant(IResource.class, "readLine", String.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, c);
-		if(resContext!=context) {
-			method.addInstruction(Opcode.SWAP); // string <-> resource
-			c = new InterfaceConstant(IResource.class, "close", void.class);
-			method.addInstruction(Opcode.INVOKEINTERFACE, c);
-		}
 		return new ResultInfo(String.class);
 	}
 }

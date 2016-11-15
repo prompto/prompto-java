@@ -1333,16 +1333,6 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitDocument_expression(@NotNull OParser.Document_expressionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link OParser#read_expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterRead_expression(@NotNull OParser.Read_expressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link OParser#read_expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitRead_expression(@NotNull OParser.Read_expressionContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link OParser#write_statement}.
 	 * @param ctx the parse tree
 	 */
@@ -3016,6 +3006,26 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitIsOtherExpression(@NotNull OParser.IsOtherExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#read_all_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterRead_all_expression(@NotNull OParser.Read_all_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#read_all_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitRead_all_expression(@NotNull OParser.Read_all_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#read_one_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterRead_one_expression(@NotNull OParser.Read_one_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#read_one_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitRead_one_expression(@NotNull OParser.Read_one_expressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link OParser#order_by_list}.
 	 * @param ctx the parse tree

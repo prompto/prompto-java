@@ -65,8 +65,8 @@ import prompto.expression.DocumentExpression;
 import prompto.expression.EqualsExpression;
 import prompto.expression.ExecuteExpression;
 import prompto.expression.FetchManyExpression;
-import prompto.expression.FilteredListExpression;
 import prompto.expression.FetchOneExpression;
+import prompto.expression.FilteredListExpression;
 import prompto.expression.IExpression;
 import prompto.expression.IntDivideExpression;
 import prompto.expression.ItemSelector;
@@ -74,19 +74,20 @@ import prompto.expression.IteratorExpression;
 import prompto.expression.MemberSelector;
 import prompto.expression.MethodExpression;
 import prompto.expression.MethodSelector;
-import prompto.expression.SubtractExpression;
+import prompto.expression.MinusExpression;
 import prompto.expression.ModuloExpression;
 import prompto.expression.MultiplyExpression;
 import prompto.expression.NativeSymbol;
-import prompto.expression.MinusExpression;
 import prompto.expression.NotExpression;
 import prompto.expression.OrExpression;
 import prompto.expression.ParenthesisExpression;
 import prompto.expression.PlusExpression;
-import prompto.expression.ReadExpression;
+import prompto.expression.ReadAllExpression;
+import prompto.expression.ReadOneExpression;
 import prompto.expression.SelectorExpression;
 import prompto.expression.SliceSelector;
 import prompto.expression.SortedExpression;
+import prompto.expression.SubtractExpression;
 import prompto.expression.SymbolExpression;
 import prompto.expression.TernaryExpression;
 import prompto.expression.ThisExpression;
@@ -165,9 +166,7 @@ import prompto.literal.TextLiteral;
 import prompto.literal.TimeLiteral;
 import prompto.literal.TupleLiteral;
 import prompto.literal.UUIDLiteral;
-import prompto.parser.EParser;
-import prompto.parser.EParserBaseListener;
-import prompto.parser.EParser.*;
+import static prompto.parser.EParser.*;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -2327,14 +2326,27 @@ public class EPromptoBuilder extends EParserBaseListener {
 		setNodeValue(ctx, new RangeLiteral(low, high));
 	}
 	
+	
 	@Override
-	public void exitRead_expression(Read_expressionContext ctx) {
+	public void exitRead_all_expression(Read_all_expressionContext ctx) {
 		IExpression source = this.<IExpression>getNodeValue(ctx.source);
-		setNodeValue(ctx, new ReadExpression(source));
+		setNodeValue(ctx, new ReadAllExpression(source));
 	}
 	
 	@Override
-	public void exitReadExpression(ReadExpressionContext ctx) {
+	public void exitRead_one_expression(Read_one_expressionContext ctx) {
+		IExpression source = this.<IExpression>getNodeValue(ctx.source);
+		setNodeValue(ctx, new ReadOneExpression(source));
+	}
+	
+	@Override
+	public void exitReadAllExpression(ReadAllExpressionContext ctx) {
+		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		setNodeValue(ctx, exp);
+	};
+	
+	@Override
+	public void exitReadOneExpression(ReadOneExpressionContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
 	}

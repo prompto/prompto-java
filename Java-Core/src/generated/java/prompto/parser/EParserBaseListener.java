@@ -845,18 +845,6 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterReadExpression(@NotNull EParser.ReadExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitReadExpression(@NotNull EParser.ReadExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterTernaryExpression(@NotNull EParser.TernaryExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1008,6 +996,18 @@ public class EParserBaseListener implements EParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLessThanOrEqualExpression(@NotNull EParser.LessThanOrEqualExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterReadOneExpression(@NotNull EParser.ReadOneExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitReadOneExpression(@NotNull EParser.ReadOneExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1301,6 +1301,18 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterReadAllExpression(@NotNull EParser.ReadAllExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitReadAllExpression(@NotNull EParser.ReadAllExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterContainsAnyExpression(@NotNull EParser.ContainsAnyExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1524,18 +1536,6 @@ public class EParserBaseListener implements EParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitConstructorNoFrom(@NotNull EParser.ConstructorNoFromContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterRead_expression(@NotNull EParser.Read_expressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitRead_expression(@NotNull EParser.Read_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -3360,6 +3360,30 @@ public class EParserBaseListener implements EParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitIsOtherExpression(@NotNull EParser.IsOtherExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRead_all_expression(@NotNull EParser.Read_all_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRead_all_expression(@NotNull EParser.Read_all_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRead_one_expression(@NotNull EParser.Read_one_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRead_one_expression(@NotNull EParser.Read_one_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -1445,18 +1445,6 @@ public class SParserBaseListener implements SParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRead_expression(@NotNull SParser.Read_expressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitRead_expression(@NotNull SParser.Read_expressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterWrite_statement(@NotNull SParser.Write_statementContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -3204,6 +3192,30 @@ public class SParserBaseListener implements SParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitIsOtherExpression(@NotNull SParser.IsOtherExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRead_all_expression(@NotNull SParser.Read_all_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRead_all_expression(@NotNull SParser.Read_all_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRead_one_expression(@NotNull SParser.Read_one_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRead_one_expression(@NotNull SParser.Read_one_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
