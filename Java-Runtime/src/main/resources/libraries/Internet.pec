@@ -54,7 +54,7 @@ define Url as native resource with attributes path and encoding, and bindings:
 
 define "reads from www.html5rocks.com" as test method doing:
 	// need a cross-domain enabled page for browser testing
-	content = read from Url with "https://www.html5rocks.com/en/" as path
+	content = read all from Url with "https://www.html5rocks.com/en/" as path
 and verifying: 
 	content contains "HTML5 Rocks"
 

@@ -32,7 +32,7 @@ public class ReadAllExpression implements IExpression {
 
 	@Override
 	public void toDialect(CodeWriter writer) {
-		writer.append("read from ");
+		writer.append("read all from ");
 		resource.toDialect(writer);
 	}
 	
