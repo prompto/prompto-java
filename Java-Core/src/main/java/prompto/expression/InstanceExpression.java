@@ -99,7 +99,7 @@ public class InstanceExpression implements IExpression {
 				MethodType type = new MethodType(decl);
 				return new ClosureValue(context, type);
 			} else
-				throw new SyntaxError("No instance or method with name:" + id);
+				throw new SyntaxError("No value or method with name:" + id);
 		}
 	}
 	
