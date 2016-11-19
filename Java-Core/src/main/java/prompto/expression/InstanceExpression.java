@@ -26,6 +26,7 @@ import prompto.runtime.Variable;
 import prompto.type.IType;
 import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
+import prompto.value.ClosureValue;
 import prompto.value.IValue;
 
 public class InstanceExpression implements IExpression {
@@ -89,7 +90,17 @@ public class InstanceExpression implements IExpression {
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		return context.getValue(id);
+		if(context.hasValue(id))
+			return context.getValue(id);
+		else {
+			INamed named = context.getRegistered(id);
+			if(named instanceof Context.MethodDeclarationMap) {
+				ConcreteMethodDeclaration decl = (ConcreteMethodDeclaration)((MethodDeclarationMap)named).values().iterator().next();
+				MethodType type = new MethodType(decl);
+				return new ClosureValue(context, type);
+			} else
+				throw new SyntaxError("No instance or method with name:" + id);
+		}
 	}
 	
 	@Override
