@@ -38,7 +38,7 @@ public class WriteStatement extends SimpleStatement {
 		writer.append("write ");
 		switch(writer.getDialect()) {
 		case E:
-		case S:
+		case M:
 			content.toDialect(writer);
 			break;
 		case O:

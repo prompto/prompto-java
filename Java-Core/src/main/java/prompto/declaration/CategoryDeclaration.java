@@ -163,8 +163,8 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		case O:
 			toODialect(writer);
 			break;
-		case S:
-			toSDialect(writer);
+		case M:
+			toMDialect(writer);
 			break;
 		}
 	}
@@ -254,12 +254,12 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 
 	protected abstract void bodyToODialect(CodeWriter writer);
 
-	protected abstract void toSDialect(CodeWriter writer);
+	protected abstract void toMDialect(CodeWriter writer);
 
-	protected void protoToSDialect(CodeWriter writer, IdentifierList derivedFrom) {
+	protected void protoToMDialect(CodeWriter writer, IdentifierList derivedFrom) {
 		if(storable)
 			writer.append("storable ");
-		categoryTypeToSDialect(writer);
+		categoryTypeToMDialect(writer);
 		writer.append(" ");
 		writer.append(getName());
 		writer.append("(");
@@ -273,7 +273,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		writer.append("):\n");
 	}
 
-	protected abstract void categoryTypeToSDialect(CodeWriter writer);
+	protected abstract void categoryTypeToMDialect(CodeWriter writer);
 
 	public ClassFile compile(Context context, String fullName) {
 		throw new UnsupportedOperationException(); // TODO -> abstract

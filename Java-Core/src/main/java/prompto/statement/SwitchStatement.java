@@ -75,7 +75,7 @@ public class SwitchStatement extends BaseSwitchStatement {
 	}
 
 	@Override
-	protected void toSDialect(CodeWriter writer) {
+	protected void toMDialect(CodeWriter writer) {
 		toEDialect(writer);
 	}
 

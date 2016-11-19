@@ -31,8 +31,8 @@ public class IdentifierList extends ObjectList<Identifier> {
 		case O:
 			toODialect(writer);
 			break;
-		case S:
-			toSDialect(writer);
+		case M:
+			toMDialect(writer);
 			break;
 		}
 		
@@ -70,7 +70,7 @@ public class IdentifierList extends ObjectList<Identifier> {
 		}
 	}
 
-	private void toSDialect(CodeWriter writer) {
+	private void toMDialect(CodeWriter writer) {
 		toODialect(writer);
 	}
 }

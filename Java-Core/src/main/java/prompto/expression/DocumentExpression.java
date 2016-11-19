@@ -99,7 +99,7 @@ public class DocumentExpression implements IExpression {
 			}
 			break;
 		case O:
-		case S:
+		case M:
 			writer.append('(');
 			if(source!=null)
 				source.toDialect(writer);

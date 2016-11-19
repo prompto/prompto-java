@@ -117,7 +117,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 	}
 	
 	@Override
-	protected void toSDialect(CodeWriter writer) {
+	protected void toMDialect(CodeWriter writer) {
 		writer.append("enum ");
 		writer.append(getName());
 		writer.append("(");

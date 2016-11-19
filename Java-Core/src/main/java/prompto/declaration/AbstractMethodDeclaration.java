@@ -68,13 +68,13 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 		case O:
 			toODialect(writer);
 			break;
-		case S:
-			toSDialect(writer);
+		case M:
+			toMDialect(writer);
 			break;
 		}
 	}
 	
-	private void toSDialect(CodeWriter writer) {
+	private void toMDialect(CodeWriter writer) {
 		writer.append("abstract def ");
 		writer.append(getName());
 		writer.append(" (");

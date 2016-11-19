@@ -36,7 +36,7 @@ public class RaiseStatement extends SimpleStatement {
 	public void toDialect(CodeWriter writer) {
 		switch(writer.getDialect()) {
 		case E:
-		case S:
+		case M:
 			writer.append("raise ");
 			break;
 		case O:

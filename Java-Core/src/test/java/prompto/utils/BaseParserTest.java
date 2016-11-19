@@ -23,7 +23,7 @@ import prompto.memstore.MemStore;
 import prompto.parser.Dialect;
 import prompto.parser.ECleverParser;
 import prompto.parser.OCleverParser;
-import prompto.parser.SCleverParser;
+import prompto.parser.MCleverParser;
 import prompto.runtime.Context;
 import prompto.runtime.Executor;
 import prompto.runtime.Interpreter;
@@ -213,15 +213,15 @@ public abstract class BaseParserTest extends BaseTest {
 		return parser.parse_declaration_list();
 	}
 	
-	public DeclarationList parseSString(String code) throws Exception {
-		SCleverParser parser = new SCleverParser(code);
+	public DeclarationList parseMString(String code) throws Exception {
+		MCleverParser parser = new MCleverParser(code);
 		return parser.parse_declaration_list();
 	}
 
-	public DeclarationList parseSResource(String resourceName) throws Exception {
+	public DeclarationList parseMResource(String resourceName) throws Exception {
 		InputStream input = getResourceAsStream(resourceName);
 		assertNotNull("resource not found:" + resourceName, input);
-		SCleverParser parser = new SCleverParser(input);
+		MCleverParser parser = new MCleverParser(input);
 		return parser.parse_declaration_list();
 	}
 
@@ -250,7 +250,7 @@ public abstract class BaseParserTest extends BaseTest {
 		assertEquivalent(expected, actual);
 	}
 	
-	public void compareResourceESE(String resourceName) throws Exception {
+	public void compareResourceEME(String resourceName) throws Exception {
 		String expected = getResourceAsString(resourceName);
 		// System.out.println(expected);
 		// parse e source code
@@ -258,12 +258,12 @@ public abstract class BaseParserTest extends BaseTest {
 		context = Context.newGlobalContext();
 		dle.register(context);
 		// rewrite as o
-		CodeWriter writer = new CodeWriter(Dialect.S, context);
+		CodeWriter writer = new CodeWriter(Dialect.M, context);
 		dle.toDialect(writer);
 		String p = writer.toString();
 		// System.out.println(p);
 		// parse o source code
-		DeclarationList dls = parseSString(p);
+		DeclarationList dls = parseMString(p);
 		context = Context.newGlobalContext();
 		dls.register(context);
 		// rewrite as e
@@ -300,7 +300,7 @@ public abstract class BaseParserTest extends BaseTest {
 		assertEquivalent(expected, actual);
 	}
 	
-	public void compareResourceOSO(String resourceName) throws Exception {
+	public void compareResourceOMO(String resourceName) throws Exception {
 		String expected = getResourceAsString(resourceName);
 		// System.out.println(expected);
 		// parse o source code
@@ -308,12 +308,12 @@ public abstract class BaseParserTest extends BaseTest {
 		context = Context.newGlobalContext();
 		dlo.register(context);
 		// rewrite as p
-		CodeWriter writer = new CodeWriter(Dialect.S, context);
+		CodeWriter writer = new CodeWriter(Dialect.M, context);
 		dlo.toDialect(writer);
 		String p = writer.toString();
 		// System.out.println(p);
 		// parse s source code
-		DeclarationList dls = parseSString(p);
+		DeclarationList dls = parseMString(p);
 		context = Context.newGlobalContext();
 		dls.register(context);
 		// rewrite as o

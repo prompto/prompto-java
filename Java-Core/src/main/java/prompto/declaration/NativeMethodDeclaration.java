@@ -117,7 +117,7 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 
 	
 	@Override
-	protected void toSDialect(CodeWriter writer) {
+	protected void toMDialect(CodeWriter writer) {
 		writer.append("def native ");
 		writer.append(getName());
 		writer.append(" (");

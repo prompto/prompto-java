@@ -129,7 +129,7 @@ public class AttributeDeclaration extends BaseDeclaration {
 			}
 			writer.append(';');
 			break;
-		case S:
+		case M:
 			if(storable)
 				writer.append("storable ");
 			writer.append("attr ");

@@ -85,7 +85,7 @@ public class InstanceExpression implements IExpression {
 			IMethodDeclaration decl = ((MethodDeclarationMap)named).values().iterator().next();
 			return new MethodType(decl);
 		} else
-			throw new SyntaxError(id + "  is not an instance:" + named.getClass().getSimpleName());
+			throw new SyntaxError(id + "  is not a value or method:" + named.getClass().getSimpleName());
 	}
 	
 	@Override

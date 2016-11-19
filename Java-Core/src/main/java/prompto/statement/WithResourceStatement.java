@@ -33,8 +33,8 @@ public class WithResourceStatement extends BaseStatement {
 		case O:
 			toODialect(writer);
 			break;
-		case S:
-			toSDialect(writer);
+		case M:
+			toMDialect(writer);
 			break;
 		}
 	}
@@ -65,7 +65,7 @@ public class WithResourceStatement extends BaseStatement {
 		}		
 	}
 
-	private void toSDialect(CodeWriter writer) {
+	private void toMDialect(CodeWriter writer) {
 		writer.append("with ");
 		assignVariable.toDialect(writer);
 		writer.append(":\n");

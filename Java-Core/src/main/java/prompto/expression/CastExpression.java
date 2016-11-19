@@ -76,7 +76,7 @@ public class CastExpression implements IExpression {
 	public void toDialect(CodeWriter writer) {
 		switch(writer.getDialect()) {
 		case E:
-		case S:
+		case M:
 			expression.toDialect(writer);
 			writer.append(" as ");
 			type.toDialect(writer);

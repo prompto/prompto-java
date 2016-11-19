@@ -71,13 +71,13 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 		case O:
 			toODialect(writer);
 			break;
-		case S:
-			toSDialect(writer);
+		case M:
+			toMDialect(writer);
 			break;
 		}
 	}
 	
-	private void toSDialect(CodeWriter writer) {
+	private void toMDialect(CodeWriter writer) {
 		writer.append("enum ");
 		writer.append(getName());
 		writer.append('(');

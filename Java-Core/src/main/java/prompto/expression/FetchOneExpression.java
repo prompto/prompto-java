@@ -78,7 +78,7 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 			predicate.toDialect(writer);
 			writer.append(")");
 			break;
-		case S:
+		case M:
 			writer.append("fetch one ");
 			if(type!=null) {
 				type.toDialect(writer);

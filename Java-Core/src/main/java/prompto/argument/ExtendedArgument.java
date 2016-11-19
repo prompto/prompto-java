@@ -52,8 +52,8 @@ public class ExtendedArgument extends CategoryArgument {
 		case O:
 			toODialect(writer);
 			break;
-		case S:
-			toSDialect(writer);
+		case M:
+			toMDialect(writer);
 			break;
 		}
 		if(defaultExpression!=null) {
@@ -89,7 +89,7 @@ public class ExtendedArgument extends CategoryArgument {
 		writer.append(id);
 	}
 
-	private void toSDialect(CodeWriter writer) {
+	private void toMDialect(CodeWriter writer) {
 		writer.append(id);
 		writer.append(':');
 		type.toDialect(writer);

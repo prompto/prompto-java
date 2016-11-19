@@ -40,7 +40,7 @@ public class NotExpression implements IUnaryExpression, IPredicateExpression, IA
 	private String operatorToDialect(Dialect dialect) {
 		switch(dialect) {
 		case E:
-		case S:
+		case M:
 			return "not ";
 		case O:
 			return "!";

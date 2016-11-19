@@ -54,8 +54,8 @@ public class ArgumentAssignment {
 		case O:
 			toODialect(writer);
 			break;
-		case S:
-			toSDialect(writer);
+		case M:
+			toMDialect(writer);
 			break;
 		}
 	}
@@ -68,7 +68,7 @@ public class ArgumentAssignment {
 		expression.toDialect(writer);
 	}
 
-	private void toSDialect(CodeWriter writer) {
+	private void toMDialect(CodeWriter writer) {
 		if(argument!=null) {
 			writer.append(argument.getId());
 			writer.append(" = ");

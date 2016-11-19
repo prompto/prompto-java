@@ -23,8 +23,8 @@ public class NativeCategoryBindingList extends ObjectList<NativeCategoryBinding>
 		case O:
 			toODialect(writer);
 			break;
-		case S:
-			toSDialect(writer);
+		case M:
+			toMDialect(writer);
 			break;
 		}
 	}
@@ -39,7 +39,7 @@ public class NativeCategoryBindingList extends ObjectList<NativeCategoryBinding>
 		writer.dedent();	
 	}
 
-	private void toSDialect(CodeWriter writer) {
+	private void toMDialect(CodeWriter writer) {
 		writer.append("def category bindings:\n");
 		writer.indent();
 		for(NativeCategoryBinding m : this) {

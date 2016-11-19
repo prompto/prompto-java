@@ -68,8 +68,8 @@ public class WithSingletonStatement extends BaseStatement {
 		case O:
 			toODialect(writer);
 			break;
-		case S:
-			toSDialect(writer);
+		case M:
+			toMDialect(writer);
 			break;
 		}
 	}
@@ -100,7 +100,7 @@ public class WithSingletonStatement extends BaseStatement {
 		}		
 	}
 
-	private void toSDialect(CodeWriter writer) {
+	private void toMDialect(CodeWriter writer) {
 		writer.append("with ");
 		type.toDialect(writer);
 		writer.append(":\n");

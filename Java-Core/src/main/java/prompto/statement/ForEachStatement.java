@@ -57,8 +57,8 @@ public class ForEachStatement extends BaseStatement {
 		case O:
 			toODialect(writer);
 			break;
-		case S:
-			toSDialect(writer);
+		case M:
+			toMDialect(writer);
 			break;
 		}
 	}
@@ -102,7 +102,7 @@ public class ForEachStatement extends BaseStatement {
 		writer.dedent();
 	}
 
-	private void toSDialect(CodeWriter writer) {
+	private void toMDialect(CodeWriter writer) {
 		writer.append("for ");
 		writer.append(v1);
 		if(v2!=null) {

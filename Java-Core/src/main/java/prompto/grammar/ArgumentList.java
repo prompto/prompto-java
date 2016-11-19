@@ -56,8 +56,8 @@ public class ArgumentList extends ObjectList<IArgument> {
 		case O:
 			toODialect(writer);
 			break;
-		case S:
-			toSDialect(writer);
+		case M:
+			toMDialect(writer);
 			break;
 		}
 	}
@@ -87,7 +87,7 @@ public class ArgumentList extends ObjectList<IArgument> {
 		writer.trimLast(2);
 	}
 
-	private void toSDialect(CodeWriter writer) {
+	private void toMDialect(CodeWriter writer) {
 		for(IArgument argument : this) {
 			argument.toDialect(writer);
 			writer.append(", ");

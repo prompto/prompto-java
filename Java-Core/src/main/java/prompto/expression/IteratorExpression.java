@@ -166,13 +166,13 @@ public class IteratorExpression implements IExpression {
 		case O:
 			toODialect(writer);
 			break;
-		case S:
-			toSDialect(writer);
+		case M:
+			toMDialect(writer);
 			break;
 		}
 	}
 
-	private void toSDialect(CodeWriter writer) {
+	private void toMDialect(CodeWriter writer) {
 		expression.toDialect(writer);
 		writer.append(" for ");
 		writer.append(name.toString());

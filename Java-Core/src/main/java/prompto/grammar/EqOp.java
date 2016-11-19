@@ -31,7 +31,7 @@ public enum EqOp {
 		case O:
 			s = o;
 			break;
-		case S:
+		case M:
 			s = p;
 			break;
 		}

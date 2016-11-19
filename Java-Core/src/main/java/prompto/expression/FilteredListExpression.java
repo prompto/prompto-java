@@ -54,7 +54,7 @@ public class FilteredListExpression extends Section implements IExpression {
 	public void toDialect(CodeWriter writer) {
 		switch(writer.getDialect()) {
 		case E:
-		case S:
+		case M:
 			source.toDialect(writer);
 			writer.append(" filtered with ");
 			writer.append(itemName);

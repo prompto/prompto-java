@@ -39,7 +39,7 @@ public class NativeSymbol extends Symbol implements IExpression {
 			writer.append(" = ");
 			expression.toDialect(writer);
 			break;
-		case S:
+		case M:
 			writer.append(" = ");
 			expression.toDialect(writer);
 			break;

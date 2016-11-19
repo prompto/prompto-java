@@ -97,7 +97,7 @@ public class BlobExpression implements IExpression {
 			source.toDialect(writer);
 			break;
 		case O:
-		case S:
+		case M:
 			writer.append('(');
 			source.toDialect(writer);
 			writer.append(')');

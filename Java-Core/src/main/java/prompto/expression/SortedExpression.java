@@ -71,8 +71,8 @@ public class SortedExpression implements IExpression {
 		case O:
 			toODialect(writer);
 			break;
-		case S:
-			toSDialect(writer);
+		case M:
+			toMDialect(writer);
 			break;
 		}
 	}
@@ -111,7 +111,7 @@ public class SortedExpression implements IExpression {
 		writer.append(")");
 	}
 	
-	private void toSDialect(CodeWriter writer) {
+	private void toMDialect(CodeWriter writer) {
 		toODialect(writer);
 	}
 	

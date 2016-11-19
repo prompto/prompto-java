@@ -14,7 +14,7 @@ import prompto.parser.AbstractParser;
 import prompto.parser.Dialect;
 import prompto.parser.ECleverParser;
 import prompto.parser.OCleverParser;
-import prompto.parser.SCleverParser;
+import prompto.parser.MCleverParser;
 import prompto.type.CategoryType;
 import prompto.utils.ISingleton;
 import prompto.utils.StringUtils;
@@ -52,8 +52,8 @@ public interface ICodeStore {
 			return new ECleverParser(path, data);
 		case O:
 			return new OCleverParser(path, data);
-		case S:
-			return new SCleverParser(path, data);
+		case M:
+			return new MCleverParser(path, data);
 		default:
 			throw new RuntimeException("Unsupported extension: " + path);
 		}

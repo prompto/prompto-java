@@ -55,7 +55,7 @@ public class OrExpression implements IPredicateExpression, IAssertion {
 	private String operatorToDialect(Dialect dialect) {
 		switch(dialect) {
 		case E:
-		case S:
+		case M:
 			return " or ";
 		case O:
 			return " || ";

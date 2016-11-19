@@ -125,17 +125,17 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 	
 	@Override
-	protected void toSDialect(CodeWriter writer) {
-		protoToSDialect(writer, derivedFrom);
-		methodsToSDialect(writer);
+	protected void toMDialect(CodeWriter writer) {
+		protoToMDialect(writer, derivedFrom);
+		methodsToMDialect(writer);
 	}
 	
 	@Override
-	protected void categoryTypeToSDialect(CodeWriter writer) {
+	protected void categoryTypeToMDialect(CodeWriter writer) {
 		writer.append("class");
 	}
 
-	private void methodsToSDialect(CodeWriter writer) {
+	private void methodsToMDialect(CodeWriter writer) {
 		writer.indent();
 		if(methods==null || methods.size()==0)
 			writer.append("pass\n");

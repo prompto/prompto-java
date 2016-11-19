@@ -73,14 +73,14 @@ public class IfStatement extends BaseStatement {
 		case O:
 			toODialect(writer);
 			break;
-		case S:
-			toSDialect(writer);
+		case M:
+			toMDialect(writer);
 			break;
 		}
 	}
 	
 
-	private void toSDialect(CodeWriter writer) {
+	private void toMDialect(CodeWriter writer) {
 		boolean first = true;
 		for(IfElement elem : elements) {
 			if(!first)
@@ -270,13 +270,13 @@ public class IfStatement extends BaseStatement {
 			case O:
 				toODialect(writer);
 				break;
-			case S:
-				toSDialect(writer);
+			case M:
+				toMDialect(writer);
 				break;
 			}
 		}
 
-		public void toSDialect(CodeWriter writer) {
+		public void toMDialect(CodeWriter writer) {
 			toEDialect(writer);
 		}
 		

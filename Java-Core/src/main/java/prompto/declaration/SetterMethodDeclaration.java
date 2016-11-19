@@ -55,7 +55,7 @@ public class SetterMethodDeclaration extends ConcreteMethodDeclaration implement
 	}	
 
 	@Override
-	protected void toSDialect(CodeWriter writer) {
+	protected void toMDialect(CodeWriter writer) {
 		writer.append("def ");
 		writer.append(getName());
 		writer.append(" setter():\n");

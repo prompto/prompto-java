@@ -27,7 +27,7 @@ public class CodeExpression implements IExpression {
 			expression.toDialect(writer);
 			break;
 		case O:
-		case S:
+		case M:
 			writer.append("Code(");
 			expression.toDialect(writer);
 			writer.append(")");

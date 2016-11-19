@@ -73,13 +73,13 @@ public class FetchManyExpression extends FetchOneExpression {
 		case O:
 			toODialect(writer);
 			break;
-		case S:
-			toSDialect(writer);
+		case M:
+			toMDialect(writer);
 			break;
 		}
 	}
 	
-	private void toSDialect(CodeWriter writer) {
+	private void toMDialect(CodeWriter writer) {
 		writer.append("fetch ");
 		if(first!=null) {
 			writer.append("rows ");
