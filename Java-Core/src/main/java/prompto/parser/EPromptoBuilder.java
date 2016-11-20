@@ -93,6 +93,7 @@ import prompto.expression.TernaryExpression;
 import prompto.expression.ThisExpression;
 import prompto.expression.TypeExpression;
 import prompto.expression.UnresolvedIdentifier;
+import prompto.expression.UnresolvedSelector;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.ArgumentList;
@@ -1754,7 +1755,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	@Override
 	public void exitMemberSelector(MemberSelectorContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		setNodeValue(ctx, new MemberSelector(name));
+		setNodeValue(ctx, new UnresolvedSelector(name));
 	}
 	
 	

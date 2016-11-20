@@ -27,8 +27,8 @@ import prompto.value.IValue;
 
 public class UnresolvedCall extends SimpleStatement implements IAssertion {
 	
-	IExpression resolved;
 	IExpression caller;
+	IExpression resolved;
 	ArgumentAssignmentList assignments;
 	
 	public UnresolvedCall(IExpression caller, ArgumentAssignmentList assignments) {
