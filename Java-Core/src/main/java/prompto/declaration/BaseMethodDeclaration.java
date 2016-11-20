@@ -173,8 +173,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 		}
 	}
 	
-	boolean isAssignableTo(Context context, IArgument argument, ArgumentAssignment assignment, 
-			boolean useInstance) {
+	boolean isAssignableTo(Context context, IArgument argument, ArgumentAssignment assignment, boolean useInstance) {
 		Specificity spec = computeSpecificity(context, argument, assignment, false, useInstance);
 		return spec.isAssignable();
 	}

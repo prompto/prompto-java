@@ -2,6 +2,7 @@ package prompto.type;
 
 import java.lang.reflect.Type;
 import java.security.InvalidParameterException;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -216,6 +217,14 @@ public class CategoryType extends BaseType {
         return ad.getType(context);
     }
     
+	
+	@Override
+	public Collection<IMethodDeclaration> getMemberMethods(Context context, Identifier name) throws PromptoError {
+		IDeclaration cd = getDeclaration(context);
+		if(!(cd instanceof ConcreteCategoryDeclaration))
+			throw new SyntaxError("Unknown category:" + this.getTypeName());
+		return ((ConcreteCategoryDeclaration)cd).getMemberMethods(context, name).values();
+	}
 
 	
 	@Override

@@ -77,8 +77,12 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	@Override
 	public void register(Context context) {
 		context.registerDeclaration(this);
+		registerMethods(context);
 	}
 	
+	protected abstract void registerMethods(Context context);
+	
+
 	@Override
 	public IType check(Context context) {
 		if(attributes!=null) for(Identifier attribute : attributes) {

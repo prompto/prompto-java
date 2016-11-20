@@ -1,12 +1,14 @@
 package prompto.type;
 
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
 
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
+import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
@@ -57,7 +59,10 @@ public interface IType {
 	
 	RangeBase<?> newRange(Object first,Object last);
 	Comparator<? extends IValue> getComparator(boolean descending);
-	IValue getMember(Context context, Identifier name) throws PromptoError;
+	IValue getMemberValue(Context context, Identifier name) throws PromptoError;
+	Collection<IMethodDeclaration> getMemberMethods(Context context, Identifier name) throws PromptoError;
+
+
 	String toString(Object value);
 	void toDialect(CodeWriter writer);
 	IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts);

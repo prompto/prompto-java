@@ -190,6 +190,16 @@ public class TestBuiltins extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedTextCapitalize() throws Exception {
+		checkInterpretedOutput("builtins/textCapitalize.poc");
+	}
+
+	@Test
+	public void testCompiledTextCapitalize() throws Exception {
+		checkCompiledOutput("builtins/textCapitalize.poc");
+	}
+
+	@Test
 	public void testInterpretedTextCount() throws Exception {
 		checkInterpretedOutput("builtins/textCount.poc");
 	}
@@ -197,6 +207,36 @@ public class TestBuiltins extends BaseOParserTest {
 	@Test
 	public void testCompiledTextCount() throws Exception {
 		checkCompiledOutput("builtins/textCount.poc");
+	}
+
+	@Test
+	public void testInterpretedTextLowercase() throws Exception {
+		checkInterpretedOutput("builtins/textLowercase.poc");
+	}
+
+	@Test
+	public void testCompiledTextLowercase() throws Exception {
+		checkCompiledOutput("builtins/textLowercase.poc");
+	}
+
+	@Test
+	public void testInterpretedTextSplit() throws Exception {
+		checkInterpretedOutput("builtins/textSplit.poc");
+	}
+
+	@Test
+	public void testCompiledTextSplit() throws Exception {
+		checkCompiledOutput("builtins/textSplit.poc");
+	}
+
+	@Test
+	public void testInterpretedTextUppercase() throws Exception {
+		checkInterpretedOutput("builtins/textUppercase.poc");
+	}
+
+	@Test
+	public void testCompiledTextUppercase() throws Exception {
+		checkCompiledOutput("builtins/textUppercase.poc");
 	}
 
 	@Test

@@ -102,8 +102,28 @@ public class TestBuiltins extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTextCapitalize() throws Exception {
+		compareResourceOMO("builtins/textCapitalize.poc");
+	}
+
+	@Test
 	public void testTextCount() throws Exception {
 		compareResourceOMO("builtins/textCount.poc");
+	}
+
+	@Test
+	public void testTextLowercase() throws Exception {
+		compareResourceOMO("builtins/textLowercase.poc");
+	}
+
+	@Test
+	public void testTextSplit() throws Exception {
+		compareResourceOMO("builtins/textSplit.poc");
+	}
+
+	@Test
+	public void testTextUppercase() throws Exception {
+		compareResourceOMO("builtins/textUppercase.poc");
 	}
 
 	@Test

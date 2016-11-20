@@ -52,7 +52,7 @@ public class TypeExpression implements IExpression {
 	}
 	
 	public IValue getMember(Context context, Identifier name) throws PromptoError {
-		return type.getMember(context, name);
+		return type.getMemberValue(context, name);
 	}
 
 	public IType getType() {

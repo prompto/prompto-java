@@ -22,6 +22,7 @@ import prompto.compiler.NameAndTypeConstant;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
+import prompto.declaration.BuiltInMethodDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.declaration.IMethodDeclaration;
@@ -34,11 +35,11 @@ import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Context.MethodDeclarationMap;
-import prompto.store.InvalidValueError;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.ConcreteInstance;
+import prompto.value.IValue;
 import prompto.value.NullValue;
 import prompto.value.TypeValue;
 
@@ -49,8 +50,8 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		super(name);
 	}
 
-	public MethodSelector(IExpression parent, Identifier name) {
-		super(parent,name);
+	public MethodSelector(IExpression parent, Identifier id) {
+		super(parent, id);
 	}
 	
 	@Override
@@ -70,7 +71,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		if(parent==null)
 			return getGlobalCandidates(context);
 		else
-			return getCategoryCandidates(context);
+			return getMemberCandidates(context);
 	}
 	
 	private Collection<IMethodDeclaration> getGlobalCandidates(Context context) {
@@ -91,16 +92,11 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		return methods;
 	}
 	
-	private Collection<IMethodDeclaration> getCategoryCandidates(Context context) {
+	private Collection<IMethodDeclaration> getMemberCandidates(Context context) {
 		IType parentType = checkParent(context);
-		if(!(parentType instanceof CategoryType))
-			throw new SyntaxError(parent.toString() + " is not a category");
-		ConcreteCategoryDeclaration cd = context.getRegisteredDeclaration(ConcreteCategoryDeclaration.class, parentType.getTypeNameId());
-		if(cd==null)
-			throw new SyntaxError("Unknown category:" + parentType.getTypeName());
-		return cd.getMemberMethods(context, id).values();
+		return parentType.getMemberMethods(context, id);
 	}
-
+	
 	public ResultInfo compileExact(Context context, MethodInfo method, Flags flags, 
 				IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
 		if(parent!=null)
@@ -283,6 +279,12 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 			// push instance if any
 			ResultInfo info = parent.compile(context.getCallingContext(), method, flags); 
 			ClassConstant c = new ClassConstant(info.getType());
+			if(declaration instanceof BuiltInMethodDeclaration) {
+				BuiltInMethodDeclaration builtin = (BuiltInMethodDeclaration)declaration;
+				if(builtin.hasCompileExactInstanceMember())
+					return builtin.compileExactInstanceMember(context, method, flags, assignments);
+			}
+			// default
 			return compileExactInstanceMember(context, method, flags, declaration, assignments, c);
 		}
 	}
@@ -308,22 +310,27 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 
 	private Context newInstanceCheckContext(Context context) {
 		IType type = parent.check(context);
-		if(!(type instanceof CategoryType))
-			throw new SyntaxError("Not an instance !");
-		context = context.newSingletonContext((CategoryType)type);
-		return context.newChildContext();
+		if(type instanceof CategoryType) {
+			context = context.newSingletonContext((CategoryType)type);
+			return context.newChildContext();
+		} else {
+			return context.newChildContext();
+		}
 	}
 
 	private Context newInstanceContext(Context context) throws PromptoError {
-		Object value = parent.interpret(context);
+		IValue value = parent.interpret(context);
 		if(value==null || value==NullValue.instance())
 			throw new NullReferenceError();
 		if(value instanceof TypeValue && ((TypeValue)value).getValue() instanceof CategoryType)
 			value = context.loadSingleton(context, (CategoryType)((TypeValue)value).getValue());
-		if(!(value instanceof ConcreteInstance))
-			throw new InvalidValueError("Not an instance !");
-		context = context.newInstanceContext((ConcreteInstance)value);
-		return context.newChildContext();
+		if(value instanceof ConcreteInstance) {
+			context = context.newInstanceContext((ConcreteInstance)value);
+			return context.newChildContext();
+		} else {
+			context = context.newBuiltInContext(value);
+			return context.newChildContext();
+		}
 	}
 
 	private Context newLocalInstanceContext(Context context) {

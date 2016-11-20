@@ -122,8 +122,28 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTextCapitalize() throws Exception {
+		compareResourceEME("builtins/textCapitalize.pec");
+	}
+
+	@Test
 	public void testTextCount() throws Exception {
 		compareResourceEME("builtins/textCount.pec");
+	}
+
+	@Test
+	public void testTextLowercase() throws Exception {
+		compareResourceEME("builtins/textLowercase.pec");
+	}
+
+	@Test
+	public void testTextSplit() throws Exception {
+		compareResourceEME("builtins/textSplit.pec");
+	}
+
+	@Test
+	public void testTextUppercase() throws Exception {
+		compareResourceEME("builtins/textUppercase.pec");
 	}
 
 	@Test

@@ -232,7 +232,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 			
 			
-	private void registerMethods(Context context) {
+	protected void registerMethods(Context context) {
 		if(methodsMap==null) {
 			methodsMap = new HashMap<String,IDeclaration>();
 			for(IMethodDeclaration method : methods) {

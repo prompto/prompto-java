@@ -177,6 +177,10 @@ public class Context implements IContext {
 		return initInstanceContext(new InstanceContext(type), false);
 	}
 	
+	public Context newBuiltInContext(IValue value) {
+		return initInstanceContext(new BuiltInContext(value), false);
+	}
+
 	public Context newInstanceContext(IInstance instance) {
 		return initInstanceContext(new InstanceContext(instance), false);
 	}
@@ -809,6 +813,19 @@ public class Context implements IContext {
 			document.setMember(calling, name, value);
 		}
 
+	}
+	
+	public static class BuiltInContext extends Context {
+		
+		IValue value;
+		
+		public BuiltInContext(IValue value) {
+			this.value = value;
+		}
+		
+		public IValue getValue() {
+			return value;
+		}
 	}
 	
 	public static class InstanceContext extends Context {

@@ -80,7 +80,7 @@ public class EnumeratedNativeType extends BaseType {
 	}
 	
 	@Override
-	public IValue getMember(Context context, Identifier id) {
+	public IValue getMemberValue(Context context, Identifier id) {
 		String name = id.toString();
 		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, typeNameId);
 		if(!(decl instanceof IEnumeratedDeclaration))

@@ -1,6 +1,7 @@
 package prompto.intrinsic;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.function.Predicate;
@@ -14,6 +15,11 @@ public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoLi
 	
 	public PromptoList(boolean mutable) {
 		this.mutable = mutable;
+	}
+
+	public PromptoList(V[] items) {
+		super(Arrays.asList(items));
+		this.mutable = false;
 	}
 
 	public PromptoList(Collection<? extends V> items, boolean mutable) {

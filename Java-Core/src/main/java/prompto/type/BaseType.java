@@ -1,9 +1,12 @@
 package prompto.type;
 
 import java.security.InvalidParameterException;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
 
+import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
@@ -196,8 +199,13 @@ public abstract class BaseType implements IType {
 	}
 	
 	@Override
-	public IValue getMember(Context context, Identifier name) throws PromptoError {
+	public IValue getMemberValue(Context context, Identifier name) throws PromptoError {
 		throw new SyntaxError("Cannot read member from " + this.getTypeName());
+	}
+	
+	@Override
+	public Collection<IMethodDeclaration> getMemberMethods(Context context, Identifier name) throws PromptoError {
+		return Collections.emptyList();
 	}
 
 	@Override

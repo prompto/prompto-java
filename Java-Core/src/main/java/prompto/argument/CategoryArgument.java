@@ -2,6 +2,7 @@ package prompto.argument;
 
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.expression.IExpression;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
@@ -14,9 +15,15 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 	
 	IType type;
 	
-	public CategoryArgument(IType type, Identifier name) {
-		super(name);
+	public CategoryArgument(IType type, Identifier id) {
+		super(id);
 		this.type = type;
+	}
+
+	public CategoryArgument(IType type, Identifier id, IExpression defaultValue) {
+		super(id);
+		this.type = type;
+		setDefaultExpression(defaultValue);
 	}
 
 	@Override
