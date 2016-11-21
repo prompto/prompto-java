@@ -28,6 +28,14 @@ public class DocumentType extends NativeType {
 	}
 
 	@Override
+	public boolean isMoreSpecificThan(Context context, IType other) {
+		if(other instanceof NullType || other instanceof AnyType || other instanceof MissingType)
+			return true;
+		else
+			return super.isMoreSpecificThan(context, other);
+	}
+	
+	@Override
 	public Type getJavaType(Context context) {
 		return PromptoDocument.class;
 	}
