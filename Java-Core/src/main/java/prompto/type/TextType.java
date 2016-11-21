@@ -184,13 +184,12 @@ public class TextType extends NativeType {
 	};
 	
 	
-	static final IMethodDeclaration TO_CAPITALIZED_METHOD = new BuiltInMethodDeclaration("toCapitalized", SINGLE_SPACE_ARGUMENT) {
+	static final IMethodDeclaration TO_CAPITALIZED_METHOD = new BuiltInMethodDeclaration("toCapitalized") {
 		
 		@Override
 		public IValue interpret(Context context) throws PromptoError {
 			String value = (String)getValue(context).getStorableData();
-			String sep = (String)context.getValue(new Identifier("separator")).getStorableData();
-			String result = StringUtils.capitalizeAll(value, sep);
+			String result = StringUtils.capitalizeAll(value);
 			return new Text(result);
 		};
 		
@@ -212,7 +211,7 @@ public class TextType extends NativeType {
 			// push arguments on the stack
 			this.compileAssignments(context, method, flags, assignments);
 			// call static method
-			Descriptor.Method descriptor = new Descriptor.Method(String.class, String.class, String.class);
+			Descriptor.Method descriptor = new Descriptor.Method(String.class, String.class);
 			MethodConstant constant = new MethodConstant(StringUtils.class, "capitalizeAll", descriptor);
 			method.addInstruction(Opcode.INVOKESTATIC, constant);
 			return new ResultInfo(String.class);

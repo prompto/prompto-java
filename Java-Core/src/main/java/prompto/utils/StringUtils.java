@@ -9,7 +9,7 @@ public abstract class StringUtils {
 		return Character.toUpperCase(value.charAt(0)) + value.substring(1).toLowerCase();
 	}
 
-	public static String capitalizeAll(String value, String separator) {
+	public static String capitalizeAll(String value) {
 		String[] parts = value.split(" ");
 		StringBuilder sb = new StringBuilder();
 		for(String part : parts) {
