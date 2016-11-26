@@ -122,6 +122,11 @@ public class TestBuiltins extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTextTrim() throws Exception {
+		compareResourceOEO("builtins/textTrim.poc");
+	}
+
+	@Test
 	public void testTextUppercase() throws Exception {
 		compareResourceOEO("builtins/textUppercase.poc");
 	}

@@ -127,6 +127,8 @@ public class TextType extends NativeType {
 			return Collections.singletonList(TO_CAPITALIZED_METHOD);
 		case "split":
 			return Collections.singletonList(SPLIT_METHOD);
+		case "trim":
+			return Collections.singletonList(TRIM_METHOD);
 		default:
 			return super.getMemberMethods(context, id);
 		}
@@ -233,10 +235,6 @@ public class TextType extends NativeType {
 			return TextType.instance();
 		}
 
-		@Override
-		public void toDialect(CodeWriter writer) {
-			throw new UnsupportedOperationException();
-		}
 	};
 
 	static final IMethodDeclaration TO_UPPERCASE_METHOD = new BuiltInMethodDeclaration("toUpperCase") {
@@ -253,13 +251,22 @@ public class TextType extends NativeType {
 			return TextType.instance();
 		}
 
+	};
+	
+	static final IMethodDeclaration TRIM_METHOD = new BuiltInMethodDeclaration("trim") {
+		
 		@Override
-		public void toDialect(CodeWriter writer) {
-			throw new UnsupportedOperationException();
+		public IValue interpret(Context context) throws PromptoError {
+			Text text = (Text)getValue(context);
+			String trimmed = text.getStorableData().trim();
+			return new Text(trimmed);
+		};
+		
+		@Override
+		public IType check(Context context) {
+			return TextType.instance();
 		}
-		
-		
-		
+
 	};
 	
 	@Override

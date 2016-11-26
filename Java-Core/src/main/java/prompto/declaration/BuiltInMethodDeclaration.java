@@ -10,6 +10,7 @@ import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.runtime.Context.BuiltInContext;
+import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
 public abstract class BuiltInMethodDeclaration extends BaseMethodDeclaration {
@@ -63,5 +64,12 @@ public abstract class BuiltInMethodDeclaration extends BaseMethodDeclaration {
 	public ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments) {
 		throw new UnsupportedOperationException("Should never get there!");
 	}
+	
+	@Override
+	public void toDialect(CodeWriter writer) {
+		throw new UnsupportedOperationException();
+	}
+
+
 
 }

@@ -230,6 +230,16 @@ public class TestBuiltins extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedTextTrim() throws Exception {
+		checkInterpretedOutput("builtins/textTrim.poc");
+	}
+
+	@Test
+	public void testCompiledTextTrim() throws Exception {
+		checkCompiledOutput("builtins/textTrim.poc");
+	}
+
+	@Test
 	public void testInterpretedTextUppercase() throws Exception {
 		checkInterpretedOutput("builtins/textUppercase.poc");
 	}
