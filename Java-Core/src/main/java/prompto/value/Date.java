@@ -179,14 +179,17 @@ public class Date extends BaseValue implements Comparable<Date> {
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, Map<String, byte[]> data) throws PromptoError {
+	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
 		try {
-			generator.writeStartObject();
-			generator.writeFieldName("type");
-			generator.writeString(DateType.instance().getTypeName());
-			generator.writeFieldName("value");
-			generator.writeString(this.toString());
-			generator.writeEndObject();
+			if(withType) {
+				generator.writeStartObject();
+				generator.writeFieldName("type");
+				generator.writeString(DateType.instance().getTypeName());
+				generator.writeFieldName("value");
+				generator.writeString(this.toString());
+				generator.writeEndObject();
+			} else
+				generator.writeString(this.toString());
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		}

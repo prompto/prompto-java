@@ -44,12 +44,14 @@ public class PromptoDocument<K,V> extends HashMap<K,V> implements ISerializable 
 	}
 	
 	@Override
-	public void toJson(JsonGenerator generator, Object instanceId, String fieldName, Map<String, byte[]> binaries) {
+	public void toJson(JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> binaries) {
 		try {
-			generator.writeStartObject();
-			generator.writeFieldName("type");
-			generator.writeString(DocumentType.instance().getTypeName());
-			generator.writeFieldName("value");
+			if(withType) {
+				generator.writeStartObject();
+				generator.writeFieldName("type");
+				generator.writeString(DocumentType.instance().getTypeName());
+				generator.writeFieldName("value");
+			}
 			generator.writeStartObject();
 			for(Entry<K, V> entry : entrySet()) {
 				fieldName = String.valueOf(entry.getKey());
@@ -58,18 +60,19 @@ public class PromptoDocument<K,V> extends HashMap<K,V> implements ISerializable 
 				if(value==null)
 					generator.writeNull();
 				else
-					valueToJson(value, generator, System.identityHashCode(this), fieldName, binaries);
+					valueToJson(value, generator, System.identityHashCode(this), fieldName, withType, binaries);
 			}
 			generator.writeEndObject();
-			generator.writeEndObject();
+			if(withType)
+				generator.writeEndObject();
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		}
 	}
 
-	private void valueToJson(V value, JsonGenerator generator, Object instanceId, String fieldName, Map<String, byte[]> binaries) throws IOException {
+	private void valueToJson(V value, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> binaries) throws IOException {
 		if(value instanceof ISerializable)
-			((ISerializable)value).toJson(generator, instanceId, fieldName, binaries);
+			((ISerializable)value).toJson(generator, instanceId, fieldName, withType, binaries);
 		else if(value instanceof Boolean)
 			generator.writeBoolean(((Boolean)value).booleanValue());
 		else if(value instanceof Long)
@@ -79,12 +82,15 @@ public class PromptoDocument<K,V> extends HashMap<K,V> implements ISerializable 
 		else if(value instanceof String)
 			generator.writeString((String)value);
 		else if(value instanceof Character) {
-			generator.writeStartObject();
-			generator.writeFieldName("type");
-			generator.writeString(CharacterType.instance().getTypeName());
-			generator.writeFieldName("value");
-			generator.writeNumber(value.toString());
-			generator.writeEndObject();
+			if(withType) {
+				generator.writeStartObject();
+				generator.writeFieldName("type");
+				generator.writeString(CharacterType.instance().getTypeName());
+				generator.writeFieldName("value");
+				generator.writeString(value.toString());
+				generator.writeEndObject();
+			} else
+				generator.writeString(value.toString());
 		} else
 			throw new UnsupportedOperationException("valueToJson for " + value.getClass().getName());
 	}
@@ -173,14 +179,14 @@ public class PromptoDocument<K,V> extends HashMap<K,V> implements ISerializable 
 	
 	@Override
 	public String toString() {
-		return toString(this::valueToJson);
+		return toString(this::valueToJson, false);
 	}
 	
 	public interface ValueToJson<V> {
-		void apply(V value, JsonGenerator generator, Object instanceId, String fieldName, Map<String, byte[]> binaries) throws IOException;
+		void apply(V value, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> binaries) throws IOException;
 	}
 	
-	public String toString(ValueToJson<V> o) {
+	public String toString(ValueToJson<V> o, boolean withType) {
 		try {
 			Map<String, byte[]> binaries = new HashMap<>();
 			// create textual data
@@ -193,7 +199,7 @@ public class PromptoDocument<K,V> extends HashMap<K,V> implements ISerializable 
 				if(value==null)
 					generator.writeNull();
 				else
-					o.apply(value, generator, System.identityHashCode(this), String.valueOf(entry.getKey()), binaries);
+					o.apply(value, generator, System.identityHashCode(this), String.valueOf(entry.getKey()), withType, binaries);
 			}
 			generator.writeEndObject();
 			generator.flush();

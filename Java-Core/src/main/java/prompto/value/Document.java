@@ -88,11 +88,11 @@ public class Document extends BaseValue {
 
 	@Override
 	public String toString() {
-		return values.toString(Document::toJson);
+		return values.toString(Document::toJson, false);
 	}
 	
-	static void toJson(IValue value, JsonGenerator generator, Object instanceId, String fieldName, Map<String, byte[]> binaries) throws IOException{
-		value.toJson(null, generator, instanceId, new Identifier(fieldName), binaries);
+	static void toJson(IValue value, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> binaries) throws IOException{
+		value.toJson(null, generator, instanceId, new Identifier(fieldName), withType, binaries);
 	}
 	
 	@Override
@@ -104,7 +104,7 @@ public class Document extends BaseValue {
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, Map<String, byte[]> binaries) throws PromptoError {
+	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
 		try {
 			generator.writeStartObject();
 			generator.writeFieldName("type");
@@ -117,7 +117,7 @@ public class Document extends BaseValue {
 				if(value==null)
 					generator.writeNull();
 				else
-					value.toJson(context, generator, System.identityHashCode(this), entry.getKey(), binaries);
+					value.toJson(context, generator, System.identityHashCode(this), entry.getKey(), withType, binaries);
 			}
 			generator.writeEndObject();
 			generator.writeEndObject();

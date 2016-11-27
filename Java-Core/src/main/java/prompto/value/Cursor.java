@@ -103,22 +103,25 @@ public class Cursor extends BaseValue implements IIterable<IValue>, IterableWith
 	}
 
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, Map<String, byte[]> data) {
+	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> data) {
 		try {
-			generator.writeStartObject();
-			generator.writeFieldName("type");
-			// serialize Cursor as list
-			IType type = new ListType(((CursorType)getType()).getItemType());
-			generator.writeString(type.getTypeName());
-			generator.writeFieldName("totalLength");
-			generator.writeNumber(iterable.totalLength());
-			generator.writeFieldName("value");
+			if(withType) {
+				generator.writeStartObject();
+				generator.writeFieldName("type");
+				// serialize Cursor as list
+				IType type = new ListType(((CursorType)getType()).getItemType());
+				generator.writeString(type.getTypeName());
+				generator.writeFieldName("totalLength");
+				generator.writeNumber(iterable.totalLength());
+				generator.writeFieldName("value");
+			}
 			generator.writeStartArray();
 			Iterator<IValue> iter = iterator();
 			while(iter.hasNext())
-				iter.next().toJson(context, generator, null, null, data);
+				iter.next().toJson(context, generator, null, null, withType, data);
 			generator.writeEndArray();
-			generator.writeEndObject();
+			if(withType)
+				generator.writeEndObject();
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		}

@@ -226,7 +226,7 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, Map<String, byte[]> data) throws PromptoError {
+	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
 		try {
 			generator.writeNumber(value);
 		} catch(IOException e) {

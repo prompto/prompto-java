@@ -59,7 +59,7 @@ public class PromptoBinary {
 		// create textual data
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		JsonGenerator generator = new JsonFactory().createGenerator(output);
-		value.toJson(generator, null, null, binaries);
+		value.toJson(generator, null, null, true, binaries);
 		generator.flush();
 		generator.close();
 		// add it

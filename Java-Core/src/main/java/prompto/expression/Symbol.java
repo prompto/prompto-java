@@ -127,7 +127,7 @@ public abstract class Symbol extends Section implements IExpression, INamed, IVa
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, Map<String, byte[]> data) throws PromptoError {
+	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
 		throw new UnsupportedOperationException("toJson not supported by " + this.getClass().getSimpleName());
 	}
 
