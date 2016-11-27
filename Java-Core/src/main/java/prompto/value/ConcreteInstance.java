@@ -129,8 +129,8 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		if(getter!=null) {
 			context = context.newInstanceContext(this).newChildContext(); // mimic method call
 			return getter.interpret(context);
-		} else if(values.containsKey(attrName))
-			return values.get(attrName);
+		} else if(getDeclaration().hasAttribute(context, attrName) || IStore.dbIdName.equals(attrName.toString()))
+			return values.getOrDefault(attrName, NullValue.instance());
 		else if("text".equals(attrName.toString()))
 			return new Text(this.toString());
 		else
