@@ -27,15 +27,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @SuppressWarnings("serial")
 public class PromptoDocument<K,V> extends HashMap<K,V> implements ISerializable {
 
+	@SuppressWarnings("unchecked")
 	public V getOrCreate(K key, Class<? extends V> autoCreate) {
-		V v = super.get(key);
-		if(v==null && autoCreate!=null) try {
-			v = autoCreate.newInstance();
+		if(super.containsKey(key))
+			return super.get(key);
+		else if("text".equals(key))
+			return (V)this.toString();
+		else if(autoCreate!=null) try {
+			V v = autoCreate.newInstance();
 			super.put(key, v);
+			return v;
 		} catch(IllegalAccessException | InstantiationException e) {
 			throw new RuntimeException(e);
-		}
-		return v;
+		} else
+			return null;
 	}
 	
 	@Override

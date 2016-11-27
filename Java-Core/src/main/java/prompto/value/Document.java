@@ -36,12 +36,7 @@ public class Document extends BaseValue {
 	
     @Override
     public IValue getMember(Context context, Identifier id, boolean autoCreate) {
-    	if("text".equals(id.toString()))
-    		autoCreate = false;
-    	IValue value = getMember(id, autoCreate);
-    	if("text".equals(id.toString()) && value==NullValue.instance())
-    		value = new Text(this.toString());
-    	return value;
+    	return getMember(id, autoCreate);
  	}
     
     
@@ -50,12 +45,16 @@ public class Document extends BaseValue {
     }
 
     public IValue getMember(Identifier name, boolean autoCreate) {
-        IValue result = values.getOrDefault(name, NullValue.instance());
-        if(autoCreate && result==NullValue.instance()) {
-            result = new Document();
+    	if(values.containsKey(name))
+    		return values.get(name);
+    	else if("text".equals(name.toString()))
+    		return new Text(this.toString());
+    	else if(autoCreate) {
+            IValue result = new Document();
             values.put(name, result);
-        }
-        return result;
+            return result;
+        } else
+        	return NullValue.instance();
  	}
 
 	@Override

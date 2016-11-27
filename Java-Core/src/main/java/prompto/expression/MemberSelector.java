@@ -185,26 +185,26 @@ public class MemberSelector extends SelectorExpression {
 	private ResultInfo compileInstanceMember(Context context, MethodInfo method, Flags flags, IExpression parent) {
 		Type resultType = check(context).getJavaType(context);
 		ResultInfo info = parent.compile(context, method, flags);
-		// special case for o.text which translates to toString
-		if("text".equals(getName()))
-			return compileObjectText(method, flags);
 		// special case for char.codePoint() to avoid wrapping char.class for just one member
-		else if(Character.class==info.getType() && "codePoint".equals(getName()))
+		if(Character.class==info.getType() && "codePoint".equals(getName()))
 			return compileCharacterCodePoint(method, flags);
 		// special case for String.length() to avoid wrapping String.class for just one member
 		else if(String.class==info.getType() && "count".equals(getName()))
 			return compileStringLength(method, flags);
+		else if(PromptoAny.class==info.getType()) 
+			return compileGetMember(context, method, flags, info, resultType);
+		else if(PromptoDocument.class==info.getType())
+			return compileGetOrCreate(context, method, flags, info, resultType);		
+		// special case for o.text which translates to toString
+		else if("text".equals(getName()))
+			return compileObjectText(method, flags);
 		else {
 			String getterName = CompilerUtils.getterName(getName());
 			if(isCompilingGetter(context, method, info, getterName))
 				compileGetField(context, method, flags, info, resultType);
 			else if(context instanceof ClosureContext)
 				compileGetField(context, method, flags, info, resultType);
-			else if(PromptoAny.class==info.getType()) 
-				compileGetMember(context, method, flags, info, resultType);
-			else if(PromptoDocument.class==info.getType())
-				resultType = compileGetOrCreate(context, method, flags, info, resultType);
-			else if(PromptoDict.Entry.class==info.getType()) // TODo manage all generics
+			else if(PromptoDict.Entry.class==info.getType()) // TODO manage all generics
 				compileGenericGetter(context, method, flags, getterName, info, resultType);
 			else if(info.isNativeCategory())
 				compileNativeGetter(context, method, flags, getterName, info, resultType);
@@ -259,7 +259,7 @@ public class MemberSelector extends SelectorExpression {
 		method.addInstruction(Opcode.CHECKCAST, new ClassConstant(resultType));
 	}
 
-	private Type compileGetOrCreate(Context context, MethodInfo method, Flags flags, ResultInfo info, Type resultType) {
+	private ResultInfo compileGetOrCreate(Context context, MethodInfo method, Flags flags, ResultInfo info, Type resultType) {
 		IOperand oper = new StringConstant(getName());
 		method.addInstruction(Opcode.LDC_W, oper);
 		oper = new ClassConstant(PromptoDocument.class);
@@ -267,16 +267,16 @@ public class MemberSelector extends SelectorExpression {
 		oper = new MethodConstant(PromptoDocument.class, "getOrCreate", Object.class, 
 				Class.class, Object.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return PromptoAny.class;
+		return new ResultInfo(PromptoAny.class);
 	}
 
-	private void compileGetMember(Context context, MethodInfo method, Flags flags, ResultInfo info, Type resultType) {
+	private ResultInfo compileGetMember(Context context, MethodInfo method, Flags flags, ResultInfo info, Type resultType) {
 		IOperand oper = new StringConstant(getName());
 		method.addInstruction(Opcode.LDC_W, oper);
 		oper = new MethodConstant(PromptoAny.class, "getMember", Object.class, 
 				Object.class, Object.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
-		resultType = PromptoAny.class;
+		return new ResultInfo(PromptoAny.class);
 	}
 
 	private void compileGetField(Context context, MethodInfo method, Flags flags, ResultInfo info, Type resultType) {

@@ -8,12 +8,15 @@ import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
 import prompto.compiler.CompilerException;
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.Descriptor;
 import prompto.compiler.FieldConstant;
 import prompto.compiler.FieldInfo;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
+import prompto.compiler.StackLocal;
+import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.error.SyntaxError;
 import prompto.expression.CategorySymbol;
 import prompto.expression.Symbol;
@@ -172,10 +175,20 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 			compileEmptyConstructor(context, classFile, new Flags());
 			compileSuperConstructor(context, classFile, new Flags());
 			compileMethods(context, classFile, new Flags());
+			compileToString(context, classFile, new Flags());
 			return classFile;
 		} catch(SyntaxError e) {
 			throw new CompilerException(e);
 		}
+	}
+
+	private void compileToString(Context context, ClassFile classFile, Flags flags) {
+		MethodInfo method = classFile.newMethod("toString", new Descriptor.Method(String.class));
+		StackLocal local = method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
+		CompilerUtils.compileALOAD(method, local);
+		MethodConstant mc = new MethodConstant(classFile.getThisClass(), "getText", String.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, mc);
+		method.addInstruction(Opcode.ARETURN);
 	}
 
 	private void compileSuperConstructor(Context context, ClassFile classFile, Flags flags) {
