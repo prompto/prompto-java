@@ -1,6 +1,7 @@
 package prompto.intrinsic;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import prompto.type.DocumentType;
 import prompto.type.IType;
 import prompto.utils.IOUtils;
 
+import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -163,5 +165,38 @@ public class PromptoDocument<K,V> extends HashMap<K,V> implements ISerializable 
 		JsonParser parser = new ObjectMapper().getFactory().createParser(data);
 		return parser.readValueAsTree();
 	}
-
+	
+	@Override
+	public String toString() {
+		return toString(this::valueToJson);
+	}
+	
+	public interface ValueToJson<V> {
+		void apply(V value, JsonGenerator generator, Object instanceId, String fieldName, Map<String, byte[]> binaries) throws IOException;
+	}
+	
+	public String toString(ValueToJson<V> o) {
+		try {
+			Map<String, byte[]> binaries = new HashMap<>();
+			// create textual data
+			ByteArrayOutputStream output = new ByteArrayOutputStream();
+			JsonGenerator generator = new JsonFactory().createGenerator(output);
+			generator.writeStartObject();
+			for(Entry<K, V> entry : entrySet()) {
+				generator.writeFieldName(String.valueOf(entry.getKey()));
+				V value = entry.getValue();
+				if(value==null)
+					generator.writeNull();
+				else
+					o.apply(value, generator, System.identityHashCode(this), String.valueOf(entry.getKey()), binaries);
+			}
+			generator.writeEndObject();
+			generator.flush();
+			generator.close();
+			// return it
+			return new String(output.toByteArray());
+		} catch(Throwable t) {
+			return "<error:" + t.getMessage() + ">";
+		}
+	}
 }

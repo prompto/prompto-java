@@ -127,7 +127,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 		if ("count".equals(name))
 			return new Integer(value.length());
 		else
-			throw new SyntaxError("No such member:" + name);
+			return super.getMember(context, id, autoCreate);
 	}
 
 	public Character getItem(Context context, IValue index) throws PromptoError {

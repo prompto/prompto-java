@@ -185,8 +185,11 @@ public class MemberSelector extends SelectorExpression {
 	private ResultInfo compileInstanceMember(Context context, MethodInfo method, Flags flags, IExpression parent) {
 		Type resultType = check(context).getJavaType(context);
 		ResultInfo info = parent.compile(context, method, flags);
+		// special case for o.text which translates to toString
+		if("text".equals(getName()))
+			return compileObjectText(method, flags);
 		// special case for char.codePoint() to avoid wrapping char.class for just one member
-		if(Character.class==info.getType() && "codePoint".equals(getName()))
+		else if(Character.class==info.getType() && "codePoint".equals(getName()))
 			return compileCharacterCodePoint(method, flags);
 		// special case for String.length() to avoid wrapping String.class for just one member
 		else if(String.class==info.getType() && "count".equals(getName()))
@@ -296,6 +299,13 @@ public class MemberSelector extends SelectorExpression {
 		else
 			return CompilerUtils.intToLong(method);
 	}
+	
+	private ResultInfo compileObjectText(MethodInfo method, Flags flags) {
+		IOperand oper = new MethodConstant(Object.class, "toString", String.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return new ResultInfo(String.class);
+	}
+
 
 	private ResultInfo compileStringLength(MethodInfo method, Flags flags) {
 		IOperand oper = new MethodConstant(String.class, "length", int.class);

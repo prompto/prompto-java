@@ -1,5 +1,6 @@
 package prompto.type;
 
+import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.Family;
 
@@ -30,6 +31,15 @@ public abstract class NativeType extends BaseType {
 	
 	public NativeType(Family family) {
 		super(family);
+	}
+	
+	
+	@Override
+	public IType checkMember(Context context, Identifier name) {
+		if("text".equals(name.toString()))
+			return TextType.instance();
+		else
+			return super.checkMember(context, name);
 	}
 	
 	@Override

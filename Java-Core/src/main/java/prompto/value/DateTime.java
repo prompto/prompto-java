@@ -141,7 +141,7 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 		else if ("tzName".equals(name))
 			return new Text(this.value.getTzName());
 		else
-			throw new SyntaxError("No such member:" + name);
+			return super.getMember(context, id, autoCreate);
 	}
 
 	@Override

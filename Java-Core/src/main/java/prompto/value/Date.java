@@ -128,7 +128,7 @@ public class Date extends BaseValue implements Comparable<Date> {
 		else if ("dayOfYear".equals(name))
 			return new Integer(this.value.getNativeDayOfYear());
 		else
-			throw new SyntaxError("No such member:" + name);
+			return super.getMember(context, id, autoCreate);
 	}
 
 	@Override

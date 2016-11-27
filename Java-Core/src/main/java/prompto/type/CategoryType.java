@@ -205,16 +205,20 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-    public IType checkMember(Context context, Identifier name) {
+    public IType checkMember(Context context, Identifier id) {
         CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, typeNameId);
         if (cd == null)
             throw new SyntaxError("Unknown category:" + typeNameId);
-        if (!cd.hasAttribute(context, name))
-            throw new SyntaxError("No attribute:" + name + " in category:" + typeNameId);
-        AttributeDeclaration ad = context.getRegisteredDeclaration(AttributeDeclaration.class, name);
-        if (ad == null)
-            throw new SyntaxError("Unknown atttribute:" + name);
-        return ad.getType(context);
+        if (cd.hasAttribute(context, id)) {
+            AttributeDeclaration ad = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
+            if (ad != null)
+            	return ad.getType(context);
+            else
+                throw new SyntaxError("Missing atttribute:" + id);
+        } else if("text".equals(id.toString()))
+        	return TextType.instance();
+        else
+            throw new SyntaxError("No attribute:" + id + " in category:" + typeNameId);
     }
     
 	

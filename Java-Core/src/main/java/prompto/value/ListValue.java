@@ -175,7 +175,7 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 		else if ("iterator".equals(name))
 			return new IteratorValue(getItemType(), getIterable(context).iterator());
 		else
-			throw new SyntaxError("No such member:" + name);
+			return super.getMember(context, id, autoCreate);
 	}
 	
 	@Override

@@ -129,16 +129,20 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		if(getter!=null) {
 			context = context.newInstanceContext(this).newChildContext(); // mimic method call
 			return getter.interpret(context);
-		} else
-			return values.getOrDefault(attrName, NullValue.instance());
+		} else if(values.containsKey(attrName))
+			return values.get(attrName);
+		else if("text".equals(attrName.toString()))
+			return new Text(this.toString());
+		else
+			return NullValue.instance();
 	}
 	
 	// don't call setters from setters, so register them
-	ThreadLocal<Map<Identifier,Context>> activeSetters = new ThreadLocal<Map<Identifier,Context>>() {
+	ThreadLocal<Map<Identifier, Context>> activeSetters = new ThreadLocal<Map<Identifier,Context>>() {
 
 		@Override
-		protected Map<Identifier,Context> initialValue() {
-			return new HashMap<Identifier,Context>();
+		protected Map<Identifier, Context> initialValue() {
+			return new HashMap<Identifier, Context>();
 		}
 	};
 	

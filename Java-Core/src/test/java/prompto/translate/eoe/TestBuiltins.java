@@ -7,8 +7,23 @@ import prompto.parser.e.BaseEParserTest;
 public class TestBuiltins extends BaseEParserTest {
 
 	@Test
+	public void testBooleanText() throws Exception {
+		compareResourceEOE("builtins/booleanText.pec");
+	}
+
+	@Test
+	public void testCategoryText() throws Exception {
+		compareResourceEOE("builtins/categoryText.pec");
+	}
+
+	@Test
 	public void testCharCodePoint() throws Exception {
 		compareResourceEOE("builtins/charCodePoint.pec");
+	}
+
+	@Test
+	public void testCharText() throws Exception {
+		compareResourceEOE("builtins/charText.pec");
 	}
 
 	@Test
@@ -24,6 +39,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testDateMonth() throws Exception {
 		compareResourceEOE("builtins/dateMonth.pec");
+	}
+
+	@Test
+	public void testDateText() throws Exception {
+		compareResourceEOE("builtins/dateText.pec");
 	}
 
 	@Test
@@ -62,6 +82,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testDateTimeText() throws Exception {
+		compareResourceEOE("builtins/dateTimeText.pec");
+	}
+
+	@Test
 	public void testDateTimeTZName() throws Exception {
 		compareResourceEOE("builtins/dateTimeTZName.pec");
 	}
@@ -82,6 +107,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testDecimalText() throws Exception {
+		compareResourceEOE("builtins/decimalText.pec");
+	}
+
+	@Test
 	public void testDictCount() throws Exception {
 		compareResourceEOE("builtins/dictCount.pec");
 	}
@@ -92,8 +122,18 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testDictText() throws Exception {
+		compareResourceEOE("builtins/dictText.pec");
+	}
+
+	@Test
 	public void testDictValues() throws Exception {
 		compareResourceEOE("builtins/dictValues.pec");
+	}
+
+	@Test
+	public void testDocumentText() throws Exception {
+		compareResourceEOE("builtins/documentText.pec");
 	}
 
 	@Test
@@ -112,13 +152,33 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testIntegerText() throws Exception {
+		compareResourceEOE("builtins/integerText.pec");
+	}
+
+	@Test
 	public void testListCount() throws Exception {
 		compareResourceEOE("builtins/listCount.pec");
 	}
 
 	@Test
+	public void testListText() throws Exception {
+		compareResourceEOE("builtins/listText.pec");
+	}
+
+	@Test
+	public void testPeriodText() throws Exception {
+		compareResourceEOE("builtins/periodText.pec");
+	}
+
+	@Test
 	public void testSetCount() throws Exception {
 		compareResourceEOE("builtins/setCount.pec");
+	}
+
+	@Test
+	public void testSetText() throws Exception {
+		compareResourceEOE("builtins/setText.pec");
 	}
 
 	@Test
@@ -139,6 +199,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testTextSplit() throws Exception {
 		compareResourceEOE("builtins/textSplit.pec");
+	}
+
+	@Test
+	public void testTextText() throws Exception {
+		compareResourceEOE("builtins/textText.pec");
 	}
 
 	@Test
@@ -172,8 +237,23 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTimeText() throws Exception {
+		compareResourceEOE("builtins/timeText.pec");
+	}
+
+	@Test
 	public void testTupleCount() throws Exception {
 		compareResourceEOE("builtins/tupleCount.pec");
+	}
+
+	@Test
+	public void testTupleText() throws Exception {
+		compareResourceEOE("builtins/tupleText.pec");
+	}
+
+	@Test
+	public void testUuidText() throws Exception {
+		compareResourceEOE("builtins/uuidText.pec");
 	}
 
 }

@@ -120,7 +120,7 @@ public class Time extends BaseValue implements Comparable<Time> {
 		else if ("millisecond".equals(name))
 			return new Integer(this.value.getNativeMillis());
 		else
-			throw new SyntaxError("No such member:" + name);
+			return super.getMember(context, id, autoCreate);
 	}
 
 	@Override

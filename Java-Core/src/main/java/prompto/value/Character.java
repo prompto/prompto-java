@@ -102,12 +102,11 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
     
     @Override
     public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
-		String name = id.toString();
-		if ("codePoint".equals(name))
+		if ("codePoint".equals(id.toString()))
 			return new Integer((int)value);
 		else
-			throw new SyntaxError("No such member:" + name);
-    }
+			return super.getMember(context, id, autoCreate);
+    };
 
     static Opcode[] cmpOpcodes = createOpcodes();
     

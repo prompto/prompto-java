@@ -157,7 +157,7 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IFilterab
 		if ("count".equals(name))
 			return new Integer(items.size());
 		else
-			throw new SyntaxError("No such member:" + name);
+			return super.getMember(context, id, autoCreate);
 	}
 
 	@Override

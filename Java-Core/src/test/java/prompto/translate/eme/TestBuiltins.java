@@ -7,8 +7,23 @@ import prompto.parser.e.BaseEParserTest;
 public class TestBuiltins extends BaseEParserTest {
 
 	@Test
+	public void testBooleanText() throws Exception {
+		compareResourceEME("builtins/booleanText.pec");
+	}
+
+	@Test
+	public void testCategoryText() throws Exception {
+		compareResourceEME("builtins/categoryText.pec");
+	}
+
+	@Test
 	public void testCharCodePoint() throws Exception {
 		compareResourceEME("builtins/charCodePoint.pec");
+	}
+
+	@Test
+	public void testCharText() throws Exception {
+		compareResourceEME("builtins/charText.pec");
 	}
 
 	@Test
@@ -24,6 +39,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testDateMonth() throws Exception {
 		compareResourceEME("builtins/dateMonth.pec");
+	}
+
+	@Test
+	public void testDateText() throws Exception {
+		compareResourceEME("builtins/dateText.pec");
 	}
 
 	@Test
@@ -62,6 +82,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testDateTimeText() throws Exception {
+		compareResourceEME("builtins/dateTimeText.pec");
+	}
+
+	@Test
 	public void testDateTimeTZName() throws Exception {
 		compareResourceEME("builtins/dateTimeTZName.pec");
 	}
@@ -82,6 +107,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testDecimalText() throws Exception {
+		compareResourceEME("builtins/decimalText.pec");
+	}
+
+	@Test
 	public void testDictCount() throws Exception {
 		compareResourceEME("builtins/dictCount.pec");
 	}
@@ -92,8 +122,18 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testDictText() throws Exception {
+		compareResourceEME("builtins/dictText.pec");
+	}
+
+	@Test
 	public void testDictValues() throws Exception {
 		compareResourceEME("builtins/dictValues.pec");
+	}
+
+	@Test
+	public void testDocumentText() throws Exception {
+		compareResourceEME("builtins/documentText.pec");
 	}
 
 	@Test
@@ -112,13 +152,33 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testIntegerText() throws Exception {
+		compareResourceEME("builtins/integerText.pec");
+	}
+
+	@Test
 	public void testListCount() throws Exception {
 		compareResourceEME("builtins/listCount.pec");
 	}
 
 	@Test
+	public void testListText() throws Exception {
+		compareResourceEME("builtins/listText.pec");
+	}
+
+	@Test
+	public void testPeriodText() throws Exception {
+		compareResourceEME("builtins/periodText.pec");
+	}
+
+	@Test
 	public void testSetCount() throws Exception {
 		compareResourceEME("builtins/setCount.pec");
+	}
+
+	@Test
+	public void testSetText() throws Exception {
+		compareResourceEME("builtins/setText.pec");
 	}
 
 	@Test
@@ -139,6 +199,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testTextSplit() throws Exception {
 		compareResourceEME("builtins/textSplit.pec");
+	}
+
+	@Test
+	public void testTextText() throws Exception {
+		compareResourceEME("builtins/textText.pec");
 	}
 
 	@Test
@@ -172,8 +237,23 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTimeText() throws Exception {
+		compareResourceEME("builtins/timeText.pec");
+	}
+
+	@Test
 	public void testTupleCount() throws Exception {
 		compareResourceEME("builtins/tupleCount.pec");
+	}
+
+	@Test
+	public void testTupleText() throws Exception {
+		compareResourceEME("builtins/tupleText.pec");
+	}
+
+	@Test
+	public void testUuidText() throws Exception {
+		compareResourceEME("builtins/uuidText.pec");
 	}
 
 }

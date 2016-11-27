@@ -26,7 +26,9 @@ public class PromptoDict<K,V> extends HashMap<K,V> implements Iterable<PromptoDi
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		for (HashMap.Entry<K,V> kvp : entrySet()) {
+			sb.append('"');
 			sb.append(kvp.getKey().toString());
+			sb.append('"');
 			sb.append(":");
 			sb.append(kvp.getValue().toString());
 			sb.append(", ");

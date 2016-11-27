@@ -35,8 +35,13 @@ public class Document extends BaseValue {
 	}
 	
     @Override
-    public IValue getMember(Context context, Identifier name, boolean autoCreate) {
-    	return getMember(name, autoCreate);
+    public IValue getMember(Context context, Identifier id, boolean autoCreate) {
+    	if("text".equals(id.toString()))
+    		autoCreate = false;
+    	IValue value = getMember(id, autoCreate);
+    	if("text".equals(id.toString()) && value==NullValue.instance())
+    		value = new Text(this.toString());
+    	return value;
  	}
     
     
@@ -84,7 +89,11 @@ public class Document extends BaseValue {
 
 	@Override
 	public String toString() {
-		return values.toString();
+		return values.toString(Document::toJson);
+	}
+	
+	static void toJson(IValue value, JsonGenerator generator, Object instanceId, String fieldName, Map<String, byte[]> binaries) throws IOException{
+		value.toJson(null, generator, instanceId, new Identifier(fieldName), binaries);
 	}
 	
 	@Override
