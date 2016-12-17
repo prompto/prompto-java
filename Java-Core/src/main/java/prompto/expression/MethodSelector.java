@@ -67,11 +67,11 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 			super.toDialect(writer);
 	}
 	
-	public Collection<IMethodDeclaration> getCandidates(Context context) {
+	public Collection<IMethodDeclaration> getCandidates(Context context, boolean checkInstance) {
 		if(parent==null)
 			return getGlobalCandidates(context);
 		else
-			return getMemberCandidates(context);
+			return getMemberCandidates(context, checkInstance);
 	}
 	
 	private Collection<IMethodDeclaration> getGlobalCandidates(Context context) {
@@ -92,11 +92,32 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		return methods;
 	}
 	
-	private Collection<IMethodDeclaration> getMemberCandidates(Context context) {
-		IType parentType = checkParent(context);
+	private Collection<IMethodDeclaration> getMemberCandidates(Context context, boolean checkInstance) {
+		IType parentType = checkParentType(context, checkInstance);
 		return parentType.getMemberMethods(context, id);
 	}
 	
+	private IType checkParentType(Context context, boolean checkInstance) {
+		if(checkInstance)
+			return checkParentInstance(context);
+		else 
+			return checkParent(context);
+	}
+
+	private IType checkParentInstance(Context context) {
+		if(parent instanceof UnresolvedIdentifier) {
+			Identifier id = ((UnresolvedIdentifier)parent).getId();
+			// don't get Singleton values
+			if(Character.isLowerCase(id.toString().charAt(0))) {
+				IValue value = context.getValue(id);
+				if(value!=null && value!=NullValue.instance())
+					return value.getType();
+			}
+		}
+		// TODO check result instance
+		return checkParent(context);
+	}
+
 	public ResultInfo compileExact(Context context, MethodInfo method, Flags flags, 
 				IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
 		if(parent!=null)

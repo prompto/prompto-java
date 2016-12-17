@@ -49,7 +49,7 @@ public class MethodFinder {
 	
 	public Collection<IMethodDeclaration> findCompatibleMethods(boolean checkInstance) {
 		MethodSelector selector = methodCall.getMethod();
-		Collection<IMethodDeclaration> candidates = selector.getCandidates(context);
+		Collection<IMethodDeclaration> candidates = selector.getCandidates(context, checkInstance);
 		if(candidates.size()==0)
 			throw new SyntaxError("No method named:" + methodCall.getMethod().getName()); 
 		return filterCompatible(candidates, checkInstance);
@@ -57,7 +57,7 @@ public class MethodFinder {
 	
 	public Collection<IMethodDeclaration> findPotentialMethods() {
 		MethodSelector selector = methodCall.getMethod();
-		Collection<IMethodDeclaration> candidates = selector.getCandidates(context);
+		Collection<IMethodDeclaration> candidates = selector.getCandidates(context, false);
 		if(candidates.size()==0)
 			throw new SyntaxError("No method named:" + methodCall.getMethod().getName()); 
 		return filterPotential(candidates);

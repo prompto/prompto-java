@@ -120,6 +120,16 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedOverride() throws Exception {
+		checkInterpretedOutput("methods/override.pec");
+	}
+
+	@Test
+	public void testCompiledOverride() throws Exception {
+		checkCompiledOutput("methods/override.pec");
+	}
+
+	@Test
 	public void testInterpretedPolymorphic_abstract() throws Exception {
 		checkInterpretedOutput("methods/polymorphic_abstract.pec");
 	}

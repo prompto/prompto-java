@@ -57,6 +57,11 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testOverride() throws Exception {
+		compareResourceEME("methods/override.pec");
+	}
+
+	@Test
 	public void testPolymorphic_abstract() throws Exception {
 		compareResourceEME("methods/polymorphic_abstract.pec");
 	}
