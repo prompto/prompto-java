@@ -110,6 +110,16 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedOverride() throws Exception {
+		checkInterpretedOutput("methods/override.poc");
+	}
+
+	@Test
+	public void testCompiledOverride() throws Exception {
+		checkCompiledOutput("methods/override.poc");
+	}
+
+	@Test
 	public void testInterpretedPolymorphic_abstract() throws Exception {
 		checkInterpretedOutput("methods/polymorphic_abstract.poc");
 	}

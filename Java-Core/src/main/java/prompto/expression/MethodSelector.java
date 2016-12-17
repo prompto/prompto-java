@@ -105,8 +105,12 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	}
 
 	private IType checkParentInstance(Context context) {
-		if(parent instanceof UnresolvedIdentifier) {
-			Identifier id = ((UnresolvedIdentifier)parent).getId();
+		Identifier id = null;
+		if(parent instanceof InstanceExpression)
+			id = ((InstanceExpression)parent).getId();
+		else if(parent instanceof UnresolvedIdentifier)
+			id = ((UnresolvedIdentifier)parent).getId();
+		if(id!=null) {
 			// don't get Singleton values
 			if(Character.isLowerCase(id.toString().charAt(0))) {
 				IValue value = context.getValue(id);

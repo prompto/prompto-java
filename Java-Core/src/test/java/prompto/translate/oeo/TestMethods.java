@@ -52,6 +52,11 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
+	public void testOverride() throws Exception {
+		compareResourceOEO("methods/override.poc");
+	}
+
+	@Test
 	public void testPolymorphic_abstract() throws Exception {
 		compareResourceOEO("methods/polymorphic_abstract.poc");
 	}
