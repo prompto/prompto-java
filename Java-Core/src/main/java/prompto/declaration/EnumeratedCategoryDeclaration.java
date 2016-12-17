@@ -1,7 +1,6 @@
 package prompto.declaration;
 
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.List;
 
 import prompto.compiler.ClassConstant;
@@ -12,12 +11,12 @@ import prompto.compiler.Descriptor;
 import prompto.compiler.FieldConstant;
 import prompto.compiler.FieldInfo;
 import prompto.compiler.Flags;
+import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
-import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.error.SyntaxError;
 import prompto.expression.CategorySymbol;
 import prompto.expression.IExpression;
@@ -171,7 +170,6 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 			compileSuperClass(context, classFile, new Flags());
 			compileInterface(context, classFile, new Flags());
 			compileCategoryField(context, classFile, new Flags());
-			compileSymbolsField(context, classFile, new Flags());
 			compileSymbolFields(context, classFile, new Flags());
 			compileClassConstructor(context, classFile, new Flags());
 			compileFields(context, classFile, new Flags());
@@ -233,23 +231,6 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 			compilePopulateCategoryField(context, method, flags);
 		for(CategorySymbol s : getSymbols())
 			compilePopulateSymbolField(context, method, flags, s);
-		compilePopulateSymbolsField(context, method, flags);
-	}
-	
-	private void compilePopulateSymbolsField(Context context, MethodInfo method, Flags flags) {
-		ClassConstant thisClass = method.getClassFile().getThisClass();
-		CompilerUtils.compileNewInstance(method, ArrayList.class);
-		MethodConstant m = new MethodConstant(ArrayList.class, "add", Object.class, boolean.class);
-		for(CategorySymbol s : getSymbols()) {
-			method.addInstruction(Opcode.DUP);
-			java.lang.reflect.Type fieldType = getFieldType(context, thisClass.getType(), s);
-			FieldConstant f = new FieldConstant(thisClass, s.getName(), fieldType);
-			method.addInstruction(Opcode.GETSTATIC, f);
-			method.addInstruction(Opcode.INVOKEVIRTUAL, m);
-			method.addInstruction(Opcode.POP); // ignore returned boolean
-		}
-		FieldConstant f = new FieldConstant(thisClass, "%symbols", List.class);
-		method.addInstruction(Opcode.PUTSTATIC, f);
 	}
 	
 	@Override
@@ -278,12 +259,6 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 			symbol.compileInnerClassAndCallConstructor(context, method, flags, thisClass, fieldType);
 		FieldConstant f = new FieldConstant(thisClass, symbol.getName(), fieldType);
 		method.addInstruction(Opcode.PUTSTATIC, f);
-	}
-
-	private void compileSymbolsField(Context context, ClassFile classFile, Flags flags) {
-		FieldInfo field = new FieldInfo("%symbols", List.class); 
-		field.addModifier(Modifier.STATIC);
-		classFile.addField(field);
 	}
 
 	private void compileSymbolFields(Context context, ClassFile classFile, Flags flags) {
