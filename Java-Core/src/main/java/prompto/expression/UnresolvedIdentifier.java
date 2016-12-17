@@ -4,6 +4,7 @@ import prompto.compiler.Flags;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.MethodInfo;
 import prompto.declaration.CategoryDeclaration;
+import prompto.declaration.EnumeratedCategoryDeclaration;
 import prompto.declaration.EnumeratedNativeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
@@ -14,6 +15,7 @@ import prompto.runtime.Context;
 import prompto.statement.MethodCall;
 import prompto.type.AnyType;
 import prompto.type.CategoryType;
+import prompto.type.EnumeratedCategoryType;
 import prompto.type.IType;
 import prompto.type.NativeType;
 import prompto.utils.CodeWriter;
@@ -137,7 +139,9 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 
 	private IExpression resolveType(Context context) {
 		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, id);
-		if(decl instanceof CategoryDeclaration)
+		if(decl instanceof EnumeratedCategoryDeclaration)
+			return new TypeExpression(new EnumeratedCategoryType(id));
+		else if(decl instanceof CategoryDeclaration)
 			return new TypeExpression(new CategoryType(id));
 		else if(decl instanceof EnumeratedNativeDeclaration)
 			return new TypeExpression(decl.getType(context));

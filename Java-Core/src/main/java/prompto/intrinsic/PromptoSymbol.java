@@ -10,21 +10,23 @@ public class PromptoSymbol {
 	public static List<PromptoSymbol> getSymbols(Class<?> klass) {
 		List<PromptoSymbol> list = new ArrayList<>();
 		for(Field field : klass.getDeclaredFields()) {
-			PromptoSymbol symbol = new PromptoSymbol() {
-				@Override
-				public String getName() {
-					return field.getName();
-				}
-				@Override
-				public Object getValue() {
-					try {
-						return field.get(null);
-					} catch (IllegalArgumentException | IllegalAccessException e) {
-						return null;
+			if(Character.isUpperCase(field.getName().charAt(0))) {
+				PromptoSymbol symbol = new PromptoSymbol() {
+					@Override
+					public String getName() {
+						return field.getName();
 					}
-				}
-			};
-			list.add(symbol);
+					@Override
+					public Object getValue() {
+						try {
+							return field.get(null);
+						} catch (IllegalArgumentException | IllegalAccessException e) {
+							return null;
+						}
+					}
+				};
+				list.add(symbol);
+			}
 		}
 		return list;
 	}

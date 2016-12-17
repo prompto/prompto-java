@@ -17,6 +17,7 @@ import prompto.compiler.ResultInfo;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
+import prompto.declaration.EnumeratedCategoryDeclaration;
 import prompto.declaration.EnumeratedNativeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
@@ -472,6 +473,8 @@ public class CategoryType extends BaseType {
 		IDeclaration decl = getDeclaration(context);
 		if(decl instanceof SingletonCategoryDeclaration)
 			return ((SingletonCategoryDeclaration)decl).compileGetMember(context, method, flags, parent, id);
+		else if(decl instanceof EnumeratedCategoryDeclaration)
+			return ((EnumeratedCategoryDeclaration)decl).compileGetMember(context, method, flags, parent, id);
 		else
 			throw new SyntaxError("No static member support for non-singleton " + decl.getName());
 	}

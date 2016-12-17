@@ -30,6 +30,7 @@ import prompto.runtime.Context;
 import prompto.runtime.Context.ClosureContext;
 import prompto.runtime.Context.InstanceContext;
 import prompto.type.CategoryType;
+import prompto.type.EnumeratedCategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.ConcreteInstance;
@@ -122,12 +123,13 @@ public class MemberSelector extends SelectorExpression {
 	}
 
 	private IValue interpretSingleton(Context context, IExpression parent) throws PromptoError {
-        if(parent instanceof TypeExpression 
-        		&& ((TypeExpression)parent).getType() instanceof CategoryType) {
-        	ConcreteInstance instance = context.loadSingleton(context, 
-        			(CategoryType)((TypeExpression)parent).getType());
-        	if(instance!=null)
-        		return instance.getMember(context, id, false); 
+        if(parent instanceof TypeExpression) {
+        	IType type = ((TypeExpression)parent).getType();
+        	if(type instanceof CategoryType && !(type instanceof EnumeratedCategoryType)) {
+        		ConcreteInstance instance = context.loadSingleton(context,  (CategoryType)((TypeExpression)parent).getType());
+	        	if(instance!=null)
+	        		return instance.getMember(context, id, false); 
+        	}
         }
         return null;
 	}

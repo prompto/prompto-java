@@ -15,13 +15,16 @@ import prompto.compiler.Flags;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
 import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.error.SyntaxError;
 import prompto.expression.CategorySymbol;
+import prompto.expression.IExpression;
 import prompto.expression.Symbol;
 import prompto.grammar.CategorySymbolList;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoSymbol;
 import prompto.runtime.Context;
 import prompto.type.EnumeratedCategoryType;
 import prompto.type.IType;
@@ -248,6 +251,23 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 		FieldConstant f = new FieldConstant(thisClass, "%symbols", List.class);
 		method.addInstruction(Opcode.PUTSTATIC, f);
 	}
+	
+	@Override
+	protected void compileMethods(Context context, ClassFile classFile, Flags flags) {
+		compileGetSymbolsMethod(context, classFile, new Flags());
+		super.compileMethods(context, classFile, flags);
+	}
+	
+	private void compileGetSymbolsMethod(Context context, ClassFile classFile, Flags flags) {
+		MethodInfo method = classFile.newMethod("getSymbols", new Descriptor.Method(List.class));
+		method.addModifier(Modifier.STATIC);
+		method.addInstruction(Opcode.LDC, classFile.getThisClass());
+		MethodConstant m = new MethodConstant(PromptoSymbol.class, "getSymbols", 
+				new Descriptor.Method(Class.class, List.class));
+		method.addInstruction(Opcode.INVOKESTATIC, m);
+		method.addInstruction(Opcode.ARETURN);
+	}
+
 
 	private void compilePopulateSymbolField(Context context, MethodInfo method, Flags flags, CategorySymbol symbol) {
 		ClassConstant thisClass = method.getClassFile().getThisClass();
@@ -284,6 +304,17 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 			return thisType;
 		else
 			return CompilerUtils.getExceptionType(thisType, symbol.getName());
+	}
+
+	public ResultInfo compileGetMember(Context context, MethodInfo method, Flags flags, IExpression parent, Identifier id) {
+		if("symbols".equals(id.toString())) {
+			java.lang.reflect.Type concreteType = CompilerUtils.getCategoryEnumConcreteType(getId());
+			String getterName = CompilerUtils.getterName("symbols");
+			MethodConstant m = new MethodConstant(concreteType, getterName, List.class);
+			method.addInstruction(Opcode.INVOKESTATIC, m);
+			return new ResultInfo(List.class);
+		} else
+			throw new SyntaxError("No static member support for non-singleton " + this.getName());
 	}
 
 }
