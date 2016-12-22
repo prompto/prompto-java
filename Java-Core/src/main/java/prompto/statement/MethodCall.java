@@ -252,7 +252,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 			else {
 				String expected = buildExpectedMessage(context, test);
 				String actual = value.toString();
-				test.printFailure(context, expected, actual);
+				test.printFailedAssertion(context, expected, actual);
 				return false;
 			}
 		} else {
@@ -284,7 +284,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		method.addInstruction(Opcode.IADD);
 		// build failure message
 		String message = buildExpectedMessage(context, test);
-		message = test.buildFailureMessagePrefix(message);
+		message = test.buildFailedAssertionMessagePrefix(message);
 		method.addInstruction(Opcode.LDC, new StringConstant(message));
 		method.addInstruction(Opcode.LDC, new StringConstant(Boolean.FALSE.toString()));
 		MethodConstant concat = new MethodConstant(String.class, "concat", String.class, String.class);

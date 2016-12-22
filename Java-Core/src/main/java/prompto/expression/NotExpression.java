@@ -107,7 +107,7 @@ public class NotExpression implements IUnaryExpression, IPredicateExpression, IA
 			return true;
 		String expected = buildExpectedMessage(context, test);
 		String actual = operatorToDialect(test.getDialect()) + val.toString();
-		test.printFailure(context, expected, actual);
+		test.printFailedAssertion(context, expected, actual);
 		return false;	
 	}
 	
@@ -133,7 +133,7 @@ public class NotExpression implements IUnaryExpression, IPredicateExpression, IA
 		method.addInstruction(Opcode.IADD);
 		// build failure message
 		String message = buildExpectedMessage(context, test);
-		message = test.buildFailureMessagePrefix(message);
+		message = test.buildFailedAssertionMessagePrefix(message);
 		method.addInstruction(Opcode.LDC, new StringConstant(message));
 		method.addInstruction(Opcode.LDC, new StringConstant(operatorToDialect(test.getDialect())));
 		MethodConstant concat = new MethodConstant(String.class, "concat", String.class, String.class);

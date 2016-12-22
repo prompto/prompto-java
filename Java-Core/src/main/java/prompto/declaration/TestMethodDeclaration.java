@@ -96,7 +96,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 	private void interpretError(Context context) {
 		// we land here only if no error was raised
 		if(error!=null)
-			printFailure(context, error.getName().toString(), "no error");
+			printFailedAssertion(context, error.getName().toString(), "no error");
 	}
 
 	private void interpretAsserts(Context context) throws PromptoError {
@@ -114,13 +114,22 @@ public class TestMethodDeclaration extends BaseDeclaration {
 		}
 	}
 
-	public void printFailure(Context context, String expected, String actual) {
-		String message = buildFailureMessagePrefix(expected);
+	public void printFailedAssertion(Context context, String expected, String actual) {
+		String message = buildFailedAssertionMessagePrefix(expected);
 		System.out.println(message + actual);
 	}
 
-	public String buildFailureMessagePrefix(String expected) {
-		return getName() + " test failed, expected: " + expected + ", actual: ";
+	public String buildFailedAssertionMessagePrefix(String expected) {
+		return getName() + " test failed while verifying: " + expected + ", found: ";
+	}
+	
+	public void printMissingError(Context context, String expected, String actual) {
+		String message = buildMissingErrorMessagePrefix(expected);
+		System.out.println(message + actual);
+	}
+	
+	public String buildMissingErrorMessagePrefix(String expected) {
+		return getName() + " test failed while expecting: " + expected + ", found: ";
 	}
 
 	private void printSuccess(Context context) {
@@ -153,7 +162,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 		else {
 			String actualName = ((IInstance)actual).getMember(context, new Identifier("name"), false).toString();
 			String expectedName = error==null ? "SUCCESS" : error.getName().toString();
-			printFailure(context, expectedName, actualName);
+			printMissingError(context, expectedName, actualName);
 		}
 	}
 
@@ -312,7 +321,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 		MethodConstant mc = new MethodConstant(PromptoException.class, "getExceptionTypeName", Object.class, String.class);
 		method.addInstruction(Opcode.INVOKESTATIC, mc); 
 		// produce failure message
-		String message = buildFailureMessagePrefix(error.getName().toString());
+		String message = buildMissingErrorMessagePrefix(error.getName().toString());
 		method.addInstruction(Opcode.LDC, new StringConstant(message)); 
 		method.addInstruction(Opcode.SWAP);  
 		mc = new MethodConstant(String.class, "concat", String.class, String.class);
@@ -329,7 +338,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 
 	private void compileMissingExceptionHandler(Context context, MethodInfo method, Flags flags) {
 		// produce failure
-		String message = buildFailureMessagePrefix(error.getName().toString()) + "no error";
+		String message = buildMissingErrorMessagePrefix(error.getName().toString()) + "no error";
 		method.addInstruction(Opcode.LDC, new StringConstant(message));
 		compilePrintResult(context, method, flags);
 	}

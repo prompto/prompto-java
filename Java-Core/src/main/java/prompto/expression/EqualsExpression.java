@@ -229,7 +229,7 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 			return true;
 		String expected = buildExpectedMessage(context, test);
 		String actual = lval.toString() + " " + operator.toString(test.getDialect()) + " " + rval.toString();
-		test.printFailure(context, expected, actual);
+		test.printFailedAssertion(context, expected, actual);
 		return false;
 	}
 
@@ -273,7 +273,7 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 		method.addInstruction(Opcode.IADD);
 		// build failure message
 		String message = buildExpectedMessage(context, test);
-		message = test.buildFailureMessagePrefix(message);
+		message = test.buildFailedAssertionMessagePrefix(message);
 		method.addInstruction(Opcode.LDC, new StringConstant(message));
 		CompilerUtils.compileALOAD(method, left);
 		MethodConstant stringValueOf = new MethodConstant(String.class, "valueOf", Object.class, String.class);

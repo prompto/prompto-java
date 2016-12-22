@@ -146,7 +146,7 @@ public class OrExpression implements IPredicateExpression, IAssertion {
 			return true;
 		String expected = buildExpectedMessage(context, test);
 		String actual = lval.toString() + operatorToDialect(test.getDialect()) + rval.toString();
-		test.printFailure(context, expected, actual);
+		test.printFailedAssertion(context, expected, actual);
 		return false;
 	}
 	
@@ -187,7 +187,7 @@ public class OrExpression implements IPredicateExpression, IAssertion {
 		method.addInstruction(Opcode.IADD);
 		// build failure message
 		String message = buildExpectedMessage(context, test);
-		message = test.buildFailureMessagePrefix(message);
+		message = test.buildFailedAssertionMessagePrefix(message);
 		method.addInstruction(Opcode.LDC, new StringConstant(message));
 		CompilerUtils.compileILOAD(method, left);
 		MethodConstant valueOf = new MethodConstant(String.class, "valueOf", boolean.class, String.class);

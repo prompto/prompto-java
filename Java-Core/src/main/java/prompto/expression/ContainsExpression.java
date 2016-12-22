@@ -253,7 +253,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 			return true;
 		String expected = buildExpectedMessage(context, test);
 		String actual = lval.toString() + " " + operator.toString() + " " + rval.toString();
-		test.printFailure(context, expected, actual);
+		test.printFailedAssertion(context, expected, actual);
 		return false;
 	}
 	
@@ -297,7 +297,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 		method.addInstruction(Opcode.IADD);
 		// build failure message
 		String message = buildExpectedMessage(context, test);
-		message = test.buildFailureMessagePrefix(message);
+		message = test.buildFailedAssertionMessagePrefix(message);
 		method.addInstruction(Opcode.LDC, new StringConstant(message));
 		CompilerUtils.compileALOAD(method, left);
 		MethodConstant toString = new MethodConstant(leftInfo.getType(), "toString", String.class);
