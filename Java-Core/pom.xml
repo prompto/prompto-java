@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.prompto</groupId>
 		<artifactId>Parent-Core</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.0.1</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>Core</artifactId>

@@ -1,15 +1,49 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.prompto</groupId>
 	<artifactId>Parent-Core</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<packaging>pom</packaging>
 
 	<modules>
 		<module>Java-Core</module>
 		<module>Java-Runtime</module>
 	</modules>
+
+	<name>Prompto Core</name>
+	<description>Prompto Core POM</description>
+	<url>http://www.prompto.org</url>
+	<organization>
+		<name>Prompto</name>
+		<url>http://www.prompto.org</url>
+	</organization>
+
+	<licenses>
+		<license>
+			<name>The Prompto License</name>
+			<url>http://www.prompto.org/license.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Eric Vergnaud</name>
+			<url>https://github.com/ericvergnaud</url>
+			<roles>
+				<role>Project lead</role>
+			</roles>
+		</developer>
+	</developers>
+	
+	<scm>
+		<connection>scm:git:https://github.com/prompto/prompto-java</connection>
+		<developerConnection>scm:git:https://github.com/prompto/prompto-java</developerConnection>
+		<tag>Parent-Core-0.0.1</tag>
+		<url>https://github.com/prompto/prompto-java</url>
+	</scm>
 
 	<profiles>
 		<profile>
