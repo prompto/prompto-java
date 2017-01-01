@@ -10,3 +10,4 @@
 travis.yml
 prompto-libraries
 prompto-tests
+/target/
