@@ -415,12 +415,10 @@ public enum Opcode {
 	}
 
     
-    /** Get the Opcode for a simple standard 1-byte opcode. */
     public static Opcode get(byte opcode) {
         return stdOpcodes[opcode & 0xFF];
     }
 
-    /** Get the Opcode for 1- or 2-byte opcode. */
     public static Opcode get(byte opcodePrefix, byte opcode) {
         Opcode[] block = getOpcodeBlock(opcodePrefix);
         return (block == null ? null : block[opcode]);
@@ -446,7 +444,6 @@ public enum Opcode {
             getOpcodeBlock(o.opcode >> 8)[o.opcode & 0xff] = o;
     }
 
-    /** The byte prefix for the wide instructions. */
     public static final int WIDE = 0xc4;
 
 
