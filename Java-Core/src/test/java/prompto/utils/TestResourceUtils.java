@@ -22,5 +22,13 @@ public class TestResourceUtils {
 		assertNotNull(names);
 		assertFalse(names.isEmpty());
 	}
+	
+	@Test
+	public void testListResourcesAtJarFolder() throws IOException {
+		Collection<String> names = ResourceUtils.listResourcesAt("org/abego/treelayout/");
+		assertNotNull(names);
+		assertFalse(names.isEmpty());
+	}
+
 
 }
