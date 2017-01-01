@@ -12,4 +12,5 @@ once all the above is done, from cmd line:
  - go to parent pom dir
  - run: mvn versions:set -DnewVersion=x.y.z -DgenerateBackupPoms=false
  - run: mvn clean deploy -P deploy -DskipTests=true
-if successful, create release on github 
+if successful, create release on github, then: 
+ - run: mvn versions:set -DnewVersion=0.0.1-SNAPSHOT -DgenerateBackupPoms=false
