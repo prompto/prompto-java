@@ -643,9 +643,9 @@ public class Context implements IContext {
 			debugger.leaveStatement(this, statement);
 	}
 
-	public void terminated() {
+	public void notifyTerminated() {
 		if(debugger!=null)
-			debugger.terminated();
+			debugger.notifyTerminated();
 	}
 
 	public ConcreteInstance loadSingleton(Context context, CategoryType type) throws PromptoError {

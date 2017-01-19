@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import prompto.debug.Debugger;
-import prompto.debug.Debugger.Status;
 import prompto.declaration.ConcreteMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;

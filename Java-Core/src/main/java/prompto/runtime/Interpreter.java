@@ -58,29 +58,37 @@ public class Interpreter {
 	
 	public static void interpretMethod(Context context, Identifier methodName, String cmdLineArgs) throws PromptoError {
 		try {
-			IMethodDeclaration method = locateMethod(context, methodName, cmdLineArgs);
-			ArgumentAssignmentList assignments = buildAssignments(method, cmdLineArgs);
-			MethodCall call = new MethodCall(new MethodSelector(methodName),assignments);
-			call.interpret(context);	
+			IExpression args = parseCmdLineArgs(cmdLineArgs);
+			interpretMethod(context, methodName, args);
 		} finally {
-			context.terminated();
+			context.notifyTerminated();
 		}
 	}
 	
+	public static void interpretMethod(Context context, Identifier methodName, IExpression args) {
+		try {
+			IMethodDeclaration method = locateMethod(context, methodName, args);
+			ArgumentAssignmentList assignments = buildAssignments(method, args);
+			MethodCall call = new MethodCall(new MethodSelector(methodName), assignments);
+			call.interpret(context);	
+		} finally {
+			context.notifyTerminated();
+		}
+	}
+
 	public static void interpretScript(Context context, String cmdLineArgs) throws PromptoError {
 	}
 
-	private static ArgumentAssignmentList buildAssignments(IMethodDeclaration method, String cmdLineArgs) {
+	private static ArgumentAssignmentList buildAssignments(IMethodDeclaration method, IExpression args) {
 		ArgumentAssignmentList assignments = new ArgumentAssignmentList();
 		if(method.getArguments().size()==1) {
 			Identifier name = method.getArguments().getFirst().getId();
-			IExpression value = parseCmdLineArgs(cmdLineArgs);
-			assignments.add(new ArgumentAssignment(new UnresolvedArgument(name), value)); 
+			assignments.add(new ArgumentAssignment(new UnresolvedArgument(name), args)); 
 		}
 		return assignments;
 	}
 
-	private static IExpression parseCmdLineArgs(String cmdLineArgs) {
+	public static IExpression parseCmdLineArgs(String cmdLineArgs) {
 		try {
 			Map<String,String> args = CmdLineParser.parse(cmdLineArgs);
 			PromptoDict<Text, IValue> valueArgs = new PromptoDict<Text, IValue>(true);
@@ -95,18 +103,18 @@ public class Interpreter {
 		}
 	}
 
-	 private static IMethodDeclaration locateMethod(Context context, Identifier methodName, String cmdLineArgs) {
+	 private static IMethodDeclaration locateMethod(Context context, Identifier methodName, IExpression args) {
 		MethodDeclarationMap map = context.getRegisteredDeclaration(MethodDeclarationMap.class, methodName);
 		if(map==null)
 			throw new SyntaxError("Could not find a \"" + methodName + "\" method.");
-		return locateMethod(map, cmdLineArgs);
+		return locateMethod(map, args!=null);
 	}
 			
-	private static IMethodDeclaration locateMethod(MethodDeclarationMap map, String cmdLineArgs) {
-		if(cmdLineArgs==null)
-			return locateMethod(map);
-		else
+	private static IMethodDeclaration locateMethod(MethodDeclarationMap map, boolean hasArgs) {
+		if(hasArgs)
 			return locateMethod(map, new DictType(TextType.instance()));
+		else
+			return locateMethod(map);
 	}
 
 	private static IMethodDeclaration locateMethod(MethodDeclarationMap map, IType ... argTypes) {

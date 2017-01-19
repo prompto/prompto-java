@@ -39,7 +39,7 @@ public abstract class Executor {
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | IOException e) {
 			throw new InternalError(e);
 		} finally {
-			context.terminated();
+			context.notifyTerminated();
 		}	
 	}
 	
@@ -82,7 +82,7 @@ public abstract class Executor {
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | IOException e) {
 			throw new InternalError(e);
 		} finally {
-			context.terminated();
+			context.notifyTerminated();
 		}
 	}
 

@@ -6,7 +6,7 @@ import prompto.error.TerminatedError;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 
-public class Debugger {
+public class Debugger implements IDebugger {
 
 	Stack stack = new Stack();
 	Object blocker = new Object();
@@ -20,18 +20,6 @@ public class Debugger {
 	boolean suspended = false;
 	boolean terminated = false;
 	
-	public static enum Status {
-		STARTING,
-		RUNNING,
-		SUSPENDED,
-		TERMINATING,
-		TERMINATED;
-		
-		@Override
-		public String toString() {
-			return name().substring(0,1) + name().substring(1).toLowerCase();
-		}
-	}
 	
 	public Stack getStack() {
 		return stack;
@@ -85,7 +73,7 @@ public class Debugger {
 	
 	public void enterStatement(Context context, ISection section) throws PromptoError {
 		terminateIfRequested();
-		StackFrame previous = stack.pop();
+		IStackFrame previous = stack.pop();
 		stack.push(new StackFrame(context, previous.getMethodName(), section));
 		if(stack.size()>0 && stack.size()<=stepDepth)
 			suspend(SuspendReason.STEPPING, context, section);
@@ -194,11 +182,11 @@ public class Debugger {
 	}
 
 	public int getLine() {
-		StackFrame frame = stack.peek();
+		IStackFrame frame = stack.peek();
 		return frame==null ? -1 : frame.getLine();
 	}
 
-	public void terminated() {
+	public void notifyTerminated() {
 		status = Status.TERMINATED;
 		if(listener!=null)
 			listener.handleTerminateEvent();
