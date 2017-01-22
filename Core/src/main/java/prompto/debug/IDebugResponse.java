@@ -1,12 +1,20 @@
 package prompto.debug;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 public interface IDebugResponse {
 	
+	@JsonIgnore
+	Type getType();
+
 	public static class StatusResponse implements IDebugResponse {
 
 		Status status;
 		
+		public StatusResponse() {
+		}
+
 		public StatusResponse(Status status) {
 			this.status = status;
 		}
@@ -18,6 +26,10 @@ public interface IDebugResponse {
 
 		public Status getStatus() {
 			return status;
+		}
+		
+		public void setStatus(Status status) {
+			this.status = status;
 		}
 
 	}
@@ -37,5 +49,4 @@ public interface IDebugResponse {
 		}
 	}
 
-	Type getType();
 }

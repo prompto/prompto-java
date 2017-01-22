@@ -117,13 +117,15 @@ public abstract class Application {
 
 	private static void debug(int debugPort, String mainMethod, Map<String, String> args) {
 		LocalDebugger debugger = new LocalDebugger();
+		DebuggerServer server = new DebuggerServer(debugger, debugPort);
+		debugger.setListener(server);
 		final Context local = getGlobalContext().newLocalContext();
 		local.setDebugger(debugger);
 		Thread execThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					Interpreter.interpretMethod(getGlobalContext(), new Identifier(mainMethod), "");
+					Interpreter.interpretMethod(local, new Identifier(mainMethod), "");
 				} catch (Throwable t) {
 					t.printStackTrace(System.err);
 				}
@@ -133,8 +135,7 @@ public abstract class Application {
 			@Override
 			public void run() {
 				try {
-					DebuggerServer server = new DebuggerServer(debugger, debugPort);
-					server.loop();
+					server.acceptLoop();
 				} catch (Throwable t) {
 					t.printStackTrace(System.err);
 				}

@@ -3,10 +3,13 @@ package prompto.debug;
 import static prompto.debug.IDebugResponse.*;
 import static prompto.debug.IDebugRequest.Type.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public interface IDebugRequest {
 
-	IDebugResponse execute(IDebugger debugger);
+	@JsonIgnore
 	Type getType();
+	IDebugResponse execute(IDebugger debugger);
 
 	public static class StatusRequest implements IDebugRequest {
 
