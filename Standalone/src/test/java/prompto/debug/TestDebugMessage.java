@@ -9,7 +9,8 @@ import java.io.OutputStream;
 
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonGenerator.Feature;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -112,14 +113,15 @@ public class TestDebugMessage {
 	public void testOpenStream() throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-		mapper.configure(Feature.AUTO_CLOSE_TARGET, false);
+		mapper.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, false);
+		mapper.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
 		RequestMessage message = new RequestMessage();
 		message.object = new StatusRequest();
 		message.type = message.object.getType();
 		JsonNode json = mapper.valueToTree(message);
 		String s = json.toString();
 		try(InputStream input = new ByteArrayInputStream(s.getBytes())) {
-			JsonNode node = mapper.readTree(input);
+			/* JsonNode node = */ mapper.readTree(input);
 			int read = input.read();
 			assertEquals(-1, read);
 			try(OutputStream output = new ByteArrayOutputStream()) {

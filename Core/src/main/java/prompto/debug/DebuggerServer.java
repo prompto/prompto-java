@@ -48,7 +48,7 @@ public class DebuggerServer implements IDebugEventListener {
 	}
 
 	private void handleRequest(Socket client) throws Exception {
-		// don't close these streams
+		// don't close these streams since that would close the underlying socket
 		System.err.println("opening server InputStream");
 		InputStream input = client.getInputStream();
 		System.err.println("opening server OutputStream");
@@ -93,19 +93,18 @@ public class DebuggerServer implements IDebugEventListener {
 
 	@Override
 	public void handleSuspendEvent(SuspendReason reason, IContext context, ISection section) {
-		// TODO Auto-generated method stub
-		
+		System.err.println("handleSuspendEvent");
 	}
 
 	@Override
 	public void handleResumeEvent(ResumeReason reason, IContext context, ISection section) {
-		// TODO Auto-generated method stub
-		
+		System.err.println("handleResumeEvent");
 	}
 
 	@Override
 	public void handleTerminateEvent() {
-		// loop = false;
+		System.err.println("handleTerminateEvent");
+		loop = false;
 	}
 
 

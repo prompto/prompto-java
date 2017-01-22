@@ -6,7 +6,10 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 import prompto.debug.IDebugRequest.StatusRequest;
+import prompto.debug.IDebugRequest.ResumeRequest;
+import prompto.debug.IDebugRequest.LineRequest;
 import prompto.debug.IDebugResponse.StatusResponse;
+import prompto.debug.IDebugResponse.LineResponse;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -115,8 +118,12 @@ public class RemoteDebugger implements IDebugger {
 
 	@Override
 	public int getLine() {
-		// TODO Auto-generated method stub
-		return 0;
+		IDebugRequest request = new LineRequest();
+		IDebugResponse response = send(request) ;
+		if(response instanceof LineResponse)
+			return ((LineResponse)response).getLine();
+		else 
+			throw new UnreachableException();
 	}
 
 	@Override
@@ -181,8 +188,8 @@ public class RemoteDebugger implements IDebugger {
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
-		
+		IDebugRequest request = new ResumeRequest();
+		send(request);
 	}
 
 	@Override

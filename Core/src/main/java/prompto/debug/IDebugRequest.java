@@ -25,8 +25,40 @@ public interface IDebugRequest {
 		}
 	}
 	
+	public static class LineRequest implements IDebugRequest {
+
+		@Override
+		public LineResponse execute(IDebugger debugger) {
+			int line = debugger.getLine();
+			System.err.println("line:" + line);
+			return new LineResponse(line);
+		}
+		
+		@Override
+		public Type getType() {
+			return LINE;
+		}
+	}
+
+	public static class ResumeRequest implements IDebugRequest {
+
+		@Override
+		public VoidResponse execute(IDebugger debugger) {
+			debugger.resume();
+			System.err.println("resume");
+			return new VoidResponse();
+		}
+		
+		@Override
+		public Type getType() {
+			return RESUME;
+		}
+	}
+
 	public enum Type {
-		STATUS(StatusRequest.class)
+		STATUS(StatusRequest.class),
+		LINE(LineRequest.class),
+		RESUME(ResumeRequest.class)
 		;
 		
 		Class<? extends IDebugRequest> klass;

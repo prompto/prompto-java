@@ -19,22 +19,23 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase {
 	Thread thread;
 	String output = null;
 	
-	// @Before
+	@Before
 	public void before() {
 		output = null;
 		Out.init();
 	}
 	
-	// @After
+	@After
 	public void after() {
-		System.out.println(readOut());
 		Out.restore();
 	}
 	
 	@Override
 	protected String readOut() {
-		if(output==null)
-			output = Out.read();
+		if(output==null) {
+			String[] lines = Out.read().split("\n");
+			output = lines.length>0 ? lines[lines.length-1] : "";
+		}
 		return output;
 	}
 	
