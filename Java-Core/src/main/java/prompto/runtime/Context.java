@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import prompto.code.ICodeStore;
-import prompto.debug.Debugger;
+import prompto.debug.LocalDebugger;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.declaration.ConcreteMethodDeclaration;
@@ -62,7 +62,7 @@ public class Context implements IContext {
 	Context globals;
 	Context calling;
 	Context parent; // for inner methods
-	Debugger debugger; 
+	LocalDebugger debugger; 
 	IProblemListener problemListener;
 	
 	Map<Identifier,IDeclaration> declarations = new HashMap<Identifier, IDeclaration>();
@@ -82,11 +82,11 @@ public class Context implements IContext {
 		return this==globals;
 	}
 	
-	public void setDebugger(Debugger debugger) {
+	public void setDebugger(LocalDebugger debugger) {
 		this.debugger = debugger;
 	}
 	
-	public Debugger getDebugger() {
+	public LocalDebugger getDebugger() {
 		return debugger;
 	}
 	

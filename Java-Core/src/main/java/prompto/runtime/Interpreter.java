@@ -52,10 +52,19 @@ public class Interpreter {
 		test.interpret(local);
 	}
 	
+	public static void interpretMain(Context context, Map<String, String> cmdLineArgs) throws PromptoError {
+		try {
+			IExpression args = convertCmdLineArgs(cmdLineArgs);
+			interpretMethod(context, new Identifier("main"), args);
+		} finally {
+			context.notifyTerminated();
+		}
+	}
+	
 	public static void interpretMainNoArgs(Context context) throws PromptoError {
 		interpretMethod(context, new Identifier("main"), "");
 	}
-	
+
 	public static void interpretMethod(Context context, Identifier methodName, String cmdLineArgs) throws PromptoError {
 		try {
 			IExpression args = parseCmdLineArgs(cmdLineArgs);
@@ -91,17 +100,22 @@ public class Interpreter {
 	public static IExpression parseCmdLineArgs(String cmdLineArgs) {
 		try {
 			Map<String,String> args = CmdLineParser.parse(cmdLineArgs);
-			PromptoDict<Text, IValue> valueArgs = new PromptoDict<Text, IValue>(true);
-			for(Entry<String,String> entry : args.entrySet())
-				valueArgs.put(new Text(entry.getKey()), new Text(entry.getValue()));
-			valueArgs.setMutable(false);
-			Dictionary dict = new Dictionary(TextType.instance(), valueArgs);
-			return new ExpressionValue(argsType, dict);
+			return convertCmdLineArgs(args);
 		} catch(Exception e) {
 			// TODO
 			return new DictLiteral(false);
 		}
 	}
+
+	private static IExpression convertCmdLineArgs(Map<String, String> args) {
+		PromptoDict<Text, IValue> valueArgs = new PromptoDict<Text, IValue>(true);
+		for(Entry<String,String> entry : args.entrySet())
+			valueArgs.put(new Text(entry.getKey()), new Text(entry.getValue()));
+		valueArgs.setMutable(false);
+		Dictionary dict = new Dictionary(TextType.instance(), valueArgs);
+		return new ExpressionValue(argsType, dict);
+	}
+
 
 	 private static IMethodDeclaration locateMethod(Context context, Identifier methodName, IExpression args) {
 		MethodDeclarationMap map = context.getRegisteredDeclaration(MethodDeclarationMap.class, methodName);

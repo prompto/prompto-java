@@ -7,6 +7,7 @@ import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.URL;
 
 public class BaseTest {
 
@@ -28,13 +29,48 @@ public class BaseTest {
 	public InputStream getResourceAsStream(String resourceName) throws Exception {
 		InputStream stream = tryLoadResource(resourceName);
 		if(stream==null)
-			stream = tryLoadRuntimeFile(resourceName);
+			stream = tryLoadTestResource(resourceName);
 		if(stream==null)
-			stream = tryLoadLibraryFile(resourceName);
+			stream = tryLoadLibraryResource(resourceName);
 		return stream;
 	}
 
-	private InputStream tryLoadLibraryFile(String resourceName) throws FileNotFoundException {
+	public URL getResourceAsURL(String resourceName) throws Exception {
+		URL url = tryGetResource(resourceName);
+		if(url==null)
+			url = tryGetTestResource(resourceName);
+		if(url==null)
+			url = tryGetLibraryResource(resourceName);
+		return url;
+	}
+
+	
+	private URL tryGetLibraryResource(String resourceName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private URL tryGetTestResource(String resourceName) throws Exception {
+		File file = tryLocateTestFile(resourceName);
+		if(file!=null)
+			return file.toURI().toURL();
+		else
+			return null;
+	}
+
+	private URL tryGetResource(String resourceName) {
+		return Thread.currentThread().getContextClassLoader().getResource(resourceName);
+	}
+
+	private InputStream tryLoadLibraryResource(String resourceName) throws FileNotFoundException {
+		File file = tryLocateLibraryFile(resourceName);
+		if(file!=null)
+			return new FileInputStream(file);
+		else
+			return null;
+	}
+	
+	public File tryLocateLibraryFile(String resourceName) throws FileNotFoundException {
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
 		String dirPath = loader.getResource("").getFile();
 		int idx = dirPath.lastIndexOf("/Java-Runtime/");
@@ -43,7 +79,7 @@ public class BaseTest {
 		String libsPath = dirPath.substring(0, idx) + "/prompto-libraries/";
 		File file = new File(libsPath + resourceName);
 		if(file.exists())
-			return new FileInputStream(file);
+			return file;
 		else
 			return null;
 	}
@@ -68,7 +104,15 @@ public class BaseTest {
 			return null;
 	}
 
-	private InputStream tryLoadRuntimeFile(String resourceName) throws FileNotFoundException {
+	private InputStream tryLoadTestResource(String resourceName) throws FileNotFoundException {
+		File file = tryLocateTestFile(resourceName);
+		if(file!=null)
+			return new FileInputStream(file);
+		else
+			return null;
+	}
+	
+	public File tryLocateTestFile(String resourceName) throws FileNotFoundException {
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
 		String dirPath = loader.getResource("").getFile();
 		int idx = dirPath.lastIndexOf("/Java-Core/");
@@ -77,7 +121,7 @@ public class BaseTest {
 		String testsPath = dirPath.substring(0, idx) + "/prompto-tests/Tests/resources/";
 		File file = new File(testsPath + resourceName);
 		if(file.exists())
-			return new FileInputStream(file);
+			return file;
 		else
 			return null;
 	}

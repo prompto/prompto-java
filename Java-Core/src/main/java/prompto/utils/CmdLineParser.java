@@ -21,6 +21,18 @@ import prompto.utils.ArgsParser.STRINGContext;
 
 public class CmdLineParser {
 
+	public static Map<String,String> parse(String[] args) {
+		Map<String,String> map = new HashMap<String,String>();
+		for(int i=0, max=args.length; i<max; i+=2) {
+			String key = args[i];
+			if(key.startsWith("-"))
+				key = key.substring(1);
+			map.put(key, args[i+1]);
+		}
+		return map;
+	}
+	
+	
 	public static Map<String,String> parse(String input) throws Exception {
 		if(input==null)
 			input = "";

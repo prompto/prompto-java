@@ -6,7 +6,7 @@ import prompto.error.TerminatedError;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 
-public class Debugger implements IDebugger {
+public class LocalDebugger implements IDebugger {
 
 	Stack stack = new Stack();
 	Object blocker = new Object();

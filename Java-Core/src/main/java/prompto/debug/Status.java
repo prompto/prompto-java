@@ -5,7 +5,8 @@ public enum Status {
 	RUNNING,
 	SUSPENDED,
 	TERMINATING,
-	TERMINATED;
+	TERMINATED,
+	UNREACHABLE;
 	
 	@Override
 	public String toString() {

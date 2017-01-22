@@ -14,7 +14,7 @@ public class TestCmdLineParser {
 	
 	@Test
 	public void testNull() throws Exception {
-		options = CmdLineParser.parse(null);
+		options = CmdLineParser.parse((String)null);
 		assertNotNull(options);
 	}
 
