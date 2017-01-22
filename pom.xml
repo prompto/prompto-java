@@ -8,8 +8,10 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>Java-Core</module>
-		<module>Java-Runtime</module>
+		<module>Core</module>
+		<module>Runtime</module>
+		<module>CodeStore</module>
+		<module>Standalone</module>
 	</modules>
 
 	<name>Prompto Core</name>

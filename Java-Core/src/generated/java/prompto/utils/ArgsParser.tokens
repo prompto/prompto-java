@@ -1,8 +1,0 @@
-STRING=1
-EQUALS=2
-DASH=3
-WS=4
-ELEMENT=5
-'='=2
-'-'=3
-' '=4
