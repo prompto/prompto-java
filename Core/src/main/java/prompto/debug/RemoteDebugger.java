@@ -6,8 +6,11 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 import prompto.debug.IDebugRequest.StatusRequest;
-import prompto.debug.IDebugRequest.ResumeRequest;
 import prompto.debug.IDebugRequest.LineRequest;
+import prompto.debug.IDebugRequest.ResumeRequest;
+import prompto.debug.IDebugRequest.StepIntoRequest;
+import prompto.debug.IDebugRequest.StepOutRequest;
+import prompto.debug.IDebugRequest.StepOverRequest;
 import prompto.debug.IDebugResponse.StatusResponse;
 import prompto.debug.IDebugResponse.LineResponse;
 
@@ -29,22 +32,22 @@ public class RemoteDebugger implements IDebugger {
 		this.remote = remote;
 		this.host = host;
 		this.port = port;
-		mapper = new ObjectMapper();
+		this.mapper = initMapper();
+	}
+
+	private static ObjectMapper initMapper() {
+		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 		mapper.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, false);
 		mapper.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
+		return mapper;
 	}
 
 	private IDebugResponse send(IDebugRequest request) {
-		System.err.println("opening client Socket");
 		try(Socket client = new Socket(host, port)) {
-			System.err.println("opening client OutputStream");
 			try(OutputStream output = client.getOutputStream()) {
-				System.err.println("sending client request");
 				sendRequest(output, request);
-				System.err.println("opening client InputStream");
 				try(InputStream input = client.getInputStream()) {
-					System.err.println("reading client response");
 					return readResponse(input);
 				}
 			}
@@ -73,7 +76,6 @@ public class RemoteDebugger implements IDebugger {
 		message.type = request.getType();
 		message.object = request;
 		mapper.writeValue(output, message);
-		System.err.println("flushing client request");
 		output.flush();
 	}
 
@@ -200,20 +202,20 @@ public class RemoteDebugger implements IDebugger {
 
 	@Override
 	public void stepInto() {
-		// TODO Auto-generated method stub
-		
+		IDebugRequest request = new StepIntoRequest();
+		send(request);
 	}
 
 	@Override
 	public void stepOut() {
-		// TODO Auto-generated method stub
-		
+		IDebugRequest request = new StepOutRequest();
+		send(request);
 	}
 
 	@Override
 	public void stepOver() {
-		// TODO Auto-generated method stub
-		
+		IDebugRequest request = new StepOverRequest();
+		send(request);
 	}
 	
 	

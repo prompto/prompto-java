@@ -11,6 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import prompto.nullstore.NullStoreFactory;
 import prompto.runtime.Application;
 import prompto.runtime.utils.Out;
 
@@ -41,9 +42,10 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase {
 	
 	@Override
 	protected void waitBlockedOrKilled() throws Exception {
+		Thread.sleep(100);
 		State state = thread.getState();
 		while(state!=State.WAITING && state!=State.TERMINATED) {
-			Thread.sleep(10);
+			Thread.sleep(100);
 			state = thread.getState();
 		}
 	}
@@ -66,7 +68,9 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase {
 				try {
 					URL url = getResourceAsURL(resourceName);
 					String args[] = new String[] { 
+							"-testMode", "true",
 							"-debug_port", "9999",
+							"-codeStoreFactory", NullStoreFactory.class.getName(),
 							"-application", "test",
 							"-resources", new File(url.toURI()).getAbsolutePath()
 							};
@@ -75,7 +79,7 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase {
 					t.printStackTrace(System.err); // TODO
 				}
 			}
-		});
+		}, "Prompto main");
 		this.debugger = new RemoteDebugger(new RemoteThread(thread), "localhost", 9999);
 		
 	}

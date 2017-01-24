@@ -118,19 +118,6 @@ public abstract class Application {
 	private static void debug(int debugPort, String mainMethod, Map<String, String> args) {
 		LocalDebugger debugger = new LocalDebugger();
 		DebuggerServer server = new DebuggerServer(debugger, debugPort);
-		debugger.setListener(server);
-		final Context local = getGlobalContext().newLocalContext();
-		local.setDebugger(debugger);
-		Thread execThread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					Interpreter.interpretMethod(local, new Identifier(mainMethod), "");
-				} catch (Throwable t) {
-					t.printStackTrace(System.err);
-				}
-			}
-		});
 		Thread serverThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -140,14 +127,19 @@ public abstract class Application {
 					t.printStackTrace(System.err);
 				}
 			}
-		});
-		execThread.start();
+		}, "Prompto debugger");
 		serverThread.start();
 		try {
-			serverThread.join();
-			execThread.join();
-		} catch(InterruptedException e) {
-			// TODO Auto-generated catch block
+			final Context local = getGlobalContext().newLocalContext();
+			local.setDebugger(debugger);
+			Interpreter.interpretMethod(local, new Identifier(mainMethod), "");
+		} finally {
+			try {
+				server.handleTerminateEvent();
+				serverThread.join();
+			} catch(InterruptedException e) {
+				// nothing to do
+			}
 		}
 	}
 

@@ -55,10 +55,58 @@ public interface IDebugRequest {
 		}
 	}
 
+	public static class StepOverRequest implements IDebugRequest {
+
+		@Override
+		public VoidResponse execute(IDebugger debugger) {
+			debugger.stepOver();
+			System.err.println("step over");
+			return new VoidResponse();
+		}
+		
+		@Override
+		public Type getType() {
+			return STEP_OVER;
+		}
+	}
+
+	public static class StepIntoRequest implements IDebugRequest {
+
+		@Override
+		public VoidResponse execute(IDebugger debugger) {
+			debugger.stepInto();
+			System.err.println("step into");
+			return new VoidResponse();
+		}
+		
+		@Override
+		public Type getType() {
+			return STEP_INTO;
+		}
+	}
+
+	public static class StepOutRequest implements IDebugRequest {
+
+		@Override
+		public VoidResponse execute(IDebugger debugger) {
+			debugger.stepOut();
+			System.err.println("step out");
+			return new VoidResponse();
+		}
+		
+		@Override
+		public Type getType() {
+			return STEP_OUT;
+		}
+	}
+
 	public enum Type {
 		STATUS(StatusRequest.class),
 		LINE(LineRequest.class),
-		RESUME(ResumeRequest.class)
+		RESUME(ResumeRequest.class),
+		STEP_INTO(StepIntoRequest.class),
+		STEP_OUT(StepOutRequest.class),
+		STEP_OVER(StepOverRequest.class)
 		;
 		
 		Class<? extends IDebugRequest> klass;

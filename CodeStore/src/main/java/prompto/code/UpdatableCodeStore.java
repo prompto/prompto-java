@@ -192,7 +192,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 					decls = fetchRegisteringDeclarations(name);
 					if(decls==null) {
 						decls = super.fetchLatestVersions(name);
-						if(decls!=null) {
+						if(store!=null && decls!=null) {
 							storeRegisteringDeclarations(name, decls);
 							decls = storeDeclarations(decls);
 							deleteRegisteringDeclarations(name);
@@ -286,7 +286,9 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	}
 
 	private Iterator<IDeclaration> fetchDeclarationsInStore(String name, Version version) {
-		try {
+		if(store==null)
+			return null;
+		else try {
 			CategoryType category = new CategoryType(new Identifier("Declaration"));
 			IStoredIterable iterable = fetchManyInStore(name, category, version);
 			Iterator<IStored> iterator = iterable.iterator();
@@ -348,17 +350,19 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	@Override
 	public void collectStorableAttributes(Map<String, AttributeDeclaration> map) throws PromptoError {
 		super.collectStorableAttributes(map);
-		IQueryBuilder builder = store.newQueryBuilder();
-		AttributeInfo info = new AttributeInfo("category", Family.TEXT, true, null);
-		builder.verify(info, MatchOp.CONTAINS, "AttributeDeclaration");
-		info = new AttributeInfo("storable", Family.BOOLEAN, false, null);
-		builder.verify(info, MatchOp.EQUALS, true);
-		builder.and();
-		IStoredIterable iterable = store.fetchMany(builder.build());
-		Iterator<IStored> stored = iterable.iterator();
-		while(stored.hasNext()) {
-			AttributeDeclaration attr = parseDeclaration(stored.next());
-			map.put(attr.getName(), attr);		
+		if(store!=null) {
+			IQueryBuilder builder = store.newQueryBuilder();
+			AttributeInfo info = new AttributeInfo("category", Family.TEXT, true, null);
+			builder.verify(info, MatchOp.CONTAINS, "AttributeDeclaration");
+			info = new AttributeInfo("storable", Family.BOOLEAN, false, null);
+			builder.verify(info, MatchOp.EQUALS, true);
+			builder.and();
+			IStoredIterable iterable = store.fetchMany(builder.build());
+			Iterator<IStored> stored = iterable.iterator();
+			while(stored.hasNext()) {
+				AttributeDeclaration attr = parseDeclaration(stored.next());
+				map.put(attr.getName(), attr);		
+			}
 		}
 	}
 

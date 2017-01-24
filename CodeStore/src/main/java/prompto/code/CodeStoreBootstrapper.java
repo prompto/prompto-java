@@ -21,6 +21,7 @@ import prompto.store.IStore;
 import prompto.type.BooleanType;
 import prompto.type.DateTimeType;
 import prompto.type.IType;
+import prompto.type.IntegerType;
 import prompto.type.ListType;
 import prompto.type.TextType;
 import prompto.utils.IdentifierList;
@@ -49,8 +50,10 @@ public class CodeStoreBootstrapper {
 		Map<String, AttributeDeclaration> columns = getMinimalColumns(store);
 		columns = fetchLatestDeclarations(columns);
 		registerColumnAttributes(columns.values());
-		List<AttributeInfo> infos = columns.values().stream().map((c)->c.getAttributeInfo()).collect(Collectors.toList());
-		store.createOrUpdateColumns(infos);
+		if(store!=null) {
+			List<AttributeInfo> infos = columns.values().stream().map((c)->c.getAttributeInfo()).collect(Collectors.toList());
+			store.createOrUpdateColumns(infos);
+		}
 	}
 
 	private void registerColumnAttributes(Collection<AttributeDeclaration> columns) throws PromptoError {
@@ -92,7 +95,7 @@ public class CodeStoreBootstrapper {
 	}
 
 	private Map<String, AttributeDeclaration> getMinimalColumns(IStore store) {
-		IType dbIdIType = TypeUtils.typeToIType(store.getDbIdClass());
+		IType dbIdIType = store==null ? IntegerType.instance() : TypeUtils.typeToIType(store.getDbIdClass());
 		Map<String, AttributeDeclaration> columns = new HashMap<>();
 		// attributes with reserved names, the below declarations will be used
 		columns.put(IStore.dbIdName, new AttributeDeclaration(new Identifier(IStore.dbIdName), dbIdIType));

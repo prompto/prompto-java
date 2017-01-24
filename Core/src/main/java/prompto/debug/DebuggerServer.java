@@ -25,21 +25,26 @@ public class DebuggerServer implements IDebugEventListener {
 	public DebuggerServer(LocalDebugger debugger, int port) {
 		this.debugger = debugger;
 		this.port = port;
-		this.mapper = new ObjectMapper();
+		this.mapper = initMapper();
+		debugger.setListener(this);
+	}
+
+	private static ObjectMapper initMapper() {
+		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 		mapper.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, false);
 		mapper.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
+		return mapper;
 	}
 
 	public void acceptLoop() throws Exception {
 		loop = true;
 		try(ServerSocket server = new ServerSocket(port)) {
-			server.setSoTimeout(1000);
+			server.setSoTimeout(10); // make it fast to exit
 			while(loop) {
 				try {
 					Socket client = server.accept();
 					handleRequest(client);
-					System.err.println("looping");
 				} catch(SocketTimeoutException e) {
 					// nothing to do, just helps exit the loop
 				}
@@ -48,19 +53,15 @@ public class DebuggerServer implements IDebugEventListener {
 	}
 
 	private void handleRequest(Socket client) throws Exception {
-		// don't close these streams since that would close the underlying socket
-		System.err.println("opening server InputStream");
-		InputStream input = client.getInputStream();
-		System.err.println("opening server OutputStream");
-		OutputStream output = client.getOutputStream();
-		System.err.println("reading server request");
-		IDebugRequest request = readRequest(input);
-		System.err.println("handling server request");
-		IDebugResponse response = request.execute(debugger);
-		System.err.println("sending server response");
-		sendResponse(output, response);
-		System.err.println("flushing server response");
-		output.flush();
+		synchronized(this) {
+			// don't close these streams since that would close the underlying socket
+			InputStream input = client.getInputStream();
+			OutputStream output = client.getOutputStream();
+			IDebugRequest request = readRequest(input);
+			IDebugResponse response = request.execute(debugger);
+			sendResponse(output, response);
+			output.flush();
+		}
 	}
 
 	private IDebugRequest readRequest(InputStream input) throws Exception {
