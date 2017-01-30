@@ -11,6 +11,42 @@ public interface IDebugRequest {
 	Type getType();
 	IDebugResponse execute(IDebugger debugger);
 
+	public static class ConnectRequest implements IDebugRequest {
+
+		String host;
+		int port;
+		
+		public void setHost(String host) {
+			this.host = host;
+		}
+		
+		
+		public String getHost() {
+			return host;
+		}
+		
+		
+		public void setPort(int port) {
+			this.port = port;
+		}
+		
+		public int getPort() {
+			return port;
+		}
+
+		@Override
+		public VoidResponse execute(IDebugger debugger) {
+			debugger.connect();
+			debugger.setListener(new DebugEventClient(host, port));
+			return new VoidResponse();
+		}
+		
+		@Override
+		public Type getType() {
+			return CONNECT;
+		}
+	}
+	
 	public static class StatusRequest implements IDebugRequest {
 
 		@Override
@@ -29,8 +65,9 @@ public interface IDebugRequest {
 
 		@Override
 		public LineResponse execute(IDebugger debugger) {
+			System.err.println("before line");
 			int line = debugger.getLine();
-			System.err.println("line:" + line);
+			System.err.println("after line:" + line);
 			return new LineResponse(line);
 		}
 		
@@ -44,8 +81,9 @@ public interface IDebugRequest {
 
 		@Override
 		public VoidResponse execute(IDebugger debugger) {
+			System.err.println("before resume");
 			debugger.resume();
-			System.err.println("resume");
+			System.err.println("after resume");
 			return new VoidResponse();
 		}
 		
@@ -59,8 +97,9 @@ public interface IDebugRequest {
 
 		@Override
 		public VoidResponse execute(IDebugger debugger) {
+			System.err.println("before step over");
 			debugger.stepOver();
-			System.err.println("step over");
+			System.err.println("after step over");
 			return new VoidResponse();
 		}
 		
@@ -74,8 +113,9 @@ public interface IDebugRequest {
 
 		@Override
 		public VoidResponse execute(IDebugger debugger) {
+			System.err.println("before step into");
 			debugger.stepInto();
-			System.err.println("step into");
+			System.err.println("after step into");
 			return new VoidResponse();
 		}
 		
@@ -89,8 +129,9 @@ public interface IDebugRequest {
 
 		@Override
 		public VoidResponse execute(IDebugger debugger) {
+			System.err.println("before step out");
 			debugger.stepOut();
-			System.err.println("step out");
+			System.err.println("after step out");
 			return new VoidResponse();
 		}
 		
@@ -101,6 +142,7 @@ public interface IDebugRequest {
 	}
 
 	public enum Type {
+		CONNECT(ConnectRequest.class),
 		STATUS(StatusRequest.class),
 		LINE(LineRequest.class),
 		RESUME(ResumeRequest.class),

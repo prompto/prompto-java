@@ -1,98 +1,89 @@
 package prompto.debug;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.function.Consumer;
 
-import prompto.debug.IDebugRequest.StatusRequest;
+import prompto.debug.IDebugRequest.ConnectRequest;
 import prompto.debug.IDebugRequest.LineRequest;
 import prompto.debug.IDebugRequest.ResumeRequest;
+import prompto.debug.IDebugRequest.StatusRequest;
 import prompto.debug.IDebugRequest.StepIntoRequest;
 import prompto.debug.IDebugRequest.StepOutRequest;
 import prompto.debug.IDebugRequest.StepOverRequest;
-import prompto.debug.IDebugResponse.StatusResponse;
 import prompto.debug.IDebugResponse.LineResponse;
+import prompto.debug.IDebugResponse.StatusResponse;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+public class DebugRequestClient implements IDebugger {
 
-public class RemoteDebugger implements IDebugger {
-
-	IDebugEventListener listener;
-	ObjectMapper mapper;
+	DebugEventServer listener;
 	IRemote remote;
 	String host;
 	int port;
 	
-	public RemoteDebugger(IRemote remote, String host, int port) {
+	public DebugRequestClient(IRemote remote, String host, int port, IDebugEventListener listener) {
+		this.listener = new DebugEventServer(listener);
 		this.remote = remote;
 		this.host = host;
 		this.port = port;
-		this.mapper = initMapper();
 	}
 
-	private static ObjectMapper initMapper() {
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-		mapper.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, false);
-		mapper.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
-		return mapper;
+	@Override
+	public void connect() {
+		listener.startListening();
+		ConnectRequest request = new ConnectRequest();
+		request.setPort(listener.port);
+		int count = 0;
+		while(++count<=100) try {
+			IDebugResponse ack = send(request, (e)->{});
+			if(ack!=null)
+				break;
+			Thread.sleep(100);
+		} catch(InterruptedException e) {
+			break;
+		}
 	}
-
+	
 	private IDebugResponse send(IDebugRequest request) {
+		return send(request, null);
+	}
+	
+	private IDebugResponse send(IDebugRequest request, Consumer<Exception> errorHandler) {
+		System.err.println("DebugRequestClient sends " + request.getType());
 		try(Socket client = new Socket(host, port)) {
 			try(OutputStream output = client.getOutputStream()) {
 				sendRequest(output, request);
 				try(InputStream input = client.getInputStream()) {
-					return readResponse(input);
+					IDebugResponse response = readResponse(input);
+					System.err.println("DebugRequestClient receives " + response.getType());
+					return response;
 				}
 			}
 		} catch(Exception e) {
-			e.printStackTrace(System.err);
+			if(errorHandler!=null)
+				errorHandler.accept(e);
+			else
+				e.printStackTrace(System.err);
 			return null;
 		}
 	}
 
 
-	static class RequestMessage {
-		IDebugRequest.Type type;
-		IDebugRequest object;
-		
-		public IDebugRequest.Type getType() {
-			return type;
-		}
-		
-		public IDebugRequest getObject() {
-			return object;
-		}
-	}
-	
 	private void sendRequest(OutputStream output, IDebugRequest request) throws Exception {
-		RequestMessage message = new RequestMessage();
-		message.type = request.getType();
-		message.object = request;
-		mapper.writeValue(output, message);
-		output.flush();
+		Serializer.writeDebugRequest(output, request);
 	}
 
 
-	private IDebugResponse readResponse(InputStream input) throws IOException {
-		JsonNode content = mapper.readTree(input);
-		String typeName = content.get("type").asText();
-		IDebugResponse.Type type = IDebugResponse.Type.valueOf(typeName);
-		return mapper.convertValue(content.get("object"), type.getKlass());
+	private IDebugResponse readResponse(InputStream input) throws Exception {
+		return Serializer.readDebugResponse(input);
 	}
 
 
 	@Override
 	public void setListener(IDebugEventListener listener) {
-		this.listener = listener;
+		this.listener.listener = listener;
 	}
-	
 	
 
 	@Override
@@ -148,8 +139,8 @@ public class RemoteDebugger implements IDebugger {
 
 	@Override
 	public void notifyTerminated() {
-		// TODO Auto-generated method stub
-		
+		if(listener!=null)
+			listener.stopListening();
 	}
 
 	@Override
@@ -196,8 +187,7 @@ public class RemoteDebugger implements IDebugger {
 
 	@Override
 	public void terminate() {
-		// TODO Auto-generated method stub
-		
+		listener.stopListening();
 	}
 
 	@Override

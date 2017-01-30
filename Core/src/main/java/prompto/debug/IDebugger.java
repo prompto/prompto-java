@@ -2,6 +2,7 @@ package prompto.debug;
 
 public interface IDebugger {
 
+	void connect();
 	void setListener(IDebugEventListener listener);
 	Status getStatus();
 	Stack getStack();

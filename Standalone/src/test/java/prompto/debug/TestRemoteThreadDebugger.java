@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.Thread.State;
 import java.net.URL;
 
 import org.junit.After;
@@ -15,7 +14,7 @@ import prompto.nullstore.NullStoreFactory;
 import prompto.runtime.Application;
 import prompto.runtime.utils.Out;
 
-public class TestRemoteThreadDebugger extends TestDebuggerBase {
+public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebugEventListener {
 
 	Thread thread;
 	String output = null;
@@ -42,17 +41,17 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase {
 	
 	@Override
 	protected void waitBlockedOrKilled() throws Exception {
-		Thread.sleep(100);
-		State state = thread.getState();
-		while(state!=State.WAITING && state!=State.TERMINATED) {
+		Status status = debugger.getStatus();
+		while(status!=Status.SUSPENDED && status!=Status.TERMINATED) {
 			Thread.sleep(100);
-			state = thread.getState();
+			status = debugger.getStatus();
 		}
 	}
 
 	@Override
 	protected void start() throws Exception {
 		thread.start();
+		debugger.connect();
 	}
 
 	@Override
@@ -80,7 +79,7 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase {
 				}
 			}
 		}, "Prompto main");
-		this.debugger = new RemoteDebugger(new RemoteThread(thread), "localhost", 9999);
+		this.debugger = new DebugRequestClient(new RemoteThread(thread), "localhost", 9999, this);
 		
 	}
 	
@@ -111,6 +110,19 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase {
 			return file;
 		else
 			return null;
+	}
+	
+	@Override
+	public void handleResumedEvent(ResumeReason reason) {
+	}
+	
+	@Override
+	public void handleSuspendedEvent(SuspendReason reason) {
+	}
+	
+	@Override
+	public void handleTerminatedEvent() {
+		this.debugger.notifyTerminated();
 	}
 	
 

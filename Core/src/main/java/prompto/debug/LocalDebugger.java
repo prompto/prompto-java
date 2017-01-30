@@ -9,7 +9,7 @@ import prompto.runtime.Context;
 public class LocalDebugger implements IDebugger {
 
 	Stack stack = new Stack();
-	Object blocker = new Object();
+	Object lock = new Object();
 	Status status = Status.STARTING;
 	ResumeReason resumeReason;
 	IDebugEventListener listener;
@@ -21,8 +21,18 @@ public class LocalDebugger implements IDebugger {
 	boolean terminated = false;
 	
 	
+	@Override
+	public void connect() {
+		setStatus(Status.RUNNING);
+	}
+	
 	public Stack getStack() {
 		return stack;
+	}
+	
+	public void setStatus(Status status) {
+		System.err.println("LocalDebugger sets status " + status);
+		this.status = status;
 	}
 	
 	public Status getStatus() {
@@ -95,7 +105,7 @@ public class LocalDebugger implements IDebugger {
 	
 	private void terminateIfRequested() throws TerminatedError {
 		if(terminated) {
-			status = Status.TERMINATING;
+			setStatus(Status.TERMINATING);
 			throw new TerminatedError();
 		}
 	}
@@ -109,19 +119,22 @@ public class LocalDebugger implements IDebugger {
 	}
 
 	public void suspend(SuspendReason reason, final Context context, ISection section) {
-		synchronized(blocker) {
-			status = Status.SUSPENDED;
+		System.err.println("acquiring lock");
+		synchronized(lock) {
+			setStatus(Status.SUSPENDED);
 			if(listener!=null)
-				listener.handleSuspendEvent(reason, context, section);
+				listener.handleSuspendedEvent(reason);
 			try {
-				blocker.wait();
+				System.err.println("waiting lock");
+				lock.wait();
+				System.err.println("waiting lock");
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} finally {
-				status = Status.RUNNING;
+				setStatus( Status.RUNNING);
 				if(listener!=null)
-					listener.handleResumeEvent(resumeReason, context, section);
+					listener.handleResumedEvent(resumeReason);
 			}
 		}
 	}	
@@ -176,8 +189,11 @@ public class LocalDebugger implements IDebugger {
 
 	public void doResume(ResumeReason reason) {
 		this.resumeReason = reason;
-		synchronized(blocker) {
-			blocker.notify();
+		System.err.println("acquiring lock");
+		synchronized(lock) {
+			System.err.println("notifying lock");
+			lock.notify();
+			System.err.println("releasing lock");
 		}
 	}
 
@@ -187,9 +203,11 @@ public class LocalDebugger implements IDebugger {
 	}
 
 	public void notifyTerminated() {
-		status = Status.TERMINATED;
-		if(listener!=null)
-			listener.handleTerminateEvent();
+		if(!isTerminated()) {
+			setStatus(Status.TERMINATED);
+			if(listener!=null)
+				listener.handleTerminatedEvent();
+		}
 	}
 	
 }

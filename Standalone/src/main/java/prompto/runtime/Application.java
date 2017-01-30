@@ -11,7 +11,7 @@ import prompto.code.ICodeStore;
 import prompto.code.UpdatableCodeStore;
 import prompto.code.Version;
 import prompto.compiler.PromptoClassLoader;
-import prompto.debug.DebuggerServer;
+import prompto.debug.DebugRequestServer;
 import prompto.debug.LocalDebugger;
 import prompto.declaration.AttributeDeclaration;
 import prompto.error.PromptoError;
@@ -116,26 +116,31 @@ public abstract class Application {
 	}
 
 	private static void debug(int debugPort, String mainMethod, Map<String, String> args) {
+		Object lock = new Object();
 		LocalDebugger debugger = new LocalDebugger();
-		DebuggerServer server = new DebuggerServer(debugger, debugPort);
-		Thread serverThread = new Thread(new Runnable() {
-			@Override
-			public void run() {
+		DebugRequestServer server = new DebugRequestServer(debugger, debugPort);
+		Thread serverThread = new Thread(() -> {
 				try {
-					server.acceptLoop();
+					server.startListening(lock);
 				} catch (Throwable t) {
 					t.printStackTrace(System.err);
 				}
-			}
-		}, "Prompto debugger");
+			}, "Prompto debug server");
 		serverThread.start();
+		synchronized(lock) {
+			try {
+				lock.wait();
+			} catch (InterruptedException e) {
+			}
+		}
+		final Context local = getGlobalContext().newLocalContext();
+		local.setDebugger(debugger);
 		try {
-			final Context local = getGlobalContext().newLocalContext();
-			local.setDebugger(debugger);
 			Interpreter.interpretMethod(local, new Identifier(mainMethod), "");
 		} finally {
 			try {
-				server.handleTerminateEvent();
+				server.stopListening();
+				local.notifyTerminated();
 				serverThread.join();
 			} catch(InterruptedException e) {
 				// nothing to do

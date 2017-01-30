@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 import com.fasterxml.jackson.core.util.ByteArrayBuilder;
 
 @Ignore("Need to manage class path to let this run in CI")
-public class TestRemoteProcessDebugger extends TestDebuggerBase {
+public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebugEventListener {
 
 	ProcessBuilder builder;
 	Process process;
@@ -44,7 +44,7 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase {
 	protected void start() throws Exception {
 		process = builder.start();
 		output = process.getInputStream();
-		debugger = new RemoteDebugger(new RemoteProcess(process), "localhost", 9999);
+		debugger = new DebugRequestClient(new RemoteProcess(process), "localhost", 9999, this);
 	}
 
 	@Override
@@ -83,4 +83,22 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase {
 				"-debug_port", "9999", 
 				"-resource", "\"" + testFile.getAbsolutePath() + "\"");
 	}
+	
+	@Override
+	public void handleResumedEvent(ResumeReason reason) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void handleSuspendedEvent(SuspendReason reason) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void handleTerminatedEvent() {
+		// TODO Auto-generated method stub
+		
+	};
 }

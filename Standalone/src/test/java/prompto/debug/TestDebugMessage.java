@@ -16,10 +16,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import prompto.debug.DebuggerServer.ResponseMessage;
+import prompto.debug.IAcknowledgement.Acknowledgement;
+import prompto.debug.Serializer.AcknowledgementMessage;
+import prompto.debug.Serializer.DebugResponseMessage;
+import prompto.debug.Serializer.DebugRequestMessage;
 import prompto.debug.IDebugResponse.StatusResponse;
 import prompto.debug.IDebugRequest.StatusRequest;
-import prompto.debug.RemoteDebugger.RequestMessage;
 
 public class TestDebugMessage {
 
@@ -72,7 +74,7 @@ public class TestDebugMessage {
 	public void testStatusRequestMessage() throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-		RequestMessage message = new RequestMessage();
+		DebugRequestMessage message = new DebugRequestMessage();
 		message.object = new StatusRequest();
 		message.type = message.object.getType();
 		JsonNode json = mapper.valueToTree(message);
@@ -92,7 +94,7 @@ public class TestDebugMessage {
 	public void testStatusResponseMessage() throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-		ResponseMessage message = new ResponseMessage();
+		DebugResponseMessage message = new DebugResponseMessage();
 		message.object = new StatusResponse(Status.SUSPENDED);
 		message.type = message.object.getType();
 		JsonNode json = mapper.valueToTree(message);
@@ -109,13 +111,14 @@ public class TestDebugMessage {
 		assertEquals(Status.SUSPENDED, ((StatusResponse)response).getStatus());
 	}
 	
+	
 	@Test
 	public void testOpenStream() throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 		mapper.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, false);
 		mapper.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
-		RequestMessage message = new RequestMessage();
+		DebugRequestMessage message = new DebugRequestMessage();
 		message.object = new StatusRequest();
 		message.type = message.object.getType();
 		JsonNode json = mapper.valueToTree(message);
@@ -131,4 +134,21 @@ public class TestDebugMessage {
 			}
 		}
 	}
+	
+	@Test
+	public void testAcknowledgementMessage() throws Exception {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+		AcknowledgementMessage message = new AcknowledgementMessage();
+		message.type = IAcknowledgement.Type.RECEIVED;
+		JsonNode json = mapper.valueToTree(message);
+		assertEquals(IAcknowledgement.Type.RECEIVED.name(), json.get("type").asText());
+		String s = json.toString();
+		JsonNode content = mapper.readTree(s);
+		String typeName = content.get("type").asText();
+		IAcknowledgement.Type type = IAcknowledgement.Type.valueOf(typeName);
+		IAcknowledgement ack = type.getKlass().newInstance();
+		assertTrue(ack instanceof Acknowledgement);
+	}
+
 }

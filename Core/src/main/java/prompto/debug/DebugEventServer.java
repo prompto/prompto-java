@@ -1,0 +1,89 @@
+package prompto.debug;
+
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
+
+import prompto.debug.IAcknowledgement.Acknowledgement;
+
+class DebugEventServer {
+	
+	Thread thread;
+	int port = 0;
+	boolean loop;
+	IDebugEventListener listener;
+	
+	
+	public DebugEventServer(IDebugEventListener listener) {
+		this.listener = listener;
+	}
+
+
+	public void startListening() {
+		Object lock = new Object();
+		thread = new Thread(()->{
+			try(ServerSocket server = new ServerSocket(0)) {
+				server.setSoTimeout(10); // make it fast to exit
+				port = server.getLocalPort();
+				synchronized(lock) {
+					lock.notify();
+				}
+				System.err.println("DebugEventServer entering loop");
+				loop = true;
+				while(loop) {
+					try {
+						Socket client = server.accept();
+						handleMessage(client);
+					} catch(SocketTimeoutException e) {
+						// nothing to do, just helps exit the loop
+					}
+				}
+				System.err.println("DebugEventServer exiting loop");
+			} catch(Exception e) {
+				e.printStackTrace(System.err);
+			}
+			
+		}, "Prompto debug notification listener");
+		thread.start();
+		synchronized(lock) {
+			try {
+				lock.wait();
+			} catch(InterruptedException e) {
+				
+			}
+		}
+	}
+
+	public void stopListening() {
+		loop = false;
+		if(thread!=Thread.currentThread()) try {
+			thread.join();
+		} catch(InterruptedException e) {
+		}
+	}
+
+	private void handleMessage(Socket client) throws Exception {
+		InputStream input = client.getInputStream();
+		OutputStream output = client.getOutputStream();
+		IDebugEvent event = readDebugEvent(input);
+		System.err.println("DebugEventServer receives " + event.getType());
+		event.execute(listener);
+		System.err.println("DebugEventServer sends " + IAcknowledgement.Type.RECEIVED);
+		sendAcknowledgement(output);
+		output.flush();
+	}
+
+	
+	private IDebugEvent readDebugEvent(InputStream input) throws Exception {
+		return Serializer.readDebugEvent(input);
+	}
+
+
+	private void sendAcknowledgement(OutputStream output) throws Exception {
+		Serializer.writeAcknowledgement(output, new Acknowledgement());
+	}
+
+
+}
