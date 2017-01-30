@@ -2,6 +2,8 @@ package prompto.debug;
 
 import static prompto.debug.IDebugResponse.*;
 import static prompto.debug.IDebugRequest.Type.*;
+import prompto.parser.ISection;
+import prompto.parser.Section;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -77,6 +79,38 @@ public interface IDebugRequest {
 		}
 	}
 
+	public static class InstallBreakpointRequest implements IDebugRequest {
+		
+		Section section;
+		
+		public InstallBreakpointRequest() {
+		}
+		
+		public InstallBreakpointRequest(ISection section) {
+			this.section = section.getClass()==Section.class ? (Section)section : new Section(section);
+		}
+		
+		public Section getSection() {
+			return section;
+		}
+		
+		public void setSection(Section section) {
+			this.section = section;
+		}
+
+		@Override
+		public IDebugResponse execute(IDebugger debugger) {
+			debugger.installBreakpoint(section);
+			return new VoidResponse();
+		}
+		
+		@Override
+		public Type getType() {
+			return INSTALL_BREAKPOINT;
+		}
+	}
+	
+	
 	public static class ResumeRequest implements IDebugRequest {
 
 		@Override
@@ -145,6 +179,7 @@ public interface IDebugRequest {
 		CONNECT(ConnectRequest.class),
 		STATUS(StatusRequest.class),
 		LINE(LineRequest.class),
+		INSTALL_BREAKPOINT(InstallBreakpointRequest.class),
 		RESUME(ResumeRequest.class),
 		STEP_INTO(StepIntoRequest.class),
 		STEP_OUT(StepOutRequest.class),

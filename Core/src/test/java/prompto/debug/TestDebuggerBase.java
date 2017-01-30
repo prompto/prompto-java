@@ -1,6 +1,6 @@
 package prompto.debug;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
@@ -25,6 +25,17 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 	protected abstract void join() throws Exception;
 	protected abstract String readOut() throws Exception;
 	
+	
+	int installBreakPoint(String methodName, int stmtNumber) {
+		MethodDeclarationMap mdm = context.getRegisteredDeclaration(MethodDeclarationMap.class, new Identifier("printLevel2"));
+		ConcreteMethodDeclaration cmd = (ConcreteMethodDeclaration)mdm.values().iterator().next();
+		ISection section = cmd.getStatements().get(stmtNumber);
+		section.setAsBreakpoint(true);
+		debugger.installBreakpoint(section);
+		return section.getStart().getLine();
+	}
+	
+
 	@Test
 	public void testResume() throws Exception {
 		debugResource("debug/stack.pec");
@@ -36,6 +47,7 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		join();
 		assertEquals("test123-ok", readOut());
 	}
+
 	
 	@Test
 	public void testStepOver() throws Exception {
@@ -56,6 +68,7 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		join();
 		assertEquals("test123-ok", readOut());
 	}
+	
 	
 	@Test
 	public void testStepInto() throws Exception {
@@ -80,6 +93,7 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		join();
 		assertEquals("test123-ok", readOut());
 	}
+	
 	
 	@Test
 	public void testSilentStepInto() throws Exception {
@@ -146,6 +160,7 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		assertEquals("test123-ok", readOut());
 	}
 	
+	
 	@Test
 	public void testBreakpoint() throws Exception {
 		debugResource("debug/stack.pec");
@@ -153,11 +168,8 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		waitBlockedOrKilled();
 		assertEquals(Status.SUSPENDED, debugger.getStatus());
 		assertEquals(MAIN_LINE, debugger.getLine());
-		MethodDeclarationMap mdm = context.getRegisteredDeclaration(MethodDeclarationMap.class, new Identifier("printLevel2"));
-		ConcreteMethodDeclaration cmd = (ConcreteMethodDeclaration)mdm.values().iterator().next();
-		ISection section = cmd.getStatements().get(0);
-		assertEquals(LEVEL_2_LINE + 1, section.getStart().getLine());
-		section.setAsBreakpoint(true);
+		int line = installBreakPoint("printLevel2", 0);
+		assertEquals(LEVEL_2_LINE + 1, line);
 		debugger.resume();	
 		waitBlockedOrKilled();
 		assertEquals(Status.SUSPENDED, debugger.getStatus());
@@ -165,6 +177,7 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		debugger.resume();	
 		join();
 		assertEquals("test123-ok", readOut());
-	}	
+	}
+
 
 }

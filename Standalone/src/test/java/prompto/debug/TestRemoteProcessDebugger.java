@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.Path;
 
 import org.junit.After;
@@ -26,6 +25,7 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 	
 	@Before
 	public void before() {
+		errorsFile = null;
 		outputFile = null;
 	}
 	
@@ -82,13 +82,16 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 
 	protected void debugResource(String resourceName) throws Exception {
 		File testFile = tryLocateTestFile(resourceName);
+		loadFile(testFile); 
 		builder = new ProcessBuilder();
 		File targetDir = getDistributionFolder("0.0.1-SNAPSHOT").toFile();
 		assertTrue(targetDir.getAbsolutePath(), targetDir.exists());
 		builder.directory(targetDir);
 		errorsFile = File.createTempFile("errors-", ".txt");
+		System.err.println("Errors: " + errorsFile.getAbsolutePath());
 		builder.redirectError(errorsFile);
 		outputFile = File.createTempFile("output-", ".txt");
+		System.err.println("Output: " + outputFile.getAbsolutePath());
 		builder.redirectOutput(outputFile);
 		builder.command("java", 
 				"-jar", "Standalone-0.0.1-SNAPSHOT.jar", 
@@ -104,7 +107,6 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 		return dest.toPath();
 	}
 
-	
 	@Override
 	public void handleResumedEvent(ResumeReason reason) {
 		// TODO Auto-generated method stub

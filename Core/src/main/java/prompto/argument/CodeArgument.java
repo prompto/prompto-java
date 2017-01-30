@@ -1,5 +1,7 @@
 package prompto.argument;
 
+import java.util.Objects;
+
 import prompto.error.SyntaxError;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
@@ -8,7 +10,6 @@ import prompto.runtime.Context;
 import prompto.type.CodeType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.utils.ObjectUtils;
 
 public class CodeArgument extends BaseArgument implements ITypedArgument {
 	
@@ -52,7 +53,7 @@ public class CodeArgument extends BaseArgument implements ITypedArgument {
 		if(!(obj instanceof CodeArgument))
 			return false;
 		CodeArgument other = (CodeArgument)obj;
-		return ObjectUtils.areEqual(this.getId(),other.getId());
+		return Objects.equals(this.getId(),other.getId());
 	}
 
 	@Override

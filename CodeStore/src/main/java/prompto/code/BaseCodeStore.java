@@ -6,6 +6,7 @@ import java.util.Map;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
+import prompto.parser.ISection;
 
 /* a code store which simply links to another one */
 /* enables multiple code store implementations (resource, classpath, store...) */
@@ -16,6 +17,11 @@ public abstract class BaseCodeStore implements ICodeStore {
 	
 	protected BaseCodeStore(ICodeStore next) {
 		this.next = next;
+	}
+	
+	@Override
+	public ISection findSection(ISection section) { 
+		return next==null ? null : next.findSection(section);
 	}
 	
 	@Override

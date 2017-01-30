@@ -122,6 +122,8 @@ public class BaseTest {
 		if(idx<0)
 			idx = dirPath.lastIndexOf("/Standalone/");
 		if(idx<0)
+			idx = dirPath.lastIndexOf("/CodeStore/");
+		if(idx<0)
 			return null;
 		String testsPath = dirPath.substring(0, idx) + "/prompto-tests/Tests/resources/";
 		File file = new File(testsPath + resourceName);

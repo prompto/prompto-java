@@ -13,7 +13,6 @@ import prompto.code.ICodeStore;
 import prompto.debug.LocalDebugger;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
-import prompto.declaration.ConcreteMethodDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.NativeCategoryDeclaration;
@@ -23,6 +22,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
+import prompto.parser.Dialect;
 import prompto.parser.ILocation;
 import prompto.parser.ISection;
 import prompto.problem.IProblemListener;
@@ -35,6 +35,7 @@ import prompto.type.IType;
 import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
 import prompto.utils.ObjectUtils;
+import prompto.utils.SectionLocator;
 import prompto.value.ConcreteInstance;
 import prompto.value.Decimal;
 import prompto.value.Document;
@@ -506,12 +507,22 @@ public class Context implements IContext {
 		}
 		
 		@Override
+		public Dialect getDialect() {
+			throw new RuntimeException("Should never get there!");
+		}
+		
+		@Override
 		public void setAsBreakpoint(boolean set) {
 			throw new RuntimeException("Should never get there!");
 		}
 		
 		@Override
 		public boolean isBreakpoint() {
+			throw new RuntimeException("Should never get there!");
+		}
+		
+		@Override
+		public boolean isOrContains(ISection section) {
 			throw new RuntimeException("Should never get there!");
 		}
 
@@ -727,39 +738,24 @@ public class Context implements IContext {
 		if(globals!=this)
 			return globals.findSectionFor(path, lineNumber);
 		else
-			return findSection(declarations.values(), path, lineNumber);
+			return SectionLocator.findSection(declarations.values(), path, lineNumber);
 	}
 	
-	private ISection findSection(Collection<IDeclaration> declarations, String path, int lineNumber) {
-		for(IDeclaration decl : declarations) {
-			if(!path.equals(decl.getPath()))
-				continue;
-			if(decl.getStart().getLine()>lineNumber)
-				continue;
-			if(decl.getEnd().getLine()<lineNumber)
-				continue;
-			return findSection(decl, lineNumber);
+	public ISection findSection(ISection section) {
+		if(globals!=this)
+			return globals.findSection(section);
+		else {
+			ISection result = SectionLocator.findSection(declarations.values(), section);
+			if(result!=null) 
+				return result;
+			ICodeStore store = ICodeStore.getInstance();
+			if(store!=null)
+				return store.findSection(section);
+				else
+					return null;
 		}
-		return null;
 	}
 
-	private ISection findSection(IDeclaration decl, int lineNumber) {
-		if(decl instanceof ConcreteMethodDeclaration)
-			return findSection((ConcreteMethodDeclaration)decl, lineNumber);
-		else
-			return decl;
-	}
-	
-	private ISection findSection(ConcreteMethodDeclaration decl, int lineNumber) {
-		for(IStatement stmt : decl.getStatements()) {
-			if(stmt.getStart().getLine()>lineNumber)
-				continue;
-			if(stmt.getEnd().getLine()<lineNumber)
-				continue;
-			return stmt;
-		}
-		return decl;
-	}
 
 	public void registerNativeBinding(Type type, NativeCategoryDeclaration declaration) {
 		if(this==globals)
@@ -911,5 +907,6 @@ public class Context implements IContext {
 		}
 		
 	}
+
 
 }

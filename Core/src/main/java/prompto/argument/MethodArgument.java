@@ -1,5 +1,7 @@
 package prompto.argument;
 
+import java.util.Objects;
+
 import prompto.compiler.ClassConstant;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodConstant;
@@ -21,7 +23,6 @@ import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.type.IType;
 import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
-import prompto.utils.ObjectUtils;
 
 public class MethodArgument extends BaseArgument implements INamedArgument {
 	
@@ -58,7 +59,7 @@ public class MethodArgument extends BaseArgument implements INamedArgument {
 		if(!(obj instanceof MethodArgument))
 			return false;
 		MethodArgument other = (MethodArgument)obj;
-		return ObjectUtils.areEqual(this.getId(),other.getId());
+		return Objects.equals(this.getId(),other.getId());
 	}
 
 	@Override

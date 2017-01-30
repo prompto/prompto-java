@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import prompto.declaration.AttributeDeclaration;
@@ -45,7 +46,6 @@ import prompto.store.IStoredIterable;
 import prompto.type.CategoryType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
-import prompto.utils.ObjectUtils;
 import prompto.utils.StringUtils;
 
 
@@ -172,7 +172,6 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	private void deleteRegisteringDeclarations(String name) {
 		registering.get().remove(name);
 	}
-	
 	
 	@Override
 	public Iterator<IDeclaration> fetchLatestVersions(String name) throws PromptoError {
@@ -375,7 +374,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 		for(IStored stored : iterable) {
 			Object thisName = stored.getData("name");
 			Object thisProto = stored.getData("prototype");
-			if(!ObjectUtils.areEqual(thisName, lastName) || !ObjectUtils.areEqual(thisProto, lastProto)) {
+			if(!Objects.equals(thisName, lastName) || !Objects.equals(thisProto, lastProto)) {
 				distinct.add(stored);
 				lastName = thisName;
 				lastProto = thisProto;

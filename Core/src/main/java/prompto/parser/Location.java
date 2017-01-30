@@ -8,6 +8,9 @@ public class Location implements ILocation {
 	int line;
 	int column;
 	
+	public Location() {
+	}
+	
 	public Location(Token token) {
 		this(token, false);
 	}
@@ -22,9 +25,29 @@ public class Location implements ILocation {
 		}
 	}
 	
+	public Location(ILocation location) {
+		this.index = location.getIndex();
+		this.line = location.getLine();
+		this.column = location.getColumn();
+	}
+
+	public Location(int index, int line, int column) {
+		this.index = index;
+		this.line = line;
+		this.column = column;
+	}
+	
+	public void setIndex(int index) {
+		this.index = index;
+	}
+	
 	@Override
 	public int getIndex() {
 		return index;
+	}
+	
+	public void setLine(int line) {
+		this.line = line;
 	}
 	
 	@Override
@@ -32,8 +55,22 @@ public class Location implements ILocation {
 		return line;
 	}
 	
+	public void setColumn(int column) {
+		this.column = column;
+	}
+	
 	@Override
 	public int getColumn() {
 		return column;
+	}
+
+	public boolean isNotAfter(ILocation other) {
+		return this.line<other.getLine()
+				|| (this.line==other.getLine() && this.column<=other.getColumn());
+	}
+	
+	public boolean isNotBefore(ILocation other) {
+		return this.line>other.getLine()
+				|| (this.line==other.getLine() && this.column>=other.getColumn());
 	}
 }

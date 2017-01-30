@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 
 import prompto.debug.IDebugRequest.ConnectRequest;
 import prompto.debug.IDebugRequest.LineRequest;
+import prompto.debug.IDebugRequest.InstallBreakpointRequest;
 import prompto.debug.IDebugRequest.ResumeRequest;
 import prompto.debug.IDebugRequest.StatusRequest;
 import prompto.debug.IDebugRequest.StepIntoRequest;
@@ -14,6 +15,7 @@ import prompto.debug.IDebugRequest.StepOutRequest;
 import prompto.debug.IDebugRequest.StepOverRequest;
 import prompto.debug.IDebugResponse.LineResponse;
 import prompto.debug.IDebugResponse.StatusResponse;
+import prompto.parser.ISection;
 
 public class DebugRequestClient implements IDebugger {
 
@@ -209,6 +211,10 @@ public class DebugRequestClient implements IDebugger {
 		send(request);
 	}
 	
-	
+	@Override
+	public void installBreakpoint(ISection section) {
+		IDebugRequest request = new InstallBreakpointRequest(section);
+		send(request);
+	}
 
 }

@@ -126,12 +126,11 @@ public abstract class Application {
 	}
 
 	private static void debugMainMethod(LocalDebugger debugger, String mainMethod, Map<String, String> args) {
-		final Context local = getGlobalContext().newLocalContext();
-		local.setDebugger(debugger);
+		getGlobalContext().setDebugger(debugger);
 		try {
-			Interpreter.interpretMethod(local, new Identifier(mainMethod), "");
+			Interpreter.interpretMethod(getGlobalContext(), new Identifier(mainMethod), ""); // TODO args
 		} finally {
-			local.notifyTerminated();
+			getGlobalContext().notifyTerminated();
 		}
 	}
 

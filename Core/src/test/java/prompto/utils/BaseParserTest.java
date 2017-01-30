@@ -1,11 +1,10 @@
 package prompto.utils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
@@ -56,12 +55,19 @@ public abstract class BaseParserTest extends BaseTest {
 		allStmts.register(coreContext);
 	}
 
+	protected void loadFile(File file) throws Exception {
+		DeclarationList stmts = parseFile(file);
+		stmts.register(context);
+		stmts.check(context);
+	}
+
 	protected void loadResource(String resourceName) throws Exception {
 		DeclarationList stmts = parseResource(resourceName);
 		stmts.register(context);
 		stmts.check(context);
 	}
 
+	public abstract DeclarationList parseFile(File file) throws Exception;
 	public abstract DeclarationList parseResource(String resourceName) throws Exception;
 
 	static interface ResourceRunner {
@@ -201,6 +207,12 @@ public abstract class BaseParserTest extends BaseTest {
 		return parser.parse_declaration_list();
 	}
 
+	public DeclarationList parseOFile(File file) throws Exception {
+		InputStream input = new FileInputStream(file);
+		OCleverParser parser = new OCleverParser(file.getAbsolutePath(), input);
+		return parser.parse_declaration_list();
+	}
+
 	public DeclarationList parseEString(String code) throws Exception {
 		ECleverParser parser = new ECleverParser(code);
 		return parser.parse_declaration_list();
@@ -213,6 +225,13 @@ public abstract class BaseParserTest extends BaseTest {
 		return parser.parse_declaration_list();
 	}
 	
+	public DeclarationList parseEFile(File file) throws Exception {
+		InputStream input = new FileInputStream(file);
+		ECleverParser parser = new ECleverParser(file.getAbsolutePath(), input);
+		return parser.parse_declaration_list();
+	}
+
+
 	public DeclarationList parseMString(String code) throws Exception {
 		MCleverParser parser = new MCleverParser(code);
 		return parser.parse_declaration_list();
@@ -224,6 +243,14 @@ public abstract class BaseParserTest extends BaseTest {
 		MCleverParser parser = new MCleverParser(input);
 		return parser.parse_declaration_list();
 	}
+	
+	public DeclarationList parseMFile(File file) throws Exception {
+		InputStream input = new FileInputStream(file);
+		MCleverParser parser = new MCleverParser(file.getAbsolutePath(), input);
+		return parser.parse_declaration_list();
+	}
+
+
 
 	public void compareResourceEOE(String resourceName) throws Exception {
 		String expected = getResourceAsString(resourceName);

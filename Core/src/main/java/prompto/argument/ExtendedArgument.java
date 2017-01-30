@@ -1,6 +1,7 @@
 package prompto.argument;
 
 import java.lang.reflect.Type;
+import java.util.Objects;
 
 import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
@@ -21,7 +22,6 @@ import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
-import prompto.utils.ObjectUtils;
 
 public class ExtendedArgument extends CategoryArgument {
 	
@@ -112,9 +112,9 @@ public class ExtendedArgument extends CategoryArgument {
 		if(!(obj instanceof ExtendedArgument))
 			return false;
 		ExtendedArgument other = (ExtendedArgument)obj;
-		return ObjectUtils.areEqual(this.getType(),other.getType())
-				&& ObjectUtils.areEqual(this.getId(),other.getId())
-				&& ObjectUtils.areEqual(this.getAttributes(),other.getAttributes());
+		return Objects.equals(this.getType(),other.getType())
+				&& Objects.equals(this.getId(),other.getId())
+				&& Objects.equals(this.getAttributes(),other.getAttributes());
 	}
 
 	@Override

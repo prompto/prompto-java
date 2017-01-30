@@ -1,7 +1,8 @@
 package prompto.parser;
 
-import org.antlr.v4.runtime.Token;
+import java.util.Objects;
 
+import org.antlr.v4.runtime.Token;
 
 public class Section implements ISection {
 	
@@ -11,8 +12,25 @@ public class Section implements ISection {
 	Dialect dialect;
 	boolean breakpoint;
 	
-	protected Section() {
+	public Section() {
 	}
+	
+	public Section(ISection section) {
+		this.path = section.getPath();
+		this.start = new Location(section.getStart());
+		this.end = new Location(section.getEnd());
+		this.dialect = section.getDialect();
+		this.breakpoint = section.isBreakpoint();
+	}
+
+	public Section(String path, Location start, Location end, Dialect dialect, boolean breakpoint) {
+		this.path = path;
+		this.start = start;
+		this.end = end;
+		this.dialect = dialect;
+		this.breakpoint = breakpoint;
+	}
+	
 	
 	public void setFrom(String path, Token start, Token end, Dialect dialect) {
 		this.path = path;
@@ -50,4 +68,13 @@ public class Section implements ISection {
 	public boolean isBreakpoint() {
 		return breakpoint;
 	}
+	
+	@Override
+	public boolean isOrContains(ISection section) {
+		return this.dialect==section.getDialect()
+				&& Objects.equals(this.path, section.getPath())
+				&& this.start.isNotAfter(section.getStart())
+				&& this.end.isNotBefore(section.getEnd());
+	}
+	
 }

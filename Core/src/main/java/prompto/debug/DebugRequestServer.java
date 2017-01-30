@@ -46,6 +46,7 @@ public class DebugRequestServer {
 	
 	private void listenInLoop(Object lock) throws Exception {
 		loop = true;
+		System.err.println("DebugRequestServer listening on " + port);
 		try(ServerSocket server = new ServerSocket(port)) {
 			server.setSoTimeout(10); // make it fast to exit
 			System.err.println("DebugRequestServer entering loop");

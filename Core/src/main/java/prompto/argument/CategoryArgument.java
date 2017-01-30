@@ -1,5 +1,7 @@
 package prompto.argument;
 
+import java.util.Objects;
+
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
@@ -9,7 +11,6 @@ import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.utils.ObjectUtils;
 
 public class CategoryArgument extends BaseArgument implements ITypedArgument {
 	
@@ -101,8 +102,8 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 		if(!(obj instanceof CategoryArgument))
 			return false;
 		CategoryArgument other = (CategoryArgument)obj;
-		return ObjectUtils.areEqual(this.getType(),other.getType())
-				&& ObjectUtils.areEqual(this.getId(),other.getId());
+		return Objects.equals(this.getType(),other.getType())
+				&& Objects.equals(this.getId(),other.getId());
 	}
 
 	@Override

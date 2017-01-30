@@ -13,6 +13,7 @@ public class LocalDebugger implements IDebugger {
 	Status status = Status.STARTING;
 	ResumeReason resumeReason;
 	IDebugEventListener listener;
+	Context context;
 	// positive for stepping on enterXXX
 	// negative for stepping on leaveXXX
 	// necessary to avoid stepping twice on the same statement
@@ -61,6 +62,7 @@ public class LocalDebugger implements IDebugger {
 	
 	public void enterMethod(Context context, IDeclaration method) throws PromptoError {
 		terminateIfRequested();
+		this.context = context;
 		stack.push(new StackFrame(context, method.getId().toString(), method));
 		if(stack.size()>0 && stack.size()<=stepDepth)
 			suspend(SuspendReason.STEPPING, context, method);
@@ -83,6 +85,7 @@ public class LocalDebugger implements IDebugger {
 	
 	public void enterStatement(Context context, ISection section) throws PromptoError {
 		terminateIfRequested();
+		this.context = context;
 		IStackFrame previous = stack.pop();
 		stack.push(new StackFrame(context, previous.getMethodName(), section));
 		if(stack.size()>0 && stack.size()<=stepDepth)
@@ -208,6 +211,18 @@ public class LocalDebugger implements IDebugger {
 			if(listener!=null)
 				listener.handleTerminatedEvent();
 		}
+	}
+	
+	@Override
+	public void installBreakpoint(ISection section) {
+		if(context==null)
+			throw new RuntimeException("No context to search from!");
+		ISection instance = context.findSection(section);
+		if(instance!=null) {
+			System.err.println("Found section " + instance.toString());
+			instance.setAsBreakpoint(section.isBreakpoint());
+		} else
+			System.err.println("Could not find section " + section.toString());
 	}
 	
 }

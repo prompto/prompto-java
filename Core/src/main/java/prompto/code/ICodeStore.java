@@ -13,6 +13,7 @@ import prompto.grammar.Identifier;
 import prompto.parser.AbstractParser;
 import prompto.parser.Dialect;
 import prompto.parser.ECleverParser;
+import prompto.parser.ISection;
 import prompto.parser.OCleverParser;
 import prompto.parser.MCleverParser;
 import prompto.type.CategoryType;
@@ -129,4 +130,6 @@ public interface ICodeStore {
 	void storeModule(Module module) throws PromptoError;
 
 	void collectStorableAttributes(Map<String, AttributeDeclaration> columns) throws PromptoError;
+
+	ISection findSection(ISection section);
 }

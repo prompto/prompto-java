@@ -71,6 +71,7 @@ public class TestLocalDebugger extends TestDebuggerBase {
 		
 	}
 	
+	
 	@Test
 	public void testStackNoDebug() throws Exception {
 		interpretResource("debug/stack.pec", false);

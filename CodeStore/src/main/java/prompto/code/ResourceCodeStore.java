@@ -15,6 +15,8 @@ import prompto.declaration.IDeclaration;
 import prompto.error.InvalidResourceError;
 import prompto.error.PromptoError;
 import prompto.parser.Dialect;
+import prompto.parser.ISection;
+import prompto.utils.SectionLocator;
 
 /* resource base code store used to bootstrap modules  */
 public class ResourceCodeStore extends BaseCodeStore {
@@ -98,6 +100,27 @@ public class ResourceCodeStore extends BaseCodeStore {
 			return decls;
 		else
 			return super.fetchSpecificVersions(name, version);
+	}
+	
+	@Override
+	public ISection findSection(ISection section) {
+		ISection result = fetchInResource(section);
+		if(result!=null)
+			return result;
+		else
+			return super.findSection(section);
+	}
+	
+
+
+	private ISection fetchInResource(ISection section) {
+		System.err.println("fetchInResource " + resourceName);
+		System.err.println("sectionPath " + section.getPath());
+		if(!resourceName.equals(section.getPath()))
+			return null;
+		loadResource();
+		return SectionLocator.findSectionInLists(declarations.values(), section);
+				
 	}
 
 	private Iterator<IDeclaration> fetchInResource(String name) throws PromptoError {

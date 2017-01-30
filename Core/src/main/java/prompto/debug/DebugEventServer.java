@@ -27,6 +27,7 @@ class DebugEventServer {
 			try(ServerSocket server = new ServerSocket(0)) {
 				server.setSoTimeout(10); // make it fast to exit
 				port = server.getLocalPort();
+				System.err.println("DebugEventServer listening on " + port);
 				synchronized(lock) {
 					lock.notify();
 				}

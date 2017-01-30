@@ -22,6 +22,10 @@ import prompto.debug.Serializer.DebugResponseMessage;
 import prompto.debug.Serializer.DebugRequestMessage;
 import prompto.debug.IDebugResponse.StatusResponse;
 import prompto.debug.IDebugRequest.StatusRequest;
+import prompto.debug.IDebugRequest.InstallBreakpointRequest;
+import prompto.parser.Dialect;
+import prompto.parser.Location;
+import prompto.parser.Section;
 
 public class TestDebugMessage {
 
@@ -90,6 +94,26 @@ public class TestDebugMessage {
 		assertTrue(request instanceof StatusRequest);
 	}
 	
+	@Test
+	public void testBreakpointRequestMessage() throws Exception {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+		DebugRequestMessage message = new DebugRequestMessage();
+		message.object = new InstallBreakpointRequest(new Section("n/a", new Location(12, 18, 22), new Location(12, 22, 14), Dialect.E, true));
+		message.type = message.object.getType();
+		JsonNode json = mapper.valueToTree(message);
+		assertEquals(IDebugRequest.Type.INSTALL_BREAKPOINT.name(), json.get("type").asText());
+		assertNull(json.get("object").get("type"));
+		String s = json.toString();
+		JsonNode content = mapper.readTree(s);
+		String typeName = content.get("type").asText();
+		IDebugRequest.Type type = IDebugRequest.Type.valueOf(typeName);
+		JsonNode object = content.get("object");
+		assertTrue(object instanceof ObjectNode);
+		IDebugRequest request = mapper.treeToValue(object, type.getKlass());
+		assertTrue(request instanceof InstallBreakpointRequest);
+	}
+
 	@Test
 	public void testStatusResponseMessage() throws Exception {
 		ObjectMapper mapper = new ObjectMapper();

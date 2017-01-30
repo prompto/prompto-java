@@ -1,5 +1,7 @@
 package prompto.parser.o;
 
+import java.io.File;
+
 import prompto.declaration.DeclarationList;
 import prompto.utils.BaseParserTest;
 
@@ -13,4 +15,8 @@ public abstract class BaseOParserTest extends BaseParserTest {
 		return super.parseOResource(resourceName);
 	}
 	
+	public DeclarationList parseFile(File file) throws Exception {
+		return super.parseOFile(file);
+	}
+
 }

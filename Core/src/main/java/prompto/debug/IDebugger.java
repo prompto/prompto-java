@@ -1,5 +1,7 @@
 package prompto.debug;
 
+import prompto.parser.ISection;
+
 public interface IDebugger {
 
 	void connect();
@@ -22,4 +24,5 @@ public interface IDebugger {
 	void stepInto();
 	void stepOut();
 	void stepOver();
+	void installBreakpoint(ISection section);
 }

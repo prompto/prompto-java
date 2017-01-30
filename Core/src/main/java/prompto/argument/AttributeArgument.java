@@ -1,6 +1,7 @@
 package prompto.argument;
 
 import java.lang.reflect.Type;
+import java.util.Objects;
 
 import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
@@ -27,7 +28,6 @@ import prompto.store.IStore;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.utils.ObjectUtils;
 import prompto.utils.TypeUtils;
 import prompto.value.IValue;
 
@@ -70,7 +70,7 @@ public class AttributeArgument extends BaseArgument implements INamedArgument {
 		if(!(obj instanceof AttributeArgument))
 			return false;
 		AttributeArgument other = (AttributeArgument)obj;
-		return ObjectUtils.areEqual(this.getId(),other.getId());
+		return Objects.equals(this.getId(),other.getId());
 	}
 
 	@Override
