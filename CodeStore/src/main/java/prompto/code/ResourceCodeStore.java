@@ -27,8 +27,16 @@ public class ResourceCodeStore extends BaseCodeStore {
 	public ResourceCodeStore(ICodeStore next, ModuleType type, String resourceName, String version) {
 		super(next);
 		this.type = type;
-		this.resourceName = resourceName;
+		this.resourceName = trim(resourceName);
 		this.version = Version.parse(version);
+	}
+
+	private static String trim(String resourceName) {
+		if(resourceName.startsWith("\""))
+			resourceName = resourceName.substring(1);
+		if(resourceName.endsWith("\""))
+			resourceName = resourceName.substring(0, resourceName.length() - 1);
+		return resourceName;
 	}
 
 	@Override

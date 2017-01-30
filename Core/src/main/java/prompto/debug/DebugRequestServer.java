@@ -17,11 +17,34 @@ public class DebugRequestServer {
 	
 	public DebugRequestServer(LocalDebugger debugger, int port) {
 		this.debugger = debugger;
-		this.thread = Thread.currentThread();
 		this.port = port;
 	}
+	
+	public Thread getThread() {
+		return thread;
+	}
 
-	public void startListening(Object lock) throws Exception {
+	public void startListening() throws Exception {
+		Object lock = new Object();
+		this.thread = new Thread(() -> {
+			try {
+				listenInLoop(lock);
+			} catch (Throwable t) {
+				t.printStackTrace(System.err);
+			}
+		}, "Prompto debug server");
+		this.thread.start();
+		synchronized(lock) {
+			try {
+				lock.wait();
+			} catch (InterruptedException e) {
+				// OK
+			}
+		}
+	}
+	
+	
+	private void listenInLoop(Object lock) throws Exception {
 		loop = true;
 		try(ServerSocket server = new ServerSocket(port)) {
 			server.setSoTimeout(10); // make it fast to exit
@@ -39,8 +62,7 @@ public class DebugRequestServer {
 			System.err.println("DebugRequestServer exiting loop");
 		}
 	}
-	
-	
+
 	public void stopListening() {
 		loop = false;
 		if(thread!=Thread.currentThread()) try {

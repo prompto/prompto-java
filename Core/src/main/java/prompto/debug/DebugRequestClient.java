@@ -35,14 +35,15 @@ public class DebugRequestClient implements IDebugger {
 		ConnectRequest request = new ConnectRequest();
 		request.setPort(listener.port);
 		int count = 0;
-		while(++count<=100) try {
+		while(remote.isAlive() && ++count<=100) try {
 			IDebugResponse ack = send(request, (e)->{});
 			if(ack!=null)
-				break;
+				return;
 			Thread.sleep(100);
 		} catch(InterruptedException e) {
 			break;
 		}
+		throw new UnreachableException();
 	}
 	
 	private IDebugResponse send(IDebugRequest request) {

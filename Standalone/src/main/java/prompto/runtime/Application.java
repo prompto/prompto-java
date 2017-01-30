@@ -115,37 +115,30 @@ public abstract class Application {
 		Interpreter.interpretMethod(getGlobalContext(), new Identifier(mainMethod), "");
 	}
 
-	private static void debug(int debugPort, String mainMethod, Map<String, String> args) {
-		Object lock = new Object();
+	private static void debug(int debugPort, String mainMethod, Map<String, String> args) throws Exception {
 		LocalDebugger debugger = new LocalDebugger();
-		DebugRequestServer server = new DebugRequestServer(debugger, debugPort);
-		Thread serverThread = new Thread(() -> {
-				try {
-					server.startListening(lock);
-				} catch (Throwable t) {
-					t.printStackTrace(System.err);
-				}
-			}, "Prompto debug server");
-		serverThread.start();
-		synchronized(lock) {
-			try {
-				lock.wait();
-			} catch (InterruptedException e) {
-			}
+		DebugRequestServer server = startDebuggerThread(debugger, debugPort);
+		try {
+			debugMainMethod(debugger, mainMethod, args);
+		} finally {
+			server.stopListening();
 		}
+	}
+
+	private static void debugMainMethod(LocalDebugger debugger, String mainMethod, Map<String, String> args) {
 		final Context local = getGlobalContext().newLocalContext();
 		local.setDebugger(debugger);
 		try {
 			Interpreter.interpretMethod(local, new Identifier(mainMethod), "");
 		} finally {
-			try {
-				server.stopListening();
-				local.notifyTerminated();
-				serverThread.join();
-			} catch(InterruptedException e) {
-				// nothing to do
-			}
+			local.notifyTerminated();
 		}
+	}
+
+	private static DebugRequestServer startDebuggerThread(LocalDebugger debugger, int debugPort) throws Exception {
+		DebugRequestServer server = new DebugRequestServer(debugger, debugPort);
+		server.startListening();
+		return server;
 	}
 
 	public static IExpression argsToArgValue(String[] args) {
