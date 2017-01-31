@@ -67,9 +67,9 @@ public interface IDebugRequest {
 
 		@Override
 		public LineResponse execute(IDebugger debugger) {
-			System.err.println("before line");
+			LocalDebugger.showEvent("before line");
 			int line = debugger.getLine();
-			System.err.println("after line:" + line);
+			LocalDebugger.showEvent("after line:" + line);
 			return new LineResponse(line);
 		}
 		
@@ -115,9 +115,9 @@ public interface IDebugRequest {
 
 		@Override
 		public VoidResponse execute(IDebugger debugger) {
-			System.err.println("before resume");
+			LocalDebugger.showEvent("before resume");
 			debugger.resume();
-			System.err.println("after resume");
+			LocalDebugger.showEvent("after resume");
 			return new VoidResponse();
 		}
 		
@@ -131,9 +131,9 @@ public interface IDebugRequest {
 
 		@Override
 		public VoidResponse execute(IDebugger debugger) {
-			System.err.println("before step over");
+			LocalDebugger.showEvent("before step over");
 			debugger.stepOver();
-			System.err.println("after step over");
+			LocalDebugger.showEvent("after step over");
 			return new VoidResponse();
 		}
 		
@@ -147,9 +147,9 @@ public interface IDebugRequest {
 
 		@Override
 		public VoidResponse execute(IDebugger debugger) {
-			System.err.println("before step into");
+			LocalDebugger.showEvent("before step into");
 			debugger.stepInto();
-			System.err.println("after step into");
+			LocalDebugger.showEvent("after step into");
 			return new VoidResponse();
 		}
 		
@@ -163,9 +163,9 @@ public interface IDebugRequest {
 
 		@Override
 		public VoidResponse execute(IDebugger debugger) {
-			System.err.println("before step out");
+			LocalDebugger.showEvent("before step out");
 			debugger.stepOut();
-			System.err.println("after step out");
+			LocalDebugger.showEvent("after step out");
 			return new VoidResponse();
 		}
 		

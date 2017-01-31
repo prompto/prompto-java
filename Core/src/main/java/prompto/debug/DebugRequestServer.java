@@ -46,10 +46,10 @@ public class DebugRequestServer {
 	
 	private void listenInLoop(Object lock) throws Exception {
 		loop = true;
-		System.err.println("DebugRequestServer listening on " + port);
+		LocalDebugger.showEvent("DebugRequestServer listening on " + port);
 		try(ServerSocket server = new ServerSocket(port)) {
 			server.setSoTimeout(10); // make it fast to exit
-			System.err.println("DebugRequestServer entering loop");
+			LocalDebugger.showEvent("DebugRequestServer entering loop");
 			while(loop) {
 				try {
 					Socket client = server.accept();
@@ -60,7 +60,7 @@ public class DebugRequestServer {
 					// nothing to do, just helps exit the loop
 				}
 			}
-			System.err.println("DebugRequestServer exiting loop");
+			LocalDebugger.showEvent("DebugRequestServer exiting loop");
 		}
 	}
 
@@ -78,9 +78,9 @@ public class DebugRequestServer {
 			InputStream input = client.getInputStream();
 			OutputStream output = client.getOutputStream();
 			IDebugRequest request = readRequest(input);
-			System.err.println("DebugRequestServer receives " + request.getType());
+			LocalDebugger.showEvent("DebugRequestServer receives " + request.getType());
 			IDebugResponse response = request.execute(debugger);
-			System.err.println("DebugRequestServer responds " + response.getType());
+			LocalDebugger.showEvent("DebugRequestServer responds " + response.getType());
 			sendResponse(output, response);
 			output.flush();
 			return request.getType()==Type.CONNECT;

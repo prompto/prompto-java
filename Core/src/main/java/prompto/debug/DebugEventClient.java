@@ -37,11 +37,11 @@ public class DebugEventClient implements IDebugEventListener {
 	private IAcknowledgement send(IDebugEvent event) {
 		try(Socket client = new Socket(host, port)) {
 			try(OutputStream output = client.getOutputStream()) {
-				System.err.println("DebugEventClient sends " + event.getType());
+				LocalDebugger.showEvent("DebugEventClient sends " + event.getType());
 				sendDebugEvent(output, event);
 				try(InputStream input = client.getInputStream()) {
 					IAcknowledgement ack = readAcknowledgement(input);
-					System.err.println("DebugEventClient receives " + ack.getType());
+					LocalDebugger.showEvent("DebugEventClient receives " + ack.getType());
 					return ack;
 				}
 			}

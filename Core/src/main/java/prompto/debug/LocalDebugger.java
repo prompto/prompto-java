@@ -8,6 +8,11 @@ import prompto.runtime.Context;
 
 public class LocalDebugger implements IDebugger {
 
+	public static void showEvent(String message) {
+		// System.err.println(message);
+	}
+	
+	
 	Stack stack = new Stack();
 	Object lock = new Object();
 	Status status = Status.STARTING;
@@ -32,7 +37,7 @@ public class LocalDebugger implements IDebugger {
 	}
 	
 	public void setStatus(Status status) {
-		System.err.println("LocalDebugger sets status " + status);
+		showEvent("LocalDebugger sets status " + status);
 		this.status = status;
 	}
 	
@@ -122,15 +127,15 @@ public class LocalDebugger implements IDebugger {
 	}
 
 	public void suspend(SuspendReason reason, final Context context, ISection section) {
-		System.err.println("acquiring lock");
+		showEvent("acquiring lock");
 		synchronized(lock) {
 			setStatus(Status.SUSPENDED);
 			if(listener!=null)
 				listener.handleSuspendedEvent(reason);
 			try {
-				System.err.println("waiting lock");
+				showEvent("waiting lock");
 				lock.wait();
-				System.err.println("waiting lock");
+				showEvent("waiting lock");
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -192,11 +197,11 @@ public class LocalDebugger implements IDebugger {
 
 	public void doResume(ResumeReason reason) {
 		this.resumeReason = reason;
-		System.err.println("acquiring lock");
+		showEvent("acquiring lock");
 		synchronized(lock) {
-			System.err.println("notifying lock");
+			showEvent("notifying lock");
 			lock.notify();
-			System.err.println("releasing lock");
+			showEvent("releasing lock");
 		}
 	}
 
@@ -219,10 +224,10 @@ public class LocalDebugger implements IDebugger {
 			throw new RuntimeException("No context to search from!");
 		ISection instance = context.findSection(section);
 		if(instance!=null) {
-			System.err.println("Found section " + instance.toString());
+			showEvent("Found section " + instance.toString());
 			instance.setAsBreakpoint(section.isBreakpoint());
 		} else
-			System.err.println("Could not find section " + section.toString());
+			showEvent("Could not find section " + section.toString());
 	}
 	
 }

@@ -15,6 +15,7 @@ public class SectionLocator {
 	public static ISection findSection(Collection<IDeclaration> declarations, ISection section) {
 		return getMethods(declarations)
 		.filter((s)->s.isOrContains(section))
+		.map((d)->{ return findSectionIn(d, section); })
 		.findFirst()
 		.orElse(null);
 	}

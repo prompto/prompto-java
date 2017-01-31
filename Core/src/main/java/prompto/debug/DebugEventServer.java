@@ -27,11 +27,11 @@ class DebugEventServer {
 			try(ServerSocket server = new ServerSocket(0)) {
 				server.setSoTimeout(10); // make it fast to exit
 				port = server.getLocalPort();
-				System.err.println("DebugEventServer listening on " + port);
+				LocalDebugger.showEvent("DebugEventServer listening on " + port);
 				synchronized(lock) {
 					lock.notify();
 				}
-				System.err.println("DebugEventServer entering loop");
+				LocalDebugger.showEvent("DebugEventServer entering loop");
 				loop = true;
 				while(loop) {
 					try {
@@ -41,7 +41,7 @@ class DebugEventServer {
 						// nothing to do, just helps exit the loop
 					}
 				}
-				System.err.println("DebugEventServer exiting loop");
+				LocalDebugger.showEvent("DebugEventServer exiting loop");
 			} catch(Exception e) {
 				e.printStackTrace(System.err);
 			}
@@ -69,9 +69,9 @@ class DebugEventServer {
 		InputStream input = client.getInputStream();
 		OutputStream output = client.getOutputStream();
 		IDebugEvent event = readDebugEvent(input);
-		System.err.println("DebugEventServer receives " + event.getType());
+		LocalDebugger.showEvent("DebugEventServer receives " + event.getType());
 		event.execute(listener);
-		System.err.println("DebugEventServer sends " + IAcknowledgement.Type.RECEIVED);
+		LocalDebugger.showEvent("DebugEventServer sends " + IAcknowledgement.Type.RECEIVED);
 		sendAcknowledgement(output);
 		output.flush();
 	}

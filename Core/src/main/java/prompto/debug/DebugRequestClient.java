@@ -53,13 +53,13 @@ public class DebugRequestClient implements IDebugger {
 	}
 	
 	private IDebugResponse send(IDebugRequest request, Consumer<Exception> errorHandler) {
-		System.err.println("DebugRequestClient sends " + request.getType());
+		LocalDebugger.showEvent("DebugRequestClient sends " + request.getType());
 		try(Socket client = new Socket(host, port)) {
 			try(OutputStream output = client.getOutputStream()) {
 				sendRequest(output, request);
 				try(InputStream input = client.getInputStream()) {
 					IDebugResponse response = readResponse(input);
-					System.err.println("DebugRequestClient receives " + response.getType());
+					LocalDebugger.showEvent("DebugRequestClient receives " + response.getType());
 					return response;
 				}
 			}
