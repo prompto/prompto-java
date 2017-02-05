@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
@@ -32,15 +34,28 @@ public abstract class ResourceUtils {
 		return names;
 	}
 
+	public interface ResourceLister {
+		Collection<String> listResourcesAt(URL url) throws IOException;
+	}
+	
+	static Map<String, ResourceLister> protocolResourceListers = new HashMap<>();
+	
+	static {
+		registerResourceLister("jar", ResourceUtils::listJarResourcesAt);
+		registerResourceLister("file", ResourceUtils::listFileResourcesAt);
+	}
+	
+	
+	public static void registerResourceLister(String protocol, ResourceLister lister) {
+		protocolResourceListers.put(protocol, lister);
+	}
+			
 	public static Collection<String> listResourcesAt(URL url) throws IOException {
-		switch(url.getProtocol()) {
-		case "jar":
-			return listJarResourcesAt(url);
-		case "file":
-			return listFileResourcesAt(url);
-		default:
+		ResourceLister lister = protocolResourceListers.get(url.getProtocol());
+		if(lister==null)
 			throw new UnsupportedOperationException("protocol:" + url.getProtocol());
-		}
+		else
+			return lister.listResourcesAt(url);
 	}
 	
 	private static URL getRootURL() throws IOException {
@@ -52,7 +67,7 @@ public abstract class ResourceUtils {
 	}
 
 
-	private static Collection<String> listFileResourcesAt(URL url) throws IOException {
+	public static Collection<String> listFileResourcesAt(URL url) throws IOException {
 		try {
 			File dir = new File(url.toURI());
 			if(!dir.exists())
