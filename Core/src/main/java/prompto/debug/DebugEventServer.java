@@ -88,7 +88,7 @@ class DebugEventServer {
 
 
 	public boolean isListening() {
-		return thread.isAlive();
+		return thread!=null && thread.isAlive();
 	}
 
 
