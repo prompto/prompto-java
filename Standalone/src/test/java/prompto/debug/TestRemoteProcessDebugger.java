@@ -3,9 +3,7 @@ package prompto.debug;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
 import java.nio.file.Path;
 
 import org.junit.After;
@@ -13,6 +11,7 @@ import org.junit.Before;
 import org.junit.experimental.categories.Category;
 
 import prompto.nullstore.NullStoreFactory;
+import prompto.utils.IOUtils;
 import prompto.utils.ManualTests;
 
 @Category(ManualTests.class)
@@ -31,32 +30,18 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 	
 	@After
 	public void after() throws Exception {
-		System.err.println(readFile(errorsFile));
-		System.out.println(readFile(outputFile));
+		System.err.println(IOUtils.readFileToString(errorsFile));
+		System.out.println(IOUtils.readFileToString(outputFile));
 		process.destroy();
 	}
 	
 	@Override
 	protected String readOut() throws IOException {
-		String output = readFile(outputFile);
+		String output = IOUtils.readFileToString(outputFile);
 		String[] lines = output.split("\n");
 		return lines.length>0 ? lines[lines.length-1] : "";
 	}
 	
-	
-	private String readFile(File file) throws IOException {
-		char[] chars = new char[2048];
-		StringBuilder sb = new StringBuilder();
-		try(Reader reader = new FileReader(file)) {
-			int read = reader.read(chars);
-			while(read>=0) {
-				sb.append(chars, 0, read);
-				read = reader.read(chars);
-			}
-		}
-		return sb.toString();
-	}
-
 	
 	@Override
 	protected void waitBlockedOrKilled() throws Exception {

@@ -2,8 +2,10 @@ package prompto.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -43,4 +45,18 @@ public abstract class IOUtils {
 		data.flush();
 		return data.toByteArray();
 	}
+	
+	public static String readFileToString(File file) throws IOException {
+		char[] chars = new char[2048];
+		StringBuilder sb = new StringBuilder();
+		try(Reader reader = new FileReader(file)) {
+			int read = reader.read(chars);
+			while(read>=0) {
+				sb.append(chars, 0, read);
+				read = reader.read(chars);
+			}
+		}
+		return sb.toString();
+	}
+
 }

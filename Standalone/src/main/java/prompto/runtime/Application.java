@@ -43,18 +43,26 @@ public abstract class Application {
 	
 	public static void main(String[] args) throws Throwable {
 		Integer debugPort = null;
-		String mainMethod = "main";
 		
 		Map<String, String> argsMap = initialize(args);
 		
 		if(argsMap.containsKey("debug_port"))
 			debugPort = Integer.parseInt(argsMap.get("debug_port"));
-		if(argsMap.containsKey("mainMethod"))
-			mainMethod = argsMap.get("mainMethod");
-		if(debugPort!=null)
-			debug(debugPort, mainMethod, argsMap);
-		else
-			run(mainMethod, argsMap);
+		if(argsMap.containsKey("application")) {
+			String mainMethod = "main";
+			if(argsMap.containsKey("mainMethod"))
+				mainMethod = argsMap.get("mainMethod");
+			if(debugPort!=null)
+				debugApplication(debugPort, mainMethod, argsMap);
+			else
+				runApplication(mainMethod, argsMap);
+		} else if(argsMap.containsKey("test")) {
+			String testMethod = argsMap.get("test");
+			if(debugPort!=null)
+				;// TODO debugTest(debugPort, testMethod);
+			else
+				runTest(testMethod);
+		}
 			
 	}
 
@@ -62,6 +70,7 @@ public abstract class Application {
 		Boolean testMode = false;
 		String[] resources = null;
 		String application = null;
+		String test = null;
 		Version version = ICodeStore.LATEST_VERSION;
 		String codeStoreFactory = MemStoreFactory.class.getName();
 		String dataStoreFactory = MemStoreFactory.class.getName();
@@ -75,6 +84,8 @@ public abstract class Application {
 			resources = argsMap.get("resources").split(",");
 		if(argsMap.containsKey("application"))
 			application = argsMap.get("application");
+		if(argsMap.containsKey("test"))
+			test = argsMap.get("test");
 		if(argsMap.containsKey("version"))
 			version = Version.parse(argsMap.get("version"));
 		if(argsMap.containsKey("codeStoreFactory"))
@@ -86,8 +97,8 @@ public abstract class Application {
 		if(argsMap.containsKey("dataStoreType"))
 			dataStoreType = Type.valueOf(argsMap.get("dataStoreType"));
 		
-		if(application==null) {
-			showHelp(application, version);
+		if(application==null && test==null) {
+			showHelp(application, test, version);
 			System.exit(-1); // raise an error in whatever tool is used to launch this
 		}
 		// initialize code store
@@ -111,11 +122,18 @@ public abstract class Application {
 	}
 
 
-	private static void run(String mainMethod, Map<String, String> args) {
+	private static void runTest(String testMethod) {
+		if("all".equals(testMethod))
+			Interpreter.interpretTests(getGlobalContext());
+		else
+			Interpreter.interpretTest(getGlobalContext(), new Identifier(testMethod), true);
+	}
+
+	private static void runApplication(String mainMethod, Map<String, String> args) {
 		Interpreter.interpretMethod(getGlobalContext(), new Identifier(mainMethod), "");
 	}
 
-	private static void debug(int debugPort, String mainMethod, Map<String, String> args) throws Exception {
+	private static void debugApplication(int debugPort, String mainMethod, Map<String, String> args) throws Exception {
 		LocalDebugger debugger = new LocalDebugger();
 		DebugRequestServer server = startDebuggerThread(debugger, debugPort);
 		try {
@@ -147,9 +165,9 @@ public abstract class Application {
 		return new ExpressionValue(new DictType(TextType.instance()), new Dictionary(TextType.instance(), dict));
 	}
 
-	public static void showHelp(String application, Version version) {
-		if(application==null)
-			System.out.println("Missing argument: -application");
+	public static void showHelp(String application, String test, Version version) {
+		if(application==null && test==null)
+			System.out.println("Missing argument: -application or -test");
 		if(version.equals(ICodeStore.LATEST_VERSION))
 			System.out.println("Additional argument: -version (optional)");
 	}
