@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import prompto.debug.IDebugRequest.ConnectRequest;
 import prompto.debug.IDebugRequest.GetLineRequest;
@@ -25,13 +26,20 @@ import prompto.parser.ISection;
 public class DebugRequestClient implements IDebugger {
 
 	DebugEventServer listener;
-	IRemote remote;
+	Supplier<Boolean> remote;
 	String host;
 	int port;
 	
-	public DebugRequestClient(IRemote remote, String host, int port, IDebugEventListener listener) {
+	public DebugRequestClient(Thread thread, String host, int port, IDebugEventListener listener) {
 		this.listener = new DebugEventServer(listener);
-		this.remote = remote;
+		this.remote = ()->thread.isAlive();
+		this.host = host;
+		this.port = port;
+	}
+
+	public DebugRequestClient(Process process, String host, int port, IDebugEventListener listener) {
+		this.listener = new DebugEventServer(listener);
+		this.remote = ()->process.isAlive();
 		this.host = host;
 		this.port = port;
 	}
@@ -42,7 +50,7 @@ public class DebugRequestClient implements IDebugger {
 		ConnectRequest request = new ConnectRequest();
 		request.setPort(listener.port);
 		int count = 0;
-		while(remote.isAlive() && ++count<=100) try {
+		while(remote.get() && ++count<=100) try {
 			IDebugResponse ack = send(request, (e)->{});
 			if(ack!=null)
 				return;
@@ -96,7 +104,7 @@ public class DebugRequestClient implements IDebugger {
 
 	@Override
 	public Status getStatus() {
-		if(!remote.isAlive())
+		if(!remote.get())
 			return Status.TERMINATED;
 		else
 			return fetchStatus();

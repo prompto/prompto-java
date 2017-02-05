@@ -79,7 +79,7 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebug
 				}
 			}
 		}, "Prompto main");
-		this.debugger = new DebugRequestClient(new RemoteThread(thread), "localhost", 9999, this);
+		this.debugger = new DebugRequestClient(thread, "localhost", 9999, this);
 		
 	}
 	

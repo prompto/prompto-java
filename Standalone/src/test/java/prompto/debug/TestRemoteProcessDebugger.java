@@ -55,7 +55,7 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 	@Override
 	protected void start() throws Exception {
 		process = builder.start();
-		debugger = new DebugRequestClient(new RemoteProcess(process), "localhost", 9999, this);
+		debugger = new DebugRequestClient(process, "localhost", 9999, this);
 		debugger.connect();
 	}
 
