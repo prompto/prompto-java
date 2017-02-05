@@ -236,7 +236,7 @@ public class Context implements IContext {
 	private void unregisterValues(String path) {
 		List<Identifier> toRemove = new ArrayList<Identifier>();
 		for(Identifier id : instances.keySet()) {
-			if(path.equals(id.getPath()))
+			if(path.equals(id.getFilePath()))
 				toRemove.add(id);
 		}
 		for(Identifier id : toRemove) {
@@ -248,7 +248,7 @@ public class Context implements IContext {
 	private void unregisterTests(String path) {
 		List<TestMethodDeclaration> toRemove = new ArrayList<TestMethodDeclaration>();
 		for(TestMethodDeclaration decl : tests.values()) {
-			if(path.equals(decl.getPath()))
+			if(path.equals(decl.getFilePath()))
 				toRemove.add(decl);
 		}
 		for(TestMethodDeclaration decl : toRemove)
@@ -258,7 +258,7 @@ public class Context implements IContext {
 	private void unregisterDeclarations(String path) {
 		List<IDeclaration> toRemove = new ArrayList<IDeclaration>();
 		for(IDeclaration decl : declarations.values()) {
-			if(path.equals(decl.getPath()))
+			if(path.equals(decl.getFilePath()))
 				toRemove.add(decl);
 			else if(decl instanceof MethodDeclarationMap)
 				((MethodDeclarationMap)decl).unregister(path);
@@ -445,7 +445,7 @@ public class Context implements IContext {
 		public void unregister(String path) {
 			List<IMethodDeclaration> toRemove = new ArrayList<IMethodDeclaration>();
 			for(IMethodDeclaration decl : this.values()) {
-				if(path.equals(decl.getPath()))
+				if(path.equals(decl.getFilePath()))
 					toRemove.add(decl);
 			}
 			for(IMethodDeclaration decl : toRemove)
@@ -492,7 +492,7 @@ public class Context implements IContext {
 		}
 
 		@Override
-		public String getPath() {
+		public String getFilePath() {
 			return "__INTERNAL__"; // avoid crash in unregister
 		}
 

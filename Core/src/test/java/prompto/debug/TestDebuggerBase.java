@@ -1,6 +1,6 @@
 package prompto.debug;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -43,6 +43,10 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		waitBlockedOrKilled();
 		assertEquals(Status.SUSPENDED, debugger.getStatus());
 		assertEquals(MAIN_LINE, debugger.getLine());
+		assertTrue(debugger.isStepping());
+		IStack<?> stack = debugger.getStack();
+		assertFalse(stack.isEmpty());
+		assertEquals(MAIN_LINE, stack.iterator().next().getLine());
 		debugger.resume();	
 		join();
 		assertEquals("test123-ok", readOut());

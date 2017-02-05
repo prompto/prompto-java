@@ -14,7 +14,7 @@ public abstract class SyntaxProblemBase implements IProblem {
 
 	@Override
 	public String getPath() {
-		return section.getPath();
+		return section.getFilePath();
 	}
 	
 	@Override

@@ -6,15 +6,20 @@ import java.net.Socket;
 import java.util.function.Consumer;
 
 import prompto.debug.IDebugRequest.ConnectRequest;
-import prompto.debug.IDebugRequest.LineRequest;
+import prompto.debug.IDebugRequest.GetLineRequest;
 import prompto.debug.IDebugRequest.InstallBreakpointRequest;
+import prompto.debug.IDebugRequest.SuspendRequest;
 import prompto.debug.IDebugRequest.ResumeRequest;
-import prompto.debug.IDebugRequest.StatusRequest;
+import prompto.debug.IDebugRequest.GetStatusRequest;
+import prompto.debug.IDebugRequest.GetStackRequest;
 import prompto.debug.IDebugRequest.StepIntoRequest;
+import prompto.debug.IDebugRequest.IsSteppingRequest;
 import prompto.debug.IDebugRequest.StepOutRequest;
 import prompto.debug.IDebugRequest.StepOverRequest;
-import prompto.debug.IDebugResponse.LineResponse;
-import prompto.debug.IDebugResponse.StatusResponse;
+import prompto.debug.IDebugResponse.GetLineResponse;
+import prompto.debug.IDebugResponse.GetStatusResponse;
+import prompto.debug.IDebugResponse.GetStackResponse;
+import prompto.debug.IDebugResponse.IsSteppingResponse;
 import prompto.parser.ISection;
 
 public class DebugRequestClient implements IDebugger {
@@ -98,40 +103,47 @@ public class DebugRequestClient implements IDebugger {
 	}
 
 	private Status fetchStatus() {
-		IDebugRequest request = new StatusRequest();
+		IDebugRequest request = new GetStatusRequest();
 		IDebugResponse response = send(request) ;
-		if(response instanceof StatusResponse)
-			return ((StatusResponse)response).getStatus();
+		if(response instanceof GetStatusResponse)
+			return ((GetStatusResponse)response).getStatus();
 		else 
 			return Status.UNREACHABLE;
 	}
 
 	@Override
-	public Stack getStack() {
-		// TODO Auto-generated method stub
-		return null;
+	public IStack<?> getStack() {
+		IDebugRequest request = new GetStackRequest();
+		IDebugResponse response = send(request) ;
+		if(response instanceof GetStackResponse)
+			return ((GetStackResponse)response).getStack();
+		else 
+			throw new UnreachableException();
 	}
 
 	@Override
 	public int getLine() {
-		IDebugRequest request = new LineRequest();
+		IDebugRequest request = new GetLineRequest();
 		IDebugResponse response = send(request) ;
-		if(response instanceof LineResponse)
-			return ((LineResponse)response).getLine();
+		if(response instanceof GetLineResponse)
+			return ((GetLineResponse)response).getLine();
 		else 
 			throw new UnreachableException();
 	}
 
 	@Override
 	public boolean isStepping() {
-		// TODO Auto-generated method stub
-		return false;
+		IDebugRequest request = new IsSteppingRequest();
+		IDebugResponse response = send(request) ;
+		if(response instanceof IsSteppingResponse)
+			return ((IsSteppingResponse)response).isStepping();
+		else 
+			throw new UnreachableException();
 	}
 
 	@Override
 	public boolean isSuspended() {
-		// TODO Auto-generated method stub
-		return false;
+		return fetchStatus()==Status.SUSPENDED;
 	}
 
 	@Override
@@ -141,7 +153,7 @@ public class DebugRequestClient implements IDebugger {
 	
 	@Override
 	public boolean isTerminated() {
-		return !listener.isListening();
+		return listener!=null && !listener.isListening();
 	}
 
 	@Override
@@ -152,38 +164,33 @@ public class DebugRequestClient implements IDebugger {
 
 	@Override
 	public boolean canResume() {
-		// TODO Auto-generated method stub
-		return false;
+		return isSuspended();
 	}
 
 	@Override
 	public boolean canSuspend() {
-		// TODO Auto-generated method stub
-		return false;
+		return !isSuspended();
 	}
 
 	@Override
 	public boolean canStepInto() {
-		// TODO Auto-generated method stub
-		return false;
+		return isSuspended();
 	}
 
 	@Override
 	public boolean canStepOver() {
-		// TODO Auto-generated method stub
-		return false;
+		return isSuspended();
 	}
 
 	@Override
 	public boolean canStepOut() {
-		// TODO Auto-generated method stub
-		return false;
+		return isSuspended();
 	}
 
 	@Override
 	public void suspend() {
-		// TODO Auto-generated method stub
-		
+		IDebugRequest request = new SuspendRequest();
+		send(request);
 	}
 
 	@Override

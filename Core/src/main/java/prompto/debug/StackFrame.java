@@ -6,25 +6,36 @@ import prompto.runtime.Context;
 public class StackFrame implements IStackFrame {
 	
 	String methodName;
-	String path;
+	String filePath;
 	int line;
 	int startCharIndex;
 	int endCharIndex;
 	
+	public StackFrame() {
+	}
+	
 	public StackFrame(Context context, String methodName, ISection section) {
 		this.methodName = methodName;
-		this.path = section.getPath();
+		this.filePath = section.getFilePath();
 		this.line = section.getStart().getLine();
 		this.startCharIndex = section.getStart().getIndex();
 		this.endCharIndex = section.getEnd().getIndex();
 	}
 	
+	public StackFrame(IStackFrame frame) {
+		this.methodName = frame.getMethodName();
+		this.filePath = frame.getFilePath();
+		this.line = frame.getLine();
+		this.startCharIndex = frame.getStartCharIndex();
+		this.endCharIndex = frame.getEndCharIndex();
+	}
+
 	public String getMethodName() {
 		return methodName;
 	}
 	
 	public String getFilePath() {
-		return path;
+		return filePath;
 	}
 	
 	public int getLine() {
@@ -52,7 +63,7 @@ public class StackFrame implements IStackFrame {
 			return false;
 		StackFrame sf = (StackFrame)obj;
 		return this.methodName.equals(sf.methodName)
-				&& this.path.equals(sf.path)
+				&& this.filePath.equals(sf.filePath)
 				&& this.line==sf.line
 				&& this.startCharIndex==sf.startCharIndex
 				&& this.endCharIndex==sf.endCharIndex;

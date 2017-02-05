@@ -49,33 +49,49 @@ public interface IDebugRequest {
 		}
 	}
 	
-	public static class StatusRequest implements IDebugRequest {
+	public static class GetStatusRequest implements IDebugRequest {
 
 		@Override
-		public StatusResponse execute(IDebugger debugger) {
+		public GetStatusResponse execute(IDebugger debugger) {
 			Status status = debugger.getStatus();
-			return new StatusResponse(status);
+			return new GetStatusResponse(status);
 		}
 		
 		@Override
 		public Type getType() {
-			return STATUS;
+			return GET_STATUS;
 		}
 	}
 	
-	public static class LineRequest implements IDebugRequest {
+	public static class GetLineRequest implements IDebugRequest {
 
 		@Override
-		public LineResponse execute(IDebugger debugger) {
+		public GetLineResponse execute(IDebugger debugger) {
 			LocalDebugger.showEvent("before line");
 			int line = debugger.getLine();
 			LocalDebugger.showEvent("after line:" + line);
-			return new LineResponse(line);
+			return new GetLineResponse(line);
 		}
 		
 		@Override
 		public Type getType() {
-			return LINE;
+			return GET_LINE;
+		}
+	}
+
+	public static class GetStackRequest implements IDebugRequest {
+
+		@Override
+		public GetStackResponse execute(IDebugger debugger) {
+			LocalDebugger.showEvent("before stack");
+			IStack<?> stack = debugger.getStack();
+			LocalDebugger.showEvent("after stack");
+			return new GetStackResponse(stack);
+		}
+		
+		@Override
+		public Type getType() {
+			return GET_STACK;
 		}
 	}
 
@@ -111,6 +127,22 @@ public interface IDebugRequest {
 	}
 	
 	
+	public static class SuspendRequest implements IDebugRequest {
+
+		@Override
+		public VoidResponse execute(IDebugger debugger) {
+			LocalDebugger.showEvent("before suspend");
+			debugger.suspend();
+			LocalDebugger.showEvent("after suspend");
+			return new VoidResponse();
+		}
+		
+		@Override
+		public Type getType() {
+			return SUSPEND;
+		}
+	}
+
 	public static class ResumeRequest implements IDebugRequest {
 
 		@Override
@@ -124,6 +156,22 @@ public interface IDebugRequest {
 		@Override
 		public Type getType() {
 			return RESUME;
+		}
+	}
+
+	public static class IsSteppingRequest implements IDebugRequest {
+
+		@Override
+		public IsSteppingResponse execute(IDebugger debugger) {
+			LocalDebugger.showEvent("before is stepping");
+			boolean stepping = debugger.isStepping();
+			LocalDebugger.showEvent("after is stepping");
+			return new IsSteppingResponse(stepping);
+		}
+		
+		@Override
+		public Type getType() {
+			return IS_STEPPING;
 		}
 	}
 
@@ -177,10 +225,13 @@ public interface IDebugRequest {
 
 	public enum Type {
 		CONNECT(ConnectRequest.class),
-		STATUS(StatusRequest.class),
-		LINE(LineRequest.class),
+		GET_STATUS(GetStatusRequest.class),
+		GET_LINE(GetLineRequest.class),
+		GET_STACK(GetStackRequest.class),
 		INSTALL_BREAKPOINT(InstallBreakpointRequest.class),
+		SUSPEND(SuspendRequest.class),
 		RESUME(ResumeRequest.class),
+		IS_STEPPING(IsSteppingRequest.class),
 		STEP_INTO(StepIntoRequest.class),
 		STEP_OUT(StepOutRequest.class),
 		STEP_OVER(StepOverRequest.class)

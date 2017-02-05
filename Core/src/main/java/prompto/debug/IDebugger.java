@@ -7,7 +7,7 @@ public interface IDebugger {
 	void connect();
 	void setListener(IDebugEventListener listener);
 	Status getStatus();
-	Stack getStack();
+	IStack<?> getStack();
 	int getLine();
 	boolean isStepping();
 	boolean isSuspended();

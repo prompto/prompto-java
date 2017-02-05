@@ -20,8 +20,8 @@ import prompto.debug.IAcknowledgement.Acknowledgement;
 import prompto.debug.Serializer.AcknowledgementMessage;
 import prompto.debug.Serializer.DebugResponseMessage;
 import prompto.debug.Serializer.DebugRequestMessage;
-import prompto.debug.IDebugResponse.StatusResponse;
-import prompto.debug.IDebugRequest.StatusRequest;
+import prompto.debug.IDebugResponse.GetStatusResponse;
+import prompto.debug.IDebugRequest.GetStatusRequest;
 import prompto.debug.IDebugRequest.InstallBreakpointRequest;
 import prompto.parser.Dialect;
 import prompto.parser.Location;
@@ -69,9 +69,9 @@ public class TestDebugMessage {
 	public void testJsonStatusRequest() throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-		StatusRequest o = new StatusRequest();
+		GetStatusRequest o = new GetStatusRequest();
 		JsonNode json = mapper.valueToTree(o);
-		o = mapper.treeToValue(json, StatusRequest.class);
+		o = mapper.treeToValue(json, GetStatusRequest.class);
 	}
 	
 	@Test
@@ -79,10 +79,10 @@ public class TestDebugMessage {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 		DebugRequestMessage message = new DebugRequestMessage();
-		message.object = new StatusRequest();
+		message.object = new GetStatusRequest();
 		message.type = message.object.getType();
 		JsonNode json = mapper.valueToTree(message);
-		assertEquals(IDebugRequest.Type.STATUS.name(), json.get("type").asText());
+		assertEquals(IDebugRequest.Type.GET_STATUS.name(), json.get("type").asText());
 		assertNull(json.get("object").get("type"));
 		String s = json.toString();
 		JsonNode content = mapper.readTree(s);
@@ -91,7 +91,7 @@ public class TestDebugMessage {
 		JsonNode object = content.get("object");
 		assertTrue(object instanceof ObjectNode);
 		IDebugRequest request = mapper.treeToValue(object, type.getKlass());
-		assertTrue(request instanceof StatusRequest);
+		assertTrue(request instanceof GetStatusRequest);
 	}
 	
 	@Test
@@ -119,10 +119,10 @@ public class TestDebugMessage {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 		DebugResponseMessage message = new DebugResponseMessage();
-		message.object = new StatusResponse(Status.SUSPENDED);
+		message.object = new GetStatusResponse(Status.SUSPENDED);
 		message.type = message.object.getType();
 		JsonNode json = mapper.valueToTree(message);
-		assertEquals(IDebugResponse.Type.STATUS.name(), json.get("type").asText());
+		assertEquals(IDebugResponse.Type.GET_STATUS.name(), json.get("type").asText());
 		assertNull(json.get("object").get("type"));
 		String s = json.toString();
 		JsonNode content = mapper.readTree(s);
@@ -131,8 +131,8 @@ public class TestDebugMessage {
 		JsonNode object = content.get("object");
 		assertTrue(object instanceof ObjectNode);
 		IDebugResponse response = mapper.treeToValue(object, type.getKlass());
-		assertTrue(response instanceof StatusResponse);
-		assertEquals(Status.SUSPENDED, ((StatusResponse)response).getStatus());
+		assertTrue(response instanceof GetStatusResponse);
+		assertEquals(Status.SUSPENDED, ((GetStatusResponse)response).getStatus());
 	}
 	
 	
@@ -143,7 +143,7 @@ public class TestDebugMessage {
 		mapper.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, false);
 		mapper.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
 		DebugRequestMessage message = new DebugRequestMessage();
-		message.object = new StatusRequest();
+		message.object = new GetStatusRequest();
 		message.type = message.object.getType();
 		JsonNode json = mapper.valueToTree(message);
 		String s = json.toString();

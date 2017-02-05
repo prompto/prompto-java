@@ -22,7 +22,7 @@ public class SectionLocator {
 
 	public static ISection findSection(Collection<IDeclaration> declarations, String path, int lineNumber) {
 		return getMethods(declarations)
-		.filter((d)->path.equals(d.getPath()))
+		.filter((d)->path.equals(d.getFilePath()))
 		.filter((d)->lineNumber>=d.getStart().getLine())
 		.filter((d)->lineNumber<=d.getEnd().getLine())
 		.map((d)->{ return findSectionIn(d, lineNumber); })

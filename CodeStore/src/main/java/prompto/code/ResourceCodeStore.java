@@ -115,8 +115,8 @@ public class ResourceCodeStore extends BaseCodeStore {
 
 	private ISection fetchInResource(ISection section) {
 		System.err.println("fetchInResource " + resourceName);
-		System.err.println("sectionPath " + section.getPath());
-		if(!resourceName.equals(section.getPath()))
+		System.err.println("sectionPath " + section.getFilePath());
+		if(!resourceName.equals(section.getFilePath()))
 			return null;
 		loadResource();
 		return SectionLocator.findSectionInLists(declarations.values(), section);

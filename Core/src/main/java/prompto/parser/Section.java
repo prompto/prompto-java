@@ -29,7 +29,7 @@ public class Section implements ISection {
 	
 	
 	public void setFrom(ISection section) {
-		this.path = section.getPath();
+		this.path = section.getFilePath();
 		this.start = section.getStart()==null ? null : new Location(section.getStart());
 		this.end = section.getEnd()==null ? null : new Location(section.getEnd());
 		this.dialect = section.getDialect();
@@ -46,7 +46,7 @@ public class Section implements ISection {
 	
 	
 	@Override
-	public String getPath() {
+	public String getFilePath() {
 		return path;
 	}
 	
@@ -77,7 +77,7 @@ public class Section implements ISection {
 	@Override
 	public boolean isOrContains(ISection section) {
 		return this.dialect==section.getDialect()
-				&& Objects.equals(this.path, section.getPath())
+				&& Objects.equals(this.path, section.getFilePath())
 				&& this.start.isNotAfter(section.getStart())
 				&& this.end.isNotBefore(section.getEnd());
 	}

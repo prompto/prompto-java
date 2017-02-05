@@ -1,5 +1,7 @@
 package prompto.debug;
 
+import java.util.ArrayList;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
@@ -20,20 +22,20 @@ public interface IDebugResponse {
 
 	}
 
-	public static class StatusResponse implements IDebugResponse {
+	public static class GetStatusResponse implements IDebugResponse {
 
 		Status status;
 		
-		public StatusResponse() {
+		public GetStatusResponse() {
 		}
 
-		public StatusResponse(Status status) {
+		public GetStatusResponse(Status status) {
 			this.status = status;
 		}
 		
 		@Override
 		public Type getType() {
-			return Type.STATUS;
+			return Type.GET_STATUS;
 		}
 
 		public Status getStatus() {
@@ -46,20 +48,20 @@ public interface IDebugResponse {
 
 	}
 	
-	public static class LineResponse implements IDebugResponse {
+	public static class GetLineResponse implements IDebugResponse {
 
 		int line;
 		
-		public LineResponse() {
+		public GetLineResponse() {
 		}
 
-		public LineResponse(int line) {
+		public GetLineResponse(int line) {
 			this.line = line;
 		}
 		
 		@Override
 		public Type getType() {
-			return Type.LINE;
+			return Type.GET_LINE;
 		}
 
 		public int getLine() {
@@ -72,10 +74,72 @@ public interface IDebugResponse {
 
 	}
 	
+	@SuppressWarnings("serial")
+	static class ArrayStack extends ArrayList<StackFrame> implements IStack<StackFrame> {
+		
+	}
+	
+	public static class GetStackResponse implements IDebugResponse {
+
+		ArrayStack stack;
+		
+		public GetStackResponse() {
+			this.stack = new ArrayStack();
+		}
+
+		public GetStackResponse(IStack<?> stack) {
+			this.stack = new ArrayStack();
+			stack.forEach((f)->this.stack.add(new StackFrame(f)));
+		}
+		
+		@Override
+		public Type getType() {
+			return Type.GET_STACK;
+		}
+
+		public ArrayStack getStack() {
+			return stack;
+		}
+		
+		public void setStack(ArrayStack stack) {
+			this.stack = stack;
+		}
+
+	}
+	
+	public static class IsSteppingResponse implements IDebugResponse {
+
+		boolean stepping;
+		
+		public IsSteppingResponse() {
+		}
+
+		public IsSteppingResponse(boolean stepping) {
+			this.stepping = stepping;
+		}
+		
+		@Override
+		public Type getType() {
+			return Type.IS_STEPPING;
+		}
+
+		public boolean isStepping() {
+			return stepping;
+		}
+		
+		public void setStepping(boolean stepping) {
+			this.stepping = stepping;
+		}
+
+	}
+	
+
 	public enum Type {
 		VOID(VoidResponse.class),
-		STATUS(StatusResponse.class),
-		LINE(LineResponse.class)
+		GET_STATUS(GetStatusResponse.class),
+		GET_LINE(GetLineResponse.class),
+		GET_STACK(GetStackResponse.class),
+		IS_STEPPING(IsSteppingResponse.class)
 		;
 		
 		Class<? extends IDebugResponse> klass;
