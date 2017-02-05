@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.Token;
 
 public class Section implements ISection {
 	
-	String path;
+	String filePath;
 	Location start;
 	Location end;
 	Dialect dialect;
@@ -20,7 +20,7 @@ public class Section implements ISection {
 	}
 
 	public Section(String path, Location start, Location end, Dialect dialect, boolean breakpoint) {
-		this.path = path;
+		this.filePath = path;
 		this.start = start;
 		this.end = end;
 		this.dialect = dialect;
@@ -29,7 +29,7 @@ public class Section implements ISection {
 	
 	
 	public void setFrom(ISection section) {
-		this.path = section.getFilePath();
+		this.filePath = section.getFilePath();
 		this.start = section.getStart()==null ? null : new Location(section.getStart());
 		this.end = section.getEnd()==null ? null : new Location(section.getEnd());
 		this.dialect = section.getDialect();
@@ -38,7 +38,7 @@ public class Section implements ISection {
 
 	
 	public void setFrom(String path, Token start, Token end, Dialect dialect) {
-		this.path = path;
+		this.filePath = path;
 		this.start = new Location(start);
 		this.end = new Location(end, true);
 		this.dialect = dialect;
@@ -47,7 +47,7 @@ public class Section implements ISection {
 	
 	@Override
 	public String getFilePath() {
-		return path;
+		return filePath;
 	}
 	
 	@Override
@@ -77,7 +77,7 @@ public class Section implements ISection {
 	@Override
 	public boolean isOrContains(ISection section) {
 		return this.dialect==section.getDialect()
-				&& Objects.equals(this.path, section.getFilePath())
+				&& Objects.equals(this.filePath, section.getFilePath())
 				&& this.start.isNotAfter(section.getStart())
 				&& this.end.isNotBefore(section.getEnd());
 	}
