@@ -18,6 +18,7 @@ public interface IDebugger {
 	boolean canStepInto();
 	boolean canStepOver();
 	boolean canStepOut();
+	boolean canTerminate();
 	void suspend();
 	void resume();
 	void terminate();

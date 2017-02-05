@@ -135,9 +135,13 @@ public class DebugRequestClient implements IDebugger {
 	}
 
 	@Override
+	public boolean canTerminate() {
+		return !isTerminated();
+	}
+	
+	@Override
 	public boolean isTerminated() {
-		// TODO Auto-generated method stub
-		return false;
+		return !listener.isListening();
 	}
 
 	@Override

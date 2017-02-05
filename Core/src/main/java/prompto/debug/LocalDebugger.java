@@ -194,6 +194,11 @@ public class LocalDebugger implements IDebugger {
 		stepDepth = -(Math.abs(stepDepth) - 1);
 		doResume(ResumeReason.STEP_OUT);
 	}
+	
+	@Override
+	public boolean canTerminate() {
+		return !isTerminated();
+	}
 
 	public void doResume(ResumeReason reason) {
 		this.resumeReason = reason;
