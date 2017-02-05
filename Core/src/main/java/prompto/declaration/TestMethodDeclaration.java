@@ -72,7 +72,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 	
 	private void checkStatement(Context context, IStatement statement) {
 		IType type = statement.check(context);
-		if(type!=VoidType.instance())
+		if(type!=null && type!=VoidType.instance()) // null indicates SyntaxError
 			context.getProblemListener().reportIllegalReturn(statement);
 	}
 

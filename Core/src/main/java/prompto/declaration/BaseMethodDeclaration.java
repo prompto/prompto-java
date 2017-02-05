@@ -163,7 +163,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 				}
 				if(assignment==null) // missing argument
 					return false;
-				if(!isAssignableFrom(local,argument,assignment))
+				if(!isAssignableFrom(local, argument, assignment))
 					return false;
 				assignmentsList.remove(assignment);
 			}

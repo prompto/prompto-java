@@ -16,11 +16,7 @@ public class Section implements ISection {
 	}
 	
 	public Section(ISection section) {
-		this.path = section.getPath();
-		this.start = new Location(section.getStart());
-		this.end = new Location(section.getEnd());
-		this.dialect = section.getDialect();
-		this.breakpoint = section.isBreakpoint();
+		setFrom(section);
 	}
 
 	public Section(String path, Location start, Location end, Dialect dialect, boolean breakpoint) {
@@ -31,6 +27,15 @@ public class Section implements ISection {
 		this.breakpoint = breakpoint;
 	}
 	
+	
+	public void setFrom(ISection section) {
+		this.path = section.getPath();
+		this.start = section.getStart()==null ? null : new Location(section.getStart());
+		this.end = section.getEnd()==null ? null : new Location(section.getEnd());
+		this.dialect = section.getDialect();
+		this.breakpoint = section.isBreakpoint();
+	}
+
 	
 	public void setFrom(String path, Token start, Token end, Dialect dialect) {
 		this.path = path;

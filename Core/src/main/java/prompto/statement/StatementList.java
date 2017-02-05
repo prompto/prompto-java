@@ -40,7 +40,7 @@ public class StatementList extends LinkedList<IStatement> {
 		if(returnType==VoidType.instance()) {
 			for(IStatement statement : this) {
 				IType type = statement.check(context);
-				if(type!=VoidType.instance())
+				if(type!=null && type!=VoidType.instance())
 					context.getProblemListener().reportIllegalReturn(statement);
 			}
 			return returnType;
@@ -50,7 +50,7 @@ public class StatementList extends LinkedList<IStatement> {
 				types.put(returnType.getTypeNameId(), returnType);
 			for(IStatement statement : this) {
 				IType type = statement.check(context);
-				if(type!=VoidType.instance())
+				if(type!=null && type!=VoidType.instance()) // null indicates error
 					types.put(type.getTypeNameId(), type);
 			}
 			IType type = types.inferType(context);
@@ -68,6 +68,9 @@ public class StatementList extends LinkedList<IStatement> {
 				if(!(statement instanceof JavaNativeCall))
 					continue;
 				IType type = ((JavaNativeCall)statement).checkNative(context, returnType);
+				// TODO: remove the below workaround for unregistered native categories
+				if(type==null)
+					type = returnType;
 				if(type!=VoidType.instance())
 					context.getProblemListener().reportIllegalReturn(statement);
 			}

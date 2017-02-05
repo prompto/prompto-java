@@ -95,15 +95,16 @@ public class UnresolvedSelector extends SelectorExpression {
 			} finally {
 				context.setProblemListener(saved);
 			}
+			if(resolved==null)
+				context.getProblemListener().reportUnknownIdentifier(id.toString(), this);
 		}
-		if(resolved==null)
-			context.getProblemListener().reportUnknownIdentifier(id.toString(), this);
 		return resolved;
 	}
 
 	private IExpression resolveMember(Context context) {
 		try {
-			IExpression member = new MemberSelector(parent, id);
+			MemberSelector member = new MemberSelector(parent, id);
+			member.setFrom(this);
 			member.check(context);
 			return member;
 		} catch(SyntaxError e) {
@@ -119,7 +120,8 @@ public class UnresolvedSelector extends SelectorExpression {
 	        	((UnresolvedIdentifier) resolvedParent).checkMember(context);
 	        	resolvedParent = ((UnresolvedIdentifier) resolvedParent).getResolved();
 			}
-			IExpression method = new UnresolvedCall(new MethodSelector(resolvedParent, id), null);
+			UnresolvedCall method = new UnresolvedCall(new MethodSelector(resolvedParent, id), null);
+			method.setFrom(this);
 			method.check(context);
 			return method;
 		} catch(SyntaxError e) {

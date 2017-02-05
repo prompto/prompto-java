@@ -26,6 +26,8 @@ public class Location implements ILocation {
 	}
 	
 	public Location(ILocation location) {
+		if(location==null)
+			location = null;
 		this.index = location.getIndex();
 		this.line = location.getLine();
 		this.column = location.getColumn();

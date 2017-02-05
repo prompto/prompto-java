@@ -50,6 +50,9 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 		if(returnType==VoidType.instance()) {
 			// don't check return type
 			IType type = ((JavaNativeCall)statement).checkNative(context, returnType);
+			// TODO: remove the below workaround for unregistered native categories
+			if(type==null)
+				type = returnType;
 			if(type!=VoidType.instance())
 				context.getProblemListener().reportIllegalReturn(statement);
 			return returnType;

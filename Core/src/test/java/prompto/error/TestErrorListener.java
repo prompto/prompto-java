@@ -79,6 +79,15 @@ public class TestErrorListener {
 				+ "\tJava: return missing.Klass.MyMethod();\n"
 				, 2, "Unknown identifier: missing.Klass"); 
 	}
+	
+	
+	@Test
+	public void testUnknownMethodError() throws Exception {
+		checkProblem("define main as method receiving Text{} args doing:\n"
+				+ "\tprintLine \"Hello app\"\n"
+				, 1, "Unknown method: printLine");
+	}
+
 
 	private IProblem checkProblem(String prompto, int count, String firstError) throws Exception {
 		IProblem error = null;

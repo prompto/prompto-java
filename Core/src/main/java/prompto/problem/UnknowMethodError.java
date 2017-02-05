@@ -18,7 +18,7 @@ public class UnknowMethodError extends SyntaxProblemBase {
 	
 	@Override
 	public String getMessage() {
-		return "Unknown method:" + name;
+		return "Unknown method: " + name;
 	}
 
 }

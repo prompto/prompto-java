@@ -17,6 +17,7 @@ import prompto.expression.MethodSelector;
 import prompto.expression.UnresolvedIdentifier;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
+import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Context.MethodDeclarationMap;
@@ -106,17 +107,22 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 	
 	private IType resolveAndCheck(Context context) {
 		resolve(context);
-		return resolved.check(context);
+		if(resolved==null)
+			return null;
+		else
+			return resolved.check(context);
 	}
 	
 	
 	private void resolve(Context context) {
-		if(resolved!=null)
-			return;
-		if(caller instanceof UnresolvedIdentifier)
-			resolved = resolveUnresolvedIdentifier(context);
-		else if(caller instanceof MemberSelector)
-			resolved = resolveMember(context);
+		if(resolved==null) {
+			if(caller instanceof UnresolvedIdentifier)
+				resolved = resolveUnresolvedIdentifier(context);
+			else if(caller instanceof MemberSelector)
+				resolved = resolveMember(context);
+			if(resolved instanceof Section)
+				((Section)resolved).setFrom(this);
+		}
 	}
 	
 	private IExpression resolveUnresolvedIdentifier(Context context) {
@@ -129,9 +135,10 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 				return new MethodCall(new MethodSelector(id), assignments);
 		}
 		decl = context.getRegisteredDeclaration(IDeclaration.class, id);
-		if(decl==null)
-			context.getProblemListener().reportUnknownIdentifier(id.toString(), id);
-		if(decl instanceof CategoryDeclaration)
+		if(decl==null) {
+			context.getProblemListener().reportUnknownMethod(id.toString(), id);
+			return null;
+		} else if(decl instanceof CategoryDeclaration)
 			return new ConstructorExpression(new CategoryType(id), assignments);
 		else
 			return new MethodCall(new MethodSelector(id), assignments);

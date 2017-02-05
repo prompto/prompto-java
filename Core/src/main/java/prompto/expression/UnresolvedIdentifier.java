@@ -109,15 +109,17 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 			} finally {
 				context.setProblemListener(saved);
 			}
+			if(resolved==null)
+				context.getProblemListener().reportUnknownIdentifier(id.toString(), this);
+			else if(resolved instanceof Section)
+				((Section)resolved).setFrom(this);
 		}
-		if(resolved==null)
-			context.getProblemListener().reportUnknownIdentifier(id.toString(), this);
 		return resolved;
 	}
 
 	private IExpression resolveInstance(Context context) {
 		try {
-			IExpression exp = new InstanceExpression(id);
+			InstanceExpression exp = new InstanceExpression(id);
 			exp.check(context);
 			return exp;
 		} catch(SyntaxError e) {
@@ -128,7 +130,8 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 
 	private IExpression resolveMethod(Context context) {
 		try {
-			IExpression method = new MethodCall(new MethodSelector(id));
+			MethodCall method = new MethodCall(new MethodSelector(id));
+			method.setFrom(this);
 			method.check(context);
 			return method;
 		} catch(SyntaxError e) {

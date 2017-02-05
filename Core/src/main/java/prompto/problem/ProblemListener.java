@@ -49,7 +49,7 @@ public class ProblemListener implements ANTLRErrorListener, IProblemListener {
 	
 	@Override
 	public void reportUnknownIdentifier(String name, ISection section) {
-		throw new SyntaxError("Unknown identifier: " + name);
+		throw new SyntaxError("Unknown identifier: \"" + name + "\"");
 	}
 	
 	@Override
