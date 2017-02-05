@@ -27,6 +27,7 @@ public class DebugRequestClient implements IDebugger {
 
 	DebugEventServer listener;
 	Supplier<Boolean> remote;
+	boolean connected;
 	String host;
 	int port;
 	
@@ -50,15 +51,15 @@ public class DebugRequestClient implements IDebugger {
 		ConnectRequest request = new ConnectRequest();
 		request.setPort(listener.port);
 		int count = 0;
-		while(remote.get() && ++count<=100) try {
+		while(remote.get() && !connected && ++count<=100) try {
 			IDebugResponse ack = send(request, (e)->{});
-			if(ack!=null)
-				return;
+			connected = ack!=null;
 			Thread.sleep(100);
 		} catch(InterruptedException e) {
 			break;
 		}
-		throw new UnreachableException();
+		if(!connected)
+			throw new UnreachableException();
 	}
 	
 	private IDebugResponse send(IDebugRequest request) {
@@ -111,6 +112,8 @@ public class DebugRequestClient implements IDebugger {
 	}
 
 	private Status fetchStatus() {
+		if(!connected)
+			return Status.UNREACHABLE;
 		IDebugRequest request = new GetStatusRequest();
 		IDebugResponse response = send(request) ;
 		if(response instanceof GetStatusResponse)
@@ -141,6 +144,8 @@ public class DebugRequestClient implements IDebugger {
 
 	@Override
 	public boolean isStepping() {
+		if(!connected)
+			return false;
 		IDebugRequest request = new IsSteppingRequest();
 		IDebugResponse response = send(request) ;
 		if(response instanceof IsSteppingResponse)
@@ -151,6 +156,8 @@ public class DebugRequestClient implements IDebugger {
 
 	@Override
 	public boolean isSuspended() {
+		if(!connected)
+			return false;
 		return fetchStatus()==Status.SUSPENDED;
 	}
 
@@ -209,6 +216,7 @@ public class DebugRequestClient implements IDebugger {
 
 	@Override
 	public void terminate() {
+		connected = false;
 		listener.stopListening();
 	}
 
