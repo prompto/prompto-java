@@ -59,7 +59,7 @@ public abstract class Application {
 		} else if(argsMap.containsKey("test")) {
 			String testMethod = argsMap.get("test");
 			if(debugPort!=null)
-				;// TODO debugTest(debugPort, testMethod);
+				debugTest(debugPort, testMethod);
 			else
 				runTest(testMethod);
 		}
@@ -127,6 +127,25 @@ public abstract class Application {
 			Interpreter.interpretTests(getGlobalContext());
 		else
 			Interpreter.interpretTest(getGlobalContext(), new Identifier(testMethod), true);
+	}
+
+	private static void debugTest(int debugPort, String testMethod) throws Exception {
+		LocalDebugger debugger = new LocalDebugger();
+		DebugRequestServer server = startDebuggerThread(debugger, debugPort);
+		try {
+			debugTestMethod(debugger, testMethod);
+		} finally {
+			server.stopListening();
+		}
+	}
+
+	private static void debugTestMethod(LocalDebugger debugger, String testMethod) {
+		getGlobalContext().setDebugger(debugger);
+		try {
+			Interpreter.interpretTest(getGlobalContext(), new Identifier(testMethod), true); 
+		} finally {
+			getGlobalContext().notifyTerminated();
+		}
 	}
 
 	private static void runApplication(String mainMethod, Map<String, String> args) {
