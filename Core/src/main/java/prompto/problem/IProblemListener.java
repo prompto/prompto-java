@@ -11,6 +11,7 @@ public interface IProblemListener {
 	void reportUnknownIdentifier(String name, ISection section);
 	void reportUnknownAttribute(String name, ISection section);
 	void reportUnknownMethod(String name, ISection section);
+	void reportNoMatchingPrototype(String proto, ISection section);
 	void reportIllegalComparison(IType type, IType other, ISection section);
 	void reportIllegalMember(String name, ISection section);
 	void reportIllegalOperation(String message, ISection section);

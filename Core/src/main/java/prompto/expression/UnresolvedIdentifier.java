@@ -11,6 +11,8 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.parser.Section;
+import prompto.problem.IProblemListener;
+import prompto.problem.ProblemListener;
 import prompto.runtime.Context;
 import prompto.statement.MethodCall;
 import prompto.type.AnyType;
@@ -87,19 +89,25 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 
 	public IExpression resolve(Context context, boolean forMember) {
 		if(resolved==null) {
-			resolved = resolveSymbol(context);
-			if(resolved==null) {
-				if(Character.isUpperCase(id.toString().charAt(0))) {
-					if(forMember)
-						resolved = resolveType(context);
-					else
-						resolved = resolveConstructor(context);
-				}
+			IProblemListener saved = context.getProblemListener();
+			try {
+				context.setProblemListener(new ProblemListener());
+				resolved = resolveSymbol(context);
 				if(resolved==null) {
-					resolved = resolveMethod(context);
-					if(resolved==null)
-						resolved = resolveInstance(context);
+					if(Character.isUpperCase(id.toString().charAt(0))) {
+						if(forMember)
+							resolved = resolveType(context);
+						else
+							resolved = resolveConstructor(context);
+					}
+					if(resolved==null) {
+						resolved = resolveMethod(context);
+						if(resolved==null)
+							resolved = resolveInstance(context);
+					}
 				}
+			} finally {
+				context.setProblemListener(saved);
 			}
 		}
 		if(resolved==null)
@@ -113,6 +121,7 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 			exp.check(context);
 			return exp;
 		} catch(SyntaxError e) {
+			// ignore resolution errors
 			return null;
 		}
 	}
@@ -123,6 +132,7 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 			method.check(context);
 			return method;
 		} catch(SyntaxError e) {
+			// ignore resolution errors
 			return null;
 		}
 	}
@@ -133,6 +143,7 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 			method.check(context);
 			return method;
 		} catch(SyntaxError e) {
+			// ignore resolution errors
 			return null;
 		}
 	}

@@ -63,6 +63,11 @@ public class ProblemListener implements ANTLRErrorListener, IProblemListener {
 	}
 	
 	@Override
+	public void reportNoMatchingPrototype(String proto, ISection section) {
+		throw new SyntaxError("No matching prototype: \"" + proto + "\"");
+	}
+	
+	@Override
 	public void reportIllegalComparison(IType type, IType other, ISection section) {
 		throw new SyntaxError("Cannot compare " +type.getTypeName() + " to " + other.getTypeName());
 	}

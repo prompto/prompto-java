@@ -93,7 +93,10 @@ public class TestErrorListener {
 		assertEquals(count, listener.getCount());
 		if(count>0) {
 			error = listener.getProblems().iterator().next();
-			assertTrue(error.getMessage().startsWith(firstError));
+			String errorMsg = error.getMessage();
+			if(errorMsg.length()>firstError.length())
+				errorMsg = errorMsg.substring(0, firstError.length());
+			assertEquals(firstError, errorMsg);
 		}
 		return error;
 	}

@@ -6,6 +6,8 @@ import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
+import prompto.problem.IProblemListener;
+import prompto.problem.ProblemListener;
 import prompto.runtime.Context;
 import prompto.statement.UnresolvedCall;
 import prompto.type.AnyType;
@@ -84,9 +86,15 @@ public class UnresolvedSelector extends SelectorExpression {
 
 	public IExpression resolve(Context context, boolean forMember) {
 		if(resolved==null) {
-			resolved = resolveMethod(context);
-			if(resolved==null)
-				resolved = resolveMember(context);
+			IProblemListener saved = context.getProblemListener();
+			try {
+				context.setProblemListener(new ProblemListener());
+				resolved = resolveMethod(context);
+				if(resolved==null)
+					resolved = resolveMember(context);
+			} finally {
+				context.setProblemListener(saved);
+			}
 		}
 		if(resolved==null)
 			context.getProblemListener().reportUnknownIdentifier(id.toString(), this);
@@ -99,6 +107,7 @@ public class UnresolvedSelector extends SelectorExpression {
 			member.check(context);
 			return member;
 		} catch(SyntaxError e) {
+			// ignore resolution errors
 			return null;
 		}
 	}
@@ -114,6 +123,7 @@ public class UnresolvedSelector extends SelectorExpression {
 			method.check(context);
 			return method;
 		} catch(SyntaxError e) {
+			// ignore resolution errors
 			return null;
 		}
 	}

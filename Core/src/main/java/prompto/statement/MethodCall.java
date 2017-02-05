@@ -79,7 +79,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 			return false;
 		try {
 			MethodFinder finder = new MethodFinder(writer.getContext(), this);
-			IMethodDeclaration declaration = finder.findBestMethod(false);
+			IMethodDeclaration declaration = finder.findBestMethod(writer.getContext(), this, false);
 			/* if method is abstract, need to prefix with invoke */
 			if(declaration instanceof AbstractMethodDeclaration)
 				return true;
@@ -109,7 +109,9 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	@Override
 	public IType check(Context context) {
 		MethodFinder finder = new MethodFinder(context, this);
-		IMethodDeclaration declaration = finder.findBestMethod(false);
+		IMethodDeclaration declaration = finder.findBestMethod(context, this, false);
+		if(declaration==null)
+			return null;
 		Context local = method.newLocalCheckContext(context, declaration);
 		return check(declaration, context, local);
 	}
@@ -164,7 +166,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		MethodFinder finder = new MethodFinder(context, this);
-		Collection<IMethodDeclaration> declarations = finder.findPotentialMethods();
+		Collection<IMethodDeclaration> declarations = finder.findPotentialMethods(context, this);
 		switch(declarations.size()) {
 		case 0:
 			throw new SyntaxError("No matching prototype for:" + this.toString()); 
@@ -304,7 +306,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		} catch (PromptoError e) {
 		}
 		MethodFinder finder = new MethodFinder(context, this);
-		return finder.findBestMethod(true);
+		return finder.findBestMethod(context, this, true);
 	}
 
 }

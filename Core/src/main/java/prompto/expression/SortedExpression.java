@@ -224,7 +224,7 @@ public class SortedExpression implements IExpression {
 			ArgumentAssignmentList args = new ArgumentAssignmentList(arg);
 			MethodCall call = new MethodCall(new MethodSelector(methodName), args);
 			MethodFinder finder = new MethodFinder(context, call);
-			IMethodDeclaration decl = finder.findBestMethod(true);
+			IMethodDeclaration decl = finder.findBestMethod(context, methodName, true);
 			if(decl==null)
 				return null;
 			else

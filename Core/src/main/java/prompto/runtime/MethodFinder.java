@@ -13,6 +13,7 @@ import prompto.expression.MethodSelector;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Specificity;
+import prompto.parser.ISection;
 import prompto.statement.MethodCall;
 import prompto.type.CategoryType;
 import prompto.type.IType;
@@ -34,32 +35,34 @@ public class MethodFinder {
 		return methodCall.toString();
 	}
 	
-	public IMethodDeclaration findBestMethod(boolean checkInstance) {
-		Collection<IMethodDeclaration> compatibles = findCompatibleMethods(checkInstance);
-		switch(compatibles.size()) {
+	public IMethodDeclaration findBestMethod(Context context, ISection section, boolean checkInstance) {
+		Collection<IMethodDeclaration> methods = findCandidateMethods(context, section, checkInstance);
+		if(methods.size()==0) {
+			context.getProblemListener().reportUnknownMethod(methodCall.getMethod().getName(), section);
+			return null;
+		}
+		methods = filterCompatible(methods, checkInstance);
+		switch(methods.size()) {
 		case 0:
-			// TODO refine
-			throw new SyntaxError("No matching prototype for:" + methodCall.toString()); 
+			context.getProblemListener().reportNoMatchingPrototype(methodCall.toString(), section);
+			return null;
 		case 1:
-			return compatibles.iterator().next();
+			return methods.iterator().next();
 		default:
-			return findMostSpecific(compatibles,checkInstance);
+			return findMostSpecific(methods,checkInstance);
 		}
 	}
 	
-	public Collection<IMethodDeclaration> findCompatibleMethods(boolean checkInstance) {
+	public Collection<IMethodDeclaration> findCandidateMethods(Context context, ISection section, boolean checkInstance) {
 		MethodSelector selector = methodCall.getMethod();
-		Collection<IMethodDeclaration> candidates = selector.getCandidates(context, checkInstance);
-		if(candidates.size()==0)
-			throw new SyntaxError("No method named:" + methodCall.getMethod().getName()); 
-		return filterCompatible(candidates, checkInstance);
+		return selector.getCandidates(context, checkInstance);
 	}
 	
-	public Collection<IMethodDeclaration> findPotentialMethods() {
+	public Collection<IMethodDeclaration> findPotentialMethods(Context context, ISection section) {
 		MethodSelector selector = methodCall.getMethod();
 		Collection<IMethodDeclaration> candidates = selector.getCandidates(context, false);
 		if(candidates.size()==0)
-			throw new SyntaxError("No method named:" + methodCall.getMethod().getName()); 
+			context.getProblemListener().reportUnknownMethod(methodCall.getMethod().getName(), section);
 		return filterPotential(candidates);
 	}
 

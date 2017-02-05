@@ -112,6 +112,13 @@ public class ProblemCollector implements ANTLRErrorListener, IProblemListener {
 	}
 	
 	@Override
+	public void reportNoMatchingPrototype(String proto, ISection section) {
+		synchronized(problems) {
+			problems.add(new NoMatchingPrototypeError(proto, section));
+		}
+	}
+	
+	@Override
 	public void reportIllegalComparison(IType type, IType other, ISection section) {
 		synchronized(problems) {
 			problems.add(new IllegalComparisonError(type, other, section));
