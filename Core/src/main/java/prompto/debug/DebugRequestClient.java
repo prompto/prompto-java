@@ -104,7 +104,7 @@ public class DebugRequestClient implements IDebugger {
 	
 
 	@Override
-	public Status getStatus() {
+	public Status getStatus(IThread thread) {
 		if(!remote.get())
 			return Status.TERMINATED;
 		else
@@ -123,7 +123,7 @@ public class DebugRequestClient implements IDebugger {
 	}
 
 	@Override
-	public IStack<?> getStack() {
+	public IStack<?> getStack(IThread thread) {
 		IDebugRequest request = new GetStackRequest();
 		IDebugResponse response = send(request) ;
 		if(response instanceof GetStackResponse)
@@ -133,7 +133,7 @@ public class DebugRequestClient implements IDebugger {
 	}
 
 	@Override
-	public int getLine() {
+	public int getLine(IThread thread) {
 		IDebugRequest request = new GetLineRequest();
 		IDebugResponse response = send(request) ;
 		if(response instanceof GetLineResponse)
@@ -143,7 +143,7 @@ public class DebugRequestClient implements IDebugger {
 	}
 
 	@Override
-	public boolean isStepping() {
+	public boolean isStepping(IThread thread) {
 		if(!connected)
 			return false;
 		IDebugRequest request = new IsSteppingRequest();
@@ -155,8 +155,8 @@ public class DebugRequestClient implements IDebugger {
 	}
 
 	@Override
-	public boolean isSuspended() {
-		if(!connected)
+	public boolean isSuspended(IThread thread) {
+		if(!connected || isTerminated())
 			return false;
 		return fetchStatus()==Status.SUSPENDED;
 	}
@@ -168,7 +168,7 @@ public class DebugRequestClient implements IDebugger {
 	
 	@Override
 	public boolean isTerminated() {
-		return listener!=null && !listener.isListening();
+		return listener==null || !listener.isListening();
 	}
 
 	@Override
@@ -178,38 +178,38 @@ public class DebugRequestClient implements IDebugger {
 	}
 
 	@Override
-	public boolean canResume() {
-		return isSuspended();
+	public boolean canResume(IThread thread) {
+		return isSuspended(thread);
 	}
 
 	@Override
-	public boolean canSuspend() {
-		return !isSuspended();
+	public boolean canSuspend(IThread thread) {
+		return !isSuspended(thread);
 	}
 
 	@Override
-	public boolean canStepInto() {
-		return isSuspended();
+	public boolean canStepInto(IThread thread) {
+		return isSuspended(thread);
 	}
 
 	@Override
-	public boolean canStepOver() {
-		return isSuspended();
+	public boolean canStepOver(IThread thread) {
+		return isSuspended(thread);
 	}
 
 	@Override
-	public boolean canStepOut() {
-		return isSuspended();
+	public boolean canStepOut(IThread thread) {
+		return isSuspended(thread);
 	}
 
 	@Override
-	public void suspend() {
+	public void suspend(IThread thread) {
 		IDebugRequest request = new SuspendRequest();
 		send(request);
 	}
 
 	@Override
-	public void resume() {
+	public void resume(IThread thread) {
 		IDebugRequest request = new ResumeRequest();
 		send(request);
 	}
@@ -221,19 +221,19 @@ public class DebugRequestClient implements IDebugger {
 	}
 
 	@Override
-	public void stepInto() {
+	public void stepInto(IThread thread) {
 		IDebugRequest request = new StepIntoRequest();
 		send(request);
 	}
 
 	@Override
-	public void stepOut() {
+	public void stepOut(IThread thread) {
 		IDebugRequest request = new StepOutRequest();
 		send(request);
 	}
 
 	@Override
-	public void stepOver() {
+	public void stepOver(IThread thread) {
 		IDebugRequest request = new StepOverRequest();
 		send(request);
 	}

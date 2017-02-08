@@ -32,7 +32,8 @@ public class LocalDebugger implements IDebugger {
 		setStatus(Status.RUNNING);
 	}
 	
-	public Stack getStack() {
+	@Override
+	public Stack getStack(IThread thread) {
 		return stack;
 	}
 	
@@ -41,11 +42,13 @@ public class LocalDebugger implements IDebugger {
 		this.status = status;
 	}
 	
-	public Status getStatus() {
+	@Override
+	public Status getStatus(IThread thread) {
 		return status;
 	}
 	
-	public void suspend() {
+	@Override
+	public void suspend(IThread thread) {
 		suspended = true;
 	}
 	
@@ -147,50 +150,61 @@ public class LocalDebugger implements IDebugger {
 		}
 	}	
 	
-	public boolean isStepping() {
+	@Override
+	public boolean isStepping(IThread thread) {
 		return stepDepth!=0;
 	}
 	
-	public boolean canSuspend() {
-		return !isSuspended();
+	@Override
+	public boolean canSuspend(IThread thread) {
+		return !isSuspended(thread);
 	}
 
-	public boolean isSuspended() {
+	@Override
+	public boolean isSuspended(IThread thread) {
 		return status==Status.SUSPENDED;
 	}
 
-	public boolean canResume() {
-		return isSuspended();
+	@Override
+	public boolean canResume(IThread thread) {
+		return isSuspended(thread);
 	}
 	
-	public void resume() {
+	@Override
+	public void resume(IThread thread) {
 		stepDepth = 0;
 		doResume(ResumeReason.RESUMED);
 	}
 	
-	public boolean canStepOver() {
-		return isSuspended();
+	@Override
+	public boolean canStepOver(IThread thread) {
+		return isSuspended(thread);
 	}
 	
-	public void stepOver() {
+	@Override
+	public void stepOver(IThread thread) {
 		stepDepth = stack.size();
 		doResume(ResumeReason.STEP_OVER);
 	}
 
-	public boolean canStepInto() {
-		return isSuspended();
+	@Override
+	public boolean canStepInto(IThread thread) {
+		return isSuspended(thread);
 	}
 	
-	public void stepInto() {
+	@Override
+	public void stepInto(IThread thread) {
 		stepDepth = Math.abs(stepDepth) + 1;
 		doResume(ResumeReason.STEP_INTO);
 	}
 	
-	public boolean canStepOut() {
-		return isSuspended();
+	@Override
+	public boolean canStepOut(IThread thread) {
+		return isSuspended(thread);
 	}
 	
-	public void stepOut() {
+	@Override
+	public void stepOut(IThread thread) {
 		stepDepth = -(Math.abs(stepDepth) - 1);
 		doResume(ResumeReason.STEP_OUT);
 	}
@@ -210,7 +224,8 @@ public class LocalDebugger implements IDebugger {
 		}
 	}
 
-	public int getLine() {
+	@Override
+	public int getLine(IThread thread) {
 		IStackFrame frame = stack.peek();
 		return frame==null ? -1 : frame.getLine();
 	}

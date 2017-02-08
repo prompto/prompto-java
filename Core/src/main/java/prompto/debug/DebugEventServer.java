@@ -12,7 +12,7 @@ class DebugEventServer {
 	
 	Thread thread;
 	int port = 0;
-	boolean loop;
+	boolean listening;
 	IDebugEventListener listener;
 	
 	
@@ -32,8 +32,8 @@ class DebugEventServer {
 					lock.notify();
 				}
 				LocalDebugger.showEvent("DebugEventServer entering loop");
-				loop = true;
-				while(loop) {
+				listening = true;
+				while(listening) {
 					try {
 						Socket client = server.accept();
 						handleMessage(client);
@@ -58,7 +58,7 @@ class DebugEventServer {
 	}
 
 	public void stopListening() {
-		loop = false;
+		listening = false;
 		if(thread!=Thread.currentThread()) try {
 			thread.join();
 		} catch(InterruptedException e) {
@@ -88,7 +88,7 @@ class DebugEventServer {
 
 
 	public boolean isListening() {
-		return thread!=null && thread.isAlive();
+		return listening;
 	}
 
 
