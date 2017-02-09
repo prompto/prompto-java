@@ -179,12 +179,12 @@ public class DebugRequestClient implements IDebugger {
 
 	@Override
 	public boolean canResume(IThread thread) {
-		return isSuspended(thread);
+		return !isTerminated() && isSuspended(thread);
 	}
 
 	@Override
 	public boolean canSuspend(IThread thread) {
-		return !isSuspended(thread);
+		return !isTerminated() && !isSuspended(thread);
 	}
 
 	@Override
