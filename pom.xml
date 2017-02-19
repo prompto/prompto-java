@@ -39,7 +39,7 @@
 			</roles>
 		</developer>
 	</developers>
-	
+
 	<scm>
 		<connection>scm:git:https://github.com/prompto/prompto-java</connection>
 		<developerConnection>scm:git:https://github.com/prompto/prompto-java</developerConnection>
@@ -47,6 +47,33 @@
 		<url>https://github.com/prompto/prompto-java</url>
 	</scm>
 
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<version>3.2.0</version>
+				<executions>
+					<execution>
+						<id>bundle-manifest</id>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>manifest</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	
 	<profiles>
 		<profile>
 			<id>deploy</id>
