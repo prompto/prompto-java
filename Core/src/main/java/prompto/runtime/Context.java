@@ -47,10 +47,6 @@ import prompto.value.IValue;
 public class Context implements IContext {
 	
 	public static Context newGlobalContext() {
-		return newGlobalContext(null);
-	}
-	
-	public static Context newGlobalContext(ICodeStore store) {
 		Context context = new Context();
 		context.globals = context;
 		context.calling = null;
@@ -326,6 +322,18 @@ public class Context implements IContext {
 			return ObjectUtils.downcast(klass,actual);
 		else
 			return null;
+	}
+	
+	public void fetchAndRegisterAllDeclarations() {
+		ICodeStore store = ICodeStore.getInstance();
+		if(store==null)
+			return;
+		synchronized(this) {
+			Collection<String> names = store.fetchDeclarationNames();
+			names.stream()
+				.map(Identifier::new)
+				.forEach(this::fetchAndRegisterDeclaration);
+		}		
 	}
 
 	private IDeclaration fetchAndRegisterDeclaration(Identifier name) {

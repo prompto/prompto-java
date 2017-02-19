@@ -3,11 +3,16 @@ package prompto.code;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.DeclarationList;
@@ -114,8 +119,6 @@ public class ResourceCodeStore extends BaseCodeStore {
 
 
 	private ISection fetchInResource(ISection section) {
-		System.err.println("fetchInResource " + resourceName);
-		System.err.println("sectionPath " + section.getFilePath());
 		if(!resourceName.equals(section.getFilePath()))
 			return null;
 		loadResource();
@@ -136,12 +139,29 @@ public class ResourceCodeStore extends BaseCodeStore {
 			if(declarations==null)
 				tryLoadFile();
 			if(declarations==null)
+				tryLoadURL();
+			if(declarations==null)
 				throw new InvalidResourceError(resourceName);
 		} catch(PromptoError error) {
 			throw error;
 		}
 	}
 
+	private void tryLoadURL() {
+		try {
+			URL url = new URL(resourceName);
+			try(InputStream input = url.openStream()) {
+				parseResource(input);
+			} catch(PromptoError error) {
+				throw error;
+			} catch(Exception e) {
+				throw new InternalError(e);
+			}
+		} catch(MalformedURLException e) {
+			// nothing to do
+		}
+	}
+	
 	private void tryLoadFile() {
 		File file = new File(resourceName);
 		if(file.exists()) {
@@ -219,5 +239,18 @@ public class ResourceCodeStore extends BaseCodeStore {
 			.filter( (decl) -> ((AttributeDeclaration)decl).isStorable())
 			.forEach( (decl) -> columns.put(decl.getName(), (AttributeDeclaration)decl));
 		});
+	}
+	
+	@Override
+	public Collection<String> fetchDeclarationNames() {
+		loadResource();
+		if(next==null)
+			return declarations.keySet();
+		else {
+			Set<String> names = new HashSet<>();
+			names.addAll(declarations.keySet());
+			names.addAll(next.fetchDeclarationNames());
+			return names;
+		}
 	}
 }

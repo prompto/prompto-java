@@ -1,5 +1,7 @@
 package prompto.code;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -22,6 +24,11 @@ public abstract class BaseCodeStore implements ICodeStore {
 	@Override
 	public ISection findSection(ISection section) { 
 		return next==null ? null : next.findSection(section);
+	}
+	
+	@Override
+	public Collection<String> fetchDeclarationNames() {
+		return next==null ? Collections.emptyList() : next.fetchDeclarationNames();
 	}
 	
 	@Override

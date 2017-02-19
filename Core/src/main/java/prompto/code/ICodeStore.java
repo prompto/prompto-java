@@ -2,6 +2,7 @@ package prompto.code;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -132,4 +133,6 @@ public interface ICodeStore {
 	void collectStorableAttributes(Map<String, AttributeDeclaration> columns) throws PromptoError;
 
 	ISection findSection(ISection section);
+
+    Collection<String> fetchDeclarationNames();
 }

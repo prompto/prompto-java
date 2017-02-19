@@ -68,10 +68,9 @@ public class UpdatableCodeStore extends BaseCodeStore {
 		this.next = AppStoreBootstrapper.bootstrap(store, runtime, application, version, resourceNames);
 	}
 	
-	private ICodeStore bootstrapRuntime() {
+	protected ICodeStore bootstrapRuntime() {
 		System.out.println("Connecting to prompto runtime libraries...");
 		try {
-			
 			ICodeStore runtime = null;
 			Collection<String> resources = Libraries.getRuntimeResources();
 			if(resources!=null) for(String name : resources)
@@ -171,6 +170,12 @@ public class UpdatableCodeStore extends BaseCodeStore {
 
 	private void deleteRegisteringDeclarations(String name) {
 		registering.get().remove(name);
+	}
+	
+	@Override
+	public Collection<String> fetchDeclarationNames() {
+		// TODO Auto-generated method stub
+		return super.fetchDeclarationNames();
 	}
 	
 	@Override
