@@ -138,21 +138,6 @@
 			<artifactId>jackson-databind</artifactId>
 			<version>${jackson-version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.prompto</groupId>
-			<artifactId>Core</artifactId>
-			<version>0.0.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.prompto</groupId>
-			<artifactId>Runtime</artifactId>
-			<version>0.0.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.prompto</groupId>
-			<artifactId>CodeStore</artifactId>
-			<version>0.0.2</version>
-		</dependency>
 	</dependencies>
 
 	<reporting>
