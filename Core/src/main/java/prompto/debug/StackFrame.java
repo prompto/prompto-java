@@ -1,7 +1,12 @@
 package prompto.debug;
 
+import prompto.declaration.ConcreteMethodDeclaration;
+import prompto.declaration.IDeclaration;
+import prompto.declaration.NativeMethodDeclaration;
+import prompto.declaration.TestMethodDeclaration;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
+import prompto.statement.IStatement;
 
 public class StackFrame implements IStackFrame {
 	
@@ -12,6 +17,21 @@ public class StackFrame implements IStackFrame {
 	int endCharIndex;
 	
 	public StackFrame() {
+	}
+	
+	public StackFrame(Context context, String methodName, IDeclaration method) {
+		this(context, methodName, (ISection)method);
+		if(method instanceof ConcreteMethodDeclaration) {
+			IStatement stmt = ((ConcreteMethodDeclaration)method).getStatements().getFirst();
+			this.endCharIndex = stmt.getStart().getIndex() - 1;
+		} else if(method instanceof NativeMethodDeclaration) {
+			IStatement stmt = ((NativeMethodDeclaration)method).getStatements().getFirst();
+			this.endCharIndex = stmt.getStart().getIndex() - 1;
+		} else if(method instanceof TestMethodDeclaration) {
+			IStatement stmt = ((TestMethodDeclaration)method).getStatements().getFirst();
+			this.endCharIndex = stmt.getStart().getIndex() - 1;
+		} else
+			this.endCharIndex = this.startCharIndex + 1;
 	}
 	
 	public StackFrame(Context context, String methodName, ISection section) {
