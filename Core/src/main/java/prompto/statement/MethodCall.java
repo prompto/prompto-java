@@ -228,9 +228,14 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	public IValue interpret(Context context) throws PromptoError {
 		IMethodDeclaration declaration = findDeclaration(context);
 		Context local = method.newLocalContext(context, declaration);
-		declaration.registerArguments(local);
-		registerAssignments(context, local, declaration);
-		return declaration.interpret(local);
+		local.enterMethod(declaration);
+		try {
+			declaration.registerArguments(local);
+			registerAssignments(context, local, declaration);
+			return declaration.interpret(local);
+		} finally {
+			local.leaveMethod(declaration);
+		}
 	}
 
 	private void registerAssignments(Context context, Context local, IMethodDeclaration declaration) throws PromptoError {

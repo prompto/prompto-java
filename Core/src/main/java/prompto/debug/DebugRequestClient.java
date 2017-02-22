@@ -3,6 +3,8 @@ package prompto.debug;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -130,6 +132,12 @@ public class DebugRequestClient implements IDebugger {
 			return ((GetStackResponse)response).getStack();
 		else 
 			throw new UnreachableException();
+	}
+	
+	@Override
+	public Collection<IVariable> getVariables(IThread thread, IStackFrame frame) {
+		// TODO Auto-generated method stub
+		return Collections.emptyList();
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package prompto.debug;
 
+import java.util.Collection;
+
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.TerminatedError;
@@ -37,6 +39,12 @@ public class LocalDebugger implements IDebugger {
 		return stack;
 	}
 	
+	@Override
+	public Collection<IVariable> getVariables(IThread thread, IStackFrame frame) {
+		FullStackFrame sf = stack.find(frame);
+		return sf.getVariables();
+	}
+	
 	public void setStatus(Status status) {
 		showEvent("LocalDebugger sets status " + status);
 		this.status = status;
@@ -71,7 +79,7 @@ public class LocalDebugger implements IDebugger {
 	public void enterMethod(Context context, IDeclaration method) throws PromptoError {
 		terminateIfRequested();
 		this.context = context;
-		stack.push(new StackFrame(context, method.getId().toString(), method));
+		stack.push(new FullStackFrame(context, method.getId().toString(), method));
 		if(stack.size()>0 && stack.size()<=stepDepth)
 			suspend(SuspendReason.STEPPING, context, method);
 		else if(method.isBreakpoint())
@@ -95,7 +103,7 @@ public class LocalDebugger implements IDebugger {
 		terminateIfRequested();
 		this.context = context;
 		IStackFrame previous = stack.pop();
-		stack.push(new StackFrame(context, previous.getMethodName(), section));
+		stack.push(new FullStackFrame(context, previous.getMethodName(), section));
 		if(stack.size()>0 && stack.size()<=stepDepth)
 			suspend(SuspendReason.STEPPING, context, section);
 		else if(section.isBreakpoint())

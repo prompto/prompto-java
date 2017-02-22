@@ -1,5 +1,6 @@
 package prompto.debug;
 
+
 public interface IStackFrame {
 
 	String getFilePath();
@@ -7,4 +8,5 @@ public interface IStackFrame {
 	int getLine();
 	int getStartCharIndex();
 	int getEndCharIndex();
+
 }

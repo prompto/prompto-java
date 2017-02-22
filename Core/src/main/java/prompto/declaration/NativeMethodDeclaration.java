@@ -77,14 +77,11 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		context.enterMethod(this);
 		try {
 			return doInterpretNative(context);
 		} catch(NullPointerException e) {
 			e.printStackTrace();
 			throw new NullReferenceError();
-		} finally {
-			context.leaveMethod(this);
 		}
 	}
 	

@@ -2,6 +2,9 @@ package prompto.debug;
 
 import static org.junit.Assert.*;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 import org.junit.Test;
 
 import prompto.declaration.ConcreteMethodDeclaration;
@@ -181,6 +184,100 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		debugger.resume(null);	
 		join();
 		assertEquals("test123-ok", readOut());
+	}
+	
+	@Test
+	public void testVariables() throws Exception {
+		debugResource("debug/variables.pec");
+		start();
+		waitBlockedOrKilled();
+		assertEquals(Status.SUSPENDED, debugger.getStatus(null));
+		// main method
+		IStack<?> stack = debugger.getStack(null);
+		IStackFrame frame = stack.iterator().next();
+		Collection<IVariable> vars = debugger.getVariables(null, frame);
+		assertEquals(0, vars.size());
+		// next
+		debugger.stepOver(null);
+		waitBlockedOrKilled();
+		// printLevel1 "test"
+		stack = debugger.getStack(null);
+		frame = stack.iterator().next();
+		vars = debugger.getVariables(null, frame);	
+		assertEquals(1, vars.size());
+		IVariable var = vars.iterator().next();
+		assertEquals("options", var.getName());
+		assertEquals("Text{}", var.getTypeName());
+		assertEquals("{}", var.getValue().getValueString());
+		// next
+		debugger.stepInto(null);
+		waitBlockedOrKilled();
+		// printLevel1 method
+		stack = debugger.getStack(null);
+		frame = stack.iterator().next();
+		vars = debugger.getVariables(null, frame);	
+		assertEquals(0, vars.size());
+		// next
+		debugger.stepOver(null);
+		waitBlockedOrKilled();
+		// value = value + "1"
+		stack = debugger.getStack(null);
+		frame = stack.iterator().next();
+		vars = debugger.getVariables(null, frame);	
+		assertEquals(1, vars.size());
+		var = vars.iterator().next();
+		assertEquals("value", var.getName());
+		assertEquals("Text", var.getTypeName());
+		assertEquals("test", var.getValue().getValueString());
+		// next
+		debugger.stepOver(null);
+		waitBlockedOrKilled();
+		// other = "other"
+		stack = debugger.getStack(null);
+		frame = stack.iterator().next();
+		vars = debugger.getVariables(null, frame);	
+		assertEquals(1, vars.size());
+		var = vars.iterator().next();
+		assertEquals("value", var.getName());
+		assertEquals("Text", var.getTypeName());
+		assertEquals("test1", var.getValue().getValueString());
+		// next
+		debugger.stepOver(null);
+		waitBlockedOrKilled();
+		// value = value + other
+		stack = debugger.getStack(null);
+		frame = stack.iterator().next();
+		vars = debugger.getVariables(null, frame);	
+		assertEquals(2, vars.size());
+		Iterator<IVariable> iter = vars.iterator();
+		var = iter.next();
+		assertEquals("value", var.getName());
+		assertEquals("Text", var.getTypeName());
+		assertEquals("test1", var.getValue().getValueString());
+		var = iter.next();
+		assertEquals("other", var.getName());
+		assertEquals("Text", var.getTypeName());
+		assertEquals("other", var.getValue().getValueString());
+		// next
+		debugger.stepOver(null);
+		waitBlockedOrKilled();
+		// printLevel2 value
+		stack = debugger.getStack(null);
+		frame = stack.iterator().next();
+		vars = debugger.getVariables(null, frame);	
+		assertEquals(2, vars.size());
+		iter = vars.iterator();
+		var = iter.next();
+		assertEquals("value", var.getName());
+		assertEquals("Text", var.getTypeName());
+		assertEquals("test1other", var.getValue().getValueString());
+		var = iter.next();
+		assertEquals("other", var.getName());
+		assertEquals("Text", var.getTypeName());
+		assertEquals("other", var.getValue().getValueString());
+		
+		
+
 	}
 
 

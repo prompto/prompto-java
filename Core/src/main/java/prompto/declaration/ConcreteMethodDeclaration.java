@@ -184,12 +184,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		context.enterMethod(this);
-		try {
-			return statements.interpret(context);
-		} finally {
-			context.leaveMethod(this);
-		}
+		return statements.interpret(context);
 	}
 	
 	@Override

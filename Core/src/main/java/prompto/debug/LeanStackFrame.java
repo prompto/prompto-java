@@ -5,10 +5,10 @@ import prompto.declaration.IDeclaration;
 import prompto.declaration.NativeMethodDeclaration;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.parser.ISection;
-import prompto.runtime.Context;
 import prompto.statement.IStatement;
 
-public class StackFrame implements IStackFrame {
+/* designed to be serialized in JSON */
+public class LeanStackFrame implements IStackFrame {
 	
 	String methodName;
 	String filePath;
@@ -16,11 +16,11 @@ public class StackFrame implements IStackFrame {
 	int startCharIndex;
 	int endCharIndex;
 	
-	public StackFrame() {
+	public LeanStackFrame() {
 	}
 	
-	public StackFrame(Context context, String methodName, IDeclaration method) {
-		this(context, methodName, (ISection)method);
+	public LeanStackFrame(String methodName, IDeclaration method) {
+		this(methodName, (ISection)method);
 		if(method instanceof ConcreteMethodDeclaration) {
 			IStatement stmt = ((ConcreteMethodDeclaration)method).getStatements().getFirst();
 			this.endCharIndex = stmt.getStart().getIndex() - 1;
@@ -34,7 +34,7 @@ public class StackFrame implements IStackFrame {
 			this.endCharIndex = this.startCharIndex + 1;
 	}
 	
-	public StackFrame(Context context, String methodName, ISection section) {
+	public LeanStackFrame(String methodName, ISection section) {
 		this.methodName = methodName;
 		this.filePath = section.getFilePath();
 		this.line = section.getStart().getLine();
@@ -42,7 +42,7 @@ public class StackFrame implements IStackFrame {
 		this.endCharIndex = section.getEnd().getIndex();
 	}
 	
-	public StackFrame(IStackFrame frame) {
+	public LeanStackFrame(IStackFrame frame) {
 		this.methodName = frame.getMethodName();
 		this.filePath = frame.getFilePath();
 		this.line = frame.getLine();
@@ -79,13 +79,14 @@ public class StackFrame implements IStackFrame {
 	public boolean equals(Object obj) {
 		if(obj==this)
 			return true;
-		if(!(obj instanceof StackFrame))
+		if(!(obj instanceof IStackFrame))
 			return false;
-		StackFrame sf = (StackFrame)obj;
-		return this.methodName.equals(sf.methodName)
-				&& this.filePath.equals(sf.filePath)
-				&& this.line==sf.line
-				&& this.startCharIndex==sf.startCharIndex
-				&& this.endCharIndex==sf.endCharIndex;
+		IStackFrame sf = (IStackFrame)obj;
+		return this.methodName.equals(sf.getMethodName())
+				&& this.filePath.equals(sf.getFilePath())
+				&& this.line==sf.getLine()
+				&& this.startCharIndex==sf.getStartCharIndex()
+				&& this.endCharIndex==sf.getEndCharIndex();
 	}
+
 }

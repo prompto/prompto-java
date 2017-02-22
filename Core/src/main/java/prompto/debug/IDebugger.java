@@ -1,5 +1,7 @@
 package prompto.debug;
 
+import java.util.Collection;
+
 import prompto.parser.ISection;
 
 public interface IDebugger {
@@ -26,4 +28,5 @@ public interface IDebugger {
 	void stepInto(IThread thread);
 	void stepOut(IThread thread);
 	void stepOver(IThread thread);
+	Collection<IVariable> getVariables(IThread thread, IStackFrame frame);
 }

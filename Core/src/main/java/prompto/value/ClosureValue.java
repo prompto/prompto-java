@@ -22,11 +22,17 @@ public class ClosureValue extends BaseValue {
 	}
 	
 	public IValue interpret(Context context) throws PromptoError {
-		Context parentMost = this.context.getParentMostContext();
-		parentMost.setParentContext(context);
-		IValue result = getMethod().interpret(this.context);
-		parentMost.setParentContext(null);
-		return result;
+		IMethodDeclaration declaration = getMethod();
+		this.context.enterMethod(declaration);
+		try {
+			Context parentMost = this.context.getParentMostContext();
+			parentMost.setParentContext(context);
+			IValue result = declaration.interpret(this.context);
+			parentMost.setParentContext(null);
+			return result;
+		} finally {
+			this.context.leaveMethod(declaration);
+		}
 	}
 
 	public Identifier getName() {

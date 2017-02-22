@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import prompto.code.ICodeStore;
@@ -62,11 +63,45 @@ public class Context implements IContext {
 	LocalDebugger debugger; 
 	IProblemListener problemListener;
 	
-	Map<Identifier,IDeclaration> declarations = new HashMap<Identifier, IDeclaration>();
-	Map<Identifier,TestMethodDeclaration> tests = new HashMap<Identifier, TestMethodDeclaration>();
-	Map<Identifier,INamed> instances = new HashMap<Identifier, INamed>();
-	Map<Identifier,IValue> values = new HashMap<Identifier, IValue>();
-	Map<Type, NativeCategoryDeclaration> nativeBindings = new HashMap<Type, NativeCategoryDeclaration>();
+	Map<Identifier,IDeclaration> declarations = new HashMap<>();
+	Map<Identifier,TestMethodDeclaration> tests = new HashMap<>();
+	Instances instances = new Instances();
+	Map<Identifier,IValue> values = new HashMap<>();
+	Map<Type, NativeCategoryDeclaration> nativeBindings = new HashMap<>();
+	
+	static class Instances {
+		
+		Map<Identifier,INamed> map = new HashMap<Identifier, INamed>();
+		List<INamed> list = new ArrayList<>();
+		
+		public boolean isEmpty() {
+			return map.isEmpty();
+		}
+
+		public Set<Identifier> keySet() {
+			return map.keySet();
+		}
+
+		public void remove(Identifier id) {
+			INamed named = map.remove(id);
+			list.remove(named);
+		}
+
+		public INamed get(Identifier name) {
+			return map.get(name);
+		}
+
+		public void put(Identifier id, INamed value) {
+			INamed previous = map.put(id, value);
+			if(previous!=null)
+				list.remove(previous);
+			list.add(value);
+		}
+
+		public Collection<INamed> values() {
+			return list;
+		}
+	}
 	
 	protected Context() {
 	}
@@ -573,6 +608,10 @@ public class Context implements IContext {
 				throw new SyntaxError("Duplicate name: \"" + value.getId() + "\"");
 		}
 		instances.put(value.getId(), value);
+	}
+	
+	public Collection<INamed> getInstances() {
+		return instances.values();
 	}
 	
 

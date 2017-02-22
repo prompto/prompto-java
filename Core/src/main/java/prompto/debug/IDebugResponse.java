@@ -75,7 +75,7 @@ public interface IDebugResponse {
 	}
 	
 	@SuppressWarnings("serial")
-	static class ArrayStack extends ArrayList<StackFrame> implements IStack<StackFrame> {
+	static class ArrayStack extends ArrayList<LeanStackFrame> implements IStack<LeanStackFrame> {
 		
 	}
 	
@@ -89,7 +89,7 @@ public interface IDebugResponse {
 
 		public GetStackResponse(IStack<?> stack) {
 			this.stack = new ArrayStack();
-			stack.forEach((f)->this.stack.add(new StackFrame(f)));
+			stack.forEach((f)->this.stack.add(new LeanStackFrame(f)));
 		}
 		
 		@Override

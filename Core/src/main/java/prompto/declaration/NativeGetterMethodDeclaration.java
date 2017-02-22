@@ -31,12 +31,7 @@ public class NativeGetterMethodDeclaration extends GetterMethodDeclaration {
 
 	@Override
 	public IValue interpret(Context context) {
-		context.enterMethod(this);
-		try {
-			return doInterpretNative(context);
-		} finally {
-			context.leaveMethod(this);
-		}
+		return doInterpretNative(context);
 	}
 	
 	private IValue doInterpretNative(Context context) {
