@@ -1,6 +1,7 @@
 package prompto.debug;
 
 import java.util.Collection;
+import java.util.Collections;
 
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
@@ -15,7 +16,7 @@ public class LocalDebugger implements IDebugger {
 	}
 	
 	
-	Stack stack = new Stack();
+	ServerStack stack = new ServerStack();
 	Object lock = new Object();
 	Status status = Status.STARTING;
 	ResumeReason resumeReason;
@@ -35,14 +36,19 @@ public class LocalDebugger implements IDebugger {
 	}
 	
 	@Override
-	public Stack getStack(IThread thread) {
+	public ServerStack getStack(IThread thread) {
 		return stack;
 	}
 	
 	@Override
-	public Collection<IVariable> getVariables(IThread thread, IStackFrame frame) {
-		FullStackFrame sf = stack.find(frame);
-		return sf.getVariables();
+	public Collection<? extends IVariable> getVariables(IThread thread, IStackFrame frame) {
+		ServerStackFrame sf = stack.find(frame);
+		if(sf!=null)
+			return sf.getVariables();
+		// need some debug info
+		System.err.println("Could not find frame: " +frame.toString() + " in stack:");
+		stack.forEach(f->System.err.println(f.toString()));
+		return Collections.emptyList();
 	}
 	
 	public void setStatus(Status status) {
@@ -79,7 +85,7 @@ public class LocalDebugger implements IDebugger {
 	public void enterMethod(Context context, IDeclaration method) throws PromptoError {
 		terminateIfRequested();
 		this.context = context;
-		stack.push(new FullStackFrame(context, method.getId().toString(), method));
+		stack.push(new ServerStackFrame(context, method.getId().toString(), stack.size(), method));
 		if(stack.size()>0 && stack.size()<=stepDepth)
 			suspend(SuspendReason.STEPPING, context, method);
 		else if(method.isBreakpoint())
@@ -103,7 +109,7 @@ public class LocalDebugger implements IDebugger {
 		terminateIfRequested();
 		this.context = context;
 		IStackFrame previous = stack.pop();
-		stack.push(new FullStackFrame(context, previous.getMethodName(), section));
+		stack.push(new ServerStackFrame(context, previous.getMethodName(), stack.size(), section));
 		if(stack.size()>0 && stack.size()<=stepDepth)
 			suspend(SuspendReason.STEPPING, context, section);
 		else if(section.isBreakpoint())

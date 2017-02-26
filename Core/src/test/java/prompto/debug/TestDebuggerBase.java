@@ -195,7 +195,7 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		// main method
 		IStack<?> stack = debugger.getStack(null);
 		IStackFrame frame = stack.iterator().next();
-		Collection<IVariable> vars = debugger.getVariables(null, frame);
+		Collection<? extends IVariable> vars = frame.getVariables();
 		assertEquals(0, vars.size());
 		// next
 		debugger.stepOver(null);
@@ -203,7 +203,7 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		// printLevel1 "test"
 		stack = debugger.getStack(null);
 		frame = stack.iterator().next();
-		vars = debugger.getVariables(null, frame);	
+		vars = frame.getVariables();	
 		assertEquals(1, vars.size());
 		IVariable var = vars.iterator().next();
 		assertEquals("options", var.getName());
@@ -215,7 +215,7 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		// printLevel1 method
 		stack = debugger.getStack(null);
 		frame = stack.iterator().next();
-		vars = debugger.getVariables(null, frame);	
+		vars = frame.getVariables();	
 		assertEquals(0, vars.size());
 		// next
 		debugger.stepOver(null);
@@ -223,7 +223,7 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		// value = value + "1"
 		stack = debugger.getStack(null);
 		frame = stack.iterator().next();
-		vars = debugger.getVariables(null, frame);	
+		vars = frame.getVariables();	
 		assertEquals(1, vars.size());
 		var = vars.iterator().next();
 		assertEquals("value", var.getName());
@@ -235,7 +235,7 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		// other = "other"
 		stack = debugger.getStack(null);
 		frame = stack.iterator().next();
-		vars = debugger.getVariables(null, frame);	
+		vars = frame.getVariables();	
 		assertEquals(1, vars.size());
 		var = vars.iterator().next();
 		assertEquals("value", var.getName());
@@ -247,9 +247,9 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		// value = value + other
 		stack = debugger.getStack(null);
 		frame = stack.iterator().next();
-		vars = debugger.getVariables(null, frame);	
+		vars = frame.getVariables();	
 		assertEquals(2, vars.size());
-		Iterator<IVariable> iter = vars.iterator();
+		Iterator<? extends IVariable> iter = vars.iterator();
 		var = iter.next();
 		assertEquals("value", var.getName());
 		assertEquals("Text", var.getTypeName());
@@ -264,7 +264,7 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		// printLevel2 value
 		stack = debugger.getStack(null);
 		frame = stack.iterator().next();
-		vars = debugger.getVariables(null, frame);	
+		vars = frame.getVariables();	
 		assertEquals(2, vars.size());
 		iter = vars.iterator();
 		var = iter.next();
@@ -275,9 +275,6 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		assertEquals("other", var.getName());
 		assertEquals("Text", var.getTypeName());
 		assertEquals("other", var.getValue().getValueString());
-		
-		
-
 	}
 
 

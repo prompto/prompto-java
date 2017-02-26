@@ -1,73 +1,73 @@
 package prompto.debug;
 
-import prompto.declaration.ConcreteMethodDeclaration;
-import prompto.declaration.IDeclaration;
-import prompto.declaration.NativeMethodDeclaration;
-import prompto.declaration.TestMethodDeclaration;
-import prompto.parser.ISection;
-import prompto.statement.IStatement;
+import java.util.Collection;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /* designed to be serialized in JSON */
 public class LeanStackFrame implements IStackFrame {
 	
 	String methodName;
 	String filePath;
+	int index;
 	int line;
 	int startCharIndex;
 	int endCharIndex;
+	boolean hasVariables;
 	
 	public LeanStackFrame() {
-	}
-	
-	public LeanStackFrame(String methodName, IDeclaration method) {
-		this(methodName, (ISection)method);
-		if(method instanceof ConcreteMethodDeclaration) {
-			IStatement stmt = ((ConcreteMethodDeclaration)method).getStatements().getFirst();
-			this.endCharIndex = stmt.getStart().getIndex() - 1;
-		} else if(method instanceof NativeMethodDeclaration) {
-			IStatement stmt = ((NativeMethodDeclaration)method).getStatements().getFirst();
-			this.endCharIndex = stmt.getStart().getIndex() - 1;
-		} else if(method instanceof TestMethodDeclaration) {
-			IStatement stmt = ((TestMethodDeclaration)method).getStatements().getFirst();
-			this.endCharIndex = stmt.getStart().getIndex() - 1;
-		} else
-			this.endCharIndex = this.startCharIndex + 1;
-	}
-	
-	public LeanStackFrame(String methodName, ISection section) {
-		this.methodName = methodName;
-		this.filePath = section.getFilePath();
-		this.line = section.getStart().getLine();
-		this.startCharIndex = section.getStart().getIndex();
-		this.endCharIndex = section.getEnd().getIndex();
 	}
 	
 	public LeanStackFrame(IStackFrame frame) {
 		this.methodName = frame.getMethodName();
 		this.filePath = frame.getFilePath();
+		this.index = frame.getIndex();
 		this.line = frame.getLine();
 		this.startCharIndex = frame.getStartCharIndex();
 		this.endCharIndex = frame.getEndCharIndex();
+		this.hasVariables = frame.hasVariables();
 	}
 
+	@Override
 	public String getMethodName() {
 		return methodName;
 	}
 	
+	@Override
 	public String getFilePath() {
 		return filePath;
 	}
 	
+	@Override
+	public int getIndex() {
+		return index;
+	}
+	
+	@Override
 	public int getLine() {
 		return line;
 	}
 	
+	@Override
 	public int getEndCharIndex() {
 		return endCharIndex;
 	}
 	
+	@Override
 	public int getStartCharIndex() {
 		return startCharIndex;
+	}
+	
+	@Override
+	public boolean hasVariables() {
+		return hasVariables;
+	}
+	
+	@JsonIgnore
+	@Override
+	public Collection<? extends IVariable> getVariables() {
+		throw new UnsupportedOperationException("Must override!");
 	}
 	
 	@Override
@@ -75,6 +75,10 @@ public class LeanStackFrame implements IStackFrame {
 		return methodName + ", line " + Integer.toString(line);
 	}
 	
+	public String toJson() {
+		return new ObjectMapper().valueToTree(this).toString();
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if(obj==this)
@@ -82,11 +86,7 @@ public class LeanStackFrame implements IStackFrame {
 		if(!(obj instanceof IStackFrame))
 			return false;
 		IStackFrame sf = (IStackFrame)obj;
-		return this.methodName.equals(sf.getMethodName())
-				&& this.filePath.equals(sf.getFilePath())
-				&& this.line==sf.getLine()
-				&& this.startCharIndex==sf.getStartCharIndex()
-				&& this.endCharIndex==sf.getEndCharIndex();
+		return this.index==sf.getIndex();
 	}
 
 }

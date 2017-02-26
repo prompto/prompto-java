@@ -1,6 +1,7 @@
 package prompto.debug;
 
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -74,22 +75,16 @@ public interface IDebugResponse {
 
 	}
 	
-	@SuppressWarnings("serial")
-	static class ArrayStack extends ArrayList<LeanStackFrame> implements IStack<LeanStackFrame> {
-		
-	}
-	
 	public static class GetStackResponse implements IDebugResponse {
 
-		ArrayStack stack;
+		LeanStack stack;
 		
 		public GetStackResponse() {
-			this.stack = new ArrayStack();
+			this.stack = new LeanStack();
 		}
 
 		public GetStackResponse(IStack<?> stack) {
-			this.stack = new ArrayStack();
-			stack.forEach((f)->this.stack.add(new LeanStackFrame(f)));
+			this.stack = new LeanStack(stack);
 		}
 		
 		@Override
@@ -97,12 +92,42 @@ public interface IDebugResponse {
 			return Type.GET_STACK;
 		}
 
-		public ArrayStack getStack() {
+		public LeanStack getStack() {
 			return stack;
 		}
 		
-		public void setStack(ArrayStack stack) {
+		public void setStack(LeanStack stack) {
 			this.stack = stack;
+		}
+
+	}
+	
+	public static class GetVariablesResponse implements IDebugResponse {
+
+		LeanVariableList variables;
+		
+		public GetVariablesResponse() {
+			this.variables = new LeanVariableList();
+		}
+
+		public GetVariablesResponse(Collection<? extends IVariable> variables) {
+			this.variables = new LeanVariableList();
+			this.variables.addAll(variables.stream()
+					.map(LeanVariable::new)
+					.collect(Collectors.toList()));
+		}
+		
+		@Override
+		public Type getType() {
+			return Type.GET_VARIABLES;
+		}
+
+		public LeanVariableList getVariables() {
+			return variables;
+		}
+		
+		public void setVariables(LeanVariableList variables) {
+			this.variables = variables;
 		}
 
 	}
@@ -139,6 +164,7 @@ public interface IDebugResponse {
 		GET_STATUS(GetStatusResponse.class),
 		GET_LINE(GetLineResponse.class),
 		GET_STACK(GetStackResponse.class),
+		GET_VARIABLES(GetVariablesResponse.class),
 		IS_STEPPING(IsSteppingResponse.class)
 		;
 		

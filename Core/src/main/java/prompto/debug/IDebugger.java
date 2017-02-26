@@ -28,5 +28,5 @@ public interface IDebugger {
 	void stepInto(IThread thread);
 	void stepOut(IThread thread);
 	void stepOver(IThread thread);
-	Collection<IVariable> getVariables(IThread thread, IStackFrame frame);
+	Collection<? extends IVariable> getVariables(IThread thread, IStackFrame frame);
 }

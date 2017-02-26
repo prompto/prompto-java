@@ -2,6 +2,9 @@ package prompto.debug;
 
 import static prompto.debug.IDebugResponse.*;
 import static prompto.debug.IDebugRequest.Type.*;
+
+import java.util.Collection;
+
 import prompto.parser.ISection;
 import prompto.parser.Section;
 
@@ -51,6 +54,12 @@ public interface IDebugRequest {
 	
 	public static class GetStatusRequest implements IDebugRequest {
 
+		public GetStatusRequest() {
+		}
+
+		public GetStatusRequest(IThread thread) {
+		}
+
 		@Override
 		public GetStatusResponse execute(IDebugger debugger) {
 			Status status = debugger.getStatus(null);
@@ -64,6 +73,12 @@ public interface IDebugRequest {
 	}
 	
 	public static class GetLineRequest implements IDebugRequest {
+
+		public GetLineRequest() {
+		}
+
+		public GetLineRequest(IThread thread) {
+		}
 
 		@Override
 		public GetLineResponse execute(IDebugger debugger) {
@@ -81,6 +96,12 @@ public interface IDebugRequest {
 
 	public static class GetStackRequest implements IDebugRequest {
 
+		public GetStackRequest() {
+		}
+
+		public GetStackRequest(IThread thread) {
+		}
+
 		@Override
 		public GetStackResponse execute(IDebugger debugger) {
 			LocalDebugger.showEvent("before stack");
@@ -92,6 +113,39 @@ public interface IDebugRequest {
 		@Override
 		public Type getType() {
 			return GET_STACK;
+		}
+	}
+
+	public static class GetVariablesRequest implements IDebugRequest {
+
+		LeanStackFrame frame;
+		
+		public GetVariablesRequest() {
+		}
+
+		public GetVariablesRequest(IThread thread, IStackFrame frame) {
+			this.frame = new LeanStackFrame(frame);
+		}
+
+		public void setFrame(LeanStackFrame frame) {
+			this.frame = frame;
+		}
+		
+		public LeanStackFrame getFrame() {
+			return frame;
+		}
+
+		@Override
+		public GetVariablesResponse execute(IDebugger debugger) {
+			LocalDebugger.showEvent("before variables");
+			Collection<? extends IVariable> variables = debugger.getVariables(null, frame);
+			LocalDebugger.showEvent("after variables");
+			return new GetVariablesResponse(variables);
+		}
+		
+		@Override
+		public Type getType() {
+			return GET_VARIABLES;
 		}
 	}
 
@@ -129,6 +183,12 @@ public interface IDebugRequest {
 	
 	public static class SuspendRequest implements IDebugRequest {
 
+		public SuspendRequest() {
+		}
+
+		public SuspendRequest(IThread thread) {
+		}
+
 		@Override
 		public VoidResponse execute(IDebugger debugger) {
 			LocalDebugger.showEvent("before suspend");
@@ -145,6 +205,12 @@ public interface IDebugRequest {
 
 	public static class ResumeRequest implements IDebugRequest {
 
+		public ResumeRequest() {
+		}
+
+		public ResumeRequest(IThread thread) {
+		}
+
 		@Override
 		public VoidResponse execute(IDebugger debugger) {
 			LocalDebugger.showEvent("before resume");
@@ -160,6 +226,12 @@ public interface IDebugRequest {
 	}
 
 	public static class IsSteppingRequest implements IDebugRequest {
+
+		public IsSteppingRequest() {
+		}
+
+		public IsSteppingRequest(IThread thread) {
+		}
 
 		@Override
 		public IsSteppingResponse execute(IDebugger debugger) {
@@ -193,6 +265,12 @@ public interface IDebugRequest {
 
 	public static class StepIntoRequest implements IDebugRequest {
 
+		public StepIntoRequest() {
+		}
+
+		public StepIntoRequest(IThread thread) {
+		}
+
 		@Override
 		public VoidResponse execute(IDebugger debugger) {
 			LocalDebugger.showEvent("before step into");
@@ -208,6 +286,12 @@ public interface IDebugRequest {
 	}
 
 	public static class StepOutRequest implements IDebugRequest {
+
+		public StepOutRequest() {
+		}
+
+		public StepOutRequest(IThread thread) {
+		}
 
 		@Override
 		public VoidResponse execute(IDebugger debugger) {
@@ -228,6 +312,7 @@ public interface IDebugRequest {
 		GET_STATUS(GetStatusRequest.class),
 		GET_LINE(GetLineRequest.class),
 		GET_STACK(GetStackRequest.class),
+		GET_VARIABLES(GetVariablesRequest.class),
 		INSTALL_BREAKPOINT(InstallBreakpointRequest.class),
 		SUSPEND(SuspendRequest.class),
 		RESUME(ResumeRequest.class),
