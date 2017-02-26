@@ -75,14 +75,10 @@ public class Interpreter {
 	}
 	
 	public static void interpretMethod(Context context, Identifier methodName, IExpression args) {
-		try {
-			IMethodDeclaration method = locateMethod(context, methodName, args);
-			ArgumentAssignmentList assignments = buildAssignments(method, args);
-			MethodCall call = new MethodCall(new MethodSelector(methodName), assignments);
-			call.interpret(context);	
-		} finally {
-			context.notifyTerminated();
-		}
+		IMethodDeclaration method = locateMethod(context, methodName, args);
+		ArgumentAssignmentList assignments = buildAssignments(method, args);
+		MethodCall call = new MethodCall(new MethodSelector(methodName), assignments);
+		call.interpret(context);	
 	}
 
 	public static void interpretScript(Context context, String cmdLineArgs) throws PromptoError {

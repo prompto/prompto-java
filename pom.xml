@@ -47,10 +47,15 @@
 		<url>https://github.com/prompto/prompto-java</url>
 	</scm>
 
-	<build>
+	<properties>
+    	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  	</properties>
+  
+  	<build>
 		<plugins>
 			<plugin>
 				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.0.2</version>
 				<configuration>
 					<archive>
 						<manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>

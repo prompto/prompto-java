@@ -171,7 +171,7 @@ public abstract class Application {
 		}
 	}
 
-	private static DebugRequestServer startDebuggerThread(LocalDebugger debugger, int debugPort) throws Exception {
+	public static DebugRequestServer startDebuggerThread(LocalDebugger debugger, int debugPort) throws Exception {
 		DebugRequestServer server = new DebugRequestServer(debugger, debugPort);
 		server.startListening();
 		return server;
