@@ -255,13 +255,9 @@ public class Context implements IContext {
 	}
 	
 	public void unregister(String path) {
-		if(globals!=this)
-			globals.unregister(path);
-		else {
-			unregisterDeclarations(path);
-			unregisterValues(path);
-			unregisterTests(path);
-		}
+		unregisterDeclarations(path);
+		unregisterValues(path);
+		unregisterTests(path);
 	}
 	
 	private void unregisterValues(String path) {
