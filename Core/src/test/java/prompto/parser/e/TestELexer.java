@@ -11,6 +11,15 @@ import prompto.parser.ELexer;
 public class TestELexer extends BaseELexerTest {
 	
 	@Test
+	public void testTokens() throws Exception {
+		String actual = parseTokenNamesFromString("{\n");
+		String expected = tokenNamesAsString(new int[] { ELexer.LCURL, ELexer.LF});
+		assertEquals(expected,actual);
+		
+	}
+	
+
+	@Test
 	public void testIntegerAttribute() {
 		String actual = parseTokenNamesFromString("define id as: Integer attribute");
 		String expected = tokenNamesAsString(new int[] { ELexer.DEFINE, ELexer.VARIABLE_IDENTIFIER, 
