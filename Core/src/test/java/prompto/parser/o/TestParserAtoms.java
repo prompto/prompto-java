@@ -21,12 +21,12 @@ import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteMethodDeclaration;
 import prompto.declaration.NativeMethodDeclaration;
-import prompto.expression.NativeSymbol;
-import prompto.expression.PlusExpression;
 import prompto.expression.ConstructorExpression;
 import prompto.expression.IExpression;
 import prompto.expression.InstanceExpression;
 import prompto.expression.MemberSelector;
+import prompto.expression.NativeSymbol;
+import prompto.expression.PlusExpression;
 import prompto.expression.TernaryExpression;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
@@ -484,6 +484,20 @@ public class TestParserAtoms {
 		literal.toDialect(writer);
 		assertEquals("{\"john\":1234, eric:5678}", writer.toString()); // TODO: DictLiteral
 	}
+	
+	@Test
+	public void testMultiLineDictLiteral() throws Exception {
+		String statement = "{ \"john\" : 1234,\n \t\"eric\" : 5678 }";
+		OTestParser parser = new OTestParser(statement);
+		IExpression literal = parser.parse_literal_expression();
+		assertNotNull(literal);
+		assertTrue(literal instanceof DictLiteral);
+		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
+		literal.toDialect(writer);
+		assertEquals("{\"john\":1234, \"eric\":5678}", writer.toString()); // TODO DictLiteral
+	}
+
+
 	
 	@Test
 	public void testSimpleDate() throws Exception {
