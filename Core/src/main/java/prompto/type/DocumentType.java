@@ -83,5 +83,13 @@ public class DocumentType extends NativeType {
 		} else
 			throw new UnsupportedOperationException();
 	}
+	
+	@Override
+	public IValue convertJavaValueToIValue(Context context, Object value) {
+		if(value instanceof PromptoDocument)
+			return new Document(context, (PromptoDocument<?,?>)value);
+		else
+			return super.convertJavaValueToIValue(context, value);
+	}
 		
 }

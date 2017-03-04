@@ -11,5 +11,10 @@ public class TestDebug extends BaseEParserTest {
 		compareResourceEOE("debug/stack.pec");
 	}
 
+	@Test
+	public void testVariables() throws Exception {
+		compareResourceEOE("debug/variables.pec");
+	}
+
 }
 

@@ -22,6 +22,11 @@ public class TestReader extends BaseEParserTest {
 	}
 
 	@Test
+	public void testJson() throws Exception {
+		runTests("reader/json.pec");
+	}
+
+	@Test
 	public void testReader() throws Exception {
 		runTests("reader/reader.pec");
 	}

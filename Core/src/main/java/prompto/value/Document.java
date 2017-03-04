@@ -9,8 +9,10 @@ import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDocument;
+import prompto.java.JavaClassType;
 import prompto.runtime.Context;
 import prompto.store.InvalidValueError;
+import prompto.type.AnyType;
 import prompto.type.DocumentType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -23,6 +25,18 @@ public class Document extends BaseValue {
 		super(DocumentType.instance());
 	}
 	
+
+	public Document(Context context, PromptoDocument<?, ?> doc) {
+		super(DocumentType.instance());
+		for(Object key : doc.keySet()) {
+			Object value = doc.get(key);
+			IValue item = value==null ? NullValue.instance() :
+				JavaClassType.convertJavaValueToPromptoValue(context, value, value.getClass(), AnyType.instance());
+			Identifier keyId = new Identifier(String.valueOf(key));
+			this.setMember(keyId, item);
+		}
+	}
+
 
 	@Override
 	public PromptoDocument<Identifier,IValue> getStorableData() {

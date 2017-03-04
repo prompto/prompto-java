@@ -10,7 +10,6 @@ import java.util.Set;
 import prompto.declaration.AnyNativeCategoryDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.NativeCategoryDeclaration;
-import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDict;
 import prompto.intrinsic.PromptoDocument;
 import prompto.intrinsic.PromptoList;
@@ -33,7 +32,6 @@ import prompto.value.IValue;
 import prompto.value.IteratorValue;
 import prompto.value.ListValue;
 import prompto.value.NativeInstance;
-import prompto.value.NullValue;
 import prompto.value.SetValue;
 import prompto.value.Text;
 
@@ -156,16 +154,7 @@ public class JavaClassType extends BaseType {
 	private static IValue convertDocument(Context context, Object value, Type type, IType returnType) {
 		if(!(value instanceof PromptoDocument<?,?>) || returnType!=DocumentType.instance())
 			return null;
-		PromptoDocument<?,?> src = (PromptoDocument<?,?>)value;
-		Document doc = new Document();
-		for(Object key : src.keySet()) {
-			value = src.get(key);
-			IValue item = value==null ? NullValue.instance() :
-				convertJavaValueToPromptoValue(context, value, value.getClass(), AnyType.instance());
-			Identifier keyId = new Identifier(String.valueOf(key));
-			doc.setMember(keyId, item);
-		}
-		return doc;
+		return new Document(context, (PromptoDocument<?,?>)value);
 	}
 
 	private static IValue convertIValue(Object value) {

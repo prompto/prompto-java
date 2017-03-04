@@ -20,5 +20,9 @@ public class TypeValue extends BaseValue {
 		throw new UnsupportedOperationException(); // can't be stored
 	}
 	
+	@Override
+	public String toString() {
+		return value.toString();
+	}
 
 }

@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -24,9 +25,11 @@ import prompto.grammar.Identifier;
 import prompto.intrinsic.Filterable;
 import prompto.intrinsic.IterableWithCounts;
 import prompto.intrinsic.PromptoList;
+import prompto.java.JavaClassType;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.store.InvalidValueError;
+import prompto.type.AnyType;
 import prompto.type.ContainerType;
 import prompto.type.IType;
 import prompto.type.ListType;
@@ -56,6 +59,14 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 	public ListValue(IType itemType, Collection<? extends IValue> items, boolean mutable) {
 		super(new ListType(itemType));
 		this.items = new PromptoList<>(items, mutable);
+	}
+
+	public ListValue(Context context, PromptoList<?> list) {
+		super(new ListType(AnyType.instance()));
+		List<IValue> items = list.stream()
+				.map((item)->JavaClassType.convertJavaValueToPromptoValue(context, item, item.getClass(), AnyType.instance()))
+				.collect(Collectors.toList());
+		this.items = new PromptoList<>(items, false);
 	}
 
 	@Override

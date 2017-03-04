@@ -195,7 +195,8 @@ public abstract class BaseType implements IType {
 	}
 
 	public IValue convertJavaValueToIValue(Context context, Object value) {
-		throw new RuntimeException("Unsupported convertJavaValueToPromptoValue for " + this.getClass());
+		throw new RuntimeException("Unsupported convertJavaValueToIValue for " 
+				+ this.getClass() + " and value type " + value.getClass().getSimpleName());
 	}
 	
 	@Override

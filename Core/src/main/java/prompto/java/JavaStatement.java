@@ -17,6 +17,7 @@ import prompto.type.IType;
 import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
+import prompto.value.NullValue;
 
 public class JavaStatement {
 
@@ -37,9 +38,15 @@ public class JavaStatement {
 
 	public IValue interpret(Context context, IType returnType) throws PromptoError {
 		Object result = expression.interpret(context);
-		if(result==null) 
-			return isReturn ? VoidResult.instance() : null;
-		else {	
+		if(result==null) {
+			if(isReturn) {
+				if(returnType==null)
+					return VoidResult.instance();
+				else
+					return NullValue.instance();
+			} else 
+				return null;
+		} else {	
             IType type = expression.check(context);
             if (type instanceof JavaClassType)
                 return ((JavaClassType)type).convertJavaValueToPromptoValue(context, result, returnType);

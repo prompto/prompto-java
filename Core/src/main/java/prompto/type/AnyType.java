@@ -1,6 +1,10 @@
 package prompto.type;
 
 import java.lang.reflect.Type;
+import java.util.AbstractMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.BiFunction;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -11,8 +15,11 @@ import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoDocument;
+import prompto.intrinsic.PromptoList;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.value.IValue;
 
 
 public class AnyType extends NativeType { 
@@ -50,6 +57,34 @@ public class AnyType extends NativeType {
 	@Override
 	public boolean isAssignableFrom(Context context, IType other) {
 		return true;
+	}
+	
+	public static <K, V> Map.Entry<K, V> entry(K key, V value) {
+        return new AbstractMap.SimpleEntry<>(key, value);
+    }
+
+	
+	static Map<Class<?>, BiFunction<Context, Object,IValue>> converters = buildConvertersMap();
+	
+	private static Map<Class<?>, BiFunction<Context, Object, IValue>> buildConvertersMap() {
+		Map<Class<?>, BiFunction<Context, Object,IValue>> map = new HashMap<>();
+		map.put(Boolean.class, (c,o)->prompto.value.Boolean.valueOf((Boolean)o));
+		map.put(Long.class, (c,o)->new prompto.value.Integer((Long)o));
+		map.put(Double.class, (c,o)->new prompto.value.Decimal((Double)o));
+		map.put(String.class, (c,o)->new prompto.value.Text((String)o));
+		map.put(PromptoDocument.class, (c,o)->new prompto.value.Document(c, (PromptoDocument<?,?>)o));
+		map.put(PromptoList.class, (c,o)->new prompto.value.ListValue(c, (PromptoList<?>)o));
+		return map;
+	}
+
+	@Override
+	public IValue convertJavaValueToIValue(Context context, Object value) {
+		if(value!=null) {
+			BiFunction<Context, Object, IValue> converter = converters.get(value.getClass());
+			if(converter!=null)
+				return converter.apply(context, value);
+		}
+		return super.convertJavaValueToIValue(context, value);
 	}
 	
 	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
