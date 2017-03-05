@@ -151,7 +151,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		declaration.compileAssignments(context, method, flags, assignments);
 		// call global method in current class
 		Type classType = method.getClassFile().getThisClass().getType();
-		IType returnType = declaration.check(context);
+		IType returnType = declaration.check(context, false);
 		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getArguments(), returnType);
 		MethodConstant constant = new MethodConstant(classType, methodName, descriptor);
 		method.addInstruction(Opcode.INVOKESTATIC, constant);
@@ -192,7 +192,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		MethodHandleConstant mhc = new MethodHandleConstant(mc);
 		BootstrapMethod bsm = new BootstrapMethod(mhc);
 		method.getClassFile().addBootstrapMethod(bsm);
-		IType returnType = declaration.check(context);
+		IType returnType = declaration.check(context, false);
 		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getArguments(), returnType);
 		NameAndTypeConstant nameAndType = new NameAndTypeConstant(methodName, descriptor);
 		CallSiteConstant constant = new CallSiteConstant(bsm, nameAndType);
@@ -220,7 +220,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		// call global method in its own class
 		Type classType = CompilerUtils.getGlobalMethodType(declaration.getName());
 		String methodName = declaration.getName();
-		IType returnType = declaration.check(context);
+		IType returnType = declaration.check(context, false);
 		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getArguments(), returnType);
 		InterfaceConstant constant = new InterfaceConstant(classType, methodName, descriptor);
 		method.addInstruction(Opcode.INVOKEINTERFACE, constant);
@@ -234,7 +234,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		// call global method in its own class
 		Type classType = CompilerUtils.getGlobalMethodType(declaration.getName());
 		String methodName = declaration.getName();
-		IType returnType = declaration.check(context);
+		IType returnType = declaration.check(context, false);
 		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getArguments(), returnType);
 		MethodConstant constant = new MethodConstant(classType, methodName, descriptor);
 		method.addInstruction(Opcode.INVOKESTATIC, constant);
@@ -256,7 +256,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		// push arguments on the stack
 		declaration.compileAssignments(context, method, flags, assignments);
 		// call virtual method
-		IType returnType = declaration.check(context);
+		IType returnType = declaration.check(context, false);
 		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getArguments(), returnType);
 		if(parentClass.isInterface()) {
 			InterfaceConstant constant = new InterfaceConstant(parentClass, declaration.getName(), descriptor);
@@ -276,7 +276,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		// push arguments on the stack
 		declaration.compileAssignments(context, method, flags, assignments);
 		// call static method
-		IType returnType = declaration.check(context);
+		IType returnType = declaration.check(context, false);
 		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getArguments(), returnType);
 		MethodConstant constant = new MethodConstant(parentClass, declaration.getName(), descriptor);
 		method.addInstruction(Opcode.INVOKESTATIC, constant);

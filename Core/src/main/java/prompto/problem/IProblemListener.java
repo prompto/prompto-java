@@ -5,6 +5,7 @@ import prompto.type.IType;
 
 public interface IProblemListener {
 
+	default boolean isCheckNative() { return true; };
 	void reportDuplicate(String name, ISection section, ISection existing);
 	void reportIllegalReturn(ISection section);
 	void reportIllegalNonBoolean(ISection section, IType type);

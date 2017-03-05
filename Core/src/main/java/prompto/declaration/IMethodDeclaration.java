@@ -33,9 +33,9 @@ public interface IMethodDeclaration extends IDeclaration {
 	void registerArguments(Context local);
 	Specificity computeSpecificity(Context context, IArgument argument, ArgumentAssignment assignment, 
 			boolean allowAncestor, boolean useInstance);
-	void compile(Context context, ClassFile classFile);
-	void compilePrototype(Context context, ClassFile classFile);
-	String compileTemplate(Context context, ClassFile classFile);
+	void compile(Context context, boolean isStart, ClassFile classFile);
+	void compilePrototype(Context context, boolean isStart, ClassFile classFile);
+	String compileTemplate(Context context, boolean isStart, ClassFile classFile);
 	void compileAssignments(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments);
 	
 }

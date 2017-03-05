@@ -152,7 +152,7 @@ public class TextType extends NativeType {
 		
 		
 		@Override
-		public IType check(Context context) {
+		public IType check(Context context, boolean isStart) {
 			return new ListType(TextType.instance());
 		}
 
@@ -196,7 +196,7 @@ public class TextType extends NativeType {
 		};
 		
 		@Override
-		public IType check(Context context) {
+		public IType check(Context context, boolean isStart) {
 			return TextType.instance();
 		}
 
@@ -231,7 +231,7 @@ public class TextType extends NativeType {
 		};
 		
 		@Override
-		public IType check(Context context) {
+		public IType check(Context context, boolean isStart) {
 			return TextType.instance();
 		}
 
@@ -247,7 +247,7 @@ public class TextType extends NativeType {
 		};
 		
 		@Override
-		public IType check(Context context) {
+		public IType check(Context context, boolean isStart) {
 			return TextType.instance();
 		}
 
@@ -263,7 +263,7 @@ public class TextType extends NativeType {
 		};
 		
 		@Override
-		public IType check(Context context) {
+		public IType check(Context context, boolean isStart) {
 			return TextType.instance();
 		}
 

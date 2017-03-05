@@ -30,6 +30,12 @@ public class OperatorMethodDeclaration extends ConcreteMethodDeclaration impleme
 	}
 
 	@Override
+	public IType check(Context context) {
+		// called as IExpression::check
+		return check(context, false);
+	}
+	
+	@Override
 	public void check(ConcreteCategoryDeclaration declaration, Context context) {
 		// TODO Auto-generated method stub
 		

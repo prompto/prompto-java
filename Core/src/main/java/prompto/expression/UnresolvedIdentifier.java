@@ -91,7 +91,7 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 		if(resolved==null) {
 			IProblemListener saved = context.getProblemListener();
 			try {
-				context.setProblemListener(new ProblemListener());
+				context.setProblemListener(new ProblemListener() { @Override public boolean isCheckNative() { return saved.isCheckNative(); } });
 				resolved = resolveSymbol(context);
 				if(resolved==null) {
 					if(Character.isUpperCase(id.toString().charAt(0))) {

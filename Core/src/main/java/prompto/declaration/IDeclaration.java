@@ -21,7 +21,7 @@ public interface IDeclaration extends INamed, ISection {
 	}
 	
 	void register(Context context);
-	IType check(Context context);
+	IType check(Context context, boolean isStart);
 	void toDialect(CodeWriter writer);
 	void setOrigin(ICodeStore origin);
 	ICodeStore getOrigin();

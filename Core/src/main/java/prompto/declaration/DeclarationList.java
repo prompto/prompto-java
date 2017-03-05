@@ -68,7 +68,7 @@ public class DeclarationList extends LinkedList<IDeclaration> {
 
 	public void check(Context context) {
 		for(IDeclaration declaration : this) {
-			declaration.check(context);
+			declaration.check(context, true);
 		}
 	}
 	

@@ -39,12 +39,12 @@ public abstract class BuiltInMethodDeclaration extends BaseMethodDeclaration {
 	}
 	
 	@Override
-	public void compile(Context context, ClassFile classFile) {
+	public void compile(Context context, boolean isStart, ClassFile classFile) {
 		throw new UnsupportedOperationException("Should never get there!");
 	}
 
 	@Override
-	public String compileTemplate(Context context, ClassFile classFile) {
+	public String compileTemplate(Context context, boolean isStart, ClassFile classFile) {
 		throw new UnsupportedOperationException("Should never get there!");
 	}
 	

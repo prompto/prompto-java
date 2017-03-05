@@ -84,7 +84,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	
 
 	@Override
-	public IType check(Context context) {
+	public IType check(Context context, boolean isStart) {
 		if(attributes!=null) for(Identifier attribute : attributes) {
 			if(attribute==null)
 				continue; // problem already handled by parser
@@ -337,7 +337,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 			throw new SyntaxError("No " + oper.getToken() + " operator method defined!");
 		Context local = context.newCategoryContext(decl.getType(context)).newChildContext();
 		operator.registerArguments(local);
-		IType resultType = operator.check(local);
+		IType resultType = operator.check(local, false);
 		String methodName = "operator-" + oper.name();
 		InterfaceConstant c = new InterfaceConstant(left.getType(), methodName, argType.getJavaType(context), resultType.getJavaType(context));
 		method.addInstruction(Opcode.INVOKEINTERFACE, c);

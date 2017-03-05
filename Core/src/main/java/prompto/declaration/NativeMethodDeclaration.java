@@ -38,7 +38,7 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 
 	@Override
 	protected IType checkStatements(Context context) {
-		if(statement!=null)
+		if(statement!=null && context.getProblemListener().isCheckNative())
 			return checkNative(context);
 		else if(returnType!=null)
 			return returnType;
@@ -98,7 +98,7 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 	}
 	
 	@Override
-	public void compile(Context context, ClassFile classFile) {
+	public void compile(Context context, boolean isStart, ClassFile classFile) {
 		try {
 			context = context.newLocalContext();
 			registerArguments(context);

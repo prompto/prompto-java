@@ -190,7 +190,7 @@ public class CategoryType extends BaseType {
 			context = context.newSingletonContext(this);
 			Context local = context.newLocalContext();
 			method.registerArguments(local);
-			return method.check(local);
+			return method.check(local, false);
 		} catch(SyntaxError e) {
 			// ok to pass, will try reverse
 		}

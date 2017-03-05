@@ -88,7 +88,7 @@ public class UnresolvedSelector extends SelectorExpression {
 		if(resolved==null) {
 			IProblemListener saved = context.getProblemListener();
 			try {
-				context.setProblemListener(new ProblemListener());
+				context.setProblemListener(new ProblemListener() { @Override public boolean isCheckNative() { return saved.isCheckNative(); } });
 				resolved = resolveMethod(context);
 				if(resolved==null)
 					resolved = resolveMember(context);

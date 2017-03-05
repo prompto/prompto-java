@@ -161,7 +161,7 @@ public class Compiler {
 			ClassFile classFile = new ClassFile(type);
 			classFile.addModifier(Modifier.ABSTRACT);
 			decls.forEach((m) -> 
-				m.compile(context, classFile));
+				m.compile(context, true, classFile));
 			if(decls.size()>1) {
 				createGlobalMethodHandles(classFile);
 				populateGlobalMethodHandles(context, classFile, decls);
@@ -178,7 +178,7 @@ public class Compiler {
 		if(method instanceof AbstractMethodDeclaration) {
 			ClassFile classFile = new ClassFile(type);
 			classFile.addModifier(Modifier.ABSTRACT | Modifier.INTERFACE);
-			method.compile(context, classFile);
+			method.compile(context, true, classFile);
 			return classFile;
 		} else
 			throw new UnsupportedOperationException();
@@ -203,7 +203,7 @@ public class Compiler {
 		for(IMethodDeclaration decl : decls) {
 			method.addInstruction(Opcode.DUP); // the array
 			method.addInstruction(Opcode.ILOAD_0); // the index
-			createGlobalMethodHandle(context, method, decl); // the value
+			createGlobalMethodHandle(context,true,  method, decl); // the value
 			method.addInstruction(Opcode.AASTORE);
 			method.addInstruction(Opcode.IINC, new ByteOperand((byte)0), new ByteOperand((byte)1)); 
 		}
@@ -212,7 +212,7 @@ public class Compiler {
 		method.addInstruction(Opcode.RETURN);
 	}
 	
-	private void createGlobalMethodHandle(Context context, MethodInfo method, IMethodDeclaration decl) {
+	private void createGlobalMethodHandle(Context context, boolean isStart, MethodInfo method, IMethodDeclaration decl) {
 		// MethodHandles.lookup().findStatic(klass, "print",  MethodType.methodType(void.class, k1))
 		MethodConstant mc = new MethodConstant(MethodHandles.class, "lookup", Lookup.class);
 		method.addInstruction(Opcode.INVOKESTATIC, mc);
@@ -221,7 +221,7 @@ public class Compiler {
 		// name
 		method.addInstruction(Opcode.LDC, new StringConstant(decl.getName()));
 		// descriptor
-		IType returnType = decl.check(context);
+		IType returnType = decl.check(context, isStart);
 		String descriptor = CompilerUtils.createMethodDescriptor(context, decl.getArguments(), returnType).toString();
 		method.addInstruction(Opcode.LDC, new StringConstant(descriptor));
 		// loader

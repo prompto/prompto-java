@@ -117,7 +117,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	@Override
 	public IType getType(Context context) {
 		try {
-			return check(context);
+			return check(context, false);
 		} catch (SyntaxError e) {
 			throw new RuntimeException(e);
 		}
@@ -233,10 +233,10 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	}
 	
 	@Override
-	public void compilePrototype(Context context, ClassFile classFile) {
+	public void compilePrototype(Context context, boolean isStart, ClassFile classFile) {
 		try {
-			context = prepareContext(context);
-			IType returnType = check(context);
+			context = prepareContext(context, isStart);
+			IType returnType = check(context, false);
 			MethodInfo method = createMethodInfo(context, classFile, returnType, getName());
 			method.addModifier(Modifier.ABSTRACT);
 		} catch (PromptoError e) {
@@ -244,8 +244,8 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 		}
 	}
 
-	protected Context prepareContext(Context context) {
-		if(context.isGlobalContext()) {
+	protected Context prepareContext(Context context, boolean isStart) {
+		if(isStart) {
 			// coming from nowhere, so need a clean context in which to register arguments
 			context = context.newLocalContext();
 			registerArguments(context);

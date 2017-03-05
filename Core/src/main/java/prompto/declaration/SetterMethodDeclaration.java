@@ -77,7 +77,7 @@ public class SetterMethodDeclaration extends ConcreteMethodDeclaration implement
 	}
 
 	@Override
-	public void compile(Context context, ClassFile classFile) {
+	public void compile(Context context, boolean isStart, ClassFile classFile) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}

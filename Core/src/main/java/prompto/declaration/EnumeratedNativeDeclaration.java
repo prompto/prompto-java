@@ -128,7 +128,7 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 	}
 	
 	@Override
-	public IType check(Context context) {
+	public IType check(Context context, boolean isStart) {
 		for(Symbol s : symbols)
 			s.check(context);
 		return type;

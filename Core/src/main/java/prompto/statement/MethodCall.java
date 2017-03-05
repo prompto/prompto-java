@@ -125,7 +125,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 
 	private IType lightCheck(IMethodDeclaration declaration, Context parent, Context local) {
 		declaration.registerArguments(local);
-		return declaration.check(local);
+		return declaration.check(local, false);
 	}
 
 	private IType fullCheck(ConcreteMethodDeclaration declaration, Context parent, Context local) {
@@ -137,7 +137,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 				IValue value = assignment.getArgument().checkValue(parent, expression);
 				local.setValue(assignment.getArgumentId(), value);
 			}
-			return declaration.check(local);
+			return declaration.check(local, false);
 		} catch (PromptoError e) {
 			throw new SyntaxError(e.getMessage());
 		}
@@ -203,7 +203,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		Context local = context.newLocalContext();
 		declaration.registerArguments(local);
 		registerCodeAssignments(context, local, declaration);
-		String methodName = declaration.compileTemplate(local, method.getClassFile());
+		String methodName = declaration.compileTemplate(local, false, method.getClassFile());
 		// compile the method call
 		IExpression parent = method.isStatic() ? null : new ThisExpression();
 		MethodSelector selector = new MethodSelector(parent, new Identifier(methodName));

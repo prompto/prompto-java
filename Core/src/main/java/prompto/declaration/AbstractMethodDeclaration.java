@@ -30,11 +30,13 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 
 	@Override
-	public IType check(Context context) {
+	public IType check(Context context, boolean isStart) {
 		if(arguments!=null)
 			arguments.check(context);
-		Context local = context.newLocalContext();
-		registerArguments(local);
+		if(isStart) {
+			Context local = context.newLocalContext();
+			registerArguments(local); // will check them
+		}
 		return returnType;
 	}
 	
@@ -50,12 +52,12 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 	
 	@Override
-	public void compile(Context context, ClassFile classFile) {
-		compilePrototype(context, classFile);
+	public void compile(Context context, boolean isStart, ClassFile classFile) {
+		compilePrototype(context, isStart, classFile);
 	}
 	
 	@Override
-	public String compileTemplate(Context context, ClassFile classFile) {
+	public String compileTemplate(Context context, boolean isStart, ClassFile classFile) {
 		throw new SyntaxError("Should never get there !");
 	}
 	

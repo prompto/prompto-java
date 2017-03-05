@@ -219,16 +219,16 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 
 	@Override
-	public IType check(Context context) {
+	public IType check(Context context, boolean isStart) {
 		checkDerived(context);
 		checkMethods(context);
-		return super.check(context);
+		return super.check(context, isStart);
 	}
 
 	private void checkMethods(Context context) {
 		registerMethods(context);
 		for(IMethodDeclaration method : methods)
-			method.check(this,context);
+			method.check(this, context);
 	}
 			
 			
@@ -611,7 +611,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		try {
 			context = context.newCategoryContext(getType(context)).newChildContext();
 			method.registerArguments(context);
-			method.compilePrototype(context, classFile);
+			method.compilePrototype(context, false, classFile);
 		} catch(SyntaxError e) {
 			throw new CompilerException(e);
 		}
@@ -952,7 +952,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 				continue;
 			context = context.newCategoryContext(getType(context)).newChildContext();
 			method.registerArguments(context);
-			method.compile(context, classFile);
+			method.compile(context, false, classFile);
 		}
 	}
 	

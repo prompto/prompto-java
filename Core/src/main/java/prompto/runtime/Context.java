@@ -502,7 +502,7 @@ public class Context implements IContext {
 		}
 		
 		@Override
-		public IType check(Context context) {
+		public IType check(Context context, boolean isStart) {
 			throw new RuntimeException("Should never get there!");
 		}
 		
