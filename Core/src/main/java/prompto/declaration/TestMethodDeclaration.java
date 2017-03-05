@@ -65,7 +65,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 			checkStatement(context, statement);
 		if(assertions!=null) {
 			for(Assertion assertion : assertions)
-				assertion.check(context);
+				context = assertion.check(context);
 		}
 		return VoidType.instance();
 	}

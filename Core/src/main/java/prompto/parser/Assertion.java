@@ -4,6 +4,7 @@ import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
+import prompto.expression.EqualsExpression;
 import prompto.expression.IAssertion;
 import prompto.expression.IExpression;
 import prompto.runtime.Context;
@@ -24,10 +25,14 @@ public class Assertion extends Section {
 		expression.toDialect(writer);
 	}
 
-	public void check(Context context) {
+	public Context check(Context context) {
 		IType type = expression.check(context);
 		if(type!=BooleanType.instance())
 			context.getProblemListener().reportIllegalNonBoolean(this, type);
+		// need to optionally auto-downcast
+		if(expression instanceof EqualsExpression) 
+			context = ((EqualsExpression)expression).downCastForCheck(context);
+		return context;
 	}
 
 	public boolean interpret(Context context, TestMethodDeclaration test) throws PromptoError {
