@@ -7,10 +7,8 @@ import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.FieldConstant;
 import prompto.compiler.IOperand;
-import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.PromptoClassLoader;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.ResultInfo.Flag;
 import prompto.compiler.StackLocal;
@@ -99,20 +97,11 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 	}
 
 	private ResultInfo compile_prompto(Context context, MethodInfo method) {
-		switch(name) {
-		case "$context":
-			return compile_prompto_context(context, method);
-		}
-		return null;
-	}
-
-	private ResultInfo compile_prompto_context(Context context, MethodInfo method) {
-		// PromptoClassLoader.getInstance().getContext()
-		MethodConstant m = new MethodConstant(PromptoClassLoader.class, "getInstance", PromptoClassLoader.class);
-		method.addInstruction(Opcode.INVOKESTATIC, m);
-		m = new MethodConstant(PromptoClassLoader.class, "getContext", Context.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
-		return new ResultInfo(Context.class);
+		JavaIdentifierProcessor processor = JavaIdentifierProcessor.processors.get(name);
+		if(processor==null)
+			return null;
+		else
+			return processor.compile(context, method);
 	}
 
 	private ResultInfo compile_instance(Context context, MethodInfo method) {
@@ -190,11 +179,11 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 	}
 
 	private Object interpret_prompto(Context context) {
-		switch(name) {
-		case "$context":
-			return context;
-		}
-		return null;
+		JavaIdentifierProcessor processor = JavaIdentifierProcessor.processors.get(name);
+		if(processor==null)
+			return null;
+		else
+			return processor.interpret(context);
 	}
 
 	Object interpret_instance(Context context) throws PromptoError {
@@ -263,11 +252,11 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 	}
 
 	private IType check_prompto(Context context) {
-		switch(name) {
-		case "$context":
-			return new JavaClassType(context.getClass());
-		}
-		return null;
+		JavaIdentifierProcessor processor = JavaIdentifierProcessor.processors.get(name);
+		if(processor==null)
+			return null;
+		else
+			return processor.check(context);
 	}
 
 	IType check_instance(Context context) {
