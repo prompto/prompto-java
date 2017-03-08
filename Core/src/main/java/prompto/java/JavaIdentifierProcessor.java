@@ -19,24 +19,24 @@ public abstract class JavaIdentifierProcessor {
 		processors.put("$context", new ContextIdentifierProcessor());
 	}
 	
-	abstract IType check(Context context);
-	abstract Object interpret(Context context);
-	abstract ResultInfo compile(Context context, MethodInfo method);
+	public abstract IType check(Context context);
+	public abstract Object interpret(Context context);
+	public abstract ResultInfo compile(Context context, MethodInfo method);
 	
 	static class ContextIdentifierProcessor extends JavaIdentifierProcessor {
 		
 		@Override
-		IType check(Context context) {
+		public IType check(Context context) {
 			return new JavaClassType(context.getClass());
 		}
 		
 		@Override
-		Object interpret(Context context) {
+		public Object interpret(Context context) {
 			return context;
 		}
 		
 		@Override
-		ResultInfo compile(Context context, MethodInfo method) {
+		public ResultInfo compile(Context context, MethodInfo method) {
 			// PromptoClassLoader.getInstance().getContext()
 			MethodConstant m = new MethodConstant(PromptoClassLoader.class, "getInstance", PromptoClassLoader.class);
 			method.addInstruction(Opcode.INVOKESTATIC, m);
