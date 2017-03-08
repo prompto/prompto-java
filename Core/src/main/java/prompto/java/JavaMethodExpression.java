@@ -14,6 +14,7 @@ import prompto.compiler.PromptoClassLoader;
 import prompto.compiler.PromptoType;
 import prompto.compiler.ResultInfo;
 import prompto.declaration.IDeclaration;
+import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.NativeCategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -21,6 +22,7 @@ import prompto.expression.IExpression;
 import prompto.runtime.Context;
 import prompto.type.CategoryType;
 import prompto.type.IType;
+import prompto.type.MethodType;
 import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
@@ -206,12 +208,17 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 	}
 	
 	boolean validArgument(Context context, Class<?> klass, JavaExpression argument) {
-		Type argType = argument.check(context).getJavaType(context);
-		if(argType instanceof PromptoType) try {
-			argType = Class.forName(argType.getTypeName());
-		} catch (ClassNotFoundException e) {
-			return false;
+		IType argIType = argument.check(context);
+		if(argIType instanceof MethodType && klass==IMethodDeclaration.class) {
+			return true;
+		} else {
+			Type argType = argIType.getJavaType(context);
+			if(argType instanceof PromptoType) try {
+				argType = Class.forName(argType.getTypeName());
+			} catch (ClassNotFoundException e) {
+				return false;
+			}
+			return klass.isAssignableFrom((Class<?>)argType);
 		}
-		return klass.isAssignableFrom((Class<?>)argType);
 	}
 }
