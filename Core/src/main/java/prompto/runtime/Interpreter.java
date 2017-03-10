@@ -82,9 +82,10 @@ public class Interpreter {
 	}
 
 	public static void interpretScript(Context context, String cmdLineArgs) throws PromptoError {
+		throw new UnsupportedOperationException("yet!");
 	}
 
-	private static ArgumentAssignmentList buildAssignments(IMethodDeclaration method, IExpression args) {
+	public static ArgumentAssignmentList buildAssignments(IMethodDeclaration method, IExpression args) {
 		ArgumentAssignmentList assignments = new ArgumentAssignmentList();
 		if(method.getArguments().size()==1) {
 			Identifier name = method.getArguments().getFirst().getId();
