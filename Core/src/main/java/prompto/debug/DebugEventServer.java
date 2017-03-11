@@ -8,7 +8,7 @@ import java.net.SocketTimeoutException;
 
 import prompto.debug.IAcknowledgement.Acknowledgement;
 
-class DebugEventServer {
+public class DebugEventServer {
 	
 	Thread thread;
 	int port = 0;
@@ -20,8 +20,11 @@ class DebugEventServer {
 		this.listener = listener;
 	}
 
+	public int getPort() {
+		return port;
+	}
 
-	public void startListening() {
+	public int startListening() {
 		Object lock = new Object();
 		thread = new Thread(()->{
 			try(ServerSocket server = new ServerSocket(0)) {
@@ -55,6 +58,7 @@ class DebugEventServer {
 				
 			}
 		}
+		return port;
 	}
 
 	public void stopListening() {

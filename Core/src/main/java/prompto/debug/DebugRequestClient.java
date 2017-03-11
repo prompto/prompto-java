@@ -8,7 +8,6 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import prompto.debug.IDebugRequest.ConnectRequest;
 import prompto.debug.IDebugRequest.GetLineRequest;
 import prompto.debug.IDebugRequest.InstallBreakpointRequest;
 import prompto.debug.IDebugRequest.SuspendRequest;
@@ -29,41 +28,26 @@ import prompto.parser.ISection;
 
 public class DebugRequestClient implements IDebugger {
 
-	DebugEventServer listener;
+	DebugEventServer eventServer;
 	Supplier<Boolean> remote;
-	boolean connected;
-	String host;
-	int port;
+	boolean connected = false;
+	String remoteHost;
+	int remotePort;
 	
-	public DebugRequestClient(Thread thread, String host, int port, IDebugEventListener listener) {
-		this.listener = new DebugEventServer(listener);
+	public DebugRequestClient(Thread thread, DebugEventServer eventServer) {
+		this.eventServer = eventServer;
 		this.remote = ()->thread.isAlive();
-		this.host = host;
-		this.port = port;
 	}
 
-	public DebugRequestClient(Process process, String host, int port, IDebugEventListener listener) {
-		this.listener = new DebugEventServer(listener);
+	public DebugRequestClient(Process process, DebugEventServer eventServer) {
+		this.eventServer = eventServer;
 		this.remote = ()->process.isAlive();
-		this.host = host;
-		this.port = port;
 	}
 
-	@Override
-	public void connect() {
-		listener.startListening();
-		ConnectRequest request = new ConnectRequest();
-		request.setPort(listener.port);
-		int count = 0;
-		while(remote.get() && !connected && ++count<=100) try {
-			IDebugResponse ack = send(request, (e)->{});
-			connected = ack!=null;
-			Thread.sleep(100);
-		} catch(InterruptedException e) {
-			break;
-		}
-		if(!connected)
-			throw new UnreachableException();
+	public void setRemote(String host, int port) {
+		this.remoteHost = host;
+		this.remotePort = port;
+		this.connected = true;
 	}
 	
 	private IDebugResponse send(IDebugRequest request) {
@@ -72,7 +56,7 @@ public class DebugRequestClient implements IDebugger {
 	
 	private IDebugResponse send(IDebugRequest request, Consumer<Exception> errorHandler) {
 		LocalDebugger.showEvent("DebugRequestClient sends " + request.getType());
-		try(Socket client = new Socket(host, port)) {
+		try(Socket client = new Socket(remoteHost, remotePort)) {
 			try(OutputStream output = client.getOutputStream()) {
 				sendRequest(output, request);
 				try(InputStream input = client.getInputStream()) {
@@ -103,7 +87,7 @@ public class DebugRequestClient implements IDebugger {
 
 	@Override
 	public void setListener(IDebugEventListener listener) {
-		this.listener.listener = listener;
+		this.eventServer.listener = listener;
 	}
 	
 
@@ -186,13 +170,13 @@ public class DebugRequestClient implements IDebugger {
 	
 	@Override
 	public boolean isTerminated() {
-		return listener==null || !listener.isListening();
+		return eventServer==null || !eventServer.isListening();
 	}
 
 	@Override
 	public void notifyTerminated() {
-		if(listener!=null)
-			listener.stopListening();
+		if(eventServer!=null)
+			eventServer.stopListening();
 	}
 
 	@Override
@@ -235,7 +219,7 @@ public class DebugRequestClient implements IDebugger {
 	@Override
 	public void terminate() {
 		connected = false;
-		listener.stopListening();
+		eventServer.stopListening();
 	}
 
 	@Override

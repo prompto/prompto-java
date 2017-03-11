@@ -6,7 +6,6 @@ import prompto.parser.ISection;
 
 public interface IDebugger {
 
-	void connect();
 	void setListener(IDebugEventListener listener);
 	void installBreakpoint(ISection section);
 	boolean isTerminated();

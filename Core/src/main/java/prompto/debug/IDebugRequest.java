@@ -16,41 +16,6 @@ public interface IDebugRequest {
 	Type getType();
 	IDebugResponse execute(IDebugger debugger);
 
-	public static class ConnectRequest implements IDebugRequest {
-
-		String host;
-		int port;
-		
-		public void setHost(String host) {
-			this.host = host;
-		}
-		
-		
-		public String getHost() {
-			return host;
-		}
-		
-		
-		public void setPort(int port) {
-			this.port = port;
-		}
-		
-		public int getPort() {
-			return port;
-		}
-
-		@Override
-		public VoidResponse execute(IDebugger debugger) {
-			debugger.connect();
-			debugger.setListener(new DebugEventClient(host, port));
-			return new VoidResponse();
-		}
-		
-		@Override
-		public Type getType() {
-			return CONNECT;
-		}
-	}
 	
 	public static class GetStatusRequest implements IDebugRequest {
 
@@ -308,7 +273,6 @@ public interface IDebugRequest {
 	}
 
 	public enum Type {
-		CONNECT(ConnectRequest.class),
 		GET_STATUS(GetStatusRequest.class),
 		GET_LINE(GetLineRequest.class),
 		GET_STACK(GetStackRequest.class),

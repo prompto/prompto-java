@@ -11,6 +11,7 @@ import prompto.code.ICodeStore;
 import prompto.code.UpdatableCodeStore;
 import prompto.code.Version;
 import prompto.compiler.PromptoClassLoader;
+import prompto.debug.DebugEventClient;
 import prompto.debug.DebugRequestServer;
 import prompto.debug.LocalDebugger;
 import prompto.declaration.AttributeDeclaration;
@@ -46,6 +47,7 @@ public abstract class Application {
 		
 		Map<String, String> argsMap = initialize(args);
 		
+		String debugHost = argsMap.getOrDefault("debug_host", "localhost");
 		if(argsMap.containsKey("debug_port"))
 			debugPort = Integer.parseInt(argsMap.get("debug_port"));
 		if(argsMap.containsKey("application")) {
@@ -53,18 +55,19 @@ public abstract class Application {
 			if(argsMap.containsKey("mainMethod"))
 				mainMethod = argsMap.get("mainMethod");
 			if(debugPort!=null)
-				debugApplication(debugPort, mainMethod, argsMap);
+				debugApplication(debugHost, debugPort, mainMethod, argsMap);
 			else
 				runApplication(mainMethod, argsMap);
 		} else if(argsMap.containsKey("test")) {
 			String testMethod = argsMap.get("test");
 			if(debugPort!=null)
-				debugTest(debugPort, testMethod);
+				debugTest(debugHost, debugPort, testMethod);
 			else
 				runTest(testMethod);
 		}
 			
 	}
+
 
 	public static Map<String, String> initialize(String[] args) throws Throwable {
 		Boolean testMode = false;
@@ -123,56 +126,54 @@ public abstract class Application {
 
 
 	private static void runTest(String testMethod) {
-		if("all".equals(testMethod))
-			Interpreter.interpretTests(getGlobalContext());
-		else
-			Interpreter.interpretTest(getGlobalContext(), new Identifier(testMethod), true);
-	}
-
-	private static void debugTest(int debugPort, String testMethod) throws Exception {
-		LocalDebugger debugger = new LocalDebugger();
-		DebugRequestServer server = startDebuggerThread(debugger, debugPort);
 		try {
-			debugTestMethod(debugger, testMethod);
+			if("all".equals(testMethod))
+				Interpreter.interpretTests(getGlobalContext());
+			else
+				Interpreter.interpretTest(getGlobalContext(), new Identifier(testMethod), true);
 		} finally {
-			server.stopListening();
+			getGlobalContext().notifyTerminated();
 		}
 	}
 
-	private static void debugTestMethod(LocalDebugger debugger, String testMethod) {
-		getGlobalContext().setDebugger(debugger);
+	private static void debugTest(String debugHost, int debugPort, String testMethod) throws Throwable {
+		DebugRequestServer server = startDebugging(debugHost, debugPort);
 		try {
-			Interpreter.interpretTest(getGlobalContext(), new Identifier(testMethod), true); 
+			runTest(testMethod);
 		} finally {
-			getGlobalContext().notifyTerminated();
+			server.stopListening();
 		}
 	}
 
 	private static void runApplication(String mainMethod, Map<String, String> args) {
-		Interpreter.interpretMethod(getGlobalContext(), new Identifier(mainMethod), "");
-	}
-
-	private static void debugApplication(int debugPort, String mainMethod, Map<String, String> args) throws Exception {
-		LocalDebugger debugger = new LocalDebugger();
-		DebugRequestServer server = startDebuggerThread(debugger, debugPort);
 		try {
-			debugMainMethod(debugger, mainMethod, args);
-		} finally {
-			server.stopListening();
-		}
-	}
-
-	private static void debugMainMethod(LocalDebugger debugger, String mainMethod, Map<String, String> args) {
-		getGlobalContext().setDebugger(debugger);
-		try {
-			Interpreter.interpretMethod(getGlobalContext(), new Identifier(mainMethod), ""); // TODO args
+			Interpreter.interpretMethod(getGlobalContext(), new Identifier(mainMethod), "");
 		} finally {
 			getGlobalContext().notifyTerminated();
 		}
 	}
 
-	public static DebugRequestServer startDebuggerThread(LocalDebugger debugger, int debugPort) throws Exception {
-		DebugRequestServer server = new DebugRequestServer(debugger, debugPort);
+	private static void debugApplication(String debugHost, int debugPort, String mainMethod, Map<String, String> args) throws Throwable {
+		DebugRequestServer server = startDebugging(debugHost, debugPort);
+		try {
+			runApplication(mainMethod, args);
+		} finally {
+			server.stopListening();
+		}
+	}
+
+	public static DebugRequestServer startDebugging(String debugHost, Integer debugPort) throws Throwable {
+		LocalDebugger debugger = new LocalDebugger();
+		debugger.setListener(new DebugEventClient(debugHost, debugPort));
+		DebugRequestServer server = startDebuggerThread(debugger);
+		getGlobalContext().setDebugger(debugger);
+		debugger.notifyStarted("localhost", server.getPort());
+		return server;
+	}
+
+
+	public static DebugRequestServer startDebuggerThread(LocalDebugger debugger) throws Exception {
+		DebugRequestServer server = new DebugRequestServer(debugger);
 		server.startListening();
 		return server;
 	}

@@ -31,11 +31,6 @@ public class LocalDebugger implements IDebugger {
 	
 	
 	@Override
-	public void connect() {
-		setStatus(Status.RUNNING);
-	}
-	
-	@Override
 	public ServerStack getStack(IThread thread) {
 		return stack;
 	}
@@ -242,6 +237,12 @@ public class LocalDebugger implements IDebugger {
 	public int getLine(IThread thread) {
 		IStackFrame frame = stack.peek();
 		return frame==null ? -1 : frame.getLine();
+	}
+	
+	public void notifyStarted(String host, int port) {
+		setStatus(Status.RUNNING);
+		if(listener!=null)
+			listener.handleConnectedEvent(host, port); // this listener actually knows host and port
 	}
 
 	public void notifyTerminated() {

@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import prompto.debug.IDebugEvent.ConnectedEvent;
 import prompto.debug.IDebugEvent.SuspendedEvent;
 import prompto.debug.IDebugEvent.ResumedEvent;
 import prompto.debug.IDebugEvent.TerminatedEvent;
@@ -18,6 +19,10 @@ public class DebugEventClient implements IDebugEventListener {
 		this.port = port;
 	}
 
+	@Override
+	public void handleConnectedEvent(String host, int port) {
+		send(new ConnectedEvent(host, port));
+	}
 	
 	@Override
 	public void handleSuspendedEvent(SuspendReason reason) {

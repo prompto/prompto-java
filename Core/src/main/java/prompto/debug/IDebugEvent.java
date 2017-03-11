@@ -8,6 +8,46 @@ public interface IDebugEvent {
 	Type getType();
 	void execute(IDebugEventListener listener);
 
+	static class ConnectedEvent implements IDebugEvent {
+		
+		String host;
+		int port;
+		
+		public ConnectedEvent() {
+		}
+		
+		public ConnectedEvent(String host, int port) {
+			this.host = host;
+			this.port = port;
+		}
+
+		public void setHost(String host) {
+			this.host = host;
+		}
+		
+		public void setPort(int port) {
+			this.port = port;
+		}
+		
+		public String getHost() {
+			return host;
+		}
+		
+		public int getPort() {
+			return port;
+		}
+		
+		@Override
+		public Type getType() {
+			return Type.CONNECTED;
+		}
+		
+		@Override
+		public void execute(IDebugEventListener listener) {
+			listener.handleConnectedEvent(host, port);
+		}
+	}
+	
 	static class SuspendedEvent implements IDebugEvent {
 		
 		SuspendReason reason;
@@ -88,6 +128,7 @@ public interface IDebugEvent {
 	}
 
 	public enum Type {
+		CONNECTED(ConnectedEvent.class),
 		SUSPENDED(SuspendedEvent.class),
 		RESUMED(ResumedEvent.class),
 		TERMINATED(TerminatedEvent.class);

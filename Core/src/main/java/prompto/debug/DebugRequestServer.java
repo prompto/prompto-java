@@ -6,8 +6,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
-import prompto.debug.IDebugRequest.Type;
-
 public class DebugRequestServer {
 
 	LocalDebugger debugger;
@@ -15,20 +13,39 @@ public class DebugRequestServer {
 	int port;
 	boolean loop;
 	
-	public DebugRequestServer(LocalDebugger debugger, int port) {
+	public DebugRequestServer(LocalDebugger debugger) {
 		this.debugger = debugger;
-		this.port = port;
 	}
 	
 	public Thread getThread() {
 		return thread;
 	}
+	
+	public int getPort() {
+		return port;
+	}
 
 	public void startListening() throws Exception {
 		Object lock = new Object();
 		this.thread = new Thread(() -> {
-			try {
-				listenInLoop(lock);
+			try(ServerSocket server = new ServerSocket(0)) {
+				server.setSoTimeout(10); // make it fast to exit
+				port = server.getLocalPort();
+				LocalDebugger.showEvent("DebugRequestServer listening on " + port);
+				synchronized(lock) {
+					lock.notify();
+				}			
+				loop = true;
+				LocalDebugger.showEvent("DebugRequestServer entering loop");
+				while(loop) {
+					try {
+						Socket client = server.accept();
+						handleMessage(client);
+					} catch(SocketTimeoutException e) {
+						// nothing to do, just helps exit the loop
+					}
+				}
+				LocalDebugger.showEvent("DebugRequestServer exiting loop");
 			} catch (Throwable t) {
 				t.printStackTrace(System.err);
 			}
@@ -44,25 +61,6 @@ public class DebugRequestServer {
 	}
 	
 	
-	private void listenInLoop(Object lock) throws Exception {
-		loop = true;
-		LocalDebugger.showEvent("DebugRequestServer listening on " + port);
-		try(ServerSocket server = new ServerSocket(port)) {
-			server.setSoTimeout(10); // make it fast to exit
-			LocalDebugger.showEvent("DebugRequestServer entering loop");
-			while(loop) {
-				try {
-					Socket client = server.accept();
-					if(handleMessage(client)) synchronized(lock) {
-						lock.notify();
-					}
-				} catch(SocketTimeoutException e) {
-					// nothing to do, just helps exit the loop
-				}
-			}
-			LocalDebugger.showEvent("DebugRequestServer exiting loop");
-		}
-	}
 
 	public void stopListening() {
 		loop = false;
@@ -72,7 +70,7 @@ public class DebugRequestServer {
 		}
 	}
 
-	private boolean handleMessage(Socket client) throws Exception {
+	private void handleMessage(Socket client) throws Exception {
 		synchronized(this) {
 			// don't close these streams since that would close the underlying socket
 			InputStream input = client.getInputStream();
@@ -83,7 +81,6 @@ public class DebugRequestServer {
 			LocalDebugger.showEvent("DebugRequestServer responds " + response.getType());
 			sendResponse(output, response);
 			output.flush();
-			return request.getType()==Type.CONNECT;
 		}
 	}
 

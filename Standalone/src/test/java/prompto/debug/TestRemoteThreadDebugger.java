@@ -17,6 +17,7 @@ import prompto.runtime.utils.Out;
 public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebugEventListener {
 
 	Thread thread;
+	DebugEventServer eventServer;
 	String output = null;
 	
 	@Before
@@ -51,7 +52,8 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebug
 	@Override
 	protected void start() throws Exception {
 		thread.start();
-		debugger.connect();
+		debugger = new DebugRequestClient(thread, eventServer);
+		waitConnected();
 	}
 
 	@Override
@@ -61,14 +63,16 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebug
 
 	@Override
 	protected void debugResource(String resourceName) throws Exception {
-		thread = new Thread(new Runnable() {
+		this.eventServer = new DebugEventServer(this);
+		final int port = eventServer.startListening();
+		this.thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				try {
 					URL url = getResourceAsURL(resourceName);
 					String args[] = new String[] { 
 							"-testMode", "true",
-							"-debug_port", "9999",
+							"-debug_port", String.valueOf(port),
 							"-codeStoreFactory", NullStoreFactory.class.getName(),
 							"-application", "test",
 							"-resources", new File(url.toURI()).getAbsolutePath()
@@ -79,8 +83,6 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebug
 				}
 			}
 		}, "Prompto main");
-		this.debugger = new DebugRequestClient(thread, "localhost", 9999, this);
-		
 	}
 	
 	@Test
@@ -112,6 +114,26 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebug
 			return null;
 	}
 	
+	Object lock;
+	
+	private void waitConnected() throws InterruptedException {
+		lock = new Object();
+		synchronized (lock) {
+			lock.wait();
+		}
+		lock = null;
+	}
+
+
+	
+	@Override
+	public void handleConnectedEvent(String host, int port) {
+		((DebugRequestClient)debugger).setRemote(host, port);
+		synchronized (lock) {
+			lock.notify();
+		}		
+	}
+
 	@Override
 	public void handleResumedEvent(ResumeReason reason) {
 	}

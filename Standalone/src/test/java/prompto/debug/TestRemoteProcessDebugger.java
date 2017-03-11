@@ -17,6 +17,7 @@ import prompto.utils.ManualTests;
 @Category(ManualTests.class)
 public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebugEventListener {
 
+	DebugEventServer eventServer;
 	ProcessBuilder builder;
 	Process process;
 	File outputFile;
@@ -55,8 +56,8 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 	@Override
 	protected void start() throws Exception {
 		process = builder.start();
-		debugger = new DebugRequestClient(process, "localhost", 9999, this);
-		debugger.connect();
+		debugger = new DebugRequestClient(process, eventServer);
+		waitConnected();
 	}
 
 
@@ -68,6 +69,8 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 	protected void debugResource(String resourceName) throws Exception {
 		File testFile = tryLocateTestFile(resourceName);
 		loadFile(testFile); 
+		this.eventServer = new DebugEventServer(this);
+		final int port = eventServer.startListening();
 		builder = new ProcessBuilder();
 		File targetDir = getDistributionFolder("0.0.1-SNAPSHOT").toFile();
 		assertTrue(targetDir.getAbsolutePath(), targetDir.exists());
@@ -80,7 +83,7 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 		builder.redirectOutput(outputFile);
 		builder.command("java", 
 				"-jar", "Standalone-0.0.1-SNAPSHOT.jar", 
-				"-debug_port", "9999", 
+				"-debug_port", String.valueOf(port), 
 				"-codeStoreFactory", NullStoreFactory.class.getName(),
 				"-application", "test", 
 				"-resources", "\"" + testFile.getAbsolutePath() + "\"");
@@ -90,6 +93,26 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 		File dest = new File(System.getProperty("java.io.tmpdir"), "Prompto/Java/" + version + "/");
 		dest.mkdirs();
 		return dest.toPath();
+	}
+	
+	Object lock;
+	
+	private void waitConnected() throws InterruptedException {
+		lock = new Object();
+		synchronized (lock) {
+			lock.wait();
+		}
+		lock = null;
+	}
+
+
+	
+	@Override
+	public void handleConnectedEvent(String host, int port) {
+		((DebugRequestClient)debugger).setRemote(host, port);
+		synchronized (lock) {
+			lock.notify();
+		}		
 	}
 
 	@Override
