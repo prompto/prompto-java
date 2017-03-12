@@ -24,6 +24,7 @@ import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDict;
 import prompto.libraries.Libraries;
 import prompto.memstore.MemStoreFactory;
+import prompto.nullstore.NullStoreFactory;
 import prompto.store.AttributeInfo;
 import prompto.store.IDataStore;
 import prompto.store.IStore;
@@ -95,6 +96,8 @@ public abstract class Application {
 			test = argsMap.get("test");
 		if(argsMap.containsKey("version"))
 			version = Version.parse(argsMap.get("version"));
+		if(!Boolean.getBoolean(argsMap.getOrDefault("loadRuntime", "true")))
+			codeStoreFactory = NullStoreFactory.class.getName();
 		if(argsMap.containsKey("codeStoreFactory"))
 			codeStoreFactory = argsMap.get("codeStoreFactory");
 		if(argsMap.containsKey("dataStoreFactory"))
@@ -108,6 +111,7 @@ public abstract class Application {
 			showHelp(application, test, version);
 			System.exit(-1); // raise an error in whatever tool is used to launch this
 		}
+
 		// initialize code store
 		IStoreFactory factory = newStoreFactory(codeStoreFactory);
 		IStore store = factory.newStore(args, codeStoreType);
