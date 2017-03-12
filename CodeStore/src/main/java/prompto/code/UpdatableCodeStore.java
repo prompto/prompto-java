@@ -1,8 +1,8 @@
 package prompto.code;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.DeclarationList;
@@ -30,7 +31,6 @@ import prompto.grammar.EqOp;
 import prompto.grammar.Identifier;
 import prompto.grammar.OrderByClause;
 import prompto.grammar.OrderByClauseList;
-import prompto.libraries.Libraries;
 import prompto.literal.TextLiteral;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
@@ -58,25 +58,24 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	// some of these are code store specific and should not be looked for in the app context
 	Context context; 
 	
-	public UpdatableCodeStore(IStore store, String application, String version, String ...resourceNames) throws PromptoError {
+	public UpdatableCodeStore(IStore store, Supplier<Collection<URL>> runtimeSupplier, String application, String version, String ...resourceNames) throws PromptoError {
 		super(null);
 		this.store = store;
 		this.application = application;
 		this.version = Version.parse(version);
-		ICodeStore runtime = bootstrapRuntime();
+		ICodeStore runtime = bootstrapRuntime(runtimeSupplier);
 		this.context = CodeStoreBootstrapper.bootstrap(store, runtime);
 		this.next = AppStoreBootstrapper.bootstrap(store, runtime, application, version, resourceNames);
 	}
 	
-	protected ICodeStore bootstrapRuntime() {
+	protected ICodeStore bootstrapRuntime(Supplier<Collection<URL>> runtimeSupplier) {
 		System.out.println("Connecting to prompto runtime libraries...");
 		try {
 			ICodeStore runtime = null;
-			Collection<String> resources = Libraries.getRuntimeResources();
-			if(resources!=null) for(String name : resources)
-				runtime = new ResourceCodeStore(runtime, ModuleType.LIBRARY, "libraries/" + name, "1.0.0");
+			if(runtimeSupplier!=null) for(URL resource : runtimeSupplier.get())
+				runtime = new ResourceCodeStore(runtime, ModuleType.LIBRARY, resource, "1.0.0");
 			return runtime;
-		} catch(IOException e) {
+		} catch(RuntimeException e) {
 			throw new ReadWriteError(e.getMessage());
 		}
 	}

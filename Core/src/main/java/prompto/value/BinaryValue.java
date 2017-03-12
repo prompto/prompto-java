@@ -2,6 +2,7 @@ package prompto.value;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -21,10 +22,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class BinaryValue extends BaseValue {
 
-	public static BinaryValue fromResource(String path) throws IOException {
-		String ext = path.substring(path.lastIndexOf('.') + 1);
+	public static BinaryValue fromURL(URL url) throws IOException {
+		String ext = url.toExternalForm();
+		ext = ext.substring(ext.lastIndexOf('.') + 1);
 		String mimeType = fileExtensionToMimeType(ext);
-		byte[] bytes = ResourceUtils.getResourceAsBytes(path);
+		byte[] bytes = ResourceUtils.getResourceAsBytes(url);
 		return newInstance(new PromptoBinary(mimeType, bytes));
 	}
 	

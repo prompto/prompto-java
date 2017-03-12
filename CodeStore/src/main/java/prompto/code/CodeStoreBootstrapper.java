@@ -1,5 +1,6 @@
 package prompto.code;
 
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -43,7 +44,8 @@ public class CodeStoreBootstrapper {
 	
 	private CodeStoreBootstrapper(IStore store, ICodeStore runtime) {
 		this.store = store;
-		this.next = new ResourceCodeStore(runtime, ModuleType.LIBRARY, "CodeStore.pec", "1.0.0");
+		URL url = Thread.currentThread().getContextClassLoader().getResource("CodeStore.pec");
+		this.next = new ResourceCodeStore(runtime, ModuleType.LIBRARY, url, "1.0.0");
 	}
 
 	private void bootstrap() throws PromptoError {
