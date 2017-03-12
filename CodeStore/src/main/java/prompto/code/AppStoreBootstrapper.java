@@ -13,6 +13,10 @@ public class AppStoreBootstrapper {
 	public static ICodeStore bootstrap(IStore store, ICodeStore runtime, String application, String version, String ... resourceNames) {
 		System.out.println("Connecting to code store for application " + application + " version " + version + "...");
 		if(resourceNames!=null) for(String resourceName : resourceNames) {
+			if(resourceName.startsWith("\""))
+				resourceName = resourceName.substring(1);
+			if(resourceName.endsWith("\""))
+				resourceName = resourceName.substring(0, resourceName.length()-1);
 			File file = new File(resourceName);
 			if(!file.exists())
 				throw new ReadWriteError("Could not locate resource: " + resourceName);
