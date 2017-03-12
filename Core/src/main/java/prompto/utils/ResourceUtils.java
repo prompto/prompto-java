@@ -127,4 +127,9 @@ public abstract class ResourceUtils {
 			return data.toByteArray();
 		}
 	}
+
+	public static String getResourceAsString(String path) throws IOException {
+		byte[] bytes = getResourceAsBytes(path);
+		return bytes==null ? null : new String(bytes);
+	}
 }

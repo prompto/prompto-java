@@ -70,6 +70,7 @@ public class PromptoDocument<K,V> extends HashMap<K,V> implements ISerializable 
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void valueToJson(V value, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> binaries) throws IOException {
 		if(value instanceof ISerializable)
 			((ISerializable)value).toJson(generator, instanceId, fieldName, withType, binaries);
@@ -81,7 +82,12 @@ public class PromptoDocument<K,V> extends HashMap<K,V> implements ISerializable 
 			generator.writeNumber(((Double)value).doubleValue());
 		else if(value instanceof String)
 			generator.writeString((String)value);
-		else if(value instanceof Character) {
+		else if(value instanceof PromptoList) {
+			generator.writeStartArray();
+			for(V item : (PromptoList<V>)value)
+				valueToJson(item, generator, null, null, withType, binaries);
+			generator.writeEndArray();
+		} else if(value instanceof Character) {
 			if(withType) {
 				generator.writeStartObject();
 				generator.writeFieldName("type");
