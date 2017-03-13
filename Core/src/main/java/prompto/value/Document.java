@@ -120,10 +120,12 @@ public class Document extends BaseValue {
 	@Override
 	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
 		try {
-			generator.writeStartObject();
-			generator.writeFieldName("type");
-			generator.writeString(DocumentType.instance().getTypeName());
-			generator.writeFieldName("value");
+			if(withType) {
+				generator.writeStartObject();
+				generator.writeFieldName("type");
+				generator.writeString(DocumentType.instance().getTypeName());
+				generator.writeFieldName("value");
+			}
 			generator.writeStartObject();
 			for(Entry<Identifier, IValue> entry : values.entrySet()) {
 				generator.writeFieldName(entry.getKey().toString());
@@ -134,7 +136,8 @@ public class Document extends BaseValue {
 					value.toJson(context, generator, System.identityHashCode(this), entry.getKey(), withType, binaries);
 			}
 			generator.writeEndObject();
-			generator.writeEndObject();
+			if(withType)
+				generator.writeEndObject();
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		}
