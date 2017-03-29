@@ -19,6 +19,24 @@ import prompto.utils.ManualTests;
 public class TestApplication extends BaseEParserTest {
 
 	@Test
+	public void testLibraryApplication() throws Throwable {
+		File testFile = tryLocateTestFile("debug/stack.pec");
+		loadFile(testFile); 
+		String[] args = new String[] {
+				"-application", "test", 
+				"-resources", "\"" + testFile.getAbsolutePath() + "\"",
+				"-loadRuntime", "false"
+		};
+		Out.init();
+		try {
+			Application.main(args);
+			assertEquals("test123-ok", readLastLine(Out.read()));
+		} finally {
+			Out.restore();
+		}
+	}
+
+	@Test
 	public void testLocalRunApplication() throws Throwable {
 		File testFile = tryLocateTestFile("debug/stack.pec");
 		loadFile(testFile); 

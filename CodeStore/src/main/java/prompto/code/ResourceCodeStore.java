@@ -1,9 +1,6 @@
 package prompto.code;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,23 +24,17 @@ import prompto.utils.SectionLocator;
 public class ResourceCodeStore extends BaseCodeStore {
 
 	ModuleType type;
-	String resourceName;
+	URL resource;
 	Version version;
 	Map<String, List<IDeclaration>> declarations = null;
 	
-	public ResourceCodeStore(ICodeStore next, ModuleType type, String resourceName, String version) {
+	public ResourceCodeStore(ICodeStore next, ModuleType type, URL resource, String version) {
 		super(next);
+		if(resource==null)
+			throw new NullPointerException();
 		this.type = type;
-		this.resourceName = trim(resourceName);
+		this.resource = resource;
 		this.version = Version.parse(version);
-	}
-
-	private static String trim(String resourceName) {
-		if(resourceName.startsWith("\""))
-			resourceName = resourceName.substring(1);
-		if(resourceName.endsWith("\""))
-			resourceName = resourceName.substring(0, resourceName.length() - 1);
-		return resourceName;
 	}
 
 	@Override
@@ -53,13 +44,14 @@ public class ResourceCodeStore extends BaseCodeStore {
 	
 	@Override
 	public Dialect getModuleDialect() {
-		String s = "" + resourceName.charAt(resourceName.length()-2);
-		return Dialect.valueOf(s.toUpperCase());
+		String external = resource.toExternalForm();
+		char c = external.charAt(external.length()-2);
+		return Dialect.valueOf(String.valueOf(c).toUpperCase());
 	}
 	
 	@Override
 	public String getModuleName() {
-		String moduleName = resourceName;
+		String moduleName = resource.toExternalForm();
 		int idx = moduleName.lastIndexOf('/');
 		if(idx>=0)
 			moduleName = moduleName.substring(idx+1);
@@ -119,7 +111,7 @@ public class ResourceCodeStore extends BaseCodeStore {
 
 
 	private ISection fetchInResource(ISection section) {
-		if(!resourceName.equals(section.getFilePath()))
+		if(!resource.toExternalForm().equals(section.getFilePath()))
 			return null;
 		loadResource();
 		return SectionLocator.findSectionInLists(declarations.values(), section);
@@ -134,49 +126,17 @@ public class ResourceCodeStore extends BaseCodeStore {
 
 	private void loadResource() throws PromptoError {
 		try {
-			if(declarations==null) 
+			if(declarations==null)
 				tryLoadResource();
 			if(declarations==null)
-				tryLoadFile();
-			if(declarations==null)
-				tryLoadURL();
-			if(declarations==null)
-				throw new InvalidResourceError(resourceName);
+				throw new InvalidResourceError(resource.toExternalForm());
 		} catch(PromptoError error) {
 			throw error;
 		}
 	}
 
-	private void tryLoadURL() {
-		try {
-			URL url = new URL(resourceName);
-			try(InputStream input = url.openStream()) {
-				parseResource(input);
-			} catch(PromptoError error) {
-				throw error;
-			} catch(Exception e) {
-				throw new InternalError(e);
-			}
-		} catch(MalformedURLException e) {
-			// nothing to do
-		}
-	}
-	
-	private void tryLoadFile() {
-		File file = new File(resourceName);
-		if(file.exists()) {
-			try(InputStream input = new FileInputStream(file)) {
-				parseResource(input);
-			} catch(PromptoError error) {
-				throw error;
-			} catch(Exception e) {
-				throw new InternalError(e);
-			}
-		}
-	}
-
 	private void tryLoadResource() {
-		try(InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName)) {
+		try(InputStream input = resource.openStream()) {
 			if(input!=null)
 				parseResource(input);
 		} catch(PromptoError error) {
@@ -187,7 +147,7 @@ public class ResourceCodeStore extends BaseCodeStore {
 	}
 
 	private void parseResource(InputStream input) throws Exception {
-		DeclarationList decls = ICodeStore.parse(resourceName, input);
+		DeclarationList decls = ICodeStore.parse(resource.toExternalForm(), input);
 		declarations = new HashMap<String, List<IDeclaration>>();
 		for(IDeclaration decl : decls) {
 			decl.setOrigin(this);

@@ -1,6 +1,7 @@
 package prompto.reader;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -18,6 +19,15 @@ public abstract class JSONReader {
 	public static Object read(String json) throws IOException {
 		try {
 			JsonNode node = new ObjectMapper().readTree(json);
+			return nodeToPrompto(node);
+		} catch(RuntimeException e) {
+			throw new IOException(e.getMessage());
+		}
+	}
+
+	public static Object read(InputStream input) throws IOException {
+		try {
+			JsonNode node = new ObjectMapper().readTree(input);
 			return nodeToPrompto(node);
 		} catch(RuntimeException e) {
 			throw new IOException(e.getMessage());

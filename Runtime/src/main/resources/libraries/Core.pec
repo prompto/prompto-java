@@ -83,6 +83,10 @@ define description as storable Text attribute with words index
 define version as storable Text attribute
 // many objects have a user, it is not unique 
 define user as storable Text attribute with key and value index
+// many connections require a login, it is not always a user name 
+define login as storable Text attribute with key and value index
+// many connections require a password, it should not be storable 
+define password as Text attribute
 // many objects have an image, it is not unique 
 define image as storable Image attribute
 // many events have a timeStamp

@@ -315,7 +315,7 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 			}
 			generator.writeStartArray();
 			for(IValue value : this.items)
-				value.toJson(context, generator, null, null, withType, data);
+				value.toJson(context, generator, System.identityHashCode(this), null, withType, data);
 			generator.writeEndArray();
 			if(withType)
 				generator.writeEndObject();

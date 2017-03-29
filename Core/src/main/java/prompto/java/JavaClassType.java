@@ -112,8 +112,8 @@ public class JavaClassType extends BaseType {
 		if(type instanceof ParameterizedType) {
 			ParameterizedType ptype = (ParameterizedType)type;
 			return ptype.getActualTypeArguments()[index];	
-		}
-		return null;
+		} else
+			return Object.class;
 	}
 
 	public IValue convertJavaValueToPromptoValue(Context context, Object value, IType returnType) {
@@ -152,9 +152,12 @@ public class JavaClassType extends BaseType {
     }
 
 	private static IValue convertDocument(Context context, Object value, Type type, IType returnType) {
-		if(!(value instanceof PromptoDocument<?,?>) || returnType!=DocumentType.instance())
-			return null;
-		return new Document(context, (PromptoDocument<?,?>)value);
+		if(value instanceof PromptoDocument<?,?>) {
+			if(returnType==DocumentType.instance() || returnType==AnyType.instance()) {
+				return new Document(context, (PromptoDocument<?,?>)value);
+			}
+		}
+		return null;
 	}
 
 	private static IValue convertIValue(Object value) {
@@ -176,16 +179,19 @@ public class JavaClassType extends BaseType {
 
 	@SuppressWarnings("unchecked")
 	private static IValue convertList(Context context, Object value, Type type, IType returnType) {
-		if(!(value instanceof List<?>) || !(returnType instanceof ListType))
-			return null;
-		Type elemType = nthArgTypeFromParameterizedType(type, 0);
-		IType itemType = ((ListType)returnType).getItemType();
-		PromptoList<IValue> list = new PromptoList<IValue>(false);
-		for(Object obj : (List<Object>)value) {
-			IValue val = convertJavaValueToPromptoValue(context, obj, elemType, itemType);
-			list.add(val);
+		if(value instanceof List<?>) {
+			if(returnType instanceof ListType || returnType==AnyType.instance()) {
+				Type elemType = nthArgTypeFromParameterizedType(type, 0);
+				IType itemType = returnType instanceof ListType ? ((ListType)returnType).getItemType() : AnyType.instance();
+				PromptoList<IValue> list = new PromptoList<IValue>(false);
+				for(Object obj : (List<Object>)value) {
+					IValue val = convertJavaValueToPromptoValue(context, obj, elemType, itemType);
+					list.add(val);
+				}
+				return new ListValue(itemType, list);
+			}
 		}
-		return new ListValue(itemType, list);
+		return null;
 	}
 	
 	@SuppressWarnings("unchecked")
