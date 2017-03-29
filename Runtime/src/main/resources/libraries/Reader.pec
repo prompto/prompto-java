@@ -39,8 +39,8 @@ and verifying:
 define "test that readJson returns a List" as test method doing:
 	o = readJson "[{\"field\":122}]"
 and verifying:
-	o is a Any[]
-	o[1].field = 122 
+	o is a any[]
+	o[1].field = 122
 
 define iterateCsv as native method receiving text, Text{} columnNames = nothing, Character separator = ',', Character quote = '"' returning Iterator<Document> doing:
 	Java: return prompto.reader.CSVReader.iterator(text, columnNames, separator, quote);
