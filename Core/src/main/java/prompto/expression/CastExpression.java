@@ -11,6 +11,7 @@ import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
+import prompto.type.AnyType;
 import prompto.type.CategoryType;
 import prompto.type.DecimalType;
 import prompto.type.IType;
@@ -34,8 +35,7 @@ public class CastExpression implements IExpression {
 	public IType check(Context context) {
 		IType actual = expression.check(context);
 		// check upcast
-		if(actual instanceof CategoryType
-			&& ((CategoryType)actual).isDerivedFrom(context, type))
+		if(type.isAssignableFrom(context, actual))
 			return type;
 		// check downcast
 		if(actual.isAssignableFrom(context, type))

@@ -36,6 +36,13 @@ public class DocumentType extends NativeType {
 	}
 	
 	@Override
+	public boolean isAssignableFrom(Context context, IType other) {
+		return super.isAssignableFrom(context, other)
+				|| other==AnyType.instance()
+				|| (other instanceof CategoryType && "Any".equals(other.getTypeName()));
+	}
+	
+	@Override
 	public Type getJavaType(Context context) {
 		return PromptoDocument.class;
 	}
