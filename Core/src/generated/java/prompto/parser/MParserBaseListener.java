@@ -3749,6 +3749,18 @@ public class MParserBaseListener implements MParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterPythonSelfExpression(@NotNull MParser.PythonSelfExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPythonSelfExpression(@NotNull MParser.PythonSelfExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterPythonParenthesisExpression(@NotNull MParser.PythonParenthesisExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -3792,6 +3804,18 @@ public class MParserBaseListener implements MParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPythonGlobalMethodExpression(@NotNull MParser.PythonGlobalMethodExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPython_self_expression(@NotNull MParser.Python_self_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPython_self_expression(@NotNull MParser.Python_self_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

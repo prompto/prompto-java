@@ -3481,6 +3481,18 @@ public interface MParserListener extends ParseTreeListener {
 	 */
 	void exitPythonPrimaryExpression(@NotNull MParser.PythonPrimaryExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code PythonSelfExpression}
+	 * labeled alternative in {@link MParser#python_primary_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterPythonSelfExpression(@NotNull MParser.PythonSelfExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code PythonSelfExpression}
+	 * labeled alternative in {@link MParser#python_primary_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitPythonSelfExpression(@NotNull MParser.PythonSelfExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code PythonParenthesisExpression}
 	 * labeled alternative in {@link MParser#python_primary_expression}.
 	 * @param ctx the parse tree
@@ -3528,6 +3540,16 @@ public interface MParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitPythonGlobalMethodExpression(@NotNull MParser.PythonGlobalMethodExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MParser#python_self_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterPython_self_expression(@NotNull MParser.Python_self_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MParser#python_self_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitPython_self_expression(@NotNull MParser.Python_self_expressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code PythonMethodExpression}
 	 * labeled alternative in {@link MParser#python_selector_expression}.

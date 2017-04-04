@@ -168,6 +168,7 @@ import prompto.literal.TimeLiteral;
 import prompto.literal.TupleLiteral;
 import prompto.literal.UUIDLiteral;
 import static prompto.parser.EParser.*;
+import prompto.parser.EParser.PythonSelfExpressionContext;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -185,6 +186,7 @@ import prompto.python.PythonNamedArgument;
 import prompto.python.PythonNativeCategoryBinding;
 import prompto.python.PythonOrdinalArgument;
 import prompto.python.PythonSelectorExpression;
+import prompto.python.PythonSelfExpression;
 import prompto.python.PythonStatement;
 import prompto.python.PythonTextLiteral;
 import prompto.statement.AssignInstanceStatement;
@@ -2296,6 +2298,12 @@ public class EPromptoBuilder extends EParserBaseListener {
 		selector.setParent(parent);
 		setNodeValue(ctx, selector);
 	}
+	
+	@Override
+	public void exitPythonSelfExpression(PythonSelfExpressionContext ctx) {
+		setNodeValue(ctx, new PythonSelfExpression());
+	}
+	
 	
 	@Override
 	public void exitPythonStatement(PythonStatementContext ctx) {

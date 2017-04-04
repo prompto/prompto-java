@@ -3797,6 +3797,18 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterPythonSelfExpression(@NotNull OParser.PythonSelfExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPythonSelfExpression(@NotNull OParser.PythonSelfExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterPythonParenthesisExpression(@NotNull OParser.PythonParenthesisExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -3840,6 +3852,18 @@ public class OParserBaseListener implements OParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPythonGlobalMethodExpression(@NotNull OParser.PythonGlobalMethodExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPython_self_expression(@NotNull OParser.Python_self_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPython_self_expression(@NotNull OParser.Python_self_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
