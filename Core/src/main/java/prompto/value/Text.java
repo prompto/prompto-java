@@ -1,6 +1,7 @@
 package prompto.value;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.text.Collator;
 import java.util.Iterator;
 import java.util.Map;
@@ -206,7 +207,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	}
 	
 	@Override
-	public Object convertTo(Class<?> type) {
+	public Object convertTo(Context context, Type type) {
 		return value;
 	}
 

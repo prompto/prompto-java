@@ -1,5 +1,6 @@
 package prompto.value;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
@@ -62,7 +63,8 @@ public abstract class BaseValue implements IValue {
 		return (this instanceof ISliceable) ? (ISliceable<IValue>)this : null;
 	}
 	
-	public Object convertTo(Class<?> type) {
+	@Override
+	public Object convertTo(Context context, Type type) {
 		return this;
 	}
 	

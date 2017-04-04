@@ -126,7 +126,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
         if (value instanceof IExpression)
             value = ((IExpression)value).interpret(context);
         if (value instanceof IValue)
-            value = ((IValue)value).convertTo(type);
+            value = ((IValue)value).convertTo(context, type);
         return value;
     }
 

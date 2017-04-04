@@ -1,5 +1,7 @@
 package prompto.value;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -160,12 +162,12 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 	}
 	
 	@Override
-	public Object convertTo(Class<?> type) {
-		Class<?> itemType = Object.class; // TODO (Class<?>)((ParameterizedType)(Object)type).getActualTypeArguments()[1];
+	public Object convertTo(Context context, Type type) {
+		Type itemType = ((ParameterizedType)type).getActualTypeArguments()[1];
 		PromptoDict<String, Object> dict = new PromptoDict<>(true);
 		for(Map.Entry<Text, IValue> entry : this.dict.entrySet()) {
 			String key = entry.getKey().toString();
-			Object value = entry.getValue().convertTo(itemType);
+			Object value = entry.getValue().convertTo(context, itemType);
 			dict.put(key, value);
 		}
 		dict.setMutable(this.isMutable());

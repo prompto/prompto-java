@@ -1,6 +1,7 @@
 package prompto.value;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -36,7 +37,7 @@ public class NullValue extends BaseValue {
 	
 	
 	@Override
-	public Object convertTo(Class<?> type) {
+	public Object convertTo(Context context, Type type) {
 		return null; // YES! you read correctly
 	}
 	

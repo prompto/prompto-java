@@ -1,6 +1,7 @@
 package prompto.value;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -322,6 +323,17 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		}
+	}
+	
+	@Override
+	public Object convertTo(Context context, Type type) {
+		if(type==PromptoList.class) {
+			Type itemType = this.getItemType().getJavaType(context);
+			PromptoList<Object> result = new PromptoList<>(true);
+			items.forEach((item)->result.add(item.convertTo(context, itemType)));
+			return result;
+		} else
+			return super.convertTo(context, type);
 	}
 
 }

@@ -112,7 +112,7 @@ public abstract class Symbol extends Section implements IExpression, INamed, IVa
 	}
 	
 	@Override
-	public Object convertTo(Class<?> type) {
+	public Object convertTo(Context context, Type type) {
 		return this;
 	}
 	

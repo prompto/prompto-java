@@ -1,5 +1,6 @@
 package prompto.value;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
@@ -102,7 +103,7 @@ public interface IValue {
 		throw new UnsupportedOperationException("asSliceable not supported by " + this.getClass().getSimpleName());
 	};
 
-	default Object convertTo(Class<?> type) throws PromptoError {
+	default Object convertTo(Context context, Type type) throws PromptoError {
 		throw new UnsupportedOperationException("convertTo not supported by " + this.getClass().getSimpleName());
 	};
 

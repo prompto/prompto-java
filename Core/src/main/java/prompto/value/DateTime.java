@@ -1,6 +1,7 @@
 package prompto.value;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.Map;
 
 import prompto.compiler.CompilerUtils;
@@ -145,7 +146,7 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 	}
 
 	@Override
-	public Object convertTo(Class<?> type) {
+	public Object convertTo(Context context, Type type) {
 		return value;
 	}
 

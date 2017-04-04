@@ -1,5 +1,7 @@
 package prompto.value;
 
+import java.lang.reflect.Type;
+
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.grammar.ArgumentList;
@@ -18,11 +20,11 @@ public class ClosureValue extends BaseValue {
 	}
 	
 	@Override
-	public Object convertTo(Class<?> type) {
+	public Object convertTo(Context context, Type type) {
 		if(type==IMethodDeclaration.class)
 			return getMethod();
 		else
-			return super.convertTo(type);
+			return super.convertTo(context, type);
 	}
 	
 	private IMethodDeclaration getMethod() {

@@ -1,5 +1,7 @@
 package prompto.value;
 
+import java.lang.reflect.Type;
+
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.IOperand;
@@ -99,7 +101,7 @@ public class Period extends BaseValue implements IMultiplyable {
 	
 
 	@Override
-	public Object convertTo(Class<?> type) {
+	public Object convertTo(Context context, Type type) {
 		return value;
 	}
 

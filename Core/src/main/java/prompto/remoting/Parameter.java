@@ -96,7 +96,7 @@ public class Parameter {
 	}
 	
 	public Object toJavaValue(Context context) {
-		return value.convertTo(Object.class);
+		return value.convertTo(context, Object.class);
 	}
 	
 	public ArgumentAssignment toAssignment(Context context) {
