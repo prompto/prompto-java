@@ -6,6 +6,6 @@ public class PythonSelfExpression implements PythonExpression {
 	
 	@Override
 	public void toDialect(CodeWriter writer) {
-		writer.append("this");
+		writer.append("self");
 	}
 }

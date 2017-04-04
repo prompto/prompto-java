@@ -185,6 +185,7 @@ import prompto.python.PythonNamedArgument;
 import prompto.python.PythonNativeCategoryBinding;
 import prompto.python.PythonOrdinalArgument;
 import prompto.python.PythonSelectorExpression;
+import prompto.python.PythonSelfExpression;
 import prompto.python.PythonStatement;
 import prompto.python.PythonTextLiteral;
 import prompto.statement.AssignInstanceStatement;
@@ -2240,6 +2241,13 @@ public class MPromptoBuilder extends MParserBaseListener {
 		selector.setParent(parent);
 		setNodeValue(ctx, selector);
 	}
+	
+	
+	@Override
+	public void exitPythonSelfExpression(PythonSelfExpressionContext ctx) {
+		setNodeValue(ctx, new PythonSelfExpression());
+	}
+	
 	
 	@Override
 	public void exitPythonStatement(PythonStatementContext ctx) {
