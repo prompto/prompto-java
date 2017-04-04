@@ -1,6 +1,7 @@
 package prompto.expression;
 
 import java.util.Collection;
+import java.util.stream.StreamSupport;
 
 import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
@@ -38,6 +39,7 @@ import prompto.utils.CodeWriter;
 import prompto.value.Boolean;
 import prompto.value.IContainer;
 import prompto.value.IInstance;
+import prompto.value.IIterable;
 import prompto.value.IValue;
 
 public class ContainsExpression extends Section implements IPredicateExpression, IAssertion {
@@ -193,11 +195,15 @@ public class ContainsExpression extends Section implements IPredicateExpression,
             case NOT_IN:
                 if(rval instanceof IContainer)
                     result = ((IContainer<?>)rval).hasItem(context, lval);
+                else if(rval instanceof IIterable)
+                	result = containsOne(context, (IIterable<?>)rval, lval);
                 break;
             case CONTAINS:
             case NOT_CONTAINS:
                 if(lval instanceof IContainer)
                     result = ((IContainer<?>)lval).hasItem(context, rval);
+                else if(lval instanceof IIterable)
+                	result = containsOne(context, (IIterable<?>)lval, rval);
                 break;
             case CONTAINS_ALL:
             case NOT_CONTAINS_ALL:
@@ -226,6 +232,11 @@ public class ContainsExpression extends Section implements IPredicateExpression,
         throw new SyntaxError("Illegal comparison: " + lval.getClass().getSimpleName() +
         		" " + lowerName + " " + rval.getClass().getSimpleName());	
     }
+
+	private java.lang.Boolean containsOne(Context context, IIterable<?> container, IValue item) {
+		return StreamSupport.stream(container.getIterable(context).spliterator(), false)
+				.anyMatch((o)->o.equals(item));
+	}
 
 	public boolean containsAll(Context context, IContainer<?> container, IContainer<?> items) throws PromptoError
     {
