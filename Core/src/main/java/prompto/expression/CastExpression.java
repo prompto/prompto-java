@@ -11,15 +11,13 @@ import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
-import prompto.type.AnyType;
-import prompto.type.CategoryType;
 import prompto.type.DecimalType;
 import prompto.type.IType;
 import prompto.type.IntegerType;
 import prompto.utils.CodeWriter;
 import prompto.value.Decimal;
-import prompto.value.Integer;
 import prompto.value.IValue;
+import prompto.value.Integer;
 
 public class CastExpression implements IExpression {
 	

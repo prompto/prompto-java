@@ -37,6 +37,11 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 		this.assignments = assignments;
 	}
 	
+	@Override
+	public String toString() {
+		return caller.toString();
+	}
+	
 	public IExpression getCaller() {
 		return caller;
 	}
