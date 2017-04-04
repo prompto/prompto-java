@@ -163,7 +163,9 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 	
 	@Override
 	public Object convertTo(Context context, Type type) {
-		Type itemType = ((ParameterizedType)type).getActualTypeArguments()[1];
+		Type itemType = Object.class;
+		if(type instanceof ParameterizedType)
+			itemType = ((ParameterizedType)type).getActualTypeArguments()[1];
 		PromptoDict<String, Object> dict = new PromptoDict<>(true);
 		for(Map.Entry<Text, IValue> entry : this.dict.entrySet()) {
 			String key = entry.getKey().toString();
