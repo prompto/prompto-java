@@ -9,6 +9,6 @@ public class CSharpThisExpression implements CSharpExpression {
 	
 	@Override
 	public void toDialect(CodeWriter writer) {
-		expression.toDialect(writer);
+		writer.append("this");
 	}
 }

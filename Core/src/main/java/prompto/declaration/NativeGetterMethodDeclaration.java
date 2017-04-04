@@ -46,6 +46,7 @@ public class NativeGetterMethodDeclaration extends GetterMethodDeclaration {
 		return null;
 	}
 	
+	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		if(statement!=null) {
 			AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, getId());

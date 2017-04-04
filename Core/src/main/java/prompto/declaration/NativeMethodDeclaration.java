@@ -5,8 +5,10 @@ import prompto.compiler.CompilerException;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
+import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.java.JavaNativeCall;
@@ -99,7 +101,12 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 	
 	@Override
 	public void compile(Context context, boolean isStart, ClassFile classFile) {
-		try {
+		compileGlobal(context, classFile);
+	}
+	
+	
+	public void compileGlobal(Context context, ClassFile classFile) {
+			try {
 			context = context.newLocalContext();
 			registerArguments(context);
 			IType returnType = this.checkNative(context);
@@ -116,9 +123,22 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 	}
 
 	
+	public ResultInfo compileMember(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments) {
+		try {
+			// push arguments on the stack
+			compileAssignments(context, method, flags, assignments);
+			return statement.compile(context, method, new Flags());
+		} catch (PromptoError e) {
+			throw new CompilerException(e);
+		}
+	}
+
+	
 	@Override
 	protected void toMDialect(CodeWriter writer) {
-		writer.append("def native ");
+		writer.append("def ");
+		if(memberOf==null)
+			writer.append("native ");
 		writer.append(getName());
 		writer.append(" (");
 		arguments.toDialect(writer);
@@ -139,7 +159,9 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 			returnType.toDialect(writer);
 			writer.append(" ");
 		}
-		writer.append("native method ");
+		if(memberOf==null)
+			writer.append("native ");
+		writer.append("method ");
 		writer.append(getName());
 		writer.append(" (");
 		arguments.toDialect(writer);
@@ -157,7 +179,10 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 	protected void toEDialect(CodeWriter writer) {
 		writer.append("define ");
 		writer.append(getName());
-		writer.append(" as native method ");
+		writer.append(" as ");
+		if(memberOf==null)
+			writer.append("native ");
+		writer.append("method ");
 		arguments.toDialect(writer);
 		if(returnType!=null && returnType!=VoidType.instance()) {
 			writer.append("returning ");
@@ -170,5 +195,6 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 		writer.dedent();
 		writer.append("\n");
 	}
+
 	
 }

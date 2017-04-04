@@ -16,6 +16,11 @@ public class JavaThisExpression extends Section implements JavaExpression {
 	ThisExpression expression = new ThisExpression();
 	
 	@Override
+	public String toString() {
+		return "this";
+	}
+	
+	@Override
 	public IType check(Context context) {
 		return expression.check(context);
 	}
@@ -27,7 +32,7 @@ public class JavaThisExpression extends Section implements JavaExpression {
 	
 	@Override
 	public void toDialect(CodeWriter writer) {
-		expression.toDialect(writer);
+		writer.append("this");
 	}
 	
 	@Override

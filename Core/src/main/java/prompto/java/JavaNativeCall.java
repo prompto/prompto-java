@@ -1,8 +1,8 @@
 package prompto.java;
 
 import prompto.compiler.Flags;
-import prompto.compiler.ResultInfo;
 import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.runtime.Context;
 import prompto.statement.NativeCall;
@@ -51,4 +51,5 @@ public class JavaNativeCall extends NativeCall {
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		return statement.compile(context, method, flags);
 	}
+
 }

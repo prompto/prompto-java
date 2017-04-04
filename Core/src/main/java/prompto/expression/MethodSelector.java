@@ -22,10 +22,13 @@ import prompto.compiler.NameAndTypeConstant;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
+import prompto.compiler.StackState;
+import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.declaration.BuiltInMethodDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.declaration.IMethodDeclaration;
+import prompto.declaration.NativeMethodDeclaration;
 import prompto.declaration.SingletonCategoryDeclaration;
 import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
@@ -40,6 +43,7 @@ import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.ConcreteInstance;
 import prompto.value.IValue;
+import prompto.value.NativeInstance;
 import prompto.value.NullValue;
 import prompto.value.TypeValue;
 
@@ -308,13 +312,28 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 				BuiltInMethodDeclaration builtin = (BuiltInMethodDeclaration)declaration;
 				if(builtin.hasCompileExactInstanceMember())
 					return builtin.compileExactInstanceMember(context, method, flags, assignments);
-			}
-			// default
+			} else if(declaration instanceof NativeMethodDeclaration)
+				return compileExactNativeMember (context, method, flags, (NativeMethodDeclaration)declaration, assignments, c);	
 			return compileExactInstanceMember(context, method, flags, declaration, assignments, c);
 		}
 	}
 	
 
+	public ResultInfo compileExactNativeMember(Context context, MethodInfo method, Flags flags, 
+			NativeMethodDeclaration declaration, ArgumentAssignmentList assignments, ClassConstant parentClass) {
+		StackState state = method.captureStackState();
+		// can't use 'this' since it could refer to another abject than the native parent
+		StackLocal local = method.registerLocal("$this$", VerifierType.ITEM_Object, parentClass); 
+		CompilerUtils.compileASTORE(method, local);
+		context = context.newCategoryContext(declaration.getMemberOf().getType(context)).newChildContext(); // mimic method call
+		ResultInfo info = declaration.compileMember(context, method, new Flags(), assignments);
+		method.unregisterLocal(local);
+		method.restoreStackLocals(state);
+		state = method.captureStackState();
+		method.placeLabel(state);
+		return info;
+	}
+	
 	public Context newLocalContext(Context context, IMethodDeclaration declaration) throws PromptoError {
 		if(parent!=null)
 			return newInstanceContext(context);
@@ -351,6 +370,9 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 			value = context.loadSingleton(context, (CategoryType)((TypeValue)value).getValue());
 		if(value instanceof ConcreteInstance) {
 			context = context.newInstanceContext((ConcreteInstance)value);
+			return context.newChildContext();
+		} else if(value instanceof NativeInstance) {
+			context = context.newInstanceContext((NativeInstance)value);
 			return context.newChildContext();
 		} else {
 			context = context.newBuiltInContext(value);

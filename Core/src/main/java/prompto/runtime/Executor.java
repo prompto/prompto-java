@@ -80,6 +80,7 @@ public abstract class Executor {
 		} catch(ClassNotFoundException | NoSuchMethodException e) {
 			throw new SyntaxError("Could not find a compatible \"" + methodName + "\" method.");
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | IOException e) {
+			e.printStackTrace(System.err);
 			throw new InternalError(e);
 		} finally {
 			context.notifyTerminated();

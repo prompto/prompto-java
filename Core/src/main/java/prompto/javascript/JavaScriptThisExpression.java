@@ -9,6 +9,6 @@ public class JavaScriptThisExpression implements JavaScriptExpression {
 	
 	@Override
 	public void toDialect(CodeWriter writer) {
-		expression.toDialect(writer);
+		writer.append("this");
 	}
 }
