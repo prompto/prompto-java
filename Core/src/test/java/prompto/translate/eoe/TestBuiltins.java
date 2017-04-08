@@ -197,6 +197,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTextReplace() throws Exception {
+		compareResourceEOE("builtins/textReplace.pec");
+	}
+
+	@Test
 	public void testTextSplit() throws Exception {
 		compareResourceEOE("builtins/textSplit.pec");
 	}

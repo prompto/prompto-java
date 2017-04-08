@@ -40,6 +40,7 @@ import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.type.CategoryType;
 import prompto.type.IType;
+import prompto.type.NativeType;
 import prompto.utils.CodeWriter;
 import prompto.value.ConcreteInstance;
 import prompto.value.IValue;
@@ -356,6 +357,9 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		IType type = parent.check(context);
 		if(type instanceof CategoryType) {
 			context = context.newSingletonContext((CategoryType)type);
+			return context.newChildContext();
+		} else if(type instanceof NativeType) {
+			context = context.newBuiltInContext((NativeType)type);
 			return context.newChildContext();
 		} else {
 			return context.newChildContext();

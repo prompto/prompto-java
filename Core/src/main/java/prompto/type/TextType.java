@@ -125,6 +125,8 @@ public class TextType extends NativeType {
 			return Collections.singletonList(TO_UPPERCASE_METHOD);
 		case "toCapitalized":
 			return Collections.singletonList(TO_CAPITALIZED_METHOD);
+		case "replace":
+			return Collections.singletonList(REPLACE_METHOD);
 		case "split":
 			return Collections.singletonList(SPLIT_METHOD);
 		case "trim":
@@ -133,6 +135,49 @@ public class TextType extends NativeType {
 			return super.getMemberMethods(context, id);
 		}
 	}
+	
+	static IArgument TO_REPLACE_ARGUMENT = new CategoryArgument(TextType.instance(), new Identifier("toReplace"));
+	static IArgument REPLACE_WITH_ARGUMENT = new CategoryArgument(TextType.instance(), new Identifier("replaceWith"));
+
+	static final IMethodDeclaration REPLACE_METHOD = new BuiltInMethodDeclaration("replace", TO_REPLACE_ARGUMENT, REPLACE_WITH_ARGUMENT) {
+		
+		@Override
+		public IValue interpret(Context context) throws PromptoError {
+			String value = (String)getValue(context).getStorableData();
+			String toReplace = (String)context.getValue(new Identifier("toReplace")).getStorableData();
+			String replaceWith = (String)context.getValue(new Identifier("replaceWith")).getStorableData();
+			String result = value.replace(toReplace, replaceWith);
+			return new Text(result);
+		};
+		
+		
+		
+		@Override
+		public IType check(Context context, boolean isStart) {
+			return TextType.instance();
+		}
+
+		@Override
+		public void toDialect(CodeWriter writer) {
+			throw new UnsupportedOperationException();
+		}
+		
+		public boolean hasCompileExactInstanceMember() {
+			return true;
+		};
+		
+		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
+			// push arguments on the stack
+			this.compileAssignments(context, method, flags, assignments);
+			// call replace method
+			Descriptor.Method descriptor = new Descriptor.Method(CharSequence.class, CharSequence.class, String.class);
+			MethodConstant constant = new MethodConstant(String.class, "replace", descriptor);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, constant);
+			// done
+			return new ResultInfo(String.class);
+
+		};
+	};
 	
 	static IArgument SINGLE_SPACE_ARGUMENT = new CategoryArgument(TextType.instance(), new Identifier("separator"), new TextLiteral("\" \""));
 

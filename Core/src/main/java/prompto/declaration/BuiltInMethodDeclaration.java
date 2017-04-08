@@ -23,6 +23,10 @@ public abstract class BuiltInMethodDeclaration extends BaseMethodDeclaration {
 		super(new Identifier(name), new ArgumentList(argument));
 	}
 
+	public BuiltInMethodDeclaration(String name, IArgument ... arguments) {
+		super(new Identifier(name), new ArgumentList(arguments));
+	}
+
 	@Override
 	public boolean isAbstract() {
 		return false;

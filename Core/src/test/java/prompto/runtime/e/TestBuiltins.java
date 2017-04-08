@@ -380,6 +380,16 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedTextReplace() throws Exception {
+		checkInterpretedOutput("builtins/textReplace.pec");
+	}
+
+	@Test
+	public void testCompiledTextReplace() throws Exception {
+		checkCompiledOutput("builtins/textReplace.pec");
+	}
+
+	@Test
 	public void testInterpretedTextSplit() throws Exception {
 		checkInterpretedOutput("builtins/textSplit.pec");
 	}

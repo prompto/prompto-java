@@ -20,6 +20,11 @@ public class ArgumentList extends ObjectList<IArgument> {
 		this.add(argument);
 	}
 	
+	public ArgumentList(IArgument ... arguments) {
+		for(IArgument argument : arguments)
+			this.add(argument);
+	}
+
 	public void register(Context context) {
 		for(IArgument argument : this) 
 			argument.register(context);

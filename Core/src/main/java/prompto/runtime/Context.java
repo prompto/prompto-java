@@ -34,6 +34,7 @@ import prompto.type.CategoryType;
 import prompto.type.DecimalType;
 import prompto.type.IType;
 import prompto.type.MethodType;
+import prompto.type.NativeType;
 import prompto.utils.CodeWriter;
 import prompto.utils.ObjectUtils;
 import prompto.utils.SectionLocator;
@@ -211,6 +212,10 @@ public class Context implements IContext {
 	
 	public Context newBuiltInContext(IValue value) {
 		return initInstanceContext(new BuiltInContext(value), false);
+	}
+
+	public Context newBuiltInContext(NativeType type) {
+		return initInstanceContext(new BuiltInContext(type), false);
 	}
 
 	public Context newInstanceContext(IInstance instance) {
@@ -857,11 +862,17 @@ public class Context implements IContext {
 	public static class BuiltInContext extends Context {
 		
 		IValue value;
+		NativeType type;
 		
 		public BuiltInContext(IValue value) {
 			this.value = value;
+			this.type = (NativeType)value.getType();
 		}
 		
+		public BuiltInContext(NativeType type) {
+			this.type = type;
+		}
+
 		public IValue getValue() {
 			return value;
 		}
