@@ -150,8 +150,14 @@ public abstract class BaseParserTest extends BaseTest {
 	}
 	
 	protected void runTests(String resource) throws Exception {
-		DeclarationList stmts = parseResource(resource);
-		for(IDeclaration decl : stmts) {
+		runTests(resource, false);
+	}
+	
+	protected void runTests(String resource, boolean register) throws Exception {
+		DeclarationList decls = parseResource(resource);
+		if(register)
+			decls.register(coreContext);
+		for(IDeclaration decl : decls) {
 			if(!(decl instanceof TestMethodDeclaration))
 				continue;
 			Out.reset();

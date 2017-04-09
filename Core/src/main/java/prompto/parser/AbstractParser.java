@@ -28,11 +28,17 @@ public abstract class AbstractParser extends Parser {
 	}
 	
 	public boolean willBe(int type) {
-		return getTokenStream().LA(1)==type;
+		int la = getTokenStream().LA(1);
+		if(this instanceof EParser && type==EParser.LF)
+			return la==type || la==EParser.DEDENT;
+		else if(this instanceof MParser && type==MParser.LF)
+			return la==type || la==MParser.DEDENT;
+		else	
+			return la==type;
 	}
 	
 	public boolean willNotBe(int type) {
-		return getTokenStream().LA(1)!=type;
+		return !willBe(type);
 	}
 	
 	public int equalToken() {
