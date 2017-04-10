@@ -1,8 +1,10 @@
 package prompto.runtime;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +24,7 @@ import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDict;
+import prompto.java.JavaIdentifierExpression;
 import prompto.libraries.Libraries;
 import prompto.memstore.MemStoreFactory;
 import prompto.nullstore.NullStoreFactory;
@@ -77,6 +80,7 @@ public abstract class Application {
 	public static Map<String, String> initialize(String[] args, Supplier<Collection<URL>> runtimeSupplier) throws Throwable {
 		Boolean testMode = false;
 		String[] resources = null;
+		URL[] addOns = null;
 		String application = null;
 		String test = null;
 		Version version = ICodeStore.LATEST_VERSION;
@@ -90,6 +94,8 @@ public abstract class Application {
 			testMode = Boolean.valueOf(argsMap.get("testMode"));
 		if(argsMap.containsKey("resources"))
 			resources = argsMap.get("resources").split(",");
+		if(argsMap.containsKey("addOns"))
+			addOns = readAddOns(argsMap);
 		if(argsMap.containsKey("application"))
 			application = argsMap.get("application");
 		if(argsMap.containsKey("test"))
@@ -115,7 +121,7 @@ public abstract class Application {
 		// initialize code store
 		IStoreFactory factory = newStoreFactory(codeStoreFactory);
 		IStore store = factory.newStore(args, codeStoreType);
-		ICodeStore codeStore = bootstrapCodeStore(store, runtimeSupplier, application, version, testMode, resources);
+		ICodeStore codeStore = bootstrapCodeStore(store, runtimeSupplier, application, version, testMode, addOns, resources);
 		// initialize data store
 		factory = newStoreFactory(dataStoreFactory);
 		store = factory.newStore(args, dataStoreType);
@@ -123,6 +129,28 @@ public abstract class Application {
 		synchronizeSchema(codeStore, dataStore);
 		return argsMap;
 	}
+
+	private static URL[] readAddOns(Map<String, String> argsMap) {
+		String paths = argsMap.get("addOns");
+		if(paths.startsWith("\""))
+			paths = paths.substring(1);
+		if(paths.endsWith("\""))
+			paths = paths.substring(0, paths.length()-1);
+		List<URL> list = Arrays.asList(paths.split(",")).stream()
+				.map((p)->{ 
+					try { 
+						return new URL(p); 
+					} catch (IOException e) { 
+						throw new RuntimeException(e); 
+					} 
+				})
+				.collect(Collectors.toList());
+		URL[] addOnURLs = list.toArray(new URL[list.size()]);
+		JavaIdentifierExpression.registerAddOns(addOnURLs);
+		return addOnURLs;
+
+	}
+
 
 	public static Context getGlobalContext() {
 		return globalContext;
@@ -221,18 +249,18 @@ public abstract class Application {
 		System.out.println("Schema successfully initialized.");
 	}
 
-	public static ICodeStore bootstrapCodeStore(IStore store, String application, Version version, boolean testMode, String ...resourceNames) throws Exception {
-		return bootstrapCodeStore(store, ()->Libraries.getRuntimeResources(), application, version, testMode, resourceNames);
+	public static ICodeStore bootstrapCodeStore(IStore store, String application, Version version, boolean testMode, URL[] addOns, String ...resourceNames) throws Exception {
+		return bootstrapCodeStore(store, ()->Libraries.getRuntimeResources(), application, version, testMode, addOns, resourceNames);
 	}
 	
-	public static ICodeStore bootstrapCodeStore(IStore store, Supplier<Collection<URL>> runtimeSupplier, String application, Version version, boolean testMode, String ...resourceNames) throws Exception {
+	public static ICodeStore bootstrapCodeStore(IStore store, Supplier<Collection<URL>> runtimeSupplier, String application, Version version, boolean testMode, URL[] addOns, String ...resourceNames) throws Exception {
 		System.out.println("Initializing class loader " + (testMode ? "in test mode" : "") + "...");
 		Application.globalContext = Context.newGlobalContext();
 		File promptoDir = Files.createTempDirectory("prompto_").toFile();
 		Application.classLoader = PromptoClassLoader.initialize(Application.globalContext, promptoDir, testMode);
 		System.out.println("Class loader initialized.");
 		System.out.println("Bootstrapping prompto...");
-		ICodeStore codeStore = new UpdatableCodeStore(store, runtimeSupplier, application, version.toString(), resourceNames);
+		ICodeStore codeStore = new UpdatableCodeStore(store, runtimeSupplier, application, version.toString(), addOns, resourceNames);
 		ICodeStore.setInstance(codeStore);
 		System.out.println("Bootstrapping successful.");
 		return codeStore;

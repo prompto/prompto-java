@@ -1,2 +1,0 @@
-cd /var/folders/7z/rdw_873x3_s5zr8pb81k9z7c0000gn/T/Prompto/Java/0.0.1-SNAPSHOT
-java -Xdebug -Xrunjdwp:transport=dt_socket,address=8888,server=y,suspend=y -jar Standalone-0.0.1-SNAPSHOT.jar -codeStoreFactory prompto.nullstore.NullStoreFactory -debug_port 9999 -application test -resources "/Users/ericvergnaud/Development/prompto/prompto-platform/prompto-java/prompto-tests/Tests/resources/debug/stack.pec"

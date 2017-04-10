@@ -19,7 +19,7 @@ public abstract class Libraries {
 			String thisResourceName = thisResourceUrl.toExternalForm();
 			URL parentUrl = new URL(thisResourceName.substring(0, thisResourceName.indexOf(thisClassName)));
 			URL url = new URL(parentUrl.toExternalForm() + "libraries/");
-			return ResourceUtils.listResourcesAt(url);
+			return ResourceUtils.listResourcesAt(url, ResourceUtils::isPrompto);
 		} catch(IOException e) {
 			throw new RuntimeException(e);
 		}

@@ -1,0 +1,3 @@
+define main as method receiving Text{} options doing:
+	ec2 = newAwsEC2 with "us-west-2" as ec2Region
+	print "ok"

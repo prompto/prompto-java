@@ -2,6 +2,8 @@ package prompto.java;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
+import java.net.URL;
+import java.net.URLClassLoader;
 
 import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
@@ -24,6 +26,7 @@ import prompto.utils.CodeWriter;
 
 public class JavaIdentifierExpression extends Section implements JavaExpression {
 
+	
 	public static JavaIdentifierExpression parse(String ids) {
 		String[] parts = ids.split("\\.");
 		JavaIdentifierExpression result = null;
@@ -147,7 +150,8 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 	private ResultInfo compile_class(Context context, MethodInfo method) {
 		String fullName = this.toString();
 		try {
-			return new ResultInfo(Class.forName(fullName), Flag.STATIC);
+			Class<?> klass = addOnsClassLoader.loadClass(fullName);
+			return new ResultInfo(klass, Flag.STATIC);
 		} catch (ClassNotFoundException e1) {
 			// package prefix not required for classes in java.lang package
 			if(parent==null) try {
@@ -197,7 +201,7 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 	public Class<?> interpret_class() {
 		String fullName = this.toString();
 		try {
-			return Class.forName(fullName);
+			return addOnsClassLoader.loadClass(fullName);
 		} catch (ClassNotFoundException e1) {
 			// package prefix not required for classes in java.lang package
 			if(parent==null) try {
@@ -269,11 +273,17 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 			return null;
 		}
 	}
-		
+
+	private static ClassLoader addOnsClassLoader; 
+
+	public static void registerAddOns(URL[] addOnURLs) {
+		addOnsClassLoader = new URLClassLoader(addOnURLs, JavaIdentifierExpression.class.getClassLoader());
+	}
+
 	IType check_class() {
 		String fullName = this.toString();
 		try {
-			Class<?> klass = Class.forName(fullName);
+			Class<?> klass = addOnsClassLoader.loadClass(fullName);
 			return new JavaClassType(klass);
 		} catch (ClassNotFoundException e1) {
 			// package prefix not required for classes in java.lang package
@@ -308,4 +318,6 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 			throw new UnsupportedOperationException();
 		}
 	}
+
+
 }

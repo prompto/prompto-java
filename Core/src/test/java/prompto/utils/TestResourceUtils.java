@@ -12,21 +12,21 @@ public class TestResourceUtils {
 
 	@Test
 	public void testListResourcesAtRoot() throws IOException {
-		Collection<URL> names = ResourceUtils.listResourcesAt("/");
+		Collection<URL> names = ResourceUtils.listResourcesAt("/", null);
 		assertNotNull(names);
 		assertFalse(names.isEmpty());
 	}
 
 	@Test
 	public void testListResourcesAtFolder() throws IOException {
-		Collection<URL> names = ResourceUtils.listResourcesAt("prompto/");
+		Collection<URL> names = ResourceUtils.listResourcesAt("prompto/", null);
 		assertNotNull(names);
 		assertFalse(names.isEmpty());
 	}
 	
 	@Test
 	public void testListResourcesAtJarFolder() throws IOException {
-		Collection<URL> names = ResourceUtils.listResourcesAt("org/abego/treelayout/");
+		Collection<URL> names = ResourceUtils.listResourcesAt("org/abego/treelayout/", null);
 		assertNotNull(names);
 		assertFalse(names.isEmpty());
 	}

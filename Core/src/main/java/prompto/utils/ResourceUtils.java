@@ -13,30 +13,34 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Predicate;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public abstract class ResourceUtils {
 
-	public static Collection<URL> listResourcesAt(String path) throws IOException {
+	public static Collection<URL> listResourcesAt(String path, Predicate<String> filter) throws IOException {
 		URL url = Thread.currentThread().getContextClassLoader().getResource(path);
 		if(url==null && "/".equals(path))
 			url = getRootURL();
-		Collection<URL> names = listResourcesAt(url);
+		Collection<URL> names = listResourcesAt(url, filter);
 		// special case when running unit tests
 		if(names==null && url.toExternalForm().contains("/test-classes/")) {
 			url = new URL(url.toExternalForm().replace("/test-classes/", "/classes/"));
-			names = listResourcesAt(url);
+			names = listResourcesAt(url, filter);
 		}
 		return names;
 	}
 
 	public interface ResourceLister {
-		Collection<URL> listResourcesAt(URL url) throws IOException;
+		Collection<URL> listResourcesAt(URL url, Predicate<String> filter) throws IOException;
 	}
 	
 	static Map<String, ResourceLister> protocolResourceListers = new HashMap<>();
@@ -51,12 +55,12 @@ public abstract class ResourceUtils {
 		protocolResourceListers.put(protocol, lister);
 	}
 			
-	public static Collection<URL> listResourcesAt(URL url) throws IOException {
+	public static Collection<URL> listResourcesAt(URL url, Predicate<String> filter) throws IOException {
 		ResourceLister lister = protocolResourceListers.get(url.getProtocol());
 		if(lister==null)
 			throw new UnsupportedOperationException("protocol:" + url.getProtocol());
 		else
-			return lister.listResourcesAt(url);
+			return lister.listResourcesAt(url, filter);
 	}
 	
 	private static URL getRootURL() throws IOException {
@@ -68,14 +72,16 @@ public abstract class ResourceUtils {
 	}
 
 
-	public static Collection<URL> listFileResourcesAt(URL url) throws IOException {
+	public static Collection<URL> listFileResourcesAt(URL url, Predicate<String> filter) throws IOException {
 		try {
 			File dir = new File(url.toURI());
 			if(!dir.exists())
 				return null;
 			String[] names = dir.list();
-			return Arrays.asList(names).stream()
-					.map((name) -> {
+			Stream<String> stream = Arrays.asList(names).stream();
+			if(filter!=null)
+				stream = stream.filter(filter);
+			return stream.map((name) -> {
 						try { 
 							return new File(dir, name).toURI().toURL(); 
 						} catch(MalformedURLException e) {
@@ -88,7 +94,7 @@ public abstract class ResourceUtils {
 		}
 	}
 
-	public static Collection<URL> listJarResourcesAt(URL url) throws IOException {
+	public static Collection<URL> listJarResourcesAt(URL url, Predicate<String> filter) throws IOException {
 		List<URL> urls = new ArrayList<>();
 		JarURLConnection cnx = (JarURLConnection) url.openConnection();
 		JarFile jar = cnx.getJarFile();
@@ -101,6 +107,8 @@ public abstract class ResourceUtils {
 			JarEntry entry = entries.nextElement();
 			String name = entry.getName();
 			if(!(name.startsWith(pathPart)) || name.endsWith("/"))
+				continue;
+			if(filter!=null && !filter.test(name))
 				continue;
 			urls.add(new URL(jarPart + name));
 		}
@@ -131,5 +139,12 @@ public abstract class ResourceUtils {
 	public static String getResourceAsString(String path) throws IOException {
 		byte[] bytes = getResourceAsBytes(path);
 		return bytes==null ? null : new String(bytes);
+	}
+	
+	static final Set<String> promptoExtensions = new HashSet<String>(Arrays.asList("pec", "poc", "pmc", "pes", "pos", "pms"));
+	
+	public static boolean isPrompto(String name) {
+		int pos = name.lastIndexOf(".");
+		return pos<0 ? false : promptoExtensions.contains(name.substring(pos + 1));
 	}
 }
