@@ -145,10 +145,7 @@ public abstract class Application {
 					} 
 				})
 				.collect(Collectors.toList());
-		URL[] addOnURLs = list.toArray(new URL[list.size()]);
-		JavaIdentifierExpression.registerAddOns(addOnURLs);
-		return addOnURLs;
-
+		return list.toArray(new URL[list.size()]);
 	}
 
 
@@ -258,6 +255,8 @@ public abstract class Application {
 		Application.globalContext = Context.newGlobalContext();
 		File promptoDir = Files.createTempDirectory("prompto_").toFile();
 		Application.classLoader = PromptoClassLoader.initialize(Application.globalContext, promptoDir, testMode);
+		if(addOns!=null)
+			JavaIdentifierExpression.registerAddOns(addOns, Application.classLoader);
 		System.out.println("Class loader initialized.");
 		System.out.println("Bootstrapping prompto...");
 		ICodeStore codeStore = new UpdatableCodeStore(store, runtimeSupplier, application, version.toString(), addOns, resourceNames);

@@ -150,7 +150,7 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 	private ResultInfo compile_class(Context context, MethodInfo method) {
 		String fullName = this.toString();
 		try {
-			Class<?> klass = addOnsClassLoader.loadClass(fullName);
+			Class<?> klass = addOnsClassLoader==null ? Class.forName(fullName) : addOnsClassLoader.loadClass(fullName);
 			return new ResultInfo(klass, Flag.STATIC);
 		} catch (ClassNotFoundException e1) {
 			// package prefix not required for classes in java.lang package
@@ -201,7 +201,7 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 	public Class<?> interpret_class() {
 		String fullName = this.toString();
 		try {
-			return addOnsClassLoader.loadClass(fullName);
+			return addOnsClassLoader==null ? Class.forName(fullName) : addOnsClassLoader.loadClass(fullName);
 		} catch (ClassNotFoundException e1) {
 			// package prefix not required for classes in java.lang package
 			if(parent==null) try {
@@ -276,14 +276,14 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 
 	private static ClassLoader addOnsClassLoader; 
 
-	public static void registerAddOns(URL[] addOnURLs) {
-		addOnsClassLoader = new URLClassLoader(addOnURLs, JavaIdentifierExpression.class.getClassLoader());
+	public static void registerAddOns(URL[] addOnURLs, ClassLoader parent) {
+		addOnsClassLoader = new URLClassLoader(addOnURLs, parent);
 	}
 
 	IType check_class() {
 		String fullName = this.toString();
 		try {
-			Class<?> klass = addOnsClassLoader.loadClass(fullName);
+			Class<?> klass = addOnsClassLoader==null ? Class.forName(fullName) : addOnsClassLoader.loadClass(fullName);
 			return new JavaClassType(klass);
 		} catch (ClassNotFoundException e1) {
 			// package prefix not required for classes in java.lang package
