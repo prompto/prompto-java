@@ -78,7 +78,7 @@ public class FilteredListExpression extends Section implements IExpression {
 		IType sourceType = source.check(context);
 		if(!(sourceType instanceof ContainerType))
 			throw new SyntaxError("Expecting a list, set or tuple as data source !");
-		Context local = context.newLocalContext();
+		Context local = context.newChildContext();
 		IType itemType = ((ContainerType)sourceType).getItemType();
 		local.registerValue(new Variable(itemName, itemType));
 		IType filterType = predicate.check(local);
