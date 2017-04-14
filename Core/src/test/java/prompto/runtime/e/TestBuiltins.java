@@ -290,6 +290,16 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedIntegerFormat() throws Exception {
+		checkInterpretedOutput("builtins/integerFormat.pec");
+	}
+
+	@Test
+	public void testCompiledIntegerFormat() throws Exception {
+		checkCompiledOutput("builtins/integerFormat.pec");
+	}
+
+	@Test
 	public void testInterpretedIntegerText() throws Exception {
 		checkInterpretedOutput("builtins/integerText.pec");
 	}

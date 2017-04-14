@@ -170,6 +170,16 @@ public class TestBuiltins extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedIntegerFormat() throws Exception {
+		checkInterpretedOutput("builtins/integerFormat.poc");
+	}
+
+	@Test
+	public void testCompiledIntegerFormat() throws Exception {
+		checkCompiledOutput("builtins/integerFormat.poc");
+	}
+
+	@Test
 	public void testInterpretedListCount() throws Exception {
 		checkInterpretedOutput("builtins/listCount.poc");
 	}

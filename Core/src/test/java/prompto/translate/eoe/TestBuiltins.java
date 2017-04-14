@@ -152,6 +152,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testIntegerFormat() throws Exception {
+		compareResourceEOE("builtins/integerFormat.pec");
+	}
+
+	@Test
 	public void testIntegerText() throws Exception {
 		compareResourceEOE("builtins/integerText.pec");
 	}

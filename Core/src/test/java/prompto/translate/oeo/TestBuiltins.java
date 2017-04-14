@@ -92,6 +92,11 @@ public class TestBuiltins extends BaseOParserTest {
 	}
 
 	@Test
+	public void testIntegerFormat() throws Exception {
+		compareResourceOEO("builtins/integerFormat.poc");
+	}
+
+	@Test
 	public void testListCount() throws Exception {
 		compareResourceOEO("builtins/listCount.poc");
 	}

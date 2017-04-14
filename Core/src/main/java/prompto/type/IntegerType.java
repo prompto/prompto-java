@@ -1,19 +1,31 @@
 package prompto.type;
 
 import java.lang.reflect.Type;
+import java.text.DecimalFormat;
+import java.text.Format;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
 
+import prompto.argument.CategoryArgument;
+import prompto.argument.IArgument;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Descriptor;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.declaration.BuiltInMethodDeclaration;
+import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoLong;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.utils.CodeWriter;
 import prompto.value.Decimal;
 import prompto.value.IValue;
 import prompto.value.Integer;
@@ -123,6 +135,64 @@ public class IntegerType extends NativeType implements INumberType {
 		else
 			return super.getMemberValue(context, name);
 	}
+	
+	@Override
+	public Collection<IMethodDeclaration> getMemberMethods(Context context, Identifier id) throws PromptoError {
+		switch(id.toString()) {
+		case "format":
+			return Collections.singletonList(FORMAT_METHOD);
+		default:
+			return super.getMemberMethods(context, id);
+		}
+	}
+	
+	
+	static IArgument FORMAT_ARGUMENT = new CategoryArgument(TextType.instance(), new Identifier("format"));
+
+	static final IMethodDeclaration FORMAT_METHOD = new BuiltInMethodDeclaration("format", FORMAT_ARGUMENT) {
+		
+		@Override
+		public IValue interpret(Context context) throws PromptoError {
+			Long value = (Long)getValue(context).getStorableData();
+			String format = (String)context.getValue(new Identifier("format")).getStorableData();
+			String result = new DecimalFormat(format).format(value);
+			return new Text(result);
+		};
+		
+		
+		
+		@Override
+		public IType check(Context context, boolean isStart) {
+			return TextType.instance();
+		}
+
+		@Override
+		public void toDialect(CodeWriter writer) {
+			throw new UnsupportedOperationException();
+		}
+		
+		public boolean hasCompileExactInstanceMember() {
+			return true;
+		};
+		
+		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
+			// push arguments on the stack
+			this.compileAssignments(context, method, flags, assignments); // stqck = Long/String
+			// create DecimalFormat instance
+			CompilerUtils.compileNewRawInstance(method, DecimalFormat.class); // stqck = Long/String/DecimalFormat
+			method.addInstruction(Opcode.DUP_X1); // need to keep a reference, stqck = Long/DecimalFormat/String/DecimalFormat
+			method.addInstruction(Opcode.SWAP); // stack = Long/DecimalFormat/DecimalFormat/String
+			CompilerUtils.compileCallConstructor(method, DecimalFormat.class, String.class); // stack = Long/DecimalFormat
+			// call format method
+			method.addInstruction(Opcode.SWAP); // stack = DecimalFormat/Long
+			Descriptor.Method descriptor = new Descriptor.Method(Object.class, String.class);
+			MethodConstant constant = new MethodConstant(Format.class, "format", descriptor);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, constant);
+			// done
+			return new ResultInfo(String.class);
+
+		};
+	};
 	
 	@Override
 	public IType checkCompare(Context context, IType other, ISection section) {
