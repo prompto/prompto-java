@@ -46,6 +46,11 @@ public class TestCore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testParse() throws Exception {
+		runTests("core/parse.pec");
+	}
+
+	@Test
 	public void testTime() throws Exception {
 		runTests("core/time.pec");
 	}
