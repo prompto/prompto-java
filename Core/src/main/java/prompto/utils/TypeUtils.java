@@ -134,6 +134,7 @@ public abstract class TypeUtils {
 		map.put(Integer.class, IntegerType.instance());
 		map.put(long.class, IntegerType.instance());
 		map.put(Long.class, IntegerType.instance());
+		map.put(double.class, DecimalType.instance());
 		map.put(Double.class, DecimalType.instance());
 		map.put(String.class, TextType.instance());
 		map.put(UUID.class, UUIDType.instance());
