@@ -28,6 +28,11 @@ public class BreakStatement extends SimpleStatement {
 	}
 	
 	@Override
+	public boolean canReturn() {
+		return true;
+	}
+	
+	@Override
 	public boolean equals(Object obj) {
 		return (obj instanceof BreakStatement);
 	}

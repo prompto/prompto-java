@@ -201,8 +201,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 	
 	private void produceByteCode(Context context, MethodInfo method, IType returnType) {
-		statements.forEach((s)->
-			s.compile(context, method, new Flags().withMember(this.memberOf!=null)));
+		statements.compile(context, method, new Flags().withMember(this.memberOf!=null));
 		// add return for void
 		if(returnType==VoidType.instance())
 			method.addInstruction(Opcode.RETURN);

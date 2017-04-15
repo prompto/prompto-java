@@ -63,6 +63,11 @@ public class IfStatement extends BaseStatement {
 	public void setFinal(StatementList instructions) {
 		elements.add(new IfElement(null,instructions));
 	}
+	
+	@Override
+	public boolean canReturn() {
+		return true;
+	}
 
 	@Override
 	public void toDialect(CodeWriter writer) {

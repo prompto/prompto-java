@@ -73,6 +73,11 @@ public abstract class BaseSwitchStatement extends BaseStatement {
 		return checkReturnType(context);
 	}
 	
+	@Override
+	public boolean canReturn() {
+		return true;
+	}
+	
 	protected void checkSwitchCasesType(Context context) {
 		IType type = checkSwitchType(context);
 		for(SwitchCase sc : switchCases)

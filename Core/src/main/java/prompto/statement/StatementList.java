@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocals;
 import prompto.error.PromptoError;
@@ -50,6 +51,8 @@ public class StatementList extends LinkedList<IStatement> {
 				types.put(returnType.getTypeNameId(), returnType);
 			for(IStatement statement : this) {
 				IType type = statement.check(context);
+				if(!statement.canReturn())
+					type = VoidType.instance();
 				if(type!=null && type!=VoidType.instance()) // null indicates error
 					types.put(type.getTypeNameId(), type);
 			}
@@ -107,7 +110,7 @@ public class StatementList extends LinkedList<IStatement> {
 			context.enterStatement(statement);
 			try {
 				IValue result = statement.interpret(context);
-				if(result!=null)
+				if(result!=null && statement.canReturn())
 					return result;
 			} finally {
 				context.leaveStatement(statement);
@@ -132,9 +135,14 @@ public class StatementList extends LinkedList<IStatement> {
 		if(this.size()>0) {
 			ResultInfo info = new ResultInfo(void.class);
 			StackLocals state = method.captureStackLocals();
-			for(IStatement statement : this)
+			for(IStatement statement : this) {
 				// TODO refine actual info, here we assume all statements are reachable
 				info = statement.compile(context, method, flags);
+				if(info.getType()!=void.class && !info.isReturn()) {
+					method.addInstruction(Opcode.POP);
+					info = new ResultInfo(void.class);
+				}
+			}
 			method.restoreStackLocals(state);
 			return info;
 		} else

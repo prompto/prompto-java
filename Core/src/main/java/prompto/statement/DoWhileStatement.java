@@ -42,6 +42,11 @@ public class DoWhileStatement extends BaseStatement {
 	}	
 	
 	@Override
+	public boolean canReturn() {
+		return true;
+	}
+	
+	@Override
 	public void toDialect(CodeWriter writer) {
 		switch(writer.getDialect()) {
 		case E:

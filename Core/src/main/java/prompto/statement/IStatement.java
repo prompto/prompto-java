@@ -5,4 +5,8 @@ import prompto.parser.ISection;
 
 public interface IStatement extends IExpression, ISection {
 
+	default boolean canReturn() {
+		return false;
+	}
+
 }

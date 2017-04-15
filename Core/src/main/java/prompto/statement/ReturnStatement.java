@@ -37,6 +37,11 @@ public class ReturnStatement extends SimpleStatement {
 	}
 	
 	@Override
+	public boolean canReturn() {
+		return true;
+	}
+	
+	@Override
 	public void toDialect(CodeWriter writer) {
 		writer.append("return");
 		if(expression!=null) {
