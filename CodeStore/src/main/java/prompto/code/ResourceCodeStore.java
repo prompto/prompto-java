@@ -14,6 +14,7 @@ import java.util.Set;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.DeclarationList;
 import prompto.declaration.IDeclaration;
+import prompto.declaration.IEnumeratedDeclaration;
 import prompto.error.InvalidResourceError;
 import prompto.error.PromptoError;
 import prompto.parser.Dialect;
@@ -99,6 +100,35 @@ public class ResourceCodeStore extends BaseCodeStore {
 			return super.fetchSpecificVersions(name, version);
 	}
 	
+	@Override
+	public IDeclaration fetchLatestSymbol(String name) throws PromptoError {
+		IDeclaration decl = fetchSymbolInResource(name);
+		if(decl!=null)
+			return decl;
+		else
+			return super.fetchLatestSymbol(name);
+	}
+	
+	@Override
+	public IDeclaration fetchSpecificSymbol(String name, Version version) throws PromptoError {
+		IDeclaration decl = fetchSymbolInResource(name);
+		if(decl!=null)
+			return decl;
+		else
+			return super.fetchSpecificSymbol(name, version);
+	}
+	
+	private IDeclaration fetchSymbolInResource(String name) {
+		loadResource();
+		return declarations.values().stream()
+				.flatMap(Collection::stream)
+				.filter((d)->d instanceof IEnumeratedDeclaration)
+				.map((d)->(IEnumeratedDeclaration<?>)d)
+				.filter((d)->d.getSymbols().hasSymbol(name))
+				.findFirst()
+				.orElse(null);
+	}
+
 	@Override
 	public ISection findSection(ISection section) {
 		ISection result = fetchInResource(section);

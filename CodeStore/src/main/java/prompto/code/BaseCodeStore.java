@@ -42,6 +42,16 @@ public abstract class BaseCodeStore implements ICodeStore {
 	}
 	
 	@Override
+	public IDeclaration fetchLatestSymbol(String name) throws PromptoError {
+		return next==null ? null : next.fetchLatestSymbol(name);
+	}
+	
+	@Override
+	public IDeclaration fetchSpecificSymbol(String name, Version version) throws PromptoError {
+		return next==null ? null : next.fetchSpecificSymbol(name, version);
+	}
+
+	@Override
 	public void collectStorableAttributes(Map<String, AttributeDeclaration> columns) throws PromptoError {
 		if(next!=null)
 			next.collectStorableAttributes(columns);

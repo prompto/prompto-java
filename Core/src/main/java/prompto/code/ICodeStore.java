@@ -107,6 +107,12 @@ public interface ICodeStore {
 	
 	Iterator<IDeclaration> fetchSpecificVersions(String name, Version version) throws PromptoError;
 
+	default IDeclaration fetchLatestSymbol(String name) throws PromptoError {
+		return fetchSpecificSymbol(name, ICodeStore.LATEST_VERSION);
+	}
+
+	IDeclaration fetchSpecificSymbol(String name, Version version) throws PromptoError;
+
 	default public WebSite fetchApplication(String name, Version version) throws PromptoError {
 		return fetchModule(ModuleType.WEBSITE, name, version);
 	}
@@ -135,4 +141,5 @@ public interface ICodeStore {
 	ISection findSection(ISection section);
 
     Collection<String> fetchDeclarationNames();
+
 }

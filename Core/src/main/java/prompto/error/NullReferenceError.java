@@ -1,6 +1,5 @@
 package prompto.error;
 
-import prompto.expression.CategorySymbol;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
@@ -12,7 +11,7 @@ public class NullReferenceError extends ExecutionError {
 
 	@Override
 	public IExpression getExpression(Context context) {
-		return context.getRegisteredValue(CategorySymbol.class, new Identifier("NULL_REFERENCE"));
+		return context.getRegisteredSymbol(new Identifier("NULL_REFERENCE"), true);
 	}
 
 }

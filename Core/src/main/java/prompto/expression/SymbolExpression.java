@@ -36,7 +36,7 @@ public class SymbolExpression implements IExpression {
 	
 	@Override
 	public IType check(Context context) {
-		Symbol symbol = context.getRegisteredValue(Symbol.class, id);
+		Symbol symbol = context.getRegisteredSymbol(id, true);
 		if(symbol==null)
 			throw new SyntaxError("Unknown symbol:" + id);
 		return symbol.check(context);
@@ -44,7 +44,7 @@ public class SymbolExpression implements IExpression {
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		Symbol symbol = context.<Symbol>getRegisteredValue(Symbol.class, id);
+		Symbol symbol = context.getRegisteredSymbol(id, true);
 		if(symbol==null)
 			throw new SyntaxError("Unknown symbol:" + id);
 		return symbol.interpret(context);			
@@ -52,7 +52,7 @@ public class SymbolExpression implements IExpression {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		Symbol symbol = context.<Symbol>getRegisteredValue(Symbol.class, id);
+		Symbol symbol = context.getRegisteredSymbol(id, true);
 		if(symbol==null)
 			throw new SyntaxError("Unknown symbol:" + id);
 		return symbol.compile(context, method, flags);			

@@ -178,12 +178,6 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public Iterator<IDeclaration> fetchLatestVersions(String name) throws PromptoError {
-		return fetchSpecificVersions(name, LATEST_VERSION);
-	}
-	
-	
-	@Override
 	public Iterator<IDeclaration> fetchSpecificVersions(String name, Version version) throws PromptoError {
 		Iterator<IDeclaration> decls = fetchDeclarationsInStore(name, version);
 		if(decls==null) {
@@ -206,6 +200,12 @@ public class UpdatableCodeStore extends BaseCodeStore {
 			}
 		}
 		return decls;
+	}
+	
+	@Override
+	public IDeclaration fetchSpecificSymbol(String name, Version version) throws PromptoError {
+		// TODO need to find non resource based symbols
+		return super.fetchSpecificSymbol(name, version);
 	}
 
 	private Iterator<IDeclaration> storeDeclarations(Iterator<IDeclaration> decls) throws PromptoError {

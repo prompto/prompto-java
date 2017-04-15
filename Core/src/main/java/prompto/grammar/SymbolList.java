@@ -121,5 +121,13 @@ public abstract class SymbolList <T extends Symbol> extends ObjectList<T> implem
 		sb.append("]");
 		return sb.toString();
 	}
+	
+	public boolean hasSymbol(String name) {
+		for(T symbol : this) {
+			if(name.equals(symbol.getName()))
+				return true;
+		}
+		return false;
+	}
 
 }

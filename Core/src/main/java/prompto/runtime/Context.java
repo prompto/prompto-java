@@ -21,6 +21,7 @@ import prompto.declaration.SingletonCategoryDeclaration;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.expression.Symbol;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
@@ -335,29 +336,62 @@ public class Context implements IContext {
 		return null;	
 	}
 	
-	public <T extends IDeclaration> T getRegisteredDeclaration(Class<T> klass, Identifier name) {
-		return getRegisteredDeclaration(klass, name, true);
+	public <T extends IDeclaration> T getRegisteredDeclaration(Class<T> klass, Identifier id) {
+		return getRegisteredDeclaration(klass, id, true);
 	}
 	
-	public <T extends IDeclaration> T getRegisteredDeclaration(Class<T> klass, Identifier name, boolean lookInStore) {
+	public <T extends IDeclaration> T getRegisteredDeclaration(Class<T> klass, Identifier id, boolean lookInStore) {
 		// resolve upwards, since local names override global ones
-		IDeclaration actual = declarations.get(name);
+		IDeclaration actual = declarations.get(id);
 		if(actual!=null)
-			return ObjectUtils.downcast(klass,actual);
+			return ObjectUtils.downcast(klass, actual);
 		else if(parent!=null)
-			actual = parent.getRegisteredDeclaration(klass, name, lookInStore);
+			actual = parent.getRegisteredDeclaration(klass, id, lookInStore);
 		if(actual!=null)
-			return ObjectUtils.downcast(klass,actual);
+			return ObjectUtils.downcast(klass, actual);
 		else if(globals!=this)
-			actual = globals.getRegisteredDeclaration(klass, name, lookInStore);
+			actual = globals.getRegisteredDeclaration(klass, id, lookInStore);
 		if(actual!=null)
-			return ObjectUtils.downcast(klass,actual);
+			return ObjectUtils.downcast(klass, actual);
 		else if(lookInStore && globals==this)
-			actual = fetchAndRegisterDeclaration(name);
+			actual = fetchAndRegisterDeclaration(id);
 		if(actual!=null)
-			return ObjectUtils.downcast(klass,actual);
+			return ObjectUtils.downcast(klass, actual);
 		else
 			return null;
+	}
+	
+	public Symbol getRegisteredSymbol(Identifier id, boolean lookInStore) {
+		Symbol symbol = getRegisteredValue(Symbol.class, id);
+		if(symbol!=null || !lookInStore)
+			return symbol;
+		if(globals!=this)
+			return globals.getRegisteredSymbol(id, lookInStore);
+		else if(lookInStore)
+			return fetchAndRegisterSymbol(id);
+		else
+			return null;
+	}
+
+	private Symbol fetchAndRegisterSymbol(Identifier id) {
+		ICodeStore store = ICodeStore.getInstance();
+		if(store==null)
+			return null;
+		// fetch and register atomically
+		synchronized(this) {
+			Symbol symbol = getRegisteredValue(Symbol.class, id); // may have happened in another thread
+			if(symbol!=null)
+				return symbol;
+			try {
+				IDeclaration decl = store.fetchLatestSymbol(id.toString());
+				if(decl==null)
+					return null;
+				decl.register(this);
+				return getRegisteredValue(Symbol.class, id);
+			} catch(PromptoError e) {
+				throw new RuntimeException(e); // TODO define a strategy
+			}
+		}
 	}
 	
 	public void fetchAndRegisterAllDeclarations() {
