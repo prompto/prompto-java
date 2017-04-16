@@ -72,8 +72,10 @@ public class UpdatableCodeStore extends BaseCodeStore {
 		System.out.println("Connecting to prompto runtime libraries...");
 		try {
 			ICodeStore runtime = null;
-			if(runtimeSupplier!=null) for(URL resource : runtimeSupplier.get())
+			if(runtimeSupplier!=null) for(URL resource : runtimeSupplier.get()) {
+				System.out.println("Connecting to " + resource.toExternalForm());
 				runtime = new ResourceCodeStore(runtime, ModuleType.LIBRARY, resource, "1.0.0");
+			}
 			return runtime;
 		} catch(RuntimeException e) {
 			throw new ReadWriteError(e.getMessage());

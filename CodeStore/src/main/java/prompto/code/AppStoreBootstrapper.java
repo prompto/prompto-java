@@ -41,9 +41,12 @@ public class AppStoreBootstrapper {
 
 	private static ICodeStore bootstrapAddOn(URL addOn, ICodeStore runtime) {
 		try {
+			System.out.println("Bootstrapping add-on " + addOn.toExternalForm());
 			Collection<URL> urls = getAddOnLibraries(addOn);
-			for(URL url : urls)
+			for(URL url : urls) {
+				System.out.println("Connecting to " + url.toExternalForm());
 				runtime = new ResourceCodeStore(runtime, ModuleType.LIBRARY, url, "0.0.1");
+			}
 			return runtime;
 		} catch (IOException e) {
 			throw new InternalError(e);
@@ -64,6 +67,7 @@ public class AppStoreBootstrapper {
 	private static ICodeStore bootstrapResource(String resourceName, ICodeStore runtime, String version) {
 		try {
 			URL resourceUrl = getUrl(resourceName);
+			System.out.println("Connecting to " + resourceUrl.toExternalForm());
 			return new ResourceCodeStore(runtime, ModuleType.LIBRARY, resourceUrl, version);
 		} catch (MalformedURLException e) {
 			throw new InternalError(e);
