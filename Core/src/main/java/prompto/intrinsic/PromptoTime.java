@@ -8,7 +8,11 @@ public class PromptoTime implements Comparable<PromptoTime> {
 	public static PromptoTime parse(String text) {
 		return new PromptoTime(LocalTime.parse(text));
 	}
-	
+
+	public static PromptoTime fromMillisOfDay(long utc) {
+		return new PromptoTime(LocalTime.fromMillisOfDay(utc));
+	}
+
 	private LocalTime wrapped;
 
 	public PromptoTime(LocalTime wrapped) {
@@ -106,5 +110,6 @@ public class PromptoTime implements Comparable<PromptoTime> {
 				this.getNativeSecond() - other.getNativeSecond(), 
 				this.getNativeMillis() - other.getNativeMillis());
 	}
+
 
 }
