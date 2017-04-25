@@ -56,7 +56,7 @@ public class AppStoreBootstrapper {
 	private static Collection<URL> getAddOnLibraries(URL addOn) throws IOException {
 		String path = "jar:" + addOn.toExternalForm() + "!/libraries/";
 		try {
-			return ResourceUtils.listResourcesAt(new URL(path), ResourceUtils::isPrompto);
+			return ResourceUtils.listResourcesAt(new URL(path), ResourceUtils::isPromptoLibrary);
 		} catch (FileNotFoundException e) {
 			// dependency jars are add ons but have no prompto code
 			return Collections.emptyList();

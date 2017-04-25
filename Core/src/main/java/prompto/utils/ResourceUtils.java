@@ -143,7 +143,7 @@ public abstract class ResourceUtils {
 	
 	static final Set<String> promptoExtensions = new HashSet<String>(Arrays.asList("pec", "poc", "pmc", "pes", "pos", "pms"));
 	
-	public static boolean isPrompto(String name) {
+	public static boolean isPromptoLibrary(String name) {
 		int pos = name.lastIndexOf(".");
 		return pos<0 ? false : promptoExtensions.contains(name.substring(pos + 1));
 	}

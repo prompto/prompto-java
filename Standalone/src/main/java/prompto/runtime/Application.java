@@ -53,7 +53,7 @@ public abstract class Application {
 	public static void main(String[] args) throws Throwable {
 		Integer debugPort = null;
 		
-		Map<String, String> argsMap = initialize(args, ()->Libraries.getRuntimeResources());
+		Map<String, String> argsMap = initialize(args, ()->Libraries.getPromptoLibraries());
 		
 		String debugHost = argsMap.getOrDefault("debug_host", "localhost");
 		if(argsMap.containsKey("debug_port"))
@@ -247,7 +247,7 @@ public abstract class Application {
 	}
 
 	public static ICodeStore bootstrapCodeStore(IStore store, String application, Version version, boolean testMode, URL[] addOns, String ...resourceNames) throws Exception {
-		return bootstrapCodeStore(store, ()->Libraries.getRuntimeResources(), application, version, testMode, addOns, resourceNames);
+		return bootstrapCodeStore(store, ()->Libraries.getPromptoLibraries(), application, version, testMode, addOns, resourceNames);
 	}
 	
 	public static ICodeStore bootstrapCodeStore(IStore store, Supplier<Collection<URL>> runtimeSupplier, String application, Version version, boolean testMode, URL[] addOns, String ...resourceNames) throws Exception {

@@ -44,7 +44,7 @@ public class CodeStoreBootstrapper {
 	
 	private CodeStoreBootstrapper(IStore store, ICodeStore runtime) {
 		this.store = store;
-		URL url = Thread.currentThread().getContextClassLoader().getResource("CodeStore.pec");
+		URL url = Thread.currentThread().getContextClassLoader().getResource("libraries/CodeStore.pec");
 		this.next = new ResourceCodeStore(runtime, ModuleType.LIBRARY, url, "1.0.0");
 	}
 
