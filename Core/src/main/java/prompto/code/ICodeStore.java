@@ -113,6 +113,10 @@ public interface ICodeStore {
 
 	IDeclaration fetchSpecificSymbol(String name, Version version) throws PromptoError;
 
+	default public Batch fetchBatch(String name, Version version) throws PromptoError {
+		return fetchModule(ModuleType.BATCH, name, version);
+	}
+	
 	default public WebSite fetchApplication(String name, Version version) throws PromptoError {
 		return fetchModule(ModuleType.WEBSITE, name, version);
 	}
