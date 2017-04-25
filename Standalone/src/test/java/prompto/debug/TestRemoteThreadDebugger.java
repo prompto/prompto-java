@@ -42,6 +42,7 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebug
 	
 	@Override
 	protected void waitBlockedOrKilled() throws Exception {
+		Thread.sleep(10); // give time to remote thread
 		Status status = debugger.getStatus(null);
 		while(status!=Status.SUSPENDED && status!=Status.TERMINATED) {
 			Thread.sleep(100);
