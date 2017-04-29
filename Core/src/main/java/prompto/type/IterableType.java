@@ -28,6 +28,14 @@ public abstract class IterableType extends NativeType {
 	}
 	
 	@Override
+	public IType checkContains(Context context, IType other) {
+		if(itemType.isAssignableFrom(context, other))
+			return BooleanType.instance();
+		else
+			return super.checkContains(context, other);
+	}
+	
+	@Override
 	public void checkExists(Context context) {
 		itemType.checkExists(context);
 	}
