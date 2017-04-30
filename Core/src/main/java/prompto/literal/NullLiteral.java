@@ -54,5 +54,10 @@ public class NullLiteral implements IExpression {
 			break;
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return "null";
+	}
 
 }
