@@ -416,7 +416,7 @@ public class Context implements IContext {
 			if(decl!=null)
 				return decl;
 			try {
-				Iterator<IDeclaration> decls = store.fetchLatestVersions(name.toString());
+				Iterator<IDeclaration> decls = store.fetchLatestDeclarations(name.toString());
 				if(decls==null)
 					return null;
 				while(decls.hasNext()) {
@@ -795,7 +795,7 @@ public class Context implements IContext {
 			if(decl!=null)
 				return decl;
 			try {
-				Iterator<IDeclaration> decls = store.fetchLatestVersions(name.toString());
+				Iterator<IDeclaration> decls = store.fetchLatestDeclarations(name.toString());
 				if(decls==null)
 					return null;
 				while(decls.hasNext()) {

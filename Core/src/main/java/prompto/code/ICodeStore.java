@@ -99,13 +99,13 @@ public interface ICodeStore {
 	String getModuleName();
 	Version getModuleVersion();
 
-	void storeDeclarations(Iterator<IDeclaration> declarations, Dialect dialect, Version version, Object projectId) throws PromptoError;
+	void storeDeclarations(Iterator<IDeclaration> declarations, Dialect dialect, Version version, Object moduleId) throws PromptoError;
 
-	default Iterator<IDeclaration> fetchLatestVersions(String name) throws PromptoError {
-		return fetchSpecificVersions(name, ICodeStore.LATEST_VERSION);
+	default Iterator<IDeclaration> fetchLatestDeclarations(String name) throws PromptoError {
+		return fetchSpecificDeclarations(name, ICodeStore.LATEST_VERSION);
 	}
 	
-	Iterator<IDeclaration> fetchSpecificVersions(String name, Version version) throws PromptoError;
+	Iterator<IDeclaration> fetchSpecificDeclarations(String name, Version version) throws PromptoError;
 
 	default IDeclaration fetchLatestSymbol(String name) throws PromptoError {
 		return fetchSpecificSymbol(name, ICodeStore.LATEST_VERSION);
@@ -145,5 +145,13 @@ public interface ICodeStore {
 	ISection findSection(ISection section);
 
     Collection<String> fetchDeclarationNames();
+
+	void storeResource(Resource resource, Object moduleId);
+
+	default public Resource fetchLatestResource(String path) throws PromptoError {
+		return fetchSpecificResource(path, ICodeStore.LATEST_VERSION);
+	}
+
+	Resource fetchSpecificResource(String path, Version version);
 
 }

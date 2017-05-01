@@ -21,15 +21,15 @@ import prompto.parser.Dialect;
 import prompto.parser.ISection;
 import prompto.utils.SectionLocator;
 
-/* resource base code store used to bootstrap modules  */
-public class ResourceCodeStore extends BaseCodeStore {
+/* resource/file based code store used to bootstrap modules  */
+public class ImmutableCodeStore extends BaseCodeStore {
 
 	ModuleType type;
 	URL resource;
 	Version version;
 	Map<String, List<IDeclaration>> declarations = null;
 	
-	public ResourceCodeStore(ICodeStore next, ModuleType type, URL resource, String version) {
+	public ImmutableCodeStore(ICodeStore next, ModuleType type, URL resource, String version) {
 		super(next);
 		if(resource==null)
 			throw new NullPointerException();
@@ -78,26 +78,37 @@ public class ResourceCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public void storeDeclarations(Iterator<IDeclaration> declarations, Dialect dialect, Version version, Object projectId) throws PromptoError {
+	public Resource fetchSpecificResource(String path, Version version) {
+		return null;
+	}
+	
+	@Override
+	public void storeDeclarations(Iterator<IDeclaration> declarations, Dialect dialect, Version version, Object moduleId) throws PromptoError {
+		throw new UnsupportedOperationException();
+	}
+	
+	
+	@Override
+	public void storeResource(Resource resource, Object moduleId) {
 		throw new UnsupportedOperationException();
 	}
 	
 	@Override
-	public Iterator<IDeclaration> fetchLatestVersions(String name) throws PromptoError {
+	public Iterator<IDeclaration> fetchLatestDeclarations(String name) throws PromptoError {
 		Iterator<IDeclaration> decls = fetchInResource(name);
 		if(decls!=null)
 			return decls;
 		else
-			return super.fetchLatestVersions(name);
+			return super.fetchLatestDeclarations(name);
 	}
 	
 	@Override
-	public Iterator<IDeclaration> fetchSpecificVersions(String name,Version version) throws PromptoError {
+	public Iterator<IDeclaration> fetchSpecificDeclarations(String name,Version version) throws PromptoError {
 		Iterator<IDeclaration> decls = fetchInResource(name);
 		if(decls!=null)
 			return decls;
 		else
-			return super.fetchSpecificVersions(name, version);
+			return super.fetchSpecificDeclarations(name, version);
 	}
 	
 	@Override

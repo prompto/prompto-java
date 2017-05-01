@@ -3,9 +3,13 @@ package prompto.code;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -49,7 +53,7 @@ import prompto.utils.IdentifierList;
 import prompto.utils.StringUtils;
 
 
-public class UpdatableCodeStore extends BaseCodeStore {
+public class QueryableCodeStore extends BaseCodeStore {
 
 	IStore store; // data store where to store/fetch the code
 	String application;
@@ -58,7 +62,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	// some of these are code store specific and should not be looked for in the app context
 	Context context; 
 	
-	public UpdatableCodeStore(IStore store, Supplier<Collection<URL>> runtimeSupplier, String application, String version, URL[] addOns, String ...resourceNames) throws PromptoError {
+	public QueryableCodeStore(IStore store, Supplier<Collection<URL>> runtimeSupplier, String application, String version, URL[] addOns, String ...resourceNames) throws PromptoError {
 		super(null);
 		this.store = store;
 		this.application = application;
@@ -74,7 +78,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 			ICodeStore runtime = null;
 			if(runtimeSupplier!=null) for(URL resource : runtimeSupplier.get()) {
 				System.out.println("Connecting to " + resource.toExternalForm());
-				runtime = new ResourceCodeStore(runtime, ModuleType.LIBRARY, resource, "1.0.0");
+				runtime = new ImmutableCodeStore(runtime, ModuleType.LIBRARY, resource, "1.0.0");
 			}
 			return runtime;
 		} catch(RuntimeException e) {
@@ -119,6 +123,14 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
+	public void storeResource(Resource resource, Object moduleId) {
+		IStorable storable = resource.toStorable(store);
+		if(moduleId!=null)
+			storable.setData("module", moduleId);
+		store.store(null, Collections.singletonList(storable));
+	}
+	
+	@Override
 	public void storeModule(Module module) throws PromptoError {
 		Context context = Context.newGlobalContext();
 		List<IStorable> storables = new ArrayList<>();
@@ -140,16 +152,40 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	@Override
 	public <T extends Module> T fetchModule(ModuleType type, String name, Version version) throws PromptoError {
 		try {
-			IStored stored = fetchOneInStore(name, type.getCategory(), version);
+			IStored stored = fetchOneNamedInStore(type.getCategory(), version, name);
 			if(stored==null)
 				return null;
 			Module module = type.getModuleClass().newInstance();
+			module.setDbId(stored.getDbId());
 			module.setName((String)stored.getData("name"));
 			module.setVersion((String)stored.getData("version"));
 			module.setDescription((String)stored.getData("description"));
 			if(module instanceof WebSite)
 				((WebSite)module).setEntryPoint((String)stored.getData("entryPoint"));
 			return (T)module;
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	@Override
+	public Resource fetchSpecificResource(String path, Version version) {
+		try {
+			IStored stored = fetchOneInStore(new CategoryType(new Identifier("Resource")), version, "path", path);
+			if(stored==null)
+				return null;
+			Resource resource;
+			if(stored.hasData("body")) {
+				resource = new TextResource();
+				((TextResource)resource).setBody((String)stored.getData("body"));
+			} else
+				throw new UnsupportedOperationException();
+			resource.setPath((String)stored.getData("path"));
+			resource.setMimeType((String)stored.getData("mimeType"));
+			resource.setVersion((String)stored.getData("version"));
+			Instant instant = Instant.ofEpochMilli((Long)stored.getData("lastModified")); 
+			resource.setLastModified(OffsetDateTime.ofInstant(instant, ZoneOffset.UTC));
+			return resource;
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -180,7 +216,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public Iterator<IDeclaration> fetchSpecificVersions(String name, Version version) throws PromptoError {
+	public Iterator<IDeclaration> fetchSpecificDeclarations(String name, Version version) throws PromptoError {
 		Iterator<IDeclaration> decls = fetchDeclarationsInStore(name, version);
 		if(decls==null) {
 			// when called from the AppServer, multiple threads may be attempting to do this
@@ -190,7 +226,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 				if(decls==null) {
 					decls = fetchRegisteringDeclarations(name);
 					if(decls==null) {
-						decls = super.fetchLatestVersions(name);
+						decls = super.fetchLatestDeclarations(name);
 						if(store!=null && decls!=null) {
 							storeRegisteringDeclarations(name, decls);
 							decls = storeDeclarations(decls);
@@ -262,7 +298,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	
 	private Object fetchDeclarationModuleDbId(IDeclaration decl) throws PromptoError {
 		ICodeStore origin = decl.getOrigin();
-		IStored stored = fetchOneInStore(origin.getModuleName(), origin.getModuleType().getCategory(), origin.getModuleVersion());
+		IStored stored = fetchOneNamedInStore(origin.getModuleType().getCategory(), origin.getModuleVersion(), origin.getModuleName());
 		if(stored==null)
 			return null;
 		else
@@ -295,7 +331,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 			return null;
 		else try {
 			CategoryType category = new CategoryType(new Identifier("Declaration"));
-			IStoredIterable iterable = fetchManyInStore(name, category, version);
+			IStoredIterable iterable = fetchManyNamedInStore(name, category, version);
 			Iterator<IStored> iterator = iterable.iterator();
 			if(iterator.hasNext())
 				return new Iterator<IDeclaration>() {
@@ -312,7 +348,11 @@ public class UpdatableCodeStore extends BaseCodeStore {
 	private static Set<String> uniqueDecls = new HashSet<>(
 			Arrays.asList(DeclarationType.ATTRIBUTE.name(), DeclarationType.CATEGORY.name(), DeclarationType.TEST.name()));
 	
-	private IStoredIterable fetchManyInStore(String name, CategoryType type, Version version) throws PromptoError {
+	private IStoredIterable fetchManyNamedInStore(String name, CategoryType type, Version version) throws PromptoError {
+		return fetchManyInStore(type, version, "name", name);
+	}
+
+	private IStoredIterable fetchManyInStore(CategoryType type, Version version, String attribute, String value) throws PromptoError {
 		IQueryBuilder builder = store.newQueryBuilder();
 		if(uniqueDecls.contains(type.toString().toUpperCase())) {
 			builder.setFirst(1L);
@@ -320,7 +360,7 @@ public class UpdatableCodeStore extends BaseCodeStore {
 		}
 		AttributeInfo info = new AttributeInfo("category", Family.TEXT, true, null);
 		builder.verify(info, MatchOp.CONTAINS, type.getTypeName());
-		IPredicateExpression filter = buildNameAndVersionFilter(name, version);
+		IPredicateExpression filter = buildFilter(version, attribute, value);
 		filter.interpretQuery(context, builder);
 		if(LATEST_VERSION.equals(version)) {
 			IdentifierList names = IdentifierList.parse("prototype,version");
@@ -332,11 +372,15 @@ public class UpdatableCodeStore extends BaseCodeStore {
 			return store.fetchMany(builder.build()); 
 	}
 	
-	private IStored fetchOneInStore(String name, CategoryType type, Version version) throws PromptoError {
+	private IStored fetchOneNamedInStore(CategoryType type, Version version, String name) throws PromptoError {
+		return fetchOneInStore(type, version, "name", name);
+	}
+	
+	private IStored fetchOneInStore(CategoryType type, Version version, String attribute, String value) throws PromptoError {
 		IQueryBuilder builder = store.newQueryBuilder();
 		AttributeInfo info = new AttributeInfo("category", Family.TEXT, true, null);
 		builder.verify(info, MatchOp.CONTAINS, type.getTypeName());
-		IPredicateExpression filter = buildNameAndVersionFilter(name, version);
+		IPredicateExpression filter = buildFilter(version, attribute, value);
 		filter.interpretQuery(context, builder);
 		builder.and();
 		if(LATEST_VERSION.equals(version)) {
@@ -393,9 +437,9 @@ public class UpdatableCodeStore extends BaseCodeStore {
 		};
 	}
 
-	private IPredicateExpression buildNameAndVersionFilter(String name, Version version) {
-		IExpression left = new UnresolvedIdentifier(new Identifier("name"));
-		IExpression right = new TextLiteral("'" + name + "'");
+	private IPredicateExpression buildFilter(Version version, String attribute, String value) {
+		IExpression left = new UnresolvedIdentifier(new Identifier(attribute));
+		IExpression right = new TextLiteral("'" + value + "'");
 		IPredicateExpression filter = new EqualsExpression(left, EqOp.EQUALS, right);
 		if(!LATEST_VERSION.equals(version)) {
 			left = new UnresolvedIdentifier(new Identifier("version"));

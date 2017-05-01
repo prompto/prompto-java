@@ -32,13 +32,13 @@ public abstract class BaseCodeStore implements ICodeStore {
 	}
 	
 	@Override
-	public Iterator<IDeclaration> fetchLatestVersions(String name) throws PromptoError {
-		return next==null ? null : next.fetchLatestVersions(name);
+	public Iterator<IDeclaration> fetchLatestDeclarations(String name) throws PromptoError {
+		return next==null ? null : next.fetchLatestDeclarations(name);
 	}
 	
 	@Override
-	public Iterator<IDeclaration> fetchSpecificVersions(String name, Version version) throws PromptoError {
-		return next==null ? null : next.fetchSpecificVersions(name, version);
+	public Iterator<IDeclaration> fetchSpecificDeclarations(String name, Version version) throws PromptoError {
+		return next==null ? null : next.fetchSpecificDeclarations(name, version);
 	}
 	
 	@Override

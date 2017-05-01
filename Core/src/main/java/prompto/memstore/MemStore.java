@@ -284,6 +284,15 @@ public final class MemStore implements IStore {
 		public boolean isDirty() {
 			return document!=null;
 		}
+		
+		
+		@Override
+		public boolean hasData(String name) {
+			if(document==null)
+				return false;
+			else
+				return document.containsKey(name);
+		}
 
 		@Override
 		public Object getData(String name) {

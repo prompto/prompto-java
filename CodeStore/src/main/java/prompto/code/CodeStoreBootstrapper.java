@@ -45,7 +45,7 @@ public class CodeStoreBootstrapper {
 	private CodeStoreBootstrapper(IStore store, ICodeStore runtime) {
 		this.store = store;
 		URL url = Thread.currentThread().getContextClassLoader().getResource("libraries/CodeStore.pec");
-		this.next = new ResourceCodeStore(runtime, ModuleType.LIBRARY, url, "1.0.0");
+		this.next = new ImmutableCodeStore(runtime, ModuleType.LIBRARY, url, "1.0.0");
 	}
 
 	private void bootstrap() throws PromptoError {
@@ -84,7 +84,7 @@ public class CodeStoreBootstrapper {
 			// can't write a declaration for a column with a reserved name, so use the hard coded one
 			if(reserved.contains(column.getName()))
 				return column;
-			Iterator<IDeclaration> decls = next.fetchLatestVersions(column.getName());
+			Iterator<IDeclaration> decls = next.fetchLatestDeclarations(column.getName());
 			if(decls==null || !decls.hasNext())
 				throw new RuntimeException("Invalid column attribute: " + column.getName());
 			IDeclaration decl = decls.next(); // can only get one attribute

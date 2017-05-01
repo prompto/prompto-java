@@ -45,7 +45,7 @@ public class AppStoreBootstrapper {
 			Collection<URL> urls = getAddOnLibraries(addOn);
 			for(URL url : urls) {
 				System.out.println("Connecting to " + url.toExternalForm());
-				runtime = new ResourceCodeStore(runtime, ModuleType.LIBRARY, url, "0.0.1");
+				runtime = new ImmutableCodeStore(runtime, ModuleType.LIBRARY, url, "0.0.1");
 			}
 			return runtime;
 		} catch (IOException e) {
@@ -68,7 +68,7 @@ public class AppStoreBootstrapper {
 		try {
 			URL resourceUrl = getUrl(resourceName);
 			System.out.println("Connecting to " + resourceUrl.toExternalForm());
-			return new ResourceCodeStore(runtime, ModuleType.LIBRARY, resourceUrl, version);
+			return new ImmutableCodeStore(runtime, ModuleType.LIBRARY, resourceUrl, version);
 		} catch (MalformedURLException e) {
 			throw new InternalError(e);
 		}

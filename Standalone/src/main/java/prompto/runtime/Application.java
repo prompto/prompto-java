@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import prompto.code.ICodeStore;
-import prompto.code.UpdatableCodeStore;
+import prompto.code.QueryableCodeStore;
 import prompto.code.Version;
 import prompto.compiler.PromptoClassLoader;
 import prompto.debug.DebugEventClient;
@@ -259,7 +259,7 @@ public abstract class Application {
 			JavaIdentifierExpression.registerAddOns(addOns, Application.classLoader);
 		System.out.println("Class loader initialized.");
 		System.out.println("Bootstrapping prompto...");
-		ICodeStore codeStore = new UpdatableCodeStore(store, runtimeSupplier, application, version.toString(), addOns, resourceNames);
+		ICodeStore codeStore = new QueryableCodeStore(store, runtimeSupplier, application, version.toString(), addOns, resourceNames);
 		ICodeStore.setInstance(codeStore);
 		System.out.println("Bootstrapping successful.");
 		return codeStore;
