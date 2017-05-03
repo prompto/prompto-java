@@ -42,20 +42,19 @@ public class IteratorExpression implements IExpression {
 
 	@Override
 	public IteratorType check(Context context) {
-		IType paramType = source.check(context).checkIterator(context);
+		IType elemType = source.check(context).checkIterator(context);
 		Context child = context.newChildContext();
-		child.registerValue(new Variable(name, paramType));
+		child.registerValue(new Variable(name, elemType));
 		IType resultType = expression.check(child);
 		return new IteratorType(resultType);
 	}
 
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		IteratorType iterType = check(context);
-		IType itemType = iterType.getItemType();
+		IType elemType = source.check(context).checkIterator(context);
 		IValue items = source.interpret(context);
 		IterableWithCounts<IValue> iterable = getIterable(context, items);
-		return new IterableValue(context, name, itemType, iterable, expression);
+		return new IterableValue(context, name, elemType, iterable, expression);
 	}
 	
 	@Override
