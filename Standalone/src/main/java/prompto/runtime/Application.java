@@ -214,7 +214,7 @@ public abstract class Application {
 	public static IExpression argsToArgValue(String[] args) {
 		PromptoDict<Text, IValue> dict = new PromptoDict<>(true);
 		for(int i=0;i<args.length; i+=2)
-			dict.put(new Text(args[i]),new Text(args[i + 1]));
+			dict.put(new Text(args[i].substring(1)),new Text(args[i + 1]));
 		return new ExpressionValue(new DictType(TextType.instance()), new Dictionary(TextType.instance(), dict));
 	}
 
