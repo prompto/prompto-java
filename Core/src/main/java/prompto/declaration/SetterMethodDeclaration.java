@@ -90,7 +90,7 @@ public class SetterMethodDeclaration extends ConcreteMethodDeclaration implement
 		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, getId());
 		method.registerLocal(getName(), VerifierType.ITEM_Object, new ClassConstant(field.getType()));
-		context = context.newCategoryContext(type).newChildContext();
+		context = context.newInstanceContext(type, false).newChildContext();
 		context.registerValue(new Variable(getId(), decl.getType()));
 		for(IStatement stmt : statements)
 			stmt.compile(context, method, flags.withSetter(field));

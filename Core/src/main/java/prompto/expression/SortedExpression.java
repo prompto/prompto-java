@@ -207,7 +207,7 @@ public class SortedExpression implements IExpression {
 			}
 
 			private IValue interpret(IInstance o) throws PromptoError {
-				Context co = context.newInstanceContext(o);
+				Context co = context.newInstanceContext(o, false);
 				return key.interpret(co);
 			}
 		};
@@ -443,7 +443,7 @@ public class SortedExpression implements IExpression {
 			Opcode opcode = Opcode.values()[Opcode.ALOAD_0.ordinal() + param.getIndex()];
 			method.addInstruction(opcode, new ClassConstant(paramType));
 			method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)tmpThis.getIndex()));
-			return key.compile(context.newCategoryContext(itemType), method, new Flags());
+			return key.compile(context.newInstanceContext(itemType, false), method, new Flags());
 		}
 	}
 

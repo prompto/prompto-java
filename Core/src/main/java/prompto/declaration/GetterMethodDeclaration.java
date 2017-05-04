@@ -79,7 +79,7 @@ public class GetterMethodDeclaration extends ConcreteMethodDeclaration implement
 		Descriptor.Method proto = new Descriptor.Method(field.getType());
 		MethodInfo method = classFile.newMethod(name, proto);
 		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
-		context = context.newCategoryContext(type).newChildContext();
+		context = context.newInstanceContext(type, false).newChildContext();
 		for(IStatement stmt : statements)
 			stmt.compile(context, method, flags);
 	}

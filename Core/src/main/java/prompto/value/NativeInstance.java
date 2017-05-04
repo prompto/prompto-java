@@ -151,7 +151,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 	public IValue getMemberAllowGetter(Context context, Identifier attrName, boolean allowGetter) throws PromptoError {
 		GetterMethodDeclaration promptoGetter = allowGetter ? declaration.findGetter(context, attrName) : null;
 		if(promptoGetter!=null) {
-			context = context.newInstanceContext(this).newChildContext(); // mimic method call
+			context = context.newInstanceContext(this, false).newChildContext(); // mimic method call
 			return promptoGetter.interpret(context);
 		} else {
 			Method nativeGetter = getGetter(attrName);
@@ -202,7 +202,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 		SetterMethodDeclaration promptoSetter = allowSetter ? declaration.findSetter(context,attrName) : null;
 		if(promptoSetter!=null) {
 			// use attribute name as parameter name for incoming value
-			context = context.newInstanceContext(this).newChildContext(); // mimic method call
+			context = context.newInstanceContext(this, false).newChildContext(); // mimic method call
 			context.registerValue(new Variable(attrName, decl.getType())); 
 			context.setValue(attrName, value);
 			value = promptoSetter.interpret(context);

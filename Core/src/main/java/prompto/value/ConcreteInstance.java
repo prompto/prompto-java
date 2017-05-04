@@ -127,7 +127,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	protected IValue getMemberAllowGetter(Context context, Identifier attrName, boolean allowGetter) throws PromptoError {
 		GetterMethodDeclaration getter = allowGetter ? declaration.findGetter(context, attrName) : null;
 		if(getter!=null) {
-			context = context.newInstanceContext(this).newChildContext(); // mimic method call
+			context = context.newInstanceContext(this, false).newChildContext(); // mimic method call
 			return getter.interpret(context);
 		} else if(getDeclaration().hasAttribute(context, attrName) || IStore.dbIdName.equals(attrName.toString()))
 			return values.getOrDefault(attrName, NullValue.instance());
@@ -168,7 +168,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		SetterMethodDeclaration setter = allowSetter ? declaration.findSetter(context,attrName) : null;
 		if(setter!=null) {
 			// use attribute name as parameter name for incoming value
-			context = context.newInstanceContext(this).newChildContext(); // mimic method call
+			context = context.newInstanceContext(this, false).newChildContext(); // mimic method call
 			context.registerValue(new Variable(attrName, decl.getType())); 
 			context.setValue(attrName, value);
 			value = setter.interpret(context);
@@ -287,7 +287,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	
 	private IValue interpretOperator(Context context, IValue value, Operator operator) throws PromptoError {
 		IMethodDeclaration decl = declaration.findOperator(context, operator, value.getType());
-		context = context.newInstanceContext(this);
+		context = context.newInstanceContext(this, false);
 		Context local = context.newChildContext();
 		decl.registerArguments(local);
 		IArgument arg = decl.getArguments().getFirst();

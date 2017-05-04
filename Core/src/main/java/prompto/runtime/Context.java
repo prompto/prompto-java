@@ -203,10 +203,6 @@ public class Context implements IContext {
 		return context;
 	}
 	
-	public Context newCategoryContext(CategoryType type) {
-		return initInstanceContext(new InstanceContext(type), false);
-	}
-	
 	public Context newBuiltInContext(IValue value) {
 		return initInstanceContext(new BuiltInContext(value), false);
 	}
@@ -215,18 +211,14 @@ public class Context implements IContext {
 		return initInstanceContext(new BuiltInContext(type), false);
 	}
 
-	public Context newInstanceContext(IInstance instance) {
-		return initInstanceContext(new InstanceContext(instance), false);
+	public Context newInstanceContext(IInstance instance, boolean isChild) {
+		return initInstanceContext(new InstanceContext(instance), isChild);
 	}
 	
-	public Context newSingletonContext(CategoryType type) {
-		return initInstanceContext(new InstanceContext(type), true);
+	public Context newInstanceContext(CategoryType type, boolean isChild) {
+		return initInstanceContext(new InstanceContext(type), isChild);
 	}
 	
-	public Context newSingletonContext(IInstance instance) {
-		return initInstanceContext(new InstanceContext(instance), true);
-	}
-
 	public Context newDocumentContext(Document document, boolean isChild) {
 		return initInstanceContext(new DocumentContext(document), isChild);
 	}

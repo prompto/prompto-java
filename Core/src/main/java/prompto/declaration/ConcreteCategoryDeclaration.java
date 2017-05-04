@@ -609,7 +609,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 
 	private void compileMethodPrototype(Context context, ClassFile classFile, IMethodDeclaration method) {
 		try {
-			context = context.newCategoryContext(getType(context)).newChildContext();
+			context = context.newInstanceContext(getType(context), false).newChildContext();
 			method.registerArguments(context);
 			method.compilePrototype(context, false, classFile);
 		} catch(SyntaxError e) {
@@ -950,7 +950,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		for(IMethodDeclaration method : methods) {
 			if(	method instanceof GetterMethodDeclaration || method instanceof SetterMethodDeclaration)
 				continue;
-			context = context.newCategoryContext(getType(context)).newChildContext();
+			context = context.newInstanceContext(getType(context), false).newChildContext();
 			method.registerArguments(context);
 			method.compile(context, false, classFile);
 		}

@@ -335,7 +335,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		IMethodDeclaration operator = decl.findOperator(context, oper, argType);
 		if(operator==null)
 			throw new SyntaxError("No " + oper.getToken() + " operator method defined!");
-		Context local = context.newCategoryContext(decl.getType(context)).newChildContext();
+		Context local = context.newInstanceContext(decl.getType(context), false).newChildContext();
 		operator.registerArguments(local);
 		IType resultType = operator.check(local, false);
 		String methodName = "operator-" + oper.name();

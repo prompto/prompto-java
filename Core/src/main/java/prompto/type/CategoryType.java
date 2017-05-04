@@ -187,7 +187,7 @@ public class CategoryType extends BaseType {
 			IMethodDeclaration method = ((ConcreteCategoryDeclaration)actual).findOperator(context, operator, other);
 			if(method==null)
 				return null;
-			context = context.newSingletonContext(this);
+			context = context.newInstanceContext(this, false);
 			Context local = context.newLocalContext();
 			method.registerArguments(local);
 			return method.check(local, false);

@@ -33,7 +33,7 @@ public class WithSingletonStatement extends BaseStatement {
 
 	@Override
 	public IType check(Context context) {
-		Context instanceContext = context.newSingletonContext(type);
+		Context instanceContext = context.newInstanceContext(type, true);
 		Context childContext = instanceContext.newChildContext();
 		return statements.check(childContext, null);
 	}
@@ -42,7 +42,7 @@ public class WithSingletonStatement extends BaseStatement {
 	public IValue interpret(Context context) throws PromptoError {
 		ConcreteInstance instance = context.loadSingleton(context, type);
 		synchronized(instance) {
-			Context instanceContext = context.newSingletonContext(instance);
+			Context instanceContext = context.newInstanceContext(instance, true);
 			Context childContext = instanceContext.newChildContext();
 			return statements.interpret(childContext);
 		}
@@ -57,7 +57,7 @@ public class WithSingletonStatement extends BaseStatement {
 		method.addInstruction(Opcode.INVOKESTATIC, m);
 		method.addInstruction(Opcode.DUP);
 		method.addInstruction(Opcode.MONITORENTER);
-		Context instanceContext = context.newCategoryContext(type);
+		Context instanceContext = context.newInstanceContext(type, false);
 		Context childContext = instanceContext.newChildContext();
 		statements.compile(childContext, method, flags);
 		method.addInstruction(Opcode.MONITOREXIT);

@@ -225,7 +225,7 @@ public class MemberSelector extends SelectorExpression {
 			// can't use 'this' since it could refer to another abject than the native parent
 			StackLocal local = method.registerLocal("$this$", VerifierType.ITEM_Object, new ClassConstant(info.getType())); 
 			CompilerUtils.compileASTORE(method, local);
-			context = context.newCategoryContext(getter.getMemberOf().getType(context)).newChildContext(); // mimic method call
+			context = context.newInstanceContext(getter.getMemberOf().getType(context), false).newChildContext(); // mimic method call
 			getter.compile(context, method, new Flags());
 			method.unregisterLocal(local);
 			method.restoreStackLocals(state);
