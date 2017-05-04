@@ -203,10 +203,6 @@ public class Context implements IContext {
 		return context;
 	}
 	
-	public Context newSingletonContext(CategoryType type) {
-		return initInstanceContext(new InstanceContext(type), false);
-	}
-
 	public Context newCategoryContext(CategoryType type) {
 		return initInstanceContext(new InstanceContext(type), false);
 	}
@@ -221,6 +217,14 @@ public class Context implements IContext {
 
 	public Context newInstanceContext(IInstance instance) {
 		return initInstanceContext(new InstanceContext(instance), false);
+	}
+	
+	public Context newSingletonContext(CategoryType type) {
+		return initInstanceContext(new InstanceContext(type), true);
+	}
+	
+	public Context newSingletonContext(IInstance instance) {
+		return initInstanceContext(new InstanceContext(instance), true);
 	}
 
 	public Context newDocumentContext(Document document, boolean isChild) {
@@ -746,6 +750,8 @@ public class Context implements IContext {
 			IValue value = values.get(type.getTypeNameId());
 			if(value==null) {
 				IDeclaration decl = declarations.get(type.getTypeNameId());
+				if(decl==null)
+					decl = fetchAndRegisterDeclaration(type.getTypeNameId());
 				if(!(decl instanceof SingletonCategoryDeclaration))
 					throw new InternalError("No such singleton:" + type.getTypeName());
 				value = new ConcreteInstance(context, (ConcreteCategoryDeclaration)decl);

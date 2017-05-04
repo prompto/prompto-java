@@ -25,6 +25,11 @@ public class WithSingletonStatement extends BaseStatement {
 		this.type = type;
 		this.statements = statements;
 	}
+	
+	@Override
+	public boolean canReturn() {
+		return true;
+	}
 
 	@Override
 	public IType check(Context context) {
@@ -37,7 +42,7 @@ public class WithSingletonStatement extends BaseStatement {
 	public IValue interpret(Context context) throws PromptoError {
 		ConcreteInstance instance = context.loadSingleton(context, type);
 		synchronized(instance) {
-			Context instanceContext = context.newInstanceContext(instance);
+			Context instanceContext = context.newSingletonContext(instance);
 			Context childContext = instanceContext.newChildContext();
 			return statements.interpret(childContext);
 		}
