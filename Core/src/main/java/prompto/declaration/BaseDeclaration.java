@@ -22,6 +22,11 @@ public abstract class BaseDeclaration extends Section implements IDeclaration {
 		return id;
 	}
 	
+	@Override
+	public String toString() { 
+		return getId().toString(); 
+	}
+	
 	public void setOrigin(ICodeStore origin) {
 		this.origin = origin;
 	}
