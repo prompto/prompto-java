@@ -1,11 +1,16 @@
 package prompto.type;
 
+import java.util.Map;
+
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoBinary;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.value.BinaryValue;
 import prompto.value.IValue;
+import prompto.value.NullValue;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 
 public abstract class BinaryType extends NativeType { 
@@ -13,6 +18,8 @@ public abstract class BinaryType extends NativeType {
 	protected BinaryType(Family family) {
 		super(family);
 	}
+	
+	protected abstract IValue newInstance(PromptoBinary binary);
 
 	@Override
 	public IType checkMember(Context context, Identifier id) {
@@ -31,6 +38,18 @@ public abstract class BinaryType extends NativeType {
 			return BinaryValue.newInstance((PromptoBinary)value);
 		else
 			return super.convertJavaValueToIValue(context, value);
+	}
+	
+	@Override
+	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
+		if(value.isNull())
+			return NullValue.instance();
+		String partName = value.get("partName").asText();
+		byte[] bytes = parts.get(partName);
+		if(bytes==null)
+			return NullValue.instance(); // TODO throw ?
+		String mimeType = value.get("mimeType").asText();
+		return newInstance(new PromptoBinary(mimeType, bytes));
 	}
 
 }

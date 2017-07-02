@@ -401,7 +401,7 @@ public class CategoryType extends BaseType {
 	private void readJSONField(Context context, IInstance instance, String fieldName, JsonNode fieldData, Map<String, byte[]> parts) throws PromptoError {
 		Identifier fieldId = new Identifier(fieldName);
 		IType fieldType = readJSONFieldType(context, fieldId, fieldData);
-		if(fieldData.isObject())
+		if(!(fieldType instanceof BinaryType) && fieldData.isObject())
 			fieldData = fieldData.get("value");
 		IValue fieldValue = fieldType.readJSONValue(context, fieldData, parts);
 		if(fieldValue!=null)
