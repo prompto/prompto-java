@@ -8,7 +8,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
 
 
 
@@ -459,13 +461,13 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		Set<Identifier> attributes = getLocalCategoryAttributes(context);
 		if(attributes==null)
 			return;
-		MethodInfo method = classFile.newMethod("collectStorables", new Descriptor.Method(List.class, void.class));
+		MethodInfo method = classFile.newMethod("collectStorables", new Descriptor.Method(Consumer.class, void.class));
 		StackLocal $this = method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
 		StackLocal $storables = method.registerLocal("storables", VerifierType.ITEM_Object, new ClassConstant(List.class));
 		// call super
 		CompilerUtils.compileALOAD(method, $this);
 		CompilerUtils.compileALOAD(method, $storables);
-		MethodConstant m = new MethodConstant(classFile.getSuperClass(), "collectStorables", List.class, void.class);
+		MethodConstant m = new MethodConstant(classFile.getSuperClass(), "collectStorables", Consumer.class, void.class);
 		method.addInstruction(Opcode.INVOKESPECIAL, m);
 		attributes.forEach((id)->{
 			StackState state = method.captureStackState();
@@ -488,7 +490,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			CompilerUtils.compileALOAD(method, $field); 
 			method.addInstruction(Opcode.CHECKCAST, new ClassConstant(PromptoRoot.class));
 			CompilerUtils.compileALOAD(method, $storables);
-			mx = new MethodConstant(PromptoRoot.class, "collectStorables", List.class, void.class);
+			mx = new MethodConstant(PromptoRoot.class, "collectStorables", Consumer.class, void.class);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, mx);
 			method.inhibitOffsetListener(listener);
 			method.restoreFullStackState(state);

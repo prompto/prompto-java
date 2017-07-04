@@ -1,8 +1,8 @@
 package prompto.value;
 
 import java.lang.reflect.Type;
-import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -74,7 +74,7 @@ public abstract class BaseValue implements IValue {
 	}
 	
 	@Override
-	public void collectStorables(List<IStorable> storables) throws NotStorableError {
+	public void collectStorables(Consumer<IStorable> collector) throws NotStorableError {
 		// nothing to do
 	}
 

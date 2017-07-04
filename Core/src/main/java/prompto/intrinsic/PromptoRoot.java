@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import prompto.compiler.CompilerUtils;
@@ -219,10 +220,10 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMuta
 				.collect(Collectors.toList()));
 	}
 
-	public void collectStorables(List<IStorable> storables) {
+	public void collectStorables(Consumer<IStorable> collector) {
 		if(storable!=null && storable.isDirty()) {
 			getOrCreateDbId();
-			storables.add(storable);
+			collector.accept(storable);
 		}
 	}
 	

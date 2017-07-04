@@ -1,8 +1,10 @@
 package prompto.intrinsic;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
@@ -17,8 +19,8 @@ import prompto.value.NullValue;
 
 public class PromptoStoreQuery {
 
-	List<Object> deletables = new ArrayList<>();
-	List<IStorable> storables = new ArrayList<>();
+	Set<Object> deletables = new HashSet<>();
+	Map<Object, IStorable> storables = new HashMap<>();
 	
 	public void execute() {
 		if(deletables.isEmpty())
@@ -28,7 +30,7 @@ public class PromptoStoreQuery {
 		if(deletables!=null || storables!=null) {
 			IStore store = IDataStore.getInstance();
 			try {
-				store.store(deletables, storables);
+				store.store(deletables, storables==null ? null : storables.values());
 			} catch(PromptoError e) {
 				throw new RuntimeException(e); // TODO for now
 			} 
@@ -61,7 +63,7 @@ public class PromptoStoreQuery {
 		if(value==NullValue.instance())
 			return;
 		else if(value instanceof IInstance) try {
-			((IInstance)value).collectStorables(storables);
+			((IInstance)value).collectStorables((s)->storables.put(s.getOrCreateDbId(), s));
 		} catch(PromptoError e) {
 			throw new RuntimeException(e);
 		} else if(value instanceof IIterable) {
@@ -100,7 +102,7 @@ public class PromptoStoreQuery {
 		if(value==null)
 			return;
 		else if(value instanceof PromptoRoot)
-			((PromptoRoot)value).collectStorables(storables);
+			((PromptoRoot)value).collectStorables((s)->storables.put(s.getOrCreateDbId(), s));
 		else if(value instanceof Iterable) {
 			((Iterable<?>)value).forEach((item)->
 				store(item));

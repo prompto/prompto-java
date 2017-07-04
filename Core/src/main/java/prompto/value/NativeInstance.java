@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
@@ -83,11 +84,11 @@ public class NativeInstance extends BaseValue implements IInstance {
 	}
 	
 	@Override
-	public void collectStorables(List<IStorable> list) throws PromptoError {
+	public void collectStorables(Consumer<IStorable> collector) throws PromptoError {
 		if(storable==null)
 			throw new NotStorableError();
 		if(!storable.isDirty())
-			list.add(storable);
+			collector.accept(storable);
 		/* TODO get child storables of native instance
 		for(IValue value : values.values()) {
 			if(value instanceof IInstance)

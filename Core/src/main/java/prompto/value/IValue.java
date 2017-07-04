@@ -1,8 +1,8 @@
 package prompto.value;
 
 import java.lang.reflect.Type;
-import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import prompto.error.NotStorableError;
 import prompto.error.PromptoError;
@@ -37,7 +37,7 @@ public interface IValue {
 		throw new UnsupportedOperationException("getStorableData not supported by " + this.getClass().getSimpleName());
 	};
 	
-	default void collectStorables(List<IStorable> storables) throws NotStorableError {
+	default void collectStorables(Consumer<IStorable> collector) throws NotStorableError {
 		throw new UnsupportedOperationException("collectStorables not supported by " + this.getClass().getSimpleName());
 	};
 	

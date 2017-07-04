@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
@@ -75,15 +76,15 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	}
 
 	@Override
-	public void collectStorables(List<IStorable> list) {
+	public void collectStorables(Consumer<IStorable> collector) {
 		if(storable==null)
 			throw new NotStorableError();
 		if(storable.isDirty()) {
 			getOrCreateDbId();
-			list.add(storable);
+			collector.accept(storable);
 		}
 		values.values().forEach((value)->
-			value.collectStorables(list));
+			value.collectStorables(collector));
 	}
 	
 	public ConcreteCategoryDeclaration getDeclaration() {

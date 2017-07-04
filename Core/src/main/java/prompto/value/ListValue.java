@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -86,9 +87,9 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 	}
 	
 	@Override
-	public void collectStorables(List<IStorable> storables) {
+	public void collectStorables(Consumer<IStorable> collector) {
 		items.forEach((value)->
-			value.collectStorables(storables));
+			value.collectStorables(collector));
 	}
 	
 	@Override
