@@ -106,8 +106,7 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 	}
 	
 	@Override
-	public IValue interpret(Context context) throws PromptoError {
-		IStore store = IDataStore.getInstance();
+	public IValue fetch(Context context, IStore store) throws PromptoError {
 		IQuery query = buildFetchOneQuery(context, store);
 		IStored stored = store.fetchOne(query);
 		if(stored==null)

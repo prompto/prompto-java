@@ -16,13 +16,12 @@ import prompto.intrinsic.PromptoRoot;
 import prompto.runtime.Context;
 import prompto.store.AttributeInfo;
 import prompto.store.Family;
-import prompto.store.IDataStore;
 import prompto.store.IQuery;
 import prompto.store.IQueryBuilder;
+import prompto.store.IQueryBuilder.MatchOp;
 import prompto.store.IStore;
 import prompto.store.IStoredIterable;
 import prompto.store.InvalidValueError;
-import prompto.store.IQueryBuilder.MatchOp;
 import prompto.type.AnyType;
 import prompto.type.BooleanType;
 import prompto.type.CategoryType;
@@ -196,8 +195,7 @@ public class FetchManyExpression extends FetchOneExpression {
 
 
 	@Override
-	public IValue interpret(Context context) throws PromptoError {
-		IStore store = IDataStore.getInstance();
+	public IValue fetch(Context context, IStore store) throws PromptoError {
 		IQuery query = buildFetchManyQuery(context, store);
 		IStoredIterable docs = store.fetchMany(query);
 		IType type = this.type==null ? AnyType.instance() : this.type;
