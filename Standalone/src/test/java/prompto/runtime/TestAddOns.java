@@ -24,6 +24,7 @@ public class TestAddOns {
 		URL url = Thread.currentThread().getContextClassLoader().getResource("awsClient.pec");
 		String[] args = new String[] {
 				"-application", "test", 
+				"-testMode", "true", 
 				"-resources", "\"" + url.toExternalForm() + "\"",
 				"-addOns", "\"" + addOns + "\"",
 				"-loadRuntime", "true"
