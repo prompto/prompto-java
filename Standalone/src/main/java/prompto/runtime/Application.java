@@ -51,7 +51,6 @@ public abstract class Application {
 	private static PromptoClassLoader classLoader;
 	
 	public static void main(String[] args) throws Throwable {
-		
 		Integer debugPort = null;
 		
 		Map<String, String> argsMap = initialize(args, ()->Libraries.getPromptoLibraries(Libraries.class));
@@ -59,13 +58,7 @@ public abstract class Application {
 		String debugHost = argsMap.getOrDefault("debug_host", "localhost");
 		if(argsMap.containsKey("debug_port"))
 			debugPort = Integer.parseInt(argsMap.get("debug_port"));
-		if(argsMap.containsKey("test")) {
-			String testMethod = argsMap.get("test");
-			if(debugPort!=null)
-				debugTest(debugHost, debugPort, testMethod);
-			else
-				runTest(testMethod);
-		} else if(argsMap.containsKey("application")) {
+		if(argsMap.containsKey("application")) {
 			String mainMethod = "main";
 			if(argsMap.containsKey("mainMethod"))
 				mainMethod = argsMap.get("mainMethod");
@@ -73,7 +66,13 @@ public abstract class Application {
 				debugApplication(debugHost, debugPort, mainMethod, argsMap);
 			else
 				runApplication(mainMethod, argsMap);
-		} 
+		} else if(argsMap.containsKey("test")) {
+			String testMethod = argsMap.get("test");
+			if(debugPort!=null)
+				debugTest(debugHost, debugPort, testMethod);
+			else
+				runTest(testMethod);
+		}
 			
 	}
 
