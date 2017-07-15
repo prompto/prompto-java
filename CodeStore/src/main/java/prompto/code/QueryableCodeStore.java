@@ -226,7 +226,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 				if(decls==null) {
 					decls = fetchRegisteringDeclarations(name);
 					if(decls==null) {
-						decls = super.fetchLatestDeclarations(name);
+						decls = super.fetchSpecificDeclarations(name, version);
 						if(store!=null && decls!=null) {
 							storeRegisteringDeclarations(name, decls);
 							decls = storeDeclarations(decls);
@@ -362,6 +362,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 		builder.verify(info, MatchOp.CONTAINS, type.getTypeName());
 		IPredicateExpression filter = buildFilter(version, attribute, value);
 		filter.interpretQuery(context, builder);
+		builder.and();
 		if(LATEST_VERSION.equals(version)) {
 			IdentifierList names = IdentifierList.parse("prototype,version");
 			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
