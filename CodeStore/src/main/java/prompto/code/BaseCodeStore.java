@@ -33,7 +33,8 @@ public abstract class BaseCodeStore implements ICodeStore {
 	
 	@Override
 	public Iterator<IDeclaration> fetchLatestDeclarations(String name) throws PromptoError {
-		return next==null ? null : next.fetchLatestDeclarations(name);
+		Iterator<IDeclaration> decls = ICodeStore.super.fetchLatestDeclarations(name);
+		return decls != null ? decls : (next==null ? null : next.fetchLatestDeclarations(name));
 	}
 	
 	@Override
@@ -43,7 +44,8 @@ public abstract class BaseCodeStore implements ICodeStore {
 	
 	@Override
 	public IDeclaration fetchLatestSymbol(String name) throws PromptoError {
-		return next==null ? null : next.fetchLatestSymbol(name);
+		IDeclaration decl = ICodeStore.super.fetchLatestSymbol(name);
+		return decl != null ? decl : (next==null ? null : next.fetchLatestSymbol(name));
 	}
 	
 	@Override
