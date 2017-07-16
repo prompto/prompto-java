@@ -93,10 +93,14 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 	@Override
 	public Object interpret(Context context) throws PromptoError {
 		Object instance = parent.interpret(context);
+		if(instance==null)
+			throw new SyntaxError("Could not locate: " + parent.toString());
 		if(instance instanceof NativeInstance)
 			instance = ((NativeInstance)instance).getInstance();
 		try {
 			Method method = findMethod(context, instance);
+			if(method==null)
+				throw new SyntaxError("Could not locate: " + this.toString());
 			Object[] args = evaluate_arguments(context, method);
 			Class<?> klass = instance instanceof Class<?> ? (Class<?>)instance : instance.getClass(); 
 			if(klass==instance)
