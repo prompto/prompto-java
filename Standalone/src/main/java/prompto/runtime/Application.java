@@ -119,10 +119,12 @@ public abstract class Application {
 		}
 
 		// initialize code store
+		System.out.println("Using " + codeStoreType.name() + " as code store");
 		IStoreFactory factory = newStoreFactory(codeStoreFactory);
 		IStore store = factory.newStore(args, codeStoreType);
 		ICodeStore codeStore = bootstrapCodeStore(store, runtimeSupplier, application, version, testMode, addOns, resources);
 		// initialize data store
+		System.out.println("Using " + dataStoreType.name() + " as data store");
 		factory = newStoreFactory(dataStoreFactory);
 		store = factory.newStore(args, dataStoreType);
 		IStore dataStore = bootstrapDataStore(store);
