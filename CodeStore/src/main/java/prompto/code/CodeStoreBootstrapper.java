@@ -115,6 +115,7 @@ public class CodeStoreBootstrapper {
 		columns.put("prototype", new AttributeDeclaration(new Identifier("prototype"), TextType.instance()));
 		columns.put("dialect", new AttributeDeclaration(new Identifier("dialect"), TextType.instance()));
 		columns.put("body", new AttributeDeclaration(new Identifier("body"), TextType.instance()));
+		columns.put("mimeType", new AttributeDeclaration(new Identifier("mimeType"), TextType.instance()));
 		return columns;
 	}
 
