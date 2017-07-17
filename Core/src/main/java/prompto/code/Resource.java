@@ -12,7 +12,7 @@ import prompto.store.IStore;
 public abstract class Resource {
 	
 	private Object dbId;
-	private String path;
+	private String name;
 	private String version;
 	private String mimeType;
 	private OffsetDateTime lastModified; // always UTC
@@ -25,12 +25,12 @@ public abstract class Resource {
 		this.dbId = dbId;
 	}
 	
-	public String getPath() {
-		return path;
+	public String getName() {
+		return name;
 	}
 	
-	public void setPath(String path) {
-		this.path = path;
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	public String getVersion() {
@@ -60,7 +60,7 @@ public abstract class Resource {
 	public IStorable toStorable(IStore store) {
 		IStorable storable = store.newStorable(Collections.singletonList("Resource"), null);
 		setDbId(storable.getOrCreateDbId());
-		storable.setData("path", this.getPath());
+		storable.setData("name", this.getName());
 		storable.setData("mimeType", this.getMimeType());
 		storable.setData("version", this.getVersion());
 		if(this.getLastModified()==null)

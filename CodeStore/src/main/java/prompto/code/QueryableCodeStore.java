@@ -169,9 +169,9 @@ public class QueryableCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public Resource fetchSpecificResource(String path, Version version) {
+	public Resource fetchSpecificResource(String name, Version version) {
 		try {
-			IStored stored = fetchOneInStore(new CategoryType(new Identifier("Resource")), version, "path", path);
+			IStored stored = fetchOneInStore(new CategoryType(new Identifier("Resource")), version, "name", name);
 			if(stored==null)
 				return null;
 			Resource resource;
@@ -180,11 +180,12 @@ public class QueryableCodeStore extends BaseCodeStore {
 				((TextResource)resource).setBody((String)stored.getData("body"));
 			} else
 				throw new UnsupportedOperationException();
-			resource.setPath((String)stored.getData("path"));
+			resource.setName((String)stored.getData("name"));
 			resource.setMimeType((String)stored.getData("mimeType"));
 			resource.setVersion((String)stored.getData("version"));
-			Instant instant = Instant.ofEpochMilli((Long)stored.getData("lastModified")); 
-			resource.setLastModified(OffsetDateTime.ofInstant(instant, ZoneOffset.UTC));
+			Long value = (Long)stored.getData("timeStamp");
+			if(value!=null)
+				resource.setLastModified(OffsetDateTime.ofInstant(Instant.ofEpochMilli(value), ZoneOffset.UTC));
 			return resource;
 		} catch(Exception e) {
 			throw new RuntimeException(e);
