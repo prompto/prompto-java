@@ -19,6 +19,7 @@ import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.AttributeInfo;
 import prompto.store.IStore;
+import prompto.type.BlobType;
 import prompto.type.BooleanType;
 import prompto.type.DateTimeType;
 import prompto.type.IType;
@@ -115,6 +116,7 @@ public class CodeStoreBootstrapper {
 		columns.put("prototype", new AttributeDeclaration(new Identifier("prototype"), TextType.instance()));
 		columns.put("dialect", new AttributeDeclaration(new Identifier("dialect"), TextType.instance()));
 		columns.put("body", new AttributeDeclaration(new Identifier("body"), TextType.instance()));
+		columns.put("data", new AttributeDeclaration(new Identifier("data"), BlobType.instance()));
 		columns.put("mimeType", new AttributeDeclaration(new Identifier("mimeType"), TextType.instance()));
 		return columns;
 	}

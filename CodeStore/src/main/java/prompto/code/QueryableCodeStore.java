@@ -35,6 +35,7 @@ import prompto.grammar.EqOp;
 import prompto.grammar.Identifier;
 import prompto.grammar.OrderByClause;
 import prompto.grammar.OrderByClauseList;
+import prompto.intrinsic.PromptoBinary;
 import prompto.literal.TextLiteral;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
@@ -174,24 +175,31 @@ public class QueryableCodeStore extends BaseCodeStore {
 			IStored stored = fetchOneInStore(new CategoryType(new Identifier("Resource")), version, "name", name);
 			if(stored==null)
 				return null;
-			Resource resource;
-			if(stored.hasData("body")) {
-				resource = new TextResource();
-				((TextResource)resource).setBody((String)stored.getData("body"));
-			} else
-				throw new UnsupportedOperationException();
-			resource.setName((String)stored.getData("name"));
-			resource.setMimeType((String)stored.getData("mimeType"));
-			resource.setVersion((String)stored.getData("version"));
-			Long value = (Long)stored.getData("timeStamp");
-			if(value!=null)
-				resource.setLastModified(OffsetDateTime.ofInstant(Instant.ofEpochMilli(value), ZoneOffset.UTC));
-			return resource;
+			return readResource(stored);
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 	
+	private Resource readResource(IStored stored) {
+		Resource resource = null;
+		String mimeType = (String)stored.getData("mimeType");
+		if(mimeType.startsWith("text/")) {
+			resource = new TextResource();
+			((TextResource)resource).setBody((String)stored.getData("body"));
+		} else {
+			resource = new BinaryResource();
+			((BinaryResource)resource).setData((PromptoBinary)stored.getData("data"));
+		}
+		resource.setMimeType(mimeType);
+		resource.setName((String)stored.getData("name"));
+		resource.setVersion((String)stored.getData("version"));
+		Long value = (Long)stored.getData("timeStamp");
+		if(value!=null)
+			resource.setLastModified(OffsetDateTime.ofInstant(Instant.ofEpochMilli(value), ZoneOffset.UTC));
+		return resource;
+	}
+
 	static ThreadLocal<Map<String, Iterator<IDeclaration>>> registering = new ThreadLocal<Map<String, Iterator<IDeclaration>>>() {
 		@Override protected Map<String, Iterator<IDeclaration>> initialValue() {
 	        return new HashMap<>();
