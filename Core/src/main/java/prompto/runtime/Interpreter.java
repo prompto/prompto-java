@@ -61,9 +61,14 @@ public class Interpreter {
 		}
 	}
 	
+	public static void interpretMainNoArgs(Context context, Identifier name) throws PromptoError {
+		interpretMethod(context, name, "");
+	}
+	
 	public static void interpretMainNoArgs(Context context) throws PromptoError {
 		interpretMethod(context, new Identifier("main"), "");
 	}
+
 
 	public static void interpretMethod(Context context, Identifier methodName, String cmdLineArgs) throws PromptoError {
 		try {
