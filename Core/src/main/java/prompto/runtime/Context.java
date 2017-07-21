@@ -4,7 +4,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -412,18 +411,17 @@ public class Context implements IContext {
 			if(decl!=null)
 				return decl;
 			try {
-				Iterator<IDeclaration> decls = store.fetchLatestDeclarations(name.toString());
+				Iterable<IDeclaration> decls = store.fetchLatestDeclarations(name.toString());
 				if(decls==null)
 					return null;
-				while(decls.hasNext()) {
-					decl = decls.next();
-					if(decl instanceof MethodDeclarationMap) {
-						MethodDeclarationMap map = (MethodDeclarationMap)decl;
+				decls.forEach((d)-> {
+					if(d instanceof MethodDeclarationMap) {
+						MethodDeclarationMap map = (MethodDeclarationMap)d;
 						for(Map.Entry<String, IMethodDeclaration> entry : map.entrySet())
 							entry.getValue().register(this);
 					} else
-						decl.register(this);
-				}
+						d.register(this);
+				});
 				return declarations.get(name);
 			} catch(PromptoError e) {
 				throw new RuntimeException(e); // TODO define a strategy
@@ -438,7 +436,7 @@ public class Context implements IContext {
 
 	private boolean checkDuplicateDeclaration(IDeclaration declaration) {
 		IDeclaration current = getRegisteredDeclaration(IDeclaration.class, declaration.getId(), false);
-		if(current!=null)
+		if(current!=null && current!=declaration)
 			problemListener.reportDuplicate(declaration.getId().toString(), declaration, current.getId());
 		return current==null;
 	}
@@ -793,18 +791,17 @@ public class Context implements IContext {
 			if(decl!=null)
 				return decl;
 			try {
-				Iterator<IDeclaration> decls = store.fetchLatestDeclarations(name.toString());
+				Iterable<IDeclaration> decls = store.fetchLatestDeclarations(name.toString());
 				if(decls==null)
 					return null;
-				while(decls.hasNext()) {
-					decl = decls.next();
-					if(decl instanceof MethodDeclarationMap) {
-						MethodDeclarationMap map = (MethodDeclarationMap)decl;
+				decls.forEach((d) -> {
+					if(d instanceof MethodDeclarationMap) {
+						MethodDeclarationMap map = (MethodDeclarationMap)d;
 						for(Map.Entry<String, IMethodDeclaration> entry : map.entrySet())
 							entry.getValue().register(this);
 					} else
-						decl.register(this);
-				}
+						d.register(this);
+				});
 				return tests.get(name);
 			} catch(PromptoError e) {
 				throw new RuntimeException(e); // TODO define a strategy
