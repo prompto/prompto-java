@@ -159,6 +159,12 @@ public abstract class Application {
 		return classLoader;
 	}
 
+	public static void clearGlobalContext() {
+		Application.globalContext = Context.newGlobalContext();
+		PromptoClassLoader loader = PromptoClassLoader.getInstance();
+		if(loader!=null)
+			loader.setContext(Application.globalContext);
+	}
 
 	private static void runTest(String testMethod) {
 		try {
@@ -276,5 +282,8 @@ public abstract class Application {
 				new ListType(TextType.instance()), new IdentifierList(new Identifier("key"))));
 		return columns;
 	}
+
+
+
 
 }
