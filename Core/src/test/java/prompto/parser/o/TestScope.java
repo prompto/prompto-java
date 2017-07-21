@@ -26,6 +26,7 @@ public class TestScope extends BaseOParserTest {
 		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, new Identifier("id"));
 		assertNotNull(actual);
 		assertTrue(actual instanceof AttributeDeclaration);
+		stmts = parseString("attribute id: Integer; ");
 		stmts.register(context);
 	}
 	
@@ -38,6 +39,7 @@ public class TestScope extends BaseOParserTest {
 		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, new Identifier("Person"));
 		assertNotNull(actual);
 		assertTrue(actual instanceof CategoryDeclaration);
+		stmts = parseString("category Person(id, name);");
 		stmts.register(context);
 	}
 	
