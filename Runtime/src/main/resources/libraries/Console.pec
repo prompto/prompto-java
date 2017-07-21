@@ -75,14 +75,12 @@ define TextWriter as Writer with attribute text, and methods:
 // now the interesting methods  
 define print as method receiving any value doing:
 	out = invoke: stdout
-	writer = ConsoleWriter with out as nativeWriter
-	print value with writer as writer
+	printNative value with out as writer
 	
 define printLine as method receiving any value doing:
 	out = invoke: stdout
-	writer = ConsoleWriter with out as nativeWriter
 	value = "" + value + "\n" 
-	print value with writer as writer
+	printNative value with out as writer
 
 
 define print as method receiving any value and Writer writer doing:
