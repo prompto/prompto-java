@@ -166,7 +166,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 					all.addAll(ids);
 			});
 		}
-		return all.isEmpty() ? null : all;
+		return all;
 	}
 	
 	private Set<Identifier> getLocalCategoryAttributes(Context context) {

@@ -3,7 +3,6 @@ package prompto.code;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
 
 import prompto.declaration.AttributeDeclaration;
@@ -99,13 +98,13 @@ public interface ICodeStore {
 	String getModuleName();
 	Version getModuleVersion();
 
-	void storeDeclarations(Iterator<IDeclaration> declarations, Dialect dialect, Version version, Object moduleId) throws PromptoError;
+	void storeDeclarations(Iterable<IDeclaration> declarations, Dialect dialect, Version version, Object moduleId) throws PromptoError;
 
-	default Iterator<IDeclaration> fetchLatestDeclarations(String name) throws PromptoError {
+	default Iterable<IDeclaration> fetchLatestDeclarations(String name) throws PromptoError {
 		return fetchSpecificDeclarations(name, ICodeStore.LATEST_VERSION);
 	}
 	
-	Iterator<IDeclaration> fetchSpecificDeclarations(String name, Version version) throws PromptoError;
+	Iterable<IDeclaration> fetchSpecificDeclarations(String name, Version version) throws PromptoError;
 
 	default IDeclaration fetchLatestSymbol(String name) throws PromptoError {
 		return fetchSpecificSymbol(name, ICodeStore.LATEST_VERSION);

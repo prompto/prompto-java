@@ -83,7 +83,7 @@ public class ImmutableCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public void storeDeclarations(Iterator<IDeclaration> declarations, Dialect dialect, Version version, Object moduleId) throws PromptoError {
+	public void storeDeclarations(Iterable<IDeclaration> declarations, Dialect dialect, Version version, Object moduleId) throws PromptoError {
 		throw new UnsupportedOperationException();
 	}
 	
@@ -94,8 +94,8 @@ public class ImmutableCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public Iterator<IDeclaration> fetchLatestDeclarations(String name) throws PromptoError {
-		Iterator<IDeclaration> decls = fetchInResource(name);
+	public Iterable<IDeclaration> fetchLatestDeclarations(String name) throws PromptoError {
+		Iterable<IDeclaration> decls = fetchInResource(name);
 		if(decls!=null)
 			return decls;
 		else
@@ -103,8 +103,8 @@ public class ImmutableCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public Iterator<IDeclaration> fetchSpecificDeclarations(String name,Version version) throws PromptoError {
-		Iterator<IDeclaration> decls = fetchInResource(name);
+	public Iterable<IDeclaration> fetchSpecificDeclarations(String name,Version version) throws PromptoError {
+		Iterable<IDeclaration> decls = fetchInResource(name);
 		if(decls!=null)
 			return decls;
 		else
@@ -159,10 +159,10 @@ public class ImmutableCodeStore extends BaseCodeStore {
 				
 	}
 
-	private Iterator<IDeclaration> fetchInResource(String name) throws PromptoError {
+	private Iterable<IDeclaration> fetchInResource(String name) throws PromptoError {
 		loadResource();
 		List<IDeclaration> decls = declarations.get(name);
-		return decls==null ? null : decls.iterator();
+		return decls==null ? null : decls;
 	}
 
 	private void loadResource() throws PromptoError {
@@ -199,9 +199,9 @@ public class ImmutableCodeStore extends BaseCodeStore {
 		}
 	}
 
-	public Iterator<IDeclaration> getDeclarations() {
+	public Iterable<IDeclaration> getDeclarations() {
 		loadResource();
-		return new Iterator<IDeclaration>() {
+		return ()->new Iterator<IDeclaration>() {
 			
 			Iterator<List<IDeclaration>> main = declarations.values().iterator();
 			Iterator<IDeclaration> child = null;

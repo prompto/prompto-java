@@ -200,17 +200,17 @@ public class QueryableCodeStore extends BaseCodeStore {
 		return resource;
 	}
 
-	static ThreadLocal<Map<String, Iterator<IDeclaration>>> registering = new ThreadLocal<Map<String, Iterator<IDeclaration>>>() {
-		@Override protected Map<String, Iterator<IDeclaration>> initialValue() {
+	static ThreadLocal<Map<String, Iterable<IDeclaration>>> registering = new ThreadLocal<Map<String, Iterable<IDeclaration>>>() {
+		@Override protected Map<String, Iterable<IDeclaration>> initialValue() {
 	        return new HashMap<>();
 	    }
 	};
 	
-	Iterator<IDeclaration> fetchRegisteringDeclarations(String name) {
+	Iterable<IDeclaration> fetchRegisteringDeclarations(String name) {
 		return registering.get().get(name);
 	}
 	
-	private void storeRegisteringDeclarations(String name, Iterator<IDeclaration> decl) {
+	private void storeRegisteringDeclarations(String name, Iterable<IDeclaration> decl) {
 		registering.get().put(name, decl);
 	}
 
@@ -225,8 +225,8 @@ public class QueryableCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public Iterator<IDeclaration> fetchSpecificDeclarations(String name, Version version) throws PromptoError {
-		Iterator<IDeclaration> decls = fetchDeclarationsInStore(name, version);
+	public Iterable<IDeclaration> fetchSpecificDeclarations(String name, Version version) throws PromptoError {
+		Iterable<IDeclaration> decls = fetchDeclarationsInStore(name, version);
 		if(decls==null) {
 			// when called from the AppServer, multiple threads may be attempting to do this
 			// TODO: need to deal with multiple cloud nodes doing this
@@ -236,7 +236,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 					decls = fetchRegisteringDeclarations(name);
 					if(decls==null) {
 						decls = super.fetchSpecificDeclarations(name, version);
-						if(store!=null && decls!=null) {
+						if(store!=null && decls!=null && decls.iterator().hasNext()) {
 							storeRegisteringDeclarations(name, decls);
 							decls = storeDeclarations(decls);
 							deleteRegisteringDeclarations(name);
@@ -255,53 +255,28 @@ public class QueryableCodeStore extends BaseCodeStore {
 		return super.fetchSpecificSymbol(name, version);
 	}
 
-	private Iterator<IDeclaration> storeDeclarations(Iterator<IDeclaration> decls) throws PromptoError {
-		if(!decls.hasNext())
-			return decls;
-		List<IDeclaration> result = new ArrayList<>();
-		final IDeclaration decl = decls.next();
+	private Iterable<IDeclaration> storeDeclarations(Iterable<IDeclaration> decls) throws PromptoError {
+		Iterator<IDeclaration> iter = decls.iterator();
+		if(!iter.hasNext())
+			return null;
+		// need module id
+		IDeclaration decl = iter.next();
 		ICodeStore origin = decl.getOrigin();
 		if(origin==null)
 			throw new InternalError("Cannot store declaration with no origin!");
 		Object moduleId = fetchDeclarationModuleDbId(decl);
 		if(moduleId==null)
 			moduleId = storeDeclarationModule(decl);
-		Iterator<IDeclaration> iter = new Iterator<IDeclaration>() {
-			
-			IDeclaration first = decl;
-			
-			@Override
-			public boolean hasNext() {
-				return first!=null || decls.hasNext();
-			}
-
-			@Override
-			public IDeclaration next() {
-				IDeclaration res = getNext();
-				if(res!=null)
-					result.add(res);
-				return res;
-			}
-			
-			protected IDeclaration getNext() {
-				if(first!=null) {
-					IDeclaration res = first;
-					first = null;
-					return res;
-				} else
-					return decls.next();
-			}
-		};
-		storeDeclarations(iter, origin.getModuleDialect(), origin.getModuleVersion(), moduleId);
-		return result.isEmpty() ? null : result.iterator();
+		storeDeclarations(decls, origin.getModuleDialect(), origin.getModuleVersion(), moduleId);
+		return decls;
 	}
 
 
 	@Override
-	public void storeDeclarations(Iterator<IDeclaration> declarations, Dialect dialect, Version version, Object moduleId) throws PromptoError {
+	public void storeDeclarations(Iterable<IDeclaration> declarations, Dialect dialect, Version version, Object moduleId) throws PromptoError {
 		List<IStorable> list = new ArrayList<>();
-		while(declarations.hasNext())
-			collectStorables(list, declarations.next(), dialect, version, moduleId);
+		declarations.forEach((decl)->
+			collectStorables(list, decl, dialect, version, moduleId));
 		store.store(null, list);
 	}
 	
@@ -335,25 +310,26 @@ public class QueryableCodeStore extends BaseCodeStore {
 		}
 	}
 
-	private Iterator<IDeclaration> fetchDeclarationsInStore(String name, Version version) {
+	
+	private Iterable<IDeclaration> fetchDeclarationsInStore(String name, Version version) {
 		if(store==null)
 			return null;
 		else try {
 			CategoryType category = new CategoryType(new Identifier("Declaration"));
 			IStoredIterable iterable = fetchManyNamedInStore(name, category, version);
-			Iterator<IStored> iterator = iterable.iterator();
-			if(iterator.hasNext())
-				return new Iterator<IDeclaration>() {
+			if(iterable.iterator().hasNext()) {
+				Iterator<IStored> iterator = iterable.iterator();
+				return () -> new Iterator<IDeclaration>() {
 					@Override public boolean hasNext() { return iterator.hasNext(); }
 					@Override public IDeclaration next() { return parseDeclaration(iterator.next()); }
 				};
-			else
+			} else
 				return null;
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
-
+	
 	private static Set<String> uniqueDecls = new HashSet<>(
 			Arrays.asList(DeclarationType.ATTRIBUTE.name(), DeclarationType.CATEGORY.name(), DeclarationType.TEST.name()));
 	

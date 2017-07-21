@@ -2,7 +2,6 @@ package prompto.code;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Map;
 
 import prompto.declaration.AttributeDeclaration;
@@ -32,13 +31,13 @@ public abstract class BaseCodeStore implements ICodeStore {
 	}
 	
 	@Override
-	public Iterator<IDeclaration> fetchLatestDeclarations(String name) throws PromptoError {
-		Iterator<IDeclaration> decls = ICodeStore.super.fetchLatestDeclarations(name);
+	public Iterable<IDeclaration> fetchLatestDeclarations(String name) throws PromptoError {
+		Iterable<IDeclaration> decls = ICodeStore.super.fetchLatestDeclarations(name);
 		return decls != null ? decls : (next==null ? null : next.fetchLatestDeclarations(name));
 	}
 	
 	@Override
-	public Iterator<IDeclaration> fetchSpecificDeclarations(String name, Version version) throws PromptoError {
+	public Iterable<IDeclaration> fetchSpecificDeclarations(String name, Version version) throws PromptoError {
 		return next==null ? null : next.fetchSpecificDeclarations(name, version);
 	}
 	

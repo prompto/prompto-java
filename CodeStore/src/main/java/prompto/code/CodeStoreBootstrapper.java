@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -85,10 +84,10 @@ public class CodeStoreBootstrapper {
 			// can't write a declaration for a column with a reserved name, so use the hard coded one
 			if(reserved.contains(column.getName()))
 				return column;
-			Iterator<IDeclaration> decls = next.fetchLatestDeclarations(column.getName());
-			if(decls==null || !decls.hasNext())
+			Iterable<IDeclaration> decls = next.fetchLatestDeclarations(column.getName());
+			if(decls==null || !decls.iterator().hasNext())
 				throw new RuntimeException("Invalid column attribute: " + column.getName());
-			IDeclaration decl = decls.next(); // can only get one attribute
+			IDeclaration decl = decls.iterator().next(); // can only get one attribute
 			if(!(decl instanceof AttributeDeclaration))
 				throw new RuntimeException("Invalid column attribute: " + column.getName());
 			return (AttributeDeclaration)decl;
