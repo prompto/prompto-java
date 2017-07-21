@@ -85,6 +85,10 @@ public class PromptoClassLoader extends URLClassLoader {
 		return context;
 	}
 	
+	public void setContext(Context context) {
+		this.context = context;
+	}
+	
 	File getClassDir() throws Exception {
 		return Paths.get(getURLs()[0].toURI()).toFile();
 	}
