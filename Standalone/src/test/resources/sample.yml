@@ -1,0 +1,17 @@
+boolean: true
+string: some string
+integer: 23456
+array: 
+  - abc
+  - def
+  
+simple: &simple
+  string: some string
+  integer: 23456
+  array: 
+    - abc
+    - def
+    
+imported: 
+  <<: *simple   
+  more: more
