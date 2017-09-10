@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import prompto.code.ICodeStore;
 import prompto.code.Version;
 
 public class RuntimeConfiguration implements IRuntimeConfiguration {
@@ -78,7 +77,7 @@ public class RuntimeConfiguration implements IRuntimeConfiguration {
 	@Override
 	public Version getApplicationVersion() {
 		String version = reader.getString("applicationVersion");
-		return version==null ? ICodeStore.LATEST_VERSION : Version.parse(version);
+		return version==null ? Version.LATEST : Version.parse(version);
 	}
 
 	@Override

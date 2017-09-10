@@ -197,7 +197,7 @@ public abstract class Application {
 	public static void showHelp(String application, String test, Version version) {
 		if(application==null && test==null)
 			System.out.println("Missing argument: -application or -test");
-		if(version.equals(ICodeStore.LATEST_VERSION))
+		if(version.equals(Version.LATEST))
 			System.out.println("Additional argument: -version (optional)");
 	}
 

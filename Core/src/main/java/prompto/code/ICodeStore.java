@@ -65,8 +65,6 @@ public interface ICodeStore {
 		return Dialect.valueOf(s.toUpperCase());
 	}
 
-	static final Version LATEST_VERSION = Version.parse("-1.-1.-1");
-	
 	static public enum ModuleType {
 		THESAURUS(Thesaurus.class), // storable attributes and categories
 		LIBRARY(Library.class), // reusable classes and methods
@@ -101,13 +99,13 @@ public interface ICodeStore {
 	void storeDeclarations(Iterable<IDeclaration> declarations, Dialect dialect, Version version, Object moduleId) throws PromptoError;
 
 	default Iterable<IDeclaration> fetchLatestDeclarations(String name) throws PromptoError {
-		return fetchSpecificDeclarations(name, ICodeStore.LATEST_VERSION);
+		return fetchSpecificDeclarations(name, Version.LATEST);
 	}
 	
 	Iterable<IDeclaration> fetchSpecificDeclarations(String name, Version version) throws PromptoError;
 
 	default IDeclaration fetchLatestSymbol(String name) throws PromptoError {
-		return fetchSpecificSymbol(name, ICodeStore.LATEST_VERSION);
+		return fetchSpecificSymbol(name, Version.LATEST);
 	}
 
 	IDeclaration fetchSpecificSymbol(String name, Version version) throws PromptoError;
@@ -148,7 +146,7 @@ public interface ICodeStore {
 	void storeResource(Resource resource, Object moduleId);
 
 	default public Resource fetchLatestResource(String path) throws PromptoError {
-		return fetchSpecificResource(path, ICodeStore.LATEST_VERSION);
+		return fetchSpecificResource(path, Version.LATEST);
 	}
 
 	Resource fetchSpecificResource(String path, Version version);

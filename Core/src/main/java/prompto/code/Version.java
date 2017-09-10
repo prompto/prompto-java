@@ -4,6 +4,8 @@ import java.security.InvalidParameterException;
 
 public class Version {
 	
+	public static final Version LATEST = parse("-1.-1.-1");
+
 	public static Version parse(String version) {
 		String[] parts = version.split("\\.");
 		if(parts.length<3)

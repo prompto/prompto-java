@@ -1,15 +1,12 @@
 package prompto.code;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
 
 import prompto.code.ICodeStore.ModuleType;
-import prompto.error.ReadWriteError;
 import prompto.store.IStore;
 import prompto.utils.ResourceUtils;
 

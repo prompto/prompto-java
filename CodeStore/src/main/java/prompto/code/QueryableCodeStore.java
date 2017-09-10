@@ -348,7 +348,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 		IPredicateExpression filter = buildFilter(version, attribute, value);
 		filter.interpretQuery(context, builder);
 		builder.and();
-		if(LATEST_VERSION.equals(version)) {
+		if(Version.LATEST.equals(version)) {
 			IdentifierList names = IdentifierList.parse("prototype,version");
 			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
 			orderBy.interpretQuery(context, builder);
@@ -369,7 +369,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 		IPredicateExpression filter = buildFilter(version, attribute, value);
 		filter.interpretQuery(context, builder);
 		builder.and();
-		if(LATEST_VERSION.equals(version)) {
+		if(Version.LATEST.equals(version)) {
 			IdentifierList names = new IdentifierList(new Identifier("version"));
 			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
 			orderBy.interpretQuery(context, builder);
@@ -427,7 +427,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 		IExpression left = new UnresolvedIdentifier(new Identifier(attribute));
 		IExpression right = new TextLiteral("'" + value + "'");
 		IPredicateExpression filter = new EqualsExpression(left, EqOp.EQUALS, right);
-		if(!LATEST_VERSION.equals(version)) {
+		if(!Version.LATEST.equals(version)) {
 			left = new UnresolvedIdentifier(new Identifier("version"));
 			right = new TextLiteral('"' + version.toString() + '"');
 			IExpression condition = new EqualsExpression(left, EqOp.EQUALS, right);
