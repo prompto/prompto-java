@@ -70,10 +70,11 @@ public abstract class Application {
 				runTest(testMethod);
 		} else {
 			String mainMethod = config.getMainMethod();
+			IExpression argsValue = Application.argsToArgValue(config.getArguments());
 			if(debug!=null)
-				debugApplication(debug, mainMethod, config.getArguments());
+				debugApplication(debug, mainMethod, argsValue);
 			else 
-				runApplication(mainMethod, config.getArguments());
+				runApplication(mainMethod, argsValue);
 		}
 	}
 
@@ -154,7 +155,7 @@ public abstract class Application {
 		}
 	}
 
-	private static void runApplication(String mainMethod, Map<String, String> args) {
+	private static void runApplication(String mainMethod, IExpression args) {
 		try {
 			Interpreter.interpretMethod(getGlobalContext(), new Identifier(mainMethod), "");
 		} finally {
@@ -162,7 +163,7 @@ public abstract class Application {
 		}
 	}
 
-	private static void debugApplication(IDebugConfiguration debug, String mainMethod, Map<String, String> args) throws Throwable {
+	private static void debugApplication(IDebugConfiguration debug, String mainMethod, IExpression args) throws Throwable {
 		DebugRequestServer server = startDebugging(debug.getHost(), debug.getPort());
 		try {
 			runApplication(mainMethod, args);
@@ -187,10 +188,10 @@ public abstract class Application {
 		return server;
 	}
 
-	public static IExpression argsToArgValue(String[] args) {
+	public static IExpression argsToArgValue(Map<String, String> args) {
 		PromptoDict<Text, IValue> dict = new PromptoDict<>(true);
-		for(int i=0;i<args.length; i+=2)
-			dict.put(new Text(args[i].substring(1)),new Text(args[i + 1]));
+		for(Map.Entry<String, String> e : args.entrySet())
+			dict.put(new Text(e.getKey()),new Text(e.getValue()));
 		return new ExpressionValue(new DictType(TextType.instance()), new Dictionary(TextType.instance(), dict));
 	}
 
