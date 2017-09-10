@@ -1,5 +1,8 @@
 package prompto.config;
 
-public interface IStandaloneConfiguration extends IConfiguration {
+public interface IStandaloneConfiguration extends IRuntimeConfiguration {
+
+	String getMainMethod();
+	String getTestMethod();
 
 }

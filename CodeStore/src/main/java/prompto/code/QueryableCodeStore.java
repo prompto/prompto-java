@@ -63,11 +63,11 @@ public class QueryableCodeStore extends BaseCodeStore {
 	// some of these are code store specific and should not be looked for in the app context
 	Context context; 
 	
-	public QueryableCodeStore(IStore store, Supplier<Collection<URL>> runtimeSupplier, String application, String version, URL[] addOns, String ...resourceNames) throws PromptoError {
+	public QueryableCodeStore(IStore store, Supplier<Collection<URL>> runtimeSupplier, String application, Version version, URL[] addOns, URL ...resourceNames) throws PromptoError {
 		super(null);
 		this.store = store;
 		this.application = application;
-		this.version = Version.parse(version);
+		this.version = version;
 		ICodeStore runtime = bootstrapRuntime(runtimeSupplier);
 		this.context = CodeStoreBootstrapper.bootstrap(store, runtime);
 		this.next = AppStoreBootstrapper.bootstrap(store, runtime, application, version, addOns, resourceNames);
@@ -79,7 +79,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 			ICodeStore runtime = null;
 			if(runtimeSupplier!=null) for(URL resource : runtimeSupplier.get()) {
 				System.out.println("Connecting to " + resource.toExternalForm());
-				runtime = new ImmutableCodeStore(runtime, ModuleType.LIBRARY, resource, "1.0.0");
+				runtime = new ImmutableCodeStore(runtime, ModuleType.LIBRARY, resource, Version.parse("1.0.0"));
 			}
 			return runtime;
 		} catch(RuntimeException e) {
@@ -159,7 +159,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 			Module module = type.getModuleClass().newInstance();
 			module.setDbId(stored.getDbId());
 			module.setName((String)stored.getData("name"));
-			module.setVersion((String)stored.getData("version"));
+			module.setVersion(Version.parse((String)stored.getData("version")));
 			module.setDescription((String)stored.getData("description"));
 			if(module instanceof WebSite)
 				((WebSite)module).setEntryPoint((String)stored.getData("entryPoint"));

@@ -1,12 +1,22 @@
 package prompto.config;
 
-public class StandaloneConfiguration extends BaseConfiguration implements IStandaloneConfiguration {
+import java.util.Map;
 
-	protected StandaloneConfiguration(IConfigurationReader reader) {
-		super(reader);
-		// TODO Auto-generated constructor stub
+public class StandaloneConfiguration extends RuntimeConfiguration implements IStandaloneConfiguration {
+
+	public StandaloneConfiguration(IConfigurationReader reader, Map<String, String> arguments) {
+		super(reader, arguments);
 	}
 
+	@Override
+	public String getMainMethod() {
+		return reader.getStringOrDefault("mainMethod", "main");
+	}
+
+	@Override
+	public String getTestMethod() {
+		return reader.getString("testMethod");
+	}
 
 
 }

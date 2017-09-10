@@ -15,3 +15,6 @@ simple: &simple
 imported: 
   <<: *simple   
   more: more
+  
+codeStore:
+  stuff: stuff

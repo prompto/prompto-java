@@ -15,7 +15,7 @@ public abstract class Module {
 	
 	private Object dbId;
 	private String name;
-	private String version;
+	private Version version;
 	private String description;
 	private PromptoBinary image;
 	private List<Dependency> dependencies;
@@ -38,11 +38,11 @@ public abstract class Module {
 		this.name = name;
 	}
 	
-	public String getVersion() {
+	public Version getVersion() {
 		return version;
 	}
 	
-	public void setVersion(String version) {
+	public void setVersion(Version version) {
 		this.version = version;
 	}
 	

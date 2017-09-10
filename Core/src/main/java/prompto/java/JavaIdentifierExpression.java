@@ -277,7 +277,8 @@ public class JavaIdentifierExpression extends Section implements JavaExpression 
 	private static ClassLoader addOnsClassLoader; 
 
 	public static void registerAddOns(URL[] addOnURLs, ClassLoader parent) {
-		addOnsClassLoader = new URLClassLoader(addOnURLs, parent);
+		if(addOnURLs!=null && addOnURLs.length>0)
+			addOnsClassLoader = new URLClassLoader(addOnURLs, parent);
 	}
 
 	IType check_class() {

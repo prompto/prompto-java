@@ -1,21 +1,26 @@
 package prompto.runtime;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URL;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import prompto.code.ICodeStore;
 import prompto.code.QueryableCodeStore;
 import prompto.code.Version;
 import prompto.compiler.PromptoClassLoader;
+import prompto.config.CmdLineConfigurationReader;
+import prompto.config.IConfigurationReader;
+import prompto.config.IDebugConfiguration;
+import prompto.config.IRuntimeConfiguration;
+import prompto.config.IStandaloneConfiguration;
+import prompto.config.IStoreConfiguration;
+import prompto.config.StandaloneConfiguration;
+import prompto.config.YamlConfigurationReader;
 import prompto.debug.DebugEventClient;
 import prompto.debug.DebugRequestServer;
 import prompto.debug.LocalDebugger;
@@ -26,13 +31,11 @@ import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDict;
 import prompto.java.JavaIdentifierExpression;
 import prompto.libraries.Libraries;
-import prompto.memstore.MemStoreFactory;
-import prompto.nullstore.NullStoreFactory;
+import prompto.memstore.MemStore;
 import prompto.store.AttributeInfo;
 import prompto.store.IDataStore;
 import prompto.store.IStore;
 import prompto.store.IStoreFactory;
-import prompto.store.IStoreFactory.Type;
 import prompto.type.DictType;
 import prompto.type.IType;
 import prompto.type.ListType;
@@ -51,103 +54,68 @@ public abstract class Application {
 	private static PromptoClassLoader classLoader;
 	
 	public static void main(String[] args) throws Throwable {
-		Integer debugPort = null;
-		
-		Map<String, String> argsMap = initialize(args, ()->Libraries.getPromptoLibraries(Libraries.class));
-		
-		String debugHost = argsMap.getOrDefault("debug_host", "localhost");
-		if(argsMap.containsKey("debug_port"))
-			debugPort = Integer.parseInt(argsMap.get("debug_port"));
-		if(argsMap.containsKey("test")) {
-			String testMethod = argsMap.get("test");
-			if(debugPort!=null)
-				debugTest(debugHost, debugPort, testMethod);
-			else
-				runTest(testMethod);
-		} else if(argsMap.containsKey("application")) {
-			String mainMethod = "main";
-			if(argsMap.containsKey("mainMethod"))
-				mainMethod = argsMap.get("mainMethod");
-			if(debugPort!=null)
-				debugApplication(debugHost, debugPort, mainMethod, argsMap);
-			else
-				runApplication(mainMethod, argsMap);
-		} 
-			
+		IStandaloneConfiguration config = loadConfiguration(args);
+		initialize(config);
+		run(config);
 	}
 
 
-	public static Map<String, String> initialize(String[] args, Supplier<Collection<URL>> runtimeSupplier) throws Throwable {
-		Boolean testMode = false;
-		String[] resources = null;
-		URL[] addOns = null;
-		String application = null;
-		String test = null;
-		Version version = ICodeStore.LATEST_VERSION;
-		String codeStoreFactory = MemStoreFactory.class.getName();
-		String dataStoreFactory = MemStoreFactory.class.getName();
-		Type codeStoreType = Type.CODE;
-		Type dataStoreType = Type.DATA;
-
-		Map<String, String> argsMap = CmdLineParser.parse(args);
-		if(argsMap.containsKey("testMode"))
-			testMode = Boolean.valueOf(argsMap.get("testMode"));
-		if(argsMap.containsKey("resources"))
-			resources = argsMap.get("resources").split(",");
-		if(argsMap.containsKey("addOns"))
-			addOns = readAddOns(argsMap);
-		if(argsMap.containsKey("application"))
-			application = argsMap.get("application");
-		if(argsMap.containsKey("test"))
-			test = argsMap.get("test");
-		if(argsMap.containsKey("version"))
-			version = Version.parse(argsMap.get("version"));
-		if(!Boolean.getBoolean(argsMap.getOrDefault("loadRuntime", "true")))
-			codeStoreFactory = NullStoreFactory.class.getName();
-		if(argsMap.containsKey("codeStoreFactory"))
-			codeStoreFactory = argsMap.get("codeStoreFactory");
-		if(argsMap.containsKey("dataStoreFactory"))
-			dataStoreFactory = argsMap.get("dataStoreFactory");
-		if(argsMap.containsKey("codeStoreType"))
-			codeStoreType = Type.valueOf(argsMap.get("codeStoreType"));
-		if(argsMap.containsKey("dataStoreType"))
-			dataStoreType = Type.valueOf(argsMap.get("dataStoreType"));
-		
-		if(application==null && test==null) {
-			showHelp(application, test, version);
-			System.exit(-1); // raise an error in whatever tool is used to launch this
+	private static void run(IStandaloneConfiguration config) throws Throwable {
+		IDebugConfiguration debug = config.getDebugConfiguration();
+		String testMethod = config.getTestMethod();
+		if(testMethod!=null) {
+			if(debug!=null)
+				debugTest(debug, testMethod);
+			else 
+				runTest(testMethod);
+		} else {
+			String mainMethod = config.getMainMethod();
+			if(debug!=null)
+				debugApplication(debug, mainMethod, config.getArguments());
+			else 
+				runApplication(mainMethod, config.getArguments());
 		}
+	}
 
+
+	private static IStandaloneConfiguration loadConfiguration(String[] args) throws FileNotFoundException {
+		Map<String, String> argsMap = CmdLineParser.parse(args);
+		IConfigurationReader reader = readerFromArgs(argsMap);
+		IStandaloneConfiguration config = new StandaloneConfiguration(reader, argsMap);
+		config.setRuntimeLibsSupplier(()->Libraries.getPromptoLibraries(Libraries.class));
+		return config;
+	}
+
+
+	public static IConfigurationReader readerFromArgs(Map<String, String> argsMap) throws FileNotFoundException {
+		if(argsMap.containsKey("yamlConfigFile"))
+			return new YamlConfigurationReader(new FileInputStream(argsMap.get("yamlConfigFile")));
+		else
+			return new CmdLineConfigurationReader(argsMap);
+	}
+
+
+	public static void initialize(IRuntimeConfiguration config) throws Throwable {
 		// initialize code store
-		System.out.println("Using " + codeStoreType.name() + " as code store");
-		IStoreFactory factory = newStoreFactory(codeStoreFactory);
-		IStore store = factory.newStore(args, codeStoreType);
-		ICodeStore codeStore = bootstrapCodeStore(store, runtimeSupplier, application, version, testMode, addOns, resources);
+		IStoreConfiguration cfg = config.getCodeStoreConfiguration();
+		if(cfg==null && !config.isLoadRuntime())
+			cfg = IStoreConfiguration.NULL_STORE_CONFIG; // only use MemStore if required
+		System.out.println("Using " + (cfg==null ? "MemStore" : cfg.toString()) + " as code store");
+		IStore store = newStoreFromConfig(cfg);
+		ICodeStore codeStore = bootstrapCodeStore(store, config);
 		// initialize data store
-		System.out.println("Using " + dataStoreType.name() + " as data store");
-		factory = newStoreFactory(dataStoreFactory);
-		store = factory.newStore(args, dataStoreType);
+		cfg = config.getDataStoreConfiguration();
+		System.out.println("Using " + (cfg==null ? "MemStore" : cfg.toString()) + " as data store");
+		store = newStoreFromConfig(cfg);
 		IStore dataStore = bootstrapDataStore(store);
 		synchronizeSchema(codeStore, dataStore);
-		return argsMap;
 	}
-
-	private static URL[] readAddOns(Map<String, String> argsMap) {
-		String paths = argsMap.get("addOns");
-		if(paths.startsWith("\""))
-			paths = paths.substring(1);
-		if(paths.endsWith("\""))
-			paths = paths.substring(0, paths.length()-1);
-		List<URL> list = Arrays.asList(paths.split(",")).stream()
-				.map((p)->{ 
-					try { 
-						return new URL(p); 
-					} catch (IOException e) { 
-						throw new RuntimeException(e); 
-					} 
-				})
-				.collect(Collectors.toList());
-		return list.toArray(new URL[list.size()]);
+	
+	private static IStore newStoreFromConfig(IStoreConfiguration cfg) throws Throwable {
+		if(cfg==null)
+			return new MemStore();
+		IStoreFactory factory = newStoreFactory(cfg.getFactory());
+		return factory.newStore(cfg);
 	}
 
 
@@ -177,8 +145,8 @@ public abstract class Application {
 		}
 	}
 
-	private static void debugTest(String debugHost, int debugPort, String testMethod) throws Throwable {
-		DebugRequestServer server = startDebugging(debugHost, debugPort);
+	private static void debugTest(IDebugConfiguration debug, String testMethod) throws Throwable {
+		DebugRequestServer server = startDebugging(debug.getHost(), debug.getPort());
 		try {
 			runTest(testMethod);
 		} finally {
@@ -194,8 +162,8 @@ public abstract class Application {
 		}
 	}
 
-	private static void debugApplication(String debugHost, int debugPort, String mainMethod, Map<String, String> args) throws Throwable {
-		DebugRequestServer server = startDebugging(debugHost, debugPort);
+	private static void debugApplication(IDebugConfiguration debug, String mainMethod, Map<String, String> args) throws Throwable {
+		DebugRequestServer server = startDebugging(debug.getHost(), debug.getPort());
 		try {
 			runApplication(mainMethod, args);
 		} finally {
@@ -254,24 +222,29 @@ public abstract class Application {
 		System.out.println("Schema successfully initialized.");
 	}
 
-	public static ICodeStore bootstrapCodeStore(IStore store, String application, Version version, boolean testMode, URL[] addOns, String ...resourceNames) throws Exception {
-		return bootstrapCodeStore(store, ()->Libraries.getPromptoLibraries(Libraries.class), application, version, testMode, addOns, resourceNames);
-	}
-	
-	public static ICodeStore bootstrapCodeStore(IStore store, Supplier<Collection<URL>> runtimeSupplier, String application, Version version, boolean testMode, URL[] addOns, String ...resourceNames) throws Exception {
-		System.out.println("Initializing class loader " + (testMode ? "in test mode" : "") + "...");
+	public static ICodeStore bootstrapCodeStore(IStore store, IRuntimeConfiguration config) throws Exception {
+		System.out.println("Initializing class loader " + (config.isTestMode() ? "in test mode" : "") + "...");
 		Application.globalContext = Context.newGlobalContext();
 		File promptoDir = Files.createTempDirectory("prompto_").toFile();
-		Application.classLoader = PromptoClassLoader.initialize(Application.globalContext, promptoDir, testMode);
-		if(addOns!=null)
-			JavaIdentifierExpression.registerAddOns(addOns, Application.classLoader);
+		Application.classLoader = PromptoClassLoader.initialize(Application.globalContext, promptoDir, config.isTestMode());
+		JavaIdentifierExpression.registerAddOns(config.getAddOnURLs(), Application.classLoader);
 		System.out.println("Class loader initialized.");
 		System.out.println("Bootstrapping prompto...");
-		ICodeStore codeStore = new QueryableCodeStore(store, runtimeSupplier, application, version.toString(), addOns, resourceNames);
+		ICodeStore codeStore = newQueryableCodeStore(store, config);
 		ICodeStore.setInstance(codeStore);
 		System.out.println("Bootstrapping successful.");
 		return codeStore;
 	}
+
+	private static ICodeStore newQueryableCodeStore(IStore store, IRuntimeConfiguration config) {
+		return new QueryableCodeStore(store, 
+				config.getRuntimeLibsSupplier(), 
+				config.getApplicationName(), 
+				config.getApplicationVersion(), 
+				config.getAddOnURLs(), 
+				config.getResourceURLs());
+	}
+
 
 	public static Map<String, AttributeDeclaration> getMinimalDataColumns(IStore dataStore) {
 		Map<String, AttributeDeclaration> columns = new HashMap<String, AttributeDeclaration>();

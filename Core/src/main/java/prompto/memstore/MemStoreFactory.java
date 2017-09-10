@@ -1,11 +1,12 @@
 package prompto.memstore;
 
+import prompto.config.IStoreConfiguration;
 import prompto.store.IStoreFactory;
 
 public class MemStoreFactory implements IStoreFactory {
 
 	@Override
-	public MemStore newStore(String[] params, Type type) {
+	public MemStore newStore(IStoreConfiguration config) {
 		return new MemStore();
 	}
 
