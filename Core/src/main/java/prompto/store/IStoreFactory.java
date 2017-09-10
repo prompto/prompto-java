@@ -1,6 +1,8 @@
 package prompto.store;
 
+import prompto.config.IStoreConfiguration;
+
 public interface IStoreFactory {
 	public static enum Type { ROOT, CODE, DATA; }
-	IStore newStore(String[] params, Type type) throws Exception;
+	IStore newStore(IStoreConfiguration config) throws Exception;
 }

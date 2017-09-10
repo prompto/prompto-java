@@ -45,7 +45,7 @@ public class CodeStoreBootstrapper {
 	private CodeStoreBootstrapper(IStore store, ICodeStore runtime) {
 		this.store = store;
 		URL url = Thread.currentThread().getContextClassLoader().getResource("libraries/CodeStore.pec");
-		this.next = new ImmutableCodeStore(runtime, ModuleType.LIBRARY, url, "1.0.0");
+		this.next = new ImmutableCodeStore(runtime, ModuleType.LIBRARY, url, Version.parse("1.0.0"));
 	}
 
 	private void bootstrap() throws PromptoError {

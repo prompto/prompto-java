@@ -16,27 +16,17 @@ import prompto.utils.ResourceUtils;
 // use a dedicated bootstrapper to ensure app and code store contexts do not spill
 public class AppStoreBootstrapper {
 
-	public static ICodeStore bootstrap(IStore store, ICodeStore runtime, String application, String version, URL[] addOns, String ... resourceNames) {
+	public static ICodeStore bootstrap(IStore store, ICodeStore runtime, String application, Version version, URL[] addOns, URL ... resources) {
 		System.out.println("Connecting to code store for application " + application + " version " + version + "...");
 		if(addOns!=null) {
 			for(URL addOn : addOns)
 				runtime = bootstrapAddOn(addOn, runtime);
 		}
-		if(resourceNames!=null) {
-			for(String resourceName : resourceNames) {
-				resourceName = trim(resourceName);
-				runtime = bootstrapResource(resourceName, runtime, version);
-			}
+		if(resources!=null) {
+			for(URL resource : resources)
+				runtime = bootstrapResource(resource, runtime, version);
 		}
 		return runtime;
-	}
-
-	private static String trim(String resourceName) {
-		if(resourceName.startsWith("\""))
-			resourceName = resourceName.substring(1);
-		if(resourceName.endsWith("\""))
-			resourceName = resourceName.substring(0, resourceName.length()-1);
-		return resourceName;
 	}
 
 	private static ICodeStore bootstrapAddOn(URL addOn, ICodeStore runtime) {
@@ -45,7 +35,7 @@ public class AppStoreBootstrapper {
 			Collection<URL> urls = getAddOnLibraries(addOn);
 			for(URL url : urls) {
 				System.out.println("Connecting to " + url.toExternalForm());
-				runtime = new ImmutableCodeStore(runtime, ModuleType.LIBRARY, url, "0.0.1");
+				runtime = new ImmutableCodeStore(runtime, ModuleType.LIBRARY, url, Version.parse("0.0.1"));
 			}
 			return runtime;
 		} catch (IOException e) {
@@ -64,25 +54,10 @@ public class AppStoreBootstrapper {
 	}
 	
 
-	private static ICodeStore bootstrapResource(String resourceName, ICodeStore runtime, String version) {
-		try {
-			URL resourceUrl = getUrl(resourceName);
-			System.out.println("Connecting to " + resourceUrl.toExternalForm());
-			return new ImmutableCodeStore(runtime, ModuleType.LIBRARY, resourceUrl, version);
-		} catch (MalformedURLException e) {
-			throw new InternalError(e);
-		}
+	private static ICodeStore bootstrapResource(URL resource, ICodeStore runtime, Version version) {
+		System.out.println("Connecting to " + resource.toExternalForm());
+		return new ImmutableCodeStore(runtime, ModuleType.LIBRARY, resource, version);
 	}
 
-	private static URL getUrl(String resourceName) throws MalformedURLException {
-		if(resourceName.startsWith("file:") || resourceName.startsWith("jar:"))
-			return new URL(resourceName);
-		else {
-			File file = new File(resourceName);
-			if(!file.exists())
-				throw new ReadWriteError("Could not locate resource: " + resourceName);
-			return file.toURI().toURL();
-		}
-	}
 
 }

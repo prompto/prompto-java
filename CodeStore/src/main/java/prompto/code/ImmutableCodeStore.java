@@ -29,13 +29,13 @@ public class ImmutableCodeStore extends BaseCodeStore {
 	Version version;
 	Map<String, List<IDeclaration>> declarations = null;
 	
-	public ImmutableCodeStore(ICodeStore next, ModuleType type, URL resource, String version) {
+	public ImmutableCodeStore(ICodeStore next, ModuleType type, URL resource, Version version) {
 		super(next);
 		if(resource==null)
 			throw new NullPointerException();
 		this.type = type;
 		this.resource = resource;
-		this.version = Version.parse(version);
+		this.version = version;
 	}
 
 	@Override

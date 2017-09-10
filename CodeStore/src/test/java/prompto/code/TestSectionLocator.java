@@ -25,7 +25,7 @@ public class TestSectionLocator extends BaseEParserTest {
 	public void testThatResourceCodeStoreContainsMethodSection() throws Exception {
 		URL file = getResourceAsURL("debug/stack.pec");
 		assertTrue(new File(file.getFile()).exists());
-		ICodeStore store = new ImmutableCodeStore(null, ModuleType.LIBRARY, file.toURI().toURL(),"1.0.0.0");
+		ICodeStore store = new ImmutableCodeStore(null, ModuleType.LIBRARY, file.toURI().toURL(), Version.parse("1.0.0.0"));
 		Section section = new Section(file.toExternalForm(), new Location(0, 9, 1), new Location(0, 9, 20), Dialect.E, false);
 		ISection found = store.findSection(section);
 		assertNotNull(found);
@@ -37,7 +37,7 @@ public class TestSectionLocator extends BaseEParserTest {
 	public void testThatResourceCodeStoreContainsStatementSection() throws Exception {
 		URL file = getResourceAsURL("debug/stack.pec");
 		assertTrue(new File(file.getFile()).exists());
-		ICodeStore store = new ImmutableCodeStore(null, ModuleType.LIBRARY, file.toURI().toURL(),"1.0.0.0");
+		ICodeStore store = new ImmutableCodeStore(null, ModuleType.LIBRARY, file.toURI().toURL(), Version.parse("1.0.0.0"));
 		Section section = new Section(file.toExternalForm(), new Location(0, 10, 1), new Location(0, 10, 20), Dialect.E, false);
 		ISection found = store.findSection(section);
 		assertNotNull(found);

@@ -83,10 +83,10 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 		builder.redirectOutput(outputFile);
 		builder.command("java", 
 				"-jar", "Standalone-0.0.1-SNAPSHOT.jar", 
-				"-debug_port", String.valueOf(port), 
-				"-codeStoreFactory", NullStoreFactory.class.getName(),
+				"-debug-port", String.valueOf(port), 
+				"-codeStore-factory", NullStoreFactory.class.getName(),
 				"-application", "test", 
-				"-resources", "\"" + testFile.getAbsolutePath() + "\"");
+				"-resourceURLs", "\"" + testFile.toURI().toURL().toExternalForm() + "\"");
 	}
 
 	private Path getDistributionFolder(String version) {

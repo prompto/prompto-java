@@ -70,13 +70,12 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebug
 			@Override
 			public void run() {
 				try {
-					URL url = getResourceAsURL(resourceName);
 					String args[] = new String[] { 
 							"-testMode", "true",
-							"-debug_port", String.valueOf(port),
-							"-codeStoreFactory", NullStoreFactory.class.getName(),
-							"-application", "test",
-							"-resources", new File(url.toURI()).getAbsolutePath()
+							"-debug-port", String.valueOf(port),
+							"-codeStore-factory", NullStoreFactory.class.getName(),
+							"-applicationName", "test",
+							"-resourceURLs", getResourceAsURL(resourceName).toString()
 							};
 					Application.main(args);
 				} catch (Throwable t) {

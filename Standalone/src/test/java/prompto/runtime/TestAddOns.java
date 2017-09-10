@@ -25,8 +25,8 @@ public class TestAddOns {
 		String[] args = new String[] {
 				"-application", "test", 
 				"-testMode", "true", 
-				"-resources", "\"" + url.toExternalForm() + "\"",
-				"-addOns", "\"" + addOns + "\"",
+				"-resourceURLs", "\"" + url.toExternalForm() + "\"",
+				"-addOnURLs", "\"" + addOns + "\"",
 				"-loadRuntime", "true"
 		};
 		Out.init();
