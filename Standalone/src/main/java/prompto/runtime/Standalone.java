@@ -48,7 +48,7 @@ import prompto.value.ExpressionValue;
 import prompto.value.IValue;
 import prompto.value.Text;
 
-public abstract class Application {
+public abstract class Standalone {
 
 	private static Context globalContext;
 	private static PromptoClassLoader classLoader;
@@ -70,7 +70,7 @@ public abstract class Application {
 				runTest(testMethod);
 		} else {
 			String mainMethod = config.getMainMethod();
-			IExpression argsValue = Application.argsToArgValue(config.getArguments());
+			IExpression argsValue = argsToArgValue(config.getArguments());
 			if(debug!=null)
 				debugApplication(debug, mainMethod, argsValue);
 			else 
@@ -129,10 +129,10 @@ public abstract class Application {
 	}
 
 	public static void clearGlobalContext() {
-		Application.globalContext = Context.newGlobalContext();
+		globalContext = Context.newGlobalContext();
 		PromptoClassLoader loader = PromptoClassLoader.getInstance();
 		if(loader!=null)
-			loader.setContext(Application.globalContext);
+			loader.setContext(globalContext);
 	}
 
 	private static void runTest(String testMethod) {
@@ -225,10 +225,10 @@ public abstract class Application {
 
 	public static ICodeStore bootstrapCodeStore(IStore store, IRuntimeConfiguration config) throws Exception {
 		System.out.println("Initializing class loader " + (config.isTestMode() ? "in test mode" : "") + "...");
-		Application.globalContext = Context.newGlobalContext();
+		globalContext = Context.newGlobalContext();
 		File promptoDir = Files.createTempDirectory("prompto_").toFile();
-		Application.classLoader = PromptoClassLoader.initialize(Application.globalContext, promptoDir, config.isTestMode());
-		JavaIdentifierExpression.registerAddOns(config.getAddOnURLs(), Application.classLoader);
+		classLoader = PromptoClassLoader.initialize(globalContext, promptoDir, config.isTestMode());
+		JavaIdentifierExpression.registerAddOns(config.getAddOnURLs(), classLoader);
 		System.out.println("Class loader initialized.");
 		System.out.println("Bootstrapping prompto...");
 		ICodeStore codeStore = newQueryableCodeStore(store, config);

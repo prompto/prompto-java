@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import prompto.nullstore.NullStoreFactory;
-import prompto.runtime.Application;
+import prompto.runtime.Standalone;
 import prompto.runtime.utils.Out;
 
 public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebugEventListener {
@@ -77,7 +77,7 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebug
 							"-applicationName", "test",
 							"-resourceURLs", getResourceAsURL(resourceName).toString()
 							};
-					Application.main(args);
+					Standalone.main(args);
 				} catch (Throwable t) {
 					t.printStackTrace(System.err); // TODO
 				}

@@ -44,7 +44,7 @@
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<mainClass>prompto.runtime.Application</mainClass>
+							<mainClass>prompto.runtime.Standalone</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

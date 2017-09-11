@@ -31,7 +31,7 @@ public class TestAddOns {
 		};
 		Out.init();
 		try {
-			Application.main(args);
+			Standalone.main(args);
 			assertEquals("ok", readLastLine(Out.read()));
 		} finally {
 			Out.restore();

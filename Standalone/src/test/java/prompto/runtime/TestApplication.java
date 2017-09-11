@@ -29,7 +29,7 @@ public class TestApplication extends BaseEParserTest {
 		};
 		Out.init();
 		try {
-			Application.main(args);
+			Standalone.main(args);
 			assertEquals("test123-ok", readLastLine(Out.read()));
 		} finally {
 			Out.restore();
@@ -47,7 +47,7 @@ public class TestApplication extends BaseEParserTest {
 		};
 		Out.init();
 		try {
-			Application.main(args);
+			Standalone.main(args);
 			assertEquals("test123-ok", readLastLine(Out.read()));
 		} finally {
 			Out.restore();
@@ -88,7 +88,7 @@ public class TestApplication extends BaseEParserTest {
 		};
 		Out.init();
 		try {
-			Application.main(args);
+			Standalone.main(args);
 			assertEquals("\"Add two numbers\" test successful", readLastLine(Out.read()));
 		} finally {
 			Out.restore();
