@@ -31,7 +31,6 @@ import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDict;
 import prompto.java.JavaIdentifierExpression;
 import prompto.libraries.Libraries;
-import prompto.memstore.MemStore;
 import prompto.store.AttributeInfo;
 import prompto.store.IDataStore;
 import prompto.store.IStore;
@@ -102,24 +101,16 @@ public abstract class Standalone {
 		if(cfg==null && !config.isLoadRuntime())
 			cfg = IStoreConfiguration.NULL_STORE_CONFIG; // only use MemStore if required
 		System.out.println("Using " + (cfg==null ? "MemStore" : cfg.toString()) + " as code store");
-		IStore store = newStoreFromConfig(cfg);
+		IStore store = IStoreFactory.newStoreFromConfig(cfg);
 		ICodeStore codeStore = bootstrapCodeStore(store, config);
 		// initialize data store
 		cfg = config.getDataStoreConfiguration();
 		System.out.println("Using " + (cfg==null ? "MemStore" : cfg.toString()) + " as data store");
-		store = newStoreFromConfig(cfg);
+		store = IStoreFactory.newStoreFromConfig(cfg);
 		IStore dataStore = bootstrapDataStore(store);
 		synchronizeSchema(codeStore, dataStore);
 	}
 	
-	private static IStore newStoreFromConfig(IStoreConfiguration cfg) throws Throwable {
-		if(cfg==null)
-			return new MemStore();
-		IStoreFactory factory = newStoreFactory(cfg.getFactory());
-		return factory.newStore(cfg);
-	}
-
-
 	public static Context getGlobalContext() {
 		return globalContext;
 	}
@@ -200,13 +191,6 @@ public abstract class Standalone {
 			System.out.println("Missing argument: -application or -test");
 		if(version.equals(Version.LATEST))
 			System.out.println("Additional argument: -version (optional)");
-	}
-
-	public static IStoreFactory newStoreFactory(String factoryName) throws Throwable {
-		Class<?> klass = Class.forName(factoryName, true, Thread.currentThread().getContextClassLoader());
-		if(!(IStoreFactory.class.isAssignableFrom(klass)))
-			throw new RuntimeException("Not a store factory: " + factoryName);
-		return (IStoreFactory)klass.newInstance();
 	}
 
 	public static IStore bootstrapDataStore(IStore store) {

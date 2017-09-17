@@ -2,6 +2,8 @@ package prompto.config;
 
 import java.util.List;
 
+import prompto.store.IStoreFactory;
+
 public interface IConfigurationReader {
 
 	Boolean getBoolean(String key);
@@ -21,4 +23,20 @@ public interface IConfigurationReader {
 	}
 	<T extends Object> List<T> getArray(String key);
 	IConfigurationReader getObject(String key);
+	default IStoreConfiguration readStoreConfiguration(String key) {
+		IConfigurationReader child = getObject(key);
+		if(child==null)
+			return null;
+		String factoryName = child.getString("factory");
+		if(factoryName==null)
+			return new StoreConfiguration(child);
+		else try {
+			@SuppressWarnings("unchecked")
+			Class<? extends IStoreFactory> klass = (Class<? extends IStoreFactory>) Class.forName(factoryName);
+			IStoreFactory factory = klass.newInstance();
+			return factory.newConfiguration(child);
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

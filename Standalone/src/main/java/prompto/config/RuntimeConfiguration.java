@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import prompto.code.Version;
-import prompto.store.IStoreFactory;
 
 public class RuntimeConfiguration implements IRuntimeConfiguration {
 
@@ -30,31 +29,14 @@ public class RuntimeConfiguration implements IRuntimeConfiguration {
 	
 	@Override
 	public IStoreConfiguration getCodeStoreConfiguration() {
-		return getStoreConfiguration("codeStore");
+		return reader.readStoreConfiguration("codeStore");
 	}
 	
 	@Override
 	public IStoreConfiguration getDataStoreConfiguration() {
-		return getStoreConfiguration("dataStore");
+		return reader.readStoreConfiguration("dataStore");
 	}
 	
-	private IStoreConfiguration getStoreConfiguration(String key) {
-		IConfigurationReader child = reader.getObject(key);
-		if(child==null)
-			return null;
-		String factoryName = child.getString("factory");
-		if(factoryName==null)
-			return new StoreConfiguration(child);
-		else try {
-			@SuppressWarnings("unchecked")
-			Class<? extends IStoreFactory> klass = (Class<? extends IStoreFactory>) Class.forName(factoryName);
-			IStoreFactory factory = klass.newInstance();
-			return factory.newConfiguration(child);
-		} catch(Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
 	@Override
 	public Supplier<Collection<URL>> getRuntimeLibsSupplier() {
 		return this.runtimeLibsSupplier;
