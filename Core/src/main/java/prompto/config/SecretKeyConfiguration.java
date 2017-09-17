@@ -14,8 +14,9 @@ public class SecretKeyConfiguration implements ISecretKeyConfiguration {
 	}
 
 	@Override
-	public String getSecretKey() {
-		return reader.getString("secretKey");
+	public char[] getSecretKey() {
+		String value = reader.getString("secretKey");
+		return value==null ? null : value.toCharArray();
 	}
 	
 	

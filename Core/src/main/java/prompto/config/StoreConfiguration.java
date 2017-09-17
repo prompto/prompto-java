@@ -34,9 +34,8 @@ public class StoreConfiguration implements IStoreConfiguration {
 	}
 	
 	@Override
-	public char[] getPassword() {
-		String password = reader.getString("password");
-		return password==null ? null : password.toCharArray();
+	public ISecretKeyConfiguration getSecretKeyConfiguration() {
+		return reader.readSecretKeyConfiguration("secretKey");
 	}
 	
 	@Override
