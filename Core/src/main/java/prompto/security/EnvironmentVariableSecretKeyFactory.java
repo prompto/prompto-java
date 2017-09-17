@@ -6,12 +6,16 @@ public class EnvironmentVariableSecretKeyFactory implements ISecretKeyFactory {
 
 	ISecretKeyConfiguration config;
 	
+	public EnvironmentVariableSecretKeyFactory() {
+	}
+	
 	public EnvironmentVariableSecretKeyFactory(ISecretKeyConfiguration config) {
 		this.config = config;
 	}
 
 	@Override
 	public String getAsPlainText() {
-		return System.getenv(config.getSecretKey());
+		char[] value = config.getSecretKey();
+		return value==null ? null : System.getenv(new String(value));
 	}
 }

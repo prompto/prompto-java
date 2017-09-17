@@ -6,13 +6,17 @@ public class PlainSecretKeyFactory implements ISecretKeyFactory {
 
 	ISecretKeyConfiguration config;
 	
+	public PlainSecretKeyFactory() {
+	}
+	
 	public PlainSecretKeyFactory(ISecretKeyConfiguration config) {
 		this.config = config;
 	}
 
 	@Override
 	public String getAsPlainText() {
-		return config.getSecretKey();
+		char[] value = config.getSecretKey();
+		return value==null ? null : new String(value);
 	}
 
 }
