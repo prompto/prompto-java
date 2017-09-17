@@ -40,7 +40,7 @@ public interface IConfigurationReader {
 			throw new RuntimeException(e);
 		}
 	}
-	default ISecretKeyConfiguration readPasswordConfiguration(String key) {
+	default ISecretKeyConfiguration readSecretKeyConfiguration(String key) {
 		IConfigurationReader child = getObject(key);
 		if(child==null)
 			return null;
