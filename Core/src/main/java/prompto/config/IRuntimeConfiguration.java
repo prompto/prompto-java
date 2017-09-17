@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 
 import prompto.code.Version;
 
-public interface IRuntimeConfiguration extends IConfiguration {
+public interface IRuntimeConfiguration {
 	void setRuntimeLibsSupplier(Supplier<Collection<URL>> supplier);
 	Supplier<Collection<URL>> getRuntimeLibsSupplier();
 	IStoreConfiguration getCodeStoreConfiguration();

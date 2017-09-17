@@ -1,6 +1,6 @@
 package prompto.config;
 
-public interface IDebugConfiguration extends IConfiguration {
+public interface IDebugConfiguration {
 
 	String getHost();
 	Integer getPort();

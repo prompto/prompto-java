@@ -2,7 +2,7 @@ package prompto.config;
 
 import prompto.nullstore.NullStoreFactory;
 
-public interface IStoreConfiguration extends IConfiguration {
+public interface IStoreConfiguration {
 
 	String getFactory();
 	String getHost();
