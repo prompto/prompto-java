@@ -26,13 +26,16 @@ import prompto.type.IntegerType;
 import prompto.type.ListType;
 import prompto.type.TextType;
 import prompto.utils.IdentifierList;
+import prompto.utils.Logger;
 import prompto.utils.TypeUtils;
 
 // use a dedicated bootstrapper to ensure app and code store contexts do not spill
 public class CodeStoreBootstrapper {
 
+	static final Logger logger = new Logger();
+	
 	public static Context bootstrap(IStore store, ICodeStore runtime) throws PromptoError {
-		System.out.println("Initializing code store...");
+		logger.info(()->"Initializing code store...");
 		CodeStoreBootstrapper bs = new CodeStoreBootstrapper(store, runtime);
 		bs.bootstrap();
 		return bs.context;

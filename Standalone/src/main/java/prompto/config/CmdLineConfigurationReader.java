@@ -12,6 +12,11 @@ public class CmdLineConfigurationReader implements IConfigurationReader {
 	public CmdLineConfigurationReader(Map<String, String> argsMap) {
 		this.argsMap = argsMap;
 	}
+	
+	@Override
+	public String toString() {
+		return argsMap.toString();
+	}
 
 	@Override
 	public Boolean getBoolean(String key) {

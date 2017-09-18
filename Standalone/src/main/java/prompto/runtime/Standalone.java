@@ -41,6 +41,7 @@ import prompto.type.ListType;
 import prompto.type.TextType;
 import prompto.utils.CmdLineParser;
 import prompto.utils.IdentifierList;
+import prompto.utils.Logger;
 import prompto.utils.TypeUtils;
 import prompto.value.Dictionary;
 import prompto.value.ExpressionValue;
@@ -49,6 +50,7 @@ import prompto.value.Text;
 
 public abstract class Standalone {
 
+	private static Logger logger = new Logger();
 	private static Context globalContext;
 	private static PromptoClassLoader classLoader;
 	
@@ -97,16 +99,15 @@ public abstract class Standalone {
 
 	public static void initialize(IRuntimeConfiguration config) throws Throwable {
 		// initialize code store
-		IStoreConfiguration cfg = config.getCodeStoreConfiguration();
-		if(cfg==null && !config.isLoadRuntime())
-			cfg = IStoreConfiguration.NULL_STORE_CONFIG; // only use MemStore if required
-		System.out.println("Using " + (cfg==null ? "MemStore" : cfg.toString()) + " as code store");
+		IStoreConfiguration tmp = config.getCodeStoreConfiguration();
+		final IStoreConfiguration cfg = tmp != null ? tmp : config.isLoadRuntime() ? null : IStoreConfiguration.NULL_STORE_CONFIG; // only use MemStore if required
+		logger.info(()->"Using " + (cfg==null ? "MemStore" : cfg.toString()) + " as code store");
 		IStore store = IStoreFactory.newStoreFromConfig(cfg);
 		ICodeStore codeStore = bootstrapCodeStore(store, config);
 		// initialize data store
-		cfg = config.getDataStoreConfiguration();
-		System.out.println("Using " + (cfg==null ? "MemStore" : cfg.toString()) + " as data store");
-		store = IStoreFactory.newStoreFromConfig(cfg);
+		final IStoreConfiguration cfg2 = config.getDataStoreConfiguration();
+		logger.info(()->"Using " + (cfg2==null ? "MemStore" : cfg2.toString()) + " as data store");
+		store = IStoreFactory.newStoreFromConfig(cfg2);
 		IStore dataStore = bootstrapDataStore(store);
 		synchronizeSchema(codeStore, dataStore);
 	}
@@ -188,9 +189,9 @@ public abstract class Standalone {
 
 	public static void showHelp(String application, String test, Version version) {
 		if(application==null && test==null)
-			System.out.println("Missing argument: -application or -test");
+			logger.info(()->"Missing argument: -application or -test");
 		if(version.equals(Version.LATEST))
-			System.out.println("Additional argument: -version (optional)");
+			logger.info(()->"Additional argument: -version (optional)");
 	}
 
 	public static IStore bootstrapDataStore(IStore store) {
@@ -199,25 +200,25 @@ public abstract class Standalone {
 	}
 
 	public static void synchronizeSchema(ICodeStore codeStore, IStore dataStore) throws PromptoError {
-		System.out.println("Initializing schema...");
+		logger.info(()->"Initializing schema...");
 		Map<String, AttributeDeclaration> columns = getMinimalDataColumns(dataStore);
 		codeStore.collectStorableAttributes(columns);
 		List<AttributeInfo> infos = columns.values().stream().map((c)->c.getAttributeInfo()).collect(Collectors.toList());
 		dataStore.createOrUpdateColumns(infos);
-		System.out.println("Schema successfully initialized.");
+		logger.info(()->"Schema successfully initialized.");
 	}
 
 	public static ICodeStore bootstrapCodeStore(IStore store, IRuntimeConfiguration config) throws Exception {
-		System.out.println("Initializing class loader " + (config.isTestMode() ? "in test mode" : "") + "...");
+		logger.info(()->"Initializing class loader " + (config.isTestMode() ? "in test mode" : "") + "...");
 		globalContext = Context.newGlobalContext();
 		File promptoDir = Files.createTempDirectory("prompto_").toFile();
 		classLoader = PromptoClassLoader.initialize(globalContext, promptoDir, config.isTestMode());
 		JavaIdentifierExpression.registerAddOns(config.getAddOnURLs(), classLoader);
-		System.out.println("Class loader initialized.");
-		System.out.println("Bootstrapping prompto...");
+		logger.info(()->"Class loader initialized.");
+		logger.info(()->"Bootstrapping prompto...");
 		ICodeStore codeStore = newQueryableCodeStore(store, config);
 		ICodeStore.setInstance(codeStore);
-		System.out.println("Bootstrapping successful.");
+		logger.info(()->"Bootstrapping successful.");
 		return codeStore;
 	}
 

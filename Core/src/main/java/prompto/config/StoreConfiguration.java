@@ -7,6 +7,11 @@ public class StoreConfiguration implements IStoreConfiguration {
 	public StoreConfiguration(IConfigurationReader reader) {
 		this.reader = reader;
 	}
+	
+	@Override
+	public String toString() {
+		return reader.toString();
+	}
 
 	@Override
 	public String getFactory() {

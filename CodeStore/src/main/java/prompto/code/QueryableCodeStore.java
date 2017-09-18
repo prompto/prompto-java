@@ -51,11 +51,14 @@ import prompto.store.IStoredIterable;
 import prompto.type.CategoryType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
+import prompto.utils.Logger;
 import prompto.utils.StringUtils;
 
 
 public class QueryableCodeStore extends BaseCodeStore {
 
+	static final Logger logger = new Logger();
+	
 	IStore store; // data store where to store/fetch the code
 	String application;
 	Version version;
@@ -74,11 +77,11 @@ public class QueryableCodeStore extends BaseCodeStore {
 	}
 	
 	protected ICodeStore bootstrapRuntime(Supplier<Collection<URL>> runtimeSupplier) {
-		System.out.println("Connecting to prompto runtime libraries...");
+		logger.info(()->"Connecting to prompto runtime libraries...");
 		try {
 			ICodeStore runtime = null;
 			if(runtimeSupplier!=null) for(URL resource : runtimeSupplier.get()) {
-				System.out.println("Connecting to " + resource.toExternalForm());
+				logger.info(()->"Connecting to " + resource.toExternalForm());
 				runtime = new ImmutableCodeStore(runtime, ModuleType.LIBRARY, resource, Version.parse("1.0.0"));
 			}
 			return runtime;

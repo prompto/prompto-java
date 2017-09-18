@@ -116,7 +116,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 
 	public void printFailedAssertion(Context context, String expected, String actual) {
 		String message = buildFailedAssertionMessagePrefix(expected);
-		System.out.println(message + actual);
+		System.out.println(message + actual); // TODO use collector but NOT logger
 	}
 
 	public String buildFailedAssertionMessagePrefix(String expected) {
@@ -125,7 +125,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 	
 	public void printMissingError(Context context, String expected, String actual) {
 		String message = buildMissingErrorMessagePrefix(expected);
-		System.out.println(message + actual);
+		System.out.println(message + actual); // TODO use collector but NOT logger
 	}
 	
 	public String buildMissingErrorMessagePrefix(String expected) {
@@ -133,7 +133,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 	}
 
 	private void printSuccess(Context context) {
-		System.out.println(buildSuccessMessage());
+		System.out.println(buildSuccessMessage()); // TODO use collector but NOT logger
 	}
 
 	public String buildSuccessMessage() {
