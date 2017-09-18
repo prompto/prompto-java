@@ -1,7 +1,6 @@
 package prompto.runtime;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -23,8 +22,8 @@ public class TestApplication extends BaseEParserTest {
 		File testFile = tryLocateTestFile("debug/stack.pec");
 		loadFile(testFile); 
 		String[] args = new String[] {
-				"-application", "test", 
-				"-resources", "\"" + testFile.getAbsolutePath() + "\"",
+				"-applicationName", "test", 
+				"-resourceURLs", "\"" + testFile.toURI().toURL() + "\"",
 				"-loadRuntime", "false"
 		};
 		Out.init();
@@ -42,8 +41,8 @@ public class TestApplication extends BaseEParserTest {
 		loadFile(testFile); 
 		String[] args = new String[] {
 				"-codeStoreFactory", NullStoreFactory.class.getName(),
-				"-application", "test", 
-				"-resources", "\"" + testFile.getAbsolutePath() + "\""
+				"-applicationName", "test", 
+				"-resourceURLs", "\"" + testFile.toURI().toURL() + "\""
 		};
 		Out.init();
 		try {
@@ -112,7 +111,7 @@ public class TestApplication extends BaseEParserTest {
 				"-jar", "Standalone-0.0.1-SNAPSHOT.jar", 
 				"-codeStoreFactory", NullStoreFactory.class.getName(),
 				"-test", "\"Add two numbers\"", 
-				"-resources", "\"" + testFile.getAbsolutePath() + "\"");
+				"-resourceURLs", "\"" + testFile.toURI().toURL() + "\"");
 		Process process = builder.start();
 		process.waitFor();
 		assertEquals("\"Add two numbers\" test successful", readLastLine(IOUtils.readFileToString(outputFile)));
