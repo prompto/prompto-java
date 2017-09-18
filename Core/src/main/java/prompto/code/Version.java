@@ -16,6 +16,14 @@ public class Version {
 		v.fix = Integer.parseInt(parts[2]);
 		return v;
 	}
+
+	public static Version parse(int version) {
+		Version v = new Version();
+		v.major = version >> 24 & 0x000000FF;
+		v.minor = version >> 16 & 0x000000FF;
+		v.fix = version & 0x0000FFFF;
+		return v;
+	}
 	
 	int major;
 	int minor;
