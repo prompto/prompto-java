@@ -18,7 +18,7 @@ public class TestSecretKeyFactory {
 		ISecretKeyConfiguration config = new ISecretKeyConfiguration() {
 
 			@Override public String getFactory() { return PlainSecretKeyFactory.class.getName(); }
-			@Override public char[] getSecretKey() { return "password".toCharArray(); }
+			@Override public char[] getSecret() { return "password".toCharArray(); }
 			
 		};
 		assertEquals("password", ISecretKeyFactory.plainPasswordFromConfig(config));
@@ -30,7 +30,7 @@ public class TestSecretKeyFactory {
 		ISecretKeyConfiguration config = new ISecretKeyConfiguration() {
 
 			@Override public String getFactory() { return EnvironmentVariableSecretKeyFactory.class.getName(); }
-			@Override public char[] getSecretKey() { return "some key".toCharArray(); }
+			@Override public char[] getSecret() { return "some key".toCharArray(); }
 			
 		};
 		assertEquals("password", ISecretKeyFactory.plainPasswordFromConfig(config));

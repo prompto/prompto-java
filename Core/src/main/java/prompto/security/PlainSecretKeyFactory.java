@@ -15,7 +15,7 @@ public class PlainSecretKeyFactory implements ISecretKeyFactory {
 
 	@Override
 	public String getAsPlainText() {
-		char[] value = config.getSecretKey();
+		char[] value = config.getSecret();
 		return value==null ? null : new String(value);
 	}
 
