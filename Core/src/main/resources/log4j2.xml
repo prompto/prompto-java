@@ -6,6 +6,12 @@
         </Console>
     </Appenders>
     <Loggers>
+        <Logger name="org.apache.http" level="warn">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Logger name="org.apache.solr" level="warn">
+            <AppenderRef ref="Console"/>
+        </Logger>
         <Logger name="org.eclipse.jetty" level="info">
             <AppenderRef ref="Console"/>
         </Logger>
