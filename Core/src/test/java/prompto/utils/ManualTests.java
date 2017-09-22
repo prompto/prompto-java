@@ -1,5 +1,5 @@
 package prompto.utils;
 
-public @interface ManualTests {
+public abstract class ManualTests {
 
 }
