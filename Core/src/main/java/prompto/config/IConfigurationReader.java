@@ -2,6 +2,7 @@ package prompto.config;
 
 import java.util.List;
 
+import prompto.security.IKeyStoreFactory;
 import prompto.security.ISecretKeyFactory;
 import prompto.store.IStoreFactory;
 
@@ -35,6 +36,22 @@ public interface IConfigurationReader {
 			@SuppressWarnings("unchecked")
 			Class<? extends IStoreFactory> klass = (Class<? extends IStoreFactory>) Class.forName(factoryName);
 			IStoreFactory factory = klass.newInstance();
+			return factory.newConfiguration(child);
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	default IKeyStoreFactoryConfiguration readKeyStoreFactoryConfiguration(String key) {
+		IConfigurationReader child = getObject(key);
+		if(child==null)
+			return null;
+		String factoryName = child.getString("factory");
+		if(factoryName==null)
+			return null;
+		else try {
+			@SuppressWarnings("unchecked")
+			Class<? extends IKeyStoreFactory> klass = (Class<? extends IKeyStoreFactory>) Class.forName(factoryName);
+			IKeyStoreFactory factory = klass.newInstance();
 			return factory.newConfiguration(child);
 		} catch(Exception e) {
 			throw new RuntimeException(e);
