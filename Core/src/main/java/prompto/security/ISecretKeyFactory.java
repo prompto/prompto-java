@@ -8,16 +8,16 @@ import prompto.config.SecretKeyConfiguration;
 
 public interface ISecretKeyFactory {
 
-	public static String plainPasswordFromConfig(ISecretKeyConfiguration config) throws Throwable {
+	public static String plainPasswordFromConfig(ISecretKeyConfiguration config) throws Exception {
 		if(config==null)
 			return null;
-		ISecretKeyFactory factory = newStoreFactory(config);
+		ISecretKeyFactory factory = newSecretKeyFactory(config);
 		return factory.getAsPlainText();
 	
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static ISecretKeyFactory newStoreFactory(ISecretKeyConfiguration config) throws Throwable {
+	public static ISecretKeyFactory newSecretKeyFactory(ISecretKeyConfiguration config) throws Exception {
 		String factoryName = config.getFactory();
 		Class<?> klass = Class.forName(factoryName, true, Thread.currentThread().getContextClassLoader());
 		if(!(ISecretKeyFactory.class.isAssignableFrom(klass)))
