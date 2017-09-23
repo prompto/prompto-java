@@ -7,8 +7,11 @@ import java.security.KeyStore;
 
 import prompto.config.IConfigurationReader;
 import prompto.config.IKeyStoreFactoryConfiguration;
+import prompto.utils.Logger;
 
 public class FileKeyStoreFactory implements IKeyStoreFactory {
+
+	static final Logger logger = new Logger();
 
 	@Override
 	public IKeyStoreFactoryConfiguration newConfiguration(IConfigurationReader reader) {
@@ -21,7 +24,7 @@ public class FileKeyStoreFactory implements IKeyStoreFactory {
 		if(filePath==null)
 			return null;
 		File file = new File(filePath);
-		System.out.println(file.getAbsolutePath());
+		logger.info(()->"Loading certificate store: " + file.getAbsolutePath());
 		try(InputStream input = new FileInputStream(filePath)) {
 			KeyStore ks = KeyStore.getInstance("JKS");
 			ks.load(input, null);
