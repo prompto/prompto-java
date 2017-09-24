@@ -1,5 +1,9 @@
 package prompto.utils;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public abstract class ObjectUtils {
 
 	@SuppressWarnings("unchecked")
@@ -9,5 +13,15 @@ public abstract class ObjectUtils {
 		else
 			return null;
 	}
+
+	@SuppressWarnings("unchecked")
+	public static Set<Class<?>> getClassesInCallStack() {
+		return (Set<Class<?>>)(Object) Stream.of(new Throwable().getStackTrace())
+				.map(StackTraceElement::getClassName)
+				.filter(s->s.indexOf("$Lambda$")<0)
+				.map(n->{try{ return Class.forName(n); } catch (ClassNotFoundException e) { throw new RuntimeException(e); }})
+				.collect(Collectors.toSet());
+	}
+
 
 }

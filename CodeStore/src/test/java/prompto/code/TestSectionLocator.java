@@ -11,6 +11,7 @@ import prompto.code.ICodeStore;
 import prompto.code.ICodeStore.ModuleType;
 import prompto.code.ImmutableCodeStore;
 import prompto.declaration.IMethodDeclaration;
+import prompto.intrinsic.PromptoVersion;
 import prompto.parser.Dialect;
 import prompto.parser.ISection;
 import prompto.parser.Location;
@@ -25,7 +26,7 @@ public class TestSectionLocator extends BaseEParserTest {
 	public void testThatResourceCodeStoreContainsMethodSection() throws Exception {
 		URL file = getResourceAsURL("debug/stack.pec");
 		assertTrue(new File(file.getFile()).exists());
-		ICodeStore store = new ImmutableCodeStore(null, ModuleType.LIBRARY, file.toURI().toURL(), Version.parse("1.0.0.0"));
+		ICodeStore store = new ImmutableCodeStore(null, ModuleType.LIBRARY, file.toURI().toURL(), PromptoVersion.parse("1.0.0.0"));
 		Section section = new Section(file.toExternalForm(), new Location(0, 9, 1), new Location(0, 9, 20), Dialect.E, false);
 		ISection found = store.findSection(section);
 		assertNotNull(found);
@@ -37,7 +38,7 @@ public class TestSectionLocator extends BaseEParserTest {
 	public void testThatResourceCodeStoreContainsStatementSection() throws Exception {
 		URL file = getResourceAsURL("debug/stack.pec");
 		assertTrue(new File(file.getFile()).exists());
-		ICodeStore store = new ImmutableCodeStore(null, ModuleType.LIBRARY, file.toURI().toURL(), Version.parse("1.0.0.0"));
+		ICodeStore store = new ImmutableCodeStore(null, ModuleType.LIBRARY, file.toURI().toURL(), PromptoVersion.parse("1.0.0.0"));
 		Section section = new Section(file.toExternalForm(), new Location(0, 10, 1), new Location(0, 10, 20), Dialect.E, false);
 		ISection found = store.findSection(section);
 		assertNotNull(found);

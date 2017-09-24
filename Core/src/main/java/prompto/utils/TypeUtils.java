@@ -18,6 +18,7 @@ import prompto.intrinsic.PromptoDateTime;
 import prompto.intrinsic.PromptoDocument;
 import prompto.intrinsic.PromptoPeriod;
 import prompto.intrinsic.PromptoTime;
+import prompto.intrinsic.PromptoVersion;
 import prompto.runtime.Context;
 import prompto.store.IStore;
 import prompto.type.AnyType;
@@ -137,6 +138,7 @@ public abstract class TypeUtils {
 		map.put(double.class, DecimalType.instance());
 		map.put(Double.class, DecimalType.instance());
 		map.put(String.class, TextType.instance());
+		map.put(PromptoVersion.class, TextType.instance());
 		map.put(UUID.class, UUIDType.instance());
 		map.put(PromptoDate.class, DateType.instance());
 		map.put(PromptoTime.class, TimeType.instance());

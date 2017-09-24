@@ -1,24 +1,24 @@
-package prompto.code;
+package prompto.intrinsic;
 
 import java.security.InvalidParameterException;
 
-public class Version {
+public class PromptoVersion implements Comparable<PromptoVersion> {
 	
-	public static final Version LATEST = parse("-1.-1.-1");
+	public static final PromptoVersion LATEST = parse("-1.-1.-1");
 
-	public static Version parse(String version) {
+	public static PromptoVersion parse(String version) {
 		String[] parts = version.split("\\.");
 		if(parts.length<3)
 			throw new InvalidParameterException("Version must be like 1.2.3!");
-		Version v = new Version();
+		PromptoVersion v = new PromptoVersion();
 		v.major = Integer.parseInt(parts[0]);
 		v.minor = Integer.parseInt(parts[1]);
 		v.fix = Integer.parseInt(parts[2]);
 		return v;
 	}
 
-	public static Version parse(int version) {
-		Version v = new Version();
+	public static PromptoVersion parse(int version) {
+		PromptoVersion v = new PromptoVersion();
 		v.major = version >> 24 & 0x000000FF;
 		v.minor = version >> 16 & 0x000000FF;
 		v.fix = version & 0x0000FFFF;
@@ -42,9 +42,14 @@ public class Version {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if(obj instanceof Version)
-			return this.asInt() == ((Version)obj).asInt();
+		if(obj instanceof PromptoVersion)
+			return this.asInt() == ((PromptoVersion)obj).asInt();
 		else
 			return false;
+	}
+
+	@Override
+	public int compareTo(PromptoVersion o) {
+		return Integer.compare(this.asInt(), o.asInt());
 	}
 }

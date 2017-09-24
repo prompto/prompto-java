@@ -36,6 +36,7 @@ import prompto.grammar.Identifier;
 import prompto.grammar.OrderByClause;
 import prompto.grammar.OrderByClauseList;
 import prompto.intrinsic.PromptoBinary;
+import prompto.intrinsic.PromptoVersion;
 import prompto.literal.TextLiteral;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
@@ -61,12 +62,12 @@ public class QueryableCodeStore extends BaseCodeStore {
 	
 	IStore store; // data store where to store/fetch the code
 	String application;
-	Version version;
+	PromptoVersion version;
 	// fetching and storing declarations requires a context holding code store attributes
 	// some of these are code store specific and should not be looked for in the app context
 	Context context; 
 	
-	public QueryableCodeStore(IStore store, Supplier<Collection<URL>> runtimeSupplier, String application, Version version, URL[] addOns, URL ...resourceNames) throws PromptoError {
+	public QueryableCodeStore(IStore store, Supplier<Collection<URL>> runtimeSupplier, String application, PromptoVersion version, URL[] addOns, URL ...resourceNames) throws PromptoError {
 		super(null);
 		this.store = store;
 		this.application = application;
@@ -82,7 +83,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 			ICodeStore runtime = null;
 			if(runtimeSupplier!=null) for(URL resource : runtimeSupplier.get()) {
 				logger.info(()->"Connecting to " + resource.toExternalForm());
-				runtime = new ImmutableCodeStore(runtime, ModuleType.LIBRARY, resource, Version.parse("1.0.0"));
+				runtime = new ImmutableCodeStore(runtime, ModuleType.LIBRARY, resource, PromptoVersion.parse("1.0.0"));
 			}
 			return runtime;
 		} catch(RuntimeException e) {
@@ -94,7 +95,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 		return store;
 	}
 	
-	public void collectStorables(List<IStorable> list, IDeclaration declaration, Dialect dialect, Version version, Object moduleId) {
+	public void collectStorables(List<IStorable> list, IDeclaration declaration, Dialect dialect, PromptoVersion version, Object moduleId) {
 		if(declaration instanceof MethodDeclarationMap) {
 			for(IDeclaration method : ((MethodDeclarationMap)declaration).values())
 				collectStorables(list, method, dialect, version, moduleId);
@@ -122,7 +123,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public Version getModuleVersion() {
+	public PromptoVersion getModuleVersion() {
 		return version;
 	}
 	
@@ -154,7 +155,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends Module> T fetchModule(ModuleType type, String name, Version version) throws PromptoError {
+	public <T extends Module> T fetchModule(ModuleType type, String name, PromptoVersion version) throws PromptoError {
 		try {
 			IStored stored = fetchOneNamedInStore(type.getCategory(), version, name);
 			if(stored==null)
@@ -162,7 +163,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 			Module module = type.getModuleClass().newInstance();
 			module.setDbId(stored.getDbId());
 			module.setName((String)stored.getData("name"));
-			module.setVersion(Version.parse((String)stored.getData("version")));
+			module.setVersion(PromptoVersion.parse((String)stored.getData("version")));
 			module.setDescription((String)stored.getData("description"));
 			if(module instanceof WebSite)
 				((WebSite)module).setEntryPoint((String)stored.getData("entryPoint"));
@@ -173,7 +174,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public Resource fetchSpecificResource(String name, Version version) {
+	public Resource fetchSpecificResource(String name, PromptoVersion version) {
 		try {
 			IStored stored = fetchOneInStore(new CategoryType(new Identifier("Resource")), version, "name", name);
 			if(stored==null)
@@ -228,7 +229,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public Iterable<IDeclaration> fetchSpecificDeclarations(String name, Version version) throws PromptoError {
+	public Iterable<IDeclaration> fetchSpecificDeclarations(String name, PromptoVersion version) throws PromptoError {
 		Iterable<IDeclaration> decls = fetchDeclarationsInStore(name, version);
 		if(decls==null) {
 			// when called from the AppServer, multiple threads may be attempting to do this
@@ -253,7 +254,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public IDeclaration fetchSpecificSymbol(String name, Version version) throws PromptoError {
+	public IDeclaration fetchSpecificSymbol(String name, PromptoVersion version) throws PromptoError {
 		// TODO need to find non resource based symbols
 		return super.fetchSpecificSymbol(name, version);
 	}
@@ -276,7 +277,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 
 
 	@Override
-	public void storeDeclarations(Iterable<IDeclaration> declarations, Dialect dialect, Version version, Object moduleId) throws PromptoError {
+	public void storeDeclarations(Iterable<IDeclaration> declarations, Dialect dialect, PromptoVersion version, Object moduleId) throws PromptoError {
 		List<IStorable> list = new ArrayList<>();
 		declarations.forEach((decl)->
 			collectStorables(list, decl, dialect, version, moduleId));
@@ -292,7 +293,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 			return stored.getDbId();
 	}
 
-	private IStorable populateDeclarationStorable(List<String> categories, IDeclaration decl, Dialect dialect, Version version, Object moduleId) {
+	private IStorable populateDeclarationStorable(List<String> categories, IDeclaration decl, Dialect dialect, PromptoVersion version, Object moduleId) {
 		IStorable storable = store.newStorable(categories, null); 
 		try {
 			storable.setData("name", decl.getId().toString());
@@ -314,7 +315,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 	}
 
 	
-	private Iterable<IDeclaration> fetchDeclarationsInStore(String name, Version version) {
+	private Iterable<IDeclaration> fetchDeclarationsInStore(String name, PromptoVersion version) {
 		if(store==null)
 			return null;
 		else try {
@@ -336,11 +337,11 @@ public class QueryableCodeStore extends BaseCodeStore {
 	private static Set<String> uniqueDecls = new HashSet<>(
 			Arrays.asList(DeclarationType.ATTRIBUTE.name(), DeclarationType.CATEGORY.name(), DeclarationType.TEST.name()));
 	
-	private IStoredIterable fetchManyNamedInStore(String name, CategoryType type, Version version) throws PromptoError {
+	private IStoredIterable fetchManyNamedInStore(String name, CategoryType type, PromptoVersion version) throws PromptoError {
 		return fetchManyInStore(type, version, "name", name);
 	}
 
-	private IStoredIterable fetchManyInStore(CategoryType type, Version version, String attribute, String value) throws PromptoError {
+	private IStoredIterable fetchManyInStore(CategoryType type, PromptoVersion version, String attribute, String value) throws PromptoError {
 		IQueryBuilder builder = store.newQueryBuilder();
 		if(uniqueDecls.contains(type.toString().toUpperCase())) {
 			builder.setFirst(1L);
@@ -351,7 +352,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 		IPredicateExpression filter = buildFilter(version, attribute, value);
 		filter.interpretQuery(context, builder);
 		builder.and();
-		if(Version.LATEST.equals(version)) {
+		if(PromptoVersion.LATEST.equals(version)) {
 			IdentifierList names = IdentifierList.parse("prototype,version");
 			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
 			orderBy.interpretQuery(context, builder);
@@ -361,18 +362,18 @@ public class QueryableCodeStore extends BaseCodeStore {
 			return store.fetchMany(builder.build()); 
 	}
 	
-	private IStored fetchOneNamedInStore(CategoryType type, Version version, String name) throws PromptoError {
+	private IStored fetchOneNamedInStore(CategoryType type, PromptoVersion version, String name) throws PromptoError {
 		return fetchOneInStore(type, version, "name", name);
 	}
 	
-	private IStored fetchOneInStore(CategoryType type, Version version, String attribute, String value) throws PromptoError {
+	private IStored fetchOneInStore(CategoryType type, PromptoVersion version, String attribute, String value) throws PromptoError {
 		IQueryBuilder builder = store.newQueryBuilder();
 		AttributeInfo info = new AttributeInfo("category", Family.TEXT, true, null);
 		builder.verify(info, MatchOp.CONTAINS, type.getTypeName());
 		IPredicateExpression filter = buildFilter(version, attribute, value);
 		filter.interpretQuery(context, builder);
 		builder.and();
-		if(Version.LATEST.equals(version)) {
+		if(PromptoVersion.LATEST.equals(version)) {
 			IdentifierList names = new IdentifierList(new Identifier("version"));
 			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
 			orderBy.interpretQuery(context, builder);
@@ -426,11 +427,11 @@ public class QueryableCodeStore extends BaseCodeStore {
 		};
 	}
 
-	private IPredicateExpression buildFilter(Version version, String attribute, String value) {
+	private IPredicateExpression buildFilter(PromptoVersion version, String attribute, String value) {
 		IExpression left = new UnresolvedIdentifier(new Identifier(attribute));
 		IExpression right = new TextLiteral("'" + value + "'");
 		IPredicateExpression filter = new EqualsExpression(left, EqOp.EQUALS, right);
-		if(!Version.LATEST.equals(version)) {
+		if(!PromptoVersion.LATEST.equals(version)) {
 			left = new UnresolvedIdentifier(new Identifier("version"));
 			right = new TextLiteral('"' + version.toString() + '"');
 			IExpression condition = new EqualsExpression(left, EqOp.EQUALS, right);

@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import prompto.code.Version;
+import prompto.intrinsic.PromptoVersion;
 
 public interface IRuntimeConfiguration {
 	void setRuntimeLibsSupplier(Supplier<Collection<URL>> supplier);
@@ -15,7 +15,7 @@ public interface IRuntimeConfiguration {
 	IDebugConfiguration getDebugConfiguration();
 	Map<String, String> getArguments();
 	String getApplicationName();
-	Version getApplicationVersion();
+	PromptoVersion getApplicationVersion();
 	boolean isTestMode();
 	URL[] getAddOnURLs();
 	URL[] getResourceURLs();
@@ -33,7 +33,7 @@ public interface IRuntimeConfiguration {
 		@Override public IDebugConfiguration getDebugConfiguration() { return source.getDebugConfiguration(); }
 		@Override public Map<String, String> getArguments() { return source.getArguments(); }
 		@Override public String getApplicationName() { return source.getApplicationName(); }
-		@Override public Version getApplicationVersion() { return source.getApplicationVersion(); }
+		@Override public PromptoVersion getApplicationVersion() { return source.getApplicationVersion(); }
 		@Override public boolean isTestMode() { return source.isTestMode(); }
 		@Override public URL[] getAddOnURLs() { return source.getAddOnURLs(); }
 		@Override public URL[] getResourceURLs() { return source.getResourceURLs(); }

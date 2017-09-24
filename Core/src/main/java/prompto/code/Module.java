@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import prompto.code.ICodeStore.ModuleType;
 import prompto.error.PromptoError;
 import prompto.intrinsic.PromptoBinary;
+import prompto.intrinsic.PromptoVersion;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.store.IStore;
@@ -15,7 +16,7 @@ public abstract class Module {
 	
 	private Object dbId;
 	private String name;
-	private Version version;
+	private PromptoVersion version;
 	private String description;
 	private PromptoBinary image;
 	private List<Dependency> dependencies;
@@ -38,11 +39,11 @@ public abstract class Module {
 		this.name = name;
 	}
 	
-	public Version getVersion() {
+	public PromptoVersion getVersion() {
 		return version;
 	}
 	
-	public void setVersion(Version version) {
+	public void setVersion(PromptoVersion version) {
 		this.version = version;
 	}
 	

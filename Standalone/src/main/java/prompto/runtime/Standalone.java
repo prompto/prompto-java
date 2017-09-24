@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 import prompto.code.ICodeStore;
 import prompto.code.QueryableCodeStore;
-import prompto.code.Version;
 import prompto.compiler.PromptoClassLoader;
 import prompto.config.CmdLineConfigurationReader;
 import prompto.config.IConfigurationReader;
@@ -29,6 +28,7 @@ import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDict;
+import prompto.intrinsic.PromptoVersion;
 import prompto.java.JavaIdentifierExpression;
 import prompto.libraries.Libraries;
 import prompto.store.AttributeInfo;
@@ -187,10 +187,10 @@ public abstract class Standalone {
 		return new ExpressionValue(new DictType(TextType.instance()), new Dictionary(TextType.instance(), dict));
 	}
 
-	public static void showHelp(String application, String test, Version version) {
+	public static void showHelp(String application, String test, PromptoVersion version) {
 		if(application==null && test==null)
 			logger.info(()->"Missing argument: -application or -test");
-		if(version.equals(Version.LATEST))
+		if(version.equals(PromptoVersion.LATEST))
 			logger.info(()->"Additional argument: -version (optional)");
 	}
 

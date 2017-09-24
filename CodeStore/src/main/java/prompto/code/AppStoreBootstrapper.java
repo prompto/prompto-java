@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import prompto.code.ICodeStore.ModuleType;
+import prompto.intrinsic.PromptoVersion;
 import prompto.store.IStore;
 import prompto.utils.Logger;
 import prompto.utils.ResourceUtils;
@@ -16,7 +17,7 @@ public class AppStoreBootstrapper {
 
 	static final Logger logger = new Logger();
 	
-	public static ICodeStore bootstrap(IStore store, ICodeStore runtime, String application, Version version, URL[] addOns, URL ... resources) {
+	public static ICodeStore bootstrap(IStore store, ICodeStore runtime, String application, PromptoVersion version, URL[] addOns, URL ... resources) {
 		logger.info(()->"Connecting to code store for application " + application + " version " + version + "...");
 		if(addOns!=null) {
 			for(URL addOn : addOns)
@@ -35,7 +36,7 @@ public class AppStoreBootstrapper {
 			Collection<URL> urls = getAddOnLibraries(addOn);
 			for(URL url : urls) {
 				logger.info(()->"Connecting to " + url.toExternalForm());
-				runtime = new ImmutableCodeStore(runtime, ModuleType.LIBRARY, url, Version.parse("0.0.1"));
+				runtime = new ImmutableCodeStore(runtime, ModuleType.LIBRARY, url, PromptoVersion.parse("0.0.1"));
 			}
 			return runtime;
 		} catch (IOException e) {
@@ -54,7 +55,7 @@ public class AppStoreBootstrapper {
 	}
 	
 
-	private static ICodeStore bootstrapResource(URL resource, ICodeStore runtime, Version version) {
+	private static ICodeStore bootstrapResource(URL resource, ICodeStore runtime, PromptoVersion version) {
 		logger.info(()->"Connecting to " + resource.toExternalForm());
 		return new ImmutableCodeStore(runtime, ModuleType.LIBRARY, resource, version);
 	}

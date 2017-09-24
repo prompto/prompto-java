@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import prompto.code.Version;
+import prompto.intrinsic.PromptoVersion;
 
 public class RuntimeConfiguration implements IRuntimeConfiguration {
 
@@ -73,9 +73,9 @@ public class RuntimeConfiguration implements IRuntimeConfiguration {
 	}
 
 	@Override
-	public Version getApplicationVersion() {
+	public PromptoVersion getApplicationVersion() {
 		String version = reader.getString("applicationVersion");
-		return version==null ? Version.LATEST : Version.parse(version);
+		return version==null ? PromptoVersion.LATEST : PromptoVersion.parse(version);
 	}
 
 	@Override

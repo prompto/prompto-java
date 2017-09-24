@@ -7,6 +7,7 @@ import java.util.Map;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
+import prompto.intrinsic.PromptoVersion;
 import prompto.parser.ISection;
 
 /* a code store which simply links to another one */
@@ -37,7 +38,7 @@ public abstract class BaseCodeStore implements ICodeStore {
 	}
 	
 	@Override
-	public Iterable<IDeclaration> fetchSpecificDeclarations(String name, Version version) throws PromptoError {
+	public Iterable<IDeclaration> fetchSpecificDeclarations(String name, PromptoVersion version) throws PromptoError {
 		return next==null ? null : next.fetchSpecificDeclarations(name, version);
 	}
 	
@@ -48,7 +49,7 @@ public abstract class BaseCodeStore implements ICodeStore {
 	}
 	
 	@Override
-	public IDeclaration fetchSpecificSymbol(String name, Version version) throws PromptoError {
+	public IDeclaration fetchSpecificSymbol(String name, PromptoVersion version) throws PromptoError {
 		return next==null ? null : next.fetchSpecificSymbol(name, version);
 	}
 

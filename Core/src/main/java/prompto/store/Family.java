@@ -12,6 +12,7 @@ public enum Family {
 	TIME,
 	DATETIME,
 	PERIOD,
+	VERSION,
 	LIST,
 	SET,
 	TUPLE,

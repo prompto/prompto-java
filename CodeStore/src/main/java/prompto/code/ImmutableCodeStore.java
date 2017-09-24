@@ -17,6 +17,7 @@ import prompto.declaration.IDeclaration;
 import prompto.declaration.IEnumeratedDeclaration;
 import prompto.error.InvalidResourceError;
 import prompto.error.PromptoError;
+import prompto.intrinsic.PromptoVersion;
 import prompto.parser.Dialect;
 import prompto.parser.ISection;
 import prompto.utils.SectionLocator;
@@ -26,10 +27,10 @@ public class ImmutableCodeStore extends BaseCodeStore {
 
 	ModuleType type;
 	URL resource;
-	Version version;
+	PromptoVersion version;
 	Map<String, List<IDeclaration>> declarations = null;
 	
-	public ImmutableCodeStore(ICodeStore next, ModuleType type, URL resource, Version version) {
+	public ImmutableCodeStore(ICodeStore next, ModuleType type, URL resource, PromptoVersion version) {
 		super(next);
 		if(resource==null)
 			throw new NullPointerException();
@@ -63,7 +64,7 @@ public class ImmutableCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public Version getModuleVersion() {
+	public PromptoVersion getModuleVersion() {
 		return version;
 	}
 	
@@ -73,17 +74,17 @@ public class ImmutableCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public <T extends Module> T fetchModule(ModuleType type, String name, Version version) throws PromptoError {
+	public <T extends Module> T fetchModule(ModuleType type, String name, PromptoVersion version) throws PromptoError {
 		return null;
 	}
 	
 	@Override
-	public Resource fetchSpecificResource(String path, Version version) {
+	public Resource fetchSpecificResource(String path, PromptoVersion version) {
 		return null;
 	}
 	
 	@Override
-	public void storeDeclarations(Iterable<IDeclaration> declarations, Dialect dialect, Version version, Object moduleId) throws PromptoError {
+	public void storeDeclarations(Iterable<IDeclaration> declarations, Dialect dialect, PromptoVersion version, Object moduleId) throws PromptoError {
 		throw new UnsupportedOperationException();
 	}
 	
@@ -103,7 +104,7 @@ public class ImmutableCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public Iterable<IDeclaration> fetchSpecificDeclarations(String name,Version version) throws PromptoError {
+	public Iterable<IDeclaration> fetchSpecificDeclarations(String name,PromptoVersion version) throws PromptoError {
 		Iterable<IDeclaration> decls = fetchInResource(name);
 		if(decls!=null)
 			return decls;
@@ -121,7 +122,7 @@ public class ImmutableCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public IDeclaration fetchSpecificSymbol(String name, Version version) throws PromptoError {
+	public IDeclaration fetchSpecificSymbol(String name, PromptoVersion version) throws PromptoError {
 		IDeclaration decl = fetchSymbolInResource(name);
 		if(decl!=null)
 			return decl;

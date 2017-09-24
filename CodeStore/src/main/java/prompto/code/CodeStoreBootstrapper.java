@@ -15,6 +15,7 @@ import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoVersion;
 import prompto.runtime.Context;
 import prompto.store.AttributeInfo;
 import prompto.store.IStore;
@@ -48,7 +49,7 @@ public class CodeStoreBootstrapper {
 	private CodeStoreBootstrapper(IStore store, ICodeStore runtime) {
 		this.store = store;
 		URL url = Thread.currentThread().getContextClassLoader().getResource("libraries/CodeStore.pec");
-		this.next = new ImmutableCodeStore(runtime, ModuleType.LIBRARY, url, Version.parse("1.0.0"));
+		this.next = new ImmutableCodeStore(runtime, ModuleType.LIBRARY, url, PromptoVersion.parse("1.0.0"));
 	}
 
 	private void bootstrap() throws PromptoError {

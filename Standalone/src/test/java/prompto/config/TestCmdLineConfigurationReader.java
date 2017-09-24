@@ -9,7 +9,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import prompto.code.Version;
+import prompto.intrinsic.PromptoVersion;
 import prompto.memstore.MemStoreFactory;
 import prompto.utils.CmdLineParser;
 
@@ -37,7 +37,7 @@ public class TestCmdLineConfigurationReader {
 		assertEquals("dev-center", config.getApplicationName());
 		assertEquals("myMethod", config.getMainMethod());
 		// converted values
-		assertEquals(Version.parse("1.2.31.7"), config.getApplicationVersion());
+		assertEquals(PromptoVersion.parse("1.2.31.7"), config.getApplicationVersion());
 		URL url = Thread.currentThread().getContextClassLoader().getResource("awsClient.pec");
 		assertEquals(Collections.singletonList(url), Arrays.asList(config.getResourceURLs()));
 		// embedded values
