@@ -76,5 +76,10 @@ public class TestLess extends BaseEParserTest {
 		compareResourceEOE("less/ltTime.pec");
 	}
 
+	@Test
+	public void testLtVersion() throws Exception {
+		compareResourceEOE("less/ltVersion.pec");
+	}
+
 }
 

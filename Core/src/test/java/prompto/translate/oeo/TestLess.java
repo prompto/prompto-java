@@ -76,5 +76,10 @@ public class TestLess extends BaseOParserTest {
 		compareResourceOEO("less/ltTime.poc");
 	}
 
+	@Test
+	public void testLtVersion() throws Exception {
+		compareResourceOEO("less/ltVersion.poc");
+	}
+
 }
 

@@ -76,5 +76,10 @@ public class TestLess extends BaseEParserTest {
 		compareResourceEME("less/ltTime.pec");
 	}
 
+	@Test
+	public void testLtVersion() throws Exception {
+		compareResourceEME("less/ltVersion.pec");
+	}
+
 }
 

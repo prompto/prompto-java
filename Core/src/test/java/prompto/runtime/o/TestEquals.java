@@ -150,6 +150,16 @@ public class TestEquals extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedEqVersion() throws Exception {
+		checkInterpretedOutput("equals/eqVersion.poc");
+	}
+
+	@Test
+	public void testCompiledEqVersion() throws Exception {
+		checkCompiledOutput("equals/eqVersion.poc");
+	}
+
+	@Test
 	public void testInterpretedIsBoolean() throws Exception {
 		checkInterpretedOutput("equals/isBoolean.poc");
 	}

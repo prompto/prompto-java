@@ -76,5 +76,10 @@ public class TestGreater extends BaseOParserTest {
 		compareResourceOEO("greater/gtTime.poc");
 	}
 
+	@Test
+	public void testGtVersion() throws Exception {
+		compareResourceOEO("greater/gtVersion.poc");
+	}
+
 }
 

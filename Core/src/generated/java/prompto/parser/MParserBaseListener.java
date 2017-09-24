@@ -2045,6 +2045,18 @@ public class MParserBaseListener implements MParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterVersionType(@NotNull MParser.VersionTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVersionType(@NotNull MParser.VersionTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCodeType(@NotNull MParser.CodeTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2904,6 +2916,18 @@ public class MParserBaseListener implements MParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPeriodLiteral(@NotNull MParser.PeriodLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterVersionLiteral(@NotNull MParser.VersionLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVersionLiteral(@NotNull MParser.VersionLiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -159,5 +159,15 @@ public class TestGreater extends BaseOParserTest {
 		checkCompiledOutput("greater/gtTime.poc");
 	}
 
+	@Test
+	public void testInterpretedGtVersion() throws Exception {
+		checkInterpretedOutput("greater/gtVersion.poc");
+	}
+
+	@Test
+	public void testCompiledGtVersion() throws Exception {
+		checkCompiledOutput("greater/gtVersion.poc");
+	}
+
 }
 

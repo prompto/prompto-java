@@ -72,6 +72,11 @@ public class TestEquals extends BaseOParserTest {
 	}
 
 	@Test
+	public void testEqVersion() throws Exception {
+		compareResourceOEO("equals/eqVersion.poc");
+	}
+
+	@Test
 	public void testIsBoolean() throws Exception {
 		compareResourceOEO("equals/isBoolean.poc");
 	}

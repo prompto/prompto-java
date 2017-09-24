@@ -72,6 +72,11 @@ public class TestEquals extends BaseEParserTest {
 	}
 
 	@Test
+	public void testEqVersion() throws Exception {
+		compareResourceEME("equals/eqVersion.pec");
+	}
+
+	@Test
 	public void testIsBoolean() throws Exception {
 		compareResourceEME("equals/isBoolean.pec");
 	}

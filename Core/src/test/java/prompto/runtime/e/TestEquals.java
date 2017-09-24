@@ -150,6 +150,16 @@ public class TestEquals extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedEqVersion() throws Exception {
+		checkInterpretedOutput("equals/eqVersion.pec");
+	}
+
+	@Test
+	public void testCompiledEqVersion() throws Exception {
+		checkCompiledOutput("equals/eqVersion.pec");
+	}
+
+	@Test
 	public void testInterpretedIsBoolean() throws Exception {
 		checkInterpretedOutput("equals/isBoolean.pec");
 	}

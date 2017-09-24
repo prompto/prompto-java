@@ -1909,6 +1909,18 @@ public interface MParserListener extends ParseTreeListener {
 	 */
 	void exitPeriodType(@NotNull MParser.PeriodTypeContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code VersionType}
+	 * labeled alternative in {@link MParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void enterVersionType(@NotNull MParser.VersionTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code VersionType}
+	 * labeled alternative in {@link MParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void exitVersionType(@NotNull MParser.VersionTypeContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code CodeType}
 	 * labeled alternative in {@link MParser#native_type}.
 	 * @param ctx the parse tree
@@ -2706,6 +2718,18 @@ public interface MParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitPeriodLiteral(@NotNull MParser.PeriodLiteralContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code VersionLiteral}
+	 * labeled alternative in {@link MParser#atomic_literal}.
+	 * @param ctx the parse tree
+	 */
+	void enterVersionLiteral(@NotNull MParser.VersionLiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code VersionLiteral}
+	 * labeled alternative in {@link MParser#atomic_literal}.
+	 * @param ctx the parse tree
+	 */
+	void exitVersionLiteral(@NotNull MParser.VersionLiteralContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code UUIDLiteral}
 	 * labeled alternative in {@link MParser#atomic_literal}.

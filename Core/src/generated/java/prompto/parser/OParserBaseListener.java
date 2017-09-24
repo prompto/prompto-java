@@ -2069,6 +2069,18 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterVersionType(@NotNull OParser.VersionTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVersionType(@NotNull OParser.VersionTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCodeType(@NotNull OParser.CodeTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2928,6 +2940,18 @@ public class OParserBaseListener implements OParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPeriodLiteral(@NotNull OParser.PeriodLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterVersionLiteral(@NotNull OParser.VersionLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVersionLiteral(@NotNull OParser.VersionLiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

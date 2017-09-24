@@ -159,5 +159,15 @@ public class TestLess extends BaseOParserTest {
 		checkCompiledOutput("less/ltTime.poc");
 	}
 
+	@Test
+	public void testInterpretedLtVersion() throws Exception {
+		checkInterpretedOutput("less/ltVersion.poc");
+	}
+
+	@Test
+	public void testCompiledLtVersion() throws Exception {
+		checkCompiledOutput("less/ltVersion.poc");
+	}
+
 }
 

@@ -2213,6 +2213,18 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterVersionType(@NotNull EParser.VersionTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVersionType(@NotNull EParser.VersionTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCodeType(@NotNull EParser.CodeTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -3072,6 +3084,18 @@ public class EParserBaseListener implements EParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPeriodLiteral(@NotNull EParser.PeriodLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterVersionLiteral(@NotNull EParser.VersionLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVersionLiteral(@NotNull EParser.VersionLiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

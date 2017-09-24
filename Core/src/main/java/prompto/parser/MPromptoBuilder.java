@@ -165,6 +165,7 @@ import prompto.literal.TextLiteral;
 import prompto.literal.TimeLiteral;
 import prompto.literal.TupleLiteral;
 import prompto.literal.UUIDLiteral;
+import prompto.literal.VersionLiteral;
 import prompto.parser.MParser;
 import prompto.parser.MParserBaseListener;
 import prompto.parser.MParser.*;
@@ -233,10 +234,12 @@ import prompto.type.IntegerType;
 import prompto.type.IteratorType;
 import prompto.type.ListType;
 import prompto.type.NativeType;
+import prompto.type.PeriodType;
 import prompto.type.SetType;
 import prompto.type.TextType;
 import prompto.type.TimeType;
 import prompto.type.UUIDType;
+import prompto.type.VersionType;
 import prompto.utils.AssertionList;
 import prompto.utils.ExpressionList;
 import prompto.utils.IdentifierList;
@@ -2034,6 +2037,11 @@ public class MPromptoBuilder extends MParserBaseListener {
 	}
 	
 	@Override
+	public void exitPeriodType(PeriodTypeContext ctx) {
+		setNodeValue(ctx, PeriodType.instance());
+	}
+
+	@Override
 	public void exitPrimaryType(PrimaryTypeContext ctx) {
 		IType type = this.<IType>getNodeValue(ctx.p);
 		setNodeValue(ctx, type);
@@ -2616,6 +2624,17 @@ public class MPromptoBuilder extends MParserBaseListener {
 		}
 		setNodeValue(ctx, list);
 	}
+	
+	@Override
+	public void exitVersionType(VersionTypeContext ctx) {
+		setNodeValue(ctx, VersionType.instance());
+	}
+
+	@Override
+	public void exitVersionLiteral(VersionLiteralContext ctx) {
+		setNodeValue(ctx, new VersionLiteral(ctx.t.getText()));
+	}
+	
 	
 	@Override
 	public void exitWhile_statement(While_statementContext ctx) {

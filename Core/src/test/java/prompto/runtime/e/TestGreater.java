@@ -159,5 +159,15 @@ public class TestGreater extends BaseEParserTest {
 		checkCompiledOutput("greater/gtTime.pec");
 	}
 
+	@Test
+	public void testInterpretedGtVersion() throws Exception {
+		checkInterpretedOutput("greater/gtVersion.pec");
+	}
+
+	@Test
+	public void testCompiledGtVersion() throws Exception {
+		checkCompiledOutput("greater/gtVersion.pec");
+	}
+
 }
 

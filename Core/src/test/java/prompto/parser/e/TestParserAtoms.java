@@ -47,6 +47,7 @@ import prompto.literal.RangeLiteral;
 import prompto.literal.TextLiteral;
 import prompto.literal.TimeLiteral;
 import prompto.literal.TupleLiteral;
+import prompto.literal.VersionLiteral;
 import prompto.parser.Dialect;
 import prompto.parser.ECleverParser;
 import prompto.parser.EIndentingLexer;
@@ -518,6 +519,16 @@ public class TestParserAtoms {
 		assertTrue(literal instanceof IntegerLiteral);
 		assertEquals("1234", literal.toString());
 		assertEquals(1234L, ((IntegerLiteral)literal).getValue().longValue());
+	}
+	
+	@Test
+	public void testVersionLiteral() throws Exception {
+		String statement = "'v1.0.0'";
+		ETestParser parser = new ETestParser(statement, false);
+		IExpression literal = parser.parse_literal_expression();
+		assertNotNull(literal);
+		assertTrue(literal instanceof VersionLiteral);
+		assertEquals("'v1.0.0'", literal.toString());
 	}
 	
 	@Test
