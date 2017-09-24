@@ -93,13 +93,13 @@ public final class MemStore implements IStore {
 	
 	@Override
 	public PromptoBinary fetchBinary(Object dbId, String attr) {
-		for(StorableDocument doc : documents.values()) {
-			Object data = doc.getData(IStore.dbIdName);
-			if(data==null || !dbId.equals(data.toString()))
-				continue;
-			data = doc.getData("attr");
-		}
-		return null;
+		if(!(dbId instanceof Long))
+			dbId = Long.decode(dbId.toString());
+		StorableDocument doc = documents.get(dbId);
+		if(doc==null)
+			return null;
+		else
+			return (PromptoBinary)doc.getData(attr);
 	}
 	
 	@Override
