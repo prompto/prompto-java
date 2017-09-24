@@ -38,6 +38,7 @@ import prompto.grammar.OrderByClauseList;
 import prompto.intrinsic.PromptoBinary;
 import prompto.intrinsic.PromptoVersion;
 import prompto.literal.TextLiteral;
+import prompto.literal.VersionLiteral;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
@@ -148,7 +149,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 		List<String> categories = Arrays.asList("Module", origin.getModuleType().getCategory().getTypeName());
 		IStorable storable = store.newStorable(categories, null);
 		storable.setData("name", origin.getModuleName());
-		storable.setData("version", origin.getModuleVersion().toString());
+		storable.setData("version", origin.getModuleVersion());
 		store.store(storable);
 		return storable.getOrCreateDbId();
 	}
@@ -163,7 +164,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 			Module module = type.getModuleClass().newInstance();
 			module.setDbId(stored.getDbId());
 			module.setName((String)stored.getData("name"));
-			module.setVersion(PromptoVersion.parse((String)stored.getData("version")));
+			module.setVersion((PromptoVersion)stored.getData("version"));
 			module.setDescription((String)stored.getData("description"));
 			if(module instanceof WebSite)
 				((WebSite)module).setEntryPoint((String)stored.getData("entryPoint"));
@@ -197,7 +198,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 		}
 		resource.setMimeType(mimeType);
 		resource.setName((String)stored.getData("name"));
-		resource.setVersion((String)stored.getData("version"));
+		resource.setVersion((PromptoVersion)stored.getData("version"));
 		Long value = (Long)stored.getData("timeStamp");
 		if(value!=null)
 			resource.setLastModified(OffsetDateTime.ofInstant(Instant.ofEpochMilli(value), ZoneOffset.UTC));
@@ -297,7 +298,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 		IStorable storable = store.newStorable(categories, null); 
 		try {
 			storable.setData("name", decl.getId().toString());
-			storable.setData("version", version.toString());
+			storable.setData("version", version);
 			if(decl instanceof IMethodDeclaration) {
 				String proto = ((IMethodDeclaration)decl).getProto();
 				storable.setData("prototype", proto);
@@ -433,7 +434,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 		IPredicateExpression filter = new EqualsExpression(left, EqOp.EQUALS, right);
 		if(!PromptoVersion.LATEST.equals(version)) {
 			left = new UnresolvedIdentifier(new Identifier("version"));
-			right = new TextLiteral('"' + version.toString() + '"');
+			right = new VersionLiteral("'v" + version.toString() + "'");
 			IExpression condition = new EqualsExpression(left, EqOp.EQUALS, right);
 			filter = new AndExpression(filter, condition);
 		} 

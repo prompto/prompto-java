@@ -3,6 +3,7 @@ package prompto.code;
 import java.util.Arrays;
 import java.util.List;
 
+import prompto.intrinsic.PromptoVersion;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.store.IStore;
@@ -11,7 +12,7 @@ public class Dependency {
 	
 	private Object dbId;
 	private String name;
-	private String version;
+	private PromptoVersion version;
 
 	public Object getDbId() {
 		return dbId;
@@ -29,11 +30,11 @@ public class Dependency {
 		this.name = name;
 	}
 	
-	public String getVersion() {
+	public PromptoVersion getVersion() {
 		return version;
 	}
 	
-	public void setVersion(String version) {
+	public void setVersion(PromptoVersion version) {
 		this.version = version;
 	}
 

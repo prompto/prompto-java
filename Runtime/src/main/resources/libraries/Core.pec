@@ -79,8 +79,6 @@ define text as storable Text attribute with value and words index
 define name as storable Text attribute with key and value index
 // many objects have a description, it is not unique 
 define description as storable Text attribute with words index
-// many objects have a version, it is not unique 
-define version as storable Text attribute
 // many objects have a user, it is not unique 
 define user as storable Text attribute with key and value index
 // many objects have an image, it is not unique 

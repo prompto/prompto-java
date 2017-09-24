@@ -30,6 +30,9 @@ import prompto.store.IStorable;
 import prompto.store.IStore;
 import prompto.type.CategoryType;
 import prompto.type.DecimalType;
+import prompto.type.IType;
+import prompto.type.IntegerType;
+import prompto.type.TextType;
 import prompto.utils.TypeUtils;
 
 public class ConcreteInstance extends BaseValue implements IInstance, IMultiplyable {
@@ -311,12 +314,8 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 				IValue value = entry.getValue();
 				if(value==null)
 					generator.writeNull();
-				else {
-					Object id = this.getDbId();
-					if(id==null)
-						id = System.identityHashCode(this);
-					value.toJson(context, generator, id, entry.getKey(), withType, data);
-				}
+				else
+					attributeToJson(context, generator, entry, withType, data);
 			}
 			generator.writeEndObject();
 			if(withType) 
@@ -324,6 +323,25 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		}
+	}
+
+	private void attributeToJson(Context context, JsonGenerator generator, Entry<Identifier, IValue> entry, boolean withType, Map<String, byte[]> data) throws IOException {
+			Object id = this.getDbId();
+			if(id==null)
+				id = System.identityHashCode(this);
+			IValue value = entry.getValue();
+			IType type = value.getType();
+			// need to wrap dbId to be consistent across all store implementations
+			boolean wrap = withType && IStore.dbIdName.equals(entry.getKey().toString()) && (type==IntegerType.instance() || type==TextType.instance());
+			if(wrap) {
+				generator.writeStartObject();
+				generator.writeFieldName("type");
+				generator.writeString(value.getType().getTypeName());
+				generator.writeFieldName("value");
+			}
+			value.toJson(context, generator, id, entry.getKey(), withType, data);
+			if(wrap) 
+				generator.writeEndObject();
 	}
 }
 

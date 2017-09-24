@@ -38,6 +38,14 @@ public class VersionType extends NativeType {
 	}
 
 	@Override
+	public IValue convertJavaValueToIValue(Context context, Object value) {
+        if (value instanceof PromptoVersion)
+            return new Version((PromptoVersion)value);
+        else
+            return super.convertJavaValueToIValue(context, value);
+	}
+	
+	@Override
 	public IType checkCompare(Context context, IType other, ISection section) {
 		if (other instanceof VersionType)
 			return BooleanType.instance();
@@ -68,7 +76,7 @@ public class VersionType extends NativeType {
 	
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
-		PromptoVersion version = PromptoVersion.parse(value.asText());
+		PromptoVersion version = PromptoVersion.parse(value.get("value").asText());
 		return new Version(version);
 	}
 }

@@ -1,3 +1,4 @@
+define version as storable Version attribute
 define author as storable Text attribute
 define prototype as storable Text attribute
 define dialect as storable Text attribute with key index
