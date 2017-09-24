@@ -27,6 +27,7 @@ import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDate;
 import prompto.intrinsic.PromptoDateTime;
 import prompto.intrinsic.PromptoTime;
+import prompto.intrinsic.PromptoVersion;
 import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
@@ -46,6 +47,7 @@ import prompto.value.IValue;
 import prompto.value.Integer;
 import prompto.value.Text;
 import prompto.value.Time;
+import prompto.value.Version;
 
 public class CompareExpression extends Section implements IPredicateExpression, IAssertion {
 
@@ -112,6 +114,7 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 		map.put(PromptoDate.class, Date::compileCompareTo); 
 		map.put(PromptoDateTime.class, DateTime::compileCompareTo); 
 		map.put(PromptoTime.class, Time::compileCompareTo); 
+		map.put(PromptoVersion.class, Version::compileCompareTo); 
 		return map;
 	}
 

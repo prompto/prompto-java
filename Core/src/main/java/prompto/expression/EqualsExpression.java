@@ -35,6 +35,7 @@ import prompto.intrinsic.PromptoPeriod;
 import prompto.intrinsic.PromptoRange;
 import prompto.intrinsic.PromptoSet;
 import prompto.intrinsic.PromptoTime;
+import prompto.intrinsic.PromptoVersion;
 import prompto.literal.NullLiteral;
 import prompto.runtime.Context;
 import prompto.runtime.LinkedValue;
@@ -65,6 +66,7 @@ import prompto.value.SetValue;
 import prompto.value.Text;
 import prompto.value.Time;
 import prompto.value.TypeValue;
+import prompto.value.Version;
 
 public class EqualsExpression implements IPredicateExpression, IAssertion {
 
@@ -394,6 +396,7 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 		map.put(PromptoDateTime.class, DateTime::compileEquals); 
 		map.put(PromptoTime.class, Time::compileEquals); 
 		map.put(PromptoPeriod.class, Period::compileEquals); 
+		map.put(PromptoVersion.class, Version::compileEquals); 
 		map.put(PromptoDict.class, Dictionary::compileEquals);
 		map.put(PromptoSet.class, SetValue::compileEquals);  /*
 		map.put(PromptoTuple.class, TupleValue::compileEquals); */
