@@ -52,7 +52,7 @@ define Url as native resource with attributes path and encoding, and bindings:
 		Python3: Url from module: prompto.internet.Url
 		JavaScript: Url from module: prompto/internet/Url.js
 
-define "reads from www.google.com" as test method doing:
+define "reads from www.html5rocks.com" as test method doing:
 	// need a cross-domain enabled page for browser testing
 	content = read all from Url with "https://www.google.com/" as path
 and verifying: 
