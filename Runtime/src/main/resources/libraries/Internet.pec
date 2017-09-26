@@ -3,14 +3,14 @@ define htmlEncode as native method receiving Text value returning Text doing:
 	C#: return System.Net.WebUtility.HtmlEncode(value);
 	Python2: return escape(value) from module: cgi
 	Python3: return escape(value) from module: html
-	JavaScript: return Encoder.htmlEncode(value); from module: prompto/internet/Html.js
+	JavaScript: return htmlEncode(value); from module: prompto/internet/Html.js
 
 define htmlDecode as native method receiving Text value returning Text doing:
 	Java: return prompto.internet.Html.decode(value);
 	C#: return System.Net.WebUtility.HtmlDecode(value);
 	Python2: return HTMLParser().unescape(value) from module: HTMLParser
 	Python3: return unescape(value) from module: html.parser
-	JavaScript: return Encoder.htmlDecode(value); from module: prompto/internet/Html.js
+	JavaScript: return htmlDecode(value); from module: prompto/internet/Html.js
 
 
 define "encode Html entity" as test method doing:
@@ -52,7 +52,7 @@ define Url as native resource with attributes path and encoding, and bindings:
 		Python3: Url from module: prompto.internet.Url
 		JavaScript: Url from module: prompto/internet/Url.js
 
-define "reads from www.google.com" as test method doing:
+define "reads from www.html5rocks.com" as test method doing:
 	// need a cross-domain enabled page for browser testing
 	content = read all from Url with "https://www.google.com/" as path
 and verifying: 
