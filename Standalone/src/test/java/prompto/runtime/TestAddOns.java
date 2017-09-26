@@ -23,7 +23,7 @@ public class TestAddOns {
 		String addOns = getAwsAddOns(jar);
 		URL url = Thread.currentThread().getContextClassLoader().getResource("awsClient.pec");
 		String[] args = new String[] {
-				"-application", "test", 
+				"-applicationName", "test", 
 				"-testMode", "true", 
 				"-resourceURLs", "\"" + url.toExternalForm() + "\"",
 				"-addOnURLs", "\"" + addOns + "\"",
