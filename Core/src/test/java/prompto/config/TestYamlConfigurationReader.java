@@ -1,10 +1,14 @@
 package prompto.config;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
 
 import org.junit.Test;
@@ -73,6 +77,18 @@ public class TestYamlConfigurationReader {
 		}
 	}
 	
+	@Test
+	public void testThatReaderReadsObjectsArray() throws IOException  {
+		try(InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("sample.yml")) {
+			IConfigurationReader reader = new YamlConfigurationReader(input);
+			Collection<IConfigurationReader> list = reader.getObjectsArray("objectsArray");
+			assertEquals(2, list.size());
+			IConfigurationReader item = list.iterator().next();
+			assertEquals("abc", item.getString("key"));
+			assertEquals("def", item.getString("value"));
+		}
+	}
+
 	@Test
 	public void testThatReaderReadsImported() throws IOException  {
 		try(InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("sample.yml")) {

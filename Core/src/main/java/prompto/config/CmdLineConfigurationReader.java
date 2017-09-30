@@ -1,6 +1,7 @@
 package prompto.config;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -37,7 +38,7 @@ public class CmdLineConfigurationReader implements IConfigurationReader {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> List<T> getArray(String key) {
+	public <T> Collection<T> getArray(String key) {
 		String value = argsMap.get(key);
 		if(value==null)
 			return null;
@@ -53,6 +54,11 @@ public class CmdLineConfigurationReader implements IConfigurationReader {
 				.filter((e)->e.getKey().startsWith(prefix))
 				.collect(Collectors.toMap(e->e.getKey().substring(prefix.length()), e->e.getValue()));
 		return subMap.isEmpty() ? null : new CmdLineConfigurationReader(subMap);
+	}
+	
+	@Override
+	public Collection<IConfigurationReader> getObjectsArray(String key) {
+		throw new UnsupportedOperationException();
 	}
 
 }

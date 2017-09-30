@@ -2,9 +2,11 @@ package prompto.config;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.esotericsoftware.yamlbeans.YamlReader;
 
@@ -57,7 +59,7 @@ public class YamlConfigurationReader implements IConfigurationReader {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> List<T> getArray(String key) {
+	public <T> Collection<T> getArray(String key) {
 		Object value = data.get(key);
 		if(value instanceof List)
 			return (List<T>) value;
@@ -65,6 +67,20 @@ public class YamlConfigurationReader implements IConfigurationReader {
 			return null;
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public Collection<IConfigurationReader> getObjectsArray(String key) {
+		Object value = data.get(key);
+		if(value instanceof List) {
+			return (Collection<IConfigurationReader>)((List)value).stream()
+					.filter(o -> o instanceof Map)
+					.map(o -> (Map<String, Object>)o)
+					.map(m -> new YamlConfigurationReader((Map<String, Object>)m))
+					.collect(Collectors.toList());
+		} else
+			return null;
+	}
+		
 	@SuppressWarnings("unchecked")
 	@Override
 	public IConfigurationReader getObject(String key) {

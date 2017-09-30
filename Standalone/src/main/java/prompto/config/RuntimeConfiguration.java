@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import prompto.intrinsic.PromptoVersion;
 
@@ -84,14 +85,14 @@ public class RuntimeConfiguration implements IRuntimeConfiguration {
 	}
 	
 	private URL[] getURLs(String key) {
-		List<Object> list = reader.getArray(key);
+		Collection<Object> list = reader.getArray(key);
 		if(list==null || list.isEmpty())
 			return null;
-		URL[] urls = new URL[list.size()];
-		for(int i=0;i<urls.length;i++) {
-			urls[i] = convertToURL(list.get(i).toString());
-		}
-		return urls;
+		List<URL> urls = list.stream()
+				.map(Object::toString)
+				.map(RuntimeConfiguration::convertToURL)
+				.collect(Collectors.toList());
+		return urls.toArray(new URL[urls.size()]);
 	}
 
 	private static URL convertToURL(String resourceName) {

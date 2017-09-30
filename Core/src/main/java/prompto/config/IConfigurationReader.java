@@ -1,6 +1,6 @@
 package prompto.config;
 
-import java.util.List;
+import java.util.Collection;
 
 import prompto.security.IKeyStoreFactory;
 import prompto.security.ISecretKeyFactory;
@@ -23,8 +23,9 @@ public interface IConfigurationReader {
 		Integer read = getInteger(key);
 		return read==null ? value : read.intValue();
 	}
-	<T extends Object> List<T> getArray(String key);
+	<T extends Object> Collection<T> getArray(String key);
 	IConfigurationReader getObject(String key);
+	Collection<IConfigurationReader> getObjectsArray(String key);
 	default IStoreConfiguration readStoreConfiguration(String key) {
 		IConfigurationReader child = getObject(key);
 		if(child==null)
@@ -73,4 +74,5 @@ public interface IConfigurationReader {
 			throw new RuntimeException(e);
 		}
 	}
+	
 }
