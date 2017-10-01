@@ -30,6 +30,7 @@ public class YamlConfigurationReader implements IConfigurationReader {
 	
 	@SuppressWarnings("unchecked")
 	public YamlConfigurationReader(Map<String, Object> data) {
+		/// TODO remove once yamlbeans is upgraded
 		if(data.containsKey("<<")) {
 			this.data = new HashMap<String, Object>();
 			this.data.putAll((Map<String, Object>)data.get("<<"));

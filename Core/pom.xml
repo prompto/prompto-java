@@ -138,9 +138,14 @@
 			<version>${jackson-version}</version>
 		</dependency>
 		<dependency>
-		    <groupId>com.esotericsoftware.yamlbeans</groupId>
-		    <artifactId>yamlbeans</artifactId>
-		    <version>1.12</version>
+			<groupId>com.esotericsoftware.yamlbeans</groupId>
+			<artifactId>yamlbeans</artifactId>
+			<version>1.12</version>
+		</dependency>
+		<dependency>
+			<groupId>com.esotericsoftware.yamlbeans</groupId>
+			<artifactId>yamlbeans</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.stefanbirkner</groupId>
