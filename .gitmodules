@@ -4,3 +4,7 @@
 [submodule "prompto-libraries"]
 	path = prompto-libraries
 	url = https://ericvergnaud@github.com/prompto/prompto-libraries.git
+[submodule "yamlbeans"]
+	path = yamlbeans
+	url = https://ericvergnaud@github.com/ericvergnaud/yamlbeans.git
+	branch = merged-branch
