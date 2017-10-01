@@ -34,7 +34,6 @@ public class TestYamlUtils {
 				YamlDocument yaml = new YamlDocumentReader(reader).read();
 				try(Writer writer = new FileWriter(targetFile)) {
 					YamlConfig config = new YamlConfig();
-					config.writeConfig.setExplicitFirstDocument(yaml.getTag()!=null);
 					config.writeConfig.setWriteClassname(WriteClassName.NEVER);
 					config.writeConfig.setAutoAnchor(false);
 					YamlWriter target = new YamlWriter(writer, config);
