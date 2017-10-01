@@ -20,7 +20,7 @@ public class TestCmdLineConfigurationReader {
 		String[] args = { "-codeStore-factory", MemStoreFactory.class.getName(),
 				"-codeStore-host", "localhost",
 				"-codeStore-port", "27017",
-				"-codeStore-dbName", "ROOT",
+				"-codeStore-dbName", "TOOLS",
 				"-dataStore-factory", MemStoreFactory.class.getName(),
 				"-dataStore-host", "localhost",
 				"-dataStore-port", "27017",
@@ -46,7 +46,7 @@ public class TestCmdLineConfigurationReader {
 		assertEquals(MemStoreFactory.class.getName(), store.getFactory());
 		assertEquals("localhost", store.getHost());
 		assertEquals(27017, store.getPort().intValue());
-		assertEquals("ROOT", store.getDbName());
+		assertEquals("TOOLS", store.getDbName());
 		store = config.getDataStoreConfiguration();
 		assertNotNull(store);
 		assertEquals(MemStoreFactory.class.getName(), store.getFactory());
