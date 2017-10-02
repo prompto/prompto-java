@@ -7,4 +7,3 @@
 [submodule "yamlbeans"]
 	path = yamlbeans
 	url = https://ericvergnaud@github.com/ericvergnaud/yamlbeans.git
-	branch = merged-branch
