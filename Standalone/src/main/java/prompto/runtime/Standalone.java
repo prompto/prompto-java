@@ -81,7 +81,7 @@ public abstract class Standalone {
 
 
 	private static IStandaloneConfiguration loadConfiguration(String[] args) throws FileNotFoundException {
-		Map<String, String> argsMap = CmdLineParser.parse(args);
+		Map<String, String> argsMap = CmdLineParser.read(args);
 		IConfigurationReader reader = readerFromArgs(argsMap);
 		IStandaloneConfiguration config = new StandaloneConfiguration(reader, argsMap);
 		config.setRuntimeLibsSupplier(()->Libraries.getPromptoLibraries(Libraries.class));

@@ -21,13 +21,16 @@ import prompto.utils.ArgsParser.STRINGContext;
 
 public class CmdLineParser {
 
-	public static Map<String,String> parse(String[] args) {
+	public static Map<String,String> read(String[] args) {
 		Map<String,String> map = new HashMap<String,String>();
-		for(int i=0, max=args.length; i<max; i+=2) {
+		for(int i=0, max=args.length; i<max; i++) {
 			String key = args[i];
-			if(key.startsWith("-"))
+			if(i==0 && key.endsWith(".jar"))
+				map.put("jar", key);
+			else if(key.startsWith("-") && i<args.length-1) {
 				key = key.substring(1);
-			map.put(key, args[i+1]);
+				map.put(key, args[++i]);
+			} 
 		}
 		return map;
 	}

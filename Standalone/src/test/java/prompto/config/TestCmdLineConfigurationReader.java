@@ -30,7 +30,7 @@ public class TestCmdLineConfigurationReader {
 				"-applicationVersion", "1.2.31.7",
 				"-mainMethod", "myMethod" };
 		
-		Map<String, String> argsMap = CmdLineParser.parse(args);
+		Map<String, String> argsMap = CmdLineParser.read(args);
 		IConfigurationReader reader = new CmdLineConfigurationReader(argsMap);
 		IStandaloneConfiguration config = new StandaloneConfiguration(reader, argsMap);
 		// simple values
