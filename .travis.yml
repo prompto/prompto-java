@@ -4,5 +4,5 @@ jdk:
   - oraclejdk8
 install:
   # need to install yamlbeans in local repo 
-  - mvn install -f yamlbeans/pom.xml -DskipTests=true -B -V -q
+  - mvn install -f yamlbeans/pom.xml -DskipTests=true -B -V
   
