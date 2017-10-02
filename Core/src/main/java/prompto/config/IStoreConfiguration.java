@@ -1,5 +1,7 @@
 package prompto.config;
 
+import java.util.function.Supplier;
+
 import prompto.nullstore.NullStoreFactory;
 
 public interface IStoreConfiguration {
@@ -21,5 +23,27 @@ public interface IStoreConfiguration {
 		@Override public ISecretKeyConfiguration getSecretKeyConfiguration() { return null; }
 		@Override public IStoreConfiguration withDbName(String dbName) { return null; }
 	};
+	
+	public class Inline implements IStoreConfiguration {
+
+		Supplier<String> factory = ()->null;
+		Supplier<String> host = ()->null;
+		protected Supplier<Integer> port = ()->null;
+		Supplier<String> dbName = ()->null;
+		Supplier<String> user = ()->null;
+		Supplier<ISecretKeyConfiguration> secretKey = ()->null;
+		
+		@Override public String getFactory() { return factory.get(); }
+		@Override public String getHost() { return host.get(); }
+		@Override public Integer getPort() { return port.get(); }
+		@Override public String getDbName() { return dbName.get(); }
+		@Override public String getUser() { return user.get(); }
+		@Override public ISecretKeyConfiguration getSecretKeyConfiguration() { return secretKey.get(); }
+		@Override public IStoreConfiguration withDbName(String dbName) {
+			this.dbName = ()->dbName;
+			return this;
+		}
+		
+	}
 
 }

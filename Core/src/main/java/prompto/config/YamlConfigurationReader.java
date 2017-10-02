@@ -41,6 +41,11 @@ public class YamlConfigurationReader implements IConfigurationReader {
 	}
 	
 	@Override
+	public String toString() {
+		return data.toString();
+	}
+	
+	@Override
 	public String getString(String key) {
 		Object value = data.get(key);
 		return value==null ? null : value.toString();
