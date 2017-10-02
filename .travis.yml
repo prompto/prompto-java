@@ -5,4 +5,5 @@ jdk:
 install:
   # need to install yamlbeans in local repo 
   - mvn install -f yamlbeans/pom.xml -DskipTests=true -B -V -q
-  
+script:
+  - mvn install -B -V -q # -DskipTests=true 
