@@ -25,7 +25,8 @@ public interface IRuntimeConfiguration {
 	<T extends IRuntimeConfiguration> T withApplicationName(String name);
 	<T extends IRuntimeConfiguration> T withApplicationVersion(PromptoVersion version);
 	<T extends IRuntimeConfiguration> T withResourceURLs(URL[] resourceURLs);
-	<T extends IRuntimeConfiguration> T withTestMode(boolean testMode);
+	<T extends IRuntimeConfiguration> T withTestMode(boolean set);
+	<T extends IRuntimeConfiguration> T withLoadRuntime(boolean set);
 
 
 	@SuppressWarnings("unchecked")
@@ -36,8 +37,8 @@ public interface IRuntimeConfiguration {
 		Supplier<IDebugConfiguration> debugConfiguration = ()->null;
 		Supplier<IStoreConfiguration> codeStoreConfiguration = ()->null;
 		Supplier<IStoreConfiguration> dataStoreConfiguration = ()->null;
-		Supplier<Boolean> testMode = ()->null;
-		Supplier<Boolean> loadRuntime = ()->null;
+		Supplier<Boolean> testMode = ()->false;
+		Supplier<Boolean> loadRuntime = ()->true;
 		Supplier<URL[]> addOnURLs = ()->null;
 		Supplier<URL[]> resourceURLs = ()->null;
 		Supplier<String> applicationName = ()->null;
@@ -88,6 +89,12 @@ public interface IRuntimeConfiguration {
 		@Override
 		public <T extends IRuntimeConfiguration> T withTestMode(boolean mode) {
 			this.testMode = ()->mode;
+			return (T)this;
+		}
+		
+		@Override
+		public <T extends IRuntimeConfiguration> T withLoadRuntime(boolean set) {
+			this.loadRuntime = ()->set;
 			return (T)this;
 		}
 		
