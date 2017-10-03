@@ -84,8 +84,7 @@ public abstract class Standalone {
 		Map<String, String> argsMap = CmdLineParser.read(args);
 		IConfigurationReader reader = readerFromArgs(argsMap);
 		IStandaloneConfiguration config = new StandaloneConfiguration(reader, argsMap);
-		config.setRuntimeLibsSupplier(()->Libraries.getPromptoLibraries(Libraries.class));
-		return config;
+		return config.withRuntimeLibs(()->Libraries.getPromptoLibraries(Libraries.class));
 	}
 
 
@@ -224,7 +223,7 @@ public abstract class Standalone {
 
 	private static ICodeStore newQueryableCodeStore(IStore store, IRuntimeConfiguration config) {
 		return new QueryableCodeStore(store, 
-				config.getRuntimeLibsSupplier(), 
+				config.getRuntimeLibs(), 
 				config.getApplicationName(), 
 				config.getApplicationVersion(), 
 				config.getAddOnURLs(), 

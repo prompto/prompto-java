@@ -6,85 +6,40 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import prompto.intrinsic.PromptoVersion;
 
-public class RuntimeConfiguration implements IRuntimeConfiguration {
+public class RuntimeConfiguration extends IRuntimeConfiguration.Inline {
 
 	IConfigurationReader reader;
-	Map<String, String> arguments;
-	Supplier<Collection<URL>> runtimeLibsSupplier;
+	
 	
 	protected RuntimeConfiguration(IConfigurationReader reader, Map<String, String> arguments) {
 		this.reader = reader;
-		this.arguments = arguments;
+		this.applicationName = ()->reader.getString("applicationName");
+		this.applicationVersion = ()->readApplicationVersion();
+		this.codeStoreConfiguration = ()->reader.readStoreConfiguration("codeStore");
+		this.dataStoreConfiguration = ()->reader.readStoreConfiguration("dataStore");
+		this.arguments = ()->arguments;
+		this.addOnURLs = ()->readURLs("addOnURLs");
+		this.resourceURLs = ()->readURLs("resourceURLs");
+		this.debugConfiguration = ()->readDebugConfiguration();
+		this.testMode = ()->reader.getBooleanOrDefault("testMode", false);
+		this.loadRuntime = ()->reader.getBooleanOrDefault("loadRuntime", true);
 	}
 	
-	@Override
-	public IDebugConfiguration getDebugConfiguration() {
+	private IDebugConfiguration readDebugConfiguration() {
 		IConfigurationReader child = reader.getObject("debug");
 		return child==null ? null : new DebugConfiguration(child);
 	}
 	
-	@Override
-	public IStoreConfiguration getCodeStoreConfiguration() {
-		return reader.readStoreConfiguration("codeStore");
-	}
-	
-	@Override
-	public IStoreConfiguration getDataStoreConfiguration() {
-		return reader.readStoreConfiguration("dataStore");
-	}
-	
-	@Override
-	public Supplier<Collection<URL>> getRuntimeLibsSupplier() {
-		return this.runtimeLibsSupplier;
-	}
-	
-	@Override
-	public void setRuntimeLibsSupplier(Supplier<Collection<URL>> supplier) {
-		this.runtimeLibsSupplier = supplier;
-	}
-	
-	@Override
-	public Map<String, String> getArguments() {
-		return arguments;
-	}
-
-	@Override
-	public boolean isTestMode() {
-		return reader.getBooleanOrDefault("testMode", false);
-	}
-	
-	@Override
-	public boolean isLoadRuntime() {
-		return reader.getBooleanOrDefault("loadRuntime", true);
-	}
-
-	@Override
-	public URL[] getAddOnURLs() {
-		return getURLs("addOnURLs");
-	}
-
-	@Override
-	public String getApplicationName() {
-		return reader.getString("applicationName");
-	}
-
-	@Override
-	public PromptoVersion getApplicationVersion() {
+	private PromptoVersion readApplicationVersion() {
 		String version = reader.getString("applicationVersion");
 		return version==null ? PromptoVersion.LATEST : PromptoVersion.parse(version);
 	}
 
-	@Override
-	public URL[] getResourceURLs() {
-		return getURLs("resourceURLs");
-	}
-	
-	private URL[] getURLs(String key) {
+	private URL[] readURLs(String key) {
 		Collection<Object> list = reader.getArray(key);
 		if(list==null || list.isEmpty())
 			return null;
