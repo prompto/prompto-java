@@ -100,12 +100,12 @@ public abstract class Standalone {
 		// initialize code store
 		IStoreConfiguration tmp = config.getCodeStoreConfiguration();
 		final IStoreConfiguration cfg = tmp != null ? tmp : config.isLoadRuntime() ? null : IStoreConfiguration.NULL_STORE_CONFIG; // only use MemStore if required
-		logger.info(()->"Using " + (cfg==null ? "MemStore" : cfg.toString()) + " as code store");
+		logger.debug(()->"Using " + (cfg==null ? "MemStore" : cfg.toString()) + " as code store");
 		IStore store = IStoreFactory.newStoreFromConfig(cfg);
 		ICodeStore codeStore = bootstrapCodeStore(store, config);
 		// initialize data store
 		final IStoreConfiguration cfg2 = config.getDataStoreConfiguration();
-		logger.info(()->"Using " + (cfg2==null ? "MemStore" : cfg2.toString()) + " as data store");
+		logger.debug(()->"Using " + (cfg2==null ? "MemStore" : cfg2.toString()) + " as data store");
 		store = IStoreFactory.newStoreFromConfig(cfg2);
 		IStore dataStore = bootstrapDataStore(store);
 		synchronizeSchema(codeStore, dataStore);

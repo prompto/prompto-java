@@ -83,7 +83,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 		try {
 			ICodeStore runtime = null;
 			if(runtimeSupplier!=null) for(URL resource : runtimeSupplier.get()) {
-				logger.info(()->"Connecting to " + resource.toExternalForm());
+				logger.info(()->"Connecting to library: " + resource.toExternalForm());
 				runtime = new ImmutableCodeStore(runtime, ModuleType.LIBRARY, resource, PromptoVersion.parse("1.0.0"));
 			}
 			return runtime;
