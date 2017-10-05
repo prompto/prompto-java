@@ -24,7 +24,7 @@ public class TestCmdLineConfigurationReader {
 				"-dataStore-factory", MemStoreFactory.class.getName(),
 				"-dataStore-host", "localhost",
 				"-dataStore-port", "27017",
-				"-dataStore-dbName", "CODE",
+				"-dataStore-dbName", "APPS",
 				"-resourceURLs", "awsClient.pec",
 				"-applicationName", "dev-center",
 				"-applicationVersion", "1.2.31.7",
@@ -52,6 +52,6 @@ public class TestCmdLineConfigurationReader {
 		assertEquals(MemStoreFactory.class.getName(), store.getFactory());
 		assertEquals("localhost", store.getHost());
 		assertEquals(27017, store.getPort().intValue());
-		assertEquals("CODE", store.getDbName());
+		assertEquals("APPS", store.getDbName());
 	}
 }
