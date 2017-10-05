@@ -12,10 +12,10 @@
         <Logger name="org.apache.solr" level="warn">
             <AppenderRef ref="Console"/>
         </Logger>
-        <Logger name="org.eclipse.jetty" level="info">
+        <Logger name="org.eclipse.jetty" level="warn">
             <AppenderRef ref="Console"/>
         </Logger>
-        <Logger name="org.mongodb" level="info">
+        <Logger name="org.mongodb" level="warn">
             <AppenderRef ref="Console"/>
         </Logger>
          <Logger name="org.mongodb.driver" level="warn">
@@ -24,7 +24,7 @@
         <Logger name="log4j.test.Log4jTest" level="trace">
             <AppenderRef ref="Console"/>
         </Logger>
-        <Root level="trace">
+        <Root level="info">
             <AppenderRef ref="Console"/>
         </Root>
     </Loggers>
