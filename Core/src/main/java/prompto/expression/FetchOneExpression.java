@@ -15,6 +15,7 @@ import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoRoot;
+import prompto.parser.Dialect;
 import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.statement.UnresolvedCall;
@@ -44,6 +45,13 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 		this.predicate = predicate;
 	}
 	
+	@Override
+	public String toString() {
+		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
+		toDialect(writer);
+		return writer.toString();
+	}
+
 	public CategoryType getType() {
 		return type;
 	}
@@ -103,6 +111,12 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 		if(filterType!=BooleanType.instance())
 			throw new SyntaxError("Filtering expression must return a boolean !");
 		return type!=null ? type : AnyType.instance();
+	}
+	
+	@Override
+	public Object fetchRaw(IStore store) {
+		IQuery query = buildFetchOneQuery(Context.newGlobalContext(), store);
+		return store.fetchOne(query);
 	}
 	
 	@Override

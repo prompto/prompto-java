@@ -9,6 +9,7 @@ import prompto.store.IStore;
 public interface IFetchExpression extends IExpression {
 	
 	IValue fetch(Context context, IStore store);
+	Object fetchRaw(IStore store);
 	
 	default IValue interpret(Context context) throws PromptoError {
 		return fetch(context, IDataStore.getInstance());

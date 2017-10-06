@@ -13,6 +13,7 @@ import prompto.error.SyntaxError;
 import prompto.grammar.OrderByClauseList;
 import prompto.intrinsic.IterableWithCounts;
 import prompto.intrinsic.PromptoRoot;
+import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.store.AttributeInfo;
 import prompto.store.Family;
@@ -43,6 +44,14 @@ public class FetchManyExpression extends FetchOneExpression {
 		this.first = first;
 		this.last = last;
 		this.orderBy = orderBy;
+	}
+	
+	
+	@Override
+	public String toString() {
+		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
+		toDialect(writer);
+		return writer.toString();
 	}
 	
 	public void setFirst(IExpression first) {
@@ -193,6 +202,11 @@ public class FetchManyExpression extends FetchOneExpression {
 			throw new SyntaxError("Filtering expression must return a boolean !");
 	}
 
+	@Override
+	public Object fetchRaw(IStore store) {
+		IQuery query = buildFetchManyQuery(Context.newGlobalContext(), store);
+		return store.fetchMany(query);
+	}
 
 	@Override
 	public IValue fetch(Context context, IStore store) throws PromptoError {

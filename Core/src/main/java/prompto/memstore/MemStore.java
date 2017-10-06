@@ -3,11 +3,13 @@ package prompto.memstore;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
@@ -309,6 +311,14 @@ public final class MemStore implements IStore {
 				document = newDocument(dbId);
 			}
 			document.put(name, value);
+		}
+		
+		@Override
+		public Set<String> keySet() throws PromptoError {
+			if(document==null)
+				return Collections.emptySet();
+			else
+				return document.keySet();
 		}
 		
 	}
