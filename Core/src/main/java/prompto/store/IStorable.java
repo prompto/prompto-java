@@ -21,6 +21,7 @@ public interface IStorable {
 		Object getDbId();
 	}
 	
+	@FunctionalInterface
 	public static interface IDbIdListener {
 		void setDbId(Object dbId);
 	}
