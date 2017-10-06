@@ -1,7 +1,7 @@
 define Any as native category with attributes id and text, and bindings:
 
 	define category bindings as:
-		Java: prompto.value.Any
+		Java: java.lang.Object
 		C#: prompto.value.Any
 		Python2: Any from module: prompto.value.Any
 		Python3: Any from module: prompto.value.Any
