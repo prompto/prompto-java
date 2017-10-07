@@ -10,5 +10,5 @@ public interface IStored {
 	Object getDbId();
 	boolean hasData(String name);
 	Object getData(String name) throws PromptoError;
-	Set<String> keySet() throws PromptoError;
+	Set<String> getNames() throws PromptoError;
 }

@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import prompto.error.PromptoError;
@@ -32,6 +33,7 @@ public final class MemStore implements IStore {
 
 	private Map<Long, StorableDocument> documents = new HashMap<>();
 	private AtomicLong lastDbId = new AtomicLong(0);
+	Function<String, AttributeInfo> attributeInfoSupplier;
 	
 	@Override
 	public Class<?> getDbIdClass() {
@@ -54,6 +56,16 @@ public final class MemStore implements IStore {
 	@Override
 	public void createOrUpdateColumns(Collection<AttributeInfo> columns) {
 		// nothing to do
+	}
+	
+	@Override
+	public void setAttributeInfoSupplier(Function<String, AttributeInfo> supplier) {
+		this.attributeInfoSupplier = supplier;
+	}
+	
+	@Override
+	public Function<String, AttributeInfo> getAttributeInfoSupplier() {
+		return attributeInfoSupplier;
 	}
 	
 	@Override
@@ -314,11 +326,15 @@ public final class MemStore implements IStore {
 		}
 		
 		@Override
-		public Set<String> keySet() throws PromptoError {
+		public Set<String> getNames() throws PromptoError {
 			if(document==null)
 				return Collections.emptySet();
-			else
-				return document.keySet();
+			else {
+				Set<String> names = document.keySet();
+				names.remove("category");
+				names.remove("dbId");
+				return names;
+			}
 		}
 		
 	}

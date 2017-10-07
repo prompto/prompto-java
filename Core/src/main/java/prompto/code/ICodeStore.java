@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Map;
+import java.util.stream.StreamSupport;
 
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.DeclarationList;
@@ -17,6 +18,8 @@ import prompto.parser.ECleverParser;
 import prompto.parser.ISection;
 import prompto.parser.OCleverParser;
 import prompto.parser.MCleverParser;
+import prompto.store.AttributeInfo;
+import prompto.store.Family;
 import prompto.type.CategoryType;
 import prompto.utils.ISingleton;
 import prompto.utils.StringUtils;
@@ -151,5 +154,25 @@ public interface ICodeStore {
 	}
 
 	Resource fetchSpecificResource(String path, PromptoVersion version);
+	
+	static AttributeInfo CATEGORY_ATTRIBUTE_INFO = new AttributeInfo("category", Family.TEXT, true, null);
+	
+	default public AttributeInfo fetchAttributeInfo(String name) {
+		if("category".equals(name))
+			return CATEGORY_ATTRIBUTE_INFO;
+		else {
+			Iterable<IDeclaration> decls = fetchLatestDeclarations(name);
+			if(decls==null)
+				return null;
+			else return StreamSupport.stream(decls.spliterator(), false)
+					.filter(d->d instanceof AttributeDeclaration)
+					.map(d->(AttributeDeclaration)d)
+					.map(AttributeDeclaration::getAttributeInfo)
+					.findFirst()
+					.orElse(null);
+		}
+	}
+
+
 
 }
