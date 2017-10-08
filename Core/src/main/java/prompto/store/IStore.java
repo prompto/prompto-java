@@ -3,7 +3,6 @@ package prompto.store;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
 
 import prompto.error.PromptoError;
 import prompto.intrinsic.PromptoBinary;
@@ -16,10 +15,8 @@ public interface IStore {
 	
 	Class<?> getDbIdClass();
 	Object convertToDbId(Object dbId);
-	Family getColumnTypeFamily(String name) throws PromptoError;
-	void createOrUpdateColumns(Collection<AttributeInfo> columns) throws PromptoError;
-	void setAttributeInfoSupplier(Function<String, AttributeInfo> supplier);
-	Function<String, AttributeInfo>  getAttributeInfoSupplier();
+	AttributeInfo getAttributeInfo(String name) throws PromptoError;
+	void createOrUpdateAttributes(Collection<AttributeInfo> attributes) throws PromptoError;
 	
 	default IStorable newStorable(String[] categories, IDbIdListener listener) {
 		return newStorable(Arrays.asList(categories), listener);

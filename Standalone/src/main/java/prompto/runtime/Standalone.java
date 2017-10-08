@@ -203,7 +203,7 @@ public abstract class Standalone {
 		Map<String, AttributeDeclaration> columns = getMinimalDataColumns(dataStore);
 		codeStore.collectStorableAttributes(columns);
 		List<AttributeInfo> infos = columns.values().stream().map((c)->c.getAttributeInfo()).collect(Collectors.toList());
-		dataStore.createOrUpdateColumns(infos);
+		dataStore.createOrUpdateAttributes(infos);
 		logger.info(()->"Schema successfully initialized.");
 	}
 

@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import prompto.error.PromptoError;
@@ -19,7 +18,6 @@ import prompto.intrinsic.PromptoBinary;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoTuple;
 import prompto.store.AttributeInfo;
-import prompto.store.Family;
 import prompto.store.IQuery;
 import prompto.store.IQueryBuilder;
 import prompto.store.IStorable;
@@ -33,7 +31,7 @@ public final class MemStore implements IStore {
 
 	private Map<Long, StorableDocument> documents = new HashMap<>();
 	private AtomicLong lastDbId = new AtomicLong(0);
-	Function<String, AttributeInfo> attributeInfoSupplier;
+	private Map<String, AttributeInfo> attributes = new HashMap<>();
 	
 	@Override
 	public Class<?> getDbIdClass() {
@@ -49,23 +47,13 @@ public final class MemStore implements IStore {
 	}
 	
 	@Override
-	public Family getColumnTypeFamily(String name) {
-		throw new UnsupportedOperationException();
+	public AttributeInfo getAttributeInfo(String name) {
+		return attributes.get(name);
 	}
 	
 	@Override
-	public void createOrUpdateColumns(Collection<AttributeInfo> columns) {
-		// nothing to do
-	}
-	
-	@Override
-	public void setAttributeInfoSupplier(Function<String, AttributeInfo> supplier) {
-		this.attributeInfoSupplier = supplier;
-	}
-	
-	@Override
-	public Function<String, AttributeInfo> getAttributeInfoSupplier() {
-		return attributeInfoSupplier;
+	public void createOrUpdateAttributes(Collection<AttributeInfo> infos) {
+		infos.forEach(i->attributes.put(i.getName(), i));
 	}
 	
 	@Override
