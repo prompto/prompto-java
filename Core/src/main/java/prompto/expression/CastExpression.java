@@ -30,6 +30,11 @@ public class CastExpression implements IExpression {
 	}
 	
 	@Override
+	public String toString() {
+		return expression.toString() + " as " + type.toString();
+	}
+	
+	@Override
 	public IType check(Context context) {
 		IType actual = expression.check(context);
 		// check upcast

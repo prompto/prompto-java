@@ -18,6 +18,11 @@ public class CommentStatement extends BaseStatement {
 	public CommentStatement(String text) {
 		this.text = text;
 	}
+	
+	@Override
+	public String toString() {
+		return text;
+	}
 
 	@Override
 	public IType check(Context context) {

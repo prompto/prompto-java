@@ -25,6 +25,7 @@ import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.IMutable;
 import prompto.intrinsic.PromptoDocument;
+import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.type.CategoryType;
 import prompto.type.DocumentType;
@@ -48,6 +49,13 @@ public class ConstructorExpression implements IExpression {
 	
 	public CategoryType getType() {
 		return type;
+	}
+	
+	@Override
+	public String toString() {
+		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
+		this.toDialect(writer);
+		return writer.toString();
 	}
 	
 	public void setAssignments(ArgumentAssignmentList assignments) {
