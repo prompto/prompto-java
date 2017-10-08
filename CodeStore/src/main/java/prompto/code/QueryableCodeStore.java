@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Supplier;
 
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.DeclarationList;
@@ -25,7 +24,6 @@ import prompto.declaration.IDeclaration;
 import prompto.declaration.IDeclaration.DeclarationType;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
-import prompto.error.ReadWriteError;
 import prompto.expression.AndExpression;
 import prompto.expression.EqualsExpression;
 import prompto.expression.IExpression;
@@ -68,30 +66,15 @@ public class QueryableCodeStore extends BaseCodeStore {
 	// some of these are code store specific and should not be looked for in the app context
 	Context context; 
 	
-	public QueryableCodeStore(IStore store, Supplier<Collection<URL>> runtimeSupplier, String application, PromptoVersion version, URL[] addOns, URL ...resourceNames) throws PromptoError {
+	public QueryableCodeStore(IStore store, ICodeStore runtime, String application, PromptoVersion version, URL[] addOns, URL ...resourceNames) throws PromptoError {
 		super(null);
 		this.store = store;
 		this.application = application;
 		this.version = version;
-		ICodeStore runtime = bootstrapRuntime(runtimeSupplier);
 		this.context = CodeStoreBootstrapper.bootstrap(store, runtime);
 		this.next = AppStoreBootstrapper.bootstrap(store, runtime, application, version, addOns, resourceNames);
 	}
 	
-	protected ICodeStore bootstrapRuntime(Supplier<Collection<URL>> runtimeSupplier) {
-		logger.info(()->"Connecting to prompto runtime libraries...");
-		try {
-			ICodeStore runtime = null;
-			if(runtimeSupplier!=null) for(URL resource : runtimeSupplier.get()) {
-				logger.info(()->"Connecting to library: " + resource.toExternalForm());
-				runtime = new ImmutableCodeStore(runtime, ModuleType.LIBRARY, resource, PromptoVersion.parse("1.0.0"));
-			}
-			return runtime;
-		} catch(RuntimeException e) {
-			throw new ReadWriteError(e.getMessage());
-		}
-	}
-
 	public IStore getStore() {
 		return store;
 	}

@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import prompto.code.ICodeStore;
+import prompto.code.ImmutableCodeStore;
 import prompto.code.QueryableCodeStore;
 import prompto.compiler.PromptoClassLoader;
 import prompto.config.CmdLineConfigurationReader;
@@ -31,6 +32,7 @@ import prompto.intrinsic.PromptoDict;
 import prompto.intrinsic.PromptoVersion;
 import prompto.java.JavaIdentifierExpression;
 import prompto.libraries.Libraries;
+import prompto.memstore.MemStore;
 import prompto.store.AttributeInfo;
 import prompto.store.IDataStore;
 import prompto.store.IStore;
@@ -97,20 +99,29 @@ public abstract class Standalone {
 
 
 	public static void initialize(IRuntimeConfiguration config) throws Throwable {
-		// initialize code store
-		IStoreConfiguration tmp = config.getCodeStoreConfiguration();
-		final IStoreConfiguration cfg = tmp != null ? tmp : config.isLoadRuntime() ? null : IStoreConfiguration.NULL_STORE_CONFIG; // only use MemStore if required
-		logger.debug(()->"Using " + (cfg==null ? "MemStore" : cfg.toString()) + " as code store");
-		IStore store = IStoreFactory.newStoreFromConfig(cfg);
-		ICodeStore codeStore = bootstrapCodeStore(store, config);
-		// initialize data store
-		final IStoreConfiguration cfg2 = config.getDataStoreConfiguration();
-		logger.debug(()->"Using " + (cfg2==null ? "MemStore" : cfg2.toString()) + " as data store");
-		store = IStoreFactory.newStoreFromConfig(cfg2);
-		IStore dataStore = bootstrapDataStore(store);
+		ICodeStore codeStore = initializeCodeStore(config);
+		IStore dataStore = initializeDataStore(config);
 		synchronizeSchema(codeStore, dataStore);
 	}
 	
+	private static ICodeStore initializeCodeStore(IRuntimeConfiguration config) throws Throwable {
+		IStoreConfiguration cfg = config.getCodeStoreConfiguration();
+		// in SEED scenario, cfg is null to ensure latest code from resource is always used
+		// so we use MemStore to stay consistent, but its content will never be persisted 
+		IStore store = cfg==null ? new MemStore() : IStoreFactory.newStoreFromConfig(cfg); 
+		logger.debug(()->"Using " + (cfg==null ? "MemStore" : cfg.toString()) + " as code store");
+		return bootstrapCodeStore(store, config);
+	}
+
+
+	private static IStore initializeDataStore(IRuntimeConfiguration config) throws Throwable {
+		IStoreConfiguration cfg = config.getDataStoreConfiguration();
+		logger.debug(()->"Using " + (cfg==null ? "MemStore" : cfg.toString()) + " as data store");
+		IStore store = IStoreFactory.newStoreFromConfig(cfg);
+		return bootstrapDataStore(store);
+	}
+
+
 	public static Context getGlobalContext() {
 		return globalContext;
 	}
@@ -215,15 +226,16 @@ public abstract class Standalone {
 		JavaIdentifierExpression.registerAddOns(config.getAddOnURLs(), classLoader);
 		logger.info(()->"Class loader initialized.");
 		logger.info(()->"Bootstrapping prompto...");
-		ICodeStore codeStore = newQueryableCodeStore(store, config);
+		ICodeStore runtime = config.getRuntimeLibs() == null ? null : ImmutableCodeStore.bootstrapRuntime(config.getRuntimeLibs());
+		ICodeStore codeStore = newQueryableCodeStore(store, runtime, config);
 		ICodeStore.setInstance(codeStore);
 		logger.info(()->"Bootstrapping successful.");
 		return codeStore;
 	}
 
-	private static ICodeStore newQueryableCodeStore(IStore store, IRuntimeConfiguration config) {
+	private static ICodeStore newQueryableCodeStore(IStore store, ICodeStore runtime, IRuntimeConfiguration config) {
 		return new QueryableCodeStore(store, 
-				config.getRuntimeLibs(), 
+				runtime, 
 				config.getApplicationName(), 
 				config.getApplicationVersion(), 
 				config.getAddOnURLs(), 

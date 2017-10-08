@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.DeclarationList;
@@ -17,14 +18,34 @@ import prompto.declaration.IDeclaration;
 import prompto.declaration.IEnumeratedDeclaration;
 import prompto.error.InvalidResourceError;
 import prompto.error.PromptoError;
+import prompto.error.ReadWriteError;
 import prompto.intrinsic.PromptoVersion;
 import prompto.parser.Dialect;
 import prompto.parser.ISection;
+import prompto.utils.Logger;
 import prompto.utils.SectionLocator;
 
 /* resource/file based code store used to bootstrap modules  */
 public class ImmutableCodeStore extends BaseCodeStore {
 
+	static final Logger logger = new Logger();
+
+	public static ICodeStore bootstrapRuntime(Supplier<Collection<URL>> runtimeSupplier) {
+		logger.info(()->"Connecting to prompto runtime libraries...");
+		try {
+			ICodeStore runtime = null;
+			if(runtimeSupplier!=null) for(URL resource : runtimeSupplier.get()) {
+				logger.info(()->"Connecting to library: " + resource.toExternalForm());
+				runtime = new ImmutableCodeStore(runtime, ModuleType.LIBRARY, resource, PromptoVersion.parse("1.0.0"));
+			}
+			return runtime;
+		} catch(RuntimeException e) {
+			throw new ReadWriteError(e.getMessage());
+		}
+	}
+
+
+	
 	ModuleType type;
 	URL resource;
 	PromptoVersion version;
