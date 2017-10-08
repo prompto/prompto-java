@@ -148,6 +148,46 @@ public class TextType extends NativeType {
 			String value = (String)getValue(context).getStorableData();
 			String toReplace = (String)context.getValue(new Identifier("toReplace")).getStorableData();
 			String replaceWith = (String)context.getValue(new Identifier("replaceWith")).getStorableData();
+			String result = StringUtils.replaceOne(value, toReplace, replaceWith);
+			return new Text(result);
+		};
+		
+		
+		
+		@Override
+		public IType check(Context context, boolean isStart) {
+			return TextType.instance();
+		}
+
+		@Override
+		public void toDialect(CodeWriter writer) {
+			throw new UnsupportedOperationException();
+		}
+		
+		public boolean hasCompileExactInstanceMember() {
+			return true;
+		};
+		
+		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
+			// push arguments on the stack
+			this.compileAssignments(context, method, flags, assignments);
+			// call replace method
+			Descriptor.Method descriptor = new Descriptor.Method(String.class, String.class, String.class, String.class);
+			MethodConstant constant = new MethodConstant(StringUtils.class, "replaceOne", descriptor);
+			method.addInstruction(Opcode.INVOKESTATIC, constant);
+			// done
+			return new ResultInfo(String.class);
+
+		};
+	};
+	
+	static final IMethodDeclaration REPLACE_ALL_METHOD = new BuiltInMethodDeclaration("replaceAll", TO_REPLACE_ARGUMENT, REPLACE_WITH_ARGUMENT) {
+		
+		@Override
+		public IValue interpret(Context context) throws PromptoError {
+			String value = (String)getValue(context).getStorableData();
+			String toReplace = (String)context.getValue(new Identifier("toReplace")).getStorableData();
+			String replaceWith = (String)context.getValue(new Identifier("replaceWith")).getStorableData();
 			String result = value.replace(toReplace, replaceWith);
 			return new Text(result);
 		};
@@ -174,46 +214,6 @@ public class TextType extends NativeType {
 			// call replace method
 			Descriptor.Method descriptor = new Descriptor.Method(CharSequence.class, CharSequence.class, String.class);
 			MethodConstant constant = new MethodConstant(String.class, "replace", descriptor);
-			method.addInstruction(Opcode.INVOKEVIRTUAL, constant);
-			// done
-			return new ResultInfo(String.class);
-
-		};
-	};
-	
-	static final IMethodDeclaration REPLACE_ALL_METHOD = new BuiltInMethodDeclaration("replaceAll", TO_REPLACE_ARGUMENT, REPLACE_WITH_ARGUMENT) {
-		
-		@Override
-		public IValue interpret(Context context) throws PromptoError {
-			String value = (String)getValue(context).getStorableData();
-			String toReplace = (String)context.getValue(new Identifier("toReplace")).getStorableData();
-			String replaceWith = (String)context.getValue(new Identifier("replaceWith")).getStorableData();
-			String result = value.replaceAll(toReplace, replaceWith);
-			return new Text(result);
-		};
-		
-		
-		
-		@Override
-		public IType check(Context context, boolean isStart) {
-			return TextType.instance();
-		}
-
-		@Override
-		public void toDialect(CodeWriter writer) {
-			throw new UnsupportedOperationException();
-		}
-		
-		public boolean hasCompileExactInstanceMember() {
-			return true;
-		};
-		
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
-			// push arguments on the stack
-			this.compileAssignments(context, method, flags, assignments);
-			// call replace method
-			Descriptor.Method descriptor = new Descriptor.Method(CharSequence.class, CharSequence.class, String.class);
-			MethodConstant constant = new MethodConstant(String.class, "replaceAll", descriptor);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, constant);
 			// done
 			return new ResultInfo(String.class);

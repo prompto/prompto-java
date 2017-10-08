@@ -28,5 +28,14 @@ public abstract class StringUtils {
 			list.add(chars[i]);
 		return list.toArray(new Character[chars.length]);
 	}
+	
+	public static String replaceOne(String value, String toReplace, String replaceWith) {
+		int idx = value.indexOf(toReplace);
+		if(idx<0)
+			return value;
+		else
+			return value.substring(0, idx) + replaceWith + value.substring(idx + toReplace.length());
+	}
+
 
 }
