@@ -76,7 +76,7 @@ public class VersionType extends NativeType {
 	
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
-		PromptoVersion version = PromptoVersion.parse(value.get("value").asText());
+		PromptoVersion version = PromptoVersion.parse(value.asText());
 		return new Version(version);
 	}
 }
