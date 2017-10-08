@@ -127,6 +127,11 @@ public class TestBuiltins extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTextReplaceAll() throws Exception {
+		compareResourceOEO("builtins/textReplaceAll.poc");
+	}
+
+	@Test
 	public void testTextSplit() throws Exception {
 		compareResourceOEO("builtins/textSplit.poc");
 	}

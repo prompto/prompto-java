@@ -240,6 +240,16 @@ public class TestBuiltins extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedTextReplaceAll() throws Exception {
+		checkInterpretedOutput("builtins/textReplaceAll.poc");
+	}
+
+	@Test
+	public void testCompiledTextReplaceAll() throws Exception {
+		checkCompiledOutput("builtins/textReplaceAll.poc");
+	}
+
+	@Test
 	public void testInterpretedTextSplit() throws Exception {
 		checkInterpretedOutput("builtins/textSplit.poc");
 	}
