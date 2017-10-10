@@ -30,14 +30,18 @@ public interface IConfigurationReader {
 		IConfigurationReader child = getObject(key);
 		if(child==null)
 			return null;
-		String factoryName = child.getString("factory");
+		else
+			return child.readStoreConfiguration();
+	}
+	default IStoreConfiguration readStoreConfiguration() {
+		String factoryName = getString("factory");
 		if(factoryName==null)
-			return new StoreConfiguration(child);
+			return new StoreConfiguration(this);
 		else try {
 			@SuppressWarnings("unchecked")
 			Class<? extends IStoreFactory> klass = (Class<? extends IStoreFactory>) Class.forName(factoryName);
 			IStoreFactory factory = klass.newInstance();
-			return factory.newConfiguration(child);
+			return factory.newConfiguration(this);
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}

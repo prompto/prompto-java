@@ -34,6 +34,11 @@ public final class MemStore implements IStore {
 	private Map<String, AttributeInfo> attributes = new HashMap<>();
 	
 	@Override
+	public boolean checkConnection() {
+		return true;
+	}
+	
+	@Override
 	public Class<?> getDbIdClass() {
 		return Long.class;
 	}

@@ -1,5 +1,6 @@
 package prompto.config;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Collection;
@@ -8,10 +9,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import prompto.store.IStore;
+import prompto.store.IStoreFactory;
+import prompto.utils.Logger;
+
 import com.esotericsoftware.yamlbeans.YamlReader;
 
 public class YamlConfigurationReader implements IConfigurationReader {
 
+	static Logger logger = new Logger();
+	
 	@SuppressWarnings("unchecked")
 	static Map<String, Object> parseYaml(InputStream input) {
 		try {
@@ -92,6 +99,19 @@ public class YamlConfigurationReader implements IConfigurationReader {
 	public IConfigurationReader getObject(String key) {
 		Object value = data.get(key);
 		return value instanceof Map ? new YamlConfigurationReader((Map<String, Object>)value): null;
+	}
+	
+	public static boolean checkStoreConnection(String yamlConfig) {
+		try {
+			logger.info(()->yamlConfig);
+			IConfigurationReader reader = new YamlConfigurationReader(new ByteArrayInputStream(yamlConfig.getBytes()));
+			IStoreConfiguration storeConfig = reader.readStoreConfiguration();
+			IStore store = IStoreFactory.newStoreFromConfig(storeConfig);
+			return store.checkConnection();
+		} catch(Throwable t) {
+			logger.error(()->"Failed to connect!", t);
+			return false;
+		}
 	}
 	
 }

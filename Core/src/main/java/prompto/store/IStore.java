@@ -13,6 +13,8 @@ public interface IStore {
 	
 	public static final String dbIdName = "dbId";
 	
+	boolean checkConnection();
+
 	Class<?> getDbIdClass();
 	Object convertToDbId(Object dbId);
 	AttributeInfo getAttributeInfo(String name) throws PromptoError;
