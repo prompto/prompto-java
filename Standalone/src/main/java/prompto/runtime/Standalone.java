@@ -205,7 +205,7 @@ public abstract class Standalone {
 	}
 
 	public static IStore bootstrapDataStore(IStore store) {
-		IDataStore.setInstance(store);
+		IDataStore.setGlobal(store);
 		return store;
 	}
 
