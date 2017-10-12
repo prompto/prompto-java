@@ -1,6 +1,7 @@
 package prompto.declaration;
 
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.util.List;
 
 import prompto.compiler.ClassConstant;
@@ -11,10 +12,13 @@ import prompto.compiler.Descriptor;
 import prompto.compiler.FieldConstant;
 import prompto.compiler.FieldInfo;
 import prompto.compiler.Flags;
+import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.PromptoType;
+import prompto.compiler.StackLocal;
+import prompto.compiler.StringConstant;
 import prompto.error.InvalidSymbolError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -153,8 +157,11 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 			ClassFile classFile = new ClassFile(new PromptoType(fullName));
 			classFile.setSuperClass(new ClassConstant(PromptoSymbol.class));
 			compileSymbolFields(context, classFile, new Flags());
+			compileNameField(context, classFile, new Flags());
+			compileValueField(context, classFile, new Flags());
+			compileValueConstructor(context, classFile, new Flags());
+			compileFieldGetters(context, classFile, new Flags());
 			compileClassConstructor(context, classFile, new Flags());
-			CompilerUtils.compileEmptyConstructor(classFile);
 			compileGetSymbolsMethod(context, classFile, new Flags());
 			return classFile;
 		} catch(SyntaxError e) {
@@ -162,34 +169,81 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 		}
 	}
 	
+	private void compileFieldGetters(Context context, ClassFile classFile, Flags flags) {
+		compileFieldGetter(context, classFile, flags, "name", String.class);
+		compileFieldGetter(context, classFile, flags, "value", type.getDerivedFrom().getJavaType(context));
+	}
+	
+	private void compileFieldGetter(Context context, ClassFile classFile, Flags flags, String fieldName, Type fieldType) {
+		String name = CompilerUtils.getterName(fieldName);
+		Descriptor.Method proto = new Descriptor.Method(fieldType);
+		MethodInfo method = classFile.newMethod(name, proto);
+		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
+		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
+		FieldConstant f = new FieldConstant(classFile.getThisClass(), fieldName, fieldType);
+		method.addInstruction(Opcode.GETFIELD, f);
+		method.addInstruction(Opcode.ARETURN, new ClassConstant(fieldType));
+	}
+
 	private void compileSymbolFields(Context context, ClassFile classFile, Flags flags) {
 		getSymbols().forEach((s)->
 			compileSymbolField(context, classFile, flags, s));
 	}
 
-	private java.lang.reflect.Type getSymbolJavaType(Context context) {
-		return type.getDerivedFrom().getJavaType(context);
-	}
-	
 	private void compileSymbolField(Context context, ClassFile classFile, Flags flags, Symbol s) {
-		FieldInfo field = new FieldInfo(s.getName(), getSymbolJavaType(context));
+		FieldInfo field = new FieldInfo(s.getName(), classFile.getThisClass().getType());
 		field.clearModifier(Modifier.PROTECTED);
 		field.addModifier(Modifier.STATIC | Modifier.PUBLIC);
 		classFile.addField(field);
 	}
 	
-	protected void compileClassConstructor(Context context, ClassFile classFile, Flags flags) {
-		MethodInfo method = classFile.newMethod("<clinit>", new Descriptor.Method(void.class));
-		method.addModifier(Modifier.STATIC);
-		for(Symbol s : getSymbols())
-			compilePopulateSymbolField(context, method, flags, s);
+
+	private void compileNameField(Context context, ClassFile classFile, Flags flags) {
+		FieldInfo field = new FieldInfo("name", String.class);
+		field.clearModifier(Modifier.PROTECTED);
+		classFile.addField(field);
+	}
+
+	private void compileValueField(Context context, ClassFile classFile, Flags flags) {
+		FieldInfo field = new FieldInfo("value", type.getDerivedFrom().getJavaType(context));
+		field.clearModifier(Modifier.PROTECTED);
+		classFile.addField(field);
+	}
+	
+	private void compileValueConstructor(Context context, ClassFile classFile, Flags flags) {
+		Descriptor.Method proto = new Descriptor.Method(type.getDerivedFrom().getJavaType(context), void.class);
+		MethodInfo method = classFile.newMethod("<init>", proto);
+		// call super()
+		StackLocal local = method.registerLocal("this", VerifierType.ITEM_UninitializedThis, classFile.getThisClass());
+		CompilerUtils.compileALOAD(method, local);
+		MethodConstant m = new MethodConstant(classFile.getSuperClass(), "<init>", void.class);
+		method.addInstruction(Opcode.INVOKESPECIAL, m);
+		// set field
+		CompilerUtils.compileALOAD(method, local);
+		StackLocal value = method.registerLocal("%value%", VerifierType.ITEM_Object, new ClassConstant(type.getDerivedFrom().getJavaType(context)));
+		CompilerUtils.compileALOAD(method, value);
+		FieldConstant f = new FieldConstant(method.getClassFile().getThisClass(), "value", type.getDerivedFrom().getJavaType(context));
+		method.addInstruction(Opcode.PUTFIELD, f);
+		// done
 		method.addInstruction(Opcode.RETURN);
 	}
 	
-	private void compilePopulateSymbolField(Context context, MethodInfo method, Flags flags, Symbol s) {
-		s.compile(context, method, flags);
-		FieldConstant f = new FieldConstant(method.getClassFile().getThisClass(), s.getName(), getSymbolJavaType(context));
-		method.addInstruction(Opcode.PUTSTATIC, f);
+	protected void compileClassConstructor(Context context, ClassFile classFile, Flags flags) {
+		MethodInfo method = classFile.newMethod("<clinit>", new Descriptor.Method(void.class));
+		method.addModifier(Modifier.STATIC);
+		for(NativeSymbol s : getSymbols())
+			compilePopulateSymbolField(context, classFile, method, flags, s);
+		method.addInstruction(Opcode.RETURN);
+	}
+	
+	private void compilePopulateSymbolField(Context context, ClassFile classFile, MethodInfo method, Flags flags, NativeSymbol symbol) {
+		symbol.compileCallConstructor(context, method, flags); 
+		method.addInstruction(Opcode.DUP);
+		method.addInstruction(Opcode.LDC, new StringConstant(symbol.getName()));
+		FieldConstant field = new FieldConstant(classFile.getThisClass(), "name", String.class);
+		method.addInstruction(Opcode.PUTFIELD, field);
+		field = new FieldConstant(classFile.getThisClass(), symbol.getName(), classFile.getThisClass().getType());
+		method.addInstruction(Opcode.PUTSTATIC, field); 
 	}
 	
 	private void compileGetSymbolsMethod(Context context, ClassFile classFile, Flags flags) {

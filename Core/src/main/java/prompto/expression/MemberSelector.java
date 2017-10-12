@@ -36,7 +36,6 @@ import prompto.utils.CodeWriter;
 import prompto.value.ConcreteInstance;
 import prompto.value.IValue;
 import prompto.value.NullValue;
-import prompto.value.Text;
 
 public class MemberSelector extends SelectorExpression {
 
@@ -91,12 +90,8 @@ public class MemberSelector extends SelectorExpression {
 	public IValue interpret(Context context) throws PromptoError {
         // resolve parent to keep clarity
 		IExpression parent = resolveParent(context);
-        // special case for Symbol which evaluates as value
-		IValue value = interpretSymbol(context, parent);
-		if(value!=null)
-			return value;
         // special case for singletons 
-		value = interpretSingleton(context, parent);
+		IValue value = interpretSingleton(context, parent);
 		if(value!=null)
 			return value;
 		// special case for 'static' type members (like Enum.symbols, Type.name etc...)
@@ -134,45 +129,17 @@ public class MemberSelector extends SelectorExpression {
         return null;
 	}
 
-	private IValue interpretSymbol(Context context, IExpression parent) throws PromptoError {
-       if (parent instanceof SymbolExpression)
-        {
-            if ("name".equals(id.toString()))
-                return new Text(((SymbolExpression)parent).getName().toString());
-            else if("value".equals(id.toString()))
-                return parent.interpret(context);
-        }
- 		return null;
-	}
-
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
         // resolve parent to keep clarity
 		IExpression parent = resolveParent(context);
-        // special case for Symbol which evaluates as value
-		ResultInfo result = compileSymbol(context, method, flags, parent);
-		if(result!=null)
-			return result;
-		else
-			// special case for 'static' type members (like Enum.symbols, Type.name etc...)
-			result = compileTypeMember(context, method, flags, parent);
+		// special case for 'static' type members (like Enum.symbols, Type.name etc...)
+		ResultInfo	result = compileTypeMember(context, method, flags, parent);
 		if(result!=null)
 			return result;
 		else
 			// finally resolve instance member
 			return compileInstanceMember(context, method, flags, parent);		
-	}
-
-	private ResultInfo compileSymbol(Context context, MethodInfo method, Flags flags, IExpression parent) {
-		if (parent instanceof SymbolExpression) {
-			if ("name".equals(id.toString())) {
-				StringConstant c = new StringConstant(((SymbolExpression)parent).getName().toString());
-				method.addInstruction(Opcode.LDC, c);
-				return new ResultInfo(String.class);
-			} else if("value".equals(id.toString()))
-				return parent.compile(context, method, flags);
-		}
-		return null;
 	}
 
 	private ResultInfo compileTypeMember(Context context, MethodInfo method, Flags flags, IExpression parent) {

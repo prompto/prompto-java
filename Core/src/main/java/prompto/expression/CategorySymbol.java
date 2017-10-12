@@ -2,6 +2,7 @@ package prompto.expression;
 
 import java.lang.reflect.Type;
 
+import prompto.argument.AttributeArgument;
 import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
 import prompto.compiler.CompilerUtils;
@@ -19,6 +20,7 @@ import prompto.error.SyntaxError;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
+import prompto.literal.TextLiteral;
 import prompto.runtime.Context;
 import prompto.type.EnumeratedCategoryType;
 import prompto.type.IType;
@@ -129,9 +131,10 @@ public class CategorySymbol extends Symbol implements IExpression  {
 	}
 
 	private void compileAssignments(Context context, MethodInfo method, Flags flags, ResultInfo thisInfo) {
-		if(assignments!=null)
-			for(ArgumentAssignment assignment : assignments)
-				compileAssignment(context, method, flags, thisInfo, assignment);
+		if(assignments!=null) for(ArgumentAssignment assignment : assignments)
+			compileAssignment(context, method, flags, thisInfo, assignment);
+		ArgumentAssignment name = new ArgumentAssignment(new AttributeArgument(new Identifier("name")), new TextLiteral("\"" + getName() + "\""));
+		compileAssignment(context, method, flags, thisInfo, name);
 	}
 	
 	private void compileAssignment(Context context, MethodInfo method, Flags flags, 

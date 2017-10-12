@@ -70,9 +70,9 @@ public class EnumeratedNativeType extends BaseType {
 	public IType checkMember(Context context, Identifier id) {
 		String name = id.toString();
 		if ("symbols".equals(name))
-			return new ListType(derivedFrom);
+			return new ListType(this);
 		else if ("value".equals(name))
-			return this;
+			return derivedFrom;
 		else if ("name".equals(name))
 			return TextType.instance();
 		else
@@ -109,7 +109,7 @@ public class EnumeratedNativeType extends BaseType {
 	
 	@Override
 	public boolean isAssignableFrom(Context context, IType other) {
-		throw new UnsupportedOperationException(); // TODO
+		return this.getTypeName().equals(other.getTypeName());
 	}
 
 	@Override

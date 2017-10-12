@@ -1,7 +1,12 @@
 package prompto.expression;
 
+import java.lang.reflect.Type;
+
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.FieldConstant;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -11,11 +16,11 @@ import prompto.type.EnumeratedNativeType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
+import prompto.value.Text;
 
 public class NativeSymbol extends Symbol implements IExpression {
 	
 	IExpression expression;
-	Object value;
 	
 	public NativeSymbol(Identifier name, IExpression expression) {
 		super(name);
@@ -69,15 +74,43 @@ public class NativeSymbol extends Symbol implements IExpression {
 		return type;
 	}
 	
+	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		return expression.interpret(context);
+		return this;
 	}
 	
+	@Override
+	public IValue getMember(Context context, Identifier name, boolean autoCreate) throws PromptoError {
+		if("name".equals(name.toString()))
+			return new Text(this.getName());
+		else if("value".equals(name.toString()))
+			return expression.interpret(context);
+		else
+			return super.getMember(context, name, autoCreate);
+	}
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		return expression.compile(context, method, flags);
+		Type parentType = getParentJavaType(context);
+		FieldConstant field = new FieldConstant(parentType, this.getId().toString(), parentType);
+		method.addInstruction(Opcode.GETSTATIC, field);
+		return new ResultInfo(parentType);
 	}
 	
+
+	public void compileCallConstructor(Context context, MethodInfo method, Flags flags) {
+		Type type = CompilerUtils.getNativeEnumType(this.getType().getTypeNameId());
+		CompilerUtils.compileNewRawInstance(method, type); 
+		method.addInstruction(Opcode.DUP);
+		ResultInfo info = expression.compile(context, method, flags);
+		CompilerUtils.compileCallConstructor(method, type, info.getType()); 
+	}
+
+	private Type getParentJavaType(Context context) {
+		EnumeratedNativeType itype = (EnumeratedNativeType)this.getType(context);
+		return CompilerUtils.getNativeEnumType(itype.getTypeNameId());
+	}
+	
+
 }

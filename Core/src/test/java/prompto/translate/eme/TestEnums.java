@@ -21,5 +21,15 @@ public class TestEnums extends BaseEParserTest {
 		compareResourceEME("enums/textEnum.pec");
 	}
 
+	@Test
+	public void testTextEnumArg() throws Exception {
+		compareResourceEME("enums/textEnumArg.pec");
+	}
+
+	@Test
+	public void testTextEnumVar() throws Exception {
+		compareResourceEME("enums/textEnumVar.pec");
+	}
+
 }
 

@@ -66,7 +66,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 	
 	@Override
 	public boolean hasAttribute(Context context, Identifier name) {
-		if("name".equals(name))
+		if("name".equals(name.toString()))
 			return true;
 		else
 			return super.hasAttribute(context, name);
@@ -237,6 +237,14 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 	protected void compileMethods(Context context, ClassFile classFile, Flags flags) {
 		compileGetSymbolsMethod(context, classFile, new Flags());
 		super.compileMethods(context, classFile, flags);
+	}
+	
+	@Override
+	protected void compileFields(Context context, ClassFile classFile, Flags flags) {
+		super.compileFields(context, classFile, flags);
+		Identifier name = new Identifier("name");
+		if(!super.hasAttribute(context, name))
+			compileField(context, classFile, flags, name);
 	}
 	
 	private void compileGetSymbolsMethod(Context context, ClassFile classFile, Flags flags) {

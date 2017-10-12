@@ -21,5 +21,15 @@ public class TestEnums extends BaseOParserTest {
 		compareResourceOMO("enums/textEnum.poc");
 	}
 
+	@Test
+	public void testTextEnumArg() throws Exception {
+		compareResourceOMO("enums/textEnumArg.poc");
+	}
+
+	@Test
+	public void testTextEnumVar() throws Exception {
+		compareResourceOMO("enums/textEnumVar.poc");
+	}
+
 }
 

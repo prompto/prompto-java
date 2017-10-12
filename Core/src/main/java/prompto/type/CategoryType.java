@@ -88,10 +88,12 @@ public class CategoryType extends BaseType {
 	
 	@Override
 	public Type getJavaType(Context context) {
-		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, typeNameId);
+		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, typeNameId);
 		if(decl instanceof NativeCategoryDeclaration)
 			return new PromptoType(((NativeCategoryDeclaration) decl).getBoundClassName());
-		else
+		else if(decl instanceof EnumeratedNativeDeclaration)
+			return CompilerUtils.getNativeEnumType(getTypeName());
+		else 
 			return CompilerUtils.getCategoryInterfaceType(getTypeName());
 	}
 	
@@ -207,19 +209,25 @@ public class CategoryType extends BaseType {
 	
 	@Override
     public IType checkMember(Context context, Identifier id) {
-        CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, typeNameId);
-        if (cd == null)
-            throw new SyntaxError("Unknown category:" + typeNameId);
-        if (cd.hasAttribute(context, id)) {
-            AttributeDeclaration ad = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
-            if (ad != null)
-            	return ad.getType(context);
-            else
-                throw new SyntaxError("Missing atttribute:" + id);
-        } else if("text".equals(id.toString()))
-        	return TextType.instance();
-        else
-            throw new SyntaxError("No attribute:" + id + " in category:" + typeNameId);
+        IDeclaration dd = context.getRegisteredDeclaration(IDeclaration.class, typeNameId);
+        if (dd == null)
+            throw new SyntaxError("Unknown type:" + typeNameId);
+        if(dd instanceof EnumeratedNativeDeclaration)
+        	return dd.getType(context).checkMember(context, id);
+        else if(dd instanceof CategoryDeclaration) {
+	        if (((CategoryDeclaration)dd).hasAttribute(context, id)) {
+	            AttributeDeclaration ad = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
+	            if (ad != null)
+	            	return ad.getType(context);
+	            else
+	                throw new SyntaxError("Missing atttribute:" + id);
+	        } else if("text".equals(id.toString()))
+	        	return TextType.instance();
+	        else
+	            throw new SyntaxError("No attribute:" + id + " in category:" + typeNameId);
+        } else
+            throw new SyntaxError("Not a category:" + typeNameId);
+        	
     }
     
 	

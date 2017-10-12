@@ -49,5 +49,25 @@ public class TestEnums extends BaseOParserTest {
 		checkCompiledOutput("enums/textEnum.poc");
 	}
 
+	@Test
+	public void testInterpretedTextEnumArg() throws Exception {
+		checkInterpretedOutput("enums/textEnumArg.poc");
+	}
+
+	@Test
+	public void testCompiledTextEnumArg() throws Exception {
+		checkCompiledOutput("enums/textEnumArg.poc");
+	}
+
+	@Test
+	public void testInterpretedTextEnumVar() throws Exception {
+		checkInterpretedOutput("enums/textEnumVar.poc");
+	}
+
+	@Test
+	public void testCompiledTextEnumVar() throws Exception {
+		checkCompiledOutput("enums/textEnumVar.poc");
+	}
+
 }
 
