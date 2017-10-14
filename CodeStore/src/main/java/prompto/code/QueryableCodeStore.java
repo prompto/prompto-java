@@ -17,17 +17,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.DeclarationList;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IDeclaration.DeclarationType;
+import prompto.declaration.IEnumeratedDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.expression.AndExpression;
 import prompto.expression.EqualsExpression;
 import prompto.expression.IExpression;
 import prompto.expression.IPredicateExpression;
+import prompto.expression.Symbol;
 import prompto.expression.UnresolvedIdentifier;
 import prompto.grammar.EqOp;
 import prompto.grammar.Identifier;
@@ -194,7 +199,21 @@ public class QueryableCodeStore extends BaseCodeStore {
 	    }
 	};
 	
-	Iterable<IDeclaration> fetchRegisteringDeclarations(String name) {
+	
+	@SuppressWarnings("unchecked")
+	private IDeclaration fetchRegisteringSymbol(String name) {
+		return registering.get().values().stream()
+				.map(i->StreamSupport.stream(i.spliterator(), false))
+				.flatMap(Function.identity())
+				.filter(d->d instanceof IEnumeratedDeclaration)
+				.map(d->(IEnumeratedDeclaration<Symbol>)d)
+				.filter(e->e.hasSymbol(name))
+				.findFirst()
+				.orElse(null);
+	}
+
+
+	private Iterable<IDeclaration> fetchRegisteringDeclarations(String name) {
 		return registering.get().get(name);
 	}
 	
@@ -205,7 +224,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 	private void deleteRegisteringDeclarations(String name) {
 		registering.get().remove(name);
 	}
-	
+
 	@Override
 	public Collection<String> fetchDeclarationNames() {
 		// TODO Auto-generated method stub
@@ -239,8 +258,56 @@ public class QueryableCodeStore extends BaseCodeStore {
 	
 	@Override
 	public IDeclaration fetchSpecificSymbol(String name, PromptoVersion version) throws PromptoError {
-		// TODO need to find non resource based symbols
-		return super.fetchSpecificSymbol(name, version);
+		Iterable<IDeclaration> decls = fetchSymbolsInStore(name, version);
+		if(decls==null) {
+			// when called from the AppServer, multiple threads may be attempting to do this
+			// TODO: need to deal with multiple cloud nodes doing this
+			synchronized(this) {
+				decls = fetchSymbolsInStore(name, version);
+				if(decls==null) {
+					IDeclaration decl = fetchRegisteringSymbol(name);
+					if(decl==null) {
+						decl = super.fetchSpecificSymbol(name, version);
+						if(store!=null && decl!=null) {
+							storeRegisteringDeclarations(decl.getName(), Collections.singletonList(decl));
+							decls = storeDeclarations(Collections.singletonList(decl));
+							deleteRegisteringDeclarations(decl.getName());
+							store.flush();
+						}
+					}
+				}
+			}
+		}
+		return decls==null ? null : decls.iterator().next();
+	}
+
+	private Iterable<IDeclaration> fetchSymbolsInStore(String name, PromptoVersion version) {
+		IStoredIterable iterable = fetchStoredDeclarationsBySymbol(name, version);
+		if(iterable.iterator().hasNext()) {
+			Iterator<IStored> iterator = iterable.iterator();
+			return () -> new Iterator<IDeclaration>() {
+				@Override public boolean hasNext() { return iterator.hasNext(); }
+				@Override public IDeclaration next() { return parseDeclaration(iterator.next()); }
+			};
+		} else
+			return null;
+	}
+
+	private IStoredIterable fetchStoredDeclarationsBySymbol(String name, PromptoVersion version) {
+		IQueryBuilder builder = store.newQueryBuilder();
+		AttributeInfo info = new AttributeInfo("category", Family.TEXT, true, null);
+		builder.verify(info, MatchOp.CONTAINS, "EnumeratedDeclaration");
+		info = new AttributeInfo("symbols", Family.TEXT, true, null);
+		builder.verify(info, MatchOp.CONTAINS, name);
+		builder.and();
+		if(PromptoVersion.LATEST.equals(version)) {
+			IdentifierList names = IdentifierList.parse("prototype,version");
+			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
+			orderBy.interpretQuery(context, builder);
+			IStoredIterable stored = store.fetchMany(builder.build());
+			return fetchDistinct(stored);
+		} else
+			return store.fetchMany(builder.build()); 
 	}
 
 	private Iterable<IDeclaration> storeDeclarations(Iterable<IDeclaration> decls) throws PromptoError {
@@ -292,6 +359,13 @@ public class QueryableCodeStore extends BaseCodeStore {
 			String content = writer.toString();
 			storable.setData("body", content);
 			storable.setData("module",  moduleId);
+			if(decl instanceof IEnumeratedDeclaration) {
+				@SuppressWarnings("unchecked")
+				List<String> symbols = ((IEnumeratedDeclaration<Symbol>)decl).getSymbols().stream()
+						.map(Symbol::getSymbol)
+						.collect(Collectors.toList());
+				storable.setData("symbols",  symbols);
+			}
 			return storable;
 		} catch(PromptoError e) {
 			throw new RuntimeException(e);
