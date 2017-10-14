@@ -63,7 +63,8 @@ public class PromptoStoreQuery {
 		if(value==NullValue.instance())
 			return;
 		else if(value instanceof IInstance) try {
-			((IInstance)value).collectStorables((s)->storables.put(s.getOrCreateDbId(), s));
+			((IInstance)value).collectStorables((s)->
+				storables.put(s.getOrCreateDbId(), s));
 		} catch(PromptoError e) {
 			throw new RuntimeException(e);
 		} else if(value instanceof IIterable) {
@@ -102,7 +103,8 @@ public class PromptoStoreQuery {
 		if(value==null)
 			return;
 		else if(value instanceof PromptoRoot)
-			((PromptoRoot)value).collectStorables((s)->storables.put(s.getOrCreateDbId(), s));
+			((PromptoRoot)value).collectStorables((s)->
+				storables.put(s.getOrCreateDbId(), s));
 		else if(value instanceof Iterable) {
 			((Iterable<?>)value).forEach((item)->
 				store(item));

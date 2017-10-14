@@ -20,6 +20,7 @@ import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.declaration.EnumeratedCategoryDeclaration;
 import prompto.declaration.EnumeratedNativeDeclaration;
 import prompto.declaration.IDeclaration;
+import prompto.declaration.IEnumeratedDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.NativeCategoryDeclaration;
 import prompto.declaration.SingletonCategoryDeclaration;
@@ -457,7 +458,9 @@ public class CategoryType extends BaseType {
 	public IValue convertJavaValueToIValue(Context context, Object value) {
 		try {
 			IDeclaration decl = getDeclaration(context);
-			if(decl instanceof CategoryDeclaration)
+			if(decl instanceof IEnumeratedDeclaration)
+				return context.getRegisteredSymbol(new Identifier(value.toString()), true);
+			else if(decl instanceof CategoryDeclaration)
 				return convertJavaValueToPromptoValue(context, (CategoryDeclaration)decl, value);
 		} catch(Exception e) {
 		}

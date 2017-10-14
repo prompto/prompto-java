@@ -13,6 +13,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import prompto.argument.IArgument;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
+import prompto.declaration.EnumeratedCategoryDeclaration;
 import prompto.declaration.GetterMethodDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.SetterMethodDeclaration;
@@ -53,9 +54,12 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	
 	@Override
 	public Object getStorableData() throws NotStorableError {
-		// this is called when storing the instance as a field value, so we just store the dbId
-		// the instance data itself will be collected as part of collectStorables
-		if(this.storable==null)
+		// this is called when storing the instance as a field value
+		// if this is an enum then we simply store the symbol name
+		if(this.declaration instanceof EnumeratedCategoryDeclaration)
+			return values.get(new Identifier("name")).getStorableData();
+		// otherwise we just store the dbId, the instance data itself will be collected as part of collectStorables
+		else if(this.storable==null)
 			throw new NotStorableError();
 		else
 			return this.getOrCreateDbId();
@@ -80,6 +84,8 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 
 	@Override
 	public void collectStorables(Consumer<IStorable> collector) {
+		if(this.declaration instanceof EnumeratedCategoryDeclaration)
+			return;
 		if(storable==null)
 			throw new NotStorableError();
 		if(storable.isDirty()) {

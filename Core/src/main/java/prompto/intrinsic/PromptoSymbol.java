@@ -4,8 +4,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-/* the root class for enumerated symbols */
-public class PromptoSymbol {
+/* the root class for enumerated native symbols */
+public abstract class PromptoSymbol implements PromptoEnum {
 
 	public static List<PromptoSymbol> getSymbols(Class<?> klass) {
 		List<PromptoSymbol> list = new ArrayList<>();
@@ -29,14 +29,6 @@ public class PromptoSymbol {
 			}
 		}
 		return list;
-	}
-	
-	public String getName() {
-		return "";
-	}
-	
-	public Object getValue() {
-		return null;
 	}
 	
 	@Override

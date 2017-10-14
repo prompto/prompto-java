@@ -2,13 +2,16 @@ package prompto.expression;
 
 import java.lang.reflect.Type;
 import java.util.Map;
+import java.util.function.Consumer;
 
+import prompto.error.NotStorableError;
 import prompto.error.PromptoError;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.parser.ISection;
 import prompto.parser.Section;
 import prompto.runtime.Context;
+import prompto.store.IStorable;
 import prompto.type.IType;
 import prompto.value.ISliceable;
 import prompto.value.IValue;
@@ -133,6 +136,11 @@ public abstract class Symbol extends Section implements IExpression, INamed, IVa
 
 	public Type getJavaType(Context context) {
 		throw new UnsupportedOperationException("getJavaType not supported by " + this.getClass().getSimpleName());
+	}
+	
+	@Override
+	public void collectStorables(Consumer<IStorable> collector) throws NotStorableError {
+		// nothing to do
 	}
 
 

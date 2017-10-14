@@ -1,6 +1,7 @@
 package prompto.declaration;
 
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,9 +11,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-
-
-
 
 import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
@@ -37,6 +35,7 @@ import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.grammar.MethodDeclarationList;
 import prompto.grammar.Operator;
+import prompto.intrinsic.PromptoEnum;
 import prompto.intrinsic.PromptoRoot;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
@@ -469,34 +468,42 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		CompilerUtils.compileALOAD(method, $storables);
 		MethodConstant m = new MethodConstant(classFile.getSuperClass(), "collectStorables", Consumer.class, void.class);
 		method.addInstruction(Opcode.INVOKESPECIAL, m);
-		attributes.forEach((id)->{
-			StackState state = method.captureStackState();
-			// call getter 
-			CompilerUtils.compileALOAD(method, $this); 
-			AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
-			FieldInfo field = decl.toFieldInfo(context);
-			MethodConstant mx = new MethodConstant(classFile.getThisClass(), 
-					CompilerUtils.getterName(id.toString()), field.getType());
-			method.addInstruction(Opcode.INVOKEVIRTUAL, mx); 
-			StackLocal $field = method.registerLocal("$" + id.toString(), 
-					VerifierType.ITEM_Object, new ClassConstant(field.getType()));
-			CompilerUtils.compileASTORE(method, $field);
-			// check if null
-			CompilerUtils.compileALOAD(method, $field); 
-			OffsetListenerConstant listener = method.addOffsetListener(new OffsetListenerConstant());
-			method.activateOffsetListener(listener);
-			method.addInstruction(Opcode.IFNULL, listener);
-			// call collectStorables
-			CompilerUtils.compileALOAD(method, $field); 
-			method.addInstruction(Opcode.CHECKCAST, new ClassConstant(PromptoRoot.class));
-			CompilerUtils.compileALOAD(method, $storables);
-			mx = new MethodConstant(PromptoRoot.class, "collectStorables", Consumer.class, void.class);
-			method.addInstruction(Opcode.INVOKEVIRTUAL, mx);
-			method.inhibitOffsetListener(listener);
-			method.restoreFullStackState(state);
-			method.placeLabel(state);
-		});
+		attributes.stream()
+			.filter(id->compilesToPromptoRoot(context, id))
+			.forEach((id)->{
+				StackState state = method.captureStackState();
+				// call getter 
+				CompilerUtils.compileALOAD(method, $this); 
+				AttributeDeclaration attr = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
+				FieldInfo field = attr.toFieldInfo(context);
+				MethodConstant mx = new MethodConstant(classFile.getThisClass(), 
+						CompilerUtils.getterName(id.toString()), field.getType());
+				method.addInstruction(Opcode.INVOKEVIRTUAL, mx); 
+				StackLocal $field = method.registerLocal("$" + id.toString(), 
+						VerifierType.ITEM_Object, new ClassConstant(field.getType()));
+				CompilerUtils.compileASTORE(method, $field);
+				// check if null
+				CompilerUtils.compileALOAD(method, $field); 
+				OffsetListenerConstant listener = method.addOffsetListener(new OffsetListenerConstant());
+				method.activateOffsetListener(listener);
+				method.addInstruction(Opcode.IFNULL, listener);
+				// call collectStorables
+				CompilerUtils.compileALOAD(method, $field); 
+				method.addInstruction(Opcode.CHECKCAST, new ClassConstant(PromptoRoot.class));
+				CompilerUtils.compileALOAD(method, $storables);
+				mx = new MethodConstant(PromptoRoot.class, "collectStorables", Consumer.class, void.class);
+				method.addInstruction(Opcode.INVOKEVIRTUAL, mx);
+				method.inhibitOffsetListener(listener);
+				method.restoreFullStackState(state);
+				method.placeLabel(state);
+			});
 		method.addInstruction(Opcode.RETURN);
+	}
+
+	private boolean compilesToPromptoRoot(Context context, Identifier id) {
+		AttributeDeclaration attr = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
+		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, attr.getType(context).getTypeNameId(), true);
+		return decl instanceof CategoryDeclaration && !(decl instanceof IEnumeratedDeclaration);
 	}
 
 	protected void compileClassConstructor(Context context, ClassFile classFile, Flags flags) {
@@ -904,7 +911,13 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 
 	private void compileConvertFieldToInstance(Context context, MethodInfo method, Flags flags, Identifier id) {
 		IType type = context.getRegisteredDeclaration(AttributeDeclaration.class, id).getType(context);
-		if(type instanceof CategoryType) {
+		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, type.getTypeNameId());
+		if(decl instanceof IEnumeratedDeclaration) {
+			Type symbolType = decl instanceof EnumeratedNativeDeclaration ? CompilerUtils.getNativeEnumType(decl.getId()) : CompilerUtils.getCategoryEnumConcreteType(decl.getId());
+			method.addInstruction(Opcode.LDC, new ClassConstant(symbolType));
+			MethodConstant m = new MethodConstant(PromptoEnum.class, "getInstance", Object.class, Class.class, PromptoEnum.class);
+			method.addInstruction(Opcode.INVOKESTATIC, m);
+		} else if(decl instanceof CategoryDeclaration) {
 			MethodConstant m = new MethodConstant(PromptoRoot.class, "newInstanceFromDbIdRef", Object.class, PromptoRoot.class);
 			method.addInstruction(Opcode.INVOKESTATIC, m);
 		}

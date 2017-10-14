@@ -23,6 +23,7 @@ import prompto.expression.IExpression;
 import prompto.expression.Symbol;
 import prompto.grammar.CategorySymbolList;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoEnum;
 import prompto.intrinsic.PromptoSymbol;
 import prompto.runtime.Context;
 import prompto.type.EnumeratedCategoryType;
@@ -169,6 +170,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 			ClassFile classFile = new ClassFile(concreteType);
 			compileSuperClass(context, classFile, new Flags());
 			compileInterface(context, classFile, new Flags());
+			classFile.addInterface(PromptoEnum.class);
 			compileCategoryField(context, classFile, new Flags());
 			compileSymbolFields(context, classFile, new Flags());
 			compileClassConstructor(context, classFile, new Flags());

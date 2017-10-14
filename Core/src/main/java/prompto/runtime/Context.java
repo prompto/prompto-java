@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import prompto.code.ICodeStore;
@@ -650,19 +651,29 @@ public class Context implements IContext {
 
 
 	public IValue getValue(Identifier id) throws PromptoError {
-		Context context = contextForValue(id);
-		if(context==null)
-			throw new SyntaxError(id + " is not defined");
-		return context.readValue(id);
+		return getValue(id, ()->null);
 	}
 	
 	
-	protected IValue readValue(Identifier name) throws PromptoError {
-		IValue value = values.get(name);
+	public IValue getValue(Identifier id, Supplier<IValue> supplier) throws PromptoError {
+		Context context = contextForValue(id);
+		if(context==null)
+			throw new SyntaxError(id + " is not defined");
+		return context.readValue(id, supplier);
+	}
+	
+	
+	protected IValue readValue(Identifier id, Supplier<IValue> supplier) throws PromptoError {
+		IValue value = values.get(id);
+		if(value==null) {
+			value = supplier.get();
+			if(value!=null)
+				values.put(id, value);
+		}
 		if(value==null)
-			throw new SyntaxError(name + " has no value");
+			throw new SyntaxError(id + " has no value");
 		if(value instanceof LinkedValue)
-			return ((LinkedValue)value).getContext().getValue(name);
+			return ((LinkedValue)value).getContext().getValue(id);
 		else
 			return value;
 	}
@@ -709,32 +720,36 @@ public class Context implements IContext {
 	}
 	
 
-
 	public void enterMethod(IDeclaration method) throws PromptoError {
 		if(debugger!=null)
 			debugger.enterMethod(this, method);
 	}
 
+	
 	public void leaveMethod(IDeclaration method) throws PromptoError {
 		if(debugger!=null)
 			debugger.leaveMethod(this, method);
 	}
 
+	
 	public void enterStatement(IStatement statement) throws PromptoError {
 		if(debugger!=null)
 			debugger.enterStatement(this, statement);
 	}
 
+	
 	public void leaveStatement(IStatement statement) throws PromptoError {
 		if(debugger!=null)
 			debugger.leaveStatement(this, statement);
 	}
 
+	
 	public void notifyTerminated() {
 		if(debugger!=null)
 			debugger.notifyTerminated();
 	}
 
+	
 	public ConcreteInstance loadSingleton(Context context, CategoryType type) throws PromptoError {
 		if(this==globals) {
 			IValue value = values.get(type.getTypeNameId());
@@ -877,7 +892,7 @@ public class Context implements IContext {
 		}
 
 		@Override
-		protected IValue readValue(Identifier name) throws PromptoError {
+		protected IValue readValue(Identifier name, Supplier<IValue> supplier) throws PromptoError {
 			return document.getMember(calling, name, false);
 		}
 		
@@ -968,7 +983,7 @@ public class Context implements IContext {
 		}
 
 		@Override
-		protected IValue readValue(Identifier name) throws PromptoError {
+		protected IValue readValue(Identifier name, Supplier<IValue> supplier) throws PromptoError {
 			return instance.getMember(calling, name, false);
 		}
 		

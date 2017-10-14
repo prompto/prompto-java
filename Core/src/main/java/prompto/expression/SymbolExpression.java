@@ -44,10 +44,13 @@ public class SymbolExpression implements IExpression {
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		Symbol symbol = context.getRegisteredSymbol(id, true);
-		if(symbol==null)
-			throw new SyntaxError("Unknown symbol:" + id);
-		return symbol.interpret(context);			
+		Context gc = context.getGlobalContext();
+		return gc.getValue(id, ()-> {
+			Symbol symbol = gc.getRegisteredSymbol(id, true);
+			if(symbol==null)
+				throw new SyntaxError("Unknown symbol:" + id);
+			return symbol.interpret(context);	
+		});
 	}
 	
 	@Override

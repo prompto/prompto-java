@@ -87,7 +87,9 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMuta
 	
 	
 	public static Object getStorableData(Object value) {
-		if(value instanceof PromptoRoot)
+		if(value instanceof PromptoEnum)
+			return ((PromptoEnum)value).getName();
+		else if(value instanceof PromptoRoot)
 			return ((PromptoRoot)value).getStorableData();
 		else
 			return null;

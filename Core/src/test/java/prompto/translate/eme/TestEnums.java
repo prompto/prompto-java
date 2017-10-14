@@ -17,6 +17,21 @@ public class TestEnums extends BaseEParserTest {
 	}
 
 	@Test
+	public void testStoreCategoryEnum() throws Exception {
+		compareResourceEME("enums/storeCategoryEnum.pec");
+	}
+
+	@Test
+	public void testStoreIntegerEnum() throws Exception {
+		compareResourceEME("enums/storeIntegerEnum.pec");
+	}
+
+	@Test
+	public void testStoreTextEnum() throws Exception {
+		compareResourceEME("enums/storeTextEnum.pec");
+	}
+
+	@Test
 	public void testTextEnum() throws Exception {
 		compareResourceEME("enums/textEnum.pec");
 	}

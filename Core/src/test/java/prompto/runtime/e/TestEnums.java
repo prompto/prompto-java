@@ -40,6 +40,36 @@ public class TestEnums extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedStoreCategoryEnum() throws Exception {
+		checkInterpretedOutput("enums/storeCategoryEnum.pec");
+	}
+
+	@Test
+	public void testCompiledStoreCategoryEnum() throws Exception {
+		checkCompiledOutput("enums/storeCategoryEnum.pec");
+	}
+
+	@Test
+	public void testInterpretedStoreIntegerEnum() throws Exception {
+		checkInterpretedOutput("enums/storeIntegerEnum.pec");
+	}
+
+	@Test
+	public void testCompiledStoreIntegerEnum() throws Exception {
+		checkCompiledOutput("enums/storeIntegerEnum.pec");
+	}
+
+	@Test
+	public void testInterpretedStoreTextEnum() throws Exception {
+		checkInterpretedOutput("enums/storeTextEnum.pec");
+	}
+
+	@Test
+	public void testCompiledStoreTextEnum() throws Exception {
+		checkCompiledOutput("enums/storeTextEnum.pec");
+	}
+
+	@Test
 	public void testInterpretedTextEnum() throws Exception {
 		checkInterpretedOutput("enums/textEnum.pec");
 	}

@@ -99,6 +99,12 @@ public class CategorySymbol extends Symbol implements IExpression  {
 	}
 	
 	@Override
+	public IValue getMember(Context context, Identifier name, boolean autoCreate) throws PromptoError {
+		IValue value = context.getValue(this.getId(), ()->this.interpret(context));
+		return value.getMember(context, name, autoCreate);
+	}
+	
+	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		Type parentType = getParentJavaType(context);
 		Type fieldType = getJavaType(context, parentType);
