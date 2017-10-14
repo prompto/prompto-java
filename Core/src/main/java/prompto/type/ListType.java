@@ -10,8 +10,13 @@ import prompto.intrinsic.PromptoList;
 import prompto.parser.ECleverParser;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.value.Boolean;
+import prompto.value.Decimal;
 import prompto.value.IValue;
+import prompto.value.Integer;
 import prompto.value.ListValue;
+import prompto.value.NullValue;
+import prompto.value.Text;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -94,17 +99,45 @@ public class ListType extends ContainerType {
 	@Override
 	public IValue readJSONValue(Context context, JsonNode array, Map<String, byte[]> parts) {
 		ListValue list = new ListValue(itemType);
-		array.forEach( (node) -> { try {
-				String typeName = node.get("type").asText(itemType.toString());
-				IType itemType = new ECleverParser(typeName).parse_standalone_type();
-				JsonNode itemNode = node.get("value");
-				IValue item = itemType.readJSONValue(context, itemNode, parts);
+		array.forEach( (node) -> {
+			IValue item = readJSONItem(context, parts, node);
+			if(item!=null)
 				list.addItem(item);
-			} catch (Exception e) {
-				throw new ReadWriteError(e.getMessage());
-			}
 		});
 		return list;
+	}
+	
+	IValue readJSONItem(Context context, Map<String, byte[]> parts, JsonNode node) { 
+		try {
+			switch(node.getNodeType()) {
+				case NULL:
+					return NullValue.instance();
+				case BOOLEAN:
+					return Boolean.valueOf(node.asBoolean());
+				case NUMBER:
+					if(this.itemType==IntegerType.instance())
+						return new Integer(node.asLong());
+					else if(this.itemType==DecimalType.instance())
+						return new Decimal(node.asDouble());
+					else
+						throw new ReadWriteError("Unsupported NUMBER for " + itemType.toString());
+				case STRING:
+					return new Text(node.asText());
+				case OBJECT:
+					return readJSONObject(context, parts, node);
+				default:
+					throw new ReadWriteError("Unsupported " + node.getNodeType().name() + " node for " + itemType.toString());
+			} 
+		} catch (Exception e) {
+			throw new ReadWriteError(e.getMessage());
+		}
+	}
+
+	private IValue readJSONObject(Context context, Map<String, byte[]> parts, JsonNode node) throws Exception {
+		String typeName = node.get("type").asText(itemType.toString());
+		IType itemType = new ECleverParser(typeName).parse_standalone_type();
+		JsonNode itemNode = node.get("value");
+		return itemType.readJSONValue(context, itemNode, parts);
 	}
 
 	@SuppressWarnings("unchecked")
