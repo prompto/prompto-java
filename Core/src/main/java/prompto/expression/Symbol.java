@@ -1,11 +1,13 @@
 package prompto.expression;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.function.Consumer;
 
 import prompto.error.NotStorableError;
 import prompto.error.PromptoError;
+import prompto.error.ReadWriteError;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.parser.ISection;
@@ -131,7 +133,11 @@ public abstract class Symbol extends Section implements IExpression, INamed, IVa
 	
 	@Override
 	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
-		throw new UnsupportedOperationException("toJson not supported by " + this.getClass().getSimpleName());
+		try {
+			generator.writeString(symbol.toString());
+		} catch(IOException e) {
+			throw new ReadWriteError(e.getMessage());
+		}
 	}
 
 	public Type getJavaType(Context context) {
