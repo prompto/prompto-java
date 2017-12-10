@@ -6,8 +6,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Token;
 
@@ -65,14 +65,14 @@ public class BaseELexerTest extends BaseTest {
 	}
 	
 	public Lexer newTokenStreamFromString(String input) {
-		CharStream stream = new ANTLRInputStream(input);
+		CharStream stream = CharStreams.fromString(input);
 		return new EIndentingLexer(stream);
 	}
 
 	public Lexer newTokenStreamFromResource(String resourceName) throws Exception {
 		InputStream input = getResourceAsStream(resourceName);
 		assertNotNull(input);
-		CharStream stream = new ANTLRInputStream(input);
+		CharStream stream = CharStreams.fromStream(input);
 		return new EIndentingLexer(stream);
 	}
 

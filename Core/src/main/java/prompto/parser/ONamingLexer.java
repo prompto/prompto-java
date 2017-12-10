@@ -4,10 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.antlr.v4.runtime.ANTLRErrorListener;
-import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
 
-import prompto.parser.OLexer;
 import prompto.problem.IProblemListener;
 
 public class ONamingLexer extends OLexer implements ILexer {
@@ -28,7 +27,7 @@ public class ONamingLexer extends OLexer implements ILexer {
 
 	@Override
     public void reset(InputStream input) throws IOException {
-    	setInputStream(new ANTLRInputStream(input));
+    	setInputStream(CharStreams.fromStream(input));
     }
 
 	@Override

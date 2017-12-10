@@ -1,13 +1,13 @@
 package prompto.parser;
 
-import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStreams;
 
 
 public class MParserFactory implements IParserFactory {
 
 	@Override
 	public ILexer newLexer() {
-		return new MIndentingLexer(new ANTLRInputStream(""));
+		return new MIndentingLexer(CharStreams.fromString(""));
 	}
 
 	@Override

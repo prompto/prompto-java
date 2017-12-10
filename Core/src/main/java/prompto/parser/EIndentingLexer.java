@@ -7,12 +7,11 @@ import java.util.List;
 import java.util.Stack;
 
 import org.antlr.v4.runtime.ANTLRErrorListener;
-import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.Token;
 
-import prompto.parser.ELexer;
 import prompto.problem.IProblemListener;
 
 public class EIndentingLexer extends ELexer implements ILexer {
@@ -38,7 +37,7 @@ public class EIndentingLexer extends ELexer implements ILexer {
 
 	@Override
     public void reset(InputStream input) throws IOException {
-    	setInputStream(new ANTLRInputStream(input));
+    	setInputStream(CharStreams.fromStream(input));
     	tokens = new LinkedList<Token>();
     	indents = new Stack<Integer>();
     	wasLF = false;

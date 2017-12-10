@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.antlr.v4.runtime.ANTLRErrorListener;
-import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -13,7 +13,6 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import prompto.declaration.DeclarationList;
 import prompto.expression.IFetchExpression;
-import prompto.parser.EParser;
 import prompto.problem.IProblemListener;
 import prompto.type.IType;
 
@@ -24,15 +23,15 @@ public class ECleverParser extends EParser implements IParser {
 	String path = "";
 
 	public ECleverParser(String input) {
-		this(new ANTLRInputStream(input));
+		this(CharStreams.fromString(input));
 	}
 	
 	public ECleverParser(InputStream input) throws IOException {
-		this(new ANTLRInputStream(input));
+		this(CharStreams.fromStream(input));
 	}
 	
 	public ECleverParser(String path, InputStream input) throws IOException {
-		this(new ANTLRInputStream(input));
+		this(CharStreams.fromStream(input));
 		setPath(path);
 	}
 

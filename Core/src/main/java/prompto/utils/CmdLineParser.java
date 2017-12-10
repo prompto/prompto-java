@@ -3,17 +3,14 @@ package prompto.utils;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import prompto.utils.ArgsLexer;
-import prompto.utils.ArgsParser;
-import prompto.utils.ArgsParserBaseListener;
 import prompto.utils.ArgsParser.ELEMENTContext;
 import prompto.utils.ArgsParser.EntryContext;
 import prompto.utils.ArgsParser.KeyContext;
@@ -40,7 +37,7 @@ public class CmdLineParser {
 		if(input==null)
 			input = "";
 		try {
-			CharStream stream = new ANTLRInputStream(input);
+			CharStream stream = CharStreams.fromString(input);
 			ArgsLexer lexer = new ArgsLexer(stream);
 			CommonTokenStream tokens = new CommonTokenStream(lexer);
 			ArgsParser parser = new ArgsParser(tokens);
