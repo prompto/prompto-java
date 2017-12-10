@@ -1,4 +1,4 @@
-// Generated from OParser.g4 by ANTLR 4.5
+// Generated from OParser.g4 by ANTLR 4.7.1
 package prompto.parser;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class OParser extends AbstractParser {
-	static { RuntimeMetaData.checkVersion("4.5", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.7.1", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -261,7 +261,7 @@ public class OParser extends AbstractParser {
 	}
 
 	@Override
-	@NotNull
+
 	public Vocabulary getVocabulary() {
 		return VOCABULARY;
 	}
@@ -327,41 +327,43 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(414); 
+			setState(414);
 			match(ENUMERATED);
-			setState(415); 
+			setState(415);
 			match(CATEGORY);
-			setState(416); 
+			setState(416);
 			((Enum_category_declarationContext)_localctx).name = type_identifier();
 			setState(421);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==LPAR) {
 				{
-				setState(417); 
+				setState(417);
 				match(LPAR);
-				setState(418); 
+				setState(418);
 				((Enum_category_declarationContext)_localctx).attrs = attribute_identifier_list();
-				setState(419); 
+				setState(419);
 				match(RPAR);
 				}
 			}
 
 			setState(425);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==EXTENDS) {
 				{
-				setState(423); 
+				setState(423);
 				match(EXTENDS);
-				setState(424); 
+				setState(424);
 				((Enum_category_declarationContext)_localctx).derived = type_identifier();
 				}
 			}
 
-			setState(427); 
+			setState(427);
 			match(LCURL);
-			setState(428); 
+			setState(428);
 			((Enum_category_declarationContext)_localctx).symbols = category_symbol_list();
-			setState(429); 
+			setState(429);
 			match(RCURL);
 			}
 		}
@@ -414,21 +416,21 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(431); 
+			setState(431);
 			match(ENUMERATED);
-			setState(432); 
+			setState(432);
 			((Enum_native_declarationContext)_localctx).name = type_identifier();
-			setState(433); 
+			setState(433);
 			match(LPAR);
-			setState(434); 
+			setState(434);
 			((Enum_native_declarationContext)_localctx).typ = native_type();
-			setState(435); 
+			setState(435);
 			match(RPAR);
-			setState(436); 
+			setState(436);
 			match(LCURL);
-			setState(437); 
+			setState(437);
 			((Enum_native_declarationContext)_localctx).symbols = native_symbol_list();
-			setState(438); 
+			setState(438);
 			match(RCURL);
 			}
 		}
@@ -475,15 +477,15 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(440); 
+			setState(440);
 			((Category_symbolContext)_localctx).name = symbol_identifier();
-			setState(441); 
+			setState(441);
 			match(LPAR);
-			setState(442); 
+			setState(442);
 			((Category_symbolContext)_localctx).args = argument_assignment_list(0);
-			setState(443); 
+			setState(443);
 			match(RPAR);
-			setState(444); 
+			setState(444);
 			match(SEMI);
 			}
 		}
@@ -529,13 +531,13 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(446); 
+			setState(446);
 			((Native_symbolContext)_localctx).name = symbol_identifier();
-			setState(447); 
+			setState(447);
 			match(EQ);
-			setState(448); 
+			setState(448);
 			((Native_symbolContext)_localctx).exp = expression(0);
-			setState(449); 
+			setState(449);
 			match(SEMI);
 			}
 		}
@@ -597,48 +599,52 @@ public class OParser extends AbstractParser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(452);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==STORABLE) {
 				{
-				setState(451); 
+				setState(451);
 				match(STORABLE);
 				}
 			}
 
-			setState(454); 
+			setState(454);
 			match(ATTRIBUTE);
-			setState(455); 
+			setState(455);
 			((Attribute_declarationContext)_localctx).name = attribute_identifier();
-			setState(456); 
+			setState(456);
 			match(COLON);
-			setState(457); 
+			setState(457);
 			((Attribute_declarationContext)_localctx).typ = typedef(0);
 			setState(459);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==IN || _la==MATCHING) {
 				{
-				setState(458); 
+				setState(458);
 				((Attribute_declarationContext)_localctx).match = attribute_constraint();
 				}
 			}
 
 			setState(469);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==WITH) {
 				{
-				setState(461); 
+				setState(461);
 				match(WITH);
-				setState(462); 
+				setState(462);
 				match(INDEX);
 				setState(467);
+				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==LPAR) {
 					{
-					setState(463); 
+					setState(463);
 					match(LPAR);
-					setState(464); 
+					setState(464);
 					((Attribute_declarationContext)_localctx).indices = variable_identifier_list();
-					setState(465); 
+					setState(465);
 					match(RPAR);
 					}
 				}
@@ -646,7 +652,7 @@ public class OParser extends AbstractParser {
 				}
 			}
 
-			setState(471); 
+			setState(471);
 			match(SEMI);
 			}
 		}
@@ -705,43 +711,46 @@ public class OParser extends AbstractParser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(474);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==STORABLE) {
 				{
-				setState(473); 
+				setState(473);
 				match(STORABLE);
 				}
 			}
 
-			setState(476); 
+			setState(476);
 			match(CATEGORY);
-			setState(477); 
+			setState(477);
 			((Concrete_category_declarationContext)_localctx).name = type_identifier();
 			setState(482);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==LPAR) {
 				{
-				setState(478); 
+				setState(478);
 				match(LPAR);
-				setState(479); 
+				setState(479);
 				((Concrete_category_declarationContext)_localctx).attrs = attribute_identifier_list();
-				setState(480); 
+				setState(480);
 				match(RPAR);
 				}
 			}
 
 			setState(486);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==EXTENDS) {
 				{
-				setState(484); 
+				setState(484);
 				match(EXTENDS);
-				setState(485); 
+				setState(485);
 				((Concrete_category_declarationContext)_localctx).derived = derived_list(0);
 				}
 			}
 
-			setState(488); 
+			setState(488);
 			((Concrete_category_declarationContext)_localctx).methods = category_method_list();
 			}
 		}
@@ -793,24 +802,25 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(490); 
+			setState(490);
 			match(SINGLETON);
-			setState(491); 
+			setState(491);
 			((Singleton_category_declarationContext)_localctx).name = type_identifier();
 			setState(496);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==LPAR) {
 				{
-				setState(492); 
+				setState(492);
 				match(LPAR);
-				setState(493); 
+				setState(493);
 				((Singleton_category_declarationContext)_localctx).attrs = attribute_identifier_list();
-				setState(494); 
+				setState(494);
 				match(RPAR);
 				}
 			}
 
-			setState(498); 
+			setState(498);
 			((Singleton_category_declarationContext)_localctx).methods = category_method_list();
 			}
 		}
@@ -892,7 +902,7 @@ public class OParser extends AbstractParser {
 			_ctx = _localctx;
 			_prevctx = _localctx;
 
-			setState(501); 
+			setState(501);
 			((DerivedListContext)_localctx).item = type_identifier();
 			}
 			_ctx.stop = _input.LT(-1);
@@ -910,9 +920,9 @@ public class OParser extends AbstractParser {
 					pushNewRecursionContext(_localctx, _startState, RULE_derived_list);
 					setState(503);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(504); 
+					setState(504);
 					match(COMMA);
-					setState(505); 
+					setState(505);
 					((DerivedListItemContext)_localctx).item = type_identifier();
 					}
 					} 
@@ -981,12 +991,13 @@ public class OParser extends AbstractParser {
 		int _la;
 		try {
 			setState(517);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case SEMI:
 				_localctx = new EmptyCategoryMethodListContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(511); 
+				setState(511);
 				match(SEMI);
 				}
 				break;
@@ -994,18 +1005,19 @@ public class OParser extends AbstractParser {
 				_localctx = new CurlyCategoryMethodListContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(512); 
+				setState(512);
 				match(LCURL);
 				setState(514);
+				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (((((_la - 46)) & ~0x3f) == 0 && ((1L << (_la - 46)) & ((1L << (BOOLEAN - 46)) | (1L << (CHARACTER - 46)) | (1L << (TEXT - 46)) | (1L << (INTEGER - 46)) | (1L << (DECIMAL - 46)) | (1L << (DATE - 46)) | (1L << (TIME - 46)) | (1L << (DATETIME - 46)) | (1L << (PERIOD - 46)) | (1L << (VERSION - 46)) | (1L << (CODE - 46)) | (1L << (DOCUMENT - 46)) | (1L << (BLOB - 46)) | (1L << (IMAGE - 46)) | (1L << (UUID - 46)) | (1L << (ITERATOR - 46)) | (1L << (CURSOR - 46)) | (1L << (ABSTRACT - 46)) | (1L << (GETTER - 46)))) != 0) || ((((_la - 111)) & ~0x3f) == 0 && ((1L << (_la - 111)) & ((1L << (METHOD - 111)) | (1L << (OPERATOR - 111)) | (1L << (SETTER - 111)) | (1L << (TYPE_IDENTIFIER - 111)))) != 0)) {
 					{
-					setState(513); 
+					setState(513);
 					((CurlyCategoryMethodListContext)_localctx).items = member_method_declaration_list();
 					}
 				}
 
-				setState(516); 
+				setState(516);
 				match(RCURL);
 				}
 				break;
@@ -1068,36 +1080,38 @@ public class OParser extends AbstractParser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(520);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << BOOLEAN) | (1L << CHARACTER) | (1L << TEXT) | (1L << INTEGER) | (1L << DECIMAL) | (1L << DATE) | (1L << TIME) | (1L << DATETIME) | (1L << PERIOD) | (1L << VERSION) | (1L << CODE) | (1L << DOCUMENT) | (1L << BLOB) | (1L << IMAGE) | (1L << UUID) | (1L << ITERATOR) | (1L << CURSOR))) != 0) || _la==TYPE_IDENTIFIER) {
 				{
-				setState(519); 
+				setState(519);
 				((Operator_method_declarationContext)_localctx).typ = typedef(0);
 				}
 			}
 
-			setState(522); 
+			setState(522);
 			match(OPERATOR);
-			setState(523); 
+			setState(523);
 			((Operator_method_declarationContext)_localctx).op = operator();
-			setState(524); 
+			setState(524);
 			match(LPAR);
-			setState(525); 
+			setState(525);
 			((Operator_method_declarationContext)_localctx).arg = operator_argument();
-			setState(526); 
+			setState(526);
 			match(RPAR);
-			setState(527); 
+			setState(527);
 			match(LCURL);
 			setState(529);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << COMMENT) | (1L << BOOLEAN) | (1L << CHARACTER) | (1L << TEXT) | (1L << INTEGER) | (1L << DECIMAL) | (1L << DATE) | (1L << TIME) | (1L << DATETIME) | (1L << PERIOD) | (1L << VERSION) | (1L << CODE) | (1L << DOCUMENT) | (1L << BLOB) | (1L << IMAGE) | (1L << UUID) | (1L << ITERATOR) | (1L << CURSOR))) != 0) || ((((_la - 75)) & ~0x3f) == 0 && ((1L << (_la - 75)) & ((1L << (BREAK - 75)) | (1L << (DELETE - 75)) | (1L << (DO - 75)) | (1L << (FLUSH - 75)) | (1L << (FOR - 75)) | (1L << (IF - 75)) | (1L << (METHOD - 75)) | (1L << (RETURN - 75)))) != 0) || ((((_la - 140)) & ~0x3f) == 0 && ((1L << (_la - 140)) & ((1L << (STORE - 140)) | (1L << (SWITCH - 140)) | (1L << (THROW - 140)) | (1L << (TRY - 140)) | (1L << (WITH - 140)) | (1L << (WHILE - 140)) | (1L << (WRITE - 140)) | (1L << (SYMBOL_IDENTIFIER - 140)) | (1L << (TYPE_IDENTIFIER - 140)) | (1L << (VARIABLE_IDENTIFIER - 140)))) != 0)) {
 				{
-				setState(528); 
+				setState(528);
 				((Operator_method_declarationContext)_localctx).stmts = statement_list();
 				}
 			}
 
-			setState(531); 
+			setState(531);
 			match(RCURL);
 			}
 		}
@@ -1145,22 +1159,23 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(533); 
+			setState(533);
 			match(SETTER);
-			setState(534); 
+			setState(534);
 			((Setter_method_declarationContext)_localctx).name = variable_identifier();
-			setState(535); 
+			setState(535);
 			match(LCURL);
 			setState(537);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << COMMENT) | (1L << BOOLEAN) | (1L << CHARACTER) | (1L << TEXT) | (1L << INTEGER) | (1L << DECIMAL) | (1L << DATE) | (1L << TIME) | (1L << DATETIME) | (1L << PERIOD) | (1L << VERSION) | (1L << CODE) | (1L << DOCUMENT) | (1L << BLOB) | (1L << IMAGE) | (1L << UUID) | (1L << ITERATOR) | (1L << CURSOR))) != 0) || ((((_la - 75)) & ~0x3f) == 0 && ((1L << (_la - 75)) & ((1L << (BREAK - 75)) | (1L << (DELETE - 75)) | (1L << (DO - 75)) | (1L << (FLUSH - 75)) | (1L << (FOR - 75)) | (1L << (IF - 75)) | (1L << (METHOD - 75)) | (1L << (RETURN - 75)))) != 0) || ((((_la - 140)) & ~0x3f) == 0 && ((1L << (_la - 140)) & ((1L << (STORE - 140)) | (1L << (SWITCH - 140)) | (1L << (THROW - 140)) | (1L << (TRY - 140)) | (1L << (WITH - 140)) | (1L << (WHILE - 140)) | (1L << (WRITE - 140)) | (1L << (SYMBOL_IDENTIFIER - 140)) | (1L << (TYPE_IDENTIFIER - 140)) | (1L << (VARIABLE_IDENTIFIER - 140)))) != 0)) {
 				{
-				setState(536); 
+				setState(536);
 				((Setter_method_declarationContext)_localctx).stmts = statement_list();
 				}
 			}
 
-			setState(539); 
+			setState(539);
 			match(RCURL);
 			}
 		}
@@ -1210,30 +1225,32 @@ public class OParser extends AbstractParser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(542);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==NATIVE) {
 				{
-				setState(541); 
+				setState(541);
 				match(NATIVE);
 				}
 			}
 
-			setState(544); 
+			setState(544);
 			match(SETTER);
-			setState(545); 
+			setState(545);
 			((Native_setter_declarationContext)_localctx).name = variable_identifier();
-			setState(546); 
+			setState(546);
 			match(LCURL);
 			setState(548);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << JAVA) | (1L << CSHARP) | (1L << PYTHON2) | (1L << PYTHON3) | (1L << JAVASCRIPT))) != 0)) {
 				{
-				setState(547); 
+				setState(547);
 				((Native_setter_declarationContext)_localctx).stmts = native_statement_list();
 				}
 			}
 
-			setState(550); 
+			setState(550);
 			match(RCURL);
 			}
 		}
@@ -1281,22 +1298,23 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(552); 
+			setState(552);
 			match(GETTER);
-			setState(553); 
+			setState(553);
 			((Getter_method_declarationContext)_localctx).name = variable_identifier();
-			setState(554); 
+			setState(554);
 			match(LCURL);
 			setState(556);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << COMMENT) | (1L << BOOLEAN) | (1L << CHARACTER) | (1L << TEXT) | (1L << INTEGER) | (1L << DECIMAL) | (1L << DATE) | (1L << TIME) | (1L << DATETIME) | (1L << PERIOD) | (1L << VERSION) | (1L << CODE) | (1L << DOCUMENT) | (1L << BLOB) | (1L << IMAGE) | (1L << UUID) | (1L << ITERATOR) | (1L << CURSOR))) != 0) || ((((_la - 75)) & ~0x3f) == 0 && ((1L << (_la - 75)) & ((1L << (BREAK - 75)) | (1L << (DELETE - 75)) | (1L << (DO - 75)) | (1L << (FLUSH - 75)) | (1L << (FOR - 75)) | (1L << (IF - 75)) | (1L << (METHOD - 75)) | (1L << (RETURN - 75)))) != 0) || ((((_la - 140)) & ~0x3f) == 0 && ((1L << (_la - 140)) & ((1L << (STORE - 140)) | (1L << (SWITCH - 140)) | (1L << (THROW - 140)) | (1L << (TRY - 140)) | (1L << (WITH - 140)) | (1L << (WHILE - 140)) | (1L << (WRITE - 140)) | (1L << (SYMBOL_IDENTIFIER - 140)) | (1L << (TYPE_IDENTIFIER - 140)) | (1L << (VARIABLE_IDENTIFIER - 140)))) != 0)) {
 				{
-				setState(555); 
+				setState(555);
 				((Getter_method_declarationContext)_localctx).stmts = statement_list();
 				}
 			}
 
-			setState(558); 
+			setState(558);
 			match(RCURL);
 			}
 		}
@@ -1346,30 +1364,32 @@ public class OParser extends AbstractParser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(561);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==NATIVE) {
 				{
-				setState(560); 
+				setState(560);
 				match(NATIVE);
 				}
 			}
 
-			setState(563); 
+			setState(563);
 			match(GETTER);
-			setState(564); 
+			setState(564);
 			((Native_getter_declarationContext)_localctx).name = variable_identifier();
-			setState(565); 
+			setState(565);
 			match(LCURL);
 			setState(567);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << JAVA) | (1L << CSHARP) | (1L << PYTHON2) | (1L << PYTHON3) | (1L << JAVASCRIPT))) != 0)) {
 				{
-				setState(566); 
+				setState(566);
 				((Native_getter_declarationContext)_localctx).stmts = native_statement_list();
 				}
 			}
 
-			setState(569); 
+			setState(569);
 			match(RCURL);
 			}
 		}
@@ -1428,39 +1448,41 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(571); 
+			setState(571);
 			match(NATIVE);
-			setState(572); 
+			setState(572);
 			match(RESOURCE);
-			setState(573); 
+			setState(573);
 			((Native_resource_declarationContext)_localctx).name = type_identifier();
 			setState(578);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==LPAR) {
 				{
-				setState(574); 
+				setState(574);
 				match(LPAR);
-				setState(575); 
+				setState(575);
 				((Native_resource_declarationContext)_localctx).attrs = attribute_identifier_list();
-				setState(576); 
+				setState(576);
 				match(RPAR);
 				}
 			}
 
-			setState(580); 
+			setState(580);
 			match(LCURL);
-			setState(581); 
+			setState(581);
 			((Native_resource_declarationContext)_localctx).bindings = native_category_bindings();
 			setState(583);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (((((_la - 46)) & ~0x3f) == 0 && ((1L << (_la - 46)) & ((1L << (BOOLEAN - 46)) | (1L << (CHARACTER - 46)) | (1L << (TEXT - 46)) | (1L << (INTEGER - 46)) | (1L << (DECIMAL - 46)) | (1L << (DATE - 46)) | (1L << (TIME - 46)) | (1L << (DATETIME - 46)) | (1L << (PERIOD - 46)) | (1L << (VERSION - 46)) | (1L << (CODE - 46)) | (1L << (DOCUMENT - 46)) | (1L << (BLOB - 46)) | (1L << (IMAGE - 46)) | (1L << (UUID - 46)) | (1L << (ITERATOR - 46)) | (1L << (CURSOR - 46)) | (1L << (ANY - 46)) | (1L << (GETTER - 46)))) != 0) || ((((_la - 111)) & ~0x3f) == 0 && ((1L << (_la - 111)) & ((1L << (METHOD - 111)) | (1L << (NATIVE - 111)) | (1L << (SETTER - 111)) | (1L << (TYPE_IDENTIFIER - 111)))) != 0)) {
 				{
-				setState(582); 
+				setState(582);
 				((Native_resource_declarationContext)_localctx).methods = native_member_method_declaration_list();
 				}
 			}
 
-			setState(585); 
+			setState(585);
 			match(RCURL);
 			}
 		}
@@ -1521,47 +1543,50 @@ public class OParser extends AbstractParser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(588);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==STORABLE) {
 				{
-				setState(587); 
+				setState(587);
 				match(STORABLE);
 				}
 			}
 
-			setState(590); 
+			setState(590);
 			match(NATIVE);
-			setState(591); 
+			setState(591);
 			match(CATEGORY);
-			setState(592); 
+			setState(592);
 			((Native_category_declarationContext)_localctx).name = type_identifier();
 			setState(597);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==LPAR) {
 				{
-				setState(593); 
+				setState(593);
 				match(LPAR);
-				setState(594); 
+				setState(594);
 				((Native_category_declarationContext)_localctx).attrs = attribute_identifier_list();
-				setState(595); 
+				setState(595);
 				match(RPAR);
 				}
 			}
 
-			setState(599); 
+			setState(599);
 			match(LCURL);
-			setState(600); 
+			setState(600);
 			((Native_category_declarationContext)_localctx).bindings = native_category_bindings();
 			setState(602);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (((((_la - 46)) & ~0x3f) == 0 && ((1L << (_la - 46)) & ((1L << (BOOLEAN - 46)) | (1L << (CHARACTER - 46)) | (1L << (TEXT - 46)) | (1L << (INTEGER - 46)) | (1L << (DECIMAL - 46)) | (1L << (DATE - 46)) | (1L << (TIME - 46)) | (1L << (DATETIME - 46)) | (1L << (PERIOD - 46)) | (1L << (VERSION - 46)) | (1L << (CODE - 46)) | (1L << (DOCUMENT - 46)) | (1L << (BLOB - 46)) | (1L << (IMAGE - 46)) | (1L << (UUID - 46)) | (1L << (ITERATOR - 46)) | (1L << (CURSOR - 46)) | (1L << (ANY - 46)) | (1L << (GETTER - 46)))) != 0) || ((((_la - 111)) & ~0x3f) == 0 && ((1L << (_la - 111)) & ((1L << (METHOD - 111)) | (1L << (NATIVE - 111)) | (1L << (SETTER - 111)) | (1L << (TYPE_IDENTIFIER - 111)))) != 0)) {
 				{
-				setState(601); 
+				setState(601);
 				((Native_category_declarationContext)_localctx).methods = native_member_method_declaration_list();
 				}
 			}
 
-			setState(604); 
+			setState(604);
 			match(RCURL);
 			}
 		}
@@ -1605,15 +1630,15 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(606); 
+			setState(606);
 			match(CATEGORY);
-			setState(607); 
+			setState(607);
 			match(BINDINGS);
-			setState(608); 
+			setState(608);
 			match(LCURL);
-			setState(609); 
+			setState(609);
 			((Native_category_bindingsContext)_localctx).items = native_category_binding_list(0);
-			setState(610); 
+			setState(610);
 			match(RCURL);
 			}
 		}
@@ -1696,9 +1721,9 @@ public class OParser extends AbstractParser {
 			_ctx = _localctx;
 			_prevctx = _localctx;
 
-			setState(613); 
+			setState(613);
 			((NativeCategoryBindingListContext)_localctx).item = native_category_binding();
-			setState(614); 
+			setState(614);
 			match(SEMI);
 			}
 			_ctx.stop = _input.LT(-1);
@@ -1716,9 +1741,9 @@ public class OParser extends AbstractParser {
 					pushNewRecursionContext(_localctx, _startState, RULE_native_category_binding_list);
 					setState(616);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(617); 
+					setState(617);
 					((NativeCategoryBindingListItemContext)_localctx).item = native_category_binding();
-					setState(618); 
+					setState(618);
 					match(SEMI);
 					}
 					} 
@@ -1779,35 +1804,37 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(625); 
+			setState(625);
 			match(ABSTRACT);
 			setState(627);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << BOOLEAN) | (1L << CHARACTER) | (1L << TEXT) | (1L << INTEGER) | (1L << DECIMAL) | (1L << DATE) | (1L << TIME) | (1L << DATETIME) | (1L << PERIOD) | (1L << VERSION) | (1L << CODE) | (1L << DOCUMENT) | (1L << BLOB) | (1L << IMAGE) | (1L << UUID) | (1L << ITERATOR) | (1L << CURSOR))) != 0) || _la==TYPE_IDENTIFIER) {
 				{
-				setState(626); 
+				setState(626);
 				((Abstract_method_declarationContext)_localctx).typ = typedef(0);
 				}
 			}
 
-			setState(629); 
+			setState(629);
 			match(METHOD);
-			setState(630); 
+			setState(630);
 			((Abstract_method_declarationContext)_localctx).name = method_identifier();
-			setState(631); 
+			setState(631);
 			match(LPAR);
 			setState(633);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (((((_la - 46)) & ~0x3f) == 0 && ((1L << (_la - 46)) & ((1L << (BOOLEAN - 46)) | (1L << (CHARACTER - 46)) | (1L << (TEXT - 46)) | (1L << (INTEGER - 46)) | (1L << (DECIMAL - 46)) | (1L << (DATE - 46)) | (1L << (TIME - 46)) | (1L << (DATETIME - 46)) | (1L << (PERIOD - 46)) | (1L << (VERSION - 46)) | (1L << (CODE - 46)) | (1L << (DOCUMENT - 46)) | (1L << (BLOB - 46)) | (1L << (IMAGE - 46)) | (1L << (UUID - 46)) | (1L << (ITERATOR - 46)) | (1L << (CURSOR - 46)) | (1L << (ANY - 46)))) != 0) || ((((_la - 114)) & ~0x3f) == 0 && ((1L << (_la - 114)) & ((1L << (MUTABLE - 114)) | (1L << (TYPE_IDENTIFIER - 114)) | (1L << (VARIABLE_IDENTIFIER - 114)))) != 0)) {
 				{
-				setState(632); 
+				setState(632);
 				((Abstract_method_declarationContext)_localctx).args = argument_list();
 				}
 			}
 
-			setState(635); 
+			setState(635);
 			match(RPAR);
-			setState(636); 
+			setState(636);
 			match(SEMI);
 			}
 		}
@@ -1866,43 +1893,46 @@ public class OParser extends AbstractParser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(639);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << BOOLEAN) | (1L << CHARACTER) | (1L << TEXT) | (1L << INTEGER) | (1L << DECIMAL) | (1L << DATE) | (1L << TIME) | (1L << DATETIME) | (1L << PERIOD) | (1L << VERSION) | (1L << CODE) | (1L << DOCUMENT) | (1L << BLOB) | (1L << IMAGE) | (1L << UUID) | (1L << ITERATOR) | (1L << CURSOR))) != 0) || _la==TYPE_IDENTIFIER) {
 				{
-				setState(638); 
+				setState(638);
 				((Concrete_method_declarationContext)_localctx).typ = typedef(0);
 				}
 			}
 
-			setState(641); 
+			setState(641);
 			match(METHOD);
-			setState(642); 
+			setState(642);
 			((Concrete_method_declarationContext)_localctx).name = method_identifier();
-			setState(643); 
+			setState(643);
 			match(LPAR);
 			setState(645);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (((((_la - 46)) & ~0x3f) == 0 && ((1L << (_la - 46)) & ((1L << (BOOLEAN - 46)) | (1L << (CHARACTER - 46)) | (1L << (TEXT - 46)) | (1L << (INTEGER - 46)) | (1L << (DECIMAL - 46)) | (1L << (DATE - 46)) | (1L << (TIME - 46)) | (1L << (DATETIME - 46)) | (1L << (PERIOD - 46)) | (1L << (VERSION - 46)) | (1L << (CODE - 46)) | (1L << (DOCUMENT - 46)) | (1L << (BLOB - 46)) | (1L << (IMAGE - 46)) | (1L << (UUID - 46)) | (1L << (ITERATOR - 46)) | (1L << (CURSOR - 46)) | (1L << (ANY - 46)))) != 0) || ((((_la - 114)) & ~0x3f) == 0 && ((1L << (_la - 114)) & ((1L << (MUTABLE - 114)) | (1L << (TYPE_IDENTIFIER - 114)) | (1L << (VARIABLE_IDENTIFIER - 114)))) != 0)) {
 				{
-				setState(644); 
+				setState(644);
 				((Concrete_method_declarationContext)_localctx).args = argument_list();
 				}
 			}
 
-			setState(647); 
+			setState(647);
 			match(RPAR);
-			setState(648); 
+			setState(648);
 			match(LCURL);
 			setState(650);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << COMMENT) | (1L << BOOLEAN) | (1L << CHARACTER) | (1L << TEXT) | (1L << INTEGER) | (1L << DECIMAL) | (1L << DATE) | (1L << TIME) | (1L << DATETIME) | (1L << PERIOD) | (1L << VERSION) | (1L << CODE) | (1L << DOCUMENT) | (1L << BLOB) | (1L << IMAGE) | (1L << UUID) | (1L << ITERATOR) | (1L << CURSOR))) != 0) || ((((_la - 75)) & ~0x3f) == 0 && ((1L << (_la - 75)) & ((1L << (BREAK - 75)) | (1L << (DELETE - 75)) | (1L << (DO - 75)) | (1L << (FLUSH - 75)) | (1L << (FOR - 75)) | (1L << (IF - 75)) | (1L << (METHOD - 75)) | (1L << (RETURN - 75)))) != 0) || ((((_la - 140)) & ~0x3f) == 0 && ((1L << (_la - 140)) & ((1L << (STORE - 140)) | (1L << (SWITCH - 140)) | (1L << (THROW - 140)) | (1L << (TRY - 140)) | (1L << (WITH - 140)) | (1L << (WHILE - 140)) | (1L << (WRITE - 140)) | (1L << (SYMBOL_IDENTIFIER - 140)) | (1L << (TYPE_IDENTIFIER - 140)) | (1L << (VARIABLE_IDENTIFIER - 140)))) != 0)) {
 				{
-				setState(649); 
+				setState(649);
 				((Concrete_method_declarationContext)_localctx).stmts = statement_list();
 				}
 			}
 
-			setState(652); 
+			setState(652);
 			match(RCURL);
 			}
 		}
@@ -1962,45 +1992,48 @@ public class OParser extends AbstractParser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(655);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (((((_la - 46)) & ~0x3f) == 0 && ((1L << (_la - 46)) & ((1L << (BOOLEAN - 46)) | (1L << (CHARACTER - 46)) | (1L << (TEXT - 46)) | (1L << (INTEGER - 46)) | (1L << (DECIMAL - 46)) | (1L << (DATE - 46)) | (1L << (TIME - 46)) | (1L << (DATETIME - 46)) | (1L << (PERIOD - 46)) | (1L << (VERSION - 46)) | (1L << (CODE - 46)) | (1L << (DOCUMENT - 46)) | (1L << (BLOB - 46)) | (1L << (IMAGE - 46)) | (1L << (UUID - 46)) | (1L << (ITERATOR - 46)) | (1L << (CURSOR - 46)) | (1L << (ANY - 46)))) != 0) || _la==TYPE_IDENTIFIER) {
 				{
-				setState(654); 
+				setState(654);
 				((Native_method_declarationContext)_localctx).typ = category_or_any_type();
 				}
 			}
 
 			setState(658);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==NATIVE) {
 				{
-				setState(657); 
+				setState(657);
 				match(NATIVE);
 				}
 			}
 
-			setState(660); 
+			setState(660);
 			match(METHOD);
-			setState(661); 
+			setState(661);
 			((Native_method_declarationContext)_localctx).name = method_identifier();
-			setState(662); 
+			setState(662);
 			match(LPAR);
 			setState(664);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (((((_la - 46)) & ~0x3f) == 0 && ((1L << (_la - 46)) & ((1L << (BOOLEAN - 46)) | (1L << (CHARACTER - 46)) | (1L << (TEXT - 46)) | (1L << (INTEGER - 46)) | (1L << (DECIMAL - 46)) | (1L << (DATE - 46)) | (1L << (TIME - 46)) | (1L << (DATETIME - 46)) | (1L << (PERIOD - 46)) | (1L << (VERSION - 46)) | (1L << (CODE - 46)) | (1L << (DOCUMENT - 46)) | (1L << (BLOB - 46)) | (1L << (IMAGE - 46)) | (1L << (UUID - 46)) | (1L << (ITERATOR - 46)) | (1L << (CURSOR - 46)) | (1L << (ANY - 46)))) != 0) || ((((_la - 114)) & ~0x3f) == 0 && ((1L << (_la - 114)) & ((1L << (MUTABLE - 114)) | (1L << (TYPE_IDENTIFIER - 114)) | (1L << (VARIABLE_IDENTIFIER - 114)))) != 0)) {
 				{
-				setState(663); 
+				setState(663);
 				((Native_method_declarationContext)_localctx).args = argument_list();
 				}
 			}
 
-			setState(666); 
+			setState(666);
 			match(RPAR);
-			setState(667); 
+			setState(667);
 			match(LCURL);
-			setState(668); 
+			setState(668);
 			((Native_method_declarationContext)_localctx).stmts = native_statement_list();
-			setState(669); 
+			setState(669);
 			match(RCURL);
 			}
 		}
@@ -2064,34 +2097,35 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(671); 
+			setState(671);
 			match(TEST);
-			setState(672); 
+			setState(672);
 			match(METHOD);
-			setState(673); 
+			setState(673);
 			((Test_method_declarationContext)_localctx).name = match(TEXT_LITERAL);
-			setState(674); 
+			setState(674);
 			match(LPAR);
-			setState(675); 
+			setState(675);
 			match(RPAR);
-			setState(676); 
+			setState(676);
 			match(LCURL);
-			setState(677); 
+			setState(677);
 			((Test_method_declarationContext)_localctx).stmts = statement_list();
-			setState(678); 
+			setState(678);
 			match(RCURL);
-			setState(679); 
+			setState(679);
 			match(VERIFYING);
 			setState(687);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case LCURL:
 				{
 				{
-				setState(680); 
+				setState(680);
 				match(LCURL);
-				setState(681); 
+				setState(681);
 				((Test_method_declarationContext)_localctx).exps = assertion_list();
-				setState(682); 
+				setState(682);
 				match(RCURL);
 				}
 				}
@@ -2099,9 +2133,9 @@ public class OParser extends AbstractParser {
 			case SYMBOL_IDENTIFIER:
 				{
 				{
-				setState(684); 
+				setState(684);
 				((Test_method_declarationContext)_localctx).error = symbol_identifier();
-				setState(685); 
+				setState(685);
 				match(SEMI);
 				}
 				}
@@ -2148,9 +2182,9 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(689); 
+			setState(689);
 			((AssertionContext)_localctx).exp = expression(0);
-			setState(690); 
+			setState(690);
 			match(SEMI);
 			}
 		}
@@ -2206,30 +2240,32 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(692); 
+			setState(692);
 			((Typed_argumentContext)_localctx).typ = category_or_any_type();
 			setState(697);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==LPAR) {
 				{
-				setState(693); 
+				setState(693);
 				match(LPAR);
-				setState(694); 
+				setState(694);
 				((Typed_argumentContext)_localctx).attrs = attribute_identifier_list();
-				setState(695); 
+				setState(695);
 				match(RPAR);
 				}
 			}
 
-			setState(699); 
+			setState(699);
 			((Typed_argumentContext)_localctx).name = variable_identifier();
 			setState(702);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==EQ) {
 				{
-				setState(700); 
+				setState(700);
 				match(EQ);
-				setState(701); 
+				setState(701);
 				((Typed_argumentContext)_localctx).value = literal_expression();
 				}
 			}
@@ -2296,6 +2332,7 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 48, RULE_statement_or_list);
 		try {
 			setState(711);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case COMMENT:
 			case BOOLEAN:
@@ -2336,7 +2373,7 @@ public class OParser extends AbstractParser {
 				_localctx = new SingleStatementContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(704); 
+				setState(704);
 				((SingleStatementContext)_localctx).stmt = statement();
 				}
 				break;
@@ -2344,15 +2381,16 @@ public class OParser extends AbstractParser {
 				_localctx = new CurlyStatementListContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(705); 
+				setState(705);
 				match(LCURL);
 				setState(709);
+				_errHandler.sync(this);
 				switch ( getInterpreter().adaptivePredict(_input,38,_ctx) ) {
 				case 1:
 					{
-					setState(706); 
+					setState(706);
 					((CurlyStatementListContext)_localctx).items = statement_list();
-					setState(707); 
+					setState(707);
 					match(RCURL);
 					}
 					break;
@@ -2677,14 +2715,15 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 50, RULE_statement);
 		try {
 			setState(734);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,40,_ctx) ) {
 			case 1:
 				_localctx = new MethodCallStatementContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(713); 
+				setState(713);
 				((MethodCallStatementContext)_localctx).stmt = method_call();
-				setState(714); 
+				setState(714);
 				match(SEMI);
 				}
 				break;
@@ -2692,7 +2731,7 @@ public class OParser extends AbstractParser {
 				_localctx = new AssignInstanceStatementContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(716); 
+				setState(716);
 				((AssignInstanceStatementContext)_localctx).stmt = assign_instance_statement();
 				}
 				break;
@@ -2700,7 +2739,7 @@ public class OParser extends AbstractParser {
 				_localctx = new AssignTupleStatementContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(717); 
+				setState(717);
 				((AssignTupleStatementContext)_localctx).stmt = assign_tuple_statement();
 				}
 				break;
@@ -2708,7 +2747,7 @@ public class OParser extends AbstractParser {
 				_localctx = new StoreStatementContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(718); 
+				setState(718);
 				((StoreStatementContext)_localctx).stmt = store_statement();
 				}
 				break;
@@ -2716,7 +2755,7 @@ public class OParser extends AbstractParser {
 				_localctx = new FlushStatementContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(719); 
+				setState(719);
 				((FlushStatementContext)_localctx).stmt = flush_statement();
 				}
 				break;
@@ -2724,7 +2763,7 @@ public class OParser extends AbstractParser {
 				_localctx = new BreakStatementContext(_localctx);
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(720); 
+				setState(720);
 				((BreakStatementContext)_localctx).stmt = break_statement();
 				}
 				break;
@@ -2732,7 +2771,7 @@ public class OParser extends AbstractParser {
 				_localctx = new ReturnStatementContext(_localctx);
 				enterOuterAlt(_localctx, 7);
 				{
-				setState(721); 
+				setState(721);
 				((ReturnStatementContext)_localctx).stmt = return_statement();
 				}
 				break;
@@ -2740,7 +2779,7 @@ public class OParser extends AbstractParser {
 				_localctx = new IfStatementContext(_localctx);
 				enterOuterAlt(_localctx, 8);
 				{
-				setState(722); 
+				setState(722);
 				((IfStatementContext)_localctx).stmt = if_statement();
 				}
 				break;
@@ -2748,7 +2787,7 @@ public class OParser extends AbstractParser {
 				_localctx = new SwitchStatementContext(_localctx);
 				enterOuterAlt(_localctx, 9);
 				{
-				setState(723); 
+				setState(723);
 				((SwitchStatementContext)_localctx).stmt = switch_statement();
 				}
 				break;
@@ -2756,7 +2795,7 @@ public class OParser extends AbstractParser {
 				_localctx = new ForEachStatementContext(_localctx);
 				enterOuterAlt(_localctx, 10);
 				{
-				setState(724); 
+				setState(724);
 				((ForEachStatementContext)_localctx).stmt = for_each_statement();
 				}
 				break;
@@ -2764,7 +2803,7 @@ public class OParser extends AbstractParser {
 				_localctx = new WhileStatementContext(_localctx);
 				enterOuterAlt(_localctx, 11);
 				{
-				setState(725); 
+				setState(725);
 				((WhileStatementContext)_localctx).stmt = while_statement();
 				}
 				break;
@@ -2772,7 +2811,7 @@ public class OParser extends AbstractParser {
 				_localctx = new DoWhileStatementContext(_localctx);
 				enterOuterAlt(_localctx, 12);
 				{
-				setState(726); 
+				setState(726);
 				((DoWhileStatementContext)_localctx).stmt = do_while_statement();
 				}
 				break;
@@ -2780,7 +2819,7 @@ public class OParser extends AbstractParser {
 				_localctx = new TryStatementContext(_localctx);
 				enterOuterAlt(_localctx, 13);
 				{
-				setState(727); 
+				setState(727);
 				((TryStatementContext)_localctx).stmt = try_statement();
 				}
 				break;
@@ -2788,7 +2827,7 @@ public class OParser extends AbstractParser {
 				_localctx = new RaiseStatementContext(_localctx);
 				enterOuterAlt(_localctx, 14);
 				{
-				setState(728); 
+				setState(728);
 				((RaiseStatementContext)_localctx).stmt = raise_statement();
 				}
 				break;
@@ -2796,7 +2835,7 @@ public class OParser extends AbstractParser {
 				_localctx = new WriteStatementContext(_localctx);
 				enterOuterAlt(_localctx, 15);
 				{
-				setState(729); 
+				setState(729);
 				((WriteStatementContext)_localctx).stmt = write_statement();
 				}
 				break;
@@ -2804,7 +2843,7 @@ public class OParser extends AbstractParser {
 				_localctx = new WithResourceStatementContext(_localctx);
 				enterOuterAlt(_localctx, 16);
 				{
-				setState(730); 
+				setState(730);
 				((WithResourceStatementContext)_localctx).stmt = with_resource_statement();
 				}
 				break;
@@ -2812,7 +2851,7 @@ public class OParser extends AbstractParser {
 				_localctx = new WithSingletonStatementContext(_localctx);
 				enterOuterAlt(_localctx, 17);
 				{
-				setState(731); 
+				setState(731);
 				((WithSingletonStatementContext)_localctx).stmt = with_singleton_statement();
 				}
 				break;
@@ -2820,7 +2859,7 @@ public class OParser extends AbstractParser {
 				_localctx = new ClosureStatementContext(_localctx);
 				enterOuterAlt(_localctx, 18);
 				{
-				setState(732); 
+				setState(732);
 				((ClosureStatementContext)_localctx).decl = concrete_method_declaration();
 				}
 				break;
@@ -2828,7 +2867,7 @@ public class OParser extends AbstractParser {
 				_localctx = new CommentStatementContext(_localctx);
 				enterOuterAlt(_localctx, 19);
 				{
-				setState(733); 
+				setState(733);
 				((CommentStatementContext)_localctx).decl = comment_statement();
 				}
 				break;
@@ -2870,13 +2909,13 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(736); 
+			setState(736);
 			match(FLUSH);
-			setState(737); 
+			setState(737);
 			match(LPAR);
-			setState(738); 
+			setState(738);
 			match(RPAR);
-			setState(739); 
+			setState(739);
 			match(SEMI);
 			}
 		}
@@ -2931,59 +2970,60 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 54, RULE_store_statement);
 		try {
 			setState(764);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,41,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(741); 
+				setState(741);
 				match(DELETE);
-				setState(742); 
+				setState(742);
 				match(LPAR);
-				setState(743); 
+				setState(743);
 				((Store_statementContext)_localctx).to_del = expression_list();
-				setState(744); 
+				setState(744);
 				match(RPAR);
-				setState(745); 
+				setState(745);
 				match(SEMI);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(747); 
+				setState(747);
 				match(STORE);
-				setState(748); 
+				setState(748);
 				match(LPAR);
-				setState(749); 
+				setState(749);
 				((Store_statementContext)_localctx).to_add = expression_list();
-				setState(750); 
+				setState(750);
 				match(RPAR);
-				setState(751); 
+				setState(751);
 				match(SEMI);
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(753); 
+				setState(753);
 				match(DELETE);
-				setState(754); 
+				setState(754);
 				match(LPAR);
-				setState(755); 
+				setState(755);
 				((Store_statementContext)_localctx).to_del = expression_list();
-				setState(756); 
+				setState(756);
 				match(RPAR);
-				setState(757); 
+				setState(757);
 				match(AND);
-				setState(758); 
+				setState(758);
 				match(STORE);
-				setState(759); 
+				setState(759);
 				match(LPAR);
-				setState(760); 
+				setState(760);
 				((Store_statementContext)_localctx).to_add = expression_list();
-				setState(761); 
+				setState(761);
 				match(RPAR);
-				setState(762); 
+				setState(762);
 				match(SEMI);
 				}
 				break;
@@ -3032,15 +3072,15 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(766); 
+			setState(766);
 			match(WITH);
-			setState(767); 
+			setState(767);
 			match(LPAR);
-			setState(768); 
+			setState(768);
 			((With_resource_statementContext)_localctx).stmt = assign_variable_statement();
-			setState(769); 
+			setState(769);
 			match(RPAR);
-			setState(770); 
+			setState(770);
 			((With_resource_statementContext)_localctx).stmts = statement_or_list();
 			}
 		}
@@ -3087,15 +3127,15 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(772); 
+			setState(772);
 			match(WITH);
-			setState(773); 
+			setState(773);
 			match(LPAR);
-			setState(774); 
+			setState(774);
 			((With_singleton_statementContext)_localctx).typ = type_identifier();
-			setState(775); 
+			setState(775);
 			match(RPAR);
-			setState(776); 
+			setState(776);
 			((With_singleton_statementContext)_localctx).stmts = statement_or_list();
 			}
 		}
@@ -3151,31 +3191,33 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(778); 
+			setState(778);
 			match(SWITCH);
-			setState(779); 
+			setState(779);
 			match(LPAR);
-			setState(780); 
+			setState(780);
 			((Switch_statementContext)_localctx).exp = expression(0);
-			setState(781); 
+			setState(781);
 			match(RPAR);
-			setState(782); 
+			setState(782);
 			match(LCURL);
-			setState(783); 
+			setState(783);
 			((Switch_statementContext)_localctx).cases = switch_case_statement_list();
 			setState(789);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==DEFAULT) {
 				{
-				setState(784); 
+				setState(784);
 				match(DEFAULT);
-				setState(785); 
+				setState(785);
 				match(COLON);
 				setState(787);
+				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << COMMENT) | (1L << BOOLEAN) | (1L << CHARACTER) | (1L << TEXT) | (1L << INTEGER) | (1L << DECIMAL) | (1L << DATE) | (1L << TIME) | (1L << DATETIME) | (1L << PERIOD) | (1L << VERSION) | (1L << CODE) | (1L << DOCUMENT) | (1L << BLOB) | (1L << IMAGE) | (1L << UUID) | (1L << ITERATOR) | (1L << CURSOR))) != 0) || ((((_la - 75)) & ~0x3f) == 0 && ((1L << (_la - 75)) & ((1L << (BREAK - 75)) | (1L << (DELETE - 75)) | (1L << (DO - 75)) | (1L << (FLUSH - 75)) | (1L << (FOR - 75)) | (1L << (IF - 75)) | (1L << (METHOD - 75)) | (1L << (RETURN - 75)))) != 0) || ((((_la - 140)) & ~0x3f) == 0 && ((1L << (_la - 140)) & ((1L << (STORE - 140)) | (1L << (SWITCH - 140)) | (1L << (THROW - 140)) | (1L << (TRY - 140)) | (1L << (WITH - 140)) | (1L << (WHILE - 140)) | (1L << (WRITE - 140)) | (1L << (SYMBOL_IDENTIFIER - 140)) | (1L << (TYPE_IDENTIFIER - 140)) | (1L << (VARIABLE_IDENTIFIER - 140)))) != 0)) {
 					{
-					setState(786); 
+					setState(786);
 					((Switch_statementContext)_localctx).stmts = statement_list();
 					}
 				}
@@ -3183,7 +3225,7 @@ public class OParser extends AbstractParser {
 				}
 			}
 
-			setState(791); 
+			setState(791);
 			match(RCURL);
 			}
 		}
@@ -3259,22 +3301,24 @@ public class OParser extends AbstractParser {
 		int _la;
 		try {
 			setState(806);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,46,_ctx) ) {
 			case 1:
 				_localctx = new AtomicSwitchCaseContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(793); 
+				setState(793);
 				match(CASE);
-				setState(794); 
+				setState(794);
 				((AtomicSwitchCaseContext)_localctx).exp = atomic_literal();
-				setState(795); 
+				setState(795);
 				match(COLON);
 				setState(797);
+				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << COMMENT) | (1L << BOOLEAN) | (1L << CHARACTER) | (1L << TEXT) | (1L << INTEGER) | (1L << DECIMAL) | (1L << DATE) | (1L << TIME) | (1L << DATETIME) | (1L << PERIOD) | (1L << VERSION) | (1L << CODE) | (1L << DOCUMENT) | (1L << BLOB) | (1L << IMAGE) | (1L << UUID) | (1L << ITERATOR) | (1L << CURSOR))) != 0) || ((((_la - 75)) & ~0x3f) == 0 && ((1L << (_la - 75)) & ((1L << (BREAK - 75)) | (1L << (DELETE - 75)) | (1L << (DO - 75)) | (1L << (FLUSH - 75)) | (1L << (FOR - 75)) | (1L << (IF - 75)) | (1L << (METHOD - 75)) | (1L << (RETURN - 75)))) != 0) || ((((_la - 140)) & ~0x3f) == 0 && ((1L << (_la - 140)) & ((1L << (STORE - 140)) | (1L << (SWITCH - 140)) | (1L << (THROW - 140)) | (1L << (TRY - 140)) | (1L << (WITH - 140)) | (1L << (WHILE - 140)) | (1L << (WRITE - 140)) | (1L << (SYMBOL_IDENTIFIER - 140)) | (1L << (TYPE_IDENTIFIER - 140)) | (1L << (VARIABLE_IDENTIFIER - 140)))) != 0)) {
 					{
-					setState(796); 
+					setState(796);
 					((AtomicSwitchCaseContext)_localctx).stmts = statement_list();
 					}
 				}
@@ -3285,19 +3329,20 @@ public class OParser extends AbstractParser {
 				_localctx = new CollectionSwitchCaseContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(799); 
+				setState(799);
 				match(CASE);
-				setState(800); 
+				setState(800);
 				match(IN);
-				setState(801); 
+				setState(801);
 				((CollectionSwitchCaseContext)_localctx).exp = literal_collection();
-				setState(802); 
+				setState(802);
 				match(COLON);
 				setState(804);
+				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << COMMENT) | (1L << BOOLEAN) | (1L << CHARACTER) | (1L << TEXT) | (1L << INTEGER) | (1L << DECIMAL) | (1L << DATE) | (1L << TIME) | (1L << DATETIME) | (1L << PERIOD) | (1L << VERSION) | (1L << CODE) | (1L << DOCUMENT) | (1L << BLOB) | (1L << IMAGE) | (1L << UUID) | (1L << ITERATOR) | (1L << CURSOR))) != 0) || ((((_la - 75)) & ~0x3f) == 0 && ((1L << (_la - 75)) & ((1L << (BREAK - 75)) | (1L << (DELETE - 75)) | (1L << (DO - 75)) | (1L << (FLUSH - 75)) | (1L << (FOR - 75)) | (1L << (IF - 75)) | (1L << (METHOD - 75)) | (1L << (RETURN - 75)))) != 0) || ((((_la - 140)) & ~0x3f) == 0 && ((1L << (_la - 140)) & ((1L << (STORE - 140)) | (1L << (SWITCH - 140)) | (1L << (THROW - 140)) | (1L << (TRY - 140)) | (1L << (WITH - 140)) | (1L << (WHILE - 140)) | (1L << (WRITE - 140)) | (1L << (SYMBOL_IDENTIFIER - 140)) | (1L << (TYPE_IDENTIFIER - 140)) | (1L << (VARIABLE_IDENTIFIER - 140)))) != 0)) {
 					{
-					setState(803); 
+					setState(803);
 					((CollectionSwitchCaseContext)_localctx).stmts = statement_list();
 					}
 				}
@@ -3361,32 +3406,33 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(808); 
+			setState(808);
 			match(FOR);
-			setState(809); 
+			setState(809);
 			match(EACH);
-			setState(810); 
+			setState(810);
 			match(LPAR);
-			setState(811); 
+			setState(811);
 			((For_each_statementContext)_localctx).name1 = variable_identifier();
 			setState(814);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==COMMA) {
 				{
-				setState(812); 
+				setState(812);
 				match(COMMA);
-				setState(813); 
+				setState(813);
 				((For_each_statementContext)_localctx).name2 = variable_identifier();
 				}
 			}
 
-			setState(816); 
+			setState(816);
 			match(IN);
-			setState(817); 
+			setState(817);
 			((For_each_statementContext)_localctx).source = expression(0);
-			setState(818); 
+			setState(818);
 			match(RPAR);
-			setState(819); 
+			setState(819);
 			((For_each_statementContext)_localctx).stmts = statement_or_list();
 			}
 		}
@@ -3438,30 +3484,31 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(821); 
+			setState(821);
 			match(DO);
-			setState(822); 
+			setState(822);
 			match(LCURL);
 			setState(824);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << COMMENT) | (1L << BOOLEAN) | (1L << CHARACTER) | (1L << TEXT) | (1L << INTEGER) | (1L << DECIMAL) | (1L << DATE) | (1L << TIME) | (1L << DATETIME) | (1L << PERIOD) | (1L << VERSION) | (1L << CODE) | (1L << DOCUMENT) | (1L << BLOB) | (1L << IMAGE) | (1L << UUID) | (1L << ITERATOR) | (1L << CURSOR))) != 0) || ((((_la - 75)) & ~0x3f) == 0 && ((1L << (_la - 75)) & ((1L << (BREAK - 75)) | (1L << (DELETE - 75)) | (1L << (DO - 75)) | (1L << (FLUSH - 75)) | (1L << (FOR - 75)) | (1L << (IF - 75)) | (1L << (METHOD - 75)) | (1L << (RETURN - 75)))) != 0) || ((((_la - 140)) & ~0x3f) == 0 && ((1L << (_la - 140)) & ((1L << (STORE - 140)) | (1L << (SWITCH - 140)) | (1L << (THROW - 140)) | (1L << (TRY - 140)) | (1L << (WITH - 140)) | (1L << (WHILE - 140)) | (1L << (WRITE - 140)) | (1L << (SYMBOL_IDENTIFIER - 140)) | (1L << (TYPE_IDENTIFIER - 140)) | (1L << (VARIABLE_IDENTIFIER - 140)))) != 0)) {
 				{
-				setState(823); 
+				setState(823);
 				((Do_while_statementContext)_localctx).stmts = statement_list();
 				}
 			}
 
-			setState(826); 
+			setState(826);
 			match(RCURL);
-			setState(827); 
+			setState(827);
 			match(WHILE);
-			setState(828); 
+			setState(828);
 			match(LPAR);
-			setState(829); 
+			setState(829);
 			((Do_while_statementContext)_localctx).exp = expression(0);
-			setState(830); 
+			setState(830);
 			match(RPAR);
-			setState(831); 
+			setState(831);
 			match(SEMI);
 			}
 		}
@@ -3508,15 +3555,15 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(833); 
+			setState(833);
 			match(WHILE);
-			setState(834); 
+			setState(834);
 			match(LPAR);
-			setState(835); 
+			setState(835);
 			((While_statementContext)_localctx).exp = expression(0);
-			setState(836); 
+			setState(836);
 			match(RPAR);
-			setState(837); 
+			setState(837);
 			((While_statementContext)_localctx).stmts = statement_or_list();
 			}
 		}
@@ -3572,32 +3619,34 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(839); 
+			setState(839);
 			match(IF);
-			setState(840); 
+			setState(840);
 			match(LPAR);
-			setState(841); 
+			setState(841);
 			((If_statementContext)_localctx).exp = expression(0);
-			setState(842); 
+			setState(842);
 			match(RPAR);
-			setState(843); 
+			setState(843);
 			((If_statementContext)_localctx).stmts = statement_or_list();
 			setState(845);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,49,_ctx) ) {
 			case 1:
 				{
-				setState(844); 
+				setState(844);
 				((If_statementContext)_localctx).elseIfs = else_if_statement_list(0);
 				}
 				break;
 			}
 			setState(849);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,50,_ctx) ) {
 			case 1:
 				{
-				setState(847); 
+				setState(847);
 				match(ELSE);
-				setState(848); 
+				setState(848);
 				((If_statementContext)_localctx).elseStmts = statement_or_list();
 				}
 				break;
@@ -3697,17 +3746,17 @@ public class OParser extends AbstractParser {
 			_ctx = _localctx;
 			_prevctx = _localctx;
 
-			setState(852); 
+			setState(852);
 			match(ELSE);
-			setState(853); 
+			setState(853);
 			match(IF);
-			setState(854); 
+			setState(854);
 			match(LPAR);
-			setState(855); 
+			setState(855);
 			((ElseIfStatementListContext)_localctx).exp = expression(0);
-			setState(856); 
+			setState(856);
 			match(RPAR);
-			setState(857); 
+			setState(857);
 			((ElseIfStatementListContext)_localctx).stmts = statement_or_list();
 			}
 			_ctx.stop = _input.LT(-1);
@@ -3725,17 +3774,17 @@ public class OParser extends AbstractParser {
 					pushNewRecursionContext(_localctx, _startState, RULE_else_if_statement_list);
 					setState(859);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(860); 
+					setState(860);
 					match(ELSE);
-					setState(861); 
+					setState(861);
 					match(IF);
-					setState(862); 
+					setState(862);
 					match(LPAR);
-					setState(863); 
+					setState(863);
 					((ElseIfStatementListItemContext)_localctx).exp = expression(0);
-					setState(864); 
+					setState(864);
 					match(RPAR);
-					setState(865); 
+					setState(865);
 					((ElseIfStatementListItemContext)_localctx).stmts = statement_or_list();
 					}
 					} 
@@ -3784,11 +3833,11 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(872); 
+			setState(872);
 			match(THROW);
-			setState(873); 
+			setState(873);
 			((Raise_statementContext)_localctx).exp = expression(0);
-			setState(874); 
+			setState(874);
 			match(SEMI);
 			}
 		}
@@ -3862,82 +3911,88 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(876); 
+			setState(876);
 			match(TRY);
-			setState(877); 
+			setState(877);
 			match(LPAR);
-			setState(878); 
+			setState(878);
 			((Try_statementContext)_localctx).name = variable_identifier();
-			setState(879); 
+			setState(879);
 			match(RPAR);
-			setState(880); 
+			setState(880);
 			match(LCURL);
 			setState(882);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << COMMENT) | (1L << BOOLEAN) | (1L << CHARACTER) | (1L << TEXT) | (1L << INTEGER) | (1L << DECIMAL) | (1L << DATE) | (1L << TIME) | (1L << DATETIME) | (1L << PERIOD) | (1L << VERSION) | (1L << CODE) | (1L << DOCUMENT) | (1L << BLOB) | (1L << IMAGE) | (1L << UUID) | (1L << ITERATOR) | (1L << CURSOR))) != 0) || ((((_la - 75)) & ~0x3f) == 0 && ((1L << (_la - 75)) & ((1L << (BREAK - 75)) | (1L << (DELETE - 75)) | (1L << (DO - 75)) | (1L << (FLUSH - 75)) | (1L << (FOR - 75)) | (1L << (IF - 75)) | (1L << (METHOD - 75)) | (1L << (RETURN - 75)))) != 0) || ((((_la - 140)) & ~0x3f) == 0 && ((1L << (_la - 140)) & ((1L << (STORE - 140)) | (1L << (SWITCH - 140)) | (1L << (THROW - 140)) | (1L << (TRY - 140)) | (1L << (WITH - 140)) | (1L << (WHILE - 140)) | (1L << (WRITE - 140)) | (1L << (SYMBOL_IDENTIFIER - 140)) | (1L << (TYPE_IDENTIFIER - 140)) | (1L << (VARIABLE_IDENTIFIER - 140)))) != 0)) {
 				{
-				setState(881); 
+				setState(881);
 				((Try_statementContext)_localctx).stmts = statement_list();
 				}
 			}
 
-			setState(884); 
+			setState(884);
 			match(RCURL);
 			setState(886);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,53,_ctx) ) {
 			case 1:
 				{
-				setState(885); 
+				setState(885);
 				((Try_statementContext)_localctx).handlers = catch_statement_list();
 				}
 				break;
 			}
 			setState(897);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,55,_ctx) ) {
 			case 1:
 				{
-				setState(888); 
+				setState(888);
 				match(CATCH);
-				setState(889); 
+				setState(889);
 				match(LPAR);
-				setState(890); 
+				setState(890);
 				match(ANY);
-				setState(891); 
+				setState(891);
 				match(RPAR);
-				setState(892); 
+				setState(892);
 				match(LCURL);
 				setState(894);
+				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << COMMENT) | (1L << BOOLEAN) | (1L << CHARACTER) | (1L << TEXT) | (1L << INTEGER) | (1L << DECIMAL) | (1L << DATE) | (1L << TIME) | (1L << DATETIME) | (1L << PERIOD) | (1L << VERSION) | (1L << CODE) | (1L << DOCUMENT) | (1L << BLOB) | (1L << IMAGE) | (1L << UUID) | (1L << ITERATOR) | (1L << CURSOR))) != 0) || ((((_la - 75)) & ~0x3f) == 0 && ((1L << (_la - 75)) & ((1L << (BREAK - 75)) | (1L << (DELETE - 75)) | (1L << (DO - 75)) | (1L << (FLUSH - 75)) | (1L << (FOR - 75)) | (1L << (IF - 75)) | (1L << (METHOD - 75)) | (1L << (RETURN - 75)))) != 0) || ((((_la - 140)) & ~0x3f) == 0 && ((1L << (_la - 140)) & ((1L << (STORE - 140)) | (1L << (SWITCH - 140)) | (1L << (THROW - 140)) | (1L << (TRY - 140)) | (1L << (WITH - 140)) | (1L << (WHILE - 140)) | (1L << (WRITE - 140)) | (1L << (SYMBOL_IDENTIFIER - 140)) | (1L << (TYPE_IDENTIFIER - 140)) | (1L << (VARIABLE_IDENTIFIER - 140)))) != 0)) {
 					{
-					setState(893); 
+					setState(893);
 					((Try_statementContext)_localctx).anyStmts = statement_list();
 					}
 				}
 
-				setState(896); 
+				setState(896);
 				match(RCURL);
 				}
 				break;
 			}
 			setState(905);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,57,_ctx) ) {
 			case 1:
 				{
-				setState(899); 
+				setState(899);
 				match(FINALLY);
-				setState(900); 
+				setState(900);
 				match(LCURL);
 				setState(902);
+				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << COMMENT) | (1L << BOOLEAN) | (1L << CHARACTER) | (1L << TEXT) | (1L << INTEGER) | (1L << DECIMAL) | (1L << DATE) | (1L << TIME) | (1L << DATETIME) | (1L << PERIOD) | (1L << VERSION) | (1L << CODE) | (1L << DOCUMENT) | (1L << BLOB) | (1L << IMAGE) | (1L << UUID) | (1L << ITERATOR) | (1L << CURSOR))) != 0) || ((((_la - 75)) & ~0x3f) == 0 && ((1L << (_la - 75)) & ((1L << (BREAK - 75)) | (1L << (DELETE - 75)) | (1L << (DO - 75)) | (1L << (FLUSH - 75)) | (1L << (FOR - 75)) | (1L << (IF - 75)) | (1L << (METHOD - 75)) | (1L << (RETURN - 75)))) != 0) || ((((_la - 140)) & ~0x3f) == 0 && ((1L << (_la - 140)) & ((1L << (STORE - 140)) | (1L << (SWITCH - 140)) | (1L << (THROW - 140)) | (1L << (TRY - 140)) | (1L << (WITH - 140)) | (1L << (WHILE - 140)) | (1L << (WRITE - 140)) | (1L << (SYMBOL_IDENTIFIER - 140)) | (1L << (TYPE_IDENTIFIER - 140)) | (1L << (VARIABLE_IDENTIFIER - 140)))) != 0)) {
 					{
-					setState(901); 
+					setState(901);
 					((Try_statementContext)_localctx).finalStmts = statement_list();
 					}
 				}
 
-				setState(904); 
+				setState(904);
 				match(RCURL);
 				}
 				break;
@@ -4022,31 +4077,33 @@ public class OParser extends AbstractParser {
 		int _la;
 		try {
 			setState(928);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,60,_ctx) ) {
 			case 1:
 				_localctx = new CatchAtomicStatementContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(907); 
+				setState(907);
 				match(CATCH);
-				setState(908); 
+				setState(908);
 				match(LPAR);
-				setState(909); 
+				setState(909);
 				((CatchAtomicStatementContext)_localctx).name = symbol_identifier();
-				setState(910); 
+				setState(910);
 				match(RPAR);
-				setState(911); 
+				setState(911);
 				match(LCURL);
 				setState(913);
+				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << COMMENT) | (1L << BOOLEAN) | (1L << CHARACTER) | (1L << TEXT) | (1L << INTEGER) | (1L << DECIMAL) | (1L << DATE) | (1L << TIME) | (1L << DATETIME) | (1L << PERIOD) | (1L << VERSION) | (1L << CODE) | (1L << DOCUMENT) | (1L << BLOB) | (1L << IMAGE) | (1L << UUID) | (1L << ITERATOR) | (1L << CURSOR))) != 0) || ((((_la - 75)) & ~0x3f) == 0 && ((1L << (_la - 75)) & ((1L << (BREAK - 75)) | (1L << (DELETE - 75)) | (1L << (DO - 75)) | (1L << (FLUSH - 75)) | (1L << (FOR - 75)) | (1L << (IF - 75)) | (1L << (METHOD - 75)) | (1L << (RETURN - 75)))) != 0) || ((((_la - 140)) & ~0x3f) == 0 && ((1L << (_la - 140)) & ((1L << (STORE - 140)) | (1L << (SWITCH - 140)) | (1L << (THROW - 140)) | (1L << (TRY - 140)) | (1L << (WITH - 140)) | (1L << (WHILE - 140)) | (1L << (WRITE - 140)) | (1L << (SYMBOL_IDENTIFIER - 140)) | (1L << (TYPE_IDENTIFIER - 140)) | (1L << (VARIABLE_IDENTIFIER - 140)))) != 0)) {
 					{
-					setState(912); 
+					setState(912);
 					((CatchAtomicStatementContext)_localctx).stmts = statement_list();
 					}
 				}
 
-				setState(915); 
+				setState(915);
 				match(RCURL);
 				}
 				break;
@@ -4054,28 +4111,29 @@ public class OParser extends AbstractParser {
 				_localctx = new CatchCollectionStatementContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(917); 
+				setState(917);
 				match(CATCH);
-				setState(918); 
+				setState(918);
 				match(IN);
-				setState(919); 
+				setState(919);
 				match(LPAR);
-				setState(920); 
+				setState(920);
 				((CatchCollectionStatementContext)_localctx).exp = symbol_list();
-				setState(921); 
+				setState(921);
 				match(RPAR);
-				setState(922); 
+				setState(922);
 				match(LCURL);
 				setState(924);
+				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << COMMENT) | (1L << BOOLEAN) | (1L << CHARACTER) | (1L << TEXT) | (1L << INTEGER) | (1L << DECIMAL) | (1L << DATE) | (1L << TIME) | (1L << DATETIME) | (1L << PERIOD) | (1L << VERSION) | (1L << CODE) | (1L << DOCUMENT) | (1L << BLOB) | (1L << IMAGE) | (1L << UUID) | (1L << ITERATOR) | (1L << CURSOR))) != 0) || ((((_la - 75)) & ~0x3f) == 0 && ((1L << (_la - 75)) & ((1L << (BREAK - 75)) | (1L << (DELETE - 75)) | (1L << (DO - 75)) | (1L << (FLUSH - 75)) | (1L << (FOR - 75)) | (1L << (IF - 75)) | (1L << (METHOD - 75)) | (1L << (RETURN - 75)))) != 0) || ((((_la - 140)) & ~0x3f) == 0 && ((1L << (_la - 140)) & ((1L << (STORE - 140)) | (1L << (SWITCH - 140)) | (1L << (THROW - 140)) | (1L << (TRY - 140)) | (1L << (WITH - 140)) | (1L << (WHILE - 140)) | (1L << (WRITE - 140)) | (1L << (SYMBOL_IDENTIFIER - 140)) | (1L << (TYPE_IDENTIFIER - 140)) | (1L << (VARIABLE_IDENTIFIER - 140)))) != 0)) {
 					{
-					setState(923); 
+					setState(923);
 					((CatchCollectionStatementContext)_localctx).stmts = statement_list();
 					}
 				}
 
-				setState(926); 
+				setState(926);
 				match(RCURL);
 				}
 				break;
@@ -4115,9 +4173,9 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(930); 
+			setState(930);
 			match(BREAK);
-			setState(931); 
+			setState(931);
 			match(SEMI);
 			}
 		}
@@ -4160,18 +4218,19 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(933); 
+			setState(933);
 			match(RETURN);
 			setState(935);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << XMARK) | (1L << MINUS) | (1L << LT) | (1L << CODE) | (1L << DOCUMENT) | (1L << BLOB))) != 0) || ((((_la - 95)) & ~0x3f) == 0 && ((1L << (_la - 95)) & ((1L << (EXECUTE - 95)) | (1L << (FETCH - 95)) | (1L << (FILTERED - 95)) | (1L << (MUTABLE - 95)) | (1L << (NULL - 95)) | (1L << (READ - 95)) | (1L << (SELF - 95)) | (1L << (SORTED - 95)) | (1L << (THIS - 95)) | (1L << (BOOLEAN_LITERAL - 95)) | (1L << (CHAR_LITERAL - 95)) | (1L << (MIN_INTEGER - 95)) | (1L << (MAX_INTEGER - 95)) | (1L << (SYMBOL_IDENTIFIER - 95)) | (1L << (TYPE_IDENTIFIER - 95)))) != 0) || ((((_la - 159)) & ~0x3f) == 0 && ((1L << (_la - 159)) & ((1L << (VARIABLE_IDENTIFIER - 159)) | (1L << (TEXT_LITERAL - 159)) | (1L << (UUID_LITERAL - 159)) | (1L << (INTEGER_LITERAL - 159)) | (1L << (HEXA_LITERAL - 159)) | (1L << (DECIMAL_LITERAL - 159)) | (1L << (DATETIME_LITERAL - 159)) | (1L << (TIME_LITERAL - 159)) | (1L << (DATE_LITERAL - 159)) | (1L << (PERIOD_LITERAL - 159)) | (1L << (VERSION_LITERAL - 159)))) != 0)) {
 				{
-				setState(934); 
+				setState(934);
 				((Return_statementContext)_localctx).exp = expression(0);
 				}
 			}
 
-			setState(937); 
+			setState(937);
 			match(SEMI);
 			}
 		}
@@ -4218,20 +4277,21 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(939); 
+			setState(939);
 			((Method_callContext)_localctx).method = method_selector();
-			setState(940); 
+			setState(940);
 			match(LPAR);
 			setState(942);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << XMARK) | (1L << MINUS) | (1L << LT) | (1L << CODE) | (1L << DOCUMENT) | (1L << BLOB))) != 0) || ((((_la - 95)) & ~0x3f) == 0 && ((1L << (_la - 95)) & ((1L << (EXECUTE - 95)) | (1L << (FETCH - 95)) | (1L << (FILTERED - 95)) | (1L << (MUTABLE - 95)) | (1L << (NULL - 95)) | (1L << (READ - 95)) | (1L << (SELF - 95)) | (1L << (SORTED - 95)) | (1L << (THIS - 95)) | (1L << (BOOLEAN_LITERAL - 95)) | (1L << (CHAR_LITERAL - 95)) | (1L << (MIN_INTEGER - 95)) | (1L << (MAX_INTEGER - 95)) | (1L << (SYMBOL_IDENTIFIER - 95)) | (1L << (TYPE_IDENTIFIER - 95)))) != 0) || ((((_la - 159)) & ~0x3f) == 0 && ((1L << (_la - 159)) & ((1L << (VARIABLE_IDENTIFIER - 159)) | (1L << (TEXT_LITERAL - 159)) | (1L << (UUID_LITERAL - 159)) | (1L << (INTEGER_LITERAL - 159)) | (1L << (HEXA_LITERAL - 159)) | (1L << (DECIMAL_LITERAL - 159)) | (1L << (DATETIME_LITERAL - 159)) | (1L << (TIME_LITERAL - 159)) | (1L << (DATE_LITERAL - 159)) | (1L << (PERIOD_LITERAL - 159)) | (1L << (VERSION_LITERAL - 159)))) != 0)) {
 				{
-				setState(941); 
+				setState(941);
 				((Method_callContext)_localctx).args = argument_assignment_list(0);
 				}
 			}
 
-			setState(944); 
+			setState(944);
 			match(RPAR);
 			}
 		}
@@ -4298,12 +4358,13 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 86, RULE_method_selector);
 		try {
 			setState(951);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,63,_ctx) ) {
 			case 1:
 				_localctx = new MethodNameContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(946); 
+				setState(946);
 				((MethodNameContext)_localctx).name = method_identifier();
 				}
 				break;
@@ -4311,11 +4372,11 @@ public class OParser extends AbstractParser {
 				_localctx = new MethodParentContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(947); 
+				setState(947);
 				((MethodParentContext)_localctx).parent = callable_parent(0);
-				setState(948); 
+				setState(948);
 				match(DOT);
-				setState(949); 
+				setState(949);
 				((MethodParentContext)_localctx).name = method_identifier();
 				}
 				break;
@@ -4398,7 +4459,7 @@ public class OParser extends AbstractParser {
 			_ctx = _localctx;
 			_prevctx = _localctx;
 
-			setState(954); 
+			setState(954);
 			((CallableRootContext)_localctx).name = identifier();
 			}
 			_ctx.stop = _input.LT(-1);
@@ -4416,7 +4477,7 @@ public class OParser extends AbstractParser {
 					pushNewRecursionContext(_localctx, _startState, RULE_callable_parent);
 					setState(956);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(957); 
+					setState(957);
 					((CallableSelectorContext)_localctx).select = callable_selector();
 					}
 					} 
@@ -4488,14 +4549,15 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 90, RULE_callable_selector);
 		try {
 			setState(969);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case DOT:
 				_localctx = new CallableMemberSelectorContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(963); 
+				setState(963);
 				match(DOT);
-				setState(964); 
+				setState(964);
 				((CallableMemberSelectorContext)_localctx).name = variable_identifier();
 				}
 				break;
@@ -4503,11 +4565,11 @@ public class OParser extends AbstractParser {
 				_localctx = new CallableItemSelectorContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(965); 
+				setState(965);
 				match(LBRAK);
-				setState(966); 
+				setState(966);
 				((CallableItemSelectorContext)_localctx).exp = expression(0);
-				setState(967); 
+				setState(967);
 				match(RBRAK);
 				}
 				break;
@@ -5279,61 +5341,62 @@ public class OParser extends AbstractParser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(994);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,66,_ctx) ) {
 			case 1:
-				{
-				_localctx = new MinusExpressionContext(_localctx);
-				_ctx = _localctx;
-				_prevctx = _localctx;
-
-				setState(972); 
-				match(MINUS);
-				setState(973); 
-				((MinusExpressionContext)_localctx).exp = expression(34);
-				}
-				break;
-			case 2:
-				{
-				_localctx = new NotExpressionContext(_localctx);
-				_ctx = _localctx;
-				_prevctx = _localctx;
-				setState(974); 
-				match(XMARK);
-				setState(975); 
-				((NotExpressionContext)_localctx).exp = expression(33);
-				}
-				break;
-			case 3:
-				{
-				_localctx = new CastExpressionContext(_localctx);
-				_ctx = _localctx;
-				_prevctx = _localctx;
-				setState(976); 
-				match(LPAR);
-				setState(977); 
-				((CastExpressionContext)_localctx).right = category_or_any_type();
-				setState(978); 
-				match(RPAR);
-				setState(979); 
-				((CastExpressionContext)_localctx).left = expression(13);
-				}
-				break;
-			case 4:
 				{
 				_localctx = new InstanceExpressionContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(981); 
+
+				setState(972);
 				((InstanceExpressionContext)_localctx).exp = instance_expression(0);
 				}
 				break;
-			case 5:
+			case 2:
 				{
 				_localctx = new MethodExpressionContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(982); 
+				setState(973);
 				((MethodExpressionContext)_localctx).exp = method_expression();
+				}
+				break;
+			case 3:
+				{
+				_localctx = new MinusExpressionContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
+				setState(974);
+				match(MINUS);
+				setState(975);
+				((MinusExpressionContext)_localctx).exp = expression(34);
+				}
+				break;
+			case 4:
+				{
+				_localctx = new NotExpressionContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
+				setState(976);
+				match(XMARK);
+				setState(977);
+				((NotExpressionContext)_localctx).exp = expression(33);
+				}
+				break;
+			case 5:
+				{
+				_localctx = new CastExpressionContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
+				setState(978);
+				match(LPAR);
+				setState(979);
+				((CastExpressionContext)_localctx).right = category_or_any_type();
+				setState(980);
+				match(RPAR);
+				setState(981);
+				((CastExpressionContext)_localctx).left = expression(13);
 				}
 				break;
 			case 6:
@@ -5341,13 +5404,13 @@ public class OParser extends AbstractParser {
 				_localctx = new CodeExpressionContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(983); 
+				setState(983);
 				match(CODE);
-				setState(984); 
+				setState(984);
 				match(LPAR);
-				setState(985); 
+				setState(985);
 				((CodeExpressionContext)_localctx).exp = expression(0);
-				setState(986); 
+				setState(986);
 				match(RPAR);
 				}
 				break;
@@ -5356,13 +5419,13 @@ public class OParser extends AbstractParser {
 				_localctx = new ExecuteExpressionContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(988); 
+				setState(988);
 				match(EXECUTE);
-				setState(989); 
+				setState(989);
 				match(LPAR);
-				setState(990); 
+				setState(990);
 				((ExecuteExpressionContext)_localctx).name = variable_identifier();
-				setState(991); 
+				setState(991);
 				match(RPAR);
 				}
 				break;
@@ -5371,7 +5434,7 @@ public class OParser extends AbstractParser {
 				_localctx = new ClosureExpressionContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(993); 
+				setState(993);
 				((ClosureExpressionContext)_localctx).exp = closure_expression();
 				}
 				break;
@@ -5386,6 +5449,7 @@ public class OParser extends AbstractParser {
 					_prevctx = _localctx;
 					{
 					setState(1103);
+					_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,67,_ctx) ) {
 					case 1:
 						{
@@ -5394,9 +5458,9 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(996);
 						if (!(precpred(_ctx, 32))) throw new FailedPredicateException(this, "precpred(_ctx, 32)");
-						setState(997); 
+						setState(997);
 						multiply();
-						setState(998); 
+						setState(998);
 						((MultiplyExpressionContext)_localctx).right = expression(33);
 						}
 						break;
@@ -5407,9 +5471,9 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1000);
 						if (!(precpred(_ctx, 31))) throw new FailedPredicateException(this, "precpred(_ctx, 31)");
-						setState(1001); 
+						setState(1001);
 						divide();
-						setState(1002); 
+						setState(1002);
 						((DivideExpressionContext)_localctx).right = expression(32);
 						}
 						break;
@@ -5420,9 +5484,9 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1004);
 						if (!(precpred(_ctx, 30))) throw new FailedPredicateException(this, "precpred(_ctx, 30)");
-						setState(1005); 
+						setState(1005);
 						modulo();
-						setState(1006); 
+						setState(1006);
 						((ModuloExpressionContext)_localctx).right = expression(31);
 						}
 						break;
@@ -5433,9 +5497,9 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1008);
 						if (!(precpred(_ctx, 29))) throw new FailedPredicateException(this, "precpred(_ctx, 29)");
-						setState(1009); 
+						setState(1009);
 						idivide();
-						setState(1010); 
+						setState(1010);
 						((IntDivideExpressionContext)_localctx).right = expression(30);
 						}
 						break;
@@ -5452,8 +5516,12 @@ public class OParser extends AbstractParser {
 						if ( !(_la==PLUS || _la==MINUS) ) {
 							((AddExpressionContext)_localctx).op = (Token)_errHandler.recoverInline(this);
 						}
-						consume();
-						setState(1014); 
+						else {
+							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+							_errHandler.reportMatch(this);
+							consume();
+						}
+						setState(1014);
 						((AddExpressionContext)_localctx).right = expression(29);
 						}
 						break;
@@ -5464,9 +5532,9 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1015);
 						if (!(precpred(_ctx, 27))) throw new FailedPredicateException(this, "precpred(_ctx, 27)");
-						setState(1016); 
+						setState(1016);
 						match(LT);
-						setState(1017); 
+						setState(1017);
 						((LessThanExpressionContext)_localctx).right = expression(28);
 						}
 						break;
@@ -5477,9 +5545,9 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1018);
 						if (!(precpred(_ctx, 26))) throw new FailedPredicateException(this, "precpred(_ctx, 26)");
-						setState(1019); 
+						setState(1019);
 						match(LTE);
-						setState(1020); 
+						setState(1020);
 						((LessThanOrEqualExpressionContext)_localctx).right = expression(27);
 						}
 						break;
@@ -5490,9 +5558,9 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1021);
 						if (!(precpred(_ctx, 25))) throw new FailedPredicateException(this, "precpred(_ctx, 25)");
-						setState(1022); 
+						setState(1022);
 						match(GT);
-						setState(1023); 
+						setState(1023);
 						((GreaterThanExpressionContext)_localctx).right = expression(26);
 						}
 						break;
@@ -5503,9 +5571,9 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1024);
 						if (!(precpred(_ctx, 24))) throw new FailedPredicateException(this, "precpred(_ctx, 24)");
-						setState(1025); 
+						setState(1025);
 						match(GTE);
-						setState(1026); 
+						setState(1026);
 						((GreaterThanOrEqualExpressionContext)_localctx).right = expression(25);
 						}
 						break;
@@ -5516,11 +5584,11 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1027);
 						if (!(precpred(_ctx, 21))) throw new FailedPredicateException(this, "precpred(_ctx, 21)");
-						setState(1028); 
+						setState(1028);
 						match(IS);
-						setState(1029); 
+						setState(1029);
 						match(NOT);
-						setState(1030); 
+						setState(1030);
 						((IsNotExpressionContext)_localctx).right = expression(22);
 						}
 						break;
@@ -5531,9 +5599,9 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1031);
 						if (!(precpred(_ctx, 20))) throw new FailedPredicateException(this, "precpred(_ctx, 20)");
-						setState(1032); 
+						setState(1032);
 						match(IS);
-						setState(1033); 
+						setState(1033);
 						((IsExpressionContext)_localctx).right = expression(21);
 						}
 						break;
@@ -5544,9 +5612,9 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1034);
 						if (!(precpred(_ctx, 19))) throw new FailedPredicateException(this, "precpred(_ctx, 19)");
-						setState(1035); 
+						setState(1035);
 						match(EQ2);
-						setState(1036); 
+						setState(1036);
 						((EqualsExpressionContext)_localctx).right = expression(20);
 						}
 						break;
@@ -5557,9 +5625,9 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1037);
 						if (!(precpred(_ctx, 18))) throw new FailedPredicateException(this, "precpred(_ctx, 18)");
-						setState(1038); 
+						setState(1038);
 						match(XEQ);
-						setState(1039); 
+						setState(1039);
 						((NotEqualsExpressionContext)_localctx).right = expression(19);
 						}
 						break;
@@ -5570,9 +5638,9 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1040);
 						if (!(precpred(_ctx, 17))) throw new FailedPredicateException(this, "precpred(_ctx, 17)");
-						setState(1041); 
+						setState(1041);
 						match(TEQ);
-						setState(1042); 
+						setState(1042);
 						((RoughlyEqualsExpressionContext)_localctx).right = expression(18);
 						}
 						break;
@@ -5583,9 +5651,9 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1043);
 						if (!(precpred(_ctx, 16))) throw new FailedPredicateException(this, "precpred(_ctx, 16)");
-						setState(1044); 
+						setState(1044);
 						match(PIPE2);
-						setState(1045); 
+						setState(1045);
 						((OrExpressionContext)_localctx).right = expression(17);
 						}
 						break;
@@ -5596,9 +5664,9 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1046);
 						if (!(precpred(_ctx, 15))) throw new FailedPredicateException(this, "precpred(_ctx, 15)");
-						setState(1047); 
+						setState(1047);
 						match(AMP2);
-						setState(1048); 
+						setState(1048);
 						((AndExpressionContext)_localctx).right = expression(16);
 						}
 						break;
@@ -5609,13 +5677,13 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1049);
 						if (!(precpred(_ctx, 14))) throw new FailedPredicateException(this, "precpred(_ctx, 14)");
-						setState(1050); 
+						setState(1050);
 						match(QMARK);
-						setState(1051); 
+						setState(1051);
 						((TernaryExpressionContext)_localctx).ifTrue = expression(0);
-						setState(1052); 
+						setState(1052);
 						match(COLON);
-						setState(1053); 
+						setState(1053);
 						((TernaryExpressionContext)_localctx).ifFalse = expression(15);
 						}
 						break;
@@ -5626,9 +5694,9 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1055);
 						if (!(precpred(_ctx, 12))) throw new FailedPredicateException(this, "precpred(_ctx, 12)");
-						setState(1056); 
+						setState(1056);
 						match(IN);
-						setState(1057); 
+						setState(1057);
 						((InExpressionContext)_localctx).right = expression(13);
 						}
 						break;
@@ -5639,9 +5707,9 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1058);
 						if (!(precpred(_ctx, 11))) throw new FailedPredicateException(this, "precpred(_ctx, 11)");
-						setState(1059); 
+						setState(1059);
 						match(CONTAINS);
-						setState(1060); 
+						setState(1060);
 						((ContainsExpressionContext)_localctx).right = expression(12);
 						}
 						break;
@@ -5652,11 +5720,11 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1061);
 						if (!(precpred(_ctx, 10))) throw new FailedPredicateException(this, "precpred(_ctx, 10)");
-						setState(1062); 
+						setState(1062);
 						match(CONTAINS);
-						setState(1063); 
+						setState(1063);
 						match(ALL);
-						setState(1064); 
+						setState(1064);
 						((ContainsAllExpressionContext)_localctx).right = expression(11);
 						}
 						break;
@@ -5667,11 +5735,11 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1065);
 						if (!(precpred(_ctx, 9))) throw new FailedPredicateException(this, "precpred(_ctx, 9)");
-						setState(1066); 
+						setState(1066);
 						match(CONTAINS);
-						setState(1067); 
+						setState(1067);
 						match(ANY);
-						setState(1068); 
+						setState(1068);
 						((ContainsAnyExpressionContext)_localctx).right = expression(10);
 						}
 						break;
@@ -5682,11 +5750,11 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1069);
 						if (!(precpred(_ctx, 8))) throw new FailedPredicateException(this, "precpred(_ctx, 8)");
-						setState(1070); 
+						setState(1070);
 						match(NOT);
-						setState(1071); 
+						setState(1071);
 						match(IN);
-						setState(1072); 
+						setState(1072);
 						((NotInExpressionContext)_localctx).right = expression(9);
 						}
 						break;
@@ -5697,11 +5765,11 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1073);
 						if (!(precpred(_ctx, 7))) throw new FailedPredicateException(this, "precpred(_ctx, 7)");
-						setState(1074); 
+						setState(1074);
 						match(NOT);
-						setState(1075); 
+						setState(1075);
 						match(CONTAINS);
-						setState(1076); 
+						setState(1076);
 						((NotContainsExpressionContext)_localctx).right = expression(8);
 						}
 						break;
@@ -5712,13 +5780,13 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1077);
 						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
-						setState(1078); 
+						setState(1078);
 						match(NOT);
-						setState(1079); 
+						setState(1079);
 						match(CONTAINS);
-						setState(1080); 
+						setState(1080);
 						match(ALL);
-						setState(1081); 
+						setState(1081);
 						((NotContainsAllExpressionContext)_localctx).right = expression(7);
 						}
 						break;
@@ -5729,13 +5797,13 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1082);
 						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
-						setState(1083); 
+						setState(1083);
 						match(NOT);
-						setState(1084); 
+						setState(1084);
 						match(CONTAINS);
-						setState(1085); 
+						setState(1085);
 						match(ANY);
-						setState(1086); 
+						setState(1086);
 						((NotContainsAnyExpressionContext)_localctx).right = expression(6);
 						}
 						break;
@@ -5746,11 +5814,11 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1087);
 						if (!(precpred(_ctx, 23))) throw new FailedPredicateException(this, "precpred(_ctx, 23)");
-						setState(1088); 
+						setState(1088);
 						match(IS);
-						setState(1089); 
+						setState(1089);
 						match(NOT);
-						setState(1090); 
+						setState(1090);
 						((IsNotAnExpressionContext)_localctx).right = an_expression();
 						}
 						break;
@@ -5761,9 +5829,9 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1091);
 						if (!(precpred(_ctx, 22))) throw new FailedPredicateException(this, "precpred(_ctx, 22)");
-						setState(1092); 
+						setState(1092);
 						match(IS);
-						setState(1093); 
+						setState(1093);
 						((IsAnExpressionContext)_localctx).right = an_expression();
 						}
 						break;
@@ -5774,19 +5842,19 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1094);
 						if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-						setState(1095); 
+						setState(1095);
 						match(FOR);
-						setState(1096); 
+						setState(1096);
 						match(EACH);
-						setState(1097); 
+						setState(1097);
 						match(LPAR);
-						setState(1098); 
+						setState(1098);
 						((IteratorExpressionContext)_localctx).name = variable_identifier();
-						setState(1099); 
+						setState(1099);
 						match(IN);
-						setState(1100); 
+						setState(1100);
 						((IteratorExpressionContext)_localctx).source = expression(0);
-						setState(1101); 
+						setState(1101);
 						match(RPAR);
 						}
 						break;
@@ -5838,9 +5906,9 @@ public class OParser extends AbstractParser {
 			{
 			setState(1108);
 			if (!(this.willBeAOrAn())) throw new FailedPredicateException(this, "$parser.willBeAOrAn()");
-			setState(1109); 
+			setState(1109);
 			match(VARIABLE_IDENTIFIER);
-			setState(1110); 
+			setState(1110);
 			((An_expressionContext)_localctx).typ = category_or_any_type();
 			}
 		}
@@ -5880,7 +5948,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1112); 
+			setState(1112);
 			((Closure_expressionContext)_localctx).name = type_identifier();
 			}
 		}
@@ -5961,7 +6029,7 @@ public class OParser extends AbstractParser {
 			_ctx = _localctx;
 			_prevctx = _localctx;
 
-			setState(1115); 
+			setState(1115);
 			((SelectableExpressionContext)_localctx).parent = selectable_expression();
 			}
 			_ctx.stop = _input.LT(-1);
@@ -5979,7 +6047,7 @@ public class OParser extends AbstractParser {
 					pushNewRecursionContext(_localctx, _startState, RULE_instance_expression);
 					setState(1117);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(1118); 
+					setState(1118);
 					((SelectorExpressionContext)_localctx).selector = selector_expression();
 					}
 					} 
@@ -6048,67 +6116,68 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 100, RULE_method_expression);
 		try {
 			setState(1133);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,70,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1124); 
+				setState(1124);
 				blob_expression();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1125); 
+				setState(1125);
 				document_expression();
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(1126); 
+				setState(1126);
 				filtered_list_expression();
 				}
 				break;
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(1127); 
+				setState(1127);
 				fetch_store_expression();
 				}
 				break;
 			case 5:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(1128); 
+				setState(1128);
 				read_all_expression();
 				}
 				break;
 			case 6:
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(1129); 
+				setState(1129);
 				read_one_expression();
 				}
 				break;
 			case 7:
 				enterOuterAlt(_localctx, 7);
 				{
-				setState(1130); 
+				setState(1130);
 				sorted_expression();
 				}
 				break;
 			case 8:
 				enterOuterAlt(_localctx, 8);
 				{
-				setState(1131); 
+				setState(1131);
 				method_call();
 				}
 				break;
 			case 9:
 				enterOuterAlt(_localctx, 9);
 				{
-				setState(1132); 
+				setState(1132);
 				constructor_expression();
 				}
 				break;
@@ -6152,13 +6221,13 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1135); 
+			setState(1135);
 			match(BLOB);
-			setState(1136); 
+			setState(1136);
 			match(LPAR);
-			setState(1137); 
+			setState(1137);
 			expression(0);
-			setState(1138); 
+			setState(1138);
 			match(RPAR);
 			}
 		}
@@ -6201,20 +6270,21 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1140); 
+			setState(1140);
 			match(DOCUMENT);
-			setState(1141); 
+			setState(1141);
 			match(LPAR);
 			setState(1143);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << XMARK) | (1L << MINUS) | (1L << LT) | (1L << CODE) | (1L << DOCUMENT) | (1L << BLOB))) != 0) || ((((_la - 95)) & ~0x3f) == 0 && ((1L << (_la - 95)) & ((1L << (EXECUTE - 95)) | (1L << (FETCH - 95)) | (1L << (FILTERED - 95)) | (1L << (MUTABLE - 95)) | (1L << (NULL - 95)) | (1L << (READ - 95)) | (1L << (SELF - 95)) | (1L << (SORTED - 95)) | (1L << (THIS - 95)) | (1L << (BOOLEAN_LITERAL - 95)) | (1L << (CHAR_LITERAL - 95)) | (1L << (MIN_INTEGER - 95)) | (1L << (MAX_INTEGER - 95)) | (1L << (SYMBOL_IDENTIFIER - 95)) | (1L << (TYPE_IDENTIFIER - 95)))) != 0) || ((((_la - 159)) & ~0x3f) == 0 && ((1L << (_la - 159)) & ((1L << (VARIABLE_IDENTIFIER - 159)) | (1L << (TEXT_LITERAL - 159)) | (1L << (UUID_LITERAL - 159)) | (1L << (INTEGER_LITERAL - 159)) | (1L << (HEXA_LITERAL - 159)) | (1L << (DECIMAL_LITERAL - 159)) | (1L << (DATETIME_LITERAL - 159)) | (1L << (TIME_LITERAL - 159)) | (1L << (DATE_LITERAL - 159)) | (1L << (PERIOD_LITERAL - 159)) | (1L << (VERSION_LITERAL - 159)))) != 0)) {
 				{
-				setState(1142); 
+				setState(1142);
 				expression(0);
 				}
 			}
 
-			setState(1145); 
+			setState(1145);
 			match(RPAR);
 			}
 		}
@@ -6263,19 +6333,19 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1147); 
+			setState(1147);
 			match(WRITE);
-			setState(1148); 
+			setState(1148);
 			match(LPAR);
-			setState(1149); 
+			setState(1149);
 			((Write_statementContext)_localctx).what = expression(0);
-			setState(1150); 
+			setState(1150);
 			match(RPAR);
-			setState(1151); 
+			setState(1151);
 			match(TO);
-			setState(1152); 
+			setState(1152);
 			((Write_statementContext)_localctx).target = expression(0);
-			setState(1153); 
+			setState(1153);
 			match(SEMI);
 			}
 		}
@@ -6334,29 +6404,29 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1155); 
+			setState(1155);
 			match(FILTERED);
-			setState(1156); 
+			setState(1156);
 			match(LPAR);
-			setState(1157); 
+			setState(1157);
 			((Filtered_list_expressionContext)_localctx).source = expression(0);
-			setState(1158); 
+			setState(1158);
 			match(RPAR);
-			setState(1159); 
+			setState(1159);
 			match(WITH);
-			setState(1160); 
+			setState(1160);
 			match(LPAR);
-			setState(1161); 
+			setState(1161);
 			((Filtered_list_expressionContext)_localctx).name = variable_identifier();
-			setState(1162); 
+			setState(1162);
 			match(RPAR);
-			setState(1163); 
+			setState(1163);
 			match(WHERE);
-			setState(1164); 
+			setState(1164);
 			match(LPAR);
-			setState(1165); 
+			setState(1165);
 			((Filtered_list_expressionContext)_localctx).predicate = expression(0);
-			setState(1166); 
+			setState(1166);
 			match(RPAR);
 			}
 		}
@@ -6462,35 +6532,37 @@ public class OParser extends AbstractParser {
 		int _la;
 		try {
 			setState(1219);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,78,_ctx) ) {
 			case 1:
 				_localctx = new FetchOneContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1168); 
+				setState(1168);
 				match(FETCH);
-				setState(1169); 
+				setState(1169);
 				match(ONE);
 				setState(1174);
+				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==LPAR) {
 					{
-					setState(1170); 
+					setState(1170);
 					match(LPAR);
-					setState(1171); 
+					setState(1171);
 					((FetchOneContext)_localctx).typ = mutable_category_type();
-					setState(1172); 
+					setState(1172);
 					match(RPAR);
 					}
 				}
 
-				setState(1176); 
+				setState(1176);
 				match(WHERE);
-				setState(1177); 
+				setState(1177);
 				match(LPAR);
-				setState(1178); 
+				setState(1178);
 				((FetchOneContext)_localctx).predicate = expression(0);
-				setState(1179); 
+				setState(1179);
 				match(RPAR);
 				}
 				break;
@@ -6498,24 +6570,26 @@ public class OParser extends AbstractParser {
 				_localctx = new FetchManyContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1181); 
+				setState(1181);
 				match(FETCH);
 				setState(1202);
+				_errHandler.sync(this);
 				switch (_input.LA(1)) {
 				case ALL:
 					{
 					{
-					setState(1182); 
+					setState(1182);
 					match(ALL);
 					setState(1187);
+					_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,73,_ctx) ) {
 					case 1:
 						{
-						setState(1183); 
+						setState(1183);
 						match(LPAR);
-						setState(1184); 
+						setState(1184);
 						((FetchManyContext)_localctx).typ = mutable_category_type();
-						setState(1185); 
+						setState(1185);
 						match(RPAR);
 						}
 						break;
@@ -6528,29 +6602,30 @@ public class OParser extends AbstractParser {
 					{
 					{
 					setState(1193);
+					_errHandler.sync(this);
 					_la = _input.LA(1);
 					if (_la==LPAR) {
 						{
-						setState(1189); 
+						setState(1189);
 						match(LPAR);
-						setState(1190); 
+						setState(1190);
 						((FetchManyContext)_localctx).typ = mutable_category_type();
-						setState(1191); 
+						setState(1191);
 						match(RPAR);
 						}
 					}
 
-					setState(1195); 
+					setState(1195);
 					match(ROWS);
-					setState(1196); 
+					setState(1196);
 					match(LPAR);
-					setState(1197); 
+					setState(1197);
 					((FetchManyContext)_localctx).xstart = expression(0);
-					setState(1198); 
+					setState(1198);
 					match(TO);
-					setState(1199); 
+					setState(1199);
 					((FetchManyContext)_localctx).xstop = expression(0);
-					setState(1200); 
+					setState(1200);
 					match(RPAR);
 					}
 					}
@@ -6559,33 +6634,35 @@ public class OParser extends AbstractParser {
 					throw new NoViableAltException(this);
 				}
 				setState(1209);
+				_errHandler.sync(this);
 				switch ( getInterpreter().adaptivePredict(_input,76,_ctx) ) {
 				case 1:
 					{
-					setState(1204); 
+					setState(1204);
 					match(WHERE);
-					setState(1205); 
+					setState(1205);
 					match(LPAR);
-					setState(1206); 
+					setState(1206);
 					((FetchManyContext)_localctx).predicate = expression(0);
-					setState(1207); 
+					setState(1207);
 					match(RPAR);
 					}
 					break;
 				}
 				setState(1217);
+				_errHandler.sync(this);
 				switch ( getInterpreter().adaptivePredict(_input,77,_ctx) ) {
 				case 1:
 					{
-					setState(1211); 
+					setState(1211);
 					match(ORDER);
-					setState(1212); 
+					setState(1212);
 					match(BY);
-					setState(1213); 
+					setState(1213);
 					match(LPAR);
-					setState(1214); 
+					setState(1214);
 					((FetchManyContext)_localctx).orderby = order_by_list();
-					setState(1215); 
+					setState(1215);
 					match(RPAR);
 					}
 					break;
@@ -6644,37 +6721,39 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1221); 
+			setState(1221);
 			match(SORTED);
 			setState(1223);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==DESC) {
 				{
-				setState(1222); 
+				setState(1222);
 				match(DESC);
 				}
 			}
 
-			setState(1225); 
+			setState(1225);
 			match(LPAR);
-			setState(1226); 
+			setState(1226);
 			((Sorted_expressionContext)_localctx).source = instance_expression(0);
 			setState(1232);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==COMMA) {
 				{
-				setState(1227); 
+				setState(1227);
 				match(COMMA);
-				setState(1228); 
+				setState(1228);
 				key_token();
-				setState(1229); 
+				setState(1229);
 				match(EQ);
-				setState(1230); 
+				setState(1230);
 				((Sorted_expressionContext)_localctx).key = instance_expression(0);
 				}
 			}
 
-			setState(1234); 
+			setState(1234);
 			match(RPAR);
 			}
 		}
@@ -6756,14 +6835,15 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 114, RULE_selector_expression);
 		try {
 			setState(1246);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,81,_ctx) ) {
 			case 1:
 				_localctx = new MemberSelectorContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1236); 
+				setState(1236);
 				match(DOT);
-				setState(1237); 
+				setState(1237);
 				((MemberSelectorContext)_localctx).name = variable_identifier();
 				}
 				break;
@@ -6771,11 +6851,11 @@ public class OParser extends AbstractParser {
 				_localctx = new ItemSelectorContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1238); 
+				setState(1238);
 				match(LBRAK);
-				setState(1239); 
+				setState(1239);
 				((ItemSelectorContext)_localctx).exp = expression(0);
-				setState(1240); 
+				setState(1240);
 				match(RBRAK);
 				}
 				break;
@@ -6783,11 +6863,11 @@ public class OParser extends AbstractParser {
 				_localctx = new SliceSelectorContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(1242); 
+				setState(1242);
 				match(LBRAK);
-				setState(1243); 
+				setState(1243);
 				((SliceSelectorContext)_localctx).xslice = slice_arguments();
-				setState(1244); 
+				setState(1244);
 				match(RBRAK);
 				}
 				break;
@@ -6836,20 +6916,21 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1248); 
+			setState(1248);
 			((Constructor_expressionContext)_localctx).typ = mutable_category_type();
-			setState(1249); 
+			setState(1249);
 			match(LPAR);
 			setState(1251);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << XMARK) | (1L << MINUS) | (1L << LT) | (1L << CODE) | (1L << DOCUMENT) | (1L << BLOB))) != 0) || ((((_la - 95)) & ~0x3f) == 0 && ((1L << (_la - 95)) & ((1L << (EXECUTE - 95)) | (1L << (FETCH - 95)) | (1L << (FILTERED - 95)) | (1L << (MUTABLE - 95)) | (1L << (NULL - 95)) | (1L << (READ - 95)) | (1L << (SELF - 95)) | (1L << (SORTED - 95)) | (1L << (THIS - 95)) | (1L << (BOOLEAN_LITERAL - 95)) | (1L << (CHAR_LITERAL - 95)) | (1L << (MIN_INTEGER - 95)) | (1L << (MAX_INTEGER - 95)) | (1L << (SYMBOL_IDENTIFIER - 95)) | (1L << (TYPE_IDENTIFIER - 95)))) != 0) || ((((_la - 159)) & ~0x3f) == 0 && ((1L << (_la - 159)) & ((1L << (VARIABLE_IDENTIFIER - 159)) | (1L << (TEXT_LITERAL - 159)) | (1L << (UUID_LITERAL - 159)) | (1L << (INTEGER_LITERAL - 159)) | (1L << (HEXA_LITERAL - 159)) | (1L << (DECIMAL_LITERAL - 159)) | (1L << (DATETIME_LITERAL - 159)) | (1L << (TIME_LITERAL - 159)) | (1L << (DATE_LITERAL - 159)) | (1L << (PERIOD_LITERAL - 159)) | (1L << (VERSION_LITERAL - 159)))) != 0)) {
 				{
-				setState(1250); 
+				setState(1250);
 				((Constructor_expressionContext)_localctx).args = argument_assignment_list(0);
 				}
 			}
 
-			setState(1253); 
+			setState(1253);
 			match(RPAR);
 			}
 		}
@@ -6942,6 +7023,7 @@ public class OParser extends AbstractParser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(1260);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,83,_ctx) ) {
 			case 1:
 				{
@@ -6949,7 +7031,7 @@ public class OParser extends AbstractParser {
 				_ctx = _localctx;
 				_prevctx = _localctx;
 
-				setState(1256); 
+				setState(1256);
 				((ExpressionAssignmentListContext)_localctx).exp = expression(0);
 				setState(1257);
 				if (!(this.willNotBe(this.equalToken()))) throw new FailedPredicateException(this, "$parser.willNotBe($parser.equalToken())");
@@ -6960,7 +7042,7 @@ public class OParser extends AbstractParser {
 				_localctx = new ArgumentAssignmentListContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(1259); 
+				setState(1259);
 				((ArgumentAssignmentListContext)_localctx).item = argument_assignment();
 				}
 				break;
@@ -6980,9 +7062,9 @@ public class OParser extends AbstractParser {
 					pushNewRecursionContext(_localctx, _startState, RULE_argument_assignment_list);
 					setState(1262);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(1263); 
+					setState(1263);
 					match(COMMA);
-					setState(1264); 
+					setState(1264);
 					((ArgumentAssignmentListItemContext)_localctx).item = argument_assignment();
 					}
 					} 
@@ -7036,11 +7118,11 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1270); 
+			setState(1270);
 			((Argument_assignmentContext)_localctx).name = variable_identifier();
-			setState(1271); 
+			setState(1271);
 			assign();
-			setState(1272); 
+			setState(1272);
 			((Argument_assignmentContext)_localctx).exp = expression(0);
 			}
 		}
@@ -7088,13 +7170,13 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1274); 
+			setState(1274);
 			((Assign_instance_statementContext)_localctx).inst = assignable_instance(0);
-			setState(1275); 
+			setState(1275);
 			assign();
-			setState(1276); 
+			setState(1276);
 			((Assign_instance_statementContext)_localctx).exp = expression(0);
-			setState(1277); 
+			setState(1277);
 			match(SEMI);
 			}
 		}
@@ -7159,14 +7241,15 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 124, RULE_child_instance);
 		try {
 			setState(1285);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case DOT:
 				_localctx = new MemberInstanceContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1279); 
+				setState(1279);
 				match(DOT);
-				setState(1280); 
+				setState(1280);
 				((MemberInstanceContext)_localctx).name = variable_identifier();
 				}
 				break;
@@ -7174,11 +7257,11 @@ public class OParser extends AbstractParser {
 				_localctx = new ItemInstanceContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1281); 
+				setState(1281);
 				match(LBRAK);
-				setState(1282); 
+				setState(1282);
 				((ItemInstanceContext)_localctx).exp = expression(0);
-				setState(1283); 
+				setState(1283);
 				match(RBRAK);
 				}
 				break;
@@ -7230,13 +7313,13 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1287); 
+			setState(1287);
 			((Assign_tuple_statementContext)_localctx).items = variable_identifier_list();
-			setState(1288); 
+			setState(1288);
 			assign();
-			setState(1289); 
+			setState(1289);
 			((Assign_tuple_statementContext)_localctx).exp = expression(0);
-			setState(1290); 
+			setState(1290);
 			match(SEMI);
 			}
 		}
@@ -7273,7 +7356,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1292); 
+			setState(1292);
 			match(NULL);
 			}
 		}
@@ -7327,17 +7410,18 @@ public class OParser extends AbstractParser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(1295);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << COMMENT) | (1L << BOOLEAN) | (1L << CHARACTER) | (1L << TEXT) | (1L << INTEGER) | (1L << DECIMAL) | (1L << DATE) | (1L << TIME) | (1L << DATETIME) | (1L << PERIOD) | (1L << VERSION) | (1L << CODE) | (1L << DOCUMENT) | (1L << BLOB) | (1L << IMAGE) | (1L << UUID) | (1L << ITERATOR) | (1L << CURSOR))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (ABSTRACT - 64)) | (1L << (ANY - 64)) | (1L << (ATTRIBUTE - 64)) | (1L << (CATEGORY - 64)) | (1L << (ENUMERATED - 64)) | (1L << (METHOD - 64)) | (1L << (NATIVE - 64)))) != 0) || ((((_la - 137)) & ~0x3f) == 0 && ((1L << (_la - 137)) & ((1L << (SINGLETON - 137)) | (1L << (STORABLE - 137)) | (1L << (TEST - 137)) | (1L << (TYPE_IDENTIFIER - 137)))) != 0)) {
 				{
-				setState(1294); 
+				setState(1294);
 				declarations();
 				}
 			}
 
-			setState(1297); 
+			setState(1297);
 			lfs();
-			setState(1298); 
+			setState(1298);
 			match(EOF);
 			}
 		}
@@ -7386,7 +7470,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1300); 
+			setState(1300);
 			declaration();
 			setState(1306);
 			_errHandler.sync(this);
@@ -7394,9 +7478,9 @@ public class OParser extends AbstractParser {
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << COMMENT) | (1L << BOOLEAN) | (1L << CHARACTER) | (1L << TEXT) | (1L << INTEGER) | (1L << DECIMAL) | (1L << DATE) | (1L << TIME) | (1L << DATETIME) | (1L << PERIOD) | (1L << VERSION) | (1L << CODE) | (1L << DOCUMENT) | (1L << BLOB) | (1L << IMAGE) | (1L << UUID) | (1L << ITERATOR) | (1L << CURSOR))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (ABSTRACT - 64)) | (1L << (ANY - 64)) | (1L << (ATTRIBUTE - 64)) | (1L << (CATEGORY - 64)) | (1L << (ENUMERATED - 64)) | (1L << (METHOD - 64)) | (1L << (NATIVE - 64)))) != 0) || ((((_la - 137)) & ~0x3f) == 0 && ((1L << (_la - 137)) & ((1L << (SINGLETON - 137)) | (1L << (STORABLE - 137)) | (1L << (TEST - 137)) | (1L << (TYPE_IDENTIFIER - 137)))) != 0)) {
 				{
 				{
-				setState(1301); 
+				setState(1301);
 				lfp();
-				setState(1302); 
+				setState(1302);
 				declaration();
 				}
 				}
@@ -7472,9 +7556,9 @@ public class OParser extends AbstractParser {
 			while (_la==COMMENT) {
 				{
 				{
-				setState(1309); 
+				setState(1309);
 				comment_statement();
-				setState(1310); 
+				setState(1310);
 				lfp();
 				}
 				}
@@ -7483,34 +7567,35 @@ public class OParser extends AbstractParser {
 				_la = _input.LA(1);
 			}
 			setState(1322);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,89,_ctx) ) {
 			case 1:
 				{
-				setState(1317); 
+				setState(1317);
 				attribute_declaration();
 				}
 				break;
 			case 2:
 				{
-				setState(1318); 
+				setState(1318);
 				category_declaration();
 				}
 				break;
 			case 3:
 				{
-				setState(1319); 
+				setState(1319);
 				resource_declaration();
 				}
 				break;
 			case 4:
 				{
-				setState(1320); 
+				setState(1320);
 				enum_declaration();
 				}
 				break;
 			case 5:
 				{
-				setState(1321); 
+				setState(1321);
 				method_declaration();
 				}
 				break;
@@ -7552,7 +7637,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1324); 
+			setState(1324);
 			native_resource_declaration();
 			}
 		}
@@ -7593,18 +7678,19 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 138, RULE_enum_declaration);
 		try {
 			setState(1328);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,90,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1326); 
+				setState(1326);
 				enum_category_declaration();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1327); 
+				setState(1327);
 				enum_native_declaration();
 				}
 				break;
@@ -7655,7 +7741,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1330); 
+			setState(1330);
 			native_symbol();
 			setState(1336);
 			_errHandler.sync(this);
@@ -7663,9 +7749,9 @@ public class OParser extends AbstractParser {
 			while (_la==SYMBOL_IDENTIFIER) {
 				{
 				{
-				setState(1331); 
+				setState(1331);
 				lfp();
-				setState(1332); 
+				setState(1332);
 				native_symbol();
 				}
 				}
@@ -7720,7 +7806,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1339); 
+			setState(1339);
 			category_symbol();
 			setState(1345);
 			_errHandler.sync(this);
@@ -7728,9 +7814,9 @@ public class OParser extends AbstractParser {
 			while (_la==SYMBOL_IDENTIFIER) {
 				{
 				{
-				setState(1340); 
+				setState(1340);
 				lfp();
-				setState(1341); 
+				setState(1341);
 				category_symbol();
 				}
 				}
@@ -7783,7 +7869,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1348); 
+			setState(1348);
 			symbol_identifier();
 			setState(1353);
 			_errHandler.sync(this);
@@ -7791,9 +7877,9 @@ public class OParser extends AbstractParser {
 			while (_la==COMMA) {
 				{
 				{
-				setState(1349); 
+				setState(1349);
 				match(COMMA);
-				setState(1350); 
+				setState(1350);
 				symbol_identifier();
 				}
 				}
@@ -7909,14 +7995,15 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 146, RULE_attribute_constraint);
 		try {
 			setState(1366);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,94,_ctx) ) {
 			case 1:
 				_localctx = new MatchingListContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1356); 
+				setState(1356);
 				match(IN);
-				setState(1357); 
+				setState(1357);
 				((MatchingListContext)_localctx).source = list_literal();
 				}
 				break;
@@ -7924,9 +8011,9 @@ public class OParser extends AbstractParser {
 				_localctx = new MatchingSetContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1358); 
+				setState(1358);
 				match(IN);
-				setState(1359); 
+				setState(1359);
 				((MatchingSetContext)_localctx).source = set_literal();
 				}
 				break;
@@ -7934,9 +8021,9 @@ public class OParser extends AbstractParser {
 				_localctx = new MatchingRangeContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(1360); 
+				setState(1360);
 				match(IN);
-				setState(1361); 
+				setState(1361);
 				((MatchingRangeContext)_localctx).source = range_literal();
 				}
 				break;
@@ -7944,9 +8031,9 @@ public class OParser extends AbstractParser {
 				_localctx = new MatchingPatternContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(1362); 
+				setState(1362);
 				match(MATCHING);
-				setState(1363); 
+				setState(1363);
 				((MatchingPatternContext)_localctx).text = match(TEXT_LITERAL);
 				}
 				break;
@@ -7954,9 +8041,9 @@ public class OParser extends AbstractParser {
 				_localctx = new MatchingExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(1364); 
+				setState(1364);
 				match(MATCHING);
-				setState(1365); 
+				setState(1365);
 				((MatchingExpressionContext)_localctx).exp = expression(0);
 				}
 				break;
@@ -8002,26 +8089,28 @@ public class OParser extends AbstractParser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(1369);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==MUTABLE) {
 				{
-				setState(1368); 
+				setState(1368);
 				match(MUTABLE);
 				}
 			}
 
-			setState(1371); 
+			setState(1371);
 			match(LBRAK);
 			setState(1373);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << XMARK) | (1L << MINUS) | (1L << LT) | (1L << CODE) | (1L << DOCUMENT) | (1L << BLOB))) != 0) || ((((_la - 95)) & ~0x3f) == 0 && ((1L << (_la - 95)) & ((1L << (EXECUTE - 95)) | (1L << (FETCH - 95)) | (1L << (FILTERED - 95)) | (1L << (MUTABLE - 95)) | (1L << (NULL - 95)) | (1L << (READ - 95)) | (1L << (SELF - 95)) | (1L << (SORTED - 95)) | (1L << (THIS - 95)) | (1L << (BOOLEAN_LITERAL - 95)) | (1L << (CHAR_LITERAL - 95)) | (1L << (MIN_INTEGER - 95)) | (1L << (MAX_INTEGER - 95)) | (1L << (SYMBOL_IDENTIFIER - 95)) | (1L << (TYPE_IDENTIFIER - 95)))) != 0) || ((((_la - 159)) & ~0x3f) == 0 && ((1L << (_la - 159)) & ((1L << (VARIABLE_IDENTIFIER - 159)) | (1L << (TEXT_LITERAL - 159)) | (1L << (UUID_LITERAL - 159)) | (1L << (INTEGER_LITERAL - 159)) | (1L << (HEXA_LITERAL - 159)) | (1L << (DECIMAL_LITERAL - 159)) | (1L << (DATETIME_LITERAL - 159)) | (1L << (TIME_LITERAL - 159)) | (1L << (DATE_LITERAL - 159)) | (1L << (PERIOD_LITERAL - 159)) | (1L << (VERSION_LITERAL - 159)))) != 0)) {
 				{
-				setState(1372); 
+				setState(1372);
 				expression_list();
 				}
 			}
 
-			setState(1375); 
+			setState(1375);
 			match(RBRAK);
 			}
 		}
@@ -8065,26 +8154,28 @@ public class OParser extends AbstractParser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(1378);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==MUTABLE) {
 				{
-				setState(1377); 
+				setState(1377);
 				match(MUTABLE);
 				}
 			}
 
-			setState(1380); 
+			setState(1380);
 			match(LT);
 			setState(1382);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << XMARK) | (1L << MINUS) | (1L << LT) | (1L << CODE) | (1L << DOCUMENT) | (1L << BLOB))) != 0) || ((((_la - 95)) & ~0x3f) == 0 && ((1L << (_la - 95)) & ((1L << (EXECUTE - 95)) | (1L << (FETCH - 95)) | (1L << (FILTERED - 95)) | (1L << (MUTABLE - 95)) | (1L << (NULL - 95)) | (1L << (READ - 95)) | (1L << (SELF - 95)) | (1L << (SORTED - 95)) | (1L << (THIS - 95)) | (1L << (BOOLEAN_LITERAL - 95)) | (1L << (CHAR_LITERAL - 95)) | (1L << (MIN_INTEGER - 95)) | (1L << (MAX_INTEGER - 95)) | (1L << (SYMBOL_IDENTIFIER - 95)) | (1L << (TYPE_IDENTIFIER - 95)))) != 0) || ((((_la - 159)) & ~0x3f) == 0 && ((1L << (_la - 159)) & ((1L << (VARIABLE_IDENTIFIER - 159)) | (1L << (TEXT_LITERAL - 159)) | (1L << (UUID_LITERAL - 159)) | (1L << (INTEGER_LITERAL - 159)) | (1L << (HEXA_LITERAL - 159)) | (1L << (DECIMAL_LITERAL - 159)) | (1L << (DATETIME_LITERAL - 159)) | (1L << (TIME_LITERAL - 159)) | (1L << (DATE_LITERAL - 159)) | (1L << (PERIOD_LITERAL - 159)) | (1L << (VERSION_LITERAL - 159)))) != 0)) {
 				{
-				setState(1381); 
+				setState(1381);
 				expression_list();
 				}
 			}
 
-			setState(1384); 
+			setState(1384);
 			match(GT);
 			}
 		}
@@ -8131,7 +8222,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1386); 
+			setState(1386);
 			expression(0);
 			setState(1391);
 			_errHandler.sync(this);
@@ -8139,9 +8230,9 @@ public class OParser extends AbstractParser {
 			while (_la==COMMA) {
 				{
 				{
-				setState(1387); 
+				setState(1387);
 				match(COMMA);
-				setState(1388); 
+				setState(1388);
 				expression(0);
 				}
 				}
@@ -8194,15 +8285,15 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1394); 
+			setState(1394);
 			match(LBRAK);
-			setState(1395); 
+			setState(1395);
 			((Range_literalContext)_localctx).low = expression(0);
-			setState(1396); 
+			setState(1396);
 			match(RANGE);
-			setState(1397); 
+			setState(1397);
 			((Range_literalContext)_localctx).high = expression(0);
-			setState(1398); 
+			setState(1398);
 			match(RBRAK);
 			}
 		}
@@ -8346,6 +8437,7 @@ public class OParser extends AbstractParser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(1412);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case BOOLEAN:
 			case CHARACTER:
@@ -8368,7 +8460,7 @@ public class OParser extends AbstractParser {
 				_ctx = _localctx;
 				_prevctx = _localctx;
 
-				setState(1401); 
+				setState(1401);
 				((PrimaryTypeContext)_localctx).p = primary_type();
 				}
 				break;
@@ -8377,13 +8469,13 @@ public class OParser extends AbstractParser {
 				_localctx = new CursorTypeContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(1402); 
+				setState(1402);
 				match(CURSOR);
-				setState(1403); 
+				setState(1403);
 				match(LT);
-				setState(1404); 
+				setState(1404);
 				((CursorTypeContext)_localctx).c = typedef(0);
-				setState(1405); 
+				setState(1405);
 				match(GT);
 				}
 				break;
@@ -8392,13 +8484,13 @@ public class OParser extends AbstractParser {
 				_localctx = new IteratorTypeContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(1407); 
+				setState(1407);
 				match(ITERATOR);
-				setState(1408); 
+				setState(1408);
 				match(LT);
-				setState(1409); 
+				setState(1409);
 				((IteratorTypeContext)_localctx).i = typedef(0);
-				setState(1410); 
+				setState(1410);
 				match(GT);
 				}
 				break;
@@ -8415,6 +8507,7 @@ public class OParser extends AbstractParser {
 					_prevctx = _localctx;
 					{
 					setState(1422);
+					_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,101,_ctx) ) {
 					case 1:
 						{
@@ -8423,7 +8516,7 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_typedef);
 						setState(1414);
 						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
-						setState(1415); 
+						setState(1415);
 						match(LTGT);
 						}
 						break;
@@ -8434,9 +8527,9 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_typedef);
 						setState(1416);
 						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
-						setState(1417); 
+						setState(1417);
 						match(LBRAK);
-						setState(1418); 
+						setState(1418);
 						match(RBRAK);
 						}
 						break;
@@ -8447,9 +8540,9 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_typedef);
 						setState(1419);
 						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
-						setState(1420); 
+						setState(1420);
 						match(LCURL);
-						setState(1421); 
+						setState(1421);
 						match(RCURL);
 						}
 						break;
@@ -8520,6 +8613,7 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 158, RULE_primary_type);
 		try {
 			setState(1429);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case BOOLEAN:
 			case CHARACTER:
@@ -8539,7 +8633,7 @@ public class OParser extends AbstractParser {
 				_localctx = new NativeTypeContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1427); 
+				setState(1427);
 				((NativeTypeContext)_localctx).n = native_type();
 				}
 				break;
@@ -8547,7 +8641,7 @@ public class OParser extends AbstractParser {
 				_localctx = new CategoryTypeContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1428); 
+				setState(1428);
 				((CategoryTypeContext)_localctx).c = category_type();
 				}
 				break;
@@ -8763,12 +8857,13 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 160, RULE_native_type);
 		try {
 			setState(1446);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case BOOLEAN:
 				_localctx = new BooleanTypeContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1431); 
+				setState(1431);
 				match(BOOLEAN);
 				}
 				break;
@@ -8776,7 +8871,7 @@ public class OParser extends AbstractParser {
 				_localctx = new CharacterTypeContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1432); 
+				setState(1432);
 				match(CHARACTER);
 				}
 				break;
@@ -8784,7 +8879,7 @@ public class OParser extends AbstractParser {
 				_localctx = new TextTypeContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(1433); 
+				setState(1433);
 				match(TEXT);
 				}
 				break;
@@ -8792,7 +8887,7 @@ public class OParser extends AbstractParser {
 				_localctx = new ImageTypeContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(1434); 
+				setState(1434);
 				match(IMAGE);
 				}
 				break;
@@ -8800,7 +8895,7 @@ public class OParser extends AbstractParser {
 				_localctx = new IntegerTypeContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(1435); 
+				setState(1435);
 				match(INTEGER);
 				}
 				break;
@@ -8808,7 +8903,7 @@ public class OParser extends AbstractParser {
 				_localctx = new DecimalTypeContext(_localctx);
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(1436); 
+				setState(1436);
 				match(DECIMAL);
 				}
 				break;
@@ -8816,7 +8911,7 @@ public class OParser extends AbstractParser {
 				_localctx = new DocumentTypeContext(_localctx);
 				enterOuterAlt(_localctx, 7);
 				{
-				setState(1437); 
+				setState(1437);
 				match(DOCUMENT);
 				}
 				break;
@@ -8824,7 +8919,7 @@ public class OParser extends AbstractParser {
 				_localctx = new DateTypeContext(_localctx);
 				enterOuterAlt(_localctx, 8);
 				{
-				setState(1438); 
+				setState(1438);
 				match(DATE);
 				}
 				break;
@@ -8832,7 +8927,7 @@ public class OParser extends AbstractParser {
 				_localctx = new DateTimeTypeContext(_localctx);
 				enterOuterAlt(_localctx, 9);
 				{
-				setState(1439); 
+				setState(1439);
 				match(DATETIME);
 				}
 				break;
@@ -8840,7 +8935,7 @@ public class OParser extends AbstractParser {
 				_localctx = new TimeTypeContext(_localctx);
 				enterOuterAlt(_localctx, 10);
 				{
-				setState(1440); 
+				setState(1440);
 				match(TIME);
 				}
 				break;
@@ -8848,7 +8943,7 @@ public class OParser extends AbstractParser {
 				_localctx = new PeriodTypeContext(_localctx);
 				enterOuterAlt(_localctx, 11);
 				{
-				setState(1441); 
+				setState(1441);
 				match(PERIOD);
 				}
 				break;
@@ -8856,7 +8951,7 @@ public class OParser extends AbstractParser {
 				_localctx = new VersionTypeContext(_localctx);
 				enterOuterAlt(_localctx, 12);
 				{
-				setState(1442); 
+				setState(1442);
 				match(VERSION);
 				}
 				break;
@@ -8864,7 +8959,7 @@ public class OParser extends AbstractParser {
 				_localctx = new CodeTypeContext(_localctx);
 				enterOuterAlt(_localctx, 13);
 				{
-				setState(1443); 
+				setState(1443);
 				match(CODE);
 				}
 				break;
@@ -8872,7 +8967,7 @@ public class OParser extends AbstractParser {
 				_localctx = new BlobTypeContext(_localctx);
 				enterOuterAlt(_localctx, 14);
 				{
-				setState(1444); 
+				setState(1444);
 				match(BLOB);
 				}
 				break;
@@ -8880,7 +8975,7 @@ public class OParser extends AbstractParser {
 				_localctx = new UUIDTypeContext(_localctx);
 				enterOuterAlt(_localctx, 15);
 				{
-				setState(1445); 
+				setState(1445);
 				match(UUID);
 				}
 				break;
@@ -8922,7 +9017,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1448); 
+			setState(1448);
 			((Category_typeContext)_localctx).t1 = match(TYPE_IDENTIFIER);
 			}
 		}
@@ -8964,15 +9059,16 @@ public class OParser extends AbstractParser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(1451);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==MUTABLE) {
 				{
-				setState(1450); 
+				setState(1450);
 				match(MUTABLE);
 				}
 			}
 
-			setState(1453); 
+			setState(1453);
 			category_type();
 			}
 		}
@@ -9010,7 +9106,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1455); 
+			setState(1455);
 			((Code_typeContext)_localctx).t1 = match(CODE);
 			}
 		}
@@ -9087,12 +9183,13 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 168, RULE_category_declaration);
 		try {
 			setState(1460);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,106,_ctx) ) {
 			case 1:
 				_localctx = new ConcreteCategoryDeclarationContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1457); 
+				setState(1457);
 				((ConcreteCategoryDeclarationContext)_localctx).decl = concrete_category_declaration();
 				}
 				break;
@@ -9100,7 +9197,7 @@ public class OParser extends AbstractParser {
 				_localctx = new NativeCategoryDeclarationContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1458); 
+				setState(1458);
 				((NativeCategoryDeclarationContext)_localctx).decl = native_category_declaration();
 				}
 				break;
@@ -9108,7 +9205,7 @@ public class OParser extends AbstractParser {
 				_localctx = new SingletonCategoryDeclarationContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(1459); 
+				setState(1459);
 				((SingletonCategoryDeclarationContext)_localctx).decl = singleton_category_declaration();
 				}
 				break;
@@ -9157,7 +9254,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1462); 
+			setState(1462);
 			type_identifier();
 			setState(1467);
 			_errHandler.sync(this);
@@ -9165,9 +9262,9 @@ public class OParser extends AbstractParser {
 			while (_la==COMMA) {
 				{
 				{
-				setState(1463); 
+				setState(1463);
 				match(COMMA);
-				setState(1464); 
+				setState(1464);
 				type_identifier();
 				}
 				}
@@ -9214,18 +9311,19 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 172, RULE_method_identifier);
 		try {
 			setState(1472);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case VARIABLE_IDENTIFIER:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1470); 
+				setState(1470);
 				variable_identifier();
 				}
 				break;
 			case TYPE_IDENTIFIER:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1471); 
+				setState(1471);
 				type_identifier();
 				}
 				break;
@@ -9303,12 +9401,13 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 174, RULE_identifier);
 		try {
 			setState(1477);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case VARIABLE_IDENTIFIER:
 				_localctx = new VariableIdentifierContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1474); 
+				setState(1474);
 				variable_identifier();
 				}
 				break;
@@ -9316,7 +9415,7 @@ public class OParser extends AbstractParser {
 				_localctx = new TypeIdentifierContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1475); 
+				setState(1475);
 				type_identifier();
 				}
 				break;
@@ -9324,7 +9423,7 @@ public class OParser extends AbstractParser {
 				_localctx = new SymbolIdentifierContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(1476); 
+				setState(1476);
 				symbol_identifier();
 				}
 				break;
@@ -9365,7 +9464,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1479); 
+			setState(1479);
 			match(VARIABLE_IDENTIFIER);
 			}
 		}
@@ -9409,7 +9508,11 @@ public class OParser extends AbstractParser {
 			if ( !(_la==STORABLE || _la==VARIABLE_IDENTIFIER) ) {
 			_errHandler.recoverInline(this);
 			}
-			consume();
+			else {
+				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+				_errHandler.reportMatch(this);
+				consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -9445,7 +9548,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1483); 
+			setState(1483);
 			match(TYPE_IDENTIFIER);
 			}
 		}
@@ -9482,7 +9585,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1485); 
+			setState(1485);
 			match(SYMBOL_IDENTIFIER);
 			}
 		}
@@ -9529,7 +9632,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1487); 
+			setState(1487);
 			argument();
 			setState(1492);
 			_errHandler.sync(this);
@@ -9537,9 +9640,9 @@ public class OParser extends AbstractParser {
 			while (_la==COMMA) {
 				{
 				{
-				setState(1488); 
+				setState(1488);
 				match(COMMA);
-				setState(1489); 
+				setState(1489);
 				argument();
 				}
 				}
@@ -9609,12 +9712,13 @@ public class OParser extends AbstractParser {
 		int _la;
 		try {
 			setState(1500);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,112,_ctx) ) {
 			case 1:
 				_localctx = new CodeArgumentContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1495); 
+				setState(1495);
 				((CodeArgumentContext)_localctx).arg = code_argument();
 				}
 				break;
@@ -9623,15 +9727,16 @@ public class OParser extends AbstractParser {
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(1497);
+				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==MUTABLE) {
 					{
-					setState(1496); 
+					setState(1496);
 					match(MUTABLE);
 					}
 				}
 
-				setState(1499); 
+				setState(1499);
 				((OperatorArgumentContext)_localctx).arg = operator_argument();
 				}
 				break;
@@ -9674,11 +9779,12 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 188, RULE_operator_argument);
 		try {
 			setState(1504);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case VARIABLE_IDENTIFIER:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1502); 
+				setState(1502);
 				named_argument();
 				}
 				break;
@@ -9703,7 +9809,7 @@ public class OParser extends AbstractParser {
 			case TYPE_IDENTIFIER:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1503); 
+				setState(1503);
 				typed_argument();
 				}
 				break;
@@ -9751,15 +9857,16 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1506); 
+			setState(1506);
 			variable_identifier();
 			setState(1509);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==EQ) {
 				{
-				setState(1507); 
+				setState(1507);
 				match(EQ);
-				setState(1508); 
+				setState(1508);
 				literal_expression();
 				}
 			}
@@ -9805,9 +9912,9 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1511); 
+			setState(1511);
 			code_type();
-			setState(1512); 
+			setState(1512);
 			((Code_argumentContext)_localctx).name = variable_identifier();
 			}
 		}
@@ -9848,6 +9955,7 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 194, RULE_category_or_any_type);
 		try {
 			setState(1516);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case BOOLEAN:
 			case CHARACTER:
@@ -9869,14 +9977,14 @@ public class OParser extends AbstractParser {
 			case TYPE_IDENTIFIER:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1514); 
+				setState(1514);
 				typedef(0);
 				}
 				break;
 			case ANY:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1515); 
+				setState(1515);
 				any_type(0);
 				}
 				break;
@@ -9971,7 +10079,7 @@ public class OParser extends AbstractParser {
 			_ctx = _localctx;
 			_prevctx = _localctx;
 
-			setState(1519); 
+			setState(1519);
 			match(ANY);
 			}
 			_ctx.stop = _input.LT(-1);
@@ -9984,6 +10092,7 @@ public class OParser extends AbstractParser {
 					_prevctx = _localctx;
 					{
 					setState(1527);
+					_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,116,_ctx) ) {
 					case 1:
 						{
@@ -9991,9 +10100,9 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_any_type);
 						setState(1521);
 						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
-						setState(1522); 
+						setState(1522);
 						match(LBRAK);
-						setState(1523); 
+						setState(1523);
 						match(RBRAK);
 						}
 						break;
@@ -10003,9 +10112,9 @@ public class OParser extends AbstractParser {
 						pushNewRecursionContext(_localctx, _startState, RULE_any_type);
 						setState(1524);
 						if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-						setState(1525); 
+						setState(1525);
 						match(LCURL);
-						setState(1526); 
+						setState(1526);
 						match(RCURL);
 						}
 						break;
@@ -10063,7 +10172,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1532); 
+			setState(1532);
 			member_method_declaration();
 			setState(1538);
 			_errHandler.sync(this);
@@ -10071,9 +10180,9 @@ public class OParser extends AbstractParser {
 			while (((((_la - 46)) & ~0x3f) == 0 && ((1L << (_la - 46)) & ((1L << (BOOLEAN - 46)) | (1L << (CHARACTER - 46)) | (1L << (TEXT - 46)) | (1L << (INTEGER - 46)) | (1L << (DECIMAL - 46)) | (1L << (DATE - 46)) | (1L << (TIME - 46)) | (1L << (DATETIME - 46)) | (1L << (PERIOD - 46)) | (1L << (VERSION - 46)) | (1L << (CODE - 46)) | (1L << (DOCUMENT - 46)) | (1L << (BLOB - 46)) | (1L << (IMAGE - 46)) | (1L << (UUID - 46)) | (1L << (ITERATOR - 46)) | (1L << (CURSOR - 46)) | (1L << (ABSTRACT - 46)) | (1L << (GETTER - 46)))) != 0) || ((((_la - 111)) & ~0x3f) == 0 && ((1L << (_la - 111)) & ((1L << (METHOD - 111)) | (1L << (OPERATOR - 111)) | (1L << (SETTER - 111)) | (1L << (TYPE_IDENTIFIER - 111)))) != 0)) {
 				{
 				{
-				setState(1533); 
+				setState(1533);
 				lfp();
-				setState(1534); 
+				setState(1534);
 				member_method_declaration();
 				}
 				}
@@ -10129,39 +10238,40 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 200, RULE_member_method_declaration);
 		try {
 			setState(1546);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,119,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1541); 
+				setState(1541);
 				setter_method_declaration();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1542); 
+				setState(1542);
 				getter_method_declaration();
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(1543); 
+				setState(1543);
 				concrete_method_declaration();
 				}
 				break;
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(1544); 
+				setState(1544);
 				abstract_method_declaration();
 				}
 				break;
 			case 5:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(1545); 
+				setState(1545);
 				operator_method_declaration();
 				}
 				break;
@@ -10212,7 +10322,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1548); 
+			setState(1548);
 			native_member_method_declaration();
 			setState(1554);
 			_errHandler.sync(this);
@@ -10220,9 +10330,9 @@ public class OParser extends AbstractParser {
 			while (((((_la - 46)) & ~0x3f) == 0 && ((1L << (_la - 46)) & ((1L << (BOOLEAN - 46)) | (1L << (CHARACTER - 46)) | (1L << (TEXT - 46)) | (1L << (INTEGER - 46)) | (1L << (DECIMAL - 46)) | (1L << (DATE - 46)) | (1L << (TIME - 46)) | (1L << (DATETIME - 46)) | (1L << (PERIOD - 46)) | (1L << (VERSION - 46)) | (1L << (CODE - 46)) | (1L << (DOCUMENT - 46)) | (1L << (BLOB - 46)) | (1L << (IMAGE - 46)) | (1L << (UUID - 46)) | (1L << (ITERATOR - 46)) | (1L << (CURSOR - 46)) | (1L << (ANY - 46)) | (1L << (GETTER - 46)))) != 0) || ((((_la - 111)) & ~0x3f) == 0 && ((1L << (_la - 111)) & ((1L << (METHOD - 111)) | (1L << (NATIVE - 111)) | (1L << (SETTER - 111)) | (1L << (TYPE_IDENTIFIER - 111)))) != 0)) {
 				{
 				{
-				setState(1549); 
+				setState(1549);
 				lfp();
-				setState(1550); 
+				setState(1550);
 				native_member_method_declaration();
 				}
 				}
@@ -10272,25 +10382,26 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 204, RULE_native_member_method_declaration);
 		try {
 			setState(1560);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,121,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1557); 
+				setState(1557);
 				native_getter_declaration();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1558); 
+				setState(1558);
 				native_setter_declaration();
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(1559); 
+				setState(1559);
 				native_method_declaration();
 				}
 				break;
@@ -10404,14 +10515,15 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 206, RULE_native_category_binding);
 		try {
 			setState(1572);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case JAVA:
 				_localctx = new JavaCategoryBindingContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1562); 
+				setState(1562);
 				match(JAVA);
-				setState(1563); 
+				setState(1563);
 				((JavaCategoryBindingContext)_localctx).binding = java_class_identifier_expression(0);
 				}
 				break;
@@ -10419,9 +10531,9 @@ public class OParser extends AbstractParser {
 				_localctx = new CSharpCategoryBindingContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1564); 
+				setState(1564);
 				match(CSHARP);
-				setState(1565); 
+				setState(1565);
 				((CSharpCategoryBindingContext)_localctx).binding = csharp_identifier_expression(0);
 				}
 				break;
@@ -10429,9 +10541,9 @@ public class OParser extends AbstractParser {
 				_localctx = new Python2CategoryBindingContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(1566); 
+				setState(1566);
 				match(PYTHON2);
-				setState(1567); 
+				setState(1567);
 				((Python2CategoryBindingContext)_localctx).binding = python_category_binding();
 				}
 				break;
@@ -10439,9 +10551,9 @@ public class OParser extends AbstractParser {
 				_localctx = new Python3CategoryBindingContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(1568); 
+				setState(1568);
 				match(PYTHON3);
-				setState(1569); 
+				setState(1569);
 				((Python3CategoryBindingContext)_localctx).binding = python_category_binding();
 				}
 				break;
@@ -10449,9 +10561,9 @@ public class OParser extends AbstractParser {
 				_localctx = new JavaScriptCategoryBindingContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(1570); 
+				setState(1570);
 				match(JAVASCRIPT);
-				setState(1571); 
+				setState(1571);
 				((JavaScriptCategoryBindingContext)_localctx).binding = javascript_category_binding();
 				}
 				break;
@@ -10498,13 +10610,14 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1574); 
+			setState(1574);
 			identifier();
 			setState(1576);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==FROM) {
 				{
-				setState(1575); 
+				setState(1575);
 				python_module();
 				}
 			}
@@ -10559,13 +10672,13 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1578); 
+			setState(1578);
 			match(FROM);
-			setState(1579); 
+			setState(1579);
 			module_token();
-			setState(1580); 
+			setState(1580);
 			match(COLON);
-			setState(1581); 
+			setState(1581);
 			identifier();
 			setState(1586);
 			_errHandler.sync(this);
@@ -10573,9 +10686,9 @@ public class OParser extends AbstractParser {
 			while (_la==DOT) {
 				{
 				{
-				setState(1582); 
+				setState(1582);
 				match(DOT);
-				setState(1583); 
+				setState(1583);
 				identifier();
 				}
 				}
@@ -10624,13 +10737,14 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1589); 
+			setState(1589);
 			identifier();
 			setState(1591);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==FROM) {
 				{
-				setState(1590); 
+				setState(1590);
 				javascript_module();
 				}
 			}
@@ -10686,22 +10800,23 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1593); 
+			setState(1593);
 			match(FROM);
-			setState(1594); 
+			setState(1594);
 			module_token();
-			setState(1595); 
+			setState(1595);
 			match(COLON);
 			setState(1597);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==SLASH) {
 				{
-				setState(1596); 
+				setState(1596);
 				match(SLASH);
 				}
 			}
 
-			setState(1599); 
+			setState(1599);
 			javascript_identifier();
 			setState(1604);
 			_errHandler.sync(this);
@@ -10709,9 +10824,9 @@ public class OParser extends AbstractParser {
 			while (_la==SLASH) {
 				{
 				{
-				setState(1600); 
+				setState(1600);
 				match(SLASH);
-				setState(1601); 
+				setState(1601);
 				javascript_identifier();
 				}
 				}
@@ -10720,12 +10835,13 @@ public class OParser extends AbstractParser {
 				_la = _input.LA(1);
 			}
 			setState(1609);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==DOT) {
 				{
-				setState(1607); 
+				setState(1607);
 				match(DOT);
-				setState(1608); 
+				setState(1608);
 				javascript_identifier();
 				}
 			}
@@ -10775,7 +10891,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1611); 
+			setState(1611);
 			variable_identifier();
 			setState(1616);
 			_errHandler.sync(this);
@@ -10783,9 +10899,9 @@ public class OParser extends AbstractParser {
 			while (_la==COMMA) {
 				{
 				{
-				setState(1612); 
+				setState(1612);
 				match(COMMA);
-				setState(1613); 
+				setState(1613);
 				variable_identifier();
 				}
 				}
@@ -10838,7 +10954,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1619); 
+			setState(1619);
 			attribute_identifier();
 			setState(1624);
 			_errHandler.sync(this);
@@ -10846,9 +10962,9 @@ public class OParser extends AbstractParser {
 			while (_la==COMMA) {
 				{
 				{
-				setState(1620); 
+				setState(1620);
 				match(COMMA);
-				setState(1621); 
+				setState(1621);
 				attribute_identifier();
 				}
 				}
@@ -10901,32 +11017,33 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 220, RULE_method_declaration);
 		try {
 			setState(1631);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,131,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1627); 
+				setState(1627);
 				abstract_method_declaration();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1628); 
+				setState(1628);
 				concrete_method_declaration();
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(1629); 
+				setState(1629);
 				native_method_declaration();
 				}
 				break;
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(1630); 
+				setState(1630);
 				test_method_declaration();
 				}
 				break;
@@ -10965,7 +11082,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1633); 
+			setState(1633);
 			match(COMMENT);
 			}
 		}
@@ -11014,7 +11131,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1635); 
+			setState(1635);
 			native_statement();
 			setState(1641);
 			_errHandler.sync(this);
@@ -11022,9 +11139,9 @@ public class OParser extends AbstractParser {
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << JAVA) | (1L << CSHARP) | (1L << PYTHON2) | (1L << PYTHON3) | (1L << JAVASCRIPT))) != 0)) {
 				{
 				{
-				setState(1636); 
+				setState(1636);
 				lfp();
-				setState(1637); 
+				setState(1637);
 				native_statement();
 				}
 				}
@@ -11137,14 +11254,15 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 226, RULE_native_statement);
 		try {
 			setState(1654);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case JAVA:
 				_localctx = new JavaNativeStatementContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1644); 
+				setState(1644);
 				match(JAVA);
-				setState(1645); 
+				setState(1645);
 				java_statement();
 				}
 				break;
@@ -11152,9 +11270,9 @@ public class OParser extends AbstractParser {
 				_localctx = new CSharpNativeStatementContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1646); 
+				setState(1646);
 				match(CSHARP);
-				setState(1647); 
+				setState(1647);
 				csharp_statement();
 				}
 				break;
@@ -11162,9 +11280,9 @@ public class OParser extends AbstractParser {
 				_localctx = new Python2NativeStatementContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(1648); 
+				setState(1648);
 				match(PYTHON2);
-				setState(1649); 
+				setState(1649);
 				python_native_statement();
 				}
 				break;
@@ -11172,9 +11290,9 @@ public class OParser extends AbstractParser {
 				_localctx = new Python3NativeStatementContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(1650); 
+				setState(1650);
 				match(PYTHON3);
-				setState(1651); 
+				setState(1651);
 				python_native_statement();
 				}
 				break;
@@ -11182,9 +11300,9 @@ public class OParser extends AbstractParser {
 				_localctx = new JavaScriptNativeStatementContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(1652); 
+				setState(1652);
 				match(JAVASCRIPT);
-				setState(1653); 
+				setState(1653);
 				javascript_native_statement();
 				}
 				break;
@@ -11232,22 +11350,24 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1656); 
+			setState(1656);
 			python_statement();
 			setState(1658);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==SEMI) {
 				{
-				setState(1657); 
+				setState(1657);
 				match(SEMI);
 				}
 			}
 
 			setState(1661);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==FROM) {
 				{
-				setState(1660); 
+				setState(1660);
 				python_module();
 				}
 			}
@@ -11294,22 +11414,24 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1663); 
+			setState(1663);
 			javascript_statement();
 			setState(1665);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==SEMI) {
 				{
-				setState(1664); 
+				setState(1664);
 				match(SEMI);
 				}
 			}
 
 			setState(1668);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==FROM) {
 				{
-				setState(1667); 
+				setState(1667);
 				javascript_module();
 				}
 			}
@@ -11361,7 +11483,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1670); 
+			setState(1670);
 			statement();
 			setState(1676);
 			_errHandler.sync(this);
@@ -11369,9 +11491,9 @@ public class OParser extends AbstractParser {
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << COMMENT) | (1L << BOOLEAN) | (1L << CHARACTER) | (1L << TEXT) | (1L << INTEGER) | (1L << DECIMAL) | (1L << DATE) | (1L << TIME) | (1L << DATETIME) | (1L << PERIOD) | (1L << VERSION) | (1L << CODE) | (1L << DOCUMENT) | (1L << BLOB) | (1L << IMAGE) | (1L << UUID) | (1L << ITERATOR) | (1L << CURSOR))) != 0) || ((((_la - 75)) & ~0x3f) == 0 && ((1L << (_la - 75)) & ((1L << (BREAK - 75)) | (1L << (DELETE - 75)) | (1L << (DO - 75)) | (1L << (FLUSH - 75)) | (1L << (FOR - 75)) | (1L << (IF - 75)) | (1L << (METHOD - 75)) | (1L << (RETURN - 75)))) != 0) || ((((_la - 140)) & ~0x3f) == 0 && ((1L << (_la - 140)) & ((1L << (STORE - 140)) | (1L << (SWITCH - 140)) | (1L << (THROW - 140)) | (1L << (TRY - 140)) | (1L << (WITH - 140)) | (1L << (WHILE - 140)) | (1L << (WRITE - 140)) | (1L << (SYMBOL_IDENTIFIER - 140)) | (1L << (TYPE_IDENTIFIER - 140)) | (1L << (VARIABLE_IDENTIFIER - 140)))) != 0)) {
 				{
 				{
-				setState(1671); 
+				setState(1671);
 				lfp();
-				setState(1672); 
+				setState(1672);
 				statement();
 				}
 				}
@@ -11426,7 +11548,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1679); 
+			setState(1679);
 			assertion();
 			setState(1685);
 			_errHandler.sync(this);
@@ -11434,9 +11556,9 @@ public class OParser extends AbstractParser {
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << XMARK) | (1L << MINUS) | (1L << LT) | (1L << CODE) | (1L << DOCUMENT) | (1L << BLOB))) != 0) || ((((_la - 95)) & ~0x3f) == 0 && ((1L << (_la - 95)) & ((1L << (EXECUTE - 95)) | (1L << (FETCH - 95)) | (1L << (FILTERED - 95)) | (1L << (MUTABLE - 95)) | (1L << (NULL - 95)) | (1L << (READ - 95)) | (1L << (SELF - 95)) | (1L << (SORTED - 95)) | (1L << (THIS - 95)) | (1L << (BOOLEAN_LITERAL - 95)) | (1L << (CHAR_LITERAL - 95)) | (1L << (MIN_INTEGER - 95)) | (1L << (MAX_INTEGER - 95)) | (1L << (SYMBOL_IDENTIFIER - 95)) | (1L << (TYPE_IDENTIFIER - 95)))) != 0) || ((((_la - 159)) & ~0x3f) == 0 && ((1L << (_la - 159)) & ((1L << (VARIABLE_IDENTIFIER - 159)) | (1L << (TEXT_LITERAL - 159)) | (1L << (UUID_LITERAL - 159)) | (1L << (INTEGER_LITERAL - 159)) | (1L << (HEXA_LITERAL - 159)) | (1L << (DECIMAL_LITERAL - 159)) | (1L << (DATETIME_LITERAL - 159)) | (1L << (TIME_LITERAL - 159)) | (1L << (DATE_LITERAL - 159)) | (1L << (PERIOD_LITERAL - 159)) | (1L << (VERSION_LITERAL - 159)))) != 0)) {
 				{
 				{
-				setState(1680); 
+				setState(1680);
 				lfp();
-				setState(1681); 
+				setState(1681);
 				assertion();
 				}
 				}
@@ -11491,7 +11613,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1688); 
+			setState(1688);
 			switch_case_statement();
 			setState(1694);
 			_errHandler.sync(this);
@@ -11499,9 +11621,9 @@ public class OParser extends AbstractParser {
 			while (_la==CASE) {
 				{
 				{
-				setState(1689); 
+				setState(1689);
 				lfp();
-				setState(1690); 
+				setState(1690);
 				switch_case_statement();
 				}
 				}
@@ -11556,7 +11678,7 @@ public class OParser extends AbstractParser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1697); 
+			setState(1697);
 			catch_statement();
 			setState(1703);
 			_errHandler.sync(this);
@@ -11565,9 +11687,9 @@ public class OParser extends AbstractParser {
 				if ( _alt==1 ) {
 					{
 					{
-					setState(1698); 
+					setState(1698);
 					lfp();
-					setState(1699); 
+					setState(1699);
 					catch_statement();
 					}
 					} 
@@ -11660,20 +11782,21 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 240, RULE_literal_collection);
 		try {
 			setState(1720);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,142,_ctx) ) {
 			case 1:
 				_localctx = new LiteralRangeLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1706); 
+				setState(1706);
 				match(LBRAK);
-				setState(1707); 
+				setState(1707);
 				((LiteralRangeLiteralContext)_localctx).low = atomic_literal();
-				setState(1708); 
+				setState(1708);
 				match(RANGE);
-				setState(1709); 
+				setState(1709);
 				((LiteralRangeLiteralContext)_localctx).high = atomic_literal();
-				setState(1710); 
+				setState(1710);
 				match(RBRAK);
 				}
 				break;
@@ -11681,11 +11804,11 @@ public class OParser extends AbstractParser {
 				_localctx = new LiteralListLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1712); 
+				setState(1712);
 				match(LBRAK);
-				setState(1713); 
+				setState(1713);
 				literal_list_literal();
-				setState(1714); 
+				setState(1714);
 				match(RBRAK);
 				}
 				break;
@@ -11693,11 +11816,11 @@ public class OParser extends AbstractParser {
 				_localctx = new LiteralSetLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(1716); 
+				setState(1716);
 				match(LT);
-				setState(1717); 
+				setState(1717);
 				literal_list_literal();
-				setState(1718); 
+				setState(1718);
 				match(GT);
 				}
 				break;
@@ -11928,12 +12051,13 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 242, RULE_atomic_literal);
 		try {
 			setState(1737);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case MIN_INTEGER:
 				_localctx = new MinIntegerLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1722); 
+				setState(1722);
 				((MinIntegerLiteralContext)_localctx).t = match(MIN_INTEGER);
 				}
 				break;
@@ -11941,7 +12065,7 @@ public class OParser extends AbstractParser {
 				_localctx = new MaxIntegerLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1723); 
+				setState(1723);
 				((MaxIntegerLiteralContext)_localctx).t = match(MAX_INTEGER);
 				}
 				break;
@@ -11949,7 +12073,7 @@ public class OParser extends AbstractParser {
 				_localctx = new IntegerLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(1724); 
+				setState(1724);
 				((IntegerLiteralContext)_localctx).t = match(INTEGER_LITERAL);
 				}
 				break;
@@ -11957,7 +12081,7 @@ public class OParser extends AbstractParser {
 				_localctx = new HexadecimalLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(1725); 
+				setState(1725);
 				((HexadecimalLiteralContext)_localctx).t = match(HEXA_LITERAL);
 				}
 				break;
@@ -11965,7 +12089,7 @@ public class OParser extends AbstractParser {
 				_localctx = new CharacterLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(1726); 
+				setState(1726);
 				((CharacterLiteralContext)_localctx).t = match(CHAR_LITERAL);
 				}
 				break;
@@ -11973,7 +12097,7 @@ public class OParser extends AbstractParser {
 				_localctx = new DateLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(1727); 
+				setState(1727);
 				((DateLiteralContext)_localctx).t = match(DATE_LITERAL);
 				}
 				break;
@@ -11981,7 +12105,7 @@ public class OParser extends AbstractParser {
 				_localctx = new TimeLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 7);
 				{
-				setState(1728); 
+				setState(1728);
 				((TimeLiteralContext)_localctx).t = match(TIME_LITERAL);
 				}
 				break;
@@ -11989,7 +12113,7 @@ public class OParser extends AbstractParser {
 				_localctx = new TextLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 8);
 				{
-				setState(1729); 
+				setState(1729);
 				((TextLiteralContext)_localctx).t = match(TEXT_LITERAL);
 				}
 				break;
@@ -11997,7 +12121,7 @@ public class OParser extends AbstractParser {
 				_localctx = new DecimalLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 9);
 				{
-				setState(1730); 
+				setState(1730);
 				((DecimalLiteralContext)_localctx).t = match(DECIMAL_LITERAL);
 				}
 				break;
@@ -12005,7 +12129,7 @@ public class OParser extends AbstractParser {
 				_localctx = new DateTimeLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 10);
 				{
-				setState(1731); 
+				setState(1731);
 				((DateTimeLiteralContext)_localctx).t = match(DATETIME_LITERAL);
 				}
 				break;
@@ -12013,7 +12137,7 @@ public class OParser extends AbstractParser {
 				_localctx = new BooleanLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 11);
 				{
-				setState(1732); 
+				setState(1732);
 				((BooleanLiteralContext)_localctx).t = match(BOOLEAN_LITERAL);
 				}
 				break;
@@ -12021,7 +12145,7 @@ public class OParser extends AbstractParser {
 				_localctx = new PeriodLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 12);
 				{
-				setState(1733); 
+				setState(1733);
 				((PeriodLiteralContext)_localctx).t = match(PERIOD_LITERAL);
 				}
 				break;
@@ -12029,7 +12153,7 @@ public class OParser extends AbstractParser {
 				_localctx = new VersionLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 13);
 				{
-				setState(1734); 
+				setState(1734);
 				((VersionLiteralContext)_localctx).t = match(VERSION_LITERAL);
 				}
 				break;
@@ -12037,7 +12161,7 @@ public class OParser extends AbstractParser {
 				_localctx = new UUIDLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 14);
 				{
-				setState(1735); 
+				setState(1735);
 				((UUIDLiteralContext)_localctx).t = match(UUID_LITERAL);
 				}
 				break;
@@ -12045,7 +12169,7 @@ public class OParser extends AbstractParser {
 				_localctx = new NullLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 15);
 				{
-				setState(1736); 
+				setState(1736);
 				((NullLiteralContext)_localctx).n = null_literal();
 				}
 				break;
@@ -12096,7 +12220,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1739); 
+			setState(1739);
 			atomic_literal();
 			setState(1744);
 			_errHandler.sync(this);
@@ -12104,9 +12228,9 @@ public class OParser extends AbstractParser {
 			while (_la==COMMA) {
 				{
 				{
-				setState(1740); 
+				setState(1740);
 				match(COMMA);
-				setState(1741); 
+				setState(1741);
 				atomic_literal();
 				}
 				}
@@ -12204,12 +12328,13 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 246, RULE_selectable_expression);
 		try {
 			setState(1751);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,145,_ctx) ) {
 			case 1:
 				_localctx = new ParenthesisExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1747); 
+				setState(1747);
 				((ParenthesisExpressionContext)_localctx).exp = parenthesis_expression();
 				}
 				break;
@@ -12217,7 +12342,7 @@ public class OParser extends AbstractParser {
 				_localctx = new LiteralExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1748); 
+				setState(1748);
 				((LiteralExpressionContext)_localctx).exp = literal_expression();
 				}
 				break;
@@ -12225,7 +12350,7 @@ public class OParser extends AbstractParser {
 				_localctx = new IdentifierExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(1749); 
+				setState(1749);
 				((IdentifierExpressionContext)_localctx).exp = identifier();
 				}
 				break;
@@ -12233,7 +12358,7 @@ public class OParser extends AbstractParser {
 				_localctx = new ThisExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(1750); 
+				setState(1750);
 				((ThisExpressionContext)_localctx).exp = this_expression();
 				}
 				break;
@@ -12279,7 +12404,11 @@ public class OParser extends AbstractParser {
 			if ( !(_la==SELF || _la==THIS) ) {
 			_errHandler.recoverInline(this);
 			}
-			consume();
+			else {
+				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+				_errHandler.reportMatch(this);
+				consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -12319,11 +12448,11 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1755); 
+			setState(1755);
 			match(LPAR);
-			setState(1756); 
+			setState(1756);
 			expression(0);
-			setState(1757); 
+			setState(1757);
 			match(RPAR);
 			}
 		}
@@ -12364,6 +12493,7 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 252, RULE_literal_expression);
 		try {
 			setState(1761);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case NULL:
 			case BOOLEAN_LITERAL:
@@ -12382,7 +12512,7 @@ public class OParser extends AbstractParser {
 			case VERSION_LITERAL:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1759); 
+				setState(1759);
 				atomic_literal();
 				}
 				break;
@@ -12393,7 +12523,7 @@ public class OParser extends AbstractParser {
 			case MUTABLE:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1760); 
+				setState(1760);
 				collection_literal();
 				}
 				break;
@@ -12447,39 +12577,40 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 254, RULE_collection_literal);
 		try {
 			setState(1768);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,147,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1763); 
+				setState(1763);
 				range_literal();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1764); 
+				setState(1764);
 				list_literal();
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(1765); 
+				setState(1765);
 				set_literal();
 				}
 				break;
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(1766); 
+				setState(1766);
 				dict_literal();
 				}
 				break;
 			case 5:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(1767); 
+				setState(1767);
 				tuple_literal();
 				}
 				break;
@@ -12525,26 +12656,28 @@ public class OParser extends AbstractParser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(1771);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==MUTABLE) {
 				{
-				setState(1770); 
+				setState(1770);
 				match(MUTABLE);
 				}
 			}
 
-			setState(1773); 
+			setState(1773);
 			match(LPAR);
 			setState(1775);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << XMARK) | (1L << MINUS) | (1L << LT) | (1L << CODE) | (1L << DOCUMENT) | (1L << BLOB))) != 0) || ((((_la - 95)) & ~0x3f) == 0 && ((1L << (_la - 95)) & ((1L << (EXECUTE - 95)) | (1L << (FETCH - 95)) | (1L << (FILTERED - 95)) | (1L << (MUTABLE - 95)) | (1L << (NULL - 95)) | (1L << (READ - 95)) | (1L << (SELF - 95)) | (1L << (SORTED - 95)) | (1L << (THIS - 95)) | (1L << (BOOLEAN_LITERAL - 95)) | (1L << (CHAR_LITERAL - 95)) | (1L << (MIN_INTEGER - 95)) | (1L << (MAX_INTEGER - 95)) | (1L << (SYMBOL_IDENTIFIER - 95)) | (1L << (TYPE_IDENTIFIER - 95)))) != 0) || ((((_la - 159)) & ~0x3f) == 0 && ((1L << (_la - 159)) & ((1L << (VARIABLE_IDENTIFIER - 159)) | (1L << (TEXT_LITERAL - 159)) | (1L << (UUID_LITERAL - 159)) | (1L << (INTEGER_LITERAL - 159)) | (1L << (HEXA_LITERAL - 159)) | (1L << (DECIMAL_LITERAL - 159)) | (1L << (DATETIME_LITERAL - 159)) | (1L << (TIME_LITERAL - 159)) | (1L << (DATE_LITERAL - 159)) | (1L << (PERIOD_LITERAL - 159)) | (1L << (VERSION_LITERAL - 159)))) != 0)) {
 				{
-				setState(1774); 
+				setState(1774);
 				expression_tuple();
 				}
 			}
 
-			setState(1777); 
+			setState(1777);
 			match(RPAR);
 			}
 		}
@@ -12588,26 +12721,28 @@ public class OParser extends AbstractParser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(1780);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==MUTABLE) {
 				{
-				setState(1779); 
+				setState(1779);
 				match(MUTABLE);
 				}
 			}
 
-			setState(1782); 
+			setState(1782);
 			match(LCURL);
 			setState(1784);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << XMARK) | (1L << MINUS) | (1L << LT) | (1L << CODE) | (1L << DOCUMENT) | (1L << BLOB))) != 0) || ((((_la - 95)) & ~0x3f) == 0 && ((1L << (_la - 95)) & ((1L << (EXECUTE - 95)) | (1L << (FETCH - 95)) | (1L << (FILTERED - 95)) | (1L << (MUTABLE - 95)) | (1L << (NULL - 95)) | (1L << (READ - 95)) | (1L << (SELF - 95)) | (1L << (SORTED - 95)) | (1L << (THIS - 95)) | (1L << (BOOLEAN_LITERAL - 95)) | (1L << (CHAR_LITERAL - 95)) | (1L << (MIN_INTEGER - 95)) | (1L << (MAX_INTEGER - 95)) | (1L << (SYMBOL_IDENTIFIER - 95)) | (1L << (TYPE_IDENTIFIER - 95)))) != 0) || ((((_la - 159)) & ~0x3f) == 0 && ((1L << (_la - 159)) & ((1L << (VARIABLE_IDENTIFIER - 159)) | (1L << (TEXT_LITERAL - 159)) | (1L << (UUID_LITERAL - 159)) | (1L << (INTEGER_LITERAL - 159)) | (1L << (HEXA_LITERAL - 159)) | (1L << (DECIMAL_LITERAL - 159)) | (1L << (DATETIME_LITERAL - 159)) | (1L << (TIME_LITERAL - 159)) | (1L << (DATE_LITERAL - 159)) | (1L << (PERIOD_LITERAL - 159)) | (1L << (VERSION_LITERAL - 159)))) != 0)) {
 				{
-				setState(1783); 
+				setState(1783);
 				dict_entry_list();
 				}
 			}
 
-			setState(1786); 
+			setState(1786);
 			match(RCURL);
 			}
 		}
@@ -12654,15 +12789,16 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1788); 
+			setState(1788);
 			expression(0);
-			setState(1789); 
+			setState(1789);
 			match(COMMA);
 			setState(1798);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << XMARK) | (1L << MINUS) | (1L << LT) | (1L << CODE) | (1L << DOCUMENT) | (1L << BLOB))) != 0) || ((((_la - 95)) & ~0x3f) == 0 && ((1L << (_la - 95)) & ((1L << (EXECUTE - 95)) | (1L << (FETCH - 95)) | (1L << (FILTERED - 95)) | (1L << (MUTABLE - 95)) | (1L << (NULL - 95)) | (1L << (READ - 95)) | (1L << (SELF - 95)) | (1L << (SORTED - 95)) | (1L << (THIS - 95)) | (1L << (BOOLEAN_LITERAL - 95)) | (1L << (CHAR_LITERAL - 95)) | (1L << (MIN_INTEGER - 95)) | (1L << (MAX_INTEGER - 95)) | (1L << (SYMBOL_IDENTIFIER - 95)) | (1L << (TYPE_IDENTIFIER - 95)))) != 0) || ((((_la - 159)) & ~0x3f) == 0 && ((1L << (_la - 159)) & ((1L << (VARIABLE_IDENTIFIER - 159)) | (1L << (TEXT_LITERAL - 159)) | (1L << (UUID_LITERAL - 159)) | (1L << (INTEGER_LITERAL - 159)) | (1L << (HEXA_LITERAL - 159)) | (1L << (DECIMAL_LITERAL - 159)) | (1L << (DATETIME_LITERAL - 159)) | (1L << (TIME_LITERAL - 159)) | (1L << (DATE_LITERAL - 159)) | (1L << (PERIOD_LITERAL - 159)) | (1L << (VERSION_LITERAL - 159)))) != 0)) {
 				{
-				setState(1790); 
+				setState(1790);
 				expression(0);
 				setState(1795);
 				_errHandler.sync(this);
@@ -12670,9 +12806,9 @@ public class OParser extends AbstractParser {
 				while (_la==COMMA) {
 					{
 					{
-					setState(1791); 
+					setState(1791);
 					match(COMMA);
-					setState(1792); 
+					setState(1792);
 					expression(0);
 					}
 					}
@@ -12728,7 +12864,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1800); 
+			setState(1800);
 			dict_entry();
 			setState(1805);
 			_errHandler.sync(this);
@@ -12736,9 +12872,9 @@ public class OParser extends AbstractParser {
 			while (_la==COMMA) {
 				{
 				{
-				setState(1801); 
+				setState(1801);
 				match(COMMA);
-				setState(1802); 
+				setState(1802);
 				dict_entry();
 				}
 				}
@@ -12789,11 +12925,11 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1808); 
+			setState(1808);
 			((Dict_entryContext)_localctx).key = expression(0);
-			setState(1809); 
+			setState(1809);
 			match(COLON);
-			setState(1810); 
+			setState(1810);
 			((Dict_entryContext)_localctx).value = expression(0);
 			}
 		}
@@ -12877,16 +13013,17 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 266, RULE_slice_arguments);
 		try {
 			setState(1821);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,155,_ctx) ) {
 			case 1:
 				_localctx = new SliceFirstAndLastContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1812); 
+				setState(1812);
 				((SliceFirstAndLastContext)_localctx).first = expression(0);
-				setState(1813); 
+				setState(1813);
 				match(COLON);
-				setState(1814); 
+				setState(1814);
 				((SliceFirstAndLastContext)_localctx).last = expression(0);
 				}
 				break;
@@ -12894,9 +13031,9 @@ public class OParser extends AbstractParser {
 				_localctx = new SliceFirstOnlyContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1816); 
+				setState(1816);
 				((SliceFirstOnlyContext)_localctx).first = expression(0);
-				setState(1817); 
+				setState(1817);
 				match(COLON);
 				}
 				break;
@@ -12904,9 +13041,9 @@ public class OParser extends AbstractParser {
 				_localctx = new SliceLastOnlyContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(1819); 
+				setState(1819);
 				match(COLON);
-				setState(1820); 
+				setState(1820);
 				((SliceLastOnlyContext)_localctx).last = expression(0);
 				}
 				break;
@@ -12953,11 +13090,11 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1823); 
+			setState(1823);
 			variable_identifier();
-			setState(1824); 
+			setState(1824);
 			assign();
-			setState(1825); 
+			setState(1825);
 			expression(0);
 			}
 		}
@@ -13035,7 +13172,7 @@ public class OParser extends AbstractParser {
 			_ctx = _localctx;
 			_prevctx = _localctx;
 
-			setState(1828); 
+			setState(1828);
 			variable_identifier();
 			}
 			_ctx.stop = _input.LT(-1);
@@ -13052,7 +13189,7 @@ public class OParser extends AbstractParser {
 					pushNewRecursionContext(_localctx, _startState, RULE_assignable_instance);
 					setState(1830);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(1831); 
+					setState(1831);
 					child_instance();
 					}
 					} 
@@ -13120,6 +13257,7 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 272, RULE_is_expression);
 		try {
 			setState(1841);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,157,_ctx) ) {
 			case 1:
 				_localctx = new IsATypeExpressionContext(_localctx);
@@ -13127,9 +13265,9 @@ public class OParser extends AbstractParser {
 				{
 				setState(1837);
 				if (!(this.willBeAOrAn())) throw new FailedPredicateException(this, "$parser.willBeAOrAn()");
-				setState(1838); 
+				setState(1838);
 				match(VARIABLE_IDENTIFIER);
-				setState(1839); 
+				setState(1839);
 				category_or_any_type();
 				}
 				break;
@@ -13137,7 +13275,7 @@ public class OParser extends AbstractParser {
 				_localctx = new IsOtherExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1840); 
+				setState(1840);
 				expression(0);
 				}
 				break;
@@ -13182,13 +13320,13 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1843); 
+			setState(1843);
 			match(READ);
-			setState(1844); 
+			setState(1844);
 			match(ALL);
-			setState(1845); 
+			setState(1845);
 			match(FROM);
-			setState(1846); 
+			setState(1846);
 			((Read_all_expressionContext)_localctx).source = expression(0);
 			}
 		}
@@ -13231,13 +13369,13 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1848); 
+			setState(1848);
 			match(READ);
-			setState(1849); 
+			setState(1849);
 			match(ONE);
-			setState(1850); 
+			setState(1850);
 			match(FROM);
-			setState(1851); 
+			setState(1851);
 			((Read_one_expressionContext)_localctx).source = expression(0);
 			}
 		}
@@ -13284,7 +13422,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1853); 
+			setState(1853);
 			order_by();
 			setState(1858);
 			_errHandler.sync(this);
@@ -13292,9 +13430,9 @@ public class OParser extends AbstractParser {
 			while (_la==COMMA) {
 				{
 				{
-				setState(1854); 
+				setState(1854);
 				match(COMMA);
-				setState(1855); 
+				setState(1855);
 				order_by();
 				}
 				}
@@ -13349,7 +13487,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1861); 
+			setState(1861);
 			variable_identifier();
 			setState(1866);
 			_errHandler.sync(this);
@@ -13357,9 +13495,9 @@ public class OParser extends AbstractParser {
 			while (_la==DOT) {
 				{
 				{
-				setState(1862); 
+				setState(1862);
 				match(DOT);
-				setState(1863); 
+				setState(1863);
 				variable_identifier();
 				}
 				}
@@ -13368,6 +13506,7 @@ public class OParser extends AbstractParser {
 				_la = _input.LA(1);
 			}
 			setState(1870);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==ASC || _la==DESC) {
 				{
@@ -13376,7 +13515,11 @@ public class OParser extends AbstractParser {
 				if ( !(_la==ASC || _la==DESC) ) {
 				_errHandler.recoverInline(this);
 				}
-				consume();
+				else {
+					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+					_errHandler.reportMatch(this);
+					consume();
+				}
 				}
 			}
 
@@ -13490,12 +13633,13 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 282, RULE_operator);
 		try {
 			setState(1878);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case PLUS:
 				_localctx = new OperatorPlusContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1872); 
+				setState(1872);
 				match(PLUS);
 				}
 				break;
@@ -13503,7 +13647,7 @@ public class OParser extends AbstractParser {
 				_localctx = new OperatorMinusContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1873); 
+				setState(1873);
 				match(MINUS);
 				}
 				break;
@@ -13511,7 +13655,7 @@ public class OParser extends AbstractParser {
 				_localctx = new OperatorMultiplyContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(1874); 
+				setState(1874);
 				multiply();
 				}
 				break;
@@ -13519,7 +13663,7 @@ public class OParser extends AbstractParser {
 				_localctx = new OperatorDivideContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(1875); 
+				setState(1875);
 				divide();
 				}
 				break;
@@ -13527,7 +13671,7 @@ public class OParser extends AbstractParser {
 				_localctx = new OperatorIDivideContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(1876); 
+				setState(1876);
 				idivide();
 				}
 				break;
@@ -13536,7 +13680,7 @@ public class OParser extends AbstractParser {
 				_localctx = new OperatorModuloContext(_localctx);
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(1877); 
+				setState(1877);
 				modulo();
 				}
 				break;
@@ -13578,7 +13722,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1880); 
+			setState(1880);
 			((New_tokenContext)_localctx).i1 = match(VARIABLE_IDENTIFIER);
 			setState(1881);
 			if (!(this.isText(((New_tokenContext)_localctx).i1,"new"))) throw new FailedPredicateException(this, "$parser.isText($i1,\"new\")");
@@ -13618,7 +13762,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1883); 
+			setState(1883);
 			((Key_tokenContext)_localctx).i1 = match(VARIABLE_IDENTIFIER);
 			setState(1884);
 			if (!(this.isText(((Key_tokenContext)_localctx).i1,"key"))) throw new FailedPredicateException(this, "$parser.isText($i1,\"key\")");
@@ -13658,7 +13802,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1886); 
+			setState(1886);
 			((Module_tokenContext)_localctx).i1 = match(VARIABLE_IDENTIFIER);
 			setState(1887);
 			if (!(this.isText(((Module_tokenContext)_localctx).i1,"module"))) throw new FailedPredicateException(this, "$parser.isText($i1,\"module\")");
@@ -13698,7 +13842,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1889); 
+			setState(1889);
 			((Value_tokenContext)_localctx).i1 = match(VARIABLE_IDENTIFIER);
 			setState(1890);
 			if (!(this.isText(((Value_tokenContext)_localctx).i1,"value"))) throw new FailedPredicateException(this, "$parser.isText($i1,\"value\")");
@@ -13738,7 +13882,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1892); 
+			setState(1892);
 			((Symbols_tokenContext)_localctx).i1 = match(VARIABLE_IDENTIFIER);
 			setState(1893);
 			if (!(this.isText(((Symbols_tokenContext)_localctx).i1,"symbols"))) throw new FailedPredicateException(this, "$parser.isText($i1,\"symbols\")");
@@ -13777,7 +13921,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1895); 
+			setState(1895);
 			match(EQ);
 			}
 		}
@@ -13814,7 +13958,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1897); 
+			setState(1897);
 			match(STAR);
 			}
 		}
@@ -13851,7 +13995,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1899); 
+			setState(1899);
 			match(SLASH);
 			}
 		}
@@ -13888,7 +14032,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1901); 
+			setState(1901);
 			match(BSLASH);
 			}
 		}
@@ -13932,7 +14076,11 @@ public class OParser extends AbstractParser {
 			if ( !(_la==PERCENT || _la==MODULO) ) {
 			_errHandler.recoverInline(this);
 			}
-			consume();
+			else {
+				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+				_errHandler.reportMatch(this);
+				consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -14064,16 +14212,17 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 308, RULE_javascript_statement);
 		try {
 			setState(1916);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case RETURN:
 				_localctx = new JavascriptReturnStatementContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1909); 
+				setState(1909);
 				match(RETURN);
-				setState(1910); 
+				setState(1910);
 				((JavascriptReturnStatementContext)_localctx).exp = javascript_expression(0);
-				setState(1911); 
+				setState(1911);
 				match(SEMI);
 				}
 				break;
@@ -14106,9 +14255,9 @@ public class OParser extends AbstractParser {
 				_localctx = new JavascriptStatementContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1913); 
+				setState(1913);
 				((JavascriptStatementContext)_localctx).exp = javascript_expression(0);
-				setState(1914); 
+				setState(1914);
 				match(SEMI);
 				}
 				break;
@@ -14193,7 +14342,7 @@ public class OParser extends AbstractParser {
 			_ctx = _localctx;
 			_prevctx = _localctx;
 
-			setState(1919); 
+			setState(1919);
 			((JavascriptPrimaryExpressionContext)_localctx).exp = javascript_primary_expression();
 			}
 			_ctx.stop = _input.LT(-1);
@@ -14211,7 +14360,7 @@ public class OParser extends AbstractParser {
 					pushNewRecursionContext(_localctx, _startState, RULE_javascript_expression);
 					setState(1921);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(1922); 
+					setState(1922);
 					((JavascriptSelectorExpressionContext)_localctx).child = javascript_selector_expression();
 					}
 					} 
@@ -14274,53 +14423,54 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 312, RULE_javascript_primary_expression);
 		try {
 			setState(1935);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,164,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1928); 
+				setState(1928);
 				javascript_this_expression();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1929); 
+				setState(1929);
 				javascript_new_expression();
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(1930); 
+				setState(1930);
 				javascript_parenthesis_expression();
 				}
 				break;
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(1931); 
+				setState(1931);
 				javascript_identifier_expression();
 				}
 				break;
 			case 5:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(1932); 
+				setState(1932);
 				javascript_literal_expression();
 				}
 				break;
 			case 6:
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(1933); 
+				setState(1933);
 				javascript_method_expression();
 				}
 				break;
 			case 7:
 				enterOuterAlt(_localctx, 7);
 				{
-				setState(1934); 
+				setState(1934);
 				javascript_item_expression();
 				}
 				break;
@@ -14361,7 +14511,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1937); 
+			setState(1937);
 			this_expression();
 			}
 		}
@@ -14403,9 +14553,9 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1939); 
+			setState(1939);
 			new_token();
-			setState(1940); 
+			setState(1940);
 			javascript_method_expression();
 			}
 		}
@@ -14484,14 +14634,15 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 318, RULE_javascript_selector_expression);
 		try {
 			setState(1947);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,165,_ctx) ) {
 			case 1:
 				_localctx = new JavaScriptMethodExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1942); 
+				setState(1942);
 				match(DOT);
-				setState(1943); 
+				setState(1943);
 				((JavaScriptMethodExpressionContext)_localctx).method = javascript_method_expression();
 				}
 				break;
@@ -14499,9 +14650,9 @@ public class OParser extends AbstractParser {
 				_localctx = new JavaScriptMemberExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1944); 
+				setState(1944);
 				match(DOT);
-				setState(1945); 
+				setState(1945);
 				((JavaScriptMemberExpressionContext)_localctx).name = javascript_identifier();
 				}
 				break;
@@ -14509,7 +14660,7 @@ public class OParser extends AbstractParser {
 				_localctx = new JavaScriptItemExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(1946); 
+				setState(1946);
 				((JavaScriptItemExpressionContext)_localctx).exp = javascript_item_expression();
 				}
 				break;
@@ -14558,20 +14709,21 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1949); 
+			setState(1949);
 			((Javascript_method_expressionContext)_localctx).name = javascript_identifier();
-			setState(1950); 
+			setState(1950);
 			match(LPAR);
 			setState(1952);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << BOOLEAN) | (1L << CHARACTER) | (1L << TEXT) | (1L << INTEGER) | (1L << DECIMAL) | (1L << DATE) | (1L << TIME) | (1L << DATETIME) | (1L << PERIOD) | (1L << VERSION))) != 0) || ((((_la - 129)) & ~0x3f) == 0 && ((1L << (_la - 129)) & ((1L << (READ - 129)) | (1L << (SELF - 129)) | (1L << (TEST - 129)) | (1L << (THIS - 129)) | (1L << (WRITE - 129)) | (1L << (BOOLEAN_LITERAL - 129)) | (1L << (CHAR_LITERAL - 129)) | (1L << (SYMBOL_IDENTIFIER - 129)) | (1L << (TYPE_IDENTIFIER - 129)) | (1L << (VARIABLE_IDENTIFIER - 129)) | (1L << (DOLLAR_IDENTIFIER - 129)) | (1L << (TEXT_LITERAL - 129)) | (1L << (INTEGER_LITERAL - 129)) | (1L << (DECIMAL_LITERAL - 129)))) != 0)) {
 				{
-				setState(1951); 
+				setState(1951);
 				((Javascript_method_expressionContext)_localctx).args = javascript_arguments(0);
 				}
 			}
 
-			setState(1954); 
+			setState(1954);
 			match(RPAR);
 			}
 		}
@@ -14653,7 +14805,7 @@ public class OParser extends AbstractParser {
 			_ctx = _localctx;
 			_prevctx = _localctx;
 
-			setState(1957); 
+			setState(1957);
 			((JavascriptArgumentListContext)_localctx).item = javascript_expression(0);
 			}
 			_ctx.stop = _input.LT(-1);
@@ -14671,9 +14823,9 @@ public class OParser extends AbstractParser {
 					pushNewRecursionContext(_localctx, _startState, RULE_javascript_arguments);
 					setState(1959);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(1960); 
+					setState(1960);
 					match(COMMA);
-					setState(1961); 
+					setState(1961);
 					((JavascriptArgumentListItemContext)_localctx).item = javascript_expression(0);
 					}
 					} 
@@ -14722,11 +14874,11 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1967); 
+			setState(1967);
 			match(LBRAK);
-			setState(1968); 
+			setState(1968);
 			((Javascript_item_expressionContext)_localctx).exp = javascript_expression(0);
-			setState(1969); 
+			setState(1969);
 			match(RBRAK);
 			}
 		}
@@ -14768,11 +14920,11 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1971); 
+			setState(1971);
 			match(LPAR);
-			setState(1972); 
+			setState(1972);
 			((Javascript_parenthesis_expressionContext)_localctx).exp = javascript_expression(0);
-			setState(1973); 
+			setState(1973);
 			match(RPAR);
 			}
 		}
@@ -14812,7 +14964,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1975); 
+			setState(1975);
 			((Javascript_identifier_expressionContext)_localctx).name = javascript_identifier();
 			}
 		}
@@ -14909,12 +15061,13 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 330, RULE_javascript_literal_expression);
 		try {
 			setState(1982);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case INTEGER_LITERAL:
 				_localctx = new JavascriptIntegerLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1977); 
+				setState(1977);
 				((JavascriptIntegerLiteralContext)_localctx).t = match(INTEGER_LITERAL);
 				}
 				break;
@@ -14922,7 +15075,7 @@ public class OParser extends AbstractParser {
 				_localctx = new JavascriptDecimalLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1978); 
+				setState(1978);
 				((JavascriptDecimalLiteralContext)_localctx).t = match(DECIMAL_LITERAL);
 				}
 				break;
@@ -14930,7 +15083,7 @@ public class OParser extends AbstractParser {
 				_localctx = new JavascriptTextLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(1979); 
+				setState(1979);
 				((JavascriptTextLiteralContext)_localctx).t = match(TEXT_LITERAL);
 				}
 				break;
@@ -14938,7 +15091,7 @@ public class OParser extends AbstractParser {
 				_localctx = new JavascriptBooleanLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(1980); 
+				setState(1980);
 				((JavascriptBooleanLiteralContext)_localctx).t = match(BOOLEAN_LITERAL);
 				}
 				break;
@@ -14946,7 +15099,7 @@ public class OParser extends AbstractParser {
 				_localctx = new JavascriptCharacterLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(1981); 
+				setState(1981);
 				((JavascriptCharacterLiteralContext)_localctx).t = match(CHAR_LITERAL);
 				}
 				break;
@@ -15009,7 +15162,11 @@ public class OParser extends AbstractParser {
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << BOOLEAN) | (1L << CHARACTER) | (1L << TEXT) | (1L << INTEGER) | (1L << DECIMAL) | (1L << DATE) | (1L << TIME) | (1L << DATETIME) | (1L << PERIOD) | (1L << VERSION))) != 0) || ((((_la - 129)) & ~0x3f) == 0 && ((1L << (_la - 129)) & ((1L << (READ - 129)) | (1L << (TEST - 129)) | (1L << (WRITE - 129)) | (1L << (SYMBOL_IDENTIFIER - 129)) | (1L << (TYPE_IDENTIFIER - 129)) | (1L << (VARIABLE_IDENTIFIER - 129)) | (1L << (DOLLAR_IDENTIFIER - 129)))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
-			consume();
+			else {
+				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+				_errHandler.reportMatch(this);
+				consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -15071,14 +15228,15 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 334, RULE_python_statement);
 		try {
 			setState(1989);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case RETURN:
 				_localctx = new PythonReturnStatementContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(1986); 
+				setState(1986);
 				match(RETURN);
-				setState(1987); 
+				setState(1987);
 				((PythonReturnStatementContext)_localctx).exp = python_expression(0);
 				}
 				break;
@@ -15110,7 +15268,7 @@ public class OParser extends AbstractParser {
 				_localctx = new PythonStatementContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1988); 
+				setState(1988);
 				((PythonStatementContext)_localctx).exp = python_expression(0);
 				}
 				break;
@@ -15195,7 +15353,7 @@ public class OParser extends AbstractParser {
 			_ctx = _localctx;
 			_prevctx = _localctx;
 
-			setState(1992); 
+			setState(1992);
 			((PythonPrimaryExpressionContext)_localctx).exp = python_primary_expression();
 			}
 			_ctx.stop = _input.LT(-1);
@@ -15213,7 +15371,7 @@ public class OParser extends AbstractParser {
 					pushNewRecursionContext(_localctx, _startState, RULE_python_expression);
 					setState(1994);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(1995); 
+					setState(1995);
 					((PythonSelectorExpressionContext)_localctx).child = python_selector_expression();
 					}
 					} 
@@ -15327,12 +15485,13 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 338, RULE_python_primary_expression);
 		try {
 			setState(2006);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,171,_ctx) ) {
 			case 1:
 				_localctx = new PythonSelfExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(2001); 
+				setState(2001);
 				((PythonSelfExpressionContext)_localctx).exp = python_self_expression();
 				}
 				break;
@@ -15340,7 +15499,7 @@ public class OParser extends AbstractParser {
 				_localctx = new PythonParenthesisExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(2002); 
+				setState(2002);
 				((PythonParenthesisExpressionContext)_localctx).exp = python_parenthesis_expression();
 				}
 				break;
@@ -15348,7 +15507,7 @@ public class OParser extends AbstractParser {
 				_localctx = new PythonIdentifierExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(2003); 
+				setState(2003);
 				((PythonIdentifierExpressionContext)_localctx).exp = python_identifier_expression(0);
 				}
 				break;
@@ -15356,7 +15515,7 @@ public class OParser extends AbstractParser {
 				_localctx = new PythonLiteralExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(2004); 
+				setState(2004);
 				((PythonLiteralExpressionContext)_localctx).exp = python_literal_expression();
 				}
 				break;
@@ -15364,7 +15523,7 @@ public class OParser extends AbstractParser {
 				_localctx = new PythonGlobalMethodExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(2005); 
+				setState(2005);
 				((PythonGlobalMethodExpressionContext)_localctx).exp = python_method_expression();
 				}
 				break;
@@ -15405,7 +15564,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(2008); 
+			setState(2008);
 			this_expression();
 			}
 		}
@@ -15470,14 +15629,15 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 342, RULE_python_selector_expression);
 		try {
 			setState(2016);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case DOT:
 				_localctx = new PythonMethodExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(2010); 
+				setState(2010);
 				match(DOT);
-				setState(2011); 
+				setState(2011);
 				((PythonMethodExpressionContext)_localctx).exp = python_method_expression();
 				}
 				break;
@@ -15485,11 +15645,11 @@ public class OParser extends AbstractParser {
 				_localctx = new PythonItemExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(2012); 
+				setState(2012);
 				match(LBRAK);
-				setState(2013); 
+				setState(2013);
 				((PythonItemExpressionContext)_localctx).exp = python_expression(0);
-				setState(2014); 
+				setState(2014);
 				match(RBRAK);
 				}
 				break;
@@ -15540,20 +15700,21 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(2018); 
+			setState(2018);
 			((Python_method_expressionContext)_localctx).name = python_identifier();
-			setState(2019); 
+			setState(2019);
 			match(LPAR);
 			setState(2021);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << BOOLEAN) | (1L << CHARACTER) | (1L << TEXT) | (1L << INTEGER) | (1L << DECIMAL) | (1L << DATE) | (1L << TIME) | (1L << DATETIME) | (1L << PERIOD) | (1L << VERSION))) != 0) || ((((_la - 129)) & ~0x3f) == 0 && ((1L << (_la - 129)) & ((1L << (READ - 129)) | (1L << (SELF - 129)) | (1L << (TEST - 129)) | (1L << (THIS - 129)) | (1L << (WRITE - 129)) | (1L << (BOOLEAN_LITERAL - 129)) | (1L << (CHAR_LITERAL - 129)) | (1L << (SYMBOL_IDENTIFIER - 129)) | (1L << (TYPE_IDENTIFIER - 129)) | (1L << (VARIABLE_IDENTIFIER - 129)) | (1L << (DOLLAR_IDENTIFIER - 129)) | (1L << (TEXT_LITERAL - 129)) | (1L << (INTEGER_LITERAL - 129)) | (1L << (DECIMAL_LITERAL - 129)))) != 0)) {
 				{
-				setState(2020); 
+				setState(2020);
 				((Python_method_expressionContext)_localctx).args = python_argument_list();
 				}
 			}
 
-			setState(2023); 
+			setState(2023);
 			match(RPAR);
 			}
 		}
@@ -15635,12 +15796,13 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 346, RULE_python_argument_list);
 		try {
 			setState(2031);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,174,_ctx) ) {
 			case 1:
 				_localctx = new PythonOrdinalOnlyArgumentListContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(2025); 
+				setState(2025);
 				((PythonOrdinalOnlyArgumentListContext)_localctx).ordinal = python_ordinal_argument_list(0);
 				}
 				break;
@@ -15648,7 +15810,7 @@ public class OParser extends AbstractParser {
 				_localctx = new PythonNamedOnlyArgumentListContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(2026); 
+				setState(2026);
 				((PythonNamedOnlyArgumentListContext)_localctx).named = python_named_argument_list(0);
 				}
 				break;
@@ -15656,11 +15818,11 @@ public class OParser extends AbstractParser {
 				_localctx = new PythonArgumentListContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(2027); 
+				setState(2027);
 				((PythonArgumentListContext)_localctx).ordinal = python_ordinal_argument_list(0);
-				setState(2028); 
+				setState(2028);
 				match(COMMA);
-				setState(2029); 
+				setState(2029);
 				((PythonArgumentListContext)_localctx).named = python_named_argument_list(0);
 				}
 				break;
@@ -15744,7 +15906,7 @@ public class OParser extends AbstractParser {
 			_ctx = _localctx;
 			_prevctx = _localctx;
 
-			setState(2034); 
+			setState(2034);
 			((PythonOrdinalArgumentListContext)_localctx).item = python_expression(0);
 			}
 			_ctx.stop = _input.LT(-1);
@@ -15762,9 +15924,9 @@ public class OParser extends AbstractParser {
 					pushNewRecursionContext(_localctx, _startState, RULE_python_ordinal_argument_list);
 					setState(2036);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(2037); 
+					setState(2037);
 					match(COMMA);
-					setState(2038); 
+					setState(2038);
 					((PythonOrdinalArgumentListItemContext)_localctx).item = python_expression(0);
 					}
 					} 
@@ -15863,11 +16025,11 @@ public class OParser extends AbstractParser {
 			_ctx = _localctx;
 			_prevctx = _localctx;
 
-			setState(2045); 
+			setState(2045);
 			((PythonNamedArgumentListContext)_localctx).name = python_identifier();
-			setState(2046); 
+			setState(2046);
 			match(EQ);
-			setState(2047); 
+			setState(2047);
 			((PythonNamedArgumentListContext)_localctx).exp = python_expression(0);
 			}
 			_ctx.stop = _input.LT(-1);
@@ -15885,13 +16047,13 @@ public class OParser extends AbstractParser {
 					pushNewRecursionContext(_localctx, _startState, RULE_python_named_argument_list);
 					setState(2049);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(2050); 
+					setState(2050);
 					match(COMMA);
-					setState(2051); 
+					setState(2051);
 					((PythonNamedArgumentListItemContext)_localctx).name = python_identifier();
-					setState(2052); 
+					setState(2052);
 					match(EQ);
-					setState(2053); 
+					setState(2053);
 					((PythonNamedArgumentListItemContext)_localctx).exp = python_expression(0);
 					}
 					} 
@@ -15940,11 +16102,11 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(2060); 
+			setState(2060);
 			match(LPAR);
-			setState(2061); 
+			setState(2061);
 			((Python_parenthesis_expressionContext)_localctx).exp = python_expression(0);
-			setState(2062); 
+			setState(2062);
 			match(RPAR);
 			}
 		}
@@ -16034,6 +16196,7 @@ public class OParser extends AbstractParser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(2067);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case DOLLAR_IDENTIFIER:
 				{
@@ -16041,7 +16204,7 @@ public class OParser extends AbstractParser {
 				_ctx = _localctx;
 				_prevctx = _localctx;
 
-				setState(2065); 
+				setState(2065);
 				match(DOLLAR_IDENTIFIER);
 				}
 				break;
@@ -16067,7 +16230,7 @@ public class OParser extends AbstractParser {
 				_localctx = new PythonIdentifierContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(2066); 
+				setState(2066);
 				((PythonIdentifierContext)_localctx).name = python_identifier();
 				}
 				break;
@@ -16089,9 +16252,9 @@ public class OParser extends AbstractParser {
 					pushNewRecursionContext(_localctx, _startState, RULE_python_identifier_expression);
 					setState(2069);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(2070); 
+					setState(2070);
 					match(DOT);
-					setState(2071); 
+					setState(2071);
 					((PythonChildIdentifierContext)_localctx).name = python_identifier();
 					}
 					} 
@@ -16195,12 +16358,13 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 356, RULE_python_literal_expression);
 		try {
 			setState(2082);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case INTEGER_LITERAL:
 				_localctx = new PythonIntegerLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(2077); 
+				setState(2077);
 				((PythonIntegerLiteralContext)_localctx).t = match(INTEGER_LITERAL);
 				}
 				break;
@@ -16208,7 +16372,7 @@ public class OParser extends AbstractParser {
 				_localctx = new PythonDecimalLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(2078); 
+				setState(2078);
 				((PythonDecimalLiteralContext)_localctx).t = match(DECIMAL_LITERAL);
 				}
 				break;
@@ -16216,7 +16380,7 @@ public class OParser extends AbstractParser {
 				_localctx = new PythonTextLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(2079); 
+				setState(2079);
 				((PythonTextLiteralContext)_localctx).t = match(TEXT_LITERAL);
 				}
 				break;
@@ -16224,7 +16388,7 @@ public class OParser extends AbstractParser {
 				_localctx = new PythonBooleanLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(2080); 
+				setState(2080);
 				((PythonBooleanLiteralContext)_localctx).t = match(BOOLEAN_LITERAL);
 				}
 				break;
@@ -16232,7 +16396,7 @@ public class OParser extends AbstractParser {
 				_localctx = new PythonCharacterLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(2081); 
+				setState(2081);
 				((PythonCharacterLiteralContext)_localctx).t = match(CHAR_LITERAL);
 				}
 				break;
@@ -16296,7 +16460,11 @@ public class OParser extends AbstractParser {
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << BOOLEAN) | (1L << CHARACTER) | (1L << TEXT) | (1L << INTEGER) | (1L << DECIMAL) | (1L << DATE) | (1L << TIME) | (1L << DATETIME) | (1L << PERIOD) | (1L << VERSION))) != 0) || ((((_la - 129)) & ~0x3f) == 0 && ((1L << (_la - 129)) & ((1L << (READ - 129)) | (1L << (SELF - 129)) | (1L << (TEST - 129)) | (1L << (THIS - 129)) | (1L << (WRITE - 129)) | (1L << (SYMBOL_IDENTIFIER - 129)) | (1L << (TYPE_IDENTIFIER - 129)) | (1L << (VARIABLE_IDENTIFIER - 129)))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
-			consume();
+			else {
+				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+				_errHandler.reportMatch(this);
+				consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -16360,16 +16528,17 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 360, RULE_java_statement);
 		try {
 			setState(2093);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case RETURN:
 				_localctx = new JavaReturnStatementContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(2086); 
+				setState(2086);
 				match(RETURN);
-				setState(2087); 
+				setState(2087);
 				((JavaReturnStatementContext)_localctx).exp = java_expression(0);
-				setState(2088); 
+				setState(2088);
 				match(SEMI);
 				}
 				break;
@@ -16402,9 +16571,9 @@ public class OParser extends AbstractParser {
 				_localctx = new JavaStatementContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(2090); 
+				setState(2090);
 				((JavaStatementContext)_localctx).exp = java_expression(0);
-				setState(2091); 
+				setState(2091);
 				match(SEMI);
 				}
 				break;
@@ -16489,7 +16658,7 @@ public class OParser extends AbstractParser {
 			_ctx = _localctx;
 			_prevctx = _localctx;
 
-			setState(2096); 
+			setState(2096);
 			((JavaPrimaryExpressionContext)_localctx).exp = java_primary_expression();
 			}
 			_ctx.stop = _input.LT(-1);
@@ -16507,7 +16676,7 @@ public class OParser extends AbstractParser {
 					pushNewRecursionContext(_localctx, _startState, RULE_java_expression);
 					setState(2098);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(2099); 
+					setState(2099);
 					((JavaSelectorExpressionContext)_localctx).child = java_selector_expression();
 					}
 					} 
@@ -16564,39 +16733,40 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 364, RULE_java_primary_expression);
 		try {
 			setState(2110);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,182,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(2105); 
+				setState(2105);
 				java_this_expression();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(2106); 
+				setState(2106);
 				java_new_expression();
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(2107); 
+				setState(2107);
 				java_parenthesis_expression();
 				}
 				break;
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(2108); 
+				setState(2108);
 				java_identifier_expression(0);
 				}
 				break;
 			case 5:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(2109); 
+				setState(2109);
 				java_literal_expression();
 				}
 				break;
@@ -16637,7 +16807,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(2112); 
+			setState(2112);
 			this_expression();
 			}
 		}
@@ -16679,9 +16849,9 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(2114); 
+			setState(2114);
 			new_token();
-			setState(2115); 
+			setState(2115);
 			java_method_expression();
 			}
 		}
@@ -16744,14 +16914,15 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 370, RULE_java_selector_expression);
 		try {
 			setState(2120);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case DOT:
 				_localctx = new JavaMethodExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(2117); 
+				setState(2117);
 				match(DOT);
-				setState(2118); 
+				setState(2118);
 				((JavaMethodExpressionContext)_localctx).exp = java_method_expression();
 				}
 				break;
@@ -16759,7 +16930,7 @@ public class OParser extends AbstractParser {
 				_localctx = new JavaItemExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(2119); 
+				setState(2119);
 				((JavaItemExpressionContext)_localctx).exp = java_item_expression();
 				}
 				break;
@@ -16810,20 +16981,21 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(2122); 
+			setState(2122);
 			((Java_method_expressionContext)_localctx).name = java_identifier();
-			setState(2123); 
+			setState(2123);
 			match(LPAR);
 			setState(2125);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << BOOLEAN) | (1L << CHARACTER) | (1L << TEXT) | (1L << INTEGER) | (1L << DECIMAL) | (1L << DATE) | (1L << TIME) | (1L << DATETIME) | (1L << PERIOD) | (1L << VERSION))) != 0) || ((((_la - 129)) & ~0x3f) == 0 && ((1L << (_la - 129)) & ((1L << (READ - 129)) | (1L << (SELF - 129)) | (1L << (TEST - 129)) | (1L << (THIS - 129)) | (1L << (WRITE - 129)) | (1L << (BOOLEAN_LITERAL - 129)) | (1L << (CHAR_LITERAL - 129)) | (1L << (SYMBOL_IDENTIFIER - 129)) | (1L << (TYPE_IDENTIFIER - 129)) | (1L << (VARIABLE_IDENTIFIER - 129)) | (1L << (NATIVE_IDENTIFIER - 129)) | (1L << (DOLLAR_IDENTIFIER - 129)) | (1L << (TEXT_LITERAL - 129)) | (1L << (INTEGER_LITERAL - 129)) | (1L << (DECIMAL_LITERAL - 129)))) != 0)) {
 				{
-				setState(2124); 
+				setState(2124);
 				((Java_method_expressionContext)_localctx).args = java_arguments(0);
 				}
 			}
 
-			setState(2127); 
+			setState(2127);
 			match(RPAR);
 			}
 		}
@@ -16905,7 +17077,7 @@ public class OParser extends AbstractParser {
 			_ctx = _localctx;
 			_prevctx = _localctx;
 
-			setState(2130); 
+			setState(2130);
 			((JavaArgumentListContext)_localctx).item = java_expression(0);
 			}
 			_ctx.stop = _input.LT(-1);
@@ -16923,9 +17095,9 @@ public class OParser extends AbstractParser {
 					pushNewRecursionContext(_localctx, _startState, RULE_java_arguments);
 					setState(2132);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(2133); 
+					setState(2133);
 					match(COMMA);
-					setState(2134); 
+					setState(2134);
 					((JavaArgumentListItemContext)_localctx).item = java_expression(0);
 					}
 					} 
@@ -16974,11 +17146,11 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(2140); 
+			setState(2140);
 			match(LBRAK);
-			setState(2141); 
+			setState(2141);
 			((Java_item_expressionContext)_localctx).exp = java_expression(0);
-			setState(2142); 
+			setState(2142);
 			match(RBRAK);
 			}
 		}
@@ -17020,11 +17192,11 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(2144); 
+			setState(2144);
 			match(LPAR);
-			setState(2145); 
+			setState(2145);
 			((Java_parenthesis_expressionContext)_localctx).exp = java_expression(0);
-			setState(2146); 
+			setState(2146);
 			match(RPAR);
 			}
 		}
@@ -17106,7 +17278,7 @@ public class OParser extends AbstractParser {
 			_ctx = _localctx;
 			_prevctx = _localctx;
 
-			setState(2149); 
+			setState(2149);
 			((JavaIdentifierContext)_localctx).name = java_identifier();
 			}
 			_ctx.stop = _input.LT(-1);
@@ -17124,9 +17296,9 @@ public class OParser extends AbstractParser {
 					pushNewRecursionContext(_localctx, _startState, RULE_java_identifier_expression);
 					setState(2151);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(2152); 
+					setState(2152);
 					match(DOT);
-					setState(2153); 
+					setState(2153);
 					((JavaChildIdentifierContext)_localctx).name = java_identifier();
 					}
 					} 
@@ -17212,7 +17384,7 @@ public class OParser extends AbstractParser {
 			_ctx = _localctx;
 			_prevctx = _localctx;
 
-			setState(2160); 
+			setState(2160);
 			((JavaClassIdentifierContext)_localctx).klass = java_identifier_expression(0);
 			}
 			_ctx.stop = _input.LT(-1);
@@ -17230,7 +17402,7 @@ public class OParser extends AbstractParser {
 					pushNewRecursionContext(_localctx, _startState, RULE_java_class_identifier_expression);
 					setState(2162);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(2163); 
+					setState(2163);
 					((JavaChildClassIdentifierContext)_localctx).name = match(DOLLAR_IDENTIFIER);
 					}
 					} 
@@ -17334,12 +17506,13 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 384, RULE_java_literal_expression);
 		try {
 			setState(2174);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case INTEGER_LITERAL:
 				_localctx = new JavaIntegerLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(2169); 
+				setState(2169);
 				((JavaIntegerLiteralContext)_localctx).t = match(INTEGER_LITERAL);
 				}
 				break;
@@ -17347,7 +17520,7 @@ public class OParser extends AbstractParser {
 				_localctx = new JavaDecimalLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(2170); 
+				setState(2170);
 				((JavaDecimalLiteralContext)_localctx).t = match(DECIMAL_LITERAL);
 				}
 				break;
@@ -17355,7 +17528,7 @@ public class OParser extends AbstractParser {
 				_localctx = new JavaTextLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(2171); 
+				setState(2171);
 				((JavaTextLiteralContext)_localctx).t = match(TEXT_LITERAL);
 				}
 				break;
@@ -17363,7 +17536,7 @@ public class OParser extends AbstractParser {
 				_localctx = new JavaBooleanLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(2172); 
+				setState(2172);
 				((JavaBooleanLiteralContext)_localctx).t = match(BOOLEAN_LITERAL);
 				}
 				break;
@@ -17371,7 +17544,7 @@ public class OParser extends AbstractParser {
 				_localctx = new JavaCharacterLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(2173); 
+				setState(2173);
 				((JavaCharacterLiteralContext)_localctx).t = match(CHAR_LITERAL);
 				}
 				break;
@@ -17435,7 +17608,11 @@ public class OParser extends AbstractParser {
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << BOOLEAN) | (1L << CHARACTER) | (1L << TEXT) | (1L << INTEGER) | (1L << DECIMAL) | (1L << DATE) | (1L << TIME) | (1L << DATETIME) | (1L << PERIOD) | (1L << VERSION))) != 0) || ((((_la - 129)) & ~0x3f) == 0 && ((1L << (_la - 129)) & ((1L << (READ - 129)) | (1L << (TEST - 129)) | (1L << (WRITE - 129)) | (1L << (SYMBOL_IDENTIFIER - 129)) | (1L << (TYPE_IDENTIFIER - 129)) | (1L << (VARIABLE_IDENTIFIER - 129)) | (1L << (NATIVE_IDENTIFIER - 129)) | (1L << (DOLLAR_IDENTIFIER - 129)))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
-			consume();
+			else {
+				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+				_errHandler.reportMatch(this);
+				consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -17499,16 +17676,17 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 388, RULE_csharp_statement);
 		try {
 			setState(2185);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case RETURN:
 				_localctx = new CSharpReturnStatementContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(2178); 
+				setState(2178);
 				match(RETURN);
-				setState(2179); 
+				setState(2179);
 				((CSharpReturnStatementContext)_localctx).exp = csharp_expression(0);
-				setState(2180); 
+				setState(2180);
 				match(SEMI);
 				}
 				break;
@@ -17540,9 +17718,9 @@ public class OParser extends AbstractParser {
 				_localctx = new CSharpStatementContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(2182); 
+				setState(2182);
 				((CSharpStatementContext)_localctx).exp = csharp_expression(0);
-				setState(2183); 
+				setState(2183);
 				match(SEMI);
 				}
 				break;
@@ -17627,7 +17805,7 @@ public class OParser extends AbstractParser {
 			_ctx = _localctx;
 			_prevctx = _localctx;
 
-			setState(2188); 
+			setState(2188);
 			((CSharpPrimaryExpressionContext)_localctx).exp = csharp_primary_expression();
 			}
 			_ctx.stop = _input.LT(-1);
@@ -17645,7 +17823,7 @@ public class OParser extends AbstractParser {
 					pushNewRecursionContext(_localctx, _startState, RULE_csharp_expression);
 					setState(2190);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(2191); 
+					setState(2191);
 					((CSharpSelectorExpressionContext)_localctx).child = csharp_selector_expression();
 					}
 					} 
@@ -17702,39 +17880,40 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 392, RULE_csharp_primary_expression);
 		try {
 			setState(2202);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,191,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(2197); 
+				setState(2197);
 				csharp_this_expression();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(2198); 
+				setState(2198);
 				csharp_new_expression();
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(2199); 
+				setState(2199);
 				csharp_parenthesis_expression();
 				}
 				break;
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(2200); 
+				setState(2200);
 				csharp_identifier_expression(0);
 				}
 				break;
 			case 5:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(2201); 
+				setState(2201);
 				csharp_literal_expression();
 				}
 				break;
@@ -17775,7 +17954,7 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(2204); 
+			setState(2204);
 			this_expression();
 			}
 		}
@@ -17817,9 +17996,9 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(2206); 
+			setState(2206);
 			new_token();
-			setState(2207); 
+			setState(2207);
 			csharp_method_expression();
 			}
 		}
@@ -17882,14 +18061,15 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 398, RULE_csharp_selector_expression);
 		try {
 			setState(2212);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case DOT:
 				_localctx = new CSharpMethodExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(2209); 
+				setState(2209);
 				match(DOT);
-				setState(2210); 
+				setState(2210);
 				((CSharpMethodExpressionContext)_localctx).exp = csharp_method_expression();
 				}
 				break;
@@ -17897,7 +18077,7 @@ public class OParser extends AbstractParser {
 				_localctx = new CSharpItemExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(2211); 
+				setState(2211);
 				((CSharpItemExpressionContext)_localctx).exp = csharp_item_expression();
 				}
 				break;
@@ -17948,20 +18128,21 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(2214); 
+			setState(2214);
 			((Csharp_method_expressionContext)_localctx).name = csharp_identifier();
-			setState(2215); 
+			setState(2215);
 			match(LPAR);
 			setState(2217);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << BOOLEAN) | (1L << CHARACTER) | (1L << TEXT) | (1L << INTEGER) | (1L << DECIMAL) | (1L << DATE) | (1L << TIME) | (1L << DATETIME) | (1L << PERIOD) | (1L << VERSION))) != 0) || ((((_la - 129)) & ~0x3f) == 0 && ((1L << (_la - 129)) & ((1L << (READ - 129)) | (1L << (SELF - 129)) | (1L << (TEST - 129)) | (1L << (THIS - 129)) | (1L << (WRITE - 129)) | (1L << (BOOLEAN_LITERAL - 129)) | (1L << (CHAR_LITERAL - 129)) | (1L << (SYMBOL_IDENTIFIER - 129)) | (1L << (TYPE_IDENTIFIER - 129)) | (1L << (VARIABLE_IDENTIFIER - 129)) | (1L << (DOLLAR_IDENTIFIER - 129)) | (1L << (TEXT_LITERAL - 129)) | (1L << (INTEGER_LITERAL - 129)) | (1L << (DECIMAL_LITERAL - 129)))) != 0)) {
 				{
-				setState(2216); 
+				setState(2216);
 				((Csharp_method_expressionContext)_localctx).args = csharp_arguments(0);
 				}
 			}
 
-			setState(2219); 
+			setState(2219);
 			match(RPAR);
 			}
 		}
@@ -18043,7 +18224,7 @@ public class OParser extends AbstractParser {
 			_ctx = _localctx;
 			_prevctx = _localctx;
 
-			setState(2222); 
+			setState(2222);
 			((CSharpArgumentListContext)_localctx).item = csharp_expression(0);
 			}
 			_ctx.stop = _input.LT(-1);
@@ -18061,9 +18242,9 @@ public class OParser extends AbstractParser {
 					pushNewRecursionContext(_localctx, _startState, RULE_csharp_arguments);
 					setState(2224);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(2225); 
+					setState(2225);
 					match(COMMA);
-					setState(2226); 
+					setState(2226);
 					((CSharpArgumentListItemContext)_localctx).item = csharp_expression(0);
 					}
 					} 
@@ -18112,11 +18293,11 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(2232); 
+			setState(2232);
 			match(LBRAK);
-			setState(2233); 
+			setState(2233);
 			((Csharp_item_expressionContext)_localctx).exp = csharp_expression(0);
-			setState(2234); 
+			setState(2234);
 			match(RBRAK);
 			}
 		}
@@ -18158,11 +18339,11 @@ public class OParser extends AbstractParser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(2236); 
+			setState(2236);
 			match(LPAR);
-			setState(2237); 
+			setState(2237);
 			((Csharp_parenthesis_expressionContext)_localctx).exp = csharp_expression(0);
-			setState(2238); 
+			setState(2238);
 			match(RPAR);
 			}
 		}
@@ -18252,6 +18433,7 @@ public class OParser extends AbstractParser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(2243);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case DOLLAR_IDENTIFIER:
 				{
@@ -18259,7 +18441,7 @@ public class OParser extends AbstractParser {
 				_ctx = _localctx;
 				_prevctx = _localctx;
 
-				setState(2241); 
+				setState(2241);
 				match(DOLLAR_IDENTIFIER);
 				}
 				break;
@@ -18283,7 +18465,7 @@ public class OParser extends AbstractParser {
 				_localctx = new CSharpIdentifierContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(2242); 
+				setState(2242);
 				((CSharpIdentifierContext)_localctx).name = csharp_identifier();
 				}
 				break;
@@ -18305,9 +18487,9 @@ public class OParser extends AbstractParser {
 					pushNewRecursionContext(_localctx, _startState, RULE_csharp_identifier_expression);
 					setState(2245);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(2246); 
+					setState(2246);
 					match(DOT);
-					setState(2247); 
+					setState(2247);
 					((CSharpChildIdentifierContext)_localctx).name = csharp_identifier();
 					}
 					} 
@@ -18406,12 +18588,13 @@ public class OParser extends AbstractParser {
 		enterRule(_localctx, 410, RULE_csharp_literal_expression);
 		try {
 			setState(2258);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case INTEGER_LITERAL:
 				_localctx = new CSharpIntegerLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(2253); 
+				setState(2253);
 				match(INTEGER_LITERAL);
 				}
 				break;
@@ -18419,7 +18602,7 @@ public class OParser extends AbstractParser {
 				_localctx = new CSharpDecimalLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(2254); 
+				setState(2254);
 				match(DECIMAL_LITERAL);
 				}
 				break;
@@ -18427,7 +18610,7 @@ public class OParser extends AbstractParser {
 				_localctx = new CSharpTextLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(2255); 
+				setState(2255);
 				match(TEXT_LITERAL);
 				}
 				break;
@@ -18435,7 +18618,7 @@ public class OParser extends AbstractParser {
 				_localctx = new CSharpBooleanLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(2256); 
+				setState(2256);
 				match(BOOLEAN_LITERAL);
 				}
 				break;
@@ -18443,7 +18626,7 @@ public class OParser extends AbstractParser {
 				_localctx = new CSharpCharacterLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(2257); 
+				setState(2257);
 				match(CHAR_LITERAL);
 				}
 				break;
@@ -18505,7 +18688,11 @@ public class OParser extends AbstractParser {
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << BOOLEAN) | (1L << CHARACTER) | (1L << TEXT) | (1L << INTEGER) | (1L << DECIMAL) | (1L << DATE) | (1L << TIME) | (1L << DATETIME) | (1L << PERIOD) | (1L << VERSION))) != 0) || ((((_la - 129)) & ~0x3f) == 0 && ((1L << (_la - 129)) & ((1L << (READ - 129)) | (1L << (TEST - 129)) | (1L << (WRITE - 129)) | (1L << (SYMBOL_IDENTIFIER - 129)) | (1L << (TYPE_IDENTIFIER - 129)) | (1L << (VARIABLE_IDENTIFIER - 129)))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
-			consume();
+			else {
+				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+				_errHandler.reportMatch(this);
+				consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -18521,344 +18708,344 @@ public class OParser extends AbstractParser {
 
 	public boolean sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
 		switch (ruleIndex) {
-		case 7: 
+		case 7:
 			return derived_list_sempred((Derived_listContext)_localctx, predIndex);
-		case 17: 
+		case 17:
 			return native_category_binding_list_sempred((Native_category_binding_listContext)_localctx, predIndex);
-		case 36: 
+		case 36:
 			return else_if_statement_list_sempred((Else_if_statement_listContext)_localctx, predIndex);
-		case 44: 
+		case 44:
 			return callable_parent_sempred((Callable_parentContext)_localctx, predIndex);
-		case 46: 
+		case 46:
 			return expression_sempred((ExpressionContext)_localctx, predIndex);
-		case 47: 
+		case 47:
 			return an_expression_sempred((An_expressionContext)_localctx, predIndex);
-		case 49: 
+		case 49:
 			return instance_expression_sempred((Instance_expressionContext)_localctx, predIndex);
-		case 59: 
+		case 59:
 			return argument_assignment_list_sempred((Argument_assignment_listContext)_localctx, predIndex);
-		case 78: 
+		case 78:
 			return typedef_sempred((TypedefContext)_localctx, predIndex);
-		case 98: 
+		case 98:
 			return any_type_sempred((Any_typeContext)_localctx, predIndex);
-		case 135: 
+		case 135:
 			return assignable_instance_sempred((Assignable_instanceContext)_localctx, predIndex);
-		case 136: 
+		case 136:
 			return is_expression_sempred((Is_expressionContext)_localctx, predIndex);
-		case 142: 
+		case 142:
 			return new_token_sempred((New_tokenContext)_localctx, predIndex);
-		case 143: 
+		case 143:
 			return key_token_sempred((Key_tokenContext)_localctx, predIndex);
-		case 144: 
+		case 144:
 			return module_token_sempred((Module_tokenContext)_localctx, predIndex);
-		case 145: 
+		case 145:
 			return value_token_sempred((Value_tokenContext)_localctx, predIndex);
-		case 146: 
+		case 146:
 			return symbols_token_sempred((Symbols_tokenContext)_localctx, predIndex);
-		case 155: 
+		case 155:
 			return javascript_expression_sempred((Javascript_expressionContext)_localctx, predIndex);
-		case 161: 
+		case 161:
 			return javascript_arguments_sempred((Javascript_argumentsContext)_localctx, predIndex);
-		case 168: 
+		case 168:
 			return python_expression_sempred((Python_expressionContext)_localctx, predIndex);
-		case 174: 
+		case 174:
 			return python_ordinal_argument_list_sempred((Python_ordinal_argument_listContext)_localctx, predIndex);
-		case 175: 
+		case 175:
 			return python_named_argument_list_sempred((Python_named_argument_listContext)_localctx, predIndex);
-		case 177: 
+		case 177:
 			return python_identifier_expression_sempred((Python_identifier_expressionContext)_localctx, predIndex);
-		case 181: 
+		case 181:
 			return java_expression_sempred((Java_expressionContext)_localctx, predIndex);
-		case 187: 
+		case 187:
 			return java_arguments_sempred((Java_argumentsContext)_localctx, predIndex);
-		case 190: 
+		case 190:
 			return java_identifier_expression_sempred((Java_identifier_expressionContext)_localctx, predIndex);
-		case 191: 
+		case 191:
 			return java_class_identifier_expression_sempred((Java_class_identifier_expressionContext)_localctx, predIndex);
-		case 195: 
+		case 195:
 			return csharp_expression_sempred((Csharp_expressionContext)_localctx, predIndex);
-		case 201: 
+		case 201:
 			return csharp_arguments_sempred((Csharp_argumentsContext)_localctx, predIndex);
-		case 204: 
+		case 204:
 			return csharp_identifier_expression_sempred((Csharp_identifier_expressionContext)_localctx, predIndex);
 		}
 		return true;
 	}
 	private boolean derived_list_sempred(Derived_listContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 0: 
+		case 0:
 			return precpred(_ctx, 1);
 		}
 		return true;
 	}
 	private boolean native_category_binding_list_sempred(Native_category_binding_listContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 1: 
+		case 1:
 			return precpred(_ctx, 1);
 		}
 		return true;
 	}
 	private boolean else_if_statement_list_sempred(Else_if_statement_listContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 2: 
+		case 2:
 			return precpred(_ctx, 1);
 		}
 		return true;
 	}
 	private boolean callable_parent_sempred(Callable_parentContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 3: 
+		case 3:
 			return precpred(_ctx, 1);
 		}
 		return true;
 	}
 	private boolean expression_sempred(ExpressionContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 4: 
+		case 4:
 			return precpred(_ctx, 32);
-		case 5: 
+		case 5:
 			return precpred(_ctx, 31);
-		case 6: 
+		case 6:
 			return precpred(_ctx, 30);
-		case 7: 
+		case 7:
 			return precpred(_ctx, 29);
-		case 8: 
+		case 8:
 			return precpred(_ctx, 28);
-		case 9: 
+		case 9:
 			return precpred(_ctx, 27);
-		case 10: 
+		case 10:
 			return precpred(_ctx, 26);
-		case 11: 
+		case 11:
 			return precpred(_ctx, 25);
-		case 12: 
+		case 12:
 			return precpred(_ctx, 24);
-		case 13: 
+		case 13:
 			return precpred(_ctx, 21);
-		case 14: 
+		case 14:
 			return precpred(_ctx, 20);
-		case 15: 
+		case 15:
 			return precpred(_ctx, 19);
-		case 16: 
+		case 16:
 			return precpred(_ctx, 18);
-		case 17: 
+		case 17:
 			return precpred(_ctx, 17);
-		case 18: 
+		case 18:
 			return precpred(_ctx, 16);
-		case 19: 
+		case 19:
 			return precpred(_ctx, 15);
-		case 20: 
+		case 20:
 			return precpred(_ctx, 14);
-		case 21: 
+		case 21:
 			return precpred(_ctx, 12);
-		case 22: 
+		case 22:
 			return precpred(_ctx, 11);
-		case 23: 
+		case 23:
 			return precpred(_ctx, 10);
-		case 24: 
+		case 24:
 			return precpred(_ctx, 9);
-		case 25: 
+		case 25:
 			return precpred(_ctx, 8);
-		case 26: 
+		case 26:
 			return precpred(_ctx, 7);
-		case 27: 
+		case 27:
 			return precpred(_ctx, 6);
-		case 28: 
+		case 28:
 			return precpred(_ctx, 5);
-		case 29: 
+		case 29:
 			return precpred(_ctx, 23);
-		case 30: 
+		case 30:
 			return precpred(_ctx, 22);
-		case 31: 
+		case 31:
 			return precpred(_ctx, 1);
 		}
 		return true;
 	}
 	private boolean an_expression_sempred(An_expressionContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 32: 
+		case 32:
 			return this.willBeAOrAn();
 		}
 		return true;
 	}
 	private boolean instance_expression_sempred(Instance_expressionContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 33: 
+		case 33:
 			return precpred(_ctx, 1);
 		}
 		return true;
 	}
 	private boolean argument_assignment_list_sempred(Argument_assignment_listContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 34: 
+		case 34:
 			return this.willNotBe(this.equalToken());
-		case 35: 
+		case 35:
 			return precpred(_ctx, 1);
 		}
 		return true;
 	}
 	private boolean typedef_sempred(TypedefContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 36: 
+		case 36:
 			return precpred(_ctx, 5);
-		case 37: 
+		case 37:
 			return precpred(_ctx, 4);
-		case 38: 
+		case 38:
 			return precpred(_ctx, 3);
 		}
 		return true;
 	}
 	private boolean any_type_sempred(Any_typeContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 39: 
+		case 39:
 			return precpred(_ctx, 2);
-		case 40: 
+		case 40:
 			return precpred(_ctx, 1);
 		}
 		return true;
 	}
 	private boolean assignable_instance_sempred(Assignable_instanceContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 41: 
+		case 41:
 			return precpred(_ctx, 1);
 		}
 		return true;
 	}
 	private boolean is_expression_sempred(Is_expressionContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 42: 
+		case 42:
 			return this.willBeAOrAn();
 		}
 		return true;
 	}
 	private boolean new_token_sempred(New_tokenContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 43: 
+		case 43:
 			return this.isText(((New_tokenContext)_localctx).i1,"new");
 		}
 		return true;
 	}
 	private boolean key_token_sempred(Key_tokenContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 44: 
+		case 44:
 			return this.isText(((Key_tokenContext)_localctx).i1,"key");
 		}
 		return true;
 	}
 	private boolean module_token_sempred(Module_tokenContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 45: 
+		case 45:
 			return this.isText(((Module_tokenContext)_localctx).i1,"module");
 		}
 		return true;
 	}
 	private boolean value_token_sempred(Value_tokenContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 46: 
+		case 46:
 			return this.isText(((Value_tokenContext)_localctx).i1,"value");
 		}
 		return true;
 	}
 	private boolean symbols_token_sempred(Symbols_tokenContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 47: 
+		case 47:
 			return this.isText(((Symbols_tokenContext)_localctx).i1,"symbols");
 		}
 		return true;
 	}
 	private boolean javascript_expression_sempred(Javascript_expressionContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 48: 
+		case 48:
 			return precpred(_ctx, 1);
 		}
 		return true;
 	}
 	private boolean javascript_arguments_sempred(Javascript_argumentsContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 49: 
+		case 49:
 			return precpred(_ctx, 1);
 		}
 		return true;
 	}
 	private boolean python_expression_sempred(Python_expressionContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 50: 
+		case 50:
 			return precpred(_ctx, 1);
 		}
 		return true;
 	}
 	private boolean python_ordinal_argument_list_sempred(Python_ordinal_argument_listContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 51: 
+		case 51:
 			return precpred(_ctx, 1);
 		}
 		return true;
 	}
 	private boolean python_named_argument_list_sempred(Python_named_argument_listContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 52: 
+		case 52:
 			return precpred(_ctx, 1);
 		}
 		return true;
 	}
 	private boolean python_identifier_expression_sempred(Python_identifier_expressionContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 53: 
+		case 53:
 			return precpred(_ctx, 1);
 		}
 		return true;
 	}
 	private boolean java_expression_sempred(Java_expressionContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 54: 
+		case 54:
 			return precpred(_ctx, 1);
 		}
 		return true;
 	}
 	private boolean java_arguments_sempred(Java_argumentsContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 55: 
+		case 55:
 			return precpred(_ctx, 1);
 		}
 		return true;
 	}
 	private boolean java_identifier_expression_sempred(Java_identifier_expressionContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 56: 
+		case 56:
 			return precpred(_ctx, 1);
 		}
 		return true;
 	}
 	private boolean java_class_identifier_expression_sempred(Java_class_identifier_expressionContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 57: 
+		case 57:
 			return precpred(_ctx, 1);
 		}
 		return true;
 	}
 	private boolean csharp_expression_sempred(Csharp_expressionContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 58: 
+		case 58:
 			return precpred(_ctx, 1);
 		}
 		return true;
 	}
 	private boolean csharp_arguments_sempred(Csharp_argumentsContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 59: 
+		case 59:
 			return precpred(_ctx, 1);
 		}
 		return true;
 	}
 	private boolean csharp_identifier_expression_sempred(Csharp_identifier_expressionContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 60: 
+		case 60:
 			return precpred(_ctx, 1);
 		}
 		return true;
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\u00ad\u08d9\4\2\t"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\u00ad\u08d9\4\2\t"+
 		"\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
 		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
@@ -19060,7 +19247,7 @@ public class OParser extends AbstractParser {
 		"\u0091\u0091\4\2HHYY\4\2##ss\b\2\609\u0083\u0083\u0090\u0090\u009a\u009a"+
 		"\u009f\u00a1\u00a3\u00a3\b\2\609\u0083\u0083\u0089\u0089\u0090\u0091\u009a"+
 		"\u009a\u009f\u00a1\7\2\609\u0083\u0083\u0090\u0090\u009a\u009a\u009f\u00a3"+
-		"\7\2\609\u0083\u0083\u0090\u0090\u009a\u009a\u009f\u00a1\u0960\2\u01a0"+
+		"\7\2\609\u0083\u0083\u0090\u0090\u009a\u009a\u009f\u00a1\2\u0960\2\u01a0"+
 		"\3\2\2\2\4\u01b1\3\2\2\2\6\u01ba\3\2\2\2\b\u01c0\3\2\2\2\n\u01c6\3\2\2"+
 		"\2\f\u01dc\3\2\2\2\16\u01ec\3\2\2\2\20\u01f6\3\2\2\2\22\u0207\3\2\2\2"+
 		"\24\u020a\3\2\2\2\26\u0217\3\2\2\2\30\u0220\3\2\2\2\32\u022a\3\2\2\2\34"+
@@ -19300,15 +19487,15 @@ public class OParser extends AbstractParser {
 		"\u03c0\3\2\2\2\u03c2\u03c3\3\2\2\2\u03c3[\3\2\2\2\u03c4\u03c2\3\2\2\2"+
 		"\u03c5\u03c6\7\21\2\2\u03c6\u03cc\5\u00b2Z\2\u03c7\u03c8\7\24\2\2\u03c8"+
 		"\u03c9\5^\60\2\u03c9\u03ca\7\25\2\2\u03ca\u03cc\3\2\2\2\u03cb\u03c5\3"+
-		"\2\2\2\u03cb\u03c7\3\2\2\2\u03cc]\3\2\2\2\u03cd\u03ce\b\60\1\2\u03ce\u03cf"+
-		"\7\37\2\2\u03cf\u03e5\5^\60$\u03d0\u03d1\7\31\2\2\u03d1\u03e5\5^\60#\u03d2"+
-		"\u03d3\7\22\2\2\u03d3\u03d4\5\u00c4c\2\u03d4\u03d5\7\23\2\2\u03d5\u03d6"+
-		"\5^\60\17\u03d6\u03e5\3\2\2\2\u03d7\u03e5\5d\63\2\u03d8\u03e5\5f\64\2"+
-		"\u03d9\u03da\7;\2\2\u03da\u03db\7\22\2\2\u03db\u03dc\5^\60\2\u03dc\u03dd"+
+		"\2\2\2\u03cb\u03c7\3\2\2\2\u03cc]\3\2\2\2\u03cd\u03ce\b\60\1\2\u03ce\u03e5"+
+		"\5d\63\2\u03cf\u03e5\5f\64\2\u03d0\u03d1\7\37\2\2\u03d1\u03e5\5^\60$\u03d2"+
+		"\u03d3\7\31\2\2\u03d3\u03e5\5^\60#\u03d4\u03d5\7\22\2\2\u03d5\u03d6\5"+
+		"\u00c4c\2\u03d6\u03d7\7\23\2\2\u03d7\u03d8\5^\60\17\u03d8\u03e5\3\2\2"+
+		"\2\u03d9\u03da\7;\2\2\u03da\u03db\7\22\2\2\u03db\u03dc\5^\60\2\u03dc\u03dd"+
 		"\7\23\2\2\u03dd\u03e5\3\2\2\2\u03de\u03df\7a\2\2\u03df\u03e0\7\22\2\2"+
 		"\u03e0\u03e1\5\u00b2Z\2\u03e1\u03e2\7\23\2\2\u03e2\u03e5\3\2\2\2\u03e3"+
-		"\u03e5\5b\62\2\u03e4\u03cd\3\2\2\2\u03e4\u03d0\3\2\2\2\u03e4\u03d2\3\2"+
-		"\2\2\u03e4\u03d7\3\2\2\2\u03e4\u03d8\3\2\2\2\u03e4\u03d9\3\2\2\2\u03e4"+
+		"\u03e5\5b\62\2\u03e4\u03cd\3\2\2\2\u03e4\u03cf\3\2\2\2\u03e4\u03d0\3\2"+
+		"\2\2\u03e4\u03d2\3\2\2\2\u03e4\u03d4\3\2\2\2\u03e4\u03d9\3\2\2\2\u03e4"+
 		"\u03de\3\2\2\2\u03e4\u03e3\3\2\2\2\u03e5\u0453\3\2\2\2\u03e6\u03e7\f\""+
 		"\2\2\u03e7\u03e8\5\u012a\u0096\2\u03e8\u03e9\5^\60#\u03e9\u0452\3\2\2"+
 		"\2\u03ea\u03eb\f!\2\2\u03eb\u03ec\5\u012c\u0097\2\u03ec\u03ed\5^\60\""+
