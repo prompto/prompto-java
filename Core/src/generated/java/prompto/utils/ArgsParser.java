@@ -1,4 +1,4 @@
-// Generated from ArgsParser.g4 by ANTLR 4.5
+// Generated from ArgsParser.g4 by ANTLR 4.7.1
 package prompto.utils;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class ArgsParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.5", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.7.1", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -58,7 +58,7 @@ public class ArgsParser extends Parser {
 	}
 
 	@Override
-	@NotNull
+
 	public Vocabulary getVocabulary() {
 		return VOCABULARY;
 	}
@@ -114,7 +114,7 @@ public class ArgsParser extends Parser {
 			while (_la==DASH || _la==ELEMENT) {
 				{
 				{
-				setState(8); 
+				setState(8);
 				((ParseContext)_localctx).e = entry();
 				}
 				}
@@ -168,19 +168,20 @@ public class ArgsParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(15);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==DASH) {
 				{
-				setState(14); 
+				setState(14);
 				match(DASH);
 				}
 			}
 
-			setState(17); 
+			setState(17);
 			((EntryContext)_localctx).k = key();
-			setState(18); 
+			setState(18);
 			match(EQUALS);
-			setState(19); 
+			setState(19);
 			((EntryContext)_localctx).v = value();
 			}
 		}
@@ -217,7 +218,7 @@ public class ArgsParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(21); 
+			setState(21);
 			match(ELEMENT);
 			}
 		}
@@ -273,12 +274,13 @@ public class ArgsParser extends Parser {
 		enterRule(_localctx, 6, RULE_value);
 		try {
 			setState(25);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case ELEMENT:
 				_localctx = new ELEMENTContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(23); 
+				setState(23);
 				match(ELEMENT);
 				}
 				break;
@@ -286,7 +288,7 @@ public class ArgsParser extends Parser {
 				_localctx = new STRINGContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(24); 
+				setState(24);
 				match(STRING);
 				}
 				break;
@@ -306,14 +308,15 @@ public class ArgsParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\7\36\4\2\t\2\4\3"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\7\36\4\2\t\2\4\3"+
 		"\t\3\4\4\t\4\4\5\t\5\3\2\7\2\f\n\2\f\2\16\2\17\13\2\3\3\5\3\22\n\3\3\3"+
-		"\3\3\3\3\3\3\3\4\3\4\3\5\3\5\5\5\34\n\5\3\5\2\2\6\2\4\6\b\2\2\34\2\r\3"+
-		"\2\2\2\4\21\3\2\2\2\6\27\3\2\2\2\b\33\3\2\2\2\n\f\5\4\3\2\13\n\3\2\2\2"+
-		"\f\17\3\2\2\2\r\13\3\2\2\2\r\16\3\2\2\2\16\3\3\2\2\2\17\r\3\2\2\2\20\22"+
-		"\7\5\2\2\21\20\3\2\2\2\21\22\3\2\2\2\22\23\3\2\2\2\23\24\5\6\4\2\24\25"+
-		"\7\4\2\2\25\26\5\b\5\2\26\5\3\2\2\2\27\30\7\7\2\2\30\7\3\2\2\2\31\34\7"+
-		"\7\2\2\32\34\7\3\2\2\33\31\3\2\2\2\33\32\3\2\2\2\34\t\3\2\2\2\5\r\21\33";
+		"\3\3\3\3\3\3\3\4\3\4\3\5\3\5\5\5\34\n\5\3\5\2\2\6\2\4\6\b\2\2\2\34\2\r"+
+		"\3\2\2\2\4\21\3\2\2\2\6\27\3\2\2\2\b\33\3\2\2\2\n\f\5\4\3\2\13\n\3\2\2"+
+		"\2\f\17\3\2\2\2\r\13\3\2\2\2\r\16\3\2\2\2\16\3\3\2\2\2\17\r\3\2\2\2\20"+
+		"\22\7\5\2\2\21\20\3\2\2\2\21\22\3\2\2\2\22\23\3\2\2\2\23\24\5\6\4\2\24"+
+		"\25\7\4\2\2\25\26\5\b\5\2\26\5\3\2\2\2\27\30\7\7\2\2\30\7\3\2\2\2\31\34"+
+		"\7\7\2\2\32\34\7\3\2\2\33\31\3\2\2\2\33\32\3\2\2\2\34\t\3\2\2\2\5\r\21"+
+		"\33";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
