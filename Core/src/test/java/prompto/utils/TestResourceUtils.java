@@ -26,7 +26,7 @@ public class TestResourceUtils {
 	
 	@Test
 	public void testListResourcesAtJarFolder() throws IOException {
-		Collection<URL> names = ResourceUtils.listResourcesAt("org/abego/treelayout/", null);
+		Collection<URL> names = ResourceUtils.listResourcesAt("org/antlr/v4/runtime/", null);
 		assertNotNull(names);
 		assertFalse(names.isEmpty());
 	}
