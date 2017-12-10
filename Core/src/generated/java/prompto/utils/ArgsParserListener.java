@@ -1,6 +1,5 @@
-// Generated from ArgsParser.g4 by ANTLR 4.5
+// Generated from ArgsParser.g4 by ANTLR 4.7.1
 package prompto.utils;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -12,54 +11,54 @@ public interface ArgsParserListener extends ParseTreeListener {
 	 * Enter a parse tree produced by {@link ArgsParser#parse}.
 	 * @param ctx the parse tree
 	 */
-	void enterParse(@NotNull ArgsParser.ParseContext ctx);
+	void enterParse(ArgsParser.ParseContext ctx);
 	/**
 	 * Exit a parse tree produced by {@link ArgsParser#parse}.
 	 * @param ctx the parse tree
 	 */
-	void exitParse(@NotNull ArgsParser.ParseContext ctx);
+	void exitParse(ArgsParser.ParseContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ArgsParser#entry}.
 	 * @param ctx the parse tree
 	 */
-	void enterEntry(@NotNull ArgsParser.EntryContext ctx);
+	void enterEntry(ArgsParser.EntryContext ctx);
 	/**
 	 * Exit a parse tree produced by {@link ArgsParser#entry}.
 	 * @param ctx the parse tree
 	 */
-	void exitEntry(@NotNull ArgsParser.EntryContext ctx);
+	void exitEntry(ArgsParser.EntryContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ArgsParser#key}.
 	 * @param ctx the parse tree
 	 */
-	void enterKey(@NotNull ArgsParser.KeyContext ctx);
+	void enterKey(ArgsParser.KeyContext ctx);
 	/**
 	 * Exit a parse tree produced by {@link ArgsParser#key}.
 	 * @param ctx the parse tree
 	 */
-	void exitKey(@NotNull ArgsParser.KeyContext ctx);
+	void exitKey(ArgsParser.KeyContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ELEMENT}
 	 * labeled alternative in {@link ArgsParser#value}.
 	 * @param ctx the parse tree
 	 */
-	void enterELEMENT(@NotNull ArgsParser.ELEMENTContext ctx);
+	void enterELEMENT(ArgsParser.ELEMENTContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code ELEMENT}
 	 * labeled alternative in {@link ArgsParser#value}.
 	 * @param ctx the parse tree
 	 */
-	void exitELEMENT(@NotNull ArgsParser.ELEMENTContext ctx);
+	void exitELEMENT(ArgsParser.ELEMENTContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code STRING}
 	 * labeled alternative in {@link ArgsParser#value}.
 	 * @param ctx the parse tree
 	 */
-	void enterSTRING(@NotNull ArgsParser.STRINGContext ctx);
+	void enterSTRING(ArgsParser.STRINGContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code STRING}
 	 * labeled alternative in {@link ArgsParser#value}.
 	 * @param ctx the parse tree
 	 */
-	void exitSTRING(@NotNull ArgsParser.STRINGContext ctx);
+	void exitSTRING(ArgsParser.STRINGContext ctx);
 }
