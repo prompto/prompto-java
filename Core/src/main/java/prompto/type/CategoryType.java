@@ -31,6 +31,7 @@ import prompto.grammar.Identifier;
 import prompto.grammar.Operator;
 import prompto.instance.MemberInstance;
 import prompto.instance.VariableInstance;
+import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoRoot;
 import prompto.runtime.Context;
 import prompto.runtime.Score;
@@ -473,11 +474,20 @@ public class CategoryType extends BaseType {
 		if(value==null)
 			return NullValue.instance();
 		else if(value instanceof IStored)
-			return decl.newInstance(context, (IStored)value);
+			return convertStoredToPromptoValue(context, decl, (IStored)value);
 		else
 			return super.convertJavaValueToIValue(context, value);
 	}
 	
+	private IValue convertStoredToPromptoValue(Context context, CategoryDeclaration decl, IStored stored) {
+		@SuppressWarnings("unchecked")
+		PromptoList<String> categories = ((PromptoList<String>)stored.getData("category"));
+		String actualTypeName = categories.getLast();
+		if(!actualTypeName.equals(this.typeNameId.toString()))
+			decl = (CategoryDeclaration)getDeclaration(context, new Identifier(actualTypeName));
+		return decl.newInstance(context, stored);
+	}
+
 	@Override
 	public ResultInfo compileGetMember(Context context, MethodInfo method,
 			Flags flags, IExpression parent, Identifier id) {
