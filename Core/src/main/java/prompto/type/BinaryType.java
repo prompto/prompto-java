@@ -44,12 +44,16 @@ public abstract class BinaryType extends NativeType {
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		if(value.isNull())
 			return NullValue.instance();
-		String partName = value.get("partName").asText();
-		byte[] bytes = parts.get(partName);
-		if(bytes==null)
-			return NullValue.instance(); // TODO throw ?
-		String mimeType = value.get("mimeType").asText();
-		return newInstance(new PromptoBinary(mimeType, bytes));
+		if(value.isTextual() && value.asText().startsWith("/ws/bin/data?"))
+			return null;
+		else {
+			String partName = value.get("partName").asText();
+			byte[] bytes = parts.get(partName);
+			if(bytes==null)
+				return NullValue.instance(); // TODO throw ?
+			String mimeType = value.get("mimeType").asText();
+			return newInstance(new PromptoBinary(mimeType, bytes));
+		}
 	}
-
+	
 }
