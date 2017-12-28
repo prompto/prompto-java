@@ -2,6 +2,7 @@ package prompto.config;
 
 import java.util.function.Supplier;
 
+import prompto.memstore.MemStoreFactory;
 import prompto.nullstore.NullStoreFactory;
 
 public interface IStoreConfiguration {
@@ -24,6 +25,16 @@ public interface IStoreConfiguration {
 		@Override public IStoreConfiguration withDbName(String dbName) { return null; }
 	};
 	
+	IStoreConfiguration MEM_STORE_CONFIG = new IStoreConfiguration() {
+		@Override public String getFactory() { return MemStoreFactory.class.getName(); }
+		@Override public String getHost() { return null; }
+		@Override public Integer getPort() { return null; }
+		@Override public String getDbName() { return null; }
+		@Override public String getUser() { return null; }
+		@Override public ISecretKeyConfiguration getSecretKeyConfiguration() { return null; }
+		@Override public IStoreConfiguration withDbName(String dbName) { return null; }
+	};
+
 	public class Inline implements IStoreConfiguration {
 
 		Supplier<String> factory = ()->null;
