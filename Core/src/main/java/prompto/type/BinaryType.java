@@ -44,8 +44,9 @@ public abstract class BinaryType extends NativeType {
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		if(value.isNull())
 			return NullValue.instance();
+		// if this an object received from the browser, use reverse logic from BinaryValue::toJson
 		if(value.isTextual() && value.asText().startsWith("/ws/bin/data?"))
-			return null;
+			return null; // TODO ok for storing an updated instance (attribute will not be overwritten), but might need a lazy loading BinaryRef value for other situations ? 
 		else {
 			String partName = value.get("partName").asText();
 			byte[] bytes = parts.get(partName);
