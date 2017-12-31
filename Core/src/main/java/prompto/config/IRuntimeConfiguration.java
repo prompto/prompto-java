@@ -2,6 +2,7 @@ package prompto.config;
 
 import java.net.URL;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -33,7 +34,7 @@ public interface IRuntimeConfiguration {
 	public static class Inline implements IRuntimeConfiguration {
 		
 		Supplier<Collection<URL>> runtimeLibs = null; // always passed from code
-		Supplier<Map<String, String>> arguments = ()->null;
+		Supplier<Map<String, String>> arguments = ()->Collections.emptyMap();
 		Supplier<IDebugConfiguration> debugConfiguration = ()->null;
 		Supplier<IStoreConfiguration> codeStoreConfiguration = ()->null;
 		Supplier<IStoreConfiguration> dataStoreConfiguration = ()->null;
