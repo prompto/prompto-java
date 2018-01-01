@@ -376,6 +376,8 @@ public class CategoryType extends BaseType {
 
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
+		if(value.isNull())
+			return NullValue.instance();
 		try {
 			IDeclaration declaration = getDeclaration(context);
 			if(declaration instanceof CategoryDeclaration) 
