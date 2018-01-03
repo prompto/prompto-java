@@ -319,7 +319,7 @@ public final class MemStore implements IStore {
 		@Override
 		public void setData(String fieldName, Object value, IDbIdProvider provider) {
 			if(document==null) {
-				Object dbId = provider==null ? null : provider.getDbId();
+				Object dbId = provider==null ? null : provider.get();
 				document = newDocument(dbId);
 			}
 			document.put(fieldName, value);

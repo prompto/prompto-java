@@ -122,7 +122,18 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMuta
 		return dbId;
 	}
 	
+	@Override // of IDbIdProvider
+	public Object get() {
+		return dbId;
+	}
+
 	public final void setDbId(Object dbId) {
+		this.dbId = dbId;
+	}
+	
+	
+	@Override // of IDbIdListener
+	public final void accept(Object dbId) {
 		this.dbId = dbId;
 	}
 	
