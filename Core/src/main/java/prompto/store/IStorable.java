@@ -1,5 +1,7 @@
 package prompto.store;
 
+import java.util.function.Consumer;
+
 import prompto.error.PromptoError;
 
 public interface IStorable {
@@ -22,7 +24,6 @@ public interface IStorable {
 	}
 	
 	@FunctionalInterface
-	public static interface IDbIdListener {
-		void setDbId(Object dbId);
+	public static interface IDbIdListener extends Consumer<Object> {
 	}
 }

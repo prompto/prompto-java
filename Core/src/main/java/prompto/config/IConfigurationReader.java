@@ -25,7 +25,7 @@ public interface IConfigurationReader {
 	}
 	<T extends Object> Collection<T> getArray(String key);
 	IConfigurationReader getObject(String key);
-	Collection<IConfigurationReader> getObjectsArray(String key);
+	Collection<? extends IConfigurationReader> getObjectsArray(String key);
 	default IStoreConfiguration readStoreConfiguration(String key) {
 		IConfigurationReader child = getObject(key);
 		if(child==null)

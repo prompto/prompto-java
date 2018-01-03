@@ -284,6 +284,8 @@ public final class MemStore implements IStore {
 			if(dbId==null)
 				dbId = Long.valueOf(lastDbId.incrementAndGet());
 			doc.put(dbIdName, dbId);
+			if(listener!=null)
+				listener.accept(dbId);
 			return doc;
 		}
 

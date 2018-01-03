@@ -81,7 +81,7 @@ public class TestYamlConfigurationReader {
 	public void testThatReaderReadsObjectsArray() throws IOException  {
 		try(InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("sample.yml")) {
 			IConfigurationReader reader = new YamlConfigurationReader(input);
-			Collection<IConfigurationReader> list = reader.getObjectsArray("objectsArray");
+			Collection<? extends IConfigurationReader> list = reader.getObjectsArray("objectsArray");
 			assertEquals(2, list.size());
 			IConfigurationReader item = list.iterator().next();
 			assertEquals("abc", item.getString("key"));
