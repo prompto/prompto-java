@@ -304,20 +304,25 @@ public final class MemStore implements IStore {
 		}
 
 		@Override
-		public Object getData(String name) {
-			if(document==null)
-				return null;
-			else
-				return document.get(name);
+		public Object getRawData(String fieldName) {
+			return getData(fieldName);
 		}
 		
 		@Override
-		public void setData(String name, Object value, IDbIdProvider provider) {
+		public Object getData(String fieldName) {
+			if(document==null)
+				return null;
+			else
+				return document.get(fieldName);
+		}
+		
+		@Override
+		public void setData(String fieldName, Object value, IDbIdProvider provider) {
 			if(document==null) {
 				Object dbId = provider==null ? null : provider.getDbId();
 				document = newDocument(dbId);
 			}
-			document.put(name, value);
+			document.put(fieldName, value);
 		}
 		
 		@Override
