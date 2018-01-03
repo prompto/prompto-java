@@ -13,7 +13,7 @@ public class StoredRecordConfigurationReader implements IConfigurationReader  {
 	static final Logger logger = new Logger();
 
 	private static IStored fetchStored(IStore store, Object dbId) {
-		IStored stored = store.fetchUnique(dbId);
+		IStored stored = store.fetchUnique(store.convertToDbId(dbId));
 		if(stored==null)
 			logger.error(()->"No record found with dbId: " + dbId.toString());
 		return stored;
@@ -35,35 +35,35 @@ public class StoredRecordConfigurationReader implements IConfigurationReader  {
 
 	@Override
 	public Boolean getBoolean(String key) {
-		Object value = stored.getData(key);
+		Object value = stored.getRawData(key);
 		return value instanceof Boolean ? (Boolean)value : null;
 	}
 
 	@Override
 	public String getString(String key) {
-		Object value = stored.getData(key);
+		Object value = stored.getRawData(key);
 		return value==null ? null : value.toString();
 	}
 
 	@Override
 	public Integer getInteger(String key) {
-		Object value = stored.getData(key);
+		Object value = stored.getRawData(key);
 		return value instanceof Number ? ((Number)value).intValue() : null;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> Collection<T> getArray(String key) {
-		Object value = stored.getData(key);
+		Object value = stored.getRawData(key);
 		return value instanceof Collection ? (Collection<T>)value : null;
 	}
 
 	@Override
 	public StoredRecordConfigurationReader getObject(String key) {
-		Object value = stored.getData(key);
+		Object value = stored.getRawData(key);
 		if(value==null)
 			return null;
-		if(!store.getDbIdClass().isAssignableFrom(value.getClass())) {
+		if(!store.getDbIdClass().isInstance(value)) {
 			logger.warn(()->"Not a valid dbId: " + value.toString());
 			return null;
 		}
@@ -73,7 +73,7 @@ public class StoredRecordConfigurationReader implements IConfigurationReader  {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<StoredRecordConfigurationReader> getObjectsArray(String key) {
-		Object value = stored.getData(key);
+		Object value = stored.getRawData(key);
 		if(value==null)
 			return null;
 		if(!(value instanceof Collection)) {
@@ -82,7 +82,7 @@ public class StoredRecordConfigurationReader implements IConfigurationReader  {
 		}
 		List<StoredRecordConfigurationReader> readers = new ArrayList<>();
 		for(Object item : (Collection<Object>)value) {
-			if(!store.getDbIdClass().isAssignableFrom(item.getClass())) {
+			if(!store.getDbIdClass().isInstance(item)) {
 				logger.warn(()->"Not a valid dbId: " + value.toString());
 				return null;
 			}
