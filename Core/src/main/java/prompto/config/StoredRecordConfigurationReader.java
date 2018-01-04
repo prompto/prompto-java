@@ -91,5 +91,16 @@ public class StoredRecordConfigurationReader implements IConfigurationReader  {
 		return readers;
 	}
 
+	public String readCategory() {
+		Object value = stored.getRawData("category");
+		if(!(value instanceof List)) {
+			logger.warn(()->"Not a valid category list: " + value.toString());
+			return null;
+		}
+		@SuppressWarnings("unchecked")
+		List<String> list = (List<String>)value;
+		return list.get(list.size()-1);
+	}
+
 
 }
