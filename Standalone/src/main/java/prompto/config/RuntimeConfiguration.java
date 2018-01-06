@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import prompto.intrinsic.PromptoVersion;
+import prompto.runtime.Mode;
 
 public class RuntimeConfiguration extends IRuntimeConfiguration.Inline {
 
@@ -25,7 +26,7 @@ public class RuntimeConfiguration extends IRuntimeConfiguration.Inline {
 		this.addOnURLs = ()->readURLs("addOnURLs");
 		this.resourceURLs = ()->readURLs("resourceURLs");
 		this.debugConfiguration = ()->readDebugConfiguration();
-		this.testMode = ()->reader.getBooleanOrDefault("testMode", false);
+		this.runtimeMode = ()->Mode.valueOf(reader.getStringOrDefault("runtimeMode", Mode.PRODUCTION.name()));
 		this.loadRuntime = ()->reader.getBooleanOrDefault("loadRuntime", true);
 	}
 	

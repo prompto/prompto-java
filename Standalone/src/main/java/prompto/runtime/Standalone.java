@@ -219,10 +219,11 @@ public abstract class Standalone {
 	}
 
 	public static ICodeStore bootstrapCodeStore(IStore store, IRuntimeConfiguration config) throws Exception {
-		logger.info(()->"Initializing class loader " + (config.isTestMode() ? "in test mode" : "") + "...");
+		boolean unitTestMode = config.getRuntimeMode()==Mode.UNITTEST;
+		logger.info(()->"Initializing class loader " + ( unitTestMode? "in test mode" : "") + "...");
 		globalContext = Context.newGlobalContext();
 		File promptoDir = Files.createTempDirectory("prompto_").toFile();
-		classLoader = PromptoClassLoader.initialize(globalContext, promptoDir, config.isTestMode());
+		classLoader = PromptoClassLoader.initialize(globalContext, promptoDir, unitTestMode);
 		JavaIdentifierExpression.registerAddOns(config.getAddOnURLs(), classLoader);
 		logger.info(()->"Class loader initialized.");
 		logger.info(()->"Bootstrapping prompto...");

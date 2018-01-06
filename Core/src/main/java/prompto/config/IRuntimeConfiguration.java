@@ -7,16 +7,17 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import prompto.intrinsic.PromptoVersion;
+import prompto.runtime.Mode;
 
 public interface IRuntimeConfiguration {
 	Supplier<Collection<URL>> getRuntimeLibs();
 	IStoreConfiguration getCodeStoreConfiguration();
 	IStoreConfiguration getDataStoreConfiguration();
 	IDebugConfiguration getDebugConfiguration();
+	Mode getRuntimeMode();
 	Map<String, String> getArguments();
 	String getApplicationName();
 	PromptoVersion getApplicationVersion();
-	boolean isTestMode();
 	URL[] getAddOnURLs();
 	URL[] getResourceURLs();
 	boolean isLoadRuntime();
@@ -26,7 +27,7 @@ public interface IRuntimeConfiguration {
 	<T extends IRuntimeConfiguration> T withApplicationName(String name);
 	<T extends IRuntimeConfiguration> T withApplicationVersion(PromptoVersion version);
 	<T extends IRuntimeConfiguration> T withResourceURLs(URL[] resourceURLs);
-	<T extends IRuntimeConfiguration> T withTestMode(boolean set);
+	<T extends IRuntimeConfiguration> T withRuntimeMode(Mode mode);
 	<T extends IRuntimeConfiguration> T withLoadRuntime(boolean set);
 
 
@@ -38,7 +39,7 @@ public interface IRuntimeConfiguration {
 		Supplier<IDebugConfiguration> debugConfiguration = ()->null;
 		Supplier<IStoreConfiguration> codeStoreConfiguration = ()->null;
 		Supplier<IStoreConfiguration> dataStoreConfiguration = ()->null;
-		Supplier<Boolean> testMode = ()->false;
+		Supplier<Mode> runtimeMode = ()->Mode.PRODUCTION;
 		Supplier<Boolean> loadRuntime = ()->true;
 		Supplier<URL[]> addOnURLs = ()->null;
 		Supplier<URL[]> resourceURLs = ()->null;
@@ -52,7 +53,7 @@ public interface IRuntimeConfiguration {
 		@Override public Map<String, String> getArguments() { return arguments.get(); }
 		@Override public String getApplicationName() { return applicationName.get(); }
 		@Override public PromptoVersion getApplicationVersion() { return applicationVersion.get(); }
-		@Override public boolean isTestMode() { return testMode.get(); }
+		@Override public Mode getRuntimeMode() { return runtimeMode.get(); }
 		@Override public URL[] getAddOnURLs() { return addOnURLs.get(); }
 		@Override public URL[] getResourceURLs() { return resourceURLs.get(); }
 		@Override public boolean isLoadRuntime() { return loadRuntime.get(); }
@@ -88,8 +89,8 @@ public interface IRuntimeConfiguration {
 		}
 		
 		@Override
-		public <T extends IRuntimeConfiguration> T withTestMode(boolean mode) {
-			this.testMode = ()->mode;
+		public <T extends IRuntimeConfiguration> T withRuntimeMode(Mode mode) {
+			this.runtimeMode = ()->mode;
 			return (T)this;
 		}
 		
