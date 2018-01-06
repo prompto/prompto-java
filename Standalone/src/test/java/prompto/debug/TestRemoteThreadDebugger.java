@@ -71,7 +71,7 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebug
 			public void run() {
 				try {
 					String args[] = new String[] { 
-							"-testMode", "true",
+							"-runtimeMode", "UNITTEST",
 							"-debug-port", String.valueOf(port),
 							"-codeStore-factory", NullStoreFactory.class.getName(),
 							"-applicationName", "test",
