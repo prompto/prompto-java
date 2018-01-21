@@ -22,7 +22,7 @@ public interface IStoreConfiguration {
 		@Override public String getDbName() { return null; }
 		@Override public String getUser() { return null; }
 		@Override public ISecretKeyConfiguration getSecretKeyConfiguration() { return null; }
-		@Override public IStoreConfiguration withDbName(String dbName) { return null; }
+		@Override public IStoreConfiguration withDbName(String dbName) { return this; }
 	};
 	
 	IStoreConfiguration MEM_STORE_CONFIG = new IStoreConfiguration() {
@@ -32,7 +32,7 @@ public interface IStoreConfiguration {
 		@Override public String getDbName() { return null; }
 		@Override public String getUser() { return null; }
 		@Override public ISecretKeyConfiguration getSecretKeyConfiguration() { return null; }
-		@Override public IStoreConfiguration withDbName(String dbName) { return null; }
+		@Override public IStoreConfiguration withDbName(String dbName) { return this; }
 	};
 
 	public class Inline implements IStoreConfiguration {
