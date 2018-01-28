@@ -14,16 +14,16 @@ public interface IQueryBuilder {
 	}
 	
 	// create atomic predicates
-	<T> void verify(AttributeInfo info, MatchOp match, T fieldValue);
+	<T> IQueryBuilder verify(AttributeInfo info, MatchOp match, T fieldValue);
 	// the below make the assumption that the atomic predicates are available from a stack
-	void and();
-	void or();
-	void not();
+	IQueryBuilder and();
+	IQueryBuilder or();
+	IQueryBuilder not();
 	// 1 based range limits
-	void setFirst(Long first); 
-	void setLast(Long last);
+	IQueryBuilder first(Long first); 
+	IQueryBuilder last(Long last);
 	// ordering
-	void addOrderByClause(AttributeInfo attribute, boolean descending);
+	IQueryBuilder orderBy(AttributeInfo attribute, boolean descending);
 	// return the built IQuery object
 	IQuery build();
 

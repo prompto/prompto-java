@@ -46,7 +46,6 @@ import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.store.AttributeInfo;
-import prompto.store.Family;
 import prompto.store.IQueryBuilder;
 import prompto.store.IQueryBuilder.MatchOp;
 import prompto.store.IStorable;
@@ -295,10 +294,8 @@ public class QueryableCodeStore extends BaseCodeStore {
 
 	private IStoredIterable fetchStoredDeclarationsBySymbol(String name, PromptoVersion version) {
 		IQueryBuilder builder = store.newQueryBuilder();
-		AttributeInfo info = new AttributeInfo("category", Family.TEXT, true, null);
-		builder.verify(info, MatchOp.CONTAINS, "EnumeratedDeclaration");
-		info = new AttributeInfo("symbols", Family.TEXT, true, null);
-		builder.verify(info, MatchOp.CONTAINS, name);
+		builder.verify(AttributeInfo.CATEGORY, MatchOp.CONTAINS, "EnumeratedDeclaration");
+		builder.verify(AttributeInfo.SYMBOLS, MatchOp.CONTAINS, name);
 		builder.and();
 		if(PromptoVersion.LATEST.equals(version)) {
 			IdentifierList names = IdentifierList.parse("prototype,version");
@@ -402,10 +399,9 @@ public class QueryableCodeStore extends BaseCodeStore {
 	private IStoredIterable fetchManyInStore(CategoryType type, PromptoVersion version, String attribute, String value) throws PromptoError {
 		IQueryBuilder builder = store.newQueryBuilder();
 		if(uniqueDecls.contains(type.toString().toUpperCase())) {
-			builder.setFirst(1L);
-			builder.setLast(1L);
+			builder.first(1L).last(1L);
 		}
-		AttributeInfo info = new AttributeInfo("category", Family.TEXT, true, null);
+		AttributeInfo info = AttributeInfo.CATEGORY;
 		builder.verify(info, MatchOp.CONTAINS, type.getTypeName());
 		IPredicateExpression filter = buildFilter(version, attribute, value);
 		filter.interpretQuery(context, builder);
@@ -426,7 +422,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 	
 	private IStored fetchOneInStore(CategoryType type, PromptoVersion version, String attribute, String value) throws PromptoError {
 		IQueryBuilder builder = store.newQueryBuilder();
-		AttributeInfo info = new AttributeInfo("category", Family.TEXT, true, null);
+		AttributeInfo info = AttributeInfo.CATEGORY;
 		builder.verify(info, MatchOp.CONTAINS, type.getTypeName());
 		IPredicateExpression filter = buildFilter(version, attribute, value);
 		filter.interpretQuery(context, builder);
@@ -435,8 +431,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 			IdentifierList names = new IdentifierList(new Identifier("version"));
 			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
 			orderBy.interpretQuery(context, builder);
-			builder.setFirst(1L);
-			builder.setLast(1L);
+			builder.first(1L).last(1L);
 			IStoredIterable iterable = store.fetchMany(builder.build());
 			Iterator<IStored> stored = iterable.iterator();
 			return stored.hasNext() ? stored.next() : null;
@@ -449,9 +444,9 @@ public class QueryableCodeStore extends BaseCodeStore {
 		super.collectStorableAttributes(map);
 		if(store!=null) {
 			IQueryBuilder builder = store.newQueryBuilder();
-			AttributeInfo info = new AttributeInfo("category", Family.TEXT, true, null);
+			AttributeInfo info = AttributeInfo.CATEGORY;
 			builder.verify(info, MatchOp.CONTAINS, "AttributeDeclaration");
-			info = new AttributeInfo("storable", Family.BOOLEAN, false, null);
+			info = AttributeInfo.STORABLE;
 			builder.verify(info, MatchOp.EQUALS, true);
 			builder.and();
 			IStoredIterable iterable = store.fetchMany(builder.build());

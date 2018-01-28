@@ -44,7 +44,7 @@ public class OrderByClause extends Section {
 		// TODO members
 		Identifier name = qualifiedName.getFirst();
 		AttributeInfo info = context.findAttribute(name.toString()).getAttributeInfo();
-		q.addOrderByClause(info, isDescending());
+		q.orderBy(info, isDescending());
 	}
 
 	public void compileQuery(Context context, MethodInfo method, Flags flags) {

@@ -203,9 +203,9 @@ public class TestMemStore {
 	
 	@Test
 	public void testSliceEmpty() throws Exception {
-		IQueryBuilder builder = new QueryBuilder();
-		builder.setFirst(1L);
-		builder.setLast(10L);
+		IQueryBuilder builder = new QueryBuilder()
+			.first(1L)
+			.last(10L);
 		IStoredIterable iterable = IDataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertFalse(docs.hasNext());
@@ -214,9 +214,9 @@ public class TestMemStore {
 	@Test
 	public void testSliceBeyond() throws Exception {
 		IStorable d1 = store("__id__", "__test1__");
-		IQueryBuilder builder = new QueryBuilder();
-		builder.setFirst(1L);
-		builder.setLast(10L);
+		IQueryBuilder builder = new QueryBuilder()
+			.first(1L)
+			.last(10L);
 		IStoredIterable iterable = IDataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertTrue(docs.hasNext());
@@ -230,9 +230,9 @@ public class TestMemStore {
 		store("__id__", "__test2__");
 		store("__id__", "__test3__");
 		store("__id__", "__test4__");
-		IQueryBuilder builder = new QueryBuilder();
-		builder.setFirst(1L);
-		builder.setLast(4L);
+		IQueryBuilder builder = new QueryBuilder()
+			.first(1L)
+			.last(4L);
 		IStoredIterable iterable = IDataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertTrue(docs.hasNext());
@@ -252,9 +252,9 @@ public class TestMemStore {
 		store("__id__", "__test2__");
 		store("__id__", "__test3__");
 		store("__id__", "__test4__");
-		IQueryBuilder builder = new QueryBuilder();
-		builder.setFirst(2L);
-		builder.setLast(3L);
+		IQueryBuilder builder = new QueryBuilder()
+			.first(2L)
+			.last(3L);
 		IStoredIterable iterable = IDataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertTrue(docs.hasNext());
@@ -273,7 +273,7 @@ public class TestMemStore {
 		categories.add("Application");
 		d1.setData("category", categories);
 		IQueryBuilder builder = new QueryBuilder();
-		AttributeInfo info = new AttributeInfo("category", Family.TEXT, true, null);
+		AttributeInfo info = AttributeInfo.CATEGORY;
 		builder.verify(info, MatchOp.CONTAINS, "Application");
 		IStored doc = IDataStore.getInstance().fetchOne(builder.build());
 		assertEquals(d1, doc);
@@ -288,7 +288,7 @@ public class TestMemStore {
 		categories.add("Application");
 		d1.setData("category", categories);
 		IQueryBuilder builder = new QueryBuilder();
-		AttributeInfo info = new AttributeInfo("category", Family.TEXT, true, null);
+		AttributeInfo info = AttributeInfo.CATEGORY;
 		builder.verify(info, MatchOp.CONTAINS, "Project");
 		IStored doc = IDataStore.getInstance().fetchOne(builder.build());
 		assertEquals(d1, doc);
@@ -303,7 +303,7 @@ public class TestMemStore {
 		categories.add("Application");
 		d1.setData("category", categories);
 		IQueryBuilder builder = new QueryBuilder();
-		AttributeInfo info = new AttributeInfo("category", Family.TEXT, true, null);
+		AttributeInfo info = AttributeInfo.CATEGORY;
 		builder.verify(info, MatchOp.CONTAINS, "Application");
 		IStoredIterable iterable = IDataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();

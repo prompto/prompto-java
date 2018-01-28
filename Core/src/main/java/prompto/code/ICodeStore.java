@@ -16,10 +16,9 @@ import prompto.parser.AbstractParser;
 import prompto.parser.Dialect;
 import prompto.parser.ECleverParser;
 import prompto.parser.ISection;
-import prompto.parser.OCleverParser;
 import prompto.parser.MCleverParser;
+import prompto.parser.OCleverParser;
 import prompto.store.AttributeInfo;
-import prompto.store.Family;
 import prompto.type.CategoryType;
 import prompto.utils.ISingleton;
 import prompto.utils.StringUtils;
@@ -155,11 +154,9 @@ public interface ICodeStore {
 
 	Resource fetchSpecificResource(String path, PromptoVersion version);
 	
-	static AttributeInfo CATEGORY_ATTRIBUTE_INFO = new AttributeInfo("category", Family.TEXT, true, null);
-	
 	default public AttributeInfo fetchAttributeInfo(String name) {
 		if("category".equals(name))
-			return CATEGORY_ATTRIBUTE_INFO;
+			return AttributeInfo.CATEGORY;
 		else {
 			Iterable<IDeclaration> decls = fetchLatestDeclarations(name);
 			if(decls==null)

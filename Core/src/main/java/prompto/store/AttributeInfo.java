@@ -4,6 +4,11 @@ import java.util.Collection;
 
 public class AttributeInfo {
 
+	public static final AttributeInfo CATEGORY = new AttributeInfo("category", Family.TEXT, true, null);
+	public static final AttributeInfo NAME = new AttributeInfo("name", Family.TEXT, false, null);
+	public static final AttributeInfo STORABLE = new AttributeInfo("storable", Family.BOOLEAN, false, null);
+	public static final AttributeInfo SYMBOLS = new AttributeInfo("symbols", Family.TEXT, true, null);
+	
 	public static final String KEY = "key";
 	public static final String VALUE = "value";
 	public static final String WORDS = "words";

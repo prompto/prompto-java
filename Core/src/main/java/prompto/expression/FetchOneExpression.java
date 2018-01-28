@@ -20,7 +20,6 @@ import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.statement.UnresolvedCall;
 import prompto.store.AttributeInfo;
-import prompto.store.Family;
 import prompto.store.IDataStore;
 import prompto.store.IQuery;
 import prompto.store.IQueryBuilder;
@@ -139,7 +138,7 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 	public IQuery buildFetchOneQuery(Context context, IStore store) {
 		IQueryBuilder builder = store.newQueryBuilder();
 		if(type!=null) {
-			AttributeInfo info = new AttributeInfo("category", Family.TEXT, true, null);
+			AttributeInfo info = AttributeInfo.CATEGORY;
 			builder.verify(info, MatchOp.CONTAINS, type.getTypeName());
 		}
 		if(predicate!=null) {
@@ -185,7 +184,7 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 	protected void compilePredicates(Context context, MethodInfo method, Flags flags) {
 		if(type!=null) {
 			method.addInstruction(Opcode.DUP);
-			AttributeInfo info = new AttributeInfo("category", Family.TEXT, true, null);
+			AttributeInfo info = AttributeInfo.CATEGORY;
 			CompilerUtils.compileAttributeInfo(context, method, flags, info);
 			CompilerUtils.compileJavaEnum(context, method, flags, MatchOp.CONTAINS);
 			method.addInstruction(Opcode.LDC, new StringConstant(type.toString()));

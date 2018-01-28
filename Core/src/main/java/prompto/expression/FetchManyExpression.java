@@ -16,7 +16,6 @@ import prompto.intrinsic.PromptoRoot;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.store.AttributeInfo;
-import prompto.store.Family;
 import prompto.store.IQuery;
 import prompto.store.IQueryBuilder;
 import prompto.store.IQueryBuilder.MatchOp;
@@ -219,7 +218,7 @@ public class FetchManyExpression extends FetchOneExpression {
 	private IQuery buildFetchManyQuery(Context context, IStore store) {
 		IQueryBuilder builder = store.newQueryBuilder();
 		if(type!=null) {
-			AttributeInfo info = new AttributeInfo("category", Family.TEXT, true, null);
+			AttributeInfo info = AttributeInfo.CATEGORY;
 			builder.verify(info, MatchOp.CONTAINS, type.getTypeName());
 		}
 		if(predicate!=null) {
@@ -229,8 +228,8 @@ public class FetchManyExpression extends FetchOneExpression {
 		}
 		if(type!=null && predicate!=null)
 			builder.and();
-		builder.setFirst(interpretLimit(context, first));
-		builder.setLast(interpretLimit(context, last));
+		builder.first(interpretLimit(context, first));
+		builder.last(interpretLimit(context, last));
 		if(orderBy!=null)
 			orderBy.interpretQuery(context, builder);
 		return builder.build();
