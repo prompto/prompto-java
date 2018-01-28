@@ -5,6 +5,8 @@ import java.util.function.Supplier;
 import prompto.memstore.MemStoreFactory;
 import prompto.nullstore.NullStoreFactory;
 
+import com.esotericsoftware.yamlbeans.document.YamlMapping;
+
 public interface IStoreConfiguration {
 
 	String getFactory();
@@ -14,6 +16,17 @@ public interface IStoreConfiguration {
 	String getUser();
 	ISecretKeyConfiguration getSecretKeyConfiguration();
 	IStoreConfiguration withDbName(String dbName);
+	
+	default YamlMapping toYaml() throws Throwable {
+		YamlMapping mapping = new YamlMapping();
+		mapping.setEntry("factory", getFactory());
+		mapping.setEntry("host", getHost());
+		mapping.setEntry("port", getPort());
+		mapping.setEntry("dbName", getDbName());
+		mapping.setEntry("user", getUser());
+		mapping.setEntry("secretKey", getSecretKeyConfiguration().toYaml());
+		return mapping;
+	}
 
 	IStoreConfiguration NULL_STORE_CONFIG = new IStoreConfiguration() {
 		@Override public String getFactory() { return NullStoreFactory.class.getName(); }
