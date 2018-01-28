@@ -93,6 +93,8 @@ define encoding as Text attribute
 define login as storable Text attribute with key and value index
 // many systems require a password
 define password as Text attribute
+// checked email  
+define email as Text attribute with value index
 define Error as enumerated category with attributes name and text, and symbols:
 	DIVIDE_BY_ZERO with "Divide by zero!" as text
 	INDEX_OUT_OF_RANGE with "Index out of range!" as text
