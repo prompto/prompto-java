@@ -335,9 +335,6 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 
 	@Override
 	public void compileQuery(Context context, MethodInfo method, Flags flags) {
-		method.addInstruction(Opcode.DUP); // IQueryBuilder -> IQueryBuilder, IQueryBuilder
-		if(operator==EqOp.NOT_EQUALS)
-			method.addInstruction(Opcode.DUP);
 		boolean reverse = compileAttributeInfo(context, method, flags);
 		MatchOp match = getMatchOp();
 		CompilerUtils.compileJavaEnum(context, method, flags, match);
@@ -346,10 +343,10 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 		else
 			right.compile(context, method, flags);
 		InterfaceConstant m = new InterfaceConstant(IQueryBuilder.class,
-				"verify", AttributeInfo.class, MatchOp.class, Object.class, void.class);
+				"verify", AttributeInfo.class, MatchOp.class, Object.class, IQueryBuilder.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, m);
 		if(operator==EqOp.NOT_EQUALS) {
-			m = new InterfaceConstant(IQueryBuilder.class, "not", void.class);
+			m = new InterfaceConstant(IQueryBuilder.class, "not", IQueryBuilder.class);
 			method.addInstruction(Opcode.INVOKEINTERFACE, m);
 		}
 	}

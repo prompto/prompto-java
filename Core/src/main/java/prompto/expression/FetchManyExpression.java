@@ -263,19 +263,17 @@ public class FetchManyExpression extends FetchOneExpression {
 
 	private void compileLimits(Context context, MethodInfo method, Flags flags) {
 		if(first!=null) {
-			method.addInstruction(Opcode.DUP);
 			ResultInfo info = first.compile(context, method, flags.withPrimitive(false));
 			if(long.class==info.getType())
 				CompilerUtils.longToLong(method);
-			InterfaceConstant i = new InterfaceConstant(IQueryBuilder.class, "setFirst", Long.class, void.class);
+			InterfaceConstant i = new InterfaceConstant(IQueryBuilder.class, "first", Long.class, IQueryBuilder.class);
 			method.addInstruction(Opcode.INVOKEINTERFACE, i);
 		}
 		if(last!=null) {
-			method.addInstruction(Opcode.DUP);
 			ResultInfo info = last.compile(context, method, flags.withPrimitive(false));
 			if(long.class==info.getType())
 				CompilerUtils.longToLong(method);
-			InterfaceConstant i = new InterfaceConstant(IQueryBuilder.class, "setLast", Long.class, void.class);
+			InterfaceConstant i = new InterfaceConstant(IQueryBuilder.class, "last", Long.class, IQueryBuilder.class);
 			method.addInstruction(Opcode.INVOKEINTERFACE, i);
 		}
 	}

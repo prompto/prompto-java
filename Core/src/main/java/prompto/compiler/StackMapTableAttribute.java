@@ -57,7 +57,7 @@ public class StackMapTableAttribute implements IAttribute {
 	}
 
 	private int labelsLength() {
-		return (int)labels.stream().mapToInt((l)->l.length()).summaryStatistics().getSum(); 
+		return (int)labels.stream().mapToInt((l)->l.length()).sum(); 
 	}
 
 	@Override

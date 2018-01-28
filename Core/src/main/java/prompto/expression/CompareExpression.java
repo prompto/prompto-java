@@ -181,15 +181,6 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 
 	@Override
 	public void compileQuery(Context context, MethodInfo method, Flags flags) {
-		method.addInstruction(Opcode.DUP); // IQueryBuilder -> IQueryBuilder, IQueryBuilder
-		switch(operator) {
-		case GTE:
-		case LTE:
-			method.addInstruction(Opcode.DUP);
-			break;
-		default:
-			// ok
-		}
 		boolean reverse = compileAttributeInfo(context, method, flags);
 		MatchOp match = getMatchOp();
 		CompilerUtils.compileJavaEnum(context, method, flags, match);
@@ -198,12 +189,12 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 		else
 			right.compile(context, method, flags);
 		InterfaceConstant m = new InterfaceConstant(IQueryBuilder.class,
-				"verify", AttributeInfo.class, MatchOp.class, Object.class, void.class);
+				"verify", AttributeInfo.class, MatchOp.class, Object.class, IQueryBuilder.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, m);
 		switch(operator) {
 		case GTE:
 		case LTE:
-			m = new InterfaceConstant(IQueryBuilder.class, "not", void.class);
+			m = new InterfaceConstant(IQueryBuilder.class, "not", IQueryBuilder.class);
 			method.addInstruction(Opcode.INVOKEINTERFACE, m);
 			break;
 		default:

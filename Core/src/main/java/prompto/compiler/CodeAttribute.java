@@ -290,7 +290,7 @@ public class CodeAttribute implements IAttribute {
 				.stream()
 					.flatMapToInt((a)->
 						IntStream.of(a.lengthWithHeader()))
-							.summaryStatistics().getSum();
+							.sum();
 	}
 
 	private int handlersLength() {

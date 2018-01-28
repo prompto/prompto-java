@@ -132,8 +132,7 @@ public class OrExpression implements IPredicateExpression, IAssertion {
 	public void compileQuery(Context context, MethodInfo method, Flags flags) {
 		((IPredicateExpression)left).compileQuery(context, method, flags);
 		((IPredicateExpression)right).compileQuery(context, method, flags);
-		method.addInstruction(Opcode.DUP); // IQueryBuilder -> IQueryBuilder, IQueryBuilder
-		InterfaceConstant m = new InterfaceConstant(IQueryBuilder.class, "or", void.class);
+		InterfaceConstant m = new InterfaceConstant(IQueryBuilder.class, "or", IQueryBuilder.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, m);
 	}
 

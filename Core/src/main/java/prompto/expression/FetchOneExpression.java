@@ -183,20 +183,18 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 
 	protected void compilePredicates(Context context, MethodInfo method, Flags flags) {
 		if(type!=null) {
-			method.addInstruction(Opcode.DUP);
 			AttributeInfo info = AttributeInfo.CATEGORY;
 			CompilerUtils.compileAttributeInfo(context, method, flags, info);
 			CompilerUtils.compileJavaEnum(context, method, flags, MatchOp.CONTAINS);
 			method.addInstruction(Opcode.LDC, new StringConstant(type.toString()));
 			InterfaceConstant i = new InterfaceConstant(IQueryBuilder.class, "verify", 
-					AttributeInfo.class, MatchOp.class, Object.class, void.class);
+					AttributeInfo.class, MatchOp.class, Object.class, IQueryBuilder.class);
 			method.addInstruction(Opcode.INVOKEINTERFACE, i);
 		}
 		if(predicate!=null)
 			((IPredicateExpression)predicate).compileQuery(context, method, flags);
 		if(type!=null && predicate!=null) {
-			method.addInstruction(Opcode.DUP);
-			InterfaceConstant i = new InterfaceConstant(IQueryBuilder.class, "and", void.class);
+			InterfaceConstant i = new InterfaceConstant(IQueryBuilder.class, "and", IQueryBuilder.class);
 			method.addInstruction(Opcode.INVOKEINTERFACE, i);
 		}
 	}

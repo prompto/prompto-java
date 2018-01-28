@@ -48,13 +48,12 @@ public class OrderByClause extends Section {
 	}
 
 	public void compileQuery(Context context, MethodInfo method, Flags flags) {
-		method.addInstruction(Opcode.DUP);
 		Identifier name = qualifiedName.getFirst();
 		AttributeInfo info = context.findAttribute(name.toString()).getAttributeInfo();
 		CompilerUtils.compileAttributeInfo(context, method, flags, info);
 		method.addInstruction(descending ? Opcode.ICONST_1 : Opcode.ICONST_0);
-		InterfaceConstant i = new InterfaceConstant(IQueryBuilder.class, "addOrderByClause", 
-				AttributeInfo.class, boolean.class, void.class);
+		InterfaceConstant i = new InterfaceConstant(IQueryBuilder.class, "orderBy", 
+				AttributeInfo.class, boolean.class, IQueryBuilder.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, i);
 	}
 }

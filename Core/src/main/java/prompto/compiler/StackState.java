@@ -48,8 +48,7 @@ public class StackState {
 	private int length(Stack<? extends IVerifierEntry> stack) {
 		return (int)stack.stream().mapToInt((e)->
 		e.length())
-			.summaryStatistics()
-				.getSum();
+			.sum();
 	}
 
 	public StackEntry pushEntry(StackEntry entry) {

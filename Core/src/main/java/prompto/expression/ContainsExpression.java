@@ -356,9 +356,6 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	
 	@Override
 	public void compileQuery(Context context, MethodInfo method, Flags flags) {
-		method.addInstruction(Opcode.DUP); // IQueryBuilder -> IQueryBuilder, IQueryBuilder
-		if(operator.name().startsWith("NOT_"))
-			method.addInstruction(Opcode.DUP);
 		IType valueType = null;
 		String name = readFieldName(left);
 		boolean reverse = name==null;
@@ -380,10 +377,10 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 		else
 			right.compile(context, method, flags);
 		InterfaceConstant m = new InterfaceConstant(IQueryBuilder.class,
-				"verify", AttributeInfo.class, MatchOp.class, Object.class, void.class);
+				"verify", AttributeInfo.class, MatchOp.class, Object.class, IQueryBuilder.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, m);
 		if(operator.name().startsWith("NOT_")) {
-			m = new InterfaceConstant(IQueryBuilder.class, "not", void.class);
+			m = new InterfaceConstant(IQueryBuilder.class, "not", IQueryBuilder.class);
 			method.addInstruction(Opcode.INVOKEINTERFACE, m);
 		}
 	}

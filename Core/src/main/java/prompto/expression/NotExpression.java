@@ -93,7 +93,6 @@ public class NotExpression implements IUnaryExpression, IPredicateExpression, IA
 	@Override
 	public void compileQuery(Context context, MethodInfo method, Flags flags) {
 		((IPredicateExpression)expression).compileQuery(context, method, flags);
-		method.addInstruction(Opcode.DUP); // IQueryBuilder -> IQueryBuilder, IQueryBuilder
 		InterfaceConstant m = new InterfaceConstant(IQueryBuilder.class, "not", void.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, m);
 	}
