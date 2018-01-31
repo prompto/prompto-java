@@ -2,9 +2,9 @@ package prompto.libraries;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import prompto.utils.ResourceUtils;
 
@@ -13,7 +13,7 @@ public abstract class Libraries {
 	public static Collection<URL> getPromptoLibraries(Class<?> ... klassesInJar) {
 		if(klassesInJar.length==0)
 			throw new RuntimeException("No Prompto libraries to bootstrap from!");
-		return Arrays.asList(klassesInJar).stream()
+		return Stream.of(klassesInJar)
 				.map(Libraries::getPromptoLibraries)
 				.flatMap(Collection::stream)
 				.collect(Collectors.toList());
