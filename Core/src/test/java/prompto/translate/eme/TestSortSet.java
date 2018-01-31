@@ -12,13 +12,13 @@ public class TestSortSet extends BaseEParserTest {
 	}
 
 	@Test
-	public void testSortDates() throws Exception {
-		compareResourceEME("sortSet/sortDates.pec");
+	public void testSortDateTimes() throws Exception {
+		compareResourceEME("sortSet/sortDateTimes.pec");
 	}
 
 	@Test
-	public void testSortDateTimes() throws Exception {
-		compareResourceEME("sortSet/sortDateTimes.pec");
+	public void testSortDates() throws Exception {
+		compareResourceEME("sortSet/sortDates.pec");
 	}
 
 	@Test
@@ -32,13 +32,13 @@ public class TestSortSet extends BaseEParserTest {
 	}
 
 	@Test
-	public void testSortDescDates() throws Exception {
-		compareResourceEME("sortSet/sortDescDates.pec");
+	public void testSortDescDateTimes() throws Exception {
+		compareResourceEME("sortSet/sortDescDateTimes.pec");
 	}
 
 	@Test
-	public void testSortDescDateTimes() throws Exception {
-		compareResourceEME("sortSet/sortDescDateTimes.pec");
+	public void testSortDescDates() throws Exception {
+		compareResourceEME("sortSet/sortDescDates.pec");
 	}
 
 	@Test

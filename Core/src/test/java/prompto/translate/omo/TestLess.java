@@ -27,6 +27,26 @@ public class TestLess extends BaseOParserTest {
 	}
 
 	@Test
+	public void testLtInteger() throws Exception {
+		compareResourceOMO("less/ltInteger.poc");
+	}
+
+	@Test
+	public void testLtText() throws Exception {
+		compareResourceOMO("less/ltText.poc");
+	}
+
+	@Test
+	public void testLtTime() throws Exception {
+		compareResourceOMO("less/ltTime.poc");
+	}
+
+	@Test
+	public void testLtVersion() throws Exception {
+		compareResourceOMO("less/ltVersion.poc");
+	}
+
+	@Test
 	public void testLteCharacter() throws Exception {
 		compareResourceOMO("less/lteCharacter.poc");
 	}
@@ -59,26 +79,6 @@ public class TestLess extends BaseOParserTest {
 	@Test
 	public void testLteTime() throws Exception {
 		compareResourceOMO("less/lteTime.poc");
-	}
-
-	@Test
-	public void testLtInteger() throws Exception {
-		compareResourceOMO("less/ltInteger.poc");
-	}
-
-	@Test
-	public void testLtText() throws Exception {
-		compareResourceOMO("less/ltText.poc");
-	}
-
-	@Test
-	public void testLtTime() throws Exception {
-		compareResourceOMO("less/ltTime.poc");
-	}
-
-	@Test
-	public void testLtVersion() throws Exception {
-		compareResourceOMO("less/ltVersion.poc");
 	}
 
 }

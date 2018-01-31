@@ -27,6 +27,26 @@ public class TestLess extends BaseEParserTest {
 	}
 
 	@Test
+	public void testLtInteger() throws Exception {
+		compareResourceEOE("less/ltInteger.pec");
+	}
+
+	@Test
+	public void testLtText() throws Exception {
+		compareResourceEOE("less/ltText.pec");
+	}
+
+	@Test
+	public void testLtTime() throws Exception {
+		compareResourceEOE("less/ltTime.pec");
+	}
+
+	@Test
+	public void testLtVersion() throws Exception {
+		compareResourceEOE("less/ltVersion.pec");
+	}
+
+	@Test
 	public void testLteCharacter() throws Exception {
 		compareResourceEOE("less/lteCharacter.pec");
 	}
@@ -59,26 +79,6 @@ public class TestLess extends BaseEParserTest {
 	@Test
 	public void testLteTime() throws Exception {
 		compareResourceEOE("less/lteTime.pec");
-	}
-
-	@Test
-	public void testLtInteger() throws Exception {
-		compareResourceEOE("less/ltInteger.pec");
-	}
-
-	@Test
-	public void testLtText() throws Exception {
-		compareResourceEOE("less/ltText.pec");
-	}
-
-	@Test
-	public void testLtTime() throws Exception {
-		compareResourceEOE("less/ltTime.pec");
-	}
-
-	@Test
-	public void testLtVersion() throws Exception {
-		compareResourceEOE("less/ltVersion.pec");
 	}
 
 }

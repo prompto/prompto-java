@@ -12,13 +12,13 @@ public class TestSortList extends BaseEParserTest {
 	}
 
 	@Test
-	public void testSortDates() throws Exception {
-		compareResourceEOE("sortList/sortDates.pec");
+	public void testSortDateTimes() throws Exception {
+		compareResourceEOE("sortList/sortDateTimes.pec");
 	}
 
 	@Test
-	public void testSortDateTimes() throws Exception {
-		compareResourceEOE("sortList/sortDateTimes.pec");
+	public void testSortDates() throws Exception {
+		compareResourceEOE("sortList/sortDates.pec");
 	}
 
 	@Test
@@ -32,13 +32,13 @@ public class TestSortList extends BaseEParserTest {
 	}
 
 	@Test
-	public void testSortDescDates() throws Exception {
-		compareResourceEOE("sortList/sortDescDates.pec");
+	public void testSortDescDateTimes() throws Exception {
+		compareResourceEOE("sortList/sortDescDateTimes.pec");
 	}
 
 	@Test
-	public void testSortDescDateTimes() throws Exception {
-		compareResourceEOE("sortList/sortDescDateTimes.pec");
+	public void testSortDescDates() throws Exception {
+		compareResourceEOE("sortList/sortDescDates.pec");
 	}
 
 	@Test

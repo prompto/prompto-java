@@ -12,13 +12,13 @@ public class TestSortList extends BaseOParserTest {
 	}
 
 	@Test
-	public void testSortDates() throws Exception {
-		compareResourceOMO("sortList/sortDates.poc");
+	public void testSortDateTimes() throws Exception {
+		compareResourceOMO("sortList/sortDateTimes.poc");
 	}
 
 	@Test
-	public void testSortDateTimes() throws Exception {
-		compareResourceOMO("sortList/sortDateTimes.poc");
+	public void testSortDates() throws Exception {
+		compareResourceOMO("sortList/sortDates.poc");
 	}
 
 	@Test
@@ -32,13 +32,13 @@ public class TestSortList extends BaseOParserTest {
 	}
 
 	@Test
-	public void testSortDescDates() throws Exception {
-		compareResourceOMO("sortList/sortDescDates.poc");
+	public void testSortDescDateTimes() throws Exception {
+		compareResourceOMO("sortList/sortDescDateTimes.poc");
 	}
 
 	@Test
-	public void testSortDescDateTimes() throws Exception {
-		compareResourceOMO("sortList/sortDescDateTimes.poc");
+	public void testSortDescDates() throws Exception {
+		compareResourceOMO("sortList/sortDescDates.poc");
 	}
 
 	@Test

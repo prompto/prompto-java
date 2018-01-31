@@ -27,6 +27,26 @@ public class TestGreater extends BaseEParserTest {
 	}
 
 	@Test
+	public void testGtInteger() throws Exception {
+		compareResourceEOE("greater/gtInteger.pec");
+	}
+
+	@Test
+	public void testGtText() throws Exception {
+		compareResourceEOE("greater/gtText.pec");
+	}
+
+	@Test
+	public void testGtTime() throws Exception {
+		compareResourceEOE("greater/gtTime.pec");
+	}
+
+	@Test
+	public void testGtVersion() throws Exception {
+		compareResourceEOE("greater/gtVersion.pec");
+	}
+
+	@Test
 	public void testGteCharacter() throws Exception {
 		compareResourceEOE("greater/gteCharacter.pec");
 	}
@@ -59,26 +79,6 @@ public class TestGreater extends BaseEParserTest {
 	@Test
 	public void testGteTime() throws Exception {
 		compareResourceEOE("greater/gteTime.pec");
-	}
-
-	@Test
-	public void testGtInteger() throws Exception {
-		compareResourceEOE("greater/gtInteger.pec");
-	}
-
-	@Test
-	public void testGtText() throws Exception {
-		compareResourceEOE("greater/gtText.pec");
-	}
-
-	@Test
-	public void testGtTime() throws Exception {
-		compareResourceEOE("greater/gtTime.pec");
-	}
-
-	@Test
-	public void testGtVersion() throws Exception {
-		compareResourceEOE("greater/gtVersion.pec");
 	}
 
 }

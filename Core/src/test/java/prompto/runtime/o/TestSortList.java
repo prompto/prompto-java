@@ -30,16 +30,6 @@ public class TestSortList extends BaseOParserTest {
 	}
 
 	@Test
-	public void testInterpretedSortDates() throws Exception {
-		checkInterpretedOutput("sortList/sortDates.poc");
-	}
-
-	@Test
-	public void testCompiledSortDates() throws Exception {
-		checkCompiledOutput("sortList/sortDates.poc");
-	}
-
-	@Test
 	public void testInterpretedSortDateTimes() throws Exception {
 		checkInterpretedOutput("sortList/sortDateTimes.poc");
 	}
@@ -47,6 +37,16 @@ public class TestSortList extends BaseOParserTest {
 	@Test
 	public void testCompiledSortDateTimes() throws Exception {
 		checkCompiledOutput("sortList/sortDateTimes.poc");
+	}
+
+	@Test
+	public void testInterpretedSortDates() throws Exception {
+		checkInterpretedOutput("sortList/sortDates.poc");
+	}
+
+	@Test
+	public void testCompiledSortDates() throws Exception {
+		checkCompiledOutput("sortList/sortDates.poc");
 	}
 
 	@Test
@@ -70,16 +70,6 @@ public class TestSortList extends BaseOParserTest {
 	}
 
 	@Test
-	public void testInterpretedSortDescDates() throws Exception {
-		checkInterpretedOutput("sortList/sortDescDates.poc");
-	}
-
-	@Test
-	public void testCompiledSortDescDates() throws Exception {
-		checkCompiledOutput("sortList/sortDescDates.poc");
-	}
-
-	@Test
 	public void testInterpretedSortDescDateTimes() throws Exception {
 		checkInterpretedOutput("sortList/sortDescDateTimes.poc");
 	}
@@ -87,6 +77,16 @@ public class TestSortList extends BaseOParserTest {
 	@Test
 	public void testCompiledSortDescDateTimes() throws Exception {
 		checkCompiledOutput("sortList/sortDescDateTimes.poc");
+	}
+
+	@Test
+	public void testInterpretedSortDescDates() throws Exception {
+		checkInterpretedOutput("sortList/sortDescDates.poc");
+	}
+
+	@Test
+	public void testCompiledSortDescDates() throws Exception {
+		checkCompiledOutput("sortList/sortDescDates.poc");
 	}
 
 	@Test

@@ -82,11 +82,6 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
-	public void testDateTimeText() throws Exception {
-		compareResourceEME("builtins/dateTimeText.pec");
-	}
-
-	@Test
 	public void testDateTimeTZName() throws Exception {
 		compareResourceEME("builtins/dateTimeTZName.pec");
 	}
@@ -94,6 +89,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testDateTimeTZOffset() throws Exception {
 		compareResourceEME("builtins/dateTimeTZOffset.pec");
+	}
+
+	@Test
+	public void testDateTimeText() throws Exception {
+		compareResourceEME("builtins/dateTimeText.pec");
 	}
 
 	@Test
