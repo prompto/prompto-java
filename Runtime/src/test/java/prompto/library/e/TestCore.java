@@ -55,10 +55,5 @@ public class TestCore extends BaseEParserTest {
 		runTests("core/time.pec");
 	}
 
-	@Test
-	public void testUtils() throws Exception {
-		runTests("core/utils.pec");
-	}
-
 }
 

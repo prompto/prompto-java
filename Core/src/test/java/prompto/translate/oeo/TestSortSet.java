@@ -12,13 +12,13 @@ public class TestSortSet extends BaseOParserTest {
 	}
 
 	@Test
-	public void testSortDateTimes() throws Exception {
-		compareResourceOEO("sortSet/sortDateTimes.poc");
+	public void testSortDates() throws Exception {
+		compareResourceOEO("sortSet/sortDates.poc");
 	}
 
 	@Test
-	public void testSortDates() throws Exception {
-		compareResourceOEO("sortSet/sortDates.poc");
+	public void testSortDateTimes() throws Exception {
+		compareResourceOEO("sortSet/sortDateTimes.poc");
 	}
 
 	@Test
@@ -32,13 +32,13 @@ public class TestSortSet extends BaseOParserTest {
 	}
 
 	@Test
-	public void testSortDescDateTimes() throws Exception {
-		compareResourceOEO("sortSet/sortDescDateTimes.poc");
+	public void testSortDescDates() throws Exception {
+		compareResourceOEO("sortSet/sortDescDates.poc");
 	}
 
 	@Test
-	public void testSortDescDates() throws Exception {
-		compareResourceOEO("sortSet/sortDescDates.poc");
+	public void testSortDescDateTimes() throws Exception {
+		compareResourceOEO("sortSet/sortDescDateTimes.poc");
 	}
 
 	@Test

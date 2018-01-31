@@ -82,6 +82,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testDateTimeText() throws Exception {
+		compareResourceEOE("builtins/dateTimeText.pec");
+	}
+
+	@Test
 	public void testDateTimeTZName() throws Exception {
 		compareResourceEOE("builtins/dateTimeTZName.pec");
 	}
@@ -89,11 +94,6 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testDateTimeTZOffset() throws Exception {
 		compareResourceEOE("builtins/dateTimeTZOffset.pec");
-	}
-
-	@Test
-	public void testDateTimeText() throws Exception {
-		compareResourceEOE("builtins/dateTimeText.pec");
 	}
 
 	@Test

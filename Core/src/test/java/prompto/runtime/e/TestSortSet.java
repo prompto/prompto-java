@@ -30,16 +30,6 @@ public class TestSortSet extends BaseEParserTest {
 	}
 
 	@Test
-	public void testInterpretedSortDateTimes() throws Exception {
-		checkInterpretedOutput("sortSet/sortDateTimes.pec");
-	}
-
-	@Test
-	public void testCompiledSortDateTimes() throws Exception {
-		checkCompiledOutput("sortSet/sortDateTimes.pec");
-	}
-
-	@Test
 	public void testInterpretedSortDates() throws Exception {
 		checkInterpretedOutput("sortSet/sortDates.pec");
 	}
@@ -47,6 +37,16 @@ public class TestSortSet extends BaseEParserTest {
 	@Test
 	public void testCompiledSortDates() throws Exception {
 		checkCompiledOutput("sortSet/sortDates.pec");
+	}
+
+	@Test
+	public void testInterpretedSortDateTimes() throws Exception {
+		checkInterpretedOutput("sortSet/sortDateTimes.pec");
+	}
+
+	@Test
+	public void testCompiledSortDateTimes() throws Exception {
+		checkCompiledOutput("sortSet/sortDateTimes.pec");
 	}
 
 	@Test
@@ -70,16 +70,6 @@ public class TestSortSet extends BaseEParserTest {
 	}
 
 	@Test
-	public void testInterpretedSortDescDateTimes() throws Exception {
-		checkInterpretedOutput("sortSet/sortDescDateTimes.pec");
-	}
-
-	@Test
-	public void testCompiledSortDescDateTimes() throws Exception {
-		checkCompiledOutput("sortSet/sortDescDateTimes.pec");
-	}
-
-	@Test
 	public void testInterpretedSortDescDates() throws Exception {
 		checkInterpretedOutput("sortSet/sortDescDates.pec");
 	}
@@ -87,6 +77,16 @@ public class TestSortSet extends BaseEParserTest {
 	@Test
 	public void testCompiledSortDescDates() throws Exception {
 		checkCompiledOutput("sortSet/sortDescDates.pec");
+	}
+
+	@Test
+	public void testInterpretedSortDescDateTimes() throws Exception {
+		checkInterpretedOutput("sortSet/sortDescDateTimes.pec");
+	}
+
+	@Test
+	public void testCompiledSortDescDateTimes() throws Exception {
+		checkCompiledOutput("sortSet/sortDescDateTimes.pec");
 	}
 
 	@Test

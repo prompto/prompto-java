@@ -27,26 +27,6 @@ public class TestLess extends BaseEParserTest {
 	}
 
 	@Test
-	public void testLtInteger() throws Exception {
-		compareResourceEME("less/ltInteger.pec");
-	}
-
-	@Test
-	public void testLtText() throws Exception {
-		compareResourceEME("less/ltText.pec");
-	}
-
-	@Test
-	public void testLtTime() throws Exception {
-		compareResourceEME("less/ltTime.pec");
-	}
-
-	@Test
-	public void testLtVersion() throws Exception {
-		compareResourceEME("less/ltVersion.pec");
-	}
-
-	@Test
 	public void testLteCharacter() throws Exception {
 		compareResourceEME("less/lteCharacter.pec");
 	}
@@ -79,6 +59,26 @@ public class TestLess extends BaseEParserTest {
 	@Test
 	public void testLteTime() throws Exception {
 		compareResourceEME("less/lteTime.pec");
+	}
+
+	@Test
+	public void testLtInteger() throws Exception {
+		compareResourceEME("less/ltInteger.pec");
+	}
+
+	@Test
+	public void testLtText() throws Exception {
+		compareResourceEME("less/ltText.pec");
+	}
+
+	@Test
+	public void testLtTime() throws Exception {
+		compareResourceEME("less/ltTime.pec");
+	}
+
+	@Test
+	public void testLtVersion() throws Exception {
+		compareResourceEME("less/ltVersion.pec");
 	}
 
 }

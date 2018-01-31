@@ -27,26 +27,6 @@ public class TestGreater extends BaseOParserTest {
 	}
 
 	@Test
-	public void testGtInteger() throws Exception {
-		compareResourceOEO("greater/gtInteger.poc");
-	}
-
-	@Test
-	public void testGtText() throws Exception {
-		compareResourceOEO("greater/gtText.poc");
-	}
-
-	@Test
-	public void testGtTime() throws Exception {
-		compareResourceOEO("greater/gtTime.poc");
-	}
-
-	@Test
-	public void testGtVersion() throws Exception {
-		compareResourceOEO("greater/gtVersion.poc");
-	}
-
-	@Test
 	public void testGteCharacter() throws Exception {
 		compareResourceOEO("greater/gteCharacter.poc");
 	}
@@ -79,6 +59,26 @@ public class TestGreater extends BaseOParserTest {
 	@Test
 	public void testGteTime() throws Exception {
 		compareResourceOEO("greater/gteTime.poc");
+	}
+
+	@Test
+	public void testGtInteger() throws Exception {
+		compareResourceOEO("greater/gtInteger.poc");
+	}
+
+	@Test
+	public void testGtText() throws Exception {
+		compareResourceOEO("greater/gtText.poc");
+	}
+
+	@Test
+	public void testGtTime() throws Exception {
+		compareResourceOEO("greater/gtTime.poc");
+	}
+
+	@Test
+	public void testGtVersion() throws Exception {
+		compareResourceOEO("greater/gtVersion.poc");
 	}
 
 }
