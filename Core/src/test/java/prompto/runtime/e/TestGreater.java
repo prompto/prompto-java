@@ -60,6 +60,46 @@ public class TestGreater extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedGtInteger() throws Exception {
+		checkInterpretedOutput("greater/gtInteger.pec");
+	}
+
+	@Test
+	public void testCompiledGtInteger() throws Exception {
+		checkCompiledOutput("greater/gtInteger.pec");
+	}
+
+	@Test
+	public void testInterpretedGtText() throws Exception {
+		checkInterpretedOutput("greater/gtText.pec");
+	}
+
+	@Test
+	public void testCompiledGtText() throws Exception {
+		checkCompiledOutput("greater/gtText.pec");
+	}
+
+	@Test
+	public void testInterpretedGtTime() throws Exception {
+		checkInterpretedOutput("greater/gtTime.pec");
+	}
+
+	@Test
+	public void testCompiledGtTime() throws Exception {
+		checkCompiledOutput("greater/gtTime.pec");
+	}
+
+	@Test
+	public void testInterpretedGtVersion() throws Exception {
+		checkInterpretedOutput("greater/gtVersion.pec");
+	}
+
+	@Test
+	public void testCompiledGtVersion() throws Exception {
+		checkCompiledOutput("greater/gtVersion.pec");
+	}
+
+	@Test
 	public void testInterpretedGteCharacter() throws Exception {
 		checkInterpretedOutput("greater/gteCharacter.pec");
 	}
@@ -127,46 +167,6 @@ public class TestGreater extends BaseEParserTest {
 	@Test
 	public void testCompiledGteTime() throws Exception {
 		checkCompiledOutput("greater/gteTime.pec");
-	}
-
-	@Test
-	public void testInterpretedGtInteger() throws Exception {
-		checkInterpretedOutput("greater/gtInteger.pec");
-	}
-
-	@Test
-	public void testCompiledGtInteger() throws Exception {
-		checkCompiledOutput("greater/gtInteger.pec");
-	}
-
-	@Test
-	public void testInterpretedGtText() throws Exception {
-		checkInterpretedOutput("greater/gtText.pec");
-	}
-
-	@Test
-	public void testCompiledGtText() throws Exception {
-		checkCompiledOutput("greater/gtText.pec");
-	}
-
-	@Test
-	public void testInterpretedGtTime() throws Exception {
-		checkInterpretedOutput("greater/gtTime.pec");
-	}
-
-	@Test
-	public void testCompiledGtTime() throws Exception {
-		checkCompiledOutput("greater/gtTime.pec");
-	}
-
-	@Test
-	public void testInterpretedGtVersion() throws Exception {
-		checkInterpretedOutput("greater/gtVersion.pec");
-	}
-
-	@Test
-	public void testCompiledGtVersion() throws Exception {
-		checkCompiledOutput("greater/gtVersion.pec");
 	}
 
 }

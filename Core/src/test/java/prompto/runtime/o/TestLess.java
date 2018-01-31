@@ -60,6 +60,46 @@ public class TestLess extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedLtInteger() throws Exception {
+		checkInterpretedOutput("less/ltInteger.poc");
+	}
+
+	@Test
+	public void testCompiledLtInteger() throws Exception {
+		checkCompiledOutput("less/ltInteger.poc");
+	}
+
+	@Test
+	public void testInterpretedLtText() throws Exception {
+		checkInterpretedOutput("less/ltText.poc");
+	}
+
+	@Test
+	public void testCompiledLtText() throws Exception {
+		checkCompiledOutput("less/ltText.poc");
+	}
+
+	@Test
+	public void testInterpretedLtTime() throws Exception {
+		checkInterpretedOutput("less/ltTime.poc");
+	}
+
+	@Test
+	public void testCompiledLtTime() throws Exception {
+		checkCompiledOutput("less/ltTime.poc");
+	}
+
+	@Test
+	public void testInterpretedLtVersion() throws Exception {
+		checkInterpretedOutput("less/ltVersion.poc");
+	}
+
+	@Test
+	public void testCompiledLtVersion() throws Exception {
+		checkCompiledOutput("less/ltVersion.poc");
+	}
+
+	@Test
 	public void testInterpretedLteCharacter() throws Exception {
 		checkInterpretedOutput("less/lteCharacter.poc");
 	}
@@ -127,46 +167,6 @@ public class TestLess extends BaseOParserTest {
 	@Test
 	public void testCompiledLteTime() throws Exception {
 		checkCompiledOutput("less/lteTime.poc");
-	}
-
-	@Test
-	public void testInterpretedLtInteger() throws Exception {
-		checkInterpretedOutput("less/ltInteger.poc");
-	}
-
-	@Test
-	public void testCompiledLtInteger() throws Exception {
-		checkCompiledOutput("less/ltInteger.poc");
-	}
-
-	@Test
-	public void testInterpretedLtText() throws Exception {
-		checkInterpretedOutput("less/ltText.poc");
-	}
-
-	@Test
-	public void testCompiledLtText() throws Exception {
-		checkCompiledOutput("less/ltText.poc");
-	}
-
-	@Test
-	public void testInterpretedLtTime() throws Exception {
-		checkInterpretedOutput("less/ltTime.poc");
-	}
-
-	@Test
-	public void testCompiledLtTime() throws Exception {
-		checkCompiledOutput("less/ltTime.poc");
-	}
-
-	@Test
-	public void testInterpretedLtVersion() throws Exception {
-		checkInterpretedOutput("less/ltVersion.poc");
-	}
-
-	@Test
-	public void testCompiledLtVersion() throws Exception {
-		checkCompiledOutput("less/ltVersion.poc");
 	}
 
 }
