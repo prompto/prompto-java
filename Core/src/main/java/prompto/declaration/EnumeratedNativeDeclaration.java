@@ -2,7 +2,9 @@ package prompto.declaration;
 
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
@@ -40,7 +42,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class EnumeratedNativeDeclaration extends BaseDeclaration 
 	implements IEnumeratedDeclaration<NativeSymbol> {
 	
-	NativeSymbolList symbols;
+	NativeSymbolList symbolsList;
+	Map<String, NativeSymbol> symbolsMap;
 	EnumeratedNativeType type;
 	
 	public EnumeratedNativeDeclaration(Identifier name, NativeType derivedFrom, NativeSymbolList symbols) {
@@ -55,14 +58,22 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 	}
 	
 	@Override
-	public NativeSymbolList getSymbols() {
-		return symbols;
+	public NativeSymbolList getSymbolsList() {
+		return symbolsList;
+	}
+	
+	@Override
+	public Map<String, NativeSymbol> getSymbolsMap() {
+		return symbolsMap;
 	}
 
 	public void setSymbols(NativeSymbolList symbols) {
-		this.symbols = symbols;
-		for(Symbol s : symbols)
+		this.symbolsMap = new HashMap<>();
+		this.symbolsList = symbols;
+		for(NativeSymbol s : symbols) {
 			s.setType(type);
+			symbolsMap.put(s.getName(), s);
+		}
 		symbols.setType(new ListType(type));
 	}
 
@@ -88,7 +99,7 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 		type.getDerivedFrom().toDialect(writer);
 		writer.append("):\n");
 		writer.indent();
-		for(Symbol s : symbols) {
+		for(Symbol s : symbolsList) {
 			s.toDialect(writer);
 			writer.append("\n");
 		}
@@ -102,7 +113,7 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 		type.getDerivedFrom().toDialect(writer);
 		writer.append(") {\n");
 		writer.indent();
-		for(Symbol s : symbols) {
+		for(Symbol s : symbolsList) {
 			s.toDialect(writer);
 			writer.append(";\n");
 		}
@@ -117,7 +128,7 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 		type.getDerivedFrom().toDialect(writer);
 		writer.append(" with symbols:\n");
 		writer.indent();
-		for(Symbol s : symbols) {
+		for(Symbol s : symbolsList) {
 			s.toDialect(writer);
 			writer.append("\n");
 		}
@@ -127,13 +138,13 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 	@Override
 	public void register(Context context) {
 		context.registerDeclaration(this);
-		for(Symbol s : symbols)
+		for(Symbol s : symbolsList)
 			s.register(context);
 	}
 	
 	@Override
 	public IType check(Context context, boolean isStart) {
-		for(Symbol s : symbols)
+		for(Symbol s : symbolsList)
 			s.check(context);
 		return type;
 	}
@@ -145,8 +156,8 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 
 	public IValue readJSONValue(Context context, JsonNode value) throws PromptoError {
 		String name = value.asText();
-		for(Symbol symbol : symbols) {
-			if(name.equals(symbol.getSymbol()))
+		for(Symbol symbol : symbolsList) {
+			if(name.equals(symbol.getName()))
 				return symbol.interpret(context);
 		}
 		throw new InvalidSymbolError(name = " is not a valid " + this.getName() + " symbol.");
@@ -186,7 +197,7 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 	}
 
 	private void compileSymbolFields(Context context, ClassFile classFile, Flags flags) {
-		getSymbols().forEach((s)->
+		getSymbolsList().forEach((s)->
 			compileSymbolField(context, classFile, flags, s));
 	}
 
@@ -231,7 +242,7 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 	protected void compileClassConstructor(Context context, ClassFile classFile, Flags flags) {
 		MethodInfo method = classFile.newMethod("<clinit>", new Descriptor.Method(void.class));
 		method.addModifier(Modifier.STATIC);
-		for(NativeSymbol s : getSymbols())
+		for(NativeSymbol s : getSymbolsList())
 			compilePopulateSymbolField(context, classFile, method, flags, s);
 		method.addInstruction(Opcode.RETURN);
 	}

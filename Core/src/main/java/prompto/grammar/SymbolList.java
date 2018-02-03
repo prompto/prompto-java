@@ -1,8 +1,10 @@
 package prompto.grammar;
 
+import java.io.IOException;
 import java.util.Map;
 
 import prompto.error.PromptoError;
+import prompto.error.ReadWriteError;
 import prompto.expression.Symbol;
 import prompto.intrinsic.IterableWithCounts;
 import prompto.runtime.Context;
@@ -106,7 +108,22 @@ public abstract class SymbolList <T extends Symbol> extends ObjectList<T> implem
 	
 	@Override
 	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
-		throw new UnsupportedOperationException("toJson not supported by " + this.getClass().getSimpleName());
+		try {
+			if(withType) {
+				generator.writeStartObject();
+				generator.writeFieldName("type");
+				generator.writeString(this.getType().getTypeName());
+				generator.writeFieldName("value");
+			}
+			generator.writeStartArray();
+			for(Symbol symbol : this)
+				symbol.toJson(context, generator, System.identityHashCode(this), null, withType, data);
+			generator.writeEndArray();
+			if(withType)
+				generator.writeEndObject();
+		} catch(IOException e) {
+			throw new ReadWriteError(e.getMessage());
+		}
 	}
 	
 	@Override

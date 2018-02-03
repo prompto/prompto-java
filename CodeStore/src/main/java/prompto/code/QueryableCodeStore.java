@@ -358,8 +358,8 @@ public class QueryableCodeStore extends BaseCodeStore {
 			storable.setData("module",  moduleId);
 			if(decl instanceof IEnumeratedDeclaration) {
 				@SuppressWarnings("unchecked")
-				List<String> symbols = ((IEnumeratedDeclaration<Symbol>)decl).getSymbols().stream()
-						.map(Symbol::getSymbol)
+				List<String> symbols = ((IEnumeratedDeclaration<Symbol>)decl).getSymbolsList().stream()
+						.map(Symbol::getName)
 						.collect(Collectors.toList());
 				storable.setData("symbols",  symbols);
 			}

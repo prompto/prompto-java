@@ -1,6 +1,10 @@
 package prompto.expression;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Map;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.FieldConstant;
@@ -9,6 +13,7 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
+import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
@@ -88,6 +93,20 @@ public class NativeSymbol extends Symbol implements IExpression {
 			return expression.interpret(context);
 		else
 			return super.getMember(context, name, autoCreate);
+	}
+	
+	@Override
+	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
+		try {
+			generator.writeStartObject();
+			generator.writeFieldName("name");
+			generator.writeString(symbol.toString());
+			generator.writeFieldName("value");
+			expression.interpret(context).toJson(context, generator, instanceId, fieldName, withType, binaries);
+			generator.writeEndObject();
+		} catch(IOException e) {
+			throw new ReadWriteError(e.getMessage());
+		}
 	}
 	
 	@Override

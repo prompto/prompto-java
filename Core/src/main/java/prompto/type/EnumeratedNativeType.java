@@ -86,7 +86,7 @@ public class EnumeratedNativeType extends BaseType {
 		if(!(decl instanceof IEnumeratedDeclaration))
 			throw new SyntaxError(name + " is not an enumerated type!");
 		if ("symbols".equals(name))
-			return ((IEnumeratedDeclaration<?>)decl).getSymbols();
+			return ((IEnumeratedDeclaration<?>)decl).getSymbolsList();
 		else
 			throw new SyntaxError("No such member:" + name);
 	}

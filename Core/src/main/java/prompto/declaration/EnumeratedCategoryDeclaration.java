@@ -1,7 +1,9 @@
 package prompto.declaration;
 
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
@@ -35,7 +37,8 @@ import prompto.utils.IdentifierList;
 public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration 
 	implements IEnumeratedDeclaration<CategorySymbol> {
 	
-	CategorySymbolList symbols;
+	CategorySymbolList symbolsList;
+	Map<String, CategorySymbol> symbolsMap;
 	EnumeratedCategoryType type;
 	
 	public EnumeratedCategoryDeclaration(Identifier name) {
@@ -54,14 +57,22 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 	}
 	
 	@Override
-	public CategorySymbolList getSymbols() {
-		return symbols;
+	public CategorySymbolList getSymbolsList() {
+		return symbolsList;
+	}
+	
+	@Override
+	public Map<String, CategorySymbol> getSymbolsMap() {
+		return symbolsMap;
 	}
 	
 	public void setSymbols(CategorySymbolList symbols) {
-		this.symbols = symbols;
-		for(Symbol s : symbols)
+		this.symbolsMap = new HashMap<>();
+		this.symbolsList = symbols;
+		for(CategorySymbol s : symbols) {
 			s.setType(type);
+			symbolsMap.put(s.getName(), s);
+		}
 		symbols.setType(new ListType(type));
 	}
 	
@@ -88,7 +99,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 		}
 		writer.append(" {\n");
 		writer.indent();
-		for(Symbol symbol : symbols) {
+		for(Symbol symbol : symbolsList) {
 			((CategorySymbol)symbol).toDialect(writer);
 			writer.append(";\n");
 		}
@@ -115,7 +126,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 		} else
 			writer.append(" with symbols:\n");
 		writer.indent();
-		for(Symbol symbol : symbols) {
+		for(Symbol symbol : symbolsList) {
 			symbol.toDialect(writer);
 			writer.append("\n");
 		}
@@ -136,7 +147,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 			attributes.toDialect(writer, false);
 		writer.append("):\n");
 		writer.indent();
-		for(Symbol symbol : symbols) {
+		for(Symbol symbol : symbolsList) {
 			symbol.toDialect(writer);
 			writer.append("\n");
 		}
@@ -146,14 +157,14 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 	@Override
 	public void register(Context context) {
 		context.registerDeclaration(this);
-		for(Symbol s : symbols)
+		for(Symbol s : symbolsList)
 			s.register(context);
 	}
 	
 	@Override
 	public IType check(Context context, boolean isStart) {
 		super.check(context, isStart);
-		for(Symbol s : symbols)
+		for(Symbol s : symbolsList)
 			s.check(context); // TODO
 		return getType(context);
 	}
@@ -231,7 +242,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 	protected void compileClassConstructorBody(Context context, MethodInfo method, Flags flags) {
 		if(isStorable())
 			compilePopulateCategoryField(context, method, flags);
-		for(CategorySymbol s : getSymbols())
+		for(CategorySymbol s : getSymbolsList())
 			compilePopulateSymbolField(context, method, flags, s);
 	}
 	
@@ -272,7 +283,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 	}
 
 	private void compileSymbolFields(Context context, ClassFile classFile, Flags flags) {
-		getSymbols().forEach((s)->
+		getSymbolsList().forEach((s)->
 			compileSymbolField(context, classFile, flags, s));
 	}
 

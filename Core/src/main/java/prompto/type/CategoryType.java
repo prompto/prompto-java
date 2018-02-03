@@ -392,12 +392,16 @@ public class CategoryType extends BaseType {
 	}
 
 	private IValue readJSONInstance(Context context, CategoryDeclaration declaration, JsonNode value, Map<String, byte[]> parts) throws PromptoError {
-		IInstance instance = newInstance(context);
-		instance.setMutable(true);
-		readJSONDbId(context, value, instance); // start by dbId to avoid creating a new one
-		readJSONFields(context, value, instance, parts); // then copy all the remaining fields
-		instance.setMutable(this.mutable);
-		return instance;
+		if(declaration instanceof IEnumeratedDeclaration) {
+			return ((IEnumeratedDeclaration<?>)declaration).getSymbol(value.asText());
+		} else {
+			IInstance instance = newInstance(context);
+			instance.setMutable(true);
+			readJSONDbId(context, value, instance); // start by dbId to avoid creating a new one
+			readJSONFields(context, value, instance, parts); // then copy all the remaining fields
+			instance.setMutable(this.mutable);
+			return instance;
+		}
 	}
 
 	private void readJSONFields(Context context, JsonNode value, IInstance instance, Map<String, byte[]> parts) throws PromptoError {

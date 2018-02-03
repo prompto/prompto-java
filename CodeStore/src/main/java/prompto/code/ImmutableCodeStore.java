@@ -157,7 +157,7 @@ public class ImmutableCodeStore extends BaseCodeStore {
 				.flatMap(Collection::stream)
 				.filter((d)->d instanceof IEnumeratedDeclaration)
 				.map((d)->(IEnumeratedDeclaration<?>)d)
-				.filter((d)->d.getSymbols().hasSymbol(name))
+				.filter((d)->d.hasSymbol(name))
 				.findFirst()
 				.orElse(null);
 	}

@@ -1,6 +1,10 @@
 package prompto.expression;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Map;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 import prompto.argument.AttributeArgument;
 import prompto.compiler.ClassConstant;
@@ -16,6 +20,7 @@ import prompto.compiler.ResultInfo;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.EnumeratedCategoryDeclaration;
 import prompto.error.PromptoError;
+import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
@@ -97,6 +102,28 @@ public class CategorySymbol extends Symbol implements IExpression  {
 		instance.setMutable(false);
 		return instance;
 	}
+	
+	@Override
+	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
+		try {
+			generator.writeStartObject();
+			generator.writeFieldName("name");
+			generator.writeString(symbol.toString());
+			if(assignments!=null) {
+				context = context.newLocalContext();
+				for(ArgumentAssignment assignment : assignments) {
+					generator.writeFieldName(assignment.getArgument().getName());
+					IValue value = assignment.getExpression().interpret(context);
+					value.toJson(context, generator, instanceId, fieldName, withType, binaries);
+				}
+			}
+			generator.writeEndObject();
+		} catch(IOException e) {
+			throw new ReadWriteError(e.getMessage());
+		}
+	}
+	
+
 	
 	@Override
 	public IValue getMember(Context context, Identifier name, boolean autoCreate) throws PromptoError {

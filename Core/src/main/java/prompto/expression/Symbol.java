@@ -1,13 +1,10 @@
 package prompto.expression;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.Map;
 import java.util.function.Consumer;
 
 import prompto.error.NotStorableError;
 import prompto.error.PromptoError;
-import prompto.error.ReadWriteError;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.parser.ISection;
@@ -17,8 +14,6 @@ import prompto.store.IStorable;
 import prompto.type.IType;
 import prompto.value.ISliceable;
 import prompto.value.IValue;
-
-import com.fasterxml.jackson.core.JsonGenerator;
 
 public abstract class Symbol extends Section implements IExpression, INamed, IValue, ISection {
 
@@ -37,10 +32,6 @@ public abstract class Symbol extends Section implements IExpression, INamed, IVa
 	@Override
 	public boolean isMutable() {
 		return false;
-	}
-	
-	public String getSymbol() {
-		return symbol.toString();
 	}
 	
 	@Override
@@ -131,15 +122,6 @@ public abstract class Symbol extends Section implements IExpression, INamed, IVa
 		return null;
 	}
 	
-	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
-		try {
-			generator.writeString(symbol.toString());
-		} catch(IOException e) {
-			throw new ReadWriteError(e.getMessage());
-		}
-	}
-
 	public Type getJavaType(Context context) {
 		throw new UnsupportedOperationException("getJavaType not supported by " + this.getClass().getSimpleName());
 	}
