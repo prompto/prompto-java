@@ -8,4 +8,5 @@ public class Library extends Module {
 	public ModuleType getType() {
 		return ModuleType.LIBRARY;
 	}
+
 }

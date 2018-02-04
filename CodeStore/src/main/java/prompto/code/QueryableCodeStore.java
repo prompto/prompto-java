@@ -153,8 +153,10 @@ public class QueryableCodeStore extends BaseCodeStore {
 			module.setName((String)stored.getData("name"));
 			module.setVersion((PromptoVersion)stored.getData("version"));
 			module.setDescription((String)stored.getData("description"));
-			if(module instanceof WebSite)
-				((WebSite)module).setEntryPoint((String)stored.getData("entryPoint"));
+			if(module instanceof Service)
+				((Service)module).setServerAboutToStartMethod((String)stored.getData("serverAboutToStartMethod"));
+			else if(module instanceof Batch)
+				((Batch)module).setStartMethod((String)stored.getData("startMethod"));
 			return (T)module;
 		} catch(Exception e) {
 			throw new RuntimeException(e);

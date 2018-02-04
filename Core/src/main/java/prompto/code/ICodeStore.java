@@ -87,9 +87,7 @@ public interface ICodeStore {
 		}
 		
 		public CategoryType getCategory() {
-			// THESAURUS is only a specific type of LIBRARY for use by Importer
-			String name = this==THESAURUS ? LIBRARY.name() : this.name();
-			String capped = StringUtils.capitalizeFirst(name);
+			String capped = StringUtils.capitalizeFirst(this.name());
 			return new CategoryType( new Identifier(capped));
 		}
 	}

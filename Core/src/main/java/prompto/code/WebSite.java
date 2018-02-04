@@ -8,16 +8,16 @@ import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.store.IStore;
 
-public class WebSite extends Module {
+public class WebSite extends Service {
 
-	private String entryPoint;
+	private String homePage;
 
-	public String getEntryPoint() {
-		return entryPoint;
+	public String getHomePage() {
+		return homePage;
 	}
 
-	public void setEntryPoint(String entryPoint) {
-		this.entryPoint = entryPoint;
+	public void setHomePage(String homePage) {
+		this.homePage = homePage;
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class WebSite extends Module {
 	@Override
 	public IStorable populate(Context context, IStore store, List<IStorable> storables) throws PromptoError {
 		IStorable storable = super.populate(context, store, storables);
-		storable.setData("entryPoint", entryPoint);
+		storable.setData("homePage", homePage);
 		return storable;
 	}
 

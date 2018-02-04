@@ -8,16 +8,16 @@ import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.store.IStore;
 
-public class Batch extends Module {
+public class Batch extends Module implements IApplication {
 
-	private String entryPoint;
+	private String startMethod;
 
-	public String getEntryPoint() {
-		return entryPoint;
+	public String getStartMethod() {
+		return startMethod;
 	}
 
-	public void setEntryPoint(String entryPoint) {
-		this.entryPoint = entryPoint;
+	public void setStartMethod(String startMethod) {
+		this.startMethod = startMethod;
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class Batch extends Module {
 	@Override
 	public IStorable populate(Context context, IStore store, List<IStorable> storables) throws PromptoError {
 		IStorable storable = super.populate(context, store, storables);
-		storable.setData("entryPoint", entryPoint);
+		storable.setData("startMethod", startMethod);
 		return storable;
 	}
 

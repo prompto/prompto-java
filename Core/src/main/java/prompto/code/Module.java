@@ -1,6 +1,7 @@
 package prompto.code;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +23,7 @@ public abstract class Module {
 	private List<Dependency> dependencies;
 	
 	public abstract ModuleType getType();
-	
+
 	public Object getDbId() {
 		return dbId;
 	}
@@ -64,8 +65,7 @@ public abstract class Module {
 	}
 
 	public IStorable populate(Context context, IStore store, List<IStorable> storables) throws PromptoError {
-		List<String> categories = Arrays.asList("Module", getType().getCategory().getTypeName());
-		IStorable storable = store.newStorable(categories, null); 
+		IStorable storable = store.newStorable(getCategories(), null); 
 		storables.add(storable);
 		setDbId(storable.getOrCreateDbId());
 		storable.setData("name", name);
@@ -83,6 +83,19 @@ public abstract class Module {
 			storable.setData("dependencies", dbIds);
 		}
 		return storable;
+	}
+
+	private List<String> getCategories() {
+		List<String> categories = new ArrayList<>();
+		Class<?> klass = this.getClass();
+		while(Module.class.isAssignableFrom(klass)) {
+			categories.add(klass.getSimpleName());
+			if(IApplication.class.isAssignableFrom(klass))
+				categories.add("Application");
+			klass = klass.getSuperclass();
+		}
+		Collections.reverse(categories);
+		return categories;
 	}
 
 	public void setDependencies(List<Dependency> dependencies) {
