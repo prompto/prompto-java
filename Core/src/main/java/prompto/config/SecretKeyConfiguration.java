@@ -1,5 +1,6 @@
 package prompto.config;
 
+import com.esotericsoftware.yamlbeans.YamlException;
 import com.esotericsoftware.yamlbeans.document.YamlMapping;
 
 public class SecretKeyConfiguration implements ISecretKeyConfiguration {
@@ -22,7 +23,7 @@ public class SecretKeyConfiguration implements ISecretKeyConfiguration {
 	}
 	
 	@Override
-	public YamlMapping toYaml() throws Throwable {
+	public YamlMapping toYaml() throws YamlException {
 		YamlMapping yaml = new YamlMapping();
 		yaml.setEntry("factory", reader.getString("factory"));
 		yaml.setEntry("secret", reader.getString("secret"));
