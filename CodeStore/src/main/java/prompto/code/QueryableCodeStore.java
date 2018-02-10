@@ -222,7 +222,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 		registering.get().put(name, decl);
 	}
 
-	private void deleteRegisteringDeclarations(String name) {
+	private void clearRegisteringDeclarations(String name) {
 		registering.get().remove(name);
 	}
 
@@ -247,7 +247,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 						if(store!=null && decls!=null && decls.iterator().hasNext()) {
 							storeRegisteringDeclarations(name, decls);
 							decls = storeDeclarations(decls);
-							deleteRegisteringDeclarations(name);
+							clearRegisteringDeclarations(name);
 							store.flush();
 						}
 					}
@@ -272,7 +272,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 						if(store!=null && decl!=null) {
 							storeRegisteringDeclarations(decl.getName(), Collections.singletonList(decl));
 							decls = storeDeclarations(Collections.singletonList(decl));
-							deleteRegisteringDeclarations(decl.getName());
+							clearRegisteringDeclarations(decl.getName());
 							store.flush();
 						}
 					}
@@ -409,7 +409,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 		filter.interpretQuery(context, builder);
 		builder.and();
 		if(PromptoVersion.LATEST.equals(version)) {
-			IdentifierList names = IdentifierList.parse("prototype,version");
+			IdentifierList names = new IdentifierList("prototype", "version");
 			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
 			orderBy.interpretQuery(context, builder);
 			IStoredIterable stored = store.fetchMany(builder.build());
@@ -430,7 +430,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 		filter.interpretQuery(context, builder);
 		builder.and();
 		if(PromptoVersion.LATEST.equals(version)) {
-			IdentifierList names = new IdentifierList(new Identifier("version"));
+			IdentifierList names = new IdentifierList("version");
 			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
 			orderBy.interpretQuery(context, builder);
 			builder.first(1L).last(1L);
