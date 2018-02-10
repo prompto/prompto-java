@@ -1,5 +1,8 @@
 package prompto.utils;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 import prompto.grammar.Identifier;
 
 
@@ -8,21 +11,31 @@ public class IdentifierList extends ObjectList<Identifier> {
 	private static final long serialVersionUID = 1L;
 
 	public static IdentifierList parse(String ids) {
-		String[] parts = ids.split(",");
-		IdentifierList result = new IdentifierList();
-		for(String part : parts)
-			result.add(new Identifier(part));
-		return result;
+		return new IdentifierList(ids.split(","));
 	}
 	
 	public IdentifierList() {		
 	}
 	
+
+	public IdentifierList(String item) {
+		this.add(new Identifier(item));
+	}
+
+	
 	public IdentifierList(Identifier item) {
 		this.add(item);
 	}
 
-	
+
+	public IdentifierList(String ... items) {
+		this.addAll(Arrays.asList(items).stream().map(Identifier::new).collect(Collectors.toList()));
+	}
+
+	public IdentifierList(Identifier ... items) {
+		this.addAll(Arrays.asList(items));
+	}
+
 	public void toDialect(CodeWriter writer, boolean finalAnd) {
 		switch(writer.getDialect()) {
 		case E:
