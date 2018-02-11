@@ -197,6 +197,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTextEndsWith() throws Exception {
+		compareResourceEOE("builtins/textEndsWith.pec");
+	}
+
+	@Test
 	public void testTextLowercase() throws Exception {
 		compareResourceEOE("builtins/textLowercase.pec");
 	}
@@ -214,6 +219,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testTextSplit() throws Exception {
 		compareResourceEOE("builtins/textSplit.pec");
+	}
+
+	@Test
+	public void testTextStartsWith() throws Exception {
+		compareResourceEOE("builtins/textStartsWith.pec");
 	}
 
 	@Test

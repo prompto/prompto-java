@@ -9,6 +9,7 @@ import java.util.Map;
 import prompto.argument.CategoryArgument;
 import prompto.argument.IArgument;
 import prompto.compiler.ClassConstant;
+import prompto.compiler.CompilerUtils;
 import prompto.compiler.Descriptor;
 import prompto.compiler.Flags;
 import prompto.compiler.IOperand;
@@ -26,8 +27,8 @@ import prompto.literal.TextLiteral;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.store.Family;
-import prompto.utils.CodeWriter;
 import prompto.utils.StringUtils;
+import prompto.value.Boolean;
 import prompto.value.IValue;
 import prompto.value.ListValue;
 import prompto.value.Text;
@@ -119,6 +120,10 @@ public class TextType extends NativeType {
 	@Override
 	public Collection<IMethodDeclaration> getMemberMethods(Context context, Identifier id) throws PromptoError {
 		switch(id.toString()) {
+		case "startsWith":
+			return Collections.singletonList(STARTS_WITH_METHOD);
+		case "endsWith":
+			return Collections.singletonList(ENDS_WITH_METHOD);
 		case "toLowerCase":
 			return Collections.singletonList(TO_LOWERCASE_METHOD);
 		case "toUpperCase":
@@ -159,11 +164,6 @@ public class TextType extends NativeType {
 			return TextType.instance();
 		}
 
-		@Override
-		public void toDialect(CodeWriter writer) {
-			throw new UnsupportedOperationException();
-		}
-		
 		public boolean hasCompileExactInstanceMember() {
 			return true;
 		};
@@ -199,11 +199,6 @@ public class TextType extends NativeType {
 			return TextType.instance();
 		}
 
-		@Override
-		public void toDialect(CodeWriter writer) {
-			throw new UnsupportedOperationException();
-		}
-		
 		public boolean hasCompileExactInstanceMember() {
 			return true;
 		};
@@ -244,11 +239,6 @@ public class TextType extends NativeType {
 			return new ListType(TextType.instance());
 		}
 
-		@Override
-		public void toDialect(CodeWriter writer) {
-			throw new UnsupportedOperationException();
-		}
-		
 		public boolean hasCompileExactInstanceMember() {
 			return true;
 		};
@@ -288,11 +278,6 @@ public class TextType extends NativeType {
 			return TextType.instance();
 		}
 
-		@Override
-		public void toDialect(CodeWriter writer) {
-			throw new UnsupportedOperationException();
-		}
-		
 		public boolean hasCompileExactInstanceMember() {
 			return true;
 		};
@@ -357,6 +342,78 @@ public class TextType extends NativeType {
 
 	};
 	
+	static IArgument TEXT_VALUE_ARGUMENT = new CategoryArgument(TextType.instance(), new Identifier("value"));
+
+	static final IMethodDeclaration STARTS_WITH_METHOD = new BuiltInMethodDeclaration("startsWith", TEXT_VALUE_ARGUMENT) {
+		
+		@Override
+		public IValue interpret(Context context) throws PromptoError {
+			Text text = (Text)getValue(context);
+			String value = (String)context.getValue(new Identifier("value")).getStorableData();
+			boolean startsWith = text.getStorableData().startsWith(value);
+			return Boolean.valueOf(startsWith);
+		};
+		
+		@Override
+		public IType check(Context context, boolean isStart) {
+			return BooleanType.instance();
+		}
+
+		public boolean hasCompileExactInstanceMember() {
+			return true;
+		};
+		
+		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
+			// push arguments on the stack
+			this.compileAssignments(context, method, flags, assignments);
+			// call replace method
+			Descriptor.Method descriptor = new Descriptor.Method(String.class, boolean.class);
+			MethodConstant constant = new MethodConstant(String.class, "startsWith", descriptor);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, constant);
+			// done
+			if(flags.toPrimitive())
+				return new ResultInfo(boolean.class);
+			else
+				return CompilerUtils.booleanToBoolean(method);
+
+		};
+	};
+
+	
+	static final IMethodDeclaration ENDS_WITH_METHOD = new BuiltInMethodDeclaration("endsWith", TEXT_VALUE_ARGUMENT) {
+		
+		@Override
+		public IValue interpret(Context context) throws PromptoError {
+			Text text = (Text)getValue(context);
+			String value = (String)context.getValue(new Identifier("value")).getStorableData();
+			boolean endsWith = text.getStorableData().endsWith(value);
+			return Boolean.valueOf(endsWith);
+		};
+		
+		@Override
+		public IType check(Context context, boolean isStart) {
+			return BooleanType.instance();
+		}
+
+		public boolean hasCompileExactInstanceMember() {
+			return true;
+		};
+		
+		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
+			// push arguments on the stack
+			this.compileAssignments(context, method, flags, assignments);
+			// call replace method
+			Descriptor.Method descriptor = new Descriptor.Method(String.class, boolean.class);
+			MethodConstant constant = new MethodConstant(String.class, "endsWith", descriptor);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, constant);
+			// done
+			if(flags.toPrimitive())
+				return new ResultInfo(boolean.class);
+			else
+				return CompilerUtils.booleanToBoolean(method);
+		};
+	};
+
 	@Override
 	public Comparator<Text> getComparator(boolean descending) {
 		return descending ? 

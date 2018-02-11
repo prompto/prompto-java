@@ -380,6 +380,16 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedTextEndsWith() throws Exception {
+		checkInterpretedOutput("builtins/textEndsWith.pec");
+	}
+
+	@Test
+	public void testCompiledTextEndsWith() throws Exception {
+		checkCompiledOutput("builtins/textEndsWith.pec");
+	}
+
+	@Test
 	public void testInterpretedTextLowercase() throws Exception {
 		checkInterpretedOutput("builtins/textLowercase.pec");
 	}
@@ -417,6 +427,16 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCompiledTextSplit() throws Exception {
 		checkCompiledOutput("builtins/textSplit.pec");
+	}
+
+	@Test
+	public void testInterpretedTextStartsWith() throws Exception {
+		checkInterpretedOutput("builtins/textStartsWith.pec");
+	}
+
+	@Test
+	public void testCompiledTextStartsWith() throws Exception {
+		checkCompiledOutput("builtins/textStartsWith.pec");
 	}
 
 	@Test

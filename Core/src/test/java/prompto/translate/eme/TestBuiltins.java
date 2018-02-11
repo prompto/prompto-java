@@ -197,6 +197,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTextEndsWith() throws Exception {
+		compareResourceEME("builtins/textEndsWith.pec");
+	}
+
+	@Test
 	public void testTextLowercase() throws Exception {
 		compareResourceEME("builtins/textLowercase.pec");
 	}
@@ -214,6 +219,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testTextSplit() throws Exception {
 		compareResourceEME("builtins/textSplit.pec");
+	}
+
+	@Test
+	public void testTextStartsWith() throws Exception {
+		compareResourceEME("builtins/textStartsWith.pec");
 	}
 
 	@Test
