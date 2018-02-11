@@ -66,7 +66,7 @@ import prompto.expression.DocumentExpression;
 import prompto.expression.EqualsExpression;
 import prompto.expression.ExecuteExpression;
 import prompto.expression.FetchManyExpression;
-import prompto.expression.FilteredListExpression;
+import prompto.expression.FilteredExpression;
 import prompto.expression.FetchOneExpression;
 import prompto.expression.IExpression;
 import prompto.expression.IntDivideExpression;
@@ -1026,7 +1026,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitFilteredListExpression(FilteredListExpressionContext ctx) {
-		FilteredListExpression fetch = this.<FilteredListExpression>getNodeValue(ctx.filtered_list_suffix());
+		FilteredExpression fetch = this.<FilteredExpression>getNodeValue(ctx.filtered_list_suffix());
 		IExpression source = this.<IExpression>getNodeValue(ctx.src);
 		fetch.setSource(source);
 		setNodeValue(ctx, fetch);
@@ -1037,7 +1037,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitFiltered_list_suffix(Filtered_list_suffixContext ctx) {
 		Identifier itemName = this.<Identifier>getNodeValue(ctx.name);
 		IExpression predicate = this.<IExpression>getNodeValue(ctx.predicate);
-		setNodeValue(ctx, new FilteredListExpression(itemName, null, predicate));
+		setNodeValue(ctx, new FilteredExpression(itemName, null, predicate));
 	}
 	
 	@Override

@@ -20,6 +20,16 @@ public class TestFilter extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedFilterFromCursor() throws Exception {
+		checkInterpretedOutput("filter/filterFromCursor.pec");
+	}
+
+	@Test
+	public void testCompiledFilterFromCursor() throws Exception {
+		checkCompiledOutput("filter/filterFromCursor.pec");
+	}
+
+	@Test
 	public void testInterpretedFilterFromList() throws Exception {
 		checkInterpretedOutput("filter/filterFromList.pec");
 	}

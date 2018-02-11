@@ -65,7 +65,7 @@ import prompto.expression.EqualsExpression;
 import prompto.expression.ExecuteExpression;
 import prompto.expression.FetchManyExpression;
 import prompto.expression.FetchOneExpression;
-import prompto.expression.FilteredListExpression;
+import prompto.expression.FilteredExpression;
 import prompto.expression.IExpression;
 import prompto.expression.InstanceExpression;
 import prompto.expression.IntDivideExpression;
@@ -1099,7 +1099,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 		Identifier itemName = this.<Identifier>getNodeValue(ctx.name);
 		IExpression source = this.<IExpression>getNodeValue(ctx.source);
 		IExpression filter = this.<IExpression>getNodeValue(ctx.predicate);
-		setNodeValue(ctx, new FilteredListExpression(itemName, source, filter));
+		setNodeValue(ctx, new FilteredExpression(itemName, source, filter));
 	}
 	
 	

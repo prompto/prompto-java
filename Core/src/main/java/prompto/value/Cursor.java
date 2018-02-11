@@ -4,12 +4,15 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.Filterable;
 import prompto.intrinsic.IterableWithCounts;
+import prompto.intrinsic.PromptoList;
 import prompto.runtime.Context;
 import prompto.store.IStored;
 import prompto.store.IStoredIterable;
@@ -21,7 +24,7 @@ import prompto.type.ListType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
-public class Cursor extends BaseValue implements IIterable<IValue>, IterableWithCounts<IValue> {
+public class Cursor extends BaseValue implements IIterable<IValue>, IterableWithCounts<IValue>, IFilterable {
 
 	Context context;
 	IStoredIterable iterable;
@@ -38,6 +41,12 @@ public class Cursor extends BaseValue implements IIterable<IValue>, IterableWith
 	public Object getStorableData() {
 		throw new UnsupportedOperationException(); // can't be stored
 	}
+	
+	
+	public IType getItemType() {
+		return ((CursorType)getType()).getItemType();
+	}
+
 	
 	@Override
 	public Long getCount() {
@@ -109,7 +118,7 @@ public class Cursor extends BaseValue implements IIterable<IValue>, IterableWith
 				generator.writeStartObject();
 				generator.writeFieldName("type");
 				// serialize Cursor as list
-				IType type = new ListType(((CursorType)getType()).getItemType());
+				IType type = new ListType(getItemType());
 				generator.writeString(type.getTypeName());
 				generator.writeFieldName("totalLength");
 				generator.writeNumber(iterable.totalLength());
@@ -127,5 +136,19 @@ public class Cursor extends BaseValue implements IIterable<IValue>, IterableWith
 		}
 	}
 
+	@Override
+	public Filterable<IValue, IValue> getFilterable(Context context) {
+		return new Filterable<IValue, IValue>() {
+			@Override
+			public IValue filter(Predicate<IValue> predicate) {
+				PromptoList<IValue> filtered = new PromptoList<IValue>(false);
+				for(IValue value : getIterable(context)) {
+					if(predicate.test(value))
+						filtered.add(value);
+				}
+				return new ListValue(getItemType(), filtered);
+			}
+		};
+	}
 
 }

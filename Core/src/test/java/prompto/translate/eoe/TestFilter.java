@@ -7,6 +7,11 @@ import prompto.parser.e.BaseEParserTest;
 public class TestFilter extends BaseEParserTest {
 
 	@Test
+	public void testFilterFromCursor() throws Exception {
+		compareResourceEOE("filter/filterFromCursor.pec");
+	}
+
+	@Test
 	public void testFilterFromList() throws Exception {
 		compareResourceEOE("filter/filterFromList.pec");
 	}

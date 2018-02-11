@@ -21,26 +21,27 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.Filterable;
+import prompto.intrinsic.IterableWithCounts;
 import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.statement.ReturnStatement;
 import prompto.type.BooleanType;
-import prompto.type.ContainerType;
 import prompto.type.IType;
+import prompto.type.IterableType;
 import prompto.type.ListType;
 import prompto.utils.CodeWriter;
 import prompto.value.Boolean;
 import prompto.value.IFilterable;
 import prompto.value.IValue;
 
-public class FilteredListExpression extends Section implements IExpression {
+public class FilteredExpression extends Section implements IExpression {
 
 	Identifier itemName;
 	IExpression source;
 	IExpression predicate;
 	
-	public FilteredListExpression(Identifier itemName, IExpression source, IExpression predicate) {
+	public FilteredExpression(Identifier itemName, IExpression source, IExpression predicate) {
 		this.itemName = itemName;
 		this.source = source;
 		this.predicate = predicate;
@@ -76,10 +77,10 @@ public class FilteredListExpression extends Section implements IExpression {
 	@Override
 	public IType check(Context context) {
 		IType sourceType = source.check(context);
-		if(!(sourceType instanceof ContainerType))
+		if(!(sourceType instanceof IterableType))
 			throw new SyntaxError("Expecting a list, set or tuple as data source !");
 		Context local = context.newChildContext();
-		IType itemType = ((ContainerType)sourceType).getItemType();
+		IType itemType = ((IterableType)sourceType).getItemType();
 		local.registerValue(new Variable(itemName, itemType));
 		IType filterType = predicate.check(local);
 		if(filterType!=BooleanType.instance())
@@ -91,9 +92,9 @@ public class FilteredListExpression extends Section implements IExpression {
 	public IValue interpret(Context context) throws PromptoError {
 		// prepare context for expression evaluation
 		IType sourceType = source.check(context);
-		if(!(sourceType instanceof ContainerType))
+		if(!(sourceType instanceof IterableType))
 			throw new InternalError("Illegal source type: " + sourceType.getTypeName());
-		IType itemType = ((ContainerType)sourceType).getItemType();
+		IType itemType = ((IterableType)sourceType).getItemType();
 		Context local = context.newChildContext();
 		Variable item = new Variable(itemName, itemType);
 		local.registerValue(item);
@@ -142,8 +143,12 @@ public class FilteredListExpression extends Section implements IExpression {
 		Descriptor.Method proto = new Descriptor.Method(void.class);
 		MethodConstant m = new MethodConstant(innerClass, "<init>", proto);
 		method.addInstruction(Opcode.INVOKESPECIAL, m);
+		// adjust return type
+		Type resultType = srcinfo.getType();
+		if(srcinfo.getType().equals(IterableWithCounts.class))
+			resultType = Iterable.class;
 		// invoke filter on source
-		Descriptor.Method desc = new Descriptor.Method(Predicate.class, srcinfo.getType());
+		Descriptor.Method desc = new Descriptor.Method(Predicate.class, resultType);
 		if(srcinfo.isInterface()) {
 			InterfaceConstant i = new InterfaceConstant(new ClassConstant(srcinfo.getType()), "filter",  desc);
 			method.addInstruction(Opcode.INVOKEINTERFACE, i);
