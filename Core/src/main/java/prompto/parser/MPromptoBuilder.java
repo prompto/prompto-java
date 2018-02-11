@@ -459,11 +459,36 @@ public class MPromptoBuilder extends MParserBaseListener {
 		setNodeValue(ctx, new BreakStatement());
 	}
 
+	
+	@Override
+	public void exitCallableItemSelector(CallableItemSelectorContext ctx) {
+		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		setNodeValue(ctx, new ItemSelector(exp));
+	}
+	
+	
+	@Override
+	public void exitCallableMemberSelector(CallableMemberSelectorContext ctx) {
+		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		setNodeValue(ctx, new MemberSelector(name));
+	}
+	
+	
 	@Override
 	public void exitCallableRoot(CallableRootContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
 		setNodeValue(ctx, new UnresolvedIdentifier(name));
 	}
+	
+	
+	@Override
+	public void exitCallableSelector(CallableSelectorContext ctx) {
+		IExpression parent = this.<IExpression>getNodeValue(ctx.parent);
+		SelectorExpression select = this.<SelectorExpression>getNodeValue(ctx.select);
+		select.setParent(parent);
+		setNodeValue(ctx, select);
+	}
+
 
 	@Override
 	public void exitCastExpression(CastExpressionContext ctx) {
