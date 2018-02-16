@@ -1,6 +1,6 @@
 package prompto.parser.e;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -8,6 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import prompto.expression.AndExpression;
 import prompto.expression.IExpression;
 import prompto.parser.ECleverParser;
 import prompto.parser.EIndentingLexer;
@@ -52,6 +53,12 @@ public class TestPrecedence extends BaseEParserTest {
 		Context context = Context.newGlobalContext();
 		Object value = exp.interpret(context);
 		assertEquals(5L,((Integer)value).longValue());
+	}
+
+	@Test
+	public void testEqAndIn() throws Exception {
+		IExpression exp = parse_expression("module = app and releaseStatus in [PENDING, RELEASED]");
+		assertTrue(exp instanceof AndExpression);
 	}
 
 	IExpression parse_expression(String code) {
