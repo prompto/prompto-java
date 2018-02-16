@@ -5764,64 +5764,90 @@ public class EParser extends AbstractParser {
 					switch ( getInterpreter().adaptivePredict(_input,54,_ctx) ) {
 					case 1:
 						{
-						_localctx = new MultiplyExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						((MultiplyExpressionContext)_localctx).left = _prevctx;
+						_localctx = new AndExpressionContext(new ExpressionContext(_parentctx, _parentState));
+						((AndExpressionContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1053);
 						if (!(precpred(_ctx, 40))) throw new FailedPredicateException(this, "precpred(_ctx, 40)");
 						setState(1054);
-						multiply();
+						match(AND);
 						setState(1055);
-						((MultiplyExpressionContext)_localctx).right = expression(41);
+						((AndExpressionContext)_localctx).right = expression(41);
 						}
 						break;
 					case 2:
 						{
-						_localctx = new DivideExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						((DivideExpressionContext)_localctx).left = _prevctx;
+						_localctx = new OrExpressionContext(new ExpressionContext(_parentctx, _parentState));
+						((OrExpressionContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(1057);
+						setState(1056);
 						if (!(precpred(_ctx, 39))) throw new FailedPredicateException(this, "precpred(_ctx, 39)");
+						setState(1057);
+						match(OR);
 						setState(1058);
-						divide();
-						setState(1059);
-						((DivideExpressionContext)_localctx).right = expression(40);
+						((OrExpressionContext)_localctx).right = expression(40);
 						}
 						break;
 					case 3:
 						{
-						_localctx = new ModuloExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						((ModuloExpressionContext)_localctx).left = _prevctx;
+						_localctx = new MultiplyExpressionContext(new ExpressionContext(_parentctx, _parentState));
+						((MultiplyExpressionContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(1061);
+						setState(1059);
 						if (!(precpred(_ctx, 38))) throw new FailedPredicateException(this, "precpred(_ctx, 38)");
-						setState(1062);
-						modulo();
-						setState(1063);
-						((ModuloExpressionContext)_localctx).right = expression(39);
+						setState(1060);
+						multiply();
+						setState(1061);
+						((MultiplyExpressionContext)_localctx).right = expression(39);
 						}
 						break;
 					case 4:
 						{
-						_localctx = new IntDivideExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						((IntDivideExpressionContext)_localctx).left = _prevctx;
+						_localctx = new DivideExpressionContext(new ExpressionContext(_parentctx, _parentState));
+						((DivideExpressionContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(1065);
+						setState(1063);
 						if (!(precpred(_ctx, 37))) throw new FailedPredicateException(this, "precpred(_ctx, 37)");
-						setState(1066);
-						idivide();
-						setState(1067);
-						((IntDivideExpressionContext)_localctx).right = expression(38);
+						setState(1064);
+						divide();
+						setState(1065);
+						((DivideExpressionContext)_localctx).right = expression(38);
 						}
 						break;
 					case 5:
 						{
+						_localctx = new ModuloExpressionContext(new ExpressionContext(_parentctx, _parentState));
+						((ModuloExpressionContext)_localctx).left = _prevctx;
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(1067);
+						if (!(precpred(_ctx, 36))) throw new FailedPredicateException(this, "precpred(_ctx, 36)");
+						setState(1068);
+						modulo();
+						setState(1069);
+						((ModuloExpressionContext)_localctx).right = expression(37);
+						}
+						break;
+					case 6:
+						{
+						_localctx = new IntDivideExpressionContext(new ExpressionContext(_parentctx, _parentState));
+						((IntDivideExpressionContext)_localctx).left = _prevctx;
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(1071);
+						if (!(precpred(_ctx, 35))) throw new FailedPredicateException(this, "precpred(_ctx, 35)");
+						setState(1072);
+						idivide();
+						setState(1073);
+						((IntDivideExpressionContext)_localctx).right = expression(36);
+						}
+						break;
+					case 7:
+						{
 						_localctx = new AddExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						((AddExpressionContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(1069);
-						if (!(precpred(_ctx, 36))) throw new FailedPredicateException(this, "precpred(_ctx, 36)");
-						setState(1070);
+						setState(1075);
+						if (!(precpred(_ctx, 34))) throw new FailedPredicateException(this, "precpred(_ctx, 34)");
+						setState(1076);
 						((AddExpressionContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !(_la==PLUS || _la==MINUS) ) {
@@ -5832,125 +5858,99 @@ public class EParser extends AbstractParser {
 							_errHandler.reportMatch(this);
 							consume();
 						}
-						setState(1071);
-						((AddExpressionContext)_localctx).right = expression(37);
-						}
-						break;
-					case 6:
-						{
-						_localctx = new LessThanExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						((LessThanExpressionContext)_localctx).left = _prevctx;
-						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(1072);
-						if (!(precpred(_ctx, 35))) throw new FailedPredicateException(this, "precpred(_ctx, 35)");
-						setState(1073);
-						match(LT);
-						setState(1074);
-						((LessThanExpressionContext)_localctx).right = expression(36);
-						}
-						break;
-					case 7:
-						{
-						_localctx = new LessThanOrEqualExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						((LessThanOrEqualExpressionContext)_localctx).left = _prevctx;
-						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(1075);
-						if (!(precpred(_ctx, 34))) throw new FailedPredicateException(this, "precpred(_ctx, 34)");
-						setState(1076);
-						match(LTE);
 						setState(1077);
-						((LessThanOrEqualExpressionContext)_localctx).right = expression(35);
+						((AddExpressionContext)_localctx).right = expression(35);
 						}
 						break;
 					case 8:
 						{
-						_localctx = new GreaterThanExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						((GreaterThanExpressionContext)_localctx).left = _prevctx;
+						_localctx = new LessThanExpressionContext(new ExpressionContext(_parentctx, _parentState));
+						((LessThanExpressionContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1078);
 						if (!(precpred(_ctx, 33))) throw new FailedPredicateException(this, "precpred(_ctx, 33)");
 						setState(1079);
-						match(GT);
+						match(LT);
 						setState(1080);
-						((GreaterThanExpressionContext)_localctx).right = expression(34);
+						((LessThanExpressionContext)_localctx).right = expression(34);
 						}
 						break;
 					case 9:
 						{
-						_localctx = new GreaterThanOrEqualExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						((GreaterThanOrEqualExpressionContext)_localctx).left = _prevctx;
+						_localctx = new LessThanOrEqualExpressionContext(new ExpressionContext(_parentctx, _parentState));
+						((LessThanOrEqualExpressionContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1081);
 						if (!(precpred(_ctx, 32))) throw new FailedPredicateException(this, "precpred(_ctx, 32)");
 						setState(1082);
-						match(GTE);
+						match(LTE);
 						setState(1083);
-						((GreaterThanOrEqualExpressionContext)_localctx).right = expression(33);
+						((LessThanOrEqualExpressionContext)_localctx).right = expression(33);
 						}
 						break;
 					case 10:
 						{
-						_localctx = new EqualsExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						((EqualsExpressionContext)_localctx).left = _prevctx;
+						_localctx = new GreaterThanExpressionContext(new ExpressionContext(_parentctx, _parentState));
+						((GreaterThanExpressionContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1084);
-						if (!(precpred(_ctx, 29))) throw new FailedPredicateException(this, "precpred(_ctx, 29)");
+						if (!(precpred(_ctx, 31))) throw new FailedPredicateException(this, "precpred(_ctx, 31)");
 						setState(1085);
-						match(EQ);
+						match(GT);
 						setState(1086);
-						((EqualsExpressionContext)_localctx).right = expression(30);
+						((GreaterThanExpressionContext)_localctx).right = expression(32);
 						}
 						break;
 					case 11:
 						{
-						_localctx = new NotEqualsExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						((NotEqualsExpressionContext)_localctx).left = _prevctx;
+						_localctx = new GreaterThanOrEqualExpressionContext(new ExpressionContext(_parentctx, _parentState));
+						((GreaterThanOrEqualExpressionContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1087);
-						if (!(precpred(_ctx, 28))) throw new FailedPredicateException(this, "precpred(_ctx, 28)");
+						if (!(precpred(_ctx, 30))) throw new FailedPredicateException(this, "precpred(_ctx, 30)");
 						setState(1088);
-						match(LTGT);
+						match(GTE);
 						setState(1089);
-						((NotEqualsExpressionContext)_localctx).right = expression(29);
+						((GreaterThanOrEqualExpressionContext)_localctx).right = expression(31);
 						}
 						break;
 					case 12:
 						{
-						_localctx = new RoughlyEqualsExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						((RoughlyEqualsExpressionContext)_localctx).left = _prevctx;
+						_localctx = new EqualsExpressionContext(new ExpressionContext(_parentctx, _parentState));
+						((EqualsExpressionContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1090);
 						if (!(precpred(_ctx, 27))) throw new FailedPredicateException(this, "precpred(_ctx, 27)");
 						setState(1091);
-						match(TILDE);
+						match(EQ);
 						setState(1092);
-						((RoughlyEqualsExpressionContext)_localctx).right = expression(28);
+						((EqualsExpressionContext)_localctx).right = expression(28);
 						}
 						break;
 					case 13:
 						{
-						_localctx = new OrExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						((OrExpressionContext)_localctx).left = _prevctx;
+						_localctx = new NotEqualsExpressionContext(new ExpressionContext(_parentctx, _parentState));
+						((NotEqualsExpressionContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1093);
 						if (!(precpred(_ctx, 26))) throw new FailedPredicateException(this, "precpred(_ctx, 26)");
 						setState(1094);
-						match(OR);
+						match(LTGT);
 						setState(1095);
-						((OrExpressionContext)_localctx).right = expression(27);
+						((NotEqualsExpressionContext)_localctx).right = expression(27);
 						}
 						break;
 					case 14:
 						{
-						_localctx = new AndExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						((AndExpressionContext)_localctx).left = _prevctx;
+						_localctx = new RoughlyEqualsExpressionContext(new ExpressionContext(_parentctx, _parentState));
+						((RoughlyEqualsExpressionContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1096);
 						if (!(precpred(_ctx, 25))) throw new FailedPredicateException(this, "precpred(_ctx, 25)");
 						setState(1097);
-						match(AND);
+						match(TILDE);
 						setState(1098);
-						((AndExpressionContext)_localctx).right = expression(26);
+						((RoughlyEqualsExpressionContext)_localctx).right = expression(26);
 						}
 						break;
 					case 15:
@@ -6115,7 +6115,7 @@ public class EParser extends AbstractParser {
 						((IsNotExpressionContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1144);
-						if (!(precpred(_ctx, 31))) throw new FailedPredicateException(this, "precpred(_ctx, 31)");
+						if (!(precpred(_ctx, 29))) throw new FailedPredicateException(this, "precpred(_ctx, 29)");
 						setState(1145);
 						match(IS);
 						setState(1146);
@@ -6130,7 +6130,7 @@ public class EParser extends AbstractParser {
 						((IsExpressionContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1148);
-						if (!(precpred(_ctx, 30))) throw new FailedPredicateException(this, "precpred(_ctx, 30)");
+						if (!(precpred(_ctx, 28))) throw new FailedPredicateException(this, "precpred(_ctx, 28)");
 						setState(1149);
 						match(IS);
 						setState(1150);
@@ -19527,9 +19527,9 @@ public class EParser extends AbstractParser {
 		case 10:
 			return precpred(_ctx, 32);
 		case 11:
-			return precpred(_ctx, 29);
+			return precpred(_ctx, 31);
 		case 12:
-			return precpred(_ctx, 28);
+			return precpred(_ctx, 30);
 		case 13:
 			return precpred(_ctx, 27);
 		case 14:
@@ -19557,9 +19557,9 @@ public class EParser extends AbstractParser {
 		case 25:
 			return precpred(_ctx, 1);
 		case 26:
-			return precpred(_ctx, 31);
+			return precpred(_ctx, 29);
 		case 27:
-			return precpred(_ctx, 30);
+			return precpred(_ctx, 28);
 		case 28:
 			return precpred(_ctx, 23);
 		case 29:
@@ -20265,20 +20265,20 @@ public class EParser extends AbstractParser {
 		"\3\2\2\2\u041d\u040e\3\2\2\2\u041d\u0411\3\2\2\2\u041d\u0414\3\2\2\2\u041d"+
 		"\u0415\3\2\2\2\u041d\u0416\3\2\2\2\u041d\u0417\3\2\2\2\u041d\u0418\3\2"+
 		"\2\2\u041d\u0419\3\2\2\2\u041d\u041a\3\2\2\2\u041d\u041b\3\2\2\2\u041d"+
-		"\u041c\3\2\2\2\u041e\u0488\3\2\2\2\u041f\u0420\f*\2\2\u0420\u0421\5\u0132"+
-		"\u009a\2\u0421\u0422\5X-+\u0422\u0487\3\2\2\2\u0423\u0424\f)\2\2\u0424"+
-		"\u0425\5\u0134\u009b\2\u0425\u0426\5X-*\u0426\u0487\3\2\2\2\u0427\u0428"+
-		"\f(\2\2\u0428\u0429\5\u0138\u009d\2\u0429\u042a\5X-)\u042a\u0487\3\2\2"+
-		"\2\u042b\u042c\f\'\2\2\u042c\u042d\5\u0136\u009c\2\u042d\u042e\5X-(\u042e"+
-		"\u0487\3\2\2\2\u042f\u0430\f&\2\2\u0430\u0431\t\2\2\2\u0431\u0487\5X-"+
-		"\'\u0432\u0433\f%\2\2\u0433\u0434\7*\2\2\u0434\u0487\5X-&\u0435\u0436"+
-		"\f$\2\2\u0436\u0437\7+\2\2\u0437\u0487\5X-%\u0438\u0439\f#\2\2\u0439\u043a"+
-		"\7(\2\2\u043a\u0487\5X-$\u043b\u043c\f\"\2\2\u043c\u043d\7)\2\2\u043d"+
-		"\u0487\5X-#\u043e\u043f\f\37\2\2\u043f\u0440\7-\2\2\u0440\u0487\5X- \u0441"+
-		"\u0442\f\36\2\2\u0442\u0443\7,\2\2\u0443\u0487\5X-\37\u0444\u0445\f\35"+
-		"\2\2\u0445\u0446\7\61\2\2\u0446\u0487\5X-\36\u0447\u0448\f\34\2\2\u0448"+
-		"\u0449\7\u0082\2\2\u0449\u0487\5X-\35\u044a\u044b\f\33\2\2\u044b\u044c"+
-		"\7I\2\2\u044c\u0487\5X-\34\u044d\u044e\f\32\2\2\u044e\u044f\7o\2\2\u044f"+
+		"\u041c\3\2\2\2\u041e\u0488\3\2\2\2\u041f\u0420\f*\2\2\u0420\u0421\7I\2"+
+		"\2\u0421\u0487\5X-+\u0422\u0423\f)\2\2\u0423\u0424\7\u0082\2\2\u0424\u0487"+
+		"\5X-*\u0425\u0426\f(\2\2\u0426\u0427\5\u0132\u009a\2\u0427\u0428\5X-)"+
+		"\u0428\u0487\3\2\2\2\u0429\u042a\f\'\2\2\u042a\u042b\5\u0134\u009b\2\u042b"+
+		"\u042c\5X-(\u042c\u0487\3\2\2\2\u042d\u042e\f&\2\2\u042e\u042f\5\u0138"+
+		"\u009d\2\u042f\u0430\5X-\'\u0430\u0487\3\2\2\2\u0431\u0432\f%\2\2\u0432"+
+		"\u0433\5\u0136\u009c\2\u0433\u0434\5X-&\u0434\u0487\3\2\2\2\u0435\u0436"+
+		"\f$\2\2\u0436\u0437\t\2\2\2\u0437\u0487\5X-%\u0438\u0439\f#\2\2\u0439"+
+		"\u043a\7*\2\2\u043a\u0487\5X-$\u043b\u043c\f\"\2\2\u043c\u043d\7+\2\2"+
+		"\u043d\u0487\5X-#\u043e\u043f\f!\2\2\u043f\u0440\7(\2\2\u0440\u0487\5"+
+		"X-\"\u0441\u0442\f \2\2\u0442\u0443\7)\2\2\u0443\u0487\5X-!\u0444\u0445"+
+		"\f\35\2\2\u0445\u0446\7-\2\2\u0446\u0487\5X-\36\u0447\u0448\f\34\2\2\u0448"+
+		"\u0449\7,\2\2\u0449\u0487\5X-\35\u044a\u044b\f\33\2\2\u044b\u044c\7\61"+
+		"\2\2\u044c\u0487\5X-\34\u044d\u044e\f\32\2\2\u044e\u044f\7o\2\2\u044f"+
 		"\u0450\5X-\2\u0450\u0451\7a\2\2\u0451\u0452\5X-\33\u0452\u0487\3\2\2\2"+
 		"\u0453\u0454\f\30\2\2\u0454\u0455\7p\2\2\u0455\u0487\5X-\31\u0456\u0457"+
 		"\f\27\2\2\u0457\u0458\7X\2\2\u0458\u0487\5X-\30\u0459\u045a\f\26\2\2\u045a"+
@@ -20290,12 +20290,12 @@ public class EParser extends AbstractParser {
 		"\7G\2\2\u046d\u0487\5X-\23\u046e\u046f\f\21\2\2\u046f\u0470\7{\2\2\u0470"+
 		"\u0471\7X\2\2\u0471\u0472\7J\2\2\u0472\u0487\5X-\22\u0473\u0474\f\3\2"+
 		"\2\u0474\u0475\7l\2\2\u0475\u0476\7`\2\2\u0476\u0477\5\u00ba^\2\u0477"+
-		"\u0478\7p\2\2\u0478\u0479\5X-\4\u0479\u0487\3\2\2\2\u047a\u047b\f!\2\2"+
-		"\u047b\u047c\7s\2\2\u047c\u047d\7{\2\2\u047d\u0487\5\u011a\u008e\2\u047e"+
-		"\u047f\f \2\2\u047f\u0480\7s\2\2\u0480\u0487\5\u011a\u008e\2\u0481\u0482"+
+		"\u0478\7p\2\2\u0478\u0479\5X-\4\u0479\u0487\3\2\2\2\u047a\u047b\f\37\2"+
+		"\2\u047b\u047c\7s\2\2\u047c\u047d\7{\2\2\u047d\u0487\5\u011a\u008e\2\u047e"+
+		"\u047f\f\36\2\2\u047f\u0480\7s\2\2\u0480\u0487\5\u011a\u008e\2\u0481\u0482"+
 		"\f\31\2\2\u0482\u0483\7K\2\2\u0483\u0487\5\u00ccg\2\u0484\u0485\f\n\2"+
-		"\2\u0485\u0487\5p9\2\u0486\u041f\3\2\2\2\u0486\u0423\3\2\2\2\u0486\u0427"+
-		"\3\2\2\2\u0486\u042b\3\2\2\2\u0486\u042f\3\2\2\2\u0486\u0432\3\2\2\2\u0486"+
+		"\2\u0485\u0487\5p9\2\u0486\u041f\3\2\2\2\u0486\u0422\3\2\2\2\u0486\u0425"+
+		"\3\2\2\2\u0486\u0429\3\2\2\2\u0486\u042d\3\2\2\2\u0486\u0431\3\2\2\2\u0486"+
 		"\u0435\3\2\2\2\u0486\u0438\3\2\2\2\u0486\u043b\3\2\2\2\u0486\u043e\3\2"+
 		"\2\2\u0486\u0441\3\2\2\2\u0486\u0444\3\2\2\2\u0486\u0447\3\2\2\2\u0486"+
 		"\u044a\3\2\2\2\u0486\u044d\3\2\2\2\u0486\u0453\3\2\2\2\u0486\u0456\3\2"+
