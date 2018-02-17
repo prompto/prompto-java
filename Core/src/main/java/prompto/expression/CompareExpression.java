@@ -150,7 +150,7 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 			throw new SyntaxError("Unable to interpret predicate");
 		else {
 			AttributeDeclaration decl = context.findAttribute(name);
-			AttributeInfo info = decl==null ? null : decl.getAttributeInfo();
+			AttributeInfo info = decl==null ? null : decl.getAttributeInfo(context);
 			if(value instanceof IInstance)
 				value = ((IInstance)value).getMember(context, new Identifier(IStore.dbIdName), false);
 			MatchOp matchOp = getMatchOp();
@@ -208,7 +208,7 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 		boolean reverse = name==null;
 		if(reverse)
 			name = readFieldName(right);
-		AttributeInfo info = context.findAttribute(name).getAttributeInfo();
+		AttributeInfo info = context.findAttribute(name).getAttributeInfo(context);
 		CompilerUtils.compileAttributeInfo(context, method, flags, info);
 		return reverse;
 	}

@@ -5,8 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import prompto.code.ICodeStore;
@@ -25,6 +27,7 @@ import prompto.debug.DebugEventClient;
 import prompto.debug.DebugRequestServer;
 import prompto.debug.LocalDebugger;
 import prompto.declaration.AttributeDeclaration;
+import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
@@ -213,7 +216,14 @@ public abstract class Standalone {
 		logger.info(()->"Initializing schema...");
 		Map<String, AttributeDeclaration> columns = getMinimalDataColumns(dataStore);
 		codeStore.collectStorableAttributes(columns);
-		List<AttributeInfo> infos = columns.values().stream().map((c)->c.getAttributeInfo()).collect(Collectors.toList());
+		Function<Identifier, IDeclaration> locator = id->{
+			Iterable<IDeclaration> found = codeStore.fetchLatestDeclarations(id.toString());
+			if(found==null)
+				return null;
+			Iterator<IDeclaration> decls = found.iterator();
+			return decls.hasNext() ? decls.next() : null;
+		};
+		List<AttributeInfo> infos = columns.values().stream().map((c)->c.getAttributeInfo(locator)).collect(Collectors.toList());
 		dataStore.createOrUpdateAttributes(infos);
 		logger.info(()->"Schema successfully initialized.");
 	}

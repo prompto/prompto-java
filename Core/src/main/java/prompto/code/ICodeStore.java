@@ -18,6 +18,7 @@ import prompto.parser.ECleverParser;
 import prompto.parser.ISection;
 import prompto.parser.MCleverParser;
 import prompto.parser.OCleverParser;
+import prompto.runtime.Context;
 import prompto.store.AttributeInfo;
 import prompto.type.CategoryType;
 import prompto.utils.ISingleton;
@@ -152,7 +153,7 @@ public interface ICodeStore {
 
 	Resource fetchSpecificResource(String path, PromptoVersion version);
 	
-	default public AttributeInfo fetchAttributeInfo(String name) {
+	default public AttributeInfo fetchAttributeInfo(Context context, String name) {
 		if("category".equals(name))
 			return AttributeInfo.CATEGORY;
 		else {
@@ -162,7 +163,7 @@ public interface ICodeStore {
 			else return StreamSupport.stream(decls.spliterator(), false)
 					.filter(d->d instanceof AttributeDeclaration)
 					.map(d->(AttributeDeclaration)d)
-					.map(AttributeDeclaration::getAttributeInfo)
+					.map(d->d.getAttributeInfo(context))
 					.findFirst()
 					.orElse(null);
 		}

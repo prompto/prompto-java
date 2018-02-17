@@ -5,13 +5,14 @@ import prompto.declaration.IEnumeratedDeclaration;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.store.Family;
 import prompto.value.IValue;
 
 
 public class EnumeratedCategoryType extends CategoryType {
 
 	public EnumeratedCategoryType(Identifier id) {
-		super(id); 
+		super(Family.ENUMERATED, id); 
 	}
 	
 	@Override

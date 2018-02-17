@@ -43,13 +43,13 @@ public class OrderByClause extends Section {
 	public void interpretQuery(Context context, IQueryBuilder q) {
 		// TODO members
 		Identifier name = qualifiedName.getFirst();
-		AttributeInfo info = context.findAttribute(name.toString()).getAttributeInfo();
+		AttributeInfo info = context.findAttribute(name.toString()).getAttributeInfo(context);
 		q.orderBy(info, isDescending());
 	}
 
 	public void compileQuery(Context context, MethodInfo method, Flags flags) {
 		Identifier name = qualifiedName.getFirst();
-		AttributeInfo info = context.findAttribute(name.toString()).getAttributeInfo();
+		AttributeInfo info = context.findAttribute(name.toString()).getAttributeInfo(context);
 		CompilerUtils.compileAttributeInfo(context, method, flags, info);
 		method.addInstruction(descending ? Opcode.ICONST_1 : Opcode.ICONST_0);
 		InterfaceConstant i = new InterfaceConstant(IQueryBuilder.class, "orderBy", 

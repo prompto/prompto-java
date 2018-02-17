@@ -57,7 +57,7 @@ public class CodeStoreBootstrapper {
 		columns = fetchLatestDeclarations(columns);
 		registerColumnAttributes(columns.values());
 		if(store!=null) {
-			List<AttributeInfo> infos = columns.values().stream().map((c)->c.getAttributeInfo()).collect(Collectors.toList());
+			List<AttributeInfo> infos = columns.values().stream().map((c)->c.getAttributeInfo(context)).collect(Collectors.toList());
 			store.createOrUpdateAttributes(infos);
 		}
 	}

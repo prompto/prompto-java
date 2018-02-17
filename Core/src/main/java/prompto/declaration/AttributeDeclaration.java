@@ -2,6 +2,7 @@ package prompto.declaration;
 
 import java.lang.reflect.Modifier;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import prompto.compiler.ClassConstant;
@@ -27,6 +28,7 @@ import prompto.store.AttributeInfo;
 import prompto.store.Family;
 import prompto.type.ContainerType;
 import prompto.type.IType;
+import prompto.type.NativeType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
 import prompto.value.IValue;
@@ -67,14 +69,30 @@ public class AttributeDeclaration extends BaseDeclaration {
 		return this.type.toString() + " " + this.getName();
 	}
 	
-	public AttributeInfo getAttributeInfo() {
-		List<String> list = indexTypes==null ? null : indexTypes.stream().map((id)->
-			id.toString()).collect(Collectors.toList());
+	public AttributeInfo getAttributeInfo(Context context) {
+		return getAttributeInfo(id->context.getRegisteredDeclaration(IDeclaration.class, id));
+	}
+	
+	
+	public AttributeInfo getAttributeInfo(Function<Identifier, IDeclaration> locator) {
+		List<String> list = indexTypes==null ?  null : 
+					indexTypes.stream()
+						.map((id)->id.toString())
+						.collect(Collectors.toList());
 		boolean collection = type instanceof ContainerType;
-		Family family = collection ? ((ContainerType)type).getItemType().getFamily() : type.getFamily();
+		Family family = getFamily(locator, collection);
 		return new AttributeInfo(getName(), family, collection, list);
 	}
 	
+	private Family getFamily(Function<Identifier, IDeclaration> locator, boolean collection) {
+		IType familyType = collection ? ((ContainerType)type).getItemType() : type;
+		if(familyType instanceof NativeType)
+			return familyType.getFamily();
+		Identifier typeName = familyType.getTypeNameId();
+		IDeclaration decl = locator.apply(typeName);
+		return decl.getType(null).getFamily();
+	}
+
 	public IType getType() {
 		return type;
 	}

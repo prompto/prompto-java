@@ -312,7 +312,7 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 		if(value instanceof IInstance)
 			value = ((IInstance)value).getMember(context, new Identifier(IStore.dbIdName), false);
 		AttributeDeclaration decl = context.findAttribute(name);
-		AttributeInfo info = decl==null ? null : decl.getAttributeInfo();
+		AttributeInfo info = decl==null ? null : decl.getAttributeInfo(context);
 		Object data = value==null ? null : value.getStorableData();
 		MatchOp match = getMatchOp();
 		query.<Object>verify(info, match, data);
@@ -357,7 +357,7 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 		boolean reverse = name==null;
 		if(reverse)
 			name = readFieldName(right);
-		AttributeInfo info = context.findAttribute(name).getAttributeInfo();
+		AttributeInfo info = context.findAttribute(name).getAttributeInfo(context);
 		CompilerUtils.compileAttributeInfo(context, method, flags, info);
 		return reverse;
 	}

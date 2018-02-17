@@ -347,7 +347,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 		MatchOp matchOp = getMatchOp(context, getAttributeType(context, name), value.getType(), this.operator, reverse);
 		if(value instanceof IInstance)
 			value = ((IInstance)value).getMember(context, new Identifier(IStore.dbIdName), false);
-		AttributeInfo info = context.findAttribute(name).getAttributeInfo();
+		AttributeInfo info = context.findAttribute(name).getAttributeInfo(context);
 		Object data = value==null ? null : value.getStorableData();
 		query.<Object>verify(info, matchOp, data);
 		if(operator.name().startsWith("NOT_"))
@@ -368,7 +368,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 			else
 				throw new SyntaxError("Unable to interpret predicate");
 		}
-		AttributeInfo info = context.findAttribute(name).getAttributeInfo();
+		AttributeInfo info = context.findAttribute(name).getAttributeInfo(context);
 		CompilerUtils.compileAttributeInfo(context, method, flags, info);
 		MatchOp match = getMatchOp(context, getAttributeType(context, name), valueType, this.operator, reverse);
 		CompilerUtils.compileJavaEnum(context, method, flags, match);
