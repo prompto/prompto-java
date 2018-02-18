@@ -1889,7 +1889,9 @@ public class OPromptoBuilder extends OParserBaseListener {
 		IdentifierList attrs = this.<IdentifierList>getNodeValue(ctx.attrs);
 		NativeCategoryBindingList bindings = this.<NativeCategoryBindingList>getNodeValue(ctx.bindings);
 		MethodDeclarationList methods = this.<MethodDeclarationList>getNodeValue(ctx.methods);
-		setNodeValue(ctx, new NativeResourceDeclaration(name, attrs, bindings, null, methods));
+		NativeResourceDeclaration decl = new NativeResourceDeclaration(name, attrs, bindings, null, methods);
+		decl.setStorable(ctx.STORABLE()!=null);
+		setNodeValue(ctx, decl);
 	}
 	
 	@Override
