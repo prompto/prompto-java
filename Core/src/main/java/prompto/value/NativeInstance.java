@@ -62,9 +62,21 @@ public class NativeInstance extends BaseValue implements IInstance {
 	
 	@Override
 	public Object getStorableData() {
-		throw new UnsupportedOperationException(); // TODO
+		if(this.storable==null)
+			throw new NotStorableError();
+		else
+			return this.getOrCreateDbId();
 	}
 	
+	private Object getOrCreateDbId() throws NotStorableError {
+		Object dbId = getDbId();
+		if(dbId==null) {
+			dbId = this.storable.getOrCreateDbId();
+			setDbId(dbId);
+		}
+		return dbId;
+	}
+
 
 	@Override
 	public IStorable getStorable() {
@@ -87,14 +99,11 @@ public class NativeInstance extends BaseValue implements IInstance {
 	public void collectStorables(Consumer<IStorable> collector) throws PromptoError {
 		if(storable==null)
 			throw new NotStorableError();
-		if(!storable.isDirty())
+		if(storable.isDirty()) {
+			getOrCreateDbId();
 			collector.accept(storable);
-		/* TODO get child storables of native instance
-		for(IValue value : values.values()) {
-			if(value instanceof IInstance)
-				((IInstance)value).collectStorables(list);
 		}
-		*/
+		// TODO get child storables of native instance
 	}
 	
 	public boolean isMutable() {
@@ -217,14 +226,26 @@ public class NativeInstance extends BaseValue implements IInstance {
 		}
 	}
 
-	private Object getDbId() {
+	public Object getDbId() {
 		try {
-			Field field = this.getClass().getField(IStore.dbIdName);
-			return field.get(this);
+			Field field = instance.getClass().getDeclaredField(IStore.dbIdName);
+			field.setAccessible(true);
+			return field.get(instance);
 		} catch (Throwable t) {
 			throw new RuntimeException(t);
 		}
 	}
+	
+	public void setDbId(Object dbId) {
+		try {
+			Field field = instance.getClass().getDeclaredField(IStore.dbIdName);
+			field.setAccessible(true);
+			field.set(instance, dbId);
+		} catch (Throwable t) {
+			throw new RuntimeException(t);
+		}
+	}
+
 
 	private void setValue(Method setter, Object data) throws PromptoError {
 		try {

@@ -12,9 +12,18 @@ import prompto.value.IResource;
 
 public class Url implements IResource {
 	
+	Object dbId;
 	URL url;
 	BufferedReader reader;
 	String encoding = "utf-8";
+	
+	public void setDbId(Object dbId) {
+		this.dbId = dbId;
+	}
+	
+	public Object getDbId() {
+		return dbId;
+	}
 	
 	public void setPath(String path) throws MalformedURLException {
 		url = new URL(path);

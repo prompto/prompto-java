@@ -38,6 +38,11 @@ public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 	}
 	
 	@Override
+	protected void setDbId(Context context, IInstance instance, Object dbId) {
+		((NativeInstance)instance).setDbId(dbId);
+	}
+	
+	@Override
 	protected void toEDialect(CodeWriter writer) {
 		protoToEDialect(writer, false, true);
 		bindingsToEDialect(writer);

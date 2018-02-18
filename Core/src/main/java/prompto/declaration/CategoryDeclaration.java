@@ -135,22 +135,30 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 
 	private void populateInstance(Context context, IStored stored, IInstance instance) throws PromptoError {
 		Object dbId = stored.getDbId();
-		IValue value = TypeUtils.fieldToValue(context, IStore.dbIdName, dbId);
-		instance.setMember(context, new Identifier(IStore.dbIdName), value);
+		setDbId(context, instance, dbId);
 		for(Identifier name : this.getAllAttributes(context)) 
 			populateMember(context, stored, instance, name);
 		if(instance.getStorable()!=null)
 			instance.getStorable().setDirty(false);
 	}
 	
+	protected void setDbId(Context context, IInstance instance, Object dbId) {
+		IValue value = TypeUtils.fieldToValue(context, IStore.dbIdName, dbId);
+		instance.setMember(context, new Identifier(IStore.dbIdName), value);
+	}
+
 	private void populateMember(Context context, IStored stored, IInstance instance, Identifier name) throws PromptoError {
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, name);
 		if(!decl.isStorable())
 			return;
 		Object data = stored.getData(name.toString());
+		populateMember(context, data, instance, decl);
+	}
+	
+	protected void populateMember(Context context, Object data, IInstance instance, AttributeDeclaration decl) throws PromptoError {
 		IValue value = data==null ? null : decl.getType().convertJavaValueToIValue(context, data);
 		if(value!=null)
-			instance.setMember(context, name, value);
+			instance.setMember(context, decl.getId(), value);
 	}
 
 	public void checkConstructorContext(Context context) {

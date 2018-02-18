@@ -30,7 +30,7 @@ define "decode Html charcode" as test method doing:
 and verifying:
 	encoded = "a'b"
 
-define Url as native resource with attributes path and encoding, and bindings:
+define Url as storable native resource with attributes path and encoding, and bindings:
 	
 	define category bindings as:
 		Java: prompto.internet.Url
