@@ -22,6 +22,11 @@ public class TestPredicate extends BaseEParserTest {
 	}
 
 	@Test
+	public void testHasItem() throws Exception {
+		compareResourceEOE("predicate/hasItem.pec");
+	}
+
+	@Test
 	public void testInList() throws Exception {
 		compareResourceEOE("predicate/inList.pec");
 	}

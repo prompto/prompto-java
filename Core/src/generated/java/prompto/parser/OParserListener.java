@@ -838,6 +838,30 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitIntDivideExpression(OParser.IntDivideExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code HasAnyExpression}
+	 * labeled alternative in {@link OParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterHasAnyExpression(OParser.HasAnyExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code HasAnyExpression}
+	 * labeled alternative in {@link OParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitHasAnyExpression(OParser.HasAnyExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code HasExpression}
+	 * labeled alternative in {@link OParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterHasExpression(OParser.HasExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code HasExpression}
+	 * labeled alternative in {@link OParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitHasExpression(OParser.HasExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code TernaryExpression}
 	 * labeled alternative in {@link OParser#expression}.
 	 * @param ctx the parse tree
@@ -849,18 +873,6 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitTernaryExpression(OParser.TernaryExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ContainsAllExpression}
-	 * labeled alternative in {@link OParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterContainsAllExpression(OParser.ContainsAllExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ContainsAllExpression}
-	 * labeled alternative in {@link OParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitContainsAllExpression(OParser.ContainsAllExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code NotEqualsExpression}
 	 * labeled alternative in {@link OParser#expression}.
@@ -958,6 +970,18 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitLessThanOrEqualExpression(OParser.LessThanOrEqualExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code NotHasAnyExpression}
+	 * labeled alternative in {@link OParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterNotHasAnyExpression(OParser.NotHasAnyExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code NotHasAnyExpression}
+	 * labeled alternative in {@link OParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitNotHasAnyExpression(OParser.NotHasAnyExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code AndExpression}
 	 * labeled alternative in {@link OParser#expression}.
 	 * @param ctx the parse tree
@@ -969,6 +993,18 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAndExpression(OParser.AndExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code NotHasExpression}
+	 * labeled alternative in {@link OParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterNotHasExpression(OParser.NotHasExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code NotHasExpression}
+	 * labeled alternative in {@link OParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitNotHasExpression(OParser.NotHasExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ClosureExpression}
 	 * labeled alternative in {@link OParser#expression}.
@@ -982,17 +1018,17 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitClosureExpression(OParser.ClosureExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code NotContainsAnyExpression}
+	 * Enter a parse tree produced by the {@code NotHasAllExpression}
 	 * labeled alternative in {@link OParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterNotContainsAnyExpression(OParser.NotContainsAnyExpressionContext ctx);
+	void enterNotHasAllExpression(OParser.NotHasAllExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code NotContainsAnyExpression}
+	 * Exit a parse tree produced by the {@code NotHasAllExpression}
 	 * labeled alternative in {@link OParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitNotContainsAnyExpression(OParser.NotContainsAnyExpressionContext ctx);
+	void exitNotHasAllExpression(OParser.NotHasAllExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ContainsExpression}
 	 * labeled alternative in {@link OParser#expression}.
@@ -1174,17 +1210,17 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitAddExpression(OParser.AddExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code NotContainsAllExpression}
+	 * Enter a parse tree produced by the {@code HasAllExpression}
 	 * labeled alternative in {@link OParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterNotContainsAllExpression(OParser.NotContainsAllExpressionContext ctx);
+	void enterHasAllExpression(OParser.HasAllExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code NotContainsAllExpression}
+	 * Exit a parse tree produced by the {@code HasAllExpression}
 	 * labeled alternative in {@link OParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitNotContainsAllExpression(OParser.NotContainsAllExpressionContext ctx);
+	void exitHasAllExpression(OParser.HasAllExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code InstanceExpression}
 	 * labeled alternative in {@link OParser#expression}.
@@ -1209,18 +1245,6 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCastExpression(OParser.CastExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ContainsAnyExpression}
-	 * labeled alternative in {@link OParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterContainsAnyExpression(OParser.ContainsAnyExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ContainsAnyExpression}
-	 * labeled alternative in {@link OParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitContainsAnyExpression(OParser.ContainsAnyExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ModuloExpression}
 	 * labeled alternative in {@link OParser#expression}.

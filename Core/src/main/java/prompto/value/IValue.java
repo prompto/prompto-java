@@ -99,6 +99,10 @@ public interface IValue {
 		throw new UnsupportedOperationException("roughly not supported by " + this.getClass().getSimpleName());
 	};
 	
+	default boolean contains(Context context, IValue value) throws PromptoError {
+		throw new UnsupportedOperationException("contains not supported by " + this.getClass().getSimpleName());
+	};
+
 	default ISliceable<IValue> asSliceable(Context context) throws PromptoError {
 		throw new UnsupportedOperationException("asSliceable not supported by " + this.getClass().getSimpleName());
 	};

@@ -50,6 +50,16 @@ public class TestPredicate extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedHasItem() throws Exception {
+		checkInterpretedOutput("predicate/hasItem.pec");
+	}
+
+	@Test
+	public void testCompiledHasItem() throws Exception {
+		checkCompiledOutput("predicate/hasItem.pec");
+	}
+
+	@Test
 	public void testInterpretedInList() throws Exception {
 		checkInterpretedOutput("predicate/inList.pec");
 	}

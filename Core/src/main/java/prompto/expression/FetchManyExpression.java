@@ -219,7 +219,7 @@ public class FetchManyExpression extends FetchOneExpression {
 		IQueryBuilder builder = store.newQueryBuilder();
 		if(type!=null) {
 			AttributeInfo info = AttributeInfo.CATEGORY;
-			builder.verify(info, MatchOp.CONTAINS, type.getTypeName());
+			builder.verify(info, MatchOp.HAS, type.getTypeName());
 		}
 		if(predicate!=null) {
 			if(!(predicate instanceof IPredicateExpression))

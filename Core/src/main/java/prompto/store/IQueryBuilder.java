@@ -5,10 +5,11 @@ package prompto.store;
 public interface IQueryBuilder {
 
 	public static enum MatchOp {
-		EQUALS,
-		ROUGHLY,
-		CONTAINS,
-		CONTAINED,
+		EQUALS,	// strict equality
+		ROUGHLY, // caseless or rounded equality 
+		CONTAINS, // pattern matching
+		HAS, // collection contains value
+		IN, // value in collection 
 		GREATER,
 		LESSER
 	}

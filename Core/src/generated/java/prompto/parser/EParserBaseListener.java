@@ -844,6 +844,30 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterHasAnyExpression(EParser.HasAnyExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitHasAnyExpression(EParser.HasAnyExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterHasExpression(EParser.HasExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitHasExpression(EParser.HasExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterTernaryExpression(EParser.TernaryExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -863,18 +887,6 @@ public class EParserBaseListener implements EParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitFetchStoreExpression(EParser.FetchStoreExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterContainsAllExpression(EParser.ContainsAllExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitContainsAllExpression(EParser.ContainsAllExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1012,6 +1024,18 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNotHasAnyExpression(EParser.NotHasAnyExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNotHasAnyExpression(EParser.NotHasAnyExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAndExpression(EParser.AndExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1031,6 +1055,18 @@ public class EParserBaseListener implements EParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitMethodCallExpression(EParser.MethodCallExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNotHasExpression(EParser.NotHasExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNotHasExpression(EParser.NotHasExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1060,6 +1096,18 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNotHasAllExpression(EParser.NotHasAllExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNotHasAllExpression(EParser.NotHasAllExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBlobExpression(EParser.BlobExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1067,18 +1115,6 @@ public class EParserBaseListener implements EParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBlobExpression(EParser.BlobExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterNotContainsAnyExpression(EParser.NotContainsAnyExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitNotContainsAnyExpression(EParser.NotContainsAnyExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1276,13 +1312,13 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNotContainsAllExpression(EParser.NotContainsAllExpressionContext ctx) { }
+	@Override public void enterHasAllExpression(EParser.HasAllExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNotContainsAllExpression(EParser.NotContainsAllExpressionContext ctx) { }
+	@Override public void exitHasAllExpression(EParser.HasAllExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1307,18 +1343,6 @@ public class EParserBaseListener implements EParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitReadAllExpression(EParser.ReadAllExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterContainsAnyExpression(EParser.ContainsAnyExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitContainsAnyExpression(EParser.ContainsAnyExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

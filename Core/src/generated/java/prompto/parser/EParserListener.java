@@ -766,6 +766,30 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitIntDivideExpression(EParser.IntDivideExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code HasAnyExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterHasAnyExpression(EParser.HasAnyExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code HasAnyExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitHasAnyExpression(EParser.HasAnyExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code HasExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterHasExpression(EParser.HasExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code HasExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitHasExpression(EParser.HasExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code TernaryExpression}
 	 * labeled alternative in {@link EParser#expression}.
 	 * @param ctx the parse tree
@@ -789,18 +813,6 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFetchStoreExpression(EParser.FetchStoreExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ContainsAllExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterContainsAllExpression(EParser.ContainsAllExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ContainsAllExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitContainsAllExpression(EParser.ContainsAllExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code NotEqualsExpression}
 	 * labeled alternative in {@link EParser#expression}.
@@ -934,6 +946,18 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitReadOneExpression(EParser.ReadOneExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code NotHasAnyExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterNotHasAnyExpression(EParser.NotHasAnyExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code NotHasAnyExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitNotHasAnyExpression(EParser.NotHasAnyExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code AndExpression}
 	 * labeled alternative in {@link EParser#expression}.
 	 * @param ctx the parse tree
@@ -957,6 +981,18 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMethodCallExpression(EParser.MethodCallExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code NotHasExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterNotHasExpression(EParser.NotHasExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code NotHasExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitNotHasExpression(EParser.NotHasExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ClosureExpression}
 	 * labeled alternative in {@link EParser#expression}.
@@ -982,6 +1018,18 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitSortedExpression(EParser.SortedExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code NotHasAllExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterNotHasAllExpression(EParser.NotHasAllExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code NotHasAllExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitNotHasAllExpression(EParser.NotHasAllExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code BlobExpression}
 	 * labeled alternative in {@link EParser#expression}.
 	 * @param ctx the parse tree
@@ -993,18 +1041,6 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBlobExpression(EParser.BlobExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code NotContainsAnyExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterNotContainsAnyExpression(EParser.NotContainsAnyExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code NotContainsAnyExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitNotContainsAnyExpression(EParser.NotContainsAnyExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ContainsExpression}
 	 * labeled alternative in {@link EParser#expression}.
@@ -1198,17 +1234,17 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitAddExpression(EParser.AddExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code NotContainsAllExpression}
+	 * Enter a parse tree produced by the {@code HasAllExpression}
 	 * labeled alternative in {@link EParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterNotContainsAllExpression(EParser.NotContainsAllExpressionContext ctx);
+	void enterHasAllExpression(EParser.HasAllExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code NotContainsAllExpression}
+	 * Exit a parse tree produced by the {@code HasAllExpression}
 	 * labeled alternative in {@link EParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitNotContainsAllExpression(EParser.NotContainsAllExpressionContext ctx);
+	void exitHasAllExpression(EParser.HasAllExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code InstanceExpression}
 	 * labeled alternative in {@link EParser#expression}.
@@ -1233,18 +1269,6 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitReadAllExpression(EParser.ReadAllExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ContainsAnyExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterContainsAnyExpression(EParser.ContainsAnyExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ContainsAnyExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitContainsAnyExpression(EParser.ContainsAnyExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code CastExpression}
 	 * labeled alternative in {@link EParser#expression}.

@@ -9,6 +9,8 @@ public enum EqOp {
 	IS_NOT_A,
 	EQUALS("=","==","=="),
 	NOT_EQUALS("<>","!=","!="),
+	CONTAINS,
+	NOT_CONTAINS,
 	ROUGHLY("~","~=","~=");
 
 	String e,o,p;

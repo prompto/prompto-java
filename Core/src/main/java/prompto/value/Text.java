@@ -325,6 +325,16 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
         } else
             return false;
     }
+    
+    @Override
+    public boolean contains(Context context, IValue obj) throws PromptoError {
+        if (obj instanceof Text)
+        	return value.contains(((Text)obj).value);
+        else if(obj instanceof Character)
+        	return value.indexOf(((Character)obj).value) >= 0;
+        else
+            return false;
+    }
 
 	@Override
 	public int hashCode() {

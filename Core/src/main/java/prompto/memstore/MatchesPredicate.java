@@ -28,8 +28,10 @@ public class MatchesPredicate<T extends Object> implements IPredicate {
 			return matchesROUGHLY(data);
 		case CONTAINS:
 			return matchesCONTAINS(data);
-		case CONTAINED:
-			return matchesCONTAINED(data);
+		case HAS:
+			return matchesHAS(data);
+		case IN:
+			return matchesIN(data);
 		case GREATER:
 			return matchesGREATER(data);
 		case LESSER:
@@ -55,20 +57,27 @@ public class MatchesPredicate<T extends Object> implements IPredicate {
 			return false;
 	}
 
-	private boolean matchesCONTAINS(Object data) {
-		if(data instanceof String && value instanceof String)
-			return ((String)data).contains((String)value);
-		else if(data instanceof Collection)
+	private boolean matchesHAS(Object data) {
+		if(data instanceof Collection)
 			return ((Collection<?>)data).contains(value);
 		else
 			return false;
 	}
 
-	private boolean matchesCONTAINED(Object data) {
+	private boolean matchesCONTAINS(Object data) {
+		if(data instanceof String && value instanceof String)
+			return ((String)data).contains((String)value);
+		else if(data instanceof Collection)
+			return ((Collection<?>)data).stream().anyMatch(this::matchesCONTAINS);
+		else
+			return false;
+	}
+
+	private boolean matchesIN(Object data) {
 		if(data instanceof String && value instanceof String)
 			return ((String)value).contains((String)data);
 		else if(value instanceof Collection)
-			return ((Collection<?>)value).contains(data);
+			return ((Collection<?>)value).stream().anyMatch(item->item.equals(data));
 		else
 			return false;
 	}

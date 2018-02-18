@@ -71,8 +71,8 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 		case IN:
 		case NOT_IN:
 			return rt.checkContains(context,lt);
-		case CONTAINS:
-		case NOT_CONTAINS:
+		case HAS:
+		case NOT_HAS:
 			return lt.checkContains(context, rt);
 		default:
 			return lt.checkContainsAllOrAny(context, rt);
@@ -113,14 +113,14 @@ public class ContainsExpression extends Section implements IPredicateExpression,
             case IN:
             case NOT_IN:
             	return compileContains(context, method, flags, right, left);
-            case CONTAINS:
-            case NOT_CONTAINS:
+            case HAS:
+            case NOT_HAS:
             	return compileContains(context, method, flags, left, right);
-            case CONTAINS_ALL:
-            case NOT_CONTAINS_ALL:
+            case HAS_ALL:
+            case NOT_HAS_ALL:
             	return compileContainsAll(context, method, flags, left, right);
-            case CONTAINS_ANY:
-            case NOT_CONTAINS_ANY:
+            case HAS_ANY:
+            case NOT_HAS_ANY:
             	return compileContainsAny(context, method, flags, left, right);
             default:
         		throw new UnsupportedOperationException("Uknown operator: " + operator.name());
@@ -198,20 +198,20 @@ public class ContainsExpression extends Section implements IPredicateExpression,
                 else if(rval instanceof IIterable)
                 	result = containsOne(context, (IIterable<?>)rval, lval);
                 break;
-            case CONTAINS:
-            case NOT_CONTAINS:
+            case HAS:
+            case NOT_HAS:
                 if(lval instanceof IContainer)
                     result = ((IContainer<?>)lval).hasItem(context, rval);
                 else if(lval instanceof IIterable)
                 	result = containsOne(context, (IIterable<?>)lval, rval);
                 break;
-            case CONTAINS_ALL:
-            case NOT_CONTAINS_ALL:
+            case HAS_ALL:
+            case NOT_HAS_ALL:
                 if (lval instanceof IContainer && rval instanceof IContainer)
                     result = containsAll(context, (IContainer<?>)lval, (IContainer<?>)rval);
                 break;
-            case CONTAINS_ANY:
-            case NOT_CONTAINS_ANY:
+            case HAS_ANY:
+            case NOT_HAS_ANY:
                 if (lval instanceof IContainer && rval instanceof IContainer)
                     result = containsAny(context, (IContainer<?>)lval, (IContainer<?>)rval);
                 break;
@@ -400,8 +400,8 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 		if((fieldType==TextType.instance() || valueType==CharacterType.instance()) &&
 				(valueType==TextType.instance() || valueType==CharacterType.instance())) {
 			switch(operator) {
-			case CONTAINS:
-			case NOT_CONTAINS:
+			case HAS:
+			case NOT_HAS:
 				return MatchOp.CONTAINS;
 			default:
 				// throw below
@@ -411,15 +411,15 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 			switch(operator) {
 			case IN:
 			case NOT_IN:
-				return MatchOp.CONTAINED;
+				return MatchOp.IN;
 			default:
 				// throw below
 			}
 		} 
 		if(fieldType instanceof ContainerType) {
 			switch(operator) {
-			case CONTAINS:
-			case NOT_CONTAINS:
+			case HAS:
+			case NOT_HAS:
 				return MatchOp.CONTAINS;
 			default:
 				// throw below

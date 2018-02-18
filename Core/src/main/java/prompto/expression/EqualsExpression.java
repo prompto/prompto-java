@@ -47,7 +47,10 @@ import prompto.store.IQueryBuilder.MatchOp;
 import prompto.store.IStore;
 import prompto.type.AnyType;
 import prompto.type.BooleanType;
+import prompto.type.CharacterType;
+import prompto.type.ContainerType;
 import prompto.type.IType;
+import prompto.type.TextType;
 import prompto.utils.CodeWriter;
 import prompto.value.Boolean;
 import prompto.value.Character;
@@ -104,9 +107,20 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 	
 	@Override
 	public IType check(Context context) {
-		left.check(context);
-		right.check(context);
-		return BooleanType.instance(); // can compare all objects
+		IType lt = left.check(context);
+		if(lt instanceof ContainerType)
+			lt = ((ContainerType)lt).getItemType();
+		IType rt = right.check(context);
+		if(rt instanceof ContainerType)
+			rt = ((ContainerType)rt).getItemType();
+		switch(operator) {
+			case CONTAINS:
+			case NOT_CONTAINS:
+				if(lt!=TextType.instance() || (rt!=TextType.instance() && rt!=CharacterType.instance()))
+					throw new SyntaxError("'contains' only operates on textual values!");
+			default:	
+				return BooleanType.instance(); // can compare all objects
+		}
 	}
 	
 	@Override
@@ -144,6 +158,12 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 		case ROUGHLY:
 			equal = lval.roughly(context, rval);
 			break;
+		case CONTAINS:
+			equal = interpretContains(context,lval,rval);
+			break;
+		case NOT_CONTAINS:
+			equal = !interpretContains(context,lval,rval);
+			break;
 		}
 		return Boolean.valueOf(equal);	}
 
@@ -160,6 +180,15 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 			return false;
 		else
 			return lval.equals(rval);
+	}
+
+	private boolean interpretContains(Context context, IValue lval, IValue rval) throws PromptoError {
+		if(lval==rval)
+			return true;
+		else if(lval==NullValue.instance() || rval==NullValue.instance())
+			return false;
+		else 
+			return lval.contains(context, rval);
 	}
 
 	public Context downCastForCheck(Context context) {
@@ -316,18 +345,20 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 		Object data = value==null ? null : value.getStorableData();
 		MatchOp match = getMatchOp();
 		query.<Object>verify(info, match, data);
-		if(operator==EqOp.NOT_EQUALS)
+		if(operator==EqOp.NOT_EQUALS || operator==EqOp.NOT_CONTAINS)
 			query.not();
 	}
 	
 	private MatchOp getMatchOp() {
 		switch(operator) {
 		case EQUALS:
+		case NOT_EQUALS:
 			return MatchOp.EQUALS;
 		case ROUGHLY:
 			return MatchOp.ROUGHLY;
-		case NOT_EQUALS:
-			return MatchOp.EQUALS;
+		case CONTAINS:
+		case NOT_CONTAINS:
+			return MatchOp.CONTAINS;
 		default:
 			throw new UnsupportedOperationException();
 		}

@@ -868,6 +868,30 @@ public class MParserBaseListener implements MParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterHasAnyExpression(MParser.HasAnyExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitHasAnyExpression(MParser.HasAnyExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterHasExpression(MParser.HasExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitHasExpression(MParser.HasExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterTernaryExpression(MParser.TernaryExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -875,18 +899,6 @@ public class MParserBaseListener implements MParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitTernaryExpression(MParser.TernaryExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterContainsAllExpression(MParser.ContainsAllExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitContainsAllExpression(MParser.ContainsAllExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -976,6 +988,18 @@ public class MParserBaseListener implements MParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNotHasAnyExpression(MParser.NotHasAnyExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNotHasAnyExpression(MParser.NotHasAnyExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAndExpression(MParser.AndExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -983,6 +1007,18 @@ public class MParserBaseListener implements MParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAndExpression(MParser.AndExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNotHasExpression(MParser.NotHasExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNotHasExpression(MParser.NotHasExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1000,13 +1036,13 @@ public class MParserBaseListener implements MParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNotContainsAnyExpression(MParser.NotContainsAnyExpressionContext ctx) { }
+	@Override public void enterNotHasAllExpression(MParser.NotHasAllExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNotContainsAnyExpression(MParser.NotContainsAnyExpressionContext ctx) { }
+	@Override public void exitNotHasAllExpression(MParser.NotHasAllExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1192,13 +1228,13 @@ public class MParserBaseListener implements MParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNotContainsAllExpression(MParser.NotContainsAllExpressionContext ctx) { }
+	@Override public void enterHasAllExpression(MParser.HasAllExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNotContainsAllExpression(MParser.NotContainsAllExpressionContext ctx) { }
+	@Override public void exitHasAllExpression(MParser.HasAllExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1211,18 +1247,6 @@ public class MParserBaseListener implements MParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitInstanceExpression(MParser.InstanceExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterContainsAnyExpression(MParser.ContainsAnyExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitContainsAnyExpression(MParser.ContainsAnyExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

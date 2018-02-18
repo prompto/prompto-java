@@ -708,24 +708,31 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 
 	@Override
-	public void exitContainsAllExpression(ContainsAllExpressionContext ctx) {
+	public void exitHasExpression(HasExpressionContext ctx) {
 		IExpression left = this.<IExpression>getNodeValue(ctx.left);
 		IExpression right = this.<IExpression>getNodeValue(ctx.right);
-		setNodeValue(ctx, new ContainsExpression(left, ContOp.CONTAINS_ALL, right));
+		setNodeValue(ctx, new ContainsExpression(left, ContOp.HAS, right));
+	}
+
+	@Override
+	public void exitHasAllExpression(HasAllExpressionContext ctx) {
+		IExpression left = this.<IExpression>getNodeValue(ctx.left);
+		IExpression right = this.<IExpression>getNodeValue(ctx.right);
+		setNodeValue(ctx, new ContainsExpression(left, ContOp.HAS_ALL, right));
 	}
 	
 	@Override
-	public void exitContainsAnyExpression(ContainsAnyExpressionContext ctx) {
+	public void exitHasAnyExpression(HasAnyExpressionContext ctx) {
 		IExpression left = this.<IExpression>getNodeValue(ctx.left);
 		IExpression right = this.<IExpression>getNodeValue(ctx.right);
-		setNodeValue(ctx, new ContainsExpression(left, ContOp.CONTAINS_ANY, right));
+		setNodeValue(ctx, new ContainsExpression(left, ContOp.HAS_ANY, right));
 	}
 	
 	@Override
 	public void exitContainsExpression(ContainsExpressionContext ctx) {
 		IExpression left = this.<IExpression>getNodeValue(ctx.left);
 		IExpression right = this.<IExpression>getNodeValue(ctx.right);
-		setNodeValue(ctx, new ContainsExpression(left, ContOp.CONTAINS, right));
+		setNodeValue(ctx, new EqualsExpression(left, EqOp.CONTAINS, right));
 	}
 	
 	@Override
@@ -1953,24 +1960,31 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitNotContainsAllExpression(NotContainsAllExpressionContext ctx) {
+	public void exitNotHasExpression(NotHasExpressionContext ctx) {
 		IExpression left = this.<IExpression>getNodeValue(ctx.left);
 		IExpression right = this.<IExpression>getNodeValue(ctx.right);
-		setNodeValue(ctx, new ContainsExpression(left, ContOp.NOT_CONTAINS_ALL, right));
+		setNodeValue(ctx, new ContainsExpression(left, ContOp.NOT_HAS, right));
+	}
+
+	@Override
+	public void exitNotHasAllExpression(NotHasAllExpressionContext ctx) {
+		IExpression left = this.<IExpression>getNodeValue(ctx.left);
+		IExpression right = this.<IExpression>getNodeValue(ctx.right);
+		setNodeValue(ctx, new ContainsExpression(left, ContOp.NOT_HAS_ALL, right));
 	}
 	
 	@Override
-	public void exitNotContainsAnyExpression(NotContainsAnyExpressionContext ctx) {
+	public void exitNotHasAnyExpression(NotHasAnyExpressionContext ctx) {
 		IExpression left = this.<IExpression>getNodeValue(ctx.left);
 		IExpression right = this.<IExpression>getNodeValue(ctx.right);
-		setNodeValue(ctx, new ContainsExpression(left, ContOp.NOT_CONTAINS_ANY, right));
+		setNodeValue(ctx, new ContainsExpression(left, ContOp.NOT_HAS_ANY, right));
 	}
 	
 	@Override
 	public void exitNotContainsExpression(NotContainsExpressionContext ctx) {
 		IExpression left = this.<IExpression>getNodeValue(ctx.left);
 		IExpression right = this.<IExpression>getNodeValue(ctx.right);
-		setNodeValue(ctx, new ContainsExpression(left, ContOp.NOT_CONTAINS, right));
+		setNodeValue(ctx, new EqualsExpression(left, EqOp.NOT_CONTAINS, right));
 	}
 	
 	@Override

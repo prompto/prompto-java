@@ -916,6 +916,30 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterHasAnyExpression(OParser.HasAnyExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitHasAnyExpression(OParser.HasAnyExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterHasExpression(OParser.HasExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitHasExpression(OParser.HasExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterTernaryExpression(OParser.TernaryExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -923,18 +947,6 @@ public class OParserBaseListener implements OParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitTernaryExpression(OParser.TernaryExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterContainsAllExpression(OParser.ContainsAllExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitContainsAllExpression(OParser.ContainsAllExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1036,6 +1048,18 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNotHasAnyExpression(OParser.NotHasAnyExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNotHasAnyExpression(OParser.NotHasAnyExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAndExpression(OParser.AndExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1043,6 +1067,18 @@ public class OParserBaseListener implements OParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAndExpression(OParser.AndExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNotHasExpression(OParser.NotHasExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNotHasExpression(OParser.NotHasExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1060,13 +1096,13 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNotContainsAnyExpression(OParser.NotContainsAnyExpressionContext ctx) { }
+	@Override public void enterNotHasAllExpression(OParser.NotHasAllExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNotContainsAnyExpression(OParser.NotContainsAnyExpressionContext ctx) { }
+	@Override public void exitNotHasAllExpression(OParser.NotHasAllExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1252,13 +1288,13 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNotContainsAllExpression(OParser.NotContainsAllExpressionContext ctx) { }
+	@Override public void enterHasAllExpression(OParser.HasAllExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNotContainsAllExpression(OParser.NotContainsAllExpressionContext ctx) { }
+	@Override public void exitHasAllExpression(OParser.HasAllExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1283,18 +1319,6 @@ public class OParserBaseListener implements OParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCastExpression(OParser.CastExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterContainsAnyExpression(OParser.ContainsAnyExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitContainsAnyExpression(OParser.ContainsAnyExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
