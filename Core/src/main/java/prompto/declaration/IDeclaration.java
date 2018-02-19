@@ -30,4 +30,5 @@ public interface IDeclaration extends INamed, ISection {
 	Collection<CommentStatement> getComments();
 	default void setClosureOf(IMethodDeclaration declaration) { throw new UnsupportedOperationException(); }
 	default IMethodDeclaration getClosureOf() { throw new UnsupportedOperationException(); }
+	default boolean isStorable() { return false; }
 }

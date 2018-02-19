@@ -105,6 +105,7 @@ public class AttributeDeclaration extends BaseDeclaration {
 		this.storable = storable;
 	}
 	
+	@Override
 	public boolean isStorable() {
 		return storable;
 	}
