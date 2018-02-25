@@ -153,7 +153,6 @@ public class ConstructorExpression implements IExpression {
 		if(cd==null)
 			throw new SyntaxError("Unknown category " + type.getTypeName());
 		checkFirstHomonym(context, cd);
-		IType type = cd.getType(context); // could be a resource rather than a category
 		cd.checkConstructorContext(context);
 		if(copyFrom!=null) {
 			IType cft = copyFrom.check(context);
@@ -169,7 +168,7 @@ public class ConstructorExpression implements IExpression {
 				assignment.check(context);
 			}
 		}
-		return type;
+		return cd.getType(context); // could be a resource rather than a category;
 	}
 	
 	@Override
