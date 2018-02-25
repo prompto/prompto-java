@@ -83,6 +83,10 @@ public class QueryableCodeStore extends BaseCodeStore {
 		return store;
 	}
 	
+	public void setStore(IStore store) {
+		this.store = store;
+	}
+	
 	public void collectStorables(List<IStorable> list, IDeclaration declaration, Dialect dialect, PromptoVersion version, Object moduleId) {
 		if(declaration instanceof MethodDeclarationMap) {
 			for(IDeclaration method : ((MethodDeclarationMap)declaration).values())
