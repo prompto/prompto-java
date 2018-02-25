@@ -671,14 +671,28 @@ public class MPromptoBuilder extends MParserBaseListener {
 		ConcreteCategoryDeclaration decl = this.<ConcreteCategoryDeclaration>getNodeValue(ctx.decl);
 		setNodeValue(ctx, decl);
 	}
-
+	
 	@Override
-	public void exitConstructor_expression(Constructor_expressionContext ctx) {
+	public void exitConstructorFrom(ConstructorFromContext ctx) {
 		CategoryType type = this.<CategoryType>getNodeValue(ctx.typ);
+		IExpression copyFrom =  this.<IExpression>getNodeValue(ctx.copyFrom);
 		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
-		setNodeValue(ctx, new ConstructorExpression(type, args));
+		setNodeValue(ctx, new ConstructorExpression(type, copyFrom, args, true));
 	}
 
+	
+	@Override
+	public void exitConstructorNoFrom(ConstructorNoFromContext ctx) {
+		CategoryType type = this.<CategoryType>getNodeValue(ctx.typ);
+		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
+		setNodeValue(ctx, new ConstructorExpression(type, null, args, true));
+	}
+	
+	@Override
+	public void exitCopy_from(Copy_fromContext ctx) {
+		setNodeValue(ctx, this.getNodeValue(ctx.exp));
+	}
+	
 	@Override
 	public void exitHasExpression(HasExpressionContext ctx) {
 		IExpression left = this.<IExpression>getNodeValue(ctx.left);

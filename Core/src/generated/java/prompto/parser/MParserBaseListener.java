@@ -1408,13 +1408,37 @@ public class MParserBaseListener implements MParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConstructor_expression(MParser.Constructor_expressionContext ctx) { }
+	@Override public void enterConstructorFrom(MParser.ConstructorFromContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitConstructor_expression(MParser.Constructor_expressionContext ctx) { }
+	@Override public void exitConstructorFrom(MParser.ConstructorFromContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterConstructorNoFrom(MParser.ConstructorNoFromContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitConstructorNoFrom(MParser.ConstructorNoFromContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCopy_from(MParser.Copy_fromContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCopy_from(MParser.Copy_fromContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

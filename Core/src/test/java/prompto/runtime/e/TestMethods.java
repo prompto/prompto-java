@@ -90,6 +90,16 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedHomonym() throws Exception {
+		checkInterpretedOutput("methods/homonym.pec");
+	}
+
+	@Test
+	public void testCompiledHomonym() throws Exception {
+		checkCompiledOutput("methods/homonym.pec");
+	}
+
+	@Test
 	public void testInterpretedImplicitMember() throws Exception {
 		checkInterpretedOutput("methods/implicitMember.pec");
 	}
@@ -177,16 +187,6 @@ public class TestMethods extends BaseEParserTest {
 	@Test
 	public void testCompiledSpecified() throws Exception {
 		checkCompiledOutput("methods/specified.pec");
-	}
-
-	@Test
-	public void testInterpretedSynonym() throws Exception {
-		checkInterpretedOutput("methods/synonym.pec");
-	}
-
-	@Test
-	public void testCompiledSynonym() throws Exception {
-		checkCompiledOutput("methods/synonym.pec");
 	}
 
 }

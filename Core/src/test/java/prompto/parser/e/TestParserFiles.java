@@ -39,8 +39,8 @@ public class TestParserFiles extends BaseEParserTest {
 	}
 
 	@Test
-	public void testImplicit() throws Exception {
-		DeclarationList stmts = parseResource("methods/implicit.pec");
+	public void testImplicitMember() throws Exception {
+		DeclarationList stmts = parseResource("methods/implicitMember.pec");
 		assertNotNull(stmts);
 		assertEquals(6,stmts.size());
 	}

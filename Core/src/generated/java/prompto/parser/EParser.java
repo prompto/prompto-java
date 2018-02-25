@@ -6840,7 +6840,7 @@ public class EParser extends AbstractParser {
 	}
 	public static class ConstructorFromContext extends Constructor_expressionContext {
 		public Mutable_category_typeContext typ;
-		public ExpressionContext firstArg;
+		public ExpressionContext copyFrom;
 		public With_argument_assignment_listContext args;
 		public Argument_assignmentContext arg;
 		public TerminalNode FROM() { return getToken(EParser.FROM, 0); }
@@ -6910,7 +6910,7 @@ public class EParser extends AbstractParser {
 				setState(1227);
 				match(FROM);
 				setState(1228);
-				((ConstructorFromContext)_localctx).firstArg = expression(0);
+				((ConstructorFromContext)_localctx).copyFrom = expression(0);
 				setState(1237);
 				_errHandler.sync(this);
 				switch ( getInterpreter().adaptivePredict(_input,63,_ctx) ) {

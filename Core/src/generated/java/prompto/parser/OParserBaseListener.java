@@ -1540,13 +1540,37 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConstructor_expression(OParser.Constructor_expressionContext ctx) { }
+	@Override public void enterConstructorFrom(OParser.ConstructorFromContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitConstructor_expression(OParser.Constructor_expressionContext ctx) { }
+	@Override public void exitConstructorFrom(OParser.ConstructorFromContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterConstructorNoFrom(OParser.ConstructorNoFromContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitConstructorNoFrom(OParser.ConstructorNoFromContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCopy_from(OParser.Copy_fromContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCopy_from(OParser.Copy_fromContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

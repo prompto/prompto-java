@@ -144,7 +144,7 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 			context.getProblemListener().reportUnknownMethod(id.toString(), id);
 			return null;
 		} else if(decl instanceof CategoryDeclaration)
-			return new ConstructorExpression(new CategoryType(id), assignments);
+			return new ConstructorExpression(new CategoryType(id), null, assignments, false);
 		else
 			return new MethodCall(new MethodSelector(id), assignments);
 	}

@@ -1318,15 +1318,39 @@ public interface MParserListener extends ParseTreeListener {
 	 */
 	void exitDocument_expression(MParser.Document_expressionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MParser#constructor_expression}.
+	 * Enter a parse tree produced by the {@code ConstructorFrom}
+	 * labeled alternative in {@link MParser#constructor_expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterConstructor_expression(MParser.Constructor_expressionContext ctx);
+	void enterConstructorFrom(MParser.ConstructorFromContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MParser#constructor_expression}.
+	 * Exit a parse tree produced by the {@code ConstructorFrom}
+	 * labeled alternative in {@link MParser#constructor_expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitConstructor_expression(MParser.Constructor_expressionContext ctx);
+	void exitConstructorFrom(MParser.ConstructorFromContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ConstructorNoFrom}
+	 * labeled alternative in {@link MParser#constructor_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterConstructorNoFrom(MParser.ConstructorNoFromContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ConstructorNoFrom}
+	 * labeled alternative in {@link MParser#constructor_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitConstructorNoFrom(MParser.ConstructorNoFromContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MParser#copy_from}.
+	 * @param ctx the parse tree
+	 */
+	void enterCopy_from(MParser.Copy_fromContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MParser#copy_from}.
+	 * @param ctx the parse tree
+	 */
+	void exitCopy_from(MParser.Copy_fromContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ExpressionAssignmentList}
 	 * labeled alternative in {@link MParser#argument_assignment_list}.

@@ -17,6 +17,7 @@ import prompto.error.SyntaxError;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
+import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.runtime.Context.ClosureContext;
 import prompto.runtime.Context.InstanceContext;
@@ -29,7 +30,7 @@ import prompto.utils.CodeWriter;
 import prompto.value.ClosureValue;
 import prompto.value.IValue;
 
-public class InstanceExpression implements IExpression {
+public class InstanceExpression extends Section implements IExpression {
 
 	Identifier id;
 	

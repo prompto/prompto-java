@@ -142,7 +142,7 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 
 	private IExpression resolveConstructor(Context context) {
 		try {
-			IExpression method = new ConstructorExpression(new CategoryType(id), null);
+			IExpression method = new ConstructorExpression(new CategoryType(id), null, null, true);
 			method.check(context);
 			return method;
 		} catch(SyntaxError e) {

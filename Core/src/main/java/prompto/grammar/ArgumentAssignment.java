@@ -26,6 +26,12 @@ public class ArgumentAssignment {
 		this.expression = expression;
 	}
 	
+	
+	public void setArgument(IArgument argument) {
+		this.argument = argument;
+	}
+	
+	
 	public IArgument getArgument() {
 		return argument;
 	}
@@ -67,26 +73,30 @@ public class ArgumentAssignment {
 	}
 	
 	private void toODialect(CodeWriter writer) {
-		if(argument!=null) {
-			writer.append(argument.getId());
-			writer.append(" = ");
-		}
-		expression.toDialect(writer);
+		toMDialect(writer);
 	}
 
 	private void toMDialect(CodeWriter writer) {
-		if(argument!=null) {
+		if(expression==null)
 			writer.append(argument.getId());
-			writer.append(" = ");
+		else {
+			if(argument!=null) {
+				writer.append(argument.getId());
+				writer.append(" = ");
+			}
+			expression.toDialect(writer);
 		}
-		expression.toDialect(writer);
 	}
 
 	private void toEDialect(CodeWriter writer) {
-		expression.toDialect(writer);
-		if(argument!=null) {
-			writer.append(" as ");
+		if(expression==null)
 			writer.append(argument.getId());
+		else {
+			expression.toDialect(writer);
+			if(argument!=null) {
+				writer.append(" as ");
+				writer.append(argument.getId());
+			}
 		}
 	}
 	

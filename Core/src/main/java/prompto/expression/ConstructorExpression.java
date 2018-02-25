@@ -3,6 +3,7 @@ package prompto.expression;
 import java.lang.reflect.Type;
 import java.util.Set;
 
+import prompto.argument.AttributeArgument;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.FieldInfo;
 import prompto.compiler.Flags;
@@ -39,12 +40,15 @@ import prompto.value.NullValue;
 public class ConstructorExpression implements IExpression {
 	
 	CategoryType type;
-	IExpression copyFrom;
+	boolean checked; // if coming from UnresolvedCall, need to check homonyms
+	IExpression copyFrom = null;
 	ArgumentAssignmentList assignments;
 	
-	public ConstructorExpression(CategoryType type, ArgumentAssignmentList assignments) {
+	public ConstructorExpression(CategoryType type, IExpression copyFrom, ArgumentAssignmentList assignments, boolean checked) {
 		this.type = type;
-		setAssignments(assignments);
+		this.copyFrom = copyFrom;
+		this.assignments = assignments;
+		this.checked = checked;
 	}
 	
 	public CategoryType getType() {
@@ -56,15 +60,6 @@ public class ConstructorExpression implements IExpression {
 		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
 		this.toDialect(writer);
 		return writer.toString();
-	}
-	
-	public void setAssignments(ArgumentAssignmentList assignments) {
-		this.assignments = assignments;
-		// in O and S dialects, first anonymous argument is copyFrom
-		if(assignments!=null && assignments.size()>0 && assignments.get(0).getArgument()==null) {
-			copyFrom = assignments.get(0).getExpression();
-			this.assignments.remove(0);
-		}
 	}
 	
 	public ArgumentAssignmentList getAssignments() {
@@ -81,6 +76,11 @@ public class ConstructorExpression implements IExpression {
 	
 	@Override
 	public void toDialect(CodeWriter writer) {
+		Context context = writer.getContext();
+		CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
+		if(cd==null)
+			throw new SyntaxError("Unknown category " + type.getTypeName());
+		checkFirstHomonym(context, cd);
 		switch(writer.getDialect()) {
 		case E:
 			toEDialect(writer);
@@ -102,7 +102,7 @@ public class ConstructorExpression implements IExpression {
 		type.toDialect(writer);
 		ArgumentAssignmentList assignments = new ArgumentAssignmentList();
 		if (copyFrom != null)
-			assignments.add(new ArgumentAssignment(null, copyFrom));
+			assignments.add(new ArgumentAssignment(new AttributeArgument(new Identifier("from")), copyFrom));
 		if(this.assignments!=null)
 			assignments.addAll(this.assignments);
 		assignments.toDialect(writer);
@@ -120,11 +120,39 @@ public class ConstructorExpression implements IExpression {
 			assignments.toDialect(writer);
 	}
 	
+	
+	public void checkFirstHomonym(Context context, CategoryDeclaration decl) {
+		if(checked)
+			return;
+		if(assignments!=null && assignments.size()>0)
+			checkFirstHomonym(context, decl, assignments.get(0));
+		checked = true;
+	}
+	
+
+	private void checkFirstHomonym(Context context, CategoryDeclaration decl, ArgumentAssignment assignment) {
+		if(assignment.getArgument()==null) {
+			IExpression exp = assignment.getExpression();
+			// when coming from UnresolvedCall, could be an homonym
+			Identifier name = null;
+			if(exp instanceof UnresolvedIdentifier) 
+				name = ((UnresolvedIdentifier)exp).getId();
+			else if(exp instanceof InstanceExpression)
+				name = ((InstanceExpression)exp).getId();
+			if(name!=null && decl.hasAttribute(context, name)) {
+				// convert expression to name to avoid translation issues
+				assignment.setArgument(new AttributeArgument(name));
+				assignment.setExpression(null);
+			}
+		}
+	}
+
 	@Override
 	public IType check(Context context) {
 		CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
 		if(cd==null)
 			throw new SyntaxError("Unknown category " + type.getTypeName());
+		checkFirstHomonym(context, cd);
 		IType type = cd.getType(context); // could be a resource rather than a category
 		cd.checkConstructorContext(context);
 		if(copyFrom!=null) {
@@ -146,10 +174,13 @@ public class ConstructorExpression implements IExpression {
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
+		CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
+		if(cd==null)
+			throw new SyntaxError("Unknown category " + type.getTypeName());
+		checkFirstHomonym(context, cd);
 		IInstance instance = type.newInstance(context);
 		instance.setMutable(true);
 		try {
-			CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
 			if(copyFrom!=null) {
 				Object copyObj = copyFrom.interpret(context);
 				if(copyObj instanceof IInstance) {
@@ -198,6 +229,10 @@ public class ConstructorExpression implements IExpression {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
+		if(cd==null)
+			throw new SyntaxError("Unknown category " + type.getTypeName());
+		checkFirstHomonym(context, cd);
 		Type klass = getConcreteType(context);
 		ResultInfo result = CompilerUtils.compileNewInstance(method, klass);
 		compileSetMutable(context, method, flags, result, true);

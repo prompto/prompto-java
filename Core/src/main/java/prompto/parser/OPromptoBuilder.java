@@ -169,6 +169,9 @@ import prompto.literal.TupleLiteral;
 import prompto.literal.UUIDLiteral;
 import prompto.literal.VersionLiteral;
 import static prompto.parser.OParser.*;
+import prompto.parser.OParser.ConstructorFromContext;
+import prompto.parser.OParser.ConstructorNoFromContext;
+import prompto.parser.OParser.Copy_fromContext;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -668,12 +671,26 @@ public class OPromptoBuilder extends OParserBaseListener {
 	}
 		
 	@Override
-	public void exitConstructor_expression(Constructor_expressionContext ctx) {
+	public void exitConstructorFrom(ConstructorFromContext ctx) {
 		CategoryType type = this.<CategoryType>getNodeValue(ctx.typ);
+		IExpression copyFrom =  this.<IExpression>getNodeValue(ctx.copyFrom);
 		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
-		setNodeValue(ctx, new ConstructorExpression(type, args));
+		setNodeValue(ctx, new ConstructorExpression(type, copyFrom, args, true));
 	}
 	
+	
+	@Override
+	public void exitConstructorNoFrom(ConstructorNoFromContext ctx) {
+		CategoryType type = this.<CategoryType>getNodeValue(ctx.typ);
+		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
+		setNodeValue(ctx, new ConstructorExpression(type, null, args, true));
+	}
+	
+	@Override
+	public void exitCopy_from(Copy_fromContext ctx) {
+		setNodeValue(ctx, this.getNodeValue(ctx.exp));
+	}
+		
 	@Override
 	public void exitHasExpression(HasExpressionContext ctx) {
 		IExpression left = this.<IExpression>getNodeValue(ctx.left);

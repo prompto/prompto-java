@@ -684,27 +684,22 @@ public class EPromptoBuilder extends EParserBaseListener {
 	@Override
 	public void exitConstructorFrom(ConstructorFromContext ctx) {
 		CategoryType type = this.<CategoryType>getNodeValue(ctx.typ);
+		IExpression copyFrom = this.<IExpression>getNodeValue(ctx.copyFrom);
 		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
-		if(args==null)
-			args = new ArgumentAssignmentList();
-		IExpression firstArg = this.<IExpression>getNodeValue(ctx.firstArg);
-		args.add(0, new ArgumentAssignment(null, firstArg));
 		ArgumentAssignment arg = this.<ArgumentAssignment>getNodeValue(ctx.arg);
 		if(arg!=null)
 			args.add(arg);
-		setNodeValue(ctx, new ConstructorExpression(type, args));
+		setNodeValue(ctx, new ConstructorExpression(type, copyFrom, args, true));
 	}
 
 	@Override
 	public void exitConstructorNoFrom(ConstructorNoFromContext ctx) {
 		CategoryType type = this.<CategoryType>getNodeValue(ctx.typ);
 		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
-		if(args==null)
-			args = new ArgumentAssignmentList();
 		ArgumentAssignment arg = this.<ArgumentAssignment>getNodeValue(ctx.arg);
 		if(arg!=null)
 			args.add(arg);
-		setNodeValue(ctx, new ConstructorExpression(type, args));
+		setNodeValue(ctx, new ConstructorExpression(type, null, args, true));
 	}
 
 	@Override

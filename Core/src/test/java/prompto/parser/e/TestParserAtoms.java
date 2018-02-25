@@ -378,6 +378,23 @@ public class TestParserAtoms {
 		assertEquals("print with \"array\" + args as value", writer.toString());
 	}
 	
+	@Test
+	public void testConstructorSynonymsExpression() throws Exception {
+		String statement = "Company with id and name";
+		ETestParser parser = new ETestParser(statement, false);
+		IExpression e = parser.parse_expression();
+		assertTrue(e instanceof UnresolvedCall);
+	}
+
+	
+	@Test
+	public void testConstructorSynonyms() throws Exception {
+		String statement = "Company with id";
+		ETestParser parser = new ETestParser(statement, false);
+		ConstructorExpression c = parser.parse_constructor_expression();
+		assertNotNull(c);
+	}
+	
 	@Test 
 	public void testConstructor1Attribute() throws Exception {
 		String statement = "Company with 1 as id";
