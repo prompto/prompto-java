@@ -770,8 +770,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			compileFieldSetter(context, classFile, flags, id, field);
 	}
 	
-	private void compileFieldSetter(Context context, ClassFile classFile, Flags flags, 
-			Identifier id, FieldInfo field) {
+	private void compileFieldSetter(Context context, ClassFile classFile, Flags flags, Identifier id, FieldInfo field) {
 		String name = CompilerUtils.setterName(field.getName().getValue());
 		Descriptor.Method proto = new Descriptor.Method(field.getType(), void.class);
 		MethodInfo method = classFile.newMethod(name, proto);

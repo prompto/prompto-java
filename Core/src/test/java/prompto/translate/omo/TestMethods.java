@@ -42,8 +42,8 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
-	public void testImplicit() throws Exception {
-		compareResourceOMO("methods/implicit.poc");
+	public void testImplicitMember() throws Exception {
+		compareResourceOMO("methods/implicitMember.poc");
 	}
 
 	@Test

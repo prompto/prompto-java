@@ -22,6 +22,7 @@ public class ResultInfo {
 	Boolean isInterface = null;
 	Boolean isPromptoCategory = null;
 	Boolean isNativeCategory = null;
+	Boolean isPromptoAttribute = null;
 	
 	public ResultInfo(Type type, Flag ...flags) {
 		this.type = type;
@@ -124,5 +125,19 @@ public class ResultInfo {
 
 	public boolean isCategory() {
 		return isPromptoCategory() || isNativeCategory();
+	}
+
+	public boolean isPromptoAttribute() {
+		if(isPromptoAttribute==null) {
+			if(isPrimitive())
+				isPromptoAttribute = false;
+			else if(type instanceof Class)
+				isPromptoAttribute = false;
+			else if(type instanceof PromptoType){
+				isPromptoAttribute = type.getTypeName().startsWith(CompilerUtils.ATTRIBUTE_PACKAGE_PREFIX);
+			} else
+				throw new UnsupportedOperationException();
+		}
+		return isPromptoAttribute;
 	}
 }

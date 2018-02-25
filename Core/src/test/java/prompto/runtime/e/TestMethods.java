@@ -90,13 +90,13 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
-	public void testInterpretedImplicit() throws Exception {
-		checkInterpretedOutput("methods/implicit.pec");
+	public void testInterpretedImplicitMember() throws Exception {
+		checkInterpretedOutput("methods/implicitMember.pec");
 	}
 
 	@Test
-	public void testCompiledImplicit() throws Exception {
-		checkCompiledOutput("methods/implicit.pec");
+	public void testCompiledImplicitMember() throws Exception {
+		checkCompiledOutput("methods/implicitMember.pec");
 	}
 
 	@Test
@@ -177,6 +177,16 @@ public class TestMethods extends BaseEParserTest {
 	@Test
 	public void testCompiledSpecified() throws Exception {
 		checkCompiledOutput("methods/specified.pec");
+	}
+
+	@Test
+	public void testInterpretedSynonym() throws Exception {
+		checkInterpretedOutput("methods/synonym.pec");
+	}
+
+	@Test
+	public void testCompiledSynonym() throws Exception {
+		checkCompiledOutput("methods/synonym.pec");
 	}
 
 }

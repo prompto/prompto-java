@@ -222,8 +222,7 @@ public class ConstructorExpression implements IExpression {
 				compileAssignment(context, method, flags, thisInfo, a));
 	}
 
-	private void compileAssignment(Context context, MethodInfo method, Flags flags, 
-			ResultInfo thisInfo, ArgumentAssignment assignment) {
+	private void compileAssignment(Context context, MethodInfo method, Flags flags, ResultInfo thisInfo, ArgumentAssignment assignment) {
 		// keep a copy of new instance on top of the stack
 		method.addInstruction(Opcode.DUP);
 		// get value
@@ -234,13 +233,14 @@ public class ConstructorExpression implements IExpression {
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, assignment.getArgumentId());
 		FieldInfo field = decl.toFieldInfo(context);
 		// cast if required
-		if(field.getType()==Double.class)
+		if(field.getType()==Boolean.class && !valueInfo.isPromptoAttribute())
+			CompilerUtils.booleanToBoolean(method, valueInfo);
+		else if(field.getType()==Double.class && !valueInfo.isPromptoAttribute())
 			CompilerUtils.numberToDouble(method, valueInfo);
-		else if(field.getType()==Long.class)
+		else if(field.getType()==Long.class && !valueInfo.isPromptoAttribute())
 			CompilerUtils.numberToLong(method, valueInfo);
 		// call setter
-		MethodConstant m = new MethodConstant(thisInfo.getType(), 
-				CompilerUtils.setterName(field.getName().getValue()), field.getType(), void.class);
+		MethodConstant m = new MethodConstant(thisInfo.getType(), CompilerUtils.setterName(field.getName().getValue()), field.getType(), void.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 	}
 

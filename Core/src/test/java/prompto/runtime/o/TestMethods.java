@@ -90,13 +90,13 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
-	public void testInterpretedImplicit() throws Exception {
-		checkInterpretedOutput("methods/implicit.poc");
+	public void testInterpretedImplicitMember() throws Exception {
+		checkInterpretedOutput("methods/implicitMember.poc");
 	}
 
 	@Test
-	public void testCompiledImplicit() throws Exception {
-		checkCompiledOutput("methods/implicit.poc");
+	public void testCompiledImplicitMember() throws Exception {
+		checkCompiledOutput("methods/implicitMember.poc");
 	}
 
 	@Test

@@ -5,6 +5,7 @@ import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
+import prompto.expression.InstanceExpression;
 import prompto.expression.MemberSelector;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
@@ -34,7 +35,7 @@ public class ArgumentAssignment {
 	} 
 	
 	public IExpression getExpression() {
-		return expression;
+		return expression!=null ? expression : new InstanceExpression(argument.getId());
 	}
 
 	public void setExpression(IExpression expression) {
@@ -43,7 +44,12 @@ public class ArgumentAssignment {
 	
 	@Override
 	public String toString() {
-		return (argument!=null ? argument.getId() + " = " : "") + expression.toString();
+		if(argument==null)
+			return expression.toString();
+		else if(expression==null)
+			return argument.getId().toString();
+		else
+			return argument.getId() + " = " + expression.toString();
 	}
 	
 	public void toDialect(CodeWriter writer) {
@@ -98,7 +104,8 @@ public class ArgumentAssignment {
 	}
 	
 	public IType check(Context context) {
-		INamed actual = context.getRegisteredValue(INamed.class,argument.getId());
+		IExpression expression = getExpression();
+		INamed actual = context.getRegisteredValue(INamed.class, argument.getId());
 		if(actual==null) {
 			IType actualType = expression.check(context);
 			context.registerValue(new Variable(argument.getId(), actualType));
@@ -139,7 +146,7 @@ public class ArgumentAssignment {
 			argument = argumentList.find(this.getArgumentId());
 		if(argument==null)
 			throw new SyntaxError("Method has no argument:" + this.getArgumentId());
-		IExpression expression = new ContextualExpression(context, this.expression);
+		IExpression expression = new ContextualExpression(context, getExpression());
 		return new ArgumentAssignment(argument,expression);
 	}
 }

@@ -381,6 +381,16 @@ public abstract class CompilerUtils {
 		return new ResultInfo(Boolean.class);
 	}
 	
+	public static ResultInfo booleanToBoolean(MethodInfo method, ResultInfo info) {
+		 if(boolean.class==info.getType())
+			return booleanToBoolean(method);
+		 else if(Boolean.class==info.getType())
+			return info;
+		else
+			throw new CompilerException("Cannot convert " + info.getType().getTypeName() + " to long");
+	}
+
+
 	public static ResultInfo BooleanToboolean(MethodInfo method) {
 		IOperand oper = new MethodConstant(
 				Boolean.class, 

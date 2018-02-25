@@ -42,8 +42,8 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
-	public void testImplicit() throws Exception {
-		compareResourceEME("methods/implicit.pec");
+	public void testImplicitMember() throws Exception {
+		compareResourceEME("methods/implicitMember.pec");
 	}
 
 	@Test
@@ -89,6 +89,11 @@ public class TestMethods extends BaseEParserTest {
 	@Test
 	public void testSpecified() throws Exception {
 		compareResourceEME("methods/specified.pec");
+	}
+
+	@Test
+	public void testSynonym() throws Exception {
+		compareResourceEME("methods/synonym.pec");
 	}
 
 }
