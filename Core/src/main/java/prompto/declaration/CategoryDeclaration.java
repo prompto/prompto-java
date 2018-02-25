@@ -53,6 +53,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		this.storable = storable;
 	}
 	
+	@Override
 	public boolean isStorable() {
 		return storable;
 	}
