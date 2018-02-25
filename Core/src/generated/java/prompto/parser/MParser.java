@@ -6473,7 +6473,7 @@ public class MParser extends AbstractParser {
 	}
 	public static class ConstructorFromContext extends Constructor_expressionContext {
 		public Mutable_category_typeContext typ;
-		public Copy_fromContext copyFrom;
+		public Copy_fromContext copyExp;
 		public Argument_assignment_listContext args;
 		public TerminalNode LPAR() { return getToken(MParser.LPAR, 0); }
 		public TerminalNode RPAR() { return getToken(MParser.RPAR, 0); }
@@ -6536,7 +6536,7 @@ public class MParser extends AbstractParser {
 				setState(1178);
 				match(LPAR);
 				setState(1179);
-				((ConstructorFromContext)_localctx).copyFrom = copy_from();
+				((ConstructorFromContext)_localctx).copyExp = copy_from();
 				setState(1182);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
