@@ -1,5 +1,7 @@
 package prompto.literal;
 
+import java.util.function.Supplier;
+
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.runtime.Context;
@@ -8,22 +10,26 @@ import prompto.value.IValue;
 
 public abstract class Literal<T extends IValue> implements IExpression {
 	
-	String text;
+	Supplier<String> text;
 	T value;
 	
 	protected Literal(String text, T value) {
+		this(()->text, value);
+	}
+	
+	protected Literal(Supplier<String> text, T value) {
 		this.text = text;
 		this.value = value;
 	}
 	
 	@Override
 	public void toDialect(CodeWriter writer) {
-		writer.append(text);
+		writer.append(text.get());
 	}
 	
 	@Override
 	public String toString() {
-		return text;
+		return text.get();
 	}
 	
 	public T getValue() {

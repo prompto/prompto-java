@@ -12,15 +12,12 @@ public class HexaLiteral extends Literal<Integer> {
 		super(text,parseHexa(text));
 	}
 
-	@Override
-	public String toString() {
-		return text;
-	}
-	
+
 	@Override
 	public IType check(Context context) {
 		return IntegerType.instance();
 	}
+	
 	
 	static public Integer parseHexa(String text) {
 		long value = 0;

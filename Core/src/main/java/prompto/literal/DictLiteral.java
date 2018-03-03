@@ -40,7 +40,7 @@ public class DictLiteral extends Literal<Dictionary> {
 	}
 	
 	public DictLiteral(DictEntryList entries, boolean mutable) {
-		super(entries.toString(),new Dictionary(MissingType.instance(), mutable));
+		super(()->entries.toString(), new Dictionary(MissingType.instance(), mutable));
 		this.entries = entries;
 		this.mutable = mutable;
 	}

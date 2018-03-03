@@ -39,12 +39,12 @@ public class ListLiteral extends Literal<ListValue> {
 	ExpressionList expressions = null;
 	
 	public ListLiteral(boolean mutable) {
-		super(getText(null, mutable),new ListValue(MissingType.instance()));
+		super(()->getText(null, mutable),new ListValue(MissingType.instance()));
 		this.mutable = mutable;
 	}
 	
 	public ListLiteral(ExpressionList expressions, boolean mutable) {
-		super(getText(expressions, mutable),new ListValue(MissingType.instance()));
+		super(()->getText(expressions, mutable),new ListValue(MissingType.instance()));
 		this.expressions = expressions;
 		this.mutable = mutable;
 	}

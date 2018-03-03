@@ -37,7 +37,7 @@ public class SetLiteral extends Literal<SetValue> {
 	}
 
 	public SetLiteral(ExpressionList expressions) {
-		super("<" + expressions.toString() + ">", new SetValue(MissingType.instance()));
+		super(()->"<" + expressions.toString() + ">", new SetValue(MissingType.instance()));
 		this.expressions = expressions;
 	}
 

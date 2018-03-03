@@ -29,7 +29,7 @@ public class TupleLiteral extends Literal<TupleValue> {
 	}
 	
 	public TupleLiteral(ExpressionList expressions, boolean mutable) {
-		super(toTupleString(expressions),new TupleValue(mutable));
+		super(()->toTupleString(expressions),new TupleValue(mutable));
 		this.expressions = expressions;
 		this.mutable = mutable;
 	}
