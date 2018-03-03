@@ -7,10 +7,13 @@ import java.net.URLClassLoader;
 import java.nio.file.Paths;
 
 import prompto.runtime.Context;
+import prompto.utils.Logger;
 
 /* a class loader which is able to create and store classes for prompto objects */
 public class PromptoClassLoader extends URLClassLoader {
 	
+	static final Logger logger = new Logger();
+
 	private static ClassLoader getParentClassLoader() {
 		return PromptoClassLoader.class.getClassLoader();
 	}
@@ -21,6 +24,7 @@ public class PromptoClassLoader extends URLClassLoader {
 		classDir.mkdirs();
 		if(!classDir.exists())
 			throw new RuntimeException("Could not create prompto class dir at " + classDir.getAbsolutePath());
+		logger.info(()->"Storing compiled classes in " + classDir.getAbsolutePath());
 		return classDir;
 	}
 
