@@ -10,6 +10,7 @@ import prompto.intrinsic.PromptoList;
 import prompto.parser.ECleverParser;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.utils.Logger;
 import prompto.value.Boolean;
 import prompto.value.Decimal;
 import prompto.value.IValue;
@@ -21,6 +22,8 @@ import prompto.value.Text;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class ListType extends ContainerType {
+	
+	public static Logger logger = new Logger();
 	
 	public ListType(IType itemType) {
 		super(Family.LIST, itemType, itemType.getTypeName() + "[]");
@@ -129,6 +132,7 @@ public class ListType extends ContainerType {
 					throw new ReadWriteError("Unsupported " + node.getNodeType().name() + " node for " + itemType.toString());
 			} 
 		} catch (Exception e) {
+			logger.error(()->e.getMessage(), e);
 			throw new ReadWriteError(e.getMessage());
 		}
 	}
