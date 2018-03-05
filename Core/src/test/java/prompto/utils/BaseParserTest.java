@@ -55,6 +55,12 @@ public abstract class BaseParserTest extends BaseTest {
 		allStmts.register(coreContext);
 	}
 
+	protected void loadString(String code) throws Exception {
+		DeclarationList stmts = parseString(code);
+		stmts.register(context);
+		stmts.check(context);
+	}
+
 	protected void loadFile(File file) throws Exception {
 		DeclarationList stmts = parseFile(file);
 		stmts.register(context);
@@ -67,6 +73,7 @@ public abstract class BaseParserTest extends BaseTest {
 		stmts.check(context);
 	}
 
+	public abstract DeclarationList parseString(String code) throws Exception;
 	public abstract DeclarationList parseFile(File file) throws Exception;
 	public abstract DeclarationList parseResource(String resourceName) throws Exception;
 
@@ -112,6 +119,29 @@ public abstract class BaseParserTest extends BaseTest {
 			return false;
 		}
 	}
+	
+	
+	protected boolean executeString(String code, boolean reThrow) throws PromptoError {
+		try {
+			loadString(code);
+			File root = Files.createTempDirectory("prompto_").toFile();
+			if(context.hasTests()) {
+				Executor.executeTests(context, root);
+				return true;
+			} else {
+				Executor.executeMainNoArgs(context, root);
+				return false;
+			}
+		} catch(Exception e) {
+			if(reThrow && e instanceof PromptoError)
+				throw (PromptoError)e;
+			e.printStackTrace(System.err);
+			fail(e.getMessage());
+			return false;
+		}
+	}
+
+	
 
 	protected void interpretResource(String resourceName, String methodName, String cmdLineArgs) throws Exception {
 		loadResource(resourceName);

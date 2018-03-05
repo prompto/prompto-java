@@ -3,9 +3,9 @@ package prompto.type;
 import java.lang.reflect.Type;
 
 import prompto.grammar.Identifier;
+import prompto.intrinsic.IterableWithCounts;
 import prompto.runtime.Context;
 import prompto.store.Family;
-import prompto.value.Cursor;
 
 public class CursorType extends IterableType {
 	
@@ -15,7 +15,7 @@ public class CursorType extends IterableType {
 	
 	@Override
 	public Type getJavaType(Context context) {
-		return Cursor.class;
+		return IterableWithCounts.class;
 	}
 	
 	@Override
