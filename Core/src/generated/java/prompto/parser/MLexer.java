@@ -90,7 +90,7 @@ public class MLexer extends Lexer {
 		"'>='", "'<'", "'<='", "'<>'", "'='", "'!='", "'=='", "'~='", "'~'", "'<-'", 
 		"'->'", "'Boolean'", "'Character'", "'Text'", "'Integer'", "'Decimal'", 
 		"'Date'", "'Time'", "'DateTime'", "'Period'", "'Version'", "'Method'", 
-		"'Code'", "'Document'", "'Blob'", "'Image'", "'UUID'", "'Iterator'", "'Cursor'", 
+		"'Code'", "'Document'", "'Blob'", "'Image'", "'Uuid'", "'Iterator'", "'Cursor'", 
 		"'abstract'", "'all'", "'always'", "'and'", "'any'", "'as'", null, "'attr'", 
 		"'attribute'", "'attributes'", "'bindings'", "'break'", "'by'", "'case'", 
 		"'catch'", "'category'", "'class'", "'close'", "'contains'", "'def'", 
@@ -514,8 +514,8 @@ public class MLexer extends Lexer {
 		"\u02a9z\3\2\2\2\u02aa\u02ab\7D\2\2\u02ab\u02ac\7n\2\2\u02ac\u02ad\7q\2"+
 		"\2\u02ad\u02ae\7d\2\2\u02ae|\3\2\2\2\u02af\u02b0\7K\2\2\u02b0\u02b1\7"+
 		"o\2\2\u02b1\u02b2\7c\2\2\u02b2\u02b3\7i\2\2\u02b3\u02b4\7g\2\2\u02b4~"+
-		"\3\2\2\2\u02b5\u02b6\7W\2\2\u02b6\u02b7\7W\2\2\u02b7\u02b8\7K\2\2\u02b8"+
-		"\u02b9\7F\2\2\u02b9\u0080\3\2\2\2\u02ba\u02bb\7K\2\2\u02bb\u02bc\7v\2"+
+		"\3\2\2\2\u02b5\u02b6\7W\2\2\u02b6\u02b7\7w\2\2\u02b7\u02b8\7k\2\2\u02b8"+
+		"\u02b9\7f\2\2\u02b9\u0080\3\2\2\2\u02ba\u02bb\7K\2\2\u02bb\u02bc\7v\2"+
 		"\2\u02bc\u02bd\7g\2\2\u02bd\u02be\7t\2\2\u02be\u02bf\7c\2\2\u02bf\u02c0"+
 		"\7v\2\2\u02c0\u02c1\7q\2\2\u02c1\u02c2\7t\2\2\u02c2\u0082\3\2\2\2\u02c3"+
 		"\u02c4\7E\2\2\u02c4\u02c5\7w\2\2\u02c5\u02c6\7t\2\2\u02c6\u02c7\7u\2\2"+

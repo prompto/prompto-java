@@ -90,7 +90,7 @@ public class ELexer extends Lexer {
 		"'>='", "'<'", "'<='", "'<>'", "'='", "'!='", "'=='", "'~='", "'~'", "'<-'", 
 		"'->'", "'Boolean'", "'Character'", "'Text'", "'Integer'", "'Decimal'", 
 		"'Date'", "'Time'", "'DateTime'", "'Period'", "'Version'", "'Method'", 
-		"'Code'", "'Document'", "'Blob'", "'Image'", "'UUID'", "'Iterator'", "'Cursor'", 
+		"'Code'", "'Document'", "'Blob'", "'Image'", "'Uuid'", "'Iterator'", "'Cursor'", 
 		"'abstract'", "'all'", "'always'", "'and'", "'any'", "'as'", null, "'attr'", 
 		"'attribute'", "'attributes'", "'bindings'", "'break'", "'by'", "'case'", 
 		"'catch'", "'category'", "'class'", "'close'", "'contains'", "'def'", 
@@ -520,8 +520,8 @@ public class ELexer extends Lexer {
 		"\u02b8z\3\2\2\2\u02b9\u02ba\7D\2\2\u02ba\u02bb\7n\2\2\u02bb\u02bc\7q\2"+
 		"\2\u02bc\u02bd\7d\2\2\u02bd|\3\2\2\2\u02be\u02bf\7K\2\2\u02bf\u02c0\7"+
 		"o\2\2\u02c0\u02c1\7c\2\2\u02c1\u02c2\7i\2\2\u02c2\u02c3\7g\2\2\u02c3~"+
-		"\3\2\2\2\u02c4\u02c5\7W\2\2\u02c5\u02c6\7W\2\2\u02c6\u02c7\7K\2\2\u02c7"+
-		"\u02c8\7F\2\2\u02c8\u0080\3\2\2\2\u02c9\u02ca\7K\2\2\u02ca\u02cb\7v\2"+
+		"\3\2\2\2\u02c4\u02c5\7W\2\2\u02c5\u02c6\7w\2\2\u02c6\u02c7\7k\2\2\u02c7"+
+		"\u02c8\7f\2\2\u02c8\u0080\3\2\2\2\u02c9\u02ca\7K\2\2\u02ca\u02cb\7v\2"+
 		"\2\u02cb\u02cc\7g\2\2\u02cc\u02cd\7t\2\2\u02cd\u02ce\7c\2\2\u02ce\u02cf"+
 		"\7v\2\2\u02cf\u02d0\7q\2\2\u02d0\u02d1\7t\2\2\u02d1\u0082\3\2\2\2\u02d2"+
 		"\u02d3\7E\2\2\u02d3\u02d4\7w\2\2\u02d4\u02d5\7t\2\2\u02d5\u02d6\7u\2\2"+
