@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import prompto.parser.e.BaseEParserTest;
 
-public class TestReturnCursor extends BaseEParserTest {
+public class TestCompilerIssues extends BaseEParserTest {
 
 	@Test
 	public void returningCursorCompilesToIterableWithCount() {
@@ -19,4 +19,17 @@ public class TestReturnCursor extends BaseEParserTest {
 				+ "    c = ee.count\n";
 		executeString(code, true);
 	}
+	
+	
+	@Test
+	public void returningUUIDCompiles() {
+		String code = "define randomUUID as native method returning UUID doing:\n"
+				+ "    Java: return java.util.UUID.randomUUID();\n\n"
+				+ "define \"randomUUID is not null\" as test method doing:\n"
+				+ "    uuid = randomUUID\n"
+				+ "and verifying:\n"
+				+ "    uuid is not nothing\n";
+		executeString(code, true);
+	}
+
 }

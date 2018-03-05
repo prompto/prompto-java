@@ -23,7 +23,8 @@ public abstract class NativeType extends BaseType {
 					DateTimeType.instance(),
 					PeriodType.instance(),
 					DocumentType.instance(),
-					TupleType.instance()
+					TupleType.instance(),
+					UUIDType.instance()
 				};
 		}
 		return all;

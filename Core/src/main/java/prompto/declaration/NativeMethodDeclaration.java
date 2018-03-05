@@ -106,7 +106,7 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 	
 	
 	public void compileGlobal(Context context, ClassFile classFile) {
-			try {
+		try {
 			context = context.newLocalContext();
 			registerArguments(context);
 			IType returnType = this.checkNative(context);

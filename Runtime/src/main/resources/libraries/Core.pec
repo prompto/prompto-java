@@ -146,7 +146,7 @@ define "now is a DateTime" as test method doing:
 and verifying: 
 	a is a DateTime 
 // returns a random UUID as defined by http://www.ietf.org/rfc/rfc4122.txt
-define randomUUID as native method returning UUID doing:
+define randomUUID as native method returning Uuid doing:
 	Java: return java.util.UUID.randomUUID();
 	C#: return System.Guid.NewGuid();
 	Python2: return uuid4() from module: uuid
