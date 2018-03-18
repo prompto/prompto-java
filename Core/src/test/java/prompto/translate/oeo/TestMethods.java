@@ -42,6 +42,11 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
+	public void testGlobal() throws Exception {
+		compareResourceOEO("methods/global.poc");
+	}
+
+	@Test
 	public void testImplicitMember() throws Exception {
 		compareResourceOEO("methods/implicitMember.poc");
 	}

@@ -42,6 +42,11 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testGlobal() throws Exception {
+		compareResourceEOE("methods/global.pec");
+	}
+
+	@Test
 	public void testHomonym() throws Exception {
 		compareResourceEOE("methods/homonym.pec");
 	}
