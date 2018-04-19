@@ -118,7 +118,7 @@ public class PromptoDateTime implements Comparable<PromptoDateTime> {
 	}
 
 	public String getTzName() {
-		return wrapped.getZone().toTimeZone().getDisplayName(Locale.ENGLISH);
+		return wrapped.getZone().toTimeZone().getID();
 	}
 
 
