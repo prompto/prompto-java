@@ -49,6 +49,11 @@ public class AttributeInfo {
 		this.words = info.isWords();
 	}
 	
+	@Override
+	public String toString() {
+		return name;
+	}
+	
 	public String getName() {
 		return name;
 	}
