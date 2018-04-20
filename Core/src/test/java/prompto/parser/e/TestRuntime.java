@@ -70,8 +70,7 @@ public class TestRuntime extends BaseEParserTest {
 	@Test
 	public void testDateTimeTZName() throws Exception {
 		interpretResource("builtins/dateTimeTZName.pec", false);
-		String tzName = TimeZone.getTimeZone("UTC").getDisplayName(Locale.ENGLISH);
-		assertEquals("tzName=" + tzName, Out.read());
+		assertEquals("tzName=UTC", Out.read());
 	}
 
 }
