@@ -248,6 +248,11 @@ public final class MemStore implements IStore {
 		public void setCategories(String[] categories) throws PromptoError {
 			this.categories = Arrays.asList(categories);
 		}
+		
+		@Override
+		public List<String> getCategories() {
+			return categories;
+		}
 
 		@Override
 		public Object getDbId() {

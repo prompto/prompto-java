@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 import java.security.InvalidParameterException;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import prompto.compiler.ClassConstant;
@@ -31,7 +32,6 @@ import prompto.grammar.Identifier;
 import prompto.grammar.Operator;
 import prompto.instance.MemberInstance;
 import prompto.instance.VariableInstance;
-import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoRoot;
 import prompto.runtime.Context;
 import prompto.runtime.Score;
@@ -490,9 +490,9 @@ public class CategoryType extends BaseType {
 	}
 	
 	private IValue convertStoredToPromptoValue(Context context, CategoryDeclaration decl, IStored stored) {
-		@SuppressWarnings("unchecked")
-		PromptoList<String> categories = new PromptoList<String>((Collection<String>)stored.getData("category"), false);
-		String actualTypeName = categories.getLast();
+		List<String> categories = stored.getCategories();
+		// TODO walk up the list until we find an implemented declaration (not just the actual/last)
+		String actualTypeName = categories.get(categories.size()-1);
 		if(!actualTypeName.equals(this.typeNameId.toString()))
 			decl = (CategoryDeclaration)getDeclaration(context, new Identifier(actualTypeName));
 		return decl.newInstance(context, stored);
