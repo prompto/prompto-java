@@ -40,6 +40,7 @@ import prompto.store.IDataStore;
 import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.utils.CodeWriter;
+import prompto.utils.Logger;
 import prompto.utils.TypeUtils;
 import prompto.value.IInstance;
 import prompto.value.IValue;
@@ -50,6 +51,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public class CategoryType extends BaseType {
 
+	static Logger logger = new Logger();
+	
 	boolean mutable = false;
 	Identifier typeNameId;
 	
@@ -470,6 +473,7 @@ public class CategoryType extends BaseType {
 			else if(decl instanceof CategoryDeclaration)
 				return convertJavaValueToPromptoValue(context, (CategoryDeclaration)decl, value);
 		} catch(Exception e) {
+			logger.error(()->"Unable to convert Java value '" + String.valueOf(value) + "' to IValue", e);
 		}
 		return super.convertJavaValueToIValue(context, value);
 	}
@@ -487,7 +491,7 @@ public class CategoryType extends BaseType {
 	
 	private IValue convertStoredToPromptoValue(Context context, CategoryDeclaration decl, IStored stored) {
 		@SuppressWarnings("unchecked")
-		PromptoList<String> categories = ((PromptoList<String>)stored.getData("category"));
+		PromptoList<String> categories = new PromptoList<String>((Collection<String>)stored.getData("category"), false);
 		String actualTypeName = categories.getLast();
 		if(!actualTypeName.equals(this.typeNameId.toString()))
 			decl = (CategoryDeclaration)getDeclaration(context, new Identifier(actualTypeName));
