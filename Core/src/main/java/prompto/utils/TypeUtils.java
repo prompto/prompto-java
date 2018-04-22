@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
@@ -20,7 +19,6 @@ import prompto.intrinsic.PromptoPeriod;
 import prompto.intrinsic.PromptoTime;
 import prompto.intrinsic.PromptoVersion;
 import prompto.runtime.Context;
-import prompto.store.IStore;
 import prompto.type.AnyType;
 import prompto.type.BooleanType;
 import prompto.type.CategoryType;
@@ -152,22 +150,6 @@ public abstract class TypeUtils {
 
 	public static IType typeToIType(Type type) {
 		return typeToITypeMap.get(type);
-	}
-
-	public static IValue fieldToValue(Context context, String name, Object data) {
-		if(data==null)
-			return null;
-		IType type = fieldType(context, name, data);
-		return type.convertJavaValueToIValue(context, data);
-	}
-
-	private static IType fieldType(Context context, String name, Object data) {
-		if(IStore.dbIdName.equals(name))
-			return typeToIType(data.getClass());
-		else {
-			AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, new Identifier(name));
-			return decl.getType();
-		}
 	}
 
 }

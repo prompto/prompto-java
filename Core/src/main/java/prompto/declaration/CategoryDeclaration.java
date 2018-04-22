@@ -27,6 +27,7 @@ import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
 import prompto.utils.TypeUtils;
+import prompto.value.DbIdValue;
 import prompto.value.IInstance;
 import prompto.value.IValue;
 
@@ -144,7 +145,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	}
 	
 	protected void setDbId(Context context, IInstance instance, Object dbId) {
-		IValue value = TypeUtils.fieldToValue(context, IStore.dbIdName, dbId);
+		IValue value = new DbIdValue(dbId);
 		instance.setMember(context, new Identifier(IStore.dbIdName), value);
 	}
 

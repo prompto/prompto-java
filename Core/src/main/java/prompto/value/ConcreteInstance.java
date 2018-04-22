@@ -8,8 +8,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-
 import prompto.argument.IArgument;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
@@ -34,7 +32,8 @@ import prompto.type.DecimalType;
 import prompto.type.IType;
 import prompto.type.IntegerType;
 import prompto.type.TextType;
-import prompto.utils.TypeUtils;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 public class ConcreteInstance extends BaseValue implements IInstance, IMultiplyable {
 
@@ -203,7 +202,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		Object dbId = getDbId();
 		if(dbId==null) {
 			dbId = this.storable.getOrCreateDbId();
-			IValue value = TypeUtils.fieldToValue(null, IStore.dbIdName, dbId);
+			IValue value = new DbIdValue(dbId);
 			values.put(new Identifier(IStore.dbIdName), value);
 		}
 		return dbId;
