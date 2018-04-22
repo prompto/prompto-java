@@ -1,7 +1,5 @@
 package prompto.intrinsic;
 
-import java.util.Locale;
-
 import org.joda.time.DateTime;
 
 /* DateTime is final so can't just extend it */
