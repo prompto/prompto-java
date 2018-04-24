@@ -7,6 +7,7 @@ import prompto.error.PromptoError;
 
 public interface IStorable {
 
+	void setDbId(Object dbId);
 	Object getOrCreateDbId();
 
 	void setDirty(boolean dirty);

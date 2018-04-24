@@ -254,6 +254,13 @@ public final class MemStore implements IStore {
 			return categories;
 		}
 
+		
+		@Override
+		public void setDbId(Object dbId) {
+			setDirty(true);
+			document.put(dbIdName, dbId);
+		}
+		
 		@Override
 		public Object getDbId() {
 			return getData(dbIdName);
