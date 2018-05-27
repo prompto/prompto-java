@@ -18,14 +18,16 @@ public class PromptoClassLoader extends URLClassLoader {
 		return PromptoClassLoader.class.getClassLoader();
 	}
 
-	private static File makeClassDir(File promptoDir) {
+	private static File makeClassesDir(File promptoDir) {
 		File javaDir = new File(promptoDir, "java");
-		File classDir = new File(javaDir, "classes");
-		classDir.mkdirs();
-		if(!classDir.exists())
-			throw new RuntimeException("Could not create prompto class dir at " + classDir.getAbsolutePath());
-		logger.info(()->"Storing compiled classes in " + classDir.getAbsolutePath());
-		return classDir;
+		File classesDir = new File(javaDir, "classes");
+		if(!classesDir.exists()) {
+			logger.debug(()->"Storing compiled classes in " + classesDir.getAbsolutePath());
+			classesDir.mkdirs();
+			if(!classesDir.exists())
+				throw new RuntimeException("Could not create prompto class dir at " + classesDir.getAbsolutePath());
+		}
+		return classesDir;
 	}
 
 	private static URL[] makeClassDirURLs(File classDir) {
@@ -81,7 +83,7 @@ public class PromptoClassLoader extends URLClassLoader {
 	Context context;
 	
 	private PromptoClassLoader(Context context, File promptoDir) {
-		super(makeClassDirURLs(makeClassDir(promptoDir)), getParentClassLoader());
+		super(makeClassDirURLs(makeClassesDir(promptoDir)), getParentClassLoader());
 		this.context = context;
 	}
 	

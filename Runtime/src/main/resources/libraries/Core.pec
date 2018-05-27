@@ -5,7 +5,7 @@ define Any as native category with attributes id and text, and bindings:
 		C#: prompto.value.Any
 		Python2: Any from module: prompto.value.Any
 		Python3: Any from module: prompto.value.Any
-		JavaScript: Any from module: prompto/value/Any.js
+		JavaScript: AnyValue from module: prompto/value/AnyValue.js
 
 and methods: 
 
@@ -151,7 +151,7 @@ define randomUuid as native method returning Uuid doing:
 	C#: return System.Guid.NewGuid();
 	Python2: return uuid4() from module: uuid
 	Python3: return uuid4() from module: uuid
-	JavaScript: return UUIDjs.create(); from module: prompto/utils/UUIDjs.js
+	JavaScript: return UUID.create(); from module: prompto/intrinsic/UUID.js
 
 
 define "randomUuid is not null" as test method doing:
