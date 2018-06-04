@@ -30,6 +30,11 @@ public class TestMutability extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledImmutable() throws Exception {
+		checkTranspiledOutput("mutability/immutable.pec");
+	}
+
+	@Test
 	public void testInterpretedImmutableArgument() throws Exception {
 		checkInterpretedOutput("mutability/immutableArgument.pec");
 	}
@@ -37,6 +42,11 @@ public class TestMutability extends BaseEParserTest {
 	@Test
 	public void testCompiledImmutableArgument() throws Exception {
 		checkCompiledOutput("mutability/immutableArgument.pec");
+	}
+
+	@Test
+	public void testTranspiledImmutableArgument() throws Exception {
+		checkTranspiledOutput("mutability/immutableArgument.pec");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestMutability extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledImmutableDict() throws Exception {
+		checkTranspiledOutput("mutability/immutableDict.pec");
+	}
+
+	@Test
 	public void testInterpretedImmutableList() throws Exception {
 		checkInterpretedOutput("mutability/immutableList.pec");
 	}
@@ -57,6 +72,11 @@ public class TestMutability extends BaseEParserTest {
 	@Test
 	public void testCompiledImmutableList() throws Exception {
 		checkCompiledOutput("mutability/immutableList.pec");
+	}
+
+	@Test
+	public void testTranspiledImmutableList() throws Exception {
+		checkTranspiledOutput("mutability/immutableList.pec");
 	}
 
 	@Test
@@ -70,6 +90,11 @@ public class TestMutability extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledImmutableMember() throws Exception {
+		checkTranspiledOutput("mutability/immutableMember.pec");
+	}
+
+	@Test
 	public void testInterpretedImmutableTuple() throws Exception {
 		checkInterpretedOutput("mutability/immutableTuple.pec");
 	}
@@ -77,6 +102,11 @@ public class TestMutability extends BaseEParserTest {
 	@Test
 	public void testCompiledImmutableTuple() throws Exception {
 		checkCompiledOutput("mutability/immutableTuple.pec");
+	}
+
+	@Test
+	public void testTranspiledImmutableTuple() throws Exception {
+		checkTranspiledOutput("mutability/immutableTuple.pec");
 	}
 
 	@Test
@@ -90,6 +120,11 @@ public class TestMutability extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledMutable() throws Exception {
+		checkTranspiledOutput("mutability/mutable.pec");
+	}
+
+	@Test
 	public void testInterpretedMutableArgument() throws Exception {
 		checkInterpretedOutput("mutability/mutableArgument.pec");
 	}
@@ -97,6 +132,11 @@ public class TestMutability extends BaseEParserTest {
 	@Test
 	public void testCompiledMutableArgument() throws Exception {
 		checkCompiledOutput("mutability/mutableArgument.pec");
+	}
+
+	@Test
+	public void testTranspiledMutableArgument() throws Exception {
+		checkTranspiledOutput("mutability/mutableArgument.pec");
 	}
 
 	@Test
@@ -110,6 +150,11 @@ public class TestMutability extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledMutableDict() throws Exception {
+		checkTranspiledOutput("mutability/mutableDict.pec");
+	}
+
+	@Test
 	public void testInterpretedMutableList() throws Exception {
 		checkInterpretedOutput("mutability/mutableList.pec");
 	}
@@ -117,6 +162,11 @@ public class TestMutability extends BaseEParserTest {
 	@Test
 	public void testCompiledMutableList() throws Exception {
 		checkCompiledOutput("mutability/mutableList.pec");
+	}
+
+	@Test
+	public void testTranspiledMutableList() throws Exception {
+		checkTranspiledOutput("mutability/mutableList.pec");
 	}
 
 	@Test
@@ -130,6 +180,11 @@ public class TestMutability extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledMutableMember() throws Exception {
+		checkTranspiledOutput("mutability/mutableMember.pec");
+	}
+
+	@Test
 	public void testInterpretedMutableTuple() throws Exception {
 		checkInterpretedOutput("mutability/mutableTuple.pec");
 	}
@@ -137,6 +192,11 @@ public class TestMutability extends BaseEParserTest {
 	@Test
 	public void testCompiledMutableTuple() throws Exception {
 		checkCompiledOutput("mutability/mutableTuple.pec");
+	}
+
+	@Test
+	public void testTranspiledMutableTuple() throws Exception {
+		checkTranspiledOutput("mutability/mutableTuple.pec");
 	}
 
 }

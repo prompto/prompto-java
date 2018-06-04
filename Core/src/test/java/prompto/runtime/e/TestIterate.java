@@ -30,6 +30,11 @@ public class TestIterate extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledForEachCategoryList() throws Exception {
+		checkTranspiledOutput("iterate/forEachCategoryList.pec");
+	}
+
+	@Test
 	public void testInterpretedForEachIntegerList() throws Exception {
 		checkInterpretedOutput("iterate/forEachIntegerList.pec");
 	}
@@ -37,6 +42,11 @@ public class TestIterate extends BaseEParserTest {
 	@Test
 	public void testCompiledForEachIntegerList() throws Exception {
 		checkCompiledOutput("iterate/forEachIntegerList.pec");
+	}
+
+	@Test
+	public void testTranspiledForEachIntegerList() throws Exception {
+		checkTranspiledOutput("iterate/forEachIntegerList.pec");
 	}
 
 }

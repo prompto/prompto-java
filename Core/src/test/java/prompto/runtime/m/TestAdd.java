@@ -29,5 +29,10 @@ public class TestAdd extends BaseMParserTest {
 		checkCompiledOutput("add/addInteger.pmc");
 	}
 
+	@Test
+	public void testTranspiledAddInteger() throws Exception {
+		checkTranspiledOutput("add/addInteger.pmc");
+	}
+
 }
 

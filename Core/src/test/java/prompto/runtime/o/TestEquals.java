@@ -30,6 +30,11 @@ public class TestEquals extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledEqBoolean() throws Exception {
+		checkTranspiledOutput("equals/eqBoolean.poc");
+	}
+
+	@Test
 	public void testInterpretedEqCharacter() throws Exception {
 		checkInterpretedOutput("equals/eqCharacter.poc");
 	}
@@ -37,6 +42,11 @@ public class TestEquals extends BaseOParserTest {
 	@Test
 	public void testCompiledEqCharacter() throws Exception {
 		checkCompiledOutput("equals/eqCharacter.poc");
+	}
+
+	@Test
+	public void testTranspiledEqCharacter() throws Exception {
+		checkTranspiledOutput("equals/eqCharacter.poc");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestEquals extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledEqDate() throws Exception {
+		checkTranspiledOutput("equals/eqDate.poc");
+	}
+
+	@Test
 	public void testInterpretedEqDateTime() throws Exception {
 		checkInterpretedOutput("equals/eqDateTime.poc");
 	}
@@ -57,6 +72,11 @@ public class TestEquals extends BaseOParserTest {
 	@Test
 	public void testCompiledEqDateTime() throws Exception {
 		checkCompiledOutput("equals/eqDateTime.poc");
+	}
+
+	@Test
+	public void testTranspiledEqDateTime() throws Exception {
+		checkTranspiledOutput("equals/eqDateTime.poc");
 	}
 
 	@Test
@@ -70,6 +90,11 @@ public class TestEquals extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledEqDecimal() throws Exception {
+		checkTranspiledOutput("equals/eqDecimal.poc");
+	}
+
+	@Test
 	public void testInterpretedEqDict() throws Exception {
 		checkInterpretedOutput("equals/eqDict.poc");
 	}
@@ -77,6 +102,11 @@ public class TestEquals extends BaseOParserTest {
 	@Test
 	public void testCompiledEqDict() throws Exception {
 		checkCompiledOutput("equals/eqDict.poc");
+	}
+
+	@Test
+	public void testTranspiledEqDict() throws Exception {
+		checkTranspiledOutput("equals/eqDict.poc");
 	}
 
 	@Test
@@ -90,6 +120,11 @@ public class TestEquals extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledEqInteger() throws Exception {
+		checkTranspiledOutput("equals/eqInteger.poc");
+	}
+
+	@Test
 	public void testInterpretedEqList() throws Exception {
 		checkInterpretedOutput("equals/eqList.poc");
 	}
@@ -97,6 +132,11 @@ public class TestEquals extends BaseOParserTest {
 	@Test
 	public void testCompiledEqList() throws Exception {
 		checkCompiledOutput("equals/eqList.poc");
+	}
+
+	@Test
+	public void testTranspiledEqList() throws Exception {
+		checkTranspiledOutput("equals/eqList.poc");
 	}
 
 	@Test
@@ -110,6 +150,11 @@ public class TestEquals extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledEqPeriod() throws Exception {
+		checkTranspiledOutput("equals/eqPeriod.poc");
+	}
+
+	@Test
 	public void testInterpretedEqRange() throws Exception {
 		checkInterpretedOutput("equals/eqRange.poc");
 	}
@@ -117,6 +162,11 @@ public class TestEquals extends BaseOParserTest {
 	@Test
 	public void testCompiledEqRange() throws Exception {
 		checkCompiledOutput("equals/eqRange.poc");
+	}
+
+	@Test
+	public void testTranspiledEqRange() throws Exception {
+		checkTranspiledOutput("equals/eqRange.poc");
 	}
 
 	@Test
@@ -130,6 +180,11 @@ public class TestEquals extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledEqSet() throws Exception {
+		checkTranspiledOutput("equals/eqSet.poc");
+	}
+
+	@Test
 	public void testInterpretedEqText() throws Exception {
 		checkInterpretedOutput("equals/eqText.poc");
 	}
@@ -137,6 +192,11 @@ public class TestEquals extends BaseOParserTest {
 	@Test
 	public void testCompiledEqText() throws Exception {
 		checkCompiledOutput("equals/eqText.poc");
+	}
+
+	@Test
+	public void testTranspiledEqText() throws Exception {
+		checkTranspiledOutput("equals/eqText.poc");
 	}
 
 	@Test
@@ -150,6 +210,11 @@ public class TestEquals extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledEqTime() throws Exception {
+		checkTranspiledOutput("equals/eqTime.poc");
+	}
+
+	@Test
 	public void testInterpretedEqVersion() throws Exception {
 		checkInterpretedOutput("equals/eqVersion.poc");
 	}
@@ -157,6 +222,11 @@ public class TestEquals extends BaseOParserTest {
 	@Test
 	public void testCompiledEqVersion() throws Exception {
 		checkCompiledOutput("equals/eqVersion.poc");
+	}
+
+	@Test
+	public void testTranspiledEqVersion() throws Exception {
+		checkTranspiledOutput("equals/eqVersion.poc");
 	}
 
 	@Test
@@ -170,6 +240,11 @@ public class TestEquals extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledIsBoolean() throws Exception {
+		checkTranspiledOutput("equals/isBoolean.poc");
+	}
+
+	@Test
 	public void testInterpretedIsInstance() throws Exception {
 		checkInterpretedOutput("equals/isInstance.poc");
 	}
@@ -177,6 +252,11 @@ public class TestEquals extends BaseOParserTest {
 	@Test
 	public void testCompiledIsInstance() throws Exception {
 		checkCompiledOutput("equals/isInstance.poc");
+	}
+
+	@Test
+	public void testTranspiledIsInstance() throws Exception {
+		checkTranspiledOutput("equals/isInstance.poc");
 	}
 
 	@Test
@@ -190,6 +270,11 @@ public class TestEquals extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledIsNotBoolean() throws Exception {
+		checkTranspiledOutput("equals/isNotBoolean.poc");
+	}
+
+	@Test
 	public void testInterpretedIsNotInstance() throws Exception {
 		checkInterpretedOutput("equals/isNotInstance.poc");
 	}
@@ -197,6 +282,11 @@ public class TestEquals extends BaseOParserTest {
 	@Test
 	public void testCompiledIsNotInstance() throws Exception {
 		checkCompiledOutput("equals/isNotInstance.poc");
+	}
+
+	@Test
+	public void testTranspiledIsNotInstance() throws Exception {
+		checkTranspiledOutput("equals/isNotInstance.poc");
 	}
 
 	@Test
@@ -210,6 +300,11 @@ public class TestEquals extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledNeqBoolean() throws Exception {
+		checkTranspiledOutput("equals/neqBoolean.poc");
+	}
+
+	@Test
 	public void testInterpretedNeqCharacter() throws Exception {
 		checkInterpretedOutput("equals/neqCharacter.poc");
 	}
@@ -217,6 +312,11 @@ public class TestEquals extends BaseOParserTest {
 	@Test
 	public void testCompiledNeqCharacter() throws Exception {
 		checkCompiledOutput("equals/neqCharacter.poc");
+	}
+
+	@Test
+	public void testTranspiledNeqCharacter() throws Exception {
+		checkTranspiledOutput("equals/neqCharacter.poc");
 	}
 
 	@Test
@@ -230,6 +330,11 @@ public class TestEquals extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledNeqDate() throws Exception {
+		checkTranspiledOutput("equals/neqDate.poc");
+	}
+
+	@Test
 	public void testInterpretedNeqDateTime() throws Exception {
 		checkInterpretedOutput("equals/neqDateTime.poc");
 	}
@@ -237,6 +342,11 @@ public class TestEquals extends BaseOParserTest {
 	@Test
 	public void testCompiledNeqDateTime() throws Exception {
 		checkCompiledOutput("equals/neqDateTime.poc");
+	}
+
+	@Test
+	public void testTranspiledNeqDateTime() throws Exception {
+		checkTranspiledOutput("equals/neqDateTime.poc");
 	}
 
 	@Test
@@ -250,6 +360,11 @@ public class TestEquals extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledNeqDecimal() throws Exception {
+		checkTranspiledOutput("equals/neqDecimal.poc");
+	}
+
+	@Test
 	public void testInterpretedNeqDict() throws Exception {
 		checkInterpretedOutput("equals/neqDict.poc");
 	}
@@ -257,6 +372,11 @@ public class TestEquals extends BaseOParserTest {
 	@Test
 	public void testCompiledNeqDict() throws Exception {
 		checkCompiledOutput("equals/neqDict.poc");
+	}
+
+	@Test
+	public void testTranspiledNeqDict() throws Exception {
+		checkTranspiledOutput("equals/neqDict.poc");
 	}
 
 	@Test
@@ -270,6 +390,11 @@ public class TestEquals extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledNeqInteger() throws Exception {
+		checkTranspiledOutput("equals/neqInteger.poc");
+	}
+
+	@Test
 	public void testInterpretedNeqList() throws Exception {
 		checkInterpretedOutput("equals/neqList.poc");
 	}
@@ -277,6 +402,11 @@ public class TestEquals extends BaseOParserTest {
 	@Test
 	public void testCompiledNeqList() throws Exception {
 		checkCompiledOutput("equals/neqList.poc");
+	}
+
+	@Test
+	public void testTranspiledNeqList() throws Exception {
+		checkTranspiledOutput("equals/neqList.poc");
 	}
 
 	@Test
@@ -290,6 +420,11 @@ public class TestEquals extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledNeqPeriod() throws Exception {
+		checkTranspiledOutput("equals/neqPeriod.poc");
+	}
+
+	@Test
 	public void testInterpretedNeqRange() throws Exception {
 		checkInterpretedOutput("equals/neqRange.poc");
 	}
@@ -297,6 +432,11 @@ public class TestEquals extends BaseOParserTest {
 	@Test
 	public void testCompiledNeqRange() throws Exception {
 		checkCompiledOutput("equals/neqRange.poc");
+	}
+
+	@Test
+	public void testTranspiledNeqRange() throws Exception {
+		checkTranspiledOutput("equals/neqRange.poc");
 	}
 
 	@Test
@@ -310,6 +450,11 @@ public class TestEquals extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledNeqSet() throws Exception {
+		checkTranspiledOutput("equals/neqSet.poc");
+	}
+
+	@Test
 	public void testInterpretedNeqText() throws Exception {
 		checkInterpretedOutput("equals/neqText.poc");
 	}
@@ -317,6 +462,11 @@ public class TestEquals extends BaseOParserTest {
 	@Test
 	public void testCompiledNeqText() throws Exception {
 		checkCompiledOutput("equals/neqText.poc");
+	}
+
+	@Test
+	public void testTranspiledNeqText() throws Exception {
+		checkTranspiledOutput("equals/neqText.poc");
 	}
 
 	@Test
@@ -330,6 +480,11 @@ public class TestEquals extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledNeqTime() throws Exception {
+		checkTranspiledOutput("equals/neqTime.poc");
+	}
+
+	@Test
 	public void testInterpretedReqText() throws Exception {
 		checkInterpretedOutput("equals/reqText.poc");
 	}
@@ -337,6 +492,11 @@ public class TestEquals extends BaseOParserTest {
 	@Test
 	public void testCompiledReqText() throws Exception {
 		checkCompiledOutput("equals/reqText.poc");
+	}
+
+	@Test
+	public void testTranspiledReqText() throws Exception {
+		checkTranspiledOutput("equals/reqText.poc");
 	}
 
 }

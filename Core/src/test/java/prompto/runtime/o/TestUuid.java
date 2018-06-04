@@ -29,5 +29,10 @@ public class TestUuid extends BaseOParserTest {
 		checkCompiledOutput("uuid/uuid.poc");
 	}
 
+	@Test
+	public void testTranspiledUuid() throws Exception {
+		checkTranspiledOutput("uuid/uuid.poc");
+	}
+
 }
 

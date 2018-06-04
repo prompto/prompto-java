@@ -30,6 +30,11 @@ public class TestSetters extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledGetter() throws Exception {
+		checkTranspiledOutput("setters/getter.poc");
+	}
+
+	@Test
 	public void testInterpretedSetter() throws Exception {
 		checkInterpretedOutput("setters/setter.poc");
 	}
@@ -37,6 +42,11 @@ public class TestSetters extends BaseOParserTest {
 	@Test
 	public void testCompiledSetter() throws Exception {
 		checkCompiledOutput("setters/setter.poc");
+	}
+
+	@Test
+	public void testTranspiledSetter() throws Exception {
+		checkTranspiledOutput("setters/setter.poc");
 	}
 
 }

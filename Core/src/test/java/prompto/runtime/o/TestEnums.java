@@ -30,6 +30,11 @@ public class TestEnums extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledCategoryEnum() throws Exception {
+		checkTranspiledOutput("enums/categoryEnum.poc");
+	}
+
+	@Test
 	public void testInterpretedIntegerEnum() throws Exception {
 		checkInterpretedOutput("enums/integerEnum.poc");
 	}
@@ -37,6 +42,11 @@ public class TestEnums extends BaseOParserTest {
 	@Test
 	public void testCompiledIntegerEnum() throws Exception {
 		checkCompiledOutput("enums/integerEnum.poc");
+	}
+
+	@Test
+	public void testTranspiledIntegerEnum() throws Exception {
+		checkTranspiledOutput("enums/integerEnum.poc");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestEnums extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledTextEnum() throws Exception {
+		checkTranspiledOutput("enums/textEnum.poc");
+	}
+
+	@Test
 	public void testInterpretedTextEnumArg() throws Exception {
 		checkInterpretedOutput("enums/textEnumArg.poc");
 	}
@@ -60,6 +75,11 @@ public class TestEnums extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledTextEnumArg() throws Exception {
+		checkTranspiledOutput("enums/textEnumArg.poc");
+	}
+
+	@Test
 	public void testInterpretedTextEnumVar() throws Exception {
 		checkInterpretedOutput("enums/textEnumVar.poc");
 	}
@@ -67,6 +87,11 @@ public class TestEnums extends BaseOParserTest {
 	@Test
 	public void testCompiledTextEnumVar() throws Exception {
 		checkCompiledOutput("enums/textEnumVar.poc");
+	}
+
+	@Test
+	public void testTranspiledTextEnumVar() throws Exception {
+		checkTranspiledOutput("enums/textEnumVar.poc");
 	}
 
 }

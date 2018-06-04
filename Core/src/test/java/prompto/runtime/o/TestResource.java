@@ -30,6 +30,11 @@ public class TestResource extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledReadResource() throws Exception {
+		checkTranspiledOutput("resource/readResource.poc");
+	}
+
+	@Test
 	public void testInterpretedReadWithResource() throws Exception {
 		checkInterpretedOutput("resource/readWithResource.poc");
 	}
@@ -37,6 +42,11 @@ public class TestResource extends BaseOParserTest {
 	@Test
 	public void testCompiledReadWithResource() throws Exception {
 		checkCompiledOutput("resource/readWithResource.poc");
+	}
+
+	@Test
+	public void testTranspiledReadWithResource() throws Exception {
+		checkTranspiledOutput("resource/readWithResource.poc");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestResource extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledWriteResource() throws Exception {
+		checkTranspiledOutput("resource/writeResource.poc");
+	}
+
+	@Test
 	public void testInterpretedWriteWithResource() throws Exception {
 		checkInterpretedOutput("resource/writeWithResource.poc");
 	}
@@ -57,6 +72,11 @@ public class TestResource extends BaseOParserTest {
 	@Test
 	public void testCompiledWriteWithResource() throws Exception {
 		checkCompiledOutput("resource/writeWithResource.poc");
+	}
+
+	@Test
+	public void testTranspiledWriteWithResource() throws Exception {
+		checkTranspiledOutput("resource/writeWithResource.poc");
 	}
 
 }

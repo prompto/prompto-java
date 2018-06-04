@@ -30,6 +30,11 @@ public class TestTuples extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledMultiAssignment() throws Exception {
+		checkTranspiledOutput("tuples/multiAssignment.poc");
+	}
+
+	@Test
 	public void testInterpretedSingleAssignment() throws Exception {
 		checkInterpretedOutput("tuples/singleAssignment.poc");
 	}
@@ -40,6 +45,11 @@ public class TestTuples extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledSingleAssignment() throws Exception {
+		checkTranspiledOutput("tuples/singleAssignment.poc");
+	}
+
+	@Test
 	public void testInterpretedTupleElement() throws Exception {
 		checkInterpretedOutput("tuples/tupleElement.poc");
 	}
@@ -47,6 +57,11 @@ public class TestTuples extends BaseOParserTest {
 	@Test
 	public void testCompiledTupleElement() throws Exception {
 		checkCompiledOutput("tuples/tupleElement.poc");
+	}
+
+	@Test
+	public void testTranspiledTupleElement() throws Exception {
+		checkTranspiledOutput("tuples/tupleElement.poc");
 	}
 
 }

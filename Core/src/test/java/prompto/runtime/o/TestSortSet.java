@@ -30,6 +30,11 @@ public class TestSortSet extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledSortBooleans() throws Exception {
+		checkTranspiledOutput("sortSet/sortBooleans.poc");
+	}
+
+	@Test
 	public void testInterpretedSortDateTimes() throws Exception {
 		checkInterpretedOutput("sortSet/sortDateTimes.poc");
 	}
@@ -37,6 +42,11 @@ public class TestSortSet extends BaseOParserTest {
 	@Test
 	public void testCompiledSortDateTimes() throws Exception {
 		checkCompiledOutput("sortSet/sortDateTimes.poc");
+	}
+
+	@Test
+	public void testTranspiledSortDateTimes() throws Exception {
+		checkTranspiledOutput("sortSet/sortDateTimes.poc");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestSortSet extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledSortDates() throws Exception {
+		checkTranspiledOutput("sortSet/sortDates.poc");
+	}
+
+	@Test
 	public void testInterpretedSortDecimals() throws Exception {
 		checkInterpretedOutput("sortSet/sortDecimals.poc");
 	}
@@ -57,6 +72,11 @@ public class TestSortSet extends BaseOParserTest {
 	@Test
 	public void testCompiledSortDecimals() throws Exception {
 		checkCompiledOutput("sortSet/sortDecimals.poc");
+	}
+
+	@Test
+	public void testTranspiledSortDecimals() throws Exception {
+		checkTranspiledOutput("sortSet/sortDecimals.poc");
 	}
 
 	@Test
@@ -70,6 +90,11 @@ public class TestSortSet extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledSortDescBooleans() throws Exception {
+		checkTranspiledOutput("sortSet/sortDescBooleans.poc");
+	}
+
+	@Test
 	public void testInterpretedSortDescDateTimes() throws Exception {
 		checkInterpretedOutput("sortSet/sortDescDateTimes.poc");
 	}
@@ -77,6 +102,11 @@ public class TestSortSet extends BaseOParserTest {
 	@Test
 	public void testCompiledSortDescDateTimes() throws Exception {
 		checkCompiledOutput("sortSet/sortDescDateTimes.poc");
+	}
+
+	@Test
+	public void testTranspiledSortDescDateTimes() throws Exception {
+		checkTranspiledOutput("sortSet/sortDescDateTimes.poc");
 	}
 
 	@Test
@@ -90,6 +120,11 @@ public class TestSortSet extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledSortDescDates() throws Exception {
+		checkTranspiledOutput("sortSet/sortDescDates.poc");
+	}
+
+	@Test
 	public void testInterpretedSortDescDecimals() throws Exception {
 		checkInterpretedOutput("sortSet/sortDescDecimals.poc");
 	}
@@ -97,6 +132,11 @@ public class TestSortSet extends BaseOParserTest {
 	@Test
 	public void testCompiledSortDescDecimals() throws Exception {
 		checkCompiledOutput("sortSet/sortDescDecimals.poc");
+	}
+
+	@Test
+	public void testTranspiledSortDescDecimals() throws Exception {
+		checkTranspiledOutput("sortSet/sortDescDecimals.poc");
 	}
 
 	@Test
@@ -110,6 +150,11 @@ public class TestSortSet extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledSortDescExpressions() throws Exception {
+		checkTranspiledOutput("sortSet/sortDescExpressions.poc");
+	}
+
+	@Test
 	public void testInterpretedSortDescIntegers() throws Exception {
 		checkInterpretedOutput("sortSet/sortDescIntegers.poc");
 	}
@@ -117,6 +162,11 @@ public class TestSortSet extends BaseOParserTest {
 	@Test
 	public void testCompiledSortDescIntegers() throws Exception {
 		checkCompiledOutput("sortSet/sortDescIntegers.poc");
+	}
+
+	@Test
+	public void testTranspiledSortDescIntegers() throws Exception {
+		checkTranspiledOutput("sortSet/sortDescIntegers.poc");
 	}
 
 	@Test
@@ -130,6 +180,11 @@ public class TestSortSet extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledSortDescKeys() throws Exception {
+		checkTranspiledOutput("sortSet/sortDescKeys.poc");
+	}
+
+	@Test
 	public void testInterpretedSortDescMethods() throws Exception {
 		checkInterpretedOutput("sortSet/sortDescMethods.poc");
 	}
@@ -137,6 +192,11 @@ public class TestSortSet extends BaseOParserTest {
 	@Test
 	public void testCompiledSortDescMethods() throws Exception {
 		checkCompiledOutput("sortSet/sortDescMethods.poc");
+	}
+
+	@Test
+	public void testTranspiledSortDescMethods() throws Exception {
+		checkTranspiledOutput("sortSet/sortDescMethods.poc");
 	}
 
 	@Test
@@ -150,6 +210,11 @@ public class TestSortSet extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledSortDescNames() throws Exception {
+		checkTranspiledOutput("sortSet/sortDescNames.poc");
+	}
+
+	@Test
 	public void testInterpretedSortDescTexts() throws Exception {
 		checkInterpretedOutput("sortSet/sortDescTexts.poc");
 	}
@@ -157,6 +222,11 @@ public class TestSortSet extends BaseOParserTest {
 	@Test
 	public void testCompiledSortDescTexts() throws Exception {
 		checkCompiledOutput("sortSet/sortDescTexts.poc");
+	}
+
+	@Test
+	public void testTranspiledSortDescTexts() throws Exception {
+		checkTranspiledOutput("sortSet/sortDescTexts.poc");
 	}
 
 	@Test
@@ -170,6 +240,11 @@ public class TestSortSet extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledSortDescTimes() throws Exception {
+		checkTranspiledOutput("sortSet/sortDescTimes.poc");
+	}
+
+	@Test
 	public void testInterpretedSortExpressions() throws Exception {
 		checkInterpretedOutput("sortSet/sortExpressions.poc");
 	}
@@ -177,6 +252,11 @@ public class TestSortSet extends BaseOParserTest {
 	@Test
 	public void testCompiledSortExpressions() throws Exception {
 		checkCompiledOutput("sortSet/sortExpressions.poc");
+	}
+
+	@Test
+	public void testTranspiledSortExpressions() throws Exception {
+		checkTranspiledOutput("sortSet/sortExpressions.poc");
 	}
 
 	@Test
@@ -190,6 +270,11 @@ public class TestSortSet extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledSortIntegers() throws Exception {
+		checkTranspiledOutput("sortSet/sortIntegers.poc");
+	}
+
+	@Test
 	public void testInterpretedSortKeys() throws Exception {
 		checkInterpretedOutput("sortSet/sortKeys.poc");
 	}
@@ -197,6 +282,11 @@ public class TestSortSet extends BaseOParserTest {
 	@Test
 	public void testCompiledSortKeys() throws Exception {
 		checkCompiledOutput("sortSet/sortKeys.poc");
+	}
+
+	@Test
+	public void testTranspiledSortKeys() throws Exception {
+		checkTranspiledOutput("sortSet/sortKeys.poc");
 	}
 
 	@Test
@@ -210,6 +300,11 @@ public class TestSortSet extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledSortMethods() throws Exception {
+		checkTranspiledOutput("sortSet/sortMethods.poc");
+	}
+
+	@Test
 	public void testInterpretedSortNames() throws Exception {
 		checkInterpretedOutput("sortSet/sortNames.poc");
 	}
@@ -217,6 +312,11 @@ public class TestSortSet extends BaseOParserTest {
 	@Test
 	public void testCompiledSortNames() throws Exception {
 		checkCompiledOutput("sortSet/sortNames.poc");
+	}
+
+	@Test
+	public void testTranspiledSortNames() throws Exception {
+		checkTranspiledOutput("sortSet/sortNames.poc");
 	}
 
 	@Test
@@ -230,6 +330,11 @@ public class TestSortSet extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledSortTexts() throws Exception {
+		checkTranspiledOutput("sortSet/sortTexts.poc");
+	}
+
+	@Test
 	public void testInterpretedSortTimes() throws Exception {
 		checkInterpretedOutput("sortSet/sortTimes.poc");
 	}
@@ -237,6 +342,11 @@ public class TestSortSet extends BaseOParserTest {
 	@Test
 	public void testCompiledSortTimes() throws Exception {
 		checkCompiledOutput("sortSet/sortTimes.poc");
+	}
+
+	@Test
+	public void testTranspiledSortTimes() throws Exception {
+		checkTranspiledOutput("sortSet/sortTimes.poc");
 	}
 
 }

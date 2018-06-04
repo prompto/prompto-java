@@ -30,6 +30,11 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledDeleteRecords() throws Exception {
+		checkTranspiledOutput("store/deleteRecords.pec");
+	}
+
+	@Test
 	public void testInterpretedFlush() throws Exception {
 		checkInterpretedOutput("store/flush.pec");
 	}
@@ -37,6 +42,11 @@ public class TestStore extends BaseEParserTest {
 	@Test
 	public void testCompiledFlush() throws Exception {
 		checkCompiledOutput("store/flush.pec");
+	}
+
+	@Test
+	public void testTranspiledFlush() throws Exception {
+		checkTranspiledOutput("store/flush.pec");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledListRecords() throws Exception {
+		checkTranspiledOutput("store/listRecords.pec");
+	}
+
+	@Test
 	public void testInterpretedManyRecords() throws Exception {
 		checkInterpretedOutput("store/manyRecords.pec");
 	}
@@ -57,6 +72,11 @@ public class TestStore extends BaseEParserTest {
 	@Test
 	public void testCompiledManyRecords() throws Exception {
 		checkCompiledOutput("store/manyRecords.pec");
+	}
+
+	@Test
+	public void testTranspiledManyRecords() throws Exception {
+		checkTranspiledOutput("store/manyRecords.pec");
 	}
 
 	@Test
@@ -70,6 +90,11 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledManyUntypedRecords() throws Exception {
+		checkTranspiledOutput("store/manyUntypedRecords.pec");
+	}
+
+	@Test
 	public void testInterpretedSimpleRecord() throws Exception {
 		checkInterpretedOutput("store/simpleRecord.pec");
 	}
@@ -77,6 +102,11 @@ public class TestStore extends BaseEParserTest {
 	@Test
 	public void testCompiledSimpleRecord() throws Exception {
 		checkCompiledOutput("store/simpleRecord.pec");
+	}
+
+	@Test
+	public void testTranspiledSimpleRecord() throws Exception {
+		checkTranspiledOutput("store/simpleRecord.pec");
 	}
 
 	@Test
@@ -90,6 +120,11 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledSlicedRecords() throws Exception {
+		checkTranspiledOutput("store/slicedRecords.pec");
+	}
+
+	@Test
 	public void testInterpretedSortedRecords() throws Exception {
 		checkInterpretedOutput("store/sortedRecords.pec");
 	}
@@ -97,6 +132,11 @@ public class TestStore extends BaseEParserTest {
 	@Test
 	public void testCompiledSortedRecords() throws Exception {
 		checkCompiledOutput("store/sortedRecords.pec");
+	}
+
+	@Test
+	public void testTranspiledSortedRecords() throws Exception {
+		checkTranspiledOutput("store/sortedRecords.pec");
 	}
 
 	@Test
@@ -110,6 +150,11 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledSubRecord() throws Exception {
+		checkTranspiledOutput("store/subRecord.pec");
+	}
+
+	@Test
 	public void testInterpretedUntypedRecord() throws Exception {
 		checkInterpretedOutput("store/untypedRecord.pec");
 	}
@@ -117,6 +162,11 @@ public class TestStore extends BaseEParserTest {
 	@Test
 	public void testCompiledUntypedRecord() throws Exception {
 		checkCompiledOutput("store/untypedRecord.pec");
+	}
+
+	@Test
+	public void testTranspiledUntypedRecord() throws Exception {
+		checkTranspiledOutput("store/untypedRecord.pec");
 	}
 
 }

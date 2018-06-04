@@ -120,6 +120,30 @@ public abstract class BaseParserTest extends BaseTest {
 		}
 	}
 	
+	protected boolean transpileResource(String resourceName, boolean reThrow) throws PromptoError {
+		return false;
+		/*
+		try {
+			loadResource(resourceName);
+			File root = Files.createTempDirectory("prompto_").toFile();
+			if(context.hasTests()) {
+				Executor.executeTests(context, root);
+				return true;
+			} else {
+				Executor.executeMainNoArgs(context, root);
+				return false;
+			}
+		} catch(Exception e) {
+			if(reThrow && e instanceof PromptoError)
+				throw (PromptoError)e;
+			e.printStackTrace(System.err);
+			fail(e.getMessage());
+			return false;
+		}
+		*/
+		
+	}
+	
 	
 	protected boolean executeString(String code, boolean reThrow) throws PromptoError {
 		try {
@@ -155,6 +179,15 @@ public abstract class BaseParserTest extends BaseTest {
 	protected void checkCompiledOutput(String resource) throws Exception {
 		try {
 			checkOutput(resource, this::executeResource);
+		} catch(Throwable t) {
+			t.printStackTrace(System.err);
+			throw t;
+		}
+	}
+
+	protected void checkTranspiledOutput(String resource) throws Exception {
+		try {
+			// checkOutput(resource, this::transpileResource);
 		} catch(Throwable t) {
 			t.printStackTrace(System.err);
 			throw t;

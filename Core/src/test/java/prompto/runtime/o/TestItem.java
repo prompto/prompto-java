@@ -30,6 +30,11 @@ public class TestItem extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledItemDict() throws Exception {
+		checkTranspiledOutput("item/itemDict.poc");
+	}
+
+	@Test
 	public void testInterpretedItemList() throws Exception {
 		checkInterpretedOutput("item/itemList.poc");
 	}
@@ -37,6 +42,11 @@ public class TestItem extends BaseOParserTest {
 	@Test
 	public void testCompiledItemList() throws Exception {
 		checkCompiledOutput("item/itemList.poc");
+	}
+
+	@Test
+	public void testTranspiledItemList() throws Exception {
+		checkTranspiledOutput("item/itemList.poc");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestItem extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledItemRange() throws Exception {
+		checkTranspiledOutput("item/itemRange.poc");
+	}
+
+	@Test
 	public void testInterpretedItemSet() throws Exception {
 		checkInterpretedOutput("item/itemSet.poc");
 	}
@@ -60,6 +75,11 @@ public class TestItem extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledItemSet() throws Exception {
+		checkTranspiledOutput("item/itemSet.poc");
+	}
+
+	@Test
 	public void testInterpretedItemText() throws Exception {
 		checkInterpretedOutput("item/itemText.poc");
 	}
@@ -67,6 +87,11 @@ public class TestItem extends BaseOParserTest {
 	@Test
 	public void testCompiledItemText() throws Exception {
 		checkCompiledOutput("item/itemText.poc");
+	}
+
+	@Test
+	public void testTranspiledItemText() throws Exception {
+		checkTranspiledOutput("item/itemText.poc");
 	}
 
 }

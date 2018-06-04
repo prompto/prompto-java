@@ -30,6 +30,11 @@ public class TestMinus extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledMinusDecimal() throws Exception {
+		checkTranspiledOutput("minus/minusDecimal.poc");
+	}
+
+	@Test
 	public void testInterpretedMinusInteger() throws Exception {
 		checkInterpretedOutput("minus/minusInteger.poc");
 	}
@@ -40,6 +45,11 @@ public class TestMinus extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledMinusInteger() throws Exception {
+		checkTranspiledOutput("minus/minusInteger.poc");
+	}
+
+	@Test
 	public void testInterpretedMinusPeriod() throws Exception {
 		checkInterpretedOutput("minus/minusPeriod.poc");
 	}
@@ -47,6 +57,11 @@ public class TestMinus extends BaseOParserTest {
 	@Test
 	public void testCompiledMinusPeriod() throws Exception {
 		checkCompiledOutput("minus/minusPeriod.poc");
+	}
+
+	@Test
+	public void testTranspiledMinusPeriod() throws Exception {
+		checkTranspiledOutput("minus/minusPeriod.poc");
 	}
 
 }

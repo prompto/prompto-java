@@ -30,6 +30,11 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledAnonymous() throws Exception {
+		checkTranspiledOutput("methods/anonymous.poc");
+	}
+
+	@Test
 	public void testInterpretedAttribute() throws Exception {
 		checkInterpretedOutput("methods/attribute.poc");
 	}
@@ -37,6 +42,11 @@ public class TestMethods extends BaseOParserTest {
 	@Test
 	public void testCompiledAttribute() throws Exception {
 		checkCompiledOutput("methods/attribute.poc");
+	}
+
+	@Test
+	public void testTranspiledAttribute() throws Exception {
+		checkTranspiledOutput("methods/attribute.poc");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledDefault() throws Exception {
+		checkTranspiledOutput("methods/default.poc");
+	}
+
+	@Test
 	public void testInterpretedE_as_e_bug() throws Exception {
 		checkInterpretedOutput("methods/e_as_e_bug.poc");
 	}
@@ -57,6 +72,11 @@ public class TestMethods extends BaseOParserTest {
 	@Test
 	public void testCompiledE_as_e_bug() throws Exception {
 		checkCompiledOutput("methods/e_as_e_bug.poc");
+	}
+
+	@Test
+	public void testTranspiledE_as_e_bug() throws Exception {
+		checkTranspiledOutput("methods/e_as_e_bug.poc");
 	}
 
 	@Test
@@ -70,6 +90,11 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledExplicit() throws Exception {
+		checkTranspiledOutput("methods/explicit.poc");
+	}
+
+	@Test
 	public void testInterpretedExpressionWith() throws Exception {
 		checkInterpretedOutput("methods/expressionWith.poc");
 	}
@@ -77,6 +102,11 @@ public class TestMethods extends BaseOParserTest {
 	@Test
 	public void testCompiledExpressionWith() throws Exception {
 		checkCompiledOutput("methods/expressionWith.poc");
+	}
+
+	@Test
+	public void testTranspiledExpressionWith() throws Exception {
+		checkTranspiledOutput("methods/expressionWith.poc");
 	}
 
 	@Test
@@ -90,6 +120,11 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledExtended() throws Exception {
+		checkTranspiledOutput("methods/extended.poc");
+	}
+
+	@Test
 	public void testInterpretedImplicitMember() throws Exception {
 		checkInterpretedOutput("methods/implicitMember.poc");
 	}
@@ -97,6 +132,11 @@ public class TestMethods extends BaseOParserTest {
 	@Test
 	public void testCompiledImplicitMember() throws Exception {
 		checkCompiledOutput("methods/implicitMember.poc");
+	}
+
+	@Test
+	public void testTranspiledImplicitMember() throws Exception {
+		checkTranspiledOutput("methods/implicitMember.poc");
 	}
 
 	@Test
@@ -110,6 +150,11 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledMember() throws Exception {
+		checkTranspiledOutput("methods/member.poc");
+	}
+
+	@Test
 	public void testInterpretedOverride() throws Exception {
 		checkInterpretedOutput("methods/override.poc");
 	}
@@ -117,6 +162,11 @@ public class TestMethods extends BaseOParserTest {
 	@Test
 	public void testCompiledOverride() throws Exception {
 		checkCompiledOutput("methods/override.poc");
+	}
+
+	@Test
+	public void testTranspiledOverride() throws Exception {
+		checkTranspiledOutput("methods/override.poc");
 	}
 
 	@Test
@@ -130,6 +180,11 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledPolymorphic_abstract() throws Exception {
+		checkTranspiledOutput("methods/polymorphic_abstract.poc");
+	}
+
+	@Test
 	public void testInterpretedPolymorphic_implicit() throws Exception {
 		checkInterpretedOutput("methods/polymorphic_implicit.poc");
 	}
@@ -137,6 +192,11 @@ public class TestMethods extends BaseOParserTest {
 	@Test
 	public void testCompiledPolymorphic_implicit() throws Exception {
 		checkCompiledOutput("methods/polymorphic_implicit.poc");
+	}
+
+	@Test
+	public void testTranspiledPolymorphic_implicit() throws Exception {
+		checkTranspiledOutput("methods/polymorphic_implicit.poc");
 	}
 
 	@Test
@@ -150,6 +210,11 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledPolymorphic_named() throws Exception {
+		checkTranspiledOutput("methods/polymorphic_named.poc");
+	}
+
+	@Test
 	public void testInterpretedPolymorphic_runtime() throws Exception {
 		checkInterpretedOutput("methods/polymorphic_runtime.poc");
 	}
@@ -160,6 +225,11 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledPolymorphic_runtime() throws Exception {
+		checkTranspiledOutput("methods/polymorphic_runtime.poc");
+	}
+
+	@Test
 	public void testInterpretedSpecified() throws Exception {
 		checkInterpretedOutput("methods/specified.poc");
 	}
@@ -167,6 +237,11 @@ public class TestMethods extends BaseOParserTest {
 	@Test
 	public void testCompiledSpecified() throws Exception {
 		checkCompiledOutput("methods/specified.poc");
+	}
+
+	@Test
+	public void testTranspiledSpecified() throws Exception {
+		checkTranspiledOutput("methods/specified.poc");
 	}
 
 }

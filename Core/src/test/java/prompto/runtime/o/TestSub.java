@@ -30,6 +30,11 @@ public class TestSub extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledSubDate() throws Exception {
+		checkTranspiledOutput("sub/subDate.poc");
+	}
+
+	@Test
 	public void testInterpretedSubDateTime() throws Exception {
 		checkInterpretedOutput("sub/subDateTime.poc");
 	}
@@ -37,6 +42,11 @@ public class TestSub extends BaseOParserTest {
 	@Test
 	public void testCompiledSubDateTime() throws Exception {
 		checkCompiledOutput("sub/subDateTime.poc");
+	}
+
+	@Test
+	public void testTranspiledSubDateTime() throws Exception {
+		checkTranspiledOutput("sub/subDateTime.poc");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestSub extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledSubDecimal() throws Exception {
+		checkTranspiledOutput("sub/subDecimal.poc");
+	}
+
+	@Test
 	public void testInterpretedSubInteger() throws Exception {
 		checkInterpretedOutput("sub/subInteger.poc");
 	}
@@ -57,6 +72,11 @@ public class TestSub extends BaseOParserTest {
 	@Test
 	public void testCompiledSubInteger() throws Exception {
 		checkCompiledOutput("sub/subInteger.poc");
+	}
+
+	@Test
+	public void testTranspiledSubInteger() throws Exception {
+		checkTranspiledOutput("sub/subInteger.poc");
 	}
 
 	@Test
@@ -70,6 +90,11 @@ public class TestSub extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledSubPeriod() throws Exception {
+		checkTranspiledOutput("sub/subPeriod.poc");
+	}
+
+	@Test
 	public void testInterpretedSubTime() throws Exception {
 		checkInterpretedOutput("sub/subTime.poc");
 	}
@@ -77,6 +102,11 @@ public class TestSub extends BaseOParserTest {
 	@Test
 	public void testCompiledSubTime() throws Exception {
 		checkCompiledOutput("sub/subTime.poc");
+	}
+
+	@Test
+	public void testTranspiledSubTime() throws Exception {
+		checkTranspiledOutput("sub/subTime.poc");
 	}
 
 }

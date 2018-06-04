@@ -30,6 +30,11 @@ public class TestDocuments extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledBlob() throws Exception {
+		checkTranspiledOutput("documents/blob.pec");
+	}
+
+	@Test
 	public void testInterpretedDeepItem() throws Exception {
 		checkInterpretedOutput("documents/deepItem.pec");
 	}
@@ -37,6 +42,11 @@ public class TestDocuments extends BaseEParserTest {
 	@Test
 	public void testCompiledDeepItem() throws Exception {
 		checkCompiledOutput("documents/deepItem.pec");
+	}
+
+	@Test
+	public void testTranspiledDeepItem() throws Exception {
+		checkTranspiledOutput("documents/deepItem.pec");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestDocuments extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledDeepVariable() throws Exception {
+		checkTranspiledOutput("documents/deepVariable.pec");
+	}
+
+	@Test
 	public void testInterpretedItem() throws Exception {
 		checkInterpretedOutput("documents/item.pec");
 	}
@@ -57,6 +72,11 @@ public class TestDocuments extends BaseEParserTest {
 	@Test
 	public void testCompiledItem() throws Exception {
 		checkCompiledOutput("documents/item.pec");
+	}
+
+	@Test
+	public void testTranspiledItem() throws Exception {
+		checkTranspiledOutput("documents/item.pec");
 	}
 
 	@Test
@@ -70,6 +90,11 @@ public class TestDocuments extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledNamedItem() throws Exception {
+		checkTranspiledOutput("documents/namedItem.pec");
+	}
+
+	@Test
 	public void testInterpretedVariable() throws Exception {
 		checkInterpretedOutput("documents/variable.pec");
 	}
@@ -77,6 +102,11 @@ public class TestDocuments extends BaseEParserTest {
 	@Test
 	public void testCompiledVariable() throws Exception {
 		checkCompiledOutput("documents/variable.pec");
+	}
+
+	@Test
+	public void testTranspiledVariable() throws Exception {
+		checkTranspiledOutput("documents/variable.pec");
 	}
 
 }

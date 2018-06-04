@@ -30,6 +30,11 @@ public class TestSub extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledSubDate() throws Exception {
+		checkTranspiledOutput("sub/subDate.pec");
+	}
+
+	@Test
 	public void testInterpretedSubDateTime() throws Exception {
 		checkInterpretedOutput("sub/subDateTime.pec");
 	}
@@ -37,6 +42,11 @@ public class TestSub extends BaseEParserTest {
 	@Test
 	public void testCompiledSubDateTime() throws Exception {
 		checkCompiledOutput("sub/subDateTime.pec");
+	}
+
+	@Test
+	public void testTranspiledSubDateTime() throws Exception {
+		checkTranspiledOutput("sub/subDateTime.pec");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestSub extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledSubDecimal() throws Exception {
+		checkTranspiledOutput("sub/subDecimal.pec");
+	}
+
+	@Test
 	public void testInterpretedSubDecimalEnum() throws Exception {
 		checkInterpretedOutput("sub/subDecimalEnum.pec");
 	}
@@ -57,6 +72,11 @@ public class TestSub extends BaseEParserTest {
 	@Test
 	public void testCompiledSubDecimalEnum() throws Exception {
 		checkCompiledOutput("sub/subDecimalEnum.pec");
+	}
+
+	@Test
+	public void testTranspiledSubDecimalEnum() throws Exception {
+		checkTranspiledOutput("sub/subDecimalEnum.pec");
 	}
 
 	@Test
@@ -70,6 +90,11 @@ public class TestSub extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledSubInteger() throws Exception {
+		checkTranspiledOutput("sub/subInteger.pec");
+	}
+
+	@Test
 	public void testInterpretedSubIntegerEnum() throws Exception {
 		checkInterpretedOutput("sub/subIntegerEnum.pec");
 	}
@@ -77,6 +102,11 @@ public class TestSub extends BaseEParserTest {
 	@Test
 	public void testCompiledSubIntegerEnum() throws Exception {
 		checkCompiledOutput("sub/subIntegerEnum.pec");
+	}
+
+	@Test
+	public void testTranspiledSubIntegerEnum() throws Exception {
+		checkTranspiledOutput("sub/subIntegerEnum.pec");
 	}
 
 	@Test
@@ -90,6 +120,11 @@ public class TestSub extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledSubPeriod() throws Exception {
+		checkTranspiledOutput("sub/subPeriod.pec");
+	}
+
+	@Test
 	public void testInterpretedSubTime() throws Exception {
 		checkInterpretedOutput("sub/subTime.pec");
 	}
@@ -97,6 +132,11 @@ public class TestSub extends BaseEParserTest {
 	@Test
 	public void testCompiledSubTime() throws Exception {
 		checkCompiledOutput("sub/subTime.pec");
+	}
+
+	@Test
+	public void testTranspiledSubTime() throws Exception {
+		checkTranspiledOutput("sub/subTime.pec");
 	}
 
 }

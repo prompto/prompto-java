@@ -30,6 +30,11 @@ public class TestFilter extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledFilterFromCursor() throws Exception {
+		checkTranspiledOutput("filter/filterFromCursor.pec");
+	}
+
+	@Test
 	public void testInterpretedFilterFromList() throws Exception {
 		checkInterpretedOutput("filter/filterFromList.pec");
 	}
@@ -40,6 +45,11 @@ public class TestFilter extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledFilterFromList() throws Exception {
+		checkTranspiledOutput("filter/filterFromList.pec");
+	}
+
+	@Test
 	public void testInterpretedFilterFromSet() throws Exception {
 		checkInterpretedOutput("filter/filterFromSet.pec");
 	}
@@ -47,6 +57,11 @@ public class TestFilter extends BaseEParserTest {
 	@Test
 	public void testCompiledFilterFromSet() throws Exception {
 		checkCompiledOutput("filter/filterFromSet.pec");
+	}
+
+	@Test
+	public void testTranspiledFilterFromSet() throws Exception {
+		checkTranspiledOutput("filter/filterFromSet.pec");
 	}
 
 }

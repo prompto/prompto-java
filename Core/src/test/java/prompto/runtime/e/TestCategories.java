@@ -30,6 +30,11 @@ public class TestCategories extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledComposed() throws Exception {
+		checkTranspiledOutput("categories/composed.pec");
+	}
+
+	@Test
 	public void testInterpretedCopyFromAscendant() throws Exception {
 		checkInterpretedOutput("categories/copyFromAscendant.pec");
 	}
@@ -37,6 +42,11 @@ public class TestCategories extends BaseEParserTest {
 	@Test
 	public void testCompiledCopyFromAscendant() throws Exception {
 		checkCompiledOutput("categories/copyFromAscendant.pec");
+	}
+
+	@Test
+	public void testTranspiledCopyFromAscendant() throws Exception {
+		checkTranspiledOutput("categories/copyFromAscendant.pec");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestCategories extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledCopyFromAscendantWithOverride() throws Exception {
+		checkTranspiledOutput("categories/copyFromAscendantWithOverride.pec");
+	}
+
+	@Test
 	public void testInterpretedCopyFromDescendant() throws Exception {
 		checkInterpretedOutput("categories/copyFromDescendant.pec");
 	}
@@ -57,6 +72,11 @@ public class TestCategories extends BaseEParserTest {
 	@Test
 	public void testCompiledCopyFromDescendant() throws Exception {
 		checkCompiledOutput("categories/copyFromDescendant.pec");
+	}
+
+	@Test
+	public void testTranspiledCopyFromDescendant() throws Exception {
+		checkTranspiledOutput("categories/copyFromDescendant.pec");
 	}
 
 	@Test
@@ -70,6 +90,11 @@ public class TestCategories extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledCopyFromDescendantWithOverride() throws Exception {
+		checkTranspiledOutput("categories/copyFromDescendantWithOverride.pec");
+	}
+
+	@Test
 	public void testInterpretedCopyFromDocument() throws Exception {
 		checkInterpretedOutput("categories/copyFromDocument.pec");
 	}
@@ -77,6 +102,11 @@ public class TestCategories extends BaseEParserTest {
 	@Test
 	public void testCompiledCopyFromDocument() throws Exception {
 		checkCompiledOutput("categories/copyFromDocument.pec");
+	}
+
+	@Test
+	public void testTranspiledCopyFromDocument() throws Exception {
+		checkTranspiledOutput("categories/copyFromDocument.pec");
 	}
 
 }

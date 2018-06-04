@@ -30,6 +30,11 @@ public class TestResource extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledReadResource() throws Exception {
+		checkTranspiledOutput("resource/readResource.pec");
+	}
+
+	@Test
 	public void testInterpretedReadWithResource() throws Exception {
 		checkInterpretedOutput("resource/readWithResource.pec");
 	}
@@ -37,6 +42,11 @@ public class TestResource extends BaseEParserTest {
 	@Test
 	public void testCompiledReadWithResource() throws Exception {
 		checkCompiledOutput("resource/readWithResource.pec");
+	}
+
+	@Test
+	public void testTranspiledReadWithResource() throws Exception {
+		checkTranspiledOutput("resource/readWithResource.pec");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestResource extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledWriteResource() throws Exception {
+		checkTranspiledOutput("resource/writeResource.pec");
+	}
+
+	@Test
 	public void testInterpretedWriteWithResource() throws Exception {
 		checkInterpretedOutput("resource/writeWithResource.pec");
 	}
@@ -57,6 +72,11 @@ public class TestResource extends BaseEParserTest {
 	@Test
 	public void testCompiledWriteWithResource() throws Exception {
 		checkCompiledOutput("resource/writeWithResource.pec");
+	}
+
+	@Test
+	public void testTranspiledWriteWithResource() throws Exception {
+		checkTranspiledOutput("resource/writeWithResource.pec");
 	}
 
 }

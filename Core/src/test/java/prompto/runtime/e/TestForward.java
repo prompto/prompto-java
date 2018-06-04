@@ -29,5 +29,10 @@ public class TestForward extends BaseEParserTest {
 		checkCompiledOutput("forward/forward.pec");
 	}
 
+	@Test
+	public void testTranspiledForward() throws Exception {
+		checkTranspiledOutput("forward/forward.pec");
+	}
+
 }
 

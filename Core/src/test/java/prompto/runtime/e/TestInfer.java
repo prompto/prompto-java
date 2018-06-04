@@ -30,6 +30,11 @@ public class TestInfer extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledInferDict() throws Exception {
+		checkTranspiledOutput("infer/inferDict.pec");
+	}
+
+	@Test
 	public void testInterpretedInferList() throws Exception {
 		checkInterpretedOutput("infer/inferList.pec");
 	}
@@ -40,6 +45,11 @@ public class TestInfer extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledInferList() throws Exception {
+		checkTranspiledOutput("infer/inferList.pec");
+	}
+
+	@Test
 	public void testInterpretedInferSet() throws Exception {
 		checkInterpretedOutput("infer/inferSet.pec");
 	}
@@ -47,6 +57,11 @@ public class TestInfer extends BaseEParserTest {
 	@Test
 	public void testCompiledInferSet() throws Exception {
 		checkCompiledOutput("infer/inferSet.pec");
+	}
+
+	@Test
+	public void testTranspiledInferSet() throws Exception {
+		checkTranspiledOutput("infer/inferSet.pec");
 	}
 
 }

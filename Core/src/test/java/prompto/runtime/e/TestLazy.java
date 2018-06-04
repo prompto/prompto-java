@@ -30,6 +30,11 @@ public class TestLazy extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledCyclic() throws Exception {
+		checkTranspiledOutput("lazy/cyclic.pec");
+	}
+
+	@Test
 	public void testInterpretedDict() throws Exception {
 		checkInterpretedOutput("lazy/dict.pec");
 	}
@@ -37,6 +42,11 @@ public class TestLazy extends BaseEParserTest {
 	@Test
 	public void testCompiledDict() throws Exception {
 		checkCompiledOutput("lazy/dict.pec");
+	}
+
+	@Test
+	public void testTranspiledDict() throws Exception {
+		checkTranspiledOutput("lazy/dict.pec");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestLazy extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledList() throws Exception {
+		checkTranspiledOutput("lazy/list.pec");
+	}
+
+	@Test
 	public void testInterpretedSet() throws Exception {
 		checkInterpretedOutput("lazy/set.pec");
 	}
@@ -60,6 +75,11 @@ public class TestLazy extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledSet() throws Exception {
+		checkTranspiledOutput("lazy/set.pec");
+	}
+
+	@Test
 	public void testInterpretedTransient() throws Exception {
 		checkInterpretedOutput("lazy/transient.pec");
 	}
@@ -67,6 +87,11 @@ public class TestLazy extends BaseEParserTest {
 	@Test
 	public void testCompiledTransient() throws Exception {
 		checkCompiledOutput("lazy/transient.pec");
+	}
+
+	@Test
+	public void testTranspiledTransient() throws Exception {
+		checkTranspiledOutput("lazy/transient.pec");
 	}
 
 }

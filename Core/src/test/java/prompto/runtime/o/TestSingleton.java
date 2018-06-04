@@ -30,6 +30,11 @@ public class TestSingleton extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledAttribute() throws Exception {
+		checkTranspiledOutput("singleton/attribute.poc");
+	}
+
+	@Test
 	public void testInterpretedMember() throws Exception {
 		checkInterpretedOutput("singleton/member.poc");
 	}
@@ -37,6 +42,11 @@ public class TestSingleton extends BaseOParserTest {
 	@Test
 	public void testCompiledMember() throws Exception {
 		checkCompiledOutput("singleton/member.poc");
+	}
+
+	@Test
+	public void testTranspiledMember() throws Exception {
+		checkTranspiledOutput("singleton/member.poc");
 	}
 
 }

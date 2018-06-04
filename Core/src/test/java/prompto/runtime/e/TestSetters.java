@@ -30,6 +30,11 @@ public class TestSetters extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledGetter() throws Exception {
+		checkTranspiledOutput("setters/getter.pec");
+	}
+
+	@Test
 	public void testInterpretedGetterCall() throws Exception {
 		checkInterpretedOutput("setters/getterCall.pec");
 	}
@@ -40,6 +45,11 @@ public class TestSetters extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledGetterCall() throws Exception {
+		checkTranspiledOutput("setters/getterCall.pec");
+	}
+
+	@Test
 	public void testInterpretedSetter() throws Exception {
 		checkInterpretedOutput("setters/setter.pec");
 	}
@@ -47,6 +57,11 @@ public class TestSetters extends BaseEParserTest {
 	@Test
 	public void testCompiledSetter() throws Exception {
 		checkCompiledOutput("setters/setter.pec");
+	}
+
+	@Test
+	public void testTranspiledSetter() throws Exception {
+		checkTranspiledOutput("setters/setter.pec");
 	}
 
 }

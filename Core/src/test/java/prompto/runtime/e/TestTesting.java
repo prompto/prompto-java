@@ -30,6 +30,11 @@ public class TestTesting extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledAnd() throws Exception {
+		checkTranspiledOutput("testing/and.pec");
+	}
+
+	@Test
 	public void testInterpretedContains() throws Exception {
 		checkInterpretedOutput("testing/contains.pec");
 	}
@@ -37,6 +42,11 @@ public class TestTesting extends BaseEParserTest {
 	@Test
 	public void testCompiledContains() throws Exception {
 		checkCompiledOutput("testing/contains.pec");
+	}
+
+	@Test
+	public void testTranspiledContains() throws Exception {
+		checkTranspiledOutput("testing/contains.pec");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestTesting extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledGreater() throws Exception {
+		checkTranspiledOutput("testing/greater.pec");
+	}
+
+	@Test
 	public void testInterpretedMethod() throws Exception {
 		checkInterpretedOutput("testing/method.pec");
 	}
@@ -57,6 +72,11 @@ public class TestTesting extends BaseEParserTest {
 	@Test
 	public void testCompiledMethod() throws Exception {
 		checkCompiledOutput("testing/method.pec");
+	}
+
+	@Test
+	public void testTranspiledMethod() throws Exception {
+		checkTranspiledOutput("testing/method.pec");
 	}
 
 	@Test
@@ -70,6 +90,11 @@ public class TestTesting extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledNegative() throws Exception {
+		checkTranspiledOutput("testing/negative.pec");
+	}
+
+	@Test
 	public void testInterpretedNegativeError() throws Exception {
 		checkInterpretedOutput("testing/negativeError.pec");
 	}
@@ -77,6 +102,11 @@ public class TestTesting extends BaseEParserTest {
 	@Test
 	public void testCompiledNegativeError() throws Exception {
 		checkCompiledOutput("testing/negativeError.pec");
+	}
+
+	@Test
+	public void testTranspiledNegativeError() throws Exception {
+		checkTranspiledOutput("testing/negativeError.pec");
 	}
 
 	@Test
@@ -90,6 +120,11 @@ public class TestTesting extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledNot() throws Exception {
+		checkTranspiledOutput("testing/not.pec");
+	}
+
+	@Test
 	public void testInterpretedOr() throws Exception {
 		checkInterpretedOutput("testing/or.pec");
 	}
@@ -97,6 +132,11 @@ public class TestTesting extends BaseEParserTest {
 	@Test
 	public void testCompiledOr() throws Exception {
 		checkCompiledOutput("testing/or.pec");
+	}
+
+	@Test
+	public void testTranspiledOr() throws Exception {
+		checkTranspiledOutput("testing/or.pec");
 	}
 
 	@Test
@@ -110,6 +150,11 @@ public class TestTesting extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledPositive() throws Exception {
+		checkTranspiledOutput("testing/positive.pec");
+	}
+
+	@Test
 	public void testInterpretedPositiveError() throws Exception {
 		checkInterpretedOutput("testing/positiveError.pec");
 	}
@@ -117,6 +162,11 @@ public class TestTesting extends BaseEParserTest {
 	@Test
 	public void testCompiledPositiveError() throws Exception {
 		checkCompiledOutput("testing/positiveError.pec");
+	}
+
+	@Test
+	public void testTranspiledPositiveError() throws Exception {
+		checkTranspiledOutput("testing/positiveError.pec");
 	}
 
 }

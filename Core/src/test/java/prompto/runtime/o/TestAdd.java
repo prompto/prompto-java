@@ -30,6 +30,11 @@ public class TestAdd extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledAddCharacter() throws Exception {
+		checkTranspiledOutput("add/addCharacter.poc");
+	}
+
+	@Test
 	public void testInterpretedAddDate() throws Exception {
 		checkInterpretedOutput("add/addDate.poc");
 	}
@@ -37,6 +42,11 @@ public class TestAdd extends BaseOParserTest {
 	@Test
 	public void testCompiledAddDate() throws Exception {
 		checkCompiledOutput("add/addDate.poc");
+	}
+
+	@Test
+	public void testTranspiledAddDate() throws Exception {
+		checkTranspiledOutput("add/addDate.poc");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestAdd extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledAddDateTime() throws Exception {
+		checkTranspiledOutput("add/addDateTime.poc");
+	}
+
+	@Test
 	public void testInterpretedAddDecimal() throws Exception {
 		checkInterpretedOutput("add/addDecimal.poc");
 	}
@@ -57,6 +72,11 @@ public class TestAdd extends BaseOParserTest {
 	@Test
 	public void testCompiledAddDecimal() throws Exception {
 		checkCompiledOutput("add/addDecimal.poc");
+	}
+
+	@Test
+	public void testTranspiledAddDecimal() throws Exception {
+		checkTranspiledOutput("add/addDecimal.poc");
 	}
 
 	@Test
@@ -70,6 +90,11 @@ public class TestAdd extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledAddDict() throws Exception {
+		checkTranspiledOutput("add/addDict.poc");
+	}
+
+	@Test
 	public void testInterpretedAddInteger() throws Exception {
 		checkInterpretedOutput("add/addInteger.poc");
 	}
@@ -77,6 +102,11 @@ public class TestAdd extends BaseOParserTest {
 	@Test
 	public void testCompiledAddInteger() throws Exception {
 		checkCompiledOutput("add/addInteger.poc");
+	}
+
+	@Test
+	public void testTranspiledAddInteger() throws Exception {
+		checkTranspiledOutput("add/addInteger.poc");
 	}
 
 	@Test
@@ -90,6 +120,11 @@ public class TestAdd extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledAddList() throws Exception {
+		checkTranspiledOutput("add/addList.poc");
+	}
+
+	@Test
 	public void testInterpretedAddPeriod() throws Exception {
 		checkInterpretedOutput("add/addPeriod.poc");
 	}
@@ -97,6 +132,11 @@ public class TestAdd extends BaseOParserTest {
 	@Test
 	public void testCompiledAddPeriod() throws Exception {
 		checkCompiledOutput("add/addPeriod.poc");
+	}
+
+	@Test
+	public void testTranspiledAddPeriod() throws Exception {
+		checkTranspiledOutput("add/addPeriod.poc");
 	}
 
 	@Test
@@ -110,6 +150,11 @@ public class TestAdd extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledAddSet() throws Exception {
+		checkTranspiledOutput("add/addSet.poc");
+	}
+
+	@Test
 	public void testInterpretedAddTextCharacter() throws Exception {
 		checkInterpretedOutput("add/addTextCharacter.poc");
 	}
@@ -117,6 +162,11 @@ public class TestAdd extends BaseOParserTest {
 	@Test
 	public void testCompiledAddTextCharacter() throws Exception {
 		checkCompiledOutput("add/addTextCharacter.poc");
+	}
+
+	@Test
+	public void testTranspiledAddTextCharacter() throws Exception {
+		checkTranspiledOutput("add/addTextCharacter.poc");
 	}
 
 	@Test
@@ -130,6 +180,11 @@ public class TestAdd extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledAddTextDecimal() throws Exception {
+		checkTranspiledOutput("add/addTextDecimal.poc");
+	}
+
+	@Test
 	public void testInterpretedAddTextInteger() throws Exception {
 		checkInterpretedOutput("add/addTextInteger.poc");
 	}
@@ -137,6 +192,11 @@ public class TestAdd extends BaseOParserTest {
 	@Test
 	public void testCompiledAddTextInteger() throws Exception {
 		checkCompiledOutput("add/addTextInteger.poc");
+	}
+
+	@Test
+	public void testTranspiledAddTextInteger() throws Exception {
+		checkTranspiledOutput("add/addTextInteger.poc");
 	}
 
 	@Test
@@ -150,6 +210,11 @@ public class TestAdd extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledAddTextText() throws Exception {
+		checkTranspiledOutput("add/addTextText.poc");
+	}
+
+	@Test
 	public void testInterpretedAddTime() throws Exception {
 		checkInterpretedOutput("add/addTime.poc");
 	}
@@ -160,6 +225,11 @@ public class TestAdd extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledAddTime() throws Exception {
+		checkTranspiledOutput("add/addTime.poc");
+	}
+
+	@Test
 	public void testInterpretedAddTuple() throws Exception {
 		checkInterpretedOutput("add/addTuple.poc");
 	}
@@ -167,6 +237,11 @@ public class TestAdd extends BaseOParserTest {
 	@Test
 	public void testCompiledAddTuple() throws Exception {
 		checkCompiledOutput("add/addTuple.poc");
+	}
+
+	@Test
+	public void testTranspiledAddTuple() throws Exception {
+		checkTranspiledOutput("add/addTuple.poc");
 	}
 
 }

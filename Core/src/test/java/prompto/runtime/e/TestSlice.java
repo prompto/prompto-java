@@ -30,6 +30,11 @@ public class TestSlice extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledSliceList() throws Exception {
+		checkTranspiledOutput("slice/sliceList.pec");
+	}
+
+	@Test
 	public void testInterpretedSliceRange() throws Exception {
 		checkInterpretedOutput("slice/sliceRange.pec");
 	}
@@ -40,6 +45,11 @@ public class TestSlice extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledSliceRange() throws Exception {
+		checkTranspiledOutput("slice/sliceRange.pec");
+	}
+
+	@Test
 	public void testInterpretedSliceText() throws Exception {
 		checkInterpretedOutput("slice/sliceText.pec");
 	}
@@ -47,6 +57,11 @@ public class TestSlice extends BaseEParserTest {
 	@Test
 	public void testCompiledSliceText() throws Exception {
 		checkCompiledOutput("slice/sliceText.pec");
+	}
+
+	@Test
+	public void testTranspiledSliceText() throws Exception {
+		checkTranspiledOutput("slice/sliceText.pec");
 	}
 
 }

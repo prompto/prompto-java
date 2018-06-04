@@ -30,6 +30,11 @@ public class TestDocuments extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledDeepItem() throws Exception {
+		checkTranspiledOutput("documents/deepItem.poc");
+	}
+
+	@Test
 	public void testInterpretedDeepVariable() throws Exception {
 		checkInterpretedOutput("documents/deepVariable.poc");
 	}
@@ -37,6 +42,11 @@ public class TestDocuments extends BaseOParserTest {
 	@Test
 	public void testCompiledDeepVariable() throws Exception {
 		checkCompiledOutput("documents/deepVariable.poc");
+	}
+
+	@Test
+	public void testTranspiledDeepVariable() throws Exception {
+		checkTranspiledOutput("documents/deepVariable.poc");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestDocuments extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledItem() throws Exception {
+		checkTranspiledOutput("documents/item.poc");
+	}
+
+	@Test
 	public void testInterpretedVariable() throws Exception {
 		checkInterpretedOutput("documents/variable.poc");
 	}
@@ -57,6 +72,11 @@ public class TestDocuments extends BaseOParserTest {
 	@Test
 	public void testCompiledVariable() throws Exception {
 		checkCompiledOutput("documents/variable.poc");
+	}
+
+	@Test
+	public void testTranspiledVariable() throws Exception {
+		checkTranspiledOutput("documents/variable.poc");
 	}
 
 }

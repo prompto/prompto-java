@@ -30,6 +30,11 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledAnonymous() throws Exception {
+		checkTranspiledOutput("methods/anonymous.pec");
+	}
+
+	@Test
 	public void testInterpretedAttribute() throws Exception {
 		checkInterpretedOutput("methods/attribute.pec");
 	}
@@ -37,6 +42,11 @@ public class TestMethods extends BaseEParserTest {
 	@Test
 	public void testCompiledAttribute() throws Exception {
 		checkCompiledOutput("methods/attribute.pec");
+	}
+
+	@Test
+	public void testTranspiledAttribute() throws Exception {
+		checkTranspiledOutput("methods/attribute.pec");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledDefault() throws Exception {
+		checkTranspiledOutput("methods/default.pec");
+	}
+
+	@Test
 	public void testInterpretedE_as_e_bug() throws Exception {
 		checkInterpretedOutput("methods/e_as_e_bug.pec");
 	}
@@ -57,6 +72,11 @@ public class TestMethods extends BaseEParserTest {
 	@Test
 	public void testCompiledE_as_e_bug() throws Exception {
 		checkCompiledOutput("methods/e_as_e_bug.pec");
+	}
+
+	@Test
+	public void testTranspiledE_as_e_bug() throws Exception {
+		checkTranspiledOutput("methods/e_as_e_bug.pec");
 	}
 
 	@Test
@@ -70,6 +90,11 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledExplicit() throws Exception {
+		checkTranspiledOutput("methods/explicit.pec");
+	}
+
+	@Test
 	public void testInterpretedExpressionWith() throws Exception {
 		checkInterpretedOutput("methods/expressionWith.pec");
 	}
@@ -77,6 +102,11 @@ public class TestMethods extends BaseEParserTest {
 	@Test
 	public void testCompiledExpressionWith() throws Exception {
 		checkCompiledOutput("methods/expressionWith.pec");
+	}
+
+	@Test
+	public void testTranspiledExpressionWith() throws Exception {
+		checkTranspiledOutput("methods/expressionWith.pec");
 	}
 
 	@Test
@@ -90,6 +120,11 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledExtended() throws Exception {
+		checkTranspiledOutput("methods/extended.pec");
+	}
+
+	@Test
 	public void testInterpretedHomonym() throws Exception {
 		checkInterpretedOutput("methods/homonym.pec");
 	}
@@ -97,6 +132,11 @@ public class TestMethods extends BaseEParserTest {
 	@Test
 	public void testCompiledHomonym() throws Exception {
 		checkCompiledOutput("methods/homonym.pec");
+	}
+
+	@Test
+	public void testTranspiledHomonym() throws Exception {
+		checkTranspiledOutput("methods/homonym.pec");
 	}
 
 	@Test
@@ -110,6 +150,11 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledImplicitMember() throws Exception {
+		checkTranspiledOutput("methods/implicitMember.pec");
+	}
+
+	@Test
 	public void testInterpretedMember() throws Exception {
 		checkInterpretedOutput("methods/member.pec");
 	}
@@ -117,6 +162,11 @@ public class TestMethods extends BaseEParserTest {
 	@Test
 	public void testCompiledMember() throws Exception {
 		checkCompiledOutput("methods/member.pec");
+	}
+
+	@Test
+	public void testTranspiledMember() throws Exception {
+		checkTranspiledOutput("methods/member.pec");
 	}
 
 	@Test
@@ -130,6 +180,11 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledMemberCall() throws Exception {
+		checkTranspiledOutput("methods/memberCall.pec");
+	}
+
+	@Test
 	public void testInterpretedOverride() throws Exception {
 		checkInterpretedOutput("methods/override.pec");
 	}
@@ -137,6 +192,11 @@ public class TestMethods extends BaseEParserTest {
 	@Test
 	public void testCompiledOverride() throws Exception {
 		checkCompiledOutput("methods/override.pec");
+	}
+
+	@Test
+	public void testTranspiledOverride() throws Exception {
+		checkTranspiledOutput("methods/override.pec");
 	}
 
 	@Test
@@ -150,6 +210,11 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledPolymorphic_abstract() throws Exception {
+		checkTranspiledOutput("methods/polymorphic_abstract.pec");
+	}
+
+	@Test
 	public void testInterpretedPolymorphic_implicit() throws Exception {
 		checkInterpretedOutput("methods/polymorphic_implicit.pec");
 	}
@@ -157,6 +222,11 @@ public class TestMethods extends BaseEParserTest {
 	@Test
 	public void testCompiledPolymorphic_implicit() throws Exception {
 		checkCompiledOutput("methods/polymorphic_implicit.pec");
+	}
+
+	@Test
+	public void testTranspiledPolymorphic_implicit() throws Exception {
+		checkTranspiledOutput("methods/polymorphic_implicit.pec");
 	}
 
 	@Test
@@ -170,6 +240,11 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledPolymorphic_named() throws Exception {
+		checkTranspiledOutput("methods/polymorphic_named.pec");
+	}
+
+	@Test
 	public void testInterpretedPolymorphic_runtime() throws Exception {
 		checkInterpretedOutput("methods/polymorphic_runtime.pec");
 	}
@@ -180,6 +255,11 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledPolymorphic_runtime() throws Exception {
+		checkTranspiledOutput("methods/polymorphic_runtime.pec");
+	}
+
+	@Test
 	public void testInterpretedSpecified() throws Exception {
 		checkInterpretedOutput("methods/specified.pec");
 	}
@@ -187,6 +267,11 @@ public class TestMethods extends BaseEParserTest {
 	@Test
 	public void testCompiledSpecified() throws Exception {
 		checkCompiledOutput("methods/specified.pec");
+	}
+
+	@Test
+	public void testTranspiledSpecified() throws Exception {
+		checkTranspiledOutput("methods/specified.pec");
 	}
 
 }

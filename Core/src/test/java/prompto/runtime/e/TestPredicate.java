@@ -30,6 +30,11 @@ public class TestPredicate extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledContainsItem() throws Exception {
+		checkTranspiledOutput("predicate/containsItem.pec");
+	}
+
+	@Test
 	public void testInterpretedEquals() throws Exception {
 		checkInterpretedOutput("predicate/equals.pec");
 	}
@@ -37,6 +42,11 @@ public class TestPredicate extends BaseEParserTest {
 	@Test
 	public void testCompiledEquals() throws Exception {
 		checkCompiledOutput("predicate/equals.pec");
+	}
+
+	@Test
+	public void testTranspiledEquals() throws Exception {
+		checkTranspiledOutput("predicate/equals.pec");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestPredicate extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledGreater() throws Exception {
+		checkTranspiledOutput("predicate/greater.pec");
+	}
+
+	@Test
 	public void testInterpretedHasItem() throws Exception {
 		checkInterpretedOutput("predicate/hasItem.pec");
 	}
@@ -57,6 +72,11 @@ public class TestPredicate extends BaseEParserTest {
 	@Test
 	public void testCompiledHasItem() throws Exception {
 		checkCompiledOutput("predicate/hasItem.pec");
+	}
+
+	@Test
+	public void testTranspiledHasItem() throws Exception {
+		checkTranspiledOutput("predicate/hasItem.pec");
 	}
 
 	@Test
@@ -70,6 +90,11 @@ public class TestPredicate extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledInList() throws Exception {
+		checkTranspiledOutput("predicate/inList.pec");
+	}
+
+	@Test
 	public void testInterpretedLesser() throws Exception {
 		checkInterpretedOutput("predicate/lesser.pec");
 	}
@@ -77,6 +102,11 @@ public class TestPredicate extends BaseEParserTest {
 	@Test
 	public void testCompiledLesser() throws Exception {
 		checkCompiledOutput("predicate/lesser.pec");
+	}
+
+	@Test
+	public void testTranspiledLesser() throws Exception {
+		checkTranspiledOutput("predicate/lesser.pec");
 	}
 
 	@Test
@@ -90,6 +120,11 @@ public class TestPredicate extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledNotEquals() throws Exception {
+		checkTranspiledOutput("predicate/notEquals.pec");
+	}
+
+	@Test
 	public void testInterpretedPartial() throws Exception {
 		checkInterpretedOutput("predicate/partial.pec");
 	}
@@ -100,6 +135,11 @@ public class TestPredicate extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledPartial() throws Exception {
+		checkTranspiledOutput("predicate/partial.pec");
+	}
+
+	@Test
 	public void testInterpretedRoughly() throws Exception {
 		checkInterpretedOutput("predicate/roughly.pec");
 	}
@@ -107,6 +147,11 @@ public class TestPredicate extends BaseEParserTest {
 	@Test
 	public void testCompiledRoughly() throws Exception {
 		checkCompiledOutput("predicate/roughly.pec");
+	}
+
+	@Test
+	public void testTranspiledRoughly() throws Exception {
+		checkTranspiledOutput("predicate/roughly.pec");
 	}
 
 }

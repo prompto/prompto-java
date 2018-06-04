@@ -30,6 +30,11 @@ public class TestMult extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledMultCharacter() throws Exception {
+		checkTranspiledOutput("mult/multCharacter.pec");
+	}
+
+	@Test
 	public void testInterpretedMultDecimal() throws Exception {
 		checkInterpretedOutput("mult/multDecimal.pec");
 	}
@@ -37,6 +42,11 @@ public class TestMult extends BaseEParserTest {
 	@Test
 	public void testCompiledMultDecimal() throws Exception {
 		checkCompiledOutput("mult/multDecimal.pec");
+	}
+
+	@Test
+	public void testTranspiledMultDecimal() throws Exception {
+		checkTranspiledOutput("mult/multDecimal.pec");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestMult extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledMultInteger() throws Exception {
+		checkTranspiledOutput("mult/multInteger.pec");
+	}
+
+	@Test
 	public void testInterpretedMultList() throws Exception {
 		checkInterpretedOutput("mult/multList.pec");
 	}
@@ -57,6 +72,11 @@ public class TestMult extends BaseEParserTest {
 	@Test
 	public void testCompiledMultList() throws Exception {
 		checkCompiledOutput("mult/multList.pec");
+	}
+
+	@Test
+	public void testTranspiledMultList() throws Exception {
+		checkTranspiledOutput("mult/multList.pec");
 	}
 
 	@Test
@@ -70,6 +90,11 @@ public class TestMult extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledMultPeriod() throws Exception {
+		checkTranspiledOutput("mult/multPeriod.pec");
+	}
+
+	@Test
 	public void testInterpretedMultText() throws Exception {
 		checkInterpretedOutput("mult/multText.pec");
 	}
@@ -77,6 +102,11 @@ public class TestMult extends BaseEParserTest {
 	@Test
 	public void testCompiledMultText() throws Exception {
 		checkCompiledOutput("mult/multText.pec");
+	}
+
+	@Test
+	public void testTranspiledMultText() throws Exception {
+		checkTranspiledOutput("mult/multText.pec");
 	}
 
 }

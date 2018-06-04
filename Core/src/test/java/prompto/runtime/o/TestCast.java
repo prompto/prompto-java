@@ -30,6 +30,11 @@ public class TestCast extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledAutoDowncast() throws Exception {
+		checkTranspiledOutput("cast/autoDowncast.poc");
+	}
+
+	@Test
 	public void testInterpretedCastChild() throws Exception {
 		checkInterpretedOutput("cast/castChild.poc");
 	}
@@ -37,6 +42,11 @@ public class TestCast extends BaseOParserTest {
 	@Test
 	public void testCompiledCastChild() throws Exception {
 		checkCompiledOutput("cast/castChild.poc");
+	}
+
+	@Test
+	public void testTranspiledCastChild() throws Exception {
+		checkTranspiledOutput("cast/castChild.poc");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestCast extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledCastMissing() throws Exception {
+		checkTranspiledOutput("cast/castMissing.poc");
+	}
+
+	@Test
 	public void testInterpretedCastNull() throws Exception {
 		checkInterpretedOutput("cast/castNull.poc");
 	}
@@ -57,6 +72,11 @@ public class TestCast extends BaseOParserTest {
 	@Test
 	public void testCompiledCastNull() throws Exception {
 		checkCompiledOutput("cast/castNull.poc");
+	}
+
+	@Test
+	public void testTranspiledCastNull() throws Exception {
+		checkTranspiledOutput("cast/castNull.poc");
 	}
 
 	@Test
@@ -70,6 +90,11 @@ public class TestCast extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledIsAChild() throws Exception {
+		checkTranspiledOutput("cast/isAChild.poc");
+	}
+
+	@Test
 	public void testInterpretedIsAText() throws Exception {
 		checkInterpretedOutput("cast/isAText.poc");
 	}
@@ -77,6 +102,11 @@ public class TestCast extends BaseOParserTest {
 	@Test
 	public void testCompiledIsAText() throws Exception {
 		checkCompiledOutput("cast/isAText.poc");
+	}
+
+	@Test
+	public void testTranspiledIsAText() throws Exception {
+		checkTranspiledOutput("cast/isAText.poc");
 	}
 
 }

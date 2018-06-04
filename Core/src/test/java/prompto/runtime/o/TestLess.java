@@ -30,6 +30,11 @@ public class TestLess extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledLtCharacter() throws Exception {
+		checkTranspiledOutput("less/ltCharacter.poc");
+	}
+
+	@Test
 	public void testInterpretedLtDate() throws Exception {
 		checkInterpretedOutput("less/ltDate.poc");
 	}
@@ -37,6 +42,11 @@ public class TestLess extends BaseOParserTest {
 	@Test
 	public void testCompiledLtDate() throws Exception {
 		checkCompiledOutput("less/ltDate.poc");
+	}
+
+	@Test
+	public void testTranspiledLtDate() throws Exception {
+		checkTranspiledOutput("less/ltDate.poc");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestLess extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledLtDateTime() throws Exception {
+		checkTranspiledOutput("less/ltDateTime.poc");
+	}
+
+	@Test
 	public void testInterpretedLtDecimal() throws Exception {
 		checkInterpretedOutput("less/ltDecimal.poc");
 	}
@@ -57,6 +72,11 @@ public class TestLess extends BaseOParserTest {
 	@Test
 	public void testCompiledLtDecimal() throws Exception {
 		checkCompiledOutput("less/ltDecimal.poc");
+	}
+
+	@Test
+	public void testTranspiledLtDecimal() throws Exception {
+		checkTranspiledOutput("less/ltDecimal.poc");
 	}
 
 	@Test
@@ -70,6 +90,11 @@ public class TestLess extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledLtInteger() throws Exception {
+		checkTranspiledOutput("less/ltInteger.poc");
+	}
+
+	@Test
 	public void testInterpretedLtText() throws Exception {
 		checkInterpretedOutput("less/ltText.poc");
 	}
@@ -77,6 +102,11 @@ public class TestLess extends BaseOParserTest {
 	@Test
 	public void testCompiledLtText() throws Exception {
 		checkCompiledOutput("less/ltText.poc");
+	}
+
+	@Test
+	public void testTranspiledLtText() throws Exception {
+		checkTranspiledOutput("less/ltText.poc");
 	}
 
 	@Test
@@ -90,6 +120,11 @@ public class TestLess extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledLtTime() throws Exception {
+		checkTranspiledOutput("less/ltTime.poc");
+	}
+
+	@Test
 	public void testInterpretedLtVersion() throws Exception {
 		checkInterpretedOutput("less/ltVersion.poc");
 	}
@@ -97,6 +132,11 @@ public class TestLess extends BaseOParserTest {
 	@Test
 	public void testCompiledLtVersion() throws Exception {
 		checkCompiledOutput("less/ltVersion.poc");
+	}
+
+	@Test
+	public void testTranspiledLtVersion() throws Exception {
+		checkTranspiledOutput("less/ltVersion.poc");
 	}
 
 	@Test
@@ -110,6 +150,11 @@ public class TestLess extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledLteCharacter() throws Exception {
+		checkTranspiledOutput("less/lteCharacter.poc");
+	}
+
+	@Test
 	public void testInterpretedLteDate() throws Exception {
 		checkInterpretedOutput("less/lteDate.poc");
 	}
@@ -117,6 +162,11 @@ public class TestLess extends BaseOParserTest {
 	@Test
 	public void testCompiledLteDate() throws Exception {
 		checkCompiledOutput("less/lteDate.poc");
+	}
+
+	@Test
+	public void testTranspiledLteDate() throws Exception {
+		checkTranspiledOutput("less/lteDate.poc");
 	}
 
 	@Test
@@ -130,6 +180,11 @@ public class TestLess extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledLteDateTime() throws Exception {
+		checkTranspiledOutput("less/lteDateTime.poc");
+	}
+
+	@Test
 	public void testInterpretedLteDecimal() throws Exception {
 		checkInterpretedOutput("less/lteDecimal.poc");
 	}
@@ -137,6 +192,11 @@ public class TestLess extends BaseOParserTest {
 	@Test
 	public void testCompiledLteDecimal() throws Exception {
 		checkCompiledOutput("less/lteDecimal.poc");
+	}
+
+	@Test
+	public void testTranspiledLteDecimal() throws Exception {
+		checkTranspiledOutput("less/lteDecimal.poc");
 	}
 
 	@Test
@@ -150,6 +210,11 @@ public class TestLess extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledLteInteger() throws Exception {
+		checkTranspiledOutput("less/lteInteger.poc");
+	}
+
+	@Test
 	public void testInterpretedLteText() throws Exception {
 		checkInterpretedOutput("less/lteText.poc");
 	}
@@ -160,6 +225,11 @@ public class TestLess extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledLteText() throws Exception {
+		checkTranspiledOutput("less/lteText.poc");
+	}
+
+	@Test
 	public void testInterpretedLteTime() throws Exception {
 		checkInterpretedOutput("less/lteTime.poc");
 	}
@@ -167,6 +237,11 @@ public class TestLess extends BaseOParserTest {
 	@Test
 	public void testCompiledLteTime() throws Exception {
 		checkCompiledOutput("less/lteTime.poc");
+	}
+
+	@Test
+	public void testTranspiledLteTime() throws Exception {
+		checkTranspiledOutput("less/lteTime.poc");
 	}
 
 }

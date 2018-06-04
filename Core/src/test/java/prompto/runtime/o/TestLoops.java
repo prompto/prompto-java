@@ -30,6 +30,11 @@ public class TestLoops extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledDoWhile() throws Exception {
+		checkTranspiledOutput("loops/doWhile.poc");
+	}
+
+	@Test
 	public void testInterpretedDoWhileBreak() throws Exception {
 		checkInterpretedOutput("loops/doWhileBreak.poc");
 	}
@@ -37,6 +42,11 @@ public class TestLoops extends BaseOParserTest {
 	@Test
 	public void testCompiledDoWhileBreak() throws Exception {
 		checkCompiledOutput("loops/doWhileBreak.poc");
+	}
+
+	@Test
+	public void testTranspiledDoWhileBreak() throws Exception {
+		checkTranspiledOutput("loops/doWhileBreak.poc");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestLoops extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledEmbeddedForEach() throws Exception {
+		checkTranspiledOutput("loops/embeddedForEach.poc");
+	}
+
+	@Test
 	public void testInterpretedForEachBreak() throws Exception {
 		checkInterpretedOutput("loops/forEachBreak.poc");
 	}
@@ -57,6 +72,11 @@ public class TestLoops extends BaseOParserTest {
 	@Test
 	public void testCompiledForEachBreak() throws Exception {
 		checkCompiledOutput("loops/forEachBreak.poc");
+	}
+
+	@Test
+	public void testTranspiledForEachBreak() throws Exception {
+		checkTranspiledOutput("loops/forEachBreak.poc");
 	}
 
 	@Test
@@ -70,6 +90,11 @@ public class TestLoops extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledForEachCharacterRange() throws Exception {
+		checkTranspiledOutput("loops/forEachCharacterRange.poc");
+	}
+
+	@Test
 	public void testInterpretedForEachCharacterRangeWithIndex() throws Exception {
 		checkInterpretedOutput("loops/forEachCharacterRangeWithIndex.poc");
 	}
@@ -77,6 +102,11 @@ public class TestLoops extends BaseOParserTest {
 	@Test
 	public void testCompiledForEachCharacterRangeWithIndex() throws Exception {
 		checkCompiledOutput("loops/forEachCharacterRangeWithIndex.poc");
+	}
+
+	@Test
+	public void testTranspiledForEachCharacterRangeWithIndex() throws Exception {
+		checkTranspiledOutput("loops/forEachCharacterRangeWithIndex.poc");
 	}
 
 	@Test
@@ -90,6 +120,11 @@ public class TestLoops extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledForEachDateRange() throws Exception {
+		checkTranspiledOutput("loops/forEachDateRange.poc");
+	}
+
+	@Test
 	public void testInterpretedForEachDateRangeWithIndex() throws Exception {
 		checkInterpretedOutput("loops/forEachDateRangeWithIndex.poc");
 	}
@@ -97,6 +132,11 @@ public class TestLoops extends BaseOParserTest {
 	@Test
 	public void testCompiledForEachDateRangeWithIndex() throws Exception {
 		checkCompiledOutput("loops/forEachDateRangeWithIndex.poc");
+	}
+
+	@Test
+	public void testTranspiledForEachDateRangeWithIndex() throws Exception {
+		checkTranspiledOutput("loops/forEachDateRangeWithIndex.poc");
 	}
 
 	@Test
@@ -110,6 +150,11 @@ public class TestLoops extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledForEachDictionaryItem() throws Exception {
+		checkTranspiledOutput("loops/forEachDictionaryItem.poc");
+	}
+
+	@Test
 	public void testInterpretedForEachDictionaryItemWithIndex() throws Exception {
 		checkInterpretedOutput("loops/forEachDictionaryItemWithIndex.poc");
 	}
@@ -117,6 +162,11 @@ public class TestLoops extends BaseOParserTest {
 	@Test
 	public void testCompiledForEachDictionaryItemWithIndex() throws Exception {
 		checkCompiledOutput("loops/forEachDictionaryItemWithIndex.poc");
+	}
+
+	@Test
+	public void testTranspiledForEachDictionaryItemWithIndex() throws Exception {
+		checkTranspiledOutput("loops/forEachDictionaryItemWithIndex.poc");
 	}
 
 	@Test
@@ -130,6 +180,11 @@ public class TestLoops extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledForEachDictionaryKey() throws Exception {
+		checkTranspiledOutput("loops/forEachDictionaryKey.poc");
+	}
+
+	@Test
 	public void testInterpretedForEachDictionaryKeyWithIndex() throws Exception {
 		checkInterpretedOutput("loops/forEachDictionaryKeyWithIndex.poc");
 	}
@@ -137,6 +192,11 @@ public class TestLoops extends BaseOParserTest {
 	@Test
 	public void testCompiledForEachDictionaryKeyWithIndex() throws Exception {
 		checkCompiledOutput("loops/forEachDictionaryKeyWithIndex.poc");
+	}
+
+	@Test
+	public void testTranspiledForEachDictionaryKeyWithIndex() throws Exception {
+		checkTranspiledOutput("loops/forEachDictionaryKeyWithIndex.poc");
 	}
 
 	@Test
@@ -150,6 +210,11 @@ public class TestLoops extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledForEachDictionaryValue() throws Exception {
+		checkTranspiledOutput("loops/forEachDictionaryValue.poc");
+	}
+
+	@Test
 	public void testInterpretedForEachDictionaryValueWithIndex() throws Exception {
 		checkInterpretedOutput("loops/forEachDictionaryValueWithIndex.poc");
 	}
@@ -157,6 +222,11 @@ public class TestLoops extends BaseOParserTest {
 	@Test
 	public void testCompiledForEachDictionaryValueWithIndex() throws Exception {
 		checkCompiledOutput("loops/forEachDictionaryValueWithIndex.poc");
+	}
+
+	@Test
+	public void testTranspiledForEachDictionaryValueWithIndex() throws Exception {
+		checkTranspiledOutput("loops/forEachDictionaryValueWithIndex.poc");
 	}
 
 	@Test
@@ -170,6 +240,11 @@ public class TestLoops extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledForEachInstanceList() throws Exception {
+		checkTranspiledOutput("loops/forEachInstanceList.poc");
+	}
+
+	@Test
 	public void testInterpretedForEachInstanceListWithIndex() throws Exception {
 		checkInterpretedOutput("loops/forEachInstanceListWithIndex.poc");
 	}
@@ -177,6 +252,11 @@ public class TestLoops extends BaseOParserTest {
 	@Test
 	public void testCompiledForEachInstanceListWithIndex() throws Exception {
 		checkCompiledOutput("loops/forEachInstanceListWithIndex.poc");
+	}
+
+	@Test
+	public void testTranspiledForEachInstanceListWithIndex() throws Exception {
+		checkTranspiledOutput("loops/forEachInstanceListWithIndex.poc");
 	}
 
 	@Test
@@ -190,6 +270,11 @@ public class TestLoops extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledForEachInstanceSet() throws Exception {
+		checkTranspiledOutput("loops/forEachInstanceSet.poc");
+	}
+
+	@Test
 	public void testInterpretedForEachInstanceSetWithIndex() throws Exception {
 		checkInterpretedOutput("loops/forEachInstanceSetWithIndex.poc");
 	}
@@ -197,6 +282,11 @@ public class TestLoops extends BaseOParserTest {
 	@Test
 	public void testCompiledForEachInstanceSetWithIndex() throws Exception {
 		checkCompiledOutput("loops/forEachInstanceSetWithIndex.poc");
+	}
+
+	@Test
+	public void testTranspiledForEachInstanceSetWithIndex() throws Exception {
+		checkTranspiledOutput("loops/forEachInstanceSetWithIndex.poc");
 	}
 
 	@Test
@@ -210,6 +300,11 @@ public class TestLoops extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledForEachIntegerList() throws Exception {
+		checkTranspiledOutput("loops/forEachIntegerList.poc");
+	}
+
+	@Test
 	public void testInterpretedForEachIntegerListWithIndex() throws Exception {
 		checkInterpretedOutput("loops/forEachIntegerListWithIndex.poc");
 	}
@@ -217,6 +312,11 @@ public class TestLoops extends BaseOParserTest {
 	@Test
 	public void testCompiledForEachIntegerListWithIndex() throws Exception {
 		checkCompiledOutput("loops/forEachIntegerListWithIndex.poc");
+	}
+
+	@Test
+	public void testTranspiledForEachIntegerListWithIndex() throws Exception {
+		checkTranspiledOutput("loops/forEachIntegerListWithIndex.poc");
 	}
 
 	@Test
@@ -230,6 +330,11 @@ public class TestLoops extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledForEachIntegerRange() throws Exception {
+		checkTranspiledOutput("loops/forEachIntegerRange.poc");
+	}
+
+	@Test
 	public void testInterpretedForEachIntegerRangeWithIndex() throws Exception {
 		checkInterpretedOutput("loops/forEachIntegerRangeWithIndex.poc");
 	}
@@ -237,6 +342,11 @@ public class TestLoops extends BaseOParserTest {
 	@Test
 	public void testCompiledForEachIntegerRangeWithIndex() throws Exception {
 		checkCompiledOutput("loops/forEachIntegerRangeWithIndex.poc");
+	}
+
+	@Test
+	public void testTranspiledForEachIntegerRangeWithIndex() throws Exception {
+		checkTranspiledOutput("loops/forEachIntegerRangeWithIndex.poc");
 	}
 
 	@Test
@@ -250,6 +360,11 @@ public class TestLoops extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledForEachIntegerSet() throws Exception {
+		checkTranspiledOutput("loops/forEachIntegerSet.poc");
+	}
+
+	@Test
 	public void testInterpretedForEachIntegerSetWithIndex() throws Exception {
 		checkInterpretedOutput("loops/forEachIntegerSetWithIndex.poc");
 	}
@@ -257,6 +372,11 @@ public class TestLoops extends BaseOParserTest {
 	@Test
 	public void testCompiledForEachIntegerSetWithIndex() throws Exception {
 		checkCompiledOutput("loops/forEachIntegerSetWithIndex.poc");
+	}
+
+	@Test
+	public void testTranspiledForEachIntegerSetWithIndex() throws Exception {
+		checkTranspiledOutput("loops/forEachIntegerSetWithIndex.poc");
 	}
 
 	@Test
@@ -270,6 +390,11 @@ public class TestLoops extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledForEachTimeRange() throws Exception {
+		checkTranspiledOutput("loops/forEachTimeRange.poc");
+	}
+
+	@Test
 	public void testInterpretedForEachTimeRangeWithIndex() throws Exception {
 		checkInterpretedOutput("loops/forEachTimeRangeWithIndex.poc");
 	}
@@ -277,6 +402,11 @@ public class TestLoops extends BaseOParserTest {
 	@Test
 	public void testCompiledForEachTimeRangeWithIndex() throws Exception {
 		checkCompiledOutput("loops/forEachTimeRangeWithIndex.poc");
+	}
+
+	@Test
+	public void testTranspiledForEachTimeRangeWithIndex() throws Exception {
+		checkTranspiledOutput("loops/forEachTimeRangeWithIndex.poc");
 	}
 
 	@Test
@@ -290,6 +420,11 @@ public class TestLoops extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledForEachTupleList() throws Exception {
+		checkTranspiledOutput("loops/forEachTupleList.poc");
+	}
+
+	@Test
 	public void testInterpretedForEachTupleListWithIndex() throws Exception {
 		checkInterpretedOutput("loops/forEachTupleListWithIndex.poc");
 	}
@@ -297,6 +432,11 @@ public class TestLoops extends BaseOParserTest {
 	@Test
 	public void testCompiledForEachTupleListWithIndex() throws Exception {
 		checkCompiledOutput("loops/forEachTupleListWithIndex.poc");
+	}
+
+	@Test
+	public void testTranspiledForEachTupleListWithIndex() throws Exception {
+		checkTranspiledOutput("loops/forEachTupleListWithIndex.poc");
 	}
 
 	@Test
@@ -310,6 +450,11 @@ public class TestLoops extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledForEachTupleSet() throws Exception {
+		checkTranspiledOutput("loops/forEachTupleSet.poc");
+	}
+
+	@Test
 	public void testInterpretedForEachTupleSetWithIndex() throws Exception {
 		checkInterpretedOutput("loops/forEachTupleSetWithIndex.poc");
 	}
@@ -317,6 +462,11 @@ public class TestLoops extends BaseOParserTest {
 	@Test
 	public void testCompiledForEachTupleSetWithIndex() throws Exception {
 		checkCompiledOutput("loops/forEachTupleSetWithIndex.poc");
+	}
+
+	@Test
+	public void testTranspiledForEachTupleSetWithIndex() throws Exception {
+		checkTranspiledOutput("loops/forEachTupleSetWithIndex.poc");
 	}
 
 	@Test
@@ -330,6 +480,11 @@ public class TestLoops extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledWhile() throws Exception {
+		checkTranspiledOutput("loops/while.poc");
+	}
+
+	@Test
 	public void testInterpretedWhileBreak() throws Exception {
 		checkInterpretedOutput("loops/whileBreak.poc");
 	}
@@ -337,6 +492,11 @@ public class TestLoops extends BaseOParserTest {
 	@Test
 	public void testCompiledWhileBreak() throws Exception {
 		checkCompiledOutput("loops/whileBreak.poc");
+	}
+
+	@Test
+	public void testTranspiledWhileBreak() throws Exception {
+		checkTranspiledOutput("loops/whileBreak.poc");
 	}
 
 }

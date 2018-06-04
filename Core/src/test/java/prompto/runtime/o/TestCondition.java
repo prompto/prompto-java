@@ -30,6 +30,11 @@ public class TestCondition extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledComplexIf() throws Exception {
+		checkTranspiledOutput("condition/complexIf.poc");
+	}
+
+	@Test
 	public void testInterpretedEmbeddedIf() throws Exception {
 		checkInterpretedOutput("condition/embeddedIf.poc");
 	}
@@ -37,6 +42,11 @@ public class TestCondition extends BaseOParserTest {
 	@Test
 	public void testCompiledEmbeddedIf() throws Exception {
 		checkCompiledOutput("condition/embeddedIf.poc");
+	}
+
+	@Test
+	public void testTranspiledEmbeddedIf() throws Exception {
+		checkTranspiledOutput("condition/embeddedIf.poc");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestCondition extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledReturnIf() throws Exception {
+		checkTranspiledOutput("condition/returnIf.poc");
+	}
+
+	@Test
 	public void testInterpretedSimpleIf() throws Exception {
 		checkInterpretedOutput("condition/simpleIf.poc");
 	}
@@ -57,6 +72,11 @@ public class TestCondition extends BaseOParserTest {
 	@Test
 	public void testCompiledSimpleIf() throws Exception {
 		checkCompiledOutput("condition/simpleIf.poc");
+	}
+
+	@Test
+	public void testTranspiledSimpleIf() throws Exception {
+		checkTranspiledOutput("condition/simpleIf.poc");
 	}
 
 	@Test
@@ -70,6 +90,11 @@ public class TestCondition extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledSwitch() throws Exception {
+		checkTranspiledOutput("condition/switch.poc");
+	}
+
+	@Test
 	public void testInterpretedTernary() throws Exception {
 		checkInterpretedOutput("condition/ternary.poc");
 	}
@@ -77,6 +102,11 @@ public class TestCondition extends BaseOParserTest {
 	@Test
 	public void testCompiledTernary() throws Exception {
 		checkCompiledOutput("condition/ternary.poc");
+	}
+
+	@Test
+	public void testTranspiledTernary() throws Exception {
+		checkTranspiledOutput("condition/ternary.poc");
 	}
 
 }

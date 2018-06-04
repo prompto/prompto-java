@@ -30,6 +30,11 @@ public class TestPatterns extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledIntegerEnumeration() throws Exception {
+		checkTranspiledOutput("patterns/integerEnumeration.poc");
+	}
+
+	@Test
 	public void testInterpretedIntegerPattern() throws Exception {
 		checkInterpretedOutput("patterns/integerPattern.poc");
 	}
@@ -37,6 +42,11 @@ public class TestPatterns extends BaseOParserTest {
 	@Test
 	public void testCompiledIntegerPattern() throws Exception {
 		checkCompiledOutput("patterns/integerPattern.poc");
+	}
+
+	@Test
+	public void testTranspiledIntegerPattern() throws Exception {
+		checkTranspiledOutput("patterns/integerPattern.poc");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestPatterns extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledNegativeIntegerRange() throws Exception {
+		checkTranspiledOutput("patterns/negativeIntegerRange.poc");
+	}
+
+	@Test
 	public void testInterpretedPositiveIntegerRange() throws Exception {
 		checkInterpretedOutput("patterns/positiveIntegerRange.poc");
 	}
@@ -57,6 +72,11 @@ public class TestPatterns extends BaseOParserTest {
 	@Test
 	public void testCompiledPositiveIntegerRange() throws Exception {
 		checkCompiledOutput("patterns/positiveIntegerRange.poc");
+	}
+
+	@Test
+	public void testTranspiledPositiveIntegerRange() throws Exception {
+		checkTranspiledOutput("patterns/positiveIntegerRange.poc");
 	}
 
 	@Test
@@ -70,6 +90,11 @@ public class TestPatterns extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledTextEnumeration() throws Exception {
+		checkTranspiledOutput("patterns/textEnumeration.poc");
+	}
+
+	@Test
 	public void testInterpretedTextPattern() throws Exception {
 		checkInterpretedOutput("patterns/textPattern.poc");
 	}
@@ -77,6 +102,11 @@ public class TestPatterns extends BaseOParserTest {
 	@Test
 	public void testCompiledTextPattern() throws Exception {
 		checkCompiledOutput("patterns/textPattern.poc");
+	}
+
+	@Test
+	public void testTranspiledTextPattern() throws Exception {
+		checkTranspiledOutput("patterns/textPattern.poc");
 	}
 
 }

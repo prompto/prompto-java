@@ -30,6 +30,11 @@ public class TestCategories extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledCopyFromAscendant() throws Exception {
+		checkTranspiledOutput("categories/copyFromAscendant.poc");
+	}
+
+	@Test
 	public void testInterpretedCopyFromAscendantWithOverride() throws Exception {
 		checkInterpretedOutput("categories/copyFromAscendantWithOverride.poc");
 	}
@@ -37,6 +42,11 @@ public class TestCategories extends BaseOParserTest {
 	@Test
 	public void testCompiledCopyFromAscendantWithOverride() throws Exception {
 		checkCompiledOutput("categories/copyFromAscendantWithOverride.poc");
+	}
+
+	@Test
+	public void testTranspiledCopyFromAscendantWithOverride() throws Exception {
+		checkTranspiledOutput("categories/copyFromAscendantWithOverride.poc");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestCategories extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledCopyFromDescendant() throws Exception {
+		checkTranspiledOutput("categories/copyFromDescendant.poc");
+	}
+
+	@Test
 	public void testInterpretedCopyFromDescendantWithOverride() throws Exception {
 		checkInterpretedOutput("categories/copyFromDescendantWithOverride.poc");
 	}
@@ -60,6 +75,11 @@ public class TestCategories extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledCopyFromDescendantWithOverride() throws Exception {
+		checkTranspiledOutput("categories/copyFromDescendantWithOverride.poc");
+	}
+
+	@Test
 	public void testInterpretedCopyFromDocument() throws Exception {
 		checkInterpretedOutput("categories/copyFromDocument.poc");
 	}
@@ -67,6 +87,11 @@ public class TestCategories extends BaseOParserTest {
 	@Test
 	public void testCompiledCopyFromDocument() throws Exception {
 		checkCompiledOutput("categories/copyFromDocument.poc");
+	}
+
+	@Test
+	public void testTranspiledCopyFromDocument() throws Exception {
+		checkTranspiledOutput("categories/copyFromDocument.poc");
 	}
 
 }

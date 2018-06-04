@@ -30,6 +30,11 @@ public class TestExit extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledAssignedReturn() throws Exception {
+		checkTranspiledOutput("exit/assignedReturn.pec");
+	}
+
+	@Test
 	public void testInterpretedAssignedReturnInDoWhile() throws Exception {
 		checkInterpretedOutput("exit/assignedReturnInDoWhile.pec");
 	}
@@ -37,6 +42,11 @@ public class TestExit extends BaseEParserTest {
 	@Test
 	public void testCompiledAssignedReturnInDoWhile() throws Exception {
 		checkCompiledOutput("exit/assignedReturnInDoWhile.pec");
+	}
+
+	@Test
+	public void testTranspiledAssignedReturnInDoWhile() throws Exception {
+		checkTranspiledOutput("exit/assignedReturnInDoWhile.pec");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestExit extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledAssignedReturnInForEach() throws Exception {
+		checkTranspiledOutput("exit/assignedReturnInForEach.pec");
+	}
+
+	@Test
 	public void testInterpretedAssignedReturnInIf() throws Exception {
 		checkInterpretedOutput("exit/assignedReturnInIf.pec");
 	}
@@ -57,6 +72,11 @@ public class TestExit extends BaseEParserTest {
 	@Test
 	public void testCompiledAssignedReturnInIf() throws Exception {
 		checkCompiledOutput("exit/assignedReturnInIf.pec");
+	}
+
+	@Test
+	public void testTranspiledAssignedReturnInIf() throws Exception {
+		checkTranspiledOutput("exit/assignedReturnInIf.pec");
 	}
 
 	@Test
@@ -70,6 +90,11 @@ public class TestExit extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledAssignedReturnInWhile() throws Exception {
+		checkTranspiledOutput("exit/assignedReturnInWhile.pec");
+	}
+
+	@Test
 	public void testInterpretedUnassignedReturn() throws Exception {
 		checkInterpretedOutput("exit/unassignedReturn.pec");
 	}
@@ -77,6 +102,11 @@ public class TestExit extends BaseEParserTest {
 	@Test
 	public void testCompiledUnassignedReturn() throws Exception {
 		checkCompiledOutput("exit/unassignedReturn.pec");
+	}
+
+	@Test
+	public void testTranspiledUnassignedReturn() throws Exception {
+		checkTranspiledOutput("exit/unassignedReturn.pec");
 	}
 
 	@Test
@@ -90,6 +120,11 @@ public class TestExit extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledUnassignedReturnInDoWhile() throws Exception {
+		checkTranspiledOutput("exit/unassignedReturnInDoWhile.pec");
+	}
+
+	@Test
 	public void testInterpretedUnassignedReturnInForEach() throws Exception {
 		checkInterpretedOutput("exit/unassignedReturnInForEach.pec");
 	}
@@ -97,6 +132,11 @@ public class TestExit extends BaseEParserTest {
 	@Test
 	public void testCompiledUnassignedReturnInForEach() throws Exception {
 		checkCompiledOutput("exit/unassignedReturnInForEach.pec");
+	}
+
+	@Test
+	public void testTranspiledUnassignedReturnInForEach() throws Exception {
+		checkTranspiledOutput("exit/unassignedReturnInForEach.pec");
 	}
 
 	@Test
@@ -110,6 +150,11 @@ public class TestExit extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledUnassignedReturnInIf() throws Exception {
+		checkTranspiledOutput("exit/unassignedReturnInIf.pec");
+	}
+
+	@Test
 	public void testInterpretedUnassignedReturnInWhile() throws Exception {
 		checkInterpretedOutput("exit/unassignedReturnInWhile.pec");
 	}
@@ -117,6 +162,11 @@ public class TestExit extends BaseEParserTest {
 	@Test
 	public void testCompiledUnassignedReturnInWhile() throws Exception {
 		checkCompiledOutput("exit/unassignedReturnInWhile.pec");
+	}
+
+	@Test
+	public void testTranspiledUnassignedReturnInWhile() throws Exception {
+		checkTranspiledOutput("exit/unassignedReturnInWhile.pec");
 	}
 
 }

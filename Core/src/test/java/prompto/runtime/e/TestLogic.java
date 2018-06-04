@@ -30,6 +30,11 @@ public class TestLogic extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledAndBoolean() throws Exception {
+		checkTranspiledOutput("logic/andBoolean.pec");
+	}
+
+	@Test
 	public void testInterpretedNotBoolean() throws Exception {
 		checkInterpretedOutput("logic/notBoolean.pec");
 	}
@@ -40,6 +45,11 @@ public class TestLogic extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledNotBoolean() throws Exception {
+		checkTranspiledOutput("logic/notBoolean.pec");
+	}
+
+	@Test
 	public void testInterpretedOrBoolean() throws Exception {
 		checkInterpretedOutput("logic/orBoolean.pec");
 	}
@@ -47,6 +57,11 @@ public class TestLogic extends BaseEParserTest {
 	@Test
 	public void testCompiledOrBoolean() throws Exception {
 		checkCompiledOutput("logic/orBoolean.pec");
+	}
+
+	@Test
+	public void testTranspiledOrBoolean() throws Exception {
+		checkTranspiledOutput("logic/orBoolean.pec");
 	}
 
 }

@@ -30,6 +30,11 @@ public class TestSelf extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledSelfAsParameter() throws Exception {
+		checkTranspiledOutput("self/selfAsParameter.pec");
+	}
+
+	@Test
 	public void testInterpretedSelfMember() throws Exception {
 		checkInterpretedOutput("self/selfMember.pec");
 	}
@@ -37,6 +42,11 @@ public class TestSelf extends BaseEParserTest {
 	@Test
 	public void testCompiledSelfMember() throws Exception {
 		checkCompiledOutput("self/selfMember.pec");
+	}
+
+	@Test
+	public void testTranspiledSelfMember() throws Exception {
+		checkTranspiledOutput("self/selfMember.pec");
 	}
 
 }

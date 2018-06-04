@@ -30,6 +30,11 @@ public class TestEquals extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledEqBoolean() throws Exception {
+		checkTranspiledOutput("equals/eqBoolean.pec");
+	}
+
+	@Test
 	public void testInterpretedEqCharacter() throws Exception {
 		checkInterpretedOutput("equals/eqCharacter.pec");
 	}
@@ -37,6 +42,11 @@ public class TestEquals extends BaseEParserTest {
 	@Test
 	public void testCompiledEqCharacter() throws Exception {
 		checkCompiledOutput("equals/eqCharacter.pec");
+	}
+
+	@Test
+	public void testTranspiledEqCharacter() throws Exception {
+		checkTranspiledOutput("equals/eqCharacter.pec");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestEquals extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledEqDate() throws Exception {
+		checkTranspiledOutput("equals/eqDate.pec");
+	}
+
+	@Test
 	public void testInterpretedEqDateTime() throws Exception {
 		checkInterpretedOutput("equals/eqDateTime.pec");
 	}
@@ -57,6 +72,11 @@ public class TestEquals extends BaseEParserTest {
 	@Test
 	public void testCompiledEqDateTime() throws Exception {
 		checkCompiledOutput("equals/eqDateTime.pec");
+	}
+
+	@Test
+	public void testTranspiledEqDateTime() throws Exception {
+		checkTranspiledOutput("equals/eqDateTime.pec");
 	}
 
 	@Test
@@ -70,6 +90,11 @@ public class TestEquals extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledEqDecimal() throws Exception {
+		checkTranspiledOutput("equals/eqDecimal.pec");
+	}
+
+	@Test
 	public void testInterpretedEqDict() throws Exception {
 		checkInterpretedOutput("equals/eqDict.pec");
 	}
@@ -77,6 +102,11 @@ public class TestEquals extends BaseEParserTest {
 	@Test
 	public void testCompiledEqDict() throws Exception {
 		checkCompiledOutput("equals/eqDict.pec");
+	}
+
+	@Test
+	public void testTranspiledEqDict() throws Exception {
+		checkTranspiledOutput("equals/eqDict.pec");
 	}
 
 	@Test
@@ -90,6 +120,11 @@ public class TestEquals extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledEqInteger() throws Exception {
+		checkTranspiledOutput("equals/eqInteger.pec");
+	}
+
+	@Test
 	public void testInterpretedEqList() throws Exception {
 		checkInterpretedOutput("equals/eqList.pec");
 	}
@@ -97,6 +132,11 @@ public class TestEquals extends BaseEParserTest {
 	@Test
 	public void testCompiledEqList() throws Exception {
 		checkCompiledOutput("equals/eqList.pec");
+	}
+
+	@Test
+	public void testTranspiledEqList() throws Exception {
+		checkTranspiledOutput("equals/eqList.pec");
 	}
 
 	@Test
@@ -110,6 +150,11 @@ public class TestEquals extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledEqPeriod() throws Exception {
+		checkTranspiledOutput("equals/eqPeriod.pec");
+	}
+
+	@Test
 	public void testInterpretedEqRange() throws Exception {
 		checkInterpretedOutput("equals/eqRange.pec");
 	}
@@ -117,6 +162,11 @@ public class TestEquals extends BaseEParserTest {
 	@Test
 	public void testCompiledEqRange() throws Exception {
 		checkCompiledOutput("equals/eqRange.pec");
+	}
+
+	@Test
+	public void testTranspiledEqRange() throws Exception {
+		checkTranspiledOutput("equals/eqRange.pec");
 	}
 
 	@Test
@@ -130,6 +180,11 @@ public class TestEquals extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledEqSet() throws Exception {
+		checkTranspiledOutput("equals/eqSet.pec");
+	}
+
+	@Test
 	public void testInterpretedEqText() throws Exception {
 		checkInterpretedOutput("equals/eqText.pec");
 	}
@@ -137,6 +192,11 @@ public class TestEquals extends BaseEParserTest {
 	@Test
 	public void testCompiledEqText() throws Exception {
 		checkCompiledOutput("equals/eqText.pec");
+	}
+
+	@Test
+	public void testTranspiledEqText() throws Exception {
+		checkTranspiledOutput("equals/eqText.pec");
 	}
 
 	@Test
@@ -150,6 +210,11 @@ public class TestEquals extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledEqTime() throws Exception {
+		checkTranspiledOutput("equals/eqTime.pec");
+	}
+
+	@Test
 	public void testInterpretedEqVersion() throws Exception {
 		checkInterpretedOutput("equals/eqVersion.pec");
 	}
@@ -157,6 +222,11 @@ public class TestEquals extends BaseEParserTest {
 	@Test
 	public void testCompiledEqVersion() throws Exception {
 		checkCompiledOutput("equals/eqVersion.pec");
+	}
+
+	@Test
+	public void testTranspiledEqVersion() throws Exception {
+		checkTranspiledOutput("equals/eqVersion.pec");
 	}
 
 	@Test
@@ -170,6 +240,11 @@ public class TestEquals extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledIsBoolean() throws Exception {
+		checkTranspiledOutput("equals/isBoolean.pec");
+	}
+
+	@Test
 	public void testInterpretedIsInstance() throws Exception {
 		checkInterpretedOutput("equals/isInstance.pec");
 	}
@@ -177,6 +252,11 @@ public class TestEquals extends BaseEParserTest {
 	@Test
 	public void testCompiledIsInstance() throws Exception {
 		checkCompiledOutput("equals/isInstance.pec");
+	}
+
+	@Test
+	public void testTranspiledIsInstance() throws Exception {
+		checkTranspiledOutput("equals/isInstance.pec");
 	}
 
 	@Test
@@ -190,6 +270,11 @@ public class TestEquals extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledIsNotBoolean() throws Exception {
+		checkTranspiledOutput("equals/isNotBoolean.pec");
+	}
+
+	@Test
 	public void testInterpretedIsNotInstance() throws Exception {
 		checkInterpretedOutput("equals/isNotInstance.pec");
 	}
@@ -197,6 +282,11 @@ public class TestEquals extends BaseEParserTest {
 	@Test
 	public void testCompiledIsNotInstance() throws Exception {
 		checkCompiledOutput("equals/isNotInstance.pec");
+	}
+
+	@Test
+	public void testTranspiledIsNotInstance() throws Exception {
+		checkTranspiledOutput("equals/isNotInstance.pec");
 	}
 
 	@Test
@@ -210,6 +300,11 @@ public class TestEquals extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledNeqBoolean() throws Exception {
+		checkTranspiledOutput("equals/neqBoolean.pec");
+	}
+
+	@Test
 	public void testInterpretedNeqCharacter() throws Exception {
 		checkInterpretedOutput("equals/neqCharacter.pec");
 	}
@@ -217,6 +312,11 @@ public class TestEquals extends BaseEParserTest {
 	@Test
 	public void testCompiledNeqCharacter() throws Exception {
 		checkCompiledOutput("equals/neqCharacter.pec");
+	}
+
+	@Test
+	public void testTranspiledNeqCharacter() throws Exception {
+		checkTranspiledOutput("equals/neqCharacter.pec");
 	}
 
 	@Test
@@ -230,6 +330,11 @@ public class TestEquals extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledNeqDate() throws Exception {
+		checkTranspiledOutput("equals/neqDate.pec");
+	}
+
+	@Test
 	public void testInterpretedNeqDateTime() throws Exception {
 		checkInterpretedOutput("equals/neqDateTime.pec");
 	}
@@ -237,6 +342,11 @@ public class TestEquals extends BaseEParserTest {
 	@Test
 	public void testCompiledNeqDateTime() throws Exception {
 		checkCompiledOutput("equals/neqDateTime.pec");
+	}
+
+	@Test
+	public void testTranspiledNeqDateTime() throws Exception {
+		checkTranspiledOutput("equals/neqDateTime.pec");
 	}
 
 	@Test
@@ -250,6 +360,11 @@ public class TestEquals extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledNeqDecimal() throws Exception {
+		checkTranspiledOutput("equals/neqDecimal.pec");
+	}
+
+	@Test
 	public void testInterpretedNeqDict() throws Exception {
 		checkInterpretedOutput("equals/neqDict.pec");
 	}
@@ -257,6 +372,11 @@ public class TestEquals extends BaseEParserTest {
 	@Test
 	public void testCompiledNeqDict() throws Exception {
 		checkCompiledOutput("equals/neqDict.pec");
+	}
+
+	@Test
+	public void testTranspiledNeqDict() throws Exception {
+		checkTranspiledOutput("equals/neqDict.pec");
 	}
 
 	@Test
@@ -270,6 +390,11 @@ public class TestEquals extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledNeqInteger() throws Exception {
+		checkTranspiledOutput("equals/neqInteger.pec");
+	}
+
+	@Test
 	public void testInterpretedNeqList() throws Exception {
 		checkInterpretedOutput("equals/neqList.pec");
 	}
@@ -277,6 +402,11 @@ public class TestEquals extends BaseEParserTest {
 	@Test
 	public void testCompiledNeqList() throws Exception {
 		checkCompiledOutput("equals/neqList.pec");
+	}
+
+	@Test
+	public void testTranspiledNeqList() throws Exception {
+		checkTranspiledOutput("equals/neqList.pec");
 	}
 
 	@Test
@@ -290,6 +420,11 @@ public class TestEquals extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledNeqPeriod() throws Exception {
+		checkTranspiledOutput("equals/neqPeriod.pec");
+	}
+
+	@Test
 	public void testInterpretedNeqRange() throws Exception {
 		checkInterpretedOutput("equals/neqRange.pec");
 	}
@@ -297,6 +432,11 @@ public class TestEquals extends BaseEParserTest {
 	@Test
 	public void testCompiledNeqRange() throws Exception {
 		checkCompiledOutput("equals/neqRange.pec");
+	}
+
+	@Test
+	public void testTranspiledNeqRange() throws Exception {
+		checkTranspiledOutput("equals/neqRange.pec");
 	}
 
 	@Test
@@ -310,6 +450,11 @@ public class TestEquals extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledNeqSet() throws Exception {
+		checkTranspiledOutput("equals/neqSet.pec");
+	}
+
+	@Test
 	public void testInterpretedNeqText() throws Exception {
 		checkInterpretedOutput("equals/neqText.pec");
 	}
@@ -317,6 +462,11 @@ public class TestEquals extends BaseEParserTest {
 	@Test
 	public void testCompiledNeqText() throws Exception {
 		checkCompiledOutput("equals/neqText.pec");
+	}
+
+	@Test
+	public void testTranspiledNeqText() throws Exception {
+		checkTranspiledOutput("equals/neqText.pec");
 	}
 
 	@Test
@@ -330,6 +480,11 @@ public class TestEquals extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledNeqTime() throws Exception {
+		checkTranspiledOutput("equals/neqTime.pec");
+	}
+
+	@Test
 	public void testInterpretedReqText() throws Exception {
 		checkInterpretedOutput("equals/reqText.pec");
 	}
@@ -337,6 +492,11 @@ public class TestEquals extends BaseEParserTest {
 	@Test
 	public void testCompiledReqText() throws Exception {
 		checkCompiledOutput("equals/reqText.pec");
+	}
+
+	@Test
+	public void testTranspiledReqText() throws Exception {
+		checkTranspiledOutput("equals/reqText.pec");
 	}
 
 }

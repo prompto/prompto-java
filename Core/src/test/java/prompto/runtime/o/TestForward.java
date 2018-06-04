@@ -29,5 +29,10 @@ public class TestForward extends BaseOParserTest {
 		checkCompiledOutput("forward/forward.poc");
 	}
 
+	@Test
+	public void testTranspiledForward() throws Exception {
+		checkTranspiledOutput("forward/forward.poc");
+	}
+
 }
 

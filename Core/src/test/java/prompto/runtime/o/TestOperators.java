@@ -30,6 +30,11 @@ public class TestOperators extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledAddAmount() throws Exception {
+		checkTranspiledOutput("operators/addAmount.poc");
+	}
+
+	@Test
 	public void testInterpretedDivAmount() throws Exception {
 		checkInterpretedOutput("operators/divAmount.poc");
 	}
@@ -37,6 +42,11 @@ public class TestOperators extends BaseOParserTest {
 	@Test
 	public void testCompiledDivAmount() throws Exception {
 		checkCompiledOutput("operators/divAmount.poc");
+	}
+
+	@Test
+	public void testTranspiledDivAmount() throws Exception {
+		checkTranspiledOutput("operators/divAmount.poc");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestOperators extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledIdivAmount() throws Exception {
+		checkTranspiledOutput("operators/idivAmount.poc");
+	}
+
+	@Test
 	public void testInterpretedModAmount() throws Exception {
 		checkInterpretedOutput("operators/modAmount.poc");
 	}
@@ -57,6 +72,11 @@ public class TestOperators extends BaseOParserTest {
 	@Test
 	public void testCompiledModAmount() throws Exception {
 		checkCompiledOutput("operators/modAmount.poc");
+	}
+
+	@Test
+	public void testTranspiledModAmount() throws Exception {
+		checkTranspiledOutput("operators/modAmount.poc");
 	}
 
 	@Test
@@ -70,6 +90,11 @@ public class TestOperators extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledMultAmount() throws Exception {
+		checkTranspiledOutput("operators/multAmount.poc");
+	}
+
+	@Test
 	public void testInterpretedSubAmount() throws Exception {
 		checkInterpretedOutput("operators/subAmount.poc");
 	}
@@ -77,6 +102,11 @@ public class TestOperators extends BaseOParserTest {
 	@Test
 	public void testCompiledSubAmount() throws Exception {
 		checkCompiledOutput("operators/subAmount.poc");
+	}
+
+	@Test
+	public void testTranspiledSubAmount() throws Exception {
+		checkTranspiledOutput("operators/subAmount.poc");
 	}
 
 }

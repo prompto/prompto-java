@@ -30,6 +30,11 @@ public class TestSlice extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledSliceList() throws Exception {
+		checkTranspiledOutput("slice/sliceList.poc");
+	}
+
+	@Test
 	public void testInterpretedSliceRange() throws Exception {
 		checkInterpretedOutput("slice/sliceRange.poc");
 	}
@@ -40,6 +45,11 @@ public class TestSlice extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledSliceRange() throws Exception {
+		checkTranspiledOutput("slice/sliceRange.poc");
+	}
+
+	@Test
 	public void testInterpretedSliceText() throws Exception {
 		checkInterpretedOutput("slice/sliceText.poc");
 	}
@@ -47,6 +57,11 @@ public class TestSlice extends BaseOParserTest {
 	@Test
 	public void testCompiledSliceText() throws Exception {
 		checkCompiledOutput("slice/sliceText.poc");
+	}
+
+	@Test
+	public void testTranspiledSliceText() throws Exception {
+		checkTranspiledOutput("slice/sliceText.poc");
 	}
 
 }

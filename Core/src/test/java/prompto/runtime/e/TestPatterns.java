@@ -30,6 +30,11 @@ public class TestPatterns extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledIntegerEnumeration() throws Exception {
+		checkTranspiledOutput("patterns/integerEnumeration.pec");
+	}
+
+	@Test
 	public void testInterpretedIntegerPattern() throws Exception {
 		checkInterpretedOutput("patterns/integerPattern.pec");
 	}
@@ -37,6 +42,11 @@ public class TestPatterns extends BaseEParserTest {
 	@Test
 	public void testCompiledIntegerPattern() throws Exception {
 		checkCompiledOutput("patterns/integerPattern.pec");
+	}
+
+	@Test
+	public void testTranspiledIntegerPattern() throws Exception {
+		checkTranspiledOutput("patterns/integerPattern.pec");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestPatterns extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledNegativeIntegerRange() throws Exception {
+		checkTranspiledOutput("patterns/negativeIntegerRange.pec");
+	}
+
+	@Test
 	public void testInterpretedPositiveIntegerRange() throws Exception {
 		checkInterpretedOutput("patterns/positiveIntegerRange.pec");
 	}
@@ -57,6 +72,11 @@ public class TestPatterns extends BaseEParserTest {
 	@Test
 	public void testCompiledPositiveIntegerRange() throws Exception {
 		checkCompiledOutput("patterns/positiveIntegerRange.pec");
+	}
+
+	@Test
+	public void testTranspiledPositiveIntegerRange() throws Exception {
+		checkTranspiledOutput("patterns/positiveIntegerRange.pec");
 	}
 
 	@Test
@@ -70,6 +90,11 @@ public class TestPatterns extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledTextEnumeration() throws Exception {
+		checkTranspiledOutput("patterns/textEnumeration.pec");
+	}
+
+	@Test
 	public void testInterpretedTextPattern() throws Exception {
 		checkInterpretedOutput("patterns/textPattern.pec");
 	}
@@ -77,6 +102,11 @@ public class TestPatterns extends BaseEParserTest {
 	@Test
 	public void testCompiledTextPattern() throws Exception {
 		checkCompiledOutput("patterns/textPattern.pec");
+	}
+
+	@Test
+	public void testTranspiledTextPattern() throws Exception {
+		checkTranspiledOutput("patterns/textPattern.pec");
 	}
 
 }

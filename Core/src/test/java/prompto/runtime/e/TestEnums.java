@@ -30,6 +30,11 @@ public class TestEnums extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledCategoryEnum() throws Exception {
+		checkTranspiledOutput("enums/categoryEnum.pec");
+	}
+
+	@Test
 	public void testInterpretedIntegerEnum() throws Exception {
 		checkInterpretedOutput("enums/integerEnum.pec");
 	}
@@ -37,6 +42,11 @@ public class TestEnums extends BaseEParserTest {
 	@Test
 	public void testCompiledIntegerEnum() throws Exception {
 		checkCompiledOutput("enums/integerEnum.pec");
+	}
+
+	@Test
+	public void testTranspiledIntegerEnum() throws Exception {
+		checkTranspiledOutput("enums/integerEnum.pec");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestEnums extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledStoreCategoryEnum() throws Exception {
+		checkTranspiledOutput("enums/storeCategoryEnum.pec");
+	}
+
+	@Test
 	public void testInterpretedStoreIntegerEnum() throws Exception {
 		checkInterpretedOutput("enums/storeIntegerEnum.pec");
 	}
@@ -57,6 +72,11 @@ public class TestEnums extends BaseEParserTest {
 	@Test
 	public void testCompiledStoreIntegerEnum() throws Exception {
 		checkCompiledOutput("enums/storeIntegerEnum.pec");
+	}
+
+	@Test
+	public void testTranspiledStoreIntegerEnum() throws Exception {
+		checkTranspiledOutput("enums/storeIntegerEnum.pec");
 	}
 
 	@Test
@@ -70,6 +90,11 @@ public class TestEnums extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledStoreTextEnum() throws Exception {
+		checkTranspiledOutput("enums/storeTextEnum.pec");
+	}
+
+	@Test
 	public void testInterpretedTextEnum() throws Exception {
 		checkInterpretedOutput("enums/textEnum.pec");
 	}
@@ -77,6 +102,11 @@ public class TestEnums extends BaseEParserTest {
 	@Test
 	public void testCompiledTextEnum() throws Exception {
 		checkCompiledOutput("enums/textEnum.pec");
+	}
+
+	@Test
+	public void testTranspiledTextEnum() throws Exception {
+		checkTranspiledOutput("enums/textEnum.pec");
 	}
 
 	@Test
@@ -90,6 +120,11 @@ public class TestEnums extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledTextEnumArg() throws Exception {
+		checkTranspiledOutput("enums/textEnumArg.pec");
+	}
+
+	@Test
 	public void testInterpretedTextEnumVar() throws Exception {
 		checkInterpretedOutput("enums/textEnumVar.pec");
 	}
@@ -97,6 +132,11 @@ public class TestEnums extends BaseEParserTest {
 	@Test
 	public void testCompiledTextEnumVar() throws Exception {
 		checkCompiledOutput("enums/textEnumVar.pec");
+	}
+
+	@Test
+	public void testTranspiledTextEnumVar() throws Exception {
+		checkTranspiledOutput("enums/textEnumVar.pec");
 	}
 
 }

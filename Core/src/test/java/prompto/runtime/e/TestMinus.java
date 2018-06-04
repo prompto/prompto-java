@@ -30,6 +30,11 @@ public class TestMinus extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledMinusDecimal() throws Exception {
+		checkTranspiledOutput("minus/minusDecimal.pec");
+	}
+
+	@Test
 	public void testInterpretedMinusInteger() throws Exception {
 		checkInterpretedOutput("minus/minusInteger.pec");
 	}
@@ -40,6 +45,11 @@ public class TestMinus extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledMinusInteger() throws Exception {
+		checkTranspiledOutput("minus/minusInteger.pec");
+	}
+
+	@Test
 	public void testInterpretedMinusPeriod() throws Exception {
 		checkInterpretedOutput("minus/minusPeriod.pec");
 	}
@@ -47,6 +57,11 @@ public class TestMinus extends BaseEParserTest {
 	@Test
 	public void testCompiledMinusPeriod() throws Exception {
 		checkCompiledOutput("minus/minusPeriod.pec");
+	}
+
+	@Test
+	public void testTranspiledMinusPeriod() throws Exception {
+		checkTranspiledOutput("minus/minusPeriod.pec");
 	}
 
 }

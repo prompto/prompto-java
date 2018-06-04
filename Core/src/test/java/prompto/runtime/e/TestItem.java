@@ -30,6 +30,11 @@ public class TestItem extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledItemDict() throws Exception {
+		checkTranspiledOutput("item/itemDict.pec");
+	}
+
+	@Test
 	public void testInterpretedItemList() throws Exception {
 		checkInterpretedOutput("item/itemList.pec");
 	}
@@ -37,6 +42,11 @@ public class TestItem extends BaseEParserTest {
 	@Test
 	public void testCompiledItemList() throws Exception {
 		checkCompiledOutput("item/itemList.pec");
+	}
+
+	@Test
+	public void testTranspiledItemList() throws Exception {
+		checkTranspiledOutput("item/itemList.pec");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestItem extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledItemRange() throws Exception {
+		checkTranspiledOutput("item/itemRange.pec");
+	}
+
+	@Test
 	public void testInterpretedItemSet() throws Exception {
 		checkInterpretedOutput("item/itemSet.pec");
 	}
@@ -60,6 +75,11 @@ public class TestItem extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledItemSet() throws Exception {
+		checkTranspiledOutput("item/itemSet.pec");
+	}
+
+	@Test
 	public void testInterpretedItemText() throws Exception {
 		checkInterpretedOutput("item/itemText.pec");
 	}
@@ -67,6 +87,11 @@ public class TestItem extends BaseEParserTest {
 	@Test
 	public void testCompiledItemText() throws Exception {
 		checkCompiledOutput("item/itemText.pec");
+	}
+
+	@Test
+	public void testTranspiledItemText() throws Exception {
+		checkTranspiledOutput("item/itemText.pec");
 	}
 
 }

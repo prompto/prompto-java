@@ -30,6 +30,11 @@ public class TestTesting extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledAnd() throws Exception {
+		checkTranspiledOutput("testing/and.poc");
+	}
+
+	@Test
 	public void testInterpretedContains() throws Exception {
 		checkInterpretedOutput("testing/contains.poc");
 	}
@@ -37,6 +42,11 @@ public class TestTesting extends BaseOParserTest {
 	@Test
 	public void testCompiledContains() throws Exception {
 		checkCompiledOutput("testing/contains.poc");
+	}
+
+	@Test
+	public void testTranspiledContains() throws Exception {
+		checkTranspiledOutput("testing/contains.poc");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestTesting extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledGreater() throws Exception {
+		checkTranspiledOutput("testing/greater.poc");
+	}
+
+	@Test
 	public void testInterpretedMethod() throws Exception {
 		checkInterpretedOutput("testing/method.poc");
 	}
@@ -57,6 +72,11 @@ public class TestTesting extends BaseOParserTest {
 	@Test
 	public void testCompiledMethod() throws Exception {
 		checkCompiledOutput("testing/method.poc");
+	}
+
+	@Test
+	public void testTranspiledMethod() throws Exception {
+		checkTranspiledOutput("testing/method.poc");
 	}
 
 	@Test
@@ -70,6 +90,11 @@ public class TestTesting extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledNegative() throws Exception {
+		checkTranspiledOutput("testing/negative.poc");
+	}
+
+	@Test
 	public void testInterpretedNegativeError() throws Exception {
 		checkInterpretedOutput("testing/negativeError.poc");
 	}
@@ -77,6 +102,11 @@ public class TestTesting extends BaseOParserTest {
 	@Test
 	public void testCompiledNegativeError() throws Exception {
 		checkCompiledOutput("testing/negativeError.poc");
+	}
+
+	@Test
+	public void testTranspiledNegativeError() throws Exception {
+		checkTranspiledOutput("testing/negativeError.poc");
 	}
 
 	@Test
@@ -90,6 +120,11 @@ public class TestTesting extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledNot() throws Exception {
+		checkTranspiledOutput("testing/not.poc");
+	}
+
+	@Test
 	public void testInterpretedOr() throws Exception {
 		checkInterpretedOutput("testing/or.poc");
 	}
@@ -97,6 +132,11 @@ public class TestTesting extends BaseOParserTest {
 	@Test
 	public void testCompiledOr() throws Exception {
 		checkCompiledOutput("testing/or.poc");
+	}
+
+	@Test
+	public void testTranspiledOr() throws Exception {
+		checkTranspiledOutput("testing/or.poc");
 	}
 
 	@Test
@@ -110,6 +150,11 @@ public class TestTesting extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledPositive() throws Exception {
+		checkTranspiledOutput("testing/positive.poc");
+	}
+
+	@Test
 	public void testInterpretedPositiveError() throws Exception {
 		checkInterpretedOutput("testing/positiveError.poc");
 	}
@@ -117,6 +162,11 @@ public class TestTesting extends BaseOParserTest {
 	@Test
 	public void testCompiledPositiveError() throws Exception {
 		checkCompiledOutput("testing/positiveError.poc");
+	}
+
+	@Test
+	public void testTranspiledPositiveError() throws Exception {
+		checkTranspiledOutput("testing/positiveError.poc");
 	}
 
 }

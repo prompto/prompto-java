@@ -30,6 +30,11 @@ public class TestFilter extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledFilterFromList() throws Exception {
+		checkTranspiledOutput("filter/filterFromList.poc");
+	}
+
+	@Test
 	public void testInterpretedFilterFromSet() throws Exception {
 		checkInterpretedOutput("filter/filterFromSet.poc");
 	}
@@ -37,6 +42,11 @@ public class TestFilter extends BaseOParserTest {
 	@Test
 	public void testCompiledFilterFromSet() throws Exception {
 		checkCompiledOutput("filter/filterFromSet.poc");
+	}
+
+	@Test
+	public void testTranspiledFilterFromSet() throws Exception {
+		checkTranspiledOutput("filter/filterFromSet.poc");
 	}
 
 }

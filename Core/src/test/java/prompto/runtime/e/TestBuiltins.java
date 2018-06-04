@@ -30,6 +30,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledBooleanText() throws Exception {
+		checkTranspiledOutput("builtins/booleanText.pec");
+	}
+
+	@Test
 	public void testInterpretedCategoryText() throws Exception {
 		checkInterpretedOutput("builtins/categoryText.pec");
 	}
@@ -37,6 +42,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCompiledCategoryText() throws Exception {
 		checkCompiledOutput("builtins/categoryText.pec");
+	}
+
+	@Test
+	public void testTranspiledCategoryText() throws Exception {
+		checkTranspiledOutput("builtins/categoryText.pec");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledCharCodePoint() throws Exception {
+		checkTranspiledOutput("builtins/charCodePoint.pec");
+	}
+
+	@Test
 	public void testInterpretedCharText() throws Exception {
 		checkInterpretedOutput("builtins/charText.pec");
 	}
@@ -57,6 +72,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCompiledCharText() throws Exception {
 		checkCompiledOutput("builtins/charText.pec");
+	}
+
+	@Test
+	public void testTranspiledCharText() throws Exception {
+		checkTranspiledOutput("builtins/charText.pec");
 	}
 
 	@Test
@@ -70,6 +90,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledDateDayOfMonth() throws Exception {
+		checkTranspiledOutput("builtins/dateDayOfMonth.pec");
+	}
+
+	@Test
 	public void testInterpretedDateDayOfYear() throws Exception {
 		checkInterpretedOutput("builtins/dateDayOfYear.pec");
 	}
@@ -77,6 +102,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCompiledDateDayOfYear() throws Exception {
 		checkCompiledOutput("builtins/dateDayOfYear.pec");
+	}
+
+	@Test
+	public void testTranspiledDateDayOfYear() throws Exception {
+		checkTranspiledOutput("builtins/dateDayOfYear.pec");
 	}
 
 	@Test
@@ -90,6 +120,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledDateMonth() throws Exception {
+		checkTranspiledOutput("builtins/dateMonth.pec");
+	}
+
+	@Test
 	public void testInterpretedDateText() throws Exception {
 		checkInterpretedOutput("builtins/dateText.pec");
 	}
@@ -97,6 +132,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCompiledDateText() throws Exception {
 		checkCompiledOutput("builtins/dateText.pec");
+	}
+
+	@Test
+	public void testTranspiledDateText() throws Exception {
+		checkTranspiledOutput("builtins/dateText.pec");
 	}
 
 	@Test
@@ -110,6 +150,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledDateTimeDayOfMonth() throws Exception {
+		checkTranspiledOutput("builtins/dateTimeDayOfMonth.pec");
+	}
+
+	@Test
 	public void testInterpretedDateTimeDayOfYear() throws Exception {
 		checkInterpretedOutput("builtins/dateTimeDayOfYear.pec");
 	}
@@ -117,6 +162,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCompiledDateTimeDayOfYear() throws Exception {
 		checkCompiledOutput("builtins/dateTimeDayOfYear.pec");
+	}
+
+	@Test
+	public void testTranspiledDateTimeDayOfYear() throws Exception {
+		checkTranspiledOutput("builtins/dateTimeDayOfYear.pec");
 	}
 
 	@Test
@@ -130,6 +180,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledDateTimeHour() throws Exception {
+		checkTranspiledOutput("builtins/dateTimeHour.pec");
+	}
+
+	@Test
 	public void testInterpretedDateTimeMilli() throws Exception {
 		checkInterpretedOutput("builtins/dateTimeMilli.pec");
 	}
@@ -137,6 +192,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCompiledDateTimeMilli() throws Exception {
 		checkCompiledOutput("builtins/dateTimeMilli.pec");
+	}
+
+	@Test
+	public void testTranspiledDateTimeMilli() throws Exception {
+		checkTranspiledOutput("builtins/dateTimeMilli.pec");
 	}
 
 	@Test
@@ -150,6 +210,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledDateTimeMinute() throws Exception {
+		checkTranspiledOutput("builtins/dateTimeMinute.pec");
+	}
+
+	@Test
 	public void testInterpretedDateTimeMonth() throws Exception {
 		checkInterpretedOutput("builtins/dateTimeMonth.pec");
 	}
@@ -157,6 +222,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCompiledDateTimeMonth() throws Exception {
 		checkCompiledOutput("builtins/dateTimeMonth.pec");
+	}
+
+	@Test
+	public void testTranspiledDateTimeMonth() throws Exception {
+		checkTranspiledOutput("builtins/dateTimeMonth.pec");
 	}
 
 	@Test
@@ -170,6 +240,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledDateTimeSecond() throws Exception {
+		checkTranspiledOutput("builtins/dateTimeSecond.pec");
+	}
+
+	@Test
 	public void testInterpretedDateTimeText() throws Exception {
 		checkInterpretedOutput("builtins/dateTimeText.pec");
 	}
@@ -177,6 +252,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCompiledDateTimeText() throws Exception {
 		checkCompiledOutput("builtins/dateTimeText.pec");
+	}
+
+	@Test
+	public void testTranspiledDateTimeText() throws Exception {
+		checkTranspiledOutput("builtins/dateTimeText.pec");
 	}
 
 	@Test
@@ -190,6 +270,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledDateTimeYear() throws Exception {
+		checkTranspiledOutput("builtins/dateTimeYear.pec");
+	}
+
+	@Test
 	public void testInterpretedDateYear() throws Exception {
 		checkInterpretedOutput("builtins/dateYear.pec");
 	}
@@ -197,6 +282,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCompiledDateYear() throws Exception {
 		checkCompiledOutput("builtins/dateYear.pec");
+	}
+
+	@Test
+	public void testTranspiledDateYear() throws Exception {
+		checkTranspiledOutput("builtins/dateYear.pec");
 	}
 
 	@Test
@@ -210,6 +300,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledDecimalText() throws Exception {
+		checkTranspiledOutput("builtins/decimalText.pec");
+	}
+
+	@Test
 	public void testInterpretedDictCount() throws Exception {
 		checkInterpretedOutput("builtins/dictCount.pec");
 	}
@@ -217,6 +312,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCompiledDictCount() throws Exception {
 		checkCompiledOutput("builtins/dictCount.pec");
+	}
+
+	@Test
+	public void testTranspiledDictCount() throws Exception {
+		checkTranspiledOutput("builtins/dictCount.pec");
 	}
 
 	@Test
@@ -230,6 +330,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledDictKeys() throws Exception {
+		checkTranspiledOutput("builtins/dictKeys.pec");
+	}
+
+	@Test
 	public void testInterpretedDictText() throws Exception {
 		checkInterpretedOutput("builtins/dictText.pec");
 	}
@@ -237,6 +342,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCompiledDictText() throws Exception {
 		checkCompiledOutput("builtins/dictText.pec");
+	}
+
+	@Test
+	public void testTranspiledDictText() throws Exception {
+		checkTranspiledOutput("builtins/dictText.pec");
 	}
 
 	@Test
@@ -250,6 +360,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledDictValues() throws Exception {
+		checkTranspiledOutput("builtins/dictValues.pec");
+	}
+
+	@Test
 	public void testInterpretedDocumentText() throws Exception {
 		checkInterpretedOutput("builtins/documentText.pec");
 	}
@@ -257,6 +372,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCompiledDocumentText() throws Exception {
 		checkCompiledOutput("builtins/documentText.pec");
+	}
+
+	@Test
+	public void testTranspiledDocumentText() throws Exception {
+		checkTranspiledOutput("builtins/documentText.pec");
 	}
 
 	@Test
@@ -270,6 +390,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledEnumName() throws Exception {
+		checkTranspiledOutput("builtins/enumName.pec");
+	}
+
+	@Test
 	public void testInterpretedEnumSymbols() throws Exception {
 		checkInterpretedOutput("builtins/enumSymbols.pec");
 	}
@@ -277,6 +402,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCompiledEnumSymbols() throws Exception {
 		checkCompiledOutput("builtins/enumSymbols.pec");
+	}
+
+	@Test
+	public void testTranspiledEnumSymbols() throws Exception {
+		checkTranspiledOutput("builtins/enumSymbols.pec");
 	}
 
 	@Test
@@ -290,6 +420,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledEnumValue() throws Exception {
+		checkTranspiledOutput("builtins/enumValue.pec");
+	}
+
+	@Test
 	public void testInterpretedIntegerFormat() throws Exception {
 		checkInterpretedOutput("builtins/integerFormat.pec");
 	}
@@ -297,6 +432,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCompiledIntegerFormat() throws Exception {
 		checkCompiledOutput("builtins/integerFormat.pec");
+	}
+
+	@Test
+	public void testTranspiledIntegerFormat() throws Exception {
+		checkTranspiledOutput("builtins/integerFormat.pec");
 	}
 
 	@Test
@@ -310,6 +450,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledIntegerText() throws Exception {
+		checkTranspiledOutput("builtins/integerText.pec");
+	}
+
+	@Test
 	public void testInterpretedListCount() throws Exception {
 		checkInterpretedOutput("builtins/listCount.pec");
 	}
@@ -317,6 +462,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCompiledListCount() throws Exception {
 		checkCompiledOutput("builtins/listCount.pec");
+	}
+
+	@Test
+	public void testTranspiledListCount() throws Exception {
+		checkTranspiledOutput("builtins/listCount.pec");
 	}
 
 	@Test
@@ -330,6 +480,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledListText() throws Exception {
+		checkTranspiledOutput("builtins/listText.pec");
+	}
+
+	@Test
 	public void testInterpretedPeriodText() throws Exception {
 		checkInterpretedOutput("builtins/periodText.pec");
 	}
@@ -337,6 +492,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCompiledPeriodText() throws Exception {
 		checkCompiledOutput("builtins/periodText.pec");
+	}
+
+	@Test
+	public void testTranspiledPeriodText() throws Exception {
+		checkTranspiledOutput("builtins/periodText.pec");
 	}
 
 	@Test
@@ -350,6 +510,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledSetCount() throws Exception {
+		checkTranspiledOutput("builtins/setCount.pec");
+	}
+
+	@Test
 	public void testInterpretedSetText() throws Exception {
 		checkInterpretedOutput("builtins/setText.pec");
 	}
@@ -357,6 +522,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCompiledSetText() throws Exception {
 		checkCompiledOutput("builtins/setText.pec");
+	}
+
+	@Test
+	public void testTranspiledSetText() throws Exception {
+		checkTranspiledOutput("builtins/setText.pec");
 	}
 
 	@Test
@@ -370,6 +540,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledTextCapitalize() throws Exception {
+		checkTranspiledOutput("builtins/textCapitalize.pec");
+	}
+
+	@Test
 	public void testInterpretedTextCount() throws Exception {
 		checkInterpretedOutput("builtins/textCount.pec");
 	}
@@ -377,6 +552,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCompiledTextCount() throws Exception {
 		checkCompiledOutput("builtins/textCount.pec");
+	}
+
+	@Test
+	public void testTranspiledTextCount() throws Exception {
+		checkTranspiledOutput("builtins/textCount.pec");
 	}
 
 	@Test
@@ -390,6 +570,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledTextEndsWith() throws Exception {
+		checkTranspiledOutput("builtins/textEndsWith.pec");
+	}
+
+	@Test
 	public void testInterpretedTextLowercase() throws Exception {
 		checkInterpretedOutput("builtins/textLowercase.pec");
 	}
@@ -397,6 +582,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCompiledTextLowercase() throws Exception {
 		checkCompiledOutput("builtins/textLowercase.pec");
+	}
+
+	@Test
+	public void testTranspiledTextLowercase() throws Exception {
+		checkTranspiledOutput("builtins/textLowercase.pec");
 	}
 
 	@Test
@@ -410,6 +600,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledTextReplace() throws Exception {
+		checkTranspiledOutput("builtins/textReplace.pec");
+	}
+
+	@Test
 	public void testInterpretedTextReplaceAll() throws Exception {
 		checkInterpretedOutput("builtins/textReplaceAll.pec");
 	}
@@ -417,6 +612,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCompiledTextReplaceAll() throws Exception {
 		checkCompiledOutput("builtins/textReplaceAll.pec");
+	}
+
+	@Test
+	public void testTranspiledTextReplaceAll() throws Exception {
+		checkTranspiledOutput("builtins/textReplaceAll.pec");
 	}
 
 	@Test
@@ -430,6 +630,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledTextSplit() throws Exception {
+		checkTranspiledOutput("builtins/textSplit.pec");
+	}
+
+	@Test
 	public void testInterpretedTextStartsWith() throws Exception {
 		checkInterpretedOutput("builtins/textStartsWith.pec");
 	}
@@ -437,6 +642,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCompiledTextStartsWith() throws Exception {
 		checkCompiledOutput("builtins/textStartsWith.pec");
+	}
+
+	@Test
+	public void testTranspiledTextStartsWith() throws Exception {
+		checkTranspiledOutput("builtins/textStartsWith.pec");
 	}
 
 	@Test
@@ -450,6 +660,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledTextText() throws Exception {
+		checkTranspiledOutput("builtins/textText.pec");
+	}
+
+	@Test
 	public void testInterpretedTextTrim() throws Exception {
 		checkInterpretedOutput("builtins/textTrim.pec");
 	}
@@ -457,6 +672,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCompiledTextTrim() throws Exception {
 		checkCompiledOutput("builtins/textTrim.pec");
+	}
+
+	@Test
+	public void testTranspiledTextTrim() throws Exception {
+		checkTranspiledOutput("builtins/textTrim.pec");
 	}
 
 	@Test
@@ -470,6 +690,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledTextUppercase() throws Exception {
+		checkTranspiledOutput("builtins/textUppercase.pec");
+	}
+
+	@Test
 	public void testInterpretedTimeHour() throws Exception {
 		checkInterpretedOutput("builtins/timeHour.pec");
 	}
@@ -477,6 +702,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCompiledTimeHour() throws Exception {
 		checkCompiledOutput("builtins/timeHour.pec");
+	}
+
+	@Test
+	public void testTranspiledTimeHour() throws Exception {
+		checkTranspiledOutput("builtins/timeHour.pec");
 	}
 
 	@Test
@@ -490,6 +720,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledTimeMilli() throws Exception {
+		checkTranspiledOutput("builtins/timeMilli.pec");
+	}
+
+	@Test
 	public void testInterpretedTimeMinute() throws Exception {
 		checkInterpretedOutput("builtins/timeMinute.pec");
 	}
@@ -497,6 +732,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCompiledTimeMinute() throws Exception {
 		checkCompiledOutput("builtins/timeMinute.pec");
+	}
+
+	@Test
+	public void testTranspiledTimeMinute() throws Exception {
+		checkTranspiledOutput("builtins/timeMinute.pec");
 	}
 
 	@Test
@@ -510,6 +750,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledTimeSecond() throws Exception {
+		checkTranspiledOutput("builtins/timeSecond.pec");
+	}
+
+	@Test
 	public void testInterpretedTimeText() throws Exception {
 		checkInterpretedOutput("builtins/timeText.pec");
 	}
@@ -517,6 +762,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCompiledTimeText() throws Exception {
 		checkCompiledOutput("builtins/timeText.pec");
+	}
+
+	@Test
+	public void testTranspiledTimeText() throws Exception {
+		checkTranspiledOutput("builtins/timeText.pec");
 	}
 
 	@Test
@@ -530,6 +780,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledTupleCount() throws Exception {
+		checkTranspiledOutput("builtins/tupleCount.pec");
+	}
+
+	@Test
 	public void testInterpretedTupleText() throws Exception {
 		checkInterpretedOutput("builtins/tupleText.pec");
 	}
@@ -540,6 +795,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledTupleText() throws Exception {
+		checkTranspiledOutput("builtins/tupleText.pec");
+	}
+
+	@Test
 	public void testInterpretedUuidText() throws Exception {
 		checkInterpretedOutput("builtins/uuidText.pec");
 	}
@@ -547,6 +807,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCompiledUuidText() throws Exception {
 		checkCompiledOutput("builtins/uuidText.pec");
+	}
+
+	@Test
+	public void testTranspiledUuidText() throws Exception {
+		checkTranspiledOutput("builtins/uuidText.pec");
 	}
 
 }

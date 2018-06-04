@@ -30,6 +30,11 @@ public class TestCondition extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledComplexIf() throws Exception {
+		checkTranspiledOutput("condition/complexIf.pec");
+	}
+
+	@Test
 	public void testInterpretedEmbeddedIf() throws Exception {
 		checkInterpretedOutput("condition/embeddedIf.pec");
 	}
@@ -37,6 +42,11 @@ public class TestCondition extends BaseEParserTest {
 	@Test
 	public void testCompiledEmbeddedIf() throws Exception {
 		checkCompiledOutput("condition/embeddedIf.pec");
+	}
+
+	@Test
+	public void testTranspiledEmbeddedIf() throws Exception {
+		checkTranspiledOutput("condition/embeddedIf.pec");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestCondition extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledReturnIf() throws Exception {
+		checkTranspiledOutput("condition/returnIf.pec");
+	}
+
+	@Test
 	public void testInterpretedSimpleIf() throws Exception {
 		checkInterpretedOutput("condition/simpleIf.pec");
 	}
@@ -57,6 +72,11 @@ public class TestCondition extends BaseEParserTest {
 	@Test
 	public void testCompiledSimpleIf() throws Exception {
 		checkCompiledOutput("condition/simpleIf.pec");
+	}
+
+	@Test
+	public void testTranspiledSimpleIf() throws Exception {
+		checkTranspiledOutput("condition/simpleIf.pec");
 	}
 
 	@Test
@@ -70,6 +90,11 @@ public class TestCondition extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledSwitch() throws Exception {
+		checkTranspiledOutput("condition/switch.pec");
+	}
+
+	@Test
 	public void testInterpretedTernary() throws Exception {
 		checkInterpretedOutput("condition/ternary.pec");
 	}
@@ -77,6 +102,11 @@ public class TestCondition extends BaseEParserTest {
 	@Test
 	public void testCompiledTernary() throws Exception {
 		checkCompiledOutput("condition/ternary.pec");
+	}
+
+	@Test
+	public void testTranspiledTernary() throws Exception {
+		checkTranspiledOutput("condition/ternary.pec");
 	}
 
 }

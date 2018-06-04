@@ -30,6 +30,11 @@ public class TestDiv extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledDivDecimal() throws Exception {
+		checkTranspiledOutput("div/divDecimal.poc");
+	}
+
+	@Test
 	public void testInterpretedDivInteger() throws Exception {
 		checkInterpretedOutput("div/divInteger.poc");
 	}
@@ -37,6 +42,11 @@ public class TestDiv extends BaseOParserTest {
 	@Test
 	public void testCompiledDivInteger() throws Exception {
 		checkCompiledOutput("div/divInteger.poc");
+	}
+
+	@Test
+	public void testTranspiledDivInteger() throws Exception {
+		checkTranspiledOutput("div/divInteger.poc");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestDiv extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledIdivInteger() throws Exception {
+		checkTranspiledOutput("div/idivInteger.poc");
+	}
+
+	@Test
 	public void testInterpretedModInteger() throws Exception {
 		checkInterpretedOutput("div/modInteger.poc");
 	}
@@ -57,6 +72,11 @@ public class TestDiv extends BaseOParserTest {
 	@Test
 	public void testCompiledModInteger() throws Exception {
 		checkCompiledOutput("div/modInteger.poc");
+	}
+
+	@Test
+	public void testTranspiledModInteger() throws Exception {
+		checkTranspiledOutput("div/modInteger.poc");
 	}
 
 }

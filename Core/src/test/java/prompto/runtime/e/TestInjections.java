@@ -29,5 +29,10 @@ public class TestInjections extends BaseEParserTest {
 		checkCompiledOutput("injections/expressionInjection.pec");
 	}
 
+	@Test
+	public void testTranspiledExpressionInjection() throws Exception {
+		checkTranspiledOutput("injections/expressionInjection.pec");
+	}
+
 }
 

@@ -30,6 +30,11 @@ public class TestClosures extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledGlobalClosureNoArg() throws Exception {
+		checkTranspiledOutput("closures/globalClosureNoArg.poc");
+	}
+
+	@Test
 	public void testInterpretedGlobalClosureWithArg() throws Exception {
 		checkInterpretedOutput("closures/globalClosureWithArg.poc");
 	}
@@ -40,6 +45,11 @@ public class TestClosures extends BaseOParserTest {
 	}
 
 	@Test
+	public void testTranspiledGlobalClosureWithArg() throws Exception {
+		checkTranspiledOutput("closures/globalClosureWithArg.poc");
+	}
+
+	@Test
 	public void testInterpretedInstanceClosureNoArg() throws Exception {
 		checkInterpretedOutput("closures/instanceClosureNoArg.poc");
 	}
@@ -47,6 +57,11 @@ public class TestClosures extends BaseOParserTest {
 	@Test
 	public void testCompiledInstanceClosureNoArg() throws Exception {
 		checkCompiledOutput("closures/instanceClosureNoArg.poc");
+	}
+
+	@Test
+	public void testTranspiledInstanceClosureNoArg() throws Exception {
+		checkTranspiledOutput("closures/instanceClosureNoArg.poc");
 	}
 
 }

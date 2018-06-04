@@ -30,6 +30,11 @@ public class TestNative extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledAnyId() throws Exception {
+		checkTranspiledOutput("native/anyId.pec");
+	}
+
+	@Test
 	public void testInterpretedAnyText() throws Exception {
 		checkInterpretedOutput("native/anyText.pec");
 	}
@@ -37,6 +42,11 @@ public class TestNative extends BaseEParserTest {
 	@Test
 	public void testCompiledAnyText() throws Exception {
 		checkCompiledOutput("native/anyText.pec");
+	}
+
+	@Test
+	public void testTranspiledAnyText() throws Exception {
+		checkTranspiledOutput("native/anyText.pec");
 	}
 
 	@Test
@@ -50,6 +60,11 @@ public class TestNative extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledAttribute() throws Exception {
+		checkTranspiledOutput("native/attribute.pec");
+	}
+
+	@Test
 	public void testInterpretedCategory() throws Exception {
 		checkInterpretedOutput("native/category.pec");
 	}
@@ -57,6 +72,11 @@ public class TestNative extends BaseEParserTest {
 	@Test
 	public void testCompiledCategory() throws Exception {
 		checkCompiledOutput("native/category.pec");
+	}
+
+	@Test
+	public void testTranspiledCategory() throws Exception {
+		checkTranspiledOutput("native/category.pec");
 	}
 
 	@Test
@@ -70,6 +90,11 @@ public class TestNative extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledMethod() throws Exception {
+		checkTranspiledOutput("native/method.pec");
+	}
+
+	@Test
 	public void testInterpretedNow() throws Exception {
 		checkInterpretedOutput("native/now.pec");
 	}
@@ -80,6 +105,11 @@ public class TestNative extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTranspiledNow() throws Exception {
+		checkTranspiledOutput("native/now.pec");
+	}
+
+	@Test
 	public void testInterpretedPrinter() throws Exception {
 		checkInterpretedOutput("native/printer.pec");
 	}
@@ -87,6 +117,11 @@ public class TestNative extends BaseEParserTest {
 	@Test
 	public void testCompiledPrinter() throws Exception {
 		checkCompiledOutput("native/printer.pec");
+	}
+
+	@Test
+	public void testTranspiledPrinter() throws Exception {
+		checkTranspiledOutput("native/printer.pec");
 	}
 
 }
