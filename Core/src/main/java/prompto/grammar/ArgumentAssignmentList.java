@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import prompto.declaration.IMethodDeclaration;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 
 
@@ -94,6 +95,13 @@ public class ArgumentAssignmentList extends LinkedList<ArgumentAssignment> {
 
 	private void toMDialect(CodeWriter writer) {
 		toODialect(writer);
+	}
+
+	public void declare(Transpiler transpiler) {
+		for(ArgumentAssignment as : this) {
+			as.declare(transpiler);
+		}
+		
 	}
 
 

@@ -6,6 +6,7 @@ import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDict;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 
 public class DictType extends ContainerType {
 	
@@ -23,6 +24,11 @@ public class DictType extends ContainerType {
 	@Override
 	public Type getJavaType(Context context) {
 		return PromptoDict.class;
+	}
+	
+	@Override
+	public String getTranspiledName(Context context) {
+		return this.itemType.getTranspiledName(context) + "_dict";
 	}
 	
 	@Override
@@ -83,6 +89,11 @@ public class DictType extends ContainerType {
 	@Override
 	public IType checkContainsAllOrAny(Context context, IType other) {
 		return BooleanType.instance();
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		transpiler.require("Dictionary");
 	}
 
 	

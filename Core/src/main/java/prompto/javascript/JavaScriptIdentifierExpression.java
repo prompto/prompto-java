@@ -1,5 +1,6 @@
 package prompto.javascript;
 
+import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 
 
@@ -49,6 +50,15 @@ public class JavaScriptIdentifierExpression implements JavaScriptExpression {
 			writer.append('.');
 		}
 		writer.append(identifier);
+	}
+	
+	@Override
+	public void transpile(Transpiler transpiler) {
+		if(parent!=null) {
+			parent.transpile(transpiler);
+			transpiler.append('.');
+		}
+		transpiler.append(identifier);
 	}
 
 }

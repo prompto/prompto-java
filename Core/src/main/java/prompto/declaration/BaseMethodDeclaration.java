@@ -1,6 +1,8 @@
 package prompto.declaration;
 
 import java.lang.reflect.Modifier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import prompto.argument.IArgument;
 import prompto.compiler.ClassFile;
@@ -19,6 +21,7 @@ import prompto.grammar.Identifier;
 import prompto.grammar.Specificity;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.value.IInstance;
@@ -124,7 +127,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	}
 	
 	@Override
-	public boolean isAssignableTo(Context context, ArgumentAssignmentList assignments, boolean checkInstance) {
+	public boolean isAssignableTo(Context context, ArgumentAssignmentList assignments, boolean checkInstance, boolean allowDerived) {
 		try {
 			Context local = context.newLocalContext();
 			registerArguments(local);
@@ -186,7 +189,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 					|| actual.isAssignableFrom(context, required)
 					|| required.isAssignableFrom(context, actual))
 				return true;
-			actual = assignment.resolve(context, this, false).check(context);
+			actual = assignment.resolve(context, this, false, false).check(context);
 			return actual.equals(required)
 					|| actual.isAssignableFrom(context, required)
 					|| required.isAssignableFrom(context, actual);
@@ -214,7 +217,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 				return Specificity.INHERITED;
 			if(allowAncestor && actual.isAssignableFrom(context, required)) 
 				return Specificity.ANCESTOR;
-			actual = assignment.resolve(context, this, useInstance).check(context);
+			actual = assignment.resolve(context, this, useInstance, false).check(context);
 			if(required.isAssignableFrom(context, actual))
 				return Specificity.RESOLVED;
 		} catch(PromptoError error) {
@@ -267,6 +270,41 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 			isFirst = false;
 		}
 	}
+	
+	public void declareArguments(Transpiler transpiler) {
+		this.arguments.declare(transpiler);
+	}
+
+	public void transpileProlog(Transpiler transpiler) {
+	    if (this.memberOf!=null)
+	        transpiler.append(this.memberOf.getName()).append(".prototype.").append(this.getTranspiledName(transpiler.getContext())).append(" = function (");
+	    else
+	        transpiler.append("function ").append(this.getTranspiledName(transpiler.getContext())).append(" (");
+	    this.arguments.transpile(transpiler);
+	    transpiler.append(") {").indent();
+	}
+
+
+	public void transpileEpilog(Transpiler transpiler) {
+	    transpiler.dedent().append("}");
+	    if(this.memberOf!=null)
+	        transpiler.append(";");
+	    transpiler.newLine();
+	}
+	
+	@Override
+	public String getTranspiledName(Context context) {
+	    // if this is a template instance, name is already transpiled
+	    if(this.getName().indexOf("$")>0)
+	    	return this.getName();
+	    else {
+	    	Stream<String> name = Stream.of(this.getName());
+	    	Stream<String> args = this.arguments.stream().map(arg->arg.getTranspiledName(context));
+	    	return Stream.concat(name, args).collect(Collectors.joining("$"));
+	    }
+	};
+
+
 }
 
 

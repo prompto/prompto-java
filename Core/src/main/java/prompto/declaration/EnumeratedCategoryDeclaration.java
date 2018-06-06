@@ -4,6 +4,7 @@ import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
@@ -311,6 +312,11 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 			return new ResultInfo(List.class);
 		} else
 			throw new SyntaxError("No static member support for non-singleton " + this.getName());
+	}
+	
+	@Override
+	public void ensureDeclarationOrder(Context context, List<IDeclaration> list, Set<IDeclaration> set) {
+		throw new UnsupportedOperationException();
 	}
 
 }

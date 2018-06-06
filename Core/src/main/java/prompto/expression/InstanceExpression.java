@@ -24,6 +24,7 @@ import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.runtime.LinkedVariable;
 import prompto.runtime.Variable;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
@@ -171,6 +172,26 @@ public class InstanceExpression extends Section implements IExpression {
 			method.addInstruction(Opcode.CHECKCAST, downcastTo);
 			return new ResultInfo(downcastTo.getType());
 		}
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		// nothing to do
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    Context context = transpiler.getContext().contextForValue(this.id);
+	    if(context instanceof InstanceContext) {
+	        ((InstanceContext)context).getInstanceType().transpileInstance(transpiler);
+	        transpiler.append(".");
+	    }
+	    /*
+	    if(transpiler.getterName === this.name)
+	        transpiler.append("$");
+	        */
+	    transpiler.append(this.getName());
+	    return false;
 	}
 
 }

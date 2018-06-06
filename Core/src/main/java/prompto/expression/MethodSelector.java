@@ -5,7 +5,6 @@ import java.lang.invoke.MethodHandles.Lookup;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import prompto.compiler.BootstrapMethod;
@@ -38,6 +37,7 @@ import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Context.MethodDeclarationMap;
+import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.type.NativeType;
@@ -71,14 +71,14 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 			super.toDialect(writer);
 	}
 	
-	public Collection<IMethodDeclaration> getCandidates(Context context, boolean checkInstance) {
+	public List<IMethodDeclaration> getCandidates(Context context, boolean checkInstance) {
 		if(parent==null)
 			return getGlobalCandidates(context);
 		else
 			return getMemberCandidates(context, checkInstance);
 	}
 	
-	private Collection<IMethodDeclaration> getGlobalCandidates(Context context) {
+	private List<IMethodDeclaration> getGlobalCandidates(Context context) {
 		List<IMethodDeclaration> methods = new ArrayList<IMethodDeclaration>();
 		// if called from a member method, could be a member method called without this/self
 		if(context.getParentContext() instanceof InstanceContext) {
@@ -96,7 +96,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		return methods;
 	}
 	
-	private Collection<IMethodDeclaration> getMemberCandidates(Context context, boolean checkInstance) {
+	private List<IMethodDeclaration> getMemberCandidates(Context context, boolean checkInstance) {
 		IType parentType = checkParentType(context, checkInstance);
 		return parentType.getMemberMethods(context, id);
 	}
@@ -397,5 +397,17 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		else
 			return new MemberSelector(parent, id);
 	}
+
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    if(this.parent!=null)
+	        return super.transpile(transpiler);
+	    else {
+	        transpiler.append(this.getName());
+	        return false;
+	    }
+	}
+	
+	
 
 }

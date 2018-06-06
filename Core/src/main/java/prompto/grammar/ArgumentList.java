@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import prompto.argument.CodeArgument;
 import prompto.argument.IArgument;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 import prompto.utils.ObjectList;
 
@@ -98,6 +99,23 @@ public class ArgumentList extends ObjectList<IArgument> {
 			writer.append(", ");
 		}
 		writer.trimLast(2);
+	}
+
+	public void declare(Transpiler transpiler) {
+		this.forEach(arg->arg.declare(transpiler));
+	}
+
+	public void transpile(Transpiler transpiler) {
+		List<IArgument> args = this.stream()
+			.filter(arg->!(arg instanceof CodeArgument))
+			.collect(Collectors.toList());
+		if(!args.isEmpty()) {
+	        args.forEach(arg->{
+	            arg.transpile(transpiler);
+	            transpiler.append(", ");
+	        });
+	        transpiler.trimLast(2);
+	    }
 	}
 
 }

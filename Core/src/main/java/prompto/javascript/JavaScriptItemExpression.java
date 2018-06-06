@@ -1,5 +1,6 @@
 package prompto.javascript;
 
+import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 
 
@@ -23,6 +24,14 @@ public class JavaScriptItemExpression extends JavaScriptSelectorExpression {
 		writer.append('[');
 		item.toDialect(writer);
 		writer.append(']');
+	}
+	
+	@Override
+	public void transpile(Transpiler transpiler) {
+		parent.transpile(transpiler);
+		transpiler.append('[');
+		item.transpile(transpiler);
+		transpiler.append(']');
 	}
 
 }

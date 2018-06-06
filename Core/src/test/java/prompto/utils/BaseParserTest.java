@@ -28,6 +28,7 @@ import prompto.runtime.Executor;
 import prompto.runtime.Interpreter;
 import prompto.runtime.utils.Out;
 import prompto.store.IDataStore;
+import prompto.transpiler.JSEngine;
 
 public abstract class BaseParserTest extends BaseTest {
 
@@ -121,16 +122,13 @@ public abstract class BaseParserTest extends BaseTest {
 	}
 	
 	protected boolean transpileResource(String resourceName, boolean reThrow) throws PromptoError {
-		return false;
-		/*
 		try {
 			loadResource(resourceName);
-			File root = Files.createTempDirectory("prompto_").toFile();
 			if(context.hasTests()) {
-				Executor.executeTests(context, root);
+				JSEngine.executeTests(context);
 				return true;
 			} else {
-				Executor.executeMainNoArgs(context, root);
+				JSEngine.executeMainNoArgs(context);
 				return false;
 			}
 		} catch(Exception e) {
@@ -140,8 +138,6 @@ public abstract class BaseParserTest extends BaseTest {
 			fail(e.getMessage());
 			return false;
 		}
-		*/
-		
 	}
 	
 	
@@ -187,7 +183,7 @@ public abstract class BaseParserTest extends BaseTest {
 
 	protected void checkTranspiledOutput(String resource) throws Exception {
 		try {
-			// checkOutput(resource, this::transpileResource);
+			checkOutput(resource, this::transpileResource);
 		} catch(Throwable t) {
 			t.printStackTrace(System.err);
 			throw t;

@@ -1,8 +1,8 @@
 package prompto.type;
 
 import java.lang.reflect.Type;
-import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 
 import prompto.compiler.Flags;
@@ -15,6 +15,7 @@ import prompto.grammar.Identifier;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 import prompto.utils.StringUtils;
 import prompto.value.IValue;
@@ -60,7 +61,7 @@ public interface IType {
 	RangeBase<?> newRange(Object first,Object last);
 	Comparator<? extends IValue> getComparator(boolean descending);
 	IValue getMemberValue(Context context, Identifier name) throws PromptoError;
-	Collection<IMethodDeclaration> getMemberMethods(Context context, Identifier name) throws PromptoError;
+	List<IMethodDeclaration> getMemberMethods(Context context, Identifier name) throws PromptoError;
 
 
 	String toString(Object value);
@@ -87,5 +88,27 @@ public interface IType {
 	default void compileGetStorableData(Context context, MethodInfo method, Flags flags) {
 		// nothing to do
 	}
+
+	default void declare(Transpiler transpiler) { 
+		throw new UnsupportedOperationException("declare " + this.getClass().getName()); 
+	}
+
+	default void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) { 
+		throw new UnsupportedOperationException("declareAdd " + this.getClass().getName());
+	}
+
+	default boolean transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) { 
+		throw new UnsupportedOperationException("transpileAdd " + this.getClass().getName());
+	}
+
+
+	default String getTranspiledName(Context context) { 
+		throw new UnsupportedOperationException("getTranspiledName " + this.getClass().getName());
+	}
+
+	default void transpileInstance(Transpiler transpiler) { 
+		throw new UnsupportedOperationException("transpileInstance " + this.getClass().getName());
+	}
+
 }
  

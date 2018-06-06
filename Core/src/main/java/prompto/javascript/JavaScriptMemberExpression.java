@@ -1,5 +1,6 @@
 package prompto.javascript;
 
+import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 
 public class JavaScriptMemberExpression extends JavaScriptSelectorExpression {
@@ -20,6 +21,13 @@ public class JavaScriptMemberExpression extends JavaScriptSelectorExpression {
 		parent.toDialect(writer);
 		writer.append('.');
 		writer.append(name);
+	}
+	
+	@Override
+	public void transpile(Transpiler transpiler) {
+		parent.transpile(transpiler);
+		transpiler.append('.');
+		transpiler.append(name);
 	}
 
 }

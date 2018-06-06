@@ -28,7 +28,7 @@ public interface IMethodDeclaration extends IDeclaration {
 	CategoryDeclaration getMemberOf();
 	IValue interpret(Context context) throws PromptoError;
 	void check(ConcreteCategoryDeclaration declaration, Context context);
-	boolean isAssignableTo(Context context, ArgumentAssignmentList assignments, boolean checkInstance);
+	boolean isAssignableTo(Context context, ArgumentAssignmentList assignments, boolean checkInstance, boolean allowDerived);
 	boolean isAssignableFrom(Context context, ArgumentAssignmentList assignments);
 	void registerArguments(Context local);
 	Specificity computeSpecificity(Context context, IArgument argument, ArgumentAssignment assignment, 
@@ -37,6 +37,7 @@ public interface IMethodDeclaration extends IDeclaration {
 	void compilePrototype(Context context, boolean isStart, ClassFile classFile);
 	String compileTemplate(Context context, boolean isStart, ClassFile classFile);
 	void compileAssignments(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments);
+	String getTranspiledName(Context context);
 	
 }
 

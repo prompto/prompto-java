@@ -970,4 +970,19 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		}
 	}
 	
+	@Override
+	public void ensureDeclarationOrder(Context context, List<IDeclaration> list, Set<IDeclaration> set) {
+	    if(set.contains(this))
+	        return;
+	    if (this.derivedFrom != null) {
+	        this.derivedFrom.forEach(cat -> {
+	        	CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, cat);
+	            decl.ensureDeclarationOrder(context, list, set);
+	        });
+	    }
+	    list.add(this);
+	    set.add(this);
+	}
+
+	
 }

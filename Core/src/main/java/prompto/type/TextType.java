@@ -1,9 +1,9 @@
 package prompto.type;
 
 import java.lang.reflect.Type;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 
 import prompto.argument.CategoryArgument;
@@ -20,6 +20,7 @@ import prompto.compiler.ResultInfo;
 import prompto.declaration.BuiltInMethodDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
+import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoString;
@@ -27,6 +28,7 @@ import prompto.literal.TextLiteral;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 import prompto.utils.StringUtils;
 import prompto.value.Boolean;
 import prompto.value.IValue;
@@ -118,7 +120,7 @@ public class TextType extends NativeType {
 	}
 	
 	@Override
-	public Collection<IMethodDeclaration> getMemberMethods(Context context, Identifier id) throws PromptoError {
+	public List<IMethodDeclaration> getMemberMethods(Context context, Identifier id) throws PromptoError {
 		switch(id.toString()) {
 		case "startsWith":
 			return Collections.singletonList(STARTS_WITH_METHOD);
@@ -458,5 +460,27 @@ public class TextType extends NativeType {
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		return new Text(value.asText());
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		transpiler.require("Utils"); // isAText
+	}
+	
+	@Override
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+		left.declare(transpiler);
+		right.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	    // can add anything to text
+	    left.transpile(transpiler);
+	    transpiler.append(" + ");
+	    right.transpile(transpiler);
+	    if(other == DecimalType.instance())
+	        transpiler.append(".toDecimalString()");
+	    return false;
 	}
 }

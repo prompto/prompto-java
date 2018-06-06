@@ -3,9 +3,9 @@ package prompto.type;
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.text.Format;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 
 import prompto.argument.CategoryArgument;
@@ -137,7 +137,7 @@ public class IntegerType extends NativeType implements INumberType {
 	}
 	
 	@Override
-	public Collection<IMethodDeclaration> getMemberMethods(Context context, Identifier id) throws PromptoError {
+	public List<IMethodDeclaration> getMemberMethods(Context context, Identifier id) throws PromptoError {
 		switch(id.toString()) {
 		case "format":
 			return Collections.singletonList(FORMAT_METHOD);

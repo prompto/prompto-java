@@ -11,6 +11,7 @@ import prompto.error.PromptoError;
 import prompto.java.JavaNativeCall;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.TypeMap;
 import prompto.type.VoidType;
@@ -147,6 +148,19 @@ public class StatementList extends LinkedList<IStatement> {
 			return info;
 		} else
 			return new ResultInfo(void.class);
+	}
+
+	public void declare(Transpiler transpiler) {
+		this.forEach(stmt->stmt.declare(transpiler));
+		
+	}
+
+	public void transpile(Transpiler transpiler) {
+		this.forEach(stmt->{
+			boolean skip = stmt.transpile(transpiler);
+			if(!skip)
+	            transpiler.append(";").newLine();
+		});
 	}
 
 

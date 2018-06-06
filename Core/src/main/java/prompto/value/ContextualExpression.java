@@ -6,6 +6,7 @@ import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 
@@ -40,5 +41,14 @@ public class ContextualExpression extends BaseValue implements IExpression {
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		return expression.compile(this.calling, method, flags);
 	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		transpiler = transpiler.newChildTranspiler(this.calling);
+	    this.expression.transpile(transpiler);
+	    transpiler.flush();
+	    return false;
+	}
+	
 
 }

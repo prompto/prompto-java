@@ -86,7 +86,7 @@ public class SortedExpression implements IExpression {
 			writer.append(" with ");
 			IExpression keyExp = key;
 			if(keyExp instanceof UnresolvedIdentifier) try {
-				keyExp = ((UnresolvedIdentifier)keyExp).resolve(writer.getContext(), false);
+				keyExp = ((UnresolvedIdentifier)keyExp).resolve(writer.getContext(), false, false);
 			} catch (SyntaxError e) {
 				// TODO add warning 
 			}
@@ -224,7 +224,7 @@ public class SortedExpression implements IExpression {
 			ArgumentAssignmentList args = new ArgumentAssignmentList(arg);
 			MethodCall call = new MethodCall(new MethodSelector(methodName), args);
 			MethodFinder finder = new MethodFinder(context, call);
-			IMethodDeclaration decl = finder.findBestMethod(context, methodName, true);
+			IMethodDeclaration decl = finder.findBestMethod(true);
 			if(decl==null)
 				return null;
 			else

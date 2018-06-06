@@ -11,3 +11,4 @@ travis.yml
 prompto-libraries
 prompto-tests
 /target/
+transpiled.js

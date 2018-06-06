@@ -1,5 +1,6 @@
 package prompto.javascript;
 
+import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 
 
@@ -31,4 +32,20 @@ public class JavaScriptStatement {
 		if(module!=null)
 			module.toDialect(writer);
 	}
+
+	public void declare(Transpiler transpiler) {
+	    // TODO module
+	    if(this.expression.toString().startsWith("$context")) {
+	        transpiler.require("$context");
+	    }
+	}
+
+	public boolean transpile(Transpiler transpiler) {
+	    if(this.isReturn)
+	        transpiler.append("return ");
+	    this.expression.transpile(transpiler);
+	    return false;
+	}
+	
+	
 }

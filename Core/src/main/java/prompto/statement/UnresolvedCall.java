@@ -21,6 +21,7 @@ import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Context.MethodDeclarationMap;
+import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -162,6 +163,18 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 		IExpression parent = ((MemberSelector)caller).getParent();
 		Identifier id = ((MemberSelector)caller).getId();
 		return new MethodCall(new MethodSelector(parent, id), assignments);
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    this.resolve(transpiler.getContext());
+	    this.resolved.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    this.resolve(transpiler.getContext());
+	    return this.resolved.transpile(transpiler);
 	}
 
 }

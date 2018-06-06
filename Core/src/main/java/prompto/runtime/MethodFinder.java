@@ -13,7 +13,6 @@ import prompto.expression.MethodSelector;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Specificity;
-import prompto.parser.ISection;
 import prompto.statement.MethodCall;
 import prompto.type.CategoryType;
 import prompto.type.IType;
@@ -35,34 +34,38 @@ public class MethodFinder {
 		return methodCall.toString();
 	}
 	
-	public IMethodDeclaration findBestMethod(Context context, ISection section, boolean checkInstance) {
-		Collection<IMethodDeclaration> methods = findCandidateMethods(context, section, checkInstance);
+	public List<IMethodDeclaration> findCompatibleMethods(boolean checkInstance, boolean allowDerived) {
+		List<IMethodDeclaration> methods = findCandidateMethods(checkInstance);
 		if(methods.size()==0) {
-			context.getProblemListener().reportUnknownMethod(methodCall.getMethod().getName(), section);
+			context.getProblemListener().reportUnknownMethod(methodCall.toString(), methodCall.getSelector().getId());
 			return null;
 		}
-		methods = filterCompatible(methods, checkInstance);
+		return filterCompatible(methods, checkInstance, allowDerived);
+	}
+	
+	public IMethodDeclaration findBestMethod(boolean checkInstance) {
+		Collection<IMethodDeclaration> methods = findCompatibleMethods(checkInstance, false);
 		switch(methods.size()) {
 		case 0:
-			context.getProblemListener().reportNoMatchingPrototype(methodCall.toString(), section);
+			context.getProblemListener().reportNoMatchingPrototype(methodCall.toString(), methodCall.getSelector().getId());
 			return null;
 		case 1:
 			return methods.iterator().next();
 		default:
-			return findMostSpecific(methods,checkInstance);
+			return findMostSpecific(methods, checkInstance);
 		}
 	}
 	
-	public Collection<IMethodDeclaration> findCandidateMethods(Context context, ISection section, boolean checkInstance) {
-		MethodSelector selector = methodCall.getMethod();
+	public List<IMethodDeclaration> findCandidateMethods(boolean checkInstance) {
+		MethodSelector selector = methodCall.getSelector();
 		return selector.getCandidates(context, checkInstance);
 	}
 	
-	public Collection<IMethodDeclaration> findPotentialMethods(Context context, ISection section) {
-		MethodSelector selector = methodCall.getMethod();
+	public List<IMethodDeclaration> findPotentialMethods() {
+		MethodSelector selector = methodCall.getSelector();
 		Collection<IMethodDeclaration> candidates = selector.getCandidates(context, false);
 		if(candidates.size()==0)
-			context.getProblemListener().reportUnknownMethod(methodCall.getMethod().getName(), section);
+			context.getProblemListener().reportUnknownMethod(methodCall.toString(), methodCall.getSelector().getId());
 		return filterPotential(candidates);
 	}
 
@@ -165,12 +168,12 @@ public class MethodFinder {
 		return Score.SIMILAR;
 	}
 	
-	Collection<IMethodDeclaration> filterCompatible(Collection<IMethodDeclaration> candidates, boolean checkInstance) {
+	List<IMethodDeclaration> filterCompatible(Collection<IMethodDeclaration> candidates, boolean checkInstance, boolean allowDerived) {
 		List<IMethodDeclaration> compatibles = new ArrayList<IMethodDeclaration>();
 		for(IMethodDeclaration declaration : candidates) {
 			try {
 				ArgumentAssignmentList args = methodCall.makeAssignments(context, declaration);
-				if(declaration.isAssignableTo(context, args, checkInstance))
+				if(declaration.isAssignableTo(context, args, checkInstance, allowDerived))
 					compatibles.add(declaration);
 			} catch(SyntaxError e) {
 				// OK
@@ -179,7 +182,7 @@ public class MethodFinder {
 		return compatibles;
 	}
 	
-	Collection<IMethodDeclaration> filterPotential(Collection<IMethodDeclaration> candidates) {
+	List<IMethodDeclaration> filterPotential(Collection<IMethodDeclaration> candidates) {
 		List<IMethodDeclaration> potential = new ArrayList<IMethodDeclaration>();
 		for(IMethodDeclaration declaration : candidates) {
 			try {

@@ -2,6 +2,7 @@ package prompto.type;
 
 import java.lang.reflect.Type;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -237,11 +238,15 @@ public class CategoryType extends BaseType {
     
 	
 	@Override
-	public Collection<IMethodDeclaration> getMemberMethods(Context context, Identifier name) throws PromptoError {
+	public List<IMethodDeclaration> getMemberMethods(Context context, Identifier name) throws PromptoError {
 		IDeclaration cd = getDeclaration(context);
 		if(!(cd instanceof ConcreteCategoryDeclaration))
 			throw new SyntaxError("Unknown category:" + this.getTypeName());
-		return ((ConcreteCategoryDeclaration)cd).getMemberMethods(context, name).values();
+		Collection<IMethodDeclaration> methods = ((ConcreteCategoryDeclaration)cd).getMemberMethods(context, name).values();
+		if(methods instanceof List)
+			return (List<IMethodDeclaration>)methods;
+		else
+			return new ArrayList<>(methods);
 	}
 
 	

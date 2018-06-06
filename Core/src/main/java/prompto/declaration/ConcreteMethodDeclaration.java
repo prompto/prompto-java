@@ -31,6 +31,7 @@ import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.statement.DeclarationStatement;
 import prompto.statement.StatementList;
+import prompto.transpiler.Transpiler;
 import prompto.type.DictType;
 import prompto.type.IType;
 import prompto.type.MethodType;
@@ -352,6 +353,34 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 			method.addInstruction(Opcode.INVOKESPECIAL, c);
 			return new ResultInfo(innerType);
 		}
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    if(this.memberOf==null) {
+	        transpiler = transpiler.newLocalTranspiler();
+	        transpiler.declare(this);
+	        this.declareArguments(transpiler);
+	    }
+	    this.registerArguments(transpiler.getContext());
+	    this.statements.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    this.registerArguments(transpiler.getContext());
+	    this.registerCodeArguments(transpiler.getContext());
+	    this.transpileProlog(transpiler);
+	    this.statements.transpile(transpiler);
+	    this.transpileEpilog(transpiler);
+	    return true;
+	}
+
+	private void registerCodeArguments(Context context) {
+		if(this.isTemplate()) {
+			throw new UnsupportedOperationException();
+		}
+		
 	}
 
 }
