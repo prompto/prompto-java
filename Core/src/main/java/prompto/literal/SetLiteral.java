@@ -11,6 +11,7 @@ import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.intrinsic.PromptoSet;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.CharacterType;
 import prompto.type.DecimalType;
 import prompto.type.IType;
@@ -118,5 +119,20 @@ public class SetLiteral extends Literal<SetValue> {
 				return CompilerUtils.CharacterToString(method);
 		}
 		return info;
+	}
+	
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    transpiler.require("StrictSet");
+	    this.expressions.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    transpiler.append("new StrictSet([");
+	    this.expressions.transpile(transpiler);
+	    transpiler.append("])");
+	    return false;
 	}
 }

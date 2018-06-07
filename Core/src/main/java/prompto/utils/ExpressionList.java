@@ -1,6 +1,7 @@
 package prompto.utils;
 
 import prompto.expression.IExpression;
+import prompto.transpiler.Transpiler;
 
 @SuppressWarnings("serial")
 public class ExpressionList extends ObjectList<IExpression>{
@@ -19,6 +20,20 @@ public class ExpressionList extends ObjectList<IExpression>{
 				writer.append(", ");
 			}
 			writer.trimLast(2);
+		}
+	}
+
+	public void declare(Transpiler transpiler) {
+		this.forEach(exp->exp.declare(transpiler));
+	}
+
+	public void transpile(Transpiler transpiler) {
+		if(this.size()>0) {
+			this.forEach(exp->{
+				exp.transpile(transpiler);
+				transpiler.append(", ");
+			});
+			transpiler.trimLast(2);
 		}
 	}
 

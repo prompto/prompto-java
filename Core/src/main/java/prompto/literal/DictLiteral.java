@@ -13,6 +13,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.intrinsic.PromptoDict;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.DictType;
 import prompto.type.IType;
 import prompto.type.MissingType;
@@ -125,5 +126,18 @@ public class DictLiteral extends Literal<Dictionary> {
 		}
 	}
 
+	@Override
+	public void declare(Transpiler transpiler) {
+	    transpiler.require("Dictionary");
+	    this.entries.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    transpiler.append("new Dictionary(").append(this.mutable).append(", ");
+	    this.entries.transpile(transpiler);
+	    transpiler.append(")");
+	    return false;
+	}
 	
 }

@@ -2,10 +2,12 @@ package prompto.type;
 
 import java.lang.reflect.Type;
 
+import prompto.expression.IExpression;
 import prompto.intrinsic.PromptoPeriod;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 
 
 
@@ -53,5 +55,28 @@ public class PeriodType extends NativeType {
 		if(other instanceof PeriodType)
 			return BooleanType.instance();
 		return super.checkCompare(context, other, section);
+	}
+	
+	@Override
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	   if(other == PeriodType.instance()) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	    } else {
+	        super.declareAdd(transpiler, other, tryReverse, left, right);
+	    }
+	}
+	
+	@Override
+	public boolean transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	   if(other == PeriodType.instance()) {
+	        left.transpile(transpiler);
+	        transpiler.append(".add(");
+	        right.transpile(transpiler);
+	        transpiler.append(")");
+	        return false;
+	    } else {
+	        return super.transpileAdd(transpiler, other, tryReverse, left, right);
+	    }
 	}
 }

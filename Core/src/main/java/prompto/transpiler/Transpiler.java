@@ -15,8 +15,11 @@ import prompto.utils.ResourceUtils;
 
 public class Transpiler {
 
-	public static String transpileMethod(Context context, IMethodDeclaration method) {
+	public static String transpileMethod(Context context, IMethodDeclaration method, String ... polyfills) {
 		Transpiler transpiler = new Transpiler(context);
+		transpiler.require("toDecimalString");
+		for(String polyfill : polyfills)
+			transpiler.require(polyfill);
 		method.declare(transpiler);
 		return transpiler.toString();
 	}
@@ -74,7 +77,10 @@ public class Transpiler {
 		return this;
 	}
 
-
+	public Transpiler append(boolean value) {
+		this.line.append(value);
+		return this;
+	}
 	
 	public Transpiler indent() {
 		return indent(false);

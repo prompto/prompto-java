@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
@@ -30,6 +31,7 @@ import prompto.grammar.Identifier;
 import prompto.grammar.NativeSymbolList;
 import prompto.intrinsic.PromptoSymbol;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.EnumeratedNativeType;
 import prompto.type.IType;
 import prompto.type.ListType;
@@ -267,7 +269,22 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 		method.addInstruction(Opcode.ARETURN);
 	}
 
-
+	@Override
+	public void declare(Transpiler transpiler) {
+		transpiler.require("List");
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    transpiler.append("function " + this.getName() + "(name, value) { this.name = name; this.value = value; return this; };");
+	    transpiler.newLine();
+	    transpiler.append(this.getName()).append(".prototype.toString = function() { return this.name; };");
+	    transpiler.newLine();
+	    this.symbolsList.forEach(symbol->symbol.initialize(transpiler));
+	    List<String> names = this.symbolsList.stream().map(Symbol::getName).collect(Collectors.toList());
+	    transpiler.append(this.getName()).append(".symbols = new List(false, [").append(names.stream().collect(Collectors.joining(", "))).append("]);");
+	    return true;
+	}
 
 
 }

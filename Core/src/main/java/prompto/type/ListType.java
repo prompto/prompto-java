@@ -5,11 +5,13 @@ import java.util.Collection;
 import java.util.Map;
 
 import prompto.error.ReadWriteError;
+import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoList;
 import prompto.parser.ECleverParser;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 import prompto.utils.Logger;
 import prompto.value.Boolean;
 import prompto.value.Decimal;
@@ -154,5 +156,28 @@ public class ListType extends ContainerType {
 			return list;
 		} else
 			return super.convertJavaValueToIValue(context, value);
+	}
+	
+	@Override
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	    if((other instanceof ListType || other instanceof SetType) && this.getItemType().equals(((ContainerType)other).getItemType())) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	    } else {
+	        super.declareAdd(transpiler, other, tryReverse, left, right);
+	    }
+	}
+	
+	@Override
+	public boolean transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	    if((other instanceof ListType || other instanceof SetType) && this.getItemType().equals(((ContainerType)other).getItemType())) {
+	        left.transpile(transpiler);
+	        transpiler.append(".add(");
+	        right.transpile(transpiler);
+	        transpiler.append(")");
+	        return false;
+	    } else {
+	        return super.transpileAdd(transpiler, other, tryReverse, left, right);
+	    }
 	}
 }

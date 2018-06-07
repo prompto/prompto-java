@@ -11,6 +11,7 @@ import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.intrinsic.PromptoTuple;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.TupleType;
 import prompto.utils.CodeWriter;
@@ -98,5 +99,20 @@ public class TupleLiteral extends Literal<TupleValue> {
 			method.addInstruction(Opcode.INVOKEVIRTUAL, c);
 			method.addInstruction(Opcode.POP); // consume the returned boolean
 		}
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    transpiler.require("List");
+	    transpiler.require("Tuple");
+	    this.expressions.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    transpiler.append("new Tuple(").append(this.mutable).append(", [");
+	    this.expressions.transpile(transpiler);
+	    transpiler.append("])");
+	    return false;
 	}
 }

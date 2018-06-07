@@ -2,10 +2,12 @@ package prompto.type;
 
 import java.lang.reflect.Type;
 
+import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoTuple;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 
 public class TupleType extends ContainerType {
 
@@ -64,6 +66,29 @@ public class TupleType extends ContainerType {
 	@Override
 	public IType checkContainsAllOrAny(Context context, IType other) {
 		return BooleanType.instance(); 
+	}
+	
+	@Override
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	    if(other == TupleType.instance() || other instanceof ListType || other instanceof SetType) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	    } else {
+	        super.declareAdd(transpiler, other, tryReverse, left, right);
+	    }
+	}
+	
+	@Override
+	public boolean transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	   if(other == TupleType.instance() || other instanceof ListType || other instanceof SetType) {
+	        left.transpile(transpiler);
+	        transpiler.append(".add(");
+	        right.transpile(transpiler);
+	        transpiler.append(")");
+	        return false;
+	    } else {
+	        return super.transpileAdd(transpiler, other, tryReverse, left, right);
+	    }
 	}
 	
 }

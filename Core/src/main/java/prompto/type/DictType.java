@@ -2,6 +2,7 @@ package prompto.type;
 
 import java.lang.reflect.Type;
 
+import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDict;
 import prompto.runtime.Context;
@@ -95,6 +96,27 @@ public class DictType extends ContainerType {
 	public void declare(Transpiler transpiler) {
 		transpiler.require("Dictionary");
 	}
-
 	
+	@Override
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	   if(other instanceof DictType && this.getItemType().equals(((DictType)other).getItemType())) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	    } else {
+	        super.declareAdd(transpiler, other, tryReverse, left, right);
+	    }
+	}
+
+	@Override
+	public boolean transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	   if(other instanceof DictType && this.getItemType().equals(((DictType)other).getItemType())) {
+	        left.transpile(transpiler);
+	        transpiler.append(".add(");
+	        right.transpile(transpiler);
+	        transpiler.append(")");
+	        return false;
+	    } else {
+	        return super.transpileAdd(transpiler, other, tryReverse, left, right);
+	    }
+	}
 }

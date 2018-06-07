@@ -126,11 +126,10 @@ public abstract class BaseParserTest extends BaseTest {
 			loadResource(resourceName);
 			if(context.hasTests()) {
 				JSEngine.executeTests(context);
-				return true;
 			} else {
 				JSEngine.executeMainNoArgs(context);
-				return false;
 			}
+			return true;
 		} catch(Exception e) {
 			if(reThrow && e instanceof PromptoError)
 				throw (PromptoError)e;
@@ -192,10 +191,10 @@ public abstract class BaseParserTest extends BaseTest {
 
 	protected void checkOutput(String resource, ResourceRunner runner) throws Exception {
 		IDataStore.setInstance(new MemStore());
-		boolean isTest = runner.runResource(resource, false);
+		boolean trimNewLines = runner.runResource(resource, false);
 		String read = Out.read();
-		if(isTest && read.endsWith("\n"))
-			read = read.substring(0, read.length() - 1);
+		if(trimNewLines)
+			read = read.replaceAll("\n", "");
 		List<String> expected = readExpected(resource);
 		if(expected.size()==1)
 			assertEquals(expected.get(0), read);

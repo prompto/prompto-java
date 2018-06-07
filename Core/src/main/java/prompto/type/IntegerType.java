@@ -20,11 +20,13 @@ import prompto.compiler.ResultInfo;
 import prompto.declaration.BuiltInMethodDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
+import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoLong;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 import prompto.value.Decimal;
 import prompto.value.IValue;
@@ -264,5 +266,25 @@ public class IntegerType extends NativeType implements INumberType {
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		return new Integer(value.asLong());
+	}
+	
+	@Override
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	    if (other == IntegerType.instance() || other == DecimalType.instance()) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	    } else
+	        super.declareAdd(transpiler, other, tryReverse, left, right);
+	}
+	
+	@Override
+	public boolean transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	    if (other == IntegerType.instance() || other == DecimalType.instance()) {
+	        left.transpile(transpiler);
+	        transpiler.append(" + ");
+	        right.transpile(transpiler);
+	        return false;
+	    } else
+	        return super.transpileAdd(transpiler, other, tryReverse, left, right);
 	}
 }

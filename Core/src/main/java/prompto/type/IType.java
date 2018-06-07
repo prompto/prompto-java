@@ -110,5 +110,18 @@ public interface IType {
 		throw new UnsupportedOperationException("transpileInstance " + this.getClass().getName());
 	}
 
+	default void declareMember(Transpiler transpiler, String name) {
+	    if(!"text".equals(name))
+	        throw new UnsupportedOperationException("declareMember " + name + " for " + this.getClass().getName());
+
+	}
+
+	default void transpileMember(Transpiler transpiler, String name) {
+	    if("text".equals(name))
+          transpiler.append("getText()");
+	    else
+	        throw new UnsupportedOperationException("transpileMember " + name + " for " + this.getClass().getName());
+	}
+
 }
  

@@ -5,10 +5,12 @@ import java.security.InvalidParameterException;
 import java.util.Comparator;
 import java.util.Map;
 
+import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 import prompto.value.Character;
 import prompto.value.CharacterRange;
 import prompto.value.IValue;
@@ -78,19 +80,17 @@ public class CharacterType extends NativeType {
 
 	@Override
 	public Comparator<Character> getComparator(boolean descending) {
-		return descending ? 
-				new Comparator<Character>() {
-					@Override
-					public int compare(Character o1, Character o2) {
-						return java.lang.Character.compare(o2.getValue(), o1.getValue());
-					}
-				} :
-				new Comparator<Character>() {
-					@Override
-					public int compare(Character o1, Character o2) {
-						return java.lang.Character.compare(o1.getValue(), o2.getValue());
-					}
-				};
+		return descending ? new Comparator<Character>() {
+			@Override
+			public int compare(Character o1, Character o2) {
+				return java.lang.Character.compare(o2.getValue(), o1.getValue());
+			}
+		} : new Comparator<Character>() {
+			@Override
+			public int compare(Character o1, Character o2) {
+				return java.lang.Character.compare(o1.getValue(), o2.getValue());
+			}
+		};
 	}
 
 	@Override
@@ -111,6 +111,22 @@ public class CharacterType extends NativeType {
 		if (value.asText().length() > 1)
 			throw new InvalidParameterException(value.toString());
 		return new Character(value.asText().charAt(0));
+	}
+
+	@Override
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+		// can add anything to text
+		left.declare(transpiler);
+		right.declare(transpiler);
+	}
+
+	@Override
+	public boolean transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+		// can add anything to text
+		left.transpile(transpiler);
+		transpiler.append(" + ");
+		right.transpile(transpiler);
+		return false;
 	}
 
 }

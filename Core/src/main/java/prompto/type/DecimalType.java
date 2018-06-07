@@ -4,9 +4,11 @@ import java.lang.reflect.Type;
 import java.util.Comparator;
 import java.util.Map;
 
+import prompto.expression.IExpression;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 import prompto.value.Decimal;
 import prompto.value.IValue;
 
@@ -126,6 +128,26 @@ public class DecimalType extends NativeType implements INumberType {
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		return new Decimal(value.asDouble());
+	}
+	
+	@Override
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+		if(other==IntegerType.instance() || other==DecimalType.instance()) {
+			left.declare(transpiler);
+			right.declare(transpiler);
+		} else
+			super.declareAdd(transpiler, other, tryReverse, left, right);
+	}
+	
+	@Override
+	public boolean transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+		if(other==IntegerType.instance() || other==DecimalType.instance()) {
+		    left.transpile(transpiler);
+		    transpiler.append(" + ");
+		    right.transpile(transpiler);
+		    return false;
+		} else
+			return super.transpileAdd(transpiler, other, tryReverse, left, right);
 	}
 
 }

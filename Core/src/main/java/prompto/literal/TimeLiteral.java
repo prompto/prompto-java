@@ -1,14 +1,15 @@
 package prompto.literal;
 
 import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.IOperand;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StringConstant;
 import prompto.intrinsic.PromptoTime;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.TimeType;
 import prompto.value.Time;
@@ -42,6 +43,15 @@ public class TimeLiteral extends Literal<Time> {
 		return new ResultInfo(PromptoTime.class);
 	}
 
+	@Override
+	public void declare(Transpiler transpiler) {
+		transpiler.require("Period");
+		transpiler.require("LocalTime");
+	}
 	
-	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		transpiler.append("LocalTime.parse(").append(this.text.get()).append(")");
+		return false;
+	}
 }

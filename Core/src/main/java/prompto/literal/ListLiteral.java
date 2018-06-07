@@ -11,6 +11,7 @@ import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.intrinsic.PromptoList;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.CharacterType;
 import prompto.type.DecimalType;
 import prompto.type.IType;
@@ -142,5 +143,23 @@ public class ListLiteral extends Literal<ListValue> {
 				return CompilerUtils.CharacterToString(method);
 		}
 		return info;
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    transpiler.require("List");
+	    if(this.expressions!=null)
+	        this.expressions.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	   transpiler.append("new List(").append(this.mutable).append(", [");
+	    if(this.expressions!=null) {
+	        this.expressions.transpile(transpiler);
+	        transpiler.append("])");
+	    } else
+	        transpiler.append("])");
+	    return false;
 	}
 }

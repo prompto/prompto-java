@@ -4,11 +4,13 @@ import java.lang.reflect.Type;
 import java.util.Comparator;
 import java.util.Map;
 
+import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDateTime;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 import prompto.value.DateTime;
 import prompto.value.IValue;
 
@@ -124,5 +126,26 @@ public class DateTimeType extends NativeType {
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		PromptoDateTime dt = PromptoDateTime.parse(value.asText());
 		return new DateTime(dt);
+	}
+	
+	@Override
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	    if (other == PeriodType.instance()) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	    } else
+	        super.declareAdd(transpiler, other, tryReverse, left, right);
+	}
+	
+	@Override
+	public boolean transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	    if (other == PeriodType.instance()) {
+	        left.transpile(transpiler);
+	        transpiler.append(".addPeriod(");
+	        right.transpile(transpiler);
+	        transpiler.append(")");
+	        return false;
+	    } else
+	        return super.transpileAdd(transpiler, other, tryReverse, left, right);
 	}
 }

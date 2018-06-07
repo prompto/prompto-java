@@ -17,6 +17,7 @@ import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.EnumeratedNativeType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -131,5 +132,22 @@ public class NativeSymbol extends Symbol implements IExpression {
 		return CompilerUtils.getNativeEnumType(itype.getTypeNameId());
 	}
 	
+	@Override
+	public void declare(Transpiler transpiler) {
+		this.type.declare(transpiler);
+	}
+
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		transpiler.append(this.getName());
+		return false;
+	}
+	
+	public void initialize(Transpiler transpiler) {
+	    transpiler.append("var ").append(this.getName()).append(" = new ").append(this.type.getTypeName()).append("('").append(this.getName()).append("', ");
+	    this.expression.transpile(transpiler);
+	    transpiler.append(");");
+	    transpiler.newLine();
+	}
 
 }

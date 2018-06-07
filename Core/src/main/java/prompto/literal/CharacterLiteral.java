@@ -13,6 +13,7 @@ import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.ShortOperand;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.CharacterType;
 import prompto.type.IType;
 import prompto.value.Character;
@@ -52,6 +53,15 @@ public class CharacterLiteral extends Literal<Character> {
 		return CompilerUtils.charToCharacter(method);
 	}
 
+	@Override
+	public void declare(Transpiler transpiler) {
+		// nothing to do
+	}
 
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		transpiler.append(this.text.get());
+		return false;
+	}
 
 }

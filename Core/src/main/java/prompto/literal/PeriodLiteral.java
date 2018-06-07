@@ -9,6 +9,7 @@ import prompto.compiler.ResultInfo;
 import prompto.compiler.StringConstant;
 import prompto.intrinsic.PromptoPeriod;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.PeriodType;
 import prompto.value.Period;
@@ -37,6 +38,17 @@ public class PeriodLiteral extends Literal<Period> {
 				String.class, PromptoPeriod.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
 		return new ResultInfo(PromptoPeriod.class);
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		transpiler.require("Period");
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		transpiler.append("Period.parse(").append(this.text.get()).append(")");
+		return false;
 	}
 	
 	

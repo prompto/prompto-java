@@ -2,6 +2,7 @@ package prompto.literal;
 
 import java.util.LinkedList;
 
+import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 
 public class DictEntryList extends LinkedList<DictEntry> {
@@ -31,6 +32,22 @@ public class DictEntryList extends LinkedList<DictEntry> {
 			writer.trimLast(2);
 		}
 		writer.append('}');
+	}
+
+	public void declare(Transpiler transpiler) {
+		this.forEach(entry->entry.declare(transpiler));
+	}
+
+	public void transpile(Transpiler transpiler) {
+	   transpiler.append('{');
+	    if(this.size()>0) {
+	        this.forEach(item -> {
+	            item.transpile(transpiler);
+	            transpiler.append(",");
+	        });
+	        transpiler.trimLast(1);
+	    }
+	    transpiler.append('}');
 	}
 	
 }
