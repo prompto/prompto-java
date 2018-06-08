@@ -123,5 +123,30 @@ public interface IType {
 	        throw new UnsupportedOperationException("transpileMember " + name + " for " + this.getClass().getName());
 	}
 
+	default void declareModulo(Transpiler transpiler, IType other, IExpression left, IExpression right)  { 
+		throw new UnsupportedOperationException("declareModulo " + this.getClass().getName());
+	}
+
+	default boolean transpileModulo(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+        throw new UnsupportedOperationException("transpileModulo " + this.getClass().getName());
+	}
+
+	default void declareDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) { 
+		throw new UnsupportedOperationException("declareDivide " + this.getClass().getName());
+	}
+
+	default boolean transpileDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+        throw new UnsupportedOperationException("transpileDivide " + this.getClass().getName());
+	}
+
+	default void declareIntDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) { 
+		throw new UnsupportedOperationException("declareIntDivide " + this.getClass().getName());
+	}
+
+	default boolean transpileIntDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+        throw new UnsupportedOperationException("transpileIntDivide " + this.getClass().getName());
+	}
+
+
 }
  

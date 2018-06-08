@@ -287,4 +287,72 @@ public class IntegerType extends NativeType implements INumberType {
 	    } else
 	        return super.transpileAdd(transpiler, other, tryReverse, left, right);
 	}
+	
+	@Override
+	public void declareModulo(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+		   if (other == IntegerType.instance() ) {
+		        left.declare(transpiler);
+		        right.declare(transpiler);
+		    } else
+		        super.declareModulo(transpiler, other, left, right);
+	}
+	
+	@Override
+	public boolean transpileModulo(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	   if (other == IntegerType.instance() ) {
+	        // TODO check negative values
+	        left.transpile(transpiler);
+	        transpiler.append(" % ");
+	        right.transpile(transpiler);
+	        return false;
+	    } else
+	        return super.transpileModulo(transpiler, other, left, right);
+	}
+	
+	@Override
+	public void declareDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+		transpiler.require("divide");
+	    if (other == IntegerType.instance() || other == DecimalType.instance()) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	    } else
+	        super.declareDivide(transpiler, other, left, right);
+	}
+	
+	@Override
+	public boolean transpileDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	   if (other == IntegerType.instance() || other == DecimalType.instance()) {
+	        transpiler.append("divide(");
+	        left.transpile(transpiler);
+	        transpiler.append(", ");
+	        right.transpile(transpiler);
+	        transpiler.append(")");
+	        return false;
+	    } else
+	        return super.transpileDivide(transpiler, other, left, right);
+	}
+	
+	@Override
+	public void declareIntDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	   if (other == IntegerType.instance() ) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	    } else
+	        super.declareIntDivide(transpiler, other, left, right);
+	}
+	
+	@Override
+	public boolean transpileIntDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	   if (other == IntegerType.instance() ) {
+	       // TODO check negative values
+	        transpiler.append("Math.floor(divide(");
+	        left.transpile(transpiler);
+	        transpiler.append(", ");
+	        right.transpile(transpiler);
+	        transpiler.append("))");
+	        return false;
+	    } else
+	        return super.transpileIntDivide(transpiler, other, left, right);
+	}
+
 }
