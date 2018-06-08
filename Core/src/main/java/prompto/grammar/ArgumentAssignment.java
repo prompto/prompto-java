@@ -171,4 +171,9 @@ public class ArgumentAssignment {
 		if(this.expression!=null)
 			this.expression.declare(transpiler);
 	}
+
+
+	public void transpile(Transpiler transpiler) {
+		this.expression.transpile(transpiler);
+	}
 }

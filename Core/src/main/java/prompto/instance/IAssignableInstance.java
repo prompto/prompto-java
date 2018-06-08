@@ -14,6 +14,7 @@ import prompto.value.IValue;
 
 public interface IAssignableInstance {
 
+	IType check(Context context);
 	IType checkAssignValue(Context context, IType valueType);
 	IType checkAssignMember(Context context, Identifier name, IType valueType);
 	IType checkAssignItem(Context context, IType itemType, IType valueType);
@@ -26,11 +27,18 @@ public interface IAssignableInstance {
 	default ResultInfo compileAssign(Context context, MethodInfo method, Flags flags, IExpression expression) {
 		throw new UnsupportedOperationException("compileAssign " + this.getClass().getName());
 	}
+	default void declare(Transpiler transpiler)  {
+		throw new UnsupportedOperationException("declare " + this.getClass().getName());
+	}
 	default void declareAssign(Transpiler transpiler, IExpression expression) {
 		throw new UnsupportedOperationException("declareAssign " + this.getClass().getName());
 	}
 	default void transpileAssign(Transpiler transpiler, IExpression expression) {
 		throw new UnsupportedOperationException("transpileAssign " + this.getClass().getName());
 	}
+	default void transpileAssignParent(Transpiler transpiler) {
+		throw new UnsupportedOperationException("transpileAssignParent " + this.getClass().getName());
+	}
+	
 
 }

@@ -149,5 +149,19 @@ public class CharacterType extends NativeType {
 	    } else
 	        return super.transpileMultiply(transpiler, other, tryReverse, left, right);
 	}
+	
+	@Override
+	public void declareMember(Transpiler transpiler, String name) {
+	    if (!"codePoint".equals(name))
+	    	super.declareMember(transpiler, name);
+	}
+	
+	@Override
+	public void transpileMember(Transpiler transpiler, String name) {
+	    if ("codePoint".equals(name))
+	    	transpiler.append("charCodeAt(0)");
+	    else
+	    	super.transpileMember(transpiler, name);
+	}
 
 }

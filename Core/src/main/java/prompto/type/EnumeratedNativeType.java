@@ -136,6 +136,12 @@ public class EnumeratedNativeType extends BaseType {
 	}
 	
 	@Override
+	public boolean transpile(Transpiler transpiler) {
+		transpiler.append(this.getTypeName());
+		return false;
+	}
+	
+	@Override
 	public void declareMember(Transpiler transpiler, String name) {
 	    if("symbols".equals(name) || "value".equals(name) || "name".equals(name)) {
 	    	EnumeratedNativeDeclaration decl = transpiler.getContext().getRegisteredDeclaration(EnumeratedNativeDeclaration.class, typeNameId);

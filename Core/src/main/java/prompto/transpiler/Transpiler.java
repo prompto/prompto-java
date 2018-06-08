@@ -17,7 +17,7 @@ public class Transpiler {
 
 	public static String transpileMethod(Context context, IMethodDeclaration method, String ... polyfills) {
 		Transpiler transpiler = new Transpiler(context);
-		transpiler.require("toDecimalString");
+		transpiler.require("Utils");
 		for(String polyfill : polyfills)
 			transpiler.require(polyfill);
 		method.declare(transpiler);

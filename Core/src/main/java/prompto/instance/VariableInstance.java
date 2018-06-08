@@ -144,6 +144,17 @@ public class VariableInstance implements IAssignableInstance {
 	}
 	
 	@Override
+	public IType check(Context context) {
+		INamed actual = context.getRegisteredValue(INamed.class, id);
+		return actual.getType(context);
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		// nothing to do
+	}
+	
+	@Override
 	public void declareAssign(Transpiler transpiler, IExpression expression) {
 		Context context = transpiler.getContext();
 	   if(context.getRegisteredValue(INamed.class, this.getId())==null) {
@@ -178,5 +189,10 @@ public class VariableInstance implements IAssignableInstance {
 	        expression.transpile(transpiler);
 	    }
     }
+	
+	@Override
+	public void transpileAssignParent(Transpiler transpiler) {
+		transpiler.append(this.getName());
+	}
 	
 }

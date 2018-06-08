@@ -23,6 +23,10 @@ public class JSSet {
 			throw new UnsupportedOperationException(values.getClass().getName());
 	}
 	
+	public int getSize() {
+		return set.size();
+	}
+	
 	public boolean has(Object value) {
 		return set.contains(value);
 	}

@@ -176,4 +176,61 @@ public class DateTimeType extends NativeType {
 	    } else
 	        return super.transpileSubtract(transpiler, other, left, right);
 	}
+	
+	@Override
+	public void declareMember(Transpiler transpiler, String name) {
+		switch(name) {
+		case "year":
+		case "month":
+		case "dayOfMonth":
+		case "dayOfYear":
+		case "hour":
+		case "minute":
+		case "second":
+		case "millisecond":
+		case "tzOffset":
+		case "tzName":
+			break;
+		default:
+			super.declareMember(transpiler, name);
+	    }
+	}
+	
+	@Override
+	public void transpileMember(Transpiler transpiler, String name) {
+		switch(name) {
+		case "year":
+	        transpiler.append("getYear()");
+			break;
+		case "month":
+	        transpiler.append("getMonth()");
+			break;
+		case "dayOfMonth":
+	        transpiler.append("getDayOfMonth()");
+			break;
+		case "dayOfYear":
+	        transpiler.append("getDayOfYear()");
+			break;
+		case "hour":
+	        transpiler.append("getHour()");
+			break;
+		case "minute":
+	        transpiler.append("getMinute()");
+			break;
+		case "second":
+	        transpiler.append("getSecond()");
+			break;
+		case "millisecond":
+	        transpiler.append("getMillisecond()");
+			break;
+		case "tzOffset":
+	        transpiler.append("getTzOffset()");
+			break;
+		case "tzName":
+	        transpiler.append("getTzName()");
+			break;
+		default:
+			super.transpileMember(transpiler, name);
+	    }
+	}
 }

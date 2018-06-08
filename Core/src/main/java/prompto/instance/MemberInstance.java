@@ -20,6 +20,7 @@ import prompto.intrinsic.IMutable;
 import prompto.intrinsic.PromptoAny;
 import prompto.intrinsic.PromptoDocument;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.AnyType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -193,4 +194,24 @@ public class MemberInstance implements IAssignableSelector {
 	}
 	*/
 
+	@Override
+	public IType check(Context context) {
+		IType parentType = this.parent.check(context);
+	    return parentType.checkMember(context, this.id);
+	}
+	
+	
+	@Override
+	public void declareAssign(Transpiler transpiler, IExpression expression) {
+		parent.declare(transpiler);
+	    expression.declare(transpiler);
+	}
+	
+	@Override
+	public void transpileAssign(Transpiler transpiler, IExpression expression) {
+	    IType parentType = this.parent.check(transpiler.getContext());
+	    this.parent.transpileAssignParent(transpiler);
+	    parentType.transpileAssignMemberValue(transpiler, getName(), expression);
+	}
+	
 }

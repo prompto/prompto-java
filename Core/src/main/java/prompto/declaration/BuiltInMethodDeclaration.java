@@ -79,6 +79,8 @@ public abstract class BuiltInMethodDeclaration extends BaseMethodDeclaration {
 		// override only of required
 	}
 
+	public abstract void transpileCall(Transpiler transpiler, ArgumentAssignmentList assignments);
+
 
 
 }

@@ -5,10 +5,12 @@ import java.util.Iterator;
 import java.util.Map;
 
 import prompto.error.PromptoError;
+import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDocument;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 import prompto.value.Document;
 import prompto.value.IValue;
 import prompto.value.NullValue;
@@ -97,6 +99,14 @@ public class DocumentType extends NativeType {
 			return new Document(context, (PromptoDocument<?,?>)value);
 		else
 			return super.convertJavaValueToIValue(context, value);
+	}
+	
+	
+	@Override
+	public void transpileAssignMemberValue(Transpiler transpiler, String name, IExpression expression) {
+	    transpiler.append(".setMember('").append(name).append("', ");
+	    expression.transpile(transpiler);
+	    transpiler.append(")");
 	}
 		
 }

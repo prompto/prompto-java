@@ -172,4 +172,37 @@ public class DateType extends NativeType {
 	    } else
 	        return super.transpileSubtract(transpiler, other, left, right);
 	}
+	
+	@Override
+	public void declareMember(Transpiler transpiler, String name) {
+		switch(name) {
+		case "year":
+		case "month":
+		case "dayOfMonth":
+		case "dayOfYear":
+			break;
+		default:
+			super.declareMember(transpiler, name);
+	    }
+	}
+	
+	@Override
+	public void transpileMember(Transpiler transpiler, String name) {
+		switch(name) {
+		case "year":
+	        transpiler.append("getYear()");
+			break;
+		case "month":
+	        transpiler.append("getMonth()");
+			break;
+		case "dayOfMonth":
+	        transpiler.append("getDayOfMonth()");
+			break;
+		case "dayOfYear":
+	        transpiler.append("getDayOfYear()");
+			break;
+		default:
+	        super.transpileMember(transpiler, name);
+	    }
+	}
 }

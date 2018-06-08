@@ -33,6 +33,7 @@ public class JSEngine {
 				js,
 				"Array.from = function(values) { return Java.from(Java.type('prompto.transpiler.JSArray').from(values)); };",
 				"var Set = Java.type('prompto.transpiler.JSSet');",
+				// "Object.defineProperty(Set, 'size', { get : function() { return this.length(); } });",
 				"var process = { stdout: { write: print } };",
 				"var method = main$Text_dict;"
 				);

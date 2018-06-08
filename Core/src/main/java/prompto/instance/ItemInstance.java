@@ -154,4 +154,10 @@ public class ItemInstance implements IAssignableSelector {
 		return new ResultInfo(void.class);
 	}
 	
+	@Override
+	public IType check(Context context) {
+		IType parentType = this.parent.check(context);
+		IType itemType = this.item.check(context);
+	    return parentType.checkItem(context, itemType);
+	}
 }

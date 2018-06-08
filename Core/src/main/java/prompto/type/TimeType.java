@@ -173,4 +173,38 @@ public class TimeType extends NativeType {
 	    } else
 	        return super.transpileSubtract(transpiler, other, left, right);
 	}
+	
+	
+	@Override
+	public void declareMember(Transpiler transpiler, String name) {
+		switch(name) {
+		case "hour":
+		case "minute":
+		case "second":
+		case "millisecond":
+			break;
+		default:
+			super.declareMember(transpiler, name);
+	    }
+	}
+	
+	@Override
+	public void transpileMember(Transpiler transpiler, String name) {
+		switch(name) {
+		case "hour":
+	        transpiler.append("getHour()");
+			break;
+		case "minute":
+	        transpiler.append("getMinute()");
+			break;
+		case "second":
+	        transpiler.append("getSecond()");
+			break;
+		case "millisecond":
+	        transpiler.append("getMillisecond()");
+			break;
+		default:
+			super.transpileMember(transpiler, name);
+	    }
+	}
 }

@@ -13,6 +13,7 @@ import prompto.error.SyntaxError;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoRange;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.IntegerType;
 import prompto.utils.CodeWriter;
@@ -114,6 +115,20 @@ public class SliceSelector extends SelectorExpression {
 			throw new SyntaxError("Cannot slice " + pinfo.getType().getTypeName());
 		}
 		return slicer.compile(context, method, flags, pinfo, first, last);
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    this.parent.declare(transpiler);
+	    IType parentType = this.parent.check(transpiler.getContext());
+	    parentType.declareSlice(transpiler, this.first, this.last);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    this.parent.transpile(transpiler);
+	    IType parentType = this.parent.check(transpiler.getContext());
+	    return parentType.transpileSlice(transpiler, this.first, this.last);
 	}
 
 }

@@ -379,7 +379,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 
 	private void transpileSingle(Transpiler transpiler, IMethodDeclaration declaration, boolean allowDerived) {
 	   if (declaration instanceof BuiltInMethodDeclaration)
-	        this.transpileBuiltin(transpiler, declaration);
+	        this.transpileBuiltin(transpiler, (BuiltInMethodDeclaration)declaration);
 	    else {
 	        this.transpileSelector(transpiler, declaration);
 	        this.transpileAssignments(transpiler, declaration, allowDerived);
@@ -420,8 +420,11 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	    selector.transpile(transpiler);
 	}
 
-	private void transpileBuiltin(Transpiler transpiler, IMethodDeclaration declaration) {
-		throw new UnsupportedOperationException();
+	private void transpileBuiltin(Transpiler transpiler, BuiltInMethodDeclaration declaration) {
+	    IExpression parent = this.selector.resolveParent(transpiler.getContext());
+	    parent.transpile(transpiler);
+	    transpiler.append(".");
+	    declaration.transpileCall(transpiler, this.assignments);
 	}
 
 	private void transpileMultiple(Transpiler transpiler, List<IMethodDeclaration> declarations) {

@@ -9,6 +9,7 @@ import prompto.compiler.StringConstant;
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
@@ -57,6 +58,16 @@ public class TypeExpression implements IExpression {
 
 	public IType getType() {
 		return type;
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		this.type.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		return this.type.transpile(transpiler);
 	}
 
 }

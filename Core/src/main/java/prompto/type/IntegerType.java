@@ -175,14 +175,14 @@ public class IntegerType extends NativeType implements INumberType {
 		
 		public boolean hasCompileExactInstanceMember() {
 			return true;
-		};
+		}
 		
 		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
 			// push arguments on the stack
-			this.compileAssignments(context, method, flags, assignments); // stqck = Long/String
+			this.compileAssignments(context, method, flags, assignments); // stack = Long/String
 			// create DecimalFormat instance
-			CompilerUtils.compileNewRawInstance(method, DecimalFormat.class); // stqck = Long/String/DecimalFormat
-			method.addInstruction(Opcode.DUP_X1); // need to keep a reference, stqck = Long/DecimalFormat/String/DecimalFormat
+			CompilerUtils.compileNewRawInstance(method, DecimalFormat.class); // stack = Long/String/DecimalFormat
+			method.addInstruction(Opcode.DUP_X1); // need to keep a reference, stack = Long/DecimalFormat/String/DecimalFormat
 			method.addInstruction(Opcode.SWAP); // stack = Long/DecimalFormat/DecimalFormat/String
 			CompilerUtils.compileCallConstructor(method, DecimalFormat.class, String.class); // stack = Long/DecimalFormat
 			// call format method
@@ -193,7 +193,13 @@ public class IntegerType extends NativeType implements INumberType {
 			// done
 			return new ResultInfo(String.class);
 
-		};
+		}
+		
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
+	        transpiler.append("formatInteger(");
+	        assignments.get(0).transpile(transpiler);
+	        transpiler.append(")");
+		}
 	};
 	
 	@Override

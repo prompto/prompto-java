@@ -92,6 +92,11 @@ public interface IType {
 	default void declare(Transpiler transpiler) { 
 		throw new UnsupportedOperationException("declare " + this.getClass().getName()); 
 	}
+	
+	default boolean transpile(Transpiler transpiler) {
+		throw new UnsupportedOperationException("transpile " + this.getClass().getName()); 
+	}
+
 
 	default void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) { 
 		if(tryReverse)
@@ -182,6 +187,19 @@ public interface IType {
 	default boolean transpileSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right)  { 
 		throw new UnsupportedOperationException("transpileSubtract " + this.getClass().getName());
 	}
+
+	default void transpileAssignMemberValue(Transpiler transpiler, String name, IExpression expression)  { 
+		throw new UnsupportedOperationException("transpileAssignMemberValue " + this.getClass().getName());
+	}
+
+	default void declareSlice(Transpiler transpiler, IExpression first, IExpression last)   { 
+		throw new UnsupportedOperationException("declareSlice " + this.getClass().getName());
+	}
+
+	default boolean transpileSlice(Transpiler transpiler, IExpression first, IExpression last) {
+		throw new UnsupportedOperationException("transpileSlice " + this.getClass().getName());
+	}
+
 
 
 }
