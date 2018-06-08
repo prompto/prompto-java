@@ -191,5 +191,36 @@ public class DecimalType extends NativeType implements INumberType {
 		} else
 			return super.transpileIntDivide(transpiler, other, left, right);
 	}
+	
+	@Override
+	public void declareMinus(Transpiler transpiler, IExpression expression) {
+		// nothing to do
+	}
+	
+	@Override
+	public boolean transpileMinus(Transpiler transpiler, IExpression expression) {
+	    transpiler.append(" -");
+	    return expression.transpile(transpiler);
+	}
+	
+	@Override
+	public void declareMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	    if(other == IntegerType.instance() || other == DecimalType.instance()) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	    } else
+	        super.declareMultiply(transpiler, other, tryReverse, left, right);
+	}
+	
+	@Override
+	public boolean transpileMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	   if(other == IntegerType.instance() || other == DecimalType.instance()) {
+	        left.transpile(transpiler);
+	        transpiler.append(" * ");
+	        right.transpile(transpiler);
+	        return false;
+	    } else
+	        return super.transpileMultiply(transpiler, other, tryReverse, left, right);
+	}
 
 }

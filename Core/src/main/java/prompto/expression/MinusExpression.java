@@ -11,6 +11,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.intrinsic.PromptoPeriod;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.DecimalType;
 import prompto.type.IType;
 import prompto.type.IntegerType;
@@ -87,6 +88,19 @@ public class MinusExpression implements IUnaryExpression {
 			throw new SyntaxError("Cannot negate " + val.getType().getTypeName());
 		}
 		return negator.compile(context, method, flags, val);
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    this.expression.declare(transpiler);
+	    IType type = this.expression.check(transpiler.getContext());
+	    type.declareMinus(transpiler, this.expression);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		IType type = this.expression.check(transpiler.getContext());
+	    return type.transpileMinus(transpiler, this.expression);
 	}
 
 }

@@ -180,4 +180,29 @@ public class ListType extends ContainerType {
 	        return super.transpileAdd(transpiler, other, tryReverse, left, right);
 	    }
 	}
+	
+	
+	@Override
+	public void declareMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	   if(other == IntegerType.instance) {
+	        transpiler.require("multiplyArray");
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	    } else {
+	        super.declareMultiply(transpiler, other, tryReverse, left, right);
+	    }
+	}
+	
+	@Override
+	public boolean transpileMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	   if(other == IntegerType.instance()) {
+	        transpiler.append("multiplyArray(");
+	        left.transpile(transpiler);
+	        transpiler.append(",");
+	        right.transpile(transpiler);
+	        transpiler.append(")");
+	        return false;
+	    } else
+	        return super.transpileMultiply(transpiler, other, tryReverse, left, right);
+	}
 }

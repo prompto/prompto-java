@@ -94,11 +94,17 @@ public interface IType {
 	}
 
 	default void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) { 
-		throw new UnsupportedOperationException("declareAdd " + this.getClass().getName());
+		if(tryReverse)
+			other.declareAdd(transpiler, this, false, right, left);
+		else
+			throw new UnsupportedOperationException("declareAdd " + this.getClass().getName());
 	}
 
 	default boolean transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) { 
-		throw new UnsupportedOperationException("transpileAdd " + this.getClass().getName());
+		if(tryReverse)
+			return other.transpileAdd(transpiler, this, false, right, left);
+		else
+			throw new UnsupportedOperationException("transpileAdd " + this.getClass().getName());
 	}
 
 
@@ -145,6 +151,28 @@ public interface IType {
 
 	default boolean transpileIntDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
         throw new UnsupportedOperationException("transpileIntDivide " + this.getClass().getName());
+	}
+
+	default void declareMinus(Transpiler transpiler, IExpression expression) { 
+		throw new UnsupportedOperationException("declareMinus " + this.getClass().getName());
+	}
+
+	default boolean transpileMinus(Transpiler transpiler, IExpression expression) {
+        throw new UnsupportedOperationException("transpileMinus " + this.getClass().getName());
+	}
+
+	default void declareMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) { 
+		if(tryReverse)
+			other.declareMultiply(transpiler, this, false, right, left);
+		else
+			throw new UnsupportedOperationException("declareMultiply " + this.getClass().getName());
+	}
+
+	default boolean transpileMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) { 
+		if(tryReverse)
+			return other.transpileMultiply(transpiler, this, false, right, left);
+		else
+			throw new UnsupportedOperationException("transpileMultiply " + this.getClass().getName());
 	}
 
 

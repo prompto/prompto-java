@@ -79,4 +79,36 @@ public class PeriodType extends NativeType {
 	        return super.transpileAdd(transpiler, other, tryReverse, left, right);
 	    }
 	}
+	
+	@Override
+	public void declareMinus(Transpiler transpiler, IExpression expression) {
+		 // nothing to do
+	}
+	
+	@Override
+	public boolean transpileMinus(Transpiler transpiler, IExpression expression) {
+		expression.transpile(transpiler);
+	    transpiler.append(".minus()");
+	    return false;
+	}
+	
+	@Override
+	public void declareMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	    if(other == IntegerType.instance()) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	    } else
+	        super.declareMultiply(transpiler, other, tryReverse, left, right);
+	}
+	
+	@Override
+	public boolean transpileMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	    if(other == IntegerType.instance()) {
+	        left.transpile(transpiler);
+	        transpiler.append(".multiply(");
+	        right.transpile(transpiler);
+	        transpiler.append(")");
+	        return false;
+	    } else
+	        return super.transpileMultiply(transpiler, other, tryReverse, left, right);	}
 }

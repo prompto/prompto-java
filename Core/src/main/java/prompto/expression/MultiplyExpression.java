@@ -15,6 +15,7 @@ import prompto.declaration.CategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.Character;
@@ -101,5 +102,19 @@ public class MultiplyExpression implements IExpression {
 		} catch(NoSuchMethodException e) {
 			throw new SyntaxError(e.getMessage());
 		}
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    IType lt = this.left.check(transpiler.getContext());
+	    IType rt = this.right.check(transpiler.getContext());
+	    lt.declareMultiply(transpiler, rt, true, this.left, this.right);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		IType lt = this.left.check(transpiler.getContext());
+		IType rt = this.right.check(transpiler.getContext());
+	    return lt.transpileMultiply(transpiler, rt, true, this.left, this.right);
 	}
 }
