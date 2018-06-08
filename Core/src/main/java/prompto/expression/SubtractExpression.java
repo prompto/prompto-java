@@ -15,6 +15,7 @@ import prompto.intrinsic.PromptoDateTime;
 import prompto.intrinsic.PromptoPeriod;
 import prompto.intrinsic.PromptoTime;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.Date;
@@ -84,4 +85,19 @@ public class SubtractExpression implements IExpression {
 		return minuser.compile(context, method, flags, lval, right);
 	}
 
+	@Override
+	public void declare(Transpiler transpiler) {
+	    IType lt = this.left.check(transpiler.getContext());
+	    IType rt = this.right.check(transpiler.getContext());
+	    lt.declareSubtract(transpiler, rt, this.left, this.right);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		IType lt = this.left.check(transpiler.getContext());
+		IType rt = this.right.check(transpiler.getContext());
+	    return lt.transpileSubtract(transpiler, rt, this.left, this.right);
+	}
+	
+	
 }

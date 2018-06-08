@@ -175,6 +175,14 @@ public interface IType {
 			throw new UnsupportedOperationException("transpileMultiply " + this.getClass().getName());
 	}
 
+	default void declareSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right)  { 
+		throw new UnsupportedOperationException("declareSubtract " + this.getClass().getName());
+	}
+
+	default boolean transpileSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right)  { 
+		throw new UnsupportedOperationException("transpileSubtract " + this.getClass().getName());
+	}
+
 
 }
  

@@ -110,5 +110,27 @@ public class PeriodType extends NativeType {
 	        transpiler.append(")");
 	        return false;
 	    } else
-	        return super.transpileMultiply(transpiler, other, tryReverse, left, right);	}
+	        return super.transpileMultiply(transpiler, other, tryReverse, left, right);	
+    }
+	
+	@Override
+	public void declareSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	   if(other == PeriodType.instance()) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	    } else
+	        super.declareSubtract(transpiler, other, left, right);
+	}
+	
+	@Override
+	public boolean transpileSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	   if(other == PeriodType.instance()) {
+	        left.transpile(transpiler);
+	        transpiler.append(".subtract(");
+	        right.transpile(transpiler);
+	        transpiler.append(")");
+	        return false;
+	    } else
+	        return super.transpileSubtract(transpiler, other, left, right);
+	}
 }

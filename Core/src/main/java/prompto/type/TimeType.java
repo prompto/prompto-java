@@ -145,5 +145,32 @@ public class TimeType extends NativeType {
 	        return super.transpileAdd(transpiler, other, tryReverse, left, right);
 	    }
 	}
+	
+	
+	@Override
+	public void declareSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	    if (other == TimeType.instance() || other == PeriodType.instance()) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	    } else
+	        super.declareSubtract(transpiler, other, left, right);
+	}
 
+	@Override
+	public boolean transpileSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	   if (other == TimeType.instance()) {
+	        left.transpile(transpiler);
+	        transpiler.append(".subtractTime(");
+	        right.transpile(transpiler);
+	        transpiler.append(")");
+	        return false;
+	    } else if (other == PeriodType.instance()) {
+	        left.transpile(transpiler);
+	        transpiler.append(".subtractPeriod(");
+	        right.transpile(transpiler);
+	        transpiler.append(")");
+	        return false;
+	    } else
+	        return super.transpileSubtract(transpiler, other, left, right);
+	}
 }

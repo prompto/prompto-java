@@ -385,5 +385,25 @@ public class IntegerType extends NativeType implements INumberType {
 	    } else
 	        return super.transpileMultiply(transpiler, other, tryReverse, left, right);
 	}
+	
+	@Override
+	public void declareSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	   if (other == IntegerType.instance() || other == DecimalType.instance()) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	    } else
+	        super.declareSubtract(transpiler, other, left, right);
+	}
+	
+	@Override
+	public boolean transpileSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	   if (other == IntegerType.instance() || other == DecimalType.instance()) {
+	        left.transpile(transpiler);
+	        transpiler.append(" - ");
+	        right.transpile(transpiler);
+	        return false;
+	    } else
+	        return super.transpileSubtract(transpiler, other, left, right);
+	}
 
 }

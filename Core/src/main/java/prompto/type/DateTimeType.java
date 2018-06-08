@@ -148,4 +148,32 @@ public class DateTimeType extends NativeType {
 	    } else
 	        return super.transpileAdd(transpiler, other, tryReverse, left, right);
 	}
+	
+	@Override
+	public void declareSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	    if (other == PeriodType.instance() || other == DateTimeType.instance()) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	    } else
+	        super.declareSubtract(transpiler, other, left, right);
+	}
+	
+	
+	@Override
+	public boolean transpileSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	   if (other == PeriodType.instance()) {
+	        left.transpile(transpiler);
+	        transpiler.append(".subtractPeriod(");
+	        right.transpile(transpiler);
+	        transpiler.append(")");
+	        return false;
+	    } else if (other == DateTimeType.instance) {
+	        left.transpile(transpiler);
+	        transpiler.append(".subtractDateTime(");
+	        right.transpile(transpiler);
+	        transpiler.append(")");
+	        return false;
+	    } else
+	        return super.transpileSubtract(transpiler, other, left, right);
+	}
 }
