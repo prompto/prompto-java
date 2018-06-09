@@ -16,7 +16,6 @@ import prompto.type.CharacterType;
 import prompto.type.DecimalType;
 import prompto.type.IType;
 import prompto.type.IntegerType;
-import prompto.type.ListType;
 import prompto.type.TextType;
 import prompto.utils.ExpressionList;
 import prompto.utils.TypeUtils;
@@ -50,8 +49,10 @@ public abstract class ContainerLiteral<T extends IContainer<IValue>> extends Lit
 			else
 				itemType = TypeUtils.inferValuesType(context, getItems());
 		}
-		return new ListType(itemType); 
+		return newType(itemType); 
 	}
+
+	protected abstract IType newType(IType itemType);
 
 	protected abstract Collection<IValue> getItems();
 

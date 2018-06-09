@@ -12,6 +12,8 @@ import prompto.expression.IExpression;
 import prompto.intrinsic.PromptoList;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
+import prompto.type.IType;
+import prompto.type.ListType;
 import prompto.type.MissingType;
 import prompto.utils.CodeWriter;
 import prompto.utils.ExpressionList;
@@ -36,6 +38,11 @@ public class ListLiteral extends ContainerLiteral<ListValue> {
 	@Override
 	protected Collection<IValue> getItems() {
 		return value.getItems();
+	}
+	
+	@Override
+	protected IType newType(IType itemType) {
+		return new ListType(itemType);
 	}
 	
 	@Override

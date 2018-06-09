@@ -11,7 +11,9 @@ import prompto.expression.IExpression;
 import prompto.intrinsic.PromptoSet;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
+import prompto.type.IType;
 import prompto.type.MissingType;
+import prompto.type.SetType;
 import prompto.utils.CodeWriter;
 import prompto.utils.ExpressionList;
 import prompto.value.IValue;
@@ -30,6 +32,11 @@ public class SetLiteral extends ContainerLiteral<SetValue> {
 	@Override
 	protected Collection<IValue> getItems() {
 		return value.getItems();
+	}
+	
+	@Override
+	protected IType newType(IType itemType) {
+		return new SetType(itemType);
 	}
 	
 	@Override
