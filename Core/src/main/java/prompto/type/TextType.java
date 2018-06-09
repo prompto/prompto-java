@@ -651,4 +651,17 @@ public class TextType extends NativeType {
 	    right.transpile(transpiler);
 		return false;
 	}
+	
+	@Override
+	public void declareItem(Transpiler transpiler, IType itemType, IExpression item) {
+		// nothing to do
+	}
+	
+	@Override
+	public boolean transpileItem(Transpiler transpiler, IType itemType, IExpression item) {
+	    transpiler.append("[");
+	    item.transpile(transpiler);
+	    transpiler.append("-1]");
+		return false;
+	}
 }

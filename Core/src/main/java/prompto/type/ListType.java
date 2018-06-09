@@ -249,4 +249,45 @@ public class ListType extends ContainerType {
 	    transpiler.append(")");
 	}
 	
+	@Override
+	public void declareItem(Transpiler transpiler, IType itemType, IExpression item) {
+	    if(itemType==IntegerType.instance()) {
+	        item.declare(transpiler);
+	    } else {
+	        super.declareItem(transpiler, itemType, item);
+	    }
+	}
+	
+	@Override
+	public boolean transpileItem(Transpiler transpiler, IType itemType, IExpression item) {
+	    if(itemType==IntegerType.instance()) {
+	        transpiler.append(".item(");
+	        item.transpile(transpiler);
+	        transpiler.append(")");
+	        return false;
+	    } else {
+	        return super.transpileItem(transpiler, itemType, item);
+	    }
+	}
+	
+	@Override
+	public void declareSlice(Transpiler transpiler, IExpression first, IExpression last) {
+		// nothing to do
+	}
+	
+	@Override
+	public boolean transpileSlice(Transpiler transpiler, IExpression first, IExpression last) {
+	    transpiler.append(".slice1Based(");
+	    if(first!=null) {
+	        first.transpile(transpiler);
+	    } else
+	        transpiler.append("null");
+	    if(last!=null) {
+	        transpiler.append(",");
+	        last.transpile(transpiler);
+	    }
+	    transpiler.append(")");
+		return false;
+	}
+	
 }

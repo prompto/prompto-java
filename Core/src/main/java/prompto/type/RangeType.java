@@ -106,4 +106,42 @@ public class RangeType extends ContainerType {
 	    transpiler.append(")");
 	}
 	
+	@Override
+	public void declareItem(Transpiler transpiler, IType itemType, IExpression item) {
+		// nothing to do
+	}
+	
+	@Override
+	public boolean transpileItem(Transpiler transpiler, IType itemType, IExpression item) {
+	    transpiler.append(".item(");
+	    item.transpile(transpiler);
+	    transpiler.append(")");
+		return false;
+	}
+	
+	@Override
+	public void declareSlice(Transpiler transpiler, IExpression first, IExpression last) {
+	    if(first!=null) {
+	        first.declare(transpiler);
+	    }
+	    if(last!=null) {
+	        last.declare(transpiler);
+	    }
+	}
+	
+	@Override
+	public boolean transpileSlice(Transpiler transpiler, IExpression first, IExpression last) {
+	    transpiler.append(".slice1Based(");
+	    if(first!=null) {
+	        first.transpile(transpiler);
+	    } else
+	        transpiler.append("null");
+	    if(last!=null) {
+	        transpiler.append(",");
+	        last.transpile(transpiler);
+	    }
+	    transpiler.append(")");
+		return false;
+	}
+	
 }

@@ -122,4 +122,16 @@ public class SetType extends ContainerType {
 	    transpiler.append(")");
 	}
 
+	@Override
+	public void declareItem(Transpiler transpiler, IType itemType, IExpression item) {
+		// nothing to do
+	}
+	
+	@Override
+	public boolean transpileItem(Transpiler transpiler, IType itemType, IExpression item) {
+	    transpiler.append(".item(");
+	    item.transpile(transpiler);
+	    transpiler.append("-1)");
+		return false;
+	}
 }

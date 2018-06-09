@@ -31,6 +31,7 @@ public class Transpiler {
 	Stack<String> lines;
 	StringBuilder line;
 	String indents;
+	boolean supportsDestructuring = false;
 	
 	public Transpiler(Context context) {
 		this.context = context;
@@ -176,6 +177,14 @@ public class Transpiler {
 		} catch(Throwable t) {
 			throw new RuntimeException("While appending script: " + path, t);
 		}
+	}
+
+	public void supportsDestructuring(boolean set) {
+		supportsDestructuring = set;
+	}
+	
+	public boolean supportsDestructuring() {
+		return supportsDestructuring;
 	}
 
 
