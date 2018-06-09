@@ -11,7 +11,6 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.expression.IExpression;
-import prompto.intrinsic.PromptoList;
 import prompto.runtime.Context;
 import prompto.type.CharacterType;
 import prompto.type.DecimalType;

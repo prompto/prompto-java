@@ -4,8 +4,6 @@ import java.util.Collection;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
-import prompto.compiler.IOperand;
-import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
@@ -14,9 +12,7 @@ import prompto.expression.IExpression;
 import prompto.intrinsic.PromptoList;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
-import prompto.type.DecimalType;
 import prompto.type.MissingType;
-import prompto.type.TextType;
 import prompto.utils.CodeWriter;
 import prompto.utils.ExpressionList;
 import prompto.value.IValue;
