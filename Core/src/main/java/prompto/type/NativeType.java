@@ -1,8 +1,10 @@
 package prompto.type;
 
+import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 
 public abstract class NativeType extends BaseType {
 
@@ -58,5 +60,16 @@ public abstract class NativeType extends BaseType {
 		return false;
 	}
 	
+	@Override
+	public void declareSorted(Transpiler transpiler, IExpression key) {
+		// nothing to do
+	}
+
+	@Override
+	public void transpileSorted(Transpiler transpiler, boolean descending, IExpression key) {
+	    if(descending)
+	        transpiler.append("function(o1, o2) { return o1 === o2 ? 0 : o1 > o2 ? -1 : 1; }");
+	}
+
 
 }

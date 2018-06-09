@@ -247,4 +247,12 @@ public class DateType extends NativeType {
 	    transpiler.append(")");
 	    return false;
 	}
+	
+	@Override
+	public void transpileSorted(Transpiler transpiler, boolean descending, IExpression key) {
+	    if(descending)
+	        transpiler.append("function(o1, o2) { return o1.equals(o2) ? 0 : o1.gt(o2) ? -1 : 1; }");
+	    else
+	        transpiler.append("function(o1, o2) { return o1.equals(o2) ? 0 : o1.gt(o2) ? 1 : -1; }");
+	}
 }

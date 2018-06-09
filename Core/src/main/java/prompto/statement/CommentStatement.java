@@ -5,6 +5,7 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
@@ -80,5 +81,15 @@ public class CommentStatement extends BaseStatement {
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		// nathing to do
 		return new ResultInfo(void.class);
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		// nothing to do
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		return true;
 	}
 }

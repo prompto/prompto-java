@@ -245,6 +245,14 @@ public interface IType {
 		throw new UnsupportedOperationException("transpileContainsAny " + this.getClass().getName());
 	}
 
+	default void declareSorted(Transpiler transpiler, IExpression key) {
+		throw new UnsupportedOperationException("declareSorted " + this.getClass().getName());
+	}
+
+	default void transpileSorted(Transpiler transpiler, boolean descending, IExpression key) {
+		throw new UnsupportedOperationException("transpileSorted " + this.getClass().getName());
+	}
+
 
 
 }

@@ -57,7 +57,11 @@ public class JSSet {
 		public JSSet JSSet() {
 			return JSSet.this;
 		}
-		
+	
+		public int getLength() {
+			return set.size();
+		}
+
 		public Object next() {
 			SetIteration iter = new SetIteration();
 			if(iterator.hasNext()) {

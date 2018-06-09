@@ -25,15 +25,14 @@ public class JSEngine {
 	
 	public static void executeMainNoArgs(Context context) throws Exception {
 		IMethodDeclaration method = MethodLocator.locateMethod(context, new Identifier("main"), new DictLiteral(false));
-		String js = Transpiler.transpileMethod(context, method, "ObjectAssign", "ObjectIs", "StringRepeat", "StringIncludes", "ArrayIncludes");
+		String js = Transpiler.transpileMethod(context, method, "ObjectAssign", "ObjectIs", "StringRepeat", "StringIncludes", "ArrayFrom", "ArrayIncludes");
 		try(OutputStream output = new FileOutputStream("transpiled.js")) {
 			output.write(js.getBytes());
 		}
 		List<String> lines = Arrays.asList(
 				js,
-				"Array.from = function(values) { return Java.from(Java.type('prompto.transpiler.JSArray').from(values)); };",
+				// "Array.from = function(values) { return Java.from(Java.type('prompto.transpiler.JSArray').from(values)); };",
 				"var Set = Java.type('prompto.transpiler.JSSet');",
-				// "Object.defineProperty(Set, 'size', { get : function() { return this.length(); } });",
 				"var process = { stdout: { write: print } };",
 				"var method = main$Text_dict;"
 				);

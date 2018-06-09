@@ -664,4 +664,5 @@ public class TextType extends NativeType {
 	    transpiler.append("-1]");
 		return false;
 	}
+	
 }
