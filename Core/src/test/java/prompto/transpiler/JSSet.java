@@ -1,12 +1,13 @@
 package prompto.transpiler;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
-import jdk.nashorn.api.scripting.ScriptUtils;
 
 @SuppressWarnings("restriction")
 public class JSSet {
@@ -15,14 +16,20 @@ public class JSSet {
 	
 	public JSSet(Object values) {
 		if(values instanceof ScriptObjectMirror) {
-			Object[] array = (Object[]) ScriptUtils.convert(values, Object[].class);
-			set.addAll(Arrays.asList(array));
+			List<Object> list = convert((ScriptObjectMirror)values);
+			set.addAll(list);
 		} else if(values instanceof JSSet) {
 			set.addAll(((JSSet)values).set);
 		} else if(values != null)
 			throw new UnsupportedOperationException(values.getClass().getName());
 	}
 	
+	private List<Object> convert(ScriptObjectMirror values) {
+		return values.entrySet().stream()
+				.map(Map.Entry::getValue)
+				.collect(Collectors.toList());
+	}
+
 	public int getSize() {
 		return set.size();
 	}

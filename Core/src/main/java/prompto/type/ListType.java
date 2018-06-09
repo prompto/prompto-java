@@ -159,6 +159,12 @@ public class ListType extends ContainerType {
 	}
 	
 	@Override
+	public void declare(Transpiler transpiler) {
+		// nothing to do
+	}
+	
+	
+	@Override
 	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
 	    if((other instanceof ListType || other instanceof SetType) && this.getItemType().equals(((ContainerType)other).getItemType())) {
 	        left.declare(transpiler);
@@ -205,4 +211,42 @@ public class ListType extends ContainerType {
 	    } else
 	        return super.transpileMultiply(transpiler, other, tryReverse, left, right);
 	}
+	
+	@Override
+	public void declareContains(Transpiler transpiler, IType other, IExpression container, IExpression item) {
+	    container.declare(transpiler);
+	    item.declare(transpiler);
+	}
+	
+	@Override
+	public void transpileContains(Transpiler transpiler, IType other, IExpression container, IExpression item) {
+	    container.transpile(transpiler);
+	    transpiler.append(".includes(");
+	    item.transpile(transpiler);
+	    transpiler.append(")");
+	}
+	
+	@Override
+	public void declareContainsAllOrAny(Transpiler transpiler, IType other, IExpression container, IExpression items) {
+	   transpiler.require("StrictSet");
+	   container.declare(transpiler);
+	   items.declare(transpiler);
+	}
+	
+	@Override
+	public void transpileContainsAll(Transpiler transpiler, IType other, IExpression container, IExpression items) {
+	    container.transpile(transpiler);
+	    transpiler.append(".hasAll(");
+	    items.transpile(transpiler);
+	    transpiler.append(")");
+	}
+	
+	@Override
+	public void transpileContainsAny(Transpiler transpiler, IType other, IExpression container, IExpression items) {
+	    container.transpile(transpiler);
+	    transpiler.append(".hasAny(");
+	    items.transpile(transpiler);
+	    transpiler.append(")");
+	}
+	
 }

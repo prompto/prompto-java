@@ -126,6 +126,11 @@ public class DateType extends NativeType {
 	}
 	
 	@Override
+	public void declare(Transpiler transpiler) {
+		transpiler.require("LocalDate");
+	}
+	
+	@Override
 	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
 	    if (other == PeriodType.instance()) {
 	        left.declare(transpiler);
@@ -204,5 +209,25 @@ public class DateType extends NativeType {
 		default:
 	        super.transpileMember(transpiler, name);
 	    }
+	}
+	
+	@Override
+	public void declareRange(Transpiler transpiler, IType other) {
+	    if(other == DateType.instance()) {
+	        transpiler.require("Range");
+	        transpiler.require("DateRange");
+	    } else {
+	        super.declareRange(transpiler, other);
+	    }
+	}
+	
+	@Override
+	public boolean transpileRange(Transpiler transpiler, IExpression first, IExpression last) {
+	    transpiler.append("new DateRange(");
+	    first.transpile(transpiler);
+	    transpiler.append(",");
+	    last.transpile(transpiler);
+	    transpiler.append(")");
+	    return false;
 	}
 }

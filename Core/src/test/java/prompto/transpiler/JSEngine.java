@@ -25,7 +25,7 @@ public class JSEngine {
 	
 	public static void executeMainNoArgs(Context context) throws Exception {
 		IMethodDeclaration method = MethodLocator.locateMethod(context, new Identifier("main"), new DictLiteral(false));
-		String js = Transpiler.transpileMethod(context, method, "ObjectAssign", "StringRepeat");
+		String js = Transpiler.transpileMethod(context, method, "ObjectAssign", "ObjectIs", "StringRepeat", "StringIncludes", "ArrayIncludes");
 		try(OutputStream output = new FileOutputStream("transpiled.js")) {
 			output.write(js.getBytes());
 		}

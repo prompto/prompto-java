@@ -112,6 +112,11 @@ public class CharacterType extends NativeType {
 			throw new InvalidParameterException(value.toString());
 		return new Character(value.asText().charAt(0));
 	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		// nothing to do
+	}
 
 	@Override
 	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
@@ -164,4 +169,25 @@ public class CharacterType extends NativeType {
 	    	super.transpileMember(transpiler, name);
 	}
 
+	@Override
+	public void declareRange(Transpiler transpiler, IType other) {
+	    if(other == CharacterType.instance()) {
+	        transpiler.require("Range");
+	        transpiler.require("IntegerRange");
+	        transpiler.require("CharacterRange");
+	    } else {
+	        super.declareRange(transpiler, other);
+	    }
+	}
+	
+	
+	@Override
+	public boolean transpileRange(Transpiler transpiler, IExpression first, IExpression last) {
+	    transpiler.append("new CharacterRange(");
+	    first.transpile(transpiler);
+	    transpiler.append(",");
+	    last.transpile(transpiler);
+	    transpiler.append(")");
+	    return false;
+	}
 }

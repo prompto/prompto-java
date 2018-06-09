@@ -537,25 +537,27 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
         case EQUALS:
             this.transpileEquals(transpiler);
             break;
-            /*
-        case EqOp.NOT_EQUALS:
+        case NOT_EQUALS:
             this.transpileNotEquals(transpiler);
             break;
-        case EqOp.ROUGHLY:
+        case ROUGHLY:
             this.transpileRoughly(transpiler);
             break;
+            /*
         case EqOp.CONTAINS:
             this.transpileContains(transpiler);
             break;
         case EqOp.NOT_CONTAINS:
             this.transpileNotContains(transpiler);
             break;
-        case EqOp.IS:
+            */
+        case IS:
             this.transpileIs(transpiler);
             break;
-        case EqOp.IS_NOT:
+        case IS_NOT:
             this.transpileIsNot(transpiler);
             break;
+            /*
         case EqOp.IS_A:
             this.transpileIsA(transpiler);
             break;
@@ -566,6 +568,28 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 	    return false;
     }
 
+	private void transpileRoughly(Transpiler transpiler) {
+	    transpiler.append("removeAccents(");
+	    this.left.transpile(transpiler);
+	    transpiler.append(").toLowerCase() === removeAccents(");
+	    this.right.transpile(transpiler);
+	    transpiler.append(").toLowerCase()");
+	}
+
+	private void transpileIsNot(Transpiler transpiler) {
+	    this.left.transpile(transpiler);
+	    transpiler.append(" !== ");
+	    this.right.transpile(transpiler);
+	}
+
+	private void transpileIs(Transpiler transpiler) {
+	    this.left.transpile(transpiler);
+	    transpiler.append(" === ");
+	    this.right.transpile(transpiler);
+	}
+	
+	
+
 	private void transpileEquals(Transpiler transpiler) {
 	    IType lt = this.left.check(transpiler.getContext());
 	    if(lt == BooleanType.instance() || lt == IntegerType.instance() || lt == DecimalType.instance() || lt == CharacterType.instance() || lt == TextType.instance()) {
@@ -573,6 +597,21 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 	        transpiler.append(" === ");
 	        this.right.transpile(transpiler);
 	    } else {
+	        this.left.transpile(transpiler);
+	        transpiler.append(".equals(");
+	        this.right.transpile(transpiler);
+	        transpiler.append(")");
+	    }
+	}
+
+	private void transpileNotEquals(Transpiler transpiler) {
+	    IType lt = this.left.check(transpiler.getContext());
+	    if(lt == BooleanType.instance() || lt == IntegerType.instance() || lt == DecimalType.instance() || lt == CharacterType.instance() || lt == TextType.instance()) {
+	        this.left.transpile(transpiler);
+	        transpiler.append(" !== ");
+	        this.right.transpile(transpiler);
+	    } else {
+	    	transpiler.append("!");
 	        this.left.transpile(transpiler);
 	        transpiler.append(".equals(");
 	        this.right.transpile(transpiler);

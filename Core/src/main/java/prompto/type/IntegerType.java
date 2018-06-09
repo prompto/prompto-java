@@ -430,5 +430,25 @@ public class IntegerType extends NativeType implements INumberType {
 	    right.transpile(transpiler);
 	    return false;
 	}
+	
+	@Override
+	public void declareRange(Transpiler transpiler, IType other) {
+	   if(other == IntegerType.instance()) {
+	        transpiler.require("Range");
+	        transpiler.require("IntegerRange");
+	    } else {
+	        super.declareRange(transpiler, other);
+	    }	
+   }
+	
+	@Override
+	public boolean transpileRange(Transpiler transpiler, IExpression first, IExpression last) {
+	    transpiler.append("new IntegerRange(");
+	    first.transpile(transpiler);
+	    transpiler.append(",");
+	    last.transpile(transpiler);
+	    transpiler.append(")");
+	    return false;
+	}
 
 }

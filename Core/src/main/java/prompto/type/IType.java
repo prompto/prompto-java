@@ -217,6 +217,34 @@ public interface IType {
 		throw new UnsupportedOperationException("transpileItem " + this.getClass().getName());
 	}
 
+	default void declareRange(Transpiler transpiler, IType lastType) {
+		throw new UnsupportedOperationException("declareRange " + this.getClass().getName());
+	}
+
+	default boolean transpileRange(Transpiler transpiler, IExpression first, IExpression last) {
+		throw new UnsupportedOperationException("transpileRange " + this.getClass().getName());
+	}
+
+	default void declareContains(Transpiler transpiler, IType other, IExpression container, IExpression item)  {
+		throw new UnsupportedOperationException("declareContains " + this.getClass().getName());
+	}
+
+	default void transpileContains(Transpiler transpiler, IType other, IExpression container, IExpression item) {
+		throw new UnsupportedOperationException("transpileContains " + this.getClass().getName());
+	}
+
+	default void declareContainsAllOrAny(Transpiler transpiler, IType other, IExpression container, IExpression items)  {
+		throw new UnsupportedOperationException("declareContainsAllOrAny " + this.getClass().getName());
+	}
+
+	default void transpileContainsAll(Transpiler transpiler, IType other, IExpression container, IExpression items) {
+		throw new UnsupportedOperationException("transpileContainsAll " + this.getClass().getName());
+	}
+
+	default void transpileContainsAny(Transpiler transpiler, IType other, IExpression container, IExpression items) {
+		throw new UnsupportedOperationException("transpileContainsAny " + this.getClass().getName());
+	}
+
 
 
 }

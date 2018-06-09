@@ -31,6 +31,7 @@ import prompto.store.AttributeInfo;
 import prompto.store.IQueryBuilder;
 import prompto.store.IStore;
 import prompto.store.IQueryBuilder.MatchOp;
+import prompto.transpiler.Transpiler;
 import prompto.type.CharacterType;
 import prompto.type.ContainerType;
 import prompto.type.IType;
@@ -437,5 +438,51 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 			return null;
 	}
 
-
+	@Override
+	public void declare(Transpiler transpiler) {
+	    IType lt = this.left.check(transpiler.getContext());
+	    IType rt = this.right.check(transpiler.getContext());
+	    switch(this.operator) {
+	        case IN:
+	        case NOT_IN:
+	            rt.declareContains(transpiler, lt, this.right, this.left);
+	            break;
+	        case HAS:
+	        case NOT_HAS:
+	            lt.declareContains(transpiler, rt, this.left, this.right);
+	            break;
+	        default:
+	            lt.declareContainsAllOrAny(transpiler, rt, this.left, this.right);
+	    }
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		IType lt = this.left.check(transpiler.getContext());
+		IType rt = this.right.check(transpiler.getContext());
+	    switch(this.operator) {
+	        case NOT_IN:
+	            transpiler.append("!");
+	        case IN:
+	            rt.transpileContains(transpiler, lt, this.right, this.left);
+	            return false;
+	        case NOT_HAS:
+	        	transpiler.append("!");
+	        case HAS:
+	            lt.transpileContains(transpiler, rt, this.left, this.right);
+	            return false;
+	        case NOT_HAS_ALL:
+	            transpiler.append("!");
+	        case HAS_ALL:
+	            lt.transpileContainsAll(transpiler, rt, this.left, this.right);
+	            return false;
+	        case NOT_HAS_ANY:
+	            transpiler.append("!");
+	        case HAS_ANY:
+	            lt.transpileContainsAny(transpiler, rt, this.left, this.right);
+	            return false;
+	        default:
+	            throw new UnsupportedOperationException("Unsupported " + this.operator);
+	    }
+	}
 }

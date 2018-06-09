@@ -10,6 +10,14 @@ function isAText(o) {
     return typeof(o) === 'string' || o instanceof String;
 }
 
+function equalObjects(o1, o2) {
+    if(Object.is(o1, o2))
+        return true;
+    else
+        return typeof(o1)==='object' && o1.equals && o1.equals(o2);
+
+}
+
 TypeError.prototype.getText = function() { return 'Null reference!'; };
 ReferenceError.prototype.getText = function() { return 'Null reference!'; };
 RangeError.prototype.getText = function() { return 'Index out of range!'; };

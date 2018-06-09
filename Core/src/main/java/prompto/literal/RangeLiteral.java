@@ -16,6 +16,7 @@ import prompto.intrinsic.PromptoDate;
 import prompto.intrinsic.PromptoRange;
 import prompto.intrinsic.PromptoTime;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.IntegerType;
 import prompto.utils.CodeWriter;
@@ -101,6 +102,23 @@ public class RangeLiteral implements IExpression {
 		Object of = first.interpret(context);
 		Object ol = last.interpret(context);
 		return type.newRange(of,ol);
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    this.first.declare(transpiler);
+	    IType firstType = this.first.check(transpiler.getContext());
+	    firstType.declare(transpiler);
+	    this.last.declare(transpiler);
+	    IType lastType = this.last.check(transpiler.getContext());
+	    lastType.declare(transpiler);
+	    firstType.declareRange(transpiler, lastType);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		IType firstType = this.first.check(transpiler.getContext());
+	    return firstType.transpileRange(transpiler, this.first, this.last);
 	}
 
 }
