@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.Map;
 
 import prompto.expression.IExpression;
+import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
@@ -189,5 +190,18 @@ public class CharacterType extends NativeType {
 	    last.transpile(transpiler);
 	    transpiler.append(")");
 	    return false;
+	}
+	
+	@Override
+	public void declareCompare(Transpiler transpiler, IType other) {
+		// nothing to do
+	}
+	
+	@Override
+	public boolean transpileCompare(Transpiler transpiler, IType other, CmpOp operator, IExpression left, IExpression right) {
+	    left.transpile(transpiler);
+	    transpiler.append(" ").append(operator.toString()).append(" ");
+	    right.transpile(transpiler);
+		return false;
 	}
 }

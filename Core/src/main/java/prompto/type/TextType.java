@@ -21,6 +21,7 @@ import prompto.declaration.BuiltInMethodDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
+import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoString;
@@ -636,5 +637,18 @@ public class TextType extends NativeType {
 	    transpiler.append(".hasAny(");
 	    items.transpile(transpiler);
 	    transpiler.append(")");
+	}
+
+	@Override
+	public void declareCompare(Transpiler transpiler, IType other) {
+		// nothing to do
+	}
+	
+	@Override
+	public boolean transpileCompare(Transpiler transpiler, IType other, CmpOp operator, IExpression left, IExpression right) {
+	    left.transpile(transpiler);
+	    transpiler.append(" ").append(operator.toString()).append(" ");
+	    right.transpile(transpiler);
+		return false;
 	}
 }

@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.Map;
 
 import prompto.expression.IExpression;
+import prompto.grammar.CmpOp;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.store.Family;
@@ -241,5 +242,18 @@ public class DecimalType extends NativeType implements INumberType {
 	        return false;
 	    } else
 	        return super.transpileSubtract(transpiler, other, left, right);
+	}
+	
+	@Override
+	public void declareCompare(Transpiler transpiler, IType other) {
+		// nothing to do
+	}
+	
+	@Override
+	public boolean transpileCompare(Transpiler transpiler, IType other, CmpOp operator, IExpression left, IExpression right) {
+	    left.transpile(transpiler);
+	    transpiler.append(" ").append(operator.toString()).append(" ");
+	    right.transpile(transpiler);
+		return false;
 	}
 }

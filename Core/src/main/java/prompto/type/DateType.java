@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.Map;
 
 import prompto.expression.IExpression;
+import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDate;
 import prompto.parser.ISection;
@@ -227,6 +228,22 @@ public class DateType extends NativeType {
 	    first.transpile(transpiler);
 	    transpiler.append(",");
 	    last.transpile(transpiler);
+	    transpiler.append(")");
+	    return false;
+	}
+	
+	@Override
+	public void declareCompare(Transpiler transpiler, IType other) {
+		// nothing to do
+	}
+	
+	@Override
+	public boolean transpileCompare(Transpiler transpiler, IType other, CmpOp operator, IExpression left, IExpression right) {
+	    left.transpile(transpiler);
+	    transpiler.append(".");
+	    operator.transpile(transpiler);
+	    transpiler.append("(");
+	    right.transpile(transpiler);
 	    transpiler.append(")");
 	    return false;
 	}
