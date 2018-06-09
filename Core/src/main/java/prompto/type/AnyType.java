@@ -19,6 +19,7 @@ import prompto.intrinsic.PromptoDocument;
 import prompto.intrinsic.PromptoList;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 import prompto.value.IValue;
 
 
@@ -101,6 +102,40 @@ public class AnyType extends NativeType {
 			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
+	}
+	
+	@Override
+	public void declareItem(Transpiler transpiler, IType itemType, IExpression item) {
+	    // required to support Document items
+		itemType.declare(transpiler);
+	    item.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpileItem(Transpiler transpiler, IType itemType, IExpression item) {
+	    // required to support Document items
+	    transpiler.append(".item(");
+	    item.transpile(transpiler);
+	    transpiler.append(")");
+	    return false;
+	}
+	
+	@Override
+	public void transpileAssignMemberValue(Transpiler transpiler, String name, IExpression expression) {
+	    // required to support Document members
+	    transpiler.append(".setMember('").append(name).append("', ");
+	    expression.transpile(transpiler);
+	    transpiler.append(")");
+	}
+	
+	@Override
+	public void transpileAssignItemValue(Transpiler transpiler, IExpression item, IExpression expression) {
+	    // required to support Document members
+	    transpiler.append(".setItem(");
+	    item.transpile(transpiler);
+	    transpiler.append(", ");
+	    expression.transpile(transpiler);
+	    transpiler.append(")");
 	}
 
 }

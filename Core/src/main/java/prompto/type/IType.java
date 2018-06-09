@@ -189,9 +189,19 @@ public interface IType {
 		throw new UnsupportedOperationException("transpileSubtract " + this.getClass().getName());
 	}
 
-	default void transpileAssignMemberValue(Transpiler transpiler, String name, IExpression expression)  { 
+	default void transpileAssignMember(Transpiler transpiler, String name)   { 
+		throw new UnsupportedOperationException("transpileAssignMember " + this.getClass().getName());
+	}
+
+
+	default void transpileAssignMemberValue(Transpiler transpiler, String name, IExpression expression) { 
 		throw new UnsupportedOperationException("transpileAssignMemberValue " + this.getClass().getName());
 	}
+
+	default void transpileAssignItemValue(Transpiler transpiler, IExpression item, IExpression expression) { 
+		throw new UnsupportedOperationException("transpileAssignItemValue " + this.getClass().getName());
+	}
+
 
 	default void declareSlice(Transpiler transpiler, IExpression first, IExpression last)   { 
 		throw new UnsupportedOperationException("declareSlice " + this.getClass().getName());

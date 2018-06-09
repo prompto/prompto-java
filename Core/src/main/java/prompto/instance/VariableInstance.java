@@ -155,6 +155,11 @@ public class VariableInstance implements IAssignableInstance {
 	}
 	
 	@Override
+	public void transpile(Transpiler transpiler) {
+		transpiler.append(this.getName());
+	}
+	
+	@Override
 	public void declareAssign(Transpiler transpiler, IExpression expression) {
 		Context context = transpiler.getContext();
 	   if(context.getRegisteredValue(INamed.class, this.getId())==null) {

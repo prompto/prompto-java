@@ -202,6 +202,11 @@ public class MemberInstance implements IAssignableSelector {
 	
 	
 	@Override
+	public void declare(Transpiler transpiler) {
+		this.parent.declare(transpiler);
+	}
+	
+	@Override
 	public void declareAssign(Transpiler transpiler, IExpression expression) {
 		parent.declare(transpiler);
 	    expression.declare(transpiler);
@@ -212,6 +217,13 @@ public class MemberInstance implements IAssignableSelector {
 	    IType parentType = this.parent.check(transpiler.getContext());
 	    this.parent.transpileAssignParent(transpiler);
 	    parentType.transpileAssignMemberValue(transpiler, getName(), expression);
+	}
+	
+	@Override
+	public void transpileAssignParent(Transpiler transpiler) {
+		IType parentType = this.parent.check(transpiler.getContext());
+	    this.parent.transpileAssignParent(transpiler);
+	    parentType.transpileAssignMember(transpiler, getName());
 	}
 	
 }

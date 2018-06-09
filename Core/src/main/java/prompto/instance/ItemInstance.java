@@ -19,6 +19,7 @@ import prompto.intrinsic.PromptoDocument;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoTuple;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.AnyType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -159,5 +160,34 @@ public class ItemInstance implements IAssignableSelector {
 		IType parentType = this.parent.check(context);
 		IType itemType = this.item.check(context);
 	    return parentType.checkItem(context, itemType);
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    this.parent.declare(transpiler);
+	    this.item.declare(transpiler);
+	}
+	
+	@Override
+	public void declareAssign(Transpiler transpiler, IExpression expression) {
+	    this.parent.declare(transpiler);
+	    this.item.declare(transpiler);
+	    expression.declare(transpiler);
+	}
+	
+	
+	@Override
+	public void transpileAssign(Transpiler transpiler, IExpression expression) {
+	    IType parentType = this.parent.check(transpiler.getContext());
+	    this.parent.transpileAssignParent(transpiler);
+	    parentType.transpileAssignItemValue(transpiler, this.item, expression);
+	}
+	
+	@Override
+	public void transpileAssignParent(Transpiler transpiler) {
+	    this.parent.transpileAssignParent(transpiler);
+	    transpiler.append(".getItem(");
+	    this.item.transpile(transpiler);
+	    transpiler.append(", true)");
 	}
 }

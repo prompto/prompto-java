@@ -17,6 +17,7 @@ import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.intrinsic.PromptoBinary;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.BlobType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -103,5 +104,23 @@ public class BlobExpression implements IExpression {
 			writer.append(')');
 			break;
 		}
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    this.source.declare(transpiler);
+	    transpiler.require("Blob");
+	    transpiler.require("Document");
+	    transpiler.require("getUtf8CharLength");
+	    transpiler.require("stringToUtf8Buffer");
+	    transpiler.require("utf8BufferToString");
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    transpiler.append("Blob.ofValue(");
+	    this.source.transpile(transpiler);
+	    transpiler.append(")");
+		return false;
 	}
 }

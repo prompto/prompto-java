@@ -103,8 +103,47 @@ public class DocumentType extends NativeType {
 	
 	
 	@Override
+	public void declareMember(Transpiler transpiler, String name) {
+		// nothing to do
+	}
+	
+	
+	@Override
+	public void transpileMember(Transpiler transpiler, String name) {
+	    if (!"text".equals(name)) {
+	        transpiler.append(name);
+	    } else {
+	        transpiler.append("getText()");
+	    }
+	}
+	
+	@Override
+	public void transpileAssignMember(Transpiler transpiler, String name) {
+		transpiler.append(".getMember('").append(name).append("', true)");
+	}
+	
+	
+	@Override
 	public void transpileAssignMemberValue(Transpiler transpiler, String name, IExpression expression) {
 	    transpiler.append(".setMember('").append(name).append("', ");
+	    expression.transpile(transpiler);
+	    transpiler.append(")");
+	}
+	
+	
+	@Override
+	public boolean transpileItem(Transpiler transpiler, IType itemType, IExpression item) {
+	    transpiler.append(".item(");
+	    item.transpile(transpiler);
+	    transpiler.append(")");
+		return false;
+	}
+	
+	@Override
+	public void transpileAssignItemValue(Transpiler transpiler, IExpression item, IExpression expression) {
+	    transpiler.append(".setItem(");
+	    item.transpile(transpiler);
+	    transpiler.append(", ");
 	    expression.transpile(transpiler);
 	    transpiler.append(")");
 	}
