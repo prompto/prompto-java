@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import prompto.error.ExecutionError;
 import prompto.error.PromptoError;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.TypeMap;
 import prompto.type.VoidType;
@@ -115,6 +116,15 @@ public abstract class BaseSwitchStatement extends BaseStatement {
 		if(toThrow!=null)
 			throw toThrow;
 		return null;
+	}
+
+	protected void declareSwitch(Transpiler transpiler) {
+	    this.switchCases.forEach( kase -> {
+	        kase.declare(transpiler);
+	    });
+	    if(this.defaultCase!=null) {
+	        this.defaultCase.declare(transpiler);
+	    }
 	}
 
 }

@@ -406,6 +406,7 @@ public class IfStatement extends BaseStatement {
 		    else
 		        transpiler = transpiler.newChildTranspiler(null);
 		    this.statements.transpile(transpiler);
+		    transpiler.flush();
 		    return false;
 		}
 	}

@@ -4,6 +4,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
@@ -78,5 +79,14 @@ public class AtomicSwitchCase extends SwitchCase {
 	@Override
 	public void catchToEDialect(CodeWriter writer) {
 		caseToEDialect(writer); // no difference
+	}
+	
+	@Override
+	public void transpile(Transpiler transpiler) {
+	    transpiler.append("case ");
+	    this.expression.transpile(transpiler);
+	    transpiler.append(":").indent();
+	    this.statements.transpile(transpiler);
+	    transpiler.append("break;").dedent();
 	}
 }

@@ -1,5 +1,7 @@
 package prompto.literal;
 
+import java.util.Collection;
+
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.IOperand;
@@ -12,59 +14,33 @@ import prompto.expression.IExpression;
 import prompto.intrinsic.PromptoList;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
-import prompto.type.CharacterType;
 import prompto.type.DecimalType;
-import prompto.type.IType;
-import prompto.type.IntegerType;
-import prompto.type.ListType;
 import prompto.type.MissingType;
 import prompto.type.TextType;
 import prompto.utils.CodeWriter;
 import prompto.utils.ExpressionList;
-import prompto.utils.TypeUtils;
-import prompto.value.Character;
-import prompto.value.Decimal;
 import prompto.value.IValue;
-import prompto.value.Integer;
 import prompto.value.ListValue;
 
-public class ListLiteral extends Literal<ListValue> {
+public class ListLiteral extends ContainerLiteral<ListValue> {
 
 	private static String getText(ExpressionList expressions, boolean mutable) {
 		return (mutable ? "mutable " : "") 
 				+ (expressions==null ? "[]" : "[" + expressions.toString() + "]");
 	}
 	
-	boolean mutable;
-	IType itemType = null;
-	ExpressionList expressions = null;
-	
 	public ListLiteral(boolean mutable) {
-		super(()->getText(null, mutable),new ListValue(MissingType.instance()));
-		this.mutable = mutable;
+		super(()->getText(null, mutable), new ListValue(MissingType.instance()), null, mutable);
 	}
 	
 	public ListLiteral(ExpressionList expressions, boolean mutable) {
-		super(()->getText(expressions, mutable),new ListValue(MissingType.instance()));
-		this.expressions = expressions;
-		this.mutable = mutable;
+		super(()->getText(expressions, mutable), new ListValue(MissingType.instance()), expressions, mutable);
 	}
 	
-	public boolean isMutable() {
-		return mutable;
-	}
-
 	@Override
-	public IType check(Context context) {
-		if(itemType==null) {
-			if(expressions!=null)
-				itemType = TypeUtils.inferElementType(context, expressions);
-			else
-				itemType = TypeUtils.inferValuesType(context, value.getItems());
-		}
-		return new ListType(itemType); 
+	protected Collection<IValue> getItems() {
+		return value.getItems();
 	}
-
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
@@ -81,21 +57,6 @@ public class ListLiteral extends Literal<ListValue> {
 			return value;
 	}
 
-	private IValue interpretPromotion(IValue item) {
-		if(item==null)
-			return item;
-		if(DecimalType.instance()==itemType && item.getType()==IntegerType.instance())
-			return new Decimal(((Integer)item).doubleValue());
-		else if(TextType.instance()==itemType && item.getType()==CharacterType.instance())
-			return ((Character)item).asText();
-		else
-			return item;
-	}
-
-	public ExpressionList getExpressions() {
-		return expressions;
-	}
-	
 	@Override
 	public void toDialect(CodeWriter writer) {
 		if(mutable)
@@ -115,36 +76,10 @@ public class ListLiteral extends Literal<ListValue> {
 		method.addInstruction(mutable ? Opcode.ICONST_1 : Opcode.ICONST_0);
 		CompilerUtils.compileCallConstructor(method, PromptoList.class, boolean.class);
 		if(expressions!=null)
-			compileItems(context, method);
+			compileItems(context, method, PromptoList.class);
 		return info;
 	}
 
-	private void compileItems(Context context, MethodInfo method) {
-		Flags flags = new Flags();
-		flags.withPrimitive(true);
-		for(IExpression e : expressions) {
-			method.addInstruction(Opcode.DUP); // need to keep a reference to the list on top of stack
-			ResultInfo info = e.compile(context, method, flags);
-			compilePromotion(method, info);
-			IOperand c = new MethodConstant(PromptoList.class, "add", 
-					Object.class, boolean.class);
-			method.addInstruction(Opcode.INVOKEVIRTUAL, c);
-			method.addInstruction(Opcode.POP); // consume the returned boolean
-		}
-	}
-	
-	private ResultInfo compilePromotion(MethodInfo method, ResultInfo info) {
-		if(DecimalType.instance()==itemType && Long.class==info.getType())
-			return CompilerUtils.LongToDouble(method);
-		else if(TextType.instance()==itemType) {
-			if(char.class==info.getType())
-				return CompilerUtils.charToString(method);
-			else if(java.lang.Character.class==info.getType())
-				return CompilerUtils.CharacterToString(method);
-		}
-		return info;
-	}
-	
 	@Override
 	public void declare(Transpiler transpiler) {
 	    transpiler.require("List");
