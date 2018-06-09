@@ -35,6 +35,7 @@ import prompto.store.AttributeInfo;
 import prompto.store.IQueryBuilder;
 import prompto.store.IQueryBuilder.MatchOp;
 import prompto.store.IStore;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.Boolean;
@@ -297,6 +298,22 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 		method.restoreFullStackState(finalState);
 		method.placeLabel(finalState);
 		method.inhibitOffsetListener(finalListener);
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    this.left.declare(transpiler);
+	    this.right.declare(transpiler);
+	    IType lt = this.left.check(transpiler.getContext());
+	    IType rt = this.right.check(transpiler.getContext());
+	    lt.declareCompare(transpiler, rt);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		IType lt = this.left.check(transpiler.getContext());
+		IType rt = this.right.check(transpiler.getContext());
+	    return lt.transpileCompare(transpiler, rt, this.operator, this.left, this.right);
 	}
 
 }

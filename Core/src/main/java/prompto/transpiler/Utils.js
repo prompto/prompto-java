@@ -1,3 +1,11 @@
+function isAnInteger(o) {
+    return typeof(o) === "number" && o === Math.floor(o);
+}
+
+function isADecimal(o) {
+    return typeof(o) === "number" && o !== Math.floor(o);
+}
+
 function isAText(o) {
     return typeof(o) === 'string' || o instanceof String;
 }

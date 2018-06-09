@@ -21,6 +21,7 @@ import prompto.declaration.BuiltInMethodDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
+import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoLong;
 import prompto.parser.ISection;
@@ -275,6 +276,11 @@ public class IntegerType extends NativeType implements INumberType {
 	}
 	
 	@Override
+	public void declare(Transpiler transpiler) {
+		// nothing to do
+	}
+	
+	@Override
 	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
 	    if (other == IntegerType.instance() || other == DecimalType.instance()) {
 	        left.declare(transpiler);
@@ -410,6 +416,19 @@ public class IntegerType extends NativeType implements INumberType {
 	        return false;
 	    } else
 	        return super.transpileSubtract(transpiler, other, left, right);
+	}
+	
+	@Override
+	public void declareCompare(Transpiler transpiler, IType rt) {
+		// nothing to do
+	}
+	
+	@Override
+	public boolean transpileCompare(Transpiler transpiler, IType other, CmpOp operator, IExpression left, IExpression right) {
+	    left.transpile(transpiler);
+	    transpiler.append(" ").append(operator.toString()).append(" ");
+	    right.transpile(transpiler);
+	    return false;
 	}
 
 }

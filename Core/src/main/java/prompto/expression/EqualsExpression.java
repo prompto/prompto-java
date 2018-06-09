@@ -45,11 +45,14 @@ import prompto.store.AttributeInfo;
 import prompto.store.IQueryBuilder;
 import prompto.store.IQueryBuilder.MatchOp;
 import prompto.store.IStore;
+import prompto.transpiler.Transpiler;
 import prompto.type.AnyType;
 import prompto.type.BooleanType;
 import prompto.type.CharacterType;
 import prompto.type.ContainerType;
+import prompto.type.DecimalType;
 import prompto.type.IType;
+import prompto.type.IntegerType;
 import prompto.type.TextType;
 import prompto.utils.CodeWriter;
 import prompto.value.Boolean;
@@ -519,5 +522,62 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 		return tester.compile(context, method, flags, lval, right);
 	}
 
+	@Override
+	public void declare(Transpiler transpiler) {
+	    this.left.declare(transpiler);
+	    this.right.declare(transpiler);
+	    if(this.operator == EqOp.ROUGHLY) {
+	        transpiler.require("removeAccents");
+	    }
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    switch (this.operator) {
+        case EQUALS:
+            this.transpileEquals(transpiler);
+            break;
+            /*
+        case EqOp.NOT_EQUALS:
+            this.transpileNotEquals(transpiler);
+            break;
+        case EqOp.ROUGHLY:
+            this.transpileRoughly(transpiler);
+            break;
+        case EqOp.CONTAINS:
+            this.transpileContains(transpiler);
+            break;
+        case EqOp.NOT_CONTAINS:
+            this.transpileNotContains(transpiler);
+            break;
+        case EqOp.IS:
+            this.transpileIs(transpiler);
+            break;
+        case EqOp.IS_NOT:
+            this.transpileIsNot(transpiler);
+            break;
+        case EqOp.IS_A:
+            this.transpileIsA(transpiler);
+            break;
+            */
+        default:
+            throw new Error("Cannot transpile:" + this.operator.toString());
+	    }
+	    return false;
+    }
+
+	private void transpileEquals(Transpiler transpiler) {
+	    IType lt = this.left.check(transpiler.getContext());
+	    if(lt == BooleanType.instance() || lt == IntegerType.instance() || lt == DecimalType.instance() || lt == CharacterType.instance() || lt == TextType.instance()) {
+	        this.left.transpile(transpiler);
+	        transpiler.append(" === ");
+	        this.right.transpile(transpiler);
+	    } else {
+	        this.left.transpile(transpiler);
+	        transpiler.append(".equals(");
+	        this.right.transpile(transpiler);
+	        transpiler.append(")");
+	    }
+	}
 
 }

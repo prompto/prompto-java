@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDict;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 
 public class EntryType extends BaseType {
 
@@ -55,6 +56,21 @@ public class EntryType extends BaseType {
 	@Override
 	public boolean isMoreSpecificThan(Context context, IType other) {
 		throw new RuntimeException("Should never get there!");
+	}
+	
+	@Override
+	public void declareMember(Transpiler transpiler, String name) {
+	    if ("key".equals(name))
+	        return;
+	    else if ("value".equals(name))
+	        this.itemType.declare(transpiler);
+	    else
+	        super.declareMember(transpiler, name);
+	}
+	
+	@Override
+	public void transpileMember(Transpiler transpiler, String name) {
+		transpiler.append(name);
 	}
 
 }

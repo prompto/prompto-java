@@ -91,4 +91,25 @@ public class TupleType extends ContainerType {
 	    }
 	}
 	
+	@Override
+	public void declareItem(Transpiler transpiler, IType itemType, IExpression item) {
+	    if(itemType==IntegerType.instance) {
+	        item.declare(transpiler);
+	    } else {
+	        super.declareItem(transpiler, itemType, item);
+	    }
+	}
+	
+	@Override
+	public boolean transpileItem(Transpiler transpiler, IType itemType, IExpression item) {
+	    if(itemType==IntegerType.instance()) {
+	        transpiler.append("[");
+	        item.transpile(transpiler);
+	        transpiler.append("-1]");
+	        return false;
+	    } else {
+	        return super.transpileItem(transpiler, itemType, item);
+	    }	
+    }
+	
 }

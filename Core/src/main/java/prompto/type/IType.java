@@ -11,6 +11,7 @@ import prompto.compiler.ResultInfo;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
+import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
@@ -198,6 +199,22 @@ public interface IType {
 
 	default boolean transpileSlice(Transpiler transpiler, IExpression first, IExpression last) {
 		throw new UnsupportedOperationException("transpileSlice " + this.getClass().getName());
+	}
+
+	default void declareCompare(Transpiler transpiler, IType other)   { 
+		throw new UnsupportedOperationException("declareCompare " + this.getClass().getName());
+	}
+
+	default boolean transpileCompare(Transpiler transpiler, IType other, CmpOp operator, IExpression left, IExpression right) {
+		throw new UnsupportedOperationException("transpileCompare " + this.getClass().getName());
+	}
+
+	default void declareItem(Transpiler transpiler, IType itemType, IExpression item) {
+		throw new UnsupportedOperationException("declareItem " + this.getClass().getName());
+	}
+
+	default boolean transpileItem(Transpiler transpiler, IType itemType, IExpression item)  {
+		throw new UnsupportedOperationException("transpileItem " + this.getClass().getName());
 	}
 
 

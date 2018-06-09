@@ -17,6 +17,7 @@ import prompto.error.SyntaxError;
 import prompto.expression.EqualsExpression;
 import prompto.expression.IExpression;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -256,6 +257,33 @@ public class IfStatement extends BaseStatement {
 		}
 	}
 
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		this.elements.forEach(e->e.declare(transpiler));
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    for(int i=0;i<this.elements.size();i++) {
+	        IfElement element = this.elements.get(i);
+	        if (i > 0)
+	            transpiler.append(" else ");
+	        if (element.condition!=null) {
+	            transpiler.append("if (");
+	            element.condition.transpile(transpiler);
+	            transpiler.append(") ");
+	        }
+	        transpiler.append("{");
+	        transpiler.indent();
+	        element.transpile(transpiler);
+	        transpiler.dedent();
+	        transpiler.append("}");
+	    }
+	    transpiler.newLine();
+	    return true;
+	}
+	
 	public static class IfElement extends BaseStatement {
 
 		IExpression condition;
@@ -354,6 +382,34 @@ public class IfStatement extends BaseStatement {
 			return context;
 		}
 
+		@Override
+		public void declare(Transpiler transpiler) {
+		    if(this.condition!=null)
+		        this.condition.declare(transpiler);
+		    Context context = transpiler.getContext();
+		    if(this.condition instanceof EqualsExpression)
+		        context = ((EqualsExpression)condition).downCastForCheck(context);
+		    if(context!=transpiler.getContext())
+		        transpiler = transpiler.newChildTranspiler(context);
+		    else
+		        transpiler = transpiler.newChildTranspiler(null);
+		    this.statements.declare(transpiler);
+		}
+		
+		@Override
+		public boolean transpile(Transpiler transpiler) {
+		    Context context = transpiler.getContext();
+		    if(this.condition instanceof EqualsExpression)
+		        context = ((EqualsExpression)condition).downCastForCheck(context);
+		    if(context!=transpiler.getContext())
+		        transpiler = transpiler.newChildTranspiler(context);
+		    else
+		        transpiler = transpiler.newChildTranspiler(null);
+		    this.statements.transpile(transpiler);
+		    return false;
+		}
 	}
+	
+
 
 }
