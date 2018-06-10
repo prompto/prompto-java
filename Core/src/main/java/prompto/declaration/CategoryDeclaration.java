@@ -349,7 +349,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		Context local = context.newInstanceContext(decl.getType(context), false).newChildContext();
 		operator.registerArguments(local);
 		IType resultType = operator.check(local, false);
-		String methodName = "operator-" + oper.name();
+		String methodName = "operator_" + oper.name();
 		InterfaceConstant c = new InterfaceConstant(left.getType(), methodName, argType.getJavaType(context), resultType.getJavaType(context));
 		method.addInstruction(Opcode.INVOKEINTERFACE, c);
 		return new ResultInfo(resultType.getJavaType(context)); 

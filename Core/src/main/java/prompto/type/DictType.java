@@ -193,4 +193,13 @@ public class DictType extends ContainerType {
 	    return false;
 	}
 	
+	@Override
+	public void transpileAssignItemValue(Transpiler transpiler, IExpression item, IExpression expression) {
+	    transpiler.append(".setItem(");
+	    item.transpile(transpiler);
+	    transpiler.append(", ");
+	    expression.transpile(transpiler);
+	    transpiler.append(")");
+	}
+	
 }

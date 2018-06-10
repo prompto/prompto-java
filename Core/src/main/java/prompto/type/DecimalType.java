@@ -262,4 +262,15 @@ public class DecimalType extends NativeType implements INumberType {
 	    right.transpile(transpiler);
 		return false;
 	}
+	
+	@Override
+	public boolean transpileModulo(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	    if(other == IntegerType.instance() || other == DecimalType.instance()) {
+	        left.transpile(transpiler);
+	        transpiler.append(" % ");
+	        right.transpile(transpiler);
+	        return false;
+	    } else
+	        return super.transpileModulo(transpiler, other, left, right);
+	}
 }

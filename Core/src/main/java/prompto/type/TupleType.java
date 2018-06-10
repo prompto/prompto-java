@@ -113,6 +113,15 @@ public class TupleType extends ContainerType {
     }
 	
 	@Override
+	public void transpileAssignItemValue(Transpiler transpiler, IExpression item, IExpression expression) {
+	    transpiler.append(".setItem(");
+	    item.transpile(transpiler);
+	    transpiler.append(", ");
+	    expression.transpile(transpiler);
+	    transpiler.append(")");
+	}
+	
+	@Override
 	public void declareContains(Transpiler transpiler, IType other, IExpression container, IExpression item) {
 	    container.declare(transpiler);
 	    item.declare(transpiler);

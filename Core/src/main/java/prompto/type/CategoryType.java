@@ -679,6 +679,13 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
+	public void transpileAssignMemberValue(Transpiler transpiler, String name, IExpression expression) {
+	    transpiler.append(".setMember('").append(name).append("', ");
+	    expression.transpile(transpiler);
+	    transpiler.append(")");
+	}
+	
+	@Override
 	public void transpileInstance(Transpiler transpiler) {
 	    IDeclaration decl = this.getDeclaration(transpiler.getContext());
 	    if(decl instanceof SingletonCategoryDeclaration)
@@ -686,4 +693,129 @@ public class CategoryType extends BaseType {
 	    else
 	        transpiler.append("this");
 	}
+	
+	@Override
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	    IType type = this.checkOperator(transpiler.getContext(), other, tryReverse, Operator.PLUS);
+	    if(type!=null) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	        type.declare(transpiler);
+	    } else
+	        super.declareAdd(transpiler, other, tryReverse, left, right);
+	}
+	
+	@Override
+	public boolean transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	    left.transpile(transpiler);
+	    transpiler.append(".operator_PLUS").append("$").append(other.getTranspiledName(transpiler.getContext())).append("(");
+	    right.transpile(transpiler);
+	    transpiler.append(")");
+	    return false;
+	}
+	
+	@Override
+	public void declareSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	    IType type = this.checkOperator(transpiler.getContext(), other, false, Operator.MINUS);
+	    if(type!=null) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	        type.declare(transpiler);
+	    } else
+	        super.declareSubtract(transpiler, other, left, right);
+	}
+	
+	
+	@Override
+	public boolean transpileSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	    left.transpile(transpiler);
+	    transpiler.append(".operator_MINUS").append("$").append(other.getTranspiledName(transpiler.getContext())).append("(");
+	    right.transpile(transpiler);
+	    transpiler.append(")");
+	    return false;
+	}
+	
+	@Override
+	public void declareMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+		IType type = this.checkOperator(transpiler.getContext(), other, tryReverse, Operator.MULTIPLY);
+	    if(type!=null) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	        type.declare(transpiler);
+	    } else
+	        super.declareMultiply(transpiler, other, tryReverse, left, right);
+	}
+	
+	@Override
+	public boolean transpileMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	    left.transpile(transpiler);
+	    transpiler.append(".operator_MULTIPLY").append("$").append(other.getTranspiledName(transpiler.getContext())).append("(");
+	    right.transpile(transpiler);
+	    transpiler.append(")");
+	    return false;
+	}
+	
+	@Override
+	public void declareDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+		IType type = this.checkOperator(transpiler.getContext(), other, false, Operator.DIVIDE);
+	    if(type!=null) {
+	    	transpiler.require("divide");
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	        type.declare(transpiler);
+	    } else
+	        super.declareDivide(transpiler, other, left, right);
+	}
+	
+	@Override
+	public boolean transpileDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	    left.transpile(transpiler);
+	    transpiler.append(".operator_DIVIDE").append("$").append(other.getTranspiledName(transpiler.getContext())).append("(");
+	    right.transpile(transpiler);
+	    transpiler.append(")");
+	    return false;
+	}
+	
+	@Override
+	public void declareIntDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+		IType type = this.checkOperator(transpiler.getContext(), other, false, Operator.IDIVIDE);
+	    if(type!=null) {
+	    	transpiler.require("divide");
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	        type.declare(transpiler);
+	    } else
+	        super.declareIntDivide(transpiler, other, left, right);
+	}
+	
+	@Override
+	public boolean transpileIntDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	    left.transpile(transpiler);
+	    transpiler.append(".operator_IDIVIDE").append("$").append(other.getTranspiledName(transpiler.getContext())).append("(");
+	    right.transpile(transpiler);
+	    transpiler.append(")");
+	    return false;
+	}
+	
+	@Override
+	public void declareModulo(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+		IType type = this.checkOperator(transpiler.getContext(), other, false, Operator.MODULO);
+	    if(type!=null) {
+	    	transpiler.require("divide");
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	        type.declare(transpiler);
+	    } else
+	        super.declareModulo(transpiler, other, left, right);
+	}
+	
+	@Override
+	public boolean transpileModulo(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	    left.transpile(transpiler);
+	    transpiler.append(".operator_MODULO").append("$").append(other.getTranspiledName(transpiler.getContext())).append("(");
+	    right.transpile(transpiler);
+	    transpiler.append(")");
+	    return false;
+	}
+	
 }

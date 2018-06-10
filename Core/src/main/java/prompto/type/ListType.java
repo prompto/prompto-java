@@ -278,6 +278,15 @@ public class ListType extends ContainerType {
 	}
 	
 	@Override
+	public void transpileAssignItemValue(Transpiler transpiler, IExpression item, IExpression expression) {
+	    transpiler.append(".setItem(");
+	    item.transpile(transpiler);
+	    transpiler.append(", ");
+	    expression.transpile(transpiler);
+	    transpiler.append(")");
+	}
+	
+	@Override
 	public void declareSlice(Transpiler transpiler, IExpression first, IExpression last) {
 		// nothing to do
 	}
