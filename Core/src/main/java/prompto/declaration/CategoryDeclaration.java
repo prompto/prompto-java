@@ -22,6 +22,7 @@ import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.store.IStore;
 import prompto.store.IStored;
+import prompto.transpiler.ITranspilable;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -380,7 +381,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		return false;
 	}
 
-	public abstract void ensureDeclarationOrder(Context context, List<IDeclaration> list, Set<IDeclaration> set);
+	public abstract void ensureDeclarationOrder(Context context, List<ITranspilable> list, Set<ITranspilable> set);
 
 	
 }

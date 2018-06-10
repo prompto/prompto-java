@@ -26,6 +26,7 @@ import prompto.intrinsic.PromptoException;
 import prompto.literal.ListLiteral;
 import prompto.runtime.Context;
 import prompto.runtime.ErrorVariable;
+import prompto.transpiler.Transpiler;
 import prompto.type.EnumeratedCategoryType;
 import prompto.type.IType;
 import prompto.type.TypeMap;
@@ -35,19 +36,19 @@ import prompto.value.IValue;
 
 public class SwitchErrorStatement extends BaseSwitchStatement {
 
-	Identifier errorName;
+	Identifier errorId;
 	StatementList statements;
 	StatementList finallyStatements;
 	
 	public SwitchErrorStatement(Identifier errorName, StatementList statements) {
-		this.errorName = errorName;
+		this.errorId = errorName;
 		this.statements = statements;
 	}
 	
 	public SwitchErrorStatement(Identifier errorName, StatementList statements, 
 			SwitchCaseList handlers, StatementList anyStmts, StatementList finalStmts) {
 		super(handlers, anyStmts);
-		this.errorName = errorName;
+		this.errorId = errorName;
 		this.statements = statements;
 		this.finallyStatements = finalStmts;
 	}
@@ -59,7 +60,7 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 	@Override
 	protected void toODialect(CodeWriter writer) {
 		writer.append("try (");
-		writer.append(errorName);
+		writer.append(errorId);
 		writer.append(") {\n");
 		writer.indent();
 		statements.toDialect(writer);
@@ -87,7 +88,7 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 	@Override
 	protected void toMDialect(CodeWriter writer) {
 		writer.append("try ");
-		writer.append(errorName);
+		writer.append(errorId);
 		writer.append(":\n");
 		writer.indent();
 		statements.toDialect(writer);
@@ -111,7 +112,7 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 	@Override
 	protected void toEDialect(CodeWriter writer) {
 		writer.append("switch on ");
-		writer.append(errorName);
+		writer.append(errorId);
 		writer.append(" doing:\n");
 		writer.indent();
 		statements.toDialect(writer);
@@ -135,7 +136,7 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 	@Override
 	protected void checkSwitchCasesType(Context context) {
 		Context local = context.newLocalContext();
-		local.registerValue(new ErrorVariable(errorName));
+		local.registerValue(new ErrorVariable(errorId));
 		super.checkSwitchCasesType(local);
 	}
 	
@@ -150,7 +151,7 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 		if(type!=VoidType.instance())
 			types.put(type.getTypeNameId(), type);
 		Context local = context.newLocalContext();
-		local.registerValue(new ErrorVariable(errorName));
+		local.registerValue(new ErrorVariable(errorId));
 		super.collectReturnTypes(local, types);
 		if(finallyStatements!=null) {
 			type = finallyStatements.check(context, null);
@@ -165,7 +166,7 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 		try {
 			result = statements.interpret(context);
 		} catch (ExecutionError e) {
-			IValue switchValue = e.interpret(context, errorName);
+			IValue switchValue = e.interpret(context, errorId);
 			result = interpretSwitch(context, switchValue, e);
 		} finally {
 			if(finallyStatements!=null)
@@ -215,11 +216,11 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 		ExceptionHandler handler = makeCommonExceptionHandler(handlers);
 		method.placeExceptionHandler(handler);
 		Type exception = compileConvertException(context, method, flags, handler);
-		StackLocal error = method.registerLocal(errorName.toString(), 
+		StackLocal error = method.registerLocal(errorId.toString(), 
 				VerifierType.ITEM_Object, new ClassConstant(exception));
 		CompilerUtils.compileASTORE(method, error);
 		Context local = context.newLocalContext();
-		local.registerValue(new ErrorVariable(errorName));
+		local.registerValue(new ErrorVariable(errorId));
 		ResultInfo result = switchCase!=null ? 
 				switchCase.statements.compile(local, method, flags) :
 				defaultCase.compile(context, method, flags);
@@ -336,5 +337,41 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 			else
 				return symbol.getJavaType(context);
 		}
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		transpiler.require("translateError");
+	    this.statements.declare(transpiler);
+	    transpiler = transpiler.newLocalTranspiler();
+	    transpiler.getContext().registerValue(new ErrorVariable(this.errorId));
+	    this.declareSwitch(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    transpiler.append("try {").indent();
+	    this.statements.transpile(transpiler);
+	    transpiler.dedent().append("} catch(").append(this.errorId.toString()).append(") {").indent();
+	    Transpiler child = transpiler.newLocalTranspiler();
+	    child.getContext().registerValue(new ErrorVariable(this.errorId));
+	    child.append("switch(translateError(").append(this.errorId.toString()).append(")) {").indent();
+	    this.switchCases.forEach(switchCase -> {
+	        switchCase.transpileError(child);
+	    });
+	    if(this.defaultCase!=null) {
+	    	child.append("default:").indent();
+	        this.defaultCase.transpile(child);
+	        child.dedent();
+	    }
+	    child.dedent().append("}");
+	    if(this.finallyStatements!=null) {
+	    	child.append(" finally {").indent();
+	        this.finallyStatements.transpile(child);
+	        child.dedent().append("}");
+	    }
+	    child.dedent().append("}");
+	    child.flush();
+	    return true;
 	}
 }

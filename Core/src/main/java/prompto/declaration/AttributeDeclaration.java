@@ -26,6 +26,7 @@ import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.AttributeInfo;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 import prompto.type.ContainerType;
 import prompto.type.IType;
 import prompto.type.NativeType;
@@ -305,6 +306,13 @@ public class AttributeDeclaration extends BaseDeclaration {
 		Descriptor.Method proto = new Descriptor.Method(field.getType(), void.class);
 		MethodInfo method = classFile.newMethod(name, proto);
 		method.addModifier(Modifier.ABSTRACT);
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    this.type.declare(transpiler);
+	    if(this.constraint!=null)
+	        this.constraint.declare(transpiler, this.getName(), this.type);
 	}
 
 }

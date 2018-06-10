@@ -102,6 +102,10 @@ public class CollectionSwitchCase extends SwitchCase {
 	    transpiler.indent(true);
 	    this.statements.transpile(transpiler);
 	    transpiler.append("break;").dedent();
-		
+	}
+	
+	@Override
+	public void transpileError(Transpiler transpiler) {
+		throw new UnsupportedOperationException();
 	}
 }

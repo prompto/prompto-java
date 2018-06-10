@@ -27,6 +27,7 @@ import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
 import prompto.literal.TextLiteral;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.EnumeratedCategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -205,5 +206,28 @@ public class CategorySymbol extends Symbol implements IExpression  {
 			return CompilerUtils.getExceptionType(parentType, this.getName());
 	}
 
+	@Override
+	public void declare(Transpiler transpiler) {
+		this.type.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		transpiler.append(this.getName());
+		return false;
+	}
 
+	public void initializeError(Transpiler transpiler) {
+	    transpiler.append("var ").append(this.getName()).append(" = new ").append(this.type.getTypeName()).append("({");
+	    transpiler.append("name: '").append(this.getName()).append("', ");
+	    if(this.assignments!=null) {
+	        this.assignments.forEach(assignment -> {
+	            transpiler.append(assignment.getArgument().getName()).append(":");
+	            assignment.getExpression().transpile(transpiler);
+	            transpiler.append(", ");
+	        });
+	    }
+	    transpiler.trimLast(2);
+	    transpiler.append("});").newLine();
+	}
 }

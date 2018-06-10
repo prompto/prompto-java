@@ -120,8 +120,19 @@ public class UnresolvedArgument extends BaseArgument implements INamedArgument {
 	@Override
 	public void declare(Transpiler transpiler) {
 	    resolve(transpiler.getContext());
+	    resolved.declare(transpiler);
+	}
+	
+	@Override
+	public void transpile(Transpiler transpiler) {
+	    resolve(transpiler.getContext());
 	    resolved.transpile(transpiler);
 	}
 
+	@Override
+	public void transpileCall(Transpiler transpiler, IExpression expression) {
+	    resolve(transpiler.getContext());
+	    resolved.transpileCall(transpiler, expression);
+	}
 
 }

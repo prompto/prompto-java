@@ -44,6 +44,7 @@ import prompto.store.IStorable;
 import prompto.store.IStorable.IDbIdListener;
 import prompto.store.IStore;
 import prompto.store.IStored;
+import prompto.transpiler.ITranspilable;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.IType;
@@ -972,7 +973,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 	
 	@Override
-	public void ensureDeclarationOrder(Context context, List<IDeclaration> list, Set<IDeclaration> set) {
+	public void ensureDeclarationOrder(Context context, List<ITranspilable> list, Set<ITranspilable> set) {
 	    if(set.contains(this))
 	        return;
 	    if (this.derivedFrom != null) {
@@ -1007,7 +1008,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	    List<String> categories = this.collectCategories(transpiler.getContext());
 	    if(this.storable)
 	        transpiler.append("this.storable = DataStore.instance.newStorableDocument(['").append(categories.stream().collect(Collectors.joining("', '"))).append("']);").newLine();
-	    // this.transpileGetterSetterAttributes(transpiler);
+	    this.transpileGetterSetterAttributes(transpiler);
 	    this.transpileSuperConstructor(transpiler);
 	    transpiler.append("this.category = new Set([").append(categories.stream().collect(Collectors.joining(", "))).append("]);").newLine();
 	    this.transpileLocalAttributes(transpiler);
@@ -1023,9 +1024,48 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	    transpiler.append(this.getName()).append(".prototype.constructor = ").append(this.getName()).append(";").newLine();
 	    transpiler = transpiler.newInstanceTranspiler(new CategoryType(this.getId()));
 	    this.transpileMethods(transpiler);
-	    // this.transpileGetterSetters(transpiler);
+	    this.transpileGetterSetters(transpiler);
 	    transpiler.flush();
 	    return true;
+	}
+
+	private void transpileGetterSetters(Transpiler transpiler) {
+		Set<Identifier> names = this.methods.stream().filter(decl -> {
+	        return (decl instanceof SetterMethodDeclaration || decl instanceof GetterMethodDeclaration);
+	    }).map(decl -> decl.getId()).collect(Collectors.toSet());
+	    names.forEach(name -> this.transpileGetterSetter(transpiler, name));
+	}
+
+	private void transpileGetterSetter(Transpiler transpiler, Identifier name) {
+	    GetterMethodDeclaration getter = this.findGetter(transpiler.getContext(), name);
+	    SetterMethodDeclaration setter = this.findSetter(transpiler.getContext(), name);
+	    transpiler.append("Object.defineProperty(").append(this.getName()).append(".prototype, '").append(name.toString()).append("', {").indent();
+	    transpiler.append("get: function() {").indent();
+	    if(getter!=null)
+	        getter.transpile(transpiler);
+	    else
+	        transpiler.append("return this.$").append(name.toString()).append(";").newLine();
+	    transpiler.dedent().append("}");
+	    transpiler.append(",").newLine();
+	    transpiler.append("set: function(").append(name.toString()).append(") {").indent();
+	    if(setter!=null) {
+	        transpiler.append(name.toString()).append(" = (function(").append(name.toString()).append(") {").indent();
+	        setter.transpile(transpiler);
+	        transpiler.append(";").dedent().append("})(name);").newLine();
+	    }
+	    transpiler.append("this.$").append(name.toString()).append(" = ").append(name.toString()).append(";").newLine();
+	    transpiler.dedent().append("}");
+	    transpiler.dedent().append("});").newLine();
+	}
+
+	private void transpileGetterSetterAttributes(Transpiler transpiler) {
+	    Set<Identifier> allAttributes = this.getAllAttributes(transpiler.getContext());
+	    if(allAttributes!=null) {
+	        allAttributes.forEach(attr -> {
+	            if (this.findGetter(transpiler.getContext(), attr) !=null|| this.findSetter(transpiler.getContext(), attr)!=null)
+	                transpiler.append("this.$").append(attr.toString()).append(" = null;").newLine();
+	        });
+	    }
 	}
 
 	private void transpileMethods(Transpiler transpiler) {

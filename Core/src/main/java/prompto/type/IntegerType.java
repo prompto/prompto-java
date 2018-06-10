@@ -347,6 +347,7 @@ public class IntegerType extends NativeType implements INumberType {
 	@Override
 	public void declareIntDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
 	   if (other == IntegerType.instance() ) {
+		    transpiler.require("divide");
 	        left.declare(transpiler);
 	        right.declare(transpiler);
 	    } else

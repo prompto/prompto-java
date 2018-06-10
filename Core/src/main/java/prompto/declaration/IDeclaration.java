@@ -7,11 +7,12 @@ import prompto.grammar.INamed;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.statement.CommentStatement;
+import prompto.transpiler.ITranspilable;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 
-public interface IDeclaration extends INamed, ISection {
+public interface IDeclaration extends ITranspilable, INamed, ISection {
 	
 	public static enum DeclarationType {
 		ATTRIBUTE,
@@ -32,6 +33,7 @@ public interface IDeclaration extends INamed, ISection {
 	default void setClosureOf(IMethodDeclaration declaration) { throw new UnsupportedOperationException(); }
 	default IMethodDeclaration getClosureOf() { throw new UnsupportedOperationException(); }
 	default boolean isStorable() { return false; }
+	default String getTranspiledName(Context context) { throw new UnsupportedOperationException("getTranspiledName " + this.getClass().getName()); }
 	default void declare(Transpiler transpiler) { throw new UnsupportedOperationException("declare " + this.getClass().getName()); }
 	default boolean transpile(Transpiler transpiler) { throw new UnsupportedOperationException("transpile " + this.getClass().getName()); }
 }

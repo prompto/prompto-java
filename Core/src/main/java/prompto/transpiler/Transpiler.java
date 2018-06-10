@@ -8,7 +8,6 @@ import java.util.Stack;
 import java.util.stream.Collectors;
 
 import prompto.declaration.CategoryDeclaration;
-import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.runtime.Context;
 import prompto.type.CategoryType;
@@ -27,12 +26,14 @@ public class Transpiler {
 
 	Context context;
 	Transpiler parent;
-	Set<IDeclaration> declared;
+	Set<ITranspilable> declared;
 	Set<String> required;
 	Stack<String> lines;
 	StringBuilder line;
 	String indents;
 	boolean supportsDestructuring = false;
+	String getterName;
+	String setterName;
 	
 	public Transpiler(Context context) {
 		this.context = context;
@@ -41,12 +42,22 @@ public class Transpiler {
 	    this.lines = new Stack<>();
 	    this.line = new StringBuilder();
 	    this.indents = "";
+	    this.getterName = null;
+	    this.setterName = null;
  	}
 	
 	public Context getContext() {
 		return context;
 	}
+	
+	public String getGetterName() {
+		return getterName;
+	}
 
+	public String getSetterName() {
+		return setterName;
+	}
+	
 	public Transpiler newLocalTranspiler() {
 		Context context = this.context.newLocalContext();
 		return this.copyTranspiler(context);
@@ -67,6 +78,18 @@ public class Transpiler {
 		Context context = this.context.newLocalContext();
 	    context.setParentContext(this.context);
 	    return this.copyTranspiler(context);
+	}
+
+	public Transpiler newGetterTranspiler(String name) {
+		Transpiler transpiler = this.newMemberTranspiler();
+	    transpiler.getterName = name;
+	    return transpiler;
+	}
+
+	public Transpiler newSetterTranspiler(String name) {
+		Transpiler transpiler = this.newMemberTranspiler();
+	    transpiler.setterName = name;
+	    return transpiler;
 	}
 
 
@@ -140,8 +163,8 @@ public class Transpiler {
 	    }
 	}
 
-	public void declare(IDeclaration declaration) {
-		declared.add(declaration);
+	public void declare(ITranspilable transpilable) {
+		declared.add(transpilable);
 	}
 
 	public void require(String script) {
@@ -156,8 +179,8 @@ public class Transpiler {
 	}
 
 	private void appendAllDeclared() {
-		List<IDeclaration> list = new ArrayList<>();
-		Set<IDeclaration> set = new HashSet<>();
+		List<ITranspilable> list = new ArrayList<>();
+		Set<ITranspilable> set = new HashSet<>();
 	    this.declared.forEach(decl -> {
 	        if(decl instanceof CategoryDeclaration)
 	            ((CategoryDeclaration)decl).ensureDeclarationOrder(this.context, list, set);
@@ -167,7 +190,7 @@ public class Transpiler {
 	    list.forEach(this::appendOneDeclared);
 	}
 
-	private void appendOneDeclared(IDeclaration decl) {
+	private void appendOneDeclared(ITranspilable decl) {
 		Transpiler transpiler = this.newLocalTranspiler();
 	    decl.transpile(transpiler);
 	    transpiler.flush();

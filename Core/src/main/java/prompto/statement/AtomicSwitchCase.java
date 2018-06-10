@@ -89,4 +89,15 @@ public class AtomicSwitchCase extends SwitchCase {
 	    this.statements.transpile(transpiler);
 	    transpiler.append("break;").dedent();
 	}
+	
+	@Override
+	public void transpileError(Transpiler transpiler) {
+	    transpiler.append("case \"");
+	    this.expression.transpile(transpiler);
+	    transpiler.append("\":");
+	    transpiler.indent();
+	    this.statements.transpile(transpiler);
+	    transpiler.append("break;");
+	    transpiler.dedent();
+	}
 }

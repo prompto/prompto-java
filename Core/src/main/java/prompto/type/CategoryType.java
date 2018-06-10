@@ -605,11 +605,20 @@ public class CategoryType extends BaseType {
 	    }
 	    decl = this.findGlobalMethod(transpiler.getContext(), keyname);
         if (decl != null) {
-	    	throw new UnsupportedOperationException();
-            // this.transpileSortedByGlobalMethod(transpiler, descending, decl.getTranspiledName(transpiler.getContext()));
-	    	// return;
+            this.transpileSortedByGlobalMethod(transpiler, descending, decl.getTranspiledName(transpiler.getContext()));
+	    	return;
         }
         this.transpileSortedByExpression(transpiler, descending, key);
+	}
+
+	private void transpileSortedByGlobalMethod(Transpiler transpiler, boolean descending, String name) {
+		   transpiler.append("function(o1, o2) { return ")
+	        .append(name).append("(o1) === ").append(name).append("(o2)").append(" ? 0 : ")
+	        .append(name).append("(o1) > ").append(name).append("(o2)").append(" ? ");
+	    if(descending)
+	        transpiler.append("-1 : 1; }");
+	    else
+	        transpiler.append("1 : -1; }");
 	}
 
 	private void transpileSortedByExpression(Transpiler transpiler, boolean descending, IExpression key) {
@@ -667,5 +676,14 @@ public class CategoryType extends BaseType {
 	        transpiler.append("getText()");
 	    else
 	        transpiler.append(name);
+	}
+	
+	@Override
+	public void transpileInstance(Transpiler transpiler) {
+	    IDeclaration decl = this.getDeclaration(transpiler.getContext());
+	    if(decl instanceof SingletonCategoryDeclaration)
+	        transpiler.append(this.getTypeName()).append(".instance");
+	    else
+	        transpiler.append("this");
 	}
 }

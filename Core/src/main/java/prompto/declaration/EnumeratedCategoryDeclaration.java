@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
@@ -29,6 +31,8 @@ import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoEnum;
 import prompto.intrinsic.PromptoSymbol;
 import prompto.runtime.Context;
+import prompto.transpiler.ITranspilable;
+import prompto.transpiler.Transpiler;
 import prompto.type.EnumeratedCategoryType;
 import prompto.type.IType;
 import prompto.type.ListType;
@@ -313,10 +317,72 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 		} else
 			throw new SyntaxError("No static member support for non-singleton " + this.getName());
 	}
+
+	@Override
+	public void ensureDeclarationOrder(Context context, List<ITranspilable> list, Set<ITranspilable> set) {
+	    if(set.contains(this))
+	        return;
+	    if (this.isUserError(context)) {
+	        list.add(this);
+	        set.add(this);
+	        // don't declare inherited Error
+	    } else
+	        super.ensureDeclarationOrder(context, list, set);
+	}
+
+	private boolean isUserError(Context context) {
+		return this.derivedFrom!=null && this.derivedFrom.size()==1 && this.derivedFrom.get(0).toString().equals("Error");
+	}
+
+	@Override
+	public void declare(Transpiler transpiler) {
+	    if("Error".equals(this.getName()))
+	        return;
+	    super.declare(transpiler);
+	    transpiler.require("List");
+	}
 	
 	@Override
-	public void ensureDeclarationOrder(Context context, List<IDeclaration> list, Set<IDeclaration> set) {
+	public boolean transpile(Transpiler transpiler) {
+	    if (this.isUserError(transpiler.getContext()))
+	        this.transpileUserError(transpiler);
+	    else
+	        this.transpileEnumerated(transpiler);
+		return true;
+	}
+
+	private void transpileEnumerated(Transpiler transpiler) {
 		throw new UnsupportedOperationException();
 	}
+
+	private void transpileUserError(Transpiler transpiler) {
+	    transpiler.append("class ").append(this.getName()).append(" extends Error {").indent();
+	    transpiler.newLine();
+	    transpiler.append("constructor(values) {").indent();
+	    transpiler.append("super(values.text);").newLine();
+	    transpiler.append("this.name = '").append(this.getName()).append("';").newLine();
+	    transpiler.append("this.promptoName = values.name;").newLine();
+	    if (this.attributes!=null) {
+	        this.attributes.stream()
+	            .filter(attr -> !("name".equals(attr.toString()) || "text".equals(attr.toString())))
+	            .forEach(attr -> {
+	                transpiler.append("this.").append(attr.toString()).append(" = values.hasownProperty('").append(attr.toString()).append("') ? values.").append(attr.toString()).append(" : null;");
+	                transpiler.newLine();
+	            });
+	    }
+	    transpiler.append("return this;").dedent();
+	    transpiler.append("}").newLine();
+	    transpiler.append("toString() {").indent().append("return this.message;").dedent().append("}").newLine();
+	    transpiler.append("getText() {").indent().append("return this.message;").dedent().append("}").newLine();
+	    transpiler.dedent().append("}").newLine();
+	    this.symbolsList.forEach(symbol -> symbol.initializeError(transpiler));
+	    this.transpileSymbols(transpiler);
+	}
+
+	private void transpileSymbols(Transpiler transpiler) {
+	    Stream<String> names = this.symbolsList.stream().map(symbol ->symbol.getName());
+	    transpiler.append(this.getName()).append(".symbols = new List(false, [").append(names.collect(Collectors.joining(", "))).append("]);").newLine();
+	}
+
 
 }

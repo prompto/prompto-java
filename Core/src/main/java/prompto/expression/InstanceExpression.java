@@ -186,10 +186,8 @@ public class InstanceExpression extends Section implements IExpression {
 	        ((InstanceContext)context).getInstanceType().transpileInstance(transpiler);
 	        transpiler.append(".");
 	    }
-	    /*
-	    if(transpiler.getterName === this.name)
+	    if(this.getName().equals(transpiler.getGetterName()))
 	        transpiler.append("$");
-	        */
 	    transpiler.append(this.getName());
 	    return false;
 	}

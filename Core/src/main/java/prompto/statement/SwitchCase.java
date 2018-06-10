@@ -50,6 +50,7 @@ public abstract class SwitchCase extends Section implements ISection {
 	}
 
 	public abstract void transpile(Transpiler transpiler);
+	public abstract void transpileError(Transpiler transpiler);
 
 
 }
