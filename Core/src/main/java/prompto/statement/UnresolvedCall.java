@@ -1,5 +1,6 @@
 package prompto.statement;
 
+import prompto.argument.MethodArgument;
 import prompto.compiler.Flags;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.MethodInfo;
@@ -13,9 +14,11 @@ import prompto.expression.ConstructorExpression;
 import prompto.expression.IAssertion;
 import prompto.expression.IExpression;
 import prompto.expression.MemberSelector;
+import prompto.expression.MethodExpression;
 import prompto.expression.MethodSelector;
 import prompto.expression.UnresolvedIdentifier;
 import prompto.grammar.ArgumentAssignmentList;
+import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.parser.Section;
 import prompto.runtime.Context;
@@ -133,21 +136,33 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 	
 	private IExpression resolveUnresolvedIdentifier(Context context) {
 		Identifier id = ((UnresolvedIdentifier)caller).getId();
+		IExpression call = null;
 		IDeclaration decl = null;
 		// if this happens in the context of a member method, then we need to check for category members first
 		if(context.getParentContext() instanceof InstanceContext) {
 			decl = resolveUnresolvedMember((InstanceContext)context.getParentContext(), id);
 			if(decl!=null)
-				return new MethodCall(new MethodSelector(id), assignments);
+				call = new MethodCall(new MethodSelector(id), assignments);
 		}
-		decl = context.getRegisteredDeclaration(IDeclaration.class, id);
-		if(decl==null) {
-			context.getProblemListener().reportUnknownMethod(id.toString(), id);
-			return null;
-		} else if(decl instanceof CategoryDeclaration)
-			return new ConstructorExpression(new CategoryType(id), null, assignments, false);
-		else
-			return new MethodCall(new MethodSelector(id), assignments);
+		if(call==null) {
+			INamed named = context.getRegisteredValue(INamed.class, id);
+			if(named instanceof MethodArgument || named instanceof MethodExpression) {
+				call = new MethodCall(new MethodSelector(id), assignments);
+				((MethodCall)call).setVariableName(id.toString());
+			}
+		}
+		if(call==null) {
+			decl = context.getRegisteredDeclaration(IDeclaration.class, id);
+			if(decl==null) {
+				context.getProblemListener().reportUnknownMethod(id.toString(), id);
+				return null;
+			} else if(decl instanceof CategoryDeclaration)
+				call = new ConstructorExpression(new CategoryType(id), null, assignments, false);
+			else
+				call = new MethodCall(new MethodSelector(id), assignments);
+		}
+		// call.copySectionFrom(this); // TODO
+		return call;
 	}
 
 	private IDeclaration resolveUnresolvedMember(InstanceContext context, Identifier name) {

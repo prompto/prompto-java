@@ -9,7 +9,9 @@ import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
+import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Variable;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.MethodType;
 import prompto.type.VoidType;
@@ -21,8 +23,11 @@ public class DeclarationStatement<T extends IDeclaration> extends BaseStatement 
 
 	T declaration;
 	
+	@SuppressWarnings("unchecked")
 	public DeclarationStatement(T declaration) {
 		this.declaration = declaration;
+		if(declaration instanceof IMethodDeclaration)
+			((IMethodDeclaration)declaration).setDeclarationOf((DeclarationStatement<IMethodDeclaration>)this);
 	}
 	
 	public T getDeclaration() {
@@ -71,6 +76,29 @@ public class DeclarationStatement<T extends IDeclaration> extends BaseStatement 
 			context.registerDeclarationIfMissing(decl);
 			decl.compileClosureClass(context, method);
 			return new ResultInfo(void.class);		
+		} else
+			throw new SyntaxError("Unsupported:" + declaration.getClass().getSimpleName());
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		if(declaration instanceof ConcreteMethodDeclaration) {
+			this.declaration.declareChild(transpiler);
+		    transpiler.getContext().registerDeclaration((ConcreteMethodDeclaration)this.declaration);
+		} else
+			throw new SyntaxError("Unsupported:" + declaration.getClass().getSimpleName());
+	}
+
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		if(declaration instanceof ConcreteMethodDeclaration) {
+		    this.declaration.transpile(transpiler);
+		    transpiler.getContext().registerDeclaration((ConcreteMethodDeclaration)this.declaration);
+		    if(transpiler.getContext().getParentContext() instanceof InstanceContext) {
+		        String name = this.declaration.getTranspiledName(transpiler.getContext());
+		        transpiler.append(name).append(" = ").append(name).append(".bind(this);").newLine();
+		    }
+		    return true;
 		} else
 			throw new SyntaxError("Unsupported:" + declaration.getClass().getSimpleName());
 	}

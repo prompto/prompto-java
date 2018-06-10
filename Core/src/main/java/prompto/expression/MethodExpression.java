@@ -12,6 +12,7 @@ import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
@@ -77,10 +78,30 @@ public class MethodExpression implements IExpression {
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		INamed named = context.getRegistered(id);
 		if(named instanceof Context.MethodDeclarationMap) {
-			ConcreteMethodDeclaration decl = (ConcreteMethodDeclaration)((MethodDeclarationMap)named).values().iterator().next();
+			ConcreteMethodDeclaration decl = (ConcreteMethodDeclaration)((MethodDeclarationMap)named).getFirst();
 			return decl.compileMethodInstance(context, method, flags);
 		} else
 			throw new SyntaxError("No method with name:" + id);
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		INamed named = transpiler.getContext().getRegistered(id);
+		if(named instanceof Context.MethodDeclarationMap) {
+			IMethodDeclaration decl = ((MethodDeclarationMap)named).getFirst();
+		    if(decl.getDeclarationOf()==null)
+		        decl.declare(transpiler);
+		}
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		INamed named = transpiler.getContext().getRegistered(id);
+		if(named instanceof Context.MethodDeclarationMap) {
+			IMethodDeclaration decl = ((MethodDeclarationMap)named).getFirst();
+			transpiler.append(decl.getTranspiledName(transpiler.getContext()));
+		}
+		return false;
 	}
 	
 }

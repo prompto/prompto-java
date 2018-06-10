@@ -5,6 +5,7 @@ import prompto.error.SyntaxError;
 import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
@@ -110,5 +111,10 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 		writer.append(" (");
 		arguments.toDialect(writer);
 		writer.append(");");
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		this.declareArguments(transpiler);
 	}
 }

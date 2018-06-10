@@ -43,6 +43,7 @@ import prompto.value.IValue;
 public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements IMethodDeclaration {
 
 	StatementList statements;
+	DeclarationStatement<IMethodDeclaration> declarationOf;
 	
 	@SuppressWarnings("unchecked")
 	public ConcreteMethodDeclaration(Identifier name, ArgumentList arguments, IType returnType, StatementList statements) {
@@ -56,6 +57,16 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 
 	public StatementList getStatements() {
 		return statements;
+	}
+	
+	@Override
+	public void setDeclarationOf(DeclarationStatement<IMethodDeclaration> statement) {
+		declarationOf = statement;
+	}
+	
+	@Override
+	public DeclarationStatement<IMethodDeclaration> getDeclarationOf() {
+		return declarationOf;
 	}
 	
 	@Override
@@ -362,6 +373,14 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	        transpiler.declare(this);
 	        this.declareArguments(transpiler);
 	    }
+	    this.registerArguments(transpiler.getContext());
+	    this.statements.declare(transpiler);
+	}
+	
+	@Override
+	public void declareChild(Transpiler transpiler) {
+	    this.declareArguments(transpiler);
+	    transpiler = transpiler.newChildTranspiler(null);
 	    this.registerArguments(transpiler.getContext());
 	    this.statements.declare(transpiler);
 	}

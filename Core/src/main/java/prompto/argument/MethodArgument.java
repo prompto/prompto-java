@@ -20,6 +20,7 @@ import prompto.intrinsic.PromptoProxy;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
@@ -107,5 +108,15 @@ public class MethodArgument extends BaseArgument implements INamedArgument {
 		method.addInstruction(Opcode.CHECKCAST, c);
 	}
 
+	@Override
+	public void declare(Transpiler transpiler) {
+		// nothing to do ?
+	}
+	
+	@Override
+	public String getTranspiledName(Context context) {
+		IMethodDeclaration method = this.getDeclaration(context);
+	    return method.getTranspiledName(context);
+	}
 
 }

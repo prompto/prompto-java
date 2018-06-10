@@ -48,7 +48,8 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 
 	MethodSelector selector;
 	ArgumentAssignmentList assignments;
-
+	String variableName;
+	
 	public MethodCall(MethodSelector selector) {
 		this.selector = selector;
 	}
@@ -56,6 +57,10 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	public MethodCall(MethodSelector method, ArgumentAssignmentList assignments) {
 		this.selector = method;
 		this.assignments = assignments;
+	}
+	
+	public void setVariableName(String variableName) {
+		this.variableName = variableName;
 	}
 
 	public MethodSelector getSelector() {
@@ -409,12 +414,11 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	    if (parent == null && declaration.getMemberOf()!=null && transpiler.getContext().getParentContext() instanceof InstanceContext)
 	        parent = new ThisExpression();
 	    String name = null;
-	    /*
-	    if(this.variableName)
+	    if(this.variableName!=null)
 	        name = this.variableName;
-	    else if(this.fullSelector)
-	        name = this.fullSelector.name;
-	    else */
+	    /*else if(this.fullSelector)
+	        name = this.fullSelector.name;*/
+	    else 
 	        name = declaration.getTranspiledName(transpiler.getContext());
 	    selector = new MethodSelector(parent, new Identifier(name));
 	    selector.transpile(transpiler);
@@ -430,5 +434,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	private void transpileMultiple(Transpiler transpiler, List<IMethodDeclaration> declarations) {
 		throw new UnsupportedOperationException();
 	}
+
+
 
 }
