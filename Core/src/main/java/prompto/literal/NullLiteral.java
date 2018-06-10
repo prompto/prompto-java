@@ -7,6 +7,7 @@ import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.NullType;
 import prompto.utils.CodeWriter;
@@ -58,6 +59,17 @@ public class NullLiteral implements IExpression {
 	@Override
 	public String toString() {
 		return "null";
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		// nothing to do
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		transpiler.append("null");
+		return false;
 	}
 
 }

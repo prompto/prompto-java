@@ -125,6 +125,12 @@ public class DecimalType extends NativeType implements INumberType {
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		return new Decimal(value.asDouble());
 	}
+	
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		// nothing to do
+	}
 
 	@Override
 	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {

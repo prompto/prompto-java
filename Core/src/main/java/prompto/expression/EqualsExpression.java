@@ -557,16 +557,41 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
         case IS_NOT:
             this.transpileIsNot(transpiler);
             break;
-            /*
-        case EqOp.IS_A:
+        case IS_A:
             this.transpileIsA(transpiler);
             break;
-            */
         default:
             throw new Error("Cannot transpile:" + this.operator.toString());
 	    }
 	    return false;
     }
+
+	private void transpileIsA(Transpiler transpiler) {
+		if(!(this.right instanceof TypeExpression))
+			throw new Error("Cannot transpile:" + this.right.getClass().getName());
+		IType type = ((TypeExpression)this.right).getType();
+	    if(type==IntegerType.instance()) {
+	        transpiler.append("isAnInteger(");
+	        this.left.transpile(transpiler);
+	        transpiler.append(")");
+	    } else if(type==DecimalType.instance()) {
+	        transpiler.append("isADecimal(");
+	        this.left.transpile(transpiler);
+	        transpiler.append(")");
+	    } else if(type==TextType.instance()) {
+	        transpiler.append("isAText(");
+	        this.left.transpile(transpiler);
+	        transpiler.append(")");
+	    } else if(type==CharacterType.instance()) {
+	        transpiler.append("isACharacter(");
+	        this.left.transpile(transpiler);
+	        transpiler.append(")");
+	    } else {
+	        this.left.transpile(transpiler);
+	        transpiler.append(" instanceof ");
+	        this.right.transpile(transpiler);
+	    }
+	}
 
 	private void transpileRoughly(Transpiler transpiler) {
 	    transpiler.append("removeAccents(");

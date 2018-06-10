@@ -152,4 +152,9 @@ public class AttributeArgument extends BaseArgument implements INamedArgument {
 			CompilerUtils.compileCallConstructor(method, type, info.getType());
 		}
 	}
+	
+	@Override
+	public String getTranspiledName(Context context) {
+		return this.id.toString();
+	}
 }

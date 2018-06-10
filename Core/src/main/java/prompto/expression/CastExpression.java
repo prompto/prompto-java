@@ -11,6 +11,7 @@ import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.DecimalType;
 import prompto.type.IType;
 import prompto.type.IntegerType;
@@ -92,6 +93,24 @@ public class CastExpression implements IExpression {
 			break;
 		}
 		
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		this.expression.declare(transpiler);
+		this.type.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    IType expType = this.expression.check(transpiler.getContext());
+	    if(expType==DecimalType.instance() && this.type==IntegerType.instance()) {
+	        transpiler.append("Math.floor(");
+	        this.expression.transpile(transpiler);
+	        transpiler.append(")");
+	    } else
+	        this.expression.transpile(transpiler);
+	    return false;
 	}
 
 }

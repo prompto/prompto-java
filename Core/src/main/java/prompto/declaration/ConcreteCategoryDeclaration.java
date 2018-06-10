@@ -1022,10 +1022,20 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	        transpiler.append(this.getName()).append(".prototype = Object.create($Root.prototype);").newLine();
 	    transpiler.append(this.getName()).append(".prototype.constructor = ").append(this.getName()).append(";").newLine();
 	    transpiler = transpiler.newInstanceTranspiler(new CategoryType(this.getId()));
-	    // this.transpileMethods(transpiler);
+	    this.transpileMethods(transpiler);
 	    // this.transpileGetterSetters(transpiler);
 	    transpiler.flush();
 	    return true;
+	}
+
+	private void transpileMethods(Transpiler transpiler) {
+	    this.methods.stream().filter(decl -> {
+	        return !(decl instanceof SetterMethodDeclaration || decl instanceof GetterMethodDeclaration);
+	    }).forEach(method -> {
+	    	Transpiler t = transpiler.newMemberTranspiler();
+	        method.transpile(t);
+	        t.flush();
+	    });
 	}
 
 	private void transpileLocalAttributes(Transpiler transpiler) {

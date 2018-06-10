@@ -21,6 +21,7 @@ import prompto.intrinsic.PromptoIterable;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.statement.ReturnStatement;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.IteratorType;
 import prompto.utils.CodeWriter;
@@ -30,12 +31,12 @@ import prompto.value.IterableValue;
 
 public class IteratorExpression implements IExpression {
 
-	Identifier name;
+	Identifier id;
 	IExpression source;
 	IExpression expression;
 	
-	public IteratorExpression(Identifier name, IExpression source, IExpression exp) {
-		this.name = name;
+	public IteratorExpression(Identifier id, IExpression source, IExpression exp) {
+		this.id = id;
 		this.source = source;
 		this.expression = exp;
 	}
@@ -44,7 +45,7 @@ public class IteratorExpression implements IExpression {
 	public IteratorType check(Context context) {
 		IType elemType = source.check(context).checkIterator(context);
 		Context child = context.newChildContext();
-		child.registerValue(new Variable(name, elemType));
+		child.registerValue(new Variable(id, elemType));
 		IType resultType = expression.check(child);
 		return new IteratorType(resultType);
 	}
@@ -54,7 +55,7 @@ public class IteratorExpression implements IExpression {
 		IType elemType = source.check(context).checkIterator(context);
 		IValue items = source.interpret(context);
 		IterableWithCounts<IValue> iterable = getIterable(context, items);
-		return new IterableValue(context, name, elemType, iterable, expression);
+		return new IterableValue(context, id, elemType, iterable, expression);
 	}
 	
 	@Override
@@ -113,7 +114,7 @@ public class IteratorExpression implements IExpression {
 	private void compileInnerClassExpression(Context context, ClassFile classFile) {
 		IType paramIType = source.check(context).checkIterator(context);
 		context = context.newChildContext();
-		context.registerValue(new Variable(name, paramIType));
+		context.registerValue(new Variable(id, paramIType));
 		Type paramType = paramIType.getJavaType(context);
 		Type resultType = expression.check(context).getJavaType(context);
 		compileInnerClassBridgeMethod(classFile, paramType, resultType);
@@ -125,7 +126,7 @@ public class IteratorExpression implements IExpression {
 		Descriptor.Method proto = new Descriptor.Method(paramType, resultType);
 		MethodInfo method = classFile.newMethod("apply", proto);
 		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
-		method.registerLocal(name.toString(), VerifierType.ITEM_Object, new ClassConstant(paramType));
+		method.registerLocal(id.toString(), VerifierType.ITEM_Object, new ClassConstant(paramType));
 		ReturnStatement stmt = new ReturnStatement(expression);
 		stmt.compile(context, method, new Flags());
 	}
@@ -136,7 +137,7 @@ public class IteratorExpression implements IExpression {
 		MethodInfo method = classFile.newMethod("apply", proto);
 		method.addModifier(Tags.ACC_BRIDGE | Tags.ACC_SYNTHETIC);
 		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
-		method.registerLocal(name.toString(), VerifierType.ITEM_Object, new ClassConstant(Object.class));
+		method.registerLocal(id.toString(), VerifierType.ITEM_Object, new ClassConstant(Object.class));
 		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
 		method.addInstruction(Opcode.ALOAD_1, new ClassConstant(Object.class));
 		method.addInstruction(Opcode.CHECKCAST, new ClassConstant(paramType));
@@ -174,7 +175,7 @@ public class IteratorExpression implements IExpression {
 	private void toMDialect(CodeWriter writer) {
 		expression.toDialect(writer);
 		writer.append(" for ");
-		writer.append(name.toString());
+		writer.append(id.toString());
 		writer.append(" in ");
 		source.toDialect(writer);
 	}
@@ -182,7 +183,7 @@ public class IteratorExpression implements IExpression {
 	private void toODialect(CodeWriter writer) {
 		expression.toDialect(writer);
 		writer.append(" for each ( ");
-		writer.append(name.toString());
+		writer.append(id.toString());
 		writer.append(" in ");
 		source.toDialect(writer);
 		writer.append(" )");
@@ -191,10 +192,22 @@ public class IteratorExpression implements IExpression {
 	private void toEDialect(CodeWriter writer) {
 		expression.toDialect(writer);
 		writer.append(" for each ");
-		writer.append(name.toString());
+		writer.append(id.toString());
 		writer.append(" in ");
 		source.toDialect(writer);
 	}
 	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    IType sourceType = this.source.check(transpiler.getContext());
+	    sourceType.declareIterator(transpiler, this.id, this.expression);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		IType sourceType = this.source.check(transpiler.getContext());
+	    this.source.transpile(transpiler);
+	    return sourceType.transpileIterator(transpiler, this.id, this.expression);
+	}
 
 }

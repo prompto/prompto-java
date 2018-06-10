@@ -14,6 +14,7 @@ import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
@@ -108,6 +109,18 @@ public class UnresolvedArgument extends BaseArgument implements INamedArgument {
 	public void compileAssignment(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments, boolean isFirst) {
 		resolve(context);
 		resolved.compileAssignment(context, method, flags, assignments, isFirst);
+	}
+	
+	@Override
+	public String getTranspiledName(Context context) {
+	    resolve(context);
+	    return resolved.getTranspiledName(context);
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    resolve(transpiler.getContext());
+	    resolved.transpile(transpiler);
 	}
 
 

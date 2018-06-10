@@ -30,7 +30,6 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.expression.InstanceExpression;
-import prompto.expression.MemberSelector;
 import prompto.expression.MethodSelector;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
@@ -42,7 +41,6 @@ import prompto.intrinsic.PromptoRoot;
 import prompto.runtime.Context;
 import prompto.runtime.MethodFinder;
 import prompto.runtime.Score;
-import prompto.runtime.Variable;
 import prompto.statement.MethodCall;
 import prompto.store.Family;
 import prompto.store.IDataStore;
@@ -557,6 +555,21 @@ public class CategoryType extends BaseType {
 		method.addInstruction(Opcode.INVOKESTATIC, m);
 		method.addInstruction(Opcode.CHECKCAST, k);
 	}
+	
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    IDeclaration decl = this.getDeclaration(transpiler.getContext());
+		decl.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		transpiler.append(this.getTypeName());
+		return false;
+	}
+	
+	
 
 	@Override
 	public void declareSorted(Transpiler transpiler, IExpression key) {

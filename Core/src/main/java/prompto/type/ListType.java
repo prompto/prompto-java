@@ -158,6 +158,13 @@ public class ListType extends ContainerType {
 			return super.convertJavaValueToIValue(context, value);
 	}
 	
+	
+	@Override
+	public String getTranspiledName(Context context) {
+		return this.itemType.getTranspiledName(context) + "_list";
+	}
+	
+	
 	@Override
 	public void declare(Transpiler transpiler) {
 		// nothing to do

@@ -263,6 +263,14 @@ public interface IType {
 		throw new UnsupportedOperationException("transpileSorted " + this.getClass().getName());
 	}
 
+	default void declareIterator(Transpiler transpiler, Identifier id, IExpression expression) {
+		throw new UnsupportedOperationException("declareIterator " + this.getClass().getName());
+	}
+
+	default boolean transpileIterator(Transpiler transpiler, Identifier id, IExpression expression) {
+		throw new UnsupportedOperationException("transpileIterator " + this.getClass().getName());
+	}
+
 
 
 }

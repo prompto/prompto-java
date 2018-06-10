@@ -63,6 +63,13 @@ public class Transpiler {
 		return this.copyTranspiler(context);
 	}
 
+	public Transpiler newMemberTranspiler() {
+		Context context = this.context.newLocalContext();
+	    context.setParentContext(this.context);
+	    return this.copyTranspiler(context);
+	}
+
+
 
 	public Transpiler copyTranspiler(Context context) {
 		Transpiler transpiler = new Transpiler(context);

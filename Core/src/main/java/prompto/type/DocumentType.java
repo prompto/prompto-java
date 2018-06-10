@@ -103,6 +103,11 @@ public class DocumentType extends NativeType {
 	
 	
 	@Override
+	public void declare(Transpiler transpiler) {
+		transpiler.require("Document");
+	}
+	
+	@Override
 	public void declareMember(Transpiler transpiler, String name) {
 		// nothing to do
 	}

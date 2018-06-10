@@ -1,6 +1,9 @@
 package prompto.type;
 
+import prompto.expression.IExpression;
+import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.runtime.Variable;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
 
@@ -34,4 +37,21 @@ public abstract class ContainerType extends IterableType {
 	    }
 	}
 	
+	@Override
+	public void declareIterator(Transpiler transpiler, Identifier id, IExpression expression) {
+	    transpiler = transpiler.newChildTranspiler(null);
+	    transpiler.getContext().registerValue(new Variable(id, this.itemType));
+	    expression.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpileIterator(Transpiler transpiler, Identifier id, IExpression expression) {
+	    transpiler.append(".iterate(function(").append(id.toString()).append(") { return ");
+	    transpiler = transpiler.newChildTranspiler(null);
+	    transpiler.getContext().registerValue(new Variable(id, this.itemType));
+	    expression.transpile(transpiler);
+	    transpiler.append("; }, this)");
+	    transpiler.flush();
+		return false;
+	}
 }
