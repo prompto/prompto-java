@@ -44,6 +44,7 @@ import prompto.store.IStorable;
 import prompto.store.IStorable.IDbIdListener;
 import prompto.store.IStore;
 import prompto.store.IStored;
+import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -984,5 +985,68 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	    set.add(this);
 	}
 
+	@Override
+	public void declare(Transpiler transpiler) {
+	    transpiler.declare(this);
+	    if (this.derivedFrom != null) {
+	        this.derivedFrom.forEach(cat -> {
+	            CategoryDeclaration decl = transpiler.getContext().getRegisteredDeclaration(CategoryDeclaration.class, cat);
+	            decl.declare(transpiler);
+	        });
+	    } else
+	        transpiler.require("$Root");
+	    if(this.storable)
+	        transpiler.require("DataStore");
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    Identifier parent = this.derivedFrom!=null && this.derivedFrom.size()>0 ? this.derivedFrom.get(0) : null;
+	    transpiler.append("function ").append(this.getName()).append("(copyFrom, values, mutable) {");
+	    transpiler.indent();
+	    List<String> categories = this.collectCategories(transpiler.getContext());
+	    if(this.storable)
+	        transpiler.append("this.storable = DataStore.instance.newStorableDocument(['").append(categories.stream().collect(Collectors.joining("', '"))).append("']);").newLine();
+	    // this.transpileGetterSetterAttributes(transpiler);
+	    this.transpileSuperConstructor(transpiler);
+	    transpiler.append("this.category = new Set([").append(categories.stream().collect(Collectors.joining(", "))).append("]);").newLine();
+	    this.transpileLocalAttributes(transpiler);
+	    transpiler.append("this.mutable = mutable;").newLine();
+	    transpiler.append("return this;");
+	    transpiler.dedent();
+	    transpiler.append("}");
+	    transpiler.newLine();
+	    if(parent!=null)
+	        transpiler.append(this.getName()).append(".prototype = Object.create(").append(parent.toString()).append(".prototype);").newLine();
+	    else
+	        transpiler.append(this.getName()).append(".prototype = Object.create($Root.prototype);").newLine();
+	    transpiler.append(this.getName()).append(".prototype.constructor = ").append(this.getName()).append(";").newLine();
+	    transpiler = transpiler.newInstanceTranspiler(new CategoryType(this.getId()));
+	    // this.transpileMethods(transpiler);
+	    // this.transpileGetterSetters(transpiler);
+	    transpiler.flush();
+	    return true;
+	}
+
+	private void transpileLocalAttributes(Transpiler transpiler) {
+	    Set<Identifier> attributes = this.getLocalAttributes(transpiler.getContext());
+	    if (attributes!=null) {
+	        transpiler.append("this.mutable = true;").newLine();
+	        transpiler.append("values = Object.assign({}, copyFrom, values);").newLine();
+	        attributes.forEach(attr -> {
+	            transpiler.append("this.setMember('").append(attr.toString()).append("', values.").append(attr.toString()).append(" || null, mutable);").newLine();
+	        });
+	    }
+	}
+
+	private void transpileSuperConstructor(Transpiler transpiler) {
+	    if (this.derivedFrom!=null && this.derivedFrom.size()>0) {
+	        this.derivedFrom.forEach(derived-> {
+	            transpiler.append(derived.toString()).append(".call(this, copyFrom, values, mutable);").newLine();
+	        });
+	    } else
+	        transpiler.append("$Root.call(this);").newLine();
+		
+	}
 	
 }

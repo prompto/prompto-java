@@ -29,20 +29,30 @@ import prompto.declaration.SingletonCategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
+import prompto.expression.InstanceExpression;
+import prompto.expression.MemberSelector;
+import prompto.expression.MethodSelector;
+import prompto.grammar.ArgumentAssignment;
+import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
 import prompto.grammar.Operator;
 import prompto.instance.MemberInstance;
 import prompto.instance.VariableInstance;
 import prompto.intrinsic.PromptoRoot;
 import prompto.runtime.Context;
+import prompto.runtime.MethodFinder;
 import prompto.runtime.Score;
+import prompto.runtime.Variable;
+import prompto.statement.MethodCall;
 import prompto.store.Family;
 import prompto.store.IDataStore;
 import prompto.store.IStore;
 import prompto.store.IStored;
+import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 import prompto.utils.Logger;
 import prompto.utils.TypeUtils;
+import prompto.value.ExpressionValue;
 import prompto.value.IInstance;
 import prompto.value.IValue;
 import prompto.value.NullValue;
@@ -548,5 +558,101 @@ public class CategoryType extends BaseType {
 		method.addInstruction(Opcode.CHECKCAST, k);
 	}
 
+	@Override
+	public void declareSorted(Transpiler transpiler, IExpression key) {
+	    String keyname = key!=null ? key.toString() : "key";
+	    IDeclaration decl = this.getDeclaration(transpiler.getContext());
+	    if(decl instanceof CategoryDeclaration) {
+	    	CategoryDeclaration cd = (CategoryDeclaration)decl;
+	    	if ( cd.hasAttribute(transpiler.getContext(), new Identifier(keyname)) ||  cd.hasMethod(transpiler.getContext(), new Identifier(keyname), null))
+	    		return;
+	    } 
+        decl = this.findGlobalMethod(transpiler.getContext(), keyname);
+        if (decl != null) {
+            decl.declare(transpiler);
+        } else {
+            key.declare(transpiler);
+        }
+	}
+	
+	@Override
+	public void transpileSorted(Transpiler transpiler, boolean descending, IExpression key) {
+	    String keyname = key!=null ? key.toString() : "key";
+	    IDeclaration decl = this.getDeclaration(transpiler.getContext());
+	    if(decl instanceof CategoryDeclaration) {
+	    	CategoryDeclaration cd = (CategoryDeclaration)decl;
+    	    if (cd.hasAttribute(transpiler.getContext(), new Identifier(keyname))) {
+    	    	this.transpileSortedByAttribute(transpiler, descending, key);
+    	    	return;
+    	    } else if (cd.hasMethod(transpiler.getContext(), new Identifier(keyname), null)) {
+    	    	throw new UnsupportedOperationException();
+    	    	/*this.transpileSortedByClassMethod(transpiler, descending, key);
+    	    	return;*/
+    	    } 
+	    }
+	    decl = this.findGlobalMethod(transpiler.getContext(), keyname);
+        if (decl != null) {
+	    	throw new UnsupportedOperationException();
+            // this.transpileSortedByGlobalMethod(transpiler, descending, decl.getTranspiledName(transpiler.getContext()));
+	    	// return;
+        }
+        this.transpileSortedByExpression(transpiler, descending, key);
+	}
 
+	private void transpileSortedByExpression(Transpiler transpiler, boolean descending, IExpression key) {
+	    this.transpileSortedByAttribute(transpiler, descending, key);
+	}
+
+	private void transpileSortedByAttribute(Transpiler transpiler, boolean descending, IExpression key) {
+	    key = key!=null ? key : new InstanceExpression(new Identifier("key"));
+	    transpiler.append("function(o1, o2) { return ");
+	    this.transpileEqualKeys(transpiler, key);
+	    transpiler.append(" ? 0 : ");
+	    this.transpileGreaterKeys(transpiler, key);
+	    transpiler.append(" ? ");
+	    if(descending)
+	        transpiler.append("-1 : 1; }");
+	    else
+	        transpiler.append("1 : -1; }");
+	}
+
+	private void transpileGreaterKeys(Transpiler transpiler, IExpression key) {
+	    transpiler.append("o1.");
+	    key.transpile(transpiler);
+	    transpiler.append(" > o2.");
+	    key.transpile(transpiler);
+	}
+
+	private void transpileEqualKeys(Transpiler transpiler, IExpression key) {
+	    transpiler.append("o1.");
+	    key.transpile(transpiler);
+	    transpiler.append(" === o2.");
+	    key.transpile(transpiler);
+	}
+
+	private IDeclaration findGlobalMethod(Context context, String name) {
+		try {
+			IExpression exp = new ExpressionValue(this, this.newInstance(context));
+			ArgumentAssignment arg = new ArgumentAssignment(null, exp);
+			ArgumentAssignmentList args = new ArgumentAssignmentList(arg);
+			MethodCall proto = new MethodCall(new MethodSelector(null, new Identifier(name)), args);
+			MethodFinder finder = new MethodFinder(context, proto);
+			return finder.findBestMethod(true);
+		} catch (PromptoError error) {
+			return null;
+		}
+	}
+	
+	@Override
+	public void declareMember(Transpiler transpiler, String name) {
+		// TODO visit attributes
+	}
+	
+	@Override
+	public void transpileMember(Transpiler transpiler, String name) {
+	    if ("text".equals(name))
+	        transpiler.append("getText()");
+	    else
+	        transpiler.append(name);
+	}
 }

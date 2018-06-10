@@ -11,6 +11,7 @@ import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.runtime.Context;
+import prompto.type.CategoryType;
 import prompto.utils.ResourceUtils;
 
 public class Transpiler {
@@ -56,6 +57,12 @@ public class Transpiler {
 			calling = this.context.newChildContext();
 		return this.copyTranspiler(calling);
 	}
+	
+	public Transpiler newInstanceTranspiler(CategoryType categoryType) {
+		Context context = this.context.newInstanceContext(categoryType, true);
+		return this.copyTranspiler(context);
+	}
+
 
 	public Transpiler copyTranspiler(Context context) {
 		Transpiler transpiler = new Transpiler(context);
@@ -186,7 +193,6 @@ public class Transpiler {
 	public boolean supportsDestructuring() {
 		return supportsDestructuring;
 	}
-
 
 
 

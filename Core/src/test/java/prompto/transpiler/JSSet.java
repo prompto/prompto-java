@@ -14,6 +14,9 @@ public class JSSet {
 
 	Set<Object> set = new HashSet<>();
 	
+	public JSSet() {
+	}
+	
 	public JSSet(Object values) {
 		if(values instanceof ScriptObjectMirror) {
 			List<Object> list = convert((ScriptObjectMirror)values);
