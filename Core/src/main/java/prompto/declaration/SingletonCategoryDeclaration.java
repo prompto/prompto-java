@@ -21,6 +21,8 @@ import prompto.grammar.Identifier;
 import prompto.grammar.MethodDeclarationList;
 import prompto.intrinsic.PromptoRoot;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
+import prompto.type.CategoryType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
 
@@ -135,5 +137,27 @@ public class SingletonCategoryDeclaration extends ConcreteCategoryDeclaration {
 		return new ResultInfo(void.class);
 	}
 
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    transpiler.append("function ").append(this.getName()).append("() {").indent();
+	    transpiler.append("$Root.call(this);").newLine();
+	    transpiler.append("this.mutable = true;").newLine();
+	    transpiler.append("return this;").dedent();
+	    transpiler.append("};").newLine();
+	    transpiler.append(this.getName()).append(".prototype = Object.create($Root.prototype);").newLine();
+	    transpiler.append(this.getName()).append(".prototype.constructor = ").append(this.getName()).append(";").newLine();
+	    transpiler.append(this.getName()).append(".instance = new ").append(this.getName()).append("();").newLine();
+	    if(this.attributes!=null) {
+	        this.attributes.forEach(attr -> transpiler.append(this.getName()).append(".instance.").append(attr.toString()).append(" = null;").newLine());
+	    }
+	    Transpiler instance = transpiler.newInstanceTranspiler(new CategoryType(this.getId()));
+	    this.methods.forEach(method -> {
+	    	Transpiler m = instance.newMemberTranspiler();
+	        method.transpile(m);
+	        m.flush();
+	    });
+	    instance.flush();
+		return true;
+	}
 
 }

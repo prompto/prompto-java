@@ -20,6 +20,7 @@ import prompto.declaration.AbstractMethodDeclaration;
 import prompto.declaration.BuiltInMethodDeclaration;
 import prompto.declaration.ClosureDeclaration;
 import prompto.declaration.ConcreteMethodDeclaration;
+import prompto.declaration.DispatchMethodDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.NotMutableError;
@@ -32,6 +33,7 @@ import prompto.expression.ThisExpression;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
+import prompto.grammar.Specificity;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.Context.InstanceContext;
@@ -49,6 +51,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	MethodSelector selector;
 	ArgumentAssignmentList assignments;
 	String variableName;
+	DispatchMethodDeclaration dispatcher;
 	
 	public MethodCall(MethodSelector selector) {
 		this.selector = selector;
@@ -334,7 +337,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	public void declare(Transpiler transpiler) {
 		Context context = transpiler.getContext();
 		MethodFinder finder = new MethodFinder(context, this);
-	    List<IMethodDeclaration> declarations = finder.findCompatibleMethods(false, true);
+	    List<IMethodDeclaration> declarations = finder.findCompatibleMethods(false, true, spec -> spec!= Specificity.INCOMPATIBLE);
 	    if(declarations.size()==1 && declarations.get(0) instanceof BuiltInMethodDeclaration) {
             ((BuiltInMethodDeclaration)declarations.get(0)).declareCall(transpiler);
 	    } else {
@@ -344,12 +347,11 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	            Context local = this.selector.newLocalCheckContext(transpiler.getContext(), declaration);
 	            this.declareDeclaration(transpiler, declaration, local);
 	        });
-	        if(declarations.size()>1 /*&& !this.dispatcher*/) {
-	        	throw new UnsupportedOperationException();/*
-	            var declaration = finder.findMethod(false);
-	            var sorted = finder.sortMostSpecificFirst(declarations);
-	            this.dispatcher = new DispatchMethodDeclaration(transpiler.context, this, declaration, sorted);
-	            transpiler.declare(this.dispatcher);*/
+	        if(declarations.size()>1 && this.dispatcher==null) {
+	        	IMethodDeclaration declaration = finder.findBestMethod(false);
+	        	List<IMethodDeclaration> sorted = finder.sortMostSpecificFirst(declarations);
+	            this.dispatcher = new DispatchMethodDeclaration(transpiler.getContext(), this, declaration, sorted);
+	            transpiler.declare(this.dispatcher);
 	        }
 	    }
 	}
@@ -374,7 +376,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 		MethodFinder finder = new MethodFinder(transpiler.getContext(), this);
-	    List<IMethodDeclaration> declarations = finder.findCompatibleMethods(false, true);
+	    List<IMethodDeclaration> declarations = finder.findCompatibleMethods(false, true, spec -> spec!=Specificity.INCOMPATIBLE);
 	    if (declarations.size() == 1)
 	        this.transpileSingle(transpiler, declarations.get(0), false);
 	    else

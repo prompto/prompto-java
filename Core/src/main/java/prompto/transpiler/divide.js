@@ -5,20 +5,18 @@ function divide( a, b ) {
         return a / b;
 }
 
-
-function DivideByZeroError(message) {
+function DivideByZeroError() {
     if (!Error.captureStackTrace)
       this.stack = (new Error()).stack;
     else
       Error.captureStackTrace(this, this.constructor);
-    this.message = message;
-    init && init.apply(this, arguments);
     return this;
 }
-DivideByZeroError.prototype = new Error();
+DivideByZeroError.prototype = Object.create(Error.prototype);
+DivideByZeroError.prototype.constructor = DivideByZeroError;
+DivideByZeroError.prototype.message = "Divide by zero!";
 DivideByZeroError.prototype.name = "DivideByZeroError";
 DivideByZeroError.prototype.promptoName = "DIVIDE_BY_ZERO";
-DivideByZeroError.prototype.constructor = DivideByZeroError;
 DivideByZeroError.prototype.toString = function() {
 	return this.message;
 };

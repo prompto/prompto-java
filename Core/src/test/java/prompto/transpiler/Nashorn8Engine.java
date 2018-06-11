@@ -22,7 +22,7 @@ import com.coveo.nashorn_modules.Folder;
 import com.coveo.nashorn_modules.Require;
 
 @SuppressWarnings("restriction")
-public class JSEngine {
+public class Nashorn8Engine implements IJSEngine {
 
 	public static void executeTests(Context context) {
 		// TODO Auto-generated method stub
@@ -31,7 +31,9 @@ public class JSEngine {
 	
 	public static void executeMainNoArgs(Context context) throws Exception {
 		IMethodDeclaration method = MethodLocator.locateMethod(context, new Identifier("main"), new DictLiteral(false));
-		String js = Transpiler.transpileMethod(context, method, "ObjectAssign", "ObjectIs", "StringRepeat", "StringIncludes", "ArrayFrom", "ArrayIncludes");
+		Transpiler transpiler = new Transpiler(new Nashorn8Engine(), context);
+		method.declare(transpiler);
+		String js = transpiler.toString();
 		try(OutputStream output = new FileOutputStream("transpiled.js")) {
 			output.write(js.getBytes());
 		}
@@ -53,7 +55,7 @@ public class JSEngine {
 
 		@Override
 		public String getFile(String name) {
-			String path = JSEngine.class.getPackage().getName().replace('.', '/') + '/' + name;
+			String path = Nashorn8Engine.class.getPackage().getName().replace('.', '/') + '/' + name;
 			try {
 				return ResourceUtils.getResourceAsString(path);
 			} catch(Throwable t) {
@@ -81,5 +83,20 @@ public class JSEngine {
 	
 	}
 	
+	@Override
+	public Iterable<String> getPolyfills() {
+		return 	Arrays.asList("ObjectAssign", "ObjectIs", "StringRepeat", "StringIncludes", "ArrayFrom", "ArrayIncludes");
+	}
 
+
+	@Override
+	public boolean supportsDestructuring() {
+		return false;
+	}
+	
+	@Override
+	public boolean supportsClass() {
+		return false;
+	}
+	
 }

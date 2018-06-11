@@ -356,6 +356,32 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 	}
 
 	private void transpileUserError(Transpiler transpiler) {
+		if(transpiler.supportsClass())
+			transpileUserErrorClass(transpiler);
+		else
+			transpileUserErrorPrototype(transpiler);
+	    this.symbolsList.forEach(symbol -> symbol.initializeError(transpiler));
+	    this.transpileSymbols(transpiler);
+}
+	
+	private void transpileUserErrorPrototype(Transpiler transpiler) {
+	    transpiler.append("function ").append(this.getName()).append(" (values) {").indent()
+	    	.append("if (!Error.captureStackTrace)").indent()
+	    	.append("this.stack = (new Error()).stack;").dedent()
+	    	.append("else").indent()
+	    	.append("Error.captureStackTrace(this, this.constructor);").dedent()
+	    	.append("this.message = values.text;").newLine()
+	    	.append("this.promptoName = values.name;").newLine()
+	    	.append("return this;").dedent()
+	    	.append("}").newLine()
+	    	.append(this.getName()).append(".prototype = Object.create(Error.prototype);").newLine()
+	    	.append(this.getName()).append(".prototype.constructor = ").append(this.getName()).append(";").newLine()
+	    	.append(this.getName()).append(".prototype.name = '").append(this.getName()).append("';").newLine()
+	    	.append(this.getName()).append(".prototype.toString = function() { return this.message; };").newLine()
+	    	.append(this.getName()).append(".prototype.getText = function() { return this.message; };").newLine();
+	}
+
+	private void transpileUserErrorClass(Transpiler transpiler) {
 	    transpiler.append("class ").append(this.getName()).append(" extends Error {").indent();
 	    transpiler.newLine();
 	    transpiler.append("constructor(values) {").indent();
@@ -375,8 +401,6 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 	    transpiler.append("toString() {").indent().append("return this.message;").dedent().append("}").newLine();
 	    transpiler.append("getText() {").indent().append("return this.message;").dedent().append("}").newLine();
 	    transpiler.dedent().append("}").newLine();
-	    this.symbolsList.forEach(symbol -> symbol.initializeError(transpiler));
-	    this.transpileSymbols(transpiler);
 	}
 
 	private void transpileSymbols(Transpiler transpiler) {

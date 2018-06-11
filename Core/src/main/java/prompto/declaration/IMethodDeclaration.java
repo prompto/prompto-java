@@ -1,5 +1,7 @@
 package prompto.declaration;
 
+import java.util.function.Predicate;
+
 import prompto.argument.IArgument;
 import prompto.compiler.ClassFile;
 import prompto.compiler.Flags;
@@ -31,11 +33,10 @@ public interface IMethodDeclaration extends IDeclaration {
 	default DeclarationStatement<IMethodDeclaration> getDeclarationOf() { throw new UnsupportedOperationException("setDeclarationOf " + this.getClass().getName()); }
 	IValue interpret(Context context) throws PromptoError;
 	void check(ConcreteCategoryDeclaration declaration, Context context);
-	boolean isAssignableTo(Context context, ArgumentAssignmentList assignments, boolean checkInstance, boolean allowDerived);
+	boolean isAssignableTo(Context context, ArgumentAssignmentList assignments, boolean checkInstance, boolean allowDerived, Predicate<Specificity> filter);
 	boolean isAssignableFrom(Context context, ArgumentAssignmentList assignments);
 	void registerArguments(Context local);
-	Specificity computeSpecificity(Context context, IArgument argument, ArgumentAssignment assignment, 
-			boolean allowAncestor, boolean useInstance);
+	Specificity computeSpecificity(Context context, IArgument argument, ArgumentAssignment assignment, boolean useInstance, boolean allowDerived);
 	void compile(Context context, boolean isStart, ClassFile classFile);
 	void compilePrototype(Context context, boolean isStart, ClassFile classFile);
 	String compileTemplate(Context context, boolean isStart, ClassFile classFile);

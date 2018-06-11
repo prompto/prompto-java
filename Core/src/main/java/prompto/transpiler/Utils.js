@@ -97,3 +97,23 @@ String.prototype.slice1Based = function(start, last) {
     }
 };
 String.prototype.getText = String.prototype.toString;
+
+function NotMutableError() {
+    if (!Error.captureStackTrace)
+      this.stack = (new Error()).stack;
+    else
+      Error.captureStackTrace(this, this.constructor);
+    return this;
+}
+NotMutableError.prototype = Object.create(Error.prototype);
+NotMutableError.prototype.constructor = NotMutableError;
+NotMutableError.prototype.message = "Not a mutable object!";
+NotMutableError.prototype.name = "NotMutableError";
+NotMutableError.prototype.promptoName = "NOT_MUTABLE";
+NotMutableError.prototype.toString = function() {
+	return this.message;
+};
+NotMutableError.prototype.getText = function() {
+	return this.message;
+};
+

@@ -1,6 +1,7 @@
 package prompto.declaration;
 
 import java.lang.reflect.Modifier;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -127,7 +128,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	}
 	
 	@Override
-	public boolean isAssignableTo(Context context, ArgumentAssignmentList assignments, boolean checkInstance, boolean allowDerived) {
+	public boolean isAssignableTo(Context context, ArgumentAssignmentList assignments, boolean checkInstance, boolean allowDerived, Predicate<Specificity> filter) {
 		try {
 			Context local = context.newLocalContext();
 			registerArguments(local);
@@ -141,7 +142,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 				}
 				if(assignment==null) // missing argument
 					return false;
-				if(!isAssignableTo(local, argument, assignment, checkInstance))
+				if(!isAssignableTo(local, argument, assignment, checkInstance, allowDerived, filter))
 					return false;
 				assignmentsList.remove(assignment);
 			}
@@ -176,9 +177,9 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 		}
 	}
 	
-	boolean isAssignableTo(Context context, IArgument argument, ArgumentAssignment assignment, boolean useInstance) {
-		Specificity spec = computeSpecificity(context, argument, assignment, false, useInstance);
-		return spec.isAssignable();
+	boolean isAssignableTo(Context context, IArgument argument, ArgumentAssignment assignment, boolean useInstance, boolean allowDerived, Predicate<Specificity> filter) {
+		Specificity spec = computeSpecificity(context, argument, assignment, useInstance, allowDerived);
+		return filter.test(spec);
 	}
 	
 	boolean isAssignableFrom(Context context, IArgument argument, ArgumentAssignment assignment) {
@@ -199,8 +200,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	}
 
 	@Override
-	public Specificity computeSpecificity(Context context, IArgument argument, ArgumentAssignment assignment,
-				boolean allowAncestor, boolean useInstance) {
+	public Specificity computeSpecificity(Context context, IArgument argument, ArgumentAssignment assignment, boolean useInstance, boolean allowDerived) {
 		try {
 			IType required = argument.getType(context);
 			IType actual = assignment.getExpression().check(context);
@@ -213,13 +213,15 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 			}
 			if(actual.equals(required))
 				return Specificity.EXACT;
-			if(required.isAssignableFrom(context, actual)) 
+			else if(required.isAssignableFrom(context, actual)) 
 				return Specificity.INHERITED;
-			if(allowAncestor && actual.isAssignableFrom(context, required)) 
-				return Specificity.ANCESTOR;
+			else if(allowDerived && actual.isAssignableFrom(context, required)) 
+				return Specificity.DERIVED;
 			actual = assignment.resolve(context, this, useInstance, false).check(context);
 			if(required.isAssignableFrom(context, actual))
-				return Specificity.RESOLVED;
+				return Specificity.IMPLICIT;
+			else if(allowDerived && actual.isAssignableFrom(context, required))
+				return Specificity.IMPLICIT;
 		} catch(PromptoError error) {
 		}
 		return Specificity.INCOMPATIBLE; 

@@ -8,7 +8,10 @@ import prompto.grammar.NativeAttributeBindingListMap;
 import prompto.grammar.NativeCategoryBinding;
 import prompto.grammar.NativeCategoryBindingList;
 import prompto.java.JavaNativeCategoryBinding;
+import prompto.javascript.JavaScriptNativeCategoryBinding;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
+import prompto.type.CategoryType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
 import prompto.value.IInstance;
@@ -146,5 +149,40 @@ public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 		else
 			return null;
 	}
+	
+	private JavaScriptNativeCategoryBinding getJavaScriptBinding() {
+		for(NativeCategoryBinding mapping : categoryBindings) {
+			if(mapping instanceof JavaScriptNativeCategoryBinding)
+				return (JavaScriptNativeCategoryBinding)mapping;
+		}
+		throw new SyntaxError("Missing JAVASCRIPT mapping !");
+	}
+
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		transpiler.declare(this);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		JavaScriptNativeCategoryBinding binding = this.getJavaScriptBinding();
+	    binding.transpile(transpiler);
+	    String name = binding.getBoundName();
+	    transpiler.append("function ").append("new_").append(this.getName()).append("(values) {").indent();
+	    transpiler.append("values = values || {};").newLine();
+	    transpiler.append("var value = new ").append(name).append("();").newLine();
+	    if(this.attributes!=null) {
+	        this.attributes.forEach(attr -> transpiler.append("value.").append(attr.toString()).append(" = values.hasOwnProperty('").append(attr.toString()).append("') ? values.").append(attr.toString()).append(" : null;").newLine());
+	    }
+	    transpiler.append("return value;").newLine();
+	    transpiler.dedent().append("}").newLine();
+	    Transpiler instance = transpiler.newInstanceTranspiler(new CategoryType(this.getId()));
+	    this.transpileMethods(instance);
+	    this.transpileGetterSetters(instance);
+	    instance.flush();
+	    return true;
+	}
+
 	
 }

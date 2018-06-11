@@ -417,7 +417,7 @@ public class ConstructorExpression implements IExpression {
 	public boolean transpile(Transpiler transpiler) {
 		CategoryDeclaration decl = transpiler.getContext().getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
 	    if (decl instanceof NativeCategoryDeclaration)
-	        this.transpileNative(transpiler, decl);
+	        this.transpileNative(transpiler, (NativeCategoryDeclaration)decl);
 	    else
 	        this.transpileConcrete(transpiler);
 	    return false;
@@ -452,7 +452,10 @@ public class ConstructorExpression implements IExpression {
 	        transpiler.append("null");
 	}
 
-	private void transpileNative(Transpiler transpiler, CategoryDeclaration decl) {
-		throw new UnsupportedOperationException();
+	private void transpileNative(Transpiler transpiler, NativeCategoryDeclaration decl) {
+	    Class<?> bound = decl.getBoundClass(true);
+	    transpiler.append("new_").append(bound.getSimpleName()).append("(");
+	    this.transpileAssignments(transpiler);
+	    transpiler.append(")");
 	}
 }

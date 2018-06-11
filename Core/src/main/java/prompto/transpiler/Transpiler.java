@@ -8,22 +8,13 @@ import java.util.Stack;
 import java.util.stream.Collectors;
 
 import prompto.declaration.CategoryDeclaration;
-import prompto.declaration.IMethodDeclaration;
 import prompto.runtime.Context;
 import prompto.type.CategoryType;
 import prompto.utils.ResourceUtils;
 
 public class Transpiler {
 
-	public static String transpileMethod(Context context, IMethodDeclaration method, String ... polyfills) {
-		Transpiler transpiler = new Transpiler(context);
-		transpiler.require("Utils");
-		for(String polyfill : polyfills)
-			transpiler.require(polyfill);
-		method.declare(transpiler);
-		return transpiler.toString();
-	}
-
+	IJSEngine engine;
 	Context context;
 	Transpiler parent;
 	Set<ITranspilable> declared;
@@ -31,11 +22,11 @@ public class Transpiler {
 	Stack<String> lines;
 	StringBuilder line;
 	String indents;
-	boolean supportsDestructuring = false;
 	String getterName;
 	String setterName;
 	
-	public Transpiler(Context context) {
+	public Transpiler(IJSEngine engine, Context context) {
+		this.engine = engine;
 		this.context = context;
 		this.declared = new HashSet<>();
 	    this.required = new HashSet<>();
@@ -44,6 +35,9 @@ public class Transpiler {
 	    this.indents = "";
 	    this.getterName = null;
 	    this.setterName = null;
+	    // load polyfills
+		this.require("Utils");
+		engine.getPolyfills().forEach(poly->this.require(poly));
  	}
 	
 	public Context getContext() {
@@ -95,7 +89,7 @@ public class Transpiler {
 
 
 	public Transpiler copyTranspiler(Context context) {
-		Transpiler transpiler = new Transpiler(context);
+		Transpiler transpiler = new Transpiler(this.engine, context);
 	    transpiler.declared = this.declared;
 	    transpiler.required = this.required;
 	    transpiler.lines = this.lines;
@@ -216,12 +210,12 @@ public class Transpiler {
 		}
 	}
 
-	public void supportsDestructuring(boolean set) {
-		supportsDestructuring = set;
-	}
-	
 	public boolean supportsDestructuring() {
-		return supportsDestructuring;
+		return engine.supportsDestructuring();
+	}
+
+	public boolean supportsClass() {
+		return engine.supportsClass();
 	}
 
 

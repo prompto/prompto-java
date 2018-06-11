@@ -1029,7 +1029,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	    return true;
 	}
 
-	private void transpileGetterSetters(Transpiler transpiler) {
+	protected void transpileGetterSetters(Transpiler transpiler) {
 		Set<Identifier> names = this.methods.stream().filter(decl -> {
 	        return (decl instanceof SetterMethodDeclaration || decl instanceof GetterMethodDeclaration);
 	    }).map(decl -> decl.getId()).collect(Collectors.toSet());
@@ -1068,7 +1068,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	    }
 	}
 
-	private void transpileMethods(Transpiler transpiler) {
+	protected void transpileMethods(Transpiler transpiler) {
 	    this.methods.stream().filter(decl -> {
 	        return !(decl instanceof SetterMethodDeclaration || decl instanceof GetterMethodDeclaration);
 	    }).forEach(method -> {

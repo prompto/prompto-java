@@ -2,6 +2,7 @@ package prompto.javascript;
 
 import java.util.Collection;
 
+import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 
 public class JavaScriptModule {
@@ -23,6 +24,10 @@ public class JavaScriptModule {
 			writer.append('/');
 		}
 		writer.trimLast(1);
+	}
+
+	public void transpile(Transpiler transpiler, String identifier) {
+		// TODO 
 	}
 
 }
