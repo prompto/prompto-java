@@ -28,7 +28,7 @@ import prompto.runtime.Executor;
 import prompto.runtime.Interpreter;
 import prompto.runtime.utils.Out;
 import prompto.store.IDataStore;
-import prompto.transpiler.JSEngine;
+import prompto.transpiler.Nashorn8Engine;
 
 public abstract class BaseParserTest extends BaseTest {
 
@@ -125,9 +125,9 @@ public abstract class BaseParserTest extends BaseTest {
 		try {
 			loadResource(resourceName);
 			if(context.hasTests()) {
-				JSEngine.executeTests(context);
+				Nashorn8Engine.executeTests(context);
 			} else {
-				JSEngine.executeMainNoArgs(context);
+				Nashorn8Engine.executeMainNoArgs(context);
 			}
 			return true;
 		} catch(Exception e) {
