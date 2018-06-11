@@ -105,6 +105,11 @@ public class AnyType extends NativeType {
 	}
 	
 	@Override
+	public void declare(Transpiler transpiler) {
+		 // nothing to do
+	}
+	
+	@Override
 	public void declareItem(Transpiler transpiler, IType itemType, IExpression item) {
 	    // required to support Document items
 		itemType.declare(transpiler);

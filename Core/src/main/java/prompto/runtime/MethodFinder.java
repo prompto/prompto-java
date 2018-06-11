@@ -201,7 +201,14 @@ public class MethodFinder {
 	    declarations = new ArrayList<>(declarations);
 	    declarations.sort((d1, d2) -> {
 	        Score score = compareSpecifity(d2, d1, false, true);
-	        return score.ordinal() -1;
+	        switch(score) {
+	        case BETTER:
+	        	return 1; 
+	        case WORSE:
+	        	return -1;
+        	default:
+        		return 0;
+	        }
 	    });
 	    return declarations;
 	}

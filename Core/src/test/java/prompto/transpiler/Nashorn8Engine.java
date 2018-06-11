@@ -39,16 +39,15 @@ public class Nashorn8Engine implements IJSEngine {
 		}
 		List<String> lines = Arrays.asList(
 				js,
-				"var require = function(value) { return Java.from(Java.type('prompto.transpiler.JSEngine').require(value)); };",
-				"var Set = Java.type('prompto.transpiler.JSSet');",
-				"var process = { stdout: { write: print } };",
-				"var method = main$Text_dict;"
+				"var require = function(value) { return Java.from(Java.type('" + Nashorn8Engine.class.getName() + "').require(value)); };",
+				"var Set = Java.type('" + JSSet.class.getName() + "');",
+				"var process = { stdout: { write: print } };"
 				);
 		js = lines.stream().collect(Collectors.joining("\n"));
 		ScriptEngine nashorn = new ScriptEngineManager().getEngineByName("nashorn");
 		nashorn.eval(js);
 		Require.enable((NashornScriptEngine)nashorn, new ScriptsFolder());
-		((Invocable)nashorn).invokeFunction("method");
+		((Invocable)nashorn).invokeFunction("main$Text_dict");
 	}
 	
 	static class ScriptsFolder implements Folder {

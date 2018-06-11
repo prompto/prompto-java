@@ -27,6 +27,10 @@ public class UnresolvedArgument extends BaseArgument implements INamedArgument {
 		super(id);
 	}
 	
+	public INamedArgument getResolved() {
+		return resolved;
+	}
+	
 	@Override
 	public String getSignature(Dialect dialect) {
 		return getId().toString();

@@ -3,10 +3,14 @@ package prompto.grammar;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import prompto.argument.IArgument;
 import prompto.declaration.IMethodDeclaration;
+import prompto.error.SyntaxError;
+import prompto.expression.IExpression;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
+import prompto.value.ContextualExpression;
 
 
 public class ArgumentAssignmentList extends LinkedList<ArgumentAssignment> {
@@ -28,6 +32,15 @@ public class ArgumentAssignmentList extends LinkedList<ArgumentAssignment> {
 	public ArgumentAssignmentList(Collection<ArgumentAssignment> assignments, ArgumentAssignment assignment) {
 		super(assignments);
 		this.add(assignment);
+	}
+
+	public int findIndex(Identifier name) {
+		for(int i=0;i<this.size();i++) {
+			if(name.equals(this.get(i).getArgumentId())) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	public ArgumentAssignment find(Identifier name) {
@@ -103,6 +116,35 @@ public class ArgumentAssignmentList extends LinkedList<ArgumentAssignment> {
 		}
 		
 	}
+
+	public ArgumentAssignmentList makeAssignments(Context context, IMethodDeclaration declaration) {
+		ArgumentAssignmentList local = new ArgumentAssignmentList(this);
+		ArgumentAssignmentList assignments = new ArgumentAssignmentList();
+		for(int i=0;i<declaration.getArguments().size();i++) {
+		    IArgument argument = declaration.getArguments().get(i);
+		    ArgumentAssignment assignment = null;
+	        int index = local.findIndex(argument.getId());
+		    if(index<0 && i==0 && this.size()>0 && this.get(0).getArgument()==null)
+		        index = 0;
+		    if(index>=0) {
+	            assignment = local.get(index);
+	            local.remove(index);
+	        }
+	        if(assignment==null) {
+	            if (argument.getDefaultExpression() != null)
+	                assignments.add(new ArgumentAssignment(argument, argument.getDefaultExpression()));
+	            else
+	                throw new SyntaxError("Missing argument:" + argument.getName());
+	        } else {
+	            IExpression expression = new ContextualExpression(context, assignment.getExpression());
+	            assignments.add(new ArgumentAssignment(argument, expression));
+	        }
+	    }
+	    if(local.size() > 0)
+	        throw new SyntaxError("Method has no argument:" + local.get(0).getArgument().getName());
+		return assignments;
+	}
+
 
 
 }

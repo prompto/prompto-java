@@ -4,8 +4,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import prompto.argument.AttributeArgument;
+import prompto.argument.CategoryArgument;
 import prompto.argument.IArgument;
+import prompto.argument.UnresolvedArgument;
 import prompto.compiler.ClassFile;
+import prompto.grammar.ArgumentList;
 import prompto.runtime.Context;
 import prompto.statement.MethodCall;
 import prompto.transpiler.Transpiler;
@@ -58,12 +62,56 @@ public class DispatchMethodDeclaration extends BaseMethodDeclaration {
 	    }
 	}
 
-	private void transpileCall(Transpiler transpiler, IMethodDeclaration iMethodDeclaration) {
-		throw new UnsupportedOperationException();
+	private void transpileCall(Transpiler transpiler, IMethodDeclaration declaration) {
+	    call.transpileSelector(transpiler, declaration);
+	    transpiler.append("(");
+	    this.arguments.forEach(arg -> {
+	        transpiler.append(arg.getName());
+	        transpiler.append(", ");
+	    });
+	    transpiler.trimLast(2);
+	    transpiler.append(")");
 	}
 
-	private void transpileTest(Transpiler transpiler, Set<IArgument> common, IMethodDeclaration iMethodDeclaration) {
-		throw new UnsupportedOperationException();
+	private void transpileTest(Transpiler transpiler, Set<IArgument> common, IMethodDeclaration declaration) {
+	    for(int i = 0, count = 0;i<this.call.getAssignments().size(); i++) {
+	        IArgument incoming = this.call.getAssignments().get(i).getArgument();
+	        if(common.contains(incoming))
+	            continue;
+	        if(count>0)
+	            transpiler.append(" && ");
+	        count++;
+	        if(incoming instanceof UnresolvedArgument)
+	            incoming = ((UnresolvedArgument)incoming).getResolved();
+	        IArgument outgoing = incoming==null ? declaration.getArguments().get(0) : findCorrespondingArg(transpiler.getContext(), declaration.getArguments(), common, incoming);
+	        if(outgoing instanceof UnresolvedArgument)
+	        	outgoing = ((UnresolvedArgument)incoming).getResolved();
+	        if(incoming==null)
+	            incoming = this.declaration.getArguments().get(0);
+	        if(incoming instanceof UnresolvedArgument)
+	            incoming = ((UnresolvedArgument)incoming).getResolved();
+	        if(incoming instanceof CategoryArgument && outgoing instanceof CategoryArgument) {
+	            transpiler.append(incoming.getName()).append(".instanceOf(").append(((CategoryArgument)outgoing).getType().getTypeName()).append(")");
+	        } else if(incoming instanceof CategoryArgument && outgoing instanceof AttributeArgument) {
+	            transpiler.append(incoming.getName()).append(".hasOwnProperty('").append(outgoing.getName()).append("')");
+	        } else
+	            throw new Error("Unsupported: " + incoming.getClass().getSimpleName() + " and " + outgoing.getClass().getSimpleName());
+	    }
+	}
+
+	private IArgument findCorrespondingArg(Context context2, ArgumentList arguments, Set<IArgument> common, IArgument incoming) {
+	    for(int i=0;i<arguments.size();i++) {
+	    	IArgument outgoing = arguments.get(i);
+	        if (common.contains(outgoing))
+	            continue;
+	        if (outgoing.equals(incoming))
+	            return outgoing;
+	        if (incoming instanceof CategoryArgument && outgoing instanceof CategoryArgument) {
+	            if(((CategoryArgument)incoming).getType().isAssignableFrom(context, ((CategoryArgument)outgoing).getType()) || ((CategoryArgument)outgoing).getType().isAssignableFrom(context, ((CategoryArgument)incoming).getType()))
+	                return outgoing;
+	        }
+	    }
+	    throw new Error("Could not find matching argument for: " + incoming + " in " + arguments);
 	}
 
 	private Set<IArgument> collectCommonArguments() {

@@ -163,10 +163,10 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	}
 
 	public ArgumentAssignmentList makeAssignments(Context context, IMethodDeclaration declaration) {
+		ArgumentAssignmentList assignments = this.assignments;
 		if (assignments == null)
-			return new ArgumentAssignmentList();
-		else
-			return assignments.resolveAndCheck(context, declaration);
+			assignments = new ArgumentAssignmentList();
+		return assignments.makeAssignments(context, declaration);
 	}
 
 	public ArgumentAssignmentList makeCodeAssignments(Context context, IMethodDeclaration declaration) {
@@ -410,7 +410,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	        transpiler.append("()");
 	}
 
-	private void transpileSelector(Transpiler transpiler, IMethodDeclaration declaration) {
+	public void transpileSelector(Transpiler transpiler, IMethodDeclaration declaration) {
 	    MethodSelector selector = /*this.fullSelector ||*/ this.selector;
 	    IExpression parent = selector.resolveParent(transpiler.getContext());
 	    if (parent == null && declaration.getMemberOf()!=null && transpiler.getContext().getParentContext() instanceof InstanceContext)
@@ -434,7 +434,13 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	}
 
 	private void transpileMultiple(Transpiler transpiler, List<IMethodDeclaration> declarations) {
-		throw new UnsupportedOperationException();
+	    String name = this.dispatcher.getTranspiledName(transpiler.getContext());
+	    IExpression parent = this.selector.resolveParent(transpiler.getContext());
+	    if(parent==null && declarations.get(0).getMemberOf()!=null && transpiler.getContext().getParentContext() instanceof InstanceContext)
+	        parent = new ThisExpression();
+	    MethodSelector selector = new MethodSelector(parent, new Identifier(name));
+	    selector.transpile(transpiler);
+	    this.transpileAssignments(transpiler, this.dispatcher, false);
 	}
 
 
