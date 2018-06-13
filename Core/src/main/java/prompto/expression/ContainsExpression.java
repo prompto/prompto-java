@@ -485,4 +485,31 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	            throw new UnsupportedOperationException("Unsupported " + this.operator);
 	    }
 	}
+	
+	@Override
+	public void transpileQuery(Transpiler transpiler, String builderName) {
+	    boolean reverse = false;
+	    IExpression value = null;
+	    String name = this.readFieldName(this.left);
+	    if (name != null)
+	        value = this.right;
+	    else {
+	        reverse = true;
+	        name = this.readFieldName(this.right);
+	        if (name != null)
+	            value = this.left;
+	        else
+	            throw new SyntaxError("Unable to transpile predicate");
+	    }
+	    AttributeDeclaration decl = transpiler.getContext().findAttribute(name);
+	    AttributeInfo info = decl.getAttributeInfo(transpiler.getContext());
+	    IType type = value.check(transpiler.getContext());
+	    // TODO check for dbId field of instance value
+	    MatchOp matchOp = this.getMatchOp(transpiler.getContext(), decl.getType(), type, this.operator, reverse);
+	    transpiler.append(builderName).append(".verify(").append(info.toTranspiled()).append(", MatchOp.").append(matchOp.name()).append(", ");
+	    value.transpile(transpiler);
+	    transpiler.append(");").newLine();
+	    if (this.operator.name().indexOf("NOT_")==0)
+	        transpiler.append(builderName).append(".not();").newLine();
+	}
 }

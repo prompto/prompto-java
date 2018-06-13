@@ -352,7 +352,15 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 	}
 
 	private void transpileEnumerated(Transpiler transpiler) {
-		throw new UnsupportedOperationException();
+	    super.transpile(transpiler);
+	    transpiler.newLine();
+	    transpiler.append(this.getName()).append(".prototype.toString = function() { return this.name; };").newLine();
+	    if(this.hasAttribute(transpiler.getContext(), new Identifier("text")))
+	        transpiler.append(this.getName()).append(".prototype.getText = function() { return this.text; };").newLine();
+	    else
+	        transpiler.append(this.getName()).append(".prototype.getText = ").append(this.getName()).append(".prototype.toString;").newLine();
+	    this.symbolsList.forEach(symbol -> symbol.initialize(transpiler));
+	    this.transpileSymbols(transpiler);
 	}
 
 	private void transpileUserError(Transpiler transpiler) {

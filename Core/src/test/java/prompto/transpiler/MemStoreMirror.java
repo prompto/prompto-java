@@ -1,7 +1,6 @@
 package prompto.transpiler;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -12,9 +11,6 @@ import java.util.stream.Collectors;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import prompto.memstore.MemStore;
 import prompto.memstore.Query;
@@ -86,6 +82,10 @@ public class MemStoreMirror {
 			builder.or();
 		}
 
+		public void not() {
+			builder.not();
+		}
+
 		public IQuery build() {
 			return builder.build();
 		}
@@ -118,10 +118,12 @@ public class MemStoreMirror {
 		public Object fromJS(Object value) {
 			if(value instanceof ScriptObjectMirror)
 				value = fromScriptObjectMirror((ScriptObjectMirror)value);
-			if(value==null || value instanceof Boolean || value instanceof Double || value instanceof String)
+			if(value==null || value instanceof Boolean || value instanceof Integer || value instanceof Double || value instanceof String)
 				return value;
 			else if(value instanceof StorableMirror)
 				return ((StorableMirror)value).getStorable();
+			else if(value instanceof StoredMirror)
+				return ((StoredMirror)value).getStored();
 			else if(value instanceof List)
 				return ((List<Object>)value).stream().map(this::fromJS).collect(Collectors.toList());
 			else if(value instanceof Map) {
@@ -137,25 +139,62 @@ public class MemStoreMirror {
 		
 		public Object fromScriptObjectMirror(ScriptObjectMirror value) {
 			if(value.isArray()) {
-				List<Object> listResult = new ArrayList<Object>();
-				value.forEach((k,v)->{
-					if(!isFunction(v))
-						listResult.add(fromJS(v));
-				});
-				return listResult;
+				return fromJSArray(value);
 			} else if(value.getClassName().equals("Object")) {
-				Map<String, Object> mapResult = new HashMap<>();
-				value.forEach((k,v)->{
-					if(!isFunction(v))
-						mapResult.put(k, fromJS(v));
-				});
-				return mapResult;
+				String className = getClassName(value);
+				if("List".equals(className)) 
+					return fromJSList(value);
+				else if("Set".equals(className))
+					return fromJSSet(value);
+				else
+					return fromJSObject(value);
 			} else
 				throw new UnsupportedOperationException(value.getClassName());
 			
 		}
 
 	
+		private Object fromJSArray(ScriptObjectMirror value) {
+			List<Object> listResult = new ArrayList<Object>();
+			value.forEach((k,v)->{
+				if(!isFunction(v))
+					listResult.add(fromJS(v));
+			});
+			return listResult;
+		}
+
+
+		private Object fromJSList(ScriptObjectMirror value) {
+			List<Object> listResult = new ArrayList<Object>();
+			value.forEach((k,v)->{
+				if(!isFunction(v) && !"length".equals(k) && !"mutable".equals(k))
+					listResult.add(fromJS(v));
+			});
+			return listResult;
+		}
+
+
+		private Object fromJSSet(ScriptObjectMirror value) {
+			throw new UnsupportedOperationException();
+		}
+
+
+		private Object fromJSObject(ScriptObjectMirror value) {
+			Map<String, Object> mapResult = new HashMap<>();
+			value.forEach((k,v)->{
+				if(!isFunction(v))
+					mapResult.put(k, fromJS(v));
+			});
+			return mapResult;
+		}
+
+
+		private String getClassName(ScriptObjectMirror value) {
+			value = (ScriptObjectMirror)value.getMember("constructor");
+			return (String)value.getMember("name");
+		}
+
+
 		private boolean isFunction(Object v) {
 			return v instanceof ScriptObjectMirror && ((ScriptObjectMirror)v).isFunction();
 		}
@@ -163,7 +202,7 @@ public class MemStoreMirror {
 
 		@SuppressWarnings("unchecked")
 		public Object toJS(Object value) {
-			if(value==null || value instanceof Boolean || value instanceof Long || value instanceof Double || value instanceof String || value instanceof StoredMirror || value instanceof StorableMirror)
+			if(value==null || value instanceof Boolean || value instanceof Integer || value instanceof Long || value instanceof Double || value instanceof String || value instanceof StoredMirror || value instanceof StorableMirror)
 				return value;
 			else if(value instanceof IStored)
 				return new StoredMirror((IStored)value);
@@ -241,6 +280,10 @@ public class MemStoreMirror {
 		
 		public StoredMirror(IStored stored) {
 			this.stored = stored;
+		}
+		
+		public IStored getStored() {
+			return stored;
 		}
 		
 		public Object getData(String name) {

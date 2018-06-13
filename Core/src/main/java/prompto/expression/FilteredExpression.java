@@ -29,6 +29,7 @@ import prompto.statement.ReturnStatement;
 import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
 import prompto.type.ContainerType;
+import prompto.type.CursorType;
 import prompto.type.IType;
 import prompto.type.IterableType;
 import prompto.type.ListType;
@@ -212,19 +213,21 @@ public class FilteredExpression extends Section implements IExpression {
 	@Override
 	public void declare(Transpiler transpiler) {
 	    this.source.declare(transpiler);
-	    IType listType = this.source.check(transpiler.getContext());
+	    IType manyType = this.source.check(transpiler.getContext());
+	    IType itemType = manyType instanceof ContainerType ? ((ContainerType)manyType).getItemType() : ((CursorType)manyType).getItemType();
 	    transpiler = transpiler.newChildTranspiler(null);
-	    transpiler.getContext().registerValue(new Variable(this.itemId, ((ContainerType)listType).getItemType()));
+	    transpiler.getContext().registerValue(new Variable(this.itemId, itemType));
 	    this.predicate.declare(transpiler);
 	}
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-	    IType listType = this.source.check(transpiler.getContext());
+	    IType manyType = this.source.check(transpiler.getContext());
+	    IType itemType = manyType instanceof ContainerType ? ((ContainerType)manyType).getItemType() : ((CursorType)manyType).getItemType();
 	    this.source.transpile(transpiler);
 	    transpiler.append(".filtered(function(").append(this.itemId.toString()).append(") { return ");
 	    transpiler = transpiler.newChildTranspiler(null);
-	    transpiler.getContext().registerValue(new Variable(this.itemId, ((ContainerType)listType).getItemType()));
+	    transpiler.getContext().registerValue(new Variable(this.itemId, itemType));
 	    this.predicate.transpile(transpiler);
 	    transpiler.append("; })");
 	    transpiler.flush();

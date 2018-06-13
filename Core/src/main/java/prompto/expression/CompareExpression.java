@@ -315,5 +315,27 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 		IType rt = this.right.check(transpiler.getContext());
 	    return lt.transpileCompare(transpiler, rt, this.operator, this.left, this.right);
 	}
+	
+	@Override
+	public void transpileQuery(Transpiler transpiler, String builderName) {
+	    String name = null;
+	    IExpression value = null;
+	    if (this.left instanceof UnresolvedIdentifier || this.left instanceof InstanceExpression || this.left instanceof MemberSelector) {
+	        name = this.left.toString();
+	        value = this.right;
+	    } else if (this.right instanceof UnresolvedIdentifier || this.right instanceof InstanceExpression || this.right instanceof MemberSelector) {
+	        name = this.right.toString();
+	        value = this.left;
+	    }
+	    AttributeDeclaration decl = transpiler.getContext().findAttribute(name);
+	    AttributeInfo info = decl == null ? null : decl.getAttributeInfo(transpiler.getContext());
+	    MatchOp matchOp = this.getMatchOp();
+	    // TODO check for dbId field of instance value
+	    transpiler.append(builderName).append(".verify(").append(info.toTranspiled()).append(", MatchOp.").append(matchOp.name()).append(", ");
+	    value.transpile(transpiler);
+	    transpiler.append(");").newLine();
+	    if (this.operator == CmpOp.GTE || this.operator==CmpOp.LTE)
+	        transpiler.append(builderName).append(".not();").newLine();
+	}
 
 }
