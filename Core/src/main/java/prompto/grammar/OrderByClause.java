@@ -9,6 +9,7 @@ import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.store.AttributeInfo;
 import prompto.store.IQueryBuilder;
+import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
 
@@ -55,5 +56,15 @@ public class OrderByClause extends Section {
 		InterfaceConstant i = new InterfaceConstant(IQueryBuilder.class, "orderBy", 
 				AttributeInfo.class, boolean.class, IQueryBuilder.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, i);
+	}
+
+	public void declare(Transpiler transpiler) {
+		// nothing to do
+	}
+
+	public void transpileQuery(Transpiler transpiler, String builderName) {
+	    String name = qualifiedName.get(0).toString();
+	    AttributeInfo info = transpiler.getContext().findAttribute(name).getAttributeInfo(transpiler.getContext());
+	    transpiler.append(builderName).append(".addOrderByClause(").append(info.toTranspiled()).append(", ").append(this.descending).append(");").newLine();
 	}
 }

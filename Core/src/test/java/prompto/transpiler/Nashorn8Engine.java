@@ -7,10 +7,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.script.Invocable;
+import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
 import jdk.nashorn.api.scripting.NashornScriptEngine;
+import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import prompto.declaration.IMethodDeclaration;
 import prompto.grammar.Identifier;
 import prompto.literal.DictLiteral;
@@ -46,6 +48,9 @@ public class Nashorn8Engine implements IJSEngine {
 		js = lines.stream().collect(Collectors.joining("\n"));
 		ScriptEngine nashorn = new ScriptEngineManager().getEngineByName("nashorn");
 		nashorn.eval(js);
+		Object dataStore = nashorn.getBindings(ScriptContext.ENGINE_SCOPE).get("DataStore");
+		if(dataStore instanceof ScriptObjectMirror)
+			((ScriptObjectMirror)dataStore).setMember("instance", new MemStoreMirror(nashorn));
 		Require.enable((NashornScriptEngine)nashorn, new ScriptsFolder());
 		((Invocable)nashorn).invokeFunction("main$Text_dict");
 	}

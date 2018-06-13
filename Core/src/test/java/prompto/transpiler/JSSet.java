@@ -27,6 +27,10 @@ public class JSSet {
 			throw new UnsupportedOperationException(values.getClass().getName());
 	}
 	
+	public Set<Object> getSet() {
+		return set;
+	}
+	
 	private List<Object> convert(ScriptObjectMirror values) {
 		return values.entrySet().stream()
 				.map(Map.Entry::getValue)

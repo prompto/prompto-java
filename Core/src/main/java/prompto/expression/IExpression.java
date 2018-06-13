@@ -31,5 +31,11 @@ public interface IExpression {
 	default boolean transpile(Transpiler transpiler) {
 		throw new UnsupportedOperationException("transpile " + this.getClass().getName());
 	}
+	default void declareQuery(Transpiler transpiler) {
+		throw new UnsupportedOperationException("declareQuery " + this.getClass().getName());
+	}
+	default void transpileQuery(Transpiler transpiler, String builderName) {
+		throw new UnsupportedOperationException("transpileQuery " + this.getClass().getName());
+	}
 	
 }

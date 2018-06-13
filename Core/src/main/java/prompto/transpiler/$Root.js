@@ -1,12 +1,12 @@
 function $Root() {
     this.mutable = false;
     this.storable = this.storable || null;
-    this.category = null;
+    this.category = [];
     return this;
 }
 
 $Root.prototype.instanceOf = function(type) {
-    return this.category && this.category.has(type);
+    return this.category.indexOf(type)>=0;
 };
 
 $Root.prototype.toString = function() {
@@ -26,7 +26,7 @@ $Root.prototype.setMember = function(name, value, mutable) {
     if(!this.mutable || (value && value.mutable && !mutable))
         throw new NotMutableError();
     this[name] = value;
-    if(this.storable)
+    if(this.storable) 
         this.storable.setData(name, value);
 };
 

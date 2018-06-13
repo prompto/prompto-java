@@ -6,6 +6,7 @@ import prompto.grammar.Identifier;
 import prompto.intrinsic.IterableWithCounts;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 
 public class CursorType extends IterableType {
 	
@@ -50,6 +51,19 @@ public class CursorType extends IterableType {
         else
     		return super.checkMember(context, id);
    }
+	
+	@Override
+	public void declareMember(Transpiler transpiler, String name) {
+	    if(!"count".equals(name) && !"totalCount".equals(name))
+	        super.declareMember(transpiler, name);
+	}
 
+	@Override
+	public void transpileMember(Transpiler transpiler, String name) {
+	    if("count".equals(name) || "totalCount".equals(name))
+	    	transpiler.append(name);
+	    else
+	    	super.transpileMember(transpiler, name);
+	}
 
 }

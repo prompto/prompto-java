@@ -22,6 +22,7 @@ import prompto.store.IQueryBuilder.MatchOp;
 import prompto.store.IStore;
 import prompto.store.IStoredIterable;
 import prompto.store.InvalidValueError;
+import prompto.transpiler.Transpiler;
 import prompto.type.AnyType;
 import prompto.type.BooleanType;
 import prompto.type.CategoryType;
@@ -288,6 +289,54 @@ public class FetchManyExpression extends FetchOneExpression {
 		MethodConstant m = new MethodConstant(PromptoRoot.class, "newIterable", IStoredIterable.class, IterableWithCounts.class);
 		method.addInstruction(Opcode.INVOKESTATIC, m);
 		return new ResultInfo(IterableWithCounts.class);
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    transpiler.require("Cursor");
+	    transpiler.require("MatchOp");
+	    transpiler.require("DataStore");
+	    transpiler.require("AttributeInfo");
+	    transpiler.require("TypeFamily");
+	    if (this.type != null)
+	        this.type.declare(transpiler);
+	    if (this.predicate != null)
+	        this.predicate.declare(transpiler);
+	    if (this.first != null)
+	        this.first.declare(transpiler);
+	    if (this.last != null)
+	        this.last.declare(transpiler);
+	    if (this.orderBy != null)
+	        this.orderBy.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    transpiler.append("(function() {").indent();
+	    transpiler.append("var builder = DataStore.instance.newQueryBuilder();").newLine();
+	    if (this.type != null)
+	        transpiler.append("builder.verify(new AttributeInfo('category', TypeFamily.TEXT, true, null), MatchOp.CONTAINS, '").append(this.type.getTypeName()).append("');").newLine();
+	    if (this.predicate != null)
+	        this.predicate.transpileQuery(transpiler, "builder");
+	    if (this.type != null && this.predicate != null)
+	        transpiler.append("builder.and();").newLine();
+	    if (this.first  != null) {
+	        transpiler.append("builder.setFirst(");
+	        this.first.transpile(transpiler);
+	        transpiler.append(");").newLine();
+	    }
+	    if (this.last  != null) {
+	        transpiler.append("builder.setLast(");
+	        this.last.transpile(transpiler);
+	        transpiler.append(");").newLine();
+	    }
+	    if (this.orderBy  != null)
+	        this.orderBy.transpileQuery(transpiler, "builder");
+	    transpiler.append("var iterable = DataStore.instance.fetchMany(builder.build());").newLine();
+	    boolean mutable = this.type!=null ? this.type.isMutable() : false;
+	    transpiler.append("return new Cursor(").append(mutable).append(", iterable);").dedent();
+	    transpiler.append("})()");
+	    return false;
 	}
 
 }

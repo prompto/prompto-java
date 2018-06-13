@@ -77,4 +77,8 @@ public class AttributeInfo {
 	public boolean isWords() {
 		return words;
 	}
+
+	public String toTranspiled() {
+	    return "new AttributeInfo('" + this.name + "', TypeFamily." + this.family.name() + ", " + this.collection + ", null)";
+	}
 }

@@ -221,4 +221,17 @@ public class OrExpression implements IPredicateExpression, IAssertion {
 	    this.right.transpile(transpiler);
 	    return false;
 	}
+	
+	@Override
+	public void declareQuery(Transpiler transpiler) {
+	    this.left.declare(transpiler);
+	    this.right.declare(transpiler);
+	}
+	
+	@Override
+	public void transpileQuery(Transpiler transpiler, String builderName) {
+	    this.left.transpileQuery(transpiler, builderName);
+	    this.right.transpileQuery(transpiler, builderName);
+	    transpiler.append(builderName).append(".or();").newLine();
+	}
 }

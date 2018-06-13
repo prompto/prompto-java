@@ -643,5 +643,36 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 	        transpiler.append(")");
 	    }
 	}
+	
+	@Override
+	public void declareQuery(Transpiler transpiler) {
+	    transpiler.require("MatchOp");
+	    this.left.declare(transpiler);
+	    this.right.declare(transpiler);
+	}
+	
+	@Override
+	public void transpileQuery(Transpiler transpiler, String builderName) {
+	    IExpression value = null;
+	    String name = this.readFieldName(this.left);
+	    if (name != null)
+	        value = this.right;
+	    else {
+	        name = this.readFieldName(this.right);
+	        if (name != null)
+	            value = this.left;
+	        else
+	            throw new SyntaxError("Unable to interpret predicate");
+	    }
+	    AttributeDeclaration decl = transpiler.getContext().findAttribute(name);
+	    AttributeInfo info = decl.getAttributeInfo(transpiler.getContext());
+	    MatchOp matchOp = this.getMatchOp();
+	    // TODO check for dbId field of instance value
+	    transpiler.append(builderName).append(".verify(").append(info.toTranspiled()).append(", MatchOp.").append(matchOp.name()).append(", ");
+	    value.transpile(transpiler);
+	    transpiler.append(");").newLine();
+	    if (this.operator == EqOp.NOT_EQUALS)
+	        transpiler.append(builderName).append(".not();").newLine();
+	}
 
 }
