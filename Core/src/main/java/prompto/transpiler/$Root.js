@@ -22,19 +22,24 @@ $Root.prototype.toString = function() {
 $Root.prototype.getText = $Root.prototype.toString;
 
 
-$Root.prototype.setMember = function(name, value, mutable) {
+$Root.prototype.setMember = function(name, value, mutable, isEnum) {
     if(!this.mutable || (value && value.mutable && !mutable))
         throw new NotMutableError();
     this[name] = value;
-    if(this.storable) 
+    if(this.storable) {
+        if(isEnum && value)
+            value = value.name;
         this.storable.setData(name, value);
+    }
 };
 
 $Root.prototype.fromStored = function(stored) {
     for(name in this) {
         if(name==='mutable' || name==='storable' || name==='category' || typeof(this[name]) === 'function')
             continue;
-        this[name] = stored.getData(name);
+        var value = stored.getData(name);
+        var method = this["load$" + name];
+        this[name] = method ? method(value) : value;
     }
     this.dbId = stored.getData("dbId");
 };

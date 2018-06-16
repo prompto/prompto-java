@@ -178,7 +178,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return set.isEmpty() ? null : set;
 	}
 	
-	private Set<Identifier> getLocalAttributes(Context context) {
+	protected Set<Identifier> getLocalAttributes(Context context) {
 		Set<Identifier> set = getAllAttributes(context);
 		if(set==null)
 			return null;
@@ -1023,10 +1023,24 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	        transpiler.append(this.getName()).append(".prototype = Object.create($Root.prototype);").newLine();
 	    transpiler.append(this.getName()).append(".prototype.constructor = ").append(this.getName()).append(";").newLine();
 	    transpiler = transpiler.newInstanceTranspiler(new CategoryType(this.getId()));
+	    this.transpileLoaders(transpiler);
 	    this.transpileMethods(transpiler);
 	    this.transpileGetterSetters(transpiler);
 	    transpiler.flush();
 	    return true;
+	}
+
+	private void transpileLoaders(Transpiler transpiler) {
+	    Set<Identifier> attributes = this.getLocalAttributes(transpiler.getContext());
+	    if (attributes!=null) {
+	        attributes.stream()
+	            .filter(attr -> isEnumeratedAttribute(transpiler.getContext(), attr))
+	            .forEach(attr -> {
+	                    transpiler.append(this.getName()).append(".prototype.load$").append(attr.toString()).append(" = function(name) {").indent();
+	                    transpiler.append("return eval(name);").dedent();
+	                    transpiler.append("};").newLine();
+	                });
+	        }
 	}
 
 	protected void transpileGetterSetters(Transpiler transpiler) {
@@ -1084,9 +1098,16 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	        transpiler.append("this.mutable = true;").newLine();
 	        transpiler.append("values = Object.assign({}, copyFrom, values);").newLine();
 	        attributes.forEach(attr -> {
-	            transpiler.append("this.setMember('").append(attr.toString()).append("', values.").append(attr.toString()).append(" || null, mutable);").newLine();
+	        	boolean isEnum = isEnumeratedAttribute(transpiler.getContext(), attr);
+	            transpiler.append("this.setMember('").append(attr.toString()).append("', values.").append(attr.toString()).append(" || null, mutable, ").append(isEnum).append(");").newLine();
 	        });
 	    }
+	}
+
+	private boolean isEnumeratedAttribute(Context context, Identifier attr) {
+		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, attr);
+		decl =  context.getRegisteredDeclaration(IDeclaration.class, decl.getType(context).getTypeNameId());
+		return decl instanceof IEnumeratedDeclaration;
 	}
 
 	private void transpileSuperConstructor(Transpiler transpiler) {

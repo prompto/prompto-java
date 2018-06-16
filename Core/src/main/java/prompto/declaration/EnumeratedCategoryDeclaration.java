@@ -2,6 +2,7 @@ package prompto.declaration;
 
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -88,6 +89,19 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 		else
 			return super.hasAttribute(context, name);
 	}
+	
+	@Override
+	protected Set<Identifier> getLocalAttributes(Context context) {
+		Set<Identifier> attributes = super.getLocalAttributes(context);
+		if(attributes==null)
+			attributes = new HashSet<>();
+		Identifier nameId = new Identifier("name");
+		if(!attributes.contains(nameId))
+			attributes.add(nameId);
+		return attributes;
+	}
+	
+	
 	
 	@Override
 	protected void toODialect(CodeWriter writer) {
