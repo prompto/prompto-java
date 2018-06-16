@@ -25,6 +25,7 @@ import prompto.parser.Assertion;
 import prompto.runtime.Context;
 import prompto.statement.IStatement;
 import prompto.statement.StatementList;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.VoidType;
 import prompto.utils.AssertionList;
@@ -367,6 +368,59 @@ public class TestMethodDeclaration extends BaseDeclaration {
 		ExceptionHandler handler = method.registerExceptionHandler(type);
 		method.activateOffsetListener(handler);
 		return handler;
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		transpiler.require("NativeError");
+	    transpiler.declare(this);
+	    transpiler = transpiler.newLocalTranspiler();
+	    this.statements.declare(transpiler);
+	    if(this.assertions!=null)
+	        this.assertions.declare(transpiler);
+	    if(this.error!=null)
+	        this.error.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    transpiler = transpiler.newLocalTranspiler();
+	    if (this.error!=null)
+	        this.transpileExpectedError(transpiler);
+	    else
+	        this.transpileAssertions(transpiler);
+	    transpiler.flush();
+		return true;
+	}
+
+	private void transpileAssertions(Transpiler transpiler) {
+		throw new UnsupportedOperationException();
+	}
+
+	private void transpileExpectedError(Transpiler transpiler) {
+		throw new UnsupportedOperationException();
+		/*
+	    transpiler.append("function ").append(this.cleanId()).append("() {");
+	    transpiler.indent();
+	    transpiler.append("try {");
+	    transpiler.indent();
+	    this.statements.transpile(transpiler);
+	    transpiler.printTestName(this.name).append("failed while expecting: ").append(this.error.name).append(", found: no error\");");
+	    transpiler.dedent();
+	    transpiler.append("} catch (e) {");
+	    transpiler.indent();
+	    transpiler.append("if(e instanceof NativeErrorNames[this.error.name]).append(") {").indent();
+	    transpiler.printTestName(this.name).append("successful\");'").dedent();
+	    transpiler.append("} else {").indent();
+	    transpiler.printTestName(this.name).append("failed while expecting: ").append(this.error.name).append(", found: \" + translateError(e));").dedent();;
+	    transpiler.append("}");
+	    transpiler.dedent();
+	    transpiler.append("}");
+	    transpiler.dedent();
+	    transpiler.append("}");
+	    transpiler.newLine();
+	    transpiler.flush();
+	    */
 	}
 
 }

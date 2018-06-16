@@ -1,6 +1,7 @@
 package prompto.utils;
 
 import prompto.parser.Assertion;
+import prompto.transpiler.Transpiler;
 
 @SuppressWarnings("serial")
 public class AssertionList extends ObjectList<Assertion>{
@@ -23,6 +24,11 @@ public class AssertionList extends ObjectList<Assertion>{
 				writer.append("\n");
 			}
 		}
+	}
+
+	public void declare(Transpiler transpiler) {
+		this.forEach(item->item.declare(transpiler));
+		
 	}
 
 }

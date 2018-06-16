@@ -3,6 +3,7 @@ package prompto.transpiler;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,6 +15,7 @@ import javax.script.ScriptEngineManager;
 import jdk.nashorn.api.scripting.NashornScriptEngine;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import prompto.declaration.IMethodDeclaration;
+import prompto.declaration.TestMethodDeclaration;
 import prompto.grammar.Identifier;
 import prompto.literal.DictLiteral;
 import prompto.runtime.Context;
@@ -26,15 +28,24 @@ import com.coveo.nashorn_modules.Require;
 @SuppressWarnings("restriction")
 public class Nashorn8Engine implements IJSEngine {
 
-	public static void executeTests(Context context) {
-		// TODO Auto-generated method stub
-		
+	public static void executeTests(Context context) throws Exception {
+		Transpiler transpiler = new Transpiler(new Nashorn8Engine(), context);
+		Collection<TestMethodDeclaration> tests = context.getTests();
+		tests.forEach(test->test.declare(transpiler));
+		Invocable invocable = transpile(transpiler);
+		for(TestMethodDeclaration test : tests)
+			invocable.invokeFunction(test.getName());
 	}
 	
 	public static void executeMainNoArgs(Context context) throws Exception {
-		IMethodDeclaration method = MethodLocator.locateMethod(context, new Identifier("main"), new DictLiteral(false));
 		Transpiler transpiler = new Transpiler(new Nashorn8Engine(), context);
+		IMethodDeclaration method = MethodLocator.locateMethod(context, new Identifier("main"), new DictLiteral(false));
 		method.declare(transpiler);
+		Invocable invocable = transpile(transpiler);
+		invocable.invokeFunction("main$Text_dict");
+	}
+	
+	private static Invocable transpile(Transpiler transpiler) throws Exception {
 		String js = transpiler.toString();
 		try(OutputStream output = new FileOutputStream("transpiled.js")) {
 			output.write(js.getBytes());
@@ -52,9 +63,9 @@ public class Nashorn8Engine implements IJSEngine {
 		if(dataStore instanceof ScriptObjectMirror)
 			((ScriptObjectMirror)dataStore).setMember("instance", new MemStoreMirror(nashorn));
 		Require.enable((NashornScriptEngine)nashorn, new ScriptsFolder());
-		((Invocable)nashorn).invokeFunction("main$Text_dict");
+		return (Invocable)nashorn;
 	}
-	
+
 	static class ScriptsFolder implements Folder {
 
 		@Override
