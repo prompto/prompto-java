@@ -37,6 +37,7 @@ import prompto.intrinsic.PromptoSet;
 import prompto.intrinsic.PromptoTime;
 import prompto.intrinsic.PromptoVersion;
 import prompto.literal.NullLiteral;
+import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.LinkedValue;
 import prompto.runtime.LinkedVariable;
@@ -673,6 +674,15 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 	    transpiler.append(");").newLine();
 	    if (this.operator == EqOp.NOT_EQUALS)
 	        transpiler.append(builderName).append(".not();").newLine();
+	}
+	
+	@Override
+	public void transpileFound(Transpiler transpiler, Dialect dialect) {
+	    transpiler.append("(");
+	    this.left.transpile(transpiler);
+	    transpiler.append(") + ' ").append(this.operator.toString(dialect)).append(" ' + (");
+	    this.right.transpile(transpiler);
+	    transpiler.append(")");
 	}
 
 }

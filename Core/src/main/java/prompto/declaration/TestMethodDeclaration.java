@@ -394,25 +394,59 @@ public class TestMethodDeclaration extends BaseDeclaration {
 	}
 
 	private void transpileAssertions(Transpiler transpiler) {
-		throw new UnsupportedOperationException();
+	    transpiler.append("function ").append(this.getTranspiledName()).append("() {");
+	    transpiler.indent();
+	    transpiler.append("try {");
+	    transpiler.indent();
+	    statements.transpile(transpiler);
+	    transpiler.append("var success = true;").newLine();
+	    assertions.forEach(assertion -> {
+	        transpiler.append("if(");
+	        assertion.transpile(transpiler);
+	        transpiler.append(")").indent();
+	        transpiler.append("success &= true;").dedent();
+	        transpiler.append("else {").indent();
+	        transpiler.append("success = false;").newLine();
+	        transpiler.printTestName(this.getName()).append("failed while verifying: ")
+	            .append(assertion.getExpected(transpiler.getContext(), this.getDialect()))
+	            .append(", found: \" + ");
+	        assertion.transpileFound(transpiler, this.getDialect());
+	        transpiler.append(");");
+	        transpiler.dedent();
+	        transpiler.append("}").newLine();
+	    });
+	    transpiler.append("if (success)").indent().printTestName(this.getName()).append("successful\");").dedent();
+	    transpiler.dedent();
+	    transpiler.append("} catch (e) {");
+	    transpiler.indent();
+	    transpiler.printTestName(this.getName()).append("failed with error: \" + e.name);");
+	    transpiler.dedent();
+	    transpiler.append("}");
+	    transpiler.dedent();
+	    transpiler.append("}");
+	    transpiler.newLine();
+	    transpiler.flush();
+	}
+
+	public String getTranspiledName() {
+		String name = this.getName();
+		return name.substring(1, name.length()-1).replaceAll("\\W","_");
 	}
 
 	private void transpileExpectedError(Transpiler transpiler) {
-		throw new UnsupportedOperationException();
-		/*
-	    transpiler.append("function ").append(this.cleanId()).append("() {");
+	    transpiler.append("function ").append(this.getTranspiledName()).append("() {");
 	    transpiler.indent();
 	    transpiler.append("try {");
 	    transpiler.indent();
 	    this.statements.transpile(transpiler);
-	    transpiler.printTestName(this.name).append("failed while expecting: ").append(this.error.name).append(", found: no error\");");
+	    transpiler.printTestName(this.getName()).append("failed while expecting: ").append(this.error.getName()).append(", found: no error\");");
 	    transpiler.dedent();
 	    transpiler.append("} catch (e) {");
 	    transpiler.indent();
-	    transpiler.append("if(e instanceof NativeErrorNames[this.error.name]).append(") {").indent();
-	    transpiler.printTestName(this.name).append("successful\");'").dedent();
+	    transpiler.append("if(e instanceof NativeErrors.").append(this.error.getName()).append(") {").indent();
+	    transpiler.printTestName(this.getName()).append("successful\");").dedent();
 	    transpiler.append("} else {").indent();
-	    transpiler.printTestName(this.name).append("failed while expecting: ").append(this.error.name).append(", found: \" + translateError(e));").dedent();;
+	    transpiler.printTestName(this.getName()).append("failed while expecting: ").append(this.error.getName()).append(", found: \" + translateError(e));").dedent();
 	    transpiler.append("}");
 	    transpiler.dedent();
 	    transpiler.append("}");
@@ -420,7 +454,6 @@ public class TestMethodDeclaration extends BaseDeclaration {
 	    transpiler.append("}");
 	    transpiler.newLine();
 	    transpiler.flush();
-	    */
 	}
 
 }

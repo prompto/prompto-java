@@ -24,6 +24,7 @@ import prompto.error.SyntaxError;
 import prompto.grammar.ContOp;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoString;
+import prompto.parser.Dialect;
 import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
@@ -511,5 +512,14 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	    transpiler.append(");").newLine();
 	    if (this.operator.name().indexOf("NOT_")==0)
 	        transpiler.append(builderName).append(".not();").newLine();
+	}
+	
+	@Override
+	public void transpileFound(Transpiler transpiler, Dialect dialect) {
+	    transpiler.append("(");
+	    this.left.transpile(transpiler);
+	    transpiler.append(") + '").append(this.operator.toString()).append("' + (");
+	    this.right.transpile(transpiler);
+	    transpiler.append(")");
 	}
 }

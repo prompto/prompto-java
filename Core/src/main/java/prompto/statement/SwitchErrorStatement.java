@@ -341,7 +341,7 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 	
 	@Override
 	public void declare(Transpiler transpiler) {
-		transpiler.require("translateError");
+		transpiler.require("NativeError");
 	    this.statements.declare(transpiler);
 	    transpiler = transpiler.newLocalTranspiler();
 	    transpiler.getContext().registerValue(new ErrorVariable(this.errorId));

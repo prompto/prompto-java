@@ -34,7 +34,7 @@ public class Nashorn8Engine implements IJSEngine {
 		tests.forEach(test->test.declare(transpiler));
 		Invocable invocable = transpile(transpiler);
 		for(TestMethodDeclaration test : tests)
-			invocable.invokeFunction(test.getName());
+			invocable.invokeFunction(test.getTranspiledName());
 	}
 	
 	public static void executeMainNoArgs(Context context) throws Exception {

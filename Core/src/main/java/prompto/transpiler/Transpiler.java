@@ -149,6 +149,12 @@ public class Transpiler {
 	    return this;
 	}
 
+	
+	public Transpiler printTestName(String testName) {
+		this.append("print(\"\\\"").append(testName.substring(1, testName.length() - 1)).append("\\\" test ");
+		return this;
+	}
+
 
 	public void flush() {
 	    if(this.parent!=null) {
@@ -217,6 +223,7 @@ public class Transpiler {
 	public boolean supportsClass() {
 		return engine.supportsClass();
 	}
+
 
 
 

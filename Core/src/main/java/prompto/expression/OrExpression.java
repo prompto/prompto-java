@@ -234,4 +234,13 @@ public class OrExpression implements IPredicateExpression, IAssertion {
 	    this.right.transpileQuery(transpiler, builderName);
 	    transpiler.append(builderName).append(".or();").newLine();
 	}
+	
+	@Override
+	public void transpileFound(Transpiler transpiler, Dialect dialect) {
+	    transpiler.append("(");
+	    this.left.transpile(transpiler);
+	    transpiler.append(") + '").append(this.operatorToDialect(dialect)).append("' + (");
+	    this.right.transpile(transpiler);
+	    transpiler.append(")");
+	}
 }

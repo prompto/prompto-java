@@ -48,4 +48,18 @@ public class Assertion extends Section {
 		expression.declare(transpiler);
 	}
 
+	public void transpile(Transpiler transpiler) {
+		expression.transpile(transpiler);
+	}
+
+	public String getExpected(Context context, Dialect dialect) {
+		CodeWriter writer = new CodeWriter(dialect, context);
+		expression.toDialect(writer);
+		return writer.toString();
+	}
+
+	public void transpileFound(Transpiler transpiler, Dialect dialect) {
+		expression.transpileFound(transpiler, dialect);
+	}
+
 }

@@ -20,6 +20,7 @@ import prompto.expression.UnresolvedIdentifier;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
+import prompto.parser.Dialect;
 import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.runtime.Context.InstanceContext;
@@ -190,6 +191,11 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 	public boolean transpile(Transpiler transpiler) {
 	    this.resolve(transpiler.getContext());
 	    return this.resolved.transpile(transpiler);
+	}
+	
+	@Override
+	public void transpileFound(Transpiler transpiler, Dialect dialect) {
+		transpiler.append("'<unknown>'");
 	}
 
 }

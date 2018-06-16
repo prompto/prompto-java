@@ -28,6 +28,7 @@ import prompto.intrinsic.PromptoDate;
 import prompto.intrinsic.PromptoDateTime;
 import prompto.intrinsic.PromptoTime;
 import prompto.intrinsic.PromptoVersion;
+import prompto.parser.Dialect;
 import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
@@ -337,5 +338,15 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 	    if (this.operator == CmpOp.GTE || this.operator==CmpOp.LTE)
 	        transpiler.append(builderName).append(".not();").newLine();
 	}
+	
+	@Override
+	public void transpileFound(Transpiler transpiler, Dialect dialect) {
+	    transpiler.append("(");
+	    this.left.transpile(transpiler);
+	    transpiler.append(") + '").append(this.operator.toString()).append("' + (");
+	    this.right.transpile(transpiler);
+	    transpiler.append(")");
+	}
+	
 
 }

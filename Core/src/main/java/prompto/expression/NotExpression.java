@@ -159,4 +159,9 @@ public class NotExpression implements IUnaryExpression, IPredicateExpression, IA
 	    transpiler.append(")");
 	    return false;
 	}
+	
+	@Override
+	public void transpileFound(Transpiler transpiler, Dialect dialect) {
+		this.transpile(transpiler);
+	}
 }

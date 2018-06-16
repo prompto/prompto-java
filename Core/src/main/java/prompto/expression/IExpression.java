@@ -4,6 +4,7 @@ import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
+import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
@@ -36,6 +37,9 @@ public interface IExpression {
 	}
 	default void transpileQuery(Transpiler transpiler, String builderName) {
 		throw new UnsupportedOperationException("transpileQuery " + this.getClass().getName());
+	}
+	default void transpileFound(Transpiler transpiler, Dialect dialect) {
+		throw new UnsupportedOperationException("transpileFound " + this.getClass().getName());
 	}
 	
 }
