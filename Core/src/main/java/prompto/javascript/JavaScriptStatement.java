@@ -38,6 +38,15 @@ public class JavaScriptStatement {
 	}
 
 	public boolean transpile(Transpiler transpiler) {
+	    if(this.module!=null) {
+	    	transpiler.append("var ");
+	    	expression.transpileRoot(transpiler);
+	    	transpiler.append(" = require('");
+	        this.module.transpile(transpiler);
+	        transpiler.append("').");
+	        expression.transpileRoot(transpiler);
+	        transpiler.append(";").newLine();
+	    }
 	    if(this.isReturn)
 	        transpiler.append("return ");
 	    this.expression.transpile(transpiler);

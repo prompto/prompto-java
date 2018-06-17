@@ -176,20 +176,28 @@ public class InstanceExpression extends Section implements IExpression {
 	
 	@Override
 	public void declare(Transpiler transpiler) {
-		// nothing to do
+		INamed named = transpiler.getContext().getRegistered(id);
+		if(named instanceof MethodDeclarationMap) 
+			transpiler.declare(((MethodDeclarationMap)named).getFirst());
 	}
 	
+
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-	    Context context = transpiler.getContext().contextForValue(this.id);
+		Context context = transpiler.getContext().contextForValue(this.id);
 	    if(context instanceof InstanceContext) {
 	        ((InstanceContext)context).getInstanceType().transpileInstance(transpiler);
 	        transpiler.append(".");
 	    }
-	    if(this.getName().equals(transpiler.getGetterName()))
-	        transpiler.append("$");
-	    transpiler.append(this.getName());
-	    return false;
+		INamed named = transpiler.getContext().getRegistered(id);
+		if(named instanceof MethodDeclarationMap) {
+			transpiler.append(((MethodDeclarationMap)named).getFirst().getTranspiledName(context));
+		} else {
+		    if(this.getName().equals(transpiler.getGetterName()))
+		        transpiler.append("$");
+		    transpiler.append(this.getName());
+		}
+		return false;
 	}
 
 }

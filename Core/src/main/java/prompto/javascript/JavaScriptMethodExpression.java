@@ -49,4 +49,12 @@ public class JavaScriptMethodExpression extends JavaScriptSelectorExpression {
 		transpiler.append(')');
 	}
 	
+	@Override
+	public void transpileRoot(Transpiler transpiler) {
+		if(parent!=null)
+			parent.transpileRoot(transpiler);
+		else
+			transpiler.append(name);
+	}
+	
 }
