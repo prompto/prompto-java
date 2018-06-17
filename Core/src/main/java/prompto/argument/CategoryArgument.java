@@ -9,7 +9,10 @@ import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
+import prompto.type.DecimalType;
 import prompto.type.IType;
+import prompto.type.IntegerType;
 import prompto.utils.CodeWriter;
 
 public class CategoryArgument extends BaseArgument implements ITypedArgument {
@@ -40,6 +43,11 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 	@Override
 	public String getProto() {
 		return type.getTypeNameId().toString();
+	}
+	
+	@Override
+	public String getTranspiledName(Context context) {
+		return type.getTranspiledName(context);
 	}
 	
 	@Override
@@ -129,4 +137,19 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 		return type;
 	}
 	
+	@Override
+	public void declare(Transpiler transpiler) {
+		this.type.declare(transpiler);
+	}
+	
+	@Override
+	public void transpileCall(Transpiler transpiler, IExpression expression) {
+		IType expType = expression.check(transpiler.getContext());
+	    if (this.type == IntegerType.instance() && expType == DecimalType.instance()) {
+	        transpiler.append("Math.round(");
+	        expression.transpile(transpiler);
+	        transpiler.append(")");
+	    } else
+	    	expression.transpile(transpiler);
+    }	
 }

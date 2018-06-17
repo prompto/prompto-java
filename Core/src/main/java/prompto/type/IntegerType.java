@@ -3,9 +3,9 @@ package prompto.type;
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.text.Format;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 
 import prompto.argument.CategoryArgument;
@@ -20,11 +20,14 @@ import prompto.compiler.ResultInfo;
 import prompto.declaration.BuiltInMethodDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
+import prompto.expression.IExpression;
+import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoLong;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 import prompto.value.Decimal;
 import prompto.value.IValue;
@@ -137,7 +140,7 @@ public class IntegerType extends NativeType implements INumberType {
 	}
 	
 	@Override
-	public Collection<IMethodDeclaration> getMemberMethods(Context context, Identifier id) throws PromptoError {
+	public List<IMethodDeclaration> getMemberMethods(Context context, Identifier id) throws PromptoError {
 		switch(id.toString()) {
 		case "format":
 			return Collections.singletonList(FORMAT_METHOD);
@@ -173,14 +176,14 @@ public class IntegerType extends NativeType implements INumberType {
 		
 		public boolean hasCompileExactInstanceMember() {
 			return true;
-		};
+		}
 		
 		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
 			// push arguments on the stack
-			this.compileAssignments(context, method, flags, assignments); // stqck = Long/String
+			this.compileAssignments(context, method, flags, assignments); // stack = Long/String
 			// create DecimalFormat instance
-			CompilerUtils.compileNewRawInstance(method, DecimalFormat.class); // stqck = Long/String/DecimalFormat
-			method.addInstruction(Opcode.DUP_X1); // need to keep a reference, stqck = Long/DecimalFormat/String/DecimalFormat
+			CompilerUtils.compileNewRawInstance(method, DecimalFormat.class); // stack = Long/String/DecimalFormat
+			method.addInstruction(Opcode.DUP_X1); // need to keep a reference, stack = Long/DecimalFormat/String/DecimalFormat
 			method.addInstruction(Opcode.SWAP); // stack = Long/DecimalFormat/DecimalFormat/String
 			CompilerUtils.compileCallConstructor(method, DecimalFormat.class, String.class); // stack = Long/DecimalFormat
 			// call format method
@@ -191,7 +194,13 @@ public class IntegerType extends NativeType implements INumberType {
 			// done
 			return new ResultInfo(String.class);
 
-		};
+		}
+		
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
+	        transpiler.append("formatInteger(");
+	        assignments.get(0).transpile(transpiler);
+	        transpiler.append(")");
+		}
 	};
 	
 	@Override
@@ -265,4 +274,182 @@ public class IntegerType extends NativeType implements INumberType {
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		return new Integer(value.asLong());
 	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		// nothing to do
+	}
+	
+	@Override
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	    if (other == IntegerType.instance() || other == DecimalType.instance()) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	    } else
+	        super.declareAdd(transpiler, other, tryReverse, left, right);
+	}
+	
+	@Override
+	public boolean transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	    if (other == IntegerType.instance() || other == DecimalType.instance()) {
+	        left.transpile(transpiler);
+	        transpiler.append(" + ");
+	        right.transpile(transpiler);
+	        return false;
+	    } else
+	        return super.transpileAdd(transpiler, other, tryReverse, left, right);
+	}
+	
+	@Override
+	public void declareModulo(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+		   if (other == IntegerType.instance() ) {
+		        left.declare(transpiler);
+		        right.declare(transpiler);
+		    } else
+		        super.declareModulo(transpiler, other, left, right);
+	}
+	
+	@Override
+	public boolean transpileModulo(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	   if (other == IntegerType.instance() ) {
+	        // TODO check negative values
+	        left.transpile(transpiler);
+	        transpiler.append(" % ");
+	        right.transpile(transpiler);
+	        return false;
+	    } else
+	        return super.transpileModulo(transpiler, other, left, right);
+	}
+	
+	@Override
+	public void declareDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+		transpiler.require("divide");
+	    if (other == IntegerType.instance() || other == DecimalType.instance()) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	    } else
+	        super.declareDivide(transpiler, other, left, right);
+	}
+	
+	@Override
+	public boolean transpileDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	   if (other == IntegerType.instance() || other == DecimalType.instance()) {
+	        transpiler.append("divide(");
+	        left.transpile(transpiler);
+	        transpiler.append(", ");
+	        right.transpile(transpiler);
+	        transpiler.append(")");
+	        return false;
+	    } else
+	        return super.transpileDivide(transpiler, other, left, right);
+	}
+	
+	@Override
+	public void declareIntDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	   if (other == IntegerType.instance() ) {
+		    transpiler.require("divide");
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	    } else
+	        super.declareIntDivide(transpiler, other, left, right);
+	}
+	
+	@Override
+	public boolean transpileIntDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	   if (other == IntegerType.instance() ) {
+	       // TODO check negative values
+	        transpiler.append("Math.floor(divide(");
+	        left.transpile(transpiler);
+	        transpiler.append(", ");
+	        right.transpile(transpiler);
+	        transpiler.append("))");
+	        return false;
+	    } else
+	        return super.transpileIntDivide(transpiler, other, left, right);
+	}
+	
+	@Override
+	public void declareMinus(Transpiler transpiler, IExpression expression) {
+		// nothing to do
+	}
+	
+	@Override
+	public boolean transpileMinus(Transpiler transpiler, IExpression expression) {
+	    transpiler.append(" -");
+	    return expression.transpile(transpiler);
+	}
+	
+	@Override
+	public void declareMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	   if (other == IntegerType.instance() || other == DecimalType.instance()) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	    } else
+	        super.declareMultiply(transpiler, other, tryReverse, left, right);
+	}
+	
+	@Override
+	public boolean transpileMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	   if (other == IntegerType.instance() || other == DecimalType.instance()) {
+	        left.transpile(transpiler);
+	        transpiler.append(" * ");
+	        right.transpile(transpiler);
+	        return false;
+	    } else
+	        return super.transpileMultiply(transpiler, other, tryReverse, left, right);
+	}
+	
+	@Override
+	public void declareSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	   if (other == IntegerType.instance() || other == DecimalType.instance()) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	    } else
+	        super.declareSubtract(transpiler, other, left, right);
+	}
+	
+	@Override
+	public boolean transpileSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	   if (other == IntegerType.instance() || other == DecimalType.instance()) {
+	        left.transpile(transpiler);
+	        transpiler.append(" - ");
+	        right.transpile(transpiler);
+	        return false;
+	    } else
+	        return super.transpileSubtract(transpiler, other, left, right);
+	}
+	
+	@Override
+	public void declareCompare(Transpiler transpiler, IType rt) {
+		// nothing to do
+	}
+	
+	@Override
+	public boolean transpileCompare(Transpiler transpiler, IType other, CmpOp operator, IExpression left, IExpression right) {
+	    left.transpile(transpiler);
+	    transpiler.append(" ").append(operator.toString()).append(" ");
+	    right.transpile(transpiler);
+	    return false;
+	}
+	
+	@Override
+	public void declareRange(Transpiler transpiler, IType other) {
+	   if(other == IntegerType.instance()) {
+	        transpiler.require("Range");
+	        transpiler.require("IntegerRange");
+	    } else {
+	        super.declareRange(transpiler, other);
+	    }	
+   }
+	
+	@Override
+	public boolean transpileRange(Transpiler transpiler, IExpression first, IExpression last) {
+	    transpiler.append("new IntegerRange(");
+	    first.transpile(transpiler);
+	    transpiler.append(",");
+	    last.transpile(transpiler);
+	    transpiler.append(")");
+	    return false;
+	}
+
 }

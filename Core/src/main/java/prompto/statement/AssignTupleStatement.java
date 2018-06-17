@@ -1,5 +1,7 @@
 package prompto.statement;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -18,6 +20,7 @@ import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoTuple;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
+import prompto.transpiler.Transpiler;
 import prompto.type.AnyType;
 import prompto.type.IType;
 import prompto.type.TupleType;
@@ -131,6 +134,45 @@ public class AssignTupleStatement extends SimpleStatement {
 		Identifier name = names.get(i);
 		StackLocal local = method.registerLocal(name.toString(), VerifierType.ITEM_Object, new ClassConstant(Object.class));
 		CompilerUtils.compileASTORE(method, local);
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    this.expression.declare(transpiler);
+	    this.names.forEach(name -> {
+	        INamed actual = transpiler.getContext().getRegistered(name);
+	        if(actual==null)
+	            transpiler.getContext().registerValue(new Variable(name, AnyType.instance()));
+	     });
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		if(transpiler.supportsDestructuring()) {
+			transpiler.append("var [");
+		    this.names.forEach(name -> {
+		        transpiler.append(name.toString()).append(", ");
+		        INamed actual = transpiler.getContext().getRegistered(name);
+		        if(actual==null)
+		            transpiler.getContext().registerValue(new Variable(name, AnyType.instance()));
+		    });
+		    transpiler.trimLast(2);
+		    transpiler.append("] = ");
+		    this.expression.transpile(transpiler);
+		} else {
+			transpiler.append("var $tuple = ");
+		    this.expression.transpile(transpiler);
+		    transpiler.append(";").newLine();	
+		    AtomicInteger idx = new AtomicInteger();
+		    this.names.forEach(name -> {
+		    	transpiler.append("var ");
+				transpiler.append(name.toString()).append(" = $tuple[").append(String.valueOf(idx.getAndIncrement())).append("];").newLine();
+				INamed actual = transpiler.getContext().getRegistered(name);
+		        if(actual==null)
+		            transpiler.getContext().registerValue(new Variable(name, AnyType.instance()));
+		    });
+		}
+	    return false;
 	}
 
 }

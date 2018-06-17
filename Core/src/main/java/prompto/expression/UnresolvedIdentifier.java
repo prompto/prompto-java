@@ -15,6 +15,7 @@ import prompto.problem.IProblemListener;
 import prompto.problem.ProblemListener;
 import prompto.runtime.Context;
 import prompto.statement.MethodCall;
+import prompto.transpiler.Transpiler;
 import prompto.type.AnyType;
 import prompto.type.CategoryType;
 import prompto.type.EnumeratedCategoryType;
@@ -52,7 +53,7 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 	@Override
 	public void toDialect(CodeWriter writer) {
 		try {
-			resolve(writer.getContext(), false);
+			resolve(writer.getContext(), false, false);
 		} catch(SyntaxError e) {
 		}
 		if(resolved!=null)
@@ -83,11 +84,11 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 	}
 	
 	private IType resolveAndCheck(Context context, boolean forMember) {
-		resolve(context, forMember);
+		resolve(context, forMember, false);
 		return resolved!=null ? resolved.check(context) : AnyType.instance();
 	}
 
-	public IExpression resolve(Context context, boolean forMember) {
+	public IExpression resolve(Context context, boolean forMember, boolean updateSelectorParent) {
 		if(resolved==null) {
 			IProblemListener saved = context.getProblemListener();
 			try {
@@ -101,7 +102,7 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 							resolved = resolveConstructor(context);
 					}
 					if(resolved==null) {
-						resolved = resolveMethod(context);
+						resolved = resolveMethod(context, updateSelectorParent);
 						if(resolved==null)
 							resolved = resolveInstance(context);
 					}
@@ -128,11 +129,11 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 		}
 	}
 
-	private IExpression resolveMethod(Context context) {
+	private IExpression resolveMethod(Context context, boolean updateSelectorParent) {
 		try {
 			MethodCall method = new MethodCall(new MethodSelector(id));
 			method.setFrom(this);
-			method.check(context);
+			method.check(context, updateSelectorParent);
 			return method;
 		} catch(SyntaxError e) {
 			// ignore resolution errors
@@ -173,6 +174,15 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 			return null;
 	}
 
+	@Override
+	public void declare(Transpiler transpiler) {
+	    this.resolve(transpiler.getContext(), false, true);
+	    this.resolved.declare(transpiler);
+	}
 	
-
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    this.resolve(transpiler.getContext(), false, true);
+	    return this.resolved.transpile(transpiler);
+	}
 }

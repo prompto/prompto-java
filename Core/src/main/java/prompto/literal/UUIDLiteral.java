@@ -10,6 +10,7 @@ import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StringConstant;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.UUIDType;
 import prompto.value.UUIDValue;
@@ -40,6 +41,15 @@ public class UUIDLiteral extends Literal<UUIDValue> {
 		return new ResultInfo(UUID.class);
 	}
 
-
+	@Override
+	public void declare(Transpiler transpiler) {
+		transpiler.require("UUID");
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		transpiler.append("UUID.fromString(").append(this.text.get()).append(")");
+		return false;
+	}
 
 }

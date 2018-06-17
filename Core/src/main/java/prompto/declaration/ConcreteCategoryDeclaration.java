@@ -44,6 +44,8 @@ import prompto.store.IStorable;
 import prompto.store.IStorable.IDbIdListener;
 import prompto.store.IStore;
 import prompto.store.IStored;
+import prompto.transpiler.ITranspilable;
+import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -176,7 +178,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return set.isEmpty() ? null : set;
 	}
 	
-	private Set<Identifier> getLocalAttributes(Context context) {
+	protected Set<Identifier> getLocalAttributes(Context context) {
 		Set<Identifier> set = getAllAttributes(context);
 		if(set==null)
 			return null;
@@ -968,6 +970,154 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			method.registerArguments(context);
 			method.compile(context, false, classFile);
 		}
+	}
+	
+	@Override
+	public void ensureDeclarationOrder(Context context, List<ITranspilable> list, Set<ITranspilable> set) {
+	    if(set.contains(this))
+	        return;
+	    if (this.derivedFrom != null) {
+	        this.derivedFrom.forEach(cat -> {
+	        	CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, cat);
+	            decl.ensureDeclarationOrder(context, list, set);
+	        });
+	    }
+	    list.add(this);
+	    set.add(this);
+	}
+
+	@Override
+	public void declare(Transpiler transpiler) {
+	    transpiler.declare(this);
+	    if (this.derivedFrom != null) {
+	        this.derivedFrom.forEach(cat -> {
+	            CategoryDeclaration decl = transpiler.getContext().getRegisteredDeclaration(CategoryDeclaration.class, cat);
+	            decl.declare(transpiler);
+	        });
+	    } else
+	        transpiler.require("$Root");
+	    if(this.storable)
+	        transpiler.require("DataStore");
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    Identifier parent = this.derivedFrom!=null && this.derivedFrom.size()>0 ? this.derivedFrom.get(0) : null;
+	    transpiler.append("function ").append(this.getName()).append("(copyFrom, values, mutable) {");
+	    transpiler.indent();
+	    List<String> categories = this.collectCategories(transpiler.getContext());
+	    if(this.storable)
+	        transpiler.append("this.storable = DataStore.instance.newStorableDocument(['").append(categories.stream().collect(Collectors.joining("', '"))).append("']);").newLine();
+	    this.transpileGetterSetterAttributes(transpiler);
+	    this.transpileSuperConstructor(transpiler);
+	    transpiler.append("this.category = [").append(categories.stream().collect(Collectors.joining(", "))).append("];").newLine();
+	    this.transpileLocalAttributes(transpiler);
+	    transpiler.append("this.mutable = mutable;").newLine();
+	    transpiler.append("return this;");
+	    transpiler.dedent();
+	    transpiler.append("}");
+	    transpiler.newLine();
+	    if(parent!=null)
+	        transpiler.append(this.getName()).append(".prototype = Object.create(").append(parent.toString()).append(".prototype);").newLine();
+	    else
+	        transpiler.append(this.getName()).append(".prototype = Object.create($Root.prototype);").newLine();
+	    transpiler.append(this.getName()).append(".prototype.constructor = ").append(this.getName()).append(";").newLine();
+	    transpiler = transpiler.newInstanceTranspiler(new CategoryType(this.getId()));
+	    this.transpileLoaders(transpiler);
+	    this.transpileMethods(transpiler);
+	    this.transpileGetterSetters(transpiler);
+	    transpiler.flush();
+	    return true;
+	}
+
+	private void transpileLoaders(Transpiler transpiler) {
+	    Set<Identifier> attributes = this.getLocalAttributes(transpiler.getContext());
+	    if (attributes!=null) {
+	        attributes.stream()
+	            .filter(attr -> isEnumeratedAttribute(transpiler.getContext(), attr))
+	            .forEach(attr -> {
+	                    transpiler.append(this.getName()).append(".prototype.load$").append(attr.toString()).append(" = function(name) {").indent();
+	                    transpiler.append("return eval(name);").dedent();
+	                    transpiler.append("};").newLine();
+	                });
+	        }
+	}
+
+	protected void transpileGetterSetters(Transpiler transpiler) {
+		Set<Identifier> names = this.methods.stream().filter(decl -> {
+	        return (decl instanceof SetterMethodDeclaration || decl instanceof GetterMethodDeclaration);
+	    }).map(decl -> decl.getId()).collect(Collectors.toSet());
+	    names.forEach(name -> this.transpileGetterSetter(transpiler, name));
+	}
+
+	private void transpileGetterSetter(Transpiler transpiler, Identifier name) {
+	    GetterMethodDeclaration getter = this.findGetter(transpiler.getContext(), name);
+	    SetterMethodDeclaration setter = this.findSetter(transpiler.getContext(), name);
+	    transpiler.append("Object.defineProperty(").append(this.getName()).append(".prototype, '").append(name.toString()).append("', {").indent();
+	    transpiler.append("get: function() {").indent();
+	    if(getter!=null)
+	        getter.transpile(transpiler);
+	    else
+	        transpiler.append("return this.$").append(name.toString()).append(";").newLine();
+	    transpiler.dedent().append("}");
+	    transpiler.append(",").newLine();
+	    transpiler.append("set: function(").append(name.toString()).append(") {").indent();
+	    if(setter!=null) {
+	        transpiler.append(name.toString()).append(" = (function(").append(name.toString()).append(") {").indent();
+	        setter.transpile(transpiler);
+	        transpiler.append(";").dedent().append("})(name);").newLine();
+	    }
+	    transpiler.append("this.$").append(name.toString()).append(" = ").append(name.toString()).append(";").newLine();
+	    transpiler.dedent().append("}");
+	    transpiler.dedent().append("});").newLine();
+	}
+
+	private void transpileGetterSetterAttributes(Transpiler transpiler) {
+	    Set<Identifier> allAttributes = this.getAllAttributes(transpiler.getContext());
+	    if(allAttributes!=null) {
+	        allAttributes.forEach(attr -> {
+	            if (this.findGetter(transpiler.getContext(), attr) !=null|| this.findSetter(transpiler.getContext(), attr)!=null)
+	                transpiler.append("this.$").append(attr.toString()).append(" = null;").newLine();
+	        });
+	    }
+	}
+
+	protected void transpileMethods(Transpiler transpiler) {
+	    this.methods.stream().filter(decl -> {
+	        return !(decl instanceof SetterMethodDeclaration || decl instanceof GetterMethodDeclaration);
+	    }).forEach(method -> {
+	    	Transpiler t = transpiler.newMemberTranspiler();
+	        method.transpile(t);
+	        t.flush();
+	    });
+	}
+
+	private void transpileLocalAttributes(Transpiler transpiler) {
+	    Set<Identifier> attributes = this.getLocalAttributes(transpiler.getContext());
+	    if (attributes!=null) {
+	        transpiler.append("this.mutable = true;").newLine();
+	        transpiler.append("values = Object.assign({}, copyFrom, values);").newLine();
+	        attributes.forEach(attr -> {
+	        	boolean isEnum = isEnumeratedAttribute(transpiler.getContext(), attr);
+	            transpiler.append("this.setMember('").append(attr.toString()).append("', values.").append(attr.toString()).append(" || null, mutable, ").append(isEnum).append(");").newLine();
+	        });
+	    }
+	}
+
+	private boolean isEnumeratedAttribute(Context context, Identifier attr) {
+		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, attr);
+		decl =  context.getRegisteredDeclaration(IDeclaration.class, decl.getType(context).getTypeNameId());
+		return decl instanceof IEnumeratedDeclaration;
+	}
+
+	private void transpileSuperConstructor(Transpiler transpiler) {
+	    if (this.derivedFrom!=null && this.derivedFrom.size()>0) {
+	        this.derivedFrom.forEach(derived-> {
+	            transpiler.append(derived.toString()).append(".call(this, copyFrom, values, mutable);").newLine();
+	        });
+	    } else
+	        transpiler.append("$Root.call(this);").newLine();
+		
 	}
 	
 }

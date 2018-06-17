@@ -14,6 +14,7 @@ import prompto.error.ReadWriteError;
 import prompto.intrinsic.PromptoDocument;
 import prompto.parser.ECleverParser;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.DocumentType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -112,4 +113,20 @@ public class DocumentExpression implements IExpression {
 	public String toString() {
 		return "Document";
 	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		transpiler.require("Document");
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    if(source!=null) {
+	        source.transpile(transpiler);
+	        transpiler.append(".toDocument()");
+	    } else
+	        transpiler.append("new Document()");
+	    return false;
+	}
+	
 }

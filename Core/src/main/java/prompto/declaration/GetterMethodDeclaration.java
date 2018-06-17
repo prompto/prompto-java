@@ -12,6 +12,7 @@ import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.statement.IStatement;
 import prompto.statement.StatementList;
+import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -82,6 +83,14 @@ public class GetterMethodDeclaration extends ConcreteMethodDeclaration implement
 		context = context.newInstanceContext(type, false).newChildContext();
 		for(IStatement stmt : statements)
 			stmt.compile(context, method, flags);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    transpiler = transpiler.newGetterTranspiler(this.getName());
+	    this.statements.transpile(transpiler);
+	    transpiler.flush();
+		return true;
 	}
 
 

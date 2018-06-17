@@ -4,10 +4,13 @@ import java.lang.reflect.Type;
 import java.util.Comparator;
 import java.util.Map;
 
+import prompto.expression.IExpression;
+import prompto.grammar.CmpOp;
 import prompto.intrinsic.PromptoVersion;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 import prompto.value.IValue;
 import prompto.value.Version;
 
@@ -78,5 +81,21 @@ public class VersionType extends NativeType {
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		PromptoVersion version = PromptoVersion.parse(value.asText());
 		return new Version(version);
+	}
+	
+	@Override
+	public void declareCompare(Transpiler transpiler, IType other) {
+		// nothing to do
+	}
+	
+	@Override
+	public boolean transpileCompare(Transpiler transpiler, IType other, CmpOp operator, IExpression left, IExpression right) {
+	    left.transpile(transpiler);
+	    transpiler.append(".");
+	    operator.transpile(transpiler);
+	    transpiler.append("(");
+	    right.transpile(transpiler);
+	    transpiler.append(")");
+	    return false;
 	}
 }

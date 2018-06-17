@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Predicate;
 
 import prompto.argument.IArgument;
 import prompto.declaration.IMethodDeclaration;
@@ -13,7 +14,6 @@ import prompto.expression.MethodSelector;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Specificity;
-import prompto.parser.ISection;
 import prompto.statement.MethodCall;
 import prompto.type.CategoryType;
 import prompto.type.IType;
@@ -35,34 +35,38 @@ public class MethodFinder {
 		return methodCall.toString();
 	}
 	
-	public IMethodDeclaration findBestMethod(Context context, ISection section, boolean checkInstance) {
-		Collection<IMethodDeclaration> methods = findCandidateMethods(context, section, checkInstance);
+	public List<IMethodDeclaration> findCompatibleMethods(boolean checkInstance, boolean allowDerived, Predicate<Specificity> filter) {
+		List<IMethodDeclaration> methods = findCandidateMethods(checkInstance);
 		if(methods.size()==0) {
-			context.getProblemListener().reportUnknownMethod(methodCall.getMethod().getName(), section);
+			context.getProblemListener().reportUnknownMethod(methodCall.toString(), methodCall.getSelector().getId());
 			return null;
 		}
-		methods = filterCompatible(methods, checkInstance);
+		return filterCompatible(methods, checkInstance, allowDerived, filter);
+	}
+	
+	public IMethodDeclaration findBestMethod(boolean checkInstance) {
+		Collection<IMethodDeclaration> methods = findCompatibleMethods(checkInstance, false, spec -> spec!=Specificity.INCOMPATIBLE && spec!=Specificity.DERIVED);
 		switch(methods.size()) {
 		case 0:
-			context.getProblemListener().reportNoMatchingPrototype(methodCall.toString(), section);
+			context.getProblemListener().reportNoMatchingPrototype(methodCall.toString(), methodCall.getSelector().getId());
 			return null;
 		case 1:
 			return methods.iterator().next();
 		default:
-			return findMostSpecific(methods,checkInstance);
+			return findMostSpecific(methods, checkInstance);
 		}
 	}
 	
-	public Collection<IMethodDeclaration> findCandidateMethods(Context context, ISection section, boolean checkInstance) {
-		MethodSelector selector = methodCall.getMethod();
+	public List<IMethodDeclaration> findCandidateMethods(boolean checkInstance) {
+		MethodSelector selector = methodCall.getSelector();
 		return selector.getCandidates(context, checkInstance);
 	}
 	
-	public Collection<IMethodDeclaration> findPotentialMethods(Context context, ISection section) {
-		MethodSelector selector = methodCall.getMethod();
+	public List<IMethodDeclaration> findPotentialMethods() {
+		MethodSelector selector = methodCall.getSelector();
 		Collection<IMethodDeclaration> candidates = selector.getCandidates(context, false);
 		if(candidates.size()==0)
-			context.getProblemListener().reportUnknownMethod(methodCall.getMethod().getName(), section);
+			context.getProblemListener().reportUnknownMethod(methodCall.toString(), methodCall.getSelector().getId());
 		return filterPotential(candidates);
 	}
 
@@ -74,7 +78,7 @@ public class MethodFinder {
 			if(candidate==null)
 				candidate = declaration;
 			else {
-				Score score = compareSpecifity(candidate, declaration, true, false);
+				Score score = compareSpecifity(candidate, declaration, false, true);
 				switch(score) {
 				case BETTER:
 					candidate = declaration;
@@ -100,7 +104,7 @@ public class MethodFinder {
 			if(candidate==null)
 				candidate = declaration;
 			else {
-				Score score = compareSpecifity(candidate, declaration, false, checkInstance);
+				Score score = compareSpecifity(candidate, declaration, checkInstance, false);
 				switch(score) {
 				case WORSE:
 					candidate = declaration;
@@ -119,7 +123,7 @@ public class MethodFinder {
 		return candidate;
 	}
 	
-	Score compareSpecifity(IMethodDeclaration d1, IMethodDeclaration d2, boolean allowAncestor, boolean useInstance) {
+	Score compareSpecifity(IMethodDeclaration d1, IMethodDeclaration d2, boolean useInstance, boolean allowDerived) {
 		try {
 			Context s1 = context.newLocalContext();
 			d1.registerArguments(s1);
@@ -152,8 +156,8 @@ public class MethodFinder {
 						return Score.WORSE;
 				} else {
 					// specific case for single anonymous argument
-					Specificity sp1 = d1.computeSpecificity(s1, ar1, as1, allowAncestor, useInstance);
-					Specificity sp2 = d2.computeSpecificity(s2, ar2, as2, allowAncestor, useInstance);
+					Specificity sp1 = d1.computeSpecificity(s1, ar1, as1, useInstance, allowDerived);
+					Specificity sp2 = d2.computeSpecificity(s2, ar2, as2, useInstance, allowDerived);
 					if(sp1.ordinal()>sp2.ordinal())
 						return Score.BETTER;
 					if(sp2.ordinal()>sp1.ordinal())
@@ -165,12 +169,12 @@ public class MethodFinder {
 		return Score.SIMILAR;
 	}
 	
-	Collection<IMethodDeclaration> filterCompatible(Collection<IMethodDeclaration> candidates, boolean checkInstance) {
+	List<IMethodDeclaration> filterCompatible(Collection<IMethodDeclaration> candidates, boolean checkInstance, boolean allowDerived, Predicate<Specificity> filter) {
 		List<IMethodDeclaration> compatibles = new ArrayList<IMethodDeclaration>();
 		for(IMethodDeclaration declaration : candidates) {
 			try {
 				ArgumentAssignmentList args = methodCall.makeAssignments(context, declaration);
-				if(declaration.isAssignableTo(context, args, checkInstance))
+				if(declaration.isAssignableTo(context, args, checkInstance, allowDerived, filter))
 					compatibles.add(declaration);
 			} catch(SyntaxError e) {
 				// OK
@@ -179,7 +183,7 @@ public class MethodFinder {
 		return compatibles;
 	}
 	
-	Collection<IMethodDeclaration> filterPotential(Collection<IMethodDeclaration> candidates) {
+	List<IMethodDeclaration> filterPotential(Collection<IMethodDeclaration> candidates) {
 		List<IMethodDeclaration> potential = new ArrayList<IMethodDeclaration>();
 		for(IMethodDeclaration declaration : candidates) {
 			try {
@@ -191,6 +195,22 @@ public class MethodFinder {
 			}
 		}
 		return potential;
+	}
+
+	public List<IMethodDeclaration> sortMostSpecificFirst(List<IMethodDeclaration> declarations) {
+	    declarations = new ArrayList<>(declarations);
+	    declarations.sort((d1, d2) -> {
+	        Score score = compareSpecifity(d2, d1, false, true);
+	        switch(score) {
+	        case BETTER:
+	        	return 1; 
+	        case WORSE:
+	        	return -1;
+        	default:
+        		return 0;
+	        }
+	    });
+	    return declarations;
 	}
 
 

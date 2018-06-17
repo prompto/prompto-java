@@ -23,6 +23,7 @@ import prompto.intrinsic.PromptoRange;
 import prompto.intrinsic.PromptoSet;
 import prompto.intrinsic.PromptoTuple;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.Dictionary;
@@ -129,6 +130,21 @@ public class ItemSelector extends SelectorExpression {
 			throw new SyntaxError("Cannot get item from " + parentInfo.getType().getTypeName());
 		}
 		return getter.compile(context, method, flags, parentInfo, item);
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		IType parentType = this.parent.check(transpiler.getContext());
+		IType itemType = this.item.check(transpiler.getContext());
+		parentType.declareItem(transpiler, itemType, this.item);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    this.parent.transpile(transpiler);
+	    IType parentType = this.parent.check(transpiler.getContext());
+	    IType itemType = this.item.check(transpiler.getContext());
+	    return parentType.transpileItem(transpiler, itemType, this.item);
 	}
 	
 

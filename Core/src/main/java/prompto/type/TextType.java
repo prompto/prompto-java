@@ -1,9 +1,9 @@
 package prompto.type;
 
 import java.lang.reflect.Type;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 
 import prompto.argument.CategoryArgument;
@@ -20,6 +20,8 @@ import prompto.compiler.ResultInfo;
 import prompto.declaration.BuiltInMethodDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
+import prompto.expression.IExpression;
+import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoString;
@@ -27,6 +29,7 @@ import prompto.literal.TextLiteral;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 import prompto.utils.StringUtils;
 import prompto.value.Boolean;
 import prompto.value.IValue;
@@ -118,7 +121,7 @@ public class TextType extends NativeType {
 	}
 	
 	@Override
-	public Collection<IMethodDeclaration> getMemberMethods(Context context, Identifier id) throws PromptoError {
+	public List<IMethodDeclaration> getMemberMethods(Context context, Identifier id) throws PromptoError {
 		switch(id.toString()) {
 		case "startsWith":
 			return Collections.singletonList(STARTS_WITH_METHOD);
@@ -166,7 +169,7 @@ public class TextType extends NativeType {
 
 		public boolean hasCompileExactInstanceMember() {
 			return true;
-		};
+		}
 		
 		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
 			// push arguments on the stack
@@ -178,7 +181,15 @@ public class TextType extends NativeType {
 			// done
 			return new ResultInfo(String.class);
 
-		};
+		}
+		
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
+			transpiler.append("replace(");
+	        assignments.find(new Identifier("toReplace")).transpile(transpiler);
+	        transpiler.append(",");
+	        assignments.find(new Identifier("replaceWith")).transpile(transpiler);
+	        transpiler.append(")");
+		}
 	};
 	
 	static final IMethodDeclaration REPLACE_ALL_METHOD = new BuiltInMethodDeclaration("replaceAll", TO_REPLACE_ARGUMENT, REPLACE_WITH_ARGUMENT) {
@@ -201,7 +212,7 @@ public class TextType extends NativeType {
 
 		public boolean hasCompileExactInstanceMember() {
 			return true;
-		};
+		}
 		
 		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
 			// push arguments on the stack
@@ -213,7 +224,15 @@ public class TextType extends NativeType {
 			// done
 			return new ResultInfo(String.class);
 
-		};
+		}
+		
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
+	        transpiler.append("replace(new RegExp(");
+	        assignments.find(new Identifier("toReplace")).transpile(transpiler);
+	        transpiler.append(", 'g'),");
+	        assignments.find(new Identifier("replaceWith")).transpile(transpiler);
+	        transpiler.append(")");
+		}
 	};
 	
 	
@@ -241,7 +260,7 @@ public class TextType extends NativeType {
 
 		public boolean hasCompileExactInstanceMember() {
 			return true;
-		};
+		}
 		
 		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
 			// push arguments on the stack
@@ -260,7 +279,21 @@ public class TextType extends NativeType {
 			// done
 			return new ResultInfo(PromptoList.class);
 
-		};
+		}
+		
+		public void declareCall(Transpiler transpiler) {
+			transpiler.require("List");
+		}
+		
+
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
+	       transpiler.append("splitToList(");
+	        if(assignments!=null)
+	            assignments.get(0).transpile(transpiler);
+	        else
+	            transpiler.append("' '"); // default
+	        transpiler.append(")");
+		}
 	};
 	
 	
@@ -280,7 +313,7 @@ public class TextType extends NativeType {
 
 		public boolean hasCompileExactInstanceMember() {
 			return true;
-		};
+		}
 		
 		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
 			// push arguments on the stack
@@ -291,7 +324,11 @@ public class TextType extends NativeType {
 			method.addInstruction(Opcode.INVOKESTATIC, constant);
 			return new ResultInfo(String.class);
 
-		};
+		}
+		
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
+	      transpiler.append("replace( /(^|\\s)([a-z])/g , function(m, p1, p2){ return p1 + p2.toUpperCase(); } )");
+		}
 	};
 
 	static final IMethodDeclaration TO_LOWERCASE_METHOD = new BuiltInMethodDeclaration("toLowerCase") {
@@ -306,6 +343,10 @@ public class TextType extends NativeType {
 		@Override
 		public IType check(Context context, boolean isStart) {
 			return TextType.instance();
+		}
+		
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
+			transpiler.append("toLowerCase()");
 		}
 
 	};
@@ -323,6 +364,10 @@ public class TextType extends NativeType {
 		public IType check(Context context, boolean isStart) {
 			return TextType.instance();
 		}
+		
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
+			transpiler.append("toUpperCase()");
+		}
 
 	};
 	
@@ -338,6 +383,10 @@ public class TextType extends NativeType {
 		@Override
 		public IType check(Context context, boolean isStart) {
 			return TextType.instance();
+		}
+		
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
+			transpiler.append("trim()");
 		}
 
 	};
@@ -375,8 +424,13 @@ public class TextType extends NativeType {
 				return new ResultInfo(boolean.class);
 			else
 				return CompilerUtils.booleanToBoolean(method);
-
 		};
+		
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
+	        transpiler.append("startsWith(");
+	        assignments.get(0).transpile(transpiler);
+	        transpiler.append(")");
+		}
 	};
 
 	
@@ -397,7 +451,7 @@ public class TextType extends NativeType {
 
 		public boolean hasCompileExactInstanceMember() {
 			return true;
-		};
+		}
 		
 		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
 			// push arguments on the stack
@@ -411,7 +465,14 @@ public class TextType extends NativeType {
 				return new ResultInfo(boolean.class);
 			else
 				return CompilerUtils.booleanToBoolean(method);
-		};
+		}
+		
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
+			transpiler.append("endsWith(");
+	        assignments.get(0).transpile(transpiler);
+	        transpiler.append(")");
+		}
+		
 	};
 
 	@Override
@@ -459,4 +520,149 @@ public class TextType extends NativeType {
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		return new Text(value.asText());
 	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		transpiler.require("Utils"); // isAText
+	}
+	
+	@Override
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+		left.declare(transpiler);
+		right.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	    // can add anything to text
+	    left.transpile(transpiler);
+	    transpiler.append(" + ");
+	    right.transpile(transpiler);
+	    if(other == DecimalType.instance())
+	        transpiler.append(".toDecimalString()");
+	    return false;
+	}
+	
+	@Override
+	public void declareMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	    if (other == IntegerType.instance()) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	    } else
+	        super.declareMultiply(transpiler, other, tryReverse, left, right);
+	}
+	
+	@Override
+	public boolean transpileMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	    if (other == IntegerType.instance()) {
+	        left.transpile(transpiler);
+	        transpiler.append(".repeat(");
+	        right.transpile(transpiler);
+	        transpiler.append(")");
+	        return false;
+	    } else
+	        return super.transpileMultiply(transpiler, other, tryReverse, left, right);
+	}
+	
+	@Override
+	public void declareMember(Transpiler transpiler, String name) {
+	   if (!"count".equals(name)) {
+	        super.declareMember(transpiler, name);
+	    }
+	}
+	
+	@Override
+	public void transpileMember(Transpiler transpiler, String name) {
+		  if ("count".equals(name)) {
+	        transpiler.append("length");
+	    } else {
+	        super.transpileMember(transpiler, name);
+	    }
+	}
+	
+	@Override
+	public void declareSlice(Transpiler transpiler, IExpression first, IExpression last) {
+	   if(first!=null)
+		   first.declare(transpiler);
+	    if(last!=null)
+	        last.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpileSlice(Transpiler transpiler, IExpression first, IExpression last) {
+	   transpiler.append(".slice1Based(");
+	    if(first!=null) {
+	        first.transpile(transpiler);
+	    } else
+	        transpiler.append("null");
+	    if(last!=null) {
+	        transpiler.append(",");
+	        last.transpile(transpiler);
+	    }
+	    transpiler.append(")");
+	    return false;
+	}
+	
+	@Override
+	public void declareContains(Transpiler transpiler, IType other, IExpression container, IExpression item) {
+	    container.declare(transpiler);
+	    item.declare(transpiler);
+	}
+	
+	@Override
+	public void transpileContains(Transpiler transpiler, IType other, IExpression container, IExpression item) {
+	    container.transpile(transpiler);
+	    transpiler.append(".includes(");
+	    item.transpile(transpiler);
+	    transpiler.append(")");
+	}
+	
+	@Override
+	public void declareContainsAllOrAny(Transpiler transpiler, IType other, IExpression container, IExpression items) {
+	    container.declare(transpiler);
+	    items.declare(transpiler);
+	}
+	
+	@Override
+	public void transpileContainsAll(Transpiler transpiler, IType other, IExpression container, IExpression items) {
+	    container.transpile(transpiler);
+	    transpiler.append(".hasAll(");
+	    items.transpile(transpiler);
+	    transpiler.append(")");
+	}
+	
+	@Override
+	public void transpileContainsAny(Transpiler transpiler, IType other, IExpression container, IExpression items) {
+	    container.transpile(transpiler);
+	    transpiler.append(".hasAny(");
+	    items.transpile(transpiler);
+	    transpiler.append(")");
+	}
+
+	@Override
+	public void declareCompare(Transpiler transpiler, IType other) {
+		// nothing to do
+	}
+	
+	@Override
+	public boolean transpileCompare(Transpiler transpiler, IType other, CmpOp operator, IExpression left, IExpression right) {
+	    left.transpile(transpiler);
+	    transpiler.append(" ").append(operator.toString()).append(" ");
+	    right.transpile(transpiler);
+		return false;
+	}
+	
+	@Override
+	public void declareItem(Transpiler transpiler, IType itemType, IExpression item) {
+		// nothing to do
+	}
+	
+	@Override
+	public boolean transpileItem(Transpiler transpiler, IType itemType, IExpression item) {
+	    transpiler.append("[");
+	    item.transpile(transpiler);
+	    transpiler.append("-1]");
+		return false;
+	}
+	
 }

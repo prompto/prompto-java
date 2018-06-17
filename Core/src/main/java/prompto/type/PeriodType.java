@@ -2,10 +2,12 @@ package prompto.type;
 
 import java.lang.reflect.Type;
 
+import prompto.expression.IExpression;
 import prompto.intrinsic.PromptoPeriod;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 
 
 
@@ -53,5 +55,82 @@ public class PeriodType extends NativeType {
 		if(other instanceof PeriodType)
 			return BooleanType.instance();
 		return super.checkCompare(context, other, section);
+	}
+	
+	@Override
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	   if(other == PeriodType.instance()) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	    } else {
+	        super.declareAdd(transpiler, other, tryReverse, left, right);
+	    }
+	}
+	
+	@Override
+	public boolean transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	   if(other == PeriodType.instance()) {
+	        left.transpile(transpiler);
+	        transpiler.append(".add(");
+	        right.transpile(transpiler);
+	        transpiler.append(")");
+	        return false;
+	    } else {
+	        return super.transpileAdd(transpiler, other, tryReverse, left, right);
+	    }
+	}
+	
+	@Override
+	public void declareMinus(Transpiler transpiler, IExpression expression) {
+		 // nothing to do
+	}
+	
+	@Override
+	public boolean transpileMinus(Transpiler transpiler, IExpression expression) {
+		expression.transpile(transpiler);
+	    transpiler.append(".minus()");
+	    return false;
+	}
+	
+	@Override
+	public void declareMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	    if(other == IntegerType.instance()) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	    } else
+	        super.declareMultiply(transpiler, other, tryReverse, left, right);
+	}
+	
+	@Override
+	public boolean transpileMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	    if(other == IntegerType.instance()) {
+	        left.transpile(transpiler);
+	        transpiler.append(".multiply(");
+	        right.transpile(transpiler);
+	        transpiler.append(")");
+	        return false;
+	    } else
+	        return super.transpileMultiply(transpiler, other, tryReverse, left, right);	
+    }
+	
+	@Override
+	public void declareSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	   if(other == PeriodType.instance()) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	    } else
+	        super.declareSubtract(transpiler, other, left, right);
+	}
+	
+	@Override
+	public boolean transpileSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	   if(other == PeriodType.instance()) {
+	        left.transpile(transpiler);
+	        transpiler.append(".subtract(");
+	        right.transpile(transpiler);
+	        transpiler.append(")");
+	        return false;
+	    } else
+	        return super.transpileSubtract(transpiler, other, left, right);
 	}
 }

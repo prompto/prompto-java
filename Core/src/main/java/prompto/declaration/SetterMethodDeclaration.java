@@ -1,5 +1,6 @@
 package prompto.declaration;
 
+import prompto.argument.AttributeArgument;
 import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
 import prompto.compiler.CompilerUtils;
@@ -14,6 +15,7 @@ import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.statement.IStatement;
 import prompto.statement.StatementList;
+import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -94,6 +96,16 @@ public class SetterMethodDeclaration extends ConcreteMethodDeclaration implement
 		context.registerValue(new Variable(getId(), decl.getType()));
 		for(IStatement stmt : statements)
 			stmt.compile(context, method, flags.withSetter(field));
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    transpiler = transpiler.newSetterTranspiler(this.getName());
+	    AttributeArgument arg = new AttributeArgument(this.getId());
+	    arg.register(transpiler.getContext());
+	    this.statements.transpile(transpiler);
+	    transpiler.flush();
+	    return false;
 	}
 
 }

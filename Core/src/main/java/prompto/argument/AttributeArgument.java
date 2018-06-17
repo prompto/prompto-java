@@ -25,6 +25,7 @@ import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.store.IDataStore;
 import prompto.store.IStore;
+import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -151,5 +152,27 @@ public class AttributeArgument extends BaseArgument implements INamedArgument {
 			ResultInfo info = assign.getExpression().compile(context.getCallingContext(), method, flags);
 			CompilerUtils.compileCallConstructor(method, type, info.getType());
 		}
+	}
+	
+	@Override
+	public String getTranspiledName(Context context) {
+		return this.id.toString();
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    IDeclaration decl = transpiler.getContext().getRegisteredDeclaration(IDeclaration.class, this.id);
+	    decl.declare(transpiler);
+	}
+	
+	@Override
+	public void transpileCall(Transpiler transpiler, IExpression expression) {
+	    AttributeDeclaration decl = transpiler.getContext().getRegisteredDeclaration(AttributeDeclaration.class, this.id);
+	    if(decl.getConstraint()!=null) {
+	        transpiler.append("$check_").append(this.getName()).append("(");
+	        super.transpileCall(transpiler, expression);
+	        transpiler.append(")");
+	    } else
+	        super.transpileCall(transpiler, expression);
 	}
 }

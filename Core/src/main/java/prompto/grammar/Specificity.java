@@ -2,12 +2,8 @@ package prompto.grammar;
 
 public enum Specificity {
 	INCOMPATIBLE,
-	RESOLVED,
+	IMPLICIT,
 	INHERITED,
 	EXACT,
-	ANCESTOR;
-	
-	public boolean isAssignable() {
-		return this!=INCOMPATIBLE && this!=ANCESTOR;
-	}
+	DERIVED
 }

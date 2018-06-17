@@ -11,6 +11,7 @@ import prompto.grammar.Identifier;
 import prompto.instance.VariableInstance;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.ResourceType;
 import prompto.type.VoidType;
@@ -115,6 +116,33 @@ public class AssignVariableStatement extends SimpleStatement {
 		return variable.compileAssign(context, method, flags, expression);
 	}
 
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    INamed actual = transpiler.getContext().getRegisteredValue(INamed.class, variable.getId());
+	    if(actual==null) {
+	        IType actualType = this.expression.check(transpiler.getContext());
+	        transpiler.getContext().registerValue(new Variable(variable.getId(), actualType));
+	    }
+	    this.expression.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    INamed actual = transpiler.getContext().getRegisteredValue(INamed.class, variable.getId());
+	    if(actual==null) {
+	        IType actualType = this.expression.check(transpiler.getContext());
+	        transpiler.getContext().registerValue(new Variable(variable.getId(), actualType));
+	        transpiler.append("var ");
+	    }
+	    transpiler.append(variable.getName()).append(" = ");
+	    this.expression.transpile(transpiler);
+		return false;
+	}
+
+	public void transpileClose(Transpiler transpiler) {
+		transpiler.append(variable.getName()).append(".close();").newLine();
+	}
 
 
 }

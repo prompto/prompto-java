@@ -23,6 +23,7 @@ import prompto.grammar.EqOp;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
@@ -209,5 +210,29 @@ public class SwitchStatement extends BaseSwitchStatement {
 			branch.branchOffsetListener = null;
 		}
 	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    this.expression.declare(transpiler);
+	    this.declareSwitch(transpiler);
+	}
 
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    transpiler.append("switch (");
+	    this.expression.transpile(transpiler);
+	    transpiler.append(") {").newLine();
+	    this.switchCases.forEach(switchCase -> {
+	        switchCase.transpile(transpiler);
+	    });
+	    if(this.defaultCase!=null) {
+	        transpiler.append("default:");
+	        transpiler.indent();
+	        this.defaultCase.transpile(transpiler);
+	        transpiler.dedent();
+	    }
+	    transpiler.append("}");
+	    transpiler.newLine();
+	    return true;
+	}
 }

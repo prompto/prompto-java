@@ -11,6 +11,7 @@ import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.store.IDataStore;
 import prompto.store.IStore;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
@@ -47,6 +48,17 @@ public class FlushStatement extends SimpleStatement {
 		if(writer.getDialect()!=Dialect.E) {
 			writer.append("()");
 		}
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		transpiler.require("DataStore");
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		transpiler.append("DataStore.instance.flush()");
+		return false;
 	}
 
 }

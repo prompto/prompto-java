@@ -28,6 +28,7 @@ import prompto.intrinsic.IMutable;
 import prompto.intrinsic.PromptoDocument;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.DocumentType;
 import prompto.type.IType;
@@ -400,5 +401,61 @@ public class ConstructorExpression implements IExpression {
 			return ((NativeCategoryDeclaration)cd).getBoundClass(false);
 		else 
 			return CompilerUtils.getCategoryConcreteType(cd.getId());
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		CategoryDeclaration cd = transpiler.getContext().getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
+	    cd.declare(transpiler);
+	    if(this.copyFrom!=null)
+	        this.copyFrom.declare(transpiler);
+	    if(this.assignments!=null)
+	        this.assignments.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		CategoryDeclaration decl = transpiler.getContext().getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
+	    if (decl instanceof NativeCategoryDeclaration)
+	        this.transpileNative(transpiler, (NativeCategoryDeclaration)decl);
+	    else
+	        this.transpileConcrete(transpiler);
+	    return false;
+	}
+
+	private void transpileConcrete(Transpiler transpiler) {
+	    transpiler = transpiler.newInstanceTranspiler(this.type);
+	    transpiler.append("new ").append(this.type.getTypeName()).append("(");
+	    if(this.copyFrom!=null)
+	        this.copyFrom.transpile(transpiler);
+	    else
+	        transpiler.append("null");
+	    transpiler.append(", ");
+	    this.transpileAssignments(transpiler);
+	    transpiler.append(", ");
+	    transpiler.append(this.type.isMutable());
+	    transpiler.append(")");
+	    transpiler.flush();
+	}
+
+	private void transpileAssignments(Transpiler transpiler) {
+	    if(this.assignments!=null) {
+	        transpiler.append("{");
+	        this.assignments.forEach(assignment -> {
+	            transpiler.append(assignment.getArgument().getName()).append(":");
+	            assignment.getExpression().transpile(transpiler);
+	            transpiler.append(", ");
+	        });
+	        transpiler.trimLast(2);
+	        transpiler.append("}");
+	    } else
+	        transpiler.append("null");
+	}
+
+	private void transpileNative(Transpiler transpiler, NativeCategoryDeclaration decl) {
+	    String bound = decl.getTranspiledBoundClass();
+	    transpiler.append("new_").append(bound).append("(");
+	    this.transpileAssignments(transpiler);
+	    transpiler.append(")");
 	}
 }

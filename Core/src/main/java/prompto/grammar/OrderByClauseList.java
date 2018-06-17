@@ -5,6 +5,7 @@ import prompto.compiler.MethodInfo;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.store.IQueryBuilder;
+import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 import prompto.utils.ObjectList;
 
@@ -39,6 +40,14 @@ public class OrderByClauseList extends ObjectList<OrderByClause> {
 	public void compileQuery(Context context, MethodInfo method, Flags flags) {
 		this.forEach((clause)->
 			clause.compileQuery(context, method, flags));
+	}
+
+	public void declare(Transpiler transpiler) {
+	    this.forEach(clause -> clause.declare(transpiler));
+	}
+
+	public void transpileQuery(Transpiler transpiler, String builderName) {
+		this.forEach(clause -> clause.transpileQuery(transpiler, builderName));
 	}
 
 }

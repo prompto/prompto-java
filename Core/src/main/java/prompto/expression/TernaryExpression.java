@@ -12,6 +12,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -91,4 +92,22 @@ public class TernaryExpression implements IExpression {
 		return result;
 	}
 
+	@Override
+	public void declare(Transpiler transpiler) {
+	    this.condition.declare(transpiler);
+	    this.ifTrue.declare(transpiler);
+	    this.ifFalse.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    transpiler.append("(");
+	    this.condition.transpile(transpiler);
+	    transpiler.append(" ? ");
+	    this.ifTrue.transpile(transpiler);
+	    transpiler.append(" : ");
+	    this.ifFalse.transpile(transpiler);
+	    transpiler.append(")");
+		return false;
+	}
 }

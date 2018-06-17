@@ -28,6 +28,7 @@ import prompto.intrinsic.PromptoDate;
 import prompto.intrinsic.PromptoDateTime;
 import prompto.intrinsic.PromptoTime;
 import prompto.intrinsic.PromptoVersion;
+import prompto.parser.Dialect;
 import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
@@ -35,6 +36,7 @@ import prompto.store.AttributeInfo;
 import prompto.store.IQueryBuilder;
 import prompto.store.IQueryBuilder.MatchOp;
 import prompto.store.IStore;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.Boolean;
@@ -298,5 +300,53 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 		method.placeLabel(finalState);
 		method.inhibitOffsetListener(finalListener);
 	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    this.left.declare(transpiler);
+	    this.right.declare(transpiler);
+	    IType lt = this.left.check(transpiler.getContext());
+	    IType rt = this.right.check(transpiler.getContext());
+	    lt.declareCompare(transpiler, rt);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		IType lt = this.left.check(transpiler.getContext());
+		IType rt = this.right.check(transpiler.getContext());
+	    return lt.transpileCompare(transpiler, rt, this.operator, this.left, this.right);
+	}
+	
+	@Override
+	public void transpileQuery(Transpiler transpiler, String builderName) {
+	    String name = null;
+	    IExpression value = null;
+	    if (this.left instanceof UnresolvedIdentifier || this.left instanceof InstanceExpression || this.left instanceof MemberSelector) {
+	        name = this.left.toString();
+	        value = this.right;
+	    } else if (this.right instanceof UnresolvedIdentifier || this.right instanceof InstanceExpression || this.right instanceof MemberSelector) {
+	        name = this.right.toString();
+	        value = this.left;
+	    }
+	    AttributeDeclaration decl = transpiler.getContext().findAttribute(name);
+	    AttributeInfo info = decl == null ? null : decl.getAttributeInfo(transpiler.getContext());
+	    MatchOp matchOp = this.getMatchOp();
+	    // TODO check for dbId field of instance value
+	    transpiler.append(builderName).append(".verify(").append(info.toTranspiled()).append(", MatchOp.").append(matchOp.name()).append(", ");
+	    value.transpile(transpiler);
+	    transpiler.append(");").newLine();
+	    if (this.operator == CmpOp.GTE || this.operator==CmpOp.LTE)
+	        transpiler.append(builderName).append(".not();").newLine();
+	}
+	
+	@Override
+	public void transpileFound(Transpiler transpiler, Dialect dialect) {
+	    transpiler.append("(");
+	    this.left.transpile(transpiler);
+	    transpiler.append(") + '").append(this.operator.toString()).append("' + (");
+	    this.right.transpile(transpiler);
+	    transpiler.append(")");
+	}
+	
 
 }

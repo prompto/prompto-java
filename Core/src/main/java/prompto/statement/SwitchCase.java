@@ -5,6 +5,7 @@ import prompto.expression.IExpression;
 import prompto.parser.ISection;
 import prompto.parser.Section;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
@@ -41,6 +42,15 @@ public abstract class SwitchCase extends Section implements ISection {
 	public abstract void catchToEDialect(CodeWriter writer);
 	public abstract void catchToODialect(CodeWriter writer);
 	public abstract void catchToPDialect(CodeWriter writer);
+
+	public void declare(Transpiler transpiler) {
+	    if(this.expression!=null)
+	        this.expression.declare(transpiler);
+	    this.statements.declare(transpiler);
+	}
+
+	public abstract void transpile(Transpiler transpiler);
+	public abstract void transpileError(Transpiler transpiler);
 
 
 }

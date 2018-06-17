@@ -9,6 +9,7 @@ import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
 import prompto.error.PromptoError;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IResource;
@@ -16,11 +17,11 @@ import prompto.value.IValue;
 
 public class WithResourceStatement extends BaseStatement {
 
-	AssignVariableStatement assignVariable;
+	AssignVariableStatement resource;
 	StatementList statements;
 	
-	public WithResourceStatement(AssignVariableStatement assignVariable, StatementList statements) {
-		this.assignVariable = assignVariable;
+	public WithResourceStatement(AssignVariableStatement resource, StatementList statements) {
+		this.resource = resource;
 		this.statements = statements;
 	}
 
@@ -41,7 +42,7 @@ public class WithResourceStatement extends BaseStatement {
 	
 	private void toEDialect(CodeWriter writer) {
 		writer.append("with ");
-		assignVariable.toDialect(writer);
+		resource.toDialect(writer);
 		writer.append(", do:\n");
 		writer.indent();
 		statements.toDialect(writer);
@@ -50,7 +51,7 @@ public class WithResourceStatement extends BaseStatement {
 
 	private void toODialect(CodeWriter writer) {
 		writer.append("with (");
-		assignVariable.toDialect(writer);
+		resource.toDialect(writer);
 		writer.append(")");
 		boolean oneLine = statements.size()==1 && (statements.get(0) instanceof SimpleStatement);
 		if(!oneLine)
@@ -67,7 +68,7 @@ public class WithResourceStatement extends BaseStatement {
 
 	private void toMDialect(CodeWriter writer) {
 		writer.append("with ");
-		assignVariable.toDialect(writer);
+		resource.toDialect(writer);
 		writer.append(":\n");
 		writer.indent();
 		statements.toDialect(writer);
@@ -78,7 +79,7 @@ public class WithResourceStatement extends BaseStatement {
 	@Override
 	public IType check(Context context) {
 		context = context.newResourceContext();
-		assignVariable.checkResource(context);
+		resource.checkResource(context);
 		return statements.check(context, null);
 	}
 
@@ -86,10 +87,10 @@ public class WithResourceStatement extends BaseStatement {
 	public IValue interpret(Context context) throws PromptoError {
 		context = context.newResourceContext();
 		try {
-			assignVariable.interpret(context);
+			resource.interpret(context);
 			return statements.interpret(context);
 		} finally {
-			Object res = context.getValue(assignVariable.getVariableId());
+			Object res = context.getValue(resource.getVariableId());
 			if(res instanceof IResource)
 				((IResource)res).close();
 		}
@@ -99,10 +100,10 @@ public class WithResourceStatement extends BaseStatement {
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		// TODO: protect with try-catch
 		context = context.newResourceContext();
-		assignVariable.compile(context, method, flags);
+		resource.compile(context, method, flags);
 		ResultInfo info = statements.compile(context, method, flags.withVariable("%return%"));
 		// call close
-		StackLocal variable = method.getRegisteredLocal(assignVariable.getVariableName());
+		StackLocal variable = method.getRegisteredLocal(resource.getVariableName());
 		CompilerUtils.compileALOAD(method, variable);
 		InterfaceConstant c = new InterfaceConstant(IResource.class, "close", void.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, c);
@@ -119,6 +120,27 @@ public class WithResourceStatement extends BaseStatement {
 			}
 		} else
 			return info;
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    transpiler = transpiler.newResourceTranspiler();
+	    this.resource.declare(transpiler);
+	    this.statements.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    transpiler = transpiler.newResourceTranspiler();
+	    this.resource.transpile(transpiler);
+	    transpiler.append(";").newLine();
+	    transpiler.append("try {").indent();
+	    this.statements.transpile(transpiler);
+	    transpiler.dedent().append("} finally {").indent();
+	    this.resource.transpileClose(transpiler);
+	    transpiler.dedent().append("}");
+	    transpiler.flush();
+		return true;
 	}
 
 }

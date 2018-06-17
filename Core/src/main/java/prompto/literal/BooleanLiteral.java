@@ -7,6 +7,7 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.value.Boolean;
@@ -29,5 +30,16 @@ public class BooleanLiteral extends Literal<Boolean> {
 			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		// nothing to do
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		transpiler.append(this.text.get());
+		return false;
 	}
 }

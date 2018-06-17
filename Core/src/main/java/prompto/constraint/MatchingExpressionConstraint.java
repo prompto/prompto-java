@@ -14,16 +14,17 @@ import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoException;
-import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.store.InvalidValueError;
+import prompto.transpiler.Transpiler;
 import prompto.type.AnyType;
+import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.Boolean;
 import prompto.value.IValue;
 
-public class MatchingExpressionConstraint extends Section implements IAttributeConstraint {
+public class MatchingExpressionConstraint extends MatchingConstraintBase {
 
 	IExpression expression;
 	
@@ -80,6 +81,32 @@ public class MatchingExpressionConstraint extends Section implements IAttributeC
 		method.restoreFullStackState(finalState);
 		method.placeLabel(finalState);
 		method.inhibitOffsetListener(finalListener);		
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler, String name, IType type) {
+	    transpiler = transpiler.newChildTranspiler(null);
+	    Identifier id = new Identifier("value");
+	    transpiler.getContext().registerValue(new Variable(id, type));
+	    this.expression.declare(transpiler);
+	    this.transpileFunction = t -> this.transpileChecker(t, name, type);
+	    transpiler.declare(this);
+	}
+
+	private boolean transpileChecker(Transpiler transpiler, String name, IType type) {
+	    transpiler.append("function $check_").append(name).append("(value) {").indent();
+	    transpiler = transpiler.newChildTranspiler(null);
+	    Identifier id = new Identifier("value");
+	    transpiler.getContext().registerValue(new Variable(id, type));
+	    transpiler.append("if(");
+	    this.expression.transpile(transpiler);
+	    transpiler.append(")").indent();
+	    transpiler.append("return value;").dedent();
+	    transpiler.append("else").indent();
+	    transpiler.append("throw new IllegalValueError((value == null ? 'null' : value.toString()) + ' does not match: \"").append(this.expression.toString()).append("\"');").dedent();
+	    transpiler.dedent().append("}").newLine();
+	    transpiler.flush();
+	    return false;
 	}
 
 }

@@ -1,8 +1,7 @@
 package prompto.javascript;
 
+import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
-
-
 
 public class JavaScriptParenthesisExpression implements JavaScriptExpression {
 
@@ -17,5 +16,12 @@ public class JavaScriptParenthesisExpression implements JavaScriptExpression {
 		writer.append('(');
 		expression.toDialect(writer);
 		writer.append(')');
+	}
+	
+	@Override
+	public void transpile(Transpiler transpiler) {
+		transpiler.append('(');
+		expression.transpile(transpiler);
+		transpiler.append(')');
 	}
 }

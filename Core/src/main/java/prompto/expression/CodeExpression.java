@@ -5,6 +5,7 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.CodeType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -57,6 +58,19 @@ public class CodeExpression implements IExpression {
 
 	public ResultInfo compileCode(Context context, MethodInfo method, Flags flags) {
 		return expression.compile(context, method, flags);
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		// nothing to do
+	}
+
+	public void declareCode(Transpiler transpiler) {
+		this.expression.declare(transpiler);
+	}
+
+	public void transpileCode(Transpiler transpiler) {
+		this.expression.transpile(transpiler);
 	}
 	
 }

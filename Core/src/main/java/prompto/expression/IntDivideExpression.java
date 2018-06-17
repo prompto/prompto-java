@@ -11,6 +11,7 @@ import prompto.declaration.CategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.Decimal;
@@ -71,4 +72,20 @@ public class IntDivideExpression implements IExpression {
 		}
 		return divider.compile(context, method, flags, lval, right);
 	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    IType lt = this.left.check(transpiler.getContext());
+	    IType rt = this.right.check(transpiler.getContext());
+	    lt.declareIntDivide(transpiler, rt, this.left, this.right);
+	}
+	
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		IType lt = this.left.check(transpiler.getContext());
+		IType rt = this.right.check(transpiler.getContext());
+	    return lt.transpileIntDivide(transpiler, rt, this.left, this.right);
+	}
+
 }

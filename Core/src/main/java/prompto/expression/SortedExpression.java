@@ -33,6 +33,7 @@ import prompto.runtime.Context;
 import prompto.runtime.MethodFinder;
 import prompto.runtime.Variable;
 import prompto.statement.MethodCall;
+import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.ContainerType;
 import prompto.type.IType;
@@ -86,7 +87,7 @@ public class SortedExpression implements IExpression {
 			writer.append(" with ");
 			IExpression keyExp = key;
 			if(keyExp instanceof UnresolvedIdentifier) try {
-				keyExp = ((UnresolvedIdentifier)keyExp).resolve(writer.getContext(), false);
+				keyExp = ((UnresolvedIdentifier)keyExp).resolve(writer.getContext(), false, false);
 			} catch (SyntaxError e) {
 				// TODO add warning 
 			}
@@ -224,7 +225,7 @@ public class SortedExpression implements IExpression {
 			ArgumentAssignmentList args = new ArgumentAssignmentList(arg);
 			MethodCall call = new MethodCall(new MethodSelector(methodName), args);
 			MethodFinder finder = new MethodFinder(context, call);
-			IMethodDeclaration decl = finder.findBestMethod(context, methodName, true);
+			IMethodDeclaration decl = finder.findBestMethod(true);
 			if(decl==null)
 				return null;
 			else
@@ -485,5 +486,24 @@ public class SortedExpression implements IExpression {
 		}
 	}
 
+	@Override
+	public void declare(Transpiler transpiler) {
+	    transpiler.require("List");
+	    this.source.declare(transpiler);
+	    IType type = this.source.check(transpiler.getContext());
+	    IType itemType = ((ContainerType)type).getItemType();
+	    itemType.declareSorted(transpiler, this.key);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    IType type = this.source.check(transpiler.getContext());
+	    this.source.transpile(transpiler);
+	    transpiler.append(".sorted(");
+	    IType itemType = ((ContainerType)type).getItemType();
+	    itemType.transpileSorted(transpiler, this.descending, this.key);
+	    transpiler.append(")");
+		return false;
+	}
 
 }

@@ -5,10 +5,12 @@ import java.util.Iterator;
 import java.util.Map;
 
 import prompto.error.PromptoError;
+import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDocument;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 import prompto.value.Document;
 import prompto.value.IValue;
 import prompto.value.NullValue;
@@ -97,6 +99,58 @@ public class DocumentType extends NativeType {
 			return new Document(context, (PromptoDocument<?,?>)value);
 		else
 			return super.convertJavaValueToIValue(context, value);
+	}
+	
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		transpiler.require("Document");
+	}
+	
+	@Override
+	public void declareMember(Transpiler transpiler, String name) {
+		// nothing to do
+	}
+	
+	
+	@Override
+	public void transpileMember(Transpiler transpiler, String name) {
+	    if (!"text".equals(name)) {
+	        transpiler.append(name);
+	    } else {
+	        transpiler.append("getText()");
+	    }
+	}
+	
+	@Override
+	public void transpileAssignMember(Transpiler transpiler, String name) {
+		transpiler.append(".getMember('").append(name).append("', true)");
+	}
+	
+	
+	@Override
+	public void transpileAssignMemberValue(Transpiler transpiler, String name, IExpression expression) {
+	    transpiler.append(".setMember('").append(name).append("', ");
+	    expression.transpile(transpiler);
+	    transpiler.append(")");
+	}
+	
+	
+	@Override
+	public boolean transpileItem(Transpiler transpiler, IType itemType, IExpression item) {
+	    transpiler.append(".item(");
+	    item.transpile(transpiler);
+	    transpiler.append(")");
+		return false;
+	}
+	
+	@Override
+	public void transpileAssignItemValue(Transpiler transpiler, IExpression item, IExpression expression) {
+	    transpiler.append(".setItem(");
+	    item.transpile(transpiler);
+	    transpiler.append(", ");
+	    expression.transpile(transpiler);
+	    transpiler.append(")");
 	}
 		
 }

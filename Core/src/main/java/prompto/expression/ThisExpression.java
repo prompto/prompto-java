@@ -9,6 +9,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
@@ -57,6 +58,16 @@ public class ThisExpression implements IExpression {
 			writer.append("this");
 		else
 			writer.append("self");
-		
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		// nothing to do
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		transpiler.append("this");
+		return false;
 	}
 }

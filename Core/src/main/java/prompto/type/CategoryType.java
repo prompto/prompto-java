@@ -2,6 +2,7 @@ package prompto.type;
 
 import java.lang.reflect.Type;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -28,20 +29,28 @@ import prompto.declaration.SingletonCategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
+import prompto.expression.InstanceExpression;
+import prompto.expression.MethodSelector;
+import prompto.grammar.ArgumentAssignment;
+import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
 import prompto.grammar.Operator;
 import prompto.instance.MemberInstance;
 import prompto.instance.VariableInstance;
 import prompto.intrinsic.PromptoRoot;
 import prompto.runtime.Context;
+import prompto.runtime.MethodFinder;
 import prompto.runtime.Score;
+import prompto.statement.MethodCall;
 import prompto.store.Family;
 import prompto.store.IDataStore;
 import prompto.store.IStore;
 import prompto.store.IStored;
+import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 import prompto.utils.Logger;
 import prompto.utils.TypeUtils;
+import prompto.value.ExpressionValue;
 import prompto.value.IInstance;
 import prompto.value.IValue;
 import prompto.value.NullValue;
@@ -237,11 +246,15 @@ public class CategoryType extends BaseType {
     
 	
 	@Override
-	public Collection<IMethodDeclaration> getMemberMethods(Context context, Identifier name) throws PromptoError {
+	public List<IMethodDeclaration> getMemberMethods(Context context, Identifier name) throws PromptoError {
 		IDeclaration cd = getDeclaration(context);
 		if(!(cd instanceof ConcreteCategoryDeclaration))
 			throw new SyntaxError("Unknown category:" + this.getTypeName());
-		return ((ConcreteCategoryDeclaration)cd).getMemberMethods(context, name).values();
+		Collection<IMethodDeclaration> methods = ((ConcreteCategoryDeclaration)cd).getMemberMethods(context, name).values();
+		if(methods instanceof List)
+			return (List<IMethodDeclaration>)methods;
+		else
+			return new ArrayList<>(methods);
 	}
 
 	
@@ -542,6 +555,267 @@ public class CategoryType extends BaseType {
 		method.addInstruction(Opcode.INVOKESTATIC, m);
 		method.addInstruction(Opcode.CHECKCAST, k);
 	}
+	
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    IDeclaration decl = this.getDeclaration(transpiler.getContext());
+		decl.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		transpiler.append(this.getTypeName());
+		return false;
+	}
+	
+	
 
+	@Override
+	public void declareSorted(Transpiler transpiler, IExpression key) {
+	    String keyname = key!=null ? key.toString() : "key";
+	    IDeclaration decl = this.getDeclaration(transpiler.getContext());
+	    if(decl instanceof CategoryDeclaration) {
+	    	CategoryDeclaration cd = (CategoryDeclaration)decl;
+	    	if ( cd.hasAttribute(transpiler.getContext(), new Identifier(keyname)) ||  cd.hasMethod(transpiler.getContext(), new Identifier(keyname), null))
+	    		return;
+	    } 
+        decl = this.findGlobalMethod(transpiler.getContext(), keyname);
+        if (decl != null) {
+            decl.declare(transpiler);
+        } else {
+            key.declare(transpiler);
+        }
+	}
+	
+	@Override
+	public void transpileSorted(Transpiler transpiler, boolean descending, IExpression key) {
+	    String keyname = key!=null ? key.toString() : "key";
+	    IDeclaration decl = this.getDeclaration(transpiler.getContext());
+	    if(decl instanceof CategoryDeclaration) {
+	    	CategoryDeclaration cd = (CategoryDeclaration)decl;
+    	    if (cd.hasAttribute(transpiler.getContext(), new Identifier(keyname))) {
+    	    	this.transpileSortedByAttribute(transpiler, descending, key);
+    	    	return;
+    	    } else if (cd.hasMethod(transpiler.getContext(), new Identifier(keyname), null)) {
+    	    	throw new UnsupportedOperationException();
+    	    	/*this.transpileSortedByClassMethod(transpiler, descending, key);
+    	    	return;*/
+    	    } 
+	    }
+	    decl = this.findGlobalMethod(transpiler.getContext(), keyname);
+        if (decl != null) {
+            this.transpileSortedByGlobalMethod(transpiler, descending, decl.getTranspiledName(transpiler.getContext()));
+	    	return;
+        }
+        this.transpileSortedByExpression(transpiler, descending, key);
+	}
 
+	private void transpileSortedByGlobalMethod(Transpiler transpiler, boolean descending, String name) {
+		   transpiler.append("function(o1, o2) { return ")
+	        .append(name).append("(o1) === ").append(name).append("(o2)").append(" ? 0 : ")
+	        .append(name).append("(o1) > ").append(name).append("(o2)").append(" ? ");
+	    if(descending)
+	        transpiler.append("-1 : 1; }");
+	    else
+	        transpiler.append("1 : -1; }");
+	}
+
+	private void transpileSortedByExpression(Transpiler transpiler, boolean descending, IExpression key) {
+	    this.transpileSortedByAttribute(transpiler, descending, key);
+	}
+
+	private void transpileSortedByAttribute(Transpiler transpiler, boolean descending, IExpression key) {
+	    key = key!=null ? key : new InstanceExpression(new Identifier("key"));
+	    transpiler.append("function(o1, o2) { return ");
+	    this.transpileEqualKeys(transpiler, key);
+	    transpiler.append(" ? 0 : ");
+	    this.transpileGreaterKeys(transpiler, key);
+	    transpiler.append(" ? ");
+	    if(descending)
+	        transpiler.append("-1 : 1; }");
+	    else
+	        transpiler.append("1 : -1; }");
+	}
+
+	private void transpileGreaterKeys(Transpiler transpiler, IExpression key) {
+	    transpiler.append("o1.");
+	    key.transpile(transpiler);
+	    transpiler.append(" > o2.");
+	    key.transpile(transpiler);
+	}
+
+	private void transpileEqualKeys(Transpiler transpiler, IExpression key) {
+	    transpiler.append("o1.");
+	    key.transpile(transpiler);
+	    transpiler.append(" === o2.");
+	    key.transpile(transpiler);
+	}
+
+	private IDeclaration findGlobalMethod(Context context, String name) {
+		try {
+			IExpression exp = new ExpressionValue(this, this.newInstance(context));
+			ArgumentAssignment arg = new ArgumentAssignment(null, exp);
+			ArgumentAssignmentList args = new ArgumentAssignmentList(arg);
+			MethodCall proto = new MethodCall(new MethodSelector(null, new Identifier(name)), args);
+			MethodFinder finder = new MethodFinder(context, proto);
+			return finder.findBestMethod(true);
+		} catch (PromptoError error) {
+			return null;
+		}
+	}
+	
+	@Override
+	public void declareMember(Transpiler transpiler, String name) {
+		// TODO visit attributes
+	}
+	
+	@Override
+	public void transpileMember(Transpiler transpiler, String name) {
+	    if ("text".equals(name))
+	        transpiler.append("getText()");
+	    else
+	        transpiler.append(name);
+	}
+	
+	@Override
+	public void transpileAssignMemberValue(Transpiler transpiler, String name, IExpression expression) {
+	    transpiler.append(".setMember('").append(name).append("', ");
+	    expression.transpile(transpiler);
+	    transpiler.append(")");
+	}
+	
+	@Override
+	public void transpileInstance(Transpiler transpiler) {
+	    IDeclaration decl = this.getDeclaration(transpiler.getContext());
+	    if(decl instanceof SingletonCategoryDeclaration)
+	        transpiler.append(this.getTypeName()).append(".instance");
+	    else
+	        transpiler.append("this");
+	}
+	
+	@Override
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	    IType type = this.checkOperator(transpiler.getContext(), other, tryReverse, Operator.PLUS);
+	    if(type!=null) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	        type.declare(transpiler);
+	    } else
+	        super.declareAdd(transpiler, other, tryReverse, left, right);
+	}
+	
+	@Override
+	public boolean transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	    left.transpile(transpiler);
+	    transpiler.append(".operator_PLUS").append("$").append(other.getTranspiledName(transpiler.getContext())).append("(");
+	    right.transpile(transpiler);
+	    transpiler.append(")");
+	    return false;
+	}
+	
+	@Override
+	public void declareSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	    IType type = this.checkOperator(transpiler.getContext(), other, false, Operator.MINUS);
+	    if(type!=null) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	        type.declare(transpiler);
+	    } else
+	        super.declareSubtract(transpiler, other, left, right);
+	}
+	
+	
+	@Override
+	public boolean transpileSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	    left.transpile(transpiler);
+	    transpiler.append(".operator_MINUS").append("$").append(other.getTranspiledName(transpiler.getContext())).append("(");
+	    right.transpile(transpiler);
+	    transpiler.append(")");
+	    return false;
+	}
+	
+	@Override
+	public void declareMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+		IType type = this.checkOperator(transpiler.getContext(), other, tryReverse, Operator.MULTIPLY);
+	    if(type!=null) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	        type.declare(transpiler);
+	    } else
+	        super.declareMultiply(transpiler, other, tryReverse, left, right);
+	}
+	
+	@Override
+	public boolean transpileMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	    left.transpile(transpiler);
+	    transpiler.append(".operator_MULTIPLY").append("$").append(other.getTranspiledName(transpiler.getContext())).append("(");
+	    right.transpile(transpiler);
+	    transpiler.append(")");
+	    return false;
+	}
+	
+	@Override
+	public void declareDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+		IType type = this.checkOperator(transpiler.getContext(), other, false, Operator.DIVIDE);
+	    if(type!=null) {
+	    	transpiler.require("divide");
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	        type.declare(transpiler);
+	    } else
+	        super.declareDivide(transpiler, other, left, right);
+	}
+	
+	@Override
+	public boolean transpileDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	    left.transpile(transpiler);
+	    transpiler.append(".operator_DIVIDE").append("$").append(other.getTranspiledName(transpiler.getContext())).append("(");
+	    right.transpile(transpiler);
+	    transpiler.append(")");
+	    return false;
+	}
+	
+	@Override
+	public void declareIntDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+		IType type = this.checkOperator(transpiler.getContext(), other, false, Operator.IDIVIDE);
+	    if(type!=null) {
+	    	transpiler.require("divide");
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	        type.declare(transpiler);
+	    } else
+	        super.declareIntDivide(transpiler, other, left, right);
+	}
+	
+	@Override
+	public boolean transpileIntDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	    left.transpile(transpiler);
+	    transpiler.append(".operator_IDIVIDE").append("$").append(other.getTranspiledName(transpiler.getContext())).append("(");
+	    right.transpile(transpiler);
+	    transpiler.append(")");
+	    return false;
+	}
+	
+	@Override
+	public void declareModulo(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+		IType type = this.checkOperator(transpiler.getContext(), other, false, Operator.MODULO);
+	    if(type!=null) {
+	    	transpiler.require("divide");
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	        type.declare(transpiler);
+	    } else
+	        super.declareModulo(transpiler, other, left, right);
+	}
+	
+	@Override
+	public boolean transpileModulo(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	    left.transpile(transpiler);
+	    transpiler.append(".operator_MODULO").append("$").append(other.getTranspiledName(transpiler.getContext())).append("(");
+	    right.transpile(transpiler);
+	    transpiler.append(")");
+	    return false;
+	}
+	
 }

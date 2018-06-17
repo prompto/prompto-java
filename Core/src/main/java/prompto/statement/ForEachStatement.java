@@ -24,8 +24,11 @@ import prompto.grammar.Identifier;
 import prompto.runtime.BreakResult;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
+import prompto.transpiler.Transpiler;
+import prompto.type.DictType;
 import prompto.type.IType;
 import prompto.type.IntegerType;
+import prompto.type.ListType;
 import prompto.utils.CodeWriter;
 import prompto.value.IIterable;
 import prompto.value.IValue;
@@ -340,4 +343,130 @@ public class ForEachStatement extends BaseStatement {
 		method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)iterLocal.getIndex()), new ClassConstant(Iterator.class));
 		return iterLocal;
 	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    IType srcType = this.source.check(transpiler.getContext());
+	    if(srcType instanceof DictType)
+	        transpiler.require("StrictSet");
+	    IType elemType = srcType.checkIterator(transpiler.getContext());
+	    this.source.declare(transpiler);
+	    transpiler = transpiler.newChildTranspiler(null);
+	    if(this.v2!=null) {
+	        transpiler.getContext().registerValue(new Variable(this.v1, IntegerType.instance()));
+	        transpiler.getContext().registerValue(new Variable(this.v2, elemType));
+	    } else
+	        transpiler.getContext().registerValue(new Variable(this.v1, elemType));
+	    this.statements.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    if(this.v2!=null)
+	        this.transpileWithIndex(transpiler);
+	    else
+	        this.transpileNoIndex(transpiler);
+	    return true;
+	}
+
+	private void transpileNoIndex(Transpiler transpiler) {
+		IType srcType = this.source.check(transpiler.getContext());
+	    if(srcType instanceof ListType)
+	        this.transpileArrayNoIndex(transpiler);
+	    else
+	        this.transpileIteratorNoIndex(transpiler);
+	}
+
+	private void transpileIteratorNoIndex(Transpiler transpiler) {
+		IType srcType = this.source.check(transpiler.getContext());
+		IType elemType = srcType.checkIterator(transpiler.getContext());
+	    String iterName = "$" + this.v1 + "_iterator";
+	    transpiler.append("var ").append(iterName).append(" = ");
+	    this.source.transpile(transpiler);
+	    transpiler.append(".iterator();");
+	    transpiler.newLine();
+	    transpiler.append("while(").append(iterName).append(".hasNext()) {");
+	    Transpiler child = transpiler.newChildTranspiler(null);
+	    child.indent();
+	    child.getContext().registerValue(new Variable(this.v1, elemType));
+	    child.append("var ").append(this.v1.toString()).append(" = ").append(iterName).append(".next();");
+	    child.newLine();
+	    this.statements.transpile(child);
+	    child.dedent();
+	    child.flush();
+	    transpiler.append("}");
+	    transpiler.newLine();
+	}
+
+	private void transpileArrayNoIndex(Transpiler transpiler) {
+		IType srcType = this.source.check(transpiler.getContext());
+	    IType elemType = srcType.checkIterator(transpiler.getContext());
+	    String itemsName = "$" + this.v1 + "_items";
+	    transpiler.append("var ").append(itemsName).append(" = ");
+	    this.source.transpile(transpiler);
+	    transpiler.append(";").newLine();
+	    String idxName = "$" + this.v1 + "_idx";
+	    transpiler.append("for(var ").append(idxName).append(" = 0; ").append(idxName).append(" < ").append(itemsName).append(".length; ").append(idxName).append("++) {");
+	    Transpiler child = transpiler.newChildTranspiler(null);
+	    child.indent();
+	    child.getContext().registerValue(new Variable(this.v1, elemType));
+	    child.append("var ").append(this.v1.toString()).append(" = ").append(itemsName).append("[").append(idxName).append("];");
+	    this.statements.transpile(child);
+	    child.dedent();
+	    child.flush();
+	    transpiler.append("}");
+	    transpiler.newLine();
+	}
+
+	private void transpileWithIndex(Transpiler transpiler) {
+	    IType srcType = this.source.check(transpiler.getContext());
+	    if(srcType instanceof ListType)
+	        this.transpileArrayWithIndex(transpiler);
+	    else
+	        this.transpileIteratorWithIndex(transpiler);
+	}
+
+	private void transpileIteratorWithIndex(Transpiler transpiler) {
+		IType srcType = this.source.check(transpiler.getContext());
+		IType elemType = srcType.checkIterator(transpiler.getContext());
+	    transpiler.append("var ").append(this.v1.toString()).append(" = 1;").newLine();
+	    String iterName = "$" + this.v2 + "_iterator";
+	    transpiler.append("var ").append(iterName).append(" = ");
+	    this.source.transpile(transpiler);
+	    transpiler.append(".iterator();");
+	    transpiler.newLine();
+	    transpiler.append("while(").append(iterName).append(".hasNext()) {");
+	    Transpiler child = transpiler.newChildTranspiler(null);
+	    child.indent();
+	    child.getContext().registerValue(new Variable(this.v1, IntegerType.instance()));
+	    child.getContext().registerValue(new Variable(this.v2, elemType));
+	    child.append("var ").append(this.v2.toString()).append(" = ").append(iterName).append(".next();").newLine();
+	    this.statements.transpile(child);
+	    child.append(this.v1.toString()).append("++;").newLine();
+	    child.dedent();
+	    child.flush();
+	    transpiler.append("}");
+	    transpiler.newLine();
+	}
+
+	private void transpileArrayWithIndex(Transpiler transpiler) {
+	    IType srcType = this.source.check(transpiler.getContext());
+	    IType elemType = srcType.checkIterator(transpiler.getContext());
+	    String itemsName = "$" + this.v2 + "_items";
+	    transpiler.append("var ").append(itemsName).append(" = ");
+	    this.source.transpile(transpiler);
+	    transpiler.append(";").newLine();
+	    transpiler.append("for(var ").append(this.v1.toString()).append(" = 1; ").append(this.v1.toString()).append(" <= ").append(itemsName).append(".length; ").append(this.v1.toString()).append("++) {");
+	    Transpiler child = transpiler.newChildTranspiler(null);
+	    child.indent();
+	    child.getContext().registerValue(new Variable(this.v1, IntegerType.instance()));
+	    child.getContext().registerValue(new Variable(this.v2, elemType));
+	    child.append("var ").append(this.v2.toString()).append(" = ").append(itemsName).append("[").append(this.v1.toString()).append("-1];").newLine();
+	    this.statements.transpile(child);
+	    child.dedent();
+	    child.flush();
+	    transpiler.append("}");
+	    transpiler.newLine();
+	}
+	
 }

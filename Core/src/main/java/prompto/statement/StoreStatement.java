@@ -11,6 +11,7 @@ import prompto.expression.IExpression;
 import prompto.intrinsic.PromptoStoreQuery;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
@@ -127,6 +128,51 @@ public class StoreStatement extends SimpleStatement {
 		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 	}
 	
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		transpiler.require("DataStore");
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    transpiler.append("DataStore.instance.store(");
+	    this.transpileIdsToDelete(transpiler);
+	    transpiler.append(", ");
+	    this.transpileStorablesToAdd(transpiler);
+	    transpiler.append(")");
+	    return false;
+	}
+
+	private void transpileStorablesToAdd(Transpiler transpiler) {
+	    if (this.storables==null)
+	        transpiler.append("null");
+	    else {
+	        transpiler.append("(function() { ").indent();
+	        transpiler.append("var storablesToAdd = new Set();").newLine();
+	        this.storables.forEach(exp-> {
+	            exp.transpile(transpiler);
+	            transpiler.append(".collectStorables(storablesToAdd);").newLine();
+	        });
+	        transpiler.append("return storablesToAdd;").newLine();
+	        transpiler.dedent().append("})()");
+	    }
+	}
+
+	private void transpileIdsToDelete(Transpiler transpiler) {
+	    if(this.deletables==null)
+	        transpiler.append("null");
+	    else {
+	        transpiler.append("(function() { ").indent();
+	        transpiler.append("var idsToDelete = new Set();").newLine();
+	        this.deletables.forEach(exp -> {
+	            exp.transpile(transpiler);
+	            transpiler.append(".collectDbIds(idsToDelete);").newLine();
+	        });
+	        transpiler.append("return idsToDelete;").newLine();
+	        transpiler.dedent().append("})()");
+	    }
+	}
 
 	
 }

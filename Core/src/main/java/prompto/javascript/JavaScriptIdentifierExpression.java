@@ -1,5 +1,6 @@
 package prompto.javascript;
 
+import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 
 
@@ -10,7 +11,7 @@ public class JavaScriptIdentifierExpression implements JavaScriptExpression {
 		String[] parts = ids.split("\\.");
 		JavaScriptIdentifierExpression result = null;
 		for(String part : parts)
-			result = new JavaScriptIdentifierExpression(result,part);
+			result = new JavaScriptIdentifierExpression(result, part);
 		return result;
 	}
 	
@@ -49,6 +50,23 @@ public class JavaScriptIdentifierExpression implements JavaScriptExpression {
 			writer.append('.');
 		}
 		writer.append(identifier);
+	}
+	
+	@Override
+	public void transpile(Transpiler transpiler) {
+		if(parent!=null) {
+			parent.transpile(transpiler);
+			transpiler.append('.');
+		}
+		transpiler.append(identifier);
+	}
+	
+	@Override
+	public void transpileRoot(Transpiler transpiler) {
+		if(parent!=null) 
+			parent.transpileRoot(transpiler);
+		else
+			transpiler.append(identifier);
 	}
 
 }

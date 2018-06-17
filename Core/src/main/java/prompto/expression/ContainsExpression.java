@@ -24,6 +24,7 @@ import prompto.error.SyntaxError;
 import prompto.grammar.ContOp;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoString;
+import prompto.parser.Dialect;
 import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
@@ -31,6 +32,7 @@ import prompto.store.AttributeInfo;
 import prompto.store.IQueryBuilder;
 import prompto.store.IStore;
 import prompto.store.IQueryBuilder.MatchOp;
+import prompto.transpiler.Transpiler;
 import prompto.type.CharacterType;
 import prompto.type.ContainerType;
 import prompto.type.IType;
@@ -437,5 +439,87 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 			return null;
 	}
 
-
+	@Override
+	public void declare(Transpiler transpiler) {
+	    IType lt = this.left.check(transpiler.getContext());
+	    IType rt = this.right.check(transpiler.getContext());
+	    switch(this.operator) {
+	        case IN:
+	        case NOT_IN:
+	            rt.declareContains(transpiler, lt, this.right, this.left);
+	            break;
+	        case HAS:
+	        case NOT_HAS:
+	            lt.declareContains(transpiler, rt, this.left, this.right);
+	            break;
+	        default:
+	            lt.declareContainsAllOrAny(transpiler, rt, this.left, this.right);
+	    }
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		IType lt = this.left.check(transpiler.getContext());
+		IType rt = this.right.check(transpiler.getContext());
+	    switch(this.operator) {
+	        case NOT_IN:
+	            transpiler.append("!");
+	        case IN:
+	            rt.transpileContains(transpiler, lt, this.right, this.left);
+	            return false;
+	        case NOT_HAS:
+	        	transpiler.append("!");
+	        case HAS:
+	            lt.transpileContains(transpiler, rt, this.left, this.right);
+	            return false;
+	        case NOT_HAS_ALL:
+	            transpiler.append("!");
+	        case HAS_ALL:
+	            lt.transpileContainsAll(transpiler, rt, this.left, this.right);
+	            return false;
+	        case NOT_HAS_ANY:
+	            transpiler.append("!");
+	        case HAS_ANY:
+	            lt.transpileContainsAny(transpiler, rt, this.left, this.right);
+	            return false;
+	        default:
+	            throw new UnsupportedOperationException("Unsupported " + this.operator);
+	    }
+	}
+	
+	@Override
+	public void transpileQuery(Transpiler transpiler, String builderName) {
+	    boolean reverse = false;
+	    IExpression value = null;
+	    String name = this.readFieldName(this.left);
+	    if (name != null)
+	        value = this.right;
+	    else {
+	        reverse = true;
+	        name = this.readFieldName(this.right);
+	        if (name != null)
+	            value = this.left;
+	        else
+	            throw new SyntaxError("Unable to transpile predicate");
+	    }
+	    AttributeDeclaration decl = transpiler.getContext().findAttribute(name);
+	    AttributeInfo info = decl.getAttributeInfo(transpiler.getContext());
+	    IType type = value.check(transpiler.getContext());
+	    // TODO check for dbId field of instance value
+	    MatchOp matchOp = this.getMatchOp(transpiler.getContext(), decl.getType(), type, this.operator, reverse);
+	    transpiler.append(builderName).append(".verify(").append(info.toTranspiled()).append(", MatchOp.").append(matchOp.name()).append(", ");
+	    value.transpile(transpiler);
+	    transpiler.append(");").newLine();
+	    if (this.operator.name().indexOf("NOT_")==0)
+	        transpiler.append(builderName).append(".not();").newLine();
+	}
+	
+	@Override
+	public void transpileFound(Transpiler transpiler, Dialect dialect) {
+	    transpiler.append("(");
+	    this.left.transpile(transpiler);
+	    transpiler.append(") + '").append(this.operator.toString()).append("' + (");
+	    this.right.transpile(transpiler);
+	    transpiler.append(")");
+	}
 }

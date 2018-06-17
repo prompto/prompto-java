@@ -37,6 +37,7 @@ import prompto.intrinsic.PromptoSet;
 import prompto.intrinsic.PromptoTime;
 import prompto.intrinsic.PromptoVersion;
 import prompto.literal.NullLiteral;
+import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.LinkedValue;
 import prompto.runtime.LinkedVariable;
@@ -45,11 +46,14 @@ import prompto.store.AttributeInfo;
 import prompto.store.IQueryBuilder;
 import prompto.store.IQueryBuilder.MatchOp;
 import prompto.store.IStore;
+import prompto.transpiler.Transpiler;
 import prompto.type.AnyType;
 import prompto.type.BooleanType;
 import prompto.type.CharacterType;
 import prompto.type.ContainerType;
+import prompto.type.DecimalType;
 import prompto.type.IType;
+import prompto.type.IntegerType;
 import prompto.type.TextType;
 import prompto.utils.CodeWriter;
 import prompto.value.Boolean;
@@ -519,5 +523,166 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 		return tester.compile(context, method, flags, lval, right);
 	}
 
+	@Override
+	public void declare(Transpiler transpiler) {
+	    this.left.declare(transpiler);
+	    this.right.declare(transpiler);
+	    if(this.operator == EqOp.ROUGHLY) {
+	        transpiler.require("removeAccents");
+	    }
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    switch (this.operator) {
+        case EQUALS:
+            this.transpileEquals(transpiler);
+            break;
+        case NOT_EQUALS:
+            this.transpileNotEquals(transpiler);
+            break;
+        case ROUGHLY:
+            this.transpileRoughly(transpiler);
+            break;
+            /*
+        case EqOp.CONTAINS:
+            this.transpileContains(transpiler);
+            break;
+        case EqOp.NOT_CONTAINS:
+            this.transpileNotContains(transpiler);
+            break;
+            */
+        case IS:
+            this.transpileIs(transpiler);
+            break;
+        case IS_NOT:
+            this.transpileIsNot(transpiler);
+            break;
+        case IS_A:
+            this.transpileIsA(transpiler);
+            break;
+        default:
+            throw new Error("Cannot transpile:" + this.operator.toString());
+	    }
+	    return false;
+    }
+
+	private void transpileIsA(Transpiler transpiler) {
+		if(!(this.right instanceof TypeExpression))
+			throw new Error("Cannot transpile:" + this.right.getClass().getName());
+		IType type = ((TypeExpression)this.right).getType();
+	    if(type==IntegerType.instance()) {
+	        transpiler.append("isAnInteger(");
+	        this.left.transpile(transpiler);
+	        transpiler.append(")");
+	    } else if(type==DecimalType.instance()) {
+	        transpiler.append("isADecimal(");
+	        this.left.transpile(transpiler);
+	        transpiler.append(")");
+	    } else if(type==TextType.instance()) {
+	        transpiler.append("isAText(");
+	        this.left.transpile(transpiler);
+	        transpiler.append(")");
+	    } else if(type==CharacterType.instance()) {
+	        transpiler.append("isACharacter(");
+	        this.left.transpile(transpiler);
+	        transpiler.append(")");
+	    } else {
+	        this.left.transpile(transpiler);
+	        transpiler.append(" instanceof ");
+	        this.right.transpile(transpiler);
+	    }
+	}
+
+	private void transpileRoughly(Transpiler transpiler) {
+	    transpiler.append("removeAccents(");
+	    this.left.transpile(transpiler);
+	    transpiler.append(").toLowerCase() === removeAccents(");
+	    this.right.transpile(transpiler);
+	    transpiler.append(").toLowerCase()");
+	}
+
+	private void transpileIsNot(Transpiler transpiler) {
+	    this.left.transpile(transpiler);
+	    transpiler.append(" !== ");
+	    this.right.transpile(transpiler);
+	}
+
+	private void transpileIs(Transpiler transpiler) {
+	    this.left.transpile(transpiler);
+	    transpiler.append(" === ");
+	    this.right.transpile(transpiler);
+	}
+	
+	
+
+	private void transpileEquals(Transpiler transpiler) {
+	    IType lt = this.left.check(transpiler.getContext());
+	    if(lt == BooleanType.instance() || lt == IntegerType.instance() || lt == DecimalType.instance() || lt == CharacterType.instance() || lt == TextType.instance()) {
+	        this.left.transpile(transpiler);
+	        transpiler.append(" === ");
+	        this.right.transpile(transpiler);
+	    } else {
+	        this.left.transpile(transpiler);
+	        transpiler.append(".equals(");
+	        this.right.transpile(transpiler);
+	        transpiler.append(")");
+	    }
+	}
+
+	private void transpileNotEquals(Transpiler transpiler) {
+	    IType lt = this.left.check(transpiler.getContext());
+	    if(lt == BooleanType.instance() || lt == IntegerType.instance() || lt == DecimalType.instance() || lt == CharacterType.instance() || lt == TextType.instance()) {
+	        this.left.transpile(transpiler);
+	        transpiler.append(" !== ");
+	        this.right.transpile(transpiler);
+	    } else {
+	    	transpiler.append("!");
+	        this.left.transpile(transpiler);
+	        transpiler.append(".equals(");
+	        this.right.transpile(transpiler);
+	        transpiler.append(")");
+	    }
+	}
+	
+	@Override
+	public void declareQuery(Transpiler transpiler) {
+	    transpiler.require("MatchOp");
+	    this.left.declare(transpiler);
+	    this.right.declare(transpiler);
+	}
+	
+	@Override
+	public void transpileQuery(Transpiler transpiler, String builderName) {
+	    IExpression value = null;
+	    String name = this.readFieldName(this.left);
+	    if (name != null)
+	        value = this.right;
+	    else {
+	        name = this.readFieldName(this.right);
+	        if (name != null)
+	            value = this.left;
+	        else
+	            throw new SyntaxError("Unable to interpret predicate");
+	    }
+	    AttributeDeclaration decl = transpiler.getContext().findAttribute(name);
+	    AttributeInfo info = decl.getAttributeInfo(transpiler.getContext());
+	    MatchOp matchOp = this.getMatchOp();
+	    // TODO check for dbId field of instance value
+	    transpiler.append(builderName).append(".verify(").append(info.toTranspiled()).append(", MatchOp.").append(matchOp.name()).append(", ");
+	    value.transpile(transpiler);
+	    transpiler.append(");").newLine();
+	    if (this.operator == EqOp.NOT_EQUALS)
+	        transpiler.append(builderName).append(".not();").newLine();
+	}
+	
+	@Override
+	public void transpileFound(Transpiler transpiler, Dialect dialect) {
+	    transpiler.append("(");
+	    this.left.transpile(transpiler);
+	    transpiler.append(") + ' ").append(this.operator.toString(dialect)).append(" ' + (");
+	    this.right.transpile(transpiler);
+	    transpiler.append(")");
+	}
 
 }

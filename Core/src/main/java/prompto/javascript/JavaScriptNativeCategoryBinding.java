@@ -1,6 +1,7 @@
 package prompto.javascript;
 
 import prompto.grammar.NativeCategoryBinding;
+import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 
 
@@ -20,6 +21,18 @@ public class JavaScriptNativeCategoryBinding extends NativeCategoryBinding {
 		writer.append(identifier);
 		if(module!=null)
 			module.toDialect(writer);
+	}
+
+	public void transpile(Transpiler transpiler) {
+	    if(this.module!=null) {
+	    	transpiler.append("var ").append(identifier).append(" = require('");
+	        this.module.transpile(transpiler);
+	        transpiler.append("').").append(identifier).append(";").newLine();
+	    }
+	}
+
+	public String getBoundName() {
+		return identifier;
 	}
 
 }

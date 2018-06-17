@@ -148,6 +148,7 @@ import prompto.javascript.JavaScriptTextLiteral;
 import prompto.javascript.JavaScriptThisExpression;
 import prompto.literal.BooleanLiteral;
 import prompto.literal.CharacterLiteral;
+import prompto.literal.ContainerLiteral;
 import prompto.literal.DateLiteral;
 import prompto.literal.DateTimeLiteral;
 import prompto.literal.DecimalLiteral;
@@ -246,6 +247,7 @@ import prompto.type.VersionType;
 import prompto.utils.AssertionList;
 import prompto.utils.ExpressionList;
 import prompto.utils.IdentifierList;
+import prompto.value.SetValue;
 
 public class OPromptoBuilder extends OParserBaseListener {
 
@@ -2445,7 +2447,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 	@Override
 	public void exitSet_literal(Set_literalContext ctx) {
 		ExpressionList items = this.<ExpressionList>getNodeValue(ctx.expression_list());
-		SetLiteral set = items==null ? new SetLiteral() : new SetLiteral(items);
+		ContainerLiteral<SetValue> set = items==null ? new SetLiteral() : new SetLiteral(items);
 		setNodeValue(ctx, set);
 	}
 	

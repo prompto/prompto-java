@@ -8,6 +8,7 @@ import prompto.expression.EqualsExpression;
 import prompto.expression.IAssertion;
 import prompto.expression.IExpression;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -41,6 +42,24 @@ public class Assertion extends Section {
 
 	public void compile(Context context, MethodInfo method, Flags flags, TestMethodDeclaration test) {
 		((IAssertion)expression).compileAssert(context, method, flags, test);
+	}
+
+	public void declare(Transpiler transpiler) {
+		expression.declare(transpiler);
+	}
+
+	public void transpile(Transpiler transpiler) {
+		expression.transpile(transpiler);
+	}
+
+	public String getExpected(Context context, Dialect dialect) {
+		CodeWriter writer = new CodeWriter(dialect, context);
+		expression.toDialect(writer);
+		return writer.toString();
+	}
+
+	public void transpileFound(Transpiler transpiler, Dialect dialect) {
+		expression.transpileFound(transpiler, dialect);
 	}
 
 }

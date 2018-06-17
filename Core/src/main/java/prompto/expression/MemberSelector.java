@@ -29,6 +29,7 @@ import prompto.intrinsic.PromptoDocument;
 import prompto.runtime.Context;
 import prompto.runtime.Context.ClosureContext;
 import prompto.runtime.Context.InstanceContext;
+import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.EnumeratedCategoryType;
 import prompto.type.IType;
@@ -283,6 +284,58 @@ public class MemberSelector extends SelectorExpression {
 			return CompilerUtils.intTolong(method);
 		else
 			return CompilerUtils.intToLong(method);
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    this.declareParent(transpiler);
+	    IType parentType = this.checkParent(transpiler.getContext());
+	    parentType.declareMember(transpiler, this.getName());
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    // resolve parent to keep clarity
+	    IExpression parent = this.resolveParent(transpiler.getContext());
+	    // special case for singletons
+	    if(this.transpileSingleton(transpiler, parent))
+	        return false;
+	    // special case for 'static' type members (like Enum.symbols, Type.name etc...)
+	    if(this.transpileTypeMember(transpiler, parent))
+	        return false;
+	    // finally resolve instance member
+	    this.transpileInstanceMember(transpiler, parent);
+	    return false;
+	}
+
+	private boolean transpileSingleton(Transpiler transpiler, IExpression parent) {
+	   if(parent instanceof TypeExpression) {
+		   IType type = ((TypeExpression)parent).getType();
+		   if(type instanceof CategoryType && !(type instanceof EnumeratedCategoryType)) {
+		 	   type.transpileInstance(transpiler);
+		        transpiler.append(".").append(this.getName());
+		        return true;
+		   }
+	    } 
+	   return false;
+	}
+
+	private boolean transpileTypeMember(Transpiler transpiler, IExpression parent) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	private void transpileInstanceMember(Transpiler transpiler, IExpression parent) {
+		parent.transpile(transpiler);
+		transpiler.append(".");
+		IType type = parent.check(transpiler.getContext());
+		type.transpileMember(transpiler, this.getName());
+	}
+
+	private void declareParent(Transpiler transpiler) {
+ 	   // resolve parent to keep clarity
+	    IExpression parent = this.resolveParent(transpiler.getContext());
+	    parent.declare(transpiler);
 	}
 
 }

@@ -28,6 +28,7 @@ import prompto.runtime.Executor;
 import prompto.runtime.Interpreter;
 import prompto.runtime.utils.Out;
 import prompto.store.IDataStore;
+import prompto.transpiler.Nashorn8Engine;
 
 public abstract class BaseParserTest extends BaseTest {
 
@@ -121,18 +122,14 @@ public abstract class BaseParserTest extends BaseTest {
 	}
 	
 	protected boolean transpileResource(String resourceName, boolean reThrow) throws PromptoError {
-		return false;
-		/*
 		try {
 			loadResource(resourceName);
-			File root = Files.createTempDirectory("prompto_").toFile();
 			if(context.hasTests()) {
-				Executor.executeTests(context, root);
-				return true;
+				Nashorn8Engine.executeTests(context);
 			} else {
-				Executor.executeMainNoArgs(context, root);
-				return false;
+				Nashorn8Engine.executeMainNoArgs(context);
 			}
+			return true;
 		} catch(Exception e) {
 			if(reThrow && e instanceof PromptoError)
 				throw (PromptoError)e;
@@ -140,8 +137,6 @@ public abstract class BaseParserTest extends BaseTest {
 			fail(e.getMessage());
 			return false;
 		}
-		*/
-		
 	}
 	
 	
@@ -187,7 +182,7 @@ public abstract class BaseParserTest extends BaseTest {
 
 	protected void checkTranspiledOutput(String resource) throws Exception {
 		try {
-			// checkOutput(resource, this::transpileResource);
+			checkOutput(resource, this::transpileResource);
 		} catch(Throwable t) {
 			t.printStackTrace(System.err);
 			throw t;
@@ -196,10 +191,10 @@ public abstract class BaseParserTest extends BaseTest {
 
 	protected void checkOutput(String resource, ResourceRunner runner) throws Exception {
 		IDataStore.setInstance(new MemStore());
-		boolean isTest = runner.runResource(resource, false);
+		boolean trimNewLines = runner.runResource(resource, false);
 		String read = Out.read();
-		if(isTest && read.endsWith("\n"))
-			read = read.substring(0, read.length() - 1);
+		if(trimNewLines)
+			read = read.replaceAll("\n", "");
 		List<String> expected = readExpected(resource);
 		if(expected.size()==1)
 			assertEquals(expected.get(0), read);

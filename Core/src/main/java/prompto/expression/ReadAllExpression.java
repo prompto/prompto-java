@@ -13,6 +13,7 @@ import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.ResourceType;
 import prompto.type.TextType;
@@ -76,5 +77,17 @@ public class ReadAllExpression implements IExpression {
 		c = new InterfaceConstant(IResource.class, "close", void.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, c);
 		return new ResultInfo(String.class);
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		this.resource.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    this.resource.transpile(transpiler);
+	    transpiler.append(".readFully()");
+		return false;
 	}
 }

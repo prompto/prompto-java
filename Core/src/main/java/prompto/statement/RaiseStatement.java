@@ -12,6 +12,7 @@ import prompto.error.UserError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.type.VoidType;
@@ -83,4 +84,15 @@ public class RaiseStatement extends SimpleStatement {
 		return new ResultInfo(void.class, Flag.THROW);
 	}
 
+	@Override
+	public void declare(Transpiler transpiler) {
+		this.expression.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    transpiler.append("throw ");
+	    this.expression.transpile(transpiler);
+		return false;
+	}
 }

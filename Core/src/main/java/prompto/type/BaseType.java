@@ -1,9 +1,9 @@
 package prompto.type;
 
 import java.security.InvalidParameterException;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 
 import prompto.declaration.IMethodDeclaration;
@@ -46,6 +46,11 @@ public abstract class BaseType implements IType {
 
 	@Override
 	public String toString() {
+		return getTypeName();
+	}
+	
+	@Override
+	public String getTranspiledName(Context context) {
 		return getTypeName();
 	}
 
@@ -205,7 +210,7 @@ public abstract class BaseType implements IType {
 	}
 	
 	@Override
-	public Collection<IMethodDeclaration> getMemberMethods(Context context, Identifier name) throws PromptoError {
+	public List<IMethodDeclaration> getMemberMethods(Context context, Identifier name) throws PromptoError {
 		return Collections.emptyList();
 	}
 

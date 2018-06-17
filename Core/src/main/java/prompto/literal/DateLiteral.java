@@ -9,6 +9,7 @@ import prompto.compiler.ResultInfo;
 import prompto.compiler.StringConstant;
 import prompto.intrinsic.PromptoDate;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.DateType;
 import prompto.type.IType;
 import prompto.value.Date;
@@ -42,6 +43,15 @@ public class DateLiteral extends Literal<Date> {
 		return new ResultInfo(PromptoDate.class);
 	}
 
+	@Override
+	public void declare(Transpiler transpiler) {
+		transpiler.require("Period");
+		transpiler.require("LocalDate");
+	}
 	
-	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		transpiler.append("LocalDate.parse(").append(this.text.get()).append(")");
+		return false;
+	}
 }

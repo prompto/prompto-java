@@ -31,7 +31,7 @@ public abstract class SelectorExpression extends Section implements IExpression 
 			return parent.check(context);
  	}
 
-	protected IExpression resolveParent(Context context) {
+	public IExpression resolveParent(Context context) {
         if(parent instanceof UnresolvedIdentifier) {
         	((UnresolvedIdentifier) parent).checkMember(context);
         	return ((UnresolvedIdentifier) parent).getResolved();

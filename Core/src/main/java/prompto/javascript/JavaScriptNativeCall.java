@@ -3,6 +3,7 @@ package prompto.javascript;
 import prompto.error.PromptoError;
 import prompto.runtime.Context;
 import prompto.statement.NativeCall;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
@@ -30,6 +31,16 @@ public class JavaScriptNativeCall extends NativeCall {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		throw new RuntimeException("Should never get there!");
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		this.statement.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		return this.statement.transpile(transpiler);
 	}
 
 }

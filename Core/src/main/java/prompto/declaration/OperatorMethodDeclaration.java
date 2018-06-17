@@ -21,7 +21,7 @@ public class OperatorMethodDeclaration extends ConcreteMethodDeclaration impleme
 	}
 
 	public static String getNameAsKey(Operator operator) {
-		return "operator-" + operator.name();
+		return "operator_" + operator.name();
 	}
 	
 	@Override

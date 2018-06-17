@@ -10,6 +10,7 @@ import prompto.compiler.ResultInfo;
 import prompto.compiler.StringConstant;
 import prompto.error.PromptoError;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -112,6 +113,24 @@ public class WithSingletonStatement extends BaseStatement {
 		writer.indent();
 		statements.toDialect(writer);
 		writer.dedent();
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    this.type.declare(transpiler);
+	    transpiler = transpiler.newInstanceTranspiler(this.type);
+	    transpiler = transpiler.newChildTranspiler(null);
+	    this.statements.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		Transpiler instance = transpiler.newInstanceTranspiler(this.type);
+		Transpiler child = instance.newChildTranspiler(null);
+	    this.statements.transpile(child);
+	    child.flush();
+	    instance.flush();
+	    return true;
 	}
 	
 }

@@ -5,10 +5,13 @@ import java.security.InvalidParameterException;
 import java.util.Comparator;
 import java.util.Map;
 
+import prompto.expression.IExpression;
+import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 import prompto.value.Character;
 import prompto.value.CharacterRange;
 import prompto.value.IValue;
@@ -78,19 +81,17 @@ public class CharacterType extends NativeType {
 
 	@Override
 	public Comparator<Character> getComparator(boolean descending) {
-		return descending ? 
-				new Comparator<Character>() {
-					@Override
-					public int compare(Character o1, Character o2) {
-						return java.lang.Character.compare(o2.getValue(), o1.getValue());
-					}
-				} :
-				new Comparator<Character>() {
-					@Override
-					public int compare(Character o1, Character o2) {
-						return java.lang.Character.compare(o1.getValue(), o2.getValue());
-					}
-				};
+		return descending ? new Comparator<Character>() {
+			@Override
+			public int compare(Character o1, Character o2) {
+				return java.lang.Character.compare(o2.getValue(), o1.getValue());
+			}
+		} : new Comparator<Character>() {
+			@Override
+			public int compare(Character o1, Character o2) {
+				return java.lang.Character.compare(o1.getValue(), o2.getValue());
+			}
+		};
 	}
 
 	@Override
@@ -112,5 +113,95 @@ public class CharacterType extends NativeType {
 			throw new InvalidParameterException(value.toString());
 		return new Character(value.asText().charAt(0));
 	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		// nothing to do
+	}
 
+	@Override
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+		// can add anything to text
+		left.declare(transpiler);
+		right.declare(transpiler);
+	}
+
+	@Override
+	public boolean transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+		// can add anything to text
+		left.transpile(transpiler);
+		transpiler.append(" + ");
+		right.transpile(transpiler);
+		return false;
+	}
+	
+	@Override
+	public void declareMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	    if (other == IntegerType.instance()) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	    } else
+	        super.declareMultiply(transpiler, other, tryReverse, left, right);
+	}
+	
+	@Override
+	public boolean transpileMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	   if (other == IntegerType.instance()) {
+	        left.transpile(transpiler);
+	        transpiler.append(".repeat(");
+	        right.transpile(transpiler);
+	        transpiler.append(")");
+	        return false;
+	    } else
+	        return super.transpileMultiply(transpiler, other, tryReverse, left, right);
+	}
+	
+	@Override
+	public void declareMember(Transpiler transpiler, String name) {
+	    if (!"codePoint".equals(name))
+	    	super.declareMember(transpiler, name);
+	}
+	
+	@Override
+	public void transpileMember(Transpiler transpiler, String name) {
+	    if ("codePoint".equals(name))
+	    	transpiler.append("charCodeAt(0)");
+	    else
+	    	super.transpileMember(transpiler, name);
+	}
+
+	@Override
+	public void declareRange(Transpiler transpiler, IType other) {
+	    if(other == CharacterType.instance()) {
+	        transpiler.require("Range");
+	        transpiler.require("IntegerRange");
+	        transpiler.require("CharacterRange");
+	    } else {
+	        super.declareRange(transpiler, other);
+	    }
+	}
+	
+	
+	@Override
+	public boolean transpileRange(Transpiler transpiler, IExpression first, IExpression last) {
+	    transpiler.append("new CharacterRange(");
+	    first.transpile(transpiler);
+	    transpiler.append(",");
+	    last.transpile(transpiler);
+	    transpiler.append(")");
+	    return false;
+	}
+	
+	@Override
+	public void declareCompare(Transpiler transpiler, IType other) {
+		// nothing to do
+	}
+	
+	@Override
+	public boolean transpileCompare(Transpiler transpiler, IType other, CmpOp operator, IExpression left, IExpression right) {
+	    left.transpile(transpiler);
+	    transpiler.append(" ").append(operator.toString()).append(" ");
+	    right.transpile(transpiler);
+		return false;
+	}
 }

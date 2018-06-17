@@ -2,10 +2,12 @@ package prompto.type;
 
 import java.lang.reflect.Type;
 
+import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoTuple;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 
 public class TupleType extends ContainerType {
 
@@ -64,6 +66,96 @@ public class TupleType extends ContainerType {
 	@Override
 	public IType checkContainsAllOrAny(Context context, IType other) {
 		return BooleanType.instance(); 
+	}
+	
+	@Override
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	    if(other == TupleType.instance() || other instanceof ListType || other instanceof SetType) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	    } else {
+	        super.declareAdd(transpiler, other, tryReverse, left, right);
+	    }
+	}
+	
+	@Override
+	public boolean transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	   if(other == TupleType.instance() || other instanceof ListType || other instanceof SetType) {
+	        left.transpile(transpiler);
+	        transpiler.append(".add(");
+	        right.transpile(transpiler);
+	        transpiler.append(")");
+	        return false;
+	    } else {
+	        return super.transpileAdd(transpiler, other, tryReverse, left, right);
+	    }
+	}
+	
+	@Override
+	public void declareItem(Transpiler transpiler, IType itemType, IExpression item) {
+	    if(itemType==IntegerType.instance) {
+	        item.declare(transpiler);
+	    } else {
+	        super.declareItem(transpiler, itemType, item);
+	    }
+	}
+	
+	@Override
+	public boolean transpileItem(Transpiler transpiler, IType itemType, IExpression item) {
+	    if(itemType==IntegerType.instance()) {
+	        transpiler.append("[");
+	        item.transpile(transpiler);
+	        transpiler.append("-1]");
+	        return false;
+	    } else {
+	        return super.transpileItem(transpiler, itemType, item);
+	    }	
+    }
+	
+	@Override
+	public void transpileAssignItemValue(Transpiler transpiler, IExpression item, IExpression expression) {
+	    transpiler.append(".setItem(");
+	    item.transpile(transpiler);
+	    transpiler.append(", ");
+	    expression.transpile(transpiler);
+	    transpiler.append(")");
+	}
+	
+	@Override
+	public void declareContains(Transpiler transpiler, IType other, IExpression container, IExpression item) {
+	    container.declare(transpiler);
+	    item.declare(transpiler);
+	}
+	
+	@Override
+	public void transpileContains(Transpiler transpiler, IType other, IExpression container, IExpression item) {
+	    container.transpile(transpiler);
+	    transpiler.append(".includes(");
+	    item.transpile(transpiler);
+	    transpiler.append(")");
+	}
+	
+	@Override
+	public void declareContainsAllOrAny(Transpiler transpiler, IType other, IExpression container, IExpression items) {
+	    transpiler.require("StrictSet");
+	    container.declare(transpiler);
+	    items.declare(transpiler);
+	}
+	
+	@Override
+	public void transpileContainsAll(Transpiler transpiler, IType other, IExpression container, IExpression items) {
+	    container.transpile(transpiler);
+	    transpiler.append(".hasAll(");
+	    items.transpile(transpiler);
+	    transpiler.append(")");
+	}
+	
+	@Override
+	public void transpileContainsAny(Transpiler transpiler, IType other, IExpression container, IExpression items) {
+	    container.transpile(transpiler);
+	    transpiler.append(".hasAny(");
+	    items.transpile(transpiler);
+	    transpiler.append(")");
 	}
 	
 }

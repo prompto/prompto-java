@@ -146,7 +146,8 @@ public class ExtendedArgument extends CategoryArgument {
 	
 	@Override
 	public IType getType(Context context) {
-		return context.getRegisteredDeclaration(IDeclaration.class, id).getType(context);
+		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, id);
+		return decl!=null ? decl.getType(context) :this.type;
 	}
 	
 	@Override

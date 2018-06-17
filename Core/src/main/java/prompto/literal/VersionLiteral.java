@@ -9,6 +9,7 @@ import prompto.compiler.ResultInfo;
 import prompto.compiler.StringConstant;
 import prompto.intrinsic.PromptoVersion;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.VersionType;
 import prompto.value.Version;
@@ -42,6 +43,16 @@ public class VersionLiteral extends Literal<Version> {
 		return new ResultInfo(PromptoVersion.class);
 	}
 
+	@Override
+	public void declare(Transpiler transpiler) {
+	    transpiler.require("Version");
+
+	}
 	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		transpiler.append("Version.Parse(").append(this.text.get()).append(")");
+		return false;
+	}
 	
 }

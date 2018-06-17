@@ -11,7 +11,7 @@ import prompto.value.IValue;
 public abstract class Literal<T extends IValue> implements IExpression {
 	
 	Supplier<String> text;
-	T value;
+	protected T value;
 	
 	protected Literal(String text, T value) {
 		this(()->text, value);

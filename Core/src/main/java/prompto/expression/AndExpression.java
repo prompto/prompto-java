@@ -21,6 +21,7 @@ import prompto.error.SyntaxError;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.store.IQueryBuilder;
+import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -209,6 +210,29 @@ public class AndExpression implements IPredicateExpression, IAssertion {
 		method.restoreFullStackState(finalState);
 		method.placeLabel(finalState);
 		method.inhibitOffsetListener(finalListener);
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    this.left.declare(transpiler);
+	    this.right.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    this.left.transpile(transpiler);
+	    transpiler.append(" && ");
+	    this.right.transpile(transpiler);
+	    return false;
+	}
+	
+	@Override
+	public void transpileFound(Transpiler transpiler, Dialect dialect) {
+	    transpiler.append("(");
+	    this.left.transpile(transpiler);
+	    transpiler.append(") + '").append(this.operatorToDialect(dialect)).append("' + (");
+	    this.right.transpile(transpiler);
+	    transpiler.append(")");
 	}
 
 }

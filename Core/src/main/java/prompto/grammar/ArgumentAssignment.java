@@ -9,6 +9,7 @@ import prompto.expression.InstanceExpression;
 import prompto.expression.MemberSelector;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
+import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.type.VoidType;
@@ -128,7 +129,7 @@ public class ArgumentAssignment {
 		return VoidType.instance();
 	}
 	
-	public IExpression resolve(Context context, IMethodDeclaration methodDeclaration,boolean checkInstance) throws PromptoError {
+	public IExpression resolve(Context context, IMethodDeclaration methodDeclaration, boolean checkInstance, boolean allowDerived) throws PromptoError {
 		// since we support implicit members, it's time to resolve them
 		Identifier name = argument.getId();
 		IExpression expression = getExpression();
@@ -140,7 +141,12 @@ public class ArgumentAssignment {
 			if(value instanceof IInstance)
 				actual = ((IInstance)value).getType();
 		}
-		if(!required.isAssignableFrom(context, actual) && (actual instanceof CategoryType)) 
+		boolean assignable = required.isAssignableFrom(context, actual);
+		// when in dispatch, allow derived
+		if(!assignable && allowDerived)
+	        assignable = actual.isAssignableFrom(context, required);
+		// try passing member
+		if(!assignable && (actual instanceof CategoryType)) 
 			expression = new MemberSelector(expression,name);
 		return expression; 
 	}
@@ -158,5 +164,16 @@ public class ArgumentAssignment {
 			throw new SyntaxError("Method has no argument:" + this.getArgumentId());
 		IExpression expression = new ContextualExpression(context, getExpression());
 		return new ArgumentAssignment(argument,expression);
+	}
+
+
+	public void declare(Transpiler transpiler) {
+		if(this.expression!=null)
+			this.expression.declare(transpiler);
+	}
+
+
+	public void transpile(Transpiler transpiler) {
+		this.expression.transpile(transpiler);
 	}
 }

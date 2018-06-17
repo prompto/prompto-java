@@ -11,6 +11,7 @@ import prompto.declaration.CategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.Decimal;
@@ -70,5 +71,19 @@ public class ModuloExpression implements IExpression {
 			throw new SyntaxError("Cannot modulo " + lval.getType().getTypeName() + " by " + right.check(context).getFamily());
 		}
 		return divider.compile(context, method, flags, lval, right);
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		IType lt = this.left.check(transpiler.getContext());
+		IType rt = this.right.check(transpiler.getContext());
+	    lt.declareModulo(transpiler, rt, this.left, this.right);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		IType lt = this.left.check(transpiler.getContext());
+		IType rt = this.right.check(transpiler.getContext());
+	    return lt.transpileModulo(transpiler, rt, this.left, this.right);
 	}
 }

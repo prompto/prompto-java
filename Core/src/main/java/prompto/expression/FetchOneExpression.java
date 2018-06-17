@@ -26,6 +26,7 @@ import prompto.store.IQueryBuilder;
 import prompto.store.IQueryBuilder.MatchOp;
 import prompto.store.IStore;
 import prompto.store.IStored;
+import prompto.transpiler.Transpiler;
 import prompto.type.AnyType;
 import prompto.type.BooleanType;
 import prompto.type.CategoryType;
@@ -208,6 +209,39 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 		// need a query factory
 		InterfaceConstant i = new InterfaceConstant(IStore.class, "newQueryBuilder", IQueryBuilder.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, i);
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    transpiler.require("MatchOp");
+	    transpiler.require("DataStore");
+	    transpiler.require("AttributeInfo");
+	    transpiler.require("TypeFamily");
+	    if (this.type != null)
+	        this.type.declare(transpiler);
+	    if (this.predicate != null)
+	        this.predicate.declareQuery(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    transpiler.append("(function() {").indent();
+	    transpiler.append("var builder = DataStore.instance.newQueryBuilder();").newLine();
+	    if (this.type != null)
+	        transpiler.append("builder.verify(new AttributeInfo('category', TypeFamily.TEXT, true, null), MatchOp.CONTAINS, '").append(this.type.getTypeName()).append("');").newLine();
+	    if (this.predicate != null)
+	        this.predicate.transpileQuery(transpiler, "builder");
+	    if (this.type != null && this.predicate != null)
+	        transpiler.append("builder.and();").newLine();
+	    transpiler.append("var stored = DataStore.instance.fetchOne(builder.build());").newLine();
+	    transpiler.append("if(stored===null)").indent().append("return null;").dedent();
+	    transpiler.append("var name = stored.getData('category').slice(-1)[0];").newLine();
+	    transpiler.append("var type = eval(name);").newLine();
+	    transpiler.append("var result = new type();").newLine();
+	    transpiler.append("result.fromStored(stored);").newLine();
+	    transpiler.append("return result;").dedent();
+	    transpiler.append("})()");
+	    return false;
 	}
 
 }

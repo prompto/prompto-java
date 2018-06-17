@@ -24,6 +24,7 @@ import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.runtime.LinkedVariable;
 import prompto.runtime.Variable;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
@@ -171,6 +172,37 @@ public class InstanceExpression extends Section implements IExpression {
 			method.addInstruction(Opcode.CHECKCAST, downcastTo);
 			return new ResultInfo(downcastTo.getType());
 		}
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		INamed named = transpiler.getContext().getRegistered(id);
+		if(named instanceof MethodDeclarationMap) {
+			IMethodDeclaration decl = ((MethodDeclarationMap)named).getFirst();
+			// don't declare closures
+			if(decl instanceof ConcreteMethodDeclaration && ((ConcreteMethodDeclaration)decl).getDeclarationStatement()!=null)
+				return;
+			transpiler.declare(decl);
+		}
+	}
+	
+
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		Context context = transpiler.getContext().contextForValue(this.id);
+	    if(context instanceof InstanceContext) {
+	        ((InstanceContext)context).getInstanceType().transpileInstance(transpiler);
+	        transpiler.append(".");
+	    }
+		INamed named = transpiler.getContext().getRegistered(id);
+		if(named instanceof MethodDeclarationMap) {
+			transpiler.append(((MethodDeclarationMap)named).getFirst().getTranspiledName(context));
+		} else {
+		    if(this.getName().equals(transpiler.getGetterName()))
+		        transpiler.append("$");
+		    transpiler.append(this.getName());
+		}
+		return false;
 	}
 
 }

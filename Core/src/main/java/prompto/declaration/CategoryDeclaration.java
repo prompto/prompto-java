@@ -22,6 +22,7 @@ import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.store.IStore;
 import prompto.store.IStored;
+import prompto.transpiler.ITranspilable;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -348,7 +349,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		Context local = context.newInstanceContext(decl.getType(context), false).newChildContext();
 		operator.registerArguments(local);
 		IType resultType = operator.check(local, false);
-		String methodName = "operator-" + oper.name();
+		String methodName = "operator_" + oper.name();
 		InterfaceConstant c = new InterfaceConstant(left.getType(), methodName, argType.getJavaType(context), resultType.getJavaType(context));
 		method.addInstruction(Opcode.INVOKEINTERFACE, c);
 		return new ResultInfo(resultType.getJavaType(context)); 
@@ -379,6 +380,8 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	protected boolean isPromptoRoot(Context context) {
 		return false;
 	}
+
+	public abstract void ensureDeclarationOrder(Context context, List<ITranspilable> list, Set<ITranspilable> set);
 
 	
 }

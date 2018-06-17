@@ -26,7 +26,10 @@ import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.statement.ReturnStatement;
+import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
+import prompto.type.ContainerType;
+import prompto.type.CursorType;
 import prompto.type.IType;
 import prompto.type.IterableType;
 import prompto.type.ListType;
@@ -37,12 +40,12 @@ import prompto.value.IValue;
 
 public class FilteredExpression extends Section implements IExpression {
 
-	Identifier itemName;
+	Identifier itemId;
 	IExpression source;
 	IExpression predicate;
 	
 	public FilteredExpression(Identifier itemName, IExpression source, IExpression predicate) {
-		this.itemName = itemName;
+		this.itemId = itemName;
 		this.source = source;
 		this.predicate = predicate;
 	}
@@ -58,7 +61,7 @@ public class FilteredExpression extends Section implements IExpression {
 		case M:
 			source.toDialect(writer);
 			writer.append(" filtered with ");
-			writer.append(itemName);
+			writer.append(itemId);
 			writer.append(" where ");
 			predicate.toDialect(writer);
 			break;
@@ -66,7 +69,7 @@ public class FilteredExpression extends Section implements IExpression {
 			writer.append("filtered (");
 			source.toDialect(writer);
 			writer.append(") with (");
-			writer.append(itemName);
+			writer.append(itemId);
 			writer.append(") where (");
 			predicate.toDialect(writer);
 			writer.append(")");
@@ -81,7 +84,7 @@ public class FilteredExpression extends Section implements IExpression {
 			throw new SyntaxError("Expecting a list, set or tuple as data source !");
 		Context local = context.newChildContext();
 		IType itemType = ((IterableType)sourceType).getItemType();
-		local.registerValue(new Variable(itemName, itemType));
+		local.registerValue(new Variable(itemId, itemType));
 		IType filterType = predicate.check(local);
 		if(filterType!=BooleanType.instance())
 			throw new SyntaxError("Filtering expression must return a boolean !");
@@ -96,7 +99,7 @@ public class FilteredExpression extends Section implements IExpression {
 			throw new InternalError("Illegal source type: " + sourceType.getTypeName());
 		IType itemType = ((IterableType)sourceType).getItemType();
 		Context local = context.newChildContext();
-		Variable item = new Variable(itemName, itemType);
+		Variable item = new Variable(itemId, itemType);
 		local.registerValue(item);
 		// fetch and check source
 		IValue src = source.interpret(context);
@@ -111,7 +114,7 @@ public class FilteredExpression extends Section implements IExpression {
 				@Override
 				public boolean test(IValue value) {
 					try {
-						local.setValue(itemName, value);
+						local.setValue(itemId, value);
 						IValue test = predicate.interpret(local);
 						if(!(test instanceof Boolean))
 							throw new InternalError("Illegal test result: " + test);
@@ -175,7 +178,7 @@ public class FilteredExpression extends Section implements IExpression {
 	private void compileInnerClassExpression(Context context, ClassFile classFile) {
 		IType paramIType = source.check(context).checkIterator(context);
 		context = context.newChildContext();
-		context.registerValue(new Variable(itemName, paramIType));
+		context.registerValue(new Variable(itemId, paramIType));
 		Type paramType = paramIType.getJavaType(context);
 		compileInnerClassBridgeMethod(classFile, paramType);
 		compileInnerClassTestMethod(context, classFile, paramType);
@@ -186,7 +189,7 @@ public class FilteredExpression extends Section implements IExpression {
 		Descriptor.Method proto = new Descriptor.Method(paramType, boolean.class);
 		MethodInfo method = classFile.newMethod("test", proto);
 		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
-		method.registerLocal(itemName.toString(), VerifierType.ITEM_Object, new ClassConstant(paramType));
+		method.registerLocal(itemId.toString(), VerifierType.ITEM_Object, new ClassConstant(paramType));
 		ReturnStatement stmt = new ReturnStatement(predicate);
 		stmt.compile(context, method, new Flags().withPrimitive(true));
 	}
@@ -197,7 +200,7 @@ public class FilteredExpression extends Section implements IExpression {
 		MethodInfo method = classFile.newMethod("test", proto);
 		method.addModifier(Tags.ACC_BRIDGE | Tags.ACC_SYNTHETIC);
 		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
-		method.registerLocal(itemName.toString(), VerifierType.ITEM_Object, new ClassConstant(Object.class));
+		method.registerLocal(itemId.toString(), VerifierType.ITEM_Object, new ClassConstant(Object.class));
 		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
 		method.addInstruction(Opcode.ALOAD_1, new ClassConstant(Object.class));
 		method.addInstruction(Opcode.CHECKCAST, new ClassConstant(paramType));
@@ -207,6 +210,28 @@ public class FilteredExpression extends Section implements IExpression {
 		method.addInstruction(Opcode.IRETURN);
 	}
 
-
+	@Override
+	public void declare(Transpiler transpiler) {
+	    this.source.declare(transpiler);
+	    IType manyType = this.source.check(transpiler.getContext());
+	    IType itemType = manyType instanceof ContainerType ? ((ContainerType)manyType).getItemType() : ((CursorType)manyType).getItemType();
+	    transpiler = transpiler.newChildTranspiler(null);
+	    transpiler.getContext().registerValue(new Variable(this.itemId, itemType));
+	    this.predicate.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    IType manyType = this.source.check(transpiler.getContext());
+	    IType itemType = manyType instanceof ContainerType ? ((ContainerType)manyType).getItemType() : ((CursorType)manyType).getItemType();
+	    this.source.transpile(transpiler);
+	    transpiler.append(".filtered(function(").append(this.itemId.toString()).append(") { return ");
+	    transpiler = transpiler.newChildTranspiler(null);
+	    transpiler.getContext().registerValue(new Variable(this.itemId, itemType));
+	    this.predicate.transpile(transpiler);
+	    transpiler.append("; })");
+	    transpiler.flush();
+		return false;
+	}
 
 }

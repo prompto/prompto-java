@@ -1,5 +1,7 @@
 package prompto.grammar;
 
+import prompto.transpiler.Transpiler;
+
 
 public enum CmpOp {
 	GT(">"),
@@ -15,5 +17,9 @@ public enum CmpOp {
 	
 	public String toString() {
 		return token;
+	}
+
+	public void transpile(Transpiler transpiler) {
+		transpiler.append(this.name().toLowerCase());
 	}
 }

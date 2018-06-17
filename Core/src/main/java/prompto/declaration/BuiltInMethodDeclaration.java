@@ -10,6 +10,7 @@ import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.runtime.Context.BuiltInContext;
+import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
@@ -73,6 +74,12 @@ public abstract class BuiltInMethodDeclaration extends BaseMethodDeclaration {
 	public void toDialect(CodeWriter writer) {
 		throw new UnsupportedOperationException();
 	}
+
+	public void declareCall(Transpiler transpiler) {
+		// override only of required
+	}
+
+	public abstract void transpileCall(Transpiler transpiler, ArgumentAssignmentList assignments);
 
 
 

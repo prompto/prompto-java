@@ -7,6 +7,7 @@ import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.instance.IAssignableInstance;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.CodeType;
 import prompto.type.IType;
 import prompto.type.VoidType;
@@ -58,5 +59,23 @@ public class AssignInstanceStatement extends SimpleStatement {
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		return instance.compileAssign(context, method, flags, expression);
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		this.instance.declareAssign(transpiler, this.expression);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    IType valueType = this.expression.check(transpiler.getContext());
+	    // don't assign Code expressions
+	    if (valueType == CodeType.instance()) {
+	        this.instance.declareAssign(transpiler, this.expression);
+	        return true;
+	    } else {
+	        this.instance.transpileAssign(transpiler, this.expression);
+	        return false;
+	    }
 	}
 }

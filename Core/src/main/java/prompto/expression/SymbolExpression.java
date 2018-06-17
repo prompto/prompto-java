@@ -9,6 +9,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
@@ -66,6 +67,18 @@ public class SymbolExpression implements IExpression {
 		if(symbol==null)
 			throw new SyntaxError("Unknown symbol:" + id);
 		return symbol.getJavaType(context);
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		Symbol symbol = transpiler.getContext().getRegisteredValue(Symbol.class, this.id);
+	    symbol.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		Symbol symbol = transpiler.getContext().getRegisteredValue(Symbol.class, this.id);
+	    return symbol.transpile(transpiler);
 	}
 
 }

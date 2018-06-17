@@ -608,6 +608,10 @@ public class Context implements IContext {
 					.collect(Collectors.toList());
 		}
 
+		public IMethodDeclaration getFirst() {
+			return values().iterator().next();
+		}
+
 	}
 	
 	public <T extends INamed> T getRegisteredValue(Class<T> klass, Identifier name) {

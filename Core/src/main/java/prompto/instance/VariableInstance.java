@@ -15,6 +15,7 @@ import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Variable;
+import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.CodeType;
 import prompto.type.IType;
@@ -141,6 +142,62 @@ public class VariableInstance implements IAssignableInstance {
 	public IValue interpret(Context context) throws PromptoError {
 		return context.getValue(id);
 	}
+	
+	@Override
+	public IType check(Context context) {
+		INamed actual = context.getRegisteredValue(INamed.class, id);
+		return actual.getType(context);
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		// nothing to do
+	}
+	
+	@Override
+	public void transpile(Transpiler transpiler) {
+		transpiler.append(this.getName());
+	}
+	
+	@Override
+	public void declareAssign(Transpiler transpiler, IExpression expression) {
+		Context context = transpiler.getContext();
+	   if(context.getRegisteredValue(INamed.class, this.getId())==null) {
+	        IType valueType = expression.check(context);
+	        context.registerValue(new Variable(this.id, valueType));
+	        // Code expressions need to be interpreted as part of full check
+	        if (valueType == CodeType.instance()) {
+	            context.setValue(this.id, expression.interpret(context));
+	        }
 
-
+	    }
+	    expression.declare(transpiler);
+	}
+	
+	@Override
+	public void transpileAssign(Transpiler transpiler, IExpression expression) {
+		Context context = transpiler.getContext();
+	   if(context.getRegisteredValue(INamed.class, this.id)==null) {
+	        IType type = expression.check(context);
+	        context.registerValue(new Variable(this.id, type));
+	        transpiler.append("var ");
+	    }
+	    context = context.contextForValue(this.id);
+	    if(context instanceof InstanceContext) {
+	        ((InstanceContext)context).getInstanceType().transpileInstance(transpiler);
+	        transpiler.append(".setMember('").append(this.getName()).append("', ");
+	        expression.transpile(transpiler);
+	        transpiler.append(")");
+	    } else {
+	        transpiler.append(this.getName());
+	        transpiler.append(" = ");
+	        expression.transpile(transpiler);
+	    }
+    }
+	
+	@Override
+	public void transpileAssignParent(Transpiler transpiler) {
+		transpiler.append(this.getName());
+	}
+	
 }

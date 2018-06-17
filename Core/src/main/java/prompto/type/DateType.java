@@ -4,11 +4,14 @@ import java.lang.reflect.Type;
 import java.util.Comparator;
 import java.util.Map;
 
+import prompto.expression.IExpression;
+import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDate;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 import prompto.value.Date;
 import prompto.value.DateRange;
 import prompto.value.IValue;
@@ -121,5 +124,135 @@ public class DateType extends NativeType {
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		PromptoDate date = PromptoDate.parse(value.asText());
 		return new Date(date);
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		transpiler.require("LocalDate");
+	}
+	
+	@Override
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	    if (other == PeriodType.instance()) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	    } else
+	        super.declareAdd(transpiler, other, tryReverse, left, right);
+	}
+	
+	@Override
+	public boolean transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	    if (other == PeriodType.instance()) {
+	        left.transpile(transpiler);
+	        transpiler.append(".addPeriod(");
+	        right.transpile(transpiler);
+	        transpiler.append(")");
+	        return false;
+	    } else
+	        return super.transpileAdd(transpiler, other, tryReverse, left, right);
+	}
+	
+	@Override
+	public void declareSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	    if (other == PeriodType.instance() || other == DateType.instance()) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	    } else
+	        super.declareSubtract(transpiler, other, left, right);
+	}
+	
+	@Override
+	public boolean transpileSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	    if (other == PeriodType.instance()) {
+	        left.transpile(transpiler);
+	        transpiler.append(".subtractPeriod(");
+	        right.transpile(transpiler);
+	        transpiler.append(")");
+	        return false;
+	    } else if (other == DateType.instance()) {
+	        left.transpile(transpiler);
+	        transpiler.append(".subtractDate(");
+	        right.transpile(transpiler);
+	        transpiler.append(")");
+	        return false;
+	    } else
+	        return super.transpileSubtract(transpiler, other, left, right);
+	}
+	
+	@Override
+	public void declareMember(Transpiler transpiler, String name) {
+		switch(name) {
+		case "year":
+		case "month":
+		case "dayOfMonth":
+		case "dayOfYear":
+			break;
+		default:
+			super.declareMember(transpiler, name);
+	    }
+	}
+	
+	@Override
+	public void transpileMember(Transpiler transpiler, String name) {
+		switch(name) {
+		case "year":
+	        transpiler.append("getYear()");
+			break;
+		case "month":
+	        transpiler.append("getMonth()");
+			break;
+		case "dayOfMonth":
+	        transpiler.append("getDayOfMonth()");
+			break;
+		case "dayOfYear":
+	        transpiler.append("getDayOfYear()");
+			break;
+		default:
+	        super.transpileMember(transpiler, name);
+	    }
+	}
+	
+	@Override
+	public void declareRange(Transpiler transpiler, IType other) {
+	    if(other == DateType.instance()) {
+	        transpiler.require("Range");
+	        transpiler.require("DateRange");
+	    } else {
+	        super.declareRange(transpiler, other);
+	    }
+	}
+	
+	@Override
+	public boolean transpileRange(Transpiler transpiler, IExpression first, IExpression last) {
+	    transpiler.append("new DateRange(");
+	    first.transpile(transpiler);
+	    transpiler.append(",");
+	    last.transpile(transpiler);
+	    transpiler.append(")");
+	    return false;
+	}
+	
+	@Override
+	public void declareCompare(Transpiler transpiler, IType other) {
+		// nothing to do
+	}
+	
+	@Override
+	public boolean transpileCompare(Transpiler transpiler, IType other, CmpOp operator, IExpression left, IExpression right) {
+	    left.transpile(transpiler);
+	    transpiler.append(".");
+	    operator.transpile(transpiler);
+	    transpiler.append("(");
+	    right.transpile(transpiler);
+	    transpiler.append(")");
+	    return false;
+	}
+	
+	@Override
+	public void transpileSorted(Transpiler transpiler, boolean descending, IExpression key) {
+	    if(descending)
+	        transpiler.append("function(o1, o2) { return o1.equals(o2) ? 0 : o1.gt(o2) ? -1 : 1; }");
+	    else
+	        transpiler.append("function(o1, o2) { return o1.equals(o2) ? 0 : o1.gt(o2) ? 1 : -1; }");
 	}
 }

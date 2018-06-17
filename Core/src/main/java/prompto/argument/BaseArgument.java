@@ -17,6 +17,7 @@ import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.DecimalType;
 import prompto.type.IntegerType;
 import prompto.value.Decimal;
@@ -108,5 +109,16 @@ public abstract class BaseArgument implements IArgument {
 			return new ArgumentAssignment(this, defaultExpression);
 		else
 			throw new SyntaxError("Missing assignment for argument " + getName());
+	}
+	
+	@Override
+	public void transpile(Transpiler transpiler) {
+		transpiler.append(this.getName());
+	}
+
+
+	@Override
+	public void transpileCall(Transpiler transpiler, IExpression expression) {
+	    expression.transpile(transpiler);
 	}
 }

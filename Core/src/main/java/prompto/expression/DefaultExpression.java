@@ -5,6 +5,7 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
@@ -38,5 +39,10 @@ public class DefaultExpression implements IExpression {
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		return expression.compile(context.getGlobalContext(), method, flags);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		return expression.transpile(transpiler);
 	}
 }

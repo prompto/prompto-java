@@ -10,6 +10,7 @@ import prompto.compiler.ResultInfo.Flag;
 import prompto.error.PromptoError;
 import prompto.runtime.BreakResult;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
@@ -56,4 +57,14 @@ public class BreakStatement extends SimpleStatement {
 		return new ResultInfo(void.class, Flag.BREAK);
 	}
 
+	@Override
+	public void declare(Transpiler transpiler) {
+		// nothing to do;
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		transpiler.append("break");
+		return false;
+	}
 }

@@ -7,6 +7,7 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.IntegerType;
 import prompto.value.Integer;
@@ -44,5 +45,17 @@ public class IntegerLiteral extends Literal<Integer> {
 		else
 			return CompilerUtils.longToLong(method);
 	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		// nothing to do
+	}
+
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		transpiler.append(this.text.get());
+		return false;
+	}
+
 
 }

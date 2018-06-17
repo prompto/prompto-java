@@ -12,14 +12,18 @@ import prompto.compiler.StackState;
 import prompto.compiler.StringConstant;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
+import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoException;
 import prompto.runtime.Context;
+import prompto.runtime.Variable;
 import prompto.store.InvalidValueError;
+import prompto.transpiler.Transpiler;
+import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IContainer;
 import prompto.value.IValue;
 
-public class MatchingCollectionConstraint implements IAttributeConstraint {
+public class MatchingCollectionConstraint extends MatchingConstraintBase {
 	
 	IExpression collection;
 	
@@ -75,4 +79,33 @@ public class MatchingCollectionConstraint implements IAttributeConstraint {
 		method.placeLabel(finalState);
 		method.inhibitOffsetListener(finalListener);		
 	}
+	
+	@Override
+	public void declare(Transpiler transpiler, String name, IType type) {
+	    transpiler = transpiler.newChildTranspiler(null);
+	    Identifier id = new Identifier("value");
+	    transpiler.getContext().registerValue(new Variable(id, type));
+	    this.collection.declare(transpiler);
+	    this.transpileFunction = t -> this.transpileChecker(t, name, type);
+	    transpiler.declare(this);
+	    transpiler.require("StrictSet");
+	}
+
+	private boolean transpileChecker(Transpiler transpiler, String name, IType type) {
+	    transpiler.append("function $check_").append(name).append("(value) {").indent();
+	    transpiler = transpiler.newChildTranspiler(null);
+	    Identifier id = new Identifier("value");
+	    transpiler.getContext().registerValue(new Variable(id, type));
+	    transpiler.append("if(");
+	    this.collection.transpile(transpiler);
+	    transpiler.append(".has(value))").indent();
+	    transpiler.append("return value;").dedent();
+	    transpiler.append("else").indent();
+	    transpiler.append("throw new IllegalValueError((value == null ? 'null' : value.toString()) + ' is not in: \"").append(this.collection.toString()).append("\"');").dedent();
+	    transpiler.dedent().append("}").newLine();
+	    transpiler.flush();
+	    return true;
+	}
+	
+	
 }
