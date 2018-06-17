@@ -89,13 +89,12 @@ public class VersionType extends NativeType {
 	}
 	
 	@Override
-	public boolean transpileCompare(Transpiler transpiler, IType other, CmpOp operator, IExpression left, IExpression right) {
+	public void transpileCompare(Transpiler transpiler, IType other, CmpOp operator, IExpression left, IExpression right) {
 	    left.transpile(transpiler);
 	    transpiler.append(".");
 	    operator.transpile(transpiler);
 	    transpiler.append("(");
 	    right.transpile(transpiler);
 	    transpiler.append(")");
-	    return false;
 	}
 }

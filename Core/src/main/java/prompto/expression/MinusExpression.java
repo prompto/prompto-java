@@ -100,7 +100,8 @@ public class MinusExpression implements IUnaryExpression {
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 		IType type = this.expression.check(transpiler.getContext());
-	    return type.transpileMinus(transpiler, this.expression);
+	    type.transpileMinus(transpiler, this.expression);
+	    return false;
 	}
 
 }

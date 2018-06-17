@@ -141,15 +141,14 @@ public class DateType extends NativeType {
 	}
 	
 	@Override
-	public boolean transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	public void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
 	    if (other == PeriodType.instance()) {
 	        left.transpile(transpiler);
 	        transpiler.append(".addPeriod(");
 	        right.transpile(transpiler);
 	        transpiler.append(")");
-	        return false;
 	    } else
-	        return super.transpileAdd(transpiler, other, tryReverse, left, right);
+	        super.transpileAdd(transpiler, other, tryReverse, left, right);
 	}
 	
 	@Override
@@ -162,21 +161,19 @@ public class DateType extends NativeType {
 	}
 	
 	@Override
-	public boolean transpileSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	public void transpileSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right) {
 	    if (other == PeriodType.instance()) {
 	        left.transpile(transpiler);
 	        transpiler.append(".subtractPeriod(");
 	        right.transpile(transpiler);
 	        transpiler.append(")");
-	        return false;
 	    } else if (other == DateType.instance()) {
 	        left.transpile(transpiler);
 	        transpiler.append(".subtractDate(");
 	        right.transpile(transpiler);
 	        transpiler.append(")");
-	        return false;
 	    } else
-	        return super.transpileSubtract(transpiler, other, left, right);
+	        super.transpileSubtract(transpiler, other, left, right);
 	}
 	
 	@Override
@@ -223,13 +220,12 @@ public class DateType extends NativeType {
 	}
 	
 	@Override
-	public boolean transpileRange(Transpiler transpiler, IExpression first, IExpression last) {
+	public void transpileRange(Transpiler transpiler, IExpression first, IExpression last) {
 	    transpiler.append("new DateRange(");
 	    first.transpile(transpiler);
 	    transpiler.append(",");
 	    last.transpile(transpiler);
 	    transpiler.append(")");
-	    return false;
 	}
 	
 	@Override
@@ -238,14 +234,13 @@ public class DateType extends NativeType {
 	}
 	
 	@Override
-	public boolean transpileCompare(Transpiler transpiler, IType other, CmpOp operator, IExpression left, IExpression right) {
+	public void transpileCompare(Transpiler transpiler, IType other, CmpOp operator, IExpression left, IExpression right) {
 	    left.transpile(transpiler);
 	    transpiler.append(".");
 	    operator.transpile(transpiler);
 	    transpiler.append("(");
 	    right.transpile(transpiler);
 	    transpiler.append(")");
-	    return false;
 	}
 	
 	@Override

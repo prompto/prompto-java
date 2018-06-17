@@ -85,7 +85,8 @@ public class DivideExpression implements IExpression {
 	public boolean transpile(Transpiler transpiler) {
 		IType lt = this.left.check(transpiler.getContext());
 		IType rt = this.right.check(transpiler.getContext());
-	    return lt.transpileDivide(transpiler, rt, this.left, this.right);
+	    lt.transpileDivide(transpiler, rt, this.left, this.right);
+	    return false;
 	}
 	
 

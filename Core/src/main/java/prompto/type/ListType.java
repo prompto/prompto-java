@@ -182,15 +182,14 @@ public class ListType extends ContainerType {
 	}
 	
 	@Override
-	public boolean transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	public void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
 	    if((other instanceof ListType || other instanceof SetType) && this.getItemType().equals(((ContainerType)other).getItemType())) {
 	        left.transpile(transpiler);
 	        transpiler.append(".add(");
 	        right.transpile(transpiler);
 	        transpiler.append(")");
-	        return false;
 	    } else {
-	        return super.transpileAdd(transpiler, other, tryReverse, left, right);
+	        super.transpileAdd(transpiler, other, tryReverse, left, right);
 	    }
 	}
 	
@@ -207,16 +206,15 @@ public class ListType extends ContainerType {
 	}
 	
 	@Override
-	public boolean transpileMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	public void transpileMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
 	   if(other == IntegerType.instance()) {
 	        transpiler.append("multiplyArray(");
 	        left.transpile(transpiler);
 	        transpiler.append(",");
 	        right.transpile(transpiler);
 	        transpiler.append(")");
-	        return false;
 	    } else
-	        return super.transpileMultiply(transpiler, other, tryReverse, left, right);
+	        super.transpileMultiply(transpiler, other, tryReverse, left, right);
 	}
 	
 	@Override
@@ -266,14 +264,13 @@ public class ListType extends ContainerType {
 	}
 	
 	@Override
-	public boolean transpileItem(Transpiler transpiler, IType itemType, IExpression item) {
+	public void transpileItem(Transpiler transpiler, IType itemType, IExpression item) {
 	    if(itemType==IntegerType.instance()) {
 	        transpiler.append(".item(");
 	        item.transpile(transpiler);
 	        transpiler.append(")");
-	        return false;
 	    } else {
-	        return super.transpileItem(transpiler, itemType, item);
+	        super.transpileItem(transpiler, itemType, item);
 	    }
 	}
 	
@@ -292,7 +289,7 @@ public class ListType extends ContainerType {
 	}
 	
 	@Override
-	public boolean transpileSlice(Transpiler transpiler, IExpression first, IExpression last) {
+	public void transpileSlice(Transpiler transpiler, IExpression first, IExpression last) {
 	    transpiler.append(".slice1Based(");
 	    if(first!=null) {
 	        first.transpile(transpiler);
@@ -303,7 +300,6 @@ public class ListType extends ContainerType {
 	        last.transpile(transpiler);
 	    }
 	    transpiler.append(")");
-		return false;
 	}
 	
 }

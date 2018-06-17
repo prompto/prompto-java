@@ -118,7 +118,8 @@ public class RangeLiteral implements IExpression {
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 		IType firstType = this.first.check(transpiler.getContext());
-	    return firstType.transpileRange(transpiler, this.first, this.last);
+	    firstType.transpileRange(transpiler, this.first, this.last);
+	    return false;
 	}
 
 }

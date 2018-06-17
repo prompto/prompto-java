@@ -314,7 +314,8 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 	public boolean transpile(Transpiler transpiler) {
 		IType lt = this.left.check(transpiler.getContext());
 		IType rt = this.right.check(transpiler.getContext());
-	    return lt.transpileCompare(transpiler, rt, this.operator, this.left, this.right);
+	    lt.transpileCompare(transpiler, rt, this.operator, this.left, this.right);
+	    return false;
 	}
 	
 	@Override

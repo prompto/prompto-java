@@ -67,7 +67,8 @@ public class TypeExpression implements IExpression {
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-		return this.type.transpile(transpiler);
+		this.type.transpile(transpiler);
+		return false;
 	}
 
 }

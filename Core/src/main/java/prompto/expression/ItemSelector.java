@@ -144,7 +144,8 @@ public class ItemSelector extends SelectorExpression {
 	    this.parent.transpile(transpiler);
 	    IType parentType = this.parent.check(transpiler.getContext());
 	    IType itemType = this.item.check(transpiler.getContext());
-	    return parentType.transpileItem(transpiler, itemType, this.item);
+	    parentType.transpileItem(transpiler, itemType, this.item);
+	    return false;
 	}
 	
 

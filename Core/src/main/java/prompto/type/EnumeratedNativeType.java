@@ -136,9 +136,8 @@ public class EnumeratedNativeType extends BaseType {
 	}
 	
 	@Override
-	public boolean transpile(Transpiler transpiler) {
+	public void transpile(Transpiler transpiler) {
 		transpiler.append(this.getTypeName());
-		return false;
 	}
 	
 	@Override

@@ -127,12 +127,11 @@ public class CharacterType extends NativeType {
 	}
 
 	@Override
-	public boolean transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	public void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
 		// can add anything to text
 		left.transpile(transpiler);
 		transpiler.append(" + ");
 		right.transpile(transpiler);
-		return false;
 	}
 	
 	@Override
@@ -145,15 +144,14 @@ public class CharacterType extends NativeType {
 	}
 	
 	@Override
-	public boolean transpileMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	public void transpileMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
 	   if (other == IntegerType.instance()) {
 	        left.transpile(transpiler);
 	        transpiler.append(".repeat(");
 	        right.transpile(transpiler);
 	        transpiler.append(")");
-	        return false;
 	    } else
-	        return super.transpileMultiply(transpiler, other, tryReverse, left, right);
+	        super.transpileMultiply(transpiler, other, tryReverse, left, right);
 	}
 	
 	@Override
@@ -183,13 +181,12 @@ public class CharacterType extends NativeType {
 	
 	
 	@Override
-	public boolean transpileRange(Transpiler transpiler, IExpression first, IExpression last) {
+	public void transpileRange(Transpiler transpiler, IExpression first, IExpression last) {
 	    transpiler.append("new CharacterRange(");
 	    first.transpile(transpiler);
 	    transpiler.append(",");
 	    last.transpile(transpiler);
 	    transpiler.append(")");
-	    return false;
 	}
 	
 	@Override
@@ -198,10 +195,9 @@ public class CharacterType extends NativeType {
 	}
 	
 	@Override
-	public boolean transpileCompare(Transpiler transpiler, IType other, CmpOp operator, IExpression left, IExpression right) {
+	public void transpileCompare(Transpiler transpiler, IType other, CmpOp operator, IExpression left, IExpression right) {
 	    left.transpile(transpiler);
 	    transpiler.append(" ").append(operator.toString()).append(" ");
 	    right.transpile(transpiler);
-		return false;
 	}
 }

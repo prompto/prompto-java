@@ -128,7 +128,8 @@ public class SliceSelector extends SelectorExpression {
 	public boolean transpile(Transpiler transpiler) {
 	    this.parent.transpile(transpiler);
 	    IType parentType = this.parent.check(transpiler.getContext());
-	    return parentType.transpileSlice(transpiler, this.first, this.last);
+	    parentType.transpileSlice(transpiler, this.first, this.last);
+	    return false;
 	}
 
 }

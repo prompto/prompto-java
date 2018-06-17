@@ -94,7 +94,7 @@ public interface IType {
 		throw new UnsupportedOperationException("declare " + this.getClass().getName()); 
 	}
 	
-	default boolean transpile(Transpiler transpiler) {
+	default void transpile(Transpiler transpiler) {
 		throw new UnsupportedOperationException("transpile " + this.getClass().getName()); 
 	}
 
@@ -106,9 +106,9 @@ public interface IType {
 			throw new UnsupportedOperationException("declareAdd " + this.getClass().getName());
 	}
 
-	default boolean transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) { 
+	default void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) { 
 		if(tryReverse)
-			return other.transpileAdd(transpiler, this, false, right, left);
+			other.transpileAdd(transpiler, this, false, right, left);
 		else
 			throw new UnsupportedOperationException("transpileAdd " + this.getClass().getName());
 	}
@@ -139,7 +139,7 @@ public interface IType {
 		throw new UnsupportedOperationException("declareModulo " + this.getClass().getName());
 	}
 
-	default boolean transpileModulo(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	default void transpileModulo(Transpiler transpiler, IType other, IExpression left, IExpression right) {
         throw new UnsupportedOperationException("transpileModulo " + this.getClass().getName());
 	}
 
@@ -147,7 +147,7 @@ public interface IType {
 		throw new UnsupportedOperationException("declareDivide " + this.getClass().getName());
 	}
 
-	default boolean transpileDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	default void transpileDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
         throw new UnsupportedOperationException("transpileDivide " + this.getClass().getName());
 	}
 
@@ -155,7 +155,7 @@ public interface IType {
 		throw new UnsupportedOperationException("declareIntDivide " + this.getClass().getName());
 	}
 
-	default boolean transpileIntDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	default void transpileIntDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
         throw new UnsupportedOperationException("transpileIntDivide " + this.getClass().getName());
 	}
 
@@ -163,7 +163,7 @@ public interface IType {
 		throw new UnsupportedOperationException("declareMinus " + this.getClass().getName());
 	}
 
-	default boolean transpileMinus(Transpiler transpiler, IExpression expression) {
+	default void transpileMinus(Transpiler transpiler, IExpression expression) {
         throw new UnsupportedOperationException("transpileMinus " + this.getClass().getName());
 	}
 
@@ -174,9 +174,9 @@ public interface IType {
 			throw new UnsupportedOperationException("declareMultiply " + this.getClass().getName());
 	}
 
-	default boolean transpileMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) { 
+	default void transpileMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) { 
 		if(tryReverse)
-			return other.transpileMultiply(transpiler, this, false, right, left);
+			other.transpileMultiply(transpiler, this, false, right, left);
 		else
 			throw new UnsupportedOperationException("transpileMultiply " + this.getClass().getName());
 	}
@@ -185,7 +185,7 @@ public interface IType {
 		throw new UnsupportedOperationException("declareSubtract " + this.getClass().getName());
 	}
 
-	default boolean transpileSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right)  { 
+	default void transpileSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right)  { 
 		throw new UnsupportedOperationException("transpileSubtract " + this.getClass().getName());
 	}
 
@@ -207,7 +207,7 @@ public interface IType {
 		throw new UnsupportedOperationException("declareSlice " + this.getClass().getName());
 	}
 
-	default boolean transpileSlice(Transpiler transpiler, IExpression first, IExpression last) {
+	default void transpileSlice(Transpiler transpiler, IExpression first, IExpression last) {
 		throw new UnsupportedOperationException("transpileSlice " + this.getClass().getName());
 	}
 
@@ -215,7 +215,7 @@ public interface IType {
 		throw new UnsupportedOperationException("declareCompare " + this.getClass().getName());
 	}
 
-	default boolean transpileCompare(Transpiler transpiler, IType other, CmpOp operator, IExpression left, IExpression right) {
+	default void transpileCompare(Transpiler transpiler, IType other, CmpOp operator, IExpression left, IExpression right) {
 		throw new UnsupportedOperationException("transpileCompare " + this.getClass().getName());
 	}
 
@@ -223,7 +223,7 @@ public interface IType {
 		throw new UnsupportedOperationException("declareItem " + this.getClass().getName());
 	}
 
-	default boolean transpileItem(Transpiler transpiler, IType itemType, IExpression item)  {
+	default void transpileItem(Transpiler transpiler, IType itemType, IExpression item)  {
 		throw new UnsupportedOperationException("transpileItem " + this.getClass().getName());
 	}
 
@@ -231,7 +231,7 @@ public interface IType {
 		throw new UnsupportedOperationException("declareRange " + this.getClass().getName());
 	}
 
-	default boolean transpileRange(Transpiler transpiler, IExpression first, IExpression last) {
+	default void transpileRange(Transpiler transpiler, IExpression first, IExpression last) {
 		throw new UnsupportedOperationException("transpileRange " + this.getClass().getName());
 	}
 
@@ -267,7 +267,7 @@ public interface IType {
 		throw new UnsupportedOperationException("declareIterator " + this.getClass().getName());
 	}
 
-	default boolean transpileIterator(Transpiler transpiler, Identifier id, IExpression expression) {
+	default void transpileIterator(Transpiler transpiler, Identifier id, IExpression expression) {
 		throw new UnsupportedOperationException("transpileIterator " + this.getClass().getName());
 	}
 

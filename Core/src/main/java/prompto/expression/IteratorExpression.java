@@ -207,7 +207,8 @@ public class IteratorExpression implements IExpression {
 	public boolean transpile(Transpiler transpiler) {
 		IType sourceType = this.source.check(transpiler.getContext());
 	    this.source.transpile(transpiler);
-	    return sourceType.transpileIterator(transpiler, this.id, this.expression);
+	    sourceType.transpileIterator(transpiler, this.id, this.expression);
+	    return false;
 	}
 
 }

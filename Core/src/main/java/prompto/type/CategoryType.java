@@ -564,9 +564,8 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public boolean transpile(Transpiler transpiler) {
+	public void transpile(Transpiler transpiler) {
 		transpiler.append(this.getTypeName());
-		return false;
 	}
 	
 	
@@ -706,12 +705,11 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public boolean transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	public void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
 	    left.transpile(transpiler);
 	    transpiler.append(".operator_PLUS").append("$").append(other.getTranspiledName(transpiler.getContext())).append("(");
 	    right.transpile(transpiler);
 	    transpiler.append(")");
-	    return false;
 	}
 	
 	@Override
@@ -727,12 +725,11 @@ public class CategoryType extends BaseType {
 	
 	
 	@Override
-	public boolean transpileSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	public void transpileSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right) {
 	    left.transpile(transpiler);
 	    transpiler.append(".operator_MINUS").append("$").append(other.getTranspiledName(transpiler.getContext())).append("(");
 	    right.transpile(transpiler);
 	    transpiler.append(")");
-	    return false;
 	}
 	
 	@Override
@@ -747,12 +744,11 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public boolean transpileMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	public void transpileMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
 	    left.transpile(transpiler);
 	    transpiler.append(".operator_MULTIPLY").append("$").append(other.getTranspiledName(transpiler.getContext())).append("(");
 	    right.transpile(transpiler);
 	    transpiler.append(")");
-	    return false;
 	}
 	
 	@Override
@@ -768,12 +764,11 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public boolean transpileDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	public void transpileDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
 	    left.transpile(transpiler);
 	    transpiler.append(".operator_DIVIDE").append("$").append(other.getTranspiledName(transpiler.getContext())).append("(");
 	    right.transpile(transpiler);
 	    transpiler.append(")");
-	    return false;
 	}
 	
 	@Override
@@ -789,12 +784,11 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public boolean transpileIntDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	public void transpileIntDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
 	    left.transpile(transpiler);
 	    transpiler.append(".operator_IDIVIDE").append("$").append(other.getTranspiledName(transpiler.getContext())).append("(");
 	    right.transpile(transpiler);
 	    transpiler.append(")");
-	    return false;
 	}
 	
 	@Override
@@ -810,12 +804,11 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public boolean transpileModulo(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	public void transpileModulo(Transpiler transpiler, IType other, IExpression left, IExpression right) {
 	    left.transpile(transpiler);
 	    transpiler.append(".operator_MODULO").append("$").append(other.getTranspiledName(transpiler.getContext())).append("(");
 	    right.transpile(transpiler);
 	    transpiler.append(")");
-	    return false;
 	}
 	
 }

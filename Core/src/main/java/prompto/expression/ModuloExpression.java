@@ -84,6 +84,7 @@ public class ModuloExpression implements IExpression {
 	public boolean transpile(Transpiler transpiler) {
 		IType lt = this.left.check(transpiler.getContext());
 		IType rt = this.right.check(transpiler.getContext());
-	    return lt.transpileModulo(transpiler, rt, this.left, this.right);
+	    lt.transpileModulo(transpiler, rt, this.left, this.right);
+	    return false;
 	}
 }

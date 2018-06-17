@@ -68,15 +68,14 @@ public class PeriodType extends NativeType {
 	}
 	
 	@Override
-	public boolean transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	public void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
 	   if(other == PeriodType.instance()) {
 	        left.transpile(transpiler);
 	        transpiler.append(".add(");
 	        right.transpile(transpiler);
 	        transpiler.append(")");
-	        return false;
 	    } else {
-	        return super.transpileAdd(transpiler, other, tryReverse, left, right);
+	        super.transpileAdd(transpiler, other, tryReverse, left, right);
 	    }
 	}
 	
@@ -86,10 +85,9 @@ public class PeriodType extends NativeType {
 	}
 	
 	@Override
-	public boolean transpileMinus(Transpiler transpiler, IExpression expression) {
+	public void transpileMinus(Transpiler transpiler, IExpression expression) {
 		expression.transpile(transpiler);
 	    transpiler.append(".minus()");
-	    return false;
 	}
 	
 	@Override
@@ -102,15 +100,14 @@ public class PeriodType extends NativeType {
 	}
 	
 	@Override
-	public boolean transpileMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	public void transpileMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
 	    if(other == IntegerType.instance()) {
 	        left.transpile(transpiler);
 	        transpiler.append(".multiply(");
 	        right.transpile(transpiler);
 	        transpiler.append(")");
-	        return false;
 	    } else
-	        return super.transpileMultiply(transpiler, other, tryReverse, left, right);	
+	        super.transpileMultiply(transpiler, other, tryReverse, left, right);	
     }
 	
 	@Override
@@ -123,14 +120,13 @@ public class PeriodType extends NativeType {
 	}
 	
 	@Override
-	public boolean transpileSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	public void transpileSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right) {
 	   if(other == PeriodType.instance()) {
 	        left.transpile(transpiler);
 	        transpiler.append(".subtract(");
 	        right.transpile(transpiler);
 	        transpiler.append(")");
-	        return false;
 	    } else
-	        return super.transpileSubtract(transpiler, other, left, right);
+	        super.transpileSubtract(transpiler, other, left, right);
 	}
 }

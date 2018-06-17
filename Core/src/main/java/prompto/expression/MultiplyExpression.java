@@ -115,6 +115,7 @@ public class MultiplyExpression implements IExpression {
 	public boolean transpile(Transpiler transpiler) {
 		IType lt = this.left.check(transpiler.getContext());
 		IType rt = this.right.check(transpiler.getContext());
-	    return lt.transpileMultiply(transpiler, rt, true, this.left, this.right);
+	    lt.transpileMultiply(transpiler, rt, true, this.left, this.right);
+	    return false;
 	}
 }

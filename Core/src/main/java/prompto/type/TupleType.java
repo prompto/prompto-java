@@ -79,15 +79,14 @@ public class TupleType extends ContainerType {
 	}
 	
 	@Override
-	public boolean transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	public void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
 	   if(other == TupleType.instance() || other instanceof ListType || other instanceof SetType) {
 	        left.transpile(transpiler);
 	        transpiler.append(".add(");
 	        right.transpile(transpiler);
 	        transpiler.append(")");
-	        return false;
 	    } else {
-	        return super.transpileAdd(transpiler, other, tryReverse, left, right);
+	        super.transpileAdd(transpiler, other, tryReverse, left, right);
 	    }
 	}
 	
@@ -101,14 +100,13 @@ public class TupleType extends ContainerType {
 	}
 	
 	@Override
-	public boolean transpileItem(Transpiler transpiler, IType itemType, IExpression item) {
+	public void transpileItem(Transpiler transpiler, IType itemType, IExpression item) {
 	    if(itemType==IntegerType.instance()) {
 	        transpiler.append("[");
 	        item.transpile(transpiler);
 	        transpiler.append("-1]");
-	        return false;
 	    } else {
-	        return super.transpileItem(transpiler, itemType, item);
+	        super.transpileItem(transpiler, itemType, item);
 	    }	
     }
 	

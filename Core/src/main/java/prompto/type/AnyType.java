@@ -117,12 +117,11 @@ public class AnyType extends NativeType {
 	}
 	
 	@Override
-	public boolean transpileItem(Transpiler transpiler, IType itemType, IExpression item) {
+	public void transpileItem(Transpiler transpiler, IType itemType, IExpression item) {
 	    // required to support Document items
 	    transpiler.append(".item(");
 	    item.transpile(transpiler);
 	    transpiler.append(")");
-	    return false;
 	}
 	
 	@Override

@@ -112,11 +112,10 @@ public class RangeType extends ContainerType {
 	}
 	
 	@Override
-	public boolean transpileItem(Transpiler transpiler, IType itemType, IExpression item) {
+	public void transpileItem(Transpiler transpiler, IType itemType, IExpression item) {
 	    transpiler.append(".item(");
 	    item.transpile(transpiler);
 	    transpiler.append(")");
-		return false;
 	}
 	
 	@Override
@@ -130,7 +129,7 @@ public class RangeType extends ContainerType {
 	}
 	
 	@Override
-	public boolean transpileSlice(Transpiler transpiler, IExpression first, IExpression last) {
+	public void transpileSlice(Transpiler transpiler, IExpression first, IExpression last) {
 	    transpiler.append(".slice1Based(");
 	    if(first!=null) {
 	        first.transpile(transpiler);
@@ -141,7 +140,6 @@ public class RangeType extends ContainerType {
 	        last.transpile(transpiler);
 	    }
 	    transpiler.append(")");
-		return false;
 	}
 	
 }

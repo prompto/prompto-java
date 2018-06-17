@@ -96,7 +96,8 @@ public class SubtractExpression implements IExpression {
 	public boolean transpile(Transpiler transpiler) {
 		IType lt = this.left.check(transpiler.getContext());
 		IType rt = this.right.check(transpiler.getContext());
-	    return lt.transpileSubtract(transpiler, rt, this.left, this.right);
+	    lt.transpileSubtract(transpiler, rt, this.left, this.right);
+	    return false;
 	}
 	
 	
