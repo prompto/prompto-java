@@ -184,5 +184,10 @@ public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 	    return true;
 	}
 
+	public String getTranspiledBoundClass() {
+		JavaScriptNativeCategoryBinding binding = this.getJavaScriptBinding();
+	    return binding.getBoundName();
+	}
+
 	
 }

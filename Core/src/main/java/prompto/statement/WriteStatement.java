@@ -15,6 +15,7 @@ import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.runtime.Context;
 import prompto.runtime.Context.ResourceContext;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.ResourceType;
 import prompto.type.VoidType;
@@ -100,5 +101,46 @@ public class WriteStatement extends SimpleStatement {
 			method.addInstruction(Opcode.INVOKEINTERFACE, c);
 		}
 		return new ResultInfo(void.class);
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+	    if(!(transpiler.getContext() instanceof ResourceContext))
+	        transpiler = transpiler.newResourceTranspiler();
+	    this.resource.declare(transpiler);
+	    this.content.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    if (transpiler.getContext() instanceof ResourceContext)
+	        this.transpileLine(transpiler);
+	    else
+	        this.transpileFully(transpiler);
+	    return false;
+	}
+
+
+	private void transpileFully(Transpiler transpiler) {
+	    transpiler = transpiler.newResourceTranspiler();
+	    transpiler.append("var $res = ");
+	    this.resource.transpile(transpiler);
+	    transpiler.append(";").newLine();
+	    transpiler.append("try {").indent();
+	    transpiler.append("$res.writeFully(");
+	    this.content.transpile(transpiler);
+	    transpiler.append(");");
+	    transpiler.dedent().append("} finally {").indent();
+	    transpiler.append("$res.close();").newLine();
+	    transpiler.dedent().append("}");
+	    transpiler.flush();
+	}
+
+
+	private void transpileLine(Transpiler transpiler) {
+	    this.resource.transpile(transpiler);
+	    transpiler.append(".writeLine(");
+	    this.content.transpile(transpiler);
+	    transpiler.append(")");
 	}
 }

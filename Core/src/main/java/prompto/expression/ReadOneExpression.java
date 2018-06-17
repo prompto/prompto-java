@@ -14,6 +14,7 @@ import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.runtime.Context.ResourceContext;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.ResourceType;
 import prompto.type.TextType;
@@ -72,5 +73,17 @@ public class ReadOneExpression implements IExpression {
 		InterfaceConstant c = new InterfaceConstant(IResource.class, "readLine", String.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, c);
 		return new ResultInfo(String.class);
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		this.resource.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+	    this.resource.transpile(transpiler);
+	    transpiler.append(".readLine()");
+		return false;
 	}
 }

@@ -10,10 +10,12 @@ import prompto.error.PromptoError;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.ArgumentList;
+import prompto.grammar.Identifier;
 import prompto.grammar.Specificity;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.statement.DeclarationStatement;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.value.IValue;
 
@@ -42,6 +44,7 @@ public interface IMethodDeclaration extends IDeclaration {
 	String compileTemplate(Context context, boolean isStart, ClassFile classFile);
 	void compileAssignments(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments);
 	String getTranspiledName(Context context);
+	default void fullDeclare(Transpiler transpiler, Identifier methodName) { throw new UnsupportedOperationException("fullDeclare " + this.getClass().getName()); }
 	
 }
 

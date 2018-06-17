@@ -12,8 +12,8 @@ public class JavaScriptMethodExpression extends JavaScriptSelectorExpression {
 		this.name = name;
 	}
 
-	public void setArguments(JavaScriptExpressionList l1) {
-		this.arguments = l1;
+	public void setArguments(JavaScriptExpressionList arguments) {
+		this.arguments = arguments!=null ? arguments : new JavaScriptExpressionList();
 	}
 
 	@Override

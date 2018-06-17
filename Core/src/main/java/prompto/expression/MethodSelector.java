@@ -407,6 +407,11 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	        return false;
 	    }
 	}
+
+	public MethodSelector newFullSelector(long counter) {
+	    String name = this.id.toString() + "$" + counter;
+	    return new MethodSelector(this.parent, new Identifier(name));
+	}
 	
 	
 

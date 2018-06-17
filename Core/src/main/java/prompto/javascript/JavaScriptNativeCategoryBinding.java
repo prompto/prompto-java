@@ -24,8 +24,11 @@ public class JavaScriptNativeCategoryBinding extends NativeCategoryBinding {
 	}
 
 	public void transpile(Transpiler transpiler) {
-	    if(this.module!=null)
-	        this.module.transpile(transpiler, this.identifier);
+	    if(this.module!=null) {
+	    	transpiler.append("var ").append(identifier).append(" = require('");
+	        this.module.transpile(transpiler);
+	        transpiler.append("').").append(identifier).append(";").newLine();
+	    }
 	}
 
 	public String getBoundName() {

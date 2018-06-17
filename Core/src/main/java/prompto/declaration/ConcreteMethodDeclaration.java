@@ -3,11 +3,14 @@ package prompto.declaration;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import prompto.argument.CategoryArgument;
 import prompto.argument.CodeArgument;
 import prompto.argument.IArgument;
+import prompto.argument.ValuedCodeArgument;
 import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
 import prompto.compiler.CompilerUtils;
@@ -38,12 +41,14 @@ import prompto.type.MethodType;
 import prompto.type.TextType;
 import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
+import prompto.value.CodeValue;
 import prompto.value.IValue;
 
 public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements IMethodDeclaration {
 
 	StatementList statements;
 	DeclarationStatement<IMethodDeclaration> declarationOf;
+	Map<Identifier, ValuedCodeArgument> codeArguments;
 	
 	@SuppressWarnings("unchecked")
 	public ConcreteMethodDeclaration(Identifier name, ArgumentList arguments, IType returnType, StatementList statements) {
@@ -386,6 +391,22 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 	
 	@Override
+	public void fullDeclare(Transpiler transpiler, Identifier methodName) {
+		ConcreteMethodDeclaration declaration = new ConcreteMethodDeclaration(getId(), getArguments(), this.returnType, this.statements);
+	    declaration.memberOf = this.memberOf;
+	    transpiler.declare(declaration);
+	    this.statements.declare(transpiler);
+	    // remember code arguments
+	    declaration.codeArguments = new HashMap<>();
+	    getArguments().stream()
+	    	.filter(arg ->arg instanceof CodeArgument )
+	    	.forEach(arg -> {
+	    		CodeValue value = (CodeValue)transpiler.getContext().getValue(arg.getId()); 
+	    		declaration.codeArguments.put(arg.getId(), new ValuedCodeArgument(arg.getId(), value));
+	    });
+	}
+	
+	@Override
 	public boolean transpile(Transpiler transpiler) {
 	    this.registerArguments(transpiler.getContext());
 	    this.registerCodeArguments(transpiler.getContext());
@@ -397,7 +418,9 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 
 	private void registerCodeArguments(Context context) {
 		if(this.isTemplate()) {
-			throw new UnsupportedOperationException();
+		    if(this.codeArguments==null)
+		        return;
+		    this.codeArguments.forEach( (k,v) -> context.setValue(v.getId(), v.getValue()));
 		}
 		
 	}

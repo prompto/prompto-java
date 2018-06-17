@@ -2,6 +2,7 @@ package prompto.statement;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 import prompto.argument.CodeArgument;
@@ -49,6 +50,7 @@ import prompto.value.IValue;
 public class MethodCall extends SimpleStatement implements IAssertion {
 
 	MethodSelector selector;
+	MethodSelector fullSelector;
 	ArgumentAssignmentList assignments;
 	String variableName;
 	DispatchMethodDeclaration dispatcher;
@@ -364,8 +366,21 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	    }
 	}
 
+	static AtomicLong fullDeclareCounter = new AtomicLong();
+	
 	private void fullDeclareDeclaration(IMethodDeclaration declaration, Transpiler transpiler, Context local) {
-		throw new UnsupportedOperationException();
+	    if(this.fullSelector==null) {
+	    	List<ArgumentAssignment> assignments = this.makeAssignments(transpiler.getContext(), declaration);
+	        declaration.registerArguments(local);
+	        assignments.forEach(assignment -> {
+	            IExpression expression = assignment.resolve(local, declaration, true, false);
+	            IValue value = assignment.getArgument().checkValue(transpiler.getContext(), expression);
+	            local.setValue(assignment.getArgument().getId(), value);
+	        });
+	        Transpiler localTranspiler = transpiler.copyTranspiler(local);
+	        this.fullSelector = this.selector.newFullSelector(fullDeclareCounter.incrementAndGet());
+	        declaration.fullDeclare(localTranspiler, this.fullSelector.getId());
+	    }
 	}
 
 	private void lightDeclareDeclaration(IMethodDeclaration declaration, Transpiler transpiler, Context local) {

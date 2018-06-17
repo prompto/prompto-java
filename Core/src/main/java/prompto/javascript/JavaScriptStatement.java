@@ -34,10 +34,7 @@ public class JavaScriptStatement {
 	}
 
 	public void declare(Transpiler transpiler) {
-	    // TODO module
-	    if(this.expression.toString().startsWith("$context")) {
-	        transpiler.require("$context");
-	    }
+	    // TODO 
 	}
 
 	public boolean transpile(Transpiler transpiler) {

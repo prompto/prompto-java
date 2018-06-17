@@ -26,8 +26,16 @@ public class JavaScriptModule {
 		writer.trimLast(1);
 	}
 
-	public void transpile(Transpiler transpiler, String identifier) {
-		// TODO 
+	public void transpile(Transpiler transpiler) {
+		for(String id : identifiers) {
+			if("js".equals(id)) {
+				transpiler.trimLast(1);
+				transpiler.append('.');
+			}
+			transpiler.append(id);
+			transpiler.append('/');
+		}
+		transpiler.trimLast(1);
 	}
 
 }

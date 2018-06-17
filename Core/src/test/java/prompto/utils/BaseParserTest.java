@@ -182,7 +182,7 @@ public abstract class BaseParserTest extends BaseTest {
 
 	protected void checkTranspiledOutput(String resource) throws Exception {
 		try {
-			// checkOutput(resource, this::transpileResource);
+			checkOutput(resource, this::transpileResource);
 		} catch(Throwable t) {
 			t.printStackTrace(System.err);
 			throw t;

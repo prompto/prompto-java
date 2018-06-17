@@ -453,8 +453,8 @@ public class ConstructorExpression implements IExpression {
 	}
 
 	private void transpileNative(Transpiler transpiler, NativeCategoryDeclaration decl) {
-	    Class<?> bound = decl.getBoundClass(true);
-	    transpiler.append("new_").append(bound.getSimpleName()).append("(");
+	    String bound = decl.getTranspiledBoundClass();
+	    transpiler.append("new_").append(bound).append("(");
 	    this.transpileAssignments(transpiler);
 	    transpiler.append(")");
 	}

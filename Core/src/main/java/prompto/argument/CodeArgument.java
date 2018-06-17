@@ -72,5 +72,10 @@ public class CodeArgument extends BaseArgument implements ITypedArgument {
 	public IType getType(Context context) {
 		return CodeType.instance();
 	}
+	
+	@Override
+	public String getTranspiledName(Context context) {
+		return id.toString();
+	}
 
 }

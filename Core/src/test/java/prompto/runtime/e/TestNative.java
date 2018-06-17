@@ -119,10 +119,5 @@ public class TestNative extends BaseEParserTest {
 		checkCompiledOutput("native/printer.pec");
 	}
 
-	@Test
-	public void testTranspiledPrinter() throws Exception {
-		checkTranspiledOutput("native/printer.pec");
-	}
-
 }
 

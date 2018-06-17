@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.script.Invocable;
 import javax.script.ScriptContext;
@@ -46,57 +47,27 @@ public class Nashorn8Engine implements IJSEngine {
 	}
 	
 	private static Invocable transpile(Transpiler transpiler) throws Exception {
+		JSContext.set(transpiler.getContext());
 		String js = transpiler.toString();
 		try(OutputStream output = new FileOutputStream("transpiled.js")) {
 			output.write(js.getBytes());
 		}
 		List<String> lines = Arrays.asList(
 				js,
-				"var require = function(value) { return Java.from(Java.type('" + Nashorn8Engine.class.getName() + "').require(value)); };",
 				"var Set = Java.type('" + JSSet.class.getName() + "');",
+				"var $context = Java.type('" + JSContext.class.getName() + "');",
 				"var process = { stdout: { write: print } };"
 				);
 		js = lines.stream().collect(Collectors.joining("\n"));
 		ScriptEngine nashorn = new ScriptEngineManager().getEngineByName("nashorn");
+		Require.enable((NashornScriptEngine)nashorn, new ResourceFolder(""));
 		nashorn.eval(js);
 		Object dataStore = nashorn.getBindings(ScriptContext.ENGINE_SCOPE).get("DataStore");
 		if(dataStore instanceof ScriptObjectMirror)
 			((ScriptObjectMirror)dataStore).setMember("instance", new MemStoreMirror(nashorn));
-		Require.enable((NashornScriptEngine)nashorn, new ScriptsFolder());
 		return (Invocable)nashorn;
 	}
-
-	static class ScriptsFolder implements Folder {
-
-		@Override
-		public String getFile(String name) {
-			String path = Nashorn8Engine.class.getPackage().getName().replace('.', '/') + '/' + name;
-			try {
-				return ResourceUtils.getResourceAsString(path);
-			} catch(Throwable t) {
-				return null;
-			}
-		}
-
-		@Override
-		public Folder getFolder(String name) {
-			if("node_modules".equals(name))
-				return this;
-			else
-				return null;
-		}
-
-		@Override
-		public Folder getParent() {
-			return null;
-		}
-
-		@Override
-		public String getPath() {
-			return "";
-		}
 	
-	}
 	
 	@Override
 	public Iterable<String> getPolyfills() {
@@ -112,6 +83,76 @@ public class Nashorn8Engine implements IJSEngine {
 	@Override
 	public boolean supportsClass() {
 		return false;
+	}
+	
+
+	static class ResourceFolder implements Folder {
+
+		String path;
+		
+		public ResourceFolder(String path) {
+			this.path = path;
+		}
+
+		@Override
+		public String getFile(String name) {
+			String result = getRealResource(name);
+			if(result==null)
+				result = getPolyfill(name);
+			if(result==null)
+				result = getNodeModule(name);
+			return result;
+		}
+		
+		private String getPolyfill(String name) {
+			return getResourceAsString("polyfills/" + name);
+		}
+
+		public String getNodeModule(String name) {
+			return getResourceAsString("node_modules/" + name);
+		}
+
+
+		private String getRealResource(String name) {
+			String path = this.path.isEmpty() ? name : this.path + "/" + name;
+			return getResourceAsString(path);
+		}
+
+
+		public String getResourceAsString(String path) {
+			try {
+				return ResourceUtils.getResourceAsString(path);
+			} catch(Throwable t) {
+				return null;
+			}
+		}
+
+		@Override
+		public Folder getFolder(String name) {
+			if("node_modules".equals(name))
+				return new ResourceFolder("");
+			else if(path.isEmpty())
+				return new ResourceFolder(name);
+			else
+				return new ResourceFolder(path + "/" + name);
+		}
+
+		@Override
+		public Folder getParent() {
+			String[] parts = path.split("/");
+			if(parts.length==1)
+				return null;
+			String[] parent = new String[parts.length-1];
+			System.arraycopy(parts,  0, parent, 0, parent.length);
+			String parentPath = Stream.of(parent).collect(Collectors.joining("/"));
+			return new ResourceFolder(parentPath);
+		}
+
+		@Override
+		public String getPath() {
+			return path.isEmpty() ? path : path + "/";
+		}
+	
 	}
 	
 }

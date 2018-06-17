@@ -67,6 +67,14 @@ public class Transpiler {
 		Context context = this.context.newInstanceContext(categoryType, true);
 		return this.copyTranspiler(context);
 	}
+	
+	
+	public Transpiler newResourceTranspiler() {
+		Context context = this.context.newResourceContext();
+	    return this.copyTranspiler(context);
+	}
+
+
 
 	public Transpiler newMemberTranspiler() {
 		Context context = this.context.newLocalContext();
@@ -206,13 +214,21 @@ public class Transpiler {
 		required.forEach(this::appendOneRequired);
 	}
 
-	private void appendOneRequired(String script) {
-		String path = this.getClass().getPackage().getName().replace('.', '/') + '/' + script + ".js";
+	private void appendOneRequired(String module) {
+		String result = getResourceAsString("prompto/intrinsic/" + module + ".js");
+		if(result==null)
+			result = getResourceAsString("polyfills/" + module + ".js");
+		if(result!=null)
+			this.lines.push(result);
+		else
+			throw new RuntimeException("Could not locate script: " + module);
+	}
+
+	private String getResourceAsString(String path) {
 		try {
-			String data = ResourceUtils.getResourceAsString(path);
-			this.lines.push(data);
+			return ResourceUtils.getResourceAsString(path);
 		} catch(Throwable t) {
-			throw new RuntimeException("While appending script: " + path, t);
+			return null;
 		}
 	}
 
