@@ -65,12 +65,12 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 	
 	@Override
-	public void setDeclarationOf(DeclarationStatement<IMethodDeclaration> statement) {
+	public void setDeclarationStatement(DeclarationStatement<IMethodDeclaration> statement) {
 		declarationOf = statement;
 	}
 	
 	@Override
-	public DeclarationStatement<IMethodDeclaration> getDeclarationOf() {
+	public DeclarationStatement<IMethodDeclaration> getDeclarationStatement() {
 		return declarationOf;
 	}
 	

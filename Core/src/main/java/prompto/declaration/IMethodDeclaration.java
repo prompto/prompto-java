@@ -31,8 +31,8 @@ public interface IMethodDeclaration extends IDeclaration {
 	default String getNameAsKey() { return getName(); }
 	void setMemberOf(CategoryDeclaration declaration);
 	CategoryDeclaration getMemberOf();
-	default void setDeclarationOf(DeclarationStatement<IMethodDeclaration> statement) { throw new UnsupportedOperationException("setDeclarationOf " + this.getClass().getName()); }
-	default DeclarationStatement<IMethodDeclaration> getDeclarationOf() { throw new UnsupportedOperationException("setDeclarationOf " + this.getClass().getName()); }
+	default void setDeclarationStatement(DeclarationStatement<IMethodDeclaration> statement) { throw new UnsupportedOperationException("setDeclarationStatement " + this.getClass().getName()); }
+	default DeclarationStatement<IMethodDeclaration> getDeclarationStatement() { throw new UnsupportedOperationException("getDeclarationStatement " + this.getClass().getName()); }
 	IValue interpret(Context context) throws PromptoError;
 	void check(ConcreteCategoryDeclaration declaration, Context context);
 	boolean isAssignableTo(Context context, ArgumentAssignmentList assignments, boolean checkInstance, boolean allowDerived, Predicate<Specificity> filter);

@@ -177,8 +177,13 @@ public class InstanceExpression extends Section implements IExpression {
 	@Override
 	public void declare(Transpiler transpiler) {
 		INamed named = transpiler.getContext().getRegistered(id);
-		if(named instanceof MethodDeclarationMap) 
-			transpiler.declare(((MethodDeclarationMap)named).getFirst());
+		if(named instanceof MethodDeclarationMap) {
+			IMethodDeclaration decl = ((MethodDeclarationMap)named).getFirst();
+			// don't declare closures
+			if(decl instanceof ConcreteMethodDeclaration && ((ConcreteMethodDeclaration)decl).getDeclarationStatement()!=null)
+				return;
+			transpiler.declare(decl);
+		}
 	}
 	
 

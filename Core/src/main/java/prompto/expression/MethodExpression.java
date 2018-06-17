@@ -89,7 +89,8 @@ public class MethodExpression implements IExpression {
 		INamed named = transpiler.getContext().getRegistered(id);
 		if(named instanceof Context.MethodDeclarationMap) {
 			IMethodDeclaration decl = ((MethodDeclarationMap)named).getFirst();
-		    if(decl.getDeclarationOf()==null)
+			// don't declare closures
+			if(decl.getDeclarationStatement()==null)
 		        decl.declare(transpiler);
 		}
 	}
