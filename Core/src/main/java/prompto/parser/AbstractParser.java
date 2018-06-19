@@ -10,9 +10,17 @@ import org.antlr.v4.runtime.TokenStream;
 import prompto.declaration.DeclarationList;
 
 public abstract class AbstractParser extends Parser {
-
+	
+	int WS_TOKEN;
+	
 	public AbstractParser(TokenStream input) { 
 		super(input);
+		if(this instanceof EParser)
+			WS_TOKEN = EParser.WS;
+		else if(this instanceof MParser)
+			WS_TOKEN = MParser.WS;
+		if(this instanceof OParser)
+			WS_TOKEN = OParser.WS;
 	}
 	
 	public boolean isText(Token token, String text) {
@@ -27,6 +35,10 @@ public abstract class AbstractParser extends Parser {
 		return lastHiddenTokenType()!=type;
 	}
 	
+	public boolean wasNotWhiteSpace() {
+		return lastHiddenTokenType()!=WS_TOKEN;
+	}
+
 	public boolean willBe(int type) {
 		int la = getTokenStream().LA(1);
 		if(this instanceof EParser && type==EParser.LF)

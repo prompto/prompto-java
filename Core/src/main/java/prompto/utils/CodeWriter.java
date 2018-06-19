@@ -56,18 +56,41 @@ public class CodeWriter {
 		return context;
 	}
 	
-	public void append(Identifier id) {
+	public CodeWriter append(Identifier id) {
 		append(id.toString());
+		return this;
 	}
 	
-	public void append(String s) {
+	public CodeWriter append(String s) {
 		indenter.appendTabsIfRequired(s);
 		sb.append(s);
+		return this;
 	}
 
-	public void append(char c) {
+	public CodeWriter append(char c) {
 		indenter.appendTabsIfRequired(c);
 		sb.append(c);
+		return this;
+	}
+
+	public CodeWriter trimLast(int count) {
+		sb.setLength(sb.length()-count);
+		return this;
+	}
+
+	public CodeWriter indent() {
+		indenter.indent();
+		return this;
+	}
+
+	public CodeWriter dedent() {
+		indenter.dedent();
+		return this;
+	}
+
+	public CodeWriter newLine() {
+		append('\n');
+		return this;
 	}
 
 	@Override
@@ -79,21 +102,6 @@ public class CodeWriter {
 		return dialect;
 	}
 
-	public void trimLast(int count) {
-		sb.setLength(sb.length()-count);
-	}
-
-	public void indent() {
-		indenter.indent();
-	}
-
-	public void dedent() {
-		indenter.dedent();
-	}
-
-	public void newLine() {
-		append('\n');
-	}
 
 	public boolean isGlobalContext() {
 		return context.isGlobalContext();

@@ -910,6 +910,18 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitIsAnExpression(OParser.IsAnExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code JsxExpression}
+	 * labeled alternative in {@link OParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterJsxExpression(OParser.JsxExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code JsxExpression}
+	 * labeled alternative in {@link OParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitJsxExpression(OParser.JsxExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code NotExpression}
 	 * labeled alternative in {@link OParser#expression}.
 	 * @param ctx the parse tree
@@ -3190,6 +3202,16 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitOperatorModulo(OParser.OperatorModuloContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link OParser#keyword}.
+	 * @param ctx the parse tree
+	 */
+	void enterKeyword(OParser.KeywordContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#keyword}.
+	 * @param ctx the parse tree
+	 */
+	void exitKeyword(OParser.KeywordContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link OParser#new_token}.
 	 * @param ctx the parse tree
 	 */
@@ -4445,4 +4467,238 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCsharp_identifier(OParser.Csharp_identifierContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#jsx_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterJsx_expression(OParser.Jsx_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#jsx_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitJsx_expression(OParser.Jsx_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code JsxSelfClosing}
+	 * labeled alternative in {@link OParser#jsx_element}.
+	 * @param ctx the parse tree
+	 */
+	void enterJsxSelfClosing(OParser.JsxSelfClosingContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code JsxSelfClosing}
+	 * labeled alternative in {@link OParser#jsx_element}.
+	 * @param ctx the parse tree
+	 */
+	void exitJsxSelfClosing(OParser.JsxSelfClosingContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code JsxElement}
+	 * labeled alternative in {@link OParser#jsx_element}.
+	 * @param ctx the parse tree
+	 */
+	void enterJsxElement(OParser.JsxElementContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code JsxElement}
+	 * labeled alternative in {@link OParser#jsx_element}.
+	 * @param ctx the parse tree
+	 */
+	void exitJsxElement(OParser.JsxElementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#jsx_fragment}.
+	 * @param ctx the parse tree
+	 */
+	void enterJsx_fragment(OParser.Jsx_fragmentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#jsx_fragment}.
+	 * @param ctx the parse tree
+	 */
+	void exitJsx_fragment(OParser.Jsx_fragmentContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#jsx_fragment_start}.
+	 * @param ctx the parse tree
+	 */
+	void enterJsx_fragment_start(OParser.Jsx_fragment_startContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#jsx_fragment_start}.
+	 * @param ctx the parse tree
+	 */
+	void exitJsx_fragment_start(OParser.Jsx_fragment_startContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#jsx_fragment_end}.
+	 * @param ctx the parse tree
+	 */
+	void enterJsx_fragment_end(OParser.Jsx_fragment_endContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#jsx_fragment_end}.
+	 * @param ctx the parse tree
+	 */
+	void exitJsx_fragment_end(OParser.Jsx_fragment_endContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#jsx_self_closing}.
+	 * @param ctx the parse tree
+	 */
+	void enterJsx_self_closing(OParser.Jsx_self_closingContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#jsx_self_closing}.
+	 * @param ctx the parse tree
+	 */
+	void exitJsx_self_closing(OParser.Jsx_self_closingContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#jsx_opening}.
+	 * @param ctx the parse tree
+	 */
+	void enterJsx_opening(OParser.Jsx_openingContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#jsx_opening}.
+	 * @param ctx the parse tree
+	 */
+	void exitJsx_opening(OParser.Jsx_openingContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#jsx_closing}.
+	 * @param ctx the parse tree
+	 */
+	void enterJsx_closing(OParser.Jsx_closingContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#jsx_closing}.
+	 * @param ctx the parse tree
+	 */
+	void exitJsx_closing(OParser.Jsx_closingContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#jsx_element_name}.
+	 * @param ctx the parse tree
+	 */
+	void enterJsx_element_name(OParser.Jsx_element_nameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#jsx_element_name}.
+	 * @param ctx the parse tree
+	 */
+	void exitJsx_element_name(OParser.Jsx_element_nameContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#jsx_identifier}.
+	 * @param ctx the parse tree
+	 */
+	void enterJsx_identifier(OParser.Jsx_identifierContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#jsx_identifier}.
+	 * @param ctx the parse tree
+	 */
+	void exitJsx_identifier(OParser.Jsx_identifierContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#jsx_hyphen_identifier}.
+	 * @param ctx the parse tree
+	 */
+	void enterJsx_hyphen_identifier(OParser.Jsx_hyphen_identifierContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#jsx_hyphen_identifier}.
+	 * @param ctx the parse tree
+	 */
+	void exitJsx_hyphen_identifier(OParser.Jsx_hyphen_identifierContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#hyphen_identifier}.
+	 * @param ctx the parse tree
+	 */
+	void enterHyphen_identifier(OParser.Hyphen_identifierContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#hyphen_identifier}.
+	 * @param ctx the parse tree
+	 */
+	void exitHyphen_identifier(OParser.Hyphen_identifierContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#identifier_or_keyword}.
+	 * @param ctx the parse tree
+	 */
+	void enterIdentifier_or_keyword(OParser.Identifier_or_keywordContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#identifier_or_keyword}.
+	 * @param ctx the parse tree
+	 */
+	void exitIdentifier_or_keyword(OParser.Identifier_or_keywordContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#jsx_attribute}.
+	 * @param ctx the parse tree
+	 */
+	void enterJsx_attribute(OParser.Jsx_attributeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#jsx_attribute}.
+	 * @param ctx the parse tree
+	 */
+	void exitJsx_attribute(OParser.Jsx_attributeContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code JsxLiteral}
+	 * labeled alternative in {@link OParser#jsx_attribute_value}.
+	 * @param ctx the parse tree
+	 */
+	void enterJsxLiteral(OParser.JsxLiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code JsxLiteral}
+	 * labeled alternative in {@link OParser#jsx_attribute_value}.
+	 * @param ctx the parse tree
+	 */
+	void exitJsxLiteral(OParser.JsxLiteralContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code JsxValue}
+	 * labeled alternative in {@link OParser#jsx_attribute_value}.
+	 * @param ctx the parse tree
+	 */
+	void enterJsxValue(OParser.JsxValueContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code JsxValue}
+	 * labeled alternative in {@link OParser#jsx_attribute_value}.
+	 * @param ctx the parse tree
+	 */
+	void exitJsxValue(OParser.JsxValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#jsx_children}.
+	 * @param ctx the parse tree
+	 */
+	void enterJsx_children(OParser.Jsx_childrenContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#jsx_children}.
+	 * @param ctx the parse tree
+	 */
+	void exitJsx_children(OParser.Jsx_childrenContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code JsxText}
+	 * labeled alternative in {@link OParser#jsx_child}.
+	 * @param ctx the parse tree
+	 */
+	void enterJsxText(OParser.JsxTextContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code JsxText}
+	 * labeled alternative in {@link OParser#jsx_child}.
+	 * @param ctx the parse tree
+	 */
+	void exitJsxText(OParser.JsxTextContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code JsxChild}
+	 * labeled alternative in {@link OParser#jsx_child}.
+	 * @param ctx the parse tree
+	 */
+	void enterJsxChild(OParser.JsxChildContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code JsxChild}
+	 * labeled alternative in {@link OParser#jsx_child}.
+	 * @param ctx the parse tree
+	 */
+	void exitJsxChild(OParser.JsxChildContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code JsxCode}
+	 * labeled alternative in {@link OParser#jsx_child}.
+	 * @param ctx the parse tree
+	 */
+	void enterJsxCode(OParser.JsxCodeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code JsxCode}
+	 * labeled alternative in {@link OParser#jsx_child}.
+	 * @param ctx the parse tree
+	 */
+	void exitJsxCode(OParser.JsxCodeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#jsx_text}.
+	 * @param ctx the parse tree
+	 */
+	void enterJsx_text(OParser.Jsx_textContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#jsx_text}.
+	 * @param ctx the parse tree
+	 */
+	void exitJsx_text(OParser.Jsx_textContext ctx);
 }
