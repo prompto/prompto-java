@@ -20,18 +20,78 @@ public class TestJsx extends BaseMParserTest {
 	}
 
 	@Test
-	public void testInterpretedClosingEmptyAttribute() throws Exception {
-		checkInterpretedOutput("jsx/closingEmptyAttribute.pmc");
+	public void testInterpretedChildElement() throws Exception {
+		checkInterpretedOutput("jsx/childElement.pmc");
 	}
 
 	@Test
-	public void testCompiledClosingEmptyAttribute() throws Exception {
-		checkCompiledOutput("jsx/closingEmptyAttribute.pmc");
+	public void testCompiledChildElement() throws Exception {
+		checkCompiledOutput("jsx/childElement.pmc");
 	}
 
 	@Test
-	public void testTranspiledClosingEmptyAttribute() throws Exception {
-		checkTranspiledOutput("jsx/closingEmptyAttribute.pmc");
+	public void testTranspiledChildElement() throws Exception {
+		checkTranspiledOutput("jsx/childElement.pmc");
+	}
+
+	@Test
+	public void testInterpretedCodeAttribute() throws Exception {
+		checkInterpretedOutput("jsx/codeAttribute.pmc");
+	}
+
+	@Test
+	public void testCompiledCodeAttribute() throws Exception {
+		checkCompiledOutput("jsx/codeAttribute.pmc");
+	}
+
+	@Test
+	public void testTranspiledCodeAttribute() throws Exception {
+		checkTranspiledOutput("jsx/codeAttribute.pmc");
+	}
+
+	@Test
+	public void testInterpretedCodeElement() throws Exception {
+		checkInterpretedOutput("jsx/codeElement.pmc");
+	}
+
+	@Test
+	public void testCompiledCodeElement() throws Exception {
+		checkCompiledOutput("jsx/codeElement.pmc");
+	}
+
+	@Test
+	public void testTranspiledCodeElement() throws Exception {
+		checkTranspiledOutput("jsx/codeElement.pmc");
+	}
+
+	@Test
+	public void testInterpretedDotName() throws Exception {
+		checkInterpretedOutput("jsx/dotName.pmc");
+	}
+
+	@Test
+	public void testCompiledDotName() throws Exception {
+		checkCompiledOutput("jsx/dotName.pmc");
+	}
+
+	@Test
+	public void testTranspiledDotName() throws Exception {
+		checkTranspiledOutput("jsx/dotName.pmc");
+	}
+
+	@Test
+	public void testInterpretedEmpty() throws Exception {
+		checkInterpretedOutput("jsx/empty.pmc");
+	}
+
+	@Test
+	public void testCompiledEmpty() throws Exception {
+		checkCompiledOutput("jsx/empty.pmc");
+	}
+
+	@Test
+	public void testTranspiledEmpty() throws Exception {
+		checkTranspiledOutput("jsx/empty.pmc");
 	}
 
 	@Test
@@ -50,33 +110,33 @@ public class TestJsx extends BaseMParserTest {
 	}
 
 	@Test
-	public void testInterpretedEmptyDiv() throws Exception {
-		checkInterpretedOutput("jsx/emptyDiv.pmc");
+	public void testInterpretedHyphenName() throws Exception {
+		checkInterpretedOutput("jsx/hyphenName.pmc");
 	}
 
 	@Test
-	public void testCompiledEmptyDiv() throws Exception {
-		checkCompiledOutput("jsx/emptyDiv.pmc");
+	public void testCompiledHyphenName() throws Exception {
+		checkCompiledOutput("jsx/hyphenName.pmc");
 	}
 
 	@Test
-	public void testTranspiledEmptyDiv() throws Exception {
-		checkTranspiledOutput("jsx/emptyDiv.pmc");
+	public void testTranspiledHyphenName() throws Exception {
+		checkTranspiledOutput("jsx/hyphenName.pmc");
 	}
 
 	@Test
-	public void testInterpretedNonEmptyAttribute() throws Exception {
-		checkInterpretedOutput("jsx/nonEmptyAttribute.pmc");
+	public void testInterpretedLiteralAttribute() throws Exception {
+		checkInterpretedOutput("jsx/literalAttribute.pmc");
 	}
 
 	@Test
-	public void testCompiledNonEmptyAttribute() throws Exception {
-		checkCompiledOutput("jsx/nonEmptyAttribute.pmc");
+	public void testCompiledLiteralAttribute() throws Exception {
+		checkCompiledOutput("jsx/literalAttribute.pmc");
 	}
 
 	@Test
-	public void testTranspiledNonEmptyAttribute() throws Exception {
-		checkTranspiledOutput("jsx/nonEmptyAttribute.pmc");
+	public void testTranspiledLiteralAttribute() throws Exception {
+		checkTranspiledOutput("jsx/literalAttribute.pmc");
 	}
 
 	@Test
@@ -92,6 +152,36 @@ public class TestJsx extends BaseMParserTest {
 	@Test
 	public void testTranspiledSelfClosingDiv() throws Exception {
 		checkTranspiledOutput("jsx/selfClosingDiv.pmc");
+	}
+
+	@Test
+	public void testInterpretedSelfClosingEmptyAttribute() throws Exception {
+		checkInterpretedOutput("jsx/selfClosingEmptyAttribute.pmc");
+	}
+
+	@Test
+	public void testCompiledSelfClosingEmptyAttribute() throws Exception {
+		checkCompiledOutput("jsx/selfClosingEmptyAttribute.pmc");
+	}
+
+	@Test
+	public void testTranspiledSelfClosingEmptyAttribute() throws Exception {
+		checkTranspiledOutput("jsx/selfClosingEmptyAttribute.pmc");
+	}
+
+	@Test
+	public void testInterpretedTextElement() throws Exception {
+		checkInterpretedOutput("jsx/textElement.pmc");
+	}
+
+	@Test
+	public void testCompiledTextElement() throws Exception {
+		checkCompiledOutput("jsx/textElement.pmc");
+	}
+
+	@Test
+	public void testTranspiledTextElement() throws Exception {
+		checkTranspiledOutput("jsx/textElement.pmc");
 	}
 
 }

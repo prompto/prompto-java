@@ -150,7 +150,10 @@ import prompto.javascript.JavaScriptThisExpression;
 import prompto.jsx.IJsxExpression;
 import prompto.jsx.IJsxValue;
 import prompto.jsx.JsxAttribute;
+import prompto.jsx.JsxCode;
 import prompto.jsx.JsxElement;
+import prompto.jsx.JsxText;
+import prompto.jsx.JsxValue;
 import prompto.jsx.JsxLiteral;
 import prompto.jsx.JsxSelfClosing;
 import prompto.literal.BooleanLiteral;
@@ -177,14 +180,6 @@ import prompto.literal.TupleLiteral;
 import prompto.literal.UUIDLiteral;
 import prompto.literal.VersionLiteral;
 import static prompto.parser.OParser.*;
-import prompto.parser.OParser.JsxElementContext;
-import prompto.parser.OParser.JsxLiteralContext;
-import prompto.parser.OParser.JsxSelfClosingContext;
-import prompto.parser.OParser.Jsx_attributeContext;
-import prompto.parser.OParser.Jsx_element_nameContext;
-import prompto.parser.OParser.Jsx_expressionContext;
-import prompto.parser.OParser.Jsx_identifierContext;
-import prompto.parser.OParser.Jsx_openingContext;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -1645,16 +1640,25 @@ public class OPromptoBuilder extends OParserBaseListener {
 		setNodeValue(ctx, new JavaTextLiteral(ctx.getText()));
 	}
 	
+	
+	@Override
+	public void exitJsxChild(JsxChildContext ctx) {
+		setNodeValue(ctx, this.<Object>getNodeValue(ctx.jsx));
+	}
+	
+	
+	@Override
+	public void exitJsxCode(JsxCodeContext ctx) {
+		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		setNodeValue(ctx, new JsxCode(exp));
+	}
+	
+
 	@Override
 	public void exitJsxExpression(JsxExpressionContext ctx) {
 		setNodeValue(ctx, this.<Object>getNodeValue(ctx.exp));
 	}
 	
-	
-	@Override
-	public void exitJsxSelfClosing(JsxSelfClosingContext ctx) {
-		setNodeValue(ctx, this.<Object>getNodeValue(ctx.jsx));
-	}
 	
 	@Override
 	public void exitJsxElement(JsxElementContext ctx) {
@@ -1665,10 +1669,38 @@ public class OPromptoBuilder extends OParserBaseListener {
 	}
 	
 	@Override
+	public void exitJsxSelfClosing(JsxSelfClosingContext ctx) {
+		setNodeValue(ctx, this.<Object>getNodeValue(ctx.jsx));
+	}
+	
+	
+	@Override
+	public void exitJsxText(JsxTextContext ctx) {
+		String text = ParserUtils.getFullText(ctx.text);
+		setNodeValue(ctx, new JsxText(text));
+	}
+	
+	
+	@Override
+	public void exitJsxValue(JsxValueContext ctx) {
+		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		setNodeValue(ctx, new JsxValue(exp));
+	}
+	
+	@Override
 	public void exitJsx_attribute(Jsx_attributeContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
 		IJsxValue value = this.<IJsxValue>getNodeValue(ctx.value);
 		setNodeValue(ctx, new JsxAttribute(name, value));
+	}
+	
+	
+	@Override
+	public void exitJsx_children(Jsx_childrenContext ctx) {
+		List<IJsxExpression> list = ctx.jsx_child().stream()
+				.map(cx -> this.<IJsxExpression>getNodeValue(cx))
+				.collect(Collectors.toList());
+		setNodeValue(ctx, list);
 	}
 	
 	@Override

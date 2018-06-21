@@ -20,7 +20,8 @@ public abstract class JsxElementBase implements IJsxExpression {
 
 	@Override
 	public IType check(Context context) {
-		// TODO check attributes
+		if(attributes!=null)
+			attributes.forEach(attr->attr.check(context));
 		return JsxType.instance();
 	}
 	

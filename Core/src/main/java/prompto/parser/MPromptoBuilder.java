@@ -149,6 +149,8 @@ import prompto.jsx.IJsxExpression;
 import prompto.jsx.IJsxValue;
 import prompto.jsx.JsxAttribute;
 import prompto.jsx.JsxElement;
+import prompto.jsx.JsxText;
+import prompto.jsx.JsxValue;
 import prompto.jsx.JsxLiteral;
 import prompto.jsx.JsxSelfClosing;
 import prompto.literal.BooleanLiteral;
@@ -174,9 +176,7 @@ import prompto.literal.TimeLiteral;
 import prompto.literal.TupleLiteral;
 import prompto.literal.UUIDLiteral;
 import prompto.literal.VersionLiteral;
-import prompto.parser.MParser;
-import prompto.parser.MParserBaseListener;
-import prompto.parser.MParser.*;
+import static prompto.parser.MParser.*;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -1587,11 +1587,35 @@ public class MPromptoBuilder extends MParserBaseListener {
 		setNodeValue(ctx, new JavaStatement(exp,false));
 	}
 	
+	
 	@Override
 	public void exitJavaTextLiteral(JavaTextLiteralContext ctx) {
 		setNodeValue(ctx, new JavaTextLiteral(ctx.getText()));
 	}
 	
+
+	@Override
+	public void exitJsxChild(JsxChildContext ctx) {
+		setNodeValue(ctx, this.<Object>getNodeValue(ctx.jsx));
+	}
+	
+	
+	@Override
+	public void exitJsxCode(JsxCodeContext ctx) {
+		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		setNodeValue(ctx, new JsxValue(exp));
+	}
+	
+
+	@Override
+	public void exitJsxElement(JsxElementContext ctx) {
+		JsxElement elem = this.<JsxElement>getNodeValue(ctx.jsx);
+		List<IJsxExpression> children = this.<List<IJsxExpression>>getNodeValue(ctx.children);
+		elem.setChildren(children);
+		setNodeValue(ctx, elem);
+	}
+	
+
 	@Override
 	public void exitJsxExpression(JsxExpressionContext ctx) {
 		setNodeValue(ctx, this.<Object>getNodeValue(ctx.exp));
@@ -1603,13 +1627,20 @@ public class MPromptoBuilder extends MParserBaseListener {
 		setNodeValue(ctx, this.<Object>getNodeValue(ctx.jsx));
 	}
 	
+	
 	@Override
-	public void exitJsxElement(JsxElementContext ctx) {
-		JsxElement elem = this.<JsxElement>getNodeValue(ctx.jsx);
-		List<IJsxExpression> children = this.<List<IJsxExpression>>getNodeValue(ctx.children);
-		elem.setChildren(children);
-		setNodeValue(ctx, elem);
+	public void exitJsxText(JsxTextContext ctx) {
+		String text = ParserUtils.getFullText(ctx.text);
+		setNodeValue(ctx, new JsxText(text));
 	}
+	
+	
+	@Override
+	public void exitJsxValue(JsxValueContext ctx) {
+		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		setNodeValue(ctx, new JsxValue(exp));
+	}
+
 	
 	@Override
 	public void exitJsx_attribute(Jsx_attributeContext ctx) {
@@ -1617,6 +1648,16 @@ public class MPromptoBuilder extends MParserBaseListener {
 		IJsxValue value = this.<IJsxValue>getNodeValue(ctx.value);
 		setNodeValue(ctx, new JsxAttribute(name, value));
 	}
+	
+	
+	@Override
+	public void exitJsx_children(Jsx_childrenContext ctx) {
+		List<IJsxExpression> list = ctx.jsx_child().stream()
+				.map(cx -> this.<IJsxExpression>getNodeValue(cx))
+				.collect(Collectors.toList());
+		setNodeValue(ctx, list);
+	}
+
 	
 	@Override
 	public void exitJsx_element_name(Jsx_element_nameContext ctx) {

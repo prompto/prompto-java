@@ -22,6 +22,8 @@ public class JsxElement extends JsxElementBase {
 		writer.append("<").append(name);
 		attributes.forEach(attr->attr.toDialect(writer));
 		writer.append(">");
+		if(children!=null)
+			children.forEach(child->child.toDialect(writer));
 		writer.append("</").append(name).append(">");
 	}
 

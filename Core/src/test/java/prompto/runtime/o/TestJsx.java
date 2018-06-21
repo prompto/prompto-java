@@ -20,18 +20,78 @@ public class TestJsx extends BaseOParserTest {
 	}
 
 	@Test
-	public void testInterpretedClosingEmptyAttribute() throws Exception {
-		checkInterpretedOutput("jsx/closingEmptyAttribute.poc");
+	public void testInterpretedChildElement() throws Exception {
+		checkInterpretedOutput("jsx/childElement.poc");
 	}
 
 	@Test
-	public void testCompiledClosingEmptyAttribute() throws Exception {
-		checkCompiledOutput("jsx/closingEmptyAttribute.poc");
+	public void testCompiledChildElement() throws Exception {
+		checkCompiledOutput("jsx/childElement.poc");
 	}
 
 	@Test
-	public void testTranspiledClosingEmptyAttribute() throws Exception {
-		checkTranspiledOutput("jsx/closingEmptyAttribute.poc");
+	public void testTranspiledChildElement() throws Exception {
+		checkTranspiledOutput("jsx/childElement.poc");
+	}
+
+	@Test
+	public void testInterpretedCodeAttribute() throws Exception {
+		checkInterpretedOutput("jsx/codeAttribute.poc");
+	}
+
+	@Test
+	public void testCompiledCodeAttribute() throws Exception {
+		checkCompiledOutput("jsx/codeAttribute.poc");
+	}
+
+	@Test
+	public void testTranspiledCodeAttribute() throws Exception {
+		checkTranspiledOutput("jsx/codeAttribute.poc");
+	}
+
+	@Test
+	public void testInterpretedCodeElement() throws Exception {
+		checkInterpretedOutput("jsx/codeElement.poc");
+	}
+
+	@Test
+	public void testCompiledCodeElement() throws Exception {
+		checkCompiledOutput("jsx/codeElement.poc");
+	}
+
+	@Test
+	public void testTranspiledCodeElement() throws Exception {
+		checkTranspiledOutput("jsx/codeElement.poc");
+	}
+
+	@Test
+	public void testInterpretedDotName() throws Exception {
+		checkInterpretedOutput("jsx/dotName.poc");
+	}
+
+	@Test
+	public void testCompiledDotName() throws Exception {
+		checkCompiledOutput("jsx/dotName.poc");
+	}
+
+	@Test
+	public void testTranspiledDotName() throws Exception {
+		checkTranspiledOutput("jsx/dotName.poc");
+	}
+
+	@Test
+	public void testInterpretedEmpty() throws Exception {
+		checkInterpretedOutput("jsx/empty.poc");
+	}
+
+	@Test
+	public void testCompiledEmpty() throws Exception {
+		checkCompiledOutput("jsx/empty.poc");
+	}
+
+	@Test
+	public void testTranspiledEmpty() throws Exception {
+		checkTranspiledOutput("jsx/empty.poc");
 	}
 
 	@Test
@@ -50,33 +110,33 @@ public class TestJsx extends BaseOParserTest {
 	}
 
 	@Test
-	public void testInterpretedEmptyDiv() throws Exception {
-		checkInterpretedOutput("jsx/emptyDiv.poc");
+	public void testInterpretedHyphenName() throws Exception {
+		checkInterpretedOutput("jsx/hyphenName.poc");
 	}
 
 	@Test
-	public void testCompiledEmptyDiv() throws Exception {
-		checkCompiledOutput("jsx/emptyDiv.poc");
+	public void testCompiledHyphenName() throws Exception {
+		checkCompiledOutput("jsx/hyphenName.poc");
 	}
 
 	@Test
-	public void testTranspiledEmptyDiv() throws Exception {
-		checkTranspiledOutput("jsx/emptyDiv.poc");
+	public void testTranspiledHyphenName() throws Exception {
+		checkTranspiledOutput("jsx/hyphenName.poc");
 	}
 
 	@Test
-	public void testInterpretedNonEmptyAttribute() throws Exception {
-		checkInterpretedOutput("jsx/nonEmptyAttribute.poc");
+	public void testInterpretedLiteralAttribute() throws Exception {
+		checkInterpretedOutput("jsx/literalAttribute.poc");
 	}
 
 	@Test
-	public void testCompiledNonEmptyAttribute() throws Exception {
-		checkCompiledOutput("jsx/nonEmptyAttribute.poc");
+	public void testCompiledLiteralAttribute() throws Exception {
+		checkCompiledOutput("jsx/literalAttribute.poc");
 	}
 
 	@Test
-	public void testTranspiledNonEmptyAttribute() throws Exception {
-		checkTranspiledOutput("jsx/nonEmptyAttribute.poc");
+	public void testTranspiledLiteralAttribute() throws Exception {
+		checkTranspiledOutput("jsx/literalAttribute.poc");
 	}
 
 	@Test
@@ -92,6 +152,36 @@ public class TestJsx extends BaseOParserTest {
 	@Test
 	public void testTranspiledSelfClosingDiv() throws Exception {
 		checkTranspiledOutput("jsx/selfClosingDiv.poc");
+	}
+
+	@Test
+	public void testInterpretedSelfClosingEmptyAttribute() throws Exception {
+		checkInterpretedOutput("jsx/selfClosingEmptyAttribute.poc");
+	}
+
+	@Test
+	public void testCompiledSelfClosingEmptyAttribute() throws Exception {
+		checkCompiledOutput("jsx/selfClosingEmptyAttribute.poc");
+	}
+
+	@Test
+	public void testTranspiledSelfClosingEmptyAttribute() throws Exception {
+		checkTranspiledOutput("jsx/selfClosingEmptyAttribute.poc");
+	}
+
+	@Test
+	public void testInterpretedTextElement() throws Exception {
+		checkInterpretedOutput("jsx/textElement.poc");
+	}
+
+	@Test
+	public void testCompiledTextElement() throws Exception {
+		checkCompiledOutput("jsx/textElement.poc");
+	}
+
+	@Test
+	public void testTranspiledTextElement() throws Exception {
+		checkTranspiledOutput("jsx/textElement.poc");
 	}
 
 }

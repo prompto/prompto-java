@@ -1,6 +1,7 @@
 package prompto.jsx;
 
 import prompto.grammar.Identifier;
+import prompto.runtime.Context;
 import prompto.utils.CodeWriter;
 
 public class JsxAttribute {
@@ -15,6 +16,12 @@ public class JsxAttribute {
 	}
 
 
+	public void check(Context context) {
+		if(value!=null)
+			value.check(context);
+	}
+
+
 	public void toDialect(CodeWriter writer) {
 		writer.append(" ").append(name);
 		if(value!=null) {
@@ -22,5 +29,6 @@ public class JsxAttribute {
 			value.toDialect(writer);
 		}
 	}
+
 
 }

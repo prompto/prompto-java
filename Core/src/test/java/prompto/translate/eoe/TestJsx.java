@@ -7,8 +7,28 @@ import prompto.parser.e.BaseEParserTest;
 public class TestJsx extends BaseEParserTest {
 
 	@Test
-	public void testClosingEmptyAttribute() throws Exception {
-		compareResourceEOE("jsx/closingEmptyAttribute.pec");
+	public void testChildElement() throws Exception {
+		compareResourceEOE("jsx/childElement.pec");
+	}
+
+	@Test
+	public void testCodeAttribute() throws Exception {
+		compareResourceEOE("jsx/codeAttribute.pec");
+	}
+
+	@Test
+	public void testCodeElement() throws Exception {
+		compareResourceEOE("jsx/codeElement.pec");
+	}
+
+	@Test
+	public void testDotName() throws Exception {
+		compareResourceEOE("jsx/dotName.pec");
+	}
+
+	@Test
+	public void testEmpty() throws Exception {
+		compareResourceEOE("jsx/empty.pec");
 	}
 
 	@Test
@@ -17,18 +37,28 @@ public class TestJsx extends BaseEParserTest {
 	}
 
 	@Test
-	public void testEmptyDiv() throws Exception {
-		compareResourceEOE("jsx/emptyDiv.pec");
+	public void testHyphenName() throws Exception {
+		compareResourceEOE("jsx/hyphenName.pec");
 	}
 
 	@Test
-	public void testNonEmptyAttribute() throws Exception {
-		compareResourceEOE("jsx/nonEmptyAttribute.pec");
+	public void testLiteralAttribute() throws Exception {
+		compareResourceEOE("jsx/literalAttribute.pec");
 	}
 
 	@Test
 	public void testSelfClosingDiv() throws Exception {
 		compareResourceEOE("jsx/selfClosingDiv.pec");
+	}
+
+	@Test
+	public void testSelfClosingEmptyAttribute() throws Exception {
+		compareResourceEOE("jsx/selfClosingEmptyAttribute.pec");
+	}
+
+	@Test
+	public void testTextElement() throws Exception {
+		compareResourceEOE("jsx/textElement.pec");
 	}
 
 }
