@@ -2,6 +2,7 @@ package prompto.parser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
@@ -144,6 +145,14 @@ import prompto.javascript.JavaScriptSelectorExpression;
 import prompto.javascript.JavaScriptStatement;
 import prompto.javascript.JavaScriptTextLiteral;
 import prompto.javascript.JavaScriptThisExpression;
+import prompto.jsx.IJsxExpression;
+import prompto.jsx.IJsxValue;
+import prompto.jsx.JsxAttribute;
+import prompto.jsx.JsxElement;
+import prompto.jsx.JsxText;
+import prompto.jsx.JsxExpression;
+import prompto.jsx.JsxLiteral;
+import prompto.jsx.JsxSelfClosing;
 import prompto.literal.BooleanLiteral;
 import prompto.literal.CharacterLiteral;
 import prompto.literal.ContainerLiteral;
@@ -167,9 +176,7 @@ import prompto.literal.TimeLiteral;
 import prompto.literal.TupleLiteral;
 import prompto.literal.UUIDLiteral;
 import prompto.literal.VersionLiteral;
-import prompto.parser.MParser;
-import prompto.parser.MParserBaseListener;
-import prompto.parser.MParser.*;
+import static prompto.parser.MParser.*;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -1580,10 +1587,120 @@ public class MPromptoBuilder extends MParserBaseListener {
 		setNodeValue(ctx, new JavaStatement(exp,false));
 	}
 	
+	
 	@Override
 	public void exitJavaTextLiteral(JavaTextLiteralContext ctx) {
 		setNodeValue(ctx, new JavaTextLiteral(ctx.getText()));
 	}
+	
+
+	@Override
+	public void exitJsxChild(JsxChildContext ctx) {
+		setNodeValue(ctx, this.<Object>getNodeValue(ctx.jsx));
+	}
+	
+	
+	@Override
+	public void exitJsxCode(JsxCodeContext ctx) {
+		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		setNodeValue(ctx, new JsxExpression(exp));
+	}
+	
+
+	@Override
+	public void exitJsxElement(JsxElementContext ctx) {
+		JsxElement elem = this.<JsxElement>getNodeValue(ctx.jsx);
+		List<IJsxExpression> children = this.<List<IJsxExpression>>getNodeValue(ctx.children_);
+		elem.setChildren(children);
+		setNodeValue(ctx, elem);
+	}
+	
+
+	@Override
+	public void exitJsxExpression(JsxExpressionContext ctx) {
+		setNodeValue(ctx, this.<Object>getNodeValue(ctx.exp));
+	}
+	
+	
+	@Override
+	public void exitJsxSelfClosing(JsxSelfClosingContext ctx) {
+		setNodeValue(ctx, this.<Object>getNodeValue(ctx.jsx));
+	}
+	
+	
+	@Override
+	public void exitJsxText(JsxTextContext ctx) {
+		String text = ParserUtils.getFullText(ctx.text);
+		setNodeValue(ctx, new JsxText(text));
+	}
+	
+	
+	@Override
+	public void exitJsxValue(JsxValueContext ctx) {
+		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		setNodeValue(ctx, new JsxExpression(exp));
+	}
+
+	
+	@Override
+	public void exitJsx_attribute(Jsx_attributeContext ctx) {
+		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		IJsxValue value = this.<IJsxValue>getNodeValue(ctx.value);
+		setNodeValue(ctx, new JsxAttribute(name, value));
+	}
+	
+	
+	@Override
+	public void exitJsx_children(Jsx_childrenContext ctx) {
+		List<IJsxExpression> list = ctx.jsx_child().stream()
+				.map(cx -> this.<IJsxExpression>getNodeValue(cx))
+				.collect(Collectors.toList());
+		setNodeValue(ctx, list);
+	}
+
+	
+	@Override
+	public void exitJsx_element_name(Jsx_element_nameContext ctx) {
+		String name = ctx.getText();
+		setNodeValue(ctx, new Identifier(name));
+	}
+	
+	@Override
+	public void exitJsx_expression(Jsx_expressionContext ctx) {
+		setNodeValue(ctx, this.<Object>getNodeValue(ctx.getChild(0)));
+	}
+	
+	@Override
+	public void exitJsx_identifier(Jsx_identifierContext ctx) {
+		String name = ctx.getText();
+		setNodeValue(ctx, new Identifier(name));
+	}
+	
+	@Override
+	public void exitJsxLiteral(JsxLiteralContext ctx) {
+		String text = ctx.getText();
+		setNodeValue(ctx, new JsxLiteral(text));
+	}
+	
+
+	@Override
+	public void exitJsx_opening(Jsx_openingContext ctx) {
+		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		List<JsxAttribute> attributes = ctx.jsx_attribute().stream()
+				.map(cx->this.<JsxAttribute>getNodeValue(cx))
+				.collect(Collectors.toList());
+		setNodeValue(ctx, new JsxElement(name, attributes));
+	}
+	
+	@Override
+	public void exitJsx_self_closing(Jsx_self_closingContext ctx) {
+		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		List<JsxAttribute> attributes = ctx.jsx_attribute().stream()
+				.map(cx->this.<JsxAttribute>getNodeValue(cx))
+				.collect(Collectors.toList());
+		setNodeValue(ctx, new JsxSelfClosing(name, attributes));
+	}
+	
 	
 	@Override
 	public void exitKey_token(Key_tokenContext ctx) {

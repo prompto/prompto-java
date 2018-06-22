@@ -54,6 +54,7 @@ public class Nashorn8Engine implements IJSEngine {
 		}
 		List<String> lines = Arrays.asList(
 				js,
+				"var React = { createElement: function() { return {}; } };",
 				"var Set = Java.type('" + JSSet.class.getName() + "');",
 				"var $context = Java.type('" + JSContext.class.getName() + "');",
 				"var process = { stdout: { write: print } };"
