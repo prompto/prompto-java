@@ -180,6 +180,7 @@ import prompto.literal.TupleLiteral;
 import prompto.literal.UUIDLiteral;
 import prompto.literal.VersionLiteral;
 import static prompto.parser.EParser.*;
+import prompto.parser.EParser.JsxChildContext;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -1635,6 +1636,12 @@ public class EPromptoBuilder extends EParserBaseListener {
 	@Override
 	public void exitJavaTextLiteral(JavaTextLiteralContext ctx) {
 		setNodeValue(ctx, new JavaTextLiteral(ctx.getText()));
+	}
+	
+	
+	@Override
+	public void exitJsxChild(JsxChildContext ctx) {
+		setNodeValue(ctx, this.<Object>getNodeValue(ctx.jsx));
 	}
 	
 	

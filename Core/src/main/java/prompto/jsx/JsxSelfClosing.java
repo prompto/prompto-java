@@ -13,7 +13,7 @@ public class JsxSelfClosing extends JsxElementBase {
 	
 	@Override
 	public void toDialect(CodeWriter writer) {
-		writer.append("<").append(name);
+		writer.append("<").append(id);
 		attributes.forEach(attr->attr.toDialect(writer));
 		writer.append("/>");
 	}

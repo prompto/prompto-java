@@ -3,6 +3,7 @@ package prompto.jsx;
 import java.util.List;
 
 import prompto.grammar.Identifier;
+import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 
 public class JsxElement extends JsxElementBase {
@@ -19,12 +20,22 @@ public class JsxElement extends JsxElementBase {
 	
 	@Override
 	public void toDialect(CodeWriter writer) {
-		writer.append("<").append(name);
+		writer.append("<").append(id);
 		attributes.forEach(attr->attr.toDialect(writer));
 		writer.append(">");
 		if(children!=null)
 			children.forEach(child->child.toDialect(writer));
-		writer.append("</").append(name).append(">");
+		writer.append("</").append(id).append(">");
+	}
+	
+	
+	@Override
+	public void transpileChildren(Transpiler transpiler) {
+	    if (this.children != null)
+	        this.children.forEach(child -> {
+	            transpiler.append(", ");
+	            child.transpile(transpiler);
+	        });
 	}
 
 }

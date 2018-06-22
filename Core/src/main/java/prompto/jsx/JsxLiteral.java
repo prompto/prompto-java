@@ -1,6 +1,7 @@
 package prompto.jsx;
 
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.TextType;
 import prompto.utils.CodeWriter;
@@ -23,4 +24,9 @@ public class JsxLiteral implements IJsxValue {
 		writer.append(text);
 	}
 
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		transpiler.append(this.text);
+		return false;
+	}
 }

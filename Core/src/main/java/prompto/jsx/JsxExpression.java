@@ -2,6 +2,7 @@ package prompto.jsx;
 
 import prompto.expression.IExpression;
 import prompto.runtime.Context;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 
@@ -23,6 +24,12 @@ public class JsxExpression implements IJsxValue, IJsxExpression {
 		writer.append("{");
 		expression.toDialect(writer);
 		writer.append("}");
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		this.expression.transpile(transpiler);
+		return false;
 	}
 
 }
