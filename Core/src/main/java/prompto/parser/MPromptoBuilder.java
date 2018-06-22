@@ -150,7 +150,7 @@ import prompto.jsx.IJsxValue;
 import prompto.jsx.JsxAttribute;
 import prompto.jsx.JsxElement;
 import prompto.jsx.JsxText;
-import prompto.jsx.JsxValue;
+import prompto.jsx.JsxExpression;
 import prompto.jsx.JsxLiteral;
 import prompto.jsx.JsxSelfClosing;
 import prompto.literal.BooleanLiteral;
@@ -1603,14 +1603,14 @@ public class MPromptoBuilder extends MParserBaseListener {
 	@Override
 	public void exitJsxCode(JsxCodeContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, new JsxValue(exp));
+		setNodeValue(ctx, new JsxExpression(exp));
 	}
 	
 
 	@Override
 	public void exitJsxElement(JsxElementContext ctx) {
 		JsxElement elem = this.<JsxElement>getNodeValue(ctx.jsx);
-		List<IJsxExpression> children = this.<List<IJsxExpression>>getNodeValue(ctx.children);
+		List<IJsxExpression> children = this.<List<IJsxExpression>>getNodeValue(ctx.children_);
 		elem.setChildren(children);
 		setNodeValue(ctx, elem);
 	}
@@ -1638,7 +1638,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	@Override
 	public void exitJsxValue(JsxValueContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, new JsxValue(exp));
+		setNodeValue(ctx, new JsxExpression(exp));
 	}
 
 	

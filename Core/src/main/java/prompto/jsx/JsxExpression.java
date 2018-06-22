@@ -5,11 +5,11 @@ import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 
-public class JsxValue implements IJsxValue, IJsxExpression {
+public class JsxExpression implements IJsxValue, IJsxExpression {
 
 	IExpression expression;
 	
-	public JsxValue(IExpression expression) {
+	public JsxExpression(IExpression expression) {
 		this.expression = expression;
 	}
 	

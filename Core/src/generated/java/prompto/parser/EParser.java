@@ -19787,7 +19787,7 @@ public class EParser extends AbstractParser {
 	}
 	public static class JsxElementContext extends Jsx_elementContext {
 		public Jsx_openingContext jsx;
-		public Jsx_childrenContext children;
+		public Jsx_childrenContext children_;
 		public Jsx_closingContext jsx_closing() {
 			return getRuleContext(Jsx_closingContext.class,0);
 		}
@@ -19835,7 +19835,7 @@ public class EParser extends AbstractParser {
 				case 1:
 					{
 					setState(2406);
-					((JsxElementContext)_localctx).children = jsx_children();
+					((JsxElementContext)_localctx).children_ = jsx_children();
 					}
 					break;
 				}
@@ -19857,7 +19857,7 @@ public class EParser extends AbstractParser {
 	}
 
 	public static class Jsx_fragmentContext extends ParserRuleContext {
-		public Jsx_childrenContext children;
+		public Jsx_childrenContext children_;
 		public Jsx_fragment_startContext jsx_fragment_start() {
 			return getRuleContext(Jsx_fragment_startContext.class,0);
 		}
@@ -19895,7 +19895,7 @@ public class EParser extends AbstractParser {
 			case 1:
 				{
 				setState(2414);
-				((Jsx_fragmentContext)_localctx).children = jsx_children();
+				((Jsx_fragmentContext)_localctx).children_ = jsx_children();
 				}
 				break;
 			}

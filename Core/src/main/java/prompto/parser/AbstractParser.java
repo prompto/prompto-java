@@ -19,7 +19,7 @@ public abstract class AbstractParser extends Parser {
 			WS_TOKEN = EParser.WS;
 		else if(this instanceof MParser)
 			WS_TOKEN = MParser.WS;
-		if(this instanceof OParser)
+		else if(this instanceof OParser)
 			WS_TOKEN = OParser.WS;
 	}
 	

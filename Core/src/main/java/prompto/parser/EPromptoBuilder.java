@@ -155,7 +155,7 @@ import prompto.jsx.JsxElement;
 import prompto.jsx.JsxLiteral;
 import prompto.jsx.JsxSelfClosing;
 import prompto.jsx.JsxText;
-import prompto.jsx.JsxValue;
+import prompto.jsx.JsxExpression;
 import prompto.literal.BooleanLiteral;
 import prompto.literal.CharacterLiteral;
 import prompto.literal.ContainerLiteral;
@@ -1654,7 +1654,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	@Override
 	public void exitJsxElement(JsxElementContext ctx) {
 		JsxElement elem = this.<JsxElement>getNodeValue(ctx.jsx);
-		List<IJsxExpression> children = this.<List<IJsxExpression>>getNodeValue(ctx.children);
+		List<IJsxExpression> children = this.<List<IJsxExpression>>getNodeValue(ctx.children_);
 		elem.setChildren(children);
 		setNodeValue(ctx, elem);
 	}
@@ -1675,7 +1675,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	@Override
 	public void exitJsxValue(JsxValueContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, new JsxValue(exp));
+		setNodeValue(ctx, new JsxExpression(exp));
 	}
 	
 	@Override
