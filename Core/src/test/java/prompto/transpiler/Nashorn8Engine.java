@@ -53,11 +53,11 @@ public class Nashorn8Engine implements IJSEngine {
 			output.write(js.getBytes());
 		}
 		List<String> lines = Arrays.asList(
-				js,
-				"var React = { createElement: function() { return {}; } };",
 				"var Set = Java.type('" + JSSet.class.getName() + "');",
-				"var $context = Java.type('" + JSContext.class.getName() + "');",
-				"var process = { stdout: { write: print } };"
+				"var React = { createElement: function() { return {}; }, Component: function() { return this; } };",
+				"var process = { stdout: { write: print } };",
+				js,
+				"var $context = Java.type('" + JSContext.class.getName() + "');"
 				);
 		js = lines.stream().collect(Collectors.joining("\n"));
 		ScriptEngine nashorn = new ScriptEngineManager().getEngineByName("nashorn");

@@ -88,6 +88,18 @@ public class MParserBaseListener implements MParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterConcrete_widget_declaration(MParser.Concrete_widget_declarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitConcrete_widget_declaration(MParser.Concrete_widget_declarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterConcrete_category_declaration(MParser.Concrete_category_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2152,6 +2164,18 @@ public class MParserBaseListener implements MParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterHtmlType(MParser.HtmlTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitHtmlType(MParser.HtmlTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCategory_type(MParser.Category_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2219,6 +2243,18 @@ public class MParserBaseListener implements MParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitSingletonCategoryDeclaration(MParser.SingletonCategoryDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterConcreteWidgetDeclaration(MParser.ConcreteWidgetDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitConcreteWidgetDeclaration(MParser.ConcreteWidgetDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -3527,6 +3563,18 @@ public class MParserBaseListener implements MParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitModulo(MParser.ModuloContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNative_widget_declaration(MParser.Native_widget_declarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNative_widget_declaration(MParser.Native_widget_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

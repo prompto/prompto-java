@@ -37,6 +37,7 @@ import prompto.declaration.AbstractMethodDeclaration;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.declaration.ConcreteMethodDeclaration;
+import prompto.declaration.ConcreteWidgetDeclaration;
 import prompto.declaration.DeclarationList;
 import prompto.declaration.EnumeratedCategoryDeclaration;
 import prompto.declaration.EnumeratedNativeDeclaration;
@@ -177,6 +178,9 @@ import prompto.literal.TupleLiteral;
 import prompto.literal.UUIDLiteral;
 import prompto.literal.VersionLiteral;
 import static prompto.parser.MParser.*;
+import prompto.parser.MParser.ConcreteWidgetDeclarationContext;
+import prompto.parser.MParser.Concrete_widget_declarationContext;
+import prompto.parser.MParser.HtmlTypeContext;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -236,6 +240,7 @@ import prompto.type.DateType;
 import prompto.type.DecimalType;
 import prompto.type.DictType;
 import prompto.type.DocumentType;
+import prompto.type.HtmlType;
 import prompto.type.IType;
 import prompto.type.ImageType;
 import prompto.type.IntegerType;
@@ -675,10 +680,24 @@ public class MPromptoBuilder extends MParserBaseListener {
 		setNodeValue(ctx, new ConcreteMethodDeclaration(name, args, type, stmts));
 	}
 	
+	
+	@Override
+	public void exitConcrete_widget_declaration(Concrete_widget_declarationContext ctx) {
+		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		Identifier derived = this.<Identifier>getNodeValue(ctx.derived);
+		MethodDeclarationList methods = this.<MethodDeclarationList>getNodeValue(ctx.methods);
+		ConcreteWidgetDeclaration decl = new ConcreteWidgetDeclaration(name, derived, methods);
+		setNodeValue(ctx, decl);
+	}
+	
 	@Override
 	public void exitConcreteCategoryDeclaration(ConcreteCategoryDeclarationContext ctx) {
-		ConcreteCategoryDeclaration decl = this.<ConcreteCategoryDeclaration>getNodeValue(ctx.decl);
-		setNodeValue(ctx, decl);
+		setNodeValue(ctx, this.<Object>getNodeValue(ctx.decl));
+	}
+	
+	@Override
+	public void exitConcreteWidgetDeclaration(ConcreteWidgetDeclarationContext ctx) {
+		setNodeValue(ctx, this.<Object>getNodeValue(ctx.decl));
 	}
 	
 	@Override
@@ -904,6 +923,8 @@ public class MPromptoBuilder extends MParserBaseListener {
 			ctx_ = ctx.method_declaration();
 		if(ctx_==null)
 			ctx_ = ctx.resource_declaration();
+		if(ctx_==null)
+			ctx_ = ctx.widget_declaration();
 		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx_);
 		if(decl!=null) {
 			decl.setComments(stmts);
@@ -1172,6 +1193,12 @@ public class MPromptoBuilder extends MParserBaseListener {
 	@Override
 	public void exitHexadecimalLiteral(HexadecimalLiteralContext ctx) {
 		setNodeValue(ctx, new HexaLiteral(ctx.t.getText()));
+	}
+	
+	
+	@Override
+	public void exitHtmlType(HtmlTypeContext ctx) {
+		setNodeValue(ctx, HtmlType.instance());
 	}
 	
 	@Override

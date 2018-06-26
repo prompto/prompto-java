@@ -76,6 +76,18 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterConcrete_widget_declaration(OParser.Concrete_widget_declarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitConcrete_widget_declaration(OParser.Concrete_widget_declarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterConcrete_category_declaration(OParser.Concrete_category_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2176,6 +2188,18 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterHtmlType(OParser.HtmlTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitHtmlType(OParser.HtmlTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCategory_type(OParser.Category_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2243,6 +2267,18 @@ public class OParserBaseListener implements OParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitSingletonCategoryDeclaration(OParser.SingletonCategoryDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterConcreteWidgetDeclaration(OParser.ConcreteWidgetDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitConcreteWidgetDeclaration(OParser.ConcreteWidgetDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -3575,6 +3611,18 @@ public class OParserBaseListener implements OParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLfp(OParser.LfpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNative_widget_declaration(OParser.Native_widget_declarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNative_widget_declaration(OParser.Native_widget_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

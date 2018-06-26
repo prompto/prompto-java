@@ -68,6 +68,16 @@ public interface MParserListener extends ParseTreeListener {
 	 */
 	void exitIndex_clause(MParser.Index_clauseContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MParser#concrete_widget_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterConcrete_widget_declaration(MParser.Concrete_widget_declarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MParser#concrete_widget_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitConcrete_widget_declaration(MParser.Concrete_widget_declarationContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MParser#concrete_category_declaration}.
 	 * @param ctx the parse tree
 	 */
@@ -2016,6 +2026,18 @@ public interface MParserListener extends ParseTreeListener {
 	 */
 	void exitUUIDType(MParser.UUIDTypeContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code HtmlType}
+	 * labeled alternative in {@link MParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void enterHtmlType(MParser.HtmlTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code HtmlType}
+	 * labeled alternative in {@link MParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void exitHtmlType(MParser.HtmlTypeContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MParser#category_type}.
 	 * @param ctx the parse tree
 	 */
@@ -2081,6 +2103,18 @@ public interface MParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitSingletonCategoryDeclaration(MParser.SingletonCategoryDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ConcreteWidgetDeclaration}
+	 * labeled alternative in {@link MParser#widget_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterConcreteWidgetDeclaration(MParser.ConcreteWidgetDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ConcreteWidgetDeclaration}
+	 * labeled alternative in {@link MParser#widget_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitConcreteWidgetDeclaration(MParser.ConcreteWidgetDeclarationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MParser#type_identifier_list}.
 	 * @param ctx the parse tree
@@ -3277,6 +3311,16 @@ public interface MParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitModulo(MParser.ModuloContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MParser#native_widget_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterNative_widget_declaration(MParser.Native_widget_declarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MParser#native_widget_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitNative_widget_declaration(MParser.Native_widget_declarationContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code JavascriptReturnStatement}
 	 * labeled alternative in {@link MParser#javascript_statement}.

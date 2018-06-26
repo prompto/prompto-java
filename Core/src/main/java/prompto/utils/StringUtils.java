@@ -37,5 +37,9 @@ public abstract class StringUtils {
 			return value.substring(0, idx) + replaceWith + value.substring(idx + toReplace.length());
 	}
 
+	public static String escape(String text) {
+		return text.replace("\"", "\\\"");
+	}
+
 
 }

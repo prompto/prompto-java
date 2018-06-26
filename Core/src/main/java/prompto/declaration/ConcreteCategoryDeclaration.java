@@ -995,11 +995,15 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	            decl.declare(transpiler);
 	        });
 	    } else
-	        transpiler.require("$Root");
+	    	declareRoot(transpiler);
 	    if(this.storable)
 	        transpiler.require("DataStore");
 	}
 	
+	protected void declareRoot(Transpiler transpiler) {
+        transpiler.require("$Root");
+	}
+
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 	    Identifier parent = this.derivedFrom!=null && this.derivedFrom.size()>0 ? this.derivedFrom.get(0) : null;
@@ -1030,7 +1034,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	    return true;
 	}
 
-	private void transpileLoaders(Transpiler transpiler) {
+	protected void transpileLoaders(Transpiler transpiler) {
 	    Set<Identifier> attributes = this.getLocalAttributes(transpiler.getContext());
 	    if (attributes!=null) {
 	        attributes.stream()
@@ -1072,7 +1076,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	    transpiler.dedent().append("});").newLine();
 	}
 
-	private void transpileGetterSetterAttributes(Transpiler transpiler) {
+	protected void transpileGetterSetterAttributes(Transpiler transpiler) {
 	    Set<Identifier> allAttributes = this.getAllAttributes(transpiler.getContext());
 	    if(allAttributes!=null) {
 	        allAttributes.forEach(attr -> {
@@ -1092,7 +1096,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	    });
 	}
 
-	private void transpileLocalAttributes(Transpiler transpiler) {
+	protected void transpileLocalAttributes(Transpiler transpiler) {
 	    Set<Identifier> attributes = this.getLocalAttributes(transpiler.getContext());
 	    if (attributes!=null) {
 	        transpiler.append("this.mutable = true;").newLine();
@@ -1110,14 +1114,17 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return decl instanceof IEnumeratedDeclaration;
 	}
 
-	private void transpileSuperConstructor(Transpiler transpiler) {
+	protected void transpileSuperConstructor(Transpiler transpiler) {
 	    if (this.derivedFrom!=null && this.derivedFrom.size()>0) {
 	        this.derivedFrom.forEach(derived-> {
 	            transpiler.append(derived.toString()).append(".call(this, copyFrom, values, mutable);").newLine();
 	        });
 	    } else
-	        transpiler.append("$Root.call(this);").newLine();
-		
+	    	transpileRootConstructor(transpiler).newLine();
+	}
+
+	protected Transpiler transpileRootConstructor(Transpiler transpiler) {
+		return transpiler.append("$Root.call(this);");
 	}
 	
 }

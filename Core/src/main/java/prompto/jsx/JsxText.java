@@ -5,6 +5,7 @@ import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.TextType;
 import prompto.utils.CodeWriter;
+import prompto.utils.StringUtils;
 
 public class JsxText implements IJsxExpression {
 
@@ -27,8 +28,10 @@ public class JsxText implements IJsxExpression {
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-		transpiler.append('"').append(this.text).append('"');
+		String text = StringUtils.escape(this.text);
+		transpiler.append('"').append(text).append('"');
 		return false;
 	}
+
 
 }

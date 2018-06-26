@@ -58,6 +58,16 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitAttribute_declaration(EParser.Attribute_declarationContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link EParser#concrete_widget_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterConcrete_widget_declaration(EParser.Concrete_widget_declarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EParser#concrete_widget_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitConcrete_widget_declaration(EParser.Concrete_widget_declarationContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link EParser#concrete_category_declaration}.
 	 * @param ctx the parse tree
 	 */
@@ -2162,6 +2172,18 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitUUIDType(EParser.UUIDTypeContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code HtmlType}
+	 * labeled alternative in {@link EParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void enterHtmlType(EParser.HtmlTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code HtmlType}
+	 * labeled alternative in {@link EParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void exitHtmlType(EParser.HtmlTypeContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link EParser#category_type}.
 	 * @param ctx the parse tree
 	 */
@@ -2227,6 +2249,18 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitSingletonCategoryDeclaration(EParser.SingletonCategoryDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ConcreteWidgetDeclaration}
+	 * labeled alternative in {@link EParser#widget_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterConcreteWidgetDeclaration(EParser.ConcreteWidgetDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ConcreteWidgetDeclaration}
+	 * labeled alternative in {@link EParser#widget_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitConcreteWidgetDeclaration(EParser.ConcreteWidgetDeclarationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link EParser#type_identifier_list}.
 	 * @param ctx the parse tree
@@ -3423,6 +3457,16 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitModulo(EParser.ModuloContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link EParser#native_widget_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterNative_widget_declaration(EParser.Native_widget_declarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EParser#native_widget_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitNative_widget_declaration(EParser.Native_widget_declarationContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code JavascriptReturnStatement}
 	 * labeled alternative in {@link EParser#javascript_statement}.

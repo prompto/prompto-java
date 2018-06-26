@@ -58,6 +58,16 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitAttribute_declaration(OParser.Attribute_declarationContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link OParser#concrete_widget_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterConcrete_widget_declaration(OParser.Concrete_widget_declarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#concrete_widget_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitConcrete_widget_declaration(OParser.Concrete_widget_declarationContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link OParser#concrete_category_declaration}.
 	 * @param ctx the parse tree
 	 */
@@ -2050,6 +2060,18 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitUUIDType(OParser.UUIDTypeContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code HtmlType}
+	 * labeled alternative in {@link OParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void enterHtmlType(OParser.HtmlTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code HtmlType}
+	 * labeled alternative in {@link OParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void exitHtmlType(OParser.HtmlTypeContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link OParser#category_type}.
 	 * @param ctx the parse tree
 	 */
@@ -2115,6 +2137,18 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitSingletonCategoryDeclaration(OParser.SingletonCategoryDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ConcreteWidgetDeclaration}
+	 * labeled alternative in {@link OParser#widget_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterConcreteWidgetDeclaration(OParser.ConcreteWidgetDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ConcreteWidgetDeclaration}
+	 * labeled alternative in {@link OParser#widget_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitConcreteWidgetDeclaration(OParser.ConcreteWidgetDeclarationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link OParser#type_identifier_list}.
 	 * @param ctx the parse tree
@@ -3331,6 +3365,16 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLfp(OParser.LfpContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#native_widget_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterNative_widget_declaration(OParser.Native_widget_declarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#native_widget_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitNative_widget_declaration(OParser.Native_widget_declarationContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code JavascriptReturnStatement}
 	 * labeled alternative in {@link OParser#javascript_statement}.
