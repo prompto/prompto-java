@@ -14894,6 +14894,7 @@ public class MParser extends AbstractParser {
 			case PERIOD:
 			case VERSION:
 			case UUID:
+			case HTML:
 			case NONE:
 			case NULL:
 			case READ:
@@ -15374,7 +15375,7 @@ public class MParser extends AbstractParser {
 			setState(2047);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if (((((_la - 20)) & ~0x3f) == 0 && ((1L << (_la - 20)) & ((1L << (LPAR - 20)) | (1L << (LBRAK - 20)) | (1L << (BOOLEAN - 20)) | (1L << (CHARACTER - 20)) | (1L << (TEXT - 20)) | (1L << (INTEGER - 20)) | (1L << (DECIMAL - 20)) | (1L << (DATE - 20)) | (1L << (TIME - 20)) | (1L << (DATETIME - 20)) | (1L << (PERIOD - 20)) | (1L << (VERSION - 20)) | (1L << (UUID - 20)))) != 0) || ((((_la - 122)) & ~0x3f) == 0 && ((1L << (_la - 122)) & ((1L << (NONE - 122)) | (1L << (NULL - 122)) | (1L << (READ - 122)) | (1L << (SELF - 122)) | (1L << (TEST - 122)) | (1L << (THIS - 122)) | (1L << (WRITE - 122)) | (1L << (BOOLEAN_LITERAL - 122)) | (1L << (CHAR_LITERAL - 122)) | (1L << (SYMBOL_IDENTIFIER - 122)) | (1L << (TYPE_IDENTIFIER - 122)) | (1L << (VARIABLE_IDENTIFIER - 122)) | (1L << (DOLLAR_IDENTIFIER - 122)) | (1L << (TEXT_LITERAL - 122)) | (1L << (INTEGER_LITERAL - 122)) | (1L << (DECIMAL_LITERAL - 122)))) != 0)) {
+			if (((((_la - 20)) & ~0x3f) == 0 && ((1L << (_la - 20)) & ((1L << (LPAR - 20)) | (1L << (LBRAK - 20)) | (1L << (BOOLEAN - 20)) | (1L << (CHARACTER - 20)) | (1L << (TEXT - 20)) | (1L << (INTEGER - 20)) | (1L << (DECIMAL - 20)) | (1L << (DATE - 20)) | (1L << (TIME - 20)) | (1L << (DATETIME - 20)) | (1L << (PERIOD - 20)) | (1L << (VERSION - 20)) | (1L << (UUID - 20)) | (1L << (HTML - 20)))) != 0) || ((((_la - 122)) & ~0x3f) == 0 && ((1L << (_la - 122)) & ((1L << (NONE - 122)) | (1L << (NULL - 122)) | (1L << (READ - 122)) | (1L << (SELF - 122)) | (1L << (TEST - 122)) | (1L << (THIS - 122)) | (1L << (WRITE - 122)) | (1L << (BOOLEAN_LITERAL - 122)) | (1L << (CHAR_LITERAL - 122)) | (1L << (SYMBOL_IDENTIFIER - 122)) | (1L << (TYPE_IDENTIFIER - 122)) | (1L << (VARIABLE_IDENTIFIER - 122)) | (1L << (DOLLAR_IDENTIFIER - 122)) | (1L << (TEXT_LITERAL - 122)) | (1L << (INTEGER_LITERAL - 122)) | (1L << (DECIMAL_LITERAL - 122)))) != 0)) {
 				{
 				setState(2046);
 				((Javascript_method_expressionContext)_localctx).args = javascript_arguments(0);
@@ -15792,6 +15793,7 @@ public class MParser extends AbstractParser {
 		public TerminalNode PERIOD() { return getToken(MParser.PERIOD, 0); }
 		public TerminalNode VERSION() { return getToken(MParser.VERSION, 0); }
 		public TerminalNode UUID() { return getToken(MParser.UUID, 0); }
+		public TerminalNode HTML() { return getToken(MParser.HTML, 0); }
 		public TerminalNode READ() { return getToken(MParser.READ, 0); }
 		public TerminalNode WRITE() { return getToken(MParser.WRITE, 0); }
 		public TerminalNode TEST() { return getToken(MParser.TEST, 0); }
@@ -15821,7 +15823,7 @@ public class MParser extends AbstractParser {
 			{
 			setState(2079);
 			_la = _input.LA(1);
-			if ( !(((((_la - 50)) & ~0x3f) == 0 && ((1L << (_la - 50)) & ((1L << (BOOLEAN - 50)) | (1L << (CHARACTER - 50)) | (1L << (TEXT - 50)) | (1L << (INTEGER - 50)) | (1L << (DECIMAL - 50)) | (1L << (DATE - 50)) | (1L << (TIME - 50)) | (1L << (DATETIME - 50)) | (1L << (PERIOD - 50)) | (1L << (VERSION - 50)) | (1L << (UUID - 50)))) != 0) || ((((_la - 122)) & ~0x3f) == 0 && ((1L << (_la - 122)) & ((1L << (NONE - 122)) | (1L << (NULL - 122)) | (1L << (READ - 122)) | (1L << (SELF - 122)) | (1L << (TEST - 122)) | (1L << (WRITE - 122)) | (1L << (SYMBOL_IDENTIFIER - 122)) | (1L << (TYPE_IDENTIFIER - 122)) | (1L << (VARIABLE_IDENTIFIER - 122)) | (1L << (DOLLAR_IDENTIFIER - 122)))) != 0)) ) {
+			if ( !(((((_la - 50)) & ~0x3f) == 0 && ((1L << (_la - 50)) & ((1L << (BOOLEAN - 50)) | (1L << (CHARACTER - 50)) | (1L << (TEXT - 50)) | (1L << (INTEGER - 50)) | (1L << (DECIMAL - 50)) | (1L << (DATE - 50)) | (1L << (TIME - 50)) | (1L << (DATETIME - 50)) | (1L << (PERIOD - 50)) | (1L << (VERSION - 50)) | (1L << (UUID - 50)) | (1L << (HTML - 50)))) != 0) || ((((_la - 122)) & ~0x3f) == 0 && ((1L << (_la - 122)) & ((1L << (NONE - 122)) | (1L << (NULL - 122)) | (1L << (READ - 122)) | (1L << (SELF - 122)) | (1L << (TEST - 122)) | (1L << (WRITE - 122)) | (1L << (SYMBOL_IDENTIFIER - 122)) | (1L << (TYPE_IDENTIFIER - 122)) | (1L << (VARIABLE_IDENTIFIER - 122)) | (1L << (DOLLAR_IDENTIFIER - 122)))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -15914,6 +15916,7 @@ public class MParser extends AbstractParser {
 			case PERIOD:
 			case VERSION:
 			case UUID:
+			case HTML:
 			case NONE:
 			case NULL:
 			case READ:
@@ -16372,7 +16375,7 @@ public class MParser extends AbstractParser {
 			setState(2116);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if (((((_la - 20)) & ~0x3f) == 0 && ((1L << (_la - 20)) & ((1L << (LPAR - 20)) | (1L << (BOOLEAN - 20)) | (1L << (CHARACTER - 20)) | (1L << (TEXT - 20)) | (1L << (INTEGER - 20)) | (1L << (DECIMAL - 20)) | (1L << (DATE - 20)) | (1L << (TIME - 20)) | (1L << (DATETIME - 20)) | (1L << (PERIOD - 20)) | (1L << (VERSION - 20)) | (1L << (UUID - 20)))) != 0) || ((((_la - 122)) & ~0x3f) == 0 && ((1L << (_la - 122)) & ((1L << (NONE - 122)) | (1L << (NULL - 122)) | (1L << (READ - 122)) | (1L << (SELF - 122)) | (1L << (TEST - 122)) | (1L << (THIS - 122)) | (1L << (WRITE - 122)) | (1L << (BOOLEAN_LITERAL - 122)) | (1L << (CHAR_LITERAL - 122)) | (1L << (SYMBOL_IDENTIFIER - 122)) | (1L << (TYPE_IDENTIFIER - 122)) | (1L << (VARIABLE_IDENTIFIER - 122)) | (1L << (DOLLAR_IDENTIFIER - 122)) | (1L << (TEXT_LITERAL - 122)) | (1L << (INTEGER_LITERAL - 122)) | (1L << (DECIMAL_LITERAL - 122)))) != 0)) {
+			if (((((_la - 20)) & ~0x3f) == 0 && ((1L << (_la - 20)) & ((1L << (LPAR - 20)) | (1L << (BOOLEAN - 20)) | (1L << (CHARACTER - 20)) | (1L << (TEXT - 20)) | (1L << (INTEGER - 20)) | (1L << (DECIMAL - 20)) | (1L << (DATE - 20)) | (1L << (TIME - 20)) | (1L << (DATETIME - 20)) | (1L << (PERIOD - 20)) | (1L << (VERSION - 20)) | (1L << (UUID - 20)) | (1L << (HTML - 20)))) != 0) || ((((_la - 122)) & ~0x3f) == 0 && ((1L << (_la - 122)) & ((1L << (NONE - 122)) | (1L << (NULL - 122)) | (1L << (READ - 122)) | (1L << (SELF - 122)) | (1L << (TEST - 122)) | (1L << (THIS - 122)) | (1L << (WRITE - 122)) | (1L << (BOOLEAN_LITERAL - 122)) | (1L << (CHAR_LITERAL - 122)) | (1L << (SYMBOL_IDENTIFIER - 122)) | (1L << (TYPE_IDENTIFIER - 122)) | (1L << (VARIABLE_IDENTIFIER - 122)) | (1L << (DOLLAR_IDENTIFIER - 122)) | (1L << (TEXT_LITERAL - 122)) | (1L << (INTEGER_LITERAL - 122)) | (1L << (DECIMAL_LITERAL - 122)))) != 0)) {
 				{
 				setState(2115);
 				((Python_method_expressionContext)_localctx).args = python_argument_list();
@@ -16884,6 +16887,7 @@ public class MParser extends AbstractParser {
 			case PERIOD:
 			case VERSION:
 			case UUID:
+			case HTML:
 			case NONE:
 			case NULL:
 			case READ:
@@ -17097,6 +17101,7 @@ public class MParser extends AbstractParser {
 		public TerminalNode PERIOD() { return getToken(MParser.PERIOD, 0); }
 		public TerminalNode VERSION() { return getToken(MParser.VERSION, 0); }
 		public TerminalNode UUID() { return getToken(MParser.UUID, 0); }
+		public TerminalNode HTML() { return getToken(MParser.HTML, 0); }
 		public TerminalNode READ() { return getToken(MParser.READ, 0); }
 		public TerminalNode WRITE() { return getToken(MParser.WRITE, 0); }
 		public TerminalNode TEST() { return getToken(MParser.TEST, 0); }
@@ -17126,7 +17131,7 @@ public class MParser extends AbstractParser {
 			{
 			setState(2179);
 			_la = _input.LA(1);
-			if ( !(((((_la - 50)) & ~0x3f) == 0 && ((1L << (_la - 50)) & ((1L << (BOOLEAN - 50)) | (1L << (CHARACTER - 50)) | (1L << (TEXT - 50)) | (1L << (INTEGER - 50)) | (1L << (DECIMAL - 50)) | (1L << (DATE - 50)) | (1L << (TIME - 50)) | (1L << (DATETIME - 50)) | (1L << (PERIOD - 50)) | (1L << (VERSION - 50)) | (1L << (UUID - 50)))) != 0) || ((((_la - 122)) & ~0x3f) == 0 && ((1L << (_la - 122)) & ((1L << (NONE - 122)) | (1L << (NULL - 122)) | (1L << (READ - 122)) | (1L << (TEST - 122)) | (1L << (THIS - 122)) | (1L << (WRITE - 122)) | (1L << (SYMBOL_IDENTIFIER - 122)) | (1L << (TYPE_IDENTIFIER - 122)) | (1L << (VARIABLE_IDENTIFIER - 122)))) != 0)) ) {
+			if ( !(((((_la - 50)) & ~0x3f) == 0 && ((1L << (_la - 50)) & ((1L << (BOOLEAN - 50)) | (1L << (CHARACTER - 50)) | (1L << (TEXT - 50)) | (1L << (INTEGER - 50)) | (1L << (DECIMAL - 50)) | (1L << (DATE - 50)) | (1L << (TIME - 50)) | (1L << (DATETIME - 50)) | (1L << (PERIOD - 50)) | (1L << (VERSION - 50)) | (1L << (UUID - 50)) | (1L << (HTML - 50)))) != 0) || ((((_la - 122)) & ~0x3f) == 0 && ((1L << (_la - 122)) & ((1L << (NONE - 122)) | (1L << (NULL - 122)) | (1L << (READ - 122)) | (1L << (TEST - 122)) | (1L << (THIS - 122)) | (1L << (WRITE - 122)) | (1L << (SYMBOL_IDENTIFIER - 122)) | (1L << (TYPE_IDENTIFIER - 122)) | (1L << (VARIABLE_IDENTIFIER - 122)))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -17223,6 +17228,7 @@ public class MParser extends AbstractParser {
 			case PERIOD:
 			case VERSION:
 			case UUID:
+			case HTML:
 			case NONE:
 			case NULL:
 			case READ:
@@ -17660,7 +17666,7 @@ public class MParser extends AbstractParser {
 			setState(2220);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if (((((_la - 20)) & ~0x3f) == 0 && ((1L << (_la - 20)) & ((1L << (LPAR - 20)) | (1L << (BOOLEAN - 20)) | (1L << (CHARACTER - 20)) | (1L << (TEXT - 20)) | (1L << (INTEGER - 20)) | (1L << (DECIMAL - 20)) | (1L << (DATE - 20)) | (1L << (TIME - 20)) | (1L << (DATETIME - 20)) | (1L << (PERIOD - 20)) | (1L << (VERSION - 20)) | (1L << (UUID - 20)))) != 0) || ((((_la - 122)) & ~0x3f) == 0 && ((1L << (_la - 122)) & ((1L << (NONE - 122)) | (1L << (NULL - 122)) | (1L << (READ - 122)) | (1L << (SELF - 122)) | (1L << (TEST - 122)) | (1L << (THIS - 122)) | (1L << (WRITE - 122)) | (1L << (BOOLEAN_LITERAL - 122)) | (1L << (CHAR_LITERAL - 122)) | (1L << (SYMBOL_IDENTIFIER - 122)) | (1L << (TYPE_IDENTIFIER - 122)) | (1L << (VARIABLE_IDENTIFIER - 122)) | (1L << (NATIVE_IDENTIFIER - 122)) | (1L << (DOLLAR_IDENTIFIER - 122)) | (1L << (TEXT_LITERAL - 122)) | (1L << (INTEGER_LITERAL - 122)) | (1L << (DECIMAL_LITERAL - 122)))) != 0)) {
+			if (((((_la - 20)) & ~0x3f) == 0 && ((1L << (_la - 20)) & ((1L << (LPAR - 20)) | (1L << (BOOLEAN - 20)) | (1L << (CHARACTER - 20)) | (1L << (TEXT - 20)) | (1L << (INTEGER - 20)) | (1L << (DECIMAL - 20)) | (1L << (DATE - 20)) | (1L << (TIME - 20)) | (1L << (DATETIME - 20)) | (1L << (PERIOD - 20)) | (1L << (VERSION - 20)) | (1L << (UUID - 20)) | (1L << (HTML - 20)))) != 0) || ((((_la - 122)) & ~0x3f) == 0 && ((1L << (_la - 122)) & ((1L << (NONE - 122)) | (1L << (NULL - 122)) | (1L << (READ - 122)) | (1L << (SELF - 122)) | (1L << (TEST - 122)) | (1L << (THIS - 122)) | (1L << (WRITE - 122)) | (1L << (BOOLEAN_LITERAL - 122)) | (1L << (CHAR_LITERAL - 122)) | (1L << (SYMBOL_IDENTIFIER - 122)) | (1L << (TYPE_IDENTIFIER - 122)) | (1L << (VARIABLE_IDENTIFIER - 122)) | (1L << (NATIVE_IDENTIFIER - 122)) | (1L << (DOLLAR_IDENTIFIER - 122)) | (1L << (TEXT_LITERAL - 122)) | (1L << (INTEGER_LITERAL - 122)) | (1L << (DECIMAL_LITERAL - 122)))) != 0)) {
 				{
 				setState(2219);
 				((Java_method_expressionContext)_localctx).args = java_arguments(0);
@@ -18252,6 +18258,7 @@ public class MParser extends AbstractParser {
 		public TerminalNode PERIOD() { return getToken(MParser.PERIOD, 0); }
 		public TerminalNode VERSION() { return getToken(MParser.VERSION, 0); }
 		public TerminalNode UUID() { return getToken(MParser.UUID, 0); }
+		public TerminalNode HTML() { return getToken(MParser.HTML, 0); }
 		public TerminalNode READ() { return getToken(MParser.READ, 0); }
 		public TerminalNode WRITE() { return getToken(MParser.WRITE, 0); }
 		public TerminalNode TEST() { return getToken(MParser.TEST, 0); }
@@ -18281,7 +18288,7 @@ public class MParser extends AbstractParser {
 			{
 			setState(2271);
 			_la = _input.LA(1);
-			if ( !(((((_la - 50)) & ~0x3f) == 0 && ((1L << (_la - 50)) & ((1L << (BOOLEAN - 50)) | (1L << (CHARACTER - 50)) | (1L << (TEXT - 50)) | (1L << (INTEGER - 50)) | (1L << (DECIMAL - 50)) | (1L << (DATE - 50)) | (1L << (TIME - 50)) | (1L << (DATETIME - 50)) | (1L << (PERIOD - 50)) | (1L << (VERSION - 50)) | (1L << (UUID - 50)))) != 0) || ((((_la - 122)) & ~0x3f) == 0 && ((1L << (_la - 122)) & ((1L << (NONE - 122)) | (1L << (NULL - 122)) | (1L << (READ - 122)) | (1L << (SELF - 122)) | (1L << (TEST - 122)) | (1L << (WRITE - 122)) | (1L << (SYMBOL_IDENTIFIER - 122)) | (1L << (TYPE_IDENTIFIER - 122)) | (1L << (VARIABLE_IDENTIFIER - 122)) | (1L << (NATIVE_IDENTIFIER - 122)) | (1L << (DOLLAR_IDENTIFIER - 122)))) != 0)) ) {
+			if ( !(((((_la - 50)) & ~0x3f) == 0 && ((1L << (_la - 50)) & ((1L << (BOOLEAN - 50)) | (1L << (CHARACTER - 50)) | (1L << (TEXT - 50)) | (1L << (INTEGER - 50)) | (1L << (DECIMAL - 50)) | (1L << (DATE - 50)) | (1L << (TIME - 50)) | (1L << (DATETIME - 50)) | (1L << (PERIOD - 50)) | (1L << (VERSION - 50)) | (1L << (UUID - 50)) | (1L << (HTML - 50)))) != 0) || ((((_la - 122)) & ~0x3f) == 0 && ((1L << (_la - 122)) & ((1L << (NONE - 122)) | (1L << (NULL - 122)) | (1L << (READ - 122)) | (1L << (SELF - 122)) | (1L << (TEST - 122)) | (1L << (WRITE - 122)) | (1L << (SYMBOL_IDENTIFIER - 122)) | (1L << (TYPE_IDENTIFIER - 122)) | (1L << (VARIABLE_IDENTIFIER - 122)) | (1L << (NATIVE_IDENTIFIER - 122)) | (1L << (DOLLAR_IDENTIFIER - 122)))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -18378,6 +18385,7 @@ public class MParser extends AbstractParser {
 			case PERIOD:
 			case VERSION:
 			case UUID:
+			case HTML:
 			case NONE:
 			case NULL:
 			case READ:
@@ -18814,7 +18822,7 @@ public class MParser extends AbstractParser {
 			setState(2312);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if (((((_la - 20)) & ~0x3f) == 0 && ((1L << (_la - 20)) & ((1L << (LPAR - 20)) | (1L << (BOOLEAN - 20)) | (1L << (CHARACTER - 20)) | (1L << (TEXT - 20)) | (1L << (INTEGER - 20)) | (1L << (DECIMAL - 20)) | (1L << (DATE - 20)) | (1L << (TIME - 20)) | (1L << (DATETIME - 20)) | (1L << (PERIOD - 20)) | (1L << (VERSION - 20)) | (1L << (UUID - 20)))) != 0) || ((((_la - 122)) & ~0x3f) == 0 && ((1L << (_la - 122)) & ((1L << (NONE - 122)) | (1L << (NULL - 122)) | (1L << (READ - 122)) | (1L << (SELF - 122)) | (1L << (TEST - 122)) | (1L << (THIS - 122)) | (1L << (WRITE - 122)) | (1L << (BOOLEAN_LITERAL - 122)) | (1L << (CHAR_LITERAL - 122)) | (1L << (SYMBOL_IDENTIFIER - 122)) | (1L << (TYPE_IDENTIFIER - 122)) | (1L << (VARIABLE_IDENTIFIER - 122)) | (1L << (DOLLAR_IDENTIFIER - 122)) | (1L << (TEXT_LITERAL - 122)) | (1L << (INTEGER_LITERAL - 122)) | (1L << (DECIMAL_LITERAL - 122)))) != 0)) {
+			if (((((_la - 20)) & ~0x3f) == 0 && ((1L << (_la - 20)) & ((1L << (LPAR - 20)) | (1L << (BOOLEAN - 20)) | (1L << (CHARACTER - 20)) | (1L << (TEXT - 20)) | (1L << (INTEGER - 20)) | (1L << (DECIMAL - 20)) | (1L << (DATE - 20)) | (1L << (TIME - 20)) | (1L << (DATETIME - 20)) | (1L << (PERIOD - 20)) | (1L << (VERSION - 20)) | (1L << (UUID - 20)) | (1L << (HTML - 20)))) != 0) || ((((_la - 122)) & ~0x3f) == 0 && ((1L << (_la - 122)) & ((1L << (NONE - 122)) | (1L << (NULL - 122)) | (1L << (READ - 122)) | (1L << (SELF - 122)) | (1L << (TEST - 122)) | (1L << (THIS - 122)) | (1L << (WRITE - 122)) | (1L << (BOOLEAN_LITERAL - 122)) | (1L << (CHAR_LITERAL - 122)) | (1L << (SYMBOL_IDENTIFIER - 122)) | (1L << (TYPE_IDENTIFIER - 122)) | (1L << (VARIABLE_IDENTIFIER - 122)) | (1L << (DOLLAR_IDENTIFIER - 122)) | (1L << (TEXT_LITERAL - 122)) | (1L << (INTEGER_LITERAL - 122)) | (1L << (DECIMAL_LITERAL - 122)))) != 0)) {
 				{
 				setState(2311);
 				((Csharp_method_expressionContext)_localctx).args = csharp_arguments(0);
@@ -19135,6 +19143,7 @@ public class MParser extends AbstractParser {
 			case PERIOD:
 			case VERSION:
 			case UUID:
+			case HTML:
 			case NONE:
 			case NULL:
 			case READ:
@@ -19343,6 +19352,7 @@ public class MParser extends AbstractParser {
 		public TerminalNode PERIOD() { return getToken(MParser.PERIOD, 0); }
 		public TerminalNode VERSION() { return getToken(MParser.VERSION, 0); }
 		public TerminalNode UUID() { return getToken(MParser.UUID, 0); }
+		public TerminalNode HTML() { return getToken(MParser.HTML, 0); }
 		public TerminalNode READ() { return getToken(MParser.READ, 0); }
 		public TerminalNode WRITE() { return getToken(MParser.WRITE, 0); }
 		public TerminalNode TEST() { return getToken(MParser.TEST, 0); }
@@ -19372,7 +19382,7 @@ public class MParser extends AbstractParser {
 			{
 			setState(2355);
 			_la = _input.LA(1);
-			if ( !(((((_la - 50)) & ~0x3f) == 0 && ((1L << (_la - 50)) & ((1L << (BOOLEAN - 50)) | (1L << (CHARACTER - 50)) | (1L << (TEXT - 50)) | (1L << (INTEGER - 50)) | (1L << (DECIMAL - 50)) | (1L << (DATE - 50)) | (1L << (TIME - 50)) | (1L << (DATETIME - 50)) | (1L << (PERIOD - 50)) | (1L << (VERSION - 50)) | (1L << (UUID - 50)))) != 0) || ((((_la - 122)) & ~0x3f) == 0 && ((1L << (_la - 122)) & ((1L << (NONE - 122)) | (1L << (NULL - 122)) | (1L << (READ - 122)) | (1L << (SELF - 122)) | (1L << (TEST - 122)) | (1L << (WRITE - 122)) | (1L << (SYMBOL_IDENTIFIER - 122)) | (1L << (TYPE_IDENTIFIER - 122)) | (1L << (VARIABLE_IDENTIFIER - 122)))) != 0)) ) {
+			if ( !(((((_la - 50)) & ~0x3f) == 0 && ((1L << (_la - 50)) & ((1L << (BOOLEAN - 50)) | (1L << (CHARACTER - 50)) | (1L << (TEXT - 50)) | (1L << (INTEGER - 50)) | (1L << (DECIMAL - 50)) | (1L << (DATE - 50)) | (1L << (TIME - 50)) | (1L << (DATETIME - 50)) | (1L << (PERIOD - 50)) | (1L << (VERSION - 50)) | (1L << (UUID - 50)) | (1L << (HTML - 50)))) != 0) || ((((_la - 122)) & ~0x3f) == 0 && ((1L << (_la - 122)) & ((1L << (NONE - 122)) | (1L << (NULL - 122)) | (1L << (READ - 122)) | (1L << (SELF - 122)) | (1L << (TEST - 122)) | (1L << (WRITE - 122)) | (1L << (SYMBOL_IDENTIFIER - 122)) | (1L << (TYPE_IDENTIFIER - 122)) | (1L << (VARIABLE_IDENTIFIER - 122)))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -21450,18 +21460,18 @@ public class MParser extends AbstractParser {
 		"\u01aa\u01ac\u01ae\u01b0\u01b2\u01b4\u01b6\u01b8\u01ba\u01bc\u01be\u01c0"+
 		"\u01c2\u01c4\u01c6\u01c8\u01ca\u01cc\2\16\3\2VW\3\2\"#\4\2\u0093\u0093"+
 		"\u00a8\u00a8\4\2\u008f\u008f\u0097\u0097\4\2MM^^\4\2\13\20\64\u00a1\4"+
-		"\2\'\'yy\f\2\64=CC||\177\177\u0089\u0089\u008f\u008f\u0096\u0096\u00a1"+
-		"\u00a1\u00a6\u00a8\u00aa\u00aa\n\2\64=CC||\177\177\u0089\u0089\u0096\u0097"+
-		"\u00a1\u00a1\u00a6\u00a8\13\2\64=CC||\177\177\u0089\u0089\u008f\u008f"+
-		"\u0096\u0096\u00a1\u00a1\u00a6\u00aa\13\2\64=CC||\177\177\u0089\u0089"+
-		"\u008f\u008f\u0096\u0096\u00a1\u00a1\u00a6\u00a8\5\2\32\33((**\2\u0a25"+
-		"\2\u01ce\3\2\2\2\4\u01df\3\2\2\2\6\u01e9\3\2\2\2\b\u01ed\3\2\2\2\n\u01f5"+
-		"\3\2\2\2\f\u0211\3\2\2\2\16\u0218\3\2\2\2\20\u0228\3\2\2\2\22\u023e\3"+
-		"\2\2\2\24\u024b\3\2\2\2\26\u024d\3\2\2\2\30\u025c\3\2\2\2\32\u0266\3\2"+
-		"\2\2\34\u0273\3\2\2\2\36\u027d\3\2\2\2 \u028b\3\2\2\2\"\u02a0\3\2\2\2"+
-		"$\u02b4\3\2\2\2&\u02bc\3\2\2\2(\u02c8\3\2\2\2*\u02d4\3\2\2\2,\u02e4\3"+
-		"\2\2\2.\u02f7\3\2\2\2\60\u030a\3\2\2\2\62\u030c\3\2\2\2\64\u032c\3\2\2"+
-		"\2\66\u032e\3\2\2\28\u0346\3\2\2\2:\u0348\3\2\2\2<\u0354\3\2\2\2>\u0356"+
+		"\2\'\'yy\r\2\64=CCFF||\177\177\u0089\u0089\u008f\u008f\u0096\u0096\u00a1"+
+		"\u00a1\u00a6\u00a8\u00aa\u00aa\13\2\64=CCFF||\177\177\u0089\u0089\u0096"+
+		"\u0097\u00a1\u00a1\u00a6\u00a8\f\2\64=CCFF||\177\177\u0089\u0089\u008f"+
+		"\u008f\u0096\u0096\u00a1\u00a1\u00a6\u00aa\f\2\64=CCFF||\177\177\u0089"+
+		"\u0089\u008f\u008f\u0096\u0096\u00a1\u00a1\u00a6\u00a8\5\2\32\33((**\2"+
+		"\u0a25\2\u01ce\3\2\2\2\4\u01df\3\2\2\2\6\u01e9\3\2\2\2\b\u01ed\3\2\2\2"+
+		"\n\u01f5\3\2\2\2\f\u0211\3\2\2\2\16\u0218\3\2\2\2\20\u0228\3\2\2\2\22"+
+		"\u023e\3\2\2\2\24\u024b\3\2\2\2\26\u024d\3\2\2\2\30\u025c\3\2\2\2\32\u0266"+
+		"\3\2\2\2\34\u0273\3\2\2\2\36\u027d\3\2\2\2 \u028b\3\2\2\2\"\u02a0\3\2"+
+		"\2\2$\u02b4\3\2\2\2&\u02bc\3\2\2\2(\u02c8\3\2\2\2*\u02d4\3\2\2\2,\u02e4"+
+		"\3\2\2\2.\u02f7\3\2\2\2\60\u030a\3\2\2\2\62\u030c\3\2\2\2\64\u032c\3\2"+
+		"\2\2\66\u032e\3\2\2\28\u0346\3\2\2\2:\u0348\3\2\2\2<\u0354\3\2\2\2>\u0356"+
 		"\3\2\2\2@\u0366\3\2\2\2B\u0368\3\2\2\2D\u036f\3\2\2\2F\u0376\3\2\2\2H"+
 		"\u0396\3\2\2\2J\u0398\3\2\2\2L\u03a5\3\2\2\2N\u03ae\3\2\2\2P\u03b5\3\2"+
 		"\2\2R\u03c9\3\2\2\2T\u03e1\3\2\2\2V\u03e4\3\2\2\2X\u0415\3\2\2\2Z\u0417"+
