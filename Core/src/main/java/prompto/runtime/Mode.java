@@ -5,5 +5,15 @@ public enum Mode {
 	VALIDATION,
 	INTEGRATION,
 	DEVELOPMENT,
-	UNITTEST
+	UNITTEST;
+
+	static Mode instance = PRODUCTION;
+	
+	public static void set(Mode mode) {
+		instance = mode!=null ? mode : PRODUCTION;
+	}
+	
+	public static Mode get() {
+		return instance;
+	}
 }

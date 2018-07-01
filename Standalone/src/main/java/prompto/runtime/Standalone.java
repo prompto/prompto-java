@@ -1,9 +1,7 @@
 package prompto.runtime;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -22,6 +20,7 @@ import prompto.config.IRuntimeConfiguration;
 import prompto.config.IStandaloneConfiguration;
 import prompto.config.IStoreConfiguration;
 import prompto.config.StandaloneConfiguration;
+import prompto.config.TempDirectories;
 import prompto.config.YamlConfigurationReader;
 import prompto.debug.DebugEventClient;
 import prompto.debug.DebugRequestServer;
@@ -40,7 +39,6 @@ import prompto.store.AttributeInfo;
 import prompto.store.IDataStore;
 import prompto.store.IStore;
 import prompto.store.IStoreFactory;
-import prompto.transpiler.Transpiler;
 import prompto.type.DictType;
 import prompto.type.IType;
 import prompto.type.ListType;
@@ -103,6 +101,8 @@ public abstract class Standalone {
 
 
 	public static void initialize(IRuntimeConfiguration config) throws Throwable {
+		Mode.set(config.getRuntimeMode());
+		TempDirectories.create();
 		ICodeStore codeStore = initializeCodeStore(config);
 		IStore dataStore = initializeDataStore(config);
 		synchronizeSchema(codeStore, dataStore);
@@ -230,12 +230,9 @@ public abstract class Standalone {
 	}
 
 	public static ICodeStore bootstrapCodeStore(IStore store, IRuntimeConfiguration config) throws Exception {
-		boolean unitTestMode = config.getRuntimeMode()==Mode.UNITTEST;
-		logger.info(()->"Initializing class loader " + ( unitTestMode? "in test mode" : "") + "...");
+		logger.info(()->"Initializing class loader " + ( Mode.get()==Mode.UNITTEST ? "in test mode" : "") + "...");
 		globalContext = Context.newGlobalContext();
-		File promptoDir = Files.createTempDirectory("prompto_").toFile();
-		classLoader = PromptoClassLoader.initialize(globalContext, promptoDir, unitTestMode);
-		Transpiler.initialize(promptoDir);
+		classLoader = PromptoClassLoader.initialize(globalContext);
 		JavaIdentifierExpression.registerAddOns(config.getAddOnURLs(), classLoader);
 		logger.info(()->"Class loader initialized.");
 		logger.info(()->"Bootstrapping prompto...");

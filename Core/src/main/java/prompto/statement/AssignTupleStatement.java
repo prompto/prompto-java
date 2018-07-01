@@ -148,7 +148,7 @@ public class AssignTupleStatement extends SimpleStatement {
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-		if(transpiler.supportsDestructuring()) {
+		if(transpiler.getEngine().supportsDestructuring()) {
 			transpiler.append("var [");
 		    this.names.forEach(name -> {
 		        transpiler.append(name.toString()).append(", ");

@@ -1,6 +1,5 @@
 package prompto.transpiler;
 
-import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,28 +17,6 @@ import prompto.utils.ResourceUtils;
 public class Transpiler {
 
 	static final Logger logger = new Logger();
-
-	static File transpiledDir;
-	
-	public static void initialize(File promptoDir) {
-		Transpiler.transpiledDir = makeTranspiledDir(promptoDir);
-	}
-	
-	public static File getTranspiledDir() {
-		return transpiledDir;
-	}
-
-	private static File makeTranspiledDir(File promptoDir) {
-		File jsDir = new File(promptoDir, "js");
-		File transpiledDir = new File(jsDir, "transpiled");
-		if(!transpiledDir.exists()) {
-			logger.debug(()->"Storing transpiled files in " + transpiledDir.getAbsolutePath());
-			transpiledDir.mkdirs();
-			if(!transpiledDir.exists())
-				throw new RuntimeException("Could not create prompto transpiled dir at " + transpiledDir.getAbsolutePath());
-		}
-		return transpiledDir;
-	}
 
 	IJSEngine engine;
 	Context context;
@@ -66,6 +43,10 @@ public class Transpiler {
 		this.require("Utils");
 		engine.getPolyfills().forEach(poly->this.require(poly));
  	}
+	
+	public IJSEngine getEngine() {
+		return engine;
+	}
 	
 	public Context getContext() {
 		return context;
@@ -266,14 +247,6 @@ public class Transpiler {
 		} catch(Throwable t) {
 			return null;
 		}
-	}
-
-	public boolean supportsDestructuring() {
-		return engine.supportsDestructuring();
-	}
-
-	public boolean supportsClass() {
-		return engine.supportsClass();
 	}
 
 }

@@ -1,18 +1,20 @@
 package prompto.utils;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
 
+import prompto.config.TempDirectories;
 import prompto.declaration.DeclarationList;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.TestMethodDeclaration;
@@ -21,8 +23,8 @@ import prompto.grammar.Identifier;
 import prompto.memstore.MemStore;
 import prompto.parser.Dialect;
 import prompto.parser.ECleverParser;
-import prompto.parser.OCleverParser;
 import prompto.parser.MCleverParser;
+import prompto.parser.OCleverParser;
 import prompto.runtime.Context;
 import prompto.runtime.Executor;
 import prompto.runtime.Interpreter;
@@ -104,12 +106,12 @@ public abstract class BaseParserTest extends BaseTest {
 	protected boolean executeResource(String resourceName, boolean reThrow) throws PromptoError {
 		try {
 			loadResource(resourceName);
-			File root = Files.createTempDirectory("prompto_").toFile();
+			TempDirectories.create();
 			if(context.hasTests()) {
-				Executor.executeTests(context, root);
+				Executor.executeTests(context);
 				return true;
 			} else {
-				Executor.executeMainNoArgs(context, root);
+				Executor.executeMainNoArgs(context);
 				return false;
 			}
 		} catch(Exception e) {
@@ -143,12 +145,12 @@ public abstract class BaseParserTest extends BaseTest {
 	protected boolean executeString(String code, boolean reThrow) throws PromptoError {
 		try {
 			loadString(code);
-			File root = Files.createTempDirectory("prompto_").toFile();
+			TempDirectories.create();
 			if(context.hasTests()) {
-				Executor.executeTests(context, root);
+				Executor.executeTests(context);
 				return true;
 			} else {
-				Executor.executeMainNoArgs(context, root);
+				Executor.executeMainNoArgs(context);
 				return false;
 			}
 		} catch(Exception e) {

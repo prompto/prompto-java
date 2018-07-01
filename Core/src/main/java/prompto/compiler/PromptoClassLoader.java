@@ -6,7 +6,9 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Paths;
 
+import prompto.config.TempDirectories;
 import prompto.runtime.Context;
+import prompto.runtime.Mode;
 import prompto.utils.Logger;
 
 /* a class loader which is able to create and store classes for prompto objects */
@@ -18,21 +20,10 @@ public class PromptoClassLoader extends URLClassLoader {
 		return PromptoClassLoader.class.getClassLoader();
 	}
 
-	private static File makeClassesDir(File promptoDir) {
-		File javaDir = new File(promptoDir, "java");
-		File classesDir = new File(javaDir, "classes");
-		if(!classesDir.exists()) {
-			logger.debug(()->"Storing compiled classes in " + classesDir.getAbsolutePath());
-			classesDir.mkdirs();
-			if(!classesDir.exists())
-				throw new RuntimeException("Could not create prompto class dir at " + classesDir.getAbsolutePath());
-		}
-		return classesDir;
-	}
-
-	private static URL[] makeClassDirURLs(File classDir) {
+	private static URL[] makeClassesDirURLs() {
+		File classesDir = TempDirectories.getJavaClassesDir();
 		try {
-			URL[] urls = { classDir.toURI().toURL() };
+			URL[] urls = { classesDir.toURI().toURL() };
 			return urls;
 		} catch (MalformedURLException e) {
 			throw new RuntimeException(e);
@@ -48,7 +39,11 @@ public class PromptoClassLoader extends URLClassLoader {
 		return instance!=null ? instance : testInstance.get();
 	}
 	
-	public static PromptoClassLoader initialize(Context context, File promptoDir, boolean testMode) {
+	public static PromptoClassLoader initialize(Context context) {
+		return initialize(context, Mode.get()==Mode.UNITTEST);
+	}
+	
+	public static PromptoClassLoader initialize(Context context, boolean testMode) {
 		synchronized(PromptoClassLoader.class) {
 			if(PromptoClassLoader.testMode==null)
 				PromptoClassLoader.testMode = testMode;
@@ -58,12 +53,12 @@ public class PromptoClassLoader extends URLClassLoader {
 			if(testMode) {
 				if(testInstance==null)
 					testInstance = new ThreadLocal<>();
-				testInstance.set(new PromptoClassLoader(context, promptoDir));
+				testInstance.set(new PromptoClassLoader(context));
 				return testInstance.get();
 			} else {
 				if(instance!=null)
 					throw new UnsupportedOperationException("Can only have one PromptoClassLoader!");
-				instance = new PromptoClassLoader(context, promptoDir);
+				instance = new PromptoClassLoader(context);
 				return instance;
 			}
 		}
@@ -82,8 +77,8 @@ public class PromptoClassLoader extends URLClassLoader {
 	
 	Context context;
 	
-	private PromptoClassLoader(Context context, File promptoDir) {
-		super(makeClassDirURLs(makeClassesDir(promptoDir)), getParentClassLoader());
+	private PromptoClassLoader(Context context) {
+		super(makeClassesDirURLs(), getParentClassLoader());
 		this.context = context;
 	}
 	

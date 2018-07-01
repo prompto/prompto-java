@@ -20,16 +20,16 @@ import prompto.utils.CmdLineParser;
 
 public abstract class Executor {
 
-	public static void executeTests(Context context, File promptoDir) {
+	public static void executeTests(Context context) {
 		Collection<TestMethodDeclaration> tests = context.getTests();
 		for(TestMethodDeclaration test : tests) {
 			Context local = context.newLocalContext();
-			executeTest(local, promptoDir, test.getName(), true);
+			executeTest(local, test.getName(), true);
 		}
 	}
 
-	private static void executeTest(Context context, File promptoDir, String testName, boolean testMode) {
-		try(PromptoClassLoader loader = PromptoClassLoader.initialize(context, promptoDir, testMode)) {
+	private static void executeTest(Context context, String testName, boolean testMode) {
+		try(PromptoClassLoader loader = PromptoClassLoader.initialize(context, testMode)) {
 			Type classType = CompilerUtils.getTestType(testName);
 			Class<?> klass = loader.loadClass(classType.getTypeName());
 			Method method = klass.getDeclaredMethod("run");
@@ -75,7 +75,7 @@ public abstract class Executor {
 		boolean testMode = options.containsKey("testMode");
 		Class<?>[] argTypes = cmdLineArgs==null ? new Class<?>[0] : new Class<?>[] { PromptoDict.class };
 		Object[] args = cmdLineArgs==null ? new Object[0] : new Object[] { options };
-		try(PromptoClassLoader loader = PromptoClassLoader.initialize(context, promptoDir, testMode)) {
+		try(PromptoClassLoader loader = PromptoClassLoader.initialize(context, testMode)) {
 			executeGlobalMethod(loader, methodName, argTypes, args);
 		} catch(ClassNotFoundException | NoSuchMethodException e) {
 			throw new SyntaxError("Could not find a compatible \"" + methodName + "\" method.");

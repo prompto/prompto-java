@@ -378,7 +378,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 	}
 
 	private void transpileUserError(Transpiler transpiler) {
-		if(transpiler.supportsClass())
+		if(transpiler.getEngine().supportsClass())
 			transpileUserErrorClass(transpiler);
 		else
 			transpileUserErrorPrototype(transpiler);
