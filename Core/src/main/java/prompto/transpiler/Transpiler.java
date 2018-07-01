@@ -1,5 +1,7 @@
 package prompto.transpiler;
 
+import java.io.File;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -10,9 +12,34 @@ import java.util.stream.Collectors;
 import prompto.declaration.CategoryDeclaration;
 import prompto.runtime.Context;
 import prompto.type.CategoryType;
+import prompto.utils.Logger;
 import prompto.utils.ResourceUtils;
 
 public class Transpiler {
+
+	static final Logger logger = new Logger();
+
+	static File transpiledDir;
+	
+	public static void initialize(File promptoDir) {
+		Transpiler.transpiledDir = makeTranspiledDir(promptoDir);
+	}
+	
+	public static File getTranspiledDir() {
+		return transpiledDir;
+	}
+
+	private static File makeTranspiledDir(File promptoDir) {
+		File jsDir = new File(promptoDir, "js");
+		File transpiledDir = new File(jsDir, "transpiled");
+		if(!transpiledDir.exists()) {
+			logger.debug(()->"Storing transpiled files in " + transpiledDir.getAbsolutePath());
+			transpiledDir.mkdirs();
+			if(!transpiledDir.exists())
+				throw new RuntimeException("Could not create prompto transpiled dir at " + transpiledDir.getAbsolutePath());
+		}
+		return transpiledDir;
+	}
 
 	IJSEngine engine;
 	Context context;
@@ -183,8 +210,17 @@ public class Transpiler {
 	public String toString() {
 	    this.appendAllRequired();
 	    this.appendAllDeclared();
+	    this.flush();
 	    return this.lines.stream().collect(Collectors.joining("\n"));
 	}
+	
+	public void print(PrintWriter printer) {
+	    this.appendAllRequired();
+	    this.appendAllDeclared();
+	    this.flush();
+	    this.lines.forEach(printer::println);
+	}
+
 
 	private void appendAllDeclared() {
 		List<ITranspilable> list = new ArrayList<>();
@@ -239,9 +275,5 @@ public class Transpiler {
 	public boolean supportsClass() {
 		return engine.supportsClass();
 	}
-
-
-
-
 
 }

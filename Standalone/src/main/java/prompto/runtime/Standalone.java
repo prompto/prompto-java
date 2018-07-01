@@ -40,6 +40,7 @@ import prompto.store.AttributeInfo;
 import prompto.store.IDataStore;
 import prompto.store.IStore;
 import prompto.store.IStoreFactory;
+import prompto.transpiler.Transpiler;
 import prompto.type.DictType;
 import prompto.type.IType;
 import prompto.type.ListType;
@@ -234,6 +235,7 @@ public abstract class Standalone {
 		globalContext = Context.newGlobalContext();
 		File promptoDir = Files.createTempDirectory("prompto_").toFile();
 		classLoader = PromptoClassLoader.initialize(globalContext, promptoDir, unitTestMode);
+		Transpiler.initialize(promptoDir);
 		JavaIdentifierExpression.registerAddOns(config.getAddOnURLs(), classLoader);
 		logger.info(()->"Class loader initialized.");
 		logger.info(()->"Bootstrapping prompto...");

@@ -7,7 +7,7 @@ import prompto.type.CategoryType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
 
-public class ConcreteWidgetDeclaration extends ConcreteCategoryDeclaration {
+public class ConcreteWidgetDeclaration extends ConcreteCategoryDeclaration implements IWidgetDeclaration {
 
 	public ConcreteWidgetDeclaration(Identifier name, Identifier derivedFrom, MethodDeclarationList methods) {
 		super(name, null, derivedFrom==null ? null: new IdentifierList(derivedFrom), methods);
@@ -37,6 +37,12 @@ public class ConcreteWidgetDeclaration extends ConcreteCategoryDeclaration {
 		// nothing to do
 	}
 
+	@Override
+	public void declare(Transpiler transpiler) {
+		registerMethods(transpiler.getContext());
+		super.declare(transpiler);
+	}
+	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 	    Identifier parent = this.derivedFrom!=null && this.derivedFrom.size()>0 ? this.derivedFrom.get(0) : null;
