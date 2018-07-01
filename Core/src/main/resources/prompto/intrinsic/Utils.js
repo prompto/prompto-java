@@ -31,9 +31,9 @@ if(!Object.values) {
 var ObjectToString = Object.prototype.toString;
 
 Object.prototype.toString = function() {
-	// use original toString on native objects
-	if(EventTarget && this instanceof EventTarget)
-		return ObjectToString.call(this);
+    // use original toString on native browser objects
+    if(typeof(EventTarget)!=='undefined' && this instanceof EventTarget)
+        return ObjectToString.call(this);
     var names = Object.getOwnPropertyNames(this).filter(function(name) { return typeof(this[name]) !== 'function'; }, this);
     var vals = names.map(function (name) {
         return name + ':' + this[name];
