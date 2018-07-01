@@ -10,7 +10,8 @@ public enum Mode {
 	static Mode instance = PRODUCTION;
 	
 	public static void set(Mode mode) {
-		instance = mode!=null ? mode : PRODUCTION;
+		if(mode!=null)
+			instance = mode;
 	}
 	
 	public static Mode get() {
