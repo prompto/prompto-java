@@ -257,6 +257,13 @@ public class DecimalType extends NativeType implements INumberType {
 	    right.transpile(transpiler);
 	}
 	
+	
+	@Override
+	public void declareModulo(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+		if (!(other instanceof IntegerType || other instanceof DecimalType))
+			super.declareModulo(transpiler, other, left, right);
+	}
+	
 	@Override
 	public void transpileModulo(Transpiler transpiler, IType other, IExpression left, IExpression right) {
 	    if(other == IntegerType.instance() || other == DecimalType.instance()) {

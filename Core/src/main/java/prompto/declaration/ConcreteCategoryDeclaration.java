@@ -966,7 +966,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		for(IMethodDeclaration method : methods) {
 			if(	method instanceof GetterMethodDeclaration || method instanceof SetterMethodDeclaration)
 				continue;
-			context = context.newInstanceContext(getType(context), false).newChildContext();
+			context = context.newMemberContext(getType(context));
 			method.registerArguments(context);
 			method.compile(context, false, classFile);
 		}
@@ -1005,7 +1005,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	    this.methods.stream().filter(decl -> {
 	        return !(decl instanceof SetterMethodDeclaration || decl instanceof GetterMethodDeclaration);
 	    }).forEach(method -> {
-	    	Transpiler t = transpiler.newMemberTranspiler();
+			Transpiler t = transpiler.newMemberTranspiler(getType(transpiler.getContext()));
 	        method.declare(t);
 	        t.flush();
 	    });
@@ -1065,24 +1065,28 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	    names.forEach(name -> this.transpileGetterSetter(transpiler, name));
 	}
 
-	private void transpileGetterSetter(Transpiler transpiler, Identifier name) {
-	    GetterMethodDeclaration getter = this.findGetter(transpiler.getContext(), name);
-	    SetterMethodDeclaration setter = this.findSetter(transpiler.getContext(), name);
-	    transpiler.append("Object.defineProperty(").append(this.getName()).append(".prototype, '").append(name.toString()).append("', {").indent();
+	private void transpileGetterSetter(Transpiler transpiler, Identifier id) {
+	    GetterMethodDeclaration getter = this.findGetter(transpiler.getContext(), id);
+	    SetterMethodDeclaration setter = this.findSetter(transpiler.getContext(), id);
+	    transpiler.append("Object.defineProperty(").append(this.getName()).append(".prototype, '").append(id.toString()).append("', {").indent();
 	    transpiler.append("get: function() {").indent();
-	    if(getter!=null)
-	        getter.transpile(transpiler);
-	    else
-	        transpiler.append("return this.$").append(name.toString()).append(";").newLine();
+	    if(getter!=null) {
+	    	Transpiler m = transpiler.newGetterTranspiler(getType(transpiler.getContext()), id.toString());
+	        getter.transpile(m);
+	        m.flush();
+	    } else
+	        transpiler.append("return this.$").append(id.toString()).append(";").newLine();
 	    transpiler.dedent().append("}");
 	    transpiler.append(",").newLine();
-	    transpiler.append("set: function(").append(name.toString()).append(") {").indent();
+	    transpiler.append("set: function(").append(id.toString()).append(") {").indent();
 	    if(setter!=null) {
-	        transpiler.append(name.toString()).append(" = (function(").append(name.toString()).append(") {").indent();
-	        setter.transpile(transpiler);
-	        transpiler.append(";").dedent().append("})(name);").newLine();
+	       	Transpiler m = transpiler.newSetterTranspiler(getType(transpiler.getContext()), id.toString());
+   	        m.append(id.toString()).append(" = (function(").append(id.toString()).append(") {").indent();
+	        setter.transpile(m);
+            m.append(";").dedent().append("})(name);").newLine();
+	        m.flush();
 	    }
-	    transpiler.append("this.$").append(name.toString()).append(" = ").append(name.toString()).append(";").newLine();
+	    transpiler.append("this.$").append(id.toString()).append(" = ").append(id.toString()).append(";").newLine();
 	    transpiler.dedent().append("}");
 	    transpiler.dedent().append("});").newLine();
 	}
@@ -1101,7 +1105,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	    this.methods.stream().filter(decl -> {
 	        return !(decl instanceof SetterMethodDeclaration || decl instanceof GetterMethodDeclaration);
 	    }).forEach(method -> {
-	    	Transpiler t = transpiler.newMemberTranspiler();
+	    	Transpiler t = transpiler.newMemberTranspiler(getType(transpiler.getContext()));
 	        method.transpile(t);
 	        t.flush();
 	    });

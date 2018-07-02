@@ -100,11 +100,9 @@ public class SetterMethodDeclaration extends ConcreteMethodDeclaration implement
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-	    transpiler = transpiler.newSetterTranspiler(this.getName());
 	    AttributeArgument arg = new AttributeArgument(this.getId());
 	    arg.register(transpiler.getContext());
 	    this.statements.transpile(transpiler);
-	    transpiler.flush();
 	    return false;
 	}
 

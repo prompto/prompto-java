@@ -84,20 +84,19 @@ public class Transpiler {
 
 
 
-	public Transpiler newMemberTranspiler() {
-		Context context = this.context.newLocalContext();
-	    context.setParentContext(this.context);
+	public Transpiler newMemberTranspiler(CategoryType categoryType) {
+		Context context = this.context.newMemberContext(categoryType);
 	    return this.copyTranspiler(context);
 	}
 
-	public Transpiler newGetterTranspiler(String name) {
-		Transpiler transpiler = this.newMemberTranspiler();
+	public Transpiler newGetterTranspiler(CategoryType categoryType, String name) {
+		Transpiler transpiler = this.newMemberTranspiler(categoryType);
 	    transpiler.getterName = name;
 	    return transpiler;
 	}
 
-	public Transpiler newSetterTranspiler(String name) {
-		Transpiler transpiler = this.newMemberTranspiler();
+	public Transpiler newSetterTranspiler(CategoryType categoryType, String name) {
+		Transpiler transpiler = this.newMemberTranspiler(categoryType);
 	    transpiler.setterName = name;
 	    return transpiler;
 	}

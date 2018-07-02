@@ -150,13 +150,12 @@ public class SingletonCategoryDeclaration extends ConcreteCategoryDeclaration {
 	    if(this.attributes!=null) {
 	        this.attributes.forEach(attr -> transpiler.append(this.getName()).append(".instance.").append(attr.toString()).append(" = null;").newLine());
 	    }
-	    Transpiler instance = transpiler.newInstanceTranspiler(new CategoryType(this.getId()));
+	    CategoryType type = new CategoryType(this.getId());
 	    this.methods.forEach(method -> {
-	    	Transpiler m = instance.newMemberTranspiler();
+	    	Transpiler m = transpiler.newMemberTranspiler(type);
 	        method.transpile(m);
 	        m.flush();
 	    });
-	    instance.flush();
 		return true;
 	}
 

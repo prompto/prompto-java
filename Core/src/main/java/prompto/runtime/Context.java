@@ -227,6 +227,10 @@ public class Context implements IContext {
 		return initInstanceContext(new ClosureContext(type), true);
 	}
 
+	public Context newMemberContext(CategoryType type) {
+		return newInstanceContext(type, false).newChildContext();
+	}
+
 
 	private Context initInstanceContext(Context context, boolean isChild) {
 		context.globals = this.globals;
@@ -1009,6 +1013,7 @@ public class Context implements IContext {
 		}
 		
 	}
+
 
 
 }

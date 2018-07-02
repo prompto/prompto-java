@@ -373,13 +373,20 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	
 	@Override
 	public void declare(Transpiler transpiler) {
-	    if(this.memberOf==null) {
-	        transpiler = transpiler.newLocalTranspiler();
-	        transpiler.declare(this);
-	        this.declareArguments(transpiler);
-	    }
-	    this.registerArguments(transpiler.getContext());
-	    this.statements.declare(transpiler);
+		if(declaring)
+			return;
+		declaring = true;
+		try {
+		    if(this.memberOf==null) {
+		        transpiler = transpiler.newLocalTranspiler();
+		        transpiler.declare(this);
+		        this.declareArguments(transpiler);
+		    }
+		    this.registerArguments(transpiler.getContext());
+		    this.statements.declare(transpiler);
+		} finally {
+			declaring = false;
+		}
 	}
 	
 	@Override

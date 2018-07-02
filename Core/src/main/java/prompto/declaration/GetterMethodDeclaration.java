@@ -87,9 +87,7 @@ public class GetterMethodDeclaration extends ConcreteMethodDeclaration implement
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-	    transpiler = transpiler.newGetterTranspiler(this.getName());
 	    this.statements.transpile(transpiler);
-	    transpiler.flush();
 		return true;
 	}
 

@@ -10,8 +10,9 @@ import prompto.statement.CommentStatement;
 public abstract class BaseDeclaration extends Section implements IDeclaration {
 
 	Collection<CommentStatement> comments = null;
-	private Identifier id;
-	private ICodeStore origin;
+	Identifier id;
+	ICodeStore origin;
+	boolean declaring = false;
 	
 	protected BaseDeclaration(Identifier id) {
 		this.id = id;
