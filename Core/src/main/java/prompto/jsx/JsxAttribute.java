@@ -42,4 +42,10 @@ public class JsxAttribute {
 	}
 
 
+	public void declare(Transpiler transpiler) {
+	    if(this.value!=null)
+	        this.value.declare(transpiler);
+	}
+
+
 }

@@ -2,6 +2,7 @@ package prompto.jsx;
 
 import java.util.List;
 
+import prompto.declaration.IDeclaration;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
@@ -33,10 +34,19 @@ public abstract class JsxElementBase implements IJsxExpression {
 	
 	@Override
 	public void declare(Transpiler transpiler) {
-		if(Character.isUpperCase(id.toString().charAt(0)))
-			transpiler.require(this.id.toString());
+		if(Character.isUpperCase(id.toString().charAt(0))) {
+			IDeclaration decl = transpiler.getContext().getRegisteredDeclaration(IDeclaration.class, id);
+			decl.declare(transpiler);
+		}
+		if(this.attributes!=null)
+			this.attributes.forEach(attr -> attr.declare(transpiler));
+		this.declareChildren(transpiler);
 	}
 	
+	public void declareChildren(Transpiler transpiler) {
+		// nothing to do
+	}
+
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 		// TODO call htmlEngine

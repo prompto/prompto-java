@@ -27,6 +27,12 @@ public class JsxExpression implements IJsxValue, IJsxExpression {
 	}
 	
 	@Override
+	public void declare(Transpiler transpiler) {
+		this.expression.declare(transpiler);
+	}
+	
+	
+	@Override
 	public boolean transpile(Transpiler transpiler) {
 		this.expression.transpile(transpiler);
 		return false;

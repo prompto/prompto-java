@@ -14,6 +14,7 @@ public interface IJsxValue {
 		throw new UnsupportedOperationException("toDialect " + this.getClass().getName());
 	}
 
+	void declare(Transpiler transpiler);
 	boolean transpile(Transpiler transpiler);
 
 }

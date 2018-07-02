@@ -23,6 +23,11 @@ public class JsxLiteral implements IJsxValue {
 	public void toDialect(CodeWriter writer) {
 		writer.append(text);
 	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		// nothing to do
+	}
 
 	@Override
 	public boolean transpile(Transpiler transpiler) {

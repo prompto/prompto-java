@@ -998,8 +998,19 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	    	declareRoot(transpiler);
 	    if(this.storable)
 	        transpiler.require("DataStore");
+	    this.declareMethods(transpiler);
 	}
 	
+	private void declareMethods(Transpiler transpiler) {
+	    this.methods.stream().filter(decl -> {
+	        return !(decl instanceof SetterMethodDeclaration || decl instanceof GetterMethodDeclaration);
+	    }).forEach(method -> {
+	    	Transpiler t = transpiler.newMemberTranspiler();
+	        method.declare(t);
+	        t.flush();
+	    });
+	}
+
 	protected void declareRoot(Transpiler transpiler) {
         transpiler.require("$Root");
 	}

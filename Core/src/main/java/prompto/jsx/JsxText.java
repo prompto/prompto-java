@@ -27,6 +27,11 @@ public class JsxText implements IJsxExpression {
 	}
 	
 	@Override
+	public void declare(Transpiler transpiler) {
+		// nothing to do
+	}
+	
+	@Override
 	public boolean transpile(Transpiler transpiler) {
 		String text = StringUtils.escape(this.text);
 		transpiler.append('"').append(text).append('"');

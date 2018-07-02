@@ -28,6 +28,12 @@ public class JsxElement extends JsxElementBase {
 		writer.append("</").append(id).append(">");
 	}
 	
+	@Override
+	public void declareChildren(Transpiler transpiler) {
+	    if (this.children != null)
+	        this.children.forEach(child -> child.declare(transpiler));
+	}
+	
 	
 	@Override
 	public void transpileChildren(Transpiler transpiler) {
