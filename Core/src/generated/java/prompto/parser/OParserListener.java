@@ -836,6 +836,16 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitCallableItemSelector(OParser.CallableItemSelectorContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link OParser#x_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterX_expression(OParser.X_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#x_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitX_expression(OParser.X_expressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code IntDivideExpression}
 	 * labeled alternative in {@link OParser#expression}.
 	 * @param ctx the parse tree
@@ -1255,6 +1265,18 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitInstanceExpression(OParser.InstanceExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code CssExpression}
+	 * labeled alternative in {@link OParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterCssExpression(OParser.CssExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code CssExpression}
+	 * labeled alternative in {@link OParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitCssExpression(OParser.CssExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code CastExpression}
 	 * labeled alternative in {@link OParser#expression}.
@@ -2169,6 +2191,36 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMethod_identifier(OParser.Method_identifierContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#identifier_or_keyword}.
+	 * @param ctx the parse tree
+	 */
+	void enterIdentifier_or_keyword(OParser.Identifier_or_keywordContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#identifier_or_keyword}.
+	 * @param ctx the parse tree
+	 */
+	void exitIdentifier_or_keyword(OParser.Identifier_or_keywordContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#minus_hyphen_identifier}.
+	 * @param ctx the parse tree
+	 */
+	void enterMinus_hyphen_identifier(OParser.Minus_hyphen_identifierContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#minus_hyphen_identifier}.
+	 * @param ctx the parse tree
+	 */
+	void exitMinus_hyphen_identifier(OParser.Minus_hyphen_identifierContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#hyphen_identifier}.
+	 * @param ctx the parse tree
+	 */
+	void enterHyphen_identifier(OParser.Hyphen_identifierContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#hyphen_identifier}.
+	 * @param ctx the parse tree
+	 */
+	void exitHyphen_identifier(OParser.Hyphen_identifierContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code VariableIdentifier}
 	 * labeled alternative in {@link OParser#identifier}.
@@ -4626,36 +4678,6 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitJsx_identifier(OParser.Jsx_identifierContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link OParser#jsx_hyphen_identifier}.
-	 * @param ctx the parse tree
-	 */
-	void enterJsx_hyphen_identifier(OParser.Jsx_hyphen_identifierContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link OParser#jsx_hyphen_identifier}.
-	 * @param ctx the parse tree
-	 */
-	void exitJsx_hyphen_identifier(OParser.Jsx_hyphen_identifierContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link OParser#hyphen_identifier}.
-	 * @param ctx the parse tree
-	 */
-	void enterHyphen_identifier(OParser.Hyphen_identifierContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link OParser#hyphen_identifier}.
-	 * @param ctx the parse tree
-	 */
-	void exitHyphen_identifier(OParser.Hyphen_identifierContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link OParser#identifier_or_keyword}.
-	 * @param ctx the parse tree
-	 */
-	void enterIdentifier_or_keyword(OParser.Identifier_or_keywordContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link OParser#identifier_or_keyword}.
-	 * @param ctx the parse tree
-	 */
-	void exitIdentifier_or_keyword(OParser.Identifier_or_keywordContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link OParser#jsx_attribute}.
 	 * @param ctx the parse tree
 	 */
@@ -4745,4 +4767,78 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitJsx_text(OParser.Jsx_textContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#minus_hyphen_identifier_or_keyword}.
+	 * @param ctx the parse tree
+	 */
+	void enterMinus_hyphen_identifier_or_keyword(OParser.Minus_hyphen_identifier_or_keywordContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#minus_hyphen_identifier_or_keyword}.
+	 * @param ctx the parse tree
+	 */
+	void exitMinus_hyphen_identifier_or_keyword(OParser.Minus_hyphen_identifier_or_keywordContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#css_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterCss_expression(OParser.Css_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#css_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitCss_expression(OParser.Css_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#css_field}.
+	 * @param ctx the parse tree
+	 */
+	void enterCss_field(OParser.Css_fieldContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#css_field}.
+	 * @param ctx the parse tree
+	 */
+	void exitCss_field(OParser.Css_fieldContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#css_identifier}.
+	 * @param ctx the parse tree
+	 */
+	void enterCss_identifier(OParser.Css_identifierContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#css_identifier}.
+	 * @param ctx the parse tree
+	 */
+	void exitCss_identifier(OParser.Css_identifierContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code CssValue}
+	 * labeled alternative in {@link OParser#css_value}.
+	 * @param ctx the parse tree
+	 */
+	void enterCssValue(OParser.CssValueContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code CssValue}
+	 * labeled alternative in {@link OParser#css_value}.
+	 * @param ctx the parse tree
+	 */
+	void exitCssValue(OParser.CssValueContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code CssText}
+	 * labeled alternative in {@link OParser#css_value}.
+	 * @param ctx the parse tree
+	 */
+	void enterCssText(OParser.CssTextContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code CssText}
+	 * labeled alternative in {@link OParser#css_value}.
+	 * @param ctx the parse tree
+	 */
+	void exitCssText(OParser.CssTextContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#css_text}.
+	 * @param ctx the parse tree
+	 */
+	void enterCss_text(OParser.Css_textContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#css_text}.
+	 * @param ctx the parse tree
+	 */
+	void exitCss_text(OParser.Css_textContext ctx);
 }

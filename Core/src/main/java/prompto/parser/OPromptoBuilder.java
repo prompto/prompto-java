@@ -33,6 +33,10 @@ import prompto.csharp.CSharpSelectorExpression;
 import prompto.csharp.CSharpStatement;
 import prompto.csharp.CSharpTextLiteral;
 import prompto.csharp.CSharpThisExpression;
+import prompto.css.CssExpression;
+import prompto.css.CssField;
+import prompto.css.CssText;
+import prompto.css.ICssValue;
 import prompto.declaration.AbstractMethodDeclaration;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
@@ -181,9 +185,6 @@ import prompto.literal.TupleLiteral;
 import prompto.literal.UUIDLiteral;
 import prompto.literal.VersionLiteral;
 import static prompto.parser.OParser.*;
-import prompto.parser.OParser.ConcreteWidgetDeclarationContext;
-import prompto.parser.OParser.Concrete_widget_declarationContext;
-import prompto.parser.OParser.HtmlTypeContext;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -874,6 +875,36 @@ public class OPromptoBuilder extends OParserBaseListener {
 		setNodeValue(ctx, new CSharpTextLiteral(ctx.getText()));
 	}
 	
+	@Override
+	public void exitCssExpression(CssExpressionContext ctx) {
+		setNodeValue(ctx, this.<Object>getNodeValue(ctx.exp));
+	}
+	
+	@Override
+	public void exitCss_expression(Css_expressionContext ctx) {
+		CssExpression exp = new CssExpression();
+		ctx.css_field().forEach(cx->{
+			CssField field = this.<CssField>getNodeValue(cx);
+			exp.addField(field);
+		});
+		setNodeValue(ctx, exp);
+	}
+	
+	@Override
+	public void exitCss_field(Css_fieldContext ctx) {
+		String name = ctx.name.getText();
+		ICssValue value = this.<ICssValue>getNodeValue(ctx.value);
+		setNodeValue(ctx, new CssField(name, value));
+	}
+	
+	
+	@Override
+	public void exitCssText(CssTextContext ctx) {
+		String text = ctx.text.getText();
+		setNodeValue(ctx, new CssText(text));
+	}
+	
+
 	@Override
 	public void exitCurlyCategoryMethodList(CurlyCategoryMethodListContext ctx) {
 		MethodDeclarationList items = this.<MethodDeclarationList>getNodeValue(ctx.items);

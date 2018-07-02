@@ -35,6 +35,7 @@ public enum Family {
 	TYPE,
 	CODE,
 	JSX,
+	CSS,
 	HTML,
 	// volatile
 	MISSING
