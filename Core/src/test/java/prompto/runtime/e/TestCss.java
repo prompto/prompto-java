@@ -20,6 +20,21 @@ public class TestCss extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedCodeValue() throws Exception {
+		checkInterpretedOutput("css/codeValue.pec");
+	}
+
+	@Test
+	public void testCompiledCodeValue() throws Exception {
+		checkCompiledOutput("css/codeValue.pec");
+	}
+
+	@Test
+	public void testTranspiledCodeValue() throws Exception {
+		checkTranspiledOutput("css/codeValue.pec");
+	}
+
+	@Test
 	public void testInterpretedHyphenName() throws Exception {
 		checkInterpretedOutput("css/hyphenName.pec");
 	}

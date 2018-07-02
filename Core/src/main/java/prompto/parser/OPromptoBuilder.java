@@ -33,6 +33,7 @@ import prompto.csharp.CSharpSelectorExpression;
 import prompto.csharp.CSharpStatement;
 import prompto.csharp.CSharpTextLiteral;
 import prompto.csharp.CSharpThisExpression;
+import prompto.css.CssCode;
 import prompto.css.CssExpression;
 import prompto.css.CssField;
 import prompto.css.CssText;
@@ -185,6 +186,7 @@ import prompto.literal.TupleLiteral;
 import prompto.literal.UUIDLiteral;
 import prompto.literal.VersionLiteral;
 import static prompto.parser.OParser.*;
+import prompto.parser.OParser.CssValueContext;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -902,6 +904,12 @@ public class OPromptoBuilder extends OParserBaseListener {
 	public void exitCssText(CssTextContext ctx) {
 		String text = ctx.text.getText();
 		setNodeValue(ctx, new CssText(text));
+	}
+	
+	@Override
+	public void exitCssValue(CssValueContext ctx) {
+		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		setNodeValue(ctx, new CssCode(exp));
 	}
 	
 

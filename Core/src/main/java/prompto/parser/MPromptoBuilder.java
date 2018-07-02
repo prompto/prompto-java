@@ -33,6 +33,7 @@ import prompto.csharp.CSharpSelectorExpression;
 import prompto.csharp.CSharpStatement;
 import prompto.csharp.CSharpTextLiteral;
 import prompto.csharp.CSharpThisExpression;
+import prompto.css.CssCode;
 import prompto.css.CssExpression;
 import prompto.css.CssField;
 import prompto.css.CssText;
@@ -903,6 +904,12 @@ public class MPromptoBuilder extends MParserBaseListener {
 		setNodeValue(ctx, new CssText(text));
 	}
 	
+	@Override
+	public void exitCssValue(CssValueContext ctx) {
+		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		setNodeValue(ctx, new CssCode(exp));
+	}
+
 	@Override
 	public void exitDateLiteral(DateLiteralContext ctx) {
 		setNodeValue(ctx, new DateLiteral(ctx.t.getText()));

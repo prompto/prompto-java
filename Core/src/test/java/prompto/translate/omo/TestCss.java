@@ -7,6 +7,11 @@ import prompto.parser.o.BaseOParserTest;
 public class TestCss extends BaseOParserTest {
 
 	@Test
+	public void testCodeValue() throws Exception {
+		compareResourceOMO("css/codeValue.poc");
+	}
+
+	@Test
 	public void testHyphenName() throws Exception {
 		compareResourceOMO("css/hyphenName.poc");
 	}

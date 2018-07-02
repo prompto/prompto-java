@@ -20,6 +20,21 @@ public class TestCss extends BaseMParserTest {
 	}
 
 	@Test
+	public void testInterpretedCodeValue() throws Exception {
+		checkInterpretedOutput("css/codeValue.pmc");
+	}
+
+	@Test
+	public void testCompiledCodeValue() throws Exception {
+		checkCompiledOutput("css/codeValue.pmc");
+	}
+
+	@Test
+	public void testTranspiledCodeValue() throws Exception {
+		checkTranspiledOutput("css/codeValue.pmc");
+	}
+
+	@Test
 	public void testInterpretedHyphenName() throws Exception {
 		checkInterpretedOutput("css/hyphenName.pmc");
 	}

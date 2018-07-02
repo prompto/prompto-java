@@ -1,6 +1,8 @@
 package prompto.css;
 
+import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
+import prompto.utils.StringUtils;
 
 public class CssText implements ICssValue {
 
@@ -14,5 +16,15 @@ public class CssText implements ICssValue {
 	public void toDialect(CodeWriter writer) {
 		writer.append(text);
 	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		// nothing to do
+	}
 
+	@Override
+	public void transpile(Transpiler transpiler) {
+		String text = StringUtils.escape(this.text);
+		transpiler.append('"').append(text).append('"');
+	}
 }

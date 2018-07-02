@@ -55,7 +55,11 @@ public class CssExpression implements IExpression {
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 		transpiler.append("{");
-		fields.forEach(field->field.transpile(transpiler));
+		fields.forEach(field->{
+			field.transpile(transpiler);
+			transpiler.append(", ");
+		});
+		transpiler.trimLast(", ".length());
 		transpiler.append("}");
 		return false;
 	}

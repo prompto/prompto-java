@@ -20,11 +20,12 @@ public class CssField {
 	}
 
 	public void declare(Transpiler transpiler) {
-		// TODO 
+		value.declare(transpiler);
 	}
 
 	public void transpile(Transpiler transpiler) {
-		// TODO Auto-generated method stub
+		transpiler.append("'").append(name).append("':");
+		value.transpile(transpiler);
 	}
 
 }
