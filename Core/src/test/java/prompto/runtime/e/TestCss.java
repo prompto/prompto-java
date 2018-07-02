@@ -20,6 +20,66 @@ public class TestCss extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedHyphenName() throws Exception {
+		checkInterpretedOutput("css/hyphenName.pec");
+	}
+
+	@Test
+	public void testCompiledHyphenName() throws Exception {
+		checkCompiledOutput("css/hyphenName.pec");
+	}
+
+	@Test
+	public void testTranspiledHyphenName() throws Exception {
+		checkTranspiledOutput("css/hyphenName.pec");
+	}
+
+	@Test
+	public void testInterpretedMultiValue() throws Exception {
+		checkInterpretedOutput("css/multiValue.pec");
+	}
+
+	@Test
+	public void testCompiledMultiValue() throws Exception {
+		checkCompiledOutput("css/multiValue.pec");
+	}
+
+	@Test
+	public void testTranspiledMultiValue() throws Exception {
+		checkTranspiledOutput("css/multiValue.pec");
+	}
+
+	@Test
+	public void testInterpretedNumberValue() throws Exception {
+		checkInterpretedOutput("css/numberValue.pec");
+	}
+
+	@Test
+	public void testCompiledNumberValue() throws Exception {
+		checkCompiledOutput("css/numberValue.pec");
+	}
+
+	@Test
+	public void testTranspiledNumberValue() throws Exception {
+		checkTranspiledOutput("css/numberValue.pec");
+	}
+
+	@Test
+	public void testInterpretedPixelValue() throws Exception {
+		checkInterpretedOutput("css/pixelValue.pec");
+	}
+
+	@Test
+	public void testCompiledPixelValue() throws Exception {
+		checkCompiledOutput("css/pixelValue.pec");
+	}
+
+	@Test
+	public void testTranspiledPixelValue() throws Exception {
+		checkTranspiledOutput("css/pixelValue.pec");
+	}
+
+	@Test
 	public void testInterpretedTextValue() throws Exception {
 		checkInterpretedOutput("css/textValue.pec");
 	}

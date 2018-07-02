@@ -20,6 +20,66 @@ public class TestCss extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedHyphenName() throws Exception {
+		checkInterpretedOutput("css/hyphenName.poc");
+	}
+
+	@Test
+	public void testCompiledHyphenName() throws Exception {
+		checkCompiledOutput("css/hyphenName.poc");
+	}
+
+	@Test
+	public void testTranspiledHyphenName() throws Exception {
+		checkTranspiledOutput("css/hyphenName.poc");
+	}
+
+	@Test
+	public void testInterpretedMultiValue() throws Exception {
+		checkInterpretedOutput("css/multiValue.poc");
+	}
+
+	@Test
+	public void testCompiledMultiValue() throws Exception {
+		checkCompiledOutput("css/multiValue.poc");
+	}
+
+	@Test
+	public void testTranspiledMultiValue() throws Exception {
+		checkTranspiledOutput("css/multiValue.poc");
+	}
+
+	@Test
+	public void testInterpretedNumberValue() throws Exception {
+		checkInterpretedOutput("css/numberValue.poc");
+	}
+
+	@Test
+	public void testCompiledNumberValue() throws Exception {
+		checkCompiledOutput("css/numberValue.poc");
+	}
+
+	@Test
+	public void testTranspiledNumberValue() throws Exception {
+		checkTranspiledOutput("css/numberValue.poc");
+	}
+
+	@Test
+	public void testInterpretedPixelValue() throws Exception {
+		checkInterpretedOutput("css/pixelValue.poc");
+	}
+
+	@Test
+	public void testCompiledPixelValue() throws Exception {
+		checkCompiledOutput("css/pixelValue.poc");
+	}
+
+	@Test
+	public void testTranspiledPixelValue() throws Exception {
+		checkTranspiledOutput("css/pixelValue.poc");
+	}
+
+	@Test
 	public void testInterpretedTextValue() throws Exception {
 		checkInterpretedOutput("css/textValue.poc");
 	}

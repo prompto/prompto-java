@@ -2308,25 +2308,25 @@ public class MParserBaseListener implements MParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMinus_hyphen_identifier(MParser.Minus_hyphen_identifierContext ctx) { }
+	@Override public void enterNospace_hyphen_identifier_or_keyword(MParser.Nospace_hyphen_identifier_or_keywordContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMinus_hyphen_identifier(MParser.Minus_hyphen_identifierContext ctx) { }
+	@Override public void exitNospace_hyphen_identifier_or_keyword(MParser.Nospace_hyphen_identifier_or_keywordContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterHyphen_identifier(MParser.Hyphen_identifierContext ctx) { }
+	@Override public void enterNospace_identifier_or_keyword(MParser.Nospace_identifier_or_keywordContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitHyphen_identifier(MParser.Hyphen_identifierContext ctx) { }
+	@Override public void exitNospace_identifier_or_keyword(MParser.Nospace_identifier_or_keywordContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -5039,18 +5039,6 @@ public class MParserBaseListener implements MParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitJsx_text(MParser.Jsx_textContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterMinus_hyphen_identifier_or_keyword(MParser.Minus_hyphen_identifier_or_keywordContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMinus_hyphen_identifier_or_keyword(MParser.Minus_hyphen_identifier_or_keywordContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

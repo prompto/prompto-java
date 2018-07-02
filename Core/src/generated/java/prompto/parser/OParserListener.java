@@ -2202,25 +2202,25 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitIdentifier_or_keyword(OParser.Identifier_or_keywordContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link OParser#minus_hyphen_identifier}.
+	 * Enter a parse tree produced by {@link OParser#nospace_hyphen_identifier_or_keyword}.
 	 * @param ctx the parse tree
 	 */
-	void enterMinus_hyphen_identifier(OParser.Minus_hyphen_identifierContext ctx);
+	void enterNospace_hyphen_identifier_or_keyword(OParser.Nospace_hyphen_identifier_or_keywordContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link OParser#minus_hyphen_identifier}.
+	 * Exit a parse tree produced by {@link OParser#nospace_hyphen_identifier_or_keyword}.
 	 * @param ctx the parse tree
 	 */
-	void exitMinus_hyphen_identifier(OParser.Minus_hyphen_identifierContext ctx);
+	void exitNospace_hyphen_identifier_or_keyword(OParser.Nospace_hyphen_identifier_or_keywordContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link OParser#hyphen_identifier}.
+	 * Enter a parse tree produced by {@link OParser#nospace_identifier_or_keyword}.
 	 * @param ctx the parse tree
 	 */
-	void enterHyphen_identifier(OParser.Hyphen_identifierContext ctx);
+	void enterNospace_identifier_or_keyword(OParser.Nospace_identifier_or_keywordContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link OParser#hyphen_identifier}.
+	 * Exit a parse tree produced by {@link OParser#nospace_identifier_or_keyword}.
 	 * @param ctx the parse tree
 	 */
-	void exitHyphen_identifier(OParser.Hyphen_identifierContext ctx);
+	void exitNospace_identifier_or_keyword(OParser.Nospace_identifier_or_keywordContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code VariableIdentifier}
 	 * labeled alternative in {@link OParser#identifier}.
@@ -4767,16 +4767,6 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitJsx_text(OParser.Jsx_textContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link OParser#minus_hyphen_identifier_or_keyword}.
-	 * @param ctx the parse tree
-	 */
-	void enterMinus_hyphen_identifier_or_keyword(OParser.Minus_hyphen_identifier_or_keywordContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link OParser#minus_hyphen_identifier_or_keyword}.
-	 * @param ctx the parse tree
-	 */
-	void exitMinus_hyphen_identifier_or_keyword(OParser.Minus_hyphen_identifier_or_keywordContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link OParser#css_expression}.
 	 * @param ctx the parse tree
