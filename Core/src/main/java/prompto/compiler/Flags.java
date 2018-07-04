@@ -17,6 +17,7 @@ public class Flags {
 		this.values.put("roughly", false);
 		this.values.put("decimal", false);
 		this.values.put("member", false);
+		this.values.put("inline", false);
 		this.values.put("opcode", null);
 		this.values.put("getter", null);
 		this.values.put("setter", null);
@@ -112,6 +113,14 @@ public class Flags {
 
 	public Flags withMember(boolean set) {
 		return clone("member", set);
+	}
+
+	public boolean isInline() {
+		return (boolean)values.get("inline");
+	}
+
+	public Flags withInline(boolean set) {
+		return clone("inline", set);
 	}
 
 	@SuppressWarnings("unchecked")

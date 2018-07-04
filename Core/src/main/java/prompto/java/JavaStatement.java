@@ -102,7 +102,7 @@ public class JavaStatement {
 			Function<MethodInfo, ResultInfo> converter = resultConverters.get(info.getType());
 			if(converter!=null)
 				info = converter.apply(method);
-			if(flags.setter()==null && flags.getter()==null)
+			if(!flags.isInline())
 				method.addInstruction(Opcode.ARETURN);
 			return info;
 		} else if(info.getType()!=void.class) {

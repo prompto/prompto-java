@@ -10,7 +10,7 @@ public class StackState {
 
 	@Override
 	public String toString() {
-		return locals.toString() + "," + entries.toString();
+		return "locals: " + locals.toString() + ", stack: " + entries.toString();
 	}
 	public Stack<StackEntry> getEntries() {
 		return entries;

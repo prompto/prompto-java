@@ -95,7 +95,7 @@ public class SetterMethodDeclaration extends ConcreteMethodDeclaration implement
 		context = context.newInstanceContext(type, false).newChildContext();
 		context.registerValue(new Variable(getId(), decl.getType()));
 		for(IStatement stmt : statements)
-			stmt.compile(context, method, flags.withSetter(field));
+			stmt.compile(context, method, flags.withMember(true).withInline(true).withSetter(field));
 	}
 	
 	@Override

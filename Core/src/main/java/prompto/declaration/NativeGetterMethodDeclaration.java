@@ -51,7 +51,7 @@ public class NativeGetterMethodDeclaration extends GetterMethodDeclaration {
 		if(statement!=null) {
 			AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, getId());
 			FieldInfo field = decl.toFieldInfo(context);
-			return statement.compile(context, method, flags.withGetter(field));
+			return statement.compile(context, method, flags.withInline(true).withMember(true).withGetter(field));
 		} else {
 			method.addInstruction(Opcode.ACONST_NULL);
 			return new ResultInfo(Object.class);
