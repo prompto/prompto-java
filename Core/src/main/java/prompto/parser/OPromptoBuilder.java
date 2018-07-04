@@ -54,6 +54,7 @@ import prompto.declaration.NativeGetterMethodDeclaration;
 import prompto.declaration.NativeMethodDeclaration;
 import prompto.declaration.NativeResourceDeclaration;
 import prompto.declaration.NativeSetterMethodDeclaration;
+import prompto.declaration.NativeWidgetDeclaration;
 import prompto.declaration.OperatorMethodDeclaration;
 import prompto.declaration.SetterMethodDeclaration;
 import prompto.declaration.SingletonCategoryDeclaration;
@@ -187,6 +188,8 @@ import prompto.literal.UUIDLiteral;
 import prompto.literal.VersionLiteral;
 import static prompto.parser.OParser.*;
 import prompto.parser.OParser.CssValueContext;
+import prompto.parser.OParser.NativeWidgetDeclarationContext;
+import prompto.parser.OParser.Native_widget_declarationContext;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -2058,6 +2061,15 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	
 	@Override
+	public void exitNative_widget_declaration(Native_widget_declarationContext ctx) {
+		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		NativeCategoryBindingList bindings = this.<NativeCategoryBindingList>getNodeValue(ctx.bindings);
+		MethodDeclarationList methods = this.<MethodDeclarationList>getNodeValue(ctx.methods);
+		setNodeValue(ctx, new NativeWidgetDeclaration(name, bindings, methods));
+	}
+
+	
+	@Override
 	public void exitNative_getter_declaration(Native_getter_declarationContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
 		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
@@ -2121,10 +2133,14 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitNativeCategoryDeclaration(NativeCategoryDeclarationContext ctx) {
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
-		setNodeValue(ctx, decl);
+		setNodeValue(ctx, this.<Object>getNodeValue(ctx.decl));
 	}
 	
+	
+	@Override
+	public void exitNativeWidgetDeclaration(NativeWidgetDeclarationContext ctx) {
+		setNodeValue(ctx, this.<Object>getNodeValue(ctx.decl));
+	}
 	
 	@Override
 	public void exitNative_member_method_declaration_list(Native_member_method_declaration_listContext ctx) {

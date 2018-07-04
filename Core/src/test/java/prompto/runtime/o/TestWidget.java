@@ -34,5 +34,20 @@ public class TestWidget extends BaseOParserTest {
 		checkTranspiledOutput("widget/minimal.poc");
 	}
 
+	@Test
+	public void testInterpretedNative() throws Exception {
+		checkInterpretedOutput("widget/native.poc");
+	}
+
+	@Test
+	public void testCompiledNative() throws Exception {
+		checkCompiledOutput("widget/native.poc");
+	}
+
+	@Test
+	public void testTranspiledNative() throws Exception {
+		checkTranspiledOutput("widget/native.poc");
+	}
+
 }
 

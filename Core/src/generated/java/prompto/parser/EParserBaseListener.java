@@ -88,6 +88,18 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNative_widget_declaration(EParser.Native_widget_declarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNative_widget_declaration(EParser.Native_widget_declarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterConcrete_category_declaration(EParser.Concrete_category_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2416,6 +2428,18 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNativeWidgetDeclaration(EParser.NativeWidgetDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNativeWidgetDeclaration(EParser.NativeWidgetDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterType_identifier_list(EParser.Type_identifier_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -3755,18 +3779,6 @@ public class EParserBaseListener implements EParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitModulo(EParser.ModuloContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterNative_widget_declaration(EParser.Native_widget_declarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitNative_widget_declaration(EParser.Native_widget_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -17,7 +17,9 @@ import prompto.compiler.StackState;
 import prompto.compiler.StringConstant;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
+import prompto.declaration.ConcreteWidgetDeclaration;
 import prompto.declaration.NativeCategoryDeclaration;
+import prompto.declaration.NativeWidgetDeclaration;
 import prompto.error.NotMutableError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -416,7 +418,11 @@ public class ConstructorExpression implements IExpression {
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 		CategoryDeclaration decl = transpiler.getContext().getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
-	    if (decl instanceof NativeCategoryDeclaration)
+	    if (decl instanceof NativeWidgetDeclaration)
+	        this.transpileNativeWidget(transpiler, (NativeWidgetDeclaration)decl);
+	    else if (decl instanceof ConcreteWidgetDeclaration)
+	        this.transpileConcreteWidget(transpiler, (ConcreteWidgetDeclaration)decl);
+	    else if (decl instanceof NativeCategoryDeclaration)
 	        this.transpileNative(transpiler, (NativeCategoryDeclaration)decl);
 	    else
 	        this.transpileConcrete(transpiler);
@@ -435,6 +441,12 @@ public class ConstructorExpression implements IExpression {
 	    transpiler.append(", ");
 	    transpiler.append(this.type.isMutable());
 	    transpiler.append(")");
+	    transpiler.flush();
+	}
+
+	private void transpileConcreteWidget(Transpiler transpiler, ConcreteWidgetDeclaration decl) {
+	    transpiler = transpiler.newInstanceTranspiler(this.type);
+	    transpiler.append("new ").append(this.type.getTypeName()).append("()");
 	    transpiler.flush();
 	}
 
@@ -458,4 +470,11 @@ public class ConstructorExpression implements IExpression {
 	    this.transpileAssignments(transpiler);
 	    transpiler.append(")");
 	}
+	
+	private void transpileNativeWidget(Transpiler transpiler, NativeWidgetDeclaration decl) {
+	    String bound = decl.getTranspiledBoundClass();
+	    transpiler.append("new ").append(bound).append("()");
+	}
+
+
 }

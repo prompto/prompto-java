@@ -55,6 +55,7 @@ import prompto.declaration.NativeGetterMethodDeclaration;
 import prompto.declaration.NativeMethodDeclaration;
 import prompto.declaration.NativeResourceDeclaration;
 import prompto.declaration.NativeSetterMethodDeclaration;
+import prompto.declaration.NativeWidgetDeclaration;
 import prompto.declaration.OperatorMethodDeclaration;
 import prompto.declaration.SetterMethodDeclaration;
 import prompto.declaration.SingletonCategoryDeclaration;
@@ -186,6 +187,8 @@ import prompto.literal.TupleLiteral;
 import prompto.literal.UUIDLiteral;
 import prompto.literal.VersionLiteral;
 import static prompto.parser.EParser.*;
+import prompto.parser.EParser.NativeWidgetDeclarationContext;
+import prompto.parser.EParser.Native_widget_declarationContext;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -2029,6 +2032,14 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
+	public void exitNative_widget_declaration(Native_widget_declarationContext ctx) {
+		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		NativeCategoryBindingList bindings = this.<NativeCategoryBindingList>getNodeValue(ctx.bindings);
+		MethodDeclarationList methods = this.<MethodDeclarationList>getNodeValue(ctx.methods);
+		setNodeValue(ctx, new NativeWidgetDeclaration(name, bindings, methods));
+	}
+	
+	@Override
 	public void exitNative_member_method_declaration(Native_member_method_declarationContext ctx) {
 		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.getChild(0));
 		setNodeValue(ctx, decl);
@@ -2092,8 +2103,13 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitNativeCategoryDeclaration(NativeCategoryDeclarationContext ctx) {
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
-		setNodeValue(ctx, decl);
+		setNodeValue(ctx, this.<Object>getNodeValue(ctx.decl));
+	}
+	
+	
+	@Override
+	public void exitNativeWidgetDeclaration(NativeWidgetDeclarationContext ctx) {
+		setNodeValue(ctx, this.<Object>getNodeValue(ctx.decl));
 	}
 	
 	@Override

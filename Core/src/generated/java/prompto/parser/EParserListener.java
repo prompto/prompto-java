@@ -68,6 +68,16 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitConcrete_widget_declaration(EParser.Concrete_widget_declarationContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link EParser#native_widget_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterNative_widget_declaration(EParser.Native_widget_declarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EParser#native_widget_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitNative_widget_declaration(EParser.Native_widget_declarationContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link EParser#concrete_category_declaration}.
 	 * @param ctx the parse tree
 	 */
@@ -2274,6 +2284,18 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitConcreteWidgetDeclaration(EParser.ConcreteWidgetDeclarationContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code NativeWidgetDeclaration}
+	 * labeled alternative in {@link EParser#widget_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterNativeWidgetDeclaration(EParser.NativeWidgetDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code NativeWidgetDeclaration}
+	 * labeled alternative in {@link EParser#widget_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitNativeWidgetDeclaration(EParser.NativeWidgetDeclarationContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link EParser#type_identifier_list}.
 	 * @param ctx the parse tree
 	 */
@@ -3499,16 +3521,6 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitModulo(EParser.ModuloContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link EParser#native_widget_declaration}.
-	 * @param ctx the parse tree
-	 */
-	void enterNative_widget_declaration(EParser.Native_widget_declarationContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link EParser#native_widget_declaration}.
-	 * @param ctx the parse tree
-	 */
-	void exitNative_widget_declaration(EParser.Native_widget_declarationContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code JavascriptReturnStatement}
 	 * labeled alternative in {@link EParser#javascript_statement}.

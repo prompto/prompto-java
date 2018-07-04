@@ -150,7 +150,7 @@ public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 			return null;
 	}
 	
-	private JavaScriptNativeCategoryBinding getJavaScriptBinding() {
+	protected JavaScriptNativeCategoryBinding getJavaScriptBinding() {
 		for(NativeCategoryBinding mapping : categoryBindings) {
 			if(mapping instanceof JavaScriptNativeCategoryBinding)
 				return (JavaScriptNativeCategoryBinding)mapping;

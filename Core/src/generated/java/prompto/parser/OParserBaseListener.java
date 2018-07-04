@@ -88,6 +88,18 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNative_widget_declaration(OParser.Native_widget_declarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNative_widget_declaration(OParser.Native_widget_declarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterConcrete_category_declaration(OParser.Concrete_category_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2308,6 +2320,18 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNativeWidgetDeclaration(OParser.NativeWidgetDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNativeWidgetDeclaration(OParser.NativeWidgetDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterType_identifier_list(OParser.Type_identifier_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -3671,18 +3695,6 @@ public class OParserBaseListener implements OParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLfp(OParser.LfpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterNative_widget_declaration(OParser.Native_widget_declarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitNative_widget_declaration(OParser.Native_widget_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

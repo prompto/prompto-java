@@ -68,6 +68,16 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitConcrete_widget_declaration(OParser.Concrete_widget_declarationContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link OParser#native_widget_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterNative_widget_declaration(OParser.Native_widget_declarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#native_widget_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitNative_widget_declaration(OParser.Native_widget_declarationContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link OParser#concrete_category_declaration}.
 	 * @param ctx the parse tree
 	 */
@@ -2172,6 +2182,18 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitConcreteWidgetDeclaration(OParser.ConcreteWidgetDeclarationContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code NativeWidgetDeclaration}
+	 * labeled alternative in {@link OParser#widget_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterNativeWidgetDeclaration(OParser.NativeWidgetDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code NativeWidgetDeclaration}
+	 * labeled alternative in {@link OParser#widget_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitNativeWidgetDeclaration(OParser.NativeWidgetDeclarationContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link OParser#type_identifier_list}.
 	 * @param ctx the parse tree
 	 */
@@ -3417,16 +3439,6 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLfp(OParser.LfpContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link OParser#native_widget_declaration}.
-	 * @param ctx the parse tree
-	 */
-	void enterNative_widget_declaration(OParser.Native_widget_declarationContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link OParser#native_widget_declaration}.
-	 * @param ctx the parse tree
-	 */
-	void exitNative_widget_declaration(OParser.Native_widget_declarationContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code JavascriptReturnStatement}
 	 * labeled alternative in {@link OParser#javascript_statement}.

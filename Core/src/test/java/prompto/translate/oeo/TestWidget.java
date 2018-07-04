@@ -11,5 +11,10 @@ public class TestWidget extends BaseOParserTest {
 		compareResourceOEO("widget/minimal.poc");
 	}
 
+	@Test
+	public void testNative() throws Exception {
+		compareResourceOEO("widget/native.poc");
+	}
+
 }
 
