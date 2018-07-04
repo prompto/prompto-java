@@ -12,6 +12,11 @@ public class TestNative extends BaseOParserTest {
 	}
 
 	@Test
+	public void testCategoryReturn() throws Exception {
+		compareResourceOMO("native/categoryReturn.poc");
+	}
+
+	@Test
 	public void testMethod() throws Exception {
 		compareResourceOMO("native/method.poc");
 	}

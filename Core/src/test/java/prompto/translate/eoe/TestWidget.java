@@ -11,5 +11,10 @@ public class TestWidget extends BaseEParserTest {
 		compareResourceEOE("widget/minimal.pec");
 	}
 
+	@Test
+	public void testNative() throws Exception {
+		compareResourceEOE("widget/native.pec");
+	}
+
 }
 

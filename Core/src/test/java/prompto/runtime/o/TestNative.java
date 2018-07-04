@@ -35,6 +35,21 @@ public class TestNative extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedCategoryReturn() throws Exception {
+		checkInterpretedOutput("native/categoryReturn.poc");
+	}
+
+	@Test
+	public void testCompiledCategoryReturn() throws Exception {
+		checkCompiledOutput("native/categoryReturn.poc");
+	}
+
+	@Test
+	public void testTranspiledCategoryReturn() throws Exception {
+		checkTranspiledOutput("native/categoryReturn.poc");
+	}
+
+	@Test
 	public void testInterpretedMethod() throws Exception {
 		checkInterpretedOutput("native/method.poc");
 	}

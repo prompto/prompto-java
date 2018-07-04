@@ -36,6 +36,10 @@ MyClass.prototype.computeDisplay = function() {
 	this.$display = "/id=" + this.$id + "/name=" + this.$name;
 };
 
+MyClass.prototype.getDisplay = function() {
+	return this.display;
+};
+
 MyClass.prototype.printDisplay = function() {
 	process.stdout.write(this.display);
 };

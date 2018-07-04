@@ -80,6 +80,21 @@ public class TestNative extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedCategoryReturn() throws Exception {
+		checkInterpretedOutput("native/categoryReturn.pec");
+	}
+
+	@Test
+	public void testCompiledCategoryReturn() throws Exception {
+		checkCompiledOutput("native/categoryReturn.pec");
+	}
+
+	@Test
+	public void testTranspiledCategoryReturn() throws Exception {
+		checkTranspiledOutput("native/categoryReturn.pec");
+	}
+
+	@Test
 	public void testInterpretedMethod() throws Exception {
 		checkInterpretedOutput("native/method.pec");
 	}

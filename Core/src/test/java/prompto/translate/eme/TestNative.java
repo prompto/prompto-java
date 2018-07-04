@@ -27,6 +27,11 @@ public class TestNative extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCategoryReturn() throws Exception {
+		compareResourceEME("native/categoryReturn.pec");
+	}
+
+	@Test
 	public void testMethod() throws Exception {
 		compareResourceEME("native/method.pec");
 	}
