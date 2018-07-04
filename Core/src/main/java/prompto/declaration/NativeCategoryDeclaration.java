@@ -24,12 +24,12 @@ public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 	Class<?> boundClass = null;
 	
 	public NativeCategoryDeclaration(Identifier name, IdentifierList attributes, 
-			NativeCategoryBindingList categoryMappings, 
-			NativeAttributeBindingListMap attributeMappings,
+			NativeCategoryBindingList categoryBindings, 
+			NativeAttributeBindingListMap attributeBindings,
 			MethodDeclarationList methods) {
 		super(name, attributes, null, methods);
-		this.categoryBindings = categoryMappings;
-		this.attributeMappings = attributeMappings;
+		this.categoryBindings = categoryBindings;
+		this.attributeMappings = attributeBindings;
 	}
 
 	@Override
@@ -120,11 +120,11 @@ public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 	}
 
 	public String getBoundClassName() {
-		JavaNativeCategoryBinding mapping = getBinding(false);
-		if(mapping==null)
+		JavaNativeCategoryBinding binding = getBinding(false);
+		if(binding==null)
 			return null;
 		else
-			return mapping.getExpression().toString();
+			return binding.getExpression().toString();
 	}
 	
 	public Class<?> getBoundClass(boolean fail) {
