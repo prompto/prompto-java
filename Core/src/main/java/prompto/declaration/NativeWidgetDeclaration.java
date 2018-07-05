@@ -13,10 +13,12 @@ public class NativeWidgetDeclaration extends NativeCategoryDeclaration implement
 		super(name, null, categoryBindings, null, methods);
 	}
 
+	@Override
 	protected void categoryTypeToEDialect(CodeWriter writer) {
 		writer.append("native widget");
 	}
 	
+	@Override
 	protected void categoryTypeToODialect(CodeWriter writer) {
 		writer.append("native widget");
 	}
