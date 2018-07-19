@@ -5,13 +5,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import prompto.code.ICodeStore.ModuleType;
 import prompto.error.PromptoError;
 import prompto.intrinsic.PromptoBinary;
 import prompto.intrinsic.PromptoVersion;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.store.IStore;
+import prompto.store.IStored;
 
 public abstract class Module {
 	
@@ -64,7 +64,7 @@ public abstract class Module {
 		this.image = image;
 	}
 
-	public IStorable populate(Context context, IStore store, List<IStorable> storables) throws PromptoError {
+	public IStorable toStorables(Context context, IStore store, List<IStorable> storables) throws PromptoError {
 		IStorable storable = store.newStorable(getCategories(), null); 
 		storables.add(storable);
 		setDbId(storable.getOrCreateDbId());
@@ -83,6 +83,13 @@ public abstract class Module {
 			storable.setData("dependencies", dbIds);
 		}
 		return storable;
+	}
+	
+	public void fromStored(IStored stored) {
+		setDbId(stored.getDbId());
+		setName((String)stored.getData("name"));
+		setVersion((PromptoVersion)stored.getData("version"));
+		setDescription((String)stored.getData("description"));
 	}
 
 	private List<String> getCategories() {
@@ -105,4 +112,6 @@ public abstract class Module {
 	public List<Dependency> getDependencies() {
 		return dependencies;
 	}
+
+
 }

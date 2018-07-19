@@ -131,7 +131,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 	public void storeModule(Module module) throws PromptoError {
 		Context context = Context.newGlobalContext();
 		List<IStorable> storables = new ArrayList<>();
-		module.populate(context, store, storables);
+		module.toStorables(context, store, storables);
 		store.store(null, storables);
 	}
 	
@@ -153,14 +153,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 			if(stored==null)
 				return null;
 			Module module = type.getModuleClass().newInstance();
-			module.setDbId(stored.getDbId());
-			module.setName((String)stored.getData("name"));
-			module.setVersion((PromptoVersion)stored.getData("version"));
-			module.setDescription((String)stored.getData("description"));
-			if(module instanceof Service)
-				((Service)module).setServerAboutToStartMethod((String)stored.getData("serverAboutToStartMethod"));
-			else if(module instanceof Batch)
-				((Batch)module).setStartMethod((String)stored.getData("startMethod"));
+			module.fromStored(stored);
 			return (T)module;
 		} catch(Exception e) {
 			throw new RuntimeException(e);

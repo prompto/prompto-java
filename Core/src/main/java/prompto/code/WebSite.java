@@ -2,7 +2,6 @@ package prompto.code;
 
 import java.util.List;
 
-import prompto.code.ICodeStore.ModuleType;
 import prompto.error.PromptoError;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
@@ -26,8 +25,8 @@ public class WebSite extends Service {
 	}
 	
 	@Override
-	public IStorable populate(Context context, IStore store, List<IStorable> storables) throws PromptoError {
-		IStorable storable = super.populate(context, store, storables);
+	public IStorable toStorables(Context context, IStore store, List<IStorable> storables) throws PromptoError {
+		IStorable storable = super.toStorables(context, store, storables);
 		storable.setData("homePage", homePage);
 		return storable;
 	}

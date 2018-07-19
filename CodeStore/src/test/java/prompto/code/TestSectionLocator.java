@@ -8,7 +8,6 @@ import java.net.URL;
 import org.junit.Test;
 
 import prompto.code.ICodeStore;
-import prompto.code.ICodeStore.ModuleType;
 import prompto.code.ImmutableCodeStore;
 import prompto.declaration.IMethodDeclaration;
 import prompto.intrinsic.PromptoVersion;

@@ -10,7 +10,6 @@ import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.DeclarationList;
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
-import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoVersion;
 import prompto.parser.AbstractParser;
 import prompto.parser.Dialect;
@@ -20,9 +19,7 @@ import prompto.parser.MCleverParser;
 import prompto.parser.OCleverParser;
 import prompto.runtime.Context;
 import prompto.store.AttributeInfo;
-import prompto.type.CategoryType;
 import prompto.utils.ISingleton;
-import prompto.utils.StringUtils;
 
 /* a code store is a place where a code consumer (interpreter, compiler...) can fetch code from */
 public interface ICodeStore {
@@ -69,30 +66,6 @@ public interface ICodeStore {
 		return Dialect.valueOf(s.toUpperCase());
 	}
 
-	static public enum ModuleType {
-		THESAURUS(Thesaurus.class), // storable attributes and categories
-		LIBRARY(Library.class), // reusable classes and methods
-		BATCH(Batch.class), // which can be scheduled
-		SCRIPT(Script.class), // which has no entry point
-		SERVICE(Service.class), // back end only web service (must be hosted)
-		WEBSITE(WebSite.class); // full fledged web app (must be hosted)
-		
-		Class<? extends Module> moduleClass;
-		
-		ModuleType(Class<? extends Module> klass) {
-			moduleClass = klass;
-		}
-		
-		public Class<? extends Module> getModuleClass() {
-			return moduleClass;
-		}
-		
-		public CategoryType getCategory() {
-			String capped = StringUtils.capitalizeFirst(this.name());
-			return new CategoryType( new Identifier(capped));
-		}
-	}
-	
 	ModuleType getModuleType();
 	Dialect getModuleDialect();
 	String getModuleName();

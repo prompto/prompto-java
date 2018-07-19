@@ -1,6 +1,5 @@
 package prompto.code;
 
-import prompto.code.ICodeStore.ModuleType;
 
 public class Library extends Module {
 
