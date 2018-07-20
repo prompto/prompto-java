@@ -1529,7 +1529,9 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitJavascript_category_binding(Javascript_category_bindingContext ctx) {
-		String identifier = ctx.identifier().getText();
+		String identifier = ctx.identifier().stream()
+				.map(cx->cx.getText())
+				.collect(Collectors.joining("."));
 		JavaScriptModule module = this.<JavaScriptModule>getNodeValue(ctx.javascript_module());
 		JavaScriptNativeCategoryBinding map = new JavaScriptNativeCategoryBinding(identifier, module);
 		setNodeValue(ctx, map);
