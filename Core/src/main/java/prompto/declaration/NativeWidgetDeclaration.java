@@ -9,8 +9,8 @@ import prompto.utils.CodeWriter;
 
 public class NativeWidgetDeclaration extends NativeCategoryDeclaration implements IWidgetDeclaration {
 	
-	public NativeWidgetDeclaration(Identifier name, NativeCategoryBindingList categoryBindings, MethodDeclarationList methods) {
-		super(name, null, categoryBindings, null, methods);
+	public NativeWidgetDeclaration(Identifier id, NativeCategoryBindingList categoryBindings, MethodDeclarationList methods) {
+		super(id, null, categoryBindings, null, methods);
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class NativeWidgetDeclaration extends NativeCategoryDeclaration implement
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 		JavaScriptNativeCategoryBinding binding = this.getJavaScriptBinding();
-	    binding.transpileWidget(transpiler);
+	    binding.transpileWidget(transpiler, getName());
 	    return true;
 	}
 
