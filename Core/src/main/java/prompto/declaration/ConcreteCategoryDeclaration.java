@@ -59,8 +59,8 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	MethodDeclarationList methods;
 	Map<String,IDeclaration> methodsMap = null;
 	
-	protected ConcreteCategoryDeclaration(Identifier name) {
-		super(name);
+	protected ConcreteCategoryDeclaration(Identifier id) {
+		super(id);
 	}
 	
 	public ConcreteCategoryDeclaration(Identifier name, IdentifierList attributes, 

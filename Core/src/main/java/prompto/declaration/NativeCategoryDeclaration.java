@@ -23,11 +23,11 @@ public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 	NativeAttributeBindingListMap attributeMappings;
 	Class<?> boundClass = null;
 	
-	public NativeCategoryDeclaration(Identifier name, IdentifierList attributes, 
+	public NativeCategoryDeclaration(Identifier id, IdentifierList attributes, 
 			NativeCategoryBindingList categoryBindings, 
 			NativeAttributeBindingListMap attributeBindings,
 			MethodDeclarationList methods) {
-		super(name, attributes, null, methods);
+		super(id, attributes, null, methods);
 		this.categoryBindings = categoryBindings;
 		this.attributeMappings = attributeBindings;
 	}
