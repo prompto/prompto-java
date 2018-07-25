@@ -3,10 +3,13 @@ package prompto.grammar;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import prompto.argument.AttributeArgument;
 import prompto.argument.IArgument;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.SyntaxError;
+import prompto.expression.AndExpression;
 import prompto.expression.IExpression;
+import prompto.expression.UnresolvedIdentifier;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
@@ -21,19 +24,32 @@ public class ArgumentAssignmentList extends LinkedList<ArgumentAssignment> {
 		
 	}
 	
-	public ArgumentAssignmentList(ArgumentAssignment assignment) {
-		this.add(assignment);
-	}
-	
 	public ArgumentAssignmentList(Collection<ArgumentAssignment> assignments) {
 		super(assignments);
 	}
 
-	public ArgumentAssignmentList(Collection<ArgumentAssignment> assignments, ArgumentAssignment assignment) {
-		super(assignments);
-		this.add(assignment);
+	/* post-fix expression priority for final assignment in E dialect */
+	/* 'xyz with a and b as c' should read 'xyz with a, b as c' NOT 'xyz with (a and b) as c' */
+	public void checkLastAnd() {
+		ArgumentAssignment assignment = this.getLast();
+		if(assignment!=null && assignment.getArgument()!=null && assignment.getExpression() instanceof AndExpression) {
+			AndExpression and = (AndExpression)assignment.getExpression();
+			if(and.getLeft() instanceof UnresolvedIdentifier) {
+				Identifier id = ((UnresolvedIdentifier)and.getLeft()).getId();
+				if(Character.isLowerCase(id.toString().charAt(0))) {
+					this.removeLast();
+					// add AttributeArgument
+					AttributeArgument argument = new AttributeArgument(id);
+					ArgumentAssignment attribute = new ArgumentAssignment(argument, null);
+					this.add(attribute);
+					// fix last assignment
+					assignment.setExpression(and.getRight());
+					this.add(assignment);
+				}
+			}
+		}
 	}
-
+	
 	public int findIndex(Identifier name) {
 		for(int i=0;i<this.size();i++) {
 			if(name.equals(this.get(i).getArgumentId())) {
@@ -144,7 +160,5 @@ public class ArgumentAssignmentList extends LinkedList<ArgumentAssignment> {
 	        throw new SyntaxError("Method has no argument:" + local.get(0).getArgument().getName());
 		return assignments;
 	}
-
-
 
 }

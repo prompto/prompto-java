@@ -1,6 +1,7 @@
 package prompto.parser;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -353,7 +354,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 	@Override
 	public void exitArgumentAssignmentList(ArgumentAssignmentListContext ctx) {
 		ArgumentAssignment item = this.<ArgumentAssignment>getNodeValue(ctx.item);
-		ArgumentAssignmentList items = new ArgumentAssignmentList(item);
+		ArgumentAssignmentList items = new ArgumentAssignmentList(Collections.singletonList(item));
 		setNodeValue(ctx, items);
 	}
 	
@@ -1168,7 +1169,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 	public void exitExpressionAssignmentList(ExpressionAssignmentListContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
 		ArgumentAssignment item = new ArgumentAssignment(null, exp);
-		ArgumentAssignmentList items = new ArgumentAssignmentList(item);
+		ArgumentAssignmentList items = new ArgumentAssignmentList(Collections.singletonList(item));
 		setNodeValue(ctx, items);
 	}
 	

@@ -1,6 +1,7 @@
 package prompto.parser;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -346,7 +347,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	@Override
 	public void exitArgumentAssignmentList(ArgumentAssignmentListContext ctx) {
 		ArgumentAssignment item = this.<ArgumentAssignment>getNodeValue(ctx.item);
-		ArgumentAssignmentList items = new ArgumentAssignmentList(item);
+		ArgumentAssignmentList items = new ArgumentAssignmentList(Collections.singletonList(item));
 		setNodeValue(ctx, items);
 	}
 	
@@ -360,6 +361,8 @@ public class EPromptoBuilder extends EParserBaseListener {
 		ArgumentAssignment item = this.<ArgumentAssignment>getNodeValue(ctx.item);
 		if(item!=null)
 			items.add(item);
+		else
+			items.checkLastAnd();
 		setNodeValue(ctx, items);
 	}
 
@@ -377,6 +380,8 @@ public class EPromptoBuilder extends EParserBaseListener {
 		ArgumentAssignment item = this.<ArgumentAssignment>getNodeValue(ctx.item);
 		if(item!=null)
 			items.add(item);
+		else
+			items.checkLastAnd();
 		setNodeValue(ctx, items);
 	}
 	

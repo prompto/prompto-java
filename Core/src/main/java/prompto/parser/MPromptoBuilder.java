@@ -1,6 +1,7 @@
 package prompto.parser;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -344,7 +345,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	@Override
 	public void exitArgumentAssignmentList(ArgumentAssignmentListContext ctx) {
 		ArgumentAssignment item = this.<ArgumentAssignment>getNodeValue(ctx.item);
-		ArgumentAssignmentList items = new ArgumentAssignmentList(item);
+		ArgumentAssignmentList items = new ArgumentAssignmentList(Collections.singletonList(item));
 		setNodeValue(ctx, items);
 	}
 	

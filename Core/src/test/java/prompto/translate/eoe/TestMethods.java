@@ -52,6 +52,11 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testImplicitAnd() throws Exception {
+		compareResourceEOE("methods/implicitAnd.pec");
+	}
+
+	@Test
 	public void testImplicitMember() throws Exception {
 		compareResourceEOE("methods/implicitMember.pec");
 	}

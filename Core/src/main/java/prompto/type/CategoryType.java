@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -655,7 +656,7 @@ public class CategoryType extends BaseType {
 		try {
 			IExpression exp = new ExpressionValue(this, this.newInstance(context));
 			ArgumentAssignment arg = new ArgumentAssignment(null, exp);
-			ArgumentAssignmentList args = new ArgumentAssignmentList(arg);
+			ArgumentAssignmentList args = new ArgumentAssignmentList(Collections.singletonList(arg));
 			MethodCall proto = new MethodCall(new MethodSelector(null, new Identifier(name)), args);
 			MethodFinder finder = new MethodFinder(context, proto);
 			return finder.findBestMethod(true);

@@ -236,7 +236,8 @@ public class CategorySymbol extends Symbol implements IExpression  {
 	    transpiler.append("var ").append(this.getName()).append(" = ");
 	    AttributeArgument nameArg = new AttributeArgument(new Identifier("name"));
 	    ArgumentAssignment nameAssign = new ArgumentAssignment(nameArg, new TextLiteral('"' + this.getName() + '"'));
-	    ArgumentAssignmentList assignments = new ArgumentAssignmentList(this.assignments, nameAssign);
+	    ArgumentAssignmentList assignments = new ArgumentAssignmentList(this.assignments);
+	    assignments.add(nameAssign);
 	    ConstructorExpression exp = new ConstructorExpression((CategoryType) this.type, null, assignments, false);
 	    exp.transpile(transpiler);
 	    transpiler.append(";").newLine();

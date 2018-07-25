@@ -140,6 +140,21 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedImplicitAnd() throws Exception {
+		checkInterpretedOutput("methods/implicitAnd.pec");
+	}
+
+	@Test
+	public void testCompiledImplicitAnd() throws Exception {
+		checkCompiledOutput("methods/implicitAnd.pec");
+	}
+
+	@Test
+	public void testTranspiledImplicitAnd() throws Exception {
+		checkTranspiledOutput("methods/implicitAnd.pec");
+	}
+
+	@Test
 	public void testInterpretedImplicitMember() throws Exception {
 		checkInterpretedOutput("methods/implicitMember.pec");
 	}

@@ -1,6 +1,7 @@
 package prompto.expression;
 
 import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.function.BiFunction;
 
@@ -222,7 +223,7 @@ public class SortedExpression implements IExpression {
 		try {
 			IExpression exp = new ExpressionValue(itemType, itemType.newInstance(context));
 			ArgumentAssignment arg = new ArgumentAssignment(null, exp); // MethodCall supports first anonymous argument
-			ArgumentAssignmentList args = new ArgumentAssignmentList(arg);
+			ArgumentAssignmentList args = new ArgumentAssignmentList(Collections.singletonList(arg));
 			MethodCall call = new MethodCall(new MethodSelector(methodName), args);
 			MethodFinder finder = new MethodFinder(context, call);
 			IMethodDeclaration decl = finder.findBestMethod(true);
