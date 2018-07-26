@@ -55,7 +55,8 @@ public abstract class BaseParserTest extends BaseTest {
 			else
 				allStmts.addAll(stmts);
 		}
-		allStmts.register(coreContext);
+		if(allStmts!=null)
+			allStmts.register(coreContext);
 	}
 
 	protected void loadString(String code) throws Exception {
