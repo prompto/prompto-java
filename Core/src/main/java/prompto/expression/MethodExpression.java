@@ -11,6 +11,7 @@ import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
+import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
@@ -27,6 +28,11 @@ public class MethodExpression implements IExpression {
 		this.id = id;
 	}
 
+	@Override
+	public String toString() {
+		return id.toString();
+	}
+	
 	public Identifier getId() {
 		return id;
 	}
@@ -99,8 +105,19 @@ public class MethodExpression implements IExpression {
 	public boolean transpile(Transpiler transpiler) {
 		INamed named = transpiler.getContext().getRegistered(id);
 		if(named instanceof Context.MethodDeclarationMap) {
+			Context context = transpiler.getContext().contextForValue(id);
 			IMethodDeclaration decl = ((MethodDeclarationMap)named).getFirst();
+		    if(context instanceof InstanceContext) {
+		        ((InstanceContext)context).getInstanceType().transpileInstance(transpiler);
+		        transpiler.append(".");
+		    }
 			transpiler.append(decl.getTranspiledName(transpiler.getContext()));
+			// need to bind instance methods
+			if(context instanceof InstanceContext) {
+		        transpiler.append(".bind(");
+		        ((InstanceContext)context).getInstanceType().transpileInstance(transpiler);
+		        transpiler.append(")");
+		    }
 		}
 		return false;
 	}

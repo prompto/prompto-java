@@ -3,8 +3,8 @@ package prompto.type;
 import java.security.InvalidParameterException;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
@@ -210,8 +210,8 @@ public abstract class BaseType implements IType {
 	}
 	
 	@Override
-	public List<IMethodDeclaration> getMemberMethods(Context context, Identifier name) throws PromptoError {
-		return Collections.emptyList();
+	public Set<IMethodDeclaration> getMemberMethods(Context context, Identifier name) throws PromptoError {
+		return Collections.emptySet();
 	}
 
 	@Override

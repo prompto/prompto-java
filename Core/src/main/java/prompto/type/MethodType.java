@@ -39,10 +39,28 @@ public class MethodType extends BaseType {
 	
 	@Override
 	public Type getJavaType(Context context) {
-		IMethodDeclaration embedding = method.getClosureOf();
-		if(embedding==null) {
+		if(method.getClosureOf()!=null && method.getMemberOf()!=null)
+			return getMemberClosureJavaType(context);
+		else if(method.getMemberOf()!=null)
+			return getMemberJavaType(context);
+		else if(method.getClosureOf()!=null)
+			return getClosureJavaType(context);
+		else
 			return CompilerUtils.getGlobalMethodType(method.getId());
-		} else if(embedding.getMemberOf()==null) {
+	}
+	
+	private Type getMemberClosureJavaType(Context context) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	private Type getMemberJavaType(Context context) {
+		Type outer = CompilerUtils.getCategoryConcreteType(method.getMemberOf().getId()); 
+		return new PromptoType(outer.getTypeName() + '$' + method.getName());
+	}
+
+	private Type getClosureJavaType(Context context) {
+		IMethodDeclaration embedding = method.getClosureOf();
+		if(embedding.getMemberOf()==null) {
 			Type outer = CompilerUtils.getGlobalMethodType(embedding.getId()); 
 			return new PromptoType(outer.getTypeName() + '$' + method.getName());
 		} else {

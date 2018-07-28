@@ -2,8 +2,8 @@ package prompto.type;
 
 import java.lang.reflect.Type;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
@@ -62,7 +62,7 @@ public interface IType {
 	RangeBase<?> newRange(Object first,Object last);
 	Comparator<? extends IValue> getComparator(boolean descending);
 	IValue getMemberValue(Context context, Identifier name) throws PromptoError;
-	List<IMethodDeclaration> getMemberMethods(Context context, Identifier name) throws PromptoError;
+	Set<IMethodDeclaration> getMemberMethods(Context context, Identifier name) throws PromptoError;
 
 
 	String toString(Object value);

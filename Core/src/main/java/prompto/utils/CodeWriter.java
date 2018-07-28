@@ -111,6 +111,10 @@ public class CodeWriter {
 		return new CodeWriter(dialect, context.newLocalContext(), sb, indenter);
 	}
 
+	public CodeWriter newChildWriter() {
+		return new CodeWriter(dialect, context.newChildContext(), sb, indenter);
+	}
+
 	public CodeWriter newMemberWriter() {
 		Context context = this.context.newLocalContext();
 		context.setParentContext(this.context);
@@ -120,5 +124,6 @@ public class CodeWriter {
 	public CodeWriter newInstanceWriter(CategoryType type) {
 		return new CodeWriter(dialect, context.newInstanceContext(type, false), sb, indenter);
 	}
+
 
 }

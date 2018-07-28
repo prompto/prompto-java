@@ -58,6 +58,13 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 	}
 	
 	@Override
+	public void toDialect(CodeWriter writer) {
+		writer = writer.newLocalWriter();
+		writer.getContext().registerValue(new ErrorVariable(errorId));
+		super.toDialect(writer);
+	}
+	
+	@Override
 	protected void toODialect(CodeWriter writer) {
 		writer.append("try (");
 		writer.append(errorId);

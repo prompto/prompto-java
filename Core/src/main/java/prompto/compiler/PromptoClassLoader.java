@@ -118,6 +118,7 @@ public class PromptoClassLoader extends URLClassLoader {
 			Compiler compiler = new Compiler(getClassDir()); // where to store .class
 			compiler.compileClass(context.getGlobalContext(), fullName);
 		} catch(Exception e) {
+			logger.error(()->"Compilation of " + fullName + " failed. Check: " +  TempDirectories.getJavaClassesDir().getAbsolutePath(), e);
 			throw new ClassNotFoundException(fullName, e);
 		}
 	}

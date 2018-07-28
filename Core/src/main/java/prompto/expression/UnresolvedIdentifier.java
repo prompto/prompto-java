@@ -10,6 +10,7 @@ import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
+import prompto.parser.Dialect;
 import prompto.parser.Section;
 import prompto.problem.IProblemListener;
 import prompto.problem.ProblemListener;
@@ -93,20 +94,7 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 			IProblemListener saved = context.getProblemListener();
 			try {
 				context.setProblemListener(new ProblemListener() { @Override public boolean isCheckNative() { return saved.isCheckNative(); } });
-				resolved = resolveSymbol(context);
-				if(resolved==null) {
-					if(Character.isUpperCase(id.toString().charAt(0))) {
-						if(forMember)
-							resolved = resolveType(context);
-						else
-							resolved = resolveConstructor(context);
-					}
-					if(resolved==null) {
-						resolved = resolveMethod(context, updateSelectorParent);
-						if(resolved==null)
-							resolved = resolveInstance(context);
-					}
-				}
+				resolved = doResolve(context, forMember, updateSelectorParent);
 			} finally {
 				context.setProblemListener(saved);
 			}
@@ -116,6 +104,29 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 				((Section)resolved).setFrom(this);
 		}
 		return resolved;
+	}
+
+	private IExpression doResolve(Context context, boolean forMember, boolean updateSelectorParent) {
+		IExpression resolved = resolveSymbol(context);
+		if(resolved!=null)
+			return resolved;
+		resolved = resolveTypeOrConstructor(context, forMember);
+		if(resolved!=null)
+			return resolved;
+		resolved = resolveMethodCall(context, updateSelectorParent);
+		if(resolved!=null)
+			return resolved;
+		resolved = resolveInstance(context);
+		return resolved;
+	}
+
+	private IExpression resolveTypeOrConstructor(Context context, boolean forMember) {
+		if(!Character.isUpperCase(id.toString().charAt(0)))
+			return null;
+		if(forMember)
+			return resolveType(context);
+		else
+			return resolveConstructor(context);
 	}
 
 	private IExpression resolveInstance(Context context) {
@@ -129,7 +140,9 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 		}
 	}
 
-	private IExpression resolveMethod(Context context, boolean updateSelectorParent) {
+	private IExpression resolveMethodCall(Context context, boolean updateSelectorParent) {
+		if(id.getDialect()!=Dialect.E)
+			return null;
 		try {
 			MethodCall method = new MethodCall(new MethodSelector(id));
 			method.setFrom(this);

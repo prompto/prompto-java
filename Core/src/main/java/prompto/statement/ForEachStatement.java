@@ -58,6 +58,13 @@ public class ForEachStatement extends BaseStatement {
 
 	@Override
 	public void toDialect(CodeWriter writer) {
+		writer = writer.newChildWriter();
+		IType srcType = source.check(writer.getContext());
+		IType elemType = srcType.checkIterator(writer.getContext());
+		Identifier itemName = v2 == null ? v1 : v2;
+		writer.getContext().registerValue(new Variable(itemName, elemType));
+		if (v2 != null)
+			writer.getContext().registerValue(new Variable(v1, IntegerType.instance()));
 		switch(writer.getDialect()) {
 		case E:
 			toEDialect(writer);

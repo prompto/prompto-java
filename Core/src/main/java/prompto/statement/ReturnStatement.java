@@ -53,7 +53,7 @@ public class ReturnStatement extends SimpleStatement {
 	
 	@Override
 	public String toString() {
-		return "return " + expression==null ? "" : expression.toString();
+		return "return " + (expression==null ? "" : expression.toString());
 	}
 	
 	@Override

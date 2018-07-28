@@ -2,12 +2,13 @@ package prompto.type;
 
 import java.lang.reflect.Type;
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
@@ -223,23 +224,27 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-    public IType checkMember(Context context, Identifier id) {
+    public IType checkMember(Context context, Identifier name) {
         IDeclaration dd = context.getRegisteredDeclaration(IDeclaration.class, typeNameId);
         if (dd == null)
             throw new SyntaxError("Unknown type:" + typeNameId);
         if(dd instanceof EnumeratedNativeDeclaration)
-        	return dd.getType(context).checkMember(context, id);
+        	return dd.getType(context).checkMember(context, name);
         else if(dd instanceof CategoryDeclaration) {
-	        if (((CategoryDeclaration)dd).hasAttribute(context, id)) {
-	            AttributeDeclaration ad = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
+        	CategoryDeclaration cd = (CategoryDeclaration)dd;
+	        if (cd.hasAttribute(context, name)) {
+	            AttributeDeclaration ad = context.getRegisteredDeclaration(AttributeDeclaration.class, name);
 	            if (ad != null)
 	            	return ad.getType(context);
 	            else
-	                throw new SyntaxError("Missing atttribute:" + id);
-	        } else if("text".equals(id.toString()))
+	                throw new SyntaxError("Missing atttribute:" + name);
+	        } else if(cd.hasMethod(context, name)) {
+	        	IMethodDeclaration method = cd.getMemberMethods(context, name).getFirst();
+	        	return new MethodType(method);
+	        } else if("text".equals(name.toString()))
 	        	return TextType.instance();
 	        else
-	            throw new SyntaxError("No attribute:" + id + " in category:" + typeNameId);
+	            throw new SyntaxError("No attribute:" + name + " in category:" + typeNameId);
         } else
             throw new SyntaxError("Not a category:" + typeNameId);
         	
@@ -247,15 +252,15 @@ public class CategoryType extends BaseType {
     
 	
 	@Override
-	public List<IMethodDeclaration> getMemberMethods(Context context, Identifier name) throws PromptoError {
+	public Set<IMethodDeclaration> getMemberMethods(Context context, Identifier name) throws PromptoError {
 		IDeclaration cd = getDeclaration(context);
 		if(!(cd instanceof ConcreteCategoryDeclaration))
 			throw new SyntaxError("Unknown category:" + this.getTypeName());
 		Collection<IMethodDeclaration> methods = ((ConcreteCategoryDeclaration)cd).getMemberMethods(context, name).values();
-		if(methods instanceof List)
-			return (List<IMethodDeclaration>)methods;
+		if(methods instanceof Set)
+			return (Set<IMethodDeclaration>)methods;
 		else
-			return new ArrayList<>(methods);
+			return new HashSet<>(methods);
 	}
 
 	
@@ -577,7 +582,7 @@ public class CategoryType extends BaseType {
 	    IDeclaration decl = this.getDeclaration(transpiler.getContext());
 	    if(decl instanceof CategoryDeclaration) {
 	    	CategoryDeclaration cd = (CategoryDeclaration)decl;
-	    	if ( cd.hasAttribute(transpiler.getContext(), new Identifier(keyname)) ||  cd.hasMethod(transpiler.getContext(), new Identifier(keyname), null))
+	    	if ( cd.hasAttribute(transpiler.getContext(), new Identifier(keyname)) ||  cd.hasMethod(transpiler.getContext(), new Identifier(keyname)))
 	    		return;
 	    } 
         decl = this.findGlobalMethod(transpiler.getContext(), keyname);
@@ -597,7 +602,7 @@ public class CategoryType extends BaseType {
     	    if (cd.hasAttribute(transpiler.getContext(), new Identifier(keyname))) {
     	    	this.transpileSortedByAttribute(transpiler, descending, key);
     	    	return;
-    	    } else if (cd.hasMethod(transpiler.getContext(), new Identifier(keyname), null)) {
+    	    } else if (cd.hasMethod(transpiler.getContext(), new Identifier(keyname))) {
     	    	throw new UnsupportedOperationException();
     	    	/*this.transpileSortedByClassMethod(transpiler, descending, key);
     	    	return;*/

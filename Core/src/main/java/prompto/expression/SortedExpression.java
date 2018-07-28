@@ -178,7 +178,7 @@ public class SortedExpression implements IExpression {
 			CategoryDeclaration decl = (CategoryDeclaration)d;
 			if(decl.hasAttribute(context, keyAsId))
 				return getCategoryAttributeComparator(context, keyAsId);
-			else if(decl.hasMethod(context, keyAsId, null))
+			else if(decl.hasMethod(context, keyAsId))
 				return getCategoryMethodComparator(context, keyAsId);
 			else {
 				MethodCall call = createGlobalMethodCall(context, itemType, keyAsId);
@@ -332,7 +332,7 @@ public class SortedExpression implements IExpression {
 		Identifier keyAsId = new Identifier(key.toString());
 		if(decl.hasAttribute(context, keyAsId))
 			return new CategoryAttributeComparatorCompiler();
-		else if(decl.hasMethod(context, keyAsId, null))
+		else if(decl.hasMethod(context, keyAsId))
 			return new CategoryMethodComparatorCompiler();
 		else {
 			MethodCall call = createGlobalMethodCall(context, itemType, keyAsId);

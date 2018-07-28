@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -207,19 +208,33 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	private boolean hasDerivedAttribute(Context context, Identifier name) {
 		if(derivedFrom==null)
 			return false;
-		for(Identifier ancestor : derivedFrom) {
-			if(ancestorHasAttribute(ancestor,context,name))
-				return true;
-		}
+		return derivedFrom.stream()
+				.map(ancestor->context.getRegisteredDeclaration(CategoryDeclaration.class, ancestor))
+				.filter(Objects::nonNull)
+				.anyMatch(decl->decl.hasAttribute(context, name));
+	}
+	
+	
+	@Override
+	public boolean hasMethod(Context context, Identifier name) {
+		registerMethods(context);
+		if(methodsMap.containsKey(name.toString()))
+			return true;
+		if(hasDerivedMethod(context,name))
+			return true;
 		return false;
 	}
-		
-	private static boolean ancestorHasAttribute(Identifier ancestor, Context context, Identifier name) {
-		CategoryDeclaration actual = context.getRegisteredDeclaration(CategoryDeclaration.class, ancestor);
-		if(actual==null)
+	
+	
+	private boolean hasDerivedMethod(Context context, Identifier name) {
+		if(derivedFrom==null)
 			return false;
-		return actual.hasAttribute(context, name);
+		return derivedFrom.stream()
+				.map(ancestor->context.getRegisteredDeclaration(CategoryDeclaration.class, ancestor))
+				.filter(Objects::nonNull)
+				.anyMatch(decl->decl.hasMethod(context, name));
 	}
+	
 
 	@Override
 	public IType check(Context context, boolean isStart) {
@@ -355,6 +370,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return cd.findSetter(context, attrName);
 	}
 	
+	@Override
 	public MethodDeclarationMap getMemberMethods(Context context, Identifier name) {
 		registerMethods(context);
 		MethodDeclarationMap result = new MethodDeclarationMap(name);

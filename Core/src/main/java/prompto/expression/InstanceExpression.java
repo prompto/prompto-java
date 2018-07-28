@@ -75,8 +75,10 @@ public class InstanceExpression extends Section implements IExpression {
 	@Override
 	public IType check(Context context) {
 		INamed named = context.getRegistered(id);
-		if(named==null)
-			throw new SyntaxError("Unknown identifier: " + id);
+		if(named==null) {
+			context.getProblemListener().reportUnknownIdentifier(id.toString(), id);
+			return null;
+		}
 		else if(named instanceof Variable // local variable
 				|| named instanceof LinkedVariable // local variable with downcast
 				|| named instanceof IArgument // named argument
@@ -87,7 +89,7 @@ public class InstanceExpression extends Section implements IExpression {
 			IMethodDeclaration decl = ((MethodDeclarationMap)named).values().iterator().next();
 			return new MethodType(decl);
 		} else
-			throw new SyntaxError(id + "  is not a value or method:" + named.getClass().getSimpleName());
+			throw new SyntaxError(id + "  is not a value or method:" + named.getClass().getSimpleName()); // TODO use pb listener
 	}
 	
 	@Override
@@ -179,6 +181,9 @@ public class InstanceExpression extends Section implements IExpression {
 		INamed named = transpiler.getContext().getRegistered(id);
 		if(named instanceof MethodDeclarationMap) {
 			IMethodDeclaration decl = ((MethodDeclarationMap)named).getFirst();
+			// don't declare member methods
+			if(decl.getMemberOf()!=null)
+				return;
 			// don't declare closures
 			if(decl instanceof ConcreteMethodDeclaration && ((ConcreteMethodDeclaration)decl).getDeclarationStatement()!=null)
 				return;
@@ -197,6 +202,12 @@ public class InstanceExpression extends Section implements IExpression {
 		INamed named = transpiler.getContext().getRegistered(id);
 		if(named instanceof MethodDeclarationMap) {
 			transpiler.append(((MethodDeclarationMap)named).getFirst().getTranspiledName(context));
+			// need to bind instance methods
+			if(context instanceof InstanceContext) {
+		        transpiler.append(".bind(");
+		        ((InstanceContext)context).getInstanceType().transpileInstance(transpiler);
+		        transpiler.append(")");
+		    }
 		} else {
 		    if(this.getName().equals(transpiler.getGetterName()))
 		        transpiler.append("$");

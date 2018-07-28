@@ -2,6 +2,7 @@ package prompto.statement;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
@@ -339,9 +340,9 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	public void declare(Transpiler transpiler) {
 		Context context = transpiler.getContext();
 		MethodFinder finder = new MethodFinder(context, this);
-	    List<IMethodDeclaration> declarations = finder.findCompatibleMethods(false, true, spec -> spec!= Specificity.INCOMPATIBLE);
-	    if(declarations.size()==1 && declarations.get(0) instanceof BuiltInMethodDeclaration) {
-            ((BuiltInMethodDeclaration)declarations.get(0)).declareCall(transpiler);
+	    Set<IMethodDeclaration> declarations = finder.findCompatibleMethods(false, true, spec -> spec!= Specificity.INCOMPATIBLE);
+	    if(declarations.size()==1 && declarations.iterator().next() instanceof BuiltInMethodDeclaration) {
+            ((BuiltInMethodDeclaration)declarations.iterator().next()).declareCall(transpiler);
 	    } else {
 	        if (this.assignments != null)
 	            this.assignments.declare(transpiler);
@@ -391,9 +392,9 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 		MethodFinder finder = new MethodFinder(transpiler.getContext(), this);
-	    List<IMethodDeclaration> declarations = finder.findCompatibleMethods(false, true, spec -> spec!=Specificity.INCOMPATIBLE);
+	    Set<IMethodDeclaration> declarations = finder.findCompatibleMethods(false, true, spec -> spec!=Specificity.INCOMPATIBLE);
 	    if (declarations.size() == 1)
-	        this.transpileSingle(transpiler, declarations.get(0), false);
+	        this.transpileSingle(transpiler, declarations.iterator().next(), false);
 	    else
 	        this.transpileMultiple(transpiler, declarations);
 	    return false;
@@ -448,10 +449,10 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	    declaration.transpileCall(transpiler, this.assignments);
 	}
 
-	private void transpileMultiple(Transpiler transpiler, List<IMethodDeclaration> declarations) {
+	private void transpileMultiple(Transpiler transpiler, Set<IMethodDeclaration> declarations) {
 	    String name = this.dispatcher.getTranspiledName(transpiler.getContext());
 	    IExpression parent = this.selector.resolveParent(transpiler.getContext());
-	    if(parent==null && declarations.get(0).getMemberOf()!=null && transpiler.getContext().getParentContext() instanceof InstanceContext)
+	    if(parent==null && declarations.iterator().next().getMemberOf()!=null && transpiler.getContext().getParentContext() instanceof InstanceContext)
 	        parent = new ThisExpression();
 	    MethodSelector selector = new MethodSelector(parent, new Identifier(name));
 	    selector.transpile(transpiler);

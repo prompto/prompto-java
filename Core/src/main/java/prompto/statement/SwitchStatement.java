@@ -88,7 +88,7 @@ public class SwitchStatement extends BaseSwitchStatement {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		IValue switchValue = expression.interpret(context);
-		return interpretSwitch(context,switchValue,null);
+		return interpretSwitch(context, switchValue, null);
 	}
 	
 	@Override

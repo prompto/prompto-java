@@ -26,6 +26,7 @@ import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoAny;
 import prompto.intrinsic.PromptoDict;
 import prompto.intrinsic.PromptoDocument;
+import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.Context.ClosureContext;
 import prompto.runtime.Context.InstanceContext;
@@ -33,6 +34,7 @@ import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.EnumeratedCategoryType;
 import prompto.type.IType;
+import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
 import prompto.value.ConcreteInstance;
 import prompto.value.IValue;
@@ -61,6 +63,16 @@ public class MemberSelector extends SelectorExpression {
 
 	@Override
 	public void toDialect(CodeWriter writer) {
+		if(writer.getDialect()==Dialect.E) {
+			IType type = check(writer.getContext());
+			if(type instanceof MethodType)
+				writer.append("Method: ");
+			
+		} 
+		parentAndMemberToDialect(writer);
+	}
+	
+	protected void parentAndMemberToDialect(CodeWriter writer) {
 		try {
 			resolveParent(writer.getContext());
 		} catch(SyntaxError e) {
@@ -70,7 +82,7 @@ public class MemberSelector extends SelectorExpression {
 		writer.append(".");
 		writer.append(id);
 	}
-	
+
 	@Override
 	public String toString() {
 		return parent.toString() + "." + id;

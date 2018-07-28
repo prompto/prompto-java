@@ -3,8 +3,9 @@ package prompto.type;
 import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import prompto.argument.CategoryArgument;
 import prompto.argument.IArgument;
@@ -121,26 +122,26 @@ public class TextType extends NativeType {
 	}
 	
 	@Override
-	public List<IMethodDeclaration> getMemberMethods(Context context, Identifier id) throws PromptoError {
+	public Set<IMethodDeclaration> getMemberMethods(Context context, Identifier id) throws PromptoError {
 		switch(id.toString()) {
 		case "startsWith":
-			return Collections.singletonList(STARTS_WITH_METHOD);
+			return new HashSet<>(Collections.singletonList(STARTS_WITH_METHOD));
 		case "endsWith":
-			return Collections.singletonList(ENDS_WITH_METHOD);
+			return new HashSet<>(Collections.singletonList(ENDS_WITH_METHOD));
 		case "toLowerCase":
-			return Collections.singletonList(TO_LOWERCASE_METHOD);
+			return new HashSet<>(Collections.singletonList(TO_LOWERCASE_METHOD));
 		case "toUpperCase":
-			return Collections.singletonList(TO_UPPERCASE_METHOD);
+			return new HashSet<>(Collections.singletonList(TO_UPPERCASE_METHOD));
 		case "toCapitalized":
-			return Collections.singletonList(TO_CAPITALIZED_METHOD);
+			return new HashSet<>(Collections.singletonList(TO_CAPITALIZED_METHOD));
 		case "replace":
-			return Collections.singletonList(REPLACE_METHOD);
+			return new HashSet<>(Collections.singletonList(REPLACE_METHOD));
 		case "replaceAll":
-			return Collections.singletonList(REPLACE_ALL_METHOD);
+			return new HashSet<>(Collections.singletonList(REPLACE_ALL_METHOD));
 		case "split":
-			return Collections.singletonList(SPLIT_METHOD);
+			return new HashSet<>(Collections.singletonList(SPLIT_METHOD));
 		case "trim":
-			return Collections.singletonList(TRIM_METHOD);
+			return new HashSet<>(Collections.singletonList(TRIM_METHOD));
 		default:
 			return super.getMemberMethods(context, id);
 		}

@@ -39,6 +39,7 @@ import prompto.type.NativeType;
 import prompto.utils.CodeWriter;
 import prompto.utils.ObjectUtils;
 import prompto.utils.SectionLocator;
+import prompto.value.ClosureValue;
 import prompto.value.ConcreteInstance;
 import prompto.value.Decimal;
 import prompto.value.Document;
@@ -951,7 +952,32 @@ public class Context implements IContext {
 		public IType getInstanceType() {
 			return type;
 		}
-
+		
+		@Override
+		public INamed getRegistered(Identifier id) {
+			INamed actual = super.getRegistered(id);
+			if(actual!=null) 
+				return actual;
+			ConcreteCategoryDeclaration decl = getDeclaration();
+			MethodDeclarationMap methods = decl.getMemberMethods(this, id);
+			return methods.isEmpty() ? null : methods;
+		}
+		
+		@SuppressWarnings("unchecked")
+		@Override
+		public <T extends IDeclaration> T getRegisteredDeclaration(Class<T> klass, Identifier id, boolean lookInStore) {
+			if(klass==MethodDeclarationMap.class) {
+				ConcreteCategoryDeclaration decl = getDeclaration();
+				if(decl!=null) {
+					MethodDeclarationMap methods = decl.getMemberMethods(this, id);
+					if(methods!=null && !methods.isEmpty())
+						return (T)methods;
+				}
+			}
+			return super.getRegisteredDeclaration(klass, id, lookInStore);
+		}
+		
+		
 		protected <T extends INamed> T readRegisteredValue(Class<T> klass, Identifier name) {
 			INamed actual = instances.get(name);
 			// not very pure, but avoids a lot of complexity when registering a value
@@ -973,7 +999,8 @@ public class Context implements IContext {
 			Context context = super.contextForValue(name);
 			if(context!=null)
 				return context;
-			else if(getDeclaration().hasAttribute(this, name))
+			ConcreteCategoryDeclaration decl = getDeclaration();
+			if(decl.hasAttribute(this, name) || decl.hasMethod(this, name))
 				return this;
 			else
 				return null;
@@ -992,7 +1019,17 @@ public class Context implements IContext {
 
 		@Override
 		protected IValue readValue(Identifier name, Supplier<IValue> supplier) throws PromptoError {
-			return instance.getMember(calling, name, false);
+			ConcreteCategoryDeclaration decl = getDeclaration();
+			if(decl.hasAttribute(this, name)) {
+				IValue value = instance.getMember(calling, name, false);
+				return value!=null ? value : supplier.get();
+			} else if (decl.hasMethod(this, name)) {
+				IMethodDeclaration method = decl.getMemberMethods(this, name).getFirst();
+				MethodType type = new MethodType(method);
+				return new ClosureValue(this, type);
+		
+			} else
+				return supplier.get();
 		}
 		
 		@Override

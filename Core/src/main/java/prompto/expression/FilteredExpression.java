@@ -56,6 +56,10 @@ public class FilteredExpression extends Section implements IExpression {
 	
 	@Override
 	public void toDialect(CodeWriter writer) {
+		writer = writer.newChildWriter();
+		IType sourceType = source.check(writer.getContext());
+		IType itemType = ((IterableType)sourceType).getItemType();
+		writer.getContext().registerValue(new Variable(itemId, itemType));
 		switch(writer.getDialect()) {
 		case E:
 		case M:
@@ -82,10 +86,10 @@ public class FilteredExpression extends Section implements IExpression {
 		IType sourceType = source.check(context);
 		if(!(sourceType instanceof IterableType))
 			throw new SyntaxError("Expecting a list, set or tuple as data source !");
-		Context local = context.newChildContext();
+		Context child = context.newChildContext();
 		IType itemType = ((IterableType)sourceType).getItemType();
-		local.registerValue(new Variable(itemId, itemType));
-		IType filterType = predicate.check(local);
+		child.registerValue(new Variable(itemId, itemType));
+		IType filterType = predicate.check(child);
 		if(filterType!=BooleanType.instance())
 			throw new SyntaxError("Filtering expression must return a boolean !");
 		return new ListType(itemType);

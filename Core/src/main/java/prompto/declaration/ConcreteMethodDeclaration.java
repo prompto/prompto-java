@@ -53,6 +53,8 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	@SuppressWarnings("unchecked")
 	public ConcreteMethodDeclaration(Identifier name, ArgumentList arguments, IType returnType, StatementList statements) {
 		super(name, arguments, returnType);
+		if(statements==null)
+			statements = new StatementList();
 		this.statements = statements;
 		statements.forEach((s)->{
 			if(s instanceof DeclarationStatement)
@@ -83,6 +85,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	public void toDialect(CodeWriter writer) {
 		if(writer.isGlobalContext())
 			writer = writer.newLocalWriter();
+		registerArguments(writer.getContext());
 		switch(writer.getDialect()) {
 		case E:
 			toEDialect(writer);
@@ -382,7 +385,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		        transpiler.declare(this);
 		        this.declareArguments(transpiler);
 		    }
-		    this.registerArguments(transpiler.getContext());
+	    	this.registerArguments(transpiler.getContext());
 		    this.statements.declare(transpiler);
 		} finally {
 			declaring = false;

@@ -5,8 +5,9 @@ import java.text.DecimalFormat;
 import java.text.Format;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import prompto.argument.CategoryArgument;
 import prompto.argument.IArgument;
@@ -140,10 +141,10 @@ public class IntegerType extends NativeType implements INumberType {
 	}
 	
 	@Override
-	public List<IMethodDeclaration> getMemberMethods(Context context, Identifier id) throws PromptoError {
+	public Set<IMethodDeclaration> getMemberMethods(Context context, Identifier id) throws PromptoError {
 		switch(id.toString()) {
 		case "format":
-			return Collections.singletonList(FORMAT_METHOD);
+			return new HashSet<>(Collections.singletonList(FORMAT_METHOD));
 		default:
 			return super.getMemberMethods(context, id);
 		}

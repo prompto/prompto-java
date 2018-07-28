@@ -4,8 +4,8 @@ import java.lang.invoke.CallSite;
 import java.lang.invoke.MethodHandles.Lookup;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import prompto.compiler.BootstrapMethod;
 import prompto.compiler.CallSiteConstant;
@@ -68,18 +68,18 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		if(parent==null)
 			writer.append(id);
 		else
-			super.toDialect(writer);
+			super.parentAndMemberToDialect(writer);
 	}
 	
-	public List<IMethodDeclaration> getCandidates(Context context, boolean checkInstance) {
+	public Set<IMethodDeclaration> getCandidates(Context context, boolean checkInstance) {
 		if(parent==null)
 			return getGlobalCandidates(context);
 		else
 			return getMemberCandidates(context, checkInstance);
 	}
 	
-	private List<IMethodDeclaration> getGlobalCandidates(Context context) {
-		List<IMethodDeclaration> methods = new ArrayList<IMethodDeclaration>();
+	private Set<IMethodDeclaration> getGlobalCandidates(Context context) {
+		Set<IMethodDeclaration> methods = new HashSet<>();
 		// if called from a member method, could be a member method called without this/self
 		if(context.getParentContext() instanceof InstanceContext) {
 			IType type = ((InstanceContext)context.getParentContext()).getInstanceType();
@@ -96,7 +96,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		return methods;
 	}
 	
-	private List<IMethodDeclaration> getMemberCandidates(Context context, boolean checkInstance) {
+	private Set<IMethodDeclaration> getMemberCandidates(Context context, boolean checkInstance) {
 		IType parentType = checkParentType(context, checkInstance);
 		return parentType.getMemberMethods(context, id);
 	}

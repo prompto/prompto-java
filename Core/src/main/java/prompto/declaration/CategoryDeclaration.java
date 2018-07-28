@@ -107,8 +107,8 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		return attributes!=null && attributes.contains(name);
 	}
 	
-	public boolean hasMethod(Context context, Identifier key, Object object) {
-		return false; // TODO
+	public boolean hasMethod(Context context, Identifier name) {
+		return false; 
 	}
 
 	public boolean isDerivedFrom(Context context, CategoryType categoryType) {
@@ -355,6 +355,10 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		return new ResultInfo(resultType.getJavaType(context)); 
 	}
 
+	public MethodDeclarationMap getMemberMethods(Context context, Identifier name) {
+		throw new UnsupportedOperationException(); // TODO -> abstract
+	}
+
 	public MethodDeclarationList getLocalMethods() {
 		throw new UnsupportedOperationException(); // TODO -> abstract
 	}
@@ -382,6 +386,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	}
 
 	public abstract void ensureDeclarationOrder(Context context, List<ITranspilable> list, Set<ITranspilable> set);
+
 
 	
 }
