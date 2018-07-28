@@ -1,0 +1,10 @@
+define alert as native method receiving Text text doing:
+	JavaScript: alert(text);
+
+define Event as native category with bindings:
+	define category bindings as:
+		JavaScript: Event
+
+define ClickEvent as native category with bindings:
+	define category bindings as:
+		JavaScript: Event
