@@ -95,6 +95,21 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedExplicitMember() throws Exception {
+		checkInterpretedOutput("methods/explicitMember.poc");
+	}
+
+	@Test
+	public void testCompiledExplicitMember() throws Exception {
+		checkCompiledOutput("methods/explicitMember.poc");
+	}
+
+	@Test
+	public void testTranspiledExplicitMember() throws Exception {
+		checkTranspiledOutput("methods/explicitMember.poc");
+	}
+
+	@Test
 	public void testInterpretedExpressionWith() throws Exception {
 		checkInterpretedOutput("methods/expressionWith.poc");
 	}

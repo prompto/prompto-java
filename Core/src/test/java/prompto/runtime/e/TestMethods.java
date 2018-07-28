@@ -95,6 +95,21 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedExplicitMember() throws Exception {
+		checkInterpretedOutput("methods/explicitMember.pec");
+	}
+
+	@Test
+	public void testCompiledExplicitMember() throws Exception {
+		checkCompiledOutput("methods/explicitMember.pec");
+	}
+
+	@Test
+	public void testTranspiledExplicitMember() throws Exception {
+		checkTranspiledOutput("methods/explicitMember.pec");
+	}
+
+	@Test
 	public void testInterpretedExpressionWith() throws Exception {
 		checkInterpretedOutput("methods/expressionWith.pec");
 	}

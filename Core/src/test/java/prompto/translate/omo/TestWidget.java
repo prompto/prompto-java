@@ -16,5 +16,10 @@ public class TestWidget extends BaseOParserTest {
 		compareResourceOMO("widget/native.poc");
 	}
 
+	@Test
+	public void testWithEvent() throws Exception {
+		compareResourceOMO("widget/withEvent.poc");
+	}
+
 }
 

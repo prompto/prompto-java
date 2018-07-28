@@ -25,11 +25,6 @@ public class TestWidget extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledMinimal() throws Exception {
-		checkCompiledOutput("widget/minimal.poc");
-	}
-
-	@Test
 	public void testTranspiledMinimal() throws Exception {
 		checkTranspiledOutput("widget/minimal.poc");
 	}
@@ -40,13 +35,18 @@ public class TestWidget extends BaseOParserTest {
 	}
 
 	@Test
-	public void testCompiledNative() throws Exception {
-		checkCompiledOutput("widget/native.poc");
+	public void testTranspiledNative() throws Exception {
+		checkTranspiledOutput("widget/native.poc");
 	}
 
 	@Test
-	public void testTranspiledNative() throws Exception {
-		checkTranspiledOutput("widget/native.poc");
+	public void testInterpretedWithEvent() throws Exception {
+		checkInterpretedOutput("widget/withEvent.poc");
+	}
+
+	@Test
+	public void testTranspiledWithEvent() throws Exception {
+		checkTranspiledOutput("widget/withEvent.poc");
 	}
 
 }

@@ -25,11 +25,6 @@ public class TestWidget extends BaseEParserTest {
 	}
 
 	@Test
-	public void testCompiledMinimal() throws Exception {
-		checkCompiledOutput("widget/minimal.pec");
-	}
-
-	@Test
 	public void testTranspiledMinimal() throws Exception {
 		checkTranspiledOutput("widget/minimal.pec");
 	}
@@ -37,11 +32,6 @@ public class TestWidget extends BaseEParserTest {
 	@Test
 	public void testInterpretedNative() throws Exception {
 		checkInterpretedOutput("widget/native.pec");
-	}
-
-	@Test
-	public void testCompiledNative() throws Exception {
-		checkCompiledOutput("widget/native.pec");
 	}
 
 	@Test

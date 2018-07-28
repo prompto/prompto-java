@@ -32,6 +32,11 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testExplicitMember() throws Exception {
+		compareResourceEOE("methods/explicitMember.pec");
+	}
+
+	@Test
 	public void testExpressionWith() throws Exception {
 		compareResourceEOE("methods/expressionWith.pec");
 	}

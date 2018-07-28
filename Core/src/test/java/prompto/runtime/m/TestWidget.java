@@ -25,11 +25,6 @@ public class TestWidget extends BaseMParserTest {
 	}
 
 	@Test
-	public void testCompiledMinimal() throws Exception {
-		checkCompiledOutput("widget/minimal.pmc");
-	}
-
-	@Test
 	public void testTranspiledMinimal() throws Exception {
 		checkTranspiledOutput("widget/minimal.pmc");
 	}
@@ -37,11 +32,6 @@ public class TestWidget extends BaseMParserTest {
 	@Test
 	public void testInterpretedNative() throws Exception {
 		checkInterpretedOutput("widget/native.pmc");
-	}
-
-	@Test
-	public void testCompiledNative() throws Exception {
-		checkCompiledOutput("widget/native.pmc");
 	}
 
 	@Test

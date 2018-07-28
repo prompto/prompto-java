@@ -32,6 +32,11 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
+	public void testExplicitMember() throws Exception {
+		compareResourceOMO("methods/explicitMember.poc");
+	}
+
+	@Test
 	public void testExpressionWith() throws Exception {
 		compareResourceOMO("methods/expressionWith.poc");
 	}
