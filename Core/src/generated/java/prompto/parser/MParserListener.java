@@ -1622,6 +1622,16 @@ public interface MParserListener extends ParseTreeListener {
 	 */
 	void exitDeclaration(MParser.DeclarationContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MParser#annotation}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnnotation(MParser.AnnotationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MParser#annotation}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnnotation(MParser.AnnotationContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MParser#resource_declaration}.
 	 * @param ctx the parse tree
 	 */
