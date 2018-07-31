@@ -1780,13 +1780,25 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAnnotation(OParser.AnnotationContext ctx) { }
+	@Override public void enterAnnotation_constructor(OParser.Annotation_constructorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAnnotation(OParser.AnnotationContext ctx) { }
+	@Override public void exitAnnotation_constructor(OParser.Annotation_constructorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAnnotation_identifier(OParser.Annotation_identifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotation_identifier(OParser.Annotation_identifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

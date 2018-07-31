@@ -22,6 +22,7 @@ import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.Symbol;
+import prompto.grammar.Annotation;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
@@ -505,6 +506,16 @@ public class Context implements IContext {
 			throw new UnsupportedOperationException();
 		}
 		
+		@Override
+		public Collection<Annotation> getAnnotations() {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public void setAnnotations(Collection<Annotation> annotations) {
+			throw new UnsupportedOperationException();
+		}
+
 		@Override
 		public DeclarationType getDeclarationType() {
 			throw new UnsupportedOperationException();

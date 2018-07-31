@@ -3,6 +3,7 @@ package prompto.declaration;
 import java.util.Collection;
 
 import prompto.code.ICodeStore;
+import prompto.grammar.Annotation;
 import prompto.grammar.INamed;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
@@ -30,6 +31,8 @@ public interface IDeclaration extends ITranspilable, INamed, ISection {
 	DeclarationType getDeclarationType();
 	void setComments(Collection<CommentStatement> comments);
 	Collection<CommentStatement> getComments();
+	void setAnnotations(Collection<Annotation> annotations);
+	Collection<Annotation> getAnnotations();
 	default void setClosureOf(IMethodDeclaration declaration) { throw new UnsupportedOperationException(); }
 	default IMethodDeclaration getClosureOf() { throw new UnsupportedOperationException(); }
 	default boolean isStorable() { return false; }
