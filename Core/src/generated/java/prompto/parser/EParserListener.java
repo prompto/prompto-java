@@ -1768,15 +1768,25 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitDeclaration(EParser.DeclarationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link EParser#annotation}.
+	 * Enter a parse tree produced by {@link EParser#annotation_constructor}.
 	 * @param ctx the parse tree
 	 */
-	void enterAnnotation(EParser.AnnotationContext ctx);
+	void enterAnnotation_constructor(EParser.Annotation_constructorContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link EParser#annotation}.
+	 * Exit a parse tree produced by {@link EParser#annotation_constructor}.
 	 * @param ctx the parse tree
 	 */
-	void exitAnnotation(EParser.AnnotationContext ctx);
+	void exitAnnotation_constructor(EParser.Annotation_constructorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link EParser#annotation_identifier}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnnotation_identifier(EParser.Annotation_identifierContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EParser#annotation_identifier}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnnotation_identifier(EParser.Annotation_identifierContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link EParser#resource_declaration}.
 	 * @param ctx the parse tree

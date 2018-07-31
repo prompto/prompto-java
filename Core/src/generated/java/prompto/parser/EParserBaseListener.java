@@ -1888,13 +1888,25 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAnnotation(EParser.AnnotationContext ctx) { }
+	@Override public void enterAnnotation_constructor(EParser.Annotation_constructorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAnnotation(EParser.AnnotationContext ctx) { }
+	@Override public void exitAnnotation_constructor(EParser.Annotation_constructorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAnnotation_identifier(EParser.Annotation_identifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotation_identifier(EParser.Annotation_identifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -102,6 +102,7 @@ import prompto.expression.TernaryExpression;
 import prompto.expression.ThisExpression;
 import prompto.expression.TypeExpression;
 import prompto.expression.UnresolvedIdentifier;
+import prompto.grammar.Annotation;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.ArgumentList;
@@ -188,9 +189,6 @@ import prompto.literal.TupleLiteral;
 import prompto.literal.UUIDLiteral;
 import prompto.literal.VersionLiteral;
 import static prompto.parser.OParser.*;
-import prompto.parser.OParser.CssValueContext;
-import prompto.parser.OParser.NativeWidgetDeclarationContext;
-import prompto.parser.OParser.Native_widget_declarationContext;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -313,6 +311,20 @@ public class OPromptoBuilder extends OParserBaseListener {
 		IExpression left = this.<IExpression>getNodeValue(ctx.left);
 		IExpression right = this.<IExpression>getNodeValue(ctx.right);
 		setNodeValue(ctx, new AndExpression(left, right));
+	}
+	
+	@Override
+	public void exitAnnotation_constructor(Annotation_constructorContext ctx) {
+		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		setNodeValue(ctx, new Annotation(name, exp));
+	}
+
+	
+	@Override
+	public void exitAnnotation_identifier(Annotation_identifierContext ctx) {
+		String name = ctx.getText();
+		setNodeValue(ctx, new Identifier(name));
 	}
 	
 	@Override
@@ -967,14 +979,16 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitDeclaration(DeclarationContext ctx) {
-		List<CommentStatement> stmts = null;
-		for(Comment_statementContext csc : ctx.comment_statement()) {
-			if(csc==null)
-				continue;
-			if(stmts==null)
-				stmts = new ArrayList<>();
-			stmts.add((CommentStatement)this.<CommentStatement>getNodeValue(csc));
-		}
+		List<CommentStatement> comments = ctx.comment_statement().stream()
+				.map(cx->(CommentStatement)this.<CommentStatement>getNodeValue(cx))
+				.collect(Collectors.toList());
+		if(comments.isEmpty())
+			comments = null;
+		List<Annotation> annotations = ctx.annotation_constructor().stream()
+				.map(cx->(Annotation)this.<Annotation>getNodeValue(cx))
+				.collect(Collectors.toList());
+		if(annotations.isEmpty())
+			annotations = null;
 		ParserRuleContext ctx_ = ctx.attribute_declaration();
 		if(ctx_==null)
 			ctx_ = ctx.category_declaration();
@@ -988,7 +1002,8 @@ public class OPromptoBuilder extends OParserBaseListener {
 			ctx_ = ctx.widget_declaration();
 		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx_);
 		if(decl!=null) {
-			decl.setComments(stmts);
+			decl.setComments(comments);
+			decl.setAnnotations(annotations);
 			setNodeValue(ctx, decl);
 		}
 	}

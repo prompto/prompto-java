@@ -1744,13 +1744,25 @@ public class MParserBaseListener implements MParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAnnotation(MParser.AnnotationContext ctx) { }
+	@Override public void enterAnnotation_constructor(MParser.Annotation_constructorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAnnotation(MParser.AnnotationContext ctx) { }
+	@Override public void exitAnnotation_constructor(MParser.Annotation_constructorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAnnotation_identifier(MParser.Annotation_identifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotation_identifier(MParser.Annotation_identifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

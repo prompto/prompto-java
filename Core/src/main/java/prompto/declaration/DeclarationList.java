@@ -3,7 +3,6 @@ package prompto.declaration;
 import java.util.LinkedList;
 
 import prompto.runtime.Context;
-import prompto.statement.CommentStatement;
 import prompto.utils.CodeWriter;
 
 
@@ -87,10 +86,10 @@ public class DeclarationList extends LinkedList<IDeclaration> {
 
 	public void toDialect(CodeWriter writer) {
 		for(IDeclaration declaration : this) {
-			if(declaration.getComments()!=null) {
-				for(CommentStatement comment : declaration.getComments())
-					comment.toDialect(writer);
-			}
+			if(declaration.getComments()!=null)
+				declaration.getComments().forEach(comment->comment.toDialect(writer));
+			if(declaration.getAnnotations()!=null)
+				declaration.getAnnotations().forEach(annotation->annotation.toDialect(writer));
 			declaration.toDialect(writer);
 			writer.append("\n");
 		}
