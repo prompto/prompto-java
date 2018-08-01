@@ -75,11 +75,11 @@ public class ELexer extends Lexer {
 		"WIDGET", "WITH", "WHEN", "WHERE", "WHILE", "WRITE", "BOOLEAN_LITERAL", 
 		"CHAR_LITERAL", "MIN_INTEGER", "MAX_INTEGER", "SYMBOL_IDENTIFIER", "TYPE_IDENTIFIER", 
 		"VARIABLE_IDENTIFIER", "NATIVE_IDENTIFIER", "DOLLAR_IDENTIFIER", "ARONDBASE_IDENTIFIER", 
-		"IdentifierSuffix", "Letter", "Digit", "TEXT_LITERAL", "UUID_LITERAL", 
-		"INTEGER_LITERAL", "HEXA_LITERAL", "DECIMAL_LITERAL", "Integer", "Decimal", 
-		"Exponent", "Hexadecimal", "HexNibble", "EscapeSequence", "DATETIME_LITERAL", 
-		"TIME_LITERAL", "Time", "DATE_LITERAL", "Date", "TimeZone", "PERIOD_LITERAL", 
-		"Years", "Months", "Days", "Hours", "Minutes", "Seconds", "HexByte", "VERSION_LITERAL"
+		"LetterOrDigit", "Letter", "Digit", "TEXT_LITERAL", "UUID_LITERAL", "INTEGER_LITERAL", 
+		"HEXA_LITERAL", "DECIMAL_LITERAL", "Integer", "Decimal", "Exponent", "Hexadecimal", 
+		"HexNibble", "EscapeSequence", "DATETIME_LITERAL", "TIME_LITERAL", "Time", 
+		"DATE_LITERAL", "Date", "TimeZone", "PERIOD_LITERAL", "Years", "Months", 
+		"Days", "Hours", "Minutes", "Seconds", "HexByte", "VERSION_LITERAL"
 	};
 
 	private static final String[] _LITERAL_NAMES = {
