@@ -31,15 +31,15 @@ and verifying:
 	o = "some text"
 
 define "test that readJson returns a Document" as test method doing:
-	o = readJson "{\"field\":122}"
+	o = (readJson "{\"field\":122}") as Document
 and verifying:
 	o is a Document
 	o.field = 122
 
 define "test that readJson returns a List" as test method doing:
-	o = readJson "[{\"field\":122}]"
+	o = (readJson "[{\"field\":122}]") as Document[]
 and verifying:
-	o is a any[]
+	o is a Document[]
 	o[1].field = 122
 
 define iterateCsv as native method receiving text, Text{} columnNames = nothing, Character separator = ',', Character quote = '"' returning Iterator<Document> doing:

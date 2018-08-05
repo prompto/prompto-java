@@ -52,19 +52,22 @@ public class IteratorExpression implements IExpression {
 
 	@Override
 	public IteratorType check(Context context) {
-		IType elemType = source.check(context).checkIterator(context);
+		IType srcType = source.check(context).checkIterator(context);
 		Context child = context.newChildContext();
-		child.registerValue(new Variable(id, elemType));
+		child.registerValue(new Variable(id, srcType));
 		IType resultType = expression.check(child);
 		return new IteratorType(resultType);
 	}
 
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		IType elemType = source.check(context).checkIterator(context);
+		IType srcType = source.check(context).checkIterator(context);
+		Context child = context.newChildContext();
+		child.registerValue(new Variable(id, srcType));
+		IType resultType = expression.check(child);
 		IValue items = source.interpret(context);
 		IterableWithCounts<IValue> iterable = getIterable(context, items);
-		return new IterableValue(context, id, elemType, iterable, expression);
+		return new IterableValue(context, id, srcType, iterable, expression, resultType);
 	}
 	
 	@Override
@@ -168,9 +171,9 @@ public class IteratorExpression implements IExpression {
 
 	@Override
 	public void toDialect(CodeWriter writer) {
-		IType elemType = source.check(writer.getContext()).checkIterator(writer.getContext());
+		IType srcType = source.check(writer.getContext()).checkIterator(writer.getContext());
 		writer = writer.newChildWriter();
-		writer.getContext().registerValue(new Variable(id, elemType));
+		writer.getContext().registerValue(new Variable(id, srcType));
 		switch(writer.getDialect()) {
 		case E:
 			toEDialect(writer);
