@@ -24,14 +24,19 @@ import prompto.value.Integer;
 
 public class CastExpression implements IExpression {
 	
+	public static IType anyfy(IType type) {
+		if(type instanceof CategoryType && "Any".equals(((CategoryType)type).getTypeName()))
+			return AnyType.instance();	
+		else
+			return type;
+	}
+
 	IExpression expression;
 	IType type;
 	
 	public CastExpression(IExpression expression, IType type) {
 		this.expression = expression;
-		if(type instanceof CategoryType && "Any".equals(((CategoryType)type).getTypeName()))
-			type = AnyType.instance();	
-		this.type = type;
+		this.type = anyfy(type);
 	}
 	
 	@Override
@@ -41,7 +46,7 @@ public class CastExpression implements IExpression {
 	
 	@Override
 	public IType check(Context context) {
-		IType actual = expression.check(context);
+		IType actual = anyfy(expression.check(context));
 		// check Any
 		if(actual==AnyType.instance())
 			return type;
