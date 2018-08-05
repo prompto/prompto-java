@@ -20,16 +20,16 @@ import com.fasterxml.jackson.core.JsonGenerator;
 
 public class IterableValue extends BaseValue implements IIterable<IValue>, IterableWithCounts<IValue> {
 
-	IType itemType;
+	IType sourceType;
 	Context context;
 	Identifier name;
 	IterableWithCounts<IValue> iterable;
 	IExpression expression;
 	
-	public IterableValue(Context context, Identifier name, IType itemType, 
-			IterableWithCounts<IValue> iterable, IExpression expression) {
-		super(new IteratorType(itemType));
-		this.itemType = itemType;
+	public IterableValue(Context context, Identifier name, IType sourceType, 
+			IterableWithCounts<IValue> iterable, IExpression expression, IType resultType) {
+		super(new IteratorType(resultType));
+		this.sourceType = sourceType;
 		this.context = context;
 		this.name = name;
 		this.iterable = iterable;
@@ -66,7 +66,7 @@ public class IterableValue extends BaseValue implements IIterable<IValue>, Itera
 			public IValue next() {
 				try {
 					Context child = context.newChildContext();
-					child.registerValue(new Variable(name, itemType));
+					child.registerValue(new Variable(name, sourceType));
 					child.setValue(name, iterator.next());
 					return expression.interpret(child);
 				} catch (PromptoError e) {

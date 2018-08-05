@@ -2516,6 +2516,18 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitCategory_or_any_type(EParser.Category_or_any_typeContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code AnySetType}
+	 * labeled alternative in {@link EParser#any_type}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnySetType(EParser.AnySetTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code AnySetType}
+	 * labeled alternative in {@link EParser#any_type}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnySetType(EParser.AnySetTypeContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code AnyListType}
 	 * labeled alternative in {@link EParser#any_type}.
 	 * @param ctx the parse tree

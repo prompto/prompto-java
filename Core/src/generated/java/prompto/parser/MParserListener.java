@@ -2370,6 +2370,18 @@ public interface MParserListener extends ParseTreeListener {
 	 */
 	void exitCategory_or_any_type(MParser.Category_or_any_typeContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code AnySetType}
+	 * labeled alternative in {@link MParser#any_type}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnySetType(MParser.AnySetTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code AnySetType}
+	 * labeled alternative in {@link MParser#any_type}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnySetType(MParser.AnySetTypeContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code AnyListType}
 	 * labeled alternative in {@link MParser#any_type}.
 	 * @param ctx the parse tree
