@@ -40,6 +40,15 @@ public class IteratorExpression implements IExpression {
 		this.source = source;
 		this.expression = exp;
 	}
+	
+	@Override
+	public String toString() {
+		return expression.toString() +
+			" for each " +
+			id.toString() +
+			" in " + 
+			source.toString();
+	}
 
 	@Override
 	public IteratorType check(Context context) {
@@ -159,6 +168,9 @@ public class IteratorExpression implements IExpression {
 
 	@Override
 	public void toDialect(CodeWriter writer) {
+		IType elemType = source.check(writer.getContext()).checkIterator(writer.getContext());
+		writer = writer.newChildWriter();
+		writer.getContext().registerValue(new Variable(id, elemType));
 		switch(writer.getDialect()) {
 		case E:
 			toEDialect(writer);

@@ -55,6 +55,15 @@ public class FilteredExpression extends Section implements IExpression {
 	}
 	
 	@Override
+	public String toString() {
+		return source.toString() + 
+				" filtered with " + 
+				itemId + 
+				" where " +
+				predicate.toString();
+	}
+	
+	@Override
 	public void toDialect(CodeWriter writer) {
 		writer = writer.newChildWriter();
 		IType sourceType = source.check(writer.getContext());
