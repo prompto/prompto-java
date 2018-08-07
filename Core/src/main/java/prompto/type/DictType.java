@@ -12,7 +12,7 @@ import prompto.transpiler.Transpiler;
 public class DictType extends ContainerType {
 	
 	public DictType(IType itemType) {
-		super(Family.DICTIONARY, itemType, itemType.getTypeName()+"{}");
+		super(Family.DICTIONARY, itemType, itemType.getTypeName()+"<:>");
 	}
 	
 	@Override

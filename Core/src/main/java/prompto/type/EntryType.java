@@ -15,7 +15,7 @@ public class EntryType extends BaseType {
 	public EntryType(IType itemType) {
 		super(null);
 		this.itemType = itemType;
-		this.typeName = itemType.getTypeName() + "{}[]";
+		this.typeName = itemType.getTypeName() + "<:>[]";
 	}
 
 	public IType getItemType() {

@@ -465,36 +465,36 @@ public class TestParserAtoms {
 	
 	@Test
 	public void testEmptyDictLiteral() throws Exception {
-		String statement = "{}";
+		String statement = "<:>";
 		OTestParser parser = new OTestParser(statement);
 		IExpression literal = parser.parse_literal_expression();
 		assertNotNull(literal);
 		assertTrue(literal instanceof DictLiteral);
-		assertEquals("{}", literal.toString());
+		assertEquals("<:>", literal.toString());
 	}
 	
 	@Test
 	public void testSimpleDictLiteral() throws Exception {
-		String statement = "{ \"john\" : 1234, eric : 5678 }";
+		String statement = "< \"john\" : 1234, eric : 5678 >";
 		OTestParser parser = new OTestParser(statement);
 		IExpression literal = parser.parse_literal_expression();
 		assertNotNull(literal);
 		assertTrue(literal instanceof DictLiteral);
 		CodeWriter writer = new CodeWriter(Dialect.O, null);
 		literal.toDialect(writer);
-		assertEquals("{\"john\":1234, eric:5678}", writer.toString()); // TODO: DictLiteral
+		assertEquals("<\"john\":1234, eric:5678>", writer.toString()); // TODO: DictLiteral
 	}
 	
 	@Test
 	public void testMultiLineDictLiteral() throws Exception {
-		String statement = "{ \"john\" : 1234,\n \t\"eric\" : 5678 }";
+		String statement = "< \"john\" : 1234,\n \t\"eric\" : 5678 >";
 		OTestParser parser = new OTestParser(statement);
 		IExpression literal = parser.parse_literal_expression();
 		assertNotNull(literal);
 		assertTrue(literal instanceof DictLiteral);
 		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
 		literal.toDialect(writer);
-		assertEquals("{\"john\":1234, \"eric\":5678}", writer.toString()); // TODO DictLiteral
+		assertEquals("<\"john\":1234, \"eric\":5678>", writer.toString()); // TODO DictLiteral
 	}
 
 

@@ -3196,6 +3196,16 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitDict_literal(EParser.Dict_literalContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link EParser#document_literal}.
+	 * @param ctx the parse tree
+	 */
+	void enterDocument_literal(EParser.Document_literalContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EParser#document_literal}.
+	 * @param ctx the parse tree
+	 */
+	void exitDocument_literal(EParser.Document_literalContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link EParser#expression_tuple}.
 	 * @param ctx the parse tree
 	 */

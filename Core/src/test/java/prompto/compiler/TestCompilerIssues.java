@@ -12,7 +12,7 @@ public class TestCompilerIssues extends BaseEParserTest {
 				+ "define Entity as storable category with attribute name\n"
 				+ "define fetchEntities as method doing:\n"
 				+ "    return fetch all Entity\n"
-				+ "define main as method receiving Text{} options doing:\n"
+				+ "define main as method receiving Text<:> options doing:\n"
 				+ "    e1 = Entity with \"John\" as name\n"
 				+ "    store e1\n"
 				+ "    ee = fetchEntities\n"

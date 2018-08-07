@@ -604,24 +604,24 @@ public class TestParserAtoms {
 	
 	@Test
 	public void testEmptyDictLiteral() throws Exception {
-		String statement = "{}";
+		String statement = "<:>";
 		ETestParser parser = new ETestParser(statement, false);
 		IExpression literal = parser.parse_literal_expression();
 		assertNotNull(literal);
 		assertTrue(literal instanceof DictLiteral);
-		assertEquals("{}", literal.toString());
+		assertEquals("<:>", literal.toString());
 	}
 	
 	@Test
 	public void testSimpleDictLiteral() throws Exception {
-		String statement = "{ \"john\" : 1234, eric : 5678 }";
+		String statement = "< \"john\" : 1234, eric : 5678 >";
 		ETestParser parser = new ETestParser(statement, false);
 		IExpression literal = parser.parse_literal_expression();
 		assertNotNull(literal);
 		assertTrue(literal instanceof DictLiteral);
 		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
 		literal.toDialect(writer);
-		assertEquals("{\"john\":1234, eric:5678}", writer.toString()); // TODO DictLiteral
+		assertEquals("<\"john\":1234, eric:5678>", writer.toString()); // TODO DictLiteral
 	}
 	
 	@Test

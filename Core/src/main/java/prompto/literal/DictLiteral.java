@@ -35,7 +35,7 @@ public class DictLiteral extends Literal<Dictionary> {
 	IType itemType = null;
 	
 	public DictLiteral(boolean mutable) {
-		super("{}",new Dictionary(MissingType.instance(), mutable));
+		super("<:>",new Dictionary(MissingType.instance(), mutable));
 		this.entries = new DictEntryList();
 		this.mutable = mutable;
 	}

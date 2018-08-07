@@ -124,7 +124,7 @@ public class TestCheck extends BaseEParserTest {
 	@Test
 	public void testDict() throws Exception {
 		DeclarationList decls = parseString("define testMethod as method receiving Text value doing:\r\n" +
-					"\tdict = { \"john\":123, \"jim\":345 }\r\n" +
+					"\tdict = < \"john\":123, \"jim\":345 >\r\n" +
 					"\telem = dict[\"john\"]\r\n");
 		decls.register(context);
 		decls.check(context);

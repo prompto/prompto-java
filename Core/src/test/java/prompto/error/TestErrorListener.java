@@ -83,7 +83,7 @@ public class TestErrorListener {
 	
 	@Test
 	public void testUnknownMethodError() throws Exception {
-		checkProblem("define main as method receiving Text{} args doing:\n"
+		checkProblem("define main as method receiving Text<:> args doing:\n"
 				+ "\tprintLine \"Hello app\"\n"
 				, 1, "Unknown method: printLine");
 	}

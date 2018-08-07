@@ -207,8 +207,8 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		assertEquals(1, vars.size());
 		IVariable var = vars.iterator().next();
 		assertEquals("options", var.getName());
-		assertEquals("Text{}", var.getTypeName());
-		assertEquals("{}", var.getValue().getValueString());
+		assertEquals("Text<:>", var.getTypeName());
+		assertEquals("<:>", var.getValue().getValueString());
 		// next
 		debugger.stepInto(null);
 		waitBlockedOrKilled();
