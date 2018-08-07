@@ -35,18 +35,18 @@ public class TestDocuments extends BaseOParserTest {
 	}
 
 	@Test
-	public void testInterpretedDeepVariable() throws Exception {
-		checkInterpretedOutput("documents/deepVariable.poc");
+	public void testInterpretedDeepMember() throws Exception {
+		checkInterpretedOutput("documents/deepMember.poc");
 	}
 
 	@Test
-	public void testCompiledDeepVariable() throws Exception {
-		checkCompiledOutput("documents/deepVariable.poc");
+	public void testCompiledDeepMember() throws Exception {
+		checkCompiledOutput("documents/deepMember.poc");
 	}
 
 	@Test
-	public void testTranspiledDeepVariable() throws Exception {
-		checkTranspiledOutput("documents/deepVariable.poc");
+	public void testTranspiledDeepMember() throws Exception {
+		checkTranspiledOutput("documents/deepMember.poc");
 	}
 
 	@Test
@@ -65,18 +65,33 @@ public class TestDocuments extends BaseOParserTest {
 	}
 
 	@Test
-	public void testInterpretedVariable() throws Exception {
-		checkInterpretedOutput("documents/variable.poc");
+	public void testInterpretedLiteral() throws Exception {
+		checkInterpretedOutput("documents/literal.poc");
 	}
 
 	@Test
-	public void testCompiledVariable() throws Exception {
-		checkCompiledOutput("documents/variable.poc");
+	public void testCompiledLiteral() throws Exception {
+		checkCompiledOutput("documents/literal.poc");
 	}
 
 	@Test
-	public void testTranspiledVariable() throws Exception {
-		checkTranspiledOutput("documents/variable.poc");
+	public void testTranspiledLiteral() throws Exception {
+		checkTranspiledOutput("documents/literal.poc");
+	}
+
+	@Test
+	public void testInterpretedMember() throws Exception {
+		checkInterpretedOutput("documents/member.poc");
+	}
+
+	@Test
+	public void testCompiledMember() throws Exception {
+		checkCompiledOutput("documents/member.poc");
+	}
+
+	@Test
+	public void testTranspiledMember() throws Exception {
+		checkTranspiledOutput("documents/member.poc");
 	}
 
 }

@@ -17,8 +17,8 @@ public class TestDocuments extends BaseEParserTest {
 	}
 
 	@Test
-	public void testDeepVariable() throws Exception {
-		compareResourceEOE("documents/deepVariable.pec");
+	public void testDeepMember() throws Exception {
+		compareResourceEOE("documents/deepMember.pec");
 	}
 
 	@Test
@@ -27,13 +27,18 @@ public class TestDocuments extends BaseEParserTest {
 	}
 
 	@Test
-	public void testNamedItem() throws Exception {
-		compareResourceEOE("documents/namedItem.pec");
+	public void testLiteral() throws Exception {
+		compareResourceEOE("documents/literal.pec");
 	}
 
 	@Test
-	public void testVariable() throws Exception {
-		compareResourceEOE("documents/variable.pec");
+	public void testMember() throws Exception {
+		compareResourceEOE("documents/member.pec");
+	}
+
+	@Test
+	public void testNamedItem() throws Exception {
+		compareResourceEOE("documents/namedItem.pec");
 	}
 
 }

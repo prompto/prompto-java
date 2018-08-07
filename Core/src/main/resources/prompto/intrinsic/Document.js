@@ -1,4 +1,6 @@
-function Document() {
+function Document(entries) {
+    if(entries)
+        Object.getOwnPropertyNames(entries).forEach(function(name) { this[name] = entries[name]; }, this);
     return this;
 }
 

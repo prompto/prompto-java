@@ -17,8 +17,8 @@ public class TestDocuments extends BaseEParserTest {
 	}
 
 	@Test
-	public void testDeepVariable() throws Exception {
-		compareResourceEME("documents/deepVariable.pec");
+	public void testDeepMember() throws Exception {
+		compareResourceEME("documents/deepMember.pec");
 	}
 
 	@Test
@@ -27,13 +27,18 @@ public class TestDocuments extends BaseEParserTest {
 	}
 
 	@Test
-	public void testNamedItem() throws Exception {
-		compareResourceEME("documents/namedItem.pec");
+	public void testLiteral() throws Exception {
+		compareResourceEME("documents/literal.pec");
 	}
 
 	@Test
-	public void testVariable() throws Exception {
-		compareResourceEME("documents/variable.pec");
+	public void testMember() throws Exception {
+		compareResourceEME("documents/member.pec");
+	}
+
+	@Test
+	public void testNamedItem() throws Exception {
+		compareResourceEME("documents/namedItem.pec");
 	}
 
 }

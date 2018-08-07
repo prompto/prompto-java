@@ -174,6 +174,8 @@ import prompto.literal.DecimalLiteral;
 import prompto.literal.DictEntry;
 import prompto.literal.DictEntryList;
 import prompto.literal.DictLiteral;
+import prompto.literal.DocEntryList;
+import prompto.literal.DocumentLiteral;
 import prompto.literal.HexaLiteral;
 import prompto.literal.IntegerLiteral;
 import prompto.literal.ListLiteral;
@@ -189,6 +191,7 @@ import prompto.literal.TupleLiteral;
 import prompto.literal.UUIDLiteral;
 import prompto.literal.VersionLiteral;
 import static prompto.parser.EParser.*;
+import prompto.parser.EParser.Document_literalContext;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -1098,6 +1101,13 @@ public class EPromptoBuilder extends EParserBaseListener {
 	public void exitDocumentExpression(DocumentExpressionContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
+	}
+	
+	@Override
+	public void exitDocument_literal(Document_literalContext ctx) {
+		DictEntryList entries = this.<DictEntryList>getNodeValue(ctx.dict_entry_list());
+		DocEntryList items = new DocEntryList(entries);
+		setNodeValue(ctx, new DocumentLiteral(items));
 	}
 	
 	@Override

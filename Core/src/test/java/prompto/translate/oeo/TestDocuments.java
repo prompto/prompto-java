@@ -12,8 +12,8 @@ public class TestDocuments extends BaseOParserTest {
 	}
 
 	@Test
-	public void testDeepVariable() throws Exception {
-		compareResourceOEO("documents/deepVariable.poc");
+	public void testDeepMember() throws Exception {
+		compareResourceOEO("documents/deepMember.poc");
 	}
 
 	@Test
@@ -22,8 +22,13 @@ public class TestDocuments extends BaseOParserTest {
 	}
 
 	@Test
-	public void testVariable() throws Exception {
-		compareResourceOEO("documents/variable.poc");
+	public void testLiteral() throws Exception {
+		compareResourceOEO("documents/literal.poc");
+	}
+
+	@Test
+	public void testMember() throws Exception {
+		compareResourceOEO("documents/member.poc");
 	}
 
 }

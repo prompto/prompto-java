@@ -50,18 +50,18 @@ public class TestDocuments extends BaseEParserTest {
 	}
 
 	@Test
-	public void testInterpretedDeepVariable() throws Exception {
-		checkInterpretedOutput("documents/deepVariable.pec");
+	public void testInterpretedDeepMember() throws Exception {
+		checkInterpretedOutput("documents/deepMember.pec");
 	}
 
 	@Test
-	public void testCompiledDeepVariable() throws Exception {
-		checkCompiledOutput("documents/deepVariable.pec");
+	public void testCompiledDeepMember() throws Exception {
+		checkCompiledOutput("documents/deepMember.pec");
 	}
 
 	@Test
-	public void testTranspiledDeepVariable() throws Exception {
-		checkTranspiledOutput("documents/deepVariable.pec");
+	public void testTranspiledDeepMember() throws Exception {
+		checkTranspiledOutput("documents/deepMember.pec");
 	}
 
 	@Test
@@ -80,6 +80,36 @@ public class TestDocuments extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedLiteral() throws Exception {
+		checkInterpretedOutput("documents/literal.pec");
+	}
+
+	@Test
+	public void testCompiledLiteral() throws Exception {
+		checkCompiledOutput("documents/literal.pec");
+	}
+
+	@Test
+	public void testTranspiledLiteral() throws Exception {
+		checkTranspiledOutput("documents/literal.pec");
+	}
+
+	@Test
+	public void testInterpretedMember() throws Exception {
+		checkInterpretedOutput("documents/member.pec");
+	}
+
+	@Test
+	public void testCompiledMember() throws Exception {
+		checkCompiledOutput("documents/member.pec");
+	}
+
+	@Test
+	public void testTranspiledMember() throws Exception {
+		checkTranspiledOutput("documents/member.pec");
+	}
+
+	@Test
 	public void testInterpretedNamedItem() throws Exception {
 		checkInterpretedOutput("documents/namedItem.pec");
 	}
@@ -92,21 +122,6 @@ public class TestDocuments extends BaseEParserTest {
 	@Test
 	public void testTranspiledNamedItem() throws Exception {
 		checkTranspiledOutput("documents/namedItem.pec");
-	}
-
-	@Test
-	public void testInterpretedVariable() throws Exception {
-		checkInterpretedOutput("documents/variable.pec");
-	}
-
-	@Test
-	public void testCompiledVariable() throws Exception {
-		checkCompiledOutput("documents/variable.pec");
-	}
-
-	@Test
-	public void testTranspiledVariable() throws Exception {
-		checkTranspiledOutput("documents/variable.pec");
 	}
 
 }
