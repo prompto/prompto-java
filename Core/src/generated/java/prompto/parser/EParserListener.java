@@ -2442,6 +2442,16 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitSymbol_identifier(EParser.Symbol_identifierContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link EParser#any_identifier}.
+	 * @param ctx the parse tree
+	 */
+	void enterAny_identifier(EParser.Any_identifierContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EParser#any_identifier}.
+	 * @param ctx the parse tree
+	 */
+	void exitAny_identifier(EParser.Any_identifierContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link EParser#argument_list}.
 	 * @param ctx the parse tree
 	 */
@@ -3235,6 +3245,30 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDict_entry(EParser.Dict_entryContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code DictKeyIdentifier}
+	 * labeled alternative in {@link EParser#dict_key}.
+	 * @param ctx the parse tree
+	 */
+	void enterDictKeyIdentifier(EParser.DictKeyIdentifierContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code DictKeyIdentifier}
+	 * labeled alternative in {@link EParser#dict_key}.
+	 * @param ctx the parse tree
+	 */
+	void exitDictKeyIdentifier(EParser.DictKeyIdentifierContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code DictKeyText}
+	 * labeled alternative in {@link EParser#dict_key}.
+	 * @param ctx the parse tree
+	 */
+	void enterDictKeyText(EParser.DictKeyTextContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code DictKeyText}
+	 * labeled alternative in {@link EParser#dict_key}.
+	 * @param ctx the parse tree
+	 */
+	void exitDictKeyText(EParser.DictKeyTextContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code SliceFirstAndLast}
 	 * labeled alternative in {@link EParser#slice_arguments}.

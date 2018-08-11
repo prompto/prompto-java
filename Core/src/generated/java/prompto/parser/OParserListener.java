@@ -2340,6 +2340,16 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitSymbol_identifier(OParser.Symbol_identifierContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link OParser#any_identifier}.
+	 * @param ctx the parse tree
+	 */
+	void enterAny_identifier(OParser.Any_identifierContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#any_identifier}.
+	 * @param ctx the parse tree
+	 */
+	void exitAny_identifier(OParser.Any_identifierContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link OParser#argument_list}.
 	 * @param ctx the parse tree
 	 */
@@ -3133,6 +3143,30 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDict_entry(OParser.Dict_entryContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code DictKeyIdentifier}
+	 * labeled alternative in {@link OParser#dict_key}.
+	 * @param ctx the parse tree
+	 */
+	void enterDictKeyIdentifier(OParser.DictKeyIdentifierContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code DictKeyIdentifier}
+	 * labeled alternative in {@link OParser#dict_key}.
+	 * @param ctx the parse tree
+	 */
+	void exitDictKeyIdentifier(OParser.DictKeyIdentifierContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code DictKeyText}
+	 * labeled alternative in {@link OParser#dict_key}.
+	 * @param ctx the parse tree
+	 */
+	void enterDictKeyText(OParser.DictKeyTextContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code DictKeyText}
+	 * labeled alternative in {@link OParser#dict_key}.
+	 * @param ctx the parse tree
+	 */
+	void exitDictKeyText(OParser.DictKeyTextContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code SliceFirstAndLast}
 	 * labeled alternative in {@link OParser#slice_arguments}.

@@ -1,5 +1,8 @@
 package prompto.utils;
 
+import java.io.IOException;
+import java.io.StreamTokenizer;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +42,17 @@ public abstract class StringUtils {
 
 	public static String escape(String text) {
 		return text.replace("\"", "\\\"");
+	}
+
+	public static String unescape(String text) {
+		StreamTokenizer parser = new StreamTokenizer(new StringReader(text));
+		try {
+		  parser.nextToken();
+		  return parser.sval;
+		}
+		catch (IOException e) {
+		  throw new RuntimeException(e);
+		}
 	}
 
 

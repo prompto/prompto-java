@@ -6,15 +6,15 @@ import prompto.utils.CodeWriter;
 
 public class DictEntry {
 
-	IExpression key;
+	DictKey key;
 	IExpression value;
 
-	public DictEntry(IExpression key, IExpression value) {
+	public DictEntry(DictKey key, IExpression value) {
 		this.key = key;
 		this.value = value;
 	}
 
-	public IExpression getKey() {
+	public DictKey getKey() {
 		return key;
 	}
 

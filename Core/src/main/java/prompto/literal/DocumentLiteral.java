@@ -50,7 +50,7 @@ public class DocumentLiteral extends Literal<Document> {
 		if(entries.size()>0) {
 			PromptoDocument<Text,IValue> doc = new PromptoDocument<Text, IValue>();
 			for(DictEntry e : entries) {
-				Text key = (Text)e.getKey().interpret(context);
+				Text key = e.getKey().asText();
 				IValue val = e.getValue().interpret(context); 
 				doc.put(key, val);
 			}

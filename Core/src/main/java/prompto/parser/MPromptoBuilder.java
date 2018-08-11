@@ -170,7 +170,10 @@ import prompto.literal.DateTimeLiteral;
 import prompto.literal.DecimalLiteral;
 import prompto.literal.DictEntry;
 import prompto.literal.DictEntryList;
+import prompto.literal.DictIdentifierKey;
+import prompto.literal.DictKey;
 import prompto.literal.DictLiteral;
+import prompto.literal.DictTextKey;
 import prompto.literal.DocEntryList;
 import prompto.literal.DocumentLiteral;
 import prompto.literal.HexaLiteral;
@@ -188,6 +191,8 @@ import prompto.literal.TupleLiteral;
 import prompto.literal.UUIDLiteral;
 import prompto.literal.VersionLiteral;
 import static prompto.parser.MParser.*;
+import prompto.parser.MParser.DictKeyIdentifierContext;
+import prompto.parser.MParser.DictKeyTextContext;
 import prompto.parser.MParser.Document_literalContext;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
@@ -1010,7 +1015,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitDict_entry(Dict_entryContext ctx) {
-		IExpression key = this.<IExpression>getNodeValue(ctx.key);
+		DictKey key = this.<DictKey>getNodeValue(ctx.key);
 		IExpression value = this.<IExpression>getNodeValue(ctx.value);
 		DictEntry entry = new DictEntry(key, value);
 		setNodeValue(ctx, entry);
@@ -1033,6 +1038,18 @@ public class MPromptoBuilder extends MParserBaseListener {
 			items.add(item);
 		});
 		setNodeValue(ctx, items);
+	}
+	
+	@Override
+	public void exitDictKeyIdentifier(DictKeyIdentifierContext ctx) {
+		String text = ctx.name.getText();
+		setNodeValue(ctx, new DictIdentifierKey(new Identifier(text)));
+	}
+	
+	@Override
+	public void exitDictKeyText(DictKeyTextContext ctx) {
+		String text = ctx.name.getText();
+		setNodeValue(ctx, new DictTextKey(text));
 	}
 	
 	@Override

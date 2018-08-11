@@ -10,14 +10,12 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.intrinsic.PromptoDict;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.DictType;
 import prompto.type.IType;
 import prompto.type.MissingType;
-import prompto.type.TextType;
 import prompto.utils.CodeWriter;
 import prompto.utils.TypeUtils;
 import prompto.value.Dictionary;
@@ -68,11 +66,6 @@ public class DictLiteral extends Literal<Dictionary> {
 	private IType inferElementType(Context context) {
 		if(entries.isEmpty())
 			return MissingType.instance();
-		entries.forEach((e)->{
-			IType keyType = e.getKey().check(context);
-			if(keyType!=TextType.instance())
-				throw new SyntaxError("Illegal key type: " + keyType.toString());
-		});
 		List<IType> types = entries.stream().map(e->e.getValue().check(context)).collect(Collectors.toList());
 		return TypeUtils.inferCollectionType(context, types);
 	}	
@@ -83,7 +76,7 @@ public class DictLiteral extends Literal<Dictionary> {
 			check(context); // to compute itemType
 			PromptoDict<Text,IValue> dict = new PromptoDict<Text, IValue>(true);
 			for(DictEntry e : entries) {
-				Text key = (Text)e.getKey().interpret(context);
+				Text key = e.getKey().asText();
 				IValue val = e.getValue().interpret(context); 
 				dict.put(key, val);
 			}
