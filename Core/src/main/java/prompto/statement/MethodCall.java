@@ -91,8 +91,8 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	private boolean requiresInvoke(CodeWriter writer) {
 		if (writer.getDialect() != Dialect.E)
 			return false;
-		if (assignments == null || assignments.isEmpty())
-			return true;
+		if (assignments != null && assignments.size() > 0)
+			return false;
 		try {
 			MethodFinder finder = new MethodFinder(writer.getContext(), this);
 			IMethodDeclaration declaration = finder.findBestMethod(false);
