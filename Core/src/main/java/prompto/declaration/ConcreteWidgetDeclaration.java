@@ -2,6 +2,7 @@ package prompto.declaration;
 
 import prompto.grammar.Identifier;
 import prompto.grammar.MethodDeclarationList;
+import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.utils.CodeWriter;
@@ -13,6 +14,11 @@ public class ConcreteWidgetDeclaration extends ConcreteCategoryDeclaration imple
 		super(name, null, derivedFrom==null ? null: new IdentifierList(derivedFrom), methods);
 	}
 	
+	
+	@Override
+	public boolean isAWidget(Context context) {
+		return true;
+	}
 	
 	@Override
 	protected void categoryTypeToEDialect(CodeWriter writer) {

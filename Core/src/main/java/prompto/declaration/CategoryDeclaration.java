@@ -51,6 +51,11 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		return DeclarationType.CATEGORY;
 	}
 	
+	public boolean isAWidget(Context context) {
+		return false;
+	}
+
+	
 	public void setStorable(boolean storable) {
 		this.storable = storable;
 	}
@@ -386,6 +391,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	}
 
 	public abstract void ensureDeclarationOrder(Context context, List<ITranspilable> list, Set<ITranspilable> set);
+
 
 
 	

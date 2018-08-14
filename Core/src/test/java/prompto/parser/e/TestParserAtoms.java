@@ -19,6 +19,7 @@ import prompto.argument.ITypedArgument;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteMethodDeclaration;
+import prompto.declaration.IDeclaration;
 import prompto.declaration.NativeMethodDeclaration;
 import prompto.expression.ConstructorExpression;
 import prompto.expression.IExpression;
@@ -784,6 +785,14 @@ public class TestParserAtoms {
 		CodeWriter writer = new CodeWriter(Dialect.E, null);
 		stmt.toDialect(writer, null);
 		assertEquals(statement, writer.toString());
+	}
+	
+	@Test
+	public void testMainDeclaration() throws Exception {
+		String statement = "define start_TestEvents as method receiving Text<:> doing:\n\ta=1";
+		ETestParser parser = new ETestParser(statement, false);
+		IDeclaration decl = parser.parse_concrete_method_declaration();
+		assertNotNull(decl);
 	}
 
 	static class ETestParser extends ECleverParser {

@@ -72,6 +72,14 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 	
 	@Override
+	public boolean isAWidget(Context context) {
+		if(derivedFrom==null || derivedFrom.size()!=1)
+			return false;
+		CategoryDeclaration parent = context.getRegisteredDeclaration(CategoryDeclaration.class, derivedFrom.get(0), true);
+		return parent.isAWidget(context);
+	}
+	
+	@Override
 	public MethodDeclarationList getLocalMethods() {
 		return methods;
 	}
