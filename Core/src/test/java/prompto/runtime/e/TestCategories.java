@@ -20,6 +20,21 @@ public class TestCategories extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedAnyAsParameter() throws Exception {
+		checkInterpretedOutput("categories/anyAsParameter.pec");
+	}
+
+	@Test
+	public void testCompiledAnyAsParameter() throws Exception {
+		checkCompiledOutput("categories/anyAsParameter.pec");
+	}
+
+	@Test
+	public void testTranspiledAnyAsParameter() throws Exception {
+		checkTranspiledOutput("categories/anyAsParameter.pec");
+	}
+
+	@Test
 	public void testInterpretedComposed() throws Exception {
 		checkInterpretedOutput("categories/composed.pec");
 	}

@@ -7,6 +7,11 @@ import prompto.parser.e.BaseEParserTest;
 public class TestCategories extends BaseEParserTest {
 
 	@Test
+	public void testAnyAsParameter() throws Exception {
+		compareResourceEME("categories/anyAsParameter.pec");
+	}
+
+	@Test
 	public void testComposed() throws Exception {
 		compareResourceEME("categories/composed.pec");
 	}
