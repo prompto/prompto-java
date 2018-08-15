@@ -52,11 +52,12 @@ public class ConcreteWidgetDeclaration extends ConcreteCategoryDeclaration imple
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 	    Identifier parent = this.derivedFrom!=null && this.derivedFrom.size()>0 ? this.derivedFrom.get(0) : null;
-	    transpiler.append("function ").append(this.getName()).append("() {");
+	    transpiler.append("function ").append(this.getName()).append("(props) {");
 	    transpiler.indent();
 	    this.transpileGetterSetterAttributes(transpiler);
 	    this.transpileSuperConstructor(transpiler);
 	    this.transpileLocalAttributes(transpiler);
+	    transpiler.append("this.state = this.getInitialState();").newLine();
 	    transpiler.append("return this;");
 	    transpiler.dedent();
 	    transpiler.append("}");
@@ -75,8 +76,12 @@ public class ConcreteWidgetDeclaration extends ConcreteCategoryDeclaration imple
 	}
 	
 	@Override
-	protected Transpiler transpileRootConstructor(Transpiler transpiler) {
-		return transpiler.append("React.Component.call(this);");
+	protected void transpileSuperConstructor(Transpiler transpiler) {
+	    Identifier parent = this.derivedFrom!=null && this.derivedFrom.size()>0 ? this.derivedFrom.get(0) : null;
+	    if (parent!=null)
+	    	transpiler.append(parent.toString()).append(".call(this, props);").newLine();
+	    else
+	    	transpiler.append("React.Component.call(this, props);").newLine();
 	}
 
 }
