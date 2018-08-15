@@ -566,7 +566,9 @@ public class CategoryType extends BaseType {
 	
 	@Override
 	public void declare(Transpiler transpiler) {
-	    IDeclaration decl = this.getDeclaration(transpiler.getContext());
+	    if("Any".equals(this.getTypeName()))
+	    	return;
+		IDeclaration decl = this.getDeclaration(transpiler.getContext());
 		decl.declare(transpiler);
 	}
 	
