@@ -1116,7 +1116,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 	@Override
 	public void exitDocument_literal(Document_literalContext ctx) {
 		DictEntryList entries = this.<DictEntryList>getNodeValue(ctx.dict_entry_list());
-		DocEntryList items = new DocEntryList(entries);
+		DocEntryList items = entries!=null ? new DocEntryList(entries) : new DocEntryList();
 		setNodeValue(ctx, new DocumentLiteral(items));
 	}
 	
