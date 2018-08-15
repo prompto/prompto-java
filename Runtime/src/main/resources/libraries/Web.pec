@@ -5,5 +5,26 @@ define Event as native category with bindings:
 define ClickEvent as native category with bindings:
 	define category bindings as:
 		JavaScript: Event
+
+define getReactWidgetState as native method receiving Any w returning Document doing:
+	JavaScript: return w.state;
+
+
+define setReactWidgetState as native method receiving Any w and Document state doing:
+	JavaScript: w.setState(state);
+
+
+define ReactWidget as widget with methods:
+	
+	define getState as method doing:
+		return getReactWidgetState self
+	
+	define getInitialState as method doing:
+		return {}
+	
+	define setState as method receiving Document state doing:
+		setReactWidgetState self with state
+
 define alert as native method receiving Text text doing:
 	JavaScript: alert(text);
+
