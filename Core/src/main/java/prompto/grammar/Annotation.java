@@ -12,6 +12,10 @@ public class Annotation {
 		this.name = name;
 		this.expression = expression;
 	}
+	
+	public boolean isNamed(String name) {
+		return name.equals(this.name.toString());
+	}
 
 	public void toDialect(CodeWriter writer) {
 		writer.append(name.toString());

@@ -33,6 +33,7 @@ public interface IDeclaration extends ITranspilable, INamed, ISection {
 	Collection<CommentStatement> getComments();
 	void setAnnotations(Collection<Annotation> annotations);
 	Collection<Annotation> getAnnotations();
+	boolean hasAnnotation(String name);
 	default void setClosureOf(IMethodDeclaration declaration) { throw new UnsupportedOperationException(); }
 	default IMethodDeclaration getClosureOf() { throw new UnsupportedOperationException(); }
 	default boolean isStorable() { return false; }

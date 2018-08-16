@@ -69,6 +69,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		super(name, attributes);
 		this.derivedFrom = derivedFrom;
 		this.methods = methods!=null ? methods : new MethodDeclarationList();
+		this.methods.forEach(method->method.setMemberOf(this));
 	}
 	
 	@Override
@@ -261,10 +262,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	protected void registerMethods(Context context) {
 		if(methodsMap==null) {
 			methodsMap = new HashMap<String,IDeclaration>();
-			for(IMethodDeclaration method : methods) {
-				method.setMemberOf(this);
-				registerMethod(method, context);
-			}
+			methods.forEach(method->registerMethod(method, context));
 		}
 	}
 

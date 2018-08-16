@@ -66,4 +66,14 @@ public abstract class BaseDeclaration extends Section implements IDeclaration {
 		return annotations;
 	}
 	
+	@Override
+	public boolean hasAnnotation(String name) {
+		if(annotations==null)
+			return false;
+		else {
+			String prefixed = name.startsWith("@") ? name : "@" + name;
+			return annotations.stream().anyMatch(a->a.isNamed(prefixed));
+		}
+	}
+	
 }

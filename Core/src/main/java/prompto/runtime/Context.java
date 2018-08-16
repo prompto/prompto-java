@@ -515,6 +515,11 @@ public class Context implements IContext {
 		public void setAnnotations(Collection<Annotation> annotations) {
 			throw new UnsupportedOperationException();
 		}
+		
+		@Override
+		public boolean hasAnnotation(String name) {
+			throw new UnsupportedOperationException();
+		}
 
 		@Override
 		public DeclarationType getDeclarationType() {
