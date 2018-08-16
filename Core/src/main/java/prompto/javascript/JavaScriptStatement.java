@@ -1,5 +1,7 @@
 package prompto.javascript;
 
+import prompto.declaration.IMethodDeclaration;
+import prompto.statement.MethodCall;
 import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 
@@ -51,6 +53,10 @@ public class JavaScriptStatement {
 	        transpiler.append("return ");
 	    this.expression.transpile(transpiler);
 	    return false;
+	}
+
+	public void transpileInlineMethodCall(Transpiler transpiler, IMethodDeclaration declaration, MethodCall methodCall) {
+	    this.expression.transpileInlineMethodCall(transpiler, declaration, methodCall);
 	}
 	
 	

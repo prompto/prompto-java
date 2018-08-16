@@ -38,7 +38,6 @@ import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
 import prompto.grammar.Specificity;
 import prompto.javascript.JavaScriptNativeCall;
-import prompto.javascript.JavaScriptStatement;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.Context.InstanceContext;
@@ -424,8 +423,9 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 
 	private void transpileInlinedMemberMethod(Transpiler transpiler, NativeMethodDeclaration declaration) {
 		JavaScriptNativeCall call = declaration.findCall(JavaScriptNativeCall.class);
-		// if(call==null)
+		if(call==null)
 			throw new UnsupportedOperationException("Missing native JavaScript call!");
+		call.transpileInlineMethodCall(transpiler, declaration, this);
 	}
 	
 	
@@ -447,6 +447,11 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	}
 
 	public void transpileSelector(Transpiler transpiler, IMethodDeclaration declaration) {
+		MethodSelector selector = resolveSelector(transpiler, declaration);
+	    selector.transpile(transpiler);
+	}
+	
+	public MethodSelector resolveSelector(Transpiler transpiler, IMethodDeclaration declaration) {
 	    MethodSelector selector = /*this.fullSelector ||*/ this.selector;
 	    IExpression parent = selector.resolveParent(transpiler.getContext());
 	    if (parent == null && declaration.getMemberOf()!=null && transpiler.getContext().getParentContext() instanceof InstanceContext)
@@ -458,8 +463,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	        name = this.fullSelector.name;*/
 	    else 
 	        name = declaration.getTranspiledName(transpiler.getContext());
-	    selector = new MethodSelector(parent, new Identifier(name));
-	    selector.transpile(transpiler);
+	    return new MethodSelector(parent, new Identifier(name));
 	}
 
 	private void transpileBuiltin(Transpiler transpiler, BuiltInMethodDeclaration declaration) {

@@ -8,7 +8,6 @@ import java.util.Collections;
 
 import javax.script.Invocable;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import prompto.declaration.DeclarationList;
@@ -51,7 +50,6 @@ public class TestInline extends BaseEParserTest {
 		assertFalse(transpiler.getDeclared().contains(decls.getFirst()));
 	}
 
-	@Ignore
 	@Test
 	public void inlinedMethodCallIsInlined() throws Exception {
 		DeclarationList decls = parseResource("samples/inlinedEvent.pec");

@@ -1,7 +1,9 @@
 package prompto.javascript;
 
+import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.runtime.Context;
+import prompto.statement.MethodCall;
 import prompto.statement.NativeCall;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
@@ -45,6 +47,10 @@ public class JavaScriptNativeCall extends NativeCall {
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 		return this.statement.transpile(transpiler);
+	}
+
+	public void transpileInlineMethodCall(Transpiler transpiler, IMethodDeclaration declaration, MethodCall methodCall) {
+		this.statement.transpileInlineMethodCall(transpiler, declaration, methodCall);
 	}
 
 }
