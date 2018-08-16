@@ -1,10 +1,21 @@
-define Event as native category with bindings:
+define ClickEvent as native category with bindings:
+	
 	define category bindings as:
 		JavaScript: Event
 
-define ClickEvent as native category with bindings:
+define TextEvent as native category with bindings:
+
 	define category bindings as:
 		JavaScript: Event
+
+and methods:
+		
+	define getCurrentText as method returning Text doing:
+		JavaScript: return this.target.defaultValue;
+	
+	define getProposedText as method returning Text doing:
+		JavaScript: return this.target.value;
+
 
 define getReactWidgetState as native method receiving Any w returning Document doing:
 	JavaScript: return w.state;
