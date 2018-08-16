@@ -46,7 +46,7 @@ public class Nashorn8Engine implements IJSEngine {
 		invocable.invokeFunction("main$Text_dict");
 	}
 	
-	private static Invocable transpile(Transpiler transpiler) throws Exception {
+	public static Invocable transpile(Transpiler transpiler) throws Exception {
 		JSContext.set(transpiler.getContext());
 		String js = transpiler.toString();
 		try(OutputStream output = new FileOutputStream("transpiled.js")) {

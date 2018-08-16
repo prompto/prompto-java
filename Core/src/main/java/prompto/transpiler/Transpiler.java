@@ -9,6 +9,7 @@ import java.util.Stack;
 import java.util.stream.Collectors;
 
 import prompto.declaration.CategoryDeclaration;
+import prompto.declaration.IDeclaration;
 import prompto.runtime.Context;
 import prompto.type.CategoryType;
 import prompto.utils.Logger;
@@ -179,11 +180,21 @@ public class Transpiler {
 	}
 
 	public void declare(ITranspilable transpilable) {
+		if(transpilable instanceof IDeclaration && ((IDeclaration)transpilable).hasAnnotation("Inlined"))
+			return;
 		declared.add(transpilable);
+	}
+	
+	public Set<ITranspilable> getDeclared() {
+		return declared;
 	}
 
 	public void require(String script) {
 		required.add(script);
+	}
+	
+	public Set<String> getRequired() {
+		return required;
 	}
 	
 	@Override

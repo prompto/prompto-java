@@ -24,6 +24,7 @@ import prompto.declaration.ClosureDeclaration;
 import prompto.declaration.ConcreteMethodDeclaration;
 import prompto.declaration.DispatchMethodDeclaration;
 import prompto.declaration.IMethodDeclaration;
+import prompto.declaration.NativeMethodDeclaration;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.NotMutableError;
 import prompto.error.PromptoError;
@@ -36,6 +37,8 @@ import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
 import prompto.grammar.Specificity;
+import prompto.javascript.JavaScriptNativeCall;
+import prompto.javascript.JavaScriptStatement;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.Context.InstanceContext;
@@ -403,12 +406,29 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	private void transpileSingle(Transpiler transpiler, IMethodDeclaration declaration, boolean allowDerived) {
 	   if (declaration instanceof BuiltInMethodDeclaration)
 	        this.transpileBuiltin(transpiler, (BuiltInMethodDeclaration)declaration);
-	    else {
+	   else if(declaration.hasAnnotation("Inlined"))
+		   throw new UnsupportedOperationException("Yet!");
+	   else if(declaration.containerHasAnnotation("Inlined"))
+		   this.transpileInlinedMemberMethod(transpiler, declaration);
+	   else {
 	        this.transpileSelector(transpiler, declaration);
 	        this.transpileAssignments(transpiler, declaration, allowDerived);
 	    }
 	}
 
+	private void transpileInlinedMemberMethod(Transpiler transpiler, IMethodDeclaration declaration) {
+		if(!(declaration instanceof NativeMethodDeclaration))
+			throw new UnsupportedOperationException("Can only inline native methods!");
+		transpileInlinedMemberMethod(transpiler, (NativeMethodDeclaration)declaration);
+	}
+
+	private void transpileInlinedMemberMethod(Transpiler transpiler, NativeMethodDeclaration declaration) {
+		JavaScriptNativeCall call = declaration.findCall(JavaScriptNativeCall.class);
+		// if(call==null)
+			throw new UnsupportedOperationException("Missing native JavaScript call!");
+	}
+	
+	
 	private void transpileAssignments(Transpiler transpiler, IMethodDeclaration declaration, boolean allowDerived) {
 		List<ArgumentAssignment> assignments = this.makeAssignments(transpiler.getContext(), declaration);
 	    assignments = assignments.stream().filter(assignment->!(assignment.getArgument() instanceof CodeArgument)).collect(Collectors.toList());

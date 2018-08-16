@@ -14,6 +14,7 @@ import prompto.grammar.Identifier;
 import prompto.java.JavaNativeCall;
 import prompto.runtime.Context;
 import prompto.statement.IStatement;
+import prompto.statement.NativeCall;
 import prompto.statement.StatementList;
 import prompto.type.IType;
 import prompto.type.TypeMap;
@@ -27,13 +28,14 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 	
 	public NativeMethodDeclaration(Identifier name, ArgumentList arguments, IType returnType, StatementList instructions) {
 		super(name, arguments, returnType, instructions);
-		statement = findNativeStatement();
+		statement = findCall(JavaNativeCall.class);
 	}
 
-	private JavaNativeCall findNativeStatement() {
+	@SuppressWarnings("unchecked")
+	public <T extends NativeCall> T findCall(Class<T> klass) {
 		for(IStatement statement : statements) {
-			if(statement instanceof JavaNativeCall)
-				return (JavaNativeCall)statement;
+			if(klass.isAssignableFrom(statement.getClass()))
+				return (T)statement;
 		}
 		return null;
 	}

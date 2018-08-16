@@ -17,6 +17,10 @@ public class JavaScriptNativeCall extends NativeCall {
 		this.statement = statement;
 	}
 	
+	public JavaScriptStatement getStatement() {
+		return statement;
+	}
+	
 	@Override
 	public void toDialect(CodeWriter writer) {
 		writer.append("JavaScript: ");
