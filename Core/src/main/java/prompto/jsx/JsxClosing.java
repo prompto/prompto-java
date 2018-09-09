@@ -15,6 +15,8 @@ public class JsxClosing {
 
 	public void toDialect(CodeWriter writer) {
 		writer.append("</").append(id).append(">");
+		if(suite!=null)
+			writer.appendRaw(suite);
 	}
 
 }
