@@ -8,9 +8,9 @@ import prompto.utils.CodeWriter;
 
 public class JsxElement extends JsxElementBase {
 
-	List<IJsxExpression> children;
 	String nameSuite;
 	String openingSuite;
+	List<IJsxExpression> children;
 	JsxClosing closing;
 	
 	public JsxElement(Identifier name, String nameSuite, List<JsxAttribute> attributes, String openingSuite) {
