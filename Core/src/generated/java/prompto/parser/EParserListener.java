@@ -1706,6 +1706,16 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitLfp(EParser.LfpContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link EParser#jsx_ws}.
+	 * @param ctx the parse tree
+	 */
+	void enterJsx_ws(EParser.Jsx_wsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EParser#jsx_ws}.
+	 * @param ctx the parse tree
+	 */
+	void exitJsx_ws(EParser.Jsx_wsContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link EParser#indent}.
 	 * @param ctx the parse tree
 	 */

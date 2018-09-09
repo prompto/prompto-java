@@ -2,6 +2,7 @@ package prompto.parser;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.function.Supplier;
 
 import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.CharStream;
@@ -82,11 +83,6 @@ public class ECleverParser extends EParser implements IParser {
 		return parse_declaration_list();
 	}
 	
-	@FunctionalInterface
-	static interface ParseMethod {
-		ParseTree parse();
-	}
-	
 	public DeclarationList parse_declaration_list() throws Exception {
 		return this.<DeclarationList>doParse(this::declaration_list, true);
 	}
@@ -99,9 +95,9 @@ public class ECleverParser extends EParser implements IParser {
 		return this.<IFetchExpression>doParse(this::fetch_store_expression, false);
 	}
 	
-	private <T extends Object> T doParse(ParseMethod method, boolean addLF) {
+	public <T extends Object> T doParse(Supplier<ParseTree> method, boolean addLF) {
 		getLexer().setAddLF(addLF);
-		ParseTree tree = method.parse();
+		ParseTree tree = method.get();
 		EPromptoBuilder builder = new EPromptoBuilder(this);
 		ParseTreeWalker walker = new ParseTreeWalker();
 		walker.walk(builder, tree);

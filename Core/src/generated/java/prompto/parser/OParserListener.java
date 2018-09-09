@@ -1634,6 +1634,16 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitNull_literal(OParser.Null_literalContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link OParser#jsx_ws}.
+	 * @param ctx the parse tree
+	 */
+	void enterJsx_ws(OParser.Jsx_wsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#jsx_ws}.
+	 * @param ctx the parse tree
+	 */
+	void exitJsx_ws(OParser.Jsx_wsContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code FullDeclarationList}
 	 * labeled alternative in {@link OParser#declaration_list}.
 	 * @param ctx the parse tree

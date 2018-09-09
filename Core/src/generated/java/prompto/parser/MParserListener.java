@@ -1560,6 +1560,16 @@ public interface MParserListener extends ParseTreeListener {
 	 */
 	void exitLfp(MParser.LfpContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MParser#jsx_ws}.
+	 * @param ctx the parse tree
+	 */
+	void enterJsx_ws(MParser.Jsx_wsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MParser#jsx_ws}.
+	 * @param ctx the parse tree
+	 */
+	void exitJsx_ws(MParser.Jsx_wsContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MParser#indent}.
 	 * @param ctx the parse tree
 	 */

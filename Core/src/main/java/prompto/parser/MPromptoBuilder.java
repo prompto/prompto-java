@@ -5,11 +5,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 import prompto.argument.CategoryArgument;
 import prompto.argument.CodeArgument;
@@ -157,6 +158,7 @@ import prompto.javascript.JavaScriptThisExpression;
 import prompto.jsx.IJsxExpression;
 import prompto.jsx.IJsxValue;
 import prompto.jsx.JsxAttribute;
+import prompto.jsx.JsxClosing;
 import prompto.jsx.JsxElement;
 import prompto.jsx.JsxText;
 import prompto.jsx.JsxExpression;
@@ -194,6 +196,7 @@ import static prompto.parser.MParser.*;
 import prompto.parser.MParser.DictKeyIdentifierContext;
 import prompto.parser.MParser.DictKeyTextContext;
 import prompto.parser.MParser.Document_literalContext;
+import prompto.parser.MParser.Jsx_closingContext;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -274,14 +277,62 @@ import prompto.value.SetValue;
 public class MPromptoBuilder extends MParserBaseListener {
 
 	ParseTreeProperty<Object> nodeValues = new ParseTreeProperty<Object>();
-	TokenStream input;
+	BufferedTokenStream input;
 	String path = "";
 
 	public MPromptoBuilder(MCleverParser parser) {
-		this.input = parser.getTokenStream();
+		this.input = (BufferedTokenStream)parser.getTokenStream();
 		this.path = parser.getPath();
 	}
 	
+	protected String getHiddenTokensBefore(TerminalNode node) {
+		return getHiddenTokensAfter(node.getSymbol());
+	}
+	
+	protected String getHiddenTokensBefore(Token token) {
+		List<Token> hidden = input.getHiddenTokensToLeft(token.getTokenIndex());
+		return getHiddenTokensText(hidden);
+	}
+	
+	protected String getHiddenTokensAfter(TerminalNode node) {
+		return getHiddenTokensAfter(node.getSymbol());
+	}
+	
+	protected String getHiddenTokensAfter(Token token) {
+		List<Token> hidden = input.getHiddenTokensToRight(token.getTokenIndex());
+		return getHiddenTokensText(hidden);
+	}
+	
+	
+	private String getHiddenTokensText(List<Token> hidden) {
+		if(hidden==null || hidden.isEmpty())
+			return null;
+		else
+			return hidden.stream()
+					.map(Token::getText)
+					.collect(Collectors.joining());
+	}
+
+	private String getJsxWhiteSpace(ParserRuleContext ctx) {
+		String within = ctx.children==null ? null : ctx.children.stream()
+				.filter(child->isNotIndent(child))
+				.map(child->child.getText())
+				.collect(Collectors.joining());
+		if(within==null)
+			return null;
+		String before = getHiddenTokensBefore(ctx.getStart());
+		if(before!=null)
+			within = before + within;
+		String after = getHiddenTokensAfter(ctx.getStop());
+		if(after!=null)
+			within = within + after;
+		return within; 
+	}
+	
+	private static boolean isNotIndent(ParseTree tree) {
+		return !(tree instanceof TerminalNode) || ((TerminalNode)tree).getSymbol().getType()!=INDENT;
+	}
+
 	public void buildSection(ParserRuleContext node, Section section) {
 		Token first = findFirstValidToken(node.start.getTokenIndex());
 		Token last = findLastValidToken(node.stop.getTokenIndex());
@@ -1723,10 +1774,12 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitJsxElement(JsxElementContext ctx) {
-		JsxElement elem = this.<JsxElement>getNodeValue(ctx.jsx);
+		JsxElement element = this.<JsxElement>getNodeValue(ctx.opening);
+		JsxClosing closing = this.<JsxClosing>getNodeValue(ctx.closing);
+		element.setClosing(closing);
 		List<IJsxExpression> children = this.<List<IJsxExpression>>getNodeValue(ctx.children_);
-		elem.setChildren(children);
-		setNodeValue(ctx, elem);
+		element.setChildren(children);
+		setNodeValue(ctx, element);
 	}
 	
 
@@ -1760,7 +1813,8 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitJsx_attribute(Jsx_attributeContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
 		IJsxValue value = this.<IJsxValue>getNodeValue(ctx.value);
-		setNodeValue(ctx, new JsxAttribute(name, value));
+		String suite = getJsxWhiteSpace(ctx.jsx_ws());
+		setNodeValue(ctx, new JsxAttribute(name, value, suite));
 	}
 	
 	
@@ -1800,19 +1854,28 @@ public class MPromptoBuilder extends MParserBaseListener {
 	@Override
 	public void exitJsx_opening(Jsx_openingContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		String nameSuite = getJsxWhiteSpace(ctx.jsx_ws());
 		List<JsxAttribute> attributes = ctx.jsx_attribute().stream()
 				.map(cx->this.<JsxAttribute>getNodeValue(cx))
 				.collect(Collectors.toList());
-		setNodeValue(ctx, new JsxElement(name, attributes));
+		setNodeValue(ctx, new JsxElement(name, nameSuite, attributes, null));
+	}
+	
+	
+	@Override
+	public void exitJsx_closing(Jsx_closingContext ctx) {
+		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		setNodeValue(ctx, new JsxClosing(name, null));
 	}
 	
 	@Override
 	public void exitJsx_self_closing(Jsx_self_closingContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		String nameSuite = getJsxWhiteSpace(ctx.jsx_ws());
 		List<JsxAttribute> attributes = ctx.jsx_attribute().stream()
 				.map(cx->this.<JsxAttribute>getNodeValue(cx))
 				.collect(Collectors.toList());
-		setNodeValue(ctx, new JsxSelfClosing(name, attributes));
+		setNodeValue(ctx, new JsxSelfClosing(name, nameSuite, attributes, null));
 	}
 	
 	

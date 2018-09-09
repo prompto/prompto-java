@@ -67,6 +67,11 @@ public class CodeWriter {
 		return this;
 	}
 
+	public CodeWriter appendRaw(String s) {
+		sb.append(s);
+		return this;
+	}
+
 	public CodeWriter append(char c) {
 		indenter.appendTabsIfRequired(c);
 		sb.append(c);

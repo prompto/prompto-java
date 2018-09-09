@@ -9,11 +9,12 @@ public class JsxAttribute {
 
 	Identifier id;
 	IJsxValue value;
+	String suite;
 	
-	
-	public JsxAttribute(Identifier id, IJsxValue value) {
+	public JsxAttribute(Identifier id, IJsxValue value, String suite) {
 		this.id = id;
 		this.value = value;
+		this.suite = (suite!=null && !suite.isEmpty()) ? suite : null;
 	}
 
 
@@ -24,11 +25,15 @@ public class JsxAttribute {
 
 
 	public void toDialect(CodeWriter writer) {
-		writer.append(" ").append(id.toString());
+		writer.append(id.toString());
 		if(value!=null) {
 			writer.append("=");
 			value.toDialect(writer);
 		}
+		if(suite!=null)
+			writer.appendRaw(suite);
+		else
+			writer.append(" ");
 	}
 
 

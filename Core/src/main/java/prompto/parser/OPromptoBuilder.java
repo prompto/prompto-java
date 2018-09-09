@@ -5,11 +5,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 import prompto.argument.CategoryArgument;
 import prompto.argument.CodeArgument;
@@ -159,6 +160,7 @@ import prompto.javascript.JavaScriptThisExpression;
 import prompto.jsx.IJsxExpression;
 import prompto.jsx.IJsxValue;
 import prompto.jsx.JsxAttribute;
+import prompto.jsx.JsxClosing;
 import prompto.jsx.JsxCode;
 import prompto.jsx.JsxElement;
 import prompto.jsx.JsxText;
@@ -197,6 +199,7 @@ import static prompto.parser.OParser.*;
 import prompto.parser.OParser.DictKeyIdentifierContext;
 import prompto.parser.OParser.DictKeyTextContext;
 import prompto.parser.OParser.Document_literalContext;
+import prompto.parser.OParser.Jsx_closingContext;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -277,12 +280,26 @@ import prompto.value.SetValue;
 public class OPromptoBuilder extends OParserBaseListener {
 
 	ParseTreeProperty<Object> nodeValues = new ParseTreeProperty<Object>();
-	TokenStream input;
+	BufferedTokenStream input;
 	String path = "";
 
 	public OPromptoBuilder(OCleverParser parser) {
-		this.input = parser.getTokenStream();
+		this.input = (BufferedTokenStream)parser.getTokenStream();
 		this.path = parser.getPath();
+	}
+	
+	protected String getHiddenTokensAfter(TerminalNode node) {
+		return getHiddenTokensAfter(node.getSymbol());
+	}
+	
+	protected String getHiddenTokensAfter(Token token) {
+		List<Token> hidden = input.getHiddenTokensToRight(token.getTokenIndex());
+		if(hidden==null || hidden.isEmpty())
+			return null;
+		else
+			return hidden.stream()
+					.map(Token::getText)
+					.collect(Collectors.joining());
 	}
 	
 	public void buildSection(ParserRuleContext node, Section section) {
@@ -1778,10 +1795,12 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitJsxElement(JsxElementContext ctx) {
-		JsxElement elem = this.<JsxElement>getNodeValue(ctx.jsx);
+		JsxElement element = this.<JsxElement>getNodeValue(ctx.opening);
+		JsxClosing closing = this.<JsxClosing>getNodeValue(ctx.closing);
+		element.setClosing(closing);
 		List<IJsxExpression> children = this.<List<IJsxExpression>>getNodeValue(ctx.children_);
-		elem.setChildren(children);
-		setNodeValue(ctx, elem);
+		element.setChildren(children);
+		setNodeValue(ctx, element);
 	}
 	
 	@Override
@@ -1807,7 +1826,8 @@ public class OPromptoBuilder extends OParserBaseListener {
 	public void exitJsx_attribute(Jsx_attributeContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
 		IJsxValue value = this.<IJsxValue>getNodeValue(ctx.value);
-		setNodeValue(ctx, new JsxAttribute(name, value));
+		String suite = getHiddenTokensAfter(ctx.value.getStop());
+		setNodeValue(ctx, new JsxAttribute(name, value, suite));
 	}
 	
 	
@@ -1845,19 +1865,30 @@ public class OPromptoBuilder extends OParserBaseListener {
 	@Override
 	public void exitJsx_opening(Jsx_openingContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		String nameSuite = getHiddenTokensAfter(ctx.name.getStop());
 		List<JsxAttribute> attributes = ctx.jsx_attribute().stream()
 				.map(cx->this.<JsxAttribute>getNodeValue(cx))
 				.collect(Collectors.toList());
-		setNodeValue(ctx, new JsxElement(name, attributes));
+		String openingSuite = getHiddenTokensAfter(ctx.GT());
+		setNodeValue(ctx, new JsxElement(name, nameSuite, attributes, openingSuite));
+	}
+	
+	@Override
+	public void exitJsx_closing(Jsx_closingContext ctx) {
+		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		String suite = getHiddenTokensAfter(ctx.GT());
+		setNodeValue(ctx, new JsxClosing(name, suite));
 	}
 	
 	@Override
 	public void exitJsx_self_closing(Jsx_self_closingContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		String nameSuite = getHiddenTokensAfter(ctx.name.getStop());
 		List<JsxAttribute> attributes = ctx.jsx_attribute().stream()
 				.map(cx->this.<JsxAttribute>getNodeValue(cx))
 				.collect(Collectors.toList());
-		setNodeValue(ctx, new JsxSelfClosing(name, attributes));
+		String openingSuite = getHiddenTokensAfter(ctx.GT());
+		setNodeValue(ctx, new JsxSelfClosing(name, nameSuite, attributes, openingSuite));
 	}
 	
 	@Override

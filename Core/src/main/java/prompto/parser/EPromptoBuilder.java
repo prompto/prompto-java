@@ -1,15 +1,18 @@
 package prompto.parser;
 
+import static prompto.parser.EParser.INDENT;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 import prompto.argument.CategoryArgument;
 import prompto.argument.CodeArgument;
@@ -159,12 +162,13 @@ import prompto.javascript.JavaScriptThisExpression;
 import prompto.jsx.IJsxExpression;
 import prompto.jsx.IJsxValue;
 import prompto.jsx.JsxAttribute;
+import prompto.jsx.JsxClosing;
 import prompto.jsx.JsxCode;
 import prompto.jsx.JsxElement;
+import prompto.jsx.JsxExpression;
 import prompto.jsx.JsxLiteral;
 import prompto.jsx.JsxSelfClosing;
 import prompto.jsx.JsxText;
-import prompto.jsx.JsxExpression;
 import prompto.literal.BooleanLiteral;
 import prompto.literal.CharacterLiteral;
 import prompto.literal.ContainerLiteral;
@@ -193,10 +197,410 @@ import prompto.literal.TimeLiteral;
 import prompto.literal.TupleLiteral;
 import prompto.literal.UUIDLiteral;
 import prompto.literal.VersionLiteral;
-import static prompto.parser.EParser.*;
+import prompto.parser.EParser.Abstract_method_declarationContext;
+import prompto.parser.EParser.AddExpressionContext;
+import prompto.parser.EParser.AndExpressionContext;
+import prompto.parser.EParser.Annotation_constructorContext;
+import prompto.parser.EParser.Annotation_identifierContext;
+import prompto.parser.EParser.AnyDictTypeContext;
+import prompto.parser.EParser.AnyListTypeContext;
+import prompto.parser.EParser.AnyTypeContext;
+import prompto.parser.EParser.ArgumentAssignmentListContext;
+import prompto.parser.EParser.ArgumentAssignmentListExpressionContext;
+import prompto.parser.EParser.ArgumentAssignmentListItemContext;
+import prompto.parser.EParser.ArgumentAssignmentListNoExpressionContext;
+import prompto.parser.EParser.Argument_assignmentContext;
+import prompto.parser.EParser.Argument_listContext;
+import prompto.parser.EParser.AssertionContext;
+import prompto.parser.EParser.Assertion_listContext;
+import prompto.parser.EParser.AssignInstanceStatementContext;
+import prompto.parser.EParser.AssignTupleStatementContext;
+import prompto.parser.EParser.Assign_instance_statementContext;
+import prompto.parser.EParser.Assign_tuple_statementContext;
+import prompto.parser.EParser.Assign_variable_statementContext;
+import prompto.parser.EParser.AtomicSwitchCaseContext;
+import prompto.parser.EParser.AttributeListContext;
+import prompto.parser.EParser.AttributeListItemContext;
+import prompto.parser.EParser.Attribute_declarationContext;
+import prompto.parser.EParser.Attribute_identifierContext;
+import prompto.parser.EParser.Attribute_identifier_listContext;
+import prompto.parser.EParser.BlobExpressionContext;
+import prompto.parser.EParser.BlobTypeContext;
+import prompto.parser.EParser.Blob_expressionContext;
+import prompto.parser.EParser.BooleanLiteralContext;
+import prompto.parser.EParser.BooleanTypeContext;
+import prompto.parser.EParser.BreakStatementContext;
+import prompto.parser.EParser.CSharpArgumentListContext;
+import prompto.parser.EParser.CSharpArgumentListItemContext;
+import prompto.parser.EParser.CSharpBooleanLiteralContext;
+import prompto.parser.EParser.CSharpCategoryBindingContext;
+import prompto.parser.EParser.CSharpCharacterLiteralContext;
+import prompto.parser.EParser.CSharpChildIdentifierContext;
+import prompto.parser.EParser.CSharpDecimalLiteralContext;
+import prompto.parser.EParser.CSharpIdentifierContext;
+import prompto.parser.EParser.CSharpIntegerLiteralContext;
+import prompto.parser.EParser.CSharpMethodExpressionContext;
+import prompto.parser.EParser.CSharpNativeStatementContext;
+import prompto.parser.EParser.CSharpPrimaryExpressionContext;
+import prompto.parser.EParser.CSharpPromptoIdentifierContext;
+import prompto.parser.EParser.CSharpReturnStatementContext;
+import prompto.parser.EParser.CSharpSelectorExpressionContext;
+import prompto.parser.EParser.CSharpStatementContext;
+import prompto.parser.EParser.CSharpTextLiteralContext;
+import prompto.parser.EParser.CastExpressionContext;
+import prompto.parser.EParser.CatchAtomicStatementContext;
+import prompto.parser.EParser.CatchCollectionStatementContext;
+import prompto.parser.EParser.Catch_statement_listContext;
+import prompto.parser.EParser.CategoryTypeContext;
+import prompto.parser.EParser.Category_or_any_typeContext;
+import prompto.parser.EParser.Category_symbolContext;
+import prompto.parser.EParser.Category_symbol_listContext;
+import prompto.parser.EParser.Category_typeContext;
+import prompto.parser.EParser.CharacterLiteralContext;
+import prompto.parser.EParser.CharacterTypeContext;
+import prompto.parser.EParser.ChildInstanceContext;
+import prompto.parser.EParser.ClosureExpressionContext;
+import prompto.parser.EParser.ClosureStatementContext;
+import prompto.parser.EParser.CodeArgumentContext;
+import prompto.parser.EParser.CodeExpressionContext;
+import prompto.parser.EParser.CodeTypeContext;
+import prompto.parser.EParser.Code_argumentContext;
+import prompto.parser.EParser.Code_typeContext;
+import prompto.parser.EParser.CollectionSwitchCaseContext;
+import prompto.parser.EParser.Collection_literalContext;
+import prompto.parser.EParser.CommentStatementContext;
+import prompto.parser.EParser.Comment_statementContext;
+import prompto.parser.EParser.ConcreteCategoryDeclarationContext;
+import prompto.parser.EParser.ConcreteWidgetDeclarationContext;
+import prompto.parser.EParser.Concrete_category_declarationContext;
+import prompto.parser.EParser.Concrete_method_declarationContext;
+import prompto.parser.EParser.Concrete_widget_declarationContext;
+import prompto.parser.EParser.ConstructorExpressionContext;
+import prompto.parser.EParser.ConstructorFromContext;
+import prompto.parser.EParser.ConstructorNoFromContext;
+import prompto.parser.EParser.ContainsExpressionContext;
+import prompto.parser.EParser.Csharp_identifierContext;
+import prompto.parser.EParser.Csharp_method_expressionContext;
+import prompto.parser.EParser.Csharp_primary_expressionContext;
+import prompto.parser.EParser.Csharp_this_expressionContext;
+import prompto.parser.EParser.CssExpressionContext;
+import prompto.parser.EParser.CssTextContext;
+import prompto.parser.EParser.CssValueContext;
+import prompto.parser.EParser.Css_expressionContext;
+import prompto.parser.EParser.Css_fieldContext;
+import prompto.parser.EParser.DateLiteralContext;
+import prompto.parser.EParser.DateTimeLiteralContext;
+import prompto.parser.EParser.DateTimeTypeContext;
+import prompto.parser.EParser.DateTypeContext;
+import prompto.parser.EParser.DecimalLiteralContext;
+import prompto.parser.EParser.DecimalTypeContext;
+import prompto.parser.EParser.DeclarationContext;
+import prompto.parser.EParser.DeclarationsContext;
+import prompto.parser.EParser.DerivedListContext;
+import prompto.parser.EParser.DerivedListItemContext;
 import prompto.parser.EParser.DictKeyIdentifierContext;
 import prompto.parser.EParser.DictKeyTextContext;
+import prompto.parser.EParser.DictTypeContext;
+import prompto.parser.EParser.Dict_entryContext;
+import prompto.parser.EParser.Dict_entry_listContext;
+import prompto.parser.EParser.Dict_literalContext;
+import prompto.parser.EParser.DivideExpressionContext;
+import prompto.parser.EParser.DoWhileStatementContext;
+import prompto.parser.EParser.Do_while_statementContext;
+import prompto.parser.EParser.DocumentExpressionContext;
+import prompto.parser.EParser.DocumentTypeContext;
+import prompto.parser.EParser.Document_expressionContext;
 import prompto.parser.EParser.Document_literalContext;
+import prompto.parser.EParser.ElseIfStatementListContext;
+import prompto.parser.EParser.ElseIfStatementListItemContext;
+import prompto.parser.EParser.Enum_category_declarationContext;
+import prompto.parser.EParser.Enum_declarationContext;
+import prompto.parser.EParser.Enum_native_declarationContext;
+import prompto.parser.EParser.EqualsExpressionContext;
+import prompto.parser.EParser.ExecuteExpressionContext;
+import prompto.parser.EParser.Expression_listContext;
+import prompto.parser.EParser.Expression_tupleContext;
+import prompto.parser.EParser.FetchManyContext;
+import prompto.parser.EParser.FetchOneContext;
+import prompto.parser.EParser.FetchStoreExpressionContext;
+import prompto.parser.EParser.FilteredListExpressionContext;
+import prompto.parser.EParser.Filtered_list_suffixContext;
+import prompto.parser.EParser.FlushStatementContext;
+import prompto.parser.EParser.Flush_statementContext;
+import prompto.parser.EParser.ForEachStatementContext;
+import prompto.parser.EParser.For_each_statementContext;
+import prompto.parser.EParser.FullDeclarationListContext;
+import prompto.parser.EParser.Full_argument_listContext;
+import prompto.parser.EParser.Getter_method_declarationContext;
+import prompto.parser.EParser.GreaterThanExpressionContext;
+import prompto.parser.EParser.GreaterThanOrEqualExpressionContext;
+import prompto.parser.EParser.HasAllExpressionContext;
+import prompto.parser.EParser.HasAnyExpressionContext;
+import prompto.parser.EParser.HasExpressionContext;
+import prompto.parser.EParser.HexadecimalLiteralContext;
+import prompto.parser.EParser.HtmlTypeContext;
+import prompto.parser.EParser.IdentifierContext;
+import prompto.parser.EParser.IdentifierExpressionContext;
+import prompto.parser.EParser.IfStatementContext;
+import prompto.parser.EParser.If_statementContext;
+import prompto.parser.EParser.ImageTypeContext;
+import prompto.parser.EParser.InExpressionContext;
+import prompto.parser.EParser.InstanceExpressionContext;
+import prompto.parser.EParser.IntDivideExpressionContext;
+import prompto.parser.EParser.IntegerLiteralContext;
+import prompto.parser.EParser.IntegerTypeContext;
+import prompto.parser.EParser.InvocationExpressionContext;
+import prompto.parser.EParser.Invocation_expressionContext;
+import prompto.parser.EParser.InvokeStatementContext;
+import prompto.parser.EParser.IsATypeExpressionContext;
+import prompto.parser.EParser.IsExpressionContext;
+import prompto.parser.EParser.IsNotExpressionContext;
+import prompto.parser.EParser.IsOtherExpressionContext;
+import prompto.parser.EParser.ItemInstanceContext;
+import prompto.parser.EParser.ItemSelectorContext;
+import prompto.parser.EParser.IteratorExpressionContext;
+import prompto.parser.EParser.IteratorTypeContext;
+import prompto.parser.EParser.JavaArgumentListContext;
+import prompto.parser.EParser.JavaArgumentListItemContext;
+import prompto.parser.EParser.JavaBooleanLiteralContext;
+import prompto.parser.EParser.JavaCategoryBindingContext;
+import prompto.parser.EParser.JavaCharacterLiteralContext;
+import prompto.parser.EParser.JavaChildClassIdentifierContext;
+import prompto.parser.EParser.JavaChildIdentifierContext;
+import prompto.parser.EParser.JavaClassIdentifierContext;
+import prompto.parser.EParser.JavaDecimalLiteralContext;
+import prompto.parser.EParser.JavaIdentifierContext;
+import prompto.parser.EParser.JavaIntegerLiteralContext;
+import prompto.parser.EParser.JavaItemExpressionContext;
+import prompto.parser.EParser.JavaMethodExpressionContext;
+import prompto.parser.EParser.JavaNativeStatementContext;
+import prompto.parser.EParser.JavaPrimaryExpressionContext;
+import prompto.parser.EParser.JavaReturnStatementContext;
+import prompto.parser.EParser.JavaScriptCategoryBindingContext;
+import prompto.parser.EParser.JavaScriptMemberExpressionContext;
+import prompto.parser.EParser.JavaScriptMethodExpressionContext;
+import prompto.parser.EParser.JavaScriptNativeStatementContext;
+import prompto.parser.EParser.JavaSelectorExpressionContext;
+import prompto.parser.EParser.JavaStatementContext;
+import prompto.parser.EParser.JavaTextLiteralContext;
+import prompto.parser.EParser.Java_identifierContext;
+import prompto.parser.EParser.Java_item_expressionContext;
+import prompto.parser.EParser.Java_method_expressionContext;
+import prompto.parser.EParser.Java_parenthesis_expressionContext;
+import prompto.parser.EParser.Java_primary_expressionContext;
+import prompto.parser.EParser.Java_this_expressionContext;
+import prompto.parser.EParser.JavascriptArgumentListContext;
+import prompto.parser.EParser.JavascriptArgumentListItemContext;
+import prompto.parser.EParser.JavascriptBooleanLiteralContext;
+import prompto.parser.EParser.JavascriptCharacterLiteralContext;
+import prompto.parser.EParser.JavascriptDecimalLiteralContext;
+import prompto.parser.EParser.JavascriptIntegerLiteralContext;
+import prompto.parser.EParser.JavascriptPrimaryExpressionContext;
+import prompto.parser.EParser.JavascriptReturnStatementContext;
+import prompto.parser.EParser.JavascriptSelectorExpressionContext;
+import prompto.parser.EParser.JavascriptStatementContext;
+import prompto.parser.EParser.JavascriptTextLiteralContext;
+import prompto.parser.EParser.Javascript_category_bindingContext;
+import prompto.parser.EParser.Javascript_identifierContext;
+import prompto.parser.EParser.Javascript_identifier_expressionContext;
+import prompto.parser.EParser.Javascript_method_expressionContext;
+import prompto.parser.EParser.Javascript_moduleContext;
+import prompto.parser.EParser.Javascript_native_statementContext;
+import prompto.parser.EParser.Javascript_new_expressionContext;
+import prompto.parser.EParser.Javascript_primary_expressionContext;
+import prompto.parser.EParser.Javascript_this_expressionContext;
+import prompto.parser.EParser.JsxChildContext;
+import prompto.parser.EParser.JsxCodeContext;
+import prompto.parser.EParser.JsxElementContext;
+import prompto.parser.EParser.JsxExpressionContext;
+import prompto.parser.EParser.JsxLiteralContext;
+import prompto.parser.EParser.JsxSelfClosingContext;
+import prompto.parser.EParser.JsxTextContext;
+import prompto.parser.EParser.JsxValueContext;
+import prompto.parser.EParser.Jsx_attributeContext;
+import prompto.parser.EParser.Jsx_childrenContext;
+import prompto.parser.EParser.Jsx_closingContext;
+import prompto.parser.EParser.Jsx_element_nameContext;
+import prompto.parser.EParser.Jsx_expressionContext;
+import prompto.parser.EParser.Jsx_identifierContext;
+import prompto.parser.EParser.Jsx_openingContext;
+import prompto.parser.EParser.Jsx_self_closingContext;
+import prompto.parser.EParser.Key_tokenContext;
+import prompto.parser.EParser.LessThanExpressionContext;
+import prompto.parser.EParser.LessThanOrEqualExpressionContext;
+import prompto.parser.EParser.ListTypeContext;
+import prompto.parser.EParser.List_literalContext;
+import prompto.parser.EParser.LiteralExpressionContext;
+import prompto.parser.EParser.LiteralListLiteralContext;
+import prompto.parser.EParser.LiteralRangeLiteralContext;
+import prompto.parser.EParser.LiteralSetLiteralContext;
+import prompto.parser.EParser.Literal_expressionContext;
+import prompto.parser.EParser.Literal_list_literalContext;
+import prompto.parser.EParser.MatchingExpressionContext;
+import prompto.parser.EParser.MatchingListContext;
+import prompto.parser.EParser.MatchingPatternContext;
+import prompto.parser.EParser.MatchingRangeContext;
+import prompto.parser.EParser.MatchingSetContext;
+import prompto.parser.EParser.MaxIntegerLiteralContext;
+import prompto.parser.EParser.MemberInstanceContext;
+import prompto.parser.EParser.MemberSelectorContext;
+import prompto.parser.EParser.Member_method_declarationContext;
+import prompto.parser.EParser.Member_method_declaration_listContext;
+import prompto.parser.EParser.MethodCallExpressionContext;
+import prompto.parser.EParser.MethodCallStatementContext;
+import prompto.parser.EParser.Method_declarationContext;
+import prompto.parser.EParser.Method_identifierContext;
+import prompto.parser.EParser.MinIntegerLiteralContext;
+import prompto.parser.EParser.MinusExpressionContext;
+import prompto.parser.EParser.ModuloExpressionContext;
+import prompto.parser.EParser.MultiplyExpressionContext;
+import prompto.parser.EParser.Mutable_category_typeContext;
+import prompto.parser.EParser.Named_argumentContext;
+import prompto.parser.EParser.NativeCategoryBindingListContext;
+import prompto.parser.EParser.NativeCategoryBindingListItemContext;
+import prompto.parser.EParser.NativeCategoryDeclarationContext;
+import prompto.parser.EParser.NativeTypeContext;
+import prompto.parser.EParser.NativeWidgetDeclarationContext;
+import prompto.parser.EParser.Native_category_bindingsContext;
+import prompto.parser.EParser.Native_category_declarationContext;
+import prompto.parser.EParser.Native_getter_declarationContext;
+import prompto.parser.EParser.Native_member_method_declarationContext;
+import prompto.parser.EParser.Native_member_method_declaration_listContext;
+import prompto.parser.EParser.Native_method_declarationContext;
+import prompto.parser.EParser.Native_resource_declarationContext;
+import prompto.parser.EParser.Native_setter_declarationContext;
+import prompto.parser.EParser.Native_statement_listContext;
+import prompto.parser.EParser.Native_symbolContext;
+import prompto.parser.EParser.Native_symbol_listContext;
+import prompto.parser.EParser.Native_widget_declarationContext;
+import prompto.parser.EParser.NotContainsExpressionContext;
+import prompto.parser.EParser.NotEqualsExpressionContext;
+import prompto.parser.EParser.NotExpressionContext;
+import prompto.parser.EParser.NotHasAllExpressionContext;
+import prompto.parser.EParser.NotHasAnyExpressionContext;
+import prompto.parser.EParser.NotHasExpressionContext;
+import prompto.parser.EParser.NotInExpressionContext;
+import prompto.parser.EParser.NullLiteralContext;
+import prompto.parser.EParser.OperatorArgumentContext;
+import prompto.parser.EParser.OperatorDivideContext;
+import prompto.parser.EParser.OperatorIDivideContext;
+import prompto.parser.EParser.OperatorMinusContext;
+import prompto.parser.EParser.OperatorModuloContext;
+import prompto.parser.EParser.OperatorMultiplyContext;
+import prompto.parser.EParser.OperatorPlusContext;
+import prompto.parser.EParser.Operator_argumentContext;
+import prompto.parser.EParser.Operator_method_declarationContext;
+import prompto.parser.EParser.OrExpressionContext;
+import prompto.parser.EParser.Order_byContext;
+import prompto.parser.EParser.Order_by_listContext;
+import prompto.parser.EParser.ParenthesisExpressionContext;
+import prompto.parser.EParser.Parenthesis_expressionContext;
+import prompto.parser.EParser.PeriodLiteralContext;
+import prompto.parser.EParser.PeriodTypeContext;
+import prompto.parser.EParser.PrimaryTypeContext;
+import prompto.parser.EParser.Python2CategoryBindingContext;
+import prompto.parser.EParser.Python2NativeStatementContext;
+import prompto.parser.EParser.Python3CategoryBindingContext;
+import prompto.parser.EParser.Python3NativeStatementContext;
+import prompto.parser.EParser.PythonArgumentListContext;
+import prompto.parser.EParser.PythonBooleanLiteralContext;
+import prompto.parser.EParser.PythonCharacterLiteralContext;
+import prompto.parser.EParser.PythonChildIdentifierContext;
+import prompto.parser.EParser.PythonDecimalLiteralContext;
+import prompto.parser.EParser.PythonGlobalMethodExpressionContext;
+import prompto.parser.EParser.PythonIdentifierContext;
+import prompto.parser.EParser.PythonIdentifierExpressionContext;
+import prompto.parser.EParser.PythonIntegerLiteralContext;
+import prompto.parser.EParser.PythonLiteralExpressionContext;
+import prompto.parser.EParser.PythonMethodExpressionContext;
+import prompto.parser.EParser.PythonNamedArgumentListContext;
+import prompto.parser.EParser.PythonNamedArgumentListItemContext;
+import prompto.parser.EParser.PythonNamedOnlyArgumentListContext;
+import prompto.parser.EParser.PythonOrdinalArgumentListContext;
+import prompto.parser.EParser.PythonOrdinalArgumentListItemContext;
+import prompto.parser.EParser.PythonOrdinalOnlyArgumentListContext;
+import prompto.parser.EParser.PythonPrimaryExpressionContext;
+import prompto.parser.EParser.PythonPromptoIdentifierContext;
+import prompto.parser.EParser.PythonReturnStatementContext;
+import prompto.parser.EParser.PythonSelectorExpressionContext;
+import prompto.parser.EParser.PythonSelfExpressionContext;
+import prompto.parser.EParser.PythonStatementContext;
+import prompto.parser.EParser.PythonTextLiteralContext;
+import prompto.parser.EParser.Python_category_bindingContext;
+import prompto.parser.EParser.Python_identifierContext;
+import prompto.parser.EParser.Python_method_expressionContext;
+import prompto.parser.EParser.Python_moduleContext;
+import prompto.parser.EParser.Python_native_statementContext;
+import prompto.parser.EParser.RaiseStatementContext;
+import prompto.parser.EParser.Raise_statementContext;
+import prompto.parser.EParser.Range_literalContext;
+import prompto.parser.EParser.ReadAllExpressionContext;
+import prompto.parser.EParser.ReadOneExpressionContext;
+import prompto.parser.EParser.Read_all_expressionContext;
+import prompto.parser.EParser.Read_one_expressionContext;
+import prompto.parser.EParser.Resource_declarationContext;
+import prompto.parser.EParser.ReturnStatementContext;
+import prompto.parser.EParser.Return_statementContext;
+import prompto.parser.EParser.RootInstanceContext;
+import prompto.parser.EParser.RoughlyEqualsExpressionContext;
+import prompto.parser.EParser.SelectableExpressionContext;
+import prompto.parser.EParser.SelectorExpressionContext;
+import prompto.parser.EParser.SetTypeContext;
+import prompto.parser.EParser.Set_literalContext;
+import prompto.parser.EParser.Setter_method_declarationContext;
+import prompto.parser.EParser.SingletonCategoryDeclarationContext;
+import prompto.parser.EParser.Singleton_category_declarationContext;
+import prompto.parser.EParser.SliceFirstAndLastContext;
+import prompto.parser.EParser.SliceFirstOnlyContext;
+import prompto.parser.EParser.SliceLastOnlyContext;
+import prompto.parser.EParser.SliceSelectorContext;
+import prompto.parser.EParser.SortedExpressionContext;
+import prompto.parser.EParser.Sorted_expressionContext;
+import prompto.parser.EParser.Statement_listContext;
+import prompto.parser.EParser.StoreStatementContext;
+import prompto.parser.EParser.Store_statementContext;
+import prompto.parser.EParser.SwitchStatementContext;
+import prompto.parser.EParser.Switch_case_statement_listContext;
+import prompto.parser.EParser.Switch_statementContext;
+import prompto.parser.EParser.SymbolIdentifierContext;
+import prompto.parser.EParser.Symbol_identifierContext;
+import prompto.parser.EParser.Symbol_listContext;
+import prompto.parser.EParser.Symbols_tokenContext;
+import prompto.parser.EParser.TernaryExpressionContext;
+import prompto.parser.EParser.Test_method_declarationContext;
+import prompto.parser.EParser.TextLiteralContext;
+import prompto.parser.EParser.TextTypeContext;
+import prompto.parser.EParser.ThisExpressionContext;
+import prompto.parser.EParser.TimeLiteralContext;
+import prompto.parser.EParser.TimeTypeContext;
+import prompto.parser.EParser.TryStatementContext;
+import prompto.parser.EParser.Try_statementContext;
+import prompto.parser.EParser.Tuple_literalContext;
+import prompto.parser.EParser.TypeIdentifierContext;
+import prompto.parser.EParser.Type_identifierContext;
+import prompto.parser.EParser.Type_identifier_listContext;
+import prompto.parser.EParser.Typed_argumentContext;
+import prompto.parser.EParser.UUIDLiteralContext;
+import prompto.parser.EParser.UUIDTypeContext;
+import prompto.parser.EParser.UnresolvedExpressionContext;
+import prompto.parser.EParser.UnresolvedIdentifierContext;
+import prompto.parser.EParser.UnresolvedSelectorContext;
+import prompto.parser.EParser.UnresolvedWithArgsStatementContext;
+import prompto.parser.EParser.Unresolved_selectorContext;
+import prompto.parser.EParser.Value_tokenContext;
+import prompto.parser.EParser.VariableIdentifierContext;
+import prompto.parser.EParser.Variable_identifierContext;
+import prompto.parser.EParser.Variable_identifier_listContext;
+import prompto.parser.EParser.VersionLiteralContext;
+import prompto.parser.EParser.VersionTypeContext;
+import prompto.parser.EParser.WhileStatementContext;
+import prompto.parser.EParser.While_statementContext;
+import prompto.parser.EParser.WithResourceStatementContext;
+import prompto.parser.EParser.WithSingletonStatementContext;
+import prompto.parser.EParser.With_resource_statementContext;
+import prompto.parser.EParser.With_singleton_statementContext;
+import prompto.parser.EParser.WriteStatementContext;
+import prompto.parser.EParser.Write_statementContext;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -278,12 +682,60 @@ import prompto.value.SetValue;
 public class EPromptoBuilder extends EParserBaseListener {
 
 	ParseTreeProperty<Object> nodeValues = new ParseTreeProperty<Object>();
-	TokenStream input;
+	BufferedTokenStream input;
 	String path = "";
 
 	public EPromptoBuilder(ECleverParser parser) {
-		this.input = parser.getTokenStream();
+		this.input = (BufferedTokenStream)parser.getTokenStream();
 		this.path = parser.getPath();
+	}
+	
+	protected String getHiddenTokensBefore(TerminalNode node) {
+		return getHiddenTokensAfter(node.getSymbol());
+	}
+	
+	protected String getHiddenTokensBefore(Token token) {
+		List<Token> hidden = input.getHiddenTokensToLeft(token.getTokenIndex());
+		return getHiddenTokensText(hidden);
+	}
+	
+	protected String getHiddenTokensAfter(TerminalNode node) {
+		return getHiddenTokensAfter(node.getSymbol());
+	}
+	
+	protected String getHiddenTokensAfter(Token token) {
+		List<Token> hidden = input.getHiddenTokensToRight(token.getTokenIndex());
+		return getHiddenTokensText(hidden);
+	}
+	
+	
+	private String getHiddenTokensText(List<Token> hidden) {
+		if(hidden==null || hidden.isEmpty())
+			return null;
+		else
+			return hidden.stream()
+					.map(Token::getText)
+					.collect(Collectors.joining());
+	}
+
+	private String getJsxWhiteSpace(ParserRuleContext ctx) {
+		String within = ctx.children==null ? null : ctx.children.stream()
+				.filter(child->isNotIndent(child))
+				.map(child->child.getText())
+				.collect(Collectors.joining());
+		if(within==null)
+			return null;
+		String before = getHiddenTokensBefore(ctx.getStart());
+		if(before!=null)
+			within = before + within;
+		String after = getHiddenTokensAfter(ctx.getStop());
+		if(after!=null)
+			within = within + after;
+		return within; 
+	}
+	
+	private static boolean isNotIndent(ParseTree tree) {
+		return !(tree instanceof TerminalNode) || ((TerminalNode)tree).getSymbol().getType()!=INDENT;
 	}
 	
 	public void buildSection(ParserRuleContext node, Section section) {
@@ -1776,10 +2228,12 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitJsxElement(JsxElementContext ctx) {
-		JsxElement elem = this.<JsxElement>getNodeValue(ctx.jsx);
+		JsxElement element = this.<JsxElement>getNodeValue(ctx.opening);
+		JsxClosing closing = this.<JsxClosing>getNodeValue(ctx.closing);
+		element.setClosing(closing);
 		List<IJsxExpression> children = this.<List<IJsxExpression>>getNodeValue(ctx.children_);
-		elem.setChildren(children);
-		setNodeValue(ctx, elem);
+		element.setChildren(children);
+		setNodeValue(ctx, element);
 	}
 	
 	@Override
@@ -1805,7 +2259,8 @@ public class EPromptoBuilder extends EParserBaseListener {
 	public void exitJsx_attribute(Jsx_attributeContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
 		IJsxValue value = this.<IJsxValue>getNodeValue(ctx.value);
-		setNodeValue(ctx, new JsxAttribute(name, value));
+		String suite = getJsxWhiteSpace(ctx.jsx_ws());
+		setNodeValue(ctx, new JsxAttribute(name, value, suite));
 	}
 	
 	
@@ -1843,19 +2298,28 @@ public class EPromptoBuilder extends EParserBaseListener {
 	@Override
 	public void exitJsx_opening(Jsx_openingContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		String suite = getJsxWhiteSpace(ctx.jsx_ws());
 		List<JsxAttribute> attributes = ctx.jsx_attribute().stream()
 				.map(cx->this.<JsxAttribute>getNodeValue(cx))
 				.collect(Collectors.toList());
-		setNodeValue(ctx, new JsxElement(name, attributes));
+		setNodeValue(ctx, new JsxElement(name, suite, attributes, null));
+	}
+	
+	
+	@Override
+	public void exitJsx_closing(Jsx_closingContext ctx) {
+		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		setNodeValue(ctx, new JsxClosing(name, null));
 	}
 	
 	@Override
 	public void exitJsx_self_closing(Jsx_self_closingContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		String nameSuite = getJsxWhiteSpace(ctx.jsx_ws());
 		List<JsxAttribute> attributes = ctx.jsx_attribute().stream()
 				.map(cx->this.<JsxAttribute>getNodeValue(cx))
 				.collect(Collectors.toList());
-		setNodeValue(ctx, new JsxSelfClosing(name, attributes));
+		setNodeValue(ctx, new JsxSelfClosing(name, nameSuite, attributes, null));
 	}
 	
 	@Override

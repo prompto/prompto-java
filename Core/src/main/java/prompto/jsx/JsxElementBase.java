@@ -8,7 +8,6 @@ import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.JsxType;
-import prompto.utils.CodeWriter;
 
 public abstract class JsxElementBase implements IJsxExpression {
 
@@ -25,11 +24,6 @@ public abstract class JsxElementBase implements IJsxExpression {
 		if(attributes!=null)
 			attributes.forEach(attr->attr.check(context));
 		return JsxType.instance();
-	}
-	
-	@Override
-	public void toDialect(CodeWriter writer) {
-		throw new UnsupportedOperationException("toDialect " + this.getClass().getName());
 	}
 	
 	@Override
