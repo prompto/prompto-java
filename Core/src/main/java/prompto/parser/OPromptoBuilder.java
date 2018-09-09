@@ -1822,7 +1822,8 @@ public class OPromptoBuilder extends OParserBaseListener {
 	public void exitJsx_attribute(Jsx_attributeContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
 		IJsxValue value = this.<IJsxValue>getNodeValue(ctx.value);
-		String suite = getHiddenTokensAfter(ctx.value.getStop());
+		Token stop = value!=null ? ctx.value.getStop() : ctx.name.getStop();
+		String suite = value==null ? null : getHiddenTokensAfter(stop);
 		setNodeValue(ctx, new JsxAttribute(name, value, suite));
 	}
 	
