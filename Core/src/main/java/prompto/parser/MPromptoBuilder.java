@@ -281,17 +281,9 @@ public class MPromptoBuilder extends MParserBaseListener {
 		this.path = parser.getPath();
 	}
 	
-	protected String getHiddenTokensBefore(TerminalNode node) {
-		return getHiddenTokensAfter(node.getSymbol());
-	}
-	
 	protected String getHiddenTokensBefore(Token token) {
 		List<Token> hidden = input.getHiddenTokensToLeft(token.getTokenIndex());
 		return getHiddenTokensText(hidden);
-	}
-	
-	protected String getHiddenTokensAfter(TerminalNode node) {
-		return getHiddenTokensAfter(node.getSymbol());
 	}
 	
 	protected String getHiddenTokensAfter(Token token) {
