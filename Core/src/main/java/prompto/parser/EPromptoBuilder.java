@@ -287,17 +287,9 @@ public class EPromptoBuilder extends EParserBaseListener {
 		this.path = parser.getPath();
 	}
 	
-	protected String getHiddenTokensBefore(TerminalNode node) {
-		return getHiddenTokensAfter(node.getSymbol());
-	}
-	
 	protected String getHiddenTokensBefore(Token token) {
 		List<Token> hidden = input.getHiddenTokensToLeft(token.getTokenIndex());
 		return getHiddenTokensText(hidden);
-	}
-	
-	protected String getHiddenTokensAfter(TerminalNode node) {
-		return getHiddenTokensAfter(node.getSymbol());
 	}
 	
 	protected String getHiddenTokensAfter(Token token) {
@@ -1895,11 +1887,11 @@ public class EPromptoBuilder extends EParserBaseListener {
 	@Override
 	public void exitJsx_opening(Jsx_openingContext ctx) {
 		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		String suite = getJsxWhiteSpace(ctx.jsx_ws());
+		String nameSuite = getJsxWhiteSpace(ctx.jsx_ws());
 		List<JsxAttribute> attributes = ctx.jsx_attribute().stream()
 				.map(cx->this.<JsxAttribute>getNodeValue(cx))
 				.collect(Collectors.toList());
-		setNodeValue(ctx, new JsxElement(name, suite, attributes, null));
+		setNodeValue(ctx, new JsxElement(name, nameSuite, attributes, null));
 	}
 	
 	
