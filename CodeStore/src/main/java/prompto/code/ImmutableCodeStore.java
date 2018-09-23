@@ -59,6 +59,11 @@ public class ImmutableCodeStore extends BaseCodeStore {
 		this.resource = resource;
 		this.version = version;
 	}
+	
+	@Override
+	public String toString() {
+		return this.resource.toString();
+	}
 
 	@Override
 	public ModuleType getModuleType() {
@@ -101,7 +106,10 @@ public class ImmutableCodeStore extends BaseCodeStore {
 	
 	@Override
 	public Resource fetchSpecificResource(String path, PromptoVersion version) {
-		return null;
+		if(this.resource.toString().endsWith(path))
+			return new URLResource(this.resource);
+		else
+			return null;
 	}
 	
 	@Override
@@ -210,17 +218,22 @@ public class ImmutableCodeStore extends BaseCodeStore {
 	}
 
 	private void parseResource(InputStream input) throws Exception {
-		DeclarationList decls = ICodeStore.parse(resource.toExternalForm(), input);
-		declarations = new HashMap<String, List<IDeclaration>>();
-		for(IDeclaration decl : decls) {
-			decl.setOrigin(this);
-			String name = decl.getId().toString();
-			if(declarations.get(name)==null)
-				declarations.put(name, new ArrayList<>());
-			declarations.get(name).add(decl);
-		}
+		String path = resource.toExternalForm();
+		Dialect dialect = ICodeStore.dialectFromResourceName(path);
+		if(dialect!=null) {
+			DeclarationList decls = ICodeStore.parse(resource.toExternalForm(), input);
+			declarations = new HashMap<String, List<IDeclaration>>();
+			for(IDeclaration decl : decls) {
+				decl.setOrigin(this);
+				String name = decl.getId().toString();
+				if(declarations.get(name)==null)
+					declarations.put(name, new ArrayList<>());
+				declarations.get(name).add(decl);
+			}
+		} else
+			declarations = new HashMap<String, List<IDeclaration>>();
 	}
-
+	
 	public Iterable<IDeclaration> getDeclarations() {
 		loadResource();
 		return ()->new Iterator<IDeclaration>() {
