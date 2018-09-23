@@ -2,8 +2,11 @@ package prompto.code;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.StreamSupport;
 
 import prompto.declaration.AttributeDeclaration;
@@ -61,10 +64,18 @@ public interface ICodeStore {
 		}
 	}
 
-	public static Dialect dialectFromResourceName(String sourceName) {
-		String s = "" + sourceName.charAt(sourceName.length()-2);
+	static Set<String> CODE_EXTENSIONS = new HashSet<>(Arrays.asList("pec", "poc", "pmc"));
+
+	static Dialect dialectFromResourceName(String path) {
+		int startExtension = path.lastIndexOf(".");
+		String extension = path.substring(startExtension + 1).toLowerCase();
+		if(!CODE_EXTENSIONS.contains(extension))
+			return null;
+		String s = "" + extension.charAt(1);
 		return Dialect.valueOf(s.toUpperCase());
 	}
+
+
 
 	ModuleType getModuleType();
 	Dialect getModuleDialect();
