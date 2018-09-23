@@ -1,7 +1,10 @@
 package prompto.runtime;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -84,7 +87,7 @@ public abstract class Standalone {
 	}
 
 
-	private static IStandaloneConfiguration loadConfiguration(String[] args) throws FileNotFoundException {
+	private static IStandaloneConfiguration loadConfiguration(String[] args) throws IOException {
 		Map<String, String> argsMap = CmdLineParser.read(args);
 		IConfigurationReader reader = readerFromArgs(argsMap);
 		IStandaloneConfiguration config = new StandaloneConfiguration(reader, argsMap);
@@ -92,11 +95,25 @@ public abstract class Standalone {
 	}
 
 
-	public static IConfigurationReader readerFromArgs(Map<String, String> argsMap) throws FileNotFoundException {
-		if(argsMap.containsKey("yamlConfigFile"))
-			return new YamlConfigurationReader(new FileInputStream(argsMap.get("yamlConfigFile")));
-		else
+	public static IConfigurationReader readerFromArgs(Map<String, String> argsMap) throws IOException {
+		if(argsMap.containsKey("yamlConfigFile")) {
+			try(InputStream input = loadYamlData(argsMap.get("yamlConfigFile"))) {
+				return new YamlConfigurationReader(input);
+			}
+		} else
 			return new CmdLineConfigurationReader(argsMap);
+	}
+
+
+	private static InputStream loadYamlData(String path) throws FileNotFoundException {
+		File file = new File(path);
+		if(file.exists())
+			return new FileInputStream(file);
+		InputStream resource = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
+		if(resource!=null)
+			return resource;
+		else
+			throw new FileNotFoundException(path);
 	}
 
 
