@@ -57,7 +57,10 @@ public class ConcreteWidgetDeclaration extends ConcreteCategoryDeclaration imple
 	    this.transpileGetterSetterAttributes(transpiler);
 	    this.transpileSuperConstructor(transpiler);
 	    this.transpileLocalAttributes(transpiler);
-	    transpiler.append("this.state = this.getInitialState();").newLine();
+	    if(this.hasMethod(transpiler.getContext(), new Identifier("getInitialState")))
+	    	transpiler.append("this.state = this.getInitialState();").newLine();
+	    else
+	    	transpiler.append("this.state = {};").newLine();
 	    transpiler.append("return this;");
 	    transpiler.dedent();
 	    transpiler.append("}");
