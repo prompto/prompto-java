@@ -21,6 +21,14 @@ public abstract class BaseCodeStore implements ICodeStore {
 		this.next = next;
 	}
 	
+	public ICodeStore getNext() {
+		return next;
+	}
+	
+	public void setNext(ICodeStore next) {
+		this.next = next;
+	}
+	
 	@Override
 	public ISection findSection(ISection section) { 
 		return next==null ? null : next.findSection(section);
@@ -40,6 +48,17 @@ public abstract class BaseCodeStore implements ICodeStore {
 	@Override
 	public Iterable<IDeclaration> fetchSpecificDeclarations(String name, PromptoVersion version) throws PromptoError {
 		return next==null ? null : next.fetchSpecificDeclarations(name, version);
+	}
+	
+	@Override
+	public Resource fetchLatestResource(String path) throws PromptoError {
+		Resource res = ICodeStore.super.fetchLatestResource(path);
+		return res != null ? res : (next==null ? null : next.fetchLatestResource(path));
+	}
+	
+	@Override
+	public Resource fetchSpecificResource(String path, PromptoVersion version) {
+		return next==null ? null : next.fetchSpecificResource(path, version);
 	}
 	
 	@Override
