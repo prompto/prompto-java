@@ -37,12 +37,12 @@ public class JavaScriptNativeCategoryBinding extends NativeCategoryBinding {
 
 	public void transpileWidget(Transpiler transpiler, String name) {
 		// assumption is that required module is already imported through other means
+    	transpiler.append("var ").append(name).append(" = ");
 	    if(this.module!=null) {
-	    	transpiler.append("var ").append(name).append(" = ");
 	        this.module.transpile(transpiler);
-	        transpiler.append(".").append(identifier).append(";").newLine();
+	        transpiler.append(".");
 	    }
-		
+	    transpiler.append(identifier).append(";").newLine();
 	}
 
 }
