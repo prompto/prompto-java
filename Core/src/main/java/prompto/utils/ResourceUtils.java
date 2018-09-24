@@ -2,12 +2,15 @@ package prompto.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.JarURLConnection;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -122,17 +125,9 @@ public abstract class ResourceUtils {
 	
 	
 	public static byte[] getResourceAsBytes(URL url) throws IOException {
-		byte[] buffer = new byte[4096];
-		ByteArrayOutputStream data = new ByteArrayOutputStream();
-		try(InputStream input = url.openStream()) {
-			for(;;) {
-				int read = input.read(buffer);
-				if(read==-1)
-					break;
-				data.write(buffer, 0, read);
-			}
-			data.flush();
-			return data.toByteArray();
+		try(ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+			copyResourceToStream(url, output);
+			return output.toByteArray();
 		}
 	}
 
@@ -147,4 +142,26 @@ public abstract class ResourceUtils {
 		int pos = name.lastIndexOf(".");
 		return pos<0 ? false : promptoExtensions.contains(name.substring(pos + 1));
 	}
+
+	public static void copyResourceToFile(URL url, Path target) throws IOException {
+		try(OutputStream output = new FileOutputStream(target.toFile())) {
+			copyResourceToStream(url, output);
+		}
+	}
+	
+	
+	public static void copyResourceToStream(URL url, OutputStream output) throws IOException {
+		byte[] buffer = new byte[4096];
+		try(InputStream input = url.openStream()) {
+			for(;;) {
+				int read = input.read(buffer);
+				if(read==-1)
+					break;
+				output.write(buffer, 0, read);
+			}
+			output.flush();
+		}
+	}
+
+
 }
