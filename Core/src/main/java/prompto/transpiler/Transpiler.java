@@ -182,36 +182,8 @@ public class Transpiler {
 	public void declare(ITranspilable transpilable) {
 		if(transpilable instanceof IDeclaration && ((IDeclaration)transpilable).hasAnnotation("Inlined"))
 			return;
-		if(!patchNodeJS(transpilable))
-			declared.add(transpilable);
+		declared.add(transpilable);
 	}
-		
-	private boolean patchNodeJS(ITranspilable transpilable) {
-		if(transpilable instanceof IDeclaration) {
-			String name = ((IDeclaration) transpilable).getName();
-			switch(name) {
-			case "print":
-				declared.add(PrintAnyTranspilable.instance);
-				return true;
-			case "printLine":
-				return true;
-			case "TextWriter":
-			case "ConsoleWriter":
-			case "NativeWriter":
-			case "Writer":
-			case "printNative":
-			case "stdout":
-			case "stderr":
-				return true;
-			default:
-				return false;
-			} 
-		} else
-			return false;
-		
-	}
-
-
 	
 	
 	public Set<ITranspilable> getDeclared() {
@@ -288,16 +260,5 @@ public class Transpiler {
 		}
 	}
 	
-	static class PrintAnyTranspilable implements ITranspilable {
-
-		public static ITranspilable instance = new PrintAnyTranspilable();
-		
-		@Override
-		public boolean transpile(Transpiler transpiler) {
-			transpiler.append("function print$any(value) {").indent().append("console.log(value);").dedent().append("}").newLine();
-			return false;
-		}
-		
-	}
 
 }
