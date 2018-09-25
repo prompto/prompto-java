@@ -1,4 +1,4 @@
-package prompto.memstore;
+package prompto.store.memory;
 
 import prompto.config.IStoreConfiguration;
 import prompto.store.IStoreFactory;

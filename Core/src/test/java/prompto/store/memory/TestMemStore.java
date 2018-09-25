@@ -1,4 +1,4 @@
-package prompto.store;
+package prompto.store.memory;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -20,10 +20,16 @@ import prompto.grammar.OrderByClause;
 import prompto.grammar.OrderByClauseList;
 import prompto.intrinsic.PromptoList;
 import prompto.literal.TextLiteral;
-import prompto.memstore.MemStore;
-import prompto.memstore.QueryBuilder;
 import prompto.runtime.Context;
+import prompto.store.AttributeInfo;
+import prompto.store.IDataStore;
+import prompto.store.IQueryBuilder;
+import prompto.store.IStorable;
+import prompto.store.IStored;
+import prompto.store.IStoredIterable;
 import prompto.store.IQueryBuilder.MatchOp;
+import prompto.store.memory.MemStore;
+import prompto.store.memory.QueryBuilder;
 import prompto.type.TextType;
 import prompto.utils.IdentifierList;
 

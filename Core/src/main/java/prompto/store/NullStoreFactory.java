@@ -1,8 +1,6 @@
-package prompto.nullstore;
+package prompto.store;
 
 import prompto.config.IStoreConfiguration;
-import prompto.store.IStore;
-import prompto.store.IStoreFactory;
 
 public class NullStoreFactory implements IStoreFactory {
 

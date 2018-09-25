@@ -12,9 +12,9 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import prompto.memstore.MemStore;
 import prompto.store.IStorable;
 import prompto.store.IStore;
+import prompto.store.memory.MemStore;
 
 
 public class TestCodeStoreConfigurationReader {

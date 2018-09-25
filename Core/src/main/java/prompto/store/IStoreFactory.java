@@ -3,7 +3,7 @@ package prompto.store;
 import prompto.config.IConfigurationReader;
 import prompto.config.IStoreConfiguration;
 import prompto.config.StoreConfiguration;
-import prompto.memstore.MemStore;
+import prompto.store.memory.MemStore;
 
 public interface IStoreFactory {
 	static IStore newStoreFromConfig(IStoreConfiguration cfg) throws Throwable {

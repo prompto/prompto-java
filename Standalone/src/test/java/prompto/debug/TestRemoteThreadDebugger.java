@@ -10,9 +10,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import prompto.nullstore.NullStoreFactory;
 import prompto.runtime.Standalone;
 import prompto.runtime.utils.Out;
+import prompto.store.NullStoreFactory;
 
 public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebugEventListener {
 

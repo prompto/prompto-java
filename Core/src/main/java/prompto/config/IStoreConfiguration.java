@@ -2,8 +2,8 @@ package prompto.config;
 
 import java.util.function.Supplier;
 
-import prompto.memstore.MemStoreFactory;
-import prompto.nullstore.NullStoreFactory;
+import prompto.store.NullStoreFactory;
+import prompto.store.memory.MemStoreFactory;
 
 import com.esotericsoftware.yamlbeans.YamlException;
 import com.esotericsoftware.yamlbeans.document.YamlMapping;

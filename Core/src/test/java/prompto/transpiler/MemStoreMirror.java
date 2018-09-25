@@ -12,13 +12,13 @@ import java.util.stream.Collectors;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
-import prompto.memstore.MemStore;
-import prompto.memstore.Query;
 import prompto.store.AttributeInfo;
 import prompto.store.Family;
 import prompto.store.IQuery;
 import prompto.store.IQueryBuilder;
 import prompto.store.IQueryBuilder.MatchOp;
+import prompto.store.memory.MemStore;
+import prompto.store.memory.Query;
 import prompto.store.IStorable;
 import prompto.store.IStored;
 import prompto.store.IStoredIterable;

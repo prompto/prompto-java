@@ -10,7 +10,7 @@ import java.util.Map;
 import org.junit.Test;
 
 import prompto.intrinsic.PromptoVersion;
-import prompto.memstore.MemStoreFactory;
+import prompto.store.memory.MemStoreFactory;
 import prompto.utils.CmdLineParser;
 
 public class TestCmdLineConfigurationReader {

@@ -20,7 +20,6 @@ import prompto.declaration.IDeclaration;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
-import prompto.memstore.MemStore;
 import prompto.parser.Dialect;
 import prompto.parser.ECleverParser;
 import prompto.parser.MCleverParser;
@@ -30,6 +29,7 @@ import prompto.runtime.Executor;
 import prompto.runtime.Interpreter;
 import prompto.runtime.utils.Out;
 import prompto.store.IDataStore;
+import prompto.store.memory.MemStore;
 import prompto.transpiler.Nashorn8Engine;
 
 public abstract class BaseParserTest extends BaseTest {

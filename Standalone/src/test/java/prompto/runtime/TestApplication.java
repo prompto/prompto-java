@@ -8,9 +8,9 @@ import java.nio.file.Path;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import prompto.nullstore.NullStoreFactory;
 import prompto.parser.e.BaseEParserTest;
 import prompto.runtime.utils.Out;
+import prompto.store.NullStoreFactory;
 import prompto.utils.IOUtils;
 import prompto.utils.ManualTests;
 
