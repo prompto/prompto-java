@@ -4,7 +4,7 @@ define ClickEvent as native category with bindings:
 		JavaScript: Event
 
 @Inlined
-define RadioEvent as native category with bindings:
+define RadioChangedEvent as native category with bindings:
 
 	define category bindings as:
 		JavaScript: Event
@@ -16,7 +16,7 @@ and methods:
 	
 
 @Inlined
-define TextEvent as native category with bindings:
+define InputChangedEvent as native category with bindings:
 
 	define category bindings as:
 		JavaScript: Event
