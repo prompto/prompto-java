@@ -4,6 +4,18 @@ define ClickEvent as native category with bindings:
 		JavaScript: Event
 
 @Inlined
+define RadioEvent as native category with bindings:
+
+	define category bindings as:
+		JavaScript: Event
+
+and methods:
+		
+	define getSelectedRadio as method returning Text doing:
+		JavaScript: return this.target.id;
+	
+
+@Inlined
 define TextEvent as native category with bindings:
 
 	define category bindings as:
