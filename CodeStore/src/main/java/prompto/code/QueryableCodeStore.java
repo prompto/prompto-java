@@ -69,6 +69,8 @@ public class QueryableCodeStore extends BaseCodeStore {
 	// fetching and storing declarations requires a context holding code store attributes
 	// some of these are code store specific and should not be looked for in the app context
 	Context context; 
+	// storing resource code is optional
+	boolean storeExternals = false;
 	
 	public QueryableCodeStore(IStore store, ICodeStore runtime, String application, PromptoVersion version, URL[] addOns, URL ...resourceNames) throws PromptoError {
 		super(null);
@@ -199,7 +201,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 	
 	
 	@SuppressWarnings("unchecked")
-	private IDeclaration fetchRegisteringSymbol(String name) {
+	private IDeclaration getRegisteringSymbol(String name) {
 		return registering.get().values().stream()
 				.map(i->StreamSupport.stream(i.spliterator(), false))
 				.flatMap(Function.identity())
@@ -211,11 +213,11 @@ public class QueryableCodeStore extends BaseCodeStore {
 	}
 
 
-	private Iterable<IDeclaration> fetchRegisteringDeclarations(String name) {
+	private Iterable<IDeclaration> getRegisteringDeclarations(String name) {
 		return registering.get().get(name);
 	}
 	
-	private void storeRegisteringDeclarations(String name, Iterable<IDeclaration> decl) {
+	private void setRegisteringDeclarations(String name, Iterable<IDeclaration> decl) {
 		registering.get().put(name, decl);
 	}
 
@@ -232,51 +234,68 @@ public class QueryableCodeStore extends BaseCodeStore {
 	@Override
 	public Iterable<IDeclaration> fetchSpecificDeclarations(String name, PromptoVersion version) throws PromptoError {
 		Iterable<IDeclaration> decls = fetchDeclarationsInStore(name, version);
-		if(decls==null) {
-			// when called from the AppServer, multiple threads may be attempting to do this
-			// TODO: need to deal with multiple cloud nodes doing this
-			synchronized(this) {
-				decls = fetchDeclarationsInStore(name, version);
-				if(decls==null) {
-					decls = fetchRegisteringDeclarations(name);
-					if(decls==null) {
-						decls = super.fetchSpecificDeclarations(name, version);
-						if(store!=null && decls!=null && decls.iterator().hasNext()) {
-							storeRegisteringDeclarations(name, decls);
-							decls = storeDeclarations(decls);
-							clearRegisteringDeclarations(name);
-							store.flush();
-						}
-					}
-				}
+		if(decls!=null)
+			return decls;
+		if(storeExternals)
+			return fetchAndStoreExternalSpecificDeclarations(name, version);
+		else
+			return super.fetchSpecificDeclarations(name, version);
+	}
+	
+	private synchronized Iterable<IDeclaration> fetchAndStoreExternalSpecificDeclarations(String name, PromptoVersion version2) {
+		// when called from the AppServer, multiple threads may be attempting to do this
+		// TODO: need to deal with multiple cloud nodes doing this
+		synchronized(this) {
+			Iterable<IDeclaration> decls = fetchDeclarationsInStore(name, version);
+			if(decls!=null)
+				return decls;
+			decls = getRegisteringDeclarations(name);
+			if(decls!=null)
+				return decls;
+			decls = super.fetchSpecificDeclarations(name, version);
+			if(store!=null && decls!=null && decls.iterator().hasNext()) {
+				// avoid infinite reentrance loop
+				setRegisteringDeclarations(name, decls);
+				decls = storeDeclarations(decls);
+				clearRegisteringDeclarations(name);
+				store.flush();
 			}
+			return decls;
 		}
-		return decls;
 	}
 	
 	@Override
 	public IDeclaration fetchSpecificSymbol(String name, PromptoVersion version) throws PromptoError {
 		Iterable<IDeclaration> decls = fetchSymbolsInStore(name, version);
-		if(decls==null) {
-			// when called from the AppServer, multiple threads may be attempting to do this
-			// TODO: need to deal with multiple cloud nodes doing this
-			synchronized(this) {
-				decls = fetchSymbolsInStore(name, version);
-				if(decls==null) {
-					IDeclaration decl = fetchRegisteringSymbol(name);
-					if(decl==null) {
-						decl = super.fetchSpecificSymbol(name, version);
-						if(store!=null && decl!=null) {
-							storeRegisteringDeclarations(decl.getName(), Collections.singletonList(decl));
-							decls = storeDeclarations(Collections.singletonList(decl));
-							clearRegisteringDeclarations(decl.getName());
-							store.flush();
-						}
-					}
+		if(decls!=null && decls.iterator().hasNext())
+			return decls.iterator().next();
+		if(storeExternals)
+			return fetchAndStoreExternalSpecificSymbol(name, version);
+		else
+			return super.fetchSpecificSymbol(name, version);
+	}
+	
+	
+	private synchronized IDeclaration fetchAndStoreExternalSpecificSymbol(String name, PromptoVersion version2) {
+		// when called from the AppServer, multiple threads may be attempting to do this
+		// TODO: need to deal with multiple cloud nodes doing this
+		synchronized(this) {
+			Iterable<IDeclaration> decls = fetchSymbolsInStore(name, version);
+			if(decls!=null && decls.iterator().hasNext())
+				return decls.iterator().next();
+			IDeclaration decl = getRegisteringSymbol(name);
+			if(decl==null) {
+				decl = super.fetchSpecificSymbol(name, version);
+				if(store!=null && decl!=null) {
+					setRegisteringDeclarations(decl.getName(), Collections.singletonList(decl));
+					decls = storeDeclarations(Collections.singletonList(decl));
+					clearRegisteringDeclarations(decl.getName());
+					store.flush();
+					decl = decls.iterator().next();
 				}
 			}
+			return decl;
 		}
-		return decls==null ? null : decls.iterator().next();
 	}
 
 	private Iterable<IDeclaration> fetchSymbolsInStore(String name, PromptoVersion version) {
