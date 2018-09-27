@@ -18,6 +18,11 @@ public class CmdLineConfigurationReader implements IConfigurationReader {
 	public String toString() {
 		return argsMap.toString();
 	}
+	
+	@Override
+	public boolean hasKey(String key) {
+		return argsMap.containsKey(key);
+	}
 
 	@Override
 	public Boolean getBoolean(String key) {

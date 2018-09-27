@@ -32,6 +32,10 @@ public class StoredRecordConfigurationReader implements IConfigurationReader  {
 		this.stored = stored;
 	}
 
+	@Override
+	public boolean hasKey(String key) {
+		return stored.hasData(key);
+	}
 
 	@Override
 	public Boolean getBoolean(String key) {

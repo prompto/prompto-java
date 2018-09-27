@@ -8,6 +8,7 @@ import prompto.store.IStoreFactory;
 
 public interface IConfigurationReader {
 
+	boolean hasKey(String key);
 	Boolean getBoolean(String key);
 	default boolean getBooleanOrDefault(String key, boolean value) {
 		Boolean read = getBoolean(key);
