@@ -31,11 +31,11 @@ public class AppStoreBootstrapper {
 
 	private static ICodeStore bootstrapAddOn(URL addOn, ICodeStore runtime) {
 		try {
-			logger.info(()->"Bootstrapping add-on " + addOn.toExternalForm());
+			logger.info(()->"Bootstrapping add-on: " + addOn.toExternalForm());
 			Collection<URL> urls = getAddOnLibraries(addOn);
 			for(URL url : urls) {
-				logger.info(()->"Connecting to " + url.toExternalForm());
-				runtime = new ImmutableCodeStore(runtime, ModuleType.LIBRARY, url, PromptoVersion.parse("0.0.1"));
+				logger.info(()->"Connecting to add-on library: " + url.toExternalForm());
+				runtime = new ImmutableCodeStore(runtime, ModuleType.LIBRARY, url, PromptoVersion.LATEST);
 			}
 			return runtime;
 		} catch (IOException e) {
@@ -55,7 +55,7 @@ public class AppStoreBootstrapper {
 	
 
 	private static ICodeStore bootstrapResource(URL resource, ICodeStore runtime, PromptoVersion version) {
-		logger.info(()->"Connecting to " + resource.toExternalForm());
+		logger.info(()->"Connecting to resource: " + resource.toExternalForm());
 		return new ImmutableCodeStore(runtime, ModuleType.LIBRARY, resource, version);
 	}
 
