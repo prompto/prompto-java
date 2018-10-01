@@ -57,6 +57,11 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	}
 	
 	@Override
+	public String toString() {
+		return left.toString() + " " + operator.toString() + " " + right.toString();
+	}
+	
+	@Override
 	public void toDialect(CodeWriter writer) {
 		left.toDialect(writer);
 		writer.append(" ");
