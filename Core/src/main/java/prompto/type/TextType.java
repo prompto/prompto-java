@@ -34,6 +34,7 @@ import prompto.transpiler.Transpiler;
 import prompto.utils.StringUtils;
 import prompto.value.Boolean;
 import prompto.value.IValue;
+import prompto.value.Integer;
 import prompto.value.ListValue;
 import prompto.value.Text;
 
@@ -142,6 +143,8 @@ public class TextType extends NativeType {
 			return new HashSet<>(Collections.singletonList(SPLIT_METHOD));
 		case "trim":
 			return new HashSet<>(Collections.singletonList(TRIM_METHOD));
+		case "indexOf":
+			return new HashSet<>(Collections.singletonList(INDEX_OF_METHOD));
 		default:
 			return super.getMemberMethods(context, id);
 		}
@@ -476,6 +479,50 @@ public class TextType extends NativeType {
 		
 	};
 
+	
+	static final IMethodDeclaration INDEX_OF_METHOD = new BuiltInMethodDeclaration("startsWith", TEXT_VALUE_ARGUMENT) {
+		
+		@Override
+		public IValue interpret(Context context) throws PromptoError {
+			Text text = (Text)getValue(context);
+			String value = (String)context.getValue(new Identifier("value")).getStorableData();
+			int indexOf = text.getStorableData().indexOf(value);
+			return new Integer(indexOf + 1);
+		};
+		
+		@Override
+		public IType check(Context context, boolean isStart) {
+			return IntegerType.instance();
+		}
+
+		public boolean hasCompileExactInstanceMember() {
+			return true;
+		};
+		
+		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
+			// push arguments on the stack
+			this.compileAssignments(context, method, flags, assignments);
+			// call indexOf method
+			Descriptor.Method descriptor = new Descriptor.Method(String.class, int.class);
+			MethodConstant constant = new MethodConstant(String.class, "indexOf", descriptor);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, constant);
+			// add 1
+			method.addInstruction(Opcode.ICONST_1);
+			method.addInstruction(Opcode.IADD);
+			// done
+			if(flags.toPrimitive())
+				return CompilerUtils.intTolong(method);
+			else
+				return CompilerUtils.intToLong(method);
+		};
+		
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
+	        transpiler.append("indexOf1Based(");
+	        assignments.get(0).transpile(transpiler);
+	        transpiler.append(")");
+		}
+	};
+	
 	@Override
 	public Comparator<Text> getComparator(boolean descending) {
 		return descending ? 

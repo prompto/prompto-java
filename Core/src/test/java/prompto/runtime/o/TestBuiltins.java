@@ -320,6 +320,21 @@ public class TestBuiltins extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedTextIndexOf() throws Exception {
+		checkInterpretedOutput("builtins/textIndexOf.poc");
+	}
+
+	@Test
+	public void testCompiledTextIndexOf() throws Exception {
+		checkCompiledOutput("builtins/textIndexOf.poc");
+	}
+
+	@Test
+	public void testTranspiledTextIndexOf() throws Exception {
+		checkTranspiledOutput("builtins/textIndexOf.poc");
+	}
+
+	@Test
 	public void testInterpretedTextLowercase() throws Exception {
 		checkInterpretedOutput("builtins/textLowercase.poc");
 	}

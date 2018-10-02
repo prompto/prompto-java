@@ -91,6 +91,9 @@ String.prototype.slice1Based = function(start, last) {
     }
 };
 String.prototype.getText = String.prototype.toString;
+String.prototype.indexOf1Based = function(value) {
+	return 1 + this.indexOf(value);
+};
 
 
 

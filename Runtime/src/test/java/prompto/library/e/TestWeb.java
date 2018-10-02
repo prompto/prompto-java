@@ -12,7 +12,6 @@ public class TestWeb extends BaseEParserTest {
 	@Before
 	public void before() throws Exception {
 		Out.init();
-		loadDependency("web");
 	}
 
 	@After
@@ -23,6 +22,11 @@ public class TestWeb extends BaseEParserTest {
 	@Test
 	public void testEvents() throws Exception {
 		runTests("web/events.pec");
+	}
+
+	@Test
+	public void testReact() throws Exception {
+		runTests("web/react.pec");
 	}
 
 	@Test
