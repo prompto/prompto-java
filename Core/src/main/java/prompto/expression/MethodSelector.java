@@ -382,11 +382,11 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	}
 
 	private Context newLocalInstanceContext(Context context) {
-		Context parent = context.getParentContext();
-		if(!(parent instanceof InstanceContext))
+		Context instance = context.getClosestInstanceContext();
+		if(instance==null)
 			throw new SyntaxError("Not in instance context !");
 		context = context.newLocalContext();
-		context.setParentContext(parent); // make local context child of the existing instance
+		context.setParentContext(instance); // make local context child of the existing instance
 		return context;
 	}
 

@@ -140,8 +140,9 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 		IExpression call = null;
 		IDeclaration decl = null;
 		// if this happens in the context of a member method, then we need to check for category members first
-		if(context.getParentContext() instanceof InstanceContext) {
-			decl = resolveUnresolvedMember((InstanceContext)context.getParentContext(), id);
+		InstanceContext instance = context.getClosestInstanceContext();
+		if(instance!=null) {
+			decl = resolveUnresolvedMember(instance, id);
 			if(decl!=null)
 				call = new MethodCall(new MethodSelector(id), assignments);
 		}
