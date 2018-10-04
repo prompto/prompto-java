@@ -232,7 +232,9 @@ public class CategoryType extends BaseType {
         	return dd.getType(context).checkMember(context, name);
         else if(dd instanceof CategoryDeclaration) {
         	CategoryDeclaration cd = (CategoryDeclaration)dd;
-	        if (cd.hasAttribute(context, name)) {
+        	if(cd.isStorable() && IStore.dbIdName.equals(name.toString()))
+        		return AnyType.instance();
+        	else if (cd.hasAttribute(context, name)) {
 	            AttributeDeclaration ad = context.getRegisteredDeclaration(AttributeDeclaration.class, name);
 	            if (ad != null)
 	            	return ad.getType(context);
