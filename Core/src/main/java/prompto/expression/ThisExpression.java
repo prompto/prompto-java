@@ -24,7 +24,7 @@ public class ThisExpression implements IExpression {
 	@Override
 	public IType check(Context context) {
 		if(context!=null && !(context instanceof Context.InstanceContext))
-			context = context.getParentContext();
+			context = context.getClosestInstanceContext();
 		if( context instanceof Context.InstanceContext)
 			return ((Context.InstanceContext)context).getInstanceType();
 		else
@@ -34,7 +34,7 @@ public class ThisExpression implements IExpression {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		if(context!=null && !(context instanceof Context.InstanceContext))
-			context = context.getParentContext();
+			context = context.getClosestInstanceContext();
 		if( context instanceof Context.InstanceContext)
 			return ((Context.InstanceContext)context).getInstance();
 		else

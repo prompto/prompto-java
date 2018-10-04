@@ -454,7 +454,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	public MethodSelector resolveSelector(Transpiler transpiler, IMethodDeclaration declaration) {
 	    MethodSelector selector = /*this.fullSelector ||*/ this.selector;
 	    IExpression parent = selector.resolveParent(transpiler.getContext());
-	    if (parent == null && declaration.getMemberOf()!=null && transpiler.getContext().getParentContext() instanceof InstanceContext)
+	    if (parent == null && declaration.getMemberOf()!=null && transpiler.getContext().getClosestInstanceContext()!=null)
 	        parent = new ThisExpression();
 	    String name = null;
 	    if(this.variableName!=null)
