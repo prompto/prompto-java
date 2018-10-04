@@ -107,7 +107,9 @@ List.prototype.slice1Based = function(start, last) {
 };
 
 
-List.prototype.iterate = function (fn) {
+List.prototype.iterate = function (fn, instance) {
+    if(instance)
+    	fn = fn.bind(instance);
     var self = this;
     return {
         length: self.length,
@@ -117,6 +119,13 @@ List.prototype.iterate = function (fn) {
                 hasNext: function() { return idx < self.length; },
                 next: function() { return fn(self[idx++]); }
             };
+        },
+        toArray: function() {
+        	var array = [];
+        	var iterator = this.iterator();
+        	while(iterator.hasNext())
+        		array.push(iterator.next());
+        	return array;
         }
     }
 };
