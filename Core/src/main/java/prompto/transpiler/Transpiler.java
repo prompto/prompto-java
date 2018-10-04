@@ -198,6 +198,11 @@ public class Transpiler {
 		return required;
 	}
 	
+	public boolean requires(String script) {
+		return required.contains(script);
+	}
+
+	
 	@Override
 	public String toString() {
 	    this.appendAllRequired();
@@ -259,6 +264,7 @@ public class Transpiler {
 			return null;
 		}
 	}
+
 	
 
 }

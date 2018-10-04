@@ -1,5 +1,3 @@
-function DataStore() {
-
-}
-
-DataStore.instance = null;
+var DataStore = {
+	instance: null
+};
