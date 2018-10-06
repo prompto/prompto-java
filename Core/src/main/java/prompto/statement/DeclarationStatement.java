@@ -94,7 +94,7 @@ public class DeclarationStatement<T extends IDeclaration> extends BaseStatement 
 		if(declaration instanceof ConcreteMethodDeclaration) {
 		    this.declaration.transpile(transpiler);
 		    transpiler.getContext().registerDeclaration((ConcreteMethodDeclaration)this.declaration);
-		    if(transpiler.getContext().getParentContext() instanceof InstanceContext) {
+		    if(transpiler.getContext().getClosestInstanceContext()!=null) {
 		        String name = this.declaration.getTranspiledName(transpiler.getContext());
 		        transpiler.append(name).append(" = ").append(name).append(".bind(this);").newLine();
 		    }

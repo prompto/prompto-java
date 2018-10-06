@@ -476,7 +476,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	private void transpileMultiple(Transpiler transpiler, Set<IMethodDeclaration> declarations) {
 	    String name = this.dispatcher.getTranspiledName(transpiler.getContext());
 	    IExpression parent = this.selector.resolveParent(transpiler.getContext());
-	    if(parent==null && declarations.iterator().next().getMemberOf()!=null && transpiler.getContext().getParentContext() instanceof InstanceContext)
+	    if(parent==null && declarations.iterator().next().getMemberOf()!=null && transpiler.getContext().getClosestInstanceContext()!=null)
 	        parent = new ThisExpression();
 	    MethodSelector selector = new MethodSelector(parent, new Identifier(name));
 	    selector.transpile(transpiler);

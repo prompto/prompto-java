@@ -193,13 +193,13 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 			arguments.check(context);
 		Context child = context.newChildContext();
 		registerArguments(child);
-		return statements.check(child, returnType);
+		return checkStatements(child);
 	}
 
 	@Override
 	public void check(ConcreteCategoryDeclaration declaration, Context context) {
-		// TODO Auto-generated method stub
-		
+		context = context.newInstanceContext(declaration.getType(context), false);
+		checkChild(context);
 	}	
 
 	@Override

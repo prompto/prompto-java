@@ -81,8 +81,9 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	private Set<IMethodDeclaration> getGlobalCandidates(Context context) {
 		Set<IMethodDeclaration> methods = new HashSet<>();
 		// if called from a member method, could be a member method called without this/self
-		if(context.getParentContext() instanceof InstanceContext) {
-			IType type = ((InstanceContext)context.getParentContext()).getInstanceType();
+		InstanceContext instance = context.getClosestInstanceContext();
+		if(instance!=null) {
+			IType type = instance.getInstanceType();
 			ConcreteCategoryDeclaration cd = context.getRegisteredDeclaration(ConcreteCategoryDeclaration.class, type.getTypeNameId());
 			if(cd!=null) {
 				MethodDeclarationMap members = cd.getMemberMethods(context, id);
