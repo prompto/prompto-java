@@ -30,6 +30,10 @@ and methods:
 		JavaScript: return this.target.value;
 
 
+define getReactWidgetProps as native method receiving Any w returning Document doing:
+	JavaScript: return w.props;
+
+
 define getReactWidgetState as native method receiving Any w returning Document doing:
 	JavaScript: return w.state;
 
@@ -40,15 +44,19 @@ define setReactWidgetState as native method receiving Any w and Document state d
 
 define ReactWidget as widget with methods:
 	
-	define getState as method doing:
-		return getReactWidgetState self
-	
+	define getProps as method doing:
+		return getReactWidgetProps self
+
 	define getInitialState as method doing:
 		return {}
+	
+	define getState as method doing:
+		return getReactWidgetState self
 	
 	define setState as method receiving Document state doing:
 		setReactWidgetState self with state
 
+	
 define alert as native method receiving Text text doing:
 	JavaScript: alert(text);
 

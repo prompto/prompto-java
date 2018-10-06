@@ -571,7 +571,7 @@ public class TextType extends NativeType {
 	
 	@Override
 	public void declare(Transpiler transpiler) {
-		transpiler.require("Utils"); // isAText
+		transpiler.require("Utils"); // isAText, equals etc...
 	}
 	
 	@Override

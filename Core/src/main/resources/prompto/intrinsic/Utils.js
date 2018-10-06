@@ -30,6 +30,9 @@ if(!Object.values) {
 }
 
 Boolean.prototype.getText = Boolean.prototype.toString;
+Boolean.prototype.equals = function(value) {
+	return this == value;
+};
 Number.prototype.formatInteger = function(format) {
     var value = "000000000000" + this;
     return value.substr(value.length - format.length);
@@ -95,5 +98,8 @@ String.prototype.indexOf1Based = function(value) {
 	return 1 + this.indexOf(value);
 };
 
+String.prototype.equals = function(value) {
+	return this == value;
+};
 
 

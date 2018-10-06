@@ -6,6 +6,7 @@ import java.util.Map;
 
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 import prompto.value.Boolean;
 import prompto.value.IValue;
 
@@ -56,6 +57,11 @@ public class BooleanType extends NativeType {
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		return prompto.value.Boolean.valueOf(value.asBoolean());
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		transpiler.require("Utils"); // equals etc...
 	}
 	
 }
