@@ -40,7 +40,6 @@ import prompto.grammar.Specificity;
 import prompto.javascript.JavaScriptNativeCall;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
-import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.MethodFinder;
 import prompto.transpiler.Transpiler;
 import prompto.type.CodeType;
