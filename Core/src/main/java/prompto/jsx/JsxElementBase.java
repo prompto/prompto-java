@@ -21,6 +21,11 @@ public abstract class JsxElementBase implements IJsxExpression {
 
 	@Override
 	public IType check(Context context) {
+		if(Character.isUpperCase(id.toString().charAt(0))) {
+			IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, id);
+			if(decl==null)
+				context.getProblemListener().reportUnknownIdentifier(id.toString(), id);
+		}
 		if(attributes!=null)
 			attributes.forEach(attr->attr.check(context));
 		return JsxType.instance();
@@ -30,7 +35,10 @@ public abstract class JsxElementBase implements IJsxExpression {
 	public void declare(Transpiler transpiler) {
 		if(Character.isUpperCase(id.toString().charAt(0))) {
 			IDeclaration decl = transpiler.getContext().getRegisteredDeclaration(IDeclaration.class, id);
-			decl.declare(transpiler);
+			if(decl==null)
+				transpiler.getContext().getProblemListener().reportUnknownIdentifier(id.toString(), id);
+			else
+				decl.declare(transpiler);
 		}
 		if(this.attributes!=null)
 			this.attributes.forEach(attr -> attr.declare(transpiler));
