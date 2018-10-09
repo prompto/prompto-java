@@ -44,6 +44,10 @@ define setReactWidgetState as native method receiving Any w and Document state d
 
 define ReactWidget as widget with methods:
 	
+	@Inlined
+	define getDerivedStateFromProps as method receiving Document props and Document state doing:
+		return Nothing
+		
 	define getProperties as method doing:
 		return getReactWidgetProps self
 
