@@ -155,6 +155,10 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		else {
 			writer.newLine();
 			for(IDeclaration decl : methods) {
+				if(decl.getComments()!=null)
+					decl.getComments().forEach(comment->comment.toDialect(writer));
+				if(decl.getAnnotations()!=null)
+					decl.getAnnotations().forEach(annotation->annotation.toDialect(writer));
 				CodeWriter w = writer.newMemberWriter();
 				decl.toDialect(w);
 				writer.newLine();

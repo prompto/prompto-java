@@ -11,5 +11,10 @@ public class TestAnnotations extends BaseEParserTest {
 		compareResourceEME("annotations/callback.pec");
 	}
 
+	@Test
+	public void testCategory() throws Exception {
+		compareResourceEME("annotations/category.pec");
+	}
+
 }
 

@@ -223,6 +223,10 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	protected void methodsToEDialect(CodeWriter writer, MethodDeclarationList methods) {
 		writer.indent();
 		for(IDeclaration decl : methods) {
+			if(decl.getComments()!=null)
+				decl.getComments().forEach(comment->comment.toDialect(writer));
+			if(decl.getAnnotations()!=null)
+				decl.getAnnotations().forEach(annotation->annotation.toDialect(writer));
 			writer.newLine();
 			CodeWriter w = writer.newMemberWriter();
 			decl.toDialect(w);
@@ -232,6 +236,10 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 
 	protected void methodsToODialect(CodeWriter writer, MethodDeclarationList methods) {
 		for(IDeclaration decl : methods) {
+			if(decl.getComments()!=null)
+				decl.getComments().forEach(comment->comment.toDialect(writer));
+			if(decl.getAnnotations()!=null)
+				decl.getAnnotations().forEach(annotation->annotation.toDialect(writer));
 			CodeWriter w = writer.newMemberWriter();
 			decl.toDialect(w);
 			w.newLine();

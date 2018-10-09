@@ -305,6 +305,20 @@ public class OPromptoBuilder extends OParserBaseListener {
 	}
 	
 	
+	private List<Annotation> readAnnotations(List<? extends ParseTree> contexts) {
+		List<Annotation> annotations = contexts.stream()
+			.map(cx->(Annotation)this.<Annotation>getNodeValue(cx))
+			.collect(Collectors.toList());
+		return annotations.isEmpty() ?  null : annotations;
+	}
+
+	private List<CommentStatement> readComments(List<? extends ParseTree> contexts) {
+		List<CommentStatement> comments = contexts.stream()
+			.map(cx->(CommentStatement)this.<CommentStatement>getNodeValue(cx))
+			.collect(Collectors.toList());
+		return comments.isEmpty() ? null : comments;
+	}
+
 	@Override
 	public void exitAbstract_method_declaration(Abstract_method_declarationContext ctx) {
 		IType type = this.<IType>getNodeValue(ctx.typ);
@@ -1000,27 +1014,9 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitDeclaration(DeclarationContext ctx) {
-		List<CommentStatement> comments = ctx.comment_statement().stream()
-				.map(cx->(CommentStatement)this.<CommentStatement>getNodeValue(cx))
-				.collect(Collectors.toList());
-		if(comments.isEmpty())
-			comments = null;
-		List<Annotation> annotations = ctx.annotation_constructor().stream()
-				.map(cx->(Annotation)this.<Annotation>getNodeValue(cx))
-				.collect(Collectors.toList());
-		if(annotations.isEmpty())
-			annotations = null;
-		ParserRuleContext ctx_ = ctx.attribute_declaration();
-		if(ctx_==null)
-			ctx_ = ctx.category_declaration();
-		if(ctx_==null)
-			ctx_ = ctx.enum_declaration();
-		if(ctx_==null)
-			ctx_ = ctx.method_declaration();
-		if(ctx_==null)
-			ctx_ = ctx.resource_declaration();
-		if(ctx_==null)
-			ctx_ = ctx.widget_declaration();
+		List<CommentStatement> comments = readComments(ctx.comment_statement());
+		List<Annotation> annotations = readAnnotations(ctx.annotation_constructor());
+		ParseTree ctx_ = ctx.getChild(ctx.getChildCount()-1);
 		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx_);
 		if(decl!=null) {
 			decl.setComments(comments);
@@ -1996,8 +1992,15 @@ public class OPromptoBuilder extends OParserBaseListener {
 
 	@Override
 	public void exitMember_method_declaration(Member_method_declarationContext ctx) {
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.getChild(0));
-		setNodeValue(ctx, decl);
+		List<CommentStatement> comments = readComments(ctx.comment_statement());
+		List<Annotation> annotations = readAnnotations(ctx.annotation_constructor());
+		ParseTree ctx_ = ctx.getChild(ctx.getChildCount()-1);
+		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx_);
+		if(decl!=null) {
+			decl.setComments(comments);
+			decl.setAnnotations(annotations);
+			setNodeValue(ctx, decl);
+		}
 	}
 	
 	

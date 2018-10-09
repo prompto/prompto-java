@@ -11,5 +11,10 @@ public class TestAnnotations extends BaseOParserTest {
 		compareResourceOMO("annotations/callback.poc");
 	}
 
+	@Test
+	public void testCategory() throws Exception {
+		compareResourceOMO("annotations/category.poc");
+	}
+
 }
 
