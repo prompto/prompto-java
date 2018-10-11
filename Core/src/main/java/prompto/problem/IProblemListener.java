@@ -16,5 +16,6 @@ public interface IProblemListener {
 	void reportIllegalComparison(IType type, IType other, ISection section);
 	void reportIllegalMember(String name, ISection section);
 	void reportIllegalOperation(String message, ISection section);
+	void reportAmbiguousIdentifier(String name, ISection section);
 
 }
