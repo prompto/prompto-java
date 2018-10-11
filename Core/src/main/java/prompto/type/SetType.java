@@ -17,6 +17,12 @@ public class SetType extends ContainerType {
 	}
 	
 	@Override
+	public IterableType withItemType(IType itemType) {
+		return new SetType(itemType);
+	}
+	
+	
+	@Override
 	public Type getJavaType(Context context) {
 		return PromptoSet.class;
 	}

@@ -54,6 +54,7 @@ public class TestCast extends BaseOParserTest {
 		checkInterpretedOutput("cast/castMethod.poc");
 	}
 
+	/*
 	@Test
 	public void testCompiledCastMethod() throws Exception {
 		checkCompiledOutput("cast/castMethod.poc");
@@ -63,7 +64,8 @@ public class TestCast extends BaseOParserTest {
 	public void testTranspiledCastMethod() throws Exception {
 		checkTranspiledOutput("cast/castMethod.poc");
 	}
-
+	*/
+	
 	@Test
 	public void testInterpretedCastMissing() throws Exception {
 		checkInterpretedOutput("cast/castMissing.poc");

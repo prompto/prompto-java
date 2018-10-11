@@ -45,5 +45,7 @@ public abstract class IterableType extends NativeType {
 		return other instanceof IterableType
 			&& itemType.isMoreSpecificThan(context, ((IterableType)other).itemType);
 	}
+
+	public abstract IterableType withItemType(IType itemType) ;
 	
 }

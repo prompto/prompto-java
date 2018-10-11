@@ -15,6 +15,11 @@ public class CursorType extends IterableType {
 	}
 	
 	@Override
+	public IterableType withItemType(IType itemType) {
+		return new CursorType(itemType);
+	}
+	
+	@Override
 	public Type getJavaType(Context context) {
 		return IterableWithCounts.class;
 	}

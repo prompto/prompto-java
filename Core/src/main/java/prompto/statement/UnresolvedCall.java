@@ -1,9 +1,8 @@
 package prompto.statement;
 
-import prompto.argument.MethodArgument;
 import prompto.compiler.Flags;
-import prompto.compiler.ResultInfo;
 import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.declaration.IDeclaration;
@@ -14,7 +13,6 @@ import prompto.expression.ConstructorExpression;
 import prompto.expression.IAssertion;
 import prompto.expression.IExpression;
 import prompto.expression.MemberSelector;
-import prompto.expression.MethodExpression;
 import prompto.expression.MethodSelector;
 import prompto.expression.UnresolvedIdentifier;
 import prompto.grammar.ArgumentAssignmentList;
@@ -28,6 +26,7 @@ import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.IType;
+import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
@@ -148,9 +147,12 @@ public class UnresolvedCall extends SimpleStatement implements IAssertion {
 		}
 		if(call==null) {
 			INamed named = context.getRegisteredValue(INamed.class, id);
-			if(named instanceof MethodArgument || named instanceof MethodExpression) {
-				call = new MethodCall(new MethodSelector(id), assignments);
-				((MethodCall)call).setVariableName(id.toString());
+			if(named!=null) {
+				IType type = named.getType(context);
+				if(type instanceof MethodType) {
+					call = new MethodCall(new MethodSelector(id), assignments);
+					((MethodCall)call).setVariableName(id.toString());
+				}
 			}
 		}
 		if(call==null) {
