@@ -24,7 +24,7 @@ import prompto.value.RangeBase;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-public interface IType {
+public interface IType extends ISection {
 	
 	Family getFamily();
 	
