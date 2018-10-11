@@ -42,6 +42,11 @@ public class TestCast extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCastMethod() throws Exception {
+		compareResourceEME("cast/castMethod.pec");
+	}
+
+	@Test
 	public void testCastMissing() throws Exception {
 		compareResourceEME("cast/castMissing.pec");
 	}
