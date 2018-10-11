@@ -338,6 +338,11 @@ public class Context implements IContext {
 		return null;	
 	}
 	
+	public <T extends IDeclaration> T getLocalDeclaration(Class<T> klass, Identifier id) {
+		IDeclaration actual = declarations.get(id);
+		return actual!=null ? ObjectUtils.downcast(klass, actual) : null;
+	}
+
 	public <T extends IDeclaration> T getRegisteredDeclaration(Class<T> klass, Identifier id) {
 		return getRegisteredDeclaration(klass, id, true);
 	}
@@ -1066,6 +1071,7 @@ public class Context implements IContext {
 		}
 		
 	}
+
 
 
 

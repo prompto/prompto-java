@@ -4,6 +4,7 @@ import java.lang.invoke.CallSite;
 import java.lang.invoke.MethodHandles.Lookup;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,10 +34,12 @@ import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.ArgumentAssignmentList;
+import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Context.MethodDeclarationMap;
+import prompto.runtime.Variable;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.IType;
@@ -72,7 +75,10 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	}
 	
 	public Set<IMethodDeclaration> getCandidates(Context context, boolean checkInstance) {
-		if(parent==null)
+		INamed named = context.getRegistered(id);
+		if(named instanceof Variable && named.getType(context) instanceof prompto.type.MethodType)
+			return Collections.singleton(((prompto.type.MethodType)named.getType(context)).getMethod());
+		else if(parent==null)
 			return getGlobalCandidates(context);
 		else
 			return getMemberCandidates(context, checkInstance);
