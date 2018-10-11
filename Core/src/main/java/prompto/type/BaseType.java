@@ -11,6 +11,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.parser.ISection;
+import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.utils.CodeWriter;
@@ -19,7 +20,7 @@ import prompto.value.RangeBase;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-public abstract class BaseType implements IType {
+public abstract class BaseType extends Section implements IType {
 
 	Family family;
 
