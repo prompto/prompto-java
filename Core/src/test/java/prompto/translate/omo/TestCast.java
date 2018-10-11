@@ -17,6 +17,11 @@ public class TestCast extends BaseOParserTest {
 	}
 
 	@Test
+	public void testCastMethod() throws Exception {
+		compareResourceOMO("cast/castMethod.poc");
+	}
+
+	@Test
 	public void testCastMissing() throws Exception {
 		compareResourceOMO("cast/castMissing.poc");
 	}
