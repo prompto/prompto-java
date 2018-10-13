@@ -78,6 +78,11 @@ public class Context implements IContext {
 		Map<Identifier,INamed> map = new HashMap<Identifier, INamed>();
 		List<INamed> list = new ArrayList<>();
 		
+		@Override
+		public String toString() {
+			return list.toString();
+		}
+		
 		public boolean isEmpty() {
 			return map.isEmpty();
 		}

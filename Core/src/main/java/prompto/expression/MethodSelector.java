@@ -37,6 +37,7 @@ import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
+import prompto.runtime.Context.ClosureContext;
 import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.runtime.Variable;
@@ -224,8 +225,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	private ResultInfo compileExactAbstractMethod(Context context, MethodInfo method, Flags flags, 
 			IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
 		// get closure instance
-		StackLocal local = method.getRegisteredLocal(declaration.getName());
-		CompilerUtils.compileALOAD(method, local);
+		compileLoadClosureInstance(context, method, declaration);
 		// push arguments on the stack
 		declaration.compileAssignments(context, method, flags, assignments);
 		// call global method in its own class
@@ -236,6 +236,16 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		InterfaceConstant constant = new InterfaceConstant(classType, methodName, descriptor);
 		method.addInstruction(Opcode.INVOKEINTERFACE, constant);
 		return new ResultInfo(returnType.getJavaType(context));
+	}
+
+	private void compileLoadClosureInstance(Context context, MethodInfo method, IMethodDeclaration declaration) {
+		if(id.toString().equals(declaration.getName())) {
+			StackLocal local = method.getRegisteredLocal(declaration.getName());
+			CompilerUtils.compileALOAD(method, local);
+		} else {
+			throw new UnsupportedOperationException();
+			// context = context.contextForValue(this.id);
+		}
 	}
 
 	private ResultInfo compileExactStaticMethod(Context context, MethodInfo method, Flags flags, 
@@ -397,6 +407,9 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		return context;
 	}
 
+	private Context newLocalClosureContext(Context context) {
+		return context.newChildContext();
+	}
 
 	public IExpression toInstanceExpression() {
 		if(parent==null)
