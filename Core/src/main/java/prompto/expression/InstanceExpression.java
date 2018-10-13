@@ -187,7 +187,7 @@ public class InstanceExpression extends Section implements IExpression {
 			// don't declare closures
 			if(decl instanceof ConcreteMethodDeclaration && ((ConcreteMethodDeclaration)decl).getDeclarationStatement()!=null)
 				return;
-			transpiler.declare(decl);
+			decl.declare(transpiler);
 		}
 	}
 	

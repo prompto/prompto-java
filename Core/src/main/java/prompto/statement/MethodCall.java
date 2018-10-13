@@ -92,20 +92,17 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	}
 
 	private boolean requiresInvoke(CodeWriter writer) {
-		if (writer.getDialect() != Dialect.E)
-			return false;
-		if (assignments != null && assignments.size() > 0)
+		if (writer.getDialect() != Dialect.E || assignments==null || assignments.isEmpty())
 			return false;
 		try {
 			MethodFinder finder = new MethodFinder(writer.getContext(), this);
 			IMethodDeclaration declaration = finder.findBestMethod(false);
-			/* if method is abstract, need to prefix with invoke */
-			if(declaration instanceof AbstractMethodDeclaration)
-				return true;
+			/* if method is a reference */
+			return declaration instanceof AbstractMethodDeclaration || declaration.getClosureOf()!=null;
 		} catch(SyntaxError e) {
-			// ok
+			// not an error
+			return false;
 		}
-		return false;
 	}
 
 	@Override
