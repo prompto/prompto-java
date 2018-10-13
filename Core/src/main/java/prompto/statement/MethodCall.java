@@ -356,10 +356,12 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	    } else {
 	        if (this.assignments != null)
 	            this.assignments.declare(transpiler);
-	        declarations.forEach(declaration -> {
-	            Context local = this.selector.newLocalCheckContext(transpiler.getContext(), declaration);
-	            this.declareDeclaration(transpiler, declaration, local);
-	        });
+        	if(!this.isLocalClosure(context)) {
+		        declarations.forEach(declaration -> {
+		            Context local = this.selector.newLocalCheckContext(transpiler.getContext(), declaration);
+		            this.declareDeclaration(transpiler, declaration, local);
+		        });
+        	}
 	        if(declarations.size()>1 && this.dispatcher==null) {
 	        	IMethodDeclaration declaration = finder.findBestMethod(false);
 	        	List<IMethodDeclaration> sorted = finder.sortMostSpecificFirst(declarations);

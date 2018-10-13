@@ -133,12 +133,12 @@ public class TestCast extends BaseEParserTest {
 	public void testCompiledCastMethod() throws Exception {
 		checkCompiledOutput("cast/castMethod.pec");
 	}
-
+*/
 	@Test
 	public void testTranspiledCastMethod() throws Exception {
 		checkTranspiledOutput("cast/castMethod.pec");
 	}
-*/
+
 	@Test
 	public void testInterpretedCastMissing() throws Exception {
 		checkInterpretedOutput("cast/castMissing.pec");
