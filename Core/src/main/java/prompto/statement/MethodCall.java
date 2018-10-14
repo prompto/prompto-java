@@ -92,7 +92,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	}
 
 	private boolean requiresInvoke(CodeWriter writer) {
-		if (writer.getDialect() != Dialect.E || assignments==null || assignments.isEmpty())
+		if (writer.getDialect() != Dialect.E || (assignments!=null && !assignments.isEmpty()))
 			return false;
 		try {
 			MethodFinder finder = new MethodFinder(writer.getContext(), this);
