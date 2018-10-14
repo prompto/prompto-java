@@ -85,6 +85,10 @@ public class ClassFile {
 		}
 		return false;
 	}
+	
+	public FieldInfo getFieldInfo(String fieldName) {
+		return fields.stream().filter(f->f.getName().toString().equals(fieldName)).findFirst().orElse(null);
+	}
 
 	public void setEnclosingMethod(MethodInfo method) {
 		System.err.println("TODO: setEnclosingMethod");

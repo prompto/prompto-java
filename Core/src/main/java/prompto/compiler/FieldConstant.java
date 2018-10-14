@@ -34,6 +34,10 @@ public class FieldConstant implements ICodeConstant {
 		return className;
 	}
 	
+	public Type getType() {
+		return fieldNameAndType.getDescriptor().getLastType();
+	}
+	
 	@Override
 	public String toString() {
 		return className.toString() + ':' + fieldNameAndType.toString();
