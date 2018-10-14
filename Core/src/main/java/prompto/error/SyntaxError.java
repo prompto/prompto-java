@@ -8,5 +8,8 @@ public class SyntaxError extends PromptoError {
 		super(message);
 	}
 
+	public SyntaxError(String message, Throwable cause) {
+		super(message, cause);
+	}
 	
 }

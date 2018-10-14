@@ -19,7 +19,9 @@ import prompto.type.CategoryType;
 import prompto.type.DecimalType;
 import prompto.type.IType;
 import prompto.type.IntegerType;
+import prompto.type.IterableType;
 import prompto.type.MethodType;
+import prompto.type.NativeType;
 import prompto.utils.CodeWriter;
 import prompto.value.Decimal;
 import prompto.value.IValue;
@@ -64,6 +66,20 @@ public class CastExpression implements IExpression {
 	}
 
 	private IType getTargetType(Context context) {
+		return getTargetType(context, type);
+	}
+	
+	private static IType getTargetType(Context context, IType type) {
+		if(type instanceof IterableType) {
+			IType itemType = getTargetType(context, ((IterableType)type).getItemType());
+			return ((IterableType)type).withItemType(itemType);
+		} else if(type instanceof NativeType)
+			return type;
+		else
+			return getTargetAtomicType(context, type);
+	}
+	
+	private static IType getTargetAtomicType(Context context, IType type) {
 		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, type.getTypeNameId());
 		if(decl==null) {
 			context.getProblemListener().reportUnknownIdentifier(type.getTypeName(), type);

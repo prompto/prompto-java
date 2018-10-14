@@ -16,6 +16,11 @@ public class DictType extends ContainerType {
 	}
 	
 	@Override
+	public IterableType withItemType(IType itemType) {
+		return new DictType(itemType);
+	}
+	
+	@Override
 	public boolean isAssignableFrom(Context context, IType other) {
 		return super.isAssignableFrom(context, other) ||
 				(other instanceof DictType && 

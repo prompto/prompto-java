@@ -37,7 +37,6 @@ import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
-import prompto.runtime.Context.ClosureContext;
 import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.runtime.Variable;
@@ -405,10 +404,6 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		context = context.newLocalContext();
 		context.setParentContext(instance); // make local context child of the existing instance
 		return context;
-	}
-
-	private Context newLocalClosureContext(Context context) {
-		return context.newChildContext();
 	}
 
 	public IExpression toInstanceExpression() {

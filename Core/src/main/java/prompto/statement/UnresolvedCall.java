@@ -1,8 +1,8 @@
 package prompto.statement;
 
 import prompto.compiler.Flags;
-import prompto.compiler.ResultInfo;
 import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.declaration.IDeclaration;

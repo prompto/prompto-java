@@ -11,8 +11,12 @@ public class PromptoError extends RuntimeException {
 		super(message);
 	}
 
-	protected PromptoError(Exception e) {
-		super(e);
+	protected PromptoError(Throwable cause) {
+		super(cause);
+	}
+
+	public PromptoError(String message, Throwable cause) {
+		super(message, cause);
 	}
 
 
