@@ -7,6 +7,7 @@ import java.net.URLClassLoader;
 import java.nio.file.Paths;
 
 import prompto.config.TempDirectories;
+import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.runtime.Mode;
 import prompto.utils.Logger;
@@ -105,22 +106,30 @@ public class PromptoClassLoader extends URLClassLoader {
 					createPromptoClass(fullName);
 					return super.findClass(fullName);
 				} catch (Throwable t) {
-					t.printStackTrace();
-					throw t;
+					t = extractSyntaxError(t);
+					logger.error(()->"Compilation of " + fullName + " failed. Check: " +  TempDirectories.getJavaClassesDir().getAbsolutePath(), t);
+					throw new ClassNotFoundException(fullName, t);
 				}
 			} else
 				throw e;
 		}
 	}
 
-	private void createPromptoClass(String fullName) throws ClassNotFoundException {
-		try {
-			Compiler compiler = new Compiler(getClassDir()); // where to store .class
-			compiler.compileClass(context.getGlobalContext(), fullName);
-		} catch(Exception e) {
-			logger.error(()->"Compilation of " + fullName + " failed. Check: " +  TempDirectories.getJavaClassesDir().getAbsolutePath(), e);
-			throw new ClassNotFoundException(fullName, e);
-		}
+	private void createPromptoClass(String fullName) throws Exception {
+		Compiler compiler = new Compiler(getClassDir()); // where to store .class
+		compiler.compileClass(context.getGlobalContext(), fullName);
+	}
+
+	private Throwable extractSyntaxError(Throwable t) {
+		Throwable s = t;
+		while(s!=null) {
+			if(s instanceof SyntaxError)
+				return s;
+			if(s==s.getCause())
+				break;
+			s = s.getCause();
+		} 
+		return t;
 	}
 	
 
