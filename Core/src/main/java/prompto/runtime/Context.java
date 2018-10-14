@@ -78,6 +78,12 @@ public class Context implements IContext {
 		Map<Identifier,INamed> map = new HashMap<Identifier, INamed>();
 		List<INamed> list = new ArrayList<>();
 		
+		
+		@Override
+		public String toString() {
+			return list.toString();
+		}
+		
 		public boolean isEmpty() {
 			return map.isEmpty();
 		}
@@ -340,7 +346,12 @@ public class Context implements IContext {
 	
 	public <T extends IDeclaration> T getLocalDeclaration(Class<T> klass, Identifier id) {
 		IDeclaration actual = declarations.get(id);
-		return actual!=null ? ObjectUtils.downcast(klass, actual) : null;
+		if(actual!=null)
+			return ObjectUtils.downcast(klass, actual);
+		else if(parent!=null)
+			return parent.getLocalDeclaration(klass, id);
+		else
+			return null;
 	}
 
 	public <T extends IDeclaration> T getRegisteredDeclaration(Class<T> klass, Identifier id) {
