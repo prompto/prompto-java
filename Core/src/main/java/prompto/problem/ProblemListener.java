@@ -53,6 +53,11 @@ public class ProblemListener implements ANTLRErrorListener, IProblemListener {
 	}
 	
 	@Override
+	public void reportAmbiguousIdentifier(String name, ISection section) {
+		throw new SyntaxError("Ambiguous identifier: \"" + name + "\"");
+	}
+	
+	@Override
 	public void reportUnknownAttribute(String name, ISection section) {
 		throw new SyntaxError("Unknown attribute: \"" + name + "\"");
 	}

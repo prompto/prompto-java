@@ -93,7 +93,14 @@ public class ProblemCollector implements ANTLRErrorListener, IProblemListener {
 	@Override
 	public void reportUnknownIdentifier(String name, ISection section) {
 		synchronized(problems) {
-			problems.add(new UnknowIdentifierError(name, section));
+			problems.add(new UnknownIdentifierError(name, section));
+		}
+	}
+	
+	@Override
+	public void reportAmbiguousIdentifier(String name, ISection section) {
+		synchronized(problems) {
+			problems.add(new AmbiguousIdentifierError(name, section));
 		}
 	}
 	
@@ -107,7 +114,7 @@ public class ProblemCollector implements ANTLRErrorListener, IProblemListener {
 	@Override
 	public void reportUnknownMethod(String name, ISection section) {
 		synchronized(problems) {
-			problems.add(new UnknowMethodError(name, section));
+			problems.add(new UnknownMethodError(name, section));
 		}
 	}
 	

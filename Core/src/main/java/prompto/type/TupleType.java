@@ -20,6 +20,11 @@ public class TupleType extends ContainerType {
 	private TupleType() {
 		super(Family.TUPLE, AnyType.instance(), "any");
 	}
+	
+	@Override
+	public IterableType withItemType(IType itemType) {
+		return this;
+	}
 
 	@Override
 	public Type getJavaType(Context context) {

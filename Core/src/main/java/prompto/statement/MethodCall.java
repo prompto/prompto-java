@@ -23,6 +23,7 @@ import prompto.declaration.BuiltInMethodDeclaration;
 import prompto.declaration.ClosureDeclaration;
 import prompto.declaration.ConcreteMethodDeclaration;
 import prompto.declaration.DispatchMethodDeclaration;
+import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.NativeMethodDeclaration;
 import prompto.declaration.TestMethodDeclaration;
@@ -40,6 +41,7 @@ import prompto.grammar.Specificity;
 import prompto.javascript.JavaScriptNativeCall;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
+import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.runtime.MethodFinder;
 import prompto.transpiler.Transpiler;
 import prompto.type.CodeType;
@@ -90,20 +92,17 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	}
 
 	private boolean requiresInvoke(CodeWriter writer) {
-		if (writer.getDialect() != Dialect.E)
-			return false;
-		if (assignments != null && assignments.size() > 0)
+		if (writer.getDialect() != Dialect.E || (assignments!=null && !assignments.isEmpty()))
 			return false;
 		try {
 			MethodFinder finder = new MethodFinder(writer.getContext(), this);
 			IMethodDeclaration declaration = finder.findBestMethod(false);
-			/* if method is abstract, need to prefix with invoke */
-			if(declaration instanceof AbstractMethodDeclaration)
-				return true;
+			/* if method is a reference */
+			return declaration instanceof AbstractMethodDeclaration || declaration.getClosureOf()!=null;
 		} catch(SyntaxError e) {
-			// ok
+			// not an error
+			return false;
 		}
-		return false;
 	}
 
 	@Override
@@ -135,8 +134,15 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 			return null;
 		if(updateSelectorParent && declaration.getMemberOf()!=null && this.selector.getParent()==null)
 			this.selector.setParent(new ThisExpression());
-		Context local = selector.newLocalCheckContext(context, declaration);
+		Context local = isLocalClosure(context) ? context : selector.newLocalCheckContext(context, declaration);
 		return check(declaration, context, local);
+	}
+
+	private boolean isLocalClosure(Context context) {
+		if(this.selector.getParent()!=null)
+			return false;
+		IDeclaration decl = context.getLocalDeclaration(IDeclaration.class, this.selector.getId());
+		return decl instanceof MethodDeclarationMap;
 	}
 
 	private IType check(IMethodDeclaration declaration, Context parent, Context local) {
@@ -347,10 +353,12 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	    } else {
 	        if (this.assignments != null)
 	            this.assignments.declare(transpiler);
-	        declarations.forEach(declaration -> {
-	            Context local = this.selector.newLocalCheckContext(transpiler.getContext(), declaration);
-	            this.declareDeclaration(transpiler, declaration, local);
-	        });
+        	if(!this.isLocalClosure(context)) {
+		        declarations.forEach(declaration -> {
+		            Context local = this.selector.newLocalCheckContext(transpiler.getContext(), declaration);
+		            this.declareDeclaration(transpiler, declaration, local);
+		        });
+        	}
 	        if(declarations.size()>1 && this.dispatcher==null) {
 	        	IMethodDeclaration declaration = finder.findBestMethod(false);
 	        	List<IMethodDeclaration> sorted = finder.sortMostSpecificFirst(declarations);

@@ -12,6 +12,11 @@ public class IteratorType extends IterableType {
 	public IteratorType(IType itemType) {
 		super(Family.ITERATOR, itemType, "Iterator<" + itemType.getTypeName()+">");
 	}
+	
+	@Override
+	public IterableType withItemType(IType itemType) {
+		return new IteratorType(itemType);
+	}
 
 	@Override
 	public Type getJavaType(Context context) {

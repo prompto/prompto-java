@@ -4,6 +4,7 @@ import java.lang.invoke.CallSite;
 import java.lang.invoke.MethodHandles.Lookup;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,10 +34,12 @@ import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.ArgumentAssignmentList;
+import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Context.MethodDeclarationMap;
+import prompto.runtime.Variable;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.IType;
@@ -72,7 +75,10 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	}
 	
 	public Set<IMethodDeclaration> getCandidates(Context context, boolean checkInstance) {
-		if(parent==null)
+		INamed named = context.getRegistered(id);
+		if(named instanceof Variable && named.getType(context) instanceof prompto.type.MethodType)
+			return Collections.singleton(((prompto.type.MethodType)named.getType(context)).getMethod());
+		else if(parent==null)
 			return getGlobalCandidates(context);
 		else
 			return getMemberCandidates(context, checkInstance);
@@ -218,8 +224,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	private ResultInfo compileExactAbstractMethod(Context context, MethodInfo method, Flags flags, 
 			IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
 		// get closure instance
-		StackLocal local = method.getRegisteredLocal(declaration.getName());
-		CompilerUtils.compileALOAD(method, local);
+		compileLoadClosureInstance(context, method, declaration);
 		// push arguments on the stack
 		declaration.compileAssignments(context, method, flags, assignments);
 		// call global method in its own class
@@ -230,6 +235,16 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		InterfaceConstant constant = new InterfaceConstant(classType, methodName, descriptor);
 		method.addInstruction(Opcode.INVOKEINTERFACE, constant);
 		return new ResultInfo(returnType.getJavaType(context));
+	}
+
+	private void compileLoadClosureInstance(Context context, MethodInfo method, IMethodDeclaration declaration) {
+		if(id.toString().equals(declaration.getName())) {
+			StackLocal local = method.getRegisteredLocal(declaration.getName());
+			CompilerUtils.compileALOAD(method, local);
+		} else {
+			throw new UnsupportedOperationException();
+			// context = context.contextForValue(this.id);
+		}
 	}
 
 	private ResultInfo compileExactStaticMethod(Context context, MethodInfo method, Flags flags, 
@@ -390,7 +405,6 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		context.setParentContext(instance); // make local context child of the existing instance
 		return context;
 	}
-
 
 	public IExpression toInstanceExpression() {
 		if(parent==null)

@@ -8,15 +8,20 @@ import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
+import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
+import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.transpiler.Transpiler;
 import prompto.type.AnyType;
 import prompto.type.CategoryType;
 import prompto.type.DecimalType;
 import prompto.type.IType;
 import prompto.type.IntegerType;
+import prompto.type.IterableType;
+import prompto.type.MethodType;
+import prompto.type.NativeType;
 import prompto.utils.CodeWriter;
 import prompto.value.Decimal;
 import prompto.value.IValue;
@@ -47,28 +52,61 @@ public class CastExpression implements IExpression {
 	@Override
 	public IType check(Context context) {
 		IType actual = anyfy(expression.check(context));
+		IType target = getTargetType(context);
 		// check Any
 		if(actual==AnyType.instance())
-			return type;
+			return target;
 		// check upcast
-		if(type.isAssignableFrom(context, actual))
-			return type;
+		if(target.isAssignableFrom(context, actual))
+			return target;
 		// check downcast
-		if(actual.isAssignableFrom(context, type))
+		if(actual.isAssignableFrom(context, target))
+			return target;
+		throw new SyntaxError("Cannot cast " + actual.toString() + " to " + target.toString());
+	}
+
+	private IType getTargetType(Context context) {
+		return getTargetType(context, type);
+	}
+	
+	private static IType getTargetType(Context context, IType type) {
+		if(type instanceof IterableType) {
+			IType itemType = getTargetType(context, ((IterableType)type).getItemType());
+			return ((IterableType)type).withItemType(itemType);
+		} else if(type instanceof NativeType)
 			return type;
-		throw new SyntaxError("Cannot cast " + actual.toString() + " to " + type.toString());
+		else
+			return getTargetAtomicType(context, type);
+	}
+	
+	private static IType getTargetAtomicType(Context context, IType type) {
+		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, type.getTypeNameId());
+		if(decl==null) {
+			context.getProblemListener().reportUnknownIdentifier(type.getTypeName(), type);
+			return null;
+		} else if(decl instanceof MethodDeclarationMap) {
+			MethodDeclarationMap map = (MethodDeclarationMap)decl;
+			if(map.size()==1)
+				return new MethodType(map.getFirst());
+			else {
+				context.getProblemListener().reportAmbiguousIdentifier(type.getTypeName(), type);
+				return null;
+			}
+		} else
+			return decl.getType(context);
 	}
 
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		IValue value = expression.interpret(context);
 		if(value!=null) {
-			if(type==DecimalType.instance() && value instanceof Integer)
+			IType target = getTargetType(context);
+			if(target==DecimalType.instance() && value instanceof Integer)
 				value = new Decimal(((Integer)value).doubleValue());
-			else if(type==IntegerType.instance() && value instanceof Decimal)
+			else if(target==IntegerType.instance() && value instanceof Decimal)
 				value = new Integer(((Decimal)value).longValue());
-			else if(type.isMoreSpecificThan(context, value.getType()))
-				value.setType(type);
+			else if(target.isMoreSpecificThan(context, value.getType()))
+				value.setType(target);
 		}
 		return value;
 	}
@@ -76,15 +114,16 @@ public class CastExpression implements IExpression {
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		ResultInfo src = expression.compile(context, method, flags);
-		Type dst = type.getJavaType(context);
-		if(dst==Long.class)
+		IType target = getTargetType(context);
+		Type dest = target.getJavaType(context);
+		if(dest==Long.class)
 			return CompilerUtils.numberToLong(method, src);
-		else if(dst==Double.class)
+		else if(dest==Double.class)
 			return CompilerUtils.numberToDouble(method, src);
 		else {
-			ClassConstant c = new ClassConstant(dst);
+			ClassConstant c = new ClassConstant(dest);
 			method.addInstruction(Opcode.CHECKCAST, c);
-			return new ResultInfo(type.getJavaType(context));
+			return new ResultInfo(dest);
 		}
 	}
 
@@ -109,14 +148,17 @@ public class CastExpression implements IExpression {
 	
 	@Override
 	public void declare(Transpiler transpiler) {
-		this.expression.declare(transpiler);
-		this.type.declare(transpiler);
+		expression.declare(transpiler);
+		IType target = getTargetType(transpiler.getContext());
+		target.declare(transpiler);
 	}
+	
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 	    IType expType = this.expression.check(transpiler.getContext());
-	    if(expType==DecimalType.instance() && this.type==IntegerType.instance()) {
+		IType target = getTargetType(transpiler.getContext());
+	    if(expType==DecimalType.instance() && target==IntegerType.instance()) {
 	        transpiler.append("Math.floor(");
 	        this.expression.transpile(transpiler);
 	        transpiler.append(")");

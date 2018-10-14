@@ -12,10 +12,6 @@ import prompto.transpiler.Transpiler;
 
 public class RangeType extends ContainerType {
 	
-	public RangeType(IType itemType) {
-		super(Family.RANGE, itemType, itemType.getTypeName()+"[..]");
-	}
-	
 	static Map<IType,Class<?>> rangeClassMap = createRangeClassMap();
 	
 	private static Map<IType, Class<?>> createRangeClassMap() {
@@ -26,6 +22,17 @@ public class RangeType extends ContainerType {
 		map.put(TimeType.instance(), PromptoRange.Time.class);
 		return map;
 	}
+	
+	
+	public RangeType(IType itemType) {
+		super(Family.RANGE, itemType, itemType.getTypeName()+"[..]");
+	}
+	
+	@Override
+	public IterableType withItemType(IType itemType) {
+		return new RangeType(itemType);
+	}
+	
 	
 	@Override
 	public Type getJavaType(Context context) {

@@ -77,8 +77,16 @@ public abstract class Executor {
 		Object[] args = cmdLineArgs==null ? new Object[0] : new Object[] { options };
 		try(PromptoClassLoader loader = PromptoClassLoader.initialize(context, testMode)) {
 			executeGlobalMethod(loader, methodName, argTypes, args);
-		} catch(ClassNotFoundException | NoSuchMethodException e) {
-			throw new SyntaxError("Could not find a compatible \"" + methodName + "\" method.");
+		} catch(NoSuchMethodException e) {
+			if(e.getCause() instanceof PromptoError)
+				throw (PromptoError)e.getCause();
+			else
+				throw new InternalError(e.getCause());
+		} catch(ClassNotFoundException e) {
+			if(e.getException() instanceof PromptoError)
+				throw (PromptoError)e.getCause();
+			else
+				throw new InternalError(e.getException());
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | IOException e) {
 			e.printStackTrace(System.err);
 			throw new InternalError(e);

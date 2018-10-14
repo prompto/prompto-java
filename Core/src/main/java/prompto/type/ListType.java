@@ -32,6 +32,12 @@ public class ListType extends ContainerType {
 	}
 	
 	@Override
+	public IterableType withItemType(IType itemType) {
+		return new ListType(itemType);
+	}
+	
+	
+	@Override
 	public Type getJavaType(Context context) {
 		return PromptoList.class;
 	}

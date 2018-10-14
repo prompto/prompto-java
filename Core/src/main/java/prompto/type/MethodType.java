@@ -12,6 +12,7 @@ import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.runtime.Context.ClosureContext;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 
 public class MethodType extends BaseType {
 
@@ -108,5 +109,11 @@ public class MethodType extends BaseType {
 		}
 		return super.checkMember(context, name);
 	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		// nothing to do
+	}
+
 
 }
