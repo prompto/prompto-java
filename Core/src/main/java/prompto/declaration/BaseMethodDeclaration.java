@@ -299,6 +299,8 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	    // if this is a template instance, name is already transpiled
 	    if(this.getName().indexOf("$")>0)
 	    	return this.getName();
+	    else if(this.hasAnnotation("@Callback"))
+	    	return this.getName();
 	    else {
 	    	Stream<String> name = Stream.of(this.getName());
 	    	Stream<String> args = this.arguments.stream().map(arg->arg.getTranspiledName(context));
