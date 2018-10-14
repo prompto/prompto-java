@@ -56,10 +56,10 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		if(statements==null)
 			statements = new StatementList();
 		this.statements = statements;
-		statements.forEach((s)->{
-			if(s instanceof DeclarationStatement)
-				((DeclarationStatement<IDeclaration>)s).getDeclaration().setClosureOf(this);
-		});
+		statements.stream()
+			.filter(s->s instanceof DeclarationStatement)
+			.map(s->(DeclarationStatement<IDeclaration>)s)
+			.forEach(s->s.getDeclaration().setClosureOf(this));
 	}
 
 	public StatementList getStatements() {
@@ -271,7 +271,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		return super.isEligibleAsMain();
 	}
 
-	public void compileClosureClass(Context context, MethodInfo method) {
+	public Type compileClosureClass(Context context, MethodInfo method) {
 		Type innerType = getClosureClassType(method);
 		ClassFile classFile = new ClassFile(innerType);
 		classFile.setSuperClass(new ClassConstant(Object.class));
@@ -283,6 +283,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		registerArguments(context);
 		compile(context, false, classFile);
 		method.getClassFile().addInnerClass(classFile);
+		return innerType;
 	}
 
 	private Type getClosureClassType(MethodInfo method) {
