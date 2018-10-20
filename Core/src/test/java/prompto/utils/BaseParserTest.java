@@ -72,9 +72,9 @@ public abstract class BaseParserTest extends BaseTest {
 	}
 
 	protected void loadResource(String resourceName) throws Exception {
-		DeclarationList stmts = parseResource(resourceName);
-		stmts.register(context);
-		stmts.check(context);
+		DeclarationList decls = parseResource(resourceName);
+		decls.register(context);
+		decls.check(context);
 	}
 
 	public abstract DeclarationList parseString(String code) throws Exception;

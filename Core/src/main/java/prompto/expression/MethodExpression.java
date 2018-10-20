@@ -96,7 +96,7 @@ public class MethodExpression implements IExpression {
 		if(named instanceof Context.MethodDeclarationMap) {
 			IMethodDeclaration decl = ((MethodDeclarationMap)named).getFirst();
 			// don't declare closures
-			if(decl.getDeclarationStatement()==null)
+			if(decl.getDeclarationOf()==null)
 		        decl.declare(transpiler);
 		}
 	}

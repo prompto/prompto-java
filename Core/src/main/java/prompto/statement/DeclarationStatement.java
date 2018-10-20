@@ -26,7 +26,7 @@ public class DeclarationStatement<T extends IDeclaration> extends BaseStatement 
 	public DeclarationStatement(T declaration) {
 		this.declaration = declaration;
 		if(declaration instanceof IMethodDeclaration)
-			((IMethodDeclaration)declaration).setDeclarationStatement((DeclarationStatement<IMethodDeclaration>)this);
+			((IMethodDeclaration)declaration).setDeclarationOf((DeclarationStatement<IMethodDeclaration>)this);
 	}
 	
 	public T getDeclaration() {
