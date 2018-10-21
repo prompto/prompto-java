@@ -245,6 +245,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 	}
 
 	public ClassFile compile(Context context, String fullName) {
+		context = context.newLocalContext();
 		java.lang.reflect.Type type = CompilerUtils.abstractTypeFrom(fullName);
 		ClassFile classFile = new ClassFile(type);
 		classFile.addModifier(Modifier.ABSTRACT);
