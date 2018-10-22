@@ -175,12 +175,9 @@ public class Compiler {
 
 	private ClassFile createGlobalMethodsInterfaceFile(Context context, MethodDeclarationMap methods, Type type) {
 		IMethodDeclaration method = methods.values().iterator().next();
-		if(method instanceof AbstractMethodDeclaration) {
-			ClassFile classFile = new ClassFile(type);
-			classFile.addModifier(Modifier.ABSTRACT | Modifier.INTERFACE);
-			method.compile(context, true, classFile);
-			return classFile;
-		} else
+		if(method instanceof AbstractMethodDeclaration)
+			return ((AbstractMethodDeclaration)method).compileInterface(context, type);
+		else
 			throw new UnsupportedOperationException();
 	}
 

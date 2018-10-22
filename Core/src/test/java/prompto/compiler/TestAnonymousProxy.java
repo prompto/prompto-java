@@ -38,7 +38,7 @@ public class TestAnonymousProxy {
 		Out.init();
 		try {
 			combined c = new combined.Combined();
-			method(PromptoProxy.newProxy(anonymous.class, c));
+			method(PromptoProxy.newProxy(c, anonymous.class));
 			assertEquals("/" + c.getName() + "/" + c.getText(), Out.read());
 		} finally {
 			Out.restore();

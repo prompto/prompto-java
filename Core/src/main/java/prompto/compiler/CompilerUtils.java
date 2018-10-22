@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.grammar.ArgumentList;
@@ -77,6 +78,17 @@ public abstract class CompilerUtils {
 			return "[" + getDescriptor(((Class<?>)type).getComponentType());
 		String s = descriptors.get(type);
 		return s!=null ? s : "L" + makeClassName(type) + ';';
+	}
+
+	public static String getGenericDescriptor(Type genericType, List<Type> parameterTypes) {
+		if(parameterTypes.isEmpty())
+			return getDescriptor(genericType);
+		
+		return "L" + makeClassName(genericType) + "<" 
+			+ parameterTypes.stream()
+				.map(CompilerUtils::getDescriptor)
+				.collect(Collectors.joining())
+			+ ">;";
 	}
 
 	public static String makeClassName(Type type) {
@@ -784,6 +796,26 @@ public abstract class CompilerUtils {
 			method.addInstruction(Opcode.ISTORE, new ByteOperand((byte)value.getIndex()));
 		else
 			throw new UnsupportedOperationException();
+	}
+
+	public static void compileClassConstantsArray(MethodInfo method, List<Type> types) {
+		if(types.size()<=5) {
+			Opcode opcode = Opcode.values()[Opcode.ICONST_0.ordinal() + types.size()];
+			method.addInstruction(opcode);
+		} else
+			method.addInstruction(Opcode.LDC, new IntConstant(types.size()));
+		method.addInstruction(Opcode.ANEWARRAY, new ClassConstant(Class.class));
+		IntStream.range(0, types.size())
+			.forEach(i->{
+				method.addInstruction(Opcode.DUP);
+				if(i<=5) {
+					Opcode opcode = Opcode.values()[Opcode.ICONST_0.ordinal() + i];
+					method.addInstruction(opcode);
+				} else
+					method.addInstruction(Opcode.LDC, new IntConstant(i));
+				method.addInstruction(Opcode.LDC, new ClassConstant(types.get(i)));
+				method.addInstruction(Opcode.AASTORE);
+			});
 	}
 
 

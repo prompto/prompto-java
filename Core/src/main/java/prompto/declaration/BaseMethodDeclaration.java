@@ -35,12 +35,6 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	ArgumentList arguments;
 	IType returnType;
 	
-	public BaseMethodDeclaration(Identifier name, ArgumentList arguments) {
-		super(name);
-		this.arguments = arguments!=null ? arguments : new ArgumentList();
-		this.returnType = null;
-	}
-	
 	public BaseMethodDeclaration(Identifier name, ArgumentList arguments, IType returnType) {
 		super(name);
 		this.arguments = arguments!=null ? arguments : new ArgumentList();

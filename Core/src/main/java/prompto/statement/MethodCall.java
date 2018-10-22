@@ -221,7 +221,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	}
 
 	private ResultInfo compileConcrete(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration) {
-		Context local = this.selector.newLocalCheckContext(context, declaration);
+		Context local = isLocalClosure(context) ? context : selector.newLocalCheckContext(context, declaration);
 		declaration.registerArguments(local);
 		ArgumentAssignmentList assignments = this.assignments!=null ? this.assignments : new ArgumentAssignmentList();
 		return this.selector.compileExact(local, method, flags, declaration, assignments);

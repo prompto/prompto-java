@@ -116,7 +116,10 @@ public class PromptoClassLoader extends URLClassLoader {
 	}
 
 	private void createPromptoClass(String fullName) throws Exception {
-		Compiler compiler = new Compiler(getClassDir()); // where to store .class
+		File classDir = getClassDir();
+		// logger.debug(()->"Compiling " + fullName + " @ " + classDir.toString());
+		System.err.println("Compiling " + fullName + " @ " + classDir.toString());
+		Compiler compiler = new Compiler(classDir); // where to store .class
 		compiler.compileClass(context.getGlobalContext(), fullName);
 	}
 

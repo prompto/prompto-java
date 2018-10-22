@@ -21,16 +21,20 @@ import prompto.compiler.FieldInfo;
 import prompto.compiler.Flags;
 import prompto.compiler.IOperand;
 import prompto.compiler.IVerifierEntry.VerifierType;
+import prompto.compiler.InterfaceType;
 import prompto.compiler.LocalVariableTableAttribute;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
+import prompto.compiler.NameAndTypeConstant;
 import prompto.compiler.Opcode;
 import prompto.compiler.PromptoType;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
+import prompto.compiler.StringConstant;
 import prompto.error.PromptoError;
 import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoMethod;
 import prompto.runtime.Context;
 import prompto.statement.DeclarationStatement;
 import prompto.statement.StatementList;
@@ -272,16 +276,20 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 
 	public Type compileClosureClass(Context context, MethodInfo method) {
+		IType returnType = this.checkChild(context);
+		InterfaceType intf = new InterfaceType(arguments, returnType);
 		Type innerType = getClosureClassType(method);
 		ClassFile classFile = new ClassFile(innerType);
 		classFile.setSuperClass(new ClassConstant(Object.class));
+		classFile.addAttribute(intf.computeSignature(context, Object.class));
+		classFile.addInterface(intf.getInterfaceType());
 		classFile.setEnclosingMethod(method);
 		LocalVariableTableAttribute locals = method.getLocals();
 		compileClosureFields(context, classFile, locals);
 		compileClosureConstructor(context, classFile, locals);
 		context = context.newClosureContext(new MethodType(this));
 		registerArguments(context);
-		compile(context, false, classFile);
+		compile(context, false, classFile, intf.getInterfaceMethodName());
 		method.getClassFile().addInnerClass(classFile);
 		return innerType;
 	}
@@ -353,11 +361,27 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 
 	public ResultInfo compileMethodInstance(Context context, MethodInfo method, Flags flags) {
-		if(closureOf==null)
-			compileClosureClass(context, method);
-		return compileClosureInstance(context, method, flags);
+		if(closureOf!=null)
+			return compileClosureInstance(context, method, flags);
+		else
+			return compileMethodReference(context, method, flags);
 	}
 	
+	private ResultInfo compileMethodReference(Context context, MethodInfo method, Flags flags) {
+		// TODO use LambdaMetaFactory 
+		Type methodsClassType = this.memberOf==null ? CompilerUtils.getGlobalMethodType(this.id) : CompilerUtils.getCategoryConcreteType(this.memberOf.getId());
+		method.addInstruction(Opcode.LDC, new ClassConstant(methodsClassType));
+		method.addInstruction(Opcode.LDC, new StringConstant(id.toString()));
+		if(this.memberOf==null)
+			method.addInstruction(Opcode.ACONST_NULL, new ClassConstant(Object.class));
+		else
+			method.addInstruction(Opcode.ALOAD_0, new ClassConstant(Object.class)); // this
+		NameAndTypeConstant nameAndType = new NameAndTypeConstant("newMethodReference", new Descriptor.Method(Class.class, String.class, Object.class, Object.class));
+		MethodConstant mc = new MethodConstant(new ClassConstant(PromptoMethod.class), nameAndType);
+		method.addInstruction(Opcode.INVOKESTATIC, mc);
+		return new ResultInfo(methodsClassType);
+	}
+
 	public ResultInfo compileClosureInstance(Context context, MethodInfo method, Flags flags) {
 		Type innerType = getClosureClassType(method);
 		LocalVariableTableAttribute locals = method.getLocals(); // TODO: use a copy saved when constructor is created

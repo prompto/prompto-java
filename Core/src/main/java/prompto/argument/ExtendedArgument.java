@@ -157,11 +157,11 @@ public class ExtendedArgument extends CategoryArgument {
 
 	@Override
 	public void compileAssignment(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments, boolean isFirst) {
+		super.compileAssignment(context, method, flags, assignments, isFirst);
 		// create a proxy to the required java type
 		ClassConstant c = new ClassConstant(getJavaType(context));
 		method.addInstruction(Opcode.LDC, c);
-		super.compileAssignment(context, method, flags, assignments, isFirst);
-		MethodConstant m = new MethodConstant(PromptoProxy.class, "newProxy", Class.class, Object.class, Object.class);
+		MethodConstant m = new MethodConstant(PromptoProxy.class, "newProxy", Object.class, Class.class, Object.class);
 		method.addInstruction(Opcode.INVOKESTATIC, m);
 		method.addInstruction(Opcode.CHECKCAST, c);
 	}

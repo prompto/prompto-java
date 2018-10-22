@@ -1,6 +1,10 @@
 package prompto.declaration;
 
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
+
 import prompto.compiler.ClassFile;
+import prompto.compiler.InterfaceType;
 import prompto.error.SyntaxError;
 import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
@@ -13,11 +17,8 @@ import prompto.value.IValue;
 
 public class AbstractMethodDeclaration extends BaseMethodDeclaration implements IMethodDeclaration {
 
-	IType returnType;
-	
 	public AbstractMethodDeclaration(Identifier name, ArgumentList arguments, IType returnType) {
-		super(name,arguments);
-		this.returnType = returnType!=null ? returnType : VoidType.instance();
+		super(name, arguments, returnType!=null ? returnType : VoidType.instance());
 	}
 	
 	@Override
@@ -54,13 +55,23 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 	
 	@Override
 	public void compile(Context context, boolean isStart, ClassFile classFile) {
-		compilePrototype(context, isStart, classFile);
+		throw new SyntaxError("Should never get there !");
 	}
-	
+
 	@Override
 	public String compileTemplate(Context context, boolean isStart, ClassFile classFile) {
 		throw new SyntaxError("Should never get there !");
 	}
+
+	public ClassFile compileInterface(Context context, Type type) {
+		ClassFile classFile = new ClassFile(type);
+		classFile.addModifier(Modifier.ABSTRACT | Modifier.INTERFACE);
+		InterfaceType intf = new InterfaceType(arguments, returnType);
+		classFile.addAttribute(intf.computeSignature(context, Object.class));
+		classFile.addInterface(intf.getInterfaceType());
+		return classFile;
+	}
+	
 	
 	@Override
 	public void toDialect(CodeWriter writer) {
@@ -117,4 +128,5 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 	public void declare(Transpiler transpiler) {
 		this.declareArguments(transpiler);
 	}
+
 }

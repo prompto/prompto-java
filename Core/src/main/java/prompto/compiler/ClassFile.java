@@ -94,6 +94,11 @@ public class ClassFile {
 		System.err.println("TODO: setEnclosingMethod");
 	}
 
+	
+	public void addAttribute(IAttribute attribute) {
+		attributes.add(attribute);
+	}
+	
 	public void addInnerClass(ClassFile classFile) {
 		InnerClassInfo info = new InnerClassInfo(classFile, getThisClass());
 		addInnerClass(info);

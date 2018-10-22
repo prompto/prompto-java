@@ -6,16 +6,22 @@ import java.lang.invoke.MethodType;
 import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import prompto.compiler.BootstrapMethod;
 import prompto.compiler.CallSiteConstant;
 import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Descriptor;
+import prompto.compiler.FieldConstant;
+import prompto.compiler.FieldInfo;
 import prompto.compiler.Flags;
 import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.InterfaceConstant;
+import prompto.compiler.InterfaceType;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodHandleConstant;
 import prompto.compiler.MethodInfo;
@@ -140,8 +146,10 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		else if(declaration.getMemberOf()!=null) 
 			return compileExactImplicitMember(context, method, flags, declaration, assignments);
 		else if(declaration.isAbstract())
-			return compileExactAbstractMethod(context, method, flags, declaration, assignments);
-		else
+			return compileExactAbstractInstance(context, method, flags, declaration, assignments);
+		else if(!id.toString().equals(declaration.getName())) 
+			return compileExactMethodInstance(context, method, flags, declaration, assignments);
+		else 
 			return compileExactStaticMethod(context, method, flags, declaration, assignments);
 	}
 	
@@ -221,10 +229,10 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		throw new UnsupportedOperationException();
 	}
 
-	private ResultInfo compileExactAbstractMethod(Context context, MethodInfo method, Flags flags, 
+	private ResultInfo compileExactMethodInstance(Context context, MethodInfo method, Flags flags, 
 			IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
-		// get closure instance
-		compileLoadClosureInstance(context, method, declaration);
+		// load method instance
+		compileLoadMethodInstance(context, method, flags, declaration);
 		// push arguments on the stack
 		declaration.compileAssignments(context, method, flags, assignments);
 		// call global method in its own class
@@ -237,14 +245,49 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		return new ResultInfo(returnType.getJavaType(context));
 	}
 
-	private void compileLoadClosureInstance(Context context, MethodInfo method, IMethodDeclaration declaration) {
-		if(id.toString().equals(declaration.getName())) {
-			StackLocal local = method.getRegisteredLocal(declaration.getName());
+	
+	private ResultInfo compileExactAbstractInstance(Context context, MethodInfo method, Flags flags, 
+			IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
+		// load method instance
+		compileLoadMethodInstance(context, method, flags, declaration);
+		// push arguments on the stack
+		declaration.compileAssignments(context, method, flags, assignments);
+		// call global method through FunctionalInterface
+		IType returnIType = declaration.check(context, false);
+		InterfaceType intf = new InterfaceType(declaration.getArguments(), returnIType);
+		Type classType = intf.getInterfaceType();
+		String methodName = intf.getInterfaceMethodName();
+		List<Type> argTypes = IntStream.range(0, declaration.getArguments().size()).mapToObj(i->Object.class).collect(Collectors.toList());
+		Descriptor.Method descriptor = new Descriptor.Method(argTypes.toArray(new Type[argTypes.size()]), intf.isVoid() ? void.class : Object.class);
+		InterfaceConstant constant = new InterfaceConstant(classType, methodName, descriptor);
+		method.addInstruction(Opcode.INVOKEINTERFACE, constant);
+		// cast result
+		Type returnType = returnIType.getJavaType(context);
+		if(!intf.isVoid())
+			method.addInstruction(Opcode.CHECKCAST, new ClassConstant(returnType));
+		// done
+		return new ResultInfo(returnIType.getJavaType(context));
+	}
+
+
+	
+	private Type compileLoadMethodInstance(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration) {
+		StackLocal local = method.getRegisteredLocal(getName());
+		if(local!=null) {
 			CompilerUtils.compileALOAD(method, local);
-		} else {
-			throw new UnsupportedOperationException();
-			// context = context.contextForValue(this.id);
+			return ((StackLocal.ObjectLocal)local).getClassName().getType();
 		}
+		// if in a closure, could be a field
+		FieldInfo fieldInfo = method.getClassFile().getFieldInfo(getName());
+		if(fieldInfo!=null) {
+			ClassConstant thisClass = method.getClassFile().getThisClass();
+			method.addInstruction(Opcode.ALOAD_0, thisClass);
+			FieldConstant field = new FieldConstant(method.getClassFile().getThisClass(), id.toString(), fieldInfo.getType());
+			method.addInstruction(Opcode.GETFIELD, field);
+			return field.getType();
+		}
+		// not sure how we got here...
+		throw new UnsupportedOperationException("Could not find abstract method instance " + getName())	;
 	}
 
 	private ResultInfo compileExactStaticMethod(Context context, MethodInfo method, Flags flags, 

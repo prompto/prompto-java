@@ -1,19 +1,24 @@
 package prompto.argument;
 
+import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import prompto.compiler.ClassConstant;
+import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
+import prompto.compiler.InterfaceType;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.ResultInfo;
 import prompto.compiler.StringConstant;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
+import prompto.grammar.ArgumentList;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoProxy;
@@ -21,7 +26,6 @@ import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.transpiler.Transpiler;
-import prompto.type.IType;
 import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
 
@@ -79,7 +83,7 @@ public class MethodArgument extends BaseArgument implements INamedArgument {
 	}
 	
 	@Override
-	public IType getType(Context context) {
+	public MethodType getType(Context context) {
 		IMethodDeclaration actual = getDeclaration(context);
 		return new MethodType(actual);
 	}
@@ -94,18 +98,28 @@ public class MethodArgument extends BaseArgument implements INamedArgument {
 	
 	@Override
 	public void compileAssignment(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments, boolean isFirst) {
-		// create a proxy to the required java type
-		ClassConstant c = new ClassConstant(getJavaType(context));
-		method.addInstruction(Opcode.LDC, c);
+		MethodType target = getType(context);
+		IMethodDeclaration decl = target.getMethod();
+		ArgumentList args = decl.getArguments();
+		InterfaceType intf = new InterfaceType(args, decl.getReturnType());
+		// the JVM can only cast to declared types, so we need a proxy to convert the FunctionalInterface call into the concrete one
+		// 1st parameter is method reference
 		ArgumentAssignment assign = makeAssignment(assignments, isFirst);
 		IExpression expression = assign.getExpression();
-		ResultInfo info = expression.compile(context.getCallingContext(), method, flags);
-		String className = info.getType().getTypeName();
-		String methodName = className.substring(className.lastIndexOf('$')+1);
+		expression.compile(context.getCallingContext(), method, flags); // this would return a lambda
+		// what interface we are casting to
+		ClassConstant dest = new ClassConstant(getJavaType(context));
+		method.addInstruction(Opcode.LDC, dest);
+		// method name
+		String methodName = intf.getInterfaceMethodName(); 
 		method.addInstruction(Opcode.LDC, new StringConstant(methodName));
-		MethodConstant m = new MethodConstant(PromptoProxy.class, "newProxy", Class.class, Object.class, String.class, Object.class);
+		// method arg types
+		List<Type> javaTypes = args.stream().map(arg->arg.getJavaType(context)).collect(Collectors.toList());
+		CompilerUtils.compileClassConstantsArray(method, javaTypes);
+		// create proxy
+		MethodConstant m = new MethodConstant(PromptoProxy.class, "newProxy", Object.class, Class.class, String.class, Class[].class, Object.class);
 		method.addInstruction(Opcode.INVOKESTATIC, m);
-		method.addInstruction(Opcode.CHECKCAST, c);
+		method.addInstruction(Opcode.CHECKCAST, dest);
 	}
 
 	@Override

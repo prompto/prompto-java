@@ -17,15 +17,15 @@ import prompto.value.IValue;
 public abstract class BuiltInMethodDeclaration extends BaseMethodDeclaration {
 
 	public BuiltInMethodDeclaration(String name) {
-		super(new Identifier(name), null);
+		super(new Identifier(name), null, null);
 	}
 
 	public BuiltInMethodDeclaration(String name, IArgument argument) {
-		super(new Identifier(name), new ArgumentList(argument));
+		super(new Identifier(name), new ArgumentList(argument), null);
 	}
 
 	public BuiltInMethodDeclaration(String name, IArgument ... arguments) {
-		super(new Identifier(name), new ArgumentList(arguments));
+		super(new Identifier(name), new ArgumentList(arguments), null);
 	}
 
 	@Override

@@ -29,7 +29,7 @@ public class TestClosureProxy {
 		Out.init();
 		try {
 			text t = new text();
-			method(PromptoProxy.newProxy(name.class, t, "xtext"));
+			method(PromptoProxy.newProxy(t, name.class, "xtext", new Class[0]));
 			assertEquals("Hello", Out.read());
 		} finally {
 			Out.restore();
