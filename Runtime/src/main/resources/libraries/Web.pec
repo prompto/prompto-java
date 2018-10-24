@@ -48,6 +48,7 @@ define ReactWidget as widget with methods:
 	define getInitialState as method doing:
 		return {}
 	
+	@Static
 	@Callback
 	define getDerivedStateFromProps as method receiving Document props and Document state doing:
 		return Nothing

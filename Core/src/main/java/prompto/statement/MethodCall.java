@@ -412,9 +412,9 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	private void transpileSingle(Transpiler transpiler, IMethodDeclaration declaration, boolean allowDerived) {
 	   if (declaration instanceof BuiltInMethodDeclaration)
 	        this.transpileBuiltin(transpiler, (BuiltInMethodDeclaration)declaration);
-	   else if(declaration.hasAnnotation("Inlined"))
+	   else if(declaration.hasAnnotation(transpiler.getContext(), "Inlined"))
 		   throw new UnsupportedOperationException("Yet!");
-	   else if(declaration.containerHasAnnotation("Inlined"))
+	   else if(declaration.containerHasAnnotation(transpiler.getContext(), "Inlined"))
 		   this.transpileInlinedMemberMethod(transpiler, declaration);
 	   else {
 	        this.transpileSelector(transpiler, declaration);

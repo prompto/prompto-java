@@ -1,6 +1,7 @@
 package prompto.declaration;
 
 import java.lang.reflect.Modifier;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -272,9 +273,14 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	}
 
 	public void transpileProlog(Transpiler transpiler) {
-	    if (this.memberOf!=null)
-	        transpiler.append(this.memberOf.getName()).append(".prototype.").append(this.getTranspiledName(transpiler.getContext())).append(" = function (");
-	    else
+	    if (this.memberOf!=null) {
+	        transpiler.append(this.memberOf.getName());
+	        if(this.hasAnnotation(transpiler.getContext(), "@Static"))
+	           	transpiler.append(".");
+	        else
+	        	transpiler.append(".prototype.");
+	        transpiler.append(this.getTranspiledName(transpiler.getContext())).append(" = function (");
+	    } else
 	        transpiler.append("function ").append(this.getTranspiledName(transpiler.getContext())).append(" (");
 	    this.arguments.transpile(transpiler);
 	    transpiler.append(") {").indent();
@@ -293,7 +299,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	    // if this is a template instance, name is already transpiled
 	    if(this.getName().indexOf("$")>0)
 	    	return this.getName();
-	    else if(this.hasAnnotation("@Callback"))
+	    else if(this.hasLocalAnnotation("@Callback") || this.hasInheritedAnnotation(context, "@Callback"))
 	    	return this.getName();
 	    else {
 	    	Stream<String> name = Stream.of(this.getName());
@@ -301,6 +307,27 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	    	return Stream.concat(name, args).collect(Collectors.joining("$"));
 	    }
 	};
+	
+	
+	@Override
+	public boolean hasInheritedAnnotation(Context context, String name) {
+		if(memberOf==null)
+			return false;
+		else
+			return getOverriddenMethods(context).anyMatch(m->m.hasLocalAnnotation(name));
+	}
+	
+	protected Stream<IMethodDeclaration> getOverriddenMethods(Context context) {
+		Stream<CategoryDeclaration> categories = Stream.of(memberOf);
+		if(memberOf.getDerivedFrom()!=null)
+			categories = Stream.concat(categories, memberOf.getDerivedFrom().stream().map(id->context.getRegisteredDeclaration(CategoryDeclaration.class, id)));
+		return categories
+				.map(cat->cat.getLocalMethods().stream())
+				.flatMap(Function.identity())
+				.filter(m->this.getName().equals(m.getName()))
+				.filter(m->this.getProto().equals(m.getProto()));
+	}
+	
 
 
 }

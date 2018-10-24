@@ -10,6 +10,7 @@ import javax.script.Invocable;
 
 import org.junit.Test;
 
+import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.DeclarationList;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
@@ -17,16 +18,24 @@ import prompto.declaration.NativeCategoryDeclaration;
 import prompto.parser.e.BaseEParserTest;
 import prompto.runtime.Context;
 
-public class TestInline extends BaseEParserTest {
+public class TestStatic extends BaseEParserTest {
 
 	@Test
-	public void inlinedAnnotationIsDetectedForCategory() throws Exception {
-		DeclarationList decls = parseResource("samples/inlinedEvent.pec");
-		IDeclaration decl = decls.getFirst();
-		assertTrue(decl.hasLocalAnnotation("Inlined"));
-		assertTrue(decl.hasLocalAnnotation("@Inlined"));
-		assertFalse(decl.hasLocalAnnotation("Unrelated"));
-		assertFalse(decl.hasLocalAnnotation("@Unrelated"));
+	public void staticAnnotationIsDetected() throws Exception {
+		DeclarationList decls = parseResource("samples/staticMethods.pec");
+		decls.register(context);
+		IDeclaration decl = decls.get(1);
+		IDeclaration method = ((CategoryDeclaration)decl).getLocalMethods().getFirst();
+		assertTrue(method.hasLocalAnnotation("Static"));
+		assertTrue(method.hasLocalAnnotation("@Static"));
+		assertFalse(method.hasLocalAnnotation("Unrelated"));
+		assertFalse(method.hasLocalAnnotation("@Unrelated"));
+		decl = decls.get(2);
+		method = ((CategoryDeclaration)decl).getLocalMethods().getFirst();
+		assertFalse(method.hasLocalAnnotation("Static"));
+		assertFalse(method.hasLocalAnnotation("@Static"));
+		assertTrue(method.hasInheritedAnnotation(context, "Static"));
+		assertTrue(method.hasAnnotation(context, "@Static"));
 	}
 
 	@Test

@@ -180,7 +180,7 @@ public class Transpiler {
 	}
 
 	public void declare(ITranspilable transpilable) {
-		if(transpilable instanceof IDeclaration && ((IDeclaration)transpilable).hasAnnotation("Inlined"))
+		if(transpilable instanceof IDeclaration && ((IDeclaration)transpilable).hasAnnotation(context, "Inlined"))
 			return;
 		declared.add(transpilable);
 	}

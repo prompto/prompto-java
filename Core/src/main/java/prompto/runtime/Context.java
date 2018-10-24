@@ -533,7 +533,12 @@ public class Context implements IContext {
 		}
 		
 		@Override
-		public boolean hasAnnotation(String name) {
+		public boolean hasLocalAnnotation(String name) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public boolean hasInheritedAnnotation(Context context, String name) {
 			throw new UnsupportedOperationException();
 		}
 

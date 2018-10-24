@@ -6,6 +6,7 @@ import prompto.code.ICodeStore;
 import prompto.grammar.Annotation;
 import prompto.grammar.Identifier;
 import prompto.parser.Section;
+import prompto.runtime.Context;
 import prompto.statement.CommentStatement;
 
 public abstract class BaseDeclaration extends Section implements IDeclaration {
@@ -67,13 +68,18 @@ public abstract class BaseDeclaration extends Section implements IDeclaration {
 	}
 	
 	@Override
-	public boolean hasAnnotation(String name) {
+	public boolean hasLocalAnnotation(String name) {
 		if(annotations==null)
 			return false;
 		else {
 			String prefixed = name.startsWith("@") ? name : "@" + name;
 			return annotations.stream().anyMatch(a->a.isNamed(prefixed));
 		}
+	}
+	
+	@Override
+	public boolean hasInheritedAnnotation(Context context, String name) {
+		return false;
 	}
 	
 }

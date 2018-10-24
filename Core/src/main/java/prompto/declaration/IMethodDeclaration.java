@@ -45,10 +45,15 @@ public interface IMethodDeclaration extends IDeclaration {
 	void compileAssignments(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments);
 	String getTranspiledName(Context context);
 	default void fullDeclare(Transpiler transpiler, Identifier methodName) { throw new UnsupportedOperationException("fullDeclare " + this.getClass().getName()); }
-	default boolean containerHasAnnotation(String name) {
+	default boolean containerHasAnnotation(Context context, String name) {
 		CategoryDeclaration category = getMemberOf();
-		return category!=null &&  category.hasAnnotation(name);
+		return category!=null &&  category.hasAnnotation(context, name);
 	};
+	default boolean containerHasLocalAnnotation(String name) {
+		CategoryDeclaration category = getMemberOf();
+		return category!=null &&  category.hasLocalAnnotation(name);
+	};
+
 	
 }
 
