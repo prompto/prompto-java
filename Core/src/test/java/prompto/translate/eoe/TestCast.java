@@ -40,7 +40,7 @@ public class TestCast extends BaseEParserTest {
 	public void testCastInteger() throws Exception {
 		compareResourceEOE("cast/castInteger.pec");
 	}
-	
+
 	@Test
 	public void testCastMethod() throws Exception {
 		compareResourceEOE("cast/castMethod.pec");

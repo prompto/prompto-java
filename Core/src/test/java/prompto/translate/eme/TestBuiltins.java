@@ -27,6 +27,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCursorToList() throws Exception {
+		compareResourceEME("builtins/cursorToList.pec");
+	}
+
+	@Test
 	public void testDateDayOfMonth() throws Exception {
 		compareResourceEME("builtins/dateDayOfMonth.pec");
 	}

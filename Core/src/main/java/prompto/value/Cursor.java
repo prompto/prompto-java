@@ -152,5 +152,14 @@ public class Cursor extends BaseValue implements IIterable<IValue>, IterableWith
 			}
 		};
 	}
+	
+	public IValue toListValue() {
+		ListValue values = new ListValue(this.getItemType());
+		for(IValue item : this)
+			values.addItem(item);
+		return values;
+	}
+
+
 
 }

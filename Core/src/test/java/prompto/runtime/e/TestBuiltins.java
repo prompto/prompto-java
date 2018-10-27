@@ -80,6 +80,21 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedCursorToList() throws Exception {
+		checkInterpretedOutput("builtins/cursorToList.pec");
+	}
+
+	@Test
+	public void testCompiledCursorToList() throws Exception {
+		checkCompiledOutput("builtins/cursorToList.pec");
+	}
+
+	@Test
+	public void testTranspiledCursorToList() throws Exception {
+		checkTranspiledOutput("builtins/cursorToList.pec");
+	}
+
+	@Test
 	public void testInterpretedDateDayOfMonth() throws Exception {
 		checkInterpretedOutput("builtins/dateDayOfMonth.pec");
 	}

@@ -1,12 +1,27 @@
 package prompto.type;
 
 import java.lang.reflect.Type;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
+import prompto.compiler.Descriptor;
+import prompto.compiler.Flags;
+import prompto.compiler.InterfaceConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.declaration.BuiltInMethodDeclaration;
+import prompto.declaration.IMethodDeclaration;
+import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.IterableWithCounts;
+import prompto.intrinsic.PromptoList;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
+import prompto.value.Cursor;
+import prompto.value.IValue;
 
 public class CursorType extends IterableType {
 	
@@ -70,5 +85,49 @@ public class CursorType extends IterableType {
 	    else
 	    	super.transpileMember(transpiler, name);
 	}
+	
+	@Override
+	public Set<IMethodDeclaration> getMemberMethods(Context context, Identifier id) throws PromptoError {
+		switch(id.toString()) {
+		case "toList":
+			return new HashSet<>(Collections.singletonList(TO_LIST_METHOD));
+		default:
+			return super.getMemberMethods(context, id);
+		}
+	}
+
+	final IMethodDeclaration TO_LIST_METHOD = new BuiltInMethodDeclaration("toList") {
+		
+		@Override
+		public IValue interpret(Context context) throws PromptoError {
+			Cursor value = (Cursor)getValue(context);
+			return value.toListValue();
+		};
+		
+		
+		
+		@Override
+		public IType check(Context context, boolean isStart) {
+			return new ListType(itemType);
+		}
+
+		public boolean hasCompileExactInstanceMember() {
+			return true;
+		}
+		
+		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
+			// call replace method
+			Descriptor.Method descriptor = new Descriptor.Method(PromptoList.class);
+			InterfaceConstant constant = new InterfaceConstant(IterableWithCounts.class, "toList", descriptor);
+			method.addInstruction(Opcode.INVOKEINTERFACE, constant);
+			// done
+			return new ResultInfo(PromptoList.class);
+
+		}
+		
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
+			transpiler.append("toList()");
+		}
+	};
 
 }

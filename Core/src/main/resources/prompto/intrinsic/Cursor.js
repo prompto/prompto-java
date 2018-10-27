@@ -36,6 +36,13 @@ Cursor.prototype.iterate = function (fn, instance) {
     }
 };
 
+Cursor.prototype.toList = function() {
+	var array = [];
+	var iterator = this.iterator();
+	while(iterator.hasNext())
+		array.push(iterator.next());
+	return array;
+};
 
 Cursor.prototype.iterator = function() {
     var Iterator = function(cursor) {
