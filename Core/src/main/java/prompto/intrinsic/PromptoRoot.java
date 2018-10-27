@@ -60,12 +60,12 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMuta
 			
 			@Override
 			public Long getCount() {
-				return iterable.length();
+				return iterable.count();
 			}
 			
 			@Override
 			public Long getTotalCount() {
-				return iterable.totalLength();
+				return iterable.totalCount();
 			}
 
 			@Override

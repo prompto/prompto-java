@@ -326,11 +326,11 @@ public class MemStoreMirror {
 		}
 		
 		public long count() {
-			return iterable.length();
+			return iterable.count();
 		}
 		
 		public long totalCount() {
-			return iterable.totalLength();
+			return iterable.totalCount();
 		}
 
 		public boolean hasNext() {

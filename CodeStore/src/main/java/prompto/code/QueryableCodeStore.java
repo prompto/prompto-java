@@ -495,8 +495,8 @@ public class QueryableCodeStore extends BaseCodeStore {
 		}
 		return new IStoredIterable() {
 			@Override public Iterator<IStored> iterator() { return distinct.iterator(); }
-			@Override public long length() { return distinct.size(); }
-			@Override public long totalLength() { return distinct.size(); }
+			@Override public long count() { return distinct.size(); }
+			@Override public long totalCount() { return distinct.size(); }
 		};
 	}
 

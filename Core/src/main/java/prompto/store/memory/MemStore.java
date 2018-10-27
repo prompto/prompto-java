@@ -137,11 +137,11 @@ public final class MemStore implements IStore {
 		final List<StorableDocument> slicedDocs = slice(q, allDocs);
 		return new IStoredIterable() {
 			@Override
-			public long length() {
+			public long count() {
 				return (long)slicedDocs.size();
 			}
 			@Override
-			public long totalLength() {
+			public long totalCount() {
 				return (long)allDocs.size(); 
 			}
 			@SuppressWarnings("unchecked")

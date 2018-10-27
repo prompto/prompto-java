@@ -50,12 +50,12 @@ public class Cursor extends BaseValue implements IIterable<IValue>, IterableWith
 	
 	@Override
 	public Long getCount() {
-		return iterable.length();
+		return iterable.count();
 	}
 	
 	@Override
 	public Long getTotalCount() {
-		return iterable.totalLength();
+		return iterable.totalCount();
 	}
 
 	@Override
@@ -120,8 +120,10 @@ public class Cursor extends BaseValue implements IIterable<IValue>, IterableWith
 				// serialize Cursor as list
 				IType type = new ListType(getItemType());
 				generator.writeString(type.getTypeName());
-				generator.writeFieldName("totalLength");
-				generator.writeNumber(iterable.totalLength());
+				generator.writeFieldName("count");
+				generator.writeNumber(iterable.count());
+				generator.writeFieldName("totalCount");
+				generator.writeNumber(iterable.totalCount());
 				generator.writeFieldName("value");
 			}
 			generator.writeStartArray();
