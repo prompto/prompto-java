@@ -20,7 +20,7 @@ import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.statement.UnresolvedCall;
 import prompto.store.AttributeInfo;
-import prompto.store.IDataStore;
+import prompto.store.DataStore;
 import prompto.store.IQuery;
 import prompto.store.IQueryBuilder;
 import prompto.store.IQueryBuilder.MatchOp;
@@ -202,7 +202,7 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 
 	protected void compileNewQueryBuilder(Context context, MethodInfo method, Flags flags) {
 		// need the data store
-		MethodConstant m = new MethodConstant(IDataStore.class, "getInstance", IStore.class);
+		MethodConstant m = new MethodConstant(DataStore.class, "getInstance", IStore.class);
 		method.addInstruction(Opcode.INVOKESTATIC, m);
 		// need a copy for fetch one
 		method.addInstruction(Opcode.DUP);

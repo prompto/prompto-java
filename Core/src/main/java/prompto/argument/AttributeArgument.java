@@ -23,7 +23,7 @@ import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
-import prompto.store.IDataStore;
+import prompto.store.DataStore;
 import prompto.store.IStore;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
@@ -95,7 +95,7 @@ public class AttributeArgument extends BaseArgument implements INamedArgument {
 	public IType getType(Context context) {
 		// dbId type can only be resolved at runtime
 		if(IStore.dbIdName.equals(id.toString()))
-			return TypeUtils.typeToIType(IDataStore.getInstance().getDbIdClass());
+			return TypeUtils.typeToIType(DataStore.getInstance().getDbIdClass());
 		else {
 			IDeclaration named = context.getRegisteredDeclaration(IDeclaration.class, id);
 			return named.getType(context);

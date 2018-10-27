@@ -40,7 +40,7 @@ import prompto.intrinsic.PromptoEnum;
 import prompto.intrinsic.PromptoRoot;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
-import prompto.store.IDataStore;
+import prompto.store.DataStore;
 import prompto.store.IStorable;
 import prompto.store.IStorable.IDbIdListener;
 import prompto.store.IStore;
@@ -971,7 +971,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	private void compileNewStorableInstance(Context context, MethodInfo method, Flags flags) {
 		ClassConstant thisClass = method.getClassFile().getThisClass();
 		method.addInstruction(Opcode.ALOAD_0, thisClass); // -> this
-		MethodConstant m = new MethodConstant(new ClassConstant(IDataStore.class), "getInstance", IStore.class);
+		MethodConstant m = new MethodConstant(new ClassConstant(DataStore.class), "getInstance", IStore.class);
 		method.addInstruction(Opcode.INVOKESTATIC, m); // -> this, IStore
 		FieldConstant f = new FieldConstant(thisClass, "category", String[].class);
 		method.addInstruction(Opcode.GETSTATIC, f); // -> this, IStore, String[]

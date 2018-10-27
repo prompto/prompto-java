@@ -17,7 +17,7 @@ import prompto.error.NotStorableError;
 import prompto.store.IStorable;
 import prompto.store.IStorable.IDbIdListener;
 import prompto.store.IStorable.IDbIdProvider;
-import prompto.store.IDataStore;
+import prompto.store.DataStore;
 import prompto.store.IStored;
 import prompto.store.IStoredIterable;
 import prompto.store.InvalidValueError;
@@ -47,8 +47,8 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMuta
 	public static PromptoRoot newInstanceFromDbIdRef(Object value) {
 		if(value instanceof PromptoRoot)
 			return (PromptoRoot)value;
-		if(IDataStore.getInstance().getDbIdClass().isInstance(value))
-			value = IDataStore.getInstance().fetchUnique(value);
+		if(DataStore.getInstance().getDbIdClass().isInstance(value))
+			value = DataStore.getInstance().fetchUnique(value);
 		if(value instanceof IStored)
 			return newInstance((IStored)value);
 		else

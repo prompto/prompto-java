@@ -45,7 +45,7 @@ import prompto.runtime.MethodFinder;
 import prompto.runtime.Score;
 import prompto.statement.MethodCall;
 import prompto.store.Family;
-import prompto.store.IDataStore;
+import prompto.store.DataStore;
 import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.transpiler.Transpiler;
@@ -469,7 +469,7 @@ public class CategoryType extends BaseType {
 
 	private void readJSONDbId(Context context, JsonNode value, IInstance instance) throws PromptoError {
 		if(value.has(IStore.dbIdName)) {
-			IType fieldType = TypeUtils.typeToIType(IDataStore.getInstance().getDbIdClass());
+			IType fieldType = TypeUtils.typeToIType(DataStore.getInstance().getDbIdClass());
 			JsonNode fieldData = value.get(IStore.dbIdName);
 			if(fieldData.isObject())
 				fieldData = fieldData.get("value");
@@ -501,8 +501,8 @@ public class CategoryType extends BaseType {
 	}
 
 	private IValue convertJavaValueToPromptoValue(Context context, CategoryDeclaration decl, Object value) throws PromptoError {
-		if(IDataStore.getInstance().getDbIdClass().isInstance(value))
-			value = IDataStore.getInstance().fetchUnique(value);
+		if(DataStore.getInstance().getDbIdClass().isInstance(value))
+			value = DataStore.getInstance().fetchUnique(value);
 		if(value==null)
 			return NullValue.instance();
 		else if(value instanceof IStored)

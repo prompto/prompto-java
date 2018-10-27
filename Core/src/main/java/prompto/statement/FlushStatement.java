@@ -9,7 +9,7 @@ import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
-import prompto.store.IDataStore;
+import prompto.store.DataStore;
 import prompto.store.IStore;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
@@ -26,14 +26,14 @@ public class FlushStatement extends SimpleStatement {
 
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		IDataStore.getInstance().flush();
+		DataStore.getInstance().flush();
 		return null;
 	}
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		// need the data store
-		MethodConstant m = new MethodConstant(IDataStore.class, "getInstance", IStore.class);
+		MethodConstant m = new MethodConstant(DataStore.class, "getInstance", IStore.class);
 		method.addInstruction(Opcode.INVOKESTATIC, m);
 		// call flush
 		InterfaceConstant i = new InterfaceConstant(IStore.class, "flush", void.class);

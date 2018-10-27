@@ -24,7 +24,7 @@ import prompto.grammar.Identifier;
 import prompto.grammar.Operator;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
-import prompto.store.IDataStore;
+import prompto.store.DataStore;
 import prompto.store.IStorable;
 import prompto.store.IStore;
 import prompto.type.CategoryType;
@@ -47,7 +47,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		this.declaration = declaration;
 		if(declaration.isStorable()) {
 			List<String> categories = declaration.collectCategories(context);
-			storable = IDataStore.getInstance().newStorable(categories, null);
+			storable = DataStore.getInstance().newStorable(categories, null);
 		}
 	}
 	

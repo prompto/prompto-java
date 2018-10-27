@@ -38,7 +38,7 @@ import prompto.intrinsic.PromptoVersion;
 import prompto.java.JavaIdentifierExpression;
 import prompto.libraries.Libraries;
 import prompto.store.AttributeInfo;
-import prompto.store.IDataStore;
+import prompto.store.DataStore;
 import prompto.store.IStore;
 import prompto.store.IStoreFactory;
 import prompto.store.memory.MemStore;
@@ -226,7 +226,7 @@ public abstract class Standalone {
 	}
 
 	public static IStore bootstrapDataStore(IStore store) {
-		IDataStore.setGlobal(store);
+		DataStore.setGlobal(store);
 		return store;
 	}
 

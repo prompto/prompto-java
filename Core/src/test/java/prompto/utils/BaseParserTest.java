@@ -28,7 +28,7 @@ import prompto.runtime.Context;
 import prompto.runtime.Executor;
 import prompto.runtime.Interpreter;
 import prompto.runtime.utils.Out;
-import prompto.store.IDataStore;
+import prompto.store.DataStore;
 import prompto.store.memory.MemStore;
 import prompto.transpiler.Nashorn8Engine;
 
@@ -193,7 +193,7 @@ public abstract class BaseParserTest extends BaseTest {
 	}
 
 	protected void checkOutput(String resource, ResourceRunner runner) throws Exception {
-		IDataStore.setInstance(new MemStore());
+		DataStore.setInstance(new MemStore());
 		boolean trimNewLines = runner.runResource(resource, false);
 		String read = Out.read();
 		if(trimNewLines)

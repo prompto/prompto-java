@@ -12,7 +12,7 @@ import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.Identifier;
 import prompto.parser.ECleverParser;
 import prompto.runtime.Context;
-import prompto.store.IDataStore;
+import prompto.store.DataStore;
 import prompto.store.IStore;
 import prompto.type.IType;
 import prompto.utils.TypeUtils;
@@ -34,7 +34,7 @@ public class Parameter {
 		param.setName(field.asText());
 		// dbId type resolves to Any category, when it's actually a value, need a hack for this one
 		if(IStore.dbIdName.equals(param.getName()))
-			param.setType(TypeUtils.typeToIType(IDataStore.getInstance().getDbIdClass()));
+			param.setType(TypeUtils.typeToIType(DataStore.getInstance().getDbIdClass()));
 		else {
 			field = jsonParam.get("type");
 			if(field==null)

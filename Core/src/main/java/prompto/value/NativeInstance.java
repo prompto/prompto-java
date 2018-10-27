@@ -27,7 +27,7 @@ import prompto.grammar.Identifier;
 import prompto.java.JavaClassType;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
-import prompto.store.IDataStore;
+import prompto.store.DataStore;
 import prompto.store.IStorable;
 import prompto.store.IStore;
 import prompto.type.CategoryType;
@@ -46,7 +46,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 		this.instance = makeInstance(context);
 		if(declaration.isStorable()) {
 			List<String> categories = Arrays.asList(declaration.getName()); 
-			storable = IDataStore.getInstance().newStorable(categories, null);
+			storable = DataStore.getInstance().newStorable(categories, null);
 		}
 	}
 	
@@ -56,7 +56,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 		this.instance = instance;
 		if(declaration.isStorable()) {
 			List<String> categories = Arrays.asList(declaration.getName()); 
-			storable = IDataStore.getInstance().newStorable(categories, null);
+			storable = DataStore.getInstance().newStorable(categories, null);
 		}
 	}
 	

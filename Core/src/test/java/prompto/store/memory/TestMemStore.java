@@ -22,7 +22,7 @@ import prompto.intrinsic.PromptoList;
 import prompto.literal.TextLiteral;
 import prompto.runtime.Context;
 import prompto.store.AttributeInfo;
-import prompto.store.IDataStore;
+import prompto.store.DataStore;
 import prompto.store.IQueryBuilder;
 import prompto.store.IStorable;
 import prompto.store.IStored;
@@ -39,7 +39,7 @@ public class TestMemStore {
 	
 	@Before
 	public void before() throws Exception {
-		IDataStore.setInstance(new MemStore());
+		DataStore.setInstance(new MemStore());
 		context = Context.newGlobalContext();
 		AttributeDeclaration attr = new AttributeDeclaration(new Identifier("__id__"), TextType.instance());
 		attr.register(context);
@@ -53,9 +53,9 @@ public class TestMemStore {
 	}
 
 	private IStorable store(String name, String value) throws Exception {
-		IStorable doc = IDataStore.getInstance().newStorable(new String[0], null);
+		IStorable doc = DataStore.getInstance().newStorable(new String[0], null);
 		doc.setData(name, value);
-		IDataStore.getInstance().store(doc);
+		DataStore.getInstance().store(doc);
 		return doc;
 	}
 
@@ -65,7 +65,7 @@ public class TestMemStore {
 		IQueryBuilder builder = new QueryBuilder();
 		IPredicateExpression filter = createPredicate("__id__", EqOp.EQUALS, "__test__");
 		filter.interpretQuery(context, builder);
-		IStored d = IDataStore.getInstance().fetchOne(builder.build());
+		IStored d = DataStore.getInstance().fetchOne(builder.build());
 		assertNull(d);
 	}
 
@@ -76,7 +76,7 @@ public class TestMemStore {
 		IQueryBuilder builder = new QueryBuilder();
 		IPredicateExpression filter = createPredicate("__id__", EqOp.EQUALS, "__test__");
 		filter.interpretQuery(context, builder);
-		IStored d2 = IDataStore.getInstance().fetchOne(builder.build());
+		IStored d2 = DataStore.getInstance().fetchOne(builder.build());
 		assertEquals(d1,  d2);
 	}
 
@@ -86,7 +86,7 @@ public class TestMemStore {
 		IQueryBuilder builder = new QueryBuilder();
 		IPredicateExpression filter = createPredicate("__id__", EqOp.EQUALS, "__test1__");
 		filter.interpretQuery(context, builder);
-		IStored d2 = IDataStore.getInstance().fetchOne(builder.build());
+		IStored d2 = DataStore.getInstance().fetchOne(builder.build());
 		assertNull(d2);
 	}
 
@@ -98,7 +98,7 @@ public class TestMemStore {
 		IQueryBuilder builder = new QueryBuilder();
 		IPredicateExpression filter = createPredicate("__id__", EqOp.EQUALS, "__test2__");
 		filter.interpretQuery(context, builder);
-		IStored d4 = IDataStore.getInstance().fetchOne(builder.build());
+		IStored d4 = DataStore.getInstance().fetchOne(builder.build());
 		assertEquals(d2,  d4);
 	}
 
@@ -107,7 +107,7 @@ public class TestMemStore {
 		IQueryBuilder builder = new QueryBuilder();
 		IPredicateExpression filter = createPredicate("__id__", EqOp.EQUALS, "__test__");
 		filter.interpretQuery(context, builder);
-		IStoredIterable iterable = IDataStore.getInstance().fetchMany(builder.build());
+		IStoredIterable iterable = DataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertFalse(docs.hasNext());
 	}
@@ -119,7 +119,7 @@ public class TestMemStore {
 		IQueryBuilder builder = new QueryBuilder();
 		IPredicateExpression filter = createPredicate("__id__", EqOp.EQUALS, "__test1__");
 		filter.interpretQuery(context, builder);
-		IStoredIterable iterable = IDataStore.getInstance().fetchMany(builder.build());
+		IStoredIterable iterable = DataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertTrue(docs.hasNext());
 		assertEquals(d1,  docs.next());
@@ -132,7 +132,7 @@ public class TestMemStore {
 		IQueryBuilder builder = new QueryBuilder();
 		IPredicateExpression filter = createPredicate("__id__", EqOp.EQUALS, "__test2__");
 		filter.interpretQuery(context, builder);
-		IStoredIterable iterable = IDataStore.getInstance().fetchMany(builder.build());
+		IStoredIterable iterable = DataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertFalse(docs.hasNext());
 	}
@@ -146,7 +146,7 @@ public class TestMemStore {
 		IQueryBuilder builder = new QueryBuilder();
 		IPredicateExpression filter = createPredicate("__id__", EqOp.EQUALS, "__test1__");
 		filter.interpretQuery(context, builder);
-		IStoredIterable iterable = IDataStore.getInstance().fetchMany(builder.build());
+		IStoredIterable iterable = DataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertTrue(docs.hasNext());
 		docs.next();
@@ -169,7 +169,7 @@ public class TestMemStore {
 						new IdentifierList(new Identifier("__id__")), 
 						false));
 		obc.interpretQuery(context, builder);
-		IStoredIterable iterable = IDataStore.getInstance().fetchMany(builder.build());
+		IStoredIterable iterable = DataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertTrue(docs.hasNext());
 		assertEquals(d1,  docs.next());
@@ -194,7 +194,7 @@ public class TestMemStore {
 						new IdentifierList(new Identifier("__id__")), 
 						true));
 		obc.interpretQuery(context, builder);
-		IStoredIterable iterable = IDataStore.getInstance().fetchMany(builder.build());
+		IStoredIterable iterable = DataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertTrue(docs.hasNext());
 		assertEquals(d4,  docs.next());
@@ -212,7 +212,7 @@ public class TestMemStore {
 		IQueryBuilder builder = new QueryBuilder()
 			.first(1L)
 			.last(10L);
-		IStoredIterable iterable = IDataStore.getInstance().fetchMany(builder.build());
+		IStoredIterable iterable = DataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertFalse(docs.hasNext());
 	}
@@ -223,7 +223,7 @@ public class TestMemStore {
 		IQueryBuilder builder = new QueryBuilder()
 			.first(1L)
 			.last(10L);
-		IStoredIterable iterable = IDataStore.getInstance().fetchMany(builder.build());
+		IStoredIterable iterable = DataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertTrue(docs.hasNext());
 		assertEquals(d1,  docs.next());
@@ -239,7 +239,7 @@ public class TestMemStore {
 		IQueryBuilder builder = new QueryBuilder()
 			.first(1L)
 			.last(4L);
-		IStoredIterable iterable = IDataStore.getInstance().fetchMany(builder.build());
+		IStoredIterable iterable = DataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertTrue(docs.hasNext());
 		docs.next();
@@ -261,7 +261,7 @@ public class TestMemStore {
 		IQueryBuilder builder = new QueryBuilder()
 			.first(2L)
 			.last(3L);
-		IStoredIterable iterable = IDataStore.getInstance().fetchMany(builder.build());
+		IStoredIterable iterable = DataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertTrue(docs.hasNext());
 		docs.next();
@@ -281,7 +281,7 @@ public class TestMemStore {
 		IQueryBuilder builder = new QueryBuilder();
 		AttributeInfo info = AttributeInfo.CATEGORY;
 		builder.verify(info, MatchOp.CONTAINS, "Application");
-		IStored doc = IDataStore.getInstance().fetchOne(builder.build());
+		IStored doc = DataStore.getInstance().fetchOne(builder.build());
 		assertEquals(d1, doc);
 	}
 
@@ -296,7 +296,7 @@ public class TestMemStore {
 		IQueryBuilder builder = new QueryBuilder();
 		AttributeInfo info = AttributeInfo.CATEGORY;
 		builder.verify(info, MatchOp.CONTAINS, "Project");
-		IStored doc = IDataStore.getInstance().fetchOne(builder.build());
+		IStored doc = DataStore.getInstance().fetchOne(builder.build());
 		assertEquals(d1, doc);
 	}
 
@@ -311,7 +311,7 @@ public class TestMemStore {
 		IQueryBuilder builder = new QueryBuilder();
 		AttributeInfo info = AttributeInfo.CATEGORY;
 		builder.verify(info, MatchOp.CONTAINS, "Application");
-		IStoredIterable iterable = IDataStore.getInstance().fetchMany(builder.build());
+		IStoredIterable iterable = DataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertTrue(docs.hasNext());
 		docs.next();

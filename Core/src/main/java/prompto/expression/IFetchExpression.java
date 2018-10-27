@@ -3,7 +3,7 @@ package prompto.expression;
 import prompto.value.IValue;
 import prompto.error.PromptoError;
 import prompto.runtime.Context;
-import prompto.store.IDataStore;
+import prompto.store.DataStore;
 import prompto.store.IStore;
 
 public interface IFetchExpression extends IExpression {
@@ -12,7 +12,7 @@ public interface IFetchExpression extends IExpression {
 	Object fetchRaw(IStore store);
 	
 	default IValue interpret(Context context) throws PromptoError {
-		return fetch(context, IDataStore.getInstance());
+		return fetch(context, DataStore.getInstance());
 	}
 
 }

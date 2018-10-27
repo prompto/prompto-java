@@ -3,7 +3,7 @@ package prompto.store;
 import prompto.store.memory.MemStore;
 import prompto.utils.ISingleton;
 
-public interface IDataStore extends IStore {
+public abstract class DataStore {
 
 	static ISingleton<IStore> globalInstance = new ISingleton<IStore>() {
 		IStore instance = new MemStore();
@@ -13,11 +13,11 @@ public interface IDataStore extends IStore {
 	
 	static ThreadLocal<IStore> threadInstance = ThreadLocal.withInitial(()->globalInstance.get());
 	
-	static void setGlobal(IStore store) {
+	public static void setGlobal(IStore store) {
 		globalInstance.set(store);
 	}
 	
-	static void setInstance(IStore store) {
+	public static void setInstance(IStore store) {
 		threadInstance.set(store);
 	}
 

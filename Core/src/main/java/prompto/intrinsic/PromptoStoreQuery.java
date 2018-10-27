@@ -9,7 +9,7 @@ import java.util.Set;
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
-import prompto.store.IDataStore;
+import prompto.store.DataStore;
 import prompto.store.IStorable;
 import prompto.store.IStore;
 import prompto.value.IInstance;
@@ -28,7 +28,7 @@ public class PromptoStoreQuery {
 		if(storables.isEmpty())
 			storables = null;
 		if(deletables!=null || storables!=null) {
-			IStore store = IDataStore.getInstance();
+			IStore store = DataStore.getInstance();
 			try {
 				store.store(deletables, storables==null ? null : storables.values());
 			} catch(PromptoError e) {
