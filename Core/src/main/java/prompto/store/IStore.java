@@ -16,6 +16,7 @@ public interface IStore {
 	boolean checkConnection();
 
 	Class<?> getDbIdClass();
+	Object newDbId();
 	Object convertToDbId(Object dbId);
 	AttributeInfo getAttributeInfo(String name) throws PromptoError;
 	void createOrUpdateAttributes(Collection<AttributeInfo> attributes) throws PromptoError;

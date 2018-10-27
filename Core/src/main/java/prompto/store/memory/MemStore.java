@@ -44,6 +44,11 @@ public final class MemStore implements IStore {
 	}
 	
 	@Override
+	public Object newDbId() {
+		return Long.valueOf(lastDbId.incrementAndGet());
+	}
+	
+	@Override
 	public Long convertToDbId(Object dbId) {
 		if(dbId instanceof Long)
 			return (Long)dbId;
