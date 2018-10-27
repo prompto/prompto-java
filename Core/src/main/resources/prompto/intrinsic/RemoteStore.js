@@ -1,5 +1,6 @@
 function StoredDocument(categories, dbId) {
-    this.categories = categories;
+	// use reserved keyword explicitly
+	this.category = categories;
     this.dbId = dbId;
     return this;
 }
@@ -19,7 +20,8 @@ StoredDocument.prototype.matches = function(predicate) {
 function StorableDocument(categories) {
     if(!categories)
         throw new Error("!!!");
-    this.categories = categories;
+    // use reserved keyword explicitly
+    this.category = categories;
     this.document = null;
     return this;
 }
@@ -31,7 +33,7 @@ Object.defineProperty(StorableDocument.prototype, "dirty", {
     set : function(value) {
         if (value) {
             if(!this.document)
-                this.document = new StoredDocument(this.categories, DataStore.instance.nextDbId());
+                this.document = new StoredDocument(this.category, DataStore.instance.nextDbId());
         } else
             this.document = null;
     }
@@ -52,10 +54,40 @@ StorableDocument.prototype.setData = function(name, value) {
     this.document[name] = value;
 };
 
+
+function readValue(value) {
+	switch(value.type) {
+	case "UUID":
+		return UUID.fromString(value.value);
+	default:
+		throw new Error("Unsupported " + value.type);
+	}	
+}
+
+function StoredIterable(records) {
+	this.index = 0;
+	this.count = function() { return records.count; };
+	this.totalCount = function() { return records.totalCount; };
+	this.hasNext = function() { return this.index < records.count; };
+	this.next = function() { 
+		var record = records.value[this.index++];
+		var stored = new StoredDocument([record.type]);
+		Object.getOwnPropertyNames(record.value)
+			.forEach(function(name) {
+				var value = record.value[name];
+				if(typeof(value)==typeof({}))
+					value = readValue(value)
+				stored[name] = value;
+			});
+		return stored;
+	};
+	return this;
+}
+
 function RemoteStore() {
 	this.lastDbId = 0;
 	this.nextDbId = function() {
-		return { temp: --this.lastDbId };
+		return { tempDbId: --this.lastDbId };
 	};
 	this.newStorableDocument = function(categories) {
 		return new StorableDocument(categories);
@@ -80,16 +112,17 @@ function RemoteStore() {
 		request.send(body);
 		return response;
 	}
+	this.store = function(toDel, toStore) {
+		var data = {};
+		if(toDel)
+			data.toDelete = toDel;
+		if(toStore)
+			data.toStore = Array.from(toStore).map(function(thing) { return thing.document; });
+		this.fetchSync("/ws/store/deleteAndStore", JSON.stringify(data));
+	};
 	this.fetchMany = function(query) {
-		var records = this.fetchSync("/ws/store/fetchMany", JSON.stringify(query));
-		// make it look like a StoredIterable
-		return {
-			index: 0,
-			count: function() { return records.count; },
-			totalCount: function() { return records.totalCount; },
-			hasNext: function() { this.index < records.count; },
-			next: function() { return records.data[this.index++]; }
-		};
+		var response = this.fetchSync("/ws/store/fetchMany", JSON.stringify(query));
+		return new StoredIterable(response.data);
 	};
 	return this; 
 }

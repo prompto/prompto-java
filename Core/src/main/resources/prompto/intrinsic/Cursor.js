@@ -22,7 +22,7 @@ Cursor.prototype.iterate = function (fn, instance) {
         iterator: function() {
             var iterator = self.iterator();
             return {
-                hasNext: function() { iterator.hasNext(); },
+                hasNext: function() { return iterator.hasNext(); },
                 next: function() { return fn(iterator.next()); }
             };
         },
