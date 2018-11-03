@@ -158,24 +158,23 @@ public final class MemStore implements IStore {
 	}
 	
 	private List<StorableDocument> fetchManyDocs(Query query) throws PromptoError {
-		List<StorableDocument> docs = filterDocs((query).getPredicate());
-		docs = sort(query.getOrdering(), docs);
+		List<StorableDocument> docs = filterDocs(query==null ? null : query.getPredicate());
+		if(query!=null)
+			docs = sort(query.getOrdering(), docs);
 		return docs;
 	}
 
 	private List<StorableDocument> filterDocs(IPredicate predicate) throws PromptoError {
-		// create list of filtered docs
-		List<StorableDocument> docs = new ArrayList<StorableDocument>();
-		List<StorableDocument> all = new ArrayList<>(documents.values()); // need a copy to avoid concurrent modification
-		for(StorableDocument doc : all) {
-			if(doc.matches(predicate))
-				docs.add(doc);
-		}
-		return docs;
+		if(predicate==null)
+			return new ArrayList<>(documents.values()); // need a copy to avoid concurrent modification;
+		else
+			return documents.values().stream()
+					.filter(doc->doc.matches(predicate))
+					.collect(Collectors.toList());
 	}
 	
 	private List<StorableDocument> slice(Query query, List<StorableDocument> docs) {
-		if(docs==null || docs.isEmpty())
+		if(docs==null || docs.isEmpty() || query==null)
 			return docs;
 		Long first = query.getFirst();
 		Long last = query.getLast();
