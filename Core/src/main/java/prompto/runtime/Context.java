@@ -997,7 +997,12 @@ public class Context implements IContext {
 				return actual;
 			ConcreteCategoryDeclaration decl = getDeclaration();
 			MethodDeclarationMap methods = decl.getMemberMethods(this, id);
-			return methods.isEmpty() ? null : methods;
+			if(methods!=null && !methods.isEmpty())
+				return methods;
+			else if(decl.hasAttribute(this, id))
+				return getRegisteredDeclaration(AttributeDeclaration.class, id);
+			else
+				return null;
 		}
 		
 		@SuppressWarnings("unchecked")
