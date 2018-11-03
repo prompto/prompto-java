@@ -225,7 +225,7 @@ public abstract class Standalone {
 			logger.info(()->"Additional argument: -version (optional)");
 	}
 
-	public static IStore bootstrapDataStore(IStore store) {
+	public static IStore bootstrapDataStore(IStore store) throws Exception {
 		DataStore.setGlobal(store);
 		return store;
 	}

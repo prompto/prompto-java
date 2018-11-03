@@ -2,6 +2,7 @@ package prompto.store;
 
 import prompto.store.memory.MemStore;
 import prompto.utils.ISingleton;
+import prompto.utils.ThreadUtils;
 
 public abstract class DataStore {
 
@@ -13,10 +14,18 @@ public abstract class DataStore {
 	
 	static ThreadLocal<IStore> threadInstance = ThreadLocal.withInitial(()->globalInstance.get());
 	
-	public static void setGlobal(IStore store) {
+	public static void setGlobal(IStore store) throws Exception {
 		globalInstance.set(store);
+		cleanupDataStoreInAllThreads();
 	}
-	
+
+	private static void cleanupDataStoreInAllThreads() throws Exception {
+		Thread[] threads = ThreadUtils.getActiveThreads();
+		for(Thread thread : threads)
+			ThreadUtils.removeThreadLocalForThread(thread, threadInstance);
+	}
+
+
 	public static void setInstance(IStore store) {
 		threadInstance.set(store);
 	}
