@@ -9,10 +9,14 @@ $Root.prototype.instanceOf = function(type) {
     return this.category.indexOf(type)>=0;
 };
 
-$Root.prototype.toString = function() {
-    var names = Object.getOwnPropertyNames(this).filter(function(name) {
+$Root.prototype.getAttributeNames = function() {
+    return Object.getOwnPropertyNames(this).filter(function(name) {
         return name!=="dbId" && name!=="mutable" && name!=="storable" && name!=="category" && typeof(this[name])!='function';
     }, this);
+};
+
+$Root.prototype.toString = function() {
+    var names = this.getAttributeNames();
     var vals = names.map(function (name) {
         return name + ':' + this[name];
     }, this);
@@ -49,13 +53,15 @@ $Root.prototype.collectStorables = function(storablesToAdd) {
         if(!this.dbId)
             this.dbId = this.storable.getOrCreateDbId();
         storablesToAdd.add(this.storable);
-        // TODO: traverse object tree
     }
-
+    var names = this.getAttributeNames();
+    names.forEach(function(name) {
+    	if(this[name] && this[name].collectStorables)
+    		this[name].collectStorables(storablesToAdd);
+    }, this);
 };
 
 $Root.prototype.collectDbIds = function(idsToDelete) {
     if(this.dbId)
         idsToDelete.add(this.dbId);
-    // TODO: traverse object tree
 };
