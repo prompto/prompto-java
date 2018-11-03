@@ -190,7 +190,7 @@ import prompto.literal.SetLiteral;
 import prompto.literal.TextLiteral;
 import prompto.literal.TimeLiteral;
 import prompto.literal.TupleLiteral;
-import prompto.literal.UUIDLiteral;
+import prompto.literal.UuidLiteral;
 import prompto.literal.VersionLiteral;
 import static prompto.parser.MParser.*;
 import prompto.python.Python2NativeCall;
@@ -263,7 +263,7 @@ import prompto.type.PeriodType;
 import prompto.type.SetType;
 import prompto.type.TextType;
 import prompto.type.TimeType;
-import prompto.type.UUIDType;
+import prompto.type.UuidType;
 import prompto.type.VersionType;
 import prompto.utils.AssertionList;
 import prompto.utils.ExpressionList;
@@ -2943,13 +2943,13 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitUUIDLiteral(UUIDLiteralContext ctx) {
-		setNodeValue(ctx, new UUIDLiteral(ctx.t.getText()));
+		setNodeValue(ctx, new UuidLiteral(ctx.t.getText()));
 	}
 	
 	
 	@Override
 	public void exitUUIDType(UUIDTypeContext ctx) {
-		setNodeValue(ctx, UUIDType.instance());
+		setNodeValue(ctx, UuidType.instance());
 	}
 	
 	@Override

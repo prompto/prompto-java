@@ -10,15 +10,15 @@ import prompto.value.IValue;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-public class UUIDType extends NativeType {
+public class UuidType extends NativeType {
 
-	static UUIDType instance = new UUIDType();
+	static UuidType instance = new UuidType();
 	
-	public static UUIDType instance() {
+	public static UuidType instance() {
 		return instance;
 	}
 	
-	private UUIDType() {
+	private UuidType() {
 		super(Family.UUID);
 	}
 	
@@ -29,11 +29,11 @@ public class UUIDType extends NativeType {
 	
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
-		return new prompto.value.UUIDValue(value.asText());
+		return new prompto.value.UuidValue(value.asText());
 	}
 	
 	@Override
 	public IValue convertJavaValueToIValue(Context context, Object value) {
-		return new prompto.value.UUIDValue((UUID)value);
+		return new prompto.value.UuidValue((UUID)value);
 	}
 }

@@ -7,21 +7,21 @@ import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
-import prompto.type.UUIDType;
+import prompto.type.UuidType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
-public class UUIDValue extends BaseValue {
+public class UuidValue extends BaseValue {
 
 	java.util.UUID value;
 	
-	public UUIDValue(String value) {
-		super(UUIDType.instance());
+	public UuidValue(String value) {
+		super(UuidType.instance());
 		this.value = java.util.UUID.fromString(value);
 	}
 
-	public UUIDValue(java.util.UUID value) {
-		super(UUIDType.instance());
+	public UuidValue(java.util.UUID value) {
+		super(UuidType.instance());
 		this.value = value;
 	}
 
@@ -45,7 +45,7 @@ public class UUIDValue extends BaseValue {
 			if(withType) {
 				generator.writeStartObject();
 				generator.writeFieldName("type");
-				generator.writeString(UUIDType.instance().getTypeName());
+				generator.writeString(UuidType.instance().getTypeName());
 				generator.writeFieldName("value");
 				generator.writeString(this.toString());
 				generator.writeEndObject();

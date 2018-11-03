@@ -12,23 +12,23 @@ import prompto.compiler.StringConstant;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
-import prompto.type.UUIDType;
-import prompto.value.UUIDValue;
+import prompto.type.UuidType;
+import prompto.value.UuidValue;
 
 
-public class UUIDLiteral extends Literal<UUIDValue> {
+public class UuidLiteral extends Literal<UuidValue> {
 
-	public UUIDLiteral(String text) {
+	public UuidLiteral(String text) {
 		super(text, parse(text));
 	}
 
-	private static UUIDValue parse(String text) {
-		return new UUIDValue(java.util.UUID.fromString(text.substring(1, text.length()-1)));
+	private static UuidValue parse(String text) {
+		return new UuidValue(java.util.UUID.fromString(text.substring(1, text.length()-1)));
 	}
 
 	@Override
 	public IType check(Context context) {
-		return UUIDType.instance();
+		return UuidType.instance();
 	}
 	
 	@Override
