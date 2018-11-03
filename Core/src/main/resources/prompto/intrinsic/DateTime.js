@@ -79,30 +79,8 @@ DateTime.prototype.subtractDateTime = function(other) {
     data[7] = this.date.getUTCMilliseconds() - other.date.getUTCMilliseconds();
     return new Period(data);
 };
-/*
-DateTime.prototype.subtractDate = function(value) {
-    var numDays = (this.date.valueOf() - value.valueOf())/(24*60*60*1000);
-    var data = [];
-    data[3] = Math.floor(numDays);
-    data[4] = this.date.getUTCHours();
-    data[5] = this.date.getUTCMinutes();
-    data[6] = this.date.getUTCSeconds();
-    data[7] = this.date.getUTCMilliseconds();
-    return new Period(data);
-};
 
-DateTime.prototype.subtractTime = function(value) {
-    var data = [];
-    data[0] = this.date.getUTCFullYear();
-    data[1] = this.date.getUTCMonth();
-    data[3] = this.date.getUTCDate();
-    data[4] = this.date.getUTCHours() - value.getUTCHours();
-    data[5] = this.date.getUTCMinutes() - value.getUTCMinutes();
-    data[6] = this.date.getUTCSeconds() - value.getUTCSeconds();
-    data[7] = this.date.getUTCMilliseconds() - value.getUTCMilliseconds();
-    return new Period(data);
-};
-*/
+
 DateTime.prototype.subtractPeriod = function(value) {
     var date = new Date();
     var year = this.date.getUTCFullYear() - (value.years || 0);
@@ -125,10 +103,21 @@ DateTime.prototype.subtractPeriod = function(value) {
 
 
 DateTime.prototype.toString = function() {
-    var s = this.date.toISOString();
+    var s = ("0000" + this.date.getFullYear()).slice(-4);
+    s += "-";
+    s += ("00" + (this.date.getMonth() + 1)).slice(-2);
+    s += "-";
+    s += ("00" + this.date.getDate()).slice(-2);
+    s += "T";
+    s += ("00" + this.date.getHours()).slice(-2);
+    s += ":";
+    s += ("00" + this.date.getMinutes()).slice(-2);
+    s += ":";
+    s += ("00" + this.date.getSeconds()).slice(-2);
+    s += ".";
+    s += ("000" + this.date.getMilliseconds()).slice(-3);
     if(this.tzOffset == 0)
-        return s;
-    s = s.substring(0, s.length()-1); // truncate trailing 'Z';
+        return s + "Z";
     var offset = this.tzOffset;
     if (offset > 0)
         s += "+";
