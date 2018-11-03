@@ -104,6 +104,7 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 			CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
 			if(decl==null)
 				throw new SyntaxError("Unknown category: " + type.getTypeName());
+			context = context.newInstanceContext(decl.getType(context), true);
 		}
 		if(!(predicate instanceof IPredicateExpression))
 			throw new SyntaxError("Filtering expression must be a predicate !");
