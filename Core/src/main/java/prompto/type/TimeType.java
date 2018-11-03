@@ -29,7 +29,7 @@ public class TimeType extends NativeType {
 	}
 
 	private TimeType() {
-		super(Family.TYPE);
+		super(Family.TIME);
 	}
 
 	@Override
