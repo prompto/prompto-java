@@ -19,13 +19,17 @@ public abstract class DataStore {
 		cleanupDataStoreInAllThreads();
 	}
 
-	private static void cleanupDataStoreInAllThreads() throws Exception {
-		Thread[] threads = ThreadUtils.getActiveThreads();
+	public static void cleanupDataStoreInAllThreads() throws Exception {
+		Thread[] threads = ThreadUtils.getAllThreads();
 		for(Thread thread : threads)
 			ThreadUtils.removeThreadLocalForThread(thread, threadInstance);
 	}
 
 
+	public static void useGlobal() {
+		threadInstance.set(globalInstance.get());
+	}
+	
 	public static void setInstance(IStore store) {
 		threadInstance.set(store);
 	}
