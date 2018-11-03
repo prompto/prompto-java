@@ -25,9 +25,11 @@ DateTime.parseTZOffset = function(text) {
     return 0;
 };
 
-DateTime.parseUTCDate = function(text) {
+DateTime.parseDate = function(text) {
     var i = text.indexOf('Z');
-    if(i<0) {
+    if(i>0)
+    	text = text.substring(0, i);
+    else if(i<0) {
         i = text.indexOf('+');
         if(i>0)
             text = text.substring(0, i);
@@ -42,7 +44,7 @@ DateTime.parseUTCDate = function(text) {
 
 
 DateTime.parse = function(text) {
-    var date = DateTime.parseUTCDate(text);
+    var date = DateTime.parseDate(text);
     var tzOffset = DateTime.parseTZOffset(text);
     return new DateTime(date, tzOffset);
 };
