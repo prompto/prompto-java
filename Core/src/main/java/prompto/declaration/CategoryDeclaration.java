@@ -108,8 +108,11 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		return new CategoryType(getId());
 	}
 
-	public boolean hasAttribute(Context context, Identifier name) {
-		return attributes!=null && attributes.contains(name);
+	public boolean hasAttribute(Context context, Identifier id) {
+		if(IStore.dbIdName.equals(id.toString()))
+			return isStorable();
+		else
+			return attributes!=null && attributes.contains(id);
 	}
 	
 	public boolean hasMethod(Context context, Identifier name) {
