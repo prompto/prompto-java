@@ -91,8 +91,8 @@ public class ECleverParser extends EParser implements IParser {
 		return this.<IType>doParse(this::category_or_any_type, false);
 	}
 
-	public IFetchExpression parse_fetch_store_expression() throws Exception {
-		return this.<IFetchExpression>doParse(this::fetch_store_expression, false);
+	public IFetchExpression parse_fetch_expression() throws Exception {
+		return this.<IFetchExpression>doParse(this::fetch_expression, false);
 	}
 	
 	public <T extends Object> T doParse(Supplier<ParseTree> method, boolean addLF) {

@@ -193,6 +193,7 @@ import prompto.literal.TupleLiteral;
 import prompto.literal.UuidLiteral;
 import prompto.literal.VersionLiteral;
 import static prompto.parser.MParser.*;
+import prompto.parser.MParser.FetchStatementContext;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -222,6 +223,8 @@ import prompto.statement.CollectionSwitchCase;
 import prompto.statement.CommentStatement;
 import prompto.statement.DeclarationStatement;
 import prompto.statement.DoWhileStatement;
+import prompto.statement.FetchManyStatement;
+import prompto.statement.FetchOneStatement;
 import prompto.statement.FlushStatement;
 import prompto.statement.ForEachStatement;
 import prompto.statement.IStatement;
@@ -1236,12 +1239,51 @@ public class MPromptoBuilder extends MParserBaseListener {
 		setNodeValue(ctx, new FilteredExpression(itemName, null, predicate));
 	}
 	
+	
+	@Override
+	public void exitFetchStatement(FetchStatementContext ctx) {
+		setNodeValue(ctx, getNodeValue(ctx.stmt));
+	}
+	
 	@Override
 	public void exitFetchOne(FetchOneContext ctx) {
 		CategoryType category = this.<CategoryType>getNodeValue(ctx.typ);
 		IExpression filter = this.<IExpression>getNodeValue(ctx.predicate);
 		setNodeValue(ctx, new FetchOneExpression(category, filter));
 	}
+	
+	@Override
+	public void exitFetchOneAsync(FetchOneAsyncContext ctx) {
+		CategoryType category = this.<CategoryType>getNodeValue(ctx.typ);
+		IExpression filter = this.<IExpression>getNodeValue(ctx.predicate);
+		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		StatementList stmts = 	this.<StatementList>getNodeValue(ctx.stmts);
+		setNodeValue(ctx, new FetchOneStatement(category, filter, name, stmts));
+	}
+
+	@Override
+	public void exitFetchMany(FetchManyContext ctx) {
+		CategoryType category = this.<CategoryType>getNodeValue(ctx.typ);
+		IExpression start = this.<IExpression>getNodeValue(ctx.xstart);
+		IExpression stop = this.<IExpression>getNodeValue(ctx.xstop);
+		IExpression filter = this.<IExpression>getNodeValue(ctx.predicate);
+		OrderByClauseList orderBy = this.<OrderByClauseList>getNodeValue(ctx.orderby);
+		setNodeValue(ctx, new FetchManyExpression(category, start, stop, filter, orderBy));
+	}
+	
+	
+	@Override
+	public void exitFetchManyAsync(FetchManyAsyncContext ctx) {
+		CategoryType category = this.<CategoryType>getNodeValue(ctx.typ);
+		IExpression start = this.<IExpression>getNodeValue(ctx.xstart);
+		IExpression stop = this.<IExpression>getNodeValue(ctx.xstop);
+		IExpression predicate = this.<IExpression>getNodeValue(ctx.predicate);
+		OrderByClauseList orderBy = this.<OrderByClauseList>getNodeValue(ctx.orderby);
+		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		setNodeValue(ctx, new FetchManyStatement(category, start, stop, predicate, orderBy, name, stmts));
+	}
+
 	
 	@Override
 	public void exitFlush_statement(Flush_statementContext ctx) {
@@ -1255,16 +1297,6 @@ public class MPromptoBuilder extends MParserBaseListener {
 	}
 	
 	
-	
-	@Override
-	public void exitFetchMany(FetchManyContext ctx) {
-		CategoryType category = this.<CategoryType>getNodeValue(ctx.typ);
-		IExpression start = this.<IExpression>getNodeValue(ctx.xstart);
-		IExpression stop = this.<IExpression>getNodeValue(ctx.xstop);
-		IExpression filter = this.<IExpression>getNodeValue(ctx.predicate);
-		OrderByClauseList orderBy = this.<OrderByClauseList>getNodeValue(ctx.orderby);
-		setNodeValue(ctx, new FetchManyExpression(category, start, stop, filter, orderBy));
-	}
 	
 	@Override
 	public void exitFor_each_statement(For_each_statementContext ctx) {

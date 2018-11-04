@@ -368,6 +368,18 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitStoreStatement(EParser.StoreStatementContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code FetchStatement}
+	 * labeled alternative in {@link EParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterFetchStatement(EParser.FetchStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code FetchStatement}
+	 * labeled alternative in {@link EParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitFetchStatement(EParser.FetchStatementContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code FlushStatement}
 	 * labeled alternative in {@link EParser#statement}.
 	 * @param ctx the parse tree
@@ -906,6 +918,18 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitMethodCallExpression(EParser.MethodCallExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code FetchExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterFetchExpression(EParser.FetchExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code FetchExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitFetchExpression(EParser.FetchExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code NotHasExpression}
 	 * labeled alternative in {@link EParser#expression}.
 	 * @param ctx the parse tree
@@ -1121,18 +1145,6 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitTernaryExpression(EParser.TernaryExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code FetchStoreExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterFetchStoreExpression(EParser.FetchStoreExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code FetchStoreExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitFetchStoreExpression(EParser.FetchStoreExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code NotEqualsExpression}
 	 * labeled alternative in {@link EParser#expression}.
@@ -1551,28 +1563,52 @@ public interface EParserListener extends ParseTreeListener {
 	void exitFiltered_list_suffix(EParser.Filtered_list_suffixContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code FetchOne}
-	 * labeled alternative in {@link EParser#fetch_store_expression}.
+	 * labeled alternative in {@link EParser#fetch_expression}.
 	 * @param ctx the parse tree
 	 */
 	void enterFetchOne(EParser.FetchOneContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code FetchOne}
-	 * labeled alternative in {@link EParser#fetch_store_expression}.
+	 * labeled alternative in {@link EParser#fetch_expression}.
 	 * @param ctx the parse tree
 	 */
 	void exitFetchOne(EParser.FetchOneContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code FetchMany}
-	 * labeled alternative in {@link EParser#fetch_store_expression}.
+	 * labeled alternative in {@link EParser#fetch_expression}.
 	 * @param ctx the parse tree
 	 */
 	void enterFetchMany(EParser.FetchManyContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code FetchMany}
-	 * labeled alternative in {@link EParser#fetch_store_expression}.
+	 * labeled alternative in {@link EParser#fetch_expression}.
 	 * @param ctx the parse tree
 	 */
 	void exitFetchMany(EParser.FetchManyContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code FetchOneAsync}
+	 * labeled alternative in {@link EParser#fetch_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterFetchOneAsync(EParser.FetchOneAsyncContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code FetchOneAsync}
+	 * labeled alternative in {@link EParser#fetch_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitFetchOneAsync(EParser.FetchOneAsyncContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code FetchManyAsync}
+	 * labeled alternative in {@link EParser#fetch_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterFetchManyAsync(EParser.FetchManyAsyncContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code FetchManyAsync}
+	 * labeled alternative in {@link EParser#fetch_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitFetchManyAsync(EParser.FetchManyAsyncContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link EParser#sorted_expression}.
 	 * @param ctx the parse tree

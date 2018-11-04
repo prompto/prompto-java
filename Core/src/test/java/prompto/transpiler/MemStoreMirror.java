@@ -63,6 +63,12 @@ public class MemStoreMirror {
 		return stored==null ? null : new StoredMirror(stored);
 	}
 	
+	public void fetchOneAsync(Query query, ScriptObjectMirror andThen) {
+		IStored stored = store.fetchOne(query);
+		StoredMirror mirror = stored==null ? null : new StoredMirror(stored);
+		andThen.call(null, mirror);
+	}
+
 	public Object fetchMany(Query query) {
 		IStoredIterable iterable = store.fetchMany(query);
 		return new StoredIterableMirror(iterable);

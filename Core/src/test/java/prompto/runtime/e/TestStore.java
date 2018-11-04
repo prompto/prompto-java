@@ -20,6 +20,21 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedAsyncFetch() throws Exception {
+		checkInterpretedOutput("store/asyncFetch.pec");
+	}
+
+	@Test
+	public void testCompiledAsyncFetch() throws Exception {
+		checkCompiledOutput("store/asyncFetch.pec");
+	}
+
+	@Test
+	public void testTranspiledAsyncFetch() throws Exception {
+		checkTranspiledOutput("store/asyncFetch.pec");
+	}
+
+	@Test
 	public void testInterpretedAsyncStore() throws Exception {
 		checkInterpretedOutput("store/asyncStore.pec");
 	}

@@ -37,8 +37,8 @@ import prompto.value.NullValue;
 
 public class FetchOneExpression extends Section implements IFetchExpression {
 
-	CategoryType type;
-	IExpression predicate;
+	protected CategoryType type;
+	protected IExpression predicate;
 	
 	public FetchOneExpression(CategoryType type, IExpression predicate) {
 		this.type = type;
@@ -178,7 +178,7 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 			return new ResultInfo(AnyType.instance().getJavaType(context));
 	}
 
-	private void compileFetchOne(Context context, MethodInfo method, Flags flags) {
+	protected void compileFetchOne(Context context, MethodInfo method, Flags flags) {
 		InterfaceConstant i = new InterfaceConstant(IStore.class, "fetchOne", IQuery.class, IStored.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, i);
 	}
@@ -227,6 +227,23 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 	    transpiler.append("(function() {").indent();
+	    transpileQuery(transpiler);
+	    transpiler.append("var stored = DataStore.instance.fetchOne(builder.build());").newLine();
+	    transpileConvert(transpiler, "result");
+	    transpiler.append("return result;").dedent();
+	    transpiler.append("})()");
+	    return false;
+	}
+
+	protected void transpileConvert(Transpiler transpiler, String varName) {
+	    transpiler.append("if(stored===null)").indent().append("return null;").dedent();
+	    transpiler.append("var name = stored.getData('category').slice(-1)[0];").newLine();
+	    transpiler.append("var type = eval(name);").newLine();
+	    transpiler.append("var ").append(varName).append(" = new type(null, {}, ").append(this.type!=null && this.type.isMutable()).append(");").newLine();
+	    transpiler.append(varName).append(".fromStored(stored);").newLine();
+	}
+
+	protected void transpileQuery(Transpiler transpiler) {
 	    transpiler.append("var builder = DataStore.instance.newQueryBuilder();").newLine();
 	    if (this.type != null)
 	        transpiler.append("builder.verify(new AttributeInfo('category', TypeFamily.TEXT, true, null), MatchOp.CONTAINS, '").append(this.type.getTypeName()).append("');").newLine();
@@ -234,15 +251,6 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 	        this.predicate.transpileQuery(transpiler, "builder");
 	    if (this.type != null && this.predicate != null)
 	        transpiler.append("builder.and();").newLine();
-	    transpiler.append("var stored = DataStore.instance.fetchOne(builder.build());").newLine();
-	    transpiler.append("if(stored===null)").indent().append("return null;").dedent();
-	    transpiler.append("var name = stored.getData('category').slice(-1)[0];").newLine();
-	    transpiler.append("var type = eval(name);").newLine();
-	    transpiler.append("var result = new type(null, {}, ").append(this.type!=null && this.type.isMutable()).append(");").newLine();
-	    transpiler.append("result.fromStored(stored);").newLine();
-	    transpiler.append("return result;").dedent();
-	    transpiler.append("})()");
-	    return false;
 	}
 
 }

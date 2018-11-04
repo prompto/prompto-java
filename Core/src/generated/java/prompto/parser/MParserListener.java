@@ -330,6 +330,18 @@ public interface MParserListener extends ParseTreeListener {
 	 */
 	void exitStoreStatement(MParser.StoreStatementContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code FetchStatement}
+	 * labeled alternative in {@link MParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterFetchStatement(MParser.FetchStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code FetchStatement}
+	 * labeled alternative in {@link MParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitFetchStatement(MParser.FetchStatementContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code FlushStatement}
 	 * labeled alternative in {@link MParser#statement}.
 	 * @param ctx the parse tree
@@ -1463,28 +1475,52 @@ public interface MParserListener extends ParseTreeListener {
 	void exitFiltered_list_suffix(MParser.Filtered_list_suffixContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code FetchOne}
-	 * labeled alternative in {@link MParser#fetch_store_expression}.
+	 * labeled alternative in {@link MParser#fetch_expression}.
 	 * @param ctx the parse tree
 	 */
 	void enterFetchOne(MParser.FetchOneContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code FetchOne}
-	 * labeled alternative in {@link MParser#fetch_store_expression}.
+	 * labeled alternative in {@link MParser#fetch_expression}.
 	 * @param ctx the parse tree
 	 */
 	void exitFetchOne(MParser.FetchOneContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code FetchMany}
-	 * labeled alternative in {@link MParser#fetch_store_expression}.
+	 * labeled alternative in {@link MParser#fetch_expression}.
 	 * @param ctx the parse tree
 	 */
 	void enterFetchMany(MParser.FetchManyContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code FetchMany}
-	 * labeled alternative in {@link MParser#fetch_store_expression}.
+	 * labeled alternative in {@link MParser#fetch_expression}.
 	 * @param ctx the parse tree
 	 */
 	void exitFetchMany(MParser.FetchManyContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code FetchOneAsync}
+	 * labeled alternative in {@link MParser#fetch_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterFetchOneAsync(MParser.FetchOneAsyncContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code FetchOneAsync}
+	 * labeled alternative in {@link MParser#fetch_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitFetchOneAsync(MParser.FetchOneAsyncContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code FetchManyAsync}
+	 * labeled alternative in {@link MParser#fetch_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterFetchManyAsync(MParser.FetchManyAsyncContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code FetchManyAsync}
+	 * labeled alternative in {@link MParser#fetch_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitFetchManyAsync(MParser.FetchManyAsyncContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MParser#sorted_expression}.
 	 * @param ctx the parse tree

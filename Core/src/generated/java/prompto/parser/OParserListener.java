@@ -382,6 +382,18 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitStoreStatement(OParser.StoreStatementContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code FetchStatement}
+	 * labeled alternative in {@link OParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterFetchStatement(OParser.FetchStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code FetchStatement}
+	 * labeled alternative in {@link OParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitFetchStatement(OParser.FetchStatementContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code FlushStatement}
 	 * labeled alternative in {@link OParser#statement}.
 	 * @param ctx the parse tree
@@ -1431,28 +1443,52 @@ public interface OParserListener extends ParseTreeListener {
 	void exitFiltered_list_expression(OParser.Filtered_list_expressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code FetchOne}
-	 * labeled alternative in {@link OParser#fetch_store_expression}.
+	 * labeled alternative in {@link OParser#fetch_expression}.
 	 * @param ctx the parse tree
 	 */
 	void enterFetchOne(OParser.FetchOneContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code FetchOne}
-	 * labeled alternative in {@link OParser#fetch_store_expression}.
+	 * labeled alternative in {@link OParser#fetch_expression}.
 	 * @param ctx the parse tree
 	 */
 	void exitFetchOne(OParser.FetchOneContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code FetchMany}
-	 * labeled alternative in {@link OParser#fetch_store_expression}.
+	 * labeled alternative in {@link OParser#fetch_expression}.
 	 * @param ctx the parse tree
 	 */
 	void enterFetchMany(OParser.FetchManyContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code FetchMany}
-	 * labeled alternative in {@link OParser#fetch_store_expression}.
+	 * labeled alternative in {@link OParser#fetch_expression}.
 	 * @param ctx the parse tree
 	 */
 	void exitFetchMany(OParser.FetchManyContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code FetchOneAsync}
+	 * labeled alternative in {@link OParser#fetch_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterFetchOneAsync(OParser.FetchOneAsyncContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code FetchOneAsync}
+	 * labeled alternative in {@link OParser#fetch_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitFetchOneAsync(OParser.FetchOneAsyncContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code FetchManyAsync}
+	 * labeled alternative in {@link OParser#fetch_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterFetchManyAsync(OParser.FetchManyAsyncContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code FetchManyAsync}
+	 * labeled alternative in {@link OParser#fetch_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitFetchManyAsync(OParser.FetchManyAsyncContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link OParser#sorted_expression}.
 	 * @param ctx the parse tree
