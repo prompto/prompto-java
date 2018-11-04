@@ -238,7 +238,9 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 	    transpiler.append("if(stored===null)").indent().append("return null;").dedent();
 	    transpiler.append("var name = stored.getData('category').slice(-1)[0];").newLine();
 	    transpiler.append("var type = eval(name);").newLine();
-	    transpiler.append("return new type(null, stored, ").append(this.type!=null && this.type.isMutable()).append(");").dedent();
+	    transpiler.append("var result = new type(null, {}, ").append(this.type!=null && this.type.isMutable()).append(");").newLine();
+	    transpiler.append("result.fromStored(stored);").newLine();
+	    transpiler.append("return result;").dedent();
 	    transpiler.append("})()");
 	    return false;
 	}

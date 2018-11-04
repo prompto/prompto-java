@@ -277,6 +277,8 @@ public final class MemStore implements IStore {
 				setDirty(true);
 				dbId = Long.valueOf(lastDbId.incrementAndGet());
 				document.put(dbIdName, dbId);
+				if(listener!=null)
+					listener.accept(dbId);
 			}
 			return dbId;
 		}
@@ -285,11 +287,13 @@ public final class MemStore implements IStore {
 		public void setDirty(boolean set) {
 			if(!set)
 				document = null;
-			else if(document==null)
-				document = newDocument(null);
+			else if(document==null) {
+				document = newDocument();
+				document.put(dbIdName, getOrCreateDbId());
+			}
 		}
 
-		private Map<String, Object> newDocument(Object dbId) {
+		private Map<String, Object> newDocument() {
 			Map<String, Object> doc = new HashMap<>();
 			if(categories!=null) {
 				PromptoList<String> value = new PromptoList<>(false);
@@ -297,11 +301,6 @@ public final class MemStore implements IStore {
 					value.add(name);
 				doc.put("category", value);
 			}
-			if(dbId==null)
-				dbId = Long.valueOf(lastDbId.incrementAndGet());
-			doc.put(dbIdName, dbId);
-			if(listener!=null)
-				listener.accept(dbId);
 			return doc;
 		}
 
@@ -335,8 +334,11 @@ public final class MemStore implements IStore {
 		@Override
 		public void setData(String fieldName, Object value, IDbIdProvider provider) {
 			if(document==null) {
-				Object dbId = provider==null ? null : provider.get();
-				document = newDocument(dbId);
+				document = newDocument();
+				if(provider==null)
+					document.put(dbIdName, getOrCreateDbId());
+				else
+					document.put(dbIdName, provider.get());
 			}
 			document.put(fieldName, value);
 		}

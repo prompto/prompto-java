@@ -17,6 +17,7 @@ import prompto.store.Family;
 import prompto.store.IQuery;
 import prompto.store.IQueryBuilder;
 import prompto.store.IQueryBuilder.MatchOp;
+import prompto.store.IStorable.IDbIdListener;
 import prompto.store.memory.MemStore;
 import prompto.store.memory.Query;
 import prompto.store.IStorable;
@@ -34,8 +35,9 @@ public class MemStoreMirror {
 		this.converter = new ValueConverter(nashorn);
 	}
 
-	public StorableMirror newStorableDocument(List<String> categories) {
-		IStorable storable = store.newStorable(categories, null);
+	public StorableMirror newStorableDocument(List<String> categories, ScriptObjectMirror dbIdListener) {
+		IDbIdListener listener = dbIdListener==null ? null : dbId->dbIdListener.call(null, dbId);
+		IStorable storable = store.newStorable(categories, listener);
 		return new StorableMirror(storable);
 	}
 	
@@ -118,7 +120,7 @@ public class MemStoreMirror {
 		public Object fromJS(Object value) {
 			if(value instanceof ScriptObjectMirror)
 				value = fromScriptObjectMirror((ScriptObjectMirror)value);
-			if(value==null || value instanceof Boolean || value instanceof Integer || value instanceof Double || value instanceof String)
+			if(value==null || value instanceof Boolean || value instanceof Integer || value instanceof Long || value instanceof Float || value instanceof Double || value instanceof String)
 				return value;
 			else if(value instanceof StorableMirror)
 				return ((StorableMirror)value).getStorable();

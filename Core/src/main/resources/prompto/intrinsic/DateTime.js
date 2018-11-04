@@ -1,51 +1,61 @@
 function DateTime(date, tzOffset) {
     this.date = date;
+    // can't just use native Date since it's tzOffset is bound to the running location
     this.tzOffset = tzOffset;
     return this;
 }
 
-
-DateTime.parseOffset = function(text) {
-    var hours = parseInt(text.substring(0,2));
-    var i = text[2]==':' ? 3 : 2;
-    var minutes = parseInt(text.substring(i,i+2));
-    return ((hours * 60) + minutes) * 60;
-};
-
-DateTime.parseTZOffset = function(text) {
-    var i = text.indexOf('Z');
-    if(i>0)
-        return 0;
-    i = text.indexOf('+');
-    if(i>0)
-        return DateTime.parseOffset(text.substring(i+1));
-    i = text.lastIndexOf('-');
-    if(i>10) // skip date separator
-        return -DateTime.parseOffset(text.substring(i+1));
-    return 0;
-};
-
-DateTime.parseDate = function(text) {
-    var i = text.indexOf('Z');
-    if(i>0)
-    	text = text.substring(0, i);
-    else if(i<0) {
-        i = text.indexOf('+');
-        if(i>0)
-            text = text.substring(0, i);
-        else {
-            i = text.lastIndexOf('-');
-            if(i>10) // skip date separator
-                text = text.substring(0, i);
+DateTime.parse = function(text) {
+    var year = parseInt(text.substring(0,4));
+    text = text.substring(4);
+    var month = 1;
+    var day = 1;
+    if(text[0]=='-') {
+        text = text.substring(1); // skip "-"
+        month = parseInt(text.substring(0,2));
+        text = text.substring(2);
+        if(text[0]=='-') {
+            text = text.substring(1); // skip "-"
+            day = parseInt(text.substring(0,2));
+            text = text.substring(2);
         }
     }
-    return new Date(text);
-};
-
-
-DateTime.parse = function(text) {
-    var date = DateTime.parseDate(text);
-    var tzOffset = DateTime.parseTZOffset(text);
+    var hour = 0;
+    var minute = 0;
+    var second = 0;
+    var milli = 0;
+    if(text[0]=='T') {
+        text = text.substring(1); // skip "T"
+        hour = parseInt(text.substring(0,2));
+        text = text.substring(2);
+        if(text[0]==':') {
+            text = text.substring(1); // skip ":"
+            minute = parseInt(text.substring(0,2));
+            text = text.substring(2);
+            if(text[0]==':') {
+                text = text.substring(1); // skip ":"
+                second = parseInt(text.substring(0, 2));
+                text = text.substring(2);
+                if (text[0] == '.') {
+                    text = text.substring(1); // skip "."
+                    milli = parseInt(text.substring(0, 3));
+                    text = text.substring(3);
+                }
+            }
+        }
+    }
+    var date = new Date(Date.UTC(year, month-1, day, hour, minute, second, milli));
+    var tzOffset = 0; // in seconds
+    if(text[0]=='+' || text[0]=='-') {
+        tzOffset = text[0]=='+' ? 1 : -1;
+        text = text.substring(1); // skip "+/-"
+        tzOffset *= parseInt(text.substring(0, 2)) * 3600;
+        text.substring(2);
+        if (text[0] == ':') {
+            text = text.substring(1); // skip ":"
+            tzOffset *= parseInt(text.substring(0, 2)) * 60;
+        }
+   }
     return new DateTime(date, tzOffset);
 };
 
@@ -105,19 +115,19 @@ DateTime.prototype.subtractPeriod = function(value) {
 
 
 DateTime.prototype.toString = function() {
-    var s = ("0000" + this.date.getFullYear()).slice(-4);
+    var s = ("0000" + this.date.getUTCFullYear()).slice(-4);
     s += "-";
-    s += ("00" + (this.date.getMonth() + 1)).slice(-2);
+    s += ("00" + (this.date.getUTCMonth() + 1)).slice(-2);
     s += "-";
-    s += ("00" + this.date.getDate()).slice(-2);
+    s += ("00" + this.date.getUTCDate()).slice(-2);
     s += "T";
-    s += ("00" + this.date.getHours()).slice(-2);
+    s += ("00" + this.date.getUTCHours()).slice(-2);
     s += ":";
-    s += ("00" + this.date.getMinutes()).slice(-2);
+    s += ("00" + this.date.getUTCMinutes()).slice(-2);
     s += ":";
-    s += ("00" + this.date.getSeconds()).slice(-2);
+    s += ("00" + this.date.getUTCSeconds()).slice(-2);
     s += ".";
-    s += ("000" + this.date.getMilliseconds()).slice(-3);
+    s += ("000" + this.date.getUTCMilliseconds()).slice(-3);
     if(this.tzOffset == 0)
         return s + "Z";
     var offset = this.tzOffset;
@@ -214,4 +224,3 @@ DateTime.prototype.getTzOffset = function(value) {
 DateTime.prototype.getTzName = function(value) {
     return "Z";
 };
-
