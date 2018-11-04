@@ -79,56 +79,40 @@ public class ForEachStatement extends BaseStatement {
 	}
 	
 	private void toODialect(CodeWriter writer) {
-		writer.append("for each (");
-		writer.append(v1);
-		if(v2!=null) {
-			writer.append(", ");
-			writer.append(v2);
-		}
+		writer.append("for each (").append(v1);
+		if(v2!=null)
+			writer.append(", ").append(v2);
 		writer.append(" in ");
 		source.toDialect(writer);
 		writer.append(")");
 		boolean oneLine = statements.size()==1 && (statements.get(0).isSimple());
 		if(!oneLine)
 			writer.append(" {");
-		writer.newLine();
-		writer.indent();
+		writer.newLine().indent();
 		statements.toDialect(writer);
 		writer.dedent();
-		if(!oneLine) {
-			writer.append("}");
-			writer.newLine();
-		}		
+		if(!oneLine)
+			writer.append("}").newLine();
 	}
 
 	private void toEDialect(CodeWriter writer) {
-		writer.append("for each ");
-		writer.append(v1);
-		if(v2!=null) {
-			writer.append(", ");
-			writer.append(v2);
-		}
+		writer.append("for each ").append(v1);
+		if(v2!=null)
+			writer.append(", ").append(v2);
 		writer.append(" in ");
 		source.toDialect(writer);
-		writer.append(":");
-		writer.newLine();
-		writer.indent();
+		writer.append(":").newLine().indent();
 		statements.toDialect(writer);
 		writer.dedent();
 	}
 
 	private void toMDialect(CodeWriter writer) {
-		writer.append("for ");
-		writer.append(v1);
-		if(v2!=null) {
-			writer.append(", ");
-			writer.append(v2);
-		}
+		writer.append("for ").append(v1);
+		if(v2!=null)
+			writer.append(", ").append(v2);
 		writer.append(" in ");
 		source.toDialect(writer);
-		writer.append(":");
-		writer.newLine();
-		writer.indent();
+		writer.append(":").newLine().indent();
 		statements.toDialect(writer);
 		writer.dedent();
 	}
