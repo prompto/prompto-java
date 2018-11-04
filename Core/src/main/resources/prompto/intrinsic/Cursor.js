@@ -54,10 +54,7 @@ Cursor.prototype.iterator = function() {
                 return null;
             var name = stored.getData('category').slice(-1)[0];
             var type = eval(name);
-            var value = new type();
-            value.fromStored(stored);
-            value.mutable = cursor.mutable;
-            return value;
+            return new type(null, stored, cursor.mutable);
         };
         return this;
     };

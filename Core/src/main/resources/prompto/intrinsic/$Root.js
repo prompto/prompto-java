@@ -1,12 +1,17 @@
 function $Root() {
     this.mutable = false;
     this.storable = this.storable || null;
+    this.dbId = null;
     this.category = [];
     return this;
 }
 
 $Root.prototype.instanceOf = function(type) {
     return this.category.indexOf(type)>=0;
+};
+
+$Root.prototype.dbIdListener = function(dbId) {
+	this.dbId = dbId;
 };
 
 $Root.prototype.getAttributeNames = function() {
@@ -38,20 +43,18 @@ $Root.prototype.setMember = function(name, value, mutable, isEnum) {
 };
 
 $Root.prototype.fromStored = function(stored) {
-    for(name in this) {
-        if(name==='mutable' || name==='storable' || name==='category' || typeof(this[name]) === 'function')
-            continue;
+	this.dbId = stored.dbId;
+	var names = this.getAttributeNames();
+	names.forEach( function(name) {
         var value = stored.getData(name);
         var method = this["load$" + name];
         this[name] = method ? method(value) : value;
-    }
-    this.dbId = stored.getData("dbId");
+    }, this);
 };
 
 $Root.prototype.collectStorables = function(storablesToAdd) {
     if(this.storable) {
-        if(!this.dbId)
-            this.dbId = this.storable.getOrCreateDbId();
+    	this.storable.getOrCreateDbId();
         storablesToAdd.add(this.storable);
     }
     var names = this.getAttributeNames();
