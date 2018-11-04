@@ -93,7 +93,7 @@ public class WithSingletonStatement extends BaseStatement {
 		writer.append("with (");
 		type.toDialect(writer);
 		writer.append(")");
-		boolean oneLine = statements.size()==1 && (statements.get(0) instanceof SimpleStatement);
+		boolean oneLine = statements.size()==1 && (statements.get(0).isSimple());
 		if(!oneLine)
 			writer.append(" {");
 		writer.newLine();

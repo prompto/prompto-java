@@ -7,6 +7,11 @@ import prompto.parser.e.BaseEParserTest;
 public class TestStore extends BaseEParserTest {
 
 	@Test
+	public void testAsyncStore() throws Exception {
+		compareResourceEOE("store/asyncStore.pec");
+	}
+
+	@Test
 	public void testDeleteRecords() throws Exception {
 		compareResourceEOE("store/deleteRecords.pec");
 	}

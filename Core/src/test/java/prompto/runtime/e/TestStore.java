@@ -20,6 +20,21 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedAsyncStore() throws Exception {
+		checkInterpretedOutput("store/asyncStore.pec");
+	}
+
+	@Test
+	public void testCompiledAsyncStore() throws Exception {
+		checkCompiledOutput("store/asyncStore.pec");
+	}
+
+	@Test
+	public void testTranspiledAsyncStore() throws Exception {
+		checkTranspiledOutput("store/asyncStore.pec");
+	}
+
+	@Test
 	public void testInterpretedDeleteRecords() throws Exception {
 		checkInterpretedOutput("store/deleteRecords.pec");
 	}

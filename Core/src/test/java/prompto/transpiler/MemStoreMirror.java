@@ -47,6 +47,13 @@ public class MemStoreMirror {
 		store.store(del, add);
 	}
 	
+	public void storeAsync(JSSet toDelete, JSSet toStore, ScriptObjectMirror andThen) {
+		Set<Object> del = toDelete==null ? null : toDelete.getSet();
+		Set<IStorable> add = toStore==null ? null : toStore.getSet().stream().map(item->((StorableMirror)item).getStorable()).collect(Collectors.toSet());
+		store.store(del, add);
+		andThen.call(null);
+	}
+
 	public void flush() {
 		store.flush();
 	}

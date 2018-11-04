@@ -18,14 +18,21 @@ import prompto.utils.CodeWriter;
 import prompto.utils.ExpressionList;
 import prompto.value.IValue;
 
-public class StoreStatement extends SimpleStatement {
+public class StoreStatement extends BaseStatement {
 	
 	ExpressionList deletables;
 	ExpressionList storables;
+	StatementList andThen;
 	
-	public StoreStatement(ExpressionList delete, ExpressionList add) {
-		this.deletables = delete;
-		this.storables = add;
+	public StoreStatement(ExpressionList deletables, ExpressionList storables, StatementList andThen) {
+		this.deletables = deletables;
+		this.storables = storables;
+		this.andThen = andThen;
+	}
+	
+	@Override
+	public boolean isSimple() {
+		return andThen==null;
 	}
 
 	@Override
@@ -50,6 +57,17 @@ public class StoreStatement extends SimpleStatement {
 				writer.append('(');
 				storables.toDialect(writer);
 				writer.append(')');
+			}
+		}
+		if(andThen!=null) {
+			if(writer.getDialect()==Dialect.O) {
+				writer.append("then {").newLine().indent();
+				andThen.toDialect(writer);
+				writer.dedent().append("}");
+			} else {
+				writer.append("then:").newLine().indent();
+				andThen.toDialect(writer);
+				writer.dedent();
 			}
 		}
 	}
@@ -89,6 +107,8 @@ public class StoreStatement extends SimpleStatement {
 			query.store(context, value);
 		}
 		query.execute();
+		if(andThen!=null)
+			andThen.interpret(context);
 		return null;
 	}
 
@@ -98,6 +118,8 @@ public class StoreStatement extends SimpleStatement {
 		compileObjectsToDelete(context, method, flags);
 		compileStorablesToStore(context, method, flags);
 		compileExecute(context, method, flags);
+		if(andThen!=null)
+			andThen.compile(context, method, flags);
 		return new ResultInfo(void.class);
 	}
 
@@ -132,14 +154,21 @@ public class StoreStatement extends SimpleStatement {
 	@Override
 	public void declare(Transpiler transpiler) {
 		transpiler.require("DataStore");
+		if(andThen!=null)
+			andThen.declare(transpiler);
 	}
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-	    transpiler.append("DataStore.instance.store(");
+	    transpiler.append("DataStore.instance.store").append(andThen==null?"":"Async").append("(");
 	    this.transpileIdsToDelete(transpiler);
 	    transpiler.append(", ");
 	    this.transpileStorablesToAdd(transpiler);
+	    if(andThen!=null) {
+	    	transpiler.append(", function() {").indent();
+	    	andThen.transpile(transpiler);
+	    	transpiler.dedent().append("}");
+	    }
 	    transpiler.append(")");
 	    return false;
 	}

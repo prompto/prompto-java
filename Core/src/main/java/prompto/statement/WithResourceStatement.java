@@ -53,7 +53,7 @@ public class WithResourceStatement extends BaseStatement {
 		writer.append("with (");
 		resource.toDialect(writer);
 		writer.append(")");
-		boolean oneLine = statements.size()==1 && (statements.get(0) instanceof SimpleStatement);
+		boolean oneLine = statements.size()==1 && (statements.get(0).isSimple());
 		if(!oneLine)
 			writer.append(" {");
 		writer.newLine();

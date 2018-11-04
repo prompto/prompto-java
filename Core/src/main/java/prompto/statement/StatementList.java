@@ -132,7 +132,7 @@ public class StatementList extends LinkedList<IStatement> {
 		}
 		else */ for(IStatement statement : this) {
 			statement.toDialect(writer);
-			if(statement instanceof SimpleStatement) {
+			if(statement.isSimple()) {
 				if(writer.getDialect()==Dialect.O && !(statement instanceof NativeCall))
 					writer.append(';');
 				writer.newLine();
