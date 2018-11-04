@@ -167,7 +167,7 @@ public class StoreStatement extends BaseStatement {
 	    if(andThen!=null) {
 	    	transpiler.append(", function() {").indent();
 	    	andThen.transpile(transpiler);
-	    	transpiler.dedent().append("}");
+	    	transpiler.dedent().append("}.bind(this)");
 	    }
 	    transpiler.append(")");
 	    return false;
