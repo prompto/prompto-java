@@ -91,7 +91,7 @@ public class FetchOneStatement extends FetchOneExpression implements IStatement 
 		transpiler = transpiler.newChildTranspiler(transpiler.getContext());
 		transpiler.getContext().registerValue(new Variable(name, type));
 		stmts.transpile(transpiler);
-		transpiler.dedent().append("}.bind(this));").dedent().append("})()");
+		transpiler.dedent().append("}.bind(this));").dedent().append("}).bind(this)()");
 		transpiler.flush();
 	    return false;
 	}
