@@ -14,6 +14,7 @@ import prompto.runtime.Variable;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.IType;
+import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
@@ -34,7 +35,7 @@ public class FetchOneStatement extends FetchOneExpression implements IStatement 
 		context = context.newChildContext();
 		context.registerValue(new Variable(name, type));
 		stmts.check(context, null);
-		return null;
+		return VoidType.instance();
 	}
 	
 	@Override
