@@ -9,6 +9,7 @@ import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.grammar.OrderByClauseList;
 import prompto.instance.VariableInstance;
+import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.transpiler.Transpiler;
@@ -16,6 +17,7 @@ import prompto.type.CategoryType;
 import prompto.type.CursorType;
 import prompto.type.IType;
 import prompto.type.VoidType;
+import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
 public class FetchManyStatement extends FetchManyExpression implements IStatement {
@@ -55,6 +57,24 @@ public class FetchManyStatement extends FetchManyExpression implements IStatemen
 		stmts.compile(context, method, flags);
 		return new ResultInfo(void.class);
 	}
+	
+	@Override
+	public void toDialect(CodeWriter writer) {
+		super.toDialect(writer);
+		writer.append(" then with ").append(name);
+		if(writer.getDialect()==Dialect.O)
+			writer.append(" {");
+		else
+			writer.append(":");
+		writer = writer.newChildWriter();
+		writer.getContext().registerValue(new Variable(name, new CursorType(type)));
+		writer.newLine().indent();
+		stmts.toDialect(writer);
+		writer.dedent();
+		if(writer.getDialect()==Dialect.O)
+			writer.append("}");
+	}
+
 	
 	@Override
 	public void declare(Transpiler transpiler) {
