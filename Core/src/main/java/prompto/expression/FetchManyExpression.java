@@ -35,9 +35,9 @@ import prompto.value.IValue;
 
 public class FetchManyExpression extends FetchOneExpression {
 
-	IExpression first;
-	IExpression last;
-	OrderByClauseList orderBy;
+	protected IExpression first;
+	protected IExpression last;
+	protected OrderByClauseList orderBy;
 	
 	public FetchManyExpression(CategoryType type, IExpression first, IExpression last, IExpression filter, OrderByClauseList orderBy) {
 		super(type, filter);

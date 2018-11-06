@@ -20,18 +20,33 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
-	public void testInterpretedAsyncFetch() throws Exception {
-		checkInterpretedOutput("store/asyncFetch.pec");
+	public void testInterpretedAsyncFetchMany() throws Exception {
+		checkInterpretedOutput("store/asyncFetchMany.pec");
 	}
 
 	@Test
-	public void testCompiledAsyncFetch() throws Exception {
-		checkCompiledOutput("store/asyncFetch.pec");
+	public void testCompiledAsyncFetchMany() throws Exception {
+		checkCompiledOutput("store/asyncFetchMany.pec");
 	}
 
 	@Test
-	public void testTranspiledAsyncFetch() throws Exception {
-		checkTranspiledOutput("store/asyncFetch.pec");
+	public void testTranspiledAsyncFetchMany() throws Exception {
+		checkTranspiledOutput("store/asyncFetchMany.pec");
+	}
+
+	@Test
+	public void testInterpretedAsyncFetchOne() throws Exception {
+		checkInterpretedOutput("store/asyncFetchOne.pec");
+	}
+
+	@Test
+	public void testCompiledAsyncFetchOne() throws Exception {
+		checkCompiledOutput("store/asyncFetchOne.pec");
+	}
+
+	@Test
+	public void testTranspiledAsyncFetchOne() throws Exception {
+		checkTranspiledOutput("store/asyncFetchOne.pec");
 	}
 
 	@Test
