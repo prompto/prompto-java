@@ -79,12 +79,15 @@ public interface IValue {
 		throw new UnsupportedOperationException("compareTo not supported by " + this.getClass().getSimpleName());
 	}
 
-	default void setMember(Context context, Identifier name, IValue value) throws PromptoError {
+	default void setMember(Context context, Identifier id, IValue value) throws PromptoError {
 		throw new UnsupportedOperationException("No member support for " + this.getClass().getSimpleName());
 	}
 
-	default IValue getMember(Context context, Identifier name, boolean autoCreate) throws PromptoError {
-		throw new UnsupportedOperationException("No member support for " + this.getClass().getSimpleName());
+	default IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
+		if("text".equals(id.toString()))
+			return new Text(this.toString());
+		else
+			throw new UnsupportedOperationException("No member support for " + this.getClass().getSimpleName());
 	}
 
 	default void setItem(Context context, IValue item, IValue value) {
