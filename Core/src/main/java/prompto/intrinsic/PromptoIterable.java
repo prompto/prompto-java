@@ -1,6 +1,8 @@
 package prompto.intrinsic;
 
 import java.util.Iterator;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public abstract class PromptoIterable<S,R> implements IterableWithCounts<R> {
 
@@ -17,6 +19,14 @@ public abstract class PromptoIterable<S,R> implements IterableWithCounts<R> {
 		return new PromptoIterator();
 	}
 	
+	@Override
+	public String toString() {
+		return StreamSupport.stream(spliterator(), false)
+				.map(Object::toString)
+				.collect(Collectors.joining(", "));
+	}
+
+	
 	class PromptoIterator implements Iterator<R> {
 		
 		Iterator<S> iter = source.iterator();
@@ -28,6 +38,7 @@ public abstract class PromptoIterable<S,R> implements IterableWithCounts<R> {
 		public R next() { 
 			return apply(iter.next()); 
 		}
+		
 	}
 	
 	protected abstract R apply(S s);

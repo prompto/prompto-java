@@ -7,8 +7,13 @@ import prompto.parser.e.BaseEParserTest;
 public class TestStore extends BaseEParserTest {
 
 	@Test
-	public void testAsyncFetch() throws Exception {
-		compareResourceEOE("store/asyncFetch.pec");
+	public void testAsyncFetchMany() throws Exception {
+		compareResourceEOE("store/asyncFetchMany.pec");
+	}
+
+	@Test
+	public void testAsyncFetchOne() throws Exception {
+		compareResourceEOE("store/asyncFetchOne.pec");
 	}
 
 	@Test

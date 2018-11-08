@@ -12,27 +12,29 @@ import java.util.stream.Collectors;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
+import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import prompto.store.AttributeInfo;
 import prompto.store.Family;
 import prompto.store.IQuery;
 import prompto.store.IQueryBuilder;
 import prompto.store.IQueryBuilder.MatchOp;
-import prompto.store.IStorable.IDbIdListener;
-import prompto.store.memory.MemStore;
-import prompto.store.memory.Query;
 import prompto.store.IStorable;
+import prompto.store.IStorable.IDbIdListener;
 import prompto.store.IStored;
 import prompto.store.IStoredIterable;
-import jdk.nashorn.api.scripting.ScriptObjectMirror;
+import prompto.store.memory.MemStore;
+import prompto.store.memory.Query;
 
 @SuppressWarnings("restriction")
 public class MemStoreMirror {
 	
 	MemStore store = new MemStore();
+	ScriptEngine nashorn;
 	ValueConverter converter;
 	
 	public MemStoreMirror(ScriptEngine nashorn) {
-		this.converter = new ValueConverter(nashorn);
+		this.nashorn = nashorn;
+		this.converter = new ValueConverter();
 	}
 
 	public StorableMirror newStorableDocument(List<String> categories, ScriptObjectMirror dbIdListener) {
@@ -72,6 +74,14 @@ public class MemStoreMirror {
 	public Object fetchMany(Query query) {
 		IStoredIterable iterable = store.fetchMany(query);
 		return new StoredIterableMirror(iterable);
+	}
+
+	public void fetchManyAsync(Query query, ScriptObjectMirror andThen) throws Exception {
+		IStoredIterable iterable = store.fetchMany(query);
+		StoredIterableMirror mirror = new StoredIterableMirror(iterable);
+		ScriptObjectMirror cursorFn = (ScriptObjectMirror)nashorn.get("Cursor");
+		Object cursor = cursorFn.newObject(false, mirror);
+		andThen.call(null, cursor);
 	}
 
 	public MemQueryBuilderMirror newQueryBuilder() {
@@ -121,13 +131,6 @@ public class MemStoreMirror {
 	}
 	
 	class ValueConverter {
-
-		ScriptEngine nashorn;
-		
-		public ValueConverter(ScriptEngine nashorn) {
-			this.nashorn = nashorn;
-		}
-
 
 		@SuppressWarnings("unchecked")
 		public Object fromJS(Object value) {
@@ -330,14 +333,31 @@ public class MemStoreMirror {
 		
 	}
 	
-	public class StoredIterableMirror {
+	public class StoredIterableBase {
 
 		IStoredIterable iterable;
 		Iterator<IStored> iterator;
 		
-		public StoredIterableMirror(IStoredIterable iterable) {
+		public StoredIterableBase(IStoredIterable iterable) {
 			this.iterable = iterable;
 			this.iterator = iterable.iterator();
+		}
+		
+		public boolean hasNext() {
+			return iterator.hasNext();
+		}
+		
+		public Object next() {
+			return converter.toJS(iterator.next());
+		}
+		
+	}
+	
+	
+	public class StoredIterableMirror extends StoredIterableBase {
+
+		public StoredIterableMirror(IStoredIterable iterable) {
+			super(iterable);
 		}
 		
 		public long count() {
@@ -348,14 +368,36 @@ public class MemStoreMirror {
 			return iterable.totalCount();
 		}
 
-		public boolean hasNext() {
-			return iterator.hasNext();
-		}
-		
-		public Object next() {
-			return converter.toJS(iterator.next());
+		public Object iterate(ScriptObjectMirror function, ScriptObjectMirror binding) {
+			return new StoredIteratorMirror(iterable, function, binding);
 		}
 	}
 
+	public class StoredIteratorMirror extends StoredIterableBase {
+
+		ScriptObjectMirror function;
+		ScriptObjectMirror binding;
+		
+		public StoredIteratorMirror(IStoredIterable iterable, ScriptObjectMirror function, ScriptObjectMirror binding) {
+			super(iterable);
+			this.function = function;
+			this.binding = binding;
+		}
+
+		@Override
+		public Object next() {
+			Object item = iterator.next();
+			return function.call(binding,  item);
+		}
+		
+		public Object getText() {
+			List<String> items = new ArrayList<>();
+			while(this.hasNext()) {
+				Object item = this.next();
+				items.add(item.toString());
+			}
+			return String.join(", ", items);
+		}
+}
 
 }

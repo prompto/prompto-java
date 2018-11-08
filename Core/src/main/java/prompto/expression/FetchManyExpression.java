@@ -35,9 +35,9 @@ import prompto.value.IValue;
 
 public class FetchManyExpression extends FetchOneExpression {
 
-	IExpression first;
-	IExpression last;
-	OrderByClauseList orderBy;
+	protected IExpression first;
+	protected IExpression last;
+	protected OrderByClauseList orderBy;
 	
 	public FetchManyExpression(CategoryType type, IExpression first, IExpression last, IExpression filter, OrderByClauseList orderBy) {
 		super(type, filter);
@@ -313,6 +313,16 @@ public class FetchManyExpression extends FetchOneExpression {
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 	    transpiler.append("(function() {").indent();
+	    this.transpileQuery(transpiler);
+	    transpiler.append("var iterable = DataStore.instance.fetchMany(builder.build());").newLine();
+	    boolean mutable = this.type!=null ? this.type.isMutable() : false;
+	    transpiler.append("return new Cursor(").append(mutable).append(", iterable);").dedent();
+	    transpiler.append("})()");
+	    return false;
+	}
+	
+	@Override
+	protected void transpileQuery(Transpiler transpiler) {
 	    transpiler.append("var builder = DataStore.instance.newQueryBuilder();").newLine();
 	    if (this.type != null)
 	        transpiler.append("builder.verify(new AttributeInfo('category', TypeFamily.TEXT, true, null), MatchOp.CONTAINS, '").append(this.type.getTypeName()).append("');").newLine();
@@ -332,11 +342,6 @@ public class FetchManyExpression extends FetchOneExpression {
 	    }
 	    if (this.orderBy  != null)
 	        this.orderBy.transpileQuery(transpiler, "builder");
-	    transpiler.append("var iterable = DataStore.instance.fetchMany(builder.build());").newLine();
-	    boolean mutable = this.type!=null ? this.type.isMutable() : false;
-	    transpiler.append("return new Cursor(").append(mutable).append(", iterable);").dedent();
-	    transpiler.append("})()");
-	    return false;
 	}
 
 }

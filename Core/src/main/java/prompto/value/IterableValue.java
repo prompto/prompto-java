@@ -3,10 +3,11 @@ package prompto.value;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
-import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.IterableWithCounts;
@@ -34,6 +35,13 @@ public class IterableValue extends BaseValue implements IIterable<IValue>, Itera
 		this.name = name;
 		this.iterable = iterable;
 		this.expression = expression;
+	}
+	
+	@Override
+	public String toString() {
+		return StreamSupport.stream(this.spliterator(), false)
+				.map(IValue::toString)
+				.collect(Collectors.joining(", "));
 	}
 
 	@Override
@@ -82,7 +90,7 @@ public class IterableValue extends BaseValue implements IIterable<IValue>, Itera
 		if ("count".equals(name))
 			return new Integer(iterable.getCount());
 		else
-			throw new SyntaxError("No such member:" + name);
+			return super.getMember(context, id, autoCreate);
 	}
 
 	@Override

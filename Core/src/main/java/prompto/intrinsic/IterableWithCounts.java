@@ -8,6 +8,9 @@ import java.util.stream.StreamSupport;
 public interface IterableWithCounts<T> extends Iterable<T> {
 
 	Long getCount();
+	default long getNativeCount() {
+		return getCount();
+	}
 	Long getTotalCount();
 	default Iterable<T> filter(Predicate<T> predicate) {
 		Iterator<T> items = this.iterator();

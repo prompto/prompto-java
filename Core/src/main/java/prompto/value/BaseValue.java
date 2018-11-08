@@ -45,14 +45,6 @@ public abstract class BaseValue implements IValue {
 	}
 	
 	@Override
-	public IValue getMember(Context context, Identifier name, boolean autoCreate) throws PromptoError {
-		if("text".equals(name.toString()))
-			return new Text(this.toString());
-		else
-			return IValue.super.getMember(context, name, autoCreate);
-	}
-
-	@Override
 	public boolean roughly(Context context, IValue value) throws PromptoError {
 		return this.equals(value);
 	}
