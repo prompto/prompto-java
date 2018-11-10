@@ -128,7 +128,7 @@ List.prototype.iterate = function (fn, instance) {
         	return array;
         },
         getText: function() {
-        	return this.toArray().getText();
+        	return this.toArray().join(", ");
         }
     }
 };
