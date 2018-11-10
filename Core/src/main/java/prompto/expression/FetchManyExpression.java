@@ -314,9 +314,8 @@ public class FetchManyExpression extends FetchOneExpression {
 	public boolean transpile(Transpiler transpiler) {
 	    transpiler.append("(function() {").indent();
 	    this.transpileQuery(transpiler);
-	    transpiler.append("var iterable = DataStore.instance.fetchMany(builder.build());").newLine();
 	    boolean mutable = this.type!=null ? this.type.isMutable() : false;
-	    transpiler.append("return new Cursor(").append(mutable).append(", iterable);").dedent();
+	    transpiler.append("return DataStore.instance.fetchMany(builder.build(),").append(mutable).append(");").newLine();
 	    transpiler.append("})()");
 	    return false;
 	}

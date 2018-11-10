@@ -71,16 +71,18 @@ public class MemStoreMirror {
 		andThen.call(null, mirror);
 	}
 
-	public Object fetchMany(Query query) {
-		IStoredIterable iterable = store.fetchMany(query);
-		return new StoredIterableMirror(iterable);
-	}
-
-	public void fetchManyAsync(Query query, ScriptObjectMirror andThen) throws Exception {
+	public Object fetchMany(Query query, boolean mutable) {
 		IStoredIterable iterable = store.fetchMany(query);
 		StoredIterableMirror mirror = new StoredIterableMirror(iterable);
 		ScriptObjectMirror cursorFn = (ScriptObjectMirror)nashorn.get("Cursor");
-		Object cursor = cursorFn.newObject(false, mirror);
+		return cursorFn.newObject(mutable, mirror);
+	}
+
+	public void fetchManyAsync(Query query, boolean mutable, ScriptObjectMirror andThen) throws Exception {
+		IStoredIterable iterable = store.fetchMany(query);
+		StoredIterableMirror mirror = new StoredIterableMirror(iterable);
+		ScriptObjectMirror cursorFn = (ScriptObjectMirror)nashorn.get("Cursor");
+		Object cursor = cursorFn.newObject(mutable, mirror);
 		andThen.call(null, cursor);
 	}
 

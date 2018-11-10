@@ -126,6 +126,9 @@ List.prototype.iterate = function (fn, instance) {
         	while(iterator.hasNext())
         		array.push(iterator.next());
         	return array;
+        },
+        getText: function() {
+        	return this.toArray().getText();
         }
     }
 };
