@@ -111,5 +111,10 @@ public class TestMethods extends BaseEParserTest {
 		compareResourceEME("methods/specified.pec");
 	}
 
+	@Test
+	public void testVoidAsync() throws Exception {
+		compareResourceEME("methods/voidAsync.pec");
+	}
+
 }
 

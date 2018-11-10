@@ -126,7 +126,7 @@ public class UnresolvedSelector extends SelectorExpression {
 				((UnresolvedIdentifier) resolvedParent).checkMember(context);
 				resolvedParent = ((UnresolvedIdentifier) resolvedParent).getResolved();
 			}
-			UnresolvedCall method = new UnresolvedCall(new MethodSelector(resolvedParent, id), null);
+			UnresolvedCall method = new UnresolvedCall(new MethodSelector(resolvedParent, id), null, null);
 			method.setFrom(this);
 			method.check(context);
 			return method;

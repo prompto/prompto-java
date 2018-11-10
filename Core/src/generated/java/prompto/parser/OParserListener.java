@@ -786,6 +786,16 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitMethod_call(OParser.Method_callContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link OParser#method_call_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterMethod_call_statement(OParser.Method_call_statementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#method_call_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitMethod_call_statement(OParser.Method_call_statementContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code MethodName}
 	 * labeled alternative in {@link OParser#method_selector}.
 	 * @param ctx the parse tree

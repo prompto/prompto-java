@@ -12,7 +12,6 @@ public class TestWeb extends BaseEParserTest {
 	@Before
 	public void before() throws Exception {
 		Out.init();
-		loadDependency("web");
 	}
 
 	@After

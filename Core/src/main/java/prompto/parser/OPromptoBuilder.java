@@ -197,6 +197,7 @@ import prompto.literal.UuidLiteral;
 import prompto.literal.VersionLiteral;
 import static prompto.parser.OParser.*;
 import prompto.parser.OParser.FetchStatementContext;
+import prompto.parser.OParser.Method_call_statementContext;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -2061,7 +2062,16 @@ public class OPromptoBuilder extends OParserBaseListener {
 	public void exitMethod_call(Method_callContext ctx) {
 		IExpression caller = this.<IExpression>getNodeValue(ctx.method);
 		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
-		setNodeValue(ctx, new UnresolvedCall(caller, args));
+		setNodeValue(ctx, new UnresolvedCall(caller, args, null));
+	}
+	
+	
+	@Override
+	public void exitMethod_call_statement(Method_call_statementContext ctx) {
+		UnresolvedCall call = this.<UnresolvedCall>getNodeValue(ctx.method);
+		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		call.setAndThen(stmts);
+		setNodeValue(ctx, call);
 	}
 	
 	@Override

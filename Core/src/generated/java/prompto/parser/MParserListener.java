@@ -552,6 +552,16 @@ public interface MParserListener extends ParseTreeListener {
 	 */
 	void exitMethod_call(MParser.Method_callContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MParser#method_call_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterMethod_call_statement(MParser.Method_call_statementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MParser#method_call_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitMethod_call_statement(MParser.Method_call_statementContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code MethodName}
 	 * labeled alternative in {@link MParser#method_selector}.
 	 * @param ctx the parse tree

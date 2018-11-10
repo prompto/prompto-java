@@ -43,7 +43,7 @@ public class Nashorn8Engine implements IJSEngine {
 		IMethodDeclaration method = MethodLocator.locateMethod(context, new Identifier("main"), new DictLiteral(false));
 		method.declare(transpiler);
 		Invocable invocable = transpile(transpiler);
-		invocable.invokeFunction("main$Text_dict");
+		invocable.invokeFunction(method.getTranspiledName(context));
 	}
 	
 	public static Invocable transpile(Transpiler transpiler) throws Exception {

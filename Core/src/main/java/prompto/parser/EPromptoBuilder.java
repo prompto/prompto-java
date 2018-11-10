@@ -2102,7 +2102,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	public void exitMethodCallExpression(MethodCallExpressionContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
 		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
-		UnresolvedCall call = new UnresolvedCall(exp,args);
+		UnresolvedCall call = new UnresolvedCall(exp, args, null);
 		setNodeValue(ctx, call);
 	};
 	
@@ -3038,7 +3038,8 @@ public class EPromptoBuilder extends EParserBaseListener {
 	public void exitUnresolvedWithArgsStatement(UnresolvedWithArgsStatementContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
 		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
-		setNodeValue(ctx, new UnresolvedCall(exp, args));
+		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		setNodeValue(ctx, new UnresolvedCall(exp, args, stmts));
 	}
 	
 	

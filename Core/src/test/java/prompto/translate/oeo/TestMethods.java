@@ -96,5 +96,10 @@ public class TestMethods extends BaseOParserTest {
 		compareResourceOEO("methods/specified.poc");
 	}
 
+	@Test
+	public void testVoidAsync() throws Exception {
+		compareResourceOEO("methods/voidAsync.poc");
+	}
+
 }
 
