@@ -19,16 +19,16 @@ import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
-public class AsynchronousCall extends UnresolvedCall {
+public class RemoteCall extends UnresolvedCall {
 
 	Identifier resultName;
 	StatementList andThen;
 
-	public AsynchronousCall(UnresolvedCall call, Identifier resultName, StatementList andThen) {
+	public RemoteCall(UnresolvedCall call, Identifier resultName, StatementList andThen) {
 		this(call.caller, call.assignments, resultName, andThen);
 	}
 
-	public AsynchronousCall(IExpression caller, ArgumentAssignmentList assignments, Identifier resultName, StatementList andThen) {
+	public RemoteCall(IExpression caller, ArgumentAssignmentList assignments, Identifier resultName, StatementList andThen) {
 		super(caller, assignments);
 		this.resultName = resultName;
 		this.andThen = andThen;
@@ -97,14 +97,14 @@ public class AsynchronousCall extends UnresolvedCall {
 	@Override
 	public void declare(Transpiler transpiler) {
 		super.declare(transpiler);
-		transpiler.require("Async");
+		transpiler.require("RemoteRunner");
     	andThen.declare(transpiler);
 	}
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 		IType type = resolveAndCheck(transpiler.getContext());
-		transpiler = transpiler.append("execute(function() {").indent().append("return ");
+		transpiler = transpiler.append("RemoteRunner.execute(function() {").indent().append("return ");
 	    this.resolved.transpile(transpiler);
 	    transpiler = transpiler.dedent().append("}, function(");
 	    if(resultName!=null)

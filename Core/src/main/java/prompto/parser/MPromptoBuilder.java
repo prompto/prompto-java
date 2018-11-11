@@ -218,7 +218,7 @@ import prompto.python.PythonTextLiteral;
 import prompto.statement.AssignInstanceStatement;
 import prompto.statement.AssignTupleStatement;
 import prompto.statement.AssignVariableStatement;
-import prompto.statement.AsynchronousCall;
+import prompto.statement.RemoteCall;
 import prompto.statement.AtomicSwitchCase;
 import prompto.statement.BreakStatement;
 import prompto.statement.CollectionSwitchCase;
@@ -2058,7 +2058,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 		Identifier resultName = this.<Identifier>getNodeValue(ctx.name);
 		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
 		if(resultName!=null || stmts!=null)
-			setNodeValue(ctx, new AsynchronousCall(call, resultName, stmts));
+			setNodeValue(ctx, new RemoteCall(call, resultName, stmts));
 		else
 			setNodeValue(ctx, call);
 	}
