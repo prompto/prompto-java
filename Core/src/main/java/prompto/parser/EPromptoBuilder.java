@@ -223,6 +223,7 @@ import prompto.python.PythonTextLiteral;
 import prompto.statement.AssignInstanceStatement;
 import prompto.statement.AssignTupleStatement;
 import prompto.statement.AssignVariableStatement;
+import prompto.statement.AsynchronousCall;
 import prompto.statement.AtomicSwitchCase;
 import prompto.statement.BaseSwitchStatement.SwitchCaseList;
 import prompto.statement.BreakStatement;
@@ -2102,7 +2103,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	public void exitMethodCallExpression(MethodCallExpressionContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
 		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
-		UnresolvedCall call = new UnresolvedCall(exp, args, null);
+		UnresolvedCall call = new UnresolvedCall(exp, args);
 		setNodeValue(ctx, call);
 	};
 	
@@ -3038,8 +3039,12 @@ public class EPromptoBuilder extends EParserBaseListener {
 	public void exitUnresolvedWithArgsStatement(UnresolvedWithArgsStatementContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
 		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
+		Identifier resultName = this.<Identifier>getNodeValue(ctx.name);
 		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
-		setNodeValue(ctx, new UnresolvedCall(exp, args, stmts));
+		if(resultName!=null || stmts!=null)
+			setNodeValue(ctx, new AsynchronousCall(exp, args, resultName, stmts));
+		else	
+			setNodeValue(ctx, new UnresolvedCall(exp, args));
 	}
 	
 	

@@ -305,6 +305,21 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedTextAsync() throws Exception {
+		checkInterpretedOutput("methods/textAsync.pec");
+	}
+
+	@Test
+	public void testCompiledTextAsync() throws Exception {
+		checkCompiledOutput("methods/textAsync.pec");
+	}
+
+	@Test
+	public void testTranspiledTextAsync() throws Exception {
+		checkTranspiledOutput("methods/textAsync.pec");
+	}
+
+	@Test
 	public void testInterpretedVoidAsync() throws Exception {
 		checkInterpretedOutput("methods/voidAsync.pec");
 	}

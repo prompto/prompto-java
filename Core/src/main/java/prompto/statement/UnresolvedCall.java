@@ -2,7 +2,6 @@ package prompto.statement;
 
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
-import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
@@ -24,12 +23,10 @@ import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Context.MethodDeclarationMap;
-import prompto.runtime.VoidResult;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.type.MethodType;
-import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
@@ -38,21 +35,15 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 	IExpression caller;
 	IExpression resolved;
 	ArgumentAssignmentList assignments;
-	StatementList andThen;
 	
-	public UnresolvedCall(IExpression caller, ArgumentAssignmentList assignments, StatementList andThen) {
+	public UnresolvedCall(IExpression caller, ArgumentAssignmentList assignments) {
 		this.caller = caller;
 		this.assignments = assignments;
-		this.andThen = andThen;
-	}
-	
-	public void setAndThen(StatementList andThen) {
-		this.andThen = andThen;
 	}
 	
 	@Override
 	public boolean isSimple() {
-		return andThen==null;
+		return true;
 	}
 	
 	@Override
@@ -73,66 +64,28 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 		try {
 			resolve(writer.getContext());
 			resolved.toDialect(writer);
-			andThenToDialect(writer);
 		} catch(SyntaxError error) {
 			caller.toDialect(writer);
 			if(assignments!=null)
 				assignments.toDialect(writer);
-			andThenToDialect(writer);
 		}
 	}
 	
-	private void andThenToDialect(CodeWriter writer) {
-		if(andThen!=null) {
-			writer.append(" then");
-			if(writer.getDialect()==Dialect.O)
-				writer.append(" {");
-			else
-				writer.append(":");
-			writer = writer.newLine().indent();
-			andThen.toDialect(writer);
-			writer = writer.dedent();
-			if(writer.getDialect()==Dialect.O)
-				writer.append("}");
-		}
-	}
-
 	@Override
 	public IType check(Context context) {
-		IType result = resolveAndCheck(context);
-		if(andThen==null)
-			return result;
-		else {
-			andThen.check(context, VoidType.instance());
-			return VoidType.instance();
-		}
+		return resolveAndCheck(context);
 	}
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		resolveAndCheck(context);
-		IValue result = resolved.interpret(context);;
-		if(andThen==null)
-			return result;
-		else {
-			andThen.interpret(context);
-			return VoidResult.instance();
-		}
-		
+		return resolved.interpret(context);
 	}
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		resolveAndCheck(context);
-		ResultInfo result = resolved.compile(context, method, flags);
-		if(andThen==null)
-			return result;
-		else {
-			if(result.getType()!=void.class)
-				method.addInstruction(Opcode.POP);
-			andThen.compile(context, method, flags);
-			return new ResultInfo(void.class);
-		}
+		return resolved.compile(context, method, flags);
 	}
 
 	@Override
@@ -166,7 +119,7 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 		return resolved;
 	}
 	
-	private IType resolveAndCheck(Context context) {
+	protected IType resolveAndCheck(Context context) {
 		resolve(context);
 		if(resolved==null)
 			return null;
@@ -175,7 +128,7 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 	}
 	
 	
-	private void resolve(Context context) {
+	protected void resolve(Context context) {
 		if(resolved==null) {
 			if(caller instanceof UnresolvedIdentifier)
 				resolved = resolveUnresolvedIdentifier(context);
@@ -240,30 +193,15 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 	public void declare(Transpiler transpiler) {
 	    this.resolve(transpiler.getContext());
 	    this.resolved.declare(transpiler);
-	    if(andThen!=null) {
-	    	transpiler.require("Async");
-	    	andThen.declare(transpiler);
-	    }
 	}
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 	    this.resolve(transpiler.getContext());
-		if(andThen!=null)
-			transpileAsync(transpiler);
-		else
-		    this.resolved.transpile(transpiler);
+	    this.resolved.transpile(transpiler);
 	    return false;
 	}
 	
-	private void transpileAsync(Transpiler transpiler) {
-		transpiler = transpiler.append("execute(function() {").indent();
-	    this.resolved.transpile(transpiler);
-	    transpiler = transpiler.dedent().append("}, function() {").indent();
-	    this.andThen.transpile(transpiler);
-	    transpiler = transpiler.dedent().append("}, this)");
-	}
-
 	@Override
 	public void transpileFound(Transpiler transpiler, Dialect dialect) {
 		transpiler.append("'<unknown>'");

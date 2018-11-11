@@ -1,4 +1,4 @@
 function execute(body, andThen, bindTo) {
-	body.bind(bindTo)();
-	andThen.bind(bindTo)();
+	var result = body.bind(bindTo)();
+	andThen.bind(bindTo)(result);
 }

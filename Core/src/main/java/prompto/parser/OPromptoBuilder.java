@@ -221,6 +221,7 @@ import prompto.python.PythonTextLiteral;
 import prompto.statement.AssignInstanceStatement;
 import prompto.statement.AssignTupleStatement;
 import prompto.statement.AssignVariableStatement;
+import prompto.statement.AsynchronousCall;
 import prompto.statement.AtomicSwitchCase;
 import prompto.statement.BaseSwitchStatement.SwitchCaseList;
 import prompto.statement.BreakStatement;
@@ -2062,16 +2063,16 @@ public class OPromptoBuilder extends OParserBaseListener {
 	public void exitMethod_call(Method_callContext ctx) {
 		IExpression caller = this.<IExpression>getNodeValue(ctx.method);
 		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
-		setNodeValue(ctx, new UnresolvedCall(caller, args, null));
+		setNodeValue(ctx, new UnresolvedCall(caller, args));
 	}
 	
 	
 	@Override
 	public void exitMethod_call_statement(Method_call_statementContext ctx) {
 		UnresolvedCall call = this.<UnresolvedCall>getNodeValue(ctx.method);
+		Identifier resultName = this.<Identifier>getNodeValue(ctx.name);
 		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
-		call.setAndThen(stmts);
-		setNodeValue(ctx, call);
+		setNodeValue(ctx, new AsynchronousCall(call, resultName, stmts));
 	}
 	
 	@Override

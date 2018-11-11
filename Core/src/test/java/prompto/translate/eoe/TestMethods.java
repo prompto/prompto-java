@@ -112,6 +112,11 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTextAsync() throws Exception {
+		compareResourceEOE("methods/textAsync.pec");
+	}
+
+	@Test
 	public void testVoidAsync() throws Exception {
 		compareResourceEOE("methods/voidAsync.pec");
 	}

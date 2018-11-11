@@ -260,6 +260,21 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedTextAsync() throws Exception {
+		checkInterpretedOutput("methods/textAsync.poc");
+	}
+
+	@Test
+	public void testCompiledTextAsync() throws Exception {
+		checkCompiledOutput("methods/textAsync.poc");
+	}
+
+	@Test
+	public void testTranspiledTextAsync() throws Exception {
+		checkTranspiledOutput("methods/textAsync.poc");
+	}
+
+	@Test
 	public void testInterpretedVoidAsync() throws Exception {
 		checkInterpretedOutput("methods/voidAsync.poc");
 	}

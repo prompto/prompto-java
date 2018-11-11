@@ -20,6 +20,21 @@ public class TestMethods extends BaseMParserTest {
 	}
 
 	@Test
+	public void testInterpretedTextAsync() throws Exception {
+		checkInterpretedOutput("methods/textAsync.pmc");
+	}
+
+	@Test
+	public void testCompiledTextAsync() throws Exception {
+		checkCompiledOutput("methods/textAsync.pmc");
+	}
+
+	@Test
+	public void testTranspiledTextAsync() throws Exception {
+		checkTranspiledOutput("methods/textAsync.pmc");
+	}
+
+	@Test
 	public void testInterpretedVoidAsync() throws Exception {
 		checkInterpretedOutput("methods/voidAsync.pmc");
 	}
