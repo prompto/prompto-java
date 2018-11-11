@@ -2072,7 +2072,10 @@ public class OPromptoBuilder extends OParserBaseListener {
 		UnresolvedCall call = this.<UnresolvedCall>getNodeValue(ctx.method);
 		Identifier resultName = this.<Identifier>getNodeValue(ctx.name);
 		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
-		setNodeValue(ctx, new AsynchronousCall(call, resultName, stmts));
+		if(resultName!=null || stmts!=null)
+			setNodeValue(ctx, new AsynchronousCall(call, resultName, stmts));
+		else
+			setNodeValue(ctx, call);
 	}
 	
 	@Override

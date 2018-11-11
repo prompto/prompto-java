@@ -43,13 +43,15 @@ public class AsynchronousCall extends UnresolvedCall {
 	public void toDialect(CodeWriter writer) {
 		super.toDialect(writer);
 		writer.append(" then");
+		if(resultName!=null)
+			writer.append(" with ").append(resultName.toString());
 		if(writer.getDialect()==Dialect.O)
 			writer.append(" {");
 		else
 			writer.append(":");
 		writer = writer.newLine().indent();
 		andThen.toDialect(writer);
-		writer = writer.dedent();
+		writer.dedent();
 		if(writer.getDialect()==Dialect.O)
 			writer.append("}");
 	}
