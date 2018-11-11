@@ -332,7 +332,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		method.inhibitOffsetListener(finalListener);
 	}
 	
-	private IMethodDeclaration findDeclaration(Context context) {
+	IMethodDeclaration findDeclaration(Context context) {
 		try {
 			Object o = context.getValue(selector.getId());
 			if (o instanceof ClosureValue)

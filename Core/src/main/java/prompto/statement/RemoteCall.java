@@ -1,11 +1,14 @@
 package prompto.statement;
 
+import prompto.argument.IArgument;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
+import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
+import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
 import prompto.instance.VariableInstance;
@@ -59,6 +62,8 @@ public class RemoteCall extends UnresolvedCall {
 	@Override
 	public IType check(Context context) {
 		IType type = resolveAndCheck(context);
+		if(!(resolved instanceof MethodCall))
+			context.getProblemListener().reportIllegalRemoteCall(resolved.toString(), this);
 		context = context.newChildContext();
 		if(resultName!=null)
 			context.registerValue(new Variable(resultName, type));
@@ -96,28 +101,88 @@ public class RemoteCall extends UnresolvedCall {
 	
 	@Override
 	public void declare(Transpiler transpiler) {
-		super.declare(transpiler);
+		if(transpiler.getEngine().isTestEngine())
+			super.declare(transpiler); // need actual method in transpiled.js
+		else
+			transpiler.require("Remote");
 		transpiler.require("RemoteRunner");
-    	andThen.declare(transpiler);
+	    transpiler = transpiler.newChildTranspiler(null);
+		if(resultName!=null) {
+			IType type = resolveAndCheck(transpiler.getContext());
+			transpiler.getContext().registerValue(new Variable(resultName, type));
+		}
+		andThen.declare(transpiler);
 	}
-	
+
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-		IType type = resolveAndCheck(transpiler.getContext());
-		transpiler = transpiler.append("RemoteRunner.execute(function() {").indent().append("return ");
-	    this.resolved.transpile(transpiler);
-	    transpiler = transpiler.dedent().append("}, function(");
-	    if(resultName!=null)
-	    	transpiler = transpiler.append(resultName.toString());
-	    transpiler = transpiler.append(") {").indent();
-	    transpiler = transpiler.newChildTranspiler(null);
-		if(resultName!=null)
-			transpiler.getContext().registerValue(new Variable(resultName, type));
-	    this.andThen.transpile(transpiler);
-	    transpiler = transpiler.dedent().append("}, this)");
-	    transpiler.flush();
+		resolveAndCheck(transpiler.getContext());
+		if(!(resolved instanceof MethodCall))
+			transpiler.getContext().getProblemListener().reportIllegalRemoteCall(resolved.toString(), this);
+		else if(transpiler.getEngine().isTestEngine())
+			transpileTest(transpiler);
+		else
+			transpileRemote(transpiler);
 	    return false;
 	}
 
+	private void transpileTest(Transpiler transpiler) {
+		transpiler = transpiler.append("RemoteRunner.run(function() {").indent().append("return ");
+	    this.resolved.transpile(transpiler);
+	    transpiler.dedent().append("}, function(");
+	    if(resultName!=null)
+	    	transpiler.append(resultName.toString());
+	    transpiler.append(") {").indent();
+	    transpiler = transpiler.newChildTranspiler(null);
+		if(resultName!=null) {
+			IType type = resolveAndCheck(transpiler.getContext());
+			transpiler.getContext().registerValue(new Variable(resultName, type));
+		}
+		this.andThen.transpile(transpiler);
+	    transpiler.dedent().append("}, this)").flush();
+	}
 
+	private void transpileRemote(Transpiler transpiler) {
+		MethodCall call = (MethodCall)resolved;
+		transpiler.append("RemoteRunner.run('").append(call.getSelector().toString()).append("', ");
+		transpileAssignments(transpiler, call);
+	    transpiler.append(", function(");
+	    if(resultName!=null)
+	    	transpiler.append(resultName.toString());
+	    transpiler.append(") {").indent();
+	    transpiler = transpiler.newChildTranspiler(null);
+		if(resultName!=null) {
+			IType type = resolveAndCheck(transpiler.getContext());
+			transpiler.getContext().registerValue(new Variable(resultName, type));
+		}
+		this.andThen.transpile(transpiler);
+	    transpiler.dedent().append("}, this)").flush();
+	}
+
+	private void transpileAssignments(Transpiler transpiler, MethodCall call) {
+		transpiler.append("[");
+		ArgumentAssignmentList assigns = call.getAssignments();
+		if(assigns!=null && !assigns.isEmpty()) {
+			IMethodDeclaration declaration = call.findDeclaration(transpiler.getContext());
+			assigns.forEach(assign->{
+				transpileAssignment(transpiler, assign, declaration);
+				transpiler.append(",");
+			});
+			transpiler.trimLast(1);
+		}
+		transpiler.append("]");
+	}
+
+	private void transpileAssignment(Transpiler transpiler, ArgumentAssignment assign, IMethodDeclaration declaration) {
+		Context ctx = transpiler.getContext();
+        IArgument argument = assign.getArgument();
+        IExpression expression = assign.resolve(ctx, declaration, false, false);
+		transpiler.append("{name:")
+			.append(argument.getTranspiledName(ctx))
+			.append(",type:")
+			.append(argument.getType(ctx).toString())
+			.append(",value:");
+        argument.transpileCall(transpiler, expression);
+        transpiler.append("}");
+	}
 }

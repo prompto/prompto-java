@@ -76,6 +76,8 @@ public class FetchOneStatement extends FetchOneExpression implements IStatement 
 	
 	@Override
 	public void declare(Transpiler transpiler) {
+		if(!transpiler.getEngine().isTestEngine())
+			transpiler.require("Remote");
 		super.declare(transpiler);
 		transpiler = transpiler.newChildTranspiler(transpiler.getContext());
 		transpiler.getContext().registerValue(new Variable(name, type));

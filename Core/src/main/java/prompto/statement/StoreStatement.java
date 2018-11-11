@@ -153,6 +153,8 @@ public class StoreStatement extends BaseStatement {
 	
 	@Override
 	public void declare(Transpiler transpiler) {
+		if(!transpiler.getEngine().isTestEngine())
+			transpiler.require("Remote");
 		transpiler.require("DataStore");
 		if(andThen!=null)
 			andThen.declare(transpiler);

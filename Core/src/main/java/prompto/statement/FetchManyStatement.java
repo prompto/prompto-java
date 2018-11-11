@@ -78,6 +78,8 @@ public class FetchManyStatement extends FetchManyExpression implements IStatemen
 	
 	@Override
 	public void declare(Transpiler transpiler) {
+		if(!transpiler.getEngine().isTestEngine())
+			transpiler.require("Remote");
 		super.declare(transpiler);
 		transpiler = transpiler.newChildTranspiler(transpiler.getContext());
 		transpiler.getContext().registerValue(new Variable(name, new CursorType(type)));

@@ -70,6 +70,10 @@ public class Nashorn8Engine implements IJSEngine {
 		return (Invocable)nashorn;
 	}
 	
+	@Override
+	public boolean isTestEngine() {
+		return true;
+	}
 	
 	@Override
 	public Iterable<String> getPolyfills() {
