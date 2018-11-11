@@ -86,4 +86,9 @@ public class ProblemListener implements ANTLRErrorListener, IProblemListener {
 	public void reportIllegalOperation(String message, ISection section) {
 		throw new SyntaxError(message);
 	}
+	
+	@Override
+	public void reportIllegalRemoteCall(String message, ISection section) {
+		throw new SyntaxError(message);
+	}
 }

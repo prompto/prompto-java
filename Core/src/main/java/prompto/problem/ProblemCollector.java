@@ -146,4 +146,10 @@ public class ProblemCollector implements ANTLRErrorListener, IProblemListener {
 		}
 	}
 	
+	@Override
+	public void reportIllegalRemoteCall(String message, ISection section) {
+		synchronized(problems) {
+			problems.add(new IllegalRemoteCallError(message, section));
+		}
+	}
 }
