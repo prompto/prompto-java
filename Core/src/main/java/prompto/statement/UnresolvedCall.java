@@ -261,7 +261,7 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 	    this.resolved.transpile(transpiler);
 	    transpiler = transpiler.dedent().append("}, function() {").indent();
 	    this.andThen.transpile(transpiler);
-	    transpiler = transpiler.dedent().append("})");
+	    transpiler = transpiler.dedent().append("}, this)");
 	}
 
 	@Override
