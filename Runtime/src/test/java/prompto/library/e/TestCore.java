@@ -36,6 +36,11 @@ public class TestCore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCloud() throws Exception {
+		runTests("core/cloud.pec");
+	}
+
+	@Test
 	public void testError() throws Exception {
 		runTests("core/error.pec");
 	}

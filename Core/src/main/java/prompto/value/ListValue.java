@@ -211,6 +211,25 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 	
 
 	@Override
+	public IValue minus(Context context, IValue value) throws PromptoError {
+        if (value instanceof ListValue)
+            return this.remove(((ListValue)value).getItems());
+        else if (value instanceof SetValue)
+            return this.remove(((SetValue)value).getItems());
+        else
+            throw new SyntaxError("Illegal: " + this.type.getTypeName() + " + " + value.getClass().getSimpleName());
+	}
+	
+
+	protected ListValue remove(Collection<? extends IValue> items) {
+		PromptoList<IValue> result = new PromptoList<IValue>(false);
+		result.addAll(this.items);
+		result.removeAll(items);
+		IType itemType = ((ListType)getType()).getItemType();
+		return new ListValue(itemType, result);
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if(!(obj instanceof ListValue))
 			return false;
@@ -252,6 +271,32 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 		method.addInstruction(Opcode.DUP); // stack is: result, result 
 		exp.compile(context, method, flags); // stack is: result, result, right
 		oper = new MethodConstant(PromptoList.class, "addAll", 
+				Collection.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		method.addInstruction(Opcode.POP); // consume returned boolean
+		return info;
+	}
+	
+	
+	public static ResultInfo compileMinus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		// TODO: return left if right is empty
+		// create result
+		ResultInfo info = CompilerUtils.compileNewRawInstance(method, PromptoList.class);
+		method.addInstruction(Opcode.DUP);
+		method.addInstruction(Opcode.ICONST_0); // not mutable
+		CompilerUtils.compileCallConstructor(method, PromptoList.class, boolean.class);
+		// add left, current stack is: left, result, we need: result, result, left
+		method.addInstruction(Opcode.DUP_X1); // stack is: result, left, result
+		method.addInstruction(Opcode.SWAP); // stack is: result, result, left
+		IOperand oper = new MethodConstant(PromptoList.class, "addAll", 
+				Collection.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		method.addInstruction(Opcode.POP); // consume returned boolean
+		// add right, current stack is: result, we need: result, result, right
+		method.addInstruction(Opcode.DUP); // stack is: result, result 
+		exp.compile(context, method, flags); // stack is: result, result, right
+		oper = new MethodConstant(PromptoList.class, "removeAll", 
 				Collection.class, boolean.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		method.addInstruction(Opcode.POP); // consume returned boolean

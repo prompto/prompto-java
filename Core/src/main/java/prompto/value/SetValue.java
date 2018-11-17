@@ -170,6 +170,34 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IFilterab
             throw new SyntaxError("Illegal: " + this.type.getTypeName() + " + " + value.getClass().getSimpleName());
     }
 
+	public SetValue merge(Collection<? extends IValue> items) {
+		PromptoSet<IValue> result = new PromptoSet<IValue>();
+		result.addAll(this.items);
+		result.addAll(items);
+		IType itemType = ((SetType)getType()).getItemType();
+		return new SetValue(itemType, result);
+	}
+	
+	
+	@Override
+	public IValue minus(Context context, IValue value) {
+        if (value instanceof ListValue)
+            return this.remove(((ListValue)value).getItems());
+        else if (value instanceof SetValue)
+            return this.remove(((SetValue)value).getItems());
+        else
+            throw new SyntaxError("Illegal: " + this.type.getTypeName() + " + " + value.getClass().getSimpleName());
+    }
+
+	public SetValue remove(Collection<? extends IValue> items) {
+		PromptoSet<IValue> result = new PromptoSet<IValue>();
+		result.addAll(this.items);
+		result.removeAll(items);
+		IType itemType = ((SetType)getType()).getItemType();
+		return new SetValue(itemType, result);
+	}
+
+	
 	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
 			ResultInfo left, IExpression exp) {
 		// TODO: return left if right is empty (or right if left is empty and is a set)
@@ -192,12 +220,26 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IFilterab
 		return info;
 	}
 	
-	public SetValue merge(Collection<? extends IValue> items) {
-		PromptoSet<IValue> result = new PromptoSet<IValue>();
-		result.addAll(this.items);
-		result.addAll(items);
-		IType itemType = ((SetType)getType()).getItemType();
-		return new SetValue(itemType, result);
-	}
 
+	public static ResultInfo compileMinus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		// TODO: return left if right is empty (or right if left is empty and is a set)
+		// create result
+		ResultInfo info = CompilerUtils.compileNewInstance(method, PromptoSet.class); 
+		// add left, current stack is: left, result, we need: result, result, left
+		method.addInstruction(Opcode.DUP_X1); // stack is: result, left, result
+		method.addInstruction(Opcode.SWAP); // stack is: result, result, left
+		IOperand oper = new MethodConstant(PromptoSet.class, "addAll", 
+				Collection.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		method.addInstruction(Opcode.POP); // consume returned boolean
+		// add right, current stack is: result, we need: result, result, right
+		method.addInstruction(Opcode.DUP); // stack is: result, result 
+		exp.compile(context, method, flags); // stack is: result, result, right
+		oper = new MethodConstant(PromptoSet.class, "removeAll", 
+				Collection.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		method.addInstruction(Opcode.POP); // consume returned boolean
+		return info;
+	}
 }

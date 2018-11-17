@@ -55,6 +55,16 @@ public class SetType extends ContainerType {
 		return super.checkAdd(context, other, tryReverse);
 	}
 	
+	
+	@Override
+	public IType checkSubstract(Context context, IType other) {
+		if(	(other instanceof ListType || other instanceof SetType) &&
+				this.getItemType().equals(((ContainerType)other).getItemType()) )
+					return this;
+		return super.checkSubstract(context, other);
+	}
+
+	
 	@Override
 	public IType checkItem(Context context, IType other) {
 		if(other==IntegerType.instance())
@@ -90,6 +100,30 @@ public class SetType extends ContainerType {
 	    }	
     }
 	
+	
+	@Override
+	public void declareSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	    if((other instanceof ListType || other instanceof SetType) && this.getItemType().equals(((ContainerType)other).getItemType())) {
+	        left.declare(transpiler);
+	        right.declare(transpiler);
+	    } else {
+	        super.declareSubtract(transpiler, other, left, right);
+	    }
+	}
+	
+	
+	@Override
+	public void transpileSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	    if((other instanceof ListType || other instanceof SetType) && this.getItemType().equals(((ContainerType)other).getItemType())) {
+	        left.transpile(transpiler);
+	        transpiler.append(".remove(");
+	        right.transpile(transpiler);
+	        transpiler.append(")");
+	    } else {
+	        super.transpileSubtract(transpiler, other, left, right);
+	    }
+	}
+
 	@Override
 	public void declareContains(Transpiler transpiler, IType other, IExpression container, IExpression item) {
 	    container.declare(transpiler);

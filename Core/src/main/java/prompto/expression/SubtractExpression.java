@@ -12,7 +12,9 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.intrinsic.PromptoDate;
 import prompto.intrinsic.PromptoDateTime;
+import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoPeriod;
+import prompto.intrinsic.PromptoSet;
 import prompto.intrinsic.PromptoTime;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
@@ -23,7 +25,9 @@ import prompto.value.DateTime;
 import prompto.value.Decimal;
 import prompto.value.IValue;
 import prompto.value.Integer;
+import prompto.value.ListValue;
 import prompto.value.Period;
+import prompto.value.SetValue;
 import prompto.value.Time;
 
 public class SubtractExpression implements IExpression {
@@ -69,6 +73,8 @@ public class SubtractExpression implements IExpression {
 		map.put(PromptoDateTime.class, DateTime::compileMinus); 
 		map.put(PromptoTime.class, Time::compileMinus);
 		map.put(PromptoPeriod.class, Period::compileMinus);
+		map.put(PromptoList.class, ListValue::compileMinus);
+		map.put(PromptoSet.class, SetValue::compileMinus);
 		return map;
 	}
 

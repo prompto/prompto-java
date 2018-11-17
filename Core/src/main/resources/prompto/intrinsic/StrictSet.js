@@ -26,6 +26,7 @@ StrictSet.prototype.iterator = function() {
     };
 };
 
+
 StrictSet.prototype.item = function(idx) {
     var iter = this.set.values();
     var item = iter.next();
@@ -36,8 +37,6 @@ StrictSet.prototype.item = function(idx) {
     else
         return item.value;
 };
-
-
 
 
 StrictSet.prototype.addItems = function(items) {
@@ -53,6 +52,14 @@ StrictSet.prototype.addAll = function(items) {
     var result = new StrictSet(this.set);
     result.addItems(items);
     return result;
+};
+
+
+StrictSet.prototype.remove = function(items) {
+	var excluded = (items instanceof StrictSet) ? items : new Set(items);
+	var items = Array.from(this.set.values());
+    var remaining = items.filter(function(item) { return !excluded.has(item); });
+    return new StrictSet(remaining);
 };
 
 
