@@ -329,8 +329,16 @@ public class MemStoreMirror {
 			return storable.getOrCreateDbId();
 		}
 		
-		public void setData(String name, Object value) {
+		public void setData(String name, Object value, Object dbId) {
 			storable.setData(name, converter.fromJS(value));
+		}
+		
+		public boolean isDirty() {
+			return storable.isDirty();
+		}
+		
+		public void clear() {
+			storable.clear();
 		}
 		
 	}

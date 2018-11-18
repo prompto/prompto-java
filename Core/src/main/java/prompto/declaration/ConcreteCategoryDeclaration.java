@@ -907,13 +907,12 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 				return;
 			compilePopulateField(context, method, flags, id);
 		});
-		// this.storable.setDirty(false)
+		// this.storable.clear()
 		ClassConstant thisClass = method.getClassFile().getThisClass();
 		method.addInstruction(Opcode.ALOAD_0, thisClass);
 		FieldConstant field = new FieldConstant(thisClass, "storable", IStorable.class);
 		method.addInstruction(Opcode.GETFIELD, field);
-		method.addInstruction(Opcode.ICONST_0);
-		InterfaceConstant i = new InterfaceConstant(IStorable.class, "setDirty", boolean.class, void.class);
+		InterfaceConstant i = new InterfaceConstant(IStorable.class, "clear", void.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, i);
 	}
 

@@ -45,10 +45,14 @@ $Root.prototype.setMember = function(name, value, mutable, isEnum) {
     if(!this.mutable || (value && value.mutable && !mutable))
         throw new NotMutableError();
     this[name] = value;
-    if(this.storable && name!=="dbId") {
-        if(isEnum && value)
-            value = value.name;
-        this.storable.setData(name, value, this.dbId);
+    if(this.storable) {
+    	if(name==="dbId")
+    		this.storable.setDbId(value);
+    	else {
+	        if(isEnum && value)
+	            value = value.name;
+	        this.storable.setData(name, value, this.dbId);
+    	}
     }
 };
 
@@ -65,8 +69,8 @@ $Root.prototype.fromStored = function(stored) {
 };
 
 $Root.prototype.collectStorables = function(storablesToAdd) {
-    if(this.storable) {
-    	this.storable.getOrCreateDbId();
+    if(this.storable && this.storable.isDirty()) {
+    	this.getOrCreateDbId();
         storablesToAdd.add(this.storable);
     }
     var names = this.getAttributeNames();

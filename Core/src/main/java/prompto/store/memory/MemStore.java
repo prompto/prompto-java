@@ -261,8 +261,8 @@ public final class MemStore implements IStore {
 		
 		@Override
 		public void setDbId(Object dbId) {
-			setDirty(true);
-			document.put(dbIdName, dbId);
+			if(document!=null)
+				document.put(dbIdName, dbId);
 		}
 		
 		@Override
@@ -274,9 +274,8 @@ public final class MemStore implements IStore {
 		public Object getOrCreateDbId() {
 			Object dbId = getData(dbIdName);
 			if(dbId==null) {
-				setDirty(true);
-				dbId = Long.valueOf(lastDbId.incrementAndGet());
-				document.put(dbIdName, dbId);
+				Object newDbId = dbId = Long.valueOf(lastDbId.incrementAndGet());
+				setData(dbIdName, newDbId, ()->newDbId);
 				if(listener!=null)
 					listener.accept(dbId);
 			}
@@ -284,13 +283,8 @@ public final class MemStore implements IStore {
 		}
 		
 		@Override
-		public void setDirty(boolean set) {
-			if(!set)
-				document = null;
-			else if(document==null) {
-				document = newDocument();
-				document.put(dbIdName, getOrCreateDbId());
-			}
+		public void clear() {
+			document = null;
 		}
 
 		private Map<String, Object> newDocument() {
@@ -334,11 +328,11 @@ public final class MemStore implements IStore {
 		@Override
 		public void setData(String fieldName, Object value, IDbIdProvider provider) {
 			if(document==null) {
+				Object dbId = provider==null ? null : provider.get();
+				if(dbId==null)
+					dbId = getOrCreateDbId();
 				document = newDocument();
-				if(provider==null)
-					document.put(dbIdName, getOrCreateDbId());
-				else
-					document.put(dbIdName, provider.get());
+				document.put(dbIdName, dbId);
 			}
 			document.put(fieldName, value);
 		}

@@ -150,7 +150,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		for(Identifier name : this.getAllAttributes(context)) 
 			populateMember(context, stored, instance, name);
 		if(instance.getStorable()!=null)
-			instance.getStorable().setDirty(false);
+			instance.getStorable().clear();
 	}
 	
 	protected void setDbId(Context context, IInstance instance, Object dbId) {

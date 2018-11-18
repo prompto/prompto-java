@@ -10,7 +10,7 @@ public interface IStorable {
 	void setDbId(Object dbId);
 	Object getOrCreateDbId();
 
-	void setDirty(boolean dirty);
+	void clear();
 	boolean isDirty();
 	
 	void setCategories(String[] categories) throws PromptoError;
