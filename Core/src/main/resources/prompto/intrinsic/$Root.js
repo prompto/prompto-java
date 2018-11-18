@@ -14,6 +14,16 @@ $Root.prototype.dbIdListener = function(dbId) {
 	this.dbId = dbId;
 };
 
+
+$Root.prototype.getOrCreateDbId = function() {
+	if(this.dbId)
+		return this.dbId;
+	else if(this.storable)
+		return this.storable.getOrCreateDbId();
+	else
+		return null;
+};
+
 $Root.prototype.getAttributeNames = function() {
     return Object.getOwnPropertyNames(this).filter(function(name) {
         return name!=="dbId" && name!=="mutable" && name!=="storable" && name!=="category" && typeof(this[name])!='function';
@@ -35,10 +45,10 @@ $Root.prototype.setMember = function(name, value, mutable, isEnum) {
     if(!this.mutable || (value && value.mutable && !mutable))
         throw new NotMutableError();
     this[name] = value;
-    if(this.storable) {
+    if(this.storable && name!=="dbId") {
         if(isEnum && value)
             value = value.name;
-        this.storable.setData(name, value);
+        this.storable.setData(name, value, this.dbId);
     }
 };
 
@@ -50,6 +60,8 @@ $Root.prototype.fromStored = function(stored) {
         var method = this["load$" + name];
         this[name] = method ? method(value) : value;
     }, this);
+	if(this.storable)
+		this.storable.clear();
 };
 
 $Root.prototype.collectStorables = function(storablesToAdd) {
