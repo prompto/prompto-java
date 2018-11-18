@@ -143,6 +143,15 @@ List.prototype.iterate = function (fn, instance) {
     }
 };
 
+
+List.prototype.collectStorables = function(storablesToAdd) {
+    this.forEach(function(item) {
+        if(item && item.collectStorables)
+            item.collectStorables(storablesToAdd);
+    });
+};
+
+
 List.prototype.equals = function(o) {
     o = o || null;
     if(this===o) {
