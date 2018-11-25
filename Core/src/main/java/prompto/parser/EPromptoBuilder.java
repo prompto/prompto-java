@@ -2505,7 +2505,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitMethodCallExpression(MethodCallExpressionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		IExpression exp = ctx.exp1!=null ? this.<IExpression>getNodeValue(ctx.exp1) : this.<IExpression>getNodeValue(ctx.exp2);
 		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
 		UnresolvedCall call = new UnresolvedCall(exp, args);
 		setNodeValue(ctx, call);
