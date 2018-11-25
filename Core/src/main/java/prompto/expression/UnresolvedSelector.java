@@ -5,6 +5,7 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
 import prompto.problem.IProblemListener;
 import prompto.problem.ProblemListener;
@@ -95,9 +96,9 @@ public class UnresolvedSelector extends SelectorExpression {
 						return saved.isCheckNative();
 					}
 				});
-				resolved = resolveMethod(context);
+				resolved = tryResolveMethod(context, null);
 				if (resolved == null)
-					resolved = resolveMember(context);
+					resolved = tryResolveMember(context);
 			} finally {
 				context.setProblemListener(saved);
 			}
@@ -107,7 +108,7 @@ public class UnresolvedSelector extends SelectorExpression {
 		return resolved;
 	}
 
-	private IExpression resolveMember(Context context) {
+	private IExpression tryResolveMember(Context context) {
 		try {
 			MemberSelector member = new MemberSelector(parent, id);
 			member.setFrom(this);
@@ -119,14 +120,19 @@ public class UnresolvedSelector extends SelectorExpression {
 		}
 	}
 
-	private IExpression resolveMethod(Context context) {
+	public void resolveMethod(Context context, ArgumentAssignmentList assignments) {
+		if (resolved == null)
+			resolved = tryResolveMethod(context, assignments);
+	}
+	
+	public IExpression tryResolveMethod(Context context, ArgumentAssignmentList assignments) {
 		try {
 			IExpression resolvedParent = parent;
 			if (resolvedParent instanceof UnresolvedIdentifier) {
 				((UnresolvedIdentifier) resolvedParent).checkMember(context);
 				resolvedParent = ((UnresolvedIdentifier) resolvedParent).getResolved();
 			}
-			UnresolvedCall method = new UnresolvedCall(new MethodSelector(resolvedParent, id), null);
+			UnresolvedCall method = new UnresolvedCall(new MethodSelector(resolvedParent, id), assignments);
 			method.setFrom(this);
 			method.check(context);
 			return method;
@@ -149,5 +155,6 @@ public class UnresolvedSelector extends SelectorExpression {
 			this.resolve(transpiler.getContext(), false);
 		return this.resolved.transpile(transpiler);
 	}
+
 
 }

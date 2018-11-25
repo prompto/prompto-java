@@ -15,6 +15,7 @@ import prompto.expression.IExpression;
 import prompto.expression.MemberSelector;
 import prompto.expression.MethodSelector;
 import prompto.expression.UnresolvedIdentifier;
+import prompto.expression.UnresolvedSelector;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
@@ -132,6 +133,8 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 		if(resolved==null) {
 			if(caller instanceof UnresolvedIdentifier)
 				resolved = resolveUnresolvedIdentifier(context);
+			else if(caller instanceof UnresolvedSelector)
+				resolved = resolveUnresolvedSelector(context);
 			else if(caller instanceof MemberSelector)
 				resolved = resolveMember(context);
 			if(resolved instanceof Section)
@@ -139,6 +142,12 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 		}
 	}
 	
+	private IExpression resolveUnresolvedSelector(Context context) {
+		UnresolvedSelector selector = (UnresolvedSelector)caller;
+		selector.resolveMethod(context, assignments);
+		return selector.getResolved();
+	}
+
 	private IExpression resolveUnresolvedIdentifier(Context context) {
 		Identifier id = ((UnresolvedIdentifier)caller).getId();
 		IExpression call = null;
