@@ -23,7 +23,7 @@ public class TestCompilerIssues extends BaseEParserTest {
 	
 	@Test
 	public void returningUUIDCompiles() {
-		String code = "define randomUUID as native method returning UUID doing:\n"
+		String code = "define randomUUID as native method returning Uuid doing:\n"
 				+ "    Java: return java.util.UUID.randomUUID();\n\n"
 				+ "define \"randomUUID is not null\" as test method doing:\n"
 				+ "    uuid = randomUUID\n"

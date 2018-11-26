@@ -110,6 +110,21 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedExpressionMember() throws Exception {
+		checkInterpretedOutput("methods/expressionMember.pec");
+	}
+
+	@Test
+	public void testCompiledExpressionMember() throws Exception {
+		checkCompiledOutput("methods/expressionMember.pec");
+	}
+
+	@Test
+	public void testTranspiledExpressionMember() throws Exception {
+		checkTranspiledOutput("methods/expressionMember.pec");
+	}
+
+	@Test
 	public void testInterpretedExpressionWith() throws Exception {
 		checkInterpretedOutput("methods/expressionWith.pec");
 	}

@@ -789,7 +789,7 @@ public class TestParserAtoms {
 	
 	@Test
 	public void testMainDeclaration() throws Exception {
-		String statement = "define start_TestEvents as method receiving Text<:> doing:\n\ta=1";
+		String statement = "define start_TestEvents as method receiving Text<:> options doing:\n\ta=1";
 		ETestParser parser = new ETestParser(statement, false);
 		IDeclaration decl = parser.parse_concrete_method_declaration();
 		assertNotNull(decl);

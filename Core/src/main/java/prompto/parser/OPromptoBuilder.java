@@ -545,8 +545,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 
 	@Override
 	public void exitCallableRoot(CallableRootContext ctx) {
-		IExpression name = this.<IExpression>getNodeValue(ctx.name);
-		setNodeValue(ctx, name);
+		setNodeValue(ctx, this.<IExpression>getNodeValue(ctx.exp));
 	}
 
 	@Override

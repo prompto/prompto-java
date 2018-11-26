@@ -3576,9 +3576,9 @@ public class MParser extends AbstractParser {
 		}
 	}
 	public static class CallableRootContext extends Callable_parentContext {
-		public IdentifierContext name;
-		public IdentifierContext identifier() {
-			return getRuleContext(IdentifierContext.class,0);
+		public Instance_expressionContext exp;
+		public Instance_expressionContext instance_expression() {
+			return getRuleContext(Instance_expressionContext.class,0);
 		}
 		public CallableRootContext(Callable_parentContext ctx) { copyFrom(ctx); }
 		@Override
@@ -3612,7 +3612,7 @@ public class MParser extends AbstractParser {
 			_prevctx = _localctx;
 
 			setState(910);
-			((CallableRootContext)_localctx).name = identifier();
+			((CallableRootContext)_localctx).exp = instance_expression(0);
 			}
 			_ctx.stop = _input.LT(-1);
 			setState(916);
@@ -23406,8 +23406,8 @@ public class MParser extends AbstractParser {
 		"I\2\u0385\u0387\3\2\2\2\u0386\u037c\3\2\2\2\u0386\u0387\3\2\2\2\u0387"+
 		"?\3\2\2\2\u0388\u038e\5\u00c4c\2\u0389\u038a\5B\"\2\u038a\u038b\7\25\2"+
 		"\2\u038b\u038c\5\u00c4c\2\u038c\u038e\3\2\2\2\u038d\u0388\3\2\2\2\u038d"+
-		"\u0389\3\2\2\2\u038eA\3\2\2\2\u038f\u0390\b\"\1\2\u0390\u0391\5\u00cc"+
-		"g\2\u0391\u0396\3\2\2\2\u0392\u0393\f\3\2\2\u0393\u0395\5D#\2\u0394\u0392"+
+		"\u0389\3\2\2\2\u038eA\3\2\2\2\u038f\u0390\b\"\1\2\u0390\u0391\5f\64\2"+
+		"\u0391\u0396\3\2\2\2\u0392\u0393\f\3\2\2\u0393\u0395\5D#\2\u0394\u0392"+
 		"\3\2\2\2\u0395\u0398\3\2\2\2\u0396\u0394\3\2\2\2\u0396\u0397\3\2\2\2\u0397"+
 		"C\3\2\2\2\u0398\u0396\3\2\2\2\u0399\u039a\7\25\2\2\u039a\u03a0\5\u00ce"+
 		"h\2\u039b\u039c\7\30\2\2\u039c\u039d\5b\62\2\u039d\u039e\7\31\2\2\u039e"+

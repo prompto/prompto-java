@@ -37,6 +37,11 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testExpressionMember() throws Exception {
+		compareResourceEME("methods/expressionMember.pec");
+	}
+
+	@Test
 	public void testExpressionWith() throws Exception {
 		compareResourceEME("methods/expressionWith.pec");
 	}

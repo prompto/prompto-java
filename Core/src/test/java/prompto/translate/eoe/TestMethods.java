@@ -37,6 +37,11 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testExpressionMember() throws Exception {
+		compareResourceEOE("methods/expressionMember.pec");
+	}
+
+	@Test
 	public void testExpressionWith() throws Exception {
 		compareResourceEOE("methods/expressionWith.pec");
 	}

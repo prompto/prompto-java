@@ -575,8 +575,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitCallableRoot(CallableRootContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		setNodeValue(ctx, new UnresolvedIdentifier(name));
+		setNodeValue(ctx, this.<Identifier>getNodeValue(ctx.exp));
 	}
 	
 	

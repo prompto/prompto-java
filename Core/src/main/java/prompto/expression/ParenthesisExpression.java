@@ -4,13 +4,14 @@ import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
+import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
-public class ParenthesisExpression implements IExpression {
+public class ParenthesisExpression extends Section implements IExpression {
 
 	IExpression expression;
 

@@ -20,6 +20,21 @@ public class TestMethods extends BaseMParserTest {
 	}
 
 	@Test
+	public void testInterpretedExpressionMember() throws Exception {
+		checkInterpretedOutput("methods/expressionMember.pmc");
+	}
+
+	@Test
+	public void testCompiledExpressionMember() throws Exception {
+		checkCompiledOutput("methods/expressionMember.pmc");
+	}
+
+	@Test
+	public void testTranspiledExpressionMember() throws Exception {
+		checkTranspiledOutput("methods/expressionMember.pmc");
+	}
+
+	@Test
 	public void testInterpretedTextAsync() throws Exception {
 		checkInterpretedOutput("methods/textAsync.pmc");
 	}
