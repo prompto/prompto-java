@@ -148,8 +148,8 @@ define parseDateTime as native method receiving Text text returning DateTime doi
 define parseUuid as native method receiving Text text returning Uuid doing:
 	Java: return java.util.UUID.fromString(text);
 	C#: return System.Guid.Parse(text);
-	Python2: return UUID(text) from module: uuid.UUID
-	Python3: return UUID(text) from module: uuid.UUID
+	Python2: return UUID(text) from module: uuid
+	Python3: return UUID(text) from module: uuid
 	JavaScript: return UUID.fromString(text); from module: prompto/intrinsic/UUID.js
 
 
