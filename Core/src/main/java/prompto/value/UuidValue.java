@@ -35,6 +35,15 @@ public class UuidValue extends BaseValue {
 	}
 	
 	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof UuidValue)
+			return value.equals(((UuidValue) obj).value);
+		else
+			return value.equals(obj);
+	}
+
+	
+	@Override
 	public String toString() {
 		return value.toString();
 	}

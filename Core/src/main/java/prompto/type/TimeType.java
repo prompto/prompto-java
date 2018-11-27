@@ -7,6 +7,7 @@ import java.util.Map;
 import prompto.expression.IExpression;
 import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoDate;
 import prompto.intrinsic.PromptoTime;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
@@ -36,6 +37,15 @@ public class TimeType extends NativeType {
 	public Type getJavaType(Context context) {
 		return PromptoTime.class;
 	}
+
+	@Override
+	public IValue convertJavaValueToIValue(Context context, Object value) {
+        if (value instanceof PromptoTime)
+            return new prompto.value.Time((PromptoTime)value);
+        else
+        	return super.convertJavaValueToIValue(context, value);
+	}
+
 
 	@Override
 	public boolean isAssignableFrom(Context context, IType other) {

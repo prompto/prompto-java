@@ -38,6 +38,14 @@ public class DateType extends NativeType {
 	}
 	
 	@Override
+	public IValue convertJavaValueToIValue(Context context, Object value) {
+        if (value instanceof PromptoDate)
+            return new prompto.value.Date((PromptoDate)value);
+        else
+        	return super.convertJavaValueToIValue(context, value);
+	}
+
+	@Override
 	public boolean isAssignableFrom(Context context, IType other) {
 		return super.isAssignableFrom(context, other) ||
 				other==DateTimeType.instance();
