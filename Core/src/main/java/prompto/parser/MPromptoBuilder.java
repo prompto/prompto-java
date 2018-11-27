@@ -195,6 +195,7 @@ import prompto.literal.VersionLiteral;
 import static prompto.parser.MParser.*;
 import prompto.parser.MParser.FetchStatementContext;
 import prompto.parser.MParser.Method_call_statementContext;
+import prompto.parser.MParser.Python_identifierContext;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -2469,7 +2470,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	@Override
 	public void exitPython_module(Python_moduleContext ctx) {
 		List<String> ids = new ArrayList<String>();
-		for(IdentifierContext ic : ctx.identifier())
+		for(Python_identifierContext ic : ctx.python_identifier())
 			ids.add(ic.getText());
 		PythonModule module = new PythonModule(ids);
 		setNodeValue(ctx, module);

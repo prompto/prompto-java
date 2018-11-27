@@ -2877,7 +2877,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	@Override
 	public void exitPython_module(Python_moduleContext ctx) {
 		List<String> ids = new ArrayList<String>();
-		for(IdentifierContext ic : ctx.identifier())
+		for(Python_identifierContext ic : ctx.python_identifier())
 			ids.add(ic.getText());
 		PythonModule module = new PythonModule(ids);
 		setNodeValue(ctx, module);
