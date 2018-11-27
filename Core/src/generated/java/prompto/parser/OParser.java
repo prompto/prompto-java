@@ -12127,11 +12127,11 @@ public class OParser extends AbstractParser {
 			return getRuleContext(Module_tokenContext.class,0);
 		}
 		public TerminalNode COLON() { return getToken(OParser.COLON, 0); }
-		public List<IdentifierContext> identifier() {
-			return getRuleContexts(IdentifierContext.class);
+		public List<Python_identifierContext> python_identifier() {
+			return getRuleContexts(Python_identifierContext.class);
 		}
-		public IdentifierContext identifier(int i) {
-			return getRuleContext(IdentifierContext.class,i);
+		public Python_identifierContext python_identifier(int i) {
+			return getRuleContext(Python_identifierContext.class,i);
 		}
 		public List<TerminalNode> DOT() { return getTokens(OParser.DOT); }
 		public TerminalNode DOT(int i) {
@@ -12165,7 +12165,7 @@ public class OParser extends AbstractParser {
 			setState(1839);
 			match(COLON);
 			setState(1840);
-			identifier();
+			python_identifier();
 			setState(1845);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -12175,7 +12175,7 @@ public class OParser extends AbstractParser {
 				setState(1841);
 				match(DOT);
 				setState(1842);
-				identifier();
+				python_identifier();
 				}
 				}
 				setState(1847);
@@ -23649,15 +23649,15 @@ public class OParser extends AbstractParser {
 		"\u0727\3\2\2\2\u072a\u00ed\3\2\2\2\u072b\u072d\5\u00caf\2\u072c\u072e"+
 		"\5\u00f0y\2\u072d\u072c\3\2\2\2\u072d\u072e\3\2\2\2\u072e\u00ef\3\2\2"+
 		"\2\u072f\u0730\7k\2\2\u0730\u0731\5\u0144\u00a3\2\u0731\u0732\7\r\2\2"+
-		"\u0732\u0737\5\u00caf\2\u0733\u0734\7\21\2\2\u0734\u0736\5\u00caf\2\u0735"+
-		"\u0733\3\2\2\2\u0736\u0739\3\2\2\2\u0737\u0735\3\2\2\2\u0737\u0738\3\2"+
-		"\2\2\u0738\u00f1\3\2\2\2\u0739\u0737\3\2\2\2\u073a\u073f\5\u0170\u00b9"+
-		"\2\u073b\u073c\7\21\2\2\u073c\u073e\5\u0170\u00b9\2\u073d\u073b\3\2\2"+
-		"\2\u073e\u0741\3\2\2\2\u073f\u073d\3\2\2\2\u073f\u0740\3\2\2\2\u0740\u0743"+
-		"\3\2\2\2\u0741\u073f\3\2\2\2\u0742\u0744\5\u00f4{\2\u0743\u0742\3\2\2"+
-		"\2\u0743\u0744\3\2\2\2\u0744\u00f3\3\2\2\2\u0745\u0746\7k\2\2\u0746\u0747"+
-		"\5\u0144\u00a3\2\u0747\u0749\7\r\2\2\u0748\u074a\7!\2\2\u0749\u0748\3"+
-		"\2\2\2\u0749\u074a\3\2\2\2\u074a\u074b\3\2\2\2\u074b\u0750\5\u0170\u00b9"+
+		"\u0732\u0737\5\u018a\u00c6\2\u0733\u0734\7\21\2\2\u0734\u0736\5\u018a"+
+		"\u00c6\2\u0735\u0733\3\2\2\2\u0736\u0739\3\2\2\2\u0737\u0735\3\2\2\2\u0737"+
+		"\u0738\3\2\2\2\u0738\u00f1\3\2\2\2\u0739\u0737\3\2\2\2\u073a\u073f\5\u0170"+
+		"\u00b9\2\u073b\u073c\7\21\2\2\u073c\u073e\5\u0170\u00b9\2\u073d\u073b"+
+		"\3\2\2\2\u073e\u0741\3\2\2\2\u073f\u073d\3\2\2\2\u073f\u0740\3\2\2\2\u0740"+
+		"\u0743\3\2\2\2\u0741\u073f\3\2\2\2\u0742\u0744\5\u00f4{\2\u0743\u0742"+
+		"\3\2\2\2\u0743\u0744\3\2\2\2\u0744\u00f3\3\2\2\2\u0745\u0746\7k\2\2\u0746"+
+		"\u0747\5\u0144\u00a3\2\u0747\u0749\7\r\2\2\u0748\u074a\7!\2\2\u0749\u0748"+
+		"\3\2\2\2\u0749\u074a\3\2\2\2\u074a\u074b\3\2\2\2\u074b\u0750\5\u0170\u00b9"+
 		"\2\u074c\u074d\7!\2\2\u074d\u074f\5\u0170\u00b9\2\u074e\u074c\3\2\2\2"+
 		"\u074f\u0752\3\2\2\2\u0750\u074e\3\2\2\2\u0750\u0751\3\2\2\2\u0751\u0755"+
 		"\3\2\2\2\u0752\u0750\3\2\2\2\u0753\u0754\7\21\2\2\u0754\u0756\5\u0170"+
