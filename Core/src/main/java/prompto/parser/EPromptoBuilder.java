@@ -342,7 +342,6 @@ import prompto.parser.EParser.HasAnyExpressionContext;
 import prompto.parser.EParser.HasExpressionContext;
 import prompto.parser.EParser.HexadecimalLiteralContext;
 import prompto.parser.EParser.HtmlTypeContext;
-import prompto.parser.EParser.IdentifierContext;
 import prompto.parser.EParser.IdentifierExpressionContext;
 import prompto.parser.EParser.IfStatementContext;
 import prompto.parser.EParser.If_statementContext;
