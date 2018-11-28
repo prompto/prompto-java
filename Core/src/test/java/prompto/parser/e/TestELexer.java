@@ -14,7 +14,7 @@ public class TestELexer extends BaseELexerTest {
 	public void testTokens() throws Exception {
 		String actual = parseTokenNamesFromString("{\n");
 		String expected = tokenNamesAsString(new int[] { ELexer.LCURL, ELexer.LF});
-		assertEquals(expected,actual);
+		assertEquals(expected, actual);
 		
 	}
 	
