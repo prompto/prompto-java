@@ -44,5 +44,5 @@ public class TestParserJsx extends BaseEParserTest {
 		assertEquals(1, decls.size());
 		ConcreteWidgetDeclaration decl = (ConcreteWidgetDeclaration)decls.get(0);
 		assertEquals(2, decl.getLocalMethods().size());
-;	}
+	}
 }
