@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import prompto.declaration.ConcreteWidgetDeclaration;
+import prompto.declaration.DeclarationList;
 import prompto.parser.Dialect;
 import prompto.parser.ECleverParser;
 import prompto.runtime.Context;
@@ -35,4 +37,12 @@ public class TestParserJsx extends BaseEParserTest {
 		String out = writer.toString();
 		assertEquals(jsx, out);
 	}
+	
+	@Test
+	public void canParseWidgetDeclaration() throws Exception {
+		DeclarationList decls = parseEResource("issues/widget.pec");
+		assertEquals(1, decls.size());
+		ConcreteWidgetDeclaration decl = (ConcreteWidgetDeclaration)decls.get(0);
+		assertEquals(2, decl.getLocalMethods().size());
+;	}
 }
