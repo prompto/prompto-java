@@ -61,11 +61,11 @@ public class StoreStatement extends BaseStatement {
 		}
 		if(andThen!=null) {
 			if(writer.getDialect()==Dialect.O) {
-				writer.append("then {").newLine().indent();
+				writer.append(" then {").newLine().indent();
 				andThen.toDialect(writer);
 				writer.dedent().append("}");
 			} else {
-				writer.append("then:").newLine().indent();
+				writer.append(" then:").newLine().indent();
 				andThen.toDialect(writer);
 				writer.dedent();
 			}
