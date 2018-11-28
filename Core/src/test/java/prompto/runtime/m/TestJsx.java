@@ -80,21 +80,6 @@ public class TestJsx extends BaseMParserTest {
 	}
 
 	@Test
-	public void testInterpretedEmpty() throws Exception {
-		checkInterpretedOutput("jsx/empty.pmc");
-	}
-
-	@Test
-	public void testCompiledEmpty() throws Exception {
-		checkCompiledOutput("jsx/empty.pmc");
-	}
-
-	@Test
-	public void testTranspiledEmpty() throws Exception {
-		checkTranspiledOutput("jsx/empty.pmc");
-	}
-
-	@Test
 	public void testInterpretedEmptyAttribute() throws Exception {
 		checkInterpretedOutput("jsx/emptyAttribute.pmc");
 	}

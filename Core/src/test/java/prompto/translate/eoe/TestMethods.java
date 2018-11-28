@@ -27,6 +27,11 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testEmpty() throws Exception {
+		compareResourceEOE("methods/empty.pec");
+	}
+
+	@Test
 	public void testExplicit() throws Exception {
 		compareResourceEOE("methods/explicit.pec");
 	}

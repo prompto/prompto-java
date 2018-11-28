@@ -27,6 +27,11 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
+	public void testEmpty() throws Exception {
+		compareResourceOEO("methods/empty.poc");
+	}
+
+	@Test
 	public void testExplicit() throws Exception {
 		compareResourceOEO("methods/explicit.poc");
 	}

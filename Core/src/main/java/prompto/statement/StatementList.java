@@ -122,20 +122,20 @@ public class StatementList extends LinkedList<IStatement> {
 	
 
 	public void toDialect(CodeWriter writer) {
-		// TODO support empty list
-		/* if(this.isEmpty()) switch(writer.getDialect()) {
+		if(this.isEmpty()) switch(writer.getDialect()) {
 		case E:
 		case M:
 			writer.append("pass").newLine();
 		default:
 			break;
-		}
-		else */ for(IStatement statement : this) {
-			statement.toDialect(writer);
-			if(statement.isSimple()) {
-				if(writer.getDialect()==Dialect.O && !(statement instanceof NativeCall))
-					writer.append(';');
-				writer.newLine();
+		} else {
+			for(IStatement statement : this) {
+				statement.toDialect(writer);
+				if(statement.isSimple()) {
+					if(writer.getDialect()==Dialect.O && !(statement instanceof NativeCall))
+						writer.append(';');
+					writer.newLine();
+				}
 			}
 		}
 	}

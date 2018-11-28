@@ -80,21 +80,6 @@ public class TestJsx extends BaseOParserTest {
 	}
 
 	@Test
-	public void testInterpretedEmpty() throws Exception {
-		checkInterpretedOutput("jsx/empty.poc");
-	}
-
-	@Test
-	public void testCompiledEmpty() throws Exception {
-		checkCompiledOutput("jsx/empty.poc");
-	}
-
-	@Test
-	public void testTranspiledEmpty() throws Exception {
-		checkTranspiledOutput("jsx/empty.poc");
-	}
-
-	@Test
 	public void testInterpretedEmptyAttribute() throws Exception {
 		checkInterpretedOutput("jsx/emptyAttribute.poc");
 	}

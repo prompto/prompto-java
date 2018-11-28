@@ -80,21 +80,6 @@ public class TestJsx extends BaseEParserTest {
 	}
 
 	@Test
-	public void testInterpretedEmpty() throws Exception {
-		checkInterpretedOutput("jsx/empty.pec");
-	}
-
-	@Test
-	public void testCompiledEmpty() throws Exception {
-		checkCompiledOutput("jsx/empty.pec");
-	}
-
-	@Test
-	public void testTranspiledEmpty() throws Exception {
-		checkTranspiledOutput("jsx/empty.pec");
-	}
-
-	@Test
 	public void testInterpretedEmptyAttribute() throws Exception {
 		checkInterpretedOutput("jsx/emptyAttribute.pec");
 	}

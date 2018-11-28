@@ -7,7 +7,6 @@ import java.util.Map;
 import prompto.expression.IExpression;
 import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;
-import prompto.intrinsic.PromptoDate;
 import prompto.intrinsic.PromptoTime;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
