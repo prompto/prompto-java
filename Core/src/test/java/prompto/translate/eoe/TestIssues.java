@@ -16,10 +16,5 @@ public class TestIssues extends BaseEParserTest {
 		compareResourceEOE("issues/widget.pec");
 	}
 
-	@Test
-	public void testWidget2() throws Exception {
-		compareResourceEOE("issues/widget2.pec");
-	}
-
 }
 
