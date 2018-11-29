@@ -35,6 +35,21 @@ public class TestIterate extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedForEachExpression() throws Exception {
+		checkInterpretedOutput("iterate/forEachExpression.pec");
+	}
+
+	@Test
+	public void testCompiledForEachExpression() throws Exception {
+		checkCompiledOutput("iterate/forEachExpression.pec");
+	}
+
+	@Test
+	public void testTranspiledForEachExpression() throws Exception {
+		checkTranspiledOutput("iterate/forEachExpression.pec");
+	}
+
+	@Test
 	public void testInterpretedForEachIntegerList() throws Exception {
 		checkInterpretedOutput("iterate/forEachIntegerList.pec");
 	}

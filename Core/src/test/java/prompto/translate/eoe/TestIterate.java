@@ -12,6 +12,11 @@ public class TestIterate extends BaseEParserTest {
 	}
 
 	@Test
+	public void testForEachExpression() throws Exception {
+		compareResourceEOE("iterate/forEachExpression.pec");
+	}
+
+	@Test
 	public void testForEachIntegerList() throws Exception {
 		compareResourceEOE("iterate/forEachIntegerList.pec");
 	}

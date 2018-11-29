@@ -20,6 +20,21 @@ public class TestIterate extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedForEachExpression() throws Exception {
+		checkInterpretedOutput("iterate/forEachExpression.poc");
+	}
+
+	@Test
+	public void testCompiledForEachExpression() throws Exception {
+		checkCompiledOutput("iterate/forEachExpression.poc");
+	}
+
+	@Test
+	public void testTranspiledForEachExpression() throws Exception {
+		checkTranspiledOutput("iterate/forEachExpression.poc");
+	}
+
+	@Test
 	public void testInterpretedForEachIntegerList() throws Exception {
 		checkInterpretedOutput("iterate/forEachIntegerList.poc");
 	}

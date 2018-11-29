@@ -21,6 +21,7 @@ import prompto.intrinsic.PromptoIterable;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.statement.ReturnStatement;
+import prompto.statement.UnresolvedCall;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.IteratorType;
@@ -188,14 +189,16 @@ public class IteratorExpression implements IExpression {
 	}
 
 	private void toMDialect(CodeWriter writer) {
+		IExpression expression = extractFromParenthesisIfPossible(this.expression);
 		expression.toDialect(writer);
-		writer.append(" for ");
+		writer.append(" for each ");
 		writer.append(id.toString());
 		writer.append(" in ");
 		source.toDialect(writer);
 	}
 
 	private void toODialect(CodeWriter writer) {
+		IExpression expression = extractFromParenthesisIfPossible(this.expression);
 		expression.toDialect(writer);
 		writer.append(" for each ( ");
 		writer.append(id.toString());
@@ -205,6 +208,7 @@ public class IteratorExpression implements IExpression {
 	}
 
 	private void toEDialect(CodeWriter writer) {
+		IExpression expression = encloseInParenthesisIfRequired(this.expression);
 		expression.toDialect(writer);
 		writer.append(" for each ");
 		writer.append(id.toString());
@@ -212,8 +216,29 @@ public class IteratorExpression implements IExpression {
 		source.toDialect(writer);
 	}
 	
+	private static IExpression encloseInParenthesisIfRequired(IExpression expression) {
+		if(mustBeEnclosedInParenthesis(expression))
+			return new ParenthesisExpression(expression);
+		else
+			return expression;
+	}
+
+	private static IExpression extractFromParenthesisIfPossible(IExpression expression) {
+		if(expression instanceof ParenthesisExpression) {
+			IExpression enclosed = ((ParenthesisExpression)expression).getExpression();
+			if(mustBeEnclosedInParenthesis(enclosed))
+				return enclosed;
+		}
+		return expression;
+	}
+
+	private static boolean mustBeEnclosedInParenthesis(IExpression expression) {
+		return expression instanceof UnresolvedCall;
+	}
+
 	@Override
 	public void declare(Transpiler transpiler) {
+		this.source.declare(transpiler);
 	    IType sourceType = this.source.check(transpiler.getContext());
 	    sourceType.declareIterator(transpiler, this.id, this.expression);
 	}

@@ -19,6 +19,10 @@ public class ParenthesisExpression extends Section implements IExpression {
 		this.expression = expression;
 	}
 
+	public IExpression getExpression() {
+		return expression;
+	}
+	
 	@Override
 	public String toString() {
 		return "(" + expression.toString() + ")";
