@@ -2,16 +2,12 @@ package prompto.parser.e;
 
 import static org.junit.Assert.*;
 
-import java.io.InputStream;
-
 import org.junit.Test;
 
 import prompto.declaration.ConcreteWidgetDeclaration;
 import prompto.declaration.DeclarationList;
 import prompto.parser.Dialect;
 import prompto.parser.ECleverParser;
-import prompto.parser.EIndentingLexer;
-import prompto.parser.ELexer;
 import prompto.runtime.Context;
 import prompto.statement.ReturnStatement;
 import prompto.utils.CodeWriter;
