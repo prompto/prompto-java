@@ -52,6 +52,14 @@ public class TestParserJsx extends BaseEParserTest {
 	
 	@Test
 	public void canParseWidgetDeclaration2() throws Exception {
+		DeclarationList decls = parseEResource("issues/widget2.pec");
+		assertEquals(1, decls.size());
+		ConcreteWidgetDeclaration decl = (ConcreteWidgetDeclaration)decls.get(0);
+		assertEquals(8, decl.getLocalMethods().size());
+	}
+
+	/*@Test
+	public void canParseWidgetDeclaration2() throws Exception {
 		InputStream input = getResourceAsStream("issues/widget2.pec");
 		ECleverParser parser = new ECleverParser(input);
 		EIndentingLexer lexer = parser.getLexer();
@@ -77,6 +85,6 @@ public class TestParserJsx extends BaseEParserTest {
 		assertEquals(1, decls.size());
 		ConcreteWidgetDeclaration decl = (ConcreteWidgetDeclaration)decls.get(0);
 		assertEquals(8, decl.getLocalMethods().size());
-	}
-
+	}*/
+	
 }
