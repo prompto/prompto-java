@@ -161,40 +161,58 @@ define parseVersion as native method receiving Text text returning Version doing
 	JavaScript: return Version.Parse(text); from module: prompto/intrinsic/Version.js
 
 
-define "parse Integer" as test method doing:
+define parsePeriod as native method receiving Text text returning Period doing:
+	Java: return prompto.intrinsic.PromptoPeriod.parse(text);
+	C#: return prompto.value.Period.Parse(text);
+	Python2: return Period.Parse(text) from module: prompto.value.Period
+	Python3: return Period.Parse(text) from module: prompto.value.Period
+	JavaScript: return Period.parse(text); from module: prompto/intrinsic/Period.js
+
+
+define "parses Integer" as test method doing:
 	i = parseInteger "123"
 and verifying:
 	i = 123
 
-define "parse Integer with leading 0" as test method doing:
+define "parses Integer with leading 0" as test method doing:
 	i = parseInteger "0123"
 and verifying:
 	i = 123
 
-define "parse Decimal" as test method doing:
+define "parses Decimal" as test method doing:
 	i = parseDecimal "123.45"
 and verifying:
 	i = 123.45
 
-define "parse Date" as test method doing:
+define "parses Date" as test method doing:
 	d = parseDate "2018-02-17"
 and verifying:
 	d = '2018-02-17'
 
-define "parse Time" as test method doing:
+define "parses Time" as test method doing:
 	t = parseTime "16:15:18"
 and verifying:
 	t = '16:15:18'
 
-define "parse DateTime" as test method doing:
+define "parses DateTime" as test method doing:
 	dt = parseDateTime "2018-02-17T16:15:18"
 and verifying:
 	dt = '2018-02-17T16:15:18'
 
-define "parse Uuid" as test method doing:
+define "parses Uuid" as test method doing:
 	u = parseUuid "11223344-aabb-ccdd-eeff-112233445566"
 and verifying:
 	u = '11223344-aabb-ccdd-eeff-112233445566'
+
+define "parses Version" as test method doing:
+	v = parseVersion "v1.2.3"
+and verifying:
+	v = 'v1.2.3'
+
+define "parses Period" as test method doing:
+	p = parsePeriod "PT1S"
+and verifying:
+	p = 'PT1S'
 define now as native method returning DateTime doing:
 	Java: return prompto.intrinsic.PromptoDateTime.now();
 	C#: return System.DateTimeOffset.Now;
@@ -214,8 +232,24 @@ define randomUuid as native method returning Uuid doing:
 	Python3: return uuid4() from module: uuid
 	JavaScript: return UUID.create(); from module: prompto/intrinsic/UUID.js
 
+// waits for n milliseconds (consuming all CPU in JavaScript)
+define sleep as native method receiving Integer millis doing:
+	Java: java.lang.Thread.sleep(millis);
+	C#: System.Threading.Thread.Sleep(millis);
+	Python2: sleep(millis) from module: prompto.utils.Utils
+	Python3: sleep(millis) from module: prompto.utils.Utils
+	JavaScript: sleep(millis); from module: prompto/utils/Utils.js
+
 
 define "randomUuid is not null" as test method doing:
 	uuid = randomUuid
 and verifying: 
 	uuid is not Nothing
+
+
+define "sleeps for 1 second" as test method doing:
+	start = now
+	sleep 1000
+	end = now
+and verifying: 
+	end > start + 'PT1S'

@@ -62,6 +62,11 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 		this.operator = operator;
 		this.right = right;
 	}
+	
+	@Override
+	public String toString() {
+		return left.toString() + " " + operator.toString() + " " + right.toString();
+	}
 
 	@Override
 	public void toDialect(CodeWriter writer) {

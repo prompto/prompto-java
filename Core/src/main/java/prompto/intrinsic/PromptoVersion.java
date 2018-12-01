@@ -7,6 +7,8 @@ public class PromptoVersion implements Comparable<PromptoVersion> {
 	public static final PromptoVersion LATEST = parse("-1.-1.-1");
 
 	public static PromptoVersion parse(String version) {
+		if(version.startsWith("v"))
+			version = version.substring(1);
 		String[] parts = version.split("\\.");
 		if(parts.length<3)
 			throw new InvalidParameterException("Version must be like 1.2.3!");

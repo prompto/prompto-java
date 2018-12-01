@@ -194,24 +194,24 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 		for(Method m : methods) {
 			if(!name.equals(m.getName())) 
 				continue;
-			if(validPrototype(context, m))
+			if(hasValidPrototype(context, m))
 				return m;
 		}
 		return null; 
 	}
 
-	boolean validPrototype(Context context,Method method) {
+	boolean hasValidPrototype(Context context,Method method) {
 		Class<?>[] types = method.getParameterTypes();
 		if(types.length!=arguments.size())
 			return false;
 		for(int i=0;i<types.length;i++) {
-			if(!validArgument(context, types[i], arguments.get(i)))
+			if(!isCompatibleArgument(context, types[i], arguments.get(i)))
 				return false;
 		}
 		return true;
 	}
 	
-	boolean validArgument(Context context, Class<?> klass, JavaExpression argument) {
+	boolean isCompatibleArgument(Context context, Class<?> klass, JavaExpression argument) {
 		IType argIType = argument.check(context);
 		if(argIType instanceof MethodType && klass==IMethodDeclaration.class) {
 			return true;
@@ -222,7 +222,18 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 			} catch (ClassNotFoundException e) {
 				return false;
 			}
-			return klass.isAssignableFrom((Class<?>)argType);
+			return isCompatibleArgument(klass, (Class<?>)argType); // 
 		}
+	}
+
+	boolean isCompatibleArgument(Class<?> required, Class<?> provided) {
+		return required==provided
+			|| required.isAssignableFrom((Class<?>)provided)
+			|| (required==boolean.class && provided==Boolean.class)
+			|| (required==Boolean.class && provided==boolean.class)
+			|| (required==long.class && provided==Long.class)
+			|| (required==Long.class && provided==long.class)
+			|| (required==double.class && provided==Double.class)
+			|| (required==Double.class && provided==double.class);
 	}
 }

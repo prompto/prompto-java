@@ -8,6 +8,8 @@ import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
+import prompto.value.IValue;
+import prompto.value.Period;
 
 
 
@@ -26,6 +28,14 @@ public class PeriodType extends NativeType {
 	@Override
 	public Type getJavaType(Context context) {
 		return PromptoPeriod.class;
+	}
+	
+	@Override
+	public IValue convertJavaValueToIValue(Context context, Object value) {
+		if(value instanceof PromptoPeriod)
+			return new Period((PromptoPeriod)value);
+		else
+			return super.convertJavaValueToIValue(context, value);
 	}
 	
 
