@@ -30,6 +30,7 @@ import prompto.type.IType;
 import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
+import prompto.value.NullValue;
 
 public class UnresolvedCall extends BaseStatement implements IAssertion {
 	
@@ -80,7 +81,11 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		resolveAndCheck(context);
-		return resolved.interpret(context);
+		if(resolved==null) {
+			context.getProblemListener().reportUnknownMethod(caller.toString(), this);
+			return NullValue.instance();
+		} else
+			return resolved.interpret(context);
 	}
 	
 	@Override

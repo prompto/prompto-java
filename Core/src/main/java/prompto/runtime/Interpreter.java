@@ -8,6 +8,7 @@ import prompto.argument.UnresolvedArgument;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
+import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.expression.MethodSelector;
 import prompto.grammar.ArgumentAssignment;
@@ -43,6 +44,8 @@ public class Interpreter {
 
 	public static void interpretTest(Context context, Identifier testName, boolean lookInStore) throws PromptoError {
 		TestMethodDeclaration test = context.getTest(testName, lookInStore);
+		if(test==null)
+			throw new SyntaxError("No such test: " + testName);
 		Context local = context.newLocalContext();
 		test.interpret(local);
 	}
