@@ -33,7 +33,6 @@ import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDocument;
 import prompto.intrinsic.PromptoList;
-import prompto.intrinsic.PromptoUtils;
 import prompto.literal.TextLiteral;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
@@ -41,6 +40,7 @@ import prompto.runtime.Variable;
 import prompto.statement.MethodCall;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
+import prompto.utils.ObjectUtils;
 import prompto.value.Document;
 import prompto.value.ExpressionValue;
 import prompto.value.IValue;
@@ -397,7 +397,7 @@ public class DocumentType extends NativeType {
 		protected void compileMethodBody(Context context, MethodInfo method, Type paramType, IExpression key) {
 			compileValue(context, method, paramType, "o1");
 			compileValue(context, method, paramType, "o2");
-			MethodConstant compare = new MethodConstant(PromptoUtils.class, "safeCompare", Object.class, Object.class, int.class);
+			MethodConstant compare = new MethodConstant(ObjectUtils.class, "safeCompare", Object.class, Object.class, int.class);
 			method.addInstruction(Opcode.INVOKESTATIC, compare);
 			method.addInstruction(Opcode.IRETURN);
 		}
@@ -422,7 +422,7 @@ public class DocumentType extends NativeType {
 			method.addInstruction(Opcode.ALOAD_2, new ClassConstant(paramType));
 			method.addInstruction(Opcode.LDC, new StringConstant(keyName));
 			method.addInstruction(Opcode.INVOKEVIRTUAL, getter);
-			MethodConstant compare = new MethodConstant(PromptoUtils.class, "safeCompare", Object.class, Object.class, int.class);
+			MethodConstant compare = new MethodConstant(ObjectUtils.class, "safeCompare", Object.class, Object.class, int.class);
 			method.addInstruction(Opcode.INVOKESTATIC, compare);
 			method.addInstruction(Opcode.IRETURN);
 		}
@@ -437,7 +437,7 @@ public class DocumentType extends NativeType {
 			StackLocal tmpThis = method.registerLocal("this", VerifierType.ITEM_Object, new ClassConstant(paramType));
 			compileValue(context, method, paramType, key, tmpThis, "o1");
 			compileValue(context, method, paramType, key, tmpThis, "o2");
-			MethodConstant compare = new MethodConstant(PromptoUtils.class, "safeCompare", Object.class, Object.class, int.class);
+			MethodConstant compare = new MethodConstant(ObjectUtils.class, "safeCompare", Object.class, Object.class, int.class);
 			method.addInstruction(Opcode.INVOKESTATIC, compare);
 			method.addInstruction(Opcode.IRETURN);
 		}
