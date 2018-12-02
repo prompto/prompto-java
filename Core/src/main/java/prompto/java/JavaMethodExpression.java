@@ -70,21 +70,26 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method) {
-		// push instance if any
-		ResultInfo parentType = parent.compile(context, method); 
-		// push arguments if any
-		for(JavaExpression arg : arguments)
-			arg.compile(context, method);
-		// write method call
 		try {
-			Method m = findMethod(context, parentType.getType());
-			Descriptor.Method dm = new Descriptor.Method(m.getParameterTypes(), m.getReturnType());
-			IConstantOperand operand = new MethodConstant(parentType.getType(), m.getName(), dm);
+			// push instance if any
+			ResultInfo parentType = parent.compile(context, method); 
+			// locate method
+			Method toCall = findMethod(context, parentType.getType());
+			// push arguments if any
+			for(int i=0;i<arguments.size();i++) {
+				JavaExpression arg = arguments.get(i);
+				ResultInfo pushed = arg.compile(context, method);
+				Class<?> argType = toCall.getParameterTypes()[i];
+				JavaValueConverter.autoboxIfRequired(method, pushed, argType);
+			}
+			// write method call
+			Descriptor.Method dm = new Descriptor.Method(toCall.getParameterTypes(), toCall.getReturnType());
+			IConstantOperand operand = new MethodConstant(parentType.getType(), toCall.getName(), dm);
 			if(parentType.isStatic())
 				method.addInstruction(Opcode.INVOKESTATIC, operand);
 			else
 				method.addInstruction(Opcode.INVOKEVIRTUAL, operand);
-			return new ResultInfo(m.getReturnType());
+			return new ResultInfo(toCall.getReturnType());
 		} catch(ClassNotFoundException e) {
 			throw new CompilerException(e);
 		}
@@ -229,11 +234,6 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 	boolean isCompatibleArgument(Class<?> required, Class<?> provided) {
 		return required==provided
 			|| required.isAssignableFrom((Class<?>)provided)
-			|| (required==boolean.class && provided==Boolean.class)
-			|| (required==Boolean.class && provided==boolean.class)
-			|| (required==long.class && provided==Long.class)
-			|| (required==Long.class && provided==long.class)
-			|| (required==double.class && provided==Double.class)
-			|| (required==Double.class && provided==double.class);
+			|| JavaValueConverter.canBeAutoboxed(required, provided);
 	}
 }

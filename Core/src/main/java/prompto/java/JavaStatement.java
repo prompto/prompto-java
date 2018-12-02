@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -68,25 +67,7 @@ public class JavaStatement {
 		writer.append(';');
 	}
 
-	static Map<Class<?>, Function<MethodInfo, ResultInfo>> resultConverters = createResultConverters();
 	static Map<Class<?>, Function<MethodInfo, ResultInfo>> resultConsumers = createResultConsumers();
-	
-	private static Map<Class<?>, Function<MethodInfo, ResultInfo>> createResultConverters() {
-		Map<Class<?>, Function<MethodInfo, ResultInfo>> map = new HashMap<>();
-		map.put(boolean.class, CompilerUtils::booleanToBoolean);
-		map.put(byte.class, CompilerUtils::intTolong); // no byte in the JVM
-		map.put(Byte.class, CompilerUtils::ByteToLong);
-		map.put(short.class, CompilerUtils::intToLong); // no short in the JVM
-		map.put(short.class, CompilerUtils::ShortToLong);
-		map.put(int.class, CompilerUtils::intToLong);
-		map.put(Integer.class, CompilerUtils::IntegerToLong);
-		map.put(long.class, CompilerUtils::longToLong);
-		map.put(float.class, CompilerUtils::floatToDouble);
-		map.put(Float.class, CompilerUtils::FloatToDouble);
-		map.put(double.class, CompilerUtils::doubleToDouble);
-		map.put(char.class, CompilerUtils::charToCharacter);
-		return map;
-	}
 	
 	private static Map<Class<?>, Function<MethodInfo, ResultInfo>> createResultConsumers() {
 		Map<Class<?>, Function<MethodInfo, ResultInfo>> map = new HashMap<>();
@@ -98,10 +79,7 @@ public class JavaStatement {
 		if(isReturn) {
 			if(info.getType()==void.class)
 				throw new SyntaxError("Cannot return void!"); // TODO add a test to ensure this has been caught earlier
-			// convert native type to object type
-			Function<MethodInfo, ResultInfo> converter = resultConverters.get(info.getType());
-			if(converter!=null)
-				info = converter.apply(method);
+			info = JavaValueConverter.convertResult(method, info);
 			if(!flags.isInline())
 				method.addInstruction(Opcode.ARETURN);
 			return info;
