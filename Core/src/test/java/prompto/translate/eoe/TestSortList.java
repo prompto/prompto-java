@@ -92,11 +92,6 @@ public class TestSortList extends BaseEParserTest {
 	}
 
 	@Test
-	public void testSortDocumentLiterals() throws Exception {
-		compareResourceEOE("sortList/sortDocumentLiterals.pec");
-	}
-
-	@Test
 	public void testSortDocumentMethods() throws Exception {
 		compareResourceEOE("sortList/sortDocumentMethods.pec");
 	}

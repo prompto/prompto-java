@@ -275,21 +275,6 @@ public class TestSortList extends BaseEParserTest {
 	}
 
 	@Test
-	public void testInterpretedSortDocumentLiterals() throws Exception {
-		checkInterpretedOutput("sortList/sortDocumentLiterals.pec");
-	}
-
-	@Test
-	public void testCompiledSortDocumentLiterals() throws Exception {
-		checkCompiledOutput("sortList/sortDocumentLiterals.pec");
-	}
-
-	@Test
-	public void testTranspiledSortDocumentLiterals() throws Exception {
-		checkTranspiledOutput("sortList/sortDocumentLiterals.pec");
-	}
-
-	@Test
 	public void testInterpretedSortDocumentMethods() throws Exception {
 		checkInterpretedOutput("sortList/sortDocumentMethods.pec");
 	}

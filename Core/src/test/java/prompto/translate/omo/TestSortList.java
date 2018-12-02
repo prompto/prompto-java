@@ -92,11 +92,6 @@ public class TestSortList extends BaseOParserTest {
 	}
 
 	@Test
-	public void testSortDocumentLiterals() throws Exception {
-		compareResourceOMO("sortList/sortDocumentLiterals.poc");
-	}
-
-	@Test
 	public void testSortDocumentMethods() throws Exception {
 		compareResourceOMO("sortList/sortDocumentMethods.poc");
 	}

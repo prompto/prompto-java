@@ -227,6 +227,10 @@ public class Context implements IContext {
 		return initInstanceContext(new InstanceContext(type), isChild);
 	}
 	
+	public Context newDocumentContext(boolean isChild) {
+		return initInstanceContext(new DocumentContext(null), isChild);
+	}
+
 	public Context newDocumentContext(Document document, boolean isChild) {
 		return initInstanceContext(new DocumentContext(document), isChild);
 	}

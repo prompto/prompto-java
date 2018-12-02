@@ -130,5 +130,9 @@ public class CodeWriter {
 		return new CodeWriter(dialect, context.newInstanceContext(type, false), sb, indenter);
 	}
 
+	public CodeWriter newDocumentWriter() {
+		return new CodeWriter(dialect, context.newDocumentContext(false), sb, indenter);
+	}
+
 
 }

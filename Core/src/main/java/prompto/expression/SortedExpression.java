@@ -62,6 +62,7 @@ public class SortedExpression implements IExpression {
 			writer.append("descending ");
 		source.toDialect(writer);
 		if(key!=null) {
+			writer = contextualizeWriter(writer);
 			writer.append(" with ");
 			IExpression keyExp = key;
 			if(keyExp instanceof UnresolvedIdentifier) try {
@@ -77,6 +78,17 @@ public class SortedExpression implements IExpression {
 		}
 	}	
 
+	private CodeWriter contextualizeWriter(CodeWriter writer) {
+		IType type = source.check(writer.getContext());
+		IType itemType = ((ContainerType)type).getItemType();
+		if (itemType instanceof CategoryType)
+			return writer.newInstanceWriter((CategoryType)itemType);
+		else if (itemType instanceof DocumentType)
+			return writer.newDocumentWriter();
+		else
+			return writer;
+	}
+
 	private void toODialect(CodeWriter writer) {
 		writer.append("sorted ");
 		if(descending)
@@ -84,6 +96,7 @@ public class SortedExpression implements IExpression {
 		writer.append("(");
 		source.toDialect(writer);
 		if(key!=null) {
+			writer = contextualizeWriter(writer);
 			writer.append(", key = ");
 			key.toDialect(writer);
 		}
