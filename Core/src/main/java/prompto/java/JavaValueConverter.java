@@ -49,7 +49,7 @@ public abstract class JavaValueConverter {
 			|| (tryReverse && canBeAutoboxed(to, from, false));
 	}
 
-	public static ResultInfo autoboxIfRequired(MethodInfo method, ResultInfo from, Class<?> to) {
+	public static ResultInfo compileAutoboxing(MethodInfo method, ResultInfo from, Class<?> to) {
 		if(from.getType()==to)
 			return from;
 		else if(from.getType()==char.class && to==Character.class)

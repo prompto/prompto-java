@@ -80,7 +80,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 				JavaExpression arg = arguments.get(i);
 				ResultInfo pushed = arg.compile(context, method);
 				Class<?> argType = toCall.getParameterTypes()[i];
-				JavaValueConverter.autoboxIfRequired(method, pushed, argType);
+				JavaValueConverter.compileAutoboxing(method, pushed, argType);
 			}
 			// write method call
 			Descriptor.Method dm = new Descriptor.Method(toCall.getParameterTypes(), toCall.getReturnType());
@@ -106,7 +106,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 			Method method = findMethod(context, instance);
 			if(method==null)
 				throw new SyntaxError("Could not locate: " + this.toString());
-			Object[] args = evaluate_arguments(context, method);
+			Object[] args = interpret_arguments(context, method);
 			Class<?> klass = instance instanceof Class<?> ? (Class<?>)instance : instance.getClass(); 
 			if(klass==instance)
 				instance = null;
@@ -120,17 +120,17 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 		}
 	}
 	
-	Object[] evaluate_arguments(Context context, Method method) throws PromptoError {
+	Object[] interpret_arguments(Context context, Method method) throws PromptoError {
 		Object[] args = new Object[arguments.size()];
 		Class<?>[] types = method.getParameterTypes();
 		for(int i=0;i<args.length;i++) {
 			JavaExpression exp = arguments.get(i);
-			args[i] = evaluate_argument(context, exp, types[i]);
+			args[i] = interpret_argument(context, exp, types[i]);
 		}
 		return args;
 	}
 
-	Object evaluate_argument(Context context, JavaExpression expression, Class<?> type) throws PromptoError {
+	Object interpret_argument(Context context, JavaExpression expression, Class<?> type) throws PromptoError {
         Object value = expression.interpret(context);
         if (value instanceof IExpression)
             value = ((IExpression)value).interpret(context);
