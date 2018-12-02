@@ -924,6 +924,10 @@ public class Context implements IContext {
 			this.document = document;
 		}
 		
+		public Document getDocument() {
+			return document;
+		}
+		
 		@Override
 		public Context contextForValue(Identifier name) {
 			// params and variables have precedence over members

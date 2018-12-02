@@ -4,20 +4,29 @@ import java.lang.reflect.Type;
 import java.security.InvalidParameterException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiFunction;
 
+import prompto.compiler.ByteOperand;
 import prompto.compiler.ClassConstant;
+import prompto.compiler.ClassFile;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
+import prompto.compiler.IVerifierEntry.VerifierType;
+import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.PromptoType;
 import prompto.compiler.ResultInfo;
+import prompto.compiler.StackLocal;
+import prompto.compiler.comparator.ComparatorCompiler;
+import prompto.compiler.comparator.ComparatorCompilerBase;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
@@ -33,19 +42,23 @@ import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.expression.InstanceExpression;
 import prompto.expression.MethodSelector;
+import prompto.expression.UnresolvedIdentifier;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
 import prompto.grammar.Operator;
 import prompto.instance.MemberInstance;
 import prompto.instance.VariableInstance;
+import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoRoot;
+import prompto.intrinsic.PromptoUtils;
 import prompto.runtime.Context;
 import prompto.runtime.MethodFinder;
 import prompto.runtime.Score;
+import prompto.runtime.Variable;
 import prompto.statement.MethodCall;
-import prompto.store.Family;
 import prompto.store.DataStore;
+import prompto.store.Family;
 import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.transpiler.Transpiler;
@@ -638,9 +651,9 @@ public class CategoryType extends BaseType {
 	private void transpileSortedByAttribute(Transpiler transpiler, boolean descending, IExpression key) {
 	    key = key!=null ? key : new InstanceExpression(new Identifier("key"));
 	    transpiler.append("function(o1, o2) { return ");
-	    this.transpileEqualKeys(transpiler, key);
+	    this.transpileEqualAttributes(transpiler, key);
 	    transpiler.append(" ? 0 : ");
-	    this.transpileGreaterKeys(transpiler, key);
+	    this.transpileGreaterAttributes(transpiler, key);
 	    transpiler.append(" ? ");
 	    if(descending)
 	        transpiler.append("-1 : 1; }");
@@ -648,14 +661,14 @@ public class CategoryType extends BaseType {
 	        transpiler.append("1 : -1; }");
 	}
 
-	private void transpileGreaterKeys(Transpiler transpiler, IExpression key) {
+	private void transpileGreaterAttributes(Transpiler transpiler, IExpression key) {
 	    transpiler.append("o1.");
 	    key.transpile(transpiler);
 	    transpiler.append(" > o2.");
 	    key.transpile(transpiler);
 	}
 
-	private void transpileEqualKeys(Transpiler transpiler, IExpression key) {
+	private void transpileEqualAttributes(Transpiler transpiler, IExpression key) {
 	    transpiler.append("o1.");
 	    key.transpile(transpiler);
 	    transpiler.append(" === o2.");
@@ -821,5 +834,231 @@ public class CategoryType extends BaseType {
 	    right.transpile(transpiler);
 	    transpiler.append(")");
 	}
+
+	public Comparator<? extends IValue> getComparator(Context context, IExpression key, boolean descending) {
+		if(key==null)
+			key = new UnresolvedIdentifier(new Identifier("key"));
+		Identifier keyAsId = new Identifier(key.toString());
+		IDeclaration d = getDeclaration(context);
+		if(d instanceof CategoryDeclaration) {
+			CategoryDeclaration decl = (CategoryDeclaration)d;
+			if(decl.hasAttribute(context, keyAsId))
+				return newAttributeComparator(context, keyAsId, descending);
+			else if(decl.hasMethod(context, keyAsId))
+				return newMemberMethodComparator(context, keyAsId, descending);
+			else {
+				MethodCall call = createGlobalMethodCallIfExists(context, keyAsId);
+				if(call!=null)
+					return newGlobalMethodComparator(context, call, descending);
+				else
+					return newExpressionComparator(context, key, descending);
+			}
+		} else
+			throw new UnsupportedOperationException(); // TODO
+	}
 	
+	
+
+	private Comparator<? extends IValue> newMemberMethodComparator(Context context, Identifier methodName, boolean descending) {
+		throw new UnsupportedOperationException(); // TODO
+	}
+
+
+	public MethodCall createGlobalMethodCallIfExists(Context context, Identifier methodName) {
+		try {
+			IExpression exp = new ExpressionValue(this, newInstance(context));
+			ArgumentAssignment arg = new ArgumentAssignment(null, exp); // MethodCall supports first anonymous argument
+			ArgumentAssignmentList args = new ArgumentAssignmentList(Collections.singletonList(arg));
+			MethodCall call = new MethodCall(new MethodSelector(methodName), args);
+			MethodFinder finder = new MethodFinder(context, call);
+			IMethodDeclaration decl = finder.findBestMethod(true);
+			if(decl==null)
+				return null;
+			else
+				return call;
+		} catch (PromptoError e) {
+			return null;
+		}
+	}
+
+
+	
+	private Comparator<? extends IValue> newAttributeComparator(Context context, Identifier name, boolean descending) {
+		BiFunction<IValue, IValue, Integer> cmpValues = BaseType.getValuesComparator(descending);
+		return new Comparator<IInstance>() {
+			@Override
+			public int compare(IInstance o1, IInstance o2) {
+				try {
+					IValue key1 = o1.getMember(context, name, false);
+					IValue key2 = o2.getMember(context, name, false);
+					return cmpValues.apply(key1, key2);
+				} catch(Throwable t) {
+					throw new RuntimeException(t);
+				}
+			}
+		};
+	}
+
+	
+	private Comparator<? extends IValue> newGlobalMethodComparator(Context context, MethodCall call, boolean descending) throws PromptoError {
+		BiFunction<IValue, IValue, Integer> cmpValues = BaseType.getValuesComparator(descending);
+		return new Comparator<IInstance>() {
+			@Override
+			public int compare(IInstance o1, IInstance o2) {
+				try {
+					IValue key1 = interpret(o1);
+					IValue key2 = interpret(o2);
+					return cmpValues.apply(key1,key2);
+				} catch(Throwable t) {
+					throw new RuntimeException(t);
+				}
+			}
+
+			private IValue interpret(IInstance o) throws PromptoError {
+				ArgumentAssignment assignment = call.getAssignments().getFirst();
+				assignment.setExpression(new ExpressionValue(CategoryType.this, o));
+				return call.interpret(context);
+			}
+		};
+	}
+
+
+	private Comparator<? extends IValue> newExpressionComparator(Context context, IExpression key, boolean descending) {
+		BiFunction<IValue, IValue, Integer> cmpValues = BaseType.getValuesComparator(descending);
+		return new Comparator<IInstance>() {
+			@Override
+			public int compare(IInstance o1, IInstance o2) {
+				try {
+					IValue key1 = interpret(o1);
+					IValue key2 = interpret(o2);
+					return cmpValues.apply(key1, key2);
+				} catch(Throwable t) {
+					throw new RuntimeException(t);
+				}
+			}
+
+			private IValue interpret(IInstance o) throws PromptoError {
+				Context co = context.newInstanceContext(o, false);
+				return key.interpret(co);
+			}
+		};
+	}
+
+	public ResultInfo compileSorted(Context context, MethodInfo method, Flags flags, ResultInfo srcInfo, IExpression key, boolean descending) {
+		if(key==null)
+			key = new UnresolvedIdentifier(new Identifier("key"));
+		compileComparator(context, method, flags, key, descending);
+		MethodConstant m = new MethodConstant(srcInfo.getType(), "sortUsing", Comparator.class, PromptoList.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+		return new ResultInfo(PromptoList.class);
+	}
+	
+	private ResultInfo compileComparator(Context context, MethodInfo method, Flags flags, IExpression key, boolean descending) {
+		IDeclaration decl = getDeclaration(context);
+		if(decl instanceof CategoryDeclaration) {
+			Type cmpType = compileComparatorClass(context, method.getClassFile(), (CategoryDeclaration)decl, key, descending);
+			return CompilerUtils.compileNewInstance(method, cmpType);
+		} else
+			throw new UnsupportedOperationException(); // TODO
+	}
+	
+	private Type compileComparatorClass(Context context, ClassFile parentClass, CategoryDeclaration decl, IExpression key, boolean descending) {
+		ComparatorCompiler compiler = getComparatorCompiler(context, decl, key);
+		return compiler.compile(context, parentClass, this, key, descending);
+	}
+	
+	private ComparatorCompiler getComparatorCompiler(Context context, CategoryDeclaration decl, IExpression key) {
+		Identifier keyAsId = new Identifier(key.toString());
+		if(decl.hasAttribute(context, keyAsId))
+			return new AttributeComparatorCompiler();
+		else if(decl.hasMethod(context, keyAsId))
+			return new MemberMethodComparatorCompiler();
+		else {
+			MethodCall call = createGlobalMethodCallIfExists(context, keyAsId);
+			if(call!=null)
+				return new GlobalMethodComparatorCompiler(call);
+			else
+				return new ExpressionComparatorCompiler();
+		}
+	}
+	
+	class AttributeComparatorCompiler extends ComparatorCompilerBase {
+
+		@Override
+		protected void compileMethodBody(Context context, MethodInfo method, Type paramType, IExpression key) {
+			method.addInstruction(Opcode.ALOAD_1, new ClassConstant(paramType));
+			Type fieldType = context.findAttribute(key.toString()).getType().getJavaType(context);
+			String getterName = CompilerUtils.getterName(key.toString());
+			InterfaceConstant getter = new InterfaceConstant(paramType, getterName, fieldType);
+			method.addInstruction(Opcode.INVOKEINTERFACE, getter);
+			method.addInstruction(Opcode.ALOAD_2, new ClassConstant(paramType));
+			method.addInstruction(Opcode.INVOKEINTERFACE, getter);
+			MethodConstant compare = new MethodConstant(PromptoUtils.class, "safeCompare", Object.class, Object.class, int.class);
+			method.addInstruction(Opcode.INVOKESTATIC, compare);
+			method.addInstruction(Opcode.IRETURN);
+		}
+
+	}
+
+	class ExpressionComparatorCompiler extends ComparatorCompilerBase {
+		
+	
+		@Override
+		protected void compileMethodBody(Context context, MethodInfo method, Type paramType, IExpression key) {
+			StackLocal tmpThis = method.registerLocal("this", VerifierType.ITEM_Object, new ClassConstant(paramType));
+			compileValue(context, method, paramType, key, tmpThis, "o1");
+			compileValue(context, method, paramType, key, tmpThis, "o2");
+			MethodConstant compare = new MethodConstant(PromptoUtils.class, "safeCompare", Object.class, Object.class, int.class);
+			method.addInstruction(Opcode.INVOKESTATIC, compare);
+			method.addInstruction(Opcode.IRETURN);
+		}
+
+		private ResultInfo compileValue(Context context, MethodInfo method, Type paramType, IExpression key, StackLocal tmpThis, String paramName) {
+			StackLocal param = method.getRegisteredLocal(paramName);
+			Opcode opcode = Opcode.values()[Opcode.ALOAD_0.ordinal() + param.getIndex()];
+			method.addInstruction(opcode, new ClassConstant(paramType));
+			method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)tmpThis.getIndex()));
+			return key.compile(context.newInstanceContext(CategoryType.this, false), method, new Flags());
+		}
+	}
+
+	class MemberMethodComparatorCompiler extends ComparatorCompilerBase {
+		@Override
+		protected void compileMethodBody(Context context, MethodInfo method, Type paramType, IExpression key) {
+			throw new UnsupportedOperationException();
+		}
+	}
+	
+	class GlobalMethodComparatorCompiler extends ComparatorCompilerBase {
+		
+		MethodCall call;
+		
+		public GlobalMethodComparatorCompiler(MethodCall call) {
+			this.call = call;
+		}
+
+		@Override
+		protected void compileMethodBody(Context context, MethodInfo method, Type paramType, IExpression key) {
+			compileValue(context, method, paramType, "o1");
+			compileValue(context, method, paramType, "o2");
+			MethodConstant compare = new MethodConstant(PromptoUtils.class, "safeCompare", Object.class, Object.class, int.class);
+			method.addInstruction(Opcode.INVOKESTATIC, compare);
+			method.addInstruction(Opcode.IRETURN);
+		}
+
+		private ResultInfo compileValue(Context context, MethodInfo method, Type paramType, String paramName) {
+			context.registerValue(new Variable(new Identifier(paramName), CategoryType.this));
+			ArgumentAssignment assignment = call.getAssignments().getFirst();
+			assignment.setExpression(new UnresolvedIdentifier(new Identifier(paramName)));
+			return call.compile(context, method, new Flags());
+		}
+	}
+
+	
+
+	
+
+
+
+
 }

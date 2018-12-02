@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiFunction;
 
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
@@ -218,6 +219,12 @@ public abstract class BaseType extends Section implements IType {
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		throw new InvalidParameterException(value.toString());
+	}
+
+	public static BiFunction<IValue, IValue, Integer> getValuesComparator(boolean descending) {
+		return descending ? 
+				((k1, k2) -> IValue.compareValues(k2, k1)) :
+				((k1, k2) -> IValue.compareValues(k1, k2));
 	}
 	
 }

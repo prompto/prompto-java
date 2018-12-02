@@ -82,6 +82,31 @@ public class TestSortList extends BaseOParserTest {
 	}
 
 	@Test
+	public void testSortDocumentExpressions() throws Exception {
+		compareResourceOEO("sortList/sortDocumentExpressions.poc");
+	}
+
+	@Test
+	public void testSortDocumentKeys() throws Exception {
+		compareResourceOEO("sortList/sortDocumentKeys.poc");
+	}
+
+	@Test
+	public void testSortDocumentLiterals() throws Exception {
+		compareResourceOEO("sortList/sortDocumentLiterals.poc");
+	}
+
+	@Test
+	public void testSortDocumentMethods() throws Exception {
+		compareResourceOEO("sortList/sortDocumentMethods.poc");
+	}
+
+	@Test
+	public void testSortDocumentNames() throws Exception {
+		compareResourceOEO("sortList/sortDocumentNames.poc");
+	}
+
+	@Test
 	public void testSortExpressions() throws Exception {
 		compareResourceOEO("sortList/sortExpressions.poc");
 	}

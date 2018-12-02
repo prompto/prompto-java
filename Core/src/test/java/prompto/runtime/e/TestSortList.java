@@ -245,6 +245,81 @@ public class TestSortList extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedSortDocumentExpressions() throws Exception {
+		checkInterpretedOutput("sortList/sortDocumentExpressions.pec");
+	}
+
+	@Test
+	public void testCompiledSortDocumentExpressions() throws Exception {
+		checkCompiledOutput("sortList/sortDocumentExpressions.pec");
+	}
+
+	@Test
+	public void testTranspiledSortDocumentExpressions() throws Exception {
+		checkTranspiledOutput("sortList/sortDocumentExpressions.pec");
+	}
+
+	@Test
+	public void testInterpretedSortDocumentKeys() throws Exception {
+		checkInterpretedOutput("sortList/sortDocumentKeys.pec");
+	}
+
+	@Test
+	public void testCompiledSortDocumentKeys() throws Exception {
+		checkCompiledOutput("sortList/sortDocumentKeys.pec");
+	}
+
+	@Test
+	public void testTranspiledSortDocumentKeys() throws Exception {
+		checkTranspiledOutput("sortList/sortDocumentKeys.pec");
+	}
+
+	@Test
+	public void testInterpretedSortDocumentLiterals() throws Exception {
+		checkInterpretedOutput("sortList/sortDocumentLiterals.pec");
+	}
+
+	@Test
+	public void testCompiledSortDocumentLiterals() throws Exception {
+		checkCompiledOutput("sortList/sortDocumentLiterals.pec");
+	}
+
+	@Test
+	public void testTranspiledSortDocumentLiterals() throws Exception {
+		checkTranspiledOutput("sortList/sortDocumentLiterals.pec");
+	}
+
+	@Test
+	public void testInterpretedSortDocumentMethods() throws Exception {
+		checkInterpretedOutput("sortList/sortDocumentMethods.pec");
+	}
+
+	@Test
+	public void testCompiledSortDocumentMethods() throws Exception {
+		checkCompiledOutput("sortList/sortDocumentMethods.pec");
+	}
+
+	@Test
+	public void testTranspiledSortDocumentMethods() throws Exception {
+		checkTranspiledOutput("sortList/sortDocumentMethods.pec");
+	}
+
+	@Test
+	public void testInterpretedSortDocumentNames() throws Exception {
+		checkInterpretedOutput("sortList/sortDocumentNames.pec");
+	}
+
+	@Test
+	public void testCompiledSortDocumentNames() throws Exception {
+		checkCompiledOutput("sortList/sortDocumentNames.pec");
+	}
+
+	@Test
+	public void testTranspiledSortDocumentNames() throws Exception {
+		checkTranspiledOutput("sortList/sortDocumentNames.pec");
+	}
+
+	@Test
 	public void testInterpretedSortExpressions() throws Exception {
 		checkInterpretedOutput("sortList/sortExpressions.pec");
 	}

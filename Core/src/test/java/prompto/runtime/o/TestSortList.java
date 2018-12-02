@@ -245,6 +245,66 @@ public class TestSortList extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedSortDocumentExpressions() throws Exception {
+		checkInterpretedOutput("sortList/sortDocumentExpressions.poc");
+	}
+
+	@Test
+	public void testCompiledSortDocumentExpressions() throws Exception {
+		checkCompiledOutput("sortList/sortDocumentExpressions.poc");
+	}
+
+	@Test
+	public void testTranspiledSortDocumentExpressions() throws Exception {
+		checkTranspiledOutput("sortList/sortDocumentExpressions.poc");
+	}
+
+	@Test
+	public void testInterpretedSortDocumentKeys() throws Exception {
+		checkInterpretedOutput("sortList/sortDocumentKeys.poc");
+	}
+
+	@Test
+	public void testCompiledSortDocumentKeys() throws Exception {
+		checkCompiledOutput("sortList/sortDocumentKeys.poc");
+	}
+
+	@Test
+	public void testTranspiledSortDocumentKeys() throws Exception {
+		checkTranspiledOutput("sortList/sortDocumentKeys.poc");
+	}
+
+	@Test
+	public void testInterpretedSortDocumentMethods() throws Exception {
+		checkInterpretedOutput("sortList/sortDocumentMethods.poc");
+	}
+
+	@Test
+	public void testCompiledSortDocumentMethods() throws Exception {
+		checkCompiledOutput("sortList/sortDocumentMethods.poc");
+	}
+
+	@Test
+	public void testTranspiledSortDocumentMethods() throws Exception {
+		checkTranspiledOutput("sortList/sortDocumentMethods.poc");
+	}
+
+	@Test
+	public void testInterpretedSortDocumentNames() throws Exception {
+		checkInterpretedOutput("sortList/sortDocumentNames.poc");
+	}
+
+	@Test
+	public void testCompiledSortDocumentNames() throws Exception {
+		checkCompiledOutput("sortList/sortDocumentNames.poc");
+	}
+
+	@Test
+	public void testTranspiledSortDocumentNames() throws Exception {
+		checkTranspiledOutput("sortList/sortDocumentNames.poc");
+	}
+
+	@Test
 	public void testInterpretedSortExpressions() throws Exception {
 		checkInterpretedOutput("sortList/sortExpressions.poc");
 	}

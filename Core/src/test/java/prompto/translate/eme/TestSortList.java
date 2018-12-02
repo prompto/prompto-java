@@ -82,6 +82,31 @@ public class TestSortList extends BaseEParserTest {
 	}
 
 	@Test
+	public void testSortDocumentExpressions() throws Exception {
+		compareResourceEME("sortList/sortDocumentExpressions.pec");
+	}
+
+	@Test
+	public void testSortDocumentKeys() throws Exception {
+		compareResourceEME("sortList/sortDocumentKeys.pec");
+	}
+
+	@Test
+	public void testSortDocumentLiterals() throws Exception {
+		compareResourceEME("sortList/sortDocumentLiterals.pec");
+	}
+
+	@Test
+	public void testSortDocumentMethods() throws Exception {
+		compareResourceEME("sortList/sortDocumentMethods.pec");
+	}
+
+	@Test
+	public void testSortDocumentNames() throws Exception {
+		compareResourceEME("sortList/sortDocumentNames.pec");
+	}
+
+	@Test
 	public void testSortExpressions() throws Exception {
 		compareResourceEME("sortList/sortExpressions.pec");
 	}

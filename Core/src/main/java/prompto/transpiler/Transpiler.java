@@ -83,6 +83,12 @@ public class Transpiler {
 	    return this.copyTranspiler(context);
 	}
 
+	public Transpiler newDocumentTranspiler() {
+		Context context = this.context.newDocumentContext(null, true);
+	    return this.copyTranspiler(context);
+	}
+
+	
 
 
 	public Transpiler newMemberTranspiler(CategoryType categoryType) {
@@ -265,6 +271,6 @@ public class Transpiler {
 		}
 	}
 
-	
+
 
 }

@@ -10,6 +10,7 @@ import prompto.error.SyntaxError;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
+import prompto.type.DocumentType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
@@ -23,6 +24,8 @@ public class ThisExpression implements IExpression {
 	
 	@Override
 	public IType check(Context context) {
+		if(context instanceof Context.DocumentContext)
+			return DocumentType.instance();
 		if(context!=null && !(context instanceof Context.InstanceContext))
 			context = context.getClosestInstanceContext();
 		if( context instanceof Context.InstanceContext)
@@ -33,6 +36,8 @@ public class ThisExpression implements IExpression {
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
+		if(context instanceof Context.DocumentContext)
+			return ((Context.DocumentContext)context).getDocument();
 		if(context!=null && !(context instanceof Context.InstanceContext))
 			context = context.getClosestInstanceContext();
 		if( context instanceof Context.InstanceContext)

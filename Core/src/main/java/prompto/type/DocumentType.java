@@ -1,17 +1,48 @@
 package prompto.type;
 
 import java.lang.reflect.Type;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.function.BiFunction;
 
+import prompto.compiler.ByteOperand;
+import prompto.compiler.ClassConstant;
+import prompto.compiler.ClassFile;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.IVerifierEntry.VerifierType;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.StackLocal;
+import prompto.compiler.StringConstant;
+import prompto.compiler.comparator.ComparatorCompiler;
+import prompto.compiler.comparator.ComparatorCompilerBase;
+import prompto.declaration.IDeclaration;
+import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
+import prompto.expression.DocumentExpression;
 import prompto.expression.IExpression;
+import prompto.expression.MethodSelector;
+import prompto.expression.UnresolvedIdentifier;
+import prompto.grammar.ArgumentAssignment;
+import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDocument;
+import prompto.intrinsic.PromptoList;
+import prompto.intrinsic.PromptoUtils;
+import prompto.literal.TextLiteral;
 import prompto.runtime.Context;
+import prompto.runtime.Context.MethodDeclarationMap;
+import prompto.runtime.Variable;
+import prompto.statement.MethodCall;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
 import prompto.value.Document;
+import prompto.value.ExpressionValue;
 import prompto.value.IValue;
 import prompto.value.NullValue;
 
@@ -151,5 +182,274 @@ public class DocumentType extends NativeType {
 	    expression.transpile(transpiler);
 	    transpiler.append(")");
 	}
+	
+	
+	@Override
+	public void declareSorted(Transpiler transpiler, IExpression key) {
+		if(key==null)
+			key = new TextLiteral("\"key\"");
+		Identifier id = new Identifier(key.toString());
+	    IMethodDeclaration method = this.findGlobalMethod(transpiler.getContext(), id);
+        if (method != null) {
+        	method.declare(transpiler);
+        } else {
+        	transpiler = transpiler.newDocumentTranspiler();
+            key.declare(transpiler);
+        }
+	}
+	
+
+	
+	@Override
+	public void transpileSorted(Transpiler transpiler, boolean descending, IExpression key) {
+		if(key==null)
+			key = new TextLiteral("\"key\"");
+		Identifier id = new Identifier(key.toString());
+		IMethodDeclaration method = findGlobalMethod(transpiler.getContext(), id);
+		if(method != null)
+            transpileSortedByGlobalMethod(transpiler, descending, method.getTranspiledName(transpiler.getContext()));
+		else if(key instanceof TextLiteral)
+			transpileSortedByEntry(transpiler, descending, (TextLiteral)key);
+		else
+			transpileSortedByExpression(transpiler, descending, key);
+	}
+
+	private void transpileSortedByGlobalMethod(Transpiler transpiler, boolean descending, String methodName) {
+	   transpiler.append("function(o1, o2) { return ")
+	        .append(methodName).append("(o1) === ").append(methodName).append("(o2)").append(" ? 0 : ")
+	        .append(methodName).append("(o1) > ").append(methodName).append("(o2)").append(" ? ");
+	    if(descending)
+	        transpiler.append("-1 : 1; }");
+	    else
+	        transpiler.append("1 : -1; }");
+	}
+
+	private void transpileSortedByExpression(Transpiler transpiler, boolean descending, IExpression key) {
+		transpiler = transpiler.newDocumentTranspiler();
+	    transpiler.append("function(o1, o2) { var v1 = (function() { return ");
+	    key.transpile(transpiler);
+	    transpiler.append("; }).bind(o1)(); var v2 = (function() { return ");
+	    key.transpile(transpiler);
+	    transpiler.append("; }).bind(o2)(); return v1===v2 ? 0 : v1 > v2 ? ");
+	    if(descending)
+	        transpiler.append("-1 : 1; }");
+	    else
+	        transpiler.append("1 : -1; }");
+	}
+
+	private void transpileSortedByEntry(Transpiler transpiler, boolean descending, TextLiteral key) {
+	    transpiler.append("function(o1, o2) { return ");
+	    transpileEqualEntries(transpiler, key);
+	    transpiler.append(" ? 0 : ");
+	    transpileGreaterEntries(transpiler, key);
+	    transpiler.append(" ? ");
+	    if(descending)
+	        transpiler.append("-1 : 1; }");
+	    else
+	        transpiler.append("1 : -1; }");
+	}
+
+	private void transpileGreaterEntries(Transpiler transpiler, IExpression key) {
+	    transpiler.append("o1[");
+	    key.transpile(transpiler);
+	    transpiler.append("] > o2[");
+	    key.transpile(transpiler);
+	    transpiler.append("]");
+	}
+
+	private void transpileEqualEntries(Transpiler transpiler, IExpression key) {
+	    transpiler.append("o1[");
+	    key.transpile(transpiler);
+	    transpiler.append("] === o2[");
+	    key.transpile(transpiler);
+	    transpiler.append("]");
+	}
+
+	private IMethodDeclaration findGlobalMethod(Context context, Identifier id) {
+		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, id);
+		if(decl instanceof MethodDeclarationMap)
+			return ((MethodDeclarationMap)decl).get(DocumentType.instance().getTypeNameId().toString());
+		else
+			return null;
+	}
+
+	public Comparator<? extends IValue> getComparator(Context context, IExpression key, boolean descending) {
+		if(key==null)
+			key = new TextLiteral("\"key\"");
+		Identifier id = new Identifier(key.toString());
+		IMethodDeclaration method = findGlobalMethod(context, id);
+		if(method!=null)
+			return newMethodComparator(context, id, descending);
+		else if(key instanceof TextLiteral) 
+			return newEntryComparator(context, new Identifier(((TextLiteral)key).getValue().getStorableData()), descending);
+		else
+			return newExpressionComparator(context, key, descending);
+	}
+	
+	
+	private Comparator<? extends IValue> newMethodComparator(Context context, Identifier method, boolean descending) {
+		BiFunction<IValue, IValue, Integer> cmpValues = BaseType.getValuesComparator(descending);
+		MethodCall call = createGlobalMethodCall(context, method);
+		return new Comparator<Document>() {
+			@Override
+			public int compare(Document o1, Document o2) {
+				try {
+					IValue key1 = interpret(o1);
+					IValue key2 = interpret(o2);
+					return cmpValues.apply(key1, key2);
+				} catch(Throwable t) {
+					throw new RuntimeException(t);
+				}
+			}
+
+			private IValue interpret(Document o) throws PromptoError {
+				ArgumentAssignment assignment = call.getAssignments().getFirst();
+				assignment.setExpression(new ExpressionValue(DocumentType.instance(), o));
+				return call.interpret(context);
+			}
+		};
+	}
+
+	private MethodCall createGlobalMethodCall(Context context, Identifier method) {
+		ArgumentAssignment arg = new ArgumentAssignment(null, new DocumentExpression(null)); // MethodCall supports first anonymous argument
+		ArgumentAssignmentList args = new ArgumentAssignmentList(Collections.singletonList(arg));
+		return new MethodCall(new MethodSelector(method), args);
+	}
+
+	private Comparator<? extends IValue> newEntryComparator(Context context, Identifier entry, boolean descending) {
+		BiFunction<IValue, IValue, Integer> cmpValues = BaseType.getValuesComparator(descending);
+		return new Comparator<Document>() {
+			@Override
+			public int compare(Document o1, Document o2) {
+				try {
+					IValue key1 = o1.getMember(context, entry, false);
+					IValue key2 = o2.getMember(context, entry, false);
+					return cmpValues.apply(key1, key2);
+				} catch(Throwable t) {
+					throw new RuntimeException(t);
+				}
+			}
+		};
+	}
+
+
+	private Comparator<? extends IValue> newExpressionComparator(Context context, IExpression key, boolean descending) {
+		BiFunction<IValue, IValue, Integer> cmpValues = BaseType.getValuesComparator(descending);
+		return new Comparator<Document>() {
+			@Override
+			public int compare(Document o1, Document o2) {
+				try {
+					Context local = context.newDocumentContext(o1, true);	
+					IValue key1 = key.interpret(local);
+					local = context.newDocumentContext(o2, true);	
+					IValue key2 = key.interpret(local);
+					return cmpValues.apply(key1, key2);
+				} catch(Throwable t) {
+					throw new RuntimeException(t);
+				}
+			}
+		};
+	}
+
+	public ResultInfo compileSorted(Context context, MethodInfo method, Flags flags, ResultInfo srcInfo, IExpression key, boolean descending) {
+		if(key==null)
+			key = new TextLiteral("\"key\"");
+		compileComparator(context, method, flags, key, descending);
+		MethodConstant m = new MethodConstant(srcInfo.getType(), "sortUsing", Comparator.class, PromptoList.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+		return new ResultInfo(PromptoList.class);
+	}
+
+	private ResultInfo compileComparator(Context context, MethodInfo method, Flags flags, IExpression key, boolean descending) {
+		Type cmpType = compileComparatorClass(context, method.getClassFile(), key, descending);
+		return CompilerUtils.compileNewInstance(method, cmpType);
+	}
+
+	private Type compileComparatorClass(Context context, ClassFile parentClass, IExpression key, boolean descending) {
+		ComparatorCompiler compiler = getComparatorCompiler(context, key);
+		return compiler.compile(context, parentClass, this, key, descending);
+	}
+	
+
+	private ComparatorCompiler getComparatorCompiler(Context context, IExpression key) {
+		Identifier keyAsId = new Identifier(key.toString());
+		IMethodDeclaration method = findGlobalMethod(context, keyAsId);
+		if(method != null) {
+			MethodCall call = createGlobalMethodCall(context, keyAsId);
+			return new GlobalMethodComparatorCompiler(call);
+		} else if(key instanceof TextLiteral)
+			return new EntryComparatorCompiler();
+		else
+			return new ExpressionComparatorCompiler();
+		
+	}
+
+	
+	class GlobalMethodComparatorCompiler extends ComparatorCompilerBase {
+		
+		MethodCall call;
+		
+		public GlobalMethodComparatorCompiler(MethodCall call) {
+			this.call = call;
+		}
+
+		@Override
+		protected void compileMethodBody(Context context, MethodInfo method, Type paramType, IExpression key) {
+			compileValue(context, method, paramType, "o1");
+			compileValue(context, method, paramType, "o2");
+			MethodConstant compare = new MethodConstant(PromptoUtils.class, "safeCompare", Object.class, Object.class, int.class);
+			method.addInstruction(Opcode.INVOKESTATIC, compare);
+			method.addInstruction(Opcode.IRETURN);
+		}
+
+		private ResultInfo compileValue(Context context, MethodInfo method, Type paramType, String paramName) {
+			context.registerValue(new Variable(new Identifier(paramName), DocumentType.instance()));
+			ArgumentAssignment assignment = call.getAssignments().getFirst();
+			assignment.setExpression(new UnresolvedIdentifier(new Identifier(paramName)));
+			return call.compile(context, method, new Flags());
+		}
+	}
+	
+	class EntryComparatorCompiler extends ComparatorCompilerBase {
+
+		@Override
+		protected void compileMethodBody(Context context, MethodInfo method, Type paramType, IExpression key) {
+			String keyName = ((TextLiteral)key).getValue().getStorableData();
+			MethodConstant getter = new MethodConstant(paramType, "get", Object.class, Object.class);
+			method.addInstruction(Opcode.ALOAD_1, new ClassConstant(paramType));
+			method.addInstruction(Opcode.LDC, new StringConstant(keyName));
+			method.addInstruction(Opcode.INVOKEVIRTUAL, getter);
+			method.addInstruction(Opcode.ALOAD_2, new ClassConstant(paramType));
+			method.addInstruction(Opcode.LDC, new StringConstant(keyName));
+			method.addInstruction(Opcode.INVOKEVIRTUAL, getter);
+			MethodConstant compare = new MethodConstant(PromptoUtils.class, "safeCompare", Object.class, Object.class, int.class);
+			method.addInstruction(Opcode.INVOKESTATIC, compare);
+			method.addInstruction(Opcode.IRETURN);
+		}
+
+	}
+
+	class ExpressionComparatorCompiler extends ComparatorCompilerBase {
+		
+		
+		@Override
+		protected void compileMethodBody(Context context, MethodInfo method, Type paramType, IExpression key) {
+			StackLocal tmpThis = method.registerLocal("this", VerifierType.ITEM_Object, new ClassConstant(paramType));
+			compileValue(context, method, paramType, key, tmpThis, "o1");
+			compileValue(context, method, paramType, key, tmpThis, "o2");
+			MethodConstant compare = new MethodConstant(PromptoUtils.class, "safeCompare", Object.class, Object.class, int.class);
+			method.addInstruction(Opcode.INVOKESTATIC, compare);
+			method.addInstruction(Opcode.IRETURN);
+		}
+
+		private ResultInfo compileValue(Context context, MethodInfo method, Type paramType, IExpression key, StackLocal tmpThis, String paramName) {
+			StackLocal param = method.getRegisteredLocal(paramName);
+			Opcode opcode = Opcode.values()[Opcode.ALOAD_0.ordinal() + param.getIndex()];
+			method.addInstruction(opcode, new ClassConstant(paramType));
+			method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)tmpThis.getIndex()));
+			return key.compile(context.newDocumentContext(null, true), method, new Flags());
+		}
+	}
+
 		
 }
