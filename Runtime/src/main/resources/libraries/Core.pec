@@ -69,6 +69,7 @@ define "at least 3 items getAllAttributes" as test method doing:
 and verifying: 
 	l is an Attribute[]
 	l.count >= 3
+
 // runtime reference of any object
 define id as Any attribute
 // database reference of stored object
@@ -93,8 +94,10 @@ define login as storable Text attribute with key and value index
 define password as Text attribute
 // users typically have an email  
 define email as storable Text attribute with value index
+
 define getCurrentCloud as native method returning Text doing:
 	Java: return prompto.cloud.Cloud.current().name();
+
 define Error as enumerated category with attributes name and text, and symbols:
 	DIVIDE_BY_ZERO with "Divide by zero!" as text
 	INDEX_OUT_OF_RANGE with "Index out of range!" as text
@@ -102,9 +105,11 @@ define Error as enumerated category with attributes name and text, and symbols:
 	NOT_MUTABLE with "Not a mutable object!" as text
 	NOT_STORABLE with "Not a storable object!" as text
 	READ_WRITE with "Read/write failed!" as text
+
 define DecimalConstant as enumerated Decimal with symbols:
 	PI with 3.14159265358979323846 as value
 	E with 2.7182818284590452354 as value
+
 define parseInteger as native method receiving Text text returning Integer doing:
 	Java: return Long.parseLong(text);
 	C#: return System.Int64.Parse(text);
@@ -213,6 +218,7 @@ define "parses Period" as test method doing:
 	p = parsePeriod "PT1S"
 and verifying:
 	p = 'PT1S'
+
 define now as native method returning DateTime doing:
 	Java: return prompto.intrinsic.PromptoDateTime.now();
 	C#: return System.DateTimeOffset.Now;
@@ -224,6 +230,7 @@ define "now is a DateTime" as test method doing:
 	a = now
 and verifying: 
 	a is a DateTime 
+
 // returns a random UUID as defined by http://www.ietf.org/rfc/rfc4122.txt
 define randomUuid as native method returning Uuid doing:
 	Java: return java.util.UUID.randomUUID();
@@ -235,7 +242,7 @@ define randomUuid as native method returning Uuid doing:
 // waits for n milliseconds (consuming all CPU in JavaScript)
 define sleep as native method receiving Integer millis doing:
 	Java: java.lang.Thread.sleep(millis);
-	C#: System.Threading.Thread.Sleep(millis);
+	C#: prompto.utils.Utils.Sleep(millis);
 	Python2: sleep(millis) from module: prompto.utils.Utils
 	Python3: sleep(millis) from module: prompto.utils.Utils
 	JavaScript: sleep(millis); from module: prompto/utils/Utils.js
