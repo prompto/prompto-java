@@ -124,7 +124,7 @@ public class StackMapFrame {
 		if (!m.isStatic()) {
 			init_local_num++;
 			// add one extra argument for instance method
-			if ("<init>".equals(m.getName()) && !"java/lang/Object".equals(thisKlass.name())) {
+			if ("<init>".equals(m.getName().toString()) && !"java/lang/Object".equals(thisKlass.name())) {
 				_locals[0] = VerificationType.uninitialized_this_type;
 				_flags |= FLAG_THIS_UNINIT;
 			} else {

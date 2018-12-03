@@ -121,23 +121,23 @@ public class IntegerType extends NativeType implements INumberType {
 	}
 
 	@Override
-	public IType checkMember(Context context, Identifier name) {
-		if(name.equals("min"))
+	public IType checkMember(Context context, Identifier id) {
+		if(id.toString().equals("min"))
 			return this;
-		else if(name.equals("max"))
+		else if(id.toString().equals("max"))
 			return this;
 		else
-			return super.checkMember(context, name);
+			return super.checkMember(context, id);
 	}
 
 	@Override
-	public IValue getMemberValue(Context context, Identifier name) throws PromptoError {
-		if(name.equals("min"))
+	public IValue getMemberValue(Context context, Identifier id) throws PromptoError {
+		if(id.toString().equals("min"))
 			return new Integer(java.lang.Integer.MIN_VALUE);
-		else if(name.equals("max"))
+		else if(id.toString().equals("max"))
 			return new Integer(java.lang.Integer.MAX_VALUE);
 		else
-			return super.getMemberValue(context, name);
+			return super.getMemberValue(context, id);
 	}
 	
 	@Override

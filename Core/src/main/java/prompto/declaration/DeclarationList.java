@@ -76,7 +76,7 @@ public class DeclarationList extends LinkedList<IDeclaration> {
 			if(!(declaration instanceof ConcreteMethodDeclaration))
 				continue;
 			ConcreteMethodDeclaration method = (ConcreteMethodDeclaration)declaration;
-			if(!(method.getId().equals("main")))
+			if(!(method.getName().equals("main")))
 				continue;
 			// TODO check proto
 			return method;
