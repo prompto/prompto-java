@@ -235,6 +235,7 @@ public class DocumentType extends NativeType {
 	        transpiler.append("-1 : 1; }");
 	    else
 	        transpiler.append("1 : -1; }");
+	    transpiler.flush();
 	}
 
 	private void transpileSortedByEntry(Transpiler transpiler, boolean descending, TextLiteral key) {
