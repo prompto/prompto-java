@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
+@SuppressWarnings("restriction")
 public class JSSet {
 
 	Set<Object> set = new HashSet<>();

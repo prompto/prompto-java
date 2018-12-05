@@ -25,6 +25,7 @@ import prompto.store.IStoredIterable;
 import prompto.store.memory.MemStore;
 import prompto.store.memory.Query;
 
+@SuppressWarnings("restriction")
 public class MemStoreMirror {
 	
 	MemStore store = new MemStore();
