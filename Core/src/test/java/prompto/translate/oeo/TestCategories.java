@@ -31,5 +31,10 @@ public class TestCategories extends BaseOParserTest {
 		compareResourceOEO("categories/copyFromDocument.poc");
 	}
 
+	@Test
+	public void testCopyFromStored() throws Exception {
+		compareResourceOEO("categories/copyFromStored.poc");
+	}
+
 }
 

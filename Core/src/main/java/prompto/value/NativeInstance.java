@@ -129,7 +129,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 	}
 	
 	@Override
-	public Set<Identifier> getMemberNames() {
+	public Set<Identifier> getMemberIds() {
 		// TODO Auto-generated method stub
 		return null;
 	}

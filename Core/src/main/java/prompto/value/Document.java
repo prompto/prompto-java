@@ -54,7 +54,7 @@ public class Document extends BaseValue {
  	}
     
     
-    public Set<Identifier> getMemberNames() {
+    public Set<Identifier> getMemberIds() {
     	return values.keySet();
     }
 

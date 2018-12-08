@@ -124,5 +124,20 @@ public class TestCategories extends BaseEParserTest {
 		checkTranspiledOutput("categories/copyFromDocument.pec");
 	}
 
+	@Test
+	public void testInterpretedCopyFromStored() throws Exception {
+		checkInterpretedOutput("categories/copyFromStored.pec");
+	}
+
+	@Test
+	public void testCompiledCopyFromStored() throws Exception {
+		checkCompiledOutput("categories/copyFromStored.pec");
+	}
+
+	@Test
+	public void testTranspiledCopyFromStored() throws Exception {
+		checkTranspiledOutput("categories/copyFromStored.pec");
+	}
+
 }
 

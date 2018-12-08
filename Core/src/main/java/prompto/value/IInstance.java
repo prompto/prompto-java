@@ -11,7 +11,7 @@ import prompto.type.CategoryType;
 public interface IInstance extends IValue {
 
 	CategoryType getType();
-	Set<Identifier> getMemberNames();
+	Set<Identifier> getMemberIds();
 	boolean setMutable(boolean set);
 	ConcreteCategoryDeclaration getDeclaration();
 	IStorable getStorable();

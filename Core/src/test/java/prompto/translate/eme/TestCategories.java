@@ -41,5 +41,10 @@ public class TestCategories extends BaseEParserTest {
 		compareResourceEME("categories/copyFromDocument.pec");
 	}
 
+	@Test
+	public void testCopyFromStored() throws Exception {
+		compareResourceEME("categories/copyFromStored.pec");
+	}
+
 }
 

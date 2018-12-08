@@ -94,5 +94,20 @@ public class TestCategories extends BaseOParserTest {
 		checkTranspiledOutput("categories/copyFromDocument.poc");
 	}
 
+	@Test
+	public void testInterpretedCopyFromStored() throws Exception {
+		checkInterpretedOutput("categories/copyFromStored.poc");
+	}
+
+	@Test
+	public void testCompiledCopyFromStored() throws Exception {
+		checkCompiledOutput("categories/copyFromStored.poc");
+	}
+
+	@Test
+	public void testTranspiledCopyFromStored() throws Exception {
+		checkTranspiledOutput("categories/copyFromStored.poc");
+	}
+
 }
 

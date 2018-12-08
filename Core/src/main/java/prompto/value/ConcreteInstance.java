@@ -105,7 +105,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	}
 	
 	@Override
-	public Set<Identifier> getMemberNames() {
+	public Set<Identifier> getMemberIds() {
 		return values.keySet();
 	}
 

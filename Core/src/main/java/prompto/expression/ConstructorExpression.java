@@ -30,6 +30,7 @@ import prompto.intrinsic.IMutable;
 import prompto.intrinsic.PromptoDocument;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
+import prompto.store.IStore;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.DocumentType;
@@ -187,26 +188,30 @@ public class ConstructorExpression implements IExpression {
 				Object copyObj = copyFrom.interpret(context);
 				if(copyObj instanceof IInstance) {
 					IInstance copyFrom = (IInstance)copyObj;
-					for(Identifier name : copyFrom.getMemberNames()) {
-						if(cd.hasAttribute(context, name)) {
-							IValue value = copyFrom.getMember(context, name, false);
+					for(Identifier id : copyFrom.getMemberIds()) {
+						if(IStore.dbIdName.equals(id.toString()))
+							continue;	
+						if(cd.hasAttribute(context, id)) {
+							IValue value = copyFrom.getMember(context, id, false);
 							if(value!=null && value.isMutable() && !type.isMutable())
 								throw new NotMutableError();
-							instance.setMember(context, name, value);
+							instance.setMember(context, id, value);
 						}
 					}
 				} else if (copyObj instanceof Document) {
 					Document copyFrom = (Document)copyObj;
-					for(Identifier name : copyFrom.getMemberNames()) {
-						if(cd.hasAttribute(context, name)) {
-							IValue value = copyFrom.getMember(context, name, false);
+					for(Identifier id : copyFrom.getMemberIds()) {
+						if(IStore.dbIdName.equals(id.toString()))
+							continue;	
+						if(cd.hasAttribute(context, id)) {
+							IValue value = copyFrom.getMember(context, id, false);
 							if(value!=null && value.isMutable() && !type.isMutable())
 								throw new NotMutableError();
 							if(value!=NullValue.instance()) {
-								AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, name);
+								AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
 								value = decl.getType(context).convertIValueToIValue(context, value);
 							}
-							instance.setMember(context, name, value);
+							instance.setMember(context, id, value);
 						}
 					}
 				}
