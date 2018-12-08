@@ -11,6 +11,7 @@ public interface IFetchExpression extends IExpression {
 	IValue fetch(Context context, IStore store);
 	Object fetchRaw(IStore store);
 	
+	@Override
 	default IValue interpret(Context context) throws PromptoError {
 		return fetch(context, DataStore.getInstance());
 	}

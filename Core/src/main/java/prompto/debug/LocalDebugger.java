@@ -61,10 +61,12 @@ public class LocalDebugger implements IDebugger {
 		suspended = true;
 	}
 	
+	@Override
 	public boolean isTerminated() {
 		return status==Status.TERMINATED;
 	}
 	
+	@Override
 	public void terminate() {
 		terminated = true;
 	}
@@ -73,6 +75,7 @@ public class LocalDebugger implements IDebugger {
 		return listener;
 	}
 	
+	@Override
 	public void setListener(IDebugEventListener listener) {
 		this.listener = listener;
 	}
@@ -245,6 +248,7 @@ public class LocalDebugger implements IDebugger {
 			listener.handleConnectedEvent(host, port); // this listener actually knows host and port
 	}
 
+	@Override
 	public void notifyTerminated() {
 		if(!isTerminated()) {
 			setStatus(Status.TERMINATED);

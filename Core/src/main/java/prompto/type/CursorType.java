@@ -130,10 +130,12 @@ public class CursorType extends IterableType {
 			return new ListType(itemType);
 		}
 
+		@Override
 		public boolean hasCompileExactInstanceMember() {
 			return true;
 		}
 		
+		@Override
 		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
 			// call replace method
 			Descriptor.Method descriptor = new Descriptor.Method(PromptoList.class);
@@ -144,10 +146,12 @@ public class CursorType extends IterableType {
 
 		}
 		
+		@Override
 		public void declareCall(Transpiler transpiler) {
 			transpiler.require("List");
 		};
 		
+		@Override
 		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
 			transpiler.append("toList()");
 		}

@@ -263,6 +263,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 			
 			
+	@Override
 	protected void registerMethods(Context context) {
 		if(methodsMap==null) {
 			methodsMap = new HashMap<String,IDeclaration>();
@@ -444,6 +445,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return candidate;
 	}
 
+	@Override
 	public List<String> collectCategories(Context context) {
 		Set<String> set = new HashSet<>();
 		List<String> list = new ArrayList<>();
@@ -832,6 +834,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		type.compileGetStorableData(context, method, flags);
 	}
 
+	@Override
 	protected boolean isPromptoRoot(Context context) {
 		if(PromptoRoot.class==getSuperClass(context).getType())
 			return true;

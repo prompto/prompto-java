@@ -72,10 +72,12 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 			return CompilerUtils.booleanToBoolean(method);
 	}
 
+	@Override
 	public boolean hasItem(Context context, IValue lval) {
 		return range.contains(lval);
 	}
 	
+	@Override
 	public T getItem(Context context, IValue index) throws PromptoError {
 		if (index instanceof Integer) {
 			try {
@@ -99,6 +101,7 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 		return new ResultInfo(Object.class);
 	}
 
+	@Override
 	public RangeBase<T> slice(Integer fi, Integer li) throws PromptoError {
 		try {
 			long _fi = fi==null ? 1L : fi.longValue();

@@ -63,6 +63,7 @@ public class ECleverParser extends EParser implements IParser {
 		return (EIndentingLexer)this.getInputStream().getTokenSource();
 	}
 	
+	@Override
 	public int equalToken() {
 		return EParser.EQ;
 	};
@@ -83,6 +84,7 @@ public class ECleverParser extends EParser implements IParser {
 		return parse_declaration_list();
 	}
 	
+	@Override
 	public DeclarationList parse_declaration_list() throws Exception {
 		return this.<DeclarationList>doParse(this::declaration_list, true);
 	}

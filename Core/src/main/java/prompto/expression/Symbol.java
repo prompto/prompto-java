@@ -49,6 +49,7 @@ public abstract class Symbol extends Section implements IExpression, INamed, IVa
 		return type;
 	}
 
+	@Override
 	public void setType(IType type) {
 		this.type = type;
 	}

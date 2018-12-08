@@ -60,6 +60,7 @@ public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 		}
 	}
 
+	@Override
 	protected void categoryTypeToEDialect(CodeWriter writer) {
 		writer.append("native category");
 	}

@@ -12,6 +12,7 @@ import prompto.value.JsxValue;
 
 public interface IJsxExpression extends IExpression {
 
+	@Override
 	default IValue interpret(Context context) throws PromptoError {
 		return new JsxValue(this);
 	}

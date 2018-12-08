@@ -171,10 +171,12 @@ public class TextType extends NativeType {
 			return TextType.instance();
 		}
 
+		@Override
 		public boolean hasCompileExactInstanceMember() {
 			return true;
 		}
 		
+		@Override
 		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
 			// push arguments on the stack
 			this.compileAssignments(context, method, flags, assignments);
@@ -187,6 +189,7 @@ public class TextType extends NativeType {
 
 		}
 		
+		@Override
 		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
 			transpiler.append("replace(");
 	        assignments.find(new Identifier("toReplace")).transpile(transpiler);
@@ -214,10 +217,12 @@ public class TextType extends NativeType {
 			return TextType.instance();
 		}
 
+		@Override
 		public boolean hasCompileExactInstanceMember() {
 			return true;
 		}
 		
+		@Override
 		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
 			// push arguments on the stack
 			this.compileAssignments(context, method, flags, assignments);
@@ -230,6 +235,7 @@ public class TextType extends NativeType {
 
 		}
 		
+		@Override
 		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
 	        transpiler.append("replace(new RegExp(");
 	        assignments.find(new Identifier("toReplace")).transpile(transpiler);
@@ -262,10 +268,12 @@ public class TextType extends NativeType {
 			return new ListType(TextType.instance());
 		}
 
+		@Override
 		public boolean hasCompileExactInstanceMember() {
 			return true;
 		}
 		
+		@Override
 		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
 			// push arguments on the stack
 			this.compileAssignments(context, method, flags, assignments);
@@ -285,11 +293,13 @@ public class TextType extends NativeType {
 
 		}
 		
+		@Override
 		public void declareCall(Transpiler transpiler) {
 			transpiler.require("List");
 		}
 		
 
+		@Override
 		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
 	       transpiler.append("splitToList(");
 	        if(assignments!=null)
@@ -315,10 +325,12 @@ public class TextType extends NativeType {
 			return TextType.instance();
 		}
 
+		@Override
 		public boolean hasCompileExactInstanceMember() {
 			return true;
 		}
 		
+		@Override
 		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
 			// push arguments on the stack
 			this.compileAssignments(context, method, flags, assignments);
@@ -330,6 +342,7 @@ public class TextType extends NativeType {
 
 		}
 		
+		@Override
 		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
 	      transpiler.append("replace( /(^|\\s)([a-z])/g , function(m, p1, p2){ return p1 + p2.toUpperCase(); } )");
 		}
@@ -349,6 +362,7 @@ public class TextType extends NativeType {
 			return TextType.instance();
 		}
 		
+		@Override
 		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
 			transpiler.append("toLowerCase()");
 		}
@@ -369,6 +383,7 @@ public class TextType extends NativeType {
 			return TextType.instance();
 		}
 		
+		@Override
 		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
 			transpiler.append("toUpperCase()");
 		}
@@ -389,6 +404,7 @@ public class TextType extends NativeType {
 			return TextType.instance();
 		}
 		
+		@Override
 		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
 			transpiler.append("trim()");
 		}
@@ -412,10 +428,12 @@ public class TextType extends NativeType {
 			return BooleanType.instance();
 		}
 
+		@Override
 		public boolean hasCompileExactInstanceMember() {
 			return true;
 		};
 		
+		@Override
 		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
 			// push arguments on the stack
 			this.compileAssignments(context, method, flags, assignments);
@@ -430,6 +448,7 @@ public class TextType extends NativeType {
 				return CompilerUtils.booleanToBoolean(method);
 		};
 		
+		@Override
 		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
 	        transpiler.append("startsWith(");
 	        assignments.get(0).transpile(transpiler);
@@ -453,10 +472,12 @@ public class TextType extends NativeType {
 			return BooleanType.instance();
 		}
 
+		@Override
 		public boolean hasCompileExactInstanceMember() {
 			return true;
 		}
 		
+		@Override
 		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
 			// push arguments on the stack
 			this.compileAssignments(context, method, flags, assignments);
@@ -471,6 +492,7 @@ public class TextType extends NativeType {
 				return CompilerUtils.booleanToBoolean(method);
 		}
 		
+		@Override
 		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
 			transpiler.append("endsWith(");
 	        assignments.get(0).transpile(transpiler);
@@ -495,10 +517,12 @@ public class TextType extends NativeType {
 			return IntegerType.instance();
 		}
 
+		@Override
 		public boolean hasCompileExactInstanceMember() {
 			return true;
 		};
 		
+		@Override
 		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
 			// push arguments on the stack
 			this.compileAssignments(context, method, flags, assignments);
@@ -516,6 +540,7 @@ public class TextType extends NativeType {
 				return CompilerUtils.intToLong(method);
 		};
 		
+		@Override
 		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
 	        transpiler.append("indexOf1Based(");
 	        assignments.get(0).transpile(transpiler);

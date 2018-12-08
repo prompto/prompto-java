@@ -15,6 +15,7 @@ public enum CmpOp {
 		this.token = token;
 	}
 	
+	@Override
 	public String toString() {
 		return token;
 	}

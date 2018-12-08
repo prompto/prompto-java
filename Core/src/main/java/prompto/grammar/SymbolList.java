@@ -39,6 +39,7 @@ public abstract class SymbolList <T extends Symbol> extends ObjectList<T> implem
 		return false;
 	}
 	
+	@Override
 	public void setType(IType type) {
 		this.type = type;
 	}
@@ -54,30 +55,37 @@ public abstract class SymbolList <T extends Symbol> extends ObjectList<T> implem
 	}
 	
 	
+	@Override
 	public IValue plus(Context context, IValue value) throws PromptoError {
 		throw new UnsupportedOperationException("Add not supported by " + this.getClass().getSimpleName());
 	}
 
+	@Override
 	public IValue minus(Context context, IValue value) throws PromptoError {
 		throw new UnsupportedOperationException("Subtract not supported by " + this.getClass().getSimpleName());
 	}
 
+	@Override
 	public IValue multiply(Context context, IValue value) throws PromptoError {
 		throw new UnsupportedOperationException("Multiply not supported by " + this.getClass().getSimpleName());
 	}
 
+	@Override
 	public IValue divide(Context context, IValue value) throws PromptoError {
 		throw new UnsupportedOperationException("Divide not supported by " + this.getClass().getSimpleName());
 	}
 
+	@Override
 	public IValue intDivide(Context context, IValue value) throws PromptoError {
 		throw new UnsupportedOperationException("Integer divide not supported by " + this.getClass().getSimpleName());
 	}
 
+	@Override
 	public IValue modulo(Context context, IValue value) throws PromptoError {
 		throw new UnsupportedOperationException("Integer divide not supported by " + this.getClass().getSimpleName());
 	}
 
+	@Override
 	public int compareTo(Context context, IValue value) throws PromptoError {
 		throw new UnsupportedOperationException("Compare not supported by " + this.getClass().getSimpleName());
 	}

@@ -141,6 +141,7 @@ public class Date extends BaseValue implements Comparable<Date> {
 		return this;
 	}
 
+	@Override
 	public int compareTo(Date other) {
 		return value.compareTo(other.value);
 	}

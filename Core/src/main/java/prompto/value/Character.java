@@ -89,7 +89,8 @@ public class Character extends BaseValue implements Comparable<Character>, IMult
 		return new ResultInfo(String.class);
 	}
 	
-    public int compareTo(Character obj) {
+    @Override
+	public int compareTo(Character obj) {
         return java.lang.Character.compare(value, obj.value);
     }
 

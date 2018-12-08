@@ -2852,6 +2852,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 		setNodeValue(ctx, type);
 	}
 	
+	@Override
 	public void exitPython_category_binding(Python_category_bindingContext ctx) {
 		String identifier = ctx.identifier().getText();
 		PythonModule module = this.<PythonModule>getNodeValue(ctx.python_module());

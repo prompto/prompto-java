@@ -52,10 +52,12 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 		return value;
 	}
 	
+	@Override
 	public long longValue() {
 		return value;
 	}
 
+	@Override
 	public double doubleValue() {
 		return value;
 	}
@@ -309,6 +311,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 			return CompilerUtils.longToLong(method);
 	}
 
+	@Override
 	public int compareTo(INumber obj) {
 		return Long.compare(value, obj.longValue());
 	}

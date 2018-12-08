@@ -268,7 +268,8 @@ public enum Opcode {
 
     static Popper popsNone() {
     	return new Popper() {
-    		public Short apply(Instruction i) {
+    		@Override
+			public Short apply(Instruction i) {
     			return 0;
     		}
     	};
@@ -276,7 +277,8 @@ public enum Opcode {
  
     static Popper pops(int count) {
     	return new Popper() {
-    		public Short apply(Instruction i) {
+    		@Override
+			public Short apply(Instruction i) {
     			return (short)count;
     		}
     	};
@@ -284,7 +286,8 @@ public enum Opcode {
 
     static Popper popsArguments(boolean isStatic) {
     	return new Popper() {
-    		public Short apply(Instruction i) {
+    		@Override
+			public Short apply(Instruction i) {
     			return i.getArgumentsCount(isStatic);
     		}
     	};

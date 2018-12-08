@@ -40,10 +40,12 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 		return value;
 	}
 
+	@Override
 	public long longValue() {
 		return (long) value;
 	}
 
+	@Override
 	public double doubleValue() {
 		return value;
 	}
@@ -162,6 +164,7 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 
 
+	@Override
 	public int compareTo(INumber obj) {
 		return Double.compare(value, obj.doubleValue());
 	}

@@ -10,6 +10,7 @@ import prompto.type.CategoryType;
 
 public interface IInstance extends IValue {
 
+	@Override
 	CategoryType getType();
 	Set<Identifier> getMemberIds();
 	boolean setMutable(boolean set);

@@ -35,6 +35,7 @@ public abstract class BaseValue implements IValue {
 		return false;
 	}
 	
+	@Override
 	public void setType(IType type) {
 		this.type = type;
 	}

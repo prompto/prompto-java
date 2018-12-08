@@ -70,6 +70,7 @@ public class Version extends BaseValue implements Comparable<Version> {
 		return value;
 	}
 
+	@Override
 	public int compareTo(Version other) {
 		return value.compareTo(other.value);
 	}

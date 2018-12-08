@@ -60,6 +60,7 @@ public class Section implements ISection {
 		return end;
 	}
 	
+	@Override
 	public Dialect getDialect() {
 		return dialect;
 	}

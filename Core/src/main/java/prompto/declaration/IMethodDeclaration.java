@@ -43,6 +43,7 @@ public interface IMethodDeclaration extends IDeclaration {
 	void compilePrototype(Context context, boolean isStart, ClassFile classFile);
 	String compileTemplate(Context context, boolean isStart, ClassFile classFile);
 	void compileAssignments(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments);
+	@Override
 	String getTranspiledName(Context context);
 	default void fullDeclare(Transpiler transpiler, Identifier methodName) { throw new UnsupportedOperationException("fullDeclare " + this.getClass().getName()); }
 	default boolean containerHasAnnotation(Context context, String name) {

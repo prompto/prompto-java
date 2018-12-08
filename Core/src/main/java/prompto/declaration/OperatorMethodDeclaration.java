@@ -41,6 +41,7 @@ public class OperatorMethodDeclaration extends ConcreteMethodDeclaration impleme
 		
 	}	
 
+	@Override
 	protected void toMDialect(CodeWriter writer) {
 		writer.append("def operator ");
 		writer.append(operator.getToken());
@@ -57,6 +58,7 @@ public class OperatorMethodDeclaration extends ConcreteMethodDeclaration impleme
 		writer.dedent();
 	}
 
+	@Override
 	protected void toEDialect(CodeWriter writer) {
 		writer.append("define ");
 		writer.append(operator.getToken());
@@ -73,6 +75,7 @@ public class OperatorMethodDeclaration extends ConcreteMethodDeclaration impleme
 		writer.dedent();
 	}
 	
+	@Override
 	protected void toODialect(CodeWriter writer) {
 		if(returnType!=null && returnType!=VoidType.instance()) {
 			returnType.toDialect(writer);

@@ -22,6 +22,7 @@ public abstract class PromptoRange<T extends Object> implements IterableWithCoun
 		return high;
 	}
 	
+	@Override
 	public java.lang.Long getCount() {
 		return getNativeCount();
 	}
@@ -31,6 +32,7 @@ public abstract class PromptoRange<T extends Object> implements IterableWithCoun
 		return getNativeCount();
 	}
 	
+	@Override
 	public abstract long getNativeCount();
 	public abstract T getItem(long item);
 	
@@ -111,6 +113,7 @@ public abstract class PromptoRange<T extends Object> implements IterableWithCoun
 			return 1L + high.charValue() - low.charValue();
 		}
 		
+		@Override
 		public boolean contains(Object item) {
 			if(!(item instanceof java.lang.Character))
 				return false;
@@ -145,6 +148,7 @@ public abstract class PromptoRange<T extends Object> implements IterableWithCoun
 			return 1L + high.longValue() - low.longValue();
 		}
 
+		@Override
 		public boolean contains(Object item) {
 			if(!(item instanceof java.lang.Long))
 				return false;
@@ -182,6 +186,7 @@ public abstract class PromptoRange<T extends Object> implements IterableWithCoun
 			return 1 + ( (h-l)/(24*60*60*1000));
 		}
 
+		@Override
 		public boolean contains(Object item) {
 			if(!(item instanceof PromptoDate))
 				return false;
@@ -216,6 +221,7 @@ public abstract class PromptoRange<T extends Object> implements IterableWithCoun
 			return 1 + (high.getNativeMillisOfDay() - low.getNativeMillisOfDay())/1000;
 		}
 
+		@Override
 		public boolean contains(Object item) {
 			if(!(item instanceof PromptoTime))
 				return false;

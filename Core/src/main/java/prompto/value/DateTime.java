@@ -150,6 +150,7 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 		return value;
 	}
 
+	@Override
 	public int compareTo(DateTime other) {
 		return this.value.compareTo(other.value);
 	}

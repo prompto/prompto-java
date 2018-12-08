@@ -12,6 +12,7 @@ import prompto.problem.IProblemListener;
 public interface ILexer extends TokenSource {
 	Dialect getDialect();
 	void setProblemListener(IProblemListener listener);
+	@Override
 	Token nextToken();
 	void reset(InputStream input) throws IOException;
 }

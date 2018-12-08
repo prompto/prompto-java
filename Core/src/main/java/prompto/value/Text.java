@@ -92,6 +92,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	}
 	
 	
+	@Override
 	public int compareTo(Text obj) {
 		return value.compareTo(obj.value);
 	}
@@ -113,6 +114,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 		return BaseValue.compileCompareToEpilogue(method, flags);
 	}
 
+	@Override
 	public boolean hasItem(Context context, IValue value) throws PromptoError {
 		if (value instanceof Character)
 			return this.value.indexOf(((Character) value).value) >= 0;
@@ -131,6 +133,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 			return super.getMember(context, id, autoCreate);
 	}
 
+	@Override
 	public Character getItem(Context context, IValue index) throws PromptoError {
 		try {
 			if (index instanceof Integer)
@@ -211,6 +214,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 		return value;
 	}
 
+	@Override
 	public ISliceable<Character> slice(Integer fi, Integer li) throws PromptoError {
 		int first = checkSliceFirst(fi);
 		int last = checkSliceLast(li);

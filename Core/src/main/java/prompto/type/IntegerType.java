@@ -175,10 +175,12 @@ public class IntegerType extends NativeType implements INumberType {
 			throw new UnsupportedOperationException();
 		}
 		
+		@Override
 		public boolean hasCompileExactInstanceMember() {
 			return true;
 		}
 		
+		@Override
 		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
 			// push arguments on the stack
 			this.compileAssignments(context, method, flags, assignments); // stack = Long/String
@@ -197,6 +199,7 @@ public class IntegerType extends NativeType implements INumberType {
 
 		}
 		
+		@Override
 		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
 	        transpiler.append("formatInteger(");
 	        assignments.get(0).transpile(transpiler);

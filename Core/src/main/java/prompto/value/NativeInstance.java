@@ -106,6 +106,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 		// TODO get child storables of native instance
 	}
 	
+	@Override
 	public boolean isMutable() {
 		return mutable;
 	}

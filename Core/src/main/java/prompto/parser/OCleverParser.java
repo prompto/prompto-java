@@ -60,6 +60,7 @@ public class OCleverParser extends OParser implements IParser {
 		return (ONamingLexer)this.getInputStream().getTokenSource();
 	}
 
+	@Override
 	public int equalToken() {
 		return OParser.EQ;
 	};
@@ -80,6 +81,7 @@ public class OCleverParser extends OParser implements IParser {
 		return parse_declaration_list();
 	}
 		
+	@Override
 	public DeclarationList parse_declaration_list() throws Exception {
 		return this.<DeclarationList>doParse(this::declaration_list);
 	}

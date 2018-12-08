@@ -11,14 +11,17 @@ public class Buffer  implements IResource {
 	StringBuffer buffer = new StringBuffer();
 	BufferedReader reader;
 	
+	@Override
 	public boolean isReadable() {
 		return true;
 	}
 	
+	@Override
 	public boolean isWritable() {
 		return true;
 	}
 	
+	@Override
 	public void close() {
 		if(reader!=null) try {
 			reader.close();
@@ -42,10 +45,12 @@ public class Buffer  implements IResource {
 		buffer.append('\n');
 	}
 	
+	@Override
 	public String readFully() throws IOException {
 		return buffer.toString();
 	}
 	
+	@Override
 	public void writeFully(String data) {
 		buffer = new StringBuffer(data);
 	}

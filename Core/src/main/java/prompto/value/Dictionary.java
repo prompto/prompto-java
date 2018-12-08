@@ -64,6 +64,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 		return dict.size();
 	}
 
+	@Override
 	public IValue plus(Context context, IValue value) throws PromptoError {
 		if (value instanceof Dictionary)
 			return merge(this, (Dictionary) value);
@@ -100,6 +101,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 		return info;
 	}
 
+	@Override
 	public boolean hasItem(Context context, IValue value) {
 		if (value instanceof Text)
 			return this.dict.containsKey((Text) value);

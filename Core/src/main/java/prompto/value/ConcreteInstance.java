@@ -72,6 +72,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		return result;
 	}
 	
+	@Override
 	public boolean isMutable() {
 		return mutable;
 	}
@@ -95,6 +96,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 			value.collectStorables(collector));
 	}
 	
+	@Override
 	public ConcreteCategoryDeclaration getDeclaration() {
 		return declaration;
 	}

@@ -19,6 +19,7 @@ public class ClassConstant implements ICodeConstant, IValueConstant {
 	}
 	
 
+	@Override
 	public ClassConstant clone() {
 		return new ClassConstant(this.type);
 	}

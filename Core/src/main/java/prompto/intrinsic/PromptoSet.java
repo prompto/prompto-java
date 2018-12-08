@@ -87,6 +87,7 @@ public class PromptoSet<V> extends HashSet<V> implements Filterable<PromptoSet<V
 		throw new UnsupportedOperationException("Should never get there!");
 	}
 	
+	@Override
 	public PromptoSet<V> filter(Predicate<V> p) {
 		PromptoSet<V> filtered = new PromptoSet<>();
 		this.forEach((v)->{

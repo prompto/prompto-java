@@ -74,6 +74,7 @@ public final class MemStore implements IStore {
 			store(storables);
 	}
 
+	@Override
 	public void store(Collection<IStorable> storables) throws PromptoError {
 		for(IStorable storable : storables) {
 			if(!(storable instanceof StorableDocument))

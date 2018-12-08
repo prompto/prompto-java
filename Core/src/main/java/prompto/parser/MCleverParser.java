@@ -60,6 +60,7 @@ public class MCleverParser extends MParser implements IParser {
 		return (MIndentingLexer)this.getInputStream().getTokenSource();
 	}
 
+	@Override
 	public int equalToken() {
 		return MParser.EQ;
 	};
@@ -80,6 +81,7 @@ public class MCleverParser extends MParser implements IParser {
 		return parse_declaration_list();
 	}
 	
+	@Override
 	public DeclarationList parse_declaration_list() throws Exception {
 		return this.<DeclarationList>doParse(this::declaration_list, true);
 	}

@@ -31,14 +31,17 @@ public abstract class BaseDeclaration extends Section implements IDeclaration {
 		return getId().toString(); 
 	}
 	
+	@Override
 	public void setOrigin(ICodeStore origin) {
 		this.origin = origin;
 	}
 	
+	@Override
 	public ICodeStore getOrigin() {
 		return origin;
 	}
 	
+	@Override
 	public String getName() {
 		return id.toString();
 	}
@@ -48,6 +51,7 @@ public abstract class BaseDeclaration extends Section implements IDeclaration {
 		return getId().hashCode();
 	}
 	
+	@Override
 	public Collection<CommentStatement> getComments() {
 		return comments;
 	}

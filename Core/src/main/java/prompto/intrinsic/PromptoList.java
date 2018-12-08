@@ -94,6 +94,7 @@ public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoLi
 		return false;
 	}
 	
+	@Override
 	public PromptoList<V> filter(Predicate<V> p) {
 		PromptoList<V> filtered = new PromptoList<>(false);
 		this.forEach((v)->{

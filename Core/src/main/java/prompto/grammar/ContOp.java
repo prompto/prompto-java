@@ -10,6 +10,7 @@ public enum ContOp {
 	NOT_HAS_ALL,
 	NOT_HAS_ANY;
 
+	@Override
 	public String toString() {
 		return this.name().toLowerCase().replace('_', ' ');
 	}

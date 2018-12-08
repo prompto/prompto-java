@@ -66,6 +66,7 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 		process.waitFor();
 	}
 
+	@Override
 	protected void debugResource(String resourceName) throws Exception {
 		File testFile = tryLocateTestFile(resourceName);
 		loadFile(testFile); 

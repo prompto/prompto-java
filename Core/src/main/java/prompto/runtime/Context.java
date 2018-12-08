@@ -1028,6 +1028,7 @@ public class Context implements IContext {
 		}
 		
 		
+		@Override
 		protected <T extends INamed> T readRegisteredValue(Class<T> klass, Identifier name) {
 			INamed actual = instances.get(name);
 			// not very pure, but avoids a lot of complexity when registering a value
