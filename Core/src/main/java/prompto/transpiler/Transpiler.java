@@ -250,6 +250,9 @@ public class Transpiler {
 	}
 	
 	private void appendAllRequired() {
+		// make sure DataStore comes before RemoteStore
+		if(required.remove("DataStore"))
+			appendOneRequired("DataStore");
 		required.forEach(this::appendOneRequired);
 	}
 
