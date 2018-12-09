@@ -7,6 +7,7 @@ import java.util.Map;
 
 import prompto.argument.CategoryArgument;
 import prompto.argument.IArgument;
+import prompto.declaration.AttributeDeclaration;
 import prompto.error.PromptoError;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.Identifier;
@@ -37,9 +38,15 @@ public class Parameter {
 			param.setType(TypeUtils.typeToIType(DataStore.getInstance().getDbIdClass()));
 		else {
 			field = jsonParam.get("type");
-			if(field==null)
-				throw new InvalidParameterException("Expecting a 'type' field!");
-			param.setType(getType(context, field.asText()));
+			if(field!=null)
+				param.setType(getType(context, field.asText()));
+			else {	
+				AttributeDeclaration decl = context.findAttribute(param.getName());
+				if(decl==null)
+					throw new InvalidParameterException("Expecting a 'type' field!");
+				else
+					param.setType(decl.getType());
+			}
 		}
 		field = jsonParam.get("value");
 		if(field==null)
