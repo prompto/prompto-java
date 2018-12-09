@@ -25,9 +25,15 @@ public class JavaScriptNativeCategoryBinding extends NativeCategoryBinding {
 
 	public void transpile(Transpiler transpiler) {
 	    if(this.module!=null) {
-	    	transpiler.append("var ").append(identifier).append(" = require('/");
-	        this.module.transpile(transpiler);
-	        transpiler.append("', null, null, function(m) { return {id: m, uri: m}; }).").append(identifier).append(";").newLine();
+	    	if(transpiler.getEngine().isTestEngine()) {
+		    	transpiler.append("var ").append(identifier).append(" = require('");
+		        this.module.transpile(transpiler);
+		        transpiler.append("').").append(identifier).append(";").newLine();
+	    	} else { 
+		    	transpiler.append("var ").append(identifier).append(" = require('/");
+		        this.module.transpile(transpiler);
+		        transpiler.append("', null, null, function(m) { return {id: m, uri: m}; }).").append(identifier).append(";").newLine();
+	    	}
 	    }
 	}
 
