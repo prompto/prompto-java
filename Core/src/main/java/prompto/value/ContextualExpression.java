@@ -28,6 +28,11 @@ public class ContextualExpression extends BaseValue implements IExpression {
 	}
 	
 	@Override
+	public String toString() {
+		return expression.toString();
+	}
+	
+	@Override
 	public IType check(Context context) {
 		return expression.check(this.calling);
 	}
