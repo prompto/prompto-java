@@ -43,10 +43,16 @@ public class JavaScriptStatement {
 	    if(this.module!=null) {
 	    	transpiler.append("var ");
 	    	expression.transpileRoot(transpiler);
-	    	transpiler.append(" = require('");
-	        this.module.transpile(transpiler);
-	        transpiler.append("').");
-	        expression.transpileRoot(transpiler);
+	    	if(transpiler.getEngine().isTestEngine()) {
+		    	transpiler.append(" = require('");
+		        this.module.transpile(transpiler);
+		        transpiler.append("').");
+	    	} else { 
+		    	transpiler.append(" = require('/");
+		        this.module.transpile(transpiler);
+		        transpiler.append("', null, null, function(m) { return {id: m, uri: m}; }).");
+	    	}
+	    	expression.transpileRoot(transpiler);
 	        transpiler.append(";").newLine();
 	    }
 	    if(this.isReturn)
