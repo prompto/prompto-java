@@ -52,6 +52,16 @@ public class JavaScriptIdentifierExpression implements JavaScriptExpression {
 		writer.append(identifier);
 	}
 	
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		if(parent!=null)
+			parent.declare(transpiler);
+		if("$context".equals(identifier))
+			transpiler.require("Context");
+	}
+	
+
 	@Override
 	public void transpile(Transpiler transpiler) {
 		if(parent!=null) {

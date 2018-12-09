@@ -248,6 +248,22 @@ define sleep as native method receiving Integer millis doing:
 	JavaScript: sleep(millis); from module: prompto/utils/Utils.js
 
 
+define isServer as native method returning Boolean doing:
+	Java: return $context.isServer();
+	C#: return false;
+	Python2: return False
+	Python3: return False
+	JavaScript: return false;
+
+
+define fetchTextResource as native method receiving path returning Text doing:
+	Java: return $context.fetchTextResource(path);
+	C#: return $context.fetchTextResource(path);
+	Python2: return $context.fetchTextResource(path)
+	Python3: return $context.fetchTextResource(path)
+	JavaScript: return $context.fetchTextResource(path);
+ 
+
 define "randomUuid is not null" as test method doing:
 	uuid = randomUuid
 and verifying: 

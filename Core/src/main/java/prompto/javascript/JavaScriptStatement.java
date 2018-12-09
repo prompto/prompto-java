@@ -36,7 +36,7 @@ public class JavaScriptStatement {
 	}
 
 	public void declare(Transpiler transpiler) {
-	    // TODO 
+		this.expression.declare(transpiler);
 	}
 
 	public boolean transpile(Transpiler transpiler) {

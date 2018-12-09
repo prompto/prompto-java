@@ -11,6 +11,8 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import prompto.code.ICodeStore;
+import prompto.code.Resource;
+import prompto.code.TextResource;
 import prompto.debug.LocalDebugger;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
@@ -911,6 +913,16 @@ public class Context implements IContext {
 			return nativeBindings.get(type);
 		else
 			return globals.getNativeBinding(type);
+	}
+	
+	public String fetchTextResource(String path) {
+		Resource resource = ICodeStore.getInstance().fetchLatestResource(path);
+		if(resource==null)
+			return null;
+		else if(resource instanceof TextResource)
+			return ((TextResource)resource).getBody();
+		else
+			return "Not a Text resource: " + path; // TODO raise exception
 	}
 
 	public static class ResourceContext extends Context {
