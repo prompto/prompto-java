@@ -345,14 +345,14 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	
 	@Override
 	public void declare(Transpiler transpiler) {
+        if (this.assignments != null)
+            this.assignments.declare(transpiler);
 		Context context = transpiler.getContext();
 		MethodFinder finder = new MethodFinder(context, this);
 	    Set<IMethodDeclaration> declarations = finder.findCompatibleMethods(false, true, spec -> spec!= Specificity.INCOMPATIBLE);
 	    if(declarations.size()==1 && declarations.iterator().next() instanceof BuiltInMethodDeclaration) {
             ((BuiltInMethodDeclaration)declarations.iterator().next()).declareCall(transpiler);
 	    } else {
-	        if (this.assignments != null)
-	            this.assignments.declare(transpiler);
         	if(!this.isLocalClosure(context)) {
 		        declarations.forEach(declaration -> {
 		            Context local = this.selector.newLocalCheckContext(transpiler.getContext(), declaration);
