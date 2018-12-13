@@ -28,7 +28,7 @@ public abstract class Executor {
 		}
 	}
 
-	private static void executeTest(Context context, String testName, boolean testMode) {
+	public static void executeTest(Context context, String testName, boolean testMode) {
 		try(PromptoClassLoader loader = PromptoClassLoader.initialize(context, testMode)) {
 			Type classType = CompilerUtils.getTestType(testName);
 			Class<?> klass = loader.loadClass(classType.getTypeName());

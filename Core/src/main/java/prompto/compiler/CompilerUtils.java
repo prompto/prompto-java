@@ -151,14 +151,15 @@ public abstract class CompilerUtils {
 	
 	private static Map<Character, String> createInvalidCharMap() {
 		Map<Character, String> map = new HashMap<>();
-		// all entities must be 5 chars for decode to work!
-		map.put('.', "&#46;");
-		map.put(';', "&#59;");
-		map.put('[', "&#91;");
-		map.put('/', "&#47;");
-		map.put(':', "&#58;");
-		map.put(':', "&#92;");
-		map.put('&', "&amp;");
+		// all entities must be same length for decode to work!
+		map.put('.', "'46'");
+		map.put(';', "'59'");
+		map.put('[', "'91'");
+		map.put('/', "'47'");
+		map.put(':', "'58'");
+		map.put('\\', "'92'");
+		map.put('&', "'38'");
+		map.put('\'', "'39'");
 		return map;
 	}
 	
@@ -169,10 +170,10 @@ public abstract class CompilerUtils {
 		return map;
 	}
 
-	private static String decodeName(String name) {
+	public static String decodeName(String name) {
 		StringBuilder sb = new StringBuilder();
 		while(name.length()>0) {
-			int idx = name.indexOf('&');
+			int idx = name.indexOf('\'');
 			if(idx<0) {
 				sb.append(name);
 				return sb.toString();
@@ -181,10 +182,10 @@ public abstract class CompilerUtils {
 				sb.append(name.substring(0, idx));
 				name = name.substring(idx);
 			}
-			if(name.length()>=5) {
-				String key = name.substring(0, 5);
+			if(name.length()>=4) {
+				String key = name.substring(0, 4);
 				if(entityCharMap.containsKey(key)) {
-					name = name.substring(5);
+					name = name.substring(4);
 					sb.append(entityCharMap.get(key));
 				}
 			} else {
@@ -195,7 +196,7 @@ public abstract class CompilerUtils {
 		throw new UnsupportedOperationException("Should never get there!");
 	}
 	
-	private static String encodeName(String name) {
+	public static String encodeName(String name) {
 		StringBuilder sb = new StringBuilder();
 		for(char c : name.toCharArray())
 			sb.append(encodeChar(c));

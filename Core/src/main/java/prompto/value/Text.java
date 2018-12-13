@@ -6,6 +6,8 @@ import java.text.Collator;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.IOperand;
@@ -25,8 +27,6 @@ import prompto.intrinsic.IterableWithCounts;
 import prompto.intrinsic.PromptoString;
 import prompto.runtime.Context;
 import prompto.type.TextType;
-
-import com.fasterxml.jackson.core.JsonGenerator;
 
 
 public class Text extends BaseValue implements Comparable<Text>, IContainer<Character>, ISliceable<Character>, IMultiplyable {
@@ -320,6 +320,25 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 			return CompilerUtils.booleanToBoolean(method);
 	}
 
+	
+	public static ResultInfo compileContains(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		ResultInfo right = exp.compile(context, method, flags);
+		if(right.getType()!=String.class) {
+			MethodConstant m = new MethodConstant(String.class, "valueOf", Object.class, String.class);
+			method.addInstruction(Opcode.INVOKESTATIC, m);
+		}
+		MethodConstant m = new MethodConstant(String.class, "contains", CharSequence.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+		if(flags.isReverse())
+			CompilerUtils.reverseBoolean(method);
+		if(flags.toPrimitive())
+			return new ResultInfo(boolean.class);
+		else
+			return CompilerUtils.booleanToBoolean(method);
+	}
+
+	
     @Override
     public boolean roughly(Context context, IValue obj) throws PromptoError {
         if (obj instanceof Character || obj instanceof Text) {

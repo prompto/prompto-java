@@ -26,6 +26,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public interface IType extends ISection {
 	
+	static IType anyfy(IType type) {
+		if(type instanceof CategoryType && "Any".equals(((CategoryType)type).getTypeName()))
+			return AnyType.instance();	
+		else
+			return type;
+	}
+
 	Family getFamily();
 	
 	default String getTypeName() {
@@ -270,8 +277,6 @@ public interface IType extends ISection {
 	default void transpileIterator(Transpiler transpiler, Identifier id, IExpression expression) {
 		throw new UnsupportedOperationException("transpileIterator " + this.getClass().getName());
 	}
-
-
 
 }
  

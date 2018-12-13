@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -25,7 +26,9 @@ import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.security.CodeSource;
 import java.security.SecureClassLoader;
+import java.util.stream.IntStream;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import prompto.compiler.IVerifierEntry.VerifierType;
@@ -55,6 +58,17 @@ public class TestClassFile {
 		byte[] expected = { (byte)0xCF, (byte)0x80, 0x2F, (byte)0xCF, (byte)0x87, 0x2F, (byte)0xC2, (byte)0xB5, 0x2F, 0x70, 0x72, 0x69, 0x6E, 0x74 };
 		byte[] transcoded = Utf8Constant.toModifiedUtf8("π/χ/µ/print");
 		assertArrayEquals(expected, transcoded);	
+	}
+	
+	@Ignore
+	@Test
+	public void encodedClassNameMustBeValid() {
+		String className = CompilerUtils.encodeName("\"reads from www.google.com\"");
+		assertTrue(Character.isJavaIdentifierStart(className.charAt(0)));
+		IntStream.of(0, className.length()).forEach(i->{
+			if(!Character.isJavaIdentifierPart(className.charAt(i)))
+				fail("Invalid:" + className.charAt(i));
+		});
 	}
 	
 	

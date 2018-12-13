@@ -1,11 +1,11 @@
 define Any as native category with attributes id and text, and bindings:
 
 	define category bindings as:
-		Java: prompto.value.Any
+		Java: prompto.intrinsic.PromptoAny
 		C#: prompto.value.Any
 		Python2: Any from module: prompto.value.Any
 		Python3: Any from module: prompto.value.Any
-		JavaScript: AnyValue from module: prompto/value/AnyValue.js
+		JavaScript: Any from module: prompto/intrinsic/Any.js
 
 and methods: 
 
@@ -224,7 +224,7 @@ define now as native method returning DateTime doing:
 	C#: return System.DateTimeOffset.Now;
 	Python2: return datetime.utcnow() from module: datetime
 	Python3: return datetime.utcnow() from module: datetime
-	JavaScript: return new Date();
+	JavaScript: return DateTime.now(); from module: prompto/intrinsic/DateTime.js
 
 define "now is a DateTime" as test method doing: 
 	a = now
@@ -275,4 +275,4 @@ define "sleeps for 1 second" as test method doing:
 	sleep 1000
 	end = now
 and verifying: 
-	end > start + 'PT1S'
+	end >= start + 'PT1S'

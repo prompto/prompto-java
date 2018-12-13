@@ -25,6 +25,6 @@ public class TestWithError extends BaseEParserTest {
 	
 	@Test
 	public void testWithReadWriteError() throws Exception {
-		runTests("testWithError.pec", true);
+		runTests("testWithError.pec", this::testInterpreted, true);
 	}
 }

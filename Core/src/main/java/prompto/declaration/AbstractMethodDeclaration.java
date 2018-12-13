@@ -55,7 +55,10 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 	
 	@Override
 	public void compile(Context context, boolean isStart, ClassFile classFile) {
-		throw new SyntaxError("Should never get there !");
+		if(memberOf==null)
+			throw new SyntaxError("Should never get there !");
+		else
+			compilePrototype(context, isStart, classFile);
 	}
 
 	@Override

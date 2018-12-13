@@ -51,34 +51,43 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 	}
 	
 	private IType checkNative(Context context) {
-		if(returnType==VoidType.instance()) {
-			// don't check return type
-			IType type = ((JavaNativeCall)statement).checkNative(context, returnType);
-			// TODO: remove the below workaround for unregistered native categories
-			if(type==null)
-				type = returnType;
-			if(type!=VoidType.instance())
-				context.getProblemListener().reportIllegalReturn(statement);
-			return returnType;
-		} else {
-			TypeMap types = new TypeMap();
-			if(returnType!=null)
-				types.put(returnType.getTypeNameId(), returnType);
-			// TODO: ensure returnType is registered prior to the below 
-			IType type = statement.checkNative(context, returnType);
-			// TODO: remove the below workaround for unregistered native categories
-			if(type==null)
-				type = returnType;
-			if(type!=VoidType.instance())
-				types.put(type.getTypeNameId(), type);
-			type = types.inferType(context);
-			if(returnType!=null)
-				return returnType;
-			else
-				return type;
-		}
+		IType inferred;
+		if(returnType==VoidType.instance())
+			inferred = checkNativeVoid(context);
+		else
+			inferred = checkNativeType(context);
+		return IType.anyfy(inferred);
 	}
 	
+	private IType checkNativeType(Context context) {
+		TypeMap types = new TypeMap();
+		if(returnType!=null)
+			types.put(returnType.getTypeNameId(), returnType);
+		// TODO: ensure returnType is registered prior to the below 
+		IType type = statement.checkNative(context, returnType);
+		// TODO: remove the below workaround for unregistered native categories
+		if(type==null)
+			type = returnType;
+		if(type!=VoidType.instance())
+			types.put(type.getTypeNameId(), type);
+		type = types.inferType(context);
+		if(returnType!=null)
+			return returnType;
+		else
+			return type;
+	}
+
+	private IType checkNativeVoid(Context context) {
+		// don't check return type
+		IType type = statement.checkNative(context, returnType);
+		// TODO: remove the below workaround for unregistered native categories
+		if(type==null)
+			type = returnType;
+		if(type!=VoidType.instance())
+			context.getProblemListener().reportIllegalReturn(statement);
+		return returnType;
+	}
+
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		try {

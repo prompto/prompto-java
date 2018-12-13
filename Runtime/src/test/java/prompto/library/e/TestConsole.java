@@ -22,13 +22,33 @@ public class TestConsole extends BaseEParserTest {
 	}
 
 	@Test
-	public void testBuffer() throws Exception {
-		runTests("console/buffer.pec");
+	public void testInterpretedBuffer() throws Exception {
+		runInterpretedTests("console/buffer.pec");
 	}
 
 	@Test
-	public void testPrint() throws Exception {
-		runTests("console/print.pec");
+	public void testCompiledBuffer() throws Exception {
+		runCompiledTests("console/buffer.pec");
+	}
+
+	@Test
+	public void testTranspiledBuffer() throws Exception {
+		runTranspiledTests("console/buffer.pec");
+	}
+
+	@Test
+	public void testInterpretedPrint() throws Exception {
+		runInterpretedTests("console/print.pec");
+	}
+
+	@Test
+	public void testCompiledPrint() throws Exception {
+		runCompiledTests("console/print.pec");
+	}
+
+	@Test
+	public void testTranspiledPrint() throws Exception {
+		runTranspiledTests("console/print.pec");
 	}
 
 }

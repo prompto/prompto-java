@@ -22,13 +22,33 @@ public class TestReader extends BaseEParserTest {
 	}
 
 	@Test
-	public void testJson() throws Exception {
-		runTests("reader/json.pec");
+	public void testInterpretedJson() throws Exception {
+		runInterpretedTests("reader/json.pec");
 	}
 
 	@Test
-	public void testReader() throws Exception {
-		runTests("reader/reader.pec");
+	public void testCompiledJson() throws Exception {
+		runCompiledTests("reader/json.pec");
+	}
+
+	@Test
+	public void testTranspiledJson() throws Exception {
+		runTranspiledTests("reader/json.pec");
+	}
+
+	@Test
+	public void testInterpretedReader() throws Exception {
+		runInterpretedTests("reader/reader.pec");
+	}
+
+	@Test
+	public void testCompiledReader() throws Exception {
+		runCompiledTests("reader/reader.pec");
+	}
+
+	@Test
+	public void testTranspiledReader() throws Exception {
+		runTranspiledTests("reader/reader.pec");
 	}
 
 }

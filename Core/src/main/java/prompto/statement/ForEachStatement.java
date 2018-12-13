@@ -204,7 +204,8 @@ public class ForEachStatement extends BaseStatement {
 	private ResultInfo compileWithIndex(Context context, MethodInfo method, Flags flags) {
 		List<IInstructionListener> breakLoopListeners = new ArrayList<>();
 		flags = flags.withBreakLoopListeners(breakLoopListeners);
-		java.lang.reflect.Type itemClass = source.check(context).checkIterator(context).getJavaType(context);
+		IType itemType = source.check(context).checkIterator(context);
+		java.lang.reflect.Type itemClass = itemType.getJavaType(context);
 		StackLocal iterLocal = compileIterator(context, method, flags);
 		StackLocal v1Local = compileInitCounter(method);
 		StackState iteratorState = method.captureStackState();
@@ -225,6 +226,9 @@ public class ForEachStatement extends BaseStatement {
 		// increment v1
 		compileIncrementCounter(method, v1Local);
 		// compile statements
+		context = context.newChildContext();
+		context.registerValue(new Variable(v1, IntegerType.instance()));
+		context.registerValue(new Variable(v2, itemType));
 		statements.compile(context, method, flags);
 		// done inner loop
 		method.unregisterLocal(v2Local);
@@ -281,7 +285,8 @@ public class ForEachStatement extends BaseStatement {
 	private ResultInfo compileWithoutIndex(Context context, MethodInfo method, Flags flags) {
 		List<IInstructionListener> breakLoopListeners = new ArrayList<>();
 		flags = flags.withBreakLoopListeners(breakLoopListeners);
-		java.lang.reflect.Type itemClass = source.check(context).checkIterator(context).getJavaType(context);
+		IType itemType = source.check(context).checkIterator(context);
+		java.lang.reflect.Type itemClass = itemType.getJavaType(context);
 		StackLocal iterLocal = compileIterator(context, method, flags);
 		StackState iteratorState = method.captureStackState();
 		IInstructionListener test = method.addOffsetListener(new OffsetListenerConstant());
@@ -299,6 +304,8 @@ public class ForEachStatement extends BaseStatement {
 		StackLocal v1Local = method.registerLocal(v1.toString(), VerifierType.ITEM_Object, new ClassConstant(itemClass));
 		method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)v1Local.getIndex()));
 		// compile statements
+		context = context.newChildContext();
+		context.registerValue(new Variable(v1, itemType));
 		statements.compile(context, method, flags);
 		// done inner loop
 		method.unregisterLocal(v1Local);

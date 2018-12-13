@@ -24,8 +24,12 @@ public abstract class TempDirectories {
 		return promptoDir;
 	}
 
-	public static void create() throws IOException {
-		setPromptoDir(Files.createTempDirectory("prompto_").toFile());
+	public static void create() {
+		try {
+			setPromptoDir(Files.createTempDirectory("prompto_").toFile());
+		} catch(IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private static File createTranspiledDir() {

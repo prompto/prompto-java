@@ -23,13 +23,33 @@ public class TestInternet extends BaseEParserTest {
 	}
 
 	@Test
-	public void testHtml() throws Exception {
-		runTests("internet/html.pec");
+	public void testInterpretedHtml() throws Exception {
+		runInterpretedTests("internet/html.pec");
 	}
 
 	@Test
-	public void testUrl() throws Exception {
-		runTests("internet/url.pec");
+	public void testCompiledHtml() throws Exception {
+		runCompiledTests("internet/html.pec");
+	}
+
+	@Test
+	public void testTranspiledHtml() throws Exception {
+		runTranspiledTests("internet/html.pec");
+	}
+
+	@Test
+	public void testInterpretedUrl() throws Exception {
+		runInterpretedTests("internet/url.pec");
+	}
+
+	@Test
+	public void testCompiledUrl() throws Exception {
+		runCompiledTests("internet/url.pec");
+	}
+
+	@Test
+	public void testTranspiledUrl() throws Exception {
+		runTranspiledTests("internet/url.pec");
 	}
 
 }

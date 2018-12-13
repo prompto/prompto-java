@@ -2,6 +2,7 @@ package prompto.expression;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
@@ -73,6 +74,7 @@ import prompto.value.SetValue;
 import prompto.value.Text;
 import prompto.value.Time;
 import prompto.value.TypeValue;
+import prompto.value.UuidValue;
 import prompto.value.Version;
 
 public class EqualsExpression implements IPredicateExpression, IAssertion {
@@ -406,9 +408,9 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 			return null;
 	}
 
-	static Map<Class<?>, IOperatorFunction> testers = createTesters();
+	static Map<Class<?>, IOperatorFunction> EQUALS_COMPILERS = createEqualsCompilers();
 	
-	private static Map<Class<?>, IOperatorFunction> createTesters() {
+	private static Map<Class<?>, IOperatorFunction> createEqualsCompilers() {
 		Map<Class<?>, IOperatorFunction> map = new HashMap<>();
 		map.put(boolean.class, Boolean::compileEquals); 
 		map.put(java.lang.Boolean.class, Boolean::compileEquals); 
@@ -433,6 +435,26 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 		map.put(PromptoSet.class, SetValue::compileEquals);  /*
 		map.put(PromptoTuple.class, TupleValue::compileEquals); */
 		map.put(PromptoList.class, ListValue::compileEquals); 
+		map.put(UUID.class, UuidValue::compileEquals); 
+		map.put(Object.class, AnyType::compileEquals); 
+		return map;
+	}
+
+
+	static Map<Class<?>, IOperatorFunction> CONTAINS_COMPILERS = createContainsCompilers();
+	
+	private static Map<Class<?>, IOperatorFunction> createContainsCompilers() {
+		Map<Class<?>, IOperatorFunction> map = new HashMap<>();
+		map.put(String.class, Text::compileContains); 
+		/*
+		map.put(PromptoRange.Long.class, RangeBase::compileContains); 
+		map.put(PromptoRange.Character.class, RangeBase::compileContains); 
+		map.put(PromptoRange.Date.class, RangeBase::compileContains); 
+		map.put(PromptoRange.Time.class, RangeBase::compileContains); 
+		map.put(PromptoSet.class, SetValue::compileContains);  
+		map.put(PromptoTuple.class, TupleValue::compileContains); 
+		map.put(PromptoList.class, ListValue::compileContains); 
+		*/
 		return map;
 	}
 
@@ -445,6 +467,10 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 			return compileEquals(context, method, flags.withReverse(true));
 		case ROUGHLY:
 			return compileEquals(context, method, flags.withReverse(false).withRoughly(true));
+		case CONTAINS:
+			return compileContains(context, method, flags.withReverse(false));
+		case NOT_CONTAINS:
+			return compileContains(context, method, flags.withReverse(true));
 		case IS:
 			return compileIs(context, method, flags.withReverse(false));
 		case IS_NOT:
@@ -515,12 +541,22 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 
 	public ResultInfo compileEquals(Context context, MethodInfo method, Flags flags) {
 		ResultInfo lval = left.compile(context, method, flags.withPrimitive(true));
-		IOperatorFunction tester = testers.get(lval.getType());
-		if(tester==null) {
+		IOperatorFunction compiler = EQUALS_COMPILERS.get(lval.getType());
+		if(compiler==null) {
 			System.err.println("Missing IOperatorFunction for = " + lval.getType().getTypeName());
 			throw new SyntaxError("Cannot check equality of " + lval.getType().getTypeName() + " with " + right.check(context).getFamily());
 		}
-		return tester.compile(context, method, flags, lval, right);
+		return compiler.compile(context, method, flags, lval, right);
+	}
+
+	public ResultInfo compileContains(Context context, MethodInfo method, Flags flags) {
+		ResultInfo lval = left.compile(context, method, flags.withPrimitive(true));
+		IOperatorFunction compiler = CONTAINS_COMPILERS.get(lval.getType());
+		if(compiler==null) {
+			System.err.println("Missing IOperatorFunction for 'contains' " + lval.getType().getTypeName());
+			throw new SyntaxError("Cannot check that " + lval.getType().getTypeName() + " contains " + right.check(context).getFamily());
+		}
+		return compiler.compile(context, method, flags, lval, right);
 	}
 
 	@Override

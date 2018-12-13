@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.junit.Before;
 
@@ -210,11 +211,19 @@ public abstract class BaseParserTest extends BaseTest {
 		}
 	}
 	
-	protected void runTests(String resource) throws Exception {
-		runTests(resource, false);
+	protected void runInterpretedTests(String resource) throws Exception {
+		runTests(resource, this::testInterpreted, false);
 	}
 	
-	protected void runTests(String resource, boolean register) throws Exception {
+	protected void runCompiledTests(String resource) throws Exception {
+		runTests(resource, this::testCompiled, false);
+	}
+	
+	protected void runTranspiledTests(String resource) throws Exception {
+		runTests(resource, this::testTranspiled, false);
+	}
+	
+	protected void runTests(String resource, Consumer<Identifier> runner, boolean register) throws Exception {
 		DeclarationList decls = parseResource(resource);
 		if(register)
 			decls.register(coreContext);
@@ -222,22 +231,26 @@ public abstract class BaseParserTest extends BaseTest {
 			if(!(decl instanceof TestMethodDeclaration))
 				continue;
 			Out.reset();
-			interpretTest(decl.getId());
-			Out.reset();
-			executeTest(decl.getId());
+			runner.accept(decl.getId());
 		}
 	}
 	
-	private void executeTest(Identifier identifier) throws Exception {
-		// TODO Auto-generated method stub
+	protected void testInterpreted(Identifier test) {
+		Interpreter.interpretTest(coreContext, test, false);
+		String expected = test.toString() + " test successful\n";
+		String read = Out.read();
+		assertEquals(expected, read);
+	}
+
+	protected void testCompiled(Identifier test) {
+		TempDirectories.create();
+		Executor.executeTest(coreContext, test.toString(), true);
 		
 	}
 
-	private void interpretTest(Identifier identifier) throws Exception {
-		Interpreter.interpretTest(coreContext, identifier, false);
-		String expected = identifier.toString() + " test successful\n";
-		String read = Out.read();
-		assertEquals(expected, read);
+	protected void testTranspiled(Identifier identifier) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	protected List<String> readExpected(String resourceName) {

@@ -27,6 +27,7 @@ import prompto.expression.Symbol;
 import prompto.grammar.Annotation;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoList;
 import prompto.parser.Dialect;
 import prompto.parser.ILocation;
 import prompto.parser.ISection;
@@ -324,10 +325,10 @@ public class Context implements IContext {
 		return getRegisteredDeclaration(AttributeDeclaration.class, new Identifier(name));
 	}
 	
-	public List<AttributeDeclaration> getAllAttributes() {
+	public PromptoList<AttributeDeclaration> getAllAttributes() {
 		if(globals!=this)
 			return globals.getAllAttributes();
-		List<AttributeDeclaration> list = new ArrayList<>();
+		PromptoList<AttributeDeclaration> list = new PromptoList<>(false);
 		for(IDeclaration decl : declarations.values()) {
 			if(decl instanceof AttributeDeclaration)
 				list.add((AttributeDeclaration)decl);

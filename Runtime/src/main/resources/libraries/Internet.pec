@@ -26,9 +26,9 @@ and verifying:
 
 
 define "decode Html charcode" as test method doing:
-	encoded = htmlDecode "a&#39;b"
+	encoded = htmlDecode "a&#49;b"
 and verifying:
-	encoded = "a'b"
+	encoded = "a1b"
 
 define Url as storable native resource with attributes path and encoding, and bindings:
 	
