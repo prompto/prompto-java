@@ -64,4 +64,10 @@ public class BooleanType extends NativeType {
 		transpiler.require("Utils"); // equals etc...
 	}
 	
+	
+	@Override
+	public void transpile(Transpiler transpiler) {
+		transpiler.append("'Boolean'");
+	}
+	
 }

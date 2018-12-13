@@ -47,7 +47,7 @@ public class PeriodLiteral extends Literal<Period> {
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-		transpiler.append("Period.parse(").append(this.text.get()).append(")");
+		transpiler.append("Period.parse(").append(text.get()).append(")");
 		return false;
 	}
 	

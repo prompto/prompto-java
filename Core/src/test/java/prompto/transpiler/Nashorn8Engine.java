@@ -45,6 +45,13 @@ public class Nashorn8Engine implements IJSEngine {
 		invocable.invokeFunction(method.getTranspiledName(context));
 	}
 	
+	public static void executeTest(Context context, TestMethodDeclaration test) throws Exception {
+		Transpiler transpiler = new Transpiler(new Nashorn8Engine(), context);
+		test.declare(transpiler);
+		Invocable invocable = transpile(transpiler);
+		invocable.invokeFunction(test.getTranspiledName());
+	}
+	
 	public static Invocable transpile(Transpiler transpiler) throws Exception {
 		JSContext.set(transpiler.getContext());
 		String js = transpiler.toString();
@@ -159,5 +166,6 @@ public class Nashorn8Engine implements IJSEngine {
 		}
 	
 	}
+
 	
 }

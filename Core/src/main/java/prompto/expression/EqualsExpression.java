@@ -580,14 +580,12 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
         case ROUGHLY:
             this.transpileRoughly(transpiler);
             break;
-            /*
-        case EqOp.CONTAINS:
+        case CONTAINS:
             this.transpileContains(transpiler);
             break;
-        case EqOp.NOT_CONTAINS:
+        case NOT_CONTAINS:
             this.transpileNotContains(transpiler);
             break;
-            */
         case IS:
             this.transpileIs(transpiler);
             break;
@@ -651,7 +649,6 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 	}
 	
 	
-
 	private void transpileEquals(Transpiler transpiler) {
 	    IType lt = this.left.check(transpiler.getContext());
 	    if(lt == BooleanType.instance() || lt == IntegerType.instance() || lt == DecimalType.instance() || lt == CharacterType.instance() || lt == TextType.instance()) {
@@ -679,6 +676,19 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 	        this.right.transpile(transpiler);
 	        transpiler.append(")");
 	    }
+	}
+	
+	private void transpileContains(Transpiler transpiler) {
+	    this.left.transpile(transpiler);
+	    transpiler.append(".contains(");
+	    this.right.transpile(transpiler);
+	    transpiler.append(")");
+	};
+	
+	
+	private void transpileNotContains(Transpiler transpiler) {
+    	transpiler.append("!");
+    	transpileNotContains(transpiler);
 	}
 	
 	@Override

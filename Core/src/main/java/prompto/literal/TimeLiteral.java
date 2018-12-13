@@ -51,7 +51,7 @@ public class TimeLiteral extends Literal<Time> {
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-		transpiler.append("LocalTime.parse(").append(this.text.get()).append(")");
+		transpiler.append("LocalTime.parse(").append(text.get()).append(")");
 		return false;
 	}
 }

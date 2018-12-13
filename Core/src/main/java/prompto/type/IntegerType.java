@@ -279,10 +279,18 @@ public class IntegerType extends NativeType implements INumberType {
 		return new Integer(value.asLong());
 	}
 	
+	
 	@Override
 	public void declare(Transpiler transpiler) {
-		// nothing to do
+		transpiler.require("Utils"); // equals etc...
 	}
+	
+	
+	@Override
+	public void transpile(Transpiler transpiler) {
+		transpiler.append("'Integer'");
+	}
+
 	
 	@Override
 	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {

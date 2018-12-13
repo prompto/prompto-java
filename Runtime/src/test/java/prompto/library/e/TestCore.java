@@ -2,6 +2,7 @@ package prompto.library.e;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import prompto.parser.e.BaseEParserTest;
@@ -44,7 +45,8 @@ public class TestCore extends BaseEParserTest {
 	public void testCompiledAttribute() throws Exception {
 		runCompiledTests("core/attribute.pec");
 	}
-
+	
+	@Ignore
 	@Test
 	public void testTranspiledAttribute() throws Exception {
 		runTranspiledTests("core/attribute.pec");

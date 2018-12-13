@@ -24,6 +24,8 @@ public class Transpiler {
 	Transpiler parent;
 	Set<ITranspilable> declared;
 	Set<String> required;
+	Set<String> registered;
+	int escapeMode;
 	Stack<String> lines;
 	StringBuilder line;
 	String indents;
@@ -35,6 +37,8 @@ public class Transpiler {
 		this.context = context;
 		this.declared = new HashSet<>();
 	    this.required = new HashSet<>();
+	    this.registered = new HashSet<>();
+	    this.escapeMode = 0;
 	    this.lines = new Stack<>();
 	    this.line = new StringBuilder();
 	    this.indents = "";
@@ -59,6 +63,10 @@ public class Transpiler {
 
 	public String getSetterName() {
 		return setterName;
+	}
+	
+	public int getEscapeMode() {
+		return escapeMode;
 	}
 	
 	public Transpiler newLocalTranspiler() {
@@ -114,6 +122,8 @@ public class Transpiler {
 		Transpiler transpiler = new Transpiler(this.engine, context);
 	    transpiler.declared = this.declared;
 	    transpiler.required = this.required;
+	    transpiler.registered = this.registered;
+	    transpiler.escapeMode = this.escapeMode;
 	    transpiler.lines = this.lines;
 	    transpiler.line = this.line;
 	    transpiler.indents = this.indents;
@@ -166,6 +176,19 @@ public class Transpiler {
 		return this;
 	}
 
+	
+	public Transpiler escape() {
+	    this.escapeMode++;
+	    return this;
+	}
+	
+	
+	public Transpiler unescape() {
+	    this.escapeMode--;
+	    return this;
+	}
+
+	
 	public Transpiler trimLast(int count) {
 	    this.line.setLength(this.line.length() - count);
 	    return this;
@@ -173,7 +196,7 @@ public class Transpiler {
 
 	
 	public Transpiler printTestName(String testName) {
-		this.append("print(\"\\\"").append(testName.substring(1, testName.length() - 1)).append("\\\" test ");
+		this.append("print('").append(testName).append(" test ");
 		return this;
 	}
 
@@ -206,6 +229,11 @@ public class Transpiler {
 	
 	public boolean requires(String script) {
 		return required.contains(script);
+	}
+	
+	public void register(String script) {
+		required.add(script);
+		registered.add(script);
 	}
 
 	

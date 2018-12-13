@@ -135,8 +135,17 @@ public class TimeType extends NativeType {
 	
 	@Override
 	public void declare(Transpiler transpiler) {
-		transpiler.require("LocalTime");
+		transpiler.register("LocalTime");
 	}
+	
+	
+	@Override
+	public void transpile(Transpiler transpiler) {
+		transpiler.append("LocalTime");
+	}
+	
+
+
 	
 	@Override
 	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {

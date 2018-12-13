@@ -589,15 +589,24 @@ public class TextType extends NativeType {
 		method.addInstruction(Opcode.INVOKESTATIC, m);
 	}
 	
+	
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		return new Text(value.asText());
 	}
 	
+	
 	@Override
 	public void declare(Transpiler transpiler) {
 		transpiler.require("Utils"); // isAText, equals etc...
 	}
+	
+
+	@Override
+	public void transpile(Transpiler transpiler) {
+		transpiler.append("'Text'");
+	}
+
 	
 	@Override
 	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {

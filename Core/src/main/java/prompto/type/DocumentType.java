@@ -135,7 +135,13 @@ public class DocumentType extends NativeType {
 	
 	@Override
 	public void declare(Transpiler transpiler) {
-		transpiler.require("Document");
+		transpiler.register("Document");
+		transpiler.register("List");
+	}
+	
+	@Override
+	public void transpile(Transpiler transpiler) {
+		transpiler.append("Document");
 	}
 	
 	@Override

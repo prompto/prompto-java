@@ -51,7 +51,7 @@ public class VersionLiteral extends Literal<Version> {
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-		transpiler.append("Version.Parse(").append(this.text.get()).append(")");
+		transpiler.append("Version.Parse(").append(text.get()).append(")");
 		return false;
 	}
 	

@@ -1,6 +1,9 @@
 package prompto.literal;
 
+import java.io.CharArrayWriter;
+import java.nio.CharBuffer;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
@@ -24,9 +27,21 @@ public abstract class Literal<T extends IValue> implements IExpression {
 	
 	@Override
 	public void toDialect(CodeWriter writer) {
-		writer.append(text.get());
+		writer.append(escapedText(writer.getEscapeMode()));
 	}
 	
+	public String escapedText(int escapeMode) {
+		String value = text.get();
+		if(escapeMode <= 0 || !value.contains("'"))
+			return value;
+		else {
+			// can't get regex to work with '
+			return value.chars()
+					.mapToObj(c->(String)(c=='\'' ? "\\'" : Character.valueOf((char)c).toString()))
+					.collect(Collectors.joining());
+		}
+	}
+
 	@Override
 	public String toString() {
 		return text.get();

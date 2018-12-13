@@ -131,5 +131,11 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 	public void declare(Transpiler transpiler) {
 		this.declareArguments(transpiler);
 	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		// nothing to do
+		return false;
+	}
 
 }

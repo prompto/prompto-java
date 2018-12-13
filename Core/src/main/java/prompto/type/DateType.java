@@ -136,9 +136,16 @@ public class DateType extends NativeType {
 	
 	@Override
 	public void declare(Transpiler transpiler) {
-		transpiler.require("LocalDate");
+		transpiler.register("LocalDate");
 	}
 	
+	
+	@Override
+	public void transpile(Transpiler transpiler) {
+		transpiler.append("LocalDate");
+	}
+	
+
 	@Override
 	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
 	    if (other == PeriodType.instance()) {

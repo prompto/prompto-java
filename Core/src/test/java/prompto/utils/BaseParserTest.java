@@ -248,9 +248,14 @@ public abstract class BaseParserTest extends BaseTest {
 		
 	}
 
-	protected void testTranspiled(Identifier identifier) {
-		// TODO Auto-generated method stub
-		
+	protected void testTranspiled(Identifier name) {
+		try {
+			TestMethodDeclaration test = coreContext.getTest(name, false);
+			Nashorn8Engine.executeTest(coreContext, test);
+		} catch(Exception e) {
+			e.printStackTrace(System.err);
+			fail(e.getMessage());
+		}
 	}
 
 	protected List<String> readExpected(String resourceName) {

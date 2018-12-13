@@ -37,23 +37,34 @@ public class CodeWriter {
 	Context context;
 	StringBuilder sb;
 	Indenter indenter;
+	int escapeMode;
 	
 	public CodeWriter(Dialect dialect, Context context) {
+		this(dialect, context, 0);
+	}
+	
+	public CodeWriter(Dialect dialect, Context context, int escapeMode) {
 		this.dialect = dialect;
 		this.context = context;
+		this.escapeMode = escapeMode;
 		this.sb = new StringBuilder();
 		indenter = new Indenter();
 	}
 	
-	public CodeWriter(Dialect dialect, Context context, StringBuilder sb, Indenter indenter) {
+	public CodeWriter(Dialect dialect, Context context, int escapeMode, StringBuilder sb, Indenter indenter) {
 		this.dialect = dialect;
 		this.context = context;
+		this.escapeMode = escapeMode;
 		this.sb = sb;
 		this.indenter = indenter;
 	}
 
 	public Context getContext() {
 		return context;
+	}
+	
+	public int getEscapeMode() {
+		return escapeMode;
 	}
 	
 	public CodeWriter append(Identifier id) {
@@ -113,25 +124,25 @@ public class CodeWriter {
 	}
 
 	public CodeWriter newLocalWriter() {
-		return new CodeWriter(dialect, context.newLocalContext(), sb, indenter);
+		return new CodeWriter(dialect, context.newLocalContext(), escapeMode, sb, indenter);
 	}
 
 	public CodeWriter newChildWriter() {
-		return new CodeWriter(dialect, context.newChildContext(), sb, indenter);
+		return new CodeWriter(dialect, context.newChildContext(), escapeMode, sb, indenter);
 	}
 
 	public CodeWriter newMemberWriter() {
 		Context context = this.context.newLocalContext();
 		context.setParentContext(this.context);
-		return new CodeWriter(dialect, context, sb, indenter);
+		return new CodeWriter(dialect, context, escapeMode, sb, indenter);
 	}
 
 	public CodeWriter newInstanceWriter(CategoryType type) {
-		return new CodeWriter(dialect, context.newInstanceContext(type, false), sb, indenter);
+		return new CodeWriter(dialect, context.newInstanceContext(type, false), escapeMode, sb, indenter);
 	}
 
 	public CodeWriter newDocumentWriter() {
-		return new CodeWriter(dialect, context.newDocumentContext(false), sb, indenter);
+		return new CodeWriter(dialect, context.newDocumentContext(false), escapeMode, sb, indenter);
 	}
 
 

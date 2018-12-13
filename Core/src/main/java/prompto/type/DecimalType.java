@@ -129,9 +129,16 @@ public class DecimalType extends NativeType implements INumberType {
 	
 	@Override
 	public void declare(Transpiler transpiler) {
-		// nothing to do
+		transpiler.require("Utils"); // equals etc...
 	}
 
+
+	@Override
+	public void transpile(Transpiler transpiler) {
+		transpiler.append("'Decimal'");
+	}
+
+	
 	@Override
 	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
 		if (other == IntegerType.instance() || other == DecimalType.instance()) {

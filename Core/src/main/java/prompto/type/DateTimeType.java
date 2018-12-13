@@ -130,6 +130,16 @@ public class DateTimeType extends NativeType {
 	}
 	
 	@Override
+	public void declare(Transpiler transpiler) {
+		transpiler.register("DateTime");
+	}
+	
+	@Override
+	public void transpile(Transpiler transpiler) {
+		transpiler.append("DateTime");
+	}
+	
+	@Override
 	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
 	    if (other == PeriodType.instance()) {
 	        left.declare(transpiler);

@@ -51,7 +51,7 @@ public class DateLiteral extends Literal<Date> {
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-		transpiler.append("LocalDate.parse(").append(this.text.get()).append(")");
+		transpiler.append("LocalDate.parse(").append(text.get()).append(")");
 		return false;
 	}
 }

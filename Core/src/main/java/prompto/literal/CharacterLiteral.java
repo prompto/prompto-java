@@ -60,7 +60,7 @@ public class CharacterLiteral extends Literal<Character> {
 
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-		transpiler.append(this.text.get());
+		transpiler.append(text.get());
 		return false;
 	}
 

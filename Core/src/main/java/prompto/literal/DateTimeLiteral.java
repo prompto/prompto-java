@@ -52,7 +52,7 @@ public class DateTimeLiteral extends Literal<DateTime> {
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-		transpiler.append("DateTime.parse(").append(this.text.get()).append(")");
+		transpiler.append("DateTime.parse(").append(text.get()).append(")");
 		return false;
 	}
 	

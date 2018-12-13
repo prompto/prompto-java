@@ -52,8 +52,8 @@ public class Assertion extends Section {
 		expression.transpile(transpiler);
 	}
 
-	public String getExpected(Context context, Dialect dialect) {
-		CodeWriter writer = new CodeWriter(dialect, context);
+	public String getExpected(Context context, Dialect dialect, int escapeMode) {
+		CodeWriter writer = new CodeWriter(dialect, context, escapeMode);
 		expression.toDialect(writer);
 		return writer.toString();
 	}

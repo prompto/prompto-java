@@ -181,7 +181,13 @@ public class ListType extends ContainerType {
 	
 	@Override
 	public void declare(Transpiler transpiler) {
-		// nothing to do
+		transpiler.register("List");
+	}
+	
+
+	@Override
+	public void transpile(Transpiler transpiler) {
+		transpiler.append("List");
 	}
 	
 	
