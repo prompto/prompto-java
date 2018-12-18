@@ -257,6 +257,7 @@ public abstract class Standalone {
 		ICodeStore codeStore = newQueryableCodeStore(store, runtime, config);
 		ICodeStore.setInstance(codeStore);
 		logger.info(()->"Bootstrapping successful.");
+		codeStore.setMainModule(config.getApplicationName(), config.getApplicationVersion());
 		return codeStore;
 	}
 

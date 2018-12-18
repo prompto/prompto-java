@@ -78,5 +78,27 @@ public abstract class BaseCodeStore implements ICodeStore {
 			next.collectStorableAttributes(columns);
 		
 	}
+	
+	@Override
+	public void setMainModule(String name, PromptoVersion version) {
+		registerModule(name, version);
+	}
+
+	private void registerModule(String name, PromptoVersion version) {
+		Module module = fetchModule(name, version);
+		if(module!=null) try {
+			ICodeStore.addModuleDbId(module.getDbId());
+			if(module.getDependencies()!=null)
+				module.getDependencies().forEach(this::registerModule);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private void registerModule(Dependency dependency) {
+		registerModule(dependency.getName(), dependency.getVersion());
+	}
+	
+	protected abstract Module fetchModule(String name, PromptoVersion version);
 
 }

@@ -41,6 +41,16 @@ public interface ICodeStore {
 		return instance.get();
 	}
 	
+	static Set<Object> moduleDbIds = new HashSet<>();
+	
+	static void addModuleDbId(Object dbId) {
+		moduleDbIds.add(dbId);
+	}
+
+	public static Set<Object> getModuleDbIds() {
+		return moduleDbIds;
+	}
+	
 	public static DeclarationList parse(String sourceName, InputStream data) throws Exception {
 		Dialect dialect = dialectFromResourceName(sourceName);
 		return parse(dialect, sourceName, data);
@@ -122,6 +132,8 @@ public interface ICodeStore {
 	
 	<T extends Module> T fetchModule(ModuleType type, String name, PromptoVersion version) throws PromptoError;
 	void storeModule(Module module) throws PromptoError;
+	
+	void setMainModule(String name, PromptoVersion version);
 
 	void collectStorableAttributes(Map<String, AttributeDeclaration> columns) throws PromptoError;
 
@@ -152,7 +164,6 @@ public interface ICodeStore {
 					.orElse(null);
 		}
 	}
-
 
 
 }

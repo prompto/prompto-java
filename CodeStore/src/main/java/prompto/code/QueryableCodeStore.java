@@ -46,6 +46,7 @@ import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.store.AttributeInfo;
+import prompto.store.Family;
 import prompto.store.IQueryBuilder;
 import prompto.store.IQueryBuilder.MatchOp;
 import prompto.store.IStorable;
@@ -157,6 +158,23 @@ public class QueryableCodeStore extends BaseCodeStore {
 			Module module = type.getModuleClass().newInstance();
 			module.fromStored(stored);
 			return (T)module;
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	@Override
+	public Module fetchModule(String name, PromptoVersion version) throws PromptoError {
+		try {
+			IStored stored = fetchOneNamedInStore(new CategoryType(new Identifier("Module")), version, name);
+			if(stored==null)
+				return null;
+			List<String> categories = stored.getCategories();
+			String category = categories.get(categories.size()-1);
+			ModuleType type = ModuleType.valueOf(category.toUpperCase());
+			Module module = type.getModuleClass().newInstance();
+			module.fromStored(stored);
+			return module;
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -315,6 +333,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 		builder.verify(AttributeInfo.CATEGORY, MatchOp.CONTAINS, "EnumeratedDeclaration");
 		builder.verify(AttributeInfo.SYMBOLS, MatchOp.CONTAINS, name);
 		builder.and();
+		builder = filterOnModules(builder);
 		if(PromptoVersion.LATEST.equals(version)) {
 			IdentifierList names = IdentifierList.parse("prototype,version");
 			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
@@ -323,6 +342,14 @@ public class QueryableCodeStore extends BaseCodeStore {
 			return fetchDistinct(stored);
 		} else
 			return store.fetchMany(builder.build()); 
+	}
+
+	private IQueryBuilder filterOnModules(IQueryBuilder builder) {
+		if(ICodeStore.getModuleDbIds().isEmpty())
+			return builder;
+		AttributeInfo info = new AttributeInfo("module", Family.CATEGORY, false, null);
+		builder.verify(info, MatchOp.IN, ICodeStore.getModuleDbIds());
+		return builder.and();
 	}
 
 	private Iterable<IDeclaration> storeDeclarations(Iterable<IDeclaration> decls) throws PromptoError {
@@ -426,6 +453,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 		IPredicateExpression filter = buildFilter(version, attribute, value);
 		filter.interpretQuery(context, builder);
 		builder.and();
+		builder = filterOnModules(builder);
 		if(PromptoVersion.LATEST.equals(version)) {
 			IdentifierList names = new IdentifierList("prototype", "version");
 			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
@@ -447,6 +475,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 		IPredicateExpression filter = buildFilter(version, attribute, value);
 		filter.interpretQuery(context, builder);
 		builder.and();
+		builder = filterOnModules(builder);
 		if(PromptoVersion.LATEST.equals(version)) {
 			IdentifierList names = new IdentifierList("version");
 			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
@@ -469,6 +498,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 			info = AttributeInfo.STORABLE;
 			builder.verify(info, MatchOp.EQUALS, true);
 			builder.and();
+			builder = filterOnModules(builder);
 			IStoredIterable iterable = store.fetchMany(builder.build());
 			Iterator<IStored> stored = iterable.iterator();
 			while(stored.hasNext()) {
