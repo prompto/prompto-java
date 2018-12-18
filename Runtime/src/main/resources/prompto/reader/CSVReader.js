@@ -3,12 +3,13 @@
 /* ideally we would use generators, but support with browsers is poor so far */
 /* so we use our own stuff until ES6 becomes widespread */
 
+
 function csvIterate(text, columns, separator, encloser) {
     return new CSVIterator(text, columns, separator, encloser);
 }
 
 function csvRead(text, columns, separator, encloser) {
-    var list = [];
+    var list = new intrinsic.List();
     var iter = new CSVIterator(text, columns, separator, encloser);
     while(iter.hasNext())
         list.push(iter.next());
@@ -32,6 +33,11 @@ var CR = '\r'.charCodeAt(0);
 var LF = '\n'.charCodeAt(0);
 var ESC = '\\'.charCodeAt(0);
 
+
+CSVIterator.prototype.iterator = function() {
+    return this;
+};
+
 CSVIterator.prototype.hasNext = function() {
     if(this.nextChar==0)
         this.fetchChar(true);
@@ -41,6 +47,20 @@ CSVIterator.prototype.hasNext = function() {
 };
 
 
+
+CSVIterator.prototype.next = function() {
+    if(!this.hasNext()) // will parse headers
+        return null;
+    var values = this.parseLine();
+    var doc = new intrinsic.Document();
+    for(var i=0;i<this.headers.length;i++) {
+        if(i<values.length)
+            doc[this.headers[i]] = values[i];
+        else
+            doc[this.headers[i]] = null;
+    }
+    return doc;
+};
 
 CSVIterator.prototype.fetchChar = function(eatNewLine) {
     eatNewLine = eatNewLine || false;
@@ -191,20 +211,6 @@ CSVIterator.prototype.handleNewLine = function(chars, endChar, list) {
     }
 }
 
-
-CSVIterator.prototype.next = function() {
-    if(!this.hasNext()) // will parse headers
-        return null;
-    var values = this.parseLine();
-    var doc = {};
-    for(var i=0;i<this.headers.length;i++) {
-        if(i<values.length)
-            doc[this.headers[i]] = values[i];
-        else
-            doc[this.headers[i]] = null;
-    }
-    return doc;
-};
 
 exports.csvIterate = csvIterate;
 exports.csvRead = csvRead;

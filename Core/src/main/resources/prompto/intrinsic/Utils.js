@@ -101,6 +101,6 @@ String.prototype.indexOf1Based = function(value) {
 String.prototype.equals = function(value) {
 	return this == value;
 };
-
+intrinsic = {};
 
 

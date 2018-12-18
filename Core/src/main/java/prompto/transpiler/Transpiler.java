@@ -240,6 +240,7 @@ public class Transpiler {
 	@Override
 	public String toString() {
 	    this.appendAllRequired();
+	    this.appendAllRegistered();
 	    this.appendAllDeclared();
 	    this.flush();
 	    return this.lines.stream().collect(Collectors.joining("\n"));
@@ -247,6 +248,7 @@ public class Transpiler {
 	
 	public void print(PrintWriter printer) {
 	    this.appendAllRequired();
+	    this.appendAllRegistered();
 	    this.appendAllDeclared();
 	    this.flush();
 	    this.lines.forEach(printer::println);
@@ -293,6 +295,15 @@ public class Transpiler {
 		else
 			throw new RuntimeException("Could not locate script: " + module);
 	}
+	
+	private void appendAllRegistered() {
+		registered.forEach(this::appendOneRegistered);
+	}
+	
+	private void appendOneRegistered(String module) {
+		this.lines.push("intrinsic." + module + " = " + module + ";");
+	}
+
 
 	private String getResourceAsString(String path) {
 		try {
