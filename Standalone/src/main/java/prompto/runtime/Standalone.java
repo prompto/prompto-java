@@ -126,11 +126,16 @@ public abstract class Standalone {
 	}
 	
 	private static ICodeStore initializeCodeStore(IRuntimeConfiguration config) throws Throwable {
-		IStoreConfiguration cfg = config.getCodeStoreConfiguration();
-		// in SEED scenario, cfg is null to ensure latest code from resource is always used
+		// in SEED scenario, cfg from store is null to ensure latest code from resource is always used
 		// so we use MemStore to stay consistent, but its content will never be persisted 
-		IStore store = cfg==null ? new MemStore() : IStoreFactory.newStoreFromConfig(cfg); 
-		logger.debug(()->"Using " + (cfg==null ? "MemStore" : cfg.toString()) + " as code store");
+		IStore store = null;
+		IStoreConfiguration cfg = config.getCodeStoreConfiguration();
+		if(cfg!=null)
+			store = IStoreFactory.newStoreFromConfig(cfg); 
+		if(store==null)
+			store = new MemStore();
+		boolean isMemStore = store instanceof MemStore;
+		logger.debug(()->"Using " + ( isMemStore ? "MemStore" : cfg.toString()) + " as code store");
 		return bootstrapCodeStore(store, config);
 	}
 
