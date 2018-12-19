@@ -134,7 +134,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 	public void storeModule(Module module) throws PromptoError {
 		Context context = Context.newGlobalContext();
 		List<IStorable> storables = new ArrayList<>();
-		module.toStorables(context, store, storables);
+		module.collectStorables(context, store, storables);
 		store.store(null, storables);
 	}
 	
@@ -152,11 +152,11 @@ public class QueryableCodeStore extends BaseCodeStore {
 	@Override
 	public <T extends Module> T fetchModule(ModuleType type, String name, PromptoVersion version) throws PromptoError {
 		try {
-			IStored stored = fetchOneNamedInStore(type.getCategory(), version, name);
+			IStored stored = fetchOneNamedInStore(type.getCategory(), version, name, false);
 			if(stored==null)
 				return null;
 			Module module = type.getModuleClass().newInstance();
-			module.fromStored(stored);
+			module.fromStored(store, stored);
 			return (T)module;
 		} catch(Exception e) {
 			throw new RuntimeException(e);
@@ -166,14 +166,14 @@ public class QueryableCodeStore extends BaseCodeStore {
 	@Override
 	public Module fetchModule(String name, PromptoVersion version) throws PromptoError {
 		try {
-			IStored stored = fetchOneNamedInStore(new CategoryType(new Identifier("Module")), version, name);
+			IStored stored = fetchOneNamedInStore(new CategoryType(new Identifier("Module")), version, name, false);
 			if(stored==null)
 				return null;
 			List<String> categories = stored.getCategories();
 			String category = categories.get(categories.size()-1);
 			ModuleType type = ModuleType.valueOf(category.toUpperCase());
 			Module module = type.getModuleClass().newInstance();
-			module.fromStored(stored);
+			module.fromStored(store, stored);
 			return module;
 		} catch(Exception e) {
 			throw new RuntimeException(e);
@@ -183,7 +183,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 	@Override
 	public Resource fetchSpecificResource(String name, PromptoVersion version) {
 		try {
-			IStored stored = fetchOneInStore(new CategoryType(new Identifier("Resource")), version, "name", name);
+			IStored stored = fetchOneInStore(new CategoryType(new Identifier("Resource")), version, "name", name, true);
 			if(stored==null)
 				return null;
 			return readResource(stored);
@@ -284,7 +284,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 	
 	@Override
 	public IDeclaration fetchSpecificSymbol(String name, PromptoVersion version) throws PromptoError {
-		Iterable<IDeclaration> decls = fetchSymbolsInStore(name, version);
+		Iterable<IDeclaration> decls = fetchSymbolsInStore(name, version, true);
 		if(decls!=null && decls.iterator().hasNext())
 			return decls.iterator().next();
 		if(storeExternals)
@@ -294,11 +294,11 @@ public class QueryableCodeStore extends BaseCodeStore {
 	}
 	
 	
-	private synchronized IDeclaration fetchAndStoreExternalSpecificSymbol(String name, PromptoVersion version2) {
+	private synchronized IDeclaration fetchAndStoreExternalSpecificSymbol(String name, PromptoVersion version) {
 		// when called from the AppServer, multiple threads may be attempting to do this
 		// TODO: need to deal with multiple cloud nodes doing this
 		synchronized(this) {
-			Iterable<IDeclaration> decls = fetchSymbolsInStore(name, version);
+			Iterable<IDeclaration> decls = fetchSymbolsInStore(name, version, true);
 			if(decls!=null && decls.iterator().hasNext())
 				return decls.iterator().next();
 			IDeclaration decl = getRegisteringSymbol(name);
@@ -316,8 +316,8 @@ public class QueryableCodeStore extends BaseCodeStore {
 		}
 	}
 
-	private Iterable<IDeclaration> fetchSymbolsInStore(String name, PromptoVersion version) {
-		IStoredIterable iterable = fetchStoredDeclarationsBySymbol(name, version);
+	private Iterable<IDeclaration> fetchSymbolsInStore(String name, PromptoVersion version, boolean filterOnModules) {
+		IStoredIterable iterable = fetchStoredDeclarationsBySymbol(name, version, filterOnModules);
 		if(iterable.iterator().hasNext()) {
 			Iterator<IStored> iterator = iterable.iterator();
 			return () -> new Iterator<IDeclaration>() {
@@ -328,12 +328,12 @@ public class QueryableCodeStore extends BaseCodeStore {
 			return null;
 	}
 
-	private IStoredIterable fetchStoredDeclarationsBySymbol(String name, PromptoVersion version) {
+	private IStoredIterable fetchStoredDeclarationsBySymbol(String name, PromptoVersion version, boolean filterOnModules) {
 		IQueryBuilder builder = store.newQueryBuilder();
 		builder.verify(AttributeInfo.CATEGORY, MatchOp.CONTAINS, "EnumeratedDeclaration");
 		builder.verify(AttributeInfo.SYMBOLS, MatchOp.CONTAINS, name);
 		builder.and();
-		builder = filterOnModules(builder);
+		builder = filterOnModules(builder, filterOnModules);
 		if(PromptoVersion.LATEST.equals(version)) {
 			IdentifierList names = IdentifierList.parse("prototype,version");
 			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
@@ -344,8 +344,8 @@ public class QueryableCodeStore extends BaseCodeStore {
 			return store.fetchMany(builder.build()); 
 	}
 
-	private IQueryBuilder filterOnModules(IQueryBuilder builder) {
-		if(ICodeStore.getModuleDbIds().isEmpty())
+	private IQueryBuilder filterOnModules(IQueryBuilder builder, boolean filterOnModules) {
+		if(ICodeStore.getModuleDbIds().isEmpty() || !filterOnModules)
 			return builder;
 		AttributeInfo info = new AttributeInfo("module", Family.CATEGORY, false, null);
 		builder.verify(info, MatchOp.IN, ICodeStore.getModuleDbIds());
@@ -379,7 +379,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 	
 	private Object fetchDeclarationModuleDbId(IDeclaration decl) throws PromptoError {
 		ICodeStore origin = decl.getOrigin();
-		IStored stored = fetchOneNamedInStore(origin.getModuleType().getCategory(), origin.getModuleVersion(), origin.getModuleName());
+		IStored stored = fetchOneNamedInStore(origin.getModuleType().getCategory(), origin.getModuleVersion(), origin.getModuleName(), false);
 		if(stored==null)
 			return null;
 		else
@@ -422,7 +422,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 			return null;
 		else try {
 			CategoryType category = new CategoryType(new Identifier("Declaration"));
-			IStoredIterable iterable = fetchManyNamedInStore(name, category, version);
+			IStoredIterable iterable = fetchManyNamedInStore(name, category, version, true);
 			if(iterable.iterator().hasNext()) {
 				Iterator<IStored> iterator = iterable.iterator();
 				return () -> new Iterator<IDeclaration>() {
@@ -439,11 +439,11 @@ public class QueryableCodeStore extends BaseCodeStore {
 	private static Set<String> uniqueDecls = new HashSet<>(
 			Arrays.asList(DeclarationType.ATTRIBUTE.name(), DeclarationType.CATEGORY.name(), DeclarationType.TEST.name()));
 	
-	private IStoredIterable fetchManyNamedInStore(String name, CategoryType type, PromptoVersion version) throws PromptoError {
-		return fetchManyInStore(type, version, "name", name);
+	private IStoredIterable fetchManyNamedInStore(String name, CategoryType type, PromptoVersion version, boolean filterOnModules) throws PromptoError {
+		return fetchManyInStore(type, version, "name", name, filterOnModules);
 	}
 
-	private IStoredIterable fetchManyInStore(CategoryType type, PromptoVersion version, String attribute, String value) throws PromptoError {
+	private IStoredIterable fetchManyInStore(CategoryType type, PromptoVersion version, String attribute, String value, boolean filterOnModules) throws PromptoError {
 		IQueryBuilder builder = store.newQueryBuilder();
 		if(uniqueDecls.contains(type.toString().toUpperCase())) {
 			builder.first(1L).last(1L);
@@ -453,7 +453,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 		IPredicateExpression filter = buildFilter(version, attribute, value);
 		filter.interpretQuery(context, builder);
 		builder.and();
-		builder = filterOnModules(builder);
+		builder = filterOnModules(builder, filterOnModules);
 		if(PromptoVersion.LATEST.equals(version)) {
 			IdentifierList names = new IdentifierList("prototype", "version");
 			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
@@ -464,18 +464,18 @@ public class QueryableCodeStore extends BaseCodeStore {
 			return store.fetchMany(builder.build()); 
 	}
 	
-	private IStored fetchOneNamedInStore(CategoryType type, PromptoVersion version, String name) throws PromptoError {
-		return fetchOneInStore(type, version, "name", name);
+	private IStored fetchOneNamedInStore(CategoryType type, PromptoVersion version, String name, boolean filterOnModules) throws PromptoError {
+		return fetchOneInStore(type, version, "name", name, filterOnModules);
 	}
 	
-	private IStored fetchOneInStore(CategoryType type, PromptoVersion version, String attribute, String value) throws PromptoError {
+	private IStored fetchOneInStore(CategoryType type, PromptoVersion version, String attribute, String value, boolean filterOnModules) throws PromptoError {
 		IQueryBuilder builder = store.newQueryBuilder();
 		AttributeInfo info = AttributeInfo.CATEGORY;
 		builder.verify(info, MatchOp.CONTAINS, type.getTypeName());
 		IPredicateExpression filter = buildFilter(version, attribute, value);
 		filter.interpretQuery(context, builder);
 		builder.and();
-		builder = filterOnModules(builder);
+		builder = filterOnModules(builder, filterOnModules);
 		if(PromptoVersion.LATEST.equals(version)) {
 			IdentifierList names = new IdentifierList("version");
 			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
@@ -498,7 +498,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 			info = AttributeInfo.STORABLE;
 			builder.verify(info, MatchOp.EQUALS, true);
 			builder.and();
-			builder = filterOnModules(builder);
+			builder = filterOnModules(builder, true);
 			IStoredIterable iterable = store.fetchMany(builder.build());
 			Iterator<IStored> stored = iterable.iterator();
 			while(stored.hasNext()) {

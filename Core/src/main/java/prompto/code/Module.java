@@ -64,7 +64,7 @@ public abstract class Module {
 		this.image = image;
 	}
 
-	public IStorable toStorables(Context context, IStore store, List<IStorable> storables) throws PromptoError {
+	public IStorable collectStorables(Context context, IStore store, List<IStorable> storables) throws PromptoError {
 		IStorable storable = store.newStorable(getCategories(), null); 
 		storables.add(storable);
 		setDbId(storable.getOrCreateDbId());
@@ -77,7 +77,7 @@ public abstract class Module {
 		if(dependencies!=null) {
 			List<Object> dbIds = dependencies.stream()
 					.map((d)->
-						d.populate(context, store, storables)
+						d.collectStorables(context, store, storables)
 						.getOrCreateDbId())
 					.collect(Collectors.toList());
 			storable.setData("dependencies", dbIds);
@@ -85,11 +85,14 @@ public abstract class Module {
 		return storable;
 	}
 	
-	public void fromStored(IStored stored) {
+	public void fromStored(IStore store, IStored stored) {
 		setDbId(stored.getDbId());
 		setName((String)stored.getData("name"));
 		setVersion((PromptoVersion)stored.getData("version"));
 		setDescription((String)stored.getData("description"));
+		setImage((PromptoBinary)stored.getData("image"));
+		List<Dependency> dependencies = Dependency.listFromStored(store, stored.getData("dependencies"));
+		setDependencies(dependencies);
 	}
 
 	private List<String> getCategories() {

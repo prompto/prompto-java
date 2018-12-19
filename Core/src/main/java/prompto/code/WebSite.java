@@ -25,8 +25,8 @@ public class WebSite extends Service {
 	}
 	
 	@Override
-	public IStorable toStorables(Context context, IStore store, List<IStorable> storables) throws PromptoError {
-		IStorable storable = super.toStorables(context, store, storables);
+	public IStorable collectStorables(Context context, IStore store, List<IStorable> storables) throws PromptoError {
+		IStorable storable = super.collectStorables(context, store, storables);
 		storable.setData("homePage", homePage);
 		return storable;
 	}

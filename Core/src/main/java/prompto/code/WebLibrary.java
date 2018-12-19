@@ -44,8 +44,8 @@ public class WebLibrary extends Library {
 	}
 
 	@Override
-	public IStorable toStorables(Context context, IStore store, List<IStorable> storables) throws PromptoError {
-		IStorable storable = super.toStorables(context, store, storables);
+	public IStorable collectStorables(Context context, IStore store, List<IStorable> storables) throws PromptoError {
+		IStorable storable = super.collectStorables(context, store, storables);
 		storable.setData("widgetLibrary", widgetLibrary);
 		storable.setData("htmlEngine", htmlEngine);
 		storable.setData("uiFramework", uiFramework);
@@ -53,8 +53,8 @@ public class WebLibrary extends Library {
 	}
 
 	@Override
-	public void fromStored(IStored stored) {
-		super.fromStored(stored);
+	public void fromStored(IStore store, IStored stored) {
+		super.fromStored(store, stored);
 		setWidgetLibrary((String)stored.getData("widgetLibrary"));
 		setHtmlEngine((String)stored.getData("htmlEngine"));
 		setUIFramework((String)stored.getData("uiFramework"));

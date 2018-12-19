@@ -26,15 +26,15 @@ public class Batch extends Module implements IApplication {
 	}
 	
 	@Override
-	public IStorable toStorables(Context context, IStore store, List<IStorable> storables) throws PromptoError {
-		IStorable storable = super.toStorables(context, store, storables);
+	public IStorable collectStorables(Context context, IStore store, List<IStorable> storables) throws PromptoError {
+		IStorable storable = super.collectStorables(context, store, storables);
 		storable.setData("startMethod", startMethod);
 		return storable;
 	}
 	
 	@Override
-	public void fromStored(IStored stored) {
-		super.fromStored(stored);
+	public void fromStored(IStore store, IStored stored) {
+		super.fromStored(store, stored);
 		setStartMethod((String)stored.getData("startMethod"));
 	}
 
