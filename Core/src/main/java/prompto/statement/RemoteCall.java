@@ -163,7 +163,8 @@ public class RemoteCall extends UnresolvedCall {
 		transpiler.append("[");
 		ArgumentAssignmentList assigns = call.getAssignments();
 		if(assigns!=null && !assigns.isEmpty()) {
-			IMethodDeclaration declaration = call.findDeclaration(transpiler.getContext());
+			IMethodDeclaration declaration = call.findDeclaration(transpiler.getContext(), false);
+			assigns = assigns.makeAssignments(transpiler.getContext(), declaration);
 			assigns.forEach(assign->{
 				transpileAssignment(transpiler, assign, declaration);
 				transpiler.append(",");
