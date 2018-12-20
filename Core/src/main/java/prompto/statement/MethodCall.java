@@ -255,7 +255,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		IMethodDeclaration declaration = findDeclaration(context);
+		IMethodDeclaration declaration = findDeclaration(context, true);
 		Context local = selector.newLocalContext(context, declaration);
 		local.enterMethod(declaration);
 		try {
@@ -332,7 +332,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		method.inhibitOffsetListener(finalListener);
 	}
 	
-	IMethodDeclaration findDeclaration(Context context) {
+	IMethodDeclaration findDeclaration(Context context, boolean checkInstance) {
 		try {
 			Object o = context.getValue(selector.getId());
 			if (o instanceof ClosureValue)
@@ -340,7 +340,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		} catch (PromptoError e) {
 		}
 		MethodFinder finder = new MethodFinder(context, this);
-		return finder.findBestMethod(true);
+		return finder.findBestMethod(checkInstance);
 	}
 	
 	@Override
