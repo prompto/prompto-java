@@ -178,11 +178,11 @@ public class RemoteCall extends UnresolvedCall {
 		Context ctx = transpiler.getContext();
         IArgument argument = assign.getArgument();
         IExpression expression = assign.resolve(ctx, declaration, false, false);
-		transpiler.append("{name:")
-			.append(argument.getTranspiledName(ctx))
-			.append(",type:")
+		transpiler.append("{name:'")
+			.append(argument.getName())
+			.append("',type:'")
 			.append(argument.getType(ctx).toString())
-			.append(",value:");
+			.append("',value:");
         argument.transpileCall(transpiler, expression);
         transpiler.append("}");
 	}
