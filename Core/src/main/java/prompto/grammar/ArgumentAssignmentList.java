@@ -156,9 +156,14 @@ public class ArgumentAssignmentList extends LinkedList<ArgumentAssignment> {
 	            assignments.add(new ArgumentAssignment(argument, expression));
 	        }
 	    }
-	    if(local.size() > 0)
-	        throw new SyntaxError("Method has no argument:" + local.get(0).getArgument().getName());
-		return assignments;
+	    if(local.size() > 0) {
+	    	ArgumentAssignment assignment = local.get(0);
+	    	IArgument argument = assignment.getArgument();
+	    	IExpression expression = assignment.getExpression();
+	    	String name = argument==null ? (expression==null ? "<unknown>" : expression.toString()) : argument.getName();
+	        throw new SyntaxError("Method has no argument:" + name);
+	    }
+	    return assignments;
 	}
 
 }
