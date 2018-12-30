@@ -42,6 +42,14 @@ and verifying:
 	o is a Document[]
 	o[1].field = 122
 
+define "test that readJson returns a complex Document" as test method doing:
+    json = "[{\"field\":122, \"list\": [{\"field\":123, \"doc\": {\"name\": \"John\"}}], \"doc\": { \"list\": [ 122, 233, 344] }}]"
+	o = (readJson json) as Document[]
+and verifying:
+	o is a Document[]
+	o[1].field = 122
+
+
 define iterateCsv as native method receiving text, Text<:> columnNames = nothing, Character separator = ',', Character quote = '"' returning Iterator<Document> doing:
 	Java: return prompto.reader.CSVReader.iterator(text, columnNames, separator, quote);
 	C#: return prompto.reader.CSVReader.iterator(text, columnNames, separator, quote); 
