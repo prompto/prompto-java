@@ -13,5 +13,9 @@ public abstract class JsonUtils {
 			return new ObjectMapper().readTree(input);
 		}
 	}
+	
+	public static String objectToJson(Object object) throws IOException {
+		return new ObjectMapper().writeValueAsString(object);
+	}
 
 }
