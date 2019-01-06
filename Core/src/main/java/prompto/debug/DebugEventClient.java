@@ -9,7 +9,8 @@ import prompto.debug.IDebugEvent.SuspendedEvent;
 import prompto.debug.IDebugEvent.ResumedEvent;
 import prompto.debug.IDebugEvent.TerminatedEvent;
 
-public class DebugEventClient implements IDebugEventListener {
+/* a client which can be notified when events occur in a remote debugged process */ 
+public abstract class DebugEventClient implements IDebugEventListener {
 
 	String host;
 	int port;
@@ -39,29 +40,39 @@ public class DebugEventClient implements IDebugEventListener {
 		send(new TerminatedEvent());
 	}
 	
-	private IAcknowledgement send(IDebugEvent event) {
-		try(Socket client = new Socket(host, port)) {
-			try(OutputStream output = client.getOutputStream()) {
-				LocalDebugger.showEvent("DebugEventClient sends " + event.getType());
-				sendDebugEvent(output, event);
-				try(InputStream input = client.getInputStream()) {
-					IAcknowledgement ack = readAcknowledgement(input);
-					LocalDebugger.showEvent("DebugEventClient receives " + ack.getType());
-					return ack;
-				}
-			}
-		} catch(Exception e) {
-			e.printStackTrace(System.err);
-			return null;
+	protected abstract IAcknowledgement send(IDebugEvent event);
+	
+	/* an implementation which uses JavaSerialization to communicate with the server */
+	public static class Java extends DebugEventClient {
+		
+		public Java(String host, int port) {
+			super(host, port);
 		}
-	}
 
-	private void sendDebugEvent(OutputStream output, IDebugEvent event) throws Exception {
-		Serializer.writeDebugEvent(output, event);
-	}
-
-	private IAcknowledgement readAcknowledgement(InputStream input) throws Exception {
-		return Serializer.readAcknowledgement(input);
+		protected IAcknowledgement send(IDebugEvent event) {
+			try(Socket client = new Socket(host, port)) {
+				try(OutputStream output = client.getOutputStream()) {
+					LocalDebugger.logEvent("DebugEventClient sends " + event.getType());
+					sendDebugEvent(output, event);
+					try(InputStream input = client.getInputStream()) {
+						IAcknowledgement ack = readAcknowledgement(input);
+						LocalDebugger.logEvent("DebugEventClient receives " + ack.getType());
+						return ack;
+					}
+				}
+			} catch(Exception e) {
+				e.printStackTrace(System.err);
+				return null;
+			}
+		}
+	
+		private void sendDebugEvent(OutputStream output, IDebugEvent event) throws Exception {
+			Serializer.writeDebugEvent(output, event);
+		}
+	
+		private IAcknowledgement readAcknowledgement(InputStream input) throws Exception {
+			return Serializer.readAcknowledgement(input);
+		}
 	}
 
 }

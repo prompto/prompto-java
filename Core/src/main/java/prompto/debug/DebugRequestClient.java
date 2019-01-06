@@ -26,22 +26,23 @@ import prompto.debug.IDebugResponse.GetVariablesResponse;
 import prompto.debug.IDebugResponse.IsSteppingResponse;
 import prompto.parser.ISection;
 
+/* a client which is able to send debug requests (such as step, get stack frames...) to a debug request server */
 public class DebugRequestClient implements IDebugger {
 
 	DebugEventServer eventServer;
-	Supplier<Boolean> remote;
+	Supplier<Boolean> remoteAlive;
 	boolean connected = false;
 	String remoteHost;
 	int remotePort;
 	
 	public DebugRequestClient(Thread thread, DebugEventServer eventServer) {
 		this.eventServer = eventServer;
-		this.remote = ()->thread.isAlive();
+		this.remoteAlive = ()->thread.isAlive();
 	}
 
 	public DebugRequestClient(Process process, DebugEventServer eventServer) {
 		this.eventServer = eventServer;
-		this.remote = ()->process.isAlive();
+		this.remoteAlive = ()->process.isAlive();
 	}
 
 	public void setRemote(String host, int port) {
@@ -55,13 +56,13 @@ public class DebugRequestClient implements IDebugger {
 	}
 	
 	private IDebugResponse send(IDebugRequest request, Consumer<Exception> errorHandler) {
-		LocalDebugger.showEvent("DebugRequestClient sends " + request.getType());
+		LocalDebugger.logEvent("DebugRequestClient sends " + request.getType());
 		try(Socket client = new Socket(remoteHost, remotePort)) {
 			try(OutputStream output = client.getOutputStream()) {
 				sendRequest(output, request);
 				try(InputStream input = client.getInputStream()) {
 					IDebugResponse response = readResponse(input);
-					LocalDebugger.showEvent("DebugRequestClient receives " + response.getType());
+					LocalDebugger.logEvent("DebugRequestClient receives " + response.getType());
 					return response;
 				}
 			}
@@ -93,7 +94,7 @@ public class DebugRequestClient implements IDebugger {
 
 	@Override
 	public Status getStatus(IThread thread) {
-		if(!remote.get())
+		if(!remoteAlive.get())
 			return Status.TERMINATED;
 		else
 			return fetchStatus(thread);

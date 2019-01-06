@@ -67,7 +67,7 @@ public abstract class Standalone {
 		run(config);
 	}
 
-
+	
 	private static void run(IStandaloneConfiguration config) throws Throwable {
 		IDebugConfiguration debug = config.getDebugConfiguration();
 		String testMethod = config.getTestMethod();
@@ -202,16 +202,16 @@ public abstract class Standalone {
 
 	public static DebugRequestServer startDebugging(String debugHost, Integer debugPort) throws Throwable {
 		LocalDebugger debugger = new LocalDebugger();
-		debugger.setListener(new DebugEventClient(debugHost, debugPort));
-		DebugRequestServer server = startDebuggerThread(debugger);
+		debugger.setListener(new DebugEventClient.Java(debugHost, debugPort));
+		DebugRequestServer.Java server = startDebuggerThread(debugger);
 		getGlobalContext().setDebugger(debugger);
 		debugger.notifyStarted("localhost", server.getPort());
 		return server;
 	}
 
 
-	public static DebugRequestServer startDebuggerThread(LocalDebugger debugger) throws Exception {
-		DebugRequestServer server = new DebugRequestServer(debugger);
+	public static DebugRequestServer.Java startDebuggerThread(LocalDebugger debugger) throws Exception {
+		DebugRequestServer.Java server = new DebugRequestServer.Java(debugger);
 		server.startListening();
 		return server;
 	}

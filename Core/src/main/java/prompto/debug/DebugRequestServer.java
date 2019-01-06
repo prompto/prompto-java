@@ -6,93 +6,105 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
-public class DebugRequestServer {
+/* a class which listens to IDebugRequest messages (such as step, get stack frames...) and forwards them to the debugger */
+public abstract class DebugRequestServer {
 
 	LocalDebugger debugger;
-	Thread thread;
-	int port;
-	boolean loop;
 	
 	public DebugRequestServer(LocalDebugger debugger) {
 		this.debugger = debugger;
 	}
 	
-	public Thread getThread() {
-		return thread;
-	}
+	public abstract void startListening() throws Exception;
+	public abstract void stopListening();
 	
-	public int getPort() {
-		return port;
-	}
+	public static class Java extends DebugRequestServer {
 
-	public void startListening() throws Exception {
-		Object lock = new Object();
-		this.thread = new Thread(() -> {
-			try(ServerSocket server = new ServerSocket(0)) {
-				server.setSoTimeout(10); // make it fast to exit
-				port = server.getLocalPort();
-				LocalDebugger.showEvent("DebugRequestServer listening on " + port);
-				synchronized(lock) {
-					lock.notify();
-				}			
-				loop = true;
-				LocalDebugger.showEvent("DebugRequestServer entering loop");
-				while(loop) {
-					try {
-						Socket client = server.accept();
-						handleMessage(client);
-					} catch(SocketTimeoutException e) {
-						// nothing to do, just helps exit the loop
+		Thread thread;
+		int port;
+		boolean loop;
+
+		public Java(LocalDebugger debugger) {
+			super(debugger);
+		}
+
+		public Thread getThread() {
+			return thread;
+		}
+		
+		public int getPort() {
+			return port;
+		}
+		
+
+		@Override
+		public void startListening() throws Exception {
+			Object lock = new Object();
+			this.thread = new Thread(() -> {
+				try(ServerSocket server = new ServerSocket(0)) {
+					server.setSoTimeout(10); // make it fast to exit
+					port = server.getLocalPort();
+					LocalDebugger.logEvent("DebugRequestServer listening on " + port);
+					synchronized(lock) {
+						lock.notify();
+					}			
+					loop = true;
+					LocalDebugger.logEvent("DebugRequestServer entering loop");
+					while(loop) {
+						try {
+							Socket client = server.accept();
+							handleMessage(client);
+						} catch(SocketTimeoutException e) {
+							// nothing to do, just helps exit the loop
+						}
 					}
+					LocalDebugger.logEvent("DebugRequestServer exiting loop");
+				} catch (Throwable t) {
+					t.printStackTrace(System.err);
 				}
-				LocalDebugger.showEvent("DebugRequestServer exiting loop");
-			} catch (Throwable t) {
-				t.printStackTrace(System.err);
-			}
-		}, "Prompto debug server");
-		this.thread.start();
-		synchronized(lock) {
-			try {
-				lock.wait();
-			} catch (InterruptedException e) {
-				// OK
+			}, "Prompto debug server");
+			this.thread.start();
+			synchronized(lock) {
+				try {
+					lock.wait();
+				} catch (InterruptedException e) {
+					// OK
+				}
 			}
 		}
-	}
+	
+		@Override
+		public void stopListening() {
+			loop = false;
+			if(thread!=Thread.currentThread()) try {
+				thread.join();
+			} catch(InterruptedException e) {
+			}
+		}
+	
+		private void handleMessage(Socket client) throws Exception {
+			synchronized(this) {
+				// don't close these streams since that would close the underlying socket
+				InputStream input = client.getInputStream();
+				OutputStream output = client.getOutputStream();
+				IDebugRequest request = readRequest(input);
+				LocalDebugger.logEvent("DebugRequestServer receives " + request.getType());
+				IDebugResponse response = request.execute(debugger);
+				LocalDebugger.logEvent("DebugRequestServer responds " + response.getType());
+				sendResponse(output, response);
+				output.flush();
+			}
+		}
+	
+		private IDebugRequest readRequest(InputStream input) throws Exception {
+			return Serializer.readDebugRequest(input);
+		}
 	
 	
-
-	public void stopListening() {
-		loop = false;
-		if(thread!=Thread.currentThread()) try {
-			thread.join();
-		} catch(InterruptedException e) {
+		private void sendResponse(OutputStream output, IDebugResponse response) throws Exception {
+			Serializer.writeDebugResponse(output, response);
 		}
 	}
-
-	private void handleMessage(Socket client) throws Exception {
-		synchronized(this) {
-			// don't close these streams since that would close the underlying socket
-			InputStream input = client.getInputStream();
-			OutputStream output = client.getOutputStream();
-			IDebugRequest request = readRequest(input);
-			LocalDebugger.showEvent("DebugRequestServer receives " + request.getType());
-			IDebugResponse response = request.execute(debugger);
-			LocalDebugger.showEvent("DebugRequestServer responds " + response.getType());
-			sendResponse(output, response);
-			output.flush();
-		}
-	}
-
-	private IDebugRequest readRequest(InputStream input) throws Exception {
-		return Serializer.readDebugRequest(input);
-	}
-
-
-	private void sendResponse(OutputStream output, IDebugResponse response) throws Exception {
-		Serializer.writeDebugResponse(output, response);
-	}
-
 
 
 }

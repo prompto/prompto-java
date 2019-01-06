@@ -17,7 +17,7 @@ import prompto.store.NullStoreFactory;
 public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebugEventListener {
 
 	Thread thread;
-	DebugEventServer eventServer;
+	DebugEventServer.Java eventServer;
 	String output = null;
 	
 	@Before
@@ -64,7 +64,7 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebug
 
 	@Override
 	protected void debugResource(String resourceName) throws Exception {
-		this.eventServer = new DebugEventServer(this);
+		this.eventServer = new DebugEventServer.Java(this);
 		final int port = eventServer.startListening();
 		this.thread = new Thread(new Runnable() {
 			@Override

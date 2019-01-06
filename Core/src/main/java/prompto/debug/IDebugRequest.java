@@ -47,9 +47,9 @@ public interface IDebugRequest {
 
 		@Override
 		public GetLineResponse execute(IDebugger debugger) {
-			LocalDebugger.showEvent("before line");
+			LocalDebugger.logEvent("before line");
 			int line = debugger.getLine(null);
-			LocalDebugger.showEvent("after line:" + line);
+			LocalDebugger.logEvent("after line:" + line);
 			return new GetLineResponse(line);
 		}
 		
@@ -69,9 +69,9 @@ public interface IDebugRequest {
 
 		@Override
 		public GetStackResponse execute(IDebugger debugger) {
-			LocalDebugger.showEvent("before stack");
+			LocalDebugger.logEvent("before stack");
 			IStack<?> stack = debugger.getStack(null);
-			LocalDebugger.showEvent("after stack");
+			LocalDebugger.logEvent("after stack");
 			return new GetStackResponse(stack);
 		}
 		
@@ -102,9 +102,9 @@ public interface IDebugRequest {
 
 		@Override
 		public GetVariablesResponse execute(IDebugger debugger) {
-			LocalDebugger.showEvent("before variables");
+			LocalDebugger.logEvent("before variables");
 			Collection<? extends IVariable> variables = debugger.getVariables(null, frame);
-			LocalDebugger.showEvent("after variables");
+			LocalDebugger.logEvent("after variables");
 			return new GetVariablesResponse(variables);
 		}
 		
@@ -156,9 +156,9 @@ public interface IDebugRequest {
 
 		@Override
 		public VoidResponse execute(IDebugger debugger) {
-			LocalDebugger.showEvent("before suspend");
+			LocalDebugger.logEvent("before suspend");
 			debugger.suspend(null);
-			LocalDebugger.showEvent("after suspend");
+			LocalDebugger.logEvent("after suspend");
 			return new VoidResponse();
 		}
 		
@@ -178,9 +178,9 @@ public interface IDebugRequest {
 
 		@Override
 		public VoidResponse execute(IDebugger debugger) {
-			LocalDebugger.showEvent("before resume");
+			LocalDebugger.logEvent("before resume");
 			debugger.resume(null);
-			LocalDebugger.showEvent("after resume");
+			LocalDebugger.logEvent("after resume");
 			return new VoidResponse();
 		}
 		
@@ -200,9 +200,9 @@ public interface IDebugRequest {
 
 		@Override
 		public IsSteppingResponse execute(IDebugger debugger) {
-			LocalDebugger.showEvent("before is stepping");
+			LocalDebugger.logEvent("before is stepping");
 			boolean stepping = debugger.isStepping(null);
-			LocalDebugger.showEvent("after is stepping");
+			LocalDebugger.logEvent("after is stepping");
 			return new IsSteppingResponse(stepping);
 		}
 		
@@ -216,9 +216,9 @@ public interface IDebugRequest {
 
 		@Override
 		public VoidResponse execute(IDebugger debugger) {
-			LocalDebugger.showEvent("before step over");
+			LocalDebugger.logEvent("before step over");
 			debugger.stepOver(null);
-			LocalDebugger.showEvent("after step over");
+			LocalDebugger.logEvent("after step over");
 			return new VoidResponse();
 		}
 		
@@ -238,9 +238,9 @@ public interface IDebugRequest {
 
 		@Override
 		public VoidResponse execute(IDebugger debugger) {
-			LocalDebugger.showEvent("before step into");
+			LocalDebugger.logEvent("before step into");
 			debugger.stepInto(null);
-			LocalDebugger.showEvent("after step into");
+			LocalDebugger.logEvent("after step into");
 			return new VoidResponse();
 		}
 		
@@ -260,9 +260,9 @@ public interface IDebugRequest {
 
 		@Override
 		public VoidResponse execute(IDebugger debugger) {
-			LocalDebugger.showEvent("before step out");
+			LocalDebugger.logEvent("before step out");
 			debugger.stepOut(null);
-			LocalDebugger.showEvent("after step out");
+			LocalDebugger.logEvent("after step out");
 			return new VoidResponse();
 		}
 		

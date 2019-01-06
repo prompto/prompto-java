@@ -11,7 +11,7 @@ import prompto.runtime.Context;
 
 public class LocalDebugger implements IDebugger {
 
-	public static void showEvent(String message) {
+	public static void logEvent(String message) {
 		// System.err.println(message);
 	}
 	
@@ -47,7 +47,7 @@ public class LocalDebugger implements IDebugger {
 	}
 	
 	public void setStatus(Status status) {
-		showEvent("LocalDebugger sets status " + status);
+		logEvent("LocalDebugger sets status " + status);
 		this.status = status;
 	}
 	
@@ -142,15 +142,15 @@ public class LocalDebugger implements IDebugger {
 	}
 
 	public void suspend(SuspendReason reason, final Context context, ISection section) {
-		showEvent("acquiring lock");
+		logEvent("acquiring lock");
 		synchronized(lock) {
 			setStatus(Status.SUSPENDED);
 			if(listener!=null)
 				listener.handleSuspendedEvent(reason);
 			try {
-				showEvent("waiting lock");
+				logEvent("waiting lock");
 				lock.wait();
-				showEvent("waiting lock");
+				logEvent("waiting lock");
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -228,11 +228,11 @@ public class LocalDebugger implements IDebugger {
 
 	public void doResume(ResumeReason reason) {
 		this.resumeReason = reason;
-		showEvent("acquiring lock");
+		logEvent("acquiring lock");
 		synchronized(lock) {
-			showEvent("notifying lock");
+			logEvent("notifying lock");
 			lock.notify();
-			showEvent("releasing lock");
+			logEvent("releasing lock");
 		}
 	}
 
@@ -263,10 +263,10 @@ public class LocalDebugger implements IDebugger {
 			throw new RuntimeException("No context to search from!");
 		ISection instance = context.findSection(section);
 		if(instance!=null) {
-			showEvent("Found section " + instance.toString());
+			logEvent("Found section " + instance.toString());
 			instance.setAsBreakpoint(section.isBreakpoint());
 		} else
-			showEvent("Could not find section " + section.toString());
+			logEvent("Could not find section " + section.toString());
 	}
 	
 }

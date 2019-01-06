@@ -17,7 +17,7 @@ import prompto.utils.ManualTests;
 @Category(ManualTests.class)
 public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebugEventListener {
 
-	DebugEventServer eventServer;
+	DebugEventServer.Java eventServer;
 	ProcessBuilder builder;
 	Process process;
 	File outputFile;
@@ -70,7 +70,7 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 	protected void debugResource(String resourceName) throws Exception {
 		File testFile = tryLocateTestFile(resourceName);
 		loadFile(testFile); 
-		this.eventServer = new DebugEventServer(this);
+		this.eventServer = new DebugEventServer.Java(this);
 		final int port = eventServer.startListening();
 		builder = new ProcessBuilder();
 		File targetDir = getDistributionFolder("0.0.1-SNAPSHOT").toFile();
