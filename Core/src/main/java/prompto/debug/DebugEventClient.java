@@ -49,6 +49,7 @@ public abstract class DebugEventClient implements IDebugEventListener {
 			super(host, port);
 		}
 
+		@Override
 		protected IAcknowledgement send(IDebugEvent event) {
 			try(Socket client = new Socket(host, port)) {
 				try(OutputStream output = client.getOutputStream()) {
