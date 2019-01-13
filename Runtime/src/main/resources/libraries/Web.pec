@@ -67,11 +67,11 @@ define ReactWidget as widget with methods:
 
 	@Callback
 	define shouldComponentUpdate as method receiving Document nextProps and Document nextState returning Boolean doing:
-		// nothing to do		
+		return true		
 
 	@Callback
 	define getSnapshotBeforeUpdate as method receiving Document prevProps and Document prevState returning Boolean doing:
-		// nothing to do		
+		return nothing		
 
 	@Callback
 	define componentDidUpdate as method receiving Document prevProps, Document prevState and Document snapshot returning Boolean doing:
