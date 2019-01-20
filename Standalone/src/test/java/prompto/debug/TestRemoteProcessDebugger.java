@@ -45,7 +45,7 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 	
 	
 	@Override
-	protected void waitBlockedOrKilled() throws Exception {
+	protected void waitSuspendedOrTerminated() throws Exception {
 		Status status = debugger.getStatus(null);
 		while(status!=Status.SUSPENDED && status!=Status.TERMINATED) {
 			Thread.sleep(100);
@@ -67,7 +67,7 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 	}
 
 	@Override
-	protected void debugResource(String resourceName) throws Exception {
+	protected void setDebuggedResource(String resourceName) throws Exception {
 		this.eventServer = new JavaDebugEventListener(this);
 		final int port = eventServer.startListening();
 		builder = new ProcessBuilder();

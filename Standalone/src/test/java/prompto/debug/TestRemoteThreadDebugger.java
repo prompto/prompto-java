@@ -41,7 +41,7 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebug
 	}
 	
 	@Override
-	protected void waitBlockedOrKilled() throws Exception {
+	protected void waitSuspendedOrTerminated() throws Exception {
 		Thread.sleep(10); // give time to remote thread
 		Status status = debugger.getStatus(null);
 		while(status!=Status.SUSPENDED && status!=Status.TERMINATED) {
@@ -63,7 +63,7 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebug
 	}
 
 	@Override
-	protected void debugResource(String resourceName) throws Exception {
+	protected void setDebuggedResource(String resourceName) throws Exception {
 		this.eventServer = new JavaDebugEventListener(this);
 		final int port = eventServer.startListening();
 		this.thread = new Thread(new Runnable() {
