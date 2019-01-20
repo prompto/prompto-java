@@ -26,22 +26,22 @@ import prompto.debug.IDebugResponse.GetVariablesResponse;
 import prompto.debug.IDebugResponse.IsSteppingResponse;
 import prompto.parser.ISection;
 
-/* a client which is able to send debug requests (such as step, get stack frames...) to a debug request server */
-public class DebugRequestClient implements IDebugger {
+/* a client which is able to send debug requests (such as step, get stack frames...) to a debug request server using Java serialization */
+public class JavaDebugRequestClient implements IDebugger {
 
-	DebugEventServer eventServer;
+	JavaDebugEventListener eventListener;
 	Supplier<Boolean> remoteAlive;
 	boolean connected = false;
 	String remoteHost;
 	int remotePort;
 	
-	public DebugRequestClient(Thread thread, DebugEventServer eventServer) {
-		this.eventServer = eventServer;
+	public JavaDebugRequestClient(Thread thread, JavaDebugEventListener eventServer) {
+		this.eventListener = eventServer;
 		this.remoteAlive = ()->thread.isAlive();
 	}
 
-	public DebugRequestClient(Process process, DebugEventServer eventServer) {
-		this.eventServer = eventServer;
+	public JavaDebugRequestClient(Process process, JavaDebugEventListener eventServer) {
+		this.eventListener = eventServer;
 		this.remoteAlive = ()->process.isAlive();
 	}
 
@@ -88,7 +88,7 @@ public class DebugRequestClient implements IDebugger {
 
 	@Override
 	public void setListener(IDebugEventListener listener) {
-		this.eventServer.listener = listener;
+		this.eventListener.listener = listener;
 	}
 	
 
@@ -171,13 +171,13 @@ public class DebugRequestClient implements IDebugger {
 	
 	@Override
 	public boolean isTerminated() {
-		return eventServer==null || !eventServer.isListening();
+		return eventListener==null || !eventListener.isListening();
 	}
 
 	@Override
 	public void notifyTerminated() {
-		if(eventServer!=null)
-			eventServer.stopListening();
+		if(eventListener!=null)
+			eventListener.stopListening();
 	}
 
 	@Override
@@ -220,7 +220,7 @@ public class DebugRequestClient implements IDebugger {
 	@Override
 	public void terminate() {
 		connected = false;
-		eventServer.stopListening();
+		eventListener.stopListening();
 	}
 
 	@Override

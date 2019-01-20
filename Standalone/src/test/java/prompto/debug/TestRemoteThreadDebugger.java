@@ -1,6 +1,6 @@
 package prompto.debug;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,7 +17,7 @@ import prompto.store.NullStoreFactory;
 public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebugEventListener {
 
 	Thread thread;
-	DebugEventServer.Java eventServer;
+	JavaDebugEventListener eventServer;
 	String output = null;
 	
 	@Before
@@ -53,7 +53,7 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebug
 	@Override
 	protected void start() throws Exception {
 		thread.start();
-		debugger = new DebugRequestClient(thread, eventServer);
+		debugger = new JavaDebugRequestClient(thread, eventServer);
 		waitConnected();
 	}
 
@@ -64,7 +64,7 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebug
 
 	@Override
 	protected void debugResource(String resourceName) throws Exception {
-		this.eventServer = new DebugEventServer.Java(this);
+		this.eventServer = new JavaDebugEventListener(this);
 		final int port = eventServer.startListening();
 		this.thread = new Thread(new Runnable() {
 			@Override
@@ -72,6 +72,8 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebug
 				try {
 					String args[] = new String[] { 
 							"-runtimeMode", "UNITTEST",
+							"-debug-eventAdapterFactory", JavaDebugEventAdapterFactory.class.getName(),
+							"-debug-requestListenerFactory", JavaDebugRequestListenerFactory.class.getName(),
 							"-debug-port", String.valueOf(port),
 							"-codeStore-factory", NullStoreFactory.class.getName(),
 							"-applicationName", "test",
@@ -127,8 +129,8 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebug
 
 	
 	@Override
-	public void handleConnectedEvent(String host, int port) {
-		((DebugRequestClient)debugger).setRemote(host, port);
+	public void handleConnectedEvent(IDebugEvent.Connected event) {
+		((JavaDebugRequestClient)debugger).setRemote(event.getHost(), event.getPort());
 		synchronized (lock) {
 			lock.notify();
 		}		

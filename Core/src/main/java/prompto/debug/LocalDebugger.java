@@ -242,10 +242,10 @@ public class LocalDebugger implements IDebugger {
 		return frame==null ? -1 : frame.getLine();
 	}
 	
-	public void notifyStarted(String host, int port) {
+	public void notifyStarted(IDebugEvent.Connected event) {
 		setStatus(Status.RUNNING);
 		if(listener!=null)
-			listener.handleConnectedEvent(host, port); // this listener actually knows host and port
+			listener.handleConnectedEvent(event); 
 	}
 
 	@Override

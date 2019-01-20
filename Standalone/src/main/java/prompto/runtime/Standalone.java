@@ -25,8 +25,11 @@ import prompto.config.IStoreConfiguration;
 import prompto.config.StandaloneConfiguration;
 import prompto.config.TempDirectories;
 import prompto.config.YamlConfigurationReader;
-import prompto.debug.DebugEventClient;
-import prompto.debug.DebugRequestServer;
+import prompto.debug.IDebugEvent;
+import prompto.debug.IDebugEventAdapter;
+import prompto.debug.IDebugEventAdapterFactory;
+import prompto.debug.IDebugRequestListener;
+import prompto.debug.IDebugRequestListenerFactory;
 import prompto.debug.LocalDebugger;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.IDeclaration;
@@ -175,11 +178,11 @@ public abstract class Standalone {
 	}
 
 	private static void debugTest(IDebugConfiguration debug, String testMethod) throws Throwable {
-		DebugRequestServer server = startDebugging(debug.getHost(), debug.getPort());
+		IDebugRequestListener requestListener = startDebugging(debug);
 		try {
 			runTest(testMethod);
 		} finally {
-			server.stopListening();
+			requestListener.stopListening();
 		}
 	}
 
@@ -192,7 +195,7 @@ public abstract class Standalone {
 	}
 
 	private static void debugApplication(IDebugConfiguration debug, String mainMethod, IExpression args) throws Throwable {
-		DebugRequestServer server = startDebugging(debug.getHost(), debug.getPort());
+		IDebugRequestListener server = startDebugging(debug);
 		try {
 			runApplication(mainMethod, args);
 		} finally {
@@ -200,20 +203,34 @@ public abstract class Standalone {
 		}
 	}
 
-	public static DebugRequestServer startDebugging(String debugHost, Integer debugPort) throws Throwable {
+	public static IDebugRequestListener startDebugging(IDebugConfiguration config) throws Throwable {
+		IDebugEventAdapter adapter = createDebugEventAdapter(config);
 		LocalDebugger debugger = new LocalDebugger();
-		debugger.setListener(new DebugEventClient.Java(debugHost, debugPort));
-		DebugRequestServer.Java server = startDebuggerThread(debugger);
+		debugger.setListener(adapter);
+		IDebugRequestListener requestListener = createDebugRequestListener(config, debugger);
+		IDebugEvent.Connected connected = requestListener.startListening();
 		getGlobalContext().setDebugger(debugger);
-		debugger.notifyStarted("localhost", server.getPort());
-		return server;
+		debugger.notifyStarted(connected);
+		return requestListener;
+		
 	}
 
 
-	public static DebugRequestServer.Java startDebuggerThread(LocalDebugger debugger) throws Exception {
-		DebugRequestServer.Java server = new DebugRequestServer.Java(debugger);
-		server.startListening();
-		return server;
+	public static IDebugRequestListener createDebugRequestListener(IDebugConfiguration config, LocalDebugger debugger) throws Exception {
+		String factoryClassName = config.getRequestListenerFactory();
+		if(factoryClassName==null)
+			throw new RuntimeException("Missing requestListenerFactory in debug config!");
+		IDebugRequestListenerFactory factory = (IDebugRequestListenerFactory)Class.forName(factoryClassName).newInstance();
+		return factory.newInstance(config, debugger);
+	}
+
+
+	public static IDebugEventAdapter createDebugEventAdapter(IDebugConfiguration config) throws Exception {
+		String factoryClassName = config.getEventAdapterFactory();
+		if(factoryClassName==null)
+			throw new RuntimeException("Missing eventAdapterFactory in debug config!");
+		IDebugEventAdapterFactory factory = (IDebugEventAdapterFactory)Class.forName(factoryClassName).newInstance();
+		return factory.newInstance(config);
 	}
 
 	public static IExpression argsToArgValue(Map<String, String> args) {

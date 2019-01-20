@@ -8,15 +8,15 @@ public interface IDebugEvent {
 	Type getType();
 	void execute(IDebugEventListener listener);
 
-	static class ConnectedEvent implements IDebugEvent {
+	static class Connected implements IDebugEvent {
 		
 		String host;
 		int port;
 		
-		public ConnectedEvent() {
+		public Connected() {
 		}
 		
-		public ConnectedEvent(String host, int port) {
+		public Connected(String host, int port) {
 			this.host = host;
 			this.port = port;
 		}
@@ -44,19 +44,19 @@ public interface IDebugEvent {
 		
 		@Override
 		public void execute(IDebugEventListener listener) {
-			listener.handleConnectedEvent(host, port);
+			listener.handleConnectedEvent(this);
 		}
 	}
 	
-	static class SuspendedEvent implements IDebugEvent {
+	static class Suspended implements IDebugEvent {
 		
 		SuspendReason reason;
 		
-		public SuspendedEvent() {
+		public Suspended() {
 		}
 		
 		
-		public SuspendedEvent(SuspendReason reason) {
+		public Suspended(SuspendReason reason) {
 			setReason(reason);
 		}
 
@@ -81,15 +81,15 @@ public interface IDebugEvent {
 		}
 	}
 	
-	static class ResumedEvent implements IDebugEvent {
+	static class Resumed implements IDebugEvent {
 		
 		ResumeReason reason;
 		
 		
-		public ResumedEvent() {
+		public Resumed() {
 		}
 		
-		public ResumedEvent(ResumeReason reason) {
+		public Resumed(ResumeReason reason) {
 			setReason(reason);
 		}
 		
@@ -114,7 +114,7 @@ public interface IDebugEvent {
 		}
 	}
 
-	static class TerminatedEvent implements IDebugEvent {
+	static class Terminated implements IDebugEvent {
 
 		@Override
 		public Type getType() {
@@ -128,10 +128,10 @@ public interface IDebugEvent {
 	}
 
 	public enum Type {
-		CONNECTED(ConnectedEvent.class),
-		SUSPENDED(SuspendedEvent.class),
-		RESUMED(ResumedEvent.class),
-		TERMINATED(TerminatedEvent.class);
+		CONNECTED(Connected.class),
+		SUSPENDED(Suspended.class),
+		RESUMED(Resumed.class),
+		TERMINATED(Terminated.class);
 
 		Class<? extends IDebugEvent> klass;
 		

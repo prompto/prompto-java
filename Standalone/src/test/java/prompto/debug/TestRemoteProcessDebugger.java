@@ -17,7 +17,7 @@ import prompto.utils.ManualTests;
 @Category(ManualTests.class)
 public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebugEventListener {
 
-	DebugEventServer.Java eventServer;
+	JavaDebugEventListener eventServer;
 	ProcessBuilder builder;
 	Process process;
 	File outputFile;
@@ -56,7 +56,7 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 	@Override
 	protected void start() throws Exception {
 		process = builder.start();
-		debugger = new DebugRequestClient(process, eventServer);
+		debugger = new JavaDebugRequestClient(process, eventServer);
 		waitConnected();
 	}
 
@@ -68,9 +68,7 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 
 	@Override
 	protected void debugResource(String resourceName) throws Exception {
-		File testFile = tryLocateTestFile(resourceName);
-		loadFile(testFile); 
-		this.eventServer = new DebugEventServer.Java(this);
+		this.eventServer = new JavaDebugEventListener(this);
 		final int port = eventServer.startListening();
 		builder = new ProcessBuilder();
 		File targetDir = getDistributionFolder("0.0.1-SNAPSHOT").toFile();
@@ -84,11 +82,12 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 		builder.redirectOutput(outputFile);
 		builder.command("java", 
 				"-jar", "Standalone-0.0.1-SNAPSHOT.jar", 
+				"-runtimeMode", "UNITTEST",
 				"-debug-port", String.valueOf(port), 
 				"-codeStore-factory", NullStoreFactory.class.getName(),
-				"-application", "test", 
-				"-resourceURLs", "\"" + testFile.toURI().toURL().toExternalForm() + "\"");
-	}
+				"-applicationName", "test", 
+				"-resourceURLs", getResourceAsURL(resourceName).toString());
+}
 
 	private Path getDistributionFolder(String version) {
 		File dest = new File(System.getProperty("java.io.tmpdir"), "Prompto/Java/" + version + "/");
@@ -109,8 +108,8 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 
 	
 	@Override
-	public void handleConnectedEvent(String host, int port) {
-		((DebugRequestClient)debugger).setRemote(host, port);
+	public void handleConnectedEvent(IDebugEvent.Connected event) {
+		((JavaDebugRequestClient)debugger).setRemote(event.getHost(), event.getPort());
 		synchronized (lock) {
 			lock.notify();
 		}		
