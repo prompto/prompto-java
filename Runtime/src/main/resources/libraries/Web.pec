@@ -30,23 +30,23 @@ and methods:
 		JavaScript: return this.target.value;
 
 
-define getReactWidgetProps as native method receiving Any w returning Document doing:
+define getReactWidgetProps as native method receiving ReactWidget w returning Document doing:
 	JavaScript: return w.props;
 
 
-define getReactWidgetState as native method receiving Any w returning Document doing:
+define getReactWidgetState as native method receiving ReactWidget w returning Document doing:
 	JavaScript: return w.state;
 
 
-define setReactWidgetState as native method receiving Any w and Document state doing:
+define setReactWidgetState as native method receiving ReactWidget w and Document state doing:
 	JavaScript: w.setState(state);
 
 
+define forceReactWidgetRender as native method receiving ReactWidget w doing:
+	JavaScript: w.forceUpdate();
+
+
 define ReactWidget as widget with methods:
-	
-	@Callback
-	define getInitialState as method doing:
-		return {}
 	
 	@Static
 	@Callback
@@ -54,12 +54,32 @@ define ReactWidget as widget with methods:
 		return Nothing
 		
 	@Callback
+	define getInitialState as method doing:
+		return {}
+	
+	@Callback
 	define componentDidMount as method doing:
 		// nothing to do		
 
 	@Callback
+	define render as method returning Html doing:
+		return <div>Your widget must override render!</div>		
+
+	@Callback
 	define componentWillUnmount as method doing:
 		// nothing to do		
+
+	@Callback
+	define shouldComponentUpdate as method receiving Document nextProps and Document nextState returning Boolean doing:
+		return true		
+
+	@Callback
+	define getSnapshotBeforeUpdate as method receiving Document prevProps and Document prevState returning Boolean doing:
+		return nothing		
+
+	@Callback
+	define componentDidUpdate as method receiving Document prevProps, Document prevState and Document snapshot returning Boolean doing:
+		// nothing to do
 
 	define getProperties as method doing:
 		return getReactWidgetProps self
@@ -70,7 +90,8 @@ define ReactWidget as widget with methods:
 	define setState as method receiving Document state doing:
 		setReactWidgetState self with state
 
-	
+	define forceRender as method doing:
+		forceReactWidgetRender self
 define alert as native method receiving Text text doing:
 	JavaScript: alert(text);
 
