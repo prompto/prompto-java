@@ -1,31 +1,14 @@
 package prompto.config;
 
-public class DebugConfiguration implements IDebugConfiguration {
+public class DebugConfiguration extends IDebugConfiguration.Inline {
 
 	IConfigurationReader reader;
 
 	public DebugConfiguration(IConfigurationReader reader) {
-		this.reader = reader;
-	}
-
-	@Override
-	public String getEventAdapterFactory() {
-		return reader.getString("eventAdapterFactory");
-	}
-	
-	@Override
-	public String getRequestListenerFactory() {
-		return reader.getString("requestListenerFactory");
-	}
-	
-	@Override
-	public String getHost() {
-		return reader.getStringOrDefault("host", "localhost");
-	}
-	
-	@Override
-	public Integer getPort() {
-		return reader.getInteger("port");
+		this.eventAdapterFactory = ()->reader.getString("eventAdapterFactory");
+		this.requestListenerFactory = ()->reader.getString("requestListenerFactory");
+		this.host = ()->reader.getStringOrDefault("host", "localhost");
+		this.port = ()->reader.getInteger("port");
 	}
 	
 }
