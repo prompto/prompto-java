@@ -116,21 +116,33 @@ public class BaseTest {
 	}
 	
 	public File tryLocateTestFile(String resourceName) throws FileNotFoundException {
-		ClassLoader loader = Thread.currentThread().getContextClassLoader();
-		String dirPath = loader.getResource("").getFile();
-		int idx = dirPath.lastIndexOf("/Core/");
-		if(idx<0)
-			idx = dirPath.lastIndexOf("/Standalone/");
-		if(idx<0)
-			idx = dirPath.lastIndexOf("/CodeStore/");
-		if(idx<0)
+		String testsPath = locateTestsProjectPath();
+		if(testsPath==null)
 			return null;
-		String testsPath = dirPath.substring(0, idx) + "/prompto-tests/Tests/resources/";
 		File file = new File(testsPath + resourceName);
 		if(file.exists())
 			return file;
 		else
 			return null;
+	}
+
+	private String locateTestsProjectPath() {
+		// get root of this module
+		ClassLoader loader = Thread.currentThread().getContextClassLoader();
+		String root = loader.getResource("").getFile();
+		// try core modules
+		int idx = root.lastIndexOf("/Core/");
+		if(idx<0)
+			idx = root.lastIndexOf("/Standalone/");
+		if(idx<0)
+			idx = root.lastIndexOf("/CodeStore/");
+		if(idx>=0)
+			return root.substring(0, idx) + "/prompto-tests/Tests/resources/";
+		// try platform modules
+		idx = root.lastIndexOf("/Server/");
+		if(idx<0)
+			return null;
+		return root.substring(0, idx) + "/prompto-java/prompto-tests/Tests/resources/";
 	}
 
 	private InputStream tryLoadCoreResource(String resourceName) {
