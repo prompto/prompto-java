@@ -1,5 +1,7 @@
 package prompto.debug;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -91,6 +93,14 @@ public class Serializer {
 		}
 	}
 	
+	
+	public static String writeDebugEvent(IDebugEvent event) throws Exception {
+		try(ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+			writeDebugEvent(output, event);
+			return output.toString();
+		}
+	}
+	
 	public static void writeDebugEvent(OutputStream output, IDebugEvent event) throws Exception {
 		DebugEventMessage message = new DebugEventMessage();
 		message.type = event.getType();
@@ -98,6 +108,12 @@ public class Serializer {
 		mapper.writeValue(output, message);
 	}
 
+	public static IDebugEvent readDebugEvent(String message) throws Exception {
+		try(InputStream input = new ByteArrayInputStream(message.getBytes())) {
+			return readDebugEvent(input);
+		}
+	}
+	
 	public static IDebugEvent readDebugEvent(InputStream input) throws Exception {
 		JsonNode content = mapper.readTree(input);
 		String typeName = content.get("type").asText();
