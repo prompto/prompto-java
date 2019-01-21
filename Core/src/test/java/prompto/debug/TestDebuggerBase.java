@@ -204,11 +204,7 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		stack = debugger.getStack(null);
 		frame = stack.iterator().next();
 		vars = frame.getVariables();	
-		assertEquals(1, vars.size());
-		IVariable var = vars.iterator().next();
-		assertEquals("options", var.getName());
-		assertEquals("Text<:>", var.getTypeName());
-		assertEquals("<:>", var.getValue().getValueString());
+		assertEquals(0, vars.size());
 		// next
 		debugger.stepInto(null);
 		waitSuspendedOrTerminated();
@@ -225,7 +221,7 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		frame = stack.iterator().next();
 		vars = frame.getVariables();	
 		assertEquals(1, vars.size());
-		var = vars.iterator().next();
+		IVariable var = vars.iterator().next();
 		assertEquals("value", var.getName());
 		assertEquals("Text", var.getTypeName());
 		assertEquals("test", var.getValue().getValueString());
