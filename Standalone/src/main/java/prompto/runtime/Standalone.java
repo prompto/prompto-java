@@ -160,7 +160,9 @@ public abstract class Standalone {
 	}
 
 	public static void clearGlobalContext() {
+		LocalDebugger debugger = globalContext.getDebugger();
 		globalContext = Context.newGlobalContext();
+		globalContext.setDebugger(debugger);
 		PromptoClassLoader loader = PromptoClassLoader.getInstance();
 		if(loader!=null)
 			loader.setContext(globalContext);
