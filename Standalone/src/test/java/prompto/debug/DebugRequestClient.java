@@ -1,11 +1,7 @@
 package prompto.debug;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.Socket;
 import java.util.Collection;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import prompto.debug.IDebugRequest.GetLineRequest;
@@ -29,10 +25,9 @@ import prompto.parser.ISection;
 /* a client which is able to send debug requests (such as step, get stack frames...) to a debug request server */
 public abstract class DebugRequestClient implements IDebugger {
 
-	Supplier<Boolean> remoteAlive = null;
-	boolean connected = false;
 	String remoteHost;
 	int remotePort;
+	boolean connected = false;
 	
 	public void setRemote(String host, int port) {
 		this.remoteHost = host;
@@ -40,38 +35,21 @@ public abstract class DebugRequestClient implements IDebugger {
 		this.connected = true;
 	}
 	
-	protected IDebugResponse send(IDebugRequest request) {
-		return send(request, null);
+	public void setConnected(boolean set) {
+		this.connected = set;
 	}
 	
-	protected IDebugResponse send(IDebugRequest request, Consumer<Exception> errorHandler) {
-		LocalDebugger.logEvent("DebugRequestClient sends " + request.getType());
-		try(Socket client = new Socket(remoteHost, remotePort)) {
-			try(OutputStream output = client.getOutputStream()) {
-				sendRequest(output, request);
-				try(InputStream input = client.getInputStream()) {
-					IDebugResponse response = readResponse(input);
-					LocalDebugger.logEvent("DebugRequestClient receives " + response.getType());
-					return response;
-				}
-			}
-		} catch(Exception e) {
-			if(errorHandler!=null)
-				errorHandler.accept(e);
-			else
-				e.printStackTrace(System.err);
-			return null;
-		}
+	protected IDebugResponse send(IDebugRequest request) {
+		return sendRequest(request, null);
 	}
-
-
-	protected abstract void sendRequest(OutputStream output, IDebugRequest request) throws Exception;
-	protected abstract IDebugResponse readResponse(InputStream input) throws Exception;
+	
+	protected abstract boolean isRemoteAlive();
+	protected abstract IDebugResponse sendRequest(IDebugRequest request, Consumer<Exception> errorHandler);
 	
 
 	@Override
 	public Status getStatus(IThread thread) {
-		if(!remoteAlive.get())
+		if(!isRemoteAlive())
 			return Status.TERMINATED;
 		else
 			return fetchStatus(thread);

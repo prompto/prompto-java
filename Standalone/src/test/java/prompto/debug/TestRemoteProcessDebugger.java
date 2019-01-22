@@ -110,6 +110,7 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 	@Override
 	public void handleConnectedEvent(IDebugEvent.Connected event) {
 		((JavaDebugRequestClient)debugger).setRemote(event.getHost(), event.getPort());
+		((DebugRequestClient)debugger).setConnected(true);
 		synchronized (lock) {
 			lock.notify();
 		}		
