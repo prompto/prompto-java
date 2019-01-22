@@ -14,10 +14,11 @@ import prompto.store.NullStoreFactory;
 import prompto.utils.IOUtils;
 import prompto.utils.ManualTests;
 
+// excluded from CI because it can only run with the jars installed (- mvn install -skipTests°
 @Category(ManualTests.class)
 public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebugEventListener {
 
-	DebugEventServer eventServer;
+	JavaDebugEventListener eventServer;
 	ProcessBuilder builder;
 	Process process;
 	File outputFile;
@@ -45,7 +46,7 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 	
 	
 	@Override
-	protected void waitBlockedOrKilled() throws Exception {
+	protected void waitSuspendedOrTerminated() throws Exception {
 		Status status = debugger.getStatus(null);
 		while(status!=Status.SUSPENDED && status!=Status.TERMINATED) {
 			Thread.sleep(100);
@@ -56,7 +57,7 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 	@Override
 	protected void start() throws Exception {
 		process = builder.start();
-		debugger = new DebugRequestClient(process, eventServer);
+		debugger = new JavaDebugRequestClient(process, eventServer);
 		waitConnected();
 	}
 
@@ -67,10 +68,8 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 	}
 
 	@Override
-	protected void debugResource(String resourceName) throws Exception {
-		File testFile = tryLocateTestFile(resourceName);
-		loadFile(testFile); 
-		this.eventServer = new DebugEventServer(this);
+	protected void setDebuggedResource(String resourceName) throws Exception {
+		this.eventServer = new JavaDebugEventListener(this);
 		final int port = eventServer.startListening();
 		builder = new ProcessBuilder();
 		File targetDir = getDistributionFolder("0.0.1-SNAPSHOT").toFile();
@@ -84,11 +83,12 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 		builder.redirectOutput(outputFile);
 		builder.command("java", 
 				"-jar", "Standalone-0.0.1-SNAPSHOT.jar", 
+				"-runtimeMode", "UNITTEST",
 				"-debug-port", String.valueOf(port), 
 				"-codeStore-factory", NullStoreFactory.class.getName(),
-				"-application", "test", 
-				"-resourceURLs", "\"" + testFile.toURI().toURL().toExternalForm() + "\"");
-	}
+				"-applicationName", "test", 
+				"-resourceURLs", getResourceAsURL(resourceName).toString());
+}
 
 	private Path getDistributionFolder(String version) {
 		File dest = new File(System.getProperty("java.io.tmpdir"), "Prompto/Java/" + version + "/");
@@ -109,8 +109,9 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 
 	
 	@Override
-	public void handleConnectedEvent(String host, int port) {
-		((DebugRequestClient)debugger).setRemote(host, port);
+	public void handleConnectedEvent(IDebugEvent.Connected event) {
+		((JavaDebugRequestClient)debugger).setRemote(event.getHost(), event.getPort());
+		((DebugRequestClient)debugger).setConnected(true);
 		synchronized (lock) {
 			lock.notify();
 		}		

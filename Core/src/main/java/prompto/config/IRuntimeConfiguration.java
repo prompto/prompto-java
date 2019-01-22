@@ -29,6 +29,7 @@ public interface IRuntimeConfiguration {
 	<T extends IRuntimeConfiguration> T withResourceURLs(URL[] resourceURLs);
 	<T extends IRuntimeConfiguration> T withRuntimeMode(Mode mode);
 	<T extends IRuntimeConfiguration> T withLoadRuntime(boolean set);
+	<T extends IRuntimeConfiguration> T withDebugConfiguration(IDebugConfiguration config);
 
 
 	@SuppressWarnings("unchecked")
@@ -97,6 +98,12 @@ public interface IRuntimeConfiguration {
 		@Override
 		public <T extends IRuntimeConfiguration> T withLoadRuntime(boolean set) {
 			this.loadRuntime = ()->set;
+			return (T)this;
+		}
+		
+		@Override
+		public <T extends IRuntimeConfiguration> T withDebugConfiguration(IDebugConfiguration config) {
+			this.debugConfiguration = ()->config;
 			return (T)this;
 		}
 		

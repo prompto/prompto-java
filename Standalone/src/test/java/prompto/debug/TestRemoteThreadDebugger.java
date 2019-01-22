@@ -1,6 +1,6 @@
 package prompto.debug;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,7 +17,7 @@ import prompto.store.NullStoreFactory;
 public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebugEventListener {
 
 	Thread thread;
-	DebugEventServer eventServer;
+	JavaDebugEventListener eventServer;
 	String output = null;
 	
 	@Before
@@ -41,7 +41,7 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebug
 	}
 	
 	@Override
-	protected void waitBlockedOrKilled() throws Exception {
+	protected void waitSuspendedOrTerminated() throws Exception {
 		Thread.sleep(10); // give time to remote thread
 		Status status = debugger.getStatus(null);
 		while(status!=Status.SUSPENDED && status!=Status.TERMINATED) {
@@ -53,7 +53,7 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebug
 	@Override
 	protected void start() throws Exception {
 		thread.start();
-		debugger = new DebugRequestClient(thread, eventServer);
+		debugger = new JavaDebugRequestClient(thread, eventServer);
 		waitConnected();
 	}
 
@@ -63,8 +63,8 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebug
 	}
 
 	@Override
-	protected void debugResource(String resourceName) throws Exception {
-		this.eventServer = new DebugEventServer(this);
+	protected void setDebuggedResource(String resourceName) throws Exception {
+		this.eventServer = new JavaDebugEventListener(this);
 		final int port = eventServer.startListening();
 		this.thread = new Thread(new Runnable() {
 			@Override
@@ -72,6 +72,8 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebug
 				try {
 					String args[] = new String[] { 
 							"-runtimeMode", "UNITTEST",
+							"-debug-eventAdapterFactory", JavaDebugEventAdapterFactory.class.getName(),
+							"-debug-requestListenerFactory", JavaDebugRequestListenerFactory.class.getName(),
 							"-debug-port", String.valueOf(port),
 							"-codeStore-factory", NullStoreFactory.class.getName(),
 							"-applicationName", "test",
@@ -127,8 +129,9 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebug
 
 	
 	@Override
-	public void handleConnectedEvent(String host, int port) {
-		((DebugRequestClient)debugger).setRemote(host, port);
+	public void handleConnectedEvent(IDebugEvent.Connected event) {
+		((JavaDebugRequestClient)debugger).setRemote(event.getHost(), event.getPort());
+		((DebugRequestClient)debugger).setConnected(true);
 		synchronized (lock) {
 			lock.notify();
 		}		

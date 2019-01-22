@@ -19,7 +19,7 @@ public class TestAddOns {
 		String path = System.getProperty("user.home") + "/.m2/repository/org/prompto/AwsClient/0.0.1-SNAPSHOT/AwsClient-0.0.1-SNAPSHOT.jar";
 		File jar = new File(path);
 		if(!jar.exists())
-			return;
+			return; // won't run on CI!
 		String addOns = getAwsAddOns(jar);
 		URL url = Thread.currentThread().getContextClassLoader().getResource("awsClient.pec");
 		String[] args = new String[] {

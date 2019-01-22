@@ -8,15 +8,15 @@ import java.net.SocketTimeoutException;
 
 import prompto.debug.IAcknowledgement.Acknowledgement;
 
-public class DebugEventServer {
+/* a server which listens to IDebugEvents sent by the remote debugged process */ 
+public class JavaDebugEventListener {
 	
+	IDebugEventListener listener;
 	Thread thread;
 	int port = 0;
 	boolean listening;
-	IDebugEventListener listener;
-	
-	
-	public DebugEventServer(IDebugEventListener listener) {
+
+	public JavaDebugEventListener(IDebugEventListener listener) {
 		this.listener = listener;
 	}
 
@@ -30,11 +30,11 @@ public class DebugEventServer {
 			try(ServerSocket server = new ServerSocket(0)) {
 				server.setSoTimeout(10); // make it fast to exit
 				port = server.getLocalPort();
-				LocalDebugger.showEvent("DebugEventServer listening on " + port);
+				LocalDebugger.logEvent("DebugEventServer listening on " + port);
 				synchronized(lock) {
 					lock.notify();
 				}
-				LocalDebugger.showEvent("DebugEventServer entering loop");
+				LocalDebugger.logEvent("DebugEventServer entering loop");
 				listening = true;
 				while(listening) {
 					try {
@@ -44,7 +44,7 @@ public class DebugEventServer {
 						// nothing to do, just helps exit the loop
 					}
 				}
-				LocalDebugger.showEvent("DebugEventServer exiting loop");
+				LocalDebugger.logEvent("DebugEventServer exiting loop");
 			} catch(Exception e) {
 				e.printStackTrace(System.err);
 			}
@@ -73,9 +73,9 @@ public class DebugEventServer {
 		InputStream input = client.getInputStream();
 		OutputStream output = client.getOutputStream();
 		IDebugEvent event = readDebugEvent(input);
-		LocalDebugger.showEvent("DebugEventServer receives " + event.getType());
+		LocalDebugger.logEvent("DebugEventServer receives " + event.getType());
 		event.execute(listener);
-		LocalDebugger.showEvent("DebugEventServer sends " + IAcknowledgement.Type.RECEIVED);
+		LocalDebugger.logEvent("DebugEventServer sends " + IAcknowledgement.Type.RECEIVED);
 		sendAcknowledgement(output);
 		output.flush();
 	}
@@ -89,7 +89,6 @@ public class DebugEventServer {
 	private void sendAcknowledgement(OutputStream output) throws Exception {
 		Serializer.writeAcknowledgement(output, new Acknowledgement());
 	}
-
 
 	public boolean isListening() {
 		return listening;

@@ -1,8 +1,11 @@
 package prompto.utils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StreamTokenizer;
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +56,16 @@ public abstract class StringUtils {
 		catch (IOException e) {
 		  throw new RuntimeException(e);
 		}
+	}
+
+	public static String stringFromStream(InputStream input) throws IOException {
+		ByteArrayOutputStream result = new ByteArrayOutputStream();
+		byte[] buffer = new byte[1024];
+		int length;
+		while ((length = input.read(buffer)) != -1) {
+		    result.write(buffer, 0, length);
+		}
+		return result.toString(StandardCharsets.UTF_8.name());
 	}
 
 

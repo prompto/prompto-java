@@ -43,7 +43,7 @@ public class TestLocalDebugger extends TestDebuggerBase {
 	}
 
 	@Override
-	protected void waitBlockedOrKilled() throws InterruptedException {
+	protected void waitSuspendedOrTerminated() throws InterruptedException {
 		State state = thread.getState();
 		while(state!=State.WAITING && state!=State.TERMINATED) {
 			Thread.sleep(10);
@@ -52,7 +52,7 @@ public class TestLocalDebugger extends TestDebuggerBase {
 	}
 
 	@Override
-	protected void debugResource(String resourceName) throws Exception {
+	protected void setDebuggedResource(String resourceName) throws Exception {
 		loadResource(resourceName);
 		LocalDebugger debugger = new LocalDebugger();
 		final Context local = context.newLocalContext();

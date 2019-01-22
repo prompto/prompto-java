@@ -1,11 +1,7 @@
 package prompto.debug;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.Socket;
 import java.util.Collection;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import prompto.debug.IDebugRequest.GetLineRequest;
@@ -26,74 +22,34 @@ import prompto.debug.IDebugResponse.GetVariablesResponse;
 import prompto.debug.IDebugResponse.IsSteppingResponse;
 import prompto.parser.ISection;
 
-public class DebugRequestClient implements IDebugger {
+/* a client which is able to send debug requests (such as step, get stack frames...) to a debug request server */
+public abstract class DebugRequestClient implements IDebugger {
 
-	DebugEventServer eventServer;
-	Supplier<Boolean> remote;
-	boolean connected = false;
 	String remoteHost;
 	int remotePort;
+	boolean connected = false;
 	
-	public DebugRequestClient(Thread thread, DebugEventServer eventServer) {
-		this.eventServer = eventServer;
-		this.remote = ()->thread.isAlive();
-	}
-
-	public DebugRequestClient(Process process, DebugEventServer eventServer) {
-		this.eventServer = eventServer;
-		this.remote = ()->process.isAlive();
-	}
-
 	public void setRemote(String host, int port) {
 		this.remoteHost = host;
 		this.remotePort = port;
 		this.connected = true;
 	}
 	
-	private IDebugResponse send(IDebugRequest request) {
-		return send(request, null);
+	public void setConnected(boolean set) {
+		this.connected = set;
 	}
 	
-	private IDebugResponse send(IDebugRequest request, Consumer<Exception> errorHandler) {
-		LocalDebugger.showEvent("DebugRequestClient sends " + request.getType());
-		try(Socket client = new Socket(remoteHost, remotePort)) {
-			try(OutputStream output = client.getOutputStream()) {
-				sendRequest(output, request);
-				try(InputStream input = client.getInputStream()) {
-					IDebugResponse response = readResponse(input);
-					LocalDebugger.showEvent("DebugRequestClient receives " + response.getType());
-					return response;
-				}
-			}
-		} catch(Exception e) {
-			if(errorHandler!=null)
-				errorHandler.accept(e);
-			else
-				e.printStackTrace(System.err);
-			return null;
-		}
+	protected IDebugResponse send(IDebugRequest request) {
+		return sendRequest(request, null);
 	}
-
-
-	private void sendRequest(OutputStream output, IDebugRequest request) throws Exception {
-		Serializer.writeDebugRequest(output, request);
-	}
-
-
-	private IDebugResponse readResponse(InputStream input) throws Exception {
-		return Serializer.readDebugResponse(input);
-	}
-
-
-	@Override
-	public void setListener(IDebugEventListener listener) {
-		this.eventServer.listener = listener;
-	}
+	
+	protected abstract boolean isRemoteAlive();
+	protected abstract IDebugResponse sendRequest(IDebugRequest request, Consumer<Exception> errorHandler);
 	
 
 	@Override
 	public Status getStatus(IThread thread) {
-		if(!remote.get())
+		if(!isRemoteAlive())
 			return Status.TERMINATED;
 		else
 			return fetchStatus(thread);
@@ -169,17 +125,6 @@ public class DebugRequestClient implements IDebugger {
 	}
 	
 	@Override
-	public boolean isTerminated() {
-		return eventServer==null || !eventServer.isListening();
-	}
-
-	@Override
-	public void notifyTerminated() {
-		if(eventServer!=null)
-			eventServer.stopListening();
-	}
-
-	@Override
 	public boolean canResume(IThread thread) {
 		return !isTerminated() && isSuspended(thread);
 	}
@@ -214,12 +159,6 @@ public class DebugRequestClient implements IDebugger {
 	public void resume(IThread thread) {
 		IDebugRequest request = new ResumeRequest(thread);
 		send(request);
-	}
-
-	@Override
-	public void terminate() {
-		connected = false;
-		eventServer.stopListening();
 	}
 
 	@Override
