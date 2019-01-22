@@ -271,6 +271,7 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		assertEquals("other", var.getName());
 		assertEquals("Text", var.getTypeName());
 		assertEquals("other", var.getValue().getValueString());
+		debugger.resume(null);
 	}
 
 
