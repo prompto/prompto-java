@@ -14,6 +14,7 @@ import prompto.store.NullStoreFactory;
 import prompto.utils.IOUtils;
 import prompto.utils.ManualTests;
 
+// excluded from CI because it can only run with the jars installed (- mvn install -skipTests°
 @Category(ManualTests.class)
 public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebugEventListener {
 
