@@ -19,6 +19,8 @@ import prompto.compiler.PromptoClassLoader;
 import prompto.config.CmdLineConfigurationReader;
 import prompto.config.IConfigurationReader;
 import prompto.config.IDebugConfiguration;
+import prompto.config.IDebugEventAdapterConfiguration;
+import prompto.config.IDebugRequestListenerConfiguration;
 import prompto.config.IRuntimeConfiguration;
 import prompto.config.IStandaloneConfiguration;
 import prompto.config.IStoreConfiguration;
@@ -218,21 +220,19 @@ public abstract class Standalone {
 	}
 
 
-	public static IDebugRequestListener createDebugRequestListener(IDebugConfiguration config, LocalDebugger debugger) throws Exception {
-		String factoryClassName = config.getRequestListenerFactory();
-		if(factoryClassName==null)
-			throw new RuntimeException("Missing requestListenerFactory in debug config!");
-		IDebugRequestListenerFactory factory = (IDebugRequestListenerFactory)Class.forName(factoryClassName).newInstance();
-		return factory.newInstance(config, debugger);
+	public static IDebugRequestListener createDebugRequestListener(IDebugConfiguration cfg, LocalDebugger debugger) throws Throwable {
+		IDebugRequestListenerConfiguration config  = cfg.getRequestListenerConfiguration();
+		if(config==null)
+			throw new RuntimeException("Missing requestListener in debug config!");
+		return IDebugRequestListenerFactory.newListenerFromConfig(config, debugger);
 	}
 
 
-	public static IDebugEventAdapter createDebugEventAdapter(IDebugConfiguration config) throws Exception {
-		String factoryClassName = config.getEventAdapterFactory();
-		if(factoryClassName==null)
-			throw new RuntimeException("Missing eventAdapterFactory in debug config!");
-		IDebugEventAdapterFactory factory = (IDebugEventAdapterFactory)Class.forName(factoryClassName).newInstance();
-		return factory.newInstance(config);
+	public static IDebugEventAdapter createDebugEventAdapter(IDebugConfiguration cfg) throws Throwable {
+		IDebugEventAdapterConfiguration config  = cfg.getEventAdapterConfiguration();
+		if(config==null)
+			throw new RuntimeException("Missing eventAdapter in debug config!");
+		return IDebugEventAdapterFactory.newAdapterFromConfig(config);
 	}
 
 	public static IExpression argsToArgValue(Map<String, String> args) {

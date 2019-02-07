@@ -84,7 +84,9 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 		builder.command("java", 
 				"-jar", "Standalone-0.0.1-SNAPSHOT.jar", 
 				"-runtimeMode", "UNITTEST",
-				"-debug-port", String.valueOf(port), 
+				"-debugger-eventAdapter-factory", JavaDebugEventAdapterFactory.class.getName(),
+				"-debugger-eventAdapter-port", String.valueOf(port),
+				"-debugger-requestListener-factory", JavaDebugRequestListenerFactory.class.getName(),
 				"-codeStore-factory", NullStoreFactory.class.getName(),
 				"-applicationName", "test", 
 				"-resourceURLs", getResourceAsURL(resourceName).toString());

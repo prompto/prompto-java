@@ -31,7 +31,7 @@ public class RuntimeConfiguration extends IRuntimeConfiguration.Inline {
 	}
 	
 	private IDebugConfiguration readDebugConfiguration() {
-		IConfigurationReader child = reader.getObject("debug");
+		IConfigurationReader child = reader.getObject("debugger");
 		return child==null ? null : new DebugConfiguration(child);
 	}
 	

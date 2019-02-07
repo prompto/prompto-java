@@ -1,12 +1,19 @@
 package prompto.debug;
 
-import prompto.config.IDebugConfiguration;
+import prompto.config.IConfigurationReader;
+import prompto.config.IDebugRequestListenerConfiguration;
 
 public class JavaDebugRequestListenerFactory implements IDebugRequestListenerFactory {
 
 	@Override
-	public IDebugRequestListener newInstance(IDebugConfiguration config, LocalDebugger debugger) {
+	public IDebugRequestListener newListener(IDebugRequestListenerConfiguration config, LocalDebugger debugger) {
 		return new JavaDebugRequestListener(debugger);
 	}
 
+	@Override
+	public IDebugRequestListenerConfiguration newConfiguration(IConfigurationReader reader) {
+		return new IDebugRequestListenerConfiguration.Inline().withFactory(this.getClass().getName());
+	}
+	
+	
 }

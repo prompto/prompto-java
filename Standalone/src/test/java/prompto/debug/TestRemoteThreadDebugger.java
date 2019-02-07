@@ -72,9 +72,9 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebug
 				try {
 					String args[] = new String[] { 
 							"-runtimeMode", "UNITTEST",
-							"-debug-eventAdapterFactory", JavaDebugEventAdapterFactory.class.getName(),
-							"-debug-requestListenerFactory", JavaDebugRequestListenerFactory.class.getName(),
-							"-debug-port", String.valueOf(port),
+							"-debugger-eventAdapter-factory", JavaDebugEventAdapterFactory.class.getName(),
+							"-debugger-eventAdapter-port", String.valueOf(port),
+							"-debugger-requestListener-factory", JavaDebugRequestListenerFactory.class.getName(),
 							"-codeStore-factory", NullStoreFactory.class.getName(),
 							"-applicationName", "test",
 							"-resourceURLs", getResourceAsURL(resourceName).toString()

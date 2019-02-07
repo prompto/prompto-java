@@ -2,6 +2,8 @@ package prompto.config;
 
 import java.util.Collection;
 
+import prompto.debug.IDebugEventAdapterFactory;
+import prompto.debug.IDebugRequestListenerFactory;
 import prompto.security.IKeyStoreFactory;
 import prompto.security.ISecretKeyFactory;
 import prompto.store.IStoreFactory;
@@ -27,6 +29,7 @@ public interface IConfigurationReader {
 	<T extends Object> Collection<T> getArray(String key);
 	IConfigurationReader getObject(String key);
 	Collection<? extends IConfigurationReader> getObjectsArray(String key);
+	
 	default IStoreConfiguration readStoreConfiguration(String key) {
 		IConfigurationReader child = getObject(key);
 		if(child==null)
@@ -34,6 +37,7 @@ public interface IConfigurationReader {
 		else
 			return child.readStoreConfiguration();
 	}
+	
 	default IStoreConfiguration readStoreConfiguration() {
 		String factoryName = getString("factory");
 		if(factoryName==null)
@@ -47,6 +51,7 @@ public interface IConfigurationReader {
 			throw new RuntimeException(e);
 		}
 	}
+	
 	default IKeyStoreFactoryConfiguration readKeyStoreFactoryConfiguration(String key) {
 		IConfigurationReader child = getObject(key);
 		if(child==null)
@@ -63,6 +68,7 @@ public interface IConfigurationReader {
 			throw new RuntimeException(e);
 		}
 	}
+	
 	default ISecretKeyConfiguration readSecretKeyConfiguration(String key) {
 		IConfigurationReader child = getObject(key);
 		if(child==null)
@@ -80,4 +86,41 @@ public interface IConfigurationReader {
 		}
 	}
 	
+	default IDebugEventAdapterConfiguration readDebugEventAdapterConfiguration(String key) {
+		IConfigurationReader child = getObject(key);
+		if(child==null)
+			return null;
+		String factoryName = child.getString("factory");
+		if(factoryName==null)
+			return null;
+		else try {
+			@SuppressWarnings("unchecked")
+			Class<? extends IDebugEventAdapterFactory> klass = (Class<? extends IDebugEventAdapterFactory>) Class.forName(factoryName);
+			IDebugEventAdapterFactory factory = klass.newInstance();
+			return factory.newConfiguration(child);
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	default IDebugRequestListenerConfiguration readDebugRequestListenerConfiguration(String key) {
+		IConfigurationReader child = getObject(key);
+		if(child==null)
+			return null;
+		String factoryName = child.getString("factory");
+		if(factoryName==null)
+			return null;
+		else try {
+			@SuppressWarnings("unchecked")
+			Class<? extends IDebugRequestListenerFactory> klass = (Class<? extends IDebugRequestListenerFactory>) Class.forName(factoryName);
+			IDebugRequestListenerFactory factory = klass.newInstance();
+			return factory.newConfiguration(child);
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+
+
+
 }

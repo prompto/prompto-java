@@ -1,9 +1,24 @@
 package prompto.debug;
 
-import prompto.config.IDebugConfiguration;
+import prompto.config.IConfigurationReader;
+import prompto.config.IDebugRequestListenerConfiguration;
 
 public interface IDebugRequestListenerFactory {
 
-	IDebugRequestListener newInstance(IDebugConfiguration config, LocalDebugger debugger);
+	IDebugRequestListener newListener(IDebugRequestListenerConfiguration config, LocalDebugger debugger);
+	IDebugRequestListenerConfiguration newConfiguration(IConfigurationReader reader);
+	
+	static IDebugRequestListener newListenerFromConfig(IDebugRequestListenerConfiguration cfg, LocalDebugger debugger) throws Throwable {
+		IDebugRequestListenerFactory factory = newListenerFactory(cfg.getFactory());
+		return factory.newListener(cfg, debugger);
+	}
+	
+	static IDebugRequestListenerFactory newListenerFactory(String factoryName) throws Throwable {
+		Class<?> klass = Class.forName(factoryName, true, Thread.currentThread().getContextClassLoader());
+		if(!(IDebugRequestListenerFactory.class.isAssignableFrom(klass)))
+			throw new RuntimeException("Not a listener factory: " + factoryName);
+		return (IDebugRequestListenerFactory)klass.newInstance();
+	}
+
 
 }
