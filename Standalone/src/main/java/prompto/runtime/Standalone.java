@@ -32,7 +32,11 @@ import prompto.debug.IDebugEventAdapter;
 import prompto.debug.IDebugEventAdapterFactory;
 import prompto.debug.IDebugRequestListener;
 import prompto.debug.IDebugRequestListenerFactory;
-import prompto.debug.LocalDebugger;
+import prompto.debug.IDebugger;
+import prompto.debug.ProcessDebugger;
+import prompto.debug.ProcessDebugger.DebuggedThread;
+import prompto.debug.Status;
+import prompto.debug.ThreadDebugger;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
@@ -65,6 +69,8 @@ public abstract class Standalone {
 	private static Logger logger = new Logger();
 	private static Context globalContext;
 	private static PromptoClassLoader classLoader;
+	private static IDebugRequestListener debugRequestListener;
+	private static IDebugEventAdapter debugEventAdapter;
 	
 	public static void main(String[] args) throws Throwable {
 		IStandaloneConfiguration config = loadConfiguration(args);
@@ -162,7 +168,7 @@ public abstract class Standalone {
 	}
 
 	public static void clearGlobalContext() {
-		LocalDebugger debugger = globalContext.getDebugger();
+		ThreadDebugger debugger = globalContext.getDebugger();
 		globalContext = Context.newGlobalContext();
 		globalContext.setDebugger(debugger);
 		PromptoClassLoader loader = PromptoClassLoader.getInstance();
@@ -171,56 +177,97 @@ public abstract class Standalone {
 	}
 
 	private static void runTest(String testMethod) {
+		runTest(getGlobalContext(), testMethod);
+	}
+	
+	private static void runTest(Context context, String testMethod) {
 		try {
 			if("all".equals(testMethod))
-				Interpreter.interpretTests(getGlobalContext());
+				Interpreter.interpretTests(context);
 			else
-				Interpreter.interpretTest(getGlobalContext(), new Identifier(testMethod), true);
+				Interpreter.interpretTest(context, new Identifier(testMethod), true);
 		} finally {
-			getGlobalContext().notifyTerminated();
+			context.notifyCompleted();
 		}
 	}
 
 	private static void debugTest(IDebugConfiguration debug, String testMethod) throws Throwable {
-		IDebugRequestListener requestListener = startDebugging(debug);
 		try {
-			runTest(testMethod);
+			Context local = startProcessDebugger(debug);
+			runTest(local, testMethod);
 		} finally {
-			requestListener.stopListening();
+			stopProcessDebugger();
 		}
 	}
 
 	private static void runApplication(String mainMethod, IExpression args) {
+		runApplication(getGlobalContext(), mainMethod, args);
+	}
+	
+	
+	private static void runApplication(Context context, String mainMethod, IExpression args) {
 		try {
-			Interpreter.interpretMethod(getGlobalContext(), new Identifier(mainMethod), "");
+			Interpreter.interpretMethod(context, new Identifier(mainMethod), "");
 		} finally {
-			getGlobalContext().notifyTerminated();
+			context.notifyCompleted();
 		}
 	}
-
+	
 	private static void debugApplication(IDebugConfiguration debug, String mainMethod, IExpression args) throws Throwable {
-		IDebugRequestListener server = startDebugging(debug);
 		try {
-			runApplication(mainMethod, args);
+			Context local = startProcessDebugger(debug);
+			runApplication(local, mainMethod, args);
 		} finally {
-			server.stopListening();
+			stopProcessDebugger();
 		}
 	}
+	
+	public static IDebugEventAdapter getDebugEventAdapter() {
+		return debugEventAdapter;
+	}
+	
+	public static IDebugRequestListener getDebugRequestListener() {
+		return debugRequestListener;
+	}
 
-	public static IDebugRequestListener startDebugging(IDebugConfiguration config) throws Throwable {
-		IDebugEventAdapter adapter = createDebugEventAdapter(config);
-		LocalDebugger debugger = new LocalDebugger();
-		debugger.setListener(adapter);
-		IDebugRequestListener requestListener = createDebugRequestListener(config, debugger);
-		IDebugEvent.Connected connected = requestListener.startListening();
-		getGlobalContext().setDebugger(debugger);
-		debugger.notifyStarted(connected);
-		return requestListener;
-		
+	public static Context startProcessDebugger(IDebugConfiguration config) throws Throwable {
+		// wire adapter which will send events to client
+		debugEventAdapter = createDebugEventAdapter(config);
+		ProcessDebugger processDebugger = ProcessDebugger.createInstance(getGlobalContext());
+		processDebugger.setListener(debugEventAdapter);
+		// wire listener which will receive requests from client
+		debugRequestListener = createDebugRequestListener(config, processDebugger);
+		IDebugEvent.Connected connected = debugRequestListener.startListening();
+		debugEventAdapter.handleConnectedEvent(connected);
+		// wire local context to debugger
+		Context local = getGlobalContext().newLocalContext();
+		startThreadDebugger(Thread.currentThread(), local);
+		processDebugger.setProcessStatus(Status.RUNNING);
+		return local;
+
+	}
+
+	public static void startThreadDebugger(Thread thread, Context context) {
+		ThreadDebugger threadDebugger = new ThreadDebugger();
+		ProcessDebugger.getInstance().register(Thread.currentThread(), threadDebugger);
+		debugEventAdapter.handleStartedEvent(DebuggedThread.wrap(Thread.currentThread()));
+		threadDebugger.setListener(debugEventAdapter);
+		context.setDebugger(threadDebugger);
+		threadDebugger.setStatus(Status.RUNNING);
 	}
 
 
-	public static IDebugRequestListener createDebugRequestListener(IDebugConfiguration cfg, LocalDebugger debugger) throws Throwable {
+	public static void stopProcessDebugger() {
+		ProcessDebugger processDebugger = ProcessDebugger.getInstance();
+		processDebugger.setProcessStatus(Status.TERMINATING);
+		debugEventAdapter.handleTerminatedEvent();
+		processDebugger.setProcessStatus(Status.TERMINATED);
+		debugRequestListener.stopListening();
+	}
+
+
+
+	public static IDebugRequestListener createDebugRequestListener(IDebugConfiguration cfg, IDebugger debugger) throws Throwable {
 		IDebugRequestListenerConfiguration config  = cfg.getRequestListenerConfiguration();
 		if(config==null)
 			throw new RuntimeException("Missing requestListener in debug config!");

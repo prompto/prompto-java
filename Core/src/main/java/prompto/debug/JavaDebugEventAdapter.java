@@ -5,10 +5,12 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 import prompto.debug.IDebugEvent;
+import prompto.utils.Logger;
 
 /* an implementation which uses JavaSerialization to communicate with the client */
 public class JavaDebugEventAdapter implements IDebugEventAdapter {
 
+	static Logger logger = new Logger();
 	
 	String host;
 	int port;
@@ -24,13 +26,23 @@ public class JavaDebugEventAdapter implements IDebugEventAdapter {
 	}
 	
 	@Override
-	public void handleSuspendedEvent(SuspendReason reason) {
-		send(new IDebugEvent.Suspended(reason));
+	public void handleStartedEvent(IThread thread) {
+		send(new IDebugEvent.Started(thread));
+	}
+	
+	@Override
+	public void handleSuspendedEvent(IThread thread, SuspendReason reason) {
+		send(new IDebugEvent.Suspended(thread, reason));
 	}
 
 	@Override
-	public void handleResumedEvent(ResumeReason reason) {
-		send(new IDebugEvent.Resumed(reason));
+	public void handleResumedEvent(IThread thread, ResumeReason reason) {
+		send(new IDebugEvent.Resumed(thread, reason));
+	}
+	
+	@Override
+	public void handleCompletedEvent(IThread thread) {
+		send(new IDebugEvent.Completed(thread));
 	}
 
 	@Override
@@ -41,11 +53,11 @@ public class JavaDebugEventAdapter implements IDebugEventAdapter {
 	protected IAcknowledgement send(IDebugEvent event) {
 		try(Socket client = new Socket(host, port)) {
 			try(OutputStream output = client.getOutputStream()) {
-				LocalDebugger.logEvent("DebugEventClient sends " + event.getType());
+				logger.debug(()->"DebugEventClient sends " + event.getType());
 				sendDebugEvent(output, event);
 				try(InputStream input = client.getInputStream()) {
 					IAcknowledgement ack = readAcknowledgement(input);
-					LocalDebugger.logEvent("DebugEventClient receives " + ack.getType());
+					logger.debug(()->"DebugEventClient receives " + ack.getType());
 					return ack;
 				}
 			}

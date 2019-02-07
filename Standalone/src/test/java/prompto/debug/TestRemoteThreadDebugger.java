@@ -22,6 +22,7 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebug
 	
 	@Before
 	public void before() {
+		ProcessDebugger.reset();
 		output = null;
 		Out.init();
 	}
@@ -43,11 +44,16 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebug
 	@Override
 	protected void waitSuspendedOrTerminated() throws Exception {
 		Thread.sleep(10); // give time to remote thread
-		Status status = debugger.getStatus(null);
+		Status status = debugger.getThreadStatus(getDebuggedThread());
 		while(status!=Status.SUSPENDED && status!=Status.TERMINATED) {
 			Thread.sleep(100);
-			status = debugger.getStatus(null);
+			status = debugger.getThreadStatus(getDebuggedThread());
 		}
+	}
+	
+	@Override
+	protected IThread getDebuggedThread() {
+		return new OnlyRemoteThread();
 	}
 
 	@Override
@@ -136,13 +142,21 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebug
 			lock.notify();
 		}		
 	}
+	
+	@Override
+	public void handleStartedEvent(IThread thread) {
+	}
 
 	@Override
-	public void handleResumedEvent(ResumeReason reason) {
+	public void handleResumedEvent(IThread thread, ResumeReason reason) {
 	}
 	
 	@Override
-	public void handleSuspendedEvent(SuspendReason reason) {
+	public void handleSuspendedEvent(IThread thread, SuspendReason reason) {
+	}
+	
+	@Override
+	public void handleCompletedEvent(IThread thread) {
 	}
 	
 	@Override

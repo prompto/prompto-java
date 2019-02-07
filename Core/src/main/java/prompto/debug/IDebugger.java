@@ -12,7 +12,9 @@ public interface IDebugger {
 	boolean canTerminate();
 	void terminate();
 	void notifyTerminated();
-	Status getStatus(IThread thread);
+	Collection<? extends IThread> getThreads();
+	Status getProcessStatus();
+	Status getThreadStatus(IThread thread);
 	IStack<?> getStack(IThread thread);
 	int getLine(IThread thread);
 	boolean isStepping(IThread thread);

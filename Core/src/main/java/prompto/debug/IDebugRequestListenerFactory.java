@@ -5,10 +5,10 @@ import prompto.config.IDebugRequestListenerConfiguration;
 
 public interface IDebugRequestListenerFactory {
 
-	IDebugRequestListener newListener(IDebugRequestListenerConfiguration config, LocalDebugger debugger);
+	IDebugRequestListener newListener(IDebugRequestListenerConfiguration config, IDebugger debugger);
 	IDebugRequestListenerConfiguration newConfiguration(IConfigurationReader reader);
 	
-	static IDebugRequestListener newListenerFromConfig(IDebugRequestListenerConfiguration cfg, LocalDebugger debugger) throws Throwable {
+	static IDebugRequestListener newListenerFromConfig(IDebugRequestListenerConfiguration cfg, IDebugger debugger) throws Throwable {
 		IDebugRequestListenerFactory factory = newListenerFactory(cfg.getFactory());
 		return factory.newListener(cfg, debugger);
 	}

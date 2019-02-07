@@ -3,18 +3,17 @@ package prompto.debug;
 import java.util.Collection;
 import java.util.Collections;
 
+import prompto.debug.ProcessDebugger.DebuggedThread;
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.TerminatedError;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
+import prompto.utils.Logger;
 
-public class LocalDebugger implements IDebugger {
+public class ThreadDebugger implements IThreadDebugger {
 
-	public static void logEvent(String message) {
-		// System.err.println(message);
-	}
-	
+	static Logger logger = new Logger();
 	
 	ServerStack stack = new ServerStack();
 	Object lock = new Object();
@@ -31,12 +30,12 @@ public class LocalDebugger implements IDebugger {
 	
 	
 	@Override
-	public ServerStack getStack(IThread thread) {
+	public ServerStack getStack() {
 		return stack;
 	}
 	
 	@Override
-	public Collection<? extends IVariable> getVariables(IThread thread, IStackFrame frame) {
+	public Collection<? extends IVariable> getVariables(IStackFrame frame) {
 		ServerStackFrame sf = stack.find(frame);
 		if(sf!=null)
 			return sf.getVariables();
@@ -47,35 +46,24 @@ public class LocalDebugger implements IDebugger {
 	}
 	
 	public void setStatus(Status status) {
-		logEvent("LocalDebugger sets status " + status);
+		logger.debug(()->"LocalDebugger sets status " + status);
 		this.status = status;
 	}
 	
 	@Override
-	public Status getStatus(IThread thread) {
+	public Status getStatus() {
 		return status;
 	}
 	
 	@Override
-	public void suspend(IThread thread) {
+	public void suspend() {
 		suspended = true;
-	}
-	
-	@Override
-	public boolean isTerminated() {
-		return status==Status.TERMINATED;
-	}
-	
-	@Override
-	public void terminate() {
-		terminated = true;
 	}
 	
 	public IDebugEventListener getListener() {
 		return listener;
 	}
 	
-	@Override
 	public void setListener(IDebugEventListener listener) {
 		this.listener = listener;
 	}
@@ -142,131 +130,117 @@ public class LocalDebugger implements IDebugger {
 	}
 
 	public void suspend(SuspendReason reason, final Context context, ISection section) {
-		logEvent("acquiring lock");
+		logger.debug(()->"acquiring lock");
 		synchronized(lock) {
 			setStatus(Status.SUSPENDED);
 			if(listener!=null)
-				listener.handleSuspendedEvent(reason);
+				listener.handleSuspendedEvent(DebuggedThread.wrap(Thread.currentThread()), reason);
 			try {
-				logEvent("waiting lock");
+				logger.debug(()->"waiting lock");
 				lock.wait();
-				logEvent("waiting lock");
+				logger.debug(()->"waiting lock");
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} finally {
 				setStatus( Status.RUNNING);
 				if(listener!=null)
-					listener.handleResumedEvent(resumeReason);
+					listener.handleResumedEvent(DebuggedThread.wrap(Thread.currentThread()), resumeReason);
 			}
 		}
 	}	
 	
 	@Override
-	public boolean isStepping(IThread thread) {
+	public boolean isStepping() {
 		return stepDepth!=0;
 	}
 	
 	@Override
-	public boolean canSuspend(IThread thread) {
-		return !isSuspended(thread);
+	public boolean canSuspend() {
+		return !isSuspended();
 	}
 
 	@Override
-	public boolean isSuspended(IThread thread) {
+	public boolean isSuspended() {
 		return status==Status.SUSPENDED;
 	}
 
 	@Override
-	public boolean canResume(IThread thread) {
-		return isSuspended(thread);
+	public boolean canResume() {
+		return isSuspended();
 	}
 	
 	@Override
-	public void resume(IThread thread) {
+	public void resume() {
 		stepDepth = 0;
 		doResume(ResumeReason.RESUMED);
 	}
 	
 	@Override
-	public boolean canStepOver(IThread thread) {
-		return isSuspended(thread);
+	public boolean canStepOver() {
+		return isSuspended();
 	}
 	
 	@Override
-	public void stepOver(IThread thread) {
+	public void stepOver() {
 		stepDepth = stack.size();
 		doResume(ResumeReason.STEP_OVER);
 	}
 
 	@Override
-	public boolean canStepInto(IThread thread) {
-		return isSuspended(thread);
+	public boolean canStepInto() {
+		return isSuspended();
 	}
 	
 	@Override
-	public void stepInto(IThread thread) {
+	public void stepInto() {
 		stepDepth = Math.abs(stepDepth) + 1;
 		doResume(ResumeReason.STEP_INTO);
 	}
 	
 	@Override
-	public boolean canStepOut(IThread thread) {
-		return isSuspended(thread);
+	public boolean canStepOut() {
+		return isSuspended();
 	}
 	
 	@Override
-	public void stepOut(IThread thread) {
+	public void stepOut() {
 		stepDepth = -(Math.abs(stepDepth) - 1);
 		doResume(ResumeReason.STEP_OUT);
 	}
 	
-	@Override
-	public boolean canTerminate() {
-		return !isTerminated();
-	}
-
 	public void doResume(ResumeReason reason) {
 		this.resumeReason = reason;
-		logEvent("acquiring lock");
+		logger.debug(()->"acquiring lock");
 		synchronized(lock) {
-			logEvent("notifying lock");
+			logger.debug(()->"notifying lock");
 			lock.notify();
-			logEvent("releasing lock");
+			logger.debug(()->"releasing lock");
 		}
 	}
 
 	@Override
-	public int getLine(IThread thread) {
+	public int getLine() {
 		IStackFrame frame = stack.peek();
 		return frame==null ? -1 : frame.getLine();
 	}
 	
-	public void notifyStarted(IDebugEvent.Connected event) {
+	public void notifyStarted(IDebugEvent.Started event) {
 		setStatus(Status.RUNNING);
-		if(listener!=null)
-			listener.handleConnectedEvent(event); 
-	}
-
-	@Override
-	public void notifyTerminated() {
-		if(!isTerminated()) {
-			setStatus(Status.TERMINATED);
-			if(listener!=null)
-				listener.handleTerminatedEvent();
+		if(listener!=null) {
+			IThread thread = DebuggedThread.parse(event.getThreadId());
+			listener.handleStartedEvent(thread); 
 		}
 	}
 	
-	@Override
-	public void installBreakpoint(ISection section) {
-		if(context==null)
-			throw new RuntimeException("No context to search from!");
-		ISection instance = context.findSection(section);
-		if(instance!=null) {
-			logEvent("Found section " + instance.toString());
-			instance.setAsBreakpoint(section.isBreakpoint());
-		} else
-			logEvent("Could not find section " + section.toString());
+	public void notifyCompleted(IDebugEvent.Completed event) {
+		ProcessDebugger.getInstance().unregister(Thread.currentThread());
+		if(listener!=null) {
+			IThread thread = DebuggedThread.parse(event.getThreadId());
+			listener.handleCompletedEvent(thread); 
+		}
 	}
+
+
 	
 }

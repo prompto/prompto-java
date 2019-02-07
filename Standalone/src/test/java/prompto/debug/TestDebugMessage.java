@@ -21,7 +21,8 @@ import prompto.debug.Serializer.AcknowledgementMessage;
 import prompto.debug.Serializer.DebugResponseMessage;
 import prompto.debug.Serializer.DebugRequestMessage;
 import prompto.debug.IDebugResponse.GetStatusResponse;
-import prompto.debug.IDebugRequest.GetStatusRequest;
+import prompto.debug.IDebugRequest.GetProcessStatusRequest;
+import prompto.debug.IDebugRequest.GetThreadStatusRequest;
 import prompto.debug.IDebugRequest.InstallBreakpointRequest;
 import prompto.parser.Dialect;
 import prompto.parser.Location;
@@ -66,23 +67,23 @@ public class TestDebugMessage {
 	}
 
 	@Test
-	public void testJsonStatusRequest() throws Exception {
+	public void testJsonProcessStatusRequest() throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-		GetStatusRequest o = new GetStatusRequest();
+		GetProcessStatusRequest o = new GetProcessStatusRequest();
 		JsonNode json = mapper.valueToTree(o);
-		o = mapper.treeToValue(json, GetStatusRequest.class);
+		o = mapper.treeToValue(json, GetProcessStatusRequest.class);
 	}
 	
 	@Test
-	public void testStatusRequestMessage() throws Exception {
+	public void testProcessStatusRequestMessage() throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 		DebugRequestMessage message = new DebugRequestMessage();
-		message.object = new GetStatusRequest();
+		message.object = new GetProcessStatusRequest();
 		message.type = message.object.getType();
 		JsonNode json = mapper.valueToTree(message);
-		assertEquals(IDebugRequest.Type.GET_STATUS.name(), json.get("type").asText());
+		assertEquals(IDebugRequest.Type.GET_PROCESS_STATUS.name(), json.get("type").asText());
 		assertNull(json.get("object").get("type"));
 		String s = json.toString();
 		JsonNode content = mapper.readTree(s);
@@ -91,9 +92,37 @@ public class TestDebugMessage {
 		JsonNode object = content.get("object");
 		assertTrue(object instanceof ObjectNode);
 		IDebugRequest request = mapper.treeToValue(object, type.getKlass());
-		assertTrue(request instanceof GetStatusRequest);
+		assertTrue(request instanceof GetProcessStatusRequest);
 	}
 	
+	@Test
+	public void testJsonThreadStatusRequest() throws Exception {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+		GetThreadStatusRequest o = new GetThreadStatusRequest();
+		JsonNode json = mapper.valueToTree(o);
+		o = mapper.treeToValue(json, GetThreadStatusRequest.class);
+	}
+	
+	@Test
+	public void testThreadStatusRequestMessage() throws Exception {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+		DebugRequestMessage message = new DebugRequestMessage();
+		message.object = new GetThreadStatusRequest();
+		message.type = message.object.getType();
+		JsonNode json = mapper.valueToTree(message);
+		assertEquals(IDebugRequest.Type.GET_THREAD_STATUS.name(), json.get("type").asText());
+		assertNull(json.get("object").get("type"));
+		String s = json.toString();
+		JsonNode content = mapper.readTree(s);
+		String typeName = content.get("type").asText();
+		IDebugRequest.Type type = IDebugRequest.Type.valueOf(typeName);
+		JsonNode object = content.get("object");
+		assertTrue(object instanceof ObjectNode);
+		IDebugRequest request = mapper.treeToValue(object, type.getKlass());
+		assertTrue(request instanceof GetThreadStatusRequest);
+	}
 	@Test
 	public void testBreakpointRequestMessage() throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
@@ -143,7 +172,7 @@ public class TestDebugMessage {
 		mapper.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, false);
 		mapper.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
 		DebugRequestMessage message = new DebugRequestMessage();
-		message.object = new GetStatusRequest();
+		message.object = new GetProcessStatusRequest();
 		message.type = message.object.getType();
 		JsonNode json = mapper.valueToTree(message);
 		String s = json.toString();

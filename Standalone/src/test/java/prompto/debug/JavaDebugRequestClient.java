@@ -6,9 +6,13 @@ import java.net.Socket;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import prompto.utils.Logger;
+
 /* a client which is able to send debug requests (such as step, get stack frames...) to a debug request server using Java serialization */
 public class JavaDebugRequestClient extends DebugRequestClient {
 
+	private static Logger logger = new Logger();
+	
 	JavaDebugEventListener eventServer;
 	Supplier<Boolean> remoteAlive;
 	
@@ -26,16 +30,21 @@ public class JavaDebugRequestClient extends DebugRequestClient {
 	protected boolean isRemoteAlive() {
 		return remoteAlive.get();
 	}
+	
+	@Override
+	public Status getProcessStatus() {
+		return isRemoteAlive() ? Status.RUNNING : Status.TERMINATED;
+	}
 
 	@Override
 	protected IDebugResponse sendRequest(IDebugRequest request, Consumer<Exception> errorHandler) {
-		LocalDebugger.logEvent("DebugRequestClient sends " + request.getType());
+		logger.debug(()->"DebugRequestClient sends " + request.getType());
 		try(Socket client = new Socket(remoteHost, remotePort)) {
 			try(OutputStream output = client.getOutputStream()) {
 				Serializer.writeDebugRequest(output, request);
 				try(InputStream input = client.getInputStream()) {
 					IDebugResponse response = Serializer.readDebugResponse(input);
-					LocalDebugger.logEvent("DebugRequestClient receives " + response.getType());
+					logger.debug(()->"DebugRequestClient receives " + response.getType());
 					return response;
 				}
 			}

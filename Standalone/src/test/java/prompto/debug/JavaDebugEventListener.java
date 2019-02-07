@@ -7,9 +7,12 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 
 import prompto.debug.IAcknowledgement.Acknowledgement;
+import prompto.utils.Logger;
 
 /* a server which listens to IDebugEvents sent by the remote debugged process */ 
 public class JavaDebugEventListener {
+	
+	private static Logger logger = new Logger();
 	
 	IDebugEventListener listener;
 	Thread thread;
@@ -30,11 +33,11 @@ public class JavaDebugEventListener {
 			try(ServerSocket server = new ServerSocket(0)) {
 				server.setSoTimeout(10); // make it fast to exit
 				port = server.getLocalPort();
-				LocalDebugger.logEvent("DebugEventServer listening on " + port);
+				logger.debug(()->"DebugEventServer listening on " + port);
 				synchronized(lock) {
 					lock.notify();
 				}
-				LocalDebugger.logEvent("DebugEventServer entering loop");
+				logger.debug(()->"DebugEventServer entering loop");
 				listening = true;
 				while(listening) {
 					try {
@@ -44,7 +47,7 @@ public class JavaDebugEventListener {
 						// nothing to do, just helps exit the loop
 					}
 				}
-				LocalDebugger.logEvent("DebugEventServer exiting loop");
+				logger.debug(()->"DebugEventServer exiting loop");
 			} catch(Exception e) {
 				e.printStackTrace(System.err);
 			}
@@ -73,9 +76,9 @@ public class JavaDebugEventListener {
 		InputStream input = client.getInputStream();
 		OutputStream output = client.getOutputStream();
 		IDebugEvent event = readDebugEvent(input);
-		LocalDebugger.logEvent("DebugEventServer receives " + event.getType());
+		logger.debug(()->"DebugEventServer receives " + event.getType());
 		event.execute(listener);
-		LocalDebugger.logEvent("DebugEventServer sends " + IAcknowledgement.Type.RECEIVED);
+		logger.debug(()->"DebugEventServer sends " + IAcknowledgement.Type.RECEIVED);
 		sendAcknowledgement(output);
 		output.flush();
 	}

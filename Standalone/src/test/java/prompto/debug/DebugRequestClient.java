@@ -1,14 +1,15 @@
 package prompto.debug;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import prompto.debug.IDebugRequest.GetThreadStatusRequest;
 import prompto.debug.IDebugRequest.GetLineRequest;
 import prompto.debug.IDebugRequest.InstallBreakpointRequest;
 import prompto.debug.IDebugRequest.SuspendRequest;
 import prompto.debug.IDebugRequest.ResumeRequest;
-import prompto.debug.IDebugRequest.GetStatusRequest;
 import prompto.debug.IDebugRequest.GetStackRequest;
 import prompto.debug.IDebugRequest.GetVariablesRequest;
 import prompto.debug.IDebugRequest.StepIntoRequest;
@@ -46,19 +47,24 @@ public abstract class DebugRequestClient implements IDebugger {
 	protected abstract boolean isRemoteAlive();
 	protected abstract IDebugResponse sendRequest(IDebugRequest request, Consumer<Exception> errorHandler);
 	
-
 	@Override
-	public Status getStatus(IThread thread) {
+	public Collection<? extends IThread> getThreads() {
+		return Collections.emptyList(); // unused in tests
+	}
+	
+	
+	@Override
+	public Status getThreadStatus(IThread thread) {
 		if(!isRemoteAlive())
 			return Status.TERMINATED;
 		else
-			return fetchStatus(thread);
+			return fetchThreadStatus(thread);
 	}
 
-	private Status fetchStatus(IThread thread) {
+	private Status fetchThreadStatus(IThread thread) {
 		if(!connected)
 			return Status.UNREACHABLE;
-		IDebugRequest request = new GetStatusRequest(thread);
+		IDebugRequest request = new GetThreadStatusRequest(thread);
 		IDebugResponse response = send(request) ;
 		if(response instanceof GetStatusResponse)
 			return ((GetStatusResponse)response).getStatus();
@@ -116,7 +122,7 @@ public abstract class DebugRequestClient implements IDebugger {
 	public boolean isSuspended(IThread thread) {
 		if(!connected || isTerminated())
 			return false;
-		return fetchStatus(thread)==Status.SUSPENDED;
+		return fetchThreadStatus(thread)==Status.SUSPENDED;
 	}
 
 	@Override
@@ -175,7 +181,7 @@ public abstract class DebugRequestClient implements IDebugger {
 
 	@Override
 	public void stepOver(IThread thread) {
-		IDebugRequest request = new StepOverRequest();
+		IDebugRequest request = new StepOverRequest(thread);
 		send(request);
 	}
 	

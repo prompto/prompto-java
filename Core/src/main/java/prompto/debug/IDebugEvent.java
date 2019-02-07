@@ -2,6 +2,8 @@ package prompto.debug;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import prompto.debug.ProcessDebugger.DebuggedThread;
+
 public interface IDebugEvent {
 
 	@JsonIgnore
@@ -48,7 +50,50 @@ public interface IDebugEvent {
 		}
 	}
 	
-	static class Suspended implements IDebugEvent {
+	static abstract class ThreadEvent implements IDebugEvent {
+
+		String threadId;
+		
+		ThreadEvent() {
+		}
+		
+		ThreadEvent(IThread thread) {
+			this.threadId = thread.toString();
+		}
+
+		public void setThreadId(String threadId) {
+			this.threadId = threadId;
+		}
+		
+		public String getThreadId() {
+			return threadId;
+		}
+		
+	}
+	
+	static class Started extends ThreadEvent {
+		
+		public Started() {
+		}
+		
+		public Started(IThread thread) {
+			super(thread);
+		}
+		
+		@Override
+		public Type getType() {
+			return Type.STARTED;
+		}
+		
+		@Override
+		public void execute(IDebugEventListener listener) {
+			IThread thread = DebuggedThread.parse(threadId);
+			listener.handleStartedEvent(thread);
+		}
+		
+	}
+	
+	static class Suspended extends ThreadEvent {
 		
 		SuspendReason reason;
 		
@@ -56,11 +101,11 @@ public interface IDebugEvent {
 		}
 		
 		
-		public Suspended(SuspendReason reason) {
-			setReason(reason);
+		public Suspended(IThread thread, SuspendReason reason) {
+			super(thread);
+			this.reason = reason;
 		}
 
-		
 		public void setReason(SuspendReason reason) {
 			this.reason = reason;
 		}
@@ -77,11 +122,12 @@ public interface IDebugEvent {
 		
 		@Override
 		public void execute(IDebugEventListener listener) {
-			listener.handleSuspendedEvent(reason);
+			IThread thread = DebuggedThread.parse(threadId);
+			listener.handleSuspendedEvent(thread, reason);
 		}
 	}
 	
-	static class Resumed implements IDebugEvent {
+	static class Resumed extends ThreadEvent {
 		
 		ResumeReason reason;
 		
@@ -89,8 +135,9 @@ public interface IDebugEvent {
 		public Resumed() {
 		}
 		
-		public Resumed(ResumeReason reason) {
-			setReason(reason);
+		public Resumed(IThread thread, ResumeReason reason) {
+			super(thread);
+			this.reason = reason;
 		}
 		
 		
@@ -110,10 +157,33 @@ public interface IDebugEvent {
 		
 		@Override
 		public void execute(IDebugEventListener listener) {
-			listener.handleResumedEvent(reason);
+			IThread thread = DebuggedThread.parse(threadId);
+			listener.handleResumedEvent(thread, reason);
 		}
 	}
 
+	static class Completed extends ThreadEvent {
+		
+		public Completed() {
+		}
+		
+		public Completed(IThread thread) {
+			super(thread);
+		}
+		
+		@Override
+		public Type getType() {
+			return Type.COMPLETED;
+		}
+		
+		@Override
+		public void execute(IDebugEventListener listener) {
+			IThread thread = DebuggedThread.parse(threadId);
+			listener.handleStartedEvent(thread);
+		}
+		
+	}
+	
 	static class Terminated implements IDebugEvent {
 
 		@Override
@@ -129,8 +199,10 @@ public interface IDebugEvent {
 
 	public enum Type {
 		CONNECTED(Connected.class),
+		STARTED(Started.class),
 		SUSPENDED(Suspended.class),
 		RESUMED(Resumed.class),
+		COMPLETED(Completed.class),
 		TERMINATED(Terminated.class);
 
 		Class<? extends IDebugEvent> klass;

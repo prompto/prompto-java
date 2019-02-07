@@ -6,16 +6,20 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
+import prompto.utils.Logger;
+
 /* a class which listens to IDebugRequest messages (such as step, get stack frames...) and forwards them to the debugger */
 public class JavaDebugRequestListener implements IDebugRequestListener {
 
-	LocalDebugger debugger;
+	private static Logger logger = new Logger();
+
+	IDebugger debugger;
 	Thread thread;
 	int port;
 	boolean loop;
 
 	
-	public JavaDebugRequestListener(LocalDebugger debugger) {
+	public JavaDebugRequestListener(IDebugger debugger) {
 		this.debugger = debugger;
 	}
 	
@@ -35,12 +39,12 @@ public class JavaDebugRequestListener implements IDebugRequestListener {
 			try(ServerSocket server = new ServerSocket(0)) {
 				server.setSoTimeout(10); // make it fast to exit
 				port = server.getLocalPort();
-				LocalDebugger.logEvent("DebugRequestServer listening on " + port);
+				logger.debug(()->"DebugRequestServer listening on " + port);
 				synchronized(lock) {
 					lock.notify();
 				}			
 				loop = true;
-				LocalDebugger.logEvent("DebugRequestServer entering loop");
+				logger.debug(()->"DebugRequestServer entering loop");
 				while(loop) {
 					try {
 						Socket client = server.accept();
@@ -49,7 +53,7 @@ public class JavaDebugRequestListener implements IDebugRequestListener {
 						// nothing to do, just helps exit the loop
 					}
 				}
-				LocalDebugger.logEvent("DebugRequestServer exiting loop");
+				logger.debug(()->"DebugRequestServer exiting loop");
 			} catch (Throwable t) {
 				t.printStackTrace(System.err);
 			}
@@ -81,9 +85,9 @@ public class JavaDebugRequestListener implements IDebugRequestListener {
 			InputStream input = client.getInputStream();
 			OutputStream output = client.getOutputStream();
 			IDebugRequest request = readRequest(input);
-			LocalDebugger.logEvent("DebugRequestServer receives " + request.getType());
+			logger.debug(()->"DebugRequestServer receives " + request.getType());
 			IDebugResponse response = request.execute(debugger);
-			LocalDebugger.logEvent("DebugRequestServer responds " + response.getType());
+			logger.debug(()->"DebugRequestServer responds " + response.getType());
 			sendResponse(output, response);
 			output.flush();
 		}

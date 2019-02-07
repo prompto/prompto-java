@@ -13,7 +13,9 @@ import java.util.stream.Collectors;
 import prompto.code.ICodeStore;
 import prompto.code.Resource;
 import prompto.code.TextResource;
-import prompto.debug.LocalDebugger;
+import prompto.debug.IDebugEvent;
+import prompto.debug.ProcessDebugger.DebuggedThread;
+import prompto.debug.ThreadDebugger;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.declaration.IDeclaration;
@@ -67,7 +69,7 @@ public class Context implements IContext {
 	Context globals;
 	Context calling;
 	Context parent; // for inner methods
-	LocalDebugger debugger; 
+	ThreadDebugger debugger; 
 	IProblemListener problemListener;
 	
 	Map<Identifier,IDeclaration> declarations = new HashMap<>();
@@ -127,11 +129,11 @@ public class Context implements IContext {
 		return this==globals;
 	}
 	
-	public void setDebugger(LocalDebugger debugger) {
+	public void setDebugger(ThreadDebugger debugger) {
 		this.debugger = debugger;
 	}
 	
-	public LocalDebugger getDebugger() {
+	public ThreadDebugger getDebugger() {
 		return debugger;
 	}
 	
@@ -797,9 +799,11 @@ public class Context implements IContext {
 	}
 
 	
-	public void notifyTerminated() {
-		if(debugger!=null)
-			debugger.notifyTerminated();
+	public void notifyCompleted() {
+		if(debugger!=null) {
+			IDebugEvent.Completed completed = new IDebugEvent.Completed(DebuggedThread.wrap(Thread.currentThread()));
+			debugger.notifyCompleted(completed);
+		}
 	}
 
 	

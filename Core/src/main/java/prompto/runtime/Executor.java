@@ -39,7 +39,7 @@ public abstract class Executor {
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | IOException e) {
 			throw new InternalError(e);
 		} finally {
-			context.notifyTerminated();
+			context.notifyCompleted();
 		}	
 	}
 	
@@ -91,7 +91,7 @@ public abstract class Executor {
 			e.printStackTrace(System.err);
 			throw new InternalError(e);
 		} finally {
-			context.notifyTerminated();
+			context.notifyCompleted();
 		}
 	}
 

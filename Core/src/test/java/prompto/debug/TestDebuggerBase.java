@@ -27,10 +27,11 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 	protected abstract void start() throws Exception;
 	protected abstract void join() throws Exception;
 	protected abstract String readOut() throws Exception;
+	protected abstract IThread getDebuggedThread();
 	
 	
 	int installBreakPoint(String methodName, int stmtNumber) {
-		MethodDeclarationMap mdm = context.getRegisteredDeclaration(MethodDeclarationMap.class, new Identifier("printLevel2"));
+		MethodDeclarationMap mdm = context.getRegisteredDeclaration(MethodDeclarationMap.class, new Identifier(methodName));
 		ConcreteMethodDeclaration cmd = (ConcreteMethodDeclaration)mdm.values().iterator().next();
 		ISection section = cmd.getStatements().get(stmtNumber);
 		section.setAsBreakpoint(true);
@@ -44,13 +45,13 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		setDebuggedResource("debug/stack.pec");
 		start();
 		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getStatus(null));
-		assertEquals(MAIN_LINE, debugger.getLine(null));
-		assertTrue(debugger.isStepping(null));
-		IStack<?> stack = debugger.getStack(null);
+		assertEquals(Status.SUSPENDED, debugger.getThreadStatus(getDebuggedThread()));
+		assertEquals(MAIN_LINE, debugger.getLine(getDebuggedThread()));
+		assertTrue(debugger.isStepping(getDebuggedThread()));
+		IStack<?> stack = debugger.getStack(getDebuggedThread());
 		assertFalse(stack.isEmpty());
 		assertEquals(MAIN_LINE, stack.iterator().next().getLine());
-		debugger.resume(null);	
+		debugger.resume(getDebuggedThread());	
 		join();
 		assertEquals("test123-ok", readOut());
 	}
@@ -61,17 +62,17 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		setDebuggedResource("debug/stack.pec");
 		start();
 		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getStatus(null));
-		assertEquals(MAIN_LINE, debugger.getLine(null));
-		debugger.stepOver(null);
+		assertEquals(Status.SUSPENDED, debugger.getThreadStatus(getDebuggedThread()));
+		assertEquals(MAIN_LINE, debugger.getLine(getDebuggedThread()));
+		debugger.stepOver(getDebuggedThread());
 		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getStatus(null));
-		assertEquals(MAIN_LINE + 1, debugger.getLine(null));
-		debugger.stepOver(null);
+		assertEquals(Status.SUSPENDED, debugger.getThreadStatus(getDebuggedThread()));
+		assertEquals(MAIN_LINE + 1, debugger.getLine(getDebuggedThread()));
+		debugger.stepOver(getDebuggedThread());
 		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getStatus(null));
-		assertEquals(MAIN_LINE + 2, debugger.getLine(null));
-		debugger.resume(null);	
+		assertEquals(Status.SUSPENDED, debugger.getThreadStatus(getDebuggedThread()));
+		assertEquals(MAIN_LINE + 2, debugger.getLine(getDebuggedThread()));
+		debugger.resume(getDebuggedThread());	
 		join();
 		assertEquals("test123-ok", readOut());
 	}
@@ -82,21 +83,21 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		setDebuggedResource("debug/stack.pec");
 		start();
 		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getStatus(null));
-		assertEquals(MAIN_LINE, debugger.getLine(null));
-		debugger.stepOver(null);
+		assertEquals(Status.SUSPENDED, debugger.getThreadStatus(getDebuggedThread()));
+		assertEquals(MAIN_LINE, debugger.getLine(getDebuggedThread()));
+		debugger.stepOver(getDebuggedThread());
 		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getStatus(null));
-		assertEquals(MAIN_LINE + 1, debugger.getLine(null));
-		debugger.stepInto(null); // printLevel1
+		assertEquals(Status.SUSPENDED, debugger.getThreadStatus(getDebuggedThread()));
+		assertEquals(MAIN_LINE + 1, debugger.getLine(getDebuggedThread()));
+		debugger.stepInto(getDebuggedThread()); // printLevel1
 		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getStatus(null));
-		assertEquals(LEVEL_1_LINE, debugger.getLine(null));
-		debugger.stepOver(null);
+		assertEquals(Status.SUSPENDED, debugger.getThreadStatus(getDebuggedThread()));
+		assertEquals(LEVEL_1_LINE, debugger.getLine(getDebuggedThread()));
+		debugger.stepOver(getDebuggedThread());
 		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getStatus(null));
-		assertEquals(LEVEL_1_LINE + 1, debugger.getLine(null));
-		debugger.resume(null);	
+		assertEquals(Status.SUSPENDED, debugger.getThreadStatus(getDebuggedThread()));
+		assertEquals(LEVEL_1_LINE + 1, debugger.getLine(getDebuggedThread()));
+		debugger.resume(getDebuggedThread());	
 		join();
 		assertEquals("test123-ok", readOut());
 	}
@@ -107,25 +108,25 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		setDebuggedResource("debug/stack.pec");
 		start();
 		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getStatus(null));
-		assertEquals(MAIN_LINE, debugger.getLine(null));
-		debugger.stepOver(null);
+		assertEquals(Status.SUSPENDED, debugger.getThreadStatus(getDebuggedThread()));
+		assertEquals(MAIN_LINE, debugger.getLine(getDebuggedThread()));
+		debugger.stepOver(getDebuggedThread());
 		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getStatus(null));
-		assertEquals(MAIN_LINE + 1, debugger.getLine(null));
-		debugger.stepInto(null); // printLevel1
+		assertEquals(Status.SUSPENDED, debugger.getThreadStatus(getDebuggedThread()));
+		assertEquals(MAIN_LINE + 1, debugger.getLine(getDebuggedThread()));
+		debugger.stepInto(getDebuggedThread()); // printLevel1
 		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getStatus(null));
-		assertEquals(LEVEL_1_LINE, debugger.getLine(null));
-		debugger.stepOver(null);
+		assertEquals(Status.SUSPENDED, debugger.getThreadStatus(getDebuggedThread()));
+		assertEquals(LEVEL_1_LINE, debugger.getLine(getDebuggedThread()));
+		debugger.stepOver(getDebuggedThread());
 		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getStatus(null));
-		assertEquals(LEVEL_1_LINE + 1, debugger.getLine(null));
-		debugger.stepInto(null); // value = value + "1", should step over
+		assertEquals(Status.SUSPENDED, debugger.getThreadStatus(getDebuggedThread()));
+		assertEquals(LEVEL_1_LINE + 1, debugger.getLine(getDebuggedThread()));
+		debugger.stepInto(getDebuggedThread()); // value = value + "1", should step over
 		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getStatus(null));
-		assertEquals(LEVEL_1_LINE + 2, debugger.getLine(null));
-		debugger.resume(null);	
+		assertEquals(Status.SUSPENDED, debugger.getThreadStatus(getDebuggedThread()));
+		assertEquals(LEVEL_1_LINE + 2, debugger.getLine(getDebuggedThread()));
+		debugger.resume(getDebuggedThread());	
 		join();
 		assertEquals("test123-ok", readOut());
 	}
@@ -136,33 +137,33 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		setDebuggedResource("debug/stack.pec");
 		start();
 		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getStatus(null));
-		assertEquals(MAIN_LINE, debugger.getLine(null));
-		debugger.stepOver(null);
+		assertEquals(Status.SUSPENDED, debugger.getThreadStatus(getDebuggedThread()));
+		assertEquals(MAIN_LINE, debugger.getLine(getDebuggedThread()));
+		debugger.stepOver(getDebuggedThread());
 		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getStatus(null));
-		assertEquals(MAIN_LINE + 1, debugger.getLine(null));
-		debugger.stepInto(null); // printLevel1
+		assertEquals(Status.SUSPENDED, debugger.getThreadStatus(getDebuggedThread()));
+		assertEquals(MAIN_LINE + 1, debugger.getLine(getDebuggedThread()));
+		debugger.stepInto(getDebuggedThread()); // printLevel1
 		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getStatus(null));
-		assertEquals(LEVEL_1_LINE, debugger.getLine(null));
-		debugger.stepOver(null);
+		assertEquals(Status.SUSPENDED, debugger.getThreadStatus(getDebuggedThread()));
+		assertEquals(LEVEL_1_LINE, debugger.getLine(getDebuggedThread()));
+		debugger.stepOver(getDebuggedThread());
 		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getStatus(null));
-		assertEquals(LEVEL_1_LINE + 1, debugger.getLine(null));
-		debugger.stepOver(null);
+		assertEquals(Status.SUSPENDED, debugger.getThreadStatus(getDebuggedThread()));
+		assertEquals(LEVEL_1_LINE + 1, debugger.getLine(getDebuggedThread()));
+		debugger.stepOver(getDebuggedThread());
 		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getStatus(null));
-		assertEquals(LEVEL_1_LINE + 2, debugger.getLine(null));
-		debugger.stepInto(null); // printLevel2
+		assertEquals(Status.SUSPENDED, debugger.getThreadStatus(getDebuggedThread()));
+		assertEquals(LEVEL_1_LINE + 2, debugger.getLine(getDebuggedThread()));
+		debugger.stepInto(getDebuggedThread()); // printLevel2
 		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getStatus(null));
-		assertEquals(LEVEL_2_LINE, debugger.getLine(null));
-		debugger.stepOut(null); // printLevel1
+		assertEquals(Status.SUSPENDED, debugger.getThreadStatus(getDebuggedThread()));
+		assertEquals(LEVEL_2_LINE, debugger.getLine(getDebuggedThread()));
+		debugger.stepOut(getDebuggedThread()); // printLevel1
 		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getStatus(null));
-		assertEquals(LEVEL_1_LINE + 2, debugger.getLine(null));
-		debugger.resume(null);	
+		assertEquals(Status.SUSPENDED, debugger.getThreadStatus(getDebuggedThread()));
+		assertEquals(LEVEL_1_LINE + 2, debugger.getLine(getDebuggedThread()));
+		debugger.resume(getDebuggedThread());	
 		join();
 		assertEquals("test123-ok", readOut());
 	}
@@ -173,15 +174,15 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		setDebuggedResource("debug/stack.pec");
 		start();
 		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getStatus(null));
-		assertEquals(MAIN_LINE, debugger.getLine(null));
+		assertEquals(Status.SUSPENDED, debugger.getThreadStatus(getDebuggedThread()));
+		assertEquals(MAIN_LINE, debugger.getLine(getDebuggedThread()));
 		int line = installBreakPoint("printLevel2", 0);
 		assertEquals(LEVEL_2_LINE + 1, line);
-		debugger.resume(null);	
+		debugger.resume(getDebuggedThread());	
 		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getStatus(null));
-		assertEquals(LEVEL_2_LINE + 1, debugger.getLine(null));
-		debugger.resume(null);	
+		assertEquals(Status.SUSPENDED, debugger.getThreadStatus(getDebuggedThread()));
+		assertEquals(LEVEL_2_LINE + 1, debugger.getLine(getDebuggedThread()));
+		debugger.resume(getDebuggedThread());	
 		join();
 		assertEquals("test123-ok", readOut());
 	}
@@ -191,33 +192,33 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		setDebuggedResource("debug/variables.pec");
 		start();
 		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getStatus(null));
+		assertEquals(Status.SUSPENDED, debugger.getThreadStatus(getDebuggedThread()));
 		// main method
-		IStack<?> stack = debugger.getStack(null);
+		IStack<?> stack = debugger.getStack(getDebuggedThread());
 		IStackFrame frame = stack.iterator().next();
 		Collection<? extends IVariable> vars = frame.getVariables();
 		assertEquals(0, vars.size());
-		// next
-		debugger.stepOver(null);
+		// declaration
+		debugger.stepOver(getDebuggedThread());
 		waitSuspendedOrTerminated();
 		// printLevel1 "test"
-		stack = debugger.getStack(null);
+		stack = debugger.getStack(getDebuggedThread());
 		frame = stack.iterator().next();
 		vars = frame.getVariables();	
 		assertEquals(0, vars.size());
 		// next
-		debugger.stepInto(null);
+		debugger.stepInto(getDebuggedThread());
 		waitSuspendedOrTerminated();
 		// printLevel1 method
-		stack = debugger.getStack(null);
+		stack = debugger.getStack(getDebuggedThread());
 		frame = stack.iterator().next();
 		vars = frame.getVariables();	
 		assertEquals(0, vars.size());
 		// next
-		debugger.stepOver(null);
+		debugger.stepOver(getDebuggedThread());
 		waitSuspendedOrTerminated();
 		// value = value + "1"
-		stack = debugger.getStack(null);
+		stack = debugger.getStack(getDebuggedThread());
 		frame = stack.iterator().next();
 		vars = frame.getVariables();	
 		assertEquals(1, vars.size());
@@ -226,10 +227,10 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		assertEquals("Text", var.getTypeName());
 		assertEquals("test", var.getValue().getValueString());
 		// next
-		debugger.stepOver(null);
+		debugger.stepOver(getDebuggedThread());
 		waitSuspendedOrTerminated();
 		// other = "other"
-		stack = debugger.getStack(null);
+		stack = debugger.getStack(getDebuggedThread());
 		frame = stack.iterator().next();
 		vars = frame.getVariables();	
 		assertEquals(1, vars.size());
@@ -238,10 +239,10 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		assertEquals("Text", var.getTypeName());
 		assertEquals("test1", var.getValue().getValueString());
 		// next
-		debugger.stepOver(null);
+		debugger.stepOver(getDebuggedThread());
 		waitSuspendedOrTerminated();
 		// value = value + other
-		stack = debugger.getStack(null);
+		stack = debugger.getStack(getDebuggedThread());
 		frame = stack.iterator().next();
 		vars = frame.getVariables();	
 		assertEquals(2, vars.size());
@@ -255,10 +256,10 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		assertEquals("Text", var.getTypeName());
 		assertEquals("other", var.getValue().getValueString());
 		// next
-		debugger.stepOver(null);
+		debugger.stepOver(getDebuggedThread());
 		waitSuspendedOrTerminated();
 		// printLevel2 value
-		stack = debugger.getStack(null);
+		stack = debugger.getStack(getDebuggedThread());
 		frame = stack.iterator().next();
 		vars = frame.getVariables();	
 		assertEquals(2, vars.size());
@@ -271,7 +272,7 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		assertEquals("other", var.getName());
 		assertEquals("Text", var.getTypeName());
 		assertEquals("other", var.getValue().getValueString());
-		debugger.resume(null);
+		debugger.resume(getDebuggedThread());
 		join();
 		assertEquals("test1other2stuff3-ok", readOut());
 	}

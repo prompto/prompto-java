@@ -47,10 +47,10 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 	
 	@Override
 	protected void waitSuspendedOrTerminated() throws Exception {
-		Status status = debugger.getStatus(null);
+		Status status = debugger.getThreadStatus(null);
 		while(status!=Status.SUSPENDED && status!=Status.TERMINATED) {
 			Thread.sleep(100);
-			status = debugger.getStatus(null);
+			status = debugger.getThreadStatus(null);
 		}
 	}
 
@@ -65,6 +65,11 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 	@Override
 	protected void join() throws Exception {
 		process.waitFor();
+	}
+	
+	@Override
+	protected IThread getDebuggedThread() {
+		return new OnlyRemoteThread();
 	}
 
 	@Override
@@ -119,16 +124,21 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 		}		
 	}
 
+	
 	@Override
-	public void handleResumedEvent(ResumeReason reason) {
-		// TODO Auto-generated method stub
-		
+	public void handleStartedEvent(IThread thread) {
 	}
 	
 	@Override
-	public void handleSuspendedEvent(SuspendReason reason) {
-		// TODO Auto-generated method stub
-		
+	public void handleResumedEvent(IThread thread, ResumeReason reason) {
+	}
+	
+	@Override
+	public void handleSuspendedEvent(IThread thread, SuspendReason reason) {
+	}
+	
+	@Override
+	public void handleCompletedEvent(IThread thread) {
 	}
 	
 	@Override

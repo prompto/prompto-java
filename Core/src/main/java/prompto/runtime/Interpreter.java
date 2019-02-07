@@ -55,7 +55,7 @@ public class Interpreter {
 			IExpression args = convertCmdLineArgs(cmdLineArgs);
 			interpretMethod(context, new Identifier("main"), args);
 		} finally {
-			context.notifyTerminated();
+			context.notifyCompleted();
 		}
 	}
 	
@@ -73,7 +73,7 @@ public class Interpreter {
 			IExpression args = parseCmdLineArgs(cmdLineArgs);
 			interpretMethod(context, methodName, args);
 		} finally {
-			context.notifyTerminated();
+			context.notifyCompleted();
 		}
 	}
 	

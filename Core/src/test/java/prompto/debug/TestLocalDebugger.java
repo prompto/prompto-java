@@ -8,6 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import prompto.debug.ProcessDebugger.DebuggedThread;
 import prompto.error.PromptoError;
 import prompto.runtime.Context;
 import prompto.runtime.Interpreter;
@@ -54,10 +55,12 @@ public class TestLocalDebugger extends TestDebuggerBase {
 	@Override
 	protected void setDebuggedResource(String resourceName) throws Exception {
 		loadResource(resourceName);
-		LocalDebugger debugger = new LocalDebugger();
+		ProcessDebugger processDebugger = ProcessDebugger.getInstance();
+		if(processDebugger==null)
+			processDebugger = ProcessDebugger.createInstance(context);
+		ThreadDebugger threadDebugger = new ThreadDebugger();
 		final Context local = context.newLocalContext();
-		local.setDebugger(debugger);
-		this.debugger = debugger;
+		local.setDebugger(threadDebugger);
 		thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -68,9 +71,14 @@ public class TestLocalDebugger extends TestDebuggerBase {
 				}
 			}
 		});
-		
+		processDebugger.register(thread, threadDebugger);
+		this.debugger = processDebugger;
 	}
 	
+	@Override
+	protected IThread getDebuggedThread() {
+		return DebuggedThread.wrap(thread);
+	}
 	
 	@Test
 	public void testStackNoDebug() throws Exception {
