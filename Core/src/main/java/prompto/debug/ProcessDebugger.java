@@ -265,7 +265,7 @@ public class ProcessDebugger implements IDebugger {
 	public static class DebuggedThread implements IThread {
 
 		public static DebuggedThread wrap(Thread thread) {
-			return new DebuggedThread(thread.getId());
+			return new DebuggedThread(thread);
 		}
 
 		public static IThread parse(String threadId) {
@@ -273,7 +273,7 @@ public class ProcessDebugger implements IDebugger {
 				long id = Long.parseLong(threadId);
 				return new DebuggedThread(id);
 			} catch(NumberFormatException e) {
-				// special case for testing
+				// gracefully handle special case for testing
 				if("only".equals(threadId)) {
 					Set<IThread> threads = ProcessDebugger.getInstance().debuggers.keySet();
 					if(threads.size()==1)
@@ -284,10 +284,36 @@ public class ProcessDebugger implements IDebugger {
 		}
 
 		long threadId;
+		String name;
+		State state;
 		
 		public DebuggedThread(long threadId) {
 			this.threadId = threadId;
 		}
+		
+		public DebuggedThread(Thread thread) {
+			this.threadId = thread.getId();
+			this.name = thread.getName();
+			this.state = State.valueOf(thread.getState());
+		}
+		
+		@Override
+		public String getThreadId() {
+			return String.valueOf(threadId);
+		}
+		
+		
+		@Override
+		public String getName() {
+			return name;
+		}
+		
+		
+		@Override
+		public State getState() {
+			return state;
+		}
+		
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -303,12 +329,6 @@ public class ProcessDebugger implements IDebugger {
 			return Long.hashCode(this.threadId);
 		}
 		
-		@Override
-		public String toString() {
-			return Long.toString(threadId);
-		}
-
-	
 	}
 
 

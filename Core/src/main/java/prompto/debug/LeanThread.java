@@ -1,20 +1,24 @@
 package prompto.debug;
 
-public class OnlyRemoteThread implements IThread {
-
+public class LeanThread implements IThread {
+	
+	String threadId;
+	String name;
+	State state;
+	
 	@Override
 	public String getThreadId() {
-		return "only";
+		return threadId;
 	}
 	
 	@Override
 	public String getName() {
-		return getThreadId();
+		return name;
 	}
 	
 	@Override
 	public State getState() {
-		return State.RUNNING;
+		return state;
 	}
-		
+
 }

@@ -1,6 +1,8 @@
 package prompto.debug;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -23,6 +25,32 @@ public interface IDebugResponse {
 
 	}
 
+	public static class GetThreadsResponse implements IDebugResponse {
+		
+		List<IThread> threads;
+		
+		public GetThreadsResponse() {
+		}
+		
+		public GetThreadsResponse(Collection<? extends IThread> threads) {
+			this.threads = new ArrayList<>(threads);
+		}
+		
+		@Override
+		public Type getType() {
+			return Type.GET_THREADS;
+		}
+		
+		public List<IThread> getThreads() {
+			return threads;
+		}
+		
+		public void setThreads(List<IThread> threads) {
+			this.threads = threads;
+		}
+	}
+	
+	
 	public static class GetStatusResponse implements IDebugResponse {
 
 		Status status;
@@ -161,6 +189,7 @@ public interface IDebugResponse {
 
 	public enum Type {
 		VOID(VoidResponse.class),
+		GET_THREADS(GetThreadsResponse.class),
 		GET_STATUS(GetStatusResponse.class),
 		GET_LINE(GetLineResponse.class),
 		GET_STACK(GetStackResponse.class),

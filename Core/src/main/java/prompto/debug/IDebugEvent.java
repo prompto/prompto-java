@@ -58,7 +58,7 @@ public interface IDebugEvent {
 		}
 		
 		ThreadEvent(IThread thread) {
-			this.threadId = thread.toString();
+			this.threadId = thread.getThreadId();
 		}
 
 		public void setThreadId(String threadId) {

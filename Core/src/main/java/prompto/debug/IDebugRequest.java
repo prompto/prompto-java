@@ -21,6 +21,24 @@ public interface IDebugRequest {
 	IDebugResponse execute(IDebugger debugger);
 
 	
+	public static class GetThreadsRequest implements IDebugRequest {
+
+		public GetThreadsRequest() {
+		}
+
+		@Override
+		public GetThreadsResponse execute(IDebugger debugger) {
+			Collection<? extends IThread> threads = debugger.getThreads();
+			return new GetThreadsResponse(threads);
+		}
+		
+		@Override
+		public Type getType() {
+			return GET_PROCESS_STATUS;
+		}
+	}
+
+	
 	public static class GetProcessStatusRequest implements IDebugRequest {
 
 		public GetProcessStatusRequest() {
@@ -334,6 +352,7 @@ public interface IDebugRequest {
 	}
 
 	public enum Type {
+		GET_THREADS(GetThreadsRequest.class),
 		GET_PROCESS_STATUS(GetProcessStatusRequest.class),
 		GET_THREAD_STATUS(GetThreadStatusRequest.class),
 		GET_LINE(GetLineRequest.class),
