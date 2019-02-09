@@ -58,15 +58,13 @@ public interface IDebugRequest {
 	
 	static abstract class ThreadRequest implements IDebugRequest {
 		
-		IThread thread;
 		String threadId;
 		
 		ThreadRequest() {
 		}
 		
 		ThreadRequest(IThread thread) {
-			this.thread = thread;
-			this.threadId = thread.toString();
+			this.threadId = thread.getThreadId();
 		}
 		
 		public String getThreadId() {
@@ -75,8 +73,8 @@ public interface IDebugRequest {
 		
 		public void setThreadId(String threadId) {
 			this.threadId = threadId;
-			this.thread = DebuggedThread.parse(threadId);
 		}
+		
 		
 	}
 	
@@ -91,7 +89,7 @@ public interface IDebugRequest {
 
 		@Override
 		public GetStatusResponse execute(IDebugger debugger) {
-			Status status = debugger.getThreadStatus(thread);
+			Status status = debugger.getThreadStatus(DebuggedThread.parse(threadId));
 			return new GetStatusResponse(status);
 		}
 		
@@ -113,7 +111,7 @@ public interface IDebugRequest {
 		@Override
 		public GetLineResponse execute(IDebugger debugger) {
 			logger.debug(()->"before line");
-			int line = debugger.getLine(thread);
+			int line = debugger.getLine(DebuggedThread.parse(threadId));
 			logger.debug(()->"after line:" + line);
 			return new GetLineResponse(line);
 		}
@@ -136,7 +134,7 @@ public interface IDebugRequest {
 		@Override
 		public GetStackResponse execute(IDebugger debugger) {
 			logger.debug(()->"before stack");
-			IStack<?> stack = debugger.getStack(thread);
+			IStack<?> stack = debugger.getStack(DebuggedThread.parse(threadId));
 			logger.debug(()->"after stack");
 			return new GetStackResponse(stack);
 		}
@@ -170,7 +168,7 @@ public interface IDebugRequest {
 		@Override
 		public GetVariablesResponse execute(IDebugger debugger) {
 			logger.debug(()->"before variables");
-			Collection<? extends IVariable> variables = debugger.getVariables(thread, frame);
+			Collection<? extends IVariable> variables = debugger.getVariables(DebuggedThread.parse(threadId), frame);
 			logger.debug(()->"after variables");
 			return new GetVariablesResponse(variables);
 		}
@@ -225,7 +223,7 @@ public interface IDebugRequest {
 		@Override
 		public VoidResponse execute(IDebugger debugger) {
 			logger.debug(()->"before suspend");
-			debugger.suspend(thread);
+			debugger.suspend(DebuggedThread.parse(threadId));
 			logger.debug(()->"after suspend");
 			return new VoidResponse();
 		}
@@ -248,7 +246,7 @@ public interface IDebugRequest {
 		@Override
 		public VoidResponse execute(IDebugger debugger) {
 			logger.debug(()->"before resume");
-			debugger.resume(thread);
+			debugger.resume(DebuggedThread.parse(threadId));
 			logger.debug(()->"after resume");
 			return new VoidResponse();
 		}
@@ -271,7 +269,7 @@ public interface IDebugRequest {
 		@Override
 		public IsSteppingResponse execute(IDebugger debugger) {
 			logger.debug(()->"before is stepping");
-			boolean stepping = debugger.isStepping(thread);
+			boolean stepping = debugger.isStepping(DebuggedThread.parse(threadId));
 			logger.debug(()->"after is stepping");
 			return new IsSteppingResponse(stepping);
 		}
@@ -294,7 +292,7 @@ public interface IDebugRequest {
 		@Override
 		public VoidResponse execute(IDebugger debugger) {
 			logger.debug(()->"before step over");
-			debugger.stepOver(thread);
+			debugger.stepOver(DebuggedThread.parse(threadId));
 			logger.debug(()->"after step over");
 			return new VoidResponse();
 		}
@@ -317,7 +315,7 @@ public interface IDebugRequest {
 		@Override
 		public VoidResponse execute(IDebugger debugger) {
 			logger.debug(()->"before step into");
-			debugger.stepInto(thread);
+			debugger.stepInto(DebuggedThread.parse(threadId));
 			logger.debug(()->"after step into");
 			return new VoidResponse();
 		}
@@ -340,7 +338,7 @@ public interface IDebugRequest {
 		@Override
 		public VoidResponse execute(IDebugger debugger) {
 			logger.debug(()->"before step out");
-			debugger.stepOut(thread);
+			debugger.stepOut(DebuggedThread.parse(threadId));
 			logger.debug(()->"after step out");
 			return new VoidResponse();
 		}
