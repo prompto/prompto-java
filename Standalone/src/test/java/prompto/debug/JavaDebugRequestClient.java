@@ -13,17 +13,29 @@ public class JavaDebugRequestClient extends DebugRequestClient {
 
 	private static Logger logger = new Logger();
 	
-	JavaDebugEventListener eventServer;
+	JavaDebugEventListener eventListener;
 	Supplier<Boolean> remoteAlive;
 	
-	public JavaDebugRequestClient(Thread thread, JavaDebugEventListener eventServer) {
-		this.eventServer = eventServer;
-		this.remoteAlive = ()->thread.isAlive();
+	protected JavaDebugRequestClient(JavaDebugEventListener eventListener, Supplier<Boolean> remoteAlive) {
+		this.eventListener = eventListener;
+		this.remoteAlive = remoteAlive;
 	}
+	
+	public static class Thread extends JavaDebugRequestClient {
+		
+		public Thread(java.lang.Thread thread, JavaDebugEventListener eventListener) {
+			super(eventListener, ()->thread.isAlive());
+		}
+		
+	}
+	
+	
+	public static class Process extends JavaDebugRequestClient {
 
-	public JavaDebugRequestClient(Process process, JavaDebugEventListener eventServer) {
-		this.eventServer = eventServer;
-		this.remoteAlive = ()->process.isAlive();
+		public Process(java.lang.Process process, JavaDebugEventListener eventListener) {
+			super(eventListener, ()->process.isAlive());
+		}
+
 	}
 	
 	@Override
@@ -59,25 +71,25 @@ public class JavaDebugRequestClient extends DebugRequestClient {
 
 	@Override
 	public void setListener(IDebugEventListener listener) {
-		this.eventServer.listener = listener;
+		this.eventListener.listener = listener;
 	}
 	
 
 	@Override
 	public boolean isTerminated() {
-		return eventServer==null || !eventServer.isListening();
+		return eventListener==null || !eventListener.isListening();
 	}
 
 	@Override
 	public void notifyTerminated() {
-		if(eventServer!=null)
-			eventServer.stopListening();
+		if(eventListener!=null)
+			eventListener.stopListening();
 	}
 
 	@Override
 	public void terminate() {
 		connected = false;
-		eventServer.stopListening();
+		eventListener.stopListening();
 	}
 
 

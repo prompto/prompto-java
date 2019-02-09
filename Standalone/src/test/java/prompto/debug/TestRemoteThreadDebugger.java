@@ -59,7 +59,7 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebug
 	@Override
 	protected void start() throws Exception {
 		thread.start();
-		debugger = new JavaDebugRequestClient(thread, eventServer);
+		debugger = new JavaDebugRequestClient.Thread(thread, eventServer);
 		waitConnected();
 	}
 
