@@ -34,9 +34,9 @@ import prompto.debug.IDebugRequestListener;
 import prompto.debug.IDebugRequestListenerFactory;
 import prompto.debug.IDebugger;
 import prompto.debug.ProcessDebugger;
-import prompto.debug.ProcessDebugger.DebuggedThread;
+import prompto.debug.ProcessDebugger.DebuggedWorker;
 import prompto.debug.Status;
-import prompto.debug.ThreadDebugger;
+import prompto.debug.WorkerDebugger;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
@@ -168,7 +168,7 @@ public abstract class Standalone {
 	}
 
 	public static void clearGlobalContext() {
-		ThreadDebugger debugger = globalContext.getDebugger();
+		WorkerDebugger debugger = globalContext.getDebugger();
 		globalContext = Context.newGlobalContext();
 		globalContext.setDebugger(debugger);
 		PromptoClassLoader loader = PromptoClassLoader.getInstance();
@@ -248,9 +248,9 @@ public abstract class Standalone {
 	}
 
 	public static void startThreadDebugger(Thread thread, Context context) {
-		ThreadDebugger threadDebugger = new ThreadDebugger();
+		WorkerDebugger threadDebugger = new WorkerDebugger();
 		ProcessDebugger.getInstance().register(Thread.currentThread(), threadDebugger);
-		debugEventAdapter.handleStartedEvent(DebuggedThread.wrap(Thread.currentThread()));
+		debugEventAdapter.handleStartedEvent(DebuggedWorker.wrap(Thread.currentThread()));
 		threadDebugger.setListener(debugEventAdapter);
 		context.setDebugger(threadDebugger);
 		threadDebugger.setStatus(Status.RUNNING);

@@ -26,23 +26,23 @@ public class JavaDebugEventAdapter implements IDebugEventAdapter {
 	}
 	
 	@Override
-	public void handleStartedEvent(IThread thread) {
-		send(new IDebugEvent.Started(thread));
+	public void handleStartedEvent(IWorker worker) {
+		send(new IDebugEvent.Started(worker));
 	}
 	
 	@Override
-	public void handleSuspendedEvent(IThread thread, SuspendReason reason) {
-		send(new IDebugEvent.Suspended(thread, reason));
+	public void handleSuspendedEvent(IWorker worker, SuspendReason reason) {
+		send(new IDebugEvent.Suspended(worker, reason));
 	}
 
 	@Override
-	public void handleResumedEvent(IThread thread, ResumeReason reason) {
-		send(new IDebugEvent.Resumed(thread, reason));
+	public void handleResumedEvent(IWorker worker, ResumeReason reason) {
+		send(new IDebugEvent.Resumed(worker, reason));
 	}
 	
 	@Override
-	public void handleCompletedEvent(IThread thread) {
-		send(new IDebugEvent.Completed(thread));
+	public void handleCompletedEvent(IWorker worker) {
+		send(new IDebugEvent.Completed(worker));
 	}
 
 	@Override

@@ -2,7 +2,7 @@ package prompto.debug;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import prompto.debug.ProcessDebugger.DebuggedThread;
+import prompto.debug.ProcessDebugger.DebuggedWorker;
 
 public interface IDebugEvent {
 
@@ -50,34 +50,34 @@ public interface IDebugEvent {
 		}
 	}
 	
-	static abstract class ThreadEvent implements IDebugEvent {
+	static abstract class WorkerEvent implements IDebugEvent {
 
-		String threadId;
+		String workerId;
 		
-		ThreadEvent() {
+		WorkerEvent() {
 		}
 		
-		ThreadEvent(IThread thread) {
-			this.threadId = thread.getThreadId();
+		WorkerEvent(IWorker worker) {
+			this.workerId = worker.getWorkerId();
 		}
 
-		public void setThreadId(String threadId) {
-			this.threadId = threadId;
+		public void setWorkerId(String workerId) {
+			this.workerId = workerId;
 		}
 		
-		public String getThreadId() {
-			return threadId;
+		public String getWorkerId() {
+			return workerId;
 		}
 		
 	}
 	
-	static class Started extends ThreadEvent {
+	static class Started extends WorkerEvent {
 		
 		public Started() {
 		}
 		
-		public Started(IThread thread) {
-			super(thread);
+		public Started(IWorker worker) {
+			super(worker);
 		}
 		
 		@Override
@@ -87,13 +87,13 @@ public interface IDebugEvent {
 		
 		@Override
 		public void execute(IDebugEventListener listener) {
-			IThread thread = DebuggedThread.parse(threadId);
-			listener.handleStartedEvent(thread);
+			IWorker worker = DebuggedWorker.parse(workerId);
+			listener.handleStartedEvent(worker);
 		}
 		
 	}
 	
-	static class Suspended extends ThreadEvent {
+	static class Suspended extends WorkerEvent {
 		
 		SuspendReason reason;
 		
@@ -101,8 +101,8 @@ public interface IDebugEvent {
 		}
 		
 		
-		public Suspended(IThread thread, SuspendReason reason) {
-			super(thread);
+		public Suspended(IWorker worker, SuspendReason reason) {
+			super(worker);
 			this.reason = reason;
 		}
 
@@ -122,12 +122,12 @@ public interface IDebugEvent {
 		
 		@Override
 		public void execute(IDebugEventListener listener) {
-			IThread thread = DebuggedThread.parse(threadId);
-			listener.handleSuspendedEvent(thread, reason);
+			IWorker worker = DebuggedWorker.parse(workerId);
+			listener.handleSuspendedEvent(worker, reason);
 		}
 	}
 	
-	static class Resumed extends ThreadEvent {
+	static class Resumed extends WorkerEvent {
 		
 		ResumeReason reason;
 		
@@ -135,8 +135,8 @@ public interface IDebugEvent {
 		public Resumed() {
 		}
 		
-		public Resumed(IThread thread, ResumeReason reason) {
-			super(thread);
+		public Resumed(IWorker worker, ResumeReason reason) {
+			super(worker);
 			this.reason = reason;
 		}
 		
@@ -157,18 +157,18 @@ public interface IDebugEvent {
 		
 		@Override
 		public void execute(IDebugEventListener listener) {
-			IThread thread = DebuggedThread.parse(threadId);
-			listener.handleResumedEvent(thread, reason);
+			IWorker worker = DebuggedWorker.parse(workerId);
+			listener.handleResumedEvent(worker, reason);
 		}
 	}
 
-	static class Completed extends ThreadEvent {
+	static class Completed extends WorkerEvent {
 		
 		public Completed() {
 		}
 		
-		public Completed(IThread thread) {
-			super(thread);
+		public Completed(IWorker worker) {
+			super(worker);
 		}
 		
 		@Override
@@ -178,8 +178,8 @@ public interface IDebugEvent {
 		
 		@Override
 		public void execute(IDebugEventListener listener) {
-			IThread thread = DebuggedThread.parse(threadId);
-			listener.handleStartedEvent(thread);
+			IWorker worker = DebuggedWorker.parse(workerId);
+			listener.handleStartedEvent(worker);
 		}
 		
 	}

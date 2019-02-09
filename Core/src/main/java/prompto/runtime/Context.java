@@ -14,8 +14,8 @@ import prompto.code.ICodeStore;
 import prompto.code.Resource;
 import prompto.code.TextResource;
 import prompto.debug.IDebugEvent;
-import prompto.debug.ProcessDebugger.DebuggedThread;
-import prompto.debug.ThreadDebugger;
+import prompto.debug.ProcessDebugger.DebuggedWorker;
+import prompto.debug.WorkerDebugger;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.declaration.IDeclaration;
@@ -69,7 +69,7 @@ public class Context implements IContext {
 	Context globals;
 	Context calling;
 	Context parent; // for inner methods
-	ThreadDebugger debugger; 
+	WorkerDebugger debugger; 
 	IProblemListener problemListener;
 	
 	Map<Identifier,IDeclaration> declarations = new HashMap<>();
@@ -129,11 +129,11 @@ public class Context implements IContext {
 		return this==globals;
 	}
 	
-	public void setDebugger(ThreadDebugger debugger) {
+	public void setDebugger(WorkerDebugger debugger) {
 		this.debugger = debugger;
 	}
 	
-	public ThreadDebugger getDebugger() {
+	public WorkerDebugger getDebugger() {
 		return debugger;
 	}
 	
@@ -801,7 +801,7 @@ public class Context implements IContext {
 	
 	public void notifyCompleted() {
 		if(debugger!=null) {
-			IDebugEvent.Completed completed = new IDebugEvent.Completed(DebuggedThread.wrap(Thread.currentThread()));
+			IDebugEvent.Completed completed = new IDebugEvent.Completed(DebuggedWorker.wrap(Thread.currentThread()));
 			debugger.notifyCompleted(completed);
 		}
 	}

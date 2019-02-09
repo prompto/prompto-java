@@ -1,15 +1,15 @@
 package prompto.debug;
 
-public class OnlyRemoteThread implements IThread {
+public class OnlyRemoteThread implements IWorker {
 
 	@Override
-	public String getThreadId() {
+	public String getWorkerId() {
 		return "only";
 	}
 	
 	@Override
 	public String getName() {
-		return getThreadId();
+		return getWorkerId();
 	}
 	
 	@Override

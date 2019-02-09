@@ -25,28 +25,28 @@ public interface IDebugResponse {
 
 	}
 
-	public static class GetThreadsResponse implements IDebugResponse {
+	public static class GetWorkersResponse implements IDebugResponse {
 		
-		List<IThread> threads;
+		List<IWorker> workers;
 		
-		public GetThreadsResponse() {
+		public GetWorkersResponse() {
 		}
 		
-		public GetThreadsResponse(Collection<? extends IThread> threads) {
-			this.threads = new ArrayList<>(threads);
+		public GetWorkersResponse(Collection<? extends IWorker> workers) {
+			this.workers = new ArrayList<>(workers);
 		}
 		
 		@Override
 		public Type getType() {
-			return Type.GET_THREADS;
+			return Type.GET_WORKERS;
 		}
 		
-		public List<IThread> getThreads() {
-			return threads;
+		public List<IWorker> getWorkers() {
+			return workers;
 		}
 		
-		public void setThreads(List<IThread> threads) {
-			this.threads = threads;
+		public void setWorkers(List<IWorker> workers) {
+			this.workers = workers;
 		}
 	}
 	
@@ -189,7 +189,7 @@ public interface IDebugResponse {
 
 	public enum Type {
 		VOID(VoidResponse.class),
-		GET_THREADS(GetThreadsResponse.class),
+		GET_WORKERS(GetWorkersResponse.class),
 		GET_STATUS(GetStatusResponse.class),
 		GET_LINE(GetLineResponse.class),
 		GET_STACK(GetStackResponse.class),

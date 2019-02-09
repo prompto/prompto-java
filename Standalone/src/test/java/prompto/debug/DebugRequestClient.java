@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import prompto.debug.IDebugRequest.GetThreadStatusRequest;
+import prompto.debug.IDebugRequest.GetWorkerStatusRequest;
 import prompto.debug.IDebugRequest.GetLineRequest;
 import prompto.debug.IDebugRequest.InstallBreakpointRequest;
 import prompto.debug.IDebugRequest.SuspendRequest;
@@ -48,23 +48,23 @@ public abstract class DebugRequestClient implements IDebugger {
 	protected abstract IDebugResponse sendRequest(IDebugRequest request, Consumer<Exception> errorHandler);
 	
 	@Override
-	public Collection<? extends IThread> getThreads() {
+	public Collection<? extends IWorker> getWorkers() {
 		return Collections.emptyList(); // unused in tests
 	}
 	
 	
 	@Override
-	public Status getThreadStatus(IThread thread) {
+	public Status getWorkerStatus(IWorker thread) {
 		if(!isRemoteAlive())
 			return Status.TERMINATED;
 		else
 			return fetchThreadStatus(thread);
 	}
 
-	private Status fetchThreadStatus(IThread thread) {
+	private Status fetchThreadStatus(IWorker thread) {
 		if(!connected)
 			return Status.UNREACHABLE;
-		IDebugRequest request = new GetThreadStatusRequest(thread);
+		IDebugRequest request = new GetWorkerStatusRequest(thread);
 		IDebugResponse response = send(request) ;
 		if(response instanceof GetStatusResponse)
 			return ((GetStatusResponse)response).getStatus();
@@ -73,7 +73,7 @@ public abstract class DebugRequestClient implements IDebugger {
 	}
 
 	@Override
-	public IStack<?> getStack(IThread thread) {
+	public IStack<?> getStack(IWorker thread) {
 		IDebugRequest request = new GetStackRequest(thread);
 		IDebugResponse response = send(request) ;
 		if(response instanceof GetStackResponse) {
@@ -84,7 +84,7 @@ public abstract class DebugRequestClient implements IDebugger {
 	}
 	
 	@Override
-	public Collection<? extends IVariable> getVariables(IThread thread, IStackFrame frame) {
+	public Collection<? extends IVariable> getVariables(IWorker thread, IStackFrame frame) {
 		IDebugRequest request = new GetVariablesRequest(thread, frame);
 		IDebugResponse response = send(request) ;
 		if(response instanceof GetVariablesResponse) {
@@ -97,7 +97,7 @@ public abstract class DebugRequestClient implements IDebugger {
 	}
 
 	@Override
-	public int getLine(IThread thread) {
+	public int getLine(IWorker thread) {
 		IDebugRequest request = new GetLineRequest(thread);
 		IDebugResponse response = send(request) ;
 		if(response instanceof GetLineResponse)
@@ -107,7 +107,7 @@ public abstract class DebugRequestClient implements IDebugger {
 	}
 
 	@Override
-	public boolean isStepping(IThread thread) {
+	public boolean isStepping(IWorker thread) {
 		if(!connected)
 			return false;
 		IDebugRequest request = new IsSteppingRequest(thread);
@@ -119,7 +119,7 @@ public abstract class DebugRequestClient implements IDebugger {
 	}
 
 	@Override
-	public boolean isSuspended(IThread thread) {
+	public boolean isSuspended(IWorker thread) {
 		if(!connected || isTerminated())
 			return false;
 		return fetchThreadStatus(thread)==Status.SUSPENDED;
@@ -131,56 +131,56 @@ public abstract class DebugRequestClient implements IDebugger {
 	}
 	
 	@Override
-	public boolean canResume(IThread thread) {
+	public boolean canResume(IWorker thread) {
 		return !isTerminated() && isSuspended(thread);
 	}
 
 	@Override
-	public boolean canSuspend(IThread thread) {
+	public boolean canSuspend(IWorker thread) {
 		return !isTerminated() && !isSuspended(thread);
 	}
 
 	@Override
-	public boolean canStepInto(IThread thread) {
+	public boolean canStepInto(IWorker thread) {
 		return isSuspended(thread);
 	}
 
 	@Override
-	public boolean canStepOver(IThread thread) {
+	public boolean canStepOver(IWorker thread) {
 		return isSuspended(thread);
 	}
 
 	@Override
-	public boolean canStepOut(IThread thread) {
+	public boolean canStepOut(IWorker thread) {
 		return isSuspended(thread);
 	}
 
 	@Override
-	public void suspend(IThread thread) {
+	public void suspend(IWorker thread) {
 		IDebugRequest request = new SuspendRequest(thread);
 		send(request);
 	}
 
 	@Override
-	public void resume(IThread thread) {
+	public void resume(IWorker thread) {
 		IDebugRequest request = new ResumeRequest(thread);
 		send(request);
 	}
 
 	@Override
-	public void stepInto(IThread thread) {
+	public void stepInto(IWorker thread) {
 		IDebugRequest request = new StepIntoRequest(thread);
 		send(request);
 	}
 
 	@Override
-	public void stepOut(IThread thread) {
+	public void stepOut(IWorker thread) {
 		IDebugRequest request = new StepOutRequest(thread);
 		send(request);
 	}
 
 	@Override
-	public void stepOver(IThread thread) {
+	public void stepOver(IWorker thread) {
 		IDebugRequest request = new StepOverRequest(thread);
 		send(request);
 	}

@@ -8,7 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import prompto.debug.ProcessDebugger.DebuggedThread;
+import prompto.debug.ProcessDebugger.DebuggedWorker;
 import prompto.error.PromptoError;
 import prompto.runtime.Context;
 import prompto.runtime.Interpreter;
@@ -58,7 +58,7 @@ public class TestLocalDebugger extends TestDebuggerBase {
 		ProcessDebugger processDebugger = ProcessDebugger.getInstance();
 		if(processDebugger==null)
 			processDebugger = ProcessDebugger.createInstance(context);
-		ThreadDebugger threadDebugger = new ThreadDebugger();
+		WorkerDebugger threadDebugger = new WorkerDebugger();
 		final Context local = context.newLocalContext();
 		local.setDebugger(threadDebugger);
 		thread = new Thread(new Runnable() {
@@ -76,8 +76,8 @@ public class TestLocalDebugger extends TestDebuggerBase {
 	}
 	
 	@Override
-	protected IThread getDebuggedThread() {
-		return DebuggedThread.wrap(thread);
+	protected IWorker getDebuggedThread() {
+		return DebuggedWorker.wrap(thread);
 	}
 	
 	@Test

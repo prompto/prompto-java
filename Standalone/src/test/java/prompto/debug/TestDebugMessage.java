@@ -22,7 +22,7 @@ import prompto.debug.Serializer.DebugResponseMessage;
 import prompto.debug.Serializer.DebugRequestMessage;
 import prompto.debug.IDebugResponse.GetStatusResponse;
 import prompto.debug.IDebugRequest.GetProcessStatusRequest;
-import prompto.debug.IDebugRequest.GetThreadStatusRequest;
+import prompto.debug.IDebugRequest.GetWorkerStatusRequest;
 import prompto.debug.IDebugRequest.InstallBreakpointRequest;
 import prompto.parser.Dialect;
 import prompto.parser.Location;
@@ -99,9 +99,9 @@ public class TestDebugMessage {
 	public void testJsonThreadStatusRequest() throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-		GetThreadStatusRequest o = new GetThreadStatusRequest();
+		GetWorkerStatusRequest o = new GetWorkerStatusRequest();
 		JsonNode json = mapper.valueToTree(o);
-		o = mapper.treeToValue(json, GetThreadStatusRequest.class);
+		o = mapper.treeToValue(json, GetWorkerStatusRequest.class);
 	}
 	
 	@Test
@@ -109,10 +109,10 @@ public class TestDebugMessage {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 		DebugRequestMessage message = new DebugRequestMessage();
-		message.object = new GetThreadStatusRequest();
+		message.object = new GetWorkerStatusRequest();
 		message.type = message.object.getType();
 		JsonNode json = mapper.valueToTree(message);
-		assertEquals(IDebugRequest.Type.GET_THREAD_STATUS.name(), json.get("type").asText());
+		assertEquals(IDebugRequest.Type.GET_WORKER_STATUS.name(), json.get("type").asText());
 		assertNull(json.get("object").get("type"));
 		String s = json.toString();
 		JsonNode content = mapper.readTree(s);
@@ -121,7 +121,7 @@ public class TestDebugMessage {
 		JsonNode object = content.get("object");
 		assertTrue(object instanceof ObjectNode);
 		IDebugRequest request = mapper.treeToValue(object, type.getKlass());
-		assertTrue(request instanceof GetThreadStatusRequest);
+		assertTrue(request instanceof GetWorkerStatusRequest);
 	}
 	@Test
 	public void testBreakpointRequestMessage() throws Exception {

@@ -5,7 +5,7 @@ import static prompto.debug.IDebugRequest.Type.*;
 
 import java.util.Collection;
 
-import prompto.debug.ProcessDebugger.DebuggedThread;
+import prompto.debug.ProcessDebugger.DebuggedWorker;
 import prompto.parser.ISection;
 import prompto.parser.Section;
 import prompto.utils.Logger;
@@ -21,20 +21,20 @@ public interface IDebugRequest {
 	IDebugResponse execute(IDebugger debugger);
 
 	
-	public static class GetThreadsRequest implements IDebugRequest {
+	public static class GetWorkersRequest implements IDebugRequest {
 
-		public GetThreadsRequest() {
+		public GetWorkersRequest() {
 		}
 
 		@Override
-		public GetThreadsResponse execute(IDebugger debugger) {
-			Collection<? extends IThread> threads = debugger.getThreads();
-			return new GetThreadsResponse(threads);
+		public GetWorkersResponse execute(IDebugger debugger) {
+			Collection<? extends IWorker> workers = debugger.getWorkers();
+			return new GetWorkersResponse(workers);
 		}
 		
 		@Override
 		public Type getType() {
-			return GET_PROCESS_STATUS;
+			return Type.GET_WORKERS;
 		}
 	}
 
@@ -56,62 +56,62 @@ public interface IDebugRequest {
 		}
 	}
 	
-	static abstract class ThreadRequest implements IDebugRequest {
+	static abstract class WorkerRequest implements IDebugRequest {
 		
-		String threadId;
+		String workerId;
 		
-		ThreadRequest() {
+		WorkerRequest() {
 		}
 		
-		ThreadRequest(IThread thread) {
-			this.threadId = thread.getThreadId();
+		WorkerRequest(IWorker worker) {
+			this.workerId = worker.getWorkerId();
 		}
 		
-		public String getThreadId() {
-			return threadId;
+		public String getWorkerId() {
+			return workerId;
 		}
 		
-		public void setThreadId(String threadId) {
-			this.threadId = threadId;
+		public void setWorkerId(String workerId) {
+			this.workerId = workerId;
 		}
 		
 		
 	}
 	
-	public static class GetThreadStatusRequest extends ThreadRequest {
+	public static class GetWorkerStatusRequest extends WorkerRequest {
 
-		public GetThreadStatusRequest() {
+		public GetWorkerStatusRequest() {
 		}
 
-		public GetThreadStatusRequest(IThread thread) {
-			super(thread);
+		public GetWorkerStatusRequest(IWorker worker) {
+			super(worker);
 		}
 
 		@Override
 		public GetStatusResponse execute(IDebugger debugger) {
-			Status status = debugger.getThreadStatus(DebuggedThread.parse(threadId));
+			Status status = debugger.getWorkerStatus(DebuggedWorker.parse(workerId));
 			return new GetStatusResponse(status);
 		}
 		
 		@Override
 		public Type getType() {
-			return GET_THREAD_STATUS;
+			return GET_WORKER_STATUS;
 		}
 	}
 
-	public static class GetLineRequest extends ThreadRequest {
+	public static class GetLineRequest extends WorkerRequest {
 
 		public GetLineRequest() {
 		}
 
-		public GetLineRequest(IThread thread) {
-			super(thread);
+		public GetLineRequest(IWorker worker) {
+			super(worker);
 		}
 
 		@Override
 		public GetLineResponse execute(IDebugger debugger) {
 			logger.debug(()->"before line");
-			int line = debugger.getLine(DebuggedThread.parse(threadId));
+			int line = debugger.getLine(DebuggedWorker.parse(workerId));
 			logger.debug(()->"after line:" + line);
 			return new GetLineResponse(line);
 		}
@@ -122,19 +122,19 @@ public interface IDebugRequest {
 		}
 	}
 
-	public static class GetStackRequest extends ThreadRequest {
+	public static class GetStackRequest extends WorkerRequest {
 
 		public GetStackRequest() {
 		}
 
-		public GetStackRequest(IThread thread) {
-			super(thread);
+		public GetStackRequest(IWorker worker) {
+			super(worker);
 		}
 
 		@Override
 		public GetStackResponse execute(IDebugger debugger) {
 			logger.debug(()->"before stack");
-			IStack<?> stack = debugger.getStack(DebuggedThread.parse(threadId));
+			IStack<?> stack = debugger.getStack(DebuggedWorker.parse(workerId));
 			logger.debug(()->"after stack");
 			return new GetStackResponse(stack);
 		}
@@ -145,15 +145,15 @@ public interface IDebugRequest {
 		}
 	}
 
-	public static class GetVariablesRequest extends ThreadRequest {
+	public static class GetVariablesRequest extends WorkerRequest {
 
 		LeanStackFrame frame;
 		
 		public GetVariablesRequest() {
 		}
 
-		public GetVariablesRequest(IThread thread, IStackFrame frame) {
-			super(thread);
+		public GetVariablesRequest(IWorker worker, IStackFrame frame) {
+			super(worker);
 			this.frame = new LeanStackFrame(frame);
 		}
 
@@ -168,7 +168,7 @@ public interface IDebugRequest {
 		@Override
 		public GetVariablesResponse execute(IDebugger debugger) {
 			logger.debug(()->"before variables");
-			Collection<? extends IVariable> variables = debugger.getVariables(DebuggedThread.parse(threadId), frame);
+			Collection<? extends IVariable> variables = debugger.getVariables(DebuggedWorker.parse(workerId), frame);
 			logger.debug(()->"after variables");
 			return new GetVariablesResponse(variables);
 		}
@@ -211,19 +211,19 @@ public interface IDebugRequest {
 	}
 	
 	
-	public static class SuspendRequest extends ThreadRequest {
+	public static class SuspendRequest extends WorkerRequest {
 
 		public SuspendRequest() {
 		}
 
-		public SuspendRequest(IThread thread) {
-			super(thread);
+		public SuspendRequest(IWorker worker) {
+			super(worker);
 		}
 
 		@Override
 		public VoidResponse execute(IDebugger debugger) {
 			logger.debug(()->"before suspend");
-			debugger.suspend(DebuggedThread.parse(threadId));
+			debugger.suspend(DebuggedWorker.parse(workerId));
 			logger.debug(()->"after suspend");
 			return new VoidResponse();
 		}
@@ -234,19 +234,19 @@ public interface IDebugRequest {
 		}
 	}
 
-	public static class ResumeRequest extends ThreadRequest {
+	public static class ResumeRequest extends WorkerRequest {
 
 		public ResumeRequest() {
 		}
 
-		public ResumeRequest(IThread thread) {
-			super(thread);
+		public ResumeRequest(IWorker worker) {
+			super(worker);
 		}
 
 		@Override
 		public VoidResponse execute(IDebugger debugger) {
 			logger.debug(()->"before resume");
-			debugger.resume(DebuggedThread.parse(threadId));
+			debugger.resume(DebuggedWorker.parse(workerId));
 			logger.debug(()->"after resume");
 			return new VoidResponse();
 		}
@@ -257,19 +257,19 @@ public interface IDebugRequest {
 		}
 	}
 
-	public static class IsSteppingRequest extends ThreadRequest {
+	public static class IsSteppingRequest extends WorkerRequest {
 
 		public IsSteppingRequest() {
 		}
 
-		public IsSteppingRequest(IThread thread) {
-			super(thread);
+		public IsSteppingRequest(IWorker worker) {
+			super(worker);
 		}
 
 		@Override
 		public IsSteppingResponse execute(IDebugger debugger) {
 			logger.debug(()->"before is stepping");
-			boolean stepping = debugger.isStepping(DebuggedThread.parse(threadId));
+			boolean stepping = debugger.isStepping(DebuggedWorker.parse(workerId));
 			logger.debug(()->"after is stepping");
 			return new IsSteppingResponse(stepping);
 		}
@@ -280,19 +280,19 @@ public interface IDebugRequest {
 		}
 	}
 
-	public static class StepOverRequest extends ThreadRequest {
+	public static class StepOverRequest extends WorkerRequest {
 
 		public StepOverRequest() {
 		}
 
-		public StepOverRequest(IThread thread) {
-			super(thread);
+		public StepOverRequest(IWorker worker) {
+			super(worker);
 		}
 
 		@Override
 		public VoidResponse execute(IDebugger debugger) {
 			logger.debug(()->"before step over");
-			debugger.stepOver(DebuggedThread.parse(threadId));
+			debugger.stepOver(DebuggedWorker.parse(workerId));
 			logger.debug(()->"after step over");
 			return new VoidResponse();
 		}
@@ -303,19 +303,19 @@ public interface IDebugRequest {
 		}
 	}
 
-	public static class StepIntoRequest extends ThreadRequest {
+	public static class StepIntoRequest extends WorkerRequest {
 
 		public StepIntoRequest() {
 		}
 
-		public StepIntoRequest(IThread thread) {
-			super(thread);
+		public StepIntoRequest(IWorker worker) {
+			super(worker);
 		}
 
 		@Override
 		public VoidResponse execute(IDebugger debugger) {
 			logger.debug(()->"before step into");
-			debugger.stepInto(DebuggedThread.parse(threadId));
+			debugger.stepInto(DebuggedWorker.parse(workerId));
 			logger.debug(()->"after step into");
 			return new VoidResponse();
 		}
@@ -326,19 +326,19 @@ public interface IDebugRequest {
 		}
 	}
 
-	public static class StepOutRequest extends ThreadRequest {
+	public static class StepOutRequest extends WorkerRequest {
 
 		public StepOutRequest() {
 		}
 
-		public StepOutRequest(IThread thread) {
-			super(thread);
+		public StepOutRequest(IWorker worker) {
+			super(worker);
 		}
 
 		@Override
 		public VoidResponse execute(IDebugger debugger) {
 			logger.debug(()->"before step out");
-			debugger.stepOut(DebuggedThread.parse(threadId));
+			debugger.stepOut(DebuggedWorker.parse(workerId));
 			logger.debug(()->"after step out");
 			return new VoidResponse();
 		}
@@ -350,9 +350,9 @@ public interface IDebugRequest {
 	}
 
 	public enum Type {
-		GET_THREADS(GetThreadsRequest.class),
+		GET_WORKERS(GetWorkersRequest.class),
 		GET_PROCESS_STATUS(GetProcessStatusRequest.class),
-		GET_THREAD_STATUS(GetThreadStatusRequest.class),
+		GET_WORKER_STATUS(GetWorkerStatusRequest.class),
 		GET_LINE(GetLineRequest.class),
 		GET_STACK(GetStackRequest.class),
 		GET_VARIABLES(GetVariablesRequest.class),

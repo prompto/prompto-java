@@ -3,7 +3,7 @@ package prompto.debug;
 import java.util.Collection;
 import java.util.Collections;
 
-import prompto.debug.ProcessDebugger.DebuggedThread;
+import prompto.debug.ProcessDebugger.DebuggedWorker;
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.TerminatedError;
@@ -11,7 +11,7 @@ import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.utils.Logger;
 
-public class ThreadDebugger implements IThreadDebugger {
+public class WorkerDebugger implements IWorkerDebugger {
 
 	static Logger logger = new Logger();
 	
@@ -134,7 +134,7 @@ public class ThreadDebugger implements IThreadDebugger {
 		synchronized(lock) {
 			setStatus(Status.SUSPENDED);
 			if(listener!=null)
-				listener.handleSuspendedEvent(DebuggedThread.wrap(Thread.currentThread()), reason);
+				listener.handleSuspendedEvent(DebuggedWorker.wrap(Thread.currentThread()), reason);
 			try {
 				logger.debug(()->"waiting lock");
 				lock.wait();
@@ -145,7 +145,7 @@ public class ThreadDebugger implements IThreadDebugger {
 			} finally {
 				setStatus( Status.RUNNING);
 				if(listener!=null)
-					listener.handleResumedEvent(DebuggedThread.wrap(Thread.currentThread()), resumeReason);
+					listener.handleResumedEvent(DebuggedWorker.wrap(Thread.currentThread()), resumeReason);
 			}
 		}
 	}	
@@ -228,16 +228,16 @@ public class ThreadDebugger implements IThreadDebugger {
 	public void notifyStarted(IDebugEvent.Started event) {
 		setStatus(Status.RUNNING);
 		if(listener!=null) {
-			IThread thread = DebuggedThread.parse(event.getThreadId());
-			listener.handleStartedEvent(thread); 
+			IWorker worker = DebuggedWorker.parse(event.getWorkerId());
+			listener.handleStartedEvent(worker); 
 		}
 	}
 	
 	public void notifyCompleted(IDebugEvent.Completed event) {
 		ProcessDebugger.getInstance().unregister(Thread.currentThread());
 		if(listener!=null) {
-			IThread thread = DebuggedThread.parse(event.getThreadId());
-			listener.handleCompletedEvent(thread); 
+			IWorker worker = DebuggedWorker.parse(event.getWorkerId());
+			listener.handleCompletedEvent(worker); 
 		}
 	}
 

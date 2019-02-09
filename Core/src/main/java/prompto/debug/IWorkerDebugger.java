@@ -2,7 +2,7 @@ package prompto.debug;
 
 import java.util.Collection;
 
-public interface IThreadDebugger {
+public interface IWorkerDebugger {
 
 	Status getStatus();
 	IStack<?> getStack();

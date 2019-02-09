@@ -1,6 +1,6 @@
 package prompto.debug;
 
-public interface IThread {
+public interface IWorker {
 	
 	public enum State {
 		STARTING,
@@ -28,7 +28,7 @@ public interface IThread {
 		}
 	}
 	
-	String getThreadId();
+	String getWorkerId();
 	String getName();
 	State getState();
 }

@@ -5,16 +5,16 @@ import java.util.Collection;
 public class ClientStackFrame extends LeanStackFrame {
 
 	IDebugger debugger;
-	IThread thread;
+	IWorker worker;
 	
-	public ClientStackFrame(IDebugger debugger, IThread thread, LeanStackFrame frame) {
+	public ClientStackFrame(IDebugger debugger, IWorker worker, LeanStackFrame frame) {
 		super(frame);
 		this.debugger = debugger;
-		this.thread = thread;
+		this.worker = worker;
 	}
 	
 	@Override
 	public Collection<? extends IVariable> getVariables() {
-		return debugger.getVariables(thread, this);
+		return debugger.getVariables(worker, this);
 	}
 }

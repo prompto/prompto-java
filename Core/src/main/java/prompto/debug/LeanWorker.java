@@ -1,14 +1,14 @@
 package prompto.debug;
 
-public class LeanThread implements IThread {
+public class LeanWorker implements IWorker {
 	
-	String threadId;
+	String workerId;
 	String name;
 	State state;
 	
 	@Override
-	public String getThreadId() {
-		return threadId;
+	public String getWorkerId() {
+		return workerId;
 	}
 	
 	@Override
