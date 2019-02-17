@@ -7,8 +7,8 @@ import java.net.Socket;
 import prompto.debug.IDebugEvent;
 import prompto.utils.Logger;
 
-/* an implementation which uses JavaSerialization to communicate with the client */
-public class JavaDebugEventAdapter implements IDebugEventAdapter {
+/* an implementation which uses plain sockets to communicate with the client */
+public class JavaDebugEventAdapter extends DebugEventAdapterBase {
 
 	static Logger logger = new Logger();
 	
@@ -20,36 +20,8 @@ public class JavaDebugEventAdapter implements IDebugEventAdapter {
 		this.port = port;
 	}
 
-	@Override
-	public void handleConnectedEvent(IDebugEvent.Connected event) {
-		send(event);
-	}
-	
-	@Override
-	public void handleStartedEvent(IWorker worker) {
-		send(new IDebugEvent.Started(worker));
-	}
-	
-	@Override
-	public void handleSuspendedEvent(IWorker worker, SuspendReason reason) {
-		send(new IDebugEvent.Suspended(worker, reason));
-	}
 
 	@Override
-	public void handleResumedEvent(IWorker worker, ResumeReason reason) {
-		send(new IDebugEvent.Resumed(worker, reason));
-	}
-	
-	@Override
-	public void handleCompletedEvent(IWorker worker) {
-		send(new IDebugEvent.Completed(worker));
-	}
-
-	@Override
-	public void handleTerminatedEvent() {
-		send(new IDebugEvent.Terminated());
-	}
-
 	protected IAcknowledgement send(IDebugEvent event) {
 		try(Socket client = new Socket(host, port)) {
 			try(OutputStream output = client.getOutputStream()) {
@@ -67,12 +39,5 @@ public class JavaDebugEventAdapter implements IDebugEventAdapter {
 		}
 	}
 
-	private void sendDebugEvent(OutputStream output, IDebugEvent event) throws Exception {
-		Serializer.writeDebugEvent(output, event);
-	}
-
-	private IAcknowledgement readAcknowledgement(InputStream input) throws Exception {
-		return Serializer.readAcknowledgement(input);
-	}
 
 }
