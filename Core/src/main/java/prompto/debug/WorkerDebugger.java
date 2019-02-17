@@ -72,19 +72,13 @@ public class WorkerDebugger implements IWorkerDebugger {
 		terminateIfRequested();
 		this.context = context;
 		stack.push(new ServerStackFrame(context, method.getId().toString(), stack.size(), method));
-		if(stack.size()>0 && stack.size()<=stepDepth)
-			suspend(SuspendReason.STEPPING, context, method);
-		else if(method.isBreakpoint())
-			suspend(SuspendReason.BREAKPOINT, context, method);
-		else
-			suspendIfRequested(context, method);
 		terminateIfRequested();
 	}
 
 	public void leaveMethod(Context context, ISection section) throws PromptoError {
 		terminateIfRequested();
 		if(stack.size()>0 && stack.size()==-stepDepth)
-			suspend(SuspendReason.STEPPING, context, section);
+			suspend(SuspendReason.STEPPING, context, section); // stepping out
 		else
 			suspendIfRequested(context, section);
 		stack.pop();
