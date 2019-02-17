@@ -108,6 +108,8 @@ public class StatementList extends LinkedList<IStatement> {
 
 	private IValue doInterpret(Context context) throws PromptoError {
 		for(IStatement statement : this) {
+			if(statement instanceof CommentStatement)
+				continue;
 			context.enterStatement(statement);
 			try {
 				IValue result = statement.interpret(context);
