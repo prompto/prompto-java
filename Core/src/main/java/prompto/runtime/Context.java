@@ -614,6 +614,11 @@ public class Context implements IContext {
 		public IType getType(Context context) {
 			throw new SyntaxError("Should never get there!");
 		}
+		
+		@Override
+		public int getStartLine() {
+			throw new RuntimeException("Should never get there!");
+		}
 
 		@Override
 		public String getFilePath() {

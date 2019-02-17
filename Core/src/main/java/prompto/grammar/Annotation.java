@@ -1,9 +1,10 @@
 package prompto.grammar;
 
 import prompto.expression.IExpression;
+import prompto.parser.Section;
 import prompto.utils.CodeWriter;
 
-public class Annotation {
+public class Annotation extends Section {
 
 	Identifier name;
 	IExpression expression;

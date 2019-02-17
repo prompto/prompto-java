@@ -57,8 +57,8 @@ public abstract class BaseDeclaration extends Section implements IDeclaration {
 	}
 	
 	@Override
-	public void setComments(Collection<CommentStatement> stmts) {
-		this.comments = stmts;
+	public void setComments(Collection<CommentStatement> comments) {
+		this.comments = comments;
 	}
 	
 	@Override
@@ -84,6 +84,16 @@ public abstract class BaseDeclaration extends Section implements IDeclaration {
 	@Override
 	public boolean hasInheritedAnnotation(Context context, String name) {
 		return false;
+	}
+	
+	@Override
+	public int getStartLine() {
+		if(comments!=null && !comments.isEmpty())
+			return comments.iterator().next().getStart().getLine();
+		else if(annotations!=null && !annotations.isEmpty())
+			return annotations.iterator().next().getStart().getLine();
+		else
+			return this.getStart().getLine();
 	}
 	
 }

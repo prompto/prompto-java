@@ -16,7 +16,7 @@ public class ServerStackFrame extends LeanStackFrame {
 	Context context;
 	
 	public ServerStackFrame(Context context, String methodName, int index, IDeclaration method) {
-		this(context, methodName, method.getStart().getLine(), index, (ISection)method);
+		this(context, methodName, method.getStartLine(), index, (ISection)method);
 		if(method instanceof ConcreteMethodDeclaration) {
 			IStatement stmt = ((ConcreteMethodDeclaration)method).getStatements().getFirst();
 			this.endCharIndex = stmt.getStart().getIndex() - 1;
