@@ -6,7 +6,8 @@ public interface IWorkerDebugger {
 
 	Status getStatus();
 	IStack<?> getStack();
-	int getLine();
+	int getLineInFile();
+	int getLineInMethod();
 	boolean isStepping();
 	boolean isSuspended();
 	boolean canResume();

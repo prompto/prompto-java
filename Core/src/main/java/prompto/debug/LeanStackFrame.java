@@ -8,24 +8,26 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /* designed to be serialized in JSON */
 public class LeanStackFrame implements IStackFrame {
 	
-	String methodName;
 	String filePath;
 	int index;
-	int line;
 	int startCharIndex;
 	int endCharIndex;
+	String methodName;
+	int methodLine;
+	int instructionLine;
 	boolean hasVariables;
 	
 	public LeanStackFrame() {
 	}
 	
 	public LeanStackFrame(IStackFrame frame) {
-		this.methodName = frame.getMethodName();
 		this.filePath = frame.getFilePath();
 		this.index = frame.getIndex();
-		this.line = frame.getLine();
 		this.startCharIndex = frame.getStartCharIndex();
 		this.endCharIndex = frame.getEndCharIndex();
+		this.methodName = frame.getMethodName();
+		this.methodLine = frame.getMethodLine();
+		this.instructionLine = frame.getInstructionLine();
 		this.hasVariables = frame.hasVariables();
 	}
 
@@ -45,8 +47,13 @@ public class LeanStackFrame implements IStackFrame {
 	}
 	
 	@Override
-	public int getLine() {
-		return line;
+	public int getMethodLine() {
+		return methodLine;
+	}
+	
+	@Override
+	public int getInstructionLine() {
+		return instructionLine;
 	}
 	
 	@Override
@@ -72,7 +79,7 @@ public class LeanStackFrame implements IStackFrame {
 	
 	@Override
 	public String toString() {
-		return methodName + ", line " + Integer.toString(line);
+		return methodName + ", line " + Integer.toString(instructionLine);
 	}
 	
 	public String toJson() {

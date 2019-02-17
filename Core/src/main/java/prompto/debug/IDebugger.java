@@ -16,7 +16,8 @@ public interface IDebugger {
 	Status getProcessStatus();
 	Status getWorkerStatus(IWorker worker);
 	IStack<?> getStack(IWorker worker);
-	int getLine(IWorker worker);
+	int getLineInFile(IWorker worker); 
+	int getLineInMethod(IWorker worker); 
 	boolean isStepping(IWorker worker);
 	boolean isSuspended(IWorker worker);
 	boolean canResume(IWorker worker);

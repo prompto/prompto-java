@@ -111,9 +111,11 @@ public interface IDebugRequest {
 		@Override
 		public GetLineResponse execute(IDebugger debugger) {
 			logger.debug(()->"before line");
-			int line = debugger.getLine(DebuggedWorker.parse(workerId));
-			logger.debug(()->"after line:" + line);
-			return new GetLineResponse(line);
+			IWorker worker = DebuggedWorker.parse(workerId);
+			int lineInFile = debugger.getLineInFile(worker);
+			int lineInMethod = debugger.getLineInMethod(worker);
+			logger.debug(()->"after line:" + lineInFile + ", " + lineInMethod);
+			return new GetLineResponse(lineInFile, lineInMethod);
 		}
 		
 		@Override

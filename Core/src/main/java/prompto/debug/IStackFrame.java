@@ -6,9 +6,10 @@ import java.util.Collection;
 public interface IStackFrame {
 
 	String getFilePath();
-	String getMethodName();
 	int getIndex();
-	int getLine();
+	String getMethodName();
+	int getMethodLine();
+	int getInstructionLine();
 	int getStartCharIndex();
 	int getEndCharIndex();
 	boolean hasVariables();

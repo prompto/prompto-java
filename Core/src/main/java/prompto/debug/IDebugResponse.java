@@ -79,13 +79,15 @@ public interface IDebugResponse {
 	
 	public static class GetLineResponse implements IDebugResponse {
 
-		int line;
-		
+		int lineInFile;
+		int lineInMethod;
+			
 		public GetLineResponse() {
 		}
 
-		public GetLineResponse(int line) {
-			this.line = line;
+		public GetLineResponse(int lineInFile, int lineInMethod) {
+			this.lineInFile = lineInFile;
+			this.lineInMethod = lineInMethod;
 		}
 		
 		@Override
@@ -93,12 +95,20 @@ public interface IDebugResponse {
 			return Type.GET_LINE;
 		}
 
-		public int getLine() {
-			return line;
+		public int getLineInFile() {
+			return lineInFile;
 		}
 		
-		public void setLine(int line) {
-			this.line = line;
+		public void setLineInFile(int lineInFile) {
+			this.lineInFile = lineInFile;
+		}
+		
+		public int getLineInMethod() {
+			return lineInMethod;
+		}
+		
+		public void setLineInMethod(int lineInMethod) {
+			this.lineInMethod = lineInMethod;
 		}
 
 	}

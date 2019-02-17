@@ -128,13 +128,23 @@ public class ProcessDebugger implements IDebugger {
 	}
 
 	@Override
-	public int getLine(IWorker worker) {
+	public int getLineInFile(IWorker worker) {
 		IWorkerDebugger debugger = debuggers.get(worker);
 		if(debugger==null) {
 			logger.warn(()->"Invalid worker: " + worker);
 			return -1;
 		} else
-			return debugger.getLine();	
+			return debugger.getLineInFile();	
+	}
+	
+	@Override
+	public int getLineInMethod(IWorker worker) {
+		IWorkerDebugger debugger = debuggers.get(worker);
+		if(debugger==null) {
+			logger.warn(()->"Invalid worker: " + worker);
+			return -1;
+		} else
+			return debugger.getLineInMethod();	
 	}
 
 	@Override

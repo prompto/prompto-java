@@ -95,7 +95,7 @@ public class WorkerDebugger implements IWorkerDebugger {
 		terminateIfRequested();
 		this.context = context;
 		IStackFrame previous = stack.pop();
-		stack.push(new ServerStackFrame(context, previous.getMethodName(), stack.size(), section));
+		stack.push(new ServerStackFrame(context, previous.getMethodName(), previous.getMethodLine(), stack.size(), section));
 		if(stack.size()>0 && stack.size()<=stepDepth)
 			suspend(SuspendReason.STEPPING, context, section);
 		else if(section.isBreakpoint())
@@ -219,10 +219,18 @@ public class WorkerDebugger implements IWorkerDebugger {
 		}
 	}
 
+	
 	@Override
-	public int getLine() {
+	public int getLineInFile() {
 		IStackFrame frame = stack.peek();
-		return frame==null ? -1 : frame.getLine();
+		return frame==null ? -1 : frame.getInstructionLine();
+	}
+	
+	
+	@Override
+	public int getLineInMethod() {
+		IStackFrame frame = stack.peek();
+		return frame==null ? -1 : 1 + frame.getMethodLine() - frame.getInstructionLine();
 	}
 	
 	public void notifyStarted(IDebugEvent.Started event) {
