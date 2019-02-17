@@ -17,6 +17,7 @@ public interface IWorkerDebugger {
 	boolean canStepOut();
 	void suspend();
 	void resume();
+	void terminate();
 	void stepInto();
 	void stepOut();
 	void stepOver();

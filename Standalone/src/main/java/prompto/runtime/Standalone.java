@@ -40,6 +40,7 @@ import prompto.debug.WorkerDebugger;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
+import prompto.error.TerminatedError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDict;
@@ -192,9 +193,13 @@ public abstract class Standalone {
 	}
 
 	private static void debugTest(IDebugConfiguration debug, String testMethod) throws Throwable {
+		Context local = null;
 		try {
-			Context local = startProcessDebugger(debug);
+			local = startProcessDebugger(debug);
 			runTest(local, testMethod);
+		} catch(TerminatedError e) {
+			if(local!=null)
+				local.notifyCompleted();
 		} finally {
 			stopProcessDebugger();
 		}
@@ -214,9 +219,13 @@ public abstract class Standalone {
 	}
 	
 	private static void debugApplication(IDebugConfiguration debug, String mainMethod, IExpression args) throws Throwable {
+		Context local = null;
 		try {
-			Context local = startProcessDebugger(debug);
+			local = startProcessDebugger(debug);
 			runApplication(local, mainMethod, args);
+		} catch(TerminatedError e) {
+			if(local!=null)
+				local.notifyCompleted();
 		} finally {
 			stopProcessDebugger();
 		}
@@ -241,21 +250,11 @@ public abstract class Standalone {
 		debugEventAdapter.handleConnectedEvent(connected);
 		// wire local context to debugger
 		Context local = getGlobalContext().newLocalContext();
-		startThreadDebugger(Thread.currentThread(), local);
+		startWorkerDebugger(Thread.currentThread(), local);
 		processDebugger.setProcessStatus(Status.RUNNING);
 		return local;
 
 	}
-
-	public static void startThreadDebugger(Thread thread, Context context) {
-		WorkerDebugger threadDebugger = new WorkerDebugger();
-		ProcessDebugger.getInstance().register(Thread.currentThread(), threadDebugger);
-		debugEventAdapter.handleStartedEvent(DebuggedWorker.wrap(Thread.currentThread()));
-		threadDebugger.setListener(debugEventAdapter);
-		context.setDebugger(threadDebugger);
-		threadDebugger.setStatus(Status.RUNNING);
-	}
-
 
 	public static void stopProcessDebugger() {
 		ProcessDebugger processDebugger = ProcessDebugger.getInstance();
@@ -265,6 +264,16 @@ public abstract class Standalone {
 		debugRequestListener.stopListening();
 	}
 
+
+
+	public static void startWorkerDebugger(Thread thread, Context context) {
+		WorkerDebugger workerDebugger = new WorkerDebugger();
+		ProcessDebugger.getInstance().register(Thread.currentThread(), workerDebugger);
+		debugEventAdapter.handleStartedEvent(DebuggedWorker.wrap(Thread.currentThread()));
+		workerDebugger.setListener(debugEventAdapter);
+		context.setDebugger(workerDebugger);
+		workerDebugger.setStatus(Status.RUNNING);
+	}
 
 
 	public static IDebugRequestListener createDebugRequestListener(IDebugConfiguration cfg, IDebugger debugger) throws Throwable {

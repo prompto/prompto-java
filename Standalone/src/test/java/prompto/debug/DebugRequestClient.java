@@ -10,6 +10,7 @@ import prompto.debug.IDebugRequest.GetLineRequest;
 import prompto.debug.IDebugRequest.InstallBreakpointRequest;
 import prompto.debug.IDebugRequest.SuspendRequest;
 import prompto.debug.IDebugRequest.ResumeRequest;
+import prompto.debug.IDebugRequest.TerminateRequest;
 import prompto.debug.IDebugRequest.GetStackRequest;
 import prompto.debug.IDebugRequest.GetVariablesRequest;
 import prompto.debug.IDebugRequest.StepIntoRequest;
@@ -174,6 +175,12 @@ public abstract class DebugRequestClient implements IDebugger {
 	@Override
 	public void resume(IWorker worker) {
 		IDebugRequest request = new ResumeRequest(worker);
+		send(request);
+	}
+	
+	@Override
+	public void terminate(IWorker worker) {
+		IDebugRequest request = new TerminateRequest(worker);
 		send(request);
 	}
 

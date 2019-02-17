@@ -259,6 +259,29 @@ public interface IDebugRequest {
 		}
 	}
 
+	public static class TerminateRequest extends WorkerRequest {
+
+		public TerminateRequest() {
+		}
+
+		public TerminateRequest(IWorker worker) {
+			super(worker);
+		}
+
+		@Override
+		public VoidResponse execute(IDebugger debugger) {
+			logger.debug(()->"before terminate");
+			debugger.terminate(DebuggedWorker.parse(workerId));
+			logger.debug(()->"after terminate");
+			return new VoidResponse();
+		}
+		
+		@Override
+		public Type getType() {
+			return TERMINATE;
+		}
+	}
+
 	public static class IsSteppingRequest extends WorkerRequest {
 
 		public IsSteppingRequest() {
@@ -361,6 +384,7 @@ public interface IDebugRequest {
 		INSTALL_BREAKPOINT(InstallBreakpointRequest.class),
 		SUSPEND(SuspendRequest.class),
 		RESUME(ResumeRequest.class),
+		TERMINATE(TerminateRequest.class),
 		IS_STEPPING(IsSteppingRequest.class),
 		STEP_INTO(StepIntoRequest.class),
 		STEP_OUT(StepOutRequest.class),

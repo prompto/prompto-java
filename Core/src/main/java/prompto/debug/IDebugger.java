@@ -11,6 +11,7 @@ public interface IDebugger {
 	boolean isTerminated();
 	boolean canTerminate();
 	void terminate();
+	void terminate(IWorker worker);
 	void notifyTerminated();
 	Collection<? extends IWorker> getWorkers();
 	Status getProcessStatus();

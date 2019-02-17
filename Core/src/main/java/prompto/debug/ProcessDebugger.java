@@ -234,6 +234,16 @@ public class ProcessDebugger implements IDebugger {
 		else
 			debugger.resume(); 
 	}
+	
+	
+	@Override
+	public void terminate(IWorker worker) {
+		IWorkerDebugger debugger = debuggers.get(worker);
+		if(debugger==null)
+			logger.warn(()->"Invalid worker: " + worker);
+		else
+			debugger.terminate(); 
+	}
 
 	@Override
 	public void stepInto(IWorker worker) {

@@ -60,6 +60,12 @@ public class WorkerDebugger implements IWorkerDebugger {
 		suspended = true;
 	}
 	
+	@Override
+	public void terminate() {
+		terminated = true;
+		doResume(ResumeReason.RESUMED);
+	}
+	
 	public IDebugEventListener getListener() {
 		return listener;
 	}
