@@ -2,6 +2,7 @@ package prompto.debug;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import prompto.debug.IWorker.State;
 import prompto.debug.ProcessDebugger.DebuggedWorker;
 
 public interface IDebugEvent {
@@ -50,6 +51,21 @@ public interface IDebugEvent {
 		}
 	}
 	
+	static class Ready implements IDebugEvent {
+		
+		@Override
+		public Type getType() {
+			return Type.READY;
+		}
+		
+		@Override
+		public void execute(IDebugEventListener listener) {
+			listener.handleReadyEvent();
+		}
+	}
+
+	
+	
 	static abstract class WorkerEvent implements IDebugEvent {
 
 		String workerId;
@@ -73,11 +89,32 @@ public interface IDebugEvent {
 	
 	static class Started extends WorkerEvent {
 		
+		String name;
+		State state;
+		
 		public Started() {
 		}
 		
 		public Started(IWorker worker) {
 			super(worker);
+			this.name = worker.getName();
+			this.state = worker.getState();
+		}
+		
+		public void setName(String name) {
+			this.name = name;
+		}
+		
+		public String getName() {
+			return name;
+		}
+		
+		public void setState(State state) {
+			this.state = state;
+		}
+		
+		public State getState() {
+			return state;
 		}
 		
 		@Override
@@ -199,6 +236,7 @@ public interface IDebugEvent {
 
 	public enum Type {
 		CONNECTED(Connected.class),
+		READY(Ready.class),
 		STARTED(Started.class),
 		SUSPENDED(Suspended.class),
 		RESUMED(Resumed.class),

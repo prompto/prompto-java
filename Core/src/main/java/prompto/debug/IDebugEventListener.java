@@ -3,6 +3,7 @@ package prompto.debug;
 /* listens to debugger events */ 
 public interface IDebugEventListener {
 	void handleConnectedEvent(IDebugEvent.Connected event);
+	void handleReadyEvent();
 	void handleStartedEvent(IWorker worker);
 	void handleResumedEvent(IWorker worker, ResumeReason reason);
 	void handleSuspendedEvent(IWorker worker, SuspendReason reason);

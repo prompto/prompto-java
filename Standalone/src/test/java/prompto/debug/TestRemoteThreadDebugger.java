@@ -144,6 +144,10 @@ public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebug
 	}
 	
 	@Override
+	public void handleReadyEvent() {
+	}
+	
+	@Override
 	public void handleStartedEvent(IWorker thread) {
 	}
 
