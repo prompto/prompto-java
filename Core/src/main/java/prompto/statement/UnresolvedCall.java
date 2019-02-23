@@ -14,6 +14,7 @@ import prompto.expression.IAssertion;
 import prompto.expression.IExpression;
 import prompto.expression.MemberSelector;
 import prompto.expression.MethodSelector;
+import prompto.expression.SelectorExpression;
 import prompto.expression.UnresolvedIdentifier;
 import prompto.expression.UnresolvedSelector;
 import prompto.grammar.ArgumentAssignmentList;
@@ -43,6 +44,17 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 		this.assignments = assignments;
 	}
 	
+	public void setParent(IExpression parent) {
+		if(parent!=null) {
+			if(caller instanceof UnresolvedIdentifier)
+				caller = new MethodSelector(parent, ((UnresolvedIdentifier)caller).getId());
+			else if(caller instanceof SelectorExpression)
+				((SelectorExpression)caller).setParent(parent);
+			else
+				throw new IllegalStateException("Should never happen!");
+		}
+	}
+	
 	@Override
 	public boolean isSimple() {
 		return true;
@@ -51,6 +63,10 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 	@Override
 	public String toString() {
 		return caller.toString();
+	}
+	
+	public void setCaller(IExpression caller) {
+		this.caller = caller;
 	}
 	
 	public IExpression getCaller() {
@@ -220,5 +236,6 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 	public void transpileFound(Transpiler transpiler, Dialect dialect) {
 		transpiler.append("'<unknown>'");
 	}
+
 
 }

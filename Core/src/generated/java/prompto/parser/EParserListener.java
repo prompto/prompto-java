@@ -1428,6 +1428,54 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitInvocation_trailer(EParser.Invocation_trailerContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code ParenthesisExpression}
+	 * labeled alternative in {@link EParser#selectable_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterParenthesisExpression(EParser.ParenthesisExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ParenthesisExpression}
+	 * labeled alternative in {@link EParser#selectable_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitParenthesisExpression(EParser.ParenthesisExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code LiteralExpression}
+	 * labeled alternative in {@link EParser#selectable_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterLiteralExpression(EParser.LiteralExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code LiteralExpression}
+	 * labeled alternative in {@link EParser#selectable_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitLiteralExpression(EParser.LiteralExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code IdentifierExpression}
+	 * labeled alternative in {@link EParser#selectable_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterIdentifierExpression(EParser.IdentifierExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code IdentifierExpression}
+	 * labeled alternative in {@link EParser#selectable_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitIdentifierExpression(EParser.IdentifierExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ThisExpression}
+	 * labeled alternative in {@link EParser#selectable_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterThisExpression(EParser.ThisExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ThisExpression}
+	 * labeled alternative in {@link EParser#selectable_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitThisExpression(EParser.ThisExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code SelectorExpression}
 	 * labeled alternative in {@link EParser#instance_expression}.
 	 * @param ctx the parse tree
@@ -3143,54 +3191,6 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLiteral_list_literal(EParser.Literal_list_literalContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ParenthesisExpression}
-	 * labeled alternative in {@link EParser#selectable_expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterParenthesisExpression(EParser.ParenthesisExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ParenthesisExpression}
-	 * labeled alternative in {@link EParser#selectable_expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitParenthesisExpression(EParser.ParenthesisExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code LiteralExpression}
-	 * labeled alternative in {@link EParser#selectable_expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterLiteralExpression(EParser.LiteralExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code LiteralExpression}
-	 * labeled alternative in {@link EParser#selectable_expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitLiteralExpression(EParser.LiteralExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code IdentifierExpression}
-	 * labeled alternative in {@link EParser#selectable_expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterIdentifierExpression(EParser.IdentifierExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code IdentifierExpression}
-	 * labeled alternative in {@link EParser#selectable_expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitIdentifierExpression(EParser.IdentifierExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ThisExpression}
-	 * labeled alternative in {@link EParser#selectable_expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterThisExpression(EParser.ThisExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ThisExpression}
-	 * labeled alternative in {@link EParser#selectable_expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitThisExpression(EParser.ThisExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link EParser#this_expression}.
 	 * @param ctx the parse tree
