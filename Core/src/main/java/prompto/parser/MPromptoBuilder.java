@@ -2462,11 +2462,6 @@ public class MPromptoBuilder extends MParserBaseListener {
 	}
 				
 	@Override
-	public void exitMinIntegerLiteral(MinIntegerLiteralContext ctx) {
-		setNodeValue(ctx, new MinIntegerLiteral());
-	}
-	
-	@Override
 	public void exitMethodSelector(MethodSelectorContext ctx) {
 		UnresolvedCall call = this.<UnresolvedCall>getNodeValue(ctx.method);
 		if(call.getCaller() instanceof UnresolvedIdentifier) {
@@ -2476,6 +2471,12 @@ public class MPromptoBuilder extends MParserBaseListener {
 		setNodeValue(ctx, call);
 	}
 
+	
+	@Override
+	public void exitMinIntegerLiteral(MinIntegerLiteralContext ctx) {
+		setNodeValue(ctx, new MinIntegerLiteral());
+	}
+	
 
 	@Override
 	public void exitMinusExpression(MinusExpressionContext ctx) {
