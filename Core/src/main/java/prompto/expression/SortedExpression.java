@@ -2,6 +2,7 @@ package prompto.expression;
 
 import java.util.Comparator;
 
+
 import prompto.compiler.Flags;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
@@ -12,6 +13,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.intrinsic.PromptoList;
 import prompto.runtime.Context;
+import prompto.runtime.Variable;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.ContainerType;
@@ -62,25 +64,31 @@ public class SortedExpression implements IExpression {
 			writer.append("descending ");
 		source.toDialect(writer);
 		if(key!=null) {
-			writer = contextualizeWriter(writer);
-			writer.append(" with ");
+			IType type = source.check(writer.getContext());
+			IType itemType = ((ContainerType)type).getItemType();
+			CodeWriter local = contextualizeWriter(writer, itemType);
+			local.append(" with ");
 			IExpression keyExp = key;
 			if(keyExp instanceof UnresolvedIdentifier) try {
 				keyExp = ((UnresolvedIdentifier)keyExp).resolve(writer.getContext(), false, false);
 			} catch (SyntaxError e) {
 				// TODO add warning 
 			}
-			if(keyExp instanceof InstanceExpression)
-				((InstanceExpression)keyExp).toDialect(writer, false);
+			if(keyExp instanceof ArrowExpression) {
+				((ArrowExpression)keyExp).getArgs().forEach(arg->{
+					Variable param = new Variable(arg, itemType);
+					local.getContext().registerValue(param);
+				});
+				keyExp.toDialect(local);
+			} else if(keyExp instanceof InstanceExpression)
+				((InstanceExpression)keyExp).toDialect(local, false);
 			else
-				keyExp.toDialect(writer);
-			writer.append(" as key");
+				keyExp.toDialect(local);
+			local.append(" as key");
 		}
 	}	
 
-	private CodeWriter contextualizeWriter(CodeWriter writer) {
-		IType type = source.check(writer.getContext());
-		IType itemType = ((ContainerType)type).getItemType();
+	private CodeWriter contextualizeWriter(CodeWriter writer, IType itemType) {
 		if (itemType instanceof CategoryType)
 			return writer.newInstanceWriter((CategoryType)itemType);
 		else if (itemType instanceof DocumentType)
@@ -96,7 +104,9 @@ public class SortedExpression implements IExpression {
 		writer.append("(");
 		source.toDialect(writer);
 		if(key!=null) {
-			writer = contextualizeWriter(writer);
+			IType type = source.check(writer.getContext());
+			IType itemType = ((ContainerType)type).getItemType();
+			writer = contextualizeWriter(writer, itemType);
 			writer.append(", key = ");
 			key.toDialect(writer);
 		}
