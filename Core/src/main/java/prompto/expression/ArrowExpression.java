@@ -40,7 +40,35 @@ public class ArrowExpression extends Section implements IExpression {
 
 	@Override
 	public void toDialect(CodeWriter writer) {
-		throw new UnsupportedOperationException();
+		argsToDialect(writer);
+		writer.append(argsSuite);
+		writer.append("=>");
+		writer.append(arrowSuite);
+		bodyToDialect(writer);
+	}
+
+	private void bodyToDialect(CodeWriter writer) {
+		if(statements.size()==1 && statements.getFirst() instanceof ReturnStatement)
+			((ReturnStatement)statements.getFirst()).getExpression().toDialect(writer);
+		else {
+			writer.append("{").newLine().indent();
+			statements.toDialect(writer);
+			writer.newLine().dedent().append("}").newLine();
+			
+		}
+	}
+
+	private void argsToDialect(CodeWriter writer) {
+		if(args==null || args.isEmpty())
+			writer.append("()");
+		else if(args.size()==1)
+			writer.append(args.getFirst().toString());
+		else {
+			writer.append("(");
+			args.toDialect(writer, false);
+			writer.append(")");
+		}
+		
 	}
 
 	public void setExpression(IExpression expression) {

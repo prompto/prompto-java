@@ -15812,16 +15812,18 @@ public class EParser extends AbstractParser {
 	}
 
 	public static class Arrow_prefixContext extends ParserRuleContext {
+		public Ws_plusContext s1;
+		public Ws_plusContext s2;
 		public Arrow_argsContext arrow_args() {
 			return getRuleContext(Arrow_argsContext.class,0);
 		}
+		public TerminalNode EGT() { return getToken(EParser.EGT, 0); }
 		public List<Ws_plusContext> ws_plus() {
 			return getRuleContexts(Ws_plusContext.class);
 		}
 		public Ws_plusContext ws_plus(int i) {
 			return getRuleContext(Ws_plusContext.class,i);
 		}
-		public TerminalNode EGT() { return getToken(EParser.EGT, 0); }
 		public Arrow_prefixContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -15845,11 +15847,11 @@ public class EParser extends AbstractParser {
 			setState(2227);
 			arrow_args();
 			setState(2228);
-			ws_plus();
+			((Arrow_prefixContext)_localctx).s1 = ws_plus();
 			setState(2229);
 			match(EGT);
 			setState(2230);
-			ws_plus();
+			((Arrow_prefixContext)_localctx).s2 = ws_plus();
 			}
 		}
 		catch (RecognitionException re) {
