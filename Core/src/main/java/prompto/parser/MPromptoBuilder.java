@@ -1657,7 +1657,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitJavaScriptCategoryBinding(JavaScriptCategoryBindingContext ctx) {
-		setNodeValue(ctx, getNodeValue(ctx.binding));
+		setNodeValue(ctx, (Object)getNodeValue(ctx.binding));
 	}
 	
 	@Override
@@ -2788,7 +2788,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitSorted_key(Sorted_keyContext ctx) {
-		setNodeValue(ctx, getNodeValue(ctx.getChild(0)));
+		setNodeValue(ctx, (Object)getNodeValue(ctx.getChild(0)));
 	}
 	
 	@Override

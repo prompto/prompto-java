@@ -1726,7 +1726,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitJavaScriptCategoryBinding(JavaScriptCategoryBindingContext ctx) {
-		setNodeValue(ctx, getNodeValue(ctx.binding));
+		setNodeValue(ctx, (Object)getNodeValue(ctx.binding));
 	}
 	
 	@Override
@@ -2093,8 +2093,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitMethod_identifier(Method_identifierContext ctx) {
-		Object id = getNodeValue(ctx.getChild(0));
-		setNodeValue(ctx, id);
+		setNodeValue(ctx, (Object)getNodeValue(ctx.getChild(0)));
 	}
 	
 	@Override
@@ -2828,14 +2827,13 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitSorted_key(Sorted_keyContext ctx) {
-		setNodeValue(ctx, getNodeValue(ctx.getChild(0)));
+		setNodeValue(ctx, (Object)getNodeValue(ctx.getChild(0)));
 	}
 
 	
 	@Override
 	public void exitSortedExpression(SortedExpressionContext ctx) {
-		IExpression exp = getNodeValue(ctx.exp);
-		setNodeValue(ctx, exp);
+		setNodeValue(ctx, (Object)getNodeValue(ctx.exp));
 	}
 	
 	
@@ -3218,6 +3216,8 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	public void setNodeValue(ParseTree node, Object value) {
 		nodeValues.put(node, value);
+		if(node instanceof ParserRuleContext && value instanceof Section)
+			buildSection((ParserRuleContext)node, (Section)value);
 	}
 	
 }

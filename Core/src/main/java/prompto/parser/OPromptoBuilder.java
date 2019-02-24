@@ -1006,8 +1006,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitCurlyStatementList(CurlyStatementListContext ctx) {
-		StatementList items = getNodeValue(ctx.items);
-		setNodeValue(ctx, items);
+		setNodeValue(ctx, (Object)getNodeValue(ctx.items));
 	}
 	
 	@Override
@@ -1400,8 +1399,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitIfStatement(IfStatementContext ctx) {
-		IStatement stmt = getNodeValue(ctx.stmt);
-		setNodeValue(ctx, stmt);
+		setNodeValue(ctx, (Object)getNodeValue(ctx.stmt));
 	}
 	
 	@Override
@@ -1731,7 +1729,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitJavaScriptCategoryBinding(JavaScriptCategoryBindingContext ctx) {
-		setNodeValue(ctx, getNodeValue(ctx.binding));
+		setNodeValue(ctx, (Object)getNodeValue(ctx.binding));
 	}
 	
 	@Override
@@ -2876,7 +2874,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitSorted_key(Sorted_keyContext ctx) {
-		setNodeValue(ctx, getNodeValue(ctx.getChild(0)));
+		setNodeValue(ctx, (Object)getNodeValue(ctx.getChild(0)));
 	}
 	
 	@Override
@@ -3106,8 +3104,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitWhileStatement(WhileStatementContext ctx) {
-		IStatement stmt = getNodeValue(ctx.stmt);
-		setNodeValue(ctx, stmt);
+		setNodeValue(ctx, (Object)getNodeValue(ctx.stmt));
 	}
 	
 	@Override
