@@ -64,25 +64,19 @@ public abstract class NativeType extends BaseType {
 		switch(args.size()) {
 			case 1:
 				return (o1, o2) -> {
-					Context local = context.newLocalContext();
-					Variable param = new Variable(args.get(0), this);
-					local.registerValue(param);
-					local.setValue(param.getId(), o1);
+					Context local = registerArrowArgs(context.newLocalContext(), args);
+					local.setValue(args.get(0), o1);
 					IValue key1 = key.interpret(local);
-					local.setValue(param.getId(), o2);
+					local.setValue(args.get(0), o2);
 					IValue key2 = key.interpret(local);
 					int result = key1.compareTo(context, key2);
 					return descending ? -result : result;
 				};
 			case 2:
 				return (o1, o2) -> {
-					Context local = context.newLocalContext();
-					Variable param1 = new Variable(args.get(0), this);
-					local.registerValue(param1);
-					local.setValue(param1.getId(), o1);
-					Variable param2 = new Variable(args.get(1), this);
-					local.registerValue(param2);
-					local.setValue(param2.getId(), o2);
+					Context local = registerArrowArgs(context.newLocalContext(), args);
+					local.setValue(args.get(0), o1);
+					local.setValue(args.get(1), o2);
 					IValue value = key.interpret(local);
 					if(!(value instanceof prompto.value.Integer))
 						throw new SyntaxError("Expecting an Integer as result of key body!");
@@ -92,6 +86,14 @@ public abstract class NativeType extends BaseType {
 			default:
 				throw new SyntaxError("Expecting 1 or 2 parameters!"); 
 		}
+	}
+
+	private Context registerArrowArgs(Context context, IdentifierList args) {
+		args.forEach(arg->{
+			Variable param = new Variable(arg, this);
+			context.registerValue(param);
+		});
+		return context;
 	}
 
 	public Comparator<? extends IValue> getNativeComparator(boolean descending) {
@@ -127,10 +129,54 @@ public abstract class NativeType extends BaseType {
 	}
 
 	@Override
-	public void transpileSorted(Transpiler transpiler, boolean descending, IExpression key) {
-	    if(descending)
+	public void transpileSorted(Transpiler transpiler, IExpression key, boolean descending) {
+		if(key instanceof ArrowExpression)
+			transpileSorted(transpiler, (ArrowExpression)key, descending);
+		else if(descending)
 	        transpiler.append("function(o1, o2) { return o1 === o2 ? 0 : o1 > o2 ? -1 : 1; }");
 	}
 
+	public void transpileSorted(Transpiler transpiler, ArrowExpression key, boolean descending) {
+		IdentifierList args = key.getArgs();
+		transpiler = transpiler.newLocalTranspiler();
+		registerArrowArgs(transpiler.getContext(), args);
+		switch(args.size()) {
+		case 1:
+			transpiler.append("function(o1, o2) { ");
+			transpiler.append("var $key = function(");
+			transpiler.append(args.getFirst());
+			transpiler.append(") { ");
+			key.getStatements().transpile(transpiler);
+			transpiler.append(" }; ");
+			transpiler.append("o1 = $key(o1); ");
+			transpiler.append("o2 = $key(o2); ");
+			if(descending)
+				transpiler.append("return o1 === o2 ? 0 : o1 > o2 ? -1 : 1;");
+			else
+				transpiler.append("return o1 === o2 ? 0 : o1 > o2 ? 1 : -1;");
+			transpiler.append(" }");
+			break;
+		case 2:
+			if(descending) {
+				transpiler.append("function(");
+				args.transpile(transpiler);
+				transpiler.append(") { return -(");
+			}
+			transpiler.append("function(");
+			args.transpile(transpiler);
+			transpiler.append(") {");
+			key.getStatements().transpile(transpiler);
+			transpiler.append("}");
+			if(descending) {
+				transpiler.append(")(");
+				args.transpile(transpiler);
+				transpiler.append("); }");
+			}
+			break;
+		default:
+			throw new SyntaxError("Expecting 1 or 2 parameters!");
+		}
+		transpiler.flush();
+	}
 
 }

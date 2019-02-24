@@ -35,6 +35,21 @@ public class TestArrow extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedSort1_desc() throws Exception {
+		checkInterpretedOutput("arrow/sort1_desc.poc");
+	}
+
+	@Test
+	public void testCompiledSort1_desc() throws Exception {
+		checkCompiledOutput("arrow/sort1_desc.poc");
+	}
+
+	@Test
+	public void testTranspiledSort1_desc() throws Exception {
+		checkTranspiledOutput("arrow/sort1_desc.poc");
+	}
+
+	@Test
 	public void testInterpretedSort2() throws Exception {
 		checkInterpretedOutput("arrow/sort2.poc");
 	}
@@ -47,6 +62,21 @@ public class TestArrow extends BaseOParserTest {
 	@Test
 	public void testTranspiledSort2() throws Exception {
 		checkTranspiledOutput("arrow/sort2.poc");
+	}
+
+	@Test
+	public void testInterpretedSort2_desc() throws Exception {
+		checkInterpretedOutput("arrow/sort2_desc.poc");
+	}
+
+	@Test
+	public void testCompiledSort2_desc() throws Exception {
+		checkCompiledOutput("arrow/sort2_desc.poc");
+	}
+
+	@Test
+	public void testTranspiledSort2_desc() throws Exception {
+		checkTranspiledOutput("arrow/sort2_desc.poc");
 	}
 
 }

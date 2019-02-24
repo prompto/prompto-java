@@ -80,5 +80,8 @@ public class ArrowExpression extends Section implements IExpression {
 		this.statements = statements;
 	}
 
+	public StatementList getStatements() {
+		return statements;
+	}
 	
 }

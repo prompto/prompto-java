@@ -612,7 +612,7 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public void transpileSorted(Transpiler transpiler, boolean descending, IExpression key) {
+	public void transpileSorted(Transpiler transpiler, IExpression key, boolean descending) {
 	    String keyname = key!=null ? key.toString() : "key";
 	    IDeclaration decl = this.getDeclaration(transpiler.getContext());
 	    if(decl instanceof CategoryDeclaration) {

@@ -207,7 +207,7 @@ public class DocumentType extends NativeType {
 
 	
 	@Override
-	public void transpileSorted(Transpiler transpiler, boolean descending, IExpression key) {
+	public void transpileSorted(Transpiler transpiler, IExpression key, boolean descending) {
 		if(key==null)
 			key = new TextLiteral("\"key\"");
 		Identifier id = new Identifier(key.toString());
