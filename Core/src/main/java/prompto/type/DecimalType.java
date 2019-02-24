@@ -99,7 +99,7 @@ public class DecimalType extends NativeType implements INumberType {
 	}
 
 	@Override
-	public Comparator<Decimal> getComparator(boolean descending) {
+	public Comparator<Decimal> getNativeComparator(boolean descending) {
 		return descending ? new Comparator<Decimal>() {
 			@Override
 			public int compare(Decimal o1, Decimal o2) {

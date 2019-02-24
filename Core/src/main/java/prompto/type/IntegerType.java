@@ -231,7 +231,7 @@ public class IntegerType extends NativeType implements INumberType {
 	}
 
 	@Override
-	public Comparator<Integer> getComparator(boolean descending) {
+	public Comparator<Integer> getNativeComparator(boolean descending) {
 		return descending ?
 				new Comparator<Integer>() {
 					@Override

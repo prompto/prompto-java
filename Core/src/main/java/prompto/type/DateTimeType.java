@@ -102,7 +102,7 @@ public class DateTimeType extends NativeType {
 	}
 
 	@Override
-	public Comparator<DateTime> getComparator(boolean descending) {
+	public Comparator<DateTime> getNativeComparator(boolean descending) {
 		return descending ? 
 				new Comparator<DateTime>() {
 					@Override

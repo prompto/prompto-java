@@ -106,7 +106,7 @@ public class TimeType extends NativeType {
 	}
 
 	@Override
-	public Comparator<Time> getComparator(boolean descending) {
+	public Comparator<Time> getNativeComparator(boolean descending) {
 		return descending ?
 				new Comparator<Time>() {
 					@Override

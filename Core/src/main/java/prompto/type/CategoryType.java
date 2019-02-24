@@ -835,6 +835,7 @@ public class CategoryType extends BaseType {
 	    transpiler.append(")");
 	}
 
+	@Override
 	public Comparator<? extends IValue> getComparator(Context context, IExpression key, boolean descending) {
 		if(key==null)
 			key = new UnresolvedIdentifier(new Identifier("key"));

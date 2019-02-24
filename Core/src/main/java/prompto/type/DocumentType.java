@@ -279,10 +279,16 @@ public class DocumentType extends NativeType {
 		else
 			return null;
 	}
-
+	
+	@Override
 	public Comparator<? extends IValue> getComparator(Context context, IExpression key, boolean descending) {
 		if(key==null)
 			key = new TextLiteral("\"key\"");
+		return super.getComparator(context, key, descending);
+	}
+
+	@Override
+	public Comparator<? extends IValue> getExpressionComparator(Context context, IExpression key, boolean descending) {
 		Identifier id = new Identifier(key.toString());
 		IMethodDeclaration method = findGlobalMethod(context, id);
 		if(method!=null)

@@ -56,7 +56,7 @@ public class VersionType extends NativeType {
 	}
 
 	@Override
-	public Comparator<Version> getComparator(boolean descending) {
+	public Comparator<Version> getNativeComparator(boolean descending) {
 		return descending ?
 				new Comparator<Version>() {
 					@Override

@@ -80,7 +80,7 @@ public class CharacterType extends NativeType {
 	}
 
 	@Override
-	public Comparator<Character> getComparator(boolean descending) {
+	public Comparator<Character> getNativeComparator(boolean descending) {
 		return descending ? new Comparator<Character>() {
 			@Override
 			public int compare(Character o1, Character o2) {

@@ -135,7 +135,7 @@ public class SortedExpression implements IExpression {
 		if(!(value instanceof SetValue))
 			throw new InternalError("Unexpected type:" + value.getClass().getName());
 		IType itemType = type.getItemType();
-		Comparator<? extends IValue> cmp = getInterpretedComparator(context, itemType, value);
+		Comparator<? extends IValue> cmp = itemType.getComparator(context, key, descending);
 		PromptoList<? extends IValue> sorted = ((SetValue)value).getItems().sortUsing(cmp);
 		return new ListValue(itemType, sorted);
 	}
@@ -147,20 +147,10 @@ public class SortedExpression implements IExpression {
 		if(!(value instanceof ListValue))
 			throw new InternalError("Unexpected type:" + value.getClass().getName());
 		IType itemType = type.getItemType();
-		Comparator<? extends IValue> cmp = getInterpretedComparator(context, itemType, value);
+		Comparator<? extends IValue> cmp = itemType.getComparator(context, key, descending);
 		PromptoList<? extends IValue> sorted = ((ListValue)value).getItems().sortUsing(cmp);
 		return new ListValue(itemType, sorted);
 	}
-
-	private Comparator<? extends IValue> getInterpretedComparator(Context context, IType itemType, IValue value) throws PromptoError {
-		if(itemType instanceof CategoryType)
-			return ((CategoryType)itemType).getComparator(context, key, descending);
-		else if(itemType==DocumentType.instance())
-			return DocumentType.instance().getComparator(context, key, descending);
-		else
-			return itemType.getComparator(descending);	
-	}
-
 
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {

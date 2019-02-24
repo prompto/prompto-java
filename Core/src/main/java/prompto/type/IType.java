@@ -67,7 +67,7 @@ public interface IType extends ISection {
 	boolean isMoreSpecificThan(Context context, IType other);
 	
 	RangeBase<?> newRange(Object first,Object last);
-	Comparator<? extends IValue> getComparator(boolean descending);
+	Comparator<? extends IValue> getComparator(Context context, IExpression key, boolean descending);
 	IValue getMemberValue(Context context, Identifier name) throws PromptoError;
 	Set<IMethodDeclaration> getMemberMethods(Context context, Identifier name) throws PromptoError;
 

@@ -194,399 +194,7 @@ import prompto.literal.TimeLiteral;
 import prompto.literal.TupleLiteral;
 import prompto.literal.UuidLiteral;
 import prompto.literal.VersionLiteral;
-import prompto.parser.MParser.Abstract_method_declarationContext;
-import prompto.parser.MParser.AddExpressionContext;
-import prompto.parser.MParser.AndExpressionContext;
-import prompto.parser.MParser.Annotation_constructorContext;
-import prompto.parser.MParser.Annotation_identifierContext;
-import prompto.parser.MParser.AnyDictTypeContext;
-import prompto.parser.MParser.AnyListTypeContext;
-import prompto.parser.MParser.AnyTypeContext;
-import prompto.parser.MParser.ArgumentAssignmentListContext;
-import prompto.parser.MParser.ArgumentAssignmentListItemContext;
-import prompto.parser.MParser.Argument_assignmentContext;
-import prompto.parser.MParser.Argument_listContext;
-import prompto.parser.MParser.AssertionContext;
-import prompto.parser.MParser.Assertion_listContext;
-import prompto.parser.MParser.AssignInstanceStatementContext;
-import prompto.parser.MParser.AssignTupleStatementContext;
-import prompto.parser.MParser.Assign_instance_statementContext;
-import prompto.parser.MParser.Assign_tuple_statementContext;
-import prompto.parser.MParser.Assign_variable_statementContext;
-import prompto.parser.MParser.AtomicSwitchCaseContext;
-import prompto.parser.MParser.Attribute_declarationContext;
-import prompto.parser.MParser.Attribute_identifierContext;
-import prompto.parser.MParser.Attribute_identifier_listContext;
-import prompto.parser.MParser.BlobTypeContext;
-import prompto.parser.MParser.Blob_expressionContext;
-import prompto.parser.MParser.BooleanLiteralContext;
-import prompto.parser.MParser.BooleanTypeContext;
-import prompto.parser.MParser.BreakStatementContext;
-import prompto.parser.MParser.CSharpArgumentListContext;
-import prompto.parser.MParser.CSharpArgumentListItemContext;
-import prompto.parser.MParser.CSharpBooleanLiteralContext;
-import prompto.parser.MParser.CSharpCategoryBindingContext;
-import prompto.parser.MParser.CSharpCharacterLiteralContext;
-import prompto.parser.MParser.CSharpChildIdentifierContext;
-import prompto.parser.MParser.CSharpDecimalLiteralContext;
-import prompto.parser.MParser.CSharpIdentifierContext;
-import prompto.parser.MParser.CSharpIntegerLiteralContext;
-import prompto.parser.MParser.CSharpMethodExpressionContext;
-import prompto.parser.MParser.CSharpNativeStatementContext;
-import prompto.parser.MParser.CSharpPrimaryExpressionContext;
-import prompto.parser.MParser.CSharpPromptoIdentifierContext;
-import prompto.parser.MParser.CSharpReturnStatementContext;
-import prompto.parser.MParser.CSharpSelectorExpressionContext;
-import prompto.parser.MParser.CSharpStatementContext;
-import prompto.parser.MParser.CSharpTextLiteralContext;
-import prompto.parser.MParser.CastExpressionContext;
-import prompto.parser.MParser.CatchAtomicStatementContext;
-import prompto.parser.MParser.CatchCollectionStatementContext;
-import prompto.parser.MParser.Catch_statement_listContext;
-import prompto.parser.MParser.CategoryTypeContext;
-import prompto.parser.MParser.Category_or_any_typeContext;
-import prompto.parser.MParser.Category_symbolContext;
-import prompto.parser.MParser.Category_symbol_listContext;
-import prompto.parser.MParser.Category_typeContext;
-import prompto.parser.MParser.CharacterLiteralContext;
-import prompto.parser.MParser.CharacterTypeContext;
-import prompto.parser.MParser.ChildInstanceContext;
-import prompto.parser.MParser.ClosureExpressionContext;
-import prompto.parser.MParser.ClosureStatementContext;
-import prompto.parser.MParser.Closure_expressionContext;
-import prompto.parser.MParser.CodeArgumentContext;
-import prompto.parser.MParser.CodeExpressionContext;
-import prompto.parser.MParser.CodeTypeContext;
-import prompto.parser.MParser.Code_argumentContext;
-import prompto.parser.MParser.Code_typeContext;
-import prompto.parser.MParser.CollectionSwitchCaseContext;
-import prompto.parser.MParser.Collection_literalContext;
-import prompto.parser.MParser.CommentStatementContext;
-import prompto.parser.MParser.Comment_statementContext;
-import prompto.parser.MParser.ConcreteCategoryDeclarationContext;
-import prompto.parser.MParser.ConcreteWidgetDeclarationContext;
-import prompto.parser.MParser.Concrete_category_declarationContext;
-import prompto.parser.MParser.Concrete_method_declarationContext;
-import prompto.parser.MParser.Concrete_widget_declarationContext;
-import prompto.parser.MParser.ConstructorFromContext;
-import prompto.parser.MParser.ConstructorNoFromContext;
-import prompto.parser.MParser.ContainsExpressionContext;
-import prompto.parser.MParser.Copy_fromContext;
-import prompto.parser.MParser.Csharp_identifierContext;
-import prompto.parser.MParser.Csharp_method_expressionContext;
-import prompto.parser.MParser.Csharp_primary_expressionContext;
-import prompto.parser.MParser.Csharp_this_expressionContext;
-import prompto.parser.MParser.CssExpressionContext;
-import prompto.parser.MParser.CssTextContext;
-import prompto.parser.MParser.CssValueContext;
-import prompto.parser.MParser.Css_expressionContext;
-import prompto.parser.MParser.Css_fieldContext;
-import prompto.parser.MParser.DateLiteralContext;
-import prompto.parser.MParser.DateTimeLiteralContext;
-import prompto.parser.MParser.DateTimeTypeContext;
-import prompto.parser.MParser.DateTypeContext;
-import prompto.parser.MParser.DecimalLiteralContext;
-import prompto.parser.MParser.DecimalTypeContext;
-import prompto.parser.MParser.DeclarationContext;
-import prompto.parser.MParser.DeclarationsContext;
-import prompto.parser.MParser.Derived_listContext;
-import prompto.parser.MParser.DictKeyIdentifierContext;
-import prompto.parser.MParser.DictKeyTextContext;
-import prompto.parser.MParser.DictTypeContext;
-import prompto.parser.MParser.Dict_entryContext;
-import prompto.parser.MParser.Dict_entry_listContext;
-import prompto.parser.MParser.Dict_literalContext;
-import prompto.parser.MParser.DivideExpressionContext;
-import prompto.parser.MParser.DoWhileStatementContext;
-import prompto.parser.MParser.Do_while_statementContext;
-import prompto.parser.MParser.DocumentTypeContext;
-import prompto.parser.MParser.Document_expressionContext;
-import prompto.parser.MParser.Document_literalContext;
-import prompto.parser.MParser.ElseIfStatementListContext;
-import prompto.parser.MParser.ElseIfStatementListItemContext;
-import prompto.parser.MParser.Enum_category_declarationContext;
-import prompto.parser.MParser.Enum_declarationContext;
-import prompto.parser.MParser.Enum_native_declarationContext;
-import prompto.parser.MParser.EqualsExpressionContext;
-import prompto.parser.MParser.ExecuteExpressionContext;
-import prompto.parser.MParser.ExpressionAssignmentListContext;
-import prompto.parser.MParser.Expression_listContext;
-import prompto.parser.MParser.Expression_tupleContext;
-import prompto.parser.MParser.FetchManyAsyncContext;
-import prompto.parser.MParser.FetchManyContext;
-import prompto.parser.MParser.FetchOneAsyncContext;
-import prompto.parser.MParser.FetchOneContext;
-import prompto.parser.MParser.FetchStatementContext;
-import prompto.parser.MParser.FilteredListExpressionContext;
-import prompto.parser.MParser.Filtered_list_suffixContext;
-import prompto.parser.MParser.FlushStatementContext;
-import prompto.parser.MParser.Flush_statementContext;
-import prompto.parser.MParser.ForEachStatementContext;
-import prompto.parser.MParser.For_each_statementContext;
-import prompto.parser.MParser.FullDeclarationListContext;
-import prompto.parser.MParser.Getter_method_declarationContext;
-import prompto.parser.MParser.GreaterThanExpressionContext;
-import prompto.parser.MParser.GreaterThanOrEqualExpressionContext;
-import prompto.parser.MParser.HasAllExpressionContext;
-import prompto.parser.MParser.HasAnyExpressionContext;
-import prompto.parser.MParser.HasExpressionContext;
-import prompto.parser.MParser.HexadecimalLiteralContext;
-import prompto.parser.MParser.HtmlTypeContext;
-import prompto.parser.MParser.IdentifierExpressionContext;
-import prompto.parser.MParser.IfStatementContext;
-import prompto.parser.MParser.If_statementContext;
-import prompto.parser.MParser.ImageTypeContext;
-import prompto.parser.MParser.InExpressionContext;
-import prompto.parser.MParser.Index_clauseContext;
-import prompto.parser.MParser.InstanceExpressionContext;
-import prompto.parser.MParser.IntDivideExpressionContext;
-import prompto.parser.MParser.IntegerLiteralContext;
-import prompto.parser.MParser.IntegerTypeContext;
-import prompto.parser.MParser.IsATypeExpressionContext;
-import prompto.parser.MParser.IsExpressionContext;
-import prompto.parser.MParser.IsNotExpressionContext;
-import prompto.parser.MParser.IsOtherExpressionContext;
-import prompto.parser.MParser.ItemInstanceContext;
-import prompto.parser.MParser.ItemSelectorContext;
-import prompto.parser.MParser.IteratorExpressionContext;
-import prompto.parser.MParser.IteratorTypeContext;
-import prompto.parser.MParser.JavaArgumentListContext;
-import prompto.parser.MParser.JavaArgumentListItemContext;
-import prompto.parser.MParser.JavaBooleanLiteralContext;
-import prompto.parser.MParser.JavaCategoryBindingContext;
-import prompto.parser.MParser.JavaCharacterLiteralContext;
-import prompto.parser.MParser.JavaChildClassIdentifierContext;
-import prompto.parser.MParser.JavaChildIdentifierContext;
-import prompto.parser.MParser.JavaClassIdentifierContext;
-import prompto.parser.MParser.JavaDecimalLiteralContext;
-import prompto.parser.MParser.JavaIdentifierContext;
-import prompto.parser.MParser.JavaIntegerLiteralContext;
-import prompto.parser.MParser.JavaItemExpressionContext;
-import prompto.parser.MParser.JavaMethodExpressionContext;
-import prompto.parser.MParser.JavaNativeStatementContext;
-import prompto.parser.MParser.JavaPrimaryExpressionContext;
-import prompto.parser.MParser.JavaReturnStatementContext;
-import prompto.parser.MParser.JavaScriptCategoryBindingContext;
-import prompto.parser.MParser.JavaScriptMemberExpressionContext;
-import prompto.parser.MParser.JavaScriptMethodExpressionContext;
-import prompto.parser.MParser.JavaScriptNativeStatementContext;
-import prompto.parser.MParser.JavaSelectorExpressionContext;
-import prompto.parser.MParser.JavaStatementContext;
-import prompto.parser.MParser.JavaTextLiteralContext;
-import prompto.parser.MParser.Java_identifierContext;
-import prompto.parser.MParser.Java_item_expressionContext;
-import prompto.parser.MParser.Java_method_expressionContext;
-import prompto.parser.MParser.Java_parenthesis_expressionContext;
-import prompto.parser.MParser.Java_primary_expressionContext;
-import prompto.parser.MParser.Java_this_expressionContext;
-import prompto.parser.MParser.JavascriptArgumentListContext;
-import prompto.parser.MParser.JavascriptArgumentListItemContext;
-import prompto.parser.MParser.JavascriptBooleanLiteralContext;
-import prompto.parser.MParser.JavascriptCharacterLiteralContext;
-import prompto.parser.MParser.JavascriptDecimalLiteralContext;
-import prompto.parser.MParser.JavascriptIntegerLiteralContext;
-import prompto.parser.MParser.JavascriptPrimaryExpressionContext;
-import prompto.parser.MParser.JavascriptReturnStatementContext;
-import prompto.parser.MParser.JavascriptSelectorExpressionContext;
-import prompto.parser.MParser.JavascriptStatementContext;
-import prompto.parser.MParser.JavascriptTextLiteralContext;
-import prompto.parser.MParser.Javascript_category_bindingContext;
-import prompto.parser.MParser.Javascript_identifierContext;
-import prompto.parser.MParser.Javascript_identifier_expressionContext;
-import prompto.parser.MParser.Javascript_method_expressionContext;
-import prompto.parser.MParser.Javascript_moduleContext;
-import prompto.parser.MParser.Javascript_native_statementContext;
-import prompto.parser.MParser.Javascript_new_expressionContext;
-import prompto.parser.MParser.Javascript_primary_expressionContext;
-import prompto.parser.MParser.Javascript_this_expressionContext;
-import prompto.parser.MParser.JsxChildContext;
-import prompto.parser.MParser.JsxCodeContext;
-import prompto.parser.MParser.JsxElementContext;
-import prompto.parser.MParser.JsxExpressionContext;
-import prompto.parser.MParser.JsxLiteralContext;
-import prompto.parser.MParser.JsxSelfClosingContext;
-import prompto.parser.MParser.JsxTextContext;
-import prompto.parser.MParser.JsxValueContext;
-import prompto.parser.MParser.Jsx_attributeContext;
-import prompto.parser.MParser.Jsx_childrenContext;
-import prompto.parser.MParser.Jsx_closingContext;
-import prompto.parser.MParser.Jsx_element_nameContext;
-import prompto.parser.MParser.Jsx_expressionContext;
-import prompto.parser.MParser.Jsx_identifierContext;
-import prompto.parser.MParser.Jsx_openingContext;
-import prompto.parser.MParser.Jsx_self_closingContext;
-import prompto.parser.MParser.Key_tokenContext;
-import prompto.parser.MParser.LessThanExpressionContext;
-import prompto.parser.MParser.LessThanOrEqualExpressionContext;
-import prompto.parser.MParser.ListTypeContext;
-import prompto.parser.MParser.List_literalContext;
-import prompto.parser.MParser.LiteralExpressionContext;
-import prompto.parser.MParser.LiteralListLiteralContext;
-import prompto.parser.MParser.LiteralRangeLiteralContext;
-import prompto.parser.MParser.LiteralSetLiteralContext;
-import prompto.parser.MParser.Literal_expressionContext;
-import prompto.parser.MParser.Literal_list_literalContext;
-import prompto.parser.MParser.MatchingExpressionContext;
-import prompto.parser.MParser.MatchingListContext;
-import prompto.parser.MParser.MatchingPatternContext;
-import prompto.parser.MParser.MatchingRangeContext;
-import prompto.parser.MParser.MatchingSetContext;
-import prompto.parser.MParser.MaxIntegerLiteralContext;
-import prompto.parser.MParser.MemberInstanceContext;
-import prompto.parser.MParser.MemberSelectorContext;
-import prompto.parser.MParser.Member_method_declarationContext;
-import prompto.parser.MParser.Member_method_declaration_listContext;
-import prompto.parser.MParser.MethodCallStatementContext;
-import prompto.parser.MParser.MethodExpressionContext;
-import prompto.parser.MParser.MethodSelectorContext;
-import prompto.parser.MParser.Method_call_expressionContext;
-import prompto.parser.MParser.Method_call_statementContext;
-import prompto.parser.MParser.Method_declarationContext;
-import prompto.parser.MParser.Method_expressionContext;
-import prompto.parser.MParser.Method_identifierContext;
-import prompto.parser.MParser.MinIntegerLiteralContext;
-import prompto.parser.MParser.MinusExpressionContext;
-import prompto.parser.MParser.ModuloExpressionContext;
-import prompto.parser.MParser.MultiplyExpressionContext;
-import prompto.parser.MParser.Mutable_category_typeContext;
-import prompto.parser.MParser.Named_argumentContext;
-import prompto.parser.MParser.NativeCategoryBindingListContext;
-import prompto.parser.MParser.NativeCategoryBindingListItemContext;
-import prompto.parser.MParser.NativeCategoryDeclarationContext;
-import prompto.parser.MParser.NativeTypeContext;
-import prompto.parser.MParser.NativeWidgetDeclarationContext;
-import prompto.parser.MParser.Native_category_bindingsContext;
-import prompto.parser.MParser.Native_category_declarationContext;
-import prompto.parser.MParser.Native_getter_declarationContext;
-import prompto.parser.MParser.Native_member_method_declarationContext;
-import prompto.parser.MParser.Native_member_method_declaration_listContext;
-import prompto.parser.MParser.Native_method_declarationContext;
-import prompto.parser.MParser.Native_resource_declarationContext;
-import prompto.parser.MParser.Native_setter_declarationContext;
-import prompto.parser.MParser.Native_statement_listContext;
-import prompto.parser.MParser.Native_symbolContext;
-import prompto.parser.MParser.Native_symbol_listContext;
-import prompto.parser.MParser.Native_widget_declarationContext;
-import prompto.parser.MParser.NotContainsExpressionContext;
-import prompto.parser.MParser.NotEqualsExpressionContext;
-import prompto.parser.MParser.NotExpressionContext;
-import prompto.parser.MParser.NotHasAllExpressionContext;
-import prompto.parser.MParser.NotHasAnyExpressionContext;
-import prompto.parser.MParser.NotHasExpressionContext;
-import prompto.parser.MParser.NotInExpressionContext;
-import prompto.parser.MParser.NullLiteralContext;
-import prompto.parser.MParser.OperatorArgumentContext;
-import prompto.parser.MParser.OperatorDivideContext;
-import prompto.parser.MParser.OperatorIDivideContext;
-import prompto.parser.MParser.OperatorMinusContext;
-import prompto.parser.MParser.OperatorModuloContext;
-import prompto.parser.MParser.OperatorMultiplyContext;
-import prompto.parser.MParser.OperatorPlusContext;
-import prompto.parser.MParser.Operator_argumentContext;
-import prompto.parser.MParser.Operator_method_declarationContext;
-import prompto.parser.MParser.OrExpressionContext;
-import prompto.parser.MParser.Order_byContext;
-import prompto.parser.MParser.Order_by_listContext;
-import prompto.parser.MParser.ParenthesisExpressionContext;
-import prompto.parser.MParser.Parenthesis_expressionContext;
-import prompto.parser.MParser.PeriodLiteralContext;
-import prompto.parser.MParser.PeriodTypeContext;
-import prompto.parser.MParser.PrimaryTypeContext;
-import prompto.parser.MParser.Python2CategoryBindingContext;
-import prompto.parser.MParser.Python2NativeStatementContext;
-import prompto.parser.MParser.Python3CategoryBindingContext;
-import prompto.parser.MParser.Python3NativeStatementContext;
-import prompto.parser.MParser.PythonArgumentListContext;
-import prompto.parser.MParser.PythonBooleanLiteralContext;
-import prompto.parser.MParser.PythonCharacterLiteralContext;
-import prompto.parser.MParser.PythonChildIdentifierContext;
-import prompto.parser.MParser.PythonDecimalLiteralContext;
-import prompto.parser.MParser.PythonGlobalMethodExpressionContext;
-import prompto.parser.MParser.PythonIdentifierContext;
-import prompto.parser.MParser.PythonIdentifierExpressionContext;
-import prompto.parser.MParser.PythonIntegerLiteralContext;
-import prompto.parser.MParser.PythonLiteralExpressionContext;
-import prompto.parser.MParser.PythonMethodExpressionContext;
-import prompto.parser.MParser.PythonNamedArgumentListContext;
-import prompto.parser.MParser.PythonNamedArgumentListItemContext;
-import prompto.parser.MParser.PythonNamedOnlyArgumentListContext;
-import prompto.parser.MParser.PythonOrdinalArgumentListContext;
-import prompto.parser.MParser.PythonOrdinalArgumentListItemContext;
-import prompto.parser.MParser.PythonOrdinalOnlyArgumentListContext;
-import prompto.parser.MParser.PythonPrimaryExpressionContext;
-import prompto.parser.MParser.PythonPromptoIdentifierContext;
-import prompto.parser.MParser.PythonReturnStatementContext;
-import prompto.parser.MParser.PythonSelectorExpressionContext;
-import prompto.parser.MParser.PythonSelfExpressionContext;
-import prompto.parser.MParser.PythonStatementContext;
-import prompto.parser.MParser.PythonTextLiteralContext;
-import prompto.parser.MParser.Python_category_bindingContext;
-import prompto.parser.MParser.Python_identifierContext;
-import prompto.parser.MParser.Python_method_expressionContext;
-import prompto.parser.MParser.Python_moduleContext;
-import prompto.parser.MParser.Python_native_statementContext;
-import prompto.parser.MParser.RaiseStatementContext;
-import prompto.parser.MParser.Raise_statementContext;
-import prompto.parser.MParser.Range_literalContext;
-import prompto.parser.MParser.Read_all_expressionContext;
-import prompto.parser.MParser.Read_one_expressionContext;
-import prompto.parser.MParser.Resource_declarationContext;
-import prompto.parser.MParser.ReturnStatementContext;
-import prompto.parser.MParser.Return_statementContext;
-import prompto.parser.MParser.RootInstanceContext;
-import prompto.parser.MParser.RoughlyEqualsExpressionContext;
-import prompto.parser.MParser.SelectableExpressionContext;
-import prompto.parser.MParser.SelectorExpressionContext;
-import prompto.parser.MParser.SetTypeContext;
-import prompto.parser.MParser.Set_literalContext;
-import prompto.parser.MParser.Setter_method_declarationContext;
-import prompto.parser.MParser.SingletonCategoryDeclarationContext;
-import prompto.parser.MParser.Singleton_category_declarationContext;
-import prompto.parser.MParser.SliceFirstAndLastContext;
-import prompto.parser.MParser.SliceFirstOnlyContext;
-import prompto.parser.MParser.SliceLastOnlyContext;
-import prompto.parser.MParser.SliceSelectorContext;
-import prompto.parser.MParser.Sorted_expressionContext;
-import prompto.parser.MParser.Statement_listContext;
-import prompto.parser.MParser.StoreStatementContext;
-import prompto.parser.MParser.Store_statementContext;
-import prompto.parser.MParser.SwitchStatementContext;
-import prompto.parser.MParser.Switch_case_statement_listContext;
-import prompto.parser.MParser.Switch_statementContext;
-import prompto.parser.MParser.SymbolIdentifierContext;
-import prompto.parser.MParser.Symbol_identifierContext;
-import prompto.parser.MParser.Symbol_listContext;
-import prompto.parser.MParser.Symbols_tokenContext;
-import prompto.parser.MParser.TernaryExpressionContext;
-import prompto.parser.MParser.Test_method_declarationContext;
-import prompto.parser.MParser.TextLiteralContext;
-import prompto.parser.MParser.TextTypeContext;
-import prompto.parser.MParser.ThisExpressionContext;
-import prompto.parser.MParser.TimeLiteralContext;
-import prompto.parser.MParser.TimeTypeContext;
-import prompto.parser.MParser.TryStatementContext;
-import prompto.parser.MParser.Try_statementContext;
-import prompto.parser.MParser.Tuple_literalContext;
-import prompto.parser.MParser.TypeIdentifierContext;
-import prompto.parser.MParser.Type_identifierContext;
-import prompto.parser.MParser.Type_identifier_listContext;
-import prompto.parser.MParser.Typed_argumentContext;
-import prompto.parser.MParser.UUIDLiteralContext;
-import prompto.parser.MParser.UUIDTypeContext;
-import prompto.parser.MParser.Value_tokenContext;
-import prompto.parser.MParser.VariableIdentifierContext;
-import prompto.parser.MParser.Variable_identifierContext;
-import prompto.parser.MParser.Variable_identifier_listContext;
-import prompto.parser.MParser.VersionLiteralContext;
-import prompto.parser.MParser.VersionTypeContext;
-import prompto.parser.MParser.WhileStatementContext;
-import prompto.parser.MParser.While_statementContext;
-import prompto.parser.MParser.WithResourceStatementContext;
-import prompto.parser.MParser.WithSingletonStatementContext;
-import prompto.parser.MParser.With_resource_statementContext;
-import prompto.parser.MParser.With_singleton_statementContext;
-import prompto.parser.MParser.WriteStatementContext;
-import prompto.parser.MParser.Write_statementContext;
+import prompto.parser.MParser.*;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -726,45 +334,45 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	private List<Annotation> readAnnotations(List<? extends ParseTree> contexts) {
 		List<Annotation> annotations = contexts.stream()
-			.map(cx->(Annotation)this.<Annotation>getNodeValue(cx))
+			.map(cx->(Annotation)getNodeValue(cx))
 			.collect(Collectors.toList());
 		return annotations.isEmpty() ?  null : annotations;
 	}
 
 	private List<CommentStatement> readComments(List<? extends ParseTree> contexts) {
 		List<CommentStatement> comments = contexts.stream()
-			.map(cx->(CommentStatement)this.<CommentStatement>getNodeValue(cx))
+			.map(cx->(CommentStatement)getNodeValue(cx))
 			.collect(Collectors.toList());
 		return comments.isEmpty() ? null : comments;
 	}
 
 	@Override
 	public void exitAbstract_method_declaration(Abstract_method_declarationContext ctx) {
-		IType type = this.<IType>getNodeValue(ctx.typ);
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		ArgumentList args = this.<ArgumentList>getNodeValue(ctx.args);
+		IType type = getNodeValue(ctx.typ);
+		Identifier name = getNodeValue(ctx.name);
+		ArgumentList args = getNodeValue(ctx.args);
 		setNodeValue(ctx, new AbstractMethodDeclaration(name, args, type));
 	}
 	
 	@Override
 	public void exitAddExpression(AddExpressionContext ctx) {
-		IExpression left = this.<IExpression>getNodeValue(ctx.left);
-		IExpression right = this.<IExpression>getNodeValue(ctx.right);
+		IExpression left = getNodeValue(ctx.left);
+		IExpression right = getNodeValue(ctx.right);
 		IExpression exp = ctx.op.getType()==MParser.PLUS ? new PlusExpression(left, right) : new SubtractExpression(left, right);
 		setNodeValue(ctx, exp);
 	}
 
 	@Override
 	public void exitAndExpression(AndExpressionContext ctx) {
-		IExpression left = this.<IExpression>getNodeValue(ctx.left);
-		IExpression right = this.<IExpression>getNodeValue(ctx.right);
+		IExpression left = getNodeValue(ctx.left);
+		IExpression right = getNodeValue(ctx.right);
 		setNodeValue(ctx, new AndExpression(left, right));
 	}
 	
 	@Override
 	public void exitAnnotation_constructor(Annotation_constructorContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		Identifier name = getNodeValue(ctx.name);
+		IExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, new Annotation(name, exp));
 	}
 
@@ -777,13 +385,13 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitAnyDictType(AnyDictTypeContext ctx) {
-		IType type = this.<IType>getNodeValue(ctx.any_type());
+		IType type = getNodeValue(ctx.any_type());
 		setNodeValue(ctx, new DictType(type));
 	}
 	
 	@Override
 	public void exitAnyListType(AnyListTypeContext ctx) {
-		IType type = this.<IType>getNodeValue(ctx.any_type());
+		IType type = getNodeValue(ctx.any_type());
 		setNodeValue(ctx, new ListType(type));
 	}
 	
@@ -794,8 +402,8 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitArgument_assignment(Argument_assignmentContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		Identifier name = getNodeValue(ctx.name);
+		IExpression exp = getNodeValue(ctx.exp);
 		IArgument arg = new UnresolvedArgument(name);
 		ArgumentAssignment item = new ArgumentAssignment(arg, exp);
 		setNodeValue(ctx, item);
@@ -806,7 +414,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitArgument_list(Argument_listContext ctx) {
 		ArgumentList items = new ArgumentList();
 		ctx.argument().forEach((a)->{
-			IArgument item = this.<IArgument>getNodeValue(a); 
+			IArgument item = getNodeValue(a); 
 			items.add(item);
 		});
 		setNodeValue(ctx, items);
@@ -815,15 +423,15 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitArgumentAssignmentList(ArgumentAssignmentListContext ctx) {
-		ArgumentAssignment item = this.<ArgumentAssignment>getNodeValue(ctx.item);
+		ArgumentAssignment item = getNodeValue(ctx.item);
 		ArgumentAssignmentList items = new ArgumentAssignmentList(Collections.singletonList(item));
 		setNodeValue(ctx, items);
 	}
 	
 	@Override
 	public void exitArgumentAssignmentListItem(ArgumentAssignmentListItemContext ctx) {
-		ArgumentAssignment item = this.<ArgumentAssignment>getNodeValue(ctx.item);
-		ArgumentAssignmentList items = this.<ArgumentAssignmentList>getNodeValue(ctx.items);
+		ArgumentAssignment item = getNodeValue(ctx.item);
+		ArgumentAssignmentList items = getNodeValue(ctx.items);
 		items.add(item);
 		setNodeValue(ctx, items);
 	}
@@ -833,7 +441,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitAssertion(AssertionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		IExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, new Assertion(exp));
 	}
 	
@@ -842,7 +450,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitAssertion_list(Assertion_listContext ctx) {
 		AssertionList items = new AssertionList();
 		ctx.assertion().forEach((a)->{
-			Assertion item = this.<Assertion>getNodeValue(a);
+			Assertion item = getNodeValue(a);
 			items.add(item);
 		});
 		setNodeValue(ctx, items);
@@ -850,50 +458,50 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitAssign_instance_statement(Assign_instance_statementContext ctx) {
-		IAssignableInstance inst = this.<IAssignableInstance>getNodeValue(ctx.inst);
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		IAssignableInstance inst = getNodeValue(ctx.inst);
+		IExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, new AssignInstanceStatement(inst, exp));
 	}
 	
 	@Override
 	public void exitAssign_tuple_statement(Assign_tuple_statementContext ctx) {
-		IdentifierList items = this.<IdentifierList>getNodeValue(ctx.items);
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		IdentifierList items = getNodeValue(ctx.items);
+		IExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, new AssignTupleStatement(items, exp));
 	}
 	
 	@Override
 	public void exitAssign_variable_statement(Assign_variable_statementContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.variable_identifier());
-		IExpression exp = this.<IExpression>getNodeValue(ctx.expression());
+		Identifier name = getNodeValue(ctx.variable_identifier());
+		IExpression exp = getNodeValue(ctx.expression());
 		setNodeValue(ctx, new AssignVariableStatement(name, exp));
 	}
 	
 	@Override
 	public void exitAssignInstanceStatement(AssignInstanceStatementContext ctx) {
-		IStatement stmt = this.<IStatement>getNodeValue(ctx.stmt);
+		IStatement stmt = getNodeValue(ctx.stmt);
 		setNodeValue(ctx, stmt);
 	}
 	
 	@Override
 	public void exitAssignTupleStatement(AssignTupleStatementContext ctx) {
-		IStatement stmt = this.<IStatement>getNodeValue(ctx.stmt);
+		IStatement stmt = getNodeValue(ctx.stmt);
 		setNodeValue(ctx, stmt);
 	}
 	
 	@Override
 	public void exitAtomicSwitchCase(AtomicSwitchCaseContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		IExpression exp = getNodeValue(ctx.exp);
+		StatementList stmts = getNodeValue(ctx.stmts);
 		setNodeValue(ctx, new AtomicSwitchCase(exp, stmts));
 	}
 	
 	@Override
 	public void exitAttribute_declaration(Attribute_declarationContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		IType type = this.<IType>getNodeValue(ctx.typ);
-		IAttributeConstraint match = this.<IAttributeConstraint>getNodeValue(ctx.match);
-		IdentifierList indices = ctx.index_clause()!=null ? this.<IdentifierList>getNodeValue(ctx.index_clause()) : null;
+		Identifier name = getNodeValue(ctx.name);
+		IType type = getNodeValue(ctx.typ);
+		IAttributeConstraint match = getNodeValue(ctx.match);
+		IdentifierList indices = ctx.index_clause()!=null ? getNodeValue(ctx.index_clause()) : null;
 		AttributeDeclaration decl = new AttributeDeclaration(name, type, match, indices);
 		decl.setStorable(ctx.STORABLE()!=null);
 		setNodeValue(ctx, decl);
@@ -903,7 +511,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	@Override
 	public void exitIndex_clause(Index_clauseContext ctx) {
 		IdentifierList indices = ctx.indices!=null ? 
-				this.<IdentifierList>getNodeValue(ctx.indices) :
+				getNodeValue(ctx.indices) :
 				new IdentifierList();
 		setNodeValue(ctx, indices);
 	}
@@ -917,7 +525,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitAttribute_identifier_list(Attribute_identifier_listContext ctx) {
 		IdentifierList list = new IdentifierList();
 		for(Attribute_identifierContext v : ctx.attribute_identifier()){
-			Identifier item = this.<Identifier>getNodeValue(v);
+			Identifier item = getNodeValue(v);
 			list.add(item);
 		}
 		setNodeValue(ctx, list);
@@ -925,7 +533,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitBlob_expression(Blob_expressionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.expression());
+		IExpression exp = getNodeValue(ctx.expression());
 		setNodeValue(ctx, new BlobExpression(exp));
 	}
 	
@@ -953,8 +561,8 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitCastExpression(CastExpressionContext ctx) {
-		IExpression left = this.<IExpression>getNodeValue(ctx.left);
-		IType type = this.<IType>getNodeValue(ctx.right);
+		IExpression left = getNodeValue(ctx.left);
+		IType type = getNodeValue(ctx.right);
 		setNodeValue(ctx, new CastExpression(left, type));
 	}
 	
@@ -963,7 +571,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitCatch_statement_list(Catch_statement_listContext ctx) {
 		SwitchCaseList items = new SwitchCaseList();
 		ctx.catch_statement().forEach((s)->{
-			SwitchCase item = this.<SwitchCase>getNodeValue(s);
+			SwitchCase item = getNodeValue(s);
 			items.add(item);
 		});
 		setNodeValue(ctx, items);
@@ -972,28 +580,28 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitCatchAtomicStatement(CatchAtomicStatementContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		Identifier name = getNodeValue(ctx.name);
+		StatementList stmts = getNodeValue(ctx.stmts);
 		setNodeValue(ctx, new AtomicSwitchCase(new SymbolExpression(name), stmts));
 	}
 
 	@Override
 	public void exitCatchCollectionStatement(CatchCollectionStatementContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		IExpression exp = getNodeValue(ctx.exp);
+		StatementList stmts = getNodeValue(ctx.stmts);
 		setNodeValue(ctx, new CollectionSwitchCase(exp, stmts));
 	}
 	
 	@Override
 	public void exitCategory_or_any_type(Category_or_any_typeContext ctx) {
-		IType type = this.<IType>getNodeValue(ctx.getChild(0));
+		IType type = getNodeValue(ctx.getChild(0));
 		setNodeValue(ctx, type);
 	}
 	
 	@Override
 	public void exitCategory_symbol(Category_symbolContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
+		Identifier name = getNodeValue(ctx.name);
+		ArgumentAssignmentList args = getNodeValue(ctx.args);
 		setNodeValue(ctx, new CategorySymbol(name, args));
 	}
 
@@ -1001,7 +609,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitCategory_symbol_list(Category_symbol_listContext ctx) {
 		CategorySymbolList items = new CategorySymbolList();
 		ctx.category_symbol().forEach((s)->{
-			CategorySymbol item = this.<CategorySymbol>getNodeValue(s);
+			CategorySymbol item = getNodeValue(s);
 			items.add(item);
 		});
 		setNodeValue(ctx, items);
@@ -1016,7 +624,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitCategoryType(CategoryTypeContext ctx) {
-		IType type = this.<IType>getNodeValue(ctx.c);
+		IType type = getNodeValue(ctx.c);
 		setNodeValue(ctx, type);
 	}
 
@@ -1032,33 +640,33 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitChildInstance(ChildInstanceContext ctx) {
-		IAssignableInstance parent = this.<IAssignableInstance>getNodeValue(ctx.assignable_instance());
-		IAssignableSelector child = this.<IAssignableSelector>getNodeValue(ctx.child_instance());
+		IAssignableInstance parent = getNodeValue(ctx.assignable_instance());
+		IAssignableSelector child = getNodeValue(ctx.child_instance());
 		child.setParent(parent);
 		setNodeValue(ctx, child);
 	}
 
 	@Override
 	public void exitClosure_expression(Closure_expressionContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		Identifier name = getNodeValue(ctx.name);
 		setNodeValue(ctx, new MethodExpression(name));
 	}
 
 	@Override
 	public void exitClosureExpression(ClosureExpressionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		IExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
 	}
 
 	@Override
 	public void exitClosureStatement(ClosureStatementContext ctx) {
-		ConcreteMethodDeclaration decl = this.<ConcreteMethodDeclaration>getNodeValue(ctx.decl);
+		ConcreteMethodDeclaration decl = getNodeValue(ctx.decl);
 		setNodeValue(ctx, new DeclarationStatement<ConcreteMethodDeclaration>(decl));
 	}
 	
 	@Override
 	public void exitCode_argument(Code_argumentContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		Identifier name = getNodeValue(ctx.name);
 		setNodeValue(ctx, new CodeArgument(name));
 	}
 
@@ -1069,13 +677,13 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitCodeArgument(CodeArgumentContext ctx) {
-		IArgument arg = this.<IArgument>getNodeValue(ctx.arg);
+		IArgument arg = getNodeValue(ctx.arg);
 		setNodeValue(ctx, arg);
 	}
 	
 	@Override
 	public void exitCodeExpression(CodeExpressionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		IExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, new CodeExpression(exp));
 	}
 
@@ -1086,20 +694,20 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitCollection_literal(Collection_literalContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.getChild(0));
+		IExpression exp = getNodeValue(ctx.getChild(0));
 		setNodeValue(ctx, exp);
 	}
 	
 	@Override
 	public void exitCollectionSwitchCase(CollectionSwitchCaseContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		IExpression exp = getNodeValue(ctx.exp);
+		StatementList stmts = getNodeValue(ctx.stmts);
 		setNodeValue(ctx, new CollectionSwitchCase(exp, stmts));
 	}
 
 	@Override
 	public void exitCommentStatement(CommentStatementContext ctx) {
-		setNodeValue(ctx, this.<Object>getNodeValue(ctx.comment_statement()));
+		setNodeValue(ctx, getNodeValue(ctx.comment_statement()));
 	}
 	
 	@Override
@@ -1109,10 +717,10 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitConcrete_category_declaration(Concrete_category_declarationContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		IdentifierList attrs = this.<IdentifierList>getNodeValue(ctx.attrs);
-		IdentifierList derived = this.<IdentifierList>getNodeValue(ctx.derived);
-		MethodDeclarationList methods = this.<MethodDeclarationList>getNodeValue(ctx.methods);
+		Identifier name = getNodeValue(ctx.name);
+		IdentifierList attrs = getNodeValue(ctx.attrs);
+		IdentifierList derived = getNodeValue(ctx.derived);
+		MethodDeclarationList methods = getNodeValue(ctx.methods);
 		ConcreteCategoryDeclaration decl = new ConcreteCategoryDeclaration(name, attrs, derived, methods);
 		decl.setStorable(ctx.STORABLE()!=null);
 		setNodeValue(ctx, decl);
@@ -1120,46 +728,46 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitConcrete_method_declaration(Concrete_method_declarationContext ctx) {
-		IType type = this.<IType>getNodeValue(ctx.typ);
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		ArgumentList args = this.<ArgumentList>getNodeValue(ctx.args);
-		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		IType type = getNodeValue(ctx.typ);
+		Identifier name = getNodeValue(ctx.name);
+		ArgumentList args = getNodeValue(ctx.args);
+		StatementList stmts = getNodeValue(ctx.stmts);
 		setNodeValue(ctx, new ConcreteMethodDeclaration(name, args, type, stmts));
 	}
 	
 	
 	@Override
 	public void exitConcrete_widget_declaration(Concrete_widget_declarationContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		Identifier derived = this.<Identifier>getNodeValue(ctx.derived);
-		MethodDeclarationList methods = this.<MethodDeclarationList>getNodeValue(ctx.methods);
+		Identifier name = getNodeValue(ctx.name);
+		Identifier derived = getNodeValue(ctx.derived);
+		MethodDeclarationList methods = getNodeValue(ctx.methods);
 		ConcreteWidgetDeclaration decl = new ConcreteWidgetDeclaration(name, derived, methods);
 		setNodeValue(ctx, decl);
 	}
 	
 	@Override
 	public void exitConcreteCategoryDeclaration(ConcreteCategoryDeclarationContext ctx) {
-		setNodeValue(ctx, this.<Object>getNodeValue(ctx.decl));
+		setNodeValue(ctx, getNodeValue(ctx.decl));
 	}
 	
 	@Override
 	public void exitConcreteWidgetDeclaration(ConcreteWidgetDeclarationContext ctx) {
-		setNodeValue(ctx, this.<Object>getNodeValue(ctx.decl));
+		setNodeValue(ctx, getNodeValue(ctx.decl));
 	}
 	
 	@Override
 	public void exitConstructorFrom(ConstructorFromContext ctx) {
-		CategoryType type = this.<CategoryType>getNodeValue(ctx.typ);
-		IExpression copyFrom =  this.<IExpression>getNodeValue(ctx.copyExp);
-		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
+		CategoryType type = getNodeValue(ctx.typ);
+		IExpression copyFrom =  getNodeValue(ctx.copyExp);
+		ArgumentAssignmentList args = getNodeValue(ctx.args);
 		setNodeValue(ctx, new ConstructorExpression(type, copyFrom, args, true));
 	}
 
 	
 	@Override
 	public void exitConstructorNoFrom(ConstructorNoFromContext ctx) {
-		CategoryType type = this.<CategoryType>getNodeValue(ctx.typ);
-		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
+		CategoryType type = getNodeValue(ctx.typ);
+		ArgumentAssignmentList args = getNodeValue(ctx.args);
 		setNodeValue(ctx, new ConstructorExpression(type, null, args, true));
 	}
 	
@@ -1170,29 +778,29 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitHasExpression(HasExpressionContext ctx) {
-		IExpression left = this.<IExpression>getNodeValue(ctx.left);
-		IExpression right = this.<IExpression>getNodeValue(ctx.right);
+		IExpression left = getNodeValue(ctx.left);
+		IExpression right = getNodeValue(ctx.right);
 		setNodeValue(ctx, new ContainsExpression(left, ContOp.HAS, right));
 	}
 
 	@Override
 	public void exitHasAllExpression(HasAllExpressionContext ctx) {
-		IExpression left = this.<IExpression>getNodeValue(ctx.left);
-		IExpression right = this.<IExpression>getNodeValue(ctx.right);
+		IExpression left = getNodeValue(ctx.left);
+		IExpression right = getNodeValue(ctx.right);
 		setNodeValue(ctx, new ContainsExpression(left, ContOp.HAS_ALL, right));
 	}
 
 	@Override
 	public void exitHasAnyExpression(HasAnyExpressionContext ctx) {
-		IExpression left = this.<IExpression>getNodeValue(ctx.left);
-		IExpression right = this.<IExpression>getNodeValue(ctx.right);
+		IExpression left = getNodeValue(ctx.left);
+		IExpression right = getNodeValue(ctx.right);
 		setNodeValue(ctx, new ContainsExpression(left, ContOp.HAS_ANY, right));
 	}
 
 	@Override
 	public void exitContainsExpression(ContainsExpressionContext ctx) {
-		IExpression left = this.<IExpression>getNodeValue(ctx.left);
-		IExpression right = this.<IExpression>getNodeValue(ctx.right);
+		IExpression left = getNodeValue(ctx.left);
+		IExpression right = getNodeValue(ctx.right);
 		setNodeValue(ctx, new EqualsExpression(left, EqOp.CONTAINS, right));
 	}
 
@@ -1203,14 +811,14 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitCsharp_method_expression(Csharp_method_expressionContext ctx) {
-		String name = this.<String>getNodeValue(ctx.name);
-		CSharpExpressionList args = this.<CSharpExpressionList>getNodeValue(ctx.args);
+		String name = getNodeValue(ctx.name);
+		CSharpExpressionList args = getNodeValue(ctx.args);
 		setNodeValue(ctx, new CSharpMethodExpression(name, args));
 	}
 
 	@Override
 	public void exitCsharp_primary_expression(Csharp_primary_expressionContext ctx) {
-		CSharpExpression exp = this.<CSharpExpression>getNodeValue(ctx.getChild(0));
+		CSharpExpression exp = getNodeValue(ctx.getChild(0));
 		setNodeValue(ctx, exp);
 	}
 		
@@ -1221,14 +829,14 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitCSharpArgumentList(CSharpArgumentListContext ctx) {
-		CSharpExpression item = this.<CSharpExpression>getNodeValue(ctx.item);
+		CSharpExpression item = getNodeValue(ctx.item);
 		setNodeValue(ctx, new CSharpExpressionList(item));
 	}
 	
 	@Override
 	public void exitCSharpArgumentListItem(CSharpArgumentListItemContext ctx) {
-		CSharpExpression item = this.<CSharpExpression>getNodeValue(ctx.item);
-		CSharpExpressionList items = this.<CSharpExpressionList>getNodeValue(ctx.items);
+		CSharpExpression item = getNodeValue(ctx.item);
+		CSharpExpressionList items = getNodeValue(ctx.items);
 		items.add(item);
 		setNodeValue(ctx, items);
 	}
@@ -1240,7 +848,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitCSharpCategoryBinding(CSharpCategoryBindingContext ctx) {
-		CSharpIdentifierExpression map = this.<CSharpIdentifierExpression>getNodeValue(ctx.binding);
+		CSharpIdentifierExpression map = getNodeValue(ctx.binding);
 		setNodeValue(ctx, new CSharpNativeCategoryBinding(map));
 	}
 	
@@ -1251,8 +859,8 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitCSharpChildIdentifier(CSharpChildIdentifierContext ctx) {
-		CSharpIdentifierExpression parent = this.<CSharpIdentifierExpression>getNodeValue(ctx.parent);
-		String name = this.<String>getNodeValue(ctx.name);
+		CSharpIdentifierExpression parent = getNodeValue(ctx.parent);
+		String name = getNodeValue(ctx.name);
 		CSharpIdentifierExpression child = new CSharpIdentifierExpression(parent, name);
 		setNodeValue(ctx, child);
 	}
@@ -1264,7 +872,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitCSharpIdentifier(CSharpIdentifierContext ctx) {
-		String name = this.<String>getNodeValue(ctx.name);
+		String name = getNodeValue(ctx.name);
 		setNodeValue(ctx, new CSharpIdentifierExpression(name));
 	}
 	
@@ -1275,13 +883,13 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitCSharpMethodExpression(CSharpMethodExpressionContext ctx) {
-		CSharpExpression exp = this.<CSharpExpression>getNodeValue(ctx.exp);
+		CSharpExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
 	}
 	
 	@Override
 	public void exitCSharpNativeStatement(CSharpNativeStatementContext ctx) {
-		CSharpStatement stmt = this.<CSharpStatement>getNodeValue(ctx.csharp_statement());
+		CSharpStatement stmt = getNodeValue(ctx.csharp_statement());
 		setNodeValue(ctx, new CSharpNativeCall(stmt));
 	}
 	
@@ -1293,27 +901,27 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitCSharpPrimaryExpression(CSharpPrimaryExpressionContext ctx) {
-		CSharpExpression exp = this.<CSharpExpression>getNodeValue(ctx.exp);
+		CSharpExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
 	}
 	
 	@Override
 	public void exitCSharpReturnStatement(CSharpReturnStatementContext ctx) {
-		CSharpExpression exp = this.<CSharpExpression>getNodeValue(ctx.exp);
+		CSharpExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, new CSharpStatement(exp,true));
 	}
 	
 	@Override
 	public void exitCSharpSelectorExpression(CSharpSelectorExpressionContext ctx) {
-		CSharpExpression parent = this.<CSharpExpression>getNodeValue(ctx.parent);
-		CSharpSelectorExpression child = this.<CSharpSelectorExpression>getNodeValue(ctx.child);
+		CSharpExpression parent = getNodeValue(ctx.parent);
+		CSharpSelectorExpression child = getNodeValue(ctx.child);
 		child.setParent(parent);
 		setNodeValue(ctx, child);
 	};
 	
 	@Override
 	public void exitCSharpStatement(CSharpStatementContext ctx) {
-		CSharpExpression exp = this.<CSharpExpression>getNodeValue(ctx.exp);
+		CSharpExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, new CSharpStatement(exp,false));
 	}
 	
@@ -1324,14 +932,14 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitCssExpression(CssExpressionContext ctx) {
-		setNodeValue(ctx, this.<Object>getNodeValue(ctx.exp));
+		setNodeValue(ctx, getNodeValue(ctx.exp));
 	}
 	
 	@Override
 	public void exitCss_expression(Css_expressionContext ctx) {
 		CssExpression exp = new CssExpression();
 		ctx.css_field().forEach(cx->{
-			CssField field = this.<CssField>getNodeValue(cx);
+			CssField field = getNodeValue(cx);
 			exp.addField(field);
 		});
 		setNodeValue(ctx, exp);
@@ -1340,7 +948,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	@Override
 	public void exitCss_field(Css_fieldContext ctx) {
 		String name = ctx.name.getText();
-		ICssValue value = this.<ICssValue>getNodeValue(ctx.value);
+		ICssValue value = getNodeValue(ctx.value);
 		setNodeValue(ctx, new CssField(name, value));
 	}
 	
@@ -1352,7 +960,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitCssValue(CssValueContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		IExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, new CssCode(exp));
 	}
 
@@ -1391,7 +999,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 		List<CommentStatement> comments = readComments(ctx.comment_statement());
 		List<Annotation> annotations = readAnnotations(ctx.annotation_constructor());
 		ParseTree ctx_ = ctx.getChild(ctx.getChildCount()-1);
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx_);
+		IDeclaration decl = getNodeValue(ctx_);
 		if(decl!=null) {
 			decl.setComments(comments);
 			decl.setAnnotations(annotations);
@@ -1404,7 +1012,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitDeclarations(DeclarationsContext ctx) {
 		DeclarationList items = new DeclarationList();
 		ctx.declaration().forEach((d)->{
-			IDeclaration item = this.<IDeclaration>getNodeValue(d);
+			IDeclaration item = getNodeValue(d);
 			items.add(item);
 		});
 		setNodeValue(ctx, items);
@@ -1412,14 +1020,14 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitDerived_list(Derived_listContext ctx) {
-		IdentifierList items = this.<IdentifierList>getNodeValue(ctx.items);
+		IdentifierList items = getNodeValue(ctx.items);
 		setNodeValue(ctx, items);
 	}
 	
 	@Override
 	public void exitDict_entry(Dict_entryContext ctx) {
-		DictKey key = this.<DictKey>getNodeValue(ctx.key);
-		IExpression value = this.<IExpression>getNodeValue(ctx.value);
+		DictKey key = getNodeValue(ctx.key);
+		IExpression value = getNodeValue(ctx.value);
 		DictEntry entry = new DictEntry(key, value);
 		setNodeValue(ctx, entry);
 	}
@@ -1427,7 +1035,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	@Override
 	public void exitDict_literal(Dict_literalContext ctx) {
 		boolean mutable = ctx.MUTABLE()!=null;
-		DictEntryList items = this.<DictEntryList>getNodeValue(ctx.dict_entry_list());
+		DictEntryList items = getNodeValue(ctx.dict_entry_list());
 		IExpression value = items==null ? new DictLiteral(mutable) : new DictLiteral(items, mutable);
 		setNodeValue(ctx, value);
 	}
@@ -1437,7 +1045,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitDict_entry_list(Dict_entry_listContext ctx) {
 		DictEntryList items = new DictEntryList();
 		ctx.dict_entry().forEach((e)->{
-			DictEntry item = this.<DictEntry>getNodeValue(e);
+			DictEntry item = getNodeValue(e);
 			items.add(item);
 		});
 		setNodeValue(ctx, items);
@@ -1457,27 +1065,27 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitDictType(DictTypeContext ctx) {
-		IType type = this.<IType>getNodeValue(ctx.d);
+		IType type = getNodeValue(ctx.d);
 		setNodeValue(ctx, new DictType(type));
 	}
 	
 	@Override
 	public void exitDivideExpression(DivideExpressionContext ctx) {
-		IExpression left = this.<IExpression>getNodeValue(ctx.left);
-		IExpression right = this.<IExpression>getNodeValue(ctx.right);
+		IExpression left = getNodeValue(ctx.left);
+		IExpression right = getNodeValue(ctx.right);
 		setNodeValue(ctx, new DivideExpression(left, right));
 	}
 	
 	@Override
 	public void exitDo_while_statement(Do_while_statementContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		IExpression exp = getNodeValue(ctx.exp);
+		StatementList stmts = getNodeValue(ctx.stmts);
 		setNodeValue(ctx, new DoWhileStatement(exp, stmts));
 	}
 	
 	@Override
 	public void exitDocument_expression(Document_expressionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.expression());
+		IExpression exp = getNodeValue(ctx.expression());
 		setNodeValue(ctx, new DocumentExpression(exp));
 	}
 	
@@ -1490,7 +1098,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitDocument_literal(Document_literalContext ctx) {
-		DictEntryList entries = this.<DictEntryList>getNodeValue(ctx.dict_entry_list());
+		DictEntryList entries = getNodeValue(ctx.dict_entry_list());
 		DocEntryList items = entries!=null ? new DocEntryList(entries) : new DocEntryList();
 		setNodeValue(ctx, new DocumentLiteral(items));
 	}
@@ -1498,23 +1106,23 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitDoWhileStatement(DoWhileStatementContext ctx) {
-		IStatement stmt = this.<IStatement>getNodeValue(ctx.stmt);
+		IStatement stmt = getNodeValue(ctx.stmt);
 		setNodeValue(ctx, stmt);
 	}
 	
 	@Override
 	public void exitElseIfStatementList(ElseIfStatementListContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		IExpression exp = getNodeValue(ctx.exp);
+		StatementList stmts = getNodeValue(ctx.stmts);
 		IfElement elem = new IfElement(exp, stmts);
 		setNodeValue(ctx, new IfElementList(elem));
 	}
 	
 	@Override
 	public void exitElseIfStatementListItem(ElseIfStatementListItemContext ctx) {
-		IfElementList items = this.<IfElementList>getNodeValue(ctx.items);
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		IfElementList items = getNodeValue(ctx.items);
+		IExpression exp = getNodeValue(ctx.exp);
+		StatementList stmts = getNodeValue(ctx.stmts);
 		IfElement elem = new IfElement(exp, stmts);
 		items.add(elem);
 		setNodeValue(ctx, items);
@@ -1522,34 +1130,34 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitEnum_category_declaration(Enum_category_declarationContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		IdentifierList attrs = this.<IdentifierList>getNodeValue(ctx.attrs);
-		Identifier parent = this.<Identifier>getNodeValue(ctx.derived);
+		Identifier name = getNodeValue(ctx.name);
+		IdentifierList attrs = getNodeValue(ctx.attrs);
+		Identifier parent = getNodeValue(ctx.derived);
 		IdentifierList derived = parent==null ? null : new IdentifierList(parent);
-		CategorySymbolList symbols = this.<CategorySymbolList>getNodeValue(ctx.symbols);
+		CategorySymbolList symbols = getNodeValue(ctx.symbols);
 		setNodeValue(ctx, new EnumeratedCategoryDeclaration(name, attrs, derived, symbols));
 	}
 	
 	@Override
 	public void exitEnum_native_declaration(Enum_native_declarationContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		NativeType type = this.<NativeType>getNodeValue(ctx.typ);
-		NativeSymbolList symbols = this.<NativeSymbolList>getNodeValue(ctx.symbols);
+		Identifier name = getNodeValue(ctx.name);
+		NativeType type = getNodeValue(ctx.typ);
+		NativeSymbolList symbols = getNodeValue(ctx.symbols);
 		setNodeValue(ctx, new EnumeratedNativeDeclaration(name, type, symbols));
 	}
 	
 	
 	@Override
 	public void exitEnum_declaration(Enum_declarationContext ctx) {
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.getChild(0));
+		IDeclaration decl = getNodeValue(ctx.getChild(0));
 		setNodeValue(ctx, decl);
 	}
 	
 		
 	@Override
 	public void exitEqualsExpression(EqualsExpressionContext ctx) {
-		IExpression left = this.<IExpression>getNodeValue(ctx.left);
-		IExpression right = this.<IExpression>getNodeValue(ctx.right);
+		IExpression left = getNodeValue(ctx.left);
+		IExpression right = getNodeValue(ctx.right);
 		setNodeValue(ctx, new EqualsExpression(left, EqOp.EQUALS, right));
 	}
 	
@@ -1558,7 +1166,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitExpression_list(Expression_listContext ctx) {
 		ExpressionList items = new ExpressionList();
 		ctx.expression().forEach((e)->{
-			IExpression item = this.<IExpression>getNodeValue(e);
+			IExpression item = getNodeValue(e);
 			items.add(item);
 		});
 		setNodeValue(ctx, items);
@@ -1568,7 +1176,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitExpression_tuple(Expression_tupleContext ctx) {
 		ExpressionList items = new ExpressionList();
 		ctx.expression().forEach((e)->{
-			IExpression item = this.<IExpression>getNodeValue(e);
+			IExpression item = getNodeValue(e);
 			items.add(item);
 		});
 		setNodeValue(ctx, items);
@@ -1576,13 +1184,13 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitExecuteExpression(ExecuteExpressionContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		Identifier name = getNodeValue(ctx.name);
 		setNodeValue(ctx, new ExecuteExpression(name));
 	}
 	
 	@Override
 	public void exitExpressionAssignmentList(ExpressionAssignmentListContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		IExpression exp = getNodeValue(ctx.exp);
 		ArgumentAssignmentList items = new ArgumentAssignmentList();
 		items.add(new ArgumentAssignment(null, exp));
 		setNodeValue(ctx, items);
@@ -1590,8 +1198,8 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitFilteredListExpression(FilteredListExpressionContext ctx) {
-		FilteredExpression fetch = this.<FilteredExpression>getNodeValue(ctx.filtered_list_suffix());
-		IExpression source = this.<IExpression>getNodeValue(ctx.src);
+		FilteredExpression fetch = getNodeValue(ctx.filtered_list_suffix());
+		IExpression source = getNodeValue(ctx.src);
 		fetch.setSource(source);
 		setNodeValue(ctx, fetch);
 	}
@@ -1599,8 +1207,8 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitFiltered_list_suffix(Filtered_list_suffixContext ctx) {
-		Identifier itemName = this.<Identifier>getNodeValue(ctx.name);
-		IExpression predicate = this.<IExpression>getNodeValue(ctx.predicate);
+		Identifier itemName = getNodeValue(ctx.name);
+		IExpression predicate = getNodeValue(ctx.predicate);
 		setNodeValue(ctx, new FilteredExpression(itemName, null, predicate));
 	}
 	
@@ -1612,40 +1220,40 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitFetchOne(FetchOneContext ctx) {
-		CategoryType category = this.<CategoryType>getNodeValue(ctx.typ);
-		IExpression filter = this.<IExpression>getNodeValue(ctx.predicate);
+		CategoryType category = getNodeValue(ctx.typ);
+		IExpression filter = getNodeValue(ctx.predicate);
 		setNodeValue(ctx, new FetchOneExpression(category, filter));
 	}
 	
 	@Override
 	public void exitFetchOneAsync(FetchOneAsyncContext ctx) {
-		CategoryType category = this.<CategoryType>getNodeValue(ctx.typ);
-		IExpression filter = this.<IExpression>getNodeValue(ctx.predicate);
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		StatementList stmts = 	this.<StatementList>getNodeValue(ctx.stmts);
+		CategoryType category = getNodeValue(ctx.typ);
+		IExpression filter = getNodeValue(ctx.predicate);
+		Identifier name = getNodeValue(ctx.name);
+		StatementList stmts = 	getNodeValue(ctx.stmts);
 		setNodeValue(ctx, new FetchOneStatement(category, filter, name, stmts));
 	}
 
 	@Override
 	public void exitFetchMany(FetchManyContext ctx) {
-		CategoryType category = this.<CategoryType>getNodeValue(ctx.typ);
-		IExpression start = this.<IExpression>getNodeValue(ctx.xstart);
-		IExpression stop = this.<IExpression>getNodeValue(ctx.xstop);
-		IExpression filter = this.<IExpression>getNodeValue(ctx.predicate);
-		OrderByClauseList orderBy = this.<OrderByClauseList>getNodeValue(ctx.orderby);
+		CategoryType category = getNodeValue(ctx.typ);
+		IExpression start = getNodeValue(ctx.xstart);
+		IExpression stop = getNodeValue(ctx.xstop);
+		IExpression filter = getNodeValue(ctx.predicate);
+		OrderByClauseList orderBy = getNodeValue(ctx.orderby);
 		setNodeValue(ctx, new FetchManyExpression(category, start, stop, filter, orderBy));
 	}
 	
 	
 	@Override
 	public void exitFetchManyAsync(FetchManyAsyncContext ctx) {
-		CategoryType category = this.<CategoryType>getNodeValue(ctx.typ);
-		IExpression start = this.<IExpression>getNodeValue(ctx.xstart);
-		IExpression stop = this.<IExpression>getNodeValue(ctx.xstop);
-		IExpression predicate = this.<IExpression>getNodeValue(ctx.predicate);
-		OrderByClauseList orderBy = this.<OrderByClauseList>getNodeValue(ctx.orderby);
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		CategoryType category = getNodeValue(ctx.typ);
+		IExpression start = getNodeValue(ctx.xstart);
+		IExpression stop = getNodeValue(ctx.xstop);
+		IExpression predicate = getNodeValue(ctx.predicate);
+		OrderByClauseList orderBy = getNodeValue(ctx.orderby);
+		Identifier name = getNodeValue(ctx.name);
+		StatementList stmts = getNodeValue(ctx.stmts);
 		setNodeValue(ctx, new FetchManyStatement(category, start, stop, predicate, orderBy, name, stmts));
 	}
 
@@ -1665,22 +1273,22 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitFor_each_statement(For_each_statementContext ctx) {
-		Identifier name1 = this.<Identifier>getNodeValue(ctx.name1);
-		Identifier name2 = this.<Identifier>getNodeValue(ctx.name2);
-		IExpression source = this.<IExpression>getNodeValue(ctx.source);
-		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		Identifier name1 = getNodeValue(ctx.name1);
+		Identifier name2 = getNodeValue(ctx.name2);
+		IExpression source = getNodeValue(ctx.source);
+		StatementList stmts = getNodeValue(ctx.stmts);
 		setNodeValue(ctx, new ForEachStatement(name1, name2, source, stmts));
 	}
 	
 	@Override
 	public void exitForEachStatement(ForEachStatementContext ctx) {
-		IStatement stmt = this.<IStatement>getNodeValue(ctx.stmt);
+		IStatement stmt = getNodeValue(ctx.stmt);
 		setNodeValue(ctx, stmt);
 	}
 	
 	@Override
 	public void exitFullDeclarationList(FullDeclarationListContext ctx) {
-		DeclarationList items = this.<DeclarationList>getNodeValue(ctx.declarations());
+		DeclarationList items = getNodeValue(ctx.declarations());
 		if(items==null)
 			items = new DeclarationList();
 		setNodeValue(ctx, items);
@@ -1688,22 +1296,22 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitGetter_method_declaration(Getter_method_declarationContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		Identifier name = getNodeValue(ctx.name);
+		StatementList stmts = getNodeValue(ctx.stmts);
 		setNodeValue(ctx, new GetterMethodDeclaration(name, stmts));
 	}
 	
 	@Override
 	public void exitGreaterThanExpression(GreaterThanExpressionContext ctx) {
-		IExpression left = this.<IExpression>getNodeValue(ctx.left);
-		IExpression right = this.<IExpression>getNodeValue(ctx.right);
+		IExpression left = getNodeValue(ctx.left);
+		IExpression right = getNodeValue(ctx.right);
 		setNodeValue(ctx, new CompareExpression(left, CmpOp.GT, right));
 	}
 	
 	@Override
 	public void exitGreaterThanOrEqualExpression(GreaterThanOrEqualExpressionContext ctx) {
-		IExpression left = this.<IExpression>getNodeValue(ctx.left);
-		IExpression right = this.<IExpression>getNodeValue(ctx.right);
+		IExpression left = getNodeValue(ctx.left);
+		IExpression right = getNodeValue(ctx.right);
 		setNodeValue(ctx, new CompareExpression(left, CmpOp.GTE, right));
 	}
 
@@ -1720,22 +1328,22 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitIdentifierExpression(IdentifierExpressionContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.exp);
+		Identifier name = getNodeValue(ctx.exp);
 		setNodeValue(ctx, new UnresolvedIdentifier(name));
 	}
 	
 	@Override
 	public void exitIf_statement(If_statementContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
-		IfElementList elseIfs = this.<IfElementList>getNodeValue(ctx.elseIfs);
-		StatementList elseStmts = this.<StatementList>getNodeValue(ctx.elseStmts);
+		IExpression exp = getNodeValue(ctx.exp);
+		StatementList stmts = getNodeValue(ctx.stmts);
+		IfElementList elseIfs = getNodeValue(ctx.elseIfs);
+		StatementList elseStmts = getNodeValue(ctx.elseStmts);
 		setNodeValue(ctx, new IfStatement(exp, stmts, elseIfs, elseStmts));
 	}
 
 	@Override
 	public void exitIfStatement(IfStatementContext ctx) {
-		IStatement stmt = this.<IStatement>getNodeValue(ctx.stmt);
+		IStatement stmt = getNodeValue(ctx.stmt);
 		setNodeValue(ctx, stmt);
 	}
 	
@@ -1746,21 +1354,21 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitInExpression(InExpressionContext ctx) {
-		IExpression left = this.<IExpression>getNodeValue(ctx.left);
-		IExpression right = this.<IExpression>getNodeValue(ctx.right);
+		IExpression left = getNodeValue(ctx.left);
+		IExpression right = getNodeValue(ctx.right);
 		setNodeValue(ctx, new ContainsExpression(left, ContOp.IN, right));
 	}
 	
 	@Override
 	public void exitInstanceExpression(InstanceExpressionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		IExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
 	}
 	
 	@Override
 	public void exitIntDivideExpression(IntDivideExpressionContext ctx) {
-		IExpression left = this.<IExpression>getNodeValue(ctx.left);
-		IExpression right = this.<IExpression>getNodeValue(ctx.right);
+		IExpression left = getNodeValue(ctx.left);
+		IExpression right = getNodeValue(ctx.right);
 		setNodeValue(ctx, new IntDivideExpression(left, right));
 	}
 	
@@ -1776,56 +1384,56 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitIsATypeExpression(IsATypeExpressionContext ctx) {
-		IType type = this.<IType>getNodeValue(ctx.category_or_any_type());
+		IType type = getNodeValue(ctx.category_or_any_type());
 		IExpression exp = new TypeExpression(type);
 		setNodeValue(ctx, exp);
 	}
 	
 	@Override
 	public void exitIsExpression(IsExpressionContext ctx) {
-		IExpression left = this.<IExpression>getNodeValue(ctx.left);
-		IExpression right = this.<IExpression>getNodeValue(ctx.right);
+		IExpression left = getNodeValue(ctx.left);
+		IExpression right = getNodeValue(ctx.right);
 		EqOp op = right instanceof TypeExpression ? EqOp.IS_A : EqOp.IS;
 		setNodeValue(ctx, new EqualsExpression(left, op, right));
 	}
 	
 	@Override
 	public void exitIsNotExpression(IsNotExpressionContext ctx) {
-		IExpression left = this.<IExpression>getNodeValue(ctx.left);
-		IExpression right = this.<IExpression>getNodeValue(ctx.right);
+		IExpression left = getNodeValue(ctx.left);
+		IExpression right = getNodeValue(ctx.right);
 		EqOp op = right instanceof TypeExpression ? EqOp.IS_NOT_A : EqOp.IS_NOT;
 		setNodeValue(ctx, new EqualsExpression(left, op, right));
 	}
 	
 	@Override
 	public void exitIsOtherExpression(IsOtherExpressionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.expression());
+		IExpression exp = getNodeValue(ctx.expression());
 		setNodeValue(ctx, exp);
 	}
 	
 	@Override
 	public void exitItemInstance(ItemInstanceContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		IExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, new ItemInstance(exp));
 	}
 	
 	@Override
 	public void exitItemSelector(ItemSelectorContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		IExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, new ItemSelector(exp));
 	}
 	
 	@Override
 	public void exitIteratorExpression(IteratorExpressionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		IExpression source = this.<IExpression>getNodeValue(ctx.source);
+		IExpression exp = getNodeValue(ctx.exp);
+		Identifier name = getNodeValue(ctx.name);
+		IExpression source = getNodeValue(ctx.source);
 		setNodeValue(ctx, new IteratorExpression(name, source, exp));
 	}
 	
 	@Override
 	public void exitIteratorType(IteratorTypeContext ctx) {
-		IType type = this.<IType>getNodeValue(ctx.i);
+		IType type = getNodeValue(ctx.i);
 		setNodeValue(ctx, new IteratorType(type));
 	}
 
@@ -1836,26 +1444,26 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitJava_item_expression(Java_item_expressionContext ctx) {
-		JavaExpression exp = this.<JavaExpression>getNodeValue(ctx.exp);
+		JavaExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, new JavaItemExpression(exp));
 	}
 	
 	@Override
 	public void exitJava_method_expression(Java_method_expressionContext ctx) {
-		String name = this.<String>getNodeValue(ctx.name);
-		JavaExpressionList args = this.<JavaExpressionList>getNodeValue(ctx.args);
+		String name = getNodeValue(ctx.name);
+		JavaExpressionList args = getNodeValue(ctx.args);
 		setNodeValue(ctx, new JavaMethodExpression(name, args));
 	}
 
 	@Override
 	public void exitJava_parenthesis_expression(Java_parenthesis_expressionContext ctx) {
-		JavaExpression exp = this.<JavaExpression>getNodeValue(ctx.exp);
+		JavaExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
 	}
 	
 	@Override
 	public void exitJava_primary_expression(Java_primary_expressionContext ctx) {
-		JavaExpression exp = this.<JavaExpression>getNodeValue(ctx.getChild(0));
+		JavaExpression exp = getNodeValue(ctx.getChild(0));
 		setNodeValue(ctx, exp);
 	}
 	
@@ -1866,14 +1474,14 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitJavaArgumentList(JavaArgumentListContext ctx) {
-		JavaExpression item = this.<JavaExpression>getNodeValue(ctx.item);
+		JavaExpression item = getNodeValue(ctx.item);
 		setNodeValue(ctx, new JavaExpressionList(item));
 	}
 	
 	@Override
 	public void exitJavaArgumentListItem(JavaArgumentListItemContext ctx) {
-		JavaExpression item = this.<JavaExpression>getNodeValue(ctx.item);
-		JavaExpressionList items = this.<JavaExpressionList>getNodeValue(ctx.items);
+		JavaExpression item = getNodeValue(ctx.item);
+		JavaExpressionList items = getNodeValue(ctx.items);
 		items.add(item);
 		setNodeValue(ctx, items);
 	}
@@ -1885,7 +1493,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitJavaCategoryBinding(JavaCategoryBindingContext ctx) {
-		JavaIdentifierExpression map = this.<JavaIdentifierExpression>getNodeValue(ctx.binding);
+		JavaIdentifierExpression map = getNodeValue(ctx.binding);
 		setNodeValue(ctx, new JavaNativeCategoryBinding(map));
 	}
 	
@@ -1896,22 +1504,22 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitJavaChildClassIdentifier(JavaChildClassIdentifierContext ctx) {
-		JavaIdentifierExpression parent = this.<JavaIdentifierExpression>getNodeValue(ctx.parent);
+		JavaIdentifierExpression parent = getNodeValue(ctx.parent);
 		JavaIdentifierExpression child = new JavaIdentifierExpression(parent, ctx.name.getText());
 		setNodeValue(ctx, child);
 	}
 	
 	@Override
 	public void exitJavaChildIdentifier(JavaChildIdentifierContext ctx) {
-		JavaIdentifierExpression parent = this.<JavaIdentifierExpression>getNodeValue(ctx.parent);
-		String name = this.<String>getNodeValue(ctx.name);
+		JavaIdentifierExpression parent = getNodeValue(ctx.parent);
+		String name = getNodeValue(ctx.name);
 		JavaIdentifierExpression child = new JavaIdentifierExpression(parent, name);
 		setNodeValue(ctx, child);
 	}
 	
 	@Override
 	public void exitJavaClassIdentifier(JavaClassIdentifierContext ctx) {
-		JavaIdentifierExpression klass = this.<JavaIdentifierExpression>getNodeValue(ctx.klass);
+		JavaIdentifierExpression klass = getNodeValue(ctx.klass);
 		setNodeValue(ctx, klass);
 	}
 	
@@ -1922,7 +1530,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitJavaIdentifier(JavaIdentifierContext ctx) {
-		String name = this.<String>getNodeValue(ctx.name);
+		String name = getNodeValue(ctx.name);
 		setNodeValue(ctx, new JavaIdentifierExpression(name));
 	}
 	
@@ -1933,31 +1541,31 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitJavaItemExpression(JavaItemExpressionContext ctx) {
-		JavaExpression exp = this.<JavaExpression>getNodeValue(ctx.exp);
+		JavaExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
 	}
 	
 	@Override
 	public void exitJavaMethodExpression(JavaMethodExpressionContext ctx) {
-		JavaExpression exp = this.<JavaExpression>getNodeValue(ctx.exp);
+		JavaExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
 	}
 	
 	@Override
 	public void exitJavaNativeStatement(JavaNativeStatementContext ctx) {
-		JavaStatement stmt = this.<JavaStatement>getNodeValue(ctx.java_statement());
+		JavaStatement stmt = getNodeValue(ctx.java_statement());
 		setNodeValue(ctx, new JavaNativeCall(stmt));
 	}
 	
 	@Override
 	public void exitJavaPrimaryExpression(JavaPrimaryExpressionContext ctx) {
-		JavaExpression exp = this.<JavaExpression>getNodeValue(ctx.exp);
+		JavaExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
 	}
 
 	@Override
 	public void exitJavaReturnStatement(JavaReturnStatementContext ctx) {
-		JavaExpression exp = this.<JavaExpression>getNodeValue(ctx.exp);
+		JavaExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, new JavaStatement(exp,true));
 	}
 	
@@ -1966,7 +1574,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 		String identifier = ctx.javascript_identifier().stream()
 				.map(cx->cx.getText())
 				.collect(Collectors.joining("."));
-		JavaScriptModule module = this.<JavaScriptModule>getNodeValue(ctx.javascript_module());
+		JavaScriptModule module = getNodeValue(ctx.javascript_module());
 		JavaScriptNativeCategoryBinding map = new JavaScriptNativeCategoryBinding(identifier, module);
 		setNodeValue(ctx, map);
 	}
@@ -1985,9 +1593,9 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitJavascript_method_expression(Javascript_method_expressionContext ctx) {
-		String name = this.<String>getNodeValue(ctx.name);
+		String name = getNodeValue(ctx.name);
 		JavaScriptMethodExpression method = new JavaScriptMethodExpression(name);
-		JavaScriptExpressionList args = this.<JavaScriptExpressionList>getNodeValue(ctx.args);
+		JavaScriptExpressionList args = getNodeValue(ctx.args);
 		method.setArguments(args);
 		setNodeValue(ctx, method);
 	}
@@ -2003,21 +1611,21 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitJavascript_native_statement(Javascript_native_statementContext ctx) {
-		JavaScriptStatement stmt = this.<JavaScriptStatement>getNodeValue(ctx.javascript_statement());
-		JavaScriptModule module = this.<JavaScriptModule>getNodeValue(ctx.javascript_module());
+		JavaScriptStatement stmt = getNodeValue(ctx.javascript_statement());
+		JavaScriptModule module = getNodeValue(ctx.javascript_module());
 		stmt.setModule(module);
 		setNodeValue(ctx, stmt);
 	}
 	
 	@Override
 	public void exitJavascript_new_expression(Javascript_new_expressionContext ctx) {
-		JavaScriptMethodExpression exp = this.<JavaScriptMethodExpression>getNodeValue(ctx.javascript_method_expression());
+		JavaScriptMethodExpression exp = getNodeValue(ctx.javascript_method_expression());
 		setNodeValue(ctx, new JavaScriptNewExpression(exp));
 	}
 	
 	@Override
 	public void exitJavascript_primary_expression(Javascript_primary_expressionContext ctx) {
-		JavaScriptExpression exp = this.<JavaScriptExpression>getNodeValue(ctx.getChild(0));
+		JavaScriptExpression exp = getNodeValue(ctx.getChild(0));
 		setNodeValue(ctx, exp);
 	}
 	
@@ -2028,15 +1636,15 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitJavascriptArgumentList(JavascriptArgumentListContext ctx) {
-		JavaScriptExpression exp = this.<JavaScriptExpression>getNodeValue(ctx.item);
+		JavaScriptExpression exp = getNodeValue(ctx.item);
 		JavaScriptExpressionList list = new JavaScriptExpressionList(exp);
 		setNodeValue(ctx, list);
 	}
 	
 	@Override
 	public void exitJavascriptArgumentListItem(JavascriptArgumentListItemContext ctx) {
-		JavaScriptExpression exp = this.<JavaScriptExpression>getNodeValue(ctx.item);
-		JavaScriptExpressionList list = this.<JavaScriptExpressionList>getNodeValue(ctx.items);
+		JavaScriptExpression exp = getNodeValue(ctx.item);
+		JavaScriptExpressionList list = getNodeValue(ctx.items);
 		list.add(exp);
 		setNodeValue(ctx, list);
 	}
@@ -2049,7 +1657,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitJavaScriptCategoryBinding(JavaScriptCategoryBindingContext ctx) {
-		setNodeValue(ctx, this.<Object>getNodeValue(ctx.binding));
+		setNodeValue(ctx, getNodeValue(ctx.binding));
 	}
 	
 	@Override
@@ -2078,38 +1686,38 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitJavaScriptMethodExpression(JavaScriptMethodExpressionContext ctx) {
-		JavaScriptExpression method = this.<JavaScriptExpression>getNodeValue(ctx.method);
+		JavaScriptExpression method = getNodeValue(ctx.method);
 		setNodeValue(ctx, method);
 	}
 	@Override
 	public void exitJavaScriptNativeStatement(JavaScriptNativeStatementContext ctx) {
-		JavaScriptStatement stmt = this.<JavaScriptStatement>getNodeValue(ctx.javascript_native_statement());
+		JavaScriptStatement stmt = getNodeValue(ctx.javascript_native_statement());
 		setNodeValue(ctx, new JavaScriptNativeCall(stmt));
 	}
 	
 	@Override
 	public void exitJavascriptPrimaryExpression(JavascriptPrimaryExpressionContext ctx) {
-		JavaScriptExpression exp = this.<JavaScriptExpression>getNodeValue(ctx.exp);
+		JavaScriptExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
 	}
 	
 	@Override
 	public void exitJavascriptReturnStatement(JavascriptReturnStatementContext ctx) {
-		JavaScriptExpression exp = this.<JavaScriptExpression>getNodeValue(ctx.exp);
+		JavaScriptExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, new JavaScriptStatement(exp, true));
 	}
 	
 	@Override
 	public void exitJavascriptSelectorExpression(JavascriptSelectorExpressionContext ctx) {
-		JavaScriptExpression parent = this.<JavaScriptExpression>getNodeValue(ctx.parent);
-		JavaScriptSelectorExpression child = this.<JavaScriptSelectorExpression>getNodeValue(ctx.child);
+		JavaScriptExpression parent = getNodeValue(ctx.parent);
+		JavaScriptSelectorExpression child = getNodeValue(ctx.child);
 		child.setParent(parent);
 		setNodeValue(ctx, child);
 	}
 	
 	@Override
 	public void exitJavascriptStatement(JavascriptStatementContext ctx) {
-		JavaScriptExpression exp = this.<JavaScriptExpression>getNodeValue(ctx.exp);
+		JavaScriptExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, new JavaScriptStatement(exp, false));
 	}
 	
@@ -2121,15 +1729,15 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitJavaSelectorExpression(JavaSelectorExpressionContext ctx) {
-		JavaExpression parent = this.<JavaExpression>getNodeValue(ctx.parent);
-		JavaSelectorExpression child = this.<JavaSelectorExpression>getNodeValue(ctx.child);
+		JavaExpression parent = getNodeValue(ctx.parent);
+		JavaSelectorExpression child = getNodeValue(ctx.child);
 		child.setParent(parent);
 		setNodeValue(ctx, child);
 	}
 	
 	@Override
 	public void exitJavaStatement(JavaStatementContext ctx) {
-		JavaExpression exp = this.<JavaExpression>getNodeValue(ctx.exp);
+		JavaExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, new JavaStatement(exp,false));
 	}
 	
@@ -2142,23 +1750,23 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitJsxChild(JsxChildContext ctx) {
-		setNodeValue(ctx, this.<Object>getNodeValue(ctx.jsx));
+		setNodeValue(ctx, getNodeValue(ctx.jsx));
 	}
 	
 	
 	@Override
 	public void exitJsxCode(JsxCodeContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		IExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, new JsxExpression(exp));
 	}
 	
 
 	@Override
 	public void exitJsxElement(JsxElementContext ctx) {
-		JsxElement element = this.<JsxElement>getNodeValue(ctx.opening);
-		JsxClosing closing = this.<JsxClosing>getNodeValue(ctx.closing);
+		JsxElement element = getNodeValue(ctx.opening);
+		JsxClosing closing = getNodeValue(ctx.closing);
 		element.setClosing(closing);
-		List<IJsxExpression> children = this.<List<IJsxExpression>>getNodeValue(ctx.children_);
+		List<IJsxExpression> children = getNodeValue(ctx.children_);
 		element.setChildren(children);
 		setNodeValue(ctx, element);
 	}
@@ -2166,13 +1774,13 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitJsxExpression(JsxExpressionContext ctx) {
-		setNodeValue(ctx, this.<Object>getNodeValue(ctx.exp));
+		setNodeValue(ctx, getNodeValue(ctx.exp));
 	}
 	
 	
 	@Override
 	public void exitJsxSelfClosing(JsxSelfClosingContext ctx) {
-		setNodeValue(ctx, this.<Object>getNodeValue(ctx.jsx));
+		setNodeValue(ctx, getNodeValue(ctx.jsx));
 	}
 	
 	
@@ -2185,16 +1793,16 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitJsxValue(JsxValueContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		IExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, new JsxExpression(exp));
 	}
 
 	
 	@Override
 	public void exitJsx_attribute(Jsx_attributeContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		IJsxValue value = this.<IJsxValue>getNodeValue(ctx.value);
-		String suite = getJsxWhiteSpace(ctx.jsx_ws());
+		Identifier name = getNodeValue(ctx.name);
+		IJsxValue value = getNodeValue(ctx.value);
+		String suite = getJsxWhiteSpace(ctx.ws_plus());
 		setNodeValue(ctx, new JsxAttribute(name, value, suite));
 	}
 	
@@ -2216,7 +1824,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitJsx_expression(Jsx_expressionContext ctx) {
-		setNodeValue(ctx, this.<Object>getNodeValue(ctx.getChild(0)));
+		setNodeValue(ctx, getNodeValue(ctx.getChild(0)));
 	}
 	
 	@Override
@@ -2234,8 +1842,8 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitJsx_opening(Jsx_openingContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		String nameSuite = getJsxWhiteSpace(ctx.jsx_ws());
+		Identifier name = getNodeValue(ctx.name);
+		String nameSuite = getJsxWhiteSpace(ctx.ws_plus());
 		List<JsxAttribute> attributes = ctx.jsx_attribute().stream()
 				.map(cx->this.<JsxAttribute>getNodeValue(cx))
 				.collect(Collectors.toList());
@@ -2245,14 +1853,14 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitJsx_closing(Jsx_closingContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		Identifier name = getNodeValue(ctx.name);
 		setNodeValue(ctx, new JsxClosing(name, null));
 	}
 	
 	@Override
 	public void exitJsx_self_closing(Jsx_self_closingContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		String nameSuite = getJsxWhiteSpace(ctx.jsx_ws());
+		Identifier name = getNodeValue(ctx.name);
+		String nameSuite = getJsxWhiteSpace(ctx.ws_plus());
 		List<JsxAttribute> attributes = ctx.jsx_attribute().stream()
 				.map(cx->this.<JsxAttribute>getNodeValue(cx))
 				.collect(Collectors.toList());
@@ -2267,22 +1875,22 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitLessThanExpression(LessThanExpressionContext ctx) {
-		IExpression left = this.<IExpression>getNodeValue(ctx.left);
-		IExpression right = this.<IExpression>getNodeValue(ctx.right);
+		IExpression left = getNodeValue(ctx.left);
+		IExpression right = getNodeValue(ctx.right);
 		setNodeValue(ctx, new CompareExpression(left, CmpOp.LT, right));
 	}
 	
 	@Override
 	public void exitLessThanOrEqualExpression(LessThanOrEqualExpressionContext ctx) {
-		IExpression left = this.<IExpression>getNodeValue(ctx.left);
-		IExpression right = this.<IExpression>getNodeValue(ctx.right);
+		IExpression left = getNodeValue(ctx.left);
+		IExpression right = getNodeValue(ctx.right);
 		setNodeValue(ctx, new CompareExpression(left, CmpOp.LTE, right));
 	}
 	
 	@Override
 	public void exitList_literal(List_literalContext ctx) {
 		boolean mutable = ctx.MUTABLE()!=null;
-		ExpressionList items = this.<ExpressionList>getNodeValue(ctx.expression_list());
+		ExpressionList items = getNodeValue(ctx.expression_list());
 		IExpression value = items==null ? new ListLiteral(mutable) : new ListLiteral(items, mutable);
 		setNodeValue(ctx, value);
 	}
@@ -2290,13 +1898,13 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitListType(ListTypeContext ctx) {
-		IType type = this.<IType>getNodeValue(ctx.l);
+		IType type = getNodeValue(ctx.l);
 		setNodeValue(ctx, new ListType(type));
 	}
 	
 	@Override
 	public void exitLiteral_expression(Literal_expressionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.getChild(0));
+		IExpression exp = getNodeValue(ctx.getChild(0));
 		setNodeValue(ctx, exp);
 	}
 	
@@ -2304,7 +1912,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitLiteral_list_literal(Literal_list_literalContext ctx) {
 		ExpressionList items = new ExpressionList();
 		ctx.atomic_literal().forEach((l)->{
-			IExpression item = this.<IExpression>getNodeValue(l);
+			IExpression item = getNodeValue(l);
 			items.add(item);
 		});
 		setNodeValue(ctx, items);
@@ -2312,7 +1920,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitLiteralExpression(LiteralExpressionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		IExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
 	}
 	
@@ -2320,32 +1928,32 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitLiteralListLiteral(LiteralListLiteralContext ctx) {
-		ExpressionList items = this.<ExpressionList>getNodeValue(ctx.literal_list_literal());
+		ExpressionList items = getNodeValue(ctx.literal_list_literal());
 		setNodeValue(ctx, new ListLiteral(items, false));
 	}
 	
 	@Override
 	public void exitLiteralRangeLiteral(LiteralRangeLiteralContext ctx) {
-		IExpression low = this.<IExpression>getNodeValue(ctx.low);
-		IExpression high = this.<IExpression>getNodeValue(ctx.high);
+		IExpression low = getNodeValue(ctx.low);
+		IExpression high = getNodeValue(ctx.high);
 		setNodeValue(ctx, new RangeLiteral(low, high));
 	}
 	
 	@Override
 	public void exitLiteralSetLiteral(LiteralSetLiteralContext ctx) {
-		ExpressionList items = this.<ExpressionList>getNodeValue(ctx.literal_list_literal());
+		ExpressionList items = getNodeValue(ctx.literal_list_literal());
 		setNodeValue(ctx, new SetLiteral(items));
 	}
 	
 	@Override
 	public void exitMatchingExpression(MatchingExpressionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		IExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, new MatchingExpressionConstraint(exp));
 	}
 
 	@Override
 	public void exitMatchingList(MatchingListContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.source);
+		IExpression exp = getNodeValue(ctx.source);
 		setNodeValue(ctx, new MatchingCollectionConstraint(exp));
 	}
 	
@@ -2357,13 +1965,13 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitMatchingRange(MatchingRangeContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.source);
+		IExpression exp = getNodeValue(ctx.source);
 		setNodeValue(ctx, new MatchingCollectionConstraint(exp));
 	}
 
 	@Override
 	public void exitMatchingSet(MatchingSetContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.source);
+		IExpression exp = getNodeValue(ctx.source);
 		setNodeValue(ctx, new MatchingCollectionConstraint(exp));
 	}
 	
@@ -2377,7 +1985,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 		List<CommentStatement> comments = readComments(ctx.comment_statement());
 		List<Annotation> annotations = readAnnotations(ctx.annotation_constructor());
 		ParseTree ctx_ = ctx.getChild(ctx.getChildCount()-1);
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx_);
+		IDeclaration decl = getNodeValue(ctx_);
 		if(decl!=null) {
 			decl.setComments(comments);
 			decl.setAnnotations(annotations);
@@ -2389,7 +1997,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitMember_method_declaration_list(Member_method_declaration_listContext ctx) {
 		MethodDeclarationList items = new MethodDeclarationList();
 		ctx.member_method_declaration().forEach((m)->{
-			IMethodDeclaration item = this.<IMethodDeclaration>getNodeValue(m);
+			IMethodDeclaration item = getNodeValue(m);
 			items.add(item);
 		});
 		setNodeValue(ctx, items);
@@ -2397,32 +2005,32 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitMemberInstance(MemberInstanceContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		Identifier name = getNodeValue(ctx.name);
 		setNodeValue(ctx, new MemberInstance(name));
 	}
 	
 	@Override
 	public void exitMemberSelector(MemberSelectorContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		Identifier name = getNodeValue(ctx.name);
 		setNodeValue(ctx, new MemberSelector(name));
 	}
 	
 	@Override
 	public void exitMethod_call_expression(Method_call_expressionContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		Identifier name = getNodeValue(ctx.name);
 		IExpression caller = new UnresolvedIdentifier(name);
-		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
+		ArgumentAssignmentList args = getNodeValue(ctx.args);
 		setNodeValue(ctx, new UnresolvedCall(caller, args));
 	}
 	
 	
 	@Override
 	public void exitMethod_call_statement(Method_call_statementContext ctx) {
-		IExpression parent = this.<IExpression>getNodeValue(ctx.parent);
-		UnresolvedCall call = this.<UnresolvedCall>getNodeValue(ctx.method);
+		IExpression parent = getNodeValue(ctx.parent);
+		UnresolvedCall call = getNodeValue(ctx.method);
 		call.setParent(parent);
-		Identifier resultName = this.<Identifier>getNodeValue(ctx.name);
-		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		Identifier resultName = getNodeValue(ctx.name);
+		StatementList stmts = getNodeValue(ctx.stmts);
 		if(resultName!=null || stmts!=null)
 			setNodeValue(ctx, new RemoteCall(call, resultName, stmts));
 		else
@@ -2431,39 +2039,39 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitMethod_declaration(Method_declarationContext ctx) {
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.getChild(0));
+		IDeclaration decl = getNodeValue(ctx.getChild(0));
 		setNodeValue(ctx, decl);
 	}
 	
 	
 	@Override
 	public void exitMethod_expression(Method_expressionContext ctx) {
-		IExpression decl = this.<IExpression>getNodeValue(ctx.getChild(0));
+		IExpression decl = getNodeValue(ctx.getChild(0));
 		setNodeValue(ctx, decl);
 	}
 	
 	
 	@Override
 	public void exitMethod_identifier(Method_identifierContext ctx) {
-		Object id = this.<Object>getNodeValue(ctx.getChild(0));
+		Object id = getNodeValue(ctx.getChild(0));
 		setNodeValue(ctx, id);
 	}
 	
 	@Override
 	public void exitMethodCallStatement(MethodCallStatementContext ctx) {
-		IStatement stmt = this.<IStatement>getNodeValue(ctx.stmt);
+		IStatement stmt = getNodeValue(ctx.stmt);
 		setNodeValue(ctx, stmt);
 	}
 	
 	@Override
 	public void exitMethodExpression(MethodExpressionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		IExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
 	}
 				
 	@Override
 	public void exitMethodSelector(MethodSelectorContext ctx) {
-		UnresolvedCall call = this.<UnresolvedCall>getNodeValue(ctx.method);
+		UnresolvedCall call = getNodeValue(ctx.method);
 		if(call.getCaller() instanceof UnresolvedIdentifier) {
 			Identifier id = ((UnresolvedIdentifier)call.getCaller()).getId();
 			call.setCaller(new UnresolvedSelector(id));
@@ -2480,52 +2088,52 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitMinusExpression(MinusExpressionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		IExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, new MinusExpression(exp));
 	}
 	
 	@Override
 	public void exitModuloExpression(ModuloExpressionContext ctx) {
-		IExpression left = this.<IExpression>getNodeValue(ctx.left);
-		IExpression right = this.<IExpression>getNodeValue(ctx.right);
+		IExpression left = getNodeValue(ctx.left);
+		IExpression right = getNodeValue(ctx.right);
 		setNodeValue(ctx, new ModuloExpression(left, right));
 	}
 	
 	@Override
 	public void exitMultiplyExpression(MultiplyExpressionContext ctx) {
-		IExpression left = this.<IExpression>getNodeValue(ctx.left);
-		IExpression right = this.<IExpression>getNodeValue(ctx.right);
+		IExpression left = getNodeValue(ctx.left);
+		IExpression right = getNodeValue(ctx.right);
 		setNodeValue(ctx, new MultiplyExpression(left, right));
 	}
 	
 	@Override
 	public void exitMutable_category_type(Mutable_category_typeContext ctx) {
-		CategoryType typ = this.<CategoryType>getNodeValue(ctx.category_type());
+		CategoryType typ = getNodeValue(ctx.category_type());
 		typ.setMutable(ctx.MUTABLE()!=null);
 		setNodeValue(ctx, typ);
 	}
 	
 	@Override
 	public void exitNamed_argument(Named_argumentContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.variable_identifier());
+		Identifier name = getNodeValue(ctx.variable_identifier());
 		UnresolvedArgument arg = new UnresolvedArgument(name);
-		IExpression exp = this.<IExpression>getNodeValue(ctx.literal_expression());
+		IExpression exp = getNodeValue(ctx.literal_expression());
 		arg.setDefaultExpression(exp);
 		setNodeValue(ctx, arg);
 	}
 	
 	@Override
 	public void exitNative_category_bindings(Native_category_bindingsContext ctx) {
-		NativeCategoryBindingList items = this.<NativeCategoryBindingList>getNodeValue(ctx.items);
+		NativeCategoryBindingList items = getNodeValue(ctx.items);
 		setNodeValue(ctx, items);
 	}
 	
 	@Override
 	public void exitNative_category_declaration(Native_category_declarationContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		IdentifierList attrs = this.<IdentifierList>getNodeValue(ctx.attrs);
-		NativeCategoryBindingList bindings = this.<NativeCategoryBindingList>getNodeValue(ctx.bindings);
-		MethodDeclarationList methods = this.<MethodDeclarationList>getNodeValue(ctx.methods);
+		Identifier name = getNodeValue(ctx.name);
+		IdentifierList attrs = getNodeValue(ctx.attrs);
+		NativeCategoryBindingList bindings = getNodeValue(ctx.bindings);
+		MethodDeclarationList methods = getNodeValue(ctx.methods);
 		NativeCategoryDeclaration decl = new NativeCategoryDeclaration(name, attrs, bindings, null, methods);
 		decl.setStorable(ctx.STORABLE()!=null);
 		setNodeValue(ctx, decl);
@@ -2533,40 +2141,40 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitNative_widget_declaration(Native_widget_declarationContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		NativeCategoryBindingList bindings = this.<NativeCategoryBindingList>getNodeValue(ctx.bindings);
-		MethodDeclarationList methods = this.<MethodDeclarationList>getNodeValue(ctx.methods);
+		Identifier name = getNodeValue(ctx.name);
+		NativeCategoryBindingList bindings = getNodeValue(ctx.bindings);
+		MethodDeclarationList methods = getNodeValue(ctx.methods);
 		setNodeValue(ctx, new NativeWidgetDeclaration(name, bindings, methods));
 	}
 	
 	@Override
 	public void exitNative_getter_declaration(Native_getter_declarationContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		Identifier name = getNodeValue(ctx.name);
+		StatementList stmts = getNodeValue(ctx.stmts);
 		setNodeValue(ctx, new NativeGetterMethodDeclaration(name, stmts));
 	}
 	
 	@Override
 	public void exitNative_member_method_declaration(Native_member_method_declarationContext ctx) {
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.getChild(0));
+		IDeclaration decl = getNodeValue(ctx.getChild(0));
 		setNodeValue(ctx, decl);
 	}
 	
 	@Override
 	public void exitNative_method_declaration(Native_method_declarationContext ctx) {
-		IType type = this.<IType>getNodeValue(ctx.typ);
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		ArgumentList args = this.<ArgumentList>getNodeValue(ctx.args);
-		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		IType type = getNodeValue(ctx.typ);
+		Identifier name = getNodeValue(ctx.name);
+		ArgumentList args = getNodeValue(ctx.args);
+		StatementList stmts = getNodeValue(ctx.stmts);
 		setNodeValue(ctx, new NativeMethodDeclaration(name, args, type, stmts));
 	}
 	
 	@Override
 	public void exitNative_resource_declaration(Native_resource_declarationContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		IdentifierList attrs = this.<IdentifierList>getNodeValue(ctx.attrs);
-		NativeCategoryBindingList bindings = this.<NativeCategoryBindingList>getNodeValue(ctx.bindings);
-		MethodDeclarationList methods = this.<MethodDeclarationList>getNodeValue(ctx.methods);
+		Identifier name = getNodeValue(ctx.name);
+		IdentifierList attrs = getNodeValue(ctx.attrs);
+		NativeCategoryBindingList bindings = getNodeValue(ctx.bindings);
+		MethodDeclarationList methods = getNodeValue(ctx.methods);
 		NativeResourceDeclaration decl = new NativeResourceDeclaration(name, attrs, bindings, null, methods);
 		decl.setStorable(ctx.STORABLE()!=null);
 		setNodeValue(ctx, decl);
@@ -2574,48 +2182,48 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitNative_setter_declaration(Native_setter_declarationContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		Identifier name = getNodeValue(ctx.name);
+		StatementList stmts = getNodeValue(ctx.stmts);
 		setNodeValue(ctx, new NativeSetterMethodDeclaration(name, stmts));
 	}
 	
 	@Override
 	public void exitNative_symbol(Native_symbolContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		Identifier name = getNodeValue(ctx.name);
+		IExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, new NativeSymbol(name, exp));
 	}
 
 	@Override
 	public void exitNativeCategoryBindingList(NativeCategoryBindingListContext ctx) {
-		NativeCategoryBinding item = this.<NativeCategoryBinding>getNodeValue(ctx.item);
+		NativeCategoryBinding item = getNodeValue(ctx.item);
 		NativeCategoryBindingList items = new NativeCategoryBindingList(item);
 		setNodeValue(ctx, items);
 	}
 	
 	@Override
 	public void exitNativeCategoryBindingListItem(NativeCategoryBindingListItemContext ctx) {
-		NativeCategoryBinding item = this.<NativeCategoryBinding>getNodeValue(ctx.item);
-		NativeCategoryBindingList items = this.<NativeCategoryBindingList>getNodeValue(ctx.items);
+		NativeCategoryBinding item = getNodeValue(ctx.item);
+		NativeCategoryBindingList items = getNodeValue(ctx.items);
 		items.add(item);
 		setNodeValue(ctx, items);
 	}
 	
 	@Override
 	public void exitNativeCategoryDeclaration(NativeCategoryDeclarationContext ctx) {
-		setNodeValue(ctx, this.<Object>getNodeValue(ctx.decl));
+		setNodeValue(ctx, getNodeValue(ctx.decl));
 	}
 	
 	@Override
 	public void exitNativeWidgetDeclaration(NativeWidgetDeclarationContext ctx) {
-		setNodeValue(ctx, this.<Object>getNodeValue(ctx.decl));
+		setNodeValue(ctx, getNodeValue(ctx.decl));
 	}
 	
 	@Override
 	public void exitNative_member_method_declaration_list(Native_member_method_declaration_listContext ctx) {
 		MethodDeclarationList items = new MethodDeclarationList();
 		ctx.native_member_method_declaration().forEach((m)->{
-			IMethodDeclaration item = this.<IMethodDeclaration>getNodeValue(m);
+			IMethodDeclaration item = getNodeValue(m);
 			items.add(item);
 		});
 		setNodeValue(ctx, items);
@@ -2626,7 +2234,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitNative_statement_list(Native_statement_listContext ctx) {
 		StatementList items = new StatementList();
 		ctx.native_statement().forEach((s)->{
-			IStatement item = this.<IStatement>getNodeValue(s);
+			IStatement item = getNodeValue(s);
 			items.add(item);
 		});
 		setNodeValue(ctx, items);
@@ -2638,7 +2246,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitNative_symbol_list(Native_symbol_listContext ctx) {
 		NativeSymbolList items = new NativeSymbolList();
 		ctx.native_symbol().forEach((s)->{
-			NativeSymbol item = this.<NativeSymbol>getNodeValue(s);
+			NativeSymbol item = getNodeValue(s);
 			items.add(item);
 		});
 		setNodeValue(ctx, items);
@@ -2646,55 +2254,55 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitNativeType(NativeTypeContext ctx) {
-		IType type = this.<IType>getNodeValue(ctx.n);
+		IType type = getNodeValue(ctx.n);
 		setNodeValue(ctx, type);
 	}
 	
 	@Override
 	public void exitNotHasExpression(NotHasExpressionContext ctx) {
-		IExpression left = this.<IExpression>getNodeValue(ctx.left);
-		IExpression right = this.<IExpression>getNodeValue(ctx.right);
+		IExpression left = getNodeValue(ctx.left);
+		IExpression right = getNodeValue(ctx.right);
 		setNodeValue(ctx, new ContainsExpression(left, ContOp.NOT_HAS, right));
 	}
 	
 	@Override
 	public void exitNotHasAllExpression(NotHasAllExpressionContext ctx) {
-		IExpression left = this.<IExpression>getNodeValue(ctx.left);
-		IExpression right = this.<IExpression>getNodeValue(ctx.right);
+		IExpression left = getNodeValue(ctx.left);
+		IExpression right = getNodeValue(ctx.right);
 		setNodeValue(ctx, new ContainsExpression(left, ContOp.NOT_HAS_ALL, right));
 	}
 	
 	@Override
 	public void exitNotHasAnyExpression(NotHasAnyExpressionContext ctx) {
-		IExpression left = this.<IExpression>getNodeValue(ctx.left);
-		IExpression right = this.<IExpression>getNodeValue(ctx.right);
+		IExpression left = getNodeValue(ctx.left);
+		IExpression right = getNodeValue(ctx.right);
 		setNodeValue(ctx, new ContainsExpression(left, ContOp.NOT_HAS_ANY, right));
 	}
 	
 	@Override
 	public void exitNotContainsExpression(NotContainsExpressionContext ctx) {
-		IExpression left = this.<IExpression>getNodeValue(ctx.left);
-		IExpression right = this.<IExpression>getNodeValue(ctx.right);
+		IExpression left = getNodeValue(ctx.left);
+		IExpression right = getNodeValue(ctx.right);
 		setNodeValue(ctx, new EqualsExpression(left, EqOp.NOT_CONTAINS, right));
 	}
 	
 	@Override
 	public void exitNotEqualsExpression(NotEqualsExpressionContext ctx) {
-		IExpression left = this.<IExpression>getNodeValue(ctx.left);
-		IExpression right = this.<IExpression>getNodeValue(ctx.right);
+		IExpression left = getNodeValue(ctx.left);
+		IExpression right = getNodeValue(ctx.right);
 		setNodeValue(ctx, new EqualsExpression(left, EqOp.NOT_EQUALS, right));
 	}
 	
 	@Override
 	public void exitNotExpression(NotExpressionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		IExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, new NotExpression(exp));
 	}
 	
 	@Override
 	public void exitNotInExpression(NotInExpressionContext ctx) {
-		IExpression left = this.<IExpression>getNodeValue(ctx.left);
-		IExpression right = this.<IExpression>getNodeValue(ctx.right);
+		IExpression left = getNodeValue(ctx.left);
+		IExpression right = getNodeValue(ctx.right);
 		setNodeValue(ctx, new ContainsExpression(left, ContOp.NOT_IN, right));
 	}
 	
@@ -2706,16 +2314,16 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitOperator_argument(Operator_argumentContext ctx) {
-		IArgument arg = this.<IArgument>getNodeValue(ctx.getChild(0));
+		IArgument arg = getNodeValue(ctx.getChild(0));
 		setNodeValue(ctx, arg);
 	}
 	
 	@Override
 	public void exitOperator_method_declaration(Operator_method_declarationContext ctx) {
-		Operator op = this.<Operator>getNodeValue(ctx.op);
-		IArgument arg = this.<IArgument>getNodeValue(ctx.arg);
-		IType typ = this.<IType>getNodeValue(ctx.typ);
-		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		Operator op = getNodeValue(ctx.op);
+		IArgument arg = getNodeValue(ctx.arg);
+		IType typ = getNodeValue(ctx.typ);
+		StatementList stmts = getNodeValue(ctx.stmts);
 		OperatorMethodDeclaration decl = new OperatorMethodDeclaration(op, arg, typ, stmts);
 		setNodeValue(ctx, decl);
 	}
@@ -2723,7 +2331,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	@Override
 	public void exitOperatorArgument(OperatorArgumentContext ctx) {
 		boolean mutable = ctx.MUTABLE()!=null;
-		IArgument arg = this.<IArgument>getNodeValue(ctx.arg);
+		IArgument arg = getNodeValue(ctx.arg);
 		arg.setMutable(mutable);
 		setNodeValue(ctx, arg);
 	}
@@ -2762,7 +2370,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitOrder_by(Order_byContext ctx) {
 		IdentifierList names = new IdentifierList();
 		for(Variable_identifierContext ctx_ : ctx.variable_identifier())
-			names.add(this.<Identifier>getNodeValue(ctx_));
+			names.add(getNodeValue(ctx_));
 		OrderByClause clause = new OrderByClause(names, ctx.DESC()!=null);
 		setNodeValue(ctx, clause);
 	}
@@ -2771,26 +2379,26 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitOrder_by_list(Order_by_listContext ctx) {
 		OrderByClauseList list = new OrderByClauseList();
 		for(Order_byContext ctx_ : ctx.order_by())
-			list.add(this.<OrderByClause>getNodeValue(ctx_));
+			list.add(getNodeValue(ctx_));
 		setNodeValue(ctx, list);
 	}
 
 	@Override
 	public void exitOrExpression(OrExpressionContext ctx) {
-		IExpression left = this.<IExpression>getNodeValue(ctx.left);
-		IExpression right = this.<IExpression>getNodeValue(ctx.right);
+		IExpression left = getNodeValue(ctx.left);
+		IExpression right = getNodeValue(ctx.right);
 		setNodeValue(ctx, new OrExpression(left, right));
 	}
 	
 	@Override
 	public void exitParenthesis_expression(Parenthesis_expressionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.expression());
+		IExpression exp = getNodeValue(ctx.expression());
 		setNodeValue(ctx, new ParenthesisExpression(exp));
 	}
 	
 	@Override
 	public void exitParenthesisExpression(ParenthesisExpressionContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		IExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
 	}
 	
@@ -2806,14 +2414,14 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitPrimaryType(PrimaryTypeContext ctx) {
-		IType type = this.<IType>getNodeValue(ctx.p);
+		IType type = getNodeValue(ctx.p);
 		setNodeValue(ctx, type);
 	}
 	
 	@Override
 	public void exitPython_category_binding(Python_category_bindingContext ctx) {
 		String identifier = ctx.identifier().getText();
-		PythonModule module = this.<PythonModule>getNodeValue(ctx.python_module());
+		PythonModule module = getNodeValue(ctx.python_module());
 		PythonNativeCategoryBinding map = new PythonNativeCategoryBinding(identifier, module);
 		setNodeValue(ctx, map);
 	}
@@ -2825,8 +2433,8 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitPython_method_expression(Python_method_expressionContext ctx) {
-		String name = this.<String>getNodeValue(ctx.name);
-		PythonArgumentList args = this.<PythonArgumentList>getNodeValue(ctx.args);
+		String name = getNodeValue(ctx.name);
+		PythonArgumentList args = getNodeValue(ctx.args);
 		PythonMethodExpression method = new PythonMethodExpression(name);
 		method.setArguments(args);
 		setNodeValue(ctx, method);
@@ -2843,40 +2451,40 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitPython_native_statement(Python_native_statementContext ctx) {
-		PythonStatement stmt = this.<PythonStatement>getNodeValue(ctx.python_statement());
-		PythonModule module = this.<PythonModule>getNodeValue(ctx.python_module());
+		PythonStatement stmt = getNodeValue(ctx.python_statement());
+		PythonModule module = getNodeValue(ctx.python_module());
 		stmt.setModule(module);
 		setNodeValue(ctx, stmt);
 	}
 	
 	@Override
 	public void exitPython2CategoryBinding(Python2CategoryBindingContext ctx) {
-		PythonNativeCategoryBinding map = this.<PythonNativeCategoryBinding>getNodeValue(ctx.binding);
+		PythonNativeCategoryBinding map = getNodeValue(ctx.binding);
 		setNodeValue(ctx, new Python2NativeCategoryBinding(map));
 	}
 	
 	@Override
 	public void exitPython2NativeStatement(Python2NativeStatementContext ctx) {
-		PythonStatement stmt = this.<PythonStatement>getNodeValue(ctx.python_native_statement());
+		PythonStatement stmt = getNodeValue(ctx.python_native_statement());
 		setNodeValue(ctx, new Python2NativeCall(stmt));
 	}
 	
 	@Override
 	public void exitPython3CategoryBinding(Python3CategoryBindingContext ctx) {
-		PythonNativeCategoryBinding map = this.<PythonNativeCategoryBinding>getNodeValue(ctx.binding);
+		PythonNativeCategoryBinding map = getNodeValue(ctx.binding);
 		setNodeValue(ctx, new Python3NativeCategoryBinding(map));
 	}
 	
 	@Override
 	public void exitPython3NativeStatement(Python3NativeStatementContext ctx) {
-		PythonStatement stmt = this.<PythonStatement>getNodeValue(ctx.python_native_statement());
+		PythonStatement stmt = getNodeValue(ctx.python_native_statement());
 		setNodeValue(ctx, new Python3NativeCall(stmt));
 	}
 	
 	@Override
 	public void exitPythonArgumentList(PythonArgumentListContext ctx) {
-		PythonArgumentList ordinal = this.<PythonArgumentList>getNodeValue(ctx.ordinal);
-		PythonArgumentList named = this.<PythonArgumentList>getNodeValue(ctx.named);
+		PythonArgumentList ordinal = getNodeValue(ctx.ordinal);
+		PythonArgumentList named = getNodeValue(ctx.named);
 		if(ordinal==null)
 			ordinal = new PythonArgumentList();
 		if(named!=null)
@@ -2896,8 +2504,8 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitPythonChildIdentifier(PythonChildIdentifierContext ctx) {
-		PythonIdentifierExpression parent = this.<PythonIdentifierExpression>getNodeValue(ctx.parent);
-		String name = this.<String>getNodeValue(ctx.name);
+		PythonIdentifierExpression parent = getNodeValue(ctx.parent);
+		String name = getNodeValue(ctx.name);
 		PythonIdentifierExpression child = new PythonIdentifierExpression(parent, name);
 		setNodeValue(ctx, child);
 	}
@@ -2909,19 +2517,19 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitPythonGlobalMethodExpression(PythonGlobalMethodExpressionContext ctx) {
-		PythonMethodExpression exp = this.<PythonMethodExpression>getNodeValue(ctx.exp);
+		PythonMethodExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
 	}
 	
 	@Override
 	public void exitPythonIdentifier(PythonIdentifierContext ctx) {
-		String name = this.<String>getNodeValue(ctx.name);
+		String name = getNodeValue(ctx.name);
 		setNodeValue(ctx, new PythonIdentifierExpression(name));
 	}
 	
 	@Override
 	public void exitPythonIdentifierExpression(PythonIdentifierExpressionContext ctx) {
-		PythonIdentifierExpression exp = this.<PythonIdentifierExpression>getNodeValue(ctx.exp);
+		PythonIdentifierExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
 	}
 	
@@ -2932,59 +2540,59 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitPythonLiteralExpression(PythonLiteralExpressionContext ctx) {
-		PythonExpression exp = this.<PythonExpression>getNodeValue(ctx.exp);
+		PythonExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
 	}
 	
 	@Override
 	public void exitPythonMethodExpression(PythonMethodExpressionContext ctx) {
-		PythonMethodExpression exp = this.<PythonMethodExpression>getNodeValue(ctx.exp);
+		PythonMethodExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
 	}
 	
 	@Override
 	public void exitPythonNamedArgumentList(PythonNamedArgumentListContext ctx) {
-		String name = this.<String>getNodeValue(ctx.name);
-		PythonExpression exp = this.<PythonExpression>getNodeValue(ctx.exp);
+		String name = getNodeValue(ctx.name);
+		PythonExpression exp = getNodeValue(ctx.exp);
 		PythonNamedArgument arg = new PythonNamedArgument(name, exp);
 		setNodeValue(ctx, new PythonArgumentList(arg));
 	}
 	
 	@Override
 	public void exitPythonNamedArgumentListItem(PythonNamedArgumentListItemContext ctx) {
-		String name = this.<String>getNodeValue(ctx.name);
-		PythonExpression exp = this.<PythonExpression>getNodeValue(ctx.exp);
+		String name = getNodeValue(ctx.name);
+		PythonExpression exp = getNodeValue(ctx.exp);
 		PythonNamedArgument arg = new PythonNamedArgument(name, exp);
-		PythonArgumentList items = this.<PythonArgumentList>getNodeValue(ctx.items);
+		PythonArgumentList items = getNodeValue(ctx.items);
 		items.add(arg);
 		setNodeValue(ctx, items);
 	}
 	
 	@Override
 	public void exitPythonNamedOnlyArgumentList(PythonNamedOnlyArgumentListContext ctx) {
-		PythonArgumentList named = this.<PythonArgumentList>getNodeValue(ctx.named);
+		PythonArgumentList named = getNodeValue(ctx.named);
 		setNodeValue(ctx, named);
 	}
 	
 	@Override
 	public void exitPythonOrdinalArgumentList( PythonOrdinalArgumentListContext ctx) {
-		PythonExpression exp = this.<PythonExpression>getNodeValue(ctx.item);
+		PythonExpression exp = getNodeValue(ctx.item);
 		PythonOrdinalArgument arg = new PythonOrdinalArgument(exp);
 		setNodeValue(ctx, new PythonArgumentList(arg));
 	}
 	
 	@Override
 	public void exitPythonOrdinalArgumentListItem( PythonOrdinalArgumentListItemContext ctx) {
-		PythonExpression exp = this.<PythonExpression>getNodeValue(ctx.item);
+		PythonExpression exp = getNodeValue(ctx.item);
 		PythonOrdinalArgument arg = new PythonOrdinalArgument(exp);
-		PythonArgumentList items = this.<PythonArgumentList>getNodeValue(ctx.items);
+		PythonArgumentList items = getNodeValue(ctx.items);
 		items.add(arg);
 		setNodeValue(ctx, items);
 	}
 	
 	@Override
 	public void exitPythonOrdinalOnlyArgumentList(PythonOrdinalOnlyArgumentListContext ctx) {
-		PythonArgumentList ordinal = this.<PythonArgumentList>getNodeValue(ctx.ordinal);
+		PythonArgumentList ordinal = getNodeValue(ctx.ordinal);
 		setNodeValue(ctx, ordinal);
 	}
 	
@@ -2996,20 +2604,20 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitPythonPrimaryExpression(PythonPrimaryExpressionContext ctx) {
-		PythonExpression exp = this.<PythonExpression>getNodeValue(ctx.exp);
+		PythonExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
 	}
 	
 	@Override
 	public void exitPythonReturnStatement(PythonReturnStatementContext ctx) {
-		PythonExpression exp = this.<PythonExpression>getNodeValue(ctx.exp);
+		PythonExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, new PythonStatement(exp,true));
 	}
 	
 	@Override
 	public void exitPythonSelectorExpression(PythonSelectorExpressionContext ctx) {
-		PythonExpression parent = this.<PythonExpression>getNodeValue(ctx.parent);
-		PythonSelectorExpression selector = this.<PythonSelectorExpression>getNodeValue(ctx.child);
+		PythonExpression parent = getNodeValue(ctx.parent);
+		PythonSelectorExpression selector = getNodeValue(ctx.child);
 		selector.setParent(parent);
 		setNodeValue(ctx, selector);
 	}
@@ -3023,7 +2631,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitPythonStatement(PythonStatementContext ctx) {
-		PythonExpression exp = this.<PythonExpression>getNodeValue(ctx.exp);
+		PythonExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, new PythonStatement(exp,false));
 	}
 	
@@ -3034,76 +2642,76 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitRaise_statement(Raise_statementContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		IExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, new RaiseStatement(exp));
 	}
 	
 	@Override
 	public void exitRaiseStatement(RaiseStatementContext ctx) {
-		IStatement stmt = this.<IStatement>getNodeValue(ctx.stmt);
+		IStatement stmt = getNodeValue(ctx.stmt);
 		setNodeValue(ctx, stmt);
 	}
 	
 	@Override
 	public void exitRange_literal(Range_literalContext ctx) {
-		IExpression low = this.<IExpression>getNodeValue(ctx.low);
-		IExpression high = this.<IExpression>getNodeValue(ctx.high);
+		IExpression low = getNodeValue(ctx.low);
+		IExpression high = getNodeValue(ctx.high);
 		setNodeValue(ctx, new RangeLiteral(low, high));
 	}
 	
 	@Override
 	public void exitRead_all_expression(Read_all_expressionContext ctx) {
-		IExpression source = this.<IExpression>getNodeValue(ctx.source);
+		IExpression source = getNodeValue(ctx.source);
 		setNodeValue(ctx, new ReadAllExpression(source));
 	}
 	
 	@Override
 	public void exitRead_one_expression(Read_one_expressionContext ctx) {
-		IExpression source = this.<IExpression>getNodeValue(ctx.source);
+		IExpression source = getNodeValue(ctx.source);
 		setNodeValue(ctx, new ReadOneExpression(source));
 	}
 	
 	@Override
 	public void exitResource_declaration(Resource_declarationContext ctx) {
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.native_resource_declaration());
+		IDeclaration decl = getNodeValue(ctx.native_resource_declaration());
 		setNodeValue(ctx, decl);
 	}
 	
 	@Override
 	public void exitReturn_statement(Return_statementContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
+		IExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, new ReturnStatement(exp));
 	}
 	
 	@Override
 	public void exitReturnStatement(ReturnStatementContext ctx) {
-		IStatement stmt = this.<IStatement>getNodeValue(ctx.stmt);
+		IStatement stmt = getNodeValue(ctx.stmt);
 		setNodeValue(ctx, stmt);
 	}
 	
 	@Override
 	public void exitRootInstance(RootInstanceContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.variable_identifier());
+		Identifier name = getNodeValue(ctx.variable_identifier());
 		setNodeValue(ctx, new VariableInstance(name));
 	}
 	
 	@Override
 	public void exitRoughlyEqualsExpression(RoughlyEqualsExpressionContext ctx) {
-		IExpression left = this.<IExpression>getNodeValue(ctx.left);
-		IExpression right = this.<IExpression>getNodeValue(ctx.right);
+		IExpression left = getNodeValue(ctx.left);
+		IExpression right = getNodeValue(ctx.right);
 		setNodeValue(ctx, new EqualsExpression(left, EqOp.ROUGHLY, right));
 	}
 	
 	@Override
 	public void exitSelectableExpression(SelectableExpressionContext ctx) {
-		IExpression parent = this.<IExpression>getNodeValue(ctx.parent);
+		IExpression parent = getNodeValue(ctx.parent);
 		setNodeValue(ctx, parent);
 	}
 	
 	@Override
 	public void exitSelectorExpression(SelectorExpressionContext ctx) {
-		IExpression parent = this.<IExpression>getNodeValue(ctx.parent);
-		IExpression selector = this.<IExpression>getNodeValue(ctx.selector);
+		IExpression parent = getNodeValue(ctx.parent);
+		IExpression selector = getNodeValue(ctx.selector);
 		if(selector instanceof SelectorExpression)
 			((SelectorExpression)selector).setParent(parent);
 		else if(selector instanceof UnresolvedCall)
@@ -3113,77 +2721,81 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitSet_literal(Set_literalContext ctx) {
-		ExpressionList items = this.<ExpressionList>getNodeValue(ctx.expression_list());
+		ExpressionList items = getNodeValue(ctx.expression_list());
 		ContainerLiteral<SetValue> set = items==null ? new SetLiteral() : new SetLiteral(items);
 		setNodeValue(ctx, set);
 	}
 	
 	@Override
 	public void exitSetter_method_declaration(Setter_method_declarationContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		Identifier name = getNodeValue(ctx.name);
+		StatementList stmts = getNodeValue(ctx.stmts);
 		setNodeValue(ctx, new SetterMethodDeclaration(name, stmts));
 	}
 	
 	@Override
 	public void exitSetType(SetTypeContext ctx) {
-		IType itemType = this.<IType>getNodeValue(ctx.s);
+		IType itemType = getNodeValue(ctx.s);
 		setNodeValue(ctx, new SetType(itemType));
 	}
 	
 	@Override
 	public void exitSingleton_category_declaration(Singleton_category_declarationContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		IdentifierList attrs = this.<IdentifierList>getNodeValue(ctx.attrs);
-		MethodDeclarationList methods = this.<MethodDeclarationList>getNodeValue(ctx.methods);
+		Identifier name = getNodeValue(ctx.name);
+		IdentifierList attrs = getNodeValue(ctx.attrs);
+		MethodDeclarationList methods = getNodeValue(ctx.methods);
 		setNodeValue(ctx, new SingletonCategoryDeclaration(name, attrs, methods));
 	}
 	
 	@Override
 	public void exitSingletonCategoryDeclaration(SingletonCategoryDeclarationContext ctx) {
-		IDeclaration decl = this.<IDeclaration>getNodeValue(ctx.decl);
+		IDeclaration decl = getNodeValue(ctx.decl);
 		setNodeValue(ctx, decl);
 	}
 	
 	@Override
 	public void exitSliceFirstAndLast(SliceFirstAndLastContext ctx) {
-		IExpression first = this.<IExpression>getNodeValue(ctx.first);
-		IExpression last = this.<IExpression>getNodeValue(ctx.last);
+		IExpression first = getNodeValue(ctx.first);
+		IExpression last = getNodeValue(ctx.last);
 		setNodeValue(ctx, new SliceSelector(first, last));
 	}
 	
 	@Override
 	public void exitSliceFirstOnly(SliceFirstOnlyContext ctx) {
-		IExpression first = this.<IExpression>getNodeValue(ctx.first);
+		IExpression first = getNodeValue(ctx.first);
 		setNodeValue(ctx, new SliceSelector(first, null));
 	}
 	
 	@Override
 	public void exitSliceLastOnly(SliceLastOnlyContext ctx) {
-		IExpression last = this.<IExpression>getNodeValue(ctx.last);
+		IExpression last = getNodeValue(ctx.last);
 		setNodeValue(ctx, new SliceSelector(null, last));
 	}
 	
 	@Override
 	public void exitSliceSelector(SliceSelectorContext ctx) {
-		IExpression slice = this.<IExpression>getNodeValue(ctx.xslice);
+		IExpression slice = getNodeValue(ctx.xslice);
 		setNodeValue(ctx, slice);
 	}
 	
 	@Override
 	public void exitSorted_expression(Sorted_expressionContext ctx) {
-		IExpression source = this.<IExpression>getNodeValue(ctx.source);
+		IExpression source = getNodeValue(ctx.source);
 		boolean descending = ctx.DESC()!=null;
-		IExpression key = this.<IExpression>getNodeValue(ctx.key);
+		IExpression key = getNodeValue(ctx.key);
 		setNodeValue(ctx, new SortedExpression(source, descending, key));
 	}
 	
-
+	@Override
+	public void exitSorted_key(Sorted_keyContext ctx) {
+		setNodeValue(ctx, getNodeValue(ctx.getChild(0)));
+	}
+	
 	@Override
 	public void exitStatement_list(Statement_listContext ctx) {
 		StatementList items = new StatementList();
 		ctx.statement().forEach((s)->{
-			IStatement item = this.<IStatement>getNodeValue(s);
+			IStatement item = getNodeValue(s);
 			items.add(item);
 		});
 		setNodeValue(ctx, items);
@@ -3192,9 +2804,9 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitStore_statement(Store_statementContext ctx) {
-		ExpressionList deletables = this.<ExpressionList>getNodeValue(ctx.to_del);
-		ExpressionList storables = this.<ExpressionList>getNodeValue(ctx.to_add);
-		StatementList andThen = this.<StatementList>getNodeValue(ctx.stmts);
+		ExpressionList deletables = getNodeValue(ctx.to_del);
+		ExpressionList storables = getNodeValue(ctx.to_add);
+		StatementList andThen = getNodeValue(ctx.stmts);
 		StoreStatement stmt = new StoreStatement(deletables, storables, andThen);
 		setNodeValue(ctx, stmt);
 	}
@@ -3206,9 +2818,9 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitSwitch_statement(Switch_statementContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		SwitchCaseList cases = this.<SwitchCaseList>getNodeValue(ctx.cases);
-		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		IExpression exp = getNodeValue(ctx.exp);
+		SwitchCaseList cases = getNodeValue(ctx.cases);
+		StatementList stmts = getNodeValue(ctx.stmts);
 		SwitchStatement stmt = new SwitchStatement(exp, cases, stmts);
 		setNodeValue(ctx, stmt);
 	}
@@ -3218,7 +2830,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitSwitch_case_statement_list(Switch_case_statement_listContext ctx) {
 		SwitchCaseList items = new SwitchCaseList();
 		ctx.switch_case_statement().forEach((s)->{
-			SwitchCase item = this.<SwitchCase>getNodeValue(s);
+			SwitchCase item = getNodeValue(s);
 			items.add(item);
 		});
 		setNodeValue(ctx, items);
@@ -3226,7 +2838,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitSwitchStatement(SwitchStatementContext ctx) {
-		IStatement stmt = this.<IStatement>getNodeValue(ctx.stmt);
+		IStatement stmt = getNodeValue(ctx.stmt);
 		setNodeValue(ctx, stmt);
 	}
 
@@ -3237,7 +2849,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitSymbolIdentifier(SymbolIdentifierContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.symbol_identifier());
+		Identifier name = getNodeValue(ctx.symbol_identifier());
 		setNodeValue(ctx, name);
 	}
 	
@@ -3253,9 +2865,9 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitTernaryExpression(TernaryExpressionContext ctx) {
-		IExpression condition = this.<IExpression>getNodeValue(ctx.test);
-		IExpression ifTrue = this.<IExpression>getNodeValue(ctx.ifTrue);
-		IExpression ifFalse = this.<IExpression>getNodeValue(ctx.ifFalse);
+		IExpression condition = getNodeValue(ctx.test);
+		IExpression ifTrue = getNodeValue(ctx.ifTrue);
+		IExpression ifFalse = getNodeValue(ctx.ifFalse);
 		TernaryExpression exp = new TernaryExpression(condition, ifTrue, ifFalse);
 		setNodeValue(ctx, exp);
 	};
@@ -3263,9 +2875,9 @@ public class MPromptoBuilder extends MParserBaseListener {
 	@Override
 	public void exitTest_method_declaration(Test_method_declarationContext ctx) {
 		Identifier name = new Identifier(ctx.name.getText());
-		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
-		AssertionList exps = this.<AssertionList>getNodeValue(ctx.exps);
-		Identifier errorName = this.<Identifier>getNodeValue(ctx.error);
+		StatementList stmts = getNodeValue(ctx.stmts);
+		AssertionList exps = getNodeValue(ctx.exps);
+		Identifier errorName = getNodeValue(ctx.error);
 		SymbolExpression error = errorName==null ? null : new SymbolExpression(errorName);
 		setNodeValue(ctx, new TestMethodDeclaration(name, stmts, exps, error));
 	}
@@ -3297,25 +2909,25 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitTry_statement(Try_statementContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
-		SwitchCaseList handlers = this.<SwitchCaseList>getNodeValue(ctx.handlers);
-		StatementList anyStmts = this.<StatementList>getNodeValue(ctx.anyStmts);
-		StatementList finalStmts = this.<StatementList>getNodeValue(ctx.finalStmts);
+		Identifier name = getNodeValue(ctx.name);
+		StatementList stmts = getNodeValue(ctx.stmts);
+		SwitchCaseList handlers = getNodeValue(ctx.handlers);
+		StatementList anyStmts = getNodeValue(ctx.anyStmts);
+		StatementList finalStmts = getNodeValue(ctx.finalStmts);
 		SwitchErrorStatement stmt = new SwitchErrorStatement(name, stmts, handlers, anyStmts, finalStmts);
 		setNodeValue(ctx, stmt);
 	}
 	
 	@Override
 	public void exitTryStatement(TryStatementContext ctx) {
-		IStatement stmt = this.<IStatement>getNodeValue(ctx.stmt);
+		IStatement stmt = getNodeValue(ctx.stmt);
 		setNodeValue(ctx, stmt);
 	}
 	
 	@Override
 	public void exitTuple_literal(Tuple_literalContext ctx) {
 		boolean mutable = ctx.MUTABLE()!=null;
-		ExpressionList items = this.<ExpressionList>getNodeValue(ctx.expression_tuple());
+		ExpressionList items = getNodeValue(ctx.expression_tuple());
 		IExpression value = items==null ? new TupleLiteral(mutable) : new TupleLiteral(items, mutable);
 		setNodeValue(ctx, value);
 	}
@@ -3327,20 +2939,20 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitTyped_argument(Typed_argumentContext ctx) {
-		IType type = this.<IType>getNodeValue(ctx.typ);
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		IdentifierList attrs = this.<IdentifierList>getNodeValue(ctx.attrs);
+		IType type = getNodeValue(ctx.typ);
+		Identifier name = getNodeValue(ctx.name);
+		IdentifierList attrs = getNodeValue(ctx.attrs);
 		CategoryArgument arg = attrs==null ?
 				new CategoryArgument(type, name) : 
 				new ExtendedArgument(type, name, attrs); 
-		IExpression exp = this.<IExpression>getNodeValue(ctx.value);
+		IExpression exp = getNodeValue(ctx.value);
 		arg.setDefaultExpression(exp);
 		setNodeValue(ctx, arg);
 	}
 	
 	@Override
 	public void exitTypeIdentifier(TypeIdentifierContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.type_identifier());
+		Identifier name = getNodeValue(ctx.type_identifier());
 		setNodeValue(ctx, name);
 	}
 	
@@ -3348,7 +2960,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitType_identifier_list(Type_identifier_listContext ctx) {
 		IdentifierList items = new IdentifierList();
 		ctx.type_identifier().forEach((i)->{
-			Identifier item = this.<Identifier>getNodeValue(i);
+			Identifier item = getNodeValue(i);
 			items.add(item);
 		});
 		setNodeValue(ctx, items);
@@ -3379,7 +2991,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitVariableIdentifier(VariableIdentifierContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.variable_identifier());
+		Identifier name = getNodeValue(ctx.variable_identifier());
 		setNodeValue(ctx, name);
 	}
 	
@@ -3387,7 +2999,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitVariable_identifier_list(Variable_identifier_listContext ctx) {
 		IdentifierList list = new IdentifierList();
 		for(Variable_identifierContext v : ctx.variable_identifier()){
-			Identifier item = this.<Identifier>getNodeValue(v);
+			Identifier item = getNodeValue(v);
 			list.add(item);
 		}
 		setNodeValue(ctx, list);
@@ -3406,54 +3018,54 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitWhile_statement(While_statementContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		IExpression exp = getNodeValue(ctx.exp);
+		StatementList stmts = getNodeValue(ctx.stmts);
 		setNodeValue(ctx, new WhileStatement(exp, stmts));
 	}
 	
 	@Override
 	public void exitWhileStatement(WhileStatementContext ctx) {
-		IStatement stmt = this.<IStatement>getNodeValue(ctx.stmt);
+		IStatement stmt = getNodeValue(ctx.stmt);
 		setNodeValue(ctx, stmt);
 	}
 	
 	@Override
 	public void exitWith_resource_statement(With_resource_statementContext ctx) {
-		AssignVariableStatement stmt = this.<AssignVariableStatement>getNodeValue(ctx.stmt);
-		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		AssignVariableStatement stmt = getNodeValue(ctx.stmt);
+		StatementList stmts = getNodeValue(ctx.stmts);
 		setNodeValue(ctx, new WithResourceStatement(stmt, stmts));
 	}
 	
 	@Override
 	public void exitWith_singleton_statement(With_singleton_statementContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.typ);
+		Identifier name = getNodeValue(ctx.typ);
 		CategoryType type = new CategoryType(name);
-		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
+		StatementList stmts = getNodeValue(ctx.stmts);
 		setNodeValue(ctx, new WithSingletonStatement(type, stmts));
 	}
 	
 	@Override
 	public void exitWithResourceStatement(WithResourceStatementContext ctx) {
-		IStatement stmt = this.<IStatement>getNodeValue(ctx.stmt);
+		IStatement stmt = getNodeValue(ctx.stmt);
 		setNodeValue(ctx, stmt);
 	}
 	
 	@Override
 	public void exitWithSingletonStatement(WithSingletonStatementContext ctx) {
-		IStatement stmt = this.<IStatement>getNodeValue(ctx.stmt);
+		IStatement stmt = getNodeValue(ctx.stmt);
 		setNodeValue(ctx, stmt);
 	}
 	
 	@Override
 	public void exitWrite_statement(Write_statementContext ctx) {
-		IExpression what = this.<IExpression>getNodeValue(ctx.what);
-		IExpression target = this.<IExpression>getNodeValue(ctx.target);
+		IExpression what = getNodeValue(ctx.what);
+		IExpression target = getNodeValue(ctx.target);
 		setNodeValue(ctx, new WriteStatement(what, target));
 	}
 	
 	@Override
 	public void exitWriteStatement(WriteStatementContext ctx) {
-		IStatement stmt = this.<IStatement>getNodeValue(ctx.stmt);
+		IStatement stmt = getNodeValue(ctx.stmt);
 		setNodeValue(ctx, stmt);
 	}
 	
