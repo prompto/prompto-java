@@ -211,15 +211,15 @@ public class TestParserAtoms {
 	public void testUnresolvedCallExpression() throws Exception {
 		String statement = "print (\"person\" + p.name );";
 		OTestParser parser = new OTestParser(statement);
-		UnresolvedCall ac = parser.parse_method_call();
+		UnresolvedCall ac = parser.parse_method_call_statement();
 		assertNotNull(ac);
 	}
 
 	@Test
 	public void testMethodCallWith() throws Exception {
-		String statement = "print( value = \"person\" + p.name )";
+		String statement = "print( value = \"person\" + p.name );";
 		OTestParser parser = new OTestParser(statement);
-		UnresolvedCall mc = parser.parse_method_call();
+		UnresolvedCall mc = parser.parse_method_call_statement();
 		assertNotNull(mc);
 		assertEquals("print",mc.getCaller().toString());
 		assertNotNull(mc.getAssignments());
@@ -694,8 +694,8 @@ public class TestParserAtoms {
 			return builder.<ArgumentList>getNodeValue(tree);
 		}
 
-		public UnresolvedCall parse_method_call() {
-			ParseTree tree = method_call();
+		public UnresolvedCall parse_method_call_statement() {
+			ParseTree tree = method_call_statement();
 			OPromptoBuilder builder = new OPromptoBuilder(this);
 			ParseTreeWalker walker = new ParseTreeWalker();
 			walker.walk(builder, tree);

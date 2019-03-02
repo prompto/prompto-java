@@ -83,7 +83,6 @@ import prompto.expression.ItemSelector;
 import prompto.expression.IteratorExpression;
 import prompto.expression.MemberSelector;
 import prompto.expression.MethodExpression;
-import prompto.expression.MethodSelector;
 import prompto.expression.MinusExpression;
 import prompto.expression.ModuloExpression;
 import prompto.expression.MultiplyExpression;
@@ -103,6 +102,7 @@ import prompto.expression.TernaryExpression;
 import prompto.expression.ThisExpression;
 import prompto.expression.TypeExpression;
 import prompto.expression.UnresolvedIdentifier;
+import prompto.expression.UnresolvedSelector;
 import prompto.grammar.Annotation;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
@@ -163,10 +163,10 @@ import prompto.jsx.JsxAttribute;
 import prompto.jsx.JsxClosing;
 import prompto.jsx.JsxCode;
 import prompto.jsx.JsxElement;
-import prompto.jsx.JsxText;
 import prompto.jsx.JsxExpression;
 import prompto.jsx.JsxLiteral;
 import prompto.jsx.JsxSelfClosing;
+import prompto.jsx.JsxText;
 import prompto.literal.BooleanLiteral;
 import prompto.literal.CharacterLiteral;
 import prompto.literal.ContainerLiteral;
@@ -195,10 +195,406 @@ import prompto.literal.TimeLiteral;
 import prompto.literal.TupleLiteral;
 import prompto.literal.UuidLiteral;
 import prompto.literal.VersionLiteral;
-import static prompto.parser.OParser.*;
+import prompto.parser.OParser.Abstract_method_declarationContext;
+import prompto.parser.OParser.AddExpressionContext;
+import prompto.parser.OParser.An_expressionContext;
+import prompto.parser.OParser.AndExpressionContext;
+import prompto.parser.OParser.Annotation_constructorContext;
+import prompto.parser.OParser.Annotation_identifierContext;
+import prompto.parser.OParser.AnyDictTypeContext;
+import prompto.parser.OParser.AnyListTypeContext;
+import prompto.parser.OParser.AnyTypeContext;
+import prompto.parser.OParser.ArgumentAssignmentListContext;
+import prompto.parser.OParser.ArgumentAssignmentListItemContext;
+import prompto.parser.OParser.Argument_assignmentContext;
+import prompto.parser.OParser.Argument_listContext;
+import prompto.parser.OParser.AssertionContext;
+import prompto.parser.OParser.Assertion_listContext;
+import prompto.parser.OParser.AssignInstanceStatementContext;
+import prompto.parser.OParser.AssignTupleStatementContext;
+import prompto.parser.OParser.Assign_instance_statementContext;
+import prompto.parser.OParser.Assign_tuple_statementContext;
+import prompto.parser.OParser.Assign_variable_statementContext;
+import prompto.parser.OParser.AtomicSwitchCaseContext;
+import prompto.parser.OParser.Attribute_declarationContext;
+import prompto.parser.OParser.Attribute_identifierContext;
+import prompto.parser.OParser.Attribute_identifier_listContext;
+import prompto.parser.OParser.BlobTypeContext;
+import prompto.parser.OParser.Blob_expressionContext;
+import prompto.parser.OParser.BooleanLiteralContext;
+import prompto.parser.OParser.BooleanTypeContext;
+import prompto.parser.OParser.BreakStatementContext;
+import prompto.parser.OParser.CSharpArgumentListContext;
+import prompto.parser.OParser.CSharpArgumentListItemContext;
+import prompto.parser.OParser.CSharpBooleanLiteralContext;
+import prompto.parser.OParser.CSharpCategoryBindingContext;
+import prompto.parser.OParser.CSharpCharacterLiteralContext;
+import prompto.parser.OParser.CSharpChildIdentifierContext;
+import prompto.parser.OParser.CSharpDecimalLiteralContext;
+import prompto.parser.OParser.CSharpIdentifierContext;
+import prompto.parser.OParser.CSharpIntegerLiteralContext;
+import prompto.parser.OParser.CSharpMethodExpressionContext;
+import prompto.parser.OParser.CSharpNativeStatementContext;
+import prompto.parser.OParser.CSharpPrimaryExpressionContext;
+import prompto.parser.OParser.CSharpPromptoIdentifierContext;
+import prompto.parser.OParser.CSharpReturnStatementContext;
+import prompto.parser.OParser.CSharpSelectorExpressionContext;
+import prompto.parser.OParser.CSharpStatementContext;
+import prompto.parser.OParser.CSharpTextLiteralContext;
+import prompto.parser.OParser.CastExpressionContext;
+import prompto.parser.OParser.CatchAtomicStatementContext;
+import prompto.parser.OParser.CatchCollectionStatementContext;
+import prompto.parser.OParser.Catch_statement_listContext;
+import prompto.parser.OParser.CategoryTypeContext;
+import prompto.parser.OParser.Category_or_any_typeContext;
+import prompto.parser.OParser.Category_symbolContext;
+import prompto.parser.OParser.Category_symbol_listContext;
+import prompto.parser.OParser.Category_typeContext;
+import prompto.parser.OParser.CharacterLiteralContext;
+import prompto.parser.OParser.CharacterTypeContext;
+import prompto.parser.OParser.ChildInstanceContext;
+import prompto.parser.OParser.ClosureExpressionContext;
+import prompto.parser.OParser.ClosureStatementContext;
+import prompto.parser.OParser.Closure_expressionContext;
+import prompto.parser.OParser.CodeArgumentContext;
+import prompto.parser.OParser.CodeExpressionContext;
+import prompto.parser.OParser.CodeTypeContext;
+import prompto.parser.OParser.Code_argumentContext;
+import prompto.parser.OParser.Code_typeContext;
+import prompto.parser.OParser.CollectionSwitchCaseContext;
+import prompto.parser.OParser.Collection_literalContext;
+import prompto.parser.OParser.CommentStatementContext;
+import prompto.parser.OParser.Comment_statementContext;
+import prompto.parser.OParser.ConcreteCategoryDeclarationContext;
+import prompto.parser.OParser.ConcreteWidgetDeclarationContext;
+import prompto.parser.OParser.Concrete_category_declarationContext;
+import prompto.parser.OParser.Concrete_method_declarationContext;
+import prompto.parser.OParser.Concrete_widget_declarationContext;
+import prompto.parser.OParser.ConstructorFromContext;
+import prompto.parser.OParser.ConstructorNoFromContext;
+import prompto.parser.OParser.ContainsExpressionContext;
+import prompto.parser.OParser.Copy_fromContext;
+import prompto.parser.OParser.Csharp_identifierContext;
+import prompto.parser.OParser.Csharp_method_expressionContext;
+import prompto.parser.OParser.Csharp_primary_expressionContext;
+import prompto.parser.OParser.Csharp_this_expressionContext;
+import prompto.parser.OParser.CssExpressionContext;
+import prompto.parser.OParser.CssTextContext;
+import prompto.parser.OParser.CssValueContext;
+import prompto.parser.OParser.Css_expressionContext;
+import prompto.parser.OParser.Css_fieldContext;
+import prompto.parser.OParser.CurlyCategoryMethodListContext;
+import prompto.parser.OParser.CurlyStatementListContext;
+import prompto.parser.OParser.CursorTypeContext;
+import prompto.parser.OParser.DateLiteralContext;
+import prompto.parser.OParser.DateTimeLiteralContext;
+import prompto.parser.OParser.DateTimeTypeContext;
+import prompto.parser.OParser.DateTypeContext;
+import prompto.parser.OParser.DecimalLiteralContext;
+import prompto.parser.OParser.DecimalTypeContext;
+import prompto.parser.OParser.DeclarationContext;
+import prompto.parser.OParser.DeclarationsContext;
+import prompto.parser.OParser.DerivedListContext;
+import prompto.parser.OParser.DerivedListItemContext;
+import prompto.parser.OParser.DictKeyIdentifierContext;
+import prompto.parser.OParser.DictKeyTextContext;
+import prompto.parser.OParser.DictTypeContext;
+import prompto.parser.OParser.Dict_entryContext;
+import prompto.parser.OParser.Dict_entry_listContext;
+import prompto.parser.OParser.Dict_literalContext;
+import prompto.parser.OParser.DivideExpressionContext;
+import prompto.parser.OParser.DoWhileStatementContext;
+import prompto.parser.OParser.Do_while_statementContext;
+import prompto.parser.OParser.DocumentTypeContext;
+import prompto.parser.OParser.Document_expressionContext;
+import prompto.parser.OParser.Document_literalContext;
+import prompto.parser.OParser.ElseIfStatementListContext;
+import prompto.parser.OParser.ElseIfStatementListItemContext;
+import prompto.parser.OParser.EmptyCategoryMethodListContext;
+import prompto.parser.OParser.Enum_category_declarationContext;
+import prompto.parser.OParser.Enum_declarationContext;
+import prompto.parser.OParser.Enum_native_declarationContext;
+import prompto.parser.OParser.EqualsExpressionContext;
+import prompto.parser.OParser.ExecuteExpressionContext;
+import prompto.parser.OParser.ExpressionAssignmentListContext;
+import prompto.parser.OParser.Expression_listContext;
+import prompto.parser.OParser.Expression_tupleContext;
+import prompto.parser.OParser.FetchManyAsyncContext;
+import prompto.parser.OParser.FetchManyContext;
+import prompto.parser.OParser.FetchOneAsyncContext;
+import prompto.parser.OParser.FetchOneContext;
 import prompto.parser.OParser.FetchStatementContext;
+import prompto.parser.OParser.Filtered_list_expressionContext;
+import prompto.parser.OParser.FlushStatementContext;
+import prompto.parser.OParser.Flush_statementContext;
+import prompto.parser.OParser.ForEachStatementContext;
+import prompto.parser.OParser.For_each_statementContext;
+import prompto.parser.OParser.FullDeclarationListContext;
+import prompto.parser.OParser.Getter_method_declarationContext;
+import prompto.parser.OParser.GreaterThanExpressionContext;
+import prompto.parser.OParser.GreaterThanOrEqualExpressionContext;
+import prompto.parser.OParser.HasAllExpressionContext;
+import prompto.parser.OParser.HasAnyExpressionContext;
+import prompto.parser.OParser.HasExpressionContext;
+import prompto.parser.OParser.HexadecimalLiteralContext;
+import prompto.parser.OParser.HtmlTypeContext;
+import prompto.parser.OParser.IdentifierExpressionContext;
+import prompto.parser.OParser.IfStatementContext;
+import prompto.parser.OParser.If_statementContext;
+import prompto.parser.OParser.ImageTypeContext;
+import prompto.parser.OParser.InExpressionContext;
+import prompto.parser.OParser.InstanceExpressionContext;
+import prompto.parser.OParser.IntDivideExpressionContext;
+import prompto.parser.OParser.IntegerLiteralContext;
+import prompto.parser.OParser.IntegerTypeContext;
+import prompto.parser.OParser.IsATypeExpressionContext;
+import prompto.parser.OParser.IsAnExpressionContext;
+import prompto.parser.OParser.IsExpressionContext;
+import prompto.parser.OParser.IsNotAnExpressionContext;
+import prompto.parser.OParser.IsNotExpressionContext;
+import prompto.parser.OParser.IsOtherExpressionContext;
+import prompto.parser.OParser.ItemInstanceContext;
+import prompto.parser.OParser.ItemSelectorContext;
+import prompto.parser.OParser.IteratorExpressionContext;
+import prompto.parser.OParser.IteratorTypeContext;
+import prompto.parser.OParser.JavaArgumentListContext;
+import prompto.parser.OParser.JavaArgumentListItemContext;
+import prompto.parser.OParser.JavaBooleanLiteralContext;
+import prompto.parser.OParser.JavaCategoryBindingContext;
+import prompto.parser.OParser.JavaCharacterLiteralContext;
+import prompto.parser.OParser.JavaChildClassIdentifierContext;
+import prompto.parser.OParser.JavaChildIdentifierContext;
+import prompto.parser.OParser.JavaClassIdentifierContext;
+import prompto.parser.OParser.JavaDecimalLiteralContext;
+import prompto.parser.OParser.JavaIdentifierContext;
+import prompto.parser.OParser.JavaIntegerLiteralContext;
+import prompto.parser.OParser.JavaItemExpressionContext;
+import prompto.parser.OParser.JavaMethodExpressionContext;
+import prompto.parser.OParser.JavaNativeStatementContext;
+import prompto.parser.OParser.JavaPrimaryExpressionContext;
+import prompto.parser.OParser.JavaReturnStatementContext;
+import prompto.parser.OParser.JavaScriptCategoryBindingContext;
+import prompto.parser.OParser.JavaScriptItemExpressionContext;
+import prompto.parser.OParser.JavaScriptMemberExpressionContext;
+import prompto.parser.OParser.JavaScriptMethodExpressionContext;
+import prompto.parser.OParser.JavaScriptNativeStatementContext;
+import prompto.parser.OParser.JavaSelectorExpressionContext;
+import prompto.parser.OParser.JavaStatementContext;
+import prompto.parser.OParser.JavaTextLiteralContext;
+import prompto.parser.OParser.Java_identifierContext;
+import prompto.parser.OParser.Java_item_expressionContext;
+import prompto.parser.OParser.Java_method_expressionContext;
+import prompto.parser.OParser.Java_parenthesis_expressionContext;
+import prompto.parser.OParser.Java_primary_expressionContext;
+import prompto.parser.OParser.Java_this_expressionContext;
+import prompto.parser.OParser.JavascriptArgumentListContext;
+import prompto.parser.OParser.JavascriptArgumentListItemContext;
+import prompto.parser.OParser.JavascriptBooleanLiteralContext;
+import prompto.parser.OParser.JavascriptCharacterLiteralContext;
+import prompto.parser.OParser.JavascriptDecimalLiteralContext;
+import prompto.parser.OParser.JavascriptIntegerLiteralContext;
+import prompto.parser.OParser.JavascriptPrimaryExpressionContext;
+import prompto.parser.OParser.JavascriptReturnStatementContext;
+import prompto.parser.OParser.JavascriptSelectorExpressionContext;
+import prompto.parser.OParser.JavascriptStatementContext;
+import prompto.parser.OParser.JavascriptTextLiteralContext;
+import prompto.parser.OParser.Javascript_category_bindingContext;
+import prompto.parser.OParser.Javascript_identifierContext;
+import prompto.parser.OParser.Javascript_identifier_expressionContext;
+import prompto.parser.OParser.Javascript_method_expressionContext;
+import prompto.parser.OParser.Javascript_moduleContext;
+import prompto.parser.OParser.Javascript_native_statementContext;
+import prompto.parser.OParser.Javascript_new_expressionContext;
+import prompto.parser.OParser.Javascript_primary_expressionContext;
+import prompto.parser.OParser.Javascript_this_expressionContext;
+import prompto.parser.OParser.JsxChildContext;
+import prompto.parser.OParser.JsxCodeContext;
+import prompto.parser.OParser.JsxElementContext;
+import prompto.parser.OParser.JsxExpressionContext;
+import prompto.parser.OParser.JsxLiteralContext;
+import prompto.parser.OParser.JsxSelfClosingContext;
+import prompto.parser.OParser.JsxTextContext;
+import prompto.parser.OParser.JsxValueContext;
+import prompto.parser.OParser.Jsx_attributeContext;
+import prompto.parser.OParser.Jsx_childrenContext;
+import prompto.parser.OParser.Jsx_closingContext;
+import prompto.parser.OParser.Jsx_element_nameContext;
+import prompto.parser.OParser.Jsx_expressionContext;
+import prompto.parser.OParser.Jsx_identifierContext;
+import prompto.parser.OParser.Jsx_openingContext;
+import prompto.parser.OParser.Jsx_self_closingContext;
+import prompto.parser.OParser.Key_tokenContext;
+import prompto.parser.OParser.LessThanExpressionContext;
+import prompto.parser.OParser.LessThanOrEqualExpressionContext;
+import prompto.parser.OParser.ListTypeContext;
+import prompto.parser.OParser.List_literalContext;
+import prompto.parser.OParser.LiteralExpressionContext;
+import prompto.parser.OParser.LiteralListLiteralContext;
+import prompto.parser.OParser.LiteralRangeLiteralContext;
+import prompto.parser.OParser.LiteralSetLiteralContext;
+import prompto.parser.OParser.Literal_expressionContext;
+import prompto.parser.OParser.Literal_list_literalContext;
+import prompto.parser.OParser.MatchingExpressionContext;
+import prompto.parser.OParser.MatchingListContext;
+import prompto.parser.OParser.MatchingPatternContext;
+import prompto.parser.OParser.MatchingRangeContext;
+import prompto.parser.OParser.MatchingSetContext;
+import prompto.parser.OParser.MaxIntegerLiteralContext;
+import prompto.parser.OParser.MemberInstanceContext;
+import prompto.parser.OParser.MemberSelectorContext;
+import prompto.parser.OParser.Member_method_declarationContext;
+import prompto.parser.OParser.Member_method_declaration_listContext;
+import prompto.parser.OParser.MethodCallStatementContext;
+import prompto.parser.OParser.MethodExpressionContext;
+import prompto.parser.OParser.MethodSelectorContext;
+import prompto.parser.OParser.Method_call_expressionContext;
 import prompto.parser.OParser.Method_call_statementContext;
+import prompto.parser.OParser.Method_declarationContext;
+import prompto.parser.OParser.Method_expressionContext;
+import prompto.parser.OParser.Method_identifierContext;
+import prompto.parser.OParser.MinIntegerLiteralContext;
+import prompto.parser.OParser.MinusExpressionContext;
+import prompto.parser.OParser.ModuloExpressionContext;
+import prompto.parser.OParser.MultiplyExpressionContext;
+import prompto.parser.OParser.Mutable_category_typeContext;
+import prompto.parser.OParser.Named_argumentContext;
+import prompto.parser.OParser.NativeCategoryBindingListContext;
+import prompto.parser.OParser.NativeCategoryBindingListItemContext;
+import prompto.parser.OParser.NativeCategoryDeclarationContext;
+import prompto.parser.OParser.NativeTypeContext;
+import prompto.parser.OParser.NativeWidgetDeclarationContext;
+import prompto.parser.OParser.Native_category_bindingsContext;
+import prompto.parser.OParser.Native_category_declarationContext;
+import prompto.parser.OParser.Native_getter_declarationContext;
+import prompto.parser.OParser.Native_member_method_declarationContext;
+import prompto.parser.OParser.Native_member_method_declaration_listContext;
+import prompto.parser.OParser.Native_method_declarationContext;
+import prompto.parser.OParser.Native_resource_declarationContext;
+import prompto.parser.OParser.Native_setter_declarationContext;
+import prompto.parser.OParser.Native_statement_listContext;
+import prompto.parser.OParser.Native_symbolContext;
+import prompto.parser.OParser.Native_symbol_listContext;
+import prompto.parser.OParser.Native_widget_declarationContext;
+import prompto.parser.OParser.NotContainsExpressionContext;
+import prompto.parser.OParser.NotEqualsExpressionContext;
+import prompto.parser.OParser.NotExpressionContext;
+import prompto.parser.OParser.NotHasAllExpressionContext;
+import prompto.parser.OParser.NotHasAnyExpressionContext;
+import prompto.parser.OParser.NotHasExpressionContext;
+import prompto.parser.OParser.NotInExpressionContext;
+import prompto.parser.OParser.NullLiteralContext;
+import prompto.parser.OParser.OperatorArgumentContext;
+import prompto.parser.OParser.OperatorDivideContext;
+import prompto.parser.OParser.OperatorIDivideContext;
+import prompto.parser.OParser.OperatorMinusContext;
+import prompto.parser.OParser.OperatorModuloContext;
+import prompto.parser.OParser.OperatorMultiplyContext;
+import prompto.parser.OParser.OperatorPlusContext;
+import prompto.parser.OParser.Operator_argumentContext;
+import prompto.parser.OParser.Operator_method_declarationContext;
+import prompto.parser.OParser.OrExpressionContext;
+import prompto.parser.OParser.Order_byContext;
+import prompto.parser.OParser.Order_by_listContext;
+import prompto.parser.OParser.ParenthesisExpressionContext;
+import prompto.parser.OParser.Parenthesis_expressionContext;
+import prompto.parser.OParser.PeriodLiteralContext;
+import prompto.parser.OParser.PeriodTypeContext;
+import prompto.parser.OParser.PrimaryTypeContext;
+import prompto.parser.OParser.Python2CategoryBindingContext;
+import prompto.parser.OParser.Python2NativeStatementContext;
+import prompto.parser.OParser.Python3CategoryBindingContext;
+import prompto.parser.OParser.Python3NativeStatementContext;
+import prompto.parser.OParser.PythonArgumentListContext;
+import prompto.parser.OParser.PythonBooleanLiteralContext;
+import prompto.parser.OParser.PythonCharacterLiteralContext;
+import prompto.parser.OParser.PythonChildIdentifierContext;
+import prompto.parser.OParser.PythonDecimalLiteralContext;
+import prompto.parser.OParser.PythonGlobalMethodExpressionContext;
+import prompto.parser.OParser.PythonIdentifierContext;
+import prompto.parser.OParser.PythonIdentifierExpressionContext;
+import prompto.parser.OParser.PythonIntegerLiteralContext;
+import prompto.parser.OParser.PythonLiteralExpressionContext;
+import prompto.parser.OParser.PythonMethodExpressionContext;
+import prompto.parser.OParser.PythonNamedArgumentListContext;
+import prompto.parser.OParser.PythonNamedArgumentListItemContext;
+import prompto.parser.OParser.PythonNamedOnlyArgumentListContext;
+import prompto.parser.OParser.PythonOrdinalArgumentListContext;
+import prompto.parser.OParser.PythonOrdinalArgumentListItemContext;
+import prompto.parser.OParser.PythonOrdinalOnlyArgumentListContext;
+import prompto.parser.OParser.PythonPrimaryExpressionContext;
+import prompto.parser.OParser.PythonPromptoIdentifierContext;
+import prompto.parser.OParser.PythonReturnStatementContext;
+import prompto.parser.OParser.PythonSelectorExpressionContext;
+import prompto.parser.OParser.PythonSelfExpressionContext;
+import prompto.parser.OParser.PythonStatementContext;
+import prompto.parser.OParser.PythonTextLiteralContext;
+import prompto.parser.OParser.Python_category_bindingContext;
 import prompto.parser.OParser.Python_identifierContext;
+import prompto.parser.OParser.Python_method_expressionContext;
+import prompto.parser.OParser.Python_moduleContext;
+import prompto.parser.OParser.Python_native_statementContext;
+import prompto.parser.OParser.RaiseStatementContext;
+import prompto.parser.OParser.Raise_statementContext;
+import prompto.parser.OParser.Range_literalContext;
+import prompto.parser.OParser.Read_all_expressionContext;
+import prompto.parser.OParser.Read_one_expressionContext;
+import prompto.parser.OParser.Resource_declarationContext;
+import prompto.parser.OParser.ReturnStatementContext;
+import prompto.parser.OParser.Return_statementContext;
+import prompto.parser.OParser.RootInstanceContext;
+import prompto.parser.OParser.RoughlyEqualsExpressionContext;
+import prompto.parser.OParser.SelectableExpressionContext;
+import prompto.parser.OParser.SelectorExpressionContext;
+import prompto.parser.OParser.SetTypeContext;
+import prompto.parser.OParser.Set_literalContext;
+import prompto.parser.OParser.Setter_method_declarationContext;
+import prompto.parser.OParser.SingleStatementContext;
+import prompto.parser.OParser.SingletonCategoryDeclarationContext;
+import prompto.parser.OParser.Singleton_category_declarationContext;
+import prompto.parser.OParser.SliceFirstAndLastContext;
+import prompto.parser.OParser.SliceFirstOnlyContext;
+import prompto.parser.OParser.SliceLastOnlyContext;
+import prompto.parser.OParser.SliceSelectorContext;
+import prompto.parser.OParser.Sorted_expressionContext;
+import prompto.parser.OParser.Statement_listContext;
+import prompto.parser.OParser.StoreStatementContext;
+import prompto.parser.OParser.Store_statementContext;
+import prompto.parser.OParser.SwitchStatementContext;
+import prompto.parser.OParser.Switch_case_statement_listContext;
+import prompto.parser.OParser.Switch_statementContext;
+import prompto.parser.OParser.SymbolIdentifierContext;
+import prompto.parser.OParser.Symbol_identifierContext;
+import prompto.parser.OParser.Symbol_listContext;
+import prompto.parser.OParser.TernaryExpressionContext;
+import prompto.parser.OParser.Test_method_declarationContext;
+import prompto.parser.OParser.TextLiteralContext;
+import prompto.parser.OParser.TextTypeContext;
+import prompto.parser.OParser.ThisExpressionContext;
+import prompto.parser.OParser.TimeLiteralContext;
+import prompto.parser.OParser.TimeTypeContext;
+import prompto.parser.OParser.TryStatementContext;
+import prompto.parser.OParser.Try_statementContext;
+import prompto.parser.OParser.Tuple_literalContext;
+import prompto.parser.OParser.TypeIdentifierContext;
+import prompto.parser.OParser.Type_identifierContext;
+import prompto.parser.OParser.Type_identifier_listContext;
+import prompto.parser.OParser.Typed_argumentContext;
+import prompto.parser.OParser.UUIDLiteralContext;
+import prompto.parser.OParser.UUIDTypeContext;
+import prompto.parser.OParser.Value_tokenContext;
+import prompto.parser.OParser.VariableIdentifierContext;
+import prompto.parser.OParser.Variable_identifierContext;
+import prompto.parser.OParser.Variable_identifier_listContext;
+import prompto.parser.OParser.VersionLiteralContext;
+import prompto.parser.OParser.VersionTypeContext;
+import prompto.parser.OParser.WhileStatementContext;
+import prompto.parser.OParser.While_statementContext;
+import prompto.parser.OParser.WithResourceStatementContext;
+import prompto.parser.OParser.WithSingletonStatementContext;
+import prompto.parser.OParser.With_resource_statementContext;
+import prompto.parser.OParser.With_singleton_statementContext;
+import prompto.parser.OParser.WriteStatementContext;
+import prompto.parser.OParser.Write_statementContext;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -222,7 +618,6 @@ import prompto.python.PythonTextLiteral;
 import prompto.statement.AssignInstanceStatement;
 import prompto.statement.AssignTupleStatement;
 import prompto.statement.AssignVariableStatement;
-import prompto.statement.RemoteCall;
 import prompto.statement.AtomicSwitchCase;
 import prompto.statement.BaseSwitchStatement.SwitchCaseList;
 import prompto.statement.BreakStatement;
@@ -239,6 +634,7 @@ import prompto.statement.IfStatement;
 import prompto.statement.IfStatement.IfElement;
 import prompto.statement.IfStatement.IfElementList;
 import prompto.statement.RaiseStatement;
+import prompto.statement.RemoteCall;
 import prompto.statement.ReturnStatement;
 import prompto.statement.StatementList;
 import prompto.statement.StoreStatement;
@@ -532,38 +928,13 @@ public class OPromptoBuilder extends OParserBaseListener {
 
 	
 	@Override
-	public void exitCallableItemSelector(CallableItemSelectorContext ctx) {
-		IExpression exp = this.<IExpression>getNodeValue(ctx.exp);
-		setNodeValue(ctx, new ItemSelector(exp));
-	}
-	
-	@Override
-	public void exitCallableMemberSelector(CallableMemberSelectorContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		setNodeValue(ctx, new MemberSelector(name));
-	}
-	
-
-	@Override
-	public void exitCallableRoot(CallableRootContext ctx) {
-		setNodeValue(ctx, this.<IExpression>getNodeValue(ctx.exp));
-	}
-
-	@Override
-	public void exitCallableSelector(CallableSelectorContext ctx) {
-		IExpression parent = this.<IExpression>getNodeValue(ctx.parent);
-		SelectorExpression select = this.<SelectorExpression>getNodeValue(ctx.select);
-		select.setParent(parent);
-		setNodeValue(ctx, select);
-	}
-
-	@Override
 	public void exitCastExpression(CastExpressionContext ctx) {
 		IExpression exp = this.<IExpression>getNodeValue(ctx.left);
 		IType type = this.<IType>getNodeValue(ctx.right);
 		setNodeValue(ctx, new CastExpression(exp, type));
 	}
 
+	
 	@Override
 	public void exitCatch_statement_list(Catch_statement_listContext ctx) {
 		SwitchCaseList items = new SwitchCaseList();
@@ -2063,9 +2434,11 @@ public class OPromptoBuilder extends OParserBaseListener {
 		setNodeValue(ctx, new MemberSelector(name));
 	}
 	
+	
 	@Override
-	public void exitMethod_call(Method_callContext ctx) {
-		IExpression caller = this.<IExpression>getNodeValue(ctx.method);
+	public void exitMethod_call_expression(Method_call_expressionContext ctx) {
+		Identifier name = this.<Identifier>getNodeValue(ctx.name);
+		IExpression caller = new UnresolvedIdentifier(name);
 		ArgumentAssignmentList args = this.<ArgumentAssignmentList>getNodeValue(ctx.args);
 		setNodeValue(ctx, new UnresolvedCall(caller, args));
 	}
@@ -2073,7 +2446,9 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitMethod_call_statement(Method_call_statementContext ctx) {
+		IExpression parent = this.<IExpression>getNodeValue(ctx.parent);
 		UnresolvedCall call = this.<UnresolvedCall>getNodeValue(ctx.method);
+		call.setParent(parent);
 		Identifier resultName = this.<Identifier>getNodeValue(ctx.name);
 		StatementList stmts = this.<StatementList>getNodeValue(ctx.stmts);
 		if(resultName!=null || stmts!=null)
@@ -2115,19 +2490,16 @@ public class OPromptoBuilder extends OParserBaseListener {
 
 
 	@Override
-	public void exitMethodName(MethodNameContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		setNodeValue(ctx, new UnresolvedIdentifier(name));
-	}
-
-	@Override
-	public void exitMethodParent(MethodParentContext ctx) {
-		IExpression parent = this.<IExpression>getNodeValue(ctx.parent);
-		Identifier name = this.<Identifier>getNodeValue(ctx.name);
-		setNodeValue(ctx, new MethodSelector(parent, name));
+	public void exitMethodSelector(MethodSelectorContext ctx) {
+		UnresolvedCall call = this.<UnresolvedCall>getNodeValue(ctx.method);
+		if(call.getCaller() instanceof UnresolvedIdentifier) {
+			Identifier id = ((UnresolvedIdentifier)call.getCaller()).getId();
+			call.setCaller(new UnresolvedSelector(id));
+		}
+		setNodeValue(ctx, call);
 	}
 	
-
+	
 	@Override
 	public void exitMinIntegerLiteral(MinIntegerLiteralContext ctx) {
 		setNodeValue(ctx, new MinIntegerLiteral());
@@ -2761,8 +3133,11 @@ public class OPromptoBuilder extends OParserBaseListener {
 	@Override
 	public void exitSelectorExpression(SelectorExpressionContext ctx) {
 		IExpression parent = this.<IExpression>getNodeValue(ctx.parent);
-		SelectorExpression selector = this.<SelectorExpression>getNodeValue(ctx.selector);
-		selector.setParent(parent);
+		IExpression selector = this.<IExpression>getNodeValue(ctx.selector);
+		if(selector instanceof SelectorExpression)
+			((SelectorExpression)selector).setParent(parent);
+		else if(selector instanceof UnresolvedCall)
+			((UnresolvedCall)selector).setParent(parent);
 		setNodeValue(ctx, selector);
 	}
 

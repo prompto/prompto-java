@@ -30,6 +30,7 @@ import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.Context.ClosureContext;
 import prompto.runtime.Context.InstanceContext;
+import prompto.statement.UnresolvedCall;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.EnumeratedCategoryType;
@@ -63,14 +64,23 @@ public class MemberSelector extends SelectorExpression {
 
 	@Override
 	public void toDialect(CodeWriter writer) {
-		if(writer.getDialect()==Dialect.E) {
-			IType type = check(writer.getContext());
-			if(type instanceof MethodType)
-				writer.append("Method: ");
-			
-		} 
+		if(writer.getDialect()==Dialect.E) 
+			toEDialect(writer);
+		else
+			toOMDialect(writer);
+	}
+	
+	void toEDialect(CodeWriter writer) {
+		IType type = check(writer.getContext());
+		if(type instanceof MethodType)
+			writer.append("Method: ");
 		parentAndMemberToDialect(writer);
 	}
+	
+	void toOMDialect(CodeWriter writer) {
+		parentAndMemberToDialect(writer);
+	}
+	
 	
 	protected void parentAndMemberToDialect(CodeWriter writer) {
 		try {
@@ -78,9 +88,29 @@ public class MemberSelector extends SelectorExpression {
 		} catch(SyntaxError e) {
 			// ignore
 		}
-		parent.toDialect(writer);
+		if(writer.getDialect()==Dialect.E) 
+			parentToEDialect(writer);
+		else
+			parentToOMDialect(writer);
 		writer.append(".");
 		writer.append(id);
+	}
+	
+	protected void parentToEDialect(CodeWriter writer) {
+		if(parent instanceof UnresolvedCall) {
+			writer.append('(');
+			parent.toDialect(writer);
+			writer.append(')');
+		} else
+			parent.toDialect(writer);
+	}
+	
+	protected void parentToOMDialect(CodeWriter writer) {
+		// if parent is: (method()), then supposedly this emanates from a translation from E dialect
+		if(parent instanceof ParenthesisExpression && ((ParenthesisExpression)parent).getExpression() instanceof UnresolvedCall)
+			((ParenthesisExpression)parent).getExpression().toDialect(writer);
+		else
+			parent.toDialect(writer);
 	}
 
 	@Override

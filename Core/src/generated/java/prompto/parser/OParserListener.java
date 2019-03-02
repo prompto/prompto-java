@@ -776,15 +776,15 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitReturn_statement(OParser.Return_statementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link OParser#method_call}.
+	 * Enter a parse tree produced by {@link OParser#method_call_expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterMethod_call(OParser.Method_callContext ctx);
+	void enterMethod_call_expression(OParser.Method_call_expressionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link OParser#method_call}.
+	 * Exit a parse tree produced by {@link OParser#method_call_expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitMethod_call(OParser.Method_callContext ctx);
+	void exitMethod_call_expression(OParser.Method_call_expressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link OParser#method_call_statement}.
 	 * @param ctx the parse tree
@@ -795,78 +795,6 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMethod_call_statement(OParser.Method_call_statementContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code MethodName}
-	 * labeled alternative in {@link OParser#method_selector}.
-	 * @param ctx the parse tree
-	 */
-	void enterMethodName(OParser.MethodNameContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code MethodName}
-	 * labeled alternative in {@link OParser#method_selector}.
-	 * @param ctx the parse tree
-	 */
-	void exitMethodName(OParser.MethodNameContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code MethodParent}
-	 * labeled alternative in {@link OParser#method_selector}.
-	 * @param ctx the parse tree
-	 */
-	void enterMethodParent(OParser.MethodParentContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code MethodParent}
-	 * labeled alternative in {@link OParser#method_selector}.
-	 * @param ctx the parse tree
-	 */
-	void exitMethodParent(OParser.MethodParentContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code CallableSelector}
-	 * labeled alternative in {@link OParser#callable_parent}.
-	 * @param ctx the parse tree
-	 */
-	void enterCallableSelector(OParser.CallableSelectorContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code CallableSelector}
-	 * labeled alternative in {@link OParser#callable_parent}.
-	 * @param ctx the parse tree
-	 */
-	void exitCallableSelector(OParser.CallableSelectorContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code CallableRoot}
-	 * labeled alternative in {@link OParser#callable_parent}.
-	 * @param ctx the parse tree
-	 */
-	void enterCallableRoot(OParser.CallableRootContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code CallableRoot}
-	 * labeled alternative in {@link OParser#callable_parent}.
-	 * @param ctx the parse tree
-	 */
-	void exitCallableRoot(OParser.CallableRootContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code CallableMemberSelector}
-	 * labeled alternative in {@link OParser#callable_selector}.
-	 * @param ctx the parse tree
-	 */
-	void enterCallableMemberSelector(OParser.CallableMemberSelectorContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code CallableMemberSelector}
-	 * labeled alternative in {@link OParser#callable_selector}.
-	 * @param ctx the parse tree
-	 */
-	void exitCallableMemberSelector(OParser.CallableMemberSelectorContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code CallableItemSelector}
-	 * labeled alternative in {@link OParser#callable_selector}.
-	 * @param ctx the parse tree
-	 */
-	void enterCallableItemSelector(OParser.CallableItemSelectorContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code CallableItemSelector}
-	 * labeled alternative in {@link OParser#callable_selector}.
-	 * @param ctx the parse tree
-	 */
-	void exitCallableItemSelector(OParser.CallableItemSelectorContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link OParser#x_expression}.
 	 * @param ctx the parse tree
@@ -1166,18 +1094,6 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitExecuteExpression(OParser.ExecuteExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code MethodExpression}
-	 * labeled alternative in {@link OParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterMethodExpression(OParser.MethodExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code MethodExpression}
-	 * labeled alternative in {@link OParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitMethodExpression(OParser.MethodExpressionContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code GreaterThanOrEqualExpression}
 	 * labeled alternative in {@link OParser#expression}.
 	 * @param ctx the parse tree
@@ -1378,6 +1294,66 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitClosure_expression(OParser.Closure_expressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code MethodExpression}
+	 * labeled alternative in {@link OParser#selectable_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterMethodExpression(OParser.MethodExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code MethodExpression}
+	 * labeled alternative in {@link OParser#selectable_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitMethodExpression(OParser.MethodExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ParenthesisExpression}
+	 * labeled alternative in {@link OParser#selectable_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterParenthesisExpression(OParser.ParenthesisExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ParenthesisExpression}
+	 * labeled alternative in {@link OParser#selectable_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitParenthesisExpression(OParser.ParenthesisExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code LiteralExpression}
+	 * labeled alternative in {@link OParser#selectable_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterLiteralExpression(OParser.LiteralExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code LiteralExpression}
+	 * labeled alternative in {@link OParser#selectable_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitLiteralExpression(OParser.LiteralExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code IdentifierExpression}
+	 * labeled alternative in {@link OParser#selectable_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterIdentifierExpression(OParser.IdentifierExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code IdentifierExpression}
+	 * labeled alternative in {@link OParser#selectable_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitIdentifierExpression(OParser.IdentifierExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ThisExpression}
+	 * labeled alternative in {@link OParser#selectable_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterThisExpression(OParser.ThisExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ThisExpression}
+	 * labeled alternative in {@link OParser#selectable_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitThisExpression(OParser.ThisExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code SelectorExpression}
 	 * labeled alternative in {@link OParser#instance_expression}.
 	 * @param ctx the parse tree
@@ -1511,37 +1487,49 @@ public interface OParserListener extends ParseTreeListener {
 	void exitSorted_expression(OParser.Sorted_expressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code MemberSelector}
-	 * labeled alternative in {@link OParser#selector_expression}.
+	 * labeled alternative in {@link OParser#instance_selector}.
 	 * @param ctx the parse tree
 	 */
 	void enterMemberSelector(OParser.MemberSelectorContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code MemberSelector}
-	 * labeled alternative in {@link OParser#selector_expression}.
+	 * labeled alternative in {@link OParser#instance_selector}.
 	 * @param ctx the parse tree
 	 */
 	void exitMemberSelector(OParser.MemberSelectorContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code MethodSelector}
+	 * labeled alternative in {@link OParser#instance_selector}.
+	 * @param ctx the parse tree
+	 */
+	void enterMethodSelector(OParser.MethodSelectorContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code MethodSelector}
+	 * labeled alternative in {@link OParser#instance_selector}.
+	 * @param ctx the parse tree
+	 */
+	void exitMethodSelector(OParser.MethodSelectorContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code ItemSelector}
-	 * labeled alternative in {@link OParser#selector_expression}.
+	 * labeled alternative in {@link OParser#instance_selector}.
 	 * @param ctx the parse tree
 	 */
 	void enterItemSelector(OParser.ItemSelectorContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code ItemSelector}
-	 * labeled alternative in {@link OParser#selector_expression}.
+	 * labeled alternative in {@link OParser#instance_selector}.
 	 * @param ctx the parse tree
 	 */
 	void exitItemSelector(OParser.ItemSelectorContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code SliceSelector}
-	 * labeled alternative in {@link OParser#selector_expression}.
+	 * labeled alternative in {@link OParser#instance_selector}.
 	 * @param ctx the parse tree
 	 */
 	void enterSliceSelector(OParser.SliceSelectorContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code SliceSelector}
-	 * labeled alternative in {@link OParser#selector_expression}.
+	 * labeled alternative in {@link OParser#instance_selector}.
 	 * @param ctx the parse tree
 	 */
 	void exitSliceSelector(OParser.SliceSelectorContext ctx);
@@ -3051,54 +3039,6 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLiteral_list_literal(OParser.Literal_list_literalContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ParenthesisExpression}
-	 * labeled alternative in {@link OParser#selectable_expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterParenthesisExpression(OParser.ParenthesisExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ParenthesisExpression}
-	 * labeled alternative in {@link OParser#selectable_expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitParenthesisExpression(OParser.ParenthesisExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code LiteralExpression}
-	 * labeled alternative in {@link OParser#selectable_expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterLiteralExpression(OParser.LiteralExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code LiteralExpression}
-	 * labeled alternative in {@link OParser#selectable_expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitLiteralExpression(OParser.LiteralExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code IdentifierExpression}
-	 * labeled alternative in {@link OParser#selectable_expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterIdentifierExpression(OParser.IdentifierExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code IdentifierExpression}
-	 * labeled alternative in {@link OParser#selectable_expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitIdentifierExpression(OParser.IdentifierExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ThisExpression}
-	 * labeled alternative in {@link OParser#selectable_expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterThisExpression(OParser.ThisExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ThisExpression}
-	 * labeled alternative in {@link OParser#selectable_expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitThisExpression(OParser.ThisExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link OParser#this_expression}.
 	 * @param ctx the parse tree
