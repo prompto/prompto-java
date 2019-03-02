@@ -14,9 +14,9 @@ import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.value.Decimal;
+import prompto.value.DecimalValue;
 import prompto.value.IValue;
-import prompto.value.Integer;
+import prompto.value.IntegerValue;
 
 public class ModuloExpression implements IExpression {
 
@@ -53,10 +53,10 @@ public class ModuloExpression implements IExpression {
 	
 	private static Map<Class<?>, IOperatorFunction> createDividers() {
 		Map<Class<?>, IOperatorFunction> map = new HashMap<>();
-		map.put(double.class, Decimal::compileModulo);
-		map.put(Double.class, Decimal::compileModulo);
-		map.put(long.class, Integer::compileModulo);
-		map.put(Long.class, Integer::compileModulo);
+		map.put(double.class, DecimalValue::compileModulo);
+		map.put(Double.class, DecimalValue::compileModulo);
+		map.put(long.class, IntegerValue::compileModulo);
+		map.put(Long.class, IntegerValue::compileModulo);
 		return map;
 	}
 

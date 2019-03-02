@@ -31,5 +31,6 @@ public interface IDebugger {
 	void stepInto(IWorker worker);
 	void stepOut(IWorker worker);
 	void stepOver(IWorker worker);
+	IVariable getVariable(IWorker worker, IStackFrame frame, String name);
 	Collection<? extends IVariable> getVariables(IWorker worker, IStackFrame frame);
 }

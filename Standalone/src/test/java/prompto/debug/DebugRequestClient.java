@@ -3,25 +3,9 @@ package prompto.debug;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
-import prompto.debug.IDebugRequest.GetWorkerStatusRequest;
-import prompto.debug.IDebugRequest.GetLineRequest;
-import prompto.debug.IDebugRequest.InstallBreakpointRequest;
-import prompto.debug.IDebugRequest.SuspendRequest;
-import prompto.debug.IDebugRequest.ResumeRequest;
-import prompto.debug.IDebugRequest.TerminateRequest;
-import prompto.debug.IDebugRequest.GetStackRequest;
-import prompto.debug.IDebugRequest.GetVariablesRequest;
-import prompto.debug.IDebugRequest.StepIntoRequest;
-import prompto.debug.IDebugRequest.IsSteppingRequest;
-import prompto.debug.IDebugRequest.StepOutRequest;
-import prompto.debug.IDebugRequest.StepOverRequest;
-import prompto.debug.IDebugResponse.GetLineResponse;
-import prompto.debug.IDebugResponse.GetStatusResponse;
-import prompto.debug.IDebugResponse.GetStackResponse;
-import prompto.debug.IDebugResponse.GetVariablesResponse;
-import prompto.debug.IDebugResponse.IsSteppingResponse;
+import static prompto.debug.IDebugRequest.*;
+import static prompto.debug.IDebugResponse.*;
 import prompto.parser.ISection;
 
 /* a client which is able to send debug requests (such as step, get stack frames...) to a debug request server */
@@ -88,12 +72,19 @@ public abstract class DebugRequestClient implements IDebugger {
 	public Collection<? extends IVariable> getVariables(IWorker worker, IStackFrame frame) {
 		IDebugRequest request = new GetVariablesRequest(worker, frame);
 		IDebugResponse response = send(request) ;
-		if(response instanceof GetVariablesResponse) {
-			LeanVariableList variables = ((GetVariablesResponse)response).getVariables();
-			return variables.stream()
-					.map((v)->new ClientVariable(worker, frame, v))
-					.collect(Collectors.toList());
-		} else 
+		if(response instanceof GetVariablesResponse)
+			return ((GetVariablesResponse)response).getVariables();
+		else 
+			throw new UnreachableException();
+	}
+	
+	@Override
+	public IVariable getVariable(IWorker worker, IStackFrame frame, String name) {
+		IDebugRequest request = new GetVariableRequest(worker, frame, name);
+		IDebugResponse response = send(request) ;
+		if(response instanceof GetVariableResponse)
+			return ((GetVariableResponse)response).getVariable();
+		else 
 			throw new UnreachableException();
 	}
 

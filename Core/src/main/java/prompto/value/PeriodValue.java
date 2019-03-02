@@ -16,19 +16,19 @@ import prompto.intrinsic.PromptoPeriod;
 import prompto.runtime.Context;
 import prompto.type.PeriodType;
 
-public class Period extends BaseValue implements IMultiplyable {
-	public static final Period ZERO = new Period(0, 0, 0, 0, 0, 0, 0, 0);
+public class PeriodValue extends BaseValue implements IMultiplyable {
+	public static final PeriodValue ZERO = new PeriodValue(0, 0, 0, 0, 0, 0, 0, 0);
 
 	PromptoPeriod value;
 
-	public Period(long years, long months, long weeks, long days, long hours,
+	public PeriodValue(long years, long months, long weeks, long days, long hours,
 			long minutes, long seconds, long millis) {
 		super(PeriodType.instance());
 		value = new PromptoPeriod(years, months, weeks, days, hours, minutes,
 				seconds, millis);
 	}
 
-	public Period(PromptoPeriod value) {
+	public PeriodValue(PromptoPeriod value) {
 		super(PeriodType.instance());
 		this.value = value;
 	}
@@ -40,8 +40,8 @@ public class Period extends BaseValue implements IMultiplyable {
 	
 	@Override
 	public IValue plus(Context context, IValue value) throws PromptoError {
-		if (value instanceof Period)
-			return new Period(this.value.plus(((Period) value).value));
+		if (value instanceof PeriodValue)
+			return new PeriodValue(this.value.plus(((PeriodValue) value).value));
 		else
 			throw new SyntaxError("Illegal: Period + "
 					+ value.getClass().getSimpleName());
@@ -62,8 +62,8 @@ public class Period extends BaseValue implements IMultiplyable {
 
 	@Override
 	public IValue minus(Context context, IValue value) throws PromptoError {
-		if (value instanceof Period)
-			return new Period(this.value.minus(((Period) value).value));
+		if (value instanceof PeriodValue)
+			return new PeriodValue(this.value.minus(((PeriodValue) value).value));
 		else
 			throw new SyntaxError("Illegal: Period - "
 					+ value.getClass().getSimpleName());
@@ -84,15 +84,15 @@ public class Period extends BaseValue implements IMultiplyable {
 
 	@Override
 	public IValue multiply(Context context, IValue value) throws PromptoError {
-		if (value instanceof Integer) {
-			int count = (int) ((Integer) value).longValue();
+		if (value instanceof IntegerValue) {
+			int count = (int) ((IntegerValue) value).longValue();
 			if (count < 0)
 				throw new SyntaxError("Negative repeat count:" + count);
 			if (count == 0)
-				return Period.ZERO;
+				return PeriodValue.ZERO;
 			if (count == 1)
 				return this;
-			return new Period(this.value.multiply(count));
+			return new PeriodValue(this.value.multiply(count));
 		} else
 			throw new SyntaxError("Illegal: Period * "
 					+ value.getClass().getSimpleName());
@@ -112,8 +112,8 @@ public class Period extends BaseValue implements IMultiplyable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Period)
-			return this.value.equals(((Period) obj).value);
+		if (obj instanceof PeriodValue)
+			return this.value.equals(((PeriodValue) obj).value);
 		else
 			return false;
 	}
@@ -140,7 +140,7 @@ public class Period extends BaseValue implements IMultiplyable {
 	}
 
 	public IValue negate() {
-		return new Period(value.negate());
+		return new PeriodValue(value.negate());
 	}
 
 	public static ResultInfo compileNegate(Context context, MethodInfo method, Flags flags,

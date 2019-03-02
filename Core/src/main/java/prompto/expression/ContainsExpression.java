@@ -38,7 +38,7 @@ import prompto.type.ContainerType;
 import prompto.type.IType;
 import prompto.type.TextType;
 import prompto.utils.CodeWriter;
-import prompto.value.Boolean;
+import prompto.value.BooleanValue;
 import prompto.value.IContainer;
 import prompto.value.IInstance;
 import prompto.value.IIterable;
@@ -106,7 +106,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
     }
     
     private ResultInfo compileNot(Context context, MethodInfo method, Flags flags, ResultInfo info) {
-		if(Boolean.class==info.getType())
+		if(BooleanValue.class==info.getType())
 			CompilerUtils.BooleanToboolean(method);
 		CompilerUtils.reverseBoolean(method);
 		if(flags.toPrimitive())
@@ -227,7 +227,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
         {
             if (operator.name().startsWith("NOT_"))
                 result = !result;
-            return Boolean.valueOf(result);
+            return BooleanValue.valueOf(result);
         }
         if (operator.name().endsWith("IN"))
         {
@@ -267,7 +267,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 		IValue lval = left.interpret(context);
 		IValue rval = right.interpret(context);
 		IValue result = interpret(context, lval, rval);
-		if(result==Boolean.TRUE) 
+		if(result==BooleanValue.TRUE) 
 			return true;
 		String expected = buildExpectedMessage(context, test);
 		String actual = lval.toString() + " " + operator.toString() + " " + rval.toString();
@@ -304,7 +304,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 		context.registerValue(new Variable(new Identifier(rightName), rightType));
 		ContainsExpression newExp = new ContainsExpression(newLeft, this.operator, newRight);
 		ResultInfo info = newExp.compile(context, method, flags.withPrimitive(true));
-		if(Boolean.class==info.getType())
+		if(BooleanValue.class==info.getType())
 			CompilerUtils.BooleanToboolean(method);
 		// 1 = success
 		IInstructionListener finalListener = method.addOffsetListener(new OffsetListenerConstant());

@@ -21,10 +21,10 @@ import prompto.type.DictType;
 import prompto.type.IType;
 import prompto.type.TextType;
 import prompto.utils.CmdLineParser;
-import prompto.value.Dictionary;
+import prompto.value.DictionaryValue;
 import prompto.value.ExpressionValue;
 import prompto.value.IValue;
-import prompto.value.Text;
+import prompto.value.TextValue;
 
 public class Interpreter {
 	
@@ -108,11 +108,11 @@ public class Interpreter {
 	}
 
 	private static IExpression convertCmdLineArgs(Map<String, String> args) {
-		PromptoDict<Text, IValue> valueArgs = new PromptoDict<Text, IValue>(true);
+		PromptoDict<TextValue, IValue> valueArgs = new PromptoDict<TextValue, IValue>(true);
 		for(Entry<String,String> entry : args.entrySet())
-			valueArgs.put(new Text(entry.getKey()), new Text(entry.getValue()));
+			valueArgs.put(new TextValue(entry.getKey()), new TextValue(entry.getValue()));
 		valueArgs.setMutable(false);
-		Dictionary dict = new Dictionary(TextType.instance(), valueArgs);
+		DictionaryValue dict = new DictionaryValue(TextType.instance(), valueArgs);
 		return new ExpressionValue(argsType, dict);
 	}
 

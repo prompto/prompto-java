@@ -16,7 +16,7 @@ import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.value.Boolean;
+import prompto.value.BooleanValue;
 import prompto.value.IValue;
 
 public class TernaryExpression implements IExpression {
@@ -62,7 +62,7 @@ public class TernaryExpression implements IExpression {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		Object test = condition.interpret(context);
-		if(test == Boolean.TRUE)
+		if(test == BooleanValue.TRUE)
 			return ifTrue.interpret(context);
 		else
 			return ifFalse.interpret(context);
@@ -72,7 +72,7 @@ public class TernaryExpression implements IExpression {
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		StackState initialState = method.captureStackState();
 		ResultInfo li = condition.compile(context, method, flags.withPrimitive(true));
-		if(Boolean.class==li.getType())
+		if(BooleanValue.class==li.getType())
 			CompilerUtils.BooleanToboolean(method);
 		IInstructionListener branchListener = method.addOffsetListener(new OffsetListenerConstant());
 		method.activateOffsetListener(branchListener);

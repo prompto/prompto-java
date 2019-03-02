@@ -21,28 +21,28 @@ import prompto.type.BooleanType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
-public class Boolean extends BaseValue implements Comparable<Boolean> {
+public class BooleanValue extends BaseValue implements Comparable<BooleanValue> {
 	
-	public static Boolean TRUE = new Boolean(true);
-	public static Boolean FALSE = new Boolean(false);
+	public static BooleanValue TRUE = new BooleanValue(true);
+	public static BooleanValue FALSE = new BooleanValue(false);
 
 	static {
 		TRUE.not = FALSE;
 		FALSE.not = TRUE;
 	}
 
-	public static Boolean parse(String text) {
+	public static BooleanValue parse(String text) {
 		return valueOf(java.lang.Boolean.parseBoolean(text));
 	}
 
-	public static Boolean valueOf(boolean value) {
+	public static BooleanValue valueOf(boolean value) {
 		return value ? TRUE : FALSE;
 	}
 
 	boolean value;
-	Boolean not;
+	BooleanValue not;
 
-	private Boolean(boolean value) {
+	private BooleanValue(boolean value) {
 		super(BooleanType.instance());
 		this.value = value;
 	}
@@ -51,7 +51,7 @@ public class Boolean extends BaseValue implements Comparable<Boolean> {
 		return value;
 	}
 
-	public Boolean getNot() {
+	public BooleanValue getNot() {
 		return not;
 	}
 	
@@ -62,14 +62,14 @@ public class Boolean extends BaseValue implements Comparable<Boolean> {
 
 	@Override
 	public int compareTo(Context context, IValue value) {
-		if (value instanceof Boolean)
-			return compareTo((Boolean) value);
+		if (value instanceof BooleanValue)
+			return compareTo((BooleanValue) value);
 		else
 			throw new SyntaxError("Illegal comparison: Boolean + " + value.getClass().getSimpleName());
 	}
 
 	@Override
-	public int compareTo(Boolean other) {
+	public int compareTo(BooleanValue other) {
 		return java.lang.Boolean.compare(this.value, other.value);
 	}
 
@@ -85,8 +85,8 @@ public class Boolean extends BaseValue implements Comparable<Boolean> {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Boolean)
-			return value == ((Boolean) obj).value;
+		if (obj instanceof BooleanValue)
+			return value == ((BooleanValue) obj).value;
 		else
 			return false;
 	}

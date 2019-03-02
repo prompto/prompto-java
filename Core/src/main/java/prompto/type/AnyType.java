@@ -69,11 +69,11 @@ public class AnyType extends NativeType {
 	
 	private static Map<Class<?>, BiFunction<Context, Object, IValue>> buildConvertersMap() {
 		Map<Class<?>, BiFunction<Context, Object,IValue>> map = new HashMap<>();
-		map.put(Boolean.class, (c,o)->prompto.value.Boolean.valueOf((Boolean)o));
-		map.put(Long.class, (c,o)->new prompto.value.Integer((Long)o));
-		map.put(Double.class, (c,o)->new prompto.value.Decimal((Double)o));
-		map.put(String.class, (c,o)->new prompto.value.Text((String)o));
-		map.put(PromptoDocument.class, (c,o)->new prompto.value.Document(c, (PromptoDocument<?,?>)o));
+		map.put(Boolean.class, (c,o)->prompto.value.BooleanValue.valueOf((Boolean)o));
+		map.put(Long.class, (c,o)->new prompto.value.IntegerValue((Long)o));
+		map.put(Double.class, (c,o)->new prompto.value.DecimalValue((Double)o));
+		map.put(String.class, (c,o)->new prompto.value.TextValue((String)o));
+		map.put(PromptoDocument.class, (c,o)->new prompto.value.DocumentValue(c, (PromptoDocument<?,?>)o));
 		map.put(PromptoList.class, (c,o)->new prompto.value.ListValue(c, (PromptoList<?>)o));
 		return map;
 	}

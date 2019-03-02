@@ -27,7 +27,7 @@ public class ServerVariable implements IVariable {
 	@Override
 	public IValue getValue() {
 		if(value==null)
-			value = new ServerValue(context.getValue(named.getId()));
+			value = new ServerValue(context, named);
 		return value;
 	}
 	

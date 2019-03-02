@@ -11,13 +11,13 @@ import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.TextType;
 import prompto.utils.StringUtils;
-import prompto.value.Text;
+import prompto.value.TextValue;
 
 
-public class TextLiteral extends Literal<Text> {
+public class TextLiteral extends Literal<TextValue> {
 
 	public TextLiteral(String text) {
-		super(text, new Text(StringUtils.unescape(text)));
+		super(text, new TextValue(StringUtils.unescape(text)));
 	}
 
 	@Override

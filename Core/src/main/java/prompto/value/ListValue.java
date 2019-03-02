@@ -37,6 +37,10 @@ import prompto.type.IType;
 import prompto.type.ListType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class ListValue extends BaseValue implements IContainer<IValue>, ISliceable<IValue>, IFilterable  {
 
@@ -119,9 +123,9 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 	
 	@Override
 	public void setItem(Context context, IValue item, IValue value) {
-		if(!(item instanceof Integer))
+		if(!(item instanceof IntegerValue))
 			throw new InvalidValueError("Expected an Integer, got:" + item.getClass().getName());
-		int index = (int)((Integer)item).longValue();
+		int index = (int)((IntegerValue)item).longValue();
 		if(index<1 || index>this.getLength())
 			throw new IndexOutOfRangeError();
 		this.setItem(index-1, value);
@@ -129,9 +133,9 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 	
 	@Override
 	public IValue getItem(Context context, IValue index) throws PromptoError {
-		if (index instanceof Integer) {
+		if (index instanceof IntegerValue) {
 			try {
-				int idx = (int)((Integer)index).longValue() - 1;
+				int idx = (int)((IntegerValue)index).longValue() - 1;
 				return items.get(idx);
 			} catch (IndexOutOfBoundsException e) {
 				throw new IndexOutOfRangeError();
@@ -184,7 +188,7 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) {
 		String name = id.toString();
 		if ("count".equals(name))
-			return new Integer(items.size());
+			return new IntegerValue(items.size());
 		else if ("iterator".equals(name))
 			return new IteratorValue(getItemType(), getIterable(context).iterator());
 		else
@@ -305,9 +309,9 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 	
 	@Override
 	public IValue multiply(Context context, IValue value) throws PromptoError {
-		if (value instanceof Integer) {
+		if (value instanceof IntegerValue) {
 			IType itemType = ((ContainerType)this.type).getItemType();
-			int count = (int) ((Integer) value).longValue();
+			int count = (int) ((IntegerValue) value).longValue();
 			if (count < 0)
 				throw new SyntaxError("Negative repeat count:" + count);
 			return new ListValue(itemType, this.items.multiply(count));
@@ -316,7 +320,7 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 	}
 	
 	@Override
-	public ListValue slice(Integer fi, Integer li) throws IndexOutOfRangeError {
+	public ListValue slice(IntegerValue fi, IntegerValue li) throws IndexOutOfRangeError {
 		long _fi = fi == null ? 1L : fi.longValue();
 		if (_fi < 0)
 			throw new IndexOutOfRangeError();
@@ -350,6 +354,22 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		return new ResultInfo(Object.class); // TODO refine
 	}
+
+	@Override
+	public JsonNode toJson(Context context, boolean withType) throws PromptoError {
+		ArrayNode value = JsonNodeFactory.instance.arrayNode();
+		JsonNode result = value;
+		if(withType) {
+			ObjectNode object = JsonNodeFactory.instance.objectNode();
+			object.put("typeName", this.getType().getTypeName());
+			object.set("value", value);
+			result = object;
+		}
+		for(IValue item : items)
+			value.add(item.toJson(context, withType));
+		return result;
+	}
+
 	
 	@Override
 	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {

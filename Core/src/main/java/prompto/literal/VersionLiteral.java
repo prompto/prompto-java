@@ -12,17 +12,17 @@ import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.VersionType;
-import prompto.value.Version;
+import prompto.value.VersionValue;
 
 
-public class VersionLiteral extends Literal<Version> {
+public class VersionLiteral extends Literal<VersionValue> {
 
 	public VersionLiteral(String text) {
 		super(text,parseVersion(text.substring(2,text.length()-1)));
 	}
 	
 	public VersionLiteral(PromptoVersion version) {
-		super("'v" + version.toString() + "'", new Version(version));
+		super("'v" + version.toString() + "'", new VersionValue(version));
 	}
 
 	@Override
@@ -30,8 +30,8 @@ public class VersionLiteral extends Literal<Version> {
 		return VersionType.instance();
 	}
 	
-	public static Version parseVersion(String text) {
-		return new Version(PromptoVersion.parse(text));
+	public static VersionValue parseVersion(String text) {
+		return new VersionValue(PromptoVersion.parse(text));
 	}
 	
 	@Override

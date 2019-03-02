@@ -13,13 +13,13 @@ import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
 import prompto.utils.Logger;
-import prompto.value.Boolean;
-import prompto.value.Decimal;
+import prompto.value.BooleanValue;
+import prompto.value.DecimalValue;
 import prompto.value.IValue;
-import prompto.value.Integer;
+import prompto.value.IntegerValue;
 import prompto.value.ListValue;
 import prompto.value.NullValue;
-import prompto.value.Text;
+import prompto.value.TextValue;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -132,16 +132,16 @@ public class ListType extends ContainerType {
 				case NULL:
 					return NullValue.instance();
 				case BOOLEAN:
-					return Boolean.valueOf(node.asBoolean());
+					return BooleanValue.valueOf(node.asBoolean());
 				case NUMBER:
 					if(this.itemType==IntegerType.instance())
-						return new Integer(node.asLong());
+						return new IntegerValue(node.asLong());
 					else if(this.itemType==DecimalType.instance())
-						return new Decimal(node.asDouble());
+						return new DecimalValue(node.asDouble());
 					else
 						throw new ReadWriteError("Unsupported NUMBER for " + itemType.toString());
 				case STRING:
-					return new Text(node.asText());
+					return new TextValue(node.asText());
 				case OBJECT:
 					return readJSONObject(context, parts, node);
 				default:

@@ -1,8 +1,12 @@
 package prompto.value;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -13,6 +17,7 @@ import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.error.IndexOutOfRangeError;
 import prompto.error.PromptoError;
+import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
@@ -60,6 +65,27 @@ public class TupleValue extends BaseValue implements IContainer<IValue>, ISlicea
 		return "(" + result.substring(1,result.length()-1) + ")";
 	}
 	
+	
+	@Override
+	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
+		try {
+			if(withType) {
+				generator.writeStartObject();
+				generator.writeFieldName("type");
+				generator.writeString(this.getType().getTypeName());
+				generator.writeFieldName("value");
+			}
+			generator.writeStartArray();
+			for(IValue value : this.items)
+				value.toJson(context, generator, System.identityHashCode(this), null, withType, data);
+			generator.writeEndArray();
+			if(withType)
+				generator.writeEndObject();
+		} catch(IOException e) {
+			throw new ReadWriteError(e.getMessage());
+		}
+	}
+
 	public void addItem(IValue item) {
 		items.add(item);
 	}
@@ -99,7 +125,7 @@ public class TupleValue extends BaseValue implements IContainer<IValue>, ISlicea
 	}
 	
 	@Override
-	public TupleValue slice(Integer fi, Integer li) throws IndexOutOfRangeError {
+	public TupleValue slice(IntegerValue fi, IntegerValue li) throws IndexOutOfRangeError {
 		long _fi = fi == null ? 1L : fi.longValue();
 		if (_fi < 0)
 			throw new IndexOutOfRangeError();
@@ -123,9 +149,9 @@ public class TupleValue extends BaseValue implements IContainer<IValue>, ISlicea
 	
 	@Override
 	public void setItem(Context context, IValue item, IValue value) {
-		if(!(item instanceof Integer))
+		if(!(item instanceof IntegerValue))
 			throw new InvalidValueError("Expected an Integer, got:" + item.getClass().getName());
-		int index = (int)((Integer)item).longValue();
+		int index = (int)((IntegerValue)item).longValue();
 		if(index<1 || index>this.getLength())
 			throw new IndexOutOfRangeError();
 		this.setItem(index-1, value);
@@ -134,9 +160,9 @@ public class TupleValue extends BaseValue implements IContainer<IValue>, ISlicea
 	
 	@Override
 	public IValue getItem(Context context, IValue index) throws PromptoError {
-		if (index instanceof Integer) {
+		if (index instanceof IntegerValue) {
 			try {
-				int idx = (int)((Integer)index).longValue() - 1;
+				int idx = (int)((IntegerValue)index).longValue() - 1;
 				return items.get(idx);
 			} catch (IndexOutOfBoundsException e) {
 				throw new IndexOutOfRangeError();
@@ -188,7 +214,7 @@ public class TupleValue extends BaseValue implements IContainer<IValue>, ISlicea
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
 		if ("count".equals(name))
-			return new Integer(items.size());
+			return new IntegerValue(items.size());
 		else
 			return super.getMember(context, id, autoCreate);
 	}

@@ -30,12 +30,12 @@ import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
-import prompto.value.Decimal;
+import prompto.value.DecimalValue;
 import prompto.value.IValue;
-import prompto.value.Integer;
+import prompto.value.IntegerValue;
 import prompto.value.IntegerRange;
 import prompto.value.RangeBase;
-import prompto.value.Text;
+import prompto.value.TextValue;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -133,9 +133,9 @@ public class IntegerType extends NativeType implements INumberType {
 	@Override
 	public IValue getMemberValue(Context context, Identifier id) throws PromptoError {
 		if(id.toString().equals("min"))
-			return new Integer(java.lang.Integer.MIN_VALUE);
+			return new IntegerValue(Integer.MIN_VALUE);
 		else if(id.toString().equals("max"))
-			return new Integer(java.lang.Integer.MAX_VALUE);
+			return new IntegerValue(Integer.MAX_VALUE);
 		else
 			return super.getMemberValue(context, id);
 	}
@@ -160,7 +160,7 @@ public class IntegerType extends NativeType implements INumberType {
 			Long value = (Long)getValue(context).getStorableData();
 			String format = (String)context.getValue(new Identifier("format")).getStorableData();
 			String result = new DecimalFormat(format).format(value);
-			return new Text(result);
+			return new TextValue(result);
 		};
 		
 		
@@ -225,36 +225,26 @@ public class IntegerType extends NativeType implements INumberType {
 	
 	@Override
 	public RangeBase<?> newRange(Object left, Object right) {
-		if(left instanceof Integer && right instanceof Integer)
-			return new IntegerRange((Integer)left,(Integer)right);
+		if(left instanceof IntegerValue && right instanceof IntegerValue)
+			return new IntegerRange((IntegerValue)left,(IntegerValue)right);
 		return super.newRange(left, right);
 	}
 
 	@Override
-	public Comparator<Integer> getComparator(boolean descending) {
-		return descending ?
-				new Comparator<Integer>() {
-					@Override
-					public int compare(Integer o1, Integer o2) {
-						return java.lang.Long.compare(o2.longValue(), o1.longValue());
-					}
-				} :
-				new Comparator<Integer>() {
-					@Override
-					public int compare(Integer o1, Integer o2) {
-						return java.lang.Long.compare(o1.longValue(), o2.longValue());
-					}
-				};
+	public Comparator<IntegerValue> getComparator(boolean descending) {
+		return descending ? 
+				(o1, o2) -> java.lang.Long.compare(o2.longValue(), o1.longValue()) :
+				(o1, o2) -> java.lang.Long.compare(o1.longValue(), o2.longValue());
 	}
 
 	@Override
 	public IValue convertIValueToIValue(Context context, IValue value) {
-		if (value instanceof Integer)
+		if (value instanceof IntegerValue)
 			return value;
-		else if(value instanceof Decimal)
-			return new Integer(((Decimal)value).longValue());
-		else if (value instanceof Text)
-            return Integer.Parse(value.toString());
+		else if(value instanceof DecimalValue)
+			return new IntegerValue(((DecimalValue)value).longValue());
+		else if (value instanceof TextValue)
+            return IntegerValue.Parse(value.toString());
         else
             return super.convertJavaValueToIValue(context, value);
 	}
@@ -262,7 +252,7 @@ public class IntegerType extends NativeType implements INumberType {
 	@Override
 	public IValue convertJavaValueToIValue(Context context, Object value) {
         if (value instanceof Number)
-            return new Integer(((Number)value).longValue());
+            return new IntegerValue(((Number)value).longValue());
         else
             return (IValue)value; // TODO for now
 	}
@@ -276,7 +266,7 @@ public class IntegerType extends NativeType implements INumberType {
 
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
-		return new Integer(value.asLong());
+		return new IntegerValue(value.asLong());
 	}
 	
 	

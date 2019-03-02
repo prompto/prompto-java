@@ -143,7 +143,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		} else if(getDeclaration().hasAttribute(context, attrName) || IStore.dbIdName.equals(attrName.toString()))
 			return values.getOrDefault(attrName, NullValue.instance());
 		else if("text".equals(attrName.toString()))
-			return new Text(this.toString());
+			return new TextValue(this.toString());
 		else
 			return NullValue.instance();
 	}
@@ -211,8 +211,8 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	}
 
 	private IValue autocast(AttributeDeclaration decl, IValue value) {
-		if(value!=null && value instanceof prompto.value.Integer && decl.getType()==DecimalType.instance())
-			value = new Decimal(((prompto.value.Integer)value).doubleValue());
+		if(value!=null && value instanceof IntegerValue && decl.getType()==DecimalType.instance())
+			value = new DecimalValue(((IntegerValue)value).doubleValue());
 		return value;
 	}
 

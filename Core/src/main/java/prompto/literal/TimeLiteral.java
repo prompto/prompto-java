@@ -12,17 +12,17 @@ import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.TimeType;
-import prompto.value.Time;
+import prompto.value.TimeValue;
 
 
-public class TimeLiteral extends Literal<Time> {
+public class TimeLiteral extends Literal<TimeValue> {
 
 	public TimeLiteral(String text) {
 		super(text, parseTime(text.substring(1,text.length()-1)));
 	}
 	
 	public TimeLiteral(PromptoTime time) {
-		super("'" + time.toString() + "'", new Time(time));
+		super("'" + time.toString() + "'", new TimeValue(time));
 	}
 	
 	@Override
@@ -30,8 +30,8 @@ public class TimeLiteral extends Literal<Time> {
 		return TimeType.instance();
 	}
 	
-	public static Time parseTime(String text) {
-		return new Time(PromptoTime.parse(text));
+	public static TimeValue parseTime(String text) {
+		return new TimeValue(PromptoTime.parse(text));
 	}
 	
 	@Override

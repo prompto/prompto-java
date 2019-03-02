@@ -18,8 +18,8 @@ import prompto.transpiler.Transpiler;
 import prompto.type.DocumentType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.value.Blob;
-import prompto.value.Document;
+import prompto.value.BlobValue;
+import prompto.value.DocumentValue;
 import prompto.value.IValue;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -42,21 +42,21 @@ public class DocumentExpression implements IExpression {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		if(source==null)
-			return new Document();
+			return new DocumentValue();
 		else {
 			IValue value = source.interpret(context);
 			return documentFromValue(context, value);
 		}
 	}
 	
-	private Document documentFromValue(Context context, IValue value) {
-		if(value instanceof Blob)
-			return documentFromBlob(context, (Blob)value);
+	private DocumentValue documentFromValue(Context context, IValue value) {
+		if(value instanceof BlobValue)
+			return documentFromBlob(context, (BlobValue)value);
 		else
 			throw new UnsupportedOperationException();
 	}
 	
-	private Document documentFromBlob(Context context, Blob blob) {
+	private DocumentValue documentFromBlob(Context context, BlobValue blob) {
 		if(!"application/zip".equals(blob.getMimeType()))
 			throw new UnsupportedOperationException();
 		try {
@@ -71,7 +71,7 @@ public class DocumentExpression implements IExpression {
 			field = value.get("value");
 			if(field==null)
 				throw new InvalidParameterException("Expecting a 'value' field!");
-			return (Document)type.readJSONValue(context, field, parts);
+			return (DocumentValue)type.readJSONValue(context, field, parts);
 		} catch(Exception e) {
 			throw new ReadWriteError(e.getMessage());
 		}

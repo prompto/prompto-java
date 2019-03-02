@@ -88,7 +88,7 @@ public class IterableValue extends BaseValue implements IIterable<IValue>, Itera
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
 		if ("count".equals(name))
-			return new Integer(iterable.getCount());
+			return new IntegerValue(iterable.getCount());
 		else
 			return super.getMember(context, id, autoCreate);
 	}

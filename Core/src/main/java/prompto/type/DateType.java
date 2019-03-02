@@ -12,7 +12,7 @@ import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
-import prompto.value.Date;
+import prompto.value.DateValue;
 import prompto.value.DateRange;
 import prompto.value.IValue;
 import prompto.value.RangeBase;
@@ -40,7 +40,7 @@ public class DateType extends NativeType {
 	@Override
 	public IValue convertJavaValueToIValue(Context context, Object value) {
         if (value instanceof PromptoDate)
-            return new prompto.value.Date((PromptoDate)value);
+            return new prompto.value.DateValue((PromptoDate)value);
         else
         	return super.convertJavaValueToIValue(context, value);
 	}
@@ -101,23 +101,23 @@ public class DateType extends NativeType {
 
 	@Override
 	public RangeBase<?> newRange(Object left, Object right) {
-		if (left instanceof Date && right instanceof Date)
-			return new DateRange((Date) left, (Date) right);
+		if (left instanceof DateValue && right instanceof DateValue)
+			return new DateRange((DateValue) left, (DateValue) right);
 		return super.newRange(left, right);
 	}
 
 	@Override
-	public Comparator<Date> getComparator(boolean descending) {
+	public Comparator<DateValue> getComparator(boolean descending) {
 		return descending ?
-				new Comparator<Date>() {
+				new Comparator<DateValue>() {
 					@Override
-					public int compare(Date o1, Date o2) {
+					public int compare(DateValue o1, DateValue o2) {
 						return o2.getStorableData().compareTo(o1.getStorableData());
 					}
 				} :
-				new Comparator<Date>() {
+				new Comparator<DateValue>() {
 					@Override
-					public int compare(Date o1, Date o2) {
+					public int compare(DateValue o1, DateValue o2) {
 						return o1.getStorableData().compareTo(o2.getStorableData());
 					}
 		};
@@ -131,7 +131,7 @@ public class DateType extends NativeType {
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		PromptoDate date = PromptoDate.parse(value.asText());
-		return new Date(date);
+		return new DateValue(date);
 	}
 	
 	@Override

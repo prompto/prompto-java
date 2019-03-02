@@ -45,6 +45,18 @@ public class WorkerDebugger implements IWorkerDebugger {
 		return Collections.emptyList();
 	}
 	
+	
+	@Override
+	public IVariable getVariable(IStackFrame frame, String variableName) {
+		ServerStackFrame sf = stack.find(frame);
+		if(sf!=null)
+			return sf.getVariable(variableName);
+		// need some debug info
+		System.err.println("Could not find frame: " +frame.toString() + " in stack:");
+		stack.forEach(f->System.err.println(f.toString()));
+		return null;
+	}
+	
 	public void setStatus(Status status) {
 		logger.debug(()->"LocalDebugger sets status " + status);
 		this.status = status;

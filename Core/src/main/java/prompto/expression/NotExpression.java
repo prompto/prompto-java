@@ -21,7 +21,7 @@ import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.value.Boolean;
+import prompto.value.BooleanValue;
 import prompto.value.IValue;
 
 public class NotExpression implements IUnaryExpression, IPredicateExpression, IAssertion {
@@ -65,8 +65,8 @@ public class NotExpression implements IUnaryExpression, IPredicateExpression, IA
 	}
 	
 	private IValue interpret(IValue val) throws PromptoError {
-		if(val instanceof Boolean) 
-			return ((Boolean)val).getNot();
+		if(val instanceof BooleanValue) 
+			return ((BooleanValue)val).getNot();
 		else
 			throw new SyntaxError("Illegal: not " + val.getClass().getSimpleName());
 	}
@@ -82,7 +82,7 @@ public class NotExpression implements IUnaryExpression, IPredicateExpression, IA
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		ResultInfo info = expression.compile(context, method, flags.withPrimitive(true));
-		if(Boolean.class==info.getType())
+		if(BooleanValue.class==info.getType())
 			CompilerUtils.BooleanToboolean(method);
 		CompilerUtils.reverseBoolean(method);
 		if(flags.toPrimitive())
@@ -103,7 +103,7 @@ public class NotExpression implements IUnaryExpression, IPredicateExpression, IA
 	public boolean interpretAssert(Context context, TestMethodDeclaration test) throws PromptoError {
 		IValue val = expression.interpret(context);
 		IValue result = interpret(val);
-		if(result==Boolean.TRUE) 
+		if(result==BooleanValue.TRUE) 
 			return true;
 		String expected = buildExpectedMessage(context, test);
 		String actual = operatorToDialect(test.getDialect()) + val.toString();
@@ -122,7 +122,7 @@ public class NotExpression implements IUnaryExpression, IPredicateExpression, IA
 		StackState finalState = method.captureStackState();
 		// compile
 		ResultInfo info = expression.compile(context, method, flags.withPrimitive(true));
-		if(Boolean.class==info.getType())
+		if(BooleanValue.class==info.getType())
 			CompilerUtils.BooleanToboolean(method);
 		// 0 = success (since we have not applied the not)
 		IInstructionListener finalListener = method.addOffsetListener(new OffsetListenerConstant());
@@ -138,7 +138,7 @@ public class NotExpression implements IUnaryExpression, IPredicateExpression, IA
 		method.addInstruction(Opcode.LDC, new StringConstant(operatorToDialect(test.getDialect())));
 		MethodConstant concat = new MethodConstant(String.class, "concat", String.class, String.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, concat);
-		method.addInstruction(Opcode.LDC, new StringConstant(Boolean.FALSE.toString()));
+		method.addInstruction(Opcode.LDC, new StringConstant(BooleanValue.FALSE.toString()));
 		method.addInstruction(Opcode.INVOKEVIRTUAL, concat);
 		test.compileFailure(context, method, flags);
 		// success/final

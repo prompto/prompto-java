@@ -17,10 +17,10 @@ import prompto.type.IType;
 import prompto.type.IntegerType;
 import prompto.type.PeriodType;
 import prompto.utils.CodeWriter;
-import prompto.value.Decimal;
+import prompto.value.DecimalValue;
 import prompto.value.IValue;
-import prompto.value.Integer;
-import prompto.value.Period;
+import prompto.value.IntegerValue;
+import prompto.value.PeriodValue;
 
 public class MinusExpression implements IUnaryExpression {
 
@@ -53,12 +53,12 @@ public class MinusExpression implements IUnaryExpression {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		Object val = expression.interpret(context);
-		if(val instanceof Integer) 
-			return ((Integer)val).negate();
-		else if(val instanceof Decimal) 
-			return ((Decimal)val).negate();
-		else if(val instanceof Period) 
-			return ((Period)val).negate();
+		if(val instanceof IntegerValue) 
+			return ((IntegerValue)val).negate();
+		else if(val instanceof DecimalValue) 
+			return ((DecimalValue)val).negate();
+		else if(val instanceof PeriodValue) 
+			return ((PeriodValue)val).negate();
 		else
 			throw new SyntaxError("Illegal: - " + val.getClass().getSimpleName());
 	}
@@ -71,11 +71,11 @@ public class MinusExpression implements IUnaryExpression {
 	
 	private static Map<Class<?>, IUnaryFunction> createNegators() {
 		Map<Class<?>, IUnaryFunction> map = new HashMap<>();
-		map.put(double.class, Decimal::compileNegate);
-		map.put(Double.class, Decimal::compileNegate);
-		map.put(long.class, Integer::compileNegate);
-		map.put(Long.class, Integer::compileNegate);
-		map.put(PromptoPeriod.class, Period::compileNegate);
+		map.put(double.class, DecimalValue::compileNegate);
+		map.put(Double.class, DecimalValue::compileNegate);
+		map.put(long.class, IntegerValue::compileNegate);
+		map.put(Long.class, IntegerValue::compileNegate);
+		map.put(PromptoPeriod.class, PeriodValue::compileNegate);
 		return map;
 	}
 

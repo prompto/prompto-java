@@ -165,11 +165,24 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		start();
 		waitSuspendedOrTerminated();
 		assertEquals(Status.SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
-		// main method, printLevel1 "test"
+		// main method, doc = ...
 		IStack<?> stack = debugger.getStack(getDebuggedThread());
 		IStackFrame frame = stack.iterator().next();
 		Collection<? extends IVariable> vars = frame.getVariables();
 		assertEquals(0, vars.size());
+		// over doc = ..., to printLevel1 "test"
+		debugger.stepOver(getDebuggedThread());
+		waitSuspendedOrTerminated();
+		stack = debugger.getStack(getDebuggedThread());
+		frame = stack.iterator().next();
+		vars = frame.getVariables();
+		assertEquals(1, vars.size());
+		IVariable var = debugger.getVariable(getDebuggedThread(), frame, "doc");
+		assertNotNull(var);
+		Object value = var.getValue();
+		assertNotNull(value);
+		Object data = var.getValue().getValueData();
+		assertNotNull(data);
 		// into printLevel1 "test"
 		debugger.stepInto(getDebuggedThread());
 		waitSuspendedOrTerminated();
@@ -178,7 +191,7 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		frame = stack.iterator().next();
 		vars = frame.getVariables();	
 		assertEquals(1, vars.size());
-		IVariable var = vars.iterator().next();
+		var = vars.iterator().next();
 		assertEquals("value", var.getName());
 		assertEquals("Text", var.getTypeName());
 		assertEquals("test", var.getValue().getValueString());

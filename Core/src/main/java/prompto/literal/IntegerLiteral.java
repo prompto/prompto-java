@@ -10,19 +10,19 @@ import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.IntegerType;
-import prompto.value.Integer;
+import prompto.value.IntegerValue;
 
-public class IntegerLiteral extends Literal<Integer> {
+public class IntegerLiteral extends Literal<IntegerValue> {
 
 	public IntegerLiteral(String text) {
-		super(text, new Integer(Long.valueOf(text)));
+		super(text, new IntegerValue(Long.valueOf(text)));
 	}
 
 	public IntegerLiteral(long value) {
-		super(Long.toString(value), new Integer(value));
+		super(Long.toString(value), new IntegerValue(value));
 	}
 	
-	public IntegerLiteral(String text, Integer value) {
+	public IntegerLiteral(String text, IntegerValue value) {
 		super(text, value);
 	}
 

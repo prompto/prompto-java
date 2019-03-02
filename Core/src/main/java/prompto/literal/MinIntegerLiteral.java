@@ -1,12 +1,12 @@
 package prompto.literal;
 
 import prompto.transpiler.Transpiler;
-import prompto.value.Integer;
+import prompto.value.IntegerValue;
 
 public class MinIntegerLiteral extends IntegerLiteral {
 
 	public MinIntegerLiteral() {
-		super("MIN_INTEGER", new Integer(Long.MIN_VALUE));
+		super("MIN_INTEGER", new IntegerValue(Long.MIN_VALUE));
 	}
 	
 	@Override

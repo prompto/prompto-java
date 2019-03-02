@@ -170,6 +170,32 @@ public interface IDebugResponse {
 
 	}
 	
+	public static class GetVariableResponse implements IDebugResponse {
+
+		FatVariable variable;
+		
+		public GetVariableResponse() {
+		}
+
+		public GetVariableResponse(IVariable variable) {
+			this.variable = null; // TODO variable;
+		}
+		
+		@Override
+		public Type getType() {
+			return Type.GET_VARIABLE;
+		}
+
+		public FatVariable getVariable() {
+			return variable;
+		}
+		
+		public void setVariable(FatVariable variable) {
+			this.variable = variable;
+		}
+
+	}
+	
 	public static class IsSteppingResponse implements IDebugResponse {
 
 		boolean stepping;
@@ -204,6 +230,7 @@ public interface IDebugResponse {
 		GET_LINE(GetLineResponse.class),
 		GET_STACK(GetStackResponse.class),
 		GET_VARIABLES(GetVariablesResponse.class),
+		GET_VARIABLE(GetVariableResponse.class),
 		IS_STEPPING(IsSteppingResponse.class)
 		;
 		

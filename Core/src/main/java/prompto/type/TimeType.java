@@ -14,7 +14,7 @@ import prompto.store.Family;
 import prompto.transpiler.Transpiler;
 import prompto.value.IValue;
 import prompto.value.RangeBase;
-import prompto.value.Time;
+import prompto.value.TimeValue;
 import prompto.value.TimeRange;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -40,7 +40,7 @@ public class TimeType extends NativeType {
 	@Override
 	public IValue convertJavaValueToIValue(Context context, Object value) {
         if (value instanceof PromptoTime)
-            return new prompto.value.Time((PromptoTime)value);
+            return new prompto.value.TimeValue((PromptoTime)value);
         else
         	return super.convertJavaValueToIValue(context, value);
 	}
@@ -100,23 +100,23 @@ public class TimeType extends NativeType {
 
 	@Override
 	public RangeBase<?> newRange(Object left, Object right) {
-		if (left instanceof Time && right instanceof Time)
-			return new TimeRange((Time) left, (Time) right);
+		if (left instanceof TimeValue && right instanceof TimeValue)
+			return new TimeRange((TimeValue) left, (TimeValue) right);
 		return super.newRange(left, right);
 	}
 
 	@Override
-	public Comparator<Time> getComparator(boolean descending) {
+	public Comparator<TimeValue> getComparator(boolean descending) {
 		return descending ?
-				new Comparator<Time>() {
+				new Comparator<TimeValue>() {
 					@Override
-					public int compare(Time o1, Time o2) {
+					public int compare(TimeValue o1, TimeValue o2) {
 						return o2.getStorableData().compareTo(o1.getStorableData());
 					}
 				} :
-				new Comparator<Time>() {
+				new Comparator<TimeValue>() {
 					@Override
-					public int compare(Time o1, Time o2) {
+					public int compare(TimeValue o1, TimeValue o2) {
 						return o1.getStorableData().compareTo(o2.getStorableData());
 					}
 				};
@@ -130,7 +130,7 @@ public class TimeType extends NativeType {
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		PromptoTime time = PromptoTime.parse(value.asText());
-		return new Time(time);
+		return new TimeValue(time);
 	}
 	
 	@Override

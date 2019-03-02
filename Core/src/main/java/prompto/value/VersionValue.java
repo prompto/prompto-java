@@ -23,16 +23,16 @@ import prompto.type.VersionType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
-public class Version extends BaseValue implements Comparable<Version> {
+public class VersionValue extends BaseValue implements Comparable<VersionValue> {
 
-	public static Version Parse(String text) {
+	public static VersionValue Parse(String text) {
 		PromptoVersion value = PromptoVersion.parse(text);
-		return new Version(value);
+		return new VersionValue(value);
 	}
 
 	PromptoVersion value;
 
-	public Version(PromptoVersion value) {
+	public VersionValue(PromptoVersion value) {
 		super(DateType.instance());
 		this.value = value;
 
@@ -46,8 +46,8 @@ public class Version extends BaseValue implements Comparable<Version> {
 	
 	@Override
 	public int compareTo(Context context, IValue value) throws PromptoError {
-		if (value instanceof Version)
-			return this.value.compareTo(((Version) value).value);
+		if (value instanceof VersionValue)
+			return this.value.compareTo(((VersionValue) value).value);
 		else
 			throw new SyntaxError("Illegal comparison: Version - "
 					+ value.getClass().getSimpleName());
@@ -71,14 +71,14 @@ public class Version extends BaseValue implements Comparable<Version> {
 	}
 
 	@Override
-	public int compareTo(Version other) {
+	public int compareTo(VersionValue other) {
 		return value.compareTo(other.value);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Version)
-			return value.equals(((Version) obj).value);
+		if (obj instanceof VersionValue)
+			return value.equals(((VersionValue) obj).value);
 		else
 			return value.equals(obj);
 	}

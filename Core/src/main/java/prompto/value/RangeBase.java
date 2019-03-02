@@ -79,9 +79,9 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 	
 	@Override
 	public T getItem(Context context, IValue index) throws PromptoError {
-		if (index instanceof Integer) {
+		if (index instanceof IntegerValue) {
 			try {
-				return range.getItem(((Integer) index).longValue());
+				return range.getItem(((IntegerValue) index).longValue());
 			} catch (IndexOutOfBoundsException e) {
 				throw new IndexOutOfRangeError();
 			}
@@ -102,7 +102,7 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 	}
 
 	@Override
-	public RangeBase<T> slice(Integer fi, Integer li) throws PromptoError {
+	public RangeBase<T> slice(IntegerValue fi, IntegerValue li) throws PromptoError {
 		try {
 			long _fi = fi==null ? 1L : fi.longValue();
 			long _li = li==null ? -1L : li.longValue();
@@ -163,7 +163,7 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 				@Override
 				public T next() {
 					try {
-						return getItem(context, new Integer(++index));
+						return getItem(context, new IntegerValue(++index));
 					} catch(Throwable t) {
 						throw new InternalError(t.getMessage());
 					}

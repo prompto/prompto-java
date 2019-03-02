@@ -41,7 +41,7 @@ import prompto.statement.MethodCall;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
 import prompto.utils.ObjectUtils;
-import prompto.value.Document;
+import prompto.value.DocumentValue;
 import prompto.value.ExpressionValue;
 import prompto.value.IValue;
 import prompto.value.NullValue;
@@ -95,7 +95,7 @@ public class DocumentType extends NativeType {
 	
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
-		Document instance = new Document();
+		DocumentValue instance = new DocumentValue();
 		Iterator<Map.Entry<String, JsonNode>> fields = value.fields();
 		while(fields.hasNext()) {
 			Map.Entry<String, JsonNode> field = fields.next();
@@ -109,13 +109,13 @@ public class DocumentType extends NativeType {
 		if(fieldData==null || fieldData.isNull())
 			return NullValue.instance();
 		else if(fieldData.isBoolean())
-			return prompto.value.Boolean.valueOf(fieldData.asBoolean());
+			return prompto.value.BooleanValue.valueOf(fieldData.asBoolean());
 		else if(fieldData.isInt() || fieldData.isLong())
-			return new prompto.value.Integer(fieldData.asLong());
+			return new prompto.value.IntegerValue(fieldData.asLong());
 		else if(fieldData.isFloat() || fieldData.isDouble())
-			return new prompto.value.Decimal(fieldData.asDouble());
+			return new prompto.value.DecimalValue(fieldData.asDouble());
 		else if(fieldData.isTextual())
-			return new prompto.value.Text(fieldData.asText());
+			return new prompto.value.TextValue(fieldData.asText());
 		else if(fieldData.isArray()) {
 			throw new UnsupportedOperationException();
 		} else if(fieldData.isObject()) {
@@ -127,7 +127,7 @@ public class DocumentType extends NativeType {
 	@Override
 	public IValue convertJavaValueToIValue(Context context, Object value) {
 		if(value instanceof PromptoDocument)
-			return new Document(context, (PromptoDocument<?,?>)value);
+			return new DocumentValue(context, (PromptoDocument<?,?>)value);
 		else
 			return super.convertJavaValueToIValue(context, value);
 	}
@@ -297,9 +297,9 @@ public class DocumentType extends NativeType {
 	private Comparator<? extends IValue> newMethodComparator(Context context, Identifier method, boolean descending) {
 		BiFunction<IValue, IValue, Integer> cmpValues = BaseType.getValuesComparator(descending);
 		MethodCall call = createGlobalMethodCall(context, method);
-		return new Comparator<Document>() {
+		return new Comparator<DocumentValue>() {
 			@Override
-			public int compare(Document o1, Document o2) {
+			public int compare(DocumentValue o1, DocumentValue o2) {
 				try {
 					IValue key1 = interpret(o1);
 					IValue key2 = interpret(o2);
@@ -309,7 +309,7 @@ public class DocumentType extends NativeType {
 				}
 			}
 
-			private IValue interpret(Document o) throws PromptoError {
+			private IValue interpret(DocumentValue o) throws PromptoError {
 				ArgumentAssignment assignment = call.getAssignments().getFirst();
 				assignment.setExpression(new ExpressionValue(DocumentType.instance(), o));
 				return call.interpret(context);
@@ -325,9 +325,9 @@ public class DocumentType extends NativeType {
 
 	private Comparator<? extends IValue> newEntryComparator(Context context, Identifier entry, boolean descending) {
 		BiFunction<IValue, IValue, Integer> cmpValues = BaseType.getValuesComparator(descending);
-		return new Comparator<Document>() {
+		return new Comparator<DocumentValue>() {
 			@Override
-			public int compare(Document o1, Document o2) {
+			public int compare(DocumentValue o1, DocumentValue o2) {
 				try {
 					IValue key1 = o1.getMember(context, entry, false);
 					IValue key2 = o2.getMember(context, entry, false);
@@ -342,9 +342,9 @@ public class DocumentType extends NativeType {
 
 	private Comparator<? extends IValue> newExpressionComparator(Context context, IExpression key, boolean descending) {
 		BiFunction<IValue, IValue, Integer> cmpValues = BaseType.getValuesComparator(descending);
-		return new Comparator<Document>() {
+		return new Comparator<DocumentValue>() {
 			@Override
-			public int compare(Document o1, Document o2) {
+			public int compare(DocumentValue o1, DocumentValue o2) {
 				try {
 					Context local = context.newDocumentContext(o1, true);	
 					IValue key1 = key.interpret(local);

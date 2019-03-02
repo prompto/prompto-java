@@ -21,7 +21,7 @@ import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.value.Boolean;
+import prompto.value.BooleanValue;
 import prompto.value.IValue;
 
 public class DoWhileStatement extends BaseStatement {
@@ -110,9 +110,9 @@ public class DoWhileStatement extends BaseStatement {
 
 	private boolean interpretCondition(Context context) throws PromptoError {
 		Object value = condition.interpret(context);
-		if(!(value instanceof Boolean))
+		if(!(value instanceof BooleanValue))
 			throw new InvalidValueError("Expected a Boolean, got:" + value.getClass().getSimpleName());
-		return ((Boolean)value).getValue();
+		return ((BooleanValue)value).getValue();
 	}
 	
 	@Override
@@ -126,7 +126,7 @@ public class DoWhileStatement extends BaseStatement {
 		statements.compile(context, method, flags);
 		// check condition
 		ResultInfo info = condition.compile(context, method, flags.withPrimitive(true));
-		if(Boolean.class==info.getType())
+		if(BooleanValue.class==info.getType())
 			CompilerUtils.BooleanToboolean(method);
 		// loop if not done
 		method.inhibitOffsetListener(loop);

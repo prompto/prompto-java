@@ -47,7 +47,7 @@ import prompto.transpiler.Transpiler;
 import prompto.type.CodeType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.value.Boolean;
+import prompto.value.BooleanValue;
 import prompto.value.ClosureValue;
 import prompto.value.IValue;
 
@@ -282,8 +282,8 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	@Override
 	public boolean interpretAssert(Context context, TestMethodDeclaration test) throws PromptoError {
 		IValue value = this.interpret(context);
-		if(value instanceof Boolean) {
-			if(((Boolean)value).getValue())
+		if(value instanceof BooleanValue) {
+			if(((BooleanValue)value).getValue())
 				return true;
 			else {
 				String expected = buildExpectedMessage(context, test);
@@ -322,7 +322,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		String message = buildExpectedMessage(context, test);
 		message = test.buildFailedAssertionMessagePrefix(message);
 		method.addInstruction(Opcode.LDC, new StringConstant(message));
-		method.addInstruction(Opcode.LDC, new StringConstant(Boolean.FALSE.toString()));
+		method.addInstruction(Opcode.LDC, new StringConstant(BooleanValue.FALSE.toString()));
 		MethodConstant concat = new MethodConstant(String.class, "concat", String.class, String.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, concat);
 		test.compileFailure(context, method, flags);

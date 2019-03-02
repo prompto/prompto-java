@@ -19,7 +19,7 @@ import prompto.parser.EPromptoBuilder;
 import prompto.runtime.Context;
 import prompto.runtime.utils.Out;
 import prompto.type.TextType;
-import prompto.value.Text;
+import prompto.value.TextValue;
 
 public class TestRuntime extends BaseEParserTest {
 
@@ -46,7 +46,7 @@ public class TestRuntime extends BaseEParserTest {
 		Context context = Context.newGlobalContext();
 		IArgument arg = new CategoryArgument(TextType.instance(), new Identifier("value"));
 		arg.register(context);
-		context.setValue(new Identifier("value"), new Text("test")); // StringLiteral trims enclosing quotes
+		context.setValue(new Identifier("value"), new TextValue("test")); // StringLiteral trims enclosing quotes
 		Object result = statement.interpret(context, null);
 		assertNull(result);
 		assertEquals("test", Out.read());

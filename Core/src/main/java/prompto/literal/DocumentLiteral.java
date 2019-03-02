@@ -13,12 +13,12 @@ import prompto.transpiler.Transpiler;
 import prompto.type.DocumentType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.value.Document;
+import prompto.value.DocumentValue;
 import prompto.value.IValue;
-import prompto.value.Text;
+import prompto.value.TextValue;
 
 
-public class DocumentLiteral extends Literal<Document> {
+public class DocumentLiteral extends Literal<DocumentValue> {
 
 	// we can only compute keys by evaluating key expressions
 	// so we can't just inherit from Map<String,Expression>. 
@@ -26,12 +26,12 @@ public class DocumentLiteral extends Literal<Document> {
 	DocEntryList entries;
 	
 	public DocumentLiteral() {
-		super("{}", new Document());
+		super("{}", new DocumentValue());
 		this.entries = new DocEntryList();
 	}
 	
 	public DocumentLiteral(DocEntryList entries) {
-		super(()->entries.toString(), new Document());
+		super(()->entries.toString(), new DocumentValue());
 		this.entries = entries;
 	}
 
@@ -48,13 +48,13 @@ public class DocumentLiteral extends Literal<Document> {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		if(entries.size()>0) {
-			PromptoDocument<Text,IValue> doc = new PromptoDocument<Text, IValue>();
+			PromptoDocument<TextValue,IValue> doc = new PromptoDocument<TextValue, IValue>();
 			for(DictEntry e : entries) {
-				Text key = e.getKey().asText();
+				TextValue key = e.getKey().asText();
 				IValue val = e.getValue().interpret(context); 
 				doc.put(key, val);
 			}
-			return new Document(context, doc);
+			return new DocumentValue(context, doc);
 		} else
 			return value;
 	}

@@ -36,7 +36,7 @@ import prompto.type.CategoryType;
 import prompto.type.DocumentType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.value.Document;
+import prompto.value.DocumentValue;
 import prompto.value.IInstance;
 import prompto.value.IValue;
 import prompto.value.NullValue;
@@ -198,8 +198,8 @@ public class ConstructorExpression implements IExpression {
 							instance.setMember(context, id, value);
 						}
 					}
-				} else if (copyObj instanceof Document) {
-					Document copyFrom = (Document)copyObj;
+				} else if (copyObj instanceof DocumentValue) {
+					DocumentValue copyFrom = (DocumentValue)copyObj;
 					for(Identifier id : copyFrom.getMemberIds()) {
 						if(IStore.dbIdName.equals(id.toString()))
 							continue;	

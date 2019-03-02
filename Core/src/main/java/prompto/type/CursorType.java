@@ -22,7 +22,7 @@ import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
-import prompto.value.Cursor;
+import prompto.value.CursorValue;
 import prompto.value.IValue;
 
 public class CursorType extends IterableType {
@@ -119,7 +119,7 @@ public class CursorType extends IterableType {
 		
 		@Override
 		public IValue interpret(Context context) throws PromptoError {
-			Cursor value = (Cursor)getValue(context);
+			CursorValue value = (CursorValue)getValue(context);
 			return value.toListValue();
 		};
 		

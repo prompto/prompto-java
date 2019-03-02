@@ -34,15 +34,15 @@ import prompto.type.TextType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
-public class Integer extends BaseValue implements INumber, Comparable<INumber>, IMultiplyable {
+public class IntegerValue extends BaseValue implements INumber, Comparable<INumber>, IMultiplyable {
 	
-	public static Integer Parse(String text) {
-		return new Integer(Long.parseLong(text));
+	public static IntegerValue Parse(String text) {
+		return new IntegerValue(Long.parseLong(text));
 	}
 
 	long value;
 
-	public Integer(long value) {
+	public IntegerValue(long value) {
 		super(IntegerType.instance());
 		this.value = value;
 	}
@@ -64,10 +64,10 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 
 	@Override
 	public IValue plus(Context context, IValue value) throws PromptoError {
-		if (value instanceof Integer)
-			return new Integer(this.longValue() + ((Integer) value).longValue());
-		else if (value instanceof Decimal)
-			return new Decimal(((Decimal) value).doubleValue() + this.value);
+		if (value instanceof IntegerValue)
+			return new IntegerValue(this.longValue() + ((IntegerValue) value).longValue());
+		else if (value instanceof DecimalValue)
+			return new DecimalValue(((DecimalValue) value).doubleValue() + this.value);
 		else
 			throw new SyntaxError("Illegal: Integer + " + value.getClass().getSimpleName());
 	}
@@ -102,10 +102,10 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 
 	@Override
 	public IValue minus(Context context, IValue value) throws PromptoError {
-		if (value instanceof Integer)
-			return new Integer(this.longValue() - ((Integer) value).longValue());
-		else if (value instanceof Decimal)
-			return new Decimal(this.doubleValue() - ((Decimal) value).doubleValue());
+		if (value instanceof IntegerValue)
+			return new IntegerValue(this.longValue() - ((IntegerValue) value).longValue());
+		else if (value instanceof DecimalValue)
+			return new DecimalValue(this.doubleValue() - ((DecimalValue) value).doubleValue());
 		else
 			throw new SyntaxError("Illegal: Integer - " + value.getClass().getSimpleName());
 	}
@@ -133,10 +133,10 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 
 	@Override
 	public IValue multiply(Context context, IValue value) throws PromptoError {
-		if (value instanceof Integer)
-			return new Integer(this.longValue() * ((Integer) value).longValue());
-		else if (value instanceof Decimal)
-			return new Decimal(((Decimal) value).doubleValue() * this.longValue());
+		if (value instanceof IntegerValue)
+			return new IntegerValue(this.longValue() * ((IntegerValue) value).longValue());
+		else if (value instanceof DecimalValue)
+			return new DecimalValue(((DecimalValue) value).doubleValue() * this.longValue());
 		else if (value instanceof IMultiplyable)
 			return value.multiply(context, this);
 		else
@@ -248,7 +248,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 			if (((INumber) value).doubleValue() == 0.0)
 				throw new DivideByZeroError();
 			else
-				return new Decimal(this.doubleValue() / ((INumber) value).doubleValue());
+				return new DecimalValue(this.doubleValue() / ((INumber) value).doubleValue());
 		} else
 			throw new SyntaxError("Illegal: Integer / " + value.getClass().getSimpleName());
 	}
@@ -267,11 +267,11 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 
 	@Override
 	public IValue intDivide(Context context, IValue value) throws PromptoError {
-		if (value instanceof Integer) {
-			if (((Integer) value).longValue() == 0)
+		if (value instanceof IntegerValue) {
+			if (((IntegerValue) value).longValue() == 0)
 				throw new DivideByZeroError();
 			else
-				return new Integer(this.longValue() / ((Integer) value).longValue());
+				return new IntegerValue(this.longValue() / ((IntegerValue) value).longValue());
 		} else
 			throw new SyntaxError("Illegal: Integer \\ " + value.getClass().getSimpleName());
 	}
@@ -290,11 +290,11 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 
 	@Override
 	public IValue modulo(Context context, IValue value) throws PromptoError {
-		if (value instanceof Integer) {
-			long mod = ((Integer) value).longValue();
+		if (value instanceof IntegerValue) {
+			long mod = ((IntegerValue) value).longValue();
 			if (mod == 0)
 				throw new DivideByZeroError();
-			return new Integer(this.longValue() % mod);
+			return new IntegerValue(this.longValue() % mod);
 		} else
 			throw new SyntaxError("Illegal: Integer % " + value.getClass().getSimpleName());
 	}
@@ -318,10 +318,10 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 
 	@Override
 	public int compareTo(Context context, IValue value) throws PromptoError {
-		if (value instanceof Integer)
-			return Long.compare(this.value, ((Integer) value).longValue());
-		else if (value instanceof Decimal)
-			return Double.compare(this.doubleValue(), ((Decimal) value).doubleValue());
+		if (value instanceof IntegerValue)
+			return Long.compare(this.value, ((IntegerValue) value).longValue());
+		else if (value instanceof DecimalValue)
+			return Double.compare(this.doubleValue(), ((DecimalValue) value).doubleValue());
 		else
 			throw new SyntaxError("Illegal comparison: Integer and " + value.getClass().getSimpleName());
 
@@ -357,10 +357,10 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Integer)
-			return value == ((Integer) obj).value;
-		else if (obj instanceof Decimal)
-			return value == ((Decimal) obj).value;
+		if (obj instanceof IntegerValue)
+			return value == ((IntegerValue) obj).value;
+		else if (obj instanceof DecimalValue)
+			return value == ((DecimalValue) obj).value;
 		else
 			return false;
 	}
@@ -397,7 +397,7 @@ public class Integer extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 
 	public IValue negate() {
-		return new Integer(-value);
+		return new IntegerValue(-value);
 	}
 	
 	public static ResultInfo compileNegate(Context context, MethodInfo method, Flags flags, 

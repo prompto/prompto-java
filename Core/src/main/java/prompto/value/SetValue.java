@@ -68,8 +68,8 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IFilterab
 
 	@Override
 	public IValue getItem(Context context, IValue index) throws PromptoError {
-		if (index instanceof Integer) {
-			int idx = (int)((Integer)index).longValue() - 1;
+		if (index instanceof IntegerValue) {
+			int idx = (int)((IntegerValue)index).longValue() - 1;
 			return getNthItem(idx);
 		} else
 			throw new SyntaxError("No such item:" + index.toString());
@@ -155,7 +155,7 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IFilterab
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) {
 		String name = id.toString();
 		if ("count".equals(name))
-			return new Integer(items.size());
+			return new IntegerValue(items.size());
 		else
 			return super.getMember(context, id, autoCreate);
 	}

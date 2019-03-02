@@ -20,15 +20,15 @@ import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.value.Date;
-import prompto.value.DateTime;
-import prompto.value.Decimal;
+import prompto.value.DateValue;
+import prompto.value.DateTimeValue;
+import prompto.value.DecimalValue;
 import prompto.value.IValue;
-import prompto.value.Integer;
+import prompto.value.IntegerValue;
 import prompto.value.ListValue;
-import prompto.value.Period;
+import prompto.value.PeriodValue;
 import prompto.value.SetValue;
-import prompto.value.Time;
+import prompto.value.TimeValue;
 
 public class SubtractExpression implements IExpression {
 
@@ -65,14 +65,14 @@ public class SubtractExpression implements IExpression {
 	
 	private static Map<Class<?>, IOperatorFunction> createMinusers() {
 		Map<Class<?>, IOperatorFunction> map = new HashMap<>();
-		map.put(double.class, Decimal::compileMinus);
-		map.put(Double.class, Decimal::compileMinus);
-		map.put(long.class, Integer::compileMinus);
-		map.put(Long.class, Integer::compileMinus);
-		map.put(PromptoDate.class, Date::compileMinus);
-		map.put(PromptoDateTime.class, DateTime::compileMinus); 
-		map.put(PromptoTime.class, Time::compileMinus);
-		map.put(PromptoPeriod.class, Period::compileMinus);
+		map.put(double.class, DecimalValue::compileMinus);
+		map.put(Double.class, DecimalValue::compileMinus);
+		map.put(long.class, IntegerValue::compileMinus);
+		map.put(Long.class, IntegerValue::compileMinus);
+		map.put(PromptoDate.class, DateValue::compileMinus);
+		map.put(PromptoDateTime.class, DateTimeValue::compileMinus); 
+		map.put(PromptoTime.class, TimeValue::compileMinus);
+		map.put(PromptoPeriod.class, PeriodValue::compileMinus);
 		map.put(PromptoList.class, ListValue::compileMinus);
 		map.put(PromptoSet.class, SetValue::compileMinus);
 		return map;

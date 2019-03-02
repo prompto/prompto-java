@@ -21,7 +21,7 @@ import prompto.transpiler.Transpiler;
 import prompto.type.AnyType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.value.Boolean;
+import prompto.value.BooleanValue;
 import prompto.value.IValue;
 
 public class MatchingExpressionConstraint extends MatchingConstraintBase {
@@ -38,7 +38,7 @@ public class MatchingExpressionConstraint extends MatchingConstraintBase {
 		child.registerValue(new Variable(new Identifier("value"), AnyType.instance()));
 		child.setValue(new Identifier("value"), value);
 		Object test = expression.interpret(child);
-		if(!Boolean.TRUE.equals(test))
+		if(!BooleanValue.TRUE.equals(test))
 			throw new InvalidValueError(String.valueOf(value) + expressionToString(context));
 	}
 	
@@ -59,7 +59,7 @@ public class MatchingExpressionConstraint extends MatchingConstraintBase {
 		Context child = context.newChildContext();
 		child.registerValue(new Variable(new Identifier("value"), AnyType.instance()));
 		ResultInfo info = expression.compile(child, method, flags.withPrimitive(true));
-		if(Boolean.class==info.getType())
+		if(BooleanValue.class==info.getType())
 			CompilerUtils.BooleanToboolean(method);
 		// 1 = success
 		IInstructionListener finalListener = method.addOffsetListener(new OffsetListenerConstant());

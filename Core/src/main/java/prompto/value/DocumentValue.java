@@ -16,17 +16,20 @@ import prompto.type.AnyType;
 import prompto.type.DocumentType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class Document extends BaseValue {
+public class DocumentValue extends BaseValue {
 	
 	PromptoDocument<Identifier,IValue> values = new PromptoDocument<Identifier,IValue>();
 	
-	public Document() {
+	public DocumentValue() {
 		super(DocumentType.instance());
 	}
 	
 
-	public Document(Context context, PromptoDocument<?, ?> doc) {
+	public DocumentValue(Context context, PromptoDocument<?, ?> doc) {
 		super(DocumentType.instance());
 		for(Object key : doc.keySet()) {
 			Object value = doc.get(key);
@@ -62,9 +65,9 @@ public class Document extends BaseValue {
     	if(values.containsKey(name))
     		return values.get(name);
     	else if("text".equals(name.toString()))
-    		return new Text(this.toString());
+    		return new TextValue(this.toString());
     	else if(autoCreate) {
-            IValue result = new Document();
+            IValue result = new DocumentValue();
             values.put(name, result);
             return result;
         } else
@@ -87,14 +90,14 @@ public class Document extends BaseValue {
 	
 	@Override
 	public void setItem(Context context, IValue item, IValue value) {
-		if(!(item instanceof Text))
+		if(!(item instanceof TextValue))
 			throw new InvalidValueError("Expected a Text, got:" + item.getClass().getName());
 		values.put(new Identifier(item.toString()), value);
 	}
 	
 	@Override
 	public IValue getItem(Context context, IValue item) {
-		if(!(item instanceof Text))
+		if(!(item instanceof TextValue))
 			throw new InvalidValueError("Expected a Text, got:" + item.getClass().getName());
 		return values.getOrDefault(new Identifier(item.toString()), NullValue.instance());
 	}
@@ -102,7 +105,7 @@ public class Document extends BaseValue {
 
 	@Override
 	public String toString() {
-		return values.toString(Document::toJson, false);
+		return values.toString(DocumentValue::toJson, false);
 	}
 	
 	static void toJson(IValue value, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> binaries) throws IOException{
@@ -111,10 +114,25 @@ public class Document extends BaseValue {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if(obj instanceof Document)
-			return values.equals(((Document)obj).values);
+		if(obj instanceof DocumentValue)
+			return values.equals(((DocumentValue)obj).values);
 		else
 			return false;
+	}
+	
+	
+	@Override
+	public JsonNode toJson(Context context, boolean withType) throws PromptoError {
+		ObjectNode result = JsonNodeFactory.instance.objectNode();
+		ObjectNode value = result;
+		if(withType) {
+			result.put("typeName", DocumentType.instance().getTypeName());
+			value = JsonNodeFactory.instance.objectNode();
+			result.set("value", value);
+		}
+		for(Entry<Identifier, IValue> entry : values.entrySet())
+			value.set(entry.getKey().toString(), entry.getValue().toJson(context, withType));
+		return result;
 	}
 	
 	@Override

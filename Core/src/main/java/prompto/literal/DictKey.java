@@ -10,7 +10,7 @@ import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
-import prompto.value.Text;
+import prompto.value.TextValue;
 
 public abstract class DictKey extends Section {
 
@@ -21,8 +21,8 @@ public abstract class DictKey extends Section {
 	public void transpile(Transpiler transpiler) {
 		transpiler.append(this.toString());
 	}
-	public Text asText() {
-		return new Text(this.asKey());
+	public TextValue asText() {
+		return new TextValue(this.asKey());
 	}
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		IConstantOperand operand = new StringConstant(this.asKey());

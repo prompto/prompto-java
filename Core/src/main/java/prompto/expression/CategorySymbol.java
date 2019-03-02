@@ -34,7 +34,7 @@ import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IInstance;
 import prompto.value.IValue;
-import prompto.value.Text;
+import prompto.value.TextValue;
 
 public class CategorySymbol extends Symbol implements IExpression  {
 	
@@ -100,7 +100,7 @@ public class CategorySymbol extends Symbol implements IExpression  {
 				instance.setMember(context, assignment.getArgumentId(), value);
 			}
 		}
-		instance.setMember(context, new Identifier("name"), new Text(this.getId().toString()));
+		instance.setMember(context, new Identifier("name"), new TextValue(this.getId().toString()));
 		instance.setMutable(false);
 		return instance;
 	}

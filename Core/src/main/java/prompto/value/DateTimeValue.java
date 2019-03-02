@@ -24,26 +24,26 @@ import prompto.type.DateTimeType;
 import com.fasterxml.jackson.core.JsonGenerator;
 
 
-public class DateTime extends BaseValue implements Comparable<DateTime> {
+public class DateTimeValue extends BaseValue implements Comparable<DateTimeValue> {
 
 	PromptoDateTime value;
 
-	public DateTime(PromptoDateTime dt) {
+	public DateTimeValue(PromptoDateTime dt) {
 		super(DateTimeType.instance());
 		this.value = dt;
 	}
 
-	public DateTime(int year, int month, int day, int hour, int minute, int second) {
+	public DateTimeValue(int year, int month, int day, int hour, int minute, int second) {
 		super(DateTimeType.instance());
 		this.value = new PromptoDateTime(year, month, day, hour, minute, second, 0);
 	}
 
-	public DateTime(int year, int month, int day, int hour, int minute, int second, int milli) {
+	public DateTimeValue(int year, int month, int day, int hour, int minute, int second, int milli) {
 		super(DateTimeType.instance());
 		this.value = new PromptoDateTime(year, month, day, hour, minute, second, milli);
 	}
 
-	public DateTime(String value) {
+	public DateTimeValue(String value) {
 		super(DateTimeType.instance());
 		this.value = PromptoDateTime.parse(value);
 	}
@@ -55,8 +55,8 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 
 	@Override
 	public IValue plus(Context context, IValue value) throws PromptoError {
-		if (value instanceof Period)
-			return new DateTime(this.value.plus(((Period) value).value));
+		if (value instanceof PeriodValue)
+			return new DateTimeValue(this.value.plus(((PeriodValue) value).value));
 		else
 			throw new SyntaxError("Illegal: DateTime + " + value.getClass().getSimpleName());
 	}
@@ -74,10 +74,10 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 
 	@Override
 	public IValue minus(Context context, IValue value) throws PromptoError {
-		if (value instanceof DateTime)
-			return new Period(this.value.minus(((DateTime)value).value));
-		else if (value instanceof Period)
-			return new DateTime(this.value.minus(((Period)value).value));
+		if (value instanceof DateTimeValue)
+			return new PeriodValue(this.value.minus(((DateTimeValue)value).value));
+		else if (value instanceof PeriodValue)
+			return new DateTimeValue(this.value.minus(((PeriodValue)value).value));
 		else
 			throw new SyntaxError("Illegal: DateTime - " + value.getClass().getSimpleName());
 	}
@@ -101,8 +101,8 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 
 	@Override
 	public int compareTo(Context context, IValue value) throws PromptoError {
-		if (value instanceof DateTime)
-			return this.value.compareTo(((DateTime) value).value);
+		if (value instanceof DateTimeValue)
+			return this.value.compareTo(((DateTimeValue) value).value);
 		else
 			throw new SyntaxError("Illegal comparison: DateTime + " + value.getClass().getSimpleName());
 
@@ -122,25 +122,25 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
 		if ("year".equals(name))
-			return new Integer(this.value.getYear());
+			return new IntegerValue(this.value.getYear());
 		else if ("month".equals(name))
-			return new Integer(this.value.getNativeMonth());
+			return new IntegerValue(this.value.getNativeMonth());
 		else if ("dayOfMonth".equals(name))
-			return new Integer(this.value.getNativeDayOfMonth());
+			return new IntegerValue(this.value.getNativeDayOfMonth());
 		else if ("dayOfYear".equals(name))
-			return new Integer(this.value.getNativeDayOfYear());
+			return new IntegerValue(this.value.getNativeDayOfYear());
 		else if ("hour".equals(name))
-			return new Integer(this.value.getNativeHour());
+			return new IntegerValue(this.value.getNativeHour());
 		else if ("minute".equals(name))
-			return new Integer(this.value.getNativeMinute());
+			return new IntegerValue(this.value.getNativeMinute());
 		else if ("second".equals(name))
-			return new Integer(this.value.getNativeSecond());
+			return new IntegerValue(this.value.getNativeSecond());
 		else if ("millisecond".equals(name))
-			return new Integer(this.value.getNativeMillis());
+			return new IntegerValue(this.value.getNativeMillis());
 		else if ("tzOffset".equals(name))
-			return new Integer(this.value.getNativeTzOffset());
+			return new IntegerValue(this.value.getNativeTzOffset());
 		else if ("tzName".equals(name))
-			return new Text(this.value.getTzName());
+			return new TextValue(this.value.getTzName());
 		else
 			return super.getMember(context, id, autoCreate);
 	}
@@ -151,14 +151,14 @@ public class DateTime extends BaseValue implements Comparable<DateTime> {
 	}
 
 	@Override
-	public int compareTo(DateTime other) {
+	public int compareTo(DateTimeValue other) {
 		return this.value.compareTo(other.value);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof DateTime)
-			return value.equals(((DateTime) obj).value);
+		if (obj instanceof DateTimeValue)
+			return value.equals(((DateTimeValue) obj).value);
 		else
 			return value.equals(obj);
 	}

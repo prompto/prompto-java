@@ -24,13 +24,13 @@ import prompto.type.ListType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
-public class Cursor extends BaseValue implements IIterable<IValue>, IterableWithCounts<IValue>, IFilterable {
+public class CursorValue extends BaseValue implements IIterable<IValue>, IterableWithCounts<IValue>, IFilterable {
 
 	Context context;
 	IStoredIterable iterable;
 	boolean mutable;
 	
-	public Cursor(Context context, IType itemType, IStoredIterable documents) {
+	public CursorValue(Context context, IType itemType, IStoredIterable documents) {
 		super(new CursorType(itemType));
 		this.context = context;
 		this.iterable = documents;
@@ -104,9 +104,9 @@ public class Cursor extends BaseValue implements IIterable<IValue>, IterableWith
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) {
 		String name = id.toString();
 		if ("count".equals(name))
-			return new Integer(getCount());
+			return new IntegerValue(getCount());
 		else if ("totalCount".equals(name))
-			return new Integer(getTotalCount());
+			return new IntegerValue(getTotalCount());
 		else
 			throw new SyntaxError("No such member:" + name);
 	}

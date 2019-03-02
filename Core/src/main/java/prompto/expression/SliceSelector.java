@@ -19,10 +19,10 @@ import prompto.type.IntegerType;
 import prompto.utils.CodeWriter;
 import prompto.value.ISliceable;
 import prompto.value.IValue;
-import prompto.value.Integer;
+import prompto.value.IntegerValue;
 import prompto.value.ListValue;
 import prompto.value.RangeBase;
-import prompto.value.Text;
+import prompto.value.TextValue;
 
 public class SliceSelector extends SelectorExpression {
 
@@ -81,12 +81,12 @@ public class SliceSelector extends SelectorExpression {
         if (sliceable!=null)
         {
             Object fi = first != null ? first.interpret(context) : null;
-            if (fi != null && !(fi instanceof Integer))
+            if (fi != null && !(fi instanceof IntegerValue))
                 throw new SyntaxError("Illegal sliced type: " + fi);
             Object li = last != null ? last.interpret(context) : null;
-            if (li != null && !(li instanceof Integer))
+            if (li != null && !(li instanceof IntegerValue))
                 throw new SyntaxError("Illegal sliced type: " + li);
-            return sliceable.slice((Integer)fi, (Integer)li);
+            return sliceable.slice((IntegerValue)fi, (IntegerValue)li);
         }
         else
 			throw new SyntaxError("Illegal sliced object: " + parent);
@@ -96,7 +96,7 @@ public class SliceSelector extends SelectorExpression {
 	
 	private static Map<Class<?>, ISlicerFunction> createSlicers() {
 		Map<Class<?>, ISlicerFunction> map = new HashMap<>(); 
-		map.put(String.class, Text::compileSlice); 
+		map.put(String.class, TextValue::compileSlice); 
 		map.put(PromptoRange.Character.class, RangeBase::compileSlice);
 		map.put(PromptoRange.Date.class, RangeBase::compileSlice);
 		map.put(PromptoRange.Time.class, RangeBase::compileSlice);
