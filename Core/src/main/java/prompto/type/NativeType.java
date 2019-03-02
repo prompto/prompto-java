@@ -1,16 +1,33 @@
 package prompto.type;
 
+import java.lang.reflect.Type;
 import java.util.Comparator;
 
+import prompto.compiler.ByteOperand;
+import prompto.compiler.ClassConstant;
+import prompto.compiler.ClassFile;
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.StackLocal;
+import prompto.compiler.IVerifierEntry.VerifierType;
+import prompto.compiler.comparator.ComparatorCompiler;
+import prompto.compiler.comparator.ComparatorCompilerBase;
 import prompto.error.SyntaxError;
 import prompto.expression.ArrowExpression;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoList;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
+import prompto.statement.ReturnStatement;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
 import prompto.utils.IdentifierList;
+import prompto.utils.ObjectUtils;
 import prompto.value.IValue;
 import prompto.value.Integer;
 
@@ -178,5 +195,67 @@ public abstract class NativeType extends BaseType {
 		}
 		transpiler.flush();
 	}
+	
+	@Override
+	public ResultInfo compileSorted(Context context, MethodInfo method, Flags flags, ResultInfo srcInfo, IExpression key, boolean descending) {
+		if(key==null) {
+			method.addInstruction(descending ? Opcode.ICONST_1 : Opcode.ICONST_0);
+			MethodConstant m = new MethodConstant(srcInfo.getType(), "sort", boolean.class, PromptoList.class);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+			return new ResultInfo(PromptoList.class);
+		} else if(key instanceof ArrowExpression)
+			return compileSorted(context, method, flags, srcInfo, (ArrowExpression)key, descending); 
+		else
+			throw new UnsupportedOperationException("Unsupported key type: " + key.getClass().getSimpleName());
+	}
+
+	public ResultInfo compileSorted(Context context, MethodInfo method, Flags flags, ResultInfo srcInfo, ArrowExpression key, boolean descending) {
+		compileComparator(context, method, flags, key, descending);
+		MethodConstant m = new MethodConstant(srcInfo.getType(), "sortUsing", Comparator.class, PromptoList.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+		return new ResultInfo(PromptoList.class);
+	}
+
+	private ResultInfo compileComparator(Context context, MethodInfo method, Flags flags, ArrowExpression key, boolean descending) {
+		Type cmpType = compileComparatorClass(context, method.getClassFile(), key, descending);
+		return CompilerUtils.compileNewInstance(method, cmpType);
+	}
+
+	private Type compileComparatorClass(Context context, ClassFile parentClass, ArrowExpression key, boolean descending) {
+		ComparatorCompiler compiler = new ArrowKeyComparatorCompiler();
+		return compiler.compile(context, parentClass, this, key, descending);
+	}
+	
+	static class ArrowKeyComparatorCompiler extends ComparatorCompilerBase {
+		
+		
+		@Override
+		protected void compileMethodBody(Context context, MethodInfo method, Type paramType, IExpression key) {
+			ArrowExpression arrow = (ArrowExpression)key;
+			if(arrow.getArgs().size()==1)
+				compileMethodBody1Arg(context, method, paramType, arrow);
+			else
+				throw new UnsupportedOperationException(); // compileMethodBody2Args(context, method, paramType, arrow);
+		}
+		
+		private void compileMethodBody1Arg(Context context, MethodInfo method, Type paramType, ArrowExpression arrow) {
+			StackLocal tmpThis = method.registerLocal("this", VerifierType.ITEM_Object, new ClassConstant(paramType));
+			compileValue1Arg(context, method, paramType, arrow, tmpThis, "o1");
+			compileValue1Arg(context, method, paramType, arrow, tmpThis, "o2");
+			MethodConstant compare = new MethodConstant(ObjectUtils.class, "safeCompare", Object.class, Object.class, int.class);
+			method.addInstruction(Opcode.INVOKESTATIC, compare);
+			method.addInstruction(Opcode.IRETURN);
+		}
+
+		private ResultInfo compileValue1Arg(Context context, MethodInfo method, Type paramType, ArrowExpression arrow, StackLocal tmpThis, String paramName) {
+			StackLocal param = method.getRegisteredLocal(paramName);
+			Opcode opcode = Opcode.values()[Opcode.ALOAD_0.ordinal() + param.getIndex()];
+			method.addInstruction(opcode, new ClassConstant(paramType));
+			method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)tmpThis.getIndex()));
+			return arrow.compileKey(context, method, new Flags(), paramType, paramName);
+		}
+	}
+
+		
 
 }

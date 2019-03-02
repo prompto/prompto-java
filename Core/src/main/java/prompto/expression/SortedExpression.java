@@ -2,11 +2,8 @@ package prompto.expression;
 
 import java.util.Comparator;
 
-
 import prompto.compiler.Flags;
-import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
-import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
@@ -167,23 +164,10 @@ public class SortedExpression implements IExpression {
 		IType type = source.check(context);
 		ResultInfo info = source.compile(context, method, flags);
 		IType itemType = ((ContainerType)type).getItemType();
-		if(itemType instanceof CategoryType) 
-			return ((CategoryType)itemType).compileSorted(context, method, flags, info, key, descending);
-		else if(itemType instanceof DocumentType) 
-			return ((DocumentType)itemType).compileSorted(context, method, flags, info, key, descending);
-		else
-			return compileSortNative(context, method, flags, info);
+		return itemType.compileSorted(context, method, flags, info, key, descending);
 	}
 
 
-	private ResultInfo compileSortNative(Context context, MethodInfo method, Flags flags, ResultInfo info) {
-		method.addInstruction(descending ? Opcode.ICONST_1 : Opcode.ICONST_0);
-		MethodConstant m = new MethodConstant(info.getType(), "sort", boolean.class, PromptoList.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
-		return new ResultInfo(PromptoList.class);
-	}
-
-	
 	@Override
 	public void declare(Transpiler transpiler) {
 	    transpiler.require("List");

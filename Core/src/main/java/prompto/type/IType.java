@@ -278,5 +278,9 @@ public interface IType extends ISection {
 		throw new UnsupportedOperationException("transpileIterator " + this.getClass().getName());
 	}
 
+	default ResultInfo compileSorted(Context context, MethodInfo method, Flags flags, ResultInfo srcInfo, IExpression key, boolean descending) {
+		throw new UnsupportedOperationException("compileSorted " + this.getClass().getName());
+	}
+
 }
  

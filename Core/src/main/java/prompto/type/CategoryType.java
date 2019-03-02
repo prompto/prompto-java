@@ -945,6 +945,7 @@ public class CategoryType extends BaseType {
 		};
 	}
 
+	@Override
 	public ResultInfo compileSorted(Context context, MethodInfo method, Flags flags, ResultInfo srcInfo, IExpression key, boolean descending) {
 		if(key==null)
 			key = new UnresolvedIdentifier(new Identifier("key"));
