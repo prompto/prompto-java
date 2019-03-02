@@ -7,6 +7,10 @@ import java.util.Iterator;
 import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -65,6 +69,22 @@ public class TupleValue extends BaseValue implements IContainer<IValue>, ISlicea
 		return "(" + result.substring(1,result.length()-1) + ")";
 	}
 	
+	
+	@Override
+	public JsonNode toJsonNode(Context context, boolean withType) throws PromptoError {
+		ArrayNode value = JsonNodeFactory.instance.arrayNode();
+		JsonNode result = value;
+		if(withType) {
+			ObjectNode object = JsonNodeFactory.instance.objectNode();
+			object.put("typeName", "Tuple");
+			object.set("value", value);
+			result = object;
+		}
+		for(IValue item : items)
+			value.add(item.toJsonNode(context, withType));
+		return result;
+	}
+
 	
 	@Override
 	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {

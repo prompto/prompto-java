@@ -1,8 +1,16 @@
 package prompto.value;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.function.Predicate;
+
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -13,6 +21,7 @@ import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.error.IndexOutOfRangeError;
 import prompto.error.PromptoError;
+import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
@@ -241,5 +250,41 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IFilterab
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		method.addInstruction(Opcode.POP); // consume returned boolean
 		return info;
+	}
+	
+	@Override
+	public JsonNode toJsonNode(Context context, boolean withType) throws PromptoError {
+		ArrayNode value = JsonNodeFactory.instance.arrayNode();
+		JsonNode result = value;
+		if(withType) {
+			ObjectNode object = JsonNodeFactory.instance.objectNode();
+			object.put("typeName", this.getType().getTypeName());
+			object.set("value", value);
+			result = object;
+		}
+		for(IValue item : items)
+			value.add(item.toJsonNode(context, withType));
+		return result;
+	}
+
+	
+	@Override
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
+		try {
+			if(withType) {
+				generator.writeStartObject();
+				generator.writeFieldName("type");
+				generator.writeString(this.getType().getTypeName());
+				generator.writeFieldName("value");
+			}
+			generator.writeStartArray();
+			for(IValue value : this.items)
+				value.toJsonStream(context, generator, System.identityHashCode(this), null, withType, data);
+			generator.writeEndArray();
+			if(withType)
+				generator.writeEndObject();
+		} catch(IOException e) {
+			throw new ReadWriteError(e.getMessage());
+		}
 	}
 }

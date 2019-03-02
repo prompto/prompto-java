@@ -4,6 +4,11 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Map;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
@@ -18,8 +23,6 @@ import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.runtime.Context;
 import prompto.type.DecimalType;
-
-import com.fasterxml.jackson.core.JsonGenerator;
 
 public class DecimalValue extends BaseValue implements INumber, Comparable<INumber>, IMultiplyable {
 	
@@ -227,6 +230,18 @@ public class DecimalValue extends BaseValue implements INumber, Comparable<INumb
 		else
 			return CompilerUtils.booleanToBoolean(method);
 	}
+
+	@Override
+	public JsonNode toJsonNode(Context context, boolean withType) throws PromptoError {
+		if(withType) {
+			ObjectNode result = JsonNodeFactory.instance.objectNode();
+			result.put("typeName", DecimalType.instance().getTypeName());
+			result.set("value", JsonNodeFactory.instance.numberNode(value));
+			return result;
+		} else
+			return JsonNodeFactory.instance.numberNode(value);
+	}
+
 
 	@Override
 	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {

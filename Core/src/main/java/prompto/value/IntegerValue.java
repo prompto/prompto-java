@@ -32,6 +32,9 @@ import prompto.type.IntegerType;
 import prompto.type.TextType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class IntegerValue extends BaseValue implements INumber, Comparable<INumber>, IMultiplyable {
 	
@@ -386,6 +389,17 @@ public class IntegerValue extends BaseValue implements INumber, Comparable<INumb
 			return CompilerUtils.booleanToBoolean(method);
 	}
 	
+	@Override
+	public JsonNode toJsonNode(Context context, boolean withType) throws PromptoError {
+		if(withType) {
+			ObjectNode result = JsonNodeFactory.instance.objectNode();
+			result.put("typeName", IntegerType.instance().getTypeName());
+			result.set("value", JsonNodeFactory.instance.numberNode(value));
+			return result;
+		} else
+			return JsonNodeFactory.instance.numberNode(value);
+	}
+
 	@Override
 	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
 		try {

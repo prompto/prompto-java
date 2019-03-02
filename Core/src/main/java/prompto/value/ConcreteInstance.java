@@ -34,6 +34,9 @@ import prompto.type.IntegerType;
 import prompto.type.TextType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class ConcreteInstance extends BaseValue implements IInstance, IMultiplyable {
 
@@ -306,6 +309,21 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		return decl.interpret(local);
 	}
 
+	@Override
+	public JsonNode toJsonNode(Context context, boolean withType) throws PromptoError {
+		ObjectNode result = JsonNodeFactory.instance.objectNode();
+		ObjectNode value = result;
+		if(withType) {
+			result.put("typeName", this.getType().getTypeName());
+			value = JsonNodeFactory.instance.objectNode();
+			result.set("value", value);
+		}
+		for(Entry<Identifier, IValue> entry : values.entrySet())
+			value.set(entry.getKey().toString(), entry.getValue().toJsonNode(context, withType));
+		return result;
+	}
+	
+	
 	@Override
 	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
 		try {
