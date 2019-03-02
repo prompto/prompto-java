@@ -27,7 +27,7 @@ public class ServerValue implements IValue {
 	
 	@Override
 	public JsonNode getValueData() {
-		return value.toJson(context, true);
+		return value.toJsonNode(context, true);
 	}
 
 }

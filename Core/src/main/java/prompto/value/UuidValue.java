@@ -16,7 +16,6 @@ import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.expression.IExpression;
-import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.type.UuidType;
 
@@ -74,7 +73,7 @@ public class UuidValue extends BaseValue {
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
 		try {
 			if(withType) {
 				generator.writeStartObject();

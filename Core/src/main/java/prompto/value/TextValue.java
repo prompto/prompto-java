@@ -368,7 +368,7 @@ public class TextValue extends BaseValue implements Comparable<TextValue>, ICont
 	}
 	
 	@Override
-	public JsonNode toJson(Context context, boolean withType) throws PromptoError {
+	public JsonNode toJsonNode(Context context, boolean withType) throws PromptoError {
 		if(withType) {
 			ObjectNode result = JsonNodeFactory.instance.objectNode();
 			result.put("typeName", TextType.instance().getTypeName());
@@ -379,7 +379,7 @@ public class TextValue extends BaseValue implements Comparable<TextValue>, ICont
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
 		try {
 			generator.writeString(value);
 		} catch(IOException e) {

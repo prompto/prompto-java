@@ -15,7 +15,6 @@ import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
-import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.type.BooleanType;
 
@@ -92,7 +91,7 @@ public class BooleanValue extends BaseValue implements Comparable<BooleanValue> 
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
 		try {
 			generator.writeBoolean(value);
 		} catch(IOException e) {

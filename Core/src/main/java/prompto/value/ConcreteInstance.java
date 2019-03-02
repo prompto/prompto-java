@@ -307,7 +307,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	}
 
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
 		try {
 			if(withType) {
 				generator.writeStartObject();
@@ -346,7 +346,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 				generator.writeString(value.getType().getTypeName());
 				generator.writeFieldName("value");
 			}
-			value.toJson(context, generator, id, entry.getKey(), withType, data);
+			value.toJsonStream(context, generator, id, entry.getKey().toString(), withType, data);
 			if(wrap) 
 				generator.writeEndObject();
 	}

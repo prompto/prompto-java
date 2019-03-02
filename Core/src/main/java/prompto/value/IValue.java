@@ -115,12 +115,12 @@ public interface IValue {
 		throw new UnsupportedOperationException("convertTo not supported by " + this.getClass().getSimpleName());
 	}
 
-	default JsonNode toJson(Context context, boolean withType) throws PromptoError {
-		throw new UnsupportedOperationException("toJson not supported by " + this.getClass().getSimpleName());
+	default JsonNode toJsonNode(Context context, boolean withType) throws PromptoError {
+		throw new UnsupportedOperationException("toJsonNode not supported by " + this.getClass().getSimpleName());
 	}
 	
-	default void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
-		throw new UnsupportedOperationException("toJson not supported by " + this.getClass().getSimpleName());
+	default void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
+		throw new UnsupportedOperationException("toJsonStream not supported by " + this.getClass().getSimpleName());
 	}
 
 

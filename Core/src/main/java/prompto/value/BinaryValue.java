@@ -112,7 +112,7 @@ public abstract class BinaryValue extends BaseValue {
 	}
 
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
 		try {
 			// if no binaries container, store a relative URL
 			if(binaries==null) 

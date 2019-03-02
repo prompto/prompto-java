@@ -97,13 +97,13 @@ public class NativeSymbol extends Symbol implements IExpression {
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
 		try {
 			generator.writeStartObject();
 			generator.writeFieldName("name");
 			generator.writeString(symbol.toString());
 			generator.writeFieldName("value");
-			expression.interpret(context).toJson(context, generator, instanceId, fieldName, withType, binaries);
+			expression.interpret(context).toJsonStream(context, generator, instanceId, fieldName, withType, binaries);
 			generator.writeEndObject();
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());

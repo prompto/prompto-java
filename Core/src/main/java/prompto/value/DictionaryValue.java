@@ -1,5 +1,6 @@
 package prompto.value;
 
+import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
@@ -7,6 +8,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -19,6 +21,7 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
+import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
@@ -211,7 +214,7 @@ public class DictionaryValue extends BaseValue implements IContainer<IValue> {
 	}
 	
 	@Override
-	public JsonNode toJson(Context context, boolean withType) throws PromptoError {
+	public JsonNode toJsonNode(Context context, boolean withType) throws PromptoError {
 		ObjectNode result = JsonNodeFactory.instance.objectNode();
 		ObjectNode value = result;
 		if(withType) {
@@ -220,8 +223,35 @@ public class DictionaryValue extends BaseValue implements IContainer<IValue> {
 			result.set("value", value);
 		}
 		for(Entry<TextValue, IValue> entry : dict.entrySet())
-			value.set(entry.getKey().getStorableData(), entry.getValue().toJson(context, withType));
+			value.set(entry.getKey().getStorableData(), entry.getValue().toJsonNode(context, withType));
 		return result;
+	}
+	
+	
+	@Override
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
+		try {
+			if(withType) {
+				generator.writeStartObject();
+				generator.writeFieldName("type");
+				generator.writeString(this.getType().getTypeName());
+				generator.writeFieldName("value");
+			}
+			generator.writeStartObject();
+			for(Entry<TextValue, IValue> entry : dict.entrySet()) {
+				generator.writeFieldName(entry.getKey().toString());
+				IValue value = entry.getValue();
+				if(value==null)
+					generator.writeNull();
+				else
+					value.toJsonStream(context, generator, System.identityHashCode(this), entry.getKey().toString(), withType, binaries);
+			}
+			generator.writeEndObject();
+			if(withType)
+				generator.writeEndObject();
+		} catch(IOException e) {
+			throw new ReadWriteError(e.getMessage());
+		}
 	}
 
 

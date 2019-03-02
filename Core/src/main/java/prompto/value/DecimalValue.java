@@ -16,7 +16,6 @@ import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
-import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.type.DecimalType;
 
@@ -230,7 +229,7 @@ public class DecimalValue extends BaseValue implements INumber, Comparable<INumb
 	}
 
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
 		try {
 			generator.writeNumber(value);
 		} catch(IOException e) {

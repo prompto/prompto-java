@@ -178,7 +178,7 @@ public interface IDebugResponse {
 		}
 
 		public GetVariableResponse(IVariable variable) {
-			this.variable = null; // TODO variable;
+			this.variable = new FatVariable(variable);
 		}
 		
 		@Override

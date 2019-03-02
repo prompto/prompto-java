@@ -94,7 +94,7 @@ public class IterableValue extends BaseValue implements IIterable<IValue>, Itera
 	}
 
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
 		try {
 			if(withType) {
 				generator.writeStartObject();
@@ -107,7 +107,7 @@ public class IterableValue extends BaseValue implements IIterable<IValue>, Itera
 			generator.writeStartArray();
 			Iterator<IValue> iter = iterator();
 			while(iter.hasNext())
-				iter.next().toJson(context, generator, null, null, withType, data);
+				iter.next().toJsonStream(context, generator, null, null, withType, data);
 			generator.writeEndArray();
 			if(withType)
 				generator.writeEndObject();

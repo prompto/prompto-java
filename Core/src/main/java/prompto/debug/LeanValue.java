@@ -1,13 +1,11 @@
 package prompto.debug;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
-public class LeanValue implements IValue {
+public class LeanValue extends ValueBase {
 
-	String typeName;
-	String valueString;
-	
 	public LeanValue() {
 	}
 	
@@ -16,24 +14,7 @@ public class LeanValue implements IValue {
 		this.valueString = value.getValueString();
 	}
 
-	public void setTypeName(String typeName) {
-		this.typeName = typeName;
-	}
-	
-	@Override
-	public String getTypeName() {
-		return typeName;
-	}
-
-	public void setValueString(String valueString) {
-		this.valueString = valueString;
-	}
-	
-	@Override
-	public String getValueString() {
-		return valueString;
-	}
-	
+	@JsonIgnore
 	@Override
 	public JsonNode getValueData() {
 		return JsonNodeFactory.instance.nullNode();

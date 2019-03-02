@@ -9,7 +9,6 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import prompto.error.NotStorableError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
-import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.type.AnyType;
@@ -37,7 +36,7 @@ public class DbIdValue implements IValue {
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
 		try {
 			generator.writeString(dbId.toString());
 		} catch(IOException e) {

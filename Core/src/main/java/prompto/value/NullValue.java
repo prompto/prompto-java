@@ -8,7 +8,6 @@ import com.fasterxml.jackson.core.JsonGenerator;
 
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
-import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.type.NullType;
 
@@ -42,7 +41,7 @@ public class NullValue extends BaseValue {
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
 		try {
 			generator.writeNull();
 		} catch(IOException e) {

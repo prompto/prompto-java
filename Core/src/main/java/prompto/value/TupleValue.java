@@ -67,7 +67,7 @@ public class TupleValue extends BaseValue implements IContainer<IValue>, ISlicea
 	
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
 		try {
 			if(withType) {
 				generator.writeStartObject();
@@ -77,7 +77,7 @@ public class TupleValue extends BaseValue implements IContainer<IValue>, ISlicea
 			}
 			generator.writeStartArray();
 			for(IValue value : this.items)
-				value.toJson(context, generator, System.identityHashCode(this), null, withType, data);
+				value.toJsonStream(context, generator, System.identityHashCode(this), null, withType, data);
 			generator.writeEndArray();
 			if(withType)
 				generator.writeEndObject();

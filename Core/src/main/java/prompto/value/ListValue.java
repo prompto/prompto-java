@@ -356,7 +356,7 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 	}
 
 	@Override
-	public JsonNode toJson(Context context, boolean withType) throws PromptoError {
+	public JsonNode toJsonNode(Context context, boolean withType) throws PromptoError {
 		ArrayNode value = JsonNodeFactory.instance.arrayNode();
 		JsonNode result = value;
 		if(withType) {
@@ -366,13 +366,13 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 			result = object;
 		}
 		for(IValue item : items)
-			value.add(item.toJson(context, withType));
+			value.add(item.toJsonNode(context, withType));
 		return result;
 	}
 
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
 		try {
 			if(withType) {
 				generator.writeStartObject();
@@ -382,7 +382,7 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 			}
 			generator.writeStartArray();
 			for(IValue value : this.items)
-				value.toJson(context, generator, System.identityHashCode(this), null, withType, data);
+				value.toJsonStream(context, generator, System.identityHashCode(this), null, withType, data);
 			generator.writeEndArray();
 			if(withType)
 				generator.writeEndObject();

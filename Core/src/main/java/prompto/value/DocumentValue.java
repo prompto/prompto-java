@@ -109,7 +109,7 @@ public class DocumentValue extends BaseValue {
 	}
 	
 	static void toJson(IValue value, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> binaries) throws IOException{
-		value.toJson(null, generator, instanceId, new Identifier(fieldName), withType, binaries);
+		value.toJsonStream(null, generator, instanceId, fieldName, withType, binaries);
 	}
 	
 	@Override
@@ -122,7 +122,7 @@ public class DocumentValue extends BaseValue {
 	
 	
 	@Override
-	public JsonNode toJson(Context context, boolean withType) throws PromptoError {
+	public JsonNode toJsonNode(Context context, boolean withType) throws PromptoError {
 		ObjectNode result = JsonNodeFactory.instance.objectNode();
 		ObjectNode value = result;
 		if(withType) {
@@ -131,12 +131,12 @@ public class DocumentValue extends BaseValue {
 			result.set("value", value);
 		}
 		for(Entry<Identifier, IValue> entry : values.entrySet())
-			value.set(entry.getKey().toString(), entry.getValue().toJson(context, withType));
+			value.set(entry.getKey().toString(), entry.getValue().toJsonNode(context, withType));
 		return result;
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
 		try {
 			if(withType) {
 				generator.writeStartObject();
@@ -151,7 +151,7 @@ public class DocumentValue extends BaseValue {
 				if(value==null)
 					generator.writeNull();
 				else
-					value.toJson(context, generator, System.identityHashCode(this), entry.getKey(), withType, binaries);
+					value.toJsonStream(context, generator, System.identityHashCode(this), entry.getKey().toString(), withType, binaries);
 			}
 			generator.writeEndObject();
 			if(withType)
