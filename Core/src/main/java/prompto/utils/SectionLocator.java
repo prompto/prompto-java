@@ -22,7 +22,7 @@ public class SectionLocator {
 
 	public static ISection findSection(Collection<IDeclaration> declarations, String path, int lineNumber) {
 		return getMethods(declarations)
-		.filter((d)->path.equals(d.getFilePath()))
+		.filter((d)->path.equals(d.getPath()))
 		.filter((d)->lineNumber>=d.getStart().getLine())
 		.filter((d)->lineNumber<=d.getEnd().getLine())
 		.map((d)->{ return findSectionIn(d, lineNumber); })
@@ -66,11 +66,15 @@ public class SectionLocator {
 	}
 	
 	private static Stream<IMethodDeclaration> getMethods(Collection<IDeclaration> declarations) {
-		return declarations.stream()
-		.filter((d)->d instanceof MethodDeclarationMap)
-		.map((d)->(MethodDeclarationMap)d)
-		.map((m)->m.values().stream())
-		.flatMap((s)->s);
+		Stream<IMethodDeclaration> fromMaps = declarations.stream()
+			.filter((d)->d instanceof MethodDeclarationMap)
+			.map((d)->(MethodDeclarationMap)d)
+			.map((m)->m.values().stream())
+			.flatMap((s)->s);
+		Stream<IMethodDeclaration> fromMethods = declarations.stream()
+				.filter((d)->d instanceof IMethodDeclaration)
+				.map((d)->(IMethodDeclaration)d);
+		return Stream.concat(fromMaps, fromMethods);
 	}
 
 

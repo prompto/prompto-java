@@ -3,6 +3,7 @@ package prompto.runtime;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,7 @@ import prompto.intrinsic.PromptoList;
 import prompto.parser.Dialect;
 import prompto.parser.ILocation;
 import prompto.parser.ISection;
+import prompto.parser.Section;
 import prompto.problem.IProblemListener;
 import prompto.problem.ProblemListener;
 import prompto.statement.CommentStatement;
@@ -286,7 +288,7 @@ public class Context implements IContext {
 	private void unregisterValues(String path) {
 		List<Identifier> toRemove = new ArrayList<Identifier>();
 		for(Identifier id : instances.keySet()) {
-			if(path.equals(id.getFilePath()))
+			if(path.equals(id.getPath()))
 				toRemove.add(id);
 		}
 		for(Identifier id : toRemove) {
@@ -298,7 +300,7 @@ public class Context implements IContext {
 	private void unregisterTests(String path) {
 		List<TestMethodDeclaration> toRemove = new ArrayList<TestMethodDeclaration>();
 		for(TestMethodDeclaration decl : tests.values()) {
-			if(path.equals(decl.getFilePath()))
+			if(path.equals(decl.getPath()))
 				toRemove.add(decl);
 		}
 		for(TestMethodDeclaration decl : toRemove)
@@ -308,7 +310,7 @@ public class Context implements IContext {
 	private void unregisterDeclarations(String path) {
 		List<IDeclaration> toRemove = new ArrayList<IDeclaration>();
 		for(IDeclaration decl : declarations.values()) {
-			if(path.equals(decl.getFilePath()))
+			if(path.equals(decl.getPath()))
 				toRemove.add(decl);
 			else if(decl instanceof MethodDeclarationMap)
 				((MethodDeclarationMap)decl).unregister(path);
@@ -569,7 +571,7 @@ public class Context implements IContext {
 		public void unregister(String path) {
 			List<IMethodDeclaration> toRemove = new ArrayList<IMethodDeclaration>();
 			for(IMethodDeclaration decl : this.values()) {
-				if(path.equals(decl.getFilePath()))
+				if(path.equals(decl.getPath()))
 					toRemove.add(decl);
 			}
 			for(IMethodDeclaration decl : toRemove)
@@ -621,7 +623,7 @@ public class Context implements IContext {
 		}
 
 		@Override
-		public String getFilePath() {
+		public String getPath() {
 			return "__INTERNAL__"; // avoid crash in unregister
 		}
 
@@ -908,15 +910,59 @@ public class Context implements IContext {
 		if(globals!=this)
 			return globals.findSection(section);
 		else {
-			ISection result = SectionLocator.findSection(declarations.values(), section);
-			if(result!=null) 
-				return result;
-			ICodeStore store = ICodeStore.getInstance();
-			if(store!=null)
-				return store.findSection(section);
-				else
-					return null;
+			String path = section.getPath();
+			if(path.startsWith("store:/")) 
+				return findStoreSection(section);
+			else
+				return findFileSection(section, declarations.values());
 		}
+	}
+	
+	ISection findStoreSection(ISection section) {
+		IDeclaration declaration = findStoreDeclaration(section.getPath());
+		if(declaration==null)
+			return null;
+		else {
+			Section converted = new Section(section);
+			converted.setPath(declaration.getPath());
+			return findFileSection(converted, Collections.singletonList(declaration));
+		}
+	}
+
+	private IDeclaration findStoreDeclaration(String path) {
+		path = path.substring("store:/".length());
+		int idx = path.indexOf("/");
+		String type = path.substring(0, idx);
+		String name = path.substring(idx + 1);
+		switch(type) {
+		case "test":
+			return getTest(new Identifier(name), true);
+		case "method":
+			{
+				idx = name.indexOf("/");
+				String proto = name.substring(idx + 1);
+				name = name.substring(0, idx);
+				MethodDeclarationMap methods = getRegisteredDeclaration(MethodDeclarationMap.class, new Identifier(name), true);
+				if(methods==null)
+					return null;
+				else
+					return methods.get(proto);
+			}
+		default:
+			return getRegisteredDeclaration(IDeclaration.class, new Identifier(name), true);
+			
+		}
+	}
+
+	ISection findFileSection(ISection section, Collection<IDeclaration> declarations) {
+		ISection result = SectionLocator.findSection(declarations, section);
+		if(result!=null) 
+			return result;
+		ICodeStore store = ICodeStore.getInstance();
+		if(store!=null)
+			return store.findSection(section);
+		else
+			return null;
 	}
 
 
