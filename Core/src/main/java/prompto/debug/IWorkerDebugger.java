@@ -22,4 +22,5 @@ public interface IWorkerDebugger {
 	void stepOut();
 	void stepOver();
 	Collection<? extends IVariable> getVariables(IStackFrame frame);
+	IVariable getVariable(IStackFrame frame, String variableName);
 }

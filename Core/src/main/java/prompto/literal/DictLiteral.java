@@ -18,12 +18,12 @@ import prompto.type.IType;
 import prompto.type.MissingType;
 import prompto.utils.CodeWriter;
 import prompto.utils.TypeUtils;
-import prompto.value.Dictionary;
+import prompto.value.DictionaryValue;
 import prompto.value.IValue;
-import prompto.value.Text;
+import prompto.value.TextValue;
 
 
-public class DictLiteral extends Literal<Dictionary> {
+public class DictLiteral extends Literal<DictionaryValue> {
 
 	// we can only compute keys by evaluating key expressions
 	// so we can't just inherit from Map<String,Expression>. 
@@ -33,13 +33,13 @@ public class DictLiteral extends Literal<Dictionary> {
 	IType itemType = null;
 	
 	public DictLiteral(boolean mutable) {
-		super("<:>",new Dictionary(MissingType.instance(), mutable));
+		super("<:>",new DictionaryValue(MissingType.instance(), mutable));
 		this.entries = new DictEntryList();
 		this.mutable = mutable;
 	}
 	
 	public DictLiteral(DictEntryList entries, boolean mutable) {
-		super(()->entries.toString(), new Dictionary(MissingType.instance(), mutable));
+		super(()->entries.toString(), new DictionaryValue(MissingType.instance(), mutable));
 		this.entries = entries;
 		this.mutable = mutable;
 	}
@@ -74,14 +74,14 @@ public class DictLiteral extends Literal<Dictionary> {
 	public IValue interpret(Context context) throws PromptoError {
 		if(entries.size()>0) {
 			check(context); // to compute itemType
-			PromptoDict<Text,IValue> dict = new PromptoDict<Text, IValue>(true);
+			PromptoDict<TextValue,IValue> dict = new PromptoDict<TextValue, IValue>(true);
 			for(DictEntry e : entries) {
-				Text key = e.getKey().asText();
+				TextValue key = e.getKey().asText();
 				IValue val = e.getValue().interpret(context); 
 				dict.put(key, val);
 			}
 			dict.setMutable(mutable);
-			return new Dictionary(itemType, dict);
+			return new DictionaryValue(itemType, dict);
 		} else
 			return value;
 	}

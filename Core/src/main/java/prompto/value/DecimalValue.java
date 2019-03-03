@@ -3,6 +3,11 @@ package prompto.value;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Map;
+import java.util.function.Function;
+
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -16,21 +21,18 @@ import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
-import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.type.DecimalType;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-
-public class Decimal extends BaseValue implements INumber, Comparable<INumber>, IMultiplyable {
+public class DecimalValue extends BaseValue implements INumber, Comparable<INumber>, IMultiplyable {
 	
-	public static Decimal Parse(String text) {
-		return new Decimal(Double.parseDouble(text));
+	public static DecimalValue Parse(String text) {
+		return new DecimalValue(Double.parseDouble(text));
 	}
 
 	double value;
 
-	public Decimal(double value) {
+	public DecimalValue(double value) {
 		super(DecimalType.instance());
 		this.value = value;
 	}
@@ -52,10 +54,10 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 
 	@Override
 	public IValue plus(Context context, IValue value) {
-		if (value instanceof Integer)
-			return new Decimal(this.value + ((Integer) value).longValue());
-		else if (value instanceof Decimal)
-			return new Decimal(this.value + ((Decimal) value).doubleValue());
+		if (value instanceof IntegerValue)
+			return new DecimalValue(this.value + ((IntegerValue) value).longValue());
+		else if (value instanceof DecimalValue)
+			return new DecimalValue(this.value + ((DecimalValue) value).doubleValue());
 		else
 			throw new SyntaxError("Illegal: Decimal + " + value.getClass().getSimpleName());
 	}
@@ -86,10 +88,10 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 
 	@Override
 	public IValue minus(Context context, IValue value) {
-		if (value instanceof Integer)
-			return new Decimal(this.value - ((Integer) value).longValue());
-		else if (value instanceof Decimal)
-			return new Decimal(this.value - ((Decimal) value).doubleValue());
+		if (value instanceof IntegerValue)
+			return new DecimalValue(this.value - ((IntegerValue) value).longValue());
+		else if (value instanceof DecimalValue)
+			return new DecimalValue(this.value - ((DecimalValue) value).doubleValue());
 		else
 			throw new SyntaxError("Illegal: Decimal - " + value.getClass().getSimpleName());
 	}
@@ -101,10 +103,10 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 
 	@Override
 	public IValue multiply(Context context, IValue value) {
-		if (value instanceof Integer)
-			return new Decimal(this.doubleValue() * ((Integer) value).longValue());
-		else if (value instanceof Decimal)
-			return new Decimal(this.doubleValue() * ((Decimal) value).doubleValue());
+		if (value instanceof IntegerValue)
+			return new DecimalValue(this.doubleValue() * ((IntegerValue) value).longValue());
+		else if (value instanceof DecimalValue)
+			return new DecimalValue(this.doubleValue() * ((DecimalValue) value).doubleValue());
 		else
 			throw new SyntaxError("Illegal: Decimal * " + value.getClass().getSimpleName());
 	}
@@ -120,7 +122,7 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 			if (((INumber) value).doubleValue() == 0.0)
 				throw new DivideByZeroError();
 			else
-				return new Decimal(this.doubleValue() / ((INumber) value).doubleValue());
+				return new DecimalValue(this.doubleValue() / ((INumber) value).doubleValue());
 		} else
 			throw new SyntaxError("Illegal: Decimal / " + value.getClass().getSimpleName());
 	}
@@ -132,11 +134,11 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 
 	@Override
 	public IValue intDivide(Context context, IValue value) throws PromptoError {
-		if (value instanceof Integer) {
-			if (((Integer) value).longValue() == 0)
+		if (value instanceof IntegerValue) {
+			if (((IntegerValue) value).longValue() == 0)
 				throw new DivideByZeroError();
 			else
-				return new Integer(this.longValue() / ((Integer) value).longValue());
+				return new IntegerValue(this.longValue() / ((IntegerValue) value).longValue());
 		} else
 			throw new SyntaxError("Illegal: Decimal \\ " + value.getClass().getSimpleName());
 	}
@@ -153,7 +155,7 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 			if (((INumber) value).doubleValue() == 0.0)
 				throw new DivideByZeroError();
 			else
-				return new Decimal(this.doubleValue() % ((INumber) value).doubleValue());
+				return new DecimalValue(this.doubleValue() % ((INumber) value).doubleValue());
 		} else
 			throw new SyntaxError("Illegal: Decimal % " + value.getClass().getSimpleName());
 	}
@@ -199,10 +201,10 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Integer)
-			return value == ((Integer) obj).value;
-		else if (obj instanceof Decimal)
-			return value == ((Decimal) obj).value;
+		if (obj instanceof IntegerValue)
+			return value == ((IntegerValue) obj).value;
+		else if (obj instanceof DecimalValue)
+			return value == ((DecimalValue) obj).value;
 		else
 			return false;
 	}
@@ -230,7 +232,13 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
+	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
+		return JsonNodeFactory.instance.numberNode(value);
+	}
+
+
+	@Override
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
 		try {
 			generator.writeNumber(value);
 		} catch(IOException e) {
@@ -239,7 +247,7 @@ public class Decimal extends BaseValue implements INumber, Comparable<INumber>, 
 	}
 
 	public IValue negate() {
-		return new Decimal(-value);
+		return new DecimalValue(-value);
 	}
 	
 	public static ResultInfo compileNegate(Context context, MethodInfo method, Flags flags, ResultInfo value) {

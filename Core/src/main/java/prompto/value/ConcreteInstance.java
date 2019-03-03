@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import prompto.argument.IArgument;
 import prompto.declaration.AttributeDeclaration;
@@ -34,6 +35,9 @@ import prompto.type.IntegerType;
 import prompto.type.TextType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class ConcreteInstance extends BaseValue implements IInstance, IMultiplyable {
 
@@ -143,7 +147,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		} else if(getDeclaration().hasAttribute(context, attrName) || IStore.dbIdName.equals(attrName.toString()))
 			return values.getOrDefault(attrName, NullValue.instance());
 		else if("text".equals(attrName.toString()))
-			return new Text(this.toString());
+			return new TextValue(this.toString());
 		else
 			return NullValue.instance();
 	}
@@ -211,8 +215,8 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	}
 
 	private IValue autocast(AttributeDeclaration decl, IValue value) {
-		if(value!=null && value instanceof prompto.value.Integer && decl.getType()==DecimalType.instance())
-			value = new Decimal(((prompto.value.Integer)value).doubleValue());
+		if(value!=null && value instanceof IntegerValue && decl.getType()==DecimalType.instance())
+			value = new DecimalValue(((IntegerValue)value).doubleValue());
 		return value;
 	}
 
@@ -307,7 +311,16 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	}
 
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
+	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
+		ObjectNode result = JsonNodeFactory.instance.objectNode();
+		for(Entry<Identifier, IValue> entry : values.entrySet())
+			result.set(entry.getKey().toString(), producer.apply(entry.getValue()));
+		return result;
+	}
+	
+	
+	@Override
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
 		try {
 			if(withType) {
 				generator.writeStartObject();
@@ -346,7 +359,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 				generator.writeString(value.getType().getTypeName());
 				generator.writeFieldName("value");
 			}
-			value.toJson(context, generator, id, entry.getKey(), withType, data);
+			value.toJsonStream(context, generator, id, entry.getKey().toString(), withType, data);
 			if(wrap) 
 				generator.writeEndObject();
 	}

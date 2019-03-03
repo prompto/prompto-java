@@ -15,7 +15,8 @@ import prompto.parser.EIndentingLexer;
 import prompto.parser.EPromptoBuilder;
 import prompto.runtime.Context;
 import prompto.runtime.utils.Out;
-import prompto.value.Integer;
+import prompto.value.IValue;
+import prompto.value.IntegerValue;
 
 
 
@@ -35,24 +36,24 @@ public class TestPrecedence extends BaseEParserTest {
 	public void test3Minuses() throws Exception {
 		IExpression exp = parse_expression("1-2-3-4");
 		Context context = Context.newGlobalContext();
-		Object value = exp.interpret(context);
-		assertEquals(-8L,((Integer)value).longValue());
+		IValue value = exp.interpret(context);
+		assertEquals(-8L,((IntegerValue)value).longValue());
 	}
 	
 	@Test
 	public void test2Plus3Minuses() throws Exception {
 		IExpression exp = parse_expression("1+2-3+4-5-6");
 		Context context = Context.newGlobalContext();
-		Object value = exp.interpret(context);
-		assertEquals(-7L,((Integer)value).longValue());
+		IValue value = exp.interpret(context);
+		assertEquals(-7L,((IntegerValue)value).longValue());
 	}
 	
 	@Test
 	public void test1Star1Plus() throws Exception {
 		IExpression exp = parse_expression("1*2+3");
 		Context context = Context.newGlobalContext();
-		Object value = exp.interpret(context);
-		assertEquals(5L,((Integer)value).longValue());
+		IValue value = exp.interpret(context);
+		assertEquals(5L,((IntegerValue)value).longValue());
 	}
 
 	@Test

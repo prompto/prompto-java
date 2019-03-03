@@ -25,7 +25,7 @@ import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.value.Boolean;
+import prompto.value.BooleanValue;
 import prompto.value.IValue;
 
 public class AndExpression implements IPredicateExpression, IAssertion {
@@ -82,9 +82,9 @@ public class AndExpression implements IPredicateExpression, IAssertion {
 	}
 	
 	private IValue interpret(IValue lval, IValue rval) throws PromptoError {
-		if(lval instanceof Boolean) {
-			if(rval instanceof Boolean)
-				return Boolean.valueOf(((Boolean)lval).getValue() && ((Boolean)rval).getValue());
+		if(lval instanceof BooleanValue) {
+			if(rval instanceof BooleanValue)
+				return BooleanValue.valueOf(((BooleanValue)lval).getValue() && ((BooleanValue)rval).getValue());
 			else
 				throw new SyntaxError("Illegal: Boolean and " + rval.getClass().getSimpleName());
 		} else
@@ -94,13 +94,13 @@ public class AndExpression implements IPredicateExpression, IAssertion {
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		ResultInfo li = left.compile(context, method, flags.withPrimitive(true));
-		if(Boolean.class==li.getType())
+		if(BooleanValue.class==li.getType())
 			CompilerUtils.BooleanToboolean(method);
 		IInstructionListener finalOffset = method.addOffsetListener(new OffsetListenerConstant());
 		method.activateOffsetListener(finalOffset);
 		method.addInstruction(Opcode.IFEQ, finalOffset);
 		ResultInfo ri = right.compile(context, method, flags.withPrimitive(true));
-		if(Boolean.class==ri.getType())
+		if(BooleanValue.class==ri.getType())
 			CompilerUtils.BooleanToboolean(method);
 		method.addInstruction(Opcode.IFEQ, new ShortOperand((short)7));
 		StackState branchState = method.captureStackState();
@@ -132,7 +132,7 @@ public class AndExpression implements IPredicateExpression, IAssertion {
 		IValue lval = left.interpret(context);
 		IValue rval = right.interpret(context);
 		IValue result = interpret(lval, rval);
-		if(result==Boolean.TRUE) 
+		if(result==BooleanValue.TRUE) 
 			return true;
 		String expected = buildExpectedMessage(context, test);
 		String actual = lval.toString() + operatorToDialect(test.getDialect()) + rval.toString();
@@ -164,14 +164,14 @@ public class AndExpression implements IPredicateExpression, IAssertion {
 		StackState finalState = method.captureStackState();
 		// compile left and store in local
 		ResultInfo info = this.left.compile(context, method, flags.withPrimitive(true));
-		if(Boolean.class==info.getType())
+		if(BooleanValue.class==info.getType())
 			CompilerUtils.BooleanToboolean(method);
 		String leftName = method.nextTransientName("left");
 		StackLocal left = method.registerLocal(leftName, VerifierType.ITEM_Integer, new ClassConstant(boolean.class));
 		CompilerUtils.compileISTORE(method, left);
 		// compile right and store in local
 		info = this.right.compile(context, method, flags.withPrimitive(true));
-		if(Boolean.class==info.getType())
+		if(BooleanValue.class==info.getType())
 			CompilerUtils.BooleanToboolean(method);
 		String rightName = method.nextTransientName("right");
 		StackLocal right = method.registerLocal(rightName, VerifierType.ITEM_Integer, new ClassConstant(boolean.class));

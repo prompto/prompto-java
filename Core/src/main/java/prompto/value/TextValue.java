@@ -5,8 +5,11 @@ import java.lang.reflect.Type;
 import java.text.Collator;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -29,11 +32,11 @@ import prompto.runtime.Context;
 import prompto.type.TextType;
 
 
-public class Text extends BaseValue implements Comparable<Text>, IContainer<Character>, ISliceable<Character>, IMultiplyable {
+public class TextValue extends BaseValue implements Comparable<TextValue>, IContainer<CharacterValue>, ISliceable<CharacterValue>, IMultiplyable {
 
 	String value;
 
-	public Text(String value) {
+	public TextValue(String value) {
 		super(TextType.instance());
 		this.value = value;
 	}
@@ -50,7 +53,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	
 	@Override
 	public IValue plus(Context context, IValue value) {
-		return new Text(this.value + value.toString());
+		return new TextValue(this.value + value.toString());
 	}
 
 	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
@@ -68,11 +71,11 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	
 	@Override
 	public IValue multiply(Context context, IValue value) throws PromptoError {
-		if (value instanceof Integer) {
-			int count = (int) ((Integer) value).longValue();
+		if (value instanceof IntegerValue) {
+			int count = (int) ((IntegerValue) value).longValue();
 			if (count < 0)
 				throw new SyntaxError("Negative repeat count:" + count);
-			return new Text(PromptoString.multiply(this.value, count));
+			return new TextValue(PromptoString.multiply(this.value, count));
 		} else
 			throw new SyntaxError("Illegal: Chararacter * " + value.getClass().getSimpleName());
 	}
@@ -93,14 +96,14 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	
 	
 	@Override
-	public int compareTo(Text obj) {
+	public int compareTo(TextValue obj) {
 		return value.compareTo(obj.value);
 	}
 
 	@Override
 	public int compareTo(Context context, IValue value) throws PromptoError {
-		if (value instanceof Text)
-			return this.value.compareTo(((Text) value).value);
+		if (value instanceof TextValue)
+			return this.value.compareTo(((TextValue) value).value);
 		else
 			throw new SyntaxError("Illegal comparison: Text + " + value.getClass().getSimpleName());
 	}
@@ -116,10 +119,10 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 
 	@Override
 	public boolean hasItem(Context context, IValue value) throws PromptoError {
-		if (value instanceof Character)
-			return this.value.indexOf(((Character) value).value) >= 0;
-		else if (value instanceof Text)
-			return this.value.indexOf(((Text) value).value) >= 0;
+		if (value instanceof CharacterValue)
+			return this.value.indexOf(((CharacterValue) value).value) >= 0;
+		else if (value instanceof TextValue)
+			return this.value.indexOf(((TextValue) value).value) >= 0;
 		else
 			throw new SyntaxError("Illegal contain: Text + " + value.getClass().getSimpleName());
 	}
@@ -128,16 +131,16 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) {
 		String name = id.toString();
 		if ("count".equals(name))
-			return new Integer(value.length());
+			return new IntegerValue(value.length());
 		else
 			return super.getMember(context, id, autoCreate);
 	}
 
 	@Override
-	public Character getItem(Context context, IValue index) throws PromptoError {
+	public CharacterValue getItem(Context context, IValue index) throws PromptoError {
 		try {
-			if (index instanceof Integer)
-				return new Character(value.charAt((int) ((Integer) index).longValue() - 1));
+			if (index instanceof IntegerValue)
+				return new CharacterValue(value.charAt((int) ((IntegerValue) index).longValue() - 1));
 			else
 				throw new SyntaxError("No such item:" + index.toString());
 		} catch (IndexOutOfBoundsException e) {
@@ -164,11 +167,11 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	}
 	
 	@Override
-	public IterableWithCounts<Character> getIterable(Context context) {
+	public IterableWithCounts<CharacterValue> getIterable(Context context) {
 		return new CharacterIterable(context);
 	}
 
-	class CharacterIterable implements IterableWithCounts<Character> {
+	class CharacterIterable implements IterableWithCounts<CharacterValue> {
 
 		Context context;
 		
@@ -187,8 +190,8 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 		}
 		
 		@Override
-		public Iterator<Character> iterator() {
-			return new Iterator<Character>() {
+		public Iterator<CharacterValue> iterator() {
+			return new Iterator<CharacterValue>() {
 				int index = -1;
 				
 				@Override
@@ -197,8 +200,8 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 				}
 				
 				@Override
-				public Character next() {
-					return new Character(value.charAt(++index));
+				public CharacterValue next() {
+					return new CharacterValue(value.charAt(++index));
 				}
 				
 				@Override
@@ -215,20 +218,20 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	}
 
 	@Override
-	public ISliceable<Character> slice(Integer fi, Integer li) throws PromptoError {
+	public ISliceable<CharacterValue> slice(IntegerValue fi, IntegerValue li) throws PromptoError {
 		int first = checkSliceFirst(fi);
 		int last = checkSliceLast(li);
-		return new Text(value.substring(first - 1, last ));
+		return new TextValue(value.substring(first - 1, last ));
 	}
 	
-	private int checkSliceFirst(Integer fi) throws IndexOutOfRangeError {
+	private int checkSliceFirst(IntegerValue fi) throws IndexOutOfRangeError {
 		int value = (fi == null) ? 1 : (int) fi.longValue();
 		if (value < 1 || value > this.value.length())
 			throw new IndexOutOfRangeError();
 		return value;
 	}
 
-	private int checkSliceLast(Integer li) throws IndexOutOfRangeError {
+	private int checkSliceLast(IntegerValue li) throws IndexOutOfRangeError {
 		int value = (li == null) ? this.value.length() : (int) li.longValue();
 		if (value < 0)
 			value = this.value.length() + 1 + (int) li.longValue();
@@ -299,8 +302,8 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Text)
-			return value.equals(((Text) obj).value);
+		if (obj instanceof TextValue)
+			return value.equals(((TextValue) obj).value);
 		else
 			return value.equals(obj);
 	}
@@ -341,7 +344,7 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	
     @Override
     public boolean roughly(Context context, IValue obj) throws PromptoError {
-        if (obj instanceof Character || obj instanceof Text) {
+        if (obj instanceof CharacterValue || obj instanceof TextValue) {
         	Collator c = Collator.getInstance();
         	c.setStrength(Collator.PRIMARY);
         	return c.compare(value, obj.toString())==0;
@@ -351,10 +354,10 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
     
     @Override
     public boolean contains(Context context, IValue obj) throws PromptoError {
-        if (obj instanceof Text)
-        	return value.contains(((Text)obj).value);
-        else if(obj instanceof Character)
-        	return value.indexOf(((Character)obj).value) >= 0;
+        if (obj instanceof TextValue)
+        	return value.contains(((TextValue)obj).value);
+        else if(obj instanceof CharacterValue)
+        	return value.indexOf(((CharacterValue)obj).value) >= 0;
         else
             return false;
     }
@@ -365,7 +368,12 @@ public class Text extends BaseValue implements Comparable<Text>, IContainer<Char
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
+	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
+		return JsonNodeFactory.instance.textNode(value);
+	}
+	
+	@Override
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
 		try {
 			generator.writeString(value);
 		} catch(IOException e) {

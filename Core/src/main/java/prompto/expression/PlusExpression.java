@@ -22,18 +22,18 @@ import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.value.Character;
-import prompto.value.Date;
-import prompto.value.DateTime;
-import prompto.value.Decimal;
-import prompto.value.Dictionary;
+import prompto.value.CharacterValue;
+import prompto.value.DateValue;
+import prompto.value.DateTimeValue;
+import prompto.value.DecimalValue;
+import prompto.value.DictionaryValue;
 import prompto.value.IValue;
-import prompto.value.Integer;
+import prompto.value.IntegerValue;
 import prompto.value.ListValue;
-import prompto.value.Period;
+import prompto.value.PeriodValue;
 import prompto.value.SetValue;
-import prompto.value.Text;
-import prompto.value.Time;
+import prompto.value.TextValue;
+import prompto.value.TimeValue;
 import prompto.value.TupleValue;
 
 public class PlusExpression implements IExpression {
@@ -76,17 +76,17 @@ public class PlusExpression implements IExpression {
 	
 	private static Map<Class<?>, IOperatorFunction> createAdders() {
 		Map<Class<?>, IOperatorFunction> map = new HashMap<>();
-		map.put(String.class, Text::compilePlus);
-		map.put(java.lang.Character.class, Character::compilePlus);
-		map.put(double.class, Decimal::compilePlus);
-		map.put(Double.class, Decimal::compilePlus);
-		map.put(long.class, Integer::compilePlus);
-		map.put(Long.class, Integer::compilePlus);
-		map.put(PromptoDate.class, Date::compilePlus);
-		map.put(PromptoDateTime.class, DateTime::compilePlus);
-		map.put(PromptoTime.class, Time::compilePlus);
-		map.put(PromptoPeriod.class, Period::compilePlus);
-		map.put(PromptoDict.class, Dictionary::compilePlus);
+		map.put(String.class, TextValue::compilePlus);
+		map.put(java.lang.Character.class, CharacterValue::compilePlus);
+		map.put(double.class, DecimalValue::compilePlus);
+		map.put(Double.class, DecimalValue::compilePlus);
+		map.put(long.class, IntegerValue::compilePlus);
+		map.put(Long.class, IntegerValue::compilePlus);
+		map.put(PromptoDate.class, DateValue::compilePlus);
+		map.put(PromptoDateTime.class, DateTimeValue::compilePlus);
+		map.put(PromptoTime.class, TimeValue::compilePlus);
+		map.put(PromptoPeriod.class, PeriodValue::compilePlus);
+		map.put(PromptoDict.class, DictionaryValue::compilePlus);
 		map.put(PromptoSet.class, SetValue::compilePlus);
 		map.put(PromptoTuple.class, TupleValue::compilePlus);
 		map.put(PromptoList.class, ListValue::compilePlus);

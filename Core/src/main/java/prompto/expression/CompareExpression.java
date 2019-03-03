@@ -39,17 +39,17 @@ import prompto.store.IStore;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.value.Boolean;
-import prompto.value.Character;
-import prompto.value.Date;
-import prompto.value.DateTime;
-import prompto.value.Decimal;
+import prompto.value.BooleanValue;
+import prompto.value.CharacterValue;
+import prompto.value.DateValue;
+import prompto.value.DateTimeValue;
+import prompto.value.DecimalValue;
 import prompto.value.IInstance;
 import prompto.value.IValue;
-import prompto.value.Integer;
-import prompto.value.Text;
-import prompto.value.Time;
-import prompto.value.Version;
+import prompto.value.IntegerValue;
+import prompto.value.TextValue;
+import prompto.value.TimeValue;
+import prompto.value.VersionValue;
 
 public class CompareExpression extends Section implements IPredicateExpression, IAssertion {
 
@@ -91,17 +91,17 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 		return compare(context, lval, rval);
 	}
 
-	private Boolean compare(Context context, IValue lval, IValue rval) throws PromptoError {
+	private BooleanValue compare(Context context, IValue lval, IValue rval) throws PromptoError {
 		int cmp = lval.compareTo(context, rval);
 		switch (operator) {
 		case GT:
-			return Boolean.valueOf(cmp > 0);
+			return BooleanValue.valueOf(cmp > 0);
 		case LT:
-			return Boolean.valueOf(cmp < 0);
+			return BooleanValue.valueOf(cmp < 0);
 		case GTE:
-			return Boolean.valueOf(cmp >= 0);
+			return BooleanValue.valueOf(cmp >= 0);
 		case LTE:
-			return Boolean.valueOf(cmp <= 0);
+			return BooleanValue.valueOf(cmp <= 0);
 		default:
 			throw new SyntaxError("Illegal compare operand: " + operator.toString());
 		}
@@ -111,17 +111,17 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 	
 	private static Map<Class<?>, IOperatorFunction> createTesters() {
 		Map<Class<?>, IOperatorFunction> map = new HashMap<>(); 
-		map.put(char.class, Character::compileCompareTo);
-		map.put(java.lang.Character.class, Character::compileCompareTo); 
-		map.put(String.class, Text::compileCompareTo); 
-		map.put(double.class, Decimal::compileCompareTo);
-		map.put(Double.class, Decimal::compileCompareTo); 
-		map.put(long.class, Integer::compileCompareTo);
-		map.put(Long.class, Integer::compileCompareTo); 
-		map.put(PromptoDate.class, Date::compileCompareTo); 
-		map.put(PromptoDateTime.class, DateTime::compileCompareTo); 
-		map.put(PromptoTime.class, Time::compileCompareTo); 
-		map.put(PromptoVersion.class, Version::compileCompareTo); 
+		map.put(char.class, CharacterValue::compileCompareTo);
+		map.put(java.lang.Character.class, CharacterValue::compileCompareTo); 
+		map.put(String.class, TextValue::compileCompareTo); 
+		map.put(double.class, DecimalValue::compileCompareTo);
+		map.put(Double.class, DecimalValue::compileCompareTo); 
+		map.put(long.class, IntegerValue::compileCompareTo);
+		map.put(Long.class, IntegerValue::compileCompareTo); 
+		map.put(PromptoDate.class, DateValue::compileCompareTo); 
+		map.put(PromptoDateTime.class, DateTimeValue::compileCompareTo); 
+		map.put(PromptoTime.class, TimeValue::compileCompareTo); 
+		map.put(PromptoVersion.class, VersionValue::compileCompareTo); 
 		return map;
 	}
 
@@ -236,7 +236,7 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 		IValue lval = left.interpret(context);
 		IValue rval = right.interpret(context);
 		IValue result = compare(context, lval, rval);
-		if(result==Boolean.TRUE) 
+		if(result==BooleanValue.TRUE) 
 			return true;
 		String expected = buildExpectedMessage(context, test);
 		String actual = lval.toString() + " " + operator.toString() + " " + rval.toString();
@@ -273,7 +273,7 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 		context.registerValue(new Variable(new Identifier(rightName), rightType));
 		CompareExpression newExp = new CompareExpression(newLeft, this.operator, newRight);
 		ResultInfo info = newExp.compile(context, method, flags.withPrimitive(true));
-		if(Boolean.class==info.getType())
+		if(BooleanValue.class==info.getType())
 			CompilerUtils.BooleanToboolean(method);
 		// 1 = success
 		IInstructionListener finalListener = method.addOffsetListener(new OffsetListenerConstant());

@@ -29,7 +29,7 @@ import prompto.type.CategoryType;
 import prompto.type.CursorType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.value.Cursor;
+import prompto.value.CursorValue;
 import prompto.value.IValue;
 
 
@@ -213,7 +213,7 @@ public class FetchManyExpression extends FetchOneExpression {
 		IQuery query = buildFetchManyQuery(context, store);
 		IStoredIterable docs = store.fetchMany(query);
 		IType type = this.type==null ? AnyType.instance() : this.type;
-		return new Cursor(context, type, docs);
+		return new CursorValue(context, type, docs);
 	}
 	
 	private IQuery buildFetchManyQuery(Context context, IStore store) {
@@ -240,9 +240,9 @@ public class FetchManyExpression extends FetchOneExpression {
 		if(exp==null)
 			return null;
 		IValue value = exp.interpret(context);
-		if(!(value instanceof prompto.value.Integer))
+		if(!(value instanceof prompto.value.IntegerValue))
 			throw new InvalidValueError("Expecting an Integer, got:" + value.getType().toString());
-		return ((prompto.value.Integer)value).longValue();
+		return ((prompto.value.IntegerValue)value).longValue();
 	}	
 
 	@Override

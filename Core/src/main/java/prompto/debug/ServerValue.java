@@ -1,21 +1,33 @@
 package prompto.debug;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
+import prompto.grammar.INamed;
+import prompto.runtime.Context;
+
 public class ServerValue implements IValue {
 	
+	Context context;
 	prompto.value.IValue value;
 
-	public ServerValue(prompto.value.IValue value) {
-		this.value = value;
+	public ServerValue(Context context, INamed named) {
+		this.context = context;
+		this.value = context.getValue(named.getId());
 	}
 	
 	@Override
 	public String getTypeName() {
-		return this.value.getType().getTypeName();
+		return value.getType().getTypeName();
 	}
 	
 	@Override
 	public String getValueString() {
-		return this.value.toString();
+		return value.toString();
+	}
+	
+	@Override
+	public JsonNode getValueData() {
+		return value.toTypedJsonNode(context);
 	}
 
 }

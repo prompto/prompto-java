@@ -19,11 +19,11 @@ import prompto.type.IntegerType;
 import prompto.type.TextType;
 import prompto.utils.ExpressionList;
 import prompto.utils.TypeUtils;
-import prompto.value.Character;
-import prompto.value.Decimal;
+import prompto.value.CharacterValue;
+import prompto.value.DecimalValue;
 import prompto.value.IContainer;
 import prompto.value.IValue;
-import prompto.value.Integer;
+import prompto.value.IntegerValue;
 
 public abstract class ContainerLiteral<T extends IContainer<IValue>> extends Literal<T> {
 
@@ -60,9 +60,9 @@ public abstract class ContainerLiteral<T extends IContainer<IValue>> extends Lit
 		if(item==null)
 			return item;
 		if(DecimalType.instance()==itemType && item.getType()==IntegerType.instance())
-			return new Decimal(((Integer)item).doubleValue());
+			return new DecimalValue(((IntegerValue)item).doubleValue());
 		else if(TextType.instance()==itemType && item.getType()==CharacterType.instance())
-			return ((Character)item).asText();
+			return ((CharacterValue)item).asText();
 		else
 			return item;
 	}

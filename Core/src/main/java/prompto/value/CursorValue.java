@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import prompto.error.PromptoError;
@@ -19,18 +20,24 @@ import prompto.store.IStoredIterable;
 import prompto.type.CategoryType;
 import prompto.type.CursorType;
 import prompto.type.IType;
+import prompto.type.IntegerType;
 import prompto.type.IterableType;
 import prompto.type.ListType;
+import prompto.type.TextType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class Cursor extends BaseValue implements IIterable<IValue>, IterableWithCounts<IValue>, IFilterable {
+
+public class CursorValue extends BaseValue implements IIterable<IValue>, IterableWithCounts<IValue>, IFilterable {
 
 	Context context;
 	IStoredIterable iterable;
 	boolean mutable;
 	
-	public Cursor(Context context, IType itemType, IStoredIterable documents) {
+	public CursorValue(Context context, IType itemType, IStoredIterable documents) {
 		super(new CursorType(itemType));
 		this.context = context;
 		this.iterable = documents;
@@ -104,15 +111,33 @@ public class Cursor extends BaseValue implements IIterable<IValue>, IterableWith
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) {
 		String name = id.toString();
 		if ("count".equals(name))
-			return new Integer(getCount());
+			return new IntegerValue(getCount());
 		else if ("totalCount".equals(name))
-			return new Integer(getTotalCount());
+			return new IntegerValue(getTotalCount());
 		else
 			throw new SyntaxError("No such member:" + name);
 	}
+	
+	@Override
+	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
+		ObjectNode result = JsonNodeFactory.instance.objectNode();
+		ObjectNode value = JsonNodeFactory.instance.objectNode();
+		value.put("typeName", TextType.instance().getTypeName());
+		value.put("value", getItemType().getTypeName());
+		result.set("itemTypeName", value);
+		value = JsonNodeFactory.instance.objectNode();
+		value.put("typeName", IntegerType.instance().getTypeName());
+		value.put("value", iterable.count());
+		result.set("count", value);
+		value = JsonNodeFactory.instance.objectNode();
+		value.put("typeName", IntegerType.instance().getTypeName());
+		value.put("value", iterable.totalCount());
+		result.set("totalCount", value);
+		return result;
+	}
 
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> data) {
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) {
 		try {
 			if(withType) {
 				generator.writeStartObject();
@@ -129,7 +154,7 @@ public class Cursor extends BaseValue implements IIterable<IValue>, IterableWith
 			generator.writeStartArray();
 			Iterator<IValue> iter = iterator();
 			while(iter.hasNext())
-				iter.next().toJson(context, generator, null, null, withType, data);
+				iter.next().toJsonStream(context, generator, null, null, withType, data);
 			generator.writeEndArray();
 			if(withType)
 				generator.writeEndObject();

@@ -7,6 +7,7 @@ import prompto.declaration.ConcreteMethodDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.NativeMethodDeclaration;
 import prompto.declaration.TestMethodDeclaration;
+import prompto.grammar.INamed;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.statement.IStatement;
@@ -51,6 +52,11 @@ public class ServerStackFrame extends LeanStackFrame {
 		return context.getInstances().stream()
 				.map((n)->new ServerVariable(context, n))
 				.collect(Collectors.toList());
+	}
+
+	public IVariable getVariable(String variableName) {
+		INamed named = context.getInstance(variableName);
+		return named==null ? null : new ServerVariable(context, named);
 	}
 
 }

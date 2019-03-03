@@ -34,7 +34,7 @@ import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IInstance;
 import prompto.value.IValue;
-import prompto.value.Text;
+import prompto.value.TextValue;
 
 public class CategorySymbol extends Symbol implements IExpression  {
 	
@@ -100,13 +100,13 @@ public class CategorySymbol extends Symbol implements IExpression  {
 				instance.setMember(context, assignment.getArgumentId(), value);
 			}
 		}
-		instance.setMember(context, new Identifier("name"), new Text(this.getId().toString()));
+		instance.setMember(context, new Identifier("name"), new TextValue(this.getId().toString()));
 		instance.setMutable(false);
 		return instance;
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
 		try {
 			generator.writeStartObject();
 			generator.writeFieldName("name");
@@ -116,7 +116,7 @@ public class CategorySymbol extends Symbol implements IExpression  {
 				for(ArgumentAssignment assignment : assignments) {
 					generator.writeFieldName(assignment.getArgument().getName());
 					IValue value = assignment.getExpression().interpret(context);
-					value.toJson(context, generator, instanceId, fieldName, withType, binaries);
+					value.toJsonStream(context, generator, instanceId, fieldName, withType, binaries);
 				}
 			}
 			generator.writeEndObject();

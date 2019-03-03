@@ -3,9 +3,9 @@ package prompto.literal;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.type.IntegerType;
-import prompto.value.Integer;
+import prompto.value.IntegerValue;
 
-public class HexaLiteral extends Literal<Integer> {
+public class HexaLiteral extends Literal<IntegerValue> {
 
 	
 	public HexaLiteral(String text) {
@@ -19,7 +19,7 @@ public class HexaLiteral extends Literal<Integer> {
 	}
 	
 	
-	static public Integer parseHexa(String text) {
+	static public IntegerValue parseHexa(String text) {
 		long value = 0;
 		for(char c : text.substring(2).toCharArray()) {
 			value <<= 4;
@@ -32,7 +32,7 @@ public class HexaLiteral extends Literal<Integer> {
 			else
 				throw new NumberFormatException(text + " is not a valid hexadecimal number");
 		}
-		return new Integer(value);
+		return new IntegerValue(value);
 	}
 	
 }

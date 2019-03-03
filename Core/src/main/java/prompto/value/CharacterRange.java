@@ -4,20 +4,20 @@ import prompto.intrinsic.PromptoRange;
 import prompto.type.CharacterType;
 
 
-public class CharacterRange extends RangeBase<Character> {
+public class CharacterRange extends RangeBase<CharacterValue> {
 
-	static class PromptoCharacterRange extends PromptoRange<Character> {
+	static class PromptoCharacterRange extends PromptoRange<CharacterValue> {
 
-		public PromptoCharacterRange(prompto.value.Character low, prompto.value.Character high) {
+		public PromptoCharacterRange(prompto.value.CharacterValue low, prompto.value.CharacterValue high) {
 			super(low, high);
 		}
 		
 		@Override
-		public prompto.value.Character getItem(long item) {
+		public prompto.value.CharacterValue getItem(long item) {
 			char result = (char)(low.getValue() + item - 1);
 			if(result>high.getValue())
 				throw new IndexOutOfBoundsException();
-			return new prompto.value.Character(result);
+			return new prompto.value.CharacterValue(result);
 		}
 		
 		@Override
@@ -33,24 +33,24 @@ public class CharacterRange extends RangeBase<Character> {
 		
 		@Override
 		public boolean contains(Object item) {
-			if(!(item instanceof prompto.value.Character))
+			if(!(item instanceof prompto.value.CharacterValue))
 				return false;
-			prompto.value.Character other = (prompto.value.Character)item;
+			prompto.value.CharacterValue other = (prompto.value.CharacterValue)item;
 			return other.compareTo(low)>=0 && high.compareTo(other)>=0;
 		}
 
 	}
 	
-	public CharacterRange(Character left, Character right) {
+	public CharacterRange(CharacterValue left, CharacterValue right) {
 		this(new PromptoCharacterRange(left, right));
 	}
 	
-	public CharacterRange(PromptoRange<Character> range) {
+	public CharacterRange(PromptoRange<CharacterValue> range) {
 		super(CharacterType.instance(), range);
 	}
 	
 	@Override
-	public RangeBase<Character> newInstance(PromptoRange<Character> range) {
+	public RangeBase<CharacterValue> newInstance(PromptoRange<CharacterValue> range) {
 		return new CharacterRange(range);
 	}
 

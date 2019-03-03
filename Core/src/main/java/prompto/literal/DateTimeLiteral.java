@@ -12,17 +12,17 @@ import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.DateTimeType;
 import prompto.type.IType;
-import prompto.value.DateTime;
+import prompto.value.DateTimeValue;
 
 
-public class DateTimeLiteral extends Literal<DateTime> {
+public class DateTimeLiteral extends Literal<DateTimeValue> {
 
 	public DateTimeLiteral(String text) {
 		super(text, parseDateTime(text.substring(1,text.length()-1)));
 	}
 	
 	public DateTimeLiteral(PromptoDateTime dateTime) {
-		super("'" + dateTime.toString() + "'" , new DateTime(dateTime));
+		super("'" + dateTime.toString() + "'" , new DateTimeValue(dateTime));
 	}
 
 	@Override
@@ -30,8 +30,8 @@ public class DateTimeLiteral extends Literal<DateTime> {
 		return DateTimeType.instance();
 	}
 	
-	public static DateTime parseDateTime(String text) {
-		return new DateTime(PromptoDateTime.parse(text));
+	public static DateTimeValue parseDateTime(String text) {
+		return new DateTimeValue(PromptoDateTime.parse(text));
 	}
 	
 	@Override

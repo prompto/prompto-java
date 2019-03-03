@@ -3,6 +3,7 @@ package prompto.value;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Function;
 import java.util.Set;
 
 import prompto.error.PromptoError;
@@ -16,17 +17,20 @@ import prompto.type.AnyType;
 import prompto.type.DocumentType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class Document extends BaseValue {
+public class DocumentValue extends BaseValue {
 	
 	PromptoDocument<Identifier,IValue> values = new PromptoDocument<Identifier,IValue>();
 	
-	public Document() {
+	public DocumentValue() {
 		super(DocumentType.instance());
 	}
 	
 
-	public Document(Context context, PromptoDocument<?, ?> doc) {
+	public DocumentValue(Context context, PromptoDocument<?, ?> doc) {
 		super(DocumentType.instance());
 		for(Object key : doc.keySet()) {
 			Object value = doc.get(key);
@@ -62,9 +66,9 @@ public class Document extends BaseValue {
     	if(values.containsKey(name))
     		return values.get(name);
     	else if("text".equals(name.toString()))
-    		return new Text(this.toString());
+    		return new TextValue(this.toString());
     	else if(autoCreate) {
-            IValue result = new Document();
+            IValue result = new DocumentValue();
             values.put(name, result);
             return result;
         } else
@@ -87,14 +91,14 @@ public class Document extends BaseValue {
 	
 	@Override
 	public void setItem(Context context, IValue item, IValue value) {
-		if(!(item instanceof Text))
+		if(!(item instanceof TextValue))
 			throw new InvalidValueError("Expected a Text, got:" + item.getClass().getName());
 		values.put(new Identifier(item.toString()), value);
 	}
 	
 	@Override
 	public IValue getItem(Context context, IValue item) {
-		if(!(item instanceof Text))
+		if(!(item instanceof TextValue))
 			throw new InvalidValueError("Expected a Text, got:" + item.getClass().getName());
 		return values.getOrDefault(new Identifier(item.toString()), NullValue.instance());
 	}
@@ -102,23 +106,32 @@ public class Document extends BaseValue {
 
 	@Override
 	public String toString() {
-		return values.toString(Document::toJson, false);
+		return values.toString(DocumentValue::toJson, false);
 	}
 	
 	static void toJson(IValue value, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> binaries) throws IOException{
-		value.toJson(null, generator, instanceId, new Identifier(fieldName), withType, binaries);
+		value.toJsonStream(null, generator, instanceId, fieldName, withType, binaries);
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
-		if(obj instanceof Document)
-			return values.equals(((Document)obj).values);
+		if(obj instanceof DocumentValue)
+			return values.equals(((DocumentValue)obj).values);
 		else
 			return false;
 	}
 	
+	
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
+	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
+		ObjectNode result = JsonNodeFactory.instance.objectNode();
+		for(Entry<Identifier, IValue> entry : values.entrySet())
+			result.set(entry.getKey().toString(), producer.apply(entry.getValue()));
+		return result;
+	}
+	
+	@Override
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
 		try {
 			if(withType) {
 				generator.writeStartObject();
@@ -133,7 +146,7 @@ public class Document extends BaseValue {
 				if(value==null)
 					generator.writeNull();
 				else
-					value.toJson(context, generator, System.identityHashCode(this), entry.getKey(), withType, binaries);
+					value.toJsonStream(context, generator, System.identityHashCode(this), entry.getKey().toString(), withType, binaries);
 			}
 			generator.writeEndObject();
 			if(withType)

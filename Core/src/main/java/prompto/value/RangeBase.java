@@ -1,6 +1,11 @@
 package prompto.value;
 
 import java.util.Iterator;
+import java.util.function.Function;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -17,6 +22,7 @@ import prompto.intrinsic.IterableWithCounts;
 import prompto.intrinsic.PromptoRange;
 import prompto.runtime.Context;
 import prompto.type.IType;
+import prompto.type.IntegerType;
 import prompto.type.RangeType;
 
 public abstract class RangeBase<T extends IValue> extends BaseValue implements IContainer<T>, IRange<T> {
@@ -79,9 +85,9 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 	
 	@Override
 	public T getItem(Context context, IValue index) throws PromptoError {
-		if (index instanceof Integer) {
+		if (index instanceof IntegerValue) {
 			try {
-				return range.getItem(((Integer) index).longValue());
+				return range.getItem(((IntegerValue) index).longValue());
 			} catch (IndexOutOfBoundsException e) {
 				throw new IndexOutOfRangeError();
 			}
@@ -102,7 +108,7 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 	}
 
 	@Override
-	public RangeBase<T> slice(Integer fi, Integer li) throws PromptoError {
+	public RangeBase<T> slice(IntegerValue fi, IntegerValue li) throws PromptoError {
 		try {
 			long _fi = fi==null ? 1L : fi.longValue();
 			long _li = li==null ? -1L : li.longValue();
@@ -163,7 +169,7 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 				@Override
 				public T next() {
 					try {
-						return getItem(context, new Integer(++index));
+						return getItem(context, new IntegerValue(++index));
 					} catch(Throwable t) {
 						throw new InternalError(t.getMessage());
 					}
@@ -178,6 +184,18 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 		}
 	}
 	
+	
+	@Override
+	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
+		ObjectNode result = JsonNodeFactory.instance.objectNode();
+		result.set("low", producer.apply(getLow()));
+		result.set("high", producer.apply(getHigh()));
+		ObjectNode value = JsonNodeFactory.instance.objectNode();
+		value.put("typeName", IntegerType.instance().getTypeName());
+		value.put("value", getLength());
+		result.set("count", value);
+		return result;
+	}
 
 
 }

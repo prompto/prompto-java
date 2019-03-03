@@ -10,12 +10,12 @@ import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
 import prompto.type.IType;
-import prompto.value.Boolean;
+import prompto.value.BooleanValue;
 
-public class BooleanLiteral extends Literal<Boolean> {
+public class BooleanLiteral extends Literal<BooleanValue> {
 
 	public BooleanLiteral(String text) {
-		super(text, Boolean.parse(text));
+		super(text, BooleanValue.parse(text));
 	}
 	
 	@Override

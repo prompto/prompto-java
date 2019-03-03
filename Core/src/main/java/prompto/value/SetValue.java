@@ -1,8 +1,16 @@
 package prompto.value;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Predicate;
+
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -13,6 +21,7 @@ import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.error.IndexOutOfRangeError;
 import prompto.error.PromptoError;
+import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
@@ -68,8 +77,8 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IFilterab
 
 	@Override
 	public IValue getItem(Context context, IValue index) throws PromptoError {
-		if (index instanceof Integer) {
-			int idx = (int)((Integer)index).longValue() - 1;
+		if (index instanceof IntegerValue) {
+			int idx = (int)((IntegerValue)index).longValue() - 1;
 			return getNthItem(idx);
 		} else
 			throw new SyntaxError("No such item:" + index.toString());
@@ -155,7 +164,7 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IFilterab
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) {
 		String name = id.toString();
 		if ("count".equals(name))
-			return new Integer(items.size());
+			return new IntegerValue(items.size());
 		else
 			return super.getMember(context, id, autoCreate);
 	}
@@ -241,5 +250,34 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IFilterab
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		method.addInstruction(Opcode.POP); // consume returned boolean
 		return info;
+	}
+	
+	@Override
+	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
+		ArrayNode result = JsonNodeFactory.instance.arrayNode();
+		for(IValue item : items)
+			result.add(producer.apply(item));
+		return result;
+	}
+
+	
+	@Override
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
+		try {
+			if(withType) {
+				generator.writeStartObject();
+				generator.writeFieldName("type");
+				generator.writeString(this.getType().getTypeName());
+				generator.writeFieldName("value");
+			}
+			generator.writeStartArray();
+			for(IValue value : this.items)
+				value.toJsonStream(context, generator, System.identityHashCode(this), null, withType, data);
+			generator.writeEndArray();
+			if(withType)
+				generator.writeEndObject();
+		} catch(IOException e) {
+			throw new ReadWriteError(e.getMessage());
+		}
 	}
 }

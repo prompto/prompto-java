@@ -3,6 +3,7 @@ package prompto.value;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Map;
+import java.util.function.Function;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -22,21 +23,23 @@ import prompto.runtime.Context;
 import prompto.type.TimeType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
 
-public class Time extends BaseValue implements Comparable<Time> {
-	public static Time Parse(String text) {
-		return new Time(PromptoTime.parse(text));
+public class TimeValue extends BaseValue implements Comparable<TimeValue> {
+	public static TimeValue Parse(String text) {
+		return new TimeValue(PromptoTime.parse(text));
 	}
 
 	PromptoTime value;
 
-	public Time(PromptoTime time) {
+	public TimeValue(PromptoTime time) {
 		super(TimeType.instance());
 		this.value = time;
 	}
 
-	public Time(int hours, int minutes, int seconds, int millis) {
+	public TimeValue(int hours, int minutes, int seconds, int millis) {
 		super(TimeType.instance());
 		this.value = new PromptoTime(hours, minutes, seconds, millis);
 	}
@@ -48,8 +51,8 @@ public class Time extends BaseValue implements Comparable<Time> {
 
 	@Override
 	public IValue plus(Context context, IValue value) {
-		if (value instanceof Period)
-			return new Time(this.value.plus(((Period)value).value));
+		if (value instanceof PeriodValue)
+			return new TimeValue(this.value.plus(((PeriodValue)value).value));
 		else
 			throw new SyntaxError("Illegal: Time + " + value.getClass().getSimpleName());
 	}
@@ -66,10 +69,10 @@ public class Time extends BaseValue implements Comparable<Time> {
 	
 	@Override
 	public IValue minus(Context context, IValue value) throws PromptoError {
-		if (value instanceof Time)
-			return new Period(this.value.minus(((Time)value).value));
-		else if (value instanceof Period)
-			return new Time(this.value.minus(((Period)value).value));
+		if (value instanceof TimeValue)
+			return new PeriodValue(this.value.minus(((TimeValue)value).value));
+		else if (value instanceof PeriodValue)
+			return new TimeValue(this.value.minus(((PeriodValue)value).value));
 		else
 			throw new SyntaxError("Illegal: Time - " + value.getClass().getSimpleName());
 	}
@@ -93,8 +96,8 @@ public class Time extends BaseValue implements Comparable<Time> {
 
 	@Override
 	public int compareTo(Context context, IValue value) {
-		if (value instanceof Time)
-			return this.value.compareTo(((Time) value).value);
+		if (value instanceof TimeValue)
+			return this.value.compareTo(((TimeValue) value).value);
 		else
 			throw new SyntaxError("Illegal comparison: Time + " + value.getClass().getSimpleName());
 	}
@@ -113,13 +116,13 @@ public class Time extends BaseValue implements Comparable<Time> {
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
 		if ("hour".equals(name))
-			return new Integer(this.value.getNativeHour());
+			return new IntegerValue(this.value.getNativeHour());
 		else if ("minute".equals(name))
-			return new Integer(this.value.getNativeMinute());
+			return new IntegerValue(this.value.getNativeMinute());
 		else if ("second".equals(name))
-			return new Integer(this.value.getNativeSecond());
+			return new IntegerValue(this.value.getNativeSecond());
 		else if ("millisecond".equals(name))
-			return new Integer(this.value.getNativeMillis());
+			return new IntegerValue(this.value.getNativeMillis());
 		else
 			return super.getMember(context, id, autoCreate);
 	}
@@ -134,14 +137,14 @@ public class Time extends BaseValue implements Comparable<Time> {
 	}
 
 	@Override
-	public int compareTo(Time other) {
+	public int compareTo(TimeValue other) {
 		return value.compareTo(other.value);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Time)
-			return value.equals(((Time) obj).value);
+		if (obj instanceof TimeValue)
+			return value.equals(((TimeValue) obj).value);
 		else
 			return value.equals(obj);
 	}
@@ -171,9 +174,14 @@ public class Time extends BaseValue implements Comparable<Time> {
 	public String toString() {
 		return value.toString();
 	}
+	
+	@Override
+	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
+		return JsonNodeFactory.instance.textNode(this.toString());
+	}
 
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
 		try {
 			if(withType) {
 				generator.writeStartObject();

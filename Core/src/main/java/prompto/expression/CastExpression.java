@@ -30,9 +30,9 @@ import prompto.type.IterableType;
 import prompto.type.MethodType;
 import prompto.type.NativeType;
 import prompto.utils.CodeWriter;
-import prompto.value.Decimal;
+import prompto.value.DecimalValue;
 import prompto.value.IValue;
-import prompto.value.Integer;
+import prompto.value.IntegerValue;
 
 public class CastExpression implements IExpression {
 	
@@ -101,10 +101,10 @@ public class CastExpression implements IExpression {
 		IValue value = expression.interpret(context);
 		if(value!=null) {
 			IType target = getTargetType(context);
-			if(target==DecimalType.instance() && value instanceof Integer)
-				value = new Decimal(((Integer)value).doubleValue());
-			else if(target==IntegerType.instance() && value instanceof Decimal)
-				value = new Integer(((Decimal)value).longValue());
+			if(target==DecimalType.instance() && value instanceof IntegerValue)
+				value = new DecimalValue(((IntegerValue)value).doubleValue());
+			else if(target==IntegerType.instance() && value instanceof DecimalValue)
+				value = new IntegerValue(((DecimalValue)value).longValue());
 			else if(target.isMoreSpecificThan(context, value.getType()))
 				value.setType(target);
 		}

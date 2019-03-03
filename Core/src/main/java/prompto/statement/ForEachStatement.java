@@ -32,7 +32,7 @@ import prompto.type.ListType;
 import prompto.utils.CodeWriter;
 import prompto.value.IIterable;
 import prompto.value.IValue;
-import prompto.value.Integer;
+import prompto.value.IntegerValue;
 
 public class ForEachStatement extends BaseStatement {
 
@@ -172,7 +172,7 @@ public class ForEachStatement extends BaseStatement {
 			child.registerValue(new Variable(v2, elemType));
 			child.setValue(v2, iterator.next());
 			child.registerValue(new Variable(v1, IntegerType.instance()));
-			child.setValue(v1, new Integer(++index));
+			child.setValue(v1, new IntegerValue(++index));
 			IValue value = statements.interpret(child);
 			if (value != null)
 				return value;

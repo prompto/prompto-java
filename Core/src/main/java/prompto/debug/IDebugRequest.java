@@ -149,28 +149,28 @@ public interface IDebugRequest {
 
 	public static class GetVariablesRequest extends WorkerRequest {
 
-		LeanStackFrame frame;
+		LeanStackFrame stackFrame;
 		
 		public GetVariablesRequest() {
 		}
 
-		public GetVariablesRequest(IWorker worker, IStackFrame frame) {
+		public GetVariablesRequest(IWorker worker, IStackFrame stackFrame) {
 			super(worker);
-			this.frame = new LeanStackFrame(frame);
+			this.stackFrame = new LeanStackFrame(stackFrame);
 		}
 
-		public void setFrame(LeanStackFrame frame) {
-			this.frame = frame;
+		public void setStackFrame(LeanStackFrame stackFrame) {
+			this.stackFrame = stackFrame;
 		}
 		
-		public LeanStackFrame getFrame() {
-			return frame;
+		public LeanStackFrame getStackFrame() {
+			return stackFrame;
 		}
 
 		@Override
 		public GetVariablesResponse execute(IDebugger debugger) {
 			logger.debug(()->"before variables");
-			Collection<? extends IVariable> variables = debugger.getVariables(DebuggedWorker.parse(workerId), frame);
+			Collection<? extends IVariable> variables = debugger.getVariables(DebuggedWorker.parse(workerId), stackFrame);
 			logger.debug(()->"after variables");
 			return new GetVariablesResponse(variables);
 		}
@@ -180,6 +180,52 @@ public interface IDebugRequest {
 			return GET_VARIABLES;
 		}
 	}
+	
+	
+	public static class GetVariableRequest extends WorkerRequest {
+
+		LeanStackFrame stackFrame;
+		String variableName;
+		
+		public GetVariableRequest() {
+		}
+
+		public GetVariableRequest(IWorker worker, IStackFrame stackFrame, String variableName) {
+			super(worker);
+			this.stackFrame = new LeanStackFrame(stackFrame);
+			this.variableName = variableName;
+		}
+
+		public void setStackFrame(LeanStackFrame stackFrame) {
+			this.stackFrame = stackFrame;
+		}
+		
+		public LeanStackFrame getStackFrame() {
+			return stackFrame;
+		}
+
+		public void setVariableName(String variableName) {
+			this.variableName = variableName;
+		}
+		
+		public String getVariableName() {
+			return variableName;
+		}
+		
+		@Override
+		public GetVariableResponse execute(IDebugger debugger) {
+			logger.debug(()->"before variable");
+			IVariable variable = debugger.getVariable(DebuggedWorker.parse(workerId), stackFrame, variableName);
+			logger.debug(()->"after variables");
+			return new GetVariableResponse(variable);
+		}
+		
+		@Override
+		public Type getType() {
+			return GET_VARIABLE;
+		}
+	}
+	
 
 	public static class InstallBreakpointRequest implements IDebugRequest {
 		
@@ -381,6 +427,7 @@ public interface IDebugRequest {
 		GET_LINE(GetLineRequest.class),
 		GET_STACK(GetStackRequest.class),
 		GET_VARIABLES(GetVariablesRequest.class),
+		GET_VARIABLE(GetVariableRequest.class),
 		INSTALL_BREAKPOINT(InstallBreakpointRequest.class),
 		SUSPEND(SuspendRequest.class),
 		RESUME(ResumeRequest.class),

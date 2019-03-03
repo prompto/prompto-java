@@ -32,9 +32,9 @@ public abstract class BinaryValue extends BaseValue {
 	
 	public static BinaryValue newInstance(PromptoBinary data) {
 		if(data.getMimeType().startsWith("image/"))
-			return new Image(data);
+			return new ImageValue(data);
 		else
-			return new Blob(data);
+			return new BlobValue(data);
 	}
 
 	PromptoBinary data;
@@ -70,7 +70,7 @@ public abstract class BinaryValue extends BaseValue {
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
 		if ("mimeType".equals(name))
-			return new Text(data.getMimeType());
+			return new TextValue(data.getMimeType());
 		else
 			return super.getMember(context, id, autoCreate);
 	}
@@ -112,7 +112,7 @@ public abstract class BinaryValue extends BaseValue {
 	}
 
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
 		try {
 			// if no binaries container, store a relative URL
 			if(binaries==null) 

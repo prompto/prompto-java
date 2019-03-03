@@ -12,7 +12,7 @@ import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
-import prompto.value.Character;
+import prompto.value.CharacterValue;
 import prompto.value.CharacterRange;
 import prompto.value.IValue;
 import prompto.value.RangeBase;
@@ -74,21 +74,21 @@ public class CharacterType extends NativeType {
 
 	@Override
 	public RangeBase<?> newRange(Object left, Object right) {
-		if (left instanceof Character && right instanceof Character)
-			return new CharacterRange((Character) left, (Character) right);
+		if (left instanceof CharacterValue && right instanceof CharacterValue)
+			return new CharacterRange((CharacterValue) left, (CharacterValue) right);
 		return super.newRange(left, right);
 	}
 
 	@Override
-	public Comparator<Character> getComparator(boolean descending) {
-		return descending ? new Comparator<Character>() {
+	public Comparator<CharacterValue> getComparator(boolean descending) {
+		return descending ? new Comparator<CharacterValue>() {
 			@Override
-			public int compare(Character o1, Character o2) {
+			public int compare(CharacterValue o1, CharacterValue o2) {
 				return java.lang.Character.compare(o2.getValue(), o1.getValue());
 			}
-		} : new Comparator<Character>() {
+		} : new Comparator<CharacterValue>() {
 			@Override
-			public int compare(Character o1, Character o2) {
+			public int compare(CharacterValue o1, CharacterValue o2) {
 				return java.lang.Character.compare(o1.getValue(), o2.getValue());
 			}
 		};
@@ -102,7 +102,7 @@ public class CharacterType extends NativeType {
 	@Override
 	public IValue convertJavaValueToIValue(Context context, Object value) {
 		if (value instanceof java.lang.Character)
-			return new Character(((java.lang.Character) value).charValue());
+			return new CharacterValue(((java.lang.Character) value).charValue());
 		else
 			return (IValue) value; // TODO for now
 	}
@@ -111,7 +111,7 @@ public class CharacterType extends NativeType {
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		if (value.asText().length() > 1)
 			throw new InvalidParameterException(value.toString());
-		return new Character(value.asText().charAt(0));
+		return new CharacterValue(value.asText().charAt(0));
 	}
 	
 	@Override

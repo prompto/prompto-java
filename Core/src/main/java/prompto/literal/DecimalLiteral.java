@@ -10,16 +10,16 @@ import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.DecimalType;
 import prompto.type.IType;
-import prompto.value.Decimal;
+import prompto.value.DecimalValue;
 
-public class DecimalLiteral extends Literal<Decimal> {
+public class DecimalLiteral extends Literal<DecimalValue> {
 
 	public DecimalLiteral(String text) {
-		super(text,Decimal.Parse(text));
+		super(text,DecimalValue.Parse(text));
 	}
 
 	public DecimalLiteral(double value) {
-		super(Double.toString(value), new Decimal(value));
+		super(Double.toString(value), new DecimalValue(value));
 	}
 
 	@Override

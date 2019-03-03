@@ -20,9 +20,9 @@ import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.DecimalType;
 import prompto.type.IntegerType;
-import prompto.value.Decimal;
+import prompto.value.DecimalValue;
 import prompto.value.IValue;
-import prompto.value.Integer;
+import prompto.value.IntegerValue;
 
 
 public abstract class BaseArgument implements IArgument {
@@ -64,10 +64,10 @@ public abstract class BaseArgument implements IArgument {
 	@Override
 	public IValue checkValue(Context context, IExpression expression) throws PromptoError {
 		IValue value = expression.interpret(context);
-		if(value instanceof Integer && getType(context)==DecimalType.instance())
-			return new Decimal(((Integer)value).doubleValue()); 
-		else if(value instanceof Decimal && getType(context)==IntegerType.instance())
-			return new Integer(((Decimal)value).longValue()); 
+		if(value instanceof IntegerValue && getType(context)==DecimalType.instance())
+			return new DecimalValue(((IntegerValue)value).doubleValue()); 
+		else if(value instanceof DecimalValue && getType(context)==IntegerType.instance())
+			return new IntegerValue(((DecimalValue)value).longValue()); 
 		else
 			return value;
 	}

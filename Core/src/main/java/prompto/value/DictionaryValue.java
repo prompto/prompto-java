@@ -1,11 +1,18 @@
 package prompto.value;
 
+import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Function;
+
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -15,6 +22,7 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
+import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
@@ -28,35 +36,35 @@ import prompto.type.DictType;
 import prompto.type.IType;
 import prompto.type.TextType;
 
-public class Dictionary extends BaseValue implements IContainer<IValue> {
+public class DictionaryValue extends BaseValue implements IContainer<IValue> {
 
-	PromptoDict<Text, IValue> dict;
+	PromptoDict<TextValue, IValue> dict;
 	
-	public Dictionary(IType itemType, boolean mutable) {
+	public DictionaryValue(IType itemType, boolean mutable) {
 		super(new DictType(itemType));
 		dict = new PromptoDict<>(mutable);
 	}
 
-	public Dictionary(Dictionary from) {
+	public DictionaryValue(DictionaryValue from) {
 		this(((ContainerType) from.type).getItemType(), from.dict);
 	}
 
-	public Dictionary(IType itemType, PromptoDict<Text, IValue> dict) {
+	public DictionaryValue(IType itemType, PromptoDict<TextValue, IValue> dict) {
 		super(new DictType(itemType));
 		this.dict = dict;
 	}
 	
 	@Override
-	public PromptoDict<Text, IValue> getStorableData() {
+	public PromptoDict<TextValue, IValue> getStorableData() {
 		return dict;
 	}
 
-	public static Dictionary merge(Dictionary dict1, Dictionary dict2) {
-		PromptoDict<Text, IValue> dict = new PromptoDict<>(false);
+	public static DictionaryValue merge(DictionaryValue dict1, DictionaryValue dict2) {
+		PromptoDict<TextValue, IValue> dict = new PromptoDict<>(false);
 		dict.putAll(dict1.dict);
 		dict.putAll(dict2.dict);
 		// TODO check type fungibility		
-		return new Dictionary(((ContainerType) dict1.type).getItemType(), dict); 
+		return new DictionaryValue(((ContainerType) dict1.type).getItemType(), dict); 
 	}
 
 	@Override
@@ -66,8 +74,8 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 
 	@Override
 	public IValue plus(Context context, IValue value) throws PromptoError {
-		if (value instanceof Dictionary)
-			return merge(this, (Dictionary) value);
+		if (value instanceof DictionaryValue)
+			return merge(this, (DictionaryValue) value);
 		else
 			throw new SyntaxError("Illegal: Dict + "
 					+ value.getClass().getSimpleName());
@@ -103,8 +111,8 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 
 	@Override
 	public boolean hasItem(Context context, IValue value) {
-		if (value instanceof Text)
-			return this.dict.containsKey((Text) value);
+		if (value instanceof TextValue)
+			return this.dict.containsKey((TextValue) value);
 		else
 			throw new SyntaxError("Only Text key supported by " + this.getClass().getSimpleName());
 	}
@@ -118,10 +126,10 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
 		if ("count".equals(name))
-			return new Integer(this.dict.size());
+			return new IntegerValue(this.dict.size());
 		else if ("keys".equals(name)) {
 			@SuppressWarnings("unchecked")
-			PromptoSet<IValue> values = (PromptoSet<IValue>)(Object)new PromptoSet<Text>(this.dict.keySet());
+			PromptoSet<IValue> values = (PromptoSet<IValue>)(Object)new PromptoSet<TextValue>(this.dict.keySet());
 			return new SetValue(TextType.instance(), values);
 		} else if ("values".equals(name)) {
 			IType itemType = ((ContainerType) this.type).getItemType();
@@ -135,9 +143,9 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 	
 	@Override
 	public void setItem(Context context, IValue item, IValue value) {
-		if(!(item instanceof Text))
+		if(!(item instanceof TextValue))
 			throw new InvalidValueError("Expected a Text, got:" + item.getClass().getName());
-		this.dict.put((Text)item, value);
+		this.dict.put((TextValue)item, value);
 	}
 
 	@Override
@@ -147,8 +155,8 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 	
 	
 	public IValue getItem(IValue index) throws PromptoError {
-		if (index instanceof Text)
-			return dict.getOrDefault((Text) index, NullValue.instance());
+		if (index instanceof TextValue)
+			return dict.getOrDefault((TextValue) index, NullValue.instance());
 		else
 			throw new SyntaxError("No such item:" + index.toString());
 	}
@@ -169,7 +177,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 		if(type instanceof ParameterizedType)
 			itemType = ((ParameterizedType)type).getActualTypeArguments()[1];
 		PromptoDict<String, Object> dict = new PromptoDict<>(true);
-		for(Map.Entry<Text, IValue> entry : this.dict.entrySet()) {
+		for(Map.Entry<TextValue, IValue> entry : this.dict.entrySet()) {
 			String key = entry.getKey().toString();
 			Object value = entry.getValue().convertTo(context, itemType);
 			dict.put(key, value);
@@ -180,9 +188,9 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof Dictionary))
+		if (!(obj instanceof DictionaryValue))
 			return false;
-		return dict.equals(((Dictionary) obj).dict);
+		return dict.equals(((DictionaryValue) obj).dict);
 	}
 
 	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
@@ -205,6 +213,42 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 	public String toString() {
 		return dict.toString();
 	}
+	
+	@Override
+	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
+		ObjectNode result = JsonNodeFactory.instance.objectNode();
+		for(Entry<TextValue, IValue> entry : dict.entrySet())
+			result.set(entry.getKey().getStorableData(), producer.apply(entry.getValue()));
+		return result;
+	}
+	
+	
+	@Override
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
+		try {
+			if(withType) {
+				generator.writeStartObject();
+				generator.writeFieldName("type");
+				generator.writeString(this.getType().getTypeName());
+				generator.writeFieldName("value");
+			}
+			generator.writeStartObject();
+			for(Entry<TextValue, IValue> entry : dict.entrySet()) {
+				generator.writeFieldName(entry.getKey().toString());
+				IValue value = entry.getValue();
+				if(value==null)
+					generator.writeNull();
+				else
+					value.toJsonStream(context, generator, System.identityHashCode(this), entry.getKey().toString(), withType, binaries);
+			}
+			generator.writeEndObject();
+			if(withType)
+				generator.writeEndObject();
+		} catch(IOException e) {
+			throw new ReadWriteError(e.getMessage());
+		}
+	}
+
 
 	@Override
 	public IterableWithCounts<IValue> getIterable(Context context) {
@@ -233,7 +277,7 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 		public Iterator<IValue> iterator() {
 			return new Iterator<IValue>() {
 
-				Iterator<Entry<Text, IValue>> iterator = dict.entrySet().iterator();
+				Iterator<Entry<TextValue, IValue>> iterator = dict.entrySet().iterator();
 				
 				@Override
 				public boolean hasNext() {
@@ -256,9 +300,9 @@ public class Dictionary extends BaseValue implements IContainer<IValue> {
 	}
 
 	static class KVPValue extends BaseValue {
-		Entry<Text, IValue> kvp;
+		Entry<TextValue, IValue> kvp;
 
-		public KVPValue(Entry<Text, IValue> kvp) {
+		public KVPValue(Entry<TextValue, IValue> kvp) {
 			super(null); // TODO, check that this is not a problem
 			this.kvp = kvp;
 		}

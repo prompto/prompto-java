@@ -3,6 +3,7 @@ package prompto.value;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Map;
+import java.util.function.Function;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -22,23 +23,25 @@ import prompto.runtime.Context;
 import prompto.type.DateType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
-public class Date extends BaseValue implements Comparable<Date> {
+public class DateValue extends BaseValue implements Comparable<DateValue> {
 
-	public static Date Parse(String text) {
+	public static DateValue Parse(String text) {
 		PromptoDate value = PromptoDate.parse(text);
-		return new Date(value);
+		return new DateValue(value);
 	}
 
 	PromptoDate value;
 
-	public Date(PromptoDate date) {
+	public DateValue(PromptoDate date) {
 		super(DateType.instance());
 		this.value = date;
 
 	}
 
-	public Date(int year, int month, int day) {
+	public DateValue(int year, int month, int day) {
 		super(DateType.instance());
 		value = new PromptoDate(year, month, day);
 	}
@@ -50,8 +53,8 @@ public class Date extends BaseValue implements Comparable<Date> {
 
 	@Override
 	public IValue plus(Context context, IValue value) throws PromptoError {
-		if (value instanceof Period)
-			return new Date(this.value.plus(((Period)value).value));
+		if (value instanceof PeriodValue)
+			return new DateValue(this.value.plus(((PeriodValue)value).value));
 		else
 			throw new SyntaxError("Illegal: Date + " + value.getClass().getSimpleName());
 	}
@@ -69,12 +72,12 @@ public class Date extends BaseValue implements Comparable<Date> {
 
 	@Override
 	public IValue minus(Context context, IValue value) throws PromptoError {
-		if (value instanceof Date) {
-			PromptoDate other = ((Date) value).value;
+		if (value instanceof DateValue) {
+			PromptoDate other = ((DateValue) value).value;
 			PromptoPeriod result = this.value.minus(other);
-			return new Period(result);
-		} else if (value instanceof Period)
-			return new Date(this.value.minus(((Period)value).value));
+			return new PeriodValue(result);
+		} else if (value instanceof PeriodValue)
+			return new DateValue(this.value.minus(((PeriodValue)value).value));
 		else
 			throw new SyntaxError("Illegal: Date - "
 					+ value.getClass().getSimpleName());
@@ -99,8 +102,8 @@ public class Date extends BaseValue implements Comparable<Date> {
 	
 	@Override
 	public int compareTo(Context context, IValue value) throws PromptoError {
-		if (value instanceof Date)
-			return this.value.compareTo(((Date) value).value);
+		if (value instanceof DateValue)
+			return this.value.compareTo(((DateValue) value).value);
 		else
 			throw new SyntaxError("Illegal comparison: Date - "
 					+ value.getClass().getSimpleName());
@@ -121,13 +124,13 @@ public class Date extends BaseValue implements Comparable<Date> {
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
 		if ("year".equals(name))
-			return new Integer(this.value.getNativeYear());
+			return new IntegerValue(this.value.getNativeYear());
 		else if ("month".equals(name))
-			return new Integer(this.value.getNativeMonth());
+			return new IntegerValue(this.value.getNativeMonth());
 		else if ("dayOfMonth".equals(name))
-			return new Integer(this.value.getNativeDayOfMonth());
+			return new IntegerValue(this.value.getNativeDayOfMonth());
 		else if ("dayOfYear".equals(name))
-			return new Integer(this.value.getNativeDayOfYear());
+			return new IntegerValue(this.value.getNativeDayOfYear());
 		else
 			return super.getMember(context, id, autoCreate);
 	}
@@ -137,19 +140,19 @@ public class Date extends BaseValue implements Comparable<Date> {
 		return value;
 	}
 
-	public Date toDateMidnight() {
+	public DateValue toDateMidnight() {
 		return this;
 	}
 
 	@Override
-	public int compareTo(Date other) {
+	public int compareTo(DateValue other) {
 		return value.compareTo(other.value);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Date)
-			return value.equals(((Date) obj).value);
+		if (obj instanceof DateValue)
+			return value.equals(((DateValue) obj).value);
 		else
 			return value.equals(obj);
 	}
@@ -181,7 +184,12 @@ public class Date extends BaseValue implements Comparable<Date> {
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
+	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
+		return JsonNodeFactory.instance.textNode(this.toString());
+	}
+	
+	@Override
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
 		try {
 			if(withType) {
 				generator.writeStartObject();

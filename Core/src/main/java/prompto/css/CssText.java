@@ -18,6 +18,17 @@ public class CssText implements ICssValue {
 	}
 	
 	@Override
+	public String toString() {
+		return text;
+	}
+	
+	@Override
+	public void toString(StringBuilder sb) {
+		sb.append(text);
+	}
+
+	
+	@Override
 	public void declare(Transpiler transpiler) {
 		// nothing to do
 	}
@@ -27,4 +38,5 @@ public class CssText implements ICssValue {
 		String text = StringUtils.escape(this.text);
 		transpiler.append('"').append(text).append('"');
 	}
+
 }

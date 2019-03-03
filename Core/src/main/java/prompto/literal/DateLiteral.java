@@ -12,17 +12,17 @@ import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.DateType;
 import prompto.type.IType;
-import prompto.value.Date;
+import prompto.value.DateValue;
 
 
-public class DateLiteral extends Literal<Date> {
+public class DateLiteral extends Literal<DateValue> {
 
 	public DateLiteral(String text) {
 		super(text,parseDate(text.substring(1,text.length()-1)));
 	}
 	
 	public DateLiteral(PromptoDate date) {
-		super("'" + date.toString() + "'", new Date(date));
+		super("'" + date.toString() + "'", new DateValue(date));
 	}
 
 	@Override
@@ -30,8 +30,8 @@ public class DateLiteral extends Literal<Date> {
 		return DateType.instance();
 	}
 	
-	public static Date parseDate(String text) {
-		return new Date(PromptoDate.parse(text));
+	public static DateValue parseDate(String text) {
+		return new DateValue(PromptoDate.parse(text));
 	}
 	
 	@Override

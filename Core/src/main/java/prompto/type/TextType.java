@@ -32,11 +32,11 @@ import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
 import prompto.utils.StringUtils;
-import prompto.value.Boolean;
+import prompto.value.BooleanValue;
 import prompto.value.IValue;
-import prompto.value.Integer;
+import prompto.value.IntegerValue;
 import prompto.value.ListValue;
-import prompto.value.Text;
+import prompto.value.TextValue;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -161,7 +161,7 @@ public class TextType extends NativeType {
 			String toReplace = (String)context.getValue(new Identifier("toReplace")).getStorableData();
 			String replaceWith = (String)context.getValue(new Identifier("replaceWith")).getStorableData();
 			String result = StringUtils.replaceOne(value, toReplace, replaceWith);
-			return new Text(result);
+			return new TextValue(result);
 		};
 		
 		
@@ -207,7 +207,7 @@ public class TextType extends NativeType {
 			String toReplace = (String)context.getValue(new Identifier("toReplace")).getStorableData();
 			String replaceWith = (String)context.getValue(new Identifier("replaceWith")).getStorableData();
 			String result = value.replace(toReplace, replaceWith);
-			return new Text(result);
+			return new TextValue(result);
 		};
 		
 		
@@ -255,9 +255,9 @@ public class TextType extends NativeType {
 			String value = (String)getValue(context).getStorableData();
 			String sep = (String)context.getValue(new Identifier("separator")).getStorableData();
 			String[] parts = value.split(sep);
-			PromptoList<Text> list = new PromptoList<>(false);
+			PromptoList<TextValue> list = new PromptoList<>(false);
 			for(String part : parts) 
-				list.add(new Text(part));
+				list.add(new TextValue(part));
 			return new ListValue(TextType.instance(), list);
 		};
 		
@@ -317,7 +317,7 @@ public class TextType extends NativeType {
 		public IValue interpret(Context context) throws PromptoError {
 			String value = (String)getValue(context).getStorableData();
 			String result = StringUtils.capitalizeAll(value);
-			return new Text(result);
+			return new TextValue(result);
 		};
 		
 		@Override
@@ -352,9 +352,9 @@ public class TextType extends NativeType {
 		
 		@Override
 		public IValue interpret(Context context) throws PromptoError {
-			Text text = (Text)getValue(context);
+			TextValue text = (TextValue)getValue(context);
 			String lower = text.getStorableData().toLowerCase();
-			return new Text(lower);
+			return new TextValue(lower);
 		};
 		
 		@Override
@@ -373,9 +373,9 @@ public class TextType extends NativeType {
 		
 		@Override
 		public IValue interpret(Context context) throws PromptoError {
-			Text text = (Text)getValue(context);
+			TextValue text = (TextValue)getValue(context);
 			String lower = text.getStorableData().toUpperCase();
-			return new Text(lower);
+			return new TextValue(lower);
 		};
 		
 		@Override
@@ -394,9 +394,9 @@ public class TextType extends NativeType {
 		
 		@Override
 		public IValue interpret(Context context) throws PromptoError {
-			Text text = (Text)getValue(context);
+			TextValue text = (TextValue)getValue(context);
 			String trimmed = text.getStorableData().trim();
-			return new Text(trimmed);
+			return new TextValue(trimmed);
 		};
 		
 		@Override
@@ -417,10 +417,10 @@ public class TextType extends NativeType {
 		
 		@Override
 		public IValue interpret(Context context) throws PromptoError {
-			Text text = (Text)getValue(context);
+			TextValue text = (TextValue)getValue(context);
 			String value = (String)context.getValue(new Identifier("value")).getStorableData();
 			boolean startsWith = text.getStorableData().startsWith(value);
-			return Boolean.valueOf(startsWith);
+			return BooleanValue.valueOf(startsWith);
 		};
 		
 		@Override
@@ -461,10 +461,10 @@ public class TextType extends NativeType {
 		
 		@Override
 		public IValue interpret(Context context) throws PromptoError {
-			Text text = (Text)getValue(context);
+			TextValue text = (TextValue)getValue(context);
 			String value = (String)context.getValue(new Identifier("value")).getStorableData();
 			boolean endsWith = text.getStorableData().endsWith(value);
-			return Boolean.valueOf(endsWith);
+			return BooleanValue.valueOf(endsWith);
 		};
 		
 		@Override
@@ -506,10 +506,10 @@ public class TextType extends NativeType {
 		
 		@Override
 		public IValue interpret(Context context) throws PromptoError {
-			Text text = (Text)getValue(context);
+			TextValue text = (TextValue)getValue(context);
 			String value = (String)context.getValue(new Identifier("value")).getStorableData();
 			int indexOf = text.getStorableData().indexOf(value);
-			return new Integer(indexOf + 1);
+			return new IntegerValue(indexOf + 1);
 		};
 		
 		@Override
@@ -549,17 +549,17 @@ public class TextType extends NativeType {
 	};
 	
 	@Override
-	public Comparator<Text> getComparator(boolean descending) {
+	public Comparator<TextValue> getComparator(boolean descending) {
 		return descending ? 
-				new Comparator<Text>() {
+				new Comparator<TextValue>() {
 					@Override
-					public int compare(Text o1, Text o2) {
+					public int compare(TextValue o1, TextValue o2) {
 						return o2.getStorableData().compareTo(o1.getStorableData());
 					}
 				} :
-				new Comparator<Text>() {
+				new Comparator<TextValue>() {
 					@Override
-					public int compare(Text o1, Text o2) {
+					public int compare(TextValue o1, TextValue o2) {
 						return o1.getStorableData().compareTo(o2.getStorableData());
 					}
 				};
@@ -567,7 +567,7 @@ public class TextType extends NativeType {
 
 	@Override
 	public IValue convertIValueToIValue(Context context, IValue value) {
-       if (value instanceof Text)
+       if (value instanceof TextValue)
             return value;
         else
             return super.convertJavaValueToIValue(context, value);
@@ -577,7 +577,7 @@ public class TextType extends NativeType {
 	@Override
 	public IValue convertJavaValueToIValue(Context context, Object value) {
         if (value instanceof String)
-            return new Text((String)value);
+            return new TextValue((String)value);
         else
             return super.convertJavaValueToIValue(context, value);
 	}
@@ -592,7 +592,7 @@ public class TextType extends NativeType {
 	
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
-		return new Text(value.asText());
+		return new TextValue(value.asText());
 	}
 	
 	

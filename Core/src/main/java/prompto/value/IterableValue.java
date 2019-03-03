@@ -3,6 +3,7 @@ package prompto.value;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -14,10 +15,15 @@ import prompto.intrinsic.IterableWithCounts;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.type.IType;
+import prompto.type.IntegerType;
 import prompto.type.IteratorType;
 import prompto.type.ListType;
+import prompto.type.TextType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class IterableValue extends BaseValue implements IIterable<IValue>, IterableWithCounts<IValue> {
 
@@ -88,13 +94,32 @@ public class IterableValue extends BaseValue implements IIterable<IValue>, Itera
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
 		if ("count".equals(name))
-			return new Integer(iterable.getCount());
+			return new IntegerValue(iterable.getCount());
 		else
 			return super.getMember(context, id, autoCreate);
 	}
+	
+	
+	@Override
+	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
+		ObjectNode result = JsonNodeFactory.instance.objectNode();
+		ObjectNode value = JsonNodeFactory.instance.objectNode();
+		value.put("typeName", TextType.instance().getTypeName());
+		value.put("value", sourceType.getTypeName());
+		result.set("itemTypeName", value);
+		value = JsonNodeFactory.instance.objectNode();
+		value.put("typeName", IntegerType.instance().getTypeName());
+		value.put("value", iterable.getCount());
+		result.set("count", value);
+		value = JsonNodeFactory.instance.objectNode();
+		value.put("typeName", IntegerType.instance().getTypeName());
+		value.put("value", iterable.getTotalCount());
+		result.set("totalCount", value);
+		return result;
+	}
 
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
 		try {
 			if(withType) {
 				generator.writeStartObject();
@@ -107,7 +132,7 @@ public class IterableValue extends BaseValue implements IIterable<IValue>, Itera
 			generator.writeStartArray();
 			Iterator<IValue> iter = iterator();
 			while(iter.hasNext())
-				iter.next().toJson(context, generator, null, null, withType, data);
+				iter.next().toJsonStream(context, generator, null, null, withType, data);
 			generator.writeEndArray();
 			if(withType)
 				generator.writeEndObject();

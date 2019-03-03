@@ -10,7 +10,7 @@ import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
-import prompto.value.Decimal;
+import prompto.value.DecimalValue;
 import prompto.value.IValue;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -99,15 +99,15 @@ public class DecimalType extends NativeType implements INumberType {
 	}
 
 	@Override
-	public Comparator<Decimal> getComparator(boolean descending) {
-		return descending ? new Comparator<Decimal>() {
+	public Comparator<DecimalValue> getComparator(boolean descending) {
+		return descending ? new Comparator<DecimalValue>() {
 			@Override
-			public int compare(Decimal o1, Decimal o2) {
+			public int compare(DecimalValue o1, DecimalValue o2) {
 				return java.lang.Double.compare(o2.doubleValue(), o1.doubleValue());
 			}
-		} : new Comparator<Decimal>() {
+		} : new Comparator<DecimalValue>() {
 			@Override
-			public int compare(Decimal o1, Decimal o2) {
+			public int compare(DecimalValue o1, DecimalValue o2) {
 				return java.lang.Double.compare(o1.doubleValue(), o2.doubleValue());
 			}
 		};
@@ -116,14 +116,14 @@ public class DecimalType extends NativeType implements INumberType {
 	@Override
 	public IValue convertJavaValueToIValue(Context context, Object value) {
 		if (value instanceof Number)
-			return new Decimal(((Number) value).doubleValue());
+			return new DecimalValue(((Number) value).doubleValue());
 		else
 			return (IValue) value; // TODO for now
 	}
 
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
-		return new Decimal(value.asDouble());
+		return new DecimalValue(value.asDouble());
 	}
 	
 	

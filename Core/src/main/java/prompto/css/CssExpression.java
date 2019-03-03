@@ -3,6 +3,10 @@ package prompto.css;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
@@ -37,7 +41,22 @@ public class CssExpression implements IExpression {
 		fields.forEach(field->field.toDialect(writer));
 		writer.append("}");
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("{ ");
+		fields.forEach(field->field.toString(sb));
+		sb.append(" }");
+		return sb.toString();
+	}
 
+	public JsonNode toJson(boolean withType) {
+		ObjectNode result = JsonNodeFactory.instance.objectNode();
+		fields.forEach(field->field.toJson(result, withType));
+		return result;
+	}
+	
 	public void addField(CssField field) {
 		fields.add(field);
 	}
@@ -63,5 +82,7 @@ public class CssExpression implements IExpression {
 		transpiler.append("}");
 		return false;
 	}
+
+
 
 }

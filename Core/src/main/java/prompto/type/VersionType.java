@@ -12,7 +12,7 @@ import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
 import prompto.value.IValue;
-import prompto.value.Version;
+import prompto.value.VersionValue;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -43,7 +43,7 @@ public class VersionType extends NativeType {
 	@Override
 	public IValue convertJavaValueToIValue(Context context, Object value) {
         if (value instanceof PromptoVersion)
-            return new Version((PromptoVersion)value);
+            return new VersionValue((PromptoVersion)value);
         else
             return super.convertJavaValueToIValue(context, value);
 	}
@@ -56,17 +56,17 @@ public class VersionType extends NativeType {
 	}
 
 	@Override
-	public Comparator<Version> getComparator(boolean descending) {
+	public Comparator<VersionValue> getComparator(boolean descending) {
 		return descending ?
-				new Comparator<Version>() {
+				new Comparator<VersionValue>() {
 					@Override
-					public int compare(Version o1, Version o2) {
+					public int compare(VersionValue o1, VersionValue o2) {
 						return o2.getStorableData().compareTo(o1.getStorableData());
 					}
 				} :
-				new Comparator<Version>() {
+				new Comparator<VersionValue>() {
 					@Override
-					public int compare(Version o1, Version o2) {
+					public int compare(VersionValue o1, VersionValue o2) {
 						return o1.getStorableData().compareTo(o2.getStorableData());
 					}
 		};
@@ -80,7 +80,7 @@ public class VersionType extends NativeType {
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		PromptoVersion version = PromptoVersion.parse(value.asText());
-		return new Version(version);
+		return new VersionValue(version);
 	}
 	
 	@Override

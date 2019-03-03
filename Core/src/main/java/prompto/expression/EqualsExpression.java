@@ -57,25 +57,25 @@ import prompto.type.IType;
 import prompto.type.IntegerType;
 import prompto.type.TextType;
 import prompto.utils.CodeWriter;
-import prompto.value.Boolean;
-import prompto.value.Character;
-import prompto.value.Date;
-import prompto.value.DateTime;
-import prompto.value.Decimal;
-import prompto.value.Dictionary;
+import prompto.value.BooleanValue;
+import prompto.value.CharacterValue;
+import prompto.value.DateValue;
+import prompto.value.DateTimeValue;
+import prompto.value.DecimalValue;
+import prompto.value.DictionaryValue;
 import prompto.value.IInstance;
 import prompto.value.IValue;
-import prompto.value.Integer;
+import prompto.value.IntegerValue;
 import prompto.value.ListValue;
 import prompto.value.NullValue;
-import prompto.value.Period;
+import prompto.value.PeriodValue;
 import prompto.value.RangeBase;
 import prompto.value.SetValue;
-import prompto.value.Text;
-import prompto.value.Time;
+import prompto.value.TextValue;
+import prompto.value.TimeValue;
 import prompto.value.TypeValue;
 import prompto.value.UuidValue;
-import prompto.value.Version;
+import prompto.value.VersionValue;
 
 public class EqualsExpression implements IPredicateExpression, IAssertion {
 
@@ -171,7 +171,7 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 			equal = !interpretContains(context,lval,rval);
 			break;
 		}
-		return Boolean.valueOf(equal);	}
+		return BooleanValue.valueOf(equal);	}
 
 	private boolean interpretIsA(Context context, IValue lval, IValue rval) throws PromptoError {
 		IType actual = lval.getType();
@@ -262,7 +262,7 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 		IValue lval = left.interpret(context);
 		IValue rval = right.interpret(context);
 		IValue result = interpret(context, lval, rval);
-		if(result==Boolean.TRUE) 
+		if(result==BooleanValue.TRUE) 
 			return true;
 		String expected = buildExpectedMessage(context, test);
 		String actual = lval.toString() + " " + operator.toString(test.getDialect()) + " " + rval.toString();
@@ -299,7 +299,7 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 		context.registerValue(new Variable(new Identifier(rightName), rightType));
 		EqualsExpression newExp = new EqualsExpression(newLeft, this.operator, newRight);
 		ResultInfo info = newExp.compile(context, method, flags.withPrimitive(true));
-		if(Boolean.class==info.getType())
+		if(BooleanValue.class==info.getType())
 			CompilerUtils.BooleanToboolean(method);
 		// 1 = success
 		IInstructionListener finalListener = method.addOffsetListener(new OffsetListenerConstant());
@@ -412,26 +412,26 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 	
 	private static Map<Class<?>, IOperatorFunction> createEqualsCompilers() {
 		Map<Class<?>, IOperatorFunction> map = new HashMap<>();
-		map.put(boolean.class, Boolean::compileEquals); 
-		map.put(java.lang.Boolean.class, Boolean::compileEquals); 
-		map.put(char.class, Character::compileEquals);
-		map.put(java.lang.Character.class, Character::compileEquals);
-		map.put(String.class, Text::compileEquals); 
-		map.put(double.class, Decimal::compileEquals);
-		map.put(Double.class, Decimal::compileEquals); 
-		map.put(long.class, Integer::compileEquals);
-		map.put(Long.class, Integer::compileEquals); 
+		map.put(boolean.class, BooleanValue::compileEquals); 
+		map.put(java.lang.Boolean.class, BooleanValue::compileEquals); 
+		map.put(char.class, CharacterValue::compileEquals);
+		map.put(java.lang.Character.class, CharacterValue::compileEquals);
+		map.put(String.class, TextValue::compileEquals); 
+		map.put(double.class, DecimalValue::compileEquals);
+		map.put(Double.class, DecimalValue::compileEquals); 
+		map.put(long.class, IntegerValue::compileEquals);
+		map.put(Long.class, IntegerValue::compileEquals); 
 		map.put(PromptoAny.class, AnyType::compileEquals); 
 		map.put(PromptoRange.Long.class, RangeBase::compileEquals); 
 		map.put(PromptoRange.Character.class, RangeBase::compileEquals); 
 		map.put(PromptoRange.Date.class, RangeBase::compileEquals); 
 		map.put(PromptoRange.Time.class, RangeBase::compileEquals); 
-		map.put(PromptoDate.class, Date::compileEquals); 
-		map.put(PromptoDateTime.class, DateTime::compileEquals); 
-		map.put(PromptoTime.class, Time::compileEquals); 
-		map.put(PromptoPeriod.class, Period::compileEquals); 
-		map.put(PromptoVersion.class, Version::compileEquals); 
-		map.put(PromptoDict.class, Dictionary::compileEquals);
+		map.put(PromptoDate.class, DateValue::compileEquals); 
+		map.put(PromptoDateTime.class, DateTimeValue::compileEquals); 
+		map.put(PromptoTime.class, TimeValue::compileEquals); 
+		map.put(PromptoPeriod.class, PeriodValue::compileEquals); 
+		map.put(PromptoVersion.class, VersionValue::compileEquals); 
+		map.put(PromptoDict.class, DictionaryValue::compileEquals);
 		map.put(PromptoSet.class, SetValue::compileEquals);  /*
 		map.put(PromptoTuple.class, TupleValue::compileEquals); */
 		map.put(PromptoList.class, ListValue::compileEquals); 
@@ -445,7 +445,7 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 	
 	private static Map<Class<?>, IOperatorFunction> createContainsCompilers() {
 		Map<Class<?>, IOperatorFunction> map = new HashMap<>();
-		map.put(String.class, Text::compileContains); 
+		map.put(String.class, TextValue::compileContains); 
 		/*
 		map.put(PromptoRange.Long.class, RangeBase::compileContains); 
 		map.put(PromptoRange.Character.class, RangeBase::compileContains); 

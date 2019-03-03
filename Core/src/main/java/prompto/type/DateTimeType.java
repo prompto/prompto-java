@@ -12,7 +12,7 @@ import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
-import prompto.value.DateTime;
+import prompto.value.DateTimeValue;
 import prompto.value.IValue;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -43,7 +43,7 @@ public class DateTimeType extends NativeType {
 	@Override
 	public IValue convertJavaValueToIValue(Context context, Object value) {
         if (value instanceof PromptoDateTime)
-            return new prompto.value.DateTime((PromptoDateTime)value);
+            return new prompto.value.DateTimeValue((PromptoDateTime)value);
         else
         	return super.convertJavaValueToIValue(context, value);
 	}
@@ -102,17 +102,17 @@ public class DateTimeType extends NativeType {
 	}
 
 	@Override
-	public Comparator<DateTime> getComparator(boolean descending) {
+	public Comparator<DateTimeValue> getComparator(boolean descending) {
 		return descending ? 
-				new Comparator<DateTime>() {
+				new Comparator<DateTimeValue>() {
 					@Override
-					public int compare(DateTime o1, DateTime o2) {
+					public int compare(DateTimeValue o1, DateTimeValue o2) {
 						return o2.getStorableData().compareTo(o1.getStorableData());
 					}
 				} :
-				new Comparator<DateTime>() {
+				new Comparator<DateTimeValue>() {
 					@Override
-					public int compare(DateTime o1, DateTime o2) {
+					public int compare(DateTimeValue o1, DateTimeValue o2) {
 						return o1.getStorableData().compareTo(o2.getStorableData());
 					}
 				};
@@ -126,7 +126,7 @@ public class DateTimeType extends NativeType {
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		PromptoDateTime dt = PromptoDateTime.parse(value.asText());
-		return new DateTime(dt);
+		return new DateTimeValue(dt);
 	}
 	
 	@Override

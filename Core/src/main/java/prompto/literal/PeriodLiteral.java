@@ -12,10 +12,10 @@ import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.PeriodType;
-import prompto.value.Period;
+import prompto.value.PeriodValue;
 
 
-public class PeriodLiteral extends Literal<Period> {
+public class PeriodLiteral extends Literal<PeriodValue> {
 
 	public PeriodLiteral(String text) {
 		super(text,parseDuration(text.substring(1,text.length()-1)));
@@ -26,8 +26,8 @@ public class PeriodLiteral extends Literal<Period> {
 		return PeriodType.instance();
 	}
 	
-	public static Period parseDuration(String text) {
-		return new Period(PromptoPeriod.parse(text));
+	public static PeriodValue parseDuration(String text) {
+		return new PeriodValue(PromptoPeriod.parse(text));
 	}
 	
 	@Override

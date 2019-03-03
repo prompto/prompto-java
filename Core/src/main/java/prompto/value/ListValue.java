@@ -8,8 +8,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -35,8 +41,6 @@ import prompto.type.AnyType;
 import prompto.type.ContainerType;
 import prompto.type.IType;
 import prompto.type.ListType;
-
-import com.fasterxml.jackson.core.JsonGenerator;
 
 public class ListValue extends BaseValue implements IContainer<IValue>, ISliceable<IValue>, IFilterable  {
 
@@ -119,9 +123,9 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 	
 	@Override
 	public void setItem(Context context, IValue item, IValue value) {
-		if(!(item instanceof Integer))
+		if(!(item instanceof IntegerValue))
 			throw new InvalidValueError("Expected an Integer, got:" + item.getClass().getName());
-		int index = (int)((Integer)item).longValue();
+		int index = (int)((IntegerValue)item).longValue();
 		if(index<1 || index>this.getLength())
 			throw new IndexOutOfRangeError();
 		this.setItem(index-1, value);
@@ -129,9 +133,9 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 	
 	@Override
 	public IValue getItem(Context context, IValue index) throws PromptoError {
-		if (index instanceof Integer) {
+		if (index instanceof IntegerValue) {
 			try {
-				int idx = (int)((Integer)index).longValue() - 1;
+				int idx = (int)((IntegerValue)index).longValue() - 1;
 				return items.get(idx);
 			} catch (IndexOutOfBoundsException e) {
 				throw new IndexOutOfRangeError();
@@ -184,7 +188,7 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) {
 		String name = id.toString();
 		if ("count".equals(name))
-			return new Integer(items.size());
+			return new IntegerValue(items.size());
 		else if ("iterator".equals(name))
 			return new IteratorValue(getItemType(), getIterable(context).iterator());
 		else
@@ -305,9 +309,9 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 	
 	@Override
 	public IValue multiply(Context context, IValue value) throws PromptoError {
-		if (value instanceof Integer) {
+		if (value instanceof IntegerValue) {
 			IType itemType = ((ContainerType)this.type).getItemType();
-			int count = (int) ((Integer) value).longValue();
+			int count = (int) ((IntegerValue) value).longValue();
 			if (count < 0)
 				throw new SyntaxError("Negative repeat count:" + count);
 			return new ListValue(itemType, this.items.multiply(count));
@@ -316,7 +320,7 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 	}
 	
 	@Override
-	public ListValue slice(Integer fi, Integer li) throws IndexOutOfRangeError {
+	public ListValue slice(IntegerValue fi, IntegerValue li) throws IndexOutOfRangeError {
 		long _fi = fi == null ? 1L : fi.longValue();
 		if (_fi < 0)
 			throw new IndexOutOfRangeError();
@@ -352,7 +356,16 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
+	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
+		ArrayNode result = JsonNodeFactory.instance.arrayNode();
+		for(IValue item : items)
+			result.add(producer.apply(item));
+		return result;
+	}
+
+	
+	@Override
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
 		try {
 			if(withType) {
 				generator.writeStartObject();
@@ -362,7 +375,7 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 			}
 			generator.writeStartArray();
 			for(IValue value : this.items)
-				value.toJson(context, generator, System.identityHashCode(this), null, withType, data);
+				value.toJsonStream(context, generator, System.identityHashCode(this), null, withType, data);
 			generator.writeEndArray();
 			if(withType)
 				generator.writeEndObject();

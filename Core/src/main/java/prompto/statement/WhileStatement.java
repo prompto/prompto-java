@@ -21,7 +21,7 @@ import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.value.Boolean;
+import prompto.value.BooleanValue;
 import prompto.value.IValue;
 
 public class WhileStatement extends BaseStatement {
@@ -109,9 +109,9 @@ public class WhileStatement extends BaseStatement {
 
 	private boolean interpretCondition(Context context) throws PromptoError {
 		Object value = condition.interpret(context);
-		if(!(value instanceof Boolean))
+		if(!(value instanceof BooleanValue))
 			throw new InvalidValueError("Expected a Boolean, got:" + value.getClass().getSimpleName());
-		return ((Boolean)value).getValue();
+		return ((BooleanValue)value).getValue();
 	}
 	
 	@Override
@@ -123,7 +123,7 @@ public class WhileStatement extends BaseStatement {
 		IInstructionListener loop = method.addOffsetListener(new OffsetListenerConstant(true));
 		method.activateOffsetListener(loop);
 		ResultInfo info = condition.compile(context, method, flags.withPrimitive(true));
-		if(Boolean.class==info.getType())
+		if(BooleanValue.class==info.getType())
 			CompilerUtils.BooleanToboolean(method);
 		IInstructionListener exit = method.addOffsetListener(new OffsetListenerConstant());
 		method.activateOffsetListener(exit);

@@ -60,10 +60,10 @@ import prompto.utils.CmdLineParser;
 import prompto.utils.IdentifierList;
 import prompto.utils.Logger;
 import prompto.utils.TypeUtils;
-import prompto.value.Dictionary;
+import prompto.value.DictionaryValue;
 import prompto.value.ExpressionValue;
 import prompto.value.IValue;
-import prompto.value.Text;
+import prompto.value.TextValue;
 
 public abstract class Standalone {
 
@@ -292,10 +292,10 @@ public abstract class Standalone {
 	}
 
 	public static IExpression argsToArgValue(Map<String, String> args) {
-		PromptoDict<Text, IValue> dict = new PromptoDict<>(true);
+		PromptoDict<TextValue, IValue> dict = new PromptoDict<>(true);
 		for(Map.Entry<String, String> e : args.entrySet())
-			dict.put(new Text(e.getKey()),new Text(e.getValue()));
-		return new ExpressionValue(new DictType(TextType.instance()), new Dictionary(TextType.instance(), dict));
+			dict.put(new TextValue(e.getKey()),new TextValue(e.getValue()));
+		return new ExpressionValue(new DictType(TextType.instance()), new DictionaryValue(TextType.instance(), dict));
 	}
 
 	public static void showHelp(String application, String test, PromptoVersion version) {

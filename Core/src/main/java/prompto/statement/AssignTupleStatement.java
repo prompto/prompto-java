@@ -28,7 +28,7 @@ import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
 import prompto.value.IValue;
-import prompto.value.Integer;
+import prompto.value.IntegerValue;
 import prompto.value.TupleValue;
 
 public class AssignTupleStatement extends SimpleStatement {
@@ -103,7 +103,7 @@ public class AssignTupleStatement extends SimpleStatement {
 		TupleValue tuple = (TupleValue)object;
 		for(int i=0;i<names.size();i++) {
 			Identifier name = names.get(i);
-			IValue value = tuple.getItem(context, new Integer(i+1));
+			IValue value = tuple.getItem(context, new IntegerValue(i+1));
 			if(context.getRegisteredValue(INamed.class, name)==null)
 				context.registerValue(new Variable(name, value.getType()));
 			context.setValue(name, value);

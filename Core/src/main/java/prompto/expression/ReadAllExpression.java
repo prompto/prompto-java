@@ -20,7 +20,7 @@ import prompto.type.TextType;
 import prompto.utils.CodeWriter;
 import prompto.value.IResource;
 import prompto.value.IValue;
-import prompto.value.Text;
+import prompto.value.TextValue;
 
 public class ReadAllExpression implements IExpression {
 
@@ -58,7 +58,7 @@ public class ReadAllExpression implements IExpression {
 		if(!res.isReadable())
 			throw new InvalidResourceError("Not readable");
 		try {
-			return new Text(res.readFully());
+			return new TextValue(res.readFully());
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		} finally {

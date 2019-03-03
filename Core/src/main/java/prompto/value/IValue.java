@@ -3,6 +3,7 @@ package prompto.value;
 import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import prompto.error.NotStorableError;
 import prompto.error.PromptoError;
@@ -12,6 +13,9 @@ import prompto.store.IStorable;
 import prompto.type.IType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /** IValue is a wrapper around intrinsic or primitive values 
  * which helps expose an API for the interpreter 
@@ -85,7 +89,7 @@ public interface IValue {
 
 	default IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		if("text".equals(id.toString()))
-			return new Text(this.toString());
+			return new TextValue(this.toString());
 		else
 			throw new UnsupportedOperationException("No member support for " + this.getClass().getSimpleName());
 	}
@@ -100,23 +104,35 @@ public interface IValue {
 
 	default boolean roughly(Context context, IValue value) throws PromptoError {
 		throw new UnsupportedOperationException("roughly not supported by " + this.getClass().getSimpleName());
-	};
+	}
 	
 	default boolean contains(Context context, IValue value) throws PromptoError {
 		throw new UnsupportedOperationException("contains not supported by " + this.getClass().getSimpleName());
-	};
+	}
 
 	default ISliceable<IValue> asSliceable(Context context) throws PromptoError {
 		throw new UnsupportedOperationException("asSliceable not supported by " + this.getClass().getSimpleName());
-	};
+	}
 
 	default Object convertTo(Context context, Type type) throws PromptoError {
 		throw new UnsupportedOperationException("convertTo not supported by " + this.getClass().getSimpleName());
-	};
-
-	default void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
-		throw new UnsupportedOperationException("toJson not supported by " + this.getClass().getSimpleName());
 	}
+
+	default JsonNode toTypedJsonNode(Context context) throws PromptoError {
+		ObjectNode result = JsonNodeFactory.instance.objectNode();
+		result.put("typeName", getType().getTypeName());
+		result.set("value", valueToJsonNode(context, value -> value.toTypedJsonNode(context)));
+		return result;
+	}
+
+	default JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
+		throw new UnsupportedOperationException("valueToJsonNode not supported by " + this.getClass().getSimpleName());
+	}
+	
+	default void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
+		throw new UnsupportedOperationException("toJsonStream not supported by " + this.getClass().getSimpleName());
+	}
+
 
 
 	

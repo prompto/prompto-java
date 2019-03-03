@@ -3,6 +3,7 @@ package prompto.value;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Map;
+import java.util.function.Function;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -15,24 +16,25 @@ import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
-import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoVersion;
 import prompto.runtime.Context;
 import prompto.type.DateType;
 import prompto.type.VersionType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
-public class Version extends BaseValue implements Comparable<Version> {
+public class VersionValue extends BaseValue implements Comparable<VersionValue> {
 
-	public static Version Parse(String text) {
+	public static VersionValue Parse(String text) {
 		PromptoVersion value = PromptoVersion.parse(text);
-		return new Version(value);
+		return new VersionValue(value);
 	}
 
 	PromptoVersion value;
 
-	public Version(PromptoVersion value) {
+	public VersionValue(PromptoVersion value) {
 		super(DateType.instance());
 		this.value = value;
 
@@ -46,8 +48,8 @@ public class Version extends BaseValue implements Comparable<Version> {
 	
 	@Override
 	public int compareTo(Context context, IValue value) throws PromptoError {
-		if (value instanceof Version)
-			return this.value.compareTo(((Version) value).value);
+		if (value instanceof VersionValue)
+			return this.value.compareTo(((VersionValue) value).value);
 		else
 			throw new SyntaxError("Illegal comparison: Version - "
 					+ value.getClass().getSimpleName());
@@ -71,14 +73,14 @@ public class Version extends BaseValue implements Comparable<Version> {
 	}
 
 	@Override
-	public int compareTo(Version other) {
+	public int compareTo(VersionValue other) {
 		return value.compareTo(other.value);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Version)
-			return value.equals(((Version) obj).value);
+		if (obj instanceof VersionValue)
+			return value.equals(((VersionValue) obj).value);
 		else
 			return value.equals(obj);
 	}
@@ -110,7 +112,12 @@ public class Version extends BaseValue implements Comparable<Version> {
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
+	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
+		return JsonNodeFactory.instance.textNode(this.toString());
+	}
+	
+	@Override
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
 		try {
 			if(withType) {
 				generator.writeStartObject();

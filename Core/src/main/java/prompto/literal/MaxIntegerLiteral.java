@@ -1,12 +1,12 @@
 package prompto.literal;
 
 import prompto.transpiler.Transpiler;
-import prompto.value.Integer;
+import prompto.value.IntegerValue;
 
 public class MaxIntegerLiteral extends IntegerLiteral {
 
 	public MaxIntegerLiteral() {
-		super("MAX_INTEGER", new Integer(Long.MAX_VALUE));
+		super("MAX_INTEGER", new IntegerValue(Long.MAX_VALUE));
 	}
 	
 	@Override

@@ -3,19 +3,19 @@ package prompto.value;
 import prompto.intrinsic.PromptoBinary;
 import prompto.type.BlobType;
 
-public class Blob extends BinaryValue {
+public class BlobValue extends BinaryValue {
 
-	public Blob() {
+	public BlobValue() {
 		super(BlobType.instance());
 	}
 	
 	
-	public Blob(PromptoBinary data) {
+	public BlobValue(PromptoBinary data) {
 		super(BlobType.instance(), data);
 	}
 
 
-	public Blob(String mimeType, byte[] bytes) {
+	public BlobValue(String mimeType, byte[] bytes) {
 		this(new PromptoBinary(mimeType, bytes));
 	}
 

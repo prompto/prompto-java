@@ -15,7 +15,6 @@ import prompto.error.NotStorableError;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.grammar.CmpOp;
-import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.type.IType;
@@ -62,7 +61,7 @@ public abstract class BaseValue implements IValue {
 	}
 	
 	@Override
-	public void toJson(Context context, JsonGenerator generator, Object instanceId, Identifier fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
+	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
 		throw new UnsupportedOperationException("toJson not supported by " + this.getClass().getSimpleName());
 	}
 	

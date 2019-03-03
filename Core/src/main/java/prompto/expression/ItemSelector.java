@@ -26,13 +26,13 @@ import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.value.Dictionary;
+import prompto.value.DictionaryValue;
 import prompto.value.IValue;
 import prompto.value.ListValue;
 import prompto.value.NullValue;
 import prompto.value.RangeBase;
 import prompto.value.SetValue;
-import prompto.value.Text;
+import prompto.value.TextValue;
 import prompto.value.TupleValue;
 
 public class ItemSelector extends SelectorExpression {
@@ -87,12 +87,12 @@ public class ItemSelector extends SelectorExpression {
 	
 	private static Map<Class<?>, IOperatorFunction> createGetters() {
 		Map<Class<?>, IOperatorFunction> map = new HashMap<>(); 
-		map.put(String.class, Text::compileItem); 
+		map.put(String.class, TextValue::compileItem); 
 		map.put(PromptoRange.Character.class, RangeBase::compileItem);
 		map.put(PromptoRange.Date.class, RangeBase::compileItem);
 		map.put(PromptoRange.Time.class, RangeBase::compileItem);
 		map.put(PromptoRange.Long.class, RangeBase::compileItem);
-		map.put(PromptoDict.class, Dictionary::compileItem);
+		map.put(PromptoDict.class, DictionaryValue::compileItem);
 		map.put(PromptoTuple.class, TupleValue::compileItem);
 		map.put(PromptoSet.class, SetValue::compileItem);
 		map.put(PromptoList.class, ListValue::compileItem);

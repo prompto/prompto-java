@@ -6,20 +6,20 @@ import prompto.type.TimeType;
 
 
 
-public class TimeRange extends RangeBase<Time> {
+public class TimeRange extends RangeBase<TimeValue> {
 
-	static class PromptoTimeRange extends PromptoRange<Time> {
+	static class PromptoTimeRange extends PromptoRange<TimeValue> {
 
-		public PromptoTimeRange(prompto.value.Time low, prompto.value.Time high) {
+		public PromptoTimeRange(prompto.value.TimeValue low, prompto.value.TimeValue high) {
 			super(low, high);
 		}
 
 		@Override
-		public prompto.value.Time getItem(long item) {
+		public prompto.value.TimeValue getItem(long item) {
 			PromptoTime result = low.value.plusSeconds(item-1);
 			if(result.isAfter(high.value))
 				throw new IndexOutOfBoundsException();
-			return new prompto.value.Time(result);
+			return new prompto.value.TimeValue(result);
 		}
 		
 		@Override
@@ -35,26 +35,26 @@ public class TimeRange extends RangeBase<Time> {
 		
 		@Override
 		public boolean contains(Object item) {
-			if(!(item instanceof prompto.value.Time))
+			if(!(item instanceof prompto.value.TimeValue))
 				return false;
-			prompto.value.Time other = (prompto.value.Time)item;
+			prompto.value.TimeValue other = (prompto.value.TimeValue)item;
 			return other.compareTo(low)>=0 && high.compareTo(other)>=0;
 		}
 
 	}
 	
-	public TimeRange(Time left, Time right) {
+	public TimeRange(TimeValue left, TimeValue right) {
 		this(new PromptoTimeRange(left, right));
 	}
 	
 	
-	public TimeRange(PromptoRange<Time> range) {
+	public TimeRange(PromptoRange<TimeValue> range) {
 		super(TimeType.instance(), range);
 	}
 
 
 	@Override
-	public RangeBase<Time> newInstance(PromptoRange<Time> range) {
+	public RangeBase<TimeValue> newInstance(PromptoRange<TimeValue> range) {
 		return new TimeRange(range);
 	}
 

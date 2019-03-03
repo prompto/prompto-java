@@ -21,7 +21,7 @@ import prompto.transpiler.Transpiler;
 import prompto.type.BlobType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.value.Blob;
+import prompto.value.BlobValue;
 import prompto.value.IValue;
 
 import com.fasterxml.jackson.core.JsonFactory;
@@ -47,7 +47,7 @@ public class BlobExpression implements IExpression {
 		try {
 			Map<String, byte[]> datas = collectData(context, value);
 			byte[] zipped = zipData(datas);
-			return new Blob("application/zip", zipped);
+			return new BlobValue("application/zip", zipped);
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		}
@@ -81,7 +81,7 @@ public class BlobExpression implements IExpression {
 		// create textual data
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		JsonGenerator generator = new JsonFactory().createGenerator(output);
-		value.toJson(context, generator, null, null, true, binaries);
+		value.toJsonStream(context, generator, null, null, true, binaries);
 		generator.flush();
 		generator.close();
 		// add it

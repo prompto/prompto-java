@@ -282,6 +282,17 @@ public class ProcessDebugger implements IDebugger {
 			return debugger.getVariables(frame);
 	}
 	
+	
+	@Override
+	public IVariable getVariable(IWorker worker, IStackFrame frame, String variableName) {
+		IWorkerDebugger debugger = debuggers.get(worker);
+		if(debugger==null) {
+			logger.warn(()->"Invalid worker: " + worker);
+			return null;
+		} else
+			return debugger.getVariable(frame, variableName);
+	}
+	
 	public static class DebuggedWorker extends LeanWorker {
 
 		public static DebuggedWorker wrap(Thread thread) {

@@ -26,14 +26,14 @@ import prompto.type.ListType;
 import prompto.type.SetType;
 import prompto.type.TextType;
 import prompto.utils.TypeUtils;
-import prompto.value.Dictionary;
-import prompto.value.Document;
+import prompto.value.DictionaryValue;
+import prompto.value.DocumentValue;
 import prompto.value.IValue;
 import prompto.value.IteratorValue;
 import prompto.value.ListValue;
 import prompto.value.NativeInstance;
 import prompto.value.SetValue;
-import prompto.value.Text;
+import prompto.value.TextValue;
 
 
 public class JavaClassType extends BaseType {
@@ -154,7 +154,7 @@ public class JavaClassType extends BaseType {
 	private static IValue convertDocument(Context context, Object value, Type type, IType returnType) {
 		if(value instanceof PromptoDocument<?,?>) {
 			if(returnType==DocumentType.instance() || returnType==AnyType.instance()) {
-				return new Document(context, (PromptoDocument<?,?>)value);
+				return new DocumentValue(context, (PromptoDocument<?,?>)value);
 			}
 		}
 		return null;
@@ -215,15 +215,15 @@ public class JavaClassType extends BaseType {
 		Type keyType = nthArgTypeFromParameterizedType(type, 0);
 		Type elemType = nthArgTypeFromParameterizedType(type, 1);
 		IType itemType = ((DictType)returnType).getItemType();
-		PromptoDict<Text, IValue> dict = new PromptoDict<Text, IValue>(true);
+		PromptoDict<TextValue, IValue> dict = new PromptoDict<TextValue, IValue>(true);
 		for(Object obj : ((Map<Object,Object>)value).keySet()) {
 			Object val = ((Map<Object,Object>)value).get(obj);
-			Text key = (Text)convertJavaValueToPromptoValue(context, obj, keyType, TextType.instance());
+			TextValue key = (TextValue)convertJavaValueToPromptoValue(context, obj, keyType, TextType.instance());
 			IValue ivalue = convertJavaValueToPromptoValue(context, val, elemType, itemType);
 			dict.put(key, ivalue);
 		}
 		dict.setMutable(false); // TODO: mutable in return type ?
-		return new Dictionary(itemType, dict); 
+		return new DictionaryValue(itemType, dict); 
 	}
 	
 	private static IValue convertIterator(Context context, Object value, Type type, IType returnType) {

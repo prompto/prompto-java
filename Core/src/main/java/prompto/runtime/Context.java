@@ -47,8 +47,8 @@ import prompto.utils.ObjectUtils;
 import prompto.utils.SectionLocator;
 import prompto.value.ClosureValue;
 import prompto.value.ConcreteInstance;
-import prompto.value.Decimal;
-import prompto.value.Document;
+import prompto.value.DecimalValue;
+import prompto.value.DocumentValue;
 import prompto.value.ExpressionValue;
 import prompto.value.IInstance;
 import prompto.value.IValue;
@@ -236,7 +236,7 @@ public class Context implements IContext {
 		return initInstanceContext(new DocumentContext(null), isChild);
 	}
 
-	public Context newDocumentContext(Document document, boolean isChild) {
+	public Context newDocumentContext(DocumentValue document, boolean isChild) {
 		return initInstanceContext(new DocumentContext(document), isChild);
 	}
 
@@ -704,6 +704,15 @@ public class Context implements IContext {
 		return instances.values();
 	}
 	
+	
+	public INamed getInstance(String name) {
+		return getInstance(new Identifier(name));
+	}
+	
+
+	private INamed getInstance(Identifier id) {
+		return instances.get(id);
+	}
 
 	public boolean hasValue(Identifier id) {
 		return contextForValue(id)!=null;
@@ -758,10 +767,10 @@ public class Context implements IContext {
 		if(value!=null) {
 			if(value instanceof ExpressionValue)
 				value = ((ExpressionValue)value).getValue();
-			if(value instanceof prompto.value.Integer) {
+			if(value instanceof prompto.value.IntegerValue) {
 				INamed actual = instances.get(name);
 				if(actual.getType(this)==DecimalType.instance())
-					value = new Decimal(((prompto.value.Integer)value).doubleValue());
+					value = new DecimalValue(((prompto.value.IntegerValue)value).doubleValue());
 			}
 		}
 		return value;
@@ -944,13 +953,13 @@ public class Context implements IContext {
 
 	public static class DocumentContext extends Context {
 		
-		Document document;
+		DocumentValue document;
 		
-		DocumentContext(Document document) {
+		DocumentContext(DocumentValue document) {
 			this.document = document;
 		}
 		
-		public Document getDocument() {
+		public DocumentValue getDocument() {
 			return document;
 		}
 		

@@ -6,7 +6,7 @@ import prompto.intrinsic.PromptoBinary;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.value.IValue;
-import prompto.value.Image;
+import prompto.value.ImageValue;
 
 public class ImageType extends BinaryType { 
 
@@ -22,12 +22,12 @@ public class ImageType extends BinaryType {
 
 	@Override
 	public Type getJavaType(Context context) {
-		return Image.class;
+		return ImageValue.class;
 	}
 	
 	@Override
 	protected IValue newInstance(PromptoBinary binary) {
-		return new Image(binary);
+		return new ImageValue(binary);
 	}
 
 	

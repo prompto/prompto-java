@@ -3,17 +3,17 @@ package prompto.value;
 import prompto.intrinsic.PromptoBinary;
 import prompto.type.ImageType;
 
-public class Image extends BinaryValue {
+public class ImageValue extends BinaryValue {
 
-	public Image() {
+	public ImageValue() {
 		super(ImageType.instance());
 	}
 	
-	public Image(PromptoBinary data) {
+	public ImageValue(PromptoBinary data) {
 		super(ImageType.instance(), data);
 	}
 
-	public Image(String mimeType, byte[] bytes) {
+	public ImageValue(String mimeType, byte[] bytes) {
 		this(new PromptoBinary(mimeType, bytes));
 	}
 

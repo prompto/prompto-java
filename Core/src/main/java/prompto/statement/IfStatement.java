@@ -21,7 +21,7 @@ import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.value.Boolean;
+import prompto.value.BooleanValue;
 import prompto.value.IValue;
 
 
@@ -137,8 +137,8 @@ public class IfStatement extends BaseStatement {
 	public IValue interpret(Context context) throws PromptoError {
 		for(IfElement element : elements) {
 			IExpression condition = element.getCondition();
-			Object test = condition==null ? Boolean.TRUE : condition.interpret(context);
-			if(test instanceof Boolean && Boolean.TRUE.equals((Boolean)test))
+			Object test = condition==null ? BooleanValue.TRUE : condition.interpret(context);
+			if(test instanceof BooleanValue && BooleanValue.TRUE.equals((BooleanValue)test))
 				return element.interpret(context);
 		}
 		return null;
@@ -243,7 +243,7 @@ public class IfStatement extends BaseStatement {
 	private void compileCondition(Context context, MethodInfo method, Flags flags, IfElement element) {
 		if(element.condition!=null) {
 			ResultInfo info = element.condition.compile(context, method, flags.withPrimitive(true));
-			if(Boolean.class==info.getType())
+			if(BooleanValue.class==info.getType())
 				CompilerUtils.BooleanToboolean(method);
 		}
 	}

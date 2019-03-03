@@ -18,12 +18,12 @@ import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.value.Character;
-import prompto.value.Decimal;
+import prompto.value.CharacterValue;
+import prompto.value.DecimalValue;
 import prompto.value.IMultiplyable;
 import prompto.value.IValue;
-import prompto.value.Integer;
-import prompto.value.Text;
+import prompto.value.IntegerValue;
+import prompto.value.TextValue;
 
 public class MultiplyExpression implements IExpression {
 
@@ -60,12 +60,12 @@ public class MultiplyExpression implements IExpression {
 	
 	private static Map<Class<?>, IOperatorFunction> createMultipliers() {
 		Map<Class<?>, IOperatorFunction> map = new HashMap<>(); 
-		map.put(String.class, Text::compileMultiply); 
-		map.put(java.lang.Character.class, Character::compileMultiply); 
-		map.put(double.class, Decimal::compileMultiply);
-		map.put(Double.class, Decimal::compileMultiply); 
-		map.put(long.class, Integer::compileMultiply);
-		map.put(Long.class, Integer::compileMultiply); 
+		map.put(String.class, TextValue::compileMultiply); 
+		map.put(java.lang.Character.class, CharacterValue::compileMultiply); 
+		map.put(double.class, DecimalValue::compileMultiply);
+		map.put(Double.class, DecimalValue::compileMultiply); 
+		map.put(long.class, IntegerValue::compileMultiply);
+		map.put(Long.class, IntegerValue::compileMultiply); 
 		return map;
 	}
 

@@ -34,7 +34,7 @@ import prompto.type.IType;
 import prompto.type.IterableType;
 import prompto.type.ListType;
 import prompto.utils.CodeWriter;
-import prompto.value.Boolean;
+import prompto.value.BooleanValue;
 import prompto.value.IFilterable;
 import prompto.value.IValue;
 
@@ -129,9 +129,9 @@ public class FilteredExpression extends Section implements IExpression {
 					try {
 						local.setValue(itemId, value);
 						IValue test = predicate.interpret(local);
-						if(!(test instanceof Boolean))
+						if(!(test instanceof BooleanValue))
 							throw new InternalError("Illegal test result: " + test);
-						return ((Boolean)test).getValue();
+						return ((BooleanValue)test).getValue();
 					} catch(PromptoError e) {
 						throw new InternalError(e);
 					}

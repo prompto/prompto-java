@@ -6,20 +6,20 @@ import prompto.type.DateType;
 
 
 
-public class DateRange extends RangeBase<Date> {
+public class DateRange extends RangeBase<DateValue> {
 
-	static class PromptoDateRange extends PromptoRange<Date> {
+	static class PromptoDateRange extends PromptoRange<DateValue> {
 
-		public PromptoDateRange(prompto.value.Date low, prompto.value.Date high) {
+		public PromptoDateRange(prompto.value.DateValue low, prompto.value.DateValue high) {
 			super(low, high);
 		}
 		
 		@Override
-		public prompto.value.Date getItem(long item) {
+		public prompto.value.DateValue getItem(long item) {
 			PromptoDate result = low.value.plusDays(item-1);
 			if(result.isAfter(high.value))
 				throw new IndexOutOfBoundsException();
-			return new prompto.value.Date(result);
+			return new prompto.value.DateValue(result);
 		}
 		
 		@Override
@@ -37,25 +37,25 @@ public class DateRange extends RangeBase<Date> {
 
 		@Override
 		public boolean contains(Object item) {
-			if(!(item instanceof prompto.value.Date))
+			if(!(item instanceof prompto.value.DateValue))
 				return false;
-			prompto.value.Date other = (prompto.value.Date)item;
+			prompto.value.DateValue other = (prompto.value.DateValue)item;
 			return other.compareTo(low)>=0 && high.compareTo(other)>=0;
 		}
 
 		
 	}
 	
-	public DateRange(Date left, Date right) {
+	public DateRange(DateValue left, DateValue right) {
 		this(new PromptoDateRange(left, right));
 	}
 	
-	public DateRange(PromptoRange<Date> range) {
+	public DateRange(PromptoRange<DateValue> range) {
 		super(DateType.instance(), range);
 	}
 
 	@Override
-	public RangeBase<Date> newInstance(PromptoRange<Date> range) {
+	public RangeBase<DateValue> newInstance(PromptoRange<DateValue> range) {
 		return new DateRange(range);
 	}
 
