@@ -2,7 +2,7 @@ package prompto.parser;
 
 public interface ILocation {
 	
-	int getIndex();
+	int getTokenIndex();
 	int getLine();
 	int getColumn();
 	

@@ -187,7 +187,7 @@ public class ImmutableCodeStore extends BaseCodeStore {
 
 
 	private ISection fetchInResource(ISection section) {
-		if(!resource.toExternalForm().equals(section.getFilePath()))
+		if(!resource.toExternalForm().equals(section.getPath()))
 			return null;
 		loadResource();
 		return SectionLocator.findSectionInLists(declarations.values(), section);

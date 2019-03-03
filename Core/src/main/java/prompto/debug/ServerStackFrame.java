@@ -20,13 +20,13 @@ public class ServerStackFrame extends LeanStackFrame {
 		this(context, methodName, method.getStartLine(), index, (ISection)method);
 		if(method instanceof ConcreteMethodDeclaration) {
 			IStatement stmt = ((ConcreteMethodDeclaration)method).getStatements().getFirst();
-			this.endCharIndex = stmt.getStart().getIndex() - 1;
+			this.endCharIndex = stmt.getStart().getTokenIndex() - 1;
 		} else if(method instanceof NativeMethodDeclaration) {
 			IStatement stmt = ((NativeMethodDeclaration)method).getStatements().getFirst();
-			this.endCharIndex = stmt.getStart().getIndex() - 1;
+			this.endCharIndex = stmt.getStart().getTokenIndex() - 1;
 		} else if(method instanceof TestMethodDeclaration) {
 			IStatement stmt = ((TestMethodDeclaration)method).getStatements().getFirst();
-			this.endCharIndex = stmt.getStart().getIndex() - 1;
+			this.endCharIndex = stmt.getStart().getTokenIndex() - 1;
 		} else
 			this.endCharIndex = this.startCharIndex + 1;
 	}
@@ -34,12 +34,12 @@ public class ServerStackFrame extends LeanStackFrame {
 	public ServerStackFrame(Context context, String methodName, int methodLine, int index, ISection section) {
 		this.context = context;
 		this.methodName = methodName;
-		this.filePath = section.getFilePath();
+		this.filePath = section.getPath();
 		this.index = index;
 		this.methodLine = methodLine;
 		this.instructionLine = section.getStart().getLine();
-		this.startCharIndex = section.getStart().getIndex();
-		this.endCharIndex = section.getEnd().getIndex();
+		this.startCharIndex = section.getStart().getTokenIndex();
+		this.endCharIndex = section.getEnd().getTokenIndex();
 	}
 	
 	@Override

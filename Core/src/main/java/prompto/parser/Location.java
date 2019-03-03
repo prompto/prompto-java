@@ -4,7 +4,7 @@ import org.antlr.v4.runtime.Token;
 
 
 public class Location implements ILocation {
-	int index;
+	int tokenIndex;
 	int line;
 	int column;
 	
@@ -16,11 +16,11 @@ public class Location implements ILocation {
 	}
 	
 	public Location(Token token, boolean isEnd) {
-		this.index = token.getStartIndex();
+		this.tokenIndex = token.getStartIndex();
 		this.line = token.getLine();
 		this.column = token.getCharPositionInLine();
 		if(isEnd && token.getText()!=null) {
-			this.index += token.getText().length();
+			this.tokenIndex += token.getText().length();
 			this.column += token.getText().length();
 		}
 	}
@@ -28,24 +28,24 @@ public class Location implements ILocation {
 	public Location(ILocation location) {
 		if(location==null)
 			location = null;
-		this.index = location.getIndex();
+		this.tokenIndex = location.getTokenIndex();
 		this.line = location.getLine();
 		this.column = location.getColumn();
 	}
 
 	public Location(int index, int line, int column) {
-		this.index = index;
+		this.tokenIndex = index;
 		this.line = line;
 		this.column = column;
 	}
 	
-	public void setIndex(int index) {
-		this.index = index;
+	public void setTokenIndex(int index) {
+		this.tokenIndex = index;
 	}
 	
 	@Override
-	public int getIndex() {
-		return index;
+	public int getTokenIndex() {
+		return tokenIndex;
 	}
 	
 	public void setLine(int line) {

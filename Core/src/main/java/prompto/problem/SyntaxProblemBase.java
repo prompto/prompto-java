@@ -14,7 +14,7 @@ public abstract class SyntaxProblemBase implements IProblem {
 
 	@Override
 	public String getPath() {
-		return section.getFilePath();
+		return section.getPath();
 	}
 	
 	@Override
@@ -29,12 +29,12 @@ public abstract class SyntaxProblemBase implements IProblem {
 
 	@Override
 	public int getStartIndex() {
-		return section.getStart().getIndex();
+		return section.getStart().getTokenIndex();
 	}
 	
 	@Override
 	public int getEndIndex() {
-		return section.getEnd().getIndex();
+		return section.getEnd().getTokenIndex();
 	}
 
 

@@ -2,7 +2,7 @@ package prompto.parser;
 
 public interface ISection {
 	
-	String getFilePath();
+	String getPath();
 	ILocation getStart();
 	ILocation getEnd();
 	Dialect getDialect();
