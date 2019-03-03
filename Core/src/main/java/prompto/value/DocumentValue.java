@@ -3,6 +3,7 @@ package prompto.value;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Function;
 import java.util.Set;
 
 import prompto.error.PromptoError;
@@ -122,16 +123,10 @@ public class DocumentValue extends BaseValue {
 	
 	
 	@Override
-	public JsonNode toJsonNode(Context context, boolean withType) throws PromptoError {
+	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
 		ObjectNode result = JsonNodeFactory.instance.objectNode();
-		ObjectNode value = result;
-		if(withType) {
-			result.put("typeName", DocumentType.instance().getTypeName());
-			value = JsonNodeFactory.instance.objectNode();
-			result.set("value", value);
-		}
 		for(Entry<Identifier, IValue> entry : values.entrySet())
-			value.set(entry.getKey().toString(), entry.getValue().toJsonNode(context, withType));
+			result.set(entry.getKey().toString(), producer.apply(entry.getValue()));
 		return result;
 	}
 	

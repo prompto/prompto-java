@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Function;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -214,16 +215,10 @@ public class DictionaryValue extends BaseValue implements IContainer<IValue> {
 	}
 	
 	@Override
-	public JsonNode toJsonNode(Context context, boolean withType) throws PromptoError {
+	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
 		ObjectNode result = JsonNodeFactory.instance.objectNode();
-		ObjectNode value = result;
-		if(withType) {
-			result.put("typeName", this.getType().getTypeName());
-			value = JsonNodeFactory.instance.objectNode();
-			result.set("value", value);
-		}
 		for(Entry<TextValue, IValue> entry : dict.entrySet())
-			value.set(entry.getKey().getStorableData(), entry.getValue().toJsonNode(context, withType));
+			result.set(entry.getKey().getStorableData(), producer.apply(entry.getValue()));
 		return result;
 	}
 	

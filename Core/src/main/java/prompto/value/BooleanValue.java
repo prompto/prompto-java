@@ -3,6 +3,11 @@ package prompto.value;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Map;
+import java.util.function.Function;
+
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -17,8 +22,6 @@ import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.runtime.Context;
 import prompto.type.BooleanType;
-
-import com.fasterxml.jackson.core.JsonGenerator;
 
 public class BooleanValue extends BaseValue implements Comparable<BooleanValue> {
 	
@@ -89,6 +92,12 @@ public class BooleanValue extends BaseValue implements Comparable<BooleanValue> 
 		else
 			return false;
 	}
+	
+	@Override
+	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
+		return JsonNodeFactory.instance.booleanNode(value);
+	}
+
 	
 	@Override
 	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {

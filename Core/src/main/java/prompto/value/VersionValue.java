@@ -3,6 +3,7 @@ package prompto.value;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Map;
+import java.util.function.Function;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -21,6 +22,8 @@ import prompto.type.DateType;
 import prompto.type.VersionType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
 public class VersionValue extends BaseValue implements Comparable<VersionValue> {
 
@@ -106,6 +109,11 @@ public class VersionValue extends BaseValue implements Comparable<VersionValue> 
 	@Override
 	public String toString() {
 		return value.toString();
+	}
+	
+	@Override
+	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
+		return JsonNodeFactory.instance.textNode(this.toString());
 	}
 	
 	@Override

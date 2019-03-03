@@ -3,11 +3,11 @@ package prompto.value;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -232,14 +232,8 @@ public class DecimalValue extends BaseValue implements INumber, Comparable<INumb
 	}
 
 	@Override
-	public JsonNode toJsonNode(Context context, boolean withType) throws PromptoError {
-		if(withType) {
-			ObjectNode result = JsonNodeFactory.instance.objectNode();
-			result.put("typeName", DecimalType.instance().getTypeName());
-			result.set("value", JsonNodeFactory.instance.numberNode(value));
-			return result;
-		} else
-			return JsonNodeFactory.instance.numberNode(value);
+	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
+		return JsonNodeFactory.instance.numberNode(value);
 	}
 
 

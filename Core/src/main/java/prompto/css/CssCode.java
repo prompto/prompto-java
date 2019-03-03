@@ -15,8 +15,20 @@ public class CssCode implements ICssValue {
 	@Override
 	public void toDialect(CodeWriter writer) {
 		writer.append("{");
-		this.expression.toDialect(writer);
+		expression.toDialect(writer);
 		writer.append("}");
+	}
+	
+	@Override
+	public String toString() {
+		return "{" + expression.toString() + "}";
+	}
+	
+	@Override
+	public void toString(StringBuilder sb) {
+		sb.append("{");
+		sb.append(expression.toString());
+		sb.append("}");
 	}
 	
 	@Override

@@ -8,8 +8,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -35,12 +41,6 @@ import prompto.type.AnyType;
 import prompto.type.ContainerType;
 import prompto.type.IType;
 import prompto.type.ListType;
-
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class ListValue extends BaseValue implements IContainer<IValue>, ISliceable<IValue>, IFilterable  {
 
@@ -354,19 +354,12 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		return new ResultInfo(Object.class); // TODO refine
 	}
-
+	
 	@Override
-	public JsonNode toJsonNode(Context context, boolean withType) throws PromptoError {
-		ArrayNode value = JsonNodeFactory.instance.arrayNode();
-		JsonNode result = value;
-		if(withType) {
-			ObjectNode object = JsonNodeFactory.instance.objectNode();
-			object.put("typeName", this.getType().getTypeName());
-			object.set("value", value);
-			result = object;
-		}
+	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
+		ArrayNode result = JsonNodeFactory.instance.arrayNode();
 		for(IValue item : items)
-			value.add(item.toJsonNode(context, withType));
+			result.add(producer.apply(item));
 		return result;
 	}
 

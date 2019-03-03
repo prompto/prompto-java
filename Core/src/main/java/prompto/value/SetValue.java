@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -253,17 +253,10 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IFilterab
 	}
 	
 	@Override
-	public JsonNode toJsonNode(Context context, boolean withType) throws PromptoError {
-		ArrayNode value = JsonNodeFactory.instance.arrayNode();
-		JsonNode result = value;
-		if(withType) {
-			ObjectNode object = JsonNodeFactory.instance.objectNode();
-			object.put("typeName", this.getType().getTypeName());
-			object.set("value", value);
-			result = object;
-		}
+	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
+		ArrayNode result = JsonNodeFactory.instance.arrayNode();
 		for(IValue item : items)
-			value.add(item.toJsonNode(context, withType));
+			result.add(producer.apply(item));
 		return result;
 	}
 

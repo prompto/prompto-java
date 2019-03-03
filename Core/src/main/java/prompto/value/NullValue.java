@@ -3,8 +3,11 @@ package prompto.value;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
@@ -38,6 +41,11 @@ public class NullValue extends BaseValue {
 	@Override
 	public Object convertTo(Context context, Type type) {
 		return null; // YES! you read correctly
+	}
+	
+	@Override
+	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
+		return JsonNodeFactory.instance.nullNode();
 	}
 	
 	@Override

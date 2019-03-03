@@ -3,6 +3,7 @@ package prompto.value;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Map;
+import java.util.function.Function;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -22,6 +23,8 @@ import prompto.runtime.Context;
 import prompto.type.DateType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
 public class DateValue extends BaseValue implements Comparable<DateValue> {
 
@@ -178,6 +181,11 @@ public class DateValue extends BaseValue implements Comparable<DateValue> {
 	@Override
 	public String toString() {
 		return value.format("yyyy-MM-dd");
+	}
+	
+	@Override
+	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
+		return JsonNodeFactory.instance.textNode(this.toString());
 	}
 	
 	@Override

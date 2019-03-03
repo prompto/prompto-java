@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import prompto.argument.IArgument;
 import prompto.declaration.AttributeDeclaration;
@@ -310,16 +311,10 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	}
 
 	@Override
-	public JsonNode toJsonNode(Context context, boolean withType) throws PromptoError {
+	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
 		ObjectNode result = JsonNodeFactory.instance.objectNode();
-		ObjectNode value = result;
-		if(withType) {
-			result.put("typeName", this.getType().getTypeName());
-			value = JsonNodeFactory.instance.objectNode();
-			result.set("value", value);
-		}
 		for(Entry<Identifier, IValue> entry : values.entrySet())
-			value.set(entry.getKey().toString(), entry.getValue().toJsonNode(context, withType));
+			result.set(entry.getKey().toString(), producer.apply(entry.getValue()));
 		return result;
 	}
 	

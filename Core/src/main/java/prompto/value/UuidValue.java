@@ -3,8 +3,11 @@ package prompto.value;
 import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Function;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -70,6 +73,11 @@ public class UuidValue extends BaseValue {
 	@Override
 	public String toString() {
 		return value.toString();
+	}
+	
+	@Override
+	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
+		return JsonNodeFactory.instance.textNode(value.toString());
 	}
 	
 	@Override

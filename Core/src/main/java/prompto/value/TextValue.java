@@ -5,11 +5,11 @@ import java.lang.reflect.Type;
 import java.text.Collator;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -368,14 +368,8 @@ public class TextValue extends BaseValue implements Comparable<TextValue>, ICont
 	}
 	
 	@Override
-	public JsonNode toJsonNode(Context context, boolean withType) throws PromptoError {
-		if(withType) {
-			ObjectNode result = JsonNodeFactory.instance.objectNode();
-			result.put("typeName", TextType.instance().getTypeName());
-			result.set("value", JsonNodeFactory.instance.textNode(value));
-			return result;
-		} else
-			return JsonNodeFactory.instance.textNode(value);
+	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
+		return JsonNodeFactory.instance.textNode(value);
 	}
 	
 	@Override
