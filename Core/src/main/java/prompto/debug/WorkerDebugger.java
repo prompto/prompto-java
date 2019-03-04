@@ -110,9 +110,10 @@ public class WorkerDebugger implements IWorkerDebugger {
 		stack.push(new ServerStackFrame(context, previous.getMethodName(), previous.getMethodLine(), stack.size(), section));
 		if(stack.size()>0 && stack.size()<=stepDepth)
 			suspend(SuspendReason.STEPPING, context, section);
-		else if(section.isBreakpoint())
+		else if(section.isBreakpoint()) {
+			stepDepth = stack.size();
 			suspend(SuspendReason.BREAKPOINT, context, section);
-		else
+		} else
 			suspendIfRequested(context, section);
 		terminateIfRequested();
 	}

@@ -14,7 +14,7 @@ import prompto.runtime.Context;
 import prompto.runtime.Interpreter;
 import prompto.runtime.utils.Out;
 
-public class TestLocalDebugger extends TestDebuggerBase {
+public class TestLocalDebugger extends TestDebuggerVariablesBase {
 
 	protected Thread thread; // in debug mode
 

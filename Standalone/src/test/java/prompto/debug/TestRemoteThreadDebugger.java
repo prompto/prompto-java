@@ -14,7 +14,7 @@ import prompto.runtime.Standalone;
 import prompto.runtime.utils.Out;
 import prompto.store.NullStoreFactory;
 
-public class TestRemoteThreadDebugger extends TestDebuggerBase implements IDebugEventListener {
+public class TestRemoteThreadDebugger extends TestDebuggerVariablesBase implements IDebugEventListener {
 
 	Thread thread;
 	JavaDebugEventListener eventServer;
