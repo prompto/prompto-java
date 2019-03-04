@@ -12,11 +12,11 @@ import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.statement.IStatement;
 
-public class ServerStackFrame extends LeanStackFrame {
+public class WorkerStackFrame extends LeanStackFrame {
 	
 	Context context;
 	
-	public ServerStackFrame(Context context, String methodName, int index, IDeclaration method) {
+	public WorkerStackFrame(Context context, String methodName, int index, IDeclaration method) {
 		this(context, methodName, method.getStartLine(), index, (ISection)method);
 		if(method instanceof ConcreteMethodDeclaration) {
 			IStatement stmt = ((ConcreteMethodDeclaration)method).getStatements().getFirst();
@@ -31,7 +31,7 @@ public class ServerStackFrame extends LeanStackFrame {
 			this.endCharIndex = this.startCharIndex + 1;
 	}
 
-	public ServerStackFrame(Context context, String methodName, int methodLine, int index, ISection section) {
+	public WorkerStackFrame(Context context, String methodName, int methodLine, int index, ISection section) {
 		this.context = context;
 		this.methodName = methodName;
 		this.filePath = section.getPath();

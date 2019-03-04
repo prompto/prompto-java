@@ -18,15 +18,21 @@ public class WorkerDebugger implements IWorkerDebugger {
 	ServerStack stack = new ServerStack();
 	Object lock = new Object();
 	Status status = Status.STARTING;
+	boolean suspended = false;
+	boolean terminated = false;
 	ResumeReason resumeReason;
 	IDebugEventListener listener;
 	Context context;
-	// positive for stepping on enterXXX
-	// negative for stepping on leaveXXX
-	// necessary to avoid stepping twice on the same statement
 	int stepDepth = 1;
-	boolean suspended = false;
-	boolean terminated = false;
+	/* 
+	 stepDepth represents the stack depth at which we should be stepping 
+	 it is normally positive, except when user requests stepOut
+	 on stepInto we increase the depth by one such that the next statement in the invoked method will suspend
+	 on stepOver we don't increase the depth such that only the next statement in the current method whill suspend
+	 on StepOut we invert the value such that leaving the method will suspend
+	 on resume we simply zero the depth
+	 initial value is 1 such that we step on every start method, TODO make this optional
+	*/
 	
 	
 	@Override
@@ -36,7 +42,7 @@ public class WorkerDebugger implements IWorkerDebugger {
 	
 	@Override
 	public Collection<? extends IVariable> getVariables(IStackFrame frame) {
-		ServerStackFrame sf = stack.find(frame);
+		WorkerStackFrame sf = stack.find(frame);
 		if(sf!=null)
 			return sf.getVariables();
 		// need some debug info
@@ -48,7 +54,7 @@ public class WorkerDebugger implements IWorkerDebugger {
 	
 	@Override
 	public IVariable getVariable(IStackFrame frame, String variableName) {
-		ServerStackFrame sf = stack.find(frame);
+		WorkerStackFrame sf = stack.find(frame);
 		if(sf!=null)
 			return sf.getVariable(variableName);
 		// need some debug info
@@ -89,15 +95,16 @@ public class WorkerDebugger implements IWorkerDebugger {
 	public void enterMethod(Context context, IDeclaration method) throws PromptoError {
 		terminateIfRequested();
 		this.context = context;
-		stack.push(new ServerStackFrame(context, method.getId().toString(), stack.size(), method));
+		stack.push(new WorkerStackFrame(context, method.getId().toString(), stack.size(), method));
 		terminateIfRequested();
 	}
 
 	public void leaveMethod(Context context, ISection section) throws PromptoError {
 		terminateIfRequested();
-		if(stack.size()>0 && stack.size()==-stepDepth)
+		if(stack.size()>0 && stack.size()==-stepDepth) {
+			stepDepth = stack.size();
 			suspend(SuspendReason.STEPPING, context, section); // stepping out
-		else
+		} else
 			suspendIfRequested(context, section);
 		stack.pop();
 		terminateIfRequested();
@@ -107,7 +114,7 @@ public class WorkerDebugger implements IWorkerDebugger {
 		terminateIfRequested();
 		this.context = context;
 		IStackFrame previous = stack.pop();
-		stack.push(new ServerStackFrame(context, previous.getMethodName(), previous.getMethodLine(), stack.size(), section));
+		stack.push(new WorkerStackFrame(context, previous.getMethodName(), previous.getMethodLine(), stack.size(), section));
 		if(stack.size()>0 && stack.size()<=stepDepth)
 			suspend(SuspendReason.STEPPING, context, section);
 		else if(section.isBreakpoint()) {
@@ -120,9 +127,10 @@ public class WorkerDebugger implements IWorkerDebugger {
 
 	public void leaveStatement(Context context, ISection section) throws PromptoError {
 		terminateIfRequested();
-		if(stack.size()>0 && stack.size()==-stepDepth)
+		if(stack.size()>0 && stack.size()==-stepDepth) {
+			stepDepth = stack.size();
 			suspend(SuspendReason.STEPPING, context, section);
-		else
+		} else
 			suspendIfRequested(context, section);
 		terminateIfRequested();
 	}
@@ -137,6 +145,7 @@ public class WorkerDebugger implements IWorkerDebugger {
 	private void suspendIfRequested(Context context, ISection section) {
 		if(suspended) {
 			suspended = false;
+			stepDepth = stack.size();
 			suspend(SuspendReason.SUSPENDED, context, section);
 		}
 		
