@@ -15,7 +15,6 @@ public class LeanStackFrame implements IStackFrame {
 	String methodName;
 	int methodLine;
 	int instructionLine;
-	boolean hasVariables;
 	
 	public LeanStackFrame() {
 	}
@@ -28,7 +27,6 @@ public class LeanStackFrame implements IStackFrame {
 		this.methodName = frame.getMethodName();
 		this.methodLine = frame.getMethodLine();
 		this.instructionLine = frame.getInstructionLine();
-		this.hasVariables = frame.hasVariables();
 	}
 
 	@Override
@@ -64,11 +62,6 @@ public class LeanStackFrame implements IStackFrame {
 	@Override
 	public int getStartCharIndex() {
 		return startCharIndex;
-	}
-	
-	@Override
-	public boolean hasVariables() {
-		return hasVariables;
 	}
 	
 	@JsonIgnore

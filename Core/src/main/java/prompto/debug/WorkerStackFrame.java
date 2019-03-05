@@ -43,11 +43,6 @@ public class WorkerStackFrame extends LeanStackFrame {
 	}
 	
 	@Override
-	public boolean hasVariables() {
-		return !context.getInstances(true).isEmpty();
-	}
-
-	@Override
 	public Collection<ServerVariable> getVariables() {
 		return context.getInstancesStream(true)
 				.map((n)->new ServerVariable(context, n))

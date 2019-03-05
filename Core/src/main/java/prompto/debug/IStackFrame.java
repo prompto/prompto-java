@@ -12,7 +12,6 @@ public interface IStackFrame {
 	int getInstructionLine();
 	int getStartCharIndex();
 	int getEndCharIndex();
-	boolean hasVariables();
 	Collection<? extends IVariable> getVariables();
 
 }

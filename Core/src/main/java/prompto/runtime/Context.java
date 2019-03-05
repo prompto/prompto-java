@@ -711,11 +711,6 @@ public class Context implements IContext {
 	}
 
 	
-	public Collection<INamed> getInstances(boolean includeParent) {
-		return getInstancesStream(includeParent).collect(Collectors.toList());
-	}
-	
-	
 	public INamed getInstance(String name, boolean includeParent) {
 		return getInstance(new Identifier(name), includeParent);
 	}
