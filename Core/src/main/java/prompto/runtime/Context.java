@@ -711,18 +711,19 @@ public class Context implements IContext {
 	}
 
 	
-	public Collection<INamed> getInstances() {
-		return instances.values();
+	public Collection<INamed> getInstances(boolean includeParent) {
+		return getInstancesStream(includeParent).collect(Collectors.toList());
 	}
 	
 	
-	public INamed getInstance(String name) {
-		return getInstance(new Identifier(name));
+	public INamed getInstance(String name, boolean includeParent) {
+		return getInstance(new Identifier(name), includeParent);
 	}
 	
 
-	private INamed getInstance(Identifier id) {
-		return instances.get(id);
+	private INamed getInstance(Identifier id, boolean includeParent) {
+		INamed named = (parent==null || !includeParent) ? null : parent.getInstance(id, true);
+		return named!=null ? named : instances.get(id);
 	}
 
 	public boolean hasValue(Identifier id) {

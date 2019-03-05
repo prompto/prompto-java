@@ -44,7 +44,7 @@ public class WorkerStackFrame extends LeanStackFrame {
 	
 	@Override
 	public boolean hasVariables() {
-		return !context.getInstances().isEmpty();
+		return !context.getInstances(true).isEmpty();
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class WorkerStackFrame extends LeanStackFrame {
 	}
 
 	public IVariable getVariable(String variableName) {
-		INamed named = context.getInstance(variableName);
+		INamed named = context.getInstance(variableName, true);
 		return named==null ? null : new ServerVariable(context, named);
 	}
 
