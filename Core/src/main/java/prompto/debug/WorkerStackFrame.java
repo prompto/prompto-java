@@ -49,7 +49,7 @@ public class WorkerStackFrame extends LeanStackFrame {
 
 	@Override
 	public Collection<ServerVariable> getVariables() {
-		return context.getInstances().stream()
+		return context.getInstancesStream(true)
 				.map((n)->new ServerVariable(context, n))
 				.collect(Collectors.toList());
 	}

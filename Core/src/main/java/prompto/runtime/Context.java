@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import prompto.code.ICodeStore;
 import prompto.code.Resource;
@@ -702,6 +703,14 @@ public class Context implements IContext {
 		instances.put(value.getId(), value);
 	}
 	
+	public Stream<INamed> getInstancesStream(boolean includeParent) {
+		if(parent==null || !includeParent)
+			return instances.values().stream();
+		else
+			return Stream.concat(parent.getInstancesStream(true), instances.values().stream());
+	}
+
+	
 	public Collection<INamed> getInstances() {
 		return instances.values();
 	}
@@ -1178,6 +1187,7 @@ public class Context implements IContext {
 		}
 		
 	}
+
 
 
 
