@@ -47,4 +47,7 @@ public interface IDeclaration extends ITranspilable, INamed, ISection {
 	@Override
 	default boolean transpile(Transpiler transpiler) { throw new UnsupportedOperationException("transpile " + this.getClass().getName()); }
 	int getStartLine();
+	default ISection locateSection(ISection section) {
+		return isOrContains(section) ? this : null;
+	}
 }

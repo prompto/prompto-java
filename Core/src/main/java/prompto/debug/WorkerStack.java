@@ -2,7 +2,7 @@ package prompto.debug;
 
 import java.util.ArrayDeque;
 
-public class ServerStack extends ArrayDeque<WorkerStackFrame> implements IStack<WorkerStackFrame> {
+public class WorkerStack extends ArrayDeque<WorkerStackFrame> implements IStack<WorkerStackFrame> {
 
 	private static final long serialVersionUID = 1L;
 

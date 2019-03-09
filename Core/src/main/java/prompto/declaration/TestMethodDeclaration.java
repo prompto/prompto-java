@@ -103,7 +103,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 	private void interpretAsserts(Context context) throws PromptoError {
 		if(assertions==null)
 			return;
-		context.enterMethod(this);
+		context.enterTest(this);
 		try {
 			boolean success = true;
 			for(Assertion assertion : assertions)
@@ -111,7 +111,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 			if(success)
 				printSuccess(context);
 		} finally {
-			context.leaveMethod(this);
+			context.leaveSection(this);
 		}
 	}
 
@@ -142,7 +142,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 	}
 
 	private boolean interpretBody(Context context) throws PromptoError {
-		context.enterMethod(this);
+		context.enterTest(this);
 		try {
 			statements.interpret(context);
 			return true;
@@ -151,7 +151,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 			// no more to execute
 			return false;
 		} finally {
-			context.leaveMethod(this);
+			context.leaveSection(this);
 		}
 	}
 

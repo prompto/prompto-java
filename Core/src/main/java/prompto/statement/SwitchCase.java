@@ -24,6 +24,11 @@ public abstract class SwitchCase extends Section implements ISection {
 		return expression;
 	}
 
+	public ISection locateSection(ISection section) {
+		ISection result = statements.locateSection(section);
+		return result!=null ? result : this.isOrContains(section) ? this : null;
+	}
+	
 	public abstract void checkSwitchType(Context context, IType type);
 
 	public IType checkReturnType(Context context) {

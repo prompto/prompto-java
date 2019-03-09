@@ -49,7 +49,7 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		assertTrue(debugger.isStepping(getDebuggedThread()));
 		IStack<?> stack = debugger.getStack(getDebuggedThread());
 		assertFalse(stack.isEmpty());
-		assertEquals(MAIN_LINE + 1, stack.iterator().next().getInstructionLine());
+		assertEquals(MAIN_LINE + 1, stack.iterator().next().getStatementLine());
 		debugger.resume(getDebuggedThread());	
 		join();
 		assertEquals("test123-ok", readOut());

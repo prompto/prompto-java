@@ -16,5 +16,8 @@ public interface IStatement extends IExpression, ISection {
 	default void declare(Transpiler transpiler) { throw new UnsupportedOperationException("declare " + this.getClass().getName()); }
 	@Override
 	default boolean transpile(Transpiler transpiler)  { throw new UnsupportedOperationException("transpile " + this.getClass().getName()); }
+	default ISection locateSection(ISection section) {
+		return isOrContains(section) ? this : null;
+	}
 
 }

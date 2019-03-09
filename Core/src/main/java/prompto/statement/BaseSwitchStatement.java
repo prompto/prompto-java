@@ -1,9 +1,11 @@
 package prompto.statement;
 
 import java.util.LinkedList;
+import java.util.Objects;
 
 import prompto.error.ExecutionError;
 import prompto.error.PromptoError;
+import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
@@ -24,6 +26,14 @@ public abstract class BaseSwitchStatement extends BaseStatement {
 
 		public SwitchCaseList(SwitchCase item) {
 			this.add(item);
+		}
+
+		public ISection locateSection(ISection section) {
+			return this.stream()
+					.map(s->s.locateSection(section))
+					.filter(Objects::nonNull)
+					.findFirst()
+					.orElse(null);
 		}
 
 	}
@@ -49,6 +59,15 @@ public abstract class BaseSwitchStatement extends BaseStatement {
 		this.defaultCase = defaultCase;
 	}
 	
+	@Override
+	public ISection locateSection(ISection section) {
+		ISection result = switchCases.locateSection(section);
+		if(result==null && defaultCase!=null)
+			result = defaultCase.locateSection(section);
+		return result!=null ? result : super.locateSection(section);
+	}
+	
+
 	@Override
 	public void toDialect(CodeWriter writer) {
 		switch(writer.getDialect()) {

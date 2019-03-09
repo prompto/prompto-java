@@ -796,15 +796,21 @@ public class Context implements IContext {
 	}
 	
 
-	public void enterMethod(IDeclaration method) throws PromptoError {
+	public void enterTest(TestMethodDeclaration test) throws PromptoError {
+		if(debugger!=null)
+			debugger.enterTest(this, test);
+	}
+
+	
+	public void enterMethod(IMethodDeclaration method) throws PromptoError {
 		if(debugger!=null)
 			debugger.enterMethod(this, method);
 	}
 
 	
-	public void leaveMethod(IDeclaration method) throws PromptoError {
+	public void leaveSection(ISection section) throws PromptoError {
 		if(debugger!=null)
-			debugger.leaveMethod(this, method);
+			debugger.leaveSection(this, section);
 	}
 
 	
@@ -904,37 +910,30 @@ public class Context implements IContext {
 	
 	
 	@Override
-	public ISection findSectionFor(String path, int lineNumber) {
+	public ISection locateSection(ISection section) {
 		if(globals!=this)
-			return globals.findSectionFor(path, lineNumber);
-		else
-			return SectionLocator.findSection(declarations.values(), path, lineNumber);
-	}
-	
-	public ISection findSection(ISection section) {
-		if(globals!=this)
-			return globals.findSection(section);
+			return globals.locateSection(section);
 		else {
 			String path = section.getPath();
 			if(path.startsWith("store:/")) 
-				return findStoreSection(section);
+				return locateStoreSection(section);
 			else
-				return findFileSection(section, declarations.values());
+				return locateFileSection(section, declarations.values());
 		}
 	}
 	
-	ISection findStoreSection(ISection section) {
-		IDeclaration declaration = findStoreDeclaration(section.getPath());
+	ISection locateStoreSection(ISection section) {
+		IDeclaration declaration = locateStoreDeclarationAtPath(section.getPath());
 		if(declaration==null)
 			return null;
 		else {
 			Section converted = new Section(section);
 			converted.setPath(declaration.getPath());
-			return findFileSection(converted, Collections.singletonList(declaration));
+			return locateFileSection(converted, Collections.singletonList(declaration));
 		}
 	}
 
-	private IDeclaration findStoreDeclaration(String path) {
+	private IDeclaration locateStoreDeclarationAtPath(String path) {
 		path = path.substring("store:/".length());
 		int idx = path.indexOf("/");
 		String type = path.substring(0, idx);
@@ -959,8 +958,8 @@ public class Context implements IContext {
 		}
 	}
 
-	ISection findFileSection(ISection section, Collection<IDeclaration> declarations) {
-		ISection result = SectionLocator.findSection(declarations, section);
+	ISection locateFileSection(ISection section, Collection<IDeclaration> declarations) {
+		ISection result = SectionLocator.locateSection(declarations, section);
 		if(result!=null) 
 			return result;
 		ICodeStore store = ICodeStore.getInstance();

@@ -16,8 +16,8 @@ public class WorkerStackFrame extends LeanStackFrame {
 	
 	Context context;
 	
-	public WorkerStackFrame(Context context, String methodName, int index, IDeclaration method) {
-		this(context, methodName, method.getStartLine(), index, (ISection)method);
+	public WorkerStackFrame(Context context, String categoryName, String methodName, String methodProto, int index, IDeclaration method) {
+		this(context, categoryName, methodName, methodProto, method.getStartLine(), index, (ISection)method);
 		if(method instanceof ConcreteMethodDeclaration) {
 			IStatement stmt = ((ConcreteMethodDeclaration)method).getStatements().getFirst();
 			this.endCharIndex = stmt.getStart().getTokenIndex() - 1;
@@ -31,27 +31,29 @@ public class WorkerStackFrame extends LeanStackFrame {
 			this.endCharIndex = this.startCharIndex + 1;
 	}
 
-	public WorkerStackFrame(Context context, String methodName, int methodLine, int index, ISection section) {
+	public WorkerStackFrame(Context context, String categoryName, String methodName, String methodProto, int methodLine, int index, ISection section) {
 		this.context = context;
-		this.methodName = methodName;
 		this.filePath = section.getPath();
-		this.index = index;
+			this.categoryName = categoryName;
+		this.methodName = methodName;
+		this.methodProto = methodProto;
 		this.methodLine = methodLine;
-		this.instructionLine = section.getStart().getLine();
+		this.statementLine = section.getStart().getLine();
+		this.index = index;
 		this.startCharIndex = section.getStart().getTokenIndex();
 		this.endCharIndex = section.getEnd().getTokenIndex();
 	}
 	
 	@Override
-	public Collection<ServerVariable> getVariables() {
+	public Collection<WorkerVariable> getVariables() {
 		return context.getInstancesStream(true)
-				.map((n)->new ServerVariable(context, n))
+				.map((n)->new WorkerVariable(context, n))
 				.collect(Collectors.toList());
 	}
 
 	public IVariable getVariable(String variableName) {
 		INamed named = context.getInstance(variableName, true);
-		return named==null ? null : new ServerVariable(context, named);
+		return named==null ? null : new WorkerVariable(context, named);
 	}
 
 }

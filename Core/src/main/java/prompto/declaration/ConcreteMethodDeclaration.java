@@ -35,6 +35,7 @@ import prompto.error.PromptoError;
 import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoMethod;
+import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.statement.DeclarationStatement;
 import prompto.statement.StatementList;
@@ -83,6 +84,11 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	@Override
 	public boolean isAbstract() {
 		return false;
+	}
+	
+	@Override
+	public ISection locateSection(ISection section) {
+		return statements.locateSection(section);
 	}
 
 	@Override

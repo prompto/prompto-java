@@ -1,6 +1,7 @@
 package prompto.statement;
 
 import java.util.LinkedList;
+import java.util.Objects;
 
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
@@ -10,6 +11,7 @@ import prompto.compiler.StackLocals;
 import prompto.error.PromptoError;
 import prompto.java.JavaNativeCall;
 import prompto.parser.Dialect;
+import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
@@ -28,6 +30,15 @@ public class StatementList extends LinkedList<IStatement> {
 
 	public StatementList(IStatement stmt) {
 		this.add(stmt);
+	}
+	
+
+	public ISection locateSection(ISection section) {
+		return this.stream()
+				.map(s->s.locateSection(section))
+				.filter(Objects::nonNull)
+				.findFirst()
+				.orElse(null);
 	}
 	
 	@Override
@@ -172,7 +183,6 @@ public class StatementList extends LinkedList<IStatement> {
 	            transpiler.append(";").newLine();
 		});
 	}
-
 
 	
 }

@@ -38,6 +38,7 @@ import prompto.grammar.MethodDeclarationList;
 import prompto.grammar.Operator;
 import prompto.intrinsic.PromptoEnum;
 import prompto.intrinsic.PromptoRoot;
+import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.store.DataStore;
@@ -92,6 +93,11 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	
 	public MethodDeclarationList getMethods() {
 		return methods;
+	}
+	
+	@Override
+	public ISection locateSection(ISection section) {
+		return methods.locateSection(section);
 	}
 	
 	@Override

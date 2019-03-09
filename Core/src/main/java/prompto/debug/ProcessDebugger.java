@@ -69,7 +69,7 @@ public class ProcessDebugger implements IDebugger {
 	public void installBreakpoint(ISection section) {
 		if(context==null)
 			throw new RuntimeException("No context to search from!");
-		ISection instance = context.findSection(section);
+		ISection instance = context.locateSection(section);
 		if(instance!=null) {
 			logger.debug(()->"Found section " + instance.toString());
 			instance.setAsBreakpoint(section.isBreakpoint());

@@ -5,12 +5,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import prompto.grammar.INamed;
 import prompto.runtime.Context;
 
-public class ServerValue implements IValue {
+public class WorkerValue implements IValue {
 	
 	Context context;
 	prompto.value.IValue value;
 
-	public ServerValue(Context context, INamed named) {
+	public WorkerValue(Context context, INamed named) {
 		this.context = context;
 		this.value = context.getValue(named.getId());
 	}

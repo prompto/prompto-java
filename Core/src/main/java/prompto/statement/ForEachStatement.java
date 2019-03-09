@@ -21,6 +21,7 @@ import prompto.compiler.StackState;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
+import prompto.parser.ISection;
 import prompto.runtime.BreakResult;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
@@ -56,6 +57,12 @@ public class ForEachStatement extends BaseStatement {
 		return true;
 	}
 
+	@Override
+	public ISection locateSection(ISection section) {
+		ISection result = statements.locateSection(section);
+		return result!=null ? result : super.locateSection(section);
+	}
+	
 	@Override
 	public void toDialect(CodeWriter writer) {
 		writer = writer.newChildWriter();

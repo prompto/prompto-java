@@ -3,13 +3,13 @@ package prompto.debug;
 import prompto.grammar.INamed;
 import prompto.runtime.Context;
 
-public class ServerVariable implements IVariable {
+public class WorkerVariable implements IVariable {
 
 	Context context;
 	INamed named;
 	IValue value;
 	
-	public ServerVariable(Context context, INamed named) {
+	public WorkerVariable(Context context, INamed named) {
 		this.context = context;
 		this.named = named;
 	}
@@ -27,7 +27,7 @@ public class ServerVariable implements IVariable {
 	@Override
 	public IValue getValue() {
 		if(value==null)
-			value = new ServerValue(context, named);
+			value = new WorkerValue(context, named);
 		return value;
 	}
 	

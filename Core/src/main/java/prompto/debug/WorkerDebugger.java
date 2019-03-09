@@ -4,7 +4,9 @@ import java.util.Collection;
 import java.util.Collections;
 
 import prompto.debug.ProcessDebugger.DebuggedWorker;
-import prompto.declaration.IDeclaration;
+import prompto.declaration.CategoryDeclaration;
+import prompto.declaration.IMethodDeclaration;
+import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.TerminatedError;
 import prompto.parser.ISection;
@@ -15,7 +17,7 @@ public class WorkerDebugger implements IWorkerDebugger {
 
 	static Logger logger = new Logger();
 	
-	ServerStack stack = new ServerStack();
+	WorkerStack stack = new WorkerStack();
 	Object lock = new Object();
 	Status status = Status.STARTING;
 	boolean suspended = false;
@@ -36,7 +38,7 @@ public class WorkerDebugger implements IWorkerDebugger {
 	
 	
 	@Override
-	public ServerStack getStack() {
+	public WorkerStack getStack() {
 		return stack;
 	}
 	
@@ -92,14 +94,23 @@ public class WorkerDebugger implements IWorkerDebugger {
 		this.listener = listener;
 	}
 	
-	public void enterMethod(Context context, IDeclaration method) throws PromptoError {
+	public void enterTest(Context context, TestMethodDeclaration test) {
 		terminateIfRequested();
 		this.context = context;
-		stack.push(new WorkerStackFrame(context, method.getId().toString(), stack.size(), method));
+		stack.push(new WorkerStackFrame(context, null, test.getName(), null, stack.size(), test));
+		terminateIfRequested();
+	}
+	
+	public void enterMethod(Context context, IMethodDeclaration method) throws PromptoError {
+		terminateIfRequested();
+		this.context = context;
+		CategoryDeclaration category = method.getMemberOf();
+		String categoryName = category==null ? null : category.getName();
+		stack.push(new WorkerStackFrame(context, categoryName, method.getName(), method.getProto(), stack.size(), method));
 		terminateIfRequested();
 	}
 
-	public void leaveMethod(Context context, ISection section) throws PromptoError {
+	public void leaveSection(Context context, ISection section) throws PromptoError {
 		terminateIfRequested();
 		if(stack.size()>0 && stack.size()==-stepDepth) {
 			stepDepth = stack.size();
@@ -114,7 +125,7 @@ public class WorkerDebugger implements IWorkerDebugger {
 		terminateIfRequested();
 		this.context = context;
 		IStackFrame previous = stack.pop();
-		stack.push(new WorkerStackFrame(context, previous.getMethodName(), previous.getMethodLine(), stack.size(), section));
+		stack.push(new WorkerStackFrame(context, previous.getCategoryName(), previous.getMethodName(), previous.getMethodProto(), previous.getMethodLine(), stack.size(), section));
 		if(stack.size()>0 && stack.size()<=stepDepth)
 			suspend(SuspendReason.STEPPING, context, section);
 		else if(section.isBreakpoint()) {
@@ -245,14 +256,14 @@ public class WorkerDebugger implements IWorkerDebugger {
 	@Override
 	public int getLineInFile() {
 		IStackFrame frame = stack.peek();
-		return frame==null ? -1 : frame.getInstructionLine();
+		return frame==null ? -1 : frame.getStatementLine();
 	}
 	
 	
 	@Override
 	public int getLineInMethod() {
 		IStackFrame frame = stack.peek();
-		return frame==null ? -1 : 1 + frame.getMethodLine() - frame.getInstructionLine();
+		return frame==null ? -1 : 1 + frame.getMethodLine() - frame.getStatementLine();
 	}
 	
 	public void notifyStarted(IDebugEvent.Started event) {
@@ -270,6 +281,7 @@ public class WorkerDebugger implements IWorkerDebugger {
 			listener.handleCompletedEvent(worker); 
 		}
 	}
+
 
 
 	

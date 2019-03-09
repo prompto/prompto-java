@@ -41,7 +41,7 @@ public class ClosureValue extends BaseValue {
 			parentMost.setParentContext(null);
 			return result;
 		} finally {
-			this.context.leaveMethod(declaration);
+			this.context.leaveSection(declaration);
 		}
 	}
 

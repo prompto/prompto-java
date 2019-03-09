@@ -263,7 +263,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 			registerAssignments(context, local, declaration);
 			return declaration.interpret(local);
 		} finally {
-			local.leaveMethod(declaration);
+			local.leaveSection(declaration);
 		}
 	}
 

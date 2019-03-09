@@ -14,6 +14,7 @@ import prompto.compiler.StackState;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
+import prompto.parser.ISection;
 import prompto.runtime.BreakResult;
 import prompto.runtime.Context;
 import prompto.store.InvalidValueError;
@@ -38,9 +39,15 @@ public class DoWhileStatement extends BaseStatement {
 		return condition;
 	}
 	
-	public StatementList getInstructions() {
+	public StatementList getStatements() {
 		return statements;
 	}	
+	
+	@Override
+	public ISection locateSection(ISection section) {
+		ISection result = statements.locateSection(section);
+		return result!=null ? result : super.locateSection(section);
+	}
 	
 	@Override
 	public boolean canReturn() {

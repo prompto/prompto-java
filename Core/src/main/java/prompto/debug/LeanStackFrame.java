@@ -12,9 +12,11 @@ public class LeanStackFrame implements IStackFrame {
 	int index;
 	int startCharIndex;
 	int endCharIndex;
+	String categoryName;
 	String methodName;
-	int methodLine;
-	int instructionLine;
+	String methodProto;
+	int methodLine; // in file
+	int statementLine; // in file
 	
 	public LeanStackFrame() {
 	}
@@ -24,14 +26,26 @@ public class LeanStackFrame implements IStackFrame {
 		this.index = frame.getIndex();
 		this.startCharIndex = frame.getStartCharIndex();
 		this.endCharIndex = frame.getEndCharIndex();
+		this.categoryName = frame.getCategoryName();
 		this.methodName = frame.getMethodName();
+		this.methodProto = frame.getMethodProto();
 		this.methodLine = frame.getMethodLine();
-		this.instructionLine = frame.getInstructionLine();
+		this.statementLine = frame.getStatementLine();
 	}
 
 	@Override
+	public String getCategoryName() {
+		return categoryName;
+	}
+	
+	@Override
 	public String getMethodName() {
 		return methodName;
+	}
+	
+	@Override
+	public String getMethodProto() {
+		return methodProto;
 	}
 	
 	@Override
@@ -50,8 +64,8 @@ public class LeanStackFrame implements IStackFrame {
 	}
 	
 	@Override
-	public int getInstructionLine() {
-		return instructionLine;
+	public int getStatementLine() {
+		return statementLine;
 	}
 	
 	@Override
@@ -72,7 +86,7 @@ public class LeanStackFrame implements IStackFrame {
 	
 	@Override
 	public String toString() {
-		return methodName + ", line " + Integer.toString(instructionLine);
+		return methodName + ", line " + Integer.toString(statementLine);
 	}
 	
 	public String toJson() {
