@@ -22,19 +22,7 @@ import prompto.statement.IStatement;
 public class TestSectionLocator extends BaseEParserTest {
 
 	@Test
-	public void testThatResourceCodeStoreContainsMethodSection() throws Exception {
-		URL file = getResourceAsURL("debug/stack.pec");
-		assertTrue(new File(file.getFile()).exists());
-		ICodeStore store = new ImmutableCodeStore(null, ModuleType.LIBRARY, file.toURI().toURL(), PromptoVersion.parse("1.0.0.0"));
-		Section section = new Section(file.toExternalForm(), new Location(0, 9, 1), new Location(0, 9, 20), Dialect.E, false);
-		ISection found = store.findSection(section);
-		assertNotNull(found);
-		assertTrue(found instanceof IMethodDeclaration);
-		assertEquals("printLevel2", ((IMethodDeclaration)found).getName());
-	}
-	
-	@Test
-	public void testThatResourceCodeStoreContainsStatementSection() throws Exception {
+	public void resourceCodeStoreContainsStatementSection() throws Exception {
 		URL file = getResourceAsURL("debug/stack.pec");
 		assertTrue(new File(file.getFile()).exists());
 		ICodeStore store = new ImmutableCodeStore(null, ModuleType.LIBRARY, file.toURI().toURL(), PromptoVersion.parse("1.0.0.0"));
