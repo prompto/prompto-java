@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import prompto.code.ICodeStore;
 import prompto.code.ImmutableCodeStore;
-import prompto.declaration.IMethodDeclaration;
 import prompto.intrinsic.PromptoVersion;
 import prompto.parser.Dialect;
 import prompto.parser.ISection;

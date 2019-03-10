@@ -32,7 +32,6 @@ import prompto.expression.Symbol;
 import prompto.grammar.Annotation;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
-import prompto.instance.VariableInstance;
 import prompto.intrinsic.PromptoList;
 import prompto.parser.Dialect;
 import prompto.parser.ILocation;
