@@ -32,6 +32,7 @@ import prompto.expression.Symbol;
 import prompto.grammar.Annotation;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
+import prompto.instance.VariableInstance;
 import prompto.intrinsic.PromptoList;
 import prompto.parser.Dialect;
 import prompto.parser.ILocation;
@@ -727,7 +728,7 @@ public class Context implements IContext {
 	}
 	
 
-	private INamed getInstance(Identifier id, boolean includeParent) {
+	public INamed getInstance(Identifier id, boolean includeParent) {
 		INamed named = (parent==null || !includeParent) ? null : parent.getInstance(id, true);
 		return named!=null ? named : instances.get(id);
 	}
@@ -769,7 +770,7 @@ public class Context implements IContext {
 		Context context = contextForValue(name);
 		if(context==null)
 			throw new SyntaxError(name + " is not defined");
-		context.writeValue(name,value);
+		context.writeValue(name, value);
 	}
 	
 	protected void writeValue(Identifier name, IValue value) throws PromptoError {
@@ -1137,6 +1138,8 @@ public class Context implements IContext {
 		
 		@Override
 		public Context contextForValue(Identifier name) {
+			if("this".equals(name.toString()))
+				return this;
 			// params and variables have precedence over members
 			// so first look in context values
 			Context context = super.contextForValue(name);
@@ -1162,6 +1165,8 @@ public class Context implements IContext {
 
 		@Override
 		protected IValue readValue(Identifier name, Supplier<IValue> supplier) throws PromptoError {
+			if("this".equals(name.toString()))
+				return instance;
 			ConcreteCategoryDeclaration decl = getDeclaration();
 			if(decl.hasAttribute(this, name)) {
 				IValue value = instance.getMember(calling, name, false);
@@ -1179,6 +1184,21 @@ public class Context implements IContext {
 		protected void writeValue(Identifier name, IValue value) throws PromptoError {
 			instance.setMember(calling, name, value);
 		}
+		
+		
+		@Override
+		public Stream<INamed> getInstancesStream(boolean includeParent) {
+			return Stream.concat(Stream.of(new Variable(new Identifier("this"), instance.getType())), super.getInstancesStream(includeParent));
+		}
+		
+		@Override
+		public INamed getInstance(Identifier name, boolean includeParent) {
+			if("this".equals(name.toString()))
+				return new Variable(new Identifier("this"), instance.getType());
+			else
+				return super.getInstance(name, includeParent);
+		}
+		
 	}
 
 	public static class ClosureContext extends InstanceContext {
