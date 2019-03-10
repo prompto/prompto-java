@@ -457,7 +457,7 @@ public class CategoryType extends BaseType {
 		IType fieldType = readJSONFieldType(context, fieldId, fieldData);
 		if(!(fieldType instanceof BinaryType) && fieldData.isObject())
 			fieldData = fieldData.get("value");
-		IValue fieldValue = fieldType.readJSONValue(context, fieldData, parts);
+		IValue fieldValue = fieldData==null ? NullValue.instance() : fieldType.readJSONValue(context, fieldData, parts);
 		if(fieldValue!=null)
 			instance.setMember(context, fieldId, fieldValue);
 	}
