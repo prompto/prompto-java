@@ -185,7 +185,7 @@ public class StoreStatement extends BaseStatement {
 	            exp.transpile(transpiler);
 	            transpiler.append(".collectStorables(storablesToAdd);").newLine();
 	        });
-	        transpiler.append("return storablesToAdd;").newLine();
+	        transpiler.append("return Array.from(storablesToAdd);").newLine();
 	        transpiler.dedent().append("})()");
 	    }
 	}
@@ -200,7 +200,7 @@ public class StoreStatement extends BaseStatement {
 	            exp.transpile(transpiler);
 	            transpiler.append(".collectDbIds(idsToDelete);").newLine();
 	        });
-	        transpiler.append("return idsToDelete;").newLine();
+	        transpiler.append("return Array.from(idsToDelete);").newLine();
 	        transpiler.dedent().append("})()");
 	    }
 	}
